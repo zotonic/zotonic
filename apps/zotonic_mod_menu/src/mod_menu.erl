@@ -48,9 +48,9 @@ Accepted Events
 
 This module handles the following notifier callbacks:
 
-- `observe_admin_menu`: Handle `admin_menu` notifications using `m_rsc:name_to_id`.
+- `observe_admin_menu`: Add menu management entries to the admin menu.
 - `observe_menu_get_rsc_ids`: Notifier handler to get all menu ids for the default menu using `m_rsc:name_to_id`.
-- `observe_menu_save`: Handle `menu_save` notifications using `m_rsc:name_to_id`.
+- `observe_menu_save`: Validate and persist edited menu trees after converting names to resource ids.
 - `observe_rsc_get`: Normalize stored menu values by converting old tuple formats to `#rsc_tree` structures.
 - `observe_rsc_update`: Validate and normalize submitted menu structures during resource updates.
 - `observe_rsc_update_done`: Rebuild `hasmenupart` edges after menu changes so referenced resources are tracked correctly.

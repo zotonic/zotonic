@@ -36,7 +36,7 @@ Accepted Events
 
 This module handles the following notifier callbacks:
 
-- `observe_auth_checked`: Handle the result of the password authentication, register all failures using `m_ratelimit:delete_event`.
+- `observe_auth_checked`: Register failed authentication attempts for rate limiting and clear counters on successful logins.
 - `observe_auth_logon`: Authentication succeeded, set the device id cookie (if we have a username from auth_checked) using `z_ids:id`.
 - `observe_auth_precheck`: Check if rate limiting applies to this authentication request using `m_ratelimit:is_event_limited`.
 - `observe_auth_reset`: Auth reset requested, register it against the device cookie using `m_ratelimit:is_event_limited`.

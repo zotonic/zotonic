@@ -98,11 +98,11 @@ Accepted Events
 
 This module handles the following notifier callbacks:
 
-- `observe_custom_pivot`: Handle `custom_pivot` notifications using `search_facet:pivot_rsc`.
-- `observe_filewatcher`: Handle `filewatcher` notifications using `search_facet:ensure_table`.
-- `observe_module_activate`: Handle `module_activate` notifications using `gen_server:cast`.
+- `observe_custom_pivot`: Populate facet pivot columns during resource indexing for search facets.
+- `observe_filewatcher`: Rebuild facet tables when watched search facet definition files change.
+- `observe_module_activate`: Trigger asynchronous initialization when the search module is activated.
 - `observe_module_reindexed`: Check the search facet table if all modules are running and the indexer reindexed using `search_facet:ensure_table`.
-- `observe_search_query`: Handle `search_query` notifications using `search_query:search`.
+- `observe_search_query`: Execute supported full-text and facet search query operators.
 
 Delegate callbacks:
 

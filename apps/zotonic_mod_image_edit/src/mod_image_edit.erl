@@ -48,8 +48,8 @@ Accepted Events
 This module handles the following notifier callbacks:
 
 - `observe_media_preview_options`: Expand the image modifications that influence the generated preview image using `m_image_edit:get_settings`.
-- `observe_media_upload_rsc_props`: Handle `media_upload_rsc_props` notifications using `m_image_edit:sanitize`.
-- `observe_rsc_update`: Handle `rsc_update` notifications using `m_image_edit:sanitize`.
+- `observe_media_upload_rsc_props`: Sanitize crop/rotation and other editable image properties on media upload.
+- `observe_rsc_update`: Sanitize crop/rotation and related image-edit properties on resource updates.
 
 Delegate callbacks:
 

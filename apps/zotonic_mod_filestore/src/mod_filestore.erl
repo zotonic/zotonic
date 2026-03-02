@@ -190,12 +190,12 @@ Accepted Events
 
 This module handles the following notifier callbacks:
 
-- `observe_admin_menu`: Handle `admin_menu` notifications using `z_url:url_path_encode`.
-- `observe_filestore`: Handle `filestore` notifications using `z_media_identify:guess_mime`.
+- `observe_admin_menu`: Add filestore settings and browser links to the admin menu.
+- `observe_filestore`: Resolve filestore read/write/delete requests for configured remote storage backends.
 - `observe_filestore_credentials_lookup`: Map the local path to the URL of the remotely stored file using `filestore_config:service`.
 - `observe_filestore_credentials_revlookup`: Given the service, find the credentials to do a lookup of the remote file using `filestore_config:service`.
-- `observe_filestore_request`: Handle `filestore_request` notifications using `filestore_request:upload`.
-- `observe_media_update_done`: Handle `media_update_done` notifications using `z_media_identify:guess_mime`.
+- `observe_filestore_request`: Accept signed upload requests and stream uploads to the configured filestore backend.
+- `observe_media_update_done`: Push newly uploaded local media files to the configured filestore backend.
 
 See also
 

@@ -93,7 +93,7 @@ Accepted Events
 
 This module handles the following notifier callbacks:
 
-- `observe_media_import`: Handle `media_import` notifications using `z_html:unescape`.
+- `observe_media_import`: Expand supported oEmbed URLs into embeddable media metadata and resources.
 - `observe_media_import_medium`: Import a embedded medium for a rsc_import using `m_media:get`.
 - `observe_media_stillimage`: Return the filename of a still image to be used for image tags using `oembed_admin:count_missing`.
 - `observe_media_viewer`: Return the media viewer for the embedded video (that is, when using `z_string:to_name`.

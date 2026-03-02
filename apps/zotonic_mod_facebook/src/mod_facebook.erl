@@ -37,7 +37,7 @@ Accepted Events
 
 This module handles the following notifier callbacks:
 
-- `observe_search_query`: Handle `search_query` notifications using `z_acl:is_allowed`.
+- `observe_search_query`: Provide module-specific search query handlers with ACL-aware filtering.
 
 Delegate callbacks:
 

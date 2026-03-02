@@ -60,7 +60,7 @@ Accepted Events
 
 This module handles the following notifier callbacks:
 
-- `observe_admin_menu`: Handle `admin_menu` notifications using `z_acl:is_admin_editable`.
+- `observe_admin_menu`: Add site-configuration menu entries for editable config sections.
 
 Delegate callbacks:
 

@@ -92,12 +92,12 @@ This module handles the following notifier callbacks:
 - `observe_admin_menu`: Contribute module entries to the admin menu tree.
 - `observe_auth_client_logon_user`: Send a request to the client to login a user using `z_context:client_topic`.
 - `observe_auth_client_switch_user`: Send a request to the client to switch users using `z_acl:sudo_user`.
-- `observe_auth_options_update`: Handle `auth_options_update` notifications using `m_acl_rule:is_valid_code`.
-- `observe_auth_validated`: Handle validated external-auth identities and map them to local user/signup flows.
-- `observe_logon_options`: Handle `logon_options` notifications using `z_string:to_lower`.
+- `observe_auth_options_update`: Merge allowed external-auth options into the logon context for templates and handlers.
+- `observe_auth_validated`: Match validated external identities to local users and trigger signup or logon continuation.
+- `observe_logon_options`: Normalize and enrich logon options before authentication starts.
 - `observe_logon_submit`: Check username/password against the identity tables using `m_identity:check_username_pw`.
 - `observe_request_context`: Check for authentication cookies in the request using `z_context:get`.
-- `observe_tick_1h`: Handle `tick_1h` notifications using `m_identity:cleanup_logon_history`.
+- `observe_tick_1h`: Remove stale authentication and logon-history records in hourly maintenance.
 
 Delegate callbacks:
 

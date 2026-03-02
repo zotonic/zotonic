@@ -32,10 +32,10 @@ Accepted Events
 
 This module handles the following notifier callbacks:
 
-- `observe_admin_menu`: Handle `admin_menu` notifications using `m_l10n:country_name`.
+- `observe_admin_menu`: Add localization and timezone settings entries to the admin menu.
 - `observe_pivot_rsc_data`: Expand the two letter iso code country depending on the languages in the resource using `m_l10n:country_name`.
 - `observe_request_context`: Check if the user has a preferred timezone using `z_acl:user`.
-- `observe_user_context`: Handle `user_context` notifications using `m_rsc:p_no_acl`.
+- `observe_user_context`: Set user context language/timezone defaults based on the user profile resource.
 
 ").
 

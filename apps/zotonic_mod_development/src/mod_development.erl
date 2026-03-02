@@ -159,7 +159,7 @@ Accepted Events
 
 This module handles the following notifier callbacks:
 
-- `observe_admin_menu`: Handle `admin_menu` notifications using `z_utils:name_for_site`.
+- `observe_admin_menu`: Add development/debug entries to the admin menu.
 - `observe_filewatcher`: Catch filewatcher file change events, reloads css or the open pages using `m_config:get_value`.
 - `observe_request_context`: Copy the database trace flag to a new (fresh) request process using `z_development_dbtrace:copy_from_session`.
 

@@ -107,7 +107,7 @@ Accepted Events
 
 This module handles the following notifier callbacks:
 
-- `observe_rsc_pivot_done`: Handle `rsc_pivot_done` notifications using `m_seo_sitemap:update_rsc`.
+- `observe_rsc_pivot_done`: Refresh sitemap metadata for the resource after pivoting changed its searchable fields.
 - `observe_seo_sitemap_index`: Return the number of entries in the mod_seo_sitemap managed sitemaps using `m_seo_sitemap:count`.
 - `observe_seo_sitemap_urlset`: Return the urlset belonging to the slice given using `m_seo_sitemap:slice`.
 

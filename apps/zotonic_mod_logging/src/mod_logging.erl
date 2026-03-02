@@ -68,10 +68,10 @@ Accepted Events
 
 This module handles the following notifier callbacks:
 
-- `observe_acl_is_allowed`: Handle `acl_is_allowed` notifications using `z_acl:is_allowed`.
-- `observe_admin_menu`: Handle `admin_menu` notifications using `m_log:install`.
-- `observe_search_query`: Handle `search_query` notifications using `z_acl:is_allowed`.
-- `observe_tick_1h`: Handle `tick_1h` notifications using `m_log:periodic_cleanup`.
+- `observe_acl_is_allowed`: Allow access to log resources only for users with the required log-view permissions.
+- `observe_admin_menu`: Add log viewers and log configuration entries to the admin menu.
+- `observe_search_query`: Provide module-specific search query handlers with ACL-aware filtering.
+- `observe_tick_1h`: Delete expired log records during hourly maintenance.
 
 See also
 

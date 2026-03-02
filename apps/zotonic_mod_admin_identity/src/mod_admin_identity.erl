@@ -127,11 +127,11 @@ Accepted Events
 
 This module handles the following notifier callbacks:
 
-- `observe_admin_menu`: Handle `admin_menu` notifications using `m_identity:get`.
-- `observe_identity_password_match`: Handle `identity_password_match` notifications using `z_utils:hex_decode`.
-- `observe_identity_verified`: Handle `identity_verified` notifications using `m_identity:set_verified`.
-- `observe_rsc_update`: Handle `rsc_update` notifications using `z_context:get`.
-- `observe_search_query`: Handle `search_query` notifications using `m_identity:get`.
+- `observe_admin_menu`: Add identity and account-management entries to the admin menu.
+- `observe_identity_password_match`: Validate legacy admin-password hashes during password checks.
+- `observe_identity_verified`: Mark matching identities as verified after successful confirmation flows.
+- `observe_rsc_update`: Apply admin identity updates from posted form values to resource-linked identities.
+- `observe_search_query`: Add identity-based search query clauses for admin user lookups.
 
 Delegate callbacks:
 

@@ -27,7 +27,7 @@ Accepted Events
 
 This module handles the following notifier callbacks:
 
-- `observe_admin_menu`: Handle `admin_menu` notifications using `cowmachine_req:get_req_header`.
+- `observe_admin_menu`: Add OAuth2 administration entries to the admin menu.
 - `observe_request_context`: Check if there is a valid Authorization header or 'access_token' argument using `z_context:get`.
 - `observe_search_query`: Queries to find OAuth2 tokens using `z_datetime:next_hour`.
 - `observe_tick_24h`: Periodically delete expired server side tokens using `m_oauth2:delete_expired_tokens`.

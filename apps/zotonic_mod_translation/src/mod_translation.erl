@@ -120,14 +120,14 @@ Accepted Events
 
 This module handles the following notifier callbacks:
 
-- `observe_admin_menu`: Handle `admin_menu` notifications using `translation_detect:detect`.
+- `observe_admin_menu`: Add translation and language administration entries to the admin menu.
 - `observe_dispatch_rewrite`: Grabs the language from the path parts and sets it as the page language (if that using `z_utils:only_digits`.
-- `observe_language_detect`: Handle `language_detect` notifications using `translation_detect:detect`.
+- `observe_language_detect`: Detect the preferred request language from URL, user context, and request headers.
 - `observe_request_context`: Check if the user has a preferred language (in the user's config) using `z_context:get_cookie`.
-- `observe_scomp_script_render`: Handle `scomp_script_render` notifications using `z_context:language`.
-- `observe_set_user_language`: Handle `set_user_language` notifications using `m_rsc:p_no_acl`.
-- `observe_url_rewrite`: Handle `url_rewrite` notifications using `z_context:language`.
-- `observe_user_context`: Handle `user_context` notifications using `m_rsc:p_no_acl`.
+- `observe_scomp_script_render`: Add translation runtime variables to rendered client-side script blocks.
+- `observe_set_user_language`: Persist a user language change to the authenticated user profile when allowed.
+- `observe_url_rewrite`: Rewrite URLs to include/remove language prefixes according to translation settings.
+- `observe_user_context`: Set user context language/timezone defaults based on the user profile resource.
 
 Delegate callbacks:
 

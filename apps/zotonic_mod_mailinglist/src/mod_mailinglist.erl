@@ -163,7 +163,7 @@ This module handles the following notifier callbacks:
 - `observe_acl_is_allowed`: Allow mailinglist admin to add or remove subscribers to mailinglists using `z_acl:is_allowed`.
 - `observe_admin_menu`: Contribute module entries to the admin menu tree.
 - `observe_mailinglist_message`: Send status messages to a recipient using `z_context:set_language`.
-- `observe_search_query`: Handle `search_query` notifications using `z_context:set_language`.
+- `observe_search_query`: Add mailing-list specific search query handling and ensure results use the current language context.
 - `observe_tick_24h`: Every 24h cleanup the mailinglists recipients using `m_mailinglist:periodic_cleanup`.
 
 Delegate callbacks:

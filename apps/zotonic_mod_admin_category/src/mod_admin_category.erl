@@ -46,7 +46,7 @@ Accepted Events
 This module handles the following notifier callbacks:
 
 - `observe_admin_menu`: Contribute module entries to the admin menu tree.
-- `observe_category_hierarchy_save`: Handle `category_hierarchy_save` notifications using `z_acl:is_allowed`.
+- `observe_category_hierarchy_save`: Check edit permissions and persist category hierarchy changes from the admin UI.
 - `observe_rsc_delete`: Do not allow a category to be removed iff there are resources within that category using `m_category:is_used`.
 
 Delegate callbacks:

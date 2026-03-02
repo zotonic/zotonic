@@ -115,20 +115,20 @@ Accepted Events
 
 This module handles the following notifier callbacks:
 
-- `observe_admin_menu`: Handle `admin_menu` notifications using `m_backup_revision:medium_delete_check`.
-- `observe_backup_download`: Handle `backup_download` notifications using `file:filename_all`.
-- `observe_backup_list`: Handle `backup_list` notifications using `file:filename_all`.
-- `observe_backup_restore`: Handle `backup_restore` notifications using `file:filename_all`.
-- `observe_backup_start`: Handle `backup_start` notifications using `file:filename_all`.
-- `observe_edge_delete`: Handle `edge_delete` notifications using `m_backup_revision:edge_delete`.
-- `observe_edge_insert`: Handle `edge_insert` notifications using `m_backup_revision:edge_insert`.
-- `observe_m_config_update`: Handle `m_config_update` notifications using `m_config:get_boolean`.
-- `observe_media_update_done`: Handle `media_update_done` notifications using `m_backup_revision:medium_insert`.
-- `observe_rsc_delete`: Handle `rsc_delete` notifications using `m_backup_revision:medium_delete_check`.
-- `observe_rsc_update_done`: Handle `rsc_update_done` notifications using `m_backup_revision:save_revision`.
-- `observe_rsc_upload`: Handle `rsc_upload` notifications using `backup_rsc_upload:rsc_upload`.
-- `observe_search_query`: Handle `search_query` notifications using `z_acl:is_allowed`.
-- `observe_tick_24h`: Handle `tick_24h` notifications using `m_site:environment`.
+- `observe_admin_menu`: Add backup and restore entries to the admin menu.
+- `observe_backup_download`: Validate and stream a requested backup archive from the backup directory.
+- `observe_backup_list`: List available backup archives from the configured backup directory.
+- `observe_backup_restore`: Restore a selected backup archive after path and permission validation.
+- `observe_backup_start`: Start creation of a new backup archive in the backup directory.
+- `observe_edge_delete`: Record edge removals as backup revisions for changed resources.
+- `observe_edge_insert`: Record edge insertions as backup revisions for changed resources.
+- `observe_m_config_update`: Toggle revision backup behavior immediately when backup config flags change.
+- `observe_media_update_done`: Store a backup revision when media metadata or file references are updated.
+- `observe_rsc_delete`: Preserve media revision data before deleting resources that own media.
+- `observe_rsc_update_done`: Save a resource revision snapshot after successful updates.
+- `observe_rsc_upload`: Include uploaded files in backup revision tracking and metadata.
+- `observe_search_query`: Provide module-specific search query handlers with ACL-aware filtering.
+- `observe_tick_24h`: Run daily backup retention and cleanup tasks according to site environment settings.
 
 ").
 -author("Marc Worrell <marc@worrell.nl>").

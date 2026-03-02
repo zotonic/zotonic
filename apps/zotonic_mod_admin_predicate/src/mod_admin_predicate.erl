@@ -43,11 +43,11 @@ Accepted Events
 
 This module handles the following notifier callbacks:
 
-- `observe_admin_menu`: Handle `admin_menu` notifications using `m_rsc:rid`.
+- `observe_admin_menu`: Add predicate management entries to the admin menu.
 - `observe_rsc_delete`: Do not allow a predicate to be removed iff there are edges with that predicate using `m_predicate:is_used`.
 - `observe_rsc_update`: Check if the update contains information for a predicate using `m_predicate:update_noflush`.
 - `observe_rsc_update_done`: Whenever a predicate has been updated we have to flush the predicate cache using `m_predicate:flush`.
-- `observe_search_query`: Handle `search_query` notifications using `m_rsc:rid`.
+- `observe_search_query`: Implement predicate-specific search query clauses used by admin predicate listings.
 
 Delegate callbacks:
 

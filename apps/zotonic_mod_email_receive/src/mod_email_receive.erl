@@ -31,10 +31,10 @@ Accepted Events
 
 This module handles the following notifier callbacks:
 
-- `observe_email_add_handler`: Handle `email_add_handler` notifications using `m_email_receive_recipient:insert`.
-- `observe_email_drop_handler`: Handle `email_drop_handler` notifications using `m_email_receive_recipient:delete`.
-- `observe_email_ensure_handler`: Handle `email_ensure_handler` notifications using `m_email_receive_recipient:ensure`.
-- `observe_email_received`: Handle `email_received` notifications using `m_email_receive_recipient:get_by_recipient`.
+- `observe_email_add_handler`: Register a recipient handler that maps inbound recipient addresses to modules/resources.
+- `observe_email_drop_handler`: Remove a previously registered inbound recipient handler.
+- `observe_email_ensure_handler`: Ensure a recipient handler registration exists, creating it when needed.
+- `observe_email_received`: Route incoming email to the recipient-specific module handler based on recipient address.
 
 Delegate callbacks:
 
