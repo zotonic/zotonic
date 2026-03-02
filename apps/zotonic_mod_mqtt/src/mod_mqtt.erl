@@ -379,7 +379,7 @@ This module handles the following notifier callbacks:
 
 - `observe_acl_is_allowed`: Apply module ACL checks for the requested action/object.
 - `observe_action_event_type`: Register the `{mqtt, ...}` action event type so wire actions can subscribe through MQTT.
-- `observe_module_activate`: Reconnect MQTT origin bridges when the module is activated for a site.
+- `observe_module_activate`: On module activation, scan the module for exported `mqtt:` observer callbacks and subscribe them as MQTT handlers using a sudo context.
 
 ").
 
