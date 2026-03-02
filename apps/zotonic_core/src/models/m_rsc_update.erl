@@ -21,7 +21,8 @@
 -moduledoc("
 Resource update helper module used by `m_rsc`.
 
-This module contains insert/update/delete/merge routines for resources and is logically part of the `m_rsc` model implementation. It is not exposed as a standalone model path endpoint.
+This module contains insert/update/delete/merge routines for resources and is logically part of the `m_rsc` model implementation.
+It is not exposed as a standalone model path endpoint.
 ").
 -author("Marc Worrell <marc@worrell.nl").
 
@@ -33,6 +34,8 @@ This module contains insert/update/delete/merge routines for resources and is lo
     delete/3,
     update/3,
     update/4,
+    update_translation/4,
+    update_translation/5,
     duplicate/3,
     duplicate/4,
     merge_delete/4,
@@ -63,11 +66,18 @@ This module contains insert/update/delete/merge routines for resources and is lo
 -define(LANGUAGE_DETECT_THRESHOLD, 10).
 
 %% @doc Insert a new resource. Crashes when insertion is not allowed.
--spec insert(m_rsc:props_all(), z:context()) -> {ok, m_rsc:resource_id()} | {error, term()}.
+-spec insert(Props, Context) -> {ok, ResourceId} | {error, term()} when
+        Props :: m_rsc:props_all(),
+        Context :: z:context(),
+        ResourceId :: m_rsc:resource_id().
 insert(Props, Context) ->
     insert(Props, [{is_escape_texts, true}], Context).
 
--spec insert(m_rsc:props_all(), m_rsc:update_options(), z:context()) -> {ok, m_rsc:resource_id()} | {error, term()}.
+-spec insert(Props, Options, Context) -> {ok, ResourceId} | {error, term()} when
+        Props :: m_rsc:props_all(),
+        Options :: m_rsc:update_options(),
+        Context :: z:context(),
+        ResourceId :: m_rsc:resource_id().
 insert(Props, Options, Context) when is_list(Props) ->
     {ok, Map} = z_props:from_list(Props),
     insert(Map, Options, Context);
@@ -76,12 +86,20 @@ insert(Props, Options, Context) when is_map(Props) ->
     update(insert_rsc, PropsDefaults, Options, Context).
 
 
-%% @doc Delete a resource
--spec delete(m_rsc:resource(), z:context()) -> ok | {error, atom()}.
+%% @doc Delete a resource.
+-spec delete(Id, Context) -> ok | {error, atom()} when
+        Id :: m_rsc:resource(),
+        Context :: z:context().
 delete(Id, Context) ->
     delete(Id, undefined, Context).
 
--spec delete(m_rsc:resource(), m_rsc:resource(), z:context()) -> ok | {error, atom()}.
+%% @doc Delete a resource, optionally set a resource that 'replaces' the
+%% the deleted resources. Requests for the deleted resource will be
+%% redirected to the follow-up resource.
+-spec delete(Id, FollowUpId, Context) -> ok | {error, atom()} when
+        Id :: m_rsc:resource(),
+        FollowUpId :: m_rsc:resource(),
+        Context :: z:context().
 delete(1, _FollowUpId, _Context) ->
     {error, eacces};
 delete(undefined, _FollowUpId, _Context) ->
@@ -113,7 +131,9 @@ delete(Name, FollowUpId, Context) ->
         Context).
 
 %% @doc Delete a resource, no check on rights etc is made. This is called by m_category:delete/3
--spec delete_nocheck(m_rsc:resource(), z:context()) -> ok | {error, atom()}.
+-spec delete_nocheck(Id, Context) -> ok | {error, atom()} when
+        Id :: m_rsc:resource(),
+        Context :: z:context().
 delete_nocheck(Id, Context) ->
     delete_nocheck(m_rsc:rid(Id, Context), undefined, Context).
 
@@ -161,8 +181,13 @@ delete_nocheck(Id, OptFollowUpId, Context) when is_integer(Id) ->
             Error
     end.
 
-%% @doc Merge two resources, delete the losing resource.
--spec merge_delete(m_rsc:resource(), m_rsc:resource(), list(), #context{}) -> ok | {error, term()}.
+%% @doc Merge two resources, update the winner, delete the loser. The losing resource is
+%% deleted with the winning one set as the follow-up resource.
+-spec merge_delete(WinnerId, LoserId, Options, Context) -> ok | {error, term()} when
+        WinnerId :: m_rsc:resource(),
+        LoserId :: m_rsc:resource(),
+        Options :: list(),
+        Context :: #context{}.
 merge_delete(WinnerId, WinnerId, _Options, _Context) ->
     ok;
 merge_delete(_WinnerId, 1, _Options, _Context) ->
@@ -185,7 +210,11 @@ merge_delete(WinnerId, LoserId, Options, Context) ->
     end.
 
 %% @doc Merge two resources, delete the 'loser'
--spec merge_delete_nocheck(integer(), integer(), list(), #context{}) -> ok.
+-spec merge_delete_nocheck(WinnerId, LoserId, Options, Context) -> ok when
+        WinnerId :: integer(),
+        LoserId :: integer(),
+        Options :: list(),
+        Context :: #context{}.
 merge_delete_nocheck(WinnerId, LoserId, Opts, Context) ->
     IsMergeTrans = proplists:get_value(is_merge_trans, Opts, false),
     z_notifier:notify_sync(#rsc_merge{
@@ -364,11 +393,20 @@ flush(Id, CatList, Context) ->
 
 
 %% @doc Duplicate a resource, creating a new resource with the given title.
--spec duplicate(m_rsc:resource(), m_rsc:props_all(), z:context()) -> {ok, m_rsc:resource_id()} | {error, term()}.
+-spec duplicate(Id, Props, Context) -> {ok, NewId} | {error, term()} when
+        Id :: m_rsc:resource(),
+        Props :: m_rsc:props_all(),
+        Context :: z:context(),
+        NewId :: m_rsc:resource_id().
 duplicate(Id, DupProps, Context) ->
     duplicate(Id, DupProps, [], Context).
 
--spec duplicate(m_rsc:resource(), m_rsc:props_all(), m_rsc:duplicate_options(), z:context()) -> {ok, m_rsc:resource_id()} | {error, term()}.
+-spec duplicate(Id, Props, Options, Context) -> {ok, NewId} | {error, term()} when
+        Id :: m_rsc:resource(),
+        Props :: m_rsc:props_all(),
+        Options :: m_rsc:duplicate_options(),
+        Context :: z:context(),
+        NewId :: m_rsc:resource_id().
 duplicate(Id, DupProps, DupOpts, Context) when is_list(DupProps) ->
     {ok, DupMap} = z_props:from_list(DupProps),
     duplicate(Id, DupMap, DupOpts, Context);
@@ -436,13 +474,12 @@ duplicate(undefined, _DupProps, _DupOpts, _Context) ->
 duplicate(Id, DupProps, DupOpts, Context) ->
     duplicate(m_rsc:rid(Id, Context), DupProps, DupOpts, Context).
 
-%% @doc Update a resource
--spec update(
-        m_rsc:resource() | insert_rsc,
-        m_rsc:props_all() | m_rsc:update_function(),
-        z:context()
-    ) ->
-    {ok, m_rsc:resource_id()} | {error, term()}.
+%% @doc Update a resource using default options.
+-spec update(IdOrInsert, PropsOrFun, Context) -> {ok, UpdatedId} | {error, term()} when
+        IdOrInsert :: m_rsc:resource() | insert_rsc,
+        PropsOrFun :: m_rsc:props_all() | m_rsc:update_function(),
+        Context :: z:context(),
+        UpdatedId :: m_rsc:resource_id().
 update(Id, Props, Context) ->
     update(Id, Props, [], Context).
 
@@ -462,13 +499,12 @@ update(Id, Props, Context) ->
 %%
 %% {is_escape_texts, false} checks if the texts are escaped, and if not then it
 %% will escape. This prevents "double-escaping" of texts.
--spec update(
-        m_rsc:resource() | insert_rsc,
-        m_rsc:props_all() | m_rsc:update_function(),
-        m_rsc:update_options() | boolean(),
-        z:context()
-    ) ->
-    {ok, m_rsc:resource_id()} | {error, term()}.
+-spec update(IdOrInsert, PropsOrFun, Options, Context) -> {ok, UpdatedId} | {error, term()} when
+        IdOrInsert :: m_rsc:resource() | insert_rsc,
+        PropsOrFun :: m_rsc:props_all() | m_rsc:update_function(),
+        Options :: m_rsc:update_options() | boolean(),
+        Context :: z:context(),
+        UpdatedId :: m_rsc:resource_id().
 update(Id, Props, false, Context) ->
     update(Id, Props, [{is_escape_texts, false}], Context);
 update(Id, Props, true, Context) ->
@@ -494,6 +530,321 @@ update(Id, PropsOrFun0, Options, Context) when is_integer(Id); Id =:= insert_rsc
     PropsOrFun = binary_keys(PropsOrFun0),
     update_1(Id, PropsOrFun, Options, Context).
 
+%% @doc Update a specific language translation of (possibly nested) properties.
+%%      The incoming values are escaped/sanitized before merge and the resulting
+%%      update is sent to `update/4` with `{is_escape_texts, false}`.
+-spec update_translation(Id, Language, Props, Context) -> {ok, UpdatedId} | {error, term()} when
+        Id :: m_rsc:resource(),
+        Language :: z_language:language(),
+        Props :: m_rsc:props_all(),
+        Context :: z:context(),
+        UpdatedId :: m_rsc:resource_id().
+update_translation(Id, Language, Props, Context) ->
+    update_translation(Id, Language, Props, [], Context).
+
+%% @doc Like `update_translation/4`, with extra update options.
+%%      For nested values the top-level property is merged from raw resource
+%%      properties. For `blocks`, merge is by block `name` while preserving order
+%%      and disallowing add/remove/reorder of blocks.
+-spec update_translation(Id, Language, Props, Options, Context) -> {ok, UpdatedId} | {error, term()} when
+        Id :: m_rsc:resource(),
+        Language :: z_language:language(),
+        Props :: m_rsc:props_all(),
+        Options :: m_rsc:update_options(),
+        Context :: z:context(),
+        UpdatedId :: m_rsc:resource_id().
+update_translation(Name, Language, Props, Options, Context) when not is_integer(Name) ->
+    case m_rsc:name_to_id(Name, Context) of
+        {ok, Id} ->
+            update_translation(Id, Language, Props, Options, Context);
+        {error, _} ->
+            case m_rsc:rid(Name, Context) of
+                undefined -> {error, enoent};
+                Id -> update_translation(Id, Language, Props, Options, Context)
+            end
+    end;
+update_translation(Id, Language, Props, Options, Context) when is_list(Props) ->
+    {ok, PropsMap} = z_props:from_list(Props),
+    update_translation(Id, Language, PropsMap, Options, Context);
+update_translation(Id, Language, Props, Options, Context) when is_integer(Id), is_map(Props) ->
+    case z_language:to_language_atom(Language) of
+        {ok, LanguageAtom} ->
+            PropsMap = z_props:from_map(Props),
+            SafeProps = z_sanitize:escape_props(PropsMap, Context),
+            update_translation_1(Id, LanguageAtom, SafeProps, Options, Context);
+        {error, _} = Error ->
+            Error
+    end.
+
+update_translation_1(Id, Language, SafeProps, Options, Context) ->
+    case m_rsc:get_raw(Id, Context) of
+        {ok, Raw} ->
+            {OptionsExpected, IsSetExpected} = maybe_set_expected_version_option(Raw, Options),
+            Merge = update_translation_merge_props(Raw, SafeProps, Language, Context),
+            UpdateOptions = [ {is_escape_texts, false} | proplists:delete(is_escape_texts, proplists:delete(escape_texts, OptionsExpected)) ],
+            case update(Id, Merge, UpdateOptions, Context) of
+                {error, {expected, _, _}} when IsSetExpected ->
+                    update_translation_retry(Id, Language, SafeProps, Options, Context);
+                Result ->
+                    Result
+            end;
+        {error, _} = Error ->
+            Error
+    end.
+
+update_translation_retry(Id, Language, SafeProps, Options, Context) ->
+    case m_rsc:get_raw(Id, Context) of
+        {ok, Raw} ->
+            {OptionsExpected, _} = maybe_set_expected_version_option(Raw, Options),
+            Merge = update_translation_merge_props(Raw, SafeProps, Language, Context),
+            UpdateOptions = [ {is_escape_texts, false} | proplists:delete(is_escape_texts, proplists:delete(escape_texts, OptionsExpected)) ],
+            update(Id, Merge, UpdateOptions, Context);
+        {error, _} = Error ->
+            Error
+    end.
+
+maybe_set_expected_version_option(Raw, Options) ->
+    case proplists:get_value(expected, Options, undefined) of
+        undefined ->
+            Version = maps:get(<<"version">>, Raw),
+            {[ {expected, [ {<<"version">>, Version} ]} | Options ], true};
+        _ ->
+            {Options, false}
+    end.
+
+update_translation_merge_props(Raw, Props, Language, Context) ->
+    RawLanguages = maps:get(<<"language">>, Raw, []),
+    Languages = case lists:member(Language, RawLanguages) of
+        true -> RawLanguages;
+        false -> lists:usort([ Language | RawLanguages ])
+    end,
+    Props1 = maps:remove(<<"language">>, Props),
+    MergedTop = lists:foldl(
+        fun(Key, Acc) ->
+            Existing = maps:get(Key, Raw, undefined),
+            Incoming = maps:get(Key, Props1),
+            Value = update_translation_merge_value(
+                [ Key ],
+                Existing,
+                Incoming,
+                Language,
+                Languages,
+                Context),
+            Acc#{ Key => Value }
+        end,
+        #{},
+        maps:keys(Props1)),
+    MergedTop#{ <<"language">> => Languages }.
+
+update_translation_merge_value([ <<"blocks">> ], Existing, Incoming, Language, Languages, Context) when is_map(Incoming); is_list(Incoming) ->
+    update_translation_merge_blocks(Existing, Incoming, Language, Languages, Context);
+update_translation_merge_value(Path, Existing, Incoming, Language, Languages, Context) when is_map(Incoming) ->
+    Base = case is_map(Existing) of
+        true -> Existing;
+        false -> #{}
+    end,
+    maps:fold(
+        fun(K, V, Acc) ->
+            ExistingValue = maps:get(K, Acc, undefined),
+            Value = update_translation_merge_value(
+                [ K | Path ],
+                ExistingValue,
+                V,
+                Language,
+                Languages,
+                Context),
+            Acc#{ K => Value }
+        end,
+        Base,
+        Incoming);
+update_translation_merge_value(Path, Existing, Incoming, Language, Languages, Context) when is_list(Incoming) ->
+    ExistingList = case is_list(Existing) of
+        true -> Existing;
+        false when Existing =:= <<>> -> [];
+        false when Existing =:= undefined -> [];
+        false -> [ Existing ]
+    end,
+    update_translation_merge_list(Path, ExistingList, Incoming, Language, Languages, Context);
+update_translation_merge_value(_Path, #trans{} = Existing, Incoming, Language, Languages, _Context) ->
+    Value = update_translation_incoming_value(Incoming, Language),
+    update_translation_set_trans(Existing, Language, Value, Languages, false);
+update_translation_merge_value(Path, Existing, Incoming, Language, Languages, _Context) ->
+    case update_translation_is_translatable(Path, Existing, Incoming) of
+        true ->
+            BaseLanguage = case Languages of
+                [ L | _ ] -> L;
+                [] -> Language
+            end,
+            Trans0 = update_translation_init_trans(Existing, BaseLanguage, Languages),
+            Value = update_translation_incoming_value(Incoming, Language),
+            update_translation_set_trans(Trans0, Language, Value, Languages, true);
+        false ->
+            Incoming
+    end.
+
+update_translation_merge_list(_Path, Existing, [], _Language, _Languages, _Context) ->
+    Existing;
+update_translation_merge_list(Path, [ E | Es ], [ I | Is ], Language, Languages, Context) ->
+    [ update_translation_merge_value(Path, E, I, Language, Languages, Context)
+      | update_translation_merge_list(Path, Es, Is, Language, Languages, Context)
+    ];
+update_translation_merge_list(Path, [], [ I | Is ], Language, Languages, Context) ->
+    [ update_translation_merge_value(Path, undefined, I, Language, Languages, Context)
+      | update_translation_merge_list(Path, [], Is, Language, Languages, Context)
+    ].
+
+update_translation_merge_blocks(ExistingBlocks, IncomingBlocks, Language, Languages, Context)
+    when is_list(ExistingBlocks) ->
+    IncomingByName = update_translation_blocks_by_name(IncomingBlocks),
+    update_translation_log_missing_blocks(ExistingBlocks, IncomingByName),
+    lists:map(
+        fun
+            (#{ <<"name">> := Name } = Block) ->
+                case maps:get(Name, IncomingByName, undefined) of
+                    undefined ->
+                        Block;
+                    Incoming when is_map(Incoming) ->
+                        Block1 = update_translation_merge_value(
+                            [ Name, <<"blocks">> ],
+                            Block,
+                            Incoming,
+                            Language,
+                            Languages,
+                            Context),
+                        Block1#{
+                            <<"name">> => maps:get(<<"name">>, Block),
+                            <<"type">> => maps:get(<<"type">>, Block, maps:get(<<"type">>, Block1, undefined))
+                        };
+                    _ ->
+                        Block
+                end;
+            (Block) ->
+                Block
+        end,
+        ExistingBlocks);
+update_translation_merge_blocks(ExistingBlocks, _IncomingBlocks, _Language, _Languages, _Context) ->
+    ExistingBlocks.
+
+update_translation_log_missing_blocks(ExistingBlocks, IncomingByName) ->
+    ExistingNames = maps:from_list(
+        lists:filtermap(
+            fun
+                (#{ <<"name">> := Name }) when is_binary(Name) -> {true, {Name, true}};
+                (_) -> false
+            end,
+            ExistingBlocks)),
+    lists:foreach(
+        fun({Name, _Block}) ->
+            case maps:is_key(Name, ExistingNames) of
+                true ->
+                    ok;
+                false ->
+                    ?LOG_NOTICE(#{
+                        in => zotonic_core,
+                        text => <<"Ignoring translation update for non-existing block">>,
+                        block_name => Name
+                    }),
+                    ok
+            end
+        end,
+        maps:to_list(IncomingByName)).
+
+update_translation_blocks_by_name(Blocks) when is_list(Blocks) ->
+    lists:foldl(
+        fun
+            (#{ <<"name">> := Name } = Block, Acc) ->
+                Acc#{ Name => Block };
+            (_, Acc) ->
+                Acc
+        end,
+        #{},
+        Blocks);
+update_translation_blocks_by_name(Blocks) when is_map(Blocks) ->
+    maps:fold(
+        fun
+            (Name, Block, Acc) when is_binary(Name), is_map(Block) ->
+                Acc#{ Name => Block#{ <<"name">> => Name } };
+            (_, _, Acc) ->
+                Acc
+        end,
+        #{},
+        Blocks);
+update_translation_blocks_by_name(_) ->
+    #{}.
+
+update_translation_is_translatable(Path, Existing, Incoming) ->
+    case update_translation_is_clear_typed(Path, Existing, Incoming) of
+        true -> false;
+        false ->
+            update_translation_is_text_like(Existing) orelse update_translation_is_text_like(Incoming)
+    end.
+
+update_translation_is_clear_typed(Path, Existing, Incoming) ->
+    update_translation_is_clear_type_value(Existing)
+    orelse update_translation_is_clear_type_value(Incoming)
+    orelse not update_translation_is_translatable_type_key(Path).
+
+update_translation_is_clear_type_value(undefined) -> false;
+update_translation_is_clear_type_value(#trans{}) -> false;
+update_translation_is_clear_type_value(V) when is_binary(V) -> false;
+update_translation_is_clear_type_value([ C | _ ]) when is_integer(C) -> false;
+update_translation_is_clear_type_value(V) when is_map(V); is_list(V) -> true;
+update_translation_is_clear_type_value(V) when is_boolean(V); is_integer(V); is_float(V) -> true;
+update_translation_is_clear_type_value(V) when is_atom(V) -> true;
+update_translation_is_clear_type_value(_) -> false.
+
+update_translation_is_translatable_type_key([ Key | _ ]) ->
+    case z_props:property_name_type_hint(Key) of
+        text -> true;
+        html -> true;
+        undefined -> true;
+        _ -> false
+    end.
+
+update_translation_is_text_like(#trans{}) -> true;
+update_translation_is_text_like(V) when is_binary(V) -> true;
+update_translation_is_text_like([ C | _ ]) when is_integer(C) -> true;
+update_translation_is_text_like(_) -> false.
+
+update_translation_incoming_value(#trans{ tr = Tr }, Language) ->
+    proplists:get_value(Language, Tr, <<>>);
+update_translation_incoming_value(undefined, _Language) ->
+    <<>>;
+update_translation_incoming_value([ C | _ ] = Text, _Language) when is_integer(C) ->
+    unicode_characters_to_binary(Text);
+update_translation_incoming_value(Value, _Language) ->
+    z_convert:to_binary(Value).
+
+update_translation_init_trans(#trans{} = Trans, _BaseLanguage, _Languages) ->
+    Trans;
+update_translation_init_trans(Existing, BaseLanguage, Languages) ->
+    Tr0 = [ {Lang, <<>>} || Lang <- Languages ],
+    Tr1 = case Existing of
+        V when is_binary(V) ->
+            [ {BaseLanguage, V} | proplists:delete(BaseLanguage, Tr0) ];
+        [ C | _ ] = Text when is_integer(C) ->
+            [ {BaseLanguage, unicode_characters_to_binary(Text)} | proplists:delete(BaseLanguage, Tr0) ];
+        _ ->
+            Tr0
+    end,
+    #trans{ tr = Tr1 }.
+
+update_translation_set_trans(#trans{ tr = Tr0 }, Language, Value, Languages, IsEnsureAllLanguages) ->
+    Tr1 = case IsEnsureAllLanguages of
+        true -> update_translation_ensure_langs(Tr0, Languages);
+        false -> Tr0
+    end,
+    Value1 = update_translation_incoming_value(Value, Language),
+    #trans{ tr = [ {Language, Value1} | proplists:delete(Language, Tr1) ] }.
+
+update_translation_ensure_langs(Tr, []) ->
+    Tr;
+update_translation_ensure_langs(Tr, [ Lang | Rest ]) ->
+    Tr1 = case proplists:is_defined(Lang, Tr) of
+        true -> Tr;
+        false -> [ {Lang, <<>>} | Tr ]
+    end,
+    update_translation_ensure_langs(Tr1, Rest).
 
 %% @doc Determine the timezone for date conversions, if it is not given in the options.
 %% Order:
@@ -1772,6 +2123,7 @@ is_protected(<<"page_url">>, _IsNormal) -> true;
 is_protected(<<"page_url_abs">>, _IsNormal) -> true;
 is_protected(<<"alternate_page_url">>, _IsNormal) -> true;
 is_protected(<<"alternate_page_url_abs">>, _IsNormal) -> true;
+is_protected(<<"email_raw">>, _IsNormal) -> true;
 is_protected(<<"medium">>, _IsNormal) -> true;
 is_protected(<<"pivot_", _binary>>, _IsNormal) -> true;
 is_protected(<<"computed_", _/binary>>, _IsNormal) -> true;
@@ -1812,4 +2164,3 @@ update_page_path_log(RscId, OldProps, #{ <<"page_path">> := NewPath }, Context) 
         Old -- New);
 update_page_path_log(_RscId, _OldProps, _NewProps, _Context) ->
     ok.
-

@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2020-2025 Marc Worrell
+%% @copyright 2020-2026 Marc Worrell
 %% @doc Query string processing, property lists and property maps for
 %% Zotonic resources.
 %% @end
 
-%% Copyright 2020-2025 Marc Worrell
+%% Copyright 2020-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -33,7 +33,9 @@
     extract_languages/1,
     prune_languages/2,
 
-    normalize_dates/3
+    normalize_dates/3,
+    common_properties/0,
+    property_name_type_hint/1
     ]).
 
 %% Query String key, value and property types.
@@ -41,11 +43,25 @@
 -type qs_key() :: binary().
 -type qs_value() :: binary() | #upload{} | term().
 -type qs_prop() :: { qs_key(), qs_value() }.
+-type type_hint_t() :: id
+                     | binary
+                     | text
+                     | html
+                     | int
+                     | datetime
+                     | list
+                     | language
+                     | float
+                     | bool
+                     | uri
+                     | email
+                     | unsafe.
 
 -export_type([
     qs_key/0,
     qs_value/0,
-    qs_prop/0
+    qs_prop/0,
+    type_hint_t/0
     ]).
 
 %% We use -4700 as the most prehistoric date, as postgresql can't handle
@@ -99,6 +115,190 @@ from_prop(K) ->
 to_binary(K) when is_atom(K) -> atom_to_binary(K, utf8);
 to_binary(K) when is_binary(K) -> K;
 to_binary(K) -> K.
+
+%% @doc Common resource properties used by exporter and backup routines.
+-spec common_properties() -> [binary()].
+common_properties() ->
+    [
+        <<"title">>,
+
+        <<"category_id">>,
+        <<"creator_id">>,
+        <<"modifier_id">>,
+
+        <<"created">>,
+        <<"modified">>,
+
+        <<"publication_start">>,
+        <<"publication_end">>,
+
+        <<"is_published">>,
+        <<"is_featured">>,
+        <<"is_protected">>,
+
+        <<"chapeau">>,
+        <<"subtitle">>,
+        <<"short_title">>,
+        <<"summary">>,
+
+        <<"name_prefix">>,
+        <<"name_first">>,
+        <<"name_surname_prefix">>,
+        <<"name_surname">>,
+
+        <<"phone">>,
+        <<"phone_mobile">>,
+        <<"phone_alt">>,
+        <<"phone_emergency">>,
+
+        <<"email">>,
+        <<"website">>,
+
+        <<"date_start">>,
+        <<"date_end">>,
+        <<"date_remarks">>,
+
+        <<"address_street_1">>,
+        <<"address_street_2">>,
+        <<"address_city">>,
+        <<"address_state">>,
+        <<"address_postcode">>,
+        <<"address_country">>,
+
+        <<"mail_email">>,
+        <<"mail_street_1">>,
+        <<"mail_street_2">>,
+        <<"mail_city">>,
+        <<"mail_state">>,
+        <<"mail_postcode">>,
+        <<"mail_country">>,
+
+        <<"billing_email">>,
+        <<"billing_street_1">>,
+        <<"billing_street_2">>,
+        <<"billing_city">>,
+        <<"billing_state">>,
+        <<"billing_postcode">>,
+        <<"billing_country">>,
+
+        <<"location_lng">>,
+        <<"location_lat">>,
+
+        <<"body">>,
+        <<"body_extra">>,
+        <<"blocks">>,
+
+        <<"page_path">>,
+        <<"name">>,
+
+        <<"seo_noindex">>,
+        <<"title_slug">>,
+        <<"custom_slug">>,
+        <<"seo_desc">>
+    ].
+
+%% @doc Return a type-hint atom derived from a property name.
+-spec property_name_type_hint(Key) -> type_hint_t() | undefined when
+        Key :: binary().
+property_name_type_hint(Key)
+    when Key =:= <<"id">>;
+         Key =:= <<"creator_id">>;
+         Key =:= <<"modifier_id">>;
+         Key =:= <<"rsc_id">>;
+         Key =:= <<"rsc_id2">> ->
+    id;
+property_name_type_hint(Key)
+    when Key =:= <<"name">>;
+         Key =:= <<"type">>;
+         Key =:= <<"tz">> ->
+    binary;
+property_name_type_hint(Key)
+    when Key =:= <<"version">>;
+         Key =:= <<"visible_for">>;
+         Key =:= <<"privacy">> ->
+    int;
+property_name_type_hint(Key)
+    when Key =:= <<"created">>;
+         Key =:= <<"modified">>;
+         Key =:= <<"date_start">>;
+         Key =:= <<"date_end">>;
+         Key =:= <<"org_pubdate">>;
+         Key =:= <<"publication_start">>;
+         Key =:= <<"publication_end">> ->
+    datetime;
+property_name_type_hint(Key)
+    when Key =:= <<"language">>;
+         Key =:= <<"blocks">>;
+         Key =:= <<"is_a">> ->
+    list;
+property_name_type_hint(Key)
+    when Key =:= <<"pref_language">>;
+         Key =:= <<"medium_language">> ->
+    language;
+property_name_type_hint(Key)
+    when Key =:= <<"location_lat">>;
+         Key =:= <<"location_lng">> ->
+    float;
+property_name_type_hint(<<"is_", _/binary>>) ->
+    bool;
+property_name_type_hint(<<"date_is_", _/binary>>) ->
+    bool;
+property_name_type_hint(Key)
+    when Key =:= <<"seo_noindex">> ->
+    bool;
+property_name_type_hint(Key)
+    when Key =:= <<"@id">>;
+         Key =:= <<"website">> ->
+    uri;
+property_name_type_hint(Key)
+    when Key =:= <<"email">> ->
+    email;
+property_name_type_hint(Key)
+    when Key =:= <<"body">>;
+         Key =:= <<"body_extra">> ->
+    html;
+property_name_type_hint(Key)
+    when Key =:= <<"date_remarks">>;
+         Key =:= <<"chapeau">>;
+         Key =:= <<"title">>;
+         Key =:= <<"short_title">>;
+         Key =:= <<"subtitle">>;
+         Key =:= <<"summary">> ->
+    text;
+property_name_type_hint(Key) ->
+    case extract_type(Key, <<>>) of
+        <<"int">> -> int;
+        <<"url">> -> uri;
+        <<"uri">> -> uri;
+        <<"email">> -> email;
+        <<"html">> -> html;
+        <<"list">> -> list;
+        <<"id">> -> id;
+        <<"date">> -> datetime;
+        <<"unsafe">> -> unsafe;
+        _ -> property_name_type_hint_1(Key)
+    end.
+
+property_name_type_hint_1(<<"email_", _/binary>>) ->
+    email;
+property_name_type_hint_1(<<"date_", _/binary>>) ->
+    datetime;
+property_name_type_hint_1(<<"address_", _/binary>>) ->
+    binary;
+property_name_type_hint_1(<<"mail_", _/binary>>) ->
+    binary;
+property_name_type_hint_1(<<"billing_", _/binary>>) ->
+    binary;
+property_name_type_hint_1(_) ->
+    undefined.
+
+extract_type(<<>>, Type) ->
+    Type;
+extract_type(<<"_", R/binary>>, _Type) ->
+    extract_type(R, <<>>);
+extract_type(<<C/utf8, R/binary>>, Type) ->
+    extract_type(R, <<Type/binary, C/utf8>>).
+
 
 from_prop_value(K, undefined) ->
     {K, undefined};
@@ -936,4 +1136,3 @@ is_date_key(K) when is_binary(K) ->
         _ -> false
     end;
 is_date_key(_) -> false.
-
