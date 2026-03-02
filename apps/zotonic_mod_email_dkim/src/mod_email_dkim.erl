@@ -63,7 +63,7 @@ Accepted Events
 
 This module handles the following notifier callbacks:
 
-- `observe_email_dkim_options`: Handle `email_dkim_options` notifications using `z_email_dkim:mimemail_options`.
+- `observe_email_dkim_options`: Inject DKIM signing options for outgoing emails when DKIM is configured.
 
 ").
 -author("Arjan Scherpenisse <arjan@miraclethings.nl>").

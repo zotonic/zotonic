@@ -69,7 +69,7 @@ Accepted Events
 
 This module handles the following notifier callbacks:
 
-- `observe_admin_menu`: Handle `admin_menu` notifications using `m_custom_redirect:is_allowed`.
+- `observe_admin_menu`: Add custom redirect management to the admin menu when permitted.
 - `observe_dispatch`: Called when the path didn't match any dispatch rule using `m_custom_redirect:get_dispatch`.
 - `observe_dispatch_host`: Called when the host didn't match any site config using `m_custom_redirect:list_dispatch_host`.
 

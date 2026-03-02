@@ -378,8 +378,8 @@ Accepted Events
 This module handles the following notifier callbacks:
 
 - `observe_acl_is_allowed`: Apply module ACL checks for the requested action/object.
-- `observe_action_event_type`: Handle the <tt>{live ...}</tt> event type using `scomp_mqtt_live:event_type_mqtt`.
-- `observe_module_activate`: Handle `module_activate` notifications using `z_acl:sudo`.
+- `observe_action_event_type`: Register the `{mqtt, ...}` action event type so wire actions can subscribe through MQTT.
+- `observe_module_activate`: On module activation, scan the module for exported `mqtt:` observer callbacks and subscribe them as MQTT handlers using a sudo context.
 
 ").
 

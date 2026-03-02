@@ -107,7 +107,7 @@ Accepted Events
 
 This module handles the following notifier callbacks:
 
-- `observe_media_viewer_consent`: Handle `media_viewer_consent` notifications using `z_template:render_to_iolist`.
+- `observe_media_viewer_consent`: Render the cookie-consent placeholder shown before tracking-sensitive media is displayed.
 
 ").
 

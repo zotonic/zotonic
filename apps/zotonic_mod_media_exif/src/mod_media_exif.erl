@@ -33,7 +33,7 @@ Accepted Events
 
 This module handles the following notifier callbacks:
 
-- `observe_media_upload_rsc_props`: Handle `media_upload_rsc_props` notifications using `z_props:from_list`.
+- `observe_media_upload_rsc_props`: Extract EXIF metadata fields and add them to resource properties on media upload.
 
 ").
 -author("Marc Worrell <marc@worrell.nl>").

@@ -140,7 +140,7 @@ Accepted Events
 
 This module handles the following notifier callbacks:
 
-- `observe_identity_verification`: Handle `identity_verification` notifications using `z_auth:is_auth`.
+- `observe_identity_verification`: Complete signup identity verification and continue the signup/logon flow when allowed.
 - `observe_logon_ready_page`: Return the url to redirect to when the user logged on, defaults to the user's personal page using `z_auth:is_auth`.
 - `observe_signup`: Add a new user or an existing person as user using `z_ids:id`.
 - `observe_signup_url`: Check if a module wants to redirect to the signup form using `z_ids:id`.

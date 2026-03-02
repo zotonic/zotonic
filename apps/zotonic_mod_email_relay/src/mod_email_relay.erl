@@ -42,7 +42,7 @@ This module handles the following notifier callbacks:
 - `observe_email_send_encoded`: Relay an email via another Zotonic server using `m_config:get_boolean`.
 - `observe_email_sent`: If the sent email is a relayed email, then forward a delivery report using `z_db:q`.
 - `observe_email_status`: Forward blocking/unblocking of email addresses to the relaying Zotonic server using `m_config:get_boolean`.
-- `observe_tick_24h`: Handle `tick_24h` notifications using `m_email_relay:periodic_cleanup`.
+- `observe_tick_24h`: Run daily cleanup of relay queues and stale relay status records.
 
 See also
 

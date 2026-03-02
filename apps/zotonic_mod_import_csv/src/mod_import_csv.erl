@@ -41,7 +41,7 @@ Accepted Events
 This module handles the following notifier callbacks:
 
 - `observe_admin_menu`: Add menu item to 'Content' admin menu using `z_acl:is_allowed`.
-- `observe_dropbox_file`: Handle a drop folder file when it is a tsv/csv file we know using `z_acl:user`.
+- `observe_dropbox_file`: Import recognized CSV (including tab-separated) and XLSX files from the drop folder when an import definition matches.
 
 Delegate callbacks:
 

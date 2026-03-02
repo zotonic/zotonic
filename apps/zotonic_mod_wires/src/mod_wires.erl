@@ -33,7 +33,7 @@ This module handles the following notifier callbacks:
 
 - `observe_acl_is_allowed`: Allow publish from clients to the transport topic using `z_render:output`.
 - `observe_output_html`: Render nested actions and scomp results using `z_render:output`.
-- `observe_page_actions`: Handle `page_actions` notifications using `z_render:clean`.
+- `observe_page_actions`: Sanitize and normalize page action payloads before they are sent to the browser.
 - `observe_scomp_script_render`: Part of the {% script %} rendering in templates using `z_render:make_postback_info`.
 
 ").

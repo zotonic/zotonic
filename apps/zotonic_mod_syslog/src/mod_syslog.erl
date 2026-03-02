@@ -27,7 +27,7 @@ Accepted Events
 
 This module handles the following notifier callbacks:
 
-- `observe_http_log_access`: Handle `http_log_access` notifications using `z_syslog_logger:log`.
+- `observe_http_log_access`: Write HTTP access log entries to syslog.
 
 ").
 -author("Marc Worrell <marc@worrell.nl>").

@@ -35,12 +35,12 @@ Accepted Events
 This module handles the following notifier callbacks:
 
 - `observe_email_bounced`: Mark an email address as bouncing, only marks for messages which we know we have sent using `m_email_status:mark_bounced`.
-- `observe_email_failed`: Handle `email_failed` notifications using `m_email_status:mark_failed`.
-- `observe_email_is_blocked`: Handle `email_is_blocked` notifications using `m_email_status:is_blocked`.
-- `observe_email_is_recipient_ok`: Handle `email_is_recipient_ok` notifications using `m_email_status:is_ok_to_send`.
-- `observe_email_received`: Handle `email_received` notifications using `m_email_status:mark_received`.
-- `observe_email_sent`: Handle `email_sent` notifications using `m_email_status:mark_sent`.
-- `observe_tick_24h`: Handle `tick_24h` notifications using `m_email_status:periodic_cleanup`.
+- `observe_email_failed`: Mark recipient addresses as failed when delivery attempts bounce or hard-fail.
+- `observe_email_is_blocked`: Report whether an address is blocked from receiving outbound email.
+- `observe_email_is_recipient_ok`: Decide if sending to an address is allowed based on bounce/block history.
+- `observe_email_received`: Record inbound email reception for recipient status tracking.
+- `observe_email_sent`: Record successful outbound deliveries for recipient status tracking.
+- `observe_tick_24h`: Purge old email status history during daily maintenance.
 
 Delegate callbacks:
 

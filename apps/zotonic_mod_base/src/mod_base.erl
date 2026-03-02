@@ -36,7 +36,7 @@ This module handles the following notifier callbacks:
 - `observe_dispatch`: Check if there is a controller or template matching the path using `z_url:url_path_encode`.
 - `observe_edge_delete`: If an edge is deleted, then force a repivot of the subject using `z_pivot_rsc:insert_queue`.
 - `observe_edge_insert`: If an edge is inserted, then force a repivot of the subject using `z_pivot_rsc:insert_queue`.
-- `observe_hierarchy_updated`: Handle `hierarchy_updated` notifications using `m_category:renumber`.
+- `observe_hierarchy_updated`: Renumber category ranges after hierarchy edits so tree lookups remain consistent.
 - `observe_media_stillimage`: Return the filename of a still image to be used for image tags using `z_media_preview:can_generate_preview`.
 
 See also

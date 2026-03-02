@@ -25,10 +25,10 @@ Accepted Events
 
 This module handles the following notifier callbacks:
 
-- `observe_admin_menu`: Handle `admin_menu` notifications using `m_hierarchy:ensure`.
+- `observe_admin_menu`: Add content-group administration entries to the admin menu.
 - `observe_rsc_delete`: Do not allow a content group to be removed iff there are resources in that content group using `m_content_group:is_used`.
-- `observe_rsc_get`: Handle `rsc_get` notifications using `m_category:is_meta`.
-- `observe_rsc_update_done`: Handle `rsc_update_done` notifications using `m_hierarchy:ensure`.
+- `observe_rsc_get`: Ensure resources get a default content group when no explicit content group is set.
+- `observe_rsc_update_done`: Rebuild/normalize the content-group hierarchy after relevant resource updates.
 
 Delegate callbacks:
 
