@@ -570,16 +570,11 @@ update_translation(Id, Language, Props, Options, Context) when is_integer(Id), i
     case z_language:to_language_atom(Language) of
         {ok, LanguageAtom} ->
             PropsMap = z_props:from_map(Props),
-            SafeProps = update_translation_escape_props(PropsMap, Context),
+            SafeProps = z_sanitize:escape_props(PropsMap, Context),
             update_translation_1(Id, LanguageAtom, SafeProps, Options, Context);
         {error, _} = Error ->
             Error
     end.
-
-update_translation_escape_props(Props, Context) when is_map(Props) ->
-    z_sanitize:escape_props(Props, Context);
-update_translation_escape_props(Props, Context) ->
-    z_sanitize:escape_props(Props, Context).
 
 update_translation_1(Id, Language, SafeProps, Options, Context) ->
     case m_rsc:get_raw(Id, Context) of
@@ -641,41 +636,35 @@ update_translation_merge_props(Raw, Props, Language, Context) ->
         maps:keys(Props1)),
     MergedTop#{ <<"language">> => Languages }.
 
+update_translation_merge_value([ <<"blocks">> ], Existing, Incoming, Language, Languages, Context) when is_map(Incoming); is_list(Incoming) ->
+    update_translation_merge_blocks(Existing, Incoming, Language, Languages, Context);
 update_translation_merge_value(Path, Existing, Incoming, Language, Languages, Context) when is_map(Incoming) ->
-    case is_blocks_path(Path) of
-        true ->
-            update_translation_merge_blocks(Existing, Incoming, Language, Languages, Context);
-        false ->
-            Base = case is_map(Existing) of
-                true -> Existing;
-                false -> #{}
-            end,
-            maps:fold(
-                fun(K, V, Acc) ->
-                    ExistingValue = maps:get(K, Acc, undefined),
-                    Value = update_translation_merge_value(
-                        [ K | Path ],
-                        ExistingValue,
-                        V,
-                        Language,
-                        Languages,
-                        Context),
-                    Acc#{ K => Value }
-                end,
-                Base,
-                Incoming)
-    end;
+    Base = case is_map(Existing) of
+        true -> Existing;
+        false -> #{}
+    end,
+    maps:fold(
+        fun(K, V, Acc) ->
+            ExistingValue = maps:get(K, Acc, undefined),
+            Value = update_translation_merge_value(
+                [ K | Path ],
+                ExistingValue,
+                V,
+                Language,
+                Languages,
+                Context),
+            Acc#{ K => Value }
+        end,
+        Base,
+        Incoming);
 update_translation_merge_value(Path, Existing, Incoming, Language, Languages, Context) when is_list(Incoming) ->
-    case is_blocks_path(Path) of
-        true ->
-            update_translation_merge_blocks(Existing, Incoming, Language, Languages, Context);
-        false ->
-            ExistingList = case is_list(Existing) of
-                true -> Existing;
-                false -> []
-            end,
-            update_translation_merge_list(Path, ExistingList, Incoming, Language, Languages, Context)
-    end;
+    ExistingList = case is_list(Existing) of
+        true -> Existing;
+        false when Existing =:= <<>> -> [];
+        false when Existing =:= undefined -> [];
+        false -> [ Existing ]
+    end,
+    update_translation_merge_list(Path, ExistingList, Incoming, Language, Languages, Context);
 update_translation_merge_value(_Path, #trans{} = Existing, Incoming, Language, Languages, _Context) ->
     Value = update_translation_incoming_value(Incoming, Language),
     update_translation_set_trans(Existing, Language, Value, Languages, false);
@@ -810,9 +799,7 @@ update_translation_is_translatable_type_key([ Key | _ ]) ->
         html -> true;
         undefined -> true;
         _ -> false
-    end;
-update_translation_is_translatable_type_key([]) ->
-    false.
+    end.
 
 update_translation_is_text_like(#trans{}) -> true;
 update_translation_is_text_like(V) when is_binary(V) -> true;
@@ -820,13 +807,13 @@ update_translation_is_text_like([ C | _ ]) when is_integer(C) -> true;
 update_translation_is_text_like(_) -> false.
 
 update_translation_incoming_value(#trans{ tr = Tr }, Language) ->
-    proplists:get_value(Language, Tr, z_trans:lookup_fallback(#trans{ tr = Tr }, [ Language ], undefined));
+    proplists:get_value(Language, Tr, <<>>);
 update_translation_incoming_value(undefined, _Language) ->
     <<>>;
 update_translation_incoming_value([ C | _ ] = Text, _Language) when is_integer(C) ->
     unicode_characters_to_binary(Text);
 update_translation_incoming_value(Value, _Language) ->
-    Value.
+    z_convert:to_binary(Value).
 
 update_translation_init_trans(#trans{} = Trans, _BaseLanguage, _Languages) ->
     Trans;
@@ -858,11 +845,6 @@ update_translation_ensure_langs(Tr, [ Lang | Rest ]) ->
         false -> [ {Lang, <<>>} | Tr ]
     end,
     update_translation_ensure_langs(Tr1, Rest).
-
-is_blocks_path([ <<"blocks">> | _ ]) -> true;
-is_blocks_path([ _ | _ ]) -> false;
-is_blocks_path([]) -> false.
-
 
 %% @doc Determine the timezone for date conversions, if it is not given in the options.
 %% Order:
