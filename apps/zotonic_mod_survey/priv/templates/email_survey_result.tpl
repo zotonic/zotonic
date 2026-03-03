@@ -5,7 +5,8 @@
 {% block body %}
 
 {% if is_result_email %}
-	<p>{_ This is a result for: _} <a href="{{ id.page_url_abs }}">{{ id.title }}</a></p>
+	<p>{_ This is a result for: _} <a href="{{ id.page_url_abs }}">{{ id.title }}</a><br/>
+	{_ You cannot reply to this email. _}</p>
 	{% block edit_answer %}
 		{% if is_result_email %}
 			<p><a href="{% url admin_edit_rsc id=id absolute_url %}">{_ Check the answer in the admin. _}</a></p>
