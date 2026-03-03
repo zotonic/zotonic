@@ -126,9 +126,9 @@ imagemagick_convert_cmd() ->
             ResultCmd
     end.
 
--spec is_legacy_imagemagic() -> boolean().
-is_legacy_imagemagic() ->
-    Key = {?MODULE, is_legacy_imagemagic},
+-spec is_legacy_imagemagick() -> boolean().
+is_legacy_imagemagick() ->
+    Key = {?MODULE, is_legacy_imagemagick},
     case persistent_term:get(Key, undefined) of
         undefined ->
             Result = case os:find_executable("magick") of
@@ -597,7 +597,7 @@ filter2arg({removebg, MatteFuzz}, Width, Height, AllFilters) ->
             {"-alpha set", z_convert:to_integer(F)}
     end,
     Fuzz = z_convert:to_integer(F),
-    Draw = case {lists:member(lossless, AllFilters), is_legacy_imagemagic()} of
+    Draw = case {lists:member(lossless, AllFilters), is_legacy_imagemagick()} of
         %% PNG images get the alpha channel flood-filled to remove the background.
         {true, true} -> "matte";
         {true, false} -> "alpha";
