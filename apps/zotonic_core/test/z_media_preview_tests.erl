@@ -41,11 +41,15 @@ cmd_args_gif_test() ->
     ],
     {ok, {_W,_H,Args}} = z_media_preview:cmd_args(MediaProps, Filters, <<"image/gif">>),
     CmdArgs = lists:flatten(lists:join(32, Args)),
+    Deconstruct = case z_media_preview:is_legacy_imagemagick() of
+        true -> "-deconstruct";
+        false -> "-layers \"CompareAny\""
+    end,
     ?assertEqual(
         "-strip "
         "-coalesce    -colorspace \"sRGB\" -gravity NorthWest "
         "-crop 80x80+21+0 -extent 80x80 +repage -set units PixelsPerInch"
-        " -density 72   -deconstruct", CmdArgs).
+        " -density 72   " ++ Deconstruct, CmdArgs).
 
 media_data_url_test() ->
     Context = z_context:new(zotonic_site_testsandbox),
@@ -67,3 +71,28 @@ calc_size_test() ->
     ?assertEqual({150, 200, none}, z_media_preview:calc_size(FourThirds#{ req_width => 200, req_height => 200, crop => none, orientation => 8 })),
 
     ok.
+
+%% Tests for imagemagick_detect/1, the injectable detection helper.
+%% Each test supplies a finder function that simulates a specific installation
+%% scenario, allowing deterministic verification of the v6/v7 logic.
+
+imagemagick_detect_v7_test() ->
+    %% Simulate ImageMagick v7: only 'magick' is present.
+    FindExe = fun("magick") -> "/usr/bin/magick"; (_) -> false end,
+    #{ cmd := Cmd, legacy := Legacy } = z_media_preview:imagemagick_detect(FindExe),
+    ?assertEqual(false, Legacy),
+    ?assertNotEqual(false, Cmd).
+
+imagemagick_detect_v6_test() ->
+    %% Simulate legacy ImageMagick v6: 'magick' absent, 'convert' present.
+    FindExe = fun("magick") -> false; (_) -> "/usr/bin/convert" end,
+    #{ cmd := Cmd, legacy := Legacy } = z_media_preview:imagemagick_detect(FindExe),
+    ?assertEqual(true, Legacy),
+    ?assertNotEqual(false, Cmd).
+
+imagemagick_detect_none_test() ->
+    %% Simulate no ImageMagick installation at all.
+    FindExe = fun(_) -> false end,
+    #{ cmd := Cmd, legacy := Legacy } = z_media_preview:imagemagick_detect(FindExe),
+    ?assertEqual(true, Legacy),
+    ?assertEqual(false, Cmd).
