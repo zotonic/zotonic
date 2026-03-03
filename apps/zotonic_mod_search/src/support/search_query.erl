@@ -1,9 +1,9 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2009-2025 Arjan Scherpenisse
+%% @copyright 2009-2026 Arjan Scherpenisse
 %% @doc Handler for m.search[{query, Args..}]
 %% @end
 
-%% Copyright 2009-2025 Arjan Scherpenisse
+%% Copyright 2009-2026 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -192,25 +192,7 @@ qterm(#{ <<"term">> := <<"content_group">>, <<"value">> := ContentGroups}, _IsNe
     %% content_group=[id,..]
     %% Include only resources which are member of the given content groups (or of their children)
     Q = #search_sql_term{ extra = [ no_content_group_check ] },
-    {WithDefaultGroup, GroupsAndSubgroups} =
-        lists:foldl(
-          fun (CGId, {DG, CGs}) ->
-            case m_rsc:is_a(CGId, content_group, Context) of
-                true ->
-                    List = m_hierarchy:contains(<<"content_group">>, CGId, Context),
-                    case m_rsc:p_no_acl(CGId, <<"name">>, Context) of
-                        <<"default_content_group">> ->
-                            { true, CGs ++ List };
-                        _ ->
-                            { DG, CGs ++ List }
-                    end;
-                false ->
-                    { DG, CGs ++ [CGId] }
-                end
-          end,
-          {false, []},
-          ContentGroups
-         ),
+    {WithDefaultGroup, GroupsAndSubgroups} = expand_content_groups(ContentGroups, Context),
     case WithDefaultGroup of
         true ->
             Q#search_sql_term{
@@ -227,6 +209,42 @@ qterm(#{ <<"term">> := <<"content_group">>, <<"value">> := ContentGroups}, _IsNe
                     <<"::int[])">>
                 ],
                 args = [ GroupsAndSubgroups ]
+            }
+    end;
+qterm(#{ <<"term">> := <<"content_group_exclude">>, <<"value">> := ContentGroup}, IsNested, Context) when not is_list(ContentGroup) ->
+    %% content_group=id
+    case rid(ContentGroup, Context) of
+        '*' ->
+            #search_sql_term{
+                where = <<"rsc.content_group_id is null">>,
+                extra = [ no_content_group_check ]
+            };
+        undefined ->
+            [];
+        CGId ->
+            qterm(#{ <<"term">> => <<"content_group_exclude">>, <<"value">> => [ CGId ] }, IsNested, Context)
+        end;
+qterm(#{ <<"term">> := <<"content_group_exclude">>, <<"value">> := ContentGroups}, _IsNested, Context) when is_list(ContentGroups) ->
+    %% content_group=[id,..]
+    %% Exclude all resources which are member of the given content groups (or of their children)
+    Q = #search_sql_term{ extra = [ no_content_group_check ] },
+    {WithoutDefaultGroup, ExcludedGroupsAndSubgroups} = expand_content_groups(ContentGroups, Context),
+    case WithoutDefaultGroup of
+        true ->
+            Q#search_sql_term{
+                where = [
+                    <<"(rsc.content_group_id <> any(">>, '$1',
+                    <<"::int[]) and rsc.content_group_id is not null)">>
+                ],
+                args = [ ExcludedGroupsAndSubgroups ]
+            };
+        false ->
+            Q#search_sql_term{
+                where = [
+                    <<"rsc.content_group_id <> any(">>, '$1',
+                    <<"::int[])">>
+                ],
+                args = [ ExcludedGroupsAndSubgroups ]
             }
     end;
 qterm(#{ <<"term">> := <<"visible_for">>, <<"value">> := VisFor}, _IsNested, _Context) when is_list(VisFor) ->
@@ -1241,6 +1259,38 @@ qterm(#{ <<"term">> := Term, <<"value">> := Arg}, IsNested, Context) ->
 %%
 %% Helper functions
 %%
+
+
+-spec expand_content_groups(ContentGroups, Context) -> {WithDefaultGroup, GroupsAndSubgroups} when
+    ContentGroups :: [ m_rsc:resource() ],
+    Context :: z:context(),
+    WithDefaultGroup :: boolean(),
+    GroupsAndSubgroups :: [ m_rsc:resource_id() ].
+expand_content_groups(ContentGroups, Context) ->
+    lists:foldl(
+        fun (CG, {DG, CGs} = Acc) ->
+            case m_rsc:rid(CG, Context) of
+                undefined ->
+                    Acc;
+                CGId ->
+                    case m_rsc:is_a(CGId, content_group, Context) of
+                        true ->
+                            List = m_hierarchy:contains(<<"content_group">>, CGId, Context),
+                            case m_rsc:p_no_acl(CGId, <<"name">>, Context) of
+                                <<"default_content_group">> ->
+                                    { true, CGs ++ List };
+                                _ ->
+                                    { DG, CGs ++ List }
+                            end;
+                        false ->
+                            { DG, CGs ++ [CGId] }
+                  end
+            end
+        end,
+        {false, []},
+        ContentGroups).
+
+
 
 maybe_predicate(Term, Context) ->
     case m_rsc:rid(Term, Context) of
