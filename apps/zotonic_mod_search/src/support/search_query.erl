@@ -181,7 +181,7 @@ qterm(#{ <<"term">> := <<"content_group">>, <<"value">> := ContentGroup}, IsNest
     %% content_group=id
     case rid(ContentGroup, Context) of
         '*' ->
-            #search_sql_term{ extra = [ no_content_group_check ] };
+            #search_sql_term{ extra = maybe_no_cg_check(Context) };
         undefined ->
             % Force an empty result
             none();
@@ -191,7 +191,7 @@ qterm(#{ <<"term">> := <<"content_group">>, <<"value">> := ContentGroup}, IsNest
 qterm(#{ <<"term">> := <<"content_group">>, <<"value">> := ContentGroups}, _IsNested, Context) when is_list(ContentGroups) ->
     %% content_group=[id,..]
     %% Include only resources which are member of the given content groups (or of their children)
-    Q = #search_sql_term{ extra = [ no_content_group_check ] },
+    Q = #search_sql_term{ extra = maybe_no_cg_check(Context) },
     {WithDefaultGroup, GroupsAndSubgroups} = expand_content_groups(ContentGroups, Context),
     case WithDefaultGroup of
         true ->
@@ -217,7 +217,7 @@ qterm(#{ <<"term">> := <<"content_group_exclude">>, <<"value">> := ContentGroup}
         '*' ->
             #search_sql_term{
                 where = <<"rsc.content_group_id is null">>,
-                extra = [ no_content_group_check ]
+                extra = maybe_no_cg_check(Context)
             };
         undefined ->
             [];
@@ -233,16 +233,16 @@ qterm(#{ <<"term">> := <<"content_group_exclude">>, <<"value">> := ContentGroups
         true ->
             Q#search_sql_term{
                 where = [
-                    <<"( (rsc.content_group_id is null) or not (rsc.content_group_id = any(">>, '$1',
-                    <<"::int[])) )">>
+                    <<"(rsc.content_group_id is not null and not (rsc.content_group_id = any(">>, '$1',
+                    <<"::int[])))">>
                 ],
                 args = [ ExcludedGroupsAndSubgroups ]
             };
         false ->
             Q#search_sql_term{
                 where = [
-                    <<"(rsc.content_group_id is not null and not (rsc.content_group_id = any(">>, '$1',
-                    <<"::int[])))">>
+                    <<"( (rsc.content_group_id is null) or not (rsc.content_group_id = any(">>, '$1',
+                    <<"::int[])) )">>
                 ],
                 args = [ ExcludedGroupsAndSubgroups ]
             }
@@ -1260,6 +1260,12 @@ qterm(#{ <<"term">> := Term, <<"value">> := Arg}, IsNested, Context) ->
 %% Helper functions
 %%
 
+%% @doc If the user is an admin, then allow to disable the content group checks.
+maybe_no_cg_check(Context) ->
+    case z_acl:is_admin(Context) of
+        true -> [ no_content_group_check ];
+        false -> []
+    end.
 
 -spec expand_content_groups(ContentGroups, Context) -> {WithDefaultGroup, GroupsAndSubgroups} when
     ContentGroups :: [ m_rsc:resource() ],
