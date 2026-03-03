@@ -233,16 +233,16 @@ qterm(#{ <<"term">> := <<"content_group_exclude">>, <<"value">> := ContentGroups
         true ->
             Q#search_sql_term{
                 where = [
-                    <<"(rsc.content_group_id <> any(">>, '$1',
-                    <<"::int[]) and rsc.content_group_id is not null)">>
+                    <<"( (rsc.content_group_id is null) or not (rsc.content_group_id = any(">>, '$1',
+                    <<"::int[])) )">>
                 ],
                 args = [ ExcludedGroupsAndSubgroups ]
             };
         false ->
             Q#search_sql_term{
                 where = [
-                    <<"rsc.content_group_id <> any(">>, '$1',
-                    <<"::int[])">>
+                    <<"(rsc.content_group_id is not null and not (rsc.content_group_id = any(">>, '$1',
+                    <<"::int[])))">>
                 ],
                 args = [ ExcludedGroupsAndSubgroups ]
             }
