@@ -602,20 +602,21 @@ filter2arg({removebg, MatteFuzz}, Width, Height, AllFilters) ->
         [ F ] ->
             {"-alpha set", z_convert:to_integer(F)}
     end,
-    Fuzz = z_convert:to_integer(F),
-    Draw = case {lists:member(lossless, AllFilters), is_legacy_imagemagick()} of
+    {Draw, Fill} = case {lists:member(lossless, AllFilters), is_legacy_imagemagick()} of
         %% PNG images get the alpha channel flood-filled to remove the background.
-        {true, true} -> "matte";
-        {true, false} -> "alpha";
+        {true, true} -> {"matte", "none"};
+        {true, false} -> {"alpha", "none"};
         %% JPEG images get flood-filled with white to remove the background.
-        _ -> "color"
+        _ -> {"color", "white"}
     end,
+    Height_1 = integer_to_list(Height-1),
+    Width_1 = integer_to_list(Width-1),
     Filter = [
-        Matte ++ " -fill white -fuzz ", integer_to_list(Fuzz), "% ",
+        Matte ++ " -fill " ++ Fill ++ " -fuzz ", integer_to_list(Fuzz), "% ",
         "-draw '" ++ Draw ++ " 0,0 floodfill' ",
-        "-draw '" ++ Draw ++ " 0,", integer_to_list(Height-1), " floodfill' ",
-        "-draw '" ++ Draw ++ " ", integer_to_list(Width-1), ",0 floodfill' ",
-        "-draw '" ++ Draw ++ " ", integer_to_list(Width-1), ",", integer_to_list(Height-1), " floodfill' "
+        "-draw '" ++ Draw ++ " 0,", Height_1, " floodfill' ",
+        "-draw '" ++ Draw ++ " ", Width_1, ",0 floodfill' ",
+        "-draw '" ++ Draw ++ " ", Width_1, ",", Height_1, " floodfill' "
     ],
     {Width, Height, Filter};
 % Custom ImageMagick command line arguments -- only available from a mediaclass file
