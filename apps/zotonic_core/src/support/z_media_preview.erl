@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2024 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell, Driebit BV
 %% @doc Make still previews of media, using image manipulation functions.  Resize, crop, grey, etc.
 %% This uses the command line imagemagick tools for all image manipulation.
 %% @end
 
-%% Copyright 2009-2024 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell, Driebit BV
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -31,7 +31,9 @@
     out_mime/2,
     string2filter/2,
     cmd_args/3,
-    calc_size/1
+    calc_size/1,
+
+    is_legacy_imagemagick/0
 ]).
 
 % Max pixels of the target image
@@ -493,7 +495,11 @@ filter2arg({make_image, <<"application/pdf">>}, Width, Height, _AllFilters) ->
 filter2arg(coalesce, Width, Height, _AllFilters) ->
     {Width, Height, "-coalesce"};
 filter2arg(deconstruct, Width, Height, _AllFilters) ->
-    {Width, Height, ["-layers ", $", "CompareAny", $"]};
+    Opt = case is_legacy_imagemagick() of
+        true -> "-deconstruct";
+        false -> "-layers \"CompareAny\""
+    end,
+    {Width, Height, [Opt]};
 filter2arg({make_image, Mime}, Width, Height, _AllFilters) when is_binary(Mime) ->
     {Width, Height, []};
 filter2arg({correct_orientation, Orientation}, Width, Height, _AllFilters) ->

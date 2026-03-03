@@ -41,11 +41,15 @@ cmd_args_gif_test() ->
     ],
     {ok, {_W,_H,Args}} = z_media_preview:cmd_args(MediaProps, Filters, <<"image/gif">>),
     CmdArgs = lists:flatten(lists:join(32, Args)),
+    Deconstruct = case z_media_preview:is_legacy_imagemagick() of
+        true -> "-deconstruct";
+        false -> "-layers \"CompareAny\""
+    end,
     ?assertEqual(
         "-strip "
         "-coalesce    -colorspace \"sRGB\" -gravity NorthWest "
         "-crop 80x80+21+0 -extent 80x80 +repage -set units PixelsPerInch"
-        " -density 72   -layers \"CompareAny\"", CmdArgs).
+        " -density 72   " ++ Deconstruct, CmdArgs).
 
 media_data_url_test() ->
     Context = z_context:new(zotonic_site_testsandbox),
