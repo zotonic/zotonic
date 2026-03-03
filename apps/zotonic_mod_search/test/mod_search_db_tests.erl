@@ -267,6 +267,147 @@ properties_search_test() ->
     true = is_integer(R2),
     ok.
 
+expand_content_groups_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    C = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+
+    %% Empty list gives no groups and WithDefaultGroup = false
+    ?assertEqual({false, []}, search_query:expand_content_groups([], C)),
+
+    %% Unknown resource name is silently skipped
+    ?assertEqual({false, []}, search_query:expand_content_groups([nonexistent_cg_name_for_testing], C)),
+
+    %% default_content_group sets WithDefaultGroup = true
+    DefaultCGId = m_rsc:rid(default_content_group, C),
+    ?assert(is_integer(DefaultCGId)),
+    {true, DefaultGroups} = search_query:expand_content_groups([default_content_group], C),
+    ?assert(lists:member(DefaultCGId, DefaultGroups)),
+
+    %% A non-default content group leaves WithDefaultGroup = false
+    {ok, CGId} = m_rsc:insert([{category, content_group}, {title, <<"Test CG for expand">>}], C),
+    {false, CustomGroups} = search_query:expand_content_groups([CGId], C),
+    ?assert(lists:member(CGId, CustomGroups)),
+    m_rsc:delete(CGId, C),
+    ok.
+
+
+content_group_exclude_sql_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    C = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+
+    %% Undefined value produces an empty result (no SQL term)
+    ?assertEqual([], search_query:qterm(
+        #{ <<"term">> => <<"content_group_exclude">>, <<"value">> => undefined },
+        false, C)),
+
+    %% Wildcard '*' matches only resources with a null content_group_id
+    #search_sql_term{ where = WhereWild, extra = ExtraWild } =
+        search_query:qterm(
+            #{ <<"term">> => <<"content_group_exclude">>, <<"value">> => <<"*">> },
+            false, C),
+    ?assertEqual(<<"rsc.content_group_id is null">>, WhereWild),
+    ?assert(lists:member(no_content_group_check, ExtraWild)),
+
+    %% Non-default content group: SQL must exclude explicitly assigned resources only
+    {ok, CGId} = m_rsc:insert([{category, content_group}, {title, <<"Test CG for SQL">>}], C),
+    #search_sql_term{ where = WhereNonDefault, args = [ArgsNonDefault], extra = ExtraNonDefault } =
+        search_query:qterm(
+            #{ <<"term">> => <<"content_group_exclude">>, <<"value">> => [CGId] },
+            false, C),
+    ?assert(lists:member(CGId, ArgsNonDefault)),
+    ?assert(lists:member(no_content_group_check, ExtraNonDefault)),
+    %% Where clause must allow resources with null content_group_id through (they are in the default group, not in the excluded CG)
+    ?assert(has_fragment(<<"is null">>, WhereNonDefault)),
+
+    %% default_content_group: SQL must also exclude resources with null content_group_id
+    #search_sql_term{ where = WhereDefault, args = [ArgsDefault], extra = ExtraDefault } =
+        search_query:qterm(
+            #{ <<"term">> => <<"content_group_exclude">>, <<"value">> => [default_content_group] },
+            false, C),
+    DefaultCGId = m_rsc:rid(default_content_group, C),
+    ?assert(lists:member(DefaultCGId, ArgsDefault)),
+    ?assert(lists:member(no_content_group_check, ExtraDefault)),
+    %% Where clause must exclude resources with null content_group_id (they are in the default group)
+    ?assert(has_fragment(<<"is not null">>, WhereDefault)),
+
+    m_rsc:delete(CGId, C),
+
+    %% Non-admin (anonymous) context: no_content_group_check must NOT be set
+    Anon = z_context:new(zotonic_site_testsandbox),
+
+    %% Wildcard: non-admin must not get no_content_group_check
+    #search_sql_term{ extra = ExtraWildAnon } =
+        search_query:qterm(
+            #{ <<"term">> => <<"content_group_exclude">>, <<"value">> => <<"*">> },
+            false, Anon),
+    ?assertNot(lists:member(no_content_group_check, ExtraWildAnon)),
+
+    %% List (non-default CG): non-admin must not get no_content_group_check
+    {ok, CGId2} = m_rsc:insert([{category, content_group}, {title, <<"Test CG for SQL anon">>}], C),
+    #search_sql_term{ extra = ExtraNonDefaultAnon } =
+        search_query:qterm(
+            #{ <<"term">> => <<"content_group_exclude">>, <<"value">> => [CGId2] },
+            false, Anon),
+    ?assertNot(lists:member(no_content_group_check, ExtraNonDefaultAnon)),
+
+    %% List (default_content_group): non-admin must not get no_content_group_check
+    #search_sql_term{ extra = ExtraDefaultAnon } =
+        search_query:qterm(
+            #{ <<"term">> => <<"content_group_exclude">>, <<"value">> => [default_content_group] },
+            false, Anon),
+    ?assertNot(lists:member(no_content_group_check, ExtraDefaultAnon)),
+
+    m_rsc:delete(CGId2, C),
+    ok.
+
+
+content_group_exclude_search_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    C = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+
+    {ok, CGId} = m_rsc:insert([{category, content_group}, {title, <<"CG for exclude search test">>}], C),
+
+    %% Resource in the custom content group
+    {ok, AId} = m_rsc:insert([
+        {category, article},
+        {title, <<"In custom CG">>},
+        {content_group_id, CGId}
+    ], C),
+    %% Resource in the default content group
+    {ok, BId} = m_rsc:insert([
+        {category, article},
+        {title, <<"In default CG">>},
+        {content_group_id, default_content_group}
+    ], C),
+
+    %% Excluding the custom CG: A should be absent, B (default CG) should be present
+    QExcludeCustom = #{
+        <<"q">> => [
+            #{ <<"term">> => <<"content_group_exclude">>, <<"value">> => CGId },
+            #{ <<"term">> => <<"id">>, <<"value">> => [AId, BId] }
+        ]
+    },
+    #search_result{ result = R1 } = z_search:search(<<"query">>, QExcludeCustom, 1, 100, C),
+    ?assertNot(lists:member(AId, R1)),
+    ?assert(lists:member(BId, R1)),
+
+    %% Excluding the default CG: B should be absent, A (custom CG) should be present
+    QExcludeDefault = #{
+        <<"q">> => [
+            #{ <<"term">> => <<"content_group_exclude">>, <<"value">> => default_content_group },
+            #{ <<"term">> => <<"id">>, <<"value">> => [AId, BId] }
+        ]
+    },
+    #search_result{ result = R2 } = z_search:search(<<"query">>, QExcludeDefault, 1, 100, C),
+    ?assert(lists:member(AId, R2)),
+    ?assertNot(lists:member(BId, R2)),
+
+    m_rsc:delete(AId, C),
+    m_rsc:delete(BId, C),
+    m_rsc:delete(CGId, C),
+    ok.
+
+
 uniq([]) ->
   [];
 uniq(List) when is_list(List) ->
@@ -281,5 +422,17 @@ uniq([H | Tail], Acc) ->
     false ->
       uniq(Tail, [H | Acc])
   end.
+
+%% Check whether a binary fragment appears in a where clause (which may be a list or binary).
+has_fragment(Fragment, Where) when is_binary(Where) ->
+    binary:match(Where, Fragment) =/= nomatch;
+has_fragment(Fragment, Where) when is_list(Where) ->
+    lists:any(
+        fun(Part) when is_binary(Part) ->
+                binary:match(Part, Fragment) =/= nomatch;
+           (_) ->
+                false
+        end,
+        Where).
 
 
