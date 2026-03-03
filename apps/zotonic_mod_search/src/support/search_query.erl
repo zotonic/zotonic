@@ -1275,8 +1275,12 @@ maybe_no_cg_check(Context) ->
 expand_content_groups(ContentGroups, Context) ->
     lists:foldl(
         fun (CG, {DG, CGs} = Acc) ->
-            case m_rsc:rid(CG, Context) of
+            case rid(CG, Context) of
                 undefined ->
+                    Acc;
+                '*' ->
+                    Acc;
+                '{}' ->
                     Acc;
                 CGId ->
                     case m_rsc:is_a(CGId, content_group, Context) of
