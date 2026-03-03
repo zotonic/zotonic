@@ -316,7 +316,7 @@ content_group_exclude_sql_test() ->
             false, C),
     ?assert(lists:member(CGId, ArgsNonDefault)),
     ?assert(lists:member(no_content_group_check, ExtraNonDefault)),
-    %% Where clause must reference is not null (to keep null-cg resources out)
+    %% Where clause must exclude resources with null content_group_id (not in any known group)
     ?assert(has_fragment(<<"is not null">>, WhereNonDefault)),
 
     %% default_content_group: SQL must also include resources with null content_group_id
@@ -401,8 +401,10 @@ has_fragment(Fragment, Where) when is_binary(Where) ->
     binary:match(Where, Fragment) =/= nomatch;
 has_fragment(Fragment, Where) when is_list(Where) ->
     lists:any(
-        fun(Part) when is_binary(Part) -> binary:match(Part, Fragment) =/= nomatch;
-           (_) -> false
+        fun(Part) when is_binary(Part) ->
+                binary:match(Part, Fragment) =/= nomatch;
+           (_) ->
+                false
         end,
         Where).
 
