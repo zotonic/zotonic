@@ -316,10 +316,10 @@ content_group_exclude_sql_test() ->
             false, C),
     ?assert(lists:member(CGId, ArgsNonDefault)),
     ?assert(lists:member(no_content_group_check, ExtraNonDefault)),
-    %% Where clause must exclude resources with null content_group_id (not in any known group)
-    ?assert(has_fragment(<<"is not null">>, WhereNonDefault)),
+    %% Where clause must allow resources with null content_group_id through (they are in the default group, not in the excluded CG)
+    ?assert(has_fragment(<<"is null">>, WhereNonDefault)),
 
-    %% default_content_group: SQL must also include resources with null content_group_id
+    %% default_content_group: SQL must also exclude resources with null content_group_id
     #search_sql_term{ where = WhereDefault, args = [ArgsDefault], extra = ExtraDefault } =
         search_query:qterm(
             #{ <<"term">> => <<"content_group_exclude">>, <<"value">> => [default_content_group] },
@@ -327,8 +327,8 @@ content_group_exclude_sql_test() ->
     DefaultCGId = m_rsc:rid(default_content_group, C),
     ?assert(lists:member(DefaultCGId, ArgsDefault)),
     ?assert(lists:member(no_content_group_check, ExtraDefault)),
-    %% Where clause must allow null content_group_id through
-    ?assert(has_fragment(<<"is null">>, WhereDefault)),
+    %% Where clause must exclude resources with null content_group_id (they are in the default group)
+    ?assert(has_fragment(<<"is not null">>, WhereDefault)),
 
     m_rsc:delete(CGId, C),
     ok.
