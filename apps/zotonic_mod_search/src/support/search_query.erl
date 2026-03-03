@@ -33,6 +33,7 @@
 %% For testing
 -export([
     qterm/3,
+    expand_content_groups/2,
     expand_object_predicates/2
 ]).
 
