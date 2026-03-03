@@ -110,39 +110,37 @@ convert(InFile, MediumFilename, OutFile, Filters, Context) ->
 %% Note: since system installations don't change that often, the result is cached.
 -spec imagemagick_convert_cmd() -> Cmd | false when Cmd :: string().
 imagemagick_convert_cmd() ->
-    Key = {?MODULE, imagemagick_convert_cmd},
-    case persistent_term:get(Key, undefined) of
-        undefined ->
-            ResultCmd = case os:find_executable("magick") of
-                false ->
-                    case os:find_executable("convert") of
-                        false -> false;
-                        Cmd -> z_filelib:os_filename(Cmd)
-                    end;
-                Cmd ->
-                    z_filelib:os_filename(Cmd)
-            end,
-            persistent_term:put(Key, ResultCmd),
-            ResultCmd;
-        ResultCmd ->
-            ResultCmd
-    end.
+    #{ cmd := Cmd } = imagemagick_find_executable(),
+    Cmd.
 
--spec is_legacy_imagemagick() -> boolean().
-is_legacy_imagemagick() ->
-    Key = {?MODULE, is_legacy_imagemagick},
+%% @doc Internal helper to discover and cache the ImageMagick executable and
+%% whether we are running a legacy (pre-v7) installation.
+-spec imagemagick_find_executable() -> #{ cmd := string() | false, legacy := boolean() }.
+imagemagick_find_executable() ->
+    Key = {?MODULE, imagemagick_find_executable},
     case persistent_term:get(Key, undefined) of
         undefined ->
-            Result = case os:find_executable("magick") of
-                false -> true;
-                _Cmd -> false
-            end,
+            Result =
+                case os:find_executable("magick") of
+                    false ->
+                        Cmd0 = case os:find_executable("convert") of
+                            false -> false;
+                            Cmd1 -> z_filelib:os_filename(Cmd1)
+                        end,
+                        #{ cmd => Cmd0, legacy => true };
+                    CmdMagick ->
+                        #{ cmd => z_filelib:os_filename(CmdMagick), legacy => false }
+                end,
             persistent_term:put(Key, Result),
             Result;
         Result ->
             Result
     end.
 
+-spec is_legacy_imagemagick() -> boolean().
+is_legacy_imagemagick() ->
+    #{ legacy := Legacy } = imagemagick_find_executable(),
+    Legacy.
 convert_1(false, _InFile, _OutFile, _InMime, _FileProps, _Filters, _SiteDir) ->
     ?LOG_ERROR(#{
         text => <<"Install ImageMagick to generate previews of images.">>,
