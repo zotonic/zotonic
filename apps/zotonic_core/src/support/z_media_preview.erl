@@ -33,7 +33,8 @@
     cmd_args/3,
     calc_size/1,
 
-    is_legacy_imagemagick/0
+    is_legacy_imagemagick/0,
+    imagemagick_detect/1
 ]).
 
 % Max pixels of the target image
@@ -120,21 +121,29 @@ imagemagick_find_executable() ->
     Key = {?MODULE, imagemagick_find_executable},
     case persistent_term:get(Key, undefined) of
         undefined ->
-            Result =
-                case os:find_executable("magick") of
-                    false ->
-                        Cmd0 = case os:find_executable("convert") of
-                            false -> false;
-                            Cmd1 -> z_filelib:os_filename(Cmd1)
-                        end,
-                        #{ cmd => Cmd0, legacy => true };
-                    CmdMagick ->
-                        #{ cmd => z_filelib:os_filename(CmdMagick), legacy => false }
-                end,
+            Result = imagemagick_detect(fun os:find_executable/1),
             persistent_term:put(Key, Result),
             Result;
         Result ->
             Result
+    end.
+
+%% @doc Detect the ImageMagick executable using the supplied finder function.
+%% The finder has the same signature as os:find_executable/1 and returns either
+%% a path string or false.  Separating this logic from the caching wrapper makes
+%% the v6/v7 detection deterministically testable.
+-spec imagemagick_detect(FindExe) -> #{ cmd := string() | false, legacy := boolean() } when
+    FindExe :: fun((string()) -> string() | false).
+imagemagick_detect(FindExe) ->
+    case FindExe("magick") of
+        false ->
+            Cmd0 = case FindExe("convert") of
+                false -> false;
+                Cmd1 -> z_filelib:os_filename(Cmd1)
+            end,
+            #{ cmd => Cmd0, legacy => true };
+        CmdMagick ->
+            #{ cmd => z_filelib:os_filename(CmdMagick), legacy => false }
     end.
 
 -spec is_legacy_imagemagick() -> boolean().

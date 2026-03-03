@@ -71,3 +71,28 @@ calc_size_test() ->
     ?assertEqual({150, 200, none}, z_media_preview:calc_size(FourThirds#{ req_width => 200, req_height => 200, crop => none, orientation => 8 })),
 
     ok.
+
+%% Tests for imagemagick_detect/1, the injectable detection helper.
+%% Each test supplies a finder function that simulates a specific installation
+%% scenario, allowing deterministic verification of the v6/v7 logic.
+
+imagemagick_detect_v7_test() ->
+    %% Simulate ImageMagick v7: only 'magick' is present.
+    FindExe = fun("magick") -> "/usr/bin/magick"; (_) -> false end,
+    #{ cmd := Cmd, legacy := Legacy } = z_media_preview:imagemagick_detect(FindExe),
+    ?assertEqual(false, Legacy),
+    ?assertNotEqual(false, Cmd).
+
+imagemagick_detect_v6_test() ->
+    %% Simulate legacy ImageMagick v6: 'magick' absent, 'convert' present.
+    FindExe = fun("magick") -> false; (_) -> "/usr/bin/convert" end,
+    #{ cmd := Cmd, legacy := Legacy } = z_media_preview:imagemagick_detect(FindExe),
+    ?assertEqual(true, Legacy),
+    ?assertNotEqual(false, Cmd).
+
+imagemagick_detect_none_test() ->
+    %% Simulate no ImageMagick installation at all.
+    FindExe = fun(_) -> false end,
+    #{ cmd := Cmd, legacy := Legacy } = z_media_preview:imagemagick_detect(FindExe),
+    ?assertEqual(true, Legacy),
+    ?assertEqual(false, Cmd).
