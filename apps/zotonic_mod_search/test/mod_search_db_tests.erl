@@ -331,6 +331,33 @@ content_group_exclude_sql_test() ->
     ?assert(has_fragment(<<"is not null">>, WhereDefault)),
 
     m_rsc:delete(CGId, C),
+
+    %% Non-admin (anonymous) context: no_content_group_check must NOT be set
+    Anon = z_context:new(zotonic_site_testsandbox),
+
+    %% Wildcard: non-admin must not get no_content_group_check
+    #search_sql_term{ extra = ExtraWildAnon } =
+        search_query:qterm(
+            #{ <<"term">> => <<"content_group_exclude">>, <<"value">> => <<"*">> },
+            false, Anon),
+    ?assertNot(lists:member(no_content_group_check, ExtraWildAnon)),
+
+    %% List (non-default CG): non-admin must not get no_content_group_check
+    {ok, CGId2} = m_rsc:insert([{category, content_group}, {title, <<"Test CG for SQL anon">>}], C),
+    #search_sql_term{ extra = ExtraNonDefaultAnon } =
+        search_query:qterm(
+            #{ <<"term">> => <<"content_group_exclude">>, <<"value">> => [CGId2] },
+            false, Anon),
+    ?assertNot(lists:member(no_content_group_check, ExtraNonDefaultAnon)),
+
+    %% List (default_content_group): non-admin must not get no_content_group_check
+    #search_sql_term{ extra = ExtraDefaultAnon } =
+        search_query:qterm(
+            #{ <<"term">> => <<"content_group_exclude">>, <<"value">> => [default_content_group] },
+            false, Anon),
+    ?assertNot(lists:member(no_content_group_check, ExtraDefaultAnon)),
+
+    m_rsc:delete(CGId2, C),
     ok.
 
 
