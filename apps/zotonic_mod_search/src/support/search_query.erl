@@ -228,8 +228,8 @@ qterm(#{ <<"term">> := <<"content_group_exclude">>, <<"value">> := ContentGroups
     %% content_group=[id,..]
     %% Exclude all resources which are member of the given content groups (or of their children)
     Q = #search_sql_term{ extra = [ no_content_group_check ] },
-    {WithoutDefaultGroup, ExcludedGroupsAndSubgroups} = expand_content_groups(ContentGroups, Context),
-    case WithoutDefaultGroup of
+    {WithDefaultGroup, ExcludedGroupsAndSubgroups} = expand_content_groups(ContentGroups, Context),
+    case WithDefaultGroup of
         true ->
             Q#search_sql_term{
                 where = [
