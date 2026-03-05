@@ -191,21 +191,21 @@ This module handles the following notifier callbacks:
             key => webmaster_verify,
             type => string,
             default => "",
-            description => "Google Webmaster Tools verification code. Add a meta tag to verify your site with Google Webmaster Tools."
+            description => "Google Webmaster Tools verification code. Add a meta tag to verify your site with Google Webmaster Tools. Multiple codes can be added at once, separated by commas."
         },
         #{
             module => seo_bing,
             key => webmaster_verify,
             type => string,
             default => "",
-            description => "Bing Webmaster Tools verification code. Add a meta tag to verify your site with Bing Webmaster Tools."
+            description => "Bing Webmaster Tools verification code. Add a meta tag to verify your site with Bing Webmaster Tools. Multiple codes can be added at once, separated by commas."
         },
         #{
             module => seo_yandex,
             key => webmaster_verify,
             type => string,
             default => "",
-            description => "Yandex Webmaster Tools verification code. Add a meta tag to verify your site with Yandex Webmaster Tools."
+            description => "Yandex Webmaster Tools verification code. Add a meta tag to verify your site with Yandex Webmaster Tools. Multiple codes can be added at once, separated by commas."
         }
     ]).
 

@@ -90,15 +90,15 @@
 {% endblock %}
 
 {% block verification %}
-    {% if m.seo.bing.webmaster_verify as wmv %}
-        <meta name="msvalidate.01" content="{{ wmv }}">
-    {% endif %}
-    {% if m.seo.google.webmaster_verify as wmv %}
-        <meta name="google-site-verification" content="{{ wmv }}">
-    {% endif %}
-    {% if m.seo.yandex.webmaster_verify as wmv %}
-        <meta name="yandex-verification" content="{{ wmv }}">
-    {% endif %}
+    {% for wmv in m.seo.bing.webmaster_verify|split:"," %}
+        <meta name="msvalidate.01" content="{{ wmv|trim }}">
+    {% endfor %}
+    {% for wmv in m.seo.google.webmaster_verify|split:"," %}
+        <meta name="google-site-verification" content="{{ wmv|trim }}">
+    {% endfor %}
+    {% for wmv in m.seo.yandex.webmaster_verify|split:"," %}
+        <meta name="yandex-verification" content="{{ wmv|trim }}">
+    {% endfor %}
 {% endblock %}
 
 {% block trackers %}
