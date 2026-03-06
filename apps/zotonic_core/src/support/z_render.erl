@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @author Rusty Klophaus
-%% @copyright 2008-2009 Rusty Klophaus, 2009-2023 Marc Worrell
+%% @copyright 2008-2009 Rusty Klophaus, 2009-2026 Marc Worrell
 %% @doc Render routines using wires and actions.
 %%      Based on Nitrogen, which is copyright (c) 2008-2009 Rusty Klophaus
 %% @end
@@ -8,7 +8,7 @@
 %% This is the MIT license.
 %%
 %% Copyright (c) 2008-2009 Rusty Klophaus
-%% Copyright (c) 2009-2024 Marc Worrell
+%% Copyright (c) 2009-2026 Marc Worrell
 %%
 %% Permission is hereby granted, free of charge, to any person obtaining a copy
 %% of this software and associated documentation files (the "Software"), to deal
@@ -514,7 +514,7 @@ insert_after_selector(CssSelector, Html, Context) ->
     update_context_render_state(CssSelector, Html, <<"insertAfter">>, <<".widgetManager()">>, Context).
 
 replace_selector(CssSelector, Html, Context) ->
-    update_context_render_state(CssSelector, Html, <<"replaceWith">>, <<".widgetManager()">>, Context).
+    update_context_render_state(CssSelector, Html, <<"replaceAll">>, <<".widgetManager()">>, Context).
 
 insert_top_selector(CssSelector, Html, Context) ->
     update_context_render_state(CssSelector, Html, <<"prependTo">>, <<".widgetManager()">>, Context).
@@ -526,7 +526,7 @@ appear_selector(CssSelector, Html, Context) ->
     update_context_render_state(CssSelector, Html, <<"html">>, <<".fadeIn().widgetManager()">>, Context).
 
 appear_replace_selector(CssSelector, Html, Context) ->
-    update_context_render_state(CssSelector, Html, <<"replaceWith">>, <<".fadeIn().widgetManager()">>, Context).
+    update_context_render_state(CssSelector, Html, <<"replaceAll">>, <<".fadeIn().widgetManager()">>, Context).
 
 appear_top_selector(CssSelector, Html, Context) ->
     update_context_render_state(CssSelector, Html, <<"prependTo">>, <<".fadeIn().widgetManager()">>, Context).
@@ -565,7 +565,7 @@ update_selector_js(CssSelector, Html) ->
     update_js(CssSelector, Html, <<"html">>, <<".widgetManager()">>).
 
 replace_selector_js(CssSelector, Html) ->
-    update_js(CssSelector, Html, <<"replaceWith">>, <<".widgetManager()">>).
+    update_js(CssSelector, Html, <<"replaceAll">>, <<".widgetManager()">>).
 
 insert_top_selector_js(CssSelector, Html) ->
     update_js(CssSelector, Html, <<"prependTo">>, <<".widgetManager()">>).
@@ -583,7 +583,7 @@ appear_selector_js(CssSelector, Html) ->
     update_js(CssSelector, Html, <<"html">>, <<".fadeIn().widgetManager()">>).
 
 appear_replace_selector_js(CssSelector, Html) ->
-    update_js(CssSelector, Html, <<"replaceWith">>, <<".fadeIn().widgetManager()">>).
+    update_js(CssSelector, Html, <<"replaceAll">>, <<".fadeIn().widgetManager()">>).
 
 appear_top_selector_js(CssSelector, Html) ->
     update_js(CssSelector, Html, <<"prependTo">>, <<".fadeIn().widgetManager()">>).
@@ -603,8 +603,6 @@ update_js(CssSelector, Html, <<"html">>, AfterEffects) ->
     update_js_selector_first(CssSelector, Html, <<"html">>, AfterEffects);
 update_js(CssSelector, Html, <<"val">>, AfterEffects) ->
     update_js_selector_first(CssSelector, Html, <<"val">>, AfterEffects);
-update_js(CssSelector, Html, <<"replaceWith">>, AfterEffects) ->
-    update_js_selector_first(CssSelector, Html, <<"replaceWith">>, AfterEffects);
 update_js(CssSelector, Html, Function, AfterEffects) ->
     [ <<"z_text_to_nodes(\"">>, z_utils:js_escape(Html), $", $),
       $., Function, $(, quote_css_selector(CssSelector), $),
