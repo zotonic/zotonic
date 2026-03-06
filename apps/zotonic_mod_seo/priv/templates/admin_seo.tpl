@@ -116,7 +116,9 @@
                     <input type="text" id="seo_google-webmaster_verify" name="seo_google-webmaster_verify" value="{{ m.config.seo_google.webmaster_verify.value|escape }}" class="form-control" placeholder="{_ Google Search Console _}">
                     <label class="control-label col-md-4" for="seo_google-webmaster">{_ Google Search Console _}</label>
                     <p class="help-block">
-                        {_ Enter here the verification code for _} <a href="https://search.google.com/search-console" rel="noopener noreferrer" target="_blank">{_ Google Search Console _}</a>. {_ Copy the value of the content attribute in the meta tag provided by Google. _}
+                        {_ Enter here the verification code for _} <a href="https://search.google.com/search-console" rel="noopener noreferrer" target="_blank">{_ Google Search Console _}</a>.<br/>
+                        {_ Copy the value of the content attribute in the meta tag provided by Google. _}<br/>
+                        {_ Multiple codes can be added at once, separated by commas. _}
                     </p>
                 </div>
             </div>
@@ -130,7 +132,8 @@
                     <label class="control-label" for="seo_bing-webmaster_verify">{_ Bing Webmaster validation id _}</label>
                     <p class="help-block">
                         {_ Enter here the verification code for _} <a href="https://www.bing.com/webmasters" rel="noopener noreferrer" target="_blank">{_ Bing Webmaster _}</a>.<br/>
-                        {_ You find this id in the content attribute of the meta tag, it has the format _} <strong>8103A84C247E45185F39A97C50D40731</strong>.
+                        {_ You find this id in the content attribute of the meta tag, it has the format _} <strong>8103A84C247E45185F39A97C50D40731</strong>.<br/>
+                        {_ Multiple codes can be added at once, separated by commas. _}
                     </p>
                 </div>
             </div>
@@ -161,7 +164,8 @@
                     <label class="control-label" for="seo_yandex-webmaster_verify">{_ Yandex Webmaster validation id _}</label>
                     <p class="help-block">
                         {_ Enter here the verification code for _} <a href="https://webmaster.yandex.com/sites/?noRedirect=yes&amp;hostnameFilter=" rel="noopener noreferrer" target="_blank">{_ Yandex Webmaster _}</a>.<br/>
-                        {_ You find this id in the content attribute of the meta tag, it has the format _} <strong>937800ae8c5a6cbf</strong>.
+                        {_ You find this id in the content attribute of the meta tag, it has the format _} <strong>937800ae8c5a6cbf</strong>.<br/>
+                        {_ Multiple codes can be added at once, separated by commas. _}
                     </p>
                 </div>
             </div>
