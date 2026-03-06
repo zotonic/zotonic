@@ -1,5 +1,5 @@
 {# Overlay for the lightbox - show a media item with prev/next
- # Media viewer using an overlay - opened via mod_wired notify observer.
+ # Media viewer using an overlay - opened via mod_wires notify observer.
  #}
 <div id="{{ #media }}">
     <div class="mediaoverlay--media">
