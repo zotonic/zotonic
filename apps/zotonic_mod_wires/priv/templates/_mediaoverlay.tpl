@@ -21,11 +21,11 @@
     </div>
 
     {% if ids|length > 1 %}
-        <button class="mediaoverlay--nav mediaoverlay--prev" rel="button" title="{_ Previous image _}" id="{{ #next }}">
+        <button class="mediaoverlay--nav mediaoverlay--prev" rel="button" title="{_ Previous image _}" aria-label="{_ Previous image _}" id="{{ #next }}">
             ＜
         </button>
 
-        <button class="mediaoverlay--nav mediaoverlay--next" rel="button" title="{_ Next image _}" id="{{ #prev }}">
+        <button class="mediaoverlay--nav mediaoverlay--next" rel="button" title="{_ Next image _}" aria-label="{_ Next image _}" id="{{ #prev }}">
             ＞
         </button>
 
