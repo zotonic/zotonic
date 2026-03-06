@@ -121,7 +121,7 @@
     left: 5px;
     position: absolute;
     color: white;
-    text-stroke: 1px;
+    -webkit-text-stroke: 1px;
     filter: grayscale(100%);
     opacity: 0.4;
     content: "🔍"; }

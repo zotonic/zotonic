@@ -21,20 +21,20 @@
     </div>
 
     {% if ids|length > 1 %}
-        <button class="mediaoverlay--nav mediaoverlay--prev" rel="button" title="{_ Previous image _}" aria-label="{_ Previous image _}" id="{{ #next }}">
+        <button class="mediaoverlay--nav mediaoverlay--prev" title="{_ Previous image _}" aria-label="{_ Previous image _}" id="{{ #prev }}">
             ＜
         </button>
 
-        <button class="mediaoverlay--nav mediaoverlay--next" rel="button" title="{_ Next image _}" aria-label="{_ Next image _}" id="{{ #prev }}">
+        <button class="mediaoverlay--nav mediaoverlay--next" title="{_ Next image _}" aria-label="{_ Next image _}" id="{{ #next }}">
             ＞
         </button>
 
-        {% wire id=#next
-                postback={mediaoverlay_update element_id=#media id=id ids=ids is_next=true}
-                delegate="mod_wires"
-        %}
         {% wire id=#prev
                 postback={mediaoverlay_update element_id=#media id=id ids=ids is_next=false}
+                delegate="mod_wires"
+        %}
+        {% wire id=#next
+                postback={mediaoverlay_update element_id=#media id=id ids=ids is_next=true}
                 delegate="mod_wires"
         %}
     {% endif %}
