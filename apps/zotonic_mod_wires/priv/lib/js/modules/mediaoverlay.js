@@ -1,4 +1,4 @@
-/* Media viewer using an overlay - opened via mod_wired notify observer. */
+/* Media viewer using an overlay - opened via mod_wires notify observer. */
 
 cotonic.ready.then(function () {
     $('body').on('click', "[data-mediaoverlay-id]", function (_event) {
