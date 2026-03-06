@@ -31,10 +31,15 @@ Accepted Events
 
 This module handles the following notifier callbacks:
 
-- `observe_acl_is_allowed`: Allow publish from clients to the transport topic using `z_render:output`.
+- `observe_acl_is_allowed`: Allow publish from clients to the transport topic.
 - `observe_output_html`: Render nested actions and scomp results using `z_render:output`.
 - `observe_page_actions`: Sanitize and normalize page action payloads before they are sent to the browser.
+- `observe_postback_notify`: Handle postback notifications for showing a media overlay.
 - `observe_scomp_script_render`: Part of the {% script %} rendering in templates using `z_render:make_postback_info`.
+
+Delegate callbacks:
+
+- `event/2` with `postback` messages: `mediaoverlay_update`.
 
 ").
 
@@ -44,6 +49,8 @@ This module handles the following notifier callbacks:
 -mod_prio(1000).
 
 -export([
+    event/2,
+    observe_postback_notify/2,
     observe_acl_is_allowed/2,
     observe_output_html/3,
     observe_scomp_script_render/2,
@@ -54,6 +61,80 @@ This module handles the following notifier callbacks:
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_mod_wires/include/mod_wires.hrl").
 
+%% @doc Handle the event for the mediaoverlay.
+event(#postback{ message={mediaoverlay_update, Args} }, Context) ->
+    {id, Id} = proplists:lookup(id, Args),
+    {ids, Ids} = proplists:lookup(ids, Args),
+    {element_id, EltId} = proplists:lookup(element_id, Args),
+    {is_next, IsNext} = proplists:lookup(is_next, Args),
+    case Ids of
+        [_|_] ->
+            NewId = if
+                IsNext -> find_next(Id, Ids);
+                true -> find_prev(Id, Ids)
+            end,
+            z_render:replace(
+                EltId,
+                #render{
+                    template = "_mediaoverlay.tpl",
+                    vars = [
+                        {id, NewId},
+                        {ids, Ids}
+                    ]
+                },
+                Context);
+        _ ->
+            Context
+    end.
+
+find_next(Id, Ids) ->
+    case lists:dropwhile(fun(X) -> X =/= Id end, Ids) of
+        [ _, Next | _ ] -> Next;
+        _ -> hd(Ids)
+    end.
+
+find_prev(Id, Ids) ->
+    find_next(Id, lists:reverse(Ids)).
+
+
+%% @doc Handle the lightbox event, filter the id and ids, open an overlay.
+observe_postback_notify(#postback_notify{ message = <<"mediaoverlay">> }, Context) ->
+    Ids = case z_context:get_q(<<"ids">>, Context) of
+        L when is_list(L) -> L;
+        _ -> []
+    end,
+    Ids1 = lists:filtermap(
+        fun(QId) ->
+            case m_rsc:rid(QId, Context) of
+                undefined -> false;
+                RId ->
+                    case z_acl:rsc_visible(RId, Context) of
+                        true -> {true, RId};
+                        false -> false
+                    end
+            end
+        end,
+        Ids),
+    Id = m_rsc:rid(z_context:get_q(<<"id">>, Context), Context),
+    Id1 = case z_acl:rsc_visible(Id, Context) of
+        true -> Id;
+        false when Ids1 =/= [] -> hd(Ids1);
+        false -> undefined
+    end,
+    if
+        is_integer(Id1) ->
+            Vars = [
+                {id, Id1},
+                {ids, Ids1},
+                {class, "overlay-mediaoverlay"}
+            ],
+            z_render:overlay("_mediaoverlay.tpl", Vars, Context);
+        true ->
+            % Ignore, nothing to show.
+            undefined
+    end;
+observe_postback_notify(#postback_notify{}, _Context) ->
+    undefined.
 
 %% @doc Allow publish from clients to the transport topic
 observe_acl_is_allowed(#acl_is_allowed{ action = publish, object = #acl_mqtt{ topic = [ <<"zotonic-transport">>, _ ] } }, _Context) ->
