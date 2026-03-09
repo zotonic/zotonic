@@ -20,12 +20,14 @@
   .modal-overlay.overlay-mediaoverlay > div {
     height: 100%;
     width: 100%;
+    border-radius: 10px;
+    overflow: hidden;
     display: grid;
     grid-template-columns: minmax(30px, 50px) 1fr minmax(30px, 50px);
-    grid-template-rows: 1fr auto; }
+    grid-template-rows: 100px 1fr 100px auto; }
     .modal-overlay.overlay-mediaoverlay > div .mediaoverlay--media {
       grid-column: 1 / span 3;
-      grid-row: 1;
+      grid-row: 1 / span 3;
       min-height: 0;
       overflow: hidden;
       position: relative; }
@@ -43,6 +45,7 @@
       .modal-overlay.overlay-mediaoverlay > div .mediaoverlay--media > audio {
         box-sizing: border-box;
         max-width: 60%;
+        min-height: 32px;
         box-shadow: 0 0 50px rgba(255, 255, 255, 0.5);
         object-fit: contain; }
       .modal-overlay.overlay-mediaoverlay > div .mediaoverlay--media > .embed-responsive {
@@ -60,7 +63,7 @@
         max-height: 100%; }
     .modal-overlay.overlay-mediaoverlay > div .mediaoverlay--caption {
       grid-column: 1 / span 3;
-      grid-row: 2;
+      grid-row: 4;
       min-height: 0;
       overflow: hidden;
       padding: 10px;
@@ -70,23 +73,30 @@
       cursor: pointer;
       height: 100%;
       width: 100%;
-      color: white;
-      opacity: 0.5;
-      font-size: 24px;
-      font-weight: bold;
-      text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-      background: transparent;
-      border: none; }
-      .modal-overlay.overlay-mediaoverlay > div .mediaoverlay--nav:hover {
+      display: flex;
+      align-items: center;
+      justify-content: center; }
+      .modal-overlay.overlay-mediaoverlay > div .mediaoverlay--nav button {
+        flex-grow: 1;
+        height: 100%;
         color: white;
-        opacity: 1;
-        background: rgba(255, 255, 255, 0.1); }
+        opacity: 0.5;
+        font-size: 24px;
+        font-weight: bold;
+        text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        background: transparent;
+        border: none; }
+        .modal-overlay.overlay-mediaoverlay > div .mediaoverlay--nav button:hover {
+          color: white;
+          opacity: 1;
+          background: rgba(255, 255, 255, 0.1);
+          background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0) 100%); }
     .modal-overlay.overlay-mediaoverlay > div .mediaoverlay--prev {
       grid-column: 1;
-      grid-row: 1; }
+      grid-row: 2; }
     .modal-overlay.overlay-mediaoverlay > div .mediaoverlay--next {
       grid-column: 3;
-      grid-row: 1; }
+      grid-row: 2; }
   .modal-overlay.overlay-mediaoverlay .modal-overlay-close {
     position: absolute;
     z-index: 2;

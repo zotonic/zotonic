@@ -21,13 +21,17 @@
     </div>
 
     {% if ids|length > 1 %}
-        <button class="mediaoverlay--nav mediaoverlay--prev" title="{_ Previous image _}" aria-label="{_ Previous image _}" id="{{ #prev }}">
-            ＜
-        </button>
+        <div class="mediaoverlay--nav mediaoverlay--prev">
+            <button title="{_ Previous image _}" aria-label="{_ Previous image _}" id="{{ #prev }}">
+                ＜
+            </button>
+        </div>
 
-        <button class="mediaoverlay--nav mediaoverlay--next" title="{_ Next image _}" aria-label="{_ Next image _}" id="{{ #next }}">
+        <div class="mediaoverlay--nav mediaoverlay--next">
+            <button title="{_ Next image _}" aria-label="{_ Next image _}" id="{{ #next }}">
             ＞
-        </button>
+            </button>
+        </div>
 
         {% wire id=#prev
                 postback={mediaoverlay_update element_id=#media id=id ids=ids is_next=false}
