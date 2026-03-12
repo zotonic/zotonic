@@ -318,6 +318,8 @@ get(Module, Key, Context) when is_binary(Key) ->
             undefined
     end.
 
+%% @doc Get the value of a config key. Returns `undefined` when the key is not found
+%% in either the config table or the site config.
 -spec get_value(Module, Key, Context) -> term() when
     Module :: atom() | binary(),
     Key :: atom() | binary(),
@@ -379,7 +381,7 @@ get_boolean(Module, Key, Default, Context) ->
     Value :: string() | binary() | atom(),
     Context :: z:context(),
     Reason :: term().
-set_default_value(Module, Key, Value, Context) ->
+set_default_value(Module, Key, Value, Context) when is_atom(Module), is_atom(Key) ->
     case get_value(Module, Key, Context) of
         undefined ->
             case z_db:has_connection(Context) of
@@ -393,16 +395,19 @@ set_default_value(Module, Key, Value, Context) ->
             end;
         _Value ->
             ok
-    end.
+    end;
+set_default_value(Module, Key, Value, Context) ->
+    set_default_value(z_convert:to_atom(Module), z_convert:to_atom(Key), Value, Context).
+
 
 %% @doc Set a "simple" config value.
--spec set_value(Module, Key, Value, Context) -> ok | {error, Reason} when 
+-spec set_value(Module, Key, Value, Context) -> ok | {error, Reason} when
     Module :: atom() | binary(),
     Key :: atom() | binary(),
     Value :: string() | binary() | atom(),
     Context :: z:context(),
     Reason :: term().
-set_value(Module, Key, Value, Context) ->
+set_value(Module, Key, Value, Context) when is_atom(Module), is_atom(Key) ->
     case z_db:has_connection(Context) of
         true ->
             set_value_db(Module, Key, Value, true, Context);
@@ -411,7 +416,9 @@ set_value(Module, Key, Value, Context) ->
             z_depcache:flush(config, Context),
             z_notifier:notify(#m_config_update{module = Module, key = Key, value = Value}, Context),
             ok
-    end.
+    end;
+set_value(Module, Key, Value, Context) ->
+    set_value(z_convert:to_atom(Module), z_convert:to_atom(Key), Value, Context).
 
 -spec set_value_db(Module, Key, Value, IsAllowUpdate, Context) -> ok | {error, Reason} when
     Module :: atom() | binary(),
@@ -420,10 +427,8 @@ set_value(Module, Key, Value, Context) ->
     IsAllowUpdate :: boolean(),
     Context :: z:context(),
     Reason :: no_database_connection | term().
-set_value_db(Module, Key, Value0, IsAllowUpdate, Context) ->
-    ModuleAtom = z_convert:to_atom(Module),
-    KeyAtom = z_convert:to_atom(Key),
-    KeyBin = z_convert:to_binary(KeyAtom),
+set_value_db(Module, Key, Value0, IsAllowUpdate, Context) when is_atom(Module), is_atom(Key) ->
+    IsSecretKey = is_secret_key(Module, Key, Context),
     Value = z_convert:to_binary(Value0),
     Result = z_db:transaction(
         fun(Ctx) ->
@@ -439,10 +444,10 @@ set_value_db(Module, Key, Value0, IsAllowUpdate, Context) ->
                     no_change;
                 undefined ->
                     Props = #{
-                        <<"module">> => ModuleAtom,
-                        <<"key">> => KeyAtom,
+                        <<"module">> => Module,
+                        <<"key">> => Key,
                         <<"value">> => Value,
-                        <<"is_secret">> => is_secret_key(KeyBin)
+                        <<"is_secret">> => IsSecretKey
                     },
                     {ok, _} = z_db:insert(config, Props, Ctx),
                     insert;
@@ -453,7 +458,7 @@ set_value_db(Module, Key, Value0, IsAllowUpdate, Context) ->
                             modified = now()
                         where module = $2
                           and key = $3",
-                        [ Value, ModuleAtom, KeyAtom ],
+                        [ Value, Module, Key ],
                         Ctx),
                     {update, OldValue};
                 _ ->
@@ -468,20 +473,18 @@ set_value_db(Module, Key, Value0, IsAllowUpdate, Context) ->
         insert ->
             z_depcache:flush(config, Context),
             z_notifier:notify(#m_config_update{module=Module, key=Key, value=Value}, Context),
-            IsSecret = is_secret_key(ModuleAtom, KeyAtom, Context),
             z:info(
                 "Configuration key '~p.~p' inserted, new value: '~s'",
-                [ ModuleAtom, KeyAtom, safe_log_value(IsSecret, Key, Value) ],
+                [ Module, Key, safe_log_value(IsSecretKey, Key, Value) ],
                 [ {module, ?MODULE}, {line, ?LINE} ],
                 Context),
             ok;
         {update, OldV} ->
             z_depcache:flush(config, Context),
             z_notifier:notify(#m_config_update{module=Module, key=Key, value=Value}, Context),
-            IsSecret = is_secret_key(ModuleAtom, KeyAtom, Context),
             z:info(
                 "Configuration key '~p.~p' changed, new value: '~s', old value '~s'",
-                [ ModuleAtom, KeyAtom, safe_log_value(IsSecret, Key, Value), safe_log_value(IsSecret, Key, OldV) ],
+                [ Module, Key, safe_log_value(IsSecretKey, Key, Value), safe_log_value(IsSecretKey, Key, OldV) ],
                 [ {module, ?MODULE}, {line, ?LINE} ],
                 Context),
             ok;
@@ -491,8 +494,9 @@ set_value_db(Module, Key, Value0, IsAllowUpdate, Context) ->
             Error;
         {rollback, Error} ->
             {error, Error}
-    end.
-
+    end;
+set_value_db(Module, Key, Value, IsAllowUpdate, Context) ->
+    set_value_db(z_convert:to_atom(Module), z_convert:to_atom(Key), Value, IsAllowUpdate, Context).
 
 %% @doc Set a "complex" config value.
 -spec set_prop(Module, Key, Prop, PropValue, Context) -> ok | {error, Reason} when
@@ -502,7 +506,8 @@ set_value_db(Module, Key, Value0, IsAllowUpdate, Context) ->
     PropValue :: term(),
     Context :: z:context(),
     Reason :: term().
-set_prop(Module, Key, Prop, PropValue, Context) ->
+set_prop(Module, Key, Prop, PropValue, Context) when is_atom(Module), is_atom(Key), is_atom(Prop) ->
+    IsSecretKey = is_secret_key(Module, Key, Context),
     Result = z_db:transaction(
         fun(Ctx) ->
             PropB = z_convert:to_binary(Prop),
@@ -518,6 +523,7 @@ set_prop(Module, Key, Prop, PropValue, Context) ->
                     Ins = #{
                         <<"module">> => Module,
                         <<"key">> => Key,
+                        <<"is_secret">> => IsSecretKey,
                         z_convert:to_binary(Prop) => PropValue
                     },
                     z_db:insert(config, Ins, Ctx);
@@ -540,17 +546,18 @@ set_prop(Module, Key, Prop, PropValue, Context) ->
                 #m_config_update_prop{module = Module, key = Key, prop = Prop, value = PropValue},
                 Context
             ),
-            IsSecretKey = is_secret_key(Module, Key, Context),
             SafeLogValue = safe_log_value(IsSecretKey, Prop, PropValue),
             z:info(
-                "Configuration key '~s.~s' changed, update property '~p' value: ~p",
-                [ z_convert:to_binary(Module), z_convert:to_binary(Key), Prop, SafeLogValue ],
+                "Configuration key '~p.~p' changed, update property '~p' value: ~p",
+                [ Module, Key, Prop, SafeLogValue ],
                 [ {module, ?MODULE}, {line, ?LINE} ],
                 Context),
             ok;
         {error, _} = Error ->
             Error
-    end.
+    end;
+set_prop(Module, Key, Prop, PropValue, Context) ->
+    set_prop(z_convert:to_atom(Module), z_convert:to_atom(Key), z_convert:to_atom(Prop), PropValue, Context).
 
 set_is_secret(Key, CMs) ->
     case proplists:get_value(is_secret, CMs) of
@@ -560,8 +567,14 @@ set_is_secret(Key, CMs) ->
             CMs
     end.
 
+%% @doc Return true if the key is a secret key. This is used to determine if the value
+%% should be hidden in the log and admin UI.
+-spec is_secret_key(Module, Key, Context) -> boolean() when
+    Module :: atom() | binary(),
+    Key :: atom() | binary(),
+    Context :: z:context().
 is_secret_key(Module, Key, Context) ->
-    case is_secret_key(z_convert:to_binary(Key)) of
+    case is_secret_key(Key) of
         true -> true;
         false ->
             case m_config:get(Module, Key, Context) of
@@ -570,6 +583,11 @@ is_secret_key(Module, Key, Context) ->
             end
     end.
 
+%% @doc Return true if the key is a secret key. This is used to determine if the value
+%% should be hidden in the log and admin UI.
+-spec is_secret_key(Key) -> boolean() when
+    Key :: atom() | binary().
+is_secret_key(Key) when is_atom(Key) -> is_secret_key(atom_to_binary(Key, utf8));
 is_secret_key(<<"public_", _/binary>>) -> false;
 is_secret_key(<<"password_min_length">>) -> false;
 is_secret_key(<<"password_regex">>) -> false;
@@ -600,21 +618,21 @@ get_prop(Module, Key, Prop, Context) ->
     Module :: atom() | binary(),
     Key :: atom() | binary(),
     Context :: z:context().
-delete(Module, Key, Context) ->
-    Module1 = z_convert:to_atom(Module),
-    Key1 = z_convert:to_atom(Key),
-    z_db:q("delete from config where module = $1 and key = $2", [Module1, Key1], Context),
+delete(Module, Key, Context) when is_atom(Module), is_atom(Key) ->
+    z_db:q("delete from config where module = $1 and key = $2", [Module, Key], Context),
     z_depcache:flush(config, Context),
     z_notifier:notify(
-        #m_config_update{module = Module1, key = Key1, value = undefined},
+        #m_config_update{module = Module, key = Key, value = undefined},
         Context
     ),
     z:info(
-        "Configuration key '~s.~s' deleted",
-        [ z_convert:to_binary(Module1), z_convert:to_binary(Key1) ],
+        "Configuration key '~p.~p' deleted",
+        [ Module, Key ],
         [ {module, ?MODULE}, {line, ?LINE} ],
         Context),
-    ok.
+    ok;
+delete(Module, Key, Context) ->
+    delete(z_convert:to_atom(Module), z_convert:to_atom(Key), Context).
 
 
 %% @doc Lookup the unique id in the config table from the module/key combination.
