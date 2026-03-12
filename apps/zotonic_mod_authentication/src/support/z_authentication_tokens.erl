@@ -246,7 +246,7 @@ decode_auth_token_1(ExpTerm, Context) ->
     end.
 
 cache_auth_token(Encoded, undefined, ExpTerm, Context) ->
-    z_depcache:set({auth_token, Encoded}, ExpTerm, ?AUTH_TOKEN_CACHE_MAXAGE, [auth_secret], Context);
+    z_depcache:set({auth_token, Encoded}, ExpTerm, ?AUTH_TOKEN_CACHE_MAXAGE, [auth_anon_secret, auth_secret], Context);
 cache_auth_token(Encoded, UserId, ExpTerm, Context) ->
     z_depcache:set({auth_token, Encoded}, ExpTerm, ?AUTH_TOKEN_CACHE_MAXAGE, [UserId, auth_secret], Context).
 
@@ -500,7 +500,6 @@ generate_auth_anon_secret(Context) ->
     Secret = z_ids:id(?AUTH_SECRET_LENGTH),
     m_config:set_value(mod_authentication, auth_anon_secret, Secret, Context),
     z_depcache:flush(auth_anon_secret, Context),
-    z_depcache:flush(auth_secret, Context),
     Secret.
 
 -spec generate_user_secret( m_rsc:resource_id(), z:context() ) -> binary().
