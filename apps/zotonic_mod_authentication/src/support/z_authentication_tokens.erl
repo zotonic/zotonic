@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019-2025 Marc Worrell
+%% @copyright 2019-2026 Marc Worrell
 %% @doc Authentication tokens and cookies.
 %% @end
 
-%% Copyright 2019-2025 Marc Worrell
+%% Copyright 2019-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -64,6 +64,8 @@
 -define(AUTOLOGON_EXPIRE, 3600*24*180).         % autologon is 180 days valid
 
 -define(ONETIME_TOKEN_EXPIRE, 30).              % onetime tokens are valid for 30 secs
+
+-define(AUTH_TOKEN_CACHE_MAXAGE, 10).           % cache auth tokens for 10 seconds
 
 
 -spec reset_cookies( z:context() ) -> z:context().
@@ -192,7 +194,9 @@ ensure_auth_cookie(Context) ->
 encode_auth_token(UserId, Options, ReplayToken, Context) ->
     Term = {auth, UserId, Options, user_secret(UserId, Context), ReplayToken},
     ExpTerm = termit:expiring(Term, session_expires(Context)),
-    termit:encode_base64(ExpTerm, auth_secret(Context)).
+    Encoded = termit:encode_base64(ExpTerm, auth_secret(Context)),
+    cache_auth_token(Encoded, UserId, ExpTerm, Context),
+    Encoded.
 
 -spec decode_auth_token( binary(), z:context() ) ->
      {ok, {OptUserId, Options, ExpiresAt, ReplayToken}} | {error, Reason} when
@@ -202,34 +206,53 @@ encode_auth_token(UserId, Options, ReplayToken, Context) ->
    ReplayToken :: binary(),
    Reason :: term().
 decode_auth_token(AuthCookie, Context) ->
-    case termit:decode_base64(AuthCookie, auth_secret(Context)) of
+    case z_depcache:get({auth_token, AuthCookie}, Context) of
         {ok, ExpTerm} ->
-            case termit:check_expired(ExpTerm) of
-                {ok, {auth, UserId, Options, UserSecret, ReplayToken}} when is_binary(UserSecret) ->
-                    case z_replay_token:is_spent_token(ReplayToken, Context) of
-                        false ->
-                            case user_secret(UserId, Context) of
-                                UserSecret ->
-                                    {ok, {UserId, Options, extract_expires(ExpTerm), ReplayToken}};
-                                _ ->
-                                    {error, user_secret}
-                            end;
-                        true ->
-                            {error, replay}
+            decode_auth_token_1(ExpTerm, Context);
+        _ ->
+            case termit:decode_base64(AuthCookie, auth_secret(Context)) of
+                {ok, ExpTerm} ->
+                    case decode_auth_token_1(ExpTerm, Context) of
+                        {ok, {UserId, _Options, _Expires, _ReplayToken} = Decoded} ->
+                            cache_auth_token(AuthCookie, UserId, ExpTerm, Context),
+                            {ok, Decoded};
+                        {error, _} = Error ->
+                            Error
                     end;
-                {ok, _} ->
-                    % Illegal or too old token - skip
-                    {error, token};
-                {error, _} = Error ->
+                {error, _}  = Error ->
                     Error
+            end
+    end.
+
+decode_auth_token_1(ExpTerm, Context) ->
+    case termit:check_expired(ExpTerm) of
+        {ok, {auth, UserId, Options, UserSecret, ReplayToken}} when is_binary(UserSecret) ->
+            case z_replay_token:is_spent_token(ReplayToken, Context) of
+                false ->
+                    case user_secret(UserId, Context) of
+                        UserSecret ->
+                            {ok, {UserId, Options, extract_expires(ExpTerm), ReplayToken}};
+                        _ ->
+                            {error, user_secret}
+                    end;
+                true ->
+                    {error, replay}
             end;
-        {error, _}  = Error ->
+        {ok, _} ->
+            % Illegal or too old token - skip
+            {error, token};
+        {error, _} = Error ->
             Error
     end.
 
+cache_auth_token(Encoded, undefined, ExpTerm, Context) ->
+    z_depcache:set({auth_token, Encoded}, ExpTerm, ?AUTH_TOKEN_CACHE_MAXAGE, [auth_anon_secret, auth_secret], Context);
+cache_auth_token(Encoded, UserId, ExpTerm, Context) ->
+    z_depcache:set({auth_token, Encoded}, ExpTerm, ?AUTH_TOKEN_CACHE_MAXAGE, [UserId, auth_secret], Context).
+
+
 extract_expires({expires, ExpiresAt, _Data}) ->
     ExpiresAt - z_datetime:timestamp().
-
 
 %% @doc Register the auth cookie's replay token as invalidated for the coming period.
 %% The z.auth cookie must be available in the request context.
@@ -439,6 +462,7 @@ auth_secret(Context) ->
 generate_auth_secret(Context) ->
     Secret = z_ids:id(?AUTH_SECRET_LENGTH),
     m_config:set_value(mod_authentication, auth_secret, Secret, Context),
+    z_depcache:flush(auth_secret, Context),
     Secret.
 
 -spec user_secret( m_rsc:resource_id() | undefined, z:context() ) -> binary() | error.
@@ -475,6 +499,7 @@ user_secret_1(true, UserId, Context) ->
 generate_auth_anon_secret(Context) ->
     Secret = z_ids:id(?AUTH_SECRET_LENGTH),
     m_config:set_value(mod_authentication, auth_anon_secret, Secret, Context),
+    z_depcache:flush(auth_anon_secret, Context),
     Secret.
 
 -spec generate_user_secret( m_rsc:resource_id(), z:context() ) -> binary().

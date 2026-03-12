@@ -339,12 +339,10 @@ observe_tick_24h(tick_24h, Context) ->
         _Env -> m_backup_revision:periodic_cleanup(Context)
     end.
 
-observe_m_config_update(#m_config_update{module=ModBackup, key=EncryptBackups}, Context)
-  when (ModBackup == <<"mod_backup">> orelse ModBackup == ?MODULE)
-       andalso (EncryptBackups == encrypt_backups orelse EncryptBackups == <<"encrypt_backups">>) ->
+observe_m_config_update(#m_config_update{module = ?MODULE, key = encrypt_backups}, Context) ->
     % When the backup encryption is enabled, make sure there is an encryption password
     % in the config. When there is no password, generate a new one.
-    case m_config:get_boolean(?MODULE, EncryptBackups, Context) of
+    case m_config:get_boolean(?MODULE, encrypt_backups, Context) of
         true ->
             case m_config:get_value(?MODULE, backup_encrypt_password, Context) of
                 Password when is_binary(Password) andalso size(Password) > 0 ->
