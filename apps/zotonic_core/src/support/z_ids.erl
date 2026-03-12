@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2025 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Functions supplying random strings, unique ids and nonce
 %% support.
 %% @end
 
-%% Copyright 2009-2025 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -36,12 +36,17 @@
     optid/1,
     sign_key/1,
     sign_key_simple/1,
+    sign_key/0,
+    sign_key_simple/0,
     number/0,
     number/1,
     rand_bytes/1
 ]).
 
 -type charset() :: 'az' | 'az09' | 'azAZ09' | 'special' | '09'.
+
+-define(SIGN_KEY_LENGTH, 50).
+-define(SIGN_KEY_SIMPLE_LENGTH, 21).
 
 
 %%%--------------------------------------------------------------------------
@@ -124,7 +129,7 @@ optid(Id) ->
 sign_key(Context) ->
     case m_config:get_value(site, sign_key, Context) of
         undefined ->
-            Key = random_id('azAZ09', 50),
+            Key = sign_key(),
             m_config:set_value(site, sign_key, Key, Context),
             Key;
         <<>> ->
@@ -133,12 +138,17 @@ sign_key(Context) ->
             SignKey
     end.
 
+-spec sign_key() -> binary().
+%% @doc Generate a key for signing requests stored in the user agent.
+sign_key() ->
+    random_id('azAZ09', ?SIGN_KEY_LENGTH).
+
 -spec sign_key_simple(Context::term()) -> binary().
 %% @doc Get the key for less secure signing of data (without nonce).
 sign_key_simple(Context) ->
     case m_config:get_value(site, sign_key_simple, Context) of
         undefined ->
-            Key = random_id('azAZ09', 21),
+            Key = sign_key_simple(),
             m_config:set_value(site, sign_key_simple, Key, Context),
             Key;
         <<>> ->
@@ -146,6 +156,11 @@ sign_key_simple(Context) ->
         SignKey ->
             SignKey
     end.
+
+-spec sign_key_simple() -> binary().
+%% @doc Generate a key for less secure signing of data (without nonce).
+sign_key_simple() ->
+    random_id('azAZ09', ?SIGN_KEY_SIMPLE_LENGTH).
 
 -spec application_key(atom()) -> binary().
 %% @doc Set/get a default sign key for the zotonic core functions.

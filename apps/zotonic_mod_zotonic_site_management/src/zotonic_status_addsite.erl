@@ -178,8 +178,8 @@ addsite_copy_skel(Name, Options, Context) ->
                 true ->
                     Options1 = [
                         {site, Name},
-                        {sign_key, z_ids:id(20)},
-                        {sign_key_simple, z_ids:id(12)}
+                        {sign_key, z_ids:sign_key()},
+                        {sign_key_simple, z_ids:sign_key_simple()}
                         | Options
                     ],
                     Options2 = case z_utils:is_empty(proplists:get_value(admin_password, Options1)) of
