@@ -499,6 +499,7 @@ user_secret_1(true, UserId, Context) ->
 generate_auth_anon_secret(Context) ->
     Secret = z_ids:id(?AUTH_SECRET_LENGTH),
     m_config:set_value(mod_authentication, auth_anon_secret, Secret, Context),
+    z_depcache:flush(auth_anon_secret, Context),
     z_depcache:flush(auth_secret, Context),
     Secret.
 
