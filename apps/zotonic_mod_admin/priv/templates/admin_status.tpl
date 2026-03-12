@@ -19,7 +19,12 @@
                         <div class="col-md-6">
                             <dl class="dl-horizontal">
                                 <dt>{_ Zotonic Version _}</dt>
-                                <dd>{{ m.admin_status.zotonic_version }}</dd>
+                                <dd>
+                                    {{ m.admin_status.zotonic_version }}
+                                    {% if m.admin_status.zotonic_git_version as git_version %}
+                                        <em>({{ git_version }})</em>
+                                    {% endif %}
+                                </dd>
 
                                 {% if m.acl.is_admin %} {# Only admins are allowed to see the all versions #}
                                     <dt>{_ Erlang Version _}</dt>

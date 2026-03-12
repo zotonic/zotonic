@@ -23,6 +23,7 @@
 
 -export([
     otp_release/0,
+    git_version/1,
     pipeline/2,
     write_terms/2,
     get_value/2,
@@ -102,6 +103,28 @@ otp_release() ->
     {match, [Version]} = re:run(erlang:system_info(otp_release), "^R?([0-9]+)", [{capture, all_but_first, list}]),
     list_to_integer(Version).
 
+
+%% @doc Return the 'git' short version from the given work directory.
+-spec git_version(file:filename_all()) -> binary() | undefined.
+git_version(DirPath) ->
+    Cmd = "git rev-parse --short HEAD",
+    case exec:run(Cmd, [sync, stdout, {cd, DirPath}]) of
+        {ok, Res} ->
+            {stdout, Hash} = proplists:lookup(stdout, Res),
+            iolist_to_binary([
+                "git-", z_string:trim(unicode:characters_to_binary(Hash))
+            ]);
+        {error, Reason} ->
+            ?LOG_WARNING(#{
+                in => zotonic_core,
+                text => <<"Git rev-parse failed">>,
+                cmd => unicode:characters_to_binary(Cmd),
+                dir => DirPath,
+                result => error,
+                reason => Reason
+            }),
+            undefined
+    end.
 
 %% @doc Apply a list of functions to a startlist of arguments.
 %% All functions must return: ok | {ok, term()} | {error, term()}.

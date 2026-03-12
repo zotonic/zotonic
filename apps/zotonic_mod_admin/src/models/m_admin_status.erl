@@ -27,6 +27,7 @@ Available Model API Paths
 | Method | Path pattern | Description |
 | --- | --- | --- |
 | `get` | `/zotonic_version/...` | Return the running Zotonic version string for admin users (ACL-protected). |
+| `get` | `/zotonic_git_version/...` | Return the running Zotonic's git version string for admin users (ACL-protected). |
 | `get` | `/database_version/...` | Return the database server version string (admin ACL-gated via `m_get/3`). |
 | `get` | `/otp_version/...` | Return the exact Erlang/OTP version string (admin ACL-gated via `m_get/3`). |
 | `get` | `/config_dir/...` | Return the active configuration directory path. |
@@ -67,6 +68,7 @@ Available Model API Paths
 
     otp_version/0,
     zotonic_version/0,
+    zotonic_git_version/0,
     database_version/1,
     tcp_connection_count/0,
     group_sockets/0,
@@ -79,6 +81,11 @@ Available Model API Paths
 m_get([ <<"zotonic_version">> | Rest ], _Msg, Context) ->
     case z_acl:is_admin(Context) of
         true -> {ok, {zotonic_version(), Rest}};
+        false -> {error, eacces}
+    end;
+m_get([ <<"zotonic_git_version">> | Rest ], _Msg, Context) ->
+    case z_acl:is_admin(Context) of
+        true -> {ok, {zotonic_git_version(), Rest}};
         false -> {error, eacces}
     end;
 m_get(Path, Msg, Context) ->
@@ -200,6 +207,18 @@ otp_version() ->
 zotonic_version() ->
     z_convert:to_binary(?ZOTONIC_VERSION).
 
+%% @doc Return the zotonic's git version.
+-spec zotonic_git_version() -> binary() | undefined.
+zotonic_git_version() ->
+    case z_memo:get(zotonic_git_version) of
+        {cached, Version} ->
+            Version;
+        _ ->
+            % NOTE: this cached value is flushed by 'mod_admin:observe_filewatcher/2'
+            GitVersion = z_utils:git_version(z_path:get_path()),
+            z_memo:set(zotonic_git_version, {cached, GitVersion}),
+            GitVersion
+    end.
 
 %% @doc Return the version string of the used database.
 -spec database_version( z:context() ) -> binary().
