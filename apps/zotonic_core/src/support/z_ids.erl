@@ -35,8 +35,8 @@
     random_id/2,
     optid/1,
     sign_key/1,
-    sign_key_simple/1,
     sign_key/0,
+    sign_key_simple/1,
     sign_key_simple/0,
     number/0,
     number/1,
@@ -46,7 +46,7 @@
 -type charset() :: 'az' | 'az09' | 'azAZ09' | 'special' | '09'.
 
 -define(SIGN_KEY_LENGTH, 50).
--define(SIGN_KEY_SIMPLE_LENGTH, 21).
+-define(SIGN_KEY_SIMPLE_LENGTH, 40).
 
 
 %%%--------------------------------------------------------------------------
