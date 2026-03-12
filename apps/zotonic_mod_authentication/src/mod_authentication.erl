@@ -96,7 +96,7 @@ This module handles the following notifier callbacks:
 - `observe_auth_validated`: Match validated external identities to local users and trigger signup or logon continuation.
 - `observe_logon_options`: Normalize and enrich logon options before authentication starts.
 - `observe_logon_submit`: Check username/password against the identity tables using `m_identity:check_username_pw`.
-- `observe_m_config_update`: Flush the `auth_secret` depcache dependency when `mod_authentication.auth_secret` config changes.
+- `observe_m_config_update`: Flush the `auth_secret` depcache dependency when `mod_authentication.auth_secret` or `mod_authentication.auth_anon_secret` config changes.
 - `observe_request_context`: Check for authentication cookies in the request using `z_context:get`.
 - `observe_tick_1h`: Remove stale authentication and logon-history records in hourly maintenance.
 
@@ -711,6 +711,8 @@ observe_tick_1h(tick_1h, Context) ->
     m_identity:cleanup_logon_history(Context).
 
 observe_m_config_update(#m_config_update{module=mod_authentication, key=auth_secret}, Context) ->
+    z_depcache:flush(auth_secret, Context);
+observe_m_config_update(#m_config_update{module=mod_authentication, key=auth_anon_secret}, Context) ->
     z_depcache:flush(auth_secret, Context);
 observe_m_config_update(#m_config_update{}, _Context) ->
     ok.
