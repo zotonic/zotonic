@@ -93,7 +93,7 @@
         			        {% if predicate %}
         				        <option value="p:{{ predicate }}" selected="selected">{_ Valid for: _} {{ predicate.title }}</option>
         			        {% endif %}
-        			        <option value="">{_ Any category _}</option>
+        			        <option value="*">{_ Any category _}</option>
         			        <option value="" disabled></option>
                             {% if cat.is_a.meta %}
                                 {% for c in m.category.tree_flat_meta %}
