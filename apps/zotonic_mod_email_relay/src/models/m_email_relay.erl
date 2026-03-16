@@ -290,12 +290,22 @@ save_relay(To, MsgId, ExtMessageNr, WebhookUrl, Context) ->
         Context).
 
 filter_headers(Headers) ->
+    Allowed =
+        [
+            <<"subject">>,
+            <<"date">>,
+            <<"cc">>,
+            <<"list-unsubscribe">>,
+            <<"list-unsubscribe-post">>,
+            <<"priority">>,
+            <<"x-priority">>,
+            <<"x-msmail-priority">>
+        ],
     lists:filter(
         fun
-            ({<<"Subject">>, _}) -> true;
-            ({<<"Date">>, _}) -> true;
-            ({<<"Cc">>, _}) -> true;
-            (_) -> false
+            ({Name, _} = Header) ->
+                LowerName = z_string:to_lower(Name),
+                lists:member(LowerName, Allowed)
         end,
         Headers).
 
