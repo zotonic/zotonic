@@ -128,11 +128,11 @@ dkim_headers() ->
     [
         % Default in gen_smtp:
         <<"from">>, <<"to">>, <<"subject">>, <<"date">>,
-        % Added by Zotonic (RFC 6376 Section 5.4.1):
+        % Recommended (RFC 6376 Section 5.4.1):
         <<"sender">>, <<"reply-to">>, <<"cc">>, <<"message-id">>,
         % MIME headers (RFC 6376 Section 5.4.1):
         <<"mime-version">>, <<"content-type">>,
-        % RFC8058: when present these must be signed
+        % Required per RFC 8058 Section 4:
         <<"list-unsubscribe">>, <<"list-unsubscribe-post">>
     ].
 

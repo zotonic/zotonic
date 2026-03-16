@@ -41,10 +41,11 @@ site security directory: `security/$site/dkim/dkim.key` and `security/$site/dkim
 site-local `priv/dkim/` location are moved there automatically when needed. When the module is active and the keypair
 has been generated, outgoing MIME e-mail is signed with DKIM.
 
-The DKIM signature covers the `From`, `To`, `Subject`, `Date`, `Sender`, `Message-Id`, `List-Unsubscribe`, and
-`List-Unsubscribe-Post` headers. These headers are always listed in the DKIM signature; if a header is missing from
-the message then DKIM treats it as an empty value, as defined by the standard. Signing the list headers ensures
-compatibility with one-click unsubscribe support from [RFC 8058](https://datatracker.ietf.org/doc/html/rfc8058).
+The DKIM signature covers the `From`, `To`, `Subject`, `Date`, `Sender`, `Reply-To`, `Cc`, `Message-Id`,
+`MIME-Version`, `Content-Type`, `List-Unsubscribe`, and `List-Unsubscribe-Post` headers. These headers are always
+listed in the DKIM signature; if a header is missing from the message then DKIM treats it as an empty value, as
+defined by the standard. This header set follows the recommendations from [RFC 6376 section 5.4.1](https://datatracker.ietf.org/doc/html/rfc6376#section-5.4.1)
+and includes the list headers required for one-click unsubscribe support from [RFC 8058](https://datatracker.ietf.org/doc/html/rfc8058).
 
 
 DNS configuration
