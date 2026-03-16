@@ -57,19 +57,23 @@ dns_entry(Context) ->
 
 %% @doc Generate an RSA key using the openssl utility
 generate_key(Context) ->
-    maybe_move_0x_keys(Context),
-    {PrivKeyFile, PubKeyFile} = cert_files(Context),
-    ok = z_filelib:ensure_dir(PrivKeyFile),
-    ok = z_filelib:ensure_dir(PubKeyFile),
-    PrivKeyCmd = "openssl genrsa -out " ++ z_filelib:os_filename(PrivKeyFile) ++ " 1024",
-    os:cmd(PrivKeyCmd),
-    PubKeyCmd = "openssl rsa "
-        ++ " -in "  ++ z_filelib:os_filename(PrivKeyFile)
-        ++ " -out " ++ z_filelib:os_filename(PubKeyFile)
-        ++ " -pubout -outform PEM",
-    os:cmd(PubKeyCmd),
-    file:change_mode(PrivKeyFile, 8#00700),
-    ok.
+    case maybe_move_0x_keys(Context) of
+        none ->
+            {PrivKeyFile, PubKeyFile} = cert_files(Context),
+            ok = z_filelib:ensure_dir(PrivKeyFile),
+            ok = z_filelib:ensure_dir(PubKeyFile),
+            PrivKeyCmd = "openssl genrsa -out " ++ z_filelib:os_filename(PrivKeyFile) ++ " 1024",
+            os:cmd(PrivKeyCmd),
+            PubKeyCmd = "openssl rsa "
+                ++ " -in "  ++ z_filelib:os_filename(PrivKeyFile)
+                ++ " -out " ++ z_filelib:os_filename(PubKeyFile)
+                ++ " -pubout -outform PEM",
+            os:cmd(PubKeyCmd),
+            file:change_mode(PrivKeyFile, 8#00700),
+            ok;
+        ok ->
+            ok
+    end.
 
 maybe_move_0x_keys(Context) ->
     KeyDir = filename:join([ z_path:site_dir(Context), "priv", "dkim" ]),
@@ -93,9 +97,10 @@ maybe_move_0x_keys(Context) ->
             file:delete(KeyFile),
             file:delete(PubFile),
             file:change_mode(KeyFile, 8#00700),
-            file:del_dir( filename:dirname(KeyFile) );
+            file:del_dir( filename:dirname(KeyFile) ),
+            ok;
         false ->
-            ok
+            none
     end.
 
 
