@@ -295,6 +295,11 @@ filter_headers(Headers) ->
             ({<<"Subject">>, _}) -> true;
             ({<<"Date">>, _}) -> true;
             ({<<"Cc">>, _}) -> true;
+            ({<<"List-Unsubscribe">>, _}) -> true;
+            ({<<"List-Unsubscribe-Post">>, _}) -> true;
+            ({<<"Priority">>, _}) -> true;
+            ({<<"X-Priority">>, _}) -> true;
+            ({<<"X-MSMail-Priority">>, _}) -> true;
             (_) -> false
         end,
         Headers).
