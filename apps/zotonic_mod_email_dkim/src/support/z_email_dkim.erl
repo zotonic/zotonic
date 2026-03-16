@@ -122,7 +122,9 @@ mimemail_options(Context) ->
 dkim_headers() ->
     [
         % Default in gen_smtp:
-        <<"sender">>, <<"from">>, <<"to">>, <<"subject">>, <<"date">>,
+        <<"from">>, <<"to">>, <<"subject">>, <<"date">>,
+        % Added by Zotonic:
+        <<"sender">>, <<"message-id">>,
         % RFC8058: when present these must be signed
         <<"list-unsubscribe">>, <<"list-unsubscribe-post">>
     ].
