@@ -94,9 +94,9 @@ maybe_move_0x_keys(Context) ->
             z_filelib:ensure_dir(NewKey),
             {ok, _} = file:copy(KeyFile, NewKey),
             {ok, _} = file:copy(PubFile, NewPub),
+            file:change_mode(NewKey, 8#00600),
             file:delete(KeyFile),
             file:delete(PubFile),
-            file:change_mode(KeyFile, 8#00700),
             file:del_dir( filename:dirname(KeyFile) ),
             ok;
         false ->
