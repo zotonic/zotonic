@@ -1,9 +1,9 @@
 %% @author Arjan Scherpenisse <arjan@miraclethings.nl>
-%% @copyright 2016-2025 Arjan Scherpenisse
+%% @copyright 2016-2026 Arjan Scherpenisse
 %% @doc DKIM signing of outgoing emails
 %% @end
 
-%% Copyright 2016-2025 Arjan Scherpenisse
+%% Copyright 2016-2026 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -25,7 +25,6 @@ DKIM (DomainKeys Identified Mail) is an important authentication mechanism to he
 email senders from forged and phishing email.
 
 
-
 How does it work?
 -----------------
 
@@ -38,8 +37,15 @@ Note
 The generating of the keypair depends on the `openssl` utility to be available in `$PATH`.
 
 This RSA keypair is generated automatically when the module is installed, and the private/public keys are put in the
-directory `sitename/dkim/`. When the module is active and the keypair has been generated, all outgoing e-mail will be signed.
+site security directory: `security/$site/dkim/dkim.key` and `security/$site/dkim/dkim.pub`. Existing keys in the old
+site-local `priv/dkim/` location are moved there automatically when needed. When the module is active and the keypair
+has been generated, outgoing MIME e-mail is signed with DKIM.
 
+The DKIM signature covers the `From`, `To`, `Subject`, `Date`, `Sender`, `Reply-To`, `Cc`, `Message-Id`,
+`MIME-Version`, `Content-Type`, `List-Unsubscribe`, and `List-Unsubscribe-Post` headers. These headers are always
+listed in the DKIM signature; if a header is missing from the message then DKIM treats it as an empty value, as
+defined by the standard. This header set follows the recommendations from [RFC 6376 section 5.4.1](https://datatracker.ietf.org/doc/html/rfc6376#section-5.4.1)
+and includes the list headers required for one-click unsubscribe support from [RFC 8058](https://datatracker.ietf.org/doc/html/rfc8058).
 
 
 DNS configuration
@@ -52,11 +58,11 @@ In the admin, the page `/admin/email/dkim`, available under (“Modules” / “
 information how to configure this DNS entry, including the text to copy-paste into the DNS record.
 
 
-
 ### DKIM selector
 
 By default, the DKIM selector is set to the string `zotonic`. This will result in DNS lookups to the
 `zotonic._domainkey.yoursite.com` domain. You can change the selector name by adding a config value called `site.dkim_selector`.
+
 
 Accepted Events
 ---------------
@@ -95,4 +101,3 @@ init(Context) ->
 
 observe_email_dkim_options(#email_dkim_options{}, Context) ->
     z_email_dkim:mimemail_options(Context).
-

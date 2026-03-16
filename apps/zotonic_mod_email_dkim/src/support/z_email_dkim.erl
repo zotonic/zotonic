@@ -1,8 +1,9 @@
 %% @author Arjan Scherpenisse <arjan@miraclethings.nl>
-%% @copyright 2016-2021 Arjan Scherpenisse
+%% @copyright 2016-2026 Arjan Scherpenisse
 %% @doc Support functions for signing e-mail messages using DKIM
+%% @end
 
-%% Copyright 2016-2021 Arjan Scherpenisse
+%% Copyright 2016-2026 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -56,19 +57,23 @@ dns_entry(Context) ->
 
 %% @doc Generate an RSA key using the openssl utility
 generate_key(Context) ->
-    maybe_move_0x_keys(Context),
-    {PrivKeyFile, PubKeyFile} = cert_files(Context),
-    ok = z_filelib:ensure_dir(PrivKeyFile),
-    ok = z_filelib:ensure_dir(PubKeyFile),
-    PrivKeyCmd = "openssl genrsa -out " ++ z_filelib:os_filename(PrivKeyFile) ++ " 1024",
-    os:cmd(PrivKeyCmd),
-    PubKeyCmd = "openssl rsa "
-        ++ " -in "  ++ z_filelib:os_filename(PrivKeyFile)
-        ++ " -out " ++ z_filelib:os_filename(PubKeyFile)
-        ++ " -pubout -outform PEM",
-    os:cmd(PubKeyCmd),
-    file:change_mode(PrivKeyFile, 8#00700),
-    ok.
+    case maybe_move_0x_keys(Context) of
+        none ->
+            {PrivKeyFile, PubKeyFile} = cert_files(Context),
+            ok = z_filelib:ensure_dir(PrivKeyFile),
+            ok = z_filelib:ensure_dir(PubKeyFile),
+            PrivKeyCmd = "openssl genrsa -out " ++ z_filelib:os_filename(PrivKeyFile) ++ " 2048",
+            os:cmd(PrivKeyCmd),
+            PubKeyCmd = "openssl rsa "
+                ++ " -in "  ++ z_filelib:os_filename(PrivKeyFile)
+                ++ " -out " ++ z_filelib:os_filename(PubKeyFile)
+                ++ " -pubout -outform PEM",
+            os:cmd(PubKeyCmd),
+            file:change_mode(PrivKeyFile, 8#00700),
+            ok;
+        ok ->
+            ok
+    end.
 
 maybe_move_0x_keys(Context) ->
     KeyDir = filename:join([ z_path:site_dir(Context), "priv", "dkim" ]),
@@ -89,12 +94,13 @@ maybe_move_0x_keys(Context) ->
             z_filelib:ensure_dir(NewKey),
             {ok, _} = file:copy(KeyFile, NewKey),
             {ok, _} = file:copy(PubFile, NewPub),
+            file:change_mode(NewKey, 8#00600),
             file:delete(KeyFile),
             file:delete(PubFile),
-            file:change_mode(KeyFile, 8#00700),
-            file:del_dir( filename:dirname(KeyFile) );
+            file:del_dir( filename:dirname(KeyFile) ),
+            ok;
         false ->
-            ok
+            none
     end.
 
 
@@ -106,13 +112,29 @@ mimemail_options(Context) ->
         true ->
             Now = calendar:universal_time(),
             Expires = z_datetime:next_year(Now),
-            [{dkim, [{s, dkim_selector(Context)},
+            [{dkim, [{h, dkim_headers()},
+                     {s, dkim_selector(Context)},
                      {d, z_convert:to_binary(z_email:email_domain(Context))},
                      {c, {simple, simple}},
                      {t, Now},
                      {x, Expires},
                      {private_key, {pem_plain, get_priv_key(Context)}}]}]
     end.
+
+%% @doc Return the list of headers that are included in the DKIM signature. This is
+%% a fixed list of headers that are commonly used in DKIM signatures, and should work
+%% for most cases. The list is based on RFC 6376 Section 5.4.1 recommendations.
+dkim_headers() ->
+    [
+        % Default in gen_smtp:
+        <<"from">>, <<"to">>, <<"subject">>, <<"date">>,
+        % Recommended (RFC 6376 Section 5.4.1):
+        <<"sender">>, <<"reply-to">>, <<"cc">>, <<"message-id">>,
+        % MIME headers (RFC 6376 Section 5.4.1):
+        <<"mime-version">>, <<"content-type">>,
+        % Required per RFC 8058 Section 4:
+        <<"list-unsubscribe">>, <<"list-unsubscribe-post">>
+    ].
 
 %% @doc Return the DKIM 'selector', which is the first part of the
 %% _domainkey subdomain, defaults to "zotonic".

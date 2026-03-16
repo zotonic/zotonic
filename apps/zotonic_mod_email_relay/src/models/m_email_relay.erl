@@ -303,7 +303,7 @@ filter_headers(Headers) ->
         ],
     lists:filter(
         fun
-            ({Name, _} = Header) ->
+            ({Name, _}) ->
                 LowerName = z_string:to_lower(Name),
                 lists:member(LowerName, Allowed)
         end,
