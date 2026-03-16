@@ -118,13 +118,15 @@ mimemail_options(Context) ->
 
 %% @doc Return the list of headers that are included in the DKIM signature. This is
 %% a fixed list of headers that are commonly used in DKIM signatures, and should work
-%% for most cases.
+%% for most cases. The list is based on RFC 6376 Section 5.4.1 recommendations.
 dkim_headers() ->
     [
         % Default in gen_smtp:
         <<"from">>, <<"to">>, <<"subject">>, <<"date">>,
-        % Added by Zotonic:
-        <<"sender">>, <<"message-id">>,
+        % Added by Zotonic (RFC 6376 Section 5.4.1):
+        <<"sender">>, <<"reply-to">>, <<"cc">>, <<"message-id">>,
+        % MIME headers (RFC 6376 Section 5.4.1):
+        <<"mime-version">>, <<"content-type">>,
         % RFC8058: when present these must be signed
         <<"list-unsubscribe">>, <<"list-unsubscribe-post">>
     ].
