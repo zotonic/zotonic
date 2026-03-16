@@ -1,8 +1,9 @@
 %% @author Arjan Scherpenisse <arjan@miraclethings.nl>
-%% @copyright 2016-2021 Arjan Scherpenisse
+%% @copyright 2016-2026 Arjan Scherpenisse
 %% @doc Support functions for signing e-mail messages using DKIM
+%% @end
 
-%% Copyright 2016-2021 Arjan Scherpenisse
+%% Copyright 2016-2026 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -106,13 +107,25 @@ mimemail_options(Context) ->
         true ->
             Now = calendar:universal_time(),
             Expires = z_datetime:next_year(Now),
-            [{dkim, [{s, dkim_selector(Context)},
+            [{dkim, [{h, dkim_headers()},
+                     {s, dkim_selector(Context)},
                      {d, z_convert:to_binary(z_email:email_domain(Context))},
                      {c, {simple, simple}},
                      {t, Now},
                      {x, Expires},
                      {private_key, {pem_plain, get_priv_key(Context)}}]}]
     end.
+
+%% @doc Return the list of headers that are included in the DKIM signature. This is
+%% a fixed list of headers that are commonly used in DKIM signatures, and should work
+%% for most cases.
+dkim_headers() ->
+    [
+        % Default in gen_smtp:
+        <<"sender">>, <<"from">>, <<"to">>, <<"subject">>, <<"date">>,
+        % RFC8058: when present these must be signed
+        <<"list-unsubscribe">>, <<"list-unsubscribe-post">>
+    ].
 
 %% @doc Return the DKIM 'selector', which is the first part of the
 %% _domainkey subdomain, defaults to "zotonic".
