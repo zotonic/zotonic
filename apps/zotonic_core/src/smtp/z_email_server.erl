@@ -652,12 +652,16 @@ bounce_email(MessageId, Context) when is_binary(MessageId) ->
     end.
 
 
-%% @doc Get the reply email address. Can be overridden per site.
-%% Defaults to "reply+MessageId@site_email_domain".
--spec reply_email(binary(), z:context()) -> binary().
-reply_email(MessageId, Context) when is_binary(MessageId) ->
-    EmailDomain = z_email:email_domain(Context),
-    <<"reply+",MessageId/binary, $@, EmailDomain/binary>>.
+%% @doc Generate a reply email address for the message-id.
+%% Used when reply_to in the email record is set to 'message_id'.
+%% The reply address will be "reply+MessageId@site_email_domain".
+-spec reply_to_message_id(MessageId, Context) -> ReplyToEmail when
+    MessageId :: binary(),
+    Context :: z:context(),
+    ReplyToEmail :: binary().
+reply_to_message_id(MessageId, Context) when is_binary(MessageId) ->
+    ReplyTo = <<"reply+", MessageId/binary>>,
+    combine_name_email(<<>>, ReplyTo, Context).
 
 
 % The 'From' is either the VERP (and bounce domain) or the set from.
@@ -1522,7 +1526,7 @@ add_reply_to(_Id, #email{ reply_to = undefined }, Headers, _Context) ->
 add_reply_to(_Id, #email{ reply_to = <<>> }, Headers, _Context) ->
     [{<<"Reply-To">>, <<"<>">>} | Headers];
 add_reply_to(Id, #email{ reply_to = message_id }, Headers, Context) ->
-    [{<<"Reply-To">>, reply_email(Id, Context)} | Headers];
+    [{<<"Reply-To">>, reply_to_message_id(Id, Context)} | Headers];
 add_reply_to(_Id, #email{ reply_to = ReplyTo }, Headers, Context) ->
     {Name, Email} = z_email:split_name_email(ReplyTo),
     ReplyTo1 = combine_name_email(Name, Email, Context),
