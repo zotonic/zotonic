@@ -654,7 +654,8 @@ bounce_email(MessageId, Context) when is_binary(MessageId) ->
 
 %% @doc Generate a reply email address for the message-id.
 %% Used when reply_to in the email record is set to 'message_id'.
-%% The reply address will be "reply+MessageId@site_email_domain".
+%% Returns an RFC822-formatted mailbox using the address
+%% "reply+MessageId@site_email_domain" (optionally with a display-name).
 -spec reply_to_message_id(MessageId, Context) -> ReplyToEmail when
     MessageId :: binary(),
     Context :: z:context(),
