@@ -637,7 +637,8 @@ update_config(State) ->
                 delete_sent_after=DeleteSentAfter}.
 
 
-%% @doc Get the bounce email address. Can be overridden per site in config setting site.bounce_email_override.
+%% @doc Get the bounce email address. Can be overridden per site
+%% in config setting site.bounce_email_override.
 -spec bounce_email(binary(), z:context()) -> binary().
 bounce_email(MessageId, Context) when is_binary(MessageId) ->
     case m_config:get_value(site, bounce_email_override, Context) of
@@ -651,13 +652,15 @@ bounce_email(MessageId, Context) when is_binary(MessageId) ->
     end.
 
 
+%% @doc Get the reply email address. Can be overridden per site.
+%% Defaults to "reply+MessageId@site_email_domain".
 -spec reply_email(binary(), z:context()) -> binary().
 reply_email(MessageId, Context) when is_binary(MessageId) ->
     EmailDomain = z_email:email_domain(Context),
     <<"reply+",MessageId/binary, $@, EmailDomain/binary>>.
 
 
-% The 'From' is either the message id (and bounce domain) or the set from.
+% The 'From' is either the VERP (and bounce domain) or the set from.
 get_email_from(EmailFrom, VERP, State, Context) ->
     From = case z_convert:to_binary(EmailFrom) of
         <<>> -> get_email_from(Context);
@@ -675,6 +678,12 @@ get_email_from(EmailFrom, VERP, State, Context) ->
 
 combine_name_email(Name, <<>>, Context) ->
     combine_name_email(Name, get_email_from(Context), Context);
+combine_name_email(<<>>, Email, Context) ->
+    Name = case m_site:title(Context) of
+        <<>> -> z_context:hostname(Context);
+        Title -> Title
+    end,
+    combine_name_email(Name, Email, Context);
 combine_name_email(Name, Email, Context) ->
     Email1 = ensure_domain(Email, Context),
     z_email:combine_name_email(Name, Email1).

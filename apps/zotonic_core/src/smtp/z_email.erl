@@ -269,13 +269,13 @@ sendq_render(To, HtmlTemplate, TextTemplate, Vars, Context) ->
 
 
 %% @doc Combine a name and an email address to the format `jan janssen <jan@example.com>'
-%% @todo do we need rfc2047:encode/1 call here?
+%% Uses the rfc822 formatting rules, so names with spaces or special characters are quoted.
 -spec combine_name_email(Name, Email) -> NameEmail when
     Name :: binary() | string() | undefined,
     Email :: binary() | string(),
     NameEmail :: binary().
 combine_name_email(undefined, Email) ->
-    Email;
+    combine_name_email(<<>>, Email);
 combine_name_email(Name, Email) ->
     Name1 = z_string:trim(unicode:characters_to_binary(Name)),
     Email1 = unicode:characters_to_binary(Email),
