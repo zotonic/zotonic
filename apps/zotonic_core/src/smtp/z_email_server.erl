@@ -44,7 +44,8 @@
     is_sender_enabled/3,
     is_recipient_ok/2,
 
-    get_email_from/1
+    get_email_from/1,
+    reply_to_message_id/2
 ]).
 
 -include_lib("zotonic.hrl").
