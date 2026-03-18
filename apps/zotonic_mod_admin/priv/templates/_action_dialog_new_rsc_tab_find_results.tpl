@@ -16,6 +16,7 @@
                     creator_id=creator_id
                     content_group=content_group
                     cat_exclude=cat_exclude
+                    is_published=`all`
                     zsort="-modified"
             }]
         as result
