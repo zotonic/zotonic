@@ -10,6 +10,7 @@
     {% with m.search.paged[
             {query text=text cat=cat page=1 pagelen=(6*3)
                    creator_id=creator_id content_group=content_group
+                   is_published='all'
                    zsort="-created"
             }]
         as result
