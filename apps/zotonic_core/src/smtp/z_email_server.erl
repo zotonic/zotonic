@@ -44,7 +44,8 @@
     is_sender_enabled/3,
     is_recipient_ok/2,
 
-    get_email_from/1
+    get_email_from/1,
+    reply_to_message_id/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -637,7 +638,8 @@ update_config(State) ->
                 delete_sent_after=DeleteSentAfter}.
 
 
-%% @doc Get the bounce email address. Can be overridden per site in config setting site.bounce_email_override.
+%% @doc Get the bounce email address. Can be overridden per site
+%% in config setting site.bounce_email_override.
 -spec bounce_email(binary(), z:context()) -> binary().
 bounce_email(MessageId, Context) when is_binary(MessageId) ->
     case m_config:get_value(site, bounce_email_override, Context) of
@@ -651,13 +653,20 @@ bounce_email(MessageId, Context) when is_binary(MessageId) ->
     end.
 
 
--spec reply_email(binary(), z:context()) -> binary().
-reply_email(MessageId, Context) when is_binary(MessageId) ->
-    EmailDomain = z_email:email_domain(Context),
-    <<"reply+",MessageId/binary, $@, EmailDomain/binary>>.
+%% @doc Generate a reply email address for the message-id.
+%% Used when reply_to in the email record is set to 'message_id'.
+%% Returns an RFC822-formatted mailbox using the address
+%% "reply+MessageId@site_email_domain" (optionally with a display-name).
+-spec reply_to_message_id(MessageId, Context) -> ReplyToEmail when
+    MessageId :: binary(),
+    Context :: z:context(),
+    ReplyToEmail :: binary().
+reply_to_message_id(MessageId, Context) when is_binary(MessageId) ->
+    ReplyTo = <<"reply+", MessageId/binary>>,
+    combine_name_email(<<>>, ReplyTo, Context).
 
 
-% The 'From' is either the message id (and bounce domain) or the set from.
+% The 'From' is either the VERP (and bounce domain) or the set from.
 get_email_from(EmailFrom, VERP, State, Context) ->
     From = case z_convert:to_binary(EmailFrom) of
         <<>> -> get_email_from(Context);
@@ -675,6 +684,12 @@ get_email_from(EmailFrom, VERP, State, Context) ->
 
 combine_name_email(Name, <<>>, Context) ->
     combine_name_email(Name, get_email_from(Context), Context);
+combine_name_email(<<>>, Email, Context) ->
+    Name = case m_site:title(Context) of
+        <<>> -> z_context:hostname(Context);
+        Title -> Title
+    end,
+    combine_name_email(Name, Email, Context);
 combine_name_email(Name, Email, Context) ->
     Email1 = ensure_domain(Email, Context),
     z_email:combine_name_email(Name, Email1).
@@ -1513,7 +1528,7 @@ add_reply_to(_Id, #email{ reply_to = undefined }, Headers, _Context) ->
 add_reply_to(_Id, #email{ reply_to = <<>> }, Headers, _Context) ->
     [{<<"Reply-To">>, <<"<>">>} | Headers];
 add_reply_to(Id, #email{ reply_to = message_id }, Headers, Context) ->
-    [{<<"Reply-To">>, reply_email(Id, Context)} | Headers];
+    [{<<"Reply-To">>, reply_to_message_id(Id, Context)} | Headers];
 add_reply_to(_Id, #email{ reply_to = ReplyTo }, Headers, Context) ->
     {Name, Email} = z_email:split_name_email(ReplyTo),
     ReplyTo1 = combine_name_email(Name, Email, Context),
