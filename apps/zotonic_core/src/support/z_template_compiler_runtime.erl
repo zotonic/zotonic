@@ -47,6 +47,7 @@
     to_render_result/3,
     escape/2,
     trace_compile/4,
+    trace_debug/3,
     trace_render/3,
     trace_block/4
     ]).
@@ -733,6 +734,17 @@ trace_compile(Module, Filename, Options, Context) ->
                 template => Filename
             })
     end,
+    ok.
+
+%% @doc Called when an enabled template debug checkpoint is hit.
+-spec trace_debug(SrcPos, Vars, Context) -> ok when
+    SrcPos :: {File, Line, Col},
+    File :: binary(),
+    Line :: integer(),
+    Col :: integer(),
+    Vars :: map(),
+    Context :: term().
+trace_debug(_SrcPos, _Vars, _Context) ->
     ok.
 
 %% @doc Called when a template is rendered (could be from an include). Optionally inserts
