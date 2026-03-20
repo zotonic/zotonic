@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2025 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Support functions for site development and introspection of the
 %% live system for template and database query tracing.
 %% @end
 
-%% Copyright 2009-2025 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -229,6 +229,10 @@ Delegate callbacks:
     template_trace_start/2,
     template_trace_stop/1,
     template_trace_fetch/1,
+    template_debug_start/1,
+    template_debug_start/2,
+    template_debug_stop/1,
+    template_debug_fetch/1,
     observe_filewatcher/2,
     pid_observe_debug/3,
     pid_observe_development_reload/3,
@@ -250,13 +254,24 @@ Delegate callbacks:
 
 -record(state, {
         site :: atom(),
-        template_trace_sid :: undefined | binary() | all,
-        template_trace :: map(),
-        template_trace_timer :: undefined | timer:tref()
+        template_trace_sid = undefined :: undefined | binary() | all,
+        template_trace = #{} :: map(),
+        template_trace_timer = undefined :: undefined | timer:tref(),
+        template_debug_sid = undefined :: undefined | binary() | all,
+        template_debug = #{} :: map(),
+        template_debug_timer = undefined :: undefined | timer:tref(),
+        template_debug_overload = false :: boolean()
     }).
 
 % After 10 minutes with no fetches we automatically stop with tracing templates.
 -define(TEMPLATE_TRACE_AUTOSTOP, 600_000).
+
+% After 5 minutes with no fetches we automatically stop with debugging templates.
+-define(TEMPLATE_DEBUG_AUTOSTOP, 300_000).
+
+% Maximum amount of data for template debug, after receiving this amount the
+% debug automatically stops.
+-define(TEMPLATE_DEBUG_MAX_DATA, 10_000_000).
 
 
 %%====================================================================
@@ -344,6 +359,36 @@ event(#postback{ message = {template_trace_fetch, Args} }, Context) ->
                 ?__("No permission to use mod_development.", Context),
                 Context)
     end;
+event(#postback{ message = {template_view, Args} }, Context) ->
+    case z_acl:is_allowed(use, mod_development, Context) of
+        true ->
+            Template = case proplists:get_value(template, Args) of
+                undefined -> z_context:get_q(<<"template">>, Context);
+                T -> T
+            end,
+            if
+                Template =:= undefined ->
+                    z_render:growl_error(?__("No template found in the context.", Context), Context);
+                true ->
+                    open_template_overlay(Template, Context)
+            end;
+        false ->
+            z_render:growl_error(?__("No permission to use mod_development.", Context), Context)
+    end;
+event(#postback{ message = {template_debug_enable, Args} }, Context) ->
+    case z_acl:is_allowed(use, mod_development, Context) of
+        true ->
+            {template, Template} = proplists:lookup(template, Args),
+            Checked = case z_context:get_q(<<"enabled">>, Context) of
+                undefined -> [];
+                Enabled when is_list(Enabled) -> Enabled
+            end,
+            IsAll = z_convert:to_bool(z_context:get_q(<<"is_all">>, Context)),
+            enable_debug_trace_points(Template, Checked, IsAll, Context),
+            z_render:growl(?__("Updated template debug points.", Context), Context);
+        false ->
+            z_render:growl_error(?__("No permission to use mod_development.", Context), Context)
+    end;
 event(#postback{ message = log_client_enable }, Context) ->
     IsEnabled = z_convert:to_bool(z_context:get_q(<<"is_enabled">>, Context)),
     Result = if
@@ -415,6 +460,88 @@ function_trace_start(Mod, Fun, Count, Context) ->
     receive
         {start_trace, Funs} ->
             Funs
+    end.
+
+%% @doc Open an overlay with the template.
+open_template_overlay(TemplatePath, Context) ->
+    case find_indexed_template(TemplatePath, Context) of
+        {ok, #module_index{ filepath = Filepath }} ->
+            Result = case z_template:lookup(Filepath, Context) of
+                {ok, Module} ->
+                    template_compiler:highlight_module(Module);
+                {error, _} ->
+                    template_compiler:highlight_file(Filepath)
+            end,
+            case Result of
+                {ok, HTML} ->
+                    Vars = [
+                        {class, "development-template-overlay"},
+                        {template_file, Filepath},
+                        {template_html, HTML}
+                    ],
+                    z_render:overlay("_overlay_template.tpl", Vars, Context);
+                {error, Reason} ->
+                    ?LOG_ERROR(#{
+                        in => zotonic_mod_development,
+                        text => <<"Error highlighting template">>,
+                        result => error,
+                        reason => Reason,
+                        template => TemplatePath
+                    }),
+                    z_render:growl_error(?__("Error parsing template.", Context), Context)
+            end;
+        {error, enoent} ->
+            z_render:growl_error(?__("Template file not found.", Context), Context)
+    end.
+
+find_indexed_template(TemplatePath, Context) ->
+    case lists:reverse(binary:split(TemplatePath, <<"/priv/templates/">>, [ global ])) of
+        [TplPath | _] ->
+            Found = z_module_indexer:find_all(template, TplPath, Context),
+            case lists:filter(
+                fun(#module_index{ filepath = Path }) -> Path =:= TemplatePath end,
+                Found)
+            of
+                [MI] -> {ok, MI};
+                [] -> {error, enoent}
+            end;
+        [] ->
+            {error, enoent}
+    end.
+
+%% @doc Recompile the template with only the given trace points enabled.
+%% Start receiving the debug info from the template compiler runtime.
+-spec enable_debug_trace_points(Filename, DebugPoints, IsAll, Context) -> ok | {error, Reason} when
+    Filename :: file:filename_all(),
+    DebugPoints :: [binary() | {integer(), integer()}],
+    IsAll :: boolean(),
+    Context :: z:context(),
+    Reason :: term().
+enable_debug_trace_points(_Filename, [], _IsAll, Context) ->
+    template_debug_stop(Context),
+    z_template:disable_debug_points(Context),
+    ok;
+enable_debug_trace_points(Filename, Enabled, IsAll, Context) ->
+    template_debug_stop(Context),
+    z_template:disable_debug_points(Context),
+    DebugPoints = lists:map(
+        fun
+            ({Line, Col} = SrcPos) when is_integer(Line), is_integer(Col) ->
+                SrcPos;
+            (SrcPos) when is_binary(SrcPos) ->
+                [Line, Col] = binary:split(SrcPos, <<":">>),
+                {binary_to_integer(Line), binary_to_integer(Col)}
+        end,
+        Enabled),
+    case z_template:enable_debug_points(Filename, DebugPoints, Context) of
+        {ok, _} when IsAll ->
+            template_debug_start(all, Context),
+            ok;
+        {ok, _} when not IsAll ->
+            template_debug_start(Context),
+            ok;
+        {error, _} = Error ->
+            Error
     end.
 
 function_tracer_output(Count, Context) when Count =< 0 ->
@@ -499,6 +626,18 @@ template_trace_stop(Context) ->
 template_trace_fetch(Context) ->
     gen_server:call(name(Context), template_trace_fetch).
 
+template_debug_start(Context) ->
+    gen_server:cast(name(Context), {template_debug_start, session_id(Context)}).
+
+template_debug_start(Sid, Context) ->
+    gen_server:cast(name(Context), {template_debug_start, Sid}).
+
+template_debug_stop(Context) ->
+    gen_server:cast(name(Context), {template_debug_start, undefined}).
+
+template_debug_fetch(Context) ->
+    gen_server:call(name(Context), template_debug_fetch).
+
 %% @doc Catch filewatcher file change events, reloads css or the open pages.
 observe_filewatcher(#filewatcher{ file = File, extension = Extension }, Context) ->
     case z_convert:to_bool(m_config:get_value(mod_development, livereload, Context)) of
@@ -523,8 +662,9 @@ observe_request_context(#request_context{ phase = _ }, Context, _Context) ->
 %% @doc Trace all template includes, used to generate a runtime view of all template
 %% inclusions and dependencies.
 pid_observe_debug(Pid, #debug{ what = template, arg = {render, _Filename, _SrcPos} = Arg }, Context) ->
-    gen_server:cast(Pid, {template_render, Arg, session_id(Context)}),
-    ok;
+    gen_server:cast(Pid, {template_render, Arg, session_id(Context)});
+pid_observe_debug(Pid, #debug{ what = template, arg = {debug, _Vars, _SrcPos} = Arg }, Context) ->
+    gen_server:cast(Pid, {template_debug, Arg, session_id(Context)});
 pid_observe_debug(_Pid, #debug{}, _Context) ->
     ok.
 
@@ -624,6 +764,23 @@ handle_call(template_trace_fetch, _From, #state{
     end,
     {ok, Timer} = timer:send_after(?TEMPLATE_TRACE_AUTOSTOP, template_trace_stop),
     {reply, {ok, Result}, State#state{ template_trace_timer = Timer }};
+handle_call(template_debug_fetch, _From, #state{
+        template_debug = Debug,
+        template_debug_sid = Sid,
+        template_debug_timer = PrevTimer,
+        template_debug_overload = IsOverload
+    } = State) ->
+    Result = #{
+        session_id => Sid,
+        debug => Debug,
+        is_overload => IsOverload
+    },
+    case PrevTimer of
+        undefined -> ok;
+        _ -> timer:cancel(PrevTimer)
+    end,
+    {ok, Timer} = timer:send_after(?TEMPLATE_DEBUG_AUTOSTOP, template_debug_stop),
+    {reply, {ok, Result}, State#state{ template_debug_timer = Timer }};
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
 
@@ -662,13 +819,73 @@ handle_cast({template_render, {render, Template, SrcPos}, Sid},
     {noreply, State#state{ template_trace = Trace1 }};
 handle_cast({template_render, _Src, _Sid}, #state{} = State) ->
     {noreply, State};
+handle_cast({template_debug_start, undefined}, State) ->
+    {noreply, do_template_debug_stop(State)};
+handle_cast({template_debug_start, Sid}, #state{ site = Site, template_debug_timer = PrevTimer } = State) ->
+    ?LOG_INFO(#{
+        in => mod_development,
+        text => <<"Template debug started.">>,
+        sid => Sid
+    }),
+    {ok, Timer} = timer:send_after(?TEMPLATE_DEBUG_AUTOSTOP, template_debug_stop),
+    case PrevTimer of
+        undefined -> ok;
+        _ -> timer:cancel(PrevTimer)
+    end,
+    z_mqtt:publish(
+        [ <<"model">>, <<"development">>, <<"event">>, <<"template">>, <<"debug">> ],
+        #{ event => start },
+        z_acl:sudo(z_context:new(Site))),
+    {noreply, State#state{
+        template_debug_sid = Sid,
+        template_debug = #{},
+        template_debug_timer = Timer,
+        template_debug_overload = false
+    }};
+handle_cast({template_debug, {debug, Vars, SrcPos}, Sid},
+           #state{ site = Site, template_debug_sid = DebugSid, template_debug = Debug } = State)
+    when is_binary(Sid) andalso Sid =:= DebugSid; DebugSid =:= all ->
+    {Debug1, NewData} = do_template_debug(SrcPos, Vars, Debug),
+    DebugSize = erts_debug:size(Debug1),
+    State1 = if
+        DebugSize > ?TEMPLATE_DEBUG_MAX_DATA ->
+            do_template_debug_stop(State#state{ template_debug_overload = true });
+        true ->
+            State
+    end,
+    {Filename, Line, Col} = SrcPos,
+    Msg = #{
+        event => data,
+        filename => Filename,
+        line => Line,
+        column => Col,
+        data => NewData,
+        is_overload => State1#state.template_debug_overload
+    },
+    z_mqtt:publish(
+        [ <<"model">>, <<"development">>, <<"event">>, <<"template">>, <<"debug">> ],
+        Msg,
+        z_acl:sudo(z_context:new(Site))),
+    {noreply, State1#state{ template_debug = Debug1 }};
+handle_cast({template_debug, _Src, _Sid}, #state{} = State) ->
+    {noreply, State};
 handle_cast(Message, State) ->
     % Trap unknown casts
     {stop, {unknown_cast, Message}, State}.
 
 
-handle_info(template_trace_stop, State) ->
+handle_info(template_trace_stop, #state{ site = Site } = State) ->
+    z_mqtt:publish(
+        [ <<"model">>, <<"development">>, <<"event">>, <<"template">>, <<"trace">> ],
+        #{ event => stop },
+        z_acl:sudo(z_context:new(Site))),
     {noreply, do_template_trace_stop(State)};
+handle_info(template_debug_stop, #state{ site = Site } = State) ->
+    z_mqtt:publish(
+        [ <<"model">>, <<"development">>, <<"event">>, <<"template">>, <<"debug">> ],
+        #{ event => stop },
+        z_acl:sudo(z_context:new(Site))),
+    {noreply, do_template_debug_stop(State)};
 handle_info(_Info, State) ->
     {noreply, State}.
 
@@ -682,6 +899,39 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 %% support functions
 %%====================================================================
+
+do_template_debug({_Filename, _Line, _Col} = SrcPos, Vars, Debug) ->
+    case maps:get(SrcPos, Debug, undefined) of
+        [ _ | _ ] = List ->
+            Start = lists:last(List),
+            Diff = maps:fold(
+                fun(K, V, Acc) ->
+                    case maps:find(K, Start) of
+                        {ok, KV} when KV =:= V -> Acc;
+                        _ -> Acc#{ K => V }
+                    end
+                end,
+                #{},
+                Vars),
+            {Debug#{ SrcPos => [ Diff | List ] }, Diff};
+        undefined ->
+            {Debug#{ SrcPos => [ Vars ] }, Vars}
+    end.
+
+do_template_debug_stop(#state{ template_debug_timer = undefined } = State) ->
+    ?LOG_INFO(#{
+        in => mod_development,
+        text => <<"Template debug stopped.">>
+    }),
+    State#state{
+        template_debug_sid = undefined,
+        template_debug = #{}
+    };
+do_template_debug_stop(#state{ template_debug_timer = Timer } = State) ->
+    timer:cancel(Timer),
+    do_template_debug_stop(State#state{ template_debug_timer = undefined }).
+
+
 
 do_template_trace_stop(#state{ template_trace_timer = undefined } = State) ->
     ?LOG_INFO(#{

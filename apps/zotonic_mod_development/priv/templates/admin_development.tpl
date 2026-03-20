@@ -1,5 +1,9 @@
 {% extends "admin_base.tpl" %}
 
+{% block head_extra %}
+    {% lib "css/development.css" %}
+{% endblock %}
+
 {% block title %}{_ Development _}{% endblock %}
 
 {% block content %}
@@ -148,7 +152,7 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <input class="form-control" type="text" name="tpl_name" placeholder="foo.tpl" value="" />
+                    <input class="form-control" type="text" name="tpl_name" placeholder="foo.tpl" value="">
                 </div>
                 <button class="btn btn-primary" type="submit">{_ Find _}</button>
             </form>

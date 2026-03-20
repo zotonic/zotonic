@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2023 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Template handling, compiles and renders django compatible templates using the
 %% template_compiler.
 %% @end
 
-%% Copyright 2009-2023 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -25,6 +25,10 @@
 
 %% External exports
 -export([
+    lookup/2,
+    enable_debug_points/3,
+    disable_debug_points/1,
+
     reset/1,
     module_reindexed/2,
     render/2,
@@ -52,6 +56,71 @@ start_link(Site) ->
     z_notifier:observe(module_reindexed, {?MODULE, module_reindexed}, Context),
     ignore.
 
+%% @doc Lookup the module for a compiled template. This will compile the template if it was not
+%% yet compiled.
+-spec lookup(Filename, Context) -> {ok, Module} | {error, term()} when
+    Filename :: binary() | string(),
+    Context :: z:context(),
+    Module :: module().
+lookup(Filename, Context) ->
+    Filename1 = unicode:characters_to_binary(Filename),
+    Options = template_opts(Context),
+    case template_compiler:lookup(Filename1, Options, Context) of
+        {ok, Module} ->
+            {ok, Module};
+        {error, _} ->
+            template_compiler:compile_file(Filename1, Options, Context)
+    end.
+
+%% @doc Enable debug points for the given template file. This will compile the template and
+%% return the module, or an error if it fails.
+-spec enable_debug_points(Filename, DebugPoints, Context) -> {ok, Module} | {error, Reason} when
+    Filename :: binary() | string(),
+    DebugPoints :: [ {Line, Col} ],
+    Line :: integer(),
+    Col :: integer(),
+    Context :: z:context(),
+    Module :: module(),
+    Reason :: term().
+enable_debug_points(Filename, DebugPoints, Context) ->
+    Filename1 = unicode:characters_to_binary(Filename),
+    Options = [
+        {debug_points, DebugPoints}
+        | template_opts(Context)
+    ],
+    case template_compiler:compile_file(Filename1, Options, Context) of
+        {ok, Module} ->
+            ?LOG_INFO(#{
+                in => zotonic_core,
+                text => <<"Setting debug points for template">>,
+                template => Filename1,
+                debug_points => DebugPoints,
+                context => z_context:site(Context),
+                module => Module
+            }),
+            {ok, Module};
+        {error, Reason} ->
+            ?LOG_ERROR(#{
+                in => zotonic_core,
+                text => <<"Error setting debug points for template">>,
+                template => Filename1,
+                debug_points => DebugPoints,
+                context => z_context:site(Context),
+                reason => Reason
+            }),
+            {error, Reason}
+    end.
+
+%% @doc Disable debug points for the given context, this will flush all debug points for the context.
+-spec disable_debug_points(Context) -> ok when
+    Context :: z:context().
+disable_debug_points(Context) ->
+    ?LOG_INFO(#{
+        in => zotonic_core,
+        text => <<"Disabling debug points for context">>,
+        context => z_context:site(Context)
+    }),
+    template_compiler:flush_debug(z_context:site(Context)).
 
 %% @doc Force a reset of all templates, used after a module has been activated or deactivated.
 -spec reset(atom()|#context{}) -> ok.
@@ -89,21 +158,13 @@ render_block(OptBlock, #module_index{filepath=Filename, key=Key}, Vars, Context)
     render_block(OptBlock, Template, Vars, Context);
 render_block(OptBlock, Template, Vars, Context) when is_map(Vars) ->
     OldCaching = z_depcache:in_process(true),
-    Opts =  [
-        {runtime, z_template_compiler_runtime},
-        {context_name, z_context:site(Context)},
-        {context_vars, [
-            <<"sudo">>,
-            <<"anondo">>,
-            <<"z_language">>,
-            <<"extra_args">>
-        ]}
-    ],
+    Opts = template_opts(Context),
+    Context1 = maybe_set_debug_context(Context),
     Result = case OptBlock of
                 undefined ->
-                    template_compiler:render(Template, Vars, Opts, Context);
+                    template_compiler:render(Template, Vars, Opts, Context1);
                 Block when is_atom(Block) ->
-                    template_compiler:render_block(Block, Template, Vars, Opts, Context)
+                    template_compiler:render_block(Block, Template, Vars, Opts, Context1)
              end,
     z_depcache:in_process(OldCaching),
     case Result of
@@ -158,7 +219,6 @@ props_to_map(L, Map) ->
         Map,
         L).
 
-%% @todo Remove these functions, templates should not have any javascript etc. (call z_render for old style templates)
 %% @doc Render a template to an iolist().  This removes all scomp state etc from the rendered html and appends the
 %% information in the scomp states to the context for later rendering.
 -spec render_to_iolist(template_compiler:template() | #module_index{},
@@ -172,7 +232,7 @@ render_to_iolist(File, Vars, Context) ->
     {iolist(), z:context()}.
 render_block_to_iolist(Block, File, Vars, Context) ->
     Html = render_block(Block, File, Vars, Context),
-    z_render:render_to_iolist(Html, Context).
+    z_render:render_to_iolist(Html, maybe_set_debug_context(Context)).
 
 %% @doc Check if the modulename looks like a module generated by the template compiler.
 -spec is_template_module(binary()|string()|atom()) -> boolean().
@@ -194,17 +254,7 @@ template_module(#module_index{filepath=Filename, key=Key}, Vars, Context) ->
     },
     template_module(Template, Vars, Context);
 template_module(#template_file{ filename = Filename }, Vars, Context) when is_map(Vars) ->
-    Opts =  [
-        {runtime, z_template_compiler_runtime},
-        {context_name, z_context:site(Context)},
-        {context_vars, [
-            <<"sudo">>,
-            <<"anondo">>,
-            <<"z_language">>,
-            <<"extra_args">>
-        ]}
-    ],
-    template_compiler:lookup(Filename, Opts, Context);
+    template_compiler:lookup(Filename, template_opts(Context), Context);
 template_module(Template, Vars, Context) ->
     case z_template_compiler_runtime:map_template(Template, Vars, Context) of
         {ok, MappedTemplate} ->
@@ -213,6 +263,31 @@ template_module(Template, Vars, Context) ->
             Error
     end.
 
+template_opts(Context) ->
+    [
+        {runtime, z_template_compiler_runtime},
+        {context_name, z_context:site(Context)},
+        {context_vars, [
+            <<"sudo">>,
+            <<"anondo">>,
+            <<"z_language">>,
+            <<"extra_args">>
+        ]}
+    ].
+
+%% @doc Cache debug flags in the render context. This speeds up the runtime when
+%% debug options are not set and there is no debug notification observer.
+maybe_set_debug_context(Context) ->
+    IsTraceRender = case z_notifier:get_observers(#debug{}, Context) of
+        [] -> m_config:get_boolean(mod_development, debug_includes, Context);
+        [_|_] -> true
+    end,
+    if
+        IsTraceRender ->
+            z_context:set(is_trace_render, true, Context);
+        true ->
+            Context
+    end.
 
 %% @doc Return the list of all block names in a template. This only returns the list
 %% in the current template and not in the extended or overruled templates.  Vars is

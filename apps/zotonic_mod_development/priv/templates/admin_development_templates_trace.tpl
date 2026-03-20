@@ -3,27 +3,7 @@
 {% block title %} Development {% endblock %}
 
 {% block head_extra %}
-    {% inherit %}
-    <style type="text/css" nonce="{{ m.req.csp_nonce }}">
-        #trace-status span {
-            display: none;
-        }
-        .trace-stopped #trace-status span.trace-stopped {
-            display: inline-block;
-        }
-        .trace-stopped .trace-loading {
-            visibility: hidden;
-        }
-        .trace-session #trace-status span.trace-session {
-            display: inline-block;
-        }
-        .trace-all #trace-status span.trace-all {
-            display: inline-block;
-        }
-        .trace-other #trace-status span.trace-other {
-            display: inline-block;
-        }
-    </style>
+    {% lib "css/development.css" %}
 {% endblock %}
 
 {% block content %}
@@ -130,6 +110,11 @@
                 setInterval(() => z_event("update-dot", {}), 1000);
                 z_event("update-dot", {});
             {% endjavascript %}
+
+            {% wire name="development_template_click"
+                    postback={template_view}
+                    delegate=`mod_development`
+            %}
         </div>
     </div>
 {% else %}
@@ -143,5 +128,6 @@
 {% block js_extra %}
     {% lib
         "js/viz.js"
+        "js/development.js"
     %}
 {% endblock %}
