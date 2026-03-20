@@ -6,6 +6,12 @@
         {{ template_html }}
     </div>
     <div class="template-debug-data" id="overlay-development_debug">
+        <div class="alert alert-info" style="display: none">
+            {_ Maximum tracing time reached, debugging stopped. _}
+            <button id="template-debug-start" class="btn btn-xs btn-primary">
+                {_ Click to restart _}
+            </button>
+        </div>
         <div class="template-debug-data-options">
             <label class="checkbox">
                 <input type="checkbox" value="all">
@@ -33,7 +39,7 @@
 %}
 
 {% javascript %}
-    $(".template-debug input").on('input', () => {
+    function debug_start() {
         const is_all = $(".template-debug-data input[value='all']").is(":checked");
         const checkboxes = $(".template-debug-source input:checked");
         let enabled = [];
@@ -42,17 +48,21 @@
             enabled.push($(this).attr("value"));
         });
 
-        z_event("template_debug_enable", {
-            enabled: enabled,
-            is_all: is_all
-        });
-
+        $('#overlay-development_debug > .alert').fadeIn();
         if (enabled.length === 0) {
             $("#template-debug-data").html('<p class="help-block">{_ Check debug points in the template source to see debug data here. _}</p>');
         } else {
             $("#template-debug-data").html('<p class="help-block">{_ Waiting for debug data... _}</p>');
         }
-    });
+
+        z_event("template_debug_enable", {
+            enabled: enabled,
+            is_all: is_all
+        });
+    }
+
+    $(".template-debug input").on('input', debug_start);
+    $("#template-debug-start").on('click', debug_start);
 
     $(".modal-overlay-close").on('click', () => {
         const checkboxes = $(".template-debug-source input:checked");
@@ -90,6 +100,7 @@
                             $('#template-debug-data > .help-block').remove();
                         }
                         const table = $('<table class="table table-striped"></table>');
+                        const tbody = $('<tbody></tbody>');
                         for (const [key, value] of Object.entries(payload.data)) {
                             const tr = $('<tr></tr>');
                             const th = $('<th></th>');
@@ -100,10 +111,17 @@
                             pre.text(JSON.stringify(value, null, 2));
                             td.append(pre);
                             tr.append(th, td);
-                            table.append(tr);
+                            tbody.append(tr);
                         }
+                        table.append(tbody);
                         $("#" + id).append(table);
                     }
+                    break;
+                case "stop":
+                    $('#overlay-development_debug > .alert').fadeIn();
+                    break;
+                case "start":
+                    $('#overlay-development_debug > .alert').hide();
                     break;
                 default:
                     break;
