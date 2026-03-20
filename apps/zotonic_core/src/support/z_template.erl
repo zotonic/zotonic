@@ -76,7 +76,7 @@ lookup(Filename, Context) ->
 %% return the module, or an error if it fails.
 -spec enable_debug_points(Filename, DebugPoints, Context) -> {ok, Module} | {error, Reason} when
     Filename :: binary() | string(),
-    DebugPoints :: {Line, Col},
+    DebugPoints :: [ {Line, Col} ],
     Line :: integer(),
     Col :: integer(),
     Context :: z:context(),
