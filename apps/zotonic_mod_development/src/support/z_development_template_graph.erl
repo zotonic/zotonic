@@ -34,7 +34,7 @@
         template := binary(),
         module := binary(),
         basename := binary(),
-        index => #module_index{}
+        filepath => file:filename_all()
     }.
 
 -type template_edge() :: #{
@@ -63,7 +63,7 @@ dot(Context) ->
     DotFile :: binary().
 dot_from_graph(G) ->
     Nodes = lists:map(
-        fun(#{ module := Mod, id := Id, template := Tpl } = Node) ->
+        fun(#{ module := Mod, id := Id, template := Tpl, filepath := FilePath } = Node) ->
             Type = maps:get(type, Node, normal),
             [
                 "    ", Id,
@@ -74,6 +74,7 @@ dot_from_graph(G) ->
                         <<"mod_", _/binary>> -> <<>>;
                         _ -> " fillcolor=powderblue style=filled "
                     end,
+                    <<" href=\"#">>, escape(FilePath), <<"\" ">>,
                     case Type of
                         root -> <<" shape=hexagon">>;
                         _ -> <<>>
@@ -110,6 +111,8 @@ dot_from_graph(G) ->
     ]),
     {ok, Dot}.
 
+escape(Path) ->
+    binary:replace(Path, <<"\"">>, <<"\\\"">>, [ global ]).
 
 -spec filename_to_node(NodeId, Path) -> template_node() when
     NodeId :: binary(),
@@ -122,13 +125,14 @@ filename_to_node(NodeId, Path, BuildDir) ->
     Path1 = binary:replace(Path, BuildDir, <<>>),
     {Mod, Tpl} = case binary:split(Path1, <<"/priv/templates/">>) of
         [M,T] -> {M, T};
-        T -> {<<>>, T}
+        [T] -> {<<>>, T}
     end,
     #{
         id => NodeId,
         module => app_to_module_name(Mod),
         template => Tpl,
-        basename => basename(Tpl)
+        basename => basename(Tpl),
+        filepath => Path
     }.
 
 app_to_module_name(<<"/", M/binary>>) -> app_to_module_name(M);

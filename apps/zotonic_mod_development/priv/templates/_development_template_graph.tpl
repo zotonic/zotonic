@@ -1,7 +1,7 @@
 <button id="graphviz_copy" class="btn btn-default pull-right">{_ Copy GraphViz data _}</button>
 <p class="help-block">
-    {_ Dependency graph of all templates. Only includes using a direct string value for the template are shown. _}<br>
-    {_ Includes using variable names or expressions are not shown. _}<br>
+    {_ Dependency graph of all templates. Only template includes using a direct string value for the template name are shown. _}<br>
+    {_ Template includes using variable names or expressions for the template name are not shown. _}<br>
     {% trans "<tt>{extends}</tt> are shown with a striped line, <tt>{overrules}</tt> are shown with a dotted line."
         extends="{% extends \"...\" %}"
         overrules="{% overrules %}"

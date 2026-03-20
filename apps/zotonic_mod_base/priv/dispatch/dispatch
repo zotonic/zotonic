@@ -46,7 +46,7 @@
 
     %% security.txt - serve a template with the security settings - https://securitytxt.org
     {security_txt, [".well-known", "security.txt"], controller_template, [
-            {template, "security.txt.tpl"}, {content_type, "text/plain"}, {anonymous, true}
+            {template, <<"security.txt.tpl">>}, {content_type, "text/plain"}, {anonymous, true}
         ]},
 
     %% Ping/pong
