@@ -34,7 +34,8 @@
         template := binary(),
         module := binary(),
         basename := binary(),
-        filepath => file:filename_all()
+        index := #module_index{},
+        filepath => binary()
     }.
 
 -type template_edge() :: #{
