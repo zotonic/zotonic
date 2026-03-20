@@ -270,7 +270,7 @@ Delegate callbacks:
 -define(TEMPLATE_DEBUG_AUTOSTOP, 300_000).
 
 % Maximum amount of data for template debug, after receiving this amount the
-% debug automaticallt stops.
+% debug automatically stops.
 -define(TEMPLATE_DEBUG_MAX_DATA, 10_000_000).
 
 
