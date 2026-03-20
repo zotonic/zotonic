@@ -8,7 +8,7 @@
     <div class="template-debug-data" id="overlay-development_debug">
         <div class="template-debug-data-options">
             <label class="checkbox">
-                <input type="checkbox" value="all" value="1">
+                <input type="checkbox" value="all">
                 {_ Debug all sessions _}
             </label>
             <p class="help-block">
