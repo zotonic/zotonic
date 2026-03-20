@@ -78,7 +78,7 @@
             const payload = msg.payload;
             switch (payload.event) {
                 case "data":
-                    if (payload.filename == '{{ template_file }}') {
+                    if (payload.filename == '{{ template_file|escapejs }}') {
                         const id = `template-data-${payload.line}-${payload.column}`;
                         let html;
 
