@@ -89,15 +89,20 @@
                             $('#template-debug-data').append(html);
                             $('#template-debug-data > .help-block').remove();
                         }
-                        html = '<table class="table table-striped">';
+                        const table = $('<table class="table table-striped"></table>');
                         for (const [key, value] of Object.entries(payload.data)) {
-                            html += `<tr>
-                                <th>${key}</th>
-                                <td><pre>${JSON.stringify(value)}</pre></td>
-                            </tr>`;
+                            const tr = $('<tr></tr>');
+                            const th = $('<th></th>');
+                            const td = $('<td></td>');
+                            const pre = $('<pre></pre>');
+
+                            th.text(key);
+                            pre.text(JSON.stringify(value, null, 2));
+                            td.append(pre);
+                            tr.append(th, td);
+                            table.append(tr);
                         }
-                        html += "</table>";
-                        $("#" + id).append(html);
+                        $("#" + id).append(table);
                     }
                     break;
                 default:
