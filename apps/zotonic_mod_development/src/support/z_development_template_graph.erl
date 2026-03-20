@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2023 Marc Worrell
+%% @copyright 2023-2026 Marc Worrell
 %% @doc Calculate the dependency graph between all templates.
 %% @end
 
-%% Copyright 2023 Marc Worrell
+%% Copyright 2023-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -34,8 +34,8 @@
         template := binary(),
         module := binary(),
         basename := binary(),
-        index := #module_index{},
-        filepath => binary()
+        filepath := binary(),
+        index => #module_index{}
     }.
 
 -type template_edge() :: #{
