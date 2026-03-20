@@ -929,7 +929,7 @@ do_template_debug_stop(#state{ template_debug_timer = undefined } = State) ->
     };
 do_template_debug_stop(#state{ template_debug_timer = Timer } = State) ->
     timer:cancel(Timer),
-    do_template_trace_stop(State#state{ template_debug_timer = undefined }).
+    do_template_debug_stop(State#state{ template_debug_timer = undefined }).
 
 
 
