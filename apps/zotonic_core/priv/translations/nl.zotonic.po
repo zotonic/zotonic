@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-03-20 23:53\n"
+"PO-Revision-Date: 2026-03-21 01:17\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -11100,7 +11100,7 @@ msgstr "Meer informatie [Google]"
 #: zotonic_mod_seo/priv/templates/admin_seo.tpl:136
 #: zotonic_mod_seo/priv/templates/admin_seo.tpl:168
 msgid "Multiple codes can be added at once, separated by commas."
-msgstr ""
+msgstr "Je kunt meerdere codes tegelijk toevoegen, gescheiden door komma's."
 
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:57
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:59
@@ -12856,7 +12856,7 @@ msgstr "Je hebt geen toestemming om de resultaten te zien."
 
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:9
 msgid "You cannot reply to this email."
-msgstr ""
+msgstr "Je kunt deze e-mail niet beantwoorden."
 
 #: zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:23
 msgid "You must be allowed to edit the form, to edit its results."
@@ -13389,11 +13389,11 @@ msgstr "Waarschuwing"
 
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:31
 msgid "Next image"
-msgstr ""
+msgstr "Volgende afbeelding"
 
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:25
 msgid "Previous image"
-msgstr ""
+msgstr "Vorige afbeelding"
 
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:95
 msgid "<b>Note that Zotonic only handles initial check out</b>, after which it is expected that you will handle further git interactions yourself.)"
