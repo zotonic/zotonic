@@ -379,7 +379,10 @@ event(#postback{ message = {template_trace_path, Args} }, Context) ->
                 true ->
                     Url = z_context:abs_url(Path, Context),
                     {sid, Sid} = proplists:lookup(sid, Args),
-                    Me = z_context:session_id(Context),
+                    Me = case z_context:session_id(Context) of
+                        {ok, CtxSid} -> CtxSid;
+                        {error, _} -> <<>>
+                    end,
                     TraceSid = case z_convert:to_binary(Sid) of
                         <<"sid">> -> undefined;
                         <<>> -> undefined;
