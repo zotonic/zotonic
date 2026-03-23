@@ -385,7 +385,7 @@ event(#postback{ message = {template_trace_path, Args} }, Context) ->
                         <<>> -> undefined;
                         Me -> undefined;
                         <<"all">> -> all;
-                        Sid -> Sid
+                        SidBin -> SidBin
                     end,
                     if
                         TraceSid =:= undefined ->
