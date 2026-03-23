@@ -27,7 +27,7 @@ Available Model API Paths
 | Method | Path pattern | Description |
 | --- | --- | --- |
 | `get` | `/is_dbtrace/...` | Return whether database query tracing is currently enabled. |
-| `get` | `/+cfg/...` | Resolve `+cfg` and return the matching value via `m_config:get_boolean`. |
+| `get` | `/+cfg/...` | Resolve the configuration flag `+cfg` and return the matching value via `m_config:get_boolean`. |
 | `get` | `/function_tracing_enabled/...` | Return whether function tracing controls are enabled for current user/session. |
 | `get` | `/list_observers/...` | Return registered notifier observers for inspection (admin/development access required). |
 | `get` | `/record_info/+record/...` | Return runtime record-field metadata for record name `+record`. |
@@ -35,6 +35,7 @@ Available Model API Paths
 | `get` | `/flush/...` | Return config flag controlling whether cache flush action is enabled. |
 | `get` | `/reindex/...` | Return config flag controlling whether reindex action is enabled. |
 | `get` | `/dispatch_info/...` | Return dispatch rule info/inspection data for development diagnostics. |
+| `get` | `/show_trace_button/...` | Check if the trace button for debugging templates can be shown. |
 
 `/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
@@ -61,6 +62,8 @@ m_get([ Cfg | Rest ], _Msg, Context)
          Cfg =:= <<"debug_blocks">>;
          Cfg =:= <<"enable_api">>;
          Cfg =:= <<"libsep">>;
+         Cfg =:= <<"trace_button">>;
+         Cfg =:= <<"hide_trace_button">>;
          Cfg =:= <<"livereload">>;
          Cfg =:= <<"nocache">> ->
     {ok, {m_config:get_boolean(mod_development, Cfg, Context), Rest}};
@@ -71,6 +74,28 @@ m_get([ <<"function_tracing_enabled">> | Rest ], _Msg, Context) ->
         _ ->
             {error, eacces}
     end;
+m_get([ <<"show_trace_button">> | Rest ], _Msg, Context) ->
+    TraceButton = case z_context:get(zotonic_dispatch_module, Context) of
+        mod_development ->
+            false;
+        _ ->
+            case m_config:get_boolean(mod_development, hide_trace_button, Context) of
+                true ->
+                    true;
+                false ->
+                    case z_acl:is_allowed(use, mod_development, Context) of
+                        true ->
+                            case m_site:environment(Context) of
+                                development -> true;
+                                test -> true;
+                                _ -> m_config:get_boolean(mod_development, trace_button, Context)
+                            end;
+                        false ->
+                            false
+                    end
+            end
+    end,
+    {ok, {TraceButton, Rest}};
 m_get([ <<"list_observers">> | Rest ], _Msg, Context) ->
     case z_acl:is_allowed(use, mod_development, Context) of
         true ->

@@ -195,6 +195,18 @@ Delegate callbacks:
             description => "Enable debugging of template blocks, this will add markers for all template blocks in rendered templates."
         },
         #{
+            key => hide_trace_button,
+            type => boolean,
+            default => false,
+            description => "If set, then the button to show a template trace is never shown."
+        },
+        #{
+            key => trace_button,
+            type => boolean,
+            default => false,
+            description => "If set, then the button to show a template trace can be shown on acceptance and production."
+        },
+        #{
             key => enable_api,
             type => boolean,
             default => false,
@@ -359,6 +371,45 @@ event(#postback{ message = {template_trace_fetch, Args} }, Context) ->
                 ?__("No permission to use mod_development.", Context),
                 Context)
     end;
+event(#postback{ message = {template_trace_path, Args} }, Context) ->
+    case z_acl:is_allowed(use, mod_development, Context) of
+        true ->
+            {path, Path} = proplists:lookup(path, Args),
+            case z_context:is_site_url(Path, Context) of
+                true ->
+                    Url = z_context:abs_url(Path, Context),
+                    {sid, Sid} = proplists:lookup(sid, Args),
+                    Me = z_context:session_id(Context),
+                    TraceSid = case z_convert:to_binary(Sid) of
+                        <<"sid">> -> undefined;
+                        <<>> -> undefined;
+                        Me -> undefined;
+                        <<"all">> -> all;
+                        Sid -> Sid
+                    end,
+                    if
+                        TraceSid =:= undefined ->
+                            template_trace_start(Context);
+                        true ->
+                            template_trace_start(TraceSid, Context)
+                    end,
+                    Context1 = z_render:wire(
+                        {script, [
+                            {script, iolist_to_binary([
+                                <<"window.startTemplateTrace(\"">>,
+                                    z_utils:js_escape(z_convert:to_binary(TraceSid)), <<"\",\"">>,
+                                    z_utils:js_escape(Url),
+                                    <<"\");">>
+                                ])}
+                        ]}, Context),
+                    z_render:growl(?__("Started tracing template inclusions by rendering the page.", Context1), Context1);
+                false ->
+                    z_render:growl_error(?__("The path must be a local URL.", Context), Context)
+            end;
+        false ->
+            z_render:growl_error(?__("No permission to use mod_development.", Context), Context)
+    end;
+
 event(#postback{ message = {template_view, Args} }, Context) ->
     case z_acl:is_allowed(use, mod_development, Context) of
         true ->
@@ -659,10 +710,14 @@ observe_request_context(#request_context{ phase = refresh }, Context, _Context) 
 observe_request_context(#request_context{ phase = _ }, Context, _Context) ->
     Context.
 
-%% @doc Trace all template includes, used to generate a runtime view of all template
-%% inclusions and dependencies.
+%% @doc Trace all template includes and debug trace points. The template includes are
+%% used to generate a runtime view of all template inclusions and dependencies. The
+%% development module is excluded.
 pid_observe_debug(Pid, #debug{ what = template, arg = {render, _Filename, _SrcPos} = Arg }, Context) ->
-    gen_server:cast(Pid, {template_render, Arg, session_id(Context)});
+    case z_context:get(dispatch_module, Context) of
+        mod_development -> ok;
+        _ -> gen_server:cast(Pid, {template_render, Arg, session_id(Context)})
+    end;
 pid_observe_debug(Pid, #debug{ what = template, arg = {debug, _Vars, _SrcPos} = Arg }, Context) ->
     gen_server:cast(Pid, {template_debug, Arg, session_id(Context)});
 pid_observe_debug(_Pid, #debug{}, _Context) ->

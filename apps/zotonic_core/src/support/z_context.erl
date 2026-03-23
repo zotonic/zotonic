@@ -62,6 +62,7 @@
 
     get_envdata/1,
     set_envdata/2,
+    is_sensitive/1,
 
     get_controller_module/1,
     set_controller_module/2,
@@ -604,6 +605,17 @@ init_cowdata(Req, Env, Context) when is_map(Req); Req =:= undefined ->
         cowreq = Req,
         cowenv = Env
     }.
+
+%% @doc Check if the current request controller options has the 'sensitive' option
+%% set. If so then tracing should be disabled.
+-spec is_sensitive(z:context()) -> boolean().
+is_sensitive(Context) ->
+    case get_envdata(Context) of
+        #{ cowmachine_controller_options := Opts } when is_list(Opts) ->
+            proplists:get_bool(sensitive, Opts);
+        _ ->
+            false
+    end.
 
 %% @doc Get the resource module handling the request.
 -spec get_controller_module(z:context()) -> atom() | undefined.

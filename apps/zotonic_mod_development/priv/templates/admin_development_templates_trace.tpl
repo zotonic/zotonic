@@ -21,10 +21,12 @@
 {% if m.acl.is_allowed.use.mod_development %}
     <div class="well">
         {% button class="btn btn-primary" text=_"Clear data and start"
+                  action={fade_out target="trace-status-url"}
                   postback={template_trace_start}
                   delegate=`mod_development`
         %}
         {% button class="btn btn-primary" text=_"Clear data and trace all"
+                  action={fade_out target="trace-status-url"}
                   postback={template_trace_start all}
                   delegate=`mod_development`
         %}
@@ -47,6 +49,11 @@
                 {_ Stopped. _}
             </span>
         </span>
+
+        <div id="trace-status-url" class="help-block" style="display: none">
+            <br><span class="glyphicon glyphicon-info-sign"></span>
+            {_ Loading and displaying the trace for: _} <tt id="trace-status-url-value"></tt>
+        </div>
     </div>
 
     <div class="widget">
@@ -108,7 +115,6 @@
                 });
 
                 setInterval(() => z_event("update-dot", {}), 1000);
-                z_event("update-dot", {});
             {% endjavascript %}
 
             {% wire name="development_template_click"
@@ -117,6 +123,50 @@
             %}
         </div>
     </div>
+
+    {% if q.path|sanitize_url as path %}
+        <iframe id="trace-frame" src=""></iframe>
+        {% javascript %}
+            {# Function called by the 'template_trace_path' postback in mod_development. #}
+            window.startTemplateTrace = function(sid, url) {
+                let loadUrl = false;
+                switch (sid) {
+                    case "all":
+                        document.getElementById('trace-status').className = "trace-all";
+                        loadUrl = true;
+                        break;
+                    case "":
+                        document.getElementById('trace-status').className = "trace-session";
+                        loadUrl = true;
+                        break;
+                    default:
+                        document.getElementById('trace-status').className = "trace-other";
+                        loadUrl = false;
+                        break;
+                }
+                if (loadUrl) {
+                    document.getElementById("trace-status-url-value").textContent = url;
+                    document.getElementById("trace-status-url").style.display = "block";
+                    setTimeout(() => document.getElementById("trace-frame").src = url, 500);
+                }
+            };
+
+            window.restartTemplateTrace = function() {
+                const url = document.getElementById("trace-frame").src;
+                if (url) {
+                    document.getElementById("trace-frame").src = '';
+                    document.getElementById("trace-frame").src = url;
+                }
+            }
+        {% endjavascript %}
+        {% wire postback={template_trace_path
+                    path=path
+                    sid=q.sid
+                }
+                delegate=`mod_development`
+        %}
+    {% endif %}
+
 {% else %}
     <div class="alert alert-danger">
         {_ You do not have permission to access development tools. _}
