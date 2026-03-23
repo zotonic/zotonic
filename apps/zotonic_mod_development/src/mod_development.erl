@@ -714,7 +714,7 @@ observe_request_context(#request_context{ phase = _ }, Context, _Context) ->
 %% used to generate a runtime view of all template inclusions and dependencies. The
 %% development module is excluded.
 pid_observe_debug(Pid, #debug{ what = template, arg = {render, _Filename, _SrcPos} = Arg }, Context) ->
-    case z_context:get(dispatch_module, Context) of
+    case z_context:get(zotonic_dispatch_module, Context) of
         mod_development -> ok;
         _ -> gen_server:cast(Pid, {template_render, Arg, session_id(Context)})
     end;
