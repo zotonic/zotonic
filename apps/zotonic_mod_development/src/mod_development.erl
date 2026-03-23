@@ -165,7 +165,7 @@ This module handles the following notifier callbacks:
 
 Delegate callbacks:
 
-- `event/2` with `postback` messages: `log_client_enable`, `template_graph`, `template_trace_fetch`, `template_trace_start`, `template_trace_stop`, `template_xref_check`.
+- `event/2` with `postback` messages: `log_client_enable`, `template_debug_enable`, `template_graph`, `template_trace_fetch`, `template_trace_path`, `template_trace_start`, `template_trace_stop`, `template_view`, `template_xref_check`.
 - `event/2` with `submit` messages: `function_trace`.
 
 ").
@@ -1137,4 +1137,3 @@ session_id(Context) ->
         {ok, Sid} -> Sid;
         {error, _} -> undefined
     end.
-
