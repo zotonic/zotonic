@@ -81,7 +81,7 @@ m_get([ <<"show_trace_button">> | Rest ], _Msg, Context) ->
         _ ->
             case m_config:get_boolean(mod_development, hide_trace_button, Context) of
                 true ->
-                    true;
+                    false;
                 false ->
                     case z_acl:is_allowed(use, mod_development, Context) of
                         true ->
