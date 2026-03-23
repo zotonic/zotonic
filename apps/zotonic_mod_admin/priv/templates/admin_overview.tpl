@@ -13,8 +13,12 @@
         {% with q.pagelen|default:default_pagelen as qpagelen %}
             {% with q.qcat, q.qcontent_group as qcat, qcontent_group %}
                 <form id="{{ #form }}" method="GET" action="{% url admin_overview_rsc %}" class="form-inline">
-                    <input type="hidden" name="qs" value="{{ q.qs|escape }}">
-                    <input type="hidden" name="qquery_id" value="{{ q.qquery_id|escape }}">
+                    {% for qkey, qval in q.qargs %}
+                        {% if qval and not qkey|member:["qcontent_group", "qcat", "qpagelen"] %}
+                            <input type="hidden" name="{{ qkey }}" value="{{ qval|escape }}" />
+                        {% endif %}
+                    {% endfor %}
+
                     <div class="btn-group pull-right">
                         <button class="btn btn-default" id="btn-filter">
                             <i class="glyphicon glyphicon-filter"></i> {_ Filter _}...
