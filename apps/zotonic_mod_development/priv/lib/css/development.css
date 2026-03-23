@@ -21,6 +21,13 @@
   #graphviz_svg .node:hover polygon {
     fill: #f0f0fe; }
 
+#trace-frame {
+  position: absolute;
+  top: 0;
+  left: -1000px;
+  width: 800px;
+  height: 800px; }
+
 /* Template code highlighting */
 body:has(.development-template-overlay) {
   overflow: hidden; }

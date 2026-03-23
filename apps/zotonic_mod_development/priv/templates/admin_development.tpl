@@ -38,6 +38,22 @@
                 {_ Show defined blocks in generated templates _}
             </label>
 
+            {% wire id="hide_trace_button"
+                action={config_toggle module="mod_development" key="hide_trace_button"}
+            %}
+            <label class="checkbox">
+                <input type="checkbox" id="hide_trace_button" value="1" {% if m.development.hide_trace_button %}checked="checked"{% endif %} />
+                {_ Always hide the floating template trace button. _}
+            </label>
+
+            {% wire id="trace_button"
+                action={config_toggle module="mod_development" key="trace_button"}
+            %}
+            <label class="checkbox">
+                <input type="checkbox" id="trace_button" value="1" {% if m.development.trace_button %}checked="checked"{% endif %} />
+                {_ Allow to show the floating template trace button on production and acceptance sites. _}
+            </label>
+
             {% wire id="libsep"
                 action={config_toggle module="mod_development" key="libsep"}
             %}
@@ -56,14 +72,6 @@
             <label class="checkbox">
                 <input type="checkbox" id="livereload" value="1" {% if m.development.livereload %}checked="checked"{% endif %} />
                 {_ Live reload of changed CSS files. Reload page on change of templates or JavaScript. _}
-            </label>
-
-            {% wire id="devapi"
-                action={config_toggle module="mod_development" key="enable_api"}
-            %}
-            <label class="checkbox">
-                <input type="checkbox" id="devapi" value="1" {% if m.development.enable_api %}checked="checked"{% endif %} />
-                {_ Enable API to recompile and build Zotonic _}
             </label>
 
             {% wire id="nocache"
@@ -89,6 +97,14 @@
                     {_ Enable <tt>mod_server_storage</tt> to use database query tracing. _}
                 </p>
             {% endif %}
+
+            {% wire id="devapi"
+                action={config_toggle module="mod_development" key="enable_api"}
+            %}
+            <label class="checkbox">
+                <input type="checkbox" id="devapi" value="1" {% if m.development.enable_api %}checked="checked"{% endif %} />
+                {_ Enable API to recompile and build Zotonic _}
+            </label>
 
             {% if m.modules.provided.mod_logging %}
                 {% if m.site.environment == `development` and m.log.is_log_client_allowed %}

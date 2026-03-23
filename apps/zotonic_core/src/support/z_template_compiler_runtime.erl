@@ -738,7 +738,9 @@ trace_compile(Module, Filename, Options, Context) ->
 
 %% @doc Called when an enabled template debug checkpoint is hit. The development
 %% module will observe this notification and register the variable values at the
-%% breakpoints.
+%% breakpoints. The debug checkpoints are disabled if the current controller has
+%% the 'sensitive' option set, unless the environment is development for which
+%% tracing is always allowed.
 -spec trace_debug(SrcPos, Vars, Context) -> ok when
     SrcPos :: {File, Line, Col},
     File :: binary(),
@@ -747,11 +749,20 @@ trace_compile(Module, Filename, Options, Context) ->
     Vars :: map(),
     Context :: term().
 trace_debug(SrcPos, Vars, Context) ->
-    z_notifier:notify_sync(
-        #debug{
-            what = template,
-            arg = {debug, Vars, SrcPos}
-        }, Context).
+    CanTrace = case z_context:is_sensitive(Context) of
+        true -> m_site:environment(Context) =:= development;
+        false -> true
+    end,
+    if
+        CanTrace ->
+            z_notifier:notify_sync(
+                #debug{
+                    what = template,
+                    arg = {debug, Vars, SrcPos}
+                }, Context);
+        true ->
+            ok
+    end.
 
 %% @doc Called when a template is rendered (could be from an include). Optionally inserts
 %% text before and after the text inclusion into the output stream.

@@ -23,6 +23,14 @@
                     {_ Debugging all sessions can result in a large amount of debug data. _}
                 </small>
             </p>
+            <div id="overlay-development_trace-restart" style="display: none">
+                <button id="template-debug-restart" class="btn btn-xs btn-primary">
+                    {_ Reload the page _}
+                </button>
+                <p class="help-block">
+                    <small>{_ Reload the page that we are tracing to see the debug data. _}</small>
+                </p>
+            </div>
         </div>
         <div id="template-debug-data">
             <!-- Debug data will be loaded here -->
@@ -39,6 +47,11 @@
 %}
 
 {% javascript %}
+    if (typeof window.restartTemplateTrace == "function") {
+        $('#overlay-development_trace-restart').show();
+        $("#template-debug-restart").on('click', window.restartTemplateTrace);
+    }
+
     function debug_start() {
         const is_all = $(".template-debug-data input[value='all']").is(":checked");
         const checkboxes = $(".template-debug-source input:checked");
