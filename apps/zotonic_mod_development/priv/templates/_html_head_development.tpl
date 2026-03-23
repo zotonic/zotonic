@@ -55,12 +55,12 @@
             background-color: white;
             opacity: 0.3;
             color: white;
-            box-shadow: 4px rgba(0,0,0,0.5);
+            box-shadow: 0 0 4px rgba(0,0,0,0.5);
             text-decoration: none;
+        }
 
-            &:hover {
-                opacity: 1;
-            }
+        #debug-trace-btn:hover {
+            opacity: 1;
         }
     </style>
 {% endif %}
