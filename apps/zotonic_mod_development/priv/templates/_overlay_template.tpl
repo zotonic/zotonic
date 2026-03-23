@@ -29,6 +29,7 @@
                 </button>
                 <p class="help-block">
                     <small>{_ Reload the page that we are tracing to see the debug data. _}</small>
+                </p>
             </div>
         </div>
         <div id="template-debug-data">
