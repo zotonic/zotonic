@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-03-24 15:32\n"
+"PO-Revision-Date: 2026-03-24 15:55\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -12561,7 +12561,7 @@ msgstr "Opslaan en stoppen"
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:117
 msgid "Save your answers without submitting them yet so you can continue later."
-msgstr ""
+msgstr "Sla je antwoorden op zonder ze al in te sturen, zodat je later verder kunt gaan."
 
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:1
 msgid "Saved"
@@ -12791,7 +12791,7 @@ msgstr "Dit blok geeft aan dat de survey ten einde is. De gebruiker kan niet ver
 
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:116
 msgid "This form has been submitted in another tab, so your current session has been stopped."
-msgstr "Dit formulier is ingediend in een ander tabblad, dus uw huidige sessie is gestopt."
+msgstr "Dit formulier is ingediend in een ander tabblad, dus jouw huidige sessie is gestopt."
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:9
 msgid "This form is disabled. Because you can edit, you can proceed for testing."
@@ -12927,7 +12927,7 @@ msgstr "Je was eerder al begonnen met invullen en gaat verder waar je gebleven w
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:125
 msgid "Your answers will not be submitted."
-msgstr "Je antwoorden worden niet verzonden."
+msgstr "Je antwoorden worden niet ingediend."
 
 #: zotonic_mod_survey/priv/templates/_survey_results_user.tpl:26
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:51
