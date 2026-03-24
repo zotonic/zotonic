@@ -796,28 +796,8 @@ maybe_git_version(LibDir) ->
     GitDir = filename:join(LibDir, ".git"),
     case filelib:is_dir(GitDir) of
         true ->
-            git_version(LibDir);
+            z_utils:git_version(LibDir);
         false ->
-            undefined
-    end.
-
-git_version(LibDir) ->
-    Cmd = "git rev-parse --short HEAD",
-    case exec:run(Cmd, [sync, stdout, {cd, LibDir}]) of
-        {ok, Res} ->
-            {stdout, Hash} = proplists:lookup(stdout, Res),
-            iolist_to_binary([
-                "git-", z_string:trim(unicode:characters_to_binary(Hash))
-            ]);
-        {error, Reason} ->
-            ?LOG_WARNING(#{
-                in => zotonic_core,
-                text => <<"Git rev-parse for module version failed">>,
-                cmd => unicode:characters_to_binary(Cmd),
-                lib_dir => LibDir,
-                result => error,
-                reason => Reason
-            }),
             undefined
     end.
 

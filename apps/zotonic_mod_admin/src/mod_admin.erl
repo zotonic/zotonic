@@ -598,7 +598,6 @@ observe_acl_is_owner(#acl_is_owner{ id = RscId }, Context) ->
         false -> undefined
     end.
 
-
 event(#postback_notify{message= <<"admin-insert-block">>}, Context) ->
     Language = language_list(z_context:get_q(<<"language">>, Context)),
     EditLanguage = case z_context:get_q(<<"edit_language">>, Context) of
