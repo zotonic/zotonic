@@ -103,3 +103,19 @@
         <a href="{% url survey_results id=id %}">{_ Show results (admin only) _}</a>
     </p>
 {% endif %}
+
+{# Close open survey entry forms in other tabs than the one where the form has been submitted. #}
+{% if m.acl.user %}
+    {% javascript %}
+        cotonic.broker.subscribe(
+            "bridge/origin/user/{{ m.acl.user }}/survey-submission/{{ id }}",
+            function(msg) {
+                const $form = $('.form-survey[data-id={{ id }}]');
+                if (!$form.hasClass('masked')) {
+                    setTimeout(() => {
+                        $form.replace('<p class="alert alert-info">{_ This form has been submitted in another tab, so your current session has been stopped. _}</p>');
+                    }, 500);
+                }
+            });
+    {% endjavascript %}
+{% endif %}

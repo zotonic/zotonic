@@ -26,7 +26,7 @@
 		}
 		delegate="mod_survey"
 	%}
-	<form class="form-survey survey-{{ id.name }}" id="{{ #q }}" method="post" action="postback">
+	<form class="form-survey survey-{{ id.name }}" id="{{ #q }}" data-id="{{ id }}" method="post" action="postback">
 		<fieldset>
 			{% if not id.is_a.poll and pages > 1 %}
 				{% if id.survey_progress == 'nr' %}
@@ -72,11 +72,16 @@
 			{% endblock %}
 		</fieldset>
 
-		{% if not editing %}
-			<div class="alert alert-danger z_invalid">
+		<div class="alert alert-danger z_invalid">
+			{% if id|survey_is_history_back:history and id.is_survey_non_lineair %}
+				{_ Not all the required fields are filled in. You can go back to the previous page without saving your answers. _}
+				<br>
+				<br>
+				<button class="btn btn-default" formnovalidate type="submit">{_ Back without saving _}</button>
+			{% else %}
 				{_ Please fill in all the required fields. _}
-			</div>
-		{% endif %}
+			{% endif %}
+		</div>
 
 		{% if editing and pages == 1 %}
 			<div class="modal-footer">
@@ -90,7 +95,11 @@
 			{% with questions|survey_page_options as options %}
 
 				{% if id|survey_is_history_back:history %}
-					<button class="btn btn-default" formnovalidate type="submit">{_ Back _}</button>
+					{% if id.is_survey_non_lineair %}
+						<button class="btn btn-default" name="z_survey_back" type="submit">{_ Back _}</button>
+					{% else %}
+						<button class="btn btn-default" formnovalidate type="submit">{_ Back _}</button>
+					{% endif %}
 				{% endif %}
 
 				{% if not editing or pages > 1 %}
@@ -105,14 +114,18 @@
 							as action
 						%}
 							{% if id|survey_is_save_intermediate %}
-								<button id="{{ #save }}" class="btn btn-default" name="z_survey_save" formnovalidate type="submit">
+								<button id="{{ #save }}" class="btn btn-default" name="z_survey_save" formnovalidate type="submit"title="{_ Save your answers now and continue later without submitting them yet. _}">
 									{_ Save and stop _}
 								</button>
 								{% wire name="survey-stop-confirm"
 										action={confirm
-											text=_"Are you sure you want to stop? You can continue later."
+											text=[
+												_"Are you sure you want to stop? You can continue later.",
+												"<br>",
+												_"Your answers will not be submitted."
+											]
 											ok=_"Stop and continue later"
-											cancel=_"Continue"
+											cancel=_"Cancel"
 											action=action
 										}
 								%}
@@ -123,7 +136,7 @@
 										action={confirm
 											text=_"Are you sure you want to stop without saving?"
 											ok=_"Stop without saving"
-											cancel=_"Continue"
+											cancel=_"Cancel"
 											action=action
 										}
 								%}

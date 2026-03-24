@@ -219,6 +219,7 @@ manage_schema(What, Context) ->
     survey_schema:manage_schema(What, Context).
 
 event(#postback{message={survey_start, Args}}, Context) ->
+    ?DEBUG(Args),
     Update = survey_start(Args, Context),
     render_update(Update, Args, Context);
 
@@ -227,39 +228,51 @@ event(#submit{message={survey_next, Args}}, Context) ->
     {answers, Answers} = proplists:lookup(answers, Args),
     {history, History} = proplists:lookup(history, Args),
     Editing = proplists:get_value(editing, Args),
-    case z_convert:to_bool(z_context:get_q(<<"z_formnovalidate">>, Context)) of
-        true ->
-            case z_context:get_q(<<"z_submitter">>, Context) of
-                <<"z_survey_save">> ->
-                    if
-                        Editing =:= undefined -> save_page(SurveyId, Answers, Args, Context);
-                        true -> ok
-                    end,
-                    z_render:wire({script, [ {script, <<"z_event('survey-stop-confirm');">>} ]}, Context);
-                _ ->
-                    % Back button pressed, no validation of query args.
-                    case History of
-                        [_,PageNr|History1] ->
-                            case is_page_back_allowed(SurveyId, PageNr, Context) of
-                                true ->
-                                    render_update(
-                                        render_next_page(SurveyId, PageNr, exact, Answers, History1, Editing, Args, Context),
-                                        Args, Context);
-                                false ->
-                                    Context
-                            end;
-                        _History ->
-                            render_update(
-                                render_next_page(SurveyId, 0, exact, Answers, [], Editing, Args, Context),
-                                Args, Context)
-                    end
+    SubmitButton = z_context:get_q(<<"z_submitter">>, Context),
+    IsValidated = not z_convert:to_bool(z_context:get_q(<<"z_formnovalidate">>, Context)),
+    if
+        IsValidated, SubmitButton =:= <<"z_survey_back">> ->
+            % Back on a form with validation, so we have to move back to the previous page.
+            % We handle the back button as a jump to the previous page in the history.
+            case History of
+                [_,PageNr|History1] ->
+                    render_update(
+                        render_next_page(SurveyId, PageNr, exact, Answers, History1, Editing, Args, Context),
+                        Args, Context);
+                _History ->
+                    render_update(
+                        render_next_page(SurveyId, 0, exact, Answers, [], Editing, Args, Context),
+                        Args, Context)
             end;
-        false ->
-            % Submit button pressed, query args are validated.
+        not IsValidated, SubmitButton =:= <<"z_survey_save">> ->
+            if
+                Editing =:= undefined -> save_page(SurveyId, Answers, Args, Context);
+                true -> ok
+            end,
+            z_render:wire({script, [ {script, <<"z_event('survey-stop-confirm');">>} ]}, Context);
+        IsValidated ->
+            % Submit button pressed, query args are validated, go to the next page.
             {page_nr, PageNr} = proplists:lookup(page_nr, Args),
             render_update(
                 render_next_page(SurveyId, PageNr+1, forward, Answers, History, Editing, Args, Context),
-                Args, Context)
+                Args, Context);
+        not IsValidated ->
+            % Back button pressed, no validation of query args, go to the previous page in the history.
+            case History of
+                [_,PageNr|History1] ->
+                    case is_page_back_allowed(SurveyId, PageNr, Context) of
+                        true ->
+                            render_update(
+                                render_next_page(SurveyId, PageNr, exact, Answers, History1, Editing, Args, Context),
+                                Args, Context);
+                        false ->
+                            Context
+                    end;
+                _History ->
+                    render_update(
+                        render_next_page(SurveyId, 0, exact, Answers, [], Editing, Args, Context),
+                        Args, Context)
+            end
     end;
 
 event(#postback{message={survey_back, Args}}, Context) ->
@@ -659,6 +672,7 @@ render_next_page(SurveyId, 0, _Direction, _Answers, _History, _Editing, Args, Co
             z_render:wire({redirect, [{id, SurveyId}]}, Context)
     end;
 render_next_page(SurveyId, PageNr, Direction, Answers, History, Editing, Args, Context) when is_integer(SurveyId) ->
+    IsNonLineair = z_convert:to_bool(m_rsc:p_no_acl(SurveyId, <<"is_survey_non_lineair">>, Context)),
     Viewer = z_convert:to_binary(proplists:get_value(viewer, Args)),
     AnswersNoValidate = z_convert:to_list(proplists:get_value(answers_novalidate, Args, [])),
     {Answers2, AnswersNoValidate2, Submitter} = case proplists:get_value(is_feedback_view, Args) of
@@ -669,15 +683,25 @@ render_next_page(SurveyId, PageNr, Direction, Answers, History, Editing, Args, C
             SubmittedAnswers1 = group_multiselect(SubmittedAnswers),
             % Remove the newly submitted question answers from both the validated and the unvalidated lists.
             % The user could be backing through multiple pages, effectively removing the answers from the validated answers.
-            Answers1 = lists:foldl(fun({Arg,_Val}, Acc) -> proplists:delete(Arg, Acc) end, Answers, SubmittedAnswers1),
-            AnswersNoValidate1 = lists:foldl(fun({Arg,_Val}, Acc) -> proplists:delete(Arg, Acc) end, AnswersNoValidate, SubmittedAnswers1),
-            case z_convert:to_bool(z_context:get_q(<<"z_formnovalidate">>, Context)) of
-                true when Direction =:= exact ->
-                    % Back - form was not validated
-                    {Answers1, AnswersNoValidate1 ++ SubmittedAnswers1, Submitter0};
-                false ->
-                    % Forward - form was validated
-                    {Answers1 ++ SubmittedAnswers1, AnswersNoValidate1, Submitter0}
+            AnswersWithoutSubmitted = lists:foldl(fun({Arg,_Val}, Acc) -> proplists:delete(Arg, Acc) end, Answers, SubmittedAnswers1),
+            AnswersNoValidateWithoutSubmitted = lists:foldl(fun({Arg,_Val}, Acc) -> proplists:delete(Arg, Acc) end, AnswersNoValidate, SubmittedAnswers1),
+            IsValidated = not z_convert:to_bool(z_context:get_q(<<"z_formnovalidate">>, Context)),
+            if
+                IsValidated ->
+                    % Forward or back - form was validated.
+                    % The answers are added to the set of validated answers and removed from the set
+                    % of non validated answers.
+                    {AnswersWithoutSubmitted ++ SubmittedAnswers1, AnswersNoValidateWithoutSubmitted, Submitter0};
+                not IsValidated, Direction =:= exact, not IsNonLineair ->
+                    % Back or jump on normal lineair form - form was not validated.
+                    % The submitted answers are removed from the set of validated answers and added to the
+                    % set of non validated answers.
+                    {AnswersWithoutSubmitted, AnswersNoValidateWithoutSubmitted ++ SubmittedAnswers1, Submitter0};
+                not IsValidated, Direction =:= exact, IsNonLineair ->
+                    % Back or jump on non-lineair form - form was not validated.
+                    % Do not update the set of validated answers as-is, no answers are removed when going back
+                    % in a non-lineair form.
+                    {Answers, AnswersNoValidateWithoutSubmitted ++ SubmittedAnswers1, Submitter0}
             end
     end,
     case m_rsc:p(SurveyId, <<"blocks">>, Context) of
@@ -690,7 +714,7 @@ render_next_page(SurveyId, PageNr, Direction, Answers, History, Editing, Args, C
             {Next, IsFeedbackView} = if
                 IsFeedbackNeeded ->
                     {go_page(PageNr-1, Questions, Answers2, exact, Context), true};
-                Submitter =:= undefined ->
+                Submitter =:= undefined; Submitter =:= <<"z_survey_back">> ->
                     {go_page(PageNr, Questions, Answers2, Direction, Context), false};
                 true ->
                     {go_button_target(Submitter, Questions, Answers2, Context), false}
