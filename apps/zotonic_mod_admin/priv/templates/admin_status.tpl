@@ -22,7 +22,7 @@
                                 <dd>
                                     {{ m.admin_status.zotonic_version }}
                                     {% if m.admin_status.zotonic_git_version as git_version %}
-                                        <em>({{ git_version }})</em>
+                                        <span class="text-muted">({{ git_version }})</span>
                                     {% endif %}
                                 </dd>
 
