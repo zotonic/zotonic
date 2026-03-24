@@ -74,9 +74,13 @@
        			{_ Allow non-linear forms; answers are saved when using the Back button _}
        		</label>
 		</div>
+	</fieldset>
 
+	<hr>
+
+	<fieldset>
+    	<h4>{_ Maximum number of submissions _}</h4>
 		<div class="form-group">
-			<h5>{_ Maximum number of submissions _}</h5>
 	        <p class="help-block">
 	        	{_ If the maximum number of forms has been submitted, then the start button is deactivated and an email is sent to the email addresses in the <em>handling</em> settings below. Leave empty for no limit. This is useful for signup lists with a limited number of spots. _}
 	        </p>
