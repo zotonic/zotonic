@@ -64,7 +64,7 @@
 		<div class="form-group">
 	   		<label class="checkbox">
        			<input type="checkbox" name="is_survey_save_intermediate" {% if id.is_survey_save_intermediate %}checked{% endif %}>
-       			{_ “Save and stop” to allow continue later without submitting _}
+       			{_ Show “Save and stop” button to continue later _}
        		</label>
 		</div>
 
