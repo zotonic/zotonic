@@ -219,7 +219,6 @@ manage_schema(What, Context) ->
     survey_schema:manage_schema(What, Context).
 
 event(#postback{message={survey_start, Args}}, Context) ->
-    ?DEBUG(Args),
     Update = survey_start(Args, Context),
     render_update(Update, Args, Context);
 
