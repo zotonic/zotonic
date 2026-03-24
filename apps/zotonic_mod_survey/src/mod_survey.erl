@@ -235,9 +235,14 @@ event(#submit{message={survey_next, Args}}, Context) ->
             % We handle the back button as a jump to the previous page in the history.
             case History of
                 [_,PageNr|History1] ->
-                    render_update(
-                        render_next_page(SurveyId, PageNr, exact, Answers, History1, Editing, Args, Context),
-                        Args, Context);
+                    case is_page_back_allowed(SurveyId, PageNr, Context) of
+                        true ->
+                            render_update(
+                                render_next_page(SurveyId, PageNr, exact, Answers, History1, Editing, Args, Context),
+                                Args, Context);
+                        false ->
+                            Context
+                    end;
                 _History ->
                     render_update(
                         render_next_page(SurveyId, 0, exact, Answers, [], Editing, Args, Context),
