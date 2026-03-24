@@ -94,10 +94,7 @@ initialize_config(Context) ->
     case z_db:has_connection(Context) of
         true ->
             % Set default language
-            case z_utils:is_empty(m_config:get_value(i18n, language, Context)) of
-                true -> m_config:set_default_value(i18n, language, default_language(Context), Context);
-                false -> ok
-            end,
+            m_config:set_default_value(i18n, language, default_language(Context), Context),
             % Set list of enabled languages
             case m_config:get_prop(i18n, languages, list, Context) of
                 undefined ->
