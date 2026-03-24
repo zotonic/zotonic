@@ -1,5 +1,5 @@
 %% @author Arthur Clemens
-%% @copyright Copyright 2016-2025 Arthur Clemens
+%% @copyright Copyright 2016-2026 Arthur Clemens
 %% @doc Language code handling functions.
 %%
 %% Mandatory background read on language tags: [1].
@@ -31,7 +31,7 @@
 %%  [2] http://www.iana.org/assignments/language-subtag-registry/language-subtag-registry
 %% @end
 
-%% Copyright 2016-2025 Arthur Clemens
+%% Copyright 2016-2026 Arthur Clemens
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -94,9 +94,9 @@ initialize_config(Context) ->
     case z_db:has_connection(Context) of
         true ->
             % Set default language
-            case m_config:get_value(i18n, language, Context) of
-                undefined -> m_config:set_value(i18n, language, default_language(Context), Context);
-                _ -> ok
+            case z_utils:is_empty(m_config:get_value(i18n, language, Context)) of
+                true -> m_config:set_default_value(i18n, language, default_language(Context), Context);
+                false -> ok
             end,
             % Set list of enabled languages
             case m_config:get_prop(i18n, languages, list, Context) of
@@ -104,7 +104,7 @@ initialize_config(Context) ->
                     init_config_languages(Context);
                 [] ->
                     Default = [ {default_language(Context), true} ],
-                    m_config:set_prop(i18n, languages, list, Default, Context);
+                    m_config:set_default_prop(i18n, languages, list, Default, Context);
                 [{FirstCode, _} | _ ] = Config ->
                     % Ensure that the default language is the first enabled language
                     Default = default_language(Context),
@@ -131,7 +131,7 @@ initialize_config(Context) ->
 init_config_languages(Context) ->
     case m_config:get(i18n, language_list, Context) of
         undefined ->
-            m_config:set_prop(i18n, languages, list, default_languages(Context), Context);
+            m_config:set_default_prop(i18n, languages, list, default_languages(Context), Context);
         I18NLanguageList ->
             maybe_update_config_list(I18NLanguageList, Context),
             ok
@@ -578,7 +578,7 @@ maybe_update_config_list(I18NLanguageList, Context) ->
             % Ensure the default language is the first enabled language
             Default = default_language(Context),
             NewList1 = [ {Default, true} | proplists:delete(Default, NewList) ],
-            m_config:set_prop(i18n, languages, list, NewList1, Context),
+            m_config:set_default_prop(i18n, languages, list, NewList1, Context),
             m_config:delete(i18n, language_list, Context);
         _ ->
             ?LOG_WARNING(#{
