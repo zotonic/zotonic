@@ -101,7 +101,7 @@ initialize_config(Context) ->
                     init_config_languages(Context);
                 [] ->
                     Default = [ {default_language(Context), true} ],
-                    m_config:set_default_prop(i18n, languages, list, Default, Context);
+                    m_config:set_prop(i18n, languages, list, Default, Context);
                 [{FirstCode, _} | _ ] = Config ->
                     % Ensure that the default language is the first enabled language
                     Default = default_language(Context),
