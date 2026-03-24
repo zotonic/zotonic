@@ -114,7 +114,7 @@
 							as action
 						%}
 							{% if id|survey_is_save_intermediate %}
-								<button id="{{ #save }}" class="btn btn-default" name="z_survey_save" formnovalidate type="submit" title="{_ Save your answers now and continue later without submitting them yet. _}">
+								<button id="{{ #save }}" class="btn btn-default" name="z_survey_save" formnovalidate type="submit" title="{_ Save your answers without submitting them yet so you can continue later. _}">
 									{_ Save and stop _}
 								</button>
 								{% wire name="survey-stop-confirm"
