@@ -439,7 +439,10 @@ event(#postback{ message = {template_debug_enable, Args} }, Context) ->
             end,
             IsAll = z_convert:to_bool(z_context:get_q(<<"is_all">>, Context)),
             enable_debug_trace_points(Template, Checked, IsAll, Context),
-            z_render:growl(?__("Updated template debug points.", Context), Context);
+            case z_convert:to_bool(z_context:get_q(<<"is_silent">>, Context)) of
+                true -> Context;
+                false -> z_render:growl(?__("Updated template debug points.", Context), Context)
+            end;
         false ->
             z_render:growl_error(?__("No permission to use mod_development.", Context), Context)
     end;

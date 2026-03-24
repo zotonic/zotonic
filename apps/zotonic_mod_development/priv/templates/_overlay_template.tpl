@@ -47,6 +47,8 @@
 %}
 
 {% javascript %}
+    let is_debug_trace_enabled = false;
+
     if (typeof window.restartTemplateTrace == "function") {
         $('#overlay-development_trace-restart').show();
         $("#template-debug-restart").on('click', window.restartTemplateTrace);
@@ -68,6 +70,8 @@
             $("#template-debug-data").html('<p class="help-block">{_ Waiting for debug data... _}</p>');
         }
 
+        is_debug_trace_enabled = enabled.length > 0;
+
         z_event("template_debug_enable", {
             enabled: enabled,
             is_all: is_all
@@ -78,11 +82,11 @@
     $("#template-debug-start").on('click', debug_start);
 
     $(".modal-overlay-close").on('click', () => {
-        const checkboxes = $(".template-debug-source input:checked");
-        if (checkboxes.length > 0) {
+        if (is_debug_trace_enabled) {
             z_event("template_debug_enable", {
                 enabled: [],
-                is_all: false
+                is_all: false,
+                is_silent: true
             });
         }
     });
