@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-03-24 15:01\n"
+"PO-Revision-Date: 2026-03-24 15:32\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -7561,7 +7561,7 @@ msgstr "Verversen"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:28
 msgid "Reload the page"
-msgstr "De pagina opnieuw laden"
+msgstr "Pagina opnieuw laden"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:31
 msgid "Reload the page that we are tracing to see the debug data."
@@ -10052,7 +10052,7 @@ msgstr "Jouw e-mailadres is toegevoegd aan onze mailinglijst <b><a href=\"{url}\
 
 #: zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:26
 msgid "Your e-mail address is added to the mailing list. A confirmation mail is sent to your e-mail address and will arrive shortly. If you don’t receive it, then please check your spam folder."
-msgstr "Je e-mailadres wordt toegevoegd aan de mailinglijst. Een bevestigingsmail wordt naar uw e-mailadres gestuurd en zal binnenkort aankomen. Als je deze niet ontvangt, controleer dan je spamfolder."
+msgstr "Je e-mailadres wordt toegevoegd aan de mailinglijst. Een bevestigingsmail wordt naar jouw e-mailadres gestuurd en zal binnenkort aankomen. Als je deze niet ontvangt, controleer dan je spamfolder."
 
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:16
 msgid "Your mailing list subscriptions"
@@ -10595,7 +10595,7 @@ msgstr "Het ophalen van een token kan enige tijd duren."
 
 #: zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:99
 msgid "Fill this in for “{client}” and “{grant}” if the remote site is not a Zotonic site."
-msgstr "Vul dit in voor \"{client}\" en \"{grant}\" als de externe site geen Zotonic site is."
+msgstr ""
 
 #: zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:90
 msgid "Fill this in for “{grant}” if the remote site is not a Zotonic site."
@@ -11840,7 +11840,7 @@ msgstr "Akkoord"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:74
 msgid "Allow non-linear forms; answers are saved when using the Back button"
-msgstr ""
+msgstr "Niet-lineaire formulieren toestaan; antwoorden worden opgeslagen bij gebruik van de Terug-knop"
 
 #: zotonic_mod_survey/src/mod_survey.erl:1240
 msgid "Already submitted"
@@ -11904,7 +11904,7 @@ msgstr "Weet je zeker dat je wilt stoppen? Je kunt later verdergaan."
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:80
 msgid "Back without saving"
-msgstr ""
+msgstr "Terug zonder op te slaan"
 
 #: zotonic_mod_survey/priv/templates/survey.tpl:25
 msgid "Because you can edit, you can proceed for testing."
@@ -12352,7 +12352,7 @@ msgstr "Nog geen resultaten."
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:77
 msgid "Not all the required fields are filled in. You can go back to the previous page without saving your answers."
-msgstr ""
+msgstr "Niet alle verplichte velden zijn ingevuld. Je kunt teruggaan naar de vorige pagina zonder je antwoorden op te slaan."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:123
 msgid "Note that if you select a special handler below, then that handler may override this setting."
@@ -12560,7 +12560,7 @@ msgid "Save and stop"
 msgstr "Opslaan en stoppen"
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:117
-msgid "Save your answers now and continue later without submitting them yet."
+msgid "Save your answers without submitting them yet so you can continue later."
 msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:1
@@ -12627,7 +12627,7 @@ msgstr "Toon resultaten (alleen beheerder)"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:67
 msgid "Show “Save and stop” button to continue later"
-msgstr ""
+msgstr "Toon de knop \"Opslaan en stoppen\" om later verder te gaan"
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:34
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:45
@@ -12927,7 +12927,7 @@ msgstr "Je was eerder al begonnen met invullen en gaat verder waar je gebleven w
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:125
 msgid "Your answers will not be submitted."
-msgstr ""
+msgstr "Je antwoorden worden niet verzonden."
 
 #: zotonic_mod_survey/priv/templates/_survey_results_user.tpl:26
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:51
