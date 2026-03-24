@@ -64,7 +64,14 @@
 		<div class="form-group">
 	   		<label class="checkbox">
        			<input type="checkbox" name="is_survey_save_intermediate" {% if id.is_survey_save_intermediate %}checked{% endif %}>
-       			{_ Save progress for later continuation _}
+       			{_ “Save and stop” to allow continue later without submitting _}
+       		</label>
+		</div>
+
+		<div class="form-group">
+	   		<label class="checkbox">
+       			<input type="checkbox" name="is_survey_non_linear" {% if id.is_survey_non_linear %}checked{% endif %}>
+       			{_ Allow non-linear forms; answers are saved when using the Back button _}
        		</label>
 		</div>
 
