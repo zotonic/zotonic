@@ -70,7 +70,7 @@
 
 		<div class="form-group">
 	   		<label class="checkbox">
-       			<input type="checkbox" name="is_survey_non_lineair" {% if id.is_survey_non_lineair %}checked{% endif %}>
+       			<input type="checkbox" name="is_survey_non_linear" {% if id.is_survey_non_linear %}checked{% endif %}>
        			{_ Allow non-linear forms; answers are saved when using the Back button _}
        		</label>
 		</div>

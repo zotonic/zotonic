@@ -672,7 +672,7 @@ render_next_page(SurveyId, 0, _Direction, _Answers, _History, _Editing, Args, Co
             z_render:wire({redirect, [{id, SurveyId}]}, Context)
     end;
 render_next_page(SurveyId, PageNr, Direction, Answers, History, Editing, Args, Context) when is_integer(SurveyId) ->
-    IsNonLineair = z_convert:to_bool(m_rsc:p_no_acl(SurveyId, <<"is_survey_non_lineair">>, Context)),
+    IsNonLinear = z_convert:to_bool(m_rsc:p_no_acl(SurveyId, <<"is_survey_non_linear">>, Context)),
     Viewer = z_convert:to_binary(proplists:get_value(viewer, Args)),
     AnswersNoValidate = z_convert:to_list(proplists:get_value(answers_novalidate, Args, [])),
     {Answers2, AnswersNoValidate2, Submitter} = case proplists:get_value(is_feedback_view, Args) of
@@ -692,13 +692,13 @@ render_next_page(SurveyId, PageNr, Direction, Answers, History, Editing, Args, C
                     % The answers are added to the set of validated answers and removed from the set
                     % of non validated answers.
                     {AnswersWithoutSubmitted ++ SubmittedAnswers1, AnswersNoValidateWithoutSubmitted, Submitter0};
-                not IsValidated, Direction =:= exact, not IsNonLineair ->
-                    % Back or jump on normal lineair form - form was not validated.
+                not IsValidated, Direction =:= exact, not IsNonLinear ->
+                    % Back or jump on normal linear form - form was not validated.
                     % The submitted answers are removed from the set of validated answers and added to the
                     % set of non validated answers.
                     {AnswersWithoutSubmitted, AnswersNoValidateWithoutSubmitted ++ SubmittedAnswers1, Submitter0};
-                not IsValidated, Direction =:= exact, IsNonLineair ->
-                    % Back or jump on non-lineair form - form was not validated.
+                not IsValidated, Direction =:= exact, IsNonLinear ->
+                    % Back or jump on non-linear form - form was not validated.
                     % Do not update the set of validated answers as-is, no answers are removed when going back
                     % in a non-lineair form.
                     {Answers, AnswersNoValidateWithoutSubmitted ++ SubmittedAnswers1, Submitter0}

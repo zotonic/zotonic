@@ -73,7 +73,7 @@
 		</fieldset>
 
 		<div class="alert alert-danger z_invalid">
-			{% if id|survey_is_history_back:history and id.is_survey_non_lineair %}
+			{% if id|survey_is_history_back:history and id.is_survey_non_linear %}
 				{_ Not all the required fields are filled in. You can go back to the previous page without saving your answers. _}
 				<br>
 				<br>
@@ -95,7 +95,7 @@
 			{% with questions|survey_page_options as options %}
 
 				{% if id|survey_is_history_back:history %}
-					{% if id.is_survey_non_lineair %}
+					{% if id.is_survey_non_linear %}
 						<button class="btn btn-default" name="z_survey_back" type="submit">{_ Back _}</button>
 					{% else %}
 						<button class="btn btn-default" formnovalidate type="submit">{_ Back _}</button>
