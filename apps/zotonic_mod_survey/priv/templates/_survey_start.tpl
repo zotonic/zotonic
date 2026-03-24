@@ -113,7 +113,7 @@
                 const $form = $('.form-survey[data-id={{ id }}]');
                 if (!$form.hasClass('masked')) {
                     setTimeout(() => {
-                        $form.replace('<p class="alert alert-info">{_ This form has been submitted in another tab, so your current session has been stopped. _}</p>');
+                        $form.replaceWith('<p class="alert alert-info">{_ This form has been submitted in another tab, so your current session has been stopped. _}</p>');
                     }, 500);
                 }
             });
