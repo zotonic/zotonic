@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-03-24 15:01\n"
+"PO-Revision-Date: 2026-03-24 15:32\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -12557,8 +12557,8 @@ msgid "Save and stop"
 msgstr "Speichern und anhalten"
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:117
-msgid "Save your answers now and continue later without submitting them yet."
-msgstr "Speichern Sie Ihre Antworten jetzt und fahren Sie später fort, ohne sie jetzt abzuschicken."
+msgid "Save your answers without submitting them yet so you can continue later."
+msgstr "Speichern Sie Ihre Antworten, ohne sie abzuschicken, damit Sie später fortfahren können."
 
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:1
 msgid "Saved"
