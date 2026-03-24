@@ -671,7 +671,7 @@ render_next_page(SurveyId, 0, _Direction, _Answers, _History, _Editing, Args, Co
             z_render:wire({redirect, [{id, SurveyId}]}, Context)
     end;
 render_next_page(SurveyId, PageNr, Direction, Answers, History, Editing, Args, Context) when is_integer(SurveyId) ->
-    IsNonLinear = z_convert:to_bool(m_rsc:p_no_acl(SurveyId, <<"is_survey_non_linear">>, Context)),
+    IsNonLineair = z_convert:to_bool(m_rsc:p(SurveyId, <<"is_survey_non_lineair">>, Context)),
     Viewer = z_convert:to_binary(proplists:get_value(viewer, Args)),
     AnswersNoValidate = z_convert:to_list(proplists:get_value(answers_novalidate, Args, [])),
     {Answers2, AnswersNoValidate2, Submitter} = case proplists:get_value(is_feedback_view, Args) of
