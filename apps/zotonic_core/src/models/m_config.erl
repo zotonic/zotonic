@@ -164,9 +164,10 @@ Available Model API Paths
     get_boolean/3,
     get_boolean/4,
 
-    set_default_value/4,
     set_value/4,
+    set_default_value/4,
     set_prop/5,
+    set_default_prop/5,
     get_prop/4,
 
     delete/3,
@@ -498,7 +499,8 @@ set_value_db(Module, Key, Value0, IsAllowUpdate, Context) when is_atom(Module), 
 set_value_db(Module, Key, Value, IsAllowUpdate, Context) ->
     set_value_db(z_convert:to_atom(Module), z_convert:to_atom(Key), Value, IsAllowUpdate, Context).
 
-%% @doc Set a "complex" config value.
+%% @doc Set a "complex" config value. The property is a (binary) key in the serialized props
+%% of the config key.
 -spec set_prop(Module, Key, Prop, PropValue, Context) -> ok | {error, Reason} when
     Module :: atom() | binary(),
     Key :: atom() | binary(),
@@ -506,7 +508,22 @@ set_value_db(Module, Key, Value, IsAllowUpdate, Context) ->
     PropValue :: term(),
     Context :: z:context(),
     Reason :: term().
-set_prop(Module, Key, Prop, PropValue, Context) when is_atom(Module), is_atom(Key), is_atom(Prop) ->
+set_prop(Module, Key, Prop, PropValue, Context) ->
+    set_prop_db(Module, Key, Prop, PropValue, true, Context).
+
+%% @doc Set a "complex" config value. The property is a (binary) key in the serialized props
+%% of the config key. Do not set if the prop already has a value.
+-spec set_default_prop(Module, Key, Prop, PropValue, Context) -> ok | {error, Reason} when
+    Module :: atom() | binary(),
+    Key :: atom() | binary(),
+    Prop :: atom() | binary(),
+    PropValue :: term(),
+    Context :: z:context(),
+    Reason :: term().
+set_default_prop(Module, Key, Prop, PropValue, Context) ->
+    set_prop_db(Module, Key, Prop, PropValue, false, Context).
+
+set_prop_db(Module, Key, Prop, PropValue, IsAllowUpdate, Context) when is_atom(Module), is_atom(Key), is_atom(Prop) ->
     IsSecretKey = is_secret_key(Module, Key, Context),
     Result = z_db:transaction(
         fun(Ctx) ->
@@ -527,7 +544,7 @@ set_prop(Module, Key, Prop, PropValue, Context) when is_atom(Module), is_atom(Ke
                         z_convert:to_binary(Prop) => PropValue
                     },
                     z_db:insert(config, Ins, Ctx);
-                {ok, #{ PropB := PropValue }} ->
+                {ok, #{ PropB := _ }} when not IsAllowUpdate ->
                     {ok, no_change};
                 {ok, #{ <<"id">> := Id } } ->
                     Upd = #{
@@ -554,10 +571,16 @@ set_prop(Module, Key, Prop, PropValue, Context) when is_atom(Module), is_atom(Ke
                 Context),
             ok;
         {error, _} = Error ->
-            Error
+            Error;
+        {rollback,{no_database_connection, _Trace}} ->
+            {error, no_database_connection};
+        {rollback, {error, _} = Error} ->
+            Error;
+        {rollback, Error} ->
+            {error, Error}
     end;
-set_prop(Module, Key, Prop, PropValue, Context) ->
-    set_prop(z_convert:to_atom(Module), z_convert:to_atom(Key), z_convert:to_atom(Prop), PropValue, Context).
+set_prop_db(Module, Key, Prop, PropValue, IsAllowUpdate, Context) ->
+    set_prop_db(z_convert:to_atom(Module), z_convert:to_atom(Key), z_convert:to_atom(Prop), PropValue, IsAllowUpdate, Context).
 
 set_is_secret(Key, CMs) ->
     case proplists:get_value(is_secret, CMs) of
