@@ -571,7 +571,13 @@ set_prop_db(Module, Key, Prop, PropValue, IsAllowUpdate, Context) when is_atom(M
                 Context),
             ok;
         {error, _} = Error ->
-            Error
+            Error;
+        {rollback,{no_database_connection, _Trace}} ->
+            {error, no_database_connection};
+        {rollback, {error, _} = Error} ->
+            Error;
+        {rollback, Error} ->
+            {error, Error}
     end;
 set_prop_db(Module, Key, Prop, PropValue, IsAllowUpdate, Context) ->
     set_prop_db(z_convert:to_atom(Module), z_convert:to_atom(Key), z_convert:to_atom(Prop), PropValue, IsAllowUpdate, Context).
