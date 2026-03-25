@@ -142,9 +142,19 @@
     }
 
     function taggedType(value) {
-        return value && typeof value === 'object' && !Array.isArray(value) && typeof value.type === 'string'
-            ? value.type
-            : null;
+        if (!value || typeof value !== 'object' || Array.isArray(value)) {
+            return null;
+        }
+
+        if (typeof value.type === 'string') {
+            return value.type;
+        }
+
+        if (typeof value._type === 'string') {
+            return value._type.startsWith('_') ? value._type : `_${value._type}`;
+        }
+
+        return null;
     }
 
     function taggedValue(value, ...keys) {
@@ -169,7 +179,7 @@
         if (type) {
             switch (type) {
                 case '_tuple': {
-                    const items = taggedValue(value, 'value', 'items', 'elements');
+                    const items = taggedValue(value, 'value', 'items', 'elements', '_list');
                     const preview = Array.isArray(items)
                         ? items.slice(0, 3).map((item) => previewTerm(item, depth + 1)).join(', ')
                         : '';
@@ -301,7 +311,7 @@
         const type = taggedType(value);
         switch (type) {
             case '_tuple': {
-                const items = taggedValue(value, 'value', 'items', 'elements');
+                const items = taggedValue(value, 'value', 'items', 'elements', '_list');
                 const rows = Array.isArray(items)
                     ? items.map((item, index) => ({ label: `${index + 1}:`, value: renderTerm(item, depth + 1) }))
                     : [];
