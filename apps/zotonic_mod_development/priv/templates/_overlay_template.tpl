@@ -46,118 +46,6 @@
     </div>
 </div>
 
-<style nonce="{{ m.req.csp_nonce }}">
-    .template-debug-value {
-        font-family: monospace;
-        font-size: 12px;
-        line-height: 1.45;
-    }
-
-    .template-debug-filename {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
-
-    .template-debug-filename-path {
-        flex: 1 1 auto;
-        min-width: 0;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-    }
-
-    .template-debug-nav,
-    .template-debug-line-nav {
-        min-width: 0;
-        font-family: monospace;
-        font-size: 11px;
-        line-height: 1.2;
-        height: 24px;
-        padding: 1px 6px;
-    }
-
-    .template-debug-nav {
-        flex: 0 0 260px;
-        max-width: 260px;
-    }
-
-    .template-debug-line-nav {
-        margin-left: 8px;
-        width: 230px;
-        max-width: calc(100% - 24px);
-        vertical-align: middle;
-    }
-
-    .template-compiler-nav-anchor {
-        display: inline-block;
-        vertical-align: middle;
-    }
-
-    .template-debug-value details {
-        margin: 0;
-    }
-
-    .template-debug-value summary {
-        cursor: pointer;
-        list-style-position: inside;
-    }
-
-    .template-debug-value summary::-webkit-details-marker {
-        margin-right: 4px;
-    }
-
-    .template-debug-term {
-        word-break: break-word;
-    }
-
-    .template-debug-term.is-atom,
-    .template-debug-term.is-number {
-        color: #1a3d7c;
-    }
-
-    .template-debug-term.is-binary,
-    .template-debug-term.is-string {
-        color: #0d6b3c;
-    }
-
-    .template-debug-term.is-tag,
-    .template-debug-term.is-punctuation,
-    .template-debug-term.is-key {
-        color: #6a3fb0;
-    }
-
-    .template-debug-term.is-special {
-        color: #a53a18;
-    }
-
-    .template-debug-term.is-null {
-        color: #777;
-        font-style: italic;
-    }
-
-    .template-debug-term-children {
-        margin-left: 18px;
-        padding: 6px 0 0;
-    }
-
-    .template-debug-term-row {
-        display: flex;
-        align-items: flex-start;
-        gap: 8px;
-        padding: 1px 0;
-    }
-
-    .template-debug-term-label {
-        flex: 0 0 auto;
-        color: #666;
-    }
-
-    .template-debug-term-value {
-        min-width: 0;
-    }
-</style>
-
 {% wire name="template_debug_enable"
         postback={template_debug_enable template=template_file}
         delegate=`mod_development`
@@ -177,6 +65,94 @@
     const debugAlert = overlayDebug.querySelector(':scope > .alert');
     const currentTemplateFile = '{{ template_file|escapejs }}';
     const templateParentsSelect = document.getElementById('template-debug-parents');
+    const developmentCssHref = '{% lib_url "css/development.css" %}';
+    const developmentCssFile = 'css/development.css';
+
+    function uncollapseLibPath(path) {
+        if (!path) {
+            return [];
+        }
+
+        const parts = path.split('~').filter((part) => part !== '');
+        if (parts.length < 2) {
+            return [];
+        }
+
+        const lastPart = parts[parts.length - 1];
+        const extensionIndex = lastPart.lastIndexOf('.');
+        const extension = extensionIndex >= 0 ? lastPart.slice(extensionIndex) : '';
+        const fileParts = parts.slice(0, -1);
+        const files = [];
+        let currentDir = '';
+
+        fileParts.forEach((item) => {
+            if (!item) {
+                return;
+            }
+            if (item.startsWith('/')) {
+                currentDir = item.slice(0, item.lastIndexOf('/'));
+                files.push(item + extension);
+                return;
+            }
+
+            const resolved = currentDir ? `${currentDir}/${item}` : `/${item}`;
+            const slashIndex = resolved.lastIndexOf('/');
+            if (slashIndex >= 0) {
+                currentDir = resolved.slice(0, slashIndex);
+            }
+            files.push(`${resolved}${extension}`);
+        });
+
+        return files;
+    }
+
+    function stylesheetIncludesFile(href, targetFile) {
+        if (!href) {
+            return false;
+        }
+
+        let url;
+        try {
+            url = new URL(href, window.location.href);
+        } catch (_) {
+            return false;
+        }
+
+        const pathname = url.pathname || '';
+        if (pathname === developmentCssHref || pathname.endsWith(`/${targetFile}`)) {
+            return true;
+        }
+
+        const segments = pathname.split('/');
+        const libIndex = segments.findIndex((segment) =>
+            segment === 'lib' ||
+            segment === 'lib_min' ||
+            segment === 'lib_nocache' ||
+            segment === 'lib_min_nocache');
+
+        if (libIndex < 0 || libIndex === segments.length - 1) {
+            return false;
+        }
+
+        const collapsed = decodeURIComponent(segments.slice(libIndex + 1).join('/'));
+        return uncollapseLibPath(collapsed).some((file) => file.replace(/^\//, '') === targetFile);
+    }
+
+    function ensureDevelopmentCss() {
+        const existingLink = Array.from(document.querySelectorAll('link[rel~="stylesheet"][href]')).find((link) => {
+            const href = link.getAttribute('href') || '';
+            return stylesheetIncludesFile(href, developmentCssFile);
+        });
+
+        if (existingLink) {
+            return;
+        }
+
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = developmentCssHref;
+        document.head.appendChild(link);
+    }
 
     function setDebugMessage(message) {
         debugData.replaceChildren();
@@ -324,59 +300,20 @@
         return select;
     }
 
-    function lineNavigationType(lineEl) {
-        if (lineEl.dataset.templateNav) {
-            return lineEl.dataset.templateNav;
-        }
-
-        const text = lineEl.textContent || '';
-        if (/\{%\s*include\b/.test(text)) {
-            return 'include';
-        }
-        if (/\{%\s*catinclude\b/.test(text)) {
-            return 'include';
-        }
-        if (/\{%\s*extends\b/.test(text)) {
-            return 'extends';
-        }
-        if (/\{%\s*overrules\b/.test(text)) {
-            return 'overrules';
-        }
-        return '';
-    }
-
     function injectTemplateNavigation() {
         templateParentsSelect.addEventListener('focus', () => loadParentTemplates(templateParentsSelect));
         templateParentsSelect.addEventListener('pointerdown', () => loadParentTemplates(templateParentsSelect));
         templateParentsSelect.addEventListener('change', () => navigateToTemplate(templateParentsSelect.value));
 
         const navAnchors = document.querySelectorAll('.template-compiler-nav-anchor[data-template-nav-enabled="1"]');
-        if (navAnchors.length > 0) {
-            navAnchors.forEach((anchorEl) => {
-                if (anchorEl.querySelector('.template-debug-line-nav')) {
-                    return;
-                }
-                createTemplatePointSelect(anchorEl, {
-                    line: anchorEl.dataset.line || '',
-                    column: anchorEl.dataset.column || '',
-                    type: anchorEl.dataset.templateNav || ''
-                });
-            });
-            return;
-        }
-
-        document.querySelectorAll('.template-compiler-line').forEach((lineEl) => {
-            const type = lineNavigationType(lineEl);
-            if (!type) {
+        navAnchors.forEach((anchorEl) => {
+            if (anchorEl.querySelector('.template-debug-line-nav')) {
                 return;
             }
-            if (lineEl.querySelector('.template-debug-line-nav')) {
-                return;
-            }
-            createTemplatePointSelect(lineEl, {
-                line: lineEl.dataset.line || '',
-                column: '',
-                type: type
+            createTemplatePointSelect(anchorEl, {
+                line: anchorEl.dataset.line || '',
+                column: anchorEl.dataset.column || '',
+                type: anchorEl.dataset.templateNav || ''
             });
         });
     }
@@ -766,6 +703,7 @@
         });
     });
 
+    ensureDevelopmentCss();
     injectTemplateNavigation();
 
     cotonic.broker.subscribe(
