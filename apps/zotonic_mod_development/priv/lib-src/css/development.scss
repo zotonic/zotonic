@@ -82,7 +82,7 @@ body:has(.development-template-overlay) {
 
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 8px;
 
             overflow: hidden;
             white-space: nowrap;
@@ -102,8 +102,13 @@ body:has(.development-template-overlay) {
             }
 
             .template-debug-nav {
-                flex: 0 0 260px;
-                max-width: 260px;
+                order: 1;
+                flex: 0 0 180px;
+                max-width: 180px;
+            }
+
+            .template-debug-filename-path {
+                order: 2;
             }
         }
 
@@ -153,7 +158,7 @@ body:has(.development-template-overlay) {
                 padding: 10px;
             }
 
-            summary {
+            > details > summary {
                 color: white;
                 background-color: black;
                 padding: 2px 8px;
@@ -249,16 +254,16 @@ body:has(.development-template-overlay) {
         .template-debug-line-nav {
             min-width: 0;
             font-family: monospace;
-            font-size: 11px;
+            font-size: 10px;
             line-height: 1.2;
-            height: 24px;
-            padding: 1px 6px;
+            height: 20px;
+            padding: 0 4px;
         }
 
         .template-debug-line-nav {
-            margin-left: 8px;
-            width: 230px;
-            max-width: calc(100% - 24px);
+            margin-left: 6px;
+            width: 170px;
+            max-width: calc(100% - 16px);
             vertical-align: middle;
         }
     }

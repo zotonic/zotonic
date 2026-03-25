@@ -1,11 +1,11 @@
 <div class="template-debug">
     <div class="template-debug-filename">
-        <div class="template-debug-filename-path">
-            <tt>{{ template_file|escape }}</tt>
-        </div>
         <select id="template-debug-parents" class="form-control input-sm template-debug-nav">
             <option value="">{_ Included by... _}</option>
         </select>
+        <div class="template-debug-filename-path">
+            <tt>{{ template_file|escape }}</tt>
+        </div>
     </div>
     <div class="template-debug-source">
         {{ template_html }}
@@ -286,6 +286,13 @@
         }, 0);
     }
 
+    function refreshTemplatesOnClick(select, loadFn) {
+        const refresh = () => loadFn(select);
+        select.addEventListener('focus', refresh);
+        select.addEventListener('pointerdown', refresh);
+        select.addEventListener('mousedown', refresh);
+    }
+
     function createTemplatePointSelect(target, options = {}) {
         const select = document.createElement('select');
         select.className = 'form-control input-sm template-debug-line-nav';
@@ -293,16 +300,14 @@
         select.dataset.column = options.column || '';
         select.dataset.type = options.type || '';
         resetTemplateSelect(select, '{_ Open included template... _}');
-        select.addEventListener('focus', () => loadChildTemplates(select));
-        select.addEventListener('pointerdown', () => loadChildTemplates(select));
+        refreshTemplatesOnClick(select, loadChildTemplates);
         select.addEventListener('change', () => navigateToTemplate(select.value));
         target.appendChild(select);
         return select;
     }
 
     function injectTemplateNavigation() {
-        templateParentsSelect.addEventListener('focus', () => loadParentTemplates(templateParentsSelect));
-        templateParentsSelect.addEventListener('pointerdown', () => loadParentTemplates(templateParentsSelect));
+        refreshTemplatesOnClick(templateParentsSelect, loadParentTemplates);
         templateParentsSelect.addEventListener('change', () => navigateToTemplate(templateParentsSelect.value));
 
         const navAnchors = document.querySelectorAll('.template-compiler-nav-anchor[data-template-nav-enabled="1"]');
