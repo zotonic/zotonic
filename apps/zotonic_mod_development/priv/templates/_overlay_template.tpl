@@ -233,8 +233,30 @@
         }
 
         applySavedSplit();
-        window.addEventListener('resize', applySavedSplit);
 
+        // Keep a reference to the resize handler so we can remove it on overlay close.
+        const onResize = () => {
+            applySavedSplit();
+        };
+        window.addEventListener('resize', onResize);
+
+        // Cleanup function to remove global listeners when the overlay closes.
+        const cleanup = () => {
+            window.removeEventListener('resize', onResize);
+            window.removeEventListener('unload', cleanup);
+        };
+
+        // Remove the resize listener when the overlay is closed.
+        const overlayElement = templateDebug.closest('.modal-overlay');
+        if (overlayElement) {
+            const closeButtons = overlayElement.querySelectorAll('.modal-overlay-close');
+            closeButtons.forEach((btn) => {
+                btn.addEventListener('click', cleanup, { once: true });
+            });
+        }
+
+        // Also ensure cleanup on page unload as a safety net.
+        window.addEventListener('unload', cleanup, { once: true });
         templateSplitter.addEventListener('pointerdown', (event) => {
             event.preventDefault();
             const rect = templateDebug.getBoundingClientRect();
