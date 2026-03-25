@@ -9,7 +9,7 @@
     <div class="template-debug-source">
         {{ template_html }}
     </div>
-    <div id="template-debug-splitter" class="template-debug-splitter" aria-hidden="true"></div>
+    <div id="template-debug-splitter" class="template-debug-splitter" role="separator" aria-orientation="vertical"></div>
     <div class="template-debug-data" id="overlay-development_debug">
         <div class="alert alert-info" style="display: none">
             {_ Maximum tracing time reached, debugging stopped. _}
