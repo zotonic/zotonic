@@ -137,7 +137,12 @@
             return false;
         }
 
-        const collapsed = decodeURIComponent(segments.slice(libIndex + 1).join('/'));
+        let collapsed;
+        try {
+            collapsed = decodeURIComponent(segments.slice(libIndex + 1).join('/'));
+        } catch (_) {
+            return false;
+        }
         return uncollapseLibPath(collapsed).some((file) => file.replace(/^\//, '') === targetFile);
     }
 
