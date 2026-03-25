@@ -1,6 +1,11 @@
 <div class="template-debug">
     <div class="template-debug-filename">
-        <tt>{{ template_file|escape }}</tt>
+        <div class="template-debug-filename-path">
+            <tt>{{ template_file|escape }}</tt>
+        </div>
+        <select id="template-debug-parents" class="form-control input-sm template-debug-nav">
+            <option value="">{_ Included by... _}</option>
+        </select>
     </div>
     <div class="template-debug-source">
         {{ template_html }}
@@ -46,6 +51,47 @@
         font-family: monospace;
         font-size: 12px;
         line-height: 1.45;
+    }
+
+    .template-debug-filename {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .template-debug-filename-path {
+        flex: 1 1 auto;
+        min-width: 0;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .template-debug-nav,
+    .template-debug-line-nav {
+        min-width: 0;
+        font-family: monospace;
+        font-size: 11px;
+        line-height: 1.2;
+        height: 24px;
+        padding: 1px 6px;
+    }
+
+    .template-debug-nav {
+        flex: 0 0 260px;
+        max-width: 260px;
+    }
+
+    .template-debug-line-nav {
+        margin-left: 8px;
+        width: 230px;
+        max-width: calc(100% - 24px);
+        vertical-align: middle;
+    }
+
+    .template-compiler-nav-anchor {
+        display: inline-block;
+        vertical-align: middle;
     }
 
     .template-debug-value details {
@@ -116,6 +162,10 @@
         postback={template_debug_enable template=template_file}
         delegate=`mod_development`
 %}
+{% wire name="template_view"
+        postback={template_view}
+        delegate=`mod_development`
+%}
 
 {% javascript %}
     let is_debug_trace_enabled = false;
@@ -125,6 +175,8 @@
     const debugRestartButton = document.getElementById('template-debug-restart');
     const debugStartButton = document.getElementById('template-debug-start');
     const debugAlert = overlayDebug.querySelector(':scope > .alert');
+    const currentTemplateFile = '{{ template_file|escapejs }}';
+    const templateParentsSelect = document.getElementById('template-debug-parents');
 
     function setDebugMessage(message) {
         debugData.replaceChildren();
@@ -158,6 +210,175 @@
         }
         document.querySelectorAll(`.template-compiler-line[data-line="${line}"]`)
             .forEach((lineEl) => lineEl.classList.add('highlighted'));
+    }
+
+    function resetTemplateSelect(select, placeholder) {
+        select.replaceChildren();
+        const option = document.createElement('option');
+        option.value = '';
+        option.textContent = placeholder;
+        select.appendChild(option);
+        select.value = '';
+    }
+
+    function setTemplateOptions(select, placeholder, templates) {
+        resetTemplateSelect(select, placeholder);
+        templates.forEach((templateInfo) => {
+            const option = document.createElement('option');
+            option.value = templateInfo.template;
+            option.textContent = templateInfo.module
+                ? `${templateInfo.name} (${templateInfo.module})`
+                : templateInfo.name;
+            option.dataset.templatePath = templateInfo.template;
+            select.appendChild(option);
+        });
+        select.disabled = false;
+    }
+
+    function templateCall(topic, payload) {
+        return cotonic.broker.call(topic, payload).then((msg) => msg.payload.result || []);
+    }
+
+    function loadParentTemplates(select) {
+        if (select.dataset.loading === '1') {
+            return;
+        }
+
+        select.dataset.loading = '1';
+        select.disabled = true;
+        resetTemplateSelect(select, '{_ Loading... _}');
+        templateCall(
+            'bridge/origin/model/development/get/template_trace_parents',
+            { template: currentTemplateFile }
+        ).then((templates) => {
+            setTemplateOptions(select, '{_ Included by... _}', templates);
+            if (templates.length === 0) {
+                resetTemplateSelect(select, '{_ No traced parent templates _}');
+            }
+        }).catch(() => {
+            resetTemplateSelect(select, '{_ Could not load templates _}');
+            select.disabled = false;
+        }).finally(() => {
+            delete select.dataset.loading;
+        });
+    }
+
+    function loadChildTemplates(select) {
+        if (select.dataset.loading === '1') {
+            return;
+        }
+
+        const line = Number.parseInt(select.dataset.line || '', 10);
+        const column = Number.parseInt(select.dataset.column || '', 10);
+        const type = select.dataset.type || '';
+        select.dataset.loading = '1';
+        select.disabled = true;
+        resetTemplateSelect(select, '{_ Loading... _}');
+        templateCall(
+            'bridge/origin/model/development/get/template_trace_children',
+            {
+                template: currentTemplateFile,
+                line: Number.isInteger(line) ? line : 0,
+                column: Number.isInteger(column) ? column : 0,
+                type: type
+            }
+        ).then((templates) => {
+            setTemplateOptions(select, '{_ Open included template... _}', templates);
+            if (templates.length === 0) {
+                resetTemplateSelect(select, '{_ No traced templates on this point _}');
+            }
+        }).catch(() => {
+            resetTemplateSelect(select, '{_ Could not load templates _}');
+            select.disabled = false;
+        }).finally(() => {
+            delete select.dataset.loading;
+        });
+    }
+
+    function navigateToTemplate(templatePath) {
+        if (!templatePath || templatePath === currentTemplateFile) {
+            return;
+        }
+
+        const overlay = overlayDebug.closest('.modal-overlay');
+        const closeButton = overlay ? overlay.querySelector('.modal-overlay-close') : null;
+        if (closeButton) {
+            closeButton.click();
+        }
+        window.setTimeout(() => {
+            z_event('template_view', { template: templatePath });
+        }, 0);
+    }
+
+    function createTemplatePointSelect(target, options = {}) {
+        const select = document.createElement('select');
+        select.className = 'form-control input-sm template-debug-line-nav';
+        select.dataset.line = options.line || '';
+        select.dataset.column = options.column || '';
+        select.dataset.type = options.type || '';
+        resetTemplateSelect(select, '{_ Open included template... _}');
+        select.addEventListener('focus', () => loadChildTemplates(select));
+        select.addEventListener('pointerdown', () => loadChildTemplates(select));
+        select.addEventListener('change', () => navigateToTemplate(select.value));
+        target.appendChild(select);
+        return select;
+    }
+
+    function lineNavigationType(lineEl) {
+        if (lineEl.dataset.templateNav) {
+            return lineEl.dataset.templateNav;
+        }
+
+        const text = lineEl.textContent || '';
+        if (/\{%\s*include\b/.test(text)) {
+            return 'include';
+        }
+        if (/\{%\s*catinclude\b/.test(text)) {
+            return 'include';
+        }
+        if (/\{%\s*extends\b/.test(text)) {
+            return 'extends';
+        }
+        if (/\{%\s*overrules\b/.test(text)) {
+            return 'overrules';
+        }
+        return '';
+    }
+
+    function injectTemplateNavigation() {
+        templateParentsSelect.addEventListener('focus', () => loadParentTemplates(templateParentsSelect));
+        templateParentsSelect.addEventListener('pointerdown', () => loadParentTemplates(templateParentsSelect));
+        templateParentsSelect.addEventListener('change', () => navigateToTemplate(templateParentsSelect.value));
+
+        const navAnchors = document.querySelectorAll('.template-compiler-nav-anchor[data-template-nav-enabled="1"]');
+        if (navAnchors.length > 0) {
+            navAnchors.forEach((anchorEl) => {
+                if (anchorEl.querySelector('.template-debug-line-nav')) {
+                    return;
+                }
+                createTemplatePointSelect(anchorEl, {
+                    line: anchorEl.dataset.line || '',
+                    column: anchorEl.dataset.column || '',
+                    type: anchorEl.dataset.templateNav || ''
+                });
+            });
+            return;
+        }
+
+        document.querySelectorAll('.template-compiler-line').forEach((lineEl) => {
+            const type = lineNavigationType(lineEl);
+            if (!type) {
+                return;
+            }
+            if (lineEl.querySelector('.template-debug-line-nav')) {
+                return;
+            }
+            createTemplatePointSelect(lineEl, {
+                line: lineEl.dataset.line || '',
+                column: '',
+                type: type
+            });
+        });
     }
 
     function termText(text, className) {
@@ -544,6 +765,8 @@
             }
         });
     });
+
+    injectTemplateNavigation();
 
     cotonic.broker.subscribe(
         "bridge/origin/model/development/event/template/debug",
