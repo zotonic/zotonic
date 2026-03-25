@@ -1261,13 +1261,19 @@ map_dispatch_template_opts(Opts) ->
         Opts).
 
 map_dispatch_template_option({cat, Template}) ->
-    {cat, unicode:characters_to_binary(Template, utf8)};
+    {cat, maybe_encode_template(Template)};
 map_dispatch_template_option(Template) when is_list(Template) ->
-    unicode:characters_to_binary(Template, utf8);
+    maybe_encode_template(Template);
 map_dispatch_template_option(Template) ->
     Template.
 
-
+maybe_encode_template(Template) ->
+    try
+        unicode:characters_to_binary(Template)
+    catch
+        _:_ ->
+            Template
+    end.
 % @doc Split the optional port number from the host name
 split_host(undefined) -> {<<>>, 80};
 split_host(none) -> {<<>>, 80};
