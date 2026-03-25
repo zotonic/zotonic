@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-03-24 15:33\n"
+"PO-Revision-Date: 2026-03-25 13:01\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -1235,6 +1235,7 @@ msgstr "Tersedia"
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:170
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:18
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:40
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:3
 #: zotonic_mod_survey/priv/templates/_survey_end.tpl:28
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:22
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:23
@@ -7184,8 +7185,8 @@ msgstr "Binding"
 msgid "Calculate and visualize a dependency graph of all templates."
 msgstr "Hitung dan visualisasikan grafik ketergantungan semua templat."
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:38
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:68
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:42
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:759
 msgid "Check debug points in the template source to see debug data here."
 msgstr ""
 
@@ -7202,7 +7203,12 @@ msgstr "Hapus data dan mulai"
 msgid "Clear data and trace all"
 msgstr "Hapus data dan lacak semuanya"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:12
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:386
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:395
+msgid "Click to load templates"
+msgstr ""
+
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:16
 msgid "Click to restart"
 msgstr ""
 
@@ -7236,6 +7242,11 @@ msgstr "Tidak dapat menyalin file titik ke papan klip."
 msgid "Could not fetch tracer output, please try again."
 msgstr "Tidak dapat mengambil keluaran pelacak, harap coba lagi."
 
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:293
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:324
+msgid "Could not load templates"
+msgstr ""
+
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:8
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:12
 msgid "Cross-reference check of all templates"
@@ -7249,11 +7260,11 @@ msgstr "Pemeriksaan referensi silang terhadap templat"
 msgid "Cross-reference check results"
 msgstr "Hasil pemeriksaan referensi silang"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:18
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:22
 msgid "Debug all sessions"
 msgstr ""
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:23
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:27
 msgid "Debugging all sessions can result in a large amount of debug data."
 msgstr ""
 
@@ -7279,7 +7290,7 @@ msgid "Dependency graph of all traced templates. All includes are shown."
 msgstr "Grafik ketergantungan semua templat yang dilacak. Semua termasuk ditampilkan."
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:7
-#: zotonic_mod_development/src/mod_development.erl:1129
+#: zotonic_mod_development/src/mod_development.erl:1135
 msgid "Development"
 msgstr "Pengembangan"
 
@@ -7405,6 +7416,10 @@ msgstr "Grafik semua dependensi template"
 msgid "Hostalias"
 msgstr "Hostali"
 
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:393
+msgid "Included by"
+msgstr ""
+
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:63
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:125
 msgid "Included template"
@@ -7445,6 +7460,8 @@ msgstr "Penelusuran langsung panggilan fungsi pada server."
 msgid "Loading and displaying the trace for:"
 msgstr ""
 
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:286
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:312
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:76
 msgid "Loading..."
 msgstr "Memuat..."
@@ -7462,7 +7479,7 @@ msgstr "Masuk sebagai admin untuk mengaktifkan masuk ke konsol javascript."
 msgid "Match a request URL, display matched dispatch rule."
 msgstr "Sesuai permintaan URL, tampilan sesuai aturan pengiriman."
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:10
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:14
 msgid "Maximum tracing time reached, debugging stopped."
 msgstr ""
 
@@ -7515,6 +7532,14 @@ msgstr "Tidak ada izin untuk menggunakan mod_development."
 msgid "No template found in the context."
 msgstr ""
 
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:291
+msgid "No traced parent templates"
+msgstr ""
+
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:322
+msgid "No traced templates on this point"
+msgstr ""
+
 #: zotonic_mod_development/priv/templates/_development_template.tpl:20
 msgid "Not found"
 msgstr "Tidak ditemukan"
@@ -7532,6 +7557,10 @@ msgstr "Hanya pengguna admin yang dapat mengatur jejak."
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:51
 msgid "Only the admin user can use function call tracing."
 msgstr "Hanya pengguna admin yang dapat menggunakan penelusuran panggilan fungsi."
+
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:381
+msgid "Open included template"
+msgstr ""
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:163
 msgid "Optional category for catinclude"
@@ -7554,11 +7583,11 @@ msgstr "Pengalihan"
 msgid "Refresh"
 msgstr "Menyegarkan"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:28
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:32
 msgid "Reload the page"
 msgstr ""
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:31
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:35
 msgid "Reload the page that we are tracing to see the debug data."
 msgstr ""
 
@@ -7767,7 +7796,7 @@ msgstr "Tipe {include}"
 msgid "URI Pattern"
 msgstr "Pola URI"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:22
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:26
 msgid "Uncheck to debug only your current session."
 msgstr ""
 
@@ -7792,7 +7821,7 @@ msgstr "Lihat semua aturan pengiriman yang tersedia di situs"
 msgid "View template"
 msgstr ""
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:70
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:761
 msgid "Waiting for debug data..."
 msgstr ""
 
