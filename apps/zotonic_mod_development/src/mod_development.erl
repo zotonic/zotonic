@@ -1030,10 +1030,12 @@ do_template_trace(Template, {From, 0, _Col}, Trace) ->
         from => ToId,
         to => FromId,
         module => maps:get(module, FromNode),
-        type => Type
+        type => Type,
+        line => 0,
+        column => 0
     },
     add_edge(Edge, Trace2);
-do_template_trace(Template, {From, _Line, _Col}, Trace) ->
+do_template_trace(Template, {From, Line, Col}, Trace) ->
     % Include
     {FromId, Trace1, FromNode} = add_template_node(From, Trace, normal),
     {ToId, Trace2, _} = add_template_node(Template, Trace1, normal),
@@ -1041,7 +1043,9 @@ do_template_trace(Template, {From, _Line, _Col}, Trace) ->
         from => FromId,
         to => ToId,
         module => maps:get(module, FromNode),
-        type => include
+        type => include,
+        line => Line,
+        column => Col
     },
     add_edge(Edge, Trace2).
 
@@ -1051,7 +1055,9 @@ add_edge(Edge, #{ edges := Edges } = Trace) ->
         to := ToId,
         type := Type
     } = Edge,
-    Key = {FromId, ToId, Type},
+    Line = maps:get(line, Edge, 0),
+    Col = maps:get(column, Edge, 0),
+    Key = {FromId, ToId, Type, Line, Col},
     case maps:is_key(Key, Edges) of
         false ->
             Edges1 = Edges#{

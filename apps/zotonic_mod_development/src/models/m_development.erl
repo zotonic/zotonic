@@ -36,6 +36,8 @@ Available Model API Paths
 | `get` | `/reindex/...` | Return config flag controlling whether reindex action is enabled. |
 | `get` | `/dispatch_info/...` | Return dispatch rule info/inspection data for development diagnostics. |
 | `get` | `/show_trace_button/...` | Check if the trace button for debugging templates can be shown. |
+| `get` | `/template_trace_parents/...` | Return traced templates that include/extend/overrule a template. |
+| `get` | `/template_trace_children/...` | Return traced templates included from a template source location. |
 
 `/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
@@ -156,8 +158,129 @@ m_get([ <<"dispatch_info">> | Rest ], _Msg, Context) ->
         false ->
             {error, eacces}
     end;
+m_get([ <<"template_trace_parents">> | Rest ], Msg, Context) ->
+    template_trace_relations(incoming, Rest, Msg, Context);
+m_get([ <<"template_trace_children">> | Rest ], Msg, Context) ->
+    template_trace_relations(outgoing, Rest, Msg, Context);
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
+
+template_trace_relations(Direction, Rest, Msg, Context) ->
+    case z_acl:is_allowed(use, mod_development, Context) of
+        true ->
+            Payload = case Msg of
+                #{ payload := P } when is_map(P) -> P;
+                _ -> #{}
+            end,
+            case maps:get(<<"template">>, Payload, undefined) of
+                Template when is_binary(Template) ->
+                    {ok, Trace} = mod_development:template_trace_fetch(Context),
+                    Graph = maps:get(graph, Trace, #{}),
+                    Result = trace_relations(Direction, Template, Payload, Graph),
+                    {ok, {Result, Rest}};
+                _ ->
+                    {error, missing_arg}
+            end;
+        false ->
+            {error, eacces}
+    end.
+
+trace_relations(Direction, Template, Payload, Graph) ->
+    Nodes = maps:get(nodes, Graph, []),
+    Edges = maps:get(edges, Graph, []),
+    NodeMap = maps:from_list([ {maps:get(id, N), N} || N <- Nodes ]),
+    case find_trace_node(Template, Nodes) of
+        undefined ->
+            [];
+        #{ id := NodeId } ->
+            FilterLine = maps:get(<<"line">>, Payload, undefined),
+            FilterColumn = maps:get(<<"column">>, Payload, undefined),
+            FilterType = maps:get(<<"type">>, Payload, undefined),
+            Relations = lists:filtermap(
+                fun(E) ->
+                    relation(Direction, NodeId, Template, FilterLine, FilterColumn, FilterType, E, NodeMap)
+                end,
+                Edges),
+            unique_relations(Relations)
+    end.
+
+find_trace_node(Template, Nodes) ->
+    case lists:search(
+        fun(#{ filepath := Path }) -> Path =:= Template end,
+        Nodes)
+    of
+        {value, Node} -> Node;
+        false -> undefined
+    end.
+
+relation(incoming, NodeId, _Template, _FilterLine, _FilterColumn, _FilterType, #{ to := NodeId } = Edge, NodeMap) ->
+    edge_relation(from, Edge, NodeMap);
+relation(outgoing, NodeId, _Template, FilterLine, FilterColumn, FilterType, #{ from := NodeId } = Edge, NodeMap) ->
+    case edge_matches(Edge, FilterLine, FilterColumn, FilterType) of
+        true -> edge_relation(to, Edge, NodeMap);
+        false -> false
+    end;
+relation(_, _NodeId, _Template, _FilterLine, _FilterColumn, _FilterType, _Edge, _NodeMap) ->
+    false.
+
+edge_matches(Edge, undefined, undefined, undefined) ->
+    maps:get(type, Edge, undefined) =/= undefined;
+edge_matches(Edge, FilterLine, FilterColumn, FilterType) ->
+    EdgeType = maps:get(type, Edge),
+    {LineMatch, ColumnMatch} = case EdgeType of
+        include ->
+            {
+                case FilterLine of
+                    undefined -> true;
+                    Line -> maps:get(line, Edge, 0) =:= z_convert:to_integer(Line)
+                end,
+                case FilterColumn of
+                    undefined -> true;
+                    Column -> maps:get(column, Edge, 0) =:= z_convert:to_integer(Column)
+                end
+            };
+        _ ->
+            {true, true}
+    end,
+    TypeMatch = case FilterType of
+        undefined -> true;
+        TypeBin -> atom_to_binary(EdgeType, utf8) =:= TypeBin
+    end,
+    LineMatch andalso ColumnMatch andalso TypeMatch.
+
+edge_relation(NodeKey, Edge, NodeMap) ->
+    NodeId = maps:get(NodeKey, Edge),
+    case maps:get(NodeId, NodeMap, undefined) of
+        undefined ->
+            false;
+        Node ->
+            {true, #{
+                template => maps:get(filepath, Node),
+                module => maps:get(module, Node, <<>>),
+                name => maps:get(template, Node, <<>>),
+                type => atom_to_binary(maps:get(type, Edge), utf8),
+                line => maps:get(line, Edge, 0),
+                column => maps:get(column, Edge, 0)
+            }}
+    end.
+
+unique_relations(Relations) ->
+    {Unique, _Seen} = lists:foldl(
+        fun(#{ template := Template } = Relation, {Acc, Seen}) ->
+            case maps:is_key(Template, Seen) of
+                true ->
+                    {Acc, Seen};
+                false ->
+                    {[Relation | Acc], Seen#{ Template => true }}
+            end
+        end,
+        {[], #{}},
+        lists:sort(fun relation_sort/2, Relations)),
+    lists:reverse(Unique).
+
+relation_sort(A, B) ->
+    {maps:get(module, A), maps:get(name, A), maps:get(template, A)} =<
+        {maps:get(module, B), maps:get(name, B), maps:get(template, B)}.
 
 
 to_atom(A) when is_atom(A) -> A;
@@ -280,5 +403,3 @@ concrete(Expr) ->
         z_convert:to_binary(
             io_lib:format("~p", [erl_syntax:concrete(Expr)])
         ) ).
-
-

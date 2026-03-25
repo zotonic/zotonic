@@ -80,14 +80,41 @@ body:has(.development-template-overlay) {
             grid-row: 1;
             grid-column: 1 / 3;
 
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            min-width: 0;
+            overflow: visible;
             padding: 4px 10px;
             font-size: 12px;
             font-family: monospace;
             background-color: black;
             color: white;
+
+            .template-debug-filename-path {
+                flex: 1 1 auto;
+                min-width: 0;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+
+            .template-debug-back {
+                order: 0;
+                flex: 0 0 28px;
+                max-width: 28px;
+            }
+
+            .template-debug-nav {
+                order: 1;
+                flex: 0 0 36px;
+                max-width: 36px;
+            }
+
+            .template-debug-filename-path {
+                order: 2;
+            }
         }
 
         .template-debug-source {
@@ -108,6 +135,12 @@ body:has(.development-template-overlay) {
 
             .template-compiler-line.highlighted {
                 background-color: rgba(255, 255, 0, 0.7);
+            }
+
+            .template-compiler-nav-anchor {
+                display: inline-block;
+                vertical-align: middle;
+                position: relative;
             }
         }
 
@@ -131,7 +164,7 @@ body:has(.development-template-overlay) {
                 padding: 10px;
             }
 
-            summary {
+            > details > summary {
                 color: white;
                 background-color: black;
                 padding: 2px 8px;
@@ -152,6 +185,186 @@ body:has(.development-template-overlay) {
                 padding: 0;
                 margin: 0;
             }
+
+            .template-debug-value {
+                font-family: monospace;
+                font-size: 12px;
+                line-height: 1.45;
+
+                details {
+                    margin: 0;
+                }
+
+                summary {
+                    cursor: pointer;
+                    list-style-position: inside;
+
+                    &::-webkit-details-marker {
+                        margin-right: 4px;
+                    }
+                }
+            }
+
+            .template-debug-term {
+                word-break: break-word;
+
+                &.is-atom,
+                &.is-number {
+                    color: #1a3d7c;
+                }
+
+                &.is-binary,
+                &.is-string {
+                    color: #0d6b3c;
+                }
+
+                &.is-tag,
+                &.is-punctuation,
+                &.is-key {
+                    color: #6a3fb0;
+                }
+
+                &.is-special {
+                    color: #a53a18;
+                }
+
+                &.is-null {
+                    color: #777;
+                    font-style: italic;
+                }
+            }
+
+            .template-debug-term-children {
+                margin-left: 18px;
+                padding: 6px 0 0;
+            }
+
+            .template-debug-term-row {
+                display: flex;
+                align-items: flex-start;
+                gap: 8px;
+                padding: 1px 0;
+            }
+
+            .template-debug-term-label {
+                flex: 0 0 auto;
+                color: #666;
+            }
+
+            .template-debug-term-value {
+                min-width: 0;
+            }
+        }
+
+        .template-debug-dropdown {
+            position: relative;
+            min-width: 0;
+            margin-right: 4px;
+
+            &.is-open {
+                .template-debug-dropdown-menu {
+                    display: block;
+                }
+            }
+        }
+
+        .template-debug-nav,
+        .template-debug-line-nav,
+        .template-debug-back {
+            min-width: 0;
+        }
+
+        .template-debug-dropdown-toggle,
+        .template-debug-back {
+            min-width: 0;
+            width: 100%;
+            font-family: monospace;
+            font-size: 10px;
+            line-height: 1.2;
+            height: 20px;
+            padding: 0 14px 0 4px;
+            border: 1px solid #777;
+            border-radius: 3px;
+            background: #fff;
+            color: #111;
+            text-align: left;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            position: relative;
+        }
+
+        .template-debug-back {
+            text-align: center;
+            padding: 0 4px;
+
+            &:disabled {
+                color: #999;
+                cursor: default;
+            }
+        }
+
+        .template-debug-dropdown-toggle {
+            &:after {
+                content: "▾";
+                position: absolute;
+                right: 4px;
+                top: 2px;
+                color: #666;
+                pointer-events: none;
+            }
+        }
+
+        .template-debug-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: calc(100% + 2px);
+            left: 0;
+            z-index: 20;
+            min-width: 170px;
+            max-width: 320px;
+            max-height: 260px;
+            overflow: auto;
+            padding: 3px 0;
+            background: #fff;
+            border: 1px solid #777;
+            border-radius: 3px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+        }
+
+        .template-debug-dropdown-item,
+        .template-debug-dropdown-empty {
+            display: block;
+            width: 100%;
+            padding: 3px 6px;
+            font-family: monospace;
+            font-size: 10px;
+            line-height: 1.35;
+            text-align: left;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .template-debug-dropdown-item {
+            border: 0;
+            background: transparent;
+            color: #111;
+
+            &:hover {
+                background: #e8eefc;
+            }
+        }
+
+        .template-debug-dropdown-empty {
+            color: #666;
+        }
+
+        .template-debug-line-nav {
+            margin-left: 6px;
+            width: 34px;
+            max-width: 34px;
+            vertical-align: middle;
         }
     }
 }
