@@ -9,6 +9,7 @@
     <div class="template-debug-source">
         {{ template_html }}
     </div>
+    <div id="template-debug-splitter" class="template-debug-splitter" aria-hidden="true"></div>
     <div class="template-debug-data" id="overlay-development_debug">
         <div class="alert alert-info" style="display: none">
             {_ Maximum tracing time reached, debugging stopped. _}
@@ -56,7 +57,9 @@
 
 {% javascript %}
     let is_debug_trace_enabled = false;
+    const templateDebug = document.querySelector('.template-debug');
     const overlayDebug = document.getElementById('overlay-development_debug');
+    const templateSplitter = document.getElementById('template-debug-splitter');
     const debugData = document.getElementById('template-debug-data');
     const debugRestart = document.getElementById('overlay-development_trace-restart');
     const debugRestartButton = document.getElementById('template-debug-restart');
@@ -69,6 +72,9 @@
     const developmentCssFile = 'css/development.css';
     const overlayHistoryState = window.__zTemplateOverlayHistoryState || (window.__zTemplateOverlayHistoryState = {
         stack: []
+    });
+    const overlaySplitState = window.__zTemplateOverlaySplitState || (window.__zTemplateOverlaySplitState = {
+        leftWidth: undefined
     });
 
     function uncollapseLibPath(path) {
@@ -198,6 +204,61 @@
 
     function updateBackButton() {
         templateBackButton.disabled = overlayHistoryState.stack.length === 0;
+    }
+
+    function setSplitWidths(leftWidth, totalWidth) {
+        const splitterWidth = 8;
+        const minLeft = 260;
+        const minRight = 280;
+        const maxLeft = Math.max(minLeft, totalWidth - splitterWidth - minRight);
+        const clampedLeft = Math.min(Math.max(leftWidth, minLeft), maxLeft);
+        const rightWidth = totalWidth - splitterWidth - clampedLeft;
+        templateDebug.style.gridTemplateColumns = `${clampedLeft}px ${splitterWidth}px ${rightWidth}px`;
+        overlaySplitState.leftWidth = clampedLeft;
+    }
+
+    function applySavedSplit() {
+        if (!templateDebug || overlaySplitState.leftWidth === undefined) {
+            return;
+        }
+        const totalWidth = templateDebug.clientWidth;
+        if (totalWidth > 0) {
+            setSplitWidths(overlaySplitState.leftWidth, totalWidth);
+        }
+    }
+
+    function initSplitter() {
+        if (!templateSplitter || !templateDebug) {
+            return;
+        }
+
+        applySavedSplit();
+        window.addEventListener('resize', applySavedSplit);
+
+        templateSplitter.addEventListener('pointerdown', (event) => {
+            event.preventDefault();
+            const rect = templateDebug.getBoundingClientRect();
+            const totalWidth = rect.width;
+            const startLeft = overlaySplitState.leftWidth !== undefined
+                ? overlaySplitState.leftWidth
+                : templateDebug.querySelector('.template-debug-source').getBoundingClientRect().width;
+            const startX = event.clientX;
+
+            const onPointerMove = (moveEvent) => {
+                const delta = moveEvent.clientX - startX;
+                setSplitWidths(startLeft + delta, totalWidth);
+            };
+
+            const onPointerUp = () => {
+                document.body.classList.remove('template-debug-resizing');
+                window.removeEventListener('pointermove', onPointerMove);
+                window.removeEventListener('pointerup', onPointerUp);
+            };
+
+            document.body.classList.add('template-debug-resizing');
+            window.addEventListener('pointermove', onPointerMove);
+            window.addEventListener('pointerup', onPointerUp);
+        });
     }
 
     function createDropdown(label, title) {
@@ -804,6 +865,7 @@
     });
 
     ensureDevelopmentCss();
+    initSplitter();
     injectTemplateNavigation();
 
     cotonic.broker.subscribe(
