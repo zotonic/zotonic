@@ -1200,7 +1200,7 @@ collect_dispatchrules() ->
 collect_dispatchrules(Site) ->
     case fetch_dispatchinfo(Site) of
         {ok, DispatchInfo} ->
-            filter_rules(DispatchInfo, Site);
+            filter_rules(map_dispatch_templates(DispatchInfo), Site);
         {error, _} ->
             #site_dispatch_list{
                 site=Site,
@@ -1237,6 +1237,35 @@ fetch_dispatchinfo(SiteOrContext) ->
         {error, _} = Error ->
             Error
     end.
+
+map_dispatch_templates(#site_dispatch_list{
+        dispatch_list = DispatchList,
+        page_paths = PagePaths
+    } = DispatchInfo) ->
+    DispatchInfo#site_dispatch_list{
+        dispatch_list = [ map_dispatch_template_rule(R) || R <- DispatchList ],
+        page_paths = maps:map(fun(_K, R) -> map_dispatch_template_rule(R) end, PagePaths)
+    }.
+
+map_dispatch_template_rule({Name, Path, Controller, Opts}) ->
+    {Name, Path, Controller, map_dispatch_template_opts(Opts)}.
+
+map_dispatch_template_opts(Opts) ->
+    lists:map(
+        fun
+            ({template, Template}) ->
+                {template, map_dispatch_template_option(Template)};
+            (Opt) ->
+                Opt
+        end,
+        Opts).
+
+map_dispatch_template_option({cat, Template}) ->
+    {cat, unicode:characters_to_binary(Template, utf8)};
+map_dispatch_template_option(Template) when is_list(Template) ->
+    unicode:characters_to_binary(Template, utf8);
+map_dispatch_template_option(Template) ->
+    Template.
 
 
 % @doc Split the optional port number from the host name
@@ -1298,4 +1327,3 @@ add_port(https, Hostname, 443) ->
 add_port(_, Hostname, Port) ->
     PortBin = z_convert:to_binary(Port),
     <<Hostname/binary, $:, PortBin/binary>>.
-

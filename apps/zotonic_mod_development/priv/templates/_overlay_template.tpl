@@ -41,6 +41,77 @@
     </div>
 </div>
 
+<style nonce="{{ m.req.csp_nonce }}">
+    .template-debug-value {
+        font-family: monospace;
+        font-size: 12px;
+        line-height: 1.45;
+    }
+
+    .template-debug-value details {
+        margin: 0;
+    }
+
+    .template-debug-value summary {
+        cursor: pointer;
+        list-style-position: inside;
+    }
+
+    .template-debug-value summary::-webkit-details-marker {
+        margin-right: 4px;
+    }
+
+    .template-debug-term {
+        word-break: break-word;
+    }
+
+    .template-debug-term.is-atom,
+    .template-debug-term.is-number {
+        color: #1a3d7c;
+    }
+
+    .template-debug-term.is-binary,
+    .template-debug-term.is-string {
+        color: #0d6b3c;
+    }
+
+    .template-debug-term.is-tag,
+    .template-debug-term.is-punctuation,
+    .template-debug-term.is-key {
+        color: #6a3fb0;
+    }
+
+    .template-debug-term.is-special {
+        color: #a53a18;
+    }
+
+    .template-debug-term.is-null {
+        color: #777;
+        font-style: italic;
+    }
+
+    .template-debug-term-children {
+        margin-left: 18px;
+        padding: 6px 0 0;
+    }
+
+    .template-debug-term-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        padding: 1px 0;
+    }
+
+    .template-debug-term-label {
+        flex: 0 0 auto;
+        color: #666;
+    }
+
+    .template-debug-term-value {
+        min-width: 0;
+    }
+</style>
+
 {% wire name="template_debug_enable"
         postback={template_debug_enable template=template_file}
         delegate=`mod_development`
@@ -48,6 +119,327 @@
 
 {% javascript %}
     let is_debug_trace_enabled = false;
+
+    function termText(text, className) {
+        const span = document.createElement('span');
+        span.className = className ? `template-debug-term ${className}` : 'template-debug-term';
+        span.textContent = text;
+        return span;
+    }
+
+    function appendInline(target, pieces) {
+        pieces.forEach((piece) => {
+            if (piece instanceof Node) {
+                target.appendChild(piece);
+            } else {
+                target.appendChild(document.createTextNode(piece));
+            }
+        });
+    }
+
+    function objectKeys(value) {
+        return Object.keys(value || {}).filter((key) => key !== 'type');
+    }
+
+    function taggedType(value) {
+        return value && typeof value === 'object' && !Array.isArray(value) && typeof value.type === 'string'
+            ? value.type
+            : null;
+    }
+
+    function taggedValue(value, ...keys) {
+        for (const key of keys) {
+            if (value && Object.prototype.hasOwnProperty.call(value, key)) {
+                return value[key];
+            }
+        }
+        return undefined;
+    }
+
+    function isPrintableString(value) {
+        return typeof value === 'string' && /^[\u0020-\u007e]*$/.test(value);
+    }
+
+    function previewTerm(value, depth = 0) {
+        if (depth > 1) {
+            return '...';
+        }
+
+        const type = taggedType(value);
+        if (type) {
+            switch (type) {
+                case '_tuple': {
+                    const items = taggedValue(value, 'value', 'items', 'elements');
+                    const preview = Array.isArray(items)
+                        ? items.slice(0, 3).map((item) => previewTerm(item, depth + 1)).join(', ')
+                        : '';
+                    const suffix = Array.isArray(items) && items.length > 3 ? ', ...' : '';
+                    return `{${preview}${suffix}}`;
+                }
+                case '_atom':
+                    return String(taggedValue(value, 'value', 'atom', 'name') ?? 'undefined');
+                case '_binary': {
+                    const binaryValue = taggedValue(value, 'value', 'data');
+                    if (typeof binaryValue === 'string') {
+                        return isPrintableString(binaryValue)
+                            ? `<<"${binaryValue}">>`
+                            : `<<${binaryValue.length} bytes>>`;
+                    }
+                    return '<<...>>';
+                }
+                case '_record': {
+                    const name = taggedValue(value, 'name', 'record') ?? 'record';
+                    return `#${name}{...}`;
+                }
+                case '_map':
+                    return '#{...}';
+                case '_list':
+                    return '[...]';
+                case '_pid':
+                case '_port':
+                case '_reference':
+                case '_fun':
+                    return String(taggedValue(value, 'value', 'id', 'name') ?? type);
+                default:
+                    return `${type}(...)`;
+            }
+        }
+
+        if (Array.isArray(value)) {
+            const preview = value.slice(0, 3).map((item) => previewTerm(item, depth + 1)).join(', ');
+            return `[${preview}${value.length > 3 ? ', ...' : ''}]`;
+        }
+
+        if (value === null) {
+            return 'null';
+        }
+
+        switch (typeof value) {
+            case 'string':
+                return `"${value}"`;
+            case 'number':
+            case 'boolean':
+                return String(value);
+            case 'object': {
+                const keys = Object.keys(value);
+                const preview = keys.slice(0, 2).map((key) => `${key} => ${previewTerm(value[key], depth + 1)}`).join(', ');
+                return `#{${preview}${keys.length > 2 ? ', ...' : ''}}`;
+            }
+            default:
+                return String(value);
+        }
+    }
+
+    function renderPrimitive(value) {
+        if (value === null) {
+            return termText('null', 'is-null');
+        }
+        switch (typeof value) {
+            case 'string':
+                return termText(JSON.stringify(value), 'is-string');
+            case 'number':
+                return termText(String(value), 'is-number');
+            case 'boolean':
+                return termText(String(value), 'is-atom');
+            default:
+                return termText(String(value), 'is-special');
+        }
+    }
+
+    function renderRows(rows, separator) {
+        const container = document.createElement('div');
+        container.className = 'template-debug-term-children';
+
+        rows.forEach((row, index) => {
+            const rowEl = document.createElement('div');
+            rowEl.className = 'template-debug-term-row';
+
+            if (row.label !== null && row.label !== undefined) {
+                const label = document.createElement('span');
+                label.className = 'template-debug-term-label';
+                label.textContent = row.label;
+                rowEl.appendChild(label);
+            }
+
+            const valueEl = document.createElement('div');
+            valueEl.className = 'template-debug-term-value';
+            valueEl.appendChild(row.value);
+            rowEl.appendChild(valueEl);
+
+            if (separator && index < rows.length - 1) {
+                valueEl.appendChild(termText(separator, 'is-punctuation'));
+            }
+
+            container.appendChild(rowEl);
+        });
+
+        return container;
+    }
+
+    function renderCompound(summaryParts, rows, closingText, isOpen = false, separator = ',') {
+        const details = document.createElement('details');
+        details.className = 'template-debug-value';
+        details.open = isOpen;
+
+        const summary = document.createElement('summary');
+        appendInline(summary, summaryParts);
+        details.appendChild(summary);
+
+        if (rows.length) {
+            details.appendChild(renderRows(rows, separator));
+        }
+
+        const closing = document.createElement('div');
+        closing.className = 'template-debug-term-children';
+        closing.appendChild(termText(closingText, 'is-punctuation'));
+        details.appendChild(closing);
+
+        return details;
+    }
+
+    function renderTaggedTerm(value, depth) {
+        const type = taggedType(value);
+        switch (type) {
+            case '_tuple': {
+                const items = taggedValue(value, 'value', 'items', 'elements');
+                const rows = Array.isArray(items)
+                    ? items.map((item, index) => ({ label: `${index + 1}:`, value: renderTerm(item, depth + 1) }))
+                    : [];
+                return renderCompound(
+                    [ termText(previewTerm(value), 'is-special') ],
+                    rows,
+                    '}',
+                    depth < 1
+                );
+            }
+            case '_list': {
+                const items = taggedValue(value, 'value', 'items', 'elements');
+                const rows = Array.isArray(items)
+                    ? items.map((item, index) => ({ label: `${index + 1}:`, value: renderTerm(item, depth + 1) }))
+                    : [];
+                return renderCompound(
+                    [ termText(previewTerm(value), 'is-special') ],
+                    rows,
+                    ']',
+                    false
+                );
+            }
+            case '_map': {
+                const mapValue = taggedValue(value, 'value', 'map', 'entries');
+                if (Array.isArray(mapValue)) {
+                    const rows = mapValue.map((entry) => {
+                        const key = Array.isArray(entry) ? entry[0] : '?';
+                        const entryValue = Array.isArray(entry) ? entry[1] : entry;
+                        return { label: `${previewTerm(key)} =>`, value: renderTerm(entryValue, depth + 1) };
+                    });
+                    return renderCompound(
+                        [ termText(previewTerm(value), 'is-special') ],
+                        rows,
+                        '}',
+                        false
+                    );
+                }
+                return renderTerm(mapValue || {}, depth);
+            }
+            case '_record': {
+                const recordName = taggedValue(value, 'name', 'record') ?? 'record';
+                const fields = taggedValue(value, 'value', 'fields');
+                const rows = [];
+
+                if (fields && typeof fields === 'object' && !Array.isArray(fields)) {
+                    Object.entries(fields).forEach(([key, fieldValue]) => {
+                        rows.push({ label: `${key} =`, value: renderTerm(fieldValue, depth + 1) });
+                    });
+                } else {
+                    objectKeys(value).forEach((key) => {
+                        if (key !== 'name' && key !== 'record' && key !== 'value' && key !== 'fields') {
+                            rows.push({ label: `${key} =`, value: renderTerm(value[key], depth + 1) });
+                        }
+                    });
+                }
+
+                return renderCompound(
+                    [ termText(previewTerm(value), 'is-tag') ],
+                    rows,
+                    '}',
+                    false
+                );
+            }
+            case '_atom':
+                return termText(String(taggedValue(value, 'value', 'atom', 'name') ?? 'undefined'), 'is-atom');
+            case '_binary': {
+                const binaryValue = taggedValue(value, 'value', 'data');
+                if (typeof binaryValue === 'string') {
+                    return termText(
+                        isPrintableString(binaryValue)
+                            ? `<<"${binaryValue}">>`
+                            : `<<${binaryValue.length} bytes>>`,
+                        'is-binary'
+                    );
+                }
+                return termText('<<...>>', 'is-binary');
+            }
+            case '_pid':
+            case '_port':
+            case '_reference':
+            case '_fun':
+                return termText(String(taggedValue(value, 'value', 'id', 'name') ?? type), 'is-special');
+            default: {
+                const rows = objectKeys(value).map((key) => ({
+                    label: `${key}:`,
+                    value: renderTerm(value[key], depth + 1)
+                }));
+                return renderCompound(
+                    [ termText(previewTerm(value), 'is-tag') ],
+                    rows,
+                    ')',
+                    false
+                );
+            }
+        }
+    }
+
+    function renderObject(value, depth) {
+        const rows = Object.keys(value).map((key) => ({
+            label: `${key} =>`,
+            value: renderTerm(value[key], depth + 1)
+        }));
+
+        return renderCompound(
+            [ termText(previewTerm(value), 'is-special') ],
+            rows,
+            '}',
+            depth < 1
+        );
+    }
+
+    function renderArray(value, depth) {
+        const rows = value.map((item, index) => ({
+            label: `${index + 1}:`,
+            value: renderTerm(item, depth + 1)
+        }));
+
+        return renderCompound(
+            [ termText(previewTerm(value), 'is-special') ],
+            rows,
+            ']',
+            depth < 1
+        );
+    }
+
+    function renderTerm(value, depth = 0) {
+        const type = taggedType(value);
+        if (type) {
+            return renderTaggedTerm(value, depth);
+        }
+        if (Array.isArray(value)) {
+            return renderArray(value, depth);
+        }
+        if (value && typeof value === 'object') {
+            return renderObject(value, depth);
+        }
+        return renderPrimitive(value);
+    }
 
     if (typeof window.restartTemplateTrace == "function") {
         $('#overlay-development_trace-restart').show();
@@ -91,7 +483,7 @@
         }
     });
 
-    $('#template-debug-data').on("mouseenter mouseleave", "details", function(e) {
+    $('#template-debug-data').on("mouseenter mouseleave", "details[data-line]", function(e) {
         const line = $(this).data("line");
         $(".template-compiler-line").removeClass("highlighted");
         if (e.type === "mouseenter") {
@@ -107,31 +499,34 @@
                 case "data":
                     if (payload.filename == '{{ template_file|escapejs }}') {
                         const id = `template-data-${payload.line}-${payload.column}`;
-                        let html;
+                        let root = document.getElementById(id);
 
-                        if ($('#' + id).length == 0) {
-                            html = `<details id="${id}" data-line="${payload.line}">
-                                <summary>Line ${payload.line}:${payload.column}</summary>
-                            </details>`;
-                            $('#template-debug-data').append(html);
+                        if (!root) {
+                            root = document.createElement('details');
+                            root.id = id;
+                            root.dataset.line = payload.line;
+                            const summary = document.createElement('summary');
+                            summary.textContent = `Line ${payload.line}:${payload.column}`;
+                            root.appendChild(summary);
+                            document.getElementById('template-debug-data').appendChild(root);
                             $('#template-debug-data > .help-block').remove();
                         }
-                        const table = $('<table class="table table-striped"></table>');
-                        const tbody = $('<tbody></tbody>');
-                        for (const [key, value] of Object.entries(payload.data)) {
-                            const tr = $('<tr></tr>');
-                            const th = $('<th></th>');
-                            const td = $('<td></td>');
-                            const pre = $('<pre></pre>');
 
-                            th.text(key);
-                            pre.text(JSON.stringify(value, null, 2));
-                            td.append(pre);
+                        const table = document.createElement('table');
+                        table.className = 'table table-striped';
+                        const tbody = document.createElement('tbody');
+                        for (const [key, value] of Object.entries(payload.data)) {
+                            const tr = document.createElement('tr');
+                            const th = document.createElement('th');
+                            const td = document.createElement('td');
+
+                            th.textContent = key;
+                            td.appendChild(renderTerm(value));
                             tr.append(th, td);
-                            tbody.append(tr);
+                            tbody.appendChild(tr);
                         }
-                        table.append(tbody);
-                        $("#" + id).append(table);
+                        table.appendChild(tbody);
+                        root.appendChild(table);
                     }
                     break;
                 case "stop":
