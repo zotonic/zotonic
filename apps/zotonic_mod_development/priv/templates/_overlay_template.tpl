@@ -409,11 +409,14 @@
         });
     }
 
-    document.addEventListener('click', (event) => {
-        if (!event.target.closest('.template-debug-dropdown')) {
-            closeAllDropdowns(null);
-        }
-    });
+    const templateDebugRoot = document.querySelector('.template-debug');
+    if (templateDebugRoot) {
+        templateDebugRoot.addEventListener('click', (event) => {
+            if (!event.target.closest('.template-debug-dropdown')) {
+                closeAllDropdowns(null);
+            }
+        });
+    }
 
     function termText(text, className) {
         const span = document.createElement('span');
