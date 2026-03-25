@@ -159,7 +159,7 @@ m_get([ <<"dispatch_info">> | Rest ], _Msg, Context) ->
             {error, eacces}
     end;
 m_get([ <<"template_trace_parents">> | Rest ], Msg, Context) ->
-    template_trace_relations(incoming, Rest, Msg, Context);
+    template_trace_relations(parents, Rest, Msg, Context);
 m_get([ <<"template_trace_children">> | Rest ], Msg, Context) ->
     template_trace_relations(outgoing, Rest, Msg, Context);
 m_get(_Vs, _Msg, _Context) ->
@@ -196,13 +196,28 @@ trace_relations(Direction, Template, Payload, Graph) ->
             FilterLine = maps:get(<<"line">>, Payload, undefined),
             FilterColumn = maps:get(<<"column">>, Payload, undefined),
             FilterType = maps:get(<<"type">>, Payload, undefined),
-            Relations = lists:filtermap(
-                fun(E) ->
-                    relation(Direction, NodeId, Template, FilterLine, FilterColumn, FilterType, E, NodeMap)
-                end,
-                Edges),
+            Relations = relations(Direction, NodeId, Template, FilterLine, FilterColumn, FilterType, Edges, NodeMap),
             unique_relations(Relations)
     end.
+
+relations(parents, NodeId, Template, FilterLine, FilterColumn, FilterType, Edges, NodeMap) ->
+    Incoming = lists:filtermap(
+        fun(E) ->
+            relation(incoming, NodeId, Template, FilterLine, FilterColumn, FilterType, E, NodeMap)
+        end,
+        Edges),
+    SemanticParents = lists:filtermap(
+        fun(E) ->
+            parent_relation(NodeId, FilterType, E, NodeMap)
+        end,
+        Edges),
+    Incoming ++ SemanticParents;
+relations(Direction, NodeId, Template, FilterLine, FilterColumn, FilterType, Edges, NodeMap) ->
+    lists:filtermap(
+        fun(E) ->
+            relation(Direction, NodeId, Template, FilterLine, FilterColumn, FilterType, E, NodeMap)
+        end,
+        Edges).
 
 find_trace_node(Template, Nodes) ->
     case lists:search(
@@ -221,6 +236,23 @@ relation(outgoing, NodeId, _Template, FilterLine, FilterColumn, FilterType, #{ f
         false -> false
     end;
 relation(_, _NodeId, _Template, _FilterLine, _FilterColumn, _FilterType, _Edge, _NodeMap) ->
+    false.
+
+parent_relation(NodeId, FilterType, #{ from := NodeId } = Edge, NodeMap) ->
+    case maps:get(type, Edge) of
+        include ->
+            false;
+        EdgeType ->
+            TypeMatch = case FilterType of
+                undefined -> true;
+                TypeBin -> atom_to_binary(EdgeType, utf8) =:= TypeBin
+            end,
+            case TypeMatch of
+                true -> edge_relation(to, Edge, NodeMap);
+                false -> false
+            end
+    end;
+parent_relation(_NodeId, _FilterType, _Edge, _NodeMap) ->
     false.
 
 edge_matches(Edge, undefined, undefined, undefined) ->
