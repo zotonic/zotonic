@@ -1,8 +1,7 @@
 <div class="template-debug">
     <div class="template-debug-filename">
-        <select id="template-debug-parents" class="form-control input-sm template-debug-nav">
-            <option value="">{_ Included by... _}</option>
-        </select>
+        <button id="template-debug-back" type="button" class="template-debug-back" title="{_ Back _}" aria-label="{_ Back _}">←</button>
+        <div id="template-debug-parents" class="template-debug-dropdown template-debug-nav"></div>
         <div class="template-debug-filename-path">
             <tt>{{ template_file|escape }}</tt>
         </div>
@@ -64,9 +63,13 @@
     const debugStartButton = document.getElementById('template-debug-start');
     const debugAlert = overlayDebug.querySelector(':scope > .alert');
     const currentTemplateFile = '{{ template_file|escapejs }}';
-    const templateParentsSelect = document.getElementById('template-debug-parents');
+    const templateBackButton = document.getElementById('template-debug-back');
+    const templateParentsDropdown = document.getElementById('template-debug-parents');
     const developmentCssHref = '{% lib_url "css/development.css" %}';
     const developmentCssFile = 'css/development.css';
+    const overlayHistoryState = window.__zTemplateOverlayHistoryState || (window.__zTemplateOverlayHistoryState = {
+        stack: []
+    });
 
     function uncollapseLibPath(path) {
         if (!path) {
@@ -188,93 +191,150 @@
             .forEach((lineEl) => lineEl.classList.add('highlighted'));
     }
 
-    function resetTemplateSelect(select, placeholder) {
-        select.replaceChildren();
-        const option = document.createElement('option');
-        option.value = '';
-        option.textContent = placeholder;
-        select.appendChild(option);
-        select.value = '';
+    function updateBackButton() {
+        templateBackButton.disabled = overlayHistoryState.stack.length === 0;
     }
 
-    function setTemplateOptions(select, placeholder, templates) {
-        resetTemplateSelect(select, placeholder);
+    function createDropdown(label, title) {
+        const dropdown = document.createElement('div');
+        dropdown.className = 'template-debug-dropdown';
+        return initializeDropdown(dropdown, label, title);
+    }
+
+    function initializeDropdown(dropdown, label, title) {
+        dropdown.replaceChildren();
+
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'template-debug-dropdown-toggle';
+        button.textContent = label;
+        if (title) {
+            button.title = title;
+            button.setAttribute('aria-label', title);
+        }
+
+        const menu = document.createElement('div');
+        menu.className = 'template-debug-dropdown-menu';
+
+        dropdown.appendChild(button);
+        dropdown.appendChild(menu);
+        dropdown._button = button;
+        dropdown._menu = menu;
+        return dropdown;
+    }
+
+    function closeDropdown(dropdown) {
+        if (!dropdown) {
+            return;
+        }
+        dropdown.classList.remove('is-open');
+    }
+
+    function closeAllDropdowns(exceptDropdown) {
+        document.querySelectorAll('.template-debug-dropdown.is-open').forEach((dropdown) => {
+            if (dropdown !== exceptDropdown) {
+                closeDropdown(dropdown);
+            }
+        });
+    }
+
+    function setDropdownStatus(dropdown, label, className) {
+        dropdown._menu.replaceChildren();
+        const item = document.createElement('div');
+        item.className = className || 'template-debug-dropdown-empty';
+        item.textContent = label;
+        dropdown._menu.appendChild(item);
+    }
+
+    function setDropdownTemplates(dropdown, emptyLabel, templates) {
+        dropdown._menu.replaceChildren();
+        if (!templates.length) {
+            setDropdownStatus(dropdown, emptyLabel, 'template-debug-dropdown-empty');
+            return;
+        }
+
         templates.forEach((templateInfo) => {
-            const option = document.createElement('option');
-            option.value = templateInfo.template;
-            option.textContent = templateInfo.module
+            const item = document.createElement('button');
+            item.type = 'button';
+            item.className = 'template-debug-dropdown-item';
+            item.textContent = templateInfo.module
                 ? `${templateInfo.name} (${templateInfo.module})`
                 : templateInfo.name;
-            option.dataset.templatePath = templateInfo.template;
-            select.appendChild(option);
+            item.addEventListener('click', () => {
+                closeDropdown(dropdown);
+                navigateToTemplate(templateInfo.template);
+            });
+            dropdown._menu.appendChild(item);
         });
-        select.disabled = false;
     }
 
     function templateCall(topic, payload) {
         return cotonic.broker.call(topic, payload).then((msg) => msg.payload.result || []);
     }
 
-    function loadParentTemplates(select) {
-        if (select.dataset.loading === '1') {
+    function loadParentTemplates(dropdown) {
+        if (dropdown.dataset.loading === '1') {
             return;
         }
 
-        select.dataset.loading = '1';
-        select.disabled = true;
-        resetTemplateSelect(select, '{_ Loading... _}');
+        dropdown.dataset.loading = '1';
+        setDropdownStatus(dropdown, '{_ Loading... _}', 'template-debug-dropdown-empty');
         templateCall(
             'bridge/origin/model/development/get/template_trace_parents',
             { template: currentTemplateFile }
         ).then((templates) => {
-            setTemplateOptions(select, '{_ Included by... _}', templates);
-            if (templates.length === 0) {
-                resetTemplateSelect(select, '{_ No traced parent templates _}');
-            }
+            setDropdownTemplates(dropdown, '{_ No traced parent templates _}', templates);
         }).catch(() => {
-            resetTemplateSelect(select, '{_ Could not load templates _}');
-            select.disabled = false;
+            setDropdownStatus(dropdown, '{_ Could not load templates _}', 'template-debug-dropdown-empty');
         }).finally(() => {
-            delete select.dataset.loading;
+            delete dropdown.dataset.loading;
         });
     }
 
-    function loadChildTemplates(select) {
-        if (select.dataset.loading === '1') {
+    function loadChildTemplates(dropdown) {
+        if (dropdown.dataset.loading === '1') {
             return;
         }
 
-        const line = Number.parseInt(select.dataset.line || '', 10);
-        const column = Number.parseInt(select.dataset.column || '', 10);
-        const type = select.dataset.type || '';
-        select.dataset.loading = '1';
-        select.disabled = true;
-        resetTemplateSelect(select, '{_ Loading... _}');
+        const line = Number.parseInt(dropdown.dataset.line || '', 10);
+        const column = Number.parseInt(dropdown.dataset.column || '', 10);
+        const type = dropdown.dataset.type || '';
+        const isPositionMatched = type === 'include';
+        const topic = type === 'include'
+            ? 'bridge/origin/model/development/get/template_trace_children'
+            : 'bridge/origin/model/development/get/template_trace_parents';
+        dropdown.dataset.loading = '1';
+        setDropdownStatus(dropdown, '{_ Loading... _}', 'template-debug-dropdown-empty');
         templateCall(
-            'bridge/origin/model/development/get/template_trace_children',
+            topic,
             {
                 template: currentTemplateFile,
-                line: Number.isInteger(line) ? line : 0,
-                column: Number.isInteger(column) ? column : 0,
+                line: isPositionMatched && Number.isInteger(line) ? line : 0,
+                column: isPositionMatched && Number.isInteger(column) ? column : 0,
                 type: type
             }
         ).then((templates) => {
-            setTemplateOptions(select, '{_ Open included template... _}', templates);
-            if (templates.length === 0) {
-                resetTemplateSelect(select, '{_ No traced templates on this point _}');
-            }
+            setDropdownTemplates(dropdown, '{_ No traced templates on this point _}', templates);
         }).catch(() => {
-            resetTemplateSelect(select, '{_ Could not load templates _}');
-            select.disabled = false;
+            setDropdownStatus(dropdown, '{_ Could not load templates _}', 'template-debug-dropdown-empty');
         }).finally(() => {
-            delete select.dataset.loading;
+            delete dropdown.dataset.loading;
         });
     }
 
-    function navigateToTemplate(templatePath) {
+    function navigateToTemplate(templatePath, options = {}) {
+        const pushHistory = options.pushHistory !== false;
         if (!templatePath || templatePath === currentTemplateFile) {
             return;
         }
+
+        if (pushHistory) {
+            const lastTemplate = overlayHistoryState.stack[overlayHistoryState.stack.length - 1];
+            if (lastTemplate !== currentTemplateFile) {
+                overlayHistoryState.stack.push(currentTemplateFile);
+            }
+        }
+        updateBackButton();
 
         const overlay = overlayDebug.closest('.modal-overlay');
         const closeButton = overlay ? overlay.querySelector('.modal-overlay-close') : null;
@@ -286,42 +346,69 @@
         }, 0);
     }
 
-    function refreshTemplatesOnClick(select, loadFn) {
-        const refresh = () => loadFn(select);
-        select.addEventListener('focus', refresh);
-        select.addEventListener('pointerdown', refresh);
-        select.addEventListener('mousedown', refresh);
+    function navigateBack() {
+        while (overlayHistoryState.stack.length > 0) {
+            const previousTemplate = overlayHistoryState.stack.pop();
+            if (previousTemplate && previousTemplate !== currentTemplateFile) {
+                updateBackButton();
+                navigateToTemplate(previousTemplate, { pushHistory: false });
+                return;
+            }
+        }
+        updateBackButton();
     }
 
-    function createTemplatePointSelect(target, options = {}) {
-        const select = document.createElement('select');
-        select.className = 'form-control input-sm template-debug-line-nav';
-        select.dataset.line = options.line || '';
-        select.dataset.column = options.column || '';
-        select.dataset.type = options.type || '';
-        resetTemplateSelect(select, '{_ Open included template... _}');
-        refreshTemplatesOnClick(select, loadChildTemplates);
-        select.addEventListener('change', () => navigateToTemplate(select.value));
-        target.appendChild(select);
-        return select;
+    function bindDropdown(dropdown, loadFn) {
+        dropdown._button.addEventListener('click', (event) => {
+            event.preventDefault();
+            const willOpen = !dropdown.classList.contains('is-open');
+            closeAllDropdowns(dropdown);
+            if (!willOpen) {
+                closeDropdown(dropdown);
+                return;
+            }
+            dropdown.classList.add('is-open');
+            loadFn(dropdown);
+        });
+    }
+
+    function createTemplatePointDropdown(target, options = {}) {
+        const dropdown = createDropdown('↗', '{_ Open included template _}');
+        dropdown.classList.add('template-debug-line-nav');
+        dropdown.dataset.line = options.line || '';
+        dropdown.dataset.column = options.column || '';
+        dropdown.dataset.type = options.type || '';
+        setDropdownStatus(dropdown, '{_ Click to load templates _}', 'template-debug-dropdown-empty');
+        bindDropdown(dropdown, loadChildTemplates);
+        target.appendChild(dropdown);
+        return dropdown;
     }
 
     function injectTemplateNavigation() {
-        refreshTemplatesOnClick(templateParentsSelect, loadParentTemplates);
-        templateParentsSelect.addEventListener('change', () => navigateToTemplate(templateParentsSelect.value));
+        initializeDropdown(templateParentsDropdown, '↑', '{_ Included by _}');
+        bindDropdown(templateParentsDropdown, loadParentTemplates);
+        setDropdownStatus(templateParentsDropdown, '{_ Click to load templates _}', 'template-debug-dropdown-empty');
+        templateBackButton.addEventListener('click', navigateBack);
+        updateBackButton();
 
         const navAnchors = document.querySelectorAll('.template-compiler-nav-anchor[data-template-nav-enabled="1"]');
         navAnchors.forEach((anchorEl) => {
             if (anchorEl.querySelector('.template-debug-line-nav')) {
                 return;
             }
-            createTemplatePointSelect(anchorEl, {
+            createTemplatePointDropdown(anchorEl, {
                 line: anchorEl.dataset.line || '',
                 column: anchorEl.dataset.column || '',
                 type: anchorEl.dataset.templateNav || ''
             });
         });
     }
+
+    document.addEventListener('click', (event) => {
+        if (!event.target.closest('.template-debug-dropdown')) {
+            closeAllDropdowns(null);
+        }
+    });
 
     function termText(text, className) {
         const span = document.createElement('span');

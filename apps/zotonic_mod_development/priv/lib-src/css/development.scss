@@ -84,9 +84,8 @@ body:has(.development-template-overlay) {
             align-items: center;
             gap: 8px;
 
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
+            min-width: 0;
+            overflow: visible;
             padding: 4px 10px;
             font-size: 12px;
             font-family: monospace;
@@ -101,10 +100,16 @@ body:has(.development-template-overlay) {
                 text-overflow: ellipsis;
             }
 
+            .template-debug-back {
+                order: 0;
+                flex: 0 0 28px;
+                max-width: 28px;
+            }
+
             .template-debug-nav {
                 order: 1;
-                flex: 0 0 180px;
-                max-width: 180px;
+                flex: 0 0 36px;
+                max-width: 36px;
             }
 
             .template-debug-filename-path {
@@ -135,6 +140,7 @@ body:has(.development-template-overlay) {
             .template-compiler-nav-anchor {
                 display: inline-block;
                 vertical-align: middle;
+                position: relative;
             }
         }
 
@@ -250,20 +256,114 @@ body:has(.development-template-overlay) {
             }
         }
 
-        .template-debug-nav,
-        .template-debug-line-nav {
+        .template-debug-dropdown {
+            position: relative;
             min-width: 0;
+            margin-right: 4px;
+
+            &.is-open {
+                .template-debug-dropdown-menu {
+                    display: block;
+                }
+            }
+        }
+
+        .template-debug-nav,
+        .template-debug-line-nav,
+        .template-debug-back {
+            min-width: 0;
+        }
+
+        .template-debug-dropdown-toggle,
+        .template-debug-back {
+            min-width: 0;
+            width: 100%;
             font-family: monospace;
             font-size: 10px;
             line-height: 1.2;
             height: 20px;
+            padding: 0 14px 0 4px;
+            border: 1px solid #777;
+            border-radius: 3px;
+            background: #fff;
+            color: #111;
+            text-align: left;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            position: relative;
+        }
+
+        .template-debug-back {
+            text-align: center;
             padding: 0 4px;
+
+            &:disabled {
+                color: #999;
+                cursor: default;
+            }
+        }
+
+        .template-debug-dropdown-toggle {
+            &:after {
+                content: "▾";
+                position: absolute;
+                right: 4px;
+                top: 2px;
+                color: #666;
+                pointer-events: none;
+            }
+        }
+
+        .template-debug-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: calc(100% + 2px);
+            left: 0;
+            z-index: 20;
+            min-width: 170px;
+            max-width: 320px;
+            max-height: 260px;
+            overflow: auto;
+            padding: 3px 0;
+            background: #fff;
+            border: 1px solid #777;
+            border-radius: 3px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+        }
+
+        .template-debug-dropdown-item,
+        .template-debug-dropdown-empty {
+            display: block;
+            width: 100%;
+            padding: 3px 6px;
+            font-family: monospace;
+            font-size: 10px;
+            line-height: 1.35;
+            text-align: left;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .template-debug-dropdown-item {
+            border: 0;
+            background: transparent;
+            color: #111;
+
+            &:hover {
+                background: #e8eefc;
+            }
+        }
+
+        .template-debug-dropdown-empty {
+            color: #666;
         }
 
         .template-debug-line-nav {
             margin-left: 6px;
-            width: 170px;
-            max-width: calc(100% - 16px);
+            width: 34px;
+            max-width: 34px;
             vertical-align: middle;
         }
     }

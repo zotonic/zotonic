@@ -1,3 +1,4 @@
+@charset "UTF-8";
 #trace-status span {
   display: none; }
 
@@ -64,9 +65,8 @@ body:has(.development-template-overlay) {
     display: flex;
     align-items: center;
     gap: 8px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    min-width: 0;
+    overflow: visible;
     padding: 4px 10px;
     font-size: 12px;
     font-family: monospace;
@@ -78,10 +78,14 @@ body:has(.development-template-overlay) {
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis; }
+    .development-template-overlay .template-debug .template-debug-filename .template-debug-back {
+      order: 0;
+      flex: 0 0 28px;
+      max-width: 28px; }
     .development-template-overlay .template-debug .template-debug-filename .template-debug-nav {
       order: 1;
-      flex: 0 0 180px;
-      max-width: 180px; }
+      flex: 0 0 36px;
+      max-width: 36px; }
     .development-template-overlay .template-debug .template-debug-filename .template-debug-filename-path {
       order: 2; }
   .development-template-overlay .template-debug .template-debug-source {
@@ -99,7 +103,8 @@ body:has(.development-template-overlay) {
       background-color: rgba(255, 255, 0, 0.7); }
     .development-template-overlay .template-debug .template-debug-source .template-compiler-nav-anchor {
       display: inline-block;
-      vertical-align: middle; }
+      vertical-align: middle;
+      position: relative; }
   .development-template-overlay .template-debug .template-debug-data {
     grid-row: 2;
     grid-column: 2;
@@ -163,16 +168,84 @@ body:has(.development-template-overlay) {
       color: #666; }
     .development-template-overlay .template-debug #template-debug-data .template-debug-term-value {
       min-width: 0; }
-  .development-template-overlay .template-debug .template-debug-nav,
-  .development-template-overlay .template-debug .template-debug-line-nav {
+  .development-template-overlay .template-debug .template-debug-dropdown {
+    position: relative;
     min-width: 0;
+    margin-right: 4px; }
+    .development-template-overlay .template-debug .template-debug-dropdown.is-open .template-debug-dropdown-menu {
+      display: block; }
+  .development-template-overlay .template-debug .template-debug-nav,
+  .development-template-overlay .template-debug .template-debug-line-nav,
+  .development-template-overlay .template-debug .template-debug-back {
+    min-width: 0; }
+  .development-template-overlay .template-debug .template-debug-dropdown-toggle,
+  .development-template-overlay .template-debug .template-debug-back {
+    min-width: 0;
+    width: 100%;
     font-family: monospace;
     font-size: 10px;
     line-height: 1.2;
     height: 20px;
+    padding: 0 14px 0 4px;
+    border: 1px solid #777;
+    border-radius: 3px;
+    background: #fff;
+    color: #111;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    position: relative; }
+  .development-template-overlay .template-debug .template-debug-back {
+    text-align: center;
     padding: 0 4px; }
+    .development-template-overlay .template-debug .template-debug-back:disabled {
+      color: #999;
+      cursor: default; }
+  .development-template-overlay .template-debug .template-debug-dropdown-toggle:after {
+    content: "▾";
+    position: absolute;
+    right: 4px;
+    top: 2px;
+    color: #666;
+    pointer-events: none; }
+  .development-template-overlay .template-debug .template-debug-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 2px);
+    left: 0;
+    z-index: 20;
+    min-width: 170px;
+    max-width: 320px;
+    max-height: 260px;
+    overflow: auto;
+    padding: 3px 0;
+    background: #fff;
+    border: 1px solid #777;
+    border-radius: 3px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25); }
+  .development-template-overlay .template-debug .template-debug-dropdown-item,
+  .development-template-overlay .template-debug .template-debug-dropdown-empty {
+    display: block;
+    width: 100%;
+    padding: 3px 6px;
+    font-family: monospace;
+    font-size: 10px;
+    line-height: 1.35;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; }
+  .development-template-overlay .template-debug .template-debug-dropdown-item {
+    border: 0;
+    background: transparent;
+    color: #111; }
+    .development-template-overlay .template-debug .template-debug-dropdown-item:hover {
+      background: #e8eefc; }
+  .development-template-overlay .template-debug .template-debug-dropdown-empty {
+    color: #666; }
   .development-template-overlay .template-debug .template-debug-line-nav {
     margin-left: 6px;
-    width: 170px;
-    max-width: calc(100% - 16px);
+    width: 34px;
+    max-width: 34px;
     vertical-align: middle; }

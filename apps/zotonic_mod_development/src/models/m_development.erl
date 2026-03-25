@@ -226,17 +226,25 @@ relation(_, _NodeId, _Template, _FilterLine, _FilterColumn, _FilterType, _Edge, 
 edge_matches(Edge, undefined, undefined, undefined) ->
     maps:get(type, Edge, undefined) =/= undefined;
 edge_matches(Edge, FilterLine, FilterColumn, FilterType) ->
-    LineMatch = case FilterLine of
-        undefined -> true;
-        Line -> maps:get(line, Edge, 0) =:= z_convert:to_integer(Line)
-    end,
-    ColumnMatch = case FilterColumn of
-        undefined -> true;
-        Column -> maps:get(column, Edge, 0) =:= z_convert:to_integer(Column)
+    EdgeType = maps:get(type, Edge),
+    {LineMatch, ColumnMatch} = case EdgeType of
+        include ->
+            {
+                case FilterLine of
+                    undefined -> true;
+                    Line -> maps:get(line, Edge, 0) =:= z_convert:to_integer(Line)
+                end,
+                case FilterColumn of
+                    undefined -> true;
+                    Column -> maps:get(column, Edge, 0) =:= z_convert:to_integer(Column)
+                end
+            };
+        _ ->
+            {true, true}
     end,
     TypeMatch = case FilterType of
         undefined -> true;
-        TypeBin -> atom_to_binary(maps:get(type, Edge), utf8) =:= TypeBin
+        TypeBin -> atom_to_binary(EdgeType, utf8) =:= TypeBin
     end,
     LineMatch andalso ColumnMatch andalso TypeMatch.
 
