@@ -119,6 +119,46 @@
 
 {% javascript %}
     let is_debug_trace_enabled = false;
+    const overlayDebug = document.getElementById('overlay-development_debug');
+    const debugData = document.getElementById('template-debug-data');
+    const debugRestart = document.getElementById('overlay-development_trace-restart');
+    const debugRestartButton = document.getElementById('template-debug-restart');
+    const debugStartButton = document.getElementById('template-debug-start');
+    const debugAlert = overlayDebug.querySelector(':scope > .alert');
+
+    function setDebugMessage(message) {
+        debugData.replaceChildren();
+        const paragraph = document.createElement('p');
+        paragraph.className = 'help-block';
+        paragraph.textContent = message;
+        debugData.appendChild(paragraph);
+    }
+
+    function showDebugAlert() {
+        debugAlert.style.display = '';
+    }
+
+    function hideDebugAlert() {
+        debugAlert.style.display = 'none';
+    }
+
+    function checkedDebugPoints() {
+        return Array.from(document.querySelectorAll('.template-debug-source input:checked'))
+            .map((input) => input.value);
+    }
+
+    function clearLineHighlights() {
+        document.querySelectorAll('.template-compiler-line.highlighted')
+            .forEach((line) => line.classList.remove('highlighted'));
+    }
+
+    function highlightLine(line) {
+        if (!line) {
+            return;
+        }
+        document.querySelectorAll(`.template-compiler-line[data-line="${line}"]`)
+            .forEach((lineEl) => lineEl.classList.add('highlighted'));
+    }
 
     function termText(text, className) {
         const span = document.createElement('span');
@@ -138,16 +178,12 @@
     }
 
     function objectKeys(value) {
-        return Object.keys(value || {}).filter((key) => key !== 'type');
+        return Object.keys(value || {}).filter((key) => key !== '_type');
     }
 
     function taggedType(value) {
         if (!value || typeof value !== 'object' || Array.isArray(value)) {
             return null;
-        }
-
-        if (typeof value.type === 'string') {
-            return value.type;
         }
 
         if (typeof value._type === 'string') {
@@ -452,24 +488,19 @@
     }
 
     if (typeof window.restartTemplateTrace == "function") {
-        $('#overlay-development_trace-restart').show();
-        $("#template-debug-restart").on('click', window.restartTemplateTrace);
+        debugRestart.style.display = '';
+        debugRestartButton.addEventListener('click', window.restartTemplateTrace);
     }
 
     function debug_start() {
-        const is_all = $(".template-debug-data input[value='all']").is(":checked");
-        const checkboxes = $(".template-debug-source input:checked");
-        let enabled = [];
+        const is_all = overlayDebug.querySelector('.template-debug-data input[value="all"]').checked;
+        const enabled = checkedDebugPoints();
 
-        checkboxes.each(function() {
-            enabled.push($(this).attr("value"));
-        });
-
-        $('#overlay-development_debug > .alert').fadeIn();
+        showDebugAlert();
         if (enabled.length === 0) {
-            $("#template-debug-data").html('<p class="help-block">{_ Check debug points in the template source to see debug data here. _}</p>');
+            setDebugMessage('{_ Check debug points in the template source to see debug data here. _}');
         } else {
-            $("#template-debug-data").html('<p class="help-block">{_ Waiting for debug data... _}</p>');
+            setDebugMessage('{_ Waiting for debug data... _}');
         }
 
         is_debug_trace_enabled = enabled.length > 0;
@@ -480,25 +511,38 @@
         });
     }
 
-    $(".template-debug input").on('input', debug_start);
-    $("#template-debug-start").on('click', debug_start);
+    document.querySelectorAll('.template-debug input')
+        .forEach((input) => input.addEventListener('input', debug_start));
+    debugStartButton.addEventListener('click', debug_start);
 
-    $(".modal-overlay-close").on('click', () => {
-        if (is_debug_trace_enabled) {
-            z_event("template_debug_enable", {
-                enabled: [],
-                is_all: false,
-                is_silent: true
-            });
-        }
-    });
+    document.querySelectorAll('.modal-overlay-close')
+        .forEach((button) => button.addEventListener('click', () => {
+            if (is_debug_trace_enabled) {
+                z_event("template_debug_enable", {
+                    enabled: [],
+                    is_all: false,
+                    is_silent: true
+                });
+            }
+        }));
 
-    $('#template-debug-data').on("mouseenter mouseleave", "details[data-line]", function(e) {
-        const line = $(this).data("line");
-        $(".template-compiler-line").removeClass("highlighted");
-        if (e.type === "mouseenter") {
-            $(`.template-compiler-line[data-line="${line}"]`).addClass("highlighted");
-        }
+    ['mouseover', 'mouseout'].forEach((eventName) => {
+        debugData.addEventListener(eventName, (e) => {
+            const details = e.target.closest('details[data-line]');
+            if (!details || !debugData.contains(details)) {
+                return;
+            }
+
+            const related = e.relatedTarget;
+            if (related instanceof Node && details.contains(related)) {
+                return;
+            }
+
+            clearLineHighlights();
+            if (eventName === 'mouseover') {
+                highlightLine(details.dataset.line);
+            }
+        });
     });
 
     cotonic.broker.subscribe(
@@ -518,8 +562,11 @@
                             const summary = document.createElement('summary');
                             summary.textContent = `Line ${payload.line}:${payload.column}`;
                             root.appendChild(summary);
-                            document.getElementById('template-debug-data').appendChild(root);
-                            $('#template-debug-data > .help-block').remove();
+                            debugData.appendChild(root);
+                            const helpBlock = debugData.querySelector(':scope > .help-block');
+                            if (helpBlock) {
+                                helpBlock.remove();
+                            }
                         }
 
                         const table = document.createElement('table');
@@ -540,10 +587,10 @@
                     }
                     break;
                 case "stop":
-                    $('#overlay-development_debug > .alert').fadeIn();
+                    showDebugAlert();
                     break;
                 case "start":
-                    $('#overlay-development_debug > .alert').hide();
+                    hideDebugAlert();
                     break;
                 default:
                     break;
