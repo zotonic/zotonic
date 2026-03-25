@@ -76,6 +76,7 @@
     const overlaySplitState = window.__zTemplateOverlaySplitState || (window.__zTemplateOverlaySplitState = {
         leftWidth: undefined
     });
+    let stopSplitterDrag = null;
 
     function uncollapseLibPath(path) {
         if (!path) {
@@ -242,6 +243,9 @@
 
         // Cleanup function to remove global listeners when the overlay closes.
         const cleanup = () => {
+            if (stopSplitterDrag) {
+                stopSplitterDrag();
+            }
             window.removeEventListener('resize', onResize);
             window.removeEventListener('unload', cleanup);
         };
@@ -265,21 +269,39 @@
                 ? overlaySplitState.leftWidth
                 : templateDebug.querySelector('.template-debug-source').getBoundingClientRect().width;
             const startX = event.clientX;
+            const pointerId = event.pointerId;
 
             const onPointerMove = (moveEvent) => {
                 const delta = moveEvent.clientX - startX;
                 setSplitWidths(startLeft + delta, totalWidth);
             };
 
-            const onPointerUp = () => {
+            const stopDrag = () => {
                 document.body.classList.remove('template-debug-resizing');
                 window.removeEventListener('pointermove', onPointerMove);
                 window.removeEventListener('pointerup', onPointerUp);
+                window.removeEventListener('pointercancel', onPointerCancel);
+                window.removeEventListener('blur', onWindowBlur);
+                if (templateSplitter.releasePointerCapture && templateSplitter.hasPointerCapture && templateSplitter.hasPointerCapture(pointerId)) {
+                    templateSplitter.releasePointerCapture(pointerId);
+                }
+                if (stopSplitterDrag === stopDrag) {
+                    stopSplitterDrag = null;
+                }
             };
+            const onPointerUp = () => stopDrag();
+            const onPointerCancel = () => stopDrag();
+            const onWindowBlur = () => stopDrag();
 
             document.body.classList.add('template-debug-resizing');
+            if (templateSplitter.setPointerCapture) {
+                templateSplitter.setPointerCapture(pointerId);
+            }
             window.addEventListener('pointermove', onPointerMove);
             window.addEventListener('pointerup', onPointerUp);
+            window.addEventListener('pointercancel', onPointerCancel);
+            window.addEventListener('blur', onWindowBlur);
+            stopSplitterDrag = stopDrag;
         });
     }
 
