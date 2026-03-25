@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-03-25 13:00\n"
+"PO-Revision-Date: 2026-03-25 14:14\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -7565,7 +7565,7 @@ msgstr "Alleen de beheerder kan het traceren van functieaanroepen gebruiken."
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:381
 msgid "Open included template"
-msgstr ""
+msgstr "Bijgeleverde sjabloon openen"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:163
 msgid "Optional category for catinclude"
