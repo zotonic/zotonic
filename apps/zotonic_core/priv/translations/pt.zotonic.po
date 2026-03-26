@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-03-26 10:59\n"
+"PO-Revision-Date: 2026-03-26 11:18\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "MIME-Version: 1.0\n"
@@ -304,7 +304,7 @@ msgstr "Você tem certeza de que quer restaurar todas as regras do LCA à sua ve
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:134
 #: zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:50
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:14
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:53
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:57
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:13
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:9
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:26
@@ -638,8 +638,8 @@ msgstr "Membros do mesmo grupo de utilizadores"
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:42
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:19
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:8
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:25
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:48
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:26
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:49
 #: zotonic_mod_base/priv/templates/error.tpl:78
 #: zotonic_mod_development/priv/templates/_development_template.tpl:3
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:10
@@ -691,9 +691,9 @@ msgstr "Não é permitido."
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:31
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:60
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:28
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:35
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:62
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:32
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:39
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:66
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:48
 msgid "Options"
 msgstr "Opções"
@@ -2166,7 +2166,7 @@ msgstr "Mova o bloco para cima"
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:227
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:9
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:52
-#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:27
+#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:28
 #: zotonic_mod_comment/priv/templates/_comments_form.tpl:23
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:22
 #: zotonic_mod_contact/priv/templates/contact.tpl:11
@@ -2347,7 +2347,7 @@ msgstr "Visão geral das páginas"
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:36
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:27
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:24
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:4
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:8
 msgid "Path"
 msgstr "Caminho"
 
@@ -3071,7 +3071,7 @@ msgstr "Tempo esgotado enquanto se tenta ir buscar dados ao site."
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:39
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:9
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:11
-#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:26
+#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:27
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:25
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:16
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:20
@@ -3407,7 +3407,7 @@ msgstr "por"
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:78
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:59
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:31
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:46
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:50
 #: zotonic_mod_oauth2/priv/templates/_oauth2_apps_list.tpl:14
 #: zotonic_mod_oauth2/priv/templates/_oauth2_apps_list.tpl:15
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:79
@@ -3419,7 +3419,7 @@ msgid "d M Y, H:i"
 msgstr "d M Y, H:i"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:167
-#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:42
+#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:43
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:39
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:79
 msgid "delete"
@@ -3437,7 +3437,7 @@ msgstr "por exemplo, pode mudar"
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:75
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:38
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:87
-#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:45
+#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:46
 #: zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:21
 #: zotonic_mod_search/priv/templates/_search_view_list_item.tpl:16
 msgid "edit"
@@ -3867,7 +3867,7 @@ msgid "Show log for message"
 msgstr "Mostrar log para mensagem"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:8
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:98
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:100
 msgid "System Configuration"
 msgstr "Configuração do sistema"
 
@@ -4648,11 +4648,11 @@ msgid "not implemented yet"
 msgstr "ainda não implementado"
 
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:34
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:123
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:124
 msgid "Activate"
 msgstr "Ativar"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:114
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:115
 msgid "Configure"
 msgstr "Configure"
 
@@ -4665,12 +4665,12 @@ msgid "Cyclic dependencies"
 msgstr "Dependências cíclicas"
 
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:17
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:33
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:118
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:34
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:119
 msgid "Deactivate"
 msgstr "Desativar"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:18
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:19
 msgid "Deactivate these modules if you are not using them, or check the installation of the system."
 msgstr "Desative esses módulos se não os estiver usando ou verifique a instalação do sistema."
 
@@ -4682,7 +4682,7 @@ msgstr "A desactivação deste módulo irá parar os seguintes módulos:"
 msgid "Dependencies"
 msgstr "Dependências"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:49
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:50
 msgid "Depends"
 msgstr "Depende"
 
@@ -4694,11 +4694,11 @@ msgstr "Você ainda quer ativar o módulo"
 msgid "Do you still want to deactivate the module"
 msgstr "Você ainda quer desativar o módulo"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:16
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:17
 msgid "Either they are not installed, or they are not compiled."
 msgstr "Ou eles não estão instalados ou não foram compilados."
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:105
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:106
 msgid "Install the module’s model and data."
 msgstr "Instale o modelo e os dados do módulo."
 
@@ -4711,15 +4711,15 @@ msgstr "Dependências do módulo"
 msgid "Modules are missing dependencies"
 msgstr "Os módulos são dependências em falta"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:136
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:137
 msgid "No modules found"
 msgstr "Não foram encontrados módulos"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:50
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:51
 msgid "Provides"
 msgstr "Fornece"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:104
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:105
 msgid "Reinstall"
 msgstr "Reinstale"
 
@@ -4749,7 +4749,7 @@ msgstr "Desculpe, você não tem permissão para fazer isso."
 msgid "The following modules will not start because they miss dependencies:"
 msgstr "Os seguintes módulos não começarão porque faltam dependências:"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:15
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:16
 msgid "The modules below are activated but could not be found."
 msgstr "Os módulos abaixo estão ativados, mas não puderam ser encontrados."
 
@@ -4865,7 +4865,7 @@ msgstr "Insira novas conexões antes das conexões existentes."
 msgid "Instead of a search box this will show a list of all pages in the <i>To</i> categories checked above. At least one category must be checked."
 msgstr "Em vez de uma caixa de pesquisa, será exibida uma lista de todas as páginas nas categorias <i>a</i> marcadas acima. Pelo menos uma categoria deve ser verificada."
 
-#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:19
+#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:20
 #: zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:54
 msgid "Make a new predicate"
 msgstr "Faça um novo predicado"
@@ -4882,7 +4882,7 @@ msgstr "Não foram encontradas ligações de página."
 msgid "No page connections with the predicate:"
 msgstr "Não há ligações de página com o predicado:"
 
-#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:53
+#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:54
 msgid "No predicates found."
 msgstr "Não foram encontrados predicados."
 
@@ -5016,7 +5016,7 @@ msgstr "Para a categoria"
 msgid "Too many connections"
 msgstr ""
 
-#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:28
+#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:29
 msgid "URI"
 msgstr "URI"
 
@@ -6143,7 +6143,7 @@ msgstr "Clique em <b>Listar e restaurar uma versão anterior</b> para obter uma 
 msgid "Cloud file store is enabled. Backups of the database are uploaded to the cloud file store. Local files are copied to the cloud and not backed up locally."
 msgstr "O armazenamento de arquivos na nuvem está ativado. Os backups do banco de dados são carregados no armazenamento de arquivos na nuvem. Os arquivos locais são copiados para a nuvem e não têm backup local."
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:47
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:49
 msgid "Cloud file store is enabled. The local files will not be backed up. Ensure that your cloud file store system has a proper backup."
 msgstr "O armazenamento de arquivos na nuvem está ativado. Os arquivos locais não serão submetidos a backup. Certifique-se de que seu sistema de armazenamento de arquivos na nuvem tenha um backup adequado."
 
@@ -6173,7 +6173,7 @@ msgstr "Páginas excluídas"
 msgid "Directory"
 msgstr "Diretório"
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:81
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:83
 msgid "Do not encrypt backups."
 msgstr "Não criptografe backups."
 
@@ -6191,11 +6191,11 @@ msgstr "Download do arquivo de backup"
 msgid "Enable <tt>mod_export</tt> to download backup files."
 msgstr "Habilite <tt>mod_export</tt> para baixar os arquivos de backup."
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:88
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:90
 msgid "Encrypt Backups"
 msgstr "Criptografar backups"
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:79
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:81
 msgid "Encrypt backups."
 msgstr "Criptografar backups."
 
@@ -6203,7 +6203,7 @@ msgstr "Criptografar backups."
 msgid "Encrypted"
 msgstr "Criptografado"
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:40
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:41
 msgid "Encryption is enabled, but there is no encryption password. Please\n"
 "      make sure there is an encryption password in the settings."
 msgstr "A criptografia está habilitada, mas não há senha de criptografia. Por favor\n"
@@ -6217,7 +6217,7 @@ msgstr "Ajuda sobre backup &amp; restore"
 msgid "If the Cloud File Store module is used, then deleted files can be retained indefinitely."
 msgstr "Se o módulo Cloud File Store for usado, os arquivos excluídos poderão ser retidos indefinidamente."
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:98
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:100
 msgid "It can be found in the"
 msgstr "Ele pode ser encontrado no"
 
@@ -6261,7 +6261,7 @@ msgstr "Não foi enviado para o armazenamento de arquivos"
 msgid "Note that files are only retained for 5 weeks after deletion, this is the same as the Zotonic database backup retention period."
 msgstr "Observe que os arquivos são retidos apenas por 5 semanas após a exclusão, o mesmo período de retenção de backup do banco de dados Zotonic."
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:97
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:99
 msgid "Note:"
 msgstr "Observação:"
 
@@ -6269,7 +6269,7 @@ msgstr "Observação:"
 msgid "Only administrators can start a backup."
 msgstr "Somente administradores podem iniciar um backup."
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:98
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:100
 msgid "Please make sure you store the backup encryption password in a safe <u>external</u> location."
 msgstr "Certifique-se de armazenar a senha de criptografia de backup em um local <u>externo</u> seguro."
 
@@ -6376,11 +6376,11 @@ msgstr "Desculpe, não tem permissão para mudar esta página."
 msgid "Sorry, you have no permission to change the configuration."
 msgstr "Desculpe, não tem permissão para alterar a configuração."
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:13
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:14
 msgid "Start backup now"
 msgstr "Iniciar o backup agora"
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:16
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:17
 msgid "Start database-only backup now"
 msgstr "Iniciar agora o backup apenas da base de dados"
 
@@ -6388,11 +6388,11 @@ msgstr "Iniciar agora o backup apenas da base de dados"
 msgid "Started the backup. You can keep this page open or continue working."
 msgstr "O backup foi iniciado. Você pode manter esta página aberta ou continuar trabalhando."
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:27
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:28
 msgid "The \"pg_dump\" command was not found in the path. Set in zotonic.config the \"pg_dump\" config key to the path to <tt>pg_dump</tt> and return to this page."
 msgstr "O comando \"pg_dump\" não foi encontrado no caminho. Defina em zotonic.config a chave de configuração \"pg_dump\" para o caminho para <tt>pg_dump</tt> e retorne a esta página."
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:30
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:31
 msgid "The \"tar\" command was not found in the path. Set in zotonic.config the \"tar\" config key to the path to <tt>tar</tt> and return to this page."
 msgstr "O comando \"tar\" não foi encontrado no caminho. Defina em zotonic.config a chave de configuração \"tar\" para o caminho para <tt>tar</tt> e retorne a esta página."
 
@@ -6410,7 +6410,7 @@ msgstr "A configuração de backup é definida como:"
 msgid "The backup module uses a global Zotonic configuration. The configuration cannot be changed here."
 msgstr "O módulo de backup usa uma configuração global do Zotonic. A configuração não pode ser alterada aqui."
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:75
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:77
 msgid "The encryption configuration is set to:"
 msgstr "A configuração de criptografia é definida como:"
 
@@ -6427,7 +6427,7 @@ msgstr "Isto irá sobrescrever a sua página com o conteúdo do ficheiro de cóp
 msgid "Uploaded to filestore"
 msgstr "Carregado para o armazenamento de arquivos"
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:23
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:24
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:124
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:42
 msgid "Warning"
@@ -6452,7 +6452,7 @@ msgstr "Você não tem permissão para recuperar esta página."
 msgid "You are not allowed to see the revisions"
 msgstr "Você não está autorizado a ver as revisões"
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:8
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:9
 msgid "You can have one backup per day of the week, older ones will be overwritten."
 msgstr "Você pode ter um backup por dia da semana, os mais antigos serão substituídos."
 
@@ -6468,7 +6468,7 @@ msgstr "Você pode selecionar uma revisão para reverter."
 msgid "You need to have access rights to the backup module."
 msgstr "Você precisa ter direitos de acesso ao módulo de backup."
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:23
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:24
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
 msgstr "O seu backup não está configurado correctamente. O módulo de backup não funcionará até que o(s) problema(s) abaixo tenha(m) sido(em) resolvido(s):"
 
@@ -6480,7 +6480,7 @@ msgstr "banco de dados de download"
 msgid "download files"
 msgstr "arquivos de download"
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:98
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:100
 msgid "or in the Zotonic configuration files."
 msgstr "ou nos arquivos de configuração do Zotonic."
 
@@ -7137,7 +7137,7 @@ msgstr "<tt>{extends}</tt> são mostrados com uma linha listrada, <tt>{overrules
 msgid "A graph of all templates, and by whom they are included, is generated and automatically updated."
 msgstr "Um gráfico de todos os modelos e por quem eles estão incluídos é gerado e atualizado automaticamente."
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:5
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:9
 msgid "Action"
 msgstr "Ação"
 
@@ -7178,7 +7178,7 @@ msgstr ""
 msgid "Below is the list of all notifications and the installed observers."
 msgstr "Abaixo está a lista de todas as notificações e dos observadores instalados."
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:6
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:10
 msgid "Bindings"
 msgstr "Encadernações"
 
@@ -7217,9 +7217,9 @@ msgstr ""
 msgid "Column"
 msgstr "Coluna"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:26
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:33
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:60
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:30
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:37
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:64
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:51
 msgid "Controller"
 msgstr "Controlador"
@@ -7371,7 +7371,7 @@ msgstr ""
 msgid "Extends"
 msgstr "Estende"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:32
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:36
 msgid "Final dispatch"
 msgstr "Envio final"
 
@@ -7391,11 +7391,11 @@ msgstr "Para mais informações consulte: { url }"
 msgid "Force a recompilation of all templates. This fixes any issues where the compiled templates might be out of sync with the template index."
 msgstr "Força uma recompilação de todos os modelos. Isso corrige quaisquer problemas em que os modelos compilados possam estar fora de sincronia com o índice do modelo."
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:42
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:46
 msgid "Forced switch of protocol to"
 msgstr "Troca forçada de protocolo para"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:23
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:27
 msgid "Found matching dispatch rule"
 msgstr "Encontrada regra de expedição correspondente"
 
@@ -7471,8 +7471,8 @@ msgstr ""
 msgid "Loading..."
 msgstr "Carregando..."
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:69
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:75
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:73
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:79
 msgid "Location"
 msgstr "Localização"
 
@@ -7500,13 +7500,13 @@ msgstr "Modelos opcionais incluídos ausentes"
 msgid "Missing {extends} or {overrules}"
 msgstr "Faltando {extends} ou {overrules}"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:40
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:43
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:44
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:47
 msgid "New host"
 msgstr "Novo anfitrião"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:48
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:54
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:52
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:58
 msgid "New path"
 msgstr "Novo caminho"
 
@@ -7514,7 +7514,7 @@ msgstr "Novo caminho"
 msgid "No data."
 msgstr "Sem dados."
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:45
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:49
 msgid "No matching dispatch rule found"
 msgstr "Não foi encontrada nenhuma regra de expedição correspondente."
 
@@ -7571,8 +7571,8 @@ msgstr ""
 msgid "Optional category for catinclude"
 msgstr "Categoria opcional para catincluir"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:71
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:77
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:75
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:81
 msgid "Permanent redirect"
 msgstr "Redirecionamento permanente"
 
@@ -7580,7 +7580,7 @@ msgstr "Redirecionamento permanente"
 msgid "Recompile templates"
 msgstr "Recompilar modelos"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:74
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:78
 msgid "Redirect"
 msgstr "Redirecionar"
 
@@ -7594,6 +7594,10 @@ msgstr ""
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:36
 msgid "Reload the page that we are tracing to see the debug data."
+msgstr ""
+
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:2
+msgid "Render page and trace templates"
 msgstr ""
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:22
@@ -7646,7 +7650,7 @@ msgstr "Nome do site"
 msgid "Start Tracing"
 msgstr "Iniciar rastreio"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:21
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:25
 msgid "Start matching dispatch rules"
 msgstr "Comece a combinar as regras de envio"
 
@@ -7688,7 +7692,7 @@ msgstr "Parou."
 msgid "Subscribers"
 msgstr "Assinantes"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:39
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:43
 msgid "Switch protocol to"
 msgstr "Mude o protocolo para"
 
@@ -7748,7 +7752,7 @@ msgstr "Isso calcula e visualiza o gráfico de dependência de todos os modelos.
 msgid "This checks all templates to see if included or extended templates are available."
 msgstr "Isso verifica todos os modelos para ver se modelos incluídos ou estendidos estão disponíveis."
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:56
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:60
 msgid "This resource is unknown or does not have a URI"
 msgstr "Este recurso não é conhecido ou não tem URI"
 
@@ -7852,27 +7856,27 @@ msgstr "Não é permitido utilizar a depuração do modelo."
 msgid "You do not have permission to access development tools."
 msgstr "Não tem permissão para aceder às ferramentas de desenvolvimento."
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:59
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:63
 msgid "found dispatch rule"
 msgstr "regra de envio encontrado"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:66
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:70
 msgid "found no match"
 msgstr "não encontrou nenhuma correspondência"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:52
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:56
 msgid "found resource id"
 msgstr "identificação do recurso encontrado"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:47
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:51
 msgid "notification"
 msgstr "notificação"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:50
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:54
 msgid "notification, checking first return"
 msgstr "notificação, verificando o primeiro retorno"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:68
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:72
 msgid "redirects"
 msgstr "redirecciona"
 
@@ -9502,7 +9506,7 @@ msgstr "Lista gerenciada externamente &mdash; sem links de cancelamento de inscr
 msgid "First name"
 msgstr "Primeiro nome"
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:21
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:25
 msgid "Forget previous e-mails, mail all recipients again."
 msgstr "Esqueça os e-mails anteriores, envie novamente para todos os destinatários."
 
@@ -9627,7 +9631,7 @@ msgstr "Número de destinatários desta lista:"
 msgid "Only keep recipients on this list that appear <em>on both lists</em>"
 msgstr "Manter nesta lista apenas os destinatários que aparecem <em>em ambas as listas</em>"
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:30
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:34
 msgid "Only send to recipients whose preferred language match the translations of the mailing."
 msgstr "Envie apenas para destinatários cujo idioma preferido corresponda às traduções da correspondência."
 
@@ -9764,7 +9768,7 @@ msgstr "Selecione..."
 msgid "Send e-mail"
 msgstr "Enviar e-mail"
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:54
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:58
 msgid "Send mailing"
 msgstr "Enviar correio"
 
@@ -9777,15 +9781,15 @@ msgstr "Enviar correio de teste"
 msgid "Send test to address"
 msgstr "Enviar teste para o endereço"
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:46
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:50
 msgid "Send the mailing automatically after the publication start date of"
 msgstr "Enviar o mailing automaticamente após a data de início da publicação de"
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:44
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:48
 msgid "Send the mailing immediately after the \"published\" checkbox has been checked in the edit page."
 msgstr "Envie o e-mail imediatamente após a caixa de seleção \"publicado\" ter sido marcada na página de edição."
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:39
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:43
 msgid "Send the mailing right now, but do not include a link back to the website."
 msgstr "Envie o mailing agora mesmo, mas não inclua um link de volta para o site."
 
@@ -9920,7 +9924,7 @@ msgstr "O envio foi cancelado."
 msgid "The mailing will be send when the page becomes visible."
 msgstr "O correio será enviado quando a página se tornar visível."
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:36
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:40
 msgid "The page you are trying to e-mail is not yet published. What do you want to do?"
 msgstr "A página que você tentou enviar como um e-mail ainda não foi publicada. O que você quer fazer?"
 
@@ -13763,7 +13767,7 @@ msgstr "Digite sua senha para gerenciar este servidor"
 msgid "Flush and reload all settings, templates etc."
 msgstr "Descarregar e carregar de novo todas as configurações, modelos, etc."
 
-#: zotonic_site_status/priv/templates/error.400.tpl:11
+#: zotonic_site_status/priv/templates/error.400.tpl:16
 msgid "If you feel that you are here by mistake,\n"
 "                please hit the \"back\" button in your browser or\n"
 "                try a different address."
@@ -13771,7 +13775,7 @@ msgstr "Se você sente que está aqui por engano,\n"
 "                por favor pressione o botão \"back\" no seu navegador ou\n"
 "                tente um endereço diferente."
 
-#: zotonic_site_status/priv/templates/home.tpl:14
+#: zotonic_site_status/priv/templates/home.tpl:19
 msgid "If you feel that you are here by mistake,\n"
 "            please hit the \"back\" button in your browser or\n"
 "            try a different address. If you are here to manage\n"
@@ -13785,9 +13789,9 @@ msgstr "Se você sente que está aqui por engano,\n"
 msgid "Log On"
 msgstr "Iniciar Sessão"
 
-#: zotonic_site_status/priv/templates/error.400.tpl:20
+#: zotonic_site_status/priv/templates/error.400.tpl:27
 #: zotonic_site_status/priv/templates/error.503.tpl:21
-#: zotonic_site_status/priv/templates/home.tpl:25
+#: zotonic_site_status/priv/templates/home.tpl:33
 msgid "Manage this server"
 msgstr "Gerir este servidor"
 
