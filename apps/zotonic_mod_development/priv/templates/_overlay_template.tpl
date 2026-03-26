@@ -408,7 +408,7 @@
         dropdown._menu.replaceChildren();
         const hasExtends = appendDropdownSection(
             dropdown,
-            '{_ Extended / overriden by _}',
+            '{_ Extended / overridden by _}',
             sections.extends_overrules || []);
         const hasIncludes = appendDropdownSection(
             dropdown,
