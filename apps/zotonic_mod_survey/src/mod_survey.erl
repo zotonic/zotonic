@@ -248,7 +248,13 @@ event(#submit{message={survey_next, Args}}, Context) ->
                         render_next_page(SurveyId, 0, exact, Answers, [], Editing, Args, Context),
                         Args, Context)
             end;
+        IsValidated, SubmitButton =:= <<"z_survey_start">> ->
+            % Jump to start on a non-lineair form - clear history.
+            render_update(
+                render_next_page(SurveyId, 1, exact, Answers, [], Editing, Args, Context),
+                Args, Context);
         not IsValidated, SubmitButton =:= <<"z_survey_save">> ->
+            % Save intermediate results, show confirm to stop.
             if
                 Editing =:= undefined -> save_page(SurveyId, Answers, Args, Context);
                 true -> ok

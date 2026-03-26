@@ -25,6 +25,14 @@
 	            <input type="checkbox" name="survey_is_autostart" id="survey_is_autostart" value="1" {% if id.survey_is_autostart or (id.survey_is_autostart|is_undefined and id.is_a.poll) %}checked="checked"{% endif %}>
 		            {_ Immediately start with the questions, no “Start” button _}
 	        </label>
+	   		<label class="checkbox">
+       			<input type="checkbox" name="is_survey_save_intermediate" {% if id.is_survey_save_intermediate %}checked{% endif %}>
+       			{_ Show “Continue later” button to save answers and return later to submit _}
+       		</label>
+	   		<label class="checkbox">
+       			<input type="checkbox" name="is_survey_non_linear" {% if id.is_survey_non_linear %}checked{% endif %}>
+       			{_ Allow non-linear forms; answers are saved when using the “Back” button _}
+       		</label>
 			<label class="checkbox">
 				<input type="checkbox" name="survey_anonymous" id="survey_anonymous" value="1" {% if id.survey_anonymous %}checked="checked"{% endif %}> {_ Hide the user’s id or browser-id from result exports _}
 			</label>
@@ -59,20 +67,6 @@
 			</div>
 
 			{% block survey_settings_fill %}{% endblock %}
-		</div>
-
-		<div class="form-group">
-	   		<label class="checkbox">
-       			<input type="checkbox" name="is_survey_save_intermediate" {% if id.is_survey_save_intermediate %}checked{% endif %}>
-       			{_ Show “Save and stop” button to continue later _}
-       		</label>
-		</div>
-
-		<div class="form-group">
-	   		<label class="checkbox">
-       			<input type="checkbox" name="is_survey_non_linear" {% if id.is_survey_non_linear %}checked{% endif %}>
-       			{_ Allow non-linear forms; answers are saved when using the Back button _}
-       		</label>
 		</div>
 	</fieldset>
 
