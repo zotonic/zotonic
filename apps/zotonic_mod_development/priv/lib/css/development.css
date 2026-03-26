@@ -239,7 +239,8 @@ body.template-debug-resizing {
     border-radius: 3px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25); }
   .development-template-overlay .template-debug .template-debug-dropdown-item,
-  .development-template-overlay .template-debug .template-debug-dropdown-empty {
+  .development-template-overlay .template-debug .template-debug-dropdown-empty,
+  .development-template-overlay .template-debug .template-debug-dropdown-header {
     display: block;
     width: 100%;
     padding: 3px 6px;
@@ -258,6 +259,16 @@ body.template-debug-resizing {
       background: #e8eefc; }
   .development-template-overlay .template-debug .template-debug-dropdown-empty {
     color: #666; }
+  .development-template-overlay .template-debug .template-debug-dropdown-header {
+    color: #666;
+    font-weight: 700;
+    border-top: 1px solid #e2e8f0;
+    margin-top: 2px;
+    padding-top: 5px; }
+    .development-template-overlay .template-debug .template-debug-dropdown-header:first-child {
+      border-top: 0;
+      margin-top: 0;
+      padding-top: 3px; }
   .development-template-overlay .template-debug .template-debug-line-nav {
     margin-left: 6px;
     width: 34px;
