@@ -352,7 +352,8 @@ body.template-debug-resizing {
         }
 
         .template-debug-dropdown-item,
-        .template-debug-dropdown-empty {
+        .template-debug-dropdown-empty,
+        .template-debug-dropdown-header {
             display: block;
             width: 100%;
             padding: 3px 6px;
@@ -377,6 +378,20 @@ body.template-debug-resizing {
 
         .template-debug-dropdown-empty {
             color: #666;
+        }
+
+        .template-debug-dropdown-header {
+            color: #666;
+            font-weight: 700;
+            border-top: 1px solid #e2e8f0;
+            margin-top: 2px;
+            padding-top: 5px;
+
+            &:first-child {
+                border-top: 0;
+                margin-top: 0;
+                padding-top: 3px;
+            }
         }
 
         .template-debug-line-nav {

@@ -36,8 +36,9 @@ Available Model API Paths
 | `get` | `/reindex/...` | Return config flag controlling whether reindex action is enabled. |
 | `get` | `/dispatch_info/...` | Return dispatch rule info/inspection data for development diagnostics. |
 | `get` | `/show_trace_button/...` | Check if the trace button for debugging templates can be shown. |
-| `get` | `/template_trace_parents/...` | Return traced templates that include/extend/overrule a template. |
+| `get` | `/template_trace_parents/...` | Return traced parent relations for a template source location. |
 | `get` | `/template_trace_children/...` | Return traced templates included from a template source location. |
+| `get` | `/template_trace_filename_menu/...` | Return grouped filename-menu relations for a traced template. |
 
 `/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
@@ -162,6 +163,8 @@ m_get([ <<"template_trace_parents">> | Rest ], Msg, Context) ->
     template_trace_relations(parents, Rest, Msg, Context);
 m_get([ <<"template_trace_children">> | Rest ], Msg, Context) ->
     template_trace_relations(outgoing, Rest, Msg, Context);
+m_get([ <<"template_trace_filename_menu">> | Rest ], Msg, Context) ->
+    template_trace_filename_menu(Rest, Msg, Context);
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
@@ -199,6 +202,56 @@ trace_relations(Direction, Template, Payload, Graph) ->
             Relations = relations(Direction, NodeId, Template, FilterLine, FilterColumn, FilterType, Edges, NodeMap),
             unique_relations(Relations)
     end.
+
+template_trace_filename_menu(Rest, Msg, Context) ->
+    case z_acl:is_allowed(use, mod_development, Context) of
+        true ->
+            Payload = case Msg of
+                #{ payload := P } when is_map(P) -> P;
+                _ -> #{}
+            end,
+            case maps:get(<<"template">>, Payload, undefined) of
+                Template when is_binary(Template) ->
+                    {ok, Trace} = mod_development:template_trace_fetch(Context),
+                    Graph = maps:get(graph, Trace, #{}),
+                    {ok, {filename_menu_relations(Template, Graph), Rest}};
+                _ ->
+                    {error, missing_arg}
+            end;
+        false ->
+            {error, eacces}
+    end.
+
+filename_menu_relations(Template, Graph) ->
+    Nodes = maps:get(nodes, Graph, []),
+    Edges = maps:get(edges, Graph, []),
+    NodeMap = maps:from_list([ {maps:get(id, N), N} || N <- Nodes ]),
+    case find_trace_node(Template, Nodes) of
+        undefined ->
+            #{
+                extends_overrules => [],
+                includes => []
+            };
+        #{ id := NodeId } ->
+            #{
+                extends_overrules => unique_relations(
+                    lists:filtermap(
+                        fun(E) -> filename_menu_relation(extends_overrules, NodeId, E, NodeMap) end,
+                        Edges)),
+                includes => unique_relations(
+                    lists:filtermap(
+                        fun(E) -> filename_menu_relation(includes, NodeId, E, NodeMap) end,
+                        Edges))
+            }
+    end.
+
+filename_menu_relation(extends_overrules, NodeId, #{ from := NodeId, type := Type } = Edge, NodeMap)
+    when Type =:= extends; Type =:= overrules ->
+    edge_relation(to, Edge, NodeMap);
+filename_menu_relation(includes, NodeId, #{ to := NodeId, type := include } = Edge, NodeMap) ->
+    edge_relation(from, Edge, NodeMap);
+filename_menu_relation(_, _NodeId, _Edge, _NodeMap) ->
+    false.
 
 relations(parents, NodeId, Template, FilterLine, FilterColumn, FilterType, Edges, NodeMap) ->
     Incoming = lists:filtermap(

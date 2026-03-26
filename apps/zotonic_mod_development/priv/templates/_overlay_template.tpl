@@ -378,6 +378,48 @@
         });
     }
 
+    function appendDropdownSection(dropdown, headerLabel, templates) {
+        if (!templates || templates.length === 0) {
+            return false;
+        }
+
+        const header = document.createElement('div');
+        header.className = 'template-debug-dropdown-header';
+        header.textContent = headerLabel;
+        dropdown._menu.appendChild(header);
+
+        templates.forEach((templateInfo) => {
+            const item = document.createElement('button');
+            item.type = 'button';
+            item.className = 'template-debug-dropdown-item';
+            item.textContent = templateInfo.module
+                ? `${templateInfo.name} (${templateInfo.module})`
+                : templateInfo.name;
+            item.addEventListener('click', () => {
+                closeDropdown(dropdown);
+                navigateToTemplate(templateInfo.template);
+            });
+            dropdown._menu.appendChild(item);
+        });
+        return true;
+    }
+
+    function setFilenameDropdownSections(dropdown, sections) {
+        dropdown._menu.replaceChildren();
+        const hasExtends = appendDropdownSection(
+            dropdown,
+            '{_ Extended / overridden by _}',
+            sections.extends_overrules || []);
+        const hasIncludes = appendDropdownSection(
+            dropdown,
+            '{_ Included by _}',
+            sections.includes || []);
+
+        if (!hasExtends && !hasIncludes) {
+            setDropdownStatus(dropdown, '{_ No traced parent templates _}', 'template-debug-dropdown-empty');
+        }
+    }
+
     function templateCall(topic, payload) {
         return cotonic.broker.call(topic, payload).then((msg) => msg.payload.result || []);
     }
@@ -390,10 +432,10 @@
         dropdown.dataset.loading = '1';
         setDropdownStatus(dropdown, '{_ Loading... _}', 'template-debug-dropdown-empty');
         templateCall(
-            'bridge/origin/model/development/get/template_trace_parents',
+            'bridge/origin/model/development/get/template_trace_filename_menu',
             { template: currentTemplateFile }
-        ).then((templates) => {
-            setDropdownTemplates(dropdown, '{_ No traced parent templates _}', templates);
+        ).then((sections) => {
+            setFilenameDropdownSections(dropdown, sections || {});
         }).catch(() => {
             setDropdownStatus(dropdown, '{_ Could not load templates _}', 'template-debug-dropdown-empty');
         }).finally(() => {
@@ -495,7 +537,7 @@
     }
 
     function injectTemplateNavigation() {
-        initializeDropdown(templateParentsDropdown, '↑', '{_ Included by _}');
+        initializeDropdown(templateParentsDropdown, '↑', '{_ This template is used by _}');
         bindDropdown(templateParentsDropdown, loadParentTemplates);
         setDropdownStatus(templateParentsDropdown, '{_ Click to load templates _}', 'template-debug-dropdown-empty');
         templateBackButton.addEventListener('click', navigateBack);
