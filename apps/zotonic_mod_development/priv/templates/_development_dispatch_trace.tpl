@@ -1,5 +1,5 @@
 <div class="form-group">
-	<a href="{% url admin_development_templates_trace sid='sid' path=path %}">🪰 {_ Render page and trace templates _} &gt;</a>
+	<a href="{% url admin_development_templates_trace sid='sid' path=path %}">🪰 {_ Render this page and trace the templates _} &gt;</a>
 </div>
 
 <table class="table table-striped">

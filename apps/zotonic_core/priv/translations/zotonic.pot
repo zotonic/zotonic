@@ -7998,7 +7998,7 @@ msgid "Reload the page that we are tracing to see the debug data."
 msgstr ""
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:2
-msgid "Render page and trace templates"
+msgid "Render this page and trace the templates"
 msgstr ""
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:22
