@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-03-26 10:58\n"
+"PO-Revision-Date: 2026-03-26 11:18\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -304,7 +304,7 @@ msgstr "האם אתה בטוח שברצונך להחזיר את כל כללי ה
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:134
 #: zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:50
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:14
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:53
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:57
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:13
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:9
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:26
@@ -638,8 +638,8 @@ msgstr "חברים מאותה קבוצת משתמשים"
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:42
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:19
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:8
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:25
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:48
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:26
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:49
 #: zotonic_mod_base/priv/templates/error.tpl:78
 #: zotonic_mod_development/priv/templates/_development_template.tpl:3
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:10
@@ -691,9 +691,9 @@ msgstr "לא מורשה."
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:31
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:60
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:28
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:35
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:62
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:32
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:39
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:66
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:48
 msgid "Options"
 msgstr "אפשרויות"
@@ -2166,7 +2166,7 @@ msgstr "הזיז את הבלוק למעלה"
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:227
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:9
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:52
-#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:27
+#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:28
 #: zotonic_mod_comment/priv/templates/_comments_form.tpl:23
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:22
 #: zotonic_mod_contact/priv/templates/contact.tpl:11
@@ -2347,7 +2347,7 @@ msgstr "סקירת דפים"
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:36
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:27
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:24
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:4
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:8
 msgid "Path"
 msgstr "נָתִיב"
 
@@ -3071,7 +3071,7 @@ msgstr "פסק זמן בזמן ניסיון להביא נתונים מהאתר."
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:39
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:9
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:11
-#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:26
+#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:27
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:25
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:16
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:20
@@ -3407,7 +3407,7 @@ msgstr "על ידי"
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:78
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:59
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:31
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:46
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:50
 #: zotonic_mod_oauth2/priv/templates/_oauth2_apps_list.tpl:14
 #: zotonic_mod_oauth2/priv/templates/_oauth2_apps_list.tpl:15
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:79
@@ -3419,7 +3419,7 @@ msgid "d M Y, H:i"
 msgstr "d MY, H: i"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:167
-#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:42
+#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:43
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:39
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:79
 msgid "delete"
@@ -3437,7 +3437,7 @@ msgstr "למשל עשוי להשתנות"
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:75
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:38
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:87
-#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:45
+#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:46
 #: zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:21
 #: zotonic_mod_search/priv/templates/_search_view_list_item.tpl:16
 msgid "edit"
@@ -3867,7 +3867,7 @@ msgid "Show log for message"
 msgstr "הצג יומן להודעה"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:8
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:98
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:100
 msgid "System Configuration"
 msgstr "הגדרות מערכת"
 
@@ -4648,11 +4648,11 @@ msgid "not implemented yet"
 msgstr "עדיין לא מיושם"
 
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:34
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:123
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:124
 msgid "Activate"
 msgstr "לְהַפְעִיל"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:114
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:115
 msgid "Configure"
 msgstr "הגדר"
 
@@ -4665,12 +4665,12 @@ msgid "Cyclic dependencies"
 msgstr "תלות מחזורית"
 
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:17
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:33
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:118
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:34
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:119
 msgid "Deactivate"
 msgstr "השבת"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:18
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:19
 msgid "Deactivate these modules if you are not using them, or check the installation of the system."
 msgstr "השבת את המודולים הללו אם אינך משתמש בהם, או בדוק את התקנת המערכת."
 
@@ -4682,7 +4682,7 @@ msgstr "השבתת מודול זה תפסיק את המודולים הבאים:"
 msgid "Dependencies"
 msgstr "תלות"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:49
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:50
 msgid "Depends"
 msgstr "תלוי"
 
@@ -4694,11 +4694,11 @@ msgstr "האם אתה עדיין רוצה להפעיל את המודול"
 msgid "Do you still want to deactivate the module"
 msgstr "האם אתה עדיין רוצה להשבית את המודול"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:16
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:17
 msgid "Either they are not installed, or they are not compiled."
 msgstr "או שהם לא מותקנים, או שהם לא הידור."
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:105
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:106
 msgid "Install the module’s model and data."
 msgstr "התקן את הדגם והנתונים של המודול."
 
@@ -4711,15 +4711,15 @@ msgstr "תלות במודול"
 msgid "Modules are missing dependencies"
 msgstr "במודולים חסרים תלות"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:136
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:137
 msgid "No modules found"
 msgstr "לא נמצאו מודולים"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:50
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:51
 msgid "Provides"
 msgstr "מספק"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:104
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:105
 msgid "Reinstall"
 msgstr "התקן מחדש"
 
@@ -4749,7 +4749,7 @@ msgstr "מצטער, אסור לך לעשות זאת."
 msgid "The following modules will not start because they miss dependencies:"
 msgstr "המודולים הבאים לא יתחילו מכיוון שהם מתגעגעים לתלות:"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:15
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:16
 msgid "The modules below are activated but could not be found."
 msgstr "המודולים שלהלן מופעלים אך לא נמצאו."
 
@@ -4865,7 +4865,7 @@ msgstr "הוסף חיבורים חדשים לפני חיבורים קיימים.
 msgid "Instead of a search box this will show a list of all pages in the <i>To</i> categories checked above. At least one category must be checked."
 msgstr "במקום תיבת חיפוש, זה יציג רשימה של כל הדפים בקטגוריות <i>עד</i> שסומנו למעלה. יש לבדוק לפחות קטגוריה אחת."
 
-#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:19
+#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:20
 #: zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:54
 msgid "Make a new predicate"
 msgstr "צור פרדיקט חדש"
@@ -4882,7 +4882,7 @@ msgstr "לא נמצאו חיבורי עמודים."
 msgid "No page connections with the predicate:"
 msgstr "אין חיבורי עמודים עם הפרדיקט:"
 
-#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:53
+#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:54
 msgid "No predicates found."
 msgstr "לא נמצאו פרדיקטים."
 
@@ -5016,7 +5016,7 @@ msgstr "לקטגוריה"
 msgid "Too many connections"
 msgstr ""
 
-#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:28
+#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:29
 msgid "URI"
 msgstr "URI"
 
@@ -6143,7 +6143,7 @@ msgstr "לחץ על רשימת <b>ושחזר גרסה קודמת</b> כדי לק
 msgid "Cloud file store is enabled. Backups of the database are uploaded to the cloud file store. Local files are copied to the cloud and not backed up locally."
 msgstr "חנות קבצים בענן מופעלת. גיבויים של מסד הנתונים מועלים לחנות הקבצים בענן. קבצים מקומיים מועתקים לענן ולא מגובים באופן מקומי."
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:47
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:49
 msgid "Cloud file store is enabled. The local files will not be backed up. Ensure that your cloud file store system has a proper backup."
 msgstr "חנות קבצים בענן מופעלת. הקבצים המקומיים לא יגובו. ודא שלמערכת חנות הקבצים בענן שלך יש גיבוי מתאים."
 
@@ -6173,7 +6173,7 @@ msgstr "דפים שנמחקו"
 msgid "Directory"
 msgstr "מַדרִיך"
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:81
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:83
 msgid "Do not encrypt backups."
 msgstr "אל תצפין גיבויים."
 
@@ -6191,11 +6191,11 @@ msgstr "הורד קובץ גיבוי"
 msgid "Enable <tt>mod_export</tt> to download backup files."
 msgstr "אפשר <tt>mod_export</tt> כדי להוריד קבצי גיבוי."
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:88
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:90
 msgid "Encrypt Backups"
 msgstr "הצפנת גיבויים"
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:79
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:81
 msgid "Encrypt backups."
 msgstr "הצפין גיבויים."
 
@@ -6203,7 +6203,7 @@ msgstr "הצפין גיבויים."
 msgid "Encrypted"
 msgstr "מוצפן"
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:40
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:41
 msgid "Encryption is enabled, but there is no encryption password. Please\n"
 "      make sure there is an encryption password in the settings."
 msgstr "ההצפנה מופעלת, אך אין סיסמת הצפנה. אנא\n"
@@ -6217,7 +6217,7 @@ msgstr "עזרה בנוגע לשחזור גיבוי &amp;"
 msgid "If the Cloud File Store module is used, then deleted files can be retained indefinitely."
 msgstr "אם נעשה שימוש במודול Cloud File Store, ניתן לשמור קבצים שנמחקו ללא הגבלת זמן."
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:98
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:100
 msgid "It can be found in the"
 msgstr "ניתן למצוא אותו ב"
 
@@ -6261,7 +6261,7 @@ msgstr "לא הועלה לחנות הקבצים"
 msgid "Note that files are only retained for 5 weeks after deletion, this is the same as the Zotonic database backup retention period."
 msgstr "שים לב שקבצים נשמרים רק למשך 5 שבועות לאחר המחיקה, זה זהה לתקופת השמירה של הגיבוי של מסד הנתונים של Zotonic."
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:97
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:99
 msgid "Note:"
 msgstr "הערה:"
 
@@ -6269,7 +6269,7 @@ msgstr "הערה:"
 msgid "Only administrators can start a backup."
 msgstr "רק מנהלי מערכת יכולים להתחיל גיבוי."
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:98
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:100
 msgid "Please make sure you store the backup encryption password in a safe <u>external</u> location."
 msgstr "אנא ודא שאתה מאחסן את סיסמת ההצפנה לגיבוי במיקום בטוח <u></u> חיצוני."
 
@@ -6376,11 +6376,11 @@ msgstr "מצטערים, אין לך הרשאה לשנות דף זה."
 msgid "Sorry, you have no permission to change the configuration."
 msgstr "מצטערים, אין לך הרשאה לשנות את התצורה."
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:13
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:14
 msgid "Start backup now"
 msgstr "התחל גיבוי עכשיו"
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:16
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:17
 msgid "Start database-only backup now"
 msgstr "התחל כעת גיבוי למסד נתונים בלבד"
 
@@ -6388,11 +6388,11 @@ msgstr "התחל כעת גיבוי למסד נתונים בלבד"
 msgid "Started the backup. You can keep this page open or continue working."
 msgstr "התחיל את הגיבוי. אתה יכול להשאיר דף זה פתוח או להמשיך לעבוד."
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:27
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:28
 msgid "The \"pg_dump\" command was not found in the path. Set in zotonic.config the \"pg_dump\" config key to the path to <tt>pg_dump</tt> and return to this page."
 msgstr "הפקודה \"pg_dump\" לא נמצאה בנתיב. הגדר ב-zotonic.config את מפתח התצורה \"pg_dump\" לנתיב ל <tt>pg_dump</tt> וחזור לדף זה."
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:30
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:31
 msgid "The \"tar\" command was not found in the path. Set in zotonic.config the \"tar\" config key to the path to <tt>tar</tt> and return to this page."
 msgstr "הפקודה \"טאר\" לא נמצאה בנתיב. הגדר ב-zotonic.config את מקש התצורה \"tar\" לנתיב ל <tt>tar</tt> וחזור לדף זה."
 
@@ -6410,7 +6410,7 @@ msgstr "תצורת הגיבוי מוגדרת ל:"
 msgid "The backup module uses a global Zotonic configuration. The configuration cannot be changed here."
 msgstr "מודול הגיבוי משתמש בתצורה גלובלית של Zotonic. לא ניתן לשנות את התצורה כאן."
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:75
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:77
 msgid "The encryption configuration is set to:"
 msgstr "תצורת ההצפנה מוגדרת ל:"
 
@@ -6427,7 +6427,7 @@ msgstr "זה יחליף את הדף שלך עם תוכן קובץ הגיבוי."
 msgid "Uploaded to filestore"
 msgstr "הועלה לחנות הקבצים"
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:23
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:24
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:124
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:42
 msgid "Warning"
@@ -6452,7 +6452,7 @@ msgstr "אינך רשאי לשחזר דף זה."
 msgid "You are not allowed to see the revisions"
 msgstr "אינך רשאי לראות את התיקונים"
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:8
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:9
 msgid "You can have one backup per day of the week, older ones will be overwritten."
 msgstr "אתה יכול לקבל גיבוי אחד ליום בשבוע, ישנים יותר יוחלפו."
 
@@ -6468,7 +6468,7 @@ msgstr "אתה יכול לבחור גרסה לשחזור."
 msgid "You need to have access rights to the backup module."
 msgstr "אתה צריך להיות בעל זכויות גישה למודול הגיבוי."
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:23
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:24
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
 msgstr "הגיבוי שלך לא מוגדר כהלכה. מודול הגיבוי לא יעבוד עד לפתרון הבעיה / ים למטה:"
 
@@ -6480,7 +6480,7 @@ msgstr "להוריד מסד נתונים"
 msgid "download files"
 msgstr "להוריד קבצים"
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:98
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:100
 msgid "or in the Zotonic configuration files."
 msgstr "או בקבצי התצורה של Zotonic."
 
@@ -7137,7 +7137,7 @@ msgstr "<tt>{extends}</tt> מוצגים עם קו פסים, <tt>{overrules}</tt>
 msgid "A graph of all templates, and by whom they are included, is generated and automatically updated."
 msgstr "גרף של כל התבניות, ועל ידי מי הן נכללות, נוצר ומתעדכן אוטומטית."
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:5
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:9
 msgid "Action"
 msgstr "פעולה"
 
@@ -7178,7 +7178,7 @@ msgstr ""
 msgid "Below is the list of all notifications and the installed observers."
 msgstr "להלן רשימת ההתראות והמשקיפים המותקנים."
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:6
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:10
 msgid "Bindings"
 msgstr "כריכות"
 
@@ -7217,9 +7217,9 @@ msgstr ""
 msgid "Column"
 msgstr "טור"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:26
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:33
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:60
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:30
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:37
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:64
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:51
 msgid "Controller"
 msgstr "בקר"
@@ -7371,7 +7371,7 @@ msgstr ""
 msgid "Extends"
 msgstr "מאריך"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:32
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:36
 msgid "Final dispatch"
 msgstr "משלוח סופי"
 
@@ -7391,11 +7391,11 @@ msgstr "למידע נוסף ראה: { url }"
 msgid "Force a recompilation of all templates. This fixes any issues where the compiled templates might be out of sync with the template index."
 msgstr "כפה הידור מחדש של כל התבניות. זה פותר את כל הבעיות שבהן התבניות הקומפילציה לא מסונכרנות עם אינדקס התבניות."
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:42
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:46
 msgid "Forced switch of protocol to"
 msgstr "מעבר פרוטוקול מאולץ ל"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:23
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:27
 msgid "Found matching dispatch rule"
 msgstr "נמצא כלל משלוח תואם"
 
@@ -7471,8 +7471,8 @@ msgstr ""
 msgid "Loading..."
 msgstr "טוען..."
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:69
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:75
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:73
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:79
 msgid "Location"
 msgstr "מקום"
 
@@ -7500,13 +7500,13 @@ msgstr "חסרות תבניות כלולות אופציונליות"
 msgid "Missing {extends} or {overrules}"
 msgstr "חסר {extends} או {overrules}"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:40
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:43
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:44
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:47
 msgid "New host"
 msgstr "מארח חדש"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:48
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:54
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:52
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:58
 msgid "New path"
 msgstr "דרך חדשה"
 
@@ -7514,7 +7514,7 @@ msgstr "דרך חדשה"
 msgid "No data."
 msgstr "אין מידע."
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:45
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:49
 msgid "No matching dispatch rule found"
 msgstr "לא נמצא כלל שיגור תואם"
 
@@ -7571,8 +7571,8 @@ msgstr ""
 msgid "Optional category for catinclude"
 msgstr "קטגוריה אופציונלית עבור כלול בקטגוריה"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:71
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:77
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:75
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:81
 msgid "Permanent redirect"
 msgstr "הפניה קבועה מחדש"
 
@@ -7580,7 +7580,7 @@ msgstr "הפניה קבועה מחדש"
 msgid "Recompile templates"
 msgstr "הידור מחדש של תבניות"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:74
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:78
 msgid "Redirect"
 msgstr "הפניה מחדש"
 
@@ -7594,6 +7594,10 @@ msgstr ""
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:36
 msgid "Reload the page that we are tracing to see the debug data."
+msgstr ""
+
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:2
+msgid "Render page and trace templates"
 msgstr ""
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:22
@@ -7646,7 +7650,7 @@ msgstr "שם אתר"
 msgid "Start Tracing"
 msgstr "התחל מעקב"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:21
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:25
 msgid "Start matching dispatch rules"
 msgstr "התחל להתאים לכללי משלוח"
 
@@ -7688,7 +7692,7 @@ msgstr "עצר."
 msgid "Subscribers"
 msgstr "מנויים"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:39
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:43
 msgid "Switch protocol to"
 msgstr "החלף פרוטוקול ל-"
 
@@ -7748,7 +7752,7 @@ msgstr "זה מחשב ומדמיין את גרף התלות של כל התבני
 msgid "This checks all templates to see if included or extended templates are available."
 msgstr "זה בודק את כל התבניות כדי לראות אם תבניות כלולות או מורחבות זמינות."
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:56
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:60
 msgid "This resource is unknown or does not have a URI"
 msgstr "משאב זה אינו ידוע או שאין לו URI"
 
@@ -7852,27 +7856,27 @@ msgstr "אינך מורשה להשתמש באגים בתבנית."
 msgid "You do not have permission to access development tools."
 msgstr "אין לך הרשאה לגשת לכלי פיתוח."
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:59
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:63
 msgid "found dispatch rule"
 msgstr "מצא כלל משלוח"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:66
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:70
 msgid "found no match"
 msgstr "לא מצא התאמה"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:52
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:56
 msgid "found resource id"
 msgstr "מזהה משאב נמצא"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:47
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:51
 msgid "notification"
 msgstr "הוֹדָעָה"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:50
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:54
 msgid "notification, checking first return"
 msgstr "הודעה, בדיקת חזרה ראשונה"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:68
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:72
 msgid "redirects"
 msgstr "הפניות מחדש"
 
@@ -9502,7 +9506,7 @@ msgstr "רשימה מנוהלת חיצונית &mdash; ללא קישורי בי�
 msgid "First name"
 msgstr "שם פרטי"
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:21
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:25
 msgid "Forget previous e-mails, mail all recipients again."
 msgstr "תשכח מהודעות דואר אלקטרוני קודמות, שלח שוב את כל הנמענים."
 
@@ -9627,7 +9631,7 @@ msgstr "מספר הנמענים ברשימה זו:"
 msgid "Only keep recipients on this list that appear <em>on both lists</em>"
 msgstr "שמור רק נמענים ברשימה זו המופיעים <em>בשתי הרשימות</em>"
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:30
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:34
 msgid "Only send to recipients whose preferred language match the translations of the mailing."
 msgstr "שלח רק לנמענים שהשפה המועדפת עליהם תואמת את תרגומי הדיוור."
 
@@ -9764,7 +9768,7 @@ msgstr "בחר..."
 msgid "Send e-mail"
 msgstr "שלח אימייל"
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:54
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:58
 msgid "Send mailing"
 msgstr "שלח דיוור"
 
@@ -9777,15 +9781,15 @@ msgstr "שלח דיוור למבחן"
 msgid "Send test to address"
 msgstr "שלח בדיקה לכתובת"
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:46
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:50
 msgid "Send the mailing automatically after the publication start date of"
 msgstr "שלח את הדיוור באופן אוטומטי לאחר תאריך תחילת הפרסום של"
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:44
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:48
 msgid "Send the mailing immediately after the \"published\" checkbox has been checked in the edit page."
 msgstr "שלח את הדיוור מיד לאחר שסימנה תיבת הסימון \"פורסמה\" בדף העריכה."
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:39
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:43
 msgid "Send the mailing right now, but do not include a link back to the website."
 msgstr "שלחו את הדיוור כבר עכשיו, אך אל תכללו קישור חזרה לאתר."
 
@@ -9920,7 +9924,7 @@ msgstr "הדיוור בוטל."
 msgid "The mailing will be send when the page becomes visible."
 msgstr "הדיוור יישלח כאשר הדף יהיה גלוי."
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:36
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:40
 msgid "The page you are trying to e-mail is not yet published. What do you want to do?"
 msgstr "הדף שאתה מנסה לשלוח בדוא\"ל עדיין לא פורסם. מה אתה רוצה לעשות?"
 
@@ -13763,7 +13767,7 @@ msgstr "הזן את הסיסמה שלך לניהול שרת זה"
 msgid "Flush and reload all settings, templates etc."
 msgstr "שטוף וטען מחדש את כל ההגדרות, התבניות וכו '."
 
-#: zotonic_site_status/priv/templates/error.400.tpl:11
+#: zotonic_site_status/priv/templates/error.400.tpl:16
 msgid "If you feel that you are here by mistake,\n"
 "                please hit the \"back\" button in your browser or\n"
 "                try a different address."
@@ -13771,7 +13775,7 @@ msgstr "אם אתה מרגיש שאתה נמצא כאן בטעות,\n"
 "                נא ללחוץ על כפתור \"אחורה\" בדפדפן או\n"
 "                נסה כתובת אחרת."
 
-#: zotonic_site_status/priv/templates/home.tpl:14
+#: zotonic_site_status/priv/templates/home.tpl:19
 msgid "If you feel that you are here by mistake,\n"
 "            please hit the \"back\" button in your browser or\n"
 "            try a different address. If you are here to manage\n"
@@ -13785,9 +13789,9 @@ msgstr "אם אתה מרגיש שאתה נמצא כאן בטעות,\n"
 msgid "Log On"
 msgstr "התחבר"
 
-#: zotonic_site_status/priv/templates/error.400.tpl:20
+#: zotonic_site_status/priv/templates/error.400.tpl:27
 #: zotonic_site_status/priv/templates/error.503.tpl:21
-#: zotonic_site_status/priv/templates/home.tpl:25
+#: zotonic_site_status/priv/templates/home.tpl:33
 msgid "Manage this server"
 msgstr "נהל שרת זה"
 
