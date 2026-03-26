@@ -29,13 +29,24 @@
 	<form class="form-survey survey-{{ id.name }}" id="{{ #q }}" data-id="{{ id }}" method="post" action="postback">
 		<fieldset>
 			{% if not id.is_a.poll and pages > 1 %}
-				{% if id.survey_progress == 'nr' %}
-					<legend>{{ page_nr }}<span class="total">/{{ pages }}</span></legend>
-				{% elseif id.survey_progress == 'bar' %}
-					<div class="progress">
-					  <div class="progress-bar" style="width: {{ page_nr * 100 / pages }}%;"></div>
-					</div>
-				{% endif %}
+				{% with page_nr > 1 and id.is_survey_non_linear and id|survey_is_history_back:1 as show_back %}
+	                {% if id.survey_progress == 'nr' %}
+	                    <legend>
+	                        {% if show_back %}
+	                            <button class="btn btn-default btn-sm" name="z_survey_start" type="submit">{_ &lt; Back to start _}</button>
+	                        {% endif %}
+	                        {{ page_nr }}<span class="total">/{{ pages }}</span>
+	                    </legend>
+	                {% elseif id.survey_progress == 'bar' %}
+	                    <div class="progress">
+	                      <div class="bar" style="width: {{ page_nr * 100 / pages }}%;"></div>
+	                    </div>
+	                {% endif %}
+
+	                {% if show_back and id.survey_progress /= 'nr' %}
+	                    <button class="btn btn-default btn-sm" name="z_survey_start" type="submit">{_ &lt; Back to start _}</button>
+	                {% endif %}
+	            {% endwith %}
 			{% endif %}
 
 			{% block before_questions %}
@@ -73,7 +84,7 @@
 		</fieldset>
 
 		<div class="alert alert-danger z_invalid">
-			{% if id|survey_is_history_back:history and id.is_survey_non_linear %}
+			{% if id.is_survey_non_linear and id|survey_is_history_back:history %}
 				{_ Not all the required fields are filled in. You can go back to the previous page without saving your answers. _}
 				<br>
 				<br>
@@ -111,33 +122,35 @@
 											:{dialog_close}
 											:{redirect id=id}
 									)
-							as action
+							as close_action
 						%}
 							{% if id|survey_is_save_intermediate %}
+								{# Save the answers to the intermediate answers, and then show dialog if user wants to stop. #}
 								<button id="{{ #save }}" class="btn btn-default" name="z_survey_save" formnovalidate type="submit" title="{_ Save your answers without submitting them yet so you can continue later. _}">
-									{_ Save and stop _}
+									{_ Continue later _}
 								</button>
 								{% wire name="survey-stop-confirm"
 										action={confirm
 											text=[
-												_"Are you sure you want to stop? You can continue later.",
+												_"Do you want to stop for now and continue later?",
 												"<br>",
-												_"Your answers will not be submitted."
+												_"Your progress has been saved. You can return later to finish and submit it."
 											]
 											ok=_"Stop and continue later"
 											cancel=_"Cancel"
-											action=action
+											action=close_action
 										}
 								%}
-								{% wire name="survey-close" action=action %}
+								{% wire name="survey-close" action=close_action %}
 							{% else %}
+								{# No intermediate answers saved, directly ask user if they want to stop. #}
 								<button id="{{ #cancel }}" class="btn btn-default" type="button">{_ Stop _}</button>
 								{% wire id=#cancel
 										action={confirm
 											text=_"Are you sure you want to stop without saving?"
 											ok=_"Stop without saving"
 											cancel=_"Cancel"
-											action=action
+											action=close_action
 										}
 								%}
 							{% endif %}
