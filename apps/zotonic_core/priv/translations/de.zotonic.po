@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-03-26 11:18\n"
+"PO-Revision-Date: 2026-03-26 13:13\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -7599,8 +7599,8 @@ msgid "Reload the page that we are tracing to see the debug data."
 msgstr "Laden Sie die Seite neu, die wir verfolgen, um die Debug-Daten zu sehen."
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:2
-msgid "Render page and trace templates"
-msgstr ""
+msgid "Render this page and trace the templates"
+msgstr "Rendern Sie diese Seite und verfolgen Sie die Vorlagen"
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:22
 msgid "Rerun graph"
