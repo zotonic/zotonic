@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-03-25 13:01\n"
+"PO-Revision-Date: 2026-03-26 10:59\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -325,9 +325,9 @@ msgstr "Kas olete kindel, et soovite taastada kõik ACL-reeglid nende praegu ava
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:113
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:88
 #: zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:49
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:128
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:139
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:147
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:140
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:152
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:160
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
 #: zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:115
@@ -352,7 +352,7 @@ msgstr "Katkesta"
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:45
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:11
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:28
-#: zotonic_mod_survey/src/mod_survey.erl:341
+#: zotonic_mod_survey/src/mod_survey.erl:346
 msgid "Category"
 msgstr "Kategooria"
 
@@ -497,7 +497,7 @@ msgstr "Koostöögruppi ei saanud liikuda."
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:106
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125
-#: zotonic_mod_survey/src/mod_survey.erl:307
+#: zotonic_mod_survey/src/mod_survey.erl:312
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:25
 msgid "Delete"
 msgstr "Kustuta"
@@ -1239,8 +1239,8 @@ msgstr "Saadaval"
 #: zotonic_mod_survey/priv/templates/_survey_end.tpl:28
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:22
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:23
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:99
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:101
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:110
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:112
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:23
 msgid "Back"
 msgstr "tagasi"
@@ -2039,7 +2039,7 @@ msgid "Make a new page or media"
 msgstr "Tehke uus leht või meedium"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:6
-#: zotonic_mod_survey/src/mod_survey.erl:342
+#: zotonic_mod_survey/src/mod_survey.erl:347
 msgid "Matching"
 msgstr "Sobitamine"
 
@@ -4304,9 +4304,9 @@ msgstr "Sisesta kasutajanimi / parool"
 #: zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:27
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:73
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:128
-#: zotonic_mod_survey/src/mod_survey.erl:1227
-#: zotonic_mod_survey/src/mod_survey.erl:1249
-#: zotonic_mod_survey/src/mod_survey.erl:1257
+#: zotonic_mod_survey/src/mod_survey.erl:1237
+#: zotonic_mod_survey/src/mod_survey.erl:1259
+#: zotonic_mod_survey/src/mod_survey.erl:1267
 msgid "Sorry"
 msgstr "Vabandust"
 
@@ -5495,7 +5495,7 @@ msgid "Confirmation failure"
 msgstr "Kinnitus ebaõnnstus"
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:67
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:93
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:104
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:48
 msgid "Continue"
 msgstr "Jätka"
@@ -5721,8 +5721,8 @@ msgid "Multiple accounts"
 msgstr "Mitu kontot"
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:209
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:152
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:157
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:165
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:170
 msgid "Next"
 msgstr "Järgmine"
 
@@ -7186,8 +7186,8 @@ msgstr "Köited"
 msgid "Calculate and visualize a dependency graph of all templates."
 msgstr "Arvutage ja visualiseerige kõigi mallide sõltuvusgraafik."
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:42
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:759
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:43
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:906
 msgid "Check debug points in the template source to see debug data here."
 msgstr ""
 
@@ -7204,12 +7204,12 @@ msgstr "Kustutage andmed ja alustage"
 msgid "Clear data and trace all"
 msgstr "Kustutage andmed ja jälgige kõike"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:386
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:395
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:533
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:542
 msgid "Click to load templates"
 msgstr ""
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:16
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:17
 msgid "Click to restart"
 msgstr ""
 
@@ -7243,8 +7243,8 @@ msgstr "Punktifaili ei saanud lõikelauale kopeerida."
 msgid "Could not fetch tracer output, please try again."
 msgstr "Jälgija väljundit ei õnnestunud tuua, proovige uuesti."
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:293
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:324
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:440
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:471
 msgid "Could not load templates"
 msgstr ""
 
@@ -7261,11 +7261,11 @@ msgstr "Mallide ristviide"
 msgid "Cross-reference check results"
 msgstr "Ristviidete kontrolli tulemused"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:22
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:23
 msgid "Debug all sessions"
 msgstr ""
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:27
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:28
 msgid "Debugging all sessions can result in a large amount of debug data."
 msgstr ""
 
@@ -7363,6 +7363,10 @@ msgstr "Iga saidil juurdepääsetav URL on määratletud väljasaatmisreeglitega
 msgid "Explain"
 msgstr "Seletama"
 
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:411
+msgid "Extended / overridden by"
+msgstr ""
+
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:191
 msgid "Extends"
 msgstr "Pikendab"
@@ -7417,7 +7421,7 @@ msgstr "Kõigi mallide sõltuvuste graafik"
 msgid "Hostalias"
 msgstr "Hostalias"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:393
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:415
 msgid "Included by"
 msgstr ""
 
@@ -7461,8 +7465,8 @@ msgstr "Funktsioonikutsete jälgimine serveris."
 msgid "Loading and displaying the trace for:"
 msgstr ""
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:286
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:312
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:433
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:459
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:76
 msgid "Loading..."
 msgstr "Laadimine..."
@@ -7480,7 +7484,7 @@ msgstr "JavaScripti konsooli logimise lubamiseks logige sisse administraatorina.
 msgid "Match a request URL, display matched dispatch rule."
 msgstr "Sobitage päringu URL, kuvage sobitatud saatmisreegel."
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:14
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:15
 msgid "Maximum tracing time reached, debugging stopped."
 msgstr ""
 
@@ -7533,11 +7537,11 @@ msgstr "Mod_developmenti kasutamiseks pole luba."
 msgid "No template found in the context."
 msgstr ""
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:291
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:419
 msgid "No traced parent templates"
 msgstr ""
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:322
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:469
 msgid "No traced templates on this point"
 msgstr ""
 
@@ -7559,7 +7563,7 @@ msgstr "Jälgi saab määrata ainult administraatori kasutaja."
 msgid "Only the admin user can use function call tracing."
 msgstr "Ainult administraatori kasutaja saab kasutada funktsioonikõne jälgimist."
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:381
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:528
 msgid "Open included template"
 msgstr ""
 
@@ -7584,11 +7588,11 @@ msgstr "Suunamine"
 msgid "Refresh"
 msgstr "Värskenda"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:32
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:33
 msgid "Reload the page"
 msgstr ""
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:35
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:36
 msgid "Reload the page that we are tracing to see the debug data."
 msgstr ""
 
@@ -7663,8 +7667,8 @@ msgid "Started tracing template inclusions for your session."
 msgstr "Alustati teie seansi malli lisamiste jälgimist."
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:33
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:134
-#: zotonic_mod_survey/src/mod_survey.erl:350
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:147
+#: zotonic_mod_survey/src/mod_survey.erl:355
 msgid "Stop"
 msgstr "Lõpeta"
 
@@ -7748,6 +7752,10 @@ msgstr "See kontrollib kõiki malle, et näha, kas kaasatud või laiendatud mall
 msgid "This resource is unknown or does not have a URI"
 msgstr "See ressurss on tundmatu või sellel pole URI-d"
 
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:540
+msgid "This template is used by"
+msgstr ""
+
 #: zotonic_mod_development/priv/templates/admin_development.tpl:13
 msgid "Tools and settings that are useful for site development."
 msgstr "Tööriistad ja seaded, mis on saidi arendamiseks kasulikud."
@@ -7797,7 +7805,7 @@ msgstr "Tüüp {include}"
 msgid "URI Pattern"
 msgstr "URI muster"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:26
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:27
 msgid "Uncheck to debug only your current session."
 msgstr ""
 
@@ -7822,7 +7830,7 @@ msgstr "Vaadake kõiki saidil saadaolevaid saatmisreegleid"
 msgid "View template"
 msgstr ""
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:761
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:908
 msgid "Waiting for debug data..."
 msgstr ""
 
@@ -11780,11 +11788,16 @@ msgstr "Sertifikaatide taotlemiseks peate olema administraator."
 msgid "not reachable or local IP"
 msgstr "pole kättesaadav ega kohalik IP"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:45
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:36
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:47
+msgid "&lt; Back to start"
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:53
 msgid "'Once' means once by a respondent who is logged in or once per browser for anonymous respondents. To identify the browser of anonymous respondents, a cookie containing a unique ID is utilized."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:105
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:99
 msgid "<b>Note</b>: For the features 'once', 'edit after submit', and checking the maximum number of submitted forms to function, the form needs to have the saved results. If a handler (chosen in the <em>handling</em> settings below) does not save the results, these features will not be available."
 msgstr ""
 
@@ -11850,11 +11863,11 @@ msgstr "Lisa olemasolevasse postitusloendisse"
 msgid "Add to mailinglist"
 msgstr "Lisa meililisti"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:121
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:115
 msgid "After all questions are answered and submitted, one of the following is shown."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:141
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:135
 msgid "Aggregated results from all respondents"
 msgstr "Koondtulemused kõigilt vastajatelt"
 
@@ -11862,11 +11875,11 @@ msgstr "Koondtulemused kõigilt vastajatelt"
 msgid "Agree"
 msgstr "Nõus"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:74
-msgid "Allow non-linear forms; answers are saved when using the Back button"
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:34
+msgid "Allow non-linear forms; answers are saved when using the “Back” button"
 msgstr ""
 
-#: zotonic_mod_survey/src/mod_survey.erl:1240
+#: zotonic_mod_survey/src/mod_survey.erl:1250
 msgid "Already submitted"
 msgstr "Juba esitatud"
 
@@ -11914,19 +11927,15 @@ msgstr "Kas soovite kindlasti selle lehe kustutada?<br/>See kustutab ka kõik se
 msgid "Are you sure you want to delete this question?"
 msgstr "Kas soovite selle küsimuse kindlasti kustutada?"
 
-#: zotonic_mod_survey/src/mod_survey.erl:306
+#: zotonic_mod_survey/src/mod_survey.erl:311
 msgid "Are you sure you want to delete this result?"
 msgstr "Kas soovite selle tulemuse kindlasti kustutada?"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:137
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:150
 msgid "Are you sure you want to stop without saving?"
 msgstr "Kas olete kindel, et soovite lõpetada ilma salvestamata?"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:123
-msgid "Are you sure you want to stop? You can continue later."
-msgstr ""
-
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:80
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:91
 msgid "Back without saving"
 msgstr ""
 
@@ -11935,7 +11944,7 @@ msgid "Because you can edit, you can proceed for testing."
 msgstr "Kuna saate redigeerida, võite jätkata testimist."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:112
-#: zotonic_mod_survey/src/mod_survey.erl:347
+#: zotonic_mod_survey/src/mod_survey.erl:352
 msgid "Button"
 msgstr "Nupp"
 
@@ -11976,7 +11985,7 @@ msgstr "Kontrollige õigeid vastuseid ja andke igale vastusele punktid."
 msgid "Choices"
 msgstr "Valikud"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:45
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:53
 msgid "Choose how many times a respondent can fill in this form."
 msgstr ""
 
@@ -11988,6 +11997,10 @@ msgstr "Sisestatud andmete vaatamiseks ja muutmiseks klõpsake nuppu \"Muuda\"."
 #: zotonic_mod_survey/priv/templates/survey.tpl:23
 msgid "Closed"
 msgstr "Suletud"
+
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:130
+msgid "Continue later"
+msgstr ""
 
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:107
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:141
@@ -12004,7 +12017,7 @@ msgstr "Saajaid ei saanud lisada."
 msgid "Could not create the mailinglist."
 msgstr "Meililisti ei saanud luua."
 
-#: zotonic_mod_survey/src/mod_survey.erl:346
+#: zotonic_mod_survey/src/mod_survey.erl:351
 msgid "Country select"
 msgstr "Valige riik"
 
@@ -12040,7 +12053,7 @@ msgstr "Loodud"
 msgid "Danger"
 msgstr "Oht"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:33
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:41
 msgid "Deactivated"
 msgstr "Deaktiveeritud"
 
@@ -12059,6 +12072,10 @@ msgstr "Kustuta küsimus"
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:67
 msgid "Disagree"
 msgstr "Pole nõus"
+
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:135
+msgid "Do you want to stop for now and continue later?"
+msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:45
 msgid "Download a spreadsheet with all answers."
@@ -12132,7 +12149,7 @@ msgstr "Tagasiside, kui see on õige"
 msgid "Feedback if wrong"
 msgstr "Tagasiside vale korral"
 
-#: zotonic_mod_survey/src/mod_survey.erl:351
+#: zotonic_mod_survey/src/mod_survey.erl:356
 msgid "File upload"
 msgstr "Faili üleslaadimine"
 
@@ -12141,7 +12158,7 @@ msgstr "Faili üleslaadimine"
 msgid "Fill in the gaps"
 msgstr "Täida lüngad"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:43
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:51
 msgid "Filling in"
 msgstr ""
 
@@ -12161,11 +12178,11 @@ msgstr "Kuupäevavahemike jaoks saate kasutada ka suhtelisi kuupäevi, näiteks 
 msgid "Go to question"
 msgstr "Mine küsimuse juurde"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:224
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:218
 msgid "Handle this form with"
 msgstr "Käsitle seda vormi koos"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:203
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:197
 msgid "Handling"
 msgstr "Käitlemine"
 
@@ -12192,11 +12209,11 @@ msgstr "Varjatud väärtus, salvestatud koos vormiga, kuid seda ei kuvata vormi 
 msgid "Hide from results"
 msgstr "Peida tulemuste eest"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:160
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:154
 msgid "Hide progress information"
 msgstr "Peida edenemisteave"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:29
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:37
 msgid "Hide the user’s id or browser-id from result exports"
 msgstr "Peida kasutaja ID või brauseri ID tulemuste eksportimise eest"
 
@@ -12209,7 +12226,7 @@ msgstr "Ma olen"
 msgid "I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|other] ice cream and my favorite color is [color]."
 msgstr "Olen [age] -aastane. Mulle meeldib [jäätise = vanilli | maasika | šokolaadi | muu] jäätis ja minu lemmikvärv on [color]."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:85
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:79
 msgid "If the maximum number of forms has been submitted, then the start button is deactivated and an email is sent to the email addresses in the <em>handling</em> settings below. Leave empty for no limit. This is useful for signup lists with a limited number of spots."
 msgstr ""
 
@@ -12254,7 +12271,7 @@ msgstr "Hüppa järgmise lehe küsimuse juurde."
 msgid "Jump to this question label (must be on an other page below)"
 msgstr "Liikuge sellele küsimusesildile (peab asuma teisel alloleval lehel)"
 
-#: zotonic_mod_survey/src/mod_survey.erl:339
+#: zotonic_mod_survey/src/mod_survey.erl:344
 msgid "Likert"
 msgstr "Likert"
 
@@ -12265,12 +12282,12 @@ msgstr "Likert"
 msgid "Link with person"
 msgstr "Seos inimesega"
 
-#: zotonic_mod_survey/src/mod_survey.erl:345
+#: zotonic_mod_survey/src/mod_survey.erl:350
 msgid "Long answer"
 msgstr "Pikk vastus"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:206
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:207
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:200
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:201
 msgid "Mail results to"
 msgstr "Saatke tulemused aadressile"
 
@@ -12296,9 +12313,9 @@ msgstr "Sobiv küsimus"
 msgid "Maximal value"
 msgstr "Maksimaalne väärtus"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:82
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:91
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:98
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:76
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:85
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:92
 msgid "Maximum number of submissions"
 msgstr "Maksimaalne esitatavate dokumentide arv"
 
@@ -12331,7 +12348,7 @@ msgstr "Võimalik on mitu vastust"
 msgid "Multiple answers possible: points are given for the correct answer <i>and</i> points are given for <i>not</i> choosing the wrong answer. Default: 1 point for a correct answer, 1 point for not choosing a wrong answer."
 msgstr "Võimalikud mitmed vastused: õige vastuse eest antakse punkte <i>ja</i> punkti <i>, mitte</i> vale vastuse eest. Vaikimisi: 1 punkt õige vastuse eest, 1 punkt vale vastuse mittevalimise eest."
 
-#: zotonic_mod_survey/src/mod_survey.erl:352
+#: zotonic_mod_survey/src/mod_survey.erl:357
 msgid "Multiple choice"
 msgstr "Valikvastustega"
 
@@ -12344,11 +12361,11 @@ msgstr "Valikvastustega või viktoriiniküsimus"
 msgid "Multiple page break blocks are merged into one."
 msgstr "Mitu lehelõike plokki ühendatakse üheks."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:57
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:65
 msgid "Multiple times – each time with new results"
 msgstr ""
 
-#: zotonic_mod_survey/src/mod_survey.erl:343
+#: zotonic_mod_survey/src/mod_survey.erl:348
 msgid "Narrative"
 msgstr "Jutustav"
 
@@ -12374,11 +12391,11 @@ msgstr ""
 msgid "No results yet."
 msgstr "Tulemusi veel pole."
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:77
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:88
 msgid "Not all the required fields are filled in. You can go back to the previous page without saving your answers."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:123
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:117
 msgid "Note that if you select a special handler below, then that handler may override this setting."
 msgstr ""
 
@@ -12391,11 +12408,11 @@ msgstr "Postiloendisse lisatud adressaatide arv:"
 msgid "Numeric input, show totals for this field in the results."
 msgstr "Numbrisisend, kuvage tulemustes selle välja kogusummad."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:53
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:61
 msgid "Once — edit after submit (logged in users only)"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:49
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:57
 msgid "Once — submit is final (no editing after submit)"
 msgstr ""
 
@@ -12407,7 +12424,7 @@ msgstr "Aktsepteerige ainult pilte."
 msgid "Options from a page category"
 msgstr "Valikud lehekategooriast"
 
-#: zotonic_mod_survey/src/mod_survey.erl:348
+#: zotonic_mod_survey/src/mod_survey.erl:353
 msgid "Page break"
 msgstr "Leheküljevahe"
 
@@ -12415,7 +12432,7 @@ msgstr "Leheküljevahe"
 msgid "Page jump condition"
 msgstr "Lehe hüppe tingimus"
 
-#: zotonic_mod_survey/src/mod_survey.erl:349
+#: zotonic_mod_survey/src/mod_survey.erl:354
 msgid "Page options"
 msgstr ""
 
@@ -12430,7 +12447,7 @@ msgstr "Üle andma?"
 msgid "Passed"
 msgstr "Läbitud"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:189
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:183
 msgid "Passing score"
 msgstr "Läbimise tulemus"
 
@@ -12442,7 +12459,7 @@ msgstr "Protsent"
 msgid "Person"
 msgstr "Isik"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:82
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:93
 msgid "Please fill in all the required fields."
 msgstr "Palun täitke kõik kohustuslikud väljad."
 
@@ -12473,7 +12490,7 @@ msgstr "Esmane"
 msgid "Printable list"
 msgstr "Prinditav nimekiri"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:155
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:149
 msgid "Progress"
 msgstr "Edusammud"
 
@@ -12510,7 +12527,7 @@ msgstr "Lühikese vastusega küsimus"
 #: zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:7
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:5
 #: zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:8
-#: zotonic_mod_survey/src/mod_survey.erl:336
+#: zotonic_mod_survey/src/mod_survey.erl:341
 msgid "Questions"
 msgstr "Küsimused"
 
@@ -12551,7 +12568,7 @@ msgstr "Eemaldage nupp \"Järgmine\". Vastuseid ei esitata, kui te ei lisa nupu 
 msgid "Required, this question must be answered."
 msgstr "Vajalik, sellele küsimusele tuleb vastata."
 
-#: zotonic_mod_survey/src/mod_survey.erl:324
+#: zotonic_mod_survey/src/mod_survey.erl:329
 msgid "Result deleted."
 msgstr "Tulemus kustutatud."
 
@@ -12567,11 +12584,11 @@ msgstr "Tulemused"
 msgid "Results editor"
 msgstr "Tulemuste redaktor"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:133
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:127
 msgid "Results from the respondent"
 msgstr "Tulemused vastajalt"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:137
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:131
 msgid "Results from the respondent – if passed only"
 msgstr ""
 
@@ -12579,11 +12596,7 @@ msgstr ""
 msgid "Results until"
 msgstr "Tulemused kuni"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:118
-msgid "Save and stop"
-msgstr ""
-
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:117
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:129
 msgid "Save your answers without submitting them yet so you can continue later."
 msgstr ""
 
@@ -12613,19 +12626,19 @@ msgstr "Valige meililist"
 msgid "Select your country"
 msgstr "Valige oma riik"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:217
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:211
 msgid "Send a confirmation to the respondent. The email address must be known (logged in respondents) or you can add a short text field with the label “email” and the validation set to \"must be an email address\"."
 msgstr "Saatke vastajale kinnitus. E-posti aadress peab olema teada (sisselogitud vastajad) või lisada lühikese tekstivälja sildiga “e-post” ja valideerimiseks määrata “peab olema meiliaadress”."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:209
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:203
 msgid "Separate multiple email addresses with a comma."
 msgstr "Eraldage mitu e-posti aadressi komaga."
 
-#: zotonic_mod_survey/src/mod_survey.erl:344
+#: zotonic_mod_survey/src/mod_survey.erl:349
 msgid "Short answer"
 msgstr "Lühike vastus"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:118
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:112
 msgid "Show after the final submit of the form"
 msgstr ""
 
@@ -12637,11 +12650,11 @@ msgstr "Kuva diagrammid"
 msgid "Show email addresses"
 msgstr "Kuva e-posti aadressid"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:172
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:166
 msgid "Show progress bar"
 msgstr "Kuva edenemisriba"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:166
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:160
 msgid "Show progress information as “<em>Question 3/10</em>”"
 msgstr "Kuva edenemisteave kui “<em>küsimus 3/10</em>”"
 
@@ -12649,8 +12662,8 @@ msgstr "Kuva edenemisteave kui “<em>küsimus 3/10</em>”"
 msgid "Show results (admin only)"
 msgstr "Kuva tulemused (ainult admin)"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:67
-msgid "Show “Save and stop” button to continue later"
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:30
+msgid "Show “Continue later” button to save answers and return later to submit"
 msgstr ""
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:34
@@ -12670,11 +12683,11 @@ msgstr "Midagi läks valesti"
 msgid "Sorry, could not insert the new person."
 msgstr "Kahjuks ei saanud uut inimest sisestada."
 
-#: zotonic_mod_survey/src/mod_survey.erl:1229
+#: zotonic_mod_survey/src/mod_survey.erl:1239
 msgid "Sorry, the maximum number of submissions has been reached. You can no longer submit this form."
 msgstr "Vabandame, et maksimaalne esitatavate taotluste arv on saavutatud. Te ei saa seda vormi enam esitada."
 
-#: zotonic_mod_survey/src/mod_survey.erl:1242
+#: zotonic_mod_survey/src/mod_survey.erl:1252
 msgid "Sorry, you already submitted your answers. Reload the page if you want to fill in the form again."
 msgstr "Vabandust, olete oma vastused juba saatnud. Kui soovite vormi uuesti täita, laadige leht uuesti."
 
@@ -12682,11 +12695,11 @@ msgstr "Vabandust, olete oma vastused juba saatnud. Kui soovite vormi uuesti tä
 msgid "Start"
 msgstr "Alusta"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:127
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:139
 msgid "Stop and continue later"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:138
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:151
 msgid "Stop without saving"
 msgstr "Lõpeta salvestamata"
 
@@ -12712,8 +12725,8 @@ msgstr "Nõustun kindlalt"
 msgid "Strongly Disagree"
 msgstr "Üldse ei nõustu"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:152
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:155
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:165
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:168
 #: zotonic_mod_wires/src/scomps/scomp_wires_button.erl:81
 msgid "Submit"
 msgstr "Esita"
@@ -12733,7 +12746,7 @@ msgstr "Lahutage punktid valede vastuste eest (kokku mitte vähem kui 0)"
 msgid "Survey editor"
 msgstr "Uuringu toimetaja"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:183
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:177
 msgid "Test pass percentage"
 msgstr "Testi läbimise protsent"
 
@@ -12745,7 +12758,7 @@ msgstr "Tekst, pilt, video"
 msgid "Thank you for filling in our survey."
 msgstr "Täname teid meie uuringu täitmise eest."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:129
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:123
 msgid "Thank you text only"
 msgstr "Ainult aitäh tekst"
 
@@ -12753,7 +12766,7 @@ msgstr "Ainult aitäh tekst"
 msgid "Thank you text."
 msgstr "Aitäh tekst."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:105
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:99
 msgid "The 'continue later' feature operates independently of the chosen form handler."
 msgstr ""
 
@@ -12825,7 +12838,7 @@ msgstr "See vorm on keelatud. Kuna saate redigeerida, võite jätkata testimist.
 msgid "This is a result for:"
 msgstr "Selle tulemus on:"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:184
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:178
 msgid "This is the percentage needed to pass a quiz or test. Only used if you have added quiz or test questions."
 msgstr "See on viktoriini või testi sooritamiseks vajalik protsent. Kasutatakse ainult siis, kui olete lisanud viktoriini või testküsimusi."
 
@@ -12843,7 +12856,7 @@ msgstr "Seda teksti näidatakse uuringu sissejuhatuseks."
 msgid "This text is shown below the start button."
 msgstr "See tekst on näidatud käivitusnupu all."
 
-#: zotonic_mod_survey/src/mod_survey.erl:340
+#: zotonic_mod_survey/src/mod_survey.erl:345
 msgid "Thurstone"
 msgstr "Thurstone"
 
@@ -12873,7 +12886,7 @@ msgstr "Tõsi"
 msgid "True or false question"
 msgstr "Õige või vale küsimus"
 
-#: zotonic_mod_survey/src/mod_survey.erl:337
+#: zotonic_mod_survey/src/mod_survey.erl:342
 msgid "True/False"
 msgstr "Õige Vale"
 
@@ -12889,7 +12902,7 @@ msgstr "Valideerimine"
 msgid "View and edit results."
 msgstr "Vaadake ja muutke tulemusi."
 
-#: zotonic_mod_survey/src/mod_survey.erl:1250
+#: zotonic_mod_survey/src/mod_survey.erl:1260
 msgid "We are experiencing an overload, please try again in 10 minutes."
 msgstr "Meil on ülekoormus, proovige 10 minuti pärast uuesti."
 
@@ -12911,7 +12924,7 @@ msgstr "Vale"
 msgid "Yes or no question"
 msgstr "Jah või ei"
 
-#: zotonic_mod_survey/src/mod_survey.erl:338
+#: zotonic_mod_survey/src/mod_survey.erl:343
 msgid "Yes/No"
 msgstr "Jah ei"
 
@@ -12923,9 +12936,9 @@ msgstr "Selle olete juba täitnud, kuid saate oma varasemaid vastuseid muuta."
 msgid "You already filled this in."
 msgstr "Selle olete juba täitnud."
 
-#: zotonic_mod_survey/src/mod_survey.erl:313
-#: zotonic_mod_survey/src/mod_survey.erl:328
-#: zotonic_mod_survey/src/mod_survey.erl:1317
+#: zotonic_mod_survey/src/mod_survey.erl:318
+#: zotonic_mod_survey/src/mod_survey.erl:333
+#: zotonic_mod_survey/src/mod_survey.erl:1327
 msgid "You are not allowed to change these results."
 msgstr "Teil pole lubatud neid tulemusi muuta."
 
@@ -12949,8 +12962,8 @@ msgstr "Saite selle e-kirja, sest teie e-posti aadress on seadetes konfigureerit
 msgid "You started filling this in and will continue where you left off."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:125
-msgid "Your answers will not be submitted."
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:137
+msgid "Your progress has been saved. You can return later to finish and submit it."
 msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_survey_results_user.tpl:26
@@ -12958,7 +12971,7 @@ msgstr ""
 msgid "Your result"
 msgstr "Teie tulemus"
 
-#: zotonic_mod_survey/src/mod_survey.erl:1258
+#: zotonic_mod_survey/src/mod_survey.erl:1268
 msgid "Your session was expired, please restart and try again."
 msgstr "Teie seanss aegus, taaskäivitage ja proovige uuesti."
 
