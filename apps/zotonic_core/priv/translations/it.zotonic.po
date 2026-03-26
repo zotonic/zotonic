@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-03-24 15:32\n"
+"PO-Revision-Date: 2026-03-25 13:01\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -1235,6 +1235,7 @@ msgstr "Disponibile"
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:170
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:18
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:40
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:3
 #: zotonic_mod_survey/priv/templates/_survey_end.tpl:28
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:22
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:23
@@ -7185,8 +7186,8 @@ msgstr "Attacchi"
 msgid "Calculate and visualize a dependency graph of all templates."
 msgstr "Calcola e visualizza un grafico delle dipendenze di tutti i modelli."
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:38
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:68
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:42
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:759
 msgid "Check debug points in the template source to see debug data here."
 msgstr ""
 
@@ -7203,7 +7204,12 @@ msgstr "Cancella i dati e inizia"
 msgid "Clear data and trace all"
 msgstr "Cancella i dati e traccia tutto"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:12
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:386
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:395
+msgid "Click to load templates"
+msgstr ""
+
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:16
 msgid "Click to restart"
 msgstr ""
 
@@ -7237,6 +7243,11 @@ msgstr "Impossibile copiare il file punto negli appunti."
 msgid "Could not fetch tracer output, please try again."
 msgstr "Impossibile recuperare l'output del tracciante, si prega di riprovare."
 
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:293
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:324
+msgid "Could not load templates"
+msgstr ""
+
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:8
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:12
 msgid "Cross-reference check of all templates"
@@ -7250,11 +7261,11 @@ msgstr "Controllo dei riferimenti incrociati dei modelli"
 msgid "Cross-reference check results"
 msgstr "Risultati del controllo dei riferimenti incrociati"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:18
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:22
 msgid "Debug all sessions"
 msgstr ""
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:23
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:27
 msgid "Debugging all sessions can result in a large amount of debug data."
 msgstr ""
 
@@ -7280,7 +7291,7 @@ msgid "Dependency graph of all traced templates. All includes are shown."
 msgstr "Grafico delle dipendenze di tutti i modelli tracciati. Vengono visualizzati tutti gli inclusi."
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:7
-#: zotonic_mod_development/src/mod_development.erl:1129
+#: zotonic_mod_development/src/mod_development.erl:1135
 msgid "Development"
 msgstr "Sviluppo"
 
@@ -7406,6 +7417,10 @@ msgstr "Grafico di tutte le dipendenze del modello"
 msgid "Hostalias"
 msgstr "Hostalias"
 
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:393
+msgid "Included by"
+msgstr ""
+
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:63
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:125
 msgid "Included template"
@@ -7446,6 +7461,8 @@ msgstr "Tracciamento in tempo reale delle chiamate di funzione sul server."
 msgid "Loading and displaying the trace for:"
 msgstr ""
 
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:286
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:312
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:76
 msgid "Loading..."
 msgstr "Caricamento..."
@@ -7463,7 +7480,7 @@ msgstr "Accedi come amministratore per abilitare l'accesso alla console JavaScri
 msgid "Match a request URL, display matched dispatch rule."
 msgstr "Abbina un URL di richiesta, visualizza la regola di spedizione abbinata."
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:10
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:14
 msgid "Maximum tracing time reached, debugging stopped."
 msgstr ""
 
@@ -7516,6 +7533,14 @@ msgstr "Nessuna autorizzazione per utilizzare mod_development."
 msgid "No template found in the context."
 msgstr ""
 
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:291
+msgid "No traced parent templates"
+msgstr ""
+
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:322
+msgid "No traced templates on this point"
+msgstr ""
+
 #: zotonic_mod_development/priv/templates/_development_template.tpl:20
 msgid "Not found"
 msgstr "Non trovato"
@@ -7533,6 +7558,10 @@ msgstr "Solo l'utente amministratore può impostare le tracce."
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:51
 msgid "Only the admin user can use function call tracing."
 msgstr "Solo l'utente amministratore può utilizzare il tracciamento delle chiamate di funzione."
+
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:381
+msgid "Open included template"
+msgstr ""
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:163
 msgid "Optional category for catinclude"
@@ -7555,11 +7584,11 @@ msgstr "Reindirizzare"
 msgid "Refresh"
 msgstr "ricaricare"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:28
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:32
 msgid "Reload the page"
 msgstr ""
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:31
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:35
 msgid "Reload the page that we are tracing to see the debug data."
 msgstr ""
 
@@ -7768,7 +7797,7 @@ msgstr "Tipo {include}"
 msgid "URI Pattern"
 msgstr "Modello URI"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:22
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:26
 msgid "Uncheck to debug only your current session."
 msgstr ""
 
@@ -7793,7 +7822,7 @@ msgstr "Visualizza tutte le regole di spedizione disponibili nel sito"
 msgid "View template"
 msgstr ""
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:70
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:761
 msgid "Waiting for debug data..."
 msgstr ""
 
