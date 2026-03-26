@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-03-25 13:01\n"
+"PO-Revision-Date: 2026-03-26 11:18\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "MIME-Version: 1.0\n"
@@ -304,7 +304,7 @@ msgstr "Tüm ACL kurallarını mevcut yayınlanmış sürülerine geri yüklemek
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:134
 #: zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:50
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:14
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:53
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:57
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:13
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:9
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:26
@@ -325,9 +325,9 @@ msgstr "Tüm ACL kurallarını mevcut yayınlanmış sürülerine geri yüklemek
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:113
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:88
 #: zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:49
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:128
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:139
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:147
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:140
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:152
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:160
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
 #: zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:115
@@ -352,7 +352,7 @@ msgstr "İptal Et"
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:45
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:11
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:28
-#: zotonic_mod_survey/src/mod_survey.erl:341
+#: zotonic_mod_survey/src/mod_survey.erl:346
 msgid "Category"
 msgstr "Kategori"
 
@@ -497,7 +497,7 @@ msgstr "İşbirliği grubuna taşınamadı."
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:106
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125
-#: zotonic_mod_survey/src/mod_survey.erl:307
+#: zotonic_mod_survey/src/mod_survey.erl:312
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:25
 msgid "Delete"
 msgstr "Sil"
@@ -638,8 +638,8 @@ msgstr "Aynı kullanıcı grubunun üyeleri"
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:42
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:19
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:8
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:25
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:48
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:26
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:49
 #: zotonic_mod_base/priv/templates/error.tpl:78
 #: zotonic_mod_development/priv/templates/_development_template.tpl:3
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:10
@@ -691,9 +691,9 @@ msgstr "İzin verilmiyor."
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:31
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:60
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:28
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:35
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:62
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:32
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:39
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:66
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:48
 msgid "Options"
 msgstr "Seçenekler"
@@ -1239,8 +1239,8 @@ msgstr "Mevcut"
 #: zotonic_mod_survey/priv/templates/_survey_end.tpl:28
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:22
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:23
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:99
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:101
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:110
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:112
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:23
 msgid "Back"
 msgstr "Geri"
@@ -2039,7 +2039,7 @@ msgid "Make a new page or media"
 msgstr "Yeni bir sayfa veya medya oluştur"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:6
-#: zotonic_mod_survey/src/mod_survey.erl:342
+#: zotonic_mod_survey/src/mod_survey.erl:347
 msgid "Matching"
 msgstr "Eşleşen"
 
@@ -2166,7 +2166,7 @@ msgstr "Bloğu yukarı taşı"
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:227
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:9
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:52
-#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:27
+#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:28
 #: zotonic_mod_comment/priv/templates/_comments_form.tpl:23
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:22
 #: zotonic_mod_contact/priv/templates/contact.tpl:11
@@ -2347,7 +2347,7 @@ msgstr "Sayfalar genel bakışı"
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:36
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:27
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:24
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:4
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:8
 msgid "Path"
 msgstr "Yol"
 
@@ -3071,7 +3071,7 @@ msgstr "Web sitesinden veri almaya çalışırken zaman aşımı oluştu."
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:39
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:9
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:11
-#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:26
+#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:27
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:25
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:16
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:20
@@ -3407,7 +3407,7 @@ msgstr "yazan"
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:78
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:59
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:31
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:46
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:50
 #: zotonic_mod_oauth2/priv/templates/_oauth2_apps_list.tpl:14
 #: zotonic_mod_oauth2/priv/templates/_oauth2_apps_list.tpl:15
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:79
@@ -3419,7 +3419,7 @@ msgid "d M Y, H:i"
 msgstr "d M Y, H:i"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:167
-#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:42
+#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:43
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:39
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:79
 msgid "delete"
@@ -3437,7 +3437,7 @@ msgstr "örn. değişebilir"
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:75
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:38
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:87
-#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:45
+#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:46
 #: zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:21
 #: zotonic_mod_search/priv/templates/_search_view_list_item.tpl:16
 msgid "edit"
@@ -3867,7 +3867,7 @@ msgid "Show log for message"
 msgstr "Mesaj günlüğünü göster"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:8
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:98
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:100
 msgid "System Configuration"
 msgstr "Sitem yapılandırması"
 
@@ -4304,9 +4304,9 @@ msgstr "Kullanıcı adı / şifre oluştur"
 #: zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:27
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:73
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:128
-#: zotonic_mod_survey/src/mod_survey.erl:1227
-#: zotonic_mod_survey/src/mod_survey.erl:1249
-#: zotonic_mod_survey/src/mod_survey.erl:1257
+#: zotonic_mod_survey/src/mod_survey.erl:1237
+#: zotonic_mod_survey/src/mod_survey.erl:1259
+#: zotonic_mod_survey/src/mod_survey.erl:1267
 msgid "Sorry"
 msgstr "Üzgünüz"
 
@@ -4648,11 +4648,11 @@ msgid "not implemented yet"
 msgstr "henüz uygulanmadı"
 
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:34
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:123
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:124
 msgid "Activate"
 msgstr "Etkinleştir"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:114
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:115
 msgid "Configure"
 msgstr "Yapılandır"
 
@@ -4665,12 +4665,12 @@ msgid "Cyclic dependencies"
 msgstr "Döngüsel bağımlılıklar"
 
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:17
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:33
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:118
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:34
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:119
 msgid "Deactivate"
 msgstr "Devre dışı bırak"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:18
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:19
 msgid "Deactivate these modules if you are not using them, or check the installation of the system."
 msgstr "Kullanmıyorsanız bu modülleri devre dışı bırakın veya sistemin kurulumunu kontrol edin."
 
@@ -4682,7 +4682,7 @@ msgstr "Bu modülün devre dışı bırakılması aşağıdaki modülleri durdur
 msgid "Dependencies"
 msgstr "Bağımlılıklar"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:49
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:50
 msgid "Depends"
 msgstr "Bağlı olmak"
 
@@ -4694,11 +4694,11 @@ msgstr "Hala modülü etkinleştirmek istiyor musunuz"
 msgid "Do you still want to deactivate the module"
 msgstr "Hala modülü devre dışı bırakmak istiyor musunuz"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:16
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:17
 msgid "Either they are not installed, or they are not compiled."
 msgstr "Ya kurulmamışlardır ya da derlenmemişlerdir."
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:105
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:106
 msgid "Install the module’s model and data."
 msgstr "Modülün modelini ve verilerini yükleyin."
 
@@ -4711,15 +4711,15 @@ msgstr "Modül bağımlılıkları"
 msgid "Modules are missing dependencies"
 msgstr "Modüllerin bağımlılıkları eksik"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:136
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:137
 msgid "No modules found"
 msgstr "Modül bulunamadı"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:50
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:51
 msgid "Provides"
 msgstr "Sağlar"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:104
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:105
 msgid "Reinstall"
 msgstr "Yeniden yükle"
 
@@ -4749,7 +4749,7 @@ msgstr "Üzgünüm, bunu yapmanıza izin verilmiyor."
 msgid "The following modules will not start because they miss dependencies:"
 msgstr "Aşağıdaki modüller bağımlılıkları kaçırdıkları için başlamayacak:"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:15
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:16
 msgid "The modules below are activated but could not be found."
 msgstr "Aşağıdaki modüller aktif edildi ancak bulunamadı."
 
@@ -4865,7 +4865,7 @@ msgstr "Mevcut bağlantılardan önce yeni bağlantılar ekleyin."
 msgid "Instead of a search box this will show a list of all pages in the <i>To</i> categories checked above. At least one category must be checked."
 msgstr "Bu, bir arama kutusu yerine yukarıda işaretlenen <i></i> kadar kategorilerdeki tüm sayfaların bir listesini gösterecektir. En az bir kategori işaretlenmelidir."
 
-#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:19
+#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:20
 #: zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:54
 msgid "Make a new predicate"
 msgstr "Yeni bir öncül oluştur"
@@ -4882,7 +4882,7 @@ msgstr "Hiçbir sayfa bağlantısı bulunamadı."
 msgid "No page connections with the predicate:"
 msgstr "Yüklemle sayfa bağlantısı yok:"
 
-#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:53
+#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:54
 msgid "No predicates found."
 msgstr "Yüklemler bulunamadı."
 
@@ -5016,7 +5016,7 @@ msgstr "Kategoriye"
 msgid "Too many connections"
 msgstr ""
 
-#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:28
+#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:29
 msgid "URI"
 msgstr "URI"
 
@@ -5495,7 +5495,7 @@ msgid "Confirmation failure"
 msgstr "Onaylama hatası"
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:67
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:93
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:104
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:48
 msgid "Continue"
 msgstr "Devam"
@@ -5721,8 +5721,8 @@ msgid "Multiple accounts"
 msgstr "Birden çok hesap"
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:209
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:152
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:157
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:165
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:170
 msgid "Next"
 msgstr "Sonraki"
 
@@ -6143,7 +6143,7 @@ msgstr "Bu sayfanın daha önce kaydedilmiş sürümlerine genel bir bakış iç
 msgid "Cloud file store is enabled. Backups of the database are uploaded to the cloud file store. Local files are copied to the cloud and not backed up locally."
 msgstr "Bulut dosya deposu etkinleştirildi. Veritabanının yedekleri bulut dosya deposuna yüklenir. Yerel dosyalar buluta kopyalanır ve yerel olarak yedeklenmez."
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:47
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:49
 msgid "Cloud file store is enabled. The local files will not be backed up. Ensure that your cloud file store system has a proper backup."
 msgstr "Bulut dosya deposu etkinleştirildi. Yerel dosyalar yedeklenmeyecektir. Bulut dosya deposu sisteminizin uygun bir yedeğe sahip olduğundan emin olun."
 
@@ -6173,7 +6173,7 @@ msgstr "Silinen sayfalar"
 msgid "Directory"
 msgstr "dizin"
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:81
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:83
 msgid "Do not encrypt backups."
 msgstr "Yedekleri şifrelemeyin."
 
@@ -6191,11 +6191,11 @@ msgstr "Yedek dosyasını indir"
 msgid "Enable <tt>mod_export</tt> to download backup files."
 msgstr "Yedekleme dosyalarını indirmek için <tt>mod_export</tt> etkinleştirin."
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:88
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:90
 msgid "Encrypt Backups"
 msgstr "Yedeklemeleri Şifrele"
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:79
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:81
 msgid "Encrypt backups."
 msgstr "Yedekleri şifreleyin."
 
@@ -6203,7 +6203,7 @@ msgstr "Yedekleri şifreleyin."
 msgid "Encrypted"
 msgstr "Şifreli"
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:40
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:41
 msgid "Encryption is enabled, but there is no encryption password. Please\n"
 "      make sure there is an encryption password in the settings."
 msgstr "Şifreleme etkin ancak şifreleme parolası yok. Lütfen\n"
@@ -6217,7 +6217,7 @@ msgstr "Yedekleme &amp; geri yükleme hakkında yardım"
 msgid "If the Cloud File Store module is used, then deleted files can be retained indefinitely."
 msgstr "Bulut Dosya Depolama modülü kullanıldığında silinen dosyalar süresiz olarak saklanabilir."
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:98
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:100
 msgid "It can be found in the"
 msgstr "Şurada bulunabilir:"
 
@@ -6261,7 +6261,7 @@ msgstr "Dosya deposuna yüklenmedi"
 msgid "Note that files are only retained for 5 weeks after deletion, this is the same as the Zotonic database backup retention period."
 msgstr "Dosyaların silindikten sonra yalnızca 5 hafta saklandığını unutmayın; bu, Zotonic veritabanı yedekleme saklama süresiyle aynıdır."
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:97
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:99
 msgid "Note:"
 msgstr "Not:"
 
@@ -6269,7 +6269,7 @@ msgstr "Not:"
 msgid "Only administrators can start a backup."
 msgstr "Yedeklemeyi yalnızca yöneticiler başlatabilir."
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:98
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:100
 msgid "Please make sure you store the backup encryption password in a safe <u>external</u> location."
 msgstr "Lütfen yedek şifreleme parolasını güvenli bir <u>harici</u> konumunda sakladığınızdan emin olun."
 
@@ -6376,11 +6376,11 @@ msgstr "Üzgünüz, bu sayfayı değiştirmek için izne sahip değilsiniz."
 msgid "Sorry, you have no permission to change the configuration."
 msgstr "Üzgünüz, bu yapılandırmayı değiştirmek için izne sahip değilsiniz."
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:13
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:14
 msgid "Start backup now"
 msgstr "Yedeklemeye şimdi başla"
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:16
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:17
 msgid "Start database-only backup now"
 msgstr "Sadece veritabanı yedeklemesini şimdi başlat"
 
@@ -6388,11 +6388,11 @@ msgstr "Sadece veritabanı yedeklemesini şimdi başlat"
 msgid "Started the backup. You can keep this page open or continue working."
 msgstr "Yedekleme başlatıldı. Bu sayfayı açık tutabilir veya çalışmaya devam edebilirsiniz."
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:27
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:28
 msgid "The \"pg_dump\" command was not found in the path. Set in zotonic.config the \"pg_dump\" config key to the path to <tt>pg_dump</tt> and return to this page."
 msgstr "\"pg_dump\" komutu yolda bulunamadı. zotonic.config'de \"pg_dump\" yapılandırma anahtarını <tt>pg_dump</tt> yoluna ayarlayın ve bu sayfaya geri dönün."
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:30
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:31
 msgid "The \"tar\" command was not found in the path. Set in zotonic.config the \"tar\" config key to the path to <tt>tar</tt> and return to this page."
 msgstr "\"tar\" komutu yolda bulunamadı. Zotonic.config'de \"tar\" yapılandırma anahtarını <tt>tar</tt> yoluna ayarlayın ve bu sayfaya geri dönün."
 
@@ -6410,7 +6410,7 @@ msgstr "Yedekleme yapılandırması şu şekilde ayarlandı:"
 msgid "The backup module uses a global Zotonic configuration. The configuration cannot be changed here."
 msgstr "Yedekleme modülü global bir Zotonic yapılandırması kullanır. Yapılandırma burada değiştirilemez."
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:75
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:77
 msgid "The encryption configuration is set to:"
 msgstr "Şifreleme yapılandırması şu şekilde ayarlandı:"
 
@@ -6427,7 +6427,7 @@ msgstr "Bu yedek dosyasındaki içeriği sayfanızın üstüne yazacaktır."
 msgid "Uploaded to filestore"
 msgstr "Dosya deposuna yüklendi"
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:23
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:24
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:124
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:42
 msgid "Warning"
@@ -6452,7 +6452,7 @@ msgstr "Bu sayfayı kurtarmanıza izin verilmiyor."
 msgid "You are not allowed to see the revisions"
 msgstr "Bu revizyonu görmeye yetkiniz yok"
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:8
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:9
 msgid "You can have one backup per day of the week, older ones will be overwritten."
 msgstr "Haftanın her günü bir yedeğiniz olabilir, eskilerin üzerine yazılacaktır."
 
@@ -6468,7 +6468,7 @@ msgstr "Geri almak istediğiniz bir revizyonu seçebilirsiniz."
 msgid "You need to have access rights to the backup module."
 msgstr "Yedekleme modülüne erişim haklarına sahip olmanız gerekir."
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:23
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:24
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
 msgstr "Yedeğiniz doğru olarak yapılandırılmamış. Yedek modülü problem(ler) giderilene kadar çalışmayacaktır:"
 
@@ -6480,7 +6480,7 @@ msgstr "veritabanını indir"
 msgid "download files"
 msgstr "dosyaları indir"
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:98
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:100
 msgid "or in the Zotonic configuration files."
 msgstr "veya Zotonic yapılandırma dosyalarında."
 
@@ -7137,7 +7137,7 @@ msgstr "<tt>{extends}</tt> çizgili çizgiyle, <tt>{overrules}</tt> ise noktalı
 msgid "A graph of all templates, and by whom they are included, is generated and automatically updated."
 msgstr "Tüm şablonların ve bunların kimler tarafından dahil edildiğinin bir grafiği oluşturulur ve otomatik olarak güncellenir."
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:5
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:9
 msgid "Action"
 msgstr "Eylem"
 
@@ -7178,7 +7178,7 @@ msgstr ""
 msgid "Below is the list of all notifications and the installed observers."
 msgstr "Aşağıda tüm bildirimlerin ve yüklü gözlemcilerin listesi bulunmaktadır."
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:6
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:10
 msgid "Bindings"
 msgstr "Bağlar"
 
@@ -7186,8 +7186,8 @@ msgstr "Bağlar"
 msgid "Calculate and visualize a dependency graph of all templates."
 msgstr "Tüm şablonların bağımlılık grafiğini hesaplayın ve görselleştirin."
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:42
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:759
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:43
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:906
 msgid "Check debug points in the template source to see debug data here."
 msgstr ""
 
@@ -7204,12 +7204,12 @@ msgstr "Verileri temizle ve başla"
 msgid "Clear data and trace all"
 msgstr "Verileri temizle ve hepsini izle"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:386
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:395
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:533
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:542
 msgid "Click to load templates"
 msgstr ""
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:16
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:17
 msgid "Click to restart"
 msgstr ""
 
@@ -7217,9 +7217,9 @@ msgstr ""
 msgid "Column"
 msgstr "Kolon"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:26
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:33
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:60
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:30
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:37
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:64
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:51
 msgid "Controller"
 msgstr "Kontrolcü"
@@ -7243,8 +7243,8 @@ msgstr "Nokta dosyası panoya kopyalanamadı."
 msgid "Could not fetch tracer output, please try again."
 msgstr "İzleme çıktısı alınamadı, lütfen tekrar deneyin."
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:293
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:324
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:440
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:471
 msgid "Could not load templates"
 msgstr ""
 
@@ -7261,11 +7261,11 @@ msgstr "Şablonların çapraz referans kontrolü"
 msgid "Cross-reference check results"
 msgstr "Çapraz referans kontrolü sonuçları"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:22
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:23
 msgid "Debug all sessions"
 msgstr ""
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:27
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:28
 msgid "Debugging all sessions can result in a large amount of debug data."
 msgstr ""
 
@@ -7363,11 +7363,15 @@ msgstr "Sitede ulaşılabilen her URL gönderim kuralları ile tanımlanır. Bu 
 msgid "Explain"
 msgstr "Açıkla"
 
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:411
+msgid "Extended / overridden by"
+msgstr ""
+
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:191
 msgid "Extends"
 msgstr "Uzatır"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:32
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:36
 msgid "Final dispatch"
 msgstr "Nihai gönderme"
 
@@ -7387,11 +7391,11 @@ msgstr "Daha fazla bilgi için bkz.: { url }"
 msgid "Force a recompilation of all templates. This fixes any issues where the compiled templates might be out of sync with the template index."
 msgstr "Tüm şablonların yeniden derlenmesini zorlayın. Bu, derlenen şablonların şablon dizini ile senkronizasyonunun bozulabileceği sorunları giderir."
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:42
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:46
 msgid "Forced switch of protocol to"
 msgstr "Protokolü şuna zorla"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:23
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:27
 msgid "Found matching dispatch rule"
 msgstr "Eşleşen gönderim kuralı bulundu"
 
@@ -7417,7 +7421,7 @@ msgstr "Tüm şablon bağımlılıklarının grafiği"
 msgid "Hostalias"
 msgstr "Hostalias"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:393
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:415
 msgid "Included by"
 msgstr ""
 
@@ -7461,14 +7465,14 @@ msgstr "Sunucudaki işlev çağrılarının canlı izlenmesi."
 msgid "Loading and displaying the trace for:"
 msgstr ""
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:286
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:312
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:433
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:459
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:76
 msgid "Loading..."
 msgstr "Yükleniyor..."
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:69
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:75
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:73
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:79
 msgid "Location"
 msgstr "Konum"
 
@@ -7480,7 +7484,7 @@ msgstr "Javascript konsolunda oturum açmayı etkinleştirmek için yönetici ol
 msgid "Match a request URL, display matched dispatch rule."
 msgstr "Bir istek URL'sini eşleştirin, eşleşen gönderim kuralı görüntüleyin."
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:14
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:15
 msgid "Maximum tracing time reached, debugging stopped."
 msgstr ""
 
@@ -7496,13 +7500,13 @@ msgstr "İsteğe bağlı olarak eklenen şablonlar eksik"
 msgid "Missing {extends} or {overrules}"
 msgstr "{extends} veya {overrules}eksik"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:40
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:43
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:44
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:47
 msgid "New host"
 msgstr "Yeni ana bilgisayar"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:48
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:54
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:52
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:58
 msgid "New path"
 msgstr "Yeni yol"
 
@@ -7510,7 +7514,7 @@ msgstr "Yeni yol"
 msgid "No data."
 msgstr "Veri yok."
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:45
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:49
 msgid "No matching dispatch rule found"
 msgstr "Eşleşen gönderme kuralı bulunamadı"
 
@@ -7533,11 +7537,11 @@ msgstr "mod_development'ı kullanma izniniz yok."
 msgid "No template found in the context."
 msgstr ""
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:291
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:419
 msgid "No traced parent templates"
 msgstr ""
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:322
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:469
 msgid "No traced templates on this point"
 msgstr ""
 
@@ -7559,7 +7563,7 @@ msgstr "Yalnızca yönetici kullanıcı izleri ayarlayabilir."
 msgid "Only the admin user can use function call tracing."
 msgstr "İşlev çağrısı izlemeyi yalnızca yönetici kullanıcı kullanabilir."
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:381
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:528
 msgid "Open included template"
 msgstr ""
 
@@ -7567,8 +7571,8 @@ msgstr ""
 msgid "Optional category for catinclude"
 msgstr "Catinclude için isteğe bağlı kategori"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:71
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:77
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:75
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:81
 msgid "Permanent redirect"
 msgstr "Kalıcı yönlendirme"
 
@@ -7576,7 +7580,7 @@ msgstr "Kalıcı yönlendirme"
 msgid "Recompile templates"
 msgstr "Şablonları yeniden derleyin"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:74
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:78
 msgid "Redirect"
 msgstr "Yönlendir"
 
@@ -7584,12 +7588,16 @@ msgstr "Yönlendir"
 msgid "Refresh"
 msgstr "Yenile"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:32
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:33
 msgid "Reload the page"
 msgstr ""
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:35
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:36
 msgid "Reload the page that we are tracing to see the debug data."
+msgstr ""
+
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:2
+msgid "Render page and trace templates"
 msgstr ""
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:22
@@ -7642,7 +7650,7 @@ msgstr "Site adı"
 msgid "Start Tracing"
 msgstr "İzlemeyi Başlat"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:21
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:25
 msgid "Start matching dispatch rules"
 msgstr "Gönderme kurallarını eşleştirmeye başla"
 
@@ -7663,8 +7671,8 @@ msgid "Started tracing template inclusions for your session."
 msgstr "Oturumunuz için şablon eklemelerini izlemeye başladım."
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:33
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:134
-#: zotonic_mod_survey/src/mod_survey.erl:350
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:147
+#: zotonic_mod_survey/src/mod_survey.erl:355
 msgid "Stop"
 msgstr "Bitir"
 
@@ -7684,7 +7692,7 @@ msgstr "Durdu."
 msgid "Subscribers"
 msgstr "Aboneler"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:39
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:43
 msgid "Switch protocol to"
 msgstr "Protokolü şuna değiştir"
 
@@ -7744,9 +7752,13 @@ msgstr "Bu, tüm şablonların bağımlılık grafiğini hesaplar ve görselleş
 msgid "This checks all templates to see if included or extended templates are available."
 msgstr "Bu, dahil edilen veya genişletilmiş şablonların mevcut olup olmadığını görmek için tüm şablonları kontrol eder."
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:56
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:60
 msgid "This resource is unknown or does not have a URI"
 msgstr "Bu kaynak bilinmiyor yada URI'a sahip değil"
+
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:540
+msgid "This template is used by"
+msgstr ""
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:13
 msgid "Tools and settings that are useful for site development."
@@ -7797,7 +7809,7 @@ msgstr "{include}türü"
 msgid "URI Pattern"
 msgstr "URI Modeli"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:26
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:27
 msgid "Uncheck to debug only your current session."
 msgstr ""
 
@@ -7822,7 +7834,7 @@ msgstr "Sitede bulunan tüm gönderim kurallarını görüntüleyin"
 msgid "View template"
 msgstr ""
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:761
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:908
 msgid "Waiting for debug data..."
 msgstr ""
 
@@ -7844,27 +7856,27 @@ msgstr "Şablon hata ayıklamayı kullanmanıza izinli değilsiniz."
 msgid "You do not have permission to access development tools."
 msgstr "Geliştirme araçlarına erişim izniniz yok."
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:59
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:63
 msgid "found dispatch rule"
 msgstr "bulunan gönderme kuralı"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:66
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:70
 msgid "found no match"
 msgstr "eşleşme bulunamadı"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:52
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:56
 msgid "found resource id"
 msgstr "bulunan kaynak kimliği"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:47
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:51
 msgid "notification"
 msgstr "bildirim"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:50
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:54
 msgid "notification, checking first return"
 msgstr "bildirim, ilk iadeyi kontrol etme"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:68
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:72
 msgid "redirects"
 msgstr "yönlendirmeler"
 
@@ -9494,7 +9506,7 @@ msgstr "Harici olarak yönetilen liste &mdash; abonelikten çıkma / abone olma 
 msgid "First name"
 msgstr "İsim"
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:21
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:25
 msgid "Forget previous e-mails, mail all recipients again."
 msgstr "Önceki e-postaları unutun, tüm alıcılara yeniden posta gönderin."
 
@@ -9619,7 +9631,7 @@ msgstr "Bu listedeki alıcıların sayısı:"
 msgid "Only keep recipients on this list that appear <em>on both lists</em>"
 msgstr "Yalnızca bu listede, alıcıların her iki listede de<em>görünen</em>"
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:30
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:34
 msgid "Only send to recipients whose preferred language match the translations of the mailing."
 msgstr "Yalnızca tercih ettiği dil postanın çevirileriyle eşleşen alıcılara gönderin."
 
@@ -9756,7 +9768,7 @@ msgstr "Seç..."
 msgid "Send e-mail"
 msgstr "E-posta gönder"
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:54
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:58
 msgid "Send mailing"
 msgstr "Posta gönder"
 
@@ -9769,15 +9781,15 @@ msgstr "Test postasını gönder"
 msgid "Send test to address"
 msgstr "Adrese test gönder"
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:46
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:50
 msgid "Send the mailing automatically after the publication start date of"
 msgstr "Postayı, yayın başladığı tarihten sonra otomatik olarak gönderin"
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:44
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:48
 msgid "Send the mailing immediately after the \"published\" checkbox has been checked in the edit page."
 msgstr "Postayı düzenleme sayfasındaki \"yayınlandı\" butonu işaretlendiğinde hemen gönder."
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:39
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:43
 msgid "Send the mailing right now, but do not include a link back to the website."
 msgstr "Postayı hemen gönder ama site bağlantısını dahil etme."
 
@@ -9912,7 +9924,7 @@ msgstr "Postalama iptal edildi."
 msgid "The mailing will be send when the page becomes visible."
 msgstr "Posta sayfa görünür olduğunda gönderilecektir."
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:36
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:40
 msgid "The page you are trying to e-mail is not yet published. What do you want to do?"
 msgstr "E-posta olarak göndermeye çalıştığınız sayfa daha yayınlanmamış. Ne yapmak istersiniz?"
 
@@ -11780,11 +11792,16 @@ msgstr "Sertifika istemek için yönetici olmanız gereklidir."
 msgid "not reachable or local IP"
 msgstr "erişilebilir değil yada yerel IP"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:45
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:36
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:47
+msgid "&lt; Back to start"
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:53
 msgid "'Once' means once by a respondent who is logged in or once per browser for anonymous respondents. To identify the browser of anonymous respondents, a cookie containing a unique ID is utilized."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:105
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:99
 msgid "<b>Note</b>: For the features 'once', 'edit after submit', and checking the maximum number of submitted forms to function, the form needs to have the saved results. If a handler (chosen in the <em>handling</em> settings below) does not save the results, these features will not be available."
 msgstr ""
 
@@ -11850,11 +11867,11 @@ msgstr "Mevcut posta listesine ekle"
 msgid "Add to mailinglist"
 msgstr "Posta listesine ekle"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:121
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:115
 msgid "After all questions are answered and submitted, one of the following is shown."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:141
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:135
 msgid "Aggregated results from all respondents"
 msgstr "Tüm katılımcıların toplu sonuçları"
 
@@ -11862,11 +11879,11 @@ msgstr "Tüm katılımcıların toplu sonuçları"
 msgid "Agree"
 msgstr "Katıl"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:74
-msgid "Allow non-linear forms; answers are saved when using the Back button"
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:34
+msgid "Allow non-linear forms; answers are saved when using the “Back” button"
 msgstr ""
 
-#: zotonic_mod_survey/src/mod_survey.erl:1240
+#: zotonic_mod_survey/src/mod_survey.erl:1250
 msgid "Already submitted"
 msgstr "Zaten gönderildi"
 
@@ -11914,19 +11931,15 @@ msgstr "Bu <br/> sayfayı silmek istediğinize emin misiniz? Bu <br/> ayrıca sa
 msgid "Are you sure you want to delete this question?"
 msgstr "Bu soruyu silmek istediğinize emin misiniz?"
 
-#: zotonic_mod_survey/src/mod_survey.erl:306
+#: zotonic_mod_survey/src/mod_survey.erl:311
 msgid "Are you sure you want to delete this result?"
 msgstr "Bu sonucu silmek istediğinize emin misiniz?"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:137
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:150
 msgid "Are you sure you want to stop without saving?"
 msgstr "Kaydetmeden durdurmak istediğinizden emin misiniz?"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:123
-msgid "Are you sure you want to stop? You can continue later."
-msgstr ""
-
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:80
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:91
 msgid "Back without saving"
 msgstr ""
 
@@ -11935,7 +11948,7 @@ msgid "Because you can edit, you can proceed for testing."
 msgstr "Düzenleyebildiğiniz için test için ilerleyebilirsiniz."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:112
-#: zotonic_mod_survey/src/mod_survey.erl:347
+#: zotonic_mod_survey/src/mod_survey.erl:352
 msgid "Button"
 msgstr "Buton"
 
@@ -11976,7 +11989,7 @@ msgstr "Doğru cevapları kontrol edin ve her cevap puanını verin."
 msgid "Choices"
 msgstr "Seçimler"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:45
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:53
 msgid "Choose how many times a respondent can fill in this form."
 msgstr ""
 
@@ -11988,6 +12001,10 @@ msgstr "Girilen verileri görmek ve değiştirmek için “Düzenle”ye tıklay
 #: zotonic_mod_survey/priv/templates/survey.tpl:23
 msgid "Closed"
 msgstr "Kapalı"
+
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:130
+msgid "Continue later"
+msgstr ""
 
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:107
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:141
@@ -12004,7 +12021,7 @@ msgstr "Alıcılar eklenemedi."
 msgid "Could not create the mailinglist."
 msgstr "Posta listesi oluşturulamadı."
 
-#: zotonic_mod_survey/src/mod_survey.erl:346
+#: zotonic_mod_survey/src/mod_survey.erl:351
 msgid "Country select"
 msgstr "Ülke seçin"
 
@@ -12040,7 +12057,7 @@ msgstr "Oluşturuldu"
 msgid "Danger"
 msgstr "Tehlike"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:33
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:41
 msgid "Deactivated"
 msgstr "Devre dışı bırakıldı"
 
@@ -12059,6 +12076,10 @@ msgstr "Soruyu sil"
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:67
 msgid "Disagree"
 msgstr "Katılmıyorum"
+
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:135
+msgid "Do you want to stop for now and continue later?"
+msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:45
 msgid "Download a spreadsheet with all answers."
@@ -12132,7 +12153,7 @@ msgstr "Geri bildirim doğruysa"
 msgid "Feedback if wrong"
 msgstr "Geri bildirim yanlış ise"
 
-#: zotonic_mod_survey/src/mod_survey.erl:351
+#: zotonic_mod_survey/src/mod_survey.erl:356
 msgid "File upload"
 msgstr "Dosya yükleme"
 
@@ -12141,7 +12162,7 @@ msgstr "Dosya yükleme"
 msgid "Fill in the gaps"
 msgstr "Boşlukları doldurun"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:43
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:51
 msgid "Filling in"
 msgstr ""
 
@@ -12161,11 +12182,11 @@ msgstr "Tarih aralıkları için <code>-5 yıl</code>gibi göreli tarihleri de k
 msgid "Go to question"
 msgstr "Soruya gidin"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:224
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:218
 msgid "Handle this form with"
 msgstr "Bu formu ile işleyin"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:203
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:197
 msgid "Handling"
 msgstr "Kullanma"
 
@@ -12192,11 +12213,11 @@ msgstr "Formla birlikte kaydedilen ancak formu dolduran kişiye gösterilmeyen g
 msgid "Hide from results"
 msgstr "Sonuçları gizle"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:160
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:154
 msgid "Hide progress information"
 msgstr "İlerleme bilgilerini gizle"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:29
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:37
 msgid "Hide the user’s id or browser-id from result exports"
 msgstr "Sonuç verilerinden kullanıcının kimliğini veya tarayıcı kimliğini gizle"
 
@@ -12209,7 +12230,7 @@ msgstr "Ben"
 msgid "I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|other] ice cream and my favorite color is [color]."
 msgstr "[age] yaşındayım. [icecream=vanilla|çilek|çikolata|diğer] dondurmayı severim ve en sevdiğim renk [color]."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:85
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:79
 msgid "If the maximum number of forms has been submitted, then the start button is deactivated and an email is sent to the email addresses in the <em>handling</em> settings below. Leave empty for no limit. This is useful for signup lists with a limited number of spots."
 msgstr ""
 
@@ -12254,7 +12275,7 @@ msgstr "Sonraki sayfadaki soruya atlayın."
 msgid "Jump to this question label (must be on an other page below)"
 msgstr "Bu soru etiketine atla (aşağıda başka bir sayfada olmalıdır)"
 
-#: zotonic_mod_survey/src/mod_survey.erl:339
+#: zotonic_mod_survey/src/mod_survey.erl:344
 msgid "Likert"
 msgstr "Likert"
 
@@ -12265,12 +12286,12 @@ msgstr "Likert"
 msgid "Link with person"
 msgstr "kişi ile bağlantı"
 
-#: zotonic_mod_survey/src/mod_survey.erl:345
+#: zotonic_mod_survey/src/mod_survey.erl:350
 msgid "Long answer"
 msgstr "Uzun cevap"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:206
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:207
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:200
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:201
 msgid "Mail results to"
 msgstr "Posta sonuçları"
 
@@ -12296,9 +12317,9 @@ msgstr "eşleşen soru"
 msgid "Maximal value"
 msgstr "Maksimum değer"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:82
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:91
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:98
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:76
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:85
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:92
 msgid "Maximum number of submissions"
 msgstr "Maksimum başvuru sayısı"
 
@@ -12331,7 +12352,7 @@ msgstr "Birden fazla cevap mümkündür"
 msgid "Multiple answers possible: points are given for the correct answer <i>and</i> points are given for <i>not</i> choosing the wrong answer. Default: 1 point for a correct answer, 1 point for not choosing a wrong answer."
 msgstr "Birden fazla cevap mümkündür: doğru cevap <i>için puan verilir ve yanlış cevap seçimi</i> değil <i>için</i> puan verilir. Varsayılan: Doğru cevap için 1 puan, yanlış cevap seçmemek için 1 puan."
 
-#: zotonic_mod_survey/src/mod_survey.erl:352
+#: zotonic_mod_survey/src/mod_survey.erl:357
 msgid "Multiple choice"
 msgstr "Çoktan seçmeli"
 
@@ -12344,11 +12365,11 @@ msgstr "Çoktan seçmeli veya test sorusu"
 msgid "Multiple page break blocks are merged into one."
 msgstr "Çoklu sayfa sonu bloklar birleştirilir."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:57
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:65
 msgid "Multiple times – each time with new results"
 msgstr ""
 
-#: zotonic_mod_survey/src/mod_survey.erl:343
+#: zotonic_mod_survey/src/mod_survey.erl:348
 msgid "Narrative"
 msgstr "Öykü"
 
@@ -12374,11 +12395,11 @@ msgstr ""
 msgid "No results yet."
 msgstr "Henüz sonuç yok."
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:77
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:88
 msgid "Not all the required fields are filled in. You can go back to the previous page without saving your answers."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:123
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:117
 msgid "Note that if you select a special handler below, then that handler may override this setting."
 msgstr ""
 
@@ -12391,11 +12412,11 @@ msgstr "Posta listesine eklenen alıcı sayısı:"
 msgid "Numeric input, show totals for this field in the results."
 msgstr "Sayısal giriş, sonuçlarda bu alan için toplamları göster."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:53
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:61
 msgid "Once — edit after submit (logged in users only)"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:49
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:57
 msgid "Once — submit is final (no editing after submit)"
 msgstr ""
 
@@ -12407,7 +12428,7 @@ msgstr "Yalnızca resimleri kabul et."
 msgid "Options from a page category"
 msgstr "Sayfa kategorisinden seçenekler"
 
-#: zotonic_mod_survey/src/mod_survey.erl:348
+#: zotonic_mod_survey/src/mod_survey.erl:353
 msgid "Page break"
 msgstr "Sayfa sonu"
 
@@ -12415,7 +12436,7 @@ msgstr "Sayfa sonu"
 msgid "Page jump condition"
 msgstr "Sayfa atlama koşulu"
 
-#: zotonic_mod_survey/src/mod_survey.erl:349
+#: zotonic_mod_survey/src/mod_survey.erl:354
 msgid "Page options"
 msgstr ""
 
@@ -12430,7 +12451,7 @@ msgstr "Geçmek?"
 msgid "Passed"
 msgstr "Geçti"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:189
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:183
 msgid "Passing score"
 msgstr "Geçme puanı"
 
@@ -12442,7 +12463,7 @@ msgstr "Yüzde"
 msgid "Person"
 msgstr "Kişi"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:82
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:93
 msgid "Please fill in all the required fields."
 msgstr "Lütfen tüm gerekli alanları doldurun."
 
@@ -12473,7 +12494,7 @@ msgstr "Başlıca"
 msgid "Printable list"
 msgstr "Yazdırılabilir liste"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:155
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:149
 msgid "Progress"
 msgstr "İlerleme"
 
@@ -12510,7 +12531,7 @@ msgstr "Kısa cevaplı soru"
 #: zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:7
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:5
 #: zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:8
-#: zotonic_mod_survey/src/mod_survey.erl:336
+#: zotonic_mod_survey/src/mod_survey.erl:341
 msgid "Questions"
 msgstr "Sorular"
 
@@ -12551,7 +12572,7 @@ msgstr "\"İleri\" düğmesini kaldırın. Bir sonraki sayfaya geçiş düğmesi
 msgid "Required, this question must be answered."
 msgstr "Gerekli, bu soruya cevap verilmeli."
 
-#: zotonic_mod_survey/src/mod_survey.erl:324
+#: zotonic_mod_survey/src/mod_survey.erl:329
 msgid "Result deleted."
 msgstr "Sonuç silindi."
 
@@ -12567,11 +12588,11 @@ msgstr "Sonuçlar"
 msgid "Results editor"
 msgstr "Sonuç düzenleyici"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:133
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:127
 msgid "Results from the respondent"
 msgstr "Karşı taraftan alınan sonuçlar"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:137
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:131
 msgid "Results from the respondent – if passed only"
 msgstr ""
 
@@ -12579,11 +12600,7 @@ msgstr ""
 msgid "Results until"
 msgstr "Şu tarihe kadar sonuçlar"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:118
-msgid "Save and stop"
-msgstr ""
-
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:117
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:129
 msgid "Save your answers without submitting them yet so you can continue later."
 msgstr ""
 
@@ -12613,19 +12630,19 @@ msgstr "posta listesi seçin"
 msgid "Select your country"
 msgstr "Ülkenizi seçin"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:217
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:211
 msgid "Send a confirmation to the respondent. The email address must be known (logged in respondents) or you can add a short text field with the label “email” and the validation set to \"must be an email address\"."
 msgstr "Yanıtlayana bir onay gönderin. E-posta adresi bilinmelidir (giriş yapan katılımcılar) veya \"e-posta\" etiketli kısa bir metin alanı ekleyebilir ve doğrulama \"bir e-posta adresi olmalıdır\" olarak ayarlayabilirsiniz."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:209
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:203
 msgid "Separate multiple email addresses with a comma."
 msgstr "Birden fazla e-posta adresini virgülle ayırın."
 
-#: zotonic_mod_survey/src/mod_survey.erl:344
+#: zotonic_mod_survey/src/mod_survey.erl:349
 msgid "Short answer"
 msgstr "Kısa cevap"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:118
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:112
 msgid "Show after the final submit of the form"
 msgstr ""
 
@@ -12637,11 +12654,11 @@ msgstr "Grafikleri göster"
 msgid "Show email addresses"
 msgstr "E-posta adreslerini göster"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:172
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:166
 msgid "Show progress bar"
 msgstr "İlerleme çubuğunu göster"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:166
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:160
 msgid "Show progress information as “<em>Question 3/10</em>”"
 msgstr "Gelişim bilgilerini \"<em>Soru 3/10</em>\" olarak göster"
 
@@ -12649,8 +12666,8 @@ msgstr "Gelişim bilgilerini \"<em>Soru 3/10</em>\" olarak göster"
 msgid "Show results (admin only)"
 msgstr "Sonuçları göster (yalnızca yönetici)"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:67
-msgid "Show “Save and stop” button to continue later"
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:30
+msgid "Show “Continue later” button to save answers and return later to submit"
 msgstr ""
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:34
@@ -12670,11 +12687,11 @@ msgstr "Bir şey yanlış gitti"
 msgid "Sorry, could not insert the new person."
 msgstr "Maalesef yeni kişi eklenemedi."
 
-#: zotonic_mod_survey/src/mod_survey.erl:1229
+#: zotonic_mod_survey/src/mod_survey.erl:1239
 msgid "Sorry, the maximum number of submissions has been reached. You can no longer submit this form."
 msgstr "Üzgünüz, maksimum gönderim sayısına ulaşıldı. Artık bu formu gönderemezsiniz."
 
-#: zotonic_mod_survey/src/mod_survey.erl:1242
+#: zotonic_mod_survey/src/mod_survey.erl:1252
 msgid "Sorry, you already submitted your answers. Reload the page if you want to fill in the form again."
 msgstr "Üzgünüz, cevaplarınızı zaten gönderdiniz. Formu tekrar doldurmak istiyorsanız sayfayı yeniden yükleyin."
 
@@ -12682,11 +12699,11 @@ msgstr "Üzgünüz, cevaplarınızı zaten gönderdiniz. Formu tekrar doldurmak 
 msgid "Start"
 msgstr "Başla"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:127
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:139
 msgid "Stop and continue later"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:138
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:151
 msgid "Stop without saving"
 msgstr "Kaydetmeden dur"
 
@@ -12712,8 +12729,8 @@ msgstr "Kesinlikle Katılıyorum"
 msgid "Strongly Disagree"
 msgstr "Kesinlikle Katılmıyorum"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:152
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:155
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:165
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:168
 #: zotonic_mod_wires/src/scomps/scomp_wires_button.erl:81
 msgid "Submit"
 msgstr "Gönder"
@@ -12733,7 +12750,7 @@ msgstr "Yanlış cevaplar için puanları çıkar (toplam asla 0'dan az olmaz)"
 msgid "Survey editor"
 msgstr "Anket editörü"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:183
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:177
 msgid "Test pass percentage"
 msgstr "Test geçme yüzdesi"
 
@@ -12745,7 +12762,7 @@ msgstr "Metin, resim, video"
 msgid "Thank you for filling in our survey."
 msgstr "Anketimizi doldurduğunuz için teşekkür ederiz."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:129
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:123
 msgid "Thank you text only"
 msgstr "Sadece teşekkür metinleri"
 
@@ -12753,7 +12770,7 @@ msgstr "Sadece teşekkür metinleri"
 msgid "Thank you text."
 msgstr "Teşekkür metni."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:105
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:99
 msgid "The 'continue later' feature operates independently of the chosen form handler."
 msgstr ""
 
@@ -12825,7 +12842,7 @@ msgstr "Bu form devre dışı bırakıldı. Düzenleyebildiğiniz için test iç
 msgid "This is a result for:"
 msgstr "Bunun sonucudur:"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:184
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:178
 msgid "This is the percentage needed to pass a quiz or test. Only used if you have added quiz or test questions."
 msgstr "Bu, bir sınavı veya testi geçmek için gereken yüzdedir. Yalnızca sınav veya test soruları eklediyseniz kullanılır."
 
@@ -12843,7 +12860,7 @@ msgstr "Bu metin ankete giriş olarak gösterilmiştir."
 msgid "This text is shown below the start button."
 msgstr "Bu metin, başlat düğmesinin altında gösterilir."
 
-#: zotonic_mod_survey/src/mod_survey.erl:340
+#: zotonic_mod_survey/src/mod_survey.erl:345
 msgid "Thurstone"
 msgstr "Thurstone"
 
@@ -12873,7 +12890,7 @@ msgstr "Gerçek"
 msgid "True or false question"
 msgstr "Doğru veya yanlış soru"
 
-#: zotonic_mod_survey/src/mod_survey.erl:337
+#: zotonic_mod_survey/src/mod_survey.erl:342
 msgid "True/False"
 msgstr "Doğru/Yanlış"
 
@@ -12889,7 +12906,7 @@ msgstr "Doğrulama"
 msgid "View and edit results."
 msgstr "Sonuçları görüntüleyin ve düzenleyin."
 
-#: zotonic_mod_survey/src/mod_survey.erl:1250
+#: zotonic_mod_survey/src/mod_survey.erl:1260
 msgid "We are experiencing an overload, please try again in 10 minutes."
 msgstr "Aşırı yüklenme yaşıyoruz, lütfen 10 dakika sonra tekrar deneyin."
 
@@ -12911,7 +12928,7 @@ msgstr "Yanlış"
 msgid "Yes or no question"
 msgstr "evet mi hayır mı soru"
 
-#: zotonic_mod_survey/src/mod_survey.erl:338
+#: zotonic_mod_survey/src/mod_survey.erl:343
 msgid "Yes/No"
 msgstr "Evet/Hayır"
 
@@ -12923,9 +12940,9 @@ msgstr "Burayı önceden doldurdun, fakat önceki cevaplarınızı değiştirebi
 msgid "You already filled this in."
 msgstr "Burayı önceden doldurdun."
 
-#: zotonic_mod_survey/src/mod_survey.erl:313
-#: zotonic_mod_survey/src/mod_survey.erl:328
-#: zotonic_mod_survey/src/mod_survey.erl:1317
+#: zotonic_mod_survey/src/mod_survey.erl:318
+#: zotonic_mod_survey/src/mod_survey.erl:333
+#: zotonic_mod_survey/src/mod_survey.erl:1327
 msgid "You are not allowed to change these results."
 msgstr "Bu sonuçları değiştirmeye izin verilmiyor."
 
@@ -12949,8 +12966,8 @@ msgstr "E-posta adresiniz ayarlarda işlem adresi olarak yapılandırıldığı 
 msgid "You started filling this in and will continue where you left off."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:125
-msgid "Your answers will not be submitted."
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:137
+msgid "Your progress has been saved. You can return later to finish and submit it."
 msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_survey_results_user.tpl:26
@@ -12958,7 +12975,7 @@ msgstr ""
 msgid "Your result"
 msgstr "Senin sonucun"
 
-#: zotonic_mod_survey/src/mod_survey.erl:1258
+#: zotonic_mod_survey/src/mod_survey.erl:1268
 msgid "Your session was expired, please restart and try again."
 msgstr "Oturumunuz sona erdi, lütfen yeniden başlatıp tekrar deneyin."
 
@@ -13750,7 +13767,7 @@ msgstr "Bu sunucuyu yönetmek için şifrenizi girin"
 msgid "Flush and reload all settings, templates etc."
 msgstr "Tüm ayarları, şablonları vb. Temizleyin ve yeniden yükleyin."
 
-#: zotonic_site_status/priv/templates/error.400.tpl:11
+#: zotonic_site_status/priv/templates/error.400.tpl:16
 msgid "If you feel that you are here by mistake,\n"
 "                please hit the \"back\" button in your browser or\n"
 "                try a different address."
@@ -13758,7 +13775,7 @@ msgstr "Eğer yanlışlıkla burada olduğunuzu düşünüyorsanız,\n"
 "                lütfen tarayıcınızdaki 'geri' düğmesine basın\n"
 "                ya da farklı bir adres deneyin."
 
-#: zotonic_site_status/priv/templates/home.tpl:14
+#: zotonic_site_status/priv/templates/home.tpl:19
 msgid "If you feel that you are here by mistake,\n"
 "            please hit the \"back\" button in your browser or\n"
 "            try a different address. If you are here to manage\n"
@@ -13772,9 +13789,9 @@ msgstr "Eğer yanlışlıkla burada olduğunuzu düşünüyorsanız,\n"
 msgid "Log On"
 msgstr "Oturum Aç"
 
-#: zotonic_site_status/priv/templates/error.400.tpl:20
+#: zotonic_site_status/priv/templates/error.400.tpl:27
 #: zotonic_site_status/priv/templates/error.503.tpl:21
-#: zotonic_site_status/priv/templates/home.tpl:25
+#: zotonic_site_status/priv/templates/home.tpl:33
 msgid "Manage this server"
 msgstr "Bu sunucuyu yönet"
 
