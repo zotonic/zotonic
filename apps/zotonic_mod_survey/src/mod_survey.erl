@@ -230,9 +230,8 @@ event(#submit{message={survey_next, Args}}, Context) ->
     SubmitButton = z_context:get_q(<<"z_submitter">>, Context),
     IsValidated = not z_convert:to_bool(z_context:get_q(<<"z_formnovalidate">>, Context)),
     if
-        IsValidated, SubmitButton =:= <<"z_survey_back">> ->
-            % Back on a form with validation, so we have to move back to the previous page.
-            % We handle the back button as a jump to the previous page in the history.
+        SubmitButton =:= <<"z_survey_back">> ->
+            % Back on a form with validation, go to the previous page in the history
             case History of
                 [_,PageNr|History1] ->
                     case is_page_back_allowed(SurveyId, PageNr, Context) of
@@ -248,12 +247,12 @@ event(#submit{message={survey_next, Args}}, Context) ->
                         render_next_page(SurveyId, 0, exact, Answers, [], Editing, Args, Context),
                         Args, Context)
             end;
-        IsValidated, SubmitButton =:= <<"z_survey_start">> ->
-            % Jump to start on a non-lineair form - clear history.
+        SubmitButton =:= <<"z_survey_start">> ->
+            % Jump to start on a non-linear form - clear history.
             render_update(
                 render_next_page(SurveyId, 1, exact, Answers, [], Editing, Args, Context),
                 Args, Context);
-        not IsValidated, SubmitButton =:= <<"z_survey_save">> ->
+        SubmitButton =:= <<"z_survey_save">> ->
             % Save intermediate results, show confirm to stop.
             if
                 Editing =:= undefined -> save_page(SurveyId, Answers, Args, Context);
@@ -261,13 +260,13 @@ event(#submit{message={survey_next, Args}}, Context) ->
             end,
             z_render:wire({script, [ {script, <<"z_event('survey-stop-confirm');">>} ]}, Context);
         IsValidated ->
-            % Submit button pressed, query args are validated, go to the next page.
+            % Validated submit, query args are assumed to be validated, go to the next page.
             {page_nr, PageNr} = proplists:lookup(page_nr, Args),
             render_update(
                 render_next_page(SurveyId, PageNr+1, forward, Answers, History, Editing, Args, Context),
                 Args, Context);
         not IsValidated ->
-            % Back button pressed, no validation of query args, go to the previous page in the history.
+            % Non-validated submit, handle this as a back button and go to the previous page in the history.
             case History of
                 [_,PageNr|History1] ->
                     case is_page_back_allowed(SurveyId, PageNr, Context) of
@@ -722,9 +721,14 @@ render_next_page(SurveyId, PageNr, Direction, Answers, History, Editing, Args, C
                         andalso page_has_feedback_view(PageNr - 1, Questions),
 
             {Next, IsFeedbackView} = if
+                Submitter =:= <<"z_survey_back">>;
+                Submitter =:= <<"z_survey_start">> ->
+                    % Direct navigation requested, do not show the feedback
+                    {go_page(PageNr, Questions, Answers2, Direction, Context), false};
                 IsFeedbackNeeded ->
+                    % Show the answers feedback for the current page.
                     {go_page(PageNr-1, Questions, Answers2, exact, Context), true};
-                Submitter =:= undefined; Submitter =:= <<"z_survey_back">> ->
+                Submitter =:= undefined ->
                     {go_page(PageNr, Questions, Answers2, Direction, Context), false};
                 true ->
                     {go_button_target(Submitter, Questions, Answers2, Context), false}

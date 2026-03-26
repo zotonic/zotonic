@@ -29,22 +29,24 @@
 	<form class="form-survey survey-{{ id.name }}" id="{{ #q }}" data-id="{{ id }}" method="post" action="postback">
 		<fieldset>
 			{% if not id.is_a.poll and pages > 1 %}
-                {% if id.survey_progress == 'nr' %}
-                    <legend>
-                        {% if id.is_survey_non_linear and page_nr > 1 %}
-                            <button class="btn btn-default btn-sm" name="z_survey_start" type="submit">{_ &lt; Back to start _}</button>
-                        {% endif %}
-                        {{ page_nr }}<span class="total">/{{ pages }}</span>
-                    </legend>
-                {% elseif id.survey_progress == 'bar' %}
-                    <div class="progress">
-                      <div class="bar" style="width: {{ page_nr * 100 / pages }}%;"></div>
-                    </div>
-                {% endif %}
+				{% with page_nr > 1 and id.is_survey_non_linear and id|survey_is_history_back:1 as show_back %}
+	                {% if id.survey_progress == 'nr' %}
+	                    <legend>
+	                        {% if show_back %}
+	                            <button class="btn btn-default btn-sm" name="z_survey_start" type="submit">{_ &lt; Back to start _}</button>
+	                        {% endif %}
+	                        {{ page_nr }}<span class="total">/{{ pages }}</span>
+	                    </legend>
+	                {% elseif id.survey_progress == 'bar' %}
+	                    <div class="progress">
+	                      <div class="bar" style="width: {{ page_nr * 100 / pages }}%;"></div>
+	                    </div>
+	                {% endif %}
 
-                {% if page_nr > 1 and id.is_survey_non_linear and id.survey_progress /= 'nr' %}
-                    <button class="btn btn-default btn-sm" name="z_survey_start" type="submit">{_ &lt; Back to start _}</button>
-                {% endif %}
+	                {% if show_back and id.survey_progress /= 'nr' %}
+	                    <button class="btn btn-default btn-sm" name="z_survey_start" type="submit">{_ &lt; Back to start _}</button>
+	                {% endif %}
+	            {% endwith %}
 			{% endif %}
 
 			{% block before_questions %}

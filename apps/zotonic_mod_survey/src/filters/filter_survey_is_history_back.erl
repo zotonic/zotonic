@@ -25,6 +25,8 @@
 
 survey_is_history_back(undefined, _History, _Context) ->
     false;
+survey_is_history_back(SurveyId, PrevPageNr, Context) when is_integer(SurveyId), is_integer(PrevPageNr) ->
+    mod_survey:is_page_back_allowed(SurveyId, PrevPageNr, Context);
 survey_is_history_back(SurveyId, [_CurrentPageNr, PrevPageNr | _], Context) when is_integer(SurveyId), is_integer(PrevPageNr) ->
     mod_survey:is_page_back_allowed(SurveyId, PrevPageNr, Context);
 survey_is_history_back(SurveyId, History, Context) when not is_integer(SurveyId) ->
