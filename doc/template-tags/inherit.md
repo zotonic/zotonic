@@ -1,6 +1,6 @@
 See also
 
-[template block](/id/doc_template_tag_tag_block), [extends](/id/doc_template_tag_tag_extends) and [overrules](/id/doc_template_tag_tag_overrules).
+[template block](/id/doc_template_tag_tag_block), [extends](/id/doc_template_tag_tag_extends), [fragment](/id/doc_template_tag_tag_fragment) and [overrules](/id/doc_template_tag_tag_overrules).
 
 Include the markup of an extended template into the extending template.
 
@@ -33,3 +33,24 @@ First line
 This is content from hello.tpl
 This is more content from world.tpl
 ```
+
+Arguments
+---------
+
+The `inherit` tag can pass extra variables when rendering the inherited block:
+
+
+```django
+{% block test %}
+    {% inherit who="world" %}
+{% endblock %}
+```
+
+The `with` keyword is optional:
+
+
+```django
+{% inherit with who="world" %}
+```
+
+The supplied arguments extend the current template context for the inherited block render.
