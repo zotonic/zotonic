@@ -57,3 +57,5 @@ jobs:
           sudo -u zotonic bash -c "ZOTONIC_DBHOST=postgres bin/zotonic runtests"
       - name: XRef
         run: make xref
+      - name: edocs
+        run: make edocs
