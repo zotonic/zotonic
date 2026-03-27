@@ -3,7 +3,7 @@
 %% @doc WordPress WXR import.
 %% @end
 
-%% Copyright 2010-2026,2011 Arjan Scherpenisse
+%% Copyright 2010-2026 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
