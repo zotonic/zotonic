@@ -11,8 +11,6 @@ MINOR=$(echo $VERSION | sed -e 's/^\([0-9][0-9]*.[0-9][0-9]*\).*$/\1/')
 # Increments version numbers where needed
 # Usage: ./prepare-release.sh 1.2.3
 
-sed -i.bck -e "s/^version = .*/version = '$MINOR'/" doc/conf.py
-sed -i.bck -e "s/^release = .*/release = '$VERSION'/" doc/conf.py
 sed -i.bck -e "s/ZOTONIC_VERSION, .*)./ZOTONIC_VERSION, \"$VERSION\")./" apps/zotonic_core/include/zotonic_release.hrl
 echo -n "$VERSION" > VERSION
 
