@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-03-26 13:13\n"
+"PO-Revision-Date: 2026-03-27 16:04\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -12084,7 +12084,7 @@ msgstr "Oneens"
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:135
 msgid "Do you want to stop for now and continue later?"
-msgstr "Wil je nu stoppen en later verdergaan?"
+msgstr "Wil je voor nu stoppen om later verder te gaan?"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:45
 msgid "Download a spreadsheet with all answers."
@@ -12673,7 +12673,7 @@ msgstr "Toon resultaten (alleen beheerder)"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:30
 msgid "Show “Continue later” button to save answers and return later to submit"
-msgstr "Toon de knop \"Ga later verder\" om antwoorden op te slaan en later terug te keren om in te sturen"
+msgstr "Toon de knop \"Later verder gaan\" om antwoorden op te slaan en in te dienen."
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:34
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:45
