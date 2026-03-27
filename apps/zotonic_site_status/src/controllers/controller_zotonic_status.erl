@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010-2019 Marc Worrell
 %% @doc Resource to serve the zotonic fallback site templates.
+%% @end
 
 %% Copyright 2010-2019 Marc Worrell
 %%

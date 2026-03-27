@@ -1,7 +1,7 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2011 Arjan Scherpenisse
-%% Date: 2011-02-26
 %% @doc Show all assigned variables in the template.
+%% @end
 
 %% Copyright 2011 Arjan Scherpenisse
 %%

@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2025 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Implements the module extension mechanisms for scomps, templates, actions etc.  Scans all active modules
 %% for scomps (etc) and maintains lookup lists for when the system tries to find a scomp (etc).
 %% @end
 
-%% Copyright 2009-2025 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -75,7 +75,7 @@
 new_ets() ->
     ets:new(?MODULE_INDEX, [set, public, named_table, {keypos, #module_index.key}]).
 
-%% @spec start_link(Props) -> {ok,Pid} | ignore | {error,Error}
+-spec start_link(term()) -> {ok, pid()} | ignore | {error, term()}.
 %% @doc Starts the server
 start_link(Site) ->
     Name = z_utils:name_for_site(?MODULE, Site),

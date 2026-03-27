@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
 %% @doc 'chunk' filter, split a list in sublists of a maximum length
+%% @end
 
 %% Copyright 2010 Marc Worrell
 %%

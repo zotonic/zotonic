@@ -1,11 +1,11 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2023 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Display a confirmation dialog.
 %% @end
 
 %% Based on code copyright (c) 2008-2009 Rusty Klophaus
 
-%% Copyright 2009-2023 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -77,7 +77,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
     {PostbackMsgJS, Context}.
 
 %% @doc Fill the dialog with the confirmation template.
-%% @spec event(Event, Context1) -> Context2
+-spec event(term(), z:context()) -> z:context().
 event(#postback{message={confirm, Args}}, Context) ->
     Title = proplists:get_value(title, Args, ?__(<<"Confirm">>, Context)),
     {IsTemplate, Text,Context1} = case proplists:get_value(text_template, Args) of

@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
 %% @doc Move an element to another place, appending it to the target.
+%% @end
 
 %% Copyright 2010 Marc Worrell
 %%

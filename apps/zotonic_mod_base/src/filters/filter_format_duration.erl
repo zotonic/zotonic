@@ -1,6 +1,7 @@
 %% @author Marc Worrell
 %% @copyright 2020 Marc Worrell
 %% @doc 'format_duration' filter, show a duration in seconds as readable text.
+%% @end
 
 %% Copyright 2020 Marc Worrell
 %%

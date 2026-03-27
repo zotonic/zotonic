@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
 %% @doc Submits a form.  Either a targeted form or form closest to an id or the trigger.
+%% @end
 
 %% Copyright 2009 Marc Worrell
 %%

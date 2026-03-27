@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2015-2021 Marc Worrell
 %% @doc Disconnect an authentication method.
+%% @end
 
 %% Copyright 2015-2021 Marc Worrell
 %%

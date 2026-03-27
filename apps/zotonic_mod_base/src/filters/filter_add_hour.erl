@@ -1,6 +1,7 @@
 %% @author Maas-Maarten Zeeman <mmzeeman@xs4all.nl>
 %% @copyright 2021 Maas-Maarten Zeeman
 %% @doc 'add_hour' filter, add hours to a date
+%% @end
 
 %% Copyright 2021 Maas-Maarten Zeeman
 %%

@@ -1,6 +1,7 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2010-2017 Arjan Scherpenisse
 %% @doc 'embedded_media' filter, return media in the resource body texts
+%% @end
 
 %% Copyright 2010-2017 Arjan Scherpenisse
 %%

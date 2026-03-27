@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2021 Marc Worrell
 %% @doc Check if the given URL is a url to the current site.
+%% @end
 
 %% Copyright 2021 Marc Worrell
 %%

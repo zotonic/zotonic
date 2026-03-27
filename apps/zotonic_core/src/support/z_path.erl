@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009-2022 Marc Worrell
 %% @doc Defines all paths for files and directories of a site.
+%% @end
 
 %% Copyright 2009-2022 Marc Worrell
 %%

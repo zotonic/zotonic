@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
 %% @doc Remove an element from the page.
+%% @end
 
 %% Copyright 2010 Marc Worrell
 %%

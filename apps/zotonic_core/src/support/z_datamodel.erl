@@ -2,6 +2,7 @@
 %% @copyright 2009-2023 Arjan Scherpenisse
 %% @doc Installing parts of the zotonic datamodel. Installs
 %% predicates, categories and default resources.
+%% @end
 
 %% Copyright 2009-2023 Arjan Scherpenisse
 %%

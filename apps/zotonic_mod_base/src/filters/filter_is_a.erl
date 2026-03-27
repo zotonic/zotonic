@@ -2,6 +2,7 @@
 %% @copyright 2010-2023 Marc Worrell
 %% @doc 'is_a' filter. Filters a list of ids on category, or tests a single resource id
 %% if it is in a category.
+%% @end
 
 %% Copyright 2010-2023 Marc Worrell
 %%

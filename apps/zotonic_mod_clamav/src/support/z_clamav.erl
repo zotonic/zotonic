@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2019 Marc Worrell
 %% @doc Communicate with clamav server, scan file or binary data.
+%% @end
 
 %% Copyright 2019 Marc Worrell
 %%

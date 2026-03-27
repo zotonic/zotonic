@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2017 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Validator for checking if an input value is within a certain length range
+%% @end
 
-%% Copyright 2009-2017 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -60,7 +61,8 @@ render_validator(length, TriggerId, _TargetId, Args, _Context)  ->
 	{[to_number(Min),to_number(Max)], Script}.
 
 
-%% @spec validate(Type, TriggerId, Values, Args, Context) -> {ok,AcceptedValue} | {error,Id,Error}
+-spec validate(term(), term(), term(), list(), z:context()) ->
+    {{ok, term()}, z:context()} | {{error, term(), term()}, z:context()}.
 %%          Error = invalid | novalue | {script, Script}
 validate(length, Id, Value, [Min,Max], Context) when is_list(Value); is_binary(Value) ->
     case z_string:len(Value) of

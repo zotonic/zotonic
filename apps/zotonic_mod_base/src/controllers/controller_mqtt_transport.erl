@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2018-2021 Marc Worrell
 %% @doc MQTT WebSocket connections
+%% @end
 
 %% Copyright 2018-2021 Marc Worrell
 %%

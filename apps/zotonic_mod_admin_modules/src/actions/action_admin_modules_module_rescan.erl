@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% Date: 2009-07-04
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Force a rescan of all modules, actions, templates etc. This is needed after a template, action or
 %% validation has been added.  It will also tell the dispatcher to reload all dispatch rules.
+%% @end
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 
 
 %% @doc Signal the module indexer to rescan all modules for actions, templates etc.
-%% @spec event(Event, Context1) -> Context2
+-spec event(term(), z:context()) -> z:context().
 event(#postback{message={module_rescan, Actions}}, Context) ->
     zotonic_fileindexer:flush(),
     z_notifier:notify(module_ready, Context),

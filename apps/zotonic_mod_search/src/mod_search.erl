@@ -1,11 +1,11 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2025 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Defines PostgreSQL queries for basic content searches in Zotonic.
 %% This module needs to be split in specific PostgreSQL queries and standard SQL queries
 %% when you want to support other databases (like MySQL).
 %% @end
 
-%% Copyright 2009-2025 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -371,7 +371,7 @@ handle_info(_Info, State) ->
 terminate(_Reason, _State) ->
     ok.
 
-%% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
+-spec code_change(term(), term(), term()) -> {ok, term()}.
 %% @doc Convert process state when code is changed
 
 code_change(_OldVsn, State, _Extra) ->

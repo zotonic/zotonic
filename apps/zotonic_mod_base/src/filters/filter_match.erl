@@ -1,6 +1,7 @@
 %% @author Maas-Maarten Zeeman <mmzeeman@xs4all.nl>
 %% @copyright 2011-2021 Maas-Maarten Zeeman
 %% @doc 'match' match a value. returns true if the value matches the regular expression.
+%% @end
 
 %% Copyright 2011-2021 Maas-Maarten Zeeman
 %%

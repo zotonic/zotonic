@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2011-2015 Marc Worrell
 %% @doc Perform some actions when an element comes into view.
+%% @end
 
 %% Copyright 2011-2015 Marc Worrell
 %%

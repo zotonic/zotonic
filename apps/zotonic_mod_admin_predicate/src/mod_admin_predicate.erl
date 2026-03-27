@@ -1,6 +1,5 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009-2026 Marc Worrell
-%% Date: 2009-07-02
 %% @doc Support for editing predicates in the admin module.  Also hooks into the rsc update function to
 %% save the specific fields for predicates
 %% @end

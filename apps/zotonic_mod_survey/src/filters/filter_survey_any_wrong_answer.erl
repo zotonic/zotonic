@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2017-2022 Marc Worrell
 %% @doc Check if any answer is wrong.
+%% @end
 
 %% Copyright 2017-2022 Marc Worrell
 %%

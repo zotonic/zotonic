@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
 %% @doc 'nthtail' filter, return nth tail of a list
+%% @end
 
 %% Copyright 2010 Marc Worrell
 %%

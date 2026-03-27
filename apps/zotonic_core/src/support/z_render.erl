@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @author Rusty Klophaus
-%% @copyright 2008-2009 Rusty Klophaus, 2009-2026 Marc Worrell
+%% @copyright 2008-2026 Rusty Klophaus, 2009-2026 Marc Worrell
 %% @doc Render routines using wires and actions.
 %%      Based on Nitrogen, which is copyright (c) 2008-2009 Rusty Klophaus
 %% @end
@@ -370,7 +370,7 @@ render_actions(TriggerId, TargetId, {Action, Args}, Context) ->
     end.
 
 
-%% @spec validator(TriggerID::string(), TargetID::string(), Validator::#validator{}, Context::#context{}) -> #context{}
+-spec validator(string(), string(), term(), term()) -> term().
 %% @doc Add an input validator to the list of known validators, used when rendering custom validators
 validator(TriggerId, TargetId, Validator, Context) ->
     V = {TriggerId, TargetId, Validator},
@@ -757,7 +757,7 @@ make_postback_info(Tag, EventType, TriggerId, TargetId, Delegate, Context) ->
 
 %% @doc Make a javascript to call the postback, posting an encoded string containing callback information.
 %% The PostbackTag is send to the server, EventType is normally the atom 'postback'.
-%% @spec make_postback(PostbackTag, EventType, TriggerId, TargetId, Delegate, Context) -> {JavascriptString, PickledPostback}
+-spec make_postback(term(), term(), term(), term(), term(), z:context()) -> {iodata(), term()}.
 make_postback(PostbackTag, EventType, TriggerId, TargetId, Delegate, Context) ->
     make_postback(PostbackTag, EventType, TriggerId, TargetId, Delegate, [], Context).
 

@@ -1,6 +1,7 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2010-2020 Arjan Scherpenisse, Marc Worrell
 %% @doc Images as data: urls.
+%% @end
 
 %% Copyright 2010-2020 Arjan Scherpenisse, Marc Worrell
 %%

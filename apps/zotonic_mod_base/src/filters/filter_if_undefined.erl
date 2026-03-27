@@ -1,6 +1,7 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2012 Arjan Scherpenisse
 %% @doc Fall back to given value *only* when the value is undefined
+%% @end
 
 %% Copyright 2012 Arjan Scherpenisse
 %%

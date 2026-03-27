@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
 %% @doc 'join' filter, join the values of a list, with an optional separator.
+%% @end
 
 %% Copyright 2010 Marc Worrell
 %%

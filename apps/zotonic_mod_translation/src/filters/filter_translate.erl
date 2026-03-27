@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2023 Marc Worrell
+%% @copyright 2023-2026 Marc Worrell
 %% @doc Translate a string to the current or given language.
-%% @enddoc
+%% @end
 
-%% Copyright 2023 Marc Worrell
+%% Copyright 2023-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -91,4 +91,3 @@ translate_1(V, Lang, Context) ->
         V1 when V1 =:= V -> V;
         V1 -> translate(V1, Lang, Context)
     end.
-

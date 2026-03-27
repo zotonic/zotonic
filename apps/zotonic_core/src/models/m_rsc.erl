@@ -782,7 +782,7 @@ update(Id, Props, Options, Context) ->
     m_rsc_update:update(Id, Props, Options, Context).
 
 %% @doc Update translations of (possibly nested) properties for one language.
-%%      The `Language` is normalized via language routines and the update is
+%%      The Language is normalized via language routines and the update is
 %%      merged with existing raw resource properties.
 -spec update_translation(Id, Language, Props, Context) -> {ok, UpdatedId} | {error, term()} when
         Id :: m_rsc:resource(),
@@ -793,7 +793,7 @@ update(Id, Props, Options, Context) ->
 update_translation(Id, Language, Props, Context) ->
     m_rsc_update:update_translation(Id, Language, Props, Context).
 
-%% @doc Like `update_translation/4`, with extra update options.
+%% @doc Like update_translation/4, with extra update options.
 -spec update_translation(Id, Language, Props, Options, Context) -> {ok, UpdatedId} | {error, term()} when
         Id :: m_rsc:resource(),
         Language :: z_language:language(),
@@ -1639,7 +1639,7 @@ opt_url_abs(Url, false, Context) ->
 %% @doc Return the predicates that are valid combined with the predicates that
 %% are actually used by the subject.
 %% This list is to show which predicates are editable for the subject rsc.
-%% @spec predicates_edit(Id, Context) -> [Predicate]
+-spec predicates_edit(term(), z:context()) -> [ term() ].
 predicates_edit(Id, Context) ->
     ByCategory = m_predicate:for_subject(Id, Context),
     Present = m_edge:object_predicate_ids(Id, Context),

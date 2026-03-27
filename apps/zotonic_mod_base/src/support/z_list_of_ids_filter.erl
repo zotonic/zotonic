@@ -1,6 +1,7 @@
 %% @author Paul Guyot <pguyot@kallisys.net>
 %% @copyright 2011-2022 Paul Guyot
 %% @doc common code for is_* filters that work on lists of ids.
+%% @end
 
 %% Copyright 2011-2022 Paul Guyot
 %%

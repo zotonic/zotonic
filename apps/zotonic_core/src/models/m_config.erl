@@ -319,7 +319,7 @@ get(Module, Key, Context) when is_binary(Key) ->
             undefined
     end.
 
-%% @doc Get the value of a config key. Returns `undefined` when the key is not found
+%% @doc Get the value of a config key. Returns undefined when the key is not found
 %% in either the config table or the site config.
 -spec get_value(Module, Key, Context) -> term() when
     Module :: atom() | binary(),

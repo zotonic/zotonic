@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2024 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Periodically loads modules whose beam file have been updated.
 %% @end
 
-%% Copyright 2009-2024 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -70,7 +70,7 @@ make() ->
 %% gen_server callbacks
 %%====================================================================
 
-%% @spec init(Args) -> {ok, State} |
+-spec init(term()) -> {ok, term()} | {ok, term(), timeout() | hibernate} | ignore | {stop, term()}.
 %%                     {ok, State, Timeout} |
 %%                     ignore               |
 %%                     {stop, Reason}
@@ -178,14 +178,14 @@ reload_module(M) ->
     end.
 
 %% @doc Reload all modules from the zotonic directory or subdirectories.  Return a list of modules reloaded. Empty list when nothing changed.
-%% @spec reload_loaded_modules() -> [Result]
+-spec reload_loaded_modules() -> [ term() ].
 reload_loaded_modules() ->
     Dir = z_utils:lib_dir(),
     Modules = [{M,P} || {M, P} <- code:all_loaded(), is_list(P) andalso string:str(P, Dir) > 0],
     [reload_module(M) || {M,Path} <- Modules, module_changed(M,Path)].
 
 %% @doc Check if the version number of the module has been changed.  Skip template modules.
-%% @spec module_changed(atom(), filename()) -> bool()
+-spec module_changed(atom(), file:filename_all()) -> boolean().
 module_changed(Module, BeamFile) ->
     case z_template:is_template_module(Module) of
         true ->

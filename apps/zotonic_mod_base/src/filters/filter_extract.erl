@@ -1,6 +1,7 @@
 %% @author Maas-Maarten Zeeman <mmzeeman@xs4all.nl>
 %% @copyright 2026 Maas-Maarten Zeeman
 %% @doc Retrieve a property from a map, proplist or resource.
+%% @end
 
 %% Copyright 2026 Maas-Maarten Zeeman
 %%

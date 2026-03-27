@@ -1,6 +1,7 @@
 %% @author Maas-Maarten Zeeman <mmzeeman@xs4all.nl>
 %% @copyright 2012 Maas-Maarten Zeeman
 %% @doc 'range' filter, create a list with integers.
+%% @end
 
 %% Copyright 2012 Maas-Maarten Zeeman
 %%

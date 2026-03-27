@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2015 Marc Worrell
 %% @doc UI for merging resources in the admin.
+%% @end
 
 %% Copyright 2015 Marc Worrell
 %%

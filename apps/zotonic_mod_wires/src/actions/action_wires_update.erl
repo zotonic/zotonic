@@ -1,7 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009-2015 Marc Worrell
-%% Date: 2009-07-16
 %% @doc Replace the content of the target with the result of a render action.
+%% @end
 
 %% Copyright 2009-2015 Marc Worrell
 %%

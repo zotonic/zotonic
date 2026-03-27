@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2019 Marc Worrell
 %% @doc Sort a list or map of languages by their sort_key
+%% @end
 
 %% Copyright 2019 Marc Worrell
 %%

@@ -2,6 +2,7 @@
 %% @copyright 2017 Marc Worrell
 %%
 %% @doc Map file changes to actions (compile, load, etc.)
+%% @end
 
 %% Copyright 2017 Marc Worrell
 %%

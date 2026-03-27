@@ -1,6 +1,7 @@
 %% @author Dmitrii Dimandt <dmitrii@dmitriid.com>
 %% @copyright 2011 Dmitrii Dimandt
 %% @doc 'slice' filter, get a range of elements from a list
+%% @end
 
 %% Copyright 2011 Dmitrii Dimandt
 %%

@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2018  Marc Worrell
 %% @doc Ensure a mixed rendering becomes a valid iolist.
+%% @end
 
 %% Copyright 2018 Marc Worrell
 %%

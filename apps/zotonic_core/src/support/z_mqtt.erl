@@ -2,6 +2,7 @@
 %% @copyright 2013-2018 Marc Worrell
 
 %% @doc Interface to MQTT pubsub functionality
+%% @end
 
 %% Copyright 2013-2018 Marc Worrell
 %%

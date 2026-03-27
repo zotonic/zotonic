@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
 %% @doc Convert a value to an atom
+%% @end
 
 %% Copyright 2010 Marc Worrell
 %%

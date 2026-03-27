@@ -1,5 +1,6 @@
 %% @copyright 2021 Driebit BV
 %% @doc Extract properties from a compact RDF document encoded by zotonic_rdf.
+%% @end
 
 %% Copyright 2021 Driebit BV
 %%

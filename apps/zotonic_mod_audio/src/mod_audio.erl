@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2020 Marc Worrell
 %% @doc Audio support for Zotonic.
+%% @end
 
 %% Copyright 2020 Marc Worrell
 %%

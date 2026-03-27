@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% Date: 2009-04-27
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Open a dialog with content from a template.
+%% @end
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -68,9 +68,8 @@ render_action(TriggerId, TargetId, Args, Context) ->
 	{PostbackMsgJS, _PickledPostback} = z_render:make_postback({dialog, Args}, click, TriggerId, TargetId, ?MODULE, Context),
 	{PostbackMsgJS, Context}.
 
-%% @spec event(Event, Context1) -> Context2
+-spec event(term(), z:context()) -> z:context().
 event(#postback{message={dialog, Args}}, Context) ->
     Title = proplists:get_value(title, Args, ""),
     {template, Template} = proplists:lookup(template, Args),
     z_render:dialog(Title, Template, Args, Context).
-

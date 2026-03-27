@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2021 Marc Worrell
 %% @doc Calculate the ImageMagick distortion parameters for a 3D rotation.
+%% @end
 
 %% Copyright 2021 Marc Worrell
 %%

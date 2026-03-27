@@ -1,6 +1,7 @@
 %% @author Maas-Maarten Zeeman <mmzeeman@xs4all.nl>
 %% @copyright 2015-2021 Maas-Maarten Zeeman
 %% @doc An access logger which gets its log entries from an ets buffer and writes them to syslog
+%% @end
 
 %% Copyright 2015-2021 Maas-Maarten Zeeman
 %%

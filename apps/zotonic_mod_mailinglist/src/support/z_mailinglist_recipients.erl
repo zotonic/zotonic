@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2020-2023 Marc Worrell <marc@worrell.nl>
 %% @doc Fetch all recipients for a mailinglist.
+%% @end
 
 %% Copyright 2020-2023 Marc Worrell
 %%

@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
 %% @doc 'timesince' filter, show a textual representation how far a date is from now.
+%% @end
 
 %% Copyright 2010 Marc Worrell
 %%

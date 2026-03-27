@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2021 Marc Worrell
 %% @doc 'sanitize_html' filter, sanitize HTML.
+%% @end
 
 %% Copyright 2021 Marc Worrell
 %%

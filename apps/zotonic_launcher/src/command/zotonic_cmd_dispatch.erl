@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2021 Marc Worrell
 %% @doc Show dispatch information for a site
+%% @end
 
 %% Copyright 2021 Marc Worrell
 %%

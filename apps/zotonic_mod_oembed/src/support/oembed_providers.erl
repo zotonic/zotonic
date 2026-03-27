@@ -1,6 +1,7 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2011-2013 Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @doc A list of known oembed providers.
+%% @end
 
 %% Copyright 2011-2013 Arjan Scherpenisse <arjan@scherpenisse.net>
 %%

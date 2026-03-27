@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2019 Marc Worrell
 %% @doc Let zotonic compile a single file.
+%% @end
 
 %% Copyright 2019 Marc Worrell
 %%

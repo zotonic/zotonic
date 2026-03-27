@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009-2012 Marc Worrell
 %% @doc Render the menu.  Add classes to highlight the current item.  The menu is always build as seen by the anonymous user.
+%% @end
 
 %% Copyright 2009-2012 Marc Worrell
 %%

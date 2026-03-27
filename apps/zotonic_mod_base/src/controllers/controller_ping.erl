@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2021 Marc Worrell
 %% @doc Simple controller that just responds with 'pong'. Used for connection tests.
+%% @end
 
 %% Copyright 2021 Marc Worrell
 %%

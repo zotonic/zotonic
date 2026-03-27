@@ -484,7 +484,7 @@ is_allowed_mailing(MailingId, Context) ->
 %%====================================================================
 %% API
 %%====================================================================
-%% @spec start_link(Args) -> {ok,Pid} | ignore | {error,Error}
+-spec start_link(list()) -> {ok, pid()} | ignore | {error, term()}.
 %% @doc Starts the server
 start_link(Args) when is_list(Args) ->
     gen_server:start_link(?MODULE, Args, []).

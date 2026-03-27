@@ -1,5 +1,6 @@
 %% @doc Map IP addresses to geo locations using the MaxMind database.
 %% @author Marc Worrell <marc@worrell.nl>
+%% @end
 
 %% Copyright 2019-2020 Marc Worrell
 %%

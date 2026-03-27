@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2012 Marc Worrell
 %% @doc A collection of icons and other art work.
+%% @end
 
 %% Copyright 2012 Marc Worrell
 %%

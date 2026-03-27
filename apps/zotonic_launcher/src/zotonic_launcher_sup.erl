@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2017 Marc Worrell
 %% @doc Read configurations and launch zotonic_core
+%% @end
 
 %% Copyright 2017 Marc Worrell
 %%

@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009-2013 Marc Worrell
 %% @doc Wire an action to an element.
+%% @end
 
 %% Copyright 2009-2013 Marc Worrell
 %%

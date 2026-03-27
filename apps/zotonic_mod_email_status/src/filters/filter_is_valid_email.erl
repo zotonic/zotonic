@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2015 Marc Worrell
 %% @doc is_valid_email filter, test if an email has a valid syntax
+%% @end
 
 %% Copyright 2015 Marc Worrell
 %%

@@ -1,6 +1,6 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @doc Provides strings for localization of dates.
-%% @copyright 2011 Arjan Scherpenisse
+%% @copyright 2011-2026 Arjan Scherpenisse
 
 -module(l10n_date).
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
@@ -15,7 +15,7 @@
 ]).
 
 %% @doc Provide some localized date strings
-%% @spec label(midnight|noon, #context{}) -> string()
+-spec label(bce | ce | midnight | noon, term()) -> binary().
 label(midnight, Context) ->
     ?__(<<"midnight">>, Context);
 label(noon, Context) ->
@@ -64,4 +64,3 @@ monthname_short(10, Context) -> ?__(<<"Oct">>, Context);
 monthname_short(11, Context) -> ?__(<<"Nov">>, Context);
 monthname_short(12, Context) -> ?__(<<"Dec">>, Context);
 monthname_short(_, _Context) -> <<"???">>.
-

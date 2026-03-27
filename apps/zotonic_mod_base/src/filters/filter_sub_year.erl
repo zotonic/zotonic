@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
 %% @doc 'sub_year' filter, subtract one or more years from a date
+%% @end
 
 %% Copyright 2010 Marc Worrell
 %%

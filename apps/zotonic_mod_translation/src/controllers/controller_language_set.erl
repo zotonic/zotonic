@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2012-2021 Marc Worrell
 %% @doc Set the language, redirect back to the page q.p
+%% @end
 
 %% Copyright 2012-2021 Marc Worrell
 %%

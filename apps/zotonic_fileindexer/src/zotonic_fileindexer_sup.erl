@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2018 Marc Worrell
 %% @doc Supervisor for the file indexer
+%% @end
 
 %% Copyright 2018 Marc Worrell
 %%

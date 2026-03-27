@@ -1,6 +1,7 @@
 %% @author Michael Connors <michael@bring42.net>
 %% @copyright 2010 Michael Connors
 %% @doc 'format_price' filter, show a price with two digits. Accepts a price in cents.
+%% @end
 
 %% Copyright 2010 Michael Connors
 %%

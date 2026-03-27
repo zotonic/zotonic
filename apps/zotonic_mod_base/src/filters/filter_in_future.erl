@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
 %% @doc 'in_future' filter, test if a date is in the future.
+%% @end
 
 %% Copyright 2010 Marc Worrell
 %%

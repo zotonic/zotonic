@@ -1,9 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2010  Marc Worrell
+%% @copyright 2009-2026  Marc Worrell
 %% @doc Handle parameter validation of a request. Checks for the presence
 %% of z_v elements containing validation information.
+%% @end
 
-%% Copyright 2009-2010 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -28,7 +29,7 @@
 -include_lib("zotonic.hrl").
 
 %% @doc Rename validator arguments to names that are compatible with the LiveValidation plugin.
-%% @spec rename_args(PropList) -> PropList1
+-spec rename_args(proplists:proplist()) -> proplists:proplist().
 rename_args(Args) ->
     rename_args(Args, []).
 
@@ -73,7 +74,7 @@ rename_args([H|T], Acc) ->
 
 %% @todo Translate unique id-names to base names (after validation)   #name -> fghw-name in postback+qs -> name in validated result
 
-%% @spec validate_query_args(Context) -> {ok, NewContext} | {error, NewContext}
+-spec validate_query_args(z:context()) -> {ok, z:context()} | {error, z:context()}.
 %% @doc Checks for z_v arguments, performs enclosed checks and adds the validated terms to the q_validated list.
 %%      Errors are reported back to the user agent
 validate_query_args(Context) ->
@@ -182,4 +183,3 @@ get_q(Name, Context) ->
             end;
         Value -> Value
     end.
-

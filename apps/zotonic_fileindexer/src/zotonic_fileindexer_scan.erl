@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2018 Marc Worrell
 %% @doc Recursively scan a directory for files.
+%% @end
 
 %% Copyright 2018 Marc Worrell
 %%

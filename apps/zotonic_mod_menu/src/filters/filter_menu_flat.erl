@@ -1,6 +1,7 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2011 Arjan Scherpenisse
 %% @doc Get a "flat" of menu parents
+%% @end
 
 %% Copyright 2011 Arjan Scherpenisse
 %%

@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2021-2025 Marc Worrell
 %% @doc Metrics for the http listener.
+%% @end
 
 %% Copyright 2021-2025 Marc Worrell
 %%

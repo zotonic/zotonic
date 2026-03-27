@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2016 Marc Worrell <marc@worrell.nl>
 %% @doc Format exports for vevent format
+%% @end
 
 %% Copyright 2016 Marc Worrell
 %%

@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
 %% @doc Reverse a list of values
+%% @end
 
 %% Copyright 2010 Marc Worrell
 %%

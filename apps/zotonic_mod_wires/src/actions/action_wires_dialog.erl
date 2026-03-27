@@ -1,6 +1,5 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% Date: 2009-04-27
 
 %% Copyright 2009 Marc Worrell
 %%

@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2021 Marc Worrell
 %% @doc 'sanitize_url' filter, sanitize an URL. The url must be an unescaped URL.
+%% @end
 
 %% Copyright 2021 Marc Worrell
 %%

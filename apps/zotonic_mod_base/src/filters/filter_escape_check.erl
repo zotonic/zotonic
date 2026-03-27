@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2021 Marc Worrell
 %% @doc Ensure a value is properly escaped.
+%% @end
 
 %% Copyright 2021 Marc Worrell
 %%

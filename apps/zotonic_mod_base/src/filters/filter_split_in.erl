@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
 %% @doc 'split_in' filter, split a list in a number of rows
+%% @end
 
 %% Copyright 2010 Marc Worrell
 %%

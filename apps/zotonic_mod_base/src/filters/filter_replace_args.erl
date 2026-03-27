@@ -1,6 +1,7 @@
 %% @author Andreas Stenius <andreas.stenius@astekk.se>
 %% @copyright 2011 Andreas Stenius
 %% @doc 'replace_args' filter, replace $N in string from a list of replacement values.
+%% @end
 
 %% Copyright 2011 Andreas Stenius
 %%

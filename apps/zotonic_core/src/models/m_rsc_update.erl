@@ -532,7 +532,7 @@ update(Id, PropsOrFun0, Options, Context) when is_integer(Id); Id =:= insert_rsc
 
 %% @doc Update a specific language translation of (possibly nested) properties.
 %%      The incoming values are escaped/sanitized before merge and the resulting
-%%      update is sent to `update/4` with `{is_escape_texts, false}`.
+%%      update is sent to update/4 with the option {is_escape_texts, false}.
 -spec update_translation(Id, Language, Props, Context) -> {ok, UpdatedId} | {error, term()} when
         Id :: m_rsc:resource(),
         Language :: z_language:language(),
@@ -542,9 +542,9 @@ update(Id, PropsOrFun0, Options, Context) when is_integer(Id); Id =:= insert_rsc
 update_translation(Id, Language, Props, Context) ->
     update_translation(Id, Language, Props, [], Context).
 
-%% @doc Like `update_translation/4`, with extra update options.
+%% @doc Like update_translation/4, with extra update options.
 %%      For nested values the top-level property is merged from raw resource
-%%      properties. For `blocks`, merge is by block `name` while preserving order
+%%      properties. For blocks, merge is by block name while preserving order
 %%      and disallowing add/remove/reorder of blocks.
 -spec update_translation(Id, Language, Props, Options, Context) -> {ok, UpdatedId} | {error, term()} when
         Id :: m_rsc:resource(),

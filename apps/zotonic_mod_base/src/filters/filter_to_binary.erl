@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2012 Marc Worrell
 %% @doc Convert a value to binary
+%% @end
 
 %% Copyright 2012 Marc Worrell
 %%

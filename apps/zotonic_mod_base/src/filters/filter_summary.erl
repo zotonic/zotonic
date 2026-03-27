@@ -1,6 +1,7 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2010-2022 Arjan Scherpenisse
 %% @doc Give a plaintext summary of the resource. Takes either the summary or, if non existent, a part of the body text.
+%% @end
 
 %% Copyright 2010-2022 Arjan Scherpenisse
 %%

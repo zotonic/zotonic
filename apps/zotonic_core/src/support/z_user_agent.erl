@@ -2,6 +2,7 @@
 %% @copyright 2012-2016 Marc Worrell
 %% @doc Check if a user agent is a crawler
 %%
+%% @end
 %% Copyright 2012-2016 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");

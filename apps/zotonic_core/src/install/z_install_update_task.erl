@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2021 Marc Worrell
 %% @doc Update tasks to be triggered by the z_install_update.erl change routines.
+%% @end
 
 %% Copyright 2021 Marc Worrell
 %%

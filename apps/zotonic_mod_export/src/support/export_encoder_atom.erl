@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2017 Marc Worrell <marc@worrell.nl>
 %% @doc Format exports for atom format
+%% @end
 
 %% Copyright 2017 Marc Worrell
 %%

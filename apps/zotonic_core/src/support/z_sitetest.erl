@@ -2,6 +2,7 @@
 %% @copyright 2016 Arjan Scherpenisse
 %%
 %% @doc Run site-specific tests in an isolated database schema
+%% @end
 
 %% Copyright 2016 Arjan Scherpenisse <arjan@miraclethings.nl>
 %%

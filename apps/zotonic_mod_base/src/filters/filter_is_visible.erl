@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
 %% @doc 'is_visible' filter, filters a list of ids or tuples {id, score}
+%% @end
 
 %% Copyright 2010 Marc Worrell
 %%

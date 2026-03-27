@@ -267,12 +267,12 @@ once(Cmd, OutFile) ->
 
 
 %% Return the ImageMagick input-file suffix.
-%% @spec infile_suffix(Mime) -> Suffix::string()
+-spec infile_suffix(term()) -> string().
 infile_suffix(<<"image/gif">>) -> [];
 infile_suffix(_) -> "[0]".
 
 
-%% @spec size(MediaRef, Filters, Context) -> {size, Width, Height, ResizedMime} | {error, Reason}
+-spec size(term(), term(), z:context()) -> {size, term(), term(), term()} | {error, term()}.
 %%   MediaRef = Filename | MediaProps
 %% @doc Calculate the size of the resulting image.
 size(Props, Filters, _Context) when is_map(Props) ->

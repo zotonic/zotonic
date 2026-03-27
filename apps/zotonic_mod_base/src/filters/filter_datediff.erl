@@ -1,8 +1,7 @@
-%%----------------------------------------------------------------------------------------------------------------
 %% @author Jason Tanner <jt4websites@googlemail.com>
 %% @copyright 2010 Jason Tanner
 %% @doc 'datediff' filter, produce the difference between two dates selecting which date part is interesting.
-%%----------------------------------------------------------------------------------------------------------------
+%% @end
 
 %%----------------------------------------------------------------------------------------------------------------
 %% Copyright 2010 Jason Tanner

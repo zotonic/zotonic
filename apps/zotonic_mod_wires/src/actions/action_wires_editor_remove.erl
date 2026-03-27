@@ -1,7 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
-%% Date: 2010-11-22
 %% @doc Add WYSIWYG editor controls to all textarea.z_editor in the target
+%% @end
 
 %% Copyright 2010 Marc Worrell
 %%

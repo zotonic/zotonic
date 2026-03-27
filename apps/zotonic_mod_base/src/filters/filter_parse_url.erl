@@ -2,6 +2,7 @@
 %% @copyright 2021 Marc Worrell
 %% @doc Parse an url. Interface to uri_string:parse/1. This filter is called parse_url
 %% and not parse_uri to be more consistent with all other URL filters.
+%% @end
 
 %% Copyright 2021 Marc Worrell
 %%

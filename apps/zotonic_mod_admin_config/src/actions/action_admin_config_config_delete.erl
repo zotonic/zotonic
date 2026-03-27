@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% Date: 2009-08-07
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Delete a configuration, no confirmation.
+%% @end
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -45,7 +45,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 
 
 %% @doc Delete a config key.
-%% @spec event(Event, Context1) -> Context2
+-spec event(term(), z:context()) -> z:context().
 event(#postback{message={config_delete, Module, Key, OnSuccess}}, Context) ->
     case z_acl:is_admin_editable(Context) of
         true ->

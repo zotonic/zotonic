@@ -323,7 +323,7 @@ is_log_client_active(Context) ->
 %%====================================================================
 %% API
 %%====================================================================
-%% @spec start_link(Args) -> {ok,Pid} | ignore | {error,Error}
+-spec start_link(list()) -> {ok, pid()} | ignore | {error, term()}.
 %% @doc Starts the server
 start_link(Args) when is_list(Args) ->
     gen_server:start_link(?MODULE, Args, []).
@@ -332,7 +332,8 @@ start_link(Args) when is_list(Args) ->
 %% gen_server callbacks
 %%====================================================================
 
-%% @spec init(Args) -> {ok, State} |
+-spec init(term()) -> {ok, term()} | {ok, term(), timeout() | hibernate} | ignore | {stop, term()}.
+%% init(Args) -> {ok, State} |
 %%                     {ok, State, Timeout} |
 %%                     ignore               |
 %%                     {stop, Reason}
@@ -348,7 +349,6 @@ init(Args) ->
     end,
     {ok, #state{ site = Site, dedup = #{} }}.
 
-%% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
 %%                                      {reply, Reply, State, Timeout} |
 %%                                      {noreply, State} |
 %%                                      {noreply, State, Timeout} |
@@ -423,7 +423,8 @@ handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
 
 
-%% @spec handle_info(Info, State) -> {noreply, State} |
+-spec handle_info(term(), term()) -> {noreply, term()} | {noreply, term(), timeout() | hibernate} | {stop, term(), term()}.
+%% handle_info(Info, State) -> {noreply, State} |
 %%                                       {noreply, State, Timeout} |
 %%                                       {stop, Reason, State}
 %% @doc Handling all non call/cast messages
@@ -450,7 +451,7 @@ handle_info({logger, Data}, #state{ site = Site, log_client_topic = ClientTopic 
 handle_info(_Info, State) ->
     {noreply, State}.
 
-%% @spec terminate(Reason, State) -> void()
+-spec terminate(term(), term()) -> ok.
 %% @doc This function is called by a gen_server when it is about to
 %% terminate. It should be the opposite of Module:init/1 and do any necessary
 %% cleaning up. When it returns, the gen_server terminates with Reason.
@@ -459,7 +460,7 @@ terminate(_Reason, _State) ->
     ok.
 
 
-%% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
+-spec code_change(term(), term(), term()) -> {ok, term()}.
 %% @doc Convert process state when code is changed
 code_change(_OldVsn, State, _Extra) ->
     {ok, State}.

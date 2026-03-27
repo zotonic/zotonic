@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% Date: 2009-05-12
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Open a dialog with some fields to make a new predicate.
+%% @end
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 
 
 %% @doc Fill the dialog with the new page form. The form will be posted back to this module.
-%% @spec event(Event, Context1) -> Context2
+-spec event(term(), z:context()) -> z:context().
 event(#postback{message={predicate_new_dialog, Title, Redirect}}, Context) ->
     Vars = [
         {delegate, atom_to_list(?MODULE)},
@@ -75,4 +75,3 @@ event(#submit{message=predicate_new}, Context) ->
         {error, _} ->
             z_render:growl_error(?__("Could not create the predicate.", Context), Context)
     end.
-

@@ -1,6 +1,7 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2009 Arjan Scherpenisse
 %% @doc Redirect to a preview for media items; for use in the tinyMCE media plugin.
+%% @end
 
 %% Copyright 2009 Arjan Scherpenisse
 %%

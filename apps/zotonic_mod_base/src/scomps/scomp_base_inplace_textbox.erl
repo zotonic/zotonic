@@ -1,9 +1,10 @@
 %% @author Konstantin Nikiforov <helllamer@gmail.com>
-%% @copyright 2010 Konstantin Nikiforov
+%% @copyright 2010-2026 Konstantin Nikiforov
 %% @doc Render JS-aided inplace textbox.
 %%	Example: {% inplace_textbox value="def.val." delegate="my_resource" hint="edit" %}
+%% @end
 
-%% Copyright 2010 Konstantin Nikiforov
+%% Copyright 2010-2026 Konstantin Nikiforov
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -121,10 +122,9 @@ render(Params, _Vars, Context) ->
 
 
 %% @doc  renders an image indicating the edit possibility.
-%% @spec render_image(Input) -> string()
+-spec render_image(term()) -> string().
 render_image(undefined) ->
     "";
 render_image(Image_url) when is_list(Image_url) ->
     %% e.g. "/lib/images/edit.gif"
     "<img src=\"" ++ Image_url ++ "\"/>".
-

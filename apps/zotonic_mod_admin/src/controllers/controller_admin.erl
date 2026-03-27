@@ -1,6 +1,7 @@
 %% @author Tim Benniks <tim@timbenniks.com>
 %% @copyright 2009 Tim Benniks.
 %% @doc Admin webmachine_controller.
+%% @end
 
 %% Copyright 2009 Tim Benniks
 %%

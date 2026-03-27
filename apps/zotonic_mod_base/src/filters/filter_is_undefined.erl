@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
 %% @doc 'is_defined' filter, test if a value is not defined
+%% @end
 
 %% Copyright 2010 Marc Worrell
 %%

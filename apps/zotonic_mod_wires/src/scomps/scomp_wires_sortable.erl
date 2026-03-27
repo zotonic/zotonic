@@ -4,6 +4,7 @@
 %% Based on code (c) 2008-2009 Rusty Klophaus
 %%
 %% @doc Mark an element as a sortable.  A sortable is sorted inside a sorter
+%% @end
 
 %% Copyright 2009 Marc Worrell
 %%

@@ -2,6 +2,7 @@
 %% @copyright 2010-2022 Marc Worrell
 %% @doc 'length' filter, return the number of elements or length of a string
 %% or other erlang term.
+%% @end
 
 %% Copyright 2010-2022 Marc Worrell
 %%

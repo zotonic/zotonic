@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
 %% @doc 'last' filter, return the last element of a list or the last character of a string
+%% @end
 
 %% Copyright 2010 Marc Worrell
 %%

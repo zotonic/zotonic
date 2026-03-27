@@ -1,7 +1,7 @@
 %% @author Konstantin Nikiforov <helllamer@gmail.com>
 %% @copyright 2011 Konstantin Nikiforov
-%% Date: 2011-04-06
 %% @doc Insert the result of a render exactly before the target HTML element.
+%% @end
 
 %% Copyright 2011 Konstantin Nikiforov
 %%

@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
 %% @doc Mask an element or the whole page with a busy indicator.
+%% @end
 
 %% Copyright 2010 Marc Worrell
 %%

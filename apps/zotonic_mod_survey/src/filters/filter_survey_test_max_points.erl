@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2017 Marc Worrell
 %% @doc Calculate the maximu points for a test survey.
+%% @end
 
 %% Copyright 2017 Marc Worrell
 %%

@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2025 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Open a dialog to change the module/key/value of a config entry.
 %% @end
 
-%% Copyright 2009-2025 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -46,7 +46,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 
 
 %% @doc Fill the dialog with the new group form. The form will be posted back to this module.
-%% @spec event(Event, Context1) -> Context2
+-spec event(term(), z:context()) -> z:context().
 event(#postback{message={config_edit_dialog, Module, Key, Value, OnSuccess}}, Context) ->
     Vars = [
         {module, Module},
@@ -61,7 +61,6 @@ event(#postback{message={config_edit_dialog, Module, Key, Value, OnSuccess}}, Co
 
 
 %% @doc Add a member to a group.  The roles are in the request (they come from a form)
-%% @spec event(Event, Context1) -> Context2
 event(#submit{message={config_edit, Args}}, Context) ->
     case z_acl:is_admin_editable(Context) of
         true ->

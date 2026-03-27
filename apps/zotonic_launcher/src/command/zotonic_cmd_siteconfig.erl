@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2019-2020 Marc Worrell
 %% @doc Print the site configuration
+%% @end
 
 %% Copyright 2019-2020 Marc Worrell
 %%

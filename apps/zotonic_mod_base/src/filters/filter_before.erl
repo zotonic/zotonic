@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
 %% @doc 'before' filter, return the element before another element in a list
+%% @end
 
 %% Copyright 2010 Marc Worrell
 %%

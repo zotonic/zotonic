@@ -2,6 +2,7 @@
 %% @copyright 2017 Marc Worrell
 %%
 %% @doc Handle file changes.
+%% @end
 
 %% Copyright 2017 Marc Worrell
 %%

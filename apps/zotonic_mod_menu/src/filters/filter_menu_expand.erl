@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2021 Marc Worrell
 %% @doc Expand a menu by adding all 'haspart' edges to the menu lists.
+%% @end
 
 %% Copyright 2021 Marc Worrell
 %%

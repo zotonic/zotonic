@@ -1,7 +1,7 @@
 %% @author Konstantin Nikiforov <marc@worrell.nl>
 %% @copyright 2011 Konstantin Nikiforov
-%% Date: 2011-04-11
 %% @doc Insert the result of a render action after of an HTML element.
+%% @end
 
 %% Copyright 2011 Konstantin Nikiforov
 %%

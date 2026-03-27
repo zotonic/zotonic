@@ -2,6 +2,7 @@
 %% @author Maas-Maarten Zeeman <mmzeeman@xs4all.nl>
 %% @copyright 2020 Marc Worrell, Maas-Maarten Zeeman
 %% @doc SSL support functions, ensure the DH file.
+%% @end
 
 %% Copyright 2020 Marc Worrell, Maas-Maarten Zeeman
 %%

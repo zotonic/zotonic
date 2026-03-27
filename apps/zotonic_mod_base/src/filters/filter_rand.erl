@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
 %% @doc 'rand' filter, return a random number
+%% @end
 
 %% Copyright 2010 Marc Worrell
 %%

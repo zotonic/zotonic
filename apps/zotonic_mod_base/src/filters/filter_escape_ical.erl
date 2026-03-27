@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
 %% @doc 'escape_ical' filter, escape a value for an ical file.
+%% @end
 
 %% Copyright 2010 Marc Worrell
 %%

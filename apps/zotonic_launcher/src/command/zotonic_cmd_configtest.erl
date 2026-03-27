@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2019 Marc Worrell
 %% @doc Test if the config files are syntactically ok
+%% @end
 
 %% Copyright 2019 Marc Worrell
 %%

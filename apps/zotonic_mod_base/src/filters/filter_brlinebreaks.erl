@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2012 Marc Worrell
 %% @doc 'brlinebreaks' filter, translate <br/> elements into linebreaks
+%% @end
 
 %% Copyright 2012 Marc Worrell
 %%

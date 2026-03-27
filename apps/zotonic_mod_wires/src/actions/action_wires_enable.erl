@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
 %% @doc Enable an element.  Removes the 'disabled' attribute and removes the class 'disabled'.
+%% @end
 
 %% Copyright 2009 Marc Worrell
 %%

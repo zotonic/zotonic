@@ -1,8 +1,9 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2009 Arjan Scherpenisse
+%% @copyright 2009-2026 Arjan Scherpenisse
 %% @doc A media item has been chosen for insertion in the body text.
+%% @end
 
-%% Copyright 2009 Arjan Scherpenisse
+%% Copyright 2009-2026 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -39,17 +40,14 @@ render_action(TriggerId, TargetId, Args, Context) ->
 	{PostbackMsgJS, Context}.
 
 
-%% @spec event(Event, Context1) -> Context2
+-spec event(term(), z:context()) -> z:context().
 event(#postback{message={zmedia_choose, []}}, Context) ->
     MediaId = z_context:get_q(<<"media_id">>, Context),
     Args = [ {id, m_rsc:rid(MediaId, Context)} ],
     z_render:wire({zmedia_has_chosen, Args}, Context);
 
-%% @spec event(Event, Context1) -> Context2
 event(#postback{message={zmedia_choose, Args}}, Context) ->
     z_render:wire({zmedia_has_chosen, Args}, Context).
 
 
 %z_render:wire([{growl, [{text, "Yay."}]}], Context).
-
-

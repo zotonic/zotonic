@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2015 Marc Worrell
 %% @doc Periodically cleanup leftover tempfiles in the tempdir
+%% @end
 
 %% Copyright 2015 Marc Worrell
 %%

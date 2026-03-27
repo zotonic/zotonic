@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2019 Marc Worrell
 %% @doc List all configuration files for a site
+%% @end
 
 %% Copyright 2019 Marc Worrell
 %%

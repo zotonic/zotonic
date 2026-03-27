@@ -1,5 +1,5 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2025 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Simple drop folder handler, monitors a directory and signals new files.
 %%
 %% Flow:
@@ -7,7 +7,7 @@
 %% 2. Drop folder handler sees the file, moves it so a safe place, and notifies the file handler of it existance.
 %% @end
 
-%% Copyright 2009-2025 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -70,7 +70,7 @@
 %%====================================================================
 %% API
 %%====================================================================
-%% @spec start_link(SiteArgs) -> {ok,Pid} | ignore | {error,Error}
+-spec start_link(term()) -> {ok, pid()} | ignore | {error, term()}.
 %% @doc Starts the drop folder server
 start_link(Site) ->
     Name = z_utils:name_for_site(?MODULE, Site),
@@ -110,7 +110,7 @@ dropbox_unhandled_dir(Context) ->
 %% gen_server callbacks
 %%====================================================================
 
-%% @spec init(SiteProps) -> {ok, State} |
+-spec init(term()) -> {ok, term()} | {ok, term(), timeout() | hibernate} | ignore | {stop, term()}.
 %%                     {ok, State, Timeout} |
 %%                     ignore               |
 %%                     {stop, Reason}
@@ -136,7 +136,6 @@ init(Site) ->
     gen_server:cast(self(), cleanup),
     {ok, State}.
 
-%% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
 %%                                      {reply, Reply, State, Timeout} |
 %%                                      {noreply, State} |
 %%                                      {noreply, State, Timeout} |
@@ -147,7 +146,7 @@ handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
 
 
-%% @spec handle_cast(Msg, State) -> {noreply, State} |
+-spec handle_cast(term(), term()) -> {noreply, term()} | {noreply, term(), timeout() | hibernate} | {stop, term(), term()}.
 %%                                  {noreply, State, Timeout} |
 %%                                  {stop, eason, State}
 %% @doc Scan the drop folder, broadcast found files.
@@ -169,7 +168,7 @@ handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
 
 
-%% @spec handle_info(Info, State) -> {noreply, State} |
+-spec handle_info(term(), term()) -> {noreply, term()} | {noreply, term(), timeout() | hibernate} | {stop, term(), term()}.
 %%                                       {noreply, State, Timeout} |
 %%                                       {stop, Reason, State}
 %% @doc Handling all non call/cast messages
@@ -177,7 +176,7 @@ handle_info(_Info, State) ->
     {noreply, State}.
 
 
-%% @spec terminate(Reason, State) -> void()
+-spec terminate(term(), term()) -> ok.
 %% @doc This function is called by a gen_server when it is about to
 %% terminate. It should be the opposite of Module:init/1 and do any necessary
 %% cleaning up. When it returns, the gen_server terminates with Reason.
@@ -185,7 +184,7 @@ handle_info(_Info, State) ->
 terminate(_Reason, _State) ->
     ok.
 
-%% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
+-spec code_change(term(), term(), term()) -> {ok, term()}.
 %% @doc Convert process state when code is changed
 code_change(_OldVsn, State, _Extra) ->
     {ok, State}.

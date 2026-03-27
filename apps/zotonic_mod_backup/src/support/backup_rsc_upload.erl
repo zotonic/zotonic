@@ -2,6 +2,7 @@
 %% @copyright 2010-2021 Marc Worrell
 %% @doc Handle generic upload of encoded blobs with a resource (from deprecated mod_rest)
 %% @todo Should be replaced with m_rsc:m_post/3 handling
+%% @end
 
 %% Copyright 2010-2021 Marc Worrell
 %%

@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2020 Marc Worrell
 %% @doc Flatten a value to be used a string.
+%% @end
 
 %% Copyright 2020 Marc Worrell
 %%

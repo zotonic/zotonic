@@ -1,6 +1,7 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2011 Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @doc Schema definition for mailinglist module, including upgraders
+%% @end
 
 %% Copyright 2011 Arjan Scherpenisse
 %%

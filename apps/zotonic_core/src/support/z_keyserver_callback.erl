@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2020 Marc Worrell
 %% @doc Access control callbacks for the keyserver.
+%% @end
 
 %% Copyright 2020 Marc Worrell
 %%

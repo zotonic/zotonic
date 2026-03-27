@@ -2,6 +2,7 @@
 %% @copyright 2010 Marc Worrell
 %%
 %% @doc Trigger a name {% wire %} with an action.  All args will be args to the named wire.
+%% @end
 
 %% Copyright 2010 Marc Worrell
 %%

@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009-2017 Marc Worrell
 %% @doc Perform a redirect to another page.
+%% @end
 
 %% Copyright 2009-2017 Marc Worrell
 %%

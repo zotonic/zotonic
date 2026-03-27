@@ -1,8 +1,9 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2010-2021 Arjan Scherpenisse
+%% @copyright 2010-2026 Arjan Scherpenisse
 %% @doc Get more results for search result
+%% @end
 
-%% Copyright 2010-2021 Arjan Scherpenisse
+%% Copyright 2010-2026 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -167,7 +168,7 @@ pagelen(_, _) ->
 
 
 %% @doc Show more results.
-%% @spec event(Event, Context1) -> Context2
+-spec event(term(), z:context()) -> z:context().
 %% @todo Handle the "MorePageLen" argument correctly.
 event(#postback{message={moreresults, SearchName, SearchProps, Page, PageLen, MorePageLen, Args, Options}, trigger=TriggerId, target=TargetId}, Context) ->
     #search_result{result=Result} = case is_list(SearchProps) of

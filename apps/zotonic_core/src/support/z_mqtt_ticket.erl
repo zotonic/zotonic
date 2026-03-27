@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2020 Marc Worrell
 %% @doc Tickets for MQTT out of band publish via HTTP
+%% @end
 
 %% Copyright 2020 Marc Worrell
 %%

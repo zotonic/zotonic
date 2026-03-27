@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2014-2023 Marc Worrell
 %% @doc Simple live updating events
+%% @end
 
 %% Copyright 2014-2023 Marc Worrell
 %%

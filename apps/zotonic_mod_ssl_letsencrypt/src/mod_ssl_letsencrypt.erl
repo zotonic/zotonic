@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2016-2024 Marc Worrell, Maas-Maarten Zeeman
+%% @copyright 2016-2026 Marc Worrell, Maas-Maarten Zeeman
 %% @doc Certificate handling for Let's Encrypt
 %% @end
 
-%% Copyright 2016-2024 Marc Worrell, Maas-Maarten Zeeman
+%% Copyright 2016-2026 Marc Worrell, Maas-Maarten Zeeman
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -268,7 +268,7 @@ load_cert(Context) ->
 %%====================================================================
 %% API
 %%====================================================================
-%% @spec start_link(Args) -> {ok,Pid} | ignore | {error,Error}
+-spec start_link(list()) -> {ok, pid()} | ignore | {error, term()}.
 %% @doc Starts the server
 start_link(Args) when is_list(Args) ->
     {context, Context} = proplists:lookup(context, Args),
