@@ -31,7 +31,7 @@
        		</label>
 	   		<label class="checkbox">
        			<input type="checkbox" name="is_survey_non_linear" {% if id.is_survey_non_linear %}checked{% endif %}>
-       			{_ Allow non-linear forms; answers are saved when using the “Back” button _}
+       			{_ Allow non-linear forms; answers are saved with “Back” button and a “Back to start” is added at the top of each page  _}
        		</label>
 			<label class="checkbox">
 				<input type="checkbox" name="survey_anonymous" id="survey_anonymous" value="1" {% if id.survey_anonymous %}checked="checked"{% endif %}> {_ Hide the user’s id or browser-id from result exports _}
