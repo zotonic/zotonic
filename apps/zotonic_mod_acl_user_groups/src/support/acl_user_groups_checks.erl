@@ -1,5 +1,6 @@
 %% @copyright 2015-2022 Marc Worrell
 %% @doc Routines for ACL notifications.
+%% @end
 
 %% Copyright 2015-2022 Marc Worrell
 %%

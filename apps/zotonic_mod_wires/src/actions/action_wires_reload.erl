@@ -2,6 +2,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
 %% @doc Refresh the current page.
+%% @end
 
 %% Copyright 2009 Marc Worrell
 %%

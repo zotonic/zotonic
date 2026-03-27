@@ -1,7 +1,7 @@
 %% @author Maas-Maarten Zeeman <mmzeeman@xs4all.nl>
 %% @copyright 2015 Marc Worrell
-%% Date: 2015-10-22
 %% @doc Simple resource that just returns "Hello, World!".
+%% @end
 
 %% Copyright 2015 Maas-Maarten Zeeman
 %%

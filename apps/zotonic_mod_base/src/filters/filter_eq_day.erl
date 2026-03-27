@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
 %% @doc 'eq_day' filter, check if two dates are on the same day
+%% @end
 
 %% Copyright 2010 Marc Worrell
 %%

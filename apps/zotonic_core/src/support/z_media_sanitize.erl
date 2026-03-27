@@ -2,6 +2,7 @@
 %% @copyright 2016 Marc Worrell
 %%
 %% @doc Check if an identified file is acceptable as upload.
+%% @end
 
 %% Copyright 2016 Marc Worrell
 %%

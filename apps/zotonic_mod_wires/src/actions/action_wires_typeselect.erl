@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2021 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Adds typeahead with a searchresult to an input box
+%% @end
 
-%% Copyright 2009-2021 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -85,7 +86,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 
 
 %% @doc Show possible completions of the search text using a template.
-%% @spec event(Event, Context1) -> Context2
+-spec event(term(), z:context()) -> z:context().
 event(#postback{message={typeselect, Cats, Template, Actions, ActionsWithId, OtherArgs}, target=TargetId}, Context) ->
     Text = z_context:get_q(<<"triggervalue">>, Context),
     Props = #{

@@ -1,10 +1,10 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2011-2024 Arjan Scherpenisse <arjan@scherpenisse.net>
+%% @copyright 2011-2026 Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @doc Watch for changed files using inotifywait.
 %%      https://github.com/rvoicilas/inotify-tools/wiki
 %% @end
 
-%% Copyright 2011-2024 Arjan Scherpenisse
+%% Copyright 2011-2026 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -78,7 +78,7 @@ restart() ->
 %% gen_server callbacks
 %%====================================================================
 
-%% @spec init(Args) -> {ok, State} |
+-spec init(term()) -> {ok, term()} | {ok, term(), timeout() | hibernate} | ignore | {stop, term()}.
 %%                     {ok, State, Timeout} |
 %%                     ignore               |
 %%                     {stop, Reason}
@@ -158,7 +158,7 @@ handle_info(start, State) ->
 handle_info(_Info, State) ->
     {noreply, State}.
 
-%% @spec terminate(Reason, State) -> void()
+-spec terminate(term(), term()) -> ok.
 %% @doc This function is called by a gen_server when it is about to
 %% terminate. It should be the opposite of Module:init/1 and do any necessary
 %% cleaning up. When it returns, the gen_server terminates with Reason.
@@ -169,7 +169,7 @@ terminate(_Reason, #state{pid = Pid}) ->
     catch exec:stop(Pid),
     ok.
 
-%% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
+-spec code_change(term(), term(), term()) -> {ok, term()}.
 %% @doc Convert process state when code is changed
 code_change(_OldVsn, State, _Extra) ->
     {ok, State}.

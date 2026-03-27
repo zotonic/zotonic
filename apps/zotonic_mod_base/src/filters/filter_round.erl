@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2017 Marc Worrell
 %% @doc Round a value to integer
+%% @end
 
 %% Copyright 2017 Marc Worrell
 %%

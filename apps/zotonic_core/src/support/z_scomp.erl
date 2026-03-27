@@ -1,11 +1,12 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2010 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell
 %%
 %% @doc Module for rendering and caching scomps.  Scomps can be caching and
 %%      non caching, depending on the passed arguments and the results of the
 %%      scomp's varies/2 function.
+%% @end
 
-%% Copyright 2009-2010 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -27,7 +28,7 @@
 -include_lib("zotonic.hrl").
 
 
-%% @spec render(ScompName, Args, Vars, Context) -> {ok, Context} | {ok, io_list} | {error, Reason}
+-spec render(term(), list(), map(), z:context()) -> {ok, z:context()} | {ok, iolist()} | {error, term()}.
 %% @doc Render the names scomp, Args are the scomp arguments and Vars are the variables given to the template
 render(ScompName, Args, Vars, Context) ->
     case z_module_indexer:find(scomp, ScompName, Context) of
@@ -92,7 +93,7 @@ render_state(MixedHtml) ->
     MixedHtml.
 
 %% @doc Create an unique key for the scomp and the visibility level it is rendered for
-%% @spec key(atom(), proplist(), context()) -> term()
+-spec key(atom(), proplists:proplist(), z:context()) -> term().
 key(ScompName, EssentialParams, Context) ->
     {ScompName, EssentialParams, z_acl:cache_key(Context), z_context:language(Context)}.
 

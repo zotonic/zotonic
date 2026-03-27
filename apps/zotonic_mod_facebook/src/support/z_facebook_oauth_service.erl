@@ -3,6 +3,7 @@
 %% @doc Support routines for using Facebook as an external identity provider.
 %%
 %% See: http://developers.facebook.com/docs/authentication/
+%% @end
 
 %% Copyright 2010-2022 Marc Worrell
 %%

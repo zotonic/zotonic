@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010-2023 Marc Worrell
 %% @doc Reset all input fields in a form.
+%% @end
 
 %% Copyright 2010-2023 Marc Worrell
 %%

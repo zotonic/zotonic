@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
 %% @doc 'if' filter, depending on input select first or second argument
+%% @end
 
 %% Copyright 2011 Marc Worrell
 %%

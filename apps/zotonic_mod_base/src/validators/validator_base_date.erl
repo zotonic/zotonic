@@ -1,8 +1,8 @@
 %% @author Michael Connors <michael@bring42.net>
-%% @copyright 2012 Michael Connors
+%% @copyright 2012-2026 Michael Connors
 %%
 
-%% Copyright 2012 Michael Connors
+%% Copyright 2012-2026 Michael Connors
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -72,7 +72,8 @@ is_valid(_, _, _, _) ->
     false.
 
 
-%% @spec validate(Type, TriggerId, Values, Args, Context) -> {ok,AcceptedValue} | {error,Id,Error}
+-spec validate(term(), term(), term(), list(), z:context()) ->
+    {{ok, term()}, z:context()} | {{error, term(), term()}, z:context()}.
 %%          Error = invalid | novalue | {script, Script}
 validate(date, Id, Value, [Format, Separator], Context) ->
     case lists:member(Format, [<<"l">>, <<"m">>, <<"b">>]) of

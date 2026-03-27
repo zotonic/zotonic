@@ -1,6 +1,7 @@
 %% @author Maas-Maarten Zeeman <mmzeeman@xs4all.nl>
 %% @copyright 2023 Maas-Maarten Zeeman
 %% @doc 'format_dispatch_controller_options' Formats controller options
+%% @end
 
 %% Copyright 2023 Maas-Maarten Zeeman
 %%

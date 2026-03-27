@@ -1,7 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% Date: 2009-07-15
 %% @doc Add the tabs UI to an element
+%% @end
 
 %% Copyright 2009 Marc Worrell
 %%

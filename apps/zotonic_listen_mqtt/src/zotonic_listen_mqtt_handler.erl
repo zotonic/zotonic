@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2019-2020 Marc Worrell
 %% @doc MQTT protocol handler for ranch
+%% @end
 
 %% Copyright 2019-2020 Marc Worrell
 %%

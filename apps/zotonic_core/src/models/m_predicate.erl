@@ -393,7 +393,7 @@ subjects(Id, Context) ->
     [R || {R} <- Subjects].
 
 %% @doc Return the list of all predicates
-%% @spec all(Context) -> PropList
+-spec all(z:context()) -> proplists:proplist().
 all(Context) ->
     F = fun() ->
         {L, R} = cat_bounds(Context),

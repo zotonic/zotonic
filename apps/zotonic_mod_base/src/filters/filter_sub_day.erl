@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
 %% @doc 'sub_day' filter, subtract days from a date
+%% @end
 
 %% Copyright 2010 Marc Worrell
 %%

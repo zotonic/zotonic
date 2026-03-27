@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2016 Marc Worrell
+%% @copyright 2016-2026 Marc Worrell
 %% @doc Open an overlay with content from a template.
+%% @end
 
-%% Copyright 2016 Marc Worrell
+%% Copyright 2016-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -65,8 +66,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
     {PostbackMsgJS, _PickledPostback} = z_render:make_postback({overlay, Args}, click, TriggerId, TargetId, ?MODULE, Context),
     {PostbackMsgJS, Context}.
 
-%% @spec event(Event, Context1) -> Context2
+-spec event(term(), z:context()) -> z:context().
 event(#postback{message={overlay, Args}}, Context) ->
     {template, Template} = proplists:lookup(template, Args),
     z_render:overlay(Template, Args, Context).
-

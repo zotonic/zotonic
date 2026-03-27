@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
 %% @doc 'group_by' filter, groups a list of proplists on a property
+%% @end
 
 %% Copyright 2010 Marc Worrell
 %%

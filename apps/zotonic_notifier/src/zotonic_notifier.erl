@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2017 Marc Worrell
 %% @doc Extension system using notifications with fold, map and priorities.
+%% @end
 
 %% Copyright 2017 Marc Worrell
 %%

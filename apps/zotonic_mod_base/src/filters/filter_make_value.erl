@@ -1,6 +1,7 @@
 %% @author Dirk Geurs <dirk@driebit.nl>
 %% @copyright 2015 Driebit BV
 %% @doc Force the input to a value
+%% @end
 
 %% Copyright 2015 Driebit BV
 %%

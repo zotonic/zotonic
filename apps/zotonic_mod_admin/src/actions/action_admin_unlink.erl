@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2025 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Remove an edge between two resources
 %% @end
 
-%% Copyright 2009-2025 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -93,7 +93,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 
 
 %% @doc Unlink the edge, on success show an undo message in the element with id "undo-message"
-%% @spec event(Event, Context1) -> Context2
+-spec event(term(), z:context()) -> z:context().
 event(#postback{message={unlink, EdgeId, SubjectId, Predicate, ObjectId, UndoMessageId, EdgeTemplate, Action, UndoAction}}, Context) ->
     case z_acl:rsc_linkable(SubjectId, Context) of
         true ->
@@ -115,4 +115,3 @@ event(#postback{message={unlink, EdgeId, SubjectId, Predicate, ObjectId, UndoMes
         false ->
             z_render:growl_error("Sorry, you have no permission to edit this page.", Context)
     end.
-

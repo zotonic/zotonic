@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2020 Marc Worrell
 %% @doc Test if we can connect to the configured database.
+%% @end
 
 %% Copyright 2020 Marc Worrell
 %%

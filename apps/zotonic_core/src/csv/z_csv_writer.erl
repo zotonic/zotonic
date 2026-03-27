@@ -1,5 +1,6 @@
 %% @doc Write data to a CSV file
 %% @author Marc Worrell <marc@worrell.nl>
+%% @end
 
 %% Copyright 2013-2019 Marc Worrell
 %%

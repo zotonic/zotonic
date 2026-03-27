@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
 %% @doc 'center' filter, center a string inside a certain amount of characters
+%% @end
 
 %% Copyright 2010 Marc Worrell
 %%

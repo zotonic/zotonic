@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2018-2020 Marc Worrell
 %% @doc Start a Cotonic web-worker
+%% @end
 
 %% Copyright 2018-2020 Marc Worrell
 %%

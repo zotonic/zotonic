@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010-2026 Marc Worrell
 %% @doc Take minimum value.
+%% @end
 
 %% Copyright 2010-2026 Marc Worrell
 %%

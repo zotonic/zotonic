@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2011 Marc Worrell
 %% @doc Simple topological sort of tuples {item, [depends], [provides]}
+%% @end
 
 %% Copyright 2011 Marc Worrell
 %%

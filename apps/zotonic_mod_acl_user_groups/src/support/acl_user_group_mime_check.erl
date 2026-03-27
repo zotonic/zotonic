@@ -1,5 +1,6 @@
 %% @copyright 2018 Marc Worrell
 %% @doc Check mime types against allowed mime types per group
+%% @end
 
 %% Copyright 2018 Marc Worrell
 %%

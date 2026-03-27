@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
 %% @doc Calculate the gravatar code for an e-mail address.
+%% @end
 
 %% Copyright 2010 Marc Worrell
 %%

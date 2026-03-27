@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2011 Marc Worrell
 %% @doc Select the language from a list of languages
+%% @end
 
 %% Copyright 2011 Marc Worrell
 %%

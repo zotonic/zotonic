@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2012-2021 Marc Worrell
 %% @doc Get the sub tree of an id in a menu (if any)
+%% @end
 
 %% Copyright 2012-2021 Marc Worrell
 %%

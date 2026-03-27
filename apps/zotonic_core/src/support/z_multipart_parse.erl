@@ -7,6 +7,7 @@
 
 %% This is the MIT license.
 %%
+%% @end
 %% Copyright (c) 2007 Mochi Media, Inc.
 %% Copyright (c) 2009-2023 Marc Worrell
 %%

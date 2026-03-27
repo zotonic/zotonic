@@ -1,6 +1,7 @@
 %% @author Arjan Scherpenisse <marc@worrell.nl>
 %% @copyright 2010,2011 Arjan Scherpenisse
 %% @doc group a list of sorted rsc ids on their first letter of the title. Then, split this list in #Cols more-or-less even columns.
+%% @end
 
 %% Copyright 2010,2011 Arjan Scherpenisse
 %%

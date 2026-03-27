@@ -2,6 +2,7 @@
 %% @copyright 2021 Marc Worrell
 %% @doc Return the direction string "ltr" or "rtl" depending on the language.
 %% Returns "" for the undefined language.
+%% @end
 
 %% Copyright 2021 Marc Worrell
 %%

@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2012-2023 Marc Worrell
+%% @copyright 2012-2026 Marc Worrell
 %% @doc Manage, compile and find mediaclass definitions per context/site.
 %% @end
 
-%% Copyright 2012-2023 Marc Worrell
+%% Copyright 2012-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -80,7 +80,7 @@ new_ets() ->
     ets:new(?MEDIACLASS_INDEX, [set, public, named_table, {keypos, #mediaclass_index.key}]).
 
 
-%% @spec start_link(Props) -> {ok,Pid} | ignore | {error,Error}
+-spec start_link(term()) -> {ok, pid()} | ignore | {error, term()}.
 %% @doc Starts the server
 start_link(Site) ->
     Name = z_utils:name_for_site(?MODULE, Site),
@@ -248,7 +248,7 @@ module_reindexed(module_reindexed, Context) ->
 %% gen_server callbacks
 %%====================================================================
 
-%% @spec init(SiteProps) -> {ok, State} |
+-spec init(term()) -> {ok, term()} | {ok, term(), timeout() | hibernate} | ignore | {stop, term()}.
 %%                     {ok, State, Timeout} |
 %%                     ignore               |
 %%                     {stop, Reason}
@@ -264,7 +264,6 @@ init(Site) ->
     {ok, #state{context=Context}}.
 
 
-%% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
 %%                                      {reply, Reply, State, Timeout} |
 %%                                      {noreply, State} |
 %%                                      {noreply, State, Timeout} |
@@ -273,7 +272,9 @@ init(Site) ->
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State, ?RESCAN_PERIOD}.
 
-%% @spec handle_cast(Msg, State) -> {noreply, State} |
+-spec handle_cast(term(), term()) ->
+    {noreply, term()} | {noreply, term(), timeout() | hibernate} |
+    {stop, term(), term()} | {stop, term(), term(), timeout() | hibernate}.
 %%                                  {noreply, State, Timeout} |
 %%                                  {stop, Reason, State}
 handle_cast(module_reindexed, State) ->
@@ -283,7 +284,7 @@ handle_cast(module_reindexed, State) ->
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State, ?RESCAN_PERIOD}.
 
-%% @spec handle_info(Info, State) -> {noreply, State} |
+-spec handle_info(term(), term()) -> {noreply, term()} | {noreply, term(), timeout() | hibernate} | {stop, term(), term()}.
 %%                                       {noreply, State, Timeout} |
 %%                                       {stop, Reason, State}
 %% @doc Check every RESCAN_PERIOD msecs if there are changes.
@@ -294,7 +295,7 @@ handle_info(timeout, State) ->
 handle_info(_Info, State) ->
     {noreply, State, ?RESCAN_PERIOD}.
 
-%% @spec terminate(Reason, State) -> void()
+-spec terminate(term(), term()) -> ok.
 %% @doc This function is called by a gen_server when it is about to
 %% terminate. It should be the opposite of Module:init/1 and do any necessary
 %% cleaning up. When it returns, the gen_server terminates with Reason.
@@ -303,7 +304,7 @@ terminate(_Reason, State) ->
     z_notifier:detach(module_reindexed, State#state.context),
     ok.
 
-%% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
+-spec code_change(term(), term(), term()) -> {ok, term()}.
 %% @doc Convert process state when code is changed
 code_change(_OldVsn, State, _Extra) ->
     {ok, State}.
@@ -468,5 +469,3 @@ cleanup_ets_1(#mediaclass_index_key{site=Site} = K, Tag, Site, Acc) ->
     end;
 cleanup_ets_1(K, Tag, Site, Acc) ->
     cleanup_ets_1(ets:next(?MEDIACLASS_INDEX, K), Tag, Site, Acc).
-
-

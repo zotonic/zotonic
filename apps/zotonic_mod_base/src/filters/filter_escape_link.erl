@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2012 Marc Worrell
 %% @doc Escapes a text and makes 'nofollow' links of any url.
+%% @end
 
 %% Copyright 2012 Marc Worrell
 %%

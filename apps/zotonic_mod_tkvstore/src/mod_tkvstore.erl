@@ -1,10 +1,11 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
+%% @copyright 2010-2026 Marc Worrell
 %%
 %% @doc Simple (type,key)/value store. Stores data in the store with minimal latency
 %% and (local) serialization of get/put requests.
+%% @end
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2010-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -59,7 +60,7 @@ See also
 %%====================================================================
 %% API
 %%====================================================================
-%% @spec start_link() -> {ok,Pid} | ignore | {error,Error}
+-spec start_link() -> {ok, pid()} | ignore | {error, term()}.
 %% @doc Starts the server
 start_link() ->
     start_link([]).
@@ -85,7 +86,8 @@ pid_observe_tkvstore_delete(Pid, #tkvstore_delete{} = Message, _Context) ->
 %% gen_server callbacks
 %%====================================================================
 
-%% @spec init(Args) -> {ok, State} |
+-spec init(term()) -> {ok, term()} | {ok, term(), timeout() | hibernate} | ignore | {stop, term()}.
+%% init(Args) -> {ok, State} |
 %%                     {ok, State, Timeout} |
 %%                     ignore               |
 %%                     {stop, Reason}
@@ -104,12 +106,6 @@ init(Args) ->
             writer_pid=WriterPid
         }}.
 
-%% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
-%%                                      {reply, Reply, State, Timeout} |
-%%                                      {noreply, State} |
-%%                                      {noreply, State, Timeout} |
-%%                                      {stop, Reason, Reply, State} |
-%%                                      {stop, Reason, State}
 %% @doc Fetch persistent data, first check the data dict that is still being written
 handle_call(#tkvstore_get{type=Type, key=Key}, _From, State) ->
     case dict:find({Type, Key}, State#state.data) of
@@ -126,7 +122,8 @@ handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
 
 
-%% @spec handle_cast(Msg, State) -> {noreply, State} |
+-spec handle_cast(term(), term()) -> {noreply, term()} | {noreply, term(), timeout() | hibernate} | {stop, term(), term()}.
+%% handle_cast(Msg, State) -> {noreply, State} |
 %%                                  {noreply, State, Timeout} |
 %%                                  {stop, Reason, State}
 %% @doc Put request, copy to the writer, keep a local copy of the data
@@ -149,14 +146,15 @@ handle_cast(Message, State) ->
 
 
 
-%% @spec handle_info(Info, State) -> {noreply, State} |
+-spec handle_info(term(), term()) -> {noreply, term()} | {noreply, term(), timeout() | hibernate} | {stop, term(), term()}.
+%% handle_info(Info, State) -> {noreply, State} |
 %%                                       {noreply, State, Timeout} |
 %%                                       {stop, Reason, State}
 %% @doc Handling all non call/cast messages
 handle_info(_Info, State) ->
     {noreply, State}.
 
-%% @spec terminate(Reason, State) -> void()
+-spec terminate(term(), term()) -> ok.
 %% @doc This function is called by a gen_server when it is about to
 %% terminate. It should be the opposite of Module:init/1 and do any necessary
 %% cleaning up. When it returns, the gen_server terminates with Reason.
@@ -165,7 +163,7 @@ terminate(_Reason, State) ->
     State#state.writer_pid ! stop,
     ok.
 
-%% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
+-spec code_change(term(), term(), term()) -> {ok, term()}.
 %% @doc Convert process state when code is changed
 
 code_change(_OldVsn, State, _Extra) ->

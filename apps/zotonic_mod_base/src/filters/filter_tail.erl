@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
 %% @doc 'tail' filter, return the tail of a list
+%% @end
 
 %% Copyright 2010 Marc Worrell
 %%

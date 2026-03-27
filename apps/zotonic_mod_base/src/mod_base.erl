@@ -307,7 +307,8 @@ observe_edge_delete(#edge_delete{ subject_id=SubjectId }, Context) ->
     ok.
 
 %% @doc Return the filename of a still image to be used for image tags.
-%% @spec observe_media_stillimage(Notification, _Context) -> undefined | {ok, Filename} | {ok, {filepath, Filename, Path}}
+-spec observe_media_stillimage(term(), z:context()) ->
+    undefined | {ok, file:filename_all()} | {ok, {filepath, file:filename_all(), file:filename_all()}}.
 observe_media_stillimage(#media_stillimage{props=Props}, Context) ->
     case maps:get(<<"preview_filename">>, Props, undefined) of
         None when None =:= <<>>; None =:= undefined ->

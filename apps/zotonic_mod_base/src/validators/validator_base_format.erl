@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Validator for checking if an input value matches a regular expression
+%% @end
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -64,7 +65,8 @@ render_validator(format, TriggerId, _TargetId, Args, _Context)  ->
     {{z_utils:is_true(Negate),Pattern}, Script}.
 
 
-%% @spec validate(Type, TriggerId, Value, Args, Context) -> {ok,AcceptedValue} | {error,Id,Error}
+-spec validate(term(), term(), term(), list(), z:context()) ->
+    {{ok, term()}, z:context()} | {{error, term(), term()}, z:context()}.
 %%          Error = invalid | novalue | {script, Script}
 validate(format, _Id, [], _, Context) ->
     {{ok, <<>>}, Context};

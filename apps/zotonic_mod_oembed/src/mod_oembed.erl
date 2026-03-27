@@ -260,7 +260,7 @@ observe_rsc_update(#rsc_update{}, {error, _} = Error, _Context) ->
 %% <tt>_oembed_embeddable_(providername).tpl</tt>; if not found, falls back to
 %% the HTML code that the oembed provider gave us; if none found,
 %% falls back to the generic template <tt>_oembed_embeddable.tpl</tt>.
-%% @spec observe_media_viewer(Notification, Context) -> undefined | {ok, Html}
+-spec observe_media_viewer(term(), z:context()) -> undefined | {ok, iodata()}.
 observe_media_viewer(#media_viewer{
             id = Id,
             props= #{ <<"mime">> := ?OEMBED_MIME } = Props,
@@ -442,7 +442,7 @@ as_int(N) -> z_convert:to_integer(N).
 
 
 %% @doc Return the filename of a still image to be used for image tags.
-%% @spec observe_media_stillimage(Notification, _Context) -> undefined | {ok, Filename}
+-spec observe_media_stillimage(term(), z:context()) -> undefined | {ok, file:filename_all()}.
 observe_media_stillimage(#media_stillimage{ props = #{ <<"mime">> := ?OEMBED_MIME } = Props}, _Context) ->
     case maps:get(<<"preview_filename">>, Props, <<>>) of
         undefined -> {ok, <<"lib/images/embed.jpg">>};

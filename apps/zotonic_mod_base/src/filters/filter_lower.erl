@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
 %% @doc 'lower' filter, translate to lowercase
+%% @end
 
 %% Copyright 2010 Marc Worrell
 %%

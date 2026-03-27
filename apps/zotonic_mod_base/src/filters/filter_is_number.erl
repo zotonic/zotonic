@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2016 Marc Worrell
 %% @doc is_number filter, test if a value is a number
+%% @end
 
 %% Copyright 2016 Marc Worrell
 %%

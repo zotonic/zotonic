@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
 %% @doc 'insert' filter, insert the parameter in front of the value.
+%% @end
 
 %% Copyright 2010 Marc Worrell
 %%

@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2011 Marc Worrell
 %% @doc 'sha1' filter, translate a string to a sha1 hex value
+%% @end
 
 %% Copyright 2011 Marc Worrell
 %%

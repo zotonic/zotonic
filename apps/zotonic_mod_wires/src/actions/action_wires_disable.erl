@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
 %% @doc Disable an element.  Adds the 'disabled' attribute and adds the class 'disabled'.
+%% @end
 
 %% Copyright 2009 Marc Worrell
 %%

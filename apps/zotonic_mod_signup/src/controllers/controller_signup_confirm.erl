@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010-2021 Marc Worrell
 %% @doc Handle the signup confirmation link
+%% @end
 
 %% Copyright 2010-2021 Marc Worrell
 %%

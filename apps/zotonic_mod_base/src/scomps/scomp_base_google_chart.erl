@@ -4,6 +4,7 @@
 %% Based on code (c) 2008-2009 Rusty Klophaus
 %%
 %% @doc Generate a google chart for a dataset
+%% @end
 
 %% Copyright 2009-2010 Marc Worrell, Konstantin Nikiforov
 %%

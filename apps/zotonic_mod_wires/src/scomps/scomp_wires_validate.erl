@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009-2010 Marc Worrell
 %% @doc Add a validation to an element
+%% @end
 
 %% Copyright 2009-2010 Marc Worrell
 %%

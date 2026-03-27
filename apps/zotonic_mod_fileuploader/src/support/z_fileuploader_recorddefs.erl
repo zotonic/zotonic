@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2021 Marc Worrell
 %% @doc All record definitions for the file uploader. Used by jsxrecord.
+%% @end
 
 %% Copyright 2018 Marc Worrell
 %%

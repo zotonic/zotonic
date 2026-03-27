@@ -1,6 +1,7 @@
 %% @author Maas-Maarten Zeeman <mmzeeman@xs4all.nl>
 %% @copyright 2026 Maas-Maarten Zeeman
 %% @doc Floor a value to integer
+%% @end
 
 %% Copyright 2026 Maas-Maarten Zeeman
 %%

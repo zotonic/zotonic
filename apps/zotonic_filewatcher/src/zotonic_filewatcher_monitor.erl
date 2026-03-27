@@ -1,25 +1,5 @@
-%% Licensed under the Apache License, Version 2.0 (the "License"); you may
-%% not use this file except in compliance with the License. You may obtain
-%% a copy of the License at <http://www.apache.org/licenses/LICENSE-2.0>
-%%
-%% Unless required by applicable law or agreed to in writing, software
-%% distributed under the License is distributed on an "AS IS" BASIS,
-%% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-%% See the License for the specific language governing permissions and
-%% limitations under the License.
-%%
-%% Alternatively, you may use this file under the terms of the GNU Lesser
-%% General Public License (the "LGPL") as published by the Free Software
-%% Foundation; either version 2.1, or (at your option) any later version.
-%% If you wish to allow use of your version of this file only under the
-%% terms of the LGPL, you should delete the provisions above and replace
-%% them with the notice and other provisions required by the LGPL; see
-%% <http://www.gnu.org/licenses/>. If you do not delete the provisions
-%% above, a recipient may use your version of this file under the terms of
-%% either the Apache License or the LGPL.
-%%
 %% @author Richard Carlsson <carlsson.richard@gmail.com>
-%% @copyright 2006-2009 Richard Carlsson
+%% @copyright 2006-2026 Richard Carlsson
 %% @doc Erlang file monitoring service
 %%
 %% The behaviour of this service is inspired by the open source FAM
@@ -110,6 +90,27 @@
 %% `found' (or possibly, by an `error' event), and subsequent changes on
 %% that path are reported by `changed' and `error' events. If the
 %% monitoring type is changed, a new `found' event is sent, and so on.
+%% @end
+
+%% Licensed under the Apache License, Version 2.0 (the "License"); you may
+%% not use this file except in compliance with the License. You may obtain
+%% a copy of the License at <http://www.apache.org/licenses/LICENSE-2.0>
+%%
+%% Unless required by applicable law or agreed to in writing, software
+%% distributed under the License is distributed on an "AS IS" BASIS,
+%% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%% See the License for the specific language governing permissions and
+%% limitations under the License.
+%%
+%% Alternatively, you may use this file under the terms of the GNU Lesser
+%% General Public License (the "LGPL") as published by the Free Software
+%% Foundation; either version 2.1, or (at your option) any later version.
+%% If you wish to allow use of your version of this file only under the
+%% terms of the LGPL, you should delete the provisions above and replace
+%% them with the notice and other provisions required by the LGPL; see
+%% <http://www.gnu.org/licenses/>. If you do not delete the provisions
+%% above, a recipient may use your version of this file under the terms of
+%% either the Apache License or the LGPL.
 
 -module(zotonic_filewatcher_monitor).
 
@@ -140,18 +141,19 @@
 %% convert every path into a binary internally, for the sake of
 %% comparisons, and return it to the caller for reference.
 %%
-%% @type filename() = binary() | atom() | [char() | filename()]. This is
-%% an "extended IO-list", that allows atoms as well as binaries to occur
-%% either on their own or embedded in a list or deep list. The intent of
-%% this is to accept any file name that can be used by the standard
-%% library module `file', as well as any normal IO-list, and any list
-%% that is formed by combining such fragments.
-%%
-%% @type options() = [term()]. A list of options.
-%%
-%% @type server_ref() = pid() | atom() | {Node::atom(), atom()} |
-%% {global, atom()}. A reference to a running server. See {@link
-%% //stdlib/gen_server:call/3} for more information.
+%% filename() is an extended IO-list that allows atoms as well as binaries to
+%% occur either on their own or embedded in a list or deep list. The intent is
+%% to accept any file name that can be used by the standard library file module,
+%% as well as any normal IO-list, and any list that is formed by combining such
+%% fragments.
+-type filename() :: binary() | atom() | [ char() | filename() ].
+
+%% options() is a list of options.
+-type options() :: [ term() ].
+
+%% server_ref() is a reference to a running server. See gen_server:call/3 for
+%% more information.
+-type server_ref() :: pid() | atom() | { atom(), atom() } | { global, atom() }.
 
 -define(DEFAULT_INTERVAL, 5000).  % change with option interval
 -define(MIN_INTERVAL, 100).
@@ -159,8 +161,8 @@
 -define(SERVER, ?MODULE).
 -define(MSGTAG, ?SERVER).
 
-%% % @type object() = {file|directory, filename()}
-%% @type monitor() = reference(). A monitor reference.
+%% monitor() is a monitor reference.
+-type monitor() :: reference().
 
 -record(state, {poll=true,  % boolean(), false if polling is disabled
                 interval,   % polling interval (milliseconds)
@@ -190,20 +192,18 @@
 %% User interface
 %%
 
-%% @spec (filename()) ->
-%%         {ok, monitor(), binary()} | {error, not_owner | automonitor}
+-spec monitor_file(filename()) -> {ok, monitor(), binary()} | {error, not_owner | automonitor}.
 %% @equiv monitor_file(Path, [])
 monitor_file(Path) ->
     monitor_file(Path, []).
 
-%% @spec (filename(), options()) ->
-%%         {ok, monitor(), binary()} | {error, not_owner | automonitor}
+-spec monitor_file(filename(), options()) -> {ok, monitor(), binary()} | {error, not_owner | automonitor}.
 %% @equiv monitor_file(file_monitor, Path, Opts)
 monitor_file(Path, Opts) ->
     monitor_file(?SERVER, Path, Opts).
 
-%% @spec (server_ref(), filename(), options()) ->
-%%         {ok, monitor(), binary()} | {error, not_owner | automonitor}
+-spec monitor_file(server_ref(), filename(), options()) ->
+    {ok, monitor(), binary()} | {error, not_owner | automonitor}.
 %% @doc Monitors the specified file path. Returns the monitor reference
 %% as well as the monitored path as a binary.
 %%
@@ -218,20 +218,18 @@ monitor_file(Path, Opts) ->
 monitor_file(Server, Path, Opts) ->
     monitor(Server, Path, Opts, file).
 
-%% @spec (filename()) ->
-%%         {ok, monitor(), binary()} | {error, not_owner | automonitor}
+-spec monitor_dir(filename()) -> {ok, monitor(), binary()} | {error, not_owner | automonitor}.
 %% @equiv monitor_dir(Path, [])
 monitor_dir(Path) ->
     monitor_dir(Path, []).
 
-%% @spec (filename(), options()) ->
-%%         {ok, monitor(), binary()} | {error, not_owner | automonitor}
+-spec monitor_dir(filename(), options()) -> {ok, monitor(), binary()} | {error, not_owner | automonitor}.
 %% @equiv monitor_dir(file_monitor, Path, Opts)
 monitor_dir(Path, Opts) ->
     monitor_dir(?SERVER, Path, Opts).
 
-%% @spec (server_ref(), filename(), options()) ->
-%%         {ok, monitor(), binary()} | {error, not_owner | automonitor}
+-spec monitor_dir(server_ref(), filename(), options()) ->
+    {ok, monitor(), binary()} | {error, not_owner | automonitor}.
 %% @doc Monitors the specified directory path. Returns the monitor
 %% reference as well as the monitored path as a binary.
 %%
@@ -254,17 +252,17 @@ monitor(Server, Path, Opts, Type) ->
     end.
 
 
-%% @spec (filename()) -> {ok, monitor(), binary()}
+-spec automonitor(filename()) -> {ok, monitor(), binary()}.
 %% @equiv automonitor(Path, [])
 automonitor(Path) ->
     automonitor(Path, []).
 
-%% @spec (filename(), options()) -> {ok, monitor(), binary()}
+-spec automonitor(filename(), options()) -> {ok, monitor(), binary()}.
 %% @equiv automonitor(file_monitor, Path, Opts)
 automonitor(Path, Opts) ->
     automonitor(?SERVER, Path, Opts).
 
-%% @spec (server_ref(), filename(), options()) -> {ok, monitor(), binary()}
+-spec automonitor(server_ref(), filename(), options()) -> {ok, monitor(), binary()}.
 %% @doc Automonitors the specified path. Returns the monitor reference as
 %% well as the monitored path as a binary.
 %%
@@ -275,34 +273,34 @@ automonitor(Server, Path, _Opts) ->
     {ok, Ref, FlatPath}.
 
 
-%% @spec (monitor()) -> ok | {error, not_owner}
+-spec demonitor(monitor()) -> ok | {error, not_owner}.
 %% @equiv demonitor(file_monitor, Ref)
 demonitor(Ref) ->
     demonitor(?SERVER, Ref).
 
-%% @spec (server_ref(), monitor()) -> ok | {error, not_owner}
+-spec demonitor(server_ref(), monitor()) -> ok | {error, not_owner}.
 %% @doc Deletes the specified monitor. This can only be done by the
 %% process that created the monitor.
 demonitor(Server, Ref) when is_reference(Ref) ->
     ok = gen_server:call(Server, {demonitor, self(), Ref}).
 
-%% @spec (filename(), monitor()) -> ok | {error, not_owner}
+-spec demonitor_file(filename(), monitor()) -> ok | {error, not_owner}.
 %% @equiv demonitor_file(file_monitor, Path, Ref)
 demonitor_file(Path, Ref) ->
     demonitor_file(?SERVER, Path, Ref).
 
-%% @spec (server_ref(), filename(), monitor()) -> ok | {error, not_owner}
+-spec demonitor_file(server_ref(), filename(), monitor()) -> ok | {error, not_owner}.
 %% @doc Removes the file path from the specified monitor. This can only
 %% be done by the process that created the monitor.
 demonitor_file(Server, Path, Ref) ->
     demonitor(Server, Path, Ref, file).
 
-%% @spec (filename(), monitor()) -> ok | {error, not_owner}
+-spec demonitor_dir(filename(), monitor()) -> ok | {error, not_owner}.
 %% @equiv demonitor_dir(file_monitor, Path, Ref)
 demonitor_dir(Path, Ref) ->
     demonitor_dir(?SERVER, Path, Ref).
 
-%% @spec (server_ref(), filename(), monitor()) -> ok | {error, not_owner}
+-spec demonitor_dir(server_ref(), filename(), monitor()) -> ok | {error, not_owner}.
 %% @doc Removes the directory path from the specified monitor. This can
 %% only be done by the process that created the monitor.
 demonitor_dir(Server, Path, Ref) ->
@@ -314,40 +312,40 @@ demonitor(Server, Path, Ref, Type) when is_reference(Ref) ->
     ok = gen_server:call(Server, {demonitor, self(), {Type, FlatPath}, Ref}).
 
 
-%% @spec () -> integer()
+-spec get_interval() -> integer().
 %% @equiv get_interval(file_monitor)
 get_interval() ->
     get_interval(?SERVER).
 
-%% @spec (server_ref()) -> integer()
+-spec get_interval(server_ref()) -> integer().
 %% @doc Returns the current polling interval.
 get_interval(Server) ->
     gen_server:call(Server, get_interval).
 
 
-%% @spec (integer()) -> ok
+-spec set_interval(integer()) -> ok.
 %% @equiv set_interval(file_monitor, Time)
 set_interval(Time) ->
     set_interval(?SERVER, Time).
 
-%% @spec (server_ref(), integer()) -> ok
+-spec set_interval(server_ref(), integer()) -> ok.
 %% @doc Sets the polling interval. Units are in milliseconds.
 set_interval(Server, Time) when is_integer(Time) ->
     gen_server:call(Server, {set_interval, Time}).
 
 
-%% @spec () -> {ok, ServerPid::pid()} | ignore | {error, any()}
+-spec start() -> {ok, pid()} | ignore | {error, term()}.
 %% @equiv start([])
 start() ->
     start([]).
 
-%% @spec (options()) -> {ok, ServerPid::pid()} | ignore | {error, any()}
+-spec start(options()) -> {ok, pid()} | ignore | {error, term()}.
 %% @equiv start({local, file_monitor}, Options)
 start(Options) ->
     start({local, ?SERVER}, Options).
 
-%% @spec ({local, atom()} | {global, atom()} | undefined, options()) ->
-%%         {ok, ServerPid::pid()} | ignore | {error, any()}
+-spec start({local, atom()} | {global, atom()} | undefined, options()) ->
+    {ok, pid()} | ignore | {error, term()}.
 %% @doc Starts the server and registers it using the specified name.
 %% If the name is `undefined', the server will not be registered. See
 %% {@link //stdlib/gen_server:start_link/4} for details about the return
@@ -362,18 +360,18 @@ start(undefined, Options) ->
 start(Name, Options) ->
     gen_server:start(Name, ?MODULE, Options, []).
 
-%% @spec () -> {ok, ServerPid::pid()} | ignore | {error, any()}
+-spec start_link() -> {ok, pid()} | ignore | {error, term()}.
 %% @equiv start_link([])
 start_link() ->
     start_link([]).
 
-%% @spec (options()) -> {ok, ServerPid::pid()} | ignore | {error, any()}
+-spec start_link(options()) -> {ok, pid()} | ignore | {error, term()}.
 %% @equiv start_link({local, file_monitor}, Options)
 start_link(Options) ->
     start_link({local, ?SERVER}, Options).
 
-%% @spec ({local, atom()} | {global, atom()} | undefined, options()) ->
-%%         {ok, ServerPid::pid()} | ignore | {error, any()}
+-spec start_link({local, atom()} | {global, atom()} | undefined, options()) ->
+    {ok, pid()} | ignore | {error, term()}.
 %% @doc Starts the server, links it to the current process, and
 %% registers it using the specified name. If the name is `undefined',
 %% the server will not be registered. See {@link
@@ -386,12 +384,12 @@ start_link(Name, Options) ->
     gen_server:start_link(Name, ?MODULE, Options, []).
 
 
-%% @spec () -> ok
+-spec stop() -> ok.
 %% @equiv stop(file_monitor)
 stop() ->
     stop(?SERVER).
 
-%% @spec (server_ref()) -> ok
+-spec stop(server_ref()) -> ok.
 %% @doc Stops the specified server.
 stop(Server) ->
     gen_server:call(Server, stop),
@@ -502,7 +500,7 @@ terminate(_Reason, _St) ->
 %% binary (currently assuming that the input uses an 8-bit encoding).
 %% A single character is not a valid path; it must be within a list.
 
-%% @spec (filename()) -> binary()
+-spec normalize_path(filename()) -> binary().
 %% @doc Flattens the given path to a single binary.
 
 normalize_path(Path) when is_binary(Path) -> Path;

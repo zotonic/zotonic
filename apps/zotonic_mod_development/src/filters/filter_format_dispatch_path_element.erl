@@ -1,6 +1,7 @@
 %% @author Maas-Maarten Zeeman <mmzeeman@xs4all.nl>
 %% @copyright 2023 Maas-Maarten Zeeman
 %% @doc 'format_dispatch_path_element' Formats an element in a path pattern of a dispatch rule
+%% @end
 
 %% Copyright 2023 Maas-Maarten Zeeman
 %%

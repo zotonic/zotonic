@@ -2,6 +2,7 @@
 %% @copyright 2021 Marc Worrell
 %%
 %% @doc Microsoft integration. Adds Microsoft/Azure login and other functionalities.
+%% @end
 
 %% Copyright 2021 Marc Worrell
 %%

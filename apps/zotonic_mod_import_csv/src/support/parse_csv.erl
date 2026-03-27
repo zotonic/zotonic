@@ -1,5 +1,6 @@
 %% @doc Placeholder, code moved to src/support/csv/z_csv_parser.erl
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
+%% @end
 
 %% Copyright 2010-2013 Arjan Scherpenisse
 %%

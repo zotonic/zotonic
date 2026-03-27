@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2013 Marc Worrell
 %% @doc Check if an e-mail is an auto-reply, bulk message or bounce.
+%% @end
 
 %% Copyright 2013 Marc Worrell
 %%

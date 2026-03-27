@@ -2,6 +2,7 @@
 %% @copyright 2021 Marc Worrell
 %%
 %% @doc Support for admin tasks around non authoritative resources.
+%% @end
 
 %% Copyright 2021 Marc Worrell
 %%

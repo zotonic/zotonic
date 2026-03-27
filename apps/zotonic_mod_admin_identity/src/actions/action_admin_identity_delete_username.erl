@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% Date: 2009-07-07
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Delete username from a user, no confirmation.
+%% @end
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 
 
 %% @doc Delete a username from a user.
-%% @spec event(Event, Context1) -> Context2
+-spec event(term(), z:context()) -> z:context().
 event(#postback{message={delete_username, Id, OnSuccess}}, Context) ->
     case not z_acl:is_read_only(Context) andalso z_acl:is_allowed(use, mod_admin_identity, Context) of
         true ->

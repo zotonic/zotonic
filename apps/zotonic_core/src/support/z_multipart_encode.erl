@@ -1,6 +1,7 @@
 %% @author Arthur Clemens, Marc Worrell
 %% @copyright 2021 Arthur Clemens, Marc Worrell
 %% @doc Encode a list of fields and/or files as multipart/form-data
+%% @end
 
 %% Copyright 2021 Arthur Clemens, Marc Worrell
 %%

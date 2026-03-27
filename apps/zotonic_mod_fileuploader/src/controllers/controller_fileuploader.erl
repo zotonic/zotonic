@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2021 Marc Worrell
 %% @doc Controller accepting blocks for uploaded files.
+%% @end
 
 %% Copyright 2021 Marc Worrell
 %%

@@ -1,6 +1,7 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2011-2021 Arjan Scherpenisse
 %% @doc Get a "trail" of menu parents
+%% @end
 
 %% Copyright 2011-2021 Arjan Scherpenisse
 %%

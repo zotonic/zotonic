@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010-2022 Marc Worrell
 %% @doc Log off a user, remove "autologon" cookies
+%% @end
 
 %% Copyright 2010-2022 Marc Worrell
 %%

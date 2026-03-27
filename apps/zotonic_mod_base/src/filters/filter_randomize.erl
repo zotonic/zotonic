@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2011-2020 Marc Worrell
 %% @doc Randomize the order of elements in a list
+%% @end
 
 %% Copyright 2011-2020 Marc Worrell
 %%

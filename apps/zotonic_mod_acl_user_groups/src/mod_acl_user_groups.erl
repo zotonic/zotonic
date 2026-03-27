@@ -1,8 +1,8 @@
-%% @copyright 2015-2025 Arjan Scherpenisse
+%% @copyright 2015-2026 Arjan Scherpenisse
 %% @doc Adds content groups to enable access-control rules on resources.
 %% @end
 
-%% Copyright 2015-2025 Arjan Scherpenisse
+%% Copyright 2015-2026 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -931,7 +931,7 @@ name(Context) ->
 %%====================================================================
 %% API
 %%====================================================================
-%% @spec start_link(Args) -> {ok,Pid} | ignore | {error,Error}
+-spec start_link(list()) -> {ok, pid()} | ignore | {error, term()}.
 %% @doc Starts the server
 start_link(Args) when is_list(Args) ->
     {context, Context} = proplists:lookup(context, Args),
@@ -941,7 +941,8 @@ start_link(Args) when is_list(Args) ->
 %% gen_server callbacks
 %%====================================================================
 
-%% @spec init(Args) -> {ok, State} |
+-spec init(term()) -> {ok, term()} | {ok, term(), timeout() | hibernate} | ignore | {stop, term()}.
+%% init(Args) -> {ok, State} |
 %%                     {ok, State, Timeout} |
 %%                     ignore               |
 %%                     {stop, Reason}
@@ -1036,7 +1037,7 @@ handle_info(Info, State) ->
     ?LOG_WARNING("[mod_acl_user_groups] unknown info message ~p", [Info]),
     {noreply, State}.
 
-%% @spec terminate(Reason, State) -> void()
+-spec terminate(term(), term()) -> ok.
 %% @doc This function is called by a gen_server when it is about to
 %% terminate. It should be the opposite of Module:init/1 and do any necessary
 %% cleaning up. When it returns, the gen_server terminates with Reason.
@@ -1044,7 +1045,7 @@ handle_info(Info, State) ->
 terminate(_Reason, _State) ->
     ok.
 
-%% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
+-spec code_change(term(), term(), term()) -> {ok, term()}.
 %% @doc Convert process state when code is changed
 code_change(_OldVsn, State, _Extra) ->
     {ok, State}.

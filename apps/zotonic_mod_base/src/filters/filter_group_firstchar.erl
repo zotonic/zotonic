@@ -4,6 +4,7 @@
 %% @doc group a list of sorted rsc ids on their first letter of the
 %% title or another rsc property. Then, split this list in a number of
 %% more-or-less even columns.
+%% @end
 
 %% Copyright 2011 Arjan Scherpenisse
 %%

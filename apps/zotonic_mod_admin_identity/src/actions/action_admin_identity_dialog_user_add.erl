@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% Date: 2009-07-13
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Add a complete new person and make it into a user.
+%% @end
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -42,7 +42,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 	{PostbackMsgJS, _PickledPostback} = z_render:make_postback(Postback, click, TriggerId, TargetId, ?MODULE, Context),
 	{PostbackMsgJS, Context}.
 
-
+-spec event(term(), z:context()) -> z:context().
 event(#postback{message={dialog_user_add, OnSuccess}}, Context) ->
     case not z_acl:is_read_only(Context) andalso z_acl:is_allowed(use, mod_admin_identity, Context) of
         true ->
@@ -55,7 +55,6 @@ event(#postback{message={dialog_user_add, OnSuccess}}, Context) ->
     end;
 
 %% @doc Create user resource and a password identity
-%% @spec event(Event, Context1) -> Context2
 event(#submit{message={user_add, Args}}, Context) ->
     case not z_acl:is_read_only(Context) andalso z_acl:is_allowed(use, mod_admin_identity, Context) of
         true ->

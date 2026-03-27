@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2012-2020 Marc Worrell, Maas-Maarten Zeeman
 %% @doc CA supplied certificate handling
+%% @end
 
 %% Copyright 2012 - 2020 Marc Worrell, Maas-Maarten Zeeman
 %%

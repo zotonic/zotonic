@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2012 Marc Worrell
 %% @doc is_list filter, test if a value is a list
+%% @end
 
 %% Copyright 2012 Marc Worrell
 %%

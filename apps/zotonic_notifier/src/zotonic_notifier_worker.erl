@@ -3,6 +3,7 @@
 %%
 %% @doc Simple implementation of an observer/notifier. Relays events to observers of that event.
 %% Also implements map and fold operations over the observers.
+%% @end
 
 %% Copyright 2009-2017 Marc Worrell
 %%

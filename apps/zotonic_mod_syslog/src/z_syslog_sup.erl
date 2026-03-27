@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2021 Marc Worrell
 %% @doc Supervisor for the syslog socket process
+%% @end
 
 %% Copyright 2021 Marc Worrell
 %%

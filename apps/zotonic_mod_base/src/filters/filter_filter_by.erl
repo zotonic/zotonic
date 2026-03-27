@@ -1,6 +1,7 @@
 %% @author Maas-Maarten Zeeman <mmzeeman@xs4all.nl>
 %% @copyright 2026 Maas-Maarten Zeeman
 %% @doc Filter elements based on the value of a property.
+%% @end
 
 %% Copyright 2026 Maas-Maarten Zeeman
 %%

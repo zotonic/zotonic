@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2013-2022 Marc Worrell
 %% @doc Filter a list of menu items on visibility. Does not filter sub-menus.
+%% @end
 
 %% Copyright 2013-2022 Marc Worrell
 %%

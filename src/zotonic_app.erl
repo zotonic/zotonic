@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2017 Marc Worrell
 %% @doc Zotonic umbrella application (empty, see zotonic_launcher)
+%% @end
 
 %% Copyright 2017 Marc Worrell
 %%

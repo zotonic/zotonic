@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2019 Marc Worrell
 %% @doc 'as_name' filter, translate a string to a 'name'
+%% @end
 
 %% Copyright 2019 Marc Worrell
 %%

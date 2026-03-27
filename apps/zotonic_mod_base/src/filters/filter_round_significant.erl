@@ -3,6 +3,7 @@
 %% @doc Round a value to the give significant digits. If you need to
 %% round to a number of digits after the decimal point then use the
 %% "round" filter.
+%% @end
 
 %% Copyright 2022-2023 Marc Worrell
 %%

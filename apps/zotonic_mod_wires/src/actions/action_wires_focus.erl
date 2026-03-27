@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
 %% @doc Set the focus on an input element.
+%% @end
 
 %% Copyright 2010 Marc Worrell
 %%

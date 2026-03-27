@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2011-2022 Marc Worrell <marc@worrell.nl>
 %% @doc Default Zotonic site, used when no other site can handle the supplied Host.
+%% @end
 
 %% Copyright 2011-2022 Marc Worrell
 %%

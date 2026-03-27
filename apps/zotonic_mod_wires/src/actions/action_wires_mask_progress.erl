@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2015 Marc Worrell
 %% @doc Show progress on a mask element.
+%% @end
 
 %% Copyright 2015 Marc Worrell
 %%

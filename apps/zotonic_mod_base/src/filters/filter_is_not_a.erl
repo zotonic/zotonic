@@ -2,6 +2,7 @@
 %% @copyright 2011-2023 Paul Guyot
 %% @doc 'is_not_a' filter, filters a list of ids or test if a single
 %% resource is in a category.
+%% @end
 
 %% Copyright 2011-2023 Paul Guyot
 %%

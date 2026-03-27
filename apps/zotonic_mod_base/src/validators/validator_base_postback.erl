@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
+%% @copyright 2010-2026 Marc Worrell
 %% @doc Postback validator, checks using a server callback against an Erlang function.
+%% @end
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2010-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -72,7 +73,8 @@ render_validator(postback, TriggerId, TargetId, Args, Context)  ->
 	Script = [<<"z_add_validator(\"">>,TriggerId,<<"\", \"postback\", ">>, JsObject, <<");\n">>],
 	{Args, Script}.
 
-%% @spec validate(Type, TriggerId, Value, Args, Context) -> {{ok,AcceptedValue}, NewContext} | {{error,Id,Error}, NewContext}
+-spec validate(term(), term(), term(), list(), z:context()) ->
+    {{ok, term()}, z:context()} | {{error, term(), term()}, z:context()}.
 %%          Error = invalid | novalue | {script, Script} | novalidator | string()
 validate(postback, Id, Value, Args, Context) ->
     case proplists:get_value(delegate, Args) of

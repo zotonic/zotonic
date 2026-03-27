@@ -2,6 +2,7 @@
 %% @copyright 2016-2021 Marc Worrell <marc@worrell.nl>
 
 %% @doc Extract EXIF information from the medium record to resource properties
+%% @end
 
 %% Copyright 2016-2021 Marc Worrell
 %%

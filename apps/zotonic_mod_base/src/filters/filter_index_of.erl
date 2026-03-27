@@ -1,8 +1,8 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2011 Arjan Scherpenisse <arjan@scherpenisse.net>
-%% Date: 2011-09-29
 
 %% @doc Returns the index the given item is in the given list.
+%% @end
 
 %% Copyright 2011 Arjan Scherpenisse
 %%

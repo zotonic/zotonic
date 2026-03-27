@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell
 %%
 %% Based on code by Rusty Klophaus
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -50,7 +50,8 @@ render_validator(email, TriggerId, _TargetId, Args, _Context)  ->
 	{[], Script}.
 
 
-%% @spec validate(Type, TriggerId, Values, Args, Context) -> {ok,AcceptedValue} | {error,Id,Error}
+-spec validate(term(), term(), term(), list(), z:context()) ->
+    {{ok, term()}, z:context()} | {{error, term(), term()}, z:context()}.
 %%          Error = invalid | novalue | {script, Script}
 validate(email, Id, Value, _Args, Context) ->
     case z_string:trim(Value) of

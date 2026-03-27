@@ -2,6 +2,7 @@
 %% @copyright 2019 Marc Worrell
 
 %% @doc Scan uploaded files with clamd.
+%% @end
 
 %% Copyright 2019 Marc Worrell
 %%

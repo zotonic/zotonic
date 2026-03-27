@@ -1,5 +1,6 @@
 %% @doc Map IP addresses to geo a country code.
 %% @author Marc Worrell <marc@worrell.nl>
+%% @end
 
 %% Copyright 2019 Marc Worrell
 %%

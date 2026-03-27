@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
-%% Date: 2010-09-07
+%% @copyright 2010-2026 Marc Worrell
 %% @doc Toggle the value of a config setting, set it to the value of the checkbox.
+%% @end
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2010-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -45,7 +45,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 
 
 %% @doc Change a config key.
-%% @spec event(Event, Context1) -> Context2
+-spec event(term(), z:context()) -> z:context().
 event(#postback{message={config_toggle, Module, Key}}, Context) ->
     case z_acl:is_admin_editable(Context) of
         true ->

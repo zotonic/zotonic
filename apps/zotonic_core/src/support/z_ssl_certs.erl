@@ -2,6 +2,7 @@
 %% @author Maas-Maarten Zeeman <mmzeeman@xs4all.nl>
 %% @copyright 2012-2019 Marc Worrell, Maas-Maarten Zeeman
 %% @doc SSL support functions, create self-signed certificates
+%% @end
 
 %% Copyright 2012-2019 Marc Worrell, Maas-Maarten Zeeman
 %%

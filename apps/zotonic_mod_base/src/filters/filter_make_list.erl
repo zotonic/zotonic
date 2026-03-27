@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
 %% @doc 'make_list' filter, force the input to a list
+%% @end
 
 %% Copyright 2010 Marc Worrell
 %%

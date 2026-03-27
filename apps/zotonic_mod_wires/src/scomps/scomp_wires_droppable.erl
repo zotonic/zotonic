@@ -5,6 +5,7 @@
 %%
 %% @doc Make an element draggable
 %%      {% @draggable id="xxx" tag="sometag" group="group1" group="group2" handle="selector" %}
+%% @end
 
 %% Copyright 2009 Marc Worrell
 %%

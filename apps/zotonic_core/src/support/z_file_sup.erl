@@ -1,5 +1,6 @@
 %% @doc Supervisor for file processes, these processes cache and maintain file information for
 %% other file services.  They can also resize, combine files and compress files.
+%% @end
 
 %% Copyright 2013-2014 Marc Worrell
 %%

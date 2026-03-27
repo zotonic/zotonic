@@ -1,5 +1,6 @@
 %% @doc Parse CSV file into a nested list of lines and fields.
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
+%% @end
 
 %% Copyright 2010-2013 Arjan Scherpenisse
 %%

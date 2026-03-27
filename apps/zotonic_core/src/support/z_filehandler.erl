@@ -1,4 +1,5 @@
 %% @doc Extend the filehandler with mappers for translations, templates and mediaclass.
+%% @end
 
 %% Copyright 2017 Marc Worrell
 %%

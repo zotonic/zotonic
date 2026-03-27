@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009-2022 Marc Worrell
 %% @doc Generates a sitemap.  For now rather crude version that will only work with smaller sites.
+%% @end
 
 %% Copyright 2009-2022 Marc Worrell
 %%

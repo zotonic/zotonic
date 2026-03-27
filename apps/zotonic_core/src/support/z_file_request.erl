@@ -2,6 +2,7 @@
 %% @copyright 2013-2014 Marc Worrell
 %%
 %% @doc Interface to static files and media storage system.
+%% @end
 
 %% Copyright 2013-2014 Marc Worrell
 %%

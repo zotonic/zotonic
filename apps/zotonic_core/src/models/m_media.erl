@@ -574,7 +574,7 @@ insert_file(File, RscProps, Options, Context) ->
     MediaProps1 = add_medium_info(File, OriginalFilename, MediaProps, Context),
     insert_file(File, RscProps, MediaProps1, Options, Context).
 
-%% @internal
+%% Internal helper used by the public insert_file entry points.
 insert_file(File, RscProps, MediaProps, Options, Context) ->
     Mime = maps:get(<<"mime">>, MediaProps, undefined),
     MimeCat = mime_to_category(Mime, Options, Context),

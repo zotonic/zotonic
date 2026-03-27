@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
 %% @doc 'ne_day' filter, check if two dates are on the different days
+%% @end
 
 %% Copyright 2010 Marc Worrell
 %%

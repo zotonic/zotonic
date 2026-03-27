@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2018 Marc Worrell
 %% @doc Indexes directories of applications.
+%% @end
 
 %% Copyright 2018 Marc Worrell
 %%

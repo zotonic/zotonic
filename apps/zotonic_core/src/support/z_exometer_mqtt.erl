@@ -1,6 +1,7 @@
 %% @author Maas-Maarten Zeeman <mmzeeman@xs4all.nl>
 %% @copyright 2015 Maas-Maarten Zeeman
 %% @doc Exometer reporter which publishes exometer stats to mqtt topics.
+%% @end
 
 %% Copyright 2015 Maas-Maarten Zeeman
 %%

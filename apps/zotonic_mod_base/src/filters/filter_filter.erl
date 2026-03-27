@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2013 Marc Worrell
 %% @doc 'filter' filter, filters a list to only display elements with a certain property
+%% @end
 
 %% Copyright 2013 Marc Worrell
 %%

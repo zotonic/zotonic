@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2019 Marc Worrell <marc@worrell.nl>
 %% @doc Format exports for ubf format
+%% @end
 
 %% Copyright 2019 Marc Worrell
 %%

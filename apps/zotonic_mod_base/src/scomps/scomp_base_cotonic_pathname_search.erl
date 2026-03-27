@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2019 Marc Worrell
 %% @doc Url encode the path_info arguments set by the dispatcher.
+%% @end
 
 %% Copyright 2019 Marc Worrell
 %%

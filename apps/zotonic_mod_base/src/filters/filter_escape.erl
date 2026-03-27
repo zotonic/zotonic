@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2016 Marc Worrell
 %% @doc Escape filter, same as 'force_escape'
+%% @end
 
 %% Copyright 2016 Marc Worrell
 %%

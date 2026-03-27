@@ -1,6 +1,7 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2011 Arjan Scherpenisse
 %% @doc Convert a value to json
+%% @end
 
 %% Copyright 2011 Arjan Scherpenisse
 %%

@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
 %% @doc 'replace' filter, replace substrings matching a regular expression
+%% @end
 
 %% Copyright 2010 Marc Worrell
 %%

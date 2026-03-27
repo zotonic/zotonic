@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2018 Marc Worrell
 %% @doc Find (and cache) files in directories.
+%% @end
 
 %% Copyright 2018 Marc Worrell
 %%

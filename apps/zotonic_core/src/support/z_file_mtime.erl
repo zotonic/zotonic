@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2015-2015 Marc Worrell <marc@worrell.nl>
+%% @copyright 2015-2026 Marc Worrell <marc@worrell.nl>
 %% @doc Keep a registration of file modification times, especially for z_template
 %% @end
 
-%% Copyright 2015-2015 Marc Worrell
+%% Copyright 2015-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -242,7 +242,7 @@ handle_info(_Info, State) ->
 terminate(_Reason, #state{}) ->
     ok.
 
-%% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
+-spec code_change(term(), term(), term()) -> {ok, term()}.
 %% @doc Convert process state when code is changed
 code_change(_OldVsn, State, _Extra) ->
     {ok, State}.

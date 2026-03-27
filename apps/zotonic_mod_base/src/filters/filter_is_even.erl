@@ -1,6 +1,7 @@
 %% @author Michael Connors
 %% @copyright 2011 Michael Connors
 %% @doc Test if an integer value is even.
+%% @end
 
 %% Copyright 2011 Michael Connors
 %%

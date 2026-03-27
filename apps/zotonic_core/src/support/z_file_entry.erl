@@ -3,6 +3,7 @@
 %%
 %% @doc Process holding information mapping a request path to one or more files.
 %% The files can be a static file, a temporary file, cached file or a binary.
+%% @end
 
 %% Copyright 2014-2020 Marc Worrell
 %%

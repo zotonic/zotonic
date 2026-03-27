@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2021 Marc Worrell
 %% @doc Parse HTML, adds ids to all header elements and returns a toc menu referring to those ids.
+%% @end
 
 %% Copyright 2021 Marc Worrell
 %%

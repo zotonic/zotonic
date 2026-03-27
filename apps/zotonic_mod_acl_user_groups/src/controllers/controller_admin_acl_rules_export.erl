@@ -1,6 +1,7 @@
 %% @author Arjan Scherpenisse
 %% @copyright 2022 Arjan Scherpenisse
 %% @doc Export the ACL rules in a format that can be imported again.
+%% @end
 
 %% Copyright 2022 Arjan Scherpenisse
 %%

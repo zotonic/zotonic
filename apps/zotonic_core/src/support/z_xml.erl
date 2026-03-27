@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% Date: 2009-08-04
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Utility functions for xml processing.
+%% @end
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ escape(V, _Context) ->
 
 %% @doc Escape a html text to valid a xml text so that it can be transported in XML.  Translates control characters to
 %% spaces, except for TAB, CR and LF.
-%% @spec escape(iolist()) -> iolist()
+-spec escape(term()) -> binary().
 escape(undefined) ->
     <<>>;
 escape(<<>>) ->
@@ -67,5 +67,3 @@ esc(<<C, T/binary>>, Acc) when C < 32 ->
     esc(T, <<Acc/binary, 32>>);
 esc(<<C/utf8, T/binary>>, Acc) ->
     esc(T, <<Acc/binary, C/utf8>>).
-
-

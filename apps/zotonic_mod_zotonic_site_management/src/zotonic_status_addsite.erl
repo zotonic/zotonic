@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2016 Marc Worrell
 %% @doc Add a new site
+%% @end
 
 %% Copyright 2016 Marc Worrell
 %%

@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009-2022 Marc Worrell
 %% @doc Redirect to a defined other url.
+%% @end
 
 %% Copyright 2009-2022 Marc Worrell
 %%

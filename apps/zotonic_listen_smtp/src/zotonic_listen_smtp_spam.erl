@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2014 Marc Worrell, 2011 Maximonster Interactive Things
 %% @doc Check spam score for received e-mail. Accept, bounce, drop or soft-error.
+%% @end
 
 %% Copyright 2011 Maximonster Interactive Things
 %% Copyright 2014 Marc Worrell

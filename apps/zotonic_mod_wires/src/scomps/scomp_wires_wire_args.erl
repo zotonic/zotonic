@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
 %% @doc Wire an action to an element, adding all non-scomp arguments to the actions before rendering them.
+%% @end
 
 %% Copyright 2009 Marc Worrell
 %%

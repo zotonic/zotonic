@@ -1,6 +1,7 @@
 %% @author Mawuli Adzaku <mawuli@mawuli.me>
 %% @copyright 2014 Mawuli Adzaku
 %% @doc 'filter_exclude' filter_exclude, filters a list to only display elements without a certain property
+%% @end
 
 %% Copyright 2014 Mawuli Adzaku
 %%

@@ -110,7 +110,6 @@ list_rsc(RscId, Context) ->
 
 
 %% @doc Count comments of the resource.
-%% @spec count_rsc(int(), Context) -> [ PropList ]
 -spec count_rsc(m_rsc:resource(), z:context()) -> list().
 count_rsc(RscId, Context) ->
     F = fun() ->
@@ -120,7 +119,7 @@ count_rsc(RscId, Context) ->
 
 
 %% @doc Fetch a specific comment from the database.
-%% @spec get(int(), Context) -> PropList
+-spec get(integer(), z:context()) -> proplists:proplist() | undefined.
 get(CommentId, Context) ->
     z_db:assoc_props_row("select * from comment where id = $1", [CommentId], Context).
 
@@ -224,7 +223,7 @@ check_editable(CommentId, Context) ->
 
 
 %% @doc Return the gravatar code of an email address. See also http://gravatar.com/
-%% @spec gravatar_code(Email) -> list()
+-spec gravatar_code(atom() | binary() | string()) -> binary().
 gravatar_code(Email) ->
     z_string:to_lower(z_utils:hex_encode(erlang:md5(z_string:to_lower(Email)))).
 

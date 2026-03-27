@@ -1,6 +1,7 @@
 %% @author Marc Worrell
 %% @copyright 2015 Marc Worrell
 %% @doc Insert the result of a render action into an iframe.
+%% @end
 
 %% Copyright 2015 Marc Worrell
 %%

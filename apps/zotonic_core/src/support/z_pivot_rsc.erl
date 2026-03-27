@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2025 Marc Worrell, Maas-Maarten Zeeman
+%% @copyright 2009-2026 Marc Worrell, Maas-Maarten Zeeman
 %% @doc Pivoting server for the rsc table. Takes care of full text indices. Polls the pivot queue for any changed resources.
 %% @end
 
-%% Copyright 2009-2025 Marc Worrell, Maas-Maarten Zeeman
+%% Copyright 2009-2026 Marc Worrell, Maas-Maarten Zeeman
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -455,7 +455,7 @@ pg_lang_extra(LangCode) ->
 %%====================================================================
 %% API
 %%====================================================================
-%% @spec start_link(SiteProps) -> {ok,Pid} | ignore | {error,Error}
+-spec start_link(term()) -> {ok, pid()} | ignore | {error, term()}.
 %% @doc Starts the server
 start_link(Site) ->
     Name = z_utils:name_for_site(?MODULE, Site),
@@ -466,7 +466,7 @@ start_link(Site) ->
 %% gen_server callbacks
 %%====================================================================
 
-%% @spec init(Args) -> {ok, State} |
+-spec init(term()) -> {ok, term()} | {ok, term(), timeout() | hibernate} | ignore | {stop, term()}.
 %%                     {ok, State, Timeout} |
 %%                     ignore               |
 %%                     {stop, Reason}

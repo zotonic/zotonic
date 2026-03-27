@@ -2,6 +2,7 @@
 %% @copyright 2013-2022 Marc Worrell
 %%
 %% @doc Serve a file (possibly resized)
+%% @end
 
 %% Copyright 2013-2022 Marc Worrell
 %%

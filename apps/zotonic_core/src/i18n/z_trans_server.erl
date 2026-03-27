@@ -2,6 +2,7 @@
 %% @copyright 2010-2017 Marc Worrell
 %% @doc Simple server to manage the translations, owns the ets table containing all translations.
 %% When new translations are read then the previous table is kept and the one before the previous is deleted.
+%% @end
 
 %% Copyright 2010-2017 Marc Worrell
 %%

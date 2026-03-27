@@ -1,6 +1,7 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2009 Arjan Scherpenisse
 %% @doc Add a media item to a resource.
+%% @end
 
 %% Copyright 2009 Arjan Scherpenisse
 %%

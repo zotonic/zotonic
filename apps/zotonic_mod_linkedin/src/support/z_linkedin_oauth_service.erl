@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2014-2021 Marc Worrell
 %% @doc Support routines for using LinkedIn as an external identity provider.
+%% @end
 
 %% Copyright 2014-2021 Marc Worrell
 %%

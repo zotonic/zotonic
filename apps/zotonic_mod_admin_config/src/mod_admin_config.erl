@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009-2022 Marc Worrell
 %% @doc Allow editing and inserting config keys with string values.
+%% @end
 
 %% Copyright 2009-2022 Marc Worrell
 %%

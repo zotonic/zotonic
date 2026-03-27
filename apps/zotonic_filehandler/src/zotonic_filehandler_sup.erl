@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2017 Marc Worrell
 %% @doc Supervisor for the file handler
+%% @end
 
 %% Copyright 2017 Marc Worrell
 %%

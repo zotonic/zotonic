@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
 %% @doc 'add_day' filter, add days to a date
+%% @end
 
 %% Copyright 2010 Marc Worrell
 %%

@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
 %% @doc Logoff the current user
+%% @end
 
 %% Copyright 2009 Marc Worrell
 %%

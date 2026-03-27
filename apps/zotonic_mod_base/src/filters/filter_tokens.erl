@@ -1,6 +1,7 @@
 %% @author Andreas Stenius <kaos@astekk.se>
 %% @copyright 2013 Andreas Stenius
 %% @doc Returns a list of tokens from input string, separated by the characters in the argument.
+%% @end
 
 %% Copyright 2013 Andreas Stenius
 %%

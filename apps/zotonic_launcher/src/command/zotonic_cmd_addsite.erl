@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2019 Marc Worrell
 %% @doc Addsite CLI command
+%% @end
 
 %% Copyright 2019 Marc Worrell
 %%

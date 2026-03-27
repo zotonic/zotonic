@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
 %% @doc 'random' filter, return a random element/elements of a list
+%% @end
 
 %% Copyright 2010-2011 Marc Worrell, Konstantin Nikiforov
 %%

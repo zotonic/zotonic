@@ -1,9 +1,9 @@
 %% @author Maas-Maarten Zeeman <mmzeeman@xs4all.nl>
-%% @copyright 2010-2023 Maas-Maarten Zeeman
+%% @copyright 2010-2026 Maas-Maarten Zeeman
 %% @doc 'urlize' filter, find urls and make them clickable.
 %% @end
 
-%% Copyright 2010-2023 Maas-Maarten Zeeman
+%% Copyright 2010-2026 Maas-Maarten Zeeman
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -57,12 +57,12 @@ urlize(Input, _Context) ->
 %% Maybe the do_urlize should go to z_html. It could be handy in other places too
 
 %% @doc Given a text, convert any URL into clickable links
-%% @spec do_urlize(string()) -> string()
+-spec do_urlize(iodata()) -> [ term() ].
 do_urlize(Text) ->
     [urlize_word(Word) || Word <- re:split(Text, "(\s+)")].
 
 %% @doc Given a word, convert it into a clickable link if it looks like one.
-%% @spec urlize_word(String) -> String
+-spec urlize_word(iodata()) -> term().
 urlize_word(Word) ->
     case smells_like_something_interesting(Word) of
         true -> urlize_word1(Word);
@@ -89,7 +89,7 @@ z_html:escape(Middle)),
 %% @doc Given a word, convert it to a url if it looks like one. When
 %% it doesn't look like a url, return undefined
 %%
-%% @spec(string()) ->string() | undefined
+-spec make_url(iodata()) -> undefined | binary() | #trans{}.
 make_url(Word) ->
     case smells_like_a_uri(Word) of
         true -> safe_escape_url(Word);

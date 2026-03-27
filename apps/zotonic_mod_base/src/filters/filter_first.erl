@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010-2022 Marc Worrell
 %% @doc 'first' filter, return the first element in a string, list or tuple.
+%% @end
 
 %% Copyright 2010-2022 Marc Worrell
 %%

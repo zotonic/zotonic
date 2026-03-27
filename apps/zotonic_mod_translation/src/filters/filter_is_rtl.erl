@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2011-2021 Marc Worrell
 %% @doc Check if the given language is a rtl or ltr language
+%% @end
 
 %% Copyright 2011-2021 Marc Worrell
 %%

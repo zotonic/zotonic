@@ -443,7 +443,7 @@ embed_code(<<"vimeo">>, H, W, V, Context) ->
         ]).
 
 %% @doc Handle the form submit from the "new media" dialog.  The form is defined in templates/_media_upload_panel.tpl.
-%% @spec event(Event, Context1) -> Context2
+-spec event(term(), z:context()) -> z:context() | {ok, integer()}.
 event(#submit{message={add_video_embed, EventProps}}, Context) ->
     Actions = proplists:get_value(actions, EventProps, []),
     Id = proplists:get_value(id, EventProps),

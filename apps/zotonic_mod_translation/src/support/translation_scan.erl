@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010-2017 Marc Worrell
 %% @doc Parse templates / erlang files in modules, extract all translations.
+%% @end
 
 %% Copyright 2010-2017 Marc Worrell
 %%

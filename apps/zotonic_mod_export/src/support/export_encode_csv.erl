@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2013 Marc Worrell
 %% @doc Encode a list of values using CSV
+%% @end
 
 %% Copyright 2013 Marc Worrell
 %%

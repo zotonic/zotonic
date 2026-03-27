@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% Date: 2010-02-12
-%% @copyright 2010 Marc Worrell
+%% @copyright 2010-2026 Marc Worrell
 %% @doc Encode data to quoted printable strings.
+%% @end
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2010-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@
 
 
 %% @doc Encode a string as quoted printable.
-%% @spec encode(iolist()) -> binary()
+-spec encode(iodata()) -> binary().
 encode(L) when is_list(L) ->
     encode(iolist_to_binary(L));
 encode(B) when is_binary(B) ->

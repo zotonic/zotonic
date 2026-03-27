@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2024 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Open a dialog with some fields to upload a new media.
 %% @end
 
-%% Copyright 2009-2024 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -55,7 +55,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 
 
 %% @doc Fill the dialog with the new page form. The form will be posted back to this module.
-%% @spec event(Event, Context1) -> Context2
+-spec event(term(), z:context()) -> z:context().
 event(#postback{message={media_upload_dialog, Title, Intent, Id, SubjectId, Predicate, Stay, Center, Callback, Actions}}, Context) ->
     Vars = [
         {delegate, atom_to_list(?MODULE)},

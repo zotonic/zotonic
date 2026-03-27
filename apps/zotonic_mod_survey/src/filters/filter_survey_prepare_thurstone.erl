@@ -2,6 +2,7 @@
 %% @copyright 2012-2022 Marc Worrell
 %% @doc Prepeare a thurstone question for further processing. This maps
 %% Zotonic 0.x Thurstone answers text to 1.x format with a list of answers.
+%% @end
 
 %% Copyright 2012-2022 Marc Worrell
 %%

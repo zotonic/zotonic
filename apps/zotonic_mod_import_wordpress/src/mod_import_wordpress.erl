@@ -1,7 +1,7 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2010 Arjan Scherpenisse
-%% Date: 2010-09-20
 %% @doc Import/export for zotonic.
+%% @end
 
 %% Copyright 2010,2011 Arjan Scherpenisse
 %%

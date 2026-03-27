@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
 %% @doc Show the spinner element
+%% @end
 
 %% Copyright 2009 Marc Worrell
 %%

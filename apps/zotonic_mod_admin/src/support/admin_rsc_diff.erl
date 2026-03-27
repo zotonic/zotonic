@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2012-2020 Marc Worrell
 %% @doc Format a resource record for a browser diff function.
+%% @end
 
 %% Copyright 2012-2020 Marc Worrell
 %%

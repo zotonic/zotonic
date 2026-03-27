@@ -1,6 +1,7 @@
 %% @author Mawuli Adzaku <mawuli@mawuli.me>
 %% @copyright 2014 Mawuli Adzaku
 %% @doc 'md5' filter, translate a string to an md5 hex value
+%% @end
 
 %% Copyright 2014 Mawuli Adzaku
 %%

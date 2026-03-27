@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010 Marc Worrell
 %% @doc Pretty print filter to dump values in a readable format.
+%% @end
 
 %% Copyright 2010 Marc Worrell
 %%

@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
-%% Date: 2009-04-16
 %% @doc Simple interface to the pie type of Google chart.  Allows for simpler data entry.
 %% Parameters:  data=[{label,value}, ...] colors=some_color
 %% and then all parameters
+%% @end
 
 %% Copyright 2009 Marc Worrell
 %%

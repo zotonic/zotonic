@@ -2,6 +2,7 @@
 %% @copyright 2017-2021 Marc Worrell
 %% @doc Zotonic core - main routines to 'reason' about the current Zotonic
 %%      installation.
+%% @end
 
 %% Copyright 2017-2021 Marc Worrell
 %%

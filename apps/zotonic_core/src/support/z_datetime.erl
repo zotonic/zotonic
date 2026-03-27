@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2022 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Utility functions for datetime handling and representation.
+%% @end
 
-%% Copyright 2009-2022 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -306,19 +307,19 @@ relative_time(N, '-', [<<"year", _/binary>>|_], Now) ->      prev_year(Now, N);
 relative_time(_N, _Op, _Unit, _Now) ->         undefined.
 
 %% @doc Show a humanized version of a relative datetime.  Like "4 months, 3 days ago".
-%% @spec timesince(Date, Context) -> string()
+-spec timesince(term(), z:context()) -> iodata().
 timesince(Date, Context) ->
     timesince(Date, calendar:universal_time(), Context).
 
 %% @doc Show a humanized version of a period between two dates.  Like "4 months, 3 days ago".
-%% @spec timesince(Date, BaseDate, Context) -> string()
+-spec timesince(term(), term(), z:context()) -> iodata().
 timesince(Date, Base, Context) ->
     timesince(Date, Base, ?__(<<"ago">>, Context), ?__(<<"now">>, Context), ?__(<<"in">>, Context), 2, Context).
 
 timesince(Date, Base, IndicatorStrings, Context) ->
     timesince(Date, Base, IndicatorStrings, 2, Context).
 
-%% @spec timesince(Date, BaseDate, IndicatorStrings, Mode, Context) -> string()
+-spec timesince(term(), term(), term(), term(), z:context()) -> iodata().
 %% @doc Show a humanized version of a period between two dates.  Like "4 months, 3 days ago".
 %% `WhenText' is a string containing a maximum of three tokens. Example "ago, now, in"
 timesince(Date, Base, IndicatorStrings, Mode, Context) ->
@@ -335,7 +336,7 @@ timesince(Date, Base, IndicatorStrings, Mode, Context) ->
     end.
 
 %% @doc Show a humanized version of a period between two dates.  Like "4 months, 3 days ago".
-%% @spec timesince(Date, BaseDate, AgoText, NowText, InText, Mode, Context) -> string()
+-spec timesince(term(), term(), term(), term(), term(), term(), z:context()) -> iodata().
 timesince(undefined, _, _AgoText, _NowText, _InText, _Mode, _Context) ->
     "";
 timesince(_, undefined, _AgoText, _NowText, _InText, _Mode, _Context) ->

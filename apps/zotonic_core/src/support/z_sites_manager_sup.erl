@@ -1,6 +1,7 @@
 %% @author Maas-Maarten Zeeman <mmzeeman@xs4all.nl>
 %% @copyright 2012-2017 Maas-Maarten Zeeman
 %% @doc Supervisor for sites dispatcher and manager
+%% @end
 
 %% Copyright 2012-2017 Maas-Maarten Zeeman
 %%
