@@ -1661,6 +1661,8 @@ msgstr ""
 #: zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:23
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:131
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:103
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:113
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:115
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:14
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:16
 msgid "Edit"
@@ -8189,8 +8191,8 @@ msgstr ""
 msgid "Trace function calls"
 msgstr ""
 
-#: zotonic_mod_development/priv/templates/_html_head_development.tpl:33
-#: zotonic_mod_development/priv/templates/_html_head_development.tpl:34
+#: zotonic_mod_development/priv/templates/_html_head_development.tpl:35
+#: zotonic_mod_development/priv/templates/_html_head_development.tpl:36
 msgid "Trace templates"
 msgstr ""
 
@@ -12581,6 +12583,10 @@ msgstr ""
 msgid "Add to mailinglist"
 msgstr ""
 
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:104
+msgid "Admin only"
+msgstr ""
+
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:115
 msgid ""
 "After all questions are answered and submitted, one of the following is "
@@ -13409,8 +13415,8 @@ msgstr ""
 msgid "Show progress information as “<em>Question 3/10</em>”"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:103
-msgid "Show results (admin only)"
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:106
+msgid "Show results"
 msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:30
@@ -13605,7 +13611,7 @@ msgid ""
 "it is counted as a page break."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:116
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:131
 msgid ""
 "This form has been submitted in another tab, so your current session has "
 "been stopped."
