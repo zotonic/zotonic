@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-03-30 12:50\n"
+"PO-Revision-Date: 2026-03-30 16:40\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -12679,7 +12679,7 @@ msgstr "Toon resultaten"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:30
 msgid "Show “Continue later” button to save answers and return later to submit"
-msgstr "Toon de knop \"Later verder gaan\" om antwoorden op te slaan om pas later in te dienen."
+msgstr "Toon de knop \"Later verdergaan\" om antwoorden op te slaan om pas later in te dienen."
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:34
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:45
