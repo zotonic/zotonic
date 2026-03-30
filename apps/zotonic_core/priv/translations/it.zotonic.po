@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-03-30 08:28\n"
+"PO-Revision-Date: 2026-03-30 12:50\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -1625,6 +1625,8 @@ msgstr "Indirizzo e-mail"
 #: zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:23
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:131
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:103
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:113
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:115
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:14
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:16
 msgid "Edit"
@@ -7772,8 +7774,8 @@ msgstr "Traccia tutte le query del database per la sessione corrente"
 msgid "Trace function calls"
 msgstr "Tracciamento delle chiamate di funzione"
 
-#: zotonic_mod_development/priv/templates/_html_head_development.tpl:33
-#: zotonic_mod_development/priv/templates/_html_head_development.tpl:34
+#: zotonic_mod_development/priv/templates/_html_head_development.tpl:35
+#: zotonic_mod_development/priv/templates/_html_head_development.tpl:36
 msgid "Trace templates"
 msgstr ""
 
@@ -11867,6 +11869,10 @@ msgstr "Aggiungi alla mailing list esistente"
 msgid "Add to mailinglist"
 msgstr "Aggiungi alla mailing list"
 
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:104
+msgid "Admin only"
+msgstr ""
+
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:115
 msgid "After all questions are answered and submitted, one of the following is shown."
 msgstr ""
@@ -12662,9 +12668,9 @@ msgstr "Mostra la barra di avanzamento"
 msgid "Show progress information as “<em>Question 3/10</em>”"
 msgstr "Mostra le informazioni sull'avanzamento come \"<em>Domanda 3/10</em>\""
 
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:103
-msgid "Show results (admin only)"
-msgstr "Mostra i risultati (solo admin)"
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:106
+msgid "Show results"
+msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:30
 msgid "Show “Continue later” button to save answers and return later to submit"
@@ -12830,7 +12836,7 @@ msgstr "Questo blocco mostra un campo di caricamento file. Questo può essere ut
 msgid "This block signals a stop in the flow. The user can't continue further and it is counted as a page break."
 msgstr "Questo blocco segnala un arresto nel flusso. L'utente non può continuare oltre e viene contato come un'interruzione di pagina."
 
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:116
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:131
 msgid "This form has been submitted in another tab, so your current session has been stopped."
 msgstr ""
 
