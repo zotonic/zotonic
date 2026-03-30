@@ -9,7 +9,9 @@
                     function() {
                         cotonic.broker.subscribe("bridge/origin/public/development/livereload", function (msg) {
                             if (msg.payload.is_page_reload) {
-                                z_reload();
+                                {% if zotonic_dispatch_module /= 'mod_development' %}
+                                    z_reload();
+                                {% endif %}
                             } else {
                                 zotonic_live_reloader.reload.apply(zotonic_live_reloader, [ msg.payload.path, { liveCSS: true } ]);
                             }
