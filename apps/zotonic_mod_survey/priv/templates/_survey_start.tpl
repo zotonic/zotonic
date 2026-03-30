@@ -98,11 +98,26 @@
 {% endwith %}
 {% endwith %}
 
-{% if m.survey.is_allowed_results_download[id] %}
+{% with m.survey.is_allowed_results_download[id] as is_download %}
+{% if id.is_editable or is_download %}
     <p>
-        <a href="{% url survey_results id=id %}">{_ Show results (admin only) _}</a>
+        <span class="text-muted">{_ Admin only _}:</span>
+        {% if is_download %}
+            <a href="{% url survey_results id=id %}">{_ Show results _}</a>
+        {% endif %}
+        {% if id.is_editable %}
+            {% if is_download %}
+                <span class="text-muted">|</span>
+            {% endif %}
+            {% if {admin_frontend_edit id=id}|url as url %}
+                <a href="{{ url }}">{_ Edit _}</a>
+            {% else %}
+                <a href="{% url admin_edit_rsc id=id %}">{_ Edit _}</a>
+            {% endif %}
+        {% endif %}
     </p>
 {% endif %}
+{% endwith %}
 
 {# Close open survey entry forms in other tabs than the one where the form has been submitted. #}
 {% if m.acl.user %}
