@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-03-26 13:13\n"
+"PO-Revision-Date: 2026-03-30 08:29\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -63,83 +63,83 @@ msgstr "Volitamata juurdepääs kaugressursi URL -ile."
 msgid "Website"
 msgstr "Veebileht"
 
-#: zotonic_core/src/support/z_datetime.erl:316
+#: zotonic_core/src/support/z_datetime.erl:317
 msgid "ago"
 msgstr "tagasi"
 
-#: zotonic_core/src/support/z_datetime.erl:374
-#: zotonic_core/src/support/z_datetime.erl:377
+#: zotonic_core/src/support/z_datetime.erl:375
+#: zotonic_core/src/support/z_datetime.erl:378
 msgid "day"
 msgstr "päeval"
 
-#: zotonic_core/src/support/z_datetime.erl:374
-#: zotonic_core/src/support/z_datetime.erl:377
+#: zotonic_core/src/support/z_datetime.erl:375
+#: zotonic_core/src/support/z_datetime.erl:378
 msgid "days"
 msgstr "päeva"
 
-#: zotonic_core/src/support/z_datetime.erl:372
-#: zotonic_core/src/support/z_datetime.erl:375
+#: zotonic_core/src/support/z_datetime.erl:373
+#: zotonic_core/src/support/z_datetime.erl:376
 msgid "hour"
 msgstr "tund"
 
-#: zotonic_core/src/support/z_datetime.erl:372
-#: zotonic_core/src/support/z_datetime.erl:375
+#: zotonic_core/src/support/z_datetime.erl:373
+#: zotonic_core/src/support/z_datetime.erl:376
 #: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:19
 #: zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:6
 msgid "hours"
 msgstr "tundi"
 
-#: zotonic_core/src/support/z_datetime.erl:316
+#: zotonic_core/src/support/z_datetime.erl:317
 #: zotonic_mod_admin/priv/templates/_rsc_preview.tpl:11
 msgid "in"
 msgstr "aastal"
 
-#: zotonic_core/src/support/z_datetime.erl:370
-#: zotonic_core/src/support/z_datetime.erl:373
+#: zotonic_core/src/support/z_datetime.erl:371
+#: zotonic_core/src/support/z_datetime.erl:374
 msgid "minute"
 msgstr "minut"
 
-#: zotonic_core/src/support/z_datetime.erl:370
-#: zotonic_core/src/support/z_datetime.erl:373
+#: zotonic_core/src/support/z_datetime.erl:371
+#: zotonic_core/src/support/z_datetime.erl:374
 #: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:20
 #: zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:7
 msgid "minutes"
 msgstr "minutit"
 
-#: zotonic_core/src/support/z_datetime.erl:367
+#: zotonic_core/src/support/z_datetime.erl:368
 msgid "moments"
 msgstr "hetki"
 
-#: zotonic_core/src/support/z_datetime.erl:376
-#: zotonic_core/src/support/z_datetime.erl:379
+#: zotonic_core/src/support/z_datetime.erl:377
+#: zotonic_core/src/support/z_datetime.erl:380
 msgid "month"
 msgstr "kuu"
 
-#: zotonic_core/src/support/z_datetime.erl:376
-#: zotonic_core/src/support/z_datetime.erl:379
+#: zotonic_core/src/support/z_datetime.erl:377
+#: zotonic_core/src/support/z_datetime.erl:380
 msgid "months"
 msgstr "kuud"
 
-#: zotonic_core/src/support/z_datetime.erl:316
-#: zotonic_core/src/support/z_datetime.erl:366
+#: zotonic_core/src/support/z_datetime.erl:317
+#: zotonic_core/src/support/z_datetime.erl:367
 msgid "now"
 msgstr "nüüd"
 
-#: zotonic_core/src/support/z_datetime.erl:368
-#: zotonic_core/src/support/z_datetime.erl:371
+#: zotonic_core/src/support/z_datetime.erl:369
+#: zotonic_core/src/support/z_datetime.erl:372
 msgid "second"
 msgstr "teine"
 
-#: zotonic_core/src/support/z_datetime.erl:368
-#: zotonic_core/src/support/z_datetime.erl:371
+#: zotonic_core/src/support/z_datetime.erl:369
+#: zotonic_core/src/support/z_datetime.erl:372
 msgid "seconds"
 msgstr "sekundit"
 
-#: zotonic_core/src/support/z_datetime.erl:378
+#: zotonic_core/src/support/z_datetime.erl:379
 msgid "year"
 msgstr "aasta"
 
-#: zotonic_core/src/support/z_datetime.erl:378
+#: zotonic_core/src/support/z_datetime.erl:379
 msgid "years"
 msgstr "aastat"
 
@@ -513,8 +513,8 @@ msgstr "Kustutage kasutajagrupp ja teisaldage kasutajad"
 #: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:516
 #: zotonic_mod_admin_category/src/mod_admin_category.erl:113
 #: zotonic_mod_admin_category/src/mod_admin_category.erl:131
-#: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:122
-#: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:128
+#: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:121
+#: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:127
 #: zotonic_mod_content_groups/src/mod_content_groups.erl:102
 #: zotonic_mod_content_groups/src/mod_content_groups.erl:130
 msgid "Deleting..."
@@ -814,8 +814,8 @@ msgstr "Kõigepealt kuvage see ACL-i kasutajagrupp:"
 #: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:466
 #: zotonic_mod_admin_category/src/mod_admin_category.erl:90
 #: zotonic_mod_admin_category/src/mod_admin_category.erl:106
-#: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:97
-#: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:112
+#: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:96
+#: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:111
 #: zotonic_mod_content_groups/src/mod_content_groups.erl:79
 #: zotonic_mod_content_groups/src/mod_content_groups.erl:95
 #: zotonic_mod_menu/src/mod_menu.erl:281
@@ -1696,12 +1696,12 @@ msgstr "Erlangi versioon"
 msgid "Error checking the website."
 msgstr "Viga veebisaidi kontrollimisel."
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:216
+#: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:217
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:125
 msgid "Error creating the page."
 msgstr "Viga lehe loomisel."
 
-#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:52
+#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:53
 msgid "Error importing page from the remote server."
 msgstr "Viga lehe kaugserverist importimisel."
 
@@ -1742,7 +1742,7 @@ msgid "Existing pages"
 msgstr "Olemasolevad lehed"
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:203
-#: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:202
+#: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:203
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:169
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:111
 msgid "Failed to download the file."
@@ -2028,7 +2028,7 @@ msgstr "Tehke selle lehekülje duplikaat."
 msgid "Make a new media item"
 msgstr "Loo uus meediafail"
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:116
+#: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:117
 msgid "Make a new page"
 msgstr "Loo uus leht"
 
@@ -2249,8 +2249,8 @@ msgstr "Ei leia meediat."
 msgid "No medium"
 msgstr "Ei mingit meediumit"
 
-#: zotonic_mod_admin/src/actions/action_admin_redirect_incat.erl:53
-#: zotonic_mod_admin/src/actions/action_admin_redirect_incat.erl:55
+#: zotonic_mod_admin/src/actions/action_admin_redirect_incat.erl:54
+#: zotonic_mod_admin/src/actions/action_admin_redirect_incat.erl:56
 msgid "No other pages found"
 msgstr "Ühtegi muud lehte ei leitud"
 
@@ -2310,7 +2310,7 @@ msgstr "Lehekülje plokk"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:6
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:10
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:3
-#: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:229
+#: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:228
 msgid "Page connections"
 msgstr "Lehe √ºhendused"
 
@@ -2827,7 +2827,7 @@ msgstr "T√§nav rida 2"
 msgid "Structure"
 msgstr "Struktuur"
 
-#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:39
+#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:40
 msgid "Succesfully imported page from the remote server."
 msgstr "Leht imporditi edukalt kaugserverist."
 
@@ -2963,7 +2963,7 @@ msgstr "Ei ole √htegi lehte seosega sellele lehele"
 msgid "There are no tasks in the task queue."
 msgstr "Ülesannete järjekorras pole ülesandeid."
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:196
+#: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:197
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:105
 msgid "There is already a page with this name."
 msgstr "Selle nimega leht on juba olemas."
@@ -2977,7 +2977,7 @@ msgid "This connection already exists."
 msgstr "See ühendus on juba olemas."
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:207
-#: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:206
+#: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:207
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:173
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:115
 msgid "This file contains links to other files or locations."
@@ -2996,14 +2996,14 @@ msgid "This file has not been scanned for viruses."
 msgstr "Seda faili pole viiruste suhtes kontrollitud."
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:205
-#: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:204
+#: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:205
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:171
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:113
 msgid "This file is infected with a virus."
 msgstr "See fail on nakatunud viirusega."
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:209
-#: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:208
+#: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:209
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:175
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:117
 msgid "This file is too large."
@@ -3344,7 +3344,7 @@ msgstr "Teil pole lubatud seda lehte muuta."
 msgid "You don't have permission to change this media item."
 msgstr "Teil pole selle meediaüksuse muutmiseks luba."
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:198
+#: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:199
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:107
 msgid "You don't have permission to create this page."
 msgstr "Teil pole selle lehe loomiseks luba."
@@ -3355,7 +3355,7 @@ msgid "You don't have permission to edit this page."
 msgstr "Teil pole selle lehe muutmise luba."
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:201
-#: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:200
+#: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:201
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:167
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:109
 msgid "You don't have the proper permissions to upload this type of file."
@@ -3474,7 +3474,7 @@ msgid "name"
 msgstr "nimi"
 
 #: zotonic_mod_admin/priv/templates/_admin_view_types.tpl:2
-#: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:96
+#: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:97
 #: zotonic_mod_base/src/filters/filter_content_type_label.erl:44
 msgid "page"
 msgstr "lehele"
@@ -3644,7 +3644,7 @@ msgstr "Oled kindel, et tahad kustutada konfiguratsioonivõtit"
 msgid "Certificates provided by SSL modules"
 msgstr "SSL-moodulite pakutavad sertifikaadid"
 
-#: zotonic_mod_admin_config/src/mod_admin_config.erl:104
+#: zotonic_mod_admin_config/src/mod_admin_config.erl:105
 msgid "Config"
 msgstr "Konfiguratsioon"
 
@@ -3708,7 +3708,7 @@ msgstr "E-kirjade pealtkuulamine &ndash; erandid"
 msgid "Email FROM"
 msgstr "E-post FROM"
 
-#: zotonic_mod_admin_config/src/mod_admin_config.erl:94
+#: zotonic_mod_admin_config/src/mod_admin_config.erl:95
 msgid "Email configuration"
 msgstr "E-posti konfiguratsioon"
 
@@ -3773,7 +3773,7 @@ msgstr "Konfigureerimisvõtmeid ei leitud."
 msgid "No configurations found."
 msgstr "Ei leia konfiguratsioone."
 
-#: zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_edit.erl:77
+#: zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_edit.erl:76
 msgid "Only administrators can change the configuration."
 msgstr "Konfiguratsiooni saavad muuta ainult administraatorid."
 
@@ -3829,7 +3829,7 @@ msgid "SMTP Hostname"
 msgstr "SMTP hostinimi"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:3
-#: zotonic_mod_admin_config/src/mod_admin_config.erl:99
+#: zotonic_mod_admin_config/src/mod_admin_config.erl:100
 msgid "SSL Certificates"
 msgstr "SSL-sertifikaadid"
 
@@ -3858,7 +3858,7 @@ msgstr "Saatke testmeil või kontrollige e-posti aadressi olekut."
 msgid "Sent an email to"
 msgstr "Saadetud e-kiri aadressile"
 
-#: zotonic_mod_admin_config/src/mod_admin_config.erl:147
+#: zotonic_mod_admin_config/src/mod_admin_config.erl:148
 msgid "Sent email to"
 msgstr "Saadetud meil aadressile"
 
@@ -3959,7 +3959,7 @@ msgid "Value"
 msgstr "Väärtus"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:195
-#: zotonic_mod_admin_config/src/mod_admin_config.erl:151
+#: zotonic_mod_admin_config/src/mod_admin_config.erl:152
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
 msgid "View email status"
 msgstr "Kuva e-posti olek"
@@ -4078,7 +4078,7 @@ msgstr "Kas soovite kindlasti selle kirje kustutada?"
 msgid "Blocked"
 msgstr "Blokeeritud"
 
-#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:116
+#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:117
 msgid "Changed the username."
 msgstr "Muutis kasutajanime."
 
@@ -4099,7 +4099,7 @@ msgstr "Olemasoleva kasutajanime / parooli eemaldamiseks inimeselt klõpsake nup
 msgid "Confirm user deletion"
 msgstr "Kinnitage kasutaja kustutamine"
 
-#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:113
+#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:112
 msgid "Could not create the user. Sorry."
 msgstr "Kasutajat ei õnnestunud luua. Vabandust."
 
@@ -4117,11 +4117,11 @@ msgstr "Kustutage see e-posti aadress"
 msgid "Delete username"
 msgstr "Kustuta kasutajanimi"
 
-#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:90
+#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:91
 msgid "Deleted the user account."
 msgstr "Kasutajakonto kustutati."
 
-#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:109
+#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:108
 msgid "Duplicate username, please choose another username."
 msgstr "Kasutajanime koopia, palun valige teine kasutajanimi."
 
@@ -4251,7 +4251,7 @@ msgid "One moment, please..."
 msgstr "Üks hetk palun..."
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:54
-#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:116
+#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:115
 msgid "Only administrators can add users."
 msgstr "Kasutajaid saavad lisada ainult administraatorid."
 
@@ -4263,9 +4263,9 @@ msgstr "Ainult administraatorid saavad kasutajanimesid kustutada."
 msgid "Only an administrator can delete usernames."
 msgstr "Kasutajanimesid saab kustutada ainult administraator."
 
-#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:82
-#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:96
-#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:142
+#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:83
+#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:97
+#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:143
 msgid "Only an administrator or the user him/herself can set a password."
 msgstr "Ainult administraator või kasutaja saab ise parooli määrata."
 
@@ -4297,7 +4297,7 @@ msgstr "Saadetud kinnitusmeil."
 
 #: zotonic_mod_admin_identity/priv/templates/_admin_edit_basics_user.tpl:9
 #: zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:7
-#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:76
+#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:77
 msgid "Set username / password"
 msgstr "Sisesta kasutajanimi / parool"
 
@@ -4310,7 +4310,7 @@ msgstr "Sisesta kasutajanimi / parool"
 msgid "Sorry"
 msgstr "Vabandust"
 
-#: zotonic_mod_admin_identity/src/validators/validator_admin_identity_username_unique.erl:57
+#: zotonic_mod_admin_identity/src/validators/validator_admin_identity_username_unique.erl:59
 #: zotonic_mod_signup/priv/templates/_signup_box.tpl:31
 msgid "Sorry, this username is already in use. Please try another one."
 msgstr "Vabandust, see kasutajanimi on juba kasutusel. Palun proovige mõnda muud."
@@ -4319,7 +4319,7 @@ msgstr "Vabandust, see kasutajanimi on juba kasutusel. Palun proovige mõnda muu
 msgid "Sorry, you are not allowed to verify this email address."
 msgstr "Kahjuks ei ole teil lubatud seda e-posti aadressi kinnitada."
 
-#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:84
+#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:85
 msgid "Sorry, you can not remove your own username."
 msgstr "Vabandust, te ei saa oma kasutajanime eemaldada."
 
@@ -4333,7 +4333,7 @@ msgstr "Aitäh"
 msgid "The address is invalid."
 msgstr "Aadress on vale."
 
-#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:86
+#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:87
 msgid "The admin user can not be removed."
 msgstr "Administraatorit ei saa eemaldada."
 
@@ -4341,7 +4341,7 @@ msgstr "Administraatorit ei saa eemaldada."
 msgid "The e-mail address has been verified."
 msgstr "E-posti aadress on kinnitatud."
 
-#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:137
+#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:138
 msgid "The new username/ password has been set."
 msgstr "Uus kasutajanimi / parool on määratud."
 
@@ -4349,8 +4349,8 @@ msgstr "Uus kasutajanimi / parool on määratud."
 msgid "The password of the admin user cannot be changed in the database. Please edit your site’s configuration file in <tt>priv/zotonic_site.config</tt> if you want to change the admin password."
 msgstr "Admin kasutaja parooli ei saa andmebaasis muuta. Kui soovite administraatori parooli muuta, muutke oma saidi konfiguratsioonifaili failis <tt>priv/zotonic_site.config</tt> ."
 
-#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:119
-#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:125
+#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:120
+#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:126
 msgid "The username is already in use, please try another."
 msgstr "Kasutajanimi on juba kasutusel, proovige teist."
 
@@ -4455,11 +4455,11 @@ msgstr "Kinnitamine ..."
 msgid "When you add credentials to a person then the person becomes a user. A person or machine can log on with those credentials and perform actions on your Zotonic system.<br/><br/>What a user can do depends on the groups the user is member of."
 msgstr "Kui lisate isikule mandaadid, saab sellest inimesest kasutaja. Inimene või masin saab nende mandaatidega sisse logida ja teie Zotonicu süsteemis toiminguid teha.<br/><br/>See, mida kasutaja saab teha, sõltub rühmadest, mille liige ta on."
 
-#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:111
+#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:110
 msgid "You are not allowed to create the person page."
 msgstr "Teil pole lubatud isikulehte luua."
 
-#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:93
+#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:94
 msgid "You are not allowed to delete this user account."
 msgstr "Teil pole lubatud seda kasutajakontot kustutada."
 
@@ -4581,11 +4581,11 @@ msgstr "Ühendage kaks lehte kokku. Saate valida, millise lehega ühendada ja mi
 msgid "Merge with another page …"
 msgstr "Ühenda teise lehega …"
 
-#: zotonic_mod_admin_merge/src/mod_admin_merge.erl:140
+#: zotonic_mod_admin_merge/src/mod_admin_merge.erl:141
 msgid "Merging the two pages ..."
 msgstr "Kahe lehe ühendamine ..."
 
-#: zotonic_mod_admin_merge/src/mod_admin_merge.erl:145
+#: zotonic_mod_admin_merge/src/mod_admin_merge.erl:146
 msgid "No merge action specified."
 msgstr "Ühinemistoimingut pole määratud."
 
@@ -4609,11 +4609,11 @@ msgstr "Valige võitja kahelt lehelt. Kaotaja liidetakse võitjaks. Jääb vaid 
 msgid "Select the winning page"
 msgstr "Valige võitnud leht"
 
-#: zotonic_mod_admin_merge/src/mod_admin_merge.erl:81
+#: zotonic_mod_admin_merge/src/mod_admin_merge.erl:82
 msgid "Sorry, you have no permission to edit this page."
 msgstr "Vabandust, teil pole selle lehe muutmiseks luba."
 
-#: zotonic_mod_admin_merge/src/mod_admin_merge.erl:124
+#: zotonic_mod_admin_merge/src/mod_admin_merge.erl:125
 msgid "The loser is protected, unprotect the loser before merging."
 msgstr "Kaotaja on kaitstud, kaitsta kaotajat enne ühinemist."
 
@@ -4630,20 +4630,20 @@ msgstr "Teil pole lubatud seda lehte valida ja seeläbi vasakpoolset lehte kustu
 msgid "You are not allowed to select this page and thereby deleting page Right."
 msgstr "Teil ei ole lubatud seda lehte valida ja seeläbi kustutada leht Right."
 
-#: zotonic_mod_admin_merge/src/mod_admin_merge.erl:100
+#: zotonic_mod_admin_merge/src/mod_admin_merge.erl:101
 msgid "You cannot remove the admin user."
 msgstr "Te ei saa administraatori kasutajat eemaldada."
 
-#: zotonic_mod_admin_merge/src/mod_admin_merge.erl:126
+#: zotonic_mod_admin_merge/src/mod_admin_merge.erl:127
 msgid "You do not have permission to delete the loser."
 msgstr "Teil pole luba kaotaja kustutamiseks."
 
-#: zotonic_mod_admin_merge/src/mod_admin_merge.erl:104
-#: zotonic_mod_admin_merge/src/mod_admin_merge.erl:128
+#: zotonic_mod_admin_merge/src/mod_admin_merge.erl:105
+#: zotonic_mod_admin_merge/src/mod_admin_merge.erl:129
 msgid "You do not have permission to edit the winner."
 msgstr "Teil pole luba võitjat muuta."
 
-#: zotonic_mod_admin_merge/src/mod_admin_merge.erl:114
+#: zotonic_mod_admin_merge/src/mod_admin_merge.erl:115
 msgid "not implemented yet"
 msgstr "pole veel rakendatud"
 
@@ -4817,7 +4817,7 @@ msgstr "Kustuta &amp; Muuda ühendusi"
 msgid "Delete All Connections"
 msgstr "Kustuta kõik ühendused"
 
-#: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:115
+#: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:114
 msgid "Delete is canceled, there are connections with this predicate."
 msgstr "Kustutamine on tühistatud, selle predikaadiga on ühendusi."
 
@@ -4914,7 +4914,7 @@ msgstr "Leheühenduste ülevaade"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:3
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:12
-#: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:224
+#: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:223
 msgid "Predicates"
 msgstr "Predikaadid"
 
@@ -4964,7 +4964,7 @@ msgstr ""
 msgid "Some predicates are mostly for internal purposes. Check this if you don’t want to show this predicate on the <em>Connected to</em> list."
 msgstr "Mõned predikaadid on enamasti sisemiseks otstarbeks. Märkige see, kui te ei soovi seda predikaati kuvada loendis <em>Ühendatud</em> -ga."
 
-#: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:94
+#: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:93
 msgid "Sorry, you are not allowed to insert connections with this predicate."
 msgstr "Vabandust, teil pole lubatud selle predikaadiga ühendusi sisestada."
 
@@ -5390,8 +5390,8 @@ msgstr "Peate kohe määrama oma kahefaktorilise autentimise pääsukoodi. Järg
 msgid "You need to be allowed to edit the system configuration to view or change the two-factor authentication configuration."
 msgstr "Kaheastmelise autentimise konfiguratsiooni kuvamiseks või muutmiseks peate lubama süsteemi konfiguratsiooni muuta."
 
-#: zotonic_mod_authentication/src/actions/action_authentication_auth_disconnect.erl:56
-#: zotonic_mod_authentication/src/actions/action_authentication_auth_disconnect.erl:64
+#: zotonic_mod_authentication/src/actions/action_authentication_auth_disconnect.erl:57
+#: zotonic_mod_authentication/src/actions/action_authentication_auth_disconnect.erl:65
 msgid "Access denied"
 msgstr "Ligipääs keelatud"
 
@@ -5814,7 +5814,7 @@ msgid "Redirecting to"
 msgstr "Suunamine aadressile"
 
 #: zotonic_mod_authentication/priv/templates/logon_service.tpl:15
-#: zotonic_mod_signup/src/controllers/controller_signup_confirm.erl:52
+#: zotonic_mod_signup/src/controllers/controller_signup_confirm.erl:53
 msgid "Redirecting..."
 msgstr "Ümbersuunamine ..."
 
@@ -6147,7 +6147,7 @@ msgstr "Pilvefailide pood on lubatud. Andmebaasi varukoopiad laaditakse üles pi
 msgid "Cloud file store is enabled. The local files will not be backed up. Ensure that your cloud file store system has a proper backup."
 msgstr "Pilvefailide pood on lubatud. Kohalikke faile ei varundata. Veenduge, et teie pilvefailide salvestamise süsteemil oleks korralik varukoopia."
 
-#: zotonic_mod_backup/src/actions/action_backup_backup_start.erl:54
+#: zotonic_mod_backup/src/actions/action_backup_backup_start.erl:53
 msgid "Could not start the backup because a backup is already in progress."
 msgstr "Varundamist ei saanud alustada, kuna varundamine on juba pooleli."
 
@@ -6265,7 +6265,7 @@ msgstr "Pange tähele, et faile säilitatakse pärast kustutamist ainult 5 näda
 msgid "Note:"
 msgstr "Märge:"
 
-#: zotonic_mod_backup/src/actions/action_backup_backup_start.erl:60
+#: zotonic_mod_backup/src/actions/action_backup_backup_start.erl:59
 msgid "Only administrators can start a backup."
 msgstr "Varundamist saavad alustada ainult administraatorid."
 
@@ -6347,7 +6347,7 @@ msgstr "Kuva importimise/ekspordi paneel administraatori redigeerimislehtedel."
 msgid "Sorry, a global Zotonic configuration is set and cannot be changed."
 msgstr "Kahjuks on globaalne Zotonic konfiguratsioon määratud ja seda ei saa muuta."
 
-#: zotonic_mod_backup/src/actions/action_backup_backup_start.erl:57
+#: zotonic_mod_backup/src/actions/action_backup_backup_start.erl:56
 msgid "Sorry, manual backups are disabled"
 msgstr "Kahjuks on käsitsi varundamine keelatud"
 
@@ -6384,7 +6384,7 @@ msgstr "Alusta varundamist kohe"
 msgid "Start database-only backup now"
 msgstr "Alustage kohe ainult andmebaasi varundamist"
 
-#: zotonic_mod_backup/src/actions/action_backup_backup_start.erl:52
+#: zotonic_mod_backup/src/actions/action_backup_backup_start.erl:51
 msgid "Started the backup. You can keep this page open or continue working."
 msgstr "Alustas varundamisega. Saate selle lehe avatuna hoida või tööd jätkata."
 
@@ -9119,7 +9119,7 @@ msgstr "Logige sisse LinkedIniga"
 msgid "Save LinkedIn Settings"
 msgstr "Salvestage LinkedIni seaded"
 
-#: zotonic_mod_linkedin/src/mod_linkedin.erl:89
+#: zotonic_mod_linkedin/src/mod_linkedin.erl:90
 msgid "Saved the LinkedIn settings."
 msgstr "Salvestasid LinkedIni seaded."
 
@@ -9136,7 +9136,7 @@ msgstr "Kasutage LinkedIni autentimist"
 msgid "You can find the application keys in"
 msgstr "Rakenduse võtmed leiate lehelt"
 
-#: zotonic_mod_linkedin/src/mod_linkedin.erl:91
+#: zotonic_mod_linkedin/src/mod_linkedin.erl:92
 msgid "You don't have permission to change the LinkedIn settings."
 msgstr "Teil pole luba LinkedIini sätete muutmiseks."
 
@@ -9480,7 +9480,7 @@ msgid "E-mail page"
 msgstr "E-posti leht"
 
 #: zotonic_mod_mailinglist/priv/templates/_share_page_email.tpl:1
-#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mail_page.erl:50
+#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mail_page.erl:51
 msgid "E-mail this page"
 msgstr "Saada see leht e-postiga"
 
@@ -9820,7 +9820,7 @@ msgstr "E-kirjade saatja aadress (valikuline)"
 msgid "Sender name for e-mails (optional)"
 msgstr "Saatja nimi e-kirjadele (valikuline)"
 
-#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mail_page.erl:59
+#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mail_page.erl:60
 msgid "Sending the e-mail..."
 msgstr "E-kirja saatmine ..."
 
@@ -10329,7 +10329,7 @@ msgstr "Ümbersuunamine Microsofti."
 msgid "Save Microsoft Settings"
 msgstr "Salvestage Microsofti seaded"
 
-#: zotonic_mod_microsoft/src/mod_microsoft.erl:118
+#: zotonic_mod_microsoft/src/mod_microsoft.erl:119
 msgid "Saved the Microsoft settings."
 msgstr "Salvestatud Microsofti seaded."
 
@@ -10346,7 +10346,7 @@ msgstr "Üürnik"
 msgid "Use Microsoft authentication"
 msgstr "Kasutage Microsofti autentimist"
 
-#: zotonic_mod_microsoft/src/mod_microsoft.erl:120
+#: zotonic_mod_microsoft/src/mod_microsoft.erl:121
 msgid "You don't have permission to change the Microsoft settings."
 msgstr "Teil pole Microsofti sätete muutmiseks luba."
 
@@ -11315,7 +11315,7 @@ msgstr "Ehitage saidikaart uuesti üles"
 msgid "Rebuild the sitemap index for all pages."
 msgstr "Taastage kõigi lehtede saidikaardi register."
 
-#: zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:170
+#: zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:171
 msgid "Rebuilding the sitemap in the background."
 msgstr "Saidikaardi taastamine taustal."
 
@@ -11363,7 +11363,7 @@ msgstr "Iganädalane (vaikimisi)"
 msgid "Yearly"
 msgstr "Iga-aastane"
 
-#: zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:172
+#: zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:173
 msgid "You are not allowed to do this"
 msgstr "Teil pole lubatud seda teha"
 
@@ -11880,7 +11880,7 @@ msgid "Agree"
 msgstr "Nõus"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:34
-msgid "Allow non-linear forms; answers are saved when using the “Back” button"
+msgid "Allow non-linear forms; answers are saved with “Back” button and a “Back to start” is added at the top of each page"
 msgstr ""
 
 #: zotonic_mod_survey/src/mod_survey.erl:1250
@@ -12967,7 +12967,7 @@ msgid "You started filling this in and will continue where you left off."
 msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:137
-msgid "Your progress has been saved. You can return later to finish and submit it."
+msgid "Your answers will be saved so that you can return later to submit them."
 msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_survey_results_user.tpl:26
@@ -13499,7 +13499,7 @@ msgstr ""
 msgid "<b>Note that Zotonic only handles initial check out</b>, after which it is expected that you will handle further git interactions yourself.)"
 msgstr "<b>Pange tähele, et Zotonic tegeleb ainult esialgse väljaregistreerimisega</b>, pärast mida eeldatakse, et hakkate edasisi giti interaktsioone ise haldama.)"
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:563
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:564
 msgid "A component of the path is not a directory:"
 msgstr "Tee komponent ei ole kataloog:"
 
@@ -13522,7 +13522,7 @@ msgstr "Kõik failid ja mallid asuvad aadressil"
 msgid "Basic blogging site"
 msgstr "Põhiline ajaveebisait"
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:76
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:77
 msgid "Checking database ..."
 msgstr "Andmebaasi kontrollimine ..."
 
@@ -13542,39 +13542,39 @@ msgstr "PostgreSQL-i andmebaasiühenduse seadistamine"
 msgid "Congratulations, your site has been created and is now running."
 msgstr "Palju õnne, teie sait on loodud ja töötab nüüd."
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:169
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:170
 msgid "Copy skeleton files ..."
 msgstr "Skeletifailide kopeerimine ..."
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:149
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:150
 msgid "Could not check out Git repository:"
 msgstr "Giti hoidlat ei õnnestunud vaadata:"
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:96
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:97
 msgid "Could not connect to 'postgres' database or create the database."
 msgstr "'Postgres' andmebaasiga ei saanud ühendust luua ega andmebaasi luua."
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:274
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:275
 msgid "Could not create the directory"
 msgstr "Kataloogi ei saanud luua"
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:568
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:569
 msgid "Could not create the file:"
 msgstr "Faili ei saanud luua:"
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:93
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:94
 msgid "Could not create the schema in the database."
 msgstr "Skeemi ei saanud andmebaasis luua."
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:460
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:461
 msgid "Could not create the site directory"
 msgstr "Saidikataloogi ei saanud luua"
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:153
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:154
 msgid "Could not delete the site dir for the Git checkout:"
 msgstr "Giti kassast saidi direkti ei saanud kustutada:"
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:558
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:559
 msgid "Disk full creating:"
 msgstr "Ketta loomine on täielik:"
 
@@ -13590,7 +13590,7 @@ msgstr "Tühi sait, malle pole jne"
 msgid "Enter a valid hostname like \"www.example.com\" or \"test.local\"."
 msgstr "Sisestage kehtiv hostinimi, näiteks „www.example.com” või „test.local”."
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:210
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:211
 msgid "Force compile all Erlang files ..."
 msgstr "Sundige kompileerima kõik Erlangi failid ..."
 
@@ -13598,7 +13598,7 @@ msgstr "Sundige kompileerima kõik Erlangi failid ..."
 msgid "Git URL"
 msgstr "Git URL"
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:129
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:130
 msgid "Git checkout ..."
 msgstr "Git kassasse ..."
 
@@ -13626,11 +13626,11 @@ msgstr "Logige sisse kasutajanimega <b>admin</b> ja parooliga"
 msgid "Make sure that this hostname has a valid DNS entry or is added to your <tt>/etc/hosts</tt> file."
 msgstr "Veenduge, et sellel hostinimel on kehtiv DNS-sisestus või see on lisatud teie faili <tt>/ etc / hosts</tt>."
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:543
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:544
 msgid "No permission to create the site directory at:"
 msgstr "Puudub luba saidi kataloogi loomiseks aadressil:"
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:455
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:456
 msgid "Not allowed to create the site directory"
 msgstr "Saidikataloogi pole lubatud luua"
 
@@ -13663,7 +13663,7 @@ msgstr "PostgreSQL andmebaasi ühendus"
 msgid "PostgreSQL database, username and password. The schema defaults to the site name filled in above."
 msgstr "PostgreSQL andmebaas, kasutajanimi ja parool. Skeemi vaikimisi kasutatakse ülaltoodud saidi nime."
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:49
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:50
 msgid "Resolving the hostname ..."
 msgstr "Hosti nime lahendamine ..."
 
@@ -13699,15 +13699,15 @@ msgstr "Konfiguratsioonifail asukohas <tt>priv/zotonic_site.config</tt> kirjutat
 msgid "The default database for the schema is <b>{db}</b>."
 msgstr "Skeemi vaikeandmebaas on <b>{db}</b>."
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:548
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:549
 msgid "The file or directory already exists:"
 msgstr "Fail või kataloog on juba olemas:"
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:57
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:58
 msgid "The hostname is unknown, check your DNS or /etc/hosts file"
 msgstr "Hosti nimi pole teada, kontrollige oma DNS- või / etc / hosts-faili"
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:553
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:554
 msgid "The parent directory does not exist:"
 msgstr "Vanemkataloogi pole olemas:"
 
@@ -13719,15 +13719,15 @@ msgstr "Sadam peab olema numbriline."
 msgid "The skeleton provides templates and content for a site."
 msgstr "Skelett pakub saidi malle ja sisu."
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:37
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:38
 msgid "There is already a file or directory named"
 msgstr "Nimega fail või kataloog on juba olemas"
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:515
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:516
 msgid "This name is reserved"
 msgstr "See nimi on reserveeritud"
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:519
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:520
 msgid "This name is taken by another Erlang module"
 msgstr "Selle nime võtab teine Erlangi moodul"
 
