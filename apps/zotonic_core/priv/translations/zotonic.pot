@@ -13753,8 +13753,7 @@ msgid "You started filling this in and will continue where you left off."
 msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:137
-msgid ""
-"Your progress has been saved. You can return later to finish and submit it."
+msgid "Your answers will be saved so that you can return later to submit them."
 msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_survey_results_user.tpl:26
