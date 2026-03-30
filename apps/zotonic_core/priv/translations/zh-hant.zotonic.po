@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-03-30 08:29\n"
+"PO-Revision-Date: 2026-03-30 12:51\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -1625,6 +1625,8 @@ msgstr "电子邮件地址"
 #: zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:23
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:131
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:103
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:113
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:115
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:14
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:16
 msgid "Edit"
@@ -7772,8 +7774,8 @@ msgstr "跟踪当前会话的所有数据库查询"
 msgid "Trace function calls"
 msgstr "追蹤函式呼叫"
 
-#: zotonic_mod_development/priv/templates/_html_head_development.tpl:33
-#: zotonic_mod_development/priv/templates/_html_head_development.tpl:34
+#: zotonic_mod_development/priv/templates/_html_head_development.tpl:35
+#: zotonic_mod_development/priv/templates/_html_head_development.tpl:36
 msgid "Trace templates"
 msgstr ""
 
@@ -11867,6 +11869,10 @@ msgstr "添加到現有郵件列表"
 msgid "Add to mailinglist"
 msgstr "添加到郵件列表"
 
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:104
+msgid "Admin only"
+msgstr ""
+
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:115
 msgid "After all questions are answered and submitted, one of the following is shown."
 msgstr ""
@@ -12662,9 +12668,9 @@ msgstr "显示进度条"
 msgid "Show progress information as “<em>Question 3/10</em>”"
 msgstr "显示进度信息，如“<em>问题 3/10</em>”"
 
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:103
-msgid "Show results (admin only)"
-msgstr "显示结果（仅限管理员"
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:106
+msgid "Show results"
+msgstr "显示结果"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:30
 msgid "Show “Continue later” button to save answers and return later to submit"
@@ -12830,7 +12836,7 @@ msgstr "此塊顯示文件上傳字段。這只能用作表格的最後一個問
 msgid "This block signals a stop in the flow. The user can't continue further and it is counted as a page break."
 msgstr "这个块表示流程暂停，用户只有"
 
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:116
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:131
 msgid "This form has been submitted in another tab, so your current session has been stopped."
 msgstr ""
 
