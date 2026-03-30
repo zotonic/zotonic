@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-03-30 08:28\n"
+"PO-Revision-Date: 2026-03-30 08:32\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -11886,7 +11886,7 @@ msgstr "Akkoord"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:34
 msgid "Allow non-linear forms; answers are saved with “Back” button and a “Back to start” is added at the top of each page"
-msgstr ""
+msgstr "Niet-lineaire formulieren toestaan; antwoorden worden opgeslagen met de \"Terug\" knop en er wordt een \"Terug naar start\" toegevoegd bovenaan elke pagina"
 
 #: zotonic_mod_survey/src/mod_survey.erl:1250
 msgid "Already submitted"
@@ -12973,7 +12973,7 @@ msgstr "Je was eerder al begonnen met invullen en gaat verder waar je gebleven w
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:137
 msgid "Your answers will be saved so that you can return later to submit them."
-msgstr ""
+msgstr "Je antwoorden worden opgeslagen zodat je ze later kunt indienen."
 
 #: zotonic_mod_survey/priv/templates/_survey_results_user.tpl:26
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:51
