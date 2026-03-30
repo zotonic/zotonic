@@ -9,6 +9,12 @@
 
 VERSION=`cat VERSION`
 
+# Ensure that all Zotonic core apps are in the deps of zotonic_apps
+pushd apps/zotonic_apps
+./update-deps.sh
+popd
+
+# Add the version number to all zotonic dependencies
 for c in apps/*/rebar.config
 do
     sed -i.bck \
@@ -225,11 +231,6 @@ sleep 20
 # Publish the app that includes all zotonic_apps (for easy deps)
 
 APPS6="zotonic_apps"
-
-# Ensure that all Zotonic core apps are in the deps of zotonic_apps
-pushd apps/zotonic_apps
-./update-deps.sh
-popd
 
 for i in $APPS6
 do
