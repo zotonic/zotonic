@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-03-26 13:13\n"
+"PO-Revision-Date: 2026-03-30 08:28\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -63,83 +63,83 @@ msgstr "לא מורשה לגשת לכתובת ה- URL של המשאב המרוח
 msgid "Website"
 msgstr "אתר אינטרנט"
 
-#: zotonic_core/src/support/z_datetime.erl:316
+#: zotonic_core/src/support/z_datetime.erl:317
 msgid "ago"
 msgstr "לִפנֵי"
 
-#: zotonic_core/src/support/z_datetime.erl:374
-#: zotonic_core/src/support/z_datetime.erl:377
+#: zotonic_core/src/support/z_datetime.erl:375
+#: zotonic_core/src/support/z_datetime.erl:378
 msgid "day"
 msgstr "יְוֹם"
 
-#: zotonic_core/src/support/z_datetime.erl:374
-#: zotonic_core/src/support/z_datetime.erl:377
+#: zotonic_core/src/support/z_datetime.erl:375
+#: zotonic_core/src/support/z_datetime.erl:378
 msgid "days"
 msgstr "ימים"
 
-#: zotonic_core/src/support/z_datetime.erl:372
-#: zotonic_core/src/support/z_datetime.erl:375
+#: zotonic_core/src/support/z_datetime.erl:373
+#: zotonic_core/src/support/z_datetime.erl:376
 msgid "hour"
 msgstr "שָׁעָה"
 
-#: zotonic_core/src/support/z_datetime.erl:372
-#: zotonic_core/src/support/z_datetime.erl:375
+#: zotonic_core/src/support/z_datetime.erl:373
+#: zotonic_core/src/support/z_datetime.erl:376
 #: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:19
 #: zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:6
 msgid "hours"
 msgstr "שעה (ות"
 
-#: zotonic_core/src/support/z_datetime.erl:316
+#: zotonic_core/src/support/z_datetime.erl:317
 #: zotonic_mod_admin/priv/templates/_rsc_preview.tpl:11
 msgid "in"
 msgstr "ב"
 
-#: zotonic_core/src/support/z_datetime.erl:370
-#: zotonic_core/src/support/z_datetime.erl:373
+#: zotonic_core/src/support/z_datetime.erl:371
+#: zotonic_core/src/support/z_datetime.erl:374
 msgid "minute"
 msgstr "דַקָה"
 
-#: zotonic_core/src/support/z_datetime.erl:370
-#: zotonic_core/src/support/z_datetime.erl:373
+#: zotonic_core/src/support/z_datetime.erl:371
+#: zotonic_core/src/support/z_datetime.erl:374
 #: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:20
 #: zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:7
 msgid "minutes"
 msgstr "דקות"
 
-#: zotonic_core/src/support/z_datetime.erl:367
+#: zotonic_core/src/support/z_datetime.erl:368
 msgid "moments"
 msgstr "רגעים"
 
-#: zotonic_core/src/support/z_datetime.erl:376
-#: zotonic_core/src/support/z_datetime.erl:379
+#: zotonic_core/src/support/z_datetime.erl:377
+#: zotonic_core/src/support/z_datetime.erl:380
 msgid "month"
 msgstr "חוֹדֶשׁ"
 
-#: zotonic_core/src/support/z_datetime.erl:376
-#: zotonic_core/src/support/z_datetime.erl:379
+#: zotonic_core/src/support/z_datetime.erl:377
+#: zotonic_core/src/support/z_datetime.erl:380
 msgid "months"
 msgstr "חודשים"
 
-#: zotonic_core/src/support/z_datetime.erl:316
-#: zotonic_core/src/support/z_datetime.erl:366
+#: zotonic_core/src/support/z_datetime.erl:317
+#: zotonic_core/src/support/z_datetime.erl:367
 msgid "now"
 msgstr "עַכשָׁיו"
 
-#: zotonic_core/src/support/z_datetime.erl:368
-#: zotonic_core/src/support/z_datetime.erl:371
+#: zotonic_core/src/support/z_datetime.erl:369
+#: zotonic_core/src/support/z_datetime.erl:372
 msgid "second"
 msgstr "שְׁנִיָה"
 
-#: zotonic_core/src/support/z_datetime.erl:368
-#: zotonic_core/src/support/z_datetime.erl:371
+#: zotonic_core/src/support/z_datetime.erl:369
+#: zotonic_core/src/support/z_datetime.erl:372
 msgid "seconds"
 msgstr "שניות"
 
-#: zotonic_core/src/support/z_datetime.erl:378
+#: zotonic_core/src/support/z_datetime.erl:379
 msgid "year"
 msgstr "שָׁנָה"
 
-#: zotonic_core/src/support/z_datetime.erl:378
+#: zotonic_core/src/support/z_datetime.erl:379
 msgid "years"
 msgstr "שנים"
 
@@ -513,8 +513,8 @@ msgstr "מחק את קבוצת המשתמשים והעבר משתמשים"
 #: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:516
 #: zotonic_mod_admin_category/src/mod_admin_category.erl:113
 #: zotonic_mod_admin_category/src/mod_admin_category.erl:131
-#: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:122
-#: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:128
+#: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:121
+#: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:127
 #: zotonic_mod_content_groups/src/mod_content_groups.erl:102
 #: zotonic_mod_content_groups/src/mod_content_groups.erl:130
 msgid "Deleting..."
@@ -814,8 +814,8 @@ msgstr "הראה תחילה את קבוצת המשתמשים של ACL זו:"
 #: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:466
 #: zotonic_mod_admin_category/src/mod_admin_category.erl:90
 #: zotonic_mod_admin_category/src/mod_admin_category.erl:106
-#: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:97
-#: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:112
+#: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:96
+#: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:111
 #: zotonic_mod_content_groups/src/mod_content_groups.erl:79
 #: zotonic_mod_content_groups/src/mod_content_groups.erl:95
 #: zotonic_mod_menu/src/mod_menu.erl:281
@@ -1696,12 +1696,12 @@ msgstr "גרסת Erlang"
 msgid "Error checking the website."
 msgstr "שגיאה בבדיקת האתר."
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:216
+#: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:217
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:125
 msgid "Error creating the page."
 msgstr "שגיאה ביצירת הדף."
 
-#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:52
+#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:53
 msgid "Error importing page from the remote server."
 msgstr "שגיאה בייבוא דף מהשרת המרוחק."
 
@@ -1742,7 +1742,7 @@ msgid "Existing pages"
 msgstr "דפים קיימים"
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:203
-#: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:202
+#: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:203
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:169
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:111
 msgid "Failed to download the file."
@@ -2028,7 +2028,7 @@ msgstr "צור עותק של דף זה."
 msgid "Make a new media item"
 msgstr "הכינו פריט מדיה חדש"
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:116
+#: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:117
 msgid "Make a new page"
 msgstr "הכינו דף חדש"
 
@@ -2249,8 +2249,8 @@ msgstr "לא נמצא מדיה."
 msgid "No medium"
 msgstr "אין מדיום"
 
-#: zotonic_mod_admin/src/actions/action_admin_redirect_incat.erl:53
-#: zotonic_mod_admin/src/actions/action_admin_redirect_incat.erl:55
+#: zotonic_mod_admin/src/actions/action_admin_redirect_incat.erl:54
+#: zotonic_mod_admin/src/actions/action_admin_redirect_incat.erl:56
 msgid "No other pages found"
 msgstr "לא נמצאו דפים אחרים"
 
@@ -2310,7 +2310,7 @@ msgstr "בלוק עמוד"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:6
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:10
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:3
-#: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:229
+#: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:228
 msgid "Page connections"
 msgstr "חיבורי עמודים"
 
@@ -2827,7 +2827,7 @@ msgstr "קו רחוב 2"
 msgid "Structure"
 msgstr "מִבְנֶה"
 
-#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:39
+#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:40
 msgid "Succesfully imported page from the remote server."
 msgstr "עמוד מיובא בהצלחה מהשרת המרוחק."
 
@@ -2963,7 +2963,7 @@ msgstr "אין עמודים עם חיבור לדף"
 msgid "There are no tasks in the task queue."
 msgstr "אין משימות בתור המשימות."
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:196
+#: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:197
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:105
 msgid "There is already a page with this name."
 msgstr "יש כבר דף עם השם הזה."
@@ -2977,7 +2977,7 @@ msgid "This connection already exists."
 msgstr "חיבור זה כבר קיים."
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:207
-#: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:206
+#: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:207
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:173
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:115
 msgid "This file contains links to other files or locations."
@@ -2996,14 +2996,14 @@ msgid "This file has not been scanned for viruses."
 msgstr "קובץ זה לא נסרק לאיתור וירוסים."
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:205
-#: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:204
+#: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:205
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:171
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:113
 msgid "This file is infected with a virus."
 msgstr "קובץ זה נגוע בווירוס."
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:209
-#: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:208
+#: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:209
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:175
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:117
 msgid "This file is too large."
@@ -3344,7 +3344,7 @@ msgstr "אינך רשאי לערוך דף זה."
 msgid "You don't have permission to change this media item."
 msgstr "אין לך הרשאה לשנות את פריט המדיה הזה."
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:198
+#: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:199
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:107
 msgid "You don't have permission to create this page."
 msgstr "אין לך הרשאה ליצור דף זה."
@@ -3355,7 +3355,7 @@ msgid "You don't have permission to edit this page."
 msgstr "אין לך הרשאה לערוך דף זה."
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:201
-#: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:200
+#: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:201
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:167
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:109
 msgid "You don't have the proper permissions to upload this type of file."
@@ -3474,7 +3474,7 @@ msgid "name"
 msgstr "שֵׁם"
 
 #: zotonic_mod_admin/priv/templates/_admin_view_types.tpl:2
-#: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:96
+#: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:97
 #: zotonic_mod_base/src/filters/filter_content_type_label.erl:44
 msgid "page"
 msgstr "עמוד"
@@ -3644,7 +3644,7 @@ msgstr "האם אתה בטוח שברצונך למחוק את מפתח התצו�
 msgid "Certificates provided by SSL modules"
 msgstr "אישורים המסופקים על ידי מודולי SSL"
 
-#: zotonic_mod_admin_config/src/mod_admin_config.erl:104
+#: zotonic_mod_admin_config/src/mod_admin_config.erl:105
 msgid "Config"
 msgstr "תצורה"
 
@@ -3708,7 +3708,7 @@ msgstr "יירוט דואר אלקטרוני &ndash; חריגים"
 msgid "Email FROM"
 msgstr "אי מייל מ"
 
-#: zotonic_mod_admin_config/src/mod_admin_config.erl:94
+#: zotonic_mod_admin_config/src/mod_admin_config.erl:95
 msgid "Email configuration"
 msgstr "תצורת דוא\"ל"
 
@@ -3773,7 +3773,7 @@ msgstr "לא נמצאו מפתחות תצורה."
 msgid "No configurations found."
 msgstr "לא נמצאו תצורות."
 
-#: zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_edit.erl:77
+#: zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_edit.erl:76
 msgid "Only administrators can change the configuration."
 msgstr "רק מנהלי מערכת יכולים לשנות את התצורה."
 
@@ -3829,7 +3829,7 @@ msgid "SMTP Hostname"
 msgstr "שם מארח SMTP"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:3
-#: zotonic_mod_admin_config/src/mod_admin_config.erl:99
+#: zotonic_mod_admin_config/src/mod_admin_config.erl:100
 msgid "SSL Certificates"
 msgstr "אישורי SSL"
 
@@ -3858,7 +3858,7 @@ msgstr "שלח דוא\"ל למבחן או בדוק את מצב כתובת הדו
 msgid "Sent an email to"
 msgstr "שלח אימייל אל"
 
-#: zotonic_mod_admin_config/src/mod_admin_config.erl:147
+#: zotonic_mod_admin_config/src/mod_admin_config.erl:148
 msgid "Sent email to"
 msgstr "נשלח דוא\"ל אל"
 
@@ -3959,7 +3959,7 @@ msgid "Value"
 msgstr "ערך"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:195
-#: zotonic_mod_admin_config/src/mod_admin_config.erl:151
+#: zotonic_mod_admin_config/src/mod_admin_config.erl:152
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
 msgid "View email status"
 msgstr "צפה בסטטוס הדוא\"ל"
@@ -4078,7 +4078,7 @@ msgstr "האם אתה בטוח שברצונך למחוק ערך זה?"
 msgid "Blocked"
 msgstr "חָסוּם"
 
-#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:116
+#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:117
 msgid "Changed the username."
 msgstr "שינה את שם המשתמש."
 
@@ -4099,7 +4099,7 @@ msgstr "לחץ על \"מחק\" כדי להסיר כל שם משתמש / סיסמ
 msgid "Confirm user deletion"
 msgstr "אשר את מחיקת המשתמש"
 
-#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:113
+#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:112
 msgid "Could not create the user. Sorry."
 msgstr "לא ניתן היה ליצור את המשתמש. מצטער."
 
@@ -4117,11 +4117,11 @@ msgstr "מחק כתובת דואר אלקטרוני זו"
 msgid "Delete username"
 msgstr "מחק את שם המשתמש"
 
-#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:90
+#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:91
 msgid "Deleted the user account."
 msgstr "מחק את חשבון המשתמש."
 
-#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:109
+#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:108
 msgid "Duplicate username, please choose another username."
 msgstr "שכפול שם משתמש, בחר שם משתמש אחר."
 
@@ -4251,7 +4251,7 @@ msgid "One moment, please..."
 msgstr "רגע אחד בבקשה..."
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:54
-#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:116
+#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:115
 msgid "Only administrators can add users."
 msgstr "רק מנהלי מערכת יכולים להוסיף משתמשים."
 
@@ -4263,9 +4263,9 @@ msgstr "רק מנהלי מערכת יכולים למחוק שמות משתמש."
 msgid "Only an administrator can delete usernames."
 msgstr "רק מנהל מערכת יכול למחוק שמות משתמש."
 
-#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:82
-#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:96
-#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:142
+#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:83
+#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:97
+#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:143
 msgid "Only an administrator or the user him/herself can set a password."
 msgstr "רק מנהל מערכת או המשתמש עצמו יכולים להגדיר סיסמה."
 
@@ -4297,7 +4297,7 @@ msgstr "נשלח דואר אלקטרוני לאימות."
 
 #: zotonic_mod_admin_identity/priv/templates/_admin_edit_basics_user.tpl:9
 #: zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:7
-#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:76
+#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:77
 msgid "Set username / password"
 msgstr "הגדר שם משתמש / סיסמה"
 
@@ -4310,7 +4310,7 @@ msgstr "הגדר שם משתמש / סיסמה"
 msgid "Sorry"
 msgstr "מצטער"
 
-#: zotonic_mod_admin_identity/src/validators/validator_admin_identity_username_unique.erl:57
+#: zotonic_mod_admin_identity/src/validators/validator_admin_identity_username_unique.erl:59
 #: zotonic_mod_signup/priv/templates/_signup_box.tpl:31
 msgid "Sorry, this username is already in use. Please try another one."
 msgstr "מצטערים, שם משתמש זה כבר בשימוש. אנא נסה עוד אחד."
@@ -4319,7 +4319,7 @@ msgstr "מצטערים, שם משתמש זה כבר בשימוש. אנא נסה 
 msgid "Sorry, you are not allowed to verify this email address."
 msgstr "מצטערים, אינך רשאי לאמת כתובת דוא\"ל זו."
 
-#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:84
+#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:85
 msgid "Sorry, you can not remove your own username."
 msgstr "מצטערים, אינך יכול להסיר את שם המשתמש שלך."
 
@@ -4333,7 +4333,7 @@ msgstr "תודה"
 msgid "The address is invalid."
 msgstr "הכתובת אינה חוקית."
 
-#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:86
+#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:87
 msgid "The admin user can not be removed."
 msgstr "לא ניתן להסיר את משתמש הניהול."
 
@@ -4341,7 +4341,7 @@ msgstr "לא ניתן להסיר את משתמש הניהול."
 msgid "The e-mail address has been verified."
 msgstr "כתובת הדואר האלקטרוני אומתה."
 
-#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:137
+#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:138
 msgid "The new username/ password has been set."
 msgstr "שם המשתמש / הסיסמה החדשים הוגדרו."
 
@@ -4349,8 +4349,8 @@ msgstr "שם המשתמש / הסיסמה החדשים הוגדרו."
 msgid "The password of the admin user cannot be changed in the database. Please edit your site’s configuration file in <tt>priv/zotonic_site.config</tt> if you want to change the admin password."
 msgstr "לא ניתן לשנות את הסיסמה של משתמש המנהל במסד הנתונים. אנא ערוך את קובץ התצורה של האתר שלך ב- <tt>priv/zotonic_site.config</tt> אם ברצונך לשנות את סיסמת המנהל."
 
-#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:119
-#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:125
+#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:120
+#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:126
 msgid "The username is already in use, please try another."
 msgstr "שם המשתמש כבר בשימוש, אנא נסה אחר."
 
@@ -4455,11 +4455,11 @@ msgstr "מאמת ..."
 msgid "When you add credentials to a person then the person becomes a user. A person or machine can log on with those credentials and perform actions on your Zotonic system.<br/><br/>What a user can do depends on the groups the user is member of."
 msgstr "כאשר אתה מוסיף אישורים לאדם אז האדם הופך למשתמש. אדם או מכונה יכולים להיכנס עם האישורים הללו ולבצע פעולות במערכת Zotonic שלך.<br/><br/>מה שמשתמש יכול לעשות תלוי בקבוצות בהן הוא חבר."
 
-#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:111
+#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:110
 msgid "You are not allowed to create the person page."
 msgstr "אינך רשאי ליצור את דף האדם."
 
-#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:93
+#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:94
 msgid "You are not allowed to delete this user account."
 msgstr "אינך רשאי למחוק חשבון משתמש זה."
 
@@ -4581,11 +4581,11 @@ msgstr "למזג שני עמודים יחד. אתה יכול לבחור עם א�
 msgid "Merge with another page …"
 msgstr "מיזוג עם עמוד נוסף …"
 
-#: zotonic_mod_admin_merge/src/mod_admin_merge.erl:140
+#: zotonic_mod_admin_merge/src/mod_admin_merge.erl:141
 msgid "Merging the two pages ..."
 msgstr "מיזוג שני העמודים ..."
 
-#: zotonic_mod_admin_merge/src/mod_admin_merge.erl:145
+#: zotonic_mod_admin_merge/src/mod_admin_merge.erl:146
 msgid "No merge action specified."
 msgstr "לא צוינה פעולת מיזוג."
 
@@ -4609,11 +4609,11 @@ msgstr "בחר את הזוכה משני עמודים. המפסיד יתמזג ל
 msgid "Select the winning page"
 msgstr "בחר את הדף הזוכה"
 
-#: zotonic_mod_admin_merge/src/mod_admin_merge.erl:81
+#: zotonic_mod_admin_merge/src/mod_admin_merge.erl:82
 msgid "Sorry, you have no permission to edit this page."
 msgstr "מצטערים, אין לך הרשאה לערוך דף זה."
 
-#: zotonic_mod_admin_merge/src/mod_admin_merge.erl:124
+#: zotonic_mod_admin_merge/src/mod_admin_merge.erl:125
 msgid "The loser is protected, unprotect the loser before merging."
 msgstr "המפסיד מוגן, אל תגן על המפסיד לפני המיזוג."
 
@@ -4630,20 +4630,20 @@ msgstr "אינך רשאי לבחור דף זה ובכך למחוק את העמו
 msgid "You are not allowed to select this page and thereby deleting page Right."
 msgstr "אינך רשאי לבחור דף זה ובכך למחוק את הדף Right."
 
-#: zotonic_mod_admin_merge/src/mod_admin_merge.erl:100
+#: zotonic_mod_admin_merge/src/mod_admin_merge.erl:101
 msgid "You cannot remove the admin user."
 msgstr "אינך יכול להסיר את משתמש הניהול."
 
-#: zotonic_mod_admin_merge/src/mod_admin_merge.erl:126
+#: zotonic_mod_admin_merge/src/mod_admin_merge.erl:127
 msgid "You do not have permission to delete the loser."
 msgstr "אין לך הרשאה למחוק את המפסיד."
 
-#: zotonic_mod_admin_merge/src/mod_admin_merge.erl:104
-#: zotonic_mod_admin_merge/src/mod_admin_merge.erl:128
+#: zotonic_mod_admin_merge/src/mod_admin_merge.erl:105
+#: zotonic_mod_admin_merge/src/mod_admin_merge.erl:129
 msgid "You do not have permission to edit the winner."
 msgstr "אין לך הרשאה לערוך את הזוכה."
 
-#: zotonic_mod_admin_merge/src/mod_admin_merge.erl:114
+#: zotonic_mod_admin_merge/src/mod_admin_merge.erl:115
 msgid "not implemented yet"
 msgstr "עדיין לא מיושם"
 
@@ -4817,7 +4817,7 @@ msgstr "מחק &amp; שנה חיבורים"
 msgid "Delete All Connections"
 msgstr "מחק את כל החיבורים"
 
-#: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:115
+#: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:114
 msgid "Delete is canceled, there are connections with this predicate."
 msgstr "מחיקה בוטלה, יש קשרים עם פרדיקט זה."
 
@@ -4914,7 +4914,7 @@ msgstr "סקירה על חיבורי העמודים"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:3
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:12
-#: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:224
+#: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:223
 msgid "Predicates"
 msgstr "מנבא"
 
@@ -4964,7 +4964,7 @@ msgstr ""
 msgid "Some predicates are mostly for internal purposes. Check this if you don’t want to show this predicate on the <em>Connected to</em> list."
 msgstr "חלק מהפרדיקטים הם בעיקר למטרות פנימיות. סמן זאת אם אינך רוצה להציג את הפרדיקט הזה ברשימה <em>מחוברים ל</em>."
 
-#: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:94
+#: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:93
 msgid "Sorry, you are not allowed to insert connections with this predicate."
 msgstr "מצטערים, אינך רשאי להוסיף קשרים עם פרדיקט זה."
 
@@ -5390,8 +5390,8 @@ msgstr "עליך להגדיר את קוד האימות הדו-גורמי שלך 
 msgid "You need to be allowed to edit the system configuration to view or change the two-factor authentication configuration."
 msgstr "עליך להיות רשאי לערוך את תצורת המערכת כדי להציג או לשנות את תצורת האימות הדו-גורמי."
 
-#: zotonic_mod_authentication/src/actions/action_authentication_auth_disconnect.erl:56
-#: zotonic_mod_authentication/src/actions/action_authentication_auth_disconnect.erl:64
+#: zotonic_mod_authentication/src/actions/action_authentication_auth_disconnect.erl:57
+#: zotonic_mod_authentication/src/actions/action_authentication_auth_disconnect.erl:65
 msgid "Access denied"
 msgstr "גישה נדחתה"
 
@@ -5814,7 +5814,7 @@ msgid "Redirecting to"
 msgstr "מפנה אל"
 
 #: zotonic_mod_authentication/priv/templates/logon_service.tpl:15
-#: zotonic_mod_signup/src/controllers/controller_signup_confirm.erl:52
+#: zotonic_mod_signup/src/controllers/controller_signup_confirm.erl:53
 msgid "Redirecting..."
 msgstr "מפנה מחדש ..."
 
@@ -6147,7 +6147,7 @@ msgstr "חנות קבצים בענן מופעלת. גיבויים של מסד ה
 msgid "Cloud file store is enabled. The local files will not be backed up. Ensure that your cloud file store system has a proper backup."
 msgstr "חנות קבצים בענן מופעלת. הקבצים המקומיים לא יגובו. ודא שלמערכת חנות הקבצים בענן שלך יש גיבוי מתאים."
 
-#: zotonic_mod_backup/src/actions/action_backup_backup_start.erl:54
+#: zotonic_mod_backup/src/actions/action_backup_backup_start.erl:53
 msgid "Could not start the backup because a backup is already in progress."
 msgstr "לא ניתן היה להתחיל את הגיבוי כי גיבוי כבר מתבצע."
 
@@ -6265,7 +6265,7 @@ msgstr "שים לב שקבצים נשמרים רק למשך 5 שבועות לא�
 msgid "Note:"
 msgstr "הערה:"
 
-#: zotonic_mod_backup/src/actions/action_backup_backup_start.erl:60
+#: zotonic_mod_backup/src/actions/action_backup_backup_start.erl:59
 msgid "Only administrators can start a backup."
 msgstr "רק מנהלי מערכת יכולים להתחיל גיבוי."
 
@@ -6347,7 +6347,7 @@ msgstr "הצג את חלונית הייבוא/ייצוא בדפי העריכה �
 msgid "Sorry, a global Zotonic configuration is set and cannot be changed."
 msgstr "מצטערים, מוגדרת תצורה גלובלית של Zotonic ולא ניתנת לשינוי."
 
-#: zotonic_mod_backup/src/actions/action_backup_backup_start.erl:57
+#: zotonic_mod_backup/src/actions/action_backup_backup_start.erl:56
 msgid "Sorry, manual backups are disabled"
 msgstr "מצטערים, גיבויים ידניים מושבתים"
 
@@ -6384,7 +6384,7 @@ msgstr "התחל גיבוי עכשיו"
 msgid "Start database-only backup now"
 msgstr "התחל כעת גיבוי למסד נתונים בלבד"
 
-#: zotonic_mod_backup/src/actions/action_backup_backup_start.erl:52
+#: zotonic_mod_backup/src/actions/action_backup_backup_start.erl:51
 msgid "Started the backup. You can keep this page open or continue working."
 msgstr "התחיל את הגיבוי. אתה יכול להשאיר דף זה פתוח או להמשיך לעבוד."
 
@@ -9119,7 +9119,7 @@ msgstr "היכנס באמצעות LinkedIn"
 msgid "Save LinkedIn Settings"
 msgstr "שמור את הגדרות LinkedIn"
 
-#: zotonic_mod_linkedin/src/mod_linkedin.erl:89
+#: zotonic_mod_linkedin/src/mod_linkedin.erl:90
 msgid "Saved the LinkedIn settings."
 msgstr "שמר את הגדרות LinkedIn."
 
@@ -9136,7 +9136,7 @@ msgstr "השתמש באימות של LinkedIn"
 msgid "You can find the application keys in"
 msgstr "אתה יכול למצוא את מפתחות היישום ב"
 
-#: zotonic_mod_linkedin/src/mod_linkedin.erl:91
+#: zotonic_mod_linkedin/src/mod_linkedin.erl:92
 msgid "You don't have permission to change the LinkedIn settings."
 msgstr "אין לך הרשאה לשנות את הגדרות LinkedIn."
 
@@ -9480,7 +9480,7 @@ msgid "E-mail page"
 msgstr "דף דואר אלקטרוני"
 
 #: zotonic_mod_mailinglist/priv/templates/_share_page_email.tpl:1
-#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mail_page.erl:50
+#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mail_page.erl:51
 msgid "E-mail this page"
 msgstr "שלח דף זה בדוא\"ל"
 
@@ -9820,7 +9820,7 @@ msgstr "כתובת שולח להודעות דואר אלקטרוני (אופצי
 msgid "Sender name for e-mails (optional)"
 msgstr "שם השולח להודעות דואר אלקטרוני (אופציונלי)"
 
-#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mail_page.erl:59
+#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mail_page.erl:60
 msgid "Sending the e-mail..."
 msgstr "שולח את הדואר האלקטרוני ..."
 
@@ -10329,7 +10329,7 @@ msgstr "מפנה מחדש למיקרוסופט."
 msgid "Save Microsoft Settings"
 msgstr "שמור את הגדרות Microsoft"
 
-#: zotonic_mod_microsoft/src/mod_microsoft.erl:118
+#: zotonic_mod_microsoft/src/mod_microsoft.erl:119
 msgid "Saved the Microsoft settings."
 msgstr "שמר את הגדרות מיקרוסופט."
 
@@ -10346,7 +10346,7 @@ msgstr "שׂוֹכֵר"
 msgid "Use Microsoft authentication"
 msgstr "השתמש באימות של מיקרוסופט"
 
-#: zotonic_mod_microsoft/src/mod_microsoft.erl:120
+#: zotonic_mod_microsoft/src/mod_microsoft.erl:121
 msgid "You don't have permission to change the Microsoft settings."
 msgstr "אין לך הרשאה לשנות את הגדרות Microsoft."
 
@@ -11315,7 +11315,7 @@ msgstr "בנה מפת אתר מחדש"
 msgid "Rebuild the sitemap index for all pages."
 msgstr "בנה מחדש את אינדקס ה- Sitemap לכל הדפים."
 
-#: zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:170
+#: zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:171
 msgid "Rebuilding the sitemap in the background."
 msgstr "בניית מפת האתר ברקע."
 
@@ -11363,7 +11363,7 @@ msgstr "שבועי (ברירת מחדל)"
 msgid "Yearly"
 msgstr "שְׁנָתִי"
 
-#: zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:172
+#: zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:173
 msgid "You are not allowed to do this"
 msgstr "אינך רשאי לעשות זאת"
 
@@ -11880,7 +11880,7 @@ msgid "Agree"
 msgstr "לְהַסכִּים"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:34
-msgid "Allow non-linear forms; answers are saved when using the “Back” button"
+msgid "Allow non-linear forms; answers are saved with “Back” button and a “Back to start” is added at the top of each page"
 msgstr ""
 
 #: zotonic_mod_survey/src/mod_survey.erl:1250
@@ -12967,7 +12967,7 @@ msgid "You started filling this in and will continue where you left off."
 msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:137
-msgid "Your progress has been saved. You can return later to finish and submit it."
+msgid "Your answers will be saved so that you can return later to submit them."
 msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_survey_results_user.tpl:26
@@ -13499,7 +13499,7 @@ msgstr ""
 msgid "<b>Note that Zotonic only handles initial check out</b>, after which it is expected that you will handle further git interactions yourself.)"
 msgstr "<b>שימו לב ש-Zotonic מטפל רק ביציאה ראשונית של</b>, ולאחר מכן צפוי שתטפלו באינטראקציות נוספות של Git בעצמכם.)"
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:563
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:564
 msgid "A component of the path is not a directory:"
 msgstr "רכיב הנתיב אינו ספרייה:"
 
@@ -13522,7 +13522,7 @@ msgstr "כל הקבצים והתבניות ממוקמים בכתובת"
 msgid "Basic blogging site"
 msgstr "אתר בלוגים בסיסי"
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:76
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:77
 msgid "Checking database ..."
 msgstr "בודק מסד נתונים ..."
 
@@ -13542,39 +13542,39 @@ msgstr "הגדר את חיבור מסד הנתונים PostgreSQL"
 msgid "Congratulations, your site has been created and is now running."
 msgstr "מזל טוב, האתר שלך נוצר והוא פועל כעת."
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:169
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:170
 msgid "Copy skeleton files ..."
 msgstr "העתק קבצי שלד ..."
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:149
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:150
 msgid "Could not check out Git repository:"
 msgstr "לא ניתן היה לבדוק את מאגר Git:"
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:96
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:97
 msgid "Could not connect to 'postgres' database or create the database."
 msgstr "לא ניתן היה להתחבר למסד 'postgres' או ליצור את מסד הנתונים."
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:274
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:275
 msgid "Could not create the directory"
 msgstr "לא ניתן ליצור את הספרייה"
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:568
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:569
 msgid "Could not create the file:"
 msgstr "לא ניתן ליצור את הקובץ:"
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:93
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:94
 msgid "Could not create the schema in the database."
 msgstr "לא ניתן היה ליצור את הסכימה במסד הנתונים."
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:460
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:461
 msgid "Could not create the site directory"
 msgstr "לא ניתן היה ליצור את ספריית האתרים"
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:153
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:154
 msgid "Could not delete the site dir for the Git checkout:"
 msgstr "לא ניתן למחוק את אתר האתר לקופת Git:"
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:558
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:559
 msgid "Disk full creating:"
 msgstr "יצירת דיסק מלא:"
 
@@ -13590,7 +13590,7 @@ msgstr "אתר ריק, ללא תבניות וכו '."
 msgid "Enter a valid hostname like \"www.example.com\" or \"test.local\"."
 msgstr "הזן שם מארח חוקי כמו \"www.example.com\" או \"test.local\"."
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:210
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:211
 msgid "Force compile all Erlang files ..."
 msgstr "כפה לאסוף את כל קבצי Erlang ..."
 
@@ -13598,7 +13598,7 @@ msgstr "כפה לאסוף את כל קבצי Erlang ..."
 msgid "Git URL"
 msgstr "כתובת אתר של Git"
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:129
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:130
 msgid "Git checkout ..."
 msgstr "קופת Git ..."
 
@@ -13626,11 +13626,11 @@ msgstr "התחבר עם שם משתמש <b>Admin</b> וסיסמה"
 msgid "Make sure that this hostname has a valid DNS entry or is added to your <tt>/etc/hosts</tt> file."
 msgstr "ודא שלשם המארח הזה יש ערך DNS חוקי או שהוא נוסף לקובץ <tt>/ etc / hosts</tt>."
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:543
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:544
 msgid "No permission to create the site directory at:"
 msgstr "אין הרשאה ליצור את ספריית האתרים בכתובת:"
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:455
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:456
 msgid "Not allowed to create the site directory"
 msgstr "אסור ליצור את ספריית האתרים"
 
@@ -13663,7 +13663,7 @@ msgstr "חיבור למסד נתונים PostgreSQL"
 msgid "PostgreSQL database, username and password. The schema defaults to the site name filled in above."
 msgstr "מסד נתונים PostgreSQL, שם משתמש וסיסמה. ברירת המחדל של הסכימה הוא שם האתר שמולא למעלה."
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:49
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:50
 msgid "Resolving the hostname ..."
 msgstr "פותר את שם המארח ..."
 
@@ -13699,15 +13699,15 @@ msgstr "קובץ התצורה ב- <tt>priv/zotonic_site.config</tt> יוחלף �
 msgid "The default database for the schema is <b>{db}</b>."
 msgstr "מסד הנתונים המוגדר כברירת מחדל עבור הסכימה הוא <b>{db}</b>."
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:548
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:549
 msgid "The file or directory already exists:"
 msgstr "הקובץ או הספריה כבר קיימים:"
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:57
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:58
 msgid "The hostname is unknown, check your DNS or /etc/hosts file"
 msgstr "שם המארח אינו ידוע, בדוק את קובץ ה- DNS שלך או / etc / hosts"
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:553
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:554
 msgid "The parent directory does not exist:"
 msgstr "ספריית האב אינה קיימת:"
 
@@ -13719,15 +13719,15 @@ msgstr "היציאה חייבת להיות מספרית."
 msgid "The skeleton provides templates and content for a site."
 msgstr "השלד מספק תבניות ותוכן לאתר."
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:37
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:38
 msgid "There is already a file or directory named"
 msgstr "יש כבר קובץ או ספרייה בשם"
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:515
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:516
 msgid "This name is reserved"
 msgstr "שם זה שמור"
 
-#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:519
+#: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:520
 msgid "This name is taken by another Erlang module"
 msgstr "שם זה נלקח על ידי מודול אחר של Erlang"
 
