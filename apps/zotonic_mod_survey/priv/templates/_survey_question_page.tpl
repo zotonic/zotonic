@@ -134,7 +134,7 @@
 											text=[
 												_"Do you want to stop for now and continue later?",
 												"<br>",
-												_"Your progress has been saved. You can return later to finish and submit it."
+												_"Your answers will be saved so that you can return later to submit them."
 											]
 											ok=_"Stop and continue later"
 											cancel=_"Cancel"
