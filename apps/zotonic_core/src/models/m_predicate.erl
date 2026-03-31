@@ -496,12 +496,13 @@ filter_cat(Cat, Context) ->
     end.
 
 %% @doc Update the list of valid subject or object categories for a predicate.
--spec update_predicate_category(PredicateId, IsSubject, NewCatIds, Context) -> ok when
+-spec update_predicate_category(PredicateId, IsSubject, NewCats, Context) -> ok when
     PredicateId :: m_rsc:resource_id(),
     IsSubject :: boolean(),
-    NewCatIds :: [ m_rsc:resource_id() ],
+    NewCats :: [ m_rsc:resource() ],
     Context :: z:context().
-update_predicate_category(PredicateId, IsSubject, NewCatIds, Context) ->
+update_predicate_category(PredicateId, IsSubject, NewCats, Context) ->
+    NewCatIds = lists:filtermap(fun(Cat) -> filter_cat(Cat, Context) end, NewCats),
     CurrentIdsR = z_db:q("
         select category_id
         from predicate_category

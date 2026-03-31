@@ -331,12 +331,10 @@ maybe_force_update(K, V, Props, Module, Id, Options, _Context) ->
             Props
     end.
 
-manage_predicate_validfor(Id, CatPairs, _Options, Context) ->
+manage_predicate_validfor(PredicateId, CatPairs, _Options, Context) when is_integer(PredicateId) ->
     {Subjects, Objects} = lists:unzip(CatPairs),
-    Subjects1 = lists:usort(Subjects) -- [ undefined ],
-    Objects1 = lists:usort(Objects) -- [ undefined ],
-    m_predicate:update_predicate_category(Id, true, Subjects1, Context),
-    m_predicate:update_predicate_category(Id, false, Objects1, Context).
+    m_predicate:update_predicate_category(PredicateId, true, Subjects, Context),
+    m_predicate:update_predicate_category(PredicateId, false, Objects, Context).
 
 map_props(Props, Context) ->
     maps:map(
