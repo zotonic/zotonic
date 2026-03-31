@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2025 Marc Worrell
+%% @copyright 2025-2026 Marc Worrell
 %% @doc Observer behaviour for all notifications. Use this behaviour
 %% in your module file to allow type checking of your observers.
 %% @end
 
-%% Copyright 2025 Marc Worrell
+%% Copyright 2025-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -2994,6 +2994,44 @@ Return:
     QueryTerm :: #{ binary() => term() }.
 
 -optional_callbacks([ observe_search_query_term/2, pid_observe_search_query_term/3 ]).
+
+
+%% Normalize a text value for a search query.
+%% Type: first
+-doc("
+Normalize a search value for queries and indexing.
+An example is the normalization of texts by transliteration
+and removal of accents. Defaults for text values to `z_string:normalize/1`.
+
+Type:
+
+[first](/id/doc_developerguide_notifications#notification-first)
+
+Return:
+
+`any()` or `undefined`
+
+`#search_query_normalize_value{}` properties:
+
+*   term: `binary` or `undefined`
+*   type :: `atom`
+*   value: `any`
+").
+-callback observe_search_query_normalize_value(#search_query_normalize_value{}, z:context()) -> Result when
+    Result :: #search_sql_term{}
+            | QueryTerm
+            | [ QueryTerm ]
+            | undefined,
+    QueryTerm :: #{ binary() => term() }.
+-callback pid_observe_search_query_normalize_value(pid(), #search_query_normalize_value{}, z:context()) -> Result when
+    Result :: #search_sql_term{}
+            | QueryTerm
+            | [ QueryTerm ]
+            | undefined,
+    QueryTerm :: #{ binary() => term() }.
+
+-optional_callbacks([ observe_search_query_normalize_value/2, pid_observe_search_query_normalize_value/3 ]).
+
 
 %% An edge has been inserted.
 %% Note that the Context for this notification does not have the user who
