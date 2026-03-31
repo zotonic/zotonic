@@ -473,14 +473,10 @@ flush(Context) ->
     Objects :: [ m_rsc:resource() ],
     Context :: z:context().
 update_noflush(PredicateId, Subjects, Objects, Context) ->
-    SubjectIds0 = lists:filtermap(fun(Cat) -> filter_cat(Cat, Context) end, Subjects),
-    ObjectIds0 = lists:filtermap(fun(Cat) -> filter_cat(Cat, Context) end, Objects),
-    SubjectIds = lists:usort(SubjectIds0),
-    ObjectIds = lists:usort(ObjectIds0),
     ok = z_db:transaction(
         fun(Ctx) ->
-            update_predicate_category(PredicateId, true, SubjectIds, Ctx),
-            update_predicate_category(PredicateId, false, ObjectIds, Ctx),
+            update_predicate_category(PredicateId, true, Subjects, Ctx),
+            update_predicate_category(PredicateId, false, Objects, Ctx),
             ok
         end,
         Context).
