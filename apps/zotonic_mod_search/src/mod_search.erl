@@ -877,7 +877,11 @@ append_wildcard(_Text, <<>>) ->
 append_wildcard(_Text, <<"'xcvvcx'">>) ->
     <<>>;
 append_wildcard(Text, TsQ) ->
-    case is_wordchar(z_string:last_char(Text)) of
+    % Only append :* if both the input text ends with a word character
+    % and the tsquery ends with a lexeme token (i.e. ends with $').
+    % websearch_to_tsquery can return parenthesized expressions like
+    % ('foo' & 'bar') which would produce invalid syntax if :* is appended.
+    case is_wordchar(z_string:last_char(Text)) andalso binary:last(TsQ) =:= $' of
         true -> <<TsQ/binary, ":*">>;
         false -> TsQ
     end.
