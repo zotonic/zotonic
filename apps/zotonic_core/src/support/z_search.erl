@@ -244,7 +244,7 @@ default_offset_limit(Context) ->
 
 %% @doc Normalize a value for search queries and indexing. For text values
 %% the normalization defaults to filtering utf8 characters and then normalizing
-%% the text by removing diacritics, converting to lowercase and transliteraion.
+%% the text by removing diacritics, converting to lowercase and transliteration.
 %% For other types, the value is returned without conversion.
 -spec normalize_value(Term, Type, Value, Context) -> NormalizedValue when
     Term :: binary() | undefined,
