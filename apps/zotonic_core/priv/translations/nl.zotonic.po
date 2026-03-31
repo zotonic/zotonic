@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-03-30 16:40\n"
+"PO-Revision-Date: 2026-03-31 09:36\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -1866,7 +1866,7 @@ msgstr "Functie"
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:117
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:20
 msgid "Graph"
-msgstr "Grafiek"
+msgstr "Graaf"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:131
 msgid "Has connections with predicate"
@@ -3261,7 +3261,7 @@ msgstr "Bekijk verwijzende pagina's"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:77
 msgid "View connection graph"
-msgstr "Verbindingsgrafiek weergeven"
+msgstr "Verbindings-graaf weergeven"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:17
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:28
@@ -4849,7 +4849,7 @@ msgstr "Van categorie"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:12
 msgid "Graph overview for:"
-msgstr "Grafiekenoverzicht voor:"
+msgstr "Graaf-overzicht"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:8
 msgid "Help about predicates"
@@ -4895,7 +4895,7 @@ msgstr "Geen predicaten gevonden."
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:52
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:38
 msgid "No such page or page not visible."
-msgstr "Geen dergelijke pagina of pagina niet zichtbaar."
+msgstr "Dit soort pagina bestaat niet of is niet zichtbaar"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:21
 msgid "Object"
@@ -4912,7 +4912,7 @@ msgstr "Of klik <strong>Verwijder alle connecties</strong> om alle connecties me
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:3
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:50
 msgid "Page connections graph"
-msgstr "Grafiek paginaconnecties"
+msgstr "Graaf van paginaconnecties"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:49
 msgid "Page connections overview"
@@ -4964,7 +4964,7 @@ msgstr "Alle uitgaande verbindingen weergeven"
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:93
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:116
 msgid "Show graph of all connections"
-msgstr "Toon grafiek van alle verbindingen"
+msgstr "Graaf van alle verbindingen weergeven"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:98
 msgid "Some predicates are mostly for internal purposes. Check this if you don’t want to show this predicate on the <em>Connected to</em> list."
@@ -5008,7 +5008,7 @@ msgstr "Dit wordt gebruikt om de predikaten te filteren in het paneel <i>Paginav
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:131
 msgid "This page has too many connections to display all at once. Only the first 300 incoming or outgoing connections are shown."
-msgstr "Deze pagina heeft te veel verbindingen om allemaal tegelijk weer te geven. Alleen de eerste 300 inkomende of uitgaande verbindingen worden getoond."
+msgstr "Deze pagina heeft te veel verbindingen om allemaal tegelijk weer te geven. Alleen de eerste 300 inkomende of uitgaande verbindingen worden weergegeven."
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:21
 msgid "This predicate can be used between two pages of the following categories."
@@ -7190,7 +7190,7 @@ msgstr "Bindingen"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:202
 msgid "Calculate and visualize a dependency graph of all templates."
-msgstr "Bereken en visualiseer een afhankelijkheidsgrafiek van alle sjablonen."
+msgstr "Bereken en visualiseer een dependency-graaf van alle sjablonen."
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:43
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:906
@@ -7290,7 +7290,7 @@ msgstr "Afhankelijkheidsgrafiek van alle sjablonen"
 
 #: zotonic_mod_development/priv/templates/_development_template_graph.tpl:3
 msgid "Dependency graph of all templates. Only template includes using a direct string value for the template name are shown."
-msgstr "Afhankelijkheidsgrafiek van alle sjablonen. Alleen sjablonen met een directe tekenreekswaarde voor de sjabloonnaam worden getoond."
+msgstr "Dependency-graaf van alle sjablonen. Alleen sjablonen met een onmiddelijke string-waarde voor de sjabloonnaam worden getoond."
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:66
 msgid "Dependency graph of all traced templates. All includes are shown."
@@ -7448,7 +7448,7 @@ msgstr "Lijn"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:193
 msgid "Live dependency graph of templates"
-msgstr "Live afhankelijkheidsgrafiek van sjablonen"
+msgstr "Live dependency-graaf van sjablonen"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:74
 msgid "Live reload of changed CSS files. Reload page on change of templates or JavaScript."
@@ -7608,7 +7608,7 @@ msgstr "Render deze pagina en traceer de sjablonen"
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:22
 msgid "Rerun graph"
-msgstr "Grafiek opnieuw berekenen"
+msgstr "Graaf opnieuw berekenen"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:112
 msgid "Set the class <tt>environment-development</tt> on the <tt>&lt;html&gt;</tt> element of your pages to see the server log in the browser console.<br>In development, admin pages always show the server log in the javascript console."
@@ -7785,7 +7785,7 @@ msgstr "Traceersjablonen"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:195
 msgid "Traces all templates for the current session-id, or all sessions, and renders them as a graph."
-msgstr "Traceert alle sjablonen voor de huidige sessie-ID, of alle sessies, en geeft deze weer als een grafiek."
+msgstr "Traceert alle sjablonen voor de huidige sessie-ID, of alle sessies, en geeft deze weer als een graaf."
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:18
 msgid "Traces automatically stop if this page is not visited during more than 10 minutes."
