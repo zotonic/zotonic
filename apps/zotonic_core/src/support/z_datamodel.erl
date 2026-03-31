@@ -1,10 +1,10 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2009-2023 Arjan Scherpenisse
+%% @copyright 2009-2026 Arjan Scherpenisse
 %% @doc Installing parts of the zotonic datamodel. Installs
 %% predicates, categories and default resources.
 %% @end
 
-%% Copyright 2009-2023 Arjan Scherpenisse
+%% Copyright 2009-2026 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -66,13 +66,23 @@ manage(Module, Datamodel, Options, Context) ->
     }),
     AdminContext = z_acl:sudo(Context),
     jobs:run(manage_module_jobs, fun() ->
+        z_memo:disable(),
         [ manage_category(Module, Cat, Options, AdminContext)   || Cat    <- Datamodel#datamodel.categories ],
+        flush(AdminContext),
         [ manage_predicate(Module, Pred, Options, AdminContext) || Pred   <- Datamodel#datamodel.predicates ],
+        flush(AdminContext),
         [ manage_resource(Module, R, Options, AdminContext)     || R      <- Datamodel#datamodel.resources ],
+        flush(AdminContext),
         [ manage_medium(Module, Medium, Options, AdminContext)  || Medium <- Datamodel#datamodel.media ],
-        [ manage_edge(Module, Edge, Options, AdminContext)      || Edge   <- Datamodel#datamodel.edges ]
+        flush(AdminContext),
+        [ manage_edge(Module, Edge, Options, AdminContext)      || Edge   <- Datamodel#datamodel.edges ],
+        flush(AdminContext)
     end),
     ok.
+
+flush(Context) ->
+    z_depcache:flush(Context),
+    z_memo:flush(Context).
 
 manage_medium(Module, {Name, Props}, Options, Context) ->
     manage_resource(Module, {Name, media, Props}, Options, Context);
@@ -169,7 +179,7 @@ manage_resource(Module, {Name, Category, Props0}, Options, Context) ->
             Props = map_props(Props0, Context),
             case m_rsc:name_to_id(Name, Context) of
                 {ok, Id} ->
-                    case m_rsc:p_no_acl(Id, installed_by, Context) of
+                    case m_rsc:p_no_acl(Id, <<"installed_by">>, Context) of
                         ModuleB ->
                             NewProps = update_new_props(Module, Id, Props, Options, Context),
                             m_rsc_update:update(
@@ -300,7 +310,7 @@ map_props(Props) when is_list(Props) ->
     z_props:from_props(Props).
 
 maybe_force_update(K, V, Props, Module, Id, Options, _Context) ->
-    case proplists:get_value(force_update, Options, false) of
+    case proplists:get_bool(force_update, Options) of
         true ->
             ?LOG_NOTICE(#{
                 text => <<"Managed resource property changed in database, updating.">>,
@@ -321,34 +331,12 @@ maybe_force_update(K, V, Props, Module, Id, Options, _Context) ->
             Props
     end.
 
-
-manage_predicate_validfor(_Id, [], _Options, _Context) ->
-    ok;
-manage_predicate_validfor(Id, [{SubjectCat, ObjectCat} | Rest], Options, Context) ->
-    F = fun(S, I, C) ->
-        case z_db:q("SELECT 1 FROM predicate_category WHERE predicate_id = $1 AND is_subject = $2 AND category_id = $3", [S, I, C], Context) of
-            [{1}] ->
-                ok;
-            _ ->
-                z_db:q("insert into predicate_category (predicate_id, is_subject, category_id) values ($1, $2, $3)", [S, I, C], Context),
-                ok
-        end
-    end,
-    case SubjectCat of
-        undefined -> nop;
-        _ ->
-            {ok, SubjectCatId} = m_rsc:name_to_id(SubjectCat, Context),
-            F(Id, true, SubjectCatId)
-    end,
-    case ObjectCat of
-        undefined -> nop;
-        _ ->
-            {ok, ObjectCatId} = m_rsc:name_to_id(ObjectCat, Context),
-            F(Id, false, ObjectCatId)
-    end,
-    manage_predicate_validfor(Id, Rest, Options, Context).
-
-
+manage_predicate_validfor(Id, CatPairs, _Options, Context) ->
+    {Subjects, Objects} = lists:unzip(CatPairs),
+    Subjects1 = lists:usort(Subjects) -- [ undefined ],
+    Objects1 = lists:usort(Objects) -- [ undefined ],
+    m_predicate:update_predicate_category(Id, Subjects1, true, Context),
+    m_predicate:update_predicate_category(Id, Objects1, false, Context).
 
 map_props(Props, Context) ->
     maps:map(

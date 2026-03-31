@@ -89,7 +89,9 @@ Available Model API Paths
     update_noflush/4,
     object_category/2,
     subject_category/2,
-    for_subject/2
+    for_subject/2,
+
+    update_predicate_category/4
 ]).
 
 -include_lib("zotonic.hrl").
