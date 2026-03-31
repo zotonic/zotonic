@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-03-31 09:36\n"
+"PO-Revision-Date: 2026-03-31 11:18\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -4895,7 +4895,7 @@ msgstr "Geen predicaten gevonden."
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:52
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:38
 msgid "No such page or page not visible."
-msgstr "Dit soort pagina bestaat niet of is niet zichtbaar"
+msgstr "Deze pagina bestaat niet of is niet zichtbaar."
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:21
 msgid "Object"
