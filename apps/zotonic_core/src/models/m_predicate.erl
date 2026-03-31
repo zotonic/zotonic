@@ -502,7 +502,8 @@ filter_cat(Cat, Context) ->
     NewCats :: [ m_rsc:resource() ],
     Context :: z:context().
 update_predicate_category(PredicateId, IsSubject, NewCats, Context) ->
-    NewCatIds = lists:filtermap(fun(Cat) -> filter_cat(Cat, Context) end, NewCats),
+    NewCatIds0 = lists:filtermap(fun(Cat) -> filter_cat(Cat, Context) end, NewCats),
+    NewCatIds = lists:usort(NewCatIds0),
     CurrentIdsR = z_db:q("
         select category_id
         from predicate_category
