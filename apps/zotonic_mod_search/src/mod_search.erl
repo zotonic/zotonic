@@ -860,7 +860,7 @@ to_tsquery_1(Text, Context) when is_binary(Text) ->
     Stemmer = z_pivot_rsc:stemmer_language(Context),
     Text1 = cleanup_text(Text),
     [{TsQuery}] = z_db:q("select websearch_to_tsquery($2, $1)", [Text1, Stemmer], Context),
-    fixup_tsquery(z_convert:to_list(Stemmer), append_wildcard(Text, TsQuery)).
+    fixup_tsquery(z_convert:to_list(Stemmer), append_wildcard(Text1, TsQuery)).
 
 cleanup_text(Text) ->
     Text1 = z_string:sanitize_utf8(Text),
