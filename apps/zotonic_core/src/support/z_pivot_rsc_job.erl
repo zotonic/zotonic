@@ -229,6 +229,8 @@ pivot_resource_1(Id, Lang, Context) ->
                     ContextTz = z_context:set_tz(Tz, Context),
                     DateStart = tz_shift_all_day(IsAllDay, DateStart1, ContextTz),
                     DateEnd = tz_shift_all_day(IsAllDay, DateEnd1, ContextTz),
+                    PivotTitle0 = truncate(Title, 100),
+                    PivotTitle = z_search:normalize_value(<<"pivot_title">>, text, PivotTitle0, Context),
 
                     % Make psql tsv texts from the A..D blocks
                     StemmerLanguage = stemmer_language(Context),
@@ -257,7 +259,7 @@ pivot_resource_1(Id, Lang, Context) ->
                         <<"pivot_date_end">> => DateEnd,
                         <<"pivot_date_start_month_day">> => DateStartMonthDay,
                         <<"pivot_date_end_month_day">> => DateEndMonthDay,
-                        <<"pivot_title">> => truncate(z_string:normalize(Title), 100),
+                        <<"pivot_title">> => PivotTitle,
                         <<"pivot_location_lat">> => LocationLat,
                         <<"pivot_location_lng">> => LocationLng
                     },
@@ -603,4 +605,3 @@ stemmer_language_config(Context) ->
                 {error, not_a_language} -> z_language:default_language(Context)
             end
     end.
-
