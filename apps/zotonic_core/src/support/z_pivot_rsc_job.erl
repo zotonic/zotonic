@@ -418,7 +418,7 @@ to_integer(Text) ->
         Text1 -> z_convert:to_integer(Text1)
     end.
 
-%% @doc Preprocess a text before making in into a TSV. Ensure the text is valid utf8, replace newlines
+%% @doc Preprocess a text before making it into a TSV. Ensure the text is valid utf8, replace newlines
 %% and tabs with a space, and trim the resulting text.
 -spec cleanup_tsv_text(binary()) -> binary().
 cleanup_tsv_text(Text) when is_binary(Text) ->
