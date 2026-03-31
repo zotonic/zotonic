@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2022-2024 Marc Worrell
+%% @copyright 2022-2026 Marc Worrell
 %% @doc Run a resource pivot job.
 %% @end
 
-%% Copyright 2022-2024 Marc Worrell
+%% Copyright 2022-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -70,7 +70,8 @@ pivot_resource_update(Id, UpdateProps, RawProps, Context) ->
         UpdateProps,
         [ <<"date_start">>, <<"date_end">>, <<"title">> ]),
     {DateStart, DateEnd} = pivot_date(Props),
-    PivotTitle = truncate(get_pivot_title(Props), 100),
+    PivotTitle0 = truncate(get_pivot_title(Props), 100),
+    PivotTitle = z_search:normalize_value(<<"pivot_title">>, text, PivotTitle0, Context),
     IsAllDay0 = case maps:find(<<"date_is_all_day">>, Props) of
         {ok, V} -> V;
         error -> maps:get(<<"date_is_all_day">>, RawProps, undefined)
@@ -231,10 +232,10 @@ pivot_resource_1(Id, Lang, Context) ->
 
                     % Make psql tsv texts from the A..D blocks
                     StemmerLanguage = stemmer_language(Context),
-                    {SqlA, ArgsA} = to_tsv(TextA, $A, [], StemmerLanguage),
-                    {SqlB, ArgsB} = to_tsv(TextB, $B, ArgsA, StemmerLanguage),
-                    {SqlC, ArgsC} = to_tsv(TextC, $C, ArgsB, StemmerLanguage),
-                    {SqlD, ArgsD} = to_tsv(TextD, $D, ArgsC, StemmerLanguage),
+                    {SqlA, ArgsA} = to_tsv(TextA, $A, [], StemmerLanguage, Context),
+                    {SqlB, ArgsB} = to_tsv(TextB, $B, ArgsA, StemmerLanguage, Context),
+                    {SqlC, ArgsC} = to_tsv(TextC, $C, ArgsB, StemmerLanguage, Context),
+                    {SqlD, ArgsD} = to_tsv(TextD, $D, ArgsC, StemmerLanguage, Context),
 
                     % Make the text and object-ids vectors for the pivot
                     TsvSql = [SqlA, " || ", SqlB, " || ", SqlC, " || ", SqlD],
@@ -392,13 +393,13 @@ check_datetime(_) ->
 
 
 %% Make the setweight(to_tsvector()) parts of the update statement
-to_tsv(Text, Level, Args, StemmingLanguage) when is_binary(Text) ->
+to_tsv(Text, Level, Args, StemmingLanguage, Context) when is_binary(Text) ->
     case cleanup_tsv_text(z_html:unescape(z_html:strip(Text))) of
         <<>> ->
             {"tsvector('')", Args};
         TsvText ->
             N = length(Args) + 1,
-            TsvText1 = z_string:normalize(TsvText),
+            TsvText1 = z_search:normalize_value(<<"pivot_tsv">>, text, TsvText, Context),
             Truncated = z_string:truncate(TsvText1, ?MAX_TSV_LEN, <<>>),
             Args1 = Args ++ [Truncated],
             {["setweight(to_tsvector('pg_catalog.",StemmingLanguage,"', $",integer_to_list(N),"), '",Level,"')"], Args1}
