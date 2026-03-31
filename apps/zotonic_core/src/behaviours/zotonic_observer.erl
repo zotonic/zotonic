@@ -3017,7 +3017,7 @@ Return:
 *   type :: `atom`
 *   value: `any`
 ").
--callback observe_search_query_normalize_valuem(#search_query_normalize_value{}, z:context()) -> Result when
+-callback observe_search_query_normalize_value(#search_query_normalize_value{}, z:context()) -> Result when
     Result :: #search_sql_term{}
             | QueryTerm
             | [ QueryTerm ]
