@@ -335,8 +335,8 @@ manage_predicate_validfor(Id, CatPairs, _Options, Context) ->
     {Subjects, Objects} = lists:unzip(CatPairs),
     Subjects1 = lists:usort(Subjects) -- [ undefined ],
     Objects1 = lists:usort(Objects) -- [ undefined ],
-    m_predicate:update_predicate_category(Id, Subjects1, true, Context),
-    m_predicate:update_predicate_category(Id, Objects1, false, Context).
+    m_predicate:update_predicate_category(Id, true, Subjects1, Context),
+    m_predicate:update_predicate_category(Id, false, Objects1, Context).
 
 map_props(Props, Context) ->
     maps:map(
