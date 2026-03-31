@@ -336,8 +336,10 @@ name_to_id(Name, Context) ->
         _ -> {error, {unknown_predicate, Name}}
     end.
 
-%% @doc Return the definition of the predicate
--spec get( atom() | m_rsc:resource_id() | string() | binary(), z:context() ) -> list() | undefined.
+%% @doc Return the definition of the predicate.
+-spec get(Predicate, Context) -> proplists:proplist() | undefined when
+    Predicate :: atom() | m_rsc:resource_id() | string() | binary(),
+    Context :: z:context().
 get(PredId, Context) when is_integer(PredId) ->
     case id_to_name(PredId, Context) of
         {error, _} -> undefined;
@@ -372,24 +374,32 @@ get(Pred, Context) ->
             proplists:get_value(Pred, all(Context))
     end.
 
-%% @doc Return the category ids that are valid as objects
-objects(Id, Context) ->
+%% @doc Return the category ids that are valid as objects of the predicate.
+-spec objects(PredicateId, Context) -> [ CategoryId ] when
+    PredicateId :: m_rsc:resource_id(),
+    Context :: z:context(),
+    CategoryId :: m_rsc:resource_id().
+objects(PredicateId, Context) ->
     Objects = z_db:q("
         select category_id
         from predicate_category
         where predicate_id = $1
           and is_subject = false",
-        [Id], Context),
+        [PredicateId], Context),
     [R || {R} <- Objects].
 
-%% @doc Return the category ids that are valid as subjects
-subjects(Id, Context) ->
+%% @doc Return the category ids that are valid as subjects of the predicate.
+-spec subjects(PredicateId, Context) -> [ CategoryId ] when
+    PredicateId :: m_rsc:resource_id(),
+    Context :: z:context(),
+    CategoryId :: m_rsc:resource_id().
+subjects(PredicateId, Context) ->
     Subjects = z_db:q("
         select category_id
         from predicate_category
         where predicate_id = $1
           and is_subject = true",
-        [Id], Context),
+        [PredicateId], Context),
     [R || {R} <- Subjects].
 
 %% @doc Return the list of all predicates
@@ -418,24 +428,30 @@ all(Context) ->
     z_depcache:memo(F, predicate, ?DAY, Context).
 
 %% @doc Insert a new predicate, sets some defaults.
--spec insert(binary()|list(), z:context()) -> {ok, integer()} | {error, any()}.
+-spec insert(Title, Context) -> {ok, m_rsc:resource_id()} | {error, term()} when
+    Title :: binary() | string(),
+    Context :: z:context().
 insert(Title, Context) ->
-    Name = z_string:to_name(Title),
-    Uri  = "http://zotonic.net/predicate/" ++ Name,
-    Props = #{
-        <<"title">> => Title,
-        <<"name">> => Name,
-        <<"uri">> => Uri,
-        <<"category">> => predicate,
-        <<"group">> => admins,
-        <<"is_published">> => true
-    },
-    case m_rsc:insert(Props, Context) of
-        {ok, Id} ->
-            flush(Context),
-            {ok, Id};
-        {error, Reason} ->
-            {error, Reason}
+    Title1 = z_string:trim(Title),
+    case z_string:to_name(Title1) of
+        <<>> ->
+            {error, invalid_title};
+        Name ->
+            Uri  = iolist_to_binary(["http://zotonic.net/predicate/", Name]),
+            Props = #{
+                <<"title">> => Title1,
+                <<"name">> => Name,
+                <<"uri">> => Uri,
+                <<"category">> => predicate,
+                <<"is_published">> => true
+            },
+            case m_rsc:insert(Props, Context) of
+                {ok, PredicateId} ->
+                    flush(Context),
+                    {ok, PredicateId};
+                {error, _Reason} = Error ->
+                    Error
+            end
     end.
 
 
@@ -444,35 +460,74 @@ flush(Context) ->
     z_depcache:flush(predicate, Context).
 
 
-%% @doc Reset the list of valid subjects and objects.
--spec update_noflush(integer(), list(), list(), z:context()) -> ok.
-update_noflush(Id, Subjects, Objects, Context) ->
-    SubjectIds0 = [m_rsc:rid(N, Context) || N <- Subjects, N /= [], N /= <<>>],
-    ObjectIds0 = [m_rsc:rid(N, Context) || N <- Objects, N /= [], N /= <<>>],
-    SubjectIds = [N || N <- SubjectIds0, N =/= undefined],
-    ObjectIds = [ N || N <- ObjectIds0, N =/= undefined ],
+%% @doc Reset the list of valid subjects and objects. Do not flush the caches.
+%% This is part of the resource updates, when saving a resource. The caches
+%% should be flushed afterwards.
+-spec update_noflush(PredicateId, Subjects, Objects, Context) -> ok when
+    PredicateId :: m_rsc:resource_id(),
+    Subjects :: [ m_rsc:resource() ],
+    Objects :: [ m_rsc:resource() ],
+    Context :: z:context().
+update_noflush(PredicateId, Subjects, Objects, Context) ->
+    SubjectIds = lists:filtermap(fun(Cat) -> filter_cat(Cat, Context) end, Subjects),
+    ObjectIds = lists:filtermap(fun(Cat) -> filter_cat(Cat, Context) end, Objects),
     ok = z_db:transaction(
         fun(Ctx) ->
-            update_predicate_category(Id, true, SubjectIds, Ctx),
-            update_predicate_category(Id, false, ObjectIds, Ctx),
+            update_predicate_category(PredicateId, true, SubjectIds, Ctx),
+            update_predicate_category(PredicateId, false, ObjectIds, Ctx),
             ok
         end,
         Context).
 
-update_predicate_category(Id, IsSubject, CatIds, Context) ->
-    OldIdsR = z_db:q("select category_id from predicate_category where predicate_id = $1 and is_subject = $2",
-        [Id, IsSubject], Context),
-    OldIds = [N || {N} <- OldIdsR],
-    % Delete the ones that are not there anymore
-    [z_db:q("delete from predicate_category where predicate_id = $1 and category_id = $2 and is_subject = $3",
-        [Id, OldId, IsSubject], Context)
-        || OldId <- OldIds, not lists:member(OldId, CatIds)
-    ],
-    [z_db:insert(predicate_category, [{predicate_id, Id}, {category_id, NewId}, {is_subject, IsSubject}],
-        Context)
-        || NewId <- CatIds, not lists:member(NewId, OldIds)
-    ],
-    ok.
+filter_cat(Cat, Context) ->
+    case m_rsc:rid(Cat, Context) of
+        undefined -> false;
+        CatId ->
+            case m_rsc:is_a(CatId, category, Context) of
+                true -> {true, CatId};
+                false -> false
+            end
+    end.
+
+%% @doc Update the list of valid subject or object categories for a predicate.
+-spec update_predicate_category(PredicateId, IsSubject, NewCatIds, Context) -> ok when
+    PredicateId :: m_rsc:resource_id(),
+    IsSubject :: boolean(),
+    NewCatIds :: [ m_rsc:resource_id() ],
+    Context :: z:context().
+update_predicate_category(PredicateId, IsSubject, NewCatIds, Context) ->
+    CurrentIdsR = z_db:q("
+        select category_id
+        from predicate_category
+        where predicate_id = $1
+          and is_subject = $2",
+        [PredicateId, IsSubject],
+        Context),
+    CurrentIds = [ N || {N} <- CurrentIdsR ],
+    % Delete categories that are no longer valid.
+    case CurrentIds -- NewCatIds of
+        [] -> ok;
+        DelIds ->
+            z_db:q("
+                delete from predicate_category
+                where predicate_id = $1
+                  and is_subject = $2
+                  and category_id = ANY($3)",
+                [PredicateId, IsSubject, DelIds],
+                Context)
+    end,
+    % Insert new categories that are not yet in the list.
+    lists:foreach(
+        fun(NewCatId) ->
+            z_db:q("
+                insert into predicate_category (predicate_id, is_subject, category_id)
+                values ($1, $2, $3)
+                on conflict (predicate_id, is_subject, category_id)
+                do nothing",
+                [PredicateId, IsSubject, NewCatId],
+                Context)
+        end,
+        NewCatIds -- CurrentIds).
 
 
 %% @doc Return all the valid categories for objects.
@@ -518,6 +573,10 @@ subject_category(Id, Context) ->
 
 %% @doc Return the list of predicates that are valid for the given resource id.
 %% Append all predicates that have no restrictions.
+-spec for_subject(Id, Context) -> Predicates when
+    Id :: m_rsc:resource_id(),
+    Context :: z:context(),
+    Predicates :: [ m_rsc:resource_id() ].
 for_subject(Id, Context) ->
     F = fun() ->
         {L, R} = cat_bounds(Context),
@@ -550,10 +609,13 @@ for_subject(Id, Context) ->
     z_depcache:memo(F, {predicate_for_subject, Id}, ?WEEK, [predicate, category, Id], Context).
 
 %% @doc Return the id of the predicate category
--spec cat_id(#context{}) -> integer().
+-spec cat_id(#context{}) -> m_rsc:resource_id().
 cat_id(Context) ->
     {ok, Id} = m_category:name_to_id(predicate, Context),
     Id.
 
+%% @doc Return the left and right bounds of the predicate category in the category tree.
+%% This is used to filter predicates in the database queries.
 -spec cat_bounds(#context{}) -> {integer(), integer()}.
-cat_bounds(Context) -> m_category:get_range(cat_id(Context), Context).
+cat_bounds(Context) ->
+    m_category:get_range(cat_id(Context), Context).
