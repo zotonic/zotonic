@@ -808,8 +808,8 @@ characters_to_binary(S) when is_list(S) ->
                 in => zotonic_mod_search,
                 text => <<"Error in characters_to_binary/1: incomplete UTF-8 sequence">>,
                 result => error,
-                input => S,
-                remaining => R
+                input => z_string:truncatechars(S, 80, <<"...">>),
+                remaining => z_string:truncatechars(R, 80, <<"...">>)
             }),
             z_string:sanitize_utf8(B);
         {error, B, R} ->
@@ -817,8 +817,8 @@ characters_to_binary(S) when is_list(S) ->
                 in => zotonic_mod_search,
                 text => <<"Error in characters_to_binary/1: illegal UTF-8 sequence">>,
                 result => error,
-                input => S,
-                remaining => R
+                input => z_string:truncatechars(S, 80, <<"...">>),
+                remaining => z_string:truncatechars(R, 80, <<"...">>)
             }),
             B;
         B when is_binary(B) ->
@@ -858,13 +858,9 @@ to_tsquery(Text, Context) when is_list(Text) ->
 
 to_tsquery_1(Text, Context) when is_binary(Text) ->
     Stemmer = z_pivot_rsc:stemmer_language(Context),
-    Text1 = cleanup_text(Text),
+    Text1 = z_search:normalize_value(<<"tsquery">>, text, Text, Context),
     [{TsQuery}] = z_db:q("select websearch_to_tsquery($2, $1)", [Text1, Stemmer], Context),
     fixup_tsquery(z_convert:to_list(Stemmer), append_wildcard(Text1, TsQuery)).
-
-cleanup_text(Text) ->
-    Text1 = z_string:sanitize_utf8(Text),
-    z_string:normalize(Text1).
 
 is_separator(C) when C < $0 -> true;
 is_separator(C) when C >= $0, C =< $9 -> false;

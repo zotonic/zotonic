@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2025 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Search the database, interfaces to specific search routines.
 %% @end
 
-%% Copyright 2009-2025 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -43,7 +43,9 @@
     reformat_sql_query/3,
     concat_sql_query/2,
 
-    default_pagelen/1
+    default_pagelen/1,
+
+    normalize_value/4
 ]).
 
 % The tuple format is deprecated. Use separate binary search term with a map.
@@ -238,6 +240,33 @@ default_pagelen(Context) ->
 -spec default_offset_limit( z:context() ) -> search_offset().
 default_offset_limit(Context) ->
     {1, default_pagelen(Context)}.
+
+
+%% @doc Normalize a value for search queries and indexing. For text values
+%% the normalization defaults to filtering utf8 characters and then normalizing
+%% the text by removing diacritics, converting to lowercase and transliteraion.
+%% For other types, the value is returned without conversion.
+-spec normalize_value(Term, Type, Value, Context) -> NormalizedValue when
+    Term :: binary() | undefined,
+    Type :: atom(),
+    Value :: term(),
+    Context :: z:context(),
+    NormalizedValue :: term().
+normalize_value(Term, Type, Value, Context) ->
+    case z_notifier:first(#search_query_normalize_value{
+            term = Term,
+            type = Type,
+            value = Value
+        }, Context)
+    of
+        undefined when Type =:= text ->
+            Text = z_string:sanitize_utf8(Value),
+            z_string:normalize(Text);
+        undefined ->
+            Value;
+        NormalizedValue ->
+            NormalizedValue
+    end.
 
 
 %% @doc Find the term value of a named argument in a query terms list or map.
