@@ -27,7 +27,7 @@ do
     -e "s/zotonic_fileindexer,$/{zotonic_fileindexer, \"$VERSION\"},/" \
     -e "s/zotonic_filewatcher,$/{zotonic_filewatcher, \"$VERSION\"},/" \
     -e "s/zotonic_launcher,$/{zotonic_launcher, \"$VERSION\"},/" \
-    -e "s/\(zotonic_mod_[a-z_]*\),$/{\1, \"$VERSION\"},/" \
+    -e "s/\(zotonic_mod_[a-z0-9_]*\),$/{\1, \"$VERSION\"},/" \
     $c
 
     sed -i.bck \
@@ -40,7 +40,7 @@ do
     -e "s/zotonic_fileindexer$/{zotonic_fileindexer, \"$VERSION\"}/" \
     -e "s/zotonic_filewatcher$/{zotonic_filewatcher, \"$VERSION\"}/" \
     -e "s/zotonic_launcher$/{zotonic_launcher, \"$VERSION\"}/" \
-    -e "s/\(zotonic_mod_[a-z_]*\)$/{\1, \"$VERSION\"}/" \
+    -e "s/\(zotonic_mod_[a-z0-9_]*\)$/{\1, \"$VERSION\"}/" \
     $c
 
     sed -i.bck \
@@ -53,7 +53,7 @@ do
     -e "s/zotonic_fileindexer, *\".*\"/zotonic_fileindexer, \"$VERSION\"/" \
     -e "s/zotonic_filewatcher, *\".*\"/zotonic_filewatcher, \"$VERSION\"/" \
     -e "s/zotonic_launcher, *\".*\"/zotonic_launcher, \"$VERSION\"/" \
-    -e "s/\(zotonic_mod_[a-z_]*\), *\".*\"/\1, \"$VERSION\"/" \
+    -e "s/\(zotonic_mod_[a-z0-9_]*\), *\".*\"/\1, \"$VERSION\"/" \
     $c
 done
 
