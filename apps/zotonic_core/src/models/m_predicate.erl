@@ -438,6 +438,8 @@ insert(Title, Context) ->
     case z_string:to_name(Title1) of
         <<>> ->
             {error, invalid_title};
+        <<"_">> ->
+            {error, invalid_title};
         Name ->
             Uri  = iolist_to_binary(["http://zotonic.net/predicate/", Name]),
             Props = #{
