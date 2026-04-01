@@ -73,6 +73,24 @@ This module handles the following notifier callbacks:
 - `observe_search_query`: Provide module-specific search query handlers with ACL-aware filtering.
 - `observe_tick_1h`: Delete expired log records during hourly maintenance.
 
+UI Log
+------
+
+Browser-side UI errors can be posted to this module and are stored in the `log_ui`
+table for later inspection in the admin.
+
+To keep a sudden flood of client-side errors from overloading the site, incoming UI
+events are first written to an in-memory ringbuffer with a fixed size. This means
+the logging path stays bounded during overload: when the buffer fills up, older
+buffered messages are overwritten instead of allowing unbounded growth in work or
+memory usage.
+
+To reduce noise, near-simultaneous duplicate UI errors are also dropped for a short
+period. The duplicate detection key is based on the error `type`, `message`, `file`,
+and `line`, specifically so that the same site problem reported by many different
+users is coalesced into a single logged event even when user ids, user agents, or
+other request-specific values differ.
+
 See also
 
 For regular application logging, use [Logger](/id/doc_developerguide_logging#dev-logging) instead.").
@@ -571,6 +589,7 @@ drain_ui_log(Buffer, Context, N, Count) ->
 
 maybe_log_ui_event(Event, UserId, Peer, State) ->
     State1 = maybe_reset_ui_dedup(State),
+    IsDedupEmpty = ets:first(State1#state.ui_dedup) =:= '$end_of_table',
     LogEvent = #{
         event => Event,
         user_id => UserId,
@@ -586,6 +605,7 @@ maybe_log_ui_event(Event, UserId, Peer, State) ->
                     {{error, ignored}, State1};
                 _Pid ->
                     ok = ringbuffer:write(ui_log_ringbuffer(State1#state.site), LogEvent),
+                    maybe_request_immediate_ui_log_drain(IsDedupEmpty, State1#state.site),
                     {ok, State1}
             end
     end.
@@ -627,6 +647,17 @@ drop_pending_drain_ui_log_messages() ->
     after 0 ->
         ok
     end.
+
+maybe_request_immediate_ui_log_drain(true, Site) ->
+    Context = z_acl:sudo(z_context:new(Site)),
+    case m_site:environment(Context) of
+        development ->
+            gen_server:cast(self(), drain_ui_log);
+        _ ->
+            ok
+    end;
+maybe_request_immediate_ui_log_drain(false, _Site) ->
+    ok.
 
 %% @private Check the health of the db pool. When usage is to high a warning will be
 %% put in the log. The warning is deduplicated every hour.
