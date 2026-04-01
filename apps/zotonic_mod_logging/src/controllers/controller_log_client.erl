@@ -24,8 +24,8 @@ Controller to log UI errors and events.
 The user-agent can post JSON events to this controller. The events will be logged
 in the admin-ui log and can be viewed in the admin interface.
 
-Rate limiting is applied at the logger level, the events themselves are added to
-a ring buffer to prevent overload of the loggers.
+Events are collected in a ring buffer with de-duplication and periodic draining
+to the admin-ui log to prevent overload.
 ").
 
 -author("Marc Worrell <marc@worrell.nl>").
