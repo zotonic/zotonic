@@ -37,8 +37,6 @@ to the admin-ui log to prevent overload.
     process/4
 ]).
 
-% -include_lib("zotonic_core/include/zotonic.hrl").
-
 % Default max body length (50KB) for HTTP log requests.
 -define(MAX_BODY_LENGTH, 50*1024).
 
