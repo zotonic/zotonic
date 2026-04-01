@@ -193,9 +193,9 @@ pid_observe_tick_1m(Pid, tick_1m, _Context) ->
 observe_tick_1s(tick_1s, Context) ->
     case z_module_manager:whereis(?MODULE, Context) of
         {ok, Pid} ->
-            gen_server:call(Pid, drain_ui_log);
+            gen_server:cast(Pid, drain_ui_log);
         {error, _} ->
-            0
+            ok
     end.
 
 observe_tick_1h(tick_1h, Context) ->
@@ -399,9 +399,6 @@ handle_call({log_client_start, ClientId, ClientTopic}, _From, #state{ site = Sit
         log_client_pong = z_datetime:timestamp()
     },
     {reply, ok, State1};
-handle_call(drain_ui_log, _From, #state{ site = Site } = State) ->
-    {Count, State1} = drain_ui_log(Site, State),
-    {reply, Count, State1};
 handle_call(log_client_status, _From, State) ->
     Now = z_datetime:timestamp(),
     Status = #{
@@ -453,6 +450,10 @@ handle_cast({log_client_pong, PongClientId, false}, #state{ log_client_id = Clie
 handle_cast({log_client_pong, _, _}, State) ->
     {noreply, State};
 
+handle_cast(drain_ui_log, #state{ site = Site } = State) ->
+    {_Count, State1} = drain_ui_log(Site, State),
+    {noreply, State1};
+
 %% @doc Trap unknown casts
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
@@ -463,6 +464,11 @@ handle_cast(Message, State) ->
 %%                                       {noreply, State, Timeout} |
 %%                                       {stop, Reason, State}
 %% @doc Handling all non call/cast messages
+%% @doc Handle drain_ui_log messages delivered as plain info messages (e.g. sent
+%% before the process was ready to receive casts, or via erlang:send/2).
+handle_info(drain_ui_log, #state{ site = Site } = State) ->
+    {_Count, State1} = drain_ui_log(Site, State),
+    {noreply, State1};
 handle_info({logger, Data}, #state{ site = Site, log_client_topic = ClientTopic } = State) ->
     Context = z_acl:sudo(z_context:new(Site)),
     case log_event_ratelimit(State) of
