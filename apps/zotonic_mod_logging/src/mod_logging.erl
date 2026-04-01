@@ -452,6 +452,7 @@ handle_cast({log_client_pong, _, _}, State) ->
 
 handle_cast(drain_ui_log, #state{ site = Site } = State) ->
     {_Count, State1} = drain_ui_log(Site, State),
+    drop_pending_drain_ui_log_messages(),
     {noreply, State1};
 
 %% @doc Trap unknown casts
@@ -468,6 +469,7 @@ handle_cast(Message, State) ->
 %% before the process was ready to receive casts, or via erlang:send/2).
 handle_info(drain_ui_log, #state{ site = Site } = State) ->
     {_Count, State1} = drain_ui_log(Site, State),
+    drop_pending_drain_ui_log_messages(),
     {noreply, State1};
 handle_info({logger, Data}, #state{ site = Site, log_client_topic = ClientTopic } = State) ->
     Context = z_acl:sudo(z_context:new(Site)),
@@ -615,6 +617,16 @@ ui_dedup_key(Event) ->
         maps:get(<<"file">>, Event, undefined),
         maps:get(<<"line">>, Event, undefined)
     }.
+
+drop_pending_drain_ui_log_messages() ->
+    receive
+        {'$gen_cast', drain_ui_log} ->
+            drop_pending_drain_ui_log_messages();
+        drain_ui_log ->
+            drop_pending_drain_ui_log_messages()
+    after 0 ->
+        ok
+    end.
 
 %% @private Check the health of the db pool. When usage is to high a warning will be
 %% put in the log. The warning is deduplicated every hour.
