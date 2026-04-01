@@ -102,18 +102,18 @@ insert(Props, Context) ->
 %% @doc Write a queued event to the database log table. Decorate with
 %% information about the user.
 insert_event(#{ event := Event, user_id := UserId, timestamp := Timestamp, peer := Peer }, Context) ->
-    Props1 = lists:filter( fun filter_prop/1, maps:to_list(Event) ),
-    Props2 = lists:map( fun map_prop/1, Props1 ),
-    Type = case proplists:get_value(type, Props2) of
+    Props1 = maps:filter(fun filter_prop/2, Event),
+    Props2 = maps:fold(fun map_prop/3, #{}, Props1),
+    Type = case maps:get(<<"type">>, Props2, undefined) of
         undefined -> <<"error">>;
         T -> T
     end,
-    Message = [
-        {user_id, UserId},
-        {type, Type},
-        {remote_ip, Peer},
-        {created, z_datetime:timestamp_to_datetime(Timestamp)}
-    ] ++ proplists:delete(type, Props2),
+    Message = Props2#{
+        <<"user_id">> => UserId,
+        <<"type">> => Type,
+        <<"remote_ip">> => Peer,
+        <<"created">> => z_datetime:timestamp_to_datetime(Timestamp)
+    },
     MsgUserProps = maybe_add_user_props(Message, Context),
     z_db:insert(log_ui, MsgUserProps, Context).
 
@@ -121,7 +121,7 @@ insert_event(#{ event := Event, user_id := UserId, timestamp := Timestamp, peer 
 %% not be a known bot.
 is_event_loggable(#{ <<"user_agent">> := UserAgent }) ->
     not is_ignored_bot(UserAgent);
-is_event_loggable(Props) ->
+is_event_loggable(Props) when is_list(Props) ->
     not is_ignored_bot(proplists:get_value(<<"user_agent">>, Props));
 is_event_loggable(_Props) ->
     false.
@@ -134,33 +134,27 @@ is_ignored_bot(UserAgent) ->
     orelse binary:match(UserAgent, <<"pingbot">>) /= nomatch
     orelse binary:match(UserAgent, <<"BingPreview">>) /= nomatch.
 
-maybe_add_user_props(Props, Context) ->
-    case proplists:get_value(user_id, Props) of
-        undefined ->
-            Props;
-        UserId ->
-            [
-                {user_name_first, m_rsc:p_no_acl(UserId, name_first, Context)},
-                {user_name_surname, m_rsc:p_no_acl(UserId, name_surname, Context)},
-                {user_email_raw, m_rsc:p_no_acl(UserId, email_raw, Context)}
-                | Props
-            ]
-    end.
+maybe_add_user_props(#{ <<"user_id">> := undefined } = Msg, _Context) ->
+    Msg;
+maybe_add_user_props(#{ <<"user_id">> := UserId } = Msg, Context) ->
+    Msg#{
+        <<"user_name_first">> => m_rsc:p_no_acl(UserId, <<"name_first">>, Context),
+        <<"user_name_surname">> => m_rsc:p_no_acl(UserId, <<"name_surname">>, Context),
+        <<"user_email_raw">> => m_rsc:p_no_acl(UserId, <<"email_raw">>, Context)
+    }.
 
+filter_prop(_, V) when not is_binary(V), not is_number(V) -> false;
+filter_prop(<<"type">>, _) -> true;
+filter_prop(<<"message">>, _) -> true;
+filter_prop(<<"file">>, _) -> true;
+filter_prop(<<"line">>, _) -> true;
+filter_prop(<<"col">>, _) -> true;
+filter_prop(<<"stack">>, _) -> true;
+filter_prop(<<"user_agent">>, _) -> true;
+filter_prop(<<"url">>, _) -> true;
+filter_prop(_, _) -> false.
 
-filter_prop({_, V}) when not is_binary(V), not is_number(V) -> false;
-filter_prop({<<"type">>, _}) -> true;
-filter_prop({<<"message">>, _}) -> true;
-filter_prop({<<"file">>, _}) -> true;
-filter_prop({<<"line">>, _}) -> true;
-filter_prop({<<"col">>, _}) -> true;
-filter_prop({<<"stack">>, _}) -> true;
-filter_prop({<<"user_agent">>, _}) -> true;
-filter_prop({<<"url">>, _}) -> true;
-filter_prop(_) -> false.
-
-map_prop({K, null}) -> map_prop({K, undefined});
-map_prop({<<"type">>, T}) ->
+map_prop(<<"type">>, T, Acc) ->
     T1 = case T of
         <<"fatal">> -> <<"fatal">>;
         <<"error">> -> <<"error">>;
@@ -170,14 +164,14 @@ map_prop({<<"type">>, T}) ->
         <<"debug">> -> <<"debug">>;
         _ -> <<"error">>
     end,
-    {type, T1};
-map_prop({<<"message">>, M}) when is_binary(M) -> {message, z_string:truncatechars(M, 500)};
-map_prop({<<"stack">>, M}) when is_binary(M) -> {stack, z_string:truncatechars(M, 1000)};
-map_prop({<<"file">>, M}) when is_binary(M) -> {file, z_string:truncatechars(M, 500)};
-map_prop({<<"line">>, M}) -> {line, z_convert:to_integer(M)};
-map_prop({<<"col">>, M}) -> {col, z_convert:to_integer(M)};
-map_prop({<<"user_agent">>, M}) when is_binary(M) -> {user_agent, z_string:truncatechars(M, 500)};
-map_prop({<<"url">>, M}) when is_binary(M) -> {url, z_string:truncatechars(M, 500)}.
+    Acc#{ <<"type">> => T1 };
+map_prop(<<"message">>, M, Acc) when is_binary(M) -> Acc#{ <<"message">> => z_string:truncatechars(M, 500) };
+map_prop(<<"stack">>, M, Acc) when is_binary(M) -> Acc#{ <<"stack">> => z_string:truncatechars(M, 1000) };
+map_prop(<<"file">>, M, Acc) when is_binary(M) -> Acc#{ <<"file">> => z_string:truncatechars(M, 500)};
+map_prop(<<"line">>, M, Acc) -> Acc#{ <<"line">> => z_convert:to_integer(M)};
+map_prop(<<"col">>, M, Acc) -> Acc#{ <<"col">> => z_convert:to_integer(M)};
+map_prop(<<"user_agent">>, M, Acc) when is_binary(M) -> Acc#{ <<"user_agent">> => z_string:truncatechars(M, 500)};
+map_prop(<<"url">>, M, Acc) when is_binary(M) -> Acc#{ <<"url">> => z_string:truncatechars(M, 500)}.
 
 
 -spec search_query( map(), z:context() ) -> #search_sql{}.
