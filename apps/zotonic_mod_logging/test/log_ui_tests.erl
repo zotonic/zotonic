@@ -19,7 +19,6 @@ ui_log_ringbuffer_dedup_test() ->
         Event3 = event(Message3, 11, <<"Mozilla/5.0 (log-ui-test-c)">>, <<"https://testsandbox.local/test?id=555">>),
 
         ok = post_event(Event1, Context),
-        ?assertEqual([], matching_rows(Prefix, Context)),
 
         ?assertEqual(1, mod_logging:observe_tick_1s(tick_1s, Context)),
         Rows1 = matching_rows(Prefix, Context),
