@@ -10,13 +10,13 @@ ui_log_ringbuffer_dedup_test() ->
         ?assertEqual(true, z_module_manager:active(mod_logging, Context)),
 
         Prefix = z_convert:to_binary(erlang:unique_integer([positive])),
-        Message1 = <<"ui-log-test-", Prefix/binary, " duplicate 101">>,
-        Message2 = <<"ui-log-test-", Prefix/binary, " duplicate 102">>,
+        Message1 = <<"ui-log-test-", Prefix/binary, " duplicate">>,
+        Message2 = <<"ui-log-test-", Prefix/binary, " duplicate">>,
         Message3 = <<"ui-log-test-", Prefix/binary, " distinct">>,
 
-        Event1 = event(Message1, 10),
-        Event2 = event(Message2, 10),
-        Event3 = event(Message3, 11),
+        Event1 = event(Message1, 10, <<"Mozilla/5.0 (log-ui-test-a)">>, <<"https://testsandbox.local/test?id=123">>),
+        Event2 = event(Message2, 10, <<"Mozilla/5.0 (log-ui-test-b)">>, <<"https://testsandbox.local/test?id=999">>),
+        Event3 = event(Message3, 11, <<"Mozilla/5.0 (log-ui-test-c)">>, <<"https://testsandbox.local/test?id=555">>),
 
         ok = post_event(Event1, Context),
         ?assertEqual([], matching_rows(Prefix, Context)),
@@ -36,7 +36,7 @@ ui_log_ringbuffer_dedup_test() ->
         ok
     end}.
 
-event(Message, Line) ->
+event(Message, Line, UserAgent, Url) ->
     #{
         <<"type">> => <<"error">>,
         <<"message">> => Message,
@@ -44,8 +44,8 @@ event(Message, Line) ->
         <<"line">> => Line,
         <<"col">> => 5,
         <<"stack">> => <<"Error: duplicate test 123\n at fn (app.js:10:5)">>,
-        <<"url">> => <<"https://testsandbox.local/test?id=123">>,
-        <<"user_agent">> => <<"Mozilla/5.0 (log-ui-test)">>
+        <<"url">> => Url,
+        <<"user_agent">> => UserAgent
     }.
 
 post_event(Event, Context) ->

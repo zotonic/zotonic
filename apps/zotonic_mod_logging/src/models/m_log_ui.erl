@@ -50,8 +50,6 @@ Available Model API Paths
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
--define(UI_LOG_DEDUP_WINDOW, 5).
-
 m_get([ Index | Rest ], _Msg, Context) ->
     case z_acl:is_admin(Context) of
         true -> {ok, {get(z_convert:to_integer(Index), Context), Rest}};
@@ -86,20 +84,7 @@ ringbuffer(Context) ->
 log_event(Event, Context) ->
     case is_event_loggable(Event) of
         true ->
-            LogEvent = #{
-                event => Event,
-                user_id => z_acl:user(Context),
-                peer => m_req:get(peer, Context),
-                timestamp => z_datetime:timestamp()
-            },
-            case is_duplicate(LogEvent, Context) of
-                true -> ok;
-                false ->
-                    case ringbuffer:whereis(ringbuffer(Context)) of
-                        undefined -> {error, ignored};
-                        _Pid -> ringbuffer:write(ringbuffer(Context), LogEvent)
-                    end
-            end;
+            mod_logging:log_ui_event(Event, Context);
         false ->
             {error, ignored}
     end.
@@ -181,39 +166,6 @@ map_prop(<<"line">>, M, Acc) -> Acc#{ <<"line">> => z_convert:to_integer(M)};
 map_prop(<<"col">>, M, Acc) -> Acc#{ <<"col">> => z_convert:to_integer(M)};
 map_prop(<<"user_agent">>, M, Acc) when is_binary(M) -> Acc#{ <<"user_agent">> => z_string:truncatechars(M, 500)};
 map_prop(<<"url">>, M, Acc) when is_binary(M) -> Acc#{ <<"url">> => z_string:truncatechars(M, 500)}.
-
-is_duplicate(#{ event := Event, user_id := UserId, peer := Peer }, Context) ->
-    Key = {log_ui_dedup, UserId, Peer, dedup_key(Event)},
-    case z_depcache:get(Key, Context) of
-        {ok, true} ->
-            true;
-        undefined ->
-            ok = z_depcache:set(Key, true, ?UI_LOG_DEDUP_WINDOW, Context),
-            false
-    end.
-
-dedup_key(Event) ->
-    #{
-        <<"type">> => maps:get(<<"type">>, Event, undefined),
-        <<"message">> => normalize_dedup_text(maps:get(<<"message">>, Event, undefined)),
-        <<"file">> => maps:get(<<"file">>, Event, undefined),
-        <<"line">> => maps:get(<<"line">>, Event, undefined),
-        <<"col">> => maps:get(<<"col">>, Event, undefined),
-        <<"stack">> => normalize_dedup_text(maps:get(<<"stack">>, Event, undefined)),
-        <<"url">> => normalize_dedup_text(maps:get(<<"url">>, Event, undefined)),
-        <<"user_agent">> => maps:get(<<"user_agent">>, Event, undefined)
-    }.
-
-normalize_dedup_text(undefined) ->
-    undefined;
-normalize_dedup_text(Text) when is_binary(Text) ->
-    Text1 = re:replace(Text, <<"0x[0-9A-Fa-f]+">>, <<"#">>, [global, {return, binary}]),
-    Text2 = re:replace(Text1, <<"[0-9A-Fa-f]{8}-[0-9A-Fa-f-]{27,}">>, <<"#">>, [global, {return, binary}]),
-    Text3 = re:replace(Text2, <<"[0-9]+">>, <<"#">>, [global, {return, binary}]),
-    Text4 = re:replace(Text3, <<"\\s+">>, <<" ">>, [global, {return, binary}, unicode]),
-    z_string:trim(Text4);
-normalize_dedup_text(Text) ->
-    z_convert:to_binary(Text).
 
 
 -spec search_query( map(), z:context() ) -> #search_sql{}.

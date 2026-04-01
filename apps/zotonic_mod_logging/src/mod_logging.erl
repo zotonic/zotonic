@@ -108,6 +108,7 @@ For regular application logging, use [Logger](/id/doc_developerguide_logging#dev
     is_log_client_allowed/1,
     is_log_client_session/1,
     is_log_client_active/1,
+    log_ui_event/2,
     log_client_start/1,
     log_client_stop/1,
     log_client_ping/4,
@@ -120,6 +121,8 @@ For regular application logging, use [Logger](/id/doc_developerguide_logging#dev
 -record(state, {
     site :: atom() | undefined,
     dedup :: map(),
+    ui_dedup :: ets:tid(),
+    ui_dedup_timestamp = 0 :: integer(),
     last_ui_event = 0 :: integer(),
     log_event_timestamp = 0 :: integer(),
     log_event_count = 0 :: integer(),
@@ -131,6 +134,7 @@ For regular application logging, use [Logger](/id/doc_developerguide_logging#dev
 -define(DEDUP_SECS, 600).
 -define(UI_LOG_BUFFER_SIZE, 1000).
 -define(UI_LOG_DRAIN_BATCH_SIZE, 100).
+-define(UI_LOG_DEDUP_SECS, 5).
 
 % Max number of published log events per second.
 -define(LOG_EVENT_RATE, 20).
@@ -240,6 +244,17 @@ is_ui_ratelimit_check(Context) ->
                     % Edge case - can happen when (re)starting or shutting down.
                     false
             end
+    end.
+
+-spec log_ui_event(map(), z:context()) -> ok | {error, ignored}.
+log_ui_event(Event, Context) ->
+    case z_module_manager:whereis(?MODULE, Context) of
+        {ok, Pid} ->
+            UserId = z_acl:user(Context),
+            Peer = m_req:get(peer, Context),
+            gen_server:call(Pid, {log_ui_event, Event, UserId, Peer});
+        {error, _} ->
+            {error, ignored}
     end.
 
 %% @doc Subscribe to event logs. The user subscribing must be an admin, or the
@@ -354,13 +369,14 @@ init(Args) ->
     {context, Context} = proplists:lookup(context, Args),
     Context1 = z_acl:sudo(z_context:new(Context)),
     Site = z_context:site(Context1),
+    UiDedup = ets:new(?MODULE, [ set, private ]),
     z_context:logger_md(Context1),
     ok = ensure_ui_log_ringbuffer(Site),
     case m_site:environment(Context1) of
         development -> z_logging_logger_handler:install(Site, self());
         _ -> ok
     end,
-    {ok, #state{ site = Site, dedup = #{} }}.
+    {ok, #state{ site = Site, dedup = #{}, ui_dedup = UiDedup }}.
 
 %%                                      {reply, Reply, State, Timeout} |
 %%                                      {noreply, State} |
@@ -372,6 +388,9 @@ handle_call(is_ui_ratelimit_check, _From, #state{ last_ui_event = LastUI } = Sta
     Now = z_datetime:timestamp(),
     {reply, Now > LastUI, State#state{ last_ui_event = Now }};
 
+handle_call({log_ui_event, Event, UserId, Peer}, _From, State) ->
+    {Reply, State1} = maybe_log_ui_event(Event, UserId, Peer, State),
+    {reply, Reply, State1};
 handle_call({log_client_start, ClientId, ClientTopic}, _From, #state{ site = Site } = State) ->
     z_logging_logger_handler:install(Site, self()),
     State1 = State#state{
@@ -381,7 +400,8 @@ handle_call({log_client_start, ClientId, ClientTopic}, _From, #state{ site = Sit
     },
     {reply, ok, State1};
 handle_call(drain_ui_log, _From, #state{ site = Site } = State) ->
-    {reply, drain_ui_log(Site), State};
+    {Count, State1} = drain_ui_log(Site, State),
+    {reply, Count, State1};
 handle_call(log_client_status, _From, State) ->
     Now = z_datetime:timestamp(),
     Status = #{
@@ -525,9 +545,10 @@ ensure_ui_log_ringbuffer(Site) ->
             ok
     end.
 
-drain_ui_log(Site) ->
+drain_ui_log(Site, State) ->
     Context = z_acl:sudo(z_context:new(Site)),
-    drain_ui_log(ui_log_ringbuffer(Site), Context, ?UI_LOG_DRAIN_BATCH_SIZE, 0).
+    State1 = maybe_reset_ui_dedup(State),
+    {drain_ui_log(ui_log_ringbuffer(Site), Context, ?UI_LOG_DRAIN_BATCH_SIZE, 0), State1}.
 
 drain_ui_log(_Buffer, _Context, 0, Count) ->
     Count;
@@ -539,6 +560,55 @@ drain_ui_log(Buffer, Context, N, Count) ->
         {error, empty} ->
             Count
     end.
+
+maybe_log_ui_event(Event, UserId, Peer, State) ->
+    State1 = maybe_reset_ui_dedup(State),
+    LogEvent = #{
+        event => Event,
+        user_id => UserId,
+        peer => Peer,
+        timestamp => z_datetime:timestamp()
+    },
+    case is_ui_duplicate(Event, State1#state.ui_dedup) of
+        true ->
+            {ok, State1};
+        false ->
+            case ringbuffer:whereis(ui_log_ringbuffer(State1#state.site)) of
+                undefined ->
+                    {{error, ignored}, State1};
+                _Pid ->
+                    ok = ringbuffer:write(ui_log_ringbuffer(State1#state.site), LogEvent),
+                    {ok, State1}
+            end
+    end.
+
+maybe_reset_ui_dedup(#state{ ui_dedup = Tab, ui_dedup_timestamp = Ts } = State) ->
+    Now = z_datetime:timestamp(),
+    case Ts =:= 0 orelse Ts + ?UI_LOG_DEDUP_SECS =< Now of
+        true ->
+            ets:delete_all_objects(Tab),
+            State#state{ ui_dedup_timestamp = Now };
+        false ->
+            State
+    end.
+
+is_ui_duplicate(Event, Tab) ->
+    Key = ui_dedup_key(Event),
+    case ets:member(Tab, Key) of
+        true ->
+            true;
+        false ->
+            true = ets:insert(Tab, {Key}),
+            false
+    end.
+
+ui_dedup_key(Event) ->
+    {
+        maps:get(<<"type">>, Event, undefined),
+        maps:get(<<"message">>, Event, undefined),
+        maps:get(<<"file">>, Event, undefined),
+        maps:get(<<"line">>, Event, undefined)
+    }.
 
 %% @private Check the health of the db pool. When usage is to high a warning will be
 %% put in the log. The warning is deduplicated every hour.
