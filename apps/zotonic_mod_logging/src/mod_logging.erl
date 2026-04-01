@@ -99,6 +99,7 @@ For regular application logging, use [Logger](/id/doc_developerguide_logging#dev
 -export([
     observe_acl_is_allowed/2,
     observe_search_query/2,
+    observe_tick_1s/2,
     pid_observe_tick_1m/3,
     observe_tick_1h/2,
     pid_observe_zlog/3,
@@ -128,6 +129,8 @@ For regular application logging, use [Logger](/id/doc_developerguide_logging#dev
 }).
 
 -define(DEDUP_SECS, 600).
+-define(UI_LOG_BUFFER_SIZE, 1000).
+-define(UI_LOG_DRAIN_BATCH_SIZE, 100).
 
 % Max number of published log events per second.
 -define(LOG_EVENT_RATE, 20).
@@ -182,6 +185,14 @@ pid_observe_zlog(_Pid, #zlog{}, _Context) ->
 pid_observe_tick_1m(Pid, tick_1m, _Context) ->
     gen_server:cast(Pid, check_db_pool_health),
     gen_server:cast(Pid, log_client_check).
+
+observe_tick_1s(tick_1s, Context) ->
+    case z_module_manager:whereis(?MODULE, Context) of
+        {ok, Pid} ->
+            gen_server:call(Pid, drain_ui_log);
+        {error, _} ->
+            0
+    end.
 
 observe_tick_1h(tick_1h, Context) ->
     m_log:periodic_cleanup(Context),
@@ -344,6 +355,7 @@ init(Args) ->
     Context1 = z_acl:sudo(z_context:new(Context)),
     Site = z_context:site(Context1),
     z_context:logger_md(Context1),
+    ok = ensure_ui_log_ringbuffer(Site),
     case m_site:environment(Context1) of
         development -> z_logging_logger_handler:install(Site, self());
         _ -> ok
@@ -368,6 +380,8 @@ handle_call({log_client_start, ClientId, ClientTopic}, _From, #state{ site = Sit
         log_client_pong = z_datetime:timestamp()
     },
     {reply, ok, State1};
+handle_call(drain_ui_log, _From, #state{ site = Site } = State) ->
+    {reply, drain_ui_log(Site), State};
 handle_call(log_client_status, _From, State) ->
     Now = z_datetime:timestamp(),
     Status = #{
@@ -457,7 +471,8 @@ handle_info(_Info, State) ->
 %% terminate. It should be the opposite of Module:init/1 and do any necessary
 %% cleaning up. When it returns, the gen_server terminates with Reason.
 %% The return value is ignored.
-terminate(_Reason, _State) ->
+terminate(_Reason, #state{ site = Site }) ->
+    _ = ringbuffer:delete(ui_log_ringbuffer(Site)),
     ok.
 
 
@@ -493,6 +508,36 @@ log_event_ratelimit(#state{ log_event_count = Count, log_event_timestamp = Tm } 
             {false, State};
         true ->
             {true, State#state{ log_event_count = 1, log_event_timestamp = Now }}
+    end.
+
+ui_log_ringbuffer(Site) ->
+    z_utils:name_for_site(ui_log_buffer, Site).
+
+ensure_ui_log_ringbuffer(Site) ->
+    Name = ui_log_ringbuffer(Site),
+    case ringbuffer:whereis(Name) of
+        undefined ->
+            case ringbuffer:new(Name, ?UI_LOG_BUFFER_SIZE) of
+                {ok, _Pid} -> ok;
+                {error, {already_started, _Pid}} -> ok
+            end;
+        _Pid ->
+            ok
+    end.
+
+drain_ui_log(Site) ->
+    Context = z_acl:sudo(z_context:new(Site)),
+    drain_ui_log(ui_log_ringbuffer(Site), Context, ?UI_LOG_DRAIN_BATCH_SIZE, 0).
+
+drain_ui_log(_Buffer, _Context, 0, Count) ->
+    Count;
+drain_ui_log(Buffer, Context, N, Count) ->
+    case ringbuffer:read(Buffer) of
+        {ok, {_Skipped, LogEvent}} ->
+            _ = m_log_ui:insert_event(LogEvent, Context),
+            drain_ui_log(Buffer, Context, N - 1, Count + 1);
+        {error, empty} ->
+            Count
     end.
 
 %% @private Check the health of the db pool. When usage is to high a warning will be
