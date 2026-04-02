@@ -130,27 +130,25 @@
 				</div>
 				{% if m.acl.use.mod_admin %}
 				<hr/>
-				<div class="alert">
-					<div class="row">
-						<div class="col-lg-4 col-md-4" data-block-type='survey_category'>
-							<p>{_ Options from a page category _}</p>
-							<p>
-								<input type="checkbox" disabled> {_ First page in category _}<br>
-								<input type="checkbox" disabled> {_ Second page in category _}<br>
-								<input type="checkbox" disabled> {_ Next page in category _}
-							</p>
-						</div>
-						<div class="col-lg-4 col-md-4" data-block-type='survey_upload'>
-							<p>{_ Please upload your file. _}</p>
-							<p>
-								<input class="form-control" style="width:95%" type="file" disabled>
-							</p>
-							<p>{_ Can only be used on the last questions page. _} {_ The uploaded file will be attached to the result email. _}</p>
-						</div>
-						<div class="col-lg-4 col-md-4" data-block-type='page'>
-							<p>{_ Another page, video or image. _}</p>
-							{% image "lib/images/koe.jpg" mediaclass="admin-editor" grey %}
-						</div>
+				<div class="row">
+					<div class="col-lg-4 col-md-4" data-block-type='survey_category'>
+						<p>{_ Options from a page category _}</p>
+						<p>
+							<input type="checkbox" disabled> {_ First page in category _}<br>
+							<input type="checkbox" disabled> {_ Second page in category _}<br>
+							<input type="checkbox" disabled> {_ Next page in category _}
+						</p>
+					</div>
+					<div class="col-lg-4 col-md-4" data-block-type='survey_upload'>
+						<p>{_ Please upload your file. _}</p>
+						<p>
+							<input class="form-control" style="width:95%" type="file" disabled>
+						</p>
+						<p>{_ Can only be used on the last questions page. _} {_ The uploaded file will be attached to the result email. _}</p>
+					</div>
+					<div class="col-lg-4 col-md-4" data-block-type='page'>
+						<p>{_ Another page, video or image. _}</p>
+						{% image "lib/images/koe.jpg" mediaclass="admin-editor" grey %}
 					</div>
 				</div>
 				{% endif %}
