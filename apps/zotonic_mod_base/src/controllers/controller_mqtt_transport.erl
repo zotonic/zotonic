@@ -172,8 +172,9 @@ websocket_init(Context) ->
     PrunedContext = z_context:prune_for_scomp(Context),
     PrunedContext1 = z_context:set(wsdata, <<>>, PrunedContext),
     PrunedContext2 = z_context:set(user_agent, m_req:get(user_agent, Context), PrunedContext1),
+    PrunedContext3 = z_context:set(is_crawler, m_req:get(is_crawler, Context), PrunedContext2),
     timer:send_after(?MQTT_CONNECT_TIMEOUT, connect_check),
-    {ok, PrunedContext2}.
+    {ok, PrunedContext3}.
 
 %% @doc Handle a MQTT message from the browser
 websocket_handle({binary, <<255, 254, 42, _, _>> = Ping}, Context) ->
@@ -274,9 +275,9 @@ handle_connect_data_1(NewData, Context) ->
         peer_ip => m_req:get(peer_ip, Context),
         context_prefs => #{
             origin => websocket,
-            is_crawler => m_req:get(is_crawler, Context),
             user_id => z_acl:user(Context),
-            user_agent => m_req:get(user_agent, Context),
+            user_agent => z_context:get(user_agent, Context),
+            is_crawler => z_context:get(is_crawler, Context),
             language => z_context:language(Context),
             timezone => z_context:tz(Context),
             auth_options => z_context:get(auth_options, Context, #{}),
