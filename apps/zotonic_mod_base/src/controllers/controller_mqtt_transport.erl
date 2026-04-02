@@ -273,6 +273,8 @@ handle_connect_data_1(NewData, Context) ->
         transport => self(),
         peer_ip => m_req:get(peer_ip, Context),
         context_prefs => #{
+            origin => websocket,
+            is_crawler => m_req:get(is_crawler, Context),
             user_id => z_acl:user(Context),
             user_agent => m_req:get(user_agent, Context),
             language => z_context:language(Context),

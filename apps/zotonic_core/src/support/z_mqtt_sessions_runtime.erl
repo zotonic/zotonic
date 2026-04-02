@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2018-2025 Marc Worrell
+%% @copyright 2018-2026 Marc Worrell
 %% @doc Zotonic specific callbacks for MQTT connections
 %% @end
 
-%% Copyright 2018-2025 Marc Worrell
+%% Copyright 2018-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -29,7 +29,10 @@
     connect/4,
     reauth/2,
     is_allowed/4,
-    is_valid_message/3
+    is_valid_message/3,
+    is_websocket_origin/1,
+    is_crawler/1,
+    is_anonymous_user/1
     ]).
 
 -behaviour(mqtt_sessions_runtime).
@@ -82,10 +85,12 @@ new_user_context( Site, ClientId, SessionOptions ) ->
     Context3 = maybe_set_timezone(Prefs, Context2),
     Context4 = maybe_set_peer_ip(SessionOptions, Context3),
     Context5 = maybe_set_user_agent(Prefs, Context4),
+    Context6 = maybe_set_origin(Prefs, Context5),
+    Context7 = maybe_set_is_crawler(Prefs, Context6),
     SessionId = maps:get(cotonic_sid, Prefs, undefined),
-    Context6 = z_context:set_session_id(SessionId, Context5),
-    z_context:logger_md(Context6),
-    Context6.
+    Context8 = z_context:set_session_id(SessionId, Context7),
+    z_context:logger_md(Context8),
+    Context8.
 
 -spec control_message(SubTopic, Message, Context) -> {ok, Context1} when
     SubTopic :: list( binary() ),
@@ -161,6 +166,16 @@ maybe_set_user_agent(#{ user_agent := UserAgent }, Context) when is_binary(UserA
 maybe_set_user_agent(_Payload, Context) ->
     Context.
 
+maybe_set_origin(#{ origin := Origin }, Context) ->
+    z_context:set(mqtt_origin, Origin, Context);
+maybe_set_origin(_Payload, Context) ->
+    Context.
+
+maybe_set_is_crawler(#{ is_crawler := IsCrawler }, Context) ->
+    z_context:set(is_crawler, IsCrawler, Context);
+maybe_set_is_crawler(_Payload, Context) ->
+    Context.
+
 set_language(Lang, Context) ->
     case z_module_manager:is_provided(mod_translation, Context) of
         true ->
@@ -180,7 +195,9 @@ set_connect_context_options(Options, Context) ->
         Sid -> z_context:set_session_id(Sid, Context4)
     end,
     Context6 = maybe_set_user_agent(Prefs, Context5),
-    z_acl:logon_refresh(Context6).
+    Context7 = maybe_set_origin(Prefs, Context6),
+    Context8 = maybe_set_is_crawler(Prefs, Context7),
+    z_acl:logon_refresh(Context8).
 
 set_connect_properties(#{ <<"cotonic_sid">> := Sid }, Context) when not ?none(Sid) ->
     RoutingId = Context#context.routing_id,
@@ -562,6 +579,18 @@ is_valid_message(_Msg, #{ auth_user_id := UserId }, Context) ->
     end;
 is_valid_message(_Msg, _Options, _Context) ->
     true.
+
+-spec is_websocket_origin( z:context() ) -> boolean().
+is_websocket_origin(Context) ->
+    z_context:get(mqtt_origin, Context, undefined) =:= websocket.
+
+-spec is_crawler( z:context() ) -> boolean().
+is_crawler(Context) ->
+    z_context:get(is_crawler, Context, false) =:= true.
+
+-spec is_anonymous_user( z:context() ) -> boolean().
+is_anonymous_user(Context) ->
+    z_acl:user(Context) =:= undefined.
 
 split_vhost_username(Username) ->
     case z_config:get(mqtt_username_format_0x, false) of
