@@ -251,7 +251,7 @@ manage_schema(_, Context) ->
 %% @doc Return true if ok to insert an UI log entry (max 1 per second)
 -spec is_ui_ratelimit_check(z:context()) -> boolean().
 is_ui_ratelimit_check(Context) ->
-    case z_convert:to_bool( m_config:get_value(mod_logging, ui_log_disabled, Context) ) of
+    case m_config:get_boolean(mod_logging, ui_log_disabled, Context) of
         true ->
             false;
         false ->
