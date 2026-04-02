@@ -368,6 +368,7 @@ is_log_client_active(Context) ->
 %%====================================================================
 %% API
 %%====================================================================
+
 -spec start_link(list()) -> {ok, pid()} | ignore | {error, term()}.
 %% @doc Starts the server
 start_link(Args) when is_list(Args) ->
@@ -378,10 +379,6 @@ start_link(Args) when is_list(Args) ->
 %%====================================================================
 
 -spec init(term()) -> {ok, term()} | {ok, term(), timeout() | hibernate} | ignore | {stop, term()}.
-%% init(Args) -> {ok, State} |
-%%                     {ok, State, Timeout} |
-%%                     ignore               |
-%%                     {stop, Reason}
 %% @doc Initiates the server.
 init(Args) ->
     {context, Context} = proplists:lookup(context, Args),
@@ -396,11 +393,6 @@ init(Args) ->
     end,
     {ok, #state{ site = Site, dedup = #{}, ui_dedup = UiDedup }}.
 
-%%                                      {reply, Reply, State, Timeout} |
-%%                                      {noreply, State} |
-%%                                      {noreply, State, Timeout} |
-%%                                      {stop, Reason, Reply, State} |
-%%                                      {stop, Reason, State}
 %% @doc Handling call messages
 handle_call(is_ui_ratelimit_check, _From, #state{ last_ui_event = LastUI } = State ) ->
     Now = z_datetime:timestamp(),
