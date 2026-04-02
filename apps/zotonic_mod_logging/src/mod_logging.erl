@@ -473,19 +473,14 @@ handle_cast(drain_ui_log, #state{ site = Site } = State) ->
     drop_pending_drain_ui_log_messages(),
     {noreply, State1};
 
-%% @doc Trap unknown casts
 handle_cast(Message, State) ->
+    % Trap unknown casts
     {stop, {unknown_cast, Message}, State}.
 
-
 -spec handle_info(term(), term()) -> {noreply, term()} | {noreply, term(), timeout() | hibernate} | {stop, term(), term()}.
-%% handle_info(Info, State) -> {noreply, State} |
-%%                                       {noreply, State, Timeout} |
-%%                                       {stop, Reason, State}
-%% @doc Handling all non call/cast messages
-%% @doc Handle drain_ui_log messages delivered as plain info messages (e.g. sent
-%% before the process was ready to receive casts, or via erlang:send/2).
 handle_info(drain_ui_log, #state{ site = Site } = State) ->
+    % Handle drain_ui_log messages delivered as plain info messages (e.g. sent
+    % before the process was ready to receive casts, or via erlang:send/2).
     {_Count, State1} = drain_ui_log(Site, State),
     drop_pending_drain_ui_log_messages(),
     {noreply, State1};
