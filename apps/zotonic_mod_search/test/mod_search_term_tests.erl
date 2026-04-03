@@ -97,3 +97,39 @@ props_map3_test() ->
     },
     ?assertEqual(M, z_search_props:from_map(T)),
     ok.
+
+filters_to_nested_terms_nested_test() ->
+    Filters = {'and', [
+        {'or', [
+            [<<"pivot.title">>, <<"Nested Filter Alpha">>],
+            [<<"pivot.title">>, <<"Nested Filter Beta">>]
+        ]},
+        [<<"is_featured">>, true]
+    ]},
+    Expected = #{
+        <<"operator">> => <<"allof">>,
+        <<"terms">> => [
+            #{
+                <<"operator">> => <<"anyof">>,
+                <<"terms">> => [
+                    #{
+                        <<"term">> => <<"pivot:title">>,
+                        <<"operator">> => <<"=">>,
+                        <<"value">> => <<"Nested Filter Alpha">>
+                    },
+                    #{
+                        <<"term">> => <<"pivot:title">>,
+                        <<"operator">> => <<"=">>,
+                        <<"value">> => <<"Nested Filter Beta">>
+                    }
+                ]
+            },
+            #{
+                <<"term">> => <<"filter:is_featured">>,
+                <<"operator">> => <<"=">>,
+                <<"value">> => true
+            }
+        ]
+    },
+    ?assertEqual(Expected, search_query:filters_to_nested_terms(Filters)),
+    ok.

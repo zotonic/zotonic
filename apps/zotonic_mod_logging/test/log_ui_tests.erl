@@ -20,7 +20,7 @@ ui_log_ringbuffer_dedup_test() ->
 
         ok = post_event(Event1, Context),
 
-        ?assertEqual(ok, mod_logging:observe_tick_1s(tick_1s, Context)),
+        ?assertEqual(ok, mod_logging:drain_ui_log(Context)),
         Rows1 = matching_rows(Prefix, Context),
         ?assertEqual(1, length(Rows1)),
         ?assertEqual([10], lists:sort([ line(Row) || Row <- Rows1 ])),
@@ -28,7 +28,7 @@ ui_log_ringbuffer_dedup_test() ->
         ok = post_event(Event2, Context),
         ok = post_event(Event3, Context),
 
-        ?assertEqual(ok, mod_logging:observe_tick_1s(tick_1s, Context)),
+        ?assertEqual(ok, mod_logging:drain_ui_log(Context)),
         Rows2 = matching_rows(Prefix, Context),
         ?assertEqual(2, length(Rows2)),
         ?assertEqual([10, 11], lists:sort([ line(Row) || Row <- Rows2 ])),

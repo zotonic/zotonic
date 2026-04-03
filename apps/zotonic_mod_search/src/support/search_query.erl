@@ -1,6 +1,7 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2009-2026 Arjan Scherpenisse
-%% @doc Handler for m.search[{query, Args..}]
+%% @doc Map search terms and queries to SQL terms. In z_search.erl, these
+%% SQL terms are combined to build SQL queries.
 %% @end
 
 %% Copyright 2009-2026 Arjan Scherpenisse
@@ -34,7 +35,8 @@
 -export([
     qterm/3,
     expand_content_groups/2,
-    expand_object_predicates/2
+    expand_object_predicates/2,
+    filters_to_nested_terms/1
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -42,34 +44,14 @@
 -define(SQL_SAFE_REGEXP, "^[0-9a-zA-Z_\.]+$").
 
 
-%% @doc Build a SQL search query from the filter arguments.
-%% @todo: also return the options and paging?
+%% @doc Build a SQL search query from the filter arguments. The query can be
+%% a map or list of terms.
 -spec search(Query, Context) -> SqlTerms | EmptyResult when
     Query ::  map() | proplists:proplist(),
     Context :: z:context(),
     SqlTerms :: #search_sql_terms{},
     EmptyResult :: #search_result{}.
 search(#{ <<"q">> := Qs }, Context) when is_list(Qs) ->
-    % Qs1 = lists:flatten(
-    %     lists:map(
-    %         fun
-    %             ({K, #{ <<"all">> := All, <<"any">> := Any }}) ->
-    %                 All1 = filter_empty( lists:map(fun(V) -> {K, V} end, All) ),
-    %                 case lists:filter(fun z_utils:is_empty/1, Any) of
-    %                     [] -> All1;
-    %                     Any1 -> [ {K, Any1} | All1 ]
-    %                 end;
-    %             ({K, #{ <<"all">> := All }}) ->
-    %                 filter_empty( lists:map(fun(V) -> {K, V} end, All) );
-    %             ({K, #{ <<"any">> := Any }}) ->
-    %                 case lists:filter(fun z_utils:is_empty/1, Any) of
-    %                     [] -> [];
-    %                     Any1 -> {K, Any1}
-    %                 end;
-    %             (KV) ->
-    %                 KV
-    %         end,
-    %         Qs)),
     Qs1 = filter_empty(Qs),
     build_query(lists:sort(Qs1), Context);
 search(Query, Context) when is_map(Query) ->
@@ -147,7 +129,7 @@ filter_empty(Q) when is_list(Q) ->
     Term :: list() | map(),
     IsNested :: boolean(),
     Context :: z:context(),
-    QueryTerms :: list() | #search_sql_term{}.
+    QueryTerms :: list() | #search_sql_term{} | #search_sql_nested{}.
 qterm(undefined, _IsNested, _Context) ->
     [];
 qterm([], _IsNested, _Context) ->
@@ -161,21 +143,50 @@ qterm(#{ <<"operator">> := Op, <<"terms">> := Terms }, _IsNested, Context) ->
     };
 qterm(#{ <<"term">> := Term } = Q, IsNested, Context) when is_atom(Term) ->
     qterm(Q#{ <<"term">> => atom_to_binary(Term, utf8) }, IsNested, Context);
-qterm(#{ <<"term">> := <<"cat">>, <<"value">> := Cats}, _IsNested, Context) ->
+qterm(#{ <<"term">> := <<"cat">>, <<"value">> := Cats}, true, Context) ->
+    %% cat=categoryname
+    %% Filter results on a certain category within a nested term.
+    Cats1 = assure_categories(Cats, Context),
+    #search_sql_term{
+        where = [ <<"rsc.category_id = ANY(">>, '$1', <<"::int[])">> ],
+        args = [ expand_sub_categories(Cats1, Context) ]
+    };
+qterm(#{ <<"term">> := <<"cat">>, <<"value">> := Cats}, false, Context) ->
     %% cat=categoryname
     %% Filter results on a certain category.
     Cats1 = assure_categories(Cats, Context),
-    % Cats2 = add_or_append(<<"rsc">>, Cats1, []),
     #search_sql_term{ cats = [ {<<"rsc">>, Cats1}] };
-    % parse_query(Rest, Context, Result#search_sql{cats=Cats2});
-qterm(#{ <<"term">> := <<"cat_exclude">>, <<"value">> := Cats}, _IsNested, Context) ->
+qterm(#{ <<"term">> := <<"cat_exclude">>, <<"value">> := Cats}, true, Context) ->
+    %% cat_exclude=categoryname
+    %% Filter results outside a certain category.
+    Cats1 = assure_categories(Cats, Context),
+    #search_sql_term{
+        where = [ <<"rsc.category_id <> ALL(">>, '$1', <<"::int[])">> ],
+        args = [ expand_sub_categories(Cats1, Context) ]
+    };
+qterm(#{ <<"term">> := <<"cat_exclude">>, <<"value">> := Cats}, false, Context) ->
     %% cat_exclude=categoryname
     %% Filter results outside a certain category.
     Cats1 = assure_categories(Cats, Context),
     #search_sql_term{ cats_exclude = [ {<<"rsc">>, Cats1} ] };
-qterm(#{ <<"term">> := <<"cat_exact">>, <<"value">> := Cats}, _IsNested, Context) ->
+qterm(#{ <<"term">> := <<"cat_exact">>, <<"value">> := Cats}, true, Context) ->
     %% cat_exact=categoryname
-    %% Filter results excactly of a category (excluding subcategories)
+    %% Filter results exactly of a category (excluding subcategories)
+    Cats1 = assure_categories(Cats, Context),
+    Cats2 = lists:filtermap(
+        fun(Cat) ->
+            case m_rsc:rid(Cat, Context) of
+                undefined -> false;
+                CatId -> {true, CatId}
+            end
+        end, Cats1),
+    #search_sql_term{
+        where = [ <<"rsc.category_id = ANY(">>, '$1', <<"::int[])">> ],
+        args = [ Cats2 ]
+    };
+qterm(#{ <<"term">> := <<"cat_exact">>, <<"value">> := Cats}, false, Context) ->
+    %% cat_exact=categoryname
+    %% Filter results exactly of a category (excluding subcategories)
     Cats1 = assure_categories(Cats, Context),
     #search_sql_term{ cats_exact = [ {<<"rsc">>, Cats1} ] };
 qterm(#{ <<"term">> := <<"content_group">>, <<"value">> := ContentGroup}, IsNested, Context) when not is_list(ContentGroup) ->
@@ -960,8 +971,9 @@ qterm(#{ <<"term">> := <<"filter">>, <<"value">> := V }, IsNested, Context) when
         end,
         [],
         V);
-qterm(#{ <<"term">> := <<"filter">>, <<"value">> := R}, _IsNested, Context) ->
-    add_filters(R, Context);
+qterm(#{ <<"term">> := <<"filter">>, <<"value">> := V}, IsNested, Context) ->
+    Terms = filters_to_nested_terms(V),
+    qterm(Terms, IsNested, Context);
 qterm(#{ <<"term">> := <<"filter:", Field/binary>>, <<"value">> := V } = T, _IsNested, Context) ->
     {Tab, Alias, Col, Q1} = map_filter_column(Field, #search_sql_term{}),
     Op = extract_term_op(T, undefined),
@@ -971,6 +983,8 @@ qterm(#{ <<"term">> := <<"filter:", Field/binary>>, <<"value">> := V } = T, _IsN
         {error, _} ->
             none()
     end;
+qterm(#{ <<"term">> := <<"filter:", _/binary>> } = T, IsNested, Context) ->
+    qterm(T#{ <<"value">> => undefined }, IsNested, Context);
 qterm(#{ <<"term">> := <<"pivot:", _/binary>> = Field, <<"value">> := V} = T, _IsNested, Context) ->
     {Tab, Alias, Col, Q1} = map_filter_column(Field, #search_sql_term{}),
     Op = extract_term_op(T, undefined),
@@ -1653,6 +1667,15 @@ sql_safe(String) ->
     sql_safe(z_convert:to_binary(String)).
 
 
+expand_sub_categories(Cats, Context) when is_list(Cats) ->
+    lists:usort(
+        lists:flatten(
+            lists:map(
+                fun(C) -> m_category:contains(C, Context) end,
+                Cats)));
+expand_sub_categories(Cat, Context) ->
+    expand_sub_categories([Cat], Context).
+
 %% Make sure the input is a list of valid categories.
 assure_categories(Name, Context) ->
     Cats = assure_cats_list(Name),
@@ -1718,7 +1741,6 @@ assure_category_1(Name, Context) ->
                         in => zotonic_mod_search,
                         name => Name
                     }),
-                    % display_error([ ?__("Unknown category", Context), 32, $", z_html:escape(z_convert:to_binary(Name)), $" ], Context),
                     error;
                 CatId ->
                     case m_category:id_to_name(CatId, Context) of
@@ -1728,23 +1750,12 @@ assure_category_1(Name, Context) ->
                                 in => zotonic_mod_search,
                                 name => Name
                             }),
-                            % display_error([ $", z_html:escape(z_convert:to_binary(Name)), $", 32, ?__("is not a category", Context) ], Context),
                             error;
                         Name1 ->
                             {ok, Name1}
                     end
             end
     end.
-
-%% If the current user is an administrator or editor, show an error message about this search
-% display_error(Msg, Context) ->
-%     case z_acl:is_allowed(use, mod_admin, Context) of
-%         true ->
-%             ContextPruned = z_context:prune_for_async(Context),
-%             z_session_page:add_script(z_render:growl_error(Msg, ContextPruned));
-%         false ->
-%             ok
-%     end.
 
 -spec pivot_qterm(Table, Alias, Column, Value, Op, Q, Context) -> {ok, QResult} | {error, term()}
     when Table :: binary(),
@@ -1787,14 +1798,34 @@ pivot_qterm_1(Tab, Alias, Col, undefined, Value, Query, Context) ->
     {Op, Value1} = extract_value_op(Value, <<"=">>),
     pivot_qterm_op(Tab, Alias, Col, Op, Value1, Query, Context);
 pivot_qterm_1(Tab, Alias, Col, Op, Value, Query, Context) ->
-    {Op, Value1} = extract_value_op(Value, Op),
-    pivot_qterm_op(Tab, Alias, Col, Op, Value1, Query, Context).
+    {Op1, Value1} = extract_value_op(Value, Op),
+    pivot_qterm_op(Tab, Alias, Col, Op1, Value1, Query, Context).
 
+pivot_qterm_op(_Tab, Alias, Col, Op, Null, Query, _Context)
+    when Null =:= null; Null =:= undefined; Null =:= none ->
+    NullOp = case Op of
+        <<"=">> -> <<" is null">>;
+        <<"~">> -> <<" is null">>;
+        <<"<>">> -> <<" is not null">>;
+        _ -> false
+    end,
+    W = if
+        NullOp =:= false -> <<"false">>;
+        true -> [ <<Alias/binary, $., Col/binary>>, NullOp ]
+    end,
+    Query1 = Query#search_sql_term{
+        where = Query#search_sql_term.where ++ [ W ]
+    },
+    {ok, Query1};
 pivot_qterm_op(Tab, Alias, Col, Op, Value, Query, Context) ->
     case z_db:to_column_value(Tab, Col, Value, Context) of
         {ok, Value2} ->
             {ArgN, Query2} = add_term_arg(Value2, Query),
-            W = term_op_expr(<<Alias/binary, $., Col/binary>>, Op, ArgN, text),
+            Type = if
+                is_number(Value2) -> number;
+                true -> text
+            end,
+            W = term_op_expr(<<Alias/binary, $., Col/binary>>, Op, ArgN, Type),
             Query3 = Query2#search_sql_term{
                 where = Query2#search_sql_term.where ++ [ W ]
             },
@@ -1818,15 +1849,6 @@ add_term_arg(ArgValue, #search_sql_term{ args = Args } = Q) ->
     Arg = [$$] ++ integer_to_list(length(Args) + 1),
     {list_to_atom(Arg), Q#search_sql_term{args = Args ++ [ ArgValue ]}}.
 
-% extract_value_op(#{
-%         <<"operator">> := Op,
-%         <<"value">> := V
-%     }) ->
-%     {sanitize_op(z_convert:to_binary(Op)), V};
-% extract_value_op(#{
-%         <<"value">> := V
-%     }) ->
-%     {<<"=">>, V};
 
 %% @doc Extract the operator from the value.
 -spec extract_value_op(Value, DefaultOperator) -> {Operator, Value1} when
@@ -1866,86 +1888,60 @@ extract_term_op(#{ <<"operator">> := Op }, _Op) ->
 extract_term_op(_, Op) ->
     Op.
 
-sanitize_op(undefined) -> <<"=">>;
-sanitize_op(<<>>) -> <<"=">>;
-sanitize_op(<<"!=">>) -> <<"<>">>;
-sanitize_op(<<"<>">>) -> <<"<>">>;
-sanitize_op(<<">=">>) -> <<">=">>;
-sanitize_op(<<"<=">>) -> <<"<=">>;
-sanitize_op(<<"=">>) -> <<"=">>;
-sanitize_op(<<">">>) -> <<">">>;
-sanitize_op(<<"<">>) -> <<"<">>;
-sanitize_op(<<"~">>) -> <<"~">>;
-sanitize_op(Op) when not is_binary(Op) -> sanitize_op(z_convert:to_binary(Op));
-sanitize_op(_) -> <<"=">>.
 
+%% @doc Rewrite nested filter lists to anyof/allof queries.
+filters_to_nested_terms(Filters) when is_list(Filters) ->
+    filter_map(Filters, false);
+filters_to_nested_terms(undefined) ->
+    [];
+filters_to_nested_terms(Column) when is_binary(Column); is_atom(Column) ->
+    filter_map([Column, true], false);
+filters_to_nested_terms({'or', Filters}) ->
+    filter_map(Filters, false);
+filters_to_nested_terms({'and', Filters}) ->
+    filter_map(Filters, true).
 
-add_filters(Filters, Context) ->
-    add_filters(Filters, #search_sql_term{}, Context).
-
-%% Add filters
-% add_filters(<<"[", _/binary>> = Filter, Q, Context) ->
-%     add_filters(maybe_split_list(Filter), Q, Context);
-add_filters([ [Column|_] | _ ] = Filters, Q, Context)
-    when is_list(Column);
-         is_binary(Column);
-         is_atom(Column) ->
-    add_filters_or(Filters, Q, Context);
-add_filters({'or', Filters}, Q, Context) ->
-    add_filters_or(Filters, Q, Context);
-add_filters([Column, Value], R, Context) ->
-    add_filters([Column, eq, Value], R, Context);
-add_filters([Column, Operator, Value], Q, Context) ->
-    {Tab, Alias, Col, Q1} = map_filter_column(Column, Q),
-    case z_db:to_column_value(Tab, Col, Value, Context) of
-        {ok, V1} ->
-            {Expr, Q2} = create_filter(Tab, Alias, Col, Operator, V1, Q1),
-            add_filter_where(Expr, Q2);
-        {error, Reason} ->
-            ?LOG_INFO(#{
-                text => <<"Search query filter could not be added">>,
-                result => error,
-                reason => Reason,
-                filter_column => Column,
-                table => Tab,
-                column => Col,
-                value => Value
-            }),
-            Q
+filter_map({'or', Terms}, _IsAnd) ->
+    filter_map(Terms, false);
+filter_map({'and', Terms}, _IsAnd) ->
+    filter_map(Terms, true);
+filter_map([], _IsAnd) ->
+    [];
+filter_map([Column], _IsAnd) when is_atom(Column); is_binary(Column) ->
+    filter_to_term(Column, <<"=">>, null);
+filter_map([Column, Value], _IsAnd) when is_atom(Column); is_binary(Column) ->
+    filter_to_term(Column, <<"=">>, Value);
+filter_map([Column, Op, Value], _IsAnd) when is_atom(Column); is_binary(Column) ->
+    filter_to_term(Column, Op, Value);
+filter_map(List, IsAnd) when is_list(List) ->
+    Terms = lists:map(fun(T) -> filter_map(T, not IsAnd) end, List),
+    case Terms of
+        [T] ->
+            T;
+        _ ->
+            Operator = if
+                IsAnd -> <<"allof">>;
+                true -> <<"anyof">>
+            end,
+            #{
+                <<"operator">> => Operator,
+                <<"terms">> => Terms
+            }
     end.
 
-add_filters_or(Filters, Q, Context) ->
-    {Exprs, Q1} = lists:foldr(
-                        fun(V, Acc) ->
-                            add_filters_or_1(V, Acc, Context)
-                        end,
-                        {[], Q},
-                        Filters),
-    Or = [ "(", lists:join(<<" or ">>, Exprs), ")" ],
-    add_filter_where(Or, Q1).
+filter_to_term(Column, Operator, Value) ->
+    #{
+        <<"term">> => filtercol_to_term(Column),
+        <<"operator">> => map_filter_operator(Operator),
+        <<"value">> => Value
+    }.
 
-add_filters_or_1([ C, O, V ], {Es, QAcc}, Context) ->
-    {Tab, Alias, Col, QAcc1} = map_filter_column(C, QAcc),
-    case z_db:to_column_value(Tab, Col, V, Context) of
-        {ok, V1} ->
-            {E, QAcc2} = create_filter(Tab, Alias, Col, O, V1, QAcc1),
-            {[E|Es], QAcc2};
-        {error, _} ->
-            {Es, QAcc}
-    end;
-add_filters_or_1([ C, V ], {Es, QAcc}, Context) ->
-    add_filters_or_1([ C, eq, V ], {Es, QAcc}, Context).
-
-create_filter(Tab, Alias, Col, Operator, null, Q) ->
-    create_filter(Tab, Alias, Col, Operator, undefined, Q);
-create_filter(_Tab, Alias, Col, Operator, undefined, Q) ->
-    Operator1 = map_filter_operator(Operator),
-    {create_filter_null(Alias, Col, Operator1), Q};
-create_filter(_Tab, Alias, Col, Operator, Value, Q) ->
-    {Arg, Q1} = add_filter_arg(Value, Q),
-    Operator1 = map_filter_operator(Operator),
-    W = term_op_expr([Alias, $., Col], Operator1, Arg, text),
-    {W, Q1}.
+filtercol_to_term(T) when is_atom(T) -> filtercol_to_term(atom_to_binary(T, utf8));
+filtercol_to_term(<<"pivot:", _/binary>> = T) -> T;
+filtercol_to_term(<<"pivot.", T/binary>>) -> <<"pivot:", T/binary>>;
+filtercol_to_term(<<"facet:", _/binary>> = T) -> T;
+filtercol_to_term(<<"facet.", T/binary>>) -> <<"facet:", T/binary>>;
+filtercol_to_term(T) -> <<"filter:", T/binary>>.
 
 
 map_filter_column(<<"pivot.", _/binary>> = P, Q) ->
@@ -1980,26 +1976,23 @@ map_filter_column(Column, Q) ->
     Field = sql_safe(Column),
     {<<"rsc">>, <<"rsc">>, Field, Q}.
 
-%% Add an AND clause to the WHERE of a #search_sql_term
-%% Clause is already supposed to be safe.
-add_filter_where(Clause, #search_sql_term{ where = [] } = Q) ->
-    Q#search_sql_term{ where = Clause };
-add_filter_where(Clause, #search_sql_term{ where = C } = Q) ->
-    Q#search_sql_term{ where = [ C, <<" and ">>, Clause ] }.
 
-%% Append an argument to a #search_sql_term
-add_filter_arg(ArgValue, #search_sql_term{ args = Args } = Q) ->
-    Arg = [$$] ++ integer_to_list(length(Args) + 1),
-    {list_to_atom(Arg), Q#search_sql_term{args = Args ++ [ ArgValue ]}}.
-
-create_filter_null(Alias, Col, <<"=">>) ->
-    [ Alias, $., Col, <<" is null">> ];
-create_filter_null(Alias, Col, <<"~">>) ->
-    [ Alias, $., Col, <<" is null">> ];
-create_filter_null(Alias, Col, <<"<>">>) ->
-    [ Alias, $., Col, <<" is not null">> ];
-create_filter_null(_Tab, _Col, _Op) ->
-    <<"false">>.
+sanitize_op(undefined) -> <<"=">>;
+sanitize_op(<<>>) -> <<"=">>;
+sanitize_op(<<"!=">>) -> <<"<>">>;
+sanitize_op(<<"<>">>) -> <<"<>">>;
+sanitize_op(<<">=">>) -> <<">=">>;
+sanitize_op(<<"<=">>) -> <<"<=">>;
+sanitize_op(<<"=">>) -> <<"=">>;
+sanitize_op(<<">">>) -> <<">">>;
+sanitize_op(<<"<">>) -> <<"<">>;
+sanitize_op(<<"~">>) -> <<"~">>;
+sanitize_op(<<"&">>) -> <<"&">>;
+sanitize_op(<<"&&">>) -> <<"&&">>;
+sanitize_op(<<"<@">>) -> <<"<@">>;
+sanitize_op(<<"@>">>) -> <<"@>">>;
+sanitize_op(Op) when not is_binary(Op) -> sanitize_op(map_filter_operator(Op));
+sanitize_op(_) -> <<"=">>.
 
 map_filter_operator(eq) -> <<"=">>;
 map_filter_operator('=') -> <<"=">>;
@@ -2041,8 +2034,13 @@ map_filter_operator(<<"&&">>) -> <<"&&">>;
 map_filter_operator(<<"overlaps">>) -> <<"&&">>;
 map_filter_operator(<<"@>">>) -> <<"@>">>;
 map_filter_operator(<<"contains">>) -> <<"@>">>;
-map_filter_operator(Op) -> throw({error, {unknown_filter_operator, Op}}).
-
+map_filter_operator(Op) ->
+    ?LOG_WARNING(#{
+        in => zotonic_mod_search,
+        text => <<"Query: unknown filter operator, defaulting to '='">>,
+        operator => Op
+    }),
+    <<"=">>.
 
 %% Expand the argument for hasanyobject, make pairs of {ObjectId,PredicateId}
 expand_object_predicates(Bin, Context) when is_binary(Bin) ->

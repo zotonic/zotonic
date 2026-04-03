@@ -1,6 +1,5 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009-2026 Marc Worrell
-%%
 %% @doc Model for categories.  Add, change and re-order categories.
 %% @end
 
@@ -167,6 +166,7 @@ Available Model API Paths
     is_a/3,
     is_meta/2,
     is_a_prim/3,
+    contains/2,
     name_to_id/2,
     id_to_name/2,
     foreach/3,
@@ -648,6 +648,18 @@ is_a_prim(CatId, Name, Context) ->
         ?WEEK,
         [{hierarchy, <<"$category">>}],
         Context).
+
+
+%% @doc Return the category ids that are contained within the category, including
+%% the category itself. If the category is unknown, then the empty list is returned.
+-spec contains(category(), z:context()) -> list( m_rsc:resource_id() ).
+contains(Cat, Context) ->
+    case name_to_id(Cat, Context) of
+        {ok, CatId} ->
+            m_hierarchy:contains('$category', CatId, Context);
+        {error, _} ->
+            []
+    end.
 
 %% @doc Map a category name to an id, be flexible with the input
 -spec name_to_id(category(), z:context()) ->

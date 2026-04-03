@@ -408,6 +408,155 @@ content_group_exclude_search_test() ->
     ok.
 
 
+nested_category_terms_qterm_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    C = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+    ArticleCatId = m_rsc:rid(article, C),
+    CollectionCatId = m_rsc:rid(collection, C),
+    MetaCatId = m_rsc:rid(meta, C),
+    #search_sql_terms{
+        terms = [
+            #search_sql_nested{
+                operator = <<"allof">>,
+                terms = [
+                    #search_sql_term{ where = WhereCat, args = [CatArgs] },
+                    #search_sql_nested{
+                        operator = <<"noneof">>,
+                        terms = [
+                            #search_sql_term{ where = WhereExact, args = [ExactArgs] }
+                        ]
+                    },
+                    #search_sql_term{ where = WhereExclude, args = [ExcludeArgs] }
+                ]
+            }
+        ]
+    } = search_query:build_query(
+        [
+            #{
+                <<"operator">> => <<"allof">>,
+                <<"terms">> => [
+                    #{ <<"term">> => <<"cat">>, <<"value">> => article },
+                    #{
+                        <<"operator">> => <<"noneof">>,
+                        <<"terms">> => [
+                            #{ <<"term">> => <<"cat_exact">>, <<"value">> => collection }
+                        ]
+                    },
+                    #{ <<"term">> => <<"cat_exclude">>, <<"value">> => meta }
+                ]
+            }
+        ],
+        C),
+    ?assertMatch([<<"rsc.category_id = ANY(">>, '$1', <<"::int[])">>], WhereCat),
+    ?assert(lists:member(ArticleCatId, CatArgs)),
+    ?assertMatch([<<"rsc.category_id = ANY(">>, '$1', <<"::int[])">>], WhereExact),
+    ?assertEqual([CollectionCatId], ExactArgs),
+    ?assertMatch([<<"rsc.category_id <> ALL(">>, '$1', <<"::int[])">>], WhereExclude),
+    ?assert(lists:member(MetaCatId, ExcludeArgs)),
+    ok.
+
+
+nested_category_terms_search_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    C = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+
+    {ok, ArticleId} = m_rsc:insert([
+        {category, article},
+        {title, <<"Nested category article">>}
+    ], C),
+    {ok, CollectionId} = m_rsc:insert([
+        {category, collection},
+        {title, <<"Nested category collection">>}
+    ], C),
+
+    Query = #{
+        <<"q">> => [
+            #{
+                <<"operator">> => <<"allof">>,
+                <<"terms">> => [
+                    #{
+                        <<"operator">> => <<"anyof">>,
+                        <<"terms">> => [
+                            #{ <<"term">> => <<"cat_exact">>, <<"value">> => article },
+                            #{ <<"term">> => <<"cat_exact">>, <<"value">> => collection }
+                        ]
+                    },
+                    #{
+                        <<"operator">> => <<"noneof">>,
+                        <<"terms">> => [
+                            #{ <<"term">> => <<"cat_exact">>, <<"value">> => collection }
+                        ]
+                    }
+                ]
+            },
+            #{ <<"term">> => <<"id">>, <<"value">> => [ArticleId, CollectionId] },
+            #{ <<"term">> => <<"sort">>, <<"value">> => <<"id">> }
+        ]
+    },
+    #search_result{ result = Result } = z_search:search(<<"query">>, Query, 1, 100, C),
+    ?assertEqual([ArticleId], Result),
+
+    m_rsc:delete(ArticleId, C),
+    m_rsc:delete(CollectionId, C),
+    ok.
+
+
+nested_filter_search_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    C = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+
+    {ok, AlphaId} = m_rsc:insert([
+        {category, article},
+        {is_featured, true},
+        {visible_for, 0},
+        {title, <<"Nested Filter Alpha">>}
+    ], C),
+    {ok, BetaId} = m_rsc:insert([
+        {category, article},
+        {is_featured, false},
+        {visible_for, 1},
+        {title, <<"Nested Filter Beta">>}
+    ], C),
+    {ok, GammaId} = m_rsc:insert([
+        {category, article},
+        {is_featured, true},
+        {visible_for, 1},
+        {title, <<"Nested Filter Gamma">>}
+    ], C),
+
+    Query = #{
+        <<"q">> => [
+            #{
+                <<"operator">> => <<"allof">>,
+                <<"terms">> => [
+                    #{
+                        <<"operator">> => <<"anyof">>,
+                        <<"terms">> => [
+                            #{ <<"term">> => <<"filter:is_featured">>, <<"value">> => true },
+                            #{ <<"term">> => <<"filter:visible_for">>, <<"value">> => 1 }
+                        ]
+                    },
+                    #{
+                        <<"operator">> => <<"noneof">>,
+                        <<"terms">> => [
+                            #{ <<"term">> => <<"filter:is_featured">>, <<"value">> => true }
+                        ]
+                    }
+                ]
+            },
+            #{ <<"term">> => <<"id">>, <<"value">> => [AlphaId, BetaId, GammaId] },
+            #{ <<"term">> => <<"sort">>, <<"value">> => <<"id">> }
+        ]
+    },
+    #search_result{ result = Result } = z_search:search(<<"query">>, Query, 1, 100, C),
+    ?assertEqual([BetaId], Result),
+
+    m_rsc:delete(AlphaId, C),
+    m_rsc:delete(BetaId, C),
+    m_rsc:delete(GammaId, C),
+    ok.
+
+
 uniq([]) ->
   [];
 uniq(List) when is_list(List) ->
@@ -434,5 +583,3 @@ has_fragment(Fragment, Where) when is_list(Where) ->
                 false
         end,
         Where).
-
-

@@ -117,7 +117,7 @@ For regular application logging, use [Logger](/id/doc_developerguide_logging#dev
 -export([
     observe_acl_is_allowed/2,
     observe_search_query/2,
-    observe_tick_1s/2,
+    pid_observe_tick_1s/3,
     pid_observe_tick_1m/3,
     observe_tick_1h/2,
     pid_observe_zlog/3,
@@ -130,6 +130,7 @@ For regular application logging, use [Logger](/id/doc_developerguide_logging#dev
     log_client_start/1,
     log_client_stop/1,
     log_client_ping/4,
+    drain_ui_log/1,
     manage_schema/2
 ]).
 
@@ -208,13 +209,8 @@ pid_observe_tick_1m(Pid, tick_1m, _Context) ->
     gen_server:cast(Pid, check_db_pool_health),
     gen_server:cast(Pid, log_client_check).
 
-observe_tick_1s(tick_1s, Context) ->
-    case z_module_manager:whereis(?MODULE, Context) of
-        {ok, Pid} ->
-            gen_server:cast(Pid, drain_ui_log);
-        {error, _} ->
-            ok
-    end.
+pid_observe_tick_1s(Pid, tick_1s, Context) ->
+    gen_server:cast(Pid, drain_ui_log).
 
 observe_tick_1h(tick_1h, Context) ->
     m_log:periodic_cleanup(Context),
@@ -241,6 +237,12 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
                 visiblecheck={acl, use, mod_logging}},
      #menu_separator{parent=admin_system}
      |Acc].
+
+drain_ui_log(Context) ->
+    case z_module_manager:whereis(?MODULE, Context) of
+        {ok, Pid} -> gen_server:cast(Pid, drain_ui_log);
+        {error, _} -> {error, ignored}
+    end.
 
 manage_schema(_, Context) ->
     m_log:install(Context),
@@ -461,7 +463,7 @@ handle_cast({log_client_pong, _, _}, State) ->
     {noreply, State};
 
 handle_cast(drain_ui_log, #state{ site = Site } = State) ->
-    {_Count, State1} = drain_ui_log(Site, State),
+    {_Count, State1} = do_drain_ui_log(Site, State),
     drop_pending_drain_ui_log_messages(),
     {noreply, State1};
 
@@ -473,7 +475,7 @@ handle_cast(Message, State) ->
 handle_info(drain_ui_log, #state{ site = Site } = State) ->
     % Handle drain_ui_log messages delivered as plain info messages (e.g. sent
     % before the process was ready to receive casts, or via erlang:send/2).
-    {_Count, State1} = drain_ui_log(Site, State),
+    {_Count, State1} = do_drain_ui_log(Site, State),
     drop_pending_drain_ui_log_messages(),
     {noreply, State1};
 handle_info({logger, Data}, #state{ site = Site, log_client_topic = ClientTopic } = State) ->
@@ -558,18 +560,18 @@ ensure_ui_log_ringbuffer(Site) ->
             ok
     end.
 
-drain_ui_log(Site, State) ->
+do_drain_ui_log(Site, State) ->
     Context = z_acl:sudo(z_context:new(Site)),
     State1 = maybe_reset_ui_dedup(State),
-    {drain_ui_log(ui_log_ringbuffer(Site), Context, ?UI_LOG_DRAIN_BATCH_SIZE, 0), State1}.
+    {do_drain_ui_log(ui_log_ringbuffer(Site), Context, ?UI_LOG_DRAIN_BATCH_SIZE, 0), State1}.
 
-drain_ui_log(_Buffer, _Context, 0, Count) ->
+do_drain_ui_log(_Buffer, _Context, 0, Count) ->
     Count;
-drain_ui_log(Buffer, Context, N, Count) ->
+do_drain_ui_log(Buffer, Context, N, Count) ->
     case ringbuffer:read(Buffer) of
         {ok, {_Skipped, LogEvent}} ->
             _ = m_log_ui:insert_event(LogEvent, Context),
-            drain_ui_log(Buffer, Context, N - 1, Count + 1);
+            do_drain_ui_log(Buffer, Context, N - 1, Count + 1);
         {error, empty} ->
             Count
     end.

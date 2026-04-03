@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2023-2025 Marc Worrell
+%% @copyright 2023-2026 Marc Worrell
 %% @doc Map query args to query maps and vice versa. Special backwards compatible handling
 %% for repeating terms with the same name.
 %% @end
 
-%% Copyright 2023-2025 Marc Worrell
+%% Copyright 2023-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -68,6 +68,9 @@ from_text(Text) ->
         <<"{", _/binary>> ->
             Map = jsx:decode(Text1),
             from_map_1(Map);
+        <<"[", _/binary>> ->
+            Terms = jsx:decode(Text1),
+            from_map_1(#{ <<"q">> => Terms });
         _ ->
             % Pairs of term/value
             TermArgs = parse_query_text(Text1),
