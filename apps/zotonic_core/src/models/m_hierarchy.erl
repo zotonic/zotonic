@@ -198,19 +198,23 @@ contains(Name0, Id, Context) when is_integer(Id) ->
     Name = z_convert:to_binary(Name0),
     z_depcache:memo(
         fun() ->
-            [{Lft, Rght}] = z_db:q(
+            case z_db:q(
                 "SELECT lft, rght FROM hierarchy "
-                "WHERE name = 'content_group' AND id = $1",
-                [Id],
-                Context
-            ),
-            R = z_db:q(
-                "SELECT id FROM hierarchy "
-                "WHERE name = 'content_group' AND lft >= $1 AND rght <= $2",
-                [Lft, Rght],
-                Context
-            ),
-            [CId || {CId} <- R]
+                "WHERE name = $2 AND id = $1",
+                [Id, Name],
+                Context)
+            of
+                [{Lft, Rght}] ->
+                    R = z_db:q(
+                        "SELECT id FROM hierarchy "
+                        "WHERE name = $3 AND lft >= $1 AND rght <= $2",
+                        [Lft, Rght, Name],
+                        Context
+                    ),
+                    [CId || {CId} <- R];
+                [] ->
+                    []
+            end
         end,
         {hierarchy_contains, Name, Id},
         3600,
