@@ -1,6 +1,7 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2009-2026 Arjan Scherpenisse
-%% @doc Handler for m.search[{query, Args..}]
+%% @doc Map search terms and queries to SQL terms. In z_search.erl, these
+%% SQL terms are combined to build SQL queries.
 %% @end
 
 %% Copyright 2009-2026 Arjan Scherpenisse
@@ -43,8 +44,8 @@
 -define(SQL_SAFE_REGEXP, "^[0-9a-zA-Z_\.]+$").
 
 
-%% @doc Build a SQL search query from the filter arguments.
-%% @todo: also return the options and paging?
+%% @doc Build a SQL search query from the filter arguments. The query can be
+%% a map or list of terms.
 -spec search(Query, Context) -> SqlTerms | EmptyResult when
     Query ::  map() | proplists:proplist(),
     Context :: z:context(),
@@ -1887,19 +1888,6 @@ extract_term_op(#{ <<"operator">> := Op }, _Op) ->
 extract_term_op(_, Op) ->
     Op.
 
-sanitize_op(undefined) -> <<"=">>;
-sanitize_op(<<>>) -> <<"=">>;
-sanitize_op(<<"!=">>) -> <<"<>">>;
-sanitize_op(<<"<>">>) -> <<"<>">>;
-sanitize_op(<<">=">>) -> <<">=">>;
-sanitize_op(<<"<=">>) -> <<"<=">>;
-sanitize_op(<<"=">>) -> <<"=">>;
-sanitize_op(<<">">>) -> <<">">>;
-sanitize_op(<<"<">>) -> <<"<">>;
-sanitize_op(<<"~">>) -> <<"~">>;
-sanitize_op(Op) when not is_binary(Op) -> sanitize_op(z_convert:to_binary(Op));
-sanitize_op(_) -> <<"=">>.
-
 
 %% @doc Rewrite nested filter lists to anyof/allof queries.
 filters_to_nested_terms(Filters) when is_list(Filters) ->
@@ -1908,9 +1896,15 @@ filters_to_nested_terms(undefined) ->
     [];
 filters_to_nested_terms(Column) when is_binary(Column); is_atom(Column) ->
     filter_map([Column, true], true);
-filters_to_nested_terms(_) ->
-    [].
+filters_to_nested_terms({'or', Filters}) ->
+    filter_map(Filters, false);
+filters_to_nested_terms({'and', Filters}) ->
+    filter_map(Filters, true).
 
+filter_map({'or', Terms}, _IsAnd) ->
+    filter_map(Terms, false);
+filter_map({'and', Terms}, _IsAnd) ->
+    filter_map(Terms, true);
 filter_map([], _IsAnd) ->
     [];
 filter_map([Column], _IsAnd) when is_atom(Column); is_binary(Column) ->
@@ -1921,14 +1915,19 @@ filter_map([Column, Op, Value], _IsAnd) when is_atom(Column); is_binary(Column) 
     filter_to_term(Column, Op, Value);
 filter_map(List, IsAnd) when is_list(List) ->
     Terms = lists:map(fun(T) -> filter_map(T, not IsAnd) end, List),
-    Operator = if
-        IsAnd -> <<"allof">>;
-        true -> <<"anyof">>
-    end,
-    #{
-        <<"operator">> => Operator,
-        <<"terms">> => Terms
-    }.
+    case Terms of
+        [T] ->
+            T;
+        _ ->
+            Operator = if
+                IsAnd -> <<"allof">>;
+                true -> <<"anyof">>
+            end,
+            #{
+                <<"operator">> => Operator,
+                <<"terms">> => Terms
+            }
+    end.
 
 filter_to_term(Column, Operator, Value) ->
     #{
@@ -1977,6 +1976,24 @@ map_filter_column(Column, Q) ->
     Field = sql_safe(Column),
     {<<"rsc">>, <<"rsc">>, Field, Q}.
 
+
+sanitize_op(undefined) -> <<"=">>;
+sanitize_op(<<>>) -> <<"=">>;
+sanitize_op(<<"!=">>) -> <<"<>">>;
+sanitize_op(<<"<>">>) -> <<"<>">>;
+sanitize_op(<<">=">>) -> <<">=">>;
+sanitize_op(<<"<=">>) -> <<"<=">>;
+sanitize_op(<<"=">>) -> <<"=">>;
+sanitize_op(<<">">>) -> <<">">>;
+sanitize_op(<<"<">>) -> <<"<">>;
+sanitize_op(<<"~">>) -> <<"~">>;
+sanitize_op(<<"&">>) -> <<"&">>;
+sanitize_op(<<"&&">>) -> <<"&&">>;
+sanitize_op(<<"<@">>) -> <<"<@">>;
+sanitize_op(<<"@>">>) -> <<"@>">>;
+sanitize_op(Op) when not is_binary(Op) -> sanitize_op(map_filter_operator(Op));
+sanitize_op(_) -> <<"=">>.
+
 map_filter_operator(eq) -> <<"=">>;
 map_filter_operator('=') -> <<"=">>;
 map_filter_operator(ne) -> <<"<>">>;
@@ -2017,8 +2034,13 @@ map_filter_operator(<<"&&">>) -> <<"&&">>;
 map_filter_operator(<<"overlaps">>) -> <<"&&">>;
 map_filter_operator(<<"@>">>) -> <<"@>">>;
 map_filter_operator(<<"contains">>) -> <<"@>">>;
-map_filter_operator(Op) -> throw({error, {unknown_filter_operator, Op}}).
-
+map_filter_operator(Op) ->
+    ?LOG_WARNING(#{
+        in => zotonic_mod_search,
+        text => <<"Query: unknown filter operator, defaulting to '='">>,
+        operator => Op
+    }),
+    <<"=">>.
 
 %% Expand the argument for hasanyobject, make pairs of {ObjectId,PredicateId}
 expand_object_predicates(Bin, Context) when is_binary(Bin) ->
