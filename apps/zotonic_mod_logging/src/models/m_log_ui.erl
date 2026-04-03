@@ -37,9 +37,11 @@ Available Model API Paths
 %% interface functions
 -export([
     m_get/3,
+    log_event/2,
     insert_event/2,
     insert/2,
     get/2,
+    ringbuffer/1,
     search_query/2,
     periodic_cleanup/1,
     install/1
@@ -56,41 +58,67 @@ m_get([ Index | Rest ], _Msg, Context) ->
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
-
+%% @doc Fetch a specific log entry from the database UI log.
+-spec get(Id, Context) -> map() | undefined when
+    Id :: integer(),
+    Context :: z:context().
 get(Id, Context) ->
     case z_db:select(log_ui, Id, Context) of
         {ok, R} -> R;
         {error, enoent} -> undefined
     end.
 
+%% @doc Return the name of the UI event ringbuffer for this site.
+-spec ringbuffer(Context) -> Name when
+    Context :: z:context(),
+    Name :: atom().
+ringbuffer(Context) ->
+    z_utils:name_for_site(ui_log_buffer, Context).
+
+%% @doc Log a UI event in the ringbuffer. The buffer is slowly consumed
+%% and the surviving events are written to the UI log.
+-spec log_event(Event, Context) -> ok | {error, Reason} when
+    Event :: map(),
+    Context :: z:context(),
+    Reason :: ignored.
+log_event(Event, Context) ->
+    case is_event_loggable(Event) of
+        true ->
+            mod_logging:log_ui_event(Event, Context);
+        false ->
+            {error, ignored}
+    end.
+
+%% @doc Write an event row to the database log table.
 insert(Props, Context) ->
     z_db:insert(log_ui, Props, Context).
 
-insert_event(Props, Context) when is_map(Props) ->
-    insert_event(maps:to_list(Props), Context);
-insert_event(Props, Context) when is_list(Props) ->
-    case is_event_loggable(Props) of
-        true ->
-            UserId = z_acl:user(Context),
-            Props1 = lists:filter( fun filter_prop/1, Props ),
-            Props2 = lists:map( fun map_prop/1, Props1 ),
-            Type = case proplists:get_value(type, Props2) of
-                undefined -> <<"error">>;
-                T -> T
-            end,
-            Message = [
-                {user_id, UserId},
-                {type, Type},
-                {remote_ip, m_req:get(peer, Context)}
-            ] ++ proplists:delete(type, Props2),
-            MsgUserProps = maybe_add_user_props(Message, Context),
-            z_db:insert(log_ui, MsgUserProps, Context);
-        false ->
-            {error, ignore}
-    end.
+%% @doc Write a queued event to the database log table. Decorate with
+%% information about the user.
+insert_event(#{ event := Event, user_id := UserId, timestamp := Timestamp, peer := Peer }, Context) ->
+    Props1 = maps:filter(fun filter_prop/2, Event),
+    Props2 = maps:fold(fun map_prop/3, #{}, Props1),
+    Type = case maps:get(<<"type">>, Props2, undefined) of
+        undefined -> <<"error">>;
+        T -> T
+    end,
+    Message = Props2#{
+        <<"user_id">> => UserId,
+        <<"type">> => Type,
+        <<"remote_ip">> => Peer,
+        <<"created">> => z_datetime:timestamp_to_datetime(Timestamp)
+    },
+    MsgUserProps = maybe_add_user_props(Message, Context),
+    z_db:insert(log_ui, MsgUserProps, Context).
 
-is_event_loggable(Props) ->
-    not is_ignored_bot(proplists:get_value(<<"user_agent">>, Props)).
+%% @doc Only log UI events with a known user_agent. The user-agent must
+%% not be a known bot.
+is_event_loggable(#{ <<"user_agent">> := UserAgent }) ->
+    not is_ignored_bot(UserAgent);
+is_event_loggable(Props) when is_list(Props) ->
+    not is_ignored_bot(proplists:get_value(<<"user_agent">>, Props));
+is_event_loggable(_Props) ->
+    false.
 
 is_ignored_bot(undefined) ->
     false;
@@ -100,33 +128,27 @@ is_ignored_bot(UserAgent) ->
     orelse binary:match(UserAgent, <<"pingbot">>) /= nomatch
     orelse binary:match(UserAgent, <<"BingPreview">>) /= nomatch.
 
-maybe_add_user_props(Props, Context) ->
-    case proplists:get_value(user_id, Props) of
-        undefined ->
-            Props;
-        UserId ->
-            [
-                {user_name_first, m_rsc:p_no_acl(UserId, name_first, Context)},
-                {user_name_surname, m_rsc:p_no_acl(UserId, name_surname, Context)},
-                {user_email_raw, m_rsc:p_no_acl(UserId, email_raw, Context)}
-                | Props
-            ]
-    end.
+maybe_add_user_props(#{ <<"user_id">> := undefined } = Msg, _Context) ->
+    Msg;
+maybe_add_user_props(#{ <<"user_id">> := UserId } = Msg, Context) ->
+    Msg#{
+        <<"user_name_first">> => m_rsc:p_no_acl(UserId, <<"name_first">>, Context),
+        <<"user_name_surname">> => m_rsc:p_no_acl(UserId, <<"name_surname">>, Context),
+        <<"user_email_raw">> => m_rsc:p_no_acl(UserId, <<"email_raw">>, Context)
+    }.
 
+filter_prop(_, V) when not is_binary(V), not is_number(V) -> false;
+filter_prop(<<"type">>, _) -> true;
+filter_prop(<<"message">>, _) -> true;
+filter_prop(<<"file">>, _) -> true;
+filter_prop(<<"line">>, _) -> true;
+filter_prop(<<"col">>, _) -> true;
+filter_prop(<<"stack">>, _) -> true;
+filter_prop(<<"user_agent">>, _) -> true;
+filter_prop(<<"url">>, _) -> true;
+filter_prop(_, _) -> false.
 
-filter_prop({_, V}) when not is_binary(V), not is_number(V) -> false;
-filter_prop({<<"type">>, _}) -> true;
-filter_prop({<<"message">>, _}) -> true;
-filter_prop({<<"file">>, _}) -> true;
-filter_prop({<<"line">>, _}) -> true;
-filter_prop({<<"col">>, _}) -> true;
-filter_prop({<<"stack">>, _}) -> true;
-filter_prop({<<"user_agent">>, _}) -> true;
-filter_prop({<<"url">>, _}) -> true;
-filter_prop(_) -> false.
-
-map_prop({K, null}) -> map_prop({K, undefined});
-map_prop({<<"type">>, T}) ->
+map_prop(<<"type">>, T, Acc) ->
     T1 = case T of
         <<"fatal">> -> <<"fatal">>;
         <<"error">> -> <<"error">>;
@@ -136,14 +158,14 @@ map_prop({<<"type">>, T}) ->
         <<"debug">> -> <<"debug">>;
         _ -> <<"error">>
     end,
-    {type, T1};
-map_prop({<<"message">>, M}) when is_binary(M) -> {message, z_string:truncatechars(M, 500)};
-map_prop({<<"stack">>, M}) when is_binary(M) -> {stack, z_string:truncatechars(M, 1000)};
-map_prop({<<"file">>, M}) when is_binary(M) -> {file, z_string:truncatechars(M, 500)};
-map_prop({<<"line">>, M}) -> {line, z_convert:to_integer(M)};
-map_prop({<<"col">>, M}) -> {col, z_convert:to_integer(M)};
-map_prop({<<"user_agent">>, M}) when is_binary(M) -> {user_agent, z_string:truncatechars(M, 500)};
-map_prop({<<"url">>, M}) when is_binary(M) -> {url, z_string:truncatechars(M, 500)}.
+    Acc#{ <<"type">> => T1 };
+map_prop(<<"message">>, M, Acc) when is_binary(M) -> Acc#{ <<"message">> => z_string:truncatechars(M, 500) };
+map_prop(<<"stack">>, M, Acc) when is_binary(M) -> Acc#{ <<"stack">> => z_string:truncatechars(M, 1000) };
+map_prop(<<"file">>, M, Acc) when is_binary(M) -> Acc#{ <<"file">> => z_string:truncatechars(M, 500)};
+map_prop(<<"line">>, M, Acc) -> Acc#{ <<"line">> => z_convert:to_integer(M)};
+map_prop(<<"col">>, M, Acc) -> Acc#{ <<"col">> => z_convert:to_integer(M)};
+map_prop(<<"user_agent">>, M, Acc) when is_binary(M) -> Acc#{ <<"user_agent">> => z_string:truncatechars(M, 500)};
+map_prop(<<"url">>, M, Acc) when is_binary(M) -> Acc#{ <<"url">> => z_string:truncatechars(M, 500)}.
 
 
 -spec search_query( map(), z:context() ) -> #search_sql{}.
