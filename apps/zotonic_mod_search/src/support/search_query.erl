@@ -147,7 +147,7 @@ qterm(#{ <<"term">> := <<"cat">>, <<"value">> := Cats}, true, Context) ->
     %% Filter results on a certain category within a nested term.
     Cats1 = assure_categories(Cats, Context),
     #search_sql_term{
-        where = [ <<"rsc.category_id = ANY(">>, '$1', <<")">> ],
+        where = [ <<"rsc.category_id = ANY(">>, '$1', <<"::int[])">> ],
         args = [ expand_sub_categories(Cats1, Context) ]
     };
 qterm(#{ <<"term">> := <<"cat">>, <<"value">> := Cats}, false, Context) ->
