@@ -160,7 +160,7 @@ qterm(#{ <<"term">> := <<"cat_exclude">>, <<"value">> := Cats}, true, Context) -
     %% Filter results outside a certain category.
     Cats1 = assure_categories(Cats, Context),
     #search_sql_term{
-        where = [ <<"rsc.category_id <> ALL(">>, '$1', <<")">> ],
+        where = [ <<"rsc.category_id <> ALL(">>, '$1', <<"::int[])">> ],
         args = [ expand_sub_categories(Cats1, Context) ]
     };
 qterm(#{ <<"term">> := <<"cat_exclude">>, <<"value">> := Cats}, false, Context) ->
