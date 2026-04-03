@@ -1937,6 +1937,7 @@ filter_to_term(Column, Operator, Value) ->
         <<"value">> => Value
     }.
 
+filtercol_to_term(T) when is_atom(T) -> filtercol_to_term(atom_to_binary(T, utf8));
 filtercol_to_term(<<"pivot:", _/binary>> = T) -> T;
 filtercol_to_term(<<"pivot.", T/binary>>) -> <<"pivot:", T/binary>>;
 filtercol_to_term(<<"facet:", _/binary>> = T) -> T;
