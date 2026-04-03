@@ -1891,11 +1891,11 @@ extract_term_op(_, Op) ->
 
 %% @doc Rewrite nested filter lists to anyof/allof queries.
 filters_to_nested_terms(Filters) when is_list(Filters) ->
-    filter_map(Filters, true);
+    filter_map(Filters, false);
 filters_to_nested_terms(undefined) ->
     [];
 filters_to_nested_terms(Column) when is_binary(Column); is_atom(Column) ->
-    filter_map([Column, true], true);
+    filter_map([Column, true], false);
 filters_to_nested_terms({'or', Filters}) ->
     filter_map(Filters, false);
 filters_to_nested_terms({'and', Filters}) ->
