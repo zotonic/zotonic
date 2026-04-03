@@ -129,7 +129,7 @@ filter_empty(Q) when is_list(Q) ->
     Term :: list() | map(),
     IsNested :: boolean(),
     Context :: z:context(),
-    QueryTerms :: list() | #search_sql_term{}.
+    QueryTerms :: list() | #search_sql_term{} | #search_sql_nested{}.
 qterm(undefined, _IsNested, _Context) ->
     [];
 qterm([], _IsNested, _Context) ->

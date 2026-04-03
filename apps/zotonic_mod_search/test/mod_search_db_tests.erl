@@ -414,33 +414,38 @@ nested_category_terms_qterm_test() ->
     ArticleCatId = m_rsc:rid(article, C),
     CollectionCatId = m_rsc:rid(collection, C),
     MetaCatId = m_rsc:rid(meta, C),
-    #search_sql_nested{
-        operator = <<"allof">>,
+    #search_sql_terms{
         terms = [
-            #search_sql_term{ where = WhereCat, args = [CatArgs] },
             #search_sql_nested{
-                operator = <<"noneof">>,
+                operator = <<"allof">>,
                 terms = [
-                    #search_sql_term{ where = WhereExact, args = [ExactArgs] }
+                    #search_sql_term{ where = WhereCat, args = [CatArgs] },
+                    #search_sql_nested{
+                        operator = <<"noneof">>,
+                        terms = [
+                            #search_sql_term{ where = WhereExact, args = [ExactArgs] }
+                        ]
+                    },
+                    #search_sql_term{ where = WhereExclude, args = [ExcludeArgs] }
                 ]
-            },
-            #search_sql_term{ where = WhereExclude, args = [ExcludeArgs] }
+            }
         ]
-    } = search_query:qterm(
-        #{
-            <<"operator">> => <<"allof">>,
-            <<"terms">> => [
-                #{ <<"term">> => <<"cat">>, <<"value">> => article },
-                #{
-                    <<"operator">> => <<"noneof">>,
-                    <<"terms">> => [
-                        #{ <<"term">> => <<"cat_exact">>, <<"value">> => collection }
-                    ]
-                },
-                #{ <<"term">> => <<"cat_exclude">>, <<"value">> => meta }
-            ]
-        },
-        false,
+    } = search_query:build_query(
+        [
+            #{
+                <<"operator">> => <<"allof">>,
+                <<"terms">> => [
+                    #{ <<"term">> => <<"cat">>, <<"value">> => article },
+                    #{
+                        <<"operator">> => <<"noneof">>,
+                        <<"terms">> => [
+                            #{ <<"term">> => <<"cat_exact">>, <<"value">> => collection }
+                        ]
+                    },
+                    #{ <<"term">> => <<"cat_exclude">>, <<"value">> => meta }
+                ]
+            }
+        ],
         C),
     ?assertMatch([<<"rsc.category_id = ANY(">>, '$1', <<"::int[])">>], WhereCat),
     ?assert(lists:member(ArticleCatId, CatArgs)),
