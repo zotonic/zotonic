@@ -180,7 +180,7 @@ qterm(#{ <<"term">> := <<"cat_exact">>, <<"value">> := Cats}, true, Context) ->
             end
         end, Cats1),
     #search_sql_term{
-        where = [ <<"rsc.category_id = ANY(">>, '$1', <<")">> ],
+        where = [ <<"rsc.category_id = ANY(">>, '$1', <<"::int[])">> ],
         args = [ Cats2 ]
     };
 qterm(#{ <<"term">> := <<"cat_exact">>, <<"value">> := Cats}, false, Context) ->
