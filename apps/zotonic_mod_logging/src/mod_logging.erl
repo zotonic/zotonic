@@ -72,6 +72,8 @@ This module handles the following notifier callbacks:
 - `observe_admin_menu`: Add log viewers and log configuration entries to the admin menu.
 - `observe_search_query`: Provide module-specific search query handlers with ACL-aware filtering.
 - `observe_tick_1h`: Delete expired log records during hourly maintenance.
+- `observe_tick_1m`: Cleanup UI log de-duplication hashes and check the database pool health.
+- `observe_tick_1s`: Fetch UI log messages from the circular buffer.
 
 UI Log
 ------
@@ -209,7 +211,7 @@ pid_observe_tick_1m(Pid, tick_1m, _Context) ->
     gen_server:cast(Pid, check_db_pool_health),
     gen_server:cast(Pid, log_client_check).
 
-pid_observe_tick_1s(Pid, tick_1s, Context) ->
+pid_observe_tick_1s(Pid, tick_1s, _Context) ->
     gen_server:cast(Pid, drain_ui_log).
 
 observe_tick_1h(tick_1h, Context) ->

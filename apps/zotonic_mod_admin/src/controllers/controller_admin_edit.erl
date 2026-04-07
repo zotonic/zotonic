@@ -1,9 +1,9 @@
 %% @author Marc Worrell, Arjan Scherpenisse
-%% @copyright 2009-2025 Marc Worrell, Arjan Scherpenisse
+%% @copyright 2009-2026 Marc Worrell, Arjan Scherpenisse
 %% @doc Admin webmachine_controller.
 %% @end
 
-%% Copyright 2009-2025 Marc Worrell, Arjan Scherpenisse
+%% Copyright 2009-2026 Marc Worrell, Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -207,19 +207,45 @@ event(#sort{items=Sorted, drop={dragdrop, {object_sorter, Props}, _, _}}, Contex
 event(#postback{message={query_preview, Opts}}, Context) ->
     DivId = proplists:get_value(div_id, Opts),
     RscId = proplists:get_value(rsc_id, Opts),
-    try
-        Q = z_search_props:from_text(z_context:get_q(<<"triggervalue">>, Context)),
-        S = z_search:search(<<"query">>, Q, 1, 20, Context),
-        Vars = [
-            {id, RscId},
-            {result, S}
-        ],
-        {Html, Context1} = z_template:render_to_iolist("_admin_query_preview.tpl", Vars, Context),
-        z_render:update(DivId, Html, Context1)
+    QueryText = z_string:trim(z_convert:to_binary(z_context:get_q(<<"query">>, Context))),
+    Vars = try
+        if
+            QueryText == <<>> ->
+                [
+                    {id, RscId},
+                    {result, undefined},
+                    {is_empty, true}
+                ];
+            true ->
+                Q = z_search_props:from_text(QueryText),
+                S = z_search:search(<<"query">>, Q, 1, 20, Context),
+                [
+                    {id, RscId},
+                    {result, S}
+                ]
+        end
     catch
-        _: {error, {Kind, Arg}} ->
-            z_render:growl_error([?__("There is an error in your query:", Context), " ", Kind, " - ", Arg], Context)
-    end.
+        throw:{error, {Kind, Arg}} ->
+            [
+                {id, RscId},
+                {result, undefined},
+                {error, throw},
+                {reason, #{
+                    kind => z_convert:to_binary(Kind),
+                    arg => z_convert:to_binary(Arg)
+                }}
+            ];
+        error:Reason ->
+            [
+                {id, RscId},
+                {result, undefined},
+                {error, error},
+                {reason, z_convert:to_binary(Reason)}
+            ]
+    end,
+    {Html, Context1} = z_template:render_to_iolist("_admin_query_preview.tpl", Vars, Context),
+    z_render:update(DivId, Html, Context1).
+
 
 set_value_slug(undefined, Context) ->
     set_value_slug(<<>>, Context);
