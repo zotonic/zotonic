@@ -72,7 +72,7 @@ This module handles the following notifier callbacks:
 - `observe_admin_menu`: Add log viewers and log configuration entries to the admin menu.
 - `observe_search_query`: Provide module-specific search query handlers with ACL-aware filtering.
 - `observe_tick_1h`: Delete expired log records during hourly maintenance.
-- `observe_tick_1m`: Cleanup UI log de-duplication hashes and check of the database pool health.
+- `observe_tick_1m`: Cleanup UI log de-duplication hashes and check the database pool health.
 - `observe_tick_1s`: Fetch UI log messages from the circular buffer.
 
 UI Log
