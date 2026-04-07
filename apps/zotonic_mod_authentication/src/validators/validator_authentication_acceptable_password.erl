@@ -113,6 +113,6 @@ event(#postback{message={validate, Args}, trigger=TriggerId}, Context) ->
             "'", TriggerId, "',",
             z_convert:to_binary(IsAcceptable), ",",
             "'", z_utils:js_escape(Password), "',",
-            "false"
+            "true"
          ");"
     ]), Context).

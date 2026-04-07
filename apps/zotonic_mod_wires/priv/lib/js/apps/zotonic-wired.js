@@ -1727,10 +1727,10 @@ function z_validation_on_invalid(id, on_invalid) {
 }
 
 // Async validation result for an element
-function z_async_validation_result(id, isValid, testedValue, isReported) {
+function z_async_validation_result(id, isValid, testedValue, isReportError) {
   const v = getLiveValidation($("#" + id));
   if (v && $("#" + id).val() == testedValue) {
-    v.asyncValidationResult(isValid, testedValue, !!isReported);
+    v.asyncValidationResult(isValid, testedValue, isReportError);
   }
 }
 

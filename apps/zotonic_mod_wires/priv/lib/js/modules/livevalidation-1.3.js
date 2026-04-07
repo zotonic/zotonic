@@ -455,7 +455,7 @@ LiveValidation.prototype = {
      * Called when there is an async validation result.
      * The caller has already checked if the current input value hasn't changed.
      */
-    asyncValidationResult: function(isValid, testedValue, isReported){
+    asyncValidationResult: function(isValid, testedValue, isReportError){
         if (this.validationAsync){
             // Find which validation was waiting for async, assume only one async postback per field.
             for(let i = 0, len = this.validations.length; i < len; ++i){
@@ -467,8 +467,8 @@ LiveValidation.prototype = {
                     if (isValid){
                         this.onValid();
                     } else {
-                        // Show the 'failureMessage' unless the error has been reported already.
-                        if (!isReported) {
+                        // Show the 'failureMessage' if requested by the validator callback.
+                        if (isReportError) {
                             this.showErrorMessage(validation.params?.failureMessage);
                         };
                         this.onInvalid();
