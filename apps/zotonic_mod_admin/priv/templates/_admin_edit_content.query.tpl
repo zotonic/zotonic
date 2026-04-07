@@ -23,12 +23,12 @@
     <div class="form-group">
     	<label class="control-label" for="query">{_ Query _}</label>
     	<div>
-    	    <textarea class="form-control" id="{{ #query }}" name="query" rows="15" placeholder="cat='text'">{{ id.query }}</textarea>
+    	    <textarea class="form-control" id="{{ #query }}" name="query" rows="15" placeholder="cat=text">{{ id.query }}</textarea>
     		{% wire id=#query type="change" action={script script="document.queryPreview();"} %}
     	</div>
     </div>
     <div class="form-group">
-        <a id="{{ #test_query }}" class="btn btn-default">{_ Test query _}</a>
+        <a id="{{ #test_query }}" class="btn btn-primary">{_ Test query _}</a>
         {% wire id=#test_query type="click" action={script script="document.queryPreview();"} %}
     </div>
     <div class="form-group">

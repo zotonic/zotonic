@@ -85,25 +85,34 @@
             </p>
 
             <div class="form-group">
-                {% with [ _"Query, for example:", "\n\ncat='person'" ] as placeholder %}
+                {% with [ _"Query, for example:", "\n\ncat=person" ] as placeholder %}
                 <textarea class="form-control" id="{{ #query }}" name="query" rows="10" placeholder="{{ placeholder }}">{{ id.query }}</textarea>
                 {% endwith %}
-                {% wire id=#query type="change" postback={query_preview rsc_id=id div_id=#querypreview target_id=#query} delegate="controller_admin_edit" %}
+                {% wire id=#query type="change" action={script script="document.queryPreview();"} %}
             </div>
             <div class="form-group">
-                <a id="{{ #test_query }}" class="btn btn-default">{_ Test query _}</a>
-                {% wire id=#test_query type="click" action={script script="$('#query').trigger('change')"} %}
+                <a id="{{ #test_query }}" class="btn btn-primary">{_ Test query _}</a>
+                {% wire id=#test_query type="click" action={script script="document.queryPreview();"} %}
             </div>
 
-            <h4>{_ Query preview _}</h4>
+            <div id="{{ #querypreview }}"></div>
 
-            <div class="query-results" id="{{ #querypreview }}">
-                {% if id.query %}
-                    {% include "_admin_query_preview.tpl" result=m.search[{query query_id=id pagelen=20}] %}
-                {% else %}
-                    <p class="text-muted">{_ No results. _}</p>
-                {% endif %}
-            </div>
+            {% wire name="query-preview"
+                    postback={query_preview
+                        rsc_id=id
+                        target_id=#query
+                        div_id=#querypreview
+                    }
+                    delegate="controller_admin_edit"
+            %}
+
+            {% javascript %}
+                document.queryPreview = function() {
+                    const text = document.getElementById('{{ #query }}').value;
+                    z_event("query-preview", { query: text });
+                };
+                setTimeout(document.queryPreview, 100);
+            {% endjavascript %}
         </details>
     </div>
 {% endblock %}
