@@ -97,6 +97,7 @@ event(#postback{message={validate, Args}, trigger=TriggerId}, Context) ->
         "z_async_validation_result(",
             "'", TriggerId, "',",
             z_convert:to_binary(IsValid), ",",
-            "'", z_utils:js_escape(Value), "'",
+            "'", z_utils:js_escape(Value), "',",
+            "true"
          ");"
     ]), Context).
