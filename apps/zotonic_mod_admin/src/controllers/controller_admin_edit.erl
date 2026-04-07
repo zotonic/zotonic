@@ -226,15 +226,13 @@ event(#postback{message={query_preview, Opts}}, Context) ->
         end
     catch
         throw:{error, {Kind, Arg}} ->
-            Kind1 = z_html:escape(z_convert:to_binary(Kind)),
-            Arg1 = z_html:escape(z_convert:to_binary(Arg)),
             [
                 {id, RscId},
                 {result, undefined},
                 {error, throw},
                 {reason, #{
-                    kind => Kind1,
-                    arg => Arg1
+                    kind => z_convert:to_binary(Kind),
+                    arg => z_convert:to_binary(Arg)
                 }}
             ];
         error:Reason ->
