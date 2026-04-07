@@ -1,6 +1,6 @@
 <h4>{_ Query results _}</h4>
 
-<div class="rows">
+<div class="row">
     <div class="col-lg-6">
         <p>
             {% if result.is_total_estimated %}{% trans "About {n} items found." n=result.total|round_significant:2 %}
