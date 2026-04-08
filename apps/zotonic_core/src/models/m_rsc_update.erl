@@ -521,9 +521,14 @@ update(Name, PropsOrFun, Options, Context) when not is_integer(Name), Name =/= i
     end;
 update(Id, Props, Options, Context) when is_list(Props) ->
     {ok, PropsMap} = z_props:from_list(Props),
-    OptionsTz = case timezone(Id, PropsMap, Options, Context) of
-        undefined -> Options;
-        Tz -> [ {tz, Tz} | proplists:delete(tz, Options) ]
+    IsImport = proplists:get_bool(is_import, Options),
+    OptionsTz = if
+        IsImport -> Options;
+        true ->
+            case timezone(Id, PropsMap, Options, Context) of
+                undefined -> Options;
+                Tz -> [ {tz, Tz} | proplists:delete(tz, Options) ]
+            end
     end,
     update_1(Id, PropsMap, OptionsTz, Context);
 update(Id, PropsOrFun0, Options, Context) when is_integer(Id); Id =:= insert_rsc ->
