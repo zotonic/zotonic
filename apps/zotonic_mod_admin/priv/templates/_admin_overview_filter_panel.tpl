@@ -276,7 +276,9 @@
                                     [ "-publication_start", _"Published on, newest first" ],
                                     [ "publication_start", _"Published on, oldest first" ],
                                     [ "-publication_end", _"Published ends, newest first" ],
-                                    [ "publication_end", _"Published ends, oldest first" ]
+                                    [ "publication_end", _"Published ends, oldest first" ],
+                                    [ "-id", _"Id, newest first" ],
+                                    [ "id", _"Id, oldest first" ]
                                 ]
                             %}
                                 <option value="{{ name }}" {% if qsort == name %}selected{% endif %}>

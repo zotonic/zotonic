@@ -389,7 +389,7 @@ observe_export_resource_filename(#export_resource_filename{dispatch=survey_resul
             Filename = lists:flatten([
                             "survey-",
                             integer_to_list(Id),
-                            case m_rsc:p(Id, slug, Context) of
+                            case m_rsc:p(Id, <<"slug">>, Context) of
                                 undefined -> "";
                                 <<>> -> "";
                                 Slug -> [$-|z_convert:to_list(Slug)]
@@ -1379,8 +1379,8 @@ uploads(Context) ->
     [ Upload || {_, #upload{} = Upload} <- Qs ].
 
 probably_email(SurveyId, Context) ->
-    not z_utils:is_empty(m_rsc:p_no_acl(SurveyId, survey_email, Context))
-    orelse z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_email_respondent, Context)).
+    not z_utils:is_empty(m_rsc:p_no_acl(SurveyId, <<"survey_email">>, Context))
+    orelse z_convert:to_bool(m_rsc:p_no_acl(SurveyId, <<"survey_email_respondent">>, Context)).
 
 %% @doc mail the survey result to an e-mail address
 mail_result(SurveyId, PrepAnswers, SurveyResult, Attachments, Context) ->
@@ -1409,14 +1409,14 @@ mail_result(SurveyId, PrepAnswers, SurveyResult, Attachments, Context) ->
     end.
 
 mail_respondent(SurveyId, Answers, ResultId, PrepAnswers, SurveyResult, IsEditing, Context) ->
-    case IsEditing orelse z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_email_respondent, Context)) of
+    case IsEditing orelse z_convert:to_bool(m_rsc:p_no_acl(SurveyId, <<"survey_email_respondent">>, Context)) of
         true ->
             EmailUser = case IsEditing of
                 false ->
-                    m_rsc:p_no_acl(z_acl:user(Context), email_raw, Context);
+                    m_rsc:p_no_acl(z_acl:user(Context), <<"email_raw">>, Context);
                 true ->
                     AnsUserId = m_survey:answer_user(ResultId, Context),
-                    m_rsc:p_no_acl(AnsUserId, email_raw, Context)
+                    m_rsc:p_no_acl(AnsUserId, <<"email_raw">>, Context)
             end,
             case find_email_respondent(Answers, EmailUser) of
                 <<>> ->
