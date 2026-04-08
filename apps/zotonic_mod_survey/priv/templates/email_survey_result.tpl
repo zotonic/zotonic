@@ -62,6 +62,7 @@
 	{% endif %}
 {% endblock %}
 
+{% if is_result_email or id.survey_email_answers /= 3 %}
 {% if id.survey_show_results /= 3
 	or (
 			id.survey_test_percentage
@@ -69,6 +70,11 @@
 		and result.points >= id|survey_test_max_points * (id.survey_test_percentage / 100)
 	)
 %}
+	{% with is_result_email
+			or not id.survey_email_answers
+			or (id.survey_email_answers == 1 and m.acl.user)
+	   as include_open_questions
+	%}
 	<table style="width: 100%; border-collapse: collapse; border-spacing: 0; margin-bottom: 18px;">
 		<tr>
 			<th style="padding: 8px; line-height: 18px; text-align: left; vertical-align: top; border-top: 1px solid #dddddd; max-width:45%;">{_ Question _}</th>
@@ -90,6 +96,12 @@
 			    	  and blk.type != 'survey_stop'
 			    	  and blk.name != 'survey_feedback'
 			   	%}
+			   		{% if include_open_questions
+			   			  or (
+			   			  		blk.type != 'survey_short_answer'
+			   			  	and blk.type != 'survey_long_answer'
+			   			  )
+			   		%}
 					<tr style="border-top: 1px solid #ccc">
 						<td valign="top" style="padding: 8px; line-height: 18px; text-align: left; vertical-align: top; border-top: 1px solid #dddddd; max-width:45%;">
 							{% if blk.prompt %}
@@ -110,6 +122,7 @@
 						    {% endif %}
 						</td>
 					</tr>
+					{% endif %}
 				{% endif %}
 			{% endfor %}
 		{% else %}
@@ -125,6 +138,12 @@
 							</td>
 						</tr>
 					{% elseif ans %}
+				   		{% if include_open_questions
+				   			  or (
+				   			  		blk.type != 'survey_short_answer'
+				   			  	and blk.type != 'survey_long_answer'
+				   			  )
+				   		%}
 						<tr style="border-top: 1px solid #ccc">
 							<td valign="top" style="padding: 8px; line-height: 18px; text-align: left; vertical-align: top; border-top: 1px solid #dddddd; max-width:45%;">
 								{% if ans.question.prompt %}
@@ -143,12 +162,15 @@
 								{% endif %}
 							</td>
 						</tr>
+						{% endif %}
 					{% endif %}
 				{% endwith %}
 				{% endwith%}
 			{% endfor %}
 		{% endif %}
 	</table>
+	{% endwith %}
+{% endif %}
 {% endif %}
 
 {% endblock %}

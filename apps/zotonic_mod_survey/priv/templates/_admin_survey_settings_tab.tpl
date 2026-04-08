@@ -128,7 +128,7 @@
 					</label>
 					<label class="radio">
 	        			<input type="radio" name="survey_show_results" value="3" {% if id.survey_show_results == 3 %}checked{% endif %}>
-	        			{_ Results from the respondent – if passed only_}
+	        			{_ Results from the respondent – if passed only _}
 					</label>
 					<label class="radio">
 	        			<input type="radio" name="survey_show_results" value="1" {% if id.survey_show_results == 1 %}checked{% endif %}>
@@ -196,6 +196,8 @@
 	<fieldset>
 		<h4>{_ Handling _}</h4>
 
+		<p class="help-block">{_ After the form is submitted, an email with all answers can be sent to the configured email addresses below. _}</p>
+
 		<div class="form-group label-floating">
 			<input type="email" multiple class="form-control" name="survey_email" id="survey_email" value="{{ id.survey_email }}" placeholder="{_ Mail results to _}">
 			<label class="control-label">{_ Mail results to _}</label>
@@ -205,17 +207,47 @@
 		</div>
 
 		<div class="form-group">
+			<label>{_ Optional confirmation email for the respondent _}</label>
+			<p class="help-block">{_ If checked, then a confirmation email with the submitted answers can be sent to the respondent. For logged-in respondents, the known email address is used. For anonymous respondents, add a short text field with the label “email” and the validation set to “must be an email address”. _}</p>
 			<div class="checkbox">
 				<label>
 					<input type="checkbox" name="survey_email_respondent" id="survey_email_respondent" value="1" {% if id.survey_email_respondent  %}checked{% endif %}>
-					{_ Send a confirmation to the respondent. The email address must be known (logged in respondents) or you can add a short text field with the label “email” and the validation set to "must be an email address". _}
+					{_ Send a confirmation email to the respondent _}
+				</label>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label>{_ Answers to include in the confirmation email _}</label>
+			<p class="help-block">
+				{_ To prevent misuse, confirmation emails can exclude answers to open questions. You can choose which answers are sent to anonymous and logged-in respondents. _}
+			</p>
+			<div class="radio">
+				<label>
+					<input type="radio" name="survey_email_answers" value="" {% if not id.survey_email_answers %}checked{% endif %}> {_ All answers for anonymous and logged-in respondents _}
+				</label>
+			</div>
+			<div class="radio">
+				<label>
+					<input type="radio" name="survey_email_answers" value="1" {% if id.survey_email_answers == '1' %}checked{% endif %}> {_ Closed-question answers for anonymous respondents; all answers for logged-in respondents _}
+				</label>
+			</div>
+			<div class="radio">
+				<label>
+					<input type="radio" name="survey_email_answers" value="2" {% if id.survey_email_answers == '2' %}checked{% endif %}> {_ Closed-question answers for anonymous and logged-in respondents _}
+				</label>
+			</div>
+			<div class="radio">
+				<label>
+					<input type="radio" name="survey_email_answers" value="3" {% if id.survey_email_answers == '3' %}checked{% endif %}> {_ No answers; confirmation text only _}
 				</label>
 			</div>
 		</div>
 
 		{% if handlers %}
 			<div class="form-group">
-				<label class="control-label">{_ Handle this form with _}</label>
+				<label>{_ Handle this form with _}</label>
+				<p class="help-block">{_ Forms can be handled by special code, for example a form that is forwarded to a back office system. Depending on the handler the results are stored in the database or not. _}</p>
 				<div>
 					<select class="form-control" name="survey_handler" id="survey_handler">
 						<option value=""></option>
