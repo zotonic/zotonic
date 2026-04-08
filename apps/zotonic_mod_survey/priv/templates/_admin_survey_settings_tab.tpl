@@ -222,26 +222,28 @@
 			<p class="help-block">
 				{_ To prevent misuse, confirmation emails can exclude answers to open questions. You can choose which answers are sent to anonymous and logged-in respondents. _}
 			</p>
-			<div class="radio">
-				<label>
-					<input type="radio" name="survey_email_answers" value="" {% if not id.survey_email_answers %}checked{% endif %}> {_ All answers for anonymous and logged-in respondents _}
-				</label>
-			</div>
-			<div class="radio">
-				<label>
-					<input type="radio" name="survey_email_answers" value="1" {% if id.survey_email_answers == '1' %}checked{% endif %}> {_ Closed-question answers for anonymous respondents; all answers for logged-in respondents _}
-				</label>
-			</div>
-			<div class="radio">
-				<label>
-					<input type="radio" name="survey_email_answers" value="2" {% if id.survey_email_answers == '2' %}checked{% endif %}> {_ Closed-question answers for anonymous and logged-in respondents _}
-				</label>
-			</div>
-			<div class="radio">
-				<label>
-					<input type="radio" name="survey_email_answers" value="3" {% if id.survey_email_answers == '3' %}checked{% endif %}> {_ No answers; confirmation text only _}
-				</label>
-			</div>
+			{% with id.survey_email_answers|to_integer as survey_email_answers %}
+				<div class="radio">
+					<label>
+						<input type="radio" name="survey_email_answers" value="" {% if not survey_email_answers %}checked{% endif %}> {_ All answers for anonymous and logged-in respondents _}
+					</label>
+				</div>
+				<div class="radio">
+					<label>
+						<input type="radio" name="survey_email_answers" value="1" {% if survey_email_answers == 1 %}checked{% endif %}> {_ Closed-question answers for anonymous respondents; all answers for logged-in respondents _}
+					</label>
+				</div>
+				<div class="radio">
+					<label>
+						<input type="radio" name="survey_email_answers" value="2" {% if survey_email_answers == 2 %}checked{% endif %}> {_ Closed-question answers for anonymous and logged-in respondents _}
+					</label>
+				</div>
+				<div class="radio">
+					<label>
+						<input type="radio" name="survey_email_answers" value="3" {% if survey_email_answers == 3 %}checked{% endif %}> {_ No answers; confirmation text only _}
+					</label>
+				</div>
+			{% endwith %}
 		</div>
 
 		{% if handlers %}
