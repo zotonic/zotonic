@@ -890,12 +890,12 @@ timezone_2(_Id, Context) ->
     z_context:tz(Context).
 
 update_1(Id, PropsOrFun, Options, Context) when is_integer(Id); Id =:= insert_rsc ->
-    IsImport = proplists:get_value(is_import, Options, false),
-    Tz0 = case is_map(PropsOrFun) of
-        true when not IsImport ->
-            timezone(Id, PropsOrFun, Options, Context);
-        _ ->
-            % Take timezone from options or request
+    IsImport = proplists:get_bool(is_import, Options),
+    Tz0 = if
+        IsImport -> <<"UTC">>;
+        is_map(PropsOrFun) -> timezone(Id, PropsOrFun, Options, Context);
+        true ->
+            % Take timezone from options or request context
             timezone(undefined, #{}, Options, Context)
     end,
     % Sanity fallback for 'undefined' tz in the options
@@ -911,8 +911,8 @@ update_1(Id, PropsOrFun, Options, Context) when is_integer(Id); Id =:= insert_rs
                                 proplists:get_value(escape_texts, Options, true)),
         is_acl_check = proplists:get_value(is_acl_check, Options,
                                 proplists:get_value(acl_check, Options, true)),
-        is_import = proplists:get_value(is_import, Options, false),
-        is_no_touch = proplists:get_value(no_touch, Options, false)
+        is_import = IsImport,
+        is_no_touch = proplists:get_bool(no_touch, Options)
                       andalso z_acl:is_admin(Context),
         tz = Tz,
         expected = proplists:get_value(expected, Options, [])
