@@ -797,7 +797,32 @@ search(_, _, _, _) ->
 trim(undefined, _Context) -> <<>>;
 trim(S, _Context) when is_binary(S) -> z_string:trim(S);
 trim(#trans{} = Tr, Context) -> trim(z_trans:lookup_fallback(Tr, Context), Context);
+trim(S, Context) when is_list(S) -> trim(characters_to_binary(S), Context);
 trim(S, Context) -> trim(z_convert:to_binary(S), Context).
+
+characters_to_binary(S) when is_list(S) ->
+    case unicode:characters_to_binary(S) of
+        {incomplete, B, R} ->
+            ?LOG_NOTICE(#{
+                in => zotonic_mod_search,
+                text => <<"Error in characters_to_binary/1: incomplete UTF-8 sequence">>,
+                result => error,
+                input => z_string:truncatechars(S, 80, <<"...">>),
+                remaining => z_string:truncatechars(R, 80, <<"...">>)
+            }),
+            z_string:sanitize_utf8(B);
+        {error, B, R} ->
+            ?LOG_NOTICE(#{
+                in => zotonic_mod_search,
+                text => <<"Error in characters_to_binary/1: illegal UTF-8 sequence">>,
+                result => error,
+                input => z_string:truncatechars(S, 80, <<"...">>),
+                remaining => z_string:truncatechars(R, 80, <<"...">>)
+            }),
+            B;
+        B when is_binary(B) ->
+            B
+    end.
 
 %% @doc Expand a search string like "hello wor" to a PostgreSQL tsquery string.
 %%      If the search string ends in a word character then a wildcard is appended
@@ -828,13 +853,13 @@ to_tsquery(Text, Context) when is_binary(Text) ->
             TsQuery
     end;
 to_tsquery(Text, Context) when is_list(Text) ->
-    to_tsquery(z_convert:to_binary(Text), Context).
-
+    to_tsquery(characters_to_binary(Text), Context).
 
 to_tsquery_1(Text, Context) when is_binary(Text) ->
     Stemmer = z_pivot_rsc:stemmer_language(Context),
-    [{TsQuery}] = z_db:q("select plainto_tsquery($2, $1)", [z_pivot_rsc:cleanup_tsv_text(Text), Stemmer], Context),
-    fixup_tsquery(z_convert:to_list(Stemmer), append_wildcard(Text, TsQuery)).
+    Text1 = z_search:normalize_value(<<"tsquery">>, text, Text, Context),
+    [{TsQuery}] = z_db:q("select websearch_to_tsquery($2, $1)", [Text1, Stemmer], Context),
+    fixup_tsquery(z_convert:to_list(Stemmer), append_wildcard(Text1, TsQuery)).
 
 is_separator(C) when C < $0 -> true;
 is_separator(C) when C >= $0, C =< $9 -> false;
@@ -848,7 +873,11 @@ append_wildcard(_Text, <<>>) ->
 append_wildcard(_Text, <<"'xcvvcx'">>) ->
     <<>>;
 append_wildcard(Text, TsQ) ->
-    case is_wordchar(z_string:last_char(Text)) of
+    % Only append :* if both the input text ends with a word character
+    % and the tsquery ends with a lexeme token (i.e. ends with $').
+    % websearch_to_tsquery can return parenthesized expressions like
+    % ('foo' & 'bar') which would produce invalid syntax if :* is appended.
+    case is_wordchar(z_string:last_char(Text)) andalso binary:last(TsQ) =:= $' of
         true -> <<TsQ/binary, ":*">>;
         false -> TsQ
     end.
