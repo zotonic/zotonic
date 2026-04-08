@@ -271,7 +271,7 @@ msgstr ""
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:35
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:259
 #: zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:40
-#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:301
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:303
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:17
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:85
 #: zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:28
@@ -327,7 +327,7 @@ msgstr ""
 #: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:226
 #: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:234
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:70
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:159
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:157
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:113
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:88
 #: zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:49
@@ -1062,7 +1062,6 @@ msgid "<b>Warning:</b> the site will stop and restart."
 msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_list_title.tpl:2
-#: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:6
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:32
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:53
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:47
@@ -1091,7 +1090,7 @@ msgstr ""
 msgid "About categories"
 msgstr ""
 
-#: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:16
+#: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:24
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:195
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:135
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:56
@@ -1530,6 +1529,10 @@ msgstr ""
 msgid "Date start/end"
 msgstr ""
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:20
+msgid "Define the query using the query arguments or JSON."
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:23
 msgid "Delete if no other page is connected to this page."
 msgstr ""
@@ -1647,6 +1650,7 @@ msgid "E-mail address"
 msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:29
+#: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:34
 #: zotonic_mod_admin/priv/templates/_rsc_edge.tpl:19
 #: zotonic_mod_admin/priv/templates/admin_edit.tpl:3
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:66
@@ -1857,7 +1861,7 @@ msgid "Find Page"
 msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:139
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:219
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:217
 msgid "Find page"
 msgstr ""
 
@@ -1959,6 +1963,14 @@ msgstr ""
 msgid "IP Address"
 msgstr ""
 
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:280
+msgid "Id, newest first"
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:281
+msgid "Id, oldest first"
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:11
 msgid ""
 "If a page has a publication date range then it will only be visible between "
@@ -2047,7 +2059,7 @@ msgstr ""
 msgid "Link"
 msgstr ""
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:37
+#: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:38
 msgid ""
 "Live query, send notifications when matching items are updated or inserted."
 msgstr ""
@@ -2328,8 +2340,7 @@ msgstr ""
 msgid "No pages selected"
 msgstr ""
 
-#: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:21
-#: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:104
+#: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:49
 msgid "No results."
 msgstr ""
 
@@ -2537,14 +2548,13 @@ msgstr ""
 msgid "Published on, oldest first"
 msgstr ""
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:21
+#: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:24
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:19
 msgid "Query"
 msgstr ""
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:41
-#: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:98
-msgid "Query preview"
+#: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:19
+msgid "Query results"
 msgstr ""
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:94
@@ -2689,7 +2699,7 @@ msgstr ""
 msgid "Scheduled a background task to check all refers connections."
 msgstr ""
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:303
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:305
 msgid "Search"
 msgstr ""
 
@@ -2765,6 +2775,10 @@ msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:59
 msgid "Show page on multiple paths"
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:55
+msgid "Show query as JSON"
 msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:37
@@ -2971,7 +2985,7 @@ msgstr ""
 msgid "Templates will be recompiled."
 msgstr ""
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:30
+#: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:31
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:94
 msgid "Test query"
 msgstr ""
@@ -3017,6 +3031,14 @@ msgid ""
 "the path of the default language is used."
 msgstr ""
 
+#: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:8
+msgid "The query could not be parsed, check the syntax."
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:16
+msgid "The query text is empty."
+msgstr ""
+
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:58
 msgid ""
 "The search index is rebuilding. Depending on the database size, this can "
@@ -3052,6 +3074,10 @@ msgstr ""
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:197
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:105
 msgid "There is already a page with this name."
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:4
+msgid "There is an error in the query:"
 msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:5
@@ -3629,7 +3655,7 @@ msgstr ""
 msgid "visit site"
 msgstr ""
 
-#: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:17
+#: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:25
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:196
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:136
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:57
@@ -9658,7 +9684,7 @@ msgid "Debug"
 msgstr ""
 
 #: zotonic_mod_logging/priv/templates/admin_log_base.tpl:12
-#: zotonic_mod_logging/src/mod_logging.erl:201
+#: zotonic_mod_logging/src/mod_logging.erl:232
 msgid "Email log"
 msgstr ""
 
@@ -9684,7 +9710,7 @@ msgid "Identities"
 msgstr ""
 
 #: zotonic_mod_logging/priv/templates/admin_log_base.tpl:3
-#: zotonic_mod_logging/src/mod_logging.erl:196
+#: zotonic_mod_logging/src/mod_logging.erl:227
 msgid "Log"
 msgstr ""
 
@@ -9800,7 +9826,7 @@ msgid "User Id"
 msgstr ""
 
 #: zotonic_mod_logging/priv/templates/admin_log_base.tpl:13
-#: zotonic_mod_logging/src/mod_logging.erl:206
+#: zotonic_mod_logging/src/mod_logging.erl:237
 msgid "User interface log"
 msgstr ""
 
@@ -12593,12 +12619,22 @@ msgid ""
 "shown."
 msgstr ""
 
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:199
+msgid ""
+"After the form is submitted, an email with all answers can be sent to the "
+"configured email addresses below."
+msgstr ""
+
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:135
 msgid "Aggregated results from all respondents"
 msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:73
 msgid "Agree"
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:228
+msgid "All answers for anonymous and logged-in respondents"
 msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:34
@@ -12611,7 +12647,7 @@ msgstr ""
 msgid "Already submitted"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:151
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:150
 msgid "Another page, video or image."
 msgstr ""
 
@@ -12619,13 +12655,17 @@ msgstr ""
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:79
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:80
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:81
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:75
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:81
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:86
 msgid "Answer"
 msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:22
 msgid "Answering"
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:221
+msgid "Answers to include in the confirmation email"
 msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:87
@@ -12691,7 +12731,7 @@ msgstr ""
 msgid "Button text"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:148
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:147
 msgid "Can only be used on the last questions page."
 msgstr ""
 
@@ -12728,12 +12768,22 @@ msgstr ""
 msgid "Closed"
 msgstr ""
 
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:238
+msgid "Closed-question answers for anonymous and logged-in respondents"
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:233
+msgid ""
+"Closed-question answers for anonymous respondents; all answers for logged-in "
+"respondents"
+msgstr ""
+
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:130
 msgid "Continue later"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:107
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:141
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:119
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:160
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:77
 msgid "Correct"
 msgstr ""
@@ -12899,7 +12949,7 @@ msgid ""
 "can create a new person."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:138
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:137
 msgid "First page in category"
 msgstr ""
 
@@ -12908,11 +12958,18 @@ msgid ""
 "For date ranges you can also use relative dates, like <code>-5 year</code>."
 msgstr ""
 
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:252
+msgid ""
+"Forms can be handled by special code, for example a form that is forwarded "
+"to a back office system. Depending on the handler the results are stored in "
+"the database or not."
+msgstr ""
+
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:29
 msgid "Go to question"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:218
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:251
 msgid "Handle this form with"
 msgstr ""
 
@@ -12962,6 +13019,14 @@ msgstr ""
 msgid ""
 "I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|other] "
 "ice cream and my favorite color is [color]."
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:211
+msgid ""
+"If checked, then a confirmation email with the submitted answers can be sent "
+"to the respondent. For logged-in respondents, the known email address is "
+"used. For anonymous respondents, add a short text field with the label "
+"“email” and the validation set to “must be an email address”."
 msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:79
@@ -13028,8 +13093,8 @@ msgstr ""
 msgid "Long answer"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:200
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:201
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:202
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:203
 msgid "Mail results to"
 msgstr ""
 
@@ -13123,7 +13188,7 @@ msgstr ""
 msgid "New result:"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:140
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:139
 msgid "Next page in category"
 msgstr ""
 
@@ -13132,6 +13197,10 @@ msgstr ""
 msgid ""
 "No \"Back\" button to this page. If correct/wrong feedback is filled in, "
 "then show it directly after this page."
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:243
+msgid "No answers; confirmation text only"
 msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:118
@@ -13171,7 +13240,11 @@ msgstr ""
 msgid "Only accept images."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:136
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:210
+msgid "Optional confirmation email for the respondent"
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:135
 msgid "Options from a page category"
 msgstr ""
 
@@ -13218,7 +13291,7 @@ msgstr ""
 msgid "Please make a choice."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:144
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:143
 msgid "Please upload your file."
 msgstr ""
 
@@ -13249,7 +13322,7 @@ msgstr ""
 msgid "Prompt"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:74
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:80
 msgid "Question"
 msgstr ""
 
@@ -13363,7 +13436,7 @@ msgstr ""
 msgid "Score"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:139
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:138
 msgid "Second page in category"
 msgstr ""
 
@@ -13380,14 +13453,11 @@ msgstr ""
 msgid "Select your country"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:211
-msgid ""
-"Send a confirmation to the respondent. The email address must be known "
-"(logged in respondents) or you can add a short text field with the label "
-"“email” and the validation set to \"must be an email address\"."
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:215
+msgid "Send a confirmation email to the respondent"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:203
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:205
 msgid "Separate multiple email addresses with a comma."
 msgstr ""
 
@@ -13578,7 +13648,7 @@ msgstr ""
 msgid "The results have been saved."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:148
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:147
 msgid "The uploaded file will be attached to the result email."
 msgstr ""
 
@@ -13650,6 +13720,13 @@ msgstr ""
 msgid "Thurstone"
 msgstr ""
 
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:223
+msgid ""
+"To prevent misuse, confirmation emails can exclude answers to open "
+"questions. You can choose which answers are sent to anonymous and logged-in "
+"respondents."
+msgstr ""
+
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:21
 msgid "To question"
 msgstr ""
@@ -13708,8 +13785,8 @@ msgstr ""
 msgid "White"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:107
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:141
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:119
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:160
 msgid "Wrong"
 msgstr ""
 
