@@ -892,7 +892,7 @@ timezone_2(_Id, Context) ->
 update_1(Id, PropsOrFun, Options, Context) when is_integer(Id); Id =:= insert_rsc ->
     IsImport = proplists:get_bool(is_import, Options),
     Tz0 = if
-        IsImport -> <<"UTC">>;
+        IsImport -> proplists:get_value(tz, Options, <<"UTC">>);
         is_map(PropsOrFun) -> timezone(Id, PropsOrFun, Options, Context);
         true ->
             % Take timezone from options or request context
