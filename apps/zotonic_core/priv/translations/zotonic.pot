@@ -12633,7 +12633,7 @@ msgstr ""
 msgid "Agree"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:228
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:236
 msgid "All answers for anonymous and logged-in respondents"
 msgstr ""
 
@@ -12662,10 +12662,6 @@ msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:22
 msgid "Answering"
-msgstr ""
-
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:221
-msgid "Answers to include in the confirmation email"
 msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:87
@@ -12768,11 +12764,11 @@ msgstr ""
 msgid "Closed"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:238
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:246
 msgid "Closed-question answers for anonymous and logged-in respondents"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:233
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:241
 msgid ""
 "Closed-question answers for anonymous respondents; all answers for logged-in "
 "respondents"
@@ -12958,7 +12954,7 @@ msgid ""
 "For date ranges you can also use relative dates, like <code>-5 year</code>."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:252
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:260
 msgid ""
 "Forms can be handled by special code, for example a form that is forwarded "
 "to a back office system. Depending on the handler the results are stored in "
@@ -12969,7 +12965,7 @@ msgstr ""
 msgid "Go to question"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:251
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:259
 msgid "Handle this form with"
 msgstr ""
 
@@ -13199,7 +13195,7 @@ msgid ""
 "then show it directly after this page."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:243
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:251
 msgid "No answers; confirmation text only"
 msgstr ""
 
@@ -13720,11 +13716,11 @@ msgstr ""
 msgid "Thurstone"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:223
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:231
 msgid ""
-"To prevent misuse, confirmation emails can exclude answers to open "
-"questions. You can choose which answers are sent to anonymous and logged-in "
-"respondents."
+"To prevent misuse, answers to open questions can be excluded from the "
+"confirmation email. You can choose which answers are sent to anonymous and "
+"logged-in respondents."
 msgstr ""
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:21
