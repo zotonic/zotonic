@@ -214,13 +214,21 @@
 					<input type="checkbox" name="survey_email_respondent" id="survey_email_respondent" value="1" {% if id.survey_email_respondent  %}checked{% endif %}>
 					{_ Send a confirmation email to the respondent _}
 				</label>
+				{% javascript %}
+					$('#survey_email_respondent').on('change', function() {
+						if ($(this).is(':checked')) {
+							$('#{{ #confirm }}').fadeIn();
+						} else {
+							$('#{{ #confirm }}').fadeOut();
+						}
+					});
+				{% endjavascript %}
 			</div>
 		</div>
 
-		<div class="form-group">
-			<label>{_ Answers to include in the confirmation email _}</label>
+		<div class="form-group" id="{{ #confirm }}" {% if not id.survey_email_respondent %}style="display: none"{% endif %}>
 			<p class="help-block">
-				{_ To prevent misuse, confirmation emails can exclude answers to open questions. You can choose which answers are sent to anonymous and logged-in respondents. _}
+				{_ To prevent misuse, answers to open questions can be excluded from the confirmation email. You can choose which answers are sent to anonymous and logged-in respondents. _}
 			</p>
 			{% with id.survey_email_answers|to_integer as survey_email_answers %}
 				<div class="radio">
