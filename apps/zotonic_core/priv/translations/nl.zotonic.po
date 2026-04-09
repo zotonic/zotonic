@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-04-08 13:58\n"
+"PO-Revision-Date: 2026-04-09 09:05\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -11920,7 +11920,7 @@ msgstr "Geaggregeerde resultaten van alle respondenten"
 msgid "Agree"
 msgstr "Akkoord"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:228
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:236
 msgid "All answers for anonymous and logged-in respondents"
 msgstr "Alle antwoorden voor anonieme en ingelogde respondenten"
 
@@ -11948,10 +11948,6 @@ msgstr "Antwoord"
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:22
 msgid "Answering"
 msgstr "Beantwoorden"
-
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:221
-msgid "Answers to include in the confirmation email"
-msgstr "Antwoorden in de bevestigingsmail"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:87
 msgid "Apple"
@@ -12051,11 +12047,11 @@ msgstr "Klik op \"Bewerken\" om de ingevoerde gegevens te bekijken en te wijzige
 msgid "Closed"
 msgstr "Gesloten"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:238
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:246
 msgid "Closed-question answers for anonymous and logged-in respondents"
 msgstr "Antwoorden met gesloten vragen voor anonieme en ingelogde respondenten"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:233
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:241
 msgid "Closed-question answers for anonymous respondents; all answers for logged-in respondents"
 msgstr "Antwoorden met gesloten vragen voor anonieme respondenten; alle antwoorden voor ingelogde respondenten"
 
@@ -12235,7 +12231,7 @@ msgstr "Eerste pagina van de categorie"
 msgid "For date ranges you can also use relative dates, like <code>-5 year</code>."
 msgstr "Voor datumbereiken kun je ook relatieve datums gebruiken, zoals <code>-5 jaar</code>."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:252
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:260
 msgid "Forms can be handled by special code, for example a form that is forwarded to a back office system. Depending on the handler the results are stored in the database or not."
 msgstr "Formulieren kunnen worden afgehandeld met speciale code, bijvoorbeeld een formulier dat wordt doorgestuurd naar een backofficesysteem. Afhankelijk van de afhandeling worden de resultaten al dan niet opgeslagen in de database."
 
@@ -12243,7 +12239,7 @@ msgstr "Formulieren kunnen worden afgehandeld met speciale code, bijvoorbeeld ee
 msgid "Go to question"
 msgstr "Ga naar vraag"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:251
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:259
 msgid "Handle this form with"
 msgstr "Verwerk dit formulier met"
 
@@ -12456,7 +12452,7 @@ msgstr "Volgende pagina van de categorie"
 msgid "No \"Back\" button to this page. If correct/wrong feedback is filled in, then show it directly after this page."
 msgstr "Geen \"Terug\"-knop naar deze pagina. Als er goede/foute feedback is ingevuld, wordt deze direct na deze pagina weergegeven."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:243
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:251
 msgid "No answers; confirmation text only"
 msgstr "Geen antwoorden; alleen bevestigingstekst"
 
@@ -12495,7 +12491,7 @@ msgstr "Sta alleen afbeeldingen toe."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:210
 msgid "Optional confirmation email for the respondent"
-msgstr "Optionele bevestigingse-mail voor de respondent"
+msgstr "Optionele bevestigingsmail voor de respondent"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:135
 msgid "Options from a page category"
@@ -12937,9 +12933,9 @@ msgstr "Deze tekst staat onder de startknop."
 msgid "Thurstone"
 msgstr "Vragen met puntenschaal"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:223
-msgid "To prevent misuse, confirmation emails can exclude answers to open questions. You can choose which answers are sent to anonymous and logged-in respondents."
-msgstr "Om misbruik te voorkomen, kunnen bevestigingsmails antwoorden op open vragen uitsluiten. Je kunt kiezen welke antwoorden worden verzonden naar anonieme en ingelogde respondenten."
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:231
+msgid "To prevent misuse, answers to open questions can be excluded from the confirmation email. You can choose which answers are sent to anonymous and logged-in respondents."
+msgstr "Om misbruik te voorkomen, kunnen antwoorden op open vragen worden uitgesloten van de bevestigingsmail. Je kunt kiezen welke antwoorden worden verzonden naar anonieme en ingelogde respondenten."
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:21
 msgid "To question"
