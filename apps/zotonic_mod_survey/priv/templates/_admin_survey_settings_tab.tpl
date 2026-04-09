@@ -215,8 +215,8 @@
 					{_ Send a confirmation email to the respondent _}
 				</label>
 				{% javascript %}
-					$('#survey_email_respondent').on('click', function(e) {
-						if (document.getElementById('survey_email_respondent').checked) {
+					$('#survey_email_respondent').on('input', function() {
+						if ($(this).is(':checked')) {
 							$('#{{ #confirm }}').fadeIn();
 						} else {
 							$('#{{ #confirm }}').fadeOut();
