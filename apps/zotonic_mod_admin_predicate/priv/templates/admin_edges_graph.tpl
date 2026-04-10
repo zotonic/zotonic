@@ -64,8 +64,10 @@
                 .then((m) => {
                     let hiddenPredicates = [];
 
-                    if (m.payload && typeof m.payload === "object") {
-                        hiddenPredicates = m.payload;
+                    if (Array.isArray(m.payload)) {
+                        hiddenPredicates = m.payload
+                            .map((predicateId) => Number(predicateId))
+                            .filter((predicateId) => Number.isFinite(predicateId));
                     }
                     document.getElementById('filter-predicates').classList.toggle("is-active", hiddenPredicates.length > 0);
 
