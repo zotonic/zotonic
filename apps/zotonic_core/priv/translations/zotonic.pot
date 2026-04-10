@@ -380,6 +380,7 @@ msgstr ""
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:174
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:67
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:69
+#: zotonic_mod_admin_predicate/priv/templates/_admin_graph_filter_predicates.tpl:20
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:79
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:43
 #: zotonic_mod_editor_tinymce/priv/templates/_admin_configure_module.tpl:30
@@ -1266,7 +1267,7 @@ msgstr ""
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:8
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:170
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:18
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:40
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:41
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:3
 #: zotonic_mod_survey/priv/templates/_survey_end.tpl:28
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:22
@@ -4999,7 +5000,7 @@ msgid ""
 "          and <strong>{{ object }}</strong>?"
 msgstr ""
 
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:33
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:34
 msgid "Beta"
 msgstr ""
 
@@ -5035,8 +5036,16 @@ msgstr ""
 msgid "Enter the title of the new predicate:"
 msgstr ""
 
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:159
+msgid "Filter connections"
+msgstr ""
+
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:28
 msgid "Filter on predicate"
+msgstr ""
+
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:28
+msgid "Filter..."
 msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:28
@@ -5049,6 +5058,10 @@ msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:8
 msgid "Help about predicates"
+msgstr ""
+
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:28
+msgid "Hide or show connections."
 msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:27
@@ -5091,12 +5104,16 @@ msgid "No predicates found."
 msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:52
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:38
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:39
 msgid "No such page or page not visible."
 msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:21
 msgid "Object"
+msgstr ""
+
+#: zotonic_mod_admin_predicate/priv/templates/_admin_graph_filter_predicates.tpl:1
+msgid "Only show connections with the following predicates:"
 msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:108
@@ -5115,7 +5132,7 @@ msgid ""
 msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:3
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:50
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:51
 msgid "Page connections graph"
 msgstr ""
 
@@ -5210,8 +5227,16 @@ msgid ""
 "possible to eg. find articles by their author’s name."
 msgstr ""
 
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:34
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:35
 msgid "This feature is in early development and may not work perfectly."
+msgstr ""
+
+#: zotonic_mod_admin_predicate/priv/templates/_admin_graph_filter_predicates.tpl:16
+msgid ""
+"This filter only affects which predicates are shown in the graph. If a "
+"resource has many incoming or outgoing connections, some connections might "
+"already be omitted from the graph data due to the edge limit, regardless of "
+"which predicates are checked."
 msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:22
@@ -5220,7 +5245,7 @@ msgid ""
 "and the pages in the connect dialogs."
 msgstr ""
 
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:131
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:154
 msgid ""
 "This page has too many connections to display all at once. Only the first "
 "300 incoming or outgoing connections are shown."
@@ -5235,7 +5260,7 @@ msgstr ""
 msgid "To category"
 msgstr ""
 
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:130
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:153
 msgid "Too many connections"
 msgstr ""
 
@@ -5273,11 +5298,11 @@ msgid ""
 "categories are valid."
 msgstr ""
 
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:28
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:29
 msgid "Zoom In"
 msgstr ""
 
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:29
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:30
 msgid "Zoom Out"
 msgstr ""
 
