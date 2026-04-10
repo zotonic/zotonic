@@ -520,16 +520,12 @@ get_graph(Ids, Options, Context) ->
 %% @doc Sort edges by suppressed predicates. Edges with a predicate in the SuppressPred
 %% list are sorted to the end of the list.
 sort_by_suppressed(Edges, SuppressPred) ->
-    lists:sort(fun({_, _, PredId1, _}, {_, _, PredId2, _}) ->
-        case lists:member(PredId1, SuppressPred) of
-            true -> 1;
-            false ->
-                case lists:member(PredId2, SuppressPred) of
-                    true -> -1;
-                    false -> 0
-                end
-        end
-    end, Edges).
+    {NonSuppressed, Suppressed} = lists:partition(
+        fun({_, _, PredId, _}) ->
+            not lists:member(PredId, SuppressPred)
+        end,
+        Edges),
+    NonSuppressed ++ Suppressed.
 
 title(Id, Unescape, Context) ->
     case z_memo:get({title, Id}) of
