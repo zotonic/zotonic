@@ -13,7 +13,7 @@
 </ul>
 
 <p class="help-block">
-    {_ If a resource has many incoming or outgoing connections, then the unchecked predicates might be omitted from the graph data. _}
+    {_ This filter only affects which predicates are shown in the graph. If a resource has many incoming or outgoing connections, some connections might already be omitted from the graph data due to the edge limit, regardless of which predicates are checked. _}
 </p>
 
 <div class="modal-footer">
