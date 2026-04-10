@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-04-09 09:05\n"
+"PO-Revision-Date: 2026-04-10 12:49\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -374,6 +374,7 @@ msgstr "Змінена конфігурація."
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:174
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:67
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:69
+#: zotonic_mod_admin_predicate/priv/templates/_admin_graph_filter_predicates.tpl:20
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:79
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:43
 #: zotonic_mod_editor_tinymce/priv/templates/_admin_configure_module.tpl:30
@@ -1233,7 +1234,7 @@ msgstr "в наявності"
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:8
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:170
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:18
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:40
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:41
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:3
 #: zotonic_mod_survey/priv/templates/_survey_end.tpl:28
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:22
@@ -4825,7 +4826,7 @@ msgid "Are you sure you want to remove the <strong>{{ predicate }}</strong>\n"
 "          and <strong>{{ object }}</strong>?"
 msgstr ""
 
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:33
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:34
 msgid "Beta"
 msgstr ""
 
@@ -4861,9 +4862,17 @@ msgstr "Не показувати у списку підключень на ст
 msgid "Enter the title of the new predicate:"
 msgstr "Введіть заголовок нового присудка:"
 
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:159
+msgid "Filter connections"
+msgstr ""
+
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:28
 msgid "Filter on predicate"
 msgstr "Фільтр за предикатом"
+
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:28
+msgid "Filter..."
+msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:28
 msgid "From category"
@@ -4876,6 +4885,10 @@ msgstr ""
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:8
 msgid "Help about predicates"
 msgstr "Довідка про присудки"
+
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:28
+msgid "Hide or show connections."
+msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:27
 msgid "Hide or show pages that are not on the path from the start page."
@@ -4915,13 +4928,17 @@ msgid "No predicates found."
 msgstr "Не знайдено предикатів."
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:52
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:38
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:39
 msgid "No such page or page not visible."
 msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:21
 msgid "Object"
 msgstr "Об'єкт"
+
+#: zotonic_mod_admin_predicate/priv/templates/_admin_graph_filter_predicates.tpl:1
+msgid "Only show connections with the following predicates:"
+msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:108
 msgid "Ontologies define predicates for a defined set of subject and object categories. Sometimes it is more practical to have the predicate’s connection direction reversed from the formal definition. Export and import functions can use this option to swap subject/object relation when exporting or importing data."
@@ -4932,7 +4949,7 @@ msgid "Or click <strong>Delete All Connections</strong> to delete all connection
 msgstr "Або натисніть <strong>Видалити всі з’єднання</strong>, щоб видалити всі з’єднання з цим предикатом."
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:3
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:50
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:51
 msgid "Page connections graph"
 msgstr ""
 
@@ -5020,15 +5037,19 @@ msgstr "З цією назвою вже є присудок."
 msgid "This directs the indexers to not include the titles of connected pages with this predicate. Normally titles of connected pages are included, making it possible to eg. find articles by their author’s name."
 msgstr "Це вказує індексаторам не включати заголовки пов’язаних сторінок із цим предикатом. Зазвичай заголовки підключених сторінок включені, що дає змогу, наприклад, знайти статті за іменем їх автора."
 
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:34
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:35
 msgid "This feature is in early development and may not work perfectly."
+msgstr ""
+
+#: zotonic_mod_admin_predicate/priv/templates/_admin_graph_filter_predicates.tpl:16
+msgid "This filter only affects which predicates are shown in the graph. If a resource has many incoming or outgoing connections, some connections might already be omitted from the graph data due to the edge limit, regardless of which predicates are checked."
 msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:22
 msgid "This is used to filter the predicates in the <i>Page connections</i> panel and the pages in the connect dialogs."
 msgstr "Це використовується для фільтрації предикатів на панелі <i>підключень сторінок</i> і сторінок у діалогових вікнах підключення."
 
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:131
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:154
 msgid "This page has too many connections to display all at once. Only the first 300 incoming or outgoing connections are shown."
 msgstr ""
 
@@ -5040,7 +5061,7 @@ msgstr "Цей предикат можна використовувати між
 msgid "To category"
 msgstr "До категорії"
 
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:130
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:153
 msgid "Too many connections"
 msgstr ""
 
@@ -5072,11 +5093,11 @@ msgstr "Вам не дозволено створювати цей предик�
 msgid "You can define for which categories the predicate is shown on the edit page.  You can also define which categories of objects will be found when searching for a page to connect to. When you don’t check anything then all categories are valid."
 msgstr "Ви можете визначити, для яких категорій предикат буде показано на сторінці редагування. Ви також можете визначити, які категорії об'єктів будуть знайдені під час пошуку сторінки для підключення. Якщо ви нічого не відмічаєте, усі категорії дійсні."
 
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:28
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:29
 msgid "Zoom In"
 msgstr ""
 
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:29
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:30
 msgid "Zoom Out"
 msgstr ""
 
