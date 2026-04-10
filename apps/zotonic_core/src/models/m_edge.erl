@@ -266,6 +266,12 @@ See also
 %% This is needed to prevent performance issues when a resource has a very
 %% large number of incoming and/or outgoing edges.
 -define(DEFAULT_GRAPH_EDGE_LIMIT, 5000).
+-define(DEFAULT_GRAPH_EDGE_QUERY_LIMIT, 20000).
+
+%% If there are too many edges to return in the graph, then some predicates are
+%% removed from the result. This list defines the default predicates that might
+%% be excluded.
+-define(DEFAULT_GRAPH_SUPPRESS_PREDICATES, [ refers, subject ]).
 
 
 %% @doc Fetch all object/edge ids for a subject/predicate
@@ -319,6 +325,9 @@ m_get([ <<"graph">> | Rest ], #{ payload := #{ <<"ids">> := Ids } = Payload }, C
                     true -> [ unescape | Acc ];
                     false -> Acc
                 end;
+            (<<"suppress_predicates">>, PredIds, Acc) ->
+                PredIds1 = [ m_rsc:rid(PId, Context) || PId <- PredIds ],
+                [ {suppress_predicates, PredIds1} | Acc ];
             (_K, _V, Acc) -> Acc
         end,
         [],
@@ -372,7 +381,8 @@ m_delete([<<"edge">>, Edge], _Msg, Context) ->
     },
     Options :: [ Option ],
     Option :: unescape
-            | {limit, pos_integer()},
+            | {limit, pos_integer()}
+            | {suppress_predicates, [ m_rsc:resource() ]},
     Node :: #{
         id => m_rsc:resource_id(),
         label => binary(),
@@ -403,13 +413,14 @@ get_graph(Ids, Options, Context) ->
         Ids),
     Limit = proplists:get_value(limit, Options, ?DEFAULT_GRAPH_EDGE_LIMIT),
     Unescape = proplists:get_bool(unescape, Options),
+    SuppressPred = [ m_rsc:rid(PId, Context) || PId <- proplists:get_value(suppress_predicates, Options, ?DEFAULT_GRAPH_SUPPRESS_PREDICATES) ],
     Out = z_db:q("
         select id, subject_id, predicate_id, object_id
         from edge
         where subject_id = any($1)
         order by id desc
         limit $2",
-        [ Ids1, Limit ],
+        [ Ids1, ?DEFAULT_GRAPH_EDGE_QUERY_LIMIT ],
         Context),
     In = z_db:q("
         select id, subject_id, predicate_id, object_id
@@ -417,11 +428,19 @@ get_graph(Ids, Options, Context) ->
         where object_id = any($1)
         order by id desc
         limit $2",
-        [ Ids1, Limit ],
+        [ Ids1, ?DEFAULT_GRAPH_EDGE_QUERY_LIMIT ],
         Context),
-    IsTruncated = length(Out) >= Limit orelse length(In) >= Limit,
-    OutRscIds = [ ObjId || {_, _, _, ObjId} <- Out ],
-    InRscIds = [ SubjId || {_, SubjId, _, _} <- In ],
+    IsTruncated = length(Out) > Limit orelse length(In) > Limit,
+    Out1 = if
+        IsTruncated -> lists:sublist(sort_by_suppressed(Out, SuppressPred), Limit);
+        true -> Out
+    end,
+    In1 = if
+        IsTruncated -> lists:sublist(sort_by_suppressed(In, SuppressPred), Limit);
+        true -> Out
+    end,
+    OutRscIds = [ ObjId || {_, _, _, ObjId} <- Out1 ],
+    InRscIds = [ SubjId || {_, SubjId, _, _} <- In1 ],
     OutSet = sets:from_list(OutRscIds),
     InSet = sets:from_list(InRscIds),
     RootSet = sets:from_list(Ids1),
@@ -497,6 +516,20 @@ get_graph(Ids, Options, Context) ->
         edges => maps:values(Edges1),
         is_truncated => IsTruncated
     }}.
+
+%% @doc Sort edges by suppressed predicates. Edges with a predicate in the SuppressPred
+%% list are sorted to the end of the list.
+sort_by_suppressed(Edges, SuppressPred) ->
+    lists:sort(fun({_, _, PredId1, _}, {_, _, PredId2, _}) ->
+        case lists:member(PredId1, SuppressPred) of
+            true -> 1;
+            false ->
+                case lists:member(PredId2, SuppressPred) of
+                    true -> -1;
+                    false -> 0
+                end
+        end
+    end, Edges).
 
 title(Id, Unescape, Context) ->
     case z_memo:get({title, Id}) of
