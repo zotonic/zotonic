@@ -1128,6 +1128,8 @@
   function setGraph(data) {
     resetGraph();
     baseGraphSaved = false;
+    setHiddenCategories((data && data.hiddenCategories) || []);
+    setHiddenPredicates((data && data.hiddenPredicates) || []);
     const useWorker = data.useWorker === true;
     enqueueBatch({
       nodes: data.nodes || [],
@@ -1625,6 +1627,9 @@
 
     if (nodesChunk.length) addResources(nodesChunk, createdNodes, batchQueue.nearResourceId);
     if (edgesChunk.length) addEdges(edgesChunk, createdEdges, createdNodes);
+    if (nodesChunk.length || edgesChunk.length) {
+      applyVisibility();
+    }
     sigma.refresh();
 
     if (pendingEdgeHints.size) {

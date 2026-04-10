@@ -63,3 +63,14 @@ fieldset[disabled] .btn-primary.active {
     background-color: #c0c0c0;
     border-color: #bbb;
 }
+
+.btn.is-active::after {
+    content: "";
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: $brand-danger;
+}

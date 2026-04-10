@@ -25,6 +25,7 @@
         <div class="controls pull-right">
             <button class="btn btn-default" id="step-back" title="{_ Hide previously added pages and connections. _}">↺ {_ Step back _}</button>
             <button class="btn btn-default" id="toggle-path-only" title="{_ Hide or show pages that are not on the path from the start page. _}">⏿ {_ Path _}</button>
+            <button class="btn btn-default" id="filter-predicates" title="{_ Hide or show connections. _}"><i class="glyphicon glyphicon-filter"></i> {_ Filter... _}</button>
             <button class="btn btn-default" id="zoom-in">+ {_ Zoom In _}</button>
             <button class="btn btn-default" id="zoom-out">– {_ Zoom Out _}</button>
         </div>
@@ -59,28 +60,45 @@
             // to twice this limit.
             const EDGES_LIMIT = 300;
 
-            cotonic.broker
-                .call("bridge/origin/model/edge/get/graph", {
-                        ids: [ {{ id }} ],
-                        limit: EDGES_LIMIT,
-                        unescape: true
-                }).then(
-                    (m) => {
-                        ResourceGraph.setGraph({
-                            nodes: m.payload.result.nodes,
-                            edges: m.payload.result.edges,
-                            startNodeId: {{ id }},
-                            setActiveToStart: true,
-                            useWorker: true
-                          });
+            cotonic.broker.call("model/sessionStorage/get/admin-graph-hidden-predicates")
+                .then((m) => {
+                    let hiddenPredicates = [];
+
+                    if (Array.isArray(m.payload)) {
+                        hiddenPredicates = m.payload
+                            .map((predicateId) => Number(predicateId))
+                            .filter((predicateId) => Number.isFinite(predicateId));
                     }
-                );
+                    document.getElementById('filter-predicates').classList.toggle("is-active", hiddenPredicates.length > 0);
+
+                    cotonic.broker
+                        .call("bridge/origin/model/edge/get/graph", {
+                                ids: [ {{ id }} ],
+                                suppress_predicates: hiddenPredicates,
+                                limit: EDGES_LIMIT,
+                                unescape: true
+                        }).then(
+                            (m) => {
+                                ResourceGraph.setGraph({
+                                    nodes: m.payload.result.nodes,
+                                    edges: m.payload.result.edges,
+                                    startNodeId: {{ id }},
+                                    hiddenPredicates: hiddenPredicates,
+                                    hiddenCategories: [],
+                                    setActiveToStart: true,
+                                    useWorker: true
+                                  });
+                            }
+                        )
+                });
 
             window.addEventListener("resource:needs-edges", (e) => {
                 const fromNodeId = e.detail.id;
+                const hiddenPredicates = ResourceGraph.getHiddenPredicates();
                 cotonic.broker
                     .call("bridge/origin/model/edge/get/graph", {
                         ids: [ fromNodeId ],
+                        suppress_predicates: hiddenPredicates,
                         limit: EDGES_LIMIT,
                         unescape: true
                     }).then(
@@ -111,6 +129,11 @@
                     show_details: showDetails
                 })
             });
+
+            document.getElementById('filter-predicates').addEventListener("click", () => {
+                const hiddenPredicates = ResourceGraph.getHiddenPredicates();
+                z_event("filter-predicates-dialog", { hidden_predicates: hiddenPredicates });
+            });
         {% endjavascript %}
 
         {% wire name="show-active-resource"
@@ -130,6 +153,10 @@
                     title=_"Too many connections"
                     text=_"This page has too many connections to display all at once. Only the first 300 incoming or outgoing connections are shown."
                 }
+        %}
+
+        {% wire name="filter-predicates-dialog"
+                action={dialog_open template="_admin_graph_filter_predicates.tpl" title=_"Filter connections"}
         %}
     {% endif %}
 {% endblock %}
