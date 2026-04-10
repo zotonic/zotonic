@@ -2,6 +2,7 @@
 
 This is a self-contained template that renders a directed resource graph using Sigma.js + Graphology and vanilla JavaScript only.
 
+
 ## Features
 
 - Directed graph with labeled edges.
@@ -64,6 +65,8 @@ ResourceGraph.refresh();
   - When `true`, hide everything except the focus path.
 - `setPathWeights({ outgoing, incoming })`
   - Configure pathfinding costs (default outgoing `1`, incoming `10`).
+- `setAllowHiddenFilteredPaths(enabled)`
+  - Controls whether pathfinding may fall back to hidden categories or hidden predicates when no fully visible path exists. Default is `true`.
 - `getNodeInfo(resourceId)`
   - Returns node attributes and in/out edges.
 - `getEdgeInfo(edgeId)`

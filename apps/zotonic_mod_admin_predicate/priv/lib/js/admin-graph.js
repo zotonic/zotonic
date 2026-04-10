@@ -67,6 +67,7 @@
   let showActiveNeighborsInPathOnly = true;
   let showActiveConnectionsInNormal = true;
   const pathWeights = { outgoing: 1, incoming: 10 };
+  let allowHiddenFilteredPaths = true;
   let activePathCache = { edges: [], nodes: [] };
   let suppressInitialFocus = false;
   let edgeCounter = 0;
@@ -1299,9 +1300,26 @@
     });
   }
 
-  // Find a shortest path in the undirected view of the graph.
-  // Find a lowest-cost path where outgoing edges cost 1 and incoming cost 10.
-  function findWeightedPath(fromNode, toNode) {
+  // Check whether an edge is currently hidden because its predicate is filtered out.
+  function isEdgeHiddenByPredicate(edgeId) {
+    const predicateId = graph.getEdgeAttribute(edgeId, "predicate_id");
+    if (predicateId === undefined || predicateId === null) return false;
+    const key = Number(predicateId);
+    if (!Number.isFinite(key)) return false;
+    return predicateVisibility.get(key) === false;
+  }
+
+  // Check whether a node is currently hidden because its category is filtered out.
+  function isNodeHiddenByCategory(nodeId) {
+    const categoryId = graph.getNodeAttribute(nodeId, "category_id");
+    if (categoryId === undefined || categoryId === null) return false;
+    const key = Number(categoryId);
+    if (!Number.isFinite(key)) return false;
+    return resourceCategoryVisibility.get(key) === false;
+  }
+
+  // Find a lowest-cost path while preferring graph elements that are still visible.
+  function findWeightedPathInternal(fromNode, toNode, allowHiddenFilters) {
     const dist = new Map();
     const prevEdge = new Map();
     const prevNode = new Map();
@@ -1317,7 +1335,17 @@
       if (current === toNode) break;
 
       graph.forEachEdge(current, (edgeId, attrs, source, target) => {
+        if (!allowHiddenFilters && isEdgeHiddenByPredicate(edgeId)) {
+          return;
+        }
         const neighbor = source === current ? target : source;
+        if (
+          !allowHiddenFilters &&
+          neighbor !== toNode &&
+          isNodeHiddenByCategory(neighbor)
+        ) {
+          return;
+        }
         const stepCost = source === current ? pathWeights.outgoing : pathWeights.incoming;
         const nextCost = cost + stepCost;
         if (!dist.has(neighbor) || nextCost < dist.get(neighbor)) {
@@ -1330,6 +1358,14 @@
     }
 
     return { found: dist.has(toNode), prevEdge, prevNode };
+  }
+
+  // Find a lowest-cost path where outgoing edges cost 1 and incoming cost 10.
+  function findWeightedPath(fromNode, toNode) {
+    const visiblePath = findWeightedPathInternal(fromNode, toNode, false);
+    if (visiblePath.found) return visiblePath;
+    if (!allowHiddenFilteredPaths) return visiblePath;
+    return findWeightedPathInternal(fromNode, toNode, true);
   }
 
   // Compute focus sets for dimming/hiding behavior.
@@ -1825,6 +1861,15 @@
     if (sigma) sigma.refresh();
   }
 
+  // Control whether hidden categories/predicates may be used as a fallback during pathfinding.
+  function setAllowHiddenFilteredPaths(enabled) {
+    allowHiddenFilteredPaths = Boolean(enabled);
+    updatePathHighlight();
+    updateHoverPathHighlight();
+    updateFocusSets();
+    if (sigma) sigma.refresh();
+  }
+
   ensureSigma();
 
   if (resetButton) {
@@ -1900,6 +1945,7 @@
     refreshColors,
     setDefaultUseWorker,
     setPathWeights,
+    setAllowHiddenFilteredPaths,
     fitCamera,
     refresh() {
       if (sigma) sigma.refresh();
