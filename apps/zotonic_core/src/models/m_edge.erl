@@ -488,7 +488,7 @@ get_graph(Ids, Options, Context) ->
             end
         end,
         #{},
-        Out),
+        Out1),
     Edges1 = lists:foldl(
         fun({EdgeId, SubjId, PredId, ObjId}, Acc) ->
             case not maps:is_key(EdgeId, Acc)
@@ -510,7 +510,7 @@ get_graph(Ids, Options, Context) ->
             end
         end,
         Edges,
-        In),
+        In1),
     {ok, #{
         nodes => maps:values(Nodes),
         edges => maps:values(Edges1),
