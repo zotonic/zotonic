@@ -437,7 +437,7 @@ get_graph(Ids, Options, Context) ->
     end,
     In1 = if
         IsTruncated -> lists:sublist(sort_by_suppressed(In, SuppressPred), Limit);
-        true -> Out
+        true -> In
     end,
     OutRscIds = [ ObjId || {_, _, _, ObjId} <- Out1 ],
     InRscIds = [ SubjId || {_, SubjId, _, _} <- In1 ],
