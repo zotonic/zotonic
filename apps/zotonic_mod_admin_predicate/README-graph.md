@@ -1,6 +1,6 @@
 # Resource Graph (Sigma.js)
 
-This is a self-contained HTML demo that renders a directed resource graph using Sigma.js + Graphology and vanilla JavaScript only.
+This is a self-contained template that renders a directed resource graph using Sigma.js + Graphology and vanilla JavaScript only.
 
 ## Features
 
@@ -32,9 +32,10 @@ ResourceGraph.refresh();
 
 ### API Details
 
-- `setGraph({ nodes, edges, startNodeId, useWorker, setActiveToStart })`
+- `setGraph({ nodes, edges, startNodeId, useWorker, setActiveToStart, hiddenCategories, hiddenPredicates })`
   - Clears the graph, inserts data in batches, and runs the layout. Use `useWorker: true` to attempt worker layout.
   - If `setActiveToStart` is true, sets the active node to `startNodeId` after the graph draws.
+  - `hiddenCategories` and `hiddenPredicates` replace the initial hidden filter lists.
 - `resetGraph()`
   - Clears all nodes/edges and resets selection.
 - `addResources(nodes, createdNodes?, nearResourceId?)`
