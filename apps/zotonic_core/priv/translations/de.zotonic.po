@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-04-08 13:58\n"
+"PO-Revision-Date: 2026-04-09 09:05\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -11917,7 +11917,7 @@ msgstr "Aggregierte Ergebnisse aller Befragten"
 msgid "Agree"
 msgstr "Zustimmen"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:228
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:236
 msgid "All answers for anonymous and logged-in respondents"
 msgstr "Alle Antworten für anonyme und eingeloggte Befragte"
 
@@ -11945,10 +11945,6 @@ msgstr "Antwort"
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:22
 msgid "Answering"
 msgstr "Antwort auf"
-
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:221
-msgid "Answers to include in the confirmation email"
-msgstr "Antworten, die in der Bestätigungs-E-Mail enthalten sein müssen"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:87
 msgid "Apple"
@@ -12048,11 +12044,11 @@ msgstr "Klicken Sie auf „Bearbeiten“, um die eingegebenen Daten anzuzeigen u
 msgid "Closed"
 msgstr "Geschlossen"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:238
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:246
 msgid "Closed-question answers for anonymous and logged-in respondents"
 msgstr "Antworten auf geschlossene Fragen für anonyme und eingeloggte Befragte"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:233
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:241
 msgid "Closed-question answers for anonymous respondents; all answers for logged-in respondents"
 msgstr "Antworten auf geschlossene Fragen für anonyme Befragte; alle Antworten für eingeloggte Befragte"
 
@@ -12232,7 +12228,7 @@ msgstr "Erste Seite in der Kategorie"
 msgid "For date ranges you can also use relative dates, like <code>-5 year</code>."
 msgstr "Für Datumsbereiche können Sie auch relative Daten verwenden, z. B. <code>-5 Jahr</code>."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:252
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:260
 msgid "Forms can be handled by special code, for example a form that is forwarded to a back office system. Depending on the handler the results are stored in the database or not."
 msgstr "Formulare können mit speziellem Code behandelt werden, zum Beispiel ein Formular, das an ein Back-Office-System weitergeleitet wird. Je nach Handler werden die Ergebnisse in der Datenbank gespeichert oder nicht."
 
@@ -12240,7 +12236,7 @@ msgstr "Formulare können mit speziellem Code behandelt werden, zum Beispiel ein
 msgid "Go to question"
 msgstr "Weiter zur Frage"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:251
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:259
 msgid "Handle this form with"
 msgstr "Behandeln Sie dieses Formular mit"
 
@@ -12453,7 +12449,7 @@ msgstr "Nächste Seite in der Kategorie"
 msgid "No \"Back\" button to this page. If correct/wrong feedback is filled in, then show it directly after this page."
 msgstr "Keine \"Zurück\"-Schaltfläche zu dieser Seite. Wenn richtiges/falsches Feedback ausgefüllt wird, dann wird es direkt nach dieser Seite angezeigt."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:243
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:251
 msgid "No answers; confirmation text only"
 msgstr "Keine Antworten; nur Bestätigungstext"
 
@@ -12934,9 +12930,9 @@ msgstr "Dieser Text wird unter dem Start-Button angezeigt."
 msgid "Thurstone"
 msgstr "Thurstone"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:223
-msgid "To prevent misuse, confirmation emails can exclude answers to open questions. You can choose which answers are sent to anonymous and logged-in respondents."
-msgstr "Um Missbrauch vorzubeugen, können Bestätigungs-E-Mails Antworten auf offene Fragen ausschließen. Sie können wählen, welche Antworten an anonyme und eingeloggte Befragte gesendet werden."
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:231
+msgid "To prevent misuse, answers to open questions can be excluded from the confirmation email. You can choose which answers are sent to anonymous and logged-in respondents."
+msgstr "Um Missbrauch zu verhindern, können Antworten auf offene Fragen von der Bestätigungs-E-Mail ausgeschlossen werden. Sie können wählen, welche Antworten an anonyme und eingeloggte Befragte gesendet werden."
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:21
 msgid "To question"

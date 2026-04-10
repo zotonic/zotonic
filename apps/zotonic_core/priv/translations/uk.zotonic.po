@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-04-08 13:58\n"
+"PO-Revision-Date: 2026-04-09 09:05\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -11915,7 +11915,7 @@ msgstr "Зведені результати від усіх респондент
 msgid "Agree"
 msgstr "Згоден"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:228
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:236
 msgid "All answers for anonymous and logged-in respondents"
 msgstr ""
 
@@ -11943,10 +11943,6 @@ msgstr "Відповідь"
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:22
 msgid "Answering"
 msgstr "Відповідаючи"
-
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:221
-msgid "Answers to include in the confirmation email"
-msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:87
 msgid "Apple"
@@ -12046,11 +12042,11 @@ msgstr "Натисніть «Редагувати», щоб переглянут
 msgid "Closed"
 msgstr "ЗАЧИНЕНО"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:238
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:246
 msgid "Closed-question answers for anonymous and logged-in respondents"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:233
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:241
 msgid "Closed-question answers for anonymous respondents; all answers for logged-in respondents"
 msgstr ""
 
@@ -12230,7 +12226,7 @@ msgstr "Перша сторінка в категорії"
 msgid "For date ranges you can also use relative dates, like <code>-5 year</code>."
 msgstr "Для діапазонів дат ви також можете використовувати відносні дати, наприклад <code>-5 років</code>."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:252
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:260
 msgid "Forms can be handled by special code, for example a form that is forwarded to a back office system. Depending on the handler the results are stored in the database or not."
 msgstr ""
 
@@ -12238,7 +12234,7 @@ msgstr ""
 msgid "Go to question"
 msgstr "Перейти до питання"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:251
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:259
 msgid "Handle this form with"
 msgstr "Обробити цю форму за допомогою"
 
@@ -12451,7 +12447,7 @@ msgstr "Наступна сторінка в категорії"
 msgid "No \"Back\" button to this page. If correct/wrong feedback is filled in, then show it directly after this page."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:243
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:251
 msgid "No answers; confirmation text only"
 msgstr ""
 
@@ -12932,8 +12928,8 @@ msgstr "Цей текст показано під кнопкою «Пуск»."
 msgid "Thurstone"
 msgstr "Терстоун"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:223
-msgid "To prevent misuse, confirmation emails can exclude answers to open questions. You can choose which answers are sent to anonymous and logged-in respondents."
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:231
+msgid "To prevent misuse, answers to open questions can be excluded from the confirmation email. You can choose which answers are sent to anonymous and logged-in respondents."
 msgstr ""
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:21
