@@ -34,4 +34,13 @@
                 id=id
             }
     %}
+
+    {% if top %}
+        <li class="tab-action">
+            <a id="{{ #showtexts }}" href="{% url admin_translation_texts id=id close=1 %}" target="_blank"
+               title="{_ Show all translated texts in a new tab. _}">
+                {_ Show translations _}
+            </a>
+        </li>
+    {% endif %}
 {% endif %}
