@@ -23,8 +23,8 @@
 -moduledoc("
 Show a pie chart.
 
-This is an utility tag providing a simplified interface to the pie chart feature of the [\\{% google_chart
-%\\}](/id/doc_template_scomp_scomp_google_chart#scomp-google-chart) tag. It has an easier way to define the data.
+This is an utility tag providing a simplified interface to the pie chart feature of the [{% google_chart
+%}](/id/doc_template_scomp_scomp_google_chart#scomp-google-chart) tag. It has an easier way to define the data.
 
 Example of simple pie chart:
 
@@ -54,11 +54,11 @@ The tag chart_pie accepts the following arguments:
 
 | Argument | Description                                                                      | Example                                 |
 | -------- | -------------------------------------------------------------------------------- | --------------------------------------- |
-| data     | The data for the pie chart. A list of pairs of \\\\{label, value\\\\} or \\\\[label, value\\\\]. | \\\\[\\\\{“nl”,300\\\\},\\\\{uk,”200”\\\\}\\\\]     |
-| colors   | The colors for the pies. A list of colors, when there are more data points than colors then the colors are interpolated. Colors are specified in hexadecimal. Defaults to Google default colors. | colors=\\\\[“ffcc00”,”ccff00”,”00ffcc”\\\\] |
-| threed   | Set to true to have a 3D effect on the pie chart. Defaults to false.             | threed=true                             |
-| width    | The width of the generated pie chart, in pixels. Defaults to 300.                | width=450                               |
-| height   | The height of the generated pie chart, in pixels. Defaults to 150.               | height=200                              |
+| `data`   | The data for the pie chart. A list of pairs of {label, value} or [label, value]. | `[{“nl”,300},{uk,”200”}]`     |
+| `colors` | The colors for the pies. A list of colors, when there are more data points than colors then the colors are interpolated. Colors are specified in hexadecimal. Defaults to Google default colors. | `colors=[“ffcc00”,”ccff00”,”00ffcc”]` |
+| `threed` | Set to true to have a 3D effect on the pie chart. Defaults to false.             | `threed=true`                             |
+| `width`  | The width of the generated pie chart, in pixels. Defaults to 300.                | `width=450`                               |
+| `height` | The height of the generated pie chart, in pixels. Defaults to 150.               | `height=200`                              |
 
 Other arguments can be found at the [google_chart](/id/doc_template_scomp_scomp_google_chart#scomp-google-chart) tag.
 

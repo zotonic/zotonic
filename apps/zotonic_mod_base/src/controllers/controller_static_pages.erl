@@ -44,9 +44,9 @@ It has the following dispatch options:
 
 | Option                    | Description                                                                      | Example                               |
 | ------------------------- | -------------------------------------------------------------------------------- | ------------------------------------- |
-| root                      | Name of the directory in the site directory containing the static files. The root is a path name relative to the current site’s base directory or `{files, \"some/path\"}` for a path relative to a site‘s files directory. | \\\\{root, “priv/oldsite”\\\\}            |
-| use\\\\_cache               | Whether or not served files are cached in memory for an hour. Defaults to false. Use this for high-volume traffic when the files themselves do not change often. | \\\\{use\\\\_cache, true\\\\}               |
-| allow\\\\_directory\\\\_index | Whether or not to serve a directory listing when no index file is found. Defaults to false. The directory index is rendered using [directory\\\\_index.tpl](../templates/template_directory_index.html#template-directory-index).  New in version 0.9. | \\\\{allow\\\\_directory\\\\_index, true\\\\} |
+| `root`                  | Name of the directory in the site directory containing the static files. The root is a path name relative to the current site’s base directory or `{files, \"some/path\"}` for a path relative to a site‘s files directory. | `{root, “priv/oldsite”}`        |
+| `use_cache`             | Whether or not served files are cached in memory for an hour. Defaults to false. Use this for high-volume traffic when the files themselves do not change often. | `{use_cache, true}`             |
+| `allow_directory_index` | Whether or not to serve a directory listing when no index file is found. Defaults to false. The directory index is rendered using [`directory_index.tpl`](../templates/template_directory_index.html#template-directory-index). New in version 0.9. | `{allow_directory_index, true}` |
 
 This resource does not handle any request arguments.
 ").

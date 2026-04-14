@@ -63,7 +63,7 @@ When the button is clicked the event function of the page controller will be cal
 event(#postback{message=Postback, trigger=TriggerId, target=TargetId}, Context).
 ```
 
-Where “Postback” will be `{hello, [{world,<<\"round\"\\>\\>}]}` and both “TriggerId” and “TargetId” will be `<<\"mybutton\"\\>\\>`.
+Where “Postback” will be `{hello, [{world,<<\"round\">>}]}` and both “TriggerId” and “TargetId” will be `<<\"mybutton\">>`.
 
 
 
@@ -107,9 +107,9 @@ There are some extra arguments added to every form post:
 
 | Post argument    | Description                                                                      | Example                |
 | ---------------- | -------------------------------------------------------------------------------- | ---------------------- |
-| z\\\\_trigger\\\\_id | Id of the HTML element that triggered the submit.                                | <<”mybutton” >>        |
-| z\\\\_pageid       | Id of the page in the browser, used to connect comet and other communictation between the browser and the server. | <<”1uTsbzIsWqmPpF32”>> |
-| postback         | Signed postback set by the wire tag. Handled internally.                         |                        |
+| `z_trigger_id` | Id of the HTML element that triggered the submit.                                | `<<\"mybutton\">>`      |
+| `z_pageid`     | Id of the page in the browser, used to connect comet and other communication between the browser and the server. | `<<\"1uTsbzIsWqmPpF32\">>` |
+| `postback`     | Signed postback set by the wire tag. Handled internally.                         |                        |
 
 
 
@@ -177,13 +177,13 @@ The wire tag accepts the following arguments:
 
 | Argument  | Description                                                                      | Example                                                 |
 | --------- | -------------------------------------------------------------------------------- | ------------------------------------------------------- |
-| id        | HTML id of the element the action gets connected to. When the id is not given then the event is bound to the window. | id=”mybutton”                                           |
-| type      | The type of the event triggering the action. Defaults to “click”. Other types are: “enterkey”, “interval”, “continuation”, “submit” or one of the jQuery events “blur”, “focus”, “load”, “resize”, “scroll”, “unload”, “beforeunload”, “click”, “dblclick”, “mousedown”, “mouseup”, “mousemove”, “mouseover”, “mouseout”, “mouseenter”, “mouseleave”, “change”, “select”, “keydown”, “keypress”, “keyup” or “error”.  The types can be extended by modules using the `#action_event_type` notification. The type must be a tuple, an example is the `{mqtt topic=...}` type provided by [mod\\\\_mqtt](/id/doc_module_mod_mqtt) | type=”submit”                                           |
-| propagate | Specify this when you don’t want the event to be canceled after handling the wire. Useful for event types like focus, click etc. .. versionadded:: 0.6.1 | propagate                                               |
-| target    | Possible target for the action. The meaning of this argument depends on the action, defaults to id. |                                                         |
-| action    | Action wired to the element. This parameter can be repeated to wire more than one action at a time. The value is a single or a list of action records. | action=\\\\{toggle target=”message”\\\\}                    |
-| postback  | Postback that will be sent to the event handler of the controller or the delegate. Either a string, which will be send as an atom, or a tagged property list. The example will be in Erlang `{myevent, [{foo,1},{bar,2}]}`. | postback=”ajaxevent” postback=\\\\{myevent foo=1 bar=2\\\\} |
-| delegate  | Name of the Erlang module that will receive the postback. Defaults to the controller that handled the page request. | delegate=”event\\\\_handler”                              |
+| `id`        | HTML id of the element the action gets connected to. When the id is not given then the event is bound to the window. | `id=”mybutton”`                                         |
+| `type`      | The type of the event triggering the action. Defaults to “click”. Other types are: “enterkey”, “interval”, “continuation”, “submit” or one of the jQuery events “blur”, “focus”, “load”, “resize”, “scroll”, “unload”, “beforeunload”, “click”, “dblclick”, “mousedown”, “mouseup”, “mousemove”, “mouseover”, “mouseout”, “mouseenter”, “mouseleave”, “change”, “select”, “keydown”, “keypress”, “keyup” or “error”.  The types can be extended by modules using the `#action_event_type` notification. The type must be a tuple, an example is the `{mqtt topic=...}` type provided by [mod_mqtt](/id/doc_module_mod_mqtt) | `type=”submit”`                                         |
+| `propagate` | Specify this when you don’t want the event to be canceled after handling the wire. Useful for event types like focus, click etc. .. versionadded:: 0.6.1 | `propagate`                                             |
+| `target`    | Possible target for the action. The meaning of this argument depends on the action, defaults to id. |                                                         |
+| `action`    | Action wired to the element. This parameter can be repeated to wire more than one action at a time. The value is a single or a list of action records. | `action={toggle target=\"message\"}`                |
+| `postback`  | Postback that will be sent to the event handler of the controller or the delegate. Either a string, which will be sent as an atom, or a tagged property list. The example will be in Erlang `{myevent, [{foo,1},{bar,2}]}`. | `postback=\"ajaxevent\" postback={myevent foo=1 bar=2}` |
+| `delegate`  | Name of the Erlang module that will receive the postback. Defaults to the controller that handled the page request. | `delegate=\"event_handler\"`                            |
 
 See also
 

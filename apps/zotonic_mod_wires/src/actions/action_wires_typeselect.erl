@@ -53,11 +53,11 @@ The typeselect action accepts the following arguments:
 
 | Argument           | Description                                                                      | Example                                                    |
 | ------------------ | -------------------------------------------------------------------------------- | ---------------------------------------------------------- |
-| target             | The id of element that will show the list of suggestions.                        | target=”mylist”                                            |
-| cat                | The category for the searched pages. This argument can be repeated.              | cat=”text”                                                 |
-| template           | Template used to show the list of possible pages. This defaults to the template “\\\\_action\\\\_typeselect\\\\_result.tpl”. The template gets the following arguments: result (list of ids), action\\\\_with\\\\_id and action. | template=”\\\\_show\\\\_suggestions.tpl”                       |
-| action\\\\_with\\\\_id | Actions executed when a suggestion is selected. The id of the selected page will be added as the id parameter. This argument can be repeated. | action\\\\_with\\\\_id=\\\\{postback postback=”page\\\\_select”\\\\} |
-| action             | Actions executed when a suggestion is selected. This list is executed after the action\\\\_with\\\\_id actions. This argument can be repeated. | action=\\\\{slide\\\\_up target=”form-id”\\\\}                   |
+| target             | The id of element that will show the list of suggestions.                        | `target=\"mylist\"`                                      |
+| cat                | The category for the searched pages. This argument can be repeated.              | `cat=\"text\"`                                           |
+| template           | Template used to show the list of possible pages. This defaults to the template `\"_action_typeselect_result.tpl\"`. The template gets the following arguments: `result` (list of ids), `action_with_id` and `action`. | `template=\"_show_suggestions.tpl\"`                     |
+| action_with_id     | Actions executed when a suggestion is selected. The id of the selected page will be added as the `id` parameter. This argument can be repeated. | `action_with_id={postback postback=\"page_select\"}` |
+| action             | Actions executed when a suggestion is selected. This list is executed after the `action_with_id` actions. This argument can be repeated. | `action={slide_up target=\"form-id\"}`                 |
 ").
 -author("Marc Worrell <marc@worrell.nl").
 -include_lib("zotonic_core/include/zotonic.hrl").

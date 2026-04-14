@@ -98,7 +98,7 @@ Currently the following topics are defined:
 | Topic           | Description                                                               |
 | --------------- | ------------------------------------------------------------------------- |
 | public          | Freely accessible topic, both for subscribe and publish                   |
-| test            | Test topic. If you publish here then mod\\\\_mqtt will log a debug message. |
+| test            | Test topic. If you publish here then `mod_mqtt` will log a debug message. |
 | user            | Topic available for any authenticated user                                |
 | user/UserId     | Topic available for a specific user of the site                           |
 | bridge/ClientId | The topic forwarding to the client with id ClientId                       |
@@ -123,7 +123,7 @@ Note that there are not automatic subscriptions for user topics. All subscriptio
 ### Access control
 
 All topics have access control added. For this an extra ACL object
-[#acl_mqtt\\{\\}](/id/doc_notification_acl_mqtt#acl-mqtt) is defined, with the actions `publish` and `subscribe`.
+[#acl_mqtt{}](/id/doc_notification_acl_mqtt#acl-mqtt) is defined, with the actions `publish` and `subscribe`.
 Modules can observe the usual [acl_is_allowed](/id/doc_notification_acl_is_allowed#acl-is-allowed) notification to
 allow access to MQTT topics:
 
@@ -238,8 +238,8 @@ Or, with a complete MQTT message:
 Msg = #{
     type => publish,
     qos => 0,
-    topic => [ <<\"~client\">>, <<\"public\">>, <<\"hello\">> ]
-    payload = #{ key => 1, foo => <<\"bar\">> }
+    topic => [ <<\"~client\">>, <<\"public\">>, <<\"hello\">> ],
+    payload => #{ key => 1, foo => <<\"bar\">> }
 },
 z_mqtt:publish(Msg, Context)
 ```
@@ -255,7 +255,7 @@ See also
 There is a separate topic tree in the browser. To be able to send message from/to the browser there are special *bridge*
 topics on both ends.
 
-The browser receives an unique client and routing id on connecting to the server. On the server those ids can be used to
+The browser receives a unique client and routing id on connecting to the server. On the server those ids can be used to
 route messages back to the client using a bridge topic.
 
 For example the server side topic:
@@ -286,7 +286,7 @@ cotonic.broker.subscribe(\"bridge/origin/test/#\", function(msg, bindings, optio
 cotonic.broker.publish(\"bridge/origin/test/foo\", \"hello world\");
 ```
 
-The received message is an JSON object:
+The received message is a JSON object:
 
 
 ```javascript
@@ -302,23 +302,6 @@ The received message is an JSON object:
 ```
 
 The transport between the server and the browser uses a websocket connection and binary encoded MQTT v5 messages.
-
-
-
-### Connection will
-
-Currently a simple version of the *lastwill* is available for JavaScript. This sets a topic and message to be sent when
-the page process stops.
-
-Multiple wills can be set. Currently it is not possible to remove a will, though that will change in the near future.
-
-Example:
-
-
-```javascript
-var will_id = pubzub.lastwill(\"~site/goodbye\", \"thanks for the fish\");
-```
-
 
 
 ### Quality of service

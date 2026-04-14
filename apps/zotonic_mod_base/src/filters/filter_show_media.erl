@@ -21,7 +21,7 @@
 -moduledoc("
 Convert the image markers in HTML from the Rich Text editor into image tags.
 
-When you add images in the Rich Text editor of the Zotonic admin, the HTML body text does not store `<img\\>` tags, but
+When you add images in the Rich Text editor of the Zotonic admin, the HTML body text does not store `<img>` tags, but
 instead, special markers containing the picture id plus size and alignment hints.
 
 The `show_media` tag converts these special markers (which are in fact HTML comments) back into image tags. For this, it
@@ -80,7 +80,7 @@ You can add your own `_body_media.tpl` templates. It will be supplied with the f
 | align      | Alignment, `block`, `left` or `right`       |
 | crop       | If crop is forced, `true` or `undefined`    |
 | link       | If the image should link to the medium page |
-| link\\\\_url | Link to use, defaults to the medium page    |
+| `link_url` | Link to use, defaults to the medium page    |
 | caption    | The caption from the editor                 |
 
 Besides the above all context variables are passed, this gives the Erlang code the possibility to change the behavior of

@@ -71,17 +71,17 @@ The sorter can have the following arguments:
 
 | Argument        | Description                                                                      | Example                   |
 | --------------- | -------------------------------------------------------------------------------- | ------------------------- |
-| id              | The HTML id of the sortable element.                                             | id=”mysorter”             |
-| tag             | Tag that identifies the sortable to the event handler. Can be any value. A string will be converted to an atom. | tag=”my\\\\_atom\\\\_value”   |
-| delegate        | The delegate of the sorter. The sort event will be send to the delegate module. Defaults to the resource that handled the page request. | delegate=”mymodule”       |
-| class           | A CSS class that will be added to the sorter. The class “sorter” will always be added. | class=”bunny-sorter”      |
-| handle          | jQuery selector for the handles of the sortables. When not defined then the whole sortable can be clicked on for dragging. | handle=”.sortable-handle” |
-| connect\\\\_group | Name of the group this sorter connects with. Sortables from this sorter can then be dragged to sorters with that group name. This argument can be repeated to connect with multiple groups. Special values are “all” and “none” to either connect to all other sorters or to no other sorter. | connect\\\\_group=”bunnies” |
-| group           | The group of this sorter. Used in connection with the “connect\\\\_group” argument. Sortables can be dragged between sorters of the same group. | group=”cows”              |
-| axis            | If defined the items can only be dragged horizontally or vertically. Possible values are “x” and “y”. | axis=”y”                  |
-| containment     | Constrains dragging of the sortables to within the bounds of the specified element. Possible values are “parent”, “document”, “window”, or a jQuery selector. | containment=”parent”      |
-| opacity         | Opacity a sortable is set to when being dragged. Defaults to “1.0”.              | opacity=”0.8”             |
-| placeholder     | Class that gets applied to the otherwise white space that will show between sortables as the new place of the sortable. | class=”drophere”          |
+| `id`            | The HTML id of the sortable element.                                             | `id=\"mysorter\"`         |
+| `tag`           | Tag that identifies the sortable to the event handler. Can be any value. A string will be converted to an atom. | `tag=\"my_atom_value\"`   |
+| `delegate`      | The delegate of the sorter. The sort event will be sent to the delegate module. Defaults to the resource that handled the page request. | `delegate=\"mymodule\"`   |
+| `class`         | A CSS class that will be added to the sorter. The class “sorter” will always be added. | `class=\"bunny-sorter\"`  |
+| `handle`        | jQuery selector for the handles of the sortables. When not defined then the whole sortable can be clicked on for dragging. | `handle=\".sortable-handle\"` |
+| `connect_group` | Name of the group this sorter connects with. Sortables from this sorter can then be dragged to sorters with that group name. This argument can be repeated to connect with multiple groups. Special values are “all” and “none” to either connect to all other sorters or to no other sorter. | `connect_group=\"bunnies\"` |
+| `group`         | The group of this sorter. Used in connection with the `connect_group` argument. Sortables can be dragged between sorters of the same group. | `group=\"cows\"`          |
+| `axis`          | If defined the items can only be dragged horizontally or vertically. Possible values are “x” and “y”. | `axis=\"y\"`              |
+| `containment`   | Constrains dragging of the sortables to within the bounds of the specified element. Possible values are “parent”, “document”, “window”, or a jQuery selector. | `containment=\"parent\"`  |
+| `opacity`       | Opacity a sortable is set to when being dragged. Defaults to “1.0”.              | `opacity=\"0.8\"`         |
+| `placeholder`   | Class that gets applied to the otherwise white space that will show between sortables as the new place of the sortable. | `class=\"drophere\"`      |
 
 See also
 

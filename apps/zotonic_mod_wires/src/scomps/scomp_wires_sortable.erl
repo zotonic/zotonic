@@ -70,10 +70,10 @@ The sortable can have the following arguments:
 
 | Argument | Description                                                                      | Example                 |
 | -------- | -------------------------------------------------------------------------------- | ----------------------- |
-| id       | The HTML id of the sortable element.                                             | id=”mysortable1”        |
-| tag      | Tag that identifies the sortable to the event handler. Can be any value. A string will be converted to an atom. | tag=”my\\\\_atom\\\\_value” |
-| delegate | The delegate of the sortable, currently unused will be passed in the sortables’s #dragdrop record. | delegate=”mymodule”     |
-| class    | A CSS class that will be added to the sortable. The class “sortable” will always be added. | class=”dragitem”        |
+| `id`       | The HTML id of the sortable element.                                             | `id=”mysortable1”`      |
+| `tag`      | Tag that identifies the sortable to the event handler. Can be any value. A string will be converted to an atom. | `tag=\"my_atom_value\"` |
+| `delegate` | The delegate of the sortable, currently unused will be passed in the sortables’s #dragdrop record. | `delegate=”mymodule”`   |
+| `class`    | A CSS class that will be added to the sortable. The class “sortable” will always be added. | `class=”dragitem”`      |
 
 See also
 

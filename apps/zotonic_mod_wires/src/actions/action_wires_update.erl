@@ -43,16 +43,16 @@ Another example, now rendering a template:
 {% button text=\"hello\" action={update target=\"mylist\" template=\"_list_item.tpl\" id=42} %}
 ```
 
-This updates the &lt;ul/> with the output of the template \\_list_item.tpl. All arguments to the update action are
+This updates the &lt;ul/> with the output of the template _list_item.tpl. All arguments to the update action are
 also arguments to the template.
 
 | Argument      | Description                                                                      | Example                       |
 | ------------- | -------------------------------------------------------------------------------- | ----------------------------- |
-| target        | The id of the element receiving the rendered HTML.                               | target=”my-view”              |
-| text          | Literal HTML text to be inserted, no escaping will be done.                      | text=”Hello &lt;b>World</b>”  |
-| template      | Name of the template to be rendered.                                             | template=”\\\\_list\\\\_view.tpl” |
-| include\\\\_all | Add this argument to include all templates with the same name. If not added then the best template will be used. | include\\\\_all                 |
-| catinclude    | Add this argument to use a [catinclude](/id/doc_template_tag_tag_catinclude) instead of a normal include of the template. The id argument *must* be present for a catinclude to work. | catinclude id=1               |
+| target        | The id of the element receiving the rendered HTML.                               | `target=\"my-view\"`          |
+| text          | Literal HTML text to be inserted, no escaping will be done.                      | `text=\"Hello &lt;b>World</b>\"` |
+| template      | Name of the template to be rendered.                                             | `template=\"_list_view.tpl\"` |
+| include_all | Add this argument to include all templates with the same name. If not added then the best template will be used. | `include_all`                 |
+| catinclude    | Add this argument to use a [catinclude](/id/doc_template_tag_tag_catinclude) instead of a normal include of the template. The `id` argument *must* be present for a catinclude to work. | `catinclude id=1`               |
 
 All other arguments are passed as-is to the included template(s).
 

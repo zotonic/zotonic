@@ -39,10 +39,10 @@ Alert accepts the following arguments:
 | title       | Title of the alert.                                                              | title=”Alert”   |
 | text        | The text to be displayed.                                                        | text=”Hola!”    |
 | button      | Text for the button. Defaults to “OK”                                            | button=”Bummer” |
-| only\\\\_text | Set this to not show the “OK” button.                                            | only\\\\_text     |
+| only_text | Set this to not show the “OK” button.                                            | `only_text`     |
 | action      | Action to be done when the user clicks on the OK button. There can be multiple actions. |                 |
-| backdrop    | Show backdrop: true, false, or the string “static”                               | backdrop=false  |
-| level       | Nesting of the dialog. Non negative integer, higher numbered levels are displayed above lower levels. Special level `\"top\"` to force display on top. | level=”top”     |
+| backdrop    | Show backdrop: true, false, or the string “static”                               | `backdrop=false` |
+| level       | Nesting of the dialog. Non negative integer, higher numbered levels are displayed above lower levels. Special level `\"top\"` to force display on top. | `level=\"top\"` |
 
 The alert dialog is rendered using the `_action_dialog_alert.tpl` template. Overrule this template to change the
 contents of the alert dialog.
@@ -72,4 +72,3 @@ event(#postback{message={alert, Args}}, Context) ->
         | Args
     ],
     z_render:dialog(Title, "_action_dialog_alert.tpl", Vars, Context).
-

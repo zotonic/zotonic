@@ -36,7 +36,7 @@ Template accepts the following arguments:
 
 | Argument | Description                                                           | Example                      |
 | -------- | --------------------------------------------------------------------- | ---------------------------- |
-| template | Name of template to render.                                           | template=”my\\\\_template.tpl” |
+| template | Name of template to render.                                           | `template=\"my_template.tpl\"` |
 | *        | Any other arguments will be passed on to the template being rendered. | id=123                       |
 ").
 -include_lib("zotonic_core/include/zotonic.hrl").

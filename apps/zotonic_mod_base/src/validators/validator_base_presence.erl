@@ -36,7 +36,7 @@ Arguments
 
 | Argument          | Description                                                | Example                           |
 | ----------------- | ---------------------------------------------------------- | --------------------------------- |
-| failure\\\\_message | Message to be shown when field is empty. Defaults to “\\\\*” | `failure_message=\"Please enter.\"` |
+| `failure_message` | Message to be shown when field is empty. Defaults to “\\\\*” | `failure_message=\"Please enter.\"` |
 
 See also
 

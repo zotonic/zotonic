@@ -26,8 +26,8 @@ define a simple menu. Every item in the menu references a Zotonic page and can b
 
 This menu can be rendered in the frontend with the [menu](/id/doc_template_scomp_scomp_menu#scomp-menu) custom tag.
 
-It will use the \\_menu.tpl template which is by default able to render a Twitter Bootstrap compatible menu structure
-using nested `<ul\\>` elements.
+It will use the _menu.tpl template which is by default able to render a Twitter Bootstrap compatible menu structure
+using nested `<ul>` elements.
 
 To implement a different navigation menu, override the `_menu.tpl` in your project and create new markup.
 
