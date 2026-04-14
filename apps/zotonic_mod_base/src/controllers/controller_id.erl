@@ -42,7 +42,7 @@ This controller handles the following query argument:
 
 | Option | Description                                                     | Example URL |
 | ------ | --------------------------------------------------------------- | ----------- |
-| id     | Id of the requested [resource](/id/doc_glossary#term-resource). | /id/1234    |
+| `id`   | Id of the requested [resource](/id/doc_glossary#term-resource). | `/id/1234`  |
 
 The list of provided content types is collected with a foldr notification (see
 [Notifications](/id/doc_developerguide_notifications#guide-notification)) of the type `content_types_dispatch`. Modules

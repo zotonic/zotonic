@@ -41,8 +41,8 @@ Arguments
 
 | Argument          | Description                                                                      | Example                           |
 | ----------------- | -------------------------------------------------------------------------------- | --------------------------------- |
-| match             | The id of the input field that should have the same value.                       | `match=\"field1\"`                  |
-| failure\\\\_message | Message to be shown when the two fields are unequal. Defaults to “Does not match.” | `failure_message=\"Please retry.\"` |
+| `match`           | The id of the input field that should have the same value.                       | `match=\"field1\"`                  |
+| `failure_message` | Message to be shown when the two fields are unequal. Defaults to “Does not match.” | `failure_message=\"Please retry.\"` |
 
 See also
 

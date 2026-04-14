@@ -55,7 +55,7 @@ This action can have the following arguments:
 | -------- | -------------------------------------------------------------------------------- | ------------------------------- |
 | back     | When given then the browser is directed to the previous page.                    | back                            |
 | dispatch | The name of a dispatch rule. All other parameters are assumed to be parameters for the dispatch rule. | dispatch=”admin”                |
-| id       | When back and dispatch are not defined then the redirect uri will be the page\\\\_url of the resource. | id=42                           |
+| id       | When back and dispatch are not defined then the redirect uri will be the `page_url` of the resource. | `id=42`                           |
 | location | The http address to redirect to. Can be an url with or without host name.        | location=”<http://example.com>“ |
 ").
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -113,5 +113,4 @@ sanitize(undefined) ->
     undefined;
 sanitize(Url) ->
     z_html:sanitize_uri(Url).
-
 

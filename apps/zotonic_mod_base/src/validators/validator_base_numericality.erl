@@ -50,15 +50,15 @@ Arguments
 
 | Argument                     | Description                                                                      | Example                    |
 | ---------------------------- | -------------------------------------------------------------------------------- | -------------------------- |
-| is                           | Tests for equality.                                                              | `is=42`                    |
-| minimum                      | Minimum value.                                                                   | `minimum=1`                |
-| maximum                      | Maximum value.                                                                   | `maximum=100`              |
-| is\\\\_float                   | Boolean flag which tells if the input can be a floating point number. Defaults to false. | `is_float` `is_float=true` |
-| not\\\\_a\\\\_number\\\\_message   | Message to show when the entered value is not a number. Defaults to “Must be a number.” | `not_a_number_message=\"*\"` |
-| not\\\\_an\\\\_integer\\\\_message | Message to show when the entered number is not an integer. Defaults to “Must be an integer.” |                            |
-| wrong\\\\_number\\\\_message     | Message to show when the entered number is unequal to the .is. argument. Defaults to “Must be ..” |                            |
-| too\\\\_low\\\\_message          | Message for when the entered number is less than the minimum allowed. Defaults to “Must not be less than ..” |                            |
-| too\\\\_high\\\\_message         | Message for when the entered number is greater than the maximum allowed. Defaults to “Must not be more than ..” |                            |
+| `is`                     | Tests for equality.                                                              | `is=42`                    |
+| `minimum`                | Minimum value.                                                                   | `minimum=1`                |
+| `maximum`                | Maximum value.                                                                   | `maximum=100`              |
+| `is_float`               | Boolean flag which tells if the input can be a floating point number. Defaults to false. | `is_float` `is_float=true` |
+| `not_a_number_message`   | Message to show when the entered value is not a number. Defaults to “Must be a number.” | `not_a_number_message=\"*\"` |
+| `not_an_integer_message` | Message to show when the entered number is not an integer. Defaults to “Must be an integer.” |                            |
+| `wrong_number_message`     | Message to show when the entered number is unequal to the `.is.` argument. Defaults to “Must be ..” |                            |
+| `too_low_message`          | Message for when the entered number is less than the minimum allowed. Defaults to “Must not be less than ..” |                            |
+| `too_high_message`         | Message for when the entered number is greater than the maximum allowed. Defaults to “Must not be more than ..” |                            |
 
 See also
 

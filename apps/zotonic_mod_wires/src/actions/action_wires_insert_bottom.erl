@@ -41,7 +41,7 @@ Another example, now rendering a template:
 {% button text=\"hello\" action={insert_bottom target=\"mylist\" template=\"_list_item.tpl\" id=42} %}
 ```
 
-This insert the output of the template \\_list_item.tpl below the existing &lt;li/>. All arguments to the update
+This insert the output of the template _list_item.tpl below the existing &lt;li/>. All arguments to the update
 action are also arguments to the template.
 
 See also

@@ -42,9 +42,9 @@ Prefix the topic with `bridge/origin/` to relay it to the topic tree on the serv
 
 | Argument | Description                                                     | Example                |
 | -------- | --------------------------------------------------------------- | ---------------------- |
-| topic    | The topic of the message.                                       | topic=”test”           |
-| js\\\\_msg | Literal javascript message to publish. Will be escaped.         | js\\\\_msg=”Hello World” |
-| &lt;key> | A literal javascript value, will be escaped and added to object | spam=”eggs”            |
+| topic    | The topic of the message.                                       | `topic=\"test\"`       |
+| js_msg   | Literal javascript message to publish. Will be escaped.         | `js_msg=\"Hello World\"` |
+| &lt;key> | A literal javascript value, will be escaped and added to object | `spam=\"eggs\"`        |
 ").
 
 -export([render_action/4]).
@@ -77,4 +77,3 @@ js_value(Int) when is_integer(Int) -> z_convert:to_list(Int);
 js_value(true) -> <<"true">>;
 js_value(false) -> <<"false">>;
 js_value(undefined) -> <<"undefined">>.
-

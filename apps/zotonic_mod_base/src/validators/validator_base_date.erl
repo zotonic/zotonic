@@ -42,8 +42,8 @@ Arguments
 
 | Argument  | Description                                                                      | Example         |
 | --------- | -------------------------------------------------------------------------------- | --------------- |
-| separator | Character used to separate date parts, such as `/` `-` `\\\\`. Defaults to `\"-\"`.  | `separator=\"-\"` |
-| format    | Date format, big endian (starting with year), little endian (starting with day) or middle endian (starting with month). Defaults to `\"l\"` (little). | `format=\"m\"`    |
+| `separator` | Character used to separate date parts, such as `/` `-` `\\\\`. Defaults to `\"-\"`.  | `separator=\"-\"` |
+| `format`    | Date format, big endian (starting with year), little endian (starting with day) or middle endian (starting with month). Defaults to `\"l\"` (little). | `format=\"m\"`    |
 ").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_validator/5, validate/5]).

@@ -49,26 +49,26 @@ Google chart accepts the following arguments:
 
 | Argument              | Description                                                                      | Example                        |
 | --------------------- | -------------------------------------------------------------------------------- | ------------------------------ |
-| type                  | Kind of chart is generated. One of “line”, “sparkline”, “stacked\\\\_horizontal\\\\_bar”, “stacked\\\\_vertical\\\\_bar”, “grouped\\\\_horizontal\\\\_bar”, “grouped\\\\_vertical\\\\_bar”, “pie” or “pie3d”. Defaults to “line”. | type=”sparkline”               |
-| id                    | The id of the generated image tag.                                               | id=”mychart”                   |
-| class                 | CSS class of the generated image tag. The class “google\\\\_chart” is always added. | class=”chart”                  |
-| style                 | CSS style attribute for the generated image tag.                                 | style=”border: 1px solid #fcc” |
-| title                 | Title shown on the chart.                                                        | title=”Browser shares”         |
-| color                 | Color for the title. Must be in hexadecimal, defaults to “909090”.               | color=”ffcc00”                 |
-| font\\\\_size           | Font size in pixels for the title. Defaults to 10.                               | font\\\\_size=12                 |
-| width                 | Width of the generated chart. Defaults to 300.                                   | width=450                      |
-| height                | Height of the generated chart.                                                   | height=200                     |
-| grid\\\\_x              | X axis grid step size.                                                           | grid\\\\_x=10                    |
-| grid\\\\_y              | Y axis grid step size.                                                           | grid\\\\_y=10                    |
-| grid\\\\_line\\\\_length  | Length of line segment for the grid lines, defaults to 1.                        | grid\\\\_line\\\\_length=1         |
-| grid\\\\_blank\\\\_length | Length of gaps in the grid lines, defaults to 5.                                 | grid\\\\_blank\\\\_length=5        |
-| background\\\\_color    | Background color for the complete chart. in hexadecimal, defaults to “ffffff”.   | background\\\\_color=”331133”    |
-| chart\\\\_color         | Background color for the chart area. In hexadecimal, defaults to “ffffff”.       | chart\\\\_color=”113311”         |
-| legend\\\\_location     | Where the legend is placed. One of “top”, “left”, “bottom” or “right”. Defaults to “bottom”. | legend\\\\_location=”right”      |
-| axis                  | Description of an axis. You can given more than one axis argument. See the section [Axis styles and labels](#axis-styles-and-labels) below. |                                |
-| data                  | The data to be shown. You can give more than one data argument. See [Data](#data) definition below. |                                |
-| bar\\\\_space           | Space in pixels between the bar of a bar chart. Defaults to 3.                   | bar\\\\_space=5                  |
-| bar\\\\_group\\\\_space   | Space in pixels between the groups of bars of a bar chart. Defaults to 7.        | bar\\\\_group\\\\_space=10         |
+| `type`               | Kind of chart is generated. One of `line`, `sparkline`, `stacked_horizontal_bar`, `stacked_vertical_bar`, `grouped_horizontal_bar`, `grouped_vertical_bar`, `pie` or `pie3d`. Defaults to `line`. | `type=\"sparkline\"`             |
+| `id`                 | The id of the generated image tag.                                               | `id=”mychart”`                 |
+| `class`              | CSS class of the generated image tag. The class `google_chart` is always added. | `class=\"chart\"`                |
+| `style`              | CSS style attribute for the generated image tag.                                 | `style=”border: 1px solid #fcc”` |
+| `title`              | Title shown on the chart.                                                        | `title=”Browser shares”`       |
+| `color`              | Color for the title. Must be in hexadecimal, defaults to “909090”.               | `color=”ffcc00”`               |
+| `font_size`          | Font size in pixels for the title. Defaults to `10`.                             | `font_size=12`                 |
+| `width`              | Width of the generated chart. Defaults to 300.                                   | `width=450`                    |
+| `height`             | Height of the generated chart.                                                   | `height=200`                   |
+| `grid_x`             | X axis grid step size.                                                           | `grid_x=10`                    |
+| `grid_y`             | Y axis grid step size.                                                           | `grid_y=10`                    |
+| `grid_line_length`   | Length of line segment for the grid lines, defaults to `1`.                      | `grid_line_length=1`           |
+| `grid_blank_length`  | Length of gaps in the grid lines, defaults to `5`.                               | `grid_blank_length=5`          |
+| `background_color`   | Background color for the complete chart, in hexadecimal, defaults to `ffffff`.   | `background_color=\"331133\"`  |
+| `chart_color`        | Background color for the chart area, in hexadecimal, defaults to `ffffff`.       | `chart_color=\"113311\"`       |
+| `legend_location`    | Where the legend is placed. One of `top`, `left`, `bottom` or `right`. Defaults to `bottom`. | `legend_location=\"right\"`    |
+| `axis`               | Description of an axis. You can given more than one axis argument. See the section [Axis styles and labels](#axis-styles-and-labels) below. |                                |
+| `data`               | The data to be shown. You can give more than one data argument. See [Data](#data) definition below. |                                |
+| `bar_space`          | Space in pixels between the bar of a bar chart. Defaults to `3`.                 | `bar_space=5`                  |
+| `bar_group_space`    | Space in pixels between the groups of bars of a bar chart. Defaults to `7`.      | `bar_group_space=10`           |
 
 
 
@@ -91,10 +91,10 @@ Valid arguments for an axis are:
 
 | Argument    | Description                                                                      | Example                     |
 | ----------- | -------------------------------------------------------------------------------- | --------------------------- |
-| font\\\\_size | Size of the labels in pixels. Defaults to 10.                                    | font\\\\_size=12              |
-| color       | Color for the label texts, in hexadecimal RGB. Defaults to “909090”.             | color=”cc0000”              |
-| position    | Which axis is defined. One of “top”, “right”, “bottom” and “left”. Defaults to “top”. You can have multiple definitions for a position. | position=”bottom”           |
-| labels      | A list with labels displayed. The labels will be evenly distributed over the axis. | labels=\\\\[2006,2007,2008\\\\] |
+| `font_size` | Size of the labels in pixels. Defaults to `10`.                                  | `font_size=12`              |
+| `color`     | Color for the label texts, in hexadecimal RGB. Defaults to “909090”.             | `color=”cc0000”`            |
+| `position`  | Which axis is defined. One of “top”, “right”, “bottom” and “left”. Defaults to “top”. You can have multiple definitions for a position. | `position=”bottom”`         |
+| `labels`    | A list with labels displayed. The labels will be evenly distributed over the axis. | `labels=[2006,2007,2008]` |
 
 
 
@@ -115,14 +115,14 @@ Valid arguments for a data record are:
 
 | Argument       | Description                                                             | Example                |
 | -------------- | ----------------------------------------------------------------------- | ---------------------- |
-| line\\\\_width   | The width of the line in pixels. Defaults to 1.                         | line\\\\_width=2         |
-| line\\\\_length  | Length of line segment in pixels. Defaults to 1.                        | line\\\\_length=1        |
-| blank\\\\_length | Length of blank segment in pixels. Defaults to 0.                       | blank\\\\_length=1       |
-| min\\\\_value    | The minimum value for the data set, used for the axis. Defaults to 0.   | min\\\\_value=-100       |
-| max\\\\_value    | The maximum value for the data set, used for the axis. Defaults to 100. | max\\\\_value=100        |
-| color          | The color used for this data set. Hexadecimal RGB value.                | color=”ffcc00”         |
-| legend         | Label for the dataset as shown in the legend.                           | legend=”monthly sales” |
-| values         | The values for drawing the chart. Must be a list.                       | values=\\\\[0,10,5,8\\\\]  |
+| `line_width`  | The width of the line in pixels. Defaults to `1`.                       | `line_width=2`         |
+| `line_length` | Length of line segment in pixels. Defaults to `1`.                      | `line_length=1`        |
+| `blank_length` | Length of blank segment in pixels. Defaults to `0`.                      | `blank_length=1`       |
+| `min_value`   | The minimum value for the data set, used for the axis. Defaults to `0`. | `min_value=-100`       |
+| `max_value`   | The maximum value for the data set, used for the axis. Defaults to `100`. | `max_value=100`        |
+| `color`       | The color used for this data set. Hexadecimal RGB value.                | `color=”ffcc00”`       |
+| `legend`      | Label for the dataset as shown in the legend.                           | `legend=”monthly sales”` |
+| `values`      | The values for drawing the chart. Must be a list.                       | `values=[0,10,5,8]`  |
 
 See also
 

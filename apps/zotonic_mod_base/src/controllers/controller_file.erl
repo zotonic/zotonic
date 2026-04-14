@@ -57,11 +57,11 @@ controller_file has the following dispatch options:
 
 | Option                | Description                                                                      | Example                             |
 | --------------------- | -------------------------------------------------------------------------------- | ----------------------------------- |
-| root                  | List of root directories where files are located. Use `lib` for the library files. This defaults to the site’s “files/archive” directory. | `{root, [lib]}`               |
-| path                  | Default file to be served. Used for files like “robots.txt” and “favicon.ico”.   | `{path,\"misc/robots.txt\"}`        |
-| content_disposition   | If the file should be viewed in the browser or downloaded. Possible values are `inline` and `attachment`. Defaults to the browser’s defaults by not setting the “Content-Disposition” response header. | `{content_disposition, inline}` |
-| acl                   | Extra authorization checks to be performed.                                      | See [ACL options](#acl-options).    |
-| max_age               | Max age, used for Cache and Expires. Value is an integer, number of secs.        | `{max_age,3600}`                |
+| `root`                | List of root directories where files are located. Use `lib` for the library files. This defaults to the site’s “files/archive” directory. | `{root, [lib]}`               |
+| `path`                | Default file to be served. Used for files like “robots.txt” and “favicon.ico”.   | `{path,\"misc/robots.txt\"}`  |
+| `content_disposition` | If the file should be viewed in the browser or downloaded. Possible values are `inline` and `attachment`. Defaults to the browser’s defaults by not setting the “Content-Disposition” response header. | `{content_disposition, inline}` |
+| `acl`                 | Extra authorization checks to be performed.                                      | See [ACL options](#acl-options).    |
+| `max_age`             | Max age, used for Cache and Expires. Value is an integer, number of secs.        | `{max_age,3600}`              |
 
 
 

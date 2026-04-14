@@ -42,9 +42,9 @@ The overlay action has the following arguments:
 
 | Argument | Description                                                                      | Example                   |
 | -------- | -------------------------------------------------------------------------------- | ------------------------- |
-| template | Template to render in the overlay                                                | template=”\\\\_overlay.tpl” |
-| class    | Extra CSS class(es) to add to the overlay diff.                                  | class=”myclass other”     |
-| level    | Nesting of the overlay. Non negative integer, higher numbered levels are displayed above lower levels. Special level `\"top\"` to force display on top, above all dialogs and other overlays. | level=”top”               |
+| template | Template to render in the overlay                                                | `template=\"_overlay.tpl\"` |
+| class    | Extra CSS class(es) to add to the overlay diff.                                  | `class=\"myclass other\"`   |
+| level    | Nesting of the overlay. Non negative integer, higher numbered levels are displayed above lower levels. Special level `\"top\"` to force display on top, above all dialogs and other overlays. | `level=\"top\"`             |
 
 All (extra) arguments are passed to the rendered template.
 

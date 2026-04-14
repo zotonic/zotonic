@@ -66,12 +66,12 @@ The menu has the following features:
 
 | Argument    | Description                                                                      | Example |
 | ----------- | -------------------------------------------------------------------------------- | ------- |
-| id          | Set this to the id of the current shown page and it wil highlight its page path. |         |
-| menu\\\\_id   | The id of the menu that you want to display. If left empty, the main menu is shown. |         |
-| id\\\\_prefix | String prepended to menu id.                                                     |         |
-| class       | HTML class for the list; default “nav”.                                          |         |
-| maxdepth    | Maximum depth of the menu; default 999.                                          |         |
-| template    | Template to render the menu; default “\\\\_menu.tpl”                               |         |
+| `id`        | Set this to the id of the current shown page and it wil highlight its page path. |         |
+| `menu_id`   | The id of the menu that you want to display. If left empty, the main menu is shown. |         |
+| `id_prefix` | String prepended to menu id.                                                     |         |
+| `class`     | HTML class for the list; default “nav”.                                          |         |
+| `maxdepth`  | Maximum depth of the menu; default 999.                                          |         |
+| `template`  | Template to render the menu; default `\"_menu.tpl\"`                             |         |
 ").
 -behaviour(zotonic_scomp).
 

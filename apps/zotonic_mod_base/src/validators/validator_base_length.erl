@@ -40,12 +40,12 @@ Arguments
 
 | Argument                 | Description                                                                      | Example      |
 | ------------------------ | -------------------------------------------------------------------------------- | ------------ |
-| is                       | Use when the value must be a specific length.                                    | `is=4`       |
-| minimum                  | The minimum length of the value.                                                 | `minimum=4`  |
-| maximum                  | The maximum length of the value.                                                 | `maximum=10` |
-| wrong\\\\_length\\\\_message | Message for when the length is unequal to the value of the “is” argument. Defaults to “Must be . characters long.” |              |
-| too\\\\_short\\\\_message    | Message for when there are not enough characters entered. Defaults to “Must not be less than . characters long.” |              |
-| too\\\\_long\\\\_message     | Message for when there are too many characters entered. Defaults to “Must not be more than . characters long.” |              |
+| `is`                     | Use when the value must be a specific length.                                    | `is=4`       |
+| `minimum`                | The minimum length of the value.                                                 | `minimum=4`  |
+| `maximum`                | The maximum length of the value.                                                 | `maximum=10` |
+| `wrong_length_message` | Message for when the length is unequal to the value of the “is” argument. Defaults to “Must be . characters long.” |              |
+| `too_short_message`    | Message for when there are not enough characters entered. Defaults to “Must not be less than . characters long.” |              |
+| `too_long_message`     | Message for when there are too many characters entered. Defaults to “Must not be more than . characters long.” |              |
 
 See also
 

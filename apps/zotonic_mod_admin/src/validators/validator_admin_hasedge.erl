@@ -58,10 +58,10 @@ Arguments
 
 | Argument  | Description                                                                      | Example    |
 | --------- | -------------------------------------------------------------------------------- | ---------- |
-| id        | Subject resource id for the edge check.                                          | `id`       |
-| predicate | Predicate to check, defaults to the value of the input element the validator is connected to. | `\"author\"` |
-| minimum   | Minimum amount of edged allowed, defaults to 1.                                  | `2`        |
-| maximum   | Maximum amount of edged allowed, per default no maximum.                         | `10`       |
+| `id`        | Subject resource id for the edge check.                                          | `id`       |
+| `predicate` | Predicate to check, defaults to the value of the input element the validator is connected to. | `\"author\"` |
+| `minimum`   | Minimum amount of edged allowed, defaults to 1.                                  | `2`        |
+| `maximum`   | Maximum amount of edged allowed, per default no maximum.                         | `10`       |
 ").
 
 -export([

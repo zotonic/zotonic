@@ -38,7 +38,7 @@ Arguments
 
 | Argument          | Description                                                                 | Example                                      |
 | ----------------- | --------------------------------------------------------------------------- | -------------------------------------------- |
-| failure\\\\_message | Message to be shown when the input is true. Defaults to “Must be accepted.” | `failure_message=\"Please agree to our TOS.\"` |
+| `failure_message` | Message to be shown when the input is true. Defaults to “Must be accepted.” | `failure_message=\"Please agree to our TOS.\"` |
 
 See also
 

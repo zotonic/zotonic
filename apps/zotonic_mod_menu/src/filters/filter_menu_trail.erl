@@ -49,7 +49,7 @@ The [menu_trail](#filter-menu-trail) includes the whole path through the menu to
 that way. Sometimes it may seem pointless to show the menu trail if we are on the first level of the menu. If we want to
 avoid this we need to avoid rendering a trail when it is less than two items long.
 
-One simple condition change to \\_article_chapeau.tpl from the blog skeleton makes this work:
+One simple condition change to _article_chapeau.tpl from the blog skeleton makes this work:
 
 
 ```django
@@ -62,7 +62,7 @@ One simple condition change to \\_article_chapeau.tpl from the blog skeleton mak
 {% endfor %}</h5>{% endif %}{% endwith %}
 ```
 
-The key here is `{% if parents|length \\> 1 %}` in place of just `{% if parents %}`.
+The key here is `{% if parents|length > 1 %}` instead of just `{% if parents %}`.
 
 The [if](/id/doc_template_tag_tag_if) tag is now rendering the menu_trail only if there are two or more items in it
 which - as I mentioned before - happens when you are at least two levels deep in the menu.

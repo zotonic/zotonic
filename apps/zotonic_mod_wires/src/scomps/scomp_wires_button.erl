@@ -54,19 +54,19 @@ Where TriggerId and TargetId are both the HTML id of the button.
 
 | Argument | Description                                                                      | Example                        |
 | -------- | -------------------------------------------------------------------------------- | ------------------------------ |
-| text     | The text on the button, defaults to “Submit”                                     | text=”click me”                |
-| postback | An event sent to the delegate or the resource serving the page.                  | postback=”hello”               |
-| tag      | The type of HTML tag that will be created. Defaults to “button”.                 | tag=”a”                        |
-| delegate | The name of the erlang module to be called for handling the postback.            | delegate=”myresource”          |
-| action   | The action to be triggered when the button is clicked. There can be more than one action argument. | action=\\\\{show target=”msg”\\\\} |
-| id       | Id of the button.                                                                | id=#submit                     |
-| class    | The css class of the button. This argument can be repeated to add multiple classes. | class=”submit”                 |
-| style    | The css style of the button.                                                     | style=”color: #fc0”            |
-| tabindex | The value for the tabindex property.                                             | tabindex=1                     |
-| type     | The type attribute of the button.                                                | type=”submit”                  |
-| title    | The title attribute of the button.                                               | title=”click to submit”        |
-| disabled | The disabled attribute of the button, set to true or false. When the button is disabled then the class “disabled” id added to the class list. | disabled=true                  |
-| href     | The href attribute of the button if tag “a” is used. Defaults to “#”.            | href=”/foobar”                 |
+| `text`     | The text on the button, defaults to “Submit”                                     | `text=”click me”`              |
+| `postback` | An event sent to the delegate or the resource serving the page.                  | `postback=”hello”`             |
+| `tag`      | The type of HTML tag that will be created. Defaults to “button”.                 | `tag=”a”`                      |
+| `delegate` | The name of the erlang module to be called for handling the postback.            | `delegate=”myresource”`        |
+| `action`   | The action to be triggered when the button is clicked. There can be more than one action argument. | `action={show target=”msg”}` |
+| `id`       | Id of the button.                                                                | `id=#submit`                   |
+| `class`    | The css class of the button. This argument can be repeated to add multiple classes. | `class=”submit”`               |
+| `style`    | The css style of the button.                                                     | `style=”color: #fc0”`          |
+| `tabindex` | The value for the tabindex property.                                             | `tabindex=1`                   |
+| `type`     | The type attribute of the button.                                                | `type=”submit”`                |
+| `title`    | The title attribute of the button.                                               | `title=”click to submit”`      |
+| `disabled` | The disabled attribute of the button, set to true or false. When the button is disabled then the class “disabled” id added to the class list. | `disabled=true`                |
+| `href`     | The href attribute of the button if tag “a” is used. Defaults to “#”.            | `href=”/foobar”`               |
 ").
 -behaviour(zotonic_scomp).
 

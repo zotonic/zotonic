@@ -36,7 +36,7 @@ Arguments
 
 | Argument          | Description                                                                      | Example                                               |
 | ----------------- | -------------------------------------------------------------------------------- | ----------------------------------------------------- |
-| failure\\\\_message | Message to show when the entered value is not an e-mail address. Defaults to “Incorrect E-mail” | `failure_message=\"Please enter your e-mail address.\"` |
+| `failure_message` | Message to show when the entered value is not an e-mail address. Defaults to “Incorrect E-mail” | `failure_message=\"Please enter your e-mail address.\"` |
 
 See also
 

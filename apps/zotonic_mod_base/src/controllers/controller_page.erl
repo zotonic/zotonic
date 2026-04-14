@@ -46,7 +46,7 @@ Dispatch arguments
 
 | Argument | Description                                                                      | Example URL |
 | -------- | -------------------------------------------------------------------------------- | ----------- |
-| id       | The id of the page (rsc) to be shown. This can be the numerical id or the unique name of a page. | /page/12345 |
+| `id`     | The id of the page (rsc) to be shown. This can be the numerical id or the unique name of a page. | `/page/12345` |
 
 
 
@@ -57,14 +57,14 @@ The following options can be given to the dispatch rule:
 
 | Option         | Description                                                                      | Example                                                             |
 | -------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| id             | Id or unique name of the resource to be shown. This overrules any id in the query arguments. Use `user_id` for the id of the current user. | `{id, page_about}`                                              |
-| template       | Name of the template to be rendered. Defaults to “page.tpl” Can also be a tuple of the following form: `{cat, Name}`. See also: [catinclude](/id/doc_template_tag_tag_catinclude). | `{template, \"about.tpl\"}`  `{template, `{cat, \"home. tpl\"}}` |
-| cat            | The category the resource that is requested has to be. If a page of a different category is requested, a 404 is shown. | `{cat, text}`                                                     |
-| acl_action   | What ACL action will be checked. Defaults to ‘view’; but can also be ‘edit’ if users need edit permission on the rsc to be able to access the resource. | `{acl_action, edit}`                                            |
-| acl            | Extra authorization checks to be performed.                                      | See [ACL options](#acl-options).                                    |
-| is_canonical | Whether this URL should be considered the caninical URL of the page. If so, the controller will redirect to the rsc’s page path if set. Defaults to true. | `{is_canonical, false}`                                         |
-| seo_noindex  | Ask crawlers to not index this page.                                             | seo_noindex                                                       |
-| nocache        | Prevent browser caching this page.                                               | nocache                                                             |
+| `id`           | Id or unique name of the resource to be shown. This overrules any id in the query arguments. Use `user_id` for the id of the current user. | `{id, page_about}`                                            |
+| `template`     | Name of the template to be rendered. Defaults to “page.tpl” Can also be a tuple of the following form: `{cat, Name}`. See also: [catinclude](/id/doc_template_tag_tag_catinclude). | `{template, \"about.tpl\"}` `{template, {cat, \"home. tpl\"}}` |
+| `cat`          | The category the resource that is requested has to be. If a page of a different category is requested, a 404 is shown. | `{cat, text}`                                                 |
+| `acl_action`   | What ACL action will be checked. Defaults to ‘view’; but can also be ‘edit’ if users need edit permission on the rsc to be able to access the resource. | `{acl_action, edit}`                                          |
+| `acl`          | Extra authorization checks to be performed.                                      | See [ACL options](#acl-options).                                    |
+| `is_canonical` | Whether this URL should be considered the canonical URL of the page. If so, the controller will redirect to the rsc’s page path if set. Defaults to true. | `{is_canonical, false}`                                       |
+| `seo_noindex`  | Ask crawlers to not index this page.                                             | `seo_noindex`                                                     |
+| `nocache`      | Prevent browser caching this page.                                               | `nocache`                                                         |
 
 
 
@@ -297,4 +297,3 @@ exists(Id, Context) ->
         {false, _} ->
             false
     end.
-
