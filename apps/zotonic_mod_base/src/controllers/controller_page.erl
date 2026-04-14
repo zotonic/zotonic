@@ -57,13 +57,13 @@ The following options can be given to the dispatch rule:
 
 | Option         | Description                                                                      | Example                                                             |
 | -------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| id             | Id or unique name of the resource to be shown. This overrules any id in the query arguments. Use `user_id` for the id of the current user. | \\\\{id, page\\\\_about\\\\}                                              |
-| template       | Name of the template to be rendered. Defaults to “page.tpl” Can also be a tuple of the following form: \\\\{cat, Name\\\\}. See also: [catinclude](/id/doc_template_tag_tag_catinclude). | \\\\{template, “about.tpl”\\\\}  \\\\{template, \\\\{cat, “home. tpl”\\\\}\\\\} |
-| cat            | The category the resource that is requested has to be. If a page of a different category is requested, a 404 is shown. | \\\\{cat, text\\\\}                                                     |
-| acl\\\\_action   | What ACL action will be checked. Defaults to ‘view’; but can also be ‘edit’ if users need edit permission on the rsc to be able to access the resource. | \\\\{acl\\\\_action, edit\\\\}                                            |
+| id             | Id or unique name of the resource to be shown. This overrules any id in the query arguments. Use `user_id` for the id of the current user. | `{id, page_about}`                                              |
+| template       | Name of the template to be rendered. Defaults to “page.tpl” Can also be a tuple of the following form: `{cat, Name}`. See also: [catinclude](/id/doc_template_tag_tag_catinclude). | `{template, \"about.tpl\"}`  `{template, `{cat, \"home. tpl\"}}` |
+| cat            | The category the resource that is requested has to be. If a page of a different category is requested, a 404 is shown. | `{cat, text}`                                                     |
+| acl_action   | What ACL action will be checked. Defaults to ‘view’; but can also be ‘edit’ if users need edit permission on the rsc to be able to access the resource. | `{acl_action, edit}`                                            |
 | acl            | Extra authorization checks to be performed.                                      | See [ACL options](#acl-options).                                    |
-| is\\\\_canonical | Whether this URL should be considered the caninical URL of the page. If so, the controller will redirect to the rsc’s page path if set. Defaults to true. | \\\\{is\\\\_canonical, false\\\\}                                         |
-| seo\\\\_noindex  | Ask crawlers to not index this page.                                             | seo\\\\_noindex                                                       |
+| is_canonical | Whether this URL should be considered the caninical URL of the page. If so, the controller will redirect to the rsc’s page path if set. Defaults to true. | `{is_canonical, false}`                                         |
+| seo_noindex  | Ask crawlers to not index this page.                                             | seo_noindex                                                       |
 | nocache        | Prevent browser caching this page.                                               | nocache                                                             |
 
 
@@ -78,7 +78,7 @@ ACL options
 | `is_auth`              | Disable anonymous access to this resource.                                       | `{acl, is_auth}`                                                          |
 | `logoff`               | Log out user before processing the request.                                      | `{acl, logoff}`                                                           |
 | `{Action, Resource}`   | Check if user is allowed to perform `Action` on `Resource`. The example is equivalent to the options `{acl_action, edit}, {id, my_named_page}`. | `{acl, {edit, my_named_page}}`                                            |
-| `[{Action, Resource}]` | A list of checks to be performed, as above.                                      | > \\\\{acl, \\\\[ >  \\\\{view, secret\\\\_page\\\\}, >  \\\\{update, 345\\\\} > \\\\]\\\\} |
+| `[{Action, Resource}]` | A list of checks to be performed, as above.                                      | `{acl, [{view, secret_page}, {update, 345}]}` |
 | `ignore`               | Don’t perform any access control checks. Be careful to add your own checks in the rendered template and all its included templates. | `{acl, ignore}`                                                           |
 
 See also
