@@ -1,151 +1,220 @@
-<html {% include "_language_attrs.tpl" class=false language=z_language %} class="zotonic-admin environment-{{ m.site.environment }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="">
-        <meta name="robots" content="noindex,nofollow">
+{% extends "admin_base.tpl" %}
 
-        <title>{_ Translations _}: {{ id.title }}</title>
+{% block title %}{_ Translations _}: {{ id.title|default:id.short_title|default:_"Untitled" }}{% endblock %}
 
-        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-        <link rel="manifest" href="{% url manifest_json %}" />
+{% block navigation %}
+{% endblock %}
 
-        {% lib
-            "css/admin-bootstrap3.css"
-            minify
-        %}
+{% block container %}
 
-        {% lib
-            "css/z.modal.css"
-            "css/z.icons.css"
-            "css/z.bridge.css"
-            "css/logon.css"
-            "css/jquery.loadmask.css"
-            "css/zotonic-admin.css"
-            "css/prism.css"
-            minify
-        %}
+{% fragment line %}
+    <tr style="border-bottom: 2px solid black">
+        <th></th>
+        {% for code, lang in m.translation.language_list_editable %}
+            {% if code|member:r_lang %}
+                <td></td>
+            {% endif %}
+        {% endfor %}
+    </tr>
+{% endfragment %}
 
-        {% all include "_html_head_admin.tpl" no_prism %}
-
-        {% block head_extra %}
-        {% endblock %}
-    </head>
-
-    <body id="body" class="{% block bodyclass %}{% endblock %}"{% block bodyattr %}{% endblock %} data-cotonic-pathname-search="{% cotonic_pathname_search %}">
+{% with m.rsc[id].language|default:[z_language] as r_lang %}
+    <div style="padding: 0 10px">
         <h1>
             {{ id.title|default:id.short_title|default:_"<em>Untitled</em>" }}
 
-            {% if q.close %}
-                <a id="link-close" href="{% url admin_edit_rsc id=id %}" class="btn btn-primary">{_ Close _}</a>
-                {% javascript %}
-                   document.getElementById('link-close').addEventListener("click", () => {
-                        window.close();
-                    });
-                {% endjavascript %}
-            {% else %}
-                <a id="link-edit" href="{% url admin_edit_rsc id=id %}" class="btn btn-primary">{_ Edit _}</a>
-            {% endif %}
-
+            <a id="link-edit" href="{% url admin_edit_rsc id=id %}" class="btn btn-primary">
+                {% if q.close %}
+                    {_ Close _}
+                    {% javascript %}
+                       document.getElementById('link-edit').addEventListener("click", (e) => {
+                            window.close();
+                        });
+                    {% endjavascript %}
+                {% else %}
+                    {_ Edit _}
+                {% endif %}
+            </a>
         </h1>
 
-        <table class="table table-striped">
-            <thead style="position: sticky; top: 0; background-color: white">
-                <tr>
-                    <th width="5%">{_ Field _}</th>
-                    {% for lang in id.language|default:[ z_language ] %}
-                        <th>{{ lang }}</th>
-                    {% endfor %}
-                </tr>
-            </thead>
-            <tbody>
-                {% for p in [
-                        'title',
-                        'short_title',
-                        'summary',
-                        'body',
-                        'body_extra'
-                    ]
-                %}
-                    <tr>
-                        <th>{{ p }}</th>
-                        {% for lang in id.language|default:[ z_language ] %}
-                            <td>{{ m.rsc[id][p] with z_language=lang }}</td>
-                        {% endfor %}
-                    </tr>
-                {% endfor %}
+        <p class="help-block">
+            {_ Translated page texts for every editable language that has a translation in the resource. _}
+        </p>
+    </div>
 
-                <tr style="border-bottom: 2px solid black">
-                    <th></th>
-                    {% for lang in id.language|default:[ z_language ] %}
-                        <td></td>
-                    {% endfor %}
-                </tr>
-
-                {% for b in id.blocks %}
-                    {% if b.type == 'survey_page_break' %}
-                        <tr style="border-bottom: 2px solid black;">
-                            <th><small class="text-muted">{_ page break _}</small></th>
-                            {% for lang in id.language|default:[ z_language ] %}
-                                <td></td>
-                            {% endfor %}
-                        </tr>
-                    {% elseif b.type|match:"survey_.*" %}
-                        <tr>
-                            <th rowspan="3">{{ b.name }}<br><small class="text-muted">{{ b.type }}</small></th>
-                            {% for lang in id.language|default:[ z_language ] %}
-                                <td>{{ b.prompt with z_language=lang }}</td>
-                            {% endfor %}
-                        </tr>
-                        <tr>
-                            {% for lang in id.language|default:[ z_language ] %}
-                                <td>{{ b.explanation with z_language=lang }}</td>
-                            {% endfor %}
-                        </tr>
-                        <tr>
-                            {% for lang in id.language|default:[ z_language ] %}
-                                <td>
-                                    {% if b.type == 'survey_thurstone' %}
-                                        <ol>
-                                            {% for ans in b.answers %}
-                                                <li>{{ ans.option with z_language=lang }}</li>
-                                            {% endfor %}
-                                        </ol>
-                                    {% elseif b.type == 'survey_yesno' %}
-                                        <ol>
-                                            <li>{{ b.yes|default:_"Yes" with z_language=lang }}</li>
-                                            <li>{{ b.no|default:_"No" with z_language=lang }}</li>
-                                        </ol>
-                                    {% endif %}
-                                </td>
-                            {% endfor %}
-                        </tr>
-                    {% else %}
-                        <tr>
-                            <th>{{ b.name }}<br><small class="text-muted">{{ b.type }}</small></th>
-                            {% for lang in id.language|default:[ z_language ] %}
-                                {% if b.type == 'text' %}
-                                    <td>{{ b.body with z_language=lang }}</td>
-                                {% elseif b.type == 'header' %}
-                                    <td>{{ b.header with z_language=lang }}</td>
-                                {% elseif b.type == 'page' %}
-                                    <td>{{ b.rsc_id.title with z_language=lang }}</td>
-                                {% endif %}
-                            {% endfor %}
-                        </tr>
+    <table class="table table-striped">
+        <thead style="position: sticky; top: 0; background-color: white">
+            <tr>
+                <th width="5%">{_ Property _}</th>
+                {% for code, lang in m.translation.language_list_editable %}
+                    {% if code|member:r_lang %}
+                    <th>
+                        <span {% include "_language_attrs.tpl" language=code %}>{{ lang.name }}</span>
+                        <span class="text-muted">&ndash; {% if code != 'en' %}{{ lang.name_en }}{% endif %} ({{ code }})</span>
+                    </th>
                     {% endif %}
                 {% endfor %}
-            </tbody>
-        </table>
+            </tr>
+        </thead>
+        <tbody>
+        {% with [
+                'chapeau',
+                'title',
+                'short_title',
+                'subtitle',
+                'summary',
+                'body',
+                'body_extra'
+            ] as base_props
+        %}
+        {% with id|translated_texts as trs %}
+            {% for p in base_props %}
+                {% if trs[p]|is_defined %}
+                    <tr>
+                        <th>{{ p|escape }}</th>
+                        {% for code, lang in m.translation.language_list_editable %}
+                            {% if code|member:r_lang %}
+                                <td>{{ trs[p] with z_language=code }}</td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                {% endif %}
+            {% endfor %}
 
-        {% include "_bridge_warning.tpl" %}
+            {% for p,tr in trs %}
+                {% if not p|member:base_props and not p|match:"^seo_" %}
+                    <tr>
+                        <th>{{ p|escape }}</th>
+                        {% for code, lang in m.translation.language_list_editable %}
+                            {% if code|member:r_lang %}
+                                <td>{{ trs[p] with z_language=code }}</td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                {% endif %}
+            {% endfor %}
 
-        {% include "_admin_js_include.tpl" %}
-        {% block js_extra %}{% endblock %}
+            {% use line %}
 
-        {% block html_body_admin %}{% all include "_html_body_admin.tpl" %}{% endblock %}
+            {% for b in id.blocks %}
+                {% if b.type == 'survey_page_options' %}
+                {% elseif b.type == 'survey_page_break' %}
+                    <tr style="border-bottom: 2px dashed black;">
+                        <th>
+                            <small class="text-muted">{_ page break _}</small>
+                        </th>
+                        {% for code, lang in m.translation.language_list_editable %}
+                            {% if code|member:r_lang %}
+                                <td></td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                {% elseif b.type|match:"survey_.*" %}
+                    <tr>
+                        <th rowspan="3">
+                            {{ b.name }}<br>
+                            <small class="text-muted">{{ b.type|replace:'survey_':''|replace:'_':' ' }}</small>
+                        </th>
+                        {% for code, lang in m.translation.language_list_editable %}
+                            {% if code|member:r_lang %}
+                                <td>{{ b.prompt with z_language=code }}</td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        {% for code, lang in m.translation.language_list_editable %}
+                            {% if code|member:r_lang %}
+                                <td>{{ b.explanation with z_language=code }}</td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        {% for code, lang in m.translation.language_list_editable %}
+                            {% if code|member:r_lang %}
+                            <td>
+                                {% if b.type == 'survey_thurstone' %}
+                                    <ol>
+                                        {% for ans in b.answers %}
+                                            <li>{{ ans.option with z_language=code }}</li>
+                                        {% endfor %}
+                                    </ol>
+                                {% elseif b.type == 'survey_likert' %}
+                                    <ol>
+                                        <li>{{ b.agree|default:_"Strongly Agree" with z_language=code }}</li>
+                                        <li>{{ b.disagree|default:_"Strongly Disagree" with z_language=code }}</li>
+                                    </ol>
+                                {% elseif b.type == 'survey_yesno' %}
+                                    <ol>
+                                        <li>{{ b.yes|default:_"Yes" with z_language=code }}</li>
+                                        <li>{{ b.no|default:_"No" with z_language=code }}</li>
+                                    </ol>
+                                {% elseif b.type == 'survey_truefalse' %}
+                                    <ol>
+                                        <li>{{ b.yes|default:_"True" with z_language=code }}</li>
+                                        <li>{{ b.no|default:_"False" with z_language=code }}</li>
+                                    </ol>
+                                {% elseif b.type == 'survey_matching' %}
+                                    {{ b.matching with z_language=code }}
+                                {% elseif b.type == 'survey_multiple_choice' %}
+                                    {{ b.choices with z_language=code }}
+                                {% elseif b.type == 'survey_narrative' %}
+                                    {{ b.narrative with z_language=code }}
+                                {% endif %}
+                            </td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                {% else %}
+                    <tr>
+                        <th>
+                            {{ b.name }}<br>
+                            <small class="text-muted">{{ b.type }}</small>
+                        </th>
+                        {% for code, lang in m.translation.language_list_editable %}
+                            {% if code|member:r_lang %}
+                                <td>
+                                    {% for p, tr in b|translated_texts %}
+                                        {% if p == 'header' %}
+                                            <h3>{{ tr with z_language=code }}</h3>
+                                        {% else %}
+                                            <div class="body">{{ tr with z_language=code }}</div>
+                                        {% endif %}
+                                    {% endfor %}
 
-        {% script %}
-    </body>
-</html>
+                                    {% if b.rsc_id %}
+                                        <p>
+                                            <span class="text-muted">{_ Page _}:</span>
+                                            {{ b.rsc_id.title with z_language=code }}
+                                        </p>
+                                    {% endif %}
+                                </td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                {% endif %}
+            {% endfor %}
+
+            {% use line %}
+
+            {% for p,tr in trs %}
+                {% if p|match:"^seo_" %}
+                    <tr>
+                        <th>{{ p|escape }}</th>
+                        {% for code, lang in m.translation.language_list_editable %}
+                            {% if code|member:r_lang %}
+                                <td>{{ trs[p] with z_language=code }}</td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                {% endif %}
+            {% endfor %}
+
+        {% endwith %}
+        {% endwith %}
+        </tbody>
+    </table>
+{% endwith %}
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
