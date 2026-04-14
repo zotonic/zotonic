@@ -1,8 +1,11 @@
 %% -*- mode: erlang -*-
 [
- {admin_translation, ["admin", "translation"], controller_admin, 
+ {admin_translation, ["admin", "translation"], controller_admin,
   [{acl_module, mod_translation}, {template, <<"admin_translation.tpl">>}, {selected, translation}, seo_noindex]},
- 
+
+ {admin_translation_texts, ["admin", "translation", "texts", id], controller_page,
+  [{acl_action, update}, {template, <<"admin_translation_texts.tpl">>}, seo_noindex, {is_canonical, false}]},
+
  {language_switch, ["language", "switch"], controller_template, [{template, <<"language_switch.tpl">>}, seo_noindex]},
  {language_select, ["language", "select", code], controller_language_set, [seo_noindex]}
 ].
