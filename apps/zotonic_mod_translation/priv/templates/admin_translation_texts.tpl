@@ -40,9 +40,8 @@
             {% if q.close %}
                 <a id="link-close" href="{% url admin_edit_rsc id=id %}" class="btn btn-primary">{_ Close _}</a>
                 {% javascript %}
-                   document.getElementById('link-close').addEventListener("click", (e) => {
+                   document.getElementById('link-close').addEventListener("click", () => {
                         window.close();
-                        e.preventDefault();
                     });
                 {% endjavascript %}
             {% else %}
