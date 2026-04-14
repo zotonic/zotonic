@@ -115,8 +115,8 @@
                                         </ol>
                                     {% elseif b.type == 'survey_yesno' %}
                                         <ol>
-                                            <li>{{ ans.yes|default:_"Yes" with z_language=lang }}</li>
-                                            <li>{{ ans.no|default:_"No" with z_language=lang }}</li>
+                                            <li>{{ b.yes|default:_"Yes" with z_language=lang }}</li>
+                                            <li>{{ b.no|default:_"No" with z_language=lang }}</li>
                                         </ol>
                                     {% endif %}
                                 </td>
