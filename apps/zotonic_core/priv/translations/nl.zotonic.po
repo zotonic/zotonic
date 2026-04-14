@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-04-10 12:49\n"
+"PO-Revision-Date: 2026-04-14 13:51\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -398,6 +398,7 @@ msgstr "Configuratie veranderd."
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:12
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:17
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:22
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:28
 msgid "Close"
 msgstr "Sluit"
 
@@ -1041,6 +1042,7 @@ msgstr "<b>Waarschuwing:</b> de site zal stoppen en opnieuw opstarten."
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:53
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:47
 #: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:250
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:24
 msgid "<em>Untitled</em>"
 msgstr "<em>Zonder titel</em>"
 
@@ -1635,6 +1637,7 @@ msgstr "E-mailadres"
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:103
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:113
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:115
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:35
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:14
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:16
 msgid "Edit"
@@ -3174,6 +3177,7 @@ msgstr "Ongepubliceerd"
 #: zotonic_mod_search/priv/templates/_search_view_list_item.tpl:8
 #: zotonic_mod_seo/src/support/seo_jsonld_webpage.erl:276
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:10
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:3
 msgid "Untitled"
 msgstr "Zonder titel"
 
@@ -4770,7 +4774,7 @@ msgid "Rescanning will rebuild the index of all modules, actions, templates etc.
 msgstr "Opnieuw scannen zal de index van alle modules, acties, templates etc. opnieuw opbouwen. Ook alle dispatchregels worden herladen."
 
 #: zotonic_mod_admin_modules/src/controllers/controller_admin_module_manager.erl:77
-#: zotonic_mod_search/src/mod_search.erl:202
+#: zotonic_mod_search/src/mod_search.erl:203
 #: zotonic_mod_survey/src/support/survey_admin.erl:40
 #: zotonic_mod_survey/src/support/survey_admin.erl:62
 #: zotonic_mod_survey/src/support/survey_admin.erl:107
@@ -6662,6 +6666,7 @@ msgstr "MQTT Brug Verbindingsstatus"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:28
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:35
 #: zotonic_mod_survey/src/questions/survey_q_yesno.erl:70
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:149
 msgid "No"
 msgstr "Nee"
 
@@ -6814,6 +6819,7 @@ msgstr "Websocket-ondersteuning?"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:32
 #: zotonic_mod_survey/src/questions/survey_q_yesno.erl:72
 #: zotonic_mod_translation/priv/templates/_translation_status.tpl:19
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:148
 msgid "Yes"
 msgstr "Ja"
 
@@ -6897,6 +6903,7 @@ msgid "Note: Comments are moderated"
 msgstr "Let op: Reacties worden gemodereerd"
 
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:20
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:186
 msgid "Page"
 msgstr "Pagina"
 
@@ -8859,6 +8866,7 @@ msgstr "De voortgang wordt gerapporteerd in het <a href=\"{url}\">beheerlogboek<
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:27
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:43
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:48
 msgid "Property"
 msgstr "Eigendom"
 
@@ -9974,8 +9982,8 @@ msgid "The mailing has been canceled."
 msgstr "De mailing is geannuleerd."
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:79
-msgid "The mailing will be send when the page becomes visible."
-msgstr "De mailing wordt verstuurd wanneer de pagina zichtbaar wordt."
+msgid "The mailing will be sent when the page becomes visible."
+msgstr "De mailing wordt verstuurd zodra de pagina zichtbaar wordt."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:40
 msgid "The page you are trying to e-mail is not yet published. What do you want to do?"
@@ -11092,7 +11100,7 @@ msgstr "Overeenkomende tekst"
 msgid "Rebuild search facets"
 msgstr "Zoekfacetten opnieuw opbouwen"
 
-#: zotonic_mod_search/src/mod_search.erl:200
+#: zotonic_mod_search/src/mod_search.erl:201
 msgid "Rebuilding the faceted search table."
 msgstr "De gefacetteerde zoektabel opnieuw opbouwen."
 
@@ -12210,6 +12218,7 @@ msgstr "Uitleg"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:35
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:11
 #: zotonic_mod_survey/src/questions/survey_q_truefalse.erl:61
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:154
 msgid "False"
 msgstr "Onwaar"
 
@@ -12809,6 +12818,7 @@ msgstr "Opgeslagen waarde"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:21
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:43
 #: zotonic_mod_survey/src/questions/survey_q_likert.erl:55
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:143
 msgid "Strongly Agree"
 msgstr "Helemaal mee eens"
 
@@ -12816,6 +12826,7 @@ msgstr "Helemaal mee eens"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:11
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:35
 #: zotonic_mod_survey/src/questions/survey_q_likert.erl:59
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:144
 msgid "Strongly Disagree"
 msgstr "Helemaal mee oneens"
 
@@ -12977,6 +12988,7 @@ msgstr "Totalen"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:32
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:10
 #: zotonic_mod_survey/src/questions/survey_q_truefalse.erl:63
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:153
 msgid "True"
 msgstr "Waar"
 
@@ -13473,9 +13485,17 @@ msgstr "Selecteer taal"
 msgid "Select your preferred language."
 msgstr "Selecteer je voorkeurstaal"
 
+#: zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:41
+msgid "Show all translated texts in a new tab."
+msgstr "Alle vertaalde teksten in een nieuw tabblad weergeven."
+
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:93
 msgid "Show the language in the URL"
 msgstr "Toon de taal in de URL"
+
+#: zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:42
+msgid "Show translations"
+msgstr "Vertalingen tonen"
 
 #: zotonic_mod_translation/src/mod_translation.erl:578
 #: zotonic_mod_translation/src/mod_translation.erl:626
@@ -13543,10 +13563,18 @@ msgstr "Naar nieuwe taal"
 msgid "Translate"
 msgstr "Vertalen"
 
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:41
+msgid "Translated page texts for every editable language that has a translation in the resource."
+msgstr "Vertaalde paginateksten voor elke bewerkbare taal met een vertaling in de bron."
+
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:3
 #: zotonic_mod_translation/src/mod_translation.erl:1052
 msgid "Translation"
 msgstr "Vertaling"
+
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:3
+msgid "Translations"
+msgstr "Vertalingen"
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:139
 msgid "Turkish"
@@ -13564,6 +13592,10 @@ msgstr "Zonder taal"
 #: zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:67
 msgid "not enabled"
 msgstr "niet actief"
+
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:104
+msgid "page break"
+msgstr "pagina-einde"
 
 #: zotonic_mod_video/priv/templates/_video_viewer.tpl:11
 msgid "Converting"
