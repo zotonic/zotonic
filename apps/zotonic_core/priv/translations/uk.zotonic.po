@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-04-10 12:49\n"
+"PO-Revision-Date: 2026-04-14 13:52\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -398,6 +398,7 @@ msgstr "Змінена конфігурація."
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:12
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:17
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:22
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:28
 msgid "Close"
 msgstr "Закрити"
 
@@ -1041,6 +1042,7 @@ msgstr "<b>Попередження:</b> сайт зупиниться та пе
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:53
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:47
 #: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:250
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:24
 msgid "<em>Untitled</em>"
 msgstr "<em>Без назви</em>"
 
@@ -1632,6 +1634,7 @@ msgstr "Адреса електронної пошти"
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:103
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:113
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:115
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:35
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:14
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:16
 msgid "Edit"
@@ -3170,6 +3173,7 @@ msgstr "Неопублікований"
 #: zotonic_mod_search/priv/templates/_search_view_list_item.tpl:8
 #: zotonic_mod_seo/src/support/seo_jsonld_webpage.erl:276
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:10
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:3
 msgid "Untitled"
 msgstr "Без заголовка"
 
@@ -4766,7 +4770,7 @@ msgid "Rescanning will rebuild the index of all modules, actions, templates etc.
 msgstr "Повторне сканування перебудує індекс усіх модулів, дій, шаблонів тощо. Це також перезавантажить усі правила диспетчеризації."
 
 #: zotonic_mod_admin_modules/src/controllers/controller_admin_module_manager.erl:77
-#: zotonic_mod_search/src/mod_search.erl:202
+#: zotonic_mod_search/src/mod_search.erl:203
 #: zotonic_mod_survey/src/support/survey_admin.erl:40
 #: zotonic_mod_survey/src/support/survey_admin.erl:62
 #: zotonic_mod_survey/src/support/survey_admin.erl:107
@@ -6658,6 +6662,7 @@ msgstr "Стан підключення MQTT мосту"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:28
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:35
 #: zotonic_mod_survey/src/questions/survey_q_yesno.erl:70
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:149
 msgid "No"
 msgstr "Ні"
 
@@ -6810,6 +6815,7 @@ msgstr "Підтримка Websocket?"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:32
 #: zotonic_mod_survey/src/questions/survey_q_yesno.erl:72
 #: zotonic_mod_translation/priv/templates/_translation_status.tpl:19
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:148
 msgid "Yes"
 msgstr "Так"
 
@@ -6893,6 +6899,7 @@ msgid "Note: Comments are moderated"
 msgstr "Примітка. Коментарі модеруються"
 
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:20
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:186
 msgid "Page"
 msgstr "Сторінка"
 
@@ -8855,6 +8862,7 @@ msgstr "Прогрес буде повідомлятися в журналі <a 
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:27
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:43
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:48
 msgid "Property"
 msgstr "Власність"
 
@@ -9970,8 +9978,8 @@ msgid "The mailing has been canceled."
 msgstr "Розсилку скасовано."
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:79
-msgid "The mailing will be send when the page becomes visible."
-msgstr "Лист буде надіслано, коли сторінка стане видимою."
+msgid "The mailing will be sent when the page becomes visible."
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:40
 msgid "The page you are trying to e-mail is not yet published. What do you want to do?"
@@ -11088,7 +11096,7 @@ msgstr "Відповідний текст"
 msgid "Rebuild search facets"
 msgstr "Перебудуйте аспекти пошуку"
 
-#: zotonic_mod_search/src/mod_search.erl:200
+#: zotonic_mod_search/src/mod_search.erl:201
 msgid "Rebuilding the faceted search table."
 msgstr "Відновлення таблиці фасетного пошуку."
 
@@ -12205,6 +12213,7 @@ msgstr "Пояснення"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:35
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:11
 #: zotonic_mod_survey/src/questions/survey_q_truefalse.erl:61
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:154
 msgid "False"
 msgstr "Помилковий"
 
@@ -12804,6 +12813,7 @@ msgstr "Збережене значення"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:21
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:43
 #: zotonic_mod_survey/src/questions/survey_q_likert.erl:55
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:143
 msgid "Strongly Agree"
 msgstr "Абсолютно згодний"
 
@@ -12811,6 +12821,7 @@ msgstr "Абсолютно згодний"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:11
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:35
 #: zotonic_mod_survey/src/questions/survey_q_likert.erl:59
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:144
 msgid "Strongly Disagree"
 msgstr "Категорично не згоден"
 
@@ -12972,6 +12983,7 @@ msgstr "Підсумки"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:32
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:10
 #: zotonic_mod_survey/src/questions/survey_q_truefalse.erl:63
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:153
 msgid "True"
 msgstr "Правда"
 
@@ -13468,9 +13480,17 @@ msgstr "Оберіть мову"
 msgid "Select your preferred language."
 msgstr "Виберіть бажану мову."
 
+#: zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:41
+msgid "Show all translated texts in a new tab."
+msgstr ""
+
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:93
 msgid "Show the language in the URL"
 msgstr "Показати мову в URL-адресі"
+
+#: zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:42
+msgid "Show translations"
+msgstr ""
 
 #: zotonic_mod_translation/src/mod_translation.erl:578
 #: zotonic_mod_translation/src/mod_translation.erl:626
@@ -13538,10 +13558,18 @@ msgstr "На нову мову"
 msgid "Translate"
 msgstr "Перекласти"
 
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:41
+msgid "Translated page texts for every editable language that has a translation in the resource."
+msgstr ""
+
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:3
 #: zotonic_mod_translation/src/mod_translation.erl:1052
 msgid "Translation"
 msgstr "Переклад"
+
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:3
+msgid "Translations"
+msgstr ""
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:139
 msgid "Turkish"
@@ -13559,6 +13587,10 @@ msgstr "Без мови"
 #: zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:67
 msgid "not enabled"
 msgstr "не ввімкнено"
+
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:104
+msgid "page break"
+msgstr ""
 
 #: zotonic_mod_video/priv/templates/_video_viewer.tpl:11
 msgid "Converting"
