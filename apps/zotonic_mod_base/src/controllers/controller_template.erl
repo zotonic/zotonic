@@ -58,7 +58,7 @@ The following options can be given to the dispatch rule:
 | `max_age`      | The number of seconds of how long to cache this file in the browser. Sets the response header `Cache-Control: public; max-age=X`. | `{max_age, 3600}`                                           |
 | `acl_action`   | What ACL action will be checked. Defaults to `view`; but can also be `edit` if users need edit permission on the rsc to be able to access the resource. | `{acl_action, edit}`                                        |
 | `acl`          | Extra authorization checks to be performed.                                      | See [ACL options](#acl-options).                                  |
-| `id`           | Id or unique name of a resource to be referenced in the rendered template. This overrules and id from the query arguments. | `{id, page_about}`                                          |
+| `id`           | Id or unique name of a resource to be referenced in the rendered template. This overrules an id from the query arguments. | `{id, page_about}`                                          |
 | `seo_noindex`  | Ask crawlers to not index this page.                                             | `seo_noindex`                                                     |
 | `nocache`      | Prevent browser caching this page.                                               | `nocache`                                                         |
 | `http_status`  | The HTTP status code to return. This defaults to `200`.                          | `{http_status, 418}`                                        |

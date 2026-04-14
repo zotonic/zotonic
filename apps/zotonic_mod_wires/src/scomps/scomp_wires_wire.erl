@@ -108,7 +108,7 @@ There are some extra arguments added to every form post:
 | Post argument    | Description                                                                      | Example                |
 | ---------------- | -------------------------------------------------------------------------------- | ---------------------- |
 | `z_trigger_id` | Id of the HTML element that triggered the submit.                                | `<<\"mybutton\">>`      |
-| `z_pageid`     | Id of the page in the browser, used to connect comet and other communictation between the browser and the server. | `<<\"1uTsbzIsWqmPpF32\">>` |
+| `z_pageid`     | Id of the page in the browser, used to connect comet and other communication between the browser and the server. | `<<\"1uTsbzIsWqmPpF32\">>` |
 | `postback`     | Signed postback set by the wire tag. Handled internally.                         |                        |
 
 
@@ -182,7 +182,7 @@ The wire tag accepts the following arguments:
 | `propagate` | Specify this when you don’t want the event to be canceled after handling the wire. Useful for event types like focus, click etc. .. versionadded:: 0.6.1 | `propagate`                                             |
 | `target`    | Possible target for the action. The meaning of this argument depends on the action, defaults to id. |                                                         |
 | `action`    | Action wired to the element. This parameter can be repeated to wire more than one action at a time. The value is a single or a list of action records. | `action={toggle target=\"message\"}`                |
-| `postback`  | Postback that will be sent to the event handler of the controller or the delegate. Either a string, which will be send as an atom, or a tagged property list. The example will be in Erlang `{myevent, [{foo,1},{bar,2}]}`. | `postback=\"ajaxevent\" postback={myevent foo=1 bar=2}` |
+| `postback`  | Postback that will be sent to the event handler of the controller or the delegate. Either a string, which will be sent as an atom, or a tagged property list. The example will be in Erlang `{myevent, [{foo,1},{bar,2}]}`. | `postback=\"ajaxevent\" postback={myevent foo=1 bar=2}` |
 | `delegate`  | Name of the Erlang module that will receive the postback. Defaults to the controller that handled the page request. | `delegate=\"event_handler\"`                            |
 
 See also

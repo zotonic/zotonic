@@ -58,11 +58,11 @@ The droppable tag accepts the following arguments:
 
 | Argument | Description                                                                      | Example                  |
 | -------- | -------------------------------------------------------------------------------- | ------------------------ |
-| `id`       | The id of the element that will accept drops of draggables.                      | `id=”dropzone”`          |
+| `id`       | The id of the element that will accept drops of draggables.                      | `id=\"dropzone\"`          |
 | `tag`      | The tag of the droppable that is sent as part of the drag and drop events. This can be any value, including a tuple. | `tag={subject id=123}` |
-| `active`   | The droppable will have this CSS class added when there is an acceptable draggable being dragged. | `active=”draghere”`      |
-| `hover`    | The droppable will have this CSS class added when there is an acceptable draggable hovering over it. | `active=”dropnow”`       |
-| `accept`   | The group the droppable accepts. See the group argument of the draggable. A droppable can accept multiple groups, just repeat the accept argument. | `accept=”edges”`         |
+| `active`   | The droppable will have this CSS class added when there is an acceptable draggable being dragged. | `active=\"draghere\"`      |
+| `hover`    | The droppable will have this CSS class added when there is an acceptable draggable hovering over it. | `hover=\"dropnow\"`       |
+| `accept`   | The group the droppable accepts. See the group argument of the draggable. A droppable can accept multiple groups, just repeat the accept argument. | `accept=\"edges\"`         |
 | `delegate` | The Erlang module that will receive the drop event after a successful drop.      |                          |
 
 See also

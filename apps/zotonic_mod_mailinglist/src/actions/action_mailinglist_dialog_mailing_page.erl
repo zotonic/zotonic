@@ -76,6 +76,6 @@ event(#submit{message={mailing_page, Args}}, Context) ->
 			z_render:growl(?__("The e-mails are being sent...", Context), Context);
 		false ->
 			m_mailinglist:insert_scheduled(ListId, PageId, Options, Context),
-			z_render:growl(?__("The mailing will be send when the page becomes visible.", Context), Context)
+			z_render:growl(?__("The mailing will be sent when the page becomes visible.", Context), Context)
 	end,
 	z_render:wire(OnSuccess, Context1).

@@ -65,7 +65,7 @@ Where TriggerId and TargetId are both the HTML id of the button.
 | `tabindex` | The value for the tabindex property.                                             | `tabindex=1`                   |
 | `type`     | The type attribute of the button.                                                | `type=”submit”`                |
 | `title`    | The title attribute of the button.                                               | `title=”click to submit”`      |
-| `disabled` | The disabled attribute of the button, set to true or false. When the button is disabled then the class “disabled” id added to the class list. | `disabled=true`                |
+| `disabled` | The disabled attribute of the button, set to true or false. When the button is disabled then the class “disabled” is added to the class list. | `disabled=true`                |
 | `href`     | The href attribute of the button if tag “a” is used. Defaults to “#”.            | `href=”/foobar”`               |
 ").
 -behaviour(zotonic_scomp).

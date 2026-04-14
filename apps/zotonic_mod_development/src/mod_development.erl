@@ -48,7 +48,7 @@ block %} ... {% endblock %}`.
 
 Download css and javascript files as separate files (ie. don’t combine them in one url).
 
-Checking this will generate separate `<link/\\>` and `<script/\\>` tags for all files mentioned in a single `{% lib %}`
+Checking this will generate separate `<link\\>` and `<script\\>` tags for all files mentioned in a single `{% lib %}`
 tag. This makes debugging those files easier but makes loading pages slower as more requests will be done per page.
 
 Enable API to recompile &amp;amp; build Zotonic

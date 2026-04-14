@@ -67,15 +67,15 @@ The pager tag accepts the following arguments:
 | Argument             | Description                                                                      | Example                           |
 | -------------------- | -------------------------------------------------------------------------------- | --------------------------------- |
 | `result`             | The result from a search. This must be a `#search_result` or a list. This mostly the result of a `m.search` call. | `result=mysearchresult`           |
-| `dispatch`           | Name of the dispatch rule to be used for the page urls. Defaults to the dispatch rule of the current page. If there is no dispatch rule defined then `none` is used and only a link with the query arguments is generated. For example `?page=2&qs=test` | `dispatch=”searchresult”`         |
+| `dispatch`           | Name of the dispatch rule to be used for the page urls. Defaults to the dispatch rule of the current page. If there is no dispatch rule defined then `none` is used and only a link with the query arguments is generated. For example `?page=2&qs=test` | `dispatch=\"searchresult\"`         |
 | `qargs`              | Append all the arguments in the HTTP request’s query string whose name starts with a ‘q’ as an argument to the dispatch rule. | `qargs`                           |
 | `hash`               | Hash to append to the pagination links. Used to jump to the search results on the load of a new page. | `hash=”#content-pager”`           |
 | `hide_single_page`   | When this argument is true, do not show the pager when the result fits on one page (e.g. the pager will be useless). | `hide_single_page=1`            |
-| `template`           | Name of the template for rendering the pager. Defaults to `_pager.tpl`. See below for specific arguments passed. | `template=”_pager.tpl”`         |
+| `template`           | Name of the template for rendering the pager. Defaults to `_pager.tpl`. See below for specific arguments passed. | `template=\"_pager.tpl\"`         |
 | `page`               | Current page number, the first page is page number 1. Fetched from the search result, this argument, or `q.page`. | `page=2`                          |
 | `pagelen`            | Number of items per page, fetch from the search result or `q.pagelen`. Defaults to 20. | `pagelen=10`                      |
 | `topic`              | The topic for handling the link clicks. Normally a link click will just load a new page in the browser. This intercepts the click and sends the new link to the given topic. | `topic=”/model/location/post/push”` |
-| `\\\\*`              | Any other argument is used as an argument for the dispatch rule.                 |                                   |
+| `*`                  | Any other argument is used as an argument for the dispatch rule.                 |                                   |
 
 
 

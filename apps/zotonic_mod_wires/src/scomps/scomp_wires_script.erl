@@ -67,7 +67,7 @@ The script scomp can have the following arguments:
 | --------- | -------------------------------------------------------------------------------- | ------------- |
 | `nostartup` | Exclude the page initialization code from the script, only includes the scripts from actions etc. Default is to include the page initialization code. | `nostartup`   |
 | `nostream`  | Do not start the bi-directional communication layer (over WebSockets or comet).  | `nostream`    |
-| `format`    | Select a different format than the `<script/>` tag. For now this accepts `\"html\"` (for the `<script/>` tag), `\"escapejs\"` for an escaped javascript string, and `\"js\"` for a normal javascript string. Default is `\"html\"`. | `format=”html”` |
+| `format`    | Select a different format than the `<script\\>` tag. For now this accepts `\"html\"` (for the `<script/>` tag), `\"escapejs\"` for an escaped javascript string, and `\"js\"` for a normal javascript string. Default is `\"html\"`. | `format=\"html\"` |
 
 
 
@@ -85,8 +85,6 @@ bi-directional communication.
 -behaviour(zotonic_scomp).
 
 -export([vary/2, render/3]).
-
--include_lib("zotonic_core/include/zotonic.hrl").
 
 vary(_Params, _Context) -> nocache.
 render(Params, _Vars, _Context) ->

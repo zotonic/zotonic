@@ -41,15 +41,16 @@ Another example, now rendering a template:
 {% button text=\"hello\" action={insert_top target=\"mylist\" template=\"_list_item.tpl\" id=42} %}
 ```
 
-This insert the output of the template _list_item.tpl above the existing &lt;li/>. All arguments to the update
+This inserts the output of the template _list_item.tpl above the existing &lt;li/>. All arguments to the update
 action are also arguments to the template.
 
 See also
 
 actions [insert_after](/id/doc_template_action_action_insert_after),
 [insert_before](/id/doc_template_action_action_insert_before),
-[insert_bottom](/id/doc_template_action_action_insert_bottom) and [update](/id/doc_template_action_action_update).").
--include_lib("zotonic_core/include/zotonic.hrl").
+[insert_bottom](/id/doc_template_action_action_insert_bottom) and [update](/id/doc_template_action_action_update).
+").
+
 -export([
     render_action/4
 ]).
