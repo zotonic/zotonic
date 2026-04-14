@@ -404,6 +404,7 @@ msgstr ""
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:12
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:17
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:22
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:28
 msgid "Close"
 msgstr ""
 
@@ -1067,6 +1068,7 @@ msgstr ""
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:53
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:47
 #: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:250
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:24
 msgid "<em>Untitled</em>"
 msgstr ""
 
@@ -1668,6 +1670,7 @@ msgstr ""
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:103
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:113
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:115
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:35
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:14
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:16
 msgid "Edit"
@@ -3260,6 +3263,7 @@ msgstr ""
 #: zotonic_mod_search/priv/templates/_search_view_list_item.tpl:8
 #: zotonic_mod_seo/src/support/seo_jsonld_webpage.erl:276
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:10
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:3
 msgid "Untitled"
 msgstr ""
 
@@ -4932,7 +4936,7 @@ msgid ""
 msgstr ""
 
 #: zotonic_mod_admin_modules/src/controllers/controller_admin_module_manager.erl:77
-#: zotonic_mod_search/src/mod_search.erl:202
+#: zotonic_mod_search/src/mod_search.erl:203
 #: zotonic_mod_survey/src/support/survey_admin.erl:40
 #: zotonic_mod_survey/src/support/survey_admin.erl:62
 #: zotonic_mod_survey/src/support/survey_admin.erl:107
@@ -7010,6 +7014,7 @@ msgstr ""
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:28
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:35
 #: zotonic_mod_survey/src/questions/survey_q_yesno.erl:70
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:149
 msgid "No"
 msgstr ""
 
@@ -7172,6 +7177,7 @@ msgstr ""
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:32
 #: zotonic_mod_survey/src/questions/survey_q_yesno.erl:72
 #: zotonic_mod_translation/priv/templates/_translation_status.tpl:19
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:148
 msgid "Yes"
 msgstr ""
 
@@ -7259,6 +7265,7 @@ msgid "Note: Comments are moderated"
 msgstr ""
 
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:20
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:186
 msgid "Page"
 msgstr ""
 
@@ -9344,6 +9351,7 @@ msgstr ""
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:27
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:43
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:48
 msgid "Property"
 msgstr ""
 
@@ -10525,7 +10533,7 @@ msgid "The mailing has been canceled."
 msgstr ""
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:79
-msgid "The mailing will be send when the page becomes visible."
+msgid "The mailing will be sent when the page becomes visible."
 msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:40
@@ -11734,7 +11742,7 @@ msgstr ""
 msgid "Rebuild search facets"
 msgstr ""
 
-#: zotonic_mod_search/src/mod_search.erl:200
+#: zotonic_mod_search/src/mod_search.erl:201
 msgid "Rebuilding the faceted search table."
 msgstr ""
 
@@ -12934,6 +12942,7 @@ msgstr ""
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:35
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:11
 #: zotonic_mod_survey/src/questions/survey_q_truefalse.erl:61
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:154
 msgid "False"
 msgstr ""
 
@@ -13569,6 +13578,7 @@ msgstr ""
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:21
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:43
 #: zotonic_mod_survey/src/questions/survey_q_likert.erl:55
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:143
 msgid "Strongly Agree"
 msgstr ""
 
@@ -13576,6 +13586,7 @@ msgstr ""
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:11
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:35
 #: zotonic_mod_survey/src/questions/survey_q_likert.erl:59
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:144
 msgid "Strongly Disagree"
 msgstr ""
 
@@ -13767,6 +13778,7 @@ msgstr ""
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:32
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:10
 #: zotonic_mod_survey/src/questions/survey_q_truefalse.erl:63
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:153
 msgid "True"
 msgstr ""
 
@@ -14296,8 +14308,16 @@ msgstr ""
 msgid "Select your preferred language."
 msgstr ""
 
+#: zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:41
+msgid "Show all translated texts in a new tab."
+msgstr ""
+
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:93
 msgid "Show the language in the URL"
+msgstr ""
+
+#: zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:42
+msgid "Show translations"
 msgstr ""
 
 #: zotonic_mod_translation/src/mod_translation.erl:578
@@ -14369,9 +14389,19 @@ msgstr ""
 msgid "Translate"
 msgstr ""
 
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:41
+msgid ""
+"Translated page texts for every editable language that has a translation in "
+"the resource."
+msgstr ""
+
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:3
 #: zotonic_mod_translation/src/mod_translation.erl:1052
 msgid "Translation"
+msgstr ""
+
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:3
+msgid "Translations"
 msgstr ""
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:139
@@ -14389,6 +14419,10 @@ msgstr ""
 #: zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:60
 #: zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:67
 msgid "not enabled"
+msgstr ""
+
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:104
+msgid "page break"
 msgstr ""
 
 #: zotonic_mod_video/priv/templates/_video_viewer.tpl:11
