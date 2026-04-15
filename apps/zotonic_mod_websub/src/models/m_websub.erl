@@ -564,8 +564,8 @@ unsubscribe_import(HubUrl, TopicUrl, Secret, Context) ->
 post_form_callback(Url, OptSecret, Payload, Context0) ->
     Context = callback_context(Context0),
     Body = iolist_to_binary(uri_string:compose_query(Payload)),
-    Options = signature_headers(OptSecret, Body),
-    z_fetch:fetch(post, Url, Payload, Options, Context).
+    Options = [{content_type, <<"application/x-www-form-urlencoded">>} | signature_headers(OptSecret, Body)],
+    z_fetch:fetch(post, Url, Body, Options, Context).
 
 mark_import_credentials_error(ImportId, Reason, Context) ->
     _ = z_db:q("
