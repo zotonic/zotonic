@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-04-14 13:51\n"
+"PO-Revision-Date: 2026-04-15 11:01\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -706,7 +706,7 @@ msgstr "Opciones para el módulo ACL."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:31
 msgid "Or click <strong>Delete</strong> to disconnect all users and delete the user listed groups."
-msgstr ""
+msgstr "O haga clic en <strong>Eliminar</strong> para desconectar a todos los usuarios y eliminar los grupos de la lista de usuarios."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:154
 msgid "Own content"
@@ -1127,7 +1127,7 @@ msgstr "Avanzado"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:2
 msgid "After the duplication you can edit the new page. The new page will be unpublished."
-msgstr ""
+msgstr "Después de la duplicación puede editar la nueva página. La nueva página no se publicará."
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:39
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:36
@@ -1498,7 +1498,7 @@ msgstr "Fecha inicio/fin"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:20
 msgid "Define the query using the query arguments or JSON."
-msgstr ""
+msgstr "Defina la consulta utilizando los argumentos de consulta o JSON."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:23
 msgid "Delete if no other page is connected to this page."
@@ -1871,7 +1871,7 @@ msgstr "Función"
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:117
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:20
 msgid "Graph"
-msgstr ""
+msgstr "Gráfico"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:131
 msgid "Has connections with predicate"
@@ -1919,11 +1919,11 @@ msgstr "Dirección IP"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:280
 msgid "Id, newest first"
-msgstr ""
+msgstr "Id, primero el más nuevo"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:281
 msgid "Id, oldest first"
-msgstr ""
+msgstr "Id, primero el más antiguo"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:11
 msgid "If a page has a publication date range then it will only be visible between the two dates. Note that if you are allowed to edit the page then you can always see it."
@@ -2500,7 +2500,7 @@ msgstr "Consulta"
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:19
 msgid "Query results"
-msgstr ""
+msgstr "Resultados de la consulta"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:94
 msgid "Rebuild all search-indices by putting all pages and data from the database in the indexer queue. This can take a long time!"
@@ -2529,7 +2529,7 @@ msgstr "Redireccionar a la página web en la vista de la página"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:75
 msgid "Referrers"
-msgstr ""
+msgstr "Remitentes"
 
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:3
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:9
@@ -2712,7 +2712,7 @@ msgstr "Mostrar la página en varias rutas"
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:55
 msgid "Show query as JSON"
-msgstr ""
+msgstr "Mostrar consulta como JSON"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:37
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:23
@@ -2957,11 +2957,11 @@ msgstr "La ruta <em>después del código de idioma</em> para la URL, si se deja 
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:8
 msgid "The query could not be parsed, check the syntax."
-msgstr ""
+msgstr "No se ha podido analizar la consulta, compruebe la sintaxis."
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:16
 msgid "The query text is empty."
-msgstr ""
+msgstr "El texto de la consulta está vacío."
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:58
 msgid "The search index is rebuilding. Depending on the database size, this can take a long time."
@@ -2998,7 +2998,7 @@ msgstr "Ya hay una página con este nombre."
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:4
 msgid "There is an error in the query:"
-msgstr ""
+msgstr "Hay un error en la consulta:"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:5
 msgid "This can't be undone. Your page will be lost forever."
@@ -3288,7 +3288,7 @@ msgstr "Ver todos los referentes"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:77
 msgid "View connection graph"
-msgstr ""
+msgstr "Ver gráfico de conexión"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:17
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:28
@@ -4828,11 +4828,13 @@ msgstr "¿Está seguro de que quiere eliminar"
 msgid "Are you sure you want to remove the <strong>{{ predicate }}</strong>\n"
 "    connection between <strong>{{ subject }}</strong>\n"
 "          and <strong>{{ object }}</strong>?"
-msgstr ""
+msgstr "¿Está seguro de que desea eliminar la <strong>{{ predicate }}</strong>\n"
+"    conexión entre <strong>{{ subject }}</strong>\n"
+"          y <strong>{{ object }}</strong>?"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:34
 msgid "Beta"
-msgstr ""
+msgstr "Beta"
 
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:9
 msgid "Change the predicate on all existing page connections to:"
@@ -4868,7 +4870,7 @@ msgstr "Introduzca el título del nuevo predicado:"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:159
 msgid "Filter connections"
-msgstr ""
+msgstr "Conexiones de filtro"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:28
 msgid "Filter on predicate"
@@ -4876,7 +4878,7 @@ msgstr "Filtrar el predicado"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:28
 msgid "Filter..."
-msgstr ""
+msgstr "Filtrar..."
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:28
 msgid "From category"
@@ -4884,7 +4886,7 @@ msgstr "De categoría"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:12
 msgid "Graph overview for:"
-msgstr ""
+msgstr "Resumen gráfico para:"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:8
 msgid "Help about predicates"
@@ -4892,15 +4894,15 @@ msgstr "Ayuda acerca de predicados"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:28
 msgid "Hide or show connections."
-msgstr ""
+msgstr "Ocultar o mostrar conexiones."
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:27
 msgid "Hide or show pages that are not on the path from the start page."
-msgstr ""
+msgstr "Ocultar o mostrar las páginas que no se encuentran en la ruta desde la página de inicio."
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:26
 msgid "Hide previously added pages and connections."
-msgstr ""
+msgstr "Ocultar páginas y conexiones añadidas anteriormente."
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:75
 msgid "Insert new connections before existing connections."
@@ -4934,7 +4936,7 @@ msgstr "No se encontraron predicados."
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:52
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:39
 msgid "No such page or page not visible."
-msgstr ""
+msgstr "No existe tal página o la página no es visible."
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:21
 msgid "Object"
@@ -4942,7 +4944,7 @@ msgstr "Objeto"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_filter_predicates.tpl:1
 msgid "Only show connections with the following predicates:"
-msgstr ""
+msgstr "Sólo se muestran las conexiones con los siguientes predicados:"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:108
 msgid "Ontologies define predicates for a defined set of subject and object categories. Sometimes it is more practical to have the predicate’s connection direction reversed from the formal definition. Export and import functions can use this option to swap subject/object relation when exporting or importing data."
@@ -4955,7 +4957,7 @@ msgstr "O has click aquí <strong>Eliminar todas las conexiones</strong>para bor
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:3
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:51
 msgid "Page connections graph"
-msgstr ""
+msgstr "Gráfico de conexiones de página"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:49
 msgid "Page connections overview"
@@ -4970,44 +4972,44 @@ msgstr "Predicados"
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edge_action.tpl:10
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edge_action.tpl:15
 msgid "Remove connection"
-msgstr ""
+msgstr "Eliminar conexión"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:23
 msgid "Remove object filter"
-msgstr ""
+msgstr "Quitar el filtro de objetos"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:15
 msgid "Remove predicate filter"
-msgstr ""
+msgstr "Quitar el filtro predicado"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:7
 msgid "Remove subject filter"
-msgstr ""
+msgstr "Quitar el filtro de temas"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:3
 msgid "Selected page"
-msgstr ""
+msgstr "Página seleccionada"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:43
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:78
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:96
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:119
 msgid "Show all incoming connections"
-msgstr ""
+msgstr "Mostrar todas las conexiones entrantes"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:37
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:72
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:90
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:113
 msgid "Show all outgoing connections"
-msgstr ""
+msgstr "Mostrar todas las conexiones salientes"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:40
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:75
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:93
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:116
 msgid "Show graph of all connections"
-msgstr ""
+msgstr "Mostrar gráfico de todas las conexiones"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:98
 msgid "Some predicates are mostly for internal purposes. Check this if you don’t want to show this predicate on the <em>Connected to</em> list."
@@ -5019,7 +5021,7 @@ msgstr "Disculpe, usted no tiene permitido insertar conexiones con este predicad
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:26
 msgid "Step back"
-msgstr ""
+msgstr "Paso atrás"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:5
 msgid "Subject"
@@ -5043,11 +5045,11 @@ msgstr "Esto indica a los indexadores que no incluyan los títulos de las págin
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:35
 msgid "This feature is in early development and may not work perfectly."
-msgstr ""
+msgstr "Esta función está en fase inicial de desarrollo y es posible que no funcione a la perfección."
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_filter_predicates.tpl:16
 msgid "This filter only affects which predicates are shown in the graph. If a resource has many incoming or outgoing connections, some connections might already be omitted from the graph data due to the edge limit, regardless of which predicates are checked."
-msgstr ""
+msgstr "Este filtro sólo afecta a los predicados que se muestran en el gráfico. Si un recurso tiene muchas conexiones entrantes o salientes, es posible que algunas conexiones ya se hayan omitido de los datos del gráfico debido al límite de bordes, independientemente de los predicados que se comprueben."
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:22
 msgid "This is used to filter the predicates in the <i>Page connections</i> panel and the pages in the connect dialogs."
@@ -5055,7 +5057,7 @@ msgstr "Esto se utiliza para filtrar los predicados en el panel <i>Conexiones de
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:154
 msgid "This page has too many connections to display all at once. Only the first 300 incoming or outgoing connections are shown."
-msgstr ""
+msgstr "Esta página tiene demasiadas conexiones para mostrarlas todas a la vez. Sólo se muestran las 300 primeras conexiones entrantes o salientes."
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:21
 msgid "This predicate can be used between two pages of the following categories."
@@ -5067,7 +5069,7 @@ msgstr "A categoría"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:153
 msgid "Too many connections"
-msgstr ""
+msgstr "Demasiadas conexiones"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:29
 msgid "URI"
@@ -5087,7 +5089,7 @@ msgstr "Válido entre"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:52
 msgid "View {predicate} references from {subject} to {object}."
-msgstr ""
+msgstr "Ver {predicate} referencias de {subject} a {object}."
 
 #: zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:74
 msgid "You are not allowed to create this predicate."
@@ -5099,19 +5101,19 @@ msgstr "Puede definir para qué categorías se muestra el predicado en la págin
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:29
 msgid "Zoom In"
-msgstr ""
+msgstr "Ampliar"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:30
 msgid "Zoom Out"
-msgstr ""
+msgstr "Alejar"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:58
 msgid "any object"
-msgstr ""
+msgstr "cualquier objeto"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:55
 msgid "any subject"
-msgstr ""
+msgstr "cualquier tema"
 
 #: zotonic_mod_admin_statistics/priv/templates/stat_panel/database.tpl:3
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:147
@@ -7224,11 +7226,11 @@ msgstr "Se compilarán todas las plantillas."
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:54
 msgid "Allow to show the floating template trace button on production and acceptance sites."
-msgstr ""
+msgstr "Permitir mostrar el botón flotante de rastreo de plantillas en los sitios de producción y aceptación."
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:46
 msgid "Always hide the floating template trace button."
-msgstr ""
+msgstr "Oculte siempre el botón flotante de rastreo de plantillas."
 
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:13
 msgid "Below is the list of all notifications and the installed observers."
@@ -7245,7 +7247,7 @@ msgstr "Calcule y visualice un gráfico de dependencia de todas las plantillas."
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:43
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:906
 msgid "Check debug points in the template source to see debug data here."
-msgstr ""
+msgstr "Compruebe los puntos de depuración en el código fuente de la plantilla para ver los datos de depuración aquí."
 
 #: zotonic_mod_development/src/mod_development.erl:301
 #: zotonic_mod_development/src/mod_development.erl:316
@@ -7263,11 +7265,11 @@ msgstr "Borrar datos y rastrear todo"
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:533
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:542
 msgid "Click to load templates"
-msgstr ""
+msgstr "Haga clic para cargar plantillas"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:17
 msgid "Click to restart"
-msgstr ""
+msgstr "Haz clic para reiniciar"
 
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:13
 msgid "Column"
@@ -7302,7 +7304,7 @@ msgstr "No se pudo obtener el resultado del rastreador. Vuelva a intentarlo."
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:440
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:471
 msgid "Could not load templates"
-msgstr ""
+msgstr "No se han podido cargar las plantillas"
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:8
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:12
@@ -7319,11 +7321,11 @@ msgstr "Resultados de la verificación de referencias cruzadas"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:23
 msgid "Debug all sessions"
-msgstr ""
+msgstr "Depurar todas las sesiones"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:28
 msgid "Debugging all sessions can result in a large amount of debug data."
-msgstr ""
+msgstr "Depurar todas las sesiones puede dar lugar a una gran cantidad de datos de depuración."
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:39
 msgid "Dependency graph"
@@ -7340,7 +7342,7 @@ msgstr "Gráfico de dependencia de todas las plantillas."
 
 #: zotonic_mod_development/priv/templates/_development_template_graph.tpl:3
 msgid "Dependency graph of all templates. Only template includes using a direct string value for the template name are shown."
-msgstr ""
+msgstr "Gráfico de dependencia de todas las plantillas. Sólo se muestran las plantillas que utilizan un valor de cadena directo para el nombre de la plantilla."
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:66
 msgid "Dependency graph of all traced templates. All includes are shown."
@@ -7405,7 +7407,7 @@ msgstr "Error al cambiar los registros de la consola."
 
 #: zotonic_mod_development/src/mod_development.erl:548
 msgid "Error parsing template."
-msgstr ""
+msgstr "Error parseando plantilla."
 
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:19
 msgid "Event"
@@ -7421,7 +7423,7 @@ msgstr "Explicar"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:411
 msgid "Extended / overridden by"
-msgstr ""
+msgstr "Ampliado / anulado por"
 
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:191
 msgid "Extends"
@@ -7479,7 +7481,7 @@ msgstr "Hostalias"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:415
 msgid "Included by"
-msgstr ""
+msgstr "Incluido por"
 
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:63
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:125
@@ -7519,7 +7521,7 @@ msgstr "Seguimiento en directo de las llamadas a funciones en el servidor."
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:55
 msgid "Loading and displaying the trace for:"
-msgstr ""
+msgstr "Carga y visualización de la traza para:"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:433
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:459
@@ -7542,7 +7544,7 @@ msgstr "Relacione a una petición de URL, mostrar la relaciones de las reglas de
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:15
 msgid "Maximum tracing time reached, debugging stopped."
-msgstr ""
+msgstr "Se ha alcanzado el tiempo máximo de rastreo, se ha detenido la depuración."
 
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:50
 msgid "Missing included templates"
@@ -7591,15 +7593,15 @@ msgstr "No hay permiso para usar mod_development."
 
 #: zotonic_mod_development/src/mod_development.erl:425
 msgid "No template found in the context."
-msgstr ""
+msgstr "No se ha encontrado ninguna plantilla en el contexto."
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:419
 msgid "No traced parent templates"
-msgstr ""
+msgstr "No hay plantillas de padres rastreadas"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:469
 msgid "No traced templates on this point"
-msgstr ""
+msgstr "No hay plantillas trazadas en este punto"
 
 #: zotonic_mod_development/priv/templates/_development_template.tpl:20
 msgid "Not found"
@@ -7621,7 +7623,7 @@ msgstr "Sólo el usuario administrador puede utilizar el rastreo de llamadas a f
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:528
 msgid "Open included template"
-msgstr ""
+msgstr "Abrir plantilla incluida"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:163
 msgid "Optional category for catinclude"
@@ -7646,15 +7648,15 @@ msgstr "Actualizar"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:33
 msgid "Reload the page"
-msgstr ""
+msgstr "Recargar la página"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:36
 msgid "Reload the page that we are tracing to see the debug data."
-msgstr ""
+msgstr "Recarga la página que estamos rastreando para ver los datos de depuración."
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:2
 msgid "Render this page and trace the templates"
-msgstr ""
+msgstr "Renderiza esta página y rastrea las plantillas"
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:22
 msgid "Rerun graph"
@@ -7720,7 +7722,7 @@ msgstr "Comenzó a rastrear todas las inclusiones de plantillas."
 
 #: zotonic_mod_development/src/mod_development.erl:408
 msgid "Started tracing template inclusions by rendering the page."
-msgstr ""
+msgstr "Comenzó el rastreo de inclusiones de plantillas renderizando la página."
 
 #: zotonic_mod_development/src/mod_development.erl:330
 msgid "Started tracing template inclusions for your session."
@@ -7770,11 +7772,11 @@ msgstr "Depuración de plantilla"
 
 #: zotonic_mod_development/src/mod_development.erl:551
 msgid "Template file not found."
-msgstr ""
+msgstr "Archivo de plantilla no encontrado."
 
 #: zotonic_mod_development/priv/templates/_development_template_graph.tpl:4
 msgid "Template includes using variable names or expressions for the template name are not shown."
-msgstr ""
+msgstr "Las plantillas que utilizan nombres de variables o expresiones para el nombre de la plantilla no se muestran."
 
 #: zotonic_mod_development/priv/templates/_development_template.tpl:4
 msgid "Template path"
@@ -7782,7 +7784,7 @@ msgstr "Ruta de plantilla"
 
 #: zotonic_mod_development/src/mod_development.erl:410
 msgid "The path must be a local URL."
-msgstr ""
+msgstr "La ruta debe ser una URL local."
 
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:180
 msgid "These templates have <tt>{extends}</tt> or <tt>{overrules}</tt> statements that are referring to a missing template."
@@ -7814,7 +7816,7 @@ msgstr "Se desconoce este recurso o no es un URI"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:540
 msgid "This template is used by"
-msgstr ""
+msgstr "Esta plantilla es utilizada por"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:13
 msgid "Tools and settings that are useful for site development."
@@ -7831,7 +7833,7 @@ msgstr "Rastrear llamadas a funciones"
 #: zotonic_mod_development/priv/templates/_html_head_development.tpl:35
 #: zotonic_mod_development/priv/templates/_html_head_development.tpl:36
 msgid "Trace templates"
-msgstr ""
+msgstr "Plantillas de seguimiento"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:195
 msgid "Traces all templates for the current session-id, or all sessions, and renders them as a graph."
@@ -7867,11 +7869,11 @@ msgstr "Patrón URI"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:27
 msgid "Uncheck to debug only your current session."
-msgstr ""
+msgstr "Desmarca esta opción para depurar sólo la sesión actual."
 
 #: zotonic_mod_development/src/mod_development.erl:444
 msgid "Updated template debug points."
-msgstr ""
+msgstr "Puntos de depuración de plantillas actualizados."
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:226
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:8
@@ -7888,11 +7890,11 @@ msgstr "Ver todas las reglas de despacho disponibles en el sitio"
 
 #: zotonic_mod_development/priv/templates/_development_template.tpl:12
 msgid "View template"
-msgstr ""
+msgstr "Ver plantilla"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:908
 msgid "Waiting for debug data..."
-msgstr ""
+msgstr "Esperando datos de depuración..."
 
 #: zotonic_mod_development/src/support/z_development_dispatch.erl:49
 msgid "You are not allowed to use the dispatch debugging."
@@ -8619,7 +8621,7 @@ msgstr "Los ajustes funcionan bien y se han guardado."
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:73
 msgid "Settings are working fine."
-msgstr ""
+msgstr "La configuración funciona correctamente."
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:207
 msgid "Storage"
@@ -8627,7 +8629,7 @@ msgstr "Almacenamiento"
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:77
 msgid "Test Cloud File Store Settings"
-msgstr ""
+msgstr "Probar la configuración del almacén de archivos en la nube"
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:30
 msgid "The cloud file store uses a global Zotonic configuration. The configuration cannot be changed here."
@@ -8643,7 +8645,7 @@ msgstr "La configuración está bloqueada por la configuración del sistema."
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:83
 msgid "The settings are tested by uploading (and removing) a small file."
-msgstr ""
+msgstr "Los ajustes se prueban cargando (y eliminando) un pequeño archivo."
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:239
 msgid "There is a 1 minute wait before files are uploaded."
@@ -8694,7 +8696,7 @@ msgstr "No tiene permitido cambiar estas configuraciones."
 
 #: zotonic_mod_filestore/src/support/filestore_admin.erl:109
 msgid "You are not allowed to use this."
-msgstr ""
+msgstr "No está permitido usar esto."
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:9
 msgid "Zotonic can store uploaded and resized files in the cloud. Here you can configure the location and access keys for the cloud service."
@@ -9979,7 +9981,7 @@ msgstr "La distribución de correo ha sido cancelada."
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:79
 msgid "The mailing will be sent when the page becomes visible."
-msgstr ""
+msgstr "El mailing se enviará cuando la página sea visible."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:40
 msgid "The page you are trying to e-mail is not yet published. What do you want to do?"
@@ -11229,7 +11231,7 @@ msgstr "Más información [Google]"
 #: zotonic_mod_seo/priv/templates/admin_seo.tpl:136
 #: zotonic_mod_seo/priv/templates/admin_seo.tpl:168
 msgid "Multiple codes can be added at once, separated by commas."
-msgstr ""
+msgstr "Se pueden añadir varios códigos a la vez, separados por comas."
 
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:57
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:59
@@ -11852,15 +11854,15 @@ msgstr "no se puede alcanzar o la IP local"
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:36
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:47
 msgid "&lt; Back to start"
-msgstr ""
+msgstr "&lt; Volver al principio"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:53
 msgid "'Once' means once by a respondent who is logged in or once per browser for anonymous respondents. To identify the browser of anonymous respondents, a cookie containing a unique ID is utilized."
-msgstr ""
+msgstr "Por \"una vez\" se entiende una vez por encuestado conectado o una vez por navegador en el caso de los encuestados anónimos. Para identificar el navegador de los encuestados anónimos, se utiliza una cookie que contiene un identificador único."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:99
 msgid "<b>Note</b>: For the features 'once', 'edit after submit', and checking the maximum number of submitted forms to function, the form needs to have the saved results. If a handler (chosen in the <em>handling</em> settings below) does not save the results, these features will not be available."
-msgstr ""
+msgstr "<b>Nota</b>: Para que funcionen las funciones 'una vez', 'editar después de enviar' y comprobar el número máximo de formularios enviados, el formulario debe tener los resultados guardados. Si un gestor (elegido en la configuración de <em>gestión</em> más abajo) no guarda los resultados, estas funciones no estarán disponibles."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:28
 msgid "Add a question or block"
@@ -11926,15 +11928,15 @@ msgstr "Agregar a la lista de correo"
 
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:104
 msgid "Admin only"
-msgstr ""
+msgstr "Sólo para administradores"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:115
 msgid "After all questions are answered and submitted, one of the following is shown."
-msgstr ""
+msgstr "Una vez contestadas y enviadas todas las preguntas, se muestra una de las siguientes."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:199
 msgid "After the form is submitted, an email with all answers can be sent to the configured email addresses below."
-msgstr ""
+msgstr "Una vez enviado el formulario, se puede enviar un correo electrónico con todas las respuestas a las direcciones de correo electrónico configuradas a continuación."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:135
 msgid "Aggregated results from all respondents"
@@ -11946,11 +11948,11 @@ msgstr "Estoy de acuerdo"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:236
 msgid "All answers for anonymous and logged-in respondents"
-msgstr ""
+msgstr "Todas las respuestas para encuestados anónimos y registrados"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:34
 msgid "Allow non-linear forms; answers are saved with “Back” button and a “Back to start” is added at the top of each page"
-msgstr ""
+msgstr "Permitir formularios no lineales; las respuestas se guardan con el botón \"Atrás\" y se añade un \"Volver al principio\" en la parte superior de cada página."
 
 #: zotonic_mod_survey/src/mod_survey.erl:1250
 msgid "Already submitted"
@@ -12010,7 +12012,7 @@ msgstr "¿Estás seguro de que quieres parar sin guardar?"
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:91
 msgid "Back without saving"
-msgstr ""
+msgstr "Volver sin guardar"
 
 #: zotonic_mod_survey/priv/templates/survey.tpl:25
 msgid "Because you can edit, you can proceed for testing."
@@ -12060,7 +12062,7 @@ msgstr "Opciones"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:53
 msgid "Choose how many times a respondent can fill in this form."
-msgstr ""
+msgstr "Elija cuántas veces puede rellenar este formulario un encuestado."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:2
 msgid "Click on “Edit” to see and change the entered data."
@@ -12073,15 +12075,15 @@ msgstr "Cerrado"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:246
 msgid "Closed-question answers for anonymous and logged-in respondents"
-msgstr ""
+msgstr "Respuestas a preguntas cerradas para encuestados anónimos y registrados"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:241
 msgid "Closed-question answers for anonymous respondents; all answers for logged-in respondents"
-msgstr ""
+msgstr "Respuestas a preguntas cerradas para los encuestados anónimos; todas las respuestas para los encuestados registrados."
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:130
 msgid "Continue later"
-msgstr ""
+msgstr "Continuar"
 
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:119
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:160
@@ -12156,7 +12158,7 @@ msgstr "No estar de acuerdo"
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:135
 msgid "Do you want to stop for now and continue later?"
-msgstr ""
+msgstr "¿Quiere parar por ahora y continuar más tarde?"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:45
 msgid "Download a spreadsheet with all answers."
@@ -12242,7 +12244,7 @@ msgstr "Rellena los huecos"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:51
 msgid "Filling in"
-msgstr ""
+msgstr "Rellenar"
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:3
 msgid "Find a person to link the answer to. If you do not find a person then you can create a new person."
@@ -12258,7 +12260,7 @@ msgstr "Para los rangos de fechas también puedes usar fechas relativas, como <c
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:260
 msgid "Forms can be handled by special code, for example a form that is forwarded to a back office system. Depending on the handler the results are stored in the database or not."
-msgstr ""
+msgstr "Los formularios pueden ser manejados por un código especial, por ejemplo un formulario que se reenvía a un sistema de back office. Dependiendo del gestor, los resultados se almacenan o no en la base de datos."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:29
 msgid "Go to question"
@@ -12314,11 +12316,11 @@ msgstr "Tengo [age] años. Me gusta el helado [helado = vainilla | fresa | choco
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:211
 msgid "If checked, then a confirmation email with the submitted answers can be sent to the respondent. For logged-in respondents, the known email address is used. For anonymous respondents, add a short text field with the label “email” and the validation set to “must be an email address”."
-msgstr ""
+msgstr "Si se marca, se puede enviar al encuestado un correo electrónico de confirmación con las respuestas enviadas. Para los encuestados que han iniciado sesión, se utiliza la dirección de correo electrónico conocida. Para los encuestados anónimos, añada un campo de texto corto con la etiqueta \"correo electrónico\" y la validación establecida en \"debe ser una dirección de correo electrónico\"."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:79
 msgid "If the maximum number of forms has been submitted, then the start button is deactivated and an email is sent to the email addresses in the <em>handling</em> settings below. Leave empty for no limit. This is useful for signup lists with a limited number of spots."
-msgstr ""
+msgstr "Si se ha enviado el número máximo de formularios, se desactivará el botón de inicio y se enviará un correo electrónico a las direcciones de correo electrónico indicadas en la configuración <em>de gestión</em>. Dejar vacío para no tener límite. Esto es útil para listas de inscripción con un número limitado de plazas."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:26
 msgid "Immediately start with the questions, no “Start” button"
@@ -12453,7 +12455,7 @@ msgstr "Varios bloques de salto de página se fusionan en solo uno."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:65
 msgid "Multiple times – each time with new results"
-msgstr ""
+msgstr "Varias veces, cada vez con nuevos resultados"
 
 #: zotonic_mod_survey/src/mod_survey.erl:348
 msgid "Narrative"
@@ -12475,11 +12477,11 @@ msgstr "Siguiente página en la categoría"
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_page.tpl:41
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_options.tpl:26
 msgid "No \"Back\" button to this page. If correct/wrong feedback is filled in, then show it directly after this page."
-msgstr ""
+msgstr "No hay botón \"Volver\" a esta página. Si se rellenan los comentarios correctos/incorrectos, muéstrelos directamente después de esta página."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:251
 msgid "No answers; confirmation text only"
-msgstr ""
+msgstr "Sin respuestas; sólo texto de confirmación"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:118
 msgid "No results yet."
@@ -12487,11 +12489,11 @@ msgstr "Aún no hay resultados."
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:88
 msgid "Not all the required fields are filled in. You can go back to the previous page without saving your answers."
-msgstr ""
+msgstr "No se han rellenado todos los campos obligatorios. Puede volver a la página anterior sin guardar sus respuestas."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:117
 msgid "Note that if you select a special handler below, then that handler may override this setting."
-msgstr ""
+msgstr "Tenga en cuenta que si selecciona un manejador especial a continuación, entonces ese manejador puede anular esta configuración."
 
 #: zotonic_mod_survey/src/support/survey_admin.erl:129
 #: zotonic_mod_survey/src/support/survey_admin.erl:173
@@ -12504,11 +12506,11 @@ msgstr "Entrada numérica, muestra los totales para este campo en los resultados
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:61
 msgid "Once — edit after submit (logged in users only)"
-msgstr ""
+msgstr "Una vez - editar después de enviar (sólo usuarios registrados)"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:57
 msgid "Once — submit is final (no editing after submit)"
-msgstr ""
+msgstr "Una vez enviado, el envío es definitivo (no se puede editar después del envío)"
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:33
 msgid "Only accept images."
@@ -12516,7 +12518,7 @@ msgstr "Solo acepta imágenes."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:210
 msgid "Optional confirmation email for the respondent"
-msgstr ""
+msgstr "Correo electrónico de confirmación opcional para el encuestado"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:135
 msgid "Options from a page category"
@@ -12532,7 +12534,7 @@ msgstr "Condición de salto de pagina"
 
 #: zotonic_mod_survey/src/mod_survey.erl:354
 msgid "Page options"
-msgstr ""
+msgstr "Opciones de página"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:25
 msgid "Pass?"
@@ -12688,7 +12690,7 @@ msgstr "Los resultados del demandado"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:131
 msgid "Results from the respondent – if passed only"
-msgstr ""
+msgstr "Resultados del encuestado - sólo si ha aprobado"
 
 #: zotonic_mod_survey/priv/templates/survey_results_printable.tpl:42
 msgid "Results until"
@@ -12696,7 +12698,7 @@ msgstr "Resultados hasta"
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:129
 msgid "Save your answers without submitting them yet so you can continue later."
-msgstr ""
+msgstr "Guarde sus respuestas sin enviarlas todavía para poder continuar más tarde."
 
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:1
 msgid "Saved"
@@ -12726,7 +12728,7 @@ msgstr "Seleccione su país"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:215
 msgid "Send a confirmation email to the respondent"
-msgstr ""
+msgstr "Enviar un correo electrónico de confirmación al encuestado"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:205
 msgid "Separate multiple email addresses with a comma."
@@ -12738,7 +12740,7 @@ msgstr "Mostrar respuesta"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:112
 msgid "Show after the final submit of the form"
-msgstr ""
+msgstr "Mostrar después del envío final del formulario"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:26
 msgid "Show charts"
@@ -12762,7 +12764,7 @@ msgstr "Mostrar resultados"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:30
 msgid "Show “Continue later” button to save answers and return later to submit"
-msgstr ""
+msgstr "Mostrar el botón \"Continuar más tarde\" para guardar las respuestas y volver más tarde para enviarlas"
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:34
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:45
@@ -12795,7 +12797,7 @@ msgstr "Inicio"
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:139
 msgid "Stop and continue later"
-msgstr ""
+msgstr "Parar y continuar más tarde"
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:151
 msgid "Stop without saving"
@@ -12868,7 +12870,7 @@ msgstr "Gracias, solo texto."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:99
 msgid "The 'continue later' feature operates independently of the chosen form handler."
-msgstr ""
+msgstr "La función \"continuar más tarde\" funciona independientemente del gestor de formularios elegido."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_charts.tpl:14
 msgid "The charts show aggregated results from closed questions like thurstone and yes/no."
@@ -12917,7 +12919,7 @@ msgstr "Se produjo un error al manejar sus respuestas, \n"
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_options.tpl:14
 msgid "This block contains options for a page. The presence of this block signals the end of the questions for a page."
-msgstr ""
+msgstr "Este bloque contiene opciones para una página. La presencia de este bloque señala el final de las preguntas para una página."
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:14
 msgid "This block show a file upload field. This can only be used as the last question of a form. The default form routines can’t handle file upload, you will need to add your own form handler to your site or module."
@@ -12929,7 +12931,7 @@ msgstr "Esta bloque señala un paro en el flujo. El usuario no puede continuar y
 
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:131
 msgid "This form has been submitted in another tab, so your current session has been stopped."
-msgstr ""
+msgstr "Este formulario se ha enviado en otra pestaña, por lo que su sesión actual se ha detenido."
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:9
 msgid "This form is disabled. Because you can edit, you can proceed for testing."
@@ -12963,7 +12965,7 @@ msgstr "Thurstone"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:231
 msgid "To prevent misuse, answers to open questions can be excluded from the confirmation email. You can choose which answers are sent to anonymous and logged-in respondents."
-msgstr ""
+msgstr "Para evitar usos indebidos, las respuestas a las preguntas abiertas pueden excluirse del correo electrónico de confirmación. Puedes elegir qué respuestas se envían a los encuestados anónimos y a los que han iniciado sesión."
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:21
 msgid "To question"
@@ -13054,7 +13056,7 @@ msgstr "No se le permite ver los resultados."
 
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:9
 msgid "You cannot reply to this email."
-msgstr ""
+msgstr "No puede responder a este correo electrónico."
 
 #: zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:23
 msgid "You must be allowed to edit the form, to edit its results."
@@ -13066,11 +13068,11 @@ msgstr "Ha recibido este correo electrónico porque su dirección de correo elec
 
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:21
 msgid "You started filling this in and will continue where you left off."
-msgstr ""
+msgstr "Empezaste a rellenar esto y continuarás donde lo dejaste."
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:137
 msgid "Your answers will be saved so that you can return later to submit them."
-msgstr ""
+msgstr "Sus respuestas se guardarán para que pueda volver más tarde a enviarlas."
 
 #: zotonic_mod_survey/priv/templates/_survey_results_user.tpl:26
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:51
@@ -13483,7 +13485,7 @@ msgstr "Seleccione su idioma preferido."
 
 #: zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:41
 msgid "Show all translated texts in a new tab."
-msgstr ""
+msgstr "Mostrar todos los textos traducidos en una nueva pestaña."
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:93
 msgid "Show the language in the URL"
@@ -13491,7 +13493,7 @@ msgstr "Mostrar el idioma en la URL"
 
 #: zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:42
 msgid "Show translations"
-msgstr ""
+msgstr "Mostrar traducciones"
 
 #: zotonic_mod_translation/src/mod_translation.erl:578
 #: zotonic_mod_translation/src/mod_translation.erl:626
@@ -13561,7 +13563,7 @@ msgstr "Traducir"
 
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:41
 msgid "Translated page texts for every editable language that has a translation in the resource."
-msgstr ""
+msgstr "Textos de página traducidos para cada idioma editable que tenga una traducción en el recurso."
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:3
 #: zotonic_mod_translation/src/mod_translation.erl:1052
@@ -13591,7 +13593,7 @@ msgstr "no esta habilitado"
 
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:104
 msgid "page break"
-msgstr ""
+msgstr "salto de página"
 
 #: zotonic_mod_video/priv/templates/_video_viewer.tpl:11
 msgid "Converting"
@@ -13611,11 +13613,11 @@ msgstr "Alerta"
 
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:31
 msgid "Next image"
-msgstr ""
+msgstr "Imagen siguiente"
 
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:25
 msgid "Previous image"
-msgstr ""
+msgstr "Imagen anterior"
 
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:95
 msgid "<b>Note that Zotonic only handles initial check out</b>, after which it is expected that you will handle further git interactions yourself.)"
