@@ -619,7 +619,8 @@ current_rsc_version(RscId, Context) ->
     z_convert:to_integer(m_rsc:p_no_acl(RscId, <<"version">>, Context)).
 
 callback_url(Context) ->
-    z_context:abs_url(z_dispatcher:url_for(websub, [], Context), Context).
+    DefaultContext = z_context:set_language(<<"x-default">>, Context),
+    z_context:abs_url(z_dispatcher:url_for(websub, [], DefaultContext), DefaultContext).
 
 user_context(undefined, Context) ->
     z_acl:anondo(z_context:new(Context));
