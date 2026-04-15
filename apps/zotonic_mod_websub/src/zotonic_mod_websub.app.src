@@ -7,7 +7,7 @@
         zotonic_core
     ]},
     {env, []},
-    {modules, [mod_websub, controller_websub, m_websub, z_websub_fetch_zotonic]},
+    {modules, []},
     {maintainers, []},
     {licenses, ["Apache-2.0"]},
     {links, [
