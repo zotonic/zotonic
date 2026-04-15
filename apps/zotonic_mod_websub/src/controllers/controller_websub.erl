@@ -25,6 +25,7 @@
 -export([
     allowed_methods/1,
     malformed_request/1,
+    content_types_provided/1,
     content_types_accepted/1,
     process/4
 ]).
@@ -42,16 +43,37 @@
 
 
 allowed_methods(Context) ->
-    {<<"POST">>, Context}.
+    {[<<"GET">>, <<"POST">>], Context}.
 
 malformed_request(Context) ->
     Context1 = z_context:ensure_qs(Context),
-    case z_context:get_q(<<"hub.mode">>, Context1) of
-        undefined ->
-            {false, Context1};
+    case cowmachine_req:method(Context1) of
+        <<"GET">> ->
+            case z_context:get_q(<<"hub.mode">>, Context1) of
+                undefined ->
+                    {false, Context1};
+                <<"subscribe">> ->
+                    {not is_valid_callback_verification_request(Context1), Context1};
+                <<"unsubscribe">> ->
+                    {not is_valid_callback_verification_request(Context1), Context1};
+                <<"denied">> ->
+                    {not is_valid_denied_request(Context1), Context1};
+                _ ->
+                    {true, Context1}
+            end;
         _ ->
-            {not is_valid_subscribe_request(Context1), Context1}
+            case z_context:get_q(<<"hub.mode">>, Context1) of
+                undefined ->
+                    {false, Context1};
+                _ ->
+                    {not is_valid_subscribe_request(Context1), Context1}
+            end
     end.
+
+content_types_provided(Context) ->
+    {[
+        {<<"text">>, <<"plain">>, []}
+    ], Context}.
 
 content_types_accepted(Context) ->
     {[
@@ -59,6 +81,9 @@ content_types_accepted(Context) ->
         {<<"application">>, <<"json">>, []}
     ], Context}.
 
+process(<<"GET">>, _AcceptedCT, _ProvidedCT, Context0) ->
+    Context = z_context:ensure_qs(Context0),
+    handle_verification(Context);
 process(<<"POST">>, _AcceptedCT, _ProvidedCT, Context0) ->
     Context = z_context:ensure_qs(Context0),
     case z_context:get_q(<<"hub.mode">>, Context) of
@@ -69,6 +94,22 @@ process(<<"POST">>, _AcceptedCT, _ProvidedCT, Context0) ->
             HubTopic = z_context:get_q(<<"hub.topic">>, Context),
             OptHubSecret = z_context:get_q(<<"hub.secret">>, Context),
             handle(HubMode, HubCallback, HubTopic, OptHubSecret, Context)
+    end.
+
+
+handle_verification(Context) ->
+    HubMode = z_context:get_q(<<"hub.mode">>, Context),
+    HubTopic = z_context:get_q(<<"hub.topic">>, Context),
+    case HubMode of
+        <<"subscribe">> ->
+            verify_callback_intent(HubTopic, Context);
+        <<"unsubscribe">> ->
+            verify_callback_intent(HubTopic, Context);
+        <<"denied">> ->
+            handle_denied_callback(HubTopic, z_context:get_q(<<"hub.reason">>, Context), Context),
+            {<<>>, Context};
+        _ ->
+            {{halt, 400}, Context}
     end.
 
 
@@ -141,7 +182,7 @@ subscribe(HubCallback, HubTopic, OptHubSecret, RscId, Context) ->
         {<<"hub.challenge">>, Challenge},
         {<<"hub.lease_seconds">>, integer_to_binary(LeaseSecs)}
     ],
-    case post_callback(HubCallback, OptHubSecret, Payload, Context) of
+    case get_callback(HubCallback, OptHubSecret, Payload, Context) of
         {ok, {Status, Challenge}} when Status >= 200, Status =< 299 ->
             m_websub:update_export(HubCallback, HubTopic, RscId, LeaseSecs, OptHubSecret, Context);
         {ok, {Status, OtherChallenge}} when Status >= 200, Status =< 299 ->
@@ -176,7 +217,7 @@ unsubscribe(HubCallback, HubTopic, OptHubSecret, Context) ->
         {<<"hub.topic">>, HubTopic},
         {<<"hub.challenge">>, Challenge}
     ],
-    case post_callback(HubCallback, OptHubSecret, Payload, Context) of
+    case get_callback(HubCallback, OptHubSecret, Payload, Context) of
         {ok, {Status, Challenge}} when Status >= 200, Status =< 299 ->
             m_websub:delete_export(HubCallback, HubTopic, Context);
         {ok, {Status, OtherChallenge}} when Status >= 200, Status =< 299 ->
@@ -210,36 +251,22 @@ refused(HubCallback, HubTopic, OptHubSecret, Reason, Context) ->
         {<<"hub.topic">>, HubTopic},
         {<<"hub.reason">>, Reason}
     ],
-    post_callback(HubCallback, OptHubSecret, Payload, Context).
+    get_callback(HubCallback, OptHubSecret, Payload, Context).
 
 
-%% @doc Post a result to the callback, return the status code or an error.
--spec post_callback(binary() | string(), binary() | undefined, list(), z:context()) -> {ok, {integer(), binary()}} | {error, term()}.
-post_callback(HubCallback, OptHubSecret, Payload, Context0) ->
+%% @doc Send an intent verification or denial callback, return the status code or an error.
+-spec get_callback(binary() | string(), binary() | undefined, list(), z:context()) -> {ok, {integer(), binary()}} | {error, term()}.
+get_callback(HubCallback, _OptHubSecret, Payload, Context0) ->
     AnonContext = z_acl:anondo(z_context:new(Context0)),
-    Options = case OptHubSecret of
-        undefined ->
-            [];
-        <<>> ->
-            [];
-        Key when is_binary(Key) ->
-            SigBody = iolist_to_binary(uri_string:compose_query(Payload)),
-            Hmac = crypto:mac(hmac, sha, Key, SigBody),
-            HmacHex = z_string:to_lower(iolist_to_binary([ z_utils:hex_encode(Hmac) ])),
-            XHubSig = <<"sha1=", HmacHex/binary>>,
-            [
-                {headers, [{<<"x-hub-signature">>, XHubSig}]}
-            ]
-    end,
-    case z_fetch:fetch(post, HubCallback, Payload, Options, AnonContext) of
+    case z_fetch:fetch(get, HubCallback, Payload, [], AnonContext) of
         {ok, {_FinalUrl, _Hs, _Size, Body}} ->
             {ok, {200, Body}};
-        {error, {Status, _Url, _Hs, _Size, _RespBody}} ->
-            {ok, {Status, iolist_to_binary(uri_string:compose_query(Payload))}};
+        {error, {Status, _Url, _Hs, _Size, RespBody}} ->
+            {ok, {Status, RespBody}};
         {error, Reason} = Error ->
             ?LOG_ERROR(#{
                 in => zotonic_mod_websub,
-                text => <<"WebSub error posting to callback">>,
+                text => <<"WebSub error fetching callback">>,
                 result => error,
                 reason => Reason,
                 callback => HubCallback
@@ -259,6 +286,62 @@ is_valid_subscribe_request(Context) ->
         andalso is_valid_topic(HubTopic, Context)
         andalso (OptHubLease =:= undefined orelse z_utils:only_digits(OptHubLease))
         andalso (OptHubSecret =:= undefined orelse size(OptHubSecret) =< 200).
+
+is_valid_callback_verification_request(Context) ->
+    HubMode = z_context:get_q(<<"hub.mode">>, Context),
+    HubTopic = z_context:get_q(<<"hub.topic">>, Context),
+    HubChallenge = z_context:get_q(<<"hub.challenge">>, Context),
+    OptHubLease = z_context:get_q(<<"hub.lease_seconds">>, Context),
+    (HubMode =:= <<"subscribe">> orelse HubMode =:= <<"unsubscribe">>)
+        andalso is_binary(HubChallenge)
+        andalso HubChallenge =/= <<>>
+        andalso is_url(HubTopic)
+        andalso (OptHubLease =:= undefined orelse z_utils:only_digits(OptHubLease)).
+
+is_valid_denied_request(Context) ->
+    is_url(z_context:get_q(<<"hub.topic">>, Context)).
+
+verify_callback_intent(HubTopic, Context) ->
+    Callback = callback_url(Context),
+    Challenge = z_context:get_q(<<"hub.challenge">>, Context),
+    case z_db:q1("
+        select id
+        from websub_import
+        where topic_url = $1
+          and callback_url = $2
+          and is_unsubscribed = false
+        ",
+        [ HubTopic, Callback ],
+        Context)
+    of
+        Id when is_integer(Id) ->
+            Context1 = z_context:set_resp_header(<<"content-type">>, <<"text/plain">>, Context),
+            {Challenge, Context1};
+        _ ->
+            {{halt, 404}, Context}
+    end.
+
+handle_denied_callback(HubTopic, Reason, Context) ->
+    Callback = callback_url(Context),
+    _ = z_db:q("
+        update websub_import
+        set is_unsubscribed = true,
+            modified = now()
+        where topic_url = $1
+          and callback_url = $2
+          and is_unsubscribed = false
+        ",
+        [ HubTopic, Callback ],
+        Context),
+    ?LOG_WARNING(#{
+        in => zotonic_mod_websub,
+        text => <<"WebSub hub denied import subscription">>,
+        result => error,
+        reason => Reason,
+        topic => HubTopic,
+        callback => Callback
+    }),
+    ok.
 
 %% Check if the URL is for the current site and has a known resource id in the url.
 is_valid_topic(Topic, Context) ->
@@ -309,3 +392,6 @@ req_body(Context) ->
         {Body, Context1} -> {Body, Context1}
     end.
 
+callback_url(Context) ->
+    ContextNoLanguage = z_context:set_language('x-default', Context),
+    z_context:abs_url(z_dispatcher:url_for(websub, [], ContextNoLanguage), ContextNoLanguage).
