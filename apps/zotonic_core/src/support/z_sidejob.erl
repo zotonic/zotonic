@@ -168,20 +168,66 @@ run_unique(RegName, {Module, Function, Args}, Context) ->
             ok
     end.
 
+-spec run_unique_started(pid(), reference(), atom(), {module(), atom(), list()}) -> ok.
+run_unique_started(Caller, Ref, RegName, {Module, Function, Args}) ->
+    try
+        true = erlang:register(RegName, self()),
+        Caller ! {Ref, {ok, self()}},
+        try
+            erlang:apply(Module, Function, Args),
+            ok
+        after
+            catch erlang:unregister(RegName)
+        end
+    catch
+        error:badarg ->
+            Caller ! {Ref, {error, already_running}},
+            ok
+    end.
+
+-spec run_unique_started(pid(), reference(), atom(), {module(), atom(), list()}, z:context()) -> ok.
+run_unique_started(Caller, Ref, RegName, {Module, Function, Args}, Context) ->
+    try
+        true = erlang:register(RegName, self()),
+        Caller ! {Ref, {ok, self()}},
+        try
+            erlang:apply(Module, Function, Args ++ [ Context ]),
+            ok
+        after
+            catch erlang:unregister(RegName)
+        end
+    catch
+        error:badarg ->
+            Caller ! {Ref, {error, already_running}},
+            ok
+    end.
+
 start_unique(RegName, Module, Function, Args) ->
-    case erlang:whereis(RegName) of
-        undefined ->
-            start(?MODULE, run_unique, [RegName, {Module, Function, Args}]);
-        _Pid ->
-            {error, already_running}
+    Ref = make_ref(),
+    case start(?MODULE, run_unique_started, [self(), Ref, RegName, {Module, Function, Args}]) of
+        {ok, Pid} ->
+            receive
+                {Ref, {ok, Pid}} ->
+                    {ok, Pid};
+                {Ref, {error, already_running}} ->
+                    {error, already_running}
+            end;
+        {error, Reason} ->
+            {error, Reason}
     end.
 
 start_unique(RegName, Module, Function, Args, Context) ->
-    case erlang:whereis(RegName) of
-        undefined ->
-            start(?MODULE, run_unique, [RegName, {Module, Function, Args}], Context);
-        _Pid ->
-            {error, already_running}
+    Ref = make_ref(),
+    case start(?MODULE, run_unique_started, [self(), Ref, RegName, {Module, Function, Args}], Context) of
+        {ok, Pid} ->
+            receive
+                {Ref, {ok, Pid}} ->
+                    {ok, Pid};
+                {Ref, {error, already_running}} ->
+                    {error, already_running}
+            end;
+        {error, Reason} ->
+            {error, Reason}
     end.
 
 site_unique_name(Name, Context) ->
