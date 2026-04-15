@@ -123,12 +123,12 @@ m_get([ <<"stats">>, MailingId | Rest ], _Msg, Context) ->
     end;
 m_get([ <<"rsc_stats">>, RscId | Rest ], _Msg, Context) ->
     case z_acl:is_allowed(use, mod_mailinglist, Context) of
-        true -> {ok, {get_rsc_stats(RscId, Context), Rest}};
+        true -> {ok, {get_rsc_stats(m_rsc:rid(RscId, Context), Context), Rest}};
         false -> {error, eacces}
     end;
 m_get([ <<"recipient">>, RecipientId | Rest ], _Msg, Context) ->
     case z_acl:is_allowed(use, mod_mailinglist, Context) of
-        true -> {ok, {recipient_get(z_convert:to_integer(RecipientId), Context), Rest}};
+        true -> {ok, {recipient_get(RecipientId, Context), Rest}};
         false -> {error, eacces}
     end;
 m_get([ <<"scheduled">>, RscId | Rest ], _Msg, Context) ->
@@ -215,8 +215,13 @@ m_get(_Vs, _Msg, _Context) ->
 
 
 %% @doc Get the stats for the mailing. Number of recipients and list of scheduled resources.
--spec get_stats( m_rsc:resource_id(), z:context() ) -> map().
-get_stats(ListId, Context) ->
+-spec get_stats(MailingId, Context) -> Stats when
+    MailingId :: m_rsc:resource(),
+    Context :: z:context(),
+    Stats :: map().
+get_stats(undefined, _Context) ->
+    #{};
+get_stats(ListId, Context) when is_integer(ListId) ->
     Counts = z_mailinglist_recipients:count_recipients(ListId, Context),
     Scheduled = z_db:q("
         select page_id
@@ -226,13 +231,21 @@ get_stats(ListId, Context) ->
         order by publication_start", [ListId], Context),
     Counts#{
         scheduled => Scheduled
-    }.
+    };
+get_stats(ListId, Context) ->
+    get_stats(m_rsc:rid(ListId, Context), Context).
 
-
-%% @doc Get the stats for all mailing lists which have been sent to a rsc (content_id)
--spec get_rsc_stats( m_rsc:resource_id(), z:context() ) -> [ {ListId::m_rsc:resource_id(), Statuslist} ]
-    when Statuslist :: list( binary() ).
-get_rsc_stats(Id, Context) ->
+%% @doc Get the email status for all mailing lists where a rsc (content_id) has been sent to.
+%% The status is fetched from the email log, which is periodically truncated.
+-spec get_rsc_stats(ContentId, Context) -> ListStatus when
+    ContentId :: m_rsc:resource(),
+    Context :: z:context(),
+    ListStatus :: [ {ListId, Statuslist} ],
+    ListId :: m_rsc:resource_id(),
+    Statuslist :: list( binary() ).
+get_rsc_stats(undefined, _Context) ->
+    [];
+get_rsc_stats(Id, Context) when is_integer(Id) ->
     F = fun() ->
         RsLog = z_db:q("
             select other_id, min(created) as sent_on, count(distinct(envelop_to))
@@ -265,18 +278,23 @@ get_rsc_stats(Id, Context) ->
             Stats,
             PerStatus)
     end,
-    z_depcache:memo(F, {mailinglist_stats, Id}, 1, [Id], Context). %% Cache a little while to prevent database DOS while mail is sending
-
+    %% Cache a short time to prevent database DOS while mail is sending
+    z_depcache:memo(F, {mailinglist_stats, Id}, 1, [Id], Context);
+get_rsc_stats(Id, Context) ->
+    get_rsc_stats(m_rsc:rid(Id, Context), Context).
 
 
 %% @doc Fetch all enabled recipients from a list.
--spec get_enabled_recipients( m_rsc:resource_id(), z:context() ) -> list( binary() ).
+-spec get_enabled_recipients(ListId, Context) -> RecipientAddresses when
+     ListId :: m_rsc:resource(),
+     Context :: z:context(),
+     RecipientAddresses :: list( binary() ).
 get_enabled_recipients(ListId, Context) ->
     Emails = z_db:q("
         select email
         from mailinglist_recipient
         where mailinglist_id = $1
-          and is_enabled = true", [ z_convert:to_integer(ListId) ], Context),
+          and is_enabled = true", [ m_rsc:rid(ListId, Context) ], Context),
     [ E || {E} <- Emails ].
 
 
@@ -688,11 +706,13 @@ line_to_recipient([ Email, NameFirst, NameLast, NamePrefix | _ ]) ->
 %% @doc Get all mailingslists for this resource, checking both the recipients and the
 %% subscriberof edges. The found subscriptions must have the email address as the resource's primary email address.
 -spec list_subscriptions_by_rsc_id(RscId, ListId, Context ) -> {ok, Subscriptions} | {error, Reason} when
-    RscId :: m_rsc:resource_id(),
+    RscId :: m_rsc:resource_id() | undefined,
     ListId :: m_rsc:resource_id() | undefined,
     Context :: z:context(),
     Subscriptions :: [ map() ],
     Reason :: enoent.
+list_subscriptions_by_rsc_id(undefined, _ListId, _Context) ->
+    {ok, []};
 list_subscriptions_by_rsc_id(RscId, ListId, Context) ->
     case list_subscriptions_by_rsc_id(RscId, Context) of
         {ok, L} ->
@@ -726,7 +746,7 @@ list_subscriptions_by_rsc_id(RscId, ListId, Context) ->
 
 %% @doc Get all mailingslists for this resource, checking both the recipients and the
 %% subscriberof edges. The found subscriptions must have the email address as the resource's primary email address.
--spec list_subscriptions_by_rsc_id( RscId, Context ) -> {ok, Subscriptions} | {error, Reason} when
+-spec list_subscriptions_by_rsc_id(RscId, Context) -> {ok, Subscriptions} | {error, Reason} when
     RscId :: m_rsc:resource(),
     Context :: z:context(),
     Subscriptions :: [ map() ],
@@ -770,7 +790,7 @@ list_subscriptions_by_rsc_id(RscId0, Context) ->
 
 %% @doc Get all mailingslists with this email address, checking both the recipients and the
 %% subscriberof edges. The found resources must have the email address as their primary email address.
--spec list_subscriptions_by_email( Email, Context ) -> {ok, Subscriptions} when
+-spec list_subscriptions_by_email(Email, Context) -> {ok, Subscriptions} when
     Email :: binary() | string(),
     Context :: z:context(),
     Subscriptions :: [ map() ].

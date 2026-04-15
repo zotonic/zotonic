@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2020-2023 Marc Worrell <marc@worrell.nl>
+%% @copyright 2020-2026 Marc Worrell <marc@worrell.nl>
 %% @doc Fetch all recipients for a mailinglist.
 %% @end
 
-%% Copyright 2020-2023 Marc Worrell
+%% Copyright 2020-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -119,7 +119,10 @@ count_recipients(ListId, Context) ->
             },
             try
                 #search_result{ total = QTotal } = z_search:search(<<"query">>, Q, 1, ?MAX_ROWS, Context),
-                QTotal
+                if
+                    is_integer(QTotal) -> QTotal;
+                    true -> 0
+                end
             catch
                 Error:Reason:Stack ->
                     ?LOG_ERROR(#{
