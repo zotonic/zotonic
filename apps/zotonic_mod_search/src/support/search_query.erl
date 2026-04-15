@@ -1938,11 +1938,10 @@ filter_to_term(Column, Operator, Value) ->
 
 filtercol_to_term(T) when is_atom(T) -> filtercol_to_term(atom_to_binary(T, utf8));
 filtercol_to_term(<<"pivot:", _/binary>> = T) -> T;
-filtercol_to_term(<<"pivot.", T/binary>>) -> <<"pivot:", T/binary>>;
+filtercol_to_term(<<"pivot.", _/binary>> = T) -> binary:replace(T, <<".">>, <<":">>, [ global ]);
 filtercol_to_term(<<"facet:", _/binary>> = T) -> T;
-filtercol_to_term(<<"facet.", T/binary>>) -> <<"facet:", T/binary>>;
+filtercol_to_term(<<"facet.", _/binary>> = T) -> binary:replace(T, <<".">>, <<":">>, [global]);
 filtercol_to_term(T) -> <<"filter:", T/binary>>.
-
 
 map_filter_column(<<"pivot.", _/binary>> = P, Q) ->
     map_filter_column(binary:replace(P, <<".">>, <<":">>, [global]), Q);
