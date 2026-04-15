@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-04-14 13:52\n"
+"PO-Revision-Date: 2026-04-15 11:01\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -706,7 +706,7 @@ msgstr "ACL-mooduli valikud."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:31
 msgid "Or click <strong>Delete</strong> to disconnect all users and delete the user listed groups."
-msgstr ""
+msgstr "Või klõpsake nuppu <strong>Kustuta</strong>, et katkestada kõigi kasutajate ühendus ja kustutada kasutajate loetletud rühmad."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:154
 msgid "Own content"
@@ -1127,7 +1127,7 @@ msgstr "Spetsile"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:2
 msgid "After the duplication you can edit the new page. The new page will be unpublished."
-msgstr ""
+msgstr "Pärast dubleerimist saate uut lehekülge redigeerida. Uus lehekülg jäetakse avaldamata."
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:39
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:36
@@ -1498,7 +1498,7 @@ msgstr "Alguse/lõpu kuupäev"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:20
 msgid "Define the query using the query arguments or JSON."
-msgstr ""
+msgstr "Määrake päring, kasutades päringu argumente või JSONi."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:23
 msgid "Delete if no other page is connected to this page."
@@ -1871,7 +1871,7 @@ msgstr "Funktsioon"
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:117
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:20
 msgid "Graph"
-msgstr ""
+msgstr "Graafik"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:131
 msgid "Has connections with predicate"
@@ -1919,11 +1919,11 @@ msgstr "IP-aadress"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:280
 msgid "Id, newest first"
-msgstr ""
+msgstr "Id, uusim esimene"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:281
 msgid "Id, oldest first"
-msgstr ""
+msgstr "Id, vanim esimene"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:11
 msgid "If a page has a publication date range then it will only be visible between the two dates. Note that if you are allowed to edit the page then you can always see it."
@@ -2500,7 +2500,7 @@ msgstr "P√§ring"
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:19
 msgid "Query results"
-msgstr ""
+msgstr "Päringu tulemused"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:94
 msgid "Rebuild all search-indices by putting all pages and data from the database in the indexer queue. This can take a long time!"
@@ -2529,7 +2529,7 @@ msgstr "Suunake veebisaidile lehevaatel"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:75
 msgid "Referrers"
-msgstr ""
+msgstr "Referrers"
 
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:3
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:9
@@ -2712,7 +2712,7 @@ msgstr "Kuva leht mitmel rajal"
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:55
 msgid "Show query as JSON"
-msgstr ""
+msgstr "Näita päringut JSONina"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:37
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:23
@@ -2957,11 +2957,11 @@ msgstr "URL-i keelekoodi</em> järel olev tee <em>; kui see väli jäetakse tüh
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:8
 msgid "The query could not be parsed, check the syntax."
-msgstr ""
+msgstr "Päringut ei õnnestunud analüüsida, kontrollige süntaksit."
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:16
 msgid "The query text is empty."
-msgstr ""
+msgstr "Päringu tekst on tühi."
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:58
 msgid "The search index is rebuilding. Depending on the database size, this can take a long time."
@@ -2998,7 +2998,7 @@ msgstr "Selle nimega leht on juba olemas."
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:4
 msgid "There is an error in the query:"
-msgstr ""
+msgstr "Päringus on viga:"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:5
 msgid "This can't be undone. Your page will be lost forever."
@@ -3288,7 +3288,7 @@ msgstr "Vaata k√µiki viitajaid"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:77
 msgid "View connection graph"
-msgstr ""
+msgstr "Vaata ühendusgraafikut"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:17
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:28
@@ -4828,11 +4828,13 @@ msgstr "Kas soovite kindlasti kustutada"
 msgid "Are you sure you want to remove the <strong>{{ predicate }}</strong>\n"
 "    connection between <strong>{{ subject }}</strong>\n"
 "          and <strong>{{ object }}</strong>?"
-msgstr ""
+msgstr "Kas olete kindel, et soovite eemaldada <strong>{{ predicate }}</strong>\n"
+"    ühenduse vahel <strong>{{ subject }}</strong>\n"
+"          ja <strong>{{ object }}</strong>?"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:34
 msgid "Beta"
-msgstr ""
+msgstr "Beeta"
 
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:9
 msgid "Change the predicate on all existing page connections to:"
@@ -4868,7 +4870,7 @@ msgstr "Sisestage uue predikaadi pealkiri:"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:159
 msgid "Filter connections"
-msgstr ""
+msgstr "Filtri ühendused"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:28
 msgid "Filter on predicate"
@@ -4876,7 +4878,7 @@ msgstr "Filtreeri predikaadil"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:28
 msgid "Filter..."
-msgstr ""
+msgstr "Filter..."
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:28
 msgid "From category"
@@ -4884,7 +4886,7 @@ msgstr "Kategooriast"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:12
 msgid "Graph overview for:"
-msgstr ""
+msgstr "Graafiku ülevaade:"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:8
 msgid "Help about predicates"
@@ -4892,15 +4894,15 @@ msgstr "Abi predikaatidest"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:28
 msgid "Hide or show connections."
-msgstr ""
+msgstr "Piiluta või näita ühendusi."
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:27
 msgid "Hide or show pages that are not on the path from the start page."
-msgstr ""
+msgstr "Varjata või näidata lehti, mis ei asu alglehe teekonnal."
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:26
 msgid "Hide previously added pages and connections."
-msgstr ""
+msgstr "Varem lisatud lehekülgede ja ühenduste peitmine."
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:75
 msgid "Insert new connections before existing connections."
@@ -4934,7 +4936,7 @@ msgstr "Predikaate ei leitud."
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:52
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:39
 msgid "No such page or page not visible."
-msgstr ""
+msgstr "Sellist lehekülge ei ole või lehekülg ei ole nähtav."
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:21
 msgid "Object"
@@ -4942,7 +4944,7 @@ msgstr "Objekt"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_filter_predicates.tpl:1
 msgid "Only show connections with the following predicates:"
-msgstr ""
+msgstr "Näita ainult järgmisi predikatiive sisaldavaid ühendusi:"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:108
 msgid "Ontologies define predicates for a defined set of subject and object categories. Sometimes it is more practical to have the predicate’s connection direction reversed from the formal definition. Export and import functions can use this option to swap subject/object relation when exporting or importing data."
@@ -4955,7 +4957,7 @@ msgstr "Või klõpsake nuppu <strong>Kustuta kõik ühendused</strong> et kustut
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:3
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:51
 msgid "Page connections graph"
-msgstr ""
+msgstr "Lehekülje ühenduste graafik"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:49
 msgid "Page connections overview"
@@ -4970,44 +4972,44 @@ msgstr "Predikaadid"
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edge_action.tpl:10
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edge_action.tpl:15
 msgid "Remove connection"
-msgstr ""
+msgstr "Eemaldage ühendus"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:23
 msgid "Remove object filter"
-msgstr ""
+msgstr "Eemalda objektifilter"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:15
 msgid "Remove predicate filter"
-msgstr ""
+msgstr "Eemalda predikaadi filter"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:7
 msgid "Remove subject filter"
-msgstr ""
+msgstr "Eemalda teema filter"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:3
 msgid "Selected page"
-msgstr ""
+msgstr "Valitud lehekülg"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:43
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:78
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:96
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:119
 msgid "Show all incoming connections"
-msgstr ""
+msgstr "Näita kõiki sissetulevaid ühendusi"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:37
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:72
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:90
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:113
 msgid "Show all outgoing connections"
-msgstr ""
+msgstr "Näita kõiki väljaminevaid ühendusi"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:40
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:75
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:93
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:116
 msgid "Show graph of all connections"
-msgstr ""
+msgstr "Näita kõigi ühenduste graafikut"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:98
 msgid "Some predicates are mostly for internal purposes. Check this if you don’t want to show this predicate on the <em>Connected to</em> list."
@@ -5019,7 +5021,7 @@ msgstr "Vabandust, teil pole lubatud selle predikaadiga ühendusi sisestada."
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:26
 msgid "Step back"
-msgstr ""
+msgstr "Astu tagasi"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:5
 msgid "Subject"
@@ -5043,11 +5045,11 @@ msgstr "See suunab indekseerijad selle predikaadiga ühendatud lehtede pealkirju
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:35
 msgid "This feature is in early development and may not work perfectly."
-msgstr ""
+msgstr "See funktsioon on alles arendamisel ja see ei pruugi veel ideaalselt toimida."
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_filter_predicates.tpl:16
 msgid "This filter only affects which predicates are shown in the graph. If a resource has many incoming or outgoing connections, some connections might already be omitted from the graph data due to the edge limit, regardless of which predicates are checked."
-msgstr ""
+msgstr "See filter mõjutab ainult seda, milliseid predikaate graafikus näidatakse. Kui ressursil on palju sissetulevaid või väljaminevaid ühendusi, võivad mõned ühendused juba servapiirangu tõttu graafi andmetest välja jääda, olenemata sellest, milliseid predikaate kontrollitakse."
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:22
 msgid "This is used to filter the predicates in the <i>Page connections</i> panel and the pages in the connect dialogs."
@@ -5055,7 +5057,7 @@ msgstr "Seda kasutatakse predikaatide filtreerimiseks paneelil <i>Page ühenduse
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:154
 msgid "This page has too many connections to display all at once. Only the first 300 incoming or outgoing connections are shown."
-msgstr ""
+msgstr "Sellel lehel on liiga palju ühendusi, et neid kõiki korraga kuvada. Näidatakse ainult esimesed 300 sissetulevat või väljaminevat ühendust."
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:21
 msgid "This predicate can be used between two pages of the following categories."
@@ -5067,7 +5069,7 @@ msgstr "Kategooriale"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:153
 msgid "Too many connections"
-msgstr ""
+msgstr "Liiga palju ühendusi"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:29
 msgid "URI"
@@ -5087,7 +5089,7 @@ msgstr "Sobiv neile"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:52
 msgid "View {predicate} references from {subject} to {object}."
-msgstr ""
+msgstr "Vaata {predicate} viited {subject} kuni {object}."
 
 #: zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:74
 msgid "You are not allowed to create this predicate."
@@ -5099,19 +5101,19 @@ msgstr "Saate määrata, milliste kategooriate jaoks predikaati redigeerimislehe
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:29
 msgid "Zoom In"
-msgstr ""
+msgstr "Suurendage"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:30
 msgid "Zoom Out"
-msgstr ""
+msgstr "Suurendage välja"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:58
 msgid "any object"
-msgstr ""
+msgstr "mis tahes objekt"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:55
 msgid "any subject"
-msgstr ""
+msgstr "mis tahes teema"
 
 #: zotonic_mod_admin_statistics/priv/templates/stat_panel/database.tpl:3
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:147
@@ -7224,11 +7226,11 @@ msgstr "Kõik mallid koostatakse."
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:54
 msgid "Allow to show the floating template trace button on production and acceptance sites."
-msgstr ""
+msgstr "Luba näidata ujuvat malli jälgimisnuppu tootmis- ja vastuvõtusaitidel."
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:46
 msgid "Always hide the floating template trace button."
-msgstr ""
+msgstr "Peida alati ujuv malli jälgimisnupp."
 
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:13
 msgid "Below is the list of all notifications and the installed observers."
@@ -7245,7 +7247,7 @@ msgstr "Arvutage ja visualiseerige kõigi mallide sõltuvusgraafik."
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:43
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:906
 msgid "Check debug points in the template source to see debug data here."
-msgstr ""
+msgstr "Kontrollige silituspunkte malli allikas, et näha silitusandmeid siin."
 
 #: zotonic_mod_development/src/mod_development.erl:301
 #: zotonic_mod_development/src/mod_development.erl:316
@@ -7263,11 +7265,11 @@ msgstr "Kustutage andmed ja jälgige kõike"
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:533
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:542
 msgid "Click to load templates"
-msgstr ""
+msgstr "Klõpsake mallide laadimiseks"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:17
 msgid "Click to restart"
-msgstr ""
+msgstr "Klõpsake taaskäivitamiseks"
 
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:13
 msgid "Column"
@@ -7302,7 +7304,7 @@ msgstr "Jälgija väljundit ei õnnestunud tuua, proovige uuesti."
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:440
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:471
 msgid "Could not load templates"
-msgstr ""
+msgstr "Ei saanud laadida malle"
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:8
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:12
@@ -7319,11 +7321,11 @@ msgstr "Ristviidete kontrolli tulemused"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:23
 msgid "Debug all sessions"
-msgstr ""
+msgstr "Kõigi seansside silumine"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:28
 msgid "Debugging all sessions can result in a large amount of debug data."
-msgstr ""
+msgstr "Kõikide seansside silumine võib põhjustada suure hulga silumisandmete kogumist."
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:39
 msgid "Dependency graph"
@@ -7340,7 +7342,7 @@ msgstr "Kõigi mallide sõltuvusgraafik"
 
 #: zotonic_mod_development/priv/templates/_development_template_graph.tpl:3
 msgid "Dependency graph of all templates. Only template includes using a direct string value for the template name are shown."
-msgstr ""
+msgstr "Kõigi mallide sõltuvusgraafik. Näidatakse ainult mallid, mis sisaldavad malli nime otsest string-väärtust kasutades."
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:66
 msgid "Dependency graph of all traced templates. All includes are shown."
@@ -7405,7 +7407,7 @@ msgstr "Konsooli logide muutmisel tekkis viga."
 
 #: zotonic_mod_development/src/mod_development.erl:548
 msgid "Error parsing template."
-msgstr ""
+msgstr "Viga malli analüüsimisel."
 
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:19
 msgid "Event"
@@ -7421,7 +7423,7 @@ msgstr "Seletama"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:411
 msgid "Extended / overridden by"
-msgstr ""
+msgstr "Laiendatud/ülesulatatud"
 
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:191
 msgid "Extends"
@@ -7479,7 +7481,7 @@ msgstr "Hostalias"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:415
 msgid "Included by"
-msgstr ""
+msgstr "Kaasa arvatud"
 
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:63
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:125
@@ -7519,7 +7521,7 @@ msgstr "Funktsioonikutsete jälgimine serveris."
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:55
 msgid "Loading and displaying the trace for:"
-msgstr ""
+msgstr "Jälje laadimine ja kuvamine:"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:433
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:459
@@ -7542,7 +7544,7 @@ msgstr "Sobitage päringu URL, kuvage sobitatud saatmisreegel."
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:15
 msgid "Maximum tracing time reached, debugging stopped."
-msgstr ""
+msgstr "Maksimaalne jälgimise aeg on saavutatud, silumine on peatatud."
 
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:50
 msgid "Missing included templates"
@@ -7591,15 +7593,15 @@ msgstr "Mod_developmenti kasutamiseks pole luba."
 
 #: zotonic_mod_development/src/mod_development.erl:425
 msgid "No template found in the context."
-msgstr ""
+msgstr "Kontekstis ei leitud malli."
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:419
 msgid "No traced parent templates"
-msgstr ""
+msgstr "Jälgitud vanemamalle ei ole"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:469
 msgid "No traced templates on this point"
-msgstr ""
+msgstr "Selles punktis ei ole jälgitavaid malle"
 
 #: zotonic_mod_development/priv/templates/_development_template.tpl:20
 msgid "Not found"
@@ -7621,7 +7623,7 @@ msgstr "Ainult administraatori kasutaja saab kasutada funktsioonikõne jälgimis
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:528
 msgid "Open included template"
-msgstr ""
+msgstr "Avage lisatud mall"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:163
 msgid "Optional category for catinclude"
@@ -7646,15 +7648,15 @@ msgstr "Värskenda"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:33
 msgid "Reload the page"
-msgstr ""
+msgstr "Laadige leht uuesti"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:36
 msgid "Reload the page that we are tracing to see the debug data."
-msgstr ""
+msgstr "Laadige uuesti leht, mida me jälgime, et näha silumisandmeid."
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:2
 msgid "Render this page and trace the templates"
-msgstr ""
+msgstr "Renderda see lehekülg ja jälgi malle"
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:22
 msgid "Rerun graph"
@@ -7720,7 +7722,7 @@ msgstr "Alustas kõigi malli lisamiste jälgimist."
 
 #: zotonic_mod_development/src/mod_development.erl:408
 msgid "Started tracing template inclusions by rendering the page."
-msgstr ""
+msgstr "Algas mallide lisade jälgimine lehe renderdamise teel."
 
 #: zotonic_mod_development/src/mod_development.erl:330
 msgid "Started tracing template inclusions for your session."
@@ -7770,11 +7772,11 @@ msgstr "Mallide silumine"
 
 #: zotonic_mod_development/src/mod_development.erl:551
 msgid "Template file not found."
-msgstr ""
+msgstr "Mallifaili ei leitud."
 
 #: zotonic_mod_development/priv/templates/_development_template_graph.tpl:4
 msgid "Template includes using variable names or expressions for the template name are not shown."
-msgstr ""
+msgstr "Malle, mis sisaldavad muutujate nimesid või väljendeid malli nime jaoks, ei kuvata."
 
 #: zotonic_mod_development/priv/templates/_development_template.tpl:4
 msgid "Template path"
@@ -7782,7 +7784,7 @@ msgstr "Mallitee"
 
 #: zotonic_mod_development/src/mod_development.erl:410
 msgid "The path must be a local URL."
-msgstr ""
+msgstr "Tee peab olema kohalik URL."
 
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:180
 msgid "These templates have <tt>{extends}</tt> or <tt>{overrules}</tt> statements that are referring to a missing template."
@@ -7814,7 +7816,7 @@ msgstr "See ressurss on tundmatu või sellel pole URI-d"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:540
 msgid "This template is used by"
-msgstr ""
+msgstr "Seda malli kasutavad"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:13
 msgid "Tools and settings that are useful for site development."
@@ -7831,7 +7833,7 @@ msgstr "Jälgida funktsioonikõnesid"
 #: zotonic_mod_development/priv/templates/_html_head_development.tpl:35
 #: zotonic_mod_development/priv/templates/_html_head_development.tpl:36
 msgid "Trace templates"
-msgstr ""
+msgstr "Jälgimustrid"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:195
 msgid "Traces all templates for the current session-id, or all sessions, and renders them as a graph."
@@ -7867,11 +7869,11 @@ msgstr "URI muster"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:27
 msgid "Uncheck to debug only your current session."
-msgstr ""
+msgstr "Tühjendage märkeruut, kui soovite ainult oma praeguse seansi siluda."
 
 #: zotonic_mod_development/src/mod_development.erl:444
 msgid "Updated template debug points."
-msgstr ""
+msgstr "Uuendatud malli tõrjepunktid."
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:226
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:8
@@ -7888,11 +7890,11 @@ msgstr "Vaadake kõiki saidil saadaolevaid saatmisreegleid"
 
 #: zotonic_mod_development/priv/templates/_development_template.tpl:12
 msgid "View template"
-msgstr ""
+msgstr "Vaata malli"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:908
 msgid "Waiting for debug data..."
-msgstr ""
+msgstr "Ootame silumisandmeid..."
 
 #: zotonic_mod_development/src/support/z_development_dispatch.erl:49
 msgid "You are not allowed to use the dispatch debugging."
@@ -8619,7 +8621,7 @@ msgstr "Seaded töötavad hästi ja on salvestatud."
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:73
 msgid "Settings are working fine."
-msgstr ""
+msgstr "Seaded töötavad hästi."
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:207
 msgid "Storage"
@@ -8627,7 +8629,7 @@ msgstr "Ladustamine"
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:77
 msgid "Test Cloud File Store Settings"
-msgstr ""
+msgstr "Pilve failipoe seadete testimine"
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:30
 msgid "The cloud file store uses a global Zotonic configuration. The configuration cannot be changed here."
@@ -8643,7 +8645,7 @@ msgstr "Seadistused on lukustatud süsteemi konfiguratsiooniga."
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:83
 msgid "The settings are tested by uploading (and removing) a small file."
-msgstr ""
+msgstr "Seadeid testitakse väikese faili üleslaadimise (ja eemaldamise) teel."
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:239
 msgid "There is a 1 minute wait before files are uploaded."
@@ -8694,7 +8696,7 @@ msgstr "Teil pole lubatud neid seadeid muuta."
 
 #: zotonic_mod_filestore/src/support/filestore_admin.erl:109
 msgid "You are not allowed to use this."
-msgstr ""
+msgstr "Teil ei ole lubatud seda kasutada."
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:9
 msgid "Zotonic can store uploaded and resized files in the cloud. Here you can configure the location and access keys for the cloud service."
@@ -9979,7 +9981,7 @@ msgstr "Postitamine on tühistatud."
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:79
 msgid "The mailing will be sent when the page becomes visible."
-msgstr ""
+msgstr "Postitus saadetakse, kui leht muutub nähtavaks."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:40
 msgid "The page you are trying to e-mail is not yet published. What do you want to do?"
@@ -11229,7 +11231,7 @@ msgstr "Rohkem infot [Google]"
 #: zotonic_mod_seo/priv/templates/admin_seo.tpl:136
 #: zotonic_mod_seo/priv/templates/admin_seo.tpl:168
 msgid "Multiple codes can be added at once, separated by commas."
-msgstr ""
+msgstr "Korraga võib lisada mitu koodi, mis on eraldatud komadega."
 
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:57
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:59
@@ -11852,15 +11854,15 @@ msgstr "pole kättesaadav ega kohalik IP"
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:36
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:47
 msgid "&lt; Back to start"
-msgstr ""
+msgstr "&lt; Tagasi algusesse"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:53
 msgid "'Once' means once by a respondent who is logged in or once per browser for anonymous respondents. To identify the browser of anonymous respondents, a cookie containing a unique ID is utilized."
-msgstr ""
+msgstr "\"Üks kord\" tähendab, et üks kord sisselogitud vastaja või üks kord anonüümsete vastajate puhul üks kord brauseri kohta. Anonüümsete vastajate brauseri tuvastamiseks kasutatakse unikaalset ID-d sisaldavat küpsist."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:99
 msgid "<b>Note</b>: For the features 'once', 'edit after submit', and checking the maximum number of submitted forms to function, the form needs to have the saved results. If a handler (chosen in the <em>handling</em> settings below) does not save the results, these features will not be available."
-msgstr ""
+msgstr "<b>Märkus</b>: Et funktsioonid \"üks kord\", \"redigeeri pärast esitamist\" ja esitatud vormide maksimaalse arvu kontrollimine toimiksid, peavad vormil olema salvestatud tulemused. Kui käitleja (mis on valitud <em>käitlemise</em> seadetes allpool) ei salvesta tulemusi, ei ole need funktsioonid saadaval."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:28
 msgid "Add a question or block"
@@ -11926,15 +11928,15 @@ msgstr "Lisa meililisti"
 
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:104
 msgid "Admin only"
-msgstr ""
+msgstr "Ainult administraator"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:115
 msgid "After all questions are answered and submitted, one of the following is shown."
-msgstr ""
+msgstr "Kui kõik küsimused on vastatud ja esitatud, kuvatakse üks järgmistest."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:199
 msgid "After the form is submitted, an email with all answers can be sent to the configured email addresses below."
-msgstr ""
+msgstr "Pärast vormi esitamist saab e-kirja kõigi vastustega saata allpool määratud e-posti aadressidele."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:135
 msgid "Aggregated results from all respondents"
@@ -11946,11 +11948,11 @@ msgstr "Nõus"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:236
 msgid "All answers for anonymous and logged-in respondents"
-msgstr ""
+msgstr "Kõik anonüümsete ja sisselogitud vastajate vastused"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:34
 msgid "Allow non-linear forms; answers are saved with “Back” button and a “Back to start” is added at the top of each page"
-msgstr ""
+msgstr "Võimaldab mittelineaarseid vorme; vastused salvestatakse nupuga \"Tagasi\" ja iga lehekülje ülaosas on lisatud \"Tagasi algusesse\"."
 
 #: zotonic_mod_survey/src/mod_survey.erl:1250
 msgid "Already submitted"
@@ -12010,7 +12012,7 @@ msgstr "Kas olete kindel, et soovite lõpetada ilma salvestamata?"
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:91
 msgid "Back without saving"
-msgstr ""
+msgstr "Tagasi ilma salvestuseta"
 
 #: zotonic_mod_survey/priv/templates/survey.tpl:25
 msgid "Because you can edit, you can proceed for testing."
@@ -12060,7 +12062,7 @@ msgstr "Valikud"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:53
 msgid "Choose how many times a respondent can fill in this form."
-msgstr ""
+msgstr "Valige, mitu korda võib vastaja seda vormi täita."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:2
 msgid "Click on “Edit” to see and change the entered data."
@@ -12073,15 +12075,15 @@ msgstr "Suletud"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:246
 msgid "Closed-question answers for anonymous and logged-in respondents"
-msgstr ""
+msgstr "Anonüümsete ja sisselogitud vastajate suletud küsimuste vastused"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:241
 msgid "Closed-question answers for anonymous respondents; all answers for logged-in respondents"
-msgstr ""
+msgstr "Anonüümsete vastajate suletud küsimuste vastused; sisselogitud vastajate kõik vastused."
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:130
 msgid "Continue later"
-msgstr ""
+msgstr "Jätka hiljem"
 
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:119
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:160
@@ -12156,7 +12158,7 @@ msgstr "Pole nõus"
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:135
 msgid "Do you want to stop for now and continue later?"
-msgstr ""
+msgstr "Kas soovite praegu lõpetada ja hiljem jätkata?"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:45
 msgid "Download a spreadsheet with all answers."
@@ -12242,7 +12244,7 @@ msgstr "Täida lüngad"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:51
 msgid "Filling in"
-msgstr ""
+msgstr "Täitmine"
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:3
 msgid "Find a person to link the answer to. If you do not find a person then you can create a new person."
@@ -12258,7 +12260,7 @@ msgstr "Kuupäevavahemike jaoks saate kasutada ka suhtelisi kuupäevi, näiteks 
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:260
 msgid "Forms can be handled by special code, for example a form that is forwarded to a back office system. Depending on the handler the results are stored in the database or not."
-msgstr ""
+msgstr "Vorme saab käsitleda spetsiaalse koodiga, näiteks vorm, mis edastatakse tagasisüsteemi. Sõltuvalt käitlejast salvestatakse tulemused andmebaasi või mitte."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:29
 msgid "Go to question"
@@ -12314,11 +12316,11 @@ msgstr "Olen [age] -aastane. Mulle meeldib [jäätise = vanilli | maasika | šok
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:211
 msgid "If checked, then a confirmation email with the submitted answers can be sent to the respondent. For logged-in respondents, the known email address is used. For anonymous respondents, add a short text field with the label “email” and the validation set to “must be an email address”."
-msgstr ""
+msgstr "Kui see on märgitud, saab vastajale saata kinnitava e-kirja koos esitatud vastustega. Sisselogitud vastajate puhul kasutatakse teadaolevat e-posti aadressi. Anonüümsete vastajate puhul lisage lühike tekstiväli märgisega \"email\" ja valideerimisega \"peab olema e-posti aadress\"."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:79
 msgid "If the maximum number of forms has been submitted, then the start button is deactivated and an email is sent to the email addresses in the <em>handling</em> settings below. Leave empty for no limit. This is useful for signup lists with a limited number of spots."
-msgstr ""
+msgstr "Kui maksimaalne arv vorme on esitatud, siis deaktiveeritakse stardinupp ja saadetakse e-kiri allpool esitatud <em>käitlemise</em> seadetes toodud e-posti aadressidele. Jäta tühjaks, kui piirangut ei ole. See on kasulik piiratud arvu kohtadega registreerimisnimekirjade puhul."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:26
 msgid "Immediately start with the questions, no “Start” button"
@@ -12453,7 +12455,7 @@ msgstr "Mitu lehelõike plokki ühendatakse üheks."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:65
 msgid "Multiple times – each time with new results"
-msgstr ""
+msgstr "Mitu korda - iga kord uute tulemustega"
 
 #: zotonic_mod_survey/src/mod_survey.erl:348
 msgid "Narrative"
@@ -12475,11 +12477,11 @@ msgstr "Kategooria järgmine leht"
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_page.tpl:41
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_options.tpl:26
 msgid "No \"Back\" button to this page. If correct/wrong feedback is filled in, then show it directly after this page."
-msgstr ""
+msgstr "Sellel leheküljel puudub \"Tagasi\" nupp. Kui õige/vale tagasiside on täidetud, siis näita seda kohe pärast seda lehekülge."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:251
 msgid "No answers; confirmation text only"
-msgstr ""
+msgstr "Vastused puuduvad; ainult kinnitustekst"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:118
 msgid "No results yet."
@@ -12487,11 +12489,11 @@ msgstr "Tulemusi veel pole."
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:88
 msgid "Not all the required fields are filled in. You can go back to the previous page without saving your answers."
-msgstr ""
+msgstr "Kõik nõutavad väljad ei ole täidetud. Võite minna tagasi eelmisele lehele ilma vastuseid salvestamata."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:117
 msgid "Note that if you select a special handler below, then that handler may override this setting."
-msgstr ""
+msgstr "Pange tähele, et kui te valite allpool spetsiaalse käitleja, siis võib see käitleja selle seadistuse tühistada."
 
 #: zotonic_mod_survey/src/support/survey_admin.erl:129
 #: zotonic_mod_survey/src/support/survey_admin.erl:173
@@ -12504,11 +12506,11 @@ msgstr "Numbrisisend, kuvage tulemustes selle välja kogusummad."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:61
 msgid "Once — edit after submit (logged in users only)"
-msgstr ""
+msgstr "Üks kord - redigeerida pärast esitamist (ainult sisselogitud kasutajad)"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:57
 msgid "Once — submit is final (no editing after submit)"
-msgstr ""
+msgstr "Üks kord - esitamine on lõplik (pärast esitamist ei saa muuta)."
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:33
 msgid "Only accept images."
@@ -12516,7 +12518,7 @@ msgstr "Aktsepteerige ainult pilte."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:210
 msgid "Optional confirmation email for the respondent"
-msgstr ""
+msgstr "Vabatahtlik kinnitav e-kiri vastajale"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:135
 msgid "Options from a page category"
@@ -12532,7 +12534,7 @@ msgstr "Lehe hüppe tingimus"
 
 #: zotonic_mod_survey/src/mod_survey.erl:354
 msgid "Page options"
-msgstr ""
+msgstr "Lehekülje valikud"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:25
 msgid "Pass?"
@@ -12688,7 +12690,7 @@ msgstr "Tulemused vastajalt"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:131
 msgid "Results from the respondent – if passed only"
-msgstr ""
+msgstr "Vastajate tulemused - ainult juhul, kui nad on läbinud"
 
 #: zotonic_mod_survey/priv/templates/survey_results_printable.tpl:42
 msgid "Results until"
@@ -12696,7 +12698,7 @@ msgstr "Tulemused kuni"
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:129
 msgid "Save your answers without submitting them yet so you can continue later."
-msgstr ""
+msgstr "Salvestage oma vastused, ilma neid veel esitamata, et saaksite hiljem jätkata."
 
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:1
 msgid "Saved"
@@ -12726,7 +12728,7 @@ msgstr "Valige oma riik"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:215
 msgid "Send a confirmation email to the respondent"
-msgstr ""
+msgstr "Saada vastajale kinnitav e-kiri"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:205
 msgid "Separate multiple email addresses with a comma."
@@ -12738,7 +12740,7 @@ msgstr "Lühike vastus"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:112
 msgid "Show after the final submit of the form"
-msgstr ""
+msgstr "Näita pärast vormi lõplikku esitamist"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:26
 msgid "Show charts"
@@ -12758,11 +12760,11 @@ msgstr "Kuva edenemisteave kui “<em>küsimus 3/10</em>”"
 
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:106
 msgid "Show results"
-msgstr ""
+msgstr "Näita tulemusi"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:30
 msgid "Show “Continue later” button to save answers and return later to submit"
-msgstr ""
+msgstr "Näita nuppu \"Jätka hiljem\", et salvestada vastused ja hiljem tagasi pöörduda, et neid esitada."
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:34
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:45
@@ -12795,7 +12797,7 @@ msgstr "Alusta"
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:139
 msgid "Stop and continue later"
-msgstr ""
+msgstr "Lõpeta ja jätka hiljem"
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:151
 msgid "Stop without saving"
@@ -12868,7 +12870,7 @@ msgstr "Aitäh tekst."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:99
 msgid "The 'continue later' feature operates independently of the chosen form handler."
-msgstr ""
+msgstr "Funktsioon \"Jätka hiljem\" toimib valitud vormikäsitlejast sõltumatult."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_charts.tpl:14
 msgid "The charts show aggregated results from closed questions like thurstone and yes/no."
@@ -12916,7 +12918,7 @@ msgstr "Teie vastuste käsitlemisel ilmnes viga. Meil on selle pärast kohutaval
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_options.tpl:14
 msgid "This block contains options for a page. The presence of this block signals the end of the questions for a page."
-msgstr ""
+msgstr "See plokk sisaldab lehekülje valikuid. Selle ploki olemasolu annab märku lehekülje küsimuste lõppemisest."
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:14
 msgid "This block show a file upload field. This can only be used as the last question of a form. The default form routines can’t handle file upload, you will need to add your own form handler to your site or module."
@@ -12928,7 +12930,7 @@ msgstr "See plokk annab märku voolu peatumisest. Kasutaja ei saa enam jätkata 
 
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:131
 msgid "This form has been submitted in another tab, so your current session has been stopped."
-msgstr ""
+msgstr "See vorm on esitatud teisel vahekaardil, seega on teie praegune seanss peatatud."
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:9
 msgid "This form is disabled. Because you can edit, you can proceed for testing."
@@ -12962,7 +12964,7 @@ msgstr "Thurstone"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:231
 msgid "To prevent misuse, answers to open questions can be excluded from the confirmation email. You can choose which answers are sent to anonymous and logged-in respondents."
-msgstr ""
+msgstr "Väärkasutuse vältimiseks võib kinnituse e-kirjast välja jätta vastused avatud küsimustele. Saate valida, millised vastused saadetakse anonüümsetele ja sisselogitud vastajatele."
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:21
 msgid "To question"
@@ -13053,7 +13055,7 @@ msgstr "Teil ei ole lubatud tulemusi näha."
 
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:9
 msgid "You cannot reply to this email."
-msgstr ""
+msgstr "Sellele e-kirjale ei saa vastata."
 
 #: zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:23
 msgid "You must be allowed to edit the form, to edit its results."
@@ -13065,11 +13067,11 @@ msgstr "Saite selle e-kirja, sest teie e-posti aadress on seadetes konfigureerit
 
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:21
 msgid "You started filling this in and will continue where you left off."
-msgstr ""
+msgstr "Te alustasite selle täitmist ja jätkate sealt, kus lõpetasite."
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:137
 msgid "Your answers will be saved so that you can return later to submit them."
-msgstr ""
+msgstr "Teie vastused salvestatakse, nii et saate hiljem nende esitamiseks tagasi tulla."
 
 #: zotonic_mod_survey/priv/templates/_survey_results_user.tpl:26
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:51
@@ -13482,7 +13484,7 @@ msgstr "Valige eelistatud keel."
 
 #: zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:41
 msgid "Show all translated texts in a new tab."
-msgstr ""
+msgstr "Näita kõiki tõlgitud tekste uuel vahekaardil."
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:93
 msgid "Show the language in the URL"
@@ -13490,7 +13492,7 @@ msgstr "Kuva URL-is keel"
 
 #: zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:42
 msgid "Show translations"
-msgstr ""
+msgstr "Näita tõlkeid"
 
 #: zotonic_mod_translation/src/mod_translation.erl:578
 #: zotonic_mod_translation/src/mod_translation.erl:626
@@ -13560,7 +13562,7 @@ msgstr "Tõlgi"
 
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:41
 msgid "Translated page texts for every editable language that has a translation in the resource."
-msgstr ""
+msgstr "Tõlgitud lehekülje tekstid iga redigeeritava keele jaoks, mille tõlge on ressursis olemas."
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:3
 #: zotonic_mod_translation/src/mod_translation.erl:1052
@@ -13590,7 +13592,7 @@ msgstr "pole lubatud"
 
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:104
 msgid "page break"
-msgstr ""
+msgstr "lehekülje katkestus"
 
 #: zotonic_mod_video/priv/templates/_video_viewer.tpl:11
 msgid "Converting"
@@ -13610,11 +13612,11 @@ msgstr "Aandacht"
 
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:31
 msgid "Next image"
-msgstr ""
+msgstr "Järgmine pilt"
 
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:25
 msgid "Previous image"
-msgstr ""
+msgstr "Eelmine pilt"
 
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:95
 msgid "<b>Note that Zotonic only handles initial check out</b>, after which it is expected that you will handle further git interactions yourself.)"
