@@ -33,7 +33,9 @@
     start_system_unique/2,
     start_system_unique/4,
     run_unique/2,
-    run_unique/3
+    run_unique/3,
+    run_unique_started/4,
+    run_unique_started/5
 ]).
 
 
