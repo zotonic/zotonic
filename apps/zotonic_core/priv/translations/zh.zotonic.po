@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-04-15 11:01\n"
+"PO-Revision-Date: 2026-04-15 11:13\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -4868,13 +4868,13 @@ msgstr "不显示在资源编辑页面的连接列表中。"
 msgid "Enter the title of the new predicate:"
 msgstr "请填写新谓词的标题"
 
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:159
-msgid "Filter connections"
-msgstr "过滤器连接"
-
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:28
 msgid "Filter on predicate"
 msgstr "谓词过滤"
+
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:159
+msgid "Filter page connections"
+msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:28
 msgid "Filter..."
