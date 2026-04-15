@@ -24,7 +24,6 @@
 
 -export([
     fetch/3,
-    fetch_json/1,
     fetch_json/2
 ]).
 
@@ -42,9 +41,6 @@ fetch(Url, Options, Context) ->
         {error, _} = Error ->
             Error
     end.
-
-fetch_json(Url) ->
-    fetch_json(Url, z_acl:anondo(z_context:new(default))).
 
 fetch_json(Url, Context) ->
     Options = [

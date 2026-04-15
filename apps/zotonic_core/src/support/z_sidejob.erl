@@ -105,7 +105,7 @@ start(Module, Function, Args, Context) ->
     MFA :: {module(), atom(), list()},
     Context :: z:context(),
     Reason :: overload | already_running.
-start_site_unique(Name, {M, F, A}, Context) ->
+start_site_unique(Name, {M, F, A}, Context) when is_atom(Name) ->
     start_site_unique(Name, M, F, A, Context).
 
 -spec start_site_unique(Name, Module, Function, Args, Context) -> {ok, pid()} | {error, Reason} when
@@ -115,7 +115,7 @@ start_site_unique(Name, {M, F, A}, Context) ->
     Args :: list(),
     Context :: z:context(),
     Reason :: overload | already_running.
-start_site_unique(Name, Module, Function, Args, Context) ->
+start_site_unique(Name, Module, Function, Args, Context) when is_atom(Name) ->
     RegName = site_unique_name(Name, Context),
     start_unique(RegName, Module, Function, Args, Context).
 
@@ -125,7 +125,7 @@ start_site_unique(Name, Module, Function, Args, Context) ->
     Name :: atom(),
     MFA :: {module(), atom(), list()},
     Reason :: overload | already_running.
-start_system_unique(Name, {M, F, A}) ->
+start_system_unique(Name, {M, F, A}) when is_atom(Name) ->
     start_system_unique(Name, M, F, A).
 
 -spec start_system_unique(Name, Module, Function, Args) -> {ok, pid()} | {error, Reason} when
@@ -134,7 +134,7 @@ start_system_unique(Name, {M, F, A}) ->
     Function :: atom(),
     Args :: list(),
     Reason :: overload | already_running.
-start_system_unique(Name, Module, Function, Args) ->
+start_system_unique(Name, Module, Function, Args) when is_atom(Name) ->
     RegName = system_unique_name(Name),
     start_unique(RegName, Module, Function, Args).
 
