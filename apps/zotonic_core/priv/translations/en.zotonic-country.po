@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-04-15 11:38\n"
+"PO-Revision-Date: 2026-04-15 13:40\n"
 "Last-Translator: \n"
 "Language-Team: English\n"
 "MIME-Version: 1.0\n"
@@ -95,7 +95,7 @@ msgid "Bolivia"
 msgstr "Bolivia"
 
 msgid "Bonaire, Sint Eustatius and Saba"
-msgstr ""
+msgstr "Bonaire, Sint Eustatius and Saba"
 
 msgid "Bosnia-Herzegovina"
 msgstr "Bosnia-Herzegovina"
@@ -182,7 +182,7 @@ msgid "Cuba"
 msgstr "Cuba"
 
 msgid "Curaçao"
-msgstr ""
+msgstr "Curaçao"
 
 msgid "Cyprus"
 msgstr "Cyprus"
@@ -248,7 +248,7 @@ msgid "French Polynesia"
 msgstr "French Polynesia"
 
 msgid "French Southern Territories"
-msgstr ""
+msgstr "French Southern Territories"
 
 msgid "Gabon"
 msgstr "Gabon"
@@ -290,7 +290,7 @@ msgid "Guatemala"
 msgstr "Guatemala"
 
 msgid "Guernsey"
-msgstr ""
+msgstr "Guernsey"
 
 msgid "Guinea"
 msgstr "Guinea"
@@ -338,7 +338,7 @@ msgid "Ireland"
 msgstr "Ireland"
 
 msgid "Isle of Man"
-msgstr ""
+msgstr "Isle of Man"
 
 msgid "Israel"
 msgstr "Israel"
@@ -356,7 +356,7 @@ msgid "Japan"
 msgstr "Japan"
 
 msgid "Jersey"
-msgstr ""
+msgstr "Jersey"
 
 msgid "Jordan"
 msgstr "Jordan"
@@ -371,7 +371,7 @@ msgid "Kiribati"
 msgstr "Kiribati"
 
 msgid "Kosovo"
-msgstr ""
+msgstr "Kosovo"
 
 msgid "Kuwait"
 msgstr "Kuwait"
@@ -461,7 +461,7 @@ msgid "Mongolia"
 msgstr "Mongolia"
 
 msgid "Montenegro"
-msgstr ""
+msgstr "Montenegro"
 
 msgid "Montserrat"
 msgstr "Montserrat"
@@ -527,7 +527,7 @@ msgid "Palau"
 msgstr "Palau"
 
 msgid "Palestinian Territory, Occupied"
-msgstr ""
+msgstr "Palestinian Territory, Occupied"
 
 msgid "Panama"
 msgstr "Panama"
@@ -572,7 +572,7 @@ msgid "Rwanda"
 msgstr "Rwanda"
 
 msgid "Saint Barthélemy"
-msgstr ""
+msgstr "Saint Barthélemy"
 
 msgid "Saint Helena"
 msgstr "Saint Helena"
@@ -584,7 +584,7 @@ msgid "Saint Lucia"
 msgstr "Saint Lucia"
 
 msgid "Saint Martin (French)"
-msgstr ""
+msgstr "Saint Martin (French)"
 
 msgid "Saint Pierre and Miquelon"
 msgstr "Saint Pierre and Miquelon"
@@ -608,7 +608,7 @@ msgid "Senegal"
 msgstr "Senegal"
 
 msgid "Serbia"
-msgstr ""
+msgstr "Serbia"
 
 msgid "Seychelles"
 msgstr "Seychelles"
@@ -620,7 +620,7 @@ msgid "Singapore"
 msgstr "Singapore"
 
 msgid "Sint Maarten (Dutch)"
-msgstr ""
+msgstr "Sint Maarten (Dutch)"
 
 msgid "Slovakia"
 msgstr "Slovakia"
@@ -644,7 +644,7 @@ msgid "South Korea"
 msgstr "South Korea"
 
 msgid "South Sudan"
-msgstr ""
+msgstr "South Sudan"
 
 msgid "Spain"
 msgstr "Spain"
@@ -728,7 +728,7 @@ msgid "United States"
 msgstr "United States"
 
 msgid "United States Minor Outlying Islands"
-msgstr ""
+msgstr "United States Minor Outlying Islands"
 
 msgid "Uruguay"
 msgstr "Uruguay"
@@ -770,5 +770,5 @@ msgid "Zimbabwe"
 msgstr "Zimbabwe"
 
 msgid "Åland Islands"
-msgstr ""
+msgstr "Åland Islands"
 
