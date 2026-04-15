@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-04-14 13:51\n"
+"PO-Revision-Date: 2026-04-15 11:13\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -4868,13 +4868,13 @@ msgstr "Nicht in der Verbindungsliste auf der Ressourcenbearbeitungsseite anzeig
 msgid "Enter the title of the new predicate:"
 msgstr "Geben Sie den Titel des neuen Prädikats ein:"
 
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:159
-msgid "Filter connections"
-msgstr "Filterverbindungen"
-
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:28
 msgid "Filter on predicate"
 msgstr "Filter nach Prädikat"
+
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:159
+msgid "Filter page connections"
+msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:28
 msgid "Filter..."
