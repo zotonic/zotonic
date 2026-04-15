@@ -31,7 +31,7 @@
 
 %% @doc Fetch the page at the URL, keep it in sync with the page that was
 %% previously synchronized. Optionally fetches all objects of the page.
--spec fetch(Url, Options, Context) -> {ok, {m_rsc:resource_id(), [m_rsc:resource_id()]}} | {error, term()}
+-spec fetch(Url, Options, Context) -> m_rsc_import:import_result()
     when Url :: binary(),
          Options :: list(),
          Context :: z:context().
