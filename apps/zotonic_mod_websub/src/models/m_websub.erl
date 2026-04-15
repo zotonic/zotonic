@@ -521,7 +521,7 @@ post_json_callback(Callback, OptSecret, Payload, Context0) ->
     Context = callback_context(Context0),
     Body = jsxrecord:encode(Payload),
     Options = signature_headers(OptSecret, Body),
-    case z_fetch:fetch(post, Callback, Payload, [{content_type, <<"application/json">>} | Options], Context) of
+    case z_fetch:fetch(post, Callback, Body, [{content_type, <<"application/json">>} | Options], Context) of
         {ok, {_FinalUrl, _Hs, _Size, _RespBody}} ->
             {ok, 200};
         {error, {Status, _Url, _Hs, _Size, _RespBody}} ->
