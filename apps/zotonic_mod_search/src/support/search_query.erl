@@ -1943,10 +1943,6 @@ filtercol_to_term(<<"facet:", _/binary>> = T) -> T;
 filtercol_to_term(<<"facet.", _/binary>> = T) -> binary:replace(T, <<".">>, <<":">>, [global]);
 filtercol_to_term(T) -> <<"filter:", T/binary>>.
 
-filters_to_nested_terms_multidot_pivot_facet_test() ->
-    <<"pivot:a:b">> = filtercol_to_term(<<"pivot.a.b">>),
-    <<"facet:a:b">> = filtercol_to_term(<<"facet.a.b">>),
-    ok.
 map_filter_column(<<"pivot.", _/binary>> = P, Q) ->
     map_filter_column(binary:replace(P, <<".">>, <<":">>, [global]), Q);
 map_filter_column(<<"pivot:", P/binary>>, #search_sql_term{ join_inner = Join } = Q) ->

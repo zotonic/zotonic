@@ -289,13 +289,17 @@ get_rsc_stats(Id, Context) ->
      ListId :: m_rsc:resource(),
      Context :: z:context(),
      RecipientAddresses :: list( binary() ).
-get_enabled_recipients(ListId, Context) ->
+get_enabled_recipients(undefined, _Context) ->
+    [];
+get_enabled_recipients(ListId, Context) when is_integer(ListId) ->
     Emails = z_db:q("
         select email
         from mailinglist_recipient
         where mailinglist_id = $1
           and is_enabled = true", [ m_rsc:rid(ListId, Context) ], Context),
-    [ E || {E} <- Emails ].
+    [ E || {E} <- Emails ];
+get_enabled_recipients(ListId, Context) ->
+    get_enabled_recipients(m_rsc:rid(ListId, Context), Context).
 
 
 %% @doc List all recipients of a mailinglist (as maps with binary keys, props expanded)
