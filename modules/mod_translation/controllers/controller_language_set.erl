@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2012 Marc Worrell
+%% @copyright 2012-2026 Marc Worrell
 %% @doc Set the language, redirect back to the page q.p
+%% @end
 
-%% Copyright 2012 Marc Worrell
+%% Copyright 2012-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -32,14 +33,17 @@
 -include_lib("include/zotonic.hrl").
 
 
-init(DispatchArgs) -> {ok, DispatchArgs}.
+init(DispatchArgs) ->
+    {ok, DispatchArgs}.
 
 service_available(ReqData, DispatchArgs) when is_list(DispatchArgs) ->
     Context  = z_context:new_request(ReqData, DispatchArgs, ?MODULE),
     Context1 = z_context:ensure_qs(Context),
     Context2 = z_context:ensure_session(Context1),
-    z_context:lager_md(Context2),
-    ?WM_REPLY(true, Context2).
+    Context3 = z_context:set_noindex_header(Context2),
+    Context4 = z_context:set_nocache_headers(Context3),
+    z_context:lager_md(Context4),
+    ?WM_REPLY(true, Context4).
 
 resource_exists(ReqData, Context) ->
     {false, ReqData, Context}.
@@ -47,7 +51,10 @@ resource_exists(ReqData, Context) ->
 previously_existed(ReqData, Context) ->
     {true, ReqData, Context}.
 
-moved_temporarily(ReqData, Context0) ->
+moved_temporarily(ReqData, Context) ->
+    {false, ReqData, Context}.
+
+moved_permanently(ReqData, Context0) ->
     Context = ?WM_REQ(ReqData, Context0),
     Context1 = mod_translation:set_user_language(z_context:get_q("code", Context), Context),
     Page = z_context:get_q("p", Context1),
@@ -56,13 +63,15 @@ moved_temporarily(ReqData, Context0) ->
         _ -> "/"
     end,
     Location1 = z_sanitize:uri(Location),
-    AbsUrl = z_context:abs_url(add_language(mod_translation:url_strip_language(Location1), Context1), Context1),
+    AbsUrl = z_context:abs_url(
+                    add_language(mod_translation:url_strip_language(Location1), Context1),
+                    Context1),
     ?WM_REPLY({true, AbsUrl}, Context1).
 
-moved_permanently(ReqData, Context) ->
-    {false, ReqData, Context}.
-
-
+add_language(<<>>, Context) ->
+    add_language(<<"/">>, Context);
+add_language("", Context) ->
+    add_language(<<"/">>, Context);
 add_language(Url, Context) ->
     Lang = z_convert:to_list(z_context:language(Context)),
     iolist_to_binary([$/, Lang, Url]).
