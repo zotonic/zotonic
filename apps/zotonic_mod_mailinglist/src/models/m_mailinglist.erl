@@ -123,7 +123,7 @@ m_get([ <<"stats">>, MailingId | Rest ], _Msg, Context) ->
     end;
 m_get([ <<"rsc_stats">>, RscId | Rest ], _Msg, Context) ->
     case z_acl:is_allowed(use, mod_mailinglist, Context) of
-        true -> {ok, {get_rsc_stats(m_rsc:rid(RscId, Context), Context), Rest}};
+        true -> {ok, {get_rsc_stats(RscId, Context), Rest}};
         false -> {error, eacces}
     end;
 m_get([ <<"recipient">>, RecipientId | Rest ], _Msg, Context) ->
