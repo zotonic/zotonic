@@ -1,9 +1,9 @@
-%% @copyright 2021-2024 Marc Worrell
+%% @copyright 2021-2026 Marc Worrell
 %% @author Marc Worrell <marc@worrell.nl>
 %% @doc Fetch resource from remote Zotonic site, keep in sync.
 %% @end
 
-%% Copyright 2021-2024 Marc Worrell
+%% Copyright 2021-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -24,37 +24,40 @@
 
 -export([
     fetch/3,
-    fetch_json/1
+    fetch_json/1,
+    fetch_json/2
 ]).
 
 
 %% @doc Fetch the page at the URL, keep it in sync with the page that was
 %% previously synchronized. Optionally fetches all objects of the page.
--spec fetch( Url, Options, Context ) -> {ok, {m_rsc:resource_id(), [ m_rsc:resource_id() ]}} | {error, term()}
+-spec fetch(Url, Options, Context) -> {ok, {m_rsc:resource_id(), [m_rsc:resource_id()]}} | {error, term()}
     when Url :: binary(),
          Options :: list(),
          Context :: z:context().
 fetch(Url, Options, Context) ->
-    case fetch_json(Url) of
+    case fetch_json(Url, Context) of
         {ok, JSON} ->
             import_json(Url, JSON, Options, Context);
         {error, _} = Error ->
             Error
     end.
 
-% Example url:
-%
-% https://test.zotonic.com/id/1"
-%
 fetch_json(Url) ->
+    fetch_json(Url, z_acl:anondo(z_context:new(default))).
+
+fetch_json(Url, Context) ->
     Options = [
         {accept, <<"application/json">>},
         {user_agent, <<"Zotonic-WebSub">>}
     ],
-    case z_url_fetch:fetch(Url, Options) of
-        {ok, {_FinalUrl, _Hs, _Size, Body}} ->
-            JSON = jsxrecord:decode(Body),
+    case z_fetch:fetch_json(Url, Options, Context) of
+        {ok, JSON} ->
             {ok, JSON};
+        {error, {Code, _FinalUrl, _Hs, _Size, _Body}} when Code =:= 401; Code =:= 403 ->
+            {error, eacces};
+        {error, {404, _FinalUrl, _Hs, _Size, _Body}} ->
+            {error, enoent};
         {error, Reason} = Error ->
             ?LOG_ERROR(#{
                 in => zotonic_mod_websub,
@@ -78,4 +81,3 @@ import_json(Url, JSON, _Options, _Context) ->
         json => JSON
     }),
     {error, status}.
-
