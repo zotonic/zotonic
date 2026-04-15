@@ -156,7 +156,7 @@
         %}
 
         {% wire name="filter-predicates-dialog"
-                action={dialog_open template="_admin_graph_filter_predicates.tpl" title=_"Filter connections"}
+                action={dialog_open template="_admin_graph_filter_predicates.tpl" title=_"Filter page connections"}
         %}
     {% endif %}
 {% endblock %}

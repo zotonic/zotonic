@@ -5040,12 +5040,12 @@ msgstr ""
 msgid "Enter the title of the new predicate:"
 msgstr ""
 
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:159
-msgid "Filter connections"
-msgstr ""
-
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:28
 msgid "Filter on predicate"
+msgstr ""
+
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:159
+msgid "Filter page connections"
 msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:28
