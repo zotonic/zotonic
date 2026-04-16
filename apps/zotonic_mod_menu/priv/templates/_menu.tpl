@@ -5,12 +5,12 @@
         {% if mid %}
             {% if action==`down` %}
                 <li class="dropdown{% if mid|member:parents %} active{% endif %}">
-                    <a href="{{ mid.page_url }}" class="dropdown-toggle {{ mid.name }}" data-toggle="dropdown">
+                    <a href="{{ mid.page_url }}" class="dropdown-toggle {{ mid.name }}" data-toggle="dropdown"{% if mid|member:parents %} aria-current="page"{% endif %}>
                         {{ mid.short_title|default:mid.title }} <b class="caret"></b></a>
                     <ul class="dropdown-menu">
             {% else %}
                 <li class="{% if mid|member:parents %}active{% endif %}">
-                    <a href="{{ mid.page_url }}" class="{{ mid.name }}{% if mid|member:parents %} active{% endif %}">
+                    <a href="{{ mid.page_url }}" class="{{ mid.name }}{% if mid|member:parents %} active{% endif %}"{% if mid|member:parents %} aria-current="page"{% endif %}>
                         {{ mid.short_title|default:mid.title }}
                     </a>
                 </li>
