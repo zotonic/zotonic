@@ -803,22 +803,20 @@ trim(S, Context) -> trim(z_convert:to_binary(S), Context).
 
 characters_to_binary(S) when is_list(S) ->
     case unicode:characters_to_binary(S) of
-        {incomplete, B, R} ->
+        {incomplete, B, _R} ->
             ?LOG_NOTICE(#{
                 in => zotonic_mod_search,
                 text => <<"Error in characters_to_binary/1: incomplete UTF-8 sequence">>,
                 result => error,
-                input => z_string:truncatechars(S, 80, <<"...">>),
-                remaining => z_string:truncatechars(R, 80, <<"...">>)
+                input => z_string:truncatechars(S, 80, <<"...">>)
             }),
             z_string:sanitize_utf8(B);
-        {error, B, R} ->
+        {error, B, _R} ->
             ?LOG_NOTICE(#{
                 in => zotonic_mod_search,
                 text => <<"Error in characters_to_binary/1: illegal UTF-8 sequence">>,
                 result => error,
-                input => z_string:truncatechars(S, 80, <<"...">>),
-                remaining => z_string:truncatechars(R, 80, <<"...">>)
+                input => z_string:truncatechars(S, 80, <<"...">>)
             }),
             B;
         B when is_binary(B) ->
