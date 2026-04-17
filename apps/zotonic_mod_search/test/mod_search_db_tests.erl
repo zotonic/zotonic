@@ -557,6 +557,92 @@ nested_filter_search_test() ->
     ok.
 
 
+%% Tests for mod_search:to_tsquery/2
+
+%% @doc undefined and empty binary inputs return an empty tsquery.
+to_tsquery_empty_inputs_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    C = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+    ?assertEqual(<<>>, mod_search:to_tsquery(undefined, C)),
+    ?assertEqual(<<>>, mod_search:to_tsquery(<<>>, C)),
+    ok.
+
+%% @doc A single word ending with a word character gets a prefix wildcard (:*) appended.
+to_tsquery_single_word_wildcard_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    C = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+    TsQ = mod_search:to_tsquery(<<"foobar">>, C),
+    ?assert(is_binary(TsQ)),
+    ?assert(byte_size(TsQ) > 0),
+    ?assertEqual($*, binary:last(TsQ)),
+    ok.
+
+%% @doc Multiple words produce an AND-combined tsquery also ending with :*.
+to_tsquery_multi_word_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    C = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+    TsQ = mod_search:to_tsquery(<<"foobar baz">>, C),
+    ?assert(is_binary(TsQ)),
+    ?assert(byte_size(TsQ) > 0),
+    ?assertNotEqual(nomatch, binary:match(TsQ, <<"&">>)),
+    ?assertEqual($*, binary:last(TsQ)),
+    ok.
+
+%% @doc A quoted phrase (input ends with a double-quote) does not get a wildcard appended.
+to_tsquery_quoted_phrase_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    C = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+    TsQ = mod_search:to_tsquery(<<"\"foobar baz\"">>, C),
+    ?assert(is_binary(TsQ)),
+    ?assert(byte_size(TsQ) > 0),
+    %% No :* because the input text ends with " (not a word character)
+    ?assertNotEqual($*, binary:last(TsQ)),
+    ok.
+
+%% @doc The websearch negation operator (-) produces a NOT (!) operator in the tsquery.
+to_tsquery_negation_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    C = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+    TsQ = mod_search:to_tsquery(<<"-foobar">>, C),
+    ?assert(is_binary(TsQ)),
+    ?assert(byte_size(TsQ) > 0),
+    ?assertNotEqual(nomatch, binary:match(TsQ, <<"!">>)),
+    ok.
+
+%% @doc List (string) input is handled the same as binary input; invalid codepoints
+%%      are sanitized and do not crash the function.
+to_tsquery_list_input_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    C = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+    %% Valid charlist (Erlang string): same result as binary input
+    TsQBin = mod_search:to_tsquery(<<"foobar">>, C),
+    TsQList = mod_search:to_tsquery("foobar", C),
+    ?assertEqual(TsQBin, TsQList),
+    %% List containing an invalid Unicode code point (lone surrogate): does not crash
+    TsQBad = mod_search:to_tsquery([16#D800], C),
+    ?assert(is_binary(TsQBad)),
+    ok.
+
+%% @doc A #trans{} value uses the fallback language text for the query.
+to_tsquery_trans_input_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    C = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+    TsQ = mod_search:to_tsquery(#trans{ tr = [{en, <<"foobar">>}] }, C),
+    ?assert(is_binary(TsQ)),
+    ?assert(byte_size(TsQ) > 0),
+    ok.
+
+%% @doc Accented text is normalized (diacritics removed) before being passed to PostgreSQL.
+to_tsquery_accented_text_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    C = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+    %% "café" normalizes to "cafe"; the result should be a valid non-empty tsquery
+    TsQ = mod_search:to_tsquery(<<"café"/utf8>>, C),
+    ?assert(is_binary(TsQ)),
+    ?assert(byte_size(TsQ) > 0),
+    ok.
+
+
 uniq([]) ->
   [];
 uniq(List) when is_list(List) ->
