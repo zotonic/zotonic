@@ -3017,18 +3017,8 @@ Return:
 *   type :: `atom`
 *   value: `any`
 ").
--callback observe_search_query_normalize_value(#search_query_normalize_value{}, z:context()) -> Result when
-    Result :: #search_sql_term{}
-            | QueryTerm
-            | [ QueryTerm ]
-            | undefined,
-    QueryTerm :: #{ binary() => term() }.
--callback pid_observe_search_query_normalize_value(pid(), #search_query_normalize_value{}, z:context()) -> Result when
-    Result :: #search_sql_term{}
-            | QueryTerm
-            | [ QueryTerm ]
-            | undefined,
-    QueryTerm :: #{ binary() => term() }.
+-callback observe_search_query_normalize_value(#search_query_normalize_value{}, z:context()) -> any() | undefined.
+-callback pid_observe_search_query_normalize_value(pid(), #search_query_normalize_value{}, z:context()) -> any() | undefined.
 
 -optional_callbacks([ observe_search_query_normalize_value/2, pid_observe_search_query_normalize_value/3 ]).
 
