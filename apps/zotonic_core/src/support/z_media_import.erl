@@ -1,11 +1,11 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014-2025 Marc Worrell
+%% @copyright 2014-2026 Marc Worrell
 %% @doc Import media from internet locations. The URL is inspected and the
 %% best possible import method is used to make resource, with optionally
 %% a medium record attached.
 %% @end
 
-%% Copyright 2014-2025 Marc Worrell
+%% Copyright 2014-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -281,6 +281,7 @@ url_import_props_retry({_Code, FinalUrl, Hs, _Sz, _Body} = Reason, Context) ->
         content_length = 0,
         is_index_page = false,
         headers = Hs,
+        links = #{},
         partial_data = <<>>,
         metadata = []
     },
