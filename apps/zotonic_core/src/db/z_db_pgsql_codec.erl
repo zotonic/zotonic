@@ -44,6 +44,8 @@ names() ->
 encode({term, Term}, bytea, State) ->
     B = term_to_binary(Term),
     epgsql_codec_text:encode(<<?TERM_MAGIC_NUMBER, B/binary>>, bytea, State);
+encode({term_json, Term}, bytea, State) ->
+    epgsql_codec_text:encode(jsxrecord:encode(Term), bytea, State);
 encode(Cell, bytea, State) ->
     epgsql_codec_text:encode(Cell, bytea, State);
 % jsonb

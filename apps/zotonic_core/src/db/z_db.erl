@@ -633,6 +633,18 @@ map_row(ColProps, Row) ->
       #{},
       ColProps).
 
+map_cell(Col, IsMerge, <<"{", _/binary>> = JSON, Acc)
+        when Col =:= <<"props_json">>; Col =:= props_json ->
+    % Legacy bytea columns containing encoded JSON terms
+    try
+        Props = z_json:decode(JSON),
+        map_cell(Col, IsMerge, Props, Acc)
+    catch
+        _:_ when not IsMerge ->
+            maps:put(Col, JSON, Acc);
+        _:_ when IsMerge ->
+            Acc
+    end;
 map_cell(_Col, true, Cell, Acc) ->
     map_merge_props(Cell, Acc);
 map_cell(Col, false, Cell, Acc) ->
