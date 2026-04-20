@@ -633,13 +633,14 @@ map_row(ColProps, Row) ->
       #{},
       ColProps).
 
-map_cell(<<"props_json">>, IsMerge, <<"{", _/binary>> = JSON, Acc) ->
+map_cell(Col, IsMerge, <<"{", _/binary>> = JSON, Acc)
+        when Col =:= <<"props_json">>; Col =:= props_json ->
     try
         Props = z_json:decode(JSON),
-        map_cell(<<"props_json">>, IsMerge, Props, Acc)
+        map_cell(Col, IsMerge, Props, Acc)
     catch
         _:_ when not IsMerge ->
-            maps:put(<<"props_json">>, JSON, Acc);
+            maps:put(Col, JSON, Acc);
         _:_ when IsMerge ->
             Acc
     end;
