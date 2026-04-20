@@ -596,7 +596,7 @@ qterm_1(Field, OpTerm, Value, Query, Context) ->
             Value2 = convert_type(Def#facet_def.type, Value1, Context),
             Final = case Def#facet_def.type of
                 fulltext when Op =:= <<"=">> ->
-                    NormV = z_string:normalize(Value2),
+                    NormV = z_search:normalize_value(Field, text, Value2, Context),
                     Words = words(NormV),
                     lists:foldl(
                         fun(Word, AccQ) ->
@@ -612,8 +612,7 @@ qterm_1(Field, OpTerm, Value, Query, Context) ->
                         Query,
                         Words);
                 fts when Op =:= <<"=">> ->
-                    NormV = z_string:normalize(Value2),
-                    TsQuery = mod_search:to_tsquery(NormV, Context),
+                    TsQuery = mod_search:to_tsquery(Value2, Context),
                     {ArgN, Query2} = add_term_arg(TsQuery, Query),
                     W = [
                         <<"facet.fts_">>, Field, " @@ ", ArgN
@@ -728,7 +727,7 @@ render_facet(Id, #facet_def{ name = Name, type = fulltext } = F, Context) ->
             [];
         V ->
             V1 = z_pivot_rsc:cleanup_tsv_text(V),
-            V2 = z_string:trim(z_string:normalize(V1)),
+            V2 = z_string:trim(z_search:normalize_value(Name, text, V1, Context)),
             [
                 {<<"f_", Name/binary>>, z_string:truncatechars(V1, ?FULLTEXT_LENGTH)},
                 {<<"ft_", Name/binary>>, V2}
@@ -740,7 +739,7 @@ render_facet(Id, #facet_def{ name = Name, type = fts } = F, Context) ->
             [];
         V ->
             V1 = z_pivot_rsc:cleanup_tsv_text(V),
-            V2 = z_string:trim(z_string:normalize(V1)),
+            V2 = z_string:trim(z_search:normalize_value(Name, text, V1, Context)),
             Stemmer = z_pivot_rsc:stemmer_language(Context),
             Tsv = z_db:q1(
                     "select to_tsvector('pg_catalog."++Stemmer++"', $1)",
