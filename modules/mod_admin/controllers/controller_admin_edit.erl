@@ -204,7 +204,7 @@ update_rsc_form(Id, Context) ->
 update_rsc_page_path(undefined, Context) ->
     z_render:set_value("field-page-path", <<>>, Context);
 update_rsc_page_path(Path, Context) when is_binary(Path) ->
-    Tr = {trans, [ {z_language:default_language(Context), Path} ]},
+    Tr = {trans, [ {z_trans:default_language(Context), Path} ]},
     update_rsc_page_path(Tr, Context);
 update_rsc_page_path({trans, _} = TransPath, Context) ->
     lists:foldl(
