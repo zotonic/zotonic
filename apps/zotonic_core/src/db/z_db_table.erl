@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2024 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Functions to create, update or drop database tables.
 %% @end
 
-%% Copyright 2009-2024 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -31,7 +31,8 @@
     assert_table_name/1,
     assert_database_name/1,
     assert_schema_name/1,
-    quoted_table_name/1
+    quoted_table_name/1,
+    to_existing_atom/1
     ]).
 
 -include_lib("zotonic.hrl").

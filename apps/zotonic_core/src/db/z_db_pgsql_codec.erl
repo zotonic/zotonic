@@ -42,17 +42,23 @@ names() ->
 
 % bytea
 encode({term, Term}, bytea, State) ->
-    B = term_to_binary(Term),
+    B = term_to_binary(Term, [compressed]),
     epgsql_codec_text:encode(<<?TERM_MAGIC_NUMBER, B/binary>>, bytea, State);
 encode({term_json, Term}, bytea, State) ->
     epgsql_codec_text:encode(jsxrecord:encode(Term), bytea, State);
+encode(<<?TERM_MAGIC_NUMBER, _/binary>> = Bin, bytea, State) ->
+    % A binary with the term-prefix. Encode this as a term to prevent decoding
+    % random data when this is passed to the bytea decoder.
+    encode({term, Bin}, bytea, State);
 encode(Cell, bytea, State) ->
     epgsql_codec_text:encode(Cell, bytea, State);
 % jsonb
+encode({term, Term}, jsonb, _State) ->
+    epgsql_codec_json:encode(jsxrecord:encode(Term), jsonb, []);
 encode({term_json, Term}, jsonb, _State) ->
     epgsql_codec_json:encode(jsxrecord:encode(Term), jsonb, []);
 encode(Term, jsonb, _State) ->
-    epgsql_codec_json:encode(Term, jsonb, []);
+    epgsql_codec_json:encode(jsxrecord:encode(Term), jsonb, []);
 % datetime types
 encode(Cell, TypeName, State) ->
     epgsql_codec_datetime:encode(Cell, TypeName, State).

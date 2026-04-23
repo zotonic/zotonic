@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2025 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Interface to database, uses database definition from Context.
 %% @end
 
-%% Copyright 2009-2025 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -84,6 +84,7 @@
 
     insert/2,
     insert/3,
+    insert/4,
     update/4,
     delete/3,
     select/3,
@@ -161,6 +162,10 @@
                       | {ok, Count :: non_neg_integer()}
                       | {error, term()}.
 
+-type insert_options() :: [ insert_option() ].
+-type insert_option() :: {returning, column_name()}
+                       | {conflict, ignore}.
+
 -export_type([
     sql/0,
     query_error/0,
@@ -179,7 +184,10 @@
     id/0,
 
     qmap_options/0,
-    qmap_option/0
+    qmap_option/0,
+
+    insert_options/0,
+    insert_option/0
 ]).
 
 
@@ -924,7 +932,11 @@ insert(Table, Context) ->
     with_connection(
         fun(C) ->
             DbDriver = z_context:db_driver(Context),
-            equery1(DbDriver, C, "insert into "++QTab++" default values returning id")
+            equery1(DbDriver,
+                    C,
+                    "insert into "++QTab++
+                    " default values"
+                    " returning id")
         end,
         Context).
 
@@ -939,9 +951,23 @@ insert(Table, Context) ->
     Context :: z:context(),
     NewId :: id(),
     Reason :: term().
-insert(Table, Parameters, Context) when is_list(Parameters) ->
-    insert(Table, z_props:from_props(Parameters), Context);
 insert(Table, Parameters, Context) ->
+    insert(Table, Parameters, [], Context).
+
+%% @doc Insert a new row in a table and return the new record id.
+%% Unknown columns are serialized in the props or props_json column. If the table has an 'id'
+%% column then the new id is returned. The 'id' column should be the primary key column
+%% and have type 'serial' (or bigserial) if it is not given in the passed parameters.
+-spec insert(Table, Parameters, Options, Context) -> {ok, NewId | undefined} | {error, Reason} when
+    Table :: table_name(),
+    Parameters :: props(),
+    Options :: insert_options(),
+    Context :: z:context(),
+    NewId :: id(),
+    Reason :: term().
+insert(Table, Parameters, Options, Context) when is_list(Parameters) ->
+    insert(Table, z_props:from_props(Parameters), Options, Context);
+insert(Table, Parameters, Options, Context) ->
     {Schema, Tab, QTab} = quoted_table_name(Table),
     Cols = column_names_bin(Schema, Tab, Context),
     BinParams = ensure_binary_keys(Parameters),
@@ -988,59 +1014,85 @@ insert(Table, Parameters, Context) ->
                     lists:join(", ", [ [$$ | integer_to_list(N)] || N <- lists:seq(1, length(ColParams)) ]),
                 ")"
             ]),
-            FinalSql = case lists:member(<<"id">>, Cols) of
-                true -> <<Sql/binary, " returning id">>;
-                false -> Sql
+            OnConflict = case proplists:get_value(conflict, Options) of
+                undefined -> <<>>;
+                ignore -> <<" on conflict do nothing">>
             end,
-
-            F = fun(C) ->
-                 DbDriver = z_context:db_driver(Context),
-                 case equery1(DbDriver, C, FinalSql, ColParams) of
-                     {ok, Id} ->
-                        {ok, Id};
-                     {error, noresult} ->
-                        {ok, undefined};
-                     {error, #error{ codename = unique_violation, message = Message }} = Error ->
-                        ?LOG_NOTICE(#{
-                            in => zotonic_core,
-                            text => <<"z_db unique_violation in insert">>,
-                            result => error,
-                            reason => unique_violation,
-                            message => Message,
-                            table => Table,
-                            parameters => Parameters
-                        }),
-                        Error;
-                     {error, #error{ codename = ErrCode, message = Message }} = Error ->
-                        ?LOG_ERROR(#{
-                            in => zotonic_core,
-                            text => <<"z_db error in insert">>,
-                            result => error,
-                            reason => ErrCode,
-                            message => Message,
-                            table => Table,
-                            query => FinalSql,
-                            parameters => Parameters
-                        }),
-                        Error;
-                     {error, Reason} = Error ->
-                        ?LOG_ERROR(#{
-                            in => zotonic_core,
-                            text => <<"z_db error in query">>,
-                            result => error,
-                            reason => Reason,
-                            table => Table,
-                            query => FinalSql,
-                            parameters => ColParams
-                        }),
-                        Error
-                 end
+            Sql1 = <<Sql/binary, OnConflict/binary>>,
+            HasId = lists:member(<<"id">>, Cols),
+            FinalSql = case proplists:get_value(returning, Options) of
+                undefined when HasId -> <<Sql1/binary, " returning id">>;
+                undefined -> Sql1;
+                RetCol ->
+                    RetCol1 = z_convert:to_binary(RetCol),
+                    case lists:member(RetCol1, Cols) of
+                        true ->
+                            <<Sql1/binary, " returning \"", RetCol1/binary, "\"">>;
+                        false ->
+                            ?LOG_ERROR(#{
+                                in => zotonic_core,
+                                text => <<"z_db error in insert: returning column not found">>,
+                                result => error,
+                                reason => badarg,
+                                table => Table,
+                                returning => RetCol,
+                                columns => Cols
+                            }),
+                            badarg
+                    end
             end,
-            with_connection(F, Context);
+            if
+                FinalSql =:= badarg ->
+                    {error, badarg};
+                true ->
+                    F = fun(C) ->
+                         DbDriver = z_context:db_driver(Context),
+                         case equery1(DbDriver, C, FinalSql, ColParams) of
+                             {ok, IdOrCount} ->
+                                {ok, IdOrCount};
+                             {error, noresult} ->
+                                {ok, undefined};
+                             {error, #error{ codename = unique_violation, message = Message }} = Error ->
+                                ?LOG_NOTICE(#{
+                                    in => zotonic_core,
+                                    text => <<"z_db unique_violation in insert">>,
+                                    result => error,
+                                    reason => unique_violation,
+                                    message => Message,
+                                    table => Table,
+                                    parameters => Parameters
+                                }),
+                                Error;
+                             {error, #error{ codename = ErrCode, message = Message }} = Error ->
+                                ?LOG_ERROR(#{
+                                    in => zotonic_core,
+                                    text => <<"z_db error in insert">>,
+                                    result => error,
+                                    reason => ErrCode,
+                                    message => Message,
+                                    table => Table,
+                                    query => FinalSql,
+                                    parameters => Parameters
+                                }),
+                                Error;
+                             {error, Reason} = Error ->
+                                ?LOG_ERROR(#{
+                                    in => zotonic_core,
+                                    text => <<"z_db error in query">>,
+                                    result => error,
+                                    reason => Reason,
+                                    table => Table,
+                                    query => FinalSql,
+                                    parameters => ColParams
+                                }),
+                                Error
+                         end
+                    end,
+                    with_connection(F, Context)
+            end;
         {error, _} = Error ->
             Error
     end.
-
 
 %% @doc Update a row in a table, merging the properties with any new property values. The table
 %% must have a column id of some integer type. If there is no matching column then 0 is returned
@@ -1177,6 +1229,8 @@ get_current_props(DBDriver, Connection, true, false, Table, Id, _Context) ->
     case equery1(DBDriver, Connection, "select props_json from \"" ++ Table ++ "\" where id = $1", [Id]) of
         {ok, JSON} when is_binary(JSON) ->
             {ok, jsxrecord:decode(JSON)};
+        {ok, Map} when is_map(Map) ->
+            {ok, Map};
         _ ->
             {error, no_properties}
     end;
@@ -1192,18 +1246,28 @@ get_current_props(DBDriver, Connection, true, true, Table, Id, _Context) ->
 
     %% Merge the properties found in the columns, the props_json column gets priority.
     case R of
+        {ok, undefined, undefined} ->
+            {error, no_properties};
         {ok, Props, undefined} when is_list(Props) ->
             {ok, z_props:from_props(Props)};
         {ok, Props, undefined} when is_map(Props) ->
             {ok, Props};
-        {ok, undefined, JSON} when is_binary(JSON) ->
-            {ok, jsxrecord:decode(JSON)};
-        {ok, Props, JSON} when is_list(Props) andalso is_binary(JSON) ->
-            {ok, maps:merge(z_props:from_props(Props), jsxrecord:decode(JSON))};
-        {ok, Props, JSON} when is_map(Props) andalso is_binary(JSON) ->
-            {ok, maps:merge(Props, jsxrecord:decode(JSON))};
+        {ok, undefined, JSON} ->
+            {ok, maybe_json_decode(JSON)};
+        {ok, Props, JSON} when is_list(Props) ->
+            {ok, maps:merge(z_props:from_props(Props), maybe_json_decode(JSON))};
+        {ok, Props, JSON} when is_map(Props) ->
+            {ok, maps:merge(Props, maybe_json_decode(JSON))};
         _ ->
             {error, no_properties}
+    end.
+
+maybe_json_decode(JSON) when is_map(JSON) -> JSON;
+maybe_json_decode(<<>>) -> #{};
+maybe_json_decode(JSON) when is_binary(JSON) ->
+    case jsxrecord:decode(JSON) of
+        #{} = Map -> Map;
+        _ -> #{}
     end.
 
 update_map_atom_arrays(Props) ->
