@@ -1035,26 +1035,26 @@ insert(Table, Parameters, Options, Context) ->
                  DbDriver = z_context:db_driver(Context),
                  case equery1(DbDriver, C, FinalSql, ColParams) of
                      {ok, undefined} when HasReturning, OnConflict =/= <<>> ->
-                        ?LOG_NOTICE(#{
+                        ?LOG_INFO(#{
                             in => zotonic_core,
-                            text => <<"z_db unique_violation in insert (conflict ignore)">>,
+                            text => <<"z_db conflict in insert (conflict ignore)">>,
                             result => error,
-                            reason => unique_violation,
+                            reason => conflict,
                             table => Table,
                             parameters => Parameters
                         }),
-                        {error, pgerror(unique_violation, <<"z_db unique_violation in insert (conflict ignore)">>)};
+                        {error, conflict};
                      {ok, 0} when not HasReturning, OnConflict =/= <<>> ->
                         % No row inserted, assume an uniqueness problem
-                        ?LOG_NOTICE(#{
+                        ?LOG_INFO(#{
                             in => zotonic_core,
-                            text => <<"z_db unique_violation in insert (conflict ignore)">>,
+                            text => <<"z_db conflict in insert (conflict ignore)">>,
                             result => error,
-                            reason => unique_violation,
+                            reason => conflict,
                             table => Table,
                             parameters => Parameters
                         }),
-                        {error, pgerror(unique_violation, <<"z_db unique_violation in insert (conflict ignore)">>)};
+                        {error, conflict};
                      {ok, IdOrCount} ->
                         {ok, IdOrCount};
                      {error, noresult} ->
@@ -1099,14 +1099,6 @@ insert(Table, Parameters, Options, Context) ->
         {error, _} = Error ->
             Error
     end.
-
-pgerror(Reason, Message) ->
-    #error{
-        codename = Reason,
-        message = Message,
-        severity = error,
-        extra = []
-    }.
 
 %% @doc Update a row in a table, merging the properties with any new property values. The table
 %% must have a column id of some integer type. If there is no matching column then 0 is returned
