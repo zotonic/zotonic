@@ -36,9 +36,6 @@
 
 -include_lib("kernel/include/logger.hrl").
 
-% From z_db_pgsql.erl
--define(TERM_MAGIC_NUMBER, 16#01326A3A:1/big-unsigned-unit:32).
-
 %%====================================================================
 %% API
 %%====================================================================
@@ -1136,27 +1133,13 @@ pivot_page_path(C, Database, Schema) ->
             lists:foreach(
                 fun({Id, Path}) ->
                     case epgsql:equery(C, "select props from rsc where id = $1", [Id]) of
-                        {ok, _, [ {<<?TERM_MAGIC_NUMBER, B/binary>>} ]} ->
-                            Props = case binary_to_term(B) of
-                                Ps when is_list(Ps) ->
-                                    z_props:from_props(Ps);
-                                Ps when is_map(Ps) ->
-                                    Ps;
-                                _ ->
-                                    #{}
-                            end,
-                            Props1 = Props#{ <<"page_path">> => Path },
-                            PropsBin = <<?TERM_MAGIC_NUMBER, (term_to_binary(Props1))/binary>>,
-                            {ok, _} = epgsql:equery(C, "update rsc set props = $2 where id = $1", [ Id, PropsBin ]);
                         {ok, _, [ {Props} ]} when is_map(Props) ->
                             Props1 = Props#{ <<"page_path">> => Path },
-                            PropsBin = <<?TERM_MAGIC_NUMBER, (term_to_binary(Props1))/binary>>,
-                            {ok, _} = epgsql:equery(C, "update rsc set props = $2 where id = $1", [ Id, PropsBin ]);
+                            {ok, _} = epgsql:equery(C, "update rsc set props = $2 where id = $1", [ Id, {term, Props1} ]);
                         {ok, _, [ {Props} ]} when is_list(Props) ->
                             Props1 = z_props:from_props(Props),
                             Props2 = Props1#{ <<"page_path">> => Path },
-                            PropsBin = <<?TERM_MAGIC_NUMBER, (term_to_binary(Props2))/binary>>,
-                            {ok, _} = epgsql:equery(C, "update rsc set props = $2 where id = $1", [ Id, PropsBin ]);
+                            {ok, _} = epgsql:equery(C, "update rsc set props = $2 where id = $1", [ Id, {term, Props2} ]);
                         {ok, _, [ {null} ]} ->
                             ok;
                         {ok, _, []} ->
