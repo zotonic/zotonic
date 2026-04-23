@@ -1043,7 +1043,7 @@ insert(Table, Parameters, Options, Context) ->
                             table => Table,
                             parameters => Parameters
                         }),
-                        {error, #error{ codename = unique_violation }};
+                        {error, pgerror(unique_violation, <<"z_db unique_violation in insert (conflict ignore)">>)};
                      {ok, 0} when not HasReturning, OnConflict =/= <<>> ->
                         % No row inserted, assume an uniqueness problem
                         ?LOG_NOTICE(#{
@@ -1054,7 +1054,7 @@ insert(Table, Parameters, Options, Context) ->
                             table => Table,
                             parameters => Parameters
                         }),
-                        {error, #error{ codename = unique_violation }};
+                        {error, pgerror(unique_violation, <<"z_db unique_violation in insert (conflict ignore)">>)};
                      {ok, IdOrCount} ->
                         {ok, IdOrCount};
                      {error, noresult} ->
@@ -1100,6 +1100,13 @@ insert(Table, Parameters, Options, Context) ->
             Error
     end.
 
+pgerror(Reason, Message) ->
+    #error{
+        codename = Reason,
+        message = Message,
+        severity = error,
+        extra = []
+    }.
 
 %% @doc Update a row in a table, merging the properties with any new property values. The table
 %% must have a column id of some integer type. If there is no matching column then 0 is returned
