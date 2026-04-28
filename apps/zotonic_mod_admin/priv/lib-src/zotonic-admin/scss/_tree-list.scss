@@ -5,6 +5,7 @@ ul.tree-list {
 
             > a {
                 color: $textColorMedium;
+                text-decoration: none;
 
                 &:hover {
                     color: #textColorDark;
