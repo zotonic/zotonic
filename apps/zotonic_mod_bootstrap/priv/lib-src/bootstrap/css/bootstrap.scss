@@ -1,5 +1,24 @@
 // Bootstrap 5 entrypoint with Bootstrap 3 compatibility layer.
 //
 // The Bootstrap 5 source must live in ../scss (see Makefile).
+@import "../scss/functions";
+
+$grid-breakpoints: (
+  xs: 0,
+  sm: 768px,
+  md: 992px,
+  lg: 1200px,
+  xl: 1400px,
+  xxl: 1600px
+);
+
+$container-max-widths: (
+  sm: 720px,
+  md: 940px,
+  lg: 1140px,
+  xl: 1320px,
+  xxl: 1520px
+);
+
 @import "../scss/bootstrap";
 @import "../compat/bootstrap3-compat";

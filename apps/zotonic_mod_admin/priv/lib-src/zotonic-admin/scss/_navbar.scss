@@ -84,14 +84,15 @@
             float: none !important;
         }
         .nav > .dropdown.open .dropdown-menu {
-            background-color: $backgroundColorLight;
+            background-color: inherit;
             border-radius: 0;
 
             > li > a {
-                background-color: $backgroundColorLight;
-                text-shadow: $darkOnLightTextShadow;
+                color: #fff;
+                background-color: inherit;
+                text-shadow: $lightOnDarkTextShadow;
                 &:hover {
-                    background: $brand-primary;
+                    background: rgba(0, 0, 0, 0.15);
                     color: #fff;
                     text-shadow: $lightOnDarkTextShadow;
                 }
@@ -153,6 +154,41 @@ body.navbar-menu-open {
         }
         .dropdown-header.z-username {
             display: none;
+        }
+    }
+}
+
+@media (min-width: $screen-tablet) {
+    .navbar.navbar-branded {
+        > div,
+        .navbar-header,
+        .navbar-collapse,
+        .navbar-nav,
+        .navbar-nav > li,
+        .navbar-nav > li > a {
+            height: $navbar-height;
+        }
+
+        .navbar-collapse {
+            min-height: $navbar-height;
+            height: $navbar-height !important;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            height: $navbar-height;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+
+        .navbar-nav > li > a {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-form {
+            height: $navbar-height;
         }
     }
 }
