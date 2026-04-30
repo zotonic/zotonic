@@ -31,7 +31,7 @@ ul.blocks.ui-sortable {
         margin: 0 0 10px 0;
 
         &:focus {
-            background-color: #fff;
+            background-color: var(--z-admin-form-control-focus-bg);
         }
     }
 

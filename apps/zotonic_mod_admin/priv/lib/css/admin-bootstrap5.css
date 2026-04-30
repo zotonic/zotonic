@@ -13953,10 +13953,30 @@ limitations under the License.
   --z-admin-form-panel-bg: var(--z-admin-surface);
   --z-admin-preview-panel-bg: var(--z-admin-surface);
   --z-admin-find-results-bg: linear-gradient(to right, #f8f8f8, white, white);
+  --z-admin-suggestions-bg: linear-gradient(to bottom, var(--z-admin-surface) 0%, var(--z-admin-surface-hover) 100%);
+  --z-admin-suggestions-border-color: #e0e0e0;
+  --z-admin-suggestions-active-color: var(--z-admin-surface-hover);
+  --z-admin-suggestions-active-bg: #999;
   --z-admin-connection-predicate-bg: color-mix(in srgb, var(--z-admin-surface) 94%, var(--bs-primary) 6%);
   --z-admin-tree-list-item-bg: #fefefe;
   --z-admin-edit-media-bg: var(--z-admin-surface);
   --z-admin-image-border-color: var(--z-admin-surface);
+  --z-admin-invalid-bg: #ffeeee;
+  --z-admin-navbar-search-focus-bg: rgba(255, 255, 255, 0.95);
+  --z-admin-navbar-search-focus-color: #222;
+  --z-admin-navbar-search-focus-placeholder-color: #666;
+  --z-admin-media-item-bg: #555;
+  --z-admin-media-remove-bg: rgba(240, 240, 240, 0.5);
+  --z-admin-media-caption-bg: rgba(255, 255, 255, 0.5);
+  --z-admin-drag-overlay-bg: rgba(255, 255, 255, 0.6);
+  --z-admin-drag-overlay-color: rgba(0, 0, 0, 0.5);
+  --z-admin-drag-media-bg: rgba(255, 255, 0, 0.3);
+  --z-admin-drag-placeholder-bg: var(--z-admin-border);
+  --z-admin-ui-transfer-border-color: #333;
+  --z-admin-btn-remove-color: #555;
+  --z-admin-btn-remove-hover-color: var(--z-admin-thumbnail-color);
+  --z-admin-btn-primary-disabled-bg: #c0c0c0;
+  --z-admin-btn-primary-disabled-border-color: #bbb;
   --z-admin-breadcrumb-bg: transparent;
   --z-admin-thumbnail-bg: var(--z-admin-bg);
   --z-admin-thumbnail-border: var(--z-admin-border);
@@ -14056,10 +14076,30 @@ limitations under the License.
   --z-admin-form-panel-bg: var(--z-admin-surface);
   --z-admin-preview-panel-bg: var(--z-admin-surface);
   --z-admin-find-results-bg: linear-gradient(to right, #252a2f, var(--z-admin-surface), var(--z-admin-surface));
+  --z-admin-suggestions-bg: linear-gradient(to bottom, var(--z-admin-surface) 0%, var(--z-admin-surface-muted) 100%);
+  --z-admin-suggestions-border-color: var(--z-admin-border);
+  --z-admin-suggestions-active-color: var(--z-admin-text);
+  --z-admin-suggestions-active-bg: var(--z-admin-surface-hover);
   --z-admin-connection-predicate-bg: color-mix(in srgb, var(--z-admin-surface) 88%, var(--bs-primary) 12%);
   --z-admin-tree-list-item-bg: var(--z-admin-surface);
   --z-admin-edit-media-bg: var(--z-admin-surface);
   --z-admin-image-border-color: var(--z-admin-border);
+  --z-admin-invalid-bg: rgba(217, 83, 79, 0.18);
+  --z-admin-navbar-search-focus-bg: var(--z-admin-surface);
+  --z-admin-navbar-search-focus-color: var(--z-admin-text);
+  --z-admin-navbar-search-focus-placeholder-color: var(--z-admin-text-muted);
+  --z-admin-media-item-bg: var(--z-admin-surface-muted);
+  --z-admin-media-remove-bg: rgba(43, 48, 53, 0.75);
+  --z-admin-media-caption-bg: rgba(31, 34, 37, 0.72);
+  --z-admin-drag-overlay-bg: rgba(31, 34, 37, 0.75);
+  --z-admin-drag-overlay-color: var(--z-admin-text-muted);
+  --z-admin-drag-media-bg: rgba(240, 173, 78, 0.25);
+  --z-admin-drag-placeholder-bg: var(--z-admin-surface-hover);
+  --z-admin-ui-transfer-border-color: var(--z-admin-text);
+  --z-admin-btn-remove-color: var(--z-admin-text-muted);
+  --z-admin-btn-remove-hover-color: var(--z-admin-text);
+  --z-admin-btn-primary-disabled-bg: var(--z-admin-surface-muted);
+  --z-admin-btn-primary-disabled-border-color: var(--z-admin-border);
   --z-admin-breadcrumb-bg: transparent;
   --z-admin-thumbnail-bg: var(--z-admin-surface);
   --z-admin-thumbnail-border: var(--z-admin-border);
@@ -14283,11 +14323,11 @@ details summary {
 .unpublished a:not(.btn),
 .unpublished .text-muted,
 .unpublished .help-block {
-  color: #aaa;
+  color: var(--z-admin-text-light);
 }
 
 .z-drag-drop-placeholder, ul.media > li.ui-sortable-placeholder, ul.blocks.ui-sortable .ui-sortable-placeholder {
-  background: #ddd;
+  background: var(--z-admin-drag-placeholder-bg);
   border: none;
   border-radius: 10px;
   visibility: visible !important;
@@ -14419,7 +14459,7 @@ pre:empty {
 }
 
 .ui-effects-transfer {
-  border: 1px dotted #333;
+  border: 1px dotted var(--z-admin-ui-transfer-border-color);
   z-index: 10000;
 }
 
@@ -14439,7 +14479,7 @@ pre:empty {
 }
 
 .text-muted {
-  color: #999;
+  color: var(--z-admin-text-muted);
 }
 
 .nav .dropdown-menu > li > a.has-icon,
@@ -14492,7 +14532,7 @@ pre:empty {
 .well {
   box-shadow: none;
   padding: 15px 15px 11px 15px;
-  background-color: white;
+  background-color: var(--z-admin-surface);
   border: 0;
   border-radius: 10px;
 }
@@ -14559,10 +14599,10 @@ code {
 }
 
 .z-btn-remove {
-  color: #555;
+  color: var(--z-admin-btn-remove-color);
 }
 .z-btn-remove:hover {
-  color: #222;
+  color: var(--z-admin-btn-remove-hover-color);
 }
 
 .btn {
@@ -14610,8 +14650,8 @@ code {
 .btn-primary.disabled:hover, .btn-primary[disabled]:hover, fieldset[disabled] .btn-primary:hover, .btn-primary.disabled:focus, .btn-primary[disabled]:focus, fieldset[disabled] .btn-primary:focus, .btn-primary.disabled.focus, .btn-primary[disabled].focus,
 fieldset[disabled] .btn-primary.focus, .btn-primary.disabled:active, .btn-primary[disabled]:active, fieldset[disabled] .btn-primary:active, .btn-primary.disabled.active, .btn-primary[disabled].active,
 fieldset[disabled] .btn-primary.active {
-  background-color: #c0c0c0;
-  border-color: #bbb;
+  background-color: var(--z-admin-btn-primary-disabled-bg);
+  border-color: var(--z-admin-btn-primary-disabled-border-color);
 }
 
 .btn.is-active::after {
@@ -14682,7 +14722,7 @@ fieldset[disabled] .btn-primary.active {
 .dashboard .table > thead > tr > th:last-child,
 .dashboard .table > tbody > tr > td:last-child {
   width: 40%;
-  color: #999;
+  color: var(--z-admin-text-muted);
 }
 .dashboard .table th {
   display: none;
@@ -14808,7 +14848,7 @@ ul.blocks.ui-sortable .form-control.block-name {
   margin: 0 0 10px 0;
 }
 ul.blocks.ui-sortable .form-control.block-name:focus {
-  background-color: #fff;
+  background-color: var(--z-admin-form-control-focus-bg);
 }
 ul.blocks.ui-sortable > li > .widget {
   display: grid;
@@ -14894,7 +14934,7 @@ ul.media {
 }
 ul.media > li {
   margin: 0 10px 10px 0;
-  background: #555555;
+  background: var(--z-admin-media-item-bg);
   width: 180px;
   height: 180px;
   float: left;
@@ -14920,7 +14960,7 @@ ul.media > li .z-btn-remove {
   position: absolute;
   top: 6px;
   right: 6px;
-  background: rgba(240, 240, 240, 0.5);
+  background: var(--z-admin-media-remove-bg);
   border-radius: 50%;
   width: 20px;
   height: 20px;
@@ -14934,7 +14974,7 @@ ul.media > li .bottom {
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: var(--z-admin-media-caption-bg);
 }
 ul.media > li .bottom .caption {
   height: 16px;
@@ -15087,7 +15127,7 @@ div + .admin-edit-no-features {
 }
 .form-field-error,
 .invalid {
-  color: #B94A48;
+  color: var(--z-admin-form-invalid-color);
 }
 
 form.form-horizontal .z_validation_message {
@@ -15097,7 +15137,7 @@ form.form-horizontal .z_validation_message {
 textarea.form-field-error, textarea.invalid,
 input.form-field-error,
 input.invalid {
-  background: #ffeeee;
+  background: var(--z-admin-invalid-bg);
 }
 
 input.form-control[type=file] {
@@ -15113,7 +15153,7 @@ option[value=""][disabled] {
 }
 
 option {
-  color: black;
+  color: var(--z-admin-text);
 }
 
 fieldset > label > input[type=checkbox],
@@ -15282,13 +15322,13 @@ div.modal .modal-footer.sticky-bottom {
   right: 10px;
   width: 90vw;
   max-width: 500px;
-  background-color: rgba(255, 255, 255, 0.95);
-  color: #222;
+  background-color: var(--z-admin-navbar-search-focus-bg);
+  color: var(--z-admin-navbar-search-focus-color);
   padding: 4px 10px;
   font-size: 2rem;
 }
 .navbar.navbar-branded .navbar-form .form-control.search-query:focus::placeholder {
-  color: #666;
+  color: var(--z-admin-navbar-search-focus-placeholder-color);
 }
 .navbar.navbar-branded .navbar-collapse {
   background-color: #0fa2db;
@@ -15475,21 +15515,21 @@ ul.suggestions-list {
 
 ul.suggestions-list li a {
   display: block;
-  background-image: linear-gradient(to bottom, #fff 0%, #f5f5f5 100%);
-  border: 1px solid #E0E0E0;
+  background-image: var(--z-admin-suggestions-bg);
+  border: 1px solid var(--z-admin-suggestions-border-color);
   border-radius: 10px;
   margin-bottom: -1px;
   padding: 2px 4px;
 }
 
 ul.suggestions-list li a .pull-right {
-  color: #999;
+  color: var(--z-admin-text-muted);
 }
 
 ul.suggestions-list li a:hover span.pull-right,
 ul.suggestions-list li a:hover {
-  color: #f5f5f5;
-  background: #999;
+  color: var(--z-admin-suggestions-active-color);
+  background: var(--z-admin-suggestions-active-bg);
   text-decoration: none;
 }
 
@@ -15883,11 +15923,11 @@ ul.tree-list li.menu-item > div {
   background-color: var(--z-admin-tree-list-item-bg);
 }
 ul.tree-list li.menu-item > div > a {
-  color: #777;
+  color: var(--z-admin-text-muted);
   text-decoration: none;
 }
 ul.tree-list li.menu-item > div > a:hover {
-  color: #textColorDark;
+  color: var(--z-admin-text);
   text-decoration: none;
 }
 ul.tree-list li.menu-item ul li:first-child {
@@ -16151,8 +16191,8 @@ li h3.widget-header, li .widget-header.h3 {
   left: 0px;
   height: 100vh;
   width: 100vw;
-  background-color: rgba(255, 255, 255, 0.6);
-  color: rgba(0, 0, 0, 0.5);
+  background-color: var(--z-admin-drag-overlay-bg);
+  color: var(--z-admin-drag-overlay-color);
   font-size: 128px;
   line-height: 1;
   z-index: 10000;
@@ -16164,7 +16204,7 @@ li h3.widget-header, li .widget-header.h3 {
 
 .dragover-medium #edit-content-media,
 .dragover-medium #edit-content-media .admin-edit-media {
-  background-color: rgba(255, 255, 0, 0.3);
+  background-color: var(--z-admin-drag-media-bg);
 }
 
 .environment-development body,

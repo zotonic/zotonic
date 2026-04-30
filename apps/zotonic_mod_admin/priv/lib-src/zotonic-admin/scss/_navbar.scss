@@ -63,13 +63,13 @@
                 right: 10px;
                 width: 90vw;
                 max-width: 500px;
-                background-color: rgba(255,255,255,0.95);
-                color: #222;
+                background-color: var(--z-admin-navbar-search-focus-bg);
+                color: var(--z-admin-navbar-search-focus-color);
                 padding: 4px 10px;
                 font-size: 2rem;
 
                 &::placeholder {
-                    color: #666;
+                    color: var(--z-admin-navbar-search-focus-placeholder-color);
                 }
             }
         }
