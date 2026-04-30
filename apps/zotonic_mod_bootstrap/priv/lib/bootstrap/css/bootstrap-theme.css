@@ -12013,6 +12013,21 @@ button.close {
   margin-left: auto;
 }
 
+.form-inline .checkbox,
+.form-inline .radio,
+.form-inline label.checkbox,
+.form-inline label.radio {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.form-inline label.checkbox > input[type=checkbox],
+.form-inline label.radio > input[type=radio] {
+  margin-right: 0.35em;
+}
+
 .form-group {
   margin-bottom: 15px;
 }
@@ -12458,7 +12473,7 @@ button.close {
 .nav > li > a:hover,
 .nav > li > a:focus {
   text-decoration: none;
-  background-color: #e9ecef;
+  background-color: var(--bs3-nav-link-hover-bg, #e9ecef);
 }
 
 .nav-tabs > li {
@@ -12473,17 +12488,18 @@ button.close {
   border-radius: 0.375rem 0.375rem 0 0;
 }
 
-.nav-tabs > li > a:hover {
-  border-color: var(--bs-secondary-bg) var(--bs-secondary-bg) var(--bs-border-color) var(--bs-secondary-bg) var(--bs-secondary-bg) var(--bs-border-color) var(--bs-border-color);
+.nav-tabs > li > a:hover,
+.nav-tabs > li > a:focus {
+  border-color: var(--bs3-nav-tabs-link-hover-border-color, var(--bs-secondary-bg) var(--bs-secondary-bg) var(--bs-border-color)) var(--bs3-nav-tabs-link-hover-border-color, var(--bs-secondary-bg) var(--bs-secondary-bg) var(--bs-border-color)) var(--bs3-nav-tabs-border-color, var(--bs-border-color));
 }
 
 .nav-tabs > li.active > a,
 .nav-tabs > li.active > a:hover,
 .nav-tabs > li.active > a:focus {
-  color: var(--bs-emphasis-color);
+  color: var(--bs3-nav-tabs-active-color, var(--bs-emphasis-color));
   cursor: default;
   background-color: var(--bs3-nav-tabs-active-bg, var(--bs-light-bg-subtle));
-  border: 1px solid var(--bs-border-color);
+  border: 1px solid var(--bs3-nav-tabs-active-border-color, var(--bs-border-color));
   border-bottom-color: transparent;
 }
 
@@ -12502,8 +12518,8 @@ button.close {
 .nav-pills > li.active > a,
 .nav-pills > li.active > a:hover,
 .nav-pills > li.active > a:focus {
-  color: #fff;
-  background-color: #0d6efd;
+  color: var(--bs3-nav-pills-active-color, #fff);
+  background-color: var(--bs3-nav-pills-active-bg, #0d6efd);
 }
 
 .pagination {
