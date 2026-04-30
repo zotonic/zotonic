@@ -22,22 +22,29 @@ $bs3-screen-lg: 1200px;
 // -----------------------------------------------------------------------------
 // Buttons
 .btn-default {
-  --bs-btn-color: #555;
-  --bs-btn-bg: var(--bs-tertiary-bg);
-  --bs-btn-border-color: #ddd;
-  --bs-btn-hover-color: #555;
-  --bs-btn-hover-bg: #e6e6e6;
-  --bs-btn-hover-border-color: #adadad;
+  --bs-btn-color: var(--bs3-btn-default-color, #555);
+  --bs-btn-bg: var(--bs3-btn-default-bg, var(--bs-tertiary-bg));
+  --bs-btn-border-color: var(--bs3-btn-default-border-color, #ddd);
+  --bs-btn-hover-color: var(--bs3-btn-default-hover-color, #555);
+  --bs-btn-hover-bg: var(--bs3-btn-default-hover-bg, #e6e6e6);
+  --bs-btn-hover-border-color: var(--bs3-btn-default-hover-border-color, #adadad);
   --bs-btn-focus-shadow-rgb: 173, 173, 173;
-  --bs-btn-active-color: #555;
-  --bs-btn-active-bg: #d4d4d4;
-  --bs-btn-active-border-color: #8c8c8c;
-  --bs-btn-disabled-color: #555;
-  --bs-btn-disabled-bg: var(--bs-tertiary-bg);
-  --bs-btn-disabled-border-color: #ddd;
+  --bs-btn-active-color: var(--bs3-btn-default-active-color, #555);
+  --bs-btn-active-bg: var(--bs3-btn-default-active-bg, #d4d4d4);
+  --bs-btn-active-border-color: var(--bs3-btn-default-active-border-color, #8c8c8c);
+  --bs-btn-disabled-color: var(--bs3-btn-default-disabled-color, #555);
+  --bs-btn-disabled-bg: var(--bs3-btn-default-disabled-bg, var(--bs-tertiary-bg));
+  --bs-btn-disabled-border-color: var(--bs3-btn-default-disabled-border-color, #ddd);
 }
 
 .btn-primary {
+  --bs-btn-color: #fff;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-active-color: #fff;
+  --bs-btn-disabled-color: #fff;
+}
+
+.btn-danger {
   --bs-btn-color: #fff;
   --bs-btn-hover-color: #fff;
   --bs-btn-active-color: #fff;
@@ -54,6 +61,35 @@ $bs3-screen-lg: 1200px;
 }
 
 .btn-group-xs > .btn { @extend .btn-xs; }
+
+// -----------------------------------------------------------------------------
+// Close buttons
+.close {
+  float: right;
+  font-size: ($font-size-base * 1.5);
+  font-weight: 700;
+  line-height: 1;
+  color: #000;
+  text-shadow: var(--z-admin-close-text-shadow, 0 1px 0 #fff);
+  opacity: .2;
+  text-decoration: none;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+  opacity: .5;
+}
+
+button.close {
+  padding: 0;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  appearance: none;
+}
 
 // -----------------------------------------------------------------------------
 // Labels (map to badges)
@@ -134,7 +170,13 @@ $bs3-screen-lg: 1200px;
 // Forms
 .form-control-static { @extend .form-control-plaintext; }
 .control-label { @extend .form-label; }
-.help-block { @extend .form-text; }
+.help-block {
+  @extend .form-text;
+  display: block;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  color: var(--z-admin-help-block-color, #737373);
+}
 
 .form-inline {
   display: flex;
@@ -143,10 +185,17 @@ $bs3-screen-lg: 1200px;
   gap: .5rem;
 }
 
+.form-inline > .pull-right {
+  margin-left: auto;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
 .form-horizontal .form-group {
   display: flex;
   flex-wrap: wrap;
-  margin-bottom: $spacer;
 }
 
 .form-horizontal .control-label {
@@ -371,6 +420,11 @@ $bs3-screen-lg: 1200px;
   transform: translate(0, 0);
 }
 
+.modal-header .close {
+  order: 2;
+  margin-left: auto;
+}
+
 .modal-backdrop {
   z-index: 1040;
 }
@@ -379,9 +433,41 @@ $bs3-screen-lg: 1200px;
   opacity: $modal-backdrop-opacity;
 }
 
+.modal-footer {
+  display: block;
+  padding: 15px;
+  text-align: right;
+}
+
+.modal-footer::before,
+.modal-footer::after {
+  display: table;
+  content: " ";
+}
+
+.modal-footer::after {
+  clear: both;
+}
+
+.modal-footer > * {
+  margin: 0;
+}
+
+.modal-footer .btn + .btn {
+  margin-bottom: 0;
+  margin-left: 5px;
+}
+
+.modal-footer .btn-group .btn + .btn {
+  margin-left: -1px;
+}
+
+.modal-footer .btn-block + .btn-block {
+  margin-left: 0;
+}
+
 .dropdown-menu > li > a {
   display: block;
-  width: 100%;
   padding: 3px 20px;
   clear: both;
   font-weight: 400;
@@ -573,9 +659,9 @@ $bs3-screen-lg: 1200px;
 .nav-tabs > li.active > a,
 .nav-tabs > li.active > a:hover,
 .nav-tabs > li.active > a:focus {
-  color: $nav-tabs-active-link-hover-color;
+  color: var(--bs3-nav-tabs-active-color, #{$nav-tabs-active-link-hover-color});
   cursor: default;
-  background-color: $nav-tabs-active-link-hover-bg;
+  background-color: var(--bs3-nav-tabs-active-bg, var(--bs-light-bg-subtle));
   border: 1px solid $nav-tabs-active-link-hover-border-color;
   border-bottom-color: transparent;
 }

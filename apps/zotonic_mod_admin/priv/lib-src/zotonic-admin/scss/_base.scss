@@ -4,8 +4,8 @@
 
 body,
 body.page-edit {
-    color: $textColorDark;
-    background-color: $body-bg;
+    color: var(--z-admin-text);
+    background-color: var(--z-admin-bg);
 
     &.wait {
         cursor: wait;
@@ -22,7 +22,7 @@ body.page-edit {
 }
 
 hr {
-    background-color: #ddd;
+    background-color: var(--z-admin-border);
     border: none;
     height: 1px;
     margin: 10px 0;
@@ -146,7 +146,7 @@ body.admin-responsive {
     > table,
     > form > table,
     .admin-table {
-        background-color: white;
+        background-color: var(--z-admin-surface);
         border-radius: $radiusWidget;
         border-bottom: 0;
     }
@@ -171,8 +171,8 @@ body.noframe > .admin-container {
 }
 .admin-text-header {
     font-size: 13px;
-    text-shadow: $darkOnLightTextShadow;
-    color: $textColorMedium;
+    text-shadow: var(--z-admin-text-shadow);
+    color: var(--z-admin-text-muted);
 }
 
 .admin-word-break {
@@ -198,7 +198,7 @@ label .z-btn-help {
     h2 {
         margin-top: 0;
         margin-bottom: 0;
-        color: #333;
+        color: var(--z-admin-text);
         @extend .admin-word-break;
     }
     h2 + p {
@@ -239,5 +239,5 @@ pre:empty {
 .sticky-bottom {
      position: sticky;
      bottom: 0;
-     background-color: rgba(255, 255, 255, 0.7);
+     background-color: var(--z-admin-sticky-bg);
 }

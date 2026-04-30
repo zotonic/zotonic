@@ -23,7 +23,7 @@
         .zotonic-logo {
             height: 15px;
             width: 87px;
-            text-shadow: $lightOnDarkTextShadow;
+            text-shadow: var(--z-admin-inverse-text-shadow);
         }
     }
     .navbar-right {
@@ -31,7 +31,7 @@
     }
     .navbar-nav > li > a,
     .navbar-nav > li > .dropdown-menu > li > a {
-        text-shadow: $lightOnDarkTextShadow;
+        text-shadow: var(--z-admin-inverse-text-shadow);
     }
     
     .navbar-toggle {
@@ -90,11 +90,11 @@
             > li > a {
                 color: #fff;
                 background-color: inherit;
-                text-shadow: $lightOnDarkTextShadow;
+                text-shadow: var(--z-admin-inverse-text-shadow);
                 &:hover {
                     background: rgba(0, 0, 0, 0.15);
                     color: #fff;
-                    text-shadow: $lightOnDarkTextShadow;
+                    text-shadow: var(--z-admin-inverse-text-shadow);
                 }
             }
         }
