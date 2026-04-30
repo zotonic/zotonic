@@ -2,7 +2,7 @@
 // https://gist.github.com/geksilla/6543145
 
 .text-muted {
-    color: $textColorMuted;
+    color: var(--z-admin-text-muted);
 }
 
 .nav {
@@ -50,14 +50,14 @@
         }
     }
     > li > a {
-        text-shadow: $darkOnLightTextShadow;
+        text-shadow: var(--z-admin-text-shadow);
     }
     > li.active > a,
     > li.active > a:hover,
     > li > a:hover {
         background-color: $brand-primary;
         color: #fff;
-        text-shadow: $lightOnDarkTextShadow;
+        text-shadow: var(--z-admin-inverse-text-shadow);
 
         .text-muted {
             color: inherit;
@@ -72,7 +72,7 @@
 
     box-shadow: none;
     padding: $_padding $_padding ($_padding - $_button_margin) $_padding;
-    background-color: white;
+    background-color: var(--z-admin-surface);
     border: 0;
     border-radius: $radiusWidget;
 
@@ -111,7 +111,7 @@ button.close {
 }
 
 .checkbox label {
-    color: $textColorButton;
+    color: var(--z-admin-checkbox-label-color);
 }
 
 .pagination {
@@ -130,8 +130,8 @@ button.close {
 
 .control-label {
     font-weight: normal;
-    color: $textColorMedium;
-    text-shadow: $darkOnLightTextShadow;
+    color: var(--z-admin-form-label-color);
+    text-shadow: var(--z-admin-text-shadow);
 }
 
 @media (min-width:768px) {

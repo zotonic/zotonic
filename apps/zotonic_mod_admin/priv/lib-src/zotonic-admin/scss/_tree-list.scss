@@ -1,13 +1,14 @@
 ul.tree-list {
     li.menu-item {
         > div {
-            background-color: #fefefe;
+            background-color: var(--z-admin-tree-list-item-bg);
 
             > a {
-                color: $textColorMedium;
+                color: var(--z-admin-text-muted);
+                text-decoration: none;
 
                 &:hover {
-                    color: #textColorDark;
+                    color: var(--z-admin-text);
                     text-decoration: none;
                 }
             }

@@ -1,7 +1,7 @@
 
 .form-field-error,
 .invalid {
-    color: #B94A48;
+    color: var(--z-admin-form-invalid-color);
 }
 
 form.form-horizontal .z_validation_message {
@@ -12,7 +12,7 @@ textarea,
 input {
     &.form-field-error,
     &.invalid {
-        background: #ffeeee;
+        background: var(--z-admin-invalid-bg);
     }
 }
 
@@ -32,7 +32,7 @@ option[value=""][disabled] {
 }
 
 option {
-    color: black;
+    color: var(--z-admin-text);
 }
 
 fieldset,

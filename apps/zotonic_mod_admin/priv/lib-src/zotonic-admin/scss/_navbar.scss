@@ -23,7 +23,7 @@
         .zotonic-logo {
             height: 15px;
             width: 87px;
-            text-shadow: $lightOnDarkTextShadow;
+            text-shadow: var(--z-admin-inverse-text-shadow);
         }
     }
     .navbar-right {
@@ -31,7 +31,7 @@
     }
     .navbar-nav > li > a,
     .navbar-nav > li > .dropdown-menu > li > a {
-        text-shadow: $lightOnDarkTextShadow;
+        text-shadow: var(--z-admin-inverse-text-shadow);
     }
     
     .navbar-toggle {
@@ -63,13 +63,13 @@
                 right: 10px;
                 width: 90vw;
                 max-width: 500px;
-                background-color: rgba(255,255,255,0.95);
-                color: #222;
+                background-color: var(--z-admin-navbar-search-focus-bg);
+                color: var(--z-admin-navbar-search-focus-color);
                 padding: 4px 10px;
                 font-size: 2rem;
 
                 &::placeholder {
-                    color: #666;
+                    color: var(--z-admin-navbar-search-focus-placeholder-color);
                 }
             }
         }
@@ -84,16 +84,17 @@
             float: none !important;
         }
         .nav > .dropdown.open .dropdown-menu {
-            background-color: $backgroundColorLight;
+            background-color: inherit;
             border-radius: 0;
 
             > li > a {
-                background-color: $backgroundColorLight;
-                text-shadow: $darkOnLightTextShadow;
+                color: #fff;
+                background-color: inherit;
+                text-shadow: var(--z-admin-inverse-text-shadow);
                 &:hover {
-                    background: $brand-primary;
+                    background: rgba(0, 0, 0, 0.15);
                     color: #fff;
-                    text-shadow: $lightOnDarkTextShadow;
+                    text-shadow: var(--z-admin-inverse-text-shadow);
                 }
             }
         }
@@ -153,6 +154,41 @@ body.navbar-menu-open {
         }
         .dropdown-header.z-username {
             display: none;
+        }
+    }
+}
+
+@media (min-width: $screen-tablet) {
+    .navbar.navbar-branded {
+        > div,
+        .navbar-header,
+        .navbar-collapse,
+        .navbar-nav,
+        .navbar-nav > li,
+        .navbar-nav > li > a {
+            height: $navbar-height;
+        }
+
+        .navbar-collapse {
+            min-height: $navbar-height;
+            height: $navbar-height !important;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            height: $navbar-height;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+
+        .navbar-nav > li > a {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-form {
+            height: $navbar-height;
         }
     }
 }

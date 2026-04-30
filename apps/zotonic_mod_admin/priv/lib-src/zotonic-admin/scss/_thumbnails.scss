@@ -27,7 +27,7 @@ $_thumbnail_gutter: 6px;
     .thumbnail:hover,
     .thumbnail:active,
     .thumbnail:focus {
-        border-color: $borderColorSelection;
+        border-color: var(--z-admin-thumbnail-hover-border);
     }
 }
 
@@ -50,21 +50,21 @@ $_thumbnail_gutter: 6px;
     line-height: 1.15;
     
     transition-duration: 0;
-    color: $textColorDark;
+    color: var(--z-admin-thumbnail-color);
     
     &:hover,
     &:focus,
     &:active {
-        border-color: $borderColorSelection;
-        color: $textColorDark;
+        border-color: var(--z-admin-thumbnail-hover-border);
+        color: var(--z-admin-thumbnail-color);
         text-decoration: none;
     }
     
     // fade out thumbnails that are connected to the page
     // except when it is a depiction predicate
     &.thumbnail-connected:not(.thumbnail-depiction) {
-        background-color: $backgroundColorLightest;
-        color: $textColorLight;
+        background-color: var(--z-admin-thumbnail-connected-bg);
+        color: var(--z-admin-thumbnail-connected-color);
 
         img {
             opacity: .3;
@@ -83,7 +83,7 @@ $_thumbnail_gutter: 6px;
         position: absolute;
         bottom: 0;
         left: 0;
-        background: white;
+        background: var(--z-admin-thumbnail-filename-bg);
     }
 
     .z-thumbnail-image {
@@ -131,5 +131,5 @@ $_thumbnail_gutter: 6px;
     text-overflow: ellipsis;
     white-space: nowrap;
     max-width: 100%;
-    color: #aaa;
+    color: var(--z-admin-thumbnail-filename-color);
 }

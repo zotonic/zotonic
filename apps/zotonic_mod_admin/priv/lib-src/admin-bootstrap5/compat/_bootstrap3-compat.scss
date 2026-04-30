@@ -1,0 +1,1163 @@
+// Bootstrap 3 compatibility layer for Bootstrap 5 (admin).
+// Only includes classes referenced in templates and removed from Bootstrap 5.
+
+// -----------------------------------------------------------------------------
+// Breakpoints to emulate Bootstrap 3 visibility helpers
+$bs3-screen-sm: 768px;
+$bs3-screen-md: 992px;
+$bs3-screen-lg: 1200px;
+
+// -----------------------------------------------------------------------------
+// Text helpers
+.text-error { @extend .text-danger; }
+
+.text-muted {
+  color: $text-muted !important;
+}
+
+.text-right {
+  text-align: right !important;
+}
+
+// -----------------------------------------------------------------------------
+// Alerts
+.alert-error { @extend .alert-danger; }
+
+// -----------------------------------------------------------------------------
+// Buttons
+.btn-default {
+  --bs-btn-color: var(--bs3-btn-default-color, #555);
+  --bs-btn-bg: var(--bs3-btn-default-bg, var(--bs-tertiary-bg));
+  --bs-btn-border-color: var(--bs3-btn-default-border-color, #ddd);
+  --bs-btn-hover-color: var(--bs3-btn-default-hover-color, #555);
+  --bs-btn-hover-bg: var(--bs3-btn-default-hover-bg, #e6e6e6);
+  --bs-btn-hover-border-color: var(--bs3-btn-default-hover-border-color, #adadad);
+  --bs-btn-focus-shadow-rgb: 173, 173, 173;
+  --bs-btn-active-color: var(--bs3-btn-default-active-color, #555);
+  --bs-btn-active-bg: var(--bs3-btn-default-active-bg, #d4d4d4);
+  --bs-btn-active-border-color: var(--bs3-btn-default-active-border-color, #8c8c8c);
+  --bs-btn-disabled-color: var(--bs3-btn-default-disabled-color, #555);
+  --bs-btn-disabled-bg: var(--bs3-btn-default-disabled-bg, var(--bs-tertiary-bg));
+  --bs-btn-disabled-border-color: var(--bs3-btn-default-disabled-border-color, #ddd);
+}
+
+.btn-primary {
+  --bs-btn-color: #fff;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-active-color: #fff;
+  --bs-btn-disabled-color: #fff;
+}
+
+.btn-danger {
+  --bs-btn-color: #fff;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-active-color: #fff;
+  --bs-btn-disabled-color: #fff;
+}
+
+.btn-small { @extend .btn-sm; }
+
+.btn-xs {
+  padding: 1px 5px;
+  font-size: 12px;
+  line-height: 1.5;
+  border-radius: $border-radius-sm;
+}
+
+.btn-group-xs > .btn { @extend .btn-xs; }
+
+// -----------------------------------------------------------------------------
+// Close buttons
+.close {
+  float: right;
+  font-size: ($font-size-base * 1.5);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--z-admin-close-color, #000);
+  text-shadow: var(--z-admin-close-text-shadow, 0 1px 0 #fff);
+  opacity: var(--z-admin-close-opacity, .2);
+  text-decoration: none;
+}
+
+.close:hover,
+.close:focus {
+  color: var(--z-admin-close-hover-color, var(--z-admin-close-color, #000));
+  text-decoration: none;
+  cursor: pointer;
+  opacity: var(--z-admin-close-hover-opacity, .5);
+}
+
+button.close {
+  padding: 0;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  appearance: none;
+}
+
+// -----------------------------------------------------------------------------
+// Labels (map to badges)
+.label {
+  @extend .badge;
+  border-radius: $border-radius;
+}
+
+.label-default { @extend .text-bg-secondary; }
+.label-primary { @extend .text-bg-primary; }
+.label-success { @extend .text-bg-success; }
+.label-info { @extend .text-bg-info; }
+.label-warning { @extend .text-bg-warning; }
+.label-danger { @extend .text-bg-danger; }
+
+// -----------------------------------------------------------------------------
+// Panels (map to cards)
+.panel {
+  @extend .card;
+  margin-bottom: $spacer;
+}
+
+.panel-heading { @extend .card-header; }
+.panel-body { @extend .card-body; }
+.panel-footer { @extend .card-footer; }
+.panel-title { @extend .card-title; margin-bottom: 0; }
+
+.panel-default { border-color: $border-color; }
+.panel-default > .panel-heading {
+  background-color: $gray-100;
+  border-color: $border-color;
+}
+
+.panel-success { @extend .border-success; }
+.panel-success > .panel-heading { @extend .text-bg-success; }
+
+.panel-info { @extend .border-info; }
+.panel-info > .panel-heading { @extend .text-bg-info; }
+
+.panel-danger { @extend .border-danger; }
+.panel-danger > .panel-heading { @extend .text-bg-danger; }
+
+// -----------------------------------------------------------------------------
+// Wells
+.well {
+  padding: $spacer;
+  margin-bottom: $spacer;
+  background-color: $gray-100;
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
+}
+
+// -----------------------------------------------------------------------------
+// Thumbnails
+.thumbnail {
+  display: block;
+  padding: .25rem;
+  margin-bottom: $spacer;
+  color: var(--z-admin-thumbnail-color, var(--bs-body-color));
+  background-color: var(--z-admin-thumbnail-bg, var(--bs-body-bg));
+  border: 1px solid var(--z-admin-thumbnail-border, var(--bs-border-color));
+  border-radius: $border-radius;
+}
+
+.thumbnails {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: $spacer;
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacer;
+}
+
+// -----------------------------------------------------------------------------
+// Images
+.img-responsive { @extend .img-fluid; }
+
+// -----------------------------------------------------------------------------
+// Forms
+.form-control-static { @extend .form-control-plaintext; }
+.control-label { @extend .form-label; }
+.help-block {
+  @extend .form-text;
+  display: block;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  color: var(--z-admin-help-block-color, #737373);
+}
+
+.form-inline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem;
+}
+
+.form-inline > .pull-right {
+  margin-left: auto;
+}
+
+.form-inline .checkbox,
+.form-inline .radio,
+.form-inline label.checkbox,
+.form-inline label.radio {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.form-inline label.checkbox > input[type="checkbox"],
+.form-inline label.radio > input[type="radio"] {
+  margin-right: .35em;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-horizontal .form-group {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.form-horizontal .control-label {
+  padding-top: calc(#{$input-padding-y} + #{$input-border-width});
+}
+
+.checkbox,
+.radio {
+  display: block;
+  min-height: $line-height-base * 1rem;
+  margin-top: .5rem;
+  margin-bottom: .5rem;
+}
+
+.checkbox-inline,
+.radio-inline {
+  display: inline-block;
+  margin-right: 1rem;
+}
+
+.input-group-addon { @extend .input-group-text; }
+
+.input-group-btn {
+  display: flex;
+  align-items: stretch;
+}
+
+.input-mini { width: 60px; }
+.input-small { width: 90px; }
+.input-medium { width: 150px; }
+.input-xlarge { width: 270px; }
+
+// -----------------------------------------------------------------------------
+// Definition lists
+.dl-horizontal dt {
+  float: left;
+  width: 160px;
+  clear: left;
+  text-align: right;
+}
+
+.dl-horizontal dd { margin-left: 180px; }
+
+// -----------------------------------------------------------------------------
+// Tables
+.table {
+  --bs-table-border-color: #{$table-border-color};
+}
+
+.table > thead > tr > th,
+.table > tbody > tr > th,
+.table > tfoot > tr > th,
+.table > thead > tr > td,
+.table > tbody > tr > td,
+.table > tfoot > tr > td {
+  border-top: 1px solid var(--bs-table-border-color);
+  border-bottom-width: 0;
+  box-shadow: none;
+}
+
+.table > thead > tr > th {
+  vertical-align: bottom;
+  border-bottom: 2px solid var(--bs-table-border-color);
+}
+
+.table > caption + thead > tr:first-child > th,
+.table > colgroup + thead > tr:first-child > th,
+.table > thead:first-child > tr:first-child > th,
+.table > caption + thead > tr:first-child > td,
+.table > colgroup + thead > tr:first-child > td,
+.table > thead:first-child > tr:first-child > td {
+  border-top: 0;
+}
+
+.table > tbody + tbody {
+  border-top: 2px solid var(--bs-table-border-color);
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+  background-color: $table-bg-accent;
+}
+
+.table-hover > tbody > tr:hover {
+  background-color: $table-bg-hover;
+}
+
+.table-condensed > thead > tr > th,
+.table-condensed > tbody > tr > th,
+.table-condensed > tfoot > tr > th,
+.table-condensed > thead > tr > td,
+.table-condensed > tbody > tr > td,
+.table-condensed > tfoot > tr > td {
+  padding: $table-condensed-cell-padding;
+}
+
+// -----------------------------------------------------------------------------
+// Navbar
+.navbar {
+  padding: 0;
+}
+
+.navbar-default {
+  background-color: $gray-100;
+  border-color: $border-color;
+}
+
+.navbar-inverse {
+  background-color: $gray-900;
+  border-color: $gray-900;
+}
+
+.navbar-default .navbar-brand,
+.navbar-default .navbar-nav .nav-link { color: $navbar-light-color; }
+
+.navbar-inverse .navbar-brand,
+.navbar-inverse .navbar-nav .nav-link { color: $navbar-dark-color; }
+
+.navbar-default .navbar-nav > li > a { color: $navbar-light-color; }
+.navbar-inverse .navbar-nav > li > a { color: $navbar-dark-color; }
+
+.navbar-nav > li {
+  position: relative;
+}
+
+.navbar-nav > li > a {
+  display: block;
+  padding: $navbar-padding-y $navbar-padding-x;
+  color: var(--bs-navbar-color);
+  text-decoration: none;
+}
+
+.navbar-nav > li > a:hover,
+.navbar-nav > li > a:focus {
+  color: var(--bs-navbar-hover-color);
+}
+
+.navbar-header {
+  display: flex;
+  align-items: center;
+}
+
+.navbar > div {
+  width: 100%;
+}
+
+.navbar-right {
+  margin-left: 0;
+  float: none;
+}
+
+.navbar-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem;
+}
+
+.navbar-toggle {
+  display: block;
+  float: right;
+  margin-top: 8px;
+  margin-right: 15px;
+  margin-bottom: 8px;
+  padding: .25rem .5rem;
+  border: 1px solid transparent;
+  border-radius: $border-radius;
+  background: none;
+}
+
+.navbar-toggle .icon-bar {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background-color: currentColor;
+  border-radius: 1px;
+}
+
+.navbar-toggle .icon-bar + .icon-bar { margin-top: 4px; }
+
+.navbar-fixed-top {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: $zindex-fixed;
+}
+
+.open > .dropdown-menu {
+  display: block;
+}
+
+.dropdown-menu {
+  top: 100%;
+  left: 0;
+  margin: 2px 0 0;
+}
+
+.dropdown-menu-right,
+.pull-right > .dropdown-menu {
+  right: 0;
+  left: auto;
+}
+
+.dropdown-menu-left {
+  right: auto;
+  left: 0;
+}
+
+.collapse.in {
+  display: block;
+}
+
+.modal {
+  z-index: 1050;
+}
+
+.modal.in {
+  display: block;
+}
+
+.modal.in .modal-dialog {
+  transform: translate(0, 0);
+}
+
+.modal-header .close {
+  order: 2;
+  margin-left: auto;
+}
+
+.modal-backdrop {
+  z-index: 1040;
+}
+
+.modal-backdrop.in {
+  opacity: $modal-backdrop-opacity;
+}
+
+.modal-footer {
+  display: block;
+  padding: 15px;
+  text-align: right;
+}
+
+.modal-footer::before,
+.modal-footer::after {
+  display: table;
+  content: " ";
+}
+
+.modal-footer::after {
+  clear: both;
+}
+
+.modal-footer > * {
+  margin: 0;
+}
+
+.modal-footer .btn + .btn {
+  margin-bottom: 0;
+  margin-left: 5px;
+}
+
+.modal-footer .btn-group .btn + .btn {
+  margin-left: -1px;
+}
+
+.modal-footer .btn-block + .btn-block {
+  margin-left: 0;
+}
+
+.dropdown-menu > li > a {
+  display: block;
+  padding: 3px 20px;
+  clear: both;
+  font-weight: 400;
+  line-height: $line-height-base;
+  color: var(--bs-dropdown-link-color);
+  text-align: inherit;
+  text-decoration: none;
+  white-space: nowrap;
+  background-color: transparent;
+  border: 0;
+}
+
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
+  color: var(--bs-dropdown-link-hover-color);
+  background-color: var(--bs-dropdown-link-hover-bg);
+}
+
+.dropdown-menu > .active > a,
+.dropdown-menu > .active > a:hover,
+.dropdown-menu > .active > a:focus {
+  color: var(--bs-dropdown-link-active-color);
+  background-color: var(--bs-dropdown-link-active-bg);
+}
+
+.dropdown-menu > .disabled > a,
+.dropdown-menu > .disabled > a:hover,
+.dropdown-menu > .disabled > a:focus {
+  color: var(--bs-dropdown-link-disabled-color);
+  pointer-events: none;
+  background-color: transparent;
+}
+
+.dropdown-menu .divider {
+  height: 0;
+  margin: $dropdown-divider-margin-y 0;
+  overflow: hidden;
+  border-top: 1px solid var(--bs-dropdown-divider-bg);
+}
+
+.dropdown-header {
+  display: block;
+  padding: $dropdown-header-padding;
+  margin-bottom: 0;
+  font-size: $font-size-sm;
+  color: var(--bs-dropdown-header-color);
+  white-space: nowrap;
+}
+
+@media (max-width: ($bs3-screen-sm - .02px)) {
+  .navbar-collapse.collapse.in {
+    display: block;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .navbar-nav {
+    flex-direction: column;
+    margin: 0;
+  }
+
+  .navbar-right {
+    float: none;
+    margin-right: 0;
+    margin-left: 0;
+  }
+
+  .navbar-form {
+    display: block;
+    padding: 10px 15px;
+    margin: 0;
+  }
+
+  .navbar-form .form-control {
+    width: 100%;
+  }
+}
+
+@media (min-width: $bs3-screen-sm) {
+  .navbar-toggle {
+    display: none;
+  }
+
+  .navbar > div {
+    display: flex;
+    align-items: stretch;
+    min-height: 50px;
+  }
+
+  .navbar-header {
+    flex: 0 0 auto;
+  }
+
+  .navbar-collapse.collapse {
+    display: flex !important;
+    align-items: stretch;
+    flex: 1 1 auto;
+    flex-wrap: nowrap;
+    min-width: 0;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .navbar-nav {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    margin: 0;
+  }
+
+  .navbar-nav > li {
+    flex: 0 0 auto;
+  }
+
+  .navbar-nav > li > a {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    line-height: 20px;
+    white-space: nowrap;
+  }
+
+  .navbar-nav .dropdown-menu {
+    position: absolute;
+  }
+
+  .navbar-nav > li > .dropdown-menu {
+    top: 100%;
+    left: 0;
+  }
+
+  .navbar-right .dropdown-menu {
+    right: 0;
+    left: auto;
+  }
+
+  .navbar-collapse > .navbar-form.navbar-right {
+    order: 1;
+    flex: 0 0 auto;
+    align-self: center;
+    flex-wrap: nowrap;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: auto;
+  }
+
+  .navbar-collapse > .navbar-right:not(.navbar-form) {
+    order: 2;
+    flex: 0 0 auto;
+    margin-left: 0;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Navs
+.nav > li {
+  position: relative;
+  display: block;
+}
+
+.nav > li > a {
+  position: relative;
+  display: block;
+  padding: 10px 15px;
+  text-decoration: none;
+}
+
+.nav > li > a:hover,
+.nav > li > a:focus {
+  text-decoration: none;
+  background-color: var(--bs3-nav-link-hover-bg, #{$gray-200});
+}
+
+.nav-tabs > li {
+  float: left;
+  margin-bottom: -1px;
+}
+
+.nav-tabs > li > a {
+  margin-right: 2px;
+  line-height: $line-height-base;
+  border: 1px solid transparent;
+  border-radius: $border-radius $border-radius 0 0;
+}
+
+.nav-tabs > li > a:hover,
+.nav-tabs > li > a:focus {
+  border-color: var(--bs3-nav-tabs-link-hover-border-color, #{$nav-tabs-link-hover-border-color}) var(--bs3-nav-tabs-link-hover-border-color, #{$nav-tabs-link-hover-border-color}) var(--bs3-nav-tabs-border-color, #{$nav-tabs-border-color});
+}
+
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover,
+.nav-tabs > li.active > a:focus {
+  color: var(--bs3-nav-tabs-active-color, #{$nav-tabs-active-link-hover-color});
+  cursor: default;
+  background-color: var(--bs3-nav-tabs-active-bg, var(--bs-light-bg-subtle));
+  border: 1px solid var(--bs3-nav-tabs-active-border-color, #{$nav-tabs-active-link-hover-border-color});
+  border-bottom-color: transparent;
+}
+
+.nav-pills > li {
+  float: left;
+}
+
+.nav-pills > li > a {
+  border-radius: $nav-pills-border-radius;
+}
+
+.nav-pills > li + li {
+  margin-left: 2px;
+}
+
+.nav-pills > li.active > a,
+.nav-pills > li.active > a:hover,
+.nav-pills > li.active > a:focus {
+  color: var(--bs3-nav-pills-active-color, #{$nav-pills-active-link-hover-color});
+  background-color: var(--bs3-nav-pills-active-bg, #{$nav-pills-active-link-hover-bg});
+}
+
+// -----------------------------------------------------------------------------
+// Pagination helpers
+.pagination {
+  display: inline-block;
+  padding-left: 0;
+  margin: 20px 0;
+  font-size: var(--bs-pagination-font-size);
+  border-radius: var(--bs-pagination-border-radius);
+}
+
+.pagination > li {
+  display: inline;
+}
+
+.pagination > li > a,
+.pagination > li > span {
+  position: relative;
+  float: left;
+  padding: var(--bs-pagination-padding-y) var(--bs-pagination-padding-x);
+  margin-left: -1px;
+  line-height: $line-height-base;
+  color: var(--z-admin-pagination-color, var(--bs-pagination-color));
+  text-decoration: none;
+  background-color: var(--z-admin-pagination-bg, var(--bs-pagination-bg));
+  border: var(--bs-pagination-border-width) solid var(--z-admin-pagination-border-color, var(--bs-pagination-border-color));
+}
+
+.pagination > li > a:hover,
+.pagination > li > a:focus,
+.pagination > li > span:hover,
+.pagination > li > span:focus {
+  z-index: 2;
+  color: var(--z-admin-pagination-hover-color, var(--bs-pagination-hover-color));
+  background-color: var(--z-admin-pagination-hover-bg, var(--bs-pagination-hover-bg));
+  border-color: var(--z-admin-pagination-hover-border-color, var(--bs-pagination-hover-border-color));
+}
+
+.pagination > li:first-child > a,
+.pagination > li:first-child > span {
+  margin-left: 0;
+  border-top-left-radius: var(--bs-pagination-border-radius);
+  border-bottom-left-radius: var(--bs-pagination-border-radius);
+}
+
+.pagination > li:last-child > a,
+.pagination > li:last-child > span {
+  border-top-right-radius: var(--bs-pagination-border-radius);
+  border-bottom-right-radius: var(--bs-pagination-border-radius);
+}
+
+.pagination > .active > a,
+.pagination > .active > a:hover,
+.pagination > .active > a:focus,
+.pagination > .active > span,
+.pagination > .active > span:hover,
+.pagination > .active > span:focus {
+  z-index: 3;
+  color: var(--z-admin-pagination-active-color, var(--bs-pagination-active-color));
+  cursor: default;
+  background-color: var(--z-admin-pagination-active-bg, var(--bs-pagination-active-bg));
+  border-color: var(--z-admin-pagination-active-border-color, var(--bs-pagination-active-border-color));
+}
+
+.pagination > .disabled > span,
+.pagination > .disabled > span:hover,
+.pagination > .disabled > span:focus,
+.pagination > .disabled > a,
+.pagination > .disabled > a:hover,
+.pagination > .disabled > a:focus {
+  color: var(--z-admin-pagination-disabled-color, var(--bs-pagination-disabled-color));
+  cursor: not-allowed;
+  background-color: var(--z-admin-pagination-disabled-bg, var(--bs-pagination-disabled-bg));
+  border-color: var(--z-admin-pagination-disabled-border-color, var(--bs-pagination-disabled-border-color));
+}
+
+.pagination-centered {
+  text-align: center;
+}
+
+.pagination-centered .pagination {
+  display: inline-block;
+}
+
+// -----------------------------------------------------------------------------
+// Breadcrumbs
+.breadcrumb > li {
+  display: inline-block;
+}
+
+.breadcrumb > li + li::before {
+  padding: 0 var(--bs-breadcrumb-item-padding-x);
+  color: var(--bs-breadcrumb-divider-color);
+  content: var(--bs-breadcrumb-divider, "/");
+}
+
+.breadcrumb > .active {
+  color: var(--bs-breadcrumb-item-active-color);
+}
+
+// -----------------------------------------------------------------------------
+// Page headers
+.page-header {
+  padding-bottom: .5rem;
+  margin: 0 0 $spacer;
+  border-bottom: 1px solid $border-color;
+}
+
+// -----------------------------------------------------------------------------
+// Progress bar variants
+.progress-bar-success { background-color: $success; }
+.progress-bar-info { background-color: $info; }
+.progress-bar-warning { background-color: $warning; }
+.progress-bar-danger { background-color: $danger; }
+
+// -----------------------------------------------------------------------------
+// Utility helpers
+.pull-left { float: left !important; }
+.pull-right { float: right !important; }
+
+.sr-only { @extend .visually-hidden; }
+.sr-only-focusable { @extend .visually-hidden-focusable; }
+
+// -----------------------------------------------------------------------------
+// Responsive visibility (Bootstrap 3 semantics)
+.hidden-xs {
+  @media (max-width: $bs3-screen-sm - .02) { display: none !important; }
+}
+
+.visible-md,
+.visible-lg { display: none !important; }
+
+.visible-md {
+  @media (min-width: $bs3-screen-md) and (max-width: $bs3-screen-lg - .02) { display: block !important; }
+}
+
+.visible-lg {
+  @media (min-width: $bs3-screen-lg) { display: block !important; }
+}
+
+// -----------------------------------------------------------------------------
+// Embedded responsive media
+.embed-responsive {
+  position: relative;
+  display: block;
+  height: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.embed-responsive .embed-responsive-item,
+.embed-responsive iframe,
+.embed-responsive embed,
+.embed-responsive object,
+.embed-responsive video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.embed-responsive-16by9 { padding-bottom: 56.25%; }
+.embed-responsive-4by3 { padding-bottom: 75%; }
+.embed-responsive-21by9 { padding-bottom: 42.8571428571%; }
+.embed-responsive-1by1 { padding-bottom: 100%; }
+
+// Glyphicons (from Bootstrap 3)
+@font-face {
+  font-family: "Glyphicons Halflings";
+  src: url("/lib/fonts/glyphicons-halflings-regular.eot");
+  src:
+    url("/lib/fonts/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"),
+    url("/lib/fonts/glyphicons-halflings-regular.woff2") format("woff2"),
+    url("/lib/fonts/glyphicons-halflings-regular.woff") format("woff"),
+    url("/lib/fonts/glyphicons-halflings-regular.ttf") format("truetype"),
+    url("/lib/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format("svg");
+}
+
+.glyphicon {
+  position: relative;
+  top: 1px;
+  display: inline-block;
+  font-family: "Glyphicons Halflings";
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.glyphicon-asterisk:before { content: "\002a"; }
+.glyphicon-plus:before { content: "\002b"; }
+.glyphicon-eur:before { content: "\20ac"; }
+.glyphicon-minus:before { content: "\2212"; }
+.glyphicon-cloud:before { content: "\2601"; }
+.glyphicon-envelope:before { content: "\2709"; }
+.glyphicon-pencil:before { content: "\270f"; }
+.glyphicon-glass:before { content: "\e001"; }
+.glyphicon-music:before { content: "\e002"; }
+.glyphicon-search:before { content: "\e003"; }
+.glyphicon-heart:before { content: "\e005"; }
+.glyphicon-star:before { content: "\e006"; }
+.glyphicon-star-empty:before { content: "\e007"; }
+.glyphicon-user:before { content: "\e008"; }
+.glyphicon-film:before { content: "\e009"; }
+.glyphicon-th-large:before { content: "\e010"; }
+.glyphicon-th:before { content: "\e011"; }
+.glyphicon-th-list:before { content: "\e012"; }
+.glyphicon-ok:before { content: "\e013"; }
+.glyphicon-remove:before { content: "\e014"; }
+.glyphicon-zoom-in:before { content: "\e015"; }
+.glyphicon-zoom-out:before { content: "\e016"; }
+.glyphicon-off:before { content: "\e017"; }
+.glyphicon-signal:before { content: "\e018"; }
+.glyphicon-cog:before { content: "\e019"; }
+.glyphicon-trash:before { content: "\e020"; }
+.glyphicon-home:before { content: "\e021"; }
+.glyphicon-file:before { content: "\e022"; }
+.glyphicon-time:before { content: "\e023"; }
+.glyphicon-road:before { content: "\e024"; }
+.glyphicon-download-alt:before { content: "\e025"; }
+.glyphicon-download:before { content: "\e026"; }
+.glyphicon-upload:before { content: "\e027"; }
+.glyphicon-inbox:before { content: "\e028"; }
+.glyphicon-play-circle:before { content: "\e029"; }
+.glyphicon-repeat:before { content: "\e030"; }
+.glyphicon-refresh:before { content: "\e031"; }
+.glyphicon-list-alt:before { content: "\e032"; }
+.glyphicon-lock:before { content: "\e033"; }
+.glyphicon-flag:before { content: "\e034"; }
+.glyphicon-headphones:before { content: "\e035"; }
+.glyphicon-volume-off:before { content: "\e036"; }
+.glyphicon-volume-down:before { content: "\e037"; }
+.glyphicon-volume-up:before { content: "\e038"; }
+.glyphicon-qrcode:before { content: "\e039"; }
+.glyphicon-barcode:before { content: "\e040"; }
+.glyphicon-tag:before { content: "\e041"; }
+.glyphicon-tags:before { content: "\e042"; }
+.glyphicon-book:before { content: "\e043"; }
+.glyphicon-bookmark:before { content: "\e044"; }
+.glyphicon-print:before { content: "\e045"; }
+.glyphicon-camera:before { content: "\e046"; }
+.glyphicon-font:before { content: "\e047"; }
+.glyphicon-bold:before { content: "\e048"; }
+.glyphicon-italic:before { content: "\e049"; }
+.glyphicon-text-height:before { content: "\e050"; }
+.glyphicon-text-width:before { content: "\e051"; }
+.glyphicon-align-left:before { content: "\e052"; }
+.glyphicon-align-center:before { content: "\e053"; }
+.glyphicon-align-right:before { content: "\e054"; }
+.glyphicon-align-justify:before { content: "\e055"; }
+.glyphicon-list:before { content: "\e056"; }
+.glyphicon-indent-left:before { content: "\e057"; }
+.glyphicon-indent-right:before { content: "\e058"; }
+.glyphicon-facetime-video:before { content: "\e059"; }
+.glyphicon-picture:before { content: "\e060"; }
+.glyphicon-map-marker:before { content: "\e062"; }
+.glyphicon-adjust:before { content: "\e063"; }
+.glyphicon-tint:before { content: "\e064"; }
+.glyphicon-edit:before { content: "\e065"; }
+.glyphicon-share:before { content: "\e066"; }
+.glyphicon-check:before { content: "\e067"; }
+.glyphicon-move:before { content: "\e068"; }
+.glyphicon-step-backward:before { content: "\e069"; }
+.glyphicon-fast-backward:before { content: "\e070"; }
+.glyphicon-backward:before { content: "\e071"; }
+.glyphicon-play:before { content: "\e072"; }
+.glyphicon-pause:before { content: "\e073"; }
+.glyphicon-stop:before { content: "\e074"; }
+.glyphicon-forward:before { content: "\e075"; }
+.glyphicon-fast-forward:before { content: "\e076"; }
+.glyphicon-step-forward:before { content: "\e077"; }
+.glyphicon-eject:before { content: "\e078"; }
+.glyphicon-chevron-left:before { content: "\e079"; }
+.glyphicon-chevron-right:before { content: "\e080"; }
+.glyphicon-plus-sign:before { content: "\e081"; }
+.glyphicon-minus-sign:before { content: "\e082"; }
+.glyphicon-remove-sign:before { content: "\e083"; }
+.glyphicon-ok-sign:before { content: "\e084"; }
+.glyphicon-question-sign:before { content: "\e085"; }
+.glyphicon-info-sign:before { content: "\e086"; }
+.glyphicon-screenshot:before { content: "\e087"; }
+.glyphicon-remove-circle:before { content: "\e088"; }
+.glyphicon-ok-circle:before { content: "\e089"; }
+.glyphicon-ban-circle:before { content: "\e090"; }
+.glyphicon-arrow-left:before { content: "\e091"; }
+.glyphicon-arrow-right:before { content: "\e092"; }
+.glyphicon-arrow-up:before { content: "\e093"; }
+.glyphicon-arrow-down:before { content: "\e094"; }
+.glyphicon-share-alt:before { content: "\e095"; }
+.glyphicon-resize-full:before { content: "\e096"; }
+.glyphicon-resize-small:before { content: "\e097"; }
+.glyphicon-exclamation-sign:before { content: "\e101"; }
+.glyphicon-gift:before { content: "\e102"; }
+.glyphicon-leaf:before { content: "\e103"; }
+.glyphicon-fire:before { content: "\e104"; }
+.glyphicon-eye-open:before { content: "\e105"; }
+.glyphicon-eye-close:before { content: "\e106"; }
+.glyphicon-warning-sign:before { content: "\e107"; }
+.glyphicon-plane:before { content: "\e108"; }
+.glyphicon-calendar:before { content: "\e109"; }
+.glyphicon-random:before { content: "\e110"; }
+.glyphicon-comment:before { content: "\e111"; }
+.glyphicon-magnet:before { content: "\e112"; }
+.glyphicon-chevron-up:before { content: "\e113"; }
+.glyphicon-chevron-down:before { content: "\e114"; }
+.glyphicon-retweet:before { content: "\e115"; }
+.glyphicon-shopping-cart:before { content: "\e116"; }
+.glyphicon-folder-close:before { content: "\e117"; }
+.glyphicon-folder-open:before { content: "\e118"; }
+.glyphicon-resize-vertical:before { content: "\e119"; }
+.glyphicon-resize-horizontal:before { content: "\e120"; }
+.glyphicon-hdd:before { content: "\e121"; }
+.glyphicon-bullhorn:before { content: "\e122"; }
+.glyphicon-bell:before { content: "\e123"; }
+.glyphicon-certificate:before { content: "\e124"; }
+.glyphicon-thumbs-up:before { content: "\e125"; }
+.glyphicon-thumbs-down:before { content: "\e126"; }
+.glyphicon-hand-right:before { content: "\e127"; }
+.glyphicon-hand-left:before { content: "\e128"; }
+.glyphicon-hand-up:before { content: "\e129"; }
+.glyphicon-hand-down:before { content: "\e130"; }
+.glyphicon-circle-arrow-right:before { content: "\e131"; }
+.glyphicon-circle-arrow-left:before { content: "\e132"; }
+.glyphicon-circle-arrow-up:before { content: "\e133"; }
+.glyphicon-circle-arrow-down:before { content: "\e134"; }
+.glyphicon-globe:before { content: "\e135"; }
+.glyphicon-wrench:before { content: "\e136"; }
+.glyphicon-tasks:before { content: "\e137"; }
+.glyphicon-filter:before { content: "\e138"; }
+.glyphicon-briefcase:before { content: "\e139"; }
+.glyphicon-fullscreen:before { content: "\e140"; }
+.glyphicon-dashboard:before { content: "\e141"; }
+.glyphicon-paperclip:before { content: "\e142"; }
+.glyphicon-heart-empty:before { content: "\e143"; }
+.glyphicon-link:before { content: "\e144"; }
+.glyphicon-phone:before { content: "\e145"; }
+.glyphicon-pushpin:before { content: "\e146"; }
+.glyphicon-usd:before { content: "\e148"; }
+.glyphicon-gbp:before { content: "\e149"; }
+.glyphicon-sort:before { content: "\e150"; }
+.glyphicon-sort-by-alphabet:before { content: "\e151"; }
+.glyphicon-sort-by-alphabet-alt:before { content: "\e152"; }
+.glyphicon-sort-by-order:before { content: "\e153"; }
+.glyphicon-sort-by-order-alt:before { content: "\e154"; }
+.glyphicon-sort-by-attributes:before { content: "\e155"; }
+.glyphicon-sort-by-attributes-alt:before { content: "\e156"; }
+.glyphicon-unchecked:before { content: "\e157"; }
+.glyphicon-expand:before { content: "\e158"; }
+.glyphicon-collapse-down:before { content: "\e159"; }
+.glyphicon-collapse-up:before { content: "\e160"; }
+.glyphicon-log-in:before { content: "\e161"; }
+.glyphicon-flash:before { content: "\e162"; }
+.glyphicon-log-out:before { content: "\e163"; }
+.glyphicon-new-window:before { content: "\e164"; }
+.glyphicon-record:before { content: "\e165"; }
+.glyphicon-save:before { content: "\e166"; }
+.glyphicon-open:before { content: "\e167"; }
+.glyphicon-saved:before { content: "\e168"; }
+.glyphicon-import:before { content: "\e169"; }
+.glyphicon-export:before { content: "\e170"; }
+.glyphicon-send:before { content: "\e171"; }
+.glyphicon-floppy-disk:before { content: "\e172"; }
+.glyphicon-floppy-saved:before { content: "\e173"; }
+.glyphicon-floppy-remove:before { content: "\e174"; }
+.glyphicon-floppy-save:before { content: "\e175"; }
+.glyphicon-floppy-open:before { content: "\e176"; }
+.glyphicon-credit-card:before { content: "\e177"; }
+.glyphicon-transfer:before { content: "\e178"; }
+.glyphicon-cutlery:before { content: "\e179"; }
+.glyphicon-header:before { content: "\e180"; }
+.glyphicon-compressed:before { content: "\e181"; }
+.glyphicon-earphone:before { content: "\e182"; }
+.glyphicon-phone-alt:before { content: "\e183"; }
+.glyphicon-tower:before { content: "\e184"; }
+.glyphicon-stats:before { content: "\e185"; }
+.glyphicon-sd-video:before { content: "\e186"; }
+.glyphicon-hd-video:before { content: "\e187"; }
+.glyphicon-subtitles:before { content: "\e188"; }
+.glyphicon-sound-stereo:before { content: "\e189"; }
+.glyphicon-sound-dolby:before { content: "\e190"; }
+.glyphicon-sound-5-1:before { content: "\e191"; }
+.glyphicon-sound-6-1:before { content: "\e192"; }
+.glyphicon-sound-7-1:before { content: "\e193"; }
+.glyphicon-copyright-mark:before { content: "\e194"; }
+.glyphicon-registration-mark:before { content: "\e195"; }
+.glyphicon-cloud-download:before { content: "\e197"; }
+.glyphicon-cloud-upload:before { content: "\e198"; }
+.glyphicon-tree-conifer:before { content: "\e199"; }
+.glyphicon-tree-deciduous:before { content: "\e200"; }
+.glyphicon-cd:before { content: "\e201"; }
+.glyphicon-save-file:before { content: "\e202"; }
+.glyphicon-open-file:before { content: "\e203"; }
+.glyphicon-level-up:before { content: "\e204"; }
+.glyphicon-copy:before { content: "\e205"; }
+.glyphicon-paste:before { content: "\e206"; }
+.glyphicon-door:before { content: "\1f6aa"; }
+.glyphicon-key:before { content: "\1f511"; }
+.glyphicon-alert:before { content: "\e209"; }
+.glyphicon-equalizer:before { content: "\e210"; }
+.glyphicon-king:before { content: "\e211"; }
+.glyphicon-queen:before { content: "\e212"; }
+.glyphicon-pawn:before { content: "\e213"; }
+.glyphicon-bishop:before { content: "\e214"; }
+.glyphicon-knight:before { content: "\e215"; }
+.glyphicon-baby-formula:before { content: "\e216"; }
+.glyphicon-tent:before { content: "\26fa"; }
+.glyphicon-blackboard:before { content: "\e218"; }
+.glyphicon-bed:before { content: "\e219"; }
+.glyphicon-apple:before { content: "\f8ff"; }
+.glyphicon-erase:before { content: "\e221"; }
+.glyphicon-hourglass:before { content: "\231b"; }
+.glyphicon-lamp:before { content: "\e223"; }
+.glyphicon-duplicate:before { content: "\e224"; }
+.glyphicon-piggy-bank:before { content: "\e225"; }
+.glyphicon-scissors:before { content: "\e226"; }
+.glyphicon-bitcoin:before { content: "\e227"; }
+.glyphicon-btc:before { content: "\e227"; }
+.glyphicon-xbt:before { content: "\e227"; }
+.glyphicon-yen:before { content: "\00a5"; }
+.glyphicon-jpy:before { content: "\00a5"; }
+.glyphicon-ruble:before { content: "\20bd"; }
+.glyphicon-rub:before { content: "\20bd"; }
+.glyphicon-scale:before { content: "\e230"; }
+.glyphicon-ice-lolly:before { content: "\e231"; }
+.glyphicon-ice-lolly-tasted:before { content: "\e232"; }
+.glyphicon-education:before { content: "\e233"; }
+.glyphicon-option-horizontal:before { content: "\e234"; }
+.glyphicon-option-vertical:before { content: "\e235"; }
+.glyphicon-menu-hamburger:before { content: "\e236"; }
+.glyphicon-modal-window:before { content: "\e237"; }
+.glyphicon-oil:before { content: "\e238"; }
+.glyphicon-grain:before { content: "\e239"; }
+.glyphicon-sunglasses:before { content: "\e240"; }
+.glyphicon-text-size:before { content: "\e241"; }
+.glyphicon-text-color:before { content: "\e242"; }
+.glyphicon-text-background:before { content: "\e243"; }
+.glyphicon-object-align-top:before { content: "\e244"; }
+.glyphicon-object-align-bottom:before { content: "\e245"; }
+.glyphicon-object-align-horizontal:before { content: "\e246"; }
+.glyphicon-object-align-left:before { content: "\e247"; }
+.glyphicon-object-align-vertical:before { content: "\e248"; }
+.glyphicon-object-align-right:before { content: "\e249"; }
+.glyphicon-triangle-right:before { content: "\e250"; }
+.glyphicon-triangle-left:before { content: "\e251"; }
+.glyphicon-triangle-bottom:before { content: "\e252"; }
+.glyphicon-triangle-top:before { content: "\e253"; }
+.glyphicon-console:before { content: "\e254"; }
+.glyphicon-superscript:before { content: "\e255"; }
+.glyphicon-subscript:before { content: "\e256"; }
+.glyphicon-menu-left:before { content: "\e257"; }
+.glyphicon-menu-right:before { content: "\e258"; }
+.glyphicon-menu-down:before { content: "\e259"; }
+.glyphicon-menu-up:before { content: "\e260"; }

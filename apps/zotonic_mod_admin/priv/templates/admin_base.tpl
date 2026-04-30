@@ -12,8 +12,24 @@
         <meta name="description" content="">
         <meta name="robots" content="noindex,nofollow">
 
+        <script nonce="{{ m.req.csp_nonce }}">
+        (function() {
+            var theme = "auto";
+            try {
+                theme = localStorage.getItem("zotonic.admin.theme") || "auto";
+            } catch (e) {
+                theme = "auto";
+            }
+            var resolved = theme === "auto" && window.matchMedia
+                ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+                : (theme === "dark" ? "dark" : "light");
+            document.documentElement.setAttribute("data-bs-theme", resolved);
+            document.documentElement.setAttribute("data-zotonic-admin-theme", theme);
+        })();
+        </script>
+
         {% lib
-            "css/admin-bootstrap3.css"
+            "css/admin-bootstrap5.min.css"
             minify
         %}
 
