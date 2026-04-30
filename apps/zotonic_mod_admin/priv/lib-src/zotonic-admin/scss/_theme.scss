@@ -17,6 +17,8 @@
     --z-admin-find-results-bg: linear-gradient(to right, #f8f8f8, white, white);
     --z-admin-connection-predicate-bg: color-mix(in srgb, var(--z-admin-surface) 94%, var(--bs-primary) 6%);
     --z-admin-tree-list-item-bg: #fefefe;
+    --z-admin-edit-media-bg: var(--z-admin-surface);
+    --z-admin-image-border-color: var(--z-admin-surface);
     --z-admin-breadcrumb-bg: transparent;
     --z-admin-thumbnail-bg: var(--z-admin-bg);
     --z-admin-thumbnail-border: var(--z-admin-border);
@@ -118,6 +120,8 @@
     --z-admin-find-results-bg: linear-gradient(to right, #252a2f, var(--z-admin-surface), var(--z-admin-surface));
     --z-admin-connection-predicate-bg: color-mix(in srgb, var(--z-admin-surface) 88%, var(--bs-primary) 12%);
     --z-admin-tree-list-item-bg: var(--z-admin-surface);
+    --z-admin-edit-media-bg: var(--z-admin-surface);
+    --z-admin-image-border-color: var(--z-admin-border);
     --z-admin-breadcrumb-bg: transparent;
     --z-admin-thumbnail-bg: var(--z-admin-surface);
     --z-admin-thumbnail-border: var(--z-admin-border);

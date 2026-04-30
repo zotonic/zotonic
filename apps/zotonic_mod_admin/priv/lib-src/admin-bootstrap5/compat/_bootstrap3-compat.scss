@@ -15,6 +15,10 @@ $bs3-screen-lg: 1200px;
   color: $text-muted !important;
 }
 
+.text-right {
+  text-align: right !important;
+}
+
 // -----------------------------------------------------------------------------
 // Alerts
 .alert-error { @extend .alert-danger; }
