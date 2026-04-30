@@ -29,7 +29,7 @@
 .mod_translation-language-list h3 {
   font-size: 1.1em;
   line-height: 1.3;
-  color: #000;
+  color: var(--z-admin-text, #000);
 }
 
 .mod_translation-language-list h4 {
