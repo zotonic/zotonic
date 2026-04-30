@@ -16,6 +16,7 @@
     --z-admin-preview-panel-bg: var(--z-admin-surface);
     --z-admin-find-results-bg: linear-gradient(to right, #f8f8f8, white, white);
     --z-admin-connection-predicate-bg: color-mix(in srgb, var(--z-admin-surface) 94%, var(--bs-primary) 6%);
+    --z-admin-tree-list-item-bg: #fefefe;
     --z-admin-breadcrumb-bg: transparent;
     --z-admin-thumbnail-bg: var(--z-admin-bg);
     --z-admin-thumbnail-border: var(--z-admin-border);
@@ -65,8 +66,14 @@
     --z-admin-close-opacity: 0.2;
     --z-admin-close-hover-opacity: 0.5;
     --z-admin-close-text-shadow: 0 1px 0 #fff;
+    --bs3-nav-link-hover-bg: #eeeeee;
+    --bs3-nav-tabs-border-color: #ddd;
+    --bs3-nav-tabs-link-hover-border-color: #eeeeee;
+    --bs3-nav-tabs-active-border-color: #ddd;
     --bs3-nav-tabs-active-color: #555;
     --bs3-nav-tabs-active-bg: var(--z-admin-surface);
+    --bs3-nav-pills-active-color: #fff;
+    --bs3-nav-pills-active-bg: var(--bs-primary);
     --bs3-btn-default-color: #555;
     --bs3-btn-default-bg: var(--bs-tertiary-bg);
     --bs3-btn-default-border-color: #ddd;
@@ -110,6 +117,7 @@
     --z-admin-preview-panel-bg: var(--z-admin-surface);
     --z-admin-find-results-bg: linear-gradient(to right, #252a2f, var(--z-admin-surface), var(--z-admin-surface));
     --z-admin-connection-predicate-bg: color-mix(in srgb, var(--z-admin-surface) 88%, var(--bs-primary) 12%);
+    --z-admin-tree-list-item-bg: var(--z-admin-surface);
     --z-admin-breadcrumb-bg: transparent;
     --z-admin-thumbnail-bg: var(--z-admin-surface);
     --z-admin-thumbnail-border: var(--z-admin-border);
@@ -159,8 +167,14 @@
     --z-admin-close-opacity: 0.65;
     --z-admin-close-hover-opacity: 0.9;
     --z-admin-close-text-shadow: none;
+    --bs3-nav-link-hover-bg: var(--z-admin-surface-hover);
+    --bs3-nav-tabs-border-color: var(--z-admin-border);
+    --bs3-nav-tabs-link-hover-border-color: var(--z-admin-border);
+    --bs3-nav-tabs-active-border-color: var(--z-admin-border);
     --bs3-nav-tabs-active-color: var(--bs-emphasis-color);
     --bs3-nav-tabs-active-bg: var(--z-admin-surface);
+    --bs3-nav-pills-active-color: #fff;
+    --bs3-nav-pills-active-bg: var(--bs-primary);
     --bs3-btn-default-color: #f8f9fa;
     --bs3-btn-default-bg: #3b444c;
     --bs3-btn-default-border-color: #8b949e;
@@ -190,6 +204,19 @@
 
 .breadcrumb {
     --bs-breadcrumb-bg: var(--z-admin-breadcrumb-bg);
+}
+
+.nav-tabs {
+    --bs-nav-tabs-border-color: var(--bs3-nav-tabs-border-color);
+    --bs-nav-tabs-link-hover-border-color: var(--bs3-nav-tabs-link-hover-border-color);
+    --bs-nav-tabs-link-active-color: var(--bs3-nav-tabs-active-color);
+    --bs-nav-tabs-link-active-bg: var(--bs3-nav-tabs-active-bg);
+    --bs-nav-tabs-link-active-border-color: var(--bs3-nav-tabs-active-border-color) var(--bs3-nav-tabs-active-border-color) var(--bs3-nav-tabs-active-bg);
+}
+
+.nav-pills {
+    --bs-nav-pills-link-active-color: var(--bs3-nav-pills-active-color);
+    --bs-nav-pills-link-active-bg: var(--bs3-nav-pills-active-bg);
 }
 
 [data-bs-theme="dark"] {

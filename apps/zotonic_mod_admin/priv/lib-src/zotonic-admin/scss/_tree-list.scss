@@ -1,7 +1,7 @@
 ul.tree-list {
     li.menu-item {
         > div {
-            background-color: #fefefe;
+            background-color: var(--z-admin-tree-list-item-bg);
 
             > a {
                 color: $textColorMedium;
