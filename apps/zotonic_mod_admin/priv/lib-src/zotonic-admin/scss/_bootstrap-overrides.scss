@@ -2,7 +2,7 @@
 // https://gist.github.com/geksilla/6543145
 
 .text-muted {
-    color: $textColorMuted;
+    color: var(--z-admin-text-muted);
 }
 
 .nav {
@@ -72,7 +72,7 @@
 
     box-shadow: none;
     padding: $_padding $_padding ($_padding - $_button_margin) $_padding;
-    background-color: white;
+    background-color: var(--z-admin-surface);
     border: 0;
     border-radius: $radiusWidget;
 

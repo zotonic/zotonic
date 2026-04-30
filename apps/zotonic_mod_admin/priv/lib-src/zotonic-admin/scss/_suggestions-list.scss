@@ -4,20 +4,20 @@ ul.suggestions-list {
 }
 ul.suggestions-list li a {
     display: block;
-    background-image: linear-gradient(to bottom, #fff 0%, #f5f5f5 100%);
-    border: 1px solid #E0E0E0;
+    background-image: var(--z-admin-suggestions-bg);
+    border: 1px solid var(--z-admin-suggestions-border-color);
     border-radius: $radiusBlockElement;
     margin-bottom: -1px;
     padding: 2px 4px;
 }
 
 ul.suggestions-list li a .pull-right {
-    color: $textColorMuted;
+    color: var(--z-admin-text-muted);
 }
 
 ul.suggestions-list li a:hover span.pull-right,
 ul.suggestions-list li a:hover {
-    color: #f5f5f5;
-    background: #999;
+    color: var(--z-admin-suggestions-active-color);
+    background: var(--z-admin-suggestions-active-bg);
     text-decoration: none;
 }
