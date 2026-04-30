@@ -15,7 +15,7 @@ ul.tree-list li {
   border: none;
 }
 ul.tree-list li.placeholder {
-  background: #aaa;
+  background: var(--z-admin-text-light, #aaa);
   border-radius: 4px;
 }
 ul.tree-list li li.menu-item:last-child {
@@ -45,13 +45,13 @@ ul.tree-list li div.menu-wrapper .menu-toggle {
   grid-column: 2;
   width: 40px;
   height: 34px;
-  color: #ccc;
+  color: var(--z-admin-text-light, #ccc);
   display: none;
 }
 ul.tree-list li div.menu-wrapper .menu-toggle:hover {
   cursor: pointer;
   text-decoration: none;
-  color: black;
+  color: var(--z-admin-text, black);
 }
 ul.tree-list li div.menu-wrapper .menu-toggle > i {
   cursor: pointer;
@@ -108,7 +108,7 @@ ul.tree-list li.submenu-open > ul {
   float: right;
 }
 .menu-item .category {
-  color: #999;
+  color: var(--z-admin-text-muted, #999);
 }
 #menu-editor .widget-header {
   height: 28px;
