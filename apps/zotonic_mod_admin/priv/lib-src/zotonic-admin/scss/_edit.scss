@@ -131,7 +131,7 @@ ul.media {
                     width: calc($_image_width - $roundBtnSize - 3px);
                     vertical-align: text-top;
                     color: white;
-                    text-shadow: 2px 2px black;
+                    text-shadow: var(--z-admin-image-text-shadow);
                 }
             }
         }
@@ -214,7 +214,8 @@ $_leaderImageHeight: 60px;
     z-index: 10;
 
     margin-bottom: 4px;
-    background-color: $backgroundColorLighter;
+    background-color: var(--z-admin-surface-muted);
+    border-color: var(--z-admin-table-border);
 }
 
 
