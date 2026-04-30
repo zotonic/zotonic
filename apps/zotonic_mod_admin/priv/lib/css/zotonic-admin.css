@@ -35,6 +35,8 @@ limitations under the License.
   --z-admin-find-results-bg: linear-gradient(to right, #f8f8f8, white, white);
   --z-admin-connection-predicate-bg: color-mix(in srgb, var(--z-admin-surface) 94%, var(--bs-primary) 6%);
   --z-admin-tree-list-item-bg: #fefefe;
+  --z-admin-edit-media-bg: var(--z-admin-surface);
+  --z-admin-image-border-color: var(--z-admin-surface);
   --z-admin-breadcrumb-bg: transparent;
   --z-admin-thumbnail-bg: var(--z-admin-bg);
   --z-admin-thumbnail-border: var(--z-admin-border);
@@ -136,6 +138,8 @@ limitations under the License.
   --z-admin-find-results-bg: linear-gradient(to right, #252a2f, var(--z-admin-surface), var(--z-admin-surface));
   --z-admin-connection-predicate-bg: color-mix(in srgb, var(--z-admin-surface) 88%, var(--bs-primary) 12%);
   --z-admin-tree-list-item-bg: var(--z-admin-surface);
+  --z-admin-edit-media-bg: var(--z-admin-surface);
+  --z-admin-image-border-color: var(--z-admin-border);
   --z-admin-breadcrumb-bg: transparent;
   --z-admin-thumbnail-bg: var(--z-admin-surface);
   --z-admin-thumbnail-border: var(--z-admin-border);
@@ -437,7 +441,7 @@ body.noframe > .admin-container {
 }
 
 .admin-image-border, .admin-edit-media {
-  border: 1px solid #fff;
+  border: 1px solid var(--z-admin-image-border-color);
 }
 
 .admin-text-header, .widget .widget-header,
@@ -1094,7 +1098,7 @@ img.mediaclass-admin-leader-image {
 }
 
 .admin-edit-media {
-  background: white;
+  background: var(--z-admin-edit-media-bg);
   padding: 0;
   margin: 0 0 10px 0;
 }

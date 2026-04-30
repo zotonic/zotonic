@@ -11897,6 +11897,10 @@ textarea.form-control-lg {
   color: #777 !important;
 }
 
+.text-right {
+  text-align: right !important;
+}
+
 .btn-default {
   --bs-btn-color: #333;
   --bs-btn-bg: var(--bs-tertiary-bg);
