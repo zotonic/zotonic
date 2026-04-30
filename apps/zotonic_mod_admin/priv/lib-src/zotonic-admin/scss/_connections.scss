@@ -10,6 +10,16 @@
     }
 }
 
+.table > :not(caption) > * > .admin-connection-predicate,
+.table.table-striped > tbody > tr > .admin-connection-predicate,
+.table.table-striped > tbody > tr:nth-of-type(odd) > .admin-connection-predicate {
+    --bs-table-bg: var(--z-admin-connection-predicate-bg);
+    --bs-table-bg-type: transparent;
+    --bs-table-bg-state: transparent;
+
+    background-color: var(--z-admin-connection-predicate-bg);
+}
+
 .checkbox-list {
     display: flex;
     flex-wrap: wrap;

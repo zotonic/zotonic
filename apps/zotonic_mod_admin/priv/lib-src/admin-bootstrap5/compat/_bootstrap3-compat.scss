@@ -69,18 +69,18 @@ $bs3-screen-lg: 1200px;
   font-size: ($font-size-base * 1.5);
   font-weight: 700;
   line-height: 1;
-  color: #000;
+  color: var(--z-admin-close-color, #000);
   text-shadow: var(--z-admin-close-text-shadow, 0 1px 0 #fff);
-  opacity: .2;
+  opacity: var(--z-admin-close-opacity, .2);
   text-decoration: none;
 }
 
 .close:hover,
 .close:focus {
-  color: #000;
+  color: var(--z-admin-close-hover-color, var(--z-admin-close-color, #000));
   text-decoration: none;
   cursor: pointer;
-  opacity: .5;
+  opacity: var(--z-admin-close-hover-opacity, .5);
 }
 
 button.close {
@@ -148,8 +148,9 @@ button.close {
   display: block;
   padding: .25rem;
   margin-bottom: $spacer;
-  background-color: $body-bg;
-  border: 1px solid $border-color;
+  color: var(--z-admin-thumbnail-color, var(--bs-body-color));
+  background-color: var(--z-admin-thumbnail-bg, var(--bs-body-bg));
+  border: 1px solid var(--z-admin-thumbnail-border, var(--bs-border-color));
   border-radius: $border-radius;
 }
 
@@ -687,12 +688,101 @@ button.close {
 
 // -----------------------------------------------------------------------------
 // Pagination helpers
+.pagination {
+  display: inline-block;
+  padding-left: 0;
+  margin: 20px 0;
+  font-size: var(--bs-pagination-font-size);
+  border-radius: var(--bs-pagination-border-radius);
+}
+
+.pagination > li {
+  display: inline;
+}
+
+.pagination > li > a,
+.pagination > li > span {
+  position: relative;
+  float: left;
+  padding: var(--bs-pagination-padding-y) var(--bs-pagination-padding-x);
+  margin-left: -1px;
+  line-height: $line-height-base;
+  color: var(--z-admin-pagination-color, var(--bs-pagination-color));
+  text-decoration: none;
+  background-color: var(--z-admin-pagination-bg, var(--bs-pagination-bg));
+  border: var(--bs-pagination-border-width) solid var(--z-admin-pagination-border-color, var(--bs-pagination-border-color));
+}
+
+.pagination > li > a:hover,
+.pagination > li > a:focus,
+.pagination > li > span:hover,
+.pagination > li > span:focus {
+  z-index: 2;
+  color: var(--z-admin-pagination-hover-color, var(--bs-pagination-hover-color));
+  background-color: var(--z-admin-pagination-hover-bg, var(--bs-pagination-hover-bg));
+  border-color: var(--z-admin-pagination-hover-border-color, var(--bs-pagination-hover-border-color));
+}
+
+.pagination > li:first-child > a,
+.pagination > li:first-child > span {
+  margin-left: 0;
+  border-top-left-radius: var(--bs-pagination-border-radius);
+  border-bottom-left-radius: var(--bs-pagination-border-radius);
+}
+
+.pagination > li:last-child > a,
+.pagination > li:last-child > span {
+  border-top-right-radius: var(--bs-pagination-border-radius);
+  border-bottom-right-radius: var(--bs-pagination-border-radius);
+}
+
+.pagination > .active > a,
+.pagination > .active > a:hover,
+.pagination > .active > a:focus,
+.pagination > .active > span,
+.pagination > .active > span:hover,
+.pagination > .active > span:focus {
+  z-index: 3;
+  color: var(--z-admin-pagination-active-color, var(--bs-pagination-active-color));
+  cursor: default;
+  background-color: var(--z-admin-pagination-active-bg, var(--bs-pagination-active-bg));
+  border-color: var(--z-admin-pagination-active-border-color, var(--bs-pagination-active-border-color));
+}
+
+.pagination > .disabled > span,
+.pagination > .disabled > span:hover,
+.pagination > .disabled > span:focus,
+.pagination > .disabled > a,
+.pagination > .disabled > a:hover,
+.pagination > .disabled > a:focus {
+  color: var(--z-admin-pagination-disabled-color, var(--bs-pagination-disabled-color));
+  cursor: not-allowed;
+  background-color: var(--z-admin-pagination-disabled-bg, var(--bs-pagination-disabled-bg));
+  border-color: var(--z-admin-pagination-disabled-border-color, var(--bs-pagination-disabled-border-color));
+}
+
 .pagination-centered {
   text-align: center;
 }
 
 .pagination-centered .pagination {
-  justify-content: center;
+  display: inline-block;
+}
+
+// -----------------------------------------------------------------------------
+// Breadcrumbs
+.breadcrumb > li {
+  display: inline-block;
+}
+
+.breadcrumb > li + li::before {
+  padding: 0 var(--bs-breadcrumb-item-padding-x);
+  color: var(--bs-breadcrumb-divider-color);
+  content: var(--bs-breadcrumb-divider, "/");
+}
+
+.breadcrumb > .active {
+  color: var(--bs-breadcrumb-item-active-color);
 }
 
 // -----------------------------------------------------------------------------

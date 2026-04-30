@@ -10,6 +10,33 @@
     --z-admin-border: #ddd;
     --z-admin-table-border: #e5e5e5;
     --z-admin-sticky-bg: rgba(255, 255, 255, 0.7);
+    --z-admin-modal-footer-sticky-bg: rgba(255, 255, 255, 0.9);
+    --z-admin-modal-footer-panel-bg: rgba(255, 255, 255, 0.8);
+    --z-admin-form-panel-bg: var(--z-admin-surface);
+    --z-admin-preview-panel-bg: var(--z-admin-surface);
+    --z-admin-find-results-bg: linear-gradient(to right, #f8f8f8, white, white);
+    --z-admin-connection-predicate-bg: color-mix(in srgb, var(--z-admin-surface) 94%, var(--bs-primary) 6%);
+    --z-admin-breadcrumb-bg: transparent;
+    --z-admin-thumbnail-bg: var(--z-admin-bg);
+    --z-admin-thumbnail-border: var(--z-admin-border);
+    --z-admin-thumbnail-hover-border: #888;
+    --z-admin-thumbnail-color: #222;
+    --z-admin-thumbnail-connected-bg: var(--z-admin-surface-hover);
+    --z-admin-thumbnail-connected-color: var(--z-admin-text-light);
+    --z-admin-thumbnail-filename-bg: var(--z-admin-surface);
+    --z-admin-thumbnail-filename-color: var(--z-admin-text-light);
+    --z-admin-pagination-color: var(--bs-link-color);
+    --z-admin-pagination-bg: var(--z-admin-surface);
+    --z-admin-pagination-border-color: var(--z-admin-border);
+    --z-admin-pagination-hover-color: var(--bs-link-hover-color);
+    --z-admin-pagination-hover-bg: #eeeeee;
+    --z-admin-pagination-hover-border-color: var(--z-admin-border);
+    --z-admin-pagination-active-color: #fff;
+    --z-admin-pagination-active-bg: var(--bs-primary);
+    --z-admin-pagination-active-border-color: var(--bs-primary);
+    --z-admin-pagination-disabled-color: var(--z-admin-text-muted);
+    --z-admin-pagination-disabled-bg: var(--z-admin-surface);
+    --z-admin-pagination-disabled-border-color: var(--z-admin-border);
     --z-admin-widget-border: transparent;
     --z-admin-widget-text: var(--z-admin-text);
     --z-admin-widget-text-muted: var(--z-admin-text-muted);
@@ -33,6 +60,10 @@
     --z-admin-text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
     --z-admin-inverse-text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
     --z-admin-image-text-shadow: 2px 2px black;
+    --z-admin-close-color: #000;
+    --z-admin-close-hover-color: #000;
+    --z-admin-close-opacity: 0.2;
+    --z-admin-close-hover-opacity: 0.5;
     --z-admin-close-text-shadow: 0 1px 0 #fff;
     --bs3-nav-tabs-active-color: #555;
     --bs3-nav-tabs-active-bg: var(--z-admin-surface);
@@ -73,6 +104,33 @@
     --z-admin-border: #495057;
     --z-admin-table-border: #495057;
     --z-admin-sticky-bg: rgba(43, 48, 53, 0.9);
+    --z-admin-modal-footer-sticky-bg: rgba(43, 48, 53, 0.92);
+    --z-admin-modal-footer-panel-bg: rgba(43, 48, 53, 0.88);
+    --z-admin-form-panel-bg: var(--z-admin-surface);
+    --z-admin-preview-panel-bg: var(--z-admin-surface);
+    --z-admin-find-results-bg: linear-gradient(to right, #252a2f, var(--z-admin-surface), var(--z-admin-surface));
+    --z-admin-connection-predicate-bg: color-mix(in srgb, var(--z-admin-surface) 88%, var(--bs-primary) 12%);
+    --z-admin-breadcrumb-bg: transparent;
+    --z-admin-thumbnail-bg: var(--z-admin-surface);
+    --z-admin-thumbnail-border: var(--z-admin-border);
+    --z-admin-thumbnail-hover-border: #9aa4ae;
+    --z-admin-thumbnail-color: var(--z-admin-widget-text);
+    --z-admin-thumbnail-connected-bg: var(--z-admin-surface-muted);
+    --z-admin-thumbnail-connected-color: var(--z-admin-text-muted);
+    --z-admin-thumbnail-filename-bg: var(--z-admin-surface);
+    --z-admin-thumbnail-filename-color: var(--z-admin-text-muted);
+    --z-admin-pagination-color: var(--bs-link-color);
+    --z-admin-pagination-bg: var(--z-admin-surface);
+    --z-admin-pagination-border-color: var(--z-admin-border);
+    --z-admin-pagination-hover-color: var(--bs-link-hover-color);
+    --z-admin-pagination-hover-bg: var(--z-admin-surface-hover);
+    --z-admin-pagination-hover-border-color: #6c757d;
+    --z-admin-pagination-active-color: #fff;
+    --z-admin-pagination-active-bg: var(--bs-primary);
+    --z-admin-pagination-active-border-color: var(--bs-primary);
+    --z-admin-pagination-disabled-color: var(--z-admin-text-muted);
+    --z-admin-pagination-disabled-bg: #252a2f;
+    --z-admin-pagination-disabled-border-color: var(--z-admin-border);
     --z-admin-widget-border: #3d454d;
     --z-admin-widget-text: #f1f3f5;
     --z-admin-widget-text-muted: #c7ced6;
@@ -96,6 +154,10 @@
     --z-admin-text-shadow: none;
     --z-admin-inverse-text-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
     --z-admin-image-text-shadow: 2px 2px black;
+    --z-admin-close-color: var(--z-admin-widget-text);
+    --z-admin-close-hover-color: #fff;
+    --z-admin-close-opacity: 0.65;
+    --z-admin-close-hover-opacity: 0.9;
     --z-admin-close-text-shadow: none;
     --bs3-nav-tabs-active-color: var(--bs-emphasis-color);
     --bs3-nav-tabs-active-bg: var(--z-admin-surface);
@@ -124,6 +186,10 @@
 
 .form-select:-moz-focusring {
     text-shadow: 0 0 0 var(--z-admin-text);
+}
+
+.breadcrumb {
+    --bs-breadcrumb-bg: var(--z-admin-breadcrumb-bg);
 }
 
 [data-bs-theme="dark"] {

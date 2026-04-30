@@ -49,7 +49,7 @@ $env-backup:        #37474f;        // Gray
     @media (min-width: $screen-phone) {
         body::before {
             background-color: $color;
-            background-image: linear-gradient($color, white);
+            background-image: linear-gradient($color, var(--z-admin-bg));
             content: $name;
         }
     }
