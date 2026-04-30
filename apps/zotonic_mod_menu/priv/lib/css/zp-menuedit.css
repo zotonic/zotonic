@@ -31,7 +31,7 @@ ul.tree-list li div.menu-wrapper {
   display: grid;
   grid-template-columns: minmax(10px, auto) auto 1fr auto auto;
   grid-template-rows: minmax(34px, auto);
-  border: 1px solid #aaa;
+  border: 1px solid var(--z-admin-border, #aaa);
   line-height: 34px;
   border-radius: 4px;
 }
