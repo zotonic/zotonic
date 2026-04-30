@@ -13,6 +13,8 @@ $danger: $brand-danger;
 $body-bg: $body-bg;
 $body-color: $text-color;
 $link-color: $link-color;
+$link-decoration: none;
+$link-hover-decoration: $link-hover-decoration;
 
 $font-family-sans-serif: $font-family-sans-serif;
 $font-family-monospace: $font-family-monospace;
@@ -34,6 +36,7 @@ $input-padding-y-sm: $padding-small-vertical;
 $input-padding-x-sm: $padding-small-horizontal;
 $input-padding-y-lg: $padding-large-vertical;
 $input-padding-x-lg: $padding-large-horizontal;
+$input-placeholder-color: $input-color-placeholder;
 
 $btn-padding-y: $padding-base-vertical;
 $btn-padding-x: $padding-base-horizontal;

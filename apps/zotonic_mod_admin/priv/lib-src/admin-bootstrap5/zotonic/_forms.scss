@@ -13,7 +13,7 @@
         margin: 0;
         font-weight: bold;
         font-size: $font-size-small;
-        color: $gray-light;
+        color: var(--z-admin-form-label-color);
         // text-transform: uppercase;
     }
 
@@ -29,7 +29,7 @@
     input:focus + label,
     textarea:focus + label,
     select:focus + label {
-        color: $brand-primary;
+        color: var(--z-admin-form-label-focus-color);
     }
 
     input.field-title {
@@ -54,51 +54,51 @@
         select,
         textarea {
             padding: 0 2px;
-            border-bottom: 2px solid $brand-danger;
+            border-bottom: 2px solid var(--z-admin-form-invalid-color);
         }
 
         label,
         input::placeholder,
         textarea::placeholder {
-            color: $brand-danger;
+            color: var(--z-admin-form-invalid-color);
         }
     }
 
     input:not(:placeholder-shown):invalid + label,
     textarea:not(:placeholder-shown):invalid + label,
     .did-submit :invalid + label {
-        color: $brand-primary;
+        color: var(--z-admin-form-label-focus-color);
     }
 
     input:not(:placeholder-shown):invalid,
     textarea:not(:placeholder-shown):invalid,
     .did-submit :invalid {
         padding: 0 2px;
-        border-bottom: 2px solid $brand-danger;
+        border-bottom: 2px solid var(--z-admin-form-invalid-color);
     }
 }
 
 .form-group label.control-label {
     font-weight: bold;
     font-size: $font-size-small;
-    color: $gray-light;
+    color: var(--z-admin-form-label-color);
 }
 
 body .form-control,
 .form-control-small {
     padding: 0 2px 1px 2px;
     border: 0;
-    border-bottom: 1px solid $gray-lighter;
+    border-bottom: 1px solid var(--z-admin-form-control-border-color);
     box-shadow: none;
     -webkit-box-shadow: none;
-    background-color: rgba(250, 250, 250, 0.5);
+    background-color: var(--z-admin-form-control-bg);
 
     &:focus {
         padding: 0 2px;
-        border-bottom: 2px solid $brand-primary;
+        border-bottom: 2px solid var(--z-admin-form-label-focus-color);
         box-shadow: none;
         -webkit-box-shadow: none;
-        background-color: rgba(255, 255, 235, 0.7);
+        background-color: var(--z-admin-form-control-focus-bg);
     }
 }
 
@@ -118,6 +118,7 @@ label {
 label.checkbox,
 label.radio {
     font-weight: normal;
+    color: var(--z-admin-checkbox-label-color);
 
     input[type="checkbox"],
     input[type="radio"] {
@@ -126,4 +127,3 @@ label.radio {
         margin-top: 0;
     }
 }
-
