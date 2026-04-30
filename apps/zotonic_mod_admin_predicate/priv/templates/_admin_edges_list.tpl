@@ -9,7 +9,7 @@
                     </a>
                 {% endif %}
             </th>
-            <th width="30%" style="background-color: #f8f8ff;">
+            <th width="30%" class="admin-connection-predicate">
                 {_ Predicate _} &rarr;
                 {% if m.rsc[q.qpredicate].id as id %}
                     <a class="btn btn-default btn-xs" href="{% url admin_edges qhassubject=q.qhassubject qhasobject=q.qhasobject %}" title="{_ Remove predicate filter _}">
@@ -45,7 +45,7 @@
                 </a>
                 {% catinclude "_rsc_item.tpl" edge.subject_id show_medium %}
             </td>
-            <td class="clickable" style="background-color: #f8f8ff;">
+            <td class="clickable admin-connection-predicate">
                 <div>
                     <strong {% include "_language_attrs.tpl" %}>{{ edge.predicate_id.title }}</strong>
                     {% if m.acl.is_allowed.link[edge.subject_id] %}
