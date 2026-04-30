@@ -20,5 +20,9 @@ $container-max-widths: (
   xxl: 1520px
 );
 
+$link-decoration: none;
+$link-hover-decoration: underline;
+$input-placeholder-color: #999;
+
 @import "../scss/bootstrap";
 @import "../compat/bootstrap3-compat";

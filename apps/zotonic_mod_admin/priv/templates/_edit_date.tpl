@@ -5,7 +5,7 @@
         type="date"
         name="dt:ymd:{{ is_end|if:1:0 }}:{{ name }}"
         value="{{ date|date:'Y-m-d':disp_tz }}"
-        class="{{ class }} {{ date_class }} form-control"
+        class="{{ class }} {{ date_class }}"
         {% if placeholder %}
             placeholder="{{ placeholder }}"
         {% endif %}
@@ -14,7 +14,7 @@
         type="time"
         name="dt:hi:{{ is_end|if:1:0 }}:{{ name }}"
         value="{% if not date_is_all_day %}{{ date|date:'H:i':disp_tz }}{% endif %}"
-        class="input-mini {{ class }} {{ time_class }} form-control"
+        class="input-mini {{ class }} {{ time_class }}"
         {% if date_is_all_day %}
             style="display: none;"
             disabled="disabled"

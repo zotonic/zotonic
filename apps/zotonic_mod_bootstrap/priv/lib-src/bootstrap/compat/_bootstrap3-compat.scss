@@ -36,6 +36,14 @@ $bs3-screen-lg: 1200px;
   --bs-btn-disabled-bg: var(--bs-tertiary-bg);
   --bs-btn-disabled-border-color: #ccc;
 }
+
+.btn-danger {
+  --bs-btn-color: #fff;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-active-color: #fff;
+  --bs-btn-disabled-color: #fff;
+}
+
 .btn-small { @extend .btn-sm; }
 
 .btn-xs {
@@ -46,6 +54,35 @@ $bs3-screen-lg: 1200px;
 }
 
 .btn-group-xs > .btn { @extend .btn-xs; }
+
+// -----------------------------------------------------------------------------
+// Close buttons
+.close {
+  float: right;
+  font-size: ($font-size-base * 1.5);
+  font-weight: 700;
+  line-height: 1;
+  color: #000;
+  text-shadow: 0 1px 0 #fff;
+  opacity: .2;
+  text-decoration: none;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+  opacity: .5;
+}
+
+button.close {
+  padding: 0;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  appearance: none;
+}
 
 // -----------------------------------------------------------------------------
 // Labels (map to badges)
@@ -135,10 +172,17 @@ $bs3-screen-lg: 1200px;
   gap: .5rem;
 }
 
+.form-inline > .pull-right {
+  margin-left: auto;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
 .form-horizontal .form-group {
   display: flex;
   flex-wrap: wrap;
-  margin-bottom: $spacer;
 }
 
 .form-horizontal .control-label {
@@ -363,6 +407,11 @@ $bs3-screen-lg: 1200px;
   transform: translate(0, 0);
 }
 
+.modal-header .close {
+  order: 2;
+  margin-left: auto;
+}
+
 .modal-backdrop {
   z-index: 1040;
 }
@@ -371,9 +420,41 @@ $bs3-screen-lg: 1200px;
   opacity: $modal-backdrop-opacity;
 }
 
+.modal-footer {
+  display: block;
+  padding: 15px;
+  text-align: right;
+}
+
+.modal-footer::before,
+.modal-footer::after {
+  display: table;
+  content: " ";
+}
+
+.modal-footer::after {
+  clear: both;
+}
+
+.modal-footer > * {
+  margin: 0;
+}
+
+.modal-footer .btn + .btn {
+  margin-bottom: 0;
+  margin-left: 5px;
+}
+
+.modal-footer .btn-group .btn + .btn {
+  margin-left: -1px;
+}
+
+.modal-footer .btn-block + .btn-block {
+  margin-left: 0;
+}
+
 .dropdown-menu > li > a {
   display: block;
-  width: 100%;
   padding: 3px 20px;
   clear: both;
   font-weight: 400;
@@ -567,7 +648,7 @@ $bs3-screen-lg: 1200px;
 .nav-tabs > li.active > a:focus {
   color: var(--bs-emphasis-color);
   cursor: default;
-  background-color: var(--bs-body-bg);
+  background-color: var(--bs3-nav-tabs-active-bg, var(--bs-light-bg-subtle));
   border: 1px solid $nav-tabs-border-color;
   border-bottom-color: transparent;
 }

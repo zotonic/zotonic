@@ -23,6 +23,69 @@ limitations under the License.
 
 (function($)
 {
+    const adminThemeStorageKey = "zotonic.admin.theme";
+    const adminThemeValues = [ "light", "dark", "auto" ];
+    const adminThemeMedia = window.matchMedia
+        ? window.matchMedia("(prefers-color-scheme: dark)")
+        : undefined;
+
+    const adminThemePreference = () => {
+        let value = "auto";
+
+        try {
+            value = localStorage.getItem(adminThemeStorageKey) || "auto";
+        } catch (e) {
+            value = "auto";
+        }
+
+        return adminThemeValues.indexOf(value) === -1 ? "auto" : value;
+    };
+
+    const adminThemeResolved = (value) =>
+        value === "auto" && adminThemeMedia && adminThemeMedia.matches ? "dark" : value === "dark" ? "dark" : "light";
+
+    const adminThemeApply = (value) => {
+        const theme = adminThemeValues.indexOf(value) === -1 ? "auto" : value;
+        document.documentElement.setAttribute("data-bs-theme", adminThemeResolved(theme));
+        document.documentElement.setAttribute("data-zotonic-admin-theme", theme);
+        $(".admin-theme-menu-item").each(function() {
+            const isActive = $(this).attr("data-admin-theme-value") === theme;
+            $(this).toggleClass("active", isActive);
+        });
+    };
+
+    const adminThemeSet = (value) => {
+        try {
+            localStorage.setItem(adminThemeStorageKey, value);
+        } catch (e) {
+            // Ignore storage failures; the selected theme still applies to the current page.
+        }
+        adminThemeApply(value);
+    };
+
+    $(function() {
+        adminThemeApply(adminThemePreference());
+
+        $(document).on("click", ".admin-theme-menu-item", function(e) {
+            e.preventDefault();
+            adminThemeSet($(this).attr("data-admin-theme-value"));
+        });
+    });
+
+    if (adminThemeMedia && adminThemeMedia.addEventListener) {
+        adminThemeMedia.addEventListener("change", function() {
+            if (adminThemePreference() === "auto") {
+                adminThemeApply("auto");
+            }
+        });
+    } else if (adminThemeMedia && adminThemeMedia.addListener) {
+        adminThemeMedia.addListener(function() {
+            if (adminThemePreference() === "auto") {
+                adminThemeApply("auto");
+            }
+        });
+    }
+
     $.widget("ui.adminLinkedTable",
     {
         // make row cells clickable

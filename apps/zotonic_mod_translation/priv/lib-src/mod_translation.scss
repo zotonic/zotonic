@@ -1,19 +1,17 @@
-@import (reference) "variables.less";
-
 .dropdown-menu {
     &.mod_translation_menu-has-icons {
         > li > a {
-            padding-left: 40px;
+            padding-left: 30px;
             position: relative;
 
             .glyphicon {
-                @_height: 18px + 2 * 3px; // line-height + padding
-                @_icon_height: 13px; // icon font size
+                $height: 18px + 2 * 3px; // line-height + padding
+                $icon-height: 13px; // icon font size
                 position: absolute;
                 left: 10px;
                 top: 0;
                 bottom: 0;
-                line-height: @_height;
+                line-height: $height;
             }
         }
     }
@@ -122,11 +120,11 @@
 
 /* Status */
 
-@_color_0: #fc5830; // red
-@_color_25: #fc5830; // red
-@_color_50: #fd9727; // orange
-@_color_75: #cdda49; // lime
-@_color_100: #1ec659; // green
+$color-0: #fc5830; // red
+$color-25: #fc5830; // red
+$color-50: #fd9727; // orange
+$color-75: #cdda49; // lime
+$color-100: #1ec659; // green
 
 .mod_translation-status-table {}
 
@@ -154,19 +152,18 @@
 }
 
 .mod_translation-status-perc-0 {
-    .mod_translation-status-bar {background-color: @_color_0;}
+    .mod_translation-status-bar {background-color: $color-0;}
 }
 .mod_translation-status-perc-25 {
-    .mod_translation-status-bar {background-color: @_color_25;}
+    .mod_translation-status-bar {background-color: $color-25;}
 }
 .mod_translation-status-perc-50 {
-    .mod_translation-status-bar {background-color: @_color_50;}
+    .mod_translation-status-bar {background-color: $color-50;}
 }
 .mod_translation-status-perc-75 {
-    .mod_translation-status-bar {background-color: @_color_75;}
+    .mod_translation-status-bar {background-color: $color-75;}
 }
 .mod_translation-status-perc-100 {
-    .mod_translation-status-bar {background-color: @_color_100;}
+    .mod_translation-status-bar {background-color: $color-100;}
 }
-
 
