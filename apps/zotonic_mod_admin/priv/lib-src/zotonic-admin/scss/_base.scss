@@ -88,12 +88,12 @@ details {
     a:not(.btn),
     .text-muted,
     .help-block {
-        color: $textColorUnpublished;
+        color: var(--z-admin-text-light);
     }
 }
 
 .z-drag-drop-placeholder {
-    background: $backgroundDragPlaceholder;
+    background: var(--z-admin-drag-placeholder-bg);
     border: none;
     border-radius: $radiusBlockElement;
     visibility: visible !important;
@@ -221,7 +221,7 @@ pre:empty {
 }
 
 .ui-effects-transfer {
-    border: 1px dotted #333;
+    border: 1px dotted var(--z-admin-ui-transfer-border-color);
     z-index: 10000;
 }
 
