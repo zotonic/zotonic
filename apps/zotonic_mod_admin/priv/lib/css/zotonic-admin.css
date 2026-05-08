@@ -39,6 +39,7 @@ limitations under the License.
   --z-admin-suggestions-active-bg: #999;
   --z-admin-connection-predicate-bg: color-mix(in srgb, var(--z-admin-surface) 94%, var(--bs-primary) 6%);
   --z-admin-tree-list-item-bg: #fefefe;
+  --z-admin-tree-list-item-hover-bg: var(--z-admin-surface-hover);
   --z-admin-edit-media-bg: var(--z-admin-surface);
   --z-admin-image-border-color: var(--z-admin-surface);
   --z-admin-invalid-bg: #ffeeee;
@@ -162,6 +163,7 @@ limitations under the License.
   --z-admin-suggestions-active-bg: var(--z-admin-surface-hover);
   --z-admin-connection-predicate-bg: color-mix(in srgb, var(--z-admin-surface) 88%, var(--bs-primary) 12%);
   --z-admin-tree-list-item-bg: var(--z-admin-surface);
+  --z-admin-tree-list-item-hover-bg: var(--z-admin-surface-hover);
   --z-admin-edit-media-bg: var(--z-admin-surface);
   --z-admin-image-border-color: var(--z-admin-border);
   --z-admin-invalid-bg: rgba(217, 83, 79, 0.18);
@@ -2007,8 +2009,11 @@ div.widget-content .mce-reset {
 ul.tree-list li.menu-item > div {
   background-color: var(--z-admin-tree-list-item-bg);
 }
+ul.tree-list li.menu-item > div:hover {
+  background-color: var(--z-admin-tree-list-item-hover-bg);
+}
 ul.tree-list li.menu-item > div > a {
-  color: var(--z-admin-text-muted);
+  color: var(--z-admin-text);
   text-decoration: none;
 }
 ul.tree-list li.menu-item > div > a:hover {

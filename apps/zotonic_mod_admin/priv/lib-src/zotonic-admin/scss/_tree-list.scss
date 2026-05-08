@@ -3,8 +3,12 @@ ul.tree-list {
         > div {
             background-color: var(--z-admin-tree-list-item-bg);
 
+            &:hover {
+                background-color: var(--z-admin-tree-list-item-hover-bg);
+            }
+
             > a {
-                color: var(--z-admin-text-muted);
+                color: var(--z-admin-text);
                 text-decoration: none;
 
                 &:hover {
