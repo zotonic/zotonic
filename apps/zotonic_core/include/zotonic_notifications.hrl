@@ -876,6 +876,15 @@
     arg :: any()
 }).
 
+%% @doc Normalize a text value for a search query.
+%% Type: first
+%% Return: ``any()`` or ``undefined``
+-record(search_query_normalize_value, {
+    term = undefined :: binary() | undefined,
+    type = text :: atom(),
+    value :: any()
+}).
+
 %% @doc An edge has been inserted.
 %% Note that the Context for this notification does not have the user who
 %% created the edge.
