@@ -861,7 +861,7 @@ to_tsquery_1(Text, Context) when is_binary(Text) ->
         {postgresql, Major, _Minor} when Major < 11 ->
             [{TsQuery}] = z_db:q("select plainto_tsquery($2, $1)", [Text1, Stemmer], Context);
         _ ->
-            % websearch_to_tsquery is available from psql version 11
+            % websearch_to_tsquery is available from PostgreSQL 11+
             [{TsQuery}] = z_db:q("select websearch_to_tsquery($2, $1)", [Text1, Stemmer], Context)
     end,
     fixup_tsquery(z_convert:to_list(Stemmer), append_wildcard(Text1, TsQuery)).
