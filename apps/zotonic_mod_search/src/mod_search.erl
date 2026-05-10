@@ -857,8 +857,14 @@ to_tsquery(Text, Context) when is_list(Text) ->
 to_tsquery_1(Text, Context) when is_binary(Text) ->
     Stemmer = z_pivot_rsc:stemmer_language(Context),
     Text1 = z_search:normalize_value(<<"tsquery">>, text, Text, Context),
-    [{TsQuery}] = z_db:q("select websearch_to_tsquery($2, $1)", [Text1, Stemmer], Context),
-    fixup_tsquery(z_convert:to_list(Stemmer), append_wildcard(Text1, TsQuery)).
+    case z_db:database_version(Context) of
+        {ok, {postgresql, Major, _Minor}} when Major < 11 ->
+            [{TsQuery}] = z_db:q("select plainto_tsquery($2, $1)", [Text1, Stemmer], Context);
+        _ ->
+            % websearch_to_tsquery is available from PostgreSQL 11+
+            [{TsQuery}] = z_db:q("select websearch_to_tsquery($2, $1)", [Text1, Stemmer], Context)
+    end,
+    fixup_tsquery(z_convert:to_binary(Stemmer), append_wildcard(Text1, TsQuery)).
 
 is_separator(C) when C < $0 -> true;
 is_separator(C) when C >= $0, C =< $9 -> false;
@@ -894,7 +900,7 @@ is_wordchar(_) -> false.
 % to_tsquery('dutch', 'oversteek') -> 'overstek'
 fixup_tsquery(_Stemmer, <<>>) ->
     <<>>;
-fixup_tsquery("dutch", TsQ) ->
+fixup_tsquery(<<"dutch">>, TsQ) ->
     iolist_to_binary(re:replace(TsQ, <<"([a-z]([aieou]))\\2':\\*">>, <<"\\1':\\*">>));
 fixup_tsquery(_Stemmer, TsQ) ->
     TsQ.

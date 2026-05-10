@@ -339,11 +339,16 @@ database_version_string(Context) ->
 database_version(Context) ->
     case has_connection(Context) of
         true ->
-            Ver = z_db:q1("show server_version", Context),
-            {Major, Minor} = case binary:split(Ver, <<".">>, [ global ]) of
-                [ A ] -> {binary_to_integer(A), 0};
-                [ A, B | _ ] -> {binary_to_integer(A), binary_to_integer(B)}
-            end,
+            {Major, Minor} = z_depcache:memo(
+                fun() ->
+                    Ver = z_db:q1("show server_version", Context),
+                    case re:run(Ver, <<"([0-9]+)(\\.[0-9]+)?">>, [{capture, all_but_first, binary}]) of
+                        {match, [ A ]} ->
+                            {binary_to_integer(A), 0};
+                        {match, [ A, <<".", B/binary>> ]} ->
+                            {binary_to_integer(A), binary_to_integer(B)}
+                    end
+                end, dbversion, 3600, [], Context),
             {ok, {postgresql, Major, Minor}};
         false ->
             {error, no_database_connection}
