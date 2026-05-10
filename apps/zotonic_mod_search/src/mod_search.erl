@@ -857,7 +857,13 @@ to_tsquery(Text, Context) when is_list(Text) ->
 to_tsquery_1(Text, Context) when is_binary(Text) ->
     Stemmer = z_pivot_rsc:stemmer_language(Context),
     Text1 = z_search:normalize_value(<<"tsquery">>, text, Text, Context),
-    [{TsQuery}] = z_db:q("select websearch_to_tsquery($2, $1)", [Text1, Stemmer], Context),
+    case z_db:database_version(Context) of
+        {postgresql, Major, _Minor} when Major < 11 ->
+            [{TsQuery}] = z_db:q("select plainto_tsquery($2, $1)", [Text1, Stemmer], Context);
+        _ ->
+            % websearch_to_tsquery is available from psql version 11
+            [{TsQuery}] = z_db:q("select websearch_to_tsquery($2, $1)", [Text1, Stemmer], Context)
+    end,
     fixup_tsquery(z_convert:to_list(Stemmer), append_wildcard(Text1, TsQuery)).
 
 is_separator(C) when C < $0 -> true;
