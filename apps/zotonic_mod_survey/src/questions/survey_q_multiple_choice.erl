@@ -1,7 +1,8 @@
 %% @author Arjan Scherpenisse <arjan@miraclethings.nl>
-%% @copyright 2013-2023 Arjan Scherpenisse
+%% @copyright 2013-2026 Arjan Scherpenisse
+%% @end
 
-%% Copyright 2013-2023 Arjan Scherpenisse
+%% Copyright 2013-2026 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -40,19 +41,20 @@ answer(_SurveyId, Block, Answers, _Context) ->
     end.
 
 
-prep_totals(Block, [{_, Vals}], _) ->
+prep_totals(Block, [{_, Vals}], _Context) ->
     case maps:get(<<"is_numeric">>, Block, false) of
         true ->
-            lists:foldl(fun({K, V}, Sum) ->
-                                try
-                                    (z_convert:to_integer(K) * z_convert:to_integer(V)) + Sum
-                                catch
-                                    error:badarith ->
-                                        Sum
-                                end
-                        end,
-                        0,
-                        Vals);
+            lists:foldl(
+                fun({K, V}, Sum) ->
+                    try
+                        (z_convert:to_integer(K) * z_convert:to_integer(V)) + Sum
+                    catch
+                        error:badarith ->
+                            Sum
+                    end
+                end,
+                0,
+                Vals);
         false ->
             undefined
     end.

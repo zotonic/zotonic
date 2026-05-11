@@ -1,7 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011-2023 Marc Worrell
+%% @copyright 2011-2026 Marc Worrell
+%% @end
 
-%% Copyright 2011-2023 Marc Worrell
+%% Copyright 2011-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -24,6 +25,7 @@
     prep_answer/3,
     prep_answer_score/3,
     prep_block/2,
+    prep_totals/3,
     to_block/1,
     is_multiple/1,
     test_max_points/1
@@ -158,6 +160,41 @@ is_multiple(Q) ->
 prep_block(Block, Context) ->
     filter_survey_prepare_thurstone:survey_prepare_thurstone(Block, false, Context).
 
+%% @doc Count the totals for answers that have an integer-like value.
+-spec prep_totals(Block, AnswerCounts, Context) -> integer() when
+    Block :: map(),
+    AnswerCounts :: [ {QName, [ {Answer, Count} ]} ],
+    QName :: binary(),
+    Answer :: binary(),
+    Count :: integer(),
+    Context :: z:context().
+prep_totals(_Block, [{_, Vals}], _Context) ->
+    lists:foldl(
+        fun({Answer, Count}, Sum) ->
+            case to_int(Answer) of
+                undefined ->
+                    Sum;
+                AnswerInt ->
+                    Sum + AnswerInt * Count
+            end
+        end,
+        0,
+        Vals).
+
+to_int(S) when is_binary(S); is_list(S) ->
+    try
+        S1 = z_string:trim(S),
+        case z_utils:only_digits(S1) of
+            true -> z_convert:to_integer(S1);
+            false -> undefined
+        end
+    catch _:_ ->
+        undefined
+    end;
+to_int(S) when is_integer(S) ->
+    S;
+to_int(_) ->
+    undefined.
 
 % Map __very__ old questions to block format (Zotonic 0.x)
 to_block(Q) ->

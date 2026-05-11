@@ -11,7 +11,11 @@
 {% block content %}
 {% with m.rsc[q.id].id as id %}
     <ul class="breadcrumb">
-        <li><a href="{% url admin_edit_rsc id=id %}">{{ id.title }}</a></li>
+        <li>
+            <a href="{% url admin_edit_rsc id=id %}">
+                {{ id.title|default:id.short_title|default:_"Untitled" }}
+            </a>
+        </li>
         <li class="active">{_ Results editor _}</li>
     </ul>
 
