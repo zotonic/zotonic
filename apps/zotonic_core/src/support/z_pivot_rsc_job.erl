@@ -427,7 +427,7 @@ to_integer(Text) ->
 cleanup_tsv_text(Text) when is_binary(Text) ->
     Text1 = z_string:sanitize_utf8(Text),
     % endash, emdash, and minus.
-    Text2 = iolist_to_binary(re:replace(Text1, <<"[ \r\n\t/–—-]+"/utf8>>, <<" ">>, [global])),
+    Text2 = iolist_to_binary(re:replace(Text1, <<"[ \r\n\t/–—-]+"/utf8>>, <<" ">>, [global, unicode])),
     z_string:trim(Text2).
 
 %% @doc Truncate a string to a max length, map control characters to spaces
