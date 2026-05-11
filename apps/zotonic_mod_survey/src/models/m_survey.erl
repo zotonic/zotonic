@@ -1198,12 +1198,12 @@ survey_totals(Id, Context) ->
                         undefined -> undefined;
                         M ->
                             Value = case proplists:get_value(prep_totals, erlang:get_module_info(M, exports)) of
-                                        3 ->
-                                            Vals = proplists:get_value(Name, Stats),
-                                            M:prep_totals(Block, Vals, Context);
-                                        undefined ->
-                                            undefined
-                                    end,
+                                3 ->
+                                    Vals = proplists:get_value(Name, Stats),
+                                    M:prep_totals(Block, Vals, Context);
+                                undefined ->
+                                    undefined
+                            end,
                             {Name, Value}
                     end
                 end,
