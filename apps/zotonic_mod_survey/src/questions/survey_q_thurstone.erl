@@ -161,7 +161,7 @@ prep_block(Block, Context) ->
     filter_survey_prepare_thurstone:survey_prepare_thurstone(Block, false, Context).
 
 %% @doc Count the totals for answers that have an integer-like value.
--spec prep_totals(Block, AnswerCounts, Context) -> integer() when
+-spec prep_totals(Block, AnswerCounts, Context) -> integer() | undefined when
     Block :: map(),
     AnswerCounts :: [ {QName, [ {Answer, Count} ]} ],
     QName :: binary(),
