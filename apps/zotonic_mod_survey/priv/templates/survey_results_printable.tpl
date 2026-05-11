@@ -70,7 +70,7 @@
                 <tr class="totals">
                     <td style="text-align: right">{_ Totals _}&nbsp;</td>
                     {% for name in headers %}
-                        {% if totals[name] %}
+                        {% if totals[name]|is_number %}
                             <td style="text-align: right; border-top: 2px solid #999;">
                                 {{ totals[name] }}
                             </td>

@@ -174,17 +174,21 @@ prep_totals(_Block, [{_, Vals}], _Context) ->
             case to_int(Answer) of
                 undefined ->
                     Sum;
-                AnswerInt ->
+                AnswerInt when Sum =:= undefined ->
+                    AnswerInt * Count;
+                AnswerInt when is_integer(Sum) ->
                     Sum + AnswerInt * Count
             end
         end,
-        0,
-        Vals).
+        undefined,
+        Vals);
+prep_totals(_Block, _QVals, _Context) ->
+    undefined.
 
 to_int(S) when is_binary(S); is_list(S) ->
     try
         S1 = z_string:trim(S),
-        case z_utils:only_digits(S1) of
+        case maybe_integer(S1) of
             true -> z_convert:to_integer(S1);
             false -> undefined
         end
@@ -195,6 +199,11 @@ to_int(S) when is_integer(S) ->
     S;
 to_int(_) ->
     undefined.
+
+maybe_integer(<<>>) -> false;
+maybe_integer(<<$-, S/binary>>) -> z_utils:only_digits(S);
+maybe_integer(<<$+, S/binary>>) -> z_utils:only_digits(S);
+maybe_integer(S) when is_binary(S) -> z_utils:only_digits(S).
 
 % Map __very__ old questions to block format (Zotonic 0.x)
 to_block(Q) ->
