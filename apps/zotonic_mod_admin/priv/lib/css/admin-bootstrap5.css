@@ -11948,7 +11948,7 @@ textarea.form-control-lg {
 .close {
   float: right;
   font-size: 1.5rem;
-  font-weight: 700;
+  font-weight: bold;
   line-height: 1;
   color: var(--z-admin-close-color, #000);
   text-shadow: var(--z-admin-close-text-shadow, 0 1px 0 #fff);
@@ -12000,11 +12000,11 @@ button.close {
 
 .thumbnail {
   display: block;
-  padding: 0.25rem;
+  padding: 4px;
   margin-bottom: 1rem;
   color: var(--z-admin-thumbnail-color, var(--bs-body-color));
   background-color: var(--z-admin-thumbnail-bg, var(--bs-body-bg));
-  border: 1px solid var(--z-admin-thumbnail-border, var(--bs-border-color));
+  border: var(--bs-border-width) solid var(--z-admin-thumbnail-border, var(--bs-border-color));
   border-radius: 4px;
 }
 
@@ -12019,8 +12019,8 @@ button.close {
 
 .help-block {
   display: block;
-  margin-top: 5px;
-  margin-bottom: 10px;
+  margin-top: 0.3125rem;
+  margin-bottom: 0.625rem;
   color: var(--z-admin-help-block-color, #737373);
 }
 
@@ -12044,11 +12044,11 @@ button.close {
 }
 .form-inline label.checkbox > input[type=checkbox],
 .form-inline label.radio > input[type=radio] {
-  margin-right: 0.35em;
+  margin-right: 3.5px;
 }
 
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 0.9375rem;
 }
 
 .form-horizontal .form-group {
@@ -12079,30 +12079,30 @@ button.close {
 }
 
 .input-mini {
-  width: 60px;
+  width: 3.75rem;
 }
 
 .input-small {
-  width: 90px;
+  width: 5.625rem;
 }
 
 .input-medium {
-  width: 150px;
+  width: 9.375rem;
 }
 
 .input-xlarge {
-  width: 270px;
+  width: 16.875rem;
 }
 
 .dl-horizontal dt {
   float: left;
-  width: 160px;
+  width: 10rem;
   clear: left;
   text-align: right;
 }
 
 .dl-horizontal dd {
-  margin-left: 180px;
+  margin-left: 11.25rem;
 }
 
 .table {
@@ -12114,7 +12114,7 @@ button.close {
 .table > tbody > tr > td,
 .table > tfoot > tr > th,
 .table > tfoot > tr > td {
-  border-top: 1px solid var(--bs-table-border-color);
+  border-top: var(--bs-border-width) solid var(--bs-table-border-color);
   border-bottom-width: 0;
   box-shadow: none;
 }
@@ -12211,10 +12211,10 @@ button.close {
 .navbar-toggle {
   display: block;
   float: right;
-  margin-top: 8px;
+  margin-top: 0.5rem;
   margin-right: 15px;
-  margin-bottom: 8px;
-  padding: 0.25rem 0.5rem;
+  margin-bottom: 0.5rem;
+  padding: 5px 10px;
   border: 1px solid transparent;
   border-radius: 4px;
   background: none;
@@ -12245,11 +12245,11 @@ button.close {
 .dropdown-menu {
   top: 100%;
   left: 0;
-  margin: 2px 0 0;
+  margin: 0.125rem 0 0;
 }
 .dropdown-menu > li > a {
   display: block;
-  padding: 3px 20px;
+  padding: 0.1875rem 1.25rem;
   clear: both;
   font-weight: 400;
   line-height: 1.428571429;
@@ -12277,7 +12277,7 @@ button.close {
   height: 0;
   margin: 0.5rem 0;
   overflow: hidden;
-  border-top: 1px solid var(--bs-dropdown-divider-bg);
+  border-top: var(--bs-border-width) solid var(--bs-dropdown-divider-bg);
 }
 
 .dropdown-menu-right,
@@ -12332,7 +12332,7 @@ button.close {
 
 .modal-footer {
   display: block;
-  padding: 15px;
+  padding: 0.9375rem;
   text-align: right;
 }
 .modal-footer::before, .modal-footer::after {
@@ -12373,7 +12373,7 @@ button.close {
   }
   .navbar-form {
     display: block;
-    padding: 10px 15px;
+    padding: 0.625rem 15px;
     margin: 0;
   }
   .navbar-form .form-control {
@@ -12387,7 +12387,7 @@ button.close {
   .navbar > div {
     display: flex;
     align-items: stretch;
-    min-height: 50px;
+    min-height: 3.125rem;
   }
   .navbar-header {
     flex: 0 0 auto;
@@ -12411,9 +12411,9 @@ button.close {
     flex: 0 0 auto;
   }
   .navbar-nav > li > a {
-    padding-top: 15px;
-    padding-bottom: 15px;
-    line-height: 20px;
+    padding-top: 0.8482142855rem;
+    padding-bottom: 0.8482142855rem;
+    line-height: 1.428571429rem;
     white-space: nowrap;
   }
   .navbar-nav > li > .dropdown-menu {
@@ -12449,7 +12449,7 @@ button.close {
 .nav > li > a {
   position: relative;
   display: block;
-  padding: 10px 15px;
+  padding: 0.625rem 15px;
   text-decoration: none;
 }
 .nav > li > a:hover, .nav > li > a:focus {
@@ -12459,10 +12459,10 @@ button.close {
 
 .nav-tabs > li {
   float: left;
-  margin-bottom: -1px;
+  margin-bottom: -var(--bs-border-width);
 }
 .nav-tabs > li > a {
-  margin-right: 2px;
+  margin-right: 0.125rem;
   line-height: 1.428571429;
   border: 1px solid transparent;
   border-radius: 4px 4px 0 0;
@@ -12474,7 +12474,7 @@ button.close {
   color: var(--bs3-nav-tabs-active-color, #555555);
   cursor: default;
   background-color: var(--bs3-nav-tabs-active-bg, var(--bs-light-bg-subtle));
-  border: 1px solid var(--bs3-nav-tabs-active-border-color, #ddd);
+  border: var(--bs-border-width) solid var(--bs3-nav-tabs-active-border-color, #ddd);
   border-bottom-color: transparent;
 }
 
@@ -12485,7 +12485,7 @@ button.close {
   border-radius: 4px;
 }
 .nav-pills > li + li {
-  margin-left: 2px;
+  margin-left: 0.125rem;
 }
 .nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
   color: var(--bs3-nav-pills-active-color, #fff);
@@ -12495,7 +12495,7 @@ button.close {
 .pagination {
   display: inline-block;
   padding-left: 0;
-  margin: 20px 0;
+  margin: 1.25rem 0;
   font-size: var(--bs-pagination-font-size);
   border-radius: var(--bs-pagination-border-radius);
 }
@@ -14489,6 +14489,9 @@ pre:empty {
 .modal-header .close {
   margin-top: 3px;
   opacity: 1;
+}
+.modal-header h3, .modal-header .h3 {
+  margin: 0;
 }
 
 a.close,
