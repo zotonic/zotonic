@@ -2,10 +2,38 @@
 // Only includes classes referenced in templates and removed from Bootstrap 5.
 
 // -----------------------------------------------------------------------------
-// Breakpoints to emulate Bootstrap 3 visibility helpers
-$bs3-screen-sm: 768px;
-$bs3-screen-md: 992px;
-$bs3-screen-lg: 1200px;
+// Bootstrap 3 compatibility metrics, expressed through Bootstrap 5 config where possible.
+$bs3-screen-sm: map-get($grid-breakpoints, sm) !default;
+$bs3-screen-md: map-get($grid-breakpoints, md) !default;
+$bs3-screen-lg: map-get($grid-breakpoints, lg) !default;
+$bs3-padding-base-vertical: $input-padding-y !default;
+$bs3-padding-base-horizontal: $input-padding-x !default;
+$bs3-padding-small-vertical: $btn-padding-y-sm !default;
+$bs3-padding-small-horizontal: $btn-padding-x-sm !default;
+$bs3-padding-xs-vertical: 1px !default;
+$bs3-padding-xs-horizontal: 5px !default;
+$bs3-font-size-small: 12px !default;
+$bs3-line-height-computed: $font-size-base * $line-height-base !default;
+$bs3-form-group-margin-bottom: $spacer * .9375 !default;
+$bs3-navbar-height: $spacer * 3.125 !default;
+$bs3-navbar-padding-horizontal: $grid-gutter-width * .5 !default;
+$bs3-navbar-padding-vertical: .5rem !default;
+$bs3-navbar-link-padding-vertical: ($bs3-navbar-height - $bs3-line-height-computed) * .5 !default;
+$bs3-dropdown-link-padding-y: $spacer * .1875 !default;
+$bs3-dropdown-link-padding-x: $spacer * 1.25 !default;
+$bs3-nav-link-padding-y: $spacer * .625 !default;
+$bs3-nav-link-padding-x: $bs3-navbar-padding-horizontal !default;
+$bs3-modal-inner-padding: $spacer * .9375 !default;
+$bs3-pagination-margin-y: $spacer * 1.25 !default;
+$bs3-sr-only-size: 1px !default;
+$bs3-glyphicon-top: 1px !default;
+$bs3-icon-bar-width: 22px !default;
+$bs3-icon-bar-height: 2px !default;
+$bs3-icon-bar-border-radius: 1px !default;
+$bs3-icon-bar-spacing: 4px !default;
+$bs3-breakpoint-max-offset: .02px !default;
+$bs3-nav-tabs-link-margin-right: $spacer * .125 !default;
+$bs3-table-strong-border-width: $border-width * 2 !default;
 
 // -----------------------------------------------------------------------------
 // Text helpers
@@ -58,8 +86,8 @@ $bs3-screen-lg: 1200px;
 .btn-small { @extend .btn-sm; }
 
 .btn-xs {
-  padding: 1px 5px;
-  font-size: 12px;
+  padding: $bs3-padding-xs-vertical $bs3-padding-xs-horizontal;
+  font-size: $bs3-font-size-small;
   line-height: 1.5;
   border-radius: $border-radius-sm;
 }
@@ -71,7 +99,7 @@ $bs3-screen-lg: 1200px;
 .close {
   float: right;
   font-size: ($font-size-base * 1.5);
-  font-weight: 700;
+  font-weight: $badge-font-weight;
   line-height: 1;
   color: var(--z-admin-close-color, #000);
   text-shadow: var(--z-admin-close-text-shadow, 0 1px 0 #fff);
@@ -154,7 +182,7 @@ button.close {
   padding: $spacer;
   margin-bottom: $spacer;
   background-color: $gray-100;
-  border: 1px solid $border-color;
+  border: $border-width solid $border-color;
   border-radius: $border-radius;
 }
 
@@ -162,11 +190,11 @@ button.close {
 // Thumbnails
 .thumbnail {
   display: block;
-  padding: .25rem;
+  padding: $thumbnail-padding;
   margin-bottom: $spacer;
   color: var(--z-admin-thumbnail-color, var(--bs-body-color));
   background-color: var(--z-admin-thumbnail-bg, var(--bs-body-bg));
-  border: 1px solid var(--z-admin-thumbnail-border, var(--bs-border-color));
+  border: $thumbnail-border-width solid var(--z-admin-thumbnail-border, var(--bs-border-color));
   border-radius: $border-radius;
 }
 
@@ -191,8 +219,8 @@ button.close {
 .help-block {
   @extend .form-text;
   display: block;
-  margin-top: 5px;
-  margin-bottom: 10px;
+  margin-top: $spacer * .3125;
+  margin-bottom: $spacer * .625;
   color: var(--z-admin-help-block-color, #737373);
 }
 
@@ -200,7 +228,7 @@ button.close {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: .5rem;
+  gap: $spacer * .5;
 
   > .pull-right {
     margin-left: auto;
@@ -218,12 +246,12 @@ button.close {
 
   label.checkbox > input[type="checkbox"],
   label.radio > input[type="radio"] {
-    margin-right: .35em;
+    margin-right: $bs3-padding-xs-horizontal * .7;
   }
 }
 
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: $bs3-form-group-margin-bottom;
 }
 
 .form-horizontal {
@@ -240,15 +268,15 @@ button.close {
 .checkbox,
 .radio {
   display: block;
-  min-height: $line-height-base * 1rem;
-  margin-top: .5rem;
-  margin-bottom: .5rem;
+  min-height: $bs3-line-height-computed;
+  margin-top: $spacer * .5;
+  margin-bottom: $spacer * .5;
 }
 
 .checkbox-inline,
 .radio-inline {
   display: inline-block;
-  margin-right: 1rem;
+  margin-right: $spacer;
 }
 
 .input-group-addon { @extend .input-group-text; }
@@ -258,21 +286,21 @@ button.close {
   align-items: stretch;
 }
 
-.input-mini { width: 60px; }
-.input-small { width: 90px; }
-.input-medium { width: 150px; }
-.input-xlarge { width: 270px; }
+.input-mini { width: $spacer * 3.75; }
+.input-small { width: $spacer * 5.625; }
+.input-medium { width: $spacer * 9.375; }
+.input-xlarge { width: $spacer * 16.875; }
 
 // -----------------------------------------------------------------------------
 // Definition lists
 .dl-horizontal dt {
   float: left;
-  width: 160px;
+  width: $spacer * 10;
   clear: left;
   text-align: right;
 }
 
-.dl-horizontal dd { margin-left: 180px; }
+.dl-horizontal dd { margin-left: $spacer * 11.25; }
 
 // -----------------------------------------------------------------------------
 // Tables
@@ -285,7 +313,7 @@ button.close {
     > tr {
       > th,
       > td {
-        border-top: 1px solid var(--bs-table-border-color);
+        border-top: $table-border-width solid var(--bs-table-border-color);
         border-bottom-width: 0;
         box-shadow: none;
       }
@@ -294,7 +322,7 @@ button.close {
 
   > thead > tr > th {
     vertical-align: bottom;
-    border-bottom: 2px solid var(--bs-table-border-color);
+    border-bottom: $bs3-table-strong-border-width solid var(--bs-table-border-color);
   }
 
   > caption + thead,
@@ -309,7 +337,7 @@ button.close {
   }
 
   > tbody + tbody {
-    border-top: 2px solid var(--bs-table-border-color);
+    border-top: $bs3-table-strong-border-width solid var(--bs-table-border-color);
   }
 }
 
@@ -398,28 +426,28 @@ button.close {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: .5rem;
+  gap: $spacer * .5;
 }
 
 .navbar-toggle {
   display: block;
   float: right;
-  margin-top: 8px;
-  margin-right: 15px;
-  margin-bottom: 8px;
-  padding: .25rem .5rem;
-  border: 1px solid transparent;
+  margin-top: $bs3-navbar-padding-vertical;
+  margin-right: $bs3-navbar-padding-horizontal;
+  margin-bottom: $bs3-navbar-padding-vertical;
+  padding: $btn-padding-y-sm $btn-padding-x-sm;
+  border: $border-width solid transparent;
   border-radius: $border-radius;
   background: none;
 
   .icon-bar {
     display: block;
-    width: 22px;
-    height: 2px;
+    width: $bs3-icon-bar-width;
+    height: $bs3-icon-bar-height;
     background-color: currentColor;
-    border-radius: 1px;
+    border-radius: $bs3-icon-bar-border-radius;
 
-    + .icon-bar { margin-top: 4px; }
+    + .icon-bar { margin-top: $bs3-icon-bar-spacing; }
   }
 }
 
@@ -438,12 +466,12 @@ button.close {
 .dropdown-menu {
   top: 100%;
   left: 0;
-  margin: 2px 0 0;
+  margin: $dropdown-spacer 0 0;
 
   > li {
     > a {
       display: block;
-      padding: 3px 20px;
+      padding: $bs3-dropdown-link-padding-y $bs3-dropdown-link-padding-x;
       clear: both;
       font-weight: 400;
       line-height: $line-height-base;
@@ -485,7 +513,7 @@ button.close {
     height: 0;
     margin: $dropdown-divider-margin-y 0;
     overflow: hidden;
-    border-top: 1px solid var(--bs-dropdown-divider-bg);
+    border-top: $dropdown-border-width solid var(--bs-dropdown-divider-bg);
   }
 }
 
@@ -546,7 +574,7 @@ button.close {
 
 .modal-footer {
   display: block;
-  padding: 15px;
+  padding: $bs3-modal-inner-padding;
   text-align: right;
 
   &::before,
@@ -565,11 +593,11 @@ button.close {
 
   .btn + .btn {
     margin-bottom: 0;
-    margin-left: 5px;
+    margin-left: $bs3-padding-xs-horizontal;
   }
 
   .btn-group .btn + .btn {
-    margin-left: -1px;
+    margin-left: -$border-width;
   }
 
   .btn-block + .btn-block {
@@ -577,7 +605,7 @@ button.close {
   }
 }
 
-@media (max-width: ($bs3-screen-sm - .02px)) {
+@media (max-width: ($bs3-screen-sm - $bs3-breakpoint-max-offset)) {
   .navbar-collapse.collapse.in {
     display: block;
     padding-top: 0;
@@ -597,7 +625,7 @@ button.close {
 
   .navbar-form {
     display: block;
-    padding: 10px 15px;
+    padding: $bs3-nav-link-padding-y $bs3-nav-link-padding-x;
     margin: 0;
 
     .form-control {
@@ -614,7 +642,7 @@ button.close {
   .navbar > div {
     display: flex;
     align-items: stretch;
-    min-height: 50px;
+    min-height: $bs3-navbar-height;
   }
 
   .navbar-header {
@@ -641,9 +669,9 @@ button.close {
       flex: 0 0 auto;
 
       > a {
-        padding-top: 15px;
-        padding-bottom: 15px;
-        line-height: 20px;
+        padding-top: $bs3-navbar-link-padding-vertical;
+        padding-bottom: $bs3-navbar-link-padding-vertical;
+        line-height: $bs3-line-height-computed;
         white-space: nowrap;
       }
 
@@ -692,7 +720,7 @@ button.close {
     > a {
       position: relative;
       display: block;
-      padding: 10px 15px;
+      padding: $bs3-nav-link-padding-y $bs3-nav-link-padding-x;
       text-decoration: none;
 
       &:hover,
@@ -707,12 +735,12 @@ button.close {
 .nav-tabs {
   > li {
     float: left;
-    margin-bottom: -1px;
+    margin-bottom: -$nav-tabs-border-width;
 
     > a {
-      margin-right: 2px;
+      margin-right: $bs3-nav-tabs-link-margin-right;
       line-height: $line-height-base;
-      border: 1px solid transparent;
+      border: $border-width solid transparent;
       border-radius: $border-radius $border-radius 0 0;
 
       &:hover,
@@ -728,7 +756,7 @@ button.close {
         color: var(--bs3-nav-tabs-active-color, #{$nav-tabs-active-link-hover-color});
         cursor: default;
         background-color: var(--bs3-nav-tabs-active-bg, var(--bs-light-bg-subtle));
-        border: 1px solid var(--bs3-nav-tabs-active-border-color, #{$nav-tabs-active-link-hover-border-color});
+        border: $nav-tabs-border-width solid var(--bs3-nav-tabs-active-border-color, #{$nav-tabs-active-link-hover-border-color});
         border-bottom-color: transparent;
       }
     }
@@ -744,7 +772,7 @@ button.close {
     }
 
     + li {
-      margin-left: 2px;
+      margin-left: $bs3-nav-tabs-link-margin-right;
     }
 
     &.active > a {
@@ -763,7 +791,7 @@ button.close {
 .pagination {
   display: inline-block;
   padding-left: 0;
-  margin: 20px 0;
+  margin: $bs3-pagination-margin-y 0;
   font-size: var(--bs-pagination-font-size);
   border-radius: var(--bs-pagination-border-radius);
 
@@ -775,7 +803,7 @@ button.close {
       position: relative;
       float: left;
       padding: var(--bs-pagination-padding-y) var(--bs-pagination-padding-x);
-      margin-left: -1px;
+      margin-left: -$border-width;
       line-height: $line-height-base;
       color: var(--z-admin-pagination-color, var(--bs-pagination-color));
       text-decoration: none;
@@ -869,9 +897,9 @@ button.close {
 // -----------------------------------------------------------------------------
 // Page headers
 .page-header {
-  padding-bottom: .5rem;
+  padding-bottom: $spacer * .5;
   margin: 0 0 $spacer;
-  border-bottom: 1px solid $border-color;
+  border-bottom: $border-width solid $border-color;
 }
 
 // -----------------------------------------------------------------------------
@@ -951,7 +979,7 @@ button.close {
 
 .glyphicon {
   position: relative;
-  top: 1px;
+  top: $bs3-glyphicon-top;
   display: inline-block;
   font-family: "Glyphicons Halflings";
   font-style: normal;

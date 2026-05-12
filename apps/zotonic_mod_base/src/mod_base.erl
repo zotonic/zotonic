@@ -26,6 +26,28 @@ Note that the amount of templates has been kept to a minimum in this module, so 
 whatever templates they want.
 Core base module providing fundamental dispatch rules, actions, and template components used across sites.
 
+Theme initialization
+--------------------
+
+The common HTML head includes `_html_head_theme_init.tpl`. This template runs a
+small inline script before the main CSS is applied, so pages start with the right
+theme and avoid a light/dark flash during rendering.
+
+The template is included from both `_html_head.tpl` and `_html_head_admin.tpl`,
+so it is applied to normal site pages and admin pages that use the standard
+Zotonic head templates.
+
+The script sets two attributes on `document.documentElement`:
+
+- `data-zotonic-theme`: the selected theme preference, one of `light`, `dark` or `auto`.
+- `data-bs-theme`: the resolved Bootstrap theme, either `light` or `dark`. When the
+  selected preference is `auto`, this follows `prefers-color-scheme: dark`.
+
+The selected preference is stored in `localStorage` under the key
+`zotonic-theme`. The stored value is JSON encoded, for example `\"dark\"`, so it
+can also be read and written through Cotonic `model/localStorage`. If the value is
+missing, invalid JSON, or not a supported theme, templates and client-side code
+fall back to `auto`.
 
 Accepted Events
 ---------------

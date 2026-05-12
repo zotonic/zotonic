@@ -1,6 +1,7 @@
 %% @author Andreas Stenius <git@astekk.se>
 %% @copyright 2012-2026 Andreas Stenius
-%% @doc Bootstrap provides simple and flexible HTML, CSS, and Javascript for popular user interface components and interactions.
+%% @doc Bootstrap provides simple and flexible HTML, CSS, and Javascript for popular user interface
+%% components and interactions.
 %% @end
 
 %% Copyright 2012-2026 Andreas Stenius
@@ -19,9 +20,16 @@
 
 -module(mod_bootstrap).
 -moduledoc("
-Adds support for the [Twitter Bootstrap](https://twitter.github.com/bootstrap/) CSS / JavaScript framework.
-Integration module for Bootstrap assets and helper templates/components.
+Adds support for the [Bootstrap](https://getbootstrap.com/) CSS / JavaScript framework.
 
+The bundled `bootstrap.css` includes Bootstrap 5 and a Bootstrap 3 compatibility
+layer for older templates. Sites that include their own Bootstrap 5 build can
+include `/lib/bootstrap/css/bootstrap3-compat.css` after their Bootstrap 5 CSS
+to add the same compatibility layer separately. For production, either include
+`/lib/bootstrap/css/bootstrap3-compat.min.css` directly or use the `{% lib ...
+minify %}` option with `/lib/bootstrap/css/bootstrap3-compat.css`.
+
+Also provides helper templates/components for Bootstrap integration.
 ").
 -author("Andreas Stenius <git@astekk.se>").
 
