@@ -30,7 +30,7 @@
             minify
         %}
 
-        {% all include "_html_head_admin.tpl" no_prism %}
+        {% all include "_html_head_admin.tpl" no_prism is_admin %}
 
         {% block head_extra %}
         {% endblock %}
