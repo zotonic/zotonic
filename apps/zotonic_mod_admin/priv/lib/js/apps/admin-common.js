@@ -33,7 +33,6 @@ limitations under the License.
 
     const themePreference = () => {
         let value = "auto";
-
         try {
             value = JSON.parse(localStorage.getItem(themeStorageKey)) || "auto";
         } catch (e) {
@@ -48,7 +47,7 @@ limitations under the License.
     const themeApply = (value) => {
         const theme = themeValues.indexOf(value) === -1 ? "auto" : value;
         document.documentElement.setAttribute("data-bs-theme", themeResolved(theme));
-        document.documentElement.setAttribute("data-zotonic-admin-theme", theme);
+        document.documentElement.setAttribute("data-zotonic-theme", theme);
         $(".admin-theme-menu-item").each(function() {
             const isActive = $(this).attr("data-admin-theme-value") === theme;
             $(this).toggleClass("active", isActive);
