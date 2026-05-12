@@ -23,30 +23,29 @@ limitations under the License.
 
 (function($)
 {
-    const adminThemeStorageKey = "zotonic.admin.theme";
-    const adminThemeValues = [ "light", "dark", "auto" ];
-    const adminThemeMedia = window.matchMedia
+    const themeStorageKey = "zotonic-theme";
+    const themeValues = [ "light", "dark", "auto" ];
+    const themeMedia = window.matchMedia
         ? window.matchMedia("(prefers-color-scheme: dark)")
         : undefined;
 
-    const adminThemePreference = () => {
+    const themePreference = () => {
         let value = "auto";
 
         try {
-            value = localStorage.getItem(adminThemeStorageKey) || "auto";
+            value = JSON.parse(localStorage.getItem(themeStorageKey)) || "auto";
         } catch (e) {
             value = "auto";
         }
-
-        return adminThemeValues.indexOf(value) === -1 ? "auto" : value;
+        return themeValues.indexOf(value) === -1 ? "auto" : value;
     };
 
-    const adminThemeResolved = (value) =>
-        value === "auto" && adminThemeMedia && adminThemeMedia.matches ? "dark" : value === "dark" ? "dark" : "light";
+    const themeResolved = (value) =>
+        value === "auto" && themeMedia && themeMedia.matches ? "dark" : value === "dark" ? "dark" : "light";
 
-    const adminThemeApply = (value) => {
-        const theme = adminThemeValues.indexOf(value) === -1 ? "auto" : value;
-        document.documentElement.setAttribute("data-bs-theme", adminThemeResolved(theme));
+    const themeApply = (value) => {
+        const theme = themeValues.indexOf(value) === -1 ? "auto" : value;
+        document.documentElement.setAttribute("data-bs-theme", themeResolved(theme));
         document.documentElement.setAttribute("data-zotonic-admin-theme", theme);
         $(".admin-theme-menu-item").each(function() {
             const isActive = $(this).attr("data-admin-theme-value") === theme;
@@ -54,34 +53,33 @@ limitations under the License.
         });
     };
 
-    const adminThemeSet = (value) => {
+    const themeSet = (value) => {
+        const theme = themeValues.indexOf(value) === -1 ? "auto" : value;
         try {
-            localStorage.setItem(adminThemeStorageKey, value);
+            localStorage.setItem(themeStorageKey, JSON.stringify(theme));
         } catch (e) {
             // Ignore storage failures; the selected theme still applies to the current page.
         }
-        adminThemeApply(value);
+        themeApply(theme);
     };
 
-    $(function() {
-        adminThemeApply(adminThemePreference());
+    themeApply(themePreference());
 
-        $(document).on("click", ".admin-theme-menu-item", function(e) {
-            e.preventDefault();
-            adminThemeSet($(this).attr("data-admin-theme-value"));
-        });
+    $(document).on("click", ".admin-theme-menu-item", function(e) {
+        e.preventDefault();
+        themeSet($(this).attr("data-admin-theme-value"));
     });
 
-    if (adminThemeMedia && adminThemeMedia.addEventListener) {
-        adminThemeMedia.addEventListener("change", function() {
-            if (adminThemePreference() === "auto") {
-                adminThemeApply("auto");
+    if (themeMedia && themeMedia.addEventListener) {
+        themeMedia.addEventListener("change", function() {
+            if (themePreference() === "auto") {
+                themeApply("auto");
             }
         });
-    } else if (adminThemeMedia && adminThemeMedia.addListener) {
-        adminThemeMedia.addListener(function() {
-            if (adminThemePreference() === "auto") {
-                adminThemeApply("auto");
+    } else if (themeMedia && themeMedia.addListener) {
+        themeMedia.addListener(function() {
+            if (themePreference() === "auto") {
+                themeApply("auto");
             }
         });
     }
