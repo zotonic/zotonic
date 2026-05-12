@@ -12286,6 +12286,10 @@ button.close {
   white-space: nowrap;
 }
 
+.fade.in {
+  opacity: 1;
+}
+
 .collapse.in {
   display: block;
 }
@@ -12584,6 +12588,11 @@ button.close {
   float: right !important;
 }
 
+.hide,
+.hidden {
+  display: none !important;
+}
+
 @media (max-width: 767.98px) {
   .hidden-xs {
     display: none !important;
@@ -12645,7 +12654,7 @@ button.close {
 
 @font-face {
   font-family: "Glyphicons Halflings";
-  src: url("../fonts/glyphicons-halflings-regular.eot");
+  src: url("/lib/bootstrap/fonts/glyphicons-halflings-regular.eot");
   src: url("/lib/bootstrap/fonts/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"), url("/lib/bootstrap/fonts/glyphicons-halflings-regular.woff2") format("woff2"), url("/lib/bootstrap/fonts/glyphicons-halflings-regular.woff") format("woff"), url("/lib/bootstrap/fonts/glyphicons-halflings-regular.ttf") format("truetype"), url("/lib/bootstrap/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format("svg");
 }
 .glyphicon {
