@@ -509,6 +509,10 @@ button.close {
   white-space: nowrap;
 }
 
+.fade.in {
+  opacity: 1;
+}
+
 .collapse.in {
   display: block;
 }
@@ -881,6 +885,9 @@ button.close {
 // Utility helpers
 .pull-left { float: left !important; }
 .pull-right { float: right !important; }
+
+.hide,
+.hidden { display: none !important; }
 
 .sr-only { @extend .visually-hidden; }
 .sr-only-focusable { @extend .visually-hidden-focusable; }
