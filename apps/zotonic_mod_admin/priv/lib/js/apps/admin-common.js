@@ -23,6 +23,8 @@ limitations under the License.
 
 (function($)
 {
+    // Theme selection. Set the selected light/dark theme on the document[data-bs-theme] attribute.
+    // The selected theme is stored in the localStorage
     const themeStorageKey = "zotonic-theme";
     const themeValues = [ "light", "dark", "auto" ];
     const themeMedia = window.matchMedia
@@ -65,11 +67,6 @@ limitations under the License.
 
     themeApply(themePreference());
 
-    $(document).on("click", ".admin-theme-menu-item", function(e) {
-        e.preventDefault();
-        themeSet($(this).attr("data-admin-theme-value"));
-    });
-
     if (themeMedia && themeMedia.addEventListener) {
         themeMedia.addEventListener("change", function() {
             if (themePreference() === "auto") {
@@ -83,6 +80,12 @@ limitations under the License.
             }
         });
     }
+
+    // Menu item to change the theme
+    $(document).on("click", ".admin-theme-menu-item", function(e) {
+        e.preventDefault();
+        themeSet($(this).attr("data-admin-theme-value"));
+    });
 
     $.widget("ui.adminLinkedTable",
     {
