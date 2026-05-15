@@ -676,6 +676,11 @@
 %% Return: ``[ m_rsc:resource_id() ]`` or ``undefined``
 -record(acl_user_groups, {}).
 
+%% @doc Return the maximum upload size in bytes for the current user, as defined by the ACL configuration.
+%% Type: first
+%% Return: ``pos_integer()`` or ``undefined``
+-record(acl_max_upload_size, {}).
+
 %% @doc Modify the list of user groups of a user. Called internally
 %% by the ACL modules when fetching the list of user groups a user
 %% is member of.
@@ -1398,4 +1403,3 @@
 % Simple mod_development notifications:
 % development_reload - Reload all template, modules etc
 % development_make - Perform a 'make' on Zotonic, reload all new beam files
-

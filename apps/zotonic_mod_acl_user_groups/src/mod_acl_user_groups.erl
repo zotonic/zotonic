@@ -314,6 +314,7 @@ This module handles the following notifier callbacks:
 - `observe_acl_is_owner`: Treat users as owner of their own person resource, creator-owned resources, and optionally author-linked resources when `author_is_owner` is enabled.
 - `observe_acl_logoff`: Clear cached ACL group state from the context on logoff.
 - `observe_acl_logon`: Populate ACL group state for the logging-in user.
+- `observe_acl_max_upload_size`: Return the ACL configured maximum upload size for the current user.
 - `observe_acl_user_groups`: Return the full effective user-group list for the current user.
 - `observe_admin_menu`: Add admin menu entries for User groups, Collaboration groups, and Access control rules.
 - `observe_edge_delete`: Log removal of `hasusergroup`, `hascollabmember`, and `hascollabmanager` membership edges.
@@ -407,6 +408,7 @@ See also
     observe_acl_logoff/2,
     observe_acl_context_authenticated/2,
     observe_acl_user_groups/2,
+    observe_acl_max_upload_size/2,
     observe_acl_add_sql_check/2,
 
     observe_hierarchy_updated/2
@@ -638,6 +640,10 @@ observe_acl_context_authenticated(_AclAuthenticated, Context) ->
     Groups :: [ m_rsc:resource_id() ].
 observe_acl_user_groups(_AclUserGroups, Context) ->
     acl_user_groups_checks:user_groups_all(Context).
+
+-spec observe_acl_max_upload_size(#acl_max_upload_size{}, z:context()) -> pos_integer() | undefined.
+observe_acl_max_upload_size(_AclMaxUploadSize, Context) ->
+    acl_user_groups_checks:max_upload_size(Context).
 
 observe_acl_add_sql_check(AclAddSQLCheck, Context) ->
     acl_user_groups_checks:acl_add_sql_check(AclAddSQLCheck, Context).
