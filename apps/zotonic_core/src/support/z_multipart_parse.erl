@@ -576,10 +576,7 @@ check_limit(Key, Value, Config, Context) ->
     end.
 
 log_limit_exceeded(Key, Value, Max, Context) ->
-    case Context of
-        undefined -> ok;
-        #context{} -> z_context:logger_md(Context)
-    end,
+    maybe_logger_md(Context),
     ?LOG_NOTICE(#{
         in => zotonic_core,
         text => <<"Could not decode multipart: form-data limit exceeded">>,
@@ -588,6 +585,11 @@ log_limit_exceeded(Key, Value, Max, Context) ->
         size => Value,
         max_size => Max
     }).
+
+maybe_logger_md(#context{} = Context) ->
+    z_context:logger_md(Context);
+maybe_logger_md(_Context) ->
+    ok.
 
 init_config(Context) ->
     Config = #{

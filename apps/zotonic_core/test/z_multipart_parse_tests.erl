@@ -2,6 +2,8 @@
 
 -module(z_multipart_parse_tests).
 
+-ifdef(TEST).
+
 -include_lib("eunit/include/eunit.hrl").
 -include_lib("zotonic.hrl").
 
@@ -106,3 +108,5 @@ acl_max_upload_size_override_anonymous_context_test() ->
     after
         meck:unload(z_notifier)
     end.
+
+-endif.
