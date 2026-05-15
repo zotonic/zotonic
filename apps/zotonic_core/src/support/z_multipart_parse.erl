@@ -58,6 +58,16 @@
    recv_parse/1
 ]).
 
+-ifdef(TEST).
+-export([
+    test_acl_upload_size_config/2,
+    test_check_part_headers/3,
+    test_config/1,
+    test_get_boundary/2,
+    test_read_more/3
+]).
+-endif.
+
 -include("zotonic.hrl").
 
 -define(CHUNKSIZE, 4096).
@@ -347,8 +357,9 @@ check_part_headers(Headers, #mp{config=Config} = State) ->
             ok
     end.
 
-check_part_headers(undefined, _Filename, _Headers, _State, _Config) ->
-    ok;
+check_part_headers(undefined, _Filename, _Headers, State, _Config) ->
+    close_open_file(State#mp.form),
+    throw({stop_request, 400});
 check_part_headers(_Name, undefined, Headers, State, Config) ->
     check_limit(max_fields, State#mp.field_count + 1, Config, State#mp.context),
     maybe_check_part_content_length(max_field_length, Headers, State);
@@ -410,6 +421,11 @@ handle_body_end(#mp{config=Config} = State) ->
         field_length = 0,
         file_length = 0
     }.
+
+close_open_file(#multipart_form{file=File}) when File =/= undefined ->
+    file:close(File);
+close_open_file(#multipart_form{}) ->
+    ok.
 
 
 
@@ -510,7 +526,7 @@ find_boundary(Prefix, Data, Config) ->
             not_found
     end.
 
-find_in_binary(B, Data, Config) when size(B) > 0 ->
+find_in_binary(B, Data, _Config) when size(B) > 0 ->
     case size(Data) - size(B) of
         Last when Last < 0 ->
             partial_find(B, Data, 0, size(Data));
@@ -679,3 +695,44 @@ normalize_optional_limit(Value) ->
         N when is_integer(N), N > 0 -> N;
         _ -> undefined
     end.
+
+
+-ifdef(TEST).
+
+test_get_boundary(ContentType, Config) ->
+    get_boundary(ContentType, Config).
+
+test_read_more(Config, ContentLength, Length) ->
+    read_more(#mp{
+        config = Config,
+        content_length = ContentLength,
+        length = Length,
+        percentage = 0,
+        buffer = <<>>,
+        next_chunk = more,
+        context = undefined
+    }).
+
+test_check_part_headers(Headers, Config, Counts) ->
+    check_part_headers(Headers, #mp{
+        config = Config,
+        field_count = maps:get(field_count, Counts, 0),
+        file_count = maps:get(file_count, Counts, 0),
+        form = #multipart_form{}
+    }).
+
+test_acl_upload_size_config(Context, Config) ->
+    apply_acl_upload_size(Context, Config).
+
+test_config(Overrides) ->
+    maps:merge(#{
+        max_boundary_length => 70,
+        max_content_length => 64 * 1024 * 1024,
+        max_field_length => 1024 * 1024,
+        max_form_data_length => 8 * 1024 * 1024,
+        max_file_length => 50 * 1024 * 1024,
+        max_files => 10,
+        max_fields => 1000
+    }, Overrides).
+
+-endif.
