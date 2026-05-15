@@ -1,8 +1,8 @@
-%% @copyright 2018 Marc Worrell
-%% @doc Check mime types against allowed mime types per group
+%% @copyright 2018-2026 Marc Worrell
+%% @doc Check mime types against allowed mime types per group.
 %% @end
 
-%% Copyright 2018 Marc Worrell
+%% Copyright 2018-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ is_acceptable(Mime, Context) when is_binary(Mime) ->
     Default = split(mime_allowed_default(Context)),
     lists:any(
         fun(Id) ->
-            Allowed = case m_rsc:p_no_acl(Id, acl_mime_allowed, Context) of
+            Allowed = case m_rsc:p_no_acl(Id, <<"acl_mime_allowed">>, Context) of
                 <<>> -> Default;
                 undefined -> Default;
                 AclAllowed -> split(AclAllowed)

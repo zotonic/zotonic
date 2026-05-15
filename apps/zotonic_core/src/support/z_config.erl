@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2025 Marc Worrell, Arjan Scherpenisse
+%% @copyright 2010-2026 Marc Worrell, Arjan Scherpenisse
 %% @doc Wrapper for Zotonic application environment configuration
 %% @end
 
-%% Copyright 2010-2025 Marc Worrell, Arjan Scherpenisse
+%% Copyright 2010-2026 Marc Worrell, Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -166,6 +166,13 @@ maybe_map_value(smtp_spamd_ip, IP) -> map_ip_address(smtp_spamd_ip, IP);
 maybe_map_value(environment, Env) -> z_convert:to_atom(Env);
 maybe_map_value(max_connections, N) -> z_convert:to_integer(N);
 maybe_map_value(ssl_max_connections, N) -> z_convert:to_integer(N);
+maybe_map_value(formdata_max_boundary_length, N) -> z_convert:to_integer(N);
+maybe_map_value(formdata_max_content_length, N) -> map_optional_integer(N);
+maybe_map_value(formdata_max_field_length, N) -> map_optional_integer(N);
+maybe_map_value(formdata_max_form_data_length, N) -> map_optional_integer(N);
+maybe_map_value(formdata_max_file_length, N) -> map_optional_integer(N);
+maybe_map_value(formdata_max_files, N) -> map_optional_integer(N);
+maybe_map_value(formdata_max_fields, N) -> map_optional_integer(N);
 maybe_map_value(log_http_buffer_size, N) -> z_convert:to_integer(N);
 maybe_map_value(security_headers, V) -> z_convert:to_bool(V);
 maybe_map_value(smtp_verp_as_from, V) -> z_convert:to_bool(V);
@@ -181,6 +188,12 @@ maybe_map_value(timezone, V) -> z_convert:to_binary(V);
 maybe_map_value(function_tracing_enabled, V) -> z_convert:to_bool(V);
 maybe_map_value(_Key, Value) ->
     Value.
+
+map_optional_integer(undefined) -> undefined;
+map_optional_integer(none) -> undefined;
+map_optional_integer("none") -> undefined;
+map_optional_integer(<<"none">>) -> undefined;
+map_optional_integer(N) -> z_convert:to_integer(N).
 
 map_ip_address(_Name, any) -> any;
 map_ip_address(_Name, "any") -> any;
@@ -286,6 +299,13 @@ default(ssl_port) ->
     end;
 default(max_connections) -> 20000;
 default(ssl_max_connections) -> 20000;
+default(formdata_max_boundary_length) -> 70;
+default(formdata_max_content_length) -> 67108864;      % 64MB
+default(formdata_max_field_length) -> 1048576;         % 1MB
+default(formdata_max_form_data_length) -> 8388608;     % 8MB
+default(formdata_max_file_length) -> 52428800;         % 50MB
+default(formdata_max_files) -> 100;
+default(formdata_max_fields) -> 1000;
 default(log_http_buffer_size) -> 10000;
 default(security_headers) -> true;
 default(smtp_verp_as_from) -> false;
@@ -385,6 +405,13 @@ all() ->
             ssl_port,
             max_connections,
             ssl_max_connections,
+            formdata_max_boundary_length,
+            formdata_max_content_length,
+            formdata_max_field_length,
+            formdata_max_form_data_length,
+            formdata_max_file_length,
+            formdata_max_files,
+            formdata_max_fields,
             dbhost,
             dbport,
             dbuser,
@@ -437,4 +464,3 @@ all() ->
             server_header,
             html_error_path
         ]).
-

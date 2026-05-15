@@ -116,6 +116,18 @@
 %%% Use 'infinity' to disable the max connections
    %% {ssl_max_connections, 20000},
 
+%%% Limits for parsing HTTP multipart/form-data request bodies.
+%%% These are parser-level protection limits. Sites can override these values
+%%% in their site config files with the same option names.
+%%% Use the atom 'none' to disable the non-boundary limits.
+   %% {formdata_max_boundary_length, 70},
+   %% {formdata_max_content_length, 67108864},      % 64MB
+   %% {formdata_max_field_length, 1048576},         % 1MB
+   %% {formdata_max_form_data_length, 8388608},     % 8MB
+   %% {formdata_max_file_length, 52428800},         % 50MB
+   %% {formdata_max_files, 100},
+   %% {formdata_max_fields, 1000},
+
 %%% Maximum mqtt connections, the ipv4 and ipv6 connections are counted separately
 %%% Use 'infinity' to disable the max connections
    %% {mqtt_max_connections, 10000},

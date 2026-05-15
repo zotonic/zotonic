@@ -557,7 +557,6 @@ output(MixedHtml, Context) ->
 
 
 %% @doc Ensure that we have parsed the query string, fetch body if necessary.
-%%      If this is a POST then the session/page-session might be continued after this call.
 ensure_qs(#context{ props = Props } = Context) ->
     case maps:find('q', Props) of
         {ok, _Qs} ->

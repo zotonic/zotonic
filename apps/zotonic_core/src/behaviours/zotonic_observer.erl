@@ -2304,6 +2304,26 @@ Return:
 
 -optional_callbacks([ observe_acl_user_groups/2, pid_observe_acl_user_groups/3 ]).
 
+%% Return the maximum upload size for the current user.
+%% Type: first
+-doc("
+Return the maximum upload size in bytes for the current user, as defined by the ACL configuration.
+
+Type:
+
+[first](/id/doc_developerguide_notifications#notification-first)
+
+Return:
+
+positive integer bytes or `undefined`
+
+`#acl_max_upload_size{}` properties: none
+").
+-callback observe_acl_max_upload_size(#acl_max_upload_size{}, z:context()) -> pos_integer() | undefined.
+-callback pid_observe_acl_max_upload_size(pid(), #acl_max_upload_size{}, z:context()) -> pos_integer() | undefined.
+
+-optional_callbacks([ observe_acl_max_upload_size/2, pid_observe_acl_max_upload_size/3 ]).
+
 %% Modify the list of user groups of a user. Called internally
 %% by the ACL modules when fetching the list of user groups a user
 %% is member of.
