@@ -6,21 +6,21 @@
 %%
 %% Supported configuration keys:
 %%
-%% - `formdata_max_boundary_length` - maximum boundary length in bytes. This limit is always enforced;
+%% - formdata_max_boundary_length - maximum boundary length in bytes. This limit is always enforced;
 %%   invalid, zero, or unset values fall back to the global z_config default.
-%% - `formdata_max_content_length` - maximum total multipart request body size in bytes, checked against
+%% - formdata_max_content_length - maximum total multipart request body size in bytes, checked against
 %%   the declared Content-Length and against streamed bytes while reading.
-%% - `formdata_max_field_length` - maximum size in bytes for a single non-file form field.
-%% - `formdata_max_form_data_length` - maximum combined size in bytes for all non-file form field data.
+%% - formdata_max_field_length - maximum size in bytes for a single non-file form field.
+%% - formdata_max_form_data_length - maximum combined size in bytes for all non-file form field data.
 %%   File bodies written to tempfiles are not counted in this limit.
-%% - `formdata_max_file_length` - maximum size in bytes for a single uploaded file part.
-%% - `formdata_max_files` - maximum number of uploaded file parts.
-%% - `formdata_max_fields` - maximum number of non-file form fields.
+%% - formdata_max_file_length - maximum size in bytes for a single uploaded file part.
+%% - formdata_max_files - maximum number of uploaded file parts.
+%% - formdata_max_fields - maximum number of non-file form fields.
 %%
-%% For all limits except `formdata_max_boundary_length`, the atom `none` disables the limit.
+%% For all limits except formdata_max_boundary_length, the atom none disables the limit.
 %% Empty or undefined site values use the corresponding global z_config value. Exceeding a size or count limit
 %% rejects the request with HTTP 413; malformed multipart input and overlong boundaries reject with HTTP 400.
-%% The `#acl_max_upload_size{}` notification can override the effective file-size limit for the current user,
+%% The #acl_max_upload_size{} notification can override the effective file-size limit for the current user,
 %% including anonymous users. When ACL returns a maximum upload size, the parser derives a conservative file count
 %% and request body limit from that value, allowing one very large file or several smaller files per form post.
 %%
