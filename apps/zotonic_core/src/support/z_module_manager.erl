@@ -192,8 +192,15 @@ deactivate(Module, Context) ->
             [Module],
             Context)
     of
-        1 -> upgrade(Context);
-        0 -> ok
+        1 ->
+            upgrade(Context),
+            UId = z_acl:user(Context),
+            ?zInfo(
+               "Module ~p deactivated by ~p (~s)",
+               [ Module, UId, z_convert:to_binary( m_rsc:p_no_acl(UId, email, Context) ) ],
+               Context);
+        0 ->
+            ok
     end.
 
 

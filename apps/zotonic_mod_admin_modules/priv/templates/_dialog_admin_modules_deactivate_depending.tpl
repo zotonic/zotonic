@@ -15,7 +15,7 @@
     {% button tag="a"
               class="btn btn-danger"
               text=_"Deactivate"
-              postback={module_deactivate_confirm module=Module}
+              postback={module_deactivate_confirm module=module}
               delegate=`action_admin_modules_module_toggle`
     %}
 </div>
