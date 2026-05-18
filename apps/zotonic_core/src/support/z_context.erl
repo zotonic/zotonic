@@ -556,7 +556,9 @@ output(MixedHtml, Context) ->
     z_output_html:output(MixedHtml, Context).
 
 
-%% @doc Ensure that we have parsed the query string, fetch body if necessary.
+%% @doc Ensure that we have parsed the query string, fetch body if necessary. Throws
+%% a `{stop_request, StatusCode}' exception if there are errors in the request body
+%% or too many query arguments.
 ensure_qs(#context{ props = Props } = Context) ->
     case maps:find('q', Props) of
         {ok, _Qs} ->
@@ -1371,16 +1373,48 @@ cookie_domain(Context) ->
 %% Local helper functions
 %% ------------------------------------------------------------------------------------
 
-%% @doc Return the keys in the body of the request, only if the request is application/x-www-form-urlencoded
--spec parse_post_body(z:context()) -> {list({binary(),binary()}), z:context()}.
+%% @doc Parse the urlencoded or multipart form-data request body. Returns the
+%% list of name/value pairs. If too many names are defined or if there are errors
+%% in the request body, then this function throws `{stop_request, StatusCode}'.
+%% Files in the multiparts posts are stored as temporary files on disk and
+%% returned as `#upload{}' records.
+-spec parse_post_body(Context) -> {QArgs, Context1} when
+    Context :: z:context(),
+    QArgs :: [ {Name, Value} ],
+    Name :: binary(),
+    Value :: binary() | #upload{},
+    Context1 :: z:context().
 parse_post_body(Context) ->
     case cowmachine_req:get_req_header(<<"content-type">>, Context) of
         <<"application/x-www-form-urlencoded", _/binary>> ->
+            MaxFormContentLength = z_multipart_parse:config_optional_limit(formdata_max_content_length, Context),
             case cowmachine_req:req_body(Context) of
                 {undefined, Context1} ->
                     {[], Context1};
+                {Body, _Context1} when size(Body) >= MaxFormContentLength ->
+                    ?LOG_INFO(#{
+                        in => zotonic_core,
+                        text => <<"Could not decode x-www-form-urlencoded: form-data limit exceeded">>,
+                        result => error,
+                        reason => max_content_length,
+                        size => size(Body),
+                        max_size => MaxFormContentLength
+                    }),
+                    throw({stop_request, 413});
                 {Body, Context1} ->
-                    {cowmachine_util:parse_qs(Body), Context1}
+                    MaxFields = z_multipart_parse:config_optional_limit(formdata_max_fields, Context),
+                    try
+                        {cowmachine_util:parse_qs(Body, MaxFields), Context1}
+                    catch
+                        throw:Reason ->
+                            ?LOG_INFO(#{
+                                in => zotonic_core,
+                                text => <<"Failed to parse x-www-form-urlencoded body">>,
+                                result => error,
+                                reason => Reason
+                            }),
+                            throw({stop_request, 413})
+                    end
             end;
         <<"multipart/form-data", _/binary>> ->
             {Form, ContextRcv} = z_multipart_parse:recv_parse(Context),

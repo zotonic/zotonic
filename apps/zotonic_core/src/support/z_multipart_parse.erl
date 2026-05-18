@@ -55,7 +55,8 @@
 
 %% interface functions
 -export([
-   recv_parse/1
+   recv_parse/1,
+   config_optional_limit/2
 ]).
 
 -ifdef(TEST).
