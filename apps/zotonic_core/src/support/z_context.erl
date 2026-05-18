@@ -1388,7 +1388,7 @@ parse_post_body(Context) ->
     case cowmachine_req:get_req_header(<<"content-type">>, Context) of
         <<"application/x-www-form-urlencoded", _/binary>> ->
             MaxFormContentLength = z_multipart_parse:config_optional_limit(formdata_max_content_length, Context),
-            case cowmachine_req:req_body(Context) of
+            case cowmachine_req:req_body(MaxFormContentLength, Context) of
                 {undefined, Context1} ->
                     {[], Context1};
                 {Body, _Context1} when size(Body) >= MaxFormContentLength ->
