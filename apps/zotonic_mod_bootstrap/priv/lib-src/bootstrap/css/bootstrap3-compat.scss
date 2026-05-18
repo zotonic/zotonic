@@ -1,0 +1,10 @@
+// Standalone Bootstrap 3 compatibility layer for Bootstrap 5.
+// Include this after Bootstrap 5 when templates still use Bootstrap 3 classes.
+
+@import "../scss/functions";
+@import "../scss/variables";
+@import "../scss/variables-dark";
+@import "../scss/maps";
+@import "../scss/mixins";
+@import "../scss/utilities";
+@import "../compat/bootstrap3-compat";

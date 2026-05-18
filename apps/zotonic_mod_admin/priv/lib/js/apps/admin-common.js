@@ -23,6 +23,69 @@ limitations under the License.
 
 (function($)
 {
+    // Theme selection. Set the selected light/dark theme on the document[data-bs-theme] attribute.
+    // The selected theme is stored in the localStorage
+    const themeStorageKey = "zotonic-theme";
+    const themeValues = [ "light", "dark", "auto" ];
+    const themeMedia = window.matchMedia
+        ? window.matchMedia("(prefers-color-scheme: dark)")
+        : undefined;
+
+    const themePreference = () => {
+        let value = "auto";
+        try {
+            value = JSON.parse(localStorage.getItem(themeStorageKey)) || "auto";
+        } catch (e) {
+            value = "auto";
+        }
+        return themeValues.indexOf(value) === -1 ? "auto" : value;
+    };
+
+    const themeResolved = (value) =>
+        value === "auto" && themeMedia && themeMedia.matches ? "dark" : value === "dark" ? "dark" : "light";
+
+    const themeApply = (value) => {
+        const theme = themeValues.indexOf(value) === -1 ? "auto" : value;
+        document.documentElement.setAttribute("data-bs-theme", themeResolved(theme));
+        document.documentElement.setAttribute("data-zotonic-theme", theme);
+        $(".admin-theme-menu-item").each(function() {
+            const isActive = $(this).attr("data-admin-theme-value") === theme;
+            $(this).toggleClass("active", isActive);
+        });
+    };
+
+    const themeSet = (value) => {
+        const theme = themeValues.indexOf(value) === -1 ? "auto" : value;
+        try {
+            localStorage.setItem(themeStorageKey, JSON.stringify(theme));
+        } catch (e) {
+            // Ignore storage failures; the selected theme still applies to the current page.
+        }
+        themeApply(theme);
+    };
+
+    themeApply(themePreference());
+
+    if (themeMedia && themeMedia.addEventListener) {
+        themeMedia.addEventListener("change", function() {
+            if (themePreference() === "auto") {
+                themeApply("auto");
+            }
+        });
+    } else if (themeMedia && themeMedia.addListener) {
+        themeMedia.addListener(function() {
+            if (themePreference() === "auto") {
+                themeApply("auto");
+            }
+        });
+    }
+
+    // Menu item to change the theme
+    $(document).on("click", ".admin-theme-menu-item", function(e) {
+        e.preventDefault();
+        themeSet($(this).attr("data-admin-theme-value"));
+    });
+
     $.widget("ui.adminLinkedTable",
     {
         // make row cells clickable
