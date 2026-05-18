@@ -1389,9 +1389,17 @@ parse_post_body(Context) ->
         <<"application/x-www-form-urlencoded", _/binary>> ->
             MaxFormContentLength = z_multipart_parse:config_optional_limit(formdata_max_content_length, Context),
             case cowmachine_req:req_body(MaxFormContentLength, Context) of
-                {undefined, Context1} ->
-                    {[], Context1};
-                {Body, _Context1} when size(Body) >= MaxFormContentLength ->
+                {undefined, _Context1} ->
+                    ?LOG_INFO(#{
+                        in => zotonic_core,
+                        text => <<"Could not decode x-www-form-urlencoded: form-data limit exceeded">>,
+                        result => error,
+                        reason => max_content_length,
+                        size => undefined,
+                        max_size => MaxFormContentLength
+                    }),
+                    throw({stop_request, 413});
+                {Body, _Context1} when size(Body) > MaxFormContentLength ->
                     ?LOG_INFO(#{
                         in => zotonic_core,
                         text => <<"Could not decode x-www-form-urlencoded: form-data limit exceeded">>,
