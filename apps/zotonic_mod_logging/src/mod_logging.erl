@@ -242,11 +242,15 @@ pid_observe_content_security_report(Pid, #content_security_report{ type = <<"csp
     EffectiveDirective = trim(maps:get(<<"effectiveDirective">>, Report, <<>>)),
     OriginalPolicy = trim(maps:get(<<"originalPolicy">>, Report, <<>>)),
     DocumentUrl = trim(maps:get(<<"documentURL">>, Report, <<>>)),
-    SourceFile = trim(maps:get(<<"sourceFile">>, Report, <<>>)),
-    LineNumber = undefined_to_int(maps:get(<<"lineNumber">>, Report, 0)),
-    ColumnNumber = undefined_to_int(maps:get(<<"columnNumber">>, Report, 0)),
+    SourceFile = case trim(maps:get(<<"sourceFile">>, Report, <<>>)) of
+        <<>> -> DocumentUrl;
+        SF -> SF
+    end,
+    LineNumber = maps:get(<<"lineNumber">>, Report, 0),
+    ColumnNumber = maps:get(<<"columnNumber">>, Report, 0),
+    {LineNumber1, ColumnNumber1} = linecol(LineNumber, ColumnNumber),
     if
-        is_integer(LineNumber), is_integer(ColumnNumber),
+        is_integer(LineNumber1), is_integer(ColumnNumber1),
         size(EffectiveDirective) > 0,
         is_binary(DocumentUrl) ->
             gen_server:call(Pid,
@@ -257,8 +261,8 @@ pid_observe_content_security_report(Pid, #content_security_report{ type = <<"csp
                     reporting_url => trim(Url),
                     document_url => DocumentUrl,
                     source_file => SourceFile,
-                    line_number => LineNumber,
-                    column_number => ColumnNumber,
+                    line_number => LineNumber1,
+                    column_number => ColumnNumber1,
                     user_agent => trim(UA)
                 }
             }, infinity);
@@ -274,8 +278,10 @@ trim(S) when size(S) > ?MAX_REPORT_STRING_LENGTH ->
 trim(Url) when is_binary(Url) -> z_string:sanitize_utf8(Url);
 trim(_) -> <<>>.
 
-undefined_to_int(undefined) -> 0;
-undefined_to_int(N) -> N.
+linecol(undefined, _) -> {0,0};
+linecol(0, _) -> {0,0};
+linecol(Line, undefined) -> {Line, 0};
+linecol(Line, Col) -> {Line, Col}.
 
 %% @doc Return the recent list of CSP reports.
 -spec csp_reports(Context) -> {ok, Reports} when
