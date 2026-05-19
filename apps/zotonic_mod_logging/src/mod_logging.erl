@@ -75,6 +75,21 @@ This module handles the following notifier callbacks:
 - `observe_tick_1m`: Cleanup UI log de-duplication hashes and check the database pool health.
 - `observe_tick_1s`: Fetch UI log messages from the circular buffer.
 
+Content-Security-Policy Log
+---------------------------
+
+The `mod_logging` module observes incoming Content-Security-Policy violation reports sent by browsers to the `controller_csp_report`
+controller, and logs them in the database with de-duplication based on the report content. Recent CSP violation reports can be viewed
+in the admin interface.
+
+The most recent CSP violation reports are kept in memory and can be retrieved via the `csp_reports/1` API function, which is used by the
+admin interface to display recent CSP violations without needing to query the database.
+
+Only the most recent 100 unique CSP violation reports are kept in memory to prevent unbounded growth in memory usage. When the limit is
+exceeded, the oldest report is dropped. For each unique CSP violation, the number of occurrences and the most recent occurrence timestamp
+are tracked, along with the original policy, the document URL, and the source file and line number of the violation when available.
+
+
 UI Log
 ------
 
