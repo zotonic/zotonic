@@ -1478,20 +1478,19 @@ set_security_headers(Context) ->
         {<<"x-permitted-cross-domain-policies">>, <<"none">>},
         {<<"referrer-policy">>, <<"strict-origin-when-cross-origin">>}
     ],
-    {CSP, Headers1} = case z_context:get(allow_frame, Context, false) of
-        true ->
-            {CSP0, Headers};
-        false ->
-            {
-                CSP0#content_security_header{ frame_ancestors = [] },
-                [ {<<"x-frame-options">>, <<"SAMEORIGIN">>} | Headers ]
-            }
+    CSP = case z_context:get(allow_frame, Context, false) of
+        true -> CSP0#content_security_header{ frame_ancestors = [] };
+        false -> CSP0
     end,
     CSP1 = z_notifier:foldr(CSP, CSP, Context),
-    Headers2 = [
+    Headers1 = [
         {<<"content-security-policy">>, flatten_csp(CSP1)}
-        | Headers1
+        | Headers
     ],
+    Headers2 = case CSP1#content_security_header.frame_ancestors of
+        [ <<"'self'">> ] -> [ {<<"x-frame-options">>, <<"SAMEORIGIN">>} | Headers1 ];
+        [] -> Headers1
+    end,
     HSTSHeaders = case hsts_header(Context) of
         {_,_} = H -> [ H | Headers2 ];
         _ -> Headers2
