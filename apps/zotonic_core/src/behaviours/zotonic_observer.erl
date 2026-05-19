@@ -158,6 +158,8 @@ See also: https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Co
 -callback observe_content_security_report(#content_security_report{}, z:context()) -> any().
 -callback pid_observe_content_security_report(pid(), #content_security_report{}, z:context()) -> any().
 
+-optional_callbacks([ observe_content_security_report/2, pid_observe_content_security_report/3 ]).
+
 %% Check and possibly modify the http response security headers
 %% All headers are in lowercase.
 %% Type: first

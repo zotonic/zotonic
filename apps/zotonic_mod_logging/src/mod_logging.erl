@@ -649,11 +649,11 @@ log_csp_report(Report, #state{ csp_reports = Reports } = State) ->
             S = {SourceFile, LineNumber, ColumnNumber},
             Sources1 = case lists:member(S, Sources) of
                 true -> Sources;
-                false -> [ S | lists:sublist(Sources, 10) ]
+                false -> [ S | lists:sublist(Sources, 9) ]
             end,
             Urls1 = case lists:member(ReportingUrl, Urls) of
                 true -> Urls;
-                false -> [ ReportingUrl | lists:sublist(Urls, 10) ]
+                false -> [ ReportingUrl | lists:sublist(Urls, 9) ]
             end,
             Reports#{
                 CspKey => R#{
@@ -668,7 +668,7 @@ log_csp_report(Report, #state{ csp_reports = Reports } = State) ->
     Reports2 = case maps:size(Reports1) of
         N when N > 100 ->
             % Drop the oldest report to prevent unbounded growth in memory usage.
-            OldestKey = maps:fold(
+            {OldestKey, _OldestTs} = maps:fold(
                 fun
                     (Key, #{ timestamp := Ts }, undefined) ->
                         {Key, Ts};
