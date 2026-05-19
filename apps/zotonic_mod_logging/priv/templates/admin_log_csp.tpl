@@ -17,7 +17,7 @@
 </p>
 
 <div class="alert alert-danger">
-    {_ Note that this is reported to an open endpoint and can not be protected against abuse. _}<br>
+    {_ Note that this is reported to an open endpoint and can contain spam. _}<br>
 </div>
 
 {% with m.log_csp.reports as reports %}
