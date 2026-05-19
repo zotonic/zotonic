@@ -1,6 +1,9 @@
-%% @author Maas-Maarten Zeeman <mmzeeman@xs4all.nl>
+%% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2026 Marc Worrell
-%% @doc Simple resource that just returns "Hello, World!".
+%% @doc Controller handling CSP reports. Every report received is checked for
+%% the referrer and reported URL. If a report is accepted then it is forwarded
+%% to the notifier system as a `content_security_report` notification, which modules
+%% can subscribe to for further processing.
 %% @end
 
 %% Copyright 2026 Marc Worrell
