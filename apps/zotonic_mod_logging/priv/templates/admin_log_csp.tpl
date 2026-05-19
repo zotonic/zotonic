@@ -50,6 +50,10 @@
                     {% endfor %}
                 </td>
             </tr>
+        {% empty %}
+            <tr>
+                <td colspan="6" class="text-muted">{_ No Content-Security-Policy reports. _}</td>
+            </tr>
         {% endfor %}
     </tbody>
 </table>
