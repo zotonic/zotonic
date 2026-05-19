@@ -1456,7 +1456,7 @@ set_nocache_headers(Context = #context{cowreq=Req}) when is_map(Req) ->
 %%      'security_headers' notification.
 -spec set_security_headers( z:context() ) -> z:context().
 set_security_headers(Context) ->
-    CSP = #content_security_header{
+    CSP0 = #content_security_header{
         default_src    = [ <<"'self'">> ],
         script_src     = [ <<"'self'">>, <<"'nonce-'">>, <<"https:">> ],
         % style-src: 'unsafe-inline' is needed for OpenLayers, replace with 'nonce-'
@@ -1470,22 +1470,30 @@ set_security_headers(Context) ->
         object_src     = [ <<"'none'">> ],
         form_action    = [ <<"'self'">> ],
         worker_src     = [ <<"'self'">>, <<"blob:">> ],
-        connect_src    = [ <<"'self'">>, <<"https:">>, <<"wss:">> ]
+        connect_src    = [ <<"'self'">>, <<"https:">>, <<"wss:">> ],
+        frame_ancestors = [ <<"'self'">> ]
     },
-    CSP1 = z_notifier:foldr(CSP, CSP, Context),
-    Default = [
-        {<<"content-security-policy">>, flatten_csp(CSP1)},
+    Headers = [
         {<<"x-content-type-options">>, <<"nosniff">>},
         {<<"x-permitted-cross-domain-policies">>, <<"none">>},
         {<<"referrer-policy">>, <<"strict-origin-when-cross-origin">>}
     ],
-    Default1 = case z_context:get(allow_frame, Context, false) of
-        true -> Default;
-        false -> [ {<<"x-frame-options">>, <<"SAMEORIGIN">>} | Default ]
+    CSP = case z_context:get(allow_frame, Context, false) of
+        true -> CSP0#content_security_header{ frame_ancestors = [] };
+        false -> CSP0
+    end,
+    CSP1 = z_notifier:foldr(CSP, CSP, Context),
+    Headers1 = [
+        {<<"content-security-policy">>, flatten_csp(CSP1)}
+        | Headers
+    ],
+    Headers2 = case CSP1#content_security_header.frame_ancestors of
+        [ <<"'self'">> ] -> [ {<<"x-frame-options">>, <<"SAMEORIGIN">>} | Headers1 ];
+        _ -> Headers1
     end,
     HSTSHeaders = case hsts_header(Context) of
-        {_,_} = H -> [ H | Default1 ];
-        _ -> Default1
+        {_,_} = H -> [ H | Headers2 ];
+        _ -> Headers2
     end,
     SecurityHeaders = case z_notifier:first(#security_headers{ headers = HSTSHeaders }, Context) of
         undefined -> HSTSHeaders;
