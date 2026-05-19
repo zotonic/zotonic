@@ -243,8 +243,8 @@ pid_observe_content_security_report(Pid, #content_security_report{ type = <<"csp
     OriginalPolicy = trim(maps:get(<<"originalPolicy">>, Report, <<>>)),
     DocumentUrl = trim(maps:get(<<"documentURL">>, Report, <<>>)),
     SourceFile = trim(maps:get(<<"sourceFile">>, Report, <<>>)),
-    LineNumber = maps:get(<<"lineNumber">>, Report, 0),
-    ColumnNumber = maps:get(<<"columnNumber">>, Report, 0),
+    LineNumber = undefined_to_int(maps:get(<<"lineNumber">>, Report, 0)),
+    ColumnNumber = undefined_to_int(maps:get(<<"columnNumber">>, Report, 0)),
     if
         is_integer(LineNumber), is_integer(ColumnNumber),
         size(EffectiveDirective) > 0,
@@ -273,6 +273,9 @@ trim(S) when size(S) > ?MAX_REPORT_STRING_LENGTH ->
     z_string:trim(S1, ?MAX_REPORT_STRING_LENGTH);
 trim(Url) when is_binary(Url) -> z_string:sanitize_utf8(Url);
 trim(_) -> <<>>.
+
+undefined_to_int(undefined) -> 0;
+undefined_to_int(N) -> N.
 
 %% @doc Return the recent list of CSP reports.
 -spec csp_reports(Context) -> {ok, Reports} when
