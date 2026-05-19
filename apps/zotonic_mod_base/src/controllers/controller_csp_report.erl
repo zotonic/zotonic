@@ -49,55 +49,68 @@ content_types_accepted(Context) ->
     ], Context}.
 
 process(_Method, AcceptedCT, _ProvidedCT, Context) ->
-    Referrer = z_context:get_req_header(<<"referer">>, Context),
-    case is_site_url(Referrer, Context) of
+    Origin = origin(Context),
+    case is_site_url(Origin, Context) of
         true ->
-            {Report, Context1} = z_controller_helper:decode_request_noz(AcceptedCT, Context),
-            case Report of
-                #{
-                    <<"type">> := <<"csp-violation">> = Type,
-                    <<"url">> := ReportUrl,
-                    <<"body">> := ReportBody
-                } ->
-                    case is_site_url(ReportUrl, Context) of
-                        true ->
-                            UserAgent = maps:get(<<"user_agent">>, ReportBody,
-                                z_context:get_req_header(<<"user-agent">>, Context)),
-                            UserAgent1 = z_convert:to_binary(UserAgent),
-
-                            % Let modules handle the report.
-                            z_notifier:notify_sync(
-                                #content_security_report{
-                                    type = Type,
-                                    url = ReportUrl,
-                                    body = ReportBody,
-                                    user_agent = UserAgent1
-                                }, Context1);
-                        false ->
-                            ?LOG_INFO(#{
-                                in => zotonic_core,
-                                message => <<"URL in CSP report does not match site">>,
-                                result => error,
-                                reason => referrer_mismatch,
-                                referrer => Referrer,
-                                report_url => ReportUrl
-                            })
-                    end,
-                    {<<>>, Context1};
+            {Payload, Context1} = z_controller_helper:decode_request_noz(AcceptedCT, Context),
+            case Payload of
+                #{} ->
+                    handle_report(Origin, Payload, Context1);
+                Rs when is_list(Rs) ->
+                    lists:foreach(fun(R) -> handle_report(Origin, R, Context1) end, Rs);
                 _ ->
-                    % Ignore other reports
-                    {<<>>, Context1}
-            end;
+                    ok
+            end,
+            {<<>>, Context1};
         false ->
             ?LOG_INFO(#{
                 in => zotonic_core,
-                message => <<"Received CSP report from non-site referrer URL, ignoring">>,
+                message => <<"Received CSP report from non-site origin URL, ignoring">>,
                 result => error,
-                reason => referrer,
-                referrer => Referrer
+                reason => origin,
+                origin => Origin
             }),
             {<<>>, Context}
     end.
 
+handle_report(Origin, #{
+        <<"type">> := <<"csp-violation">> = Type,
+        <<"url">> := ReportUrl,
+        <<"body">> := ReportBody
+    }, Context) ->
+    case is_site_url(ReportUrl, Context) of
+        true ->
+            UserAgent = maps:get(<<"user_agent">>, ReportBody,
+                z_context:get_req_header(<<"user-agent">>, Context)),
+            UserAgent1 = z_convert:to_binary(UserAgent),
+
+            % Let modules handle the report.
+            z_notifier:notify_sync(
+                #content_security_report{
+                    type = Type,
+                    url = ReportUrl,
+                    body = ReportBody,
+                    user_agent = UserAgent1
+                }, Context);
+        false ->
+            ?LOG_INFO(#{
+                in => zotonic_core,
+                message => <<"URL in CSP report does not match site">>,
+                result => error,
+                reason => referrer_mismatch,
+                origin => Origin,
+                report_url => ReportUrl
+            })
+    end;
+handle_report(_Origin, _Report, _Context) ->
+    % Ignore other reports
+    ok.
+
 is_site_url(<<"https://", _/binary>> = Url, Context) -> z_context:is_site_url(Url, Context);
 is_site_url(_Url, _Context) -> false.
+
+origin(Context) ->
+    case z_context:get_req_header(<<"origin">>, Context) of
+        <<"null">> -> z_context:get_req_header(<<"referer">>, Context);  % Safari
+        Origin -> Origin
+    end.

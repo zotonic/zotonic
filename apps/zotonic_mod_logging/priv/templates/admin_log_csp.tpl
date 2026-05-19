@@ -42,7 +42,7 @@
                 <td>{{ r.count }}</td>
                 <td>
                     {% for url in r.reporting_url %}
-                        <a href="{{ url|escape }}" target="_blank">{{ url|truncatechars:80|escape }} <span class="fa fa-external-link"></span></a><br>
+                        <a href="{{ url|escape }}" title="{{ url|escape }}" target="_blank">{{ url|truncatechars:50|escape }} <span class="fa fa-external-link"></span></a><br>
                     {% endfor %}
                 </td>
                 <td>
@@ -70,8 +70,6 @@
     <pre>{{ reports[1].original_policy|trim|replace:"; ":";"|replace:";":";\n"|escape|linebreaksbr }}</pre>
 </div>
 {% endif %}
-
-{% print reports %}
 
 {% endwith %}
 
