@@ -1489,7 +1489,7 @@ set_security_headers(Context) ->
     ],
     Headers2 = case CSP1#content_security_header.frame_ancestors of
         [ <<"'self'">> ] -> [ {<<"x-frame-options">>, <<"SAMEORIGIN">>} | Headers1 ];
-        [] -> Headers1
+        _ -> Headers1
     end,
     HSTSHeaders = case hsts_header(Context) of
         {_,_} = H -> [ H | Headers2 ];
