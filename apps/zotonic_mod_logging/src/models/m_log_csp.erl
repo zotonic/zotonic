@@ -31,7 +31,7 @@ Available Model API Paths
 | --- | --- | --- |
 | `get` | `/reports/...` | Return the log of recent content security reports; admin-only access. |
 
-`A trailing `/...` means extra path segments are accepted for further lookups.
+A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 -author("Marc Worrell").
 
