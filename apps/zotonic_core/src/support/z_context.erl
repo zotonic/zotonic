@@ -1471,7 +1471,8 @@ set_security_headers(Context) ->
         form_action    = [ <<"'self'">> ],
         worker_src     = [ <<"'self'">>, <<"blob:">> ],
         connect_src    = [ <<"'self'">>, <<"https:">>, <<"wss:">> ],
-        frame_ancestors = [ <<"'self'">> ]
+        frame_ancestors = [ <<"'self'">> ],
+        report_to      = [ <<"site">> ]
     },
     Headers = [
         {<<"x-content-type-options">>, <<"nosniff">>},
@@ -1495,8 +1496,19 @@ set_security_headers(Context) ->
         {_,_} = H -> [ H | Headers2 ];
         _ -> Headers2
     end,
-    SecurityHeaders = case z_notifier:first(#security_headers{ headers = HSTSHeaders }, Context) of
-        undefined -> HSTSHeaders;
+    ReportHeaders = case lists:member(<<"site">>, CSP1#content_security_header.report_to) of
+        true ->
+            ReportToUrl = z_dispatcher:url_for(csp_report, set_language('x-default', Context)),
+            ReportToUrl1 = abs_url(ReportToUrl, Context),
+            [
+                {<<"reporting-endpoints">>, <<"site=\"", ReportToUrl1/binary, "\"">>}
+                | HSTSHeaders
+            ];
+        false ->
+            HSTSHeaders
+    end,
+    SecurityHeaders = case z_notifier:first(#security_headers{ headers = ReportHeaders }, Context) of
+        undefined -> ReportHeaders;
         Custom -> Custom
     end,
     SecurityHeaders1 = case proplists:get_value(<<"content-security-policy">>, SecurityHeaders) of

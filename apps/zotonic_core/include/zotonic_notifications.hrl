@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011-2025 Marc Worrell
+%% @copyright 2011-2026 Marc Worrell
 %% @doc Notifications used in Zotonic core
 %% @end
 
-%% Copyright 2011-2025 Marc Worrell
+%% Copyright 2011-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -70,6 +70,13 @@
     form_action = [] :: [ binary() ],
     % Reporting directives
     report_to = [] :: [ binary() ]
+}).
+
+%% @doc A content-security report, received by the report controller.
+-record(content_security_report, {
+    type :: binary(),
+    url :: binary(),
+    body :: map()
 }).
 
 %% @doc Check and possibly modify the http response security headers

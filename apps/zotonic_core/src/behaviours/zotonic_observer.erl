@@ -132,6 +132,32 @@ Return:
 
 -optional_callbacks([ observe_content_security_header/3, pid_observe_content_security_header/4 ]).
 
+%% Handle a content security report.
+%% Type: notify_sync
+-doc("
+Handle a content security report
+
+Type:
+
+[notify\\_sync](/id/doc_developerguide_notifications#notification-notify-sync)
+
+This is called when a content security report is received by the report controller.
+The notification contains the type, url and body of the report.
+
+Be aware that the content security report may contain untrusted data, so make sure to
+properly sanitize any output when handling this notification.
+
+`#content_security_report{}` properties:
+
+*   type: `binary`
+*   url: `binary`
+*   body: `map`
+
+See also: https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy/report-to
+").
+-callback observe_content_security_report(#content_security_report{}, z:context()) -> any().
+-callback pid_observe_content_security_report(pid(), #content_security_report{}, z:context()) -> any().
+
 %% Check and possibly modify the http response security headers
 %% All headers are in lowercase.
 %% Type: first

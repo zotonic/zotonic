@@ -4,7 +4,7 @@
 
 {% block title_log %}{_ Log user interface events _}{% endblock %}
 
-{% block active3 %}active{% endblock %}
+{% block active4 %}active{% endblock %}
 
 {% block content_log %}
 
