@@ -152,6 +152,7 @@ properly sanitize any output when handling this notification.
 *   type: `binary`
 *   url: `binary`
 *   body: `map`
+*   user_agent: `binary`
 
 See also: https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy/report-to
 ").

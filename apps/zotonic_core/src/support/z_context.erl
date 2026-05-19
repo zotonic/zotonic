@@ -1466,7 +1466,7 @@ set_security_headers(Context) ->
         img_src        = [ <<"'self'">>, <<"https:">>, <<"data:">> ],
         media_src      = [ <<"'self'">>, <<"https:">>, <<"data:">>, <<"mediastream:">> ],
         font_src       = [ <<"'self'">>, <<"https:">> ],
-        frame_src      = [ <<"'self'">>, <<"https:">> ],
+        frame_src      = [ <<"'self'">> ],
         object_src     = [ <<"'none'">> ],
         form_action    = [ <<"'self'">> ],
         worker_src     = [ <<"'self'">>, <<"blob:">> ],

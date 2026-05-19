@@ -76,7 +76,8 @@
 -record(content_security_report, {
     type :: binary(),
     url :: binary(),
-    body :: map()
+    body :: map(),
+    user_agent :: binary()
 }).
 
 %% @doc Check and possibly modify the http response security headers

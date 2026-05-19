@@ -58,27 +58,31 @@ process(_Method, AcceptedCT, _ProvidedCT, Context) ->
                     <<"type">> := <<"csp-violation">> = Type,
                     <<"url">> := ReportUrl,
                     <<"body">> := ReportBody
-                } when ReportUrl =:= Referrer ->
-                    % Let modules handle the report.
-                    z_notifier:notify_sync(
-                        #content_security_report{
-                            type = Type,
-                            url = ReportUrl,
-                            body = ReportBody
-                        }, Context1),
-                    {<<>>, Context1};
-                #{
-                    <<"type">> := <<"csp-violation">>,
-                    <<"url">> := ReportUrl
                 } ->
-                    ?LOG_INFO(#{
-                        in => zotonic_core,
-                        message => <<"URL in CSP report does not match referrer">>,
-                        result => error,
-                        reason => referrer_mismatch,
-                        referrer => Referrer,
-                        report_url => ReportUrl
-                    }),
+                    case is_site_url(ReportUrl, Context) of
+                        true ->
+                            UserAgent = maps:get(<<"user_agent">>, ReportBody,
+                                z_context:get_req_header(<<"user-agent">>, Context)),
+                            UserAgent1 = z_convert:to_binary(UserAgent),
+
+                            % Let modules handle the report.
+                            z_notifier:notify_sync(
+                                #content_security_report{
+                                    type = Type,
+                                    url = ReportUrl,
+                                    body = ReportBody,
+                                    user_agent = UserAgent1
+                                }, Context1);
+                        false ->
+                            ?LOG_INFO(#{
+                                in => zotonic_core,
+                                message => <<"URL in CSP report does not match site">>,
+                                result => error,
+                                reason => referrer_mismatch,
+                                referrer => Referrer,
+                                report_url => ReportUrl
+                            })
+                    end,
                     {<<>>, Context1};
                 _ ->
                     % Ignore other reports

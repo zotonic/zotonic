@@ -237,7 +237,7 @@ observe_tick_1h(tick_1h, Context) ->
     m_log_email:periodic_cleanup(Context),
     m_log_ui:periodic_cleanup(Context).
 
-pid_observe_content_security_report(Pid, #content_security_report{ type = <<"csp-violation">>, url = Url, body = Report }, _Context) ->
+pid_observe_content_security_report(Pid, #content_security_report{ type = <<"csp-violation">>, url = Url, body = Report, user_agent = UA }, _Context) ->
     BlockedUrl = trim(maps:get(<<"blockedURL">>, Report, <<>>)),
     EffectiveDirective = trim(maps:get(<<"effectiveDirective">>, Report, <<>>)),
     OriginalPolicy = trim(maps:get(<<"originalPolicy">>, Report, <<>>)),
@@ -258,7 +258,8 @@ pid_observe_content_security_report(Pid, #content_security_report{ type = <<"csp
                     document_url => DocumentUrl,
                     source_file => SourceFile,
                     line_number => LineNumber,
-                    column_number => ColumnNumber
+                    column_number => ColumnNumber,
+                    user_agent => trim(UA)
                 }
             }, infinity);
         true ->
@@ -622,7 +623,8 @@ log_csp_report(Report, #state{ csp_reports = Reports } = State) ->
         document_url := DocumentUrl,
         source_file := SourceFile,
         line_number := LineNumber,
-        column_number := ColumnNumber
+        column_number := ColumnNumber,
+        user_agent := UA
     } = Report,
     CspKey = {EffectiveDirective, BlockedUrl},
     Reports1 = case maps:get(CspKey, Reports, undefined) of
@@ -633,23 +635,25 @@ log_csp_report(Report, #state{ csp_reports = Reports } = State) ->
                     original_policy => OriginalPolicy,
                     document_url => DocumentUrl,
                     count => 1,
-                    source => [
-                        {SourceFile, LineNumber, ColumnNumber}
-                    ],
-                    reporting_url => [
-                        ReportingUrl
-                    ]
+                    source => [ {SourceFile, LineNumber, ColumnNumber} ],
+                    user_agent => [ UA ],
+                    reporting_url => [ ReportingUrl ]
                 }
             };
         #{
             count := Count,
             source := Sources,
-            reporting_url := Urls
+            reporting_url := Urls,
+            user_agent := UAs
         } = R ->
             S = {SourceFile, LineNumber, ColumnNumber},
             Sources1 = case lists:member(S, Sources) of
                 true -> Sources;
                 false -> [ S | lists:sublist(Sources, 9) ]
+            end,
+            UAs1 = case lists:member(UA, UAs) of
+                true -> UAs;
+                false -> [ UA | lists:sublist(UAs, 9) ]
             end,
             Urls1 = case lists:member(ReportingUrl, Urls) of
                 true -> Urls;
@@ -661,7 +665,8 @@ log_csp_report(Report, #state{ csp_reports = Reports } = State) ->
                     count => Count + 1,
                     original_policy => OriginalPolicy,
                     source => Sources1,
-                    reporting_url => Urls1
+                    reporting_url => Urls1,
+                    user_agent => UAs1
                 }
             }
     end,

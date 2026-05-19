@@ -30,6 +30,7 @@
             <th>{_ Count _}</th>
             <th>{_ Reporting URLs _}</th>
             <th>{_ Sources _}</th>
+            <th>{_ User-Agents _}</th>
         </tr>
     </thead>
     <tbody>
@@ -49,10 +50,15 @@
                         {{ s.file|truncatechars:80|escape }}<span class="text-muted">:{{ s.line }}:{{ s.column }}</span><br>
                     {% endfor %}
                 </td>
+                <td>
+                    {% for s in r.user_agent %}
+                        {{ s|truncatechars:400|escape }}<br>
+                    {% endfor %}
+                </td>
             </tr>
         {% empty %}
             <tr>
-                <td colspan="6" class="text-muted">{_ No Content-Security-Policy reports. _}</td>
+                <td colspan="7" class="text-muted">{_ No Content-Security-Policy reports. _}</td>
             </tr>
         {% endfor %}
     </tbody>
@@ -64,6 +70,8 @@
     <pre>{{ reports[1].original_policy|trim|replace:"; ":";"|replace:";":";\n"|escape|linebreaksbr }}</pre>
 </div>
 {% endif %}
+
+{% print reports %}
 
 {% endwith %}
 
