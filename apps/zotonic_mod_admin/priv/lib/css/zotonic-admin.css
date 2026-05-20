@@ -2295,14 +2295,14 @@ li h3.widget-header {
   background-color: var(--z-admin-drag-media-bg);
 }
 
-.environment-development body,
-.environment-test body,
-.environment-acceptance body,
-.environment-education body,
-.environment-backup body {
-  padding-left: 24px;
-}
 @media (min-width: 480px) {
+  .environment-development body,
+  .environment-test body,
+  .environment-acceptance body,
+  .environment-education body,
+  .environment-backup body {
+    padding-left: 24px;
+  }
   .environment-development body::before,
   .environment-test body::before,
   .environment-acceptance body::before,
