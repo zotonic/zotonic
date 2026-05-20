@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-04-15 11:38\n"
+"PO-Revision-Date: 2026-05-20 11:40\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgstr "לא ניתן היה לאחזר את כתובת ה- URL של המשאב 
 msgid "Forbidden to access the remote resource URL."
 msgstr "אסור לגשת לכתובת ה- URL של המשאב המרוחק."
 
-#: zotonic_core/src/support/z_media_import.erl:327
+#: zotonic_core/src/support/z_media_import.erl:328
 msgid "Page Import"
 msgstr "ייבוא עמודים"
 
@@ -56,7 +56,7 @@ msgstr "יותר מדי בקשות לשרת המרוחק, נסה שוב מאוח
 msgid "Unauthorized to access the remote resource URL."
 msgstr "לא מורשה לגשת לכתובת ה- URL של המשאב המרוחק."
 
-#: zotonic_core/src/support/z_media_import.erl:384
+#: zotonic_core/src/support/z_media_import.erl:385
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
@@ -178,7 +178,7 @@ msgid "ACL user group"
 msgstr "קבוצת משתמשים של ACL"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:922
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:928
 msgid "Access control rules"
 msgstr "כללי בקרת גישה"
 
@@ -194,10 +194,10 @@ msgstr "הוסף קישורים לקבוצת שיתוף הפעולה"
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:91
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:141
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:110
-#: zotonic_mod_logging/priv/templates/admin_log.tpl:46
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:132
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:164
-#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:45
+#: zotonic_mod_logging/priv/templates/admin_log.tpl:47
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:152
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:184
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:47
 msgid "All"
 msgstr "את כל"
 
@@ -364,7 +364,7 @@ msgstr "קטגוריה &amp; קבוצת תוכן"
 msgid "Change category and/or content group..."
 msgstr "שנה קטגוריה ו / או קבוצת תוכן ..."
 
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:483
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:485
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:140
 msgid "Changed configuration."
 msgstr "תצורה שונתה."
@@ -411,7 +411,7 @@ msgid "Collaboration group members"
 msgstr "חברי קבוצת שיתוף פעולה"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:22
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:918
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:924
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:123
 msgid "Collaboration groups"
 msgstr "קבוצות שיתוף פעולה"
@@ -432,7 +432,7 @@ msgstr "ראה מחברי משאבים כבעלים."
 #: zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4
 #: zotonic_mod_admin/src/mod_admin.erl:477
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:67
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:113
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:133
 msgid "Content"
 msgstr "תוֹכֶן"
 
@@ -504,7 +504,7 @@ msgstr "לא ניתן היה לעבור לקבוצת שיתוף פעולה."
 msgid "Delete"
 msgstr "לִמְחוֹק"
 
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:471
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:473
 msgid "Delete is canceled, there are users in the user groups."
 msgstr "המחיקה בוטלה, ישנם משתמשים בקבוצות המשתמשים."
 
@@ -512,7 +512,7 @@ msgstr "המחיקה בוטלה, ישנם משתמשים בקבוצות המשת
 msgid "Delete user group and move users"
 msgstr "מחק את קבוצת המשתמשים והעבר משתמשים"
 
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:516
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:518
 #: zotonic_mod_admin_category/src/mod_admin_category.erl:113
 #: zotonic_mod_admin_category/src/mod_admin_category.erl:131
 #: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:121
@@ -649,7 +649,7 @@ msgstr "חברים מאותה קבוצת משתמשים"
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:122
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:189
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:50
-#: zotonic_mod_logging/priv/templates/admin_log.tpl:24
+#: zotonic_mod_logging/priv/templates/admin_log.tpl:25
 msgid "Module"
 msgstr "מודול"
 
@@ -674,11 +674,11 @@ msgstr "עבור ל- {title}…"
 msgid "No ACL rules"
 msgstr "אין כללי ACL"
 
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:509
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:511
 msgid "Not all user groups could be deleted."
 msgstr "לא ניתן למחוק את כל קבוצות המשתמשים."
 
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:489
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:491
 msgid "Not allowed to change ACL options."
 msgstr "אסור לשנות אפשרויות ACL."
 
@@ -812,8 +812,8 @@ msgstr "הצג נכסים פרטיים ל-"
 msgid "Show this ACL user group first:"
 msgstr "הראה תחילה את קבוצת המשתמשים של ACL זו:"
 
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:450
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:466
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:452
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:468
 #: zotonic_mod_admin_category/src/mod_admin_category.erl:90
 #: zotonic_mod_admin_category/src/mod_admin_category.erl:106
 #: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:96
@@ -911,7 +911,7 @@ msgstr "השתמש בכתובת האתר הבאה כדי לבדוק את כלל�
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:913
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:919
 msgid "User groups"
 msgstr "קבוצות משתמש"
 
@@ -1405,6 +1405,7 @@ msgid "Could not reload the site configuration, check the logs."
 msgstr "לא ניתן היה לטעון מחדש את תצורת האתר, בדוק את היומנים."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:6
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:37
 msgid "Count"
 msgstr "לספור"
 
@@ -1475,9 +1476,10 @@ msgstr "גרסת מסד הנתונים"
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:36
 #: zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:5
 #: zotonic_mod_base/priv/templates/directory_index.tpl:16
-#: zotonic_mod_logging/priv/templates/admin_log.tpl:20
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:116
-#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:20
+#: zotonic_mod_logging/priv/templates/admin_log.tpl:21
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:34
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:136
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:22
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:16
 #: zotonic_mod_survey/src/models/m_survey.erl:831
 #: zotonic_mod_survey/src/models/m_survey.erl:834
@@ -1796,9 +1798,9 @@ msgstr "שם קובץ"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:27
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:24
-#: zotonic_mod_logging/priv/templates/admin_log.tpl:45
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:163
-#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:44
+#: zotonic_mod_logging/priv/templates/admin_log.tpl:46
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:183
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:46
 msgid "Filter"
 msgstr "לְסַנֵן"
 
@@ -1856,7 +1858,7 @@ msgid "Follow connections and import all (deep copy)."
 msgstr "עקוב אחר חיבורים וייבא הכל (העתקה עמוקה)."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:59
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:112
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:132
 msgid "From"
 msgstr "מ"
 
@@ -1951,7 +1953,7 @@ msgstr "הוכנס לאינדקס על ידי מנועי החיפוש"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:128
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:21
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:125
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:145
 msgid "Info"
 msgstr "מידע"
 
@@ -2815,7 +2817,7 @@ msgstr "מדינה"
 #: zotonic_mod_admin/src/mod_admin.erl:517
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
 #: zotonic_mod_base/priv/templates/_session_info.tpl:12
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:109
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:111
 #: zotonic_site_status/priv/templates/_navbar.tpl:15
 #: zotonic_site_status/priv/templates/_sites.tpl:4
 msgid "Status"
@@ -3172,6 +3174,7 @@ msgstr "לא פורסם"
 #: zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:13
 #: zotonic_mod_search/priv/templates/_search_view_list_item.tpl:8
 #: zotonic_mod_seo/src/support/seo_jsonld_webpage.erl:276
+#: zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:16
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:10
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:3
 msgid "Untitled"
@@ -4107,7 +4110,8 @@ msgstr "האם אתה בטוח שברצונך למחוק ערך זה?"
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:19
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:37
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:87
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:140
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:36
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:159
 msgid "Blocked"
 msgstr "חָסוּם"
 
@@ -5604,7 +5608,7 @@ msgstr "הזן את כתובת הדוא\"ל שלך כדי לקבל הוראות 
 
 #: zotonic_mod_authentication/priv/templates/logon_service_error.tpl:5
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:14
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:123
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:143
 #: zotonic_mod_survey/priv/templates/_survey_block_name_check.tpl:2
 msgid "Error"
 msgstr "שְׁגִיאָה"
@@ -6483,7 +6487,7 @@ msgid "Uploaded to filestore"
 msgstr "הועלה לחנות הקבצים"
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:24
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:124
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:144
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:42
 msgid "Warning"
 msgstr "אַזהָרָה"
@@ -6885,10 +6889,10 @@ msgstr "היכנס או הירשם להגיב"
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:21
 #: zotonic_mod_contact/priv/templates/contact.tpl:22
 #: zotonic_mod_contact/priv/templates/email_contact.tpl:16
-#: zotonic_mod_logging/priv/templates/admin_log.tpl:22
-#: zotonic_mod_logging/priv/templates/admin_log.tpl:39
-#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:22
-#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:38
+#: zotonic_mod_logging/priv/templates/admin_log.tpl:23
+#: zotonic_mod_logging/priv/templates/admin_log.tpl:40
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:24
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:40
 msgid "Message"
 msgstr "הוֹדָעָה"
 
@@ -7762,7 +7766,7 @@ msgstr "שגיאות תחביר"
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:61
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:123
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:190
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:115
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:135
 msgid "Template"
 msgstr "תבנית"
 
@@ -9207,25 +9211,81 @@ msgstr "חיברת <strong>חשבון LinkedIn</strong>."
 msgid "Your LinkedIn Developer Network"
 msgstr "רשת המפתחים שלך ב- LinkedIn"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:136
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:116
+msgid "<ul>\n"
+"                                            <li><b>Sending</b>: the email is being sent to the remote mailer</li>\n"
+"                           <li><b>Sent</b>: the email has been sent to the remote mailer</li>\n"
+"      <li><b>Relayed</b>: the remote mailer reports that the email is relayed to the next server</li>\n"
+"                                            <li><b>Bounce</b>: the email bounced back from a remote mailer, this is a fatal error</li>\n"
+"                                            <li><b>Failed</b>: the remote mailer did not accept our email, no further retries</li>\n"
+"                                            <li><b>Retry</b>: we could not sent the email and will retry later</li>\n"
+" <li><b>Blocked</b>: the recipient’s email address is blocked, check the email address status</li>\n"
+"                                            <li><b>Received</b>: a remote mailer sent email to us</li>\n"
+"              </ul>"
+msgstr "<ul>\n"
+"                                            <li><b>שליחה</b>: הדוא\"ל נשלח לשרת הדוא\"ל המרוחק</li>\n"
+"                           <li><b>נשלח</b>: הדוא\"ל נשלח לשרת הדואר המרוחק</li>\n"
+"      <li><b>Relayed</b>: שרת הדואר המרוחק מדווח שהדוא\"ל מועבר לשרת הבא</li>\n"
+"                                            <li><b>Bounce</b>: הדוא\"ל הוחזר מהשרת המרוחק, זו שגיאה חמורה</li>\n"
+"                                            <li><b>נכשל</b>: שרת הדואר המרוחק לא קיבל את הדוא\"ל שלנו, לא יהיו ניסיונות נוספים</li>\n"
+"                                            <li><b>ניסיון חוזר</b>: לא הצלחנו לשלוח את הדוא\"ל וננסה שוב מאוחר יותר</li>\n"
+" <li><b>חסום</b>: כתובת הדוא\"ל של הנמען חסומה, בדוק את מצב כתובת הדוא\"ל</li>\n"
+"                                            <li><b>התקבל</b>: שרת דואר מרוחק שלח אלינו דואר אלקטרוני</li>\n"
+"              </ul>"
+
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:156
 msgid "Bounce"
 msgstr "להקפיץ"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:126
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:14
+msgid "Clear log"
+msgstr "נקה את היומן"
+
+#: zotonic_mod_logging/src/mod_logging.erl:191
+msgid "Cleared the CSP reports."
+msgstr "סיימתי את דוחות ה-CSP."
+
+#: zotonic_mod_logging/priv/templates/admin_log_base.tpl:13
+#: zotonic_mod_logging/src/mod_logging.erl:358
+msgid "Content-Security log"
+msgstr "יומן אבטחת תוכן"
+
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:3
+msgid "Content-Security-Policy violations"
+msgstr "הפרות של מדיניות אבטחת התוכן"
+
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:27
+msgid "Content-Security-Policy violations are reported to an open endpoint and can contain spam."
+msgstr "הפרות של מדיניות אבטחת התוכן (Content-Security-Policy) מדווחות לנקודת קצה פתוחה ועשויות להכיל דואר זבל."
+
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:146
 msgid "Debug"
 msgstr "לנפות"
 
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:35
+msgid "Directive"
+msgstr "הנחיה"
+
 #: zotonic_mod_logging/priv/templates/admin_log_base.tpl:12
-#: zotonic_mod_logging/src/mod_logging.erl:232
+#: zotonic_mod_logging/src/mod_logging.erl:353
 msgid "Email log"
 msgstr "יומן דוא\"ל"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:38
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:39
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_status_flag.tpl:10
 msgid "Email status"
 msgstr "סטטוס דוא\"ל"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:138
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:14
+msgid "Errors and other unexpected exceptions in the browser."
+msgstr "שגיאות וחריגות בלתי צפויות אחרות בדפדפן."
+
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:114
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:128
+msgid "Explanation of email status"
+msgstr "הסבר על מצב הדוא\"ל"
+
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:157
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:97
 #: zotonic_mod_survey/priv/templates/_survey_results_user.tpl:12
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:37
@@ -9233,95 +9293,103 @@ msgstr "סטטוס דוא\"ל"
 msgid "Failed"
 msgstr "נִכשָׁל"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:122
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:142
 msgid "Fatal"
 msgstr "קָטלָנִי"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:46
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:47
 msgid "Identities"
 msgstr "זהויות"
 
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:3
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:28
+msgid "Incoming/outgoing e-mail log"
+msgstr "יומן דואר אלקטרוני נכנס/יוצא"
+
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:76
+msgid "Latest reported security policy:"
+msgstr "מדיניות האבטחה המעודכנת ביותר שדווחה:"
+
 #: zotonic_mod_logging/priv/templates/admin_log_base.tpl:3
-#: zotonic_mod_logging/src/mod_logging.erl:227
+#: zotonic_mod_logging/src/mod_logging.erl:348
 msgid "Log"
 msgstr "עֵץ"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:3
-msgid "Log email"
-msgstr "רישום דוא\"ל"
-
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:5
-msgid "Log incoming/outgoing e-mail"
-msgstr "רשום דואר אלקטרוני נכנס / יוצא"
-
 #: zotonic_mod_logging/priv/templates/admin_log.tpl:3
-#: zotonic_mod_logging/priv/templates/admin_log.tpl:5
-#: zotonic_mod_logging/priv/templates/admin_log_base.tpl:7
+#: zotonic_mod_logging/priv/templates/admin_log.tpl:10
 msgid "Log messages"
 msgstr "הודעות יומן"
 
-#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:3
-msgid "Log ui events"
-msgstr "אירועי ממשק משתמש"
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:32
+msgid "Log of all outgoing and incoming email. For every email we log different states."
+msgstr "יומן של כל הודעות הדוא\"ל הנכנסות והיוצאות. עבור כל הודעת דוא\"ל אנו מתעדים מצבים שונים."
 
-#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:5
-msgid "Log user interface events"
-msgstr "כניסה לאירועים בממשק המשתמש"
+#: zotonic_mod_logging/priv/templates/admin_log_base.tpl:7
+msgid "Logging"
+msgstr "רישום"
 
 #: zotonic_mod_logging/priv/templates/admin_log_base.tpl:11
 msgid "Message log"
 msgstr "יומן הודעות"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:110
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:130
 msgid "Message nr"
 msgstr "מס 'הודעה"
 
-#: zotonic_mod_logging/priv/templates/admin_log.tpl:12
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:30
-msgid "Most recent messages"
-msgstr "ההודעות האחרונות"
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:15
+msgid "Messages are dropped if too many are received in a short time or if they are identical to a previous message."
+msgstr "הודעות נמחקות אם מתקבלות יותר מדי הודעות בפרק זמן קצר, או אם הן זהות להודעה קודמת."
 
-#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:12
-msgid "Most recent user interface events"
-msgstr "אירועי ממשק המשתמש האחרונים"
+#: zotonic_mod_logging/priv/templates/admin_log.tpl:14
+msgid "Messages logged by the system and modules."
+msgstr "הודעות שנרשמו על ידי המערכת והמודולים."
 
-#: zotonic_mod_logging/priv/templates/admin_log.tpl:60
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:181
-#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:59
+#: zotonic_mod_logging/priv/templates/admin_log.tpl:61
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:68
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:200
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:61
 msgid "No log messages."
 msgstr "אין הודעות יומן."
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:114
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:134
 msgid "Other"
 msgstr "אַחֵר"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:137
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:160
 msgid "Received"
 msgstr "קיבלו"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:135
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:155
 msgid "Relayed"
 msgstr "ממסר"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:48
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:10
+msgid "Reported Content-Security-Policy violations"
+msgstr "דיווחים על הפרות של מדיניות אבטחת התוכן (CSP)"
+
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:38
+msgid "Reporting URLs"
+msgstr "דיווח על כתובות URL"
+
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:49
 msgid "Resources with email identity"
 msgstr "משאבים עם זהות דוא\"ל"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:139
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:158
 msgid "Retry"
 msgstr "נסה שוב"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:133
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:153
 msgid "Sending"
 msgstr "שְׁלִיחָה"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:134
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:154
 msgid "Sent"
 msgstr "נשלח"
 
-#: zotonic_mod_logging/priv/templates/admin_log.tpl:21
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:108
-#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:21
+#: zotonic_mod_logging/priv/templates/admin_log.tpl:22
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:109
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:23
 msgid "Severity"
 msgstr "חוּמרָה"
 
@@ -9330,20 +9398,28 @@ msgstr "חוּמרָה"
 msgid "Site Administrator"
 msgstr "מנהל האתר"
 
-#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:24
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:39
+msgid "Sources"
+msgstr "מקורות"
+
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:26
 msgid "Stack"
 msgstr "לַעֲרוֹם"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:111
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:23
+msgid "The latest 100 reported directives and blocked contents are kept. For each, the last 10 reported source locations are shown."
+msgstr "נשמרים 100 ההנחיות והתכנים החסומים האחרונים שדווחו. עבור כל אחד מהם מוצגים 10 מיקומי המקור האחרונים שדווחו."
+
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:131
 msgid "To"
 msgstr "ל"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:69
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:70
 msgid "Toggle non people"
 msgstr "החלף אנשים שאינם"
 
-#: zotonic_mod_logging/priv/templates/admin_log.tpl:23
-#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:23
+#: zotonic_mod_logging/priv/templates/admin_log.tpl:24
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:25
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:49
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:40
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:39
@@ -9351,18 +9427,34 @@ msgstr "החלף אנשים שאינם"
 msgid "User"
 msgstr "מִשׁתַמֵשׁ"
 
-#: zotonic_mod_logging/priv/templates/admin_log.tpl:42
-#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:41
+#: zotonic_mod_logging/priv/templates/admin_log.tpl:43
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:43
 #: zotonic_mod_survey/src/models/m_survey.erl:835
 msgid "User Id"
 msgstr "תעודת זהות של משתמש"
 
-#: zotonic_mod_logging/priv/templates/admin_log_base.tpl:13
-#: zotonic_mod_logging/src/mod_logging.erl:237
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:10
+msgid "User interface events"
+msgstr "אירועי ממשק המשתמש"
+
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:3
+msgid "User interface events log"
+msgstr "יומן אירועי ממשק המשתמש"
+
+#: zotonic_mod_logging/priv/templates/admin_log_base.tpl:14
+#: zotonic_mod_logging/src/mod_logging.erl:363
 msgid "User interface log"
 msgstr "יומן ממשק משתמש"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:62
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:40
+msgid "User-Agents"
+msgstr "סוכני משתמש"
+
+#: zotonic_mod_logging/src/mod_logging.erl:193
+msgid "You don't have permission to clear the CSP reports."
+msgstr "אין לך הרשאה למחוק את דוחות ה-CSP."
+
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:63
 msgid "email verified"
 msgstr "דואר אלקטרוני אומת"
 
@@ -12680,7 +12772,7 @@ msgid "Results"
 msgstr "תוצאות"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:22
-#: zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:15
+#: zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:19
 msgid "Results editor"
 msgstr "עורך תוצאות"
 
@@ -12975,7 +13067,7 @@ msgid "Toggle outline view"
 msgstr "החלף את תצוגת המתאר"
 
 #: zotonic_mod_survey/priv/templates/_survey_result_chart.tpl:30
-#: zotonic_mod_survey/priv/templates/survey_results_printable.tpl:67
+#: zotonic_mod_survey/priv/templates/survey_results_printable.tpl:71
 msgid "Totals"
 msgstr "סך הכל"
 
@@ -13057,7 +13149,7 @@ msgstr "אסור לראות את התוצאות."
 msgid "You cannot reply to this email."
 msgstr "אינך יכול להשיב למייל זה."
 
-#: zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:23
+#: zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:27
 msgid "You must be allowed to edit the form, to edit its results."
 msgstr "יש לאפשר לך לערוך את הטופס, כדי לערוך את התוצאות שלו."
 
