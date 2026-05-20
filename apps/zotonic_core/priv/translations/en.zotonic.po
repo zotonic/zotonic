@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-04-15 11:38\n"
+"PO-Revision-Date: 2026-05-20 11:41\n"
 "Last-Translator: \n"
 "Language-Team: English\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgstr ""
 msgid "Forbidden to access the remote resource URL."
 msgstr "Forbidden to access the remote resource URL."
 
-#: zotonic_core/src/support/z_media_import.erl:327
+#: zotonic_core/src/support/z_media_import.erl:328
 msgid "Page Import"
 msgstr "Page Import"
 
@@ -56,7 +56,7 @@ msgstr "Too many requests for the remote server, try again later."
 msgid "Unauthorized to access the remote resource URL."
 msgstr "Unauthorized to access the remote resource URL."
 
-#: zotonic_core/src/support/z_media_import.erl:384
+#: zotonic_core/src/support/z_media_import.erl:385
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
@@ -178,7 +178,7 @@ msgid "ACL user group"
 msgstr "ACL user group"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:922
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:928
 msgid "Access control rules"
 msgstr "Access control rules"
 
@@ -194,10 +194,10 @@ msgstr "Add links to the collaboration group"
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:91
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:141
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:110
-#: zotonic_mod_logging/priv/templates/admin_log.tpl:46
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:132
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:164
-#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:45
+#: zotonic_mod_logging/priv/templates/admin_log.tpl:47
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:152
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:184
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:47
 msgid "All"
 msgstr "All"
 
@@ -364,7 +364,7 @@ msgstr "Category &amp; Content group"
 msgid "Change category and/or content group..."
 msgstr "Change category and/or content group..."
 
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:483
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:485
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:140
 msgid "Changed configuration."
 msgstr "Changed configuration."
@@ -411,7 +411,7 @@ msgid "Collaboration group members"
 msgstr "Collaboration group members"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:22
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:918
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:924
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:123
 msgid "Collaboration groups"
 msgstr "Collaboration groups"
@@ -432,7 +432,7 @@ msgstr "Consider resource authors to be owner."
 #: zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4
 #: zotonic_mod_admin/src/mod_admin.erl:477
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:67
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:113
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:133
 msgid "Content"
 msgstr "Content"
 
@@ -504,7 +504,7 @@ msgstr "Could not move to collaboration group."
 msgid "Delete"
 msgstr "Delete"
 
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:471
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:473
 msgid "Delete is canceled, there are users in the user groups."
 msgstr "Delete is canceled, there are users in the user groups."
 
@@ -512,7 +512,7 @@ msgstr "Delete is canceled, there are users in the user groups."
 msgid "Delete user group and move users"
 msgstr "Delete user group and move users"
 
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:516
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:518
 #: zotonic_mod_admin_category/src/mod_admin_category.erl:113
 #: zotonic_mod_admin_category/src/mod_admin_category.erl:131
 #: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:121
@@ -649,7 +649,7 @@ msgstr "Members of same user group"
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:122
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:189
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:50
-#: zotonic_mod_logging/priv/templates/admin_log.tpl:24
+#: zotonic_mod_logging/priv/templates/admin_log.tpl:25
 msgid "Module"
 msgstr "Module"
 
@@ -674,11 +674,11 @@ msgstr "Move to {title}…"
 msgid "No ACL rules"
 msgstr "No ACL rules"
 
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:509
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:511
 msgid "Not all user groups could be deleted."
 msgstr "Not all user groups could be deleted."
 
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:489
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:491
 msgid "Not allowed to change ACL options."
 msgstr "Not allowed to change ACL options."
 
@@ -812,8 +812,8 @@ msgstr "Show private properties to"
 msgid "Show this ACL user group first:"
 msgstr "Show this ACL user group first:"
 
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:450
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:466
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:452
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:468
 #: zotonic_mod_admin_category/src/mod_admin_category.erl:90
 #: zotonic_mod_admin_category/src/mod_admin_category.erl:106
 #: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:96
@@ -911,7 +911,7 @@ msgstr "Use the following URL to test the access control rules before publishing
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:913
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:919
 msgid "User groups"
 msgstr "User groups"
 
@@ -1405,6 +1405,7 @@ msgid "Could not reload the site configuration, check the logs."
 msgstr "Could not reload the site configuration, check the logs."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:6
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:37
 msgid "Count"
 msgstr "Count"
 
@@ -1475,9 +1476,10 @@ msgstr "Database Version"
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:36
 #: zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:5
 #: zotonic_mod_base/priv/templates/directory_index.tpl:16
-#: zotonic_mod_logging/priv/templates/admin_log.tpl:20
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:116
-#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:20
+#: zotonic_mod_logging/priv/templates/admin_log.tpl:21
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:34
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:136
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:22
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:16
 #: zotonic_mod_survey/src/models/m_survey.erl:831
 #: zotonic_mod_survey/src/models/m_survey.erl:834
@@ -1796,9 +1798,9 @@ msgstr "Filename"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:27
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:24
-#: zotonic_mod_logging/priv/templates/admin_log.tpl:45
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:163
-#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:44
+#: zotonic_mod_logging/priv/templates/admin_log.tpl:46
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:183
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:46
 msgid "Filter"
 msgstr "Filter"
 
@@ -1856,7 +1858,7 @@ msgid "Follow connections and import all (deep copy)."
 msgstr "Follow connections and import all (deep copy)."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:59
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:112
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:132
 msgid "From"
 msgstr "From"
 
@@ -1951,7 +1953,7 @@ msgstr "Indexed by search engines"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:128
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:21
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:125
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:145
 msgid "Info"
 msgstr "Info"
 
@@ -2815,7 +2817,7 @@ msgstr "State"
 #: zotonic_mod_admin/src/mod_admin.erl:517
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
 #: zotonic_mod_base/priv/templates/_session_info.tpl:12
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:109
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:111
 #: zotonic_site_status/priv/templates/_navbar.tpl:15
 #: zotonic_site_status/priv/templates/_sites.tpl:4
 msgid "Status"
@@ -3172,6 +3174,7 @@ msgstr "Unpublished"
 #: zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:13
 #: zotonic_mod_search/priv/templates/_search_view_list_item.tpl:8
 #: zotonic_mod_seo/src/support/seo_jsonld_webpage.erl:276
+#: zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:16
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:10
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:3
 msgid "Untitled"
@@ -4107,7 +4110,8 @@ msgstr "Are you sure you want to delete this entry?"
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:19
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:37
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:87
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:140
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:36
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:159
 msgid "Blocked"
 msgstr "Blocked"
 
@@ -5604,7 +5608,7 @@ msgstr "Enter your email address to receive instructions on how to reset your pa
 
 #: zotonic_mod_authentication/priv/templates/logon_service_error.tpl:5
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:14
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:123
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:143
 #: zotonic_mod_survey/priv/templates/_survey_block_name_check.tpl:2
 msgid "Error"
 msgstr "Error"
@@ -6483,7 +6487,7 @@ msgid "Uploaded to filestore"
 msgstr "Uploaded to filestore"
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:24
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:124
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:144
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:42
 msgid "Warning"
 msgstr "Warning"
@@ -6885,10 +6889,10 @@ msgstr "Log on or sign up to comment"
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:21
 #: zotonic_mod_contact/priv/templates/contact.tpl:22
 #: zotonic_mod_contact/priv/templates/email_contact.tpl:16
-#: zotonic_mod_logging/priv/templates/admin_log.tpl:22
-#: zotonic_mod_logging/priv/templates/admin_log.tpl:39
-#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:22
-#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:38
+#: zotonic_mod_logging/priv/templates/admin_log.tpl:23
+#: zotonic_mod_logging/priv/templates/admin_log.tpl:40
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:24
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:40
 msgid "Message"
 msgstr "Message"
 
@@ -7762,7 +7766,7 @@ msgstr "Syntax errors"
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:61
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:123
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:190
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:115
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:135
 msgid "Template"
 msgstr "Template"
 
@@ -9207,25 +9211,81 @@ msgstr "You have coupled your <strong>LinkedIn</strong> account."
 msgid "Your LinkedIn Developer Network"
 msgstr "Your LinkedIn Developer Network"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:136
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:116
+msgid "<ul>\n"
+"                                            <li><b>Sending</b>: the email is being sent to the remote mailer</li>\n"
+"                           <li><b>Sent</b>: the email has been sent to the remote mailer</li>\n"
+"      <li><b>Relayed</b>: the remote mailer reports that the email is relayed to the next server</li>\n"
+"                                            <li><b>Bounce</b>: the email bounced back from a remote mailer, this is a fatal error</li>\n"
+"                                            <li><b>Failed</b>: the remote mailer did not accept our email, no further retries</li>\n"
+"                                            <li><b>Retry</b>: we could not sent the email and will retry later</li>\n"
+" <li><b>Blocked</b>: the recipient’s email address is blocked, check the email address status</li>\n"
+"                                            <li><b>Received</b>: a remote mailer sent email to us</li>\n"
+"              </ul>"
+msgstr "<ul>\n"
+"                                            <li><b>Sending</b>: the email is being sent to the remote mailer</li>\n"
+"                           <li><b>Sent</b>: the email has been sent to the remote mailer</li>\n"
+"      <li><b>Relayed</b>: the remote mailer reports that the email is relayed to the next server</li>\n"
+"                                            <li><b>Bounce</b>: the email bounced back from a remote mailer, this is a fatal error</li>\n"
+"                                            <li><b>Failed</b>: the remote mailer did not accept our email, no further retries</li>\n"
+"                                            <li><b>Retry</b>: we could not sent the email and will retry later</li>\n"
+" <li><b>Blocked</b>: the recipient’s email address is blocked, check the email address status</li>\n"
+"                                            <li><b>Received</b>: a remote mailer sent email to us</li>\n"
+"              </ul>"
+
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:156
 msgid "Bounce"
 msgstr "Bounce"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:126
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:14
+msgid "Clear log"
+msgstr "Clear log"
+
+#: zotonic_mod_logging/src/mod_logging.erl:191
+msgid "Cleared the CSP reports."
+msgstr "Cleared the CSP reports."
+
+#: zotonic_mod_logging/priv/templates/admin_log_base.tpl:13
+#: zotonic_mod_logging/src/mod_logging.erl:358
+msgid "Content-Security log"
+msgstr "Content-Security log"
+
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:3
+msgid "Content-Security-Policy violations"
+msgstr "Content-Security-Policy violations"
+
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:27
+msgid "Content-Security-Policy violations are reported to an open endpoint and can contain spam."
+msgstr "Content-Security-Policy violations are reported to an open endpoint and can contain spam."
+
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:146
 msgid "Debug"
 msgstr "Debug"
 
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:35
+msgid "Directive"
+msgstr "Directive"
+
 #: zotonic_mod_logging/priv/templates/admin_log_base.tpl:12
-#: zotonic_mod_logging/src/mod_logging.erl:232
+#: zotonic_mod_logging/src/mod_logging.erl:353
 msgid "Email log"
 msgstr "Email log"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:38
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:39
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_status_flag.tpl:10
 msgid "Email status"
 msgstr "Email status"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:138
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:14
+msgid "Errors and other unexpected exceptions in the browser."
+msgstr "Errors and other unexpected exceptions in the browser."
+
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:114
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:128
+msgid "Explanation of email status"
+msgstr "Explanation of email status"
+
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:157
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:97
 #: zotonic_mod_survey/priv/templates/_survey_results_user.tpl:12
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:37
@@ -9233,95 +9293,103 @@ msgstr "Email status"
 msgid "Failed"
 msgstr "Failed"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:122
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:142
 msgid "Fatal"
 msgstr "Fatal"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:46
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:47
 msgid "Identities"
 msgstr "Identities"
 
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:3
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:28
+msgid "Incoming/outgoing e-mail log"
+msgstr "Incoming/outgoing e-mail log"
+
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:76
+msgid "Latest reported security policy:"
+msgstr "Latest reported security policy:"
+
 #: zotonic_mod_logging/priv/templates/admin_log_base.tpl:3
-#: zotonic_mod_logging/src/mod_logging.erl:227
+#: zotonic_mod_logging/src/mod_logging.erl:348
 msgid "Log"
 msgstr "Log"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:3
-msgid "Log email"
-msgstr "Log email"
-
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:5
-msgid "Log incoming/outgoing e-mail"
-msgstr "Log incoming/outgoing e-mail"
-
 #: zotonic_mod_logging/priv/templates/admin_log.tpl:3
-#: zotonic_mod_logging/priv/templates/admin_log.tpl:5
-#: zotonic_mod_logging/priv/templates/admin_log_base.tpl:7
+#: zotonic_mod_logging/priv/templates/admin_log.tpl:10
 msgid "Log messages"
 msgstr "Log messages"
 
-#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:3
-msgid "Log ui events"
-msgstr "Log ui events"
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:32
+msgid "Log of all outgoing and incoming email. For every email we log different states."
+msgstr "Log of all outgoing and incoming email. For every email we log different states."
 
-#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:5
-msgid "Log user interface events"
-msgstr "Log user interface events"
+#: zotonic_mod_logging/priv/templates/admin_log_base.tpl:7
+msgid "Logging"
+msgstr "Logging"
 
 #: zotonic_mod_logging/priv/templates/admin_log_base.tpl:11
 msgid "Message log"
 msgstr "Message log"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:110
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:130
 msgid "Message nr"
 msgstr "Message nr"
 
-#: zotonic_mod_logging/priv/templates/admin_log.tpl:12
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:30
-msgid "Most recent messages"
-msgstr "Most recent messages"
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:15
+msgid "Messages are dropped if too many are received in a short time or if they are identical to a previous message."
+msgstr "Messages are dropped if too many are received in a short time or if they are identical to a previous message."
 
-#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:12
-msgid "Most recent user interface events"
-msgstr "Most recent user interface events"
+#: zotonic_mod_logging/priv/templates/admin_log.tpl:14
+msgid "Messages logged by the system and modules."
+msgstr "Messages logged by the system and modules."
 
-#: zotonic_mod_logging/priv/templates/admin_log.tpl:60
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:181
-#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:59
+#: zotonic_mod_logging/priv/templates/admin_log.tpl:61
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:68
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:200
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:61
 msgid "No log messages."
 msgstr "No log messages."
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:114
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:134
 msgid "Other"
 msgstr "Other"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:137
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:160
 msgid "Received"
 msgstr "Received"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:135
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:155
 msgid "Relayed"
 msgstr "Relayed"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:48
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:10
+msgid "Reported Content-Security-Policy violations"
+msgstr "Reported Content-Security-Policy violations"
+
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:38
+msgid "Reporting URLs"
+msgstr "Reporting URLs"
+
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:49
 msgid "Resources with email identity"
 msgstr "Resources with email identity"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:139
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:158
 msgid "Retry"
 msgstr "Retry"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:133
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:153
 msgid "Sending"
 msgstr "Sending"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:134
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:154
 msgid "Sent"
 msgstr "Sent"
 
-#: zotonic_mod_logging/priv/templates/admin_log.tpl:21
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:108
-#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:21
+#: zotonic_mod_logging/priv/templates/admin_log.tpl:22
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:109
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:23
 msgid "Severity"
 msgstr "Severity"
 
@@ -9330,20 +9398,28 @@ msgstr "Severity"
 msgid "Site Administrator"
 msgstr "Site Administrator"
 
-#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:24
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:39
+msgid "Sources"
+msgstr "Sources"
+
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:26
 msgid "Stack"
 msgstr "Stack"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:111
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:23
+msgid "The latest 100 reported directives and blocked contents are kept. For each, the last 10 reported source locations are shown."
+msgstr "The latest 100 reported directives and blocked contents are kept. For each, the last 10 reported source locations are shown."
+
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:131
 msgid "To"
 msgstr "To"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:69
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:70
 msgid "Toggle non people"
 msgstr "Toggle non people"
 
-#: zotonic_mod_logging/priv/templates/admin_log.tpl:23
-#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:23
+#: zotonic_mod_logging/priv/templates/admin_log.tpl:24
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:25
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:49
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:40
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:39
@@ -9351,18 +9427,34 @@ msgstr "Toggle non people"
 msgid "User"
 msgstr "User"
 
-#: zotonic_mod_logging/priv/templates/admin_log.tpl:42
-#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:41
+#: zotonic_mod_logging/priv/templates/admin_log.tpl:43
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:43
 #: zotonic_mod_survey/src/models/m_survey.erl:835
 msgid "User Id"
 msgstr "User Id"
 
-#: zotonic_mod_logging/priv/templates/admin_log_base.tpl:13
-#: zotonic_mod_logging/src/mod_logging.erl:237
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:10
+msgid "User interface events"
+msgstr "User interface events"
+
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:3
+msgid "User interface events log"
+msgstr "User interface events log"
+
+#: zotonic_mod_logging/priv/templates/admin_log_base.tpl:14
+#: zotonic_mod_logging/src/mod_logging.erl:363
 msgid "User interface log"
 msgstr "User interface log"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:62
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:40
+msgid "User-Agents"
+msgstr "User-Agents"
+
+#: zotonic_mod_logging/src/mod_logging.erl:193
+msgid "You don't have permission to clear the CSP reports."
+msgstr "You don't have permission to clear the CSP reports."
+
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:63
 msgid "email verified"
 msgstr "email verified"
 
@@ -12680,7 +12772,7 @@ msgid "Results"
 msgstr "Results"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:22
-#: zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:15
+#: zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:19
 msgid "Results editor"
 msgstr "Results editor"
 
@@ -12975,7 +13067,7 @@ msgid "Toggle outline view"
 msgstr "Toggle outline view"
 
 #: zotonic_mod_survey/priv/templates/_survey_result_chart.tpl:30
-#: zotonic_mod_survey/priv/templates/survey_results_printable.tpl:67
+#: zotonic_mod_survey/priv/templates/survey_results_printable.tpl:71
 msgid "Totals"
 msgstr "Totals"
 
@@ -13057,7 +13149,7 @@ msgstr "You are not allowed to see the results."
 msgid "You cannot reply to this email."
 msgstr "You cannot reply to this email."
 
-#: zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:23
+#: zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:27
 msgid "You must be allowed to edit the form, to edit its results."
 msgstr "You must be allowed to edit the form, to edit its results."
 
