@@ -2,7 +2,7 @@
 // https://gist.github.com/geksilla/6543145
 
 .text-muted {
-    color: var(--z-admin-text-muted);
+    color: var(--z-admin-text-muted) !important;
 }
 
 .nav {
