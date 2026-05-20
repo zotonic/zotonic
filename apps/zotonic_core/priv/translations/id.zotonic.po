@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-04-15 11:38\n"
+"PO-Revision-Date: 2026-05-20 11:41\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgstr "Tidak dapat mengambil URL sumber daya jarak jauh."
 msgid "Forbidden to access the remote resource URL."
 msgstr "Dilarang mengakses URL sumber daya jarak jauh."
 
-#: zotonic_core/src/support/z_media_import.erl:327
+#: zotonic_core/src/support/z_media_import.erl:328
 msgid "Page Import"
 msgstr "Impor Halaman"
 
@@ -56,7 +56,7 @@ msgstr "Terlalu banyak permintaan untuk server jarak jauh, coba lagi nanti."
 msgid "Unauthorized to access the remote resource URL."
 msgstr "Tidak berwenang untuk mengakses URL sumber daya jarak jauh."
 
-#: zotonic_core/src/support/z_media_import.erl:384
+#: zotonic_core/src/support/z_media_import.erl:385
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
@@ -178,7 +178,7 @@ msgid "ACL user group"
 msgstr "Kelompok pengguna ACL"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:922
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:928
 msgid "Access control rules"
 msgstr "Aturan kontrol akses"
 
@@ -194,10 +194,10 @@ msgstr "Tambahkan tautan ke grup kolaborasi"
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:91
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:141
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:110
-#: zotonic_mod_logging/priv/templates/admin_log.tpl:46
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:132
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:164
-#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:45
+#: zotonic_mod_logging/priv/templates/admin_log.tpl:47
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:152
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:184
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:47
 msgid "All"
 msgstr "Semuanya"
 
@@ -364,7 +364,7 @@ msgstr "Kategori &amp; konten kelompok"
 msgid "Change category and/or content group..."
 msgstr "Ubah kategori dan/atau konten kelompok..."
 
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:483
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:485
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:140
 msgid "Changed configuration."
 msgstr "Konfigurasi berubah."
@@ -411,7 +411,7 @@ msgid "Collaboration group members"
 msgstr "Kerjasama anggota kelompok"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:22
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:918
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:924
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:123
 msgid "Collaboration groups"
 msgstr "Kerja sama kelompok"
@@ -432,7 +432,7 @@ msgstr "Pertimbangkan penulis sumber daya sebagai pemilik."
 #: zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4
 #: zotonic_mod_admin/src/mod_admin.erl:477
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:67
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:113
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:133
 msgid "Content"
 msgstr "Konten"
 
@@ -504,7 +504,7 @@ msgstr "Tidak bisa bergerak untuk kolaborasi kelompok."
 msgid "Delete"
 msgstr "Hapus"
 
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:471
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:473
 msgid "Delete is canceled, there are users in the user groups."
 msgstr "Penghapusan dibatalkan, ada para pengguna di kelompok pengguna."
 
@@ -512,7 +512,7 @@ msgstr "Penghapusan dibatalkan, ada para pengguna di kelompok pengguna."
 msgid "Delete user group and move users"
 msgstr "Hapus kelompok pengguna dan pindahkan pengguna"
 
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:516
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:518
 #: zotonic_mod_admin_category/src/mod_admin_category.erl:113
 #: zotonic_mod_admin_category/src/mod_admin_category.erl:131
 #: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:121
@@ -649,7 +649,7 @@ msgstr "Anggota dari kelompok pengguna yang sama"
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:122
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:189
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:50
-#: zotonic_mod_logging/priv/templates/admin_log.tpl:24
+#: zotonic_mod_logging/priv/templates/admin_log.tpl:25
 msgid "Module"
 msgstr "Modul"
 
@@ -674,11 +674,11 @@ msgstr "Pindah ke {title}…"
 msgid "No ACL rules"
 msgstr "Tidak ada peraturan ACL"
 
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:509
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:511
 msgid "Not all user groups could be deleted."
 msgstr "Tidak semua grup pengguna bisa dihapus."
 
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:489
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:491
 msgid "Not allowed to change ACL options."
 msgstr "Tidak diperbolehkan mengubah opsi ACL."
 
@@ -812,8 +812,8 @@ msgstr "Tampilkan properti pribadi untuk"
 msgid "Show this ACL user group first:"
 msgstr "Tunjukkan grup pengguna ACL ini terlebih dahulu:"
 
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:450
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:466
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:452
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:468
 #: zotonic_mod_admin_category/src/mod_admin_category.erl:90
 #: zotonic_mod_admin_category/src/mod_admin_category.erl:106
 #: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:96
@@ -911,7 +911,7 @@ msgstr "Menggunakan URL berikut untuk menguji aturan kontrol akses sebelum mempu
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:913
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:919
 msgid "User groups"
 msgstr "Pengguna kelompok"
 
@@ -1405,6 +1405,7 @@ msgid "Could not reload the site configuration, check the logs."
 msgstr "Tidak dapat memuat ulang konfigurasi situs, periksa log."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:6
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:37
 msgid "Count"
 msgstr "Menghitung"
 
@@ -1475,9 +1476,10 @@ msgstr "Versi Basis Data"
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:36
 #: zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:5
 #: zotonic_mod_base/priv/templates/directory_index.tpl:16
-#: zotonic_mod_logging/priv/templates/admin_log.tpl:20
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:116
-#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:20
+#: zotonic_mod_logging/priv/templates/admin_log.tpl:21
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:34
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:136
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:22
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:16
 #: zotonic_mod_survey/src/models/m_survey.erl:831
 #: zotonic_mod_survey/src/models/m_survey.erl:834
@@ -1796,9 +1798,9 @@ msgstr "Nama berkas"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:27
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:24
-#: zotonic_mod_logging/priv/templates/admin_log.tpl:45
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:163
-#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:44
+#: zotonic_mod_logging/priv/templates/admin_log.tpl:46
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:183
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:46
 msgid "Filter"
 msgstr "Menyaring"
 
@@ -1856,7 +1858,7 @@ msgid "Follow connections and import all (deep copy)."
 msgstr "Ikuti koneksi dan impor semua (salinan dalam)."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:59
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:112
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:132
 msgid "From"
 msgstr "Dari"
 
@@ -1951,7 +1953,7 @@ msgstr "Diindeks oleh mesin pencari"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:128
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:21
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:125
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:145
 msgid "Info"
 msgstr "Info"
 
@@ -2815,7 +2817,7 @@ msgstr "Negara"
 #: zotonic_mod_admin/src/mod_admin.erl:517
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
 #: zotonic_mod_base/priv/templates/_session_info.tpl:12
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:109
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:111
 #: zotonic_site_status/priv/templates/_navbar.tpl:15
 #: zotonic_site_status/priv/templates/_sites.tpl:4
 msgid "Status"
@@ -3172,6 +3174,7 @@ msgstr "Tidak diterbitkan"
 #: zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:13
 #: zotonic_mod_search/priv/templates/_search_view_list_item.tpl:8
 #: zotonic_mod_seo/src/support/seo_jsonld_webpage.erl:276
+#: zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:16
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:10
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:3
 msgid "Untitled"
@@ -4107,7 +4110,8 @@ msgstr "Apakah anda yakin anda ingin menghapus entri ini?"
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:19
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:37
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:87
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:140
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:36
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:159
 msgid "Blocked"
 msgstr "Memblokir"
 
@@ -5603,7 +5607,7 @@ msgstr "Masukkan alamat email Anda untuk menerima instruksi tentang cara mengatu
 
 #: zotonic_mod_authentication/priv/templates/logon_service_error.tpl:5
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:14
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:123
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:143
 #: zotonic_mod_survey/priv/templates/_survey_block_name_check.tpl:2
 msgid "Error"
 msgstr "Kesalahan"
@@ -6482,7 +6486,7 @@ msgid "Uploaded to filestore"
 msgstr "Diunggah ke filestore"
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:24
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:124
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:144
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:42
 msgid "Warning"
 msgstr "Peringatan"
@@ -6884,10 +6888,10 @@ msgstr "Masuk atau mendaftar untuk komentar"
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:21
 #: zotonic_mod_contact/priv/templates/contact.tpl:22
 #: zotonic_mod_contact/priv/templates/email_contact.tpl:16
-#: zotonic_mod_logging/priv/templates/admin_log.tpl:22
-#: zotonic_mod_logging/priv/templates/admin_log.tpl:39
-#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:22
-#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:38
+#: zotonic_mod_logging/priv/templates/admin_log.tpl:23
+#: zotonic_mod_logging/priv/templates/admin_log.tpl:40
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:24
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:40
 msgid "Message"
 msgstr "Pesan"
 
@@ -7761,7 +7765,7 @@ msgstr "Kesalahan sintaksis"
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:61
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:123
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:190
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:115
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:135
 msgid "Template"
 msgstr "Template"
 
@@ -9206,25 +9210,81 @@ msgstr "Anda telah menggabungkan <strong>LinkedIn</strong> akun."
 msgid "Your LinkedIn Developer Network"
 msgstr "Jaringan Pengembang LinkedIn anda"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:136
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:116
+msgid "<ul>\n"
+"                                            <li><b>Sending</b>: the email is being sent to the remote mailer</li>\n"
+"                           <li><b>Sent</b>: the email has been sent to the remote mailer</li>\n"
+"      <li><b>Relayed</b>: the remote mailer reports that the email is relayed to the next server</li>\n"
+"                                            <li><b>Bounce</b>: the email bounced back from a remote mailer, this is a fatal error</li>\n"
+"                                            <li><b>Failed</b>: the remote mailer did not accept our email, no further retries</li>\n"
+"                                            <li><b>Retry</b>: we could not sent the email and will retry later</li>\n"
+" <li><b>Blocked</b>: the recipient’s email address is blocked, check the email address status</li>\n"
+"                                            <li><b>Received</b>: a remote mailer sent email to us</li>\n"
+"              </ul>"
+msgstr "<ul>\n"
+"                                            <li><b>Terkirim</b>: email sedang dikirim ke pengirim jarak jauh</li>\n"
+"                           <li><b>Terkirim</b>: email telah terkirim ke pengirim jarak jauh</li>\n"
+"      <li><b>Diteruskan</b>: pengirim jarak jauh melaporkan bahwa email diteruskan ke server berikutnya</li>\n"
+"                                            <li><b>Bounce</b>: email dipantulkan kembali dari pengirim jarak jauh, ini adalah kesalahan fatal</li>\n"
+"                                            <li><b>Gagal</b>: pengirim jarak jauh tidak menerima email kita, tidak ada percobaan ulang lebih lanjut</li>\n"
+"                                            <li><b>Coba</b> lagi: kami tidak dapat mengirim email dan akan mencoba lagi nanti</li>\n"
+" <li><b>Diblokir</b>: alamat email penerima diblokir, periksa status alamat email</li>\n"
+"                                            <li><b>Diterima</b>: pengirim jarak jauh mengirim email kepada kami</li>\n"
+"              </ul>"
+
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:156
 msgid "Bounce"
 msgstr "Melambung"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:126
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:14
+msgid "Clear log"
+msgstr "Hapus log"
+
+#: zotonic_mod_logging/src/mod_logging.erl:191
+msgid "Cleared the CSP reports."
+msgstr "Menghapus laporan CSP."
+
+#: zotonic_mod_logging/priv/templates/admin_log_base.tpl:13
+#: zotonic_mod_logging/src/mod_logging.erl:358
+msgid "Content-Security log"
+msgstr "Log Keamanan Konten"
+
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:3
+msgid "Content-Security-Policy violations"
+msgstr "Pelanggaran Kebijakan Keamanan Konten"
+
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:27
+msgid "Content-Security-Policy violations are reported to an open endpoint and can contain spam."
+msgstr "Pelanggaran Kebijakan Keamanan Konten dilaporkan ke titik akhir terbuka dan dapat berisi spam."
+
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:146
 msgid "Debug"
 msgstr "Debug"
 
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:35
+msgid "Directive"
+msgstr "Petunjuk"
+
 #: zotonic_mod_logging/priv/templates/admin_log_base.tpl:12
-#: zotonic_mod_logging/src/mod_logging.erl:232
+#: zotonic_mod_logging/src/mod_logging.erl:353
 msgid "Email log"
 msgstr "Log email"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:38
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:39
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_status_flag.tpl:10
 msgid "Email status"
 msgstr "Status email"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:138
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:14
+msgid "Errors and other unexpected exceptions in the browser."
+msgstr "Kesalahan dan pengecualian tak terduga lainnya di browser."
+
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:114
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:128
+msgid "Explanation of email status"
+msgstr "Penjelasan tentang status email"
+
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:157
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:97
 #: zotonic_mod_survey/priv/templates/_survey_results_user.tpl:12
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:37
@@ -9232,95 +9292,103 @@ msgstr "Status email"
 msgid "Failed"
 msgstr "Gagal"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:122
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:142
 msgid "Fatal"
 msgstr "Fatal"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:46
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:47
 msgid "Identities"
 msgstr "Identitas"
 
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:3
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:28
+msgid "Incoming/outgoing e-mail log"
+msgstr "Catatan email masuk/keluar"
+
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:76
+msgid "Latest reported security policy:"
+msgstr "Kebijakan keamanan terbaru yang dilaporkan:"
+
 #: zotonic_mod_logging/priv/templates/admin_log_base.tpl:3
-#: zotonic_mod_logging/src/mod_logging.erl:227
+#: zotonic_mod_logging/src/mod_logging.erl:348
 msgid "Log"
 msgstr "Log"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:3
-msgid "Log email"
-msgstr "Log email"
-
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:5
-msgid "Log incoming/outgoing e-mail"
-msgstr "Log masuk / keluar e-mail"
-
 #: zotonic_mod_logging/priv/templates/admin_log.tpl:3
-#: zotonic_mod_logging/priv/templates/admin_log.tpl:5
-#: zotonic_mod_logging/priv/templates/admin_log_base.tpl:7
+#: zotonic_mod_logging/priv/templates/admin_log.tpl:10
 msgid "Log messages"
 msgstr "Pesan Log"
 
-#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:3
-msgid "Log ui events"
-msgstr "Catat peristiwa ui"
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:32
+msgid "Log of all outgoing and incoming email. For every email we log different states."
+msgstr "Mencatat semua email keluar dan masuk. Untuk setiap email, kami mencatat status yang berbeda."
 
-#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:5
-msgid "Log user interface events"
-msgstr "Catat peristiwa antarmuka pengguna"
+#: zotonic_mod_logging/priv/templates/admin_log_base.tpl:7
+msgid "Logging"
+msgstr "Penebangan"
 
 #: zotonic_mod_logging/priv/templates/admin_log_base.tpl:11
 msgid "Message log"
 msgstr "Pesan log"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:110
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:130
 msgid "Message nr"
 msgstr "Pesan nr"
 
-#: zotonic_mod_logging/priv/templates/admin_log.tpl:12
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:30
-msgid "Most recent messages"
-msgstr "Pesan terakhir"
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:15
+msgid "Messages are dropped if too many are received in a short time or if they are identical to a previous message."
+msgstr "Pesan akan dibuang jika terlalu banyak diterima dalam waktu singkat atau jika pesan tersebut identik dengan pesan sebelumnya."
 
-#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:12
-msgid "Most recent user interface events"
-msgstr "Peristiwa antarmuka pengguna terbaru"
+#: zotonic_mod_logging/priv/templates/admin_log.tpl:14
+msgid "Messages logged by the system and modules."
+msgstr "Pesan yang dicatat oleh sistem dan modul."
 
-#: zotonic_mod_logging/priv/templates/admin_log.tpl:60
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:181
-#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:59
+#: zotonic_mod_logging/priv/templates/admin_log.tpl:61
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:68
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:200
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:61
 msgid "No log messages."
 msgstr "Tidak ada pesan log."
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:114
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:134
 msgid "Other"
 msgstr "Lain"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:137
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:160
 msgid "Received"
 msgstr "Diterima"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:135
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:155
 msgid "Relayed"
 msgstr "Relay"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:48
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:10
+msgid "Reported Content-Security-Policy violations"
+msgstr "Pelanggaran Kebijakan Keamanan-Konten yang dilaporkan"
+
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:38
+msgid "Reporting URLs"
+msgstr "URL Pelaporan"
+
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:49
 msgid "Resources with email identity"
 msgstr "Sumber daya dengan identitas email"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:139
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:158
 msgid "Retry"
 msgstr "Mencoba kembali"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:133
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:153
 msgid "Sending"
 msgstr "Mengirim"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:134
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:154
 msgid "Sent"
 msgstr "Dikirim"
 
-#: zotonic_mod_logging/priv/templates/admin_log.tpl:21
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:108
-#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:21
+#: zotonic_mod_logging/priv/templates/admin_log.tpl:22
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:109
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:23
 msgid "Severity"
 msgstr "Kerasnya"
 
@@ -9329,20 +9397,28 @@ msgstr "Kerasnya"
 msgid "Site Administrator"
 msgstr "Administrator Situs"
 
-#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:24
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:39
+msgid "Sources"
+msgstr "Sumber"
+
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:26
 msgid "Stack"
 msgstr "Tumpukan"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:111
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:23
+msgid "The latest 100 reported directives and blocked contents are kept. For each, the last 10 reported source locations are shown."
+msgstr "100 arahan terbaru yang dilaporkan dan konten yang diblokir disimpan. Untuk masing-masing, 10 lokasi sumber terakhir yang dilaporkan ditampilkan."
+
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:131
 msgid "To"
 msgstr "Untuk"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:69
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:70
 msgid "Toggle non people"
 msgstr "Alihkan bukan orang"
 
-#: zotonic_mod_logging/priv/templates/admin_log.tpl:23
-#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:23
+#: zotonic_mod_logging/priv/templates/admin_log.tpl:24
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:25
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:49
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:40
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:39
@@ -9350,18 +9426,34 @@ msgstr "Alihkan bukan orang"
 msgid "User"
 msgstr "Pengguna"
 
-#: zotonic_mod_logging/priv/templates/admin_log.tpl:42
-#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:41
+#: zotonic_mod_logging/priv/templates/admin_log.tpl:43
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:43
 #: zotonic_mod_survey/src/models/m_survey.erl:835
 msgid "User Id"
 msgstr "Id pengguna"
 
-#: zotonic_mod_logging/priv/templates/admin_log_base.tpl:13
-#: zotonic_mod_logging/src/mod_logging.erl:237
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:10
+msgid "User interface events"
+msgstr "Peristiwa antarmuka pengguna"
+
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:3
+msgid "User interface events log"
+msgstr "Log peristiwa antarmuka pengguna"
+
+#: zotonic_mod_logging/priv/templates/admin_log_base.tpl:14
+#: zotonic_mod_logging/src/mod_logging.erl:363
 msgid "User interface log"
 msgstr "Log antarmuka pengguna"
 
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:62
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:40
+msgid "User-Agents"
+msgstr "Agen-Pengguna"
+
+#: zotonic_mod_logging/src/mod_logging.erl:193
+msgid "You don't have permission to clear the CSP reports."
+msgstr "Anda tidak memiliki izin untuk menghapus laporan CSP."
+
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:63
 msgid "email verified"
 msgstr "email terverifikasi"
 
@@ -12680,7 +12772,7 @@ msgid "Results"
 msgstr "Hasil"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:22
-#: zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:15
+#: zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:19
 msgid "Results editor"
 msgstr "Editor hasil"
 
@@ -12975,7 +13067,7 @@ msgid "Toggle outline view"
 msgstr "Beralih outline view"
 
 #: zotonic_mod_survey/priv/templates/_survey_result_chart.tpl:30
-#: zotonic_mod_survey/priv/templates/survey_results_printable.tpl:67
+#: zotonic_mod_survey/priv/templates/survey_results_printable.tpl:71
 msgid "Totals"
 msgstr "Jumlah"
 
@@ -13057,7 +13149,7 @@ msgstr "Anda tidak diizinkan untuk melihat hasilnya."
 msgid "You cannot reply to this email."
 msgstr "Anda tidak dapat membalas email ini."
 
-#: zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:23
+#: zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:27
 msgid "You must be allowed to edit the form, to edit its results."
 msgstr "Anda harus diizinkan untuk mengedit formulir, untuk mengedit hasilnya."
 
