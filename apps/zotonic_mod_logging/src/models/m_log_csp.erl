@@ -46,12 +46,8 @@ A trailing `/...` means extra path segments are accepted for further lookups.
 m_get([ <<"reports">> | Rest ], _Msg, Context) ->
     case z_acl:is_admin(Context) orelse z_acl:is_allowed(use, mod_logging, Context) of
         true ->
-            case reports(Context) of
-                {ok, Rs} ->
-                    {ok, {Rs, Rest}};
-                {error, _} ->
-                    {ok, {[], Rest}}
-            end;
+            {ok, Rs} = reports(Context),
+            {ok, {Rs, Rest}};
         false ->
             {error, eacces}
     end;

@@ -162,7 +162,11 @@ get_configured_id(Context) ->
 
 %% @doc Decode the request data - remove zotonic arguments that are part
 %% of the query string and/or post.
--spec decode_request_noz( undefined | cow_http_hd:media_type(), z:context() ) -> { map() | binary(), z:context() }.
+-spec decode_request_noz( undefined | cow_http_hd:media_type(), z:context() ) -> { Decoded, z:context() } when
+    Decoded :: #{ binary() => term() }
+             | binary()
+             | list()
+             | term().
 decode_request_noz(undefined, Context) ->
     from_qs_noz(Context);
 decode_request_noz({<<"application">>, <<"x-www-form-urlencoded">>, _}, Context) ->
@@ -197,7 +201,11 @@ decode_request_noz_1(Context) ->
     end.
 
 %% @doc Decode the request data
--spec decode_request( undefined | cow_http_hd:media_type(), z:context() ) -> { map() | binary(), z:context() }.
+-spec decode_request( undefined | cow_http_hd:media_type(), z:context() ) -> { Decoded, z:context() } when
+    Decoded :: #{ binary() => term() }
+             | binary()
+             | list()
+             | term().
 decode_request(undefined, Context) ->
     from_qs(Context);
 decode_request({<<"application">>, <<"x-www-form-urlencoded">>, _}, Context) ->
