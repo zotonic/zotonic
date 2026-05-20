@@ -561,7 +561,7 @@ pre:empty {
 }
 
 .text-muted {
-  color: var(--z-admin-text-muted);
+  color: var(--z-admin-text-muted) !important;
 }
 
 .nav .dropdown-menu > li > a.has-icon,
