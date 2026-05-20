@@ -20,9 +20,9 @@ $env-backup:        #37474f;        // Gray
 .environment-backup {
 
     body {
-        padding-left: 24px;
-
         @media (min-width: $screen-phone) {
+            padding-left: 24px;
+
             &::before {
                 position: fixed;
                 top: 0;
