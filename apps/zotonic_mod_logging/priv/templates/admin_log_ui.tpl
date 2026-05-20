@@ -1,17 +1,19 @@
 {% extends "admin_log_base.tpl" %}
 
-{% block title %}{_ Log ui events _}{% endblock %}
+{% block title %}{_ User interface events log _}{% endblock %}
 
-{% block title_log %}{_ Log user interface events _}{% endblock %}
-
-{% block active3 %}active{% endblock %}
+{% block active_ui %}active{% endblock %}
 
 {% block content_log %}
 
 <h3 class="above-list">
-    {_ Most recent user interface events _}
+    {_ User interface events _}
 </h3>
-<br />
+
+<p class="help-block">
+    {_ Errors and other unexpected exceptions in the browser. _}
+    {_ Messages are dropped if too many are received in a short time or if they are identical to a previous message. _}
+</p>
 
 <form id="log_filter" action="" type="GET">
 {% with m.search[{log_ui page=q.page type=q.type user=q.user pagelen=100}] as result %}

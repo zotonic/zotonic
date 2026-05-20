@@ -50,5 +50,8 @@
         ]},
 
     %% Ping/pong
-    {zotonic_ping, [".zotonic", "ping"], controller_ping, []}
+    {zotonic_ping, [".zotonic", "ping"], controller_ping, []},
+
+    %% Content-Security-Policy violation reports.
+    {csp_report, [".zotonic", "csp_report"], controller_csp_report, []}
 ].

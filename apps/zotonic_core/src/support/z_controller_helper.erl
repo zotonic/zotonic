@@ -162,7 +162,11 @@ get_configured_id(Context) ->
 
 %% @doc Decode the request data - remove zotonic arguments that are part
 %% of the query string and/or post.
--spec decode_request_noz( undefined | cow_http_hd:media_type(), z:context() ) -> { map() | binary(), z:context() }.
+-spec decode_request_noz( undefined | cow_http_hd:media_type(), z:context() ) -> { Decoded, z:context() } when
+    Decoded :: #{ binary() => term() }
+             | binary()
+             | list()
+             | term().
 decode_request_noz(undefined, Context) ->
     from_qs_noz(Context);
 decode_request_noz({<<"application">>, <<"x-www-form-urlencoded">>, _}, Context) ->
@@ -170,6 +174,8 @@ decode_request_noz({<<"application">>, <<"x-www-form-urlencoded">>, _}, Context)
 decode_request_noz({<<"multipart">>, <<"form-data">>, _}, Context) ->
     from_qs_noz(Context);
 decode_request_noz({<<"application">>, <<"json">>, _}, Context) ->
+    from_json(Context);
+decode_request_noz({<<"application">>, <<"csp-report">>, _}, Context) ->
     from_json(Context);
 decode_request_noz({<<"application">>, <<"javascript">>, _}, Context) ->
     from_json(Context);
@@ -179,7 +185,15 @@ decode_request_noz({<<"text">>, <<"x-ubf">>, _} = Mime, Context) ->
     decode_request(Mime, Context);
 decode_request_noz({<<"application">>, <<"x-bert">>, _} = Mime, Context) ->
     decode_request(Mime, Context);
+decode_request_noz({<<"application">>, Subtype, _}, Context) ->
+    case binary:split(Subtype, <<"+">>) of
+        [_, <<"json">>] -> from_json(Context);
+        _ -> decode_request_noz_1(Context)
+    end;
 decode_request_noz(_CT, Context) ->
+    decode_request_noz_1(Context).
+
+decode_request_noz_1(Context) ->
     case cowmachine_req:method(Context) of
         <<"GET">> -> from_qs_noz(Context);
         <<"DELETE">> -> from_qs_noz(Context);
@@ -187,7 +201,11 @@ decode_request_noz(_CT, Context) ->
     end.
 
 %% @doc Decode the request data
--spec decode_request( undefined | cow_http_hd:media_type(), z:context() ) -> { map() | binary(), z:context() }.
+-spec decode_request( undefined | cow_http_hd:media_type(), z:context() ) -> { Decoded, z:context() } when
+    Decoded :: #{ binary() => term() }
+             | binary()
+             | list()
+             | term().
 decode_request(undefined, Context) ->
     from_qs(Context);
 decode_request({<<"application">>, <<"x-www-form-urlencoded">>, _}, Context) ->
@@ -195,6 +213,8 @@ decode_request({<<"application">>, <<"x-www-form-urlencoded">>, _}, Context) ->
 decode_request({<<"multipart">>, <<"form-data">>, _}, Context) ->
     from_qs(Context);
 decode_request({<<"application">>, <<"json">>, _}, Context) ->
+    from_json(Context);
+decode_request({<<"application">>, <<"csp-report">>, _}, Context) ->
     from_json(Context);
 decode_request({<<"application">>, <<"javascript">>, _}, Context) ->
     from_json(Context);
@@ -208,7 +228,15 @@ decode_request({<<"application">>, <<"x-bert">>, _}, Context) ->
     {Body, Context1} = req_body(Context),
     Data = erlang:binary_to_term(Body, [safe]),
     {Data, Context1};
+decode_request({<<"application">>, Subtype, _}, Context) ->
+    case binary:split(Subtype, <<"+">>) of
+        [_, <<"json">>] -> from_json(Context);
+        _ -> decode_request_1(Context)
+    end;
 decode_request(_CT, Context) ->
+    decode_request_1(Context).
+
+decode_request_1(Context) ->
     case cowmachine_req:method(Context) of
         <<"GET">> -> from_qs(Context);
         <<"DELETE">> -> from_qs(Context);

@@ -75,6 +75,21 @@ This module handles the following notifier callbacks:
 - `observe_tick_1m`: Cleanup UI log de-duplication hashes and check the database pool health.
 - `observe_tick_1s`: Fetch UI log messages from the circular buffer.
 
+Content-Security-Policy Log
+---------------------------
+
+The `mod_logging` module observes incoming Content-Security-Policy violation reports sent by browsers to the `controller_csp_report`
+controller, and logs them in the database with de-duplication based on the report content. Recent CSP violation reports can be viewed
+in the admin interface.
+
+The most recent CSP violation reports are kept in memory and can be retrieved via the `csp_reports/1` API function, which is used by the
+admin interface to display recent CSP violations without needing to query the database.
+
+Only the most recent 100 unique CSP violation reports are kept in memory to prevent unbounded growth in memory usage. When the limit is
+exceeded, the oldest report is dropped. For each unique CSP violation, the number of occurrences and the most recent occurrence timestamp
+are tracked, along with the original policy, the document URL, and the source file and line number of the violation when available.
+
+
 UI Log
 ------
 
@@ -117,12 +132,16 @@ For regular application logging, use [Logger](/id/doc_developerguide_logging#dev
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
 -export([start_link/1]).
 -export([
+    event/2,
     observe_acl_is_allowed/2,
     observe_search_query/2,
     pid_observe_tick_1s/3,
     pid_observe_tick_1m/3,
     observe_tick_1h/2,
     pid_observe_zlog/3,
+    pid_observe_content_security_report/3,
+    csp_reports/1,
+    clear_csp_reports/1,
     observe_admin_menu/3,
     is_ui_ratelimit_check/1,
     is_log_client_allowed/1,
@@ -149,7 +168,8 @@ For regular application logging, use [Logger](/id/doc_developerguide_logging#dev
     log_event_count = 0 :: integer(),
     log_client_id = undefined,
     log_client_topic = undefined,
-    log_client_pong = 0
+    log_client_pong = 0,
+    csp_reports = #{}
 }).
 
 -define(DEDUP_SECS, 600).
@@ -163,6 +183,15 @@ For regular application logging, use [Logger](/id/doc_developerguide_logging#dev
 -define(LOG_CLIENT_PONG_RECENT, 120).
 
 %% interface functions
+
+event(#postback{ message = {admin_log_csp_clear, _Args} }, Context) ->
+    case z_acl:is_admin(Context) orelse z_acl:is_allowed(use, ?MODULE, Context) of
+        true ->
+            clear_csp_reports(Context),
+            z_render:growl(?__("Cleared the CSP reports.", Context), Context);
+        false ->
+            z_render:growl(?__("You don't have permission to clear the CSP reports.", Context), Context)
+    end.
 
 observe_acl_is_allowed(#acl_is_allowed{
         action = subscribe,
@@ -219,6 +248,98 @@ observe_tick_1h(tick_1h, Context) ->
     m_log_email:periodic_cleanup(Context),
     m_log_ui:periodic_cleanup(Context).
 
+pid_observe_content_security_report(Pid, #content_security_report{ type = <<"csp-violation">>, url = Url, body = Report, user_agent = UA }, Context) ->
+    BlockedUrl = sanitize_uri(trim(maps:get(<<"blockedURL">>, Report, <<>>))),
+    EffectiveDirective = trim(maps:get(<<"effectiveDirective">>, Report, <<>>)),
+    OriginalPolicy = trim(maps:get(<<"originalPolicy">>, Report, <<>>)),
+    DocumentUrl = sanitize_uri(trim(maps:get(<<"documentURL">>, Report, <<>>))),
+    SourceFile = case trim(maps:get(<<"sourceFile">>, Report, <<>>)) of
+        <<>> -> DocumentUrl;
+        SF -> SF
+    end,
+    LineNumber = maps:get(<<"lineNumber">>, Report, 0),
+    ColumnNumber = maps:get(<<"columnNumber">>, Report, 0),
+    {LineNumber1, ColumnNumber1} = linecol(LineNumber, ColumnNumber),
+    case is_valid_site_url(DocumentUrl, Context) of
+        true ->
+            if
+                is_integer(LineNumber1), is_integer(ColumnNumber1),
+                size(EffectiveDirective) > 0 ->
+                    ?LOG_INFO(#{
+                        in => zotonic_mod_logging,
+                        text => <<"Received CSP violation report">>,
+                        result => error,
+                        reason => csp_violation,
+                        effective_directive => EffectiveDirective,
+                        blocked_url => BlockedUrl,
+                        original_policy => OriginalPolicy,
+                        reporting_url => trim(Url),
+                        document_url => DocumentUrl,
+                        source_file => SourceFile,
+                        line_number => LineNumber1,
+                        column_number => ColumnNumber1,
+                        user_agent => trim(UA)
+                    }),
+                    gen_server:call(Pid,
+                        {csp_report, #{
+                            effective_directive => EffectiveDirective,
+                            blocked_url => BlockedUrl,
+                            original_policy => OriginalPolicy,
+                            reporting_url => trim(Url),
+                            document_url => DocumentUrl,
+                            source_file => SourceFile,
+                            line_number => LineNumber1,
+                            column_number => ColumnNumber1,
+                            user_agent => trim(UA)
+                        }
+                    }, infinity);
+                true ->
+                    ok
+            end;
+        false ->
+            ok
+    end.
+
+-define(MAX_REPORT_STRING_LENGTH, 300).
+
+trim(S) when size(S) > ?MAX_REPORT_STRING_LENGTH ->
+    S1 = z_string:sanitize_utf8(S),
+    z_string:trim(S1, ?MAX_REPORT_STRING_LENGTH);
+trim(Url) when is_binary(Url) -> z_string:sanitize_utf8(Url);
+trim(_) -> <<>>.
+
+linecol(undefined, _) -> {0,0};
+linecol(0, _) -> {0,0};
+linecol(Line, undefined) -> {Line, 0};
+linecol(Line, Col) -> {Line, Col}.
+
+sanitize_uri(<<>>) -> <<>>;
+sanitize_uri(<<"http://", _/binary>> = Url) -> z_html:sanitize_uri(Url);
+sanitize_uri(<<"https://", _/binary>> = Url) -> z_html:sanitize_uri(Url);
+sanitize_uri(_Url) -> <<>>.
+
+is_valid_site_url(<<"http://", _/binary>> = Url, Context) -> z_context:is_site_url(Url, Context);
+is_valid_site_url(<<"https://", _/binary>> = Url, Context) -> z_context:is_site_url(Url, Context);
+is_valid_site_url(_, _Context) -> false.
+
+%% @doc Return the recent list of CSP reports.
+-spec csp_reports(Context) -> {ok, Reports} when
+    Context :: z:context(),
+    Reports :: list(map()).
+csp_reports(Context) ->
+    case z_module_manager:whereis(?MODULE, Context) of
+        {ok, Pid} -> gen_server:call(Pid, csp_reports);
+        {error, _} -> {error, ignored}
+    end.
+
+%% @doc Clear the CSP reports
+-spec clear_csp_reports(Context) -> ok | {error, ignored} when
+    Context :: z:context().
+clear_csp_reports(Context) ->
+    case z_module_manager:whereis(?MODULE, Context) of
+        {ok, Pid} -> gen_server:call(Pid, clear_csp_reports);
+        {error, _} -> {error, ignored}
+    end.
 
 observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
@@ -231,6 +352,11 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
                 parent=admin_system,
                 label=?__("Email log", Context),
                 url={admin_log_email},
+                visiblecheck={acl, use, mod_logging}},
+     #menu_item{id=admin_log_csp,
+                parent=admin_system,
+                label=?__("Content-Security log", Context),
+                url={admin_log_csp},
                 visiblecheck={acl, use, mod_logging}},
      #menu_item{id=admin_log_ui,
                 parent=admin_system,
@@ -422,6 +548,29 @@ handle_call(log_client_status, _From, State) ->
         is_pong_recent => (Now - State#state.log_client_pong) < ?LOG_CLIENT_PONG_RECENT
     },
     {reply, {ok, Status}, State};
+handle_call({csp_report, Report}, _From, State) ->
+    State1 = log_csp_report(Report, State),
+    {reply, ok, State1};
+handle_call(csp_reports, _From, #state{ csp_reports = Rs } = State) ->
+    Rs1 = lists:map(
+        fun({{EffectiveDirective, BlockedUrl}, R}) ->
+            {maps:get(timestamp, R), R#{
+                effective_directive => EffectiveDirective,
+                blocked_url => BlockedUrl,
+                date => z_datetime:timestamp_to_datetime(maps:get(timestamp, R)),
+                source => lists:map(
+                    fun({File, Line, Col}) ->
+                        #{ file => File, line => Line, column => Col }
+                    end,
+                    maps:get(source, R, []))
+            }}
+        end,
+        maps:to_list(Rs)),
+    Rs2 = lists:reverse(lists:sort(Rs1)),
+    Rs3 = [ R || {_, R} <- Rs2 ],
+    {reply, {ok, Rs3}, State};
+handle_call(clear_csp_reports, _From, State) ->
+    {reply, ok, State#state{ csp_reports = #{} }};
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
 
@@ -522,6 +671,82 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 %% support functions
 %%====================================================================
+
+%% @doc Log a CSP report, with de-duplication based on the report content.
+log_csp_report(Report, #state{ csp_reports = Reports } = State) ->
+    #{
+        effective_directive := EffectiveDirective,
+        blocked_url := BlockedUrl,
+        original_policy := OriginalPolicy,
+        reporting_url := ReportingUrl,
+        document_url := DocumentUrl,
+        source_file := SourceFile,
+        line_number := LineNumber,
+        column_number := ColumnNumber,
+        user_agent := UA
+    } = Report,
+    CspKey = {EffectiveDirective, BlockedUrl},
+    Reports1 = case maps:get(CspKey, Reports, undefined) of
+        undefined ->
+            Reports#{
+                CspKey => #{
+                    timestamp => z_datetime:timestamp(),
+                    original_policy => OriginalPolicy,
+                    document_url => DocumentUrl,
+                    count => 1,
+                    source => [ {SourceFile, LineNumber, ColumnNumber} ],
+                    user_agent => [ UA ],
+                    reporting_url => [ ReportingUrl ]
+                }
+            };
+        #{
+            count := Count,
+            source := Sources,
+            reporting_url := Urls,
+            user_agent := UAs
+        } = R ->
+            S = {SourceFile, LineNumber, ColumnNumber},
+            Sources1 = case lists:member(S, Sources) of
+                true -> Sources;
+                false -> [ S | lists:sublist(Sources, 9) ]
+            end,
+            UAs1 = case lists:member(UA, UAs) of
+                true -> UAs;
+                false -> [ UA | lists:sublist(UAs, 9) ]
+            end,
+            Urls1 = case lists:member(ReportingUrl, Urls) of
+                true -> Urls;
+                false -> [ ReportingUrl | lists:sublist(Urls, 9) ]
+            end,
+            Reports#{
+                CspKey => R#{
+                    timestamp => z_datetime:timestamp(),
+                    count => Count + 1,
+                    original_policy => OriginalPolicy,
+                    source => Sources1,
+                    reporting_url => Urls1,
+                    user_agent => UAs1
+                }
+            }
+    end,
+    Reports2 = case maps:size(Reports1) of
+        N when N > 100 ->
+            % Drop the oldest report to prevent unbounded growth in memory usage.
+            {OldestKey, _OldestTs} = maps:fold(
+                fun
+                    (Key, #{ timestamp := Ts }, undefined) ->
+                        {Key, Ts};
+                    (Key, #{ timestamp := Ts }, {_OldestKey, OldestTs}) when Ts < OldestTs ->
+                        {Key, Ts};
+                    (_Key, _R, Acc) ->
+                        Acc
+                end, undefined, Reports1),
+            maps:remove(OldestKey, Reports1);
+        _N ->
+            Reports1
+    end,
+    State#state{ csp_reports = Reports2 }.
+
 
 %% @doc Check if the log client is still Active.
 log_client_ping(ClientId, ClientTopic, Pid, Context) ->
