@@ -145,7 +145,9 @@ This is called when a content security report is received by the report controll
 The notification contains the type, url and body of the report.
 
 Be aware that the content security report may contain untrusted data, so make sure to
-properly sanitize any output when handling this notification.
+properly sanitize any output when handling this notification. The `url` field is
+sanitized and checked if it indeed belongs to the site, but the `body` field is not
+sanitized by Zotonic and may contain any data.
 
 `#content_security_report{}` properties:
 

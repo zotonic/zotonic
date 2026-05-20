@@ -2,16 +2,17 @@
 
 {% block title %}{_ Log messages _}{% endblock %}
 
-{% block title_log %}{_ Log messages _}{% endblock %}
-
-{% block active1 %}active{% endblock %}
+{% block active_log %}active{% endblock %}
 
 {% block content_log %}
 
 <h3 class="above-list">
-    {_ Most recent messages _}
+    {_ Log messages _}
 </h3>
-<br />
+
+<p class="help-block">
+    {_ Messages logged by the system and modules. _}
+</p>
 
 <form id="log_filter" action="" type="GET">
 {% with m.search[{log page=q.page type=q.type user=q.user pagelen=100}] as result %}

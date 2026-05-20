@@ -1,23 +1,30 @@
 {% extends "admin_log_base.tpl" %}
 
-{% block title %}{_ Log CSP reports _}{% endblock %}
+{% block title %}{_ Content-Security-Policy violations _}{% endblock %}
 
-{% block title_log %}{_ Content-Security-Policy reports _}{% endblock %}
-
-{% block active3 %}active{% endblock %}
+{% block active_csp %}active{% endblock %}
 
 {% block content_log %}
 
 <h3 class="above-list">
-    {_ Most recently reported Content-Security-Policy violations. _}
+    {_ Reported Content-Security-Policy violations _}
 </h3>
+
+<button id="clear-csp-log" class="btn btn-primary pull-right">
+    <span class="fa fa-trash"></span> {_ Clear log _}
+</button>
+{% wire id="clear-csp-log" type="click"
+        postback={admin_log_csp_clear}
+        delegate=`mod_logging`
+        action={reload}
+%}
 
 <p class="help-block">
     {_ The latest 100 reported directives and blocked contents are kept. For each, the last 10 reported source locations are shown.  _}
 </p>
 
-<div class="alert alert-danger">
-    {_ Content-Security-Policy violations are reported to an open endpoint and can contain spam. _}<br>
+<div class="text-danger">
+    <span class="glyphicon glyphicon-alert"></span> {_ Content-Security-Policy violations are reported to an open endpoint and can contain spam. _}<br>
 </div>
 
 {% with m.log_csp.reports as reports %}
@@ -58,7 +65,7 @@
             </tr>
         {% empty %}
             <tr>
-                <td colspan="7" class="text-muted">{_ No Content-Security-Policy reports. _}</td>
+                <td colspan="7" class="text-muted">{_ No log messages. _}</td>
             </tr>
         {% endfor %}
     </tbody>

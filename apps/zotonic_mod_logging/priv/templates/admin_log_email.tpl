@@ -1,10 +1,8 @@
 {% extends "admin_log_base.tpl" %}
 
-{% block title %}{_ Log email _}{% endblock %}
+{% block title %}{_ Incoming/outgoing e-mail log _}{% endblock %}
 
-{% block title_log %}{_ Log incoming/outgoing e-mail _}{% endblock %}
-
-{% block active2 %}active{% endblock %}
+{% block active_email %}active{% endblock %}
 
 {% block content_log %}
 
@@ -27,9 +25,12 @@
 #}
 
 <h3>
-    {_ Most recent messages _}
+    {_ Incoming/outgoing e-mail log _}
 </h3>
-<br />
+
+<p class="help-block">
+    {_ Log of all outgoing and incoming email. For every email we log different states. _}
+</p>
 
 {% if m.modules.active.mod_email_status and q.to and not q.to|match:"%" %}
     <div class="row">
@@ -105,15 +106,34 @@
     <table class="table data-table">
         <thead>
             <tr>
-            <th width="8%">{_ Severity _}</th>
-            <th width="8%">{_ Status _}</th>
-            <th width="8%">{_ Message nr _}</th>
-            <th width="15%">{_ To _}</th>
-            <th width="15%">{_ From _}</th>
-            <th width="5%">{_ Content _}</th>
-            <th width="5%">{_ Other _}</th>
-            <th width="15%">{_ Template _}</th>
-            <th width="20%">{_ Date _}</th>
+                <th width="8%">{_ Severity _}</th>
+                <th width="8%">
+                    {_ Status _}
+                        <a href="#" style="display: inline" class="z-btn-help do_dialog" data-dialog="{{
+                                %{
+                                    title: _"Explanation of email status",
+                                    text: [
+                                        _"<ul>
+                                            <li><b>Sending</b>: the email is being sent to the remote mailer</li>
+                                            <li><b>Sent</b>: the email has been sent to the remote mailer</li>
+                                            <li><b>Relayed</b>: the remote mailer reports that the email is relayed to the next server</li>
+                                            <li><b>Bounce</b>: the email bounced back from a remote mailer, this is a fatal error</li>
+                                            <li><b>Failed</b>: the remote mailer did not accept our email, no further retries</li>
+                                            <li><b>Retry</b>: we could not sent the email and will retry later</li>
+                                            <li><b>Blocked</b>: the recipient’s email address is blocked, check the email address status</li>
+                                            <li><b>Received</b>: a remote mailer sent email to us</li>
+                                        </ul>"
+                                    ]
+                                }|escape
+                            }}" title="{_ Explanation of email status _}"></a>
+                </th>
+                <th width="8%">{_ Message nr _}</th>
+                <th width="15%">{_ To _}</th>
+                <th width="15%">{_ From _}</th>
+                <th width="5%">{_ Content _}</th>
+                <th width="5%">{_ Other _}</th>
+                <th width="15%">{_ Template _}</th>
+                <th width="20%">{_ Date _}</th>
             </tr>
 
             <tr>
@@ -134,10 +154,10 @@
                 <option value="sent" {% if q.status == 'sent' %}selected="selected"{% endif %}>{_ Sent _}</option>
                 <option value="relayed" {% if q.status == 'relayed' %}selected="selected"{% endif %}>{_ Relayed _}</option>
                 <option value="bounce" {% if q.status == 'bounce' %}selected="selected"{% endif %}>{_ Bounce _}</option>
-                <option value="received" {% if q.status == 'received' %}selected="selected"{% endif %}>{_ Received _}</option>
                 <option value="failed" {% if q.status == 'failed' %}selected="selected"{% endif %}>{_ Failed _}</option>
                 <option value="retry" {% if q.status == 'retry' %}selected="selected"{% endif %}>{_ Retry _}</option>
                 <option value="blocked" {% if q.status == 'blocked' %}selected="selected"{% endif %}>{_ Blocked _}</option>
+                <option value="received" {% if q.status == 'received' %}selected="selected"{% endif %}>{_ Received _}</option>
             </select>
             {% wire id="log_status" type="change" action={submit target="log_filter"} %}
                 </td>
@@ -160,8 +180,8 @@
             <input class="form-control" name="template" type="text" style="width: 85%" value="{{ q.template|escape }}" />
                 </td>
             <td class="col-lg-2 col-md-2">
-            <button class="btn btn-primary btn-xs" type="submit">{_ Filter _}</button>
-            <button class="btn btn-default btn-xs" id="filter_clear">{_ All _}</button>
+            <button class="btn btn-primary" type="submit">{_ Filter _}</button>
+            <button class="btn btn-default" id="filter_clear">{_ All _}</button>
             {% wire id="filter_clear"
                 action={set_value selector="#log_filter input" value=""}
                 action={set_value selector="#log_status" value=""}
@@ -176,25 +196,24 @@
         {% for result_row in result %}
         {% include "_admin_log_email_row.tpl" %}
         {% empty %}
-        <tr>
-                <td colspan="9">
-            {_ No log messages. _}
-                </td>
+            <tr>
+                <td colspan="9" class="text-muted">{_ No log messages. _}</td>
             </tr>
         {% endfor %}
         </tbody>
+
         <tfoot>
-        <tr>
+            <tr>
                 <td colspan="9">
-                {% button
-                    class="btn btn-primary"
-                    text="More..."
-                    action={moreresults
-                        result=result
-                        target="log-area"
-                        template="_admin_log_email_row.tpl"
-                    }
-                %}
+                    {% button
+                        class="btn btn-primary"
+                        text="More..."
+                        action={moreresults
+                            result=result
+                            target="log-area"
+                            template="_admin_log_email_row.tpl"
+                        }
+                    %}
                 </td>
             </tr>
         </tfoot>
