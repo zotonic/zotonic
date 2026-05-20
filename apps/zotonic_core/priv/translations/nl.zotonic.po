@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-05-20 11:40\n"
+"PO-Revision-Date: 2026-05-20 12:13\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -9254,7 +9254,7 @@ msgstr "Inhoud-beveiligingslogboek"
 
 #: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:3
 msgid "Content-Security-Policy violations"
-msgstr "Schendingen van het inhoudsveiligheidsbeleid"
+msgstr "Schendingen van de Content-Security-Policy"
 
 #: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:27
 msgid "Content-Security-Policy violations are reported to an open endpoint and can contain spam."
@@ -9367,7 +9367,7 @@ msgstr "Relayed"
 
 #: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:10
 msgid "Reported Content-Security-Policy violations"
-msgstr "Gerapporteerde schendingen van het inhoudsveiligheidsbeleid"
+msgstr "Gerapporteerde schendingen van de Content-Security-Policy"
 
 #: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:38
 msgid "Reporting URLs"
