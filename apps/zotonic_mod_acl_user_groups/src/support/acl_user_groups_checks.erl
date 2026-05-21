@@ -60,7 +60,9 @@
 -ifdef(TEST).
 -export([
         test_normalize_category_visibility/1,
-        test_visibility_cats_sql/4
+        test_visibility_cats_sql/4,
+        test_restrict_viewable_cats/2,
+        test_restrict_collab_cats/2
     ]).
 -endif.
 
@@ -914,6 +916,12 @@ test_normalize_category_visibility(CatVisCouples) ->
 
 test_visibility_cats_sql(Visibility, Categories, Alias, Args0) ->
     visibility_cats_sql(Visibility, Categories, Alias, Args0).
+
+test_restrict_viewable_cats(Lines, SearchCats) ->
+    restrict_viewable_cats(Lines, SearchCats).
+
+test_restrict_collab_cats(Lines, SearchCats) ->
+    restrict_collab_cats(Lines, SearchCats).
 
 -endif.
 

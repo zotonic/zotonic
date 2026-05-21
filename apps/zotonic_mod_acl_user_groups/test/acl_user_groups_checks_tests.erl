@@ -85,4 +85,79 @@ normalize_result(Result) ->
 flatten_clause({Clause, Args}) ->
     {lists:flatten(Clause), Args}.
 
+
+%% ---- restrict_viewable_cats ----
+
+%% When SearchCats = all, all CG entries are returned unchanged.
+restrict_viewable_cats_search_all_test() ->
+    Lines = [
+        {cg1, 0, [10, 11]},
+        {cg1, 1, all},
+        {cg2, 0, [20]}
+    ],
+    ?assertEqual(Lines, acl_user_groups_checks:test_restrict_viewable_cats(Lines, all)).
+
+%% When the search restricts to a specific set of cats, entries whose category
+%% list has no overlap with the search cats are dropped entirely.
+restrict_viewable_cats_drops_non_overlapping_test() ->
+    Lines = [
+        {cg1, 0, [10, 11]},
+        {cg2, 0, [20, 21]}
+    ],
+    Result = acl_user_groups_checks:test_restrict_viewable_cats(Lines, [10]),
+    ?assertEqual([{cg1, 0, [10]}], Result).
+
+%% When a CG entry covers 'all' categories, it is kept as-is even when
+%% the search provides a specific cat list -- the category restriction is
+%% handled upstream by the pivot_category_nr check.
+restrict_viewable_cats_keeps_all_entry_test() ->
+    Lines = [
+        {cg1, 0, all},
+        {cg2, 0, [20, 21]}
+    ],
+    Result = acl_user_groups_checks:test_restrict_viewable_cats(Lines, [10]),
+    ?assertEqual([{cg1, 0, all}], Result).
+
+%% Category lists in entries are intersected with the search cats.
+restrict_viewable_cats_intersects_cat_list_test() ->
+    Lines = [
+        {cg1, 0, [10, 11, 12]},
+        {cg2, 1, [11, 13]}
+    ],
+    Result = acl_user_groups_checks:test_restrict_viewable_cats(Lines, [11, 12]),
+    ?assertEqual(
+        [{cg1, 0, [11, 12]}, {cg2, 1, [11]}],
+        Result
+    ).
+
+%% An empty Lines list returns empty.
+restrict_viewable_cats_empty_lines_test() ->
+    ?assertEqual([], acl_user_groups_checks:test_restrict_viewable_cats([], [10])).
+
+
+%% ---- restrict_collab_cats ----
+
+%% When SearchCats = all, all collab entries are returned unchanged.
+restrict_collab_cats_search_all_test() ->
+    Lines = [{0, [10, 11]}, {1, all}],
+    ?assertEqual(Lines, acl_user_groups_checks:test_restrict_collab_cats(Lines, all)).
+
+%% Entries with no category overlap with the search cats are dropped.
+restrict_collab_cats_drops_non_overlapping_test() ->
+    Lines = [{0, [10, 11]}, {1, [20]}],
+    Result = acl_user_groups_checks:test_restrict_collab_cats(Lines, [10]),
+    ?assertEqual([{0, [10]}], Result).
+
+%% 'all'-category collab entries are kept regardless of search cats.
+restrict_collab_cats_keeps_all_entry_test() ->
+    Lines = [{0, all}, {1, [20]}],
+    Result = acl_user_groups_checks:test_restrict_collab_cats(Lines, [10]),
+    ?assertEqual([{0, all}], Result).
+
+%% Category lists in collab entries are intersected with the search cats.
+restrict_collab_cats_intersects_cat_list_test() ->
+    Lines = [{0, [10, 11, 12]}, {1, [11, 13]}],
+    Result = acl_user_groups_checks:test_restrict_collab_cats(Lines, [11, 12]),
+    ?assertEqual([{0, [11, 12]}, {1, [11]}], Result).
+
 -endif.
