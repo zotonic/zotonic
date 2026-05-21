@@ -706,7 +706,7 @@ visibility_check(Alias, Args0, Cats, Context) ->
     end.
 
 % Restrict viewable content-group+category entries to the categories in the search query.
-% When 'Categories' in an entry is 'all', keep it as 'all' — our visibility_cats_sql/4 clause
+% When 'Categories' in an entry is 'all', keep it as 'all' -- our visibility_cats_sql/4 clause
 % will then generate only a visibility filter (not a category list), and the search already
 % handles the category restriction via pivot_category_nr.
 % When 'Categories' is a list, intersect with SearchCats to reduce the generated SQL.

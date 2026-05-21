@@ -827,6 +827,10 @@ reformat_sql_query(#search_sql{where=Where, from=From, tables=Tables0, args=Args
             Q1
     end.
 
+%% @doc Compute the final set of category IDs to filter on for each table alias, by
+%% resolving the Include/Exclude/Exact category constraints from the search query.
+%% Returns a list of {Alias, all | [CategoryId]} pairs.  'all' means no category
+%% restriction for that alias.
 cats_per_alias(TabCats, TabExclude, TabExact, Context) ->
     AllAlias = lists:usort(
         [ Alias || {Alias, _} <- TabCats ] ++
@@ -842,6 +846,9 @@ cats_per_alias(TabCats, TabExclude, TabExact, Context) ->
         end,
         AllAlias).
 
+%% @doc Compute the category IDs to include in the query given Include, Exclude and Exact
+%% category lists.  Returns 'all' when there are no restrictions (empty Include, Exclude and
+%% Exact).  'Exact' takes priority over Include; Exclude is always subtracted.
 cats_to_find([], [], [], _Context) ->
     all;
 cats_to_find([], Exclude, [], Context) ->
