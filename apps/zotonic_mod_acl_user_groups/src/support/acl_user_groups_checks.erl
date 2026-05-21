@@ -57,6 +57,13 @@
         session_state/1
     ]).
 
+-ifdef(TEST).
+-export([
+        test_normalize_category_visibility/1,
+        test_visibility_cats_sql/4
+    ]).
+-endif.
+
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include("acl_user_groups.hrl").
 
@@ -728,6 +735,16 @@ viewable_collab_sql(Lines, Alias, Args0, _Context) when is_list(Lines) ->
     ),
     {enclose_sql(ClauseOut), ArgsOut}.
 
+visibility_cats_sql(Visibility, all, Alias, Args0) ->
+    case Visibility of
+        undefined ->
+            {[], Args0};
+        _ ->
+            {
+                [Alias, ".visible_for = $", integer_to_list(length(Args0)+1)],
+                Args0 ++ [Visibility]
+            }
+    end;
 visibility_cats_sql(Visibility, Categories, Alias, Args0) ->
     {VisibilityFilter, Args1} =
         case Visibility of
@@ -807,7 +824,7 @@ normalize_category_visibility(CatVisCouples) ->
         CatVisCouples
     )),
     % then group by visibility and remove redundant entries
-    maps:to_list(maps:groups_from_list(
+    VisByVis = maps:groups_from_list(
         fun ({Visibility, _CatId}) -> Visibility end,
         fun ({_Visibility, CatId}) -> CatId end,
         lists:flatmap(
@@ -819,6 +836,15 @@ normalize_category_visibility(CatVisCouples) ->
             end,
             CatVisLists
         )
+    ),
+    maps:to_list(maps:map(
+        fun (_Visibility, CatIds) ->
+            case lists:member(undefined, CatIds) of
+                true -> all;
+                false -> CatIds
+            end
+        end,
+        VisByVis
     )).
 
 publish_check(Alias) ->
@@ -835,6 +861,16 @@ session_state(Context) ->
         #{ acl_user_groups_state := edit } -> edit;
         _ -> publish
     end.
+
+-ifdef(TEST).
+
+test_normalize_category_visibility(CatVisCouples) ->
+    normalize_category_visibility(CatVisCouples).
+
+test_visibility_cats_sql(Visibility, Categories, Alias, Args0) ->
+    visibility_cats_sql(Visibility, Categories, Alias, Args0).
+
+-endif.
 
 
 %% @doc Fetch all usergroups the user is member of.
