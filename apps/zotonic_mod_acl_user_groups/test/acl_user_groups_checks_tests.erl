@@ -8,6 +8,10 @@
 
 
 normalize_category_visibility_all_categories_test() ->
+    %% A view rule covering all categories (PropId = undefined) emits a sentinel
+    %% entry with CatId = undefined in the ETS table.  await_match returns the
+    %% sentinel alongside all the concretely-expanded category IDs.  The result
+    %% for the visibility that has the sentinel must be 'all'.
     Result = acl_user_groups_checks:test_normalize_category_visibility([
         {1, 0},
         {2, 0},
@@ -16,6 +20,22 @@ normalize_category_visibility_all_categories_test() ->
     ]),
     ?assertEqual(
         #{0 => [1, 2], 1 => all},
+        normalize_result(Result)
+    ).
+
+
+normalize_category_visibility_all_with_expanded_ids_test() ->
+    %% When await_match returns the sentinel (undefined) PLUS all the
+    %% expanded concrete category IDs for the same visibility, the result
+    %% must still be 'all' (not a huge list of IDs).
+    Result = acl_user_groups_checks:test_normalize_category_visibility([
+        {1, 1},
+        {2, 1},
+        {3, 1},
+        {undefined, 1}
+    ]),
+    ?assertEqual(
+        #{1 => all},
         normalize_result(Result)
     ).
 

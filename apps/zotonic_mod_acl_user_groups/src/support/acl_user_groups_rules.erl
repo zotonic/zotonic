@@ -149,14 +149,26 @@ expand_rule_row(Prop, Row, Cs, NonMetaCs, Context) when is_binary(Prop) ->
     ContentGroupName = m_rsc:p_no_acl(ContentGroupId, name, Context),
     CIdsEdit = maybe_filter_meta(ContentGroupName, Prop, PropId, Cs, NonMetaCs, Context),
     CIdsView = proplists:get_value(PropId, Cs, [PropId]),
-    lists:flatten(
+    Expanded = lists:flatten(
         [
             [
               {ContentGroupId, {CId, Visibility, Action, IsOwner, IsAllow}, UserGroupId}
               || CId <- select_cids(Action, IsCategoryExact, CIdsEdit, CIdsView)
             ]
             || Action <- Actions
-        ]).
+        ]),
+    % When a rule applies to all categories (PropId = undefined) and is not category-exact,
+    % also emit a sentinel entry with CId = undefined for the view action. This is picked up
+    % by await_match in viewable_cg_categories/viewable_collab_categories, allowing
+    % normalize_category_visibility to detect that all categories are covered and produce the
+    % 'all' sentinel, which prevents the generation of a large category_id SQL filter.
+    AllCatSentinel = case {Prop, PropId, IsCategoryExact, lists:member(view, Actions)} of
+        {<<"category_id">>, undefined, false, true} ->
+            [{ContentGroupId, {undefined, Visibility, view, IsOwner, IsAllow}, UserGroupId}];
+        _ ->
+            []
+    end,
+    Expanded ++ AllCatSentinel.
 
 select_cids(view, false, _Edit, View) -> View;
 select_cids(view, true, _Edit, [View|_]) -> [View];
