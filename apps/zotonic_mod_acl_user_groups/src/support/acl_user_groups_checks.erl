@@ -707,11 +707,11 @@ visibility_check(Alias, Args0, Cats, Context) ->
             {EnclosedFilter, NewArgs}
     end.
 
-% Restrict viewable content-group+category entries to the categories in the search query.
-% When 'Categories' in an entry is 'all', keep it as 'all' -- our visibility_cats_sql/4 clause
-% will then generate only a visibility filter (not a category list), and the search already
-% handles the category restriction via pivot_category_nr.
-% When 'Categories' is a list, intersect with SearchCats to reduce the generated SQL.
+%% Restrict viewable content-group+category entries to the categories in the search query.
+%% When 'Categories' in an entry is 'all', keep it as 'all' -- our visibility_cats_sql/4 clause
+%% will then generate only a visibility filter (not a category list), and the search already
+%% handles the category restriction via pivot_category_nr.
+%% When 'Categories' is a list, intersect with SearchCats to reduce the generated SQL.
 restrict_viewable_cats(Lines, all) ->
     Lines;
 restrict_viewable_cats(Lines, SearchCats) when is_list(SearchCats) ->
@@ -728,7 +728,7 @@ restrict_viewable_cats(Lines, SearchCats) when is_list(SearchCats) ->
         Lines
     ).
 
-% Same as restrict_viewable_cats but for collab entries {Visibility, all | [CatId]}.
+%% Same as restrict_viewable_cats but for collab entries {Visibility, all | [CatId]}.
 restrict_collab_cats(Lines, all) ->
     Lines;
 restrict_collab_cats(Lines, SearchCats) when is_list(SearchCats) ->
