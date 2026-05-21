@@ -313,9 +313,10 @@
 %% ACL notifications
 %% Modify queries by adding ACL restrictions by the database
 -record(acl_add_sql_check, {
-    alias,
-    args,
-    search_sql
+    alias :: string() | binary(),
+    args = [] :: list(),
+    search_sql :: iodata(),
+    cats = [] :: [ m_rsc:resource_id() ]
 }).
 
 

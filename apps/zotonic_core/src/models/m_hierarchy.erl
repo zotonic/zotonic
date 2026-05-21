@@ -54,6 +54,7 @@ Available Model API Paths
     tree_flat/3,
     parents/3,
     contains/3,
+    all/2,
     children/3,
     menu/2,
     ensure/2,
@@ -222,6 +223,23 @@ contains(Name0, Id, Context) when is_integer(Id) ->
         Context);
 contains(Name, Id, Context) ->
     contains(Name, m_rsc:rid(Id, Context), Context).
+
+%% @doc Return the list of all ids in the hierarchy. The ids are sorted by their value.
+all(Name0, Context) ->
+    Name = z_convert:to_binary(Name0),
+    z_depcache:memo(
+        fun() ->
+            Ids = z_db:q(
+                "SELECT id FROM hierarchy "
+                "WHERE name = $1",
+                [Name],
+                Context),
+            lists:usort([ Id || {Id} <- Ids ])
+        end,
+        {hierarchy_all, Name},
+        3600,
+        [{hierarchy, Name}],
+        Context).
 
 %% @doc Make a flattened list with indentations showing the level of the tree entries.
 %%      Useful for select lists.
