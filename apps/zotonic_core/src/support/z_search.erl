@@ -918,7 +918,7 @@ add_acl_check(_, Args, _Q, _CatsPerAlias, _Context) ->
 %% @doc Create extra 'where' conditions for checking the access control
 %% @todo This needs to be changed for the pluggable ACL
 add_acl_check_rsc(Alias, Args, SearchSql, CatsPerAlias, Context) ->
-    Cats = proplists:get_value(Alias, CatsPerAlias, []),
+    Cats = proplists:get_value(Alias, CatsPerAlias, all),
     case z_notifier:first(#acl_add_sql_check{
         alias = Alias,
         args = Args,

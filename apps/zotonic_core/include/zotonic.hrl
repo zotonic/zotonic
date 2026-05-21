@@ -316,7 +316,7 @@
     alias :: string() | binary(),
     args = [] :: list(),
     search_sql :: iodata(),
-    cats = [] :: [ m_rsc:resource_id() ]
+    cats = all :: [ m_rsc:resource_id() ] | all
 }).
 
 
