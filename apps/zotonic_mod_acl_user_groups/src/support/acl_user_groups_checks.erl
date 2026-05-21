@@ -612,7 +612,7 @@ find_first_collab_group(CatId, Context) ->
 
 
 %% @doc Add a restriction on the visible content groups to SQL searches
-acl_add_sql_check(#acl_add_sql_check{alias=Alias, args=Args, search_sql=SearchSql}, Context) ->
+acl_add_sql_check(#acl_add_sql_check{alias=Alias, args=Args, search_sql=SearchSql, cats=Cats}, Context) ->
     case z_acl:is_admin(Context) of
         true ->
             % admins can see all resources
@@ -626,12 +626,12 @@ acl_add_sql_check(#acl_add_sql_check{alias=Alias, args=Args, search_sql=SearchSq
             {ContentGroupSQL, NewArgs} =
                 case lists:member(no_content_group_check, SearchSql#search_sql.extra) of
                     true -> {[], Args};
-                    false -> visibility_check(Alias, Args, Context)
+                    false -> visibility_check(Alias, Args, Cats, Context)
                 end,
             {join_sql(PublishedSQL, "AND", ContentGroupSQL), NewArgs}
     end.
 
-visibility_check(Alias, Args0, Context) ->
+visibility_check(Alias, Args0, Cats, Context) ->
     % find all the user's usergroups:
     UGs = user_groups(Context),
     % find all the contentgroups where _something_ is visible
@@ -639,10 +639,14 @@ visibility_check(Alias, Args0, Context) ->
         fun (UGId) -> mod_acl_user_groups:await_lookup({view, UGId}, Context) end,
         UGs
     )),
-    % for each contentgroup, find the required visibility for viewable categories:
-    ViewableCats = lists:flatmap(
-        fun (CGId) -> viewable_cg_categories(CGId, UGs, true, Context) end,
-        CGs
+    % for each contentgroup, find the required visibility for viewable categories;
+    % restrict to only the categories in the search query (if any):
+    ViewableCats = restrict_viewable_cats(
+        lists:flatmap(
+            fun (CGId) -> viewable_cg_categories(CGId, UGs, true, Context) end,
+            CGs
+        ),
+        Cats
     ),
     % and calculate the query to only allow those:
     {ViewableSql, Args1} = viewable_cg_sql(ViewableCats, Alias, Args0, Context),
@@ -652,9 +656,12 @@ visibility_check(Alias, Args0, Context) ->
             {ViewableSql, Args1};
         _ ->
             % otherwise find also the categories with forbidden visibilities:
-            NonViewableCats = lists:flatmap(
-                fun (CGId) -> viewable_cg_categories(CGId, UGs, false, Context) end,
-                CGs
+            NonViewableCats = restrict_viewable_cats(
+                lists:flatmap(
+                    fun (CGId) -> viewable_cg_categories(CGId, UGs, false, Context) end,
+                    CGs
+                ),
+                Cats
             ),
             % and add an exclusion for them in the SQL clause as well:
             {NonViewableSql, Args2} = viewable_cg_sql(NonViewableCats, Alias, Args1, Context),
@@ -667,7 +674,7 @@ visibility_check(Alias, Args0, Context) ->
             {[], Args3};
         CollabIds ->
             % otherwise find the required visibility for viewable categories in collab groups:
-            ViewableCollabCats = viewable_collab_categories(true, Context),
+            ViewableCollabCats = restrict_collab_cats(viewable_collab_categories(true, Context), Cats),
             {ViewableCollabSql, Args4} = viewable_collab_sql(ViewableCollabCats, Alias, Args3, Context),
             case ViewableCollabSql of
                 [] ->
@@ -675,7 +682,7 @@ visibility_check(Alias, Args0, Context) ->
                     {ViewableCollabSql, Args4};
                 _ ->
                     % otherwise find also the categories with forbidden visibilities:
-                    NonViewableCollabCats = viewable_collab_categories(false, Context),
+                    NonViewableCollabCats = restrict_collab_cats(viewable_collab_categories(false, Context), Cats),
                     % add an exclusion for them in the SQL clause:
                     {NonViewableCollabSql, Args5} = viewable_collab_sql(NonViewableCollabCats, Alias, Args4, Context),
                     AllCollabFilters = join_sql(ViewableCollabSql, "AND NOT", NonViewableCollabSql),
@@ -697,6 +704,44 @@ visibility_check(Alias, Args0, Context) ->
         EnclosedFilter ->
             {EnclosedFilter, NewArgs}
     end.
+
+% Restrict viewable content-group+category entries to the categories in the search query.
+% When 'Categories' in an entry is 'all', keep it as 'all' — our visibility_cats_sql/4 clause
+% will then generate only a visibility filter (not a category list), and the search already
+% handles the category restriction via pivot_category_nr.
+% When 'Categories' is a list, intersect with SearchCats to reduce the generated SQL.
+restrict_viewable_cats(Lines, all) ->
+    Lines;
+restrict_viewable_cats(Lines, SearchCats) when is_list(SearchCats) ->
+    lists:filtermap(
+        fun ({CGId, Visibility, all}) ->
+                {true, {CGId, Visibility, all}};
+            ({CGId, Visibility, CatIds}) ->
+                Intersection = [C || C <- CatIds, lists:member(C, SearchCats)],
+                case Intersection of
+                    [] -> false;
+                    _ -> {true, {CGId, Visibility, Intersection}}
+                end
+        end,
+        Lines
+    ).
+
+% Same as restrict_viewable_cats but for collab entries {Visibility, all | [CatId]}.
+restrict_collab_cats(Lines, all) ->
+    Lines;
+restrict_collab_cats(Lines, SearchCats) when is_list(SearchCats) ->
+    lists:filtermap(
+        fun ({Visibility, all}) ->
+                {true, {Visibility, all}};
+            ({Visibility, CatIds}) ->
+                Intersection = [C || C <- CatIds, lists:member(C, SearchCats)],
+                case Intersection of
+                    [] -> false;
+                    _ -> {true, {Visibility, Intersection}}
+                end
+        end,
+        Lines
+    ).
 
 viewable_cg_sql(Lines, Alias, Args0, Context) when is_list(Lines) ->
     CollabId = m_rsc:rid(acl_collaboration_group, Context),
