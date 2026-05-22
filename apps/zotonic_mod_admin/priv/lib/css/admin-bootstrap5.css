@@ -13841,6 +13841,24 @@ body .form-control:focus,
   background-color: var(--z-admin-form-control-focus-bg);
 }
 
+select.form-control {
+  --bs-form-select-bg-img: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+  padding-right: 16px;
+  appearance: none;
+  background-image: var(--bs-form-select-bg-img);
+  background-repeat: no-repeat;
+  background-position: right 4px center;
+  background-size: 16px 12px;
+}
+select.form-control[multiple], select.form-control[size]:not([size="1"]) {
+  padding-right: 4px;
+  background-image: none;
+}
+
+[data-bs-theme=dark] select.form-control {
+  --bs-form-select-bg-img: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23dee2e6' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+}
+
 .form-control.form-control-small {
   width: 15em;
   display: inline-block;

@@ -98,6 +98,31 @@ body .form-control,
     }
 }
 
+select.form-control {
+    --#{$prefix}form-select-bg-img: #{escape-svg($form-select-indicator)};
+
+    padding-right: $input-padding-x + $form-select-indicator-padding;
+    appearance: none;
+    background-image: var(--#{$prefix}form-select-bg-img);
+    background-repeat: no-repeat;
+    background-position: right $input-padding-x center;
+    background-size: $form-select-bg-size;
+
+    &[multiple],
+    &[size]:not([size="1"]) {
+        padding-right: $input-padding-x;
+        background-image: none;
+    }
+}
+
+@if $enable-dark-mode {
+    @include color-mode(dark) {
+        select.form-control {
+            --#{$prefix}form-select-bg-img: #{escape-svg($form-select-indicator-dark)};
+        }
+    }
+}
+
 .form-control.form-control-small {
     width: 15em;
     display: inline-block;
