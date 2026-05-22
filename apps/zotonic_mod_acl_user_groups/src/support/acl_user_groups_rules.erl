@@ -21,8 +21,7 @@
 -export([
     expand/2,
     expand_rsc/2,
-    expand_collab/2,
-    test/0
+    expand_collab/2
 ]).
 
 -export([
@@ -280,8 +279,3 @@ resort_deny_rules([R|Rs], GroupId, DenyAcc, Acc) ->
             end
     end.
 
-test() ->
-    [] = tree_expand([]),
-    [{1,[1]}, {2,[2]}] = tree_expand([{1,[]}, {2,[]}]),
-    [{1,[1]},{2,[2,3]},{3,[3]}] = tree_expand([{1,[]}, {2,[{3,[]}]}]),
-    ok.

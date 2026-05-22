@@ -57,14 +57,13 @@
         session_state/1
     ]).
 
--ifdef(TEST).
+% Exports for testing
 -export([
-        test_normalize_category_visibility/1,
-        test_visibility_cats_sql/4,
-        test_restrict_viewable_cats/2,
-        test_restrict_collab_cats/2
+        normalize_category_visibility/1,
+        visibility_cats_sql/4,
+        restrict_viewable_cats/2,
+        restrict_collab_cats/2
     ]).
--endif.
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include("acl_user_groups.hrl").
@@ -909,8 +908,6 @@ session_state(Context) ->
         _ -> publish
     end.
 
--ifdef(TEST).
-
 test_normalize_category_visibility(CatVisCouples) ->
     normalize_category_visibility(CatVisCouples).
 
@@ -922,8 +919,6 @@ test_restrict_viewable_cats(Lines, SearchCats) ->
 
 test_restrict_collab_cats(Lines, SearchCats) ->
     restrict_collab_cats(Lines, SearchCats).
-
--endif.
 
 
 %% @doc Fetch all usergroups the user is member of.
@@ -1038,7 +1033,7 @@ can_rsc(Id, view, Context) when is_integer(Id) ->
     )
     orelse
     (
-         % Members can see each other. 
+         % Members can see each other.
          m_rsc:is_a(Id, person, Context)
          andalso has_common_collab_group(Id, Context)
     )
