@@ -11900,6 +11900,10 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+.row {
+  width: calc(100% + var(--bs-gutter-x));
+}
+
 .text-muted {
   color: #777777 !important;
 }
