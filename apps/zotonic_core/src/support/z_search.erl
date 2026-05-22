@@ -1038,5 +1038,5 @@ cat_check_pivot1(Alias, {From,To}) ->
 %% when the category tree is dirty and the pivot_category_nr values are not up to date.
 add_cat_check_any(Alias, Cats, Args, _Context) ->
     Args1 = Args ++ [ Cats ],
-    {[ Alias, ".category_id = any($", integer_to_list(length(Args1)), ")" ], Args1}.
+    {[ Alias, ".category_id = any($", integer_to_list(length(Args1)), "::int[])" ], Args1}.
 
