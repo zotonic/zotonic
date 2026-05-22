@@ -2130,7 +2130,7 @@ progress {
   background-color: #fff;
   background-clip: padding-box;
   border: var(--bs-border-width) solid var(--bs-border-color);
-  border-radius: 4px;
+  border-radius: 0;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 @media (prefers-reduced-motion: reduce) {
@@ -2214,7 +2214,7 @@ progress {
   min-height: calc(1.428571429em + 10px + calc(var(--bs-border-width) * 2));
   padding: 5px 4px;
   font-size: 0.875rem;
-  border-radius: 3px;
+  border-radius: 0;
 }
 .form-control-sm::file-selector-button {
   padding: 5px 4px;
@@ -2226,7 +2226,7 @@ progress {
   min-height: calc(1.428571429em + 20px + calc(var(--bs-border-width) * 2));
   padding: 10px 4px;
   font-size: 1.25rem;
-  border-radius: 6px;
+  border-radius: 0;
 }
 .form-control-lg::file-selector-button {
   padding: 10px 4px;
@@ -2254,11 +2254,11 @@ textarea.form-control-lg {
 }
 .form-control-color::-moz-color-swatch {
   border: 0 !important;
-  border-radius: 4px;
+  border-radius: 0;
 }
 .form-control-color::-webkit-color-swatch {
   border: 0 !important;
-  border-radius: 4px;
+  border-radius: 0;
 }
 .form-control-color.form-control-sm {
   height: calc(1.428571429em + 10px + calc(var(--bs-border-width) * 2));
@@ -2283,7 +2283,7 @@ textarea.form-control-lg {
   background-position: right 4px center;
   background-size: 16px 12px;
   border: var(--bs-border-width) solid var(--bs-border-color);
-  border-radius: 4px;
+  border-radius: 0;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 @media (prefers-reduced-motion: reduce) {
@@ -2313,7 +2313,7 @@ textarea.form-control-lg {
   padding-bottom: 5px;
   padding-left: 4px;
   font-size: 0.875rem;
-  border-radius: 3px;
+  border-radius: 0;
 }
 
 .form-select-lg {
@@ -2321,7 +2321,7 @@ textarea.form-control-lg {
   padding-bottom: 10px;
   padding-left: 4px;
   font-size: 1.25rem;
-  border-radius: 6px;
+  border-radius: 0;
 }
 
 [data-bs-theme=dark] .form-select {
@@ -2621,7 +2621,7 @@ textarea.form-control-lg {
   height: 1.5em;
   content: "";
   background-color: #fff;
-  border-radius: 4px;
+  border-radius: 0;
 }
 .form-floating > textarea:disabled ~ label::after {
   background-color: var(--bs-secondary-bg);
@@ -2674,7 +2674,7 @@ textarea.form-control-lg {
   white-space: nowrap;
   background-color: #eeeeee;
   border: var(--bs-border-width) solid #ddd;
-  border-radius: 4px;
+  border-radius: 0;
 }
 
 .input-group-lg > .form-control,
@@ -2684,7 +2684,7 @@ textarea.form-control-lg {
 .input-group-lg > .btn {
   padding: 10px 4px;
   font-size: 1.25rem;
-  border-radius: 6px;
+  border-radius: 0;
 }
 
 .input-group-sm > .form-control,
@@ -2694,7 +2694,7 @@ textarea.form-control-lg {
 .input-group-sm > .btn {
   padding: 5px 4px;
   font-size: 0.875rem;
-  border-radius: 3px;
+  border-radius: 0;
 }
 
 .input-group-lg > .form-select,

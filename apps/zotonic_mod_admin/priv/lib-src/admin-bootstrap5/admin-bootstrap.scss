@@ -26,9 +26,9 @@ $border-radius: $border-radius-base;
 $border-radius-sm: $border-radius-small;
 $border-radius-lg: $border-radius-large;
 
-$input-border-radius: $border-radius-base;
-$input-border-radius-sm: $border-radius-small;
-$input-border-radius-lg: $border-radius-large;
+$input-border-radius: 0;
+$input-border-radius-sm: 0;
+$input-border-radius-lg: 0;
 
 $input-padding-y: $padding-base-vertical;
 $input-padding-x: 4px;
