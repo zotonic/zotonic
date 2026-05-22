@@ -2121,7 +2121,7 @@ progress {
 .form-control {
   display: block;
   width: 100%;
-  padding: 6px 12px;
+  padding: 6px 4px;
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.428571429;
@@ -2169,9 +2169,9 @@ progress {
   opacity: 1;
 }
 .form-control::file-selector-button {
-  padding: 6px 12px;
-  margin: -6px -12px;
-  margin-inline-end: 12px;
+  padding: 6px 4px;
+  margin: -6px -4px;
+  margin-inline-end: 4px;
   color: #555555;
   background-color: var(--bs-tertiary-bg);
   pointer-events: none;
@@ -2212,26 +2212,26 @@ progress {
 
 .form-control-sm {
   min-height: calc(1.428571429em + 10px + calc(var(--bs-border-width) * 2));
-  padding: 5px 10px;
+  padding: 5px 4px;
   font-size: 0.875rem;
   border-radius: 3px;
 }
 .form-control-sm::file-selector-button {
-  padding: 5px 10px;
-  margin: -5px -10px;
-  margin-inline-end: 10px;
+  padding: 5px 4px;
+  margin: -5px -4px;
+  margin-inline-end: 4px;
 }
 
 .form-control-lg {
   min-height: calc(1.428571429em + 20px + calc(var(--bs-border-width) * 2));
-  padding: 10px 16px;
+  padding: 10px 4px;
   font-size: 1.25rem;
   border-radius: 6px;
 }
 .form-control-lg::file-selector-button {
-  padding: 10px 16px;
-  margin: -10px -16px;
-  margin-inline-end: 16px;
+  padding: 10px 4px;
+  margin: -10px -4px;
+  margin-inline-end: 4px;
 }
 
 textarea.form-control {
@@ -2271,7 +2271,7 @@ textarea.form-control-lg {
   --bs-form-select-bg-img: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
   display: block;
   width: 100%;
-  padding: 6px 36px 6px 12px;
+  padding: 6px 12px 6px 4px;
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.428571429;
@@ -2280,7 +2280,7 @@ textarea.form-control-lg {
   background-color: #fff;
   background-image: var(--bs-form-select-bg-img), var(--bs-form-select-bg-icon, none);
   background-repeat: no-repeat;
-  background-position: right 12px center;
+  background-position: right 4px center;
   background-size: 16px 12px;
   border: var(--bs-border-width) solid var(--bs-border-color);
   border-radius: 4px;
@@ -2297,7 +2297,7 @@ textarea.form-control-lg {
   box-shadow: 0 0 0 0.25rem rgba(15, 162, 219, 0.25);
 }
 .form-select[multiple], .form-select[size]:not([size="1"]) {
-  padding-right: 12px;
+  padding-right: 4px;
   background-image: none;
 }
 .form-select:disabled {
@@ -2311,7 +2311,7 @@ textarea.form-control-lg {
 .form-select-sm {
   padding-top: 5px;
   padding-bottom: 5px;
-  padding-left: 10px;
+  padding-left: 4px;
   font-size: 0.875rem;
   border-radius: 3px;
 }
@@ -2319,7 +2319,7 @@ textarea.form-control-lg {
 .form-select-lg {
   padding-top: 10px;
   padding-bottom: 10px;
-  padding-left: 16px;
+  padding-left: 4px;
   font-size: 1.25rem;
   border-radius: 6px;
 }
@@ -2558,7 +2558,7 @@ textarea.form-control-lg {
   z-index: 2;
   max-width: 100%;
   height: 100%;
-  padding: 1rem 12px;
+  padding: 1rem 4px;
   overflow: hidden;
   color: rgba(var(--bs-body-color-rgb), 0.65);
   text-align: start;
@@ -2577,7 +2577,7 @@ textarea.form-control-lg {
 .form-floating > .form-control,
 .form-floating > .form-control-plaintext,
 .form-floating > .form-control-static {
-  padding: 1rem 12px;
+  padding: 1rem 4px;
 }
 .form-floating > .form-control::placeholder,
 .form-floating > .form-control-plaintext::placeholder,
@@ -2601,7 +2601,7 @@ textarea.form-control-lg {
 .form-floating > .form-select {
   padding-top: 1.625rem;
   padding-bottom: 0.625rem;
-  padding-left: 12px;
+  padding-left: 4px;
 }
 .form-floating > .form-control:focus ~ label,
 .form-floating > .form-control:not(:placeholder-shown) ~ label,
@@ -2616,7 +2616,7 @@ textarea.form-control-lg {
 .form-floating > textarea:focus ~ label::after,
 .form-floating > textarea:not(:placeholder-shown) ~ label::after {
   position: absolute;
-  inset: 1rem 6px;
+  inset: 1rem 2px;
   z-index: -1;
   height: 1.5em;
   content: "";
@@ -2665,7 +2665,7 @@ textarea.form-control-lg {
 .input-group-text, .input-group-addon {
   display: flex;
   align-items: center;
-  padding: 6px 12px;
+  padding: 6px 4px;
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.428571429;
@@ -2682,7 +2682,7 @@ textarea.form-control-lg {
 .input-group-lg > .input-group-text,
 .input-group-lg > .input-group-addon,
 .input-group-lg > .btn {
-  padding: 10px 16px;
+  padding: 10px 4px;
   font-size: 1.25rem;
   border-radius: 6px;
 }
@@ -2692,14 +2692,14 @@ textarea.form-control-lg {
 .input-group-sm > .input-group-text,
 .input-group-sm > .input-group-addon,
 .input-group-sm > .btn {
-  padding: 5px 10px;
+  padding: 5px 4px;
   font-size: 0.875rem;
   border-radius: 3px;
 }
 
 .input-group-lg > .form-select,
 .input-group-sm > .form-select {
-  padding-right: 48px;
+  padding-right: 16px;
 }
 
 .input-group:not(.has-validation) > :not(:last-child):not(.dropdown-toggle):not(.dropdown-menu):not(.form-floating),
@@ -2779,8 +2779,8 @@ textarea.form-control-lg {
 }
 .was-validated .form-select:valid:not([multiple]):not([size]), .was-validated .form-select:valid:not([multiple])[size="1"], .form-select.is-valid:not([multiple]):not([size]), .form-select.is-valid:not([multiple])[size="1"] {
   --bs-form-select-bg-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%235cb85c' d='M2.3 6.73.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1'/%3e%3c/svg%3e");
-  padding-right: 66px;
-  background-position: right 12px center, center right 36px;
+  padding-right: 22px;
+  background-position: right 4px center, center right 12px;
   background-size: 16px 12px, calc(0.7142857145em + 6px) calc(0.7142857145em + 6px);
 }
 .was-validated .form-select:valid:focus, .form-select.is-valid:focus {
@@ -2869,8 +2869,8 @@ textarea.form-control-lg {
 }
 .was-validated .form-select:invalid:not([multiple]):not([size]), .was-validated .form-select:invalid:not([multiple])[size="1"], .form-select.is-invalid:not([multiple]):not([size]), .form-select.is-invalid:not([multiple])[size="1"] {
   --bs-form-select-bg-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23d9534f'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23d9534f' stroke='none'/%3e%3c/svg%3e");
-  padding-right: 66px;
-  background-position: right 12px center, center right 36px;
+  padding-right: 22px;
+  background-position: right 4px center, center right 12px;
   background-size: 16px 12px, calc(0.7142857145em + 6px) calc(0.7142857145em + 6px);
 }
 .was-validated .form-select:invalid:focus, .form-select.is-invalid:focus {
@@ -13799,7 +13799,6 @@ button.close {
 .label-floating.has-error textarea, .label-floating.invalid input,
 .label-floating.invalid select,
 .label-floating.invalid textarea {
-  padding: 0 2px;
   border-bottom: 2px solid var(--z-admin-form-invalid-color);
 }
 .label-floating.has-error label,
@@ -13817,7 +13816,6 @@ button.close {
 .label-floating input:not(:placeholder-shown):invalid,
 .label-floating textarea:not(:placeholder-shown):invalid,
 .label-floating .did-submit :invalid {
-  padding: 0 2px;
   border-bottom: 2px solid var(--z-admin-form-invalid-color);
 }
 
@@ -13829,7 +13827,6 @@ button.close {
 
 body .form-control,
 .form-control-small {
-  padding: 0 2px 1px 2px;
   border: 0;
   border-bottom: 1px solid var(--z-admin-form-control-border-color);
   box-shadow: none;
@@ -13838,7 +13835,6 @@ body .form-control,
 }
 body .form-control:focus,
 .form-control-small:focus {
-  padding: 0 2px;
   border-bottom: 2px solid var(--z-admin-form-label-focus-color);
   box-shadow: none;
   -webkit-box-shadow: none;
