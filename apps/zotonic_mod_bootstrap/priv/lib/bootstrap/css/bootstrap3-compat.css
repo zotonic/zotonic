@@ -1,4 +1,8 @@
 @charset "UTF-8";
+.row {
+  width: calc(100% + var(--bs-gutter-x));
+}
+
 .text-error {
   --bs-text-opacity: 1;
   color: rgba(var(--bs-danger-rgb), var(--bs-text-opacity)) !important;
