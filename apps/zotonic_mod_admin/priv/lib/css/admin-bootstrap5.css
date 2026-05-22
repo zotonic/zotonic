@@ -12497,6 +12497,17 @@ button.close {
   background-color: var(--bs3-nav-pills-active-bg, #0fa2db);
 }
 
+.nav-stacked {
+  display: block;
+}
+.nav-stacked > li {
+  float: none;
+}
+.nav-stacked > li + li {
+  margin-top: 0.125rem;
+  margin-left: 0;
+}
+
 .pagination {
   display: inline-block;
   padding-left: 0;
