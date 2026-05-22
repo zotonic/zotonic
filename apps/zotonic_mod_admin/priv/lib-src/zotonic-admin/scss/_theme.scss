@@ -76,9 +76,9 @@
     --z-admin-form-label-color: #777;
     --z-admin-form-label-focus-color: var(--bs-primary);
     --z-admin-form-invalid-color: var(--bs-danger);
-    --z-admin-form-control-bg: rgba(250, 250, 250, 0.5);
-    --z-admin-form-control-focus-bg: rgba(255, 255, 235, 0.7);
-    --z-admin-form-control-border-color: #eeeeee;
+    --z-admin-form-control-bg: color-mix(in srgb, var(--z-admin-bg) 20%, var(--z-admin-surface) 80%);
+    --z-admin-form-control-focus-bg: color-mix(in srgb, var(--z-admin-bg) 10%, var(--z-admin-surface) 90%);
+    --z-admin-form-control-border-color: var(--z-admin-border);
     --z-admin-checkbox-label-color: #555;
     --z-admin-help-block-color: #737373;
     --z-admin-text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
@@ -200,9 +200,9 @@
     --z-admin-form-label-color: var(--z-admin-widget-text);
     --z-admin-form-label-focus-color: var(--bs-link-color);
     --z-admin-form-invalid-color: var(--bs-form-invalid-color);
-    --z-admin-form-control-bg: rgba(43, 48, 53, 0.65);
-    --z-admin-form-control-focus-bg: rgba(55, 65, 74, 0.85);
-    --z-admin-form-control-border-color: var(--z-admin-border);
+    --z-admin-form-control-bg: color-mix(in srgb, var(--z-admin-bg) 25%, var(--bs3-btn-default-active-bg) 75%);
+    --z-admin-form-control-focus-bg: color-mix(in srgb, var(--z-admin-bg) 10%, var(--bs3-btn-default-active-bg) 90%);
+    --z-admin-form-control-border-color: #7f8a94;
     --z-admin-checkbox-label-color: var(--z-admin-widget-text);
     --z-admin-help-block-color: #c7ced6;
     --z-admin-text-shadow: none;
@@ -269,7 +269,7 @@
     .form-control,
     .form-select {
         color: var(--z-admin-text);
-        background-color: var(--z-admin-surface);
+        background-color: var(--z-admin-form-control-bg);
         border-color: var(--z-admin-border);
     }
 
