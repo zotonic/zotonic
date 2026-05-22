@@ -794,7 +794,7 @@ reformat_sql_query(#search_sql{where=Where, from=From, tables=Tables0, args=Args
     TabCatsExact = [ {z_convert:to_binary(Alias), Cats} || {Alias, Cats} <- TabCatsExact0 ],
     Tables = [ {z_convert:to_binary(Table), z_convert:to_binary(Alias)} || {Table, Alias} <- Tables0 ],
     % Make a list of included category ids for each alias
-    CatsPerAlias = cats_per_alias(TabCats, TabCatsExact, TabCatsExclude, Context),
+    CatsPerAlias = cats_per_alias(TabCats, TabCatsExclude, TabCatsExact, Context),
     % Add ACL checks for the rsc tables
     {ExtraWhere1, Args1} = lists:foldl(
                                 fun(Table, {Ws,As}) ->
