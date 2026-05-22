@@ -36,6 +36,12 @@ $bs3-nav-tabs-link-margin-right: $spacer * .125 !default;
 $bs3-table-strong-border-width: $border-width * 2 !default;
 
 // -----------------------------------------------------------------------------
+// Grid
+.row {
+  width: calc(100% + var(--bs-gutter-x));
+}
+
+// -----------------------------------------------------------------------------
 // Text helpers
 .text-error { @extend .text-danger; }
 
