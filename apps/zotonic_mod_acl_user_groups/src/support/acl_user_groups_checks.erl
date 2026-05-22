@@ -1,8 +1,8 @@
-%% @copyright 2015-2022 Marc Worrell
+%% @copyright 2015-2026 Marc Worrell
 %% @doc Routines for ACL notifications.
 %% @end
 
-%% Copyright 2015-2022 Marc Worrell
+%% Copyright 2015-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -907,19 +907,6 @@ session_state(Context) ->
         #{ acl_user_groups_state := edit } -> edit;
         _ -> publish
     end.
-
-test_normalize_category_visibility(CatVisCouples) ->
-    normalize_category_visibility(CatVisCouples).
-
-test_visibility_cats_sql(Visibility, Categories, Alias, Args0) ->
-    visibility_cats_sql(Visibility, Categories, Alias, Args0).
-
-test_restrict_viewable_cats(Lines, SearchCats) ->
-    restrict_viewable_cats(Lines, SearchCats).
-
-test_restrict_collab_cats(Lines, SearchCats) ->
-    restrict_collab_cats(Lines, SearchCats).
-
 
 %% @doc Fetch all usergroups the user is member of.
 %% Anonymous user are member of 'acl_user_group_anonymous'.
