@@ -839,29 +839,67 @@ cats_per_alias(TabCats, TabExclude, TabExact, Context) ->
     ),
     lists:map(
         fun(Alias) ->
-            Include = proplists:get_value(Alias, TabCats, []),
-            Exclude = proplists:get_value(Alias, TabExclude, []),
-            Exact = proplists:get_value(Alias, TabExact, []),
+            Include = make_rids(lists:flatten(proplists:get_value(Alias, TabCats, [])), Context),
+            Exclude = make_rids(lists:flatten(proplists:get_value(Alias, TabExclude, [])), Context),
+            Exact = case lists:flatten(proplists:get_value(Alias, TabExact, [])) of
+                [] -> [];
+                ExactIds ->
+                    case make_rids(ExactIds, Context) of
+                        [] -> none;
+                        EIds -> EIds
+                    end
+            end,
             {Alias, cats_to_find(Include, Exclude, Exact, Context)}
         end,
         AllAlias).
 
+-spec make_rids(Ids, Context) -> Ids1 when
+    Ids :: list(m_rsc:resource()),
+    Ids1 :: list(m_rsc:resource_id()),
+    Context :: z:context().
+make_rids(Ids, Context) ->
+    lists:filtermap(
+        fun(Id) ->
+            case m_rsc:rid(Id, Context) of
+                undefined -> false;
+                RId -> {true, RId}
+            end
+        end,
+        lists:flatten(Ids)).
+
 %% @doc Compute the category IDs to include in the query given Include, Exclude and Exact
 %% category lists.  Returns 'all' when there are no restrictions (empty Include, Exclude and
-%% Exact).  'Exact' takes priority over Include; Exclude is always subtracted.
+%% Exact).  'Exact' takes priority over Include, Exclude is always subtracted.
+%% The empty list means no categories are matching, the resulting query should not return any
+%% resources.
+-spec cats_to_find(Include, Exclude, Exact, Context) -> all | list(m_rsc:resource_id()) when
+    Include :: list(m_rsc:resource_id()),
+    Exclude :: list(m_rsc:resource_id()),
+    Exact :: list(m_rsc:resource_id()) | none,
+    Context :: z:context().
+cats_to_find(_Include, _Exclude, _Exact = none, _Context) ->
+    [];
 cats_to_find([], [], [], _Context) ->
     all;
 cats_to_find([], Exclude, [], Context) ->
-    IncludeContains = m_category:all(Context),
-    ExcludeContains = lists:usort(lists:flatmap(fun(C) -> m_category:contains(C, Context) end, Exclude)),
-    IncludeContains -- ExcludeContains;
+    IncludeSet = sets:from_list(m_category:all(Context)),
+    ExcludeSet = sets:from_list(lists:flatmap(fun(C) -> m_category:contains(C, Context) end, Exclude)),
+    ToFind = sets:subtract(IncludeSet, ExcludeSet),
+    lists:sort(sets:to_list(ToFind));
 cats_to_find(Include, Exclude, [], Context) ->
-    IncludeContains = lists:usort(lists:flatmap(fun(C) -> m_category:contains(C, Context) end, Include)),
+    IncludeSet = sets:from_list(lists:flatmap(fun(C) -> m_category:contains(C, Context) end, Include)),
+    ExcludeSet = sets:from_list(lists:flatmap(fun(C) -> m_category:contains(C, Context) end, Exclude)),
+    ToFind = sets:subtract(IncludeSet, ExcludeSet),
+    lists:sort(sets:to_list(ToFind));
+cats_to_find([], Exclude, Exact, Context) ->
     ExcludeContains = lists:usort(lists:flatmap(fun(C) -> m_category:contains(C, Context) end, Exclude)),
-    IncludeContains -- ExcludeContains;
-cats_to_find(_Include, Exclude, Exact, Context) ->
-    ExcludeContains = lists:usort(lists:flatmap(fun(C) -> m_category:contains(C, Context) end, Exclude)),
-    Exact -- ExcludeContains.
+    Exact -- ExcludeContains;
+cats_to_find(Include, Exclude, Exact, Context) ->
+    IncludeSet = sets:from_list(lists:flatmap(fun(C) -> m_category:contains(C, Context) end, Include)),
+    ExcludeSet = sets:from_list(lists:flatmap(fun(C) -> m_category:contains(C, Context) end, Exclude)),
+    ExactSet = sets:from_list(Exact),
+    ToFind = sets:intersection(sets:subtract(ExactSet, ExcludeSet), IncludeSet),
+    lists:sort(sets:to_list(ToFind)).
 
 %% @doc Concatenate the where clause with the extra ACL checks using "and".  Skip empty clauses.
 concat_where([], Acc) ->
@@ -961,6 +999,8 @@ publish_check(Alias, #search_sql{extra=Extra}) ->
 %% @doc Create the 'where' conditions for the category check
 add_cat_check(_Alias, all, Args, _Context) ->
     {[], Args};
+add_cat_check(_Alias, [], Args, _Context) ->
+    {[ "false" ], Args};
 add_cat_check(Alias, Cats, Args, Context) ->
     All = m_category:all(Context),
     case lists:usort(Cats) of
