@@ -39,6 +39,13 @@
   --bs-btn-disabled-border-color: var(--bs3-btn-default-disabled-border-color, var(--bs-border-color));
 }
 
+.btn-primary {
+  --bs-btn-color: #fff;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-active-color: #fff;
+  --bs-btn-disabled-color: #fff;
+}
+
 .btn-danger {
   --bs-btn-color: #fff;
   --bs-btn-hover-color: #fff;
