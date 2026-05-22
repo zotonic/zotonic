@@ -53,7 +53,6 @@
         input,
         select,
         textarea {
-            padding: 0 2px;
             border-bottom: 2px solid var(--z-admin-form-invalid-color);
         }
 
@@ -73,7 +72,6 @@
     input:not(:placeholder-shown):invalid,
     textarea:not(:placeholder-shown):invalid,
     .did-submit :invalid {
-        padding: 0 2px;
         border-bottom: 2px solid var(--z-admin-form-invalid-color);
     }
 }
@@ -86,7 +84,6 @@
 
 body .form-control,
 .form-control-small {
-    padding: 0 2px 1px 2px;
     border: 0;
     border-bottom: 1px solid var(--z-admin-form-control-border-color);
     box-shadow: none;
@@ -94,7 +91,6 @@ body .form-control,
     background-color: var(--z-admin-form-control-bg);
 
     &:focus {
-        padding: 0 2px;
         border-bottom: 2px solid var(--z-admin-form-label-focus-color);
         box-shadow: none;
         -webkit-box-shadow: none;
