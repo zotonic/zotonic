@@ -156,11 +156,11 @@ expand_rule_row(Prop, Row, Cs, NonMetaCs, Context) when is_binary(Prop) ->
             ]
             || Action <- Actions
         ]),
-    % When a rule applies to all categories (PropId = undefined) and is not category-exact,
-    % also emit a sentinel entry with CId = undefined for the view action. This is picked up
-    % by await_match in viewable_cg_categories/viewable_collab_categories, allowing
-    % normalize_category_visibility to detect that all categories are covered and produce the
-    % 'all' sentinel, which prevents the generation of a large category_id SQL filter.
+    %% When a rule applies to all categories (PropId = undefined) and is not category-exact,
+    %% also emit a sentinel entry with CId = undefined for the view action. This is picked up
+    %% by await_match in viewable_cg_categories/viewable_collab_categories, allowing
+    %% normalize_category_visibility to detect that all categories are covered and produce the
+    %% 'all' sentinel, which prevents the generation of a large category_id SQL filter.
     AllCatSentinel = case {Prop, PropId, IsCategoryExact, lists:member(view, Actions)} of
         {<<"category_id">>, undefined, false, true} ->
             [{ContentGroupId, {undefined, Visibility, view, IsOwner, IsAllow}, UserGroupId}];
