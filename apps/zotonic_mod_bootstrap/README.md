@@ -13,6 +13,9 @@ Included:
 
 The default `bootstrap.css` build includes Bootstrap 5 and the Bootstrap 3 compatibility layer.
 
+Use `bootstrap5.css` if you need the plain Bootstrap 5 build without the
+compatibility layer.
+
 Sites that include their own Bootstrap 5 build can include only the compatibility layer after their Bootstrap 5 CSS:
 
 ```django
