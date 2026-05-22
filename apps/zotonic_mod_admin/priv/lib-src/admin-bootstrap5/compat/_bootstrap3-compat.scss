@@ -793,6 +793,19 @@ button.close {
   }
 }
 
+.nav-stacked {
+  display: block;
+
+  > li {
+    float: none;
+
+    + li {
+      margin-top: $bs3-nav-tabs-link-margin-right;
+      margin-left: 0;
+    }
+  }
+}
+
 // -----------------------------------------------------------------------------
 // Pagination helpers
 .pagination {
