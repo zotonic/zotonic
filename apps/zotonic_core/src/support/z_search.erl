@@ -1012,7 +1012,8 @@ add_cat_check(Alias, Cats, Args, Context) ->
                     % Use range queries on the category_nr pivot column.
                     add_cat_check_pivot(Alias, Cats, Args, Context);
                 true ->
-                    % While the category tree is rebuilding, we use the less efficient version with joins.
+                    % While the category tree is rebuilding, fall back to a direct category_id check
+                    % because the pivot_category_nr values are not up to date.
                     add_cat_check_any(Alias, Cats, Args, Context)
             end
     end.
