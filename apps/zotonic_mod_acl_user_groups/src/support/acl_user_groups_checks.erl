@@ -397,7 +397,7 @@ acl_logon(#acl_logon{ id = UserId, options = Options }, Context) ->
 logon_options_readonly(#{ is_read_only := true }, Context) ->
     Context#context{ acl_is_read_only = true };
 logon_options_readonly(#{ is_read_only := false }, Context) ->
-    Context#context{ acl_is_read_only = true };
+    Context#context{ acl_is_read_only = false };
 logon_options_readonly(_Options, Context) ->
     Context.
 
