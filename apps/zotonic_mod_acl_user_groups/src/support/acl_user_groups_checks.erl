@@ -781,16 +781,6 @@ viewable_collab_sql(Lines, Alias, Args0, _Context) when is_list(Lines) ->
     ),
     {enclose_sql(ClauseOut), ArgsOut}.
 
-visibility_cats_sql(Visibility, all, Alias, Args0) ->
-    case Visibility of
-        undefined ->
-            {[], Args0};
-        _ ->
-            {
-                [Alias, ".visible_for = $", integer_to_list(length(Args0)+1)],
-                Args0 ++ [Visibility]
-            }
-    end;
 visibility_cats_sql(Visibility, Categories, Alias, Args0) ->
     {VisibilityFilter, Args1} =
         case Visibility of
@@ -804,6 +794,8 @@ visibility_cats_sql(Visibility, Categories, Alias, Args0) ->
         end,
     {CategoryFilter, Args2} =
         case Categories of
+            all ->
+                {[], Args1};
             [Category] ->
                 {
                     [Alias, ".category_id = $", integer_to_list(length(Args1)+1)],
@@ -820,18 +812,16 @@ visibility_cats_sql(Visibility, Categories, Alias, Args0) ->
 
 join_sql(Clause1, With, Clause2) ->
     case {lists:flatten(Clause1), lists:flatten(Clause2)} of
-        {[], FlatClause2} ->
-            FlatClause2;
-        {FlatClause1, []} ->
-            FlatClause1;
+        {[], FlatClause2} -> FlatClause2;
+        {FlatClause1, []} -> FlatClause1;
         {FlatClause1, FlatClause2} ->
-            FlatClause1 ++ " " ++ With ++ " " ++ FlatClause2
+            [FlatClause1, " ",  With,  " ", FlatClause2]
     end.
 
 enclose_sql(Clause) ->
     case lists:flatten(Clause) of
         [] -> [];
-        FlatClause -> "(" ++ FlatClause ++ ")"
+        FlatClause -> ["(", FlatClause, ")"]
     end.
 
 % Returns a list of tuples: {content_group_id, visibility, list(category_id)}
@@ -928,10 +918,9 @@ has_user_groups_1(undefined, Context) ->
 has_user_groups_1(1, Context) ->
     MgrId = m_rsc:rid(acl_user_group_managers, Context),
     Groups = m_edge:objects(1, hasusergroup, Context),
-    case {MgrId, lists:member(MgrId, Groups)} of
-        {undefined, _} -> Groups;
-        {_, true} -> Groups;
-        {_, false} -> Groups ++ [MgrId]
+    case MgrId =:= undefined orelse lists:member(MgrId, Groups) of
+        true -> Groups;
+        false -> [MgrId | Groups]
     end;
 has_user_groups_1(UserId, Context) ->
     case m_edge:objects(UserId, hasusergroup, Context) of
