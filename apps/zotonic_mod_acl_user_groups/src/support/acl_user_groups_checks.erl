@@ -99,13 +99,8 @@ max_upload_size_default() ->
 user_groups(#context{ acl = #aclug{ user_groups = Ids }}) ->
     Ids;
 user_groups(#context{ user_id = UserId, acl = admin } = Context) ->
-    MgrId = m_rsc:rid(acl_user_group_managers, Context),
-    Groups = m_edge:objects(UserId, hasusergroup, Context),
-    case {MgrId, lists:member(MgrId, Groups)} of
-        {undefined, _} -> Groups;
-        {_, true} -> Groups;
-        {_, false} -> Groups ++ [MgrId]
-    end;
+    ensure_included(m_rsc:rid(acl_user_group_managers, Context),
+                    m_edge:objects(UserId, hasusergroup, Context));
 user_groups(#context{ user_id = UserId } = Context) ->
     has_user_groups(UserId, Context).
 
@@ -748,22 +743,22 @@ viewable_cg_sql(Lines, Alias, Args0, Context) when is_list(Lines) ->
     CollabId = m_rsc:rid(acl_collaboration_group, Context),
     {ClauseOut, ArgsOut} = lists:foldl(
         fun ({CGId, Visibility, Categories}, {Clause, ArgsIn}) ->
-            {CGFilter, CGArgs} =
+                {CGFilter, CGArgs} =
                 {
-                    if
-                        % Note: rules on the 'acl_collaboration_group' category
-                        % itself apply to all resources whose 'content_group_id'
-                        % is _any_ of the existing collaboration groups
-                        CGId =:= CollabId ->
-                            [Alias, ".content_group_id IN (SELECT id FROM rsc WHERE category_id = $", integer_to_list(length(ArgsIn)+1), ")"];
-                        true ->
-                            [Alias, ".content_group_id = $", integer_to_list(length(ArgsIn)+1)]
-                    end,
-                    ArgsIn ++ [CGId]
+                 if
+                     % Note: rules on the 'acl_collaboration_group' category
+                     % itself apply to all resources whose 'content_group_id'
+                     % is _any_ of the existing collaboration groups
+                     CGId =:= CollabId ->
+                         [Alias, ".content_group_id IN (SELECT id FROM rsc WHERE category_id = $", integer_to_list(length(ArgsIn)+1), ")"];
+                     true ->
+                         [Alias, ".content_group_id = $", integer_to_list(length(ArgsIn)+1)]
+                 end,
+                 ArgsIn ++ [CGId]
                 },
-            {VisibCatsFilter, NewArgs} = visibility_cats_sql(Visibility, Categories, Alias, CGArgs),
-            NewClause = enclose_sql(join_sql(CGFilter, "AND", VisibCatsFilter)),
-            {join_sql(Clause, "OR", NewClause), NewArgs}
+                {VisibCatsFilter, NewArgs} = visibility_cats_sql(Visibility, Categories, Alias, CGArgs),
+                NewClause = enclose_sql(join_sql(CGFilter, "AND", VisibCatsFilter)),
+                {join_sql(Clause, "OR", NewClause), NewArgs}
         end,
         {[], Args0},
         Lines
@@ -914,21 +909,25 @@ has_user_groups(UserId, Context) ->
         }, Groups, Context).
 
 has_user_groups_1(undefined, Context) ->
-    [ m_rsc:rid(acl_user_group_anonymous, Context) ];
+    % Anonymous users are always in the anonymous user group
+    ensure_included(m_rsc:rid(acl_user_group_anonymous, Context), []);
 has_user_groups_1(1, Context) ->
-    MgrId = m_rsc:rid(acl_user_group_managers, Context),
-    Groups = m_edge:objects(1, hasusergroup, Context),
-    case MgrId =:= undefined orelse lists:member(MgrId, Groups) of
-        true -> Groups;
-        false -> [MgrId | Groups]
-    end;
+    % Admin is always in the managers user group
+    ensure_included(m_rsc:rid(acl_user_group_managers, Context),
+                    m_edge:objects(1, hasusergroup, Context));
 has_user_groups_1(UserId, Context) ->
-    case m_edge:objects(UserId, hasusergroup, Context) of
-        [] ->
-            [ m_rsc:rid(acl_user_group_members, Context) ];
-        Us ->
-            Us
+    % And normal users always in the members user group
+    ensure_included(m_rsc:rid(acl_user_group_members, Context),
+                    m_edge:objects(UserId, hasusergroup, Context)).
+
+ensure_included(undefined, Groups) ->
+    Groups;
+ensure_included(Id, Groups) ->
+    case lists:member(Id, Groups) of
+        true -> Groups;
+        false -> [Id | Groups]
     end.
+
 
 % Fetch all collaboration groups the current is member of.
 -spec has_collab_groups(#context{}) -> list(integer()).
