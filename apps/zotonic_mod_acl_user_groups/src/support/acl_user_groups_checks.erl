@@ -99,8 +99,8 @@ max_upload_size_default() ->
 user_groups(#context{ acl = #aclug{ user_groups = Ids }}) ->
     Ids;
 user_groups(#context{ user_id = UserId, acl = admin } = Context) ->
-    ensure_included(m_rsc:rid(acl_user_group_managers, Context),
-                    m_edge:objects(UserId, hasusergroup, Context));
+    ensure_include(m_rsc:rid(acl_user_group_managers, Context),
+                   m_edge:objects(UserId, hasusergroup, Context));
 user_groups(#context{ user_id = UserId } = Context) ->
     has_user_groups(UserId, Context).
 
@@ -776,6 +776,8 @@ viewable_collab_sql(Lines, Alias, Args0, _Context) when is_list(Lines) ->
     ),
     {enclose_sql(ClauseOut), ArgsOut}.
 
+visibility_cats_sql(_Visibility, [], _Alias, Args) ->
+    {[], Args};
 visibility_cats_sql(Visibility, Categories, Alias, Args0) ->
     {VisibilityFilter, Args1} =
         case Visibility of
@@ -789,17 +791,16 @@ visibility_cats_sql(Visibility, Categories, Alias, Args0) ->
         end,
     {CategoryFilter, Args2} =
         case Categories of
-            all ->
-                {[], Args1};
+            all -> {[], Args1};
             [Category] ->
                 {
-                    [Alias, <<".category_id = $">>, integer_to_binary(length(Args1)+1)],
-                    Args1 ++ [Category]
+                 [Alias, <<".category_id = $">>, integer_to_binary(length(Args1)+1)],
+                 Args1 ++ [Category]
                 };
             _ ->
                 {
-                    [Alias, <<".category_id = any($">>, integer_to_binary(length(Args1)+1), <<"::int[])">>],
-                    Args1 ++ [Categories]
+                 [Alias, <<".category_id = any($">>, integer_to_binary(length(Args1)+1), <<"::int[])">>],
+                 Args1 ++ [Categories]
                 }
         end,
     {join_sql(VisibilityFilter, <<"AND">>, CategoryFilter), Args2}.
@@ -910,19 +911,21 @@ has_user_groups(UserId, Context) ->
 
 has_user_groups_1(undefined, Context) ->
     % Anonymous users are always in the anonymous user group
-    ensure_included(m_rsc:rid(acl_user_group_anonymous, Context), []);
+    ensure_include(m_rsc:rid(acl_user_group_anonymous, Context), []);
 has_user_groups_1(1, Context) ->
     % Admin is always in the managers user group
-    ensure_included(m_rsc:rid(acl_user_group_managers, Context),
+    ensure_include(m_rsc:rid(acl_user_group_managers, Context),
                     m_edge:objects(1, hasusergroup, Context));
 has_user_groups_1(UserId, Context) ->
-    % And normal users always in the members user group
-    ensure_included(m_rsc:rid(acl_user_group_members, Context),
-                    m_edge:objects(UserId, hasusergroup, Context)).
+    % Users with no assigned user groups are added to the members user group.
+    case m_edge:objects(UserId, hasusergroup, Context) of
+        [] -> ensure_include(m_rsc:rid(acl_user_group_members, Context), []);
+        Groups -> Groups
+    end.
 
-ensure_included(undefined, Groups) ->
+ensure_include(undefined, Groups) ->
     Groups;
-ensure_included(Id, Groups) ->
+ensure_include(Id, Groups) ->
     case lists:member(Id, Groups) of
         true -> Groups;
         false -> [Id | Groups]
