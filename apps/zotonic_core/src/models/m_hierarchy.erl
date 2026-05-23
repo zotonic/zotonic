@@ -218,7 +218,7 @@ contains(Name0, Id, Context) when is_integer(Id) ->
             end
         end,
         {hierarchy_contains, Name, Id},
-        3600,
+        ?HOUR,
         [{hierarchy, Name}, Id],
         Context);
 contains(Name, Id, Context) ->
@@ -230,14 +230,15 @@ all(Name0, Context) ->
     z_depcache:memo(
         fun() ->
             Ids = z_db:q(
-                "SELECT id FROM hierarchy "
-                "WHERE name = $1",
+                "SELECT DISTINCT(id) FROM hierarchy "
+                "WHERE name = $1 "
+                "ORDER BY id ASC",
                 [Name],
                 Context),
-            lists:usort([ Id || {Id} <- Ids ])
+            [ Id || {Id} <- Ids ]
         end,
         {hierarchy_all, Name},
-        3600,
+        ?HOUR,
         [{hierarchy, Name}],
         Context).
 
