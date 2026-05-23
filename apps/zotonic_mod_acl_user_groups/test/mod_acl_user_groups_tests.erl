@@ -64,21 +64,21 @@ normalize_category_visibility_explicit_categories_unchanged_test() ->
 
 visibility_cats_sql_all_categories_with_visibility_test() ->
     ?assertEqual(
-        {"r.visible_for = $1", [0]},
+        {<<"r.visible_for = $1">>, [0]},
         flatten_clause(acl_user_groups_checks:visibility_cats_sql(0, all, "r", []))
     ).
 
 
 visibility_cats_sql_all_categories_without_visibility_test() ->
     ?assertEqual(
-        {[], []},
+        {<<>>, []},
         flatten_clause(acl_user_groups_checks:visibility_cats_sql(undefined, all, "r", []))
     ).
 
 
 visibility_cats_sql_explicit_categories_unchanged_test() ->
     ?assertEqual(
-        {"r.visible_for = $1 AND r.category_id = any($2::int[])", [0, [10, 11]]},
+        {<<"r.visible_for = $1 AND r.category_id = any($2::int[])">>, [0, [10, 11]]},
         flatten_clause(acl_user_groups_checks:visibility_cats_sql(0, [10, 11], "r", []))
     ).
 
@@ -92,7 +92,7 @@ normalize_result(Result) ->
 
 
 flatten_clause({Clause, Args}) ->
-    {lists:flatten(Clause), Args}.
+    {iolist_to_binary(Clause), Args}.
 
 
 %% ---- restrict_viewable_cats ----
