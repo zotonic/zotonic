@@ -12,7 +12,7 @@ pkgs.mkShell {
     gettext
     libiconv
     (if stdenv.isDarwin then fswatch else inotify-tools)
-    python
+    python310
     python310Packages.pip
   ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) libcap;
 }
