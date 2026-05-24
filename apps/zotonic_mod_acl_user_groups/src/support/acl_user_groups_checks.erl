@@ -143,11 +143,7 @@ can_insert_category(CGId, CatId, Context) ->
     CatId1 = m_rsc:rid(CatId, Context),
     case is_collab_group_member(CGId1, Context) of
         true ->
-            case mod_acl_user_groups:await_lookup({collab, {CatId1, undefined, insert, false}, collab}, Context) of
-                true -> true;
-                false -> false;
-                undefined -> false
-            end
+            is_allowed(mod_acl_user_groups:await_lookup({collab, {CatId1, undefined, insert, false}, collab}, Context))
             orelse can_insert_category_rsc_ug(CGId1, CatId1, true, Context);
         false ->
             can_insert_category_rsc_ug(CGId1, CatId1, false, Context)
@@ -174,11 +170,7 @@ can_insert_category_collab(Cat, Context) ->
         [] ->
             false;
         _Groups ->
-            case mod_acl_user_groups:await_lookup({collab, {CatId, undefined, insert, false}, collab}, Context) of
-                true -> true;
-                false -> false;
-                undefined -> false
-            end
+            is_allowed(mod_acl_user_groups:await_lookup({collab, {CatId, undefined, insert, false}, collab}, Context))
     end.
 
 
@@ -777,7 +769,7 @@ viewable_collab_sql(Lines, Alias, Args0, _Context) when is_list(Lines) ->
     {enclose_sql(ClauseOut), ArgsOut}.
 
 visibility_cats_sql(_Visibility, [], _Alias, Args) ->
-    {[], Args};
+    {[<<"false">>], Args};
 visibility_cats_sql(Visibility, Categories, Alias, Args0) ->
     {VisibilityFilter, Args1} =
         case Visibility of
@@ -985,7 +977,7 @@ can_insert_with_ug(Cat, Context) ->
     CatId = m_rsc:rid(Cat, Context),
     lists:any(
         fun(GId) ->
-                true =:= mod_acl_user_groups:await_lookup({CatId, insert, GId}, Context)
+                is_allowed(mod_acl_user_groups:await_lookup({CatId, insert, GId}, Context))
         end,
         user_groups(Context)
     ).
@@ -1048,12 +1040,12 @@ can_rsc_for_collab(Id, Action, CGId, CatId, Visibility, UGs, Context) ->
 
 % User is member of collab group CGId, check ACL rules for collaboration groups
 can_rsc_collab_member(Id, Action, CGId, CatId, Visibility, Context) ->
-    true =:= mod_acl_user_groups:await_lookup({collab, {CatId, Visibility, Action, false}, collab}, Context)
+    is_allowed(mod_acl_user_groups:await_lookup({collab, {CatId, Visibility, Action, false}, collab}, Context))
     orelse (
-        true =:= mod_acl_user_groups:await_lookup({collab, {CatId, Visibility, Action, true}, collab}, Context)
+        is_allowed(mod_acl_user_groups:await_lookup({collab, {CatId, Visibility, Action, true}, collab}, Context))
         andalso (
-          is_owner(Id, Context)
-          orelse is_collab_group_manager(CGId, Context)
+            is_owner(Id, Context)
+            orelse is_collab_group_manager(CGId, Context)
         )
     ) orelse (
         % when there isn't a rule for the given visibility,
@@ -1061,7 +1053,6 @@ can_rsc_collab_member(Id, Action, CGId, CatId, Visibility, Context) ->
         Visibility =/= undefined andalso
         can_rsc_collab_member(Id, Action, CGId, CatId, undefined, Context)
     ).
-
 
 % User is member of collab group: check configured permissions for the collab group resource itself.
 is_collab_group_member_action_allowed(_CGId, view, _Context) ->
@@ -1111,10 +1102,11 @@ can_rsc_non_collab_rules(Id, Action, CGId, CatId, Visibility, UGs, Context) ->
 can_rsc_ug(CGId, CatId, Visibility, Action, IsOwner, UGs, Context) ->
     case lists:any(
            fun(GId) ->
-                   true =:= mod_acl_user_groups:await_lookup({CGId, {CatId, Visibility, Action, IsOwner}, GId}, Context)
+                   is_allowed(
+                     mod_acl_user_groups:await_lookup({CGId, {CatId, Visibility, Action, IsOwner}, GId}, Context)
+                    )
            end,
-           UGs
-          )
+           UGs)
     of
         true -> true;
         false when Visibility =/= undefined ->
@@ -1126,12 +1118,12 @@ can_rsc_ug(CGId, CatId, Visibility, Action, IsOwner, UGs, Context) ->
 is_owner(insert_rsc, _Context) ->
     true;
 is_owner(Id, #context{ user_id = UserId } = Context) ->
-    true =:= z_notifier:first(#acl_is_owner{
-                                 id = Id,
-                                 creator_id = m_rsc:p_no_acl(Id, creator_id, Context),
-                                 user_id = UserId
-                                },
-                              Context).
+    is_allowed(z_notifier:first(#acl_is_owner{
+                                   id = Id,
+                                   creator_id = m_rsc:p_no_acl(Id, creator_id, Context),
+                                   user_id = UserId
+                                  },
+                                Context)).
 
 %% @doc Check if the user has a collaboration group in common with another user.
 has_common_collab_group(_Id, #context{ acl = #aclug{ collab_groups = [] }}) ->
@@ -1174,7 +1166,14 @@ can_media(Mime, Size, Context) ->
 can_module(Action, ModuleName, Context) ->
     lists:any(
       fun(GId) ->
-              true =:= mod_acl_user_groups:await_lookup({ModuleName, Action, GId}, Context)
+              is_allowed(mod_acl_user_groups:await_lookup({ModuleName, Action, GId}, Context))
       end,
       user_groups(Context)
      ).
+
+is_allowed(true) -> true;
+is_allowed(false) -> false;
+is_allowed(undefined) -> false;
+is_allowed(_Other) ->
+    % ACL lookup unexpected return value
+    erlang:error(badarg).
