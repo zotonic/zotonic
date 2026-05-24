@@ -873,9 +873,9 @@ normalize_category_visibility(CatVisCouples) ->
 
 publish_check(Alias) ->
     [
-        Alias, <<".is_published = true and ">>,
-        Alias, <<".publication_start <= now() and ">>,
-        Alias, <<".publication_end >= now()">>
+        Alias, <<".is_published = true and now() between">>,
+        Alias, <<".publication_start and ">>,
+        Alias, <<".publication_end">>
     ].
 
 -spec session_state( z:context() ) -> publish | edit.
