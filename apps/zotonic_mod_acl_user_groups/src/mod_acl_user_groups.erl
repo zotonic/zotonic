@@ -374,16 +374,11 @@ See also
 -export([
     is_acl_admin/1,
     status/1,
-    table/1,
-    table/2,
-    await_table/1,
-    await_table/2,
-    await_table/3,
-    lookup/2,
-    await_lookup/2,
-    match/2,
-    await_match/2,
+
+    expand_path/2,
+    rebuild/1,
     rebuild/2,
+
     observe_admin_menu/3,
     observe_rsc_update_done/2,
     observe_rsc_delete/2,
@@ -395,6 +390,20 @@ See also
     name/1,
     manage_schema/2,
     manage_data/2
+]).
+
+% CURRENT API - TODO: PHASE OUT:
+-export([
+    % table/1,
+    % table/2,
+    % await_table/1,
+    % await_table/2,
+    % await_table/3,
+    % lookup/2,
+    % match/2,
+
+    await_lookup/2,
+    await_match/2
 ]).
 
 % Access control hooks
@@ -882,6 +891,15 @@ await_table(State, Timeout, Context) when Timeout > 0 ->
             TId
     end.
 
+% Expand the given user group id(s) to its full user group's path
+-spec expand_path(list(m_rsc:resource_id())|m_rsc:resource_id(), #context{}) -> list(m_rsc:resource_id()).
+expand_path(Ids, Context) when is_list(Ids) ->
+    Ids2 = [ expand_path(Id, Context) || Id <- Ids ],
+    Ids3 = [ Xs || Xs <- Ids2, Xs =/= undefined ],
+    lists:usort(lists:flatten(Ids3));
+expand_path(Id, Context) ->
+    lookup(Id, Context).
+
 lookup(Key, Context) ->
     lookup1(table(Context), Key).
 
@@ -895,9 +913,6 @@ lookup1(TId, Key) ->
         [] -> undefined;
         [{_,V}|_] -> V
     end.
-
-match(Pattern, Context) ->
-    match1(table(Context), Pattern).
 
 await_match(Pattern, Context) ->
     match1(await_table(Context), Pattern).

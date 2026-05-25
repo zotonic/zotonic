@@ -106,12 +106,8 @@ user_groups(#context{ user_id = UserId } = Context) ->
 
 %% @doc Return all user groups the user is directly or indirectly member of.
 user_groups_all(Context) ->
-    user_groups_expand(user_groups(Context), Context).
+    mod_acl_user_groups:expand_path(user_groups(Context), Context).
 
-user_groups_expand(Ids, Context) ->
-    Ids2 = [ mod_acl_user_groups:lookup(Id, Context) || Id <- Ids ],
-    Ids3 = [ Xs || Xs <- Ids2, Xs =/= undefined ],
-    lists:usort(lists:flatten(Ids3)).
 
 %% @doc API to check if a category can be updated in a content-group
 can_update_category(_, _, #context{ acl = admin }) ->
