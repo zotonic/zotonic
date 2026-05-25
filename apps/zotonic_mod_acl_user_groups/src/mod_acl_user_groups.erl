@@ -375,7 +375,6 @@ See also
     is_acl_admin/1,
     status/1,
 
-    expand_path/2,
     rebuild/1,
     rebuild/2,
 
@@ -851,10 +850,6 @@ rebuild(edit, Context) ->
 rebuild(publish, Context) ->
     gen_server:cast(name(Context), rebuild_publish).
 
--spec table(#context{}) -> ets:tab() | undefined.
-table(Context) ->
-    table(acl_user_groups_checks:state(Context), Context).
-
 -spec await_table(#context{}) -> ets:tab() | undefined.
 await_table(Context) ->
     await_table(acl_user_groups_checks:state(Context), Context).
@@ -890,18 +885,6 @@ await_table(State, Timeout, Context) when Timeout > 0 ->
         TId ->
             TId
     end.
-
-% Expand the given user group id(s) to its full user group's path
--spec expand_path(list(m_rsc:resource_id())|m_rsc:resource_id(), #context{}) -> list(m_rsc:resource_id()).
-expand_path(Ids, Context) when is_list(Ids) ->
-    Ids2 = [ expand_path(Id, Context) || Id <- Ids ],
-    Ids3 = [ Xs || Xs <- Ids2, Xs =/= undefined ],
-    lists:usort(lists:flatten(Ids3));
-expand_path(Id, Context) ->
-    lookup(Id, Context).
-
-lookup(Key, Context) ->
-    lookup1(table(Context), Key).
 
 await_lookup(Key, Context) ->
     lookup1(await_table(Context), Key).

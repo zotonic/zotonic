@@ -106,7 +106,27 @@ user_groups(#context{ user_id = UserId } = Context) ->
 
 %% @doc Return all user groups the user is directly or indirectly member of.
 user_groups_all(Context) ->
-    mod_acl_user_groups:expand_path(user_groups(Context), Context).
+    expand_path(user_groups(Context), Context).
+
+% Expand the given user group id(s) to its full user group's path (cached)
+-spec expand_path(list(m_rsc:resource_id())|m_rsc:resource_id(), #context{}) -> list(m_rsc:resource_id()).
+expand_path(Ids, Context) when is_list(Ids) ->
+    Ids2 = [ expand_path(Id, Context) || Id <- Ids ],
+    Ids3 = [ Xs || Xs <- Ids2, Xs =/= undefined ],
+    lists:usort(lists:flatten(Ids3));
+expand_path(Id, Context) ->
+    UsergroupPathMap = z_depcache:memo(
+        fun () ->
+            UserTree = m_hierarchy:menu(acl_user_group, Context),
+            UsergroupPaths = acl_user_groups_rules:expand_group_path(UserTree),
+            maps:from_list(UsergroupPaths)
+        end,
+        acl_user_group_paths,
+        ?DAY,
+        [hierarchy, {hierarchy, acl_user_group}],
+        Context
+    ),
+    maps:get(Id, UsergroupPathMap, []).
 
 
 %% @doc API to check if a category can be updated in a content-group
@@ -139,7 +159,12 @@ can_insert_category(CGId, CatId, Context) ->
     CatId1 = m_rsc:rid(CatId, Context),
     case is_collab_group_member(CGId1, Context) of
         true ->
-            is_allowed(mod_acl_user_groups:await_lookup({collab, {CatId1, undefined, insert, false}, collab}, Context))
+            % TODO: replace with DB query, cache this info?
+            case mod_acl_user_groups:await_lookup({collab, {CatId1, undefined, insert, false}, collab}, Context) of
+                true -> true;
+                false -> false;
+                undefined -> false
+            end
             orelse can_insert_category_rsc_ug(CGId1, CatId1, true, Context);
         false ->
             can_insert_category_rsc_ug(CGId1, CatId1, false, Context)
@@ -166,7 +191,12 @@ can_insert_category_collab(Cat, Context) ->
         [] ->
             false;
         _Groups ->
-            is_allowed(mod_acl_user_groups:await_lookup({collab, {CatId, undefined, insert, false}, collab}, Context))
+            % TODO: replace with DB query, cache this info?
+            case mod_acl_user_groups:await_lookup({collab, {CatId, undefined, insert, false}, collab}, Context) of
+                true -> true;
+                false -> false;
+                undefined -> false
+            end
     end.
 
 
@@ -988,7 +1018,12 @@ can_insert_with_ug(Cat, Context) ->
     CatId = m_rsc:rid(Cat, Context),
     lists:any(
         fun(GId) ->
-                is_allowed(mod_acl_user_groups:await_lookup({CatId, insert, GId}, Context))
+            % TODO: replace with DB query, cache this info?
+            case mod_acl_user_groups:await_lookup({CatId, insert, GId}, Context) of
+                true -> true;
+                false -> false;
+                undefined -> false
+            end
         end,
         user_groups(Context)
     ).
@@ -1051,7 +1086,12 @@ can_rsc_for_collab(Id, Action, CGId, CatId, Visibility, UGs, Context) ->
 
 % User is member of collab group CGId, check ACL rules for collaboration groups
 can_rsc_collab_member(Id, Action, CGId, CatId, Visibility, Context) ->
-    is_allowed(mod_acl_user_groups:await_lookup({collab, {CatId, Visibility, Action, false}, collab}, Context))
+    % TODO: replace with DB query, cache this info?
+    case mod_acl_user_groups:await_lookup({collab, {CatId, Visibility, Action, false}, collab}, Context) of
+        true -> true;
+        false -> false;
+        undefined -> false
+    end
     orelse (
         is_allowed(mod_acl_user_groups:await_lookup({collab, {CatId, Visibility, Action, true}, collab}, Context))
         andalso (
@@ -1111,6 +1151,7 @@ can_rsc_non_collab_rules(Id, Action, CGId, CatId, Visibility, UGs, Context) ->
 
 % Check against the ACL rules for user-groups and content-groups
 can_rsc_ug(CGId, CatId, Visibility, Action, IsOwner, UGs, Context) ->
+    % TODO: replace with DB query, cache this info?
     lists:any(
         fun(GId) ->
             case mod_acl_user_groups:await_lookup({CGId, {CatId, Visibility, Action, IsOwner}, GId}, Context) of
@@ -1175,6 +1216,7 @@ can_media(Mime, Size, Context) ->
 
 %% @doc See if the user can do something with the given module
 can_module(Action, ModuleName, Context) ->
+    % TODO: replace with DB query, cache this info?
     lists:any(
       fun(GId) ->
               is_allowed(mod_acl_user_groups:await_lookup({ModuleName, Action, GId}, Context))
