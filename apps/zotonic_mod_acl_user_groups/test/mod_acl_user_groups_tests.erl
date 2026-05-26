@@ -82,12 +82,11 @@ visibility_cats_sql_explicit_categories_unchanged_test() ->
         flatten_clause(acl_user_groups_checks:visibility_cats_sql(0, [10, 11], "r", []))
     ).
 
-visibility_cats_sql_no_categories() ->
+visibility_cats_sql_no_categories_test() ->
     ?assertEqual(
-        {<<>>, []},
+        {<<"false">>, []},
         flatten_clause(acl_user_groups_checks:visibility_cats_sql(0, [], "r", []))
     ).
-
 
 normalize_result(Result) ->
     maps:map(
