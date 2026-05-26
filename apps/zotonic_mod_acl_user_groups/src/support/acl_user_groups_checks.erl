@@ -39,7 +39,9 @@
         acl_context_authenticated/1,
         acl_add_sql_check/2,
 
-        rsc_update_check/3
+        rsc_update_check/3,
+
+        flush/1
     ]).
 
 -export([
@@ -123,7 +125,7 @@ expand_path(Id, Context) ->
         end,
         acl_user_group_paths,
         ?DAY,
-        [hierarchy, {hierarchy, acl_user_group}],
+        [hierarchy, {hierarchy, acl_user_group}, acl_user_groups_checks],
         Context
     ),
     maps:get(Id, UsergroupPathMap, []).
@@ -159,7 +161,6 @@ can_insert_category(CGId, CatId, Context) ->
     CatId1 = m_rsc:rid(CatId, Context),
     case is_collab_group_member(CGId1, Context) of
         true ->
-            % TODO: replace with DB query, cache this info?
             case mod_acl_user_groups:await_lookup({collab, {CatId1, undefined, insert, false}, collab}, Context) of
                 true -> true;
                 false -> false;
@@ -191,7 +192,6 @@ can_insert_category_collab(Cat, Context) ->
         [] ->
             false;
         _Groups ->
-            % TODO: replace with DB query, cache this info?
             case mod_acl_user_groups:await_lookup({collab, {CatId, undefined, insert, false}, collab}, Context) of
                 true -> true;
                 false -> false;
@@ -1018,7 +1018,6 @@ can_insert_with_ug(Cat, Context) ->
     CatId = m_rsc:rid(Cat, Context),
     lists:any(
         fun(GId) ->
-            % TODO: replace with DB query, cache this info?
             case mod_acl_user_groups:await_lookup({CatId, insert, GId}, Context) of
                 true -> true;
                 false -> false;
@@ -1086,7 +1085,6 @@ can_rsc_for_collab(Id, Action, CGId, CatId, Visibility, UGs, Context) ->
 
 % User is member of collab group CGId, check ACL rules for collaboration groups
 can_rsc_collab_member(Id, Action, CGId, CatId, Visibility, Context) ->
-    % TODO: replace with DB query, cache this info?
     case mod_acl_user_groups:await_lookup({collab, {CatId, Visibility, Action, false}, collab}, Context) of
         true -> true;
         false -> false;
@@ -1151,7 +1149,6 @@ can_rsc_non_collab_rules(Id, Action, CGId, CatId, Visibility, UGs, Context) ->
 
 % Check against the ACL rules for user-groups and content-groups
 can_rsc_ug(CGId, CatId, Visibility, Action, IsOwner, UGs, Context) ->
-    % TODO: replace with DB query, cache this info?
     lists:any(
         fun(GId) ->
             case mod_acl_user_groups:await_lookup({CGId, {CatId, Visibility, Action, IsOwner}, GId}, Context) of
@@ -1216,17 +1213,35 @@ can_media(Mime, Size, Context) ->
 
 %% @doc See if the user can do something with the given module
 can_module(Action, ModuleName, Context) ->
-    % TODO: replace with DB query, cache this info?
     lists:any(
-      fun(GId) ->
-              is_allowed(mod_acl_user_groups:await_lookup({ModuleName, Action, GId}, Context))
-      end,
-      user_groups(Context)
-     ).
+        fun(GId) -> can_module(GId, Action, ModuleName, Context) end,
+        user_groups(Context)
+    ).
 
-is_allowed(true) -> true;
-is_allowed(false) -> false;
-is_allowed(undefined) -> false;
-is_allowed(_Other) ->
-    % ACL lookup unexpected return value
-    erlang:error(badarg).
+can_module(GId, Action, ModuleName, Context) ->
+    State = state(Context),
+    ModulePermissions = z_depcache:memo(
+        fun () ->
+            ModuleRules = acl_user_groups_rules:expand_module(State, Context),
+            maps:from_list(lists:map(
+                fun ({RuleModName, RuleModAction, RuleGroupId, Allow}) ->
+                    {{RuleGroupId, RuleModAction, RuleModName}, Allow}
+                end,
+                ModuleRules
+            ))
+        end,
+        {acl_can_module, State},
+        ?DAY,
+        [
+            hierarchy,
+            {hierarchy, acl_user_group},
+            {z_module_manager, active, z_context:site(Context)},
+            acl_user_groups_checks
+        ],
+        Context
+    ),
+    maps:get({GId, Action, ModuleName}, ModulePermissions, false).
+
+%% @doc Flush the caches kept by this module
+flush(Context) ->
+    z_depcache:flush(acl_user_groups_checks, Context).
