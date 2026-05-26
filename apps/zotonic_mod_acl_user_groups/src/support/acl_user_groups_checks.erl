@@ -1111,7 +1111,7 @@ can_rsc_ug(CGId, CatId, Visibility, Action, IsOwner, UGs, Context) ->
                     % when there isn't a rule for the given visibility,
                     % also check if there is a rule that applies to any:
                     Visibility =/= undefined andalso
-                    can_rsc_ug(CGId, CatId, undefined, Action, IsOwner, UGs, Context)
+                    is_allowed(mod_acl_user_groups:await_lookup({CGId, {CatId, undefined, Action, IsOwner}, GId}, Context))
             end
         end,
         UGs
