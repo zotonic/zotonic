@@ -1100,20 +1100,20 @@ can_rsc_non_collab_rules(Id, Action, CGId, CatId, Visibility, UGs, Context) ->
 
 % Check against the ACL rules for user-groups and content-groups
 can_rsc_ug(CGId, CatId, Visibility, Action, IsOwner, UGs, Context) ->
-    case lists:any(
-           fun(GId) ->
-                   is_allowed(
-                     mod_acl_user_groups:await_lookup({CGId, {CatId, Visibility, Action, IsOwner}, GId}, Context)
-                    )
-           end,
-           UGs)
-    of
-        true -> true;
-        false when Visibility =/= undefined ->
-            can_rsc_ug(CGId, CatId, undefined, Action, IsOwner, UGs, Context);
-        false ->
-            false
-    end.
+    lists:any(
+        fun(GId) ->
+            case mod_acl_user_groups:await_lookup({CGId, {CatId, Visibility, Action, IsOwner}, GId}, Context) of
+                true -> true;
+                false -> false;
+                undefined ->
+                    % when there isn't a rule for the given visibility,
+                    % also check if there is a rule that applies to any:
+                    Visibility =/= undefined andalso
+                    can_rsc_ug(CGId, CatId, undefined, Action, IsOwner, UGs, Context)
+            end
+        end,
+        UGs
+    ).
 
 is_owner(insert_rsc, _Context) ->
     true;
