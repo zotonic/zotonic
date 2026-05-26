@@ -50,7 +50,7 @@ compile: $(REBAR)
 dev:
 	docker-compose run --rm --service-ports zotonic sh
 
-test: compile
+test: $(REBAR)
 	ERL_COMPILER_OPTIONS="[{d,'TEST'}]" ZOTONIC_UMBRELLA=1 $(REBAR) $(REBAR_OPTS) compile
 	bin/zotonic runtests
 
