@@ -873,7 +873,7 @@ normalize_category_visibility(CatVisCouples) ->
 
 publish_check(Alias) ->
     [
-        Alias, <<".is_published = true and now() between">>,
+        Alias, <<".is_published = true and now() between ">>,
         Alias, <<".publication_start and ">>,
         Alias, <<".publication_end">>
     ].
