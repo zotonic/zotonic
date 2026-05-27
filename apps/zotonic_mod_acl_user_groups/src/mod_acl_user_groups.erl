@@ -1027,7 +1027,9 @@ handle_info({'ETS-TRANSFER', TId, _FromPid, publish}, State) ->
     ?LOG_DEBUG("[mod_acl_user_groups] 'ETS-TRANSFER' for 'publish' (~p)", [TId]),
     gproc_new_ets(TId, publish, State#state.site),
     State1 = store_new_ets(TId, publish, State),
-    z_mqtt:publish(<<"model/acl_user_groups/event/acl-rules/publish">>, true, z_context:new(State#state.site)),
+    Context = z_context:new(State#state.site),
+    z_depcache:flush(mod_acl_user_groups, Context),
+    z_mqtt:publish(<<"model/acl_user_groups/event/acl-rules/publish">>, true, Context),
     {noreply, State1};
 handle_info({'ETS-TRANSFER', TId, _FromPid, edit}, State) ->
     ?LOG_DEBUG("[mod_acl_user_groups] 'ETS-TRANSFER' for 'edit' (~p)", [TId]),

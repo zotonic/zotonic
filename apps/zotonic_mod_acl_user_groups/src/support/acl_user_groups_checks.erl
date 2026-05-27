@@ -814,6 +814,14 @@ enclose_sql(Clause) ->
 
 % Returns a list of tuples: {content_group_id, visibility, list(category_id)}
 viewable_cg_categories(CGId, UGs, IsAllow, Context) ->
+    % Multiple acl table scans are needed to collect the viewable categories.
+    z_depcache:memo(fun() -> viewable_cg_categories1(CGId, UGs, IsAllow, Context) end,
+                    {viewable_cg_categories, CGId, UGs, IsAllow},
+                    ?HOUR,
+                    [mod_acl_user_groups],
+                    Context).
+
+viewable_cg_categories1(CGId, UGs, IsAllow, Context) ->
     % find all the categories+visibility that can/not be viewed in this CG by any UG:
     CatVisCouples = lists:flatmap(
         fun (UGId) ->
@@ -833,6 +841,13 @@ viewable_cg_categories(CGId, UGs, IsAllow, Context) ->
 
 % Returns a list of tuples: {visibility, list(category_id)}
 viewable_collab_categories(IsAllow, Context) ->
+    z_depcache:memo(fun() -> viewable_collab_categories1(IsAllow, Context) end,
+                    {viewable_collab_categories, IsAllow},
+                    ?DAY,
+                    [mod_acl_user_groups],
+                    Context).
+
+viewable_collab_categories1(IsAllow, Context) ->
     % find all the categories+visibility that can/not be viewed in this CG by any UG:
     CatVisCouples = lists:map(
         fun ([CatId, Visibility]) -> {CatId, Visibility} end,
