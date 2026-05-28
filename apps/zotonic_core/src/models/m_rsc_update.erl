@@ -1110,7 +1110,6 @@ update_transaction_filter_props(#rscupd{id = Id} = RscUpd, UpdateProps, Raw, Con
             try
                 throw_if_category_not_allowed(Id, SafeSlugProps, RscUpd#rscupd.is_acl_check, Context),
                 Result = update_transaction_fun_insert(RscUpd, SafeSlugProps, Raw, UpdateProps, Context),
-                ?DEBUG({insert_edges, Edges}),
                 insert_edges(Result, Edges, Context)
             catch
                 throw:{error, _} = Error -> {rollback, Error}
