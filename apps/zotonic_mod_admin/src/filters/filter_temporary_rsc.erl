@@ -66,6 +66,7 @@ See [mod_admin](/id/doc_module_mod_admin), [mod_server_storage](/id/doc_module_m
 %% Check every hour if the page can be deleted.
 -define(INACTIVE_CHECK_DELAY, 3600).
 
+-include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("kernel/include/logger.hrl").
 
 temporary_rsc(RscId, Context) ->
@@ -142,6 +143,7 @@ is_creator(RscId, Context) ->
 %% --- internal functions ---
 
 make_temporary_rsc(Props, Context) ->
+    ?DEBUG(Props),
     make_temporary_rsc( z_context:session_id(Context), Props, Context ).
 
 make_temporary_rsc({error, _}, _Props, _Context) ->

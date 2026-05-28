@@ -1110,6 +1110,7 @@ update_transaction_filter_props(#rscupd{id = Id} = RscUpd, UpdateProps, Raw, Con
             try
                 throw_if_category_not_allowed(Id, SafeSlugProps, RscUpd#rscupd.is_acl_check, Context),
                 Result = update_transaction_fun_insert(RscUpd, SafeSlugProps, Raw, UpdateProps, Context),
+                ?DEBUG({insert_edges, Edges}),
                 insert_edges(Result, Edges, Context)
             catch
                 throw:{error, _} = Error -> {rollback, Error}
@@ -1164,38 +1165,66 @@ insert_edges({ok, Id, _Res} = Result, Edges, Context) ->
             % ignore edge insertion error
             Result;
         false ->
-            lists:foreach(
-                fun
-                    ({_ ,<<>>, _}) ->
-                        ok;
-                    ({_ ,undefined, _}) ->
-                        ok;
-                    ({_ ,_, undefined}) ->
-                        ok;
-                    ({object, Pred, Es}) when is_list(Es) ->
-                        Es1 = lists:filtermap(
-                            fun(EId) ->
-                                case m_rsc:rid(EId, Context) of
-                                    undefined -> false;
-                                    Rid -> {true, Rid}
-                                end
-                            end,
-                            Es),
-                        m_edge:replace(Id, Pred, Es1, Context);
-                    ({object, Pred, E}) ->
-                        m_edge:insert(Id, Pred, E, Context);
-                    ({subject, Pred, Es}) when is_list(Es) ->
-                        lists:map(
-                            fun(E) -> m_edge:insert(E, Pred, Id, Context) end,
-                            Es);
-                    ({subject, Pred, E}) ->
-                        m_edge:insert(E, Pred, Id, Context)
-                end,
-                Edges),
+            lists:foreach(fun({Direction, Predicate, Things}) ->
+                                  insert_edge(Id, Direction, Predicate, Things, Context)
+                          end,
+                          Edges),
             Result
     end;
 insert_edges({error, _} = Error , _, _Context) ->
     Error.
+
+insert_edge(_RscId, _Direction, <<>>, _E, _Context) -> ok;
+insert_edge(_RscId, _Direction, undefined, _E, _Context) -> ok;
+insert_edge(_RscId, _Direction, _Predicate, <<>>, _Context) -> ok;
+insert_edge(_RscId, _Direction, _Predicate, undefined, _Context) -> ok;
+insert_edge(Rsc, object, Predicate, Things, Context) when is_list(Things) ->
+    % For outgoing (object) edges we assume a full edit: the given list
+    % represents the complete set of edges for this predicate, so any
+    % edges not in the list are removed.
+    Ids = lists:filtermap(
+            fun(Thing) ->
+                    case m_rsc:rid(Thing, Context) of
+                        undefined -> false;
+                        Rid -> {true, Rid}
+                    end
+            end,
+            Things),
+    case m_edge:replace(Rsc, Predicate, Ids, Context) of
+        ok ->
+            ok;
+        {error, Reason} ->
+            ?LOG_WARNING(#{ text => <<"Could not replace edges during resource update">>,
+                            reason => Reason,
+                            rsc => Rsc,
+                            in => zotonic_core,
+                            predicate => Predicate,
+                            direction => object,
+                            things => Things
+                          }),
+            ok
+    end;
+insert_edge(Rsc, subject, Predicate, Things, Context) when is_list(Things) ->
+    lists:foreach(fun(Thing) -> insert_edge(Rsc, subject, Predicate, Thing, Context) end, Things);
+insert_edge(Rsc, Direction, Predicate, Thing, Context) ->
+    {SubjectId, ObjectId} = case Direction of
+                                object  -> {Rsc, Thing};
+                                subject -> {Thing, Rsc}
+                            end,
+    case m_edge:insert(SubjectId, Predicate, ObjectId, Context) of
+        {ok, _} ->
+            ok;
+        {error, Reason} ->
+            ?LOG_WARNING(#{ text => <<"Could not insert edge during resource update">>,
+                            reason => Reason,
+                            rsc => Rsc,
+                            in => zotonic_core,
+                            predicate => Predicate,
+                            direction => Direction,
+                            thing => Thing
+                          }),
+            ok
+    end.
 
 escape_props(true, Props, Context) ->
     z_sanitize:escape_props(Props, Context);
