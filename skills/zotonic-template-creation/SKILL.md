@@ -98,7 +98,13 @@ description: Use when creating, refactoring, or reviewing Zotonic template_compi
 ## Scomps
 
 - Scomps are screen components: server-side template tags that render HTML, JavaScript, or wire actions from Erlang.
-- Use scomps as normal template tags, for example `{% button text=_"Save" action={submit} %}`, `{% wire id="form" type="submit" postback={save id=id} %}`, `{% pager result=result dispatch="page" %}`, or `{% menu id=`main_menu` %}`.
+- Use scomps as normal template tags, for example:
+  ```django
+  {% button text=_"Save" action={submit} %}
+  {% wire id="form" type="submit" postback={save id=id} %}
+  {% pager result=result dispatch="page" %}
+  {% menu id=`main_menu` %}
+  ```
 - Unknown non-built-in tags are usually scomps. Find their implementation under `src/scomps/` as `scomp_<module>_<tag>.erl`.
 - Scomps should have a `-moduledoc` that documents accepted arguments, generated markup, emitted JavaScript, postbacks, and security assumptions.
 - Prefer existing scomps for common Zotonic behavior such as buttons, wires, validation, live updates, sortable lists, menus, tabs, pagers, and Cotonic integration.
