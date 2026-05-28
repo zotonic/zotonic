@@ -113,7 +113,7 @@ description: Use when creating, refactoring, or reviewing Zotonic template_compi
 
 ## Forms
 
-- Use normal HTML forms and wire them with Zotonic when the result should be handled by Erlang: `{% wire id="contact-form" type="submit" postback={contact []} delegate=`mod_contact` %}`.
+- Use normal HTML forms and wire them with Zotonic when the result should be handled by Erlang: ``{% wire id="contact-form" type="submit" postback={contact []} delegate=`mod_contact` %}``.
 - Forms that submit by postback normally use `method="post" action="postback"` and have a stable `id`.
 - Use `{% button %}` or action `{submit}` when the local template pattern uses Zotonic buttons instead of raw submit buttons.
 - In the receiving `event(#submit{}, Context)`, fetch fields with `z_context:get_q/2`, `z_context:get_q_all/1`, or `z_context:get_q_validated/2`; never trust client-side validation alone.
