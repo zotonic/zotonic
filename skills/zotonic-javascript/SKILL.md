@@ -42,7 +42,7 @@ description: Use when creating, refactoring, or reviewing Zotonic JavaScript, te
 ```
 
 - A click wire with `postback=...` sends a `#postback{}` to the delegate. A submit wire sends a `#submit{}`.
-- Use `delegate=`module`` when the `event/2` handler is not in the controller or current module.
+- Use ``delegate=`mod_example` `` when the `event/2` handler is not in the controller or current module.
 - Use repeated `action={...}` arguments for client-side effects before/after a postback; keep user-visible text translated.
 - Named wires can be triggered from JavaScript with `z_event("name")`: `{% wire name="refresh-list" action={update target="list" template="_list.tpl"} %}`.
 - MQTT wires can subscribe client actions to topics when `mod_mqtt` is enabled, for example `{% wire type={mqtt topic="~site/public/hello"} action={growl text="hello"} %}`.
