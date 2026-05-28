@@ -1,0 +1,4 @@
+interface:
+  display_name: "Zotonic Security"
+  short_description: "Review Zotonic security-sensitive code."
+  default_prompt: "Review or implement Zotonic security-sensitive templates, JavaScript, Erlang, models, controllers, cookies, HTTP headers, embeds, client-stored state, ACL checks, CSP, and client/server communication."

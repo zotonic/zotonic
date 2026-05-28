@@ -10,6 +10,13 @@ be used as modules pulled from Hex.pm using rebar dependencies.
 All files use utf-8 encoding and LF line endings. The project uses the Apache 2.0 license, unless
 otherwise noted in individual files, directories or modules.
 
+Read the skills in the `.agents/skills/` directory that match the changes you want to make
+or review, and use the Zotonic Coding skill for coding in the Zotonic codebase. The Zotonic Coding
+skill provides conventions and best practices for working with Zotonic 1.x code, including Erlang modules,
+templates, dispatch rules, and site/module structure.
+
+Always check any new or reviewed code using the security considerations outlined in the zotonic-security skill.
+
 ## Folder Structure
 
 - `/apps`: Contains Erlang applications which implement modules and the core Zotonic system.
@@ -20,6 +27,7 @@ otherwise noted in individual files, directories or modules.
 - `/docker`: Contains Docker files and configs
 - `/cloud-init`: Contains initialization and config files for cloud servers
 - `/nix`: Contains NixOS files and configs
+- `/skills`: information about AI agent skills related to Zotonic, including the Zotonic Coding skill
 
 ## Libraries and Frameworks
 
