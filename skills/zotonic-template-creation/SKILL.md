@@ -62,7 +62,7 @@ description: Use when creating, refactoring, or reviewing Zotonic template_compi
 - Use category-specific template filenames for resources and partials: `page.event.tpl`, `page.name.page_home.tpl`, `_admin_edit_content.person.tpl`, `cards/card.artwork.tpl`.
 - Use `{% catinclude "base.tpl" id %}` when a resource category or unique resource name should choose the template.
 - For a resource named `my_page_name` in category `news` under `article` under `text`, `{% catinclude "hello.tpl" id %}` searches `hello.name.my_page_name.tpl`, `hello.news.tpl`, `hello.article.tpl`, `hello.text.tpl`, then `hello.tpl`.
-- When passing category names instead of a resource, put the most specific category last: `{% catinclude "hello.tpl" [`text`, `article`] %}` searches `hello.article.tpl`, then `hello.text.tpl`, then `hello.tpl`.
+- When passing category names instead of a resource, put the most specific category last: ``{% catinclude "hello.tpl" [`text`, `article`] %}`` searches `hello.article.tpl`, then `hello.text.tpl`, then `hello.tpl`.
 - Category names are mixed into the full basename before `.tpl`, preserving subfolders and prefixes. `catinclude "cards/card.tpl" event_id` looks for `cards/card.name.NAME.tpl`, `cards/card.event.tpl`, and `cards/card.tpl`.
 - Use `{% all catinclude "partial.tpl" id %}` when all matching category templates from all modules must render, as in admin edit panels.
 - Prefer `catinclude`/`catcompose` over large `if id.is_a...` switches when category-specific rendering is intended.
