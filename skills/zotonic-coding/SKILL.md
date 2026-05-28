@@ -52,7 +52,7 @@ description: Use when working in Zotonic projects, especially Erlang modules, Zo
 ## Templates
 
 - Zotonic templates use `template_compiler` tags, loosely Django-like.
-- Documentaton for the tags is in doc/template-tags
+- Documentation for the tags is in doc/template-tags
 - Use `{% extends "base.tpl" %}` and blocks for page composition.
 - Use `{% catinclude %}` for category-specific page/header variants.
 - Prefer resource URLs with `m.rsc.resource_name.page_url` for named resources.
