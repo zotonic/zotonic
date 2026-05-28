@@ -165,3 +165,10 @@ General advice for templates:
 In the templates directory there can be a file `mediaclass.config` which contains definitions for
 image preview generation. The names of the mediaclasses in these files can be used in `{% image %}` tags.
 The `mediaclass.config` file must be in Erlang format.
+
+## Erlang debugging artifacts
+
+Erlang code that is being merged should never contain `?DEBUG()` or `io:format()` statements. These are only meant
+for temporary debugging and should be removed before merging.
+
+Exceptions are for shell commands that need to echo information to the user, for example scripts called via `bin/zotonic`.
