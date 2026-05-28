@@ -10,7 +10,7 @@ be used as modules pulled from Hex.pm using rebar dependencies.
 All files use utf-8 encoding and LF line endings. The project uses the Apache 2.0 license, unless
 otherwise noted in individual files, directories or modules.
 
-Read the skills in the `skills/` directory that are matching with the changes you want to make
+Read the skills in the `skills/` directory that match the changes you want to make
 or review, and use the Zotonic Coding skill for coding in the Zotonic codebase. The Zotonic Coding
 skill provides conventions and best practices for working with Zotonic 1.x code, including Erlang modules,
 templates, dispatch rules, and site/module structure.
