@@ -10,8 +10,8 @@ description: Use when working in Zotonic projects, especially Erlang modules, Zo
 - Read the local app/module before editing. Prefer existing project patterns over inventing new abstractions.
 - Keep changes inside the requested app unless the user explicitly expands scope.
 - Files use UTF-8 and LF line endings.
-- For Zotonic 1.x code, expect request keys, query keys, JSON keys, and most external textual data to be binaries, not strings.
 - Use `rg`/`rg --files` for discovery.
+- Zotonic is built using `make`. If compile updates unrelated `rebar.lock` entries, remove that generated noise unless dependency changes were intended.
 - Compile with `./rebar3 compile` after Erlang changes. If compile updates unrelated `rebar.lock` entries, remove that generated noise unless dependency changes were intended.
 
 ## Erlang Style
@@ -31,6 +31,7 @@ description: Use when working in Zotonic projects, especially Erlang modules, Zo
 - Use `#trans{ tr = [...] }` records, not old `{trans, ...}` tuples.
 - Use Zotonic records such as `#datamodel{}` and `#rsc_tree{}` when fixtures/menu structures require them.
 - Use `m_site`/context environment data for environment-dependent behavior instead of duplicating dev/prod fixtures.
+- For Zotonic 1.x code, expect request keys, query keys, JSON keys, and most external textual data to be binaries, not strings.
 
 ## App Structure
 

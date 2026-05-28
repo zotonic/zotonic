@@ -1,0 +1,4 @@
+interface:
+  display_name: "Zotonic JavaScript"
+  short_description: "Zotonic JS, wires, Cotonic, MQTT."
+  default_prompt: "Create or update Zotonic JavaScript, template JavaScript tags, wires, actions, Erlang event handlers, Cotonic workers/models, MQTT communication, authentication flows, and do_ widgets using local Zotonic conventions."

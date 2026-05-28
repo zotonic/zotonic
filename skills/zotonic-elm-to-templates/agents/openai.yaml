@@ -1,0 +1,4 @@
+interface:
+  display_name: "Zotonic Elm To Templates"
+  short_description: "Convert Elm pages to Zotonic templates."
+  default_prompt: "Convert Elm-generated Zotonic pages to template_compiler templates using resource URLs, dispatch rules, category templates, catinclude, translated source strings, and local base/page conventions."

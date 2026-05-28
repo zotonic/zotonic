@@ -1,0 +1,4 @@
+interface:
+  display_name: "Zotonic Template Creation"
+  short_description: "Create Zotonic template_compiler templates."
+  default_prompt: "Create or update Zotonic templates using local project conventions, translation tags, category-aware includes, standard base/body includes, and template_compiler tags and filters."
