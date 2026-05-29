@@ -495,6 +495,8 @@ maybe_add_identity_logon(Auth, Context) ->
                     % Local user with matching verified email identity.
                     case z_notifier:first(#auth_postcheck{
                             service = Auth#auth_validated.service,
+                            service_uid = Auth#auth_validated.service_uid,
+                            service_props = Auth#auth_validated.service_props,
                             id = UserId,
                             query_args = #{}
                         }, Context) of
@@ -504,7 +506,21 @@ maybe_add_identity_logon(Auth, Context) ->
                         {error, set_passcode} ->
                             % Local 2FA enabled - the user needs to set their passcode
                             {error, {set_passcode, UserId}};
-                        undefined ->
+                        {error, Reason} ->
+                            % An error occurred during the postcheck. Examples are SSO
+                            % modules that restrict certain (email) domains to log in using
+                            % their service only.
+                            % Typical reason: user_external
+                            ?LOG_WARNING(#{
+                                text => <<"Error during auth_postcheck for user with verified email identity">>,
+                                in => zotonic_mod_authentication,
+                                result => error,
+                                reason => Reason,
+                                user_id => UserId,
+                                service => Auth#auth_validated.service
+                            }),
+                            {error, Reason};
+                        OK when OK =:= ok; OK =:= undefined ->
                             % As both SSO and local email addresses are confirmed AND there
                             % is no local 2FA enabled, add SSO identities and allow direct logon.
                             {ok, _} = insert_identity(UserId, Auth, Context),

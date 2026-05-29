@@ -732,6 +732,8 @@
 %% Return: 'undefined' | ok | {error, Reason}
 -record(auth_postcheck, {
         service = username_pw :: atom(),
+        service_uid :: binary() | undefined,
+        service_props = #{} :: map(),
         id :: m_rsc:resource_id(),
         query_args = #{} :: map()
     }).
