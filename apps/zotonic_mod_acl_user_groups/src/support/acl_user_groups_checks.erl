@@ -1,8 +1,8 @@
-%% @copyright 2015-2022 Marc Worrell
+%% @copyright 2015-2026 Marc Worrell
 %% @doc Routines for ACL notifications.
 %% @end
 
-%% Copyright 2015-2022 Marc Worrell
+%% Copyright 2015-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -57,6 +57,14 @@
         session_state/1
     ]).
 
+% Exports for testing
+-export([
+        normalize_category_visibility/1,
+        visibility_cats_sql/4,
+        restrict_viewable_cats/2,
+        restrict_collab_cats/2
+    ]).
+
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include("acl_user_groups.hrl").
 
@@ -91,13 +99,8 @@ max_upload_size_default() ->
 user_groups(#context{ acl = #aclug{ user_groups = Ids }}) ->
     Ids;
 user_groups(#context{ user_id = UserId, acl = admin } = Context) ->
-    MgrId = m_rsc:rid(acl_user_group_managers, Context),
-    Groups = m_edge:objects(UserId, hasusergroup, Context),
-    case {MgrId, lists:member(MgrId, Groups)} of
-        {undefined, _} -> Groups;
-        {_, true} -> Groups;
-        {_, false} -> Groups ++ [MgrId]
-    end;
+    ensure_include(m_rsc:rid(acl_user_group_managers, Context),
+                   m_edge:objects(UserId, hasusergroup, Context));
 user_groups(#context{ user_id = UserId } = Context) ->
     has_user_groups(UserId, Context).
 
@@ -140,11 +143,7 @@ can_insert_category(CGId, CatId, Context) ->
     CatId1 = m_rsc:rid(CatId, Context),
     case is_collab_group_member(CGId1, Context) of
         true ->
-            case mod_acl_user_groups:await_lookup({collab, {CatId1, undefined, insert, false}, collab}, Context) of
-                true -> true;
-                false -> false;
-                undefined -> false
-            end
+            is_allowed(mod_acl_user_groups:await_lookup({collab, {CatId1, undefined, insert, false}, collab}, Context))
             orelse can_insert_category_rsc_ug(CGId1, CatId1, true, Context);
         false ->
             can_insert_category_rsc_ug(CGId1, CatId1, false, Context)
@@ -171,11 +170,7 @@ can_insert_category_collab(Cat, Context) ->
         [] ->
             false;
         _Groups ->
-            case mod_acl_user_groups:await_lookup({collab, {CatId, undefined, insert, false}, collab}, Context) of
-                true -> true;
-                false -> false;
-                undefined -> false
-            end
+            is_allowed(mod_acl_user_groups:await_lookup({collab, {CatId, undefined, insert, false}, collab}, Context))
     end.
 
 
@@ -394,7 +389,7 @@ acl_logon(#acl_logon{ id = UserId, options = Options }, Context) ->
 logon_options_readonly(#{ is_read_only := true }, Context) ->
     Context#context{ acl_is_read_only = true };
 logon_options_readonly(#{ is_read_only := false }, Context) ->
-    Context#context{ acl_is_read_only = true };
+    Context#context{ acl_is_read_only = false };
 logon_options_readonly(_Options, Context) ->
     Context.
 
@@ -605,7 +600,7 @@ find_first_collab_group(CatId, Context) ->
 
 
 %% @doc Add a restriction on the visible content groups to SQL searches
-acl_add_sql_check(#acl_add_sql_check{alias=Alias, args=Args, search_sql=SearchSql}, Context) ->
+acl_add_sql_check(#acl_add_sql_check{alias=Alias, args=Args, search_sql=SearchSql, cats=Cats}, Context) ->
     case z_acl:is_admin(Context) of
         true ->
             % admins can see all resources
@@ -619,12 +614,12 @@ acl_add_sql_check(#acl_add_sql_check{alias=Alias, args=Args, search_sql=SearchSq
             {ContentGroupSQL, NewArgs} =
                 case lists:member(no_content_group_check, SearchSql#search_sql.extra) of
                     true -> {[], Args};
-                    false -> visibility_check(Alias, Args, Context)
+                    false -> visibility_check(Alias, Args, Cats, Context)
                 end,
-            {join_sql(PublishedSQL, "AND", ContentGroupSQL), NewArgs}
+            {join_sql(PublishedSQL, <<"AND">>, ContentGroupSQL), NewArgs}
     end.
 
-visibility_check(Alias, Args0, Context) ->
+visibility_check(Alias, Args0, Cats, Context) ->
     % find all the user's usergroups:
     UGs = user_groups(Context),
     % find all the contentgroups where _something_ is visible
@@ -632,10 +627,14 @@ visibility_check(Alias, Args0, Context) ->
         fun (UGId) -> mod_acl_user_groups:await_lookup({view, UGId}, Context) end,
         UGs
     )),
-    % for each contentgroup, find the required visibility for viewable categories:
-    ViewableCats = lists:flatmap(
-        fun (CGId) -> viewable_cg_categories(CGId, UGs, true, Context) end,
-        CGs
+    % for each contentgroup, find the required visibility for viewable categories;
+    % restrict to only the categories in the search query (if any):
+    ViewableCats = restrict_viewable_cats(
+        lists:flatmap(
+            fun (CGId) -> viewable_cg_categories(CGId, UGs, true, Context) end,
+            CGs
+        ),
+        Cats
     ),
     % and calculate the query to only allow those:
     {ViewableSql, Args1} = viewable_cg_sql(ViewableCats, Alias, Args0, Context),
@@ -645,13 +644,16 @@ visibility_check(Alias, Args0, Context) ->
             {ViewableSql, Args1};
         _ ->
             % otherwise find also the categories with forbidden visibilities:
-            NonViewableCats = lists:flatmap(
-                fun (CGId) -> viewable_cg_categories(CGId, UGs, false, Context) end,
-                CGs
+            NonViewableCats = restrict_viewable_cats(
+                lists:flatmap(
+                    fun (CGId) -> viewable_cg_categories(CGId, UGs, false, Context) end,
+                    CGs
+                ),
+                Cats
             ),
             % and add an exclusion for them in the SQL clause as well:
             {NonViewableSql, Args2} = viewable_cg_sql(NonViewableCats, Alias, Args1, Context),
-            {join_sql(ViewableSql, "AND NOT", NonViewableSql), Args2}
+            {join_sql(ViewableSql, <<"AND NOT">>, NonViewableSql), Args2}
     end,
 
     {CollabFilter, NewArgs} = case has_collab_groups(Context) of
@@ -660,7 +662,7 @@ visibility_check(Alias, Args0, Context) ->
             {[], Args3};
         CollabIds ->
             % otherwise find the required visibility for viewable categories in collab groups:
-            ViewableCollabCats = viewable_collab_categories(true, Context),
+            ViewableCollabCats = restrict_collab_cats(viewable_collab_categories(true, Context), Cats),
             {ViewableCollabSql, Args4} = viewable_collab_sql(ViewableCollabCats, Alias, Args3, Context),
             case ViewableCollabSql of
                 [] ->
@@ -668,21 +670,21 @@ visibility_check(Alias, Args0, Context) ->
                     {ViewableCollabSql, Args4};
                 _ ->
                     % otherwise find also the categories with forbidden visibilities:
-                    NonViewableCollabCats = viewable_collab_categories(false, Context),
+                    NonViewableCollabCats = restrict_collab_cats(viewable_collab_categories(false, Context), Cats),
                     % add an exclusion for them in the SQL clause:
                     {NonViewableCollabSql, Args5} = viewable_collab_sql(NonViewableCollabCats, Alias, Args4, Context),
-                    AllCollabFilters = join_sql(ViewableCollabSql, "AND NOT", NonViewableCollabSql),
+                    AllCollabFilters = join_sql(ViewableCollabSql, <<"AND NOT">>, NonViewableCollabSql),
                     % and add the filtering on the user's collab groups:
                     CollabSelect =
-                        [Alias, ".content_group_id = any($" ,integer_to_list(length(Args5)+1), "::int[])"],
+                        [Alias, <<".content_group_id = any($">>, integer_to_binary(length(Args5)+1),  <<"::int[])">>],
                     {
-                        enclose_sql(join_sql(CollabSelect, "AND", AllCollabFilters)),
+                        enclose_sql(join_sql(CollabSelect, <<"AND">>, AllCollabFilters)),
                         Args5 ++ [CollabIds]
                     }
             end
     end,
     % Finally, combine them both in one large filtering clause:
-    CompleteSql = join_sql(CGFilter, "OR", CollabFilter),
+    CompleteSql = join_sql(CGFilter, <<"OR">>, CollabFilter),
     case enclose_sql(CompleteSql) of
         [] ->
             % the user is not allowed to view anything:
@@ -691,26 +693,64 @@ visibility_check(Alias, Args0, Context) ->
             {EnclosedFilter, NewArgs}
     end.
 
+%% Restrict viewable content-group+category entries to the categories in the search query.
+%% When 'Categories' in an entry is 'all', keep it as 'all' -- our visibility_cats_sql/4 clause
+%% will then generate only a visibility filter (not a category list), and the search already
+%% handles the category restriction via pivot_category_nr.
+%% When 'Categories' is a list, intersect with SearchCats to reduce the generated SQL.
+restrict_viewable_cats(Lines, all) ->
+    Lines;
+restrict_viewable_cats(Lines, SearchCats) when is_list(SearchCats) ->
+    lists:filtermap(
+        fun ({CGId, Visibility, all}) ->
+                {true, {CGId, Visibility, all}};
+            ({CGId, Visibility, CatIds}) ->
+                Intersection = [C || C <- CatIds, lists:member(C, SearchCats)],
+                case Intersection of
+                    [] -> false;
+                    _ -> {true, {CGId, Visibility, Intersection}}
+                end
+        end,
+        Lines
+    ).
+
+%% Same as restrict_viewable_cats but for collab entries {Visibility, all | [CatId]}.
+restrict_collab_cats(Lines, all) ->
+    Lines;
+restrict_collab_cats(Lines, SearchCats) when is_list(SearchCats) ->
+    lists:filtermap(
+        fun ({Visibility, all}) ->
+                {true, {Visibility, all}};
+            ({Visibility, CatIds}) ->
+                Intersection = [C || C <- CatIds, lists:member(C, SearchCats)],
+                case Intersection of
+                    [] -> false;
+                    _ -> {true, {Visibility, Intersection}}
+                end
+        end,
+        Lines
+    ).
+
 viewable_cg_sql(Lines, Alias, Args0, Context) when is_list(Lines) ->
     CollabId = m_rsc:rid(acl_collaboration_group, Context),
     {ClauseOut, ArgsOut} = lists:foldl(
         fun ({CGId, Visibility, Categories}, {Clause, ArgsIn}) ->
-            {CGFilter, CGArgs} =
+                {CGFilter, CGArgs} =
                 {
-                    if
-                        % Note: rules on the 'acl_collaboration_group' category
-                        % itself apply to all resources whose 'content_group_id'
-                        % is _any_ of the existing collaboration groups
-                        CGId =:= CollabId ->
-                            [Alias, ".content_group_id IN (SELECT id FROM rsc WHERE category_id = $", integer_to_list(length(ArgsIn)+1), ")"];
-                        true ->
-                            [Alias, ".content_group_id = $", integer_to_list(length(ArgsIn)+1)]
-                    end,
-                    ArgsIn ++ [CGId]
+                 if
+                     % Note: rules on the 'acl_collaboration_group' category
+                     % itself apply to all resources whose 'content_group_id'
+                     % is _any_ of the existing collaboration groups
+                     CGId =:= CollabId ->
+                         [Alias, <<".content_group_id IN (SELECT id FROM rsc WHERE category_id = $">>, integer_to_binary(length(ArgsIn)+1), $)];
+                     true ->
+                         [Alias, <<".content_group_id = $">>, integer_to_binary(length(ArgsIn)+1)]
+                 end,
+                 ArgsIn ++ [CGId]
                 },
-            {VisibCatsFilter, NewArgs} = visibility_cats_sql(Visibility, Categories, Alias, CGArgs),
-            NewClause = enclose_sql(join_sql(CGFilter, "AND", VisibCatsFilter)),
-            {join_sql(Clause, "OR", NewClause), NewArgs}
+                {VisibCatsFilter, NewArgs} = visibility_cats_sql(Visibility, Categories, Alias, CGArgs),
+                NewClause = enclose_sql(join_sql(CGFilter, <<"AND">>, VisibCatsFilter)),
+                {join_sql(Clause, <<"OR">>, NewClause), NewArgs}
         end,
         {[], Args0},
         Lines
@@ -721,13 +761,15 @@ viewable_collab_sql(Lines, Alias, Args0, _Context) when is_list(Lines) ->
     {ClauseOut, ArgsOut} = lists:foldl(
         fun ({Visibility, Categories}, {Clause, ArgsIn}) ->
             {NewClause, NewArgs} = visibility_cats_sql(Visibility, Categories, Alias, ArgsIn),
-            {join_sql(Clause, "OR", NewClause), NewArgs}
+            {join_sql(Clause, <<"OR">>, NewClause), NewArgs}
         end,
         {[], Args0},
         Lines
     ),
     {enclose_sql(ClauseOut), ArgsOut}.
 
+visibility_cats_sql(_Visibility, [], _Alias, Args) ->
+    {[<<"false">>], Args};
 visibility_cats_sql(Visibility, Categories, Alias, Args0) ->
     {VisibilityFilter, Args1} =
         case Visibility of
@@ -735,44 +777,51 @@ visibility_cats_sql(Visibility, Categories, Alias, Args0) ->
                 {[], Args0};
             _ ->
                 {
-                    [Alias, ".visible_for = $", integer_to_list(length(Args0)+1)],
+                    [Alias, <<".visible_for = $">>, integer_to_binary(length(Args0)+1)],
                     Args0 ++ [Visibility]
                 }
         end,
     {CategoryFilter, Args2} =
         case Categories of
+            all -> {[], Args1};
             [Category] ->
                 {
-                    [Alias, ".category_id = $", integer_to_list(length(Args1)+1)],
-                    Args1 ++ [Category]
+                 [Alias, <<".category_id = $">>, integer_to_binary(length(Args1)+1)],
+                 Args1 ++ [Category]
                 };
             _ ->
                 {
-                    [Alias, ".category_id = any($", integer_to_list(length(Args1)+1),"::int[])"],
-                    Args1 ++ [Categories]
+                 [Alias, <<".category_id = any($">>, integer_to_binary(length(Args1)+1), <<"::int[])">>],
+                 Args1 ++ [Categories]
                 }
         end,
-    {join_sql(VisibilityFilter, "AND", CategoryFilter), Args2}.
+    {join_sql(VisibilityFilter, <<"AND">>, CategoryFilter), Args2}.
 
 
+join_sql([], _With, []) ->
+    [];
+join_sql([], _With, Clause) ->
+    Clause;
+join_sql(Clause, _With, []) ->
+    Clause;
 join_sql(Clause1, With, Clause2) ->
-    case {lists:flatten(Clause1), lists:flatten(Clause2)} of
-        {[], FlatClause2} ->
-            FlatClause2;
-        {FlatClause1, []} ->
-            FlatClause1;
-        {FlatClause1, FlatClause2} ->
-            FlatClause1 ++ " " ++ With ++ " " ++ FlatClause2
-    end.
+    [Clause1, $\s,  With,  $\s, Clause2].
 
+enclose_sql([]) ->
+    [];
 enclose_sql(Clause) ->
-    case lists:flatten(Clause) of
-        [] -> [];
-        FlatClause -> "(" ++ FlatClause ++ ")"
-    end.
+    [$(, Clause, $)].
 
 % Returns a list of tuples: {content_group_id, visibility, list(category_id)}
 viewable_cg_categories(CGId, UGs, IsAllow, Context) ->
+    % Multiple acl table scans are needed to collect the viewable categories.
+    z_depcache:memo(fun() -> viewable_cg_categories1(CGId, UGs, IsAllow, Context) end,
+                    {viewable_cg_categories, CGId, UGs, IsAllow},
+                    ?HOUR,
+                    [mod_acl_user_groups],
+                    Context).
+
+viewable_cg_categories1(CGId, UGs, IsAllow, Context) ->
     % find all the categories+visibility that can/not be viewed in this CG by any UG:
     CatVisCouples = lists:flatmap(
         fun (UGId) ->
@@ -792,6 +841,13 @@ viewable_cg_categories(CGId, UGs, IsAllow, Context) ->
 
 % Returns a list of tuples: {visibility, list(category_id)}
 viewable_collab_categories(IsAllow, Context) ->
+    z_depcache:memo(fun() -> viewable_collab_categories1(IsAllow, Context) end,
+                    {viewable_collab_categories, IsAllow},
+                    ?DAY,
+                    [mod_acl_user_groups],
+                    Context).
+
+viewable_collab_categories1(IsAllow, Context) ->
     % find all the categories+visibility that can/not be viewed in this CG by any UG:
     CatVisCouples = lists:map(
         fun ([CatId, Visibility]) -> {CatId, Visibility} end,
@@ -807,7 +863,7 @@ normalize_category_visibility(CatVisCouples) ->
         CatVisCouples
     )),
     % then group by visibility and remove redundant entries
-    maps:to_list(maps:groups_from_list(
+    VisByVis = maps:groups_from_list(
         fun ({Visibility, _CatId}) -> Visibility end,
         fun ({_Visibility, CatId}) -> CatId end,
         lists:flatmap(
@@ -819,13 +875,22 @@ normalize_category_visibility(CatVisCouples) ->
             end,
             CatVisLists
         )
+    ),
+    maps:to_list(maps:map(
+        fun (_Visibility, CatIds) ->
+            case lists:member(undefined, CatIds) of
+                true -> all;
+                false -> CatIds
+            end
+        end,
+        VisByVis
     )).
 
 publish_check(Alias) ->
     [
-        Alias,".is_published = true and ",
-        Alias,".publication_start <= now() and ",
-        Alias,".publication_end >= now()"
+        Alias, <<".is_published = true and now() between ">>,
+        Alias, <<".publication_start and ">>,
+        Alias, <<".publication_end">>
     ].
 
 -spec session_state( z:context() ) -> publish | edit.
@@ -835,7 +900,6 @@ session_state(Context) ->
         #{ acl_user_groups_state := edit } -> edit;
         _ -> publish
     end.
-
 
 %% @doc Fetch all usergroups the user is member of.
 %% Anonymous user are member of 'acl_user_group_anonymous'.
@@ -853,22 +917,27 @@ has_user_groups(UserId, Context) ->
         }, Groups, Context).
 
 has_user_groups_1(undefined, Context) ->
-    [ m_rsc:rid(acl_user_group_anonymous, Context) ];
+    % Anonymous users are always in the anonymous user group
+    ensure_include(m_rsc:rid(acl_user_group_anonymous, Context), []);
 has_user_groups_1(1, Context) ->
-    MgrId = m_rsc:rid(acl_user_group_managers, Context),
-    Groups = m_edge:objects(1, hasusergroup, Context),
-    case {MgrId, lists:member(MgrId, Groups)} of
-        {undefined, _} -> Groups;
-        {_, true} -> Groups;
-        {_, false} -> Groups ++ [MgrId]
-    end;
+    % Admin is always in the managers user group
+    ensure_include(m_rsc:rid(acl_user_group_managers, Context),
+                    m_edge:objects(1, hasusergroup, Context));
 has_user_groups_1(UserId, Context) ->
+    % Users with no assigned user groups are added to the members user group.
     case m_edge:objects(UserId, hasusergroup, Context) of
-        [] ->
-            [ m_rsc:rid(acl_user_group_members, Context) ];
-        Us ->
-            Us
+        [] -> ensure_include(m_rsc:rid(acl_user_group_members, Context), []);
+        Groups -> Groups
     end.
+
+ensure_include(undefined, Groups) ->
+    Groups;
+ensure_include(Id, Groups) ->
+    case lists:member(Id, Groups) of
+        true -> Groups;
+        false -> [Id | Groups]
+    end.
+
 
 % Fetch all collaboration groups the current is member of.
 -spec has_collab_groups(#context{}) -> list(integer()).
@@ -923,11 +992,7 @@ can_insert_with_ug(Cat, Context) ->
     CatId = m_rsc:rid(Cat, Context),
     lists:any(
         fun(GId) ->
-            case mod_acl_user_groups:await_lookup({CatId, insert, GId}, Context) of
-                true -> true;
-                false -> false;
-                undefined -> false
-            end
+                is_allowed(mod_acl_user_groups:await_lookup({CatId, insert, GId}, Context))
         end,
         user_groups(Context)
     ).
@@ -949,7 +1014,7 @@ can_rsc(Id, view, Context) when is_integer(Id) ->
     )
     orelse
     (
-         % Members can see each other. 
+         % Members can see each other.
          m_rsc:is_a(Id, person, Context)
          andalso has_common_collab_group(Id, Context)
     )
@@ -990,17 +1055,9 @@ can_rsc_for_collab(Id, Action, CGId, CatId, Visibility, UGs, Context) ->
 
 % User is member of collab group CGId, check ACL rules for collaboration groups
 can_rsc_collab_member(Id, Action, CGId, CatId, Visibility, Context) ->
-    case mod_acl_user_groups:await_lookup({collab, {CatId, Visibility, Action, false}, collab}, Context) of
-        true -> true;
-        false -> false;
-        undefined -> false
-    end
+    is_allowed(mod_acl_user_groups:await_lookup({collab, {CatId, Visibility, Action, false}, collab}, Context))
     orelse (
-        case mod_acl_user_groups:await_lookup({collab, {CatId, Visibility, Action, true}, collab}, Context) of
-            true -> true;
-            false -> false;
-            undefined -> false
-        end
+        is_allowed(mod_acl_user_groups:await_lookup({collab, {CatId, Visibility, Action, true}, collab}, Context))
         andalso (
             is_owner(Id, Context)
             orelse is_collab_group_manager(CGId, Context)
@@ -1011,7 +1068,6 @@ can_rsc_collab_member(Id, Action, CGId, CatId, Visibility, Context) ->
         Visibility =/= undefined andalso
         can_rsc_collab_member(Id, Action, CGId, CatId, undefined, Context)
     ).
-
 
 % User is member of collab group: check configured permissions for the collab group resource itself.
 is_collab_group_member_action_allowed(_CGId, view, _Context) ->
@@ -1068,27 +1124,21 @@ can_rsc_ug(CGId, CatId, Visibility, Action, IsOwner, UGs, Context) ->
                     % when there isn't a rule for the given visibility,
                     % also check if there is a rule that applies to any:
                     Visibility =/= undefined andalso
-                    can_rsc_ug(CGId, CatId, undefined, Action, IsOwner, UGs, Context)
+                    is_allowed(mod_acl_user_groups:await_lookup({CGId, {CatId, undefined, Action, IsOwner}, GId}, Context))
             end
         end,
         UGs
     ).
 
-
 is_owner(insert_rsc, _Context) ->
     true;
 is_owner(Id, #context{ user_id = UserId } = Context) ->
-    case z_notifier:first(#acl_is_owner{
-            id = Id,
-            creator_id = m_rsc:p_no_acl(Id, creator_id, Context),
-            user_id = UserId
-        },
-        Context)
-    of
-        undefined -> false;
-        true -> true;
-        false -> false
-    end.
+    is_allowed(z_notifier:first(#acl_is_owner{
+                                   id = Id,
+                                   creator_id = m_rsc:p_no_acl(Id, creator_id, Context),
+                                   user_id = UserId
+                                  },
+                                Context)).
 
 %% @doc Check if the user has a collaboration group in common with another user.
 has_common_collab_group(_Id, #context{ acl = #aclug{ collab_groups = [] }}) ->
@@ -1130,12 +1180,15 @@ can_media(Mime, Size, Context) ->
 %% @doc See if the user can do something with the given module
 can_module(Action, ModuleName, Context) ->
     lists:any(
-        fun(GId) ->
-            case mod_acl_user_groups:await_lookup({ModuleName, Action, GId}, Context) of
-                true -> true;
-                false -> false;
-                undefined -> false
-            end
-        end,
-        user_groups(Context)
-    ).
+      fun(GId) ->
+              is_allowed(mod_acl_user_groups:await_lookup({ModuleName, Action, GId}, Context))
+      end,
+      user_groups(Context)
+     ).
+
+is_allowed(true) -> true;
+is_allowed(false) -> false;
+is_allowed(undefined) -> false;
+is_allowed(_Other) ->
+    % ACL lookup unexpected return value
+    erlang:error(badarg).

@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2025 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Main definitions for zotonic
+%% @end
 
-%% Copyright 2009-2025 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -313,9 +314,10 @@
 %% ACL notifications
 %% Modify queries by adding ACL restrictions by the database
 -record(acl_add_sql_check, {
-    alias,
-    args,
-    search_sql
+    alias :: string() | binary(),
+    args = [] :: list(),
+    search_sql :: #search_sql{},
+    cats = all :: [ m_rsc:resource_id() ] | all
 }).
 
 

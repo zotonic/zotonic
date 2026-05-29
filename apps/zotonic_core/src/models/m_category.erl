@@ -167,6 +167,7 @@ Available Model API Paths
     is_meta/2,
     is_a_prim/3,
     contains/2,
+    all/1,
     name_to_id/2,
     id_to_name/2,
     foreach/3,
@@ -660,6 +661,11 @@ contains(Cat, Context) ->
         {error, _} ->
             []
     end.
+
+%% @doc Return all category ids. The category ids are sorted by their value.
+-spec all(z:context()) -> list( m_rsc:resource_id() ).
+all(Context) ->
+    m_hierarchy:all('$category', Context).
 
 %% @doc Map a category name to an id, be flexible with the input
 -spec name_to_id(category(), z:context()) ->
