@@ -510,6 +510,18 @@ maybe_add_identity_logon(Auth, Context) ->
                             % This is an ok situation, as we are adding the SSO identity.
                             {ok, _} = insert_identity(UserId, Auth, Context),
                             {ok, UserId};
+                        {error, Reason} ->
+                            % An error occurred during the postcheck, log it and let the user log on using their local account.
+                            ?LOG_WARNING(#{
+                                text => <<"Error during auth_postcheck for user with verified email identity">>,
+                                in => zotonic_mod_authentication,
+                                result => error,
+                                reason => Reason,
+                                user_id => UserId,
+                                service => Auth#auth_validated.service,
+                                auth => Auth
+                            }),
+                            {error, Reason};
                         undefined ->
                             % As both SSO and local email addresses are confirmed AND there
                             % is no local 2FA enabled, add SSO identities and allow direct logon.
