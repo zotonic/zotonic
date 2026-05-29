@@ -517,8 +517,7 @@ maybe_add_identity_logon(Auth, Context) ->
                                 result => error,
                                 reason => Reason,
                                 user_id => UserId,
-                                service => Auth#auth_validated.service,
-                                auth => Auth
+                                service => Auth#auth_validated.service
                             }),
                             {error, Reason};
                         OK when OK =:= ok; OK =:= undefined ->
