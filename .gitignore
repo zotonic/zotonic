@@ -54,6 +54,7 @@ release/packages/zotonic_apps/rebar.lock
 release/packages/zotonic_apps/rebar.config
 
 apps_user/*
+apps_user.*/*
 
 _build
 _checkouts

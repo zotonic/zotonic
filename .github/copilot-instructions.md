@@ -27,7 +27,7 @@ Always check any new or reviewed code using the security considerations outlined
 - `/docker`: Contains Docker files and configs
 - `/cloud-init`: Contains initialization and config files for cloud servers
 - `/nix`: Contains NixOS files and configs
-- `/skills`: information about AI agent skills related to Zotonic, including the Zotonic Coding skill
+- `/.agents/skills`: information about AI agent skills related to Zotonic, including the Zotonic Coding skill
 
 ## Libraries and Frameworks
 
