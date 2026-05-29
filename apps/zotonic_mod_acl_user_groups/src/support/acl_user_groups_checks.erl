@@ -58,14 +58,12 @@
     ]).
 
 % Exports for testing
--ifdef(TEST).
 -export([
         normalize_category_visibility/1,
         visibility_cats_sql/4,
         restrict_viewable_cats/2,
         restrict_collab_cats/2
     ]).
--endif.
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include("acl_user_groups.hrl").
