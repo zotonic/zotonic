@@ -504,14 +504,10 @@ maybe_add_identity_logon(Auth, Context) ->
                         {error, set_passcode} ->
                             % Local 2FA enabled - the user needs to set their passcode
                             {error, {set_passcode, UserId}};
-                        {error, user_external} ->
-                            % The SSO module intercepted logons for users that have a primary email
-                            % address matching the controlled domains of a provider.
-                            % This is an ok situation, as we are adding the SSO identity.
-                            {ok, _} = insert_identity(UserId, Auth, Context),
-                            {ok, UserId};
                         {error, Reason} ->
-                            % An error occurred during the postcheck, log it and let the user log on using their local account.
+                            % An error occurred during the postcheck. Examples are SSO
+                            % modules that restrict certain (email) domains to log in using
+                            % their service only.
                             ?LOG_WARNING(#{
                                 text => <<"Error during auth_postcheck for user with verified email identity">>,
                                 in => zotonic_mod_authentication,
