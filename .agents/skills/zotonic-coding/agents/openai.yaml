@@ -1,0 +1,4 @@
+interface:
+  display_name: "Zotonic Coding"
+  short_description: "Code in Zotonic project conventions."
+  default_prompt: "Work in this Zotonic project using local Erlang, template_compiler, dispatch, module, logging, fixture, and site/module structure conventions."

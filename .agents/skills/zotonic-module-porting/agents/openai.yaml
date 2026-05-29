@@ -1,0 +1,4 @@
+interface:
+  display_name: "Zotonic Module Porting"
+  short_description: "Create or port Zotonic 1.x modules."
+  default_prompt: "Create or port a Zotonic 1.x module using correct app structure, .app.src, -mod_config, controllers, binary request keys, JSON decoding, logging, specs, SCSS builds, and Makefile conventions."
