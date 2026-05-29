@@ -495,6 +495,8 @@ maybe_add_identity_logon(Auth, Context) ->
                     % Local user with matching verified email identity.
                     case z_notifier:first(#auth_postcheck{
                             service = Auth#auth_validated.service,
+                            service_uid = Auth#auth_validated.service_uid,
+                            service_props = Auth#auth_validated.service_props,
                             id = UserId,
                             query_args = #{}
                         }, Context) of
