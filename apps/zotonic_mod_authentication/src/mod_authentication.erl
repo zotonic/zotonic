@@ -504,6 +504,12 @@ maybe_add_identity_logon(Auth, Context) ->
                         {error, set_passcode} ->
                             % Local 2FA enabled - the user needs to set their passcode
                             {error, {set_passcode, UserId}};
+                        {error, user_external} ->
+                            % The SSO module intercepted logons for users that have a primary email
+                            % address matching the controlled domains of a provider.
+                            % This is an ok situation, as we are adding the SSO identity.
+                            {ok, _} = insert_identity(UserId, Auth, Context),
+                            {ok, UserId};
                         undefined ->
                             % As both SSO and local email addresses are confirmed AND there
                             % is no local 2FA enabled, add SSO identities and allow direct logon.
