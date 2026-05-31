@@ -24,8 +24,7 @@
     expand_collab/2,
     expand_module/2,
 
-    expand_group_path/1,
-    test/0
+    expand_group_path/1
 ]).
 
 -export([
