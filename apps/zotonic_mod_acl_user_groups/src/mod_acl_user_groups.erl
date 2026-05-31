@@ -377,6 +377,9 @@ See also
 
     rebuild/1,
     rebuild/2,
+    await_rebuilding/1,
+    await_rebuilding/2,
+    await_rebuilding/3,
 
     observe_admin_menu/3,
     observe_rsc_update_done/2,
@@ -850,6 +853,40 @@ rebuild(edit, Context) ->
 rebuild(publish, Context) ->
     gen_server:cast(name(Context), rebuild_publish).
 
+
+-spec await_rebuilding(#context{}) -> ok.
+await_rebuilding(Context) ->
+    await_rebuilding(acl_user_groups_checks:state(Context), Context).
+
+-spec await_rebuilding(edit|publish, #context{}) -> ok.
+await_rebuilding(State, Context) ->
+    await_rebuilding(State, infinity, Context).
+
+-spec await_rebuilding(edit|publish, integer()|infinity, #context{}) -> ok.
+await_rebuilding(State, MaybeTimeout, Context) ->
+    IsReady = case status(Context) of
+        {ok, Status} ->
+            IsRebuilding = proplists:get_value(is_rebuilding, Status, true),
+            RebuildingState = proplists:get_value(rebuilding, Status, undefined),
+            case {IsRebuilding, RebuildingState} of
+                {true, State} -> false;
+                {true, undefined} -> false;
+                _ -> true
+            end;
+        _ ->
+            false
+    end,
+    case {IsReady, MaybeTimeout} of
+        {false, infinity} ->
+            timer:sleep(100),
+            await_rebuilding(State, infinity, Context);
+        {false, Timeout} when Timeout > 0 ->
+            timer:sleep(100),
+            await_rebuilding(State, Timeout-10, Context);
+        {true, _} ->
+            ok
+    end.
+
 -spec await_table(#context{}) -> ets:tab() | undefined.
 await_table(Context) ->
     await_table(acl_user_groups_checks:state(Context), Context).
@@ -1086,6 +1123,7 @@ start_rebuilder(EditState, Site) ->
     Self = self(),
     Pid = z_proc:spawn_link_md(fun() ->
         Context = z_acl:sudo(z_context:new(Site)),
+        acl_user_group_rebuilder:digest(EditState, Context),
         acl_user_group_rebuilder:rebuild(Self, EditState, Context)
     end),
     MRef = erlang:monitor(process, Pid),

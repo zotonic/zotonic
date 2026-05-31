@@ -41,8 +41,12 @@
 -module(acl_user_group_rebuilder).
 
 -export([
-	rebuild/3
-	]).
+	rebuild/3,
+
+	digest/2,
+	rsc_digest_table/1,
+	collab_digest_table/1
+]).
 
 %% @doc Fetch a the new rules and store them in a fresh ets table.
 %%      The completed table is transfered to the acl module gen_server.
@@ -110,3 +114,181 @@ can_action(Table, Action, [UId|UIds], CIds) ->
 	ets:insert(Table, {{Action, UId}, CIds1}),
 	can_action(Table, Action, UIds, CIds).
 
+%% @doc "Digests" ACL rules into a more usable form (aka expanded) and stores them
+%% in dedicated database tables, for easier 'JOIN's/'EXISTS' operations.
+digest(State, Context) ->
+	io:format("debug digest: ~p~n", [State]),
+	digest_rsc_rules(State, Context),
+	digest_collab_rules(State, Context),
+	ok.
+
+% TODO: reduce duplication:
+
+digest_rsc_rules(State, Context) ->
+	ensure_rsc_digest_table(State, Context),
+	ExpandedRscRules = acl_user_groups_rules:expand_rsc(State, Context),
+	z_db:transaction(
+		fun (TrCtx) ->
+			clear_rsc_digest_table(State, TrCtx),
+			lists:foreach(
+				fun (ExpandedRscRule) -> digest_rsc_rule(ExpandedRscRule, State, TrCtx) end,
+				ExpandedRscRules
+			)
+		end,
+		Context
+	).
+
+digest_collab_rules(State, Context) ->
+	ensure_collab_digest_table(State, Context),
+	ExpandedCollabRules = acl_user_groups_rules:expand_collab(State, Context),
+	z_db:transaction(
+		fun (TrCtx) ->
+			clear_collab_digest_table(State, TrCtx),
+			lists:foreach(
+				fun (ExpandedCollabRule) -> digest_collab_rule(ExpandedCollabRule, State, TrCtx) end,
+				ExpandedCollabRules
+			)
+		end,
+		Context
+	).
+
+digest_rsc_rule({CgId, {CatId, Visibility, Action, OnlyOwner, IsAllow}, UgId}, State, Context) ->
+	TableName = rsc_digest_table(State),
+	% TODO: check (dis)allow rules order:
+    z_db:q1(
+        "INSERT INTO " ++ TableName ++ " (cg_id, cat_id, ug_id, visibility, action, only_owner, is_allow)
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
+        ON CONFLICT (cg_id, cat_id, ug_id, visibility, action, only_owner)
+        DO UPDATE SET is_allow = $7
+        RETURNING id",
+        [CgId, CatId, UgId, Visibility, Action, OnlyOwner, IsAllow],
+        Context
+    ).
+
+digest_collab_rule({collab, {CatId, Visibility, Action, OnlyOwner, IsAllow}, collab}, State, Context) ->
+	TableName = collab_digest_table(State),
+	% TODO: check (dis)allow rules order:
+    z_db:q1(
+        "INSERT INTO " ++ TableName ++ " (cat_id, visibility, action, only_owner, is_allow)
+        VALUES ($1, $2, $3, $4, $5)
+        ON CONFLICT (cat_id, visibility, action, only_owner)
+        DO UPDATE SET is_allow = $5
+        RETURNING id",
+        [CatId, Visibility, Action, OnlyOwner, IsAllow],
+        Context
+    ).
+
+
+ensure_rsc_digest_table(State, Context) ->
+	TableName = rsc_digest_table(State),
+	[] = z_db:q("
+        CREATE TABLE IF NOT EXISTS " ++ TableName ++ " (
+            id bigserial NOT NULL,
+            cg_id int NOT NULL,
+            cat_id int NOT NULL,
+            ug_id int NOT NULL,
+            visibility int,
+            action character varying(32) NOT NULL,
+            only_owner boolean NOT NULL DEFAULT false,
+            is_allow boolean NOT NULL,
+
+            CONSTRAINT " ++ TableName ++ "_pkey
+                PRIMARY KEY (id),
+            CONSTRAINT fk_" ++ TableName ++ "_cg_id
+                FOREIGN KEY (cg_id) REFERENCES rsc (id)
+                ON UPDATE CASCADE ON DELETE CASCADE,
+            CONSTRAINT fk_" ++ TableName ++ "_cat_id
+                FOREIGN KEY (cat_id) REFERENCES rsc (id)
+                ON UPDATE CASCADE ON DELETE CASCADE,
+            CONSTRAINT fk_" ++ TableName ++ "_ug_id
+                FOREIGN KEY (ug_id) REFERENCES rsc (id)
+                ON UPDATE CASCADE ON DELETE CASCADE,
+            CONSTRAINT " ++ TableName ++ "_ukey
+                UNIQUE (cg_id, cat_id, ug_id, visibility, action, only_owner)
+        )",
+        Context
+    ),
+	[] = z_db:q("
+        CREATE INDEX IF NOT EXISTS " ++ TableName ++ "_visibility_idx
+        ON " ++ TableName ++ " (visibility)
+        ",
+        Context
+    ),
+	[] = z_db:q("
+        CREATE INDEX IF NOT EXISTS " ++ TableName ++ "_action_idx
+        ON " ++ TableName ++ " (action)
+        ",
+        Context
+    ),
+    [] = z_db:q("
+        CREATE INDEX IF NOT EXISTS " ++ TableName ++ "_only_owner_idx
+        ON " ++ TableName ++ " (only_owner)
+        ",
+        Context
+    ),
+    [] = z_db:q("
+        CREATE INDEX IF NOT EXISTS " ++ TableName ++ "_is_allow_idx
+        ON " ++ TableName ++ " (is_allow)
+        ",
+        Context
+    ),
+   	ok.
+
+ensure_collab_digest_table(State, Context) ->
+	TableName = collab_digest_table(State),
+	[] = z_db:q("
+        CREATE TABLE IF NOT EXISTS " ++ TableName ++ " (
+            id bigserial NOT NULL,
+            cat_id int NOT NULL,
+            visibility int,
+            action character varying(32) NOT NULL,
+            only_owner boolean NOT NULL DEFAULT false,
+            is_allow boolean NOT NULL,
+
+            CONSTRAINT " ++ TableName ++ "_pkey
+                PRIMARY KEY (id),
+            CONSTRAINT fk_" ++ TableName ++ "_cat_id
+                FOREIGN KEY (cat_id) REFERENCES rsc (id)
+                ON UPDATE CASCADE ON DELETE CASCADE,
+            CONSTRAINT " ++ TableName ++ "_ukey
+                UNIQUE (cat_id, visibility, action, only_owner)
+        )",
+        Context
+    ),
+	[] = z_db:q("
+        CREATE INDEX IF NOT EXISTS " ++ TableName ++ "_visibility_idx
+        ON " ++ TableName ++ " (visibility)
+        ",
+        Context
+    ),
+	[] = z_db:q("
+        CREATE INDEX IF NOT EXISTS " ++ TableName ++ "_action_idx
+        ON " ++ TableName ++ " (action)
+        ",
+        Context
+    ),
+    [] = z_db:q("
+        CREATE INDEX IF NOT EXISTS " ++ TableName ++ "_only_owner_idx
+        ON " ++ TableName ++ " (only_owner)
+        ",
+        Context
+    ),
+    [] = z_db:q("
+        CREATE INDEX IF NOT EXISTS " ++ TableName ++ "_is_allow_idx
+        ON " ++ TableName ++ " (is_allow)
+        ",
+        Context
+    ),
+   	ok.
+
+clear_rsc_digest_table(State, Context) ->
+	z_db:q("DELETE FROM " ++ rsc_digest_table(State), Context).
+
+clear_collab_digest_table(State, Context) ->
+	z_db:q("DELETE FROM " ++ collab_digest_table(State), Context).
+
+rsc_digest_table(State) ->
+	"acl_rule_digest_rsc_" ++ z_convert:to_list(State).
+
+collab_digest_table(State) ->
+	"acl_rule_digest_collab_" ++ z_convert:to_list(State).
