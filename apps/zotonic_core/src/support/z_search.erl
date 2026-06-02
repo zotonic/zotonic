@@ -841,7 +841,7 @@ cats_per_alias(TabCats, TabExclude, TabExact, Context) ->
         fun(Alias) ->
             Include = make_rids(flatten(proplists:get_value(Alias, TabCats, [])), Context),
             Exclude = make_rids(flatten(proplists:get_value(Alias, TabExclude, [])), Context),
-            Exact = case lists:flatten(proplists:get_value(Alias, TabExact, [])) of
+            Exact = case flatten(proplists:get_value(Alias, TabExact, [])) of
                 [] -> [];
                 ExactIds ->
                     case make_rids(ExactIds, Context) of
