@@ -839,8 +839,8 @@ cats_per_alias(TabCats, TabExclude, TabExact, Context) ->
     ),
     lists:map(
         fun(Alias) ->
-            Include = make_rids(lists:flatten(proplists:get_value(Alias, TabCats, [])), Context),
-            Exclude = make_rids(lists:flatten(proplists:get_value(Alias, TabExclude, [])), Context),
+            Include = make_rids(flatten(proplists:get_value(Alias, TabCats, [])), Context),
+            Exclude = make_rids(flatten(proplists:get_value(Alias, TabExclude, [])), Context),
             Exact = case lists:flatten(proplists:get_value(Alias, TabExact, [])) of
                 [] -> [];
                 ExactIds ->
@@ -852,6 +852,10 @@ cats_per_alias(TabCats, TabExclude, TabExact, Context) ->
             {Alias, cats_to_find(Include, Exclude, Exact, Context)}
         end,
         AllAlias).
+
+flatten(L) when is_list(L) -> lists:flatten(L);
+flatten(undefined) -> [];
+flatten(A) -> [A].
 
 -spec make_rids(Ids, Context) -> Ids1 when
     Ids :: list(m_rsc:resource()),
