@@ -41,6 +41,10 @@ description: Use when working in Zotonic projects, especially Erlang modules, Zo
 - Module/site roots should have `rebar.config` unless the local workspace has an established exception.
 - Common source directories include `actions`, `filters`, `scomps`, `validators`, `models`, `controllers`, and `support`.
 - Actions, validators, and scomps should include the module/site name in their Erlang module name so higher-priority modules can override them cleanly.
+- Keep the main `mod_*.erl` focused on Zotonic module concerns: `-mod_*` declarations, lifecycle hooks, observers, dispatch/menu setup, datamodel/install hooks, and small glue code.
+- Put template/model-facing APIs and site-aware operations in `src/models/m_*.erl`. Models are the right place to normalize input from templates, check ACLs for model data, read module config, start shared workers when needed, and expose stable functions to other Zotonic code.
+- Put reusable implementation details in `src/support/`. Support modules should own focused domain logic, parsing/recombination, protocol handling, worker `gen_server`s, and helpers that are not themselves template APIs.
+- Prefer the model as the boundary between Zotonic callers and support processes. Keep process startup, batching, timeouts, and result normalization close to the public model API unless the logic is truly generic.
 
 ## Logging
 

@@ -40,6 +40,14 @@ app_or_module/
 - A site app has the same shape but uses a site module such as `src/sitename.erl` and must include `priv/zotonic_site.config`, `.json`, `.yaml`, or `.yml`.
 - Keep source files UTF-8 with LF line endings.
 
+## Module Boundaries
+
+- Keep `src/mod_*.erl` small and Zotonic-facing. It should declare module metadata and config, handle lifecycle callbacks, observe notifications, install data, and connect the module to Zotonic.
+- Put public module APIs in `src/models/m_*.erl` when templates, other modules, or model lookups need to call them. Models should normalize external/template input, apply ACL checks for model data, read module configuration, and return template-friendly data structures.
+- Put worker processes and domain implementation in `src/support/`. This includes `gen_server` workers, parsers, protocol adapters, batching internals, external command/process communication, and pure transformation helpers.
+- Let the model mediate support modules when the functionality is exposed to Zotonic. For example, have the model ensure a shared worker is started, pass timeouts/configuration, call the support worker, and normalize `{ok, ...} | {error, ...}` results for callers.
+- Move code out of `mod_*.erl` once it stops being module lifecycle or observer glue. Move code out of `m_*.erl` when it becomes reusable implementation detail rather than a Zotonic-facing API.
+
 ## Porting From Zotonic 0.x
 
 - Replace Webmachine-style controllers with Zotonic 1.x/Cowmachine callbacks.
