@@ -160,7 +160,8 @@
                         from: src,
                         to: dst,
                         texts: texts
-                    }).then((msg) => {
+                    }, {timeout: 300000})
+                    .then((msg) => {
                         if (msg.payload.status == 'ok') {
                             const result = msg.payload.result;
                             const mapping = {};
@@ -180,6 +181,13 @@
                             z_event("translation-error");
                         }
                         z_unmask('body');
+                    })
+                    .catch(() => {
+                        z_unmask('body');
+                        z_dialog_alert({
+                            title: "{_ Timeout _}",
+                            text: "<p>{_ There was an error translating the texts. Please try again later. _}</p>"
+                        });
                     });
                 break;
             default:

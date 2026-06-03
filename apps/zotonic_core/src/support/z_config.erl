@@ -185,6 +185,7 @@ maybe_map_value(smtp_listen_size, V) -> z_convert:to_integer(V);
 maybe_map_value(smtp_delete_sent_after, V) -> z_convert:to_integer(V);
 maybe_map_value(smtp_is_blackhole, V) -> z_convert:to_bool(V);
 maybe_map_value(timezone, V) -> z_convert:to_binary(V);
+maybe_map_value(python_command, V) -> z_convert:to_binary(V);
 maybe_map_value(function_tracing_enabled, V) -> z_convert:to_bool(V);
 maybe_map_value(_Key, Value) ->
     Value.
@@ -348,6 +349,7 @@ default(filewatcher_enabled) -> true;
 default(filewatcher_scanner_enabled) -> true;
 default(filewatcher_scanner_interval) -> 10000;
 default(filewatcher_terminal_notifier) -> true;
+default(python_command) -> <<"python3">>;
 default(syslog_ident) -> "zotonic";
 default(syslog_opts) -> [ndelay];
 default(syslog_facility) -> local0;

@@ -13,6 +13,7 @@
                   bert, dh_date, eiconv, exometer_core,
                   epgsql,
                   depcache, zotonic_stdlib,
+                  erlexec,
                   cowboy, cowmachine,
                   poolboy,
                   filezcache, s3filez,

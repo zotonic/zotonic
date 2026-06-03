@@ -79,6 +79,10 @@ init([]) ->
             {z_file_sup, start_link, []},
             permanent, 5000, supervisor, dynamic},
 
+        {z_system_process,
+            {z_system_process, start_link, []},
+            permanent, 5000, supervisor, dynamic},
+
         % Sites supervisor, starts all enabled sites
         {z_sites_manager_sup,
             {z_sites_manager_sup, start_link, []},

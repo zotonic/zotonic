@@ -106,7 +106,7 @@ runtests(Tests) ->
     ok.
 
 %% @doc Stop all sites, the zotonic server and the beam.
--spec stop() -> ok.
+-spec stop() -> no_return().
 stop() ->
     ?LOG_INFO(#{ text => <<"Stopping Zotonic">> }),
     logger:set_primary_config(level, error),

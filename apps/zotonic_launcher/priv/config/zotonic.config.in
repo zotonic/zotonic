@@ -321,6 +321,9 @@
 %%% 'pg_dump' command to be used when dumping a site's schema, also used by mod_backup
    %% {pg_dump, "pg_dump"},
 
+%%% Python command to be used by modules creating Python virtual environments.
+   %% {python_command, "python3"},
+
 %%% Password for the sites administration site (zotonic_status). Will be generated on
 %%% first Zotonic startup, if the zotonic.config file does not yet exist.
 %%% The corresponding account name is 'wwwadmin'

@@ -362,6 +362,7 @@ is_json(K) ->
 % Fields we are sure of that they are text fields
 is_text(<<"title">>) -> true;
 is_text(<<"short_title">>) -> true;
+is_text(<<"chapeau">>) -> true;
 is_text(<<"summary">>) -> true;
 is_text(<<"body">>) -> true;
 is_text(<<"body_extra">>) -> true;
