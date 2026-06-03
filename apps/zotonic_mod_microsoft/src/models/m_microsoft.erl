@@ -40,8 +40,6 @@ Available Model API Paths
     is_useauth/1
 ]).
 
--include_lib("zotonic_core/include/zotonic.hrl").
-
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
 m_get([ <<"useauth">> | Rest ], _OptMsg, Context) ->

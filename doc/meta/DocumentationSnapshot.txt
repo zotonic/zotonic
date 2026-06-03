@@ -1,9 +1,0 @@
-/cd /tmp
-rm -rf zotonic-docs 
-mkdir zotonic-docs
-cd zotonic-docs
-httrack http://zotonic.com/
-cd ..
-zip -r zotonic-html-documentation-`date +"%Y%m%d"`.zip zotonic-docs/
-
-and upload to google code.
