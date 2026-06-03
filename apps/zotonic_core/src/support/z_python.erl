@@ -25,6 +25,9 @@
 %% Keeping virtual environments in the module-specific app data directory makes
 %% them persistent across restarts and shareable by all sites using the same
 %% Zotonic node, while keeping module-specific files out of `zotonic_core`.
+%% Use `venv_python_result/1` when the caller should return data-directory
+%% errors as structured `{error, Reason}` tuples. `venv_python/1` raises with
+%% the same context when the path cannot be resolved.
 %% The default Python executable is read from `z_config:get(python_command)`,
 %% which defaults to `python3`.
 %% @end
@@ -52,10 +55,12 @@
     python_command/0,
     python_command/1,
     run_install_command/1,
+    venv_python_result/1,
     venv_python/1
 ]).
 
 -define(KILL_TIMEOUT_SECS, 10).
+-define(INSTALL_TIMEOUT, 900000).
 
 -spec ensure_venv(Venv) -> ok | {error, Reason} when
     Venv :: file:filename_all() | atom(),
@@ -70,13 +75,17 @@ ensure_venv(Venv) ->
     Reason :: term().
 %% @doc Create a Python virtual environment if it does not exist.
 ensure_venv(Python, Venv) ->
-    VenvDir = venv_dir(Venv),
-    case filelib:is_file(venv_python(VenvDir)) of
-        true ->
-            ok;
-        false ->
-            filelib:ensure_dir(filename:join(VenvDir, ".keep")),
-            run_install_command([ Python, "-m", "venv", VenvDir ])
+    case venv_dir(Venv) of
+        {ok, VenvDir} ->
+            case filelib:is_file(venv_python_path(VenvDir)) of
+                true ->
+                    ok;
+                false ->
+                    filelib:ensure_dir(filename:join(VenvDir, ".keep")),
+                    run_install_command([ Python, "-m", "venv", VenvDir ])
+            end;
+        {error, _} = Error ->
+            Error
     end.
 
 -spec python_command() -> binary().
@@ -103,32 +112,99 @@ pip_install(VenvPython, Requirements) ->
             Error
     end.
 
--spec run_install_command(Command) -> ok | {error, map()} when
+-spec run_install_command(Command) -> ok | {error, timeout | map()} when
     Command :: [ file:filename_all() ].
 %% @doc Run a Python installation command and normalize its result.
 run_install_command(Command) ->
-    case exec:run(Command, [sync, stdout, stderr, {kill_timeout, ?KILL_TIMEOUT_SECS}]) of
-        {ok, _Output} ->
-            ok;
+    ExecOptions = [
+        stdout,
+        stderr,
+        monitor,
+        {kill_timeout, ?KILL_TIMEOUT_SECS}
+    ],
+    case exec:run(Command, ExecOptions) of
+        {ok, _Pid, OsPid} ->
+            Timer = erlang:send_after(?INSTALL_TIMEOUT, self(), {timeout, OsPid}),
+            Result = receive_install_result(OsPid, Command),
+            cancel_timer(Timer, OsPid),
+            Result;
         {error, Reason} ->
             {error, #{ command => Command, reason => Reason }}
     end.
 
+%% @doc Receive command output until the Python installation command exits.
+receive_install_result(OsPid, Command) ->
+    receive
+        {'DOWN', OsPid, process, _Pid, normal} ->
+            ok;
+        {'DOWN', OsPid, process, _Pid, Reason} ->
+            {error, #{ command => Command, reason => Reason }};
+        {timeout, OsPid} ->
+            exec:stop(OsPid),
+            receive
+                {'DOWN', OsPid, process, _Pid, _Reason} ->
+                    {error, timeout}
+            end;
+        {stdout, OsPid, _Data} ->
+            receive_install_result(OsPid, Command);
+        {stderr, OsPid, _Data} ->
+            receive_install_result(OsPid, Command)
+    end.
+
+%% @doc Cancel a timeout timer and flush a late timeout message.
+cancel_timer(Timer, OsPid) ->
+    _ = erlang:cancel_timer(Timer),
+    receive
+        {timeout, OsPid} ->
+            ok
+    after 0 ->
+            ok
+    end.
+
+-spec venv_python_result(Venv) -> {ok, Python} | {error, Reason} when
+    Venv :: file:filename_all() | atom(),
+    Python :: file:filename_all(),
+    Reason :: term().
+%% @doc Return the Python executable path inside a virtual environment.
+venv_python_result(Venv) ->
+    case venv_dir(Venv) of
+        {ok, VenvDir} ->
+            {ok, venv_python_path(VenvDir)};
+        {error, _} = Error ->
+            Error
+    end.
+
 -spec venv_python(Venv) -> file:filename_all() when
     Venv :: file:filename_all() | atom().
-%% @doc Return the Python executable path inside a virtual environment.
+%% @doc Return the Python executable path or raise with context if it can't be resolved.
 venv_python(Venv) ->
-    VenvDir = venv_dir(Venv),
+    case venv_python_result(Venv) of
+        {ok, Python} ->
+            Python;
+        {error, Reason} ->
+            erlang:error(Reason)
+    end.
+
+-spec venv_python_path(VenvDir) -> file:filename_all() when
+    VenvDir :: file:filename_all().
+%% @doc Return the Python executable path inside a concrete virtualenv directory.
+venv_python_path(VenvDir) ->
     filename:join([ VenvDir, "bin", "python" ]).
 
--spec venv_dir(Venv) -> file:filename_all() when
-    Venv :: file:filename_all() | atom().
+-spec venv_dir(Venv) -> {ok, Dir} | {error, Reason} when
+    Venv :: file:filename_all() | atom(),
+    Dir :: file:filename_all(),
+    Reason :: term().
 %% @doc Resolve a virtualenv directory or module atom to a concrete directory.
 venv_dir(Module) when is_atom(Module) ->
-    {ok, Dir} = z_config_files:app_data_dir(Module),
-    filename:join(Dir, "venv");
+    case z_config_files:app_data_dir(Module) of
+        {ok, Dir} ->
+            {ok, filename:join(Dir, "venv")};
+        {error, Reason} ->
+            {error, #{ venv => Module, reason => Reason }}
+    end;
 venv_dir(VenvDir) ->
-    VenvDir.
+    {ok, VenvDir}.
 
 %% @doc Resolve a configured Python command to an absolute executable when possible.
 resolve_command(<<>>) ->
