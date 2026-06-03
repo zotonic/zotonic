@@ -26,7 +26,7 @@ Configuration keys:
 
 | Key | Description |
 | --- | --- |
-| `mod_authentication.password_min_length` | The minimumum length of passwords. Defaults to 8; set this to an integer value. |
+| `mod_authentication.password_min_length` | The minimum length of passwords. Defaults to 8; set this to an integer value. |
 | `mod_authentication.is_rememberme` | Set this to `1` to check the *remember me* checkbox per default. |
 | `mod_authentication.is_one_step_logon` | Normally a two-step logon is used, first the username is requested, then the password is requested. In between the server checks the username and is able to show alternative authentication methods based on the username. Set this to `1` to show the username and password field at once, and disable the display of alternative authentication methods. |
 | `mod_authentication.is_signup_confirm` | Set to `1` to force user confirmation of new accounts. This is useful when using 3rd party authentication services. If a new identity is found then a new account is automatically added. With this option set the user will be asked if they want to make a new account. This prevents duplicate accounts when using multiple authentication methods. |
