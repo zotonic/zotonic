@@ -97,8 +97,8 @@ After upload:
 
 After delete of medium record:
 
- - find in filename_cas table the hashes for the filename
- - mark all matching cas entries for possible GC (on delete trigger in database)
+  - find in filename_cafs table the hashes for the filename
+  - mark all matching cafs entries for possible GC (on delete trigger in database)
 
 
 Previews
