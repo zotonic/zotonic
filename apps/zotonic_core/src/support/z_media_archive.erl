@@ -248,9 +248,7 @@ safe_filename_1(<<$.,Rest/binary>>) ->
     safe_filename_1(<<$_, Rest/binary>>);
 safe_filename_1(B) when is_binary(B) ->
     AsName = z_convert:to_binary(z_string:to_name(B)),
-    safe_filename_2(AsName, <<>>);
-safe_filename_1(L) when is_list(L) ->
-    safe_filename_1(iolist_to_binary(L)).
+    safe_filename_2(AsName, <<>>).
 
 safe_filename_2(<<>>, Acc) ->
     Acc;

@@ -11,7 +11,7 @@
 %% filename:join(AppDataDir, "venv")
 %% </pre>
 %%
-%% where `AppDataDir` is returned by `z_config_files:app_data_dir/1`.
+%% where AppDataDir is returned by z_config_files:app_data_dir/1.
 %%
 %% For example, a module can use:
 %%
@@ -24,12 +24,12 @@
 %%
 %% Keeping virtual environments in the module-specific app data directory makes
 %% them persistent across restarts and shareable by all sites using the same
-%% Zotonic node, while keeping module-specific files out of `zotonic_core`.
-%% Use `venv_python_result/1` when the caller should return data-directory
-%% errors as structured `{error, Reason}` tuples. `venv_python/1` raises with
+%% Zotonic node, while keeping module-specific files out of zotonic_core.
+%% Use venv_python_result/1 when the caller should return data-directory
+%% errors as structured {error, Reason} tuples. venv_python/1 raises with
 %% the same context when the path cannot be resolved.
-%% The default Python executable is read from `z_config:get(python_command)`,
-%% which defaults to `python3`.
+%% The default Python executable is read from z_config:get(python_command),
+%% which defaults to python3.
 %% @end
 
 %% Copyright 2026 Marc Worrell

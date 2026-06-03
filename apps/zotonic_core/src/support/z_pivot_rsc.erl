@@ -798,8 +798,14 @@ task_topic(Context) ->
 next_poll(State = #state{ poll_timer = TRef }, Interval) ->
     timer:cancel(TRef),
     z_utils:flush_message(poll),
-    {ok, TRefNew} = timer:send_after(Interval*1000, poll),
-    State#state{ poll_timer = TRefNew }.
+    if
+        Interval > 0 ->
+            {ok, TRefNew} = timer:send_after(Interval*1000, poll),
+            State#state{ poll_timer = TRefNew };
+        true ->
+            self() ! poll,
+            State#state{ poll_timer = undefined }
+    end.
 
 
 check_pivot_job(#state{ pivot_pid = undefined }) ->
