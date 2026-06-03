@@ -155,6 +155,7 @@ Example with built-in functions:
    r.readAsArrayBuffer(file);
    r.onloadend = async function(entry) {
        const h = await crypto.subtle.digest('SHA-256', entry.target.result);
+       const hashArray = Array.from(new Uint8Array(h));
        // output: the sha256 digest hex encoded of the file
        const hashHex = hashArray
           .map((b) => b.toString(16).padStart(2, "0"))
