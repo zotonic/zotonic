@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2025 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Media archiving utilities.  Manages the files/archive directory of sites.
 %% @end
 
-%% Copyright 2009-2025 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -225,13 +225,15 @@ preview_filename(Filename, Context) ->
                     safe_filename(Rootname)]),
     make_unique(RelRoot, z_convert:to_binary(Extension), Context).
 
+safe_filename(Filename) when is_list(Filename) ->
+    safe_filename(unicode:characters_to_binary(Filename));
 safe_filename(Filename) when size(Filename) > ?MAX_FILENAME_TRUNCATE_LENGTH ->
     Parts = binary:split(Filename, [ <<"_">>, <<"-">> ], [ global, trim_all ]),
     Parts1 = drop_numparts(lists:reverse(Parts)),
     Filename2 = iolist_to_binary(lists:join(<<"_">>, lists:reverse(Parts1))),
     Filename3 = z_string:truncatechars(Filename2, ?MAX_FILENAME_TRUNCATE_LENGTH, <<>>),
     safe_filename_1(Filename3);
-safe_filename(Filename) ->
+safe_filename(Filename) when is_binary(Filename) ->
     Filename1 = z_string:truncatechars(Filename, ?MAX_FILENAME_TRUNCATE_LENGTH, <<>>),
     safe_filename_1(Filename1).
 
