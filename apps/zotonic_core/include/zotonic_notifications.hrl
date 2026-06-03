@@ -1075,6 +1075,7 @@
 %% Type: first
 %% Return {ok, List} | {error, Reason} | undefined.
 -record(translate, {
+    type = html :: html | text,
     from :: atom(),
     to :: atom(),
     texts = [] :: list( binary() )

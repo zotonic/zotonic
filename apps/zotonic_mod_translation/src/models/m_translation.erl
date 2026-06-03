@@ -75,7 +75,7 @@ Available Model API Paths
 | `get` | `/english_name/+code/...` | Return English language name for code `+code`. |
 | `get` | `/localized_name/+code/...` | Return language name for `+code` localized to the current request language. |
 | `get` | `/properties/+code/...` | Return language properties map for code `+code`. |
-| `get` | `/translate/...` | Translate text payload using configured translation services and options. |
+| `get` | `/translate/...` | Translate text payload using configured translation services and optional `type`. |
 | `get` | `/has_translation_service/...` | Return whether any translation service is configured and available. |
 | `get` | `/detect/...` | Detect language of supplied text payload. |
 | `get` | `/detect_enabled/...` | Detect language only when detection is enabled for the site. |
@@ -92,7 +92,9 @@ Available Model API Paths
     m_get/3,
 
     translate_to_lookup/4,
+    translate_to_lookup/5,
     translate/4,
+    translate/5,
     has_translation_service/1,
 
     has_language/3,
@@ -181,7 +183,8 @@ m_get([ <<"translate">> | Rest ], #{ payload := Payload }, Context) ->
             <<"texts">> := Texts
         } ->
             ToCode = maps:get(<<"to">>, Payload, z_context:language(Context)),
-            case translate_to_lookup(FromCode, ToCode, Texts, Context) of
+            Type = to_type(maps:get(<<"type">>, Payload, html)),
+            case translate_to_lookup(FromCode, ToCode, Texts, Type, Context) of
                 {ok, Result} ->
                     {ok, {Result, Rest}};
                 {error, _} = Error ->
@@ -312,8 +315,27 @@ has_translation_service(Context) ->
     Translations :: list( map() ),
     Reason :: term().
 translate_to_lookup(FromLanguage, ToLanguage, Texts, Context) ->
+    translate_to_lookup(FromLanguage, ToLanguage, Texts, html, Context).
+
+%% @doc Translate one or more strings from one language to another. The strings
+%% can be trans records, a single string or a list of strings. If the source language
+%% is 'en' then the .po files are consulted for a preferred translation.
+%% Both the from and to language must be configured as editable languages.
+%% The type is passed to translation services and is 'html' or 'text'.
+%% The result is a list of maps with keys 'text' and 'translation'. The translation can be
+%% 'undefined' if no translation could be provided.
+-spec translate_to_lookup(FromLanguage, ToLanguage, Texts, Type, Context) -> {ok, Translations} | {error, Reason} when
+    FromLanguage :: z_language:language(),
+    ToLanguage :: z_language:language(),
+    Texts :: [ Text ] | Text,
+    Text :: binary() | #trans{},
+    Type :: html | text | binary() | string(),
+    Context :: z:context(),
+    Translations :: list( map() ),
+    Reason :: term().
+translate_to_lookup(FromLanguage, ToLanguage, Texts, Type, Context) ->
     TextList = to_list(Texts),
-    case translate(FromLanguage, ToLanguage, Texts, Context) of
+    case translate(FromLanguage, ToLanguage, Texts, Type, Context) of
         {ok, Result} ->
             R = lists:map(
                 fun({From, To}) ->
@@ -343,7 +365,26 @@ translate_to_lookup(FromLanguage, ToLanguage, Texts, Context) ->
     Translations :: [ binary() | undefined ],
     Reason :: term().
 translate(FromLanguage, ToLanguage, Texts, Context) ->
-    translation_translate:translate(FromLanguage, ToLanguage, Texts, Context).
+    translate(FromLanguage, ToLanguage, Texts, html, Context).
+
+%% @doc Translate one or more strings from one language to another. The strings
+%% can be trans records, a single string or a list of strings. If the source language
+%% is 'en' then the .po files are consulted for a preferred translation.
+%% Both the from and to language must be configured as editable languages.
+%% The type is passed to translation services and is 'html' or 'text'.
+%% The result is a list of translations, in the same order as the input Texts. Translations
+%% that could not be done result in 'undefined'.
+-spec translate(FromLanguage, ToLanguage, Texts, Type, Context) -> {ok, Translations} | {error, Reason} when
+    FromLanguage :: z_language:language(),
+    ToLanguage :: z_language:language(),
+    Texts :: [ Text ] | Text,
+    Text :: binary() | #trans{},
+    Type :: html | text | binary() | string(),
+    Context :: z:context(),
+    Translations :: [ binary() | undefined ],
+    Reason :: term().
+translate(FromLanguage, ToLanguage, Texts, Type, Context) ->
+    translation_translate:translate(FromLanguage, ToLanguage, Texts, to_type(Type), Context).
 
 to_list(#trans{} = Tr) ->
     [Tr];
@@ -351,6 +392,14 @@ to_list(Text) when is_binary(Text) ->
     [Text];
 to_list(L) when is_list(L) ->
     L.
+
+to_type(html) -> html;
+to_type(text) -> text;
+to_type(<<"html">>) -> html;
+to_type(<<"text">>) -> text;
+to_type("html") -> html;
+to_type("text") -> text;
+to_type(_) -> html.
 
 language_list_configured(Context) ->
     Default = z_language:default_language(Context),

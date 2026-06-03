@@ -160,7 +160,7 @@
                         from: src,
                         to: dst,
                         texts: texts
-                    }).then((msg) => {
+                    }, {timeout: 300000}).then((msg) => {
                         if (msg.payload.status == 'ok') {
                             const result = msg.payload.result;
                             const mapping = {};

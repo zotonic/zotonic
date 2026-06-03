@@ -72,3 +72,5 @@ docker-data
 apps/zotonic_launcher/bin/zotonic-completion.bash
 
 .env
+
+llm-input/

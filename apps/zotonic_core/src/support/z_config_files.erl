@@ -26,6 +26,7 @@
     security_dir/0,
     log_dir/0,
     data_dir/0,
+    app_data_dir/1,
     cache_dir/0,
     config_dir/0,
     config_dir/1,
@@ -290,6 +291,25 @@ data_dir_1() ->
             end;
         [ D | _ ] ->
             {ok, D}
+    end.
+
+-spec app_data_dir(App) -> {ok, Dir} | {error, Reason} when
+    App :: atom(),
+    Dir :: file:filename_all(),
+    Reason :: term().
+%% @doc Return and create the shared data directory for one application.
+app_data_dir(App) when is_atom(App) ->
+    case data_dir() of
+        {ok, DataDir} ->
+            Dir = filename:join([DataDir, "apps", atom_to_list(App)]),
+            case filelib:ensure_dir(filename:join(Dir, ".empty")) of
+                ok ->
+                    {ok, Dir};
+                {error, _} = Error ->
+                    Error
+            end;
+        {error, _} = Error ->
+            Error
     end.
 
 

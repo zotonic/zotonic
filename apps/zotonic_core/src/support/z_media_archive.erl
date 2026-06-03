@@ -42,6 +42,10 @@
 
 -include("../../include/zotonic.hrl").
 
+-define(MAX_FILENAME_LENGTH, 100).
+-define(MAX_FILENAME_TRUNCATE_LENGTH, ?MAX_FILENAME_LENGTH - 20).   % leave room for the unique part of the filename
+
+
 %% @doc Return the absolute path of a file in the archive. The given filename
 %% must be relative to the archive directory.
 -spec abspath(File, Context) -> file:filename_all() when
@@ -205,7 +209,8 @@ archive_filename(Filename, Context) ->
     make_unique(RelRoot, z_convert:to_binary(Extension), Context).
 
 %% @doc Return an unique filename for archiving a preview of a file. Used for
-%% storing a new file after preview generation.
+%% storing a new file after preview generation. Optionally removes any appended
+%% numbers, which are always added for uniqueness.
 -spec preview_filename(Filename, Context) -> UniqueArchiveFilename when
     Filename :: file:filename_all(),
     Context :: z:context(),
@@ -220,24 +225,40 @@ preview_filename(Filename, Context) ->
                     safe_filename(Rootname)]),
     make_unique(RelRoot, z_convert:to_binary(Extension), Context).
 
+safe_filename(Filename) when size(Filename) > ?MAX_FILENAME_TRUNCATE_LENGTH ->
+    Parts = binary:split(Filename, [ <<"_">>, <<"-">> ], [ global, trim_all ]),
+    Parts1 = drop_numparts(lists:reverse(Parts)),
+    Filename2 = iolist_to_binary(lists:join(<<"_">>, lists:reverse(Parts1))),
+    Filename3 = z_string:truncatechars(Filename2, ?MAX_FILENAME_TRUNCATE_LENGTH, <<>>),
+    safe_filename_1(Filename3);
+safe_filename(Filename) ->
+    Filename1 = z_string:truncatechars(Filename, ?MAX_FILENAME_TRUNCATE_LENGTH, <<>>),
+    safe_filename_1(Filename1).
 
-safe_filename(<<$.,Rest/binary>>) ->
-    safe_filename(<<$_, Rest/binary>>);
-safe_filename(B) when is_binary(B) ->
+drop_numparts([_] = Path) -> Path;
+drop_numparts([P|Ps] = Path) ->
+    case z_utils:only_digits(P) of
+        true -> drop_numparts(Ps);
+        false -> Path
+    end.
+
+safe_filename_1(<<$.,Rest/binary>>) ->
+    safe_filename_1(<<$_, Rest/binary>>);
+safe_filename_1(B) when is_binary(B) ->
     AsName = z_convert:to_binary(z_string:to_name(B)),
-    safe_filename_1(AsName, <<>>);
-safe_filename(L) when is_list(L) ->
-    safe_filename(iolist_to_binary(L)).
+    safe_filename_2(AsName, <<>>);
+safe_filename_1(L) when is_list(L) ->
+    safe_filename_1(iolist_to_binary(L)).
 
-safe_filename_1(<<>>, Acc) ->
+safe_filename_2(<<>>, Acc) ->
     Acc;
-safe_filename_1(<<C/utf8, Rest/binary>>, Acc)
+safe_filename_2(<<C/utf8, Rest/binary>>, Acc)
     when (C >= $a andalso C =< $z)
         orelse (C >= $0 andalso C =< $9)
         orelse C == $. orelse C == $- orelse C == $_ ->
-    safe_filename_1(Rest, <<Acc/binary,C>>);
-safe_filename_1(<<_/utf8, Rest/binary>>, Acc) ->
-    safe_filename_1(Rest, <<Acc/binary, $_>>).
+    safe_filename_2(Rest, <<Acc/binary,C>>);
+safe_filename_2(<<_/utf8, Rest/binary>>, Acc) ->
+    safe_filename_2(Rest, <<Acc/binary, $_>>).
 
 
 %% @doc Make sure that the filename is unique by appending a number.

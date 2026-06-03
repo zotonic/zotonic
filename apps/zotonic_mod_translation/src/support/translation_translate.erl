@@ -23,13 +23,16 @@
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
--export([ translate/4 ]).
+-export([
+    translate/4,
+    translate/5
+]).
 
 %% @doc Translate one or more strings from one language to another. The strings
 %% can be trans records, a single string or a list of strings. If the source language
 %% is 'en' then the .po files are consulted for a preferred translation.
 %% Both the from and to language must be configured as editable languages.
-
+%% The text is assumed to be HTML, with entities and tags.
 -spec translate(FromLanguage, ToLanguage, Texts, Context) -> {ok, Translations} | {error, Reason} when
     FromLanguage :: z_language:language(),
     ToLanguage :: z_language:language(),
@@ -39,24 +42,40 @@
     Translations :: [ binary() | undefined ],
     Reason :: term().
 translate(FromLanguage, ToLanguage, Texts, Context) ->
+    translate(FromLanguage, ToLanguage, Texts, html, Context).
+
+%% @doc Translate one or more strings from one language to another. The strings
+%% can be trans records, a single string or a list of strings. If the source language
+%% is 'en' then the .po files are consulted for a preferred translation.
+%% Both the from and to language must be configured as editable languages.
+-spec translate(FromLanguage, ToLanguage, Texts, Type, Context) -> {ok, Translations} | {error, Reason} when
+    FromLanguage :: z_language:language(),
+    ToLanguage :: z_language:language(),
+    Texts :: [ Text ] | Text,
+    Text :: binary() | #trans{},
+    Type :: html | text,
+    Context :: z:context(),
+    Translations :: [ binary() | undefined ],
+    Reason :: term().
+translate(FromLanguage, ToLanguage, Texts, Type, Context) ->
     FromCode = to_lang(FromLanguage, Context),
     ToCode = to_lang(ToLanguage, Context),
-    translate_1(FromCode, ToCode, to_list(Texts), Context).
+    translate_1(FromCode, ToCode, to_list(Texts), Type, Context).
 
-translate_1({error, _}, _ToCode, _Texts, _Context) ->
+translate_1({error, _}, _ToCode, _Texts, _Type, _Context) ->
     {error, from_language};
-translate_1(_FromCode, {error, _}, _Texts, _Context) ->
+translate_1(_FromCode, {error, _}, _Texts, _Type, _Context) ->
     {error, to_language};
-translate_1({ok, FromCode}, {ok, ToCode}, Texts, Context) ->
+translate_1({ok, FromCode}, {ok, ToCode}, Texts, Type, Context) ->
     PartlyTranslated = lists:map(
         fun(Text) ->
             local_trans(FromCode, ToCode, trim(Text), Context)
         end,
         Texts),
-    add_service_trans(FromCode, ToCode, PartlyTranslated, Context).
+    add_service_trans(FromCode, ToCode, PartlyTranslated, Type, Context).
 
 
-add_service_trans(FromCode, ToCode, PartlyTranslated, Context) ->
+add_service_trans(FromCode, ToCode, PartlyTranslated, Type, Context) ->
     case lists:filtermap(
         fun
             ({FromText, undefined}) -> {true, FromText};
@@ -69,6 +88,7 @@ add_service_trans(FromCode, ToCode, PartlyTranslated, Context) ->
             {ok, Translations};
         ToTranslate ->
             Notification = #translate{
+                type = Type,
                 from = FromCode,
                 to = ToCode,
                 texts = ToTranslate
