@@ -49,6 +49,7 @@ description: Use when working in Zotonic projects, especially Erlang modules, Zo
 ## Logging
 
 - Prefer structured `?LOG_*` maps.
+- In `?LOG_*` maps, `in => ...` is the Zotonic module or Erlang application context, not necessarily the current Erlang `?MODULE` file.
 - If logging `?LOG_ERROR` with `result => error`, include `reason => ...`.
 - If logging after an operation that returns `ok | {error, Reason}`, branch on the result and log success/failure explicitly.
 - If a module already includes `zotonic_core/include/zotonic.hrl`, do not also include `kernel/include/logger.hrl`; `zotonic.hrl` provides the logging macros.
