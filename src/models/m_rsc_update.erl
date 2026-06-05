@@ -852,7 +852,7 @@ props_filter([{page_path, Path}|T], Acc, RscUpd, Context) ->
                         is_binary(Path) ->
                             normalize_page_path(Path, IsEncoded);
                         is_list(Path) ->
-                            normalize_page_path(z_convert:to_binary(Path), IsEncoded);
+                            normalize_page_path(Path, IsEncoded);
                         true ->
                             case Path of
                                 {trans, []} ->
@@ -997,7 +997,7 @@ normalize_page_path(<<>>, _IsEncoded) -> <<>>;
 normalize_page_path("", _IsEncoded) -> <<>>;
 normalize_page_path(Path, true) ->
     try
-        Path1 = z_url:url_decode(Path),
+        Path1 = z_url:url_decode(z_convert:to_list(Path)),
         normalize_page_path(Path1)
     catch
         _:_ ->
