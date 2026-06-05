@@ -4,12 +4,21 @@
  #}
 <script nonce="{{ m.req.csp_nonce }}">
     (function() {
-        let theme = "auto";
-        try {
-            theme = JSON.parse(localStorage.getItem("zotonic-theme")) || "auto";
-        } catch (e) {
-            theme = "auto";
-        }
+        {% if m.site.ui_theme as theme %}
+            let theme = '{{ theme }}';
+            try {
+                if (JSON.parse(localStorage.getItem("zotonic-theme")) != theme) {
+                    localStorage.setItem("zotonic-theme", JSON.stringify(theme));
+                }
+            } catch (e) {}
+        {% else %}
+            let theme = "auto";
+            try {
+                theme = JSON.parse(localStorage.getItem("zotonic-theme")) || "auto";
+            } catch (e) {
+                theme = "auto";
+            }
+        {% endif %}
         const resolved = theme === "auto" && window.matchMedia
             ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
             : (theme === "dark" ? "dark" : "light");
