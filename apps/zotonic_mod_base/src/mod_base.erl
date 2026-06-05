@@ -89,6 +89,13 @@ See also
         },
         #{
             module => site,
+            key => ui_theme,
+            type => string,
+            default => "",
+            description => "Set to the 'auto', 'light' or 'dark' to fix the UI theme and remove the admin theme selector."
+        },
+        #{
+            module => site,
             key => pagelen,
             type => integer,
             default => 20,
