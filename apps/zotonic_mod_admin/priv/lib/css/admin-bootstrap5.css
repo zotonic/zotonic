@@ -75,7 +75,7 @@
   --bs-font-sans-serif: "Helvetica Neue", Helvetica, Arial, sans-serif;
   --bs-font-monospace: Menlo, Monaco, Consolas, "Courier New", monospace;
   --bs-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
-  --bs-root-font-size: 13px;
+  --bs-root-font-size: 14px;
   --bs-body-font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   --bs-body-font-size: 1rem;
   --bs-body-font-weight: 400;
@@ -696,7 +696,7 @@ progress {
 
 .blockquote {
   margin-bottom: 1rem;
-  font-size: 1.015625rem;
+  font-size: 1.09375rem;
 }
 .blockquote > :last-child {
   margin-bottom: 0;
@@ -13758,7 +13758,7 @@ button.close {
 /* Forms and input definitions */
 .label-floating {
   position: relative;
-  padding-top: 18px;
+  padding-top: 20px;
 }
 .label-floating label,
 .label-floating label.control-label {
@@ -13784,15 +13784,15 @@ button.close {
   color: var(--z-admin-form-label-focus-color);
 }
 .label-floating input.field-title {
-  font-size: 27px;
-  height: 36px;
+  font-size: 30px;
+  height: 40px;
 }
 .label-floating textarea.field-summary {
-  font-size: 17px;
+  font-size: 18px;
 }
 .label-floating textarea.field-collapse:placeholder-shown,
 .label-floating textarea.field-summary:placeholder-shown {
-  height: 33px;
+  height: 34px;
 }
 .label-floating.has-error input,
 .label-floating.has-error select,
