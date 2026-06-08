@@ -2,17 +2,40 @@ $logon_box_width: 400px;
 $horizontal_spacing: 20px;
 $button_spacing: 10px;
 $vertical_element_spacing: 15px; // Bootstrap default
-$border_color: #ddd;
-$background_color: #fff;
-$box_background_color: #f2f2f2;
-$error_color: #C21C3D;
-$error403_background_color: #e8e8e8;
+
+:root,
+[data-bs-theme="light"] {
+    --z-logon-bg: var(--bs-body-bg, #fff);
+    --z-logon-text: var(--bs-body-color, #212529);
+    --z-logon-surface: var(--bs-body-bg, #fff);
+    --z-logon-surface-muted: var(--bs-tertiary-bg, #f2f2f2);
+    --z-logon-border: var(--bs-border-color, #ddd);
+    --z-logon-error: var(--bs-danger, #C21C3D);
+    --z-logon-error403-bg: var(--bs-secondary-bg, #e8e8e8);
+}
+
+[data-bs-theme="dark"] {
+    --z-logon-bg: var(--bs-body-bg, #212529);
+    --z-logon-text: var(--bs-body-color, #f1f3f5);
+    --z-logon-surface: var(--bs-body-bg, #212529);
+    --z-logon-surface-muted: var(--bs-tertiary-bg, #343a40);
+    --z-logon-border: var(--bs-border-color, #495057);
+    --z-logon-error: var(--bs-danger-text-emphasis, #ff6b81);
+    --z-logon-error403-bg: var(--bs-secondary-bg, #1f2225);
+}
+
+$border_color: var(--z-logon-border, #ddd);
+$background_color: var(--z-logon-surface, #fff);
+$box_background_color: var(--z-logon-surface-muted, #f2f2f2);
+$error_color: var(--z-logon-error, #C21C3D);
+$error403_background_color: var(--z-logon-error403-bg, #e8e8e8);
 
 body.err403 {
     background-color: $error403_background_color;
+    color: var(--z-logon-text, #212529);
 
     .z-logon-box {
-        background-color: white;
+        background-color: $background_color;
         padding: 20px 10px;
     }
 }
@@ -31,6 +54,7 @@ body.err403 {
 .z-logon-box {
     float: none;
     margin: $vertical_element_spacing auto;
+    color: var(--z-logon-text, #212529);
 
     width: $logon_box_width;
     max-width: 100%;
@@ -153,6 +177,7 @@ body.err403 {
             margin: $vertical_element_spacing 0;
             padding: $vertical_element_spacing $horizontal_spacing;
             background-color: $background_color;
+            border: 1px solid $border_color;
         }
 
         .z-logon-extra {
@@ -206,5 +231,6 @@ body.err403 {
     .z_validation_message {
         display: block;
         margin: 5px 0 0 0;
+        color: $error_color;
     }
 }

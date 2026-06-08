@@ -640,11 +640,6 @@ pre:empty {
   margin: 0;
 }
 
-a.close,
-button.close {
-  color: #555;
-}
-
 .radio-inline,
 .checkbox-inline,
 .radio-inline + .radio-inline,
