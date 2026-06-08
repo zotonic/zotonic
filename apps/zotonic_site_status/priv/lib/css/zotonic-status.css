@@ -26,15 +26,72 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 ---------------------------------------------------------- */
+:root,
+[data-bs-theme=light] {
+  --z-status-bg: #eee;
+  --z-status-text: #000;
+  --z-status-text-muted: #777;
+  --z-status-text-medium: #555;
+  --z-status-border: #d7d7d7;
+  --z-status-table-border: #fff;
+  --z-status-table-stopped-border: #eee;
+  --z-status-surface: #fff;
+  --z-status-primary: #0fa2db;
+  --z-status-primary-hover: #0d91c4;
+  --z-status-on-primary: #fff;
+  --z-status-running: #4CAF50;
+  --z-status-running-bg: #E8F5E9;
+  --z-status-retrying: #EF6C00;
+  --z-status-retrying-bg: #FFF3E0;
+  --z-status-stopped: #BDBDBD;
+  --z-status-stopped-bg: #fff;
+  --z-status-waiting: #00BCD4;
+  --z-status-waiting-bg: #fff;
+  --z-status-failed: #D84315;
+  --z-status-failed-bg: #FBE9E7;
+  --z-status-info-bg: #343434;
+  --z-status-info-text: #fff;
+  --z-status-error-text: #D84315;
+  --z-status-stopped-label-bg: #999;
+}
+
+[data-bs-theme=dark] {
+  --z-status-bg: #1f2225;
+  --z-status-text: #e5e7eb;
+  --z-status-text-muted: #adb5bd;
+  --z-status-text-medium: #c7ced6;
+  --z-status-border: #495057;
+  --z-status-table-border: #343a40;
+  --z-status-table-stopped-border: #495057;
+  --z-status-surface: #2b3035;
+  --z-status-primary: #0fa2db;
+  --z-status-primary-hover: #1286b6;
+  --z-status-on-primary: #fff;
+  --z-status-running: #63d471;
+  --z-status-running-bg: #17351d;
+  --z-status-retrying: #ffb457;
+  --z-status-retrying-bg: #3b2814;
+  --z-status-stopped: #aeb7c0;
+  --z-status-stopped-bg: #2b3035;
+  --z-status-waiting: #46d9e8;
+  --z-status-waiting-bg: #12343a;
+  --z-status-failed: #ff8a72;
+  --z-status-failed-bg: #3a1f1b;
+  --z-status-info-bg: #2b3035;
+  --z-status-info-text: #e5e7eb;
+  --z-status-error-text: #ff8a72;
+  --z-status-stopped-label-bg: #6c757d;
+}
+
 body {
-  background: #eee;
-  color: #000;
+  background: var(--z-status-bg, #eee);
+  color: var(--z-status-text, #000);
 }
 
 .navbar {
   border-radius: 0;
   margin-bottom: 0;
-  background-color: #0fa2db;
+  background-color: var(--z-status-primary, #0fa2db);
   border: none;
 }
 .navbar > a, .navbar > a:hover,
@@ -42,12 +99,12 @@ body {
 .navbar .navbar-brand:hover,
 .navbar .navbar-nav > li > a,
 .navbar .navbar-nav > li > a:hover {
-  color: #fff;
+  color: var(--z-status-on-primary, #fff);
 }
 .navbar > a:hover,
 .navbar .navbar-brand:hover,
 .navbar .navbar-nav > li > a:hover {
-  background-color: #0d90c3;
+  background-color: var(--z-status-primary-hover, #0d91c4);
 }
 .navbar .navbar-brand {
   font-size: 15px;
@@ -69,11 +126,11 @@ body {
 
 .footer {
   padding: 20px 0;
-  border-top: 1px solid #d7d7d7;
+  border-top: 1px solid var(--z-status-border, #d7d7d7);
   text-align: left;
 }
 .footer .zotonic-logo {
-  color: #777777;
+  color: var(--z-status-text-muted, #777);
 }
 
 .jumbotron h1 {
@@ -94,38 +151,38 @@ form.error-pw #error-pw p {
   margin-bottom: 0;
 }
 form .has-error .help-block {
-  color: #555555;
+  color: var(--z-status-text-medium, #555);
 }
 form .has-error .help-block-error {
-  color: #D84315;
+  color: var(--z-status-error-text, #D84315);
 }
 
 .table.sites-overview {
   margin-bottom: 0;
 }
 .table.sites-overview a {
-  color: #000;
+  color: var(--z-status-text, #000);
 }
 .table.sites-overview > tbody > tr > td {
-  border-color: #fff;
+  border-color: var(--z-status-table-border, #fff);
 }
 .table.sites-overview > tbody > tr.stopped + tr.stopped > td {
-  border-color: #eee;
+  border-color: var(--z-status-table-stopped-border, #eee);
 }
 .table.sites-overview > tbody > tr.running > td {
-  background-color: #E8F5E9;
+  background-color: var(--z-status-running-bg, #E8F5E9);
 }
 .table.sites-overview > tbody > tr.retrying > td {
-  background-color: #FFF3E0;
+  background-color: var(--z-status-retrying-bg, #FFF3E0);
 }
 .table.sites-overview > tbody > tr.stopped > td {
-  background-color: #fff;
+  background-color: var(--z-status-stopped-bg, #fff);
 }
 .table.sites-overview > tbody > tr.waiting > td {
-  background-color: #fff;
+  background-color: var(--z-status-waiting-bg, #fff);
 }
 .table.sites-overview > tbody > tr.failed > td {
-  background-color: #FBE9E7;
+  background-color: var(--z-status-failed-bg, #FBE9E7);
 }
 .table.sites-overview span.status {
   display: none;
@@ -142,28 +199,28 @@ form .has-error .help-block-error {
   display: inline-block;
 }
 .table.sites-overview .stopped a {
-  color: #BDBDBD;
-  background: #fff;
+  color: var(--z-status-stopped, #BDBDBD);
+  background: var(--z-status-stopped-bg, #fff);
 }
 .table.sites-overview span.running {
-  color: #fff;
-  background: #4CAF50;
+  color: var(--z-status-on-primary, #fff);
+  background: var(--z-status-running, #4CAF50);
 }
 .table.sites-overview span.retrying {
-  color: #fff;
-  background: #EF6C00;
+  color: var(--z-status-on-primary, #fff);
+  background: var(--z-status-retrying, #EF6C00);
 }
 .table.sites-overview span.waiting {
-  color: #fff;
-  background: #00BCD4;
+  color: var(--z-status-on-primary, #fff);
+  background: var(--z-status-waiting, #00BCD4);
 }
 .table.sites-overview span.failed {
-  color: #fff;
-  background: #D84315;
+  color: var(--z-status-on-primary, #fff);
+  background: var(--z-status-failed, #D84315);
 }
 .table.sites-overview span.stopped {
-  color: #fff;
-  background: #999;
+  color: var(--z-status-on-primary, #fff);
+  background: var(--z-status-stopped-label-bg, #999);
 }
 .table.sites-overview .retrying button.restart,
 .table.sites-overview .retrying button.admin,
@@ -187,6 +244,10 @@ form .has-error .help-block-error {
   font-size: 16px;
 }
 
+.panel {
+  background-color: var(--z-status-surface, #fff);
+  border-color: var(--z-status-border, #d7d7d7);
+}
 .panel .panel-body > :last-child {
   margin-bottom: 0;
 }
@@ -198,23 +259,29 @@ form .has-error .help-block-error {
   font-size: 13px;
 }
 
+.list-group-item {
+  background-color: var(--z-status-surface, #fff);
+  border-color: var(--z-status-border, #d7d7d7);
+  color: var(--z-status-text, #000);
+}
+
 .alert {
   border-radius: 2px;
   margin-bottom: 10px;
 }
 .alert.alert-info {
-  background-color: #343434;
-  border-color: #343434;
-  color: #fff;
+  background-color: var(--z-status-info-bg, #343434);
+  border-color: var(--z-status-info-bg, #343434);
+  color: var(--z-status-info-text, #fff);
 }
 .alert .close {
   opacity: 1;
   text-shadow: none;
-  color: #fff;
+  color: var(--z-status-info-text, #fff);
 }
 
 .text-muted {
-  color: #777777;
+  color: var(--z-status-text-muted, #777);
 }
 
 .alert,
@@ -234,15 +301,15 @@ form .has-error .help-block-error {
 a.list-group-item:hover,
 a.list-group-item:hover * {
   cursor: pointer;
-  background-color: #0fa2db;
-  color: #fff;
-  border-color: #0fa2db;
+  background-color: var(--z-status-primary, #0fa2db);
+  color: var(--z-status-on-primary, #fff);
+  border-color: var(--z-status-primary, #0fa2db);
 }
 
 .container .jumbotron {
-  background-color: #0fa2db;
+  background-color: var(--z-status-primary, #0fa2db);
   padding: 40px;
-  color: #fff;
+  color: var(--z-status-on-primary, #fff);
 }
 .container .jumbotron > :last-child {
   margin-bottom: 0;
@@ -256,7 +323,9 @@ a.list-group-item:hover * {
 }
 
 .panel-default > .panel-heading {
-  background-color: #fff;
+  background-color: var(--z-status-surface, #fff);
+  border-color: var(--z-status-border, #d7d7d7);
+  color: var(--z-status-text, #000);
   padding: 15px;
   text-align: center;
 }
