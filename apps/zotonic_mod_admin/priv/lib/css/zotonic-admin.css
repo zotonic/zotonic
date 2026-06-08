@@ -855,13 +855,13 @@ fieldset[disabled] .btn-primary.active {
   overflow-x: hidden;
 }
 #dialog-new-rsc-tab .new-find-cols > .rsc-preview-panel-wrapper .rsc-preview h1 {
-  font-size: 23px;
+  font-size: 24px;
 }
 #dialog-new-rsc-tab .new-find-cols > .rsc-preview-panel-wrapper .rsc-preview h2 {
-  font-size: 17px;
+  font-size: 18px;
 }
 #dialog-new-rsc-tab .new-find-cols > .rsc-preview-panel-wrapper .rsc-preview h3 {
-  font-size: 17px;
+  font-size: 18px;
 }
 #dialog-new-rsc-tab .new-find-cols > .rsc-preview-panel-wrapper .rsc-preview img {
   max-width: 100%;
@@ -2157,7 +2157,7 @@ ul.tree-list.connections-list li.menu-item-alert {
   -ms-user-select: "none";
   user-select: "none";
   text-shadow: var(--z-admin-text-shadow);
-  font-size: 17px;
+  font-size: 18px;
   font-weight: normal;
   line-height: 16px;
   border-radius: 10px;
