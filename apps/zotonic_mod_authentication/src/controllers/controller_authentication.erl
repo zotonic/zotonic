@@ -289,22 +289,25 @@ maybe_add_logon_options(#{ status := error } = Result, Payload, Context) ->
         is_password_entered => not z_utils:is_empty(maps:get(<<"password">>, Payload, <<>>))
                                andalso not maps:get(<<"is_username_check">>, Payload, false)
     },
-    Options1 = case Result of #{ token := Token } -> Options#{ token => Token}; _ -> Options end,
+    Options1 = case Result of
+        #{ token := Token } -> Options#{ token => Token};
+        _ -> Options
+    end,
     Options2 = z_notifier:foldr(#logon_options{ payload = Payload }, Options1, Context),
-    Result1 = Result#{ options => Options2 },
-    case Options2 of
-        #{ is_user_external := true } -> {Result1, Context};
-        #{ is_user_local := true } -> {Result1, Context};
-        #{ is_user_local := false, is_user_external := false, username := Username } when is_binary(Username), Username =/= <<>> ->
-            % Hide the fact a user is unknown, this prevents fishing for known usernames.
-            Options3 = Options2#{
+    % Hide the fact a user is unknown, this prevents fishing for known usernames.
+    Options3 = case Options2 of
+        #{ is_user_local := false,
+           is_user_external := false,
+           username := Username
+        } when is_binary(Username), Username =/= <<>> ->
+            Options2#{
                 is_user_local => true,
                 is_username_checked => true
-            },
-            {Result1#{ options => Options3 }, Context};
+            };
         _ ->
-            {Result1, Context}
-    end;
+            Options2
+    end,
+    {Result#{ options => Options3 }, Context};
 maybe_add_logon_options(#{ status := ok } = Result, _Payload, Context) ->
     {Result, Context}.
 
