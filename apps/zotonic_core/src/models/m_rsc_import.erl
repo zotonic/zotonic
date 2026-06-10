@@ -295,7 +295,7 @@ maybe_create_empty(Rsc, ImportedAcc, Options, Context) ->
                             },
                             {ok, {LocalId, ImportedAcc1}};
                         {error, duplicate_page_path} ->
-                            PagePath = unique_page_path(undefined, maps:get(<<"page_path">>, Rsc), Context ),
+                            PagePath = unique_page_path(undefined, maps:get(<<"page_path">>, Rsc), Context),
                             ?LOG_WARNING(#{
                                 text => <<"Import of duplicate page_path">>,
                                 in => zotonic_core,
@@ -1966,29 +1966,67 @@ is_local_site(Uri, Context ) ->
     end.
 
 %% @doc Generate a new page path by appending a number.
--spec unique_page_path(OptRscId, Path, Context) -> NewPath | undefined when
+-spec unique_page_path(OptRscId, Path, Context) -> NewPath when
     OptRscId :: m_rsc:resource_id() | undefined,
-    Path :: binary(),
+    Path :: binary() | #trans{} | undefined,
     Context :: z:context(),
-    NewPath :: binary().
+    NewPath :: binary() | #trans{} | undefined.
+unique_page_path(_OptRscId, undefined, _Context) ->
+    undefined;
+unique_page_path(_OptRscId, <<>>, _Context) ->
+    undefined;
+unique_page_path(OptRscId, #trans{ tr = Tr }, Context) ->
+    Tr1 = lists:map(
+        fun
+            ({Lang, <<>>}) ->
+                {Lang, <<>>};
+            ({Lang, Path}) ->
+                Path1 = case path_exists(OptRscId, Path, Context) of
+                    false -> Path;
+                    true ->
+                        case unique_page_path(OptRscId, Path, 1, Context) of
+                            undefined -> <<>>;
+                            P -> P
+                        end;
+                    error -> <<>>
+                end,
+                {Lang, Path1}
+        end,
+        Tr),
+    #trans{ tr = Tr1 };
 unique_page_path(OptRscId, Path, Context) ->
     unique_page_path(OptRscId, Path, 1, Context).
 
 unique_page_path(OptRscId, Path, N, Context) ->
     B = integer_to_binary(N),
     Path1 = <<Path/binary, $-, B/binary>>,
-    case m_rsc:page_path_to_id(Path1, Context) of
-        {ok, OptRscId} ->
-            Path1;
-        {ok, _} ->
-            unique_page_path(OptRscId, Path, N+1, Context);
-        {redirect, _} ->
-            Path1;
-        {error, {unknown_page_path, _}} ->
-            Path1;
-        {error, _} ->
-            undefined
+    case path_exists(OptRscId, Path1, Context) of
+        true -> unique_page_path(OptRscId, Path, N+1, Context);
+        false -> Path1;
+        error -> undefined
     end.
+
+path_exists(OptRscId, #trans{ tr = Tr }, Context) ->
+    lists:any(
+        fun
+            ({_, <<>>}) -> false;
+            ({_, Path}) ->
+                case path_exists(OptRscId, Path, Context) of
+                    true -> true;
+                    false -> false;
+                    error -> true
+                end
+        end,
+        Tr);
+path_exists(OptRscId, Path, Context) ->
+    case m_rsc:page_path_to_id(Path, Context) of
+        {ok, LocalRscId} when LocalRscId =:= OptRscId -> false;
+        {ok, _} -> true;
+        {redirect, _} -> false;
+        {error, {unknown_page_path, _}} -> false;
+        {error, _} -> error
+    end.
+
 
 %% @doc Generate a new name by appending a number.
 -spec unique_name(OptRscId, Name, Context) -> NewName | undefined when
@@ -2006,7 +2044,7 @@ unique_name(OptRscId, Name, N, Context) ->
         {ok, OptRscId} ->
             Name1;
         {ok, _} ->
-            unique_page_path(OptRscId, Name, N+1, Context);
+            unique_name(OptRscId, Name, N+1, Context);
         {error, _} ->
             Name1
     end.
