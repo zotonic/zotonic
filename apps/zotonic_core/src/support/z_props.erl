@@ -456,16 +456,22 @@ to_qs_time(H, I, S) ->
     ]).
 
 to_qs_list(Key, Vs) ->
-    {Qs, _PrevType, _Index} = lists:foldl(
-        fun(V, {Acc, PrevType, Index}) ->
+    {QsRev, _PrevType, _Index} = lists:foldl(
+        fun(V, {AccRev, PrevType, Index}) ->
             Type = to_qs_list_value_type(V),
             {Boundary, Key1} = to_qs_list_key(Key, PrevType, Type, Index),
             Qs = to_qs_value(Key1, V),
-            {Acc ++ Boundary ++ Qs, Type, Index + 1}
+            Chunk = to_qs_list_chunk(Key1, Type, Boundary, Qs),
+            {lists:reverse(Chunk, AccRev), Type, Index + 1}
         end,
         {[], undefined, 1},
         Vs),
-    Qs.
+    lists:reverse(QsRev).
+
+to_qs_list_chunk(Key, map, [], []) ->
+    [ {<<Key/binary, $.>>, <<>>} ];
+to_qs_list_chunk(_Key, _Type, Boundary, Qs) ->
+    Boundary ++ Qs.
 
 to_qs_list_value_type(V) when is_map(V) -> map;
 to_qs_list_value_type(#trans{}) -> trans;

@@ -204,6 +204,22 @@ to_qs_test() ->
 
     ?assertEqual(
         [
+            {<<"a[].">>, <<>>}
+        ],
+        z_props:to_qs(#{ <<"a">> => [ #{} ] })),
+
+    roundtrip_qs(#{
+        <<"a">> => [
+            #{},
+            1,
+            #{},
+            #{ <<"b">> => 2 },
+            #{}
+        ]
+    }),
+
+    ?assertEqual(
+        [
             {<<"title$en">>, <<"Hello">>},
             {<<"title$nl">>, <<"Hallo">>}
         ],
