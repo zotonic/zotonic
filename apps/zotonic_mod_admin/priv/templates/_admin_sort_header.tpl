@@ -61,9 +61,7 @@
             %}
                 <a href="{% url zotonic_dispatch|as_atom
                                     qsort=next_modifier_param_char++field
-                                    qcat=q.qcat
-                                    qs=q.qs
-                                    qquery=q.qquery
+                                    qargs
                                     pagelen=q.pagelen
                          %}{{ url_append }}">{{ caption }}{{ status_modifier_char }}</a>
             {% endwith %}
