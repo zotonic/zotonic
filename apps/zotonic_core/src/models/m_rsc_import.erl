@@ -1976,14 +1976,18 @@ unique_page_path(_OptRscId, undefined, _Context) ->
 unique_page_path(_OptRscId, <<>>, _Context) ->
     undefined;
 unique_page_path(OptRscId, #trans{ tr = Tr }, Context) ->
-    Tr1 = lists:foreach(
+    Tr1 = lists:map(
         fun
             ({Lang, <<>>}) ->
                 {Lang, <<>>};
             ({Lang, Path}) ->
                 Path1 = case path_exists(OptRscId, Path, Context) of
                     false -> Path;
-                    true -> unique_page_path(OptRscId, Path, 1, Context);
+                    true ->
+                        case unique_page_path(OptRscId, Path, 1, Context) of
+                            undefined -> <<>>;
+                            P -> P
+                        end;
                     error -> <<>>
                 end,
                 {Lang, Path1}
