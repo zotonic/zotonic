@@ -329,7 +329,9 @@ revision_title(Id, Context) ->
     of
         Data when is_binary(Data) ->
             case binary_to_term(Data) of
-                Props when is_map(Props) -> maps:get(<<"title">>, Props);
+                #{ <<"title">> := Title } -> Title;
+                #{ <<"short_title">> := Title } -> Title;
+                #{ <<"subtitle">> := Title } -> Title;
                 Props when is_list(Props) -> proplists:get_value(title, Props);
                 _ -> undefined
             end;
