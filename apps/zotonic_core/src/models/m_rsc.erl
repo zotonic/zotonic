@@ -421,7 +421,7 @@ name_to_id_cat(Name, Cat, Context) ->
 -spec page_path_to_id( binary() | string() | #trans{}, z:context() ) ->
               {ok, resource_id()}
             | {redirect, resource_id()}
-            | {error, {unknown_page_path, binary()}}
+            | {error, {unknown_page_path, binary() | #trans{}}}
             | {error, {illegal_page_path, binary(), length|unicode}}.
 page_path_to_id(#trans{ tr = Tr } = Paths, Context) ->
     Tr1 = lists:filter(
