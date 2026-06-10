@@ -66,10 +66,10 @@ from_text(Text) ->
     Text1 = z_string:trim(unicode:characters_to_binary(Text, utf8)),
     case Text1 of
         <<"{", _/binary>> ->
-            Map = jsx:decode(Text1),
+            Map = z_json:decode(Text1),
             from_map_1(Map);
         <<"[", _/binary>> ->
-            Terms = jsx:decode(Text1),
+            Terms = z_json:decode(Text1),
             from_map_1(#{ <<"q">> => Terms });
         _ ->
             % Pairs of term/value

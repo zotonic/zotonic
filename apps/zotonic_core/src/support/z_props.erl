@@ -29,6 +29,7 @@
     from_list/1,
     from_qs/1,
     from_qs/2,
+    to_qs/1,
 
     extract_languages/1,
     prune_languages/2,
@@ -383,6 +384,101 @@ from_qs(Qs, Now) ->
     WithTrans = combine_trans(WithDates),
     WithoutSingles = lift_singles(WithTrans),
     {ok, WithoutSingles}.
+
+
+%% @doc Transform a nested property map to a flat list of query string
+%%      properties. This is the reverse of from_qs/1 for nested maps,
+%%      lists and translations.
+-spec to_qs( map() ) -> list( qs_prop() ).
+to_qs(Props) when is_map(Props) ->
+    to_qs_map(<<>>, Props).
+
+to_qs_map(Prefix, Props) ->
+    lists:flatmap(
+        fun({K, V}) ->
+            Key = to_qs_key(Prefix, K),
+            to_qs_value(Key, V)
+        end,
+        lists:sort(maps:to_list(Props))).
+
+to_qs_key(<<>>, K) ->
+    z_convert:to_binary(K);
+to_qs_key(Prefix, K) ->
+    <<Prefix/binary, $., (z_convert:to_binary(K))/binary>>.
+
+to_qs_value(Key, #trans{ tr = Tr }) ->
+    [ {to_qs_trans_key(Key, Iso), Text} || {Iso, Text} <- Tr ];
+to_qs_value(Key, V) when is_map(V) ->
+    to_qs_map(Key, V);
+to_qs_value(Key, V) when is_list(V) ->
+    to_qs_list(Key, V);
+to_qs_value(Key, {{Y, M, D}, {H, I, S}}) when
+    is_integer(Y), is_integer(M), is_integer(D),
+    is_integer(H), is_integer(I), is_integer(S) ->
+    [
+        {to_qs_date_key(<<"ymd">>, Key), to_qs_date(Y, M, D)},
+        {to_qs_date_key(<<"his">>, Key), to_qs_time(H, I, S)}
+    ];
+to_qs_value(Key, V) ->
+    [ {Key, V} ].
+
+to_qs_trans_key(Key, Iso) ->
+    <<Key/binary, $$, (z_convert:to_binary(Iso))/binary>>.
+
+to_qs_date_key(Pattern, Key) ->
+    Parts = binary:split(Key, <<".">>, [global]),
+    DateKey = to_qs_date_key_1(Pattern, lists:reverse(Parts)),
+    iolist_to_binary(lists:join(<<".">>, DateKey)).
+
+to_qs_date_key_1(Pattern, [Name | PrefixRev]) ->
+    EndFlag = to_qs_date_end_flag(Name),
+    DateName = <<"dt:", Pattern/binary, $:, EndFlag/binary, $:, Name/binary>>,
+    lists:reverse(PrefixRev, [ DateName ]).
+
+to_qs_date_end_flag(Name) ->
+    case basename(Name, false) of
+        {true, _Base, _Name} -> <<"1">>;
+        {false, _Base, _Name} -> <<"0">>
+    end.
+
+to_qs_date(Y, M, D) ->
+    iolist_to_binary([
+        integer_to_binary(Y), $-,
+        integer_to_binary(M), $-,
+        integer_to_binary(D)
+    ]).
+
+to_qs_time(H, I, S) ->
+    iolist_to_binary([
+        integer_to_binary(H), $:,
+        integer_to_binary(I), $:,
+        integer_to_binary(S)
+    ]).
+
+to_qs_list(Key, Vs) ->
+    {Qs, _PrevType, _Index} = lists:foldl(
+        fun(V, {Acc, PrevType, Index}) ->
+            Type = to_qs_list_value_type(V),
+            {Boundary, Key1} = to_qs_list_key(Key, PrevType, Type, Index),
+            Qs = to_qs_value(Key1, V),
+            {Acc ++ Boundary ++ Qs, Type, Index + 1}
+        end,
+        {[], undefined, 1},
+        Vs),
+    Qs.
+
+to_qs_list_value_type(V) when is_map(V) -> map;
+to_qs_list_value_type(#trans{}) -> trans;
+to_qs_list_value_type(_) -> value.
+
+to_qs_list_key(Key, map, map, _Index) ->
+    { [ {<<Key/binary, "[].">>, <<>>} ], <<Key/binary, "[]">> };
+to_qs_list_key(Key, _PrevType, trans, Index) ->
+    { [], <<Key/binary, $[, (integer_to_binary(Index))/binary, $]>> };
+to_qs_list_key(Key, trans, _Type, Index) ->
+    { [], <<Key/binary, $[, (integer_to_binary(Index))/binary, $]>> };
+to_qs_list_key(Key, _PrevType, _Type, _Index) ->
+    { [], <<Key/binary, "[]">> }.
 
 
 %% ---------------------------------------------------------------------------------------

@@ -166,6 +166,111 @@ props_test() ->
     }} = z_props:from_qs([ {<<"a[]$en">>, <<"a1">>}, {<<"a[]$en">>, <<"b1">>} ]),
     ok.
 
+to_qs_test() ->
+    ?assertEqual(
+        [ {<<"a">>, 1} ],
+        z_props:to_qs(#{ <<"a">> => 1 })),
+
+    ?assertEqual(
+        [
+            {<<"a.b.c">>, 4},
+            {<<"a.d">>, 5}
+        ],
+        z_props:to_qs(#{
+            <<"a">> => #{
+                <<"b">> => #{ <<"c">> => 4 },
+                <<"d">> => 5
+            }
+        })),
+
+    ?assertEqual(
+        [
+            {<<"a[]">>, 1},
+            {<<"a[]">>, 2},
+            {<<"a[]">>, 3}
+        ],
+        z_props:to_qs(#{ <<"a">> => [ 1, 2, 3 ] })),
+
+    ?assertEqual(
+        [
+            {<<"a[].b">>, 1},
+            {<<"a[].">>, <<>>},
+            {<<"a[].c">>, 2}
+        ],
+        z_props:to_qs(#{ <<"a">> => [
+            #{ <<"b">> => 1 },
+            #{ <<"c">> => 2 }
+        ] })),
+
+    ?assertEqual(
+        [
+            {<<"title$en">>, <<"Hello">>},
+            {<<"title$nl">>, <<"Hallo">>}
+        ],
+        z_props:to_qs(#{ <<"title">> => #trans{ tr = [
+            {en, <<"Hello">>},
+            {nl, <<"Hallo">>}
+        ] }})),
+
+    ?assertEqual(
+        [
+            {<<"dt:ymd:0:publication_start">>, <<"2008-12-10">>},
+            {<<"dt:his:0:publication_start">>, <<"11:12:13">>}
+        ],
+        z_props:to_qs(#{ <<"publication_start">> => {{2008, 12, 10}, {11, 12, 13}} })),
+
+    ?assertEqual(
+        [
+            {<<"dt:ymd:1:publication_end">>, <<"2008-12-31">>},
+            {<<"dt:his:1:publication_end">>, <<"23:59:59">>}
+        ],
+        z_props:to_qs(#{ <<"publication_end">> => {{2008, 12, 31}, {23, 59, 59}} })),
+
+    ?assertEqual(
+        [
+            {<<"blocks[].dt:ymd:0:date_start">>, <<"2026-6-10">>},
+            {<<"blocks[].dt:his:0:date_start">>, <<"12:30:45">>}
+        ],
+        z_props:to_qs(#{ <<"blocks">> => [
+            #{ <<"date_start">> => {{2026, 6, 10}, {12, 30, 45}} }
+        ] })),
+
+    roundtrip_qs(#{
+        <<"publication_start">> => {{2008, 12, 10}, {11, 12, 13}},
+        <<"publication_end">> => {{2008, 12, 31}, {23, 59, 59}},
+        <<"blocks">> => [
+            #{
+                <<"title">> => <<"First">>,
+                <<"date_start">> => {{2026, 6, 10}, {12, 30, 45}}
+            }
+        ]
+    }),
+
+    roundtrip_qs(#{
+        <<"a">> => [
+            #{ <<"b">> => #trans{ tr = [
+                {en, <<"Hello">>},
+                {nl, <<"Hallo">>}
+            ] }},
+            #{ <<"c">> => 2 }
+        ],
+        <<"title">> => #trans{ tr = [
+            {en, <<"Hello">>},
+            {nl, <<"Hallo">>}
+        ] }
+    }),
+
+    roundtrip_qs(#{
+        <<"a">> => [
+            #trans{ tr = [ {en, <<"a1">>} ] },
+            #trans{ tr = [ {nl, <<"b1">>} ] }
+        ]
+    }),
+    ok.
+
+roundtrip_qs(Props) ->
+    {ok, Props} = z_props:from_qs(z_props:to_qs(Props)).
+
 common_properties_test() ->
     Props = z_props:common_properties(),
     true = is_list(Props),
