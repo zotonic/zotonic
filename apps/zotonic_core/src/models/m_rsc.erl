@@ -412,13 +412,34 @@ name_to_id_cat(Name, Cat, Context) ->
 %% once, this function will return {redirect, Id} to indicate that the
 %% page path was found but is no longer the current page path for the
 %% resource.
+%% The page path is normalized by ensuring that the path starts with
+%% a single "/" and removing trailing "/" characters.
+%% Note that the path "" is mapped to "/" (the home page) but the same
+%% "" path in a trans record is ignored. This is to be consistent with
+%% the behavior that empty translations should map to a translation that
+%% is filled.
 -spec page_path_to_id( binary() | string() | #trans{}, z:context() ) ->
               {ok, resource_id()}
             | {redirect, resource_id()}
             | {error, {unknown_page_path, binary()}}
             | {error, {illegal_page_path, binary(), length|unicode}}.
-page_path_to_id(#trans{ tr = Tr }, Context) ->
-    page_path_to_id_1(Tr, Context);
+page_path_to_id(#trans{ tr = Tr } = Paths, Context) ->
+    Tr1 = lists:filter(
+        fun({_, Path}) when is_binary(Path) andalso size(Path) > 0 -> true;
+           (_) -> false
+        end,
+        Tr),
+    if
+        Tr1 =:= [] ->
+            {error, {unknown_page_path, <<>>}};
+        true ->
+            case page_path_to_id_1(Tr1, Context) of
+                {error, unknown_page_path} ->
+                    {error, {unknown_page_path, Paths}};
+                Other ->
+                    Other
+            end
+    end;
 page_path_to_id(Path, Context) ->
     Path1 = iolist_to_binary([ $/, z_string:trim(Path, $/) ]),
     case is_utf8(Path1) of
@@ -445,7 +466,7 @@ page_path_to_id(Path, Context) ->
     end.
 
 page_path_to_id_1([], _Context) ->
-    {error, {unknown_page_path, <<>>}};
+    {error, unknown_page_path};
 page_path_to_id_1([{_, <<>>}|Tr], Context) ->
     page_path_to_id_1(Tr, Context);
 page_path_to_id_1([{_, Path}|Tr], Context) ->
