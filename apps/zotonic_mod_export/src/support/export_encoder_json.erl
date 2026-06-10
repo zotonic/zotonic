@@ -70,7 +70,7 @@ row(Row, #state{ is_first_row = IsFirstRow } = State, _Context) when is_map(Row)
             true -> <<>>;
             false -> $,
         end,
-        jsxrecord:encode(Row)
+        z_json:encode(Row)
     ],
     {ok, Data, State#state{ is_first_row = false }};
 row(_Row, #state{} = State, _Context) ->

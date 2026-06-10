@@ -42,7 +42,7 @@ Url = z_context:abs_url( z_dispatcher:url_for(api, [ {star, <<"model/acl/get/use
 {ok, {_, _, _, Body}} = z_url_fetch:fetch(Url, [ {authorization, <<"Bearer ", Token/binary>>} ]),
 
 % The user-id associated should be '1', as was defined when inserting the token.
-#{ <<"result">> := 1, <<"status">> := <<"ok">> } = jsxrecord:decode(Body),
+#{ <<"result">> := 1, <<"status">> := <<"ok">> } = z_json:decode(Body),
 ```
 
 

@@ -1,9 +1,9 @@
 %% @author Marc Worrell
-%% @copyright 2014-2025 Marc Worrell
+%% @copyright 2014-2026 Marc Worrell
 %% @doc Helper functions commonly used in controllers.
 %% @end
 
-%% Copyright 2014-2025 Marc Worrell
+%% Copyright 2014-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -246,7 +246,7 @@ decode_request_1(Context) ->
 %% @doc Decode the incoming body
 from_json(Context) ->
     {Body, Context1} = req_body(Context),
-    Data = jsxrecord:decode(Body),
+    Data = z_json:decode(Body),
     {Data, Context1}.
 
 %% @doc Make a map from the query arguments.
@@ -269,11 +269,11 @@ req_body(Context) ->
 %% @doc Encode the response data
 -spec encode_response( Mime :: cow_http_hd:media_type(), term() ) -> binary().
 encode_response({<<"application">>, <<"json">>, _}, Data) ->
-    jsxrecord:encode(Data);
+    z_json:encode(Data);
 encode_response({<<"application">>, <<"javascript">>, _}, Data) ->
-    jsxrecord:encode(Data);
+    z_json:encode(Data);
 encode_response({<<"text">>, <<"javascript">>, _}, Data) ->
-    jsxrecord:encode(Data);
+    z_json:encode(Data);
 encode_response({<<"text">>, <<"x-ubf">>, _}, Data) ->
     {ok, UBF} = z_ubf:encode(Data),
     UBF;
@@ -283,7 +283,7 @@ encode_response({<<"application">>, <<"x-www-form-urlencoded">>, _}, Data) ->
     cow_qs:qs( encode_prep_qs(Data) ).
 
 encode_prep_qs(Map) when is_map(Map) ->
-    encode_prep_qs( maps:to_list(Map) );
+    encode_prep_qs( z_props:to_qs(Map) );
 encode_prep_qs(List) when is_list(List) ->
     lists:map(
         fun

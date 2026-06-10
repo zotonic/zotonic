@@ -235,7 +235,7 @@ httpc_http_options() ->
 % This code is extracted from https://github.com/G-Corp/jwerl/blob/master/src/jwerl.erl
 decode_jwt( JWT ) ->
     [ _Header64, Claims64, _Signature ] = binary:split(JWT, <<".">>, [global]),
-    jsx:decode( base64_decode(Claims64) ).
+    z_json:decode( base64_decode(Claims64) ).
 
 base64_decode(Data) ->
     Data1 = << << (urldecode_digit(D)) >> || <<D>> <= Data >>,

@@ -56,7 +56,7 @@ generate_1(Id, Context) ->
             #{};
         SeoJSON ->
             try
-                case jsxrecord:decode(z_html:unescape(SeoJSON)) of
+                case z_json:decode(z_html:unescape(SeoJSON)) of
                     #{ <<"@context">> := _ } = SeoJSONParsed ->
                         SeoJSONParsed;
                     SeoJSONParsed when is_map(SeoJSONParsed) ->

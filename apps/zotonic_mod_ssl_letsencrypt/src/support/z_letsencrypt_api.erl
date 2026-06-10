@@ -108,7 +108,7 @@ bin(S) -> z_convert:to_binary(S).
 %
 -spec decode(json | body, request_result()) -> {ok, request_result()}.
 decode(json, Response=#{ body := Body }) ->
-    Payload = jsx:decode(Body, [return_maps]),
+    Payload = z_json:decode(Body),
     {ok, Response#{ json => Payload }};
 decode(_, Response) ->
     {ok, Response}.

@@ -46,17 +46,17 @@ init(#{b64 := {N,E}}) ->
 %
 -spec encode(z_letsencrypt:ssl_privatekey(), z_letsencrypt:jws(), map()|empty) -> binary().
 encode(#{raw := RSAKey}, Jws, Content) ->
-    Protected = z_letsencrypt_utils:b64encode(jsx:encode(Jws)),
+    Protected = z_letsencrypt_utils:b64encode(z_json:encode(Jws)),
     Payload = case Content of
         % for POST-as-GET queries, payload is just an empty string
         empty -> <<>>;
-        _     -> z_letsencrypt_utils:b64encode(jsx:encode(Content))
+        _     -> z_letsencrypt_utils:b64encode(z_json:encode(Content))
     end,
 
     Sign  = crypto:sign(rsa, sha256, <<Protected/binary, $., Payload/binary>>, RSAKey),
     Sign2 = z_letsencrypt_utils:b64encode(Sign),
 
-    jsx:encode(#{
+    z_json:encode(#{
         %{header, {[]}},
         <<"protected">> => Protected,
         <<"payload">> => Payload,
@@ -72,7 +72,7 @@ encode(#{raw := RSAKey}, Jws, Content) ->
 %   KeyAuthorization
 %
 keyauth(#{<<"e">> := E, <<"n">> := N, <<"kty">> := Kty}, Token) ->
-    Thumbprint = jsx:encode(#{
+    Thumbprint = z_json:encode(#{
         <<"e">> => E,
         <<"kty">> => Kty,
         <<"n">> => N

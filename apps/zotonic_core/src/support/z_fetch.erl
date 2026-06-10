@@ -43,7 +43,7 @@ fetch(Url, Options, Context) ->
     z_url_fetch:fetch(Url1, Options1).
 
 %% @doc Fetch JSON data from an URL. Let modules change the fetch options. On success, the returned
-%% body is parsed with jsxrecord and returned.
+%% body is parsed with z_json and returned.
 -spec fetch_json(Url, Options, Context) -> {ok, JSON} | {error, term()} when
     Url :: string() | binary(),
     Options :: z_url_fetch:options(),
@@ -57,7 +57,7 @@ fetch_json(Url, Options, Context) ->
         {ok, {_Final, _Hs, _Length, <<>>}} ->
             {ok, #{}};
         {ok, {_Final, _Hs, _Length, Body}} ->
-            {ok, jsxrecord:decode(Body)};
+            {ok, z_json:decode(Body)};
         {error, _} = Error ->
             Error
     end.
@@ -115,7 +115,7 @@ fetch(Method, Url, Args, Options, Context) ->
     z_url_fetch:fetch(Method, Url2, Payload, Options2).
 
 %% @doc Perform a request and fetch JSON data from an URL. Let modules change the fetch options. On success, the
-%% returned body is parsed with jsxrecord and returned.
+%% returned body is parsed with z_json and returned.
 -spec fetch_json(Method, Url, Payload, Options, Context) -> Result when
     Method :: get | post | delete | put | patch,
     Url :: string() | binary(),
@@ -133,7 +133,7 @@ fetch_json(Method, Url, Args, Options, Context) ->
             {ok, #{}};
         {ok, {_Final, _Hs, _Length, Body}} ->
             try
-                {ok, jsxrecord:decode(Body)}
+                {ok, z_json:decode(Body)}
             catch
                 error:badarg:Stack ->
                     ?LOG_ERROR(#{
@@ -155,7 +155,7 @@ fetch_json(Method, Url, Args, Options, Context) ->
 payload(B, _CT) when is_binary(B) -> B;
 payload(M, <<"application/x-www-form-urlencoded">>) when is_map(M) -> cow_qs:qs(ensure_qlist(maps:to_list(M)));
 payload(L, <<"application/x-www-form-urlencoded">>) when is_list(L) -> cow_qs:qs(ensure_qlist(L));
-payload(Data, <<"application/json">>) -> jsxrecord:encode(Data).
+payload(Data, <<"application/json">>) -> z_json:encode(Data).
 
 ensure_qlist(L) ->
     lists:map(

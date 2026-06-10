@@ -1,5 +1,5 @@
 %% @author Maas-Maarten Zeeman <mmzeeman@xs4all.nl>
-%% @copyright 2025 Maas-Maarten Zeeman
+%% @copyright 2025-2026 Maas-Maarten Zeeman
 %% @doc Postgresql zotonic codec
 %%
 %% These are conversion routines between how z_db expects values and how epgsl expects them.
@@ -9,7 +9,7 @@
 %% - date/datetimes have a floating-point second argument in epgsql, in Zotonic they don't.
 %% @end
 
-%% Copyright 2025 Arjan Scherpenisse, Maas-Maarten Zeeman
+%% Copyright 2025-2026 Arjan Scherpenisse, Maas-Maarten Zeeman
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -45,7 +45,7 @@ encode({term, Term}, bytea, State) ->
     B = term_to_binary(Term, [compressed]),
     epgsql_codec_text:encode(<<?TERM_MAGIC_NUMBER, B/binary>>, bytea, State);
 encode({term_json, Term}, bytea, State) ->
-    epgsql_codec_text:encode(jsxrecord:encode(Term), bytea, State);
+    epgsql_codec_text:encode(z_json:encode(Term), bytea, State);
 encode(<<?TERM_MAGIC_NUMBER, _/binary>> = Bin, bytea, State) ->
     % A binary with the term-prefix. Encode this as a term to prevent decoding
     % random data when this is passed to the bytea decoder.
@@ -54,11 +54,11 @@ encode(Cell, bytea, State) ->
     epgsql_codec_text:encode(Cell, bytea, State);
 % jsonb
 encode({term, Term}, jsonb, _State) ->
-    epgsql_codec_json:encode(jsxrecord:encode(Term), jsonb, []);
+    epgsql_codec_json:encode(z_json:encode(Term), jsonb, []);
 encode({term_json, Term}, jsonb, _State) ->
-    epgsql_codec_json:encode(jsxrecord:encode(Term), jsonb, []);
+    epgsql_codec_json:encode(z_json:encode(Term), jsonb, []);
 encode(Term, jsonb, _State) ->
-    epgsql_codec_json:encode(jsxrecord:encode(Term), jsonb, []);
+    epgsql_codec_json:encode(z_json:encode(Term), jsonb, []);
 % datetime types
 encode(Cell, TypeName, State) ->
     epgsql_codec_datetime:encode(Cell, TypeName, State).
@@ -68,7 +68,7 @@ decode(Cell, bytea, _State) ->
     decode_bytea_value(epgsql_codec_text:decode(Cell, bytea, []));
 % jsonb
 decode(Cell, jsonb, _State) ->
-    epgsql_codec_json:decode(Cell, jsonb, jsxrecord);
+    epgsql_codec_json:decode(Cell, jsonb, z_json);
 % datetime types
 decode(Cell, TypeName, State) ->
     decode_datetime_value(epgsql_codec_datetime:decode(Cell, TypeName, State)).
