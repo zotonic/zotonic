@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010-2026 Marc Worrell
-%% @doc Display a form to sign up.
+%% @doc Display a form to sign up, handle signup flow.
 %% @end
 
 %% Copyright 2010-2026 Marc Worrell
