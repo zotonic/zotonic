@@ -342,7 +342,10 @@ cols2importdef(Cols) ->
     ].
 
 to_property_name(Name) ->
-    to_property_name_1(z_string:trim(z_string:to_lower(Name))).
+    to_property_name_1(
+        z_string:trim(
+            z_string:to_lower(
+                z_convert:to_binary(Name)))).
 
 to_property_name_1(<<"block.", B/binary>>) ->
     <<"blocks.", B/binary>>;
