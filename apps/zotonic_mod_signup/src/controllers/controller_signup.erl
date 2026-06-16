@@ -21,7 +21,7 @@
 -moduledoc("
 Controller which displays a form to sign up (rendered from `signup.tpl`).
 
-It also implements the neccesary postbacks to perform the signup and log a user in.
+It also implements the necessary postbacks to perform the signup and log a user in.
 
 Todo
 
