@@ -264,6 +264,7 @@ event(#submit{ message={signup_email_step2, Args} }, Context) ->
         false ->
             case mod_signup:check_onetime_code({signup, EmailNorm}, Code, Context) of
                 true ->
+                    ok = mod_signup:delete_onetime_code({signup, EmailNorm}, Context),
                     % Code is correct, render step3
                     Vars = [
                         {is_code_checked, true}
