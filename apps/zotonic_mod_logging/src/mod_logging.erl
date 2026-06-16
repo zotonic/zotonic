@@ -200,14 +200,6 @@ observe_acl_is_allowed(#acl_is_allowed{
         }
     }, Context) ->
     is_log_client_allowed(Context);
-observe_acl_is_allowed(#acl_is_allowed{
-        action = subscribe,
-        object = #acl_mqtt{
-            topic = [ <<"model">>,<<"log_email">>,<<"event">>, <<"email_send_status">>, _MsgId ],
-            is_wildcard = false
-        }
-    }, _Context) ->
-    true;
 observe_acl_is_allowed(_AclIsAllowed, _Context) ->
     undefined.
 
@@ -954,16 +946,13 @@ handle_simple_log(#log_message{ user_id = UserId, type = Type, message = Msg, pr
     {ok, Id} = z_db:insert(log, MsgUserProps, Context),
     SeverityB = z_convert:to_binary(Type),
     LogTypeB = z_convert:to_binary( proplists:get_value(log_type, Props, log) ),
-    PubMsg = #{
-        type => publish,
-        topic => [ <<"model">>, <<"logging">>, <<"event">>, LogTypeB, SeverityB ],
-        payload => #{
-            <<"log_id">> => Id,
-            <<"user_id">> => UserId
+    z_mqtt:publish(
+        [ <<"model">>, <<"logging">>, <<"event">>, LogTypeB, SeverityB ],
+        #{
+            log_id => Id,
+            user_id => UserId
         },
-        qos => 0
-    },
-    z_mqtt:publish(PubMsg, Context),
+        Context),
     ok.
 
 % All non #log_message{} logs are sent to their own log table. If the severity of the log entry is high enough then
@@ -975,7 +964,6 @@ handle_other_log(Record, State) ->
     case z_db:table_exists(LogType, Context) of
         true ->
             {ok, Id} = z_db:insert(LogType, flatten(Fields), Context),
-            maybe_mqtt_publish(LogType, Fields, Context),
             Log = record_to_log_message(Record, Fields, LogType, Id),
             Severity = proplists:get_value(severity, Fields),
             case Severity of
@@ -994,32 +982,6 @@ handle_other_log(Record, State) ->
             },
             handle_simple_log(Log, State)
     end.
-
-%% @doc For certain log types, also publish a message to MQTT with some of the log details. This allows
-%% external monitoring of important events without needing to poll the database. Retained messages are
-%% used so that the current status is available immediately upon subscription.
-maybe_mqtt_publish(log_email, Fields, Context) ->
-    MessageNr = proplists:get_value(message_nr, Fields),
-    Severity = proplists:get_value(severity, Fields),
-    MailerStatus = proplists:get_value(mailer_status, Fields),
-    PubMsg = #{
-        type => publish,
-        topic => [ <<"model">>, <<"log_email">>, <<"event">>, <<"email_send_status">>, MessageNr ],
-        payload => #{
-            <<"message_nr">> => MessageNr,
-            <<"severity">> => Severity,
-            <<"mailer_status">> => MailerStatus
-        },
-        qos => 0,
-        retain => true,
-        properties => #{
-            message_expiry_interval => 600
-        }
-    },
-    z_mqtt:publish(PubMsg, Context);
-maybe_mqtt_publish(_LogType, _Fields, _Context) ->
-    ok.
-
 
 flatten(Fields) ->
      lists:map( fun flatten_prop/1, Fields ).

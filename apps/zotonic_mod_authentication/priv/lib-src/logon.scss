@@ -50,13 +50,11 @@ body.err403 {
 
     p {
         margin-bottom: $button_spacing;
-        width: 100%;
     }
 
     // full width submit button
     button[type="submit"],
-    input[type="submit"],
-    .btn-submit {
+    input[type="submit"] {
         width: 100%;
     }
 
@@ -187,34 +185,8 @@ body.err403 {
         display: none;
     }
 
-    .signup-external {
-        display: flex;
-        flex-flow: column nowrap;
-        gap: 1em;
-    }
-
-    .signup-name {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-
-        #signup_name_first {
-            flex-grow: 1;
-            min-width: 60%;
-        }
-
-        #signup_surname_prefix {
-            flex-shrink: 0;
-
-            input[name="surprefix"] {
-                width: 8ch;
-            }
-        }
-
-        #signup_name_surname {
-            flex-grow: 2;
-            min-width: 60%;
-        }
+    input#surprefix {
+        width: 50px;
     }
 
     #signup_error_tos_agree,
@@ -234,11 +206,5 @@ body.err403 {
     .z_validation_message {
         display: block;
         margin: 5px 0 0 0;
-    }
-
-    .z_validation {
-        &.z_invalid {
-            color: $error_color;
-        }
     }
 }
