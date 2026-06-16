@@ -207,7 +207,7 @@ import_edge(Row, _RestColDef, RowNr, ImportState, _Context) ->
         row_nr => RowNr,
         row => Row
     }),
-    add_result_error(edge, incomplete, ImportState).
+    add_result_seen(edge, add_result_error(edge, incomplete, ImportState)).
 
 edge_opts([ Seq | _ ], [ <<"order">> | _ ]) when is_integer(Seq) ->
     [ {seq, Seq} ];
