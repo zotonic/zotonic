@@ -165,7 +165,7 @@ import_edge([ Subject, Predicate, Object | RestRowData ], RestColDef, RowNr, Imp
                         predicate => Predicate,
                         object => Object
                     }),
-                    add_result_error(edge, edge, ImportState3)
+                    add_result_seen(edge, add_result_error(edge, {insert_failed, Reason}, ImportState3))
             end;
         true when not is_integer(SubjectId) ->
             ?LOG_ERROR(#{
