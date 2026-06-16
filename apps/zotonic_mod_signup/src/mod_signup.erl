@@ -29,7 +29,7 @@ You can adjust this module’s behaviour with the following [Module configuratio
 | Key | Default | Description |
 | --- | --- | --- |
 | `mod_signup.request_confirm` | `true` | Send a signup confirmation e-mail to new users. If set to `false`, users are verified immediately. |
-| `mod_signup.username_equals_email` | `true` | Let users have a username separate from their e-mail address. If set to `true`, the user’s e-mail address is also the username. |
+| `mod_signup.username_equals_email` | `true` | If `true`, the user’s e-mail address is also the username (users can log in with their e-mail). If `false`, users can choose a separate username. |
 | `mod_signup.member_category` | `person` | Name of the category that users created through sign up will be placed in. |
 | `mod_signup.content_group` | empty string | Name of the content group that users created through sign up will be placed in. The empty string means the default content group for the current ACL module. |
 | `mod_signup.depiction_as_medium` | `false` | If set then any depiction URL is added as a medium record to the person who signed up. Normally the depiction is added as a separate *depending* image resource and connected from the person using a `depiction` predicate. |
