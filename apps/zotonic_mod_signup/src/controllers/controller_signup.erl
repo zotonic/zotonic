@@ -131,7 +131,8 @@ precheck_managed(Email, Page, Context) ->
     end.
 
 send_code(Email, Context) ->
-    {ok, Code} = mod_signup:new_onetime_code({signup, Email}, Context),
+    EmailNorm = m_identity:normalize_key(email, Email),
+    {ok, Code} = mod_signup:new_onetime_code({signup, EmailNorm}, Context),
     z_email:send(#email{
             to = Email,
             html_tpl = "email_signup_code.tpl",
