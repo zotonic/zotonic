@@ -196,7 +196,7 @@ import_edge([ Subject, Predicate, Object | RestRowData ], RestColDef, RowNr, Imp
                 row_nr => RowNr,
                 predicate => Predicate
             }),
-            add_result_error(edge, predicate, ImportState3)
+            add_result_seen(edge, add_result_error(edge, predicate, ImportState3))
     end;
 import_edge(Row, _RestColDef, RowNr, ImportState, _Context) ->
     ?LOG_ERROR(#{
