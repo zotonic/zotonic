@@ -402,15 +402,19 @@ event(#postback{ message={signup_resend_code, Args} }, Context) ->
     end.
 
 username_idn_check(SignupProps, Context) ->
-    case find_identity(username, SignupProps) of
-        none -> none;
-        {username_pw, {Username, _, _, _}} -> m_identity:lookup_by_username(Username, Context)
+    case find_identity(username_pw, SignupProps) of
+        undefined ->
+            undefined;
+        {username_pw, {Username, _Password}, _IsUnique, _IsVerified} ->
+            m_identity:lookup_by_username(Username, Context)
     end.
 
 email_idn_check(SignupProps, Context) ->
     case find_identity(email, SignupProps) of
-        none -> none;
-        {email, Email, _, _} -> m_identity:lookup_users_by_verified_type_and_key(email, Email, Context)
+        undefined ->
+            [];
+        {email, Email, _IsUnique, _IsVerified} ->
+            m_identity:lookup_users_by_verified_type_and_key(email, Email, Context)
     end.
 
 form_props(Args, Context) ->
