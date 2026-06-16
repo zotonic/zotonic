@@ -193,9 +193,7 @@ parse_worksheet({Worksheet, _Args, Elts}, Shared) when is_list(Elts) ->
             end;
         _ ->
             no_sheetdata()
-    end;
-parse_worksheet(_, _Shared) ->
-    no_sheetdata().
+    end.
 
 extract_rows(Rs, Shared) ->
     lists:filtermap(
