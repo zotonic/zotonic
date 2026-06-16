@@ -259,6 +259,8 @@ can_handle(Type, OriginalFilename, DataFile, Context) ->
             Error;
         undefined ->
             case inspect_file(Type, DataFile) of
+                {ok, #import_data_def{ columns = [ <<"subject">>, <<"predicate">>, <<"object">> | _ ] } = Def} ->
+                    {ok, Def};
                 {ok, #import_data_def{ columns = Cols } = Def} ->
                     case lists:member(<<"name">>, Cols) andalso lists:member(<<"category">>, Cols) of
                         true ->
@@ -339,9 +341,12 @@ cols2importdef(Cols) ->
         }
     ].
 
-to_property_name(<<"block.", B/binary>>) ->
-    <<"blocks.", B/binary>>;
 to_property_name(Name) ->
+    to_property_name_1(z_string:trim(z_string:to_lower(Name))).
+
+to_property_name_1(<<"block.", B/binary>>) ->
+    <<"blocks.", B/binary>>;
+to_property_name_1(Name) ->
     Name.
 
 unique([], Acc) ->

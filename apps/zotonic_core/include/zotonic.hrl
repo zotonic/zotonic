@@ -353,7 +353,7 @@
         }
     ],
     importstate = undefined :: term(),
-    importmodule = import_csv :: module() | undefined
+    importmodule = import_data_csv :: module() | undefined
 }).
 
 
