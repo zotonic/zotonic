@@ -34,6 +34,22 @@ If the notification is not returning anything, it tries to map the columns found
 [resource](/id/doc_glossary#term-resource) column names.
 CSV/XLSX import module for admin-driven and watched-folder data imports.
 
+Edge import
+-----------
+
+CSV files whose first three columns are `subject`, `predicate`, and `object` are imported as edge definitions instead
+of resources. The values in those columns are looked up as resource names: `subject` and `object` must name existing
+resources, and `predicate` must name an existing predicate resource.
+
+An optional fourth column named `order` sets the edge sequence number. For example, a tab-separated file can contain:
+
+```text
+subject predicate object  order
+page_a  author    person_a 1
+```
+
+The separator can be a tab or comma, depending on what is detected for the file.
+
 
 Accepted Events
 ---------------
