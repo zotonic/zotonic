@@ -186,7 +186,7 @@ import_edge([ Subject, Predicate, Object | RestRowData ], RestColDef, RowNr, Imp
                 row_nr => RowNr,
                 object => Object
             }),
-            add_result_error(edge, object, ImportState3);
+            add_result_seen(edge, add_result_error(edge, object, ImportState3));
         false ->
             ?LOG_ERROR(#{
                 text => <<"Error importing CSV edge data - predicate does not exist">>,
