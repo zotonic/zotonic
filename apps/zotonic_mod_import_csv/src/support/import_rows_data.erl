@@ -200,10 +200,10 @@ import_edge([ Subject, Predicate, Object | RestRowData ], RestColDef, RowNr, Imp
 
 edge_opts([ Seq | _ ], [ <<"order">> | _ ]) when is_integer(Seq) ->
     [ {seq, Seq} ];
-edge_opts([ Seq | _ ], [ <<"order">> | _ ]) when size(Seq) > 0 ->
+edge_opts([ Seq | _ ], [ <<"order">> | _ ]) when is_binary(Seq), byte_size(Seq) > 0 ->
     try
-        Seq = binary_to_integer(Seq),
-        [ {seq, Seq} ]
+        SeqI = binary_to_integer(Seq),
+        [ {seq, SeqI} ]
     catch
         _:_ ->
             []
