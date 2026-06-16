@@ -1,9 +1,10 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @author Marc Worrell <marc@worrell.nl>
+%% @copyright 2010-2026 Marc Worrell, Arjan Scherpenisse
 %% @doc Import rows of data according to the derived file/record definitions.
 %% @end
 
-%% Copyright 2010-2025 Marc Worrell, Arjan Scherpenisse
+%% Copyright 2010-2026 Marc Worrell, Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -74,14 +75,14 @@ import_rows([], _Def, _IsReset, _Context) ->
         {deleted, 0},
         {ignored, 0}
     ];
-import_rows(RowData, Def, IsReset, Context) ->
+import_rows(RowData, DataDef, IsReset, Context) ->
     StartDate = erlang:universaltime(),
     %% Drop (optionally) the first row, empty rows and the comment rows (starting with a '#')
-    RowData1 = case Def#import_data_def.skip_first_row of
+    RowData1 = case DataDef#import_data_def.skip_first_row of
                 true -> tl(RowData);
                 _ -> RowData
             end,
-    State = import_rows(RowData1, 1, Def, new_importstate(IsReset), Context),
+    State = import_rows(RowData1, 1, DataDef, new_importstate(IsReset), Context),
     %% Return the stats from this import run
     R = State#importstate.result,
     [
@@ -112,17 +113,21 @@ new_importstate(IsReset) ->
 %% @doc Import all rows.
 -spec import_rows(list( row() ), non_neg_integer(), #import_data_def{}, #importstate{}, z:context()) ->
         #importstate{}.
-import_rows([], _RowNr, _Def, ImportState, _Context) ->
+import_rows([], _RowNr, _DataDef, ImportState, _Context) ->
     ImportState;
-import_rows([[<<$#, _/binary>>|_]|Rows], RowNr, Def, ImportState, Context) ->
-    import_rows(Rows, RowNr+1, Def, ImportState, Context);
-import_rows([[]|Rows], RowNr, Def, ImportState, Context) ->
-    import_rows(Rows, RowNr+1, Def, ImportState, Context);
-import_rows([R|Rows], RowNr, Def, ImportState, Context) ->
-    Zipped = zip(R, Def#import_data_def.columns, []),
-    ImportState1 = import_parts(Zipped, RowNr, Def#import_data_def.importdef, ImportState, Context),
-    import_rows(Rows, RowNr+1, Def, ImportState1, Context).
-
+import_rows([[<<$#, _/binary>>|_]|Rows], RowNr, DataDef, ImportState, Context) ->
+    import_rows(Rows, RowNr+1, DataDef, ImportState, Context);
+import_rows([[]|Rows], RowNr, DataDef, ImportState, Context) ->
+    import_rows(Rows, RowNr+1, DataDef, ImportState, Context);
+import_rows([R|Rows], RowNr, DataDef, ImportState, Context) ->
+    ImportState1 = case DataDef#import_data_def.columns of
+        [ <<"subject">>, <<"predicate">>, <<"object">> | RestColDef ] ->
+            import_edge(R, RestColDef, RowNr, ImportState, Context);
+        _ ->
+            Zipped = zip(R, DataDef#import_data_def.columns, []),
+            import_parts(Zipped, RowNr, DataDef#import_data_def.importdef, ImportState, Context)
+    end,
+    import_rows(Rows, RowNr+1, DataDef, ImportState1, Context).
 
 %% @doc Combine the field name definitions and the field values.
 zip(_Cols, [], Acc) -> lists:reverse(Acc);
@@ -133,7 +138,91 @@ zip([], [N|Ns], Acc) -> zip([], Ns, [{N,<<>>}|Acc]);
 zip([C|Cs], [N|Ns], Acc) -> zip(Cs, Ns, [{N, C}|Acc]).
 
 
-%% @doc Import all resources on a row
+%% @doc Import a single edge definition. Used when the row looks like a
+%% single edge definition: subject, predicate, object.
+%% The 'order' in the definition is optional.
+import_edge([ Subject, Predicate, Object | RestRowData ], RestColDef, RowNr, ImportState, Context) ->
+    {SubjectId, ImportState1} = name_lookup(Subject, ImportState, Context),
+    {PredicateId, ImportState2} = name_lookup(Predicate, ImportState1, Context),
+    {ObjectId, ImportState3} = name_lookup(Object, ImportState2, Context),
+    case m_rsc:is_a(PredicateId, predicate, Context) of
+        true when is_integer(SubjectId), is_integer(ObjectId) ->
+            Opts = [
+                {no_touch, true}
+                | edge_opts(RestRowData, RestColDef)
+            ],
+            case m_edge:insert(SubjectId, PredicateId, ObjectId, Opts, Context) of
+                {ok, _EdgeId} ->
+                    add_result_seen(edge, ImportState3);
+                {error, Reason} ->
+                    ?LOG_ERROR(#{
+                        text => <<"Error importing CSV edge data - failed to insert edge">>,
+                        in => zotonic_mod_import_csv,
+                        result => error,
+                        reason => Reason,
+                        row_nr => RowNr,
+                        subject => Subject,
+                        predicate => Predicate,
+                        object => Object
+                    }),
+                    add_result_seen(edge, add_result_error(edge, {insert_failed, Reason}, ImportState3))
+            end;
+        true when not is_integer(SubjectId) ->
+            ?LOG_ERROR(#{
+                text => <<"Error importing CSV edge data - subject does not exist">>,
+                in => zotonic_mod_import_csv,
+                result => error,
+                reason => enoent,
+                row_nr => RowNr,
+                subject => Subject
+            }),
+            add_result_seen(edge, add_result_error(edge, subject, ImportState3));
+        true when not is_integer(ObjectId) ->
+            ?LOG_ERROR(#{
+                text => <<"Error importing CSV edge data - object does not exist">>,
+                in => zotonic_mod_import_csv,
+                result => error,
+                reason => enoent,
+                row_nr => RowNr,
+                object => Object
+            }),
+            add_result_seen(edge, add_result_error(edge, object, ImportState3));
+        false ->
+            ?LOG_ERROR(#{
+                text => <<"Error importing CSV edge data - predicate does not exist or is not a predicate">>,
+                in => zotonic_mod_import_csv,
+                result => error,
+                reason => predicate,
+                row_nr => RowNr,
+                predicate => Predicate
+            }),
+            add_result_seen(edge, add_result_error(edge, predicate, ImportState3))
+    end;
+import_edge(Row, _RestColDef, RowNr, ImportState, _Context) ->
+    ?LOG_ERROR(#{
+        text => <<"Error importing CSV edge data - edge needs subject, predicate and object">>,
+        in => zotonic_mod_import_csv,
+        result => error,
+        reason => incomplete,
+        row_nr => RowNr,
+        row => Row
+    }),
+    add_result_seen(edge, add_result_error(edge, incomplete, ImportState)).
+
+edge_opts([ Seq | _ ], [ <<"order">> | _ ]) when is_integer(Seq) ->
+    [ {seq, Seq} ];
+edge_opts([ Seq | _ ], [ <<"order">> | _ ]) when is_binary(Seq), byte_size(Seq) > 0 ->
+    try
+        SeqI = binary_to_integer(Seq),
+        [ {seq, SeqI} ]
+    catch
+        _:_ ->
+            []
+    end;
+edge_opts(_Data, _RowCols) ->
+    [].
+
+%% @doc Import all resources on a row.
 -spec import_parts(row(), pos_integer(), list(), #importstate{}, z:context()) -> #importstate{}.
 import_parts(_Row, _RowNr, [], ImportState, _Context) ->
     ImportState;

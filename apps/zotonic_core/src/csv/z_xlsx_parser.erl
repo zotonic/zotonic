@@ -142,63 +142,82 @@ letters_to_num(Letters) ->
 
 parse_shared(#{ shared := SharedBin }) ->
     case z_html_parse:parse(SharedBin, #{ mode => xml, lowercase => true }) of
-        {ok, {<<"sst">>, _, Elts}} ->
+        {ok, {Sst, _, Elts}} when is_list(Elts) ->
             {_, Shared} = lists:foldl(
                 fun
-                    ({<<"si">>, _, Ts}, {N, Acc}) ->
-                        V = case lists:keyfind(<<"t">>, 1, Ts) of
-                            {<<"t">>, _, T} -> text(T);
-                            false -> <<>>
-                        end,
-                        {N+1, Acc#{ N => V}};
+                    ({Si, _, Ts}, {N, Acc}) ->
+                        case local_name(Si) of
+                            <<"si">> ->
+                                V = case keyfind_element(<<"t">>, Ts) of
+                                    {_, _, T} -> text(T);
+                                    false -> <<>>
+                                end,
+                                {N+1, Acc#{ N => V}};
+                            _ ->
+                                {N, Acc}
+                        end;
                     (_, NAcc) ->
                         NAcc
                 end,
                 {0, #{}},
                 Elts),
-            Shared;
+            case local_name(Sst) of
+                <<"sst">> -> Shared;
+                _ -> #{}
+            end;
         {error, _} ->
             #{}
     end;
 parse_shared(_) ->
     #{}.
 
-parse_worksheet({<<"worksheet">>, _Args, Elts}, Shared) ->
+parse_worksheet({Worksheet, _Args, Elts}, Shared) when is_list(Elts) ->
     case lists:filtermap(
         fun
-            ({<<"sheetdata">>, _, SheetRows}) ->
-                {true, extract_rows(SheetRows, Shared)};
+            ({SheetData, _, SheetRows}) when is_list(SheetRows) ->
+                case local_name(SheetData) of
+                    <<"sheetdata">> -> {true, extract_rows(SheetRows, Shared)};
+                    _ -> false
+                end;
             (_) ->
                 false
         end,
         Elts)
     of
         [ Data | _ ] ->
-            Data;
-        [] ->
-            ?LOG_WARNING(#{
-                in => zotonic_core,
-                text => <<"No sheetdata in XLSX worksheet">>,
-                result => error,
-                reason => sheetdata_missing
-            }),
-            []
+            case local_name(Worksheet) of
+                <<"worksheet">> ->
+                    Data;
+                _ ->
+                    no_sheetdata()
+            end;
+        _ ->
+            no_sheetdata()
     end.
 
 extract_rows(Rs, Shared) ->
     lists:filtermap(
         fun
-            ({<<"row">>, _, _} = R) -> {true, extract_row(R, Shared)};
+            ({Row, _, _} = R) ->
+                case local_name(Row) of
+                    <<"row">> -> {true, extract_row(R, Shared)};
+                    _ -> false
+                end;
             (_) -> false
         end,
         Rs).
 
-extract_row({<<"row">>, _RowArgs, Cells}, Shared) ->
+extract_row({_Row, _RowArgs, Cells}, Shared) ->
     lists:filtermap(
         fun
-            ({<<"c">>, Args, CellData}) ->
-                Data = map_cell(proplists:get_value(<<"t">>, Args), Args, CellData, Shared),
-                {true, {proplists:get_value(<<"r">>, Args), Data}};
+            ({Cell, Args, CellData}) ->
+                case local_name(Cell) of
+                    <<"c">> ->
+                        Data = map_cell(proplists:get_value(<<"t">>, Args), Args, CellData, Shared),
+                        {true, {proplists:get_value(<<"r">>, Args), Data}};
+                    _ ->
+                        false
+                end;
             (_) ->
                 false
         end,
@@ -206,33 +225,68 @@ extract_row({<<"row">>, _RowArgs, Cells}, Shared) ->
 
 map_cell(<<"inlineStr">>, _CellArgs, CellData, _Shared) ->
     % Text
-    case lists:keyfind(<<"is">>, 1, CellData) of
-        {<<"is">>, _, IsData} when is_list(IsData) ->
+    case keyfind_element(<<"is">>, CellData) of
+        {_Is, _, IsData} when is_list(IsData) ->
             text(IsData);
         false ->
             <<>>
     end;
 map_cell(<<"s">>, _CellArgs, CellData, Shared) ->
     % String from the shared string data
-    case lists:keyfind(<<"v">>, 1, CellData) of
-        {<<"v">>, _, VData} ->
+    case keyfind_element(<<"v">>, CellData) of
+        {_V, _, VData} ->
             maps:get(binary_to_integer(text(VData)), Shared, <<>>);
         false ->
             <<>>
     end;
 map_cell(<<"str">>, _CellArgs, CellData, _Shared) ->
     % Formula with string result
-    case lists:keyfind(<<"v">>, 1, CellData) of
-        {<<"v">>, _, VData} ->
+    case keyfind_element(<<"v">>, CellData) of
+        {_V, _, VData} ->
             text(VData);
         false ->
             <<>>
     end;
+map_cell(<<"b">>, _CellArgs, CellData, _Shared) ->
+    case keyfind_element(<<"v">>, CellData) of
+        {_V, _, VData} ->
+            case text(VData) of
+                <<"1">> -> <<"true">>;
+                _ -> <<"false">>
+            end;
+        false ->
+            <<"false">>
+    end;
 map_cell(undefined, _CellArgs, CellData, _Shared) ->
-    case lists:keyfind(<<"v">>, 1, CellData) of
-        {<<"v">>, _, VData} -> text(VData);
+    case keyfind_element(<<"v">>, CellData) of
+        {_V, _, VData} -> text(VData);
         false -> <<>>
     end.
+
+keyfind_element(_Name, []) ->
+    false;
+keyfind_element(Name, [{Tag, _, _} = Element | Rest]) ->
+    case local_name(Tag) of
+        Name -> Element;
+        _ -> keyfind_element(Name, Rest)
+    end;
+keyfind_element(Name, [_ | Rest]) ->
+    keyfind_element(Name, Rest).
+
+local_name(Name) ->
+    case binary:split(Name, <<":">>) of
+        [_Prefix, Local] -> Local;
+        [Name] -> Name
+    end.
+
+no_sheetdata() ->
+    ?LOG_WARNING(#{
+        in => zotonic_core,
+        text => <<"No sheetdata in XLSX worksheet">>,
+        result => error,
+        reason => sheetdata_missing
+    }),
+    [].
 
 text(B) when is_binary(B) ->
     B;
