@@ -21,50 +21,18 @@
 -moduledoc("
 This module presents an interface for letting users register themselves.
 
-
-
 Configuration
 -------------
 
 You can adjust this module’s behaviour with the following [Module configuration](/id/doc_developerguide_modules#dev-configuration-parameters):
 
-`mod_signup.``request_confirm`
-
-true (default)
-
-send a signup confirmation e-mail to new users
-
-false
-
-disable the signup confirmation e-mail
-
-`mod_signup.``username_equals_email`
-
-false (default)
-
-users have a username separate from their e-mail address and use that username for logging in
-
-true
-
-the user’s e-mail address is also the user’s username, so users can log in with their e-mail address.
-
-`mod_signup.``member_category`
-
-Name of the category that users created through sign up will be placed in.
-
-Defaults to `person`.
-
-`mod_signup.``content_group`
-
-Name of the content group that users created through sign up will be placed in.
-
-Defaults to `default_content_group`.
-
-`mod_signup.``depiction_as_medium`
-
-If set then any depiction_url is added as a medium record to the person who signed up. Normally the depiction is added
-as a separate *depending* image resource and connected from the person using a `depiction` predicate.
-
+| Key | Default | Description |
+| --- | --- | --- |
+| `mod_signup.request_confirm` | `true` | Send a signup confirmation e-mail to new users. If set to `false`, users are verified immediately. |
+| `mod_signup.username_equals_email` | `true` | Let users have a username separate from their e-mail address. If set to `true`, the user’s e-mail address is also the username. |
+| `mod_signup.member_category` | `person` | Name of the category that users created through sign up will be placed in. |
+| `mod_signup.content_group` | empty string | Name of the content group that users created through sign up will be placed in. The empty string means the default content group for the current ACL module. |
+| `mod_signup.depiction_as_medium` | `false` | If set then any depiction URL is added as a medium record to the person who signed up. Normally the depiction is added as a separate *depending* image resource and connected from the person using a `depiction` predicate. |
 
 
 Config: Using the user’s e-mail address as username
@@ -79,11 +47,8 @@ separate user name. Note that when you allow a user to change his email, take ca
 {Username, Password}}` identity as well, otherwise the username remains equal to the old email address.
 
 
-
 Notifications
 -------------
-
-
 
 ### `signup_form_fields`
 
@@ -102,34 +67,29 @@ Fold for determining which signup fields to validate. This is an array of `{Fiel
 Observers can add / remove fields using the accumulator value that is passed into the notification.
 
 
-
-### `identify_verification{user_id=UserId, identity=Ident}`
+### `#identify_verification{ user_id = UserId, identity = Ident }`
 
 Send verification requests to unverified identities.
 
 
-
-### `signup_check`
+### `#signup_check{ props = UserProps, signup_props = SignupProps }`
 
 Fold for the signup preflight check. Allows to add extra user properties or abort the signup.
 
 If no `{ok, _Props1, SignupProps}` is returned, but `{error, Reason}`, the signup is aborted.
 
 
-
-### `signup_done{id=Id, is_verified=IsVerified, props=Props, signup_props=SignupProps}`
+### `#signup_done{ id = Id, is_verified = IsVerified, props = Props, signup_props = SignupProps }`
 
 Fired when a signup procedure is done and a user has been created.
 
 
-
-### `signup_confirm{id=UserId}`
+### `#signup_confirm{ id = UserId }`
 
 Fired when a users have signed up and confirmed their identity (e.g. via e-mail).
 
 
-
-### `signup_confirm_redirect{id=UserId}`
+### `signup_confirm_redirect{ id = UserId }`
 
 Decide to which page a user gets redirected to after signup.
 User signup module handling registration, activation, and signup-related policies.
@@ -143,7 +103,7 @@ This module handles the following notifier callbacks:
 - `observe_identity_verification`: Complete signup identity verification and continue the signup/logon flow when allowed.
 - `observe_logon_ready_page`: Return the url to redirect to when the user logged on, defaults to the user's personal page using `z_auth:is_auth`.
 - `observe_signup`: Add a new user or an existing person as user using `z_ids:id`.
-- `observe_signup_url`: Check if a module wants to redirect to the signup form using `z_ids:id`.
+- `observe_signup_url`: Generate a link to the signup page, with additional signup properties stored as xs_props.
 
 ").
 -author("Marc Worrell <marc@worrell.nl>").
@@ -172,7 +132,7 @@ This module handles the following notifier callbacks:
             key => depiction_as_medium,
             type => boolean,
             default => false,
-            description => "If true, the depiction of the user will be the medium beloging to the user's resource, "
+            description => "If true, the depiction of the user will be the medium belonging to the user's resource, "
                            "otherwise it will be uploaded as a separate image resource and connected to the user using "
                            "a depiction connection."
         },
@@ -186,12 +146,13 @@ This module handles the following notifier callbacks:
         #{
             key => username_equals_email,
             type => boolean,
-            default => false,
+            default => true,
             description => "If true, the username will be set to the email address of the user. "
                            "If false, the user can choose a different username."
         }
     ]).
 
+-behaviour(gen_server).
 
 -export([
     manage_schema/2,
@@ -201,26 +162,52 @@ This module handles the following notifier callbacks:
     observe_identity_verification/2,
     observe_logon_ready_page/2,
 
+    new_onetime_code/2,
+    delete_onetime_code/2,
+    check_onetime_code/3,
+
     signup/4,
     signup_existing/5,
     request_verification/2
 ]).
 
+-export([
+    start_link/1,
+    init/1,
+    handle_call/3,
+    handle_cast/2,
+    handle_info/2,
+    terminate/2,
+    code_change/3
+]).
+
+-define(CODE_TIMEOUT, 900_000). % 15 minutes
+-define(CODE_CG, 10).           % 10 generations for CG
+
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 
-%% @doc Add a new user or an existing person as user.
+%% @doc Add a new user or an existing person as user. Typically called when a user
+%% authenticated using an external source. The UserId is optional, it migh be referring
+%% to an existing Person resource that does not have authentication identities attached.
 observe_signup(#signup{id=UserId, props=Props, signup_props=SignupProps, request_confirm=RequestConfirm}, Context) ->
     signup_existing(UserId, Props, SignupProps, RequestConfirm, Context).
 
 
 %% @doc Check if a module wants to redirect to the signup form.  Returns either {ok, Location} or undefined.
+%% This generated an URL referring to stored arguments, the arguments are later retrieved when the page
+%% is visited. The arguments consist of resource propertties and signup properties (typically identities)
+%% that are predefined by the caller. Some parts of the signup form might be skipped or prefilled, based
+%% on the passed properties.
 observe_signup_url(#signup_url{props=Props, signup_props=SignupProps}, Context) ->
     CheckId = z_ids:id(),
     ok = m_server_storage:secure_store(CheckId, {CheckId, Props, SignupProps}, Context),
     {ok, z_dispatcher:url_for(signup, [{xs, CheckId}], Context)}.
 
 
+%% @doc A request to perform a verification of an idenntity. The signup module can send an email with a
+%% verification link to verify the email address. No other identities can be verified (yet) by the signup
+%% module.
 observe_identity_verification(#identity_verification{user_id=UserId, identity=undefined}, Context) ->
     request_verification(UserId, Context);
 observe_identity_verification(#identity_verification{user_id=UserId, identity=Ident}, Context) ->
@@ -233,7 +220,7 @@ observe_identity_verification(#identity_verification{user_id=UserId, identity=Id
 %% @doc Return the url to redirect to when the user logged on, defaults to the user's personal page.
 observe_logon_ready_page(#logon_ready_page{ request_page = None }, Context) when None =:= undefined; None =:= <<>> ->
     case z_auth:is_auth(Context) of
-        true -> m_rsc:p(z_acl:user(Context), page_url, Context);
+        true -> m_rsc:p(z_acl:user(Context), <<"page_url">>, Context);
         false -> undefined
     end;
 observe_logon_ready_page(#logon_ready_page{ request_page = _ }, _Context) ->
@@ -241,13 +228,25 @@ observe_logon_ready_page(#logon_ready_page{ request_page = _ }, _Context) ->
 
 
 %% @doc Sign up a new user.
--spec signup(list(), list() | map(), boolean(), z:context()) -> {ok, integer()} | {error, term()}.
+-spec signup(Props, SignupProps, RequestConfirm, Context) -> {ok, UserId} | {error, Reason} when
+    Props :: proplists:proplist() | map(),
+    SignupProps :: list(),
+    RequestConfirm :: boolean(),
+    Context :: z:context(),
+    UserId :: m_rsc:resource_id(),
+    Reason :: term().
 signup(Props, SignupProps, RequestConfirm, Context) ->
     signup_existing(undefined, Props, SignupProps, RequestConfirm, Context).
 
-%% @doc Sign up a existing user
--spec signup_existing(integer()|undefined, map() | list(), list(), boolean(), z:context()) -> {ok, integer()} | {error, term()}.
-
+%% @doc Sign up user, connected to a new or existing Person resource.
+-spec signup_existing(OptUserId, Props, SignupProps, RequestConfirm, Context) -> {ok, UserId} | {error, Reason} when
+    OptUserId :: m_rsc:resource_id() | undefined,
+    Props :: proplists:proplist() | map(),
+    SignupProps :: list() | map(),
+    RequestConfirm :: boolean(),
+    Context :: z:context(),
+    UserId :: m_rsc:resource_id(),
+    Reason :: term().
 signup_existing(UserId, Props, SignupProps, RequestConfirm, Context) when is_list(Props) ->
     {ok, PropsMap} = z_props:from_list(Props),
     signup_existing(UserId, PropsMap, SignupProps, RequestConfirm, Context);
@@ -275,8 +274,108 @@ request_verification(UserId, [Ident|Rest], Requested, Context) ->
     end.
 
 %%====================================================================
+%% gen_server functions
+%%====================================================================
+
+
+-spec new_onetime_code(Tag, Context) -> {ok, Code} when
+    Tag :: term(),
+    Context :: z:context(),
+    Code :: binary().
+new_onetime_code(Tag, Context) ->
+    gen_server:call(z_utils:name_for_site(?MODULE, z_context:site(Context)), {new_code, Tag}).
+
+-spec check_onetime_code(Tag, Code, Context) -> boolean() when
+    Tag :: term(),
+    Context :: z:context(),
+    Code :: binary().
+check_onetime_code(Tag, Code, Context) ->
+    gen_server:call(z_utils:name_for_site(?MODULE, z_context:site(Context)), {check, Tag, Code}).
+
+-spec delete_onetime_code(Tag, Context) -> ok when
+    Tag :: term(),
+    Context :: z:context().
+delete_onetime_code(Tag, Context) ->
+    gen_server:call(z_utils:name_for_site(?MODULE, z_context:site(Context)), {delete, Tag}).
+
+
+-spec start_link(list()) -> {ok, pid()} | ignore | {error, term()}.
+%% @doc Starts the server
+start_link(Args) when is_list(Args) ->
+    {context, Context} = proplists:lookup(context, Args),
+    gen_server:start_link({local, z_utils:name_for_site(?MODULE, Context)}, ?MODULE, Args, []).
+
+%%====================================================================
+%% gen_server callbacks
+%%====================================================================
+
+%% @doc Initiates the server.
+init(Args) ->
+    {context, Context} = proplists:lookup(context, Args),
+    Site = z_context:site(Context),
+    logger:set_process_metadata(#{
+        site => Site,
+        module => ?MODULE
+    }),
+    % Simple generational garbage collection.
+    timer:send_interval(?CODE_TIMEOUT div ?CODE_CG, self(), cg),
+    {ok, #{ codes => [] }}.
+
+handle_call({new_code, Tag}, _From, #{ codes := Codes } = State) ->
+    Code = new_code(),
+    Codes1 = tag_delete(Tag, Codes),
+    Codes2 = case Codes1 of
+        [] -> [ #{ Tag => Code } ];
+        [H|Ts] -> [ H#{ Tag => Code } | Ts ]
+    end,
+    State1 = State#{
+        codes => Codes2
+    },
+    {reply, {ok, Code}, State1};
+handle_call({check, Tag, Code}, _From, #{ codes := Codes } = State) ->
+    {reply, tag_check(Tag, Code, Codes), State};
+handle_call({delete, Tag}, _From, #{ codes := Codes } = State) ->
+    Codes1 = tag_delete(Tag, Codes),
+    {reply, ok, State#{ codes => Codes1 }};
+handle_call(_Request, _From, State) ->
+    {reply, ok, State}.
+
+handle_cast(_Msg, State) ->
+    {noreply, State}.
+
+handle_info(cg, #{ codes := Codes } = State) ->
+    Codes1 = lists:sublist(Codes, ?CODE_CG),
+    State1 = State#{
+        codes => [ #{} | Codes1 ]
+    },
+    {noreply, State1};
+handle_info(_Info, State) ->
+    {noreply, State}.
+
+terminate(_Reason, _State) ->
+    ok.
+
+code_change(_OldVsn, State, _Extra) ->
+    {ok, State}.
+
+
+%%====================================================================
 %% support functions
 %%====================================================================
+
+tag_delete(Tag, Codes) ->
+    lists:map(fun(C) -> maps:remove(Tag, C) end, Codes).
+
+tag_check(Tag, Code, Codes) ->
+    lists:any(fun(C) -> maps:find(Tag, C) =:= {ok, Code} end, Codes).
+
+new_code() ->
+    prepend(integer_to_binary(z_ids:number(1000000))).
+
+prepend(Code) when size(Code) < 6 ->
+    prepend(<<"0", Code/binary>>);
+prepend(Code) ->
+    Code.
 
 %% @doc Preflight checks on a signup
 %% This function is called with a 'sudo' context.
@@ -318,7 +417,7 @@ do_signup(UserId, Props, SignupProps, RequestConfirm, Context) ->
     case insert_or_update(UserId, props_to_rsc(Props, IsVerified, Context), Context) of
         {ok, NewUserId} ->
             ContextLogon = z_acl:logon(NewUserId, Context),
-            ContextUser = case m_rsc:p_no_acl(NewUserId, creator_id, Context) of
+            ContextUser = case m_rsc:p_no_acl(NewUserId, <<"creator_id">>, Context) of
                 NewUserId -> z_acl:sudo(ContextLogon);
                 _ -> ContextLogon
             end,

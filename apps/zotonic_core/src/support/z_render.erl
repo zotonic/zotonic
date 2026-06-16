@@ -874,6 +874,7 @@ css_selector_1(window) -> window;
 css_selector_1("window") -> window;
 css_selector_1(<<"window">>) -> window;
 css_selector_1(<<"#", _/binary>> = Sel) -> Sel;
+css_selector_1(<<".", _/binary>> = Sel) -> Sel;
 css_selector_1(<<" ", _/binary>> = Sel) -> Sel;
 css_selector_1(Sel) when is_list(Sel) -> css_selector_1(iolist_to_binary(Sel));
 css_selector_1(Sel) -> <<"#", Sel/binary>>.

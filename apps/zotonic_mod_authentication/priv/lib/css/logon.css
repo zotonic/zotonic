@@ -39,9 +39,11 @@ body.err403 .z-logon-box {
 }
 .z-logon-box p {
   margin-bottom: 10px;
+  width: 100%;
 }
 .z-logon-box button[type=submit],
-.z-logon-box input[type=submit] {
+.z-logon-box input[type=submit],
+.z-logon-box .btn-submit {
   width: 100%;
 }
 .z-logon-box .z-logon-title:first-of-type,
@@ -128,8 +130,29 @@ body.err403 .z-logon-box {
 .z-logon-box #signup_verify {
   display: none;
 }
-.z-logon-box input#surprefix {
-  width: 50px;
+.z-logon-box .signup-external {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 1em;
+}
+.z-logon-box .signup-name {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.z-logon-box .signup-name #signup_name_first {
+  flex-grow: 1;
+  min-width: 60%;
+}
+.z-logon-box .signup-name #signup_surname_prefix {
+  flex-shrink: 0;
+}
+.z-logon-box .signup-name #signup_surname_prefix input[name=surprefix] {
+  width: 8ch;
+}
+.z-logon-box .signup-name #signup_name_surname {
+  flex-grow: 2;
+  min-width: 60%;
 }
 .z-logon-box #signup_error_tos_agree,
 .z-logon-box #signup_error_duplicate_username,
@@ -142,4 +165,7 @@ body.err403 .z-logon-box {
 .z-logon-box .z_validation_message {
   display: block;
   margin: 5px 0 0 0;
+}
+.z-logon-box .z_validation.z_invalid {
+  color: #C21C3D;
 }
