@@ -187,8 +187,8 @@ This module handles the following notifier callbacks:
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 
-%% @doc Add a new user or an existing person as user. Typically called when a user
-%% authenticated using an external source. The UserId is optional, it migh be referring
+%% @doc Add a new user or connect an existing person as a user. Typically called when a user
+%% authenticated using an external source. The UserId is optional; it might refer
 %% to an existing Person resource that does not have authentication identities attached.
 observe_signup(#signup{id=UserId, props=Props, signup_props=SignupProps, request_confirm=RequestConfirm}, Context) ->
     signup_existing(UserId, Props, SignupProps, RequestConfirm, Context).
