@@ -194,9 +194,9 @@ observe_signup(#signup{id=UserId, props=Props, signup_props=SignupProps, request
     signup_existing(UserId, Props, SignupProps, RequestConfirm, Context).
 
 
-%% @doc Check if a module wants to redirect to the signup form.  Returns either {ok, Location} or undefined.
-%% This generated an URL referring to stored arguments, the arguments are later retrieved when the page
-%% is visited. The arguments consist of resource propertties and signup properties (typically identities)
+%% @doc Check if a module wants to redirect to the signup form. Returns either {ok, Location} or undefined.
+%% This generates a URL referring to stored arguments; the arguments are later retrieved when the page
+%% is visited. The arguments consist of resource properties and signup properties (typically identities)
 %% that are predefined by the caller. Some parts of the signup form might be skipped or prefilled, based
 %% on the passed properties.
 observe_signup_url(#signup_url{props=Props, signup_props=SignupProps}, Context) ->
