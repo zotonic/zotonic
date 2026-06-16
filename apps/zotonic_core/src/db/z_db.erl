@@ -1233,7 +1233,7 @@ get_current_props(DBDriver, Connection, true, false, Table, Id, _Context) ->
     %% There is only a props_json column
     case equery1(DBDriver, Connection, "select props_json from \"" ++ Table ++ "\" where id = $1", [Id]) of
         {ok, JSON} when is_binary(JSON) ->
-            {ok, jsxrecord:decode(JSON)};
+            {ok, z_json:decode(JSON)};
         {ok, Map} when is_map(Map) ->
             {ok, Map};
         _ ->
@@ -1270,7 +1270,7 @@ get_current_props(DBDriver, Connection, true, true, Table, Id, _Context) ->
 maybe_json_decode(JSON) when is_map(JSON) -> JSON;
 maybe_json_decode(<<>>) -> #{};
 maybe_json_decode(JSON) when is_binary(JSON) ->
-    case jsxrecord:decode(JSON) of
+    case z_json:decode(JSON) of
         #{} = Map -> Map;
         _ -> #{}
     end.

@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2025 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Manage dispatch lists (aka definitions for url patterns). Constructs named urls from dispatch lists.
 %% @end
 
-%% Copyright 2009-2025 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -742,9 +742,12 @@ select_best_pattern1({AQS, _APat, _AOpts}=A, {BQS, _BPat, _BOpts}=B) ->
 
 %% @doc URL encode the property list.
 urlencode(Props, Join) ->
-    RevPairs = lists:foldl(fun ({K, V}, Acc) ->
-                                   [[mochiweb_util:quote_plus(K), $=, mochiweb_util:quote_plus(V)] | Acc]
-                           end, [], Props),
+    RevPairs = lists:foldl(
+        fun ({K, V}, Acc) ->
+            K1 = z_convert:to_binary(K),
+            V1 = z_convert:to_binary(V),
+            [[cow_qs:urlencode(K1), $=, cow_qs:urlencode(V1)] | Acc]
+        end, [], Props),
     lists:flatten(revjoin(RevPairs, Join, [])).
 
 revjoin([], _Separator, Acc) ->
@@ -756,47 +759,61 @@ revjoin([S | Rest], Separator, Acc) ->
 
 
 %% @doc Append extra arguments to the url, depending if 'qargs' or 'varargs' is set.
-append_extra_args(Args, Context) when is_map(Args) ->
-    append_extra_args(maps:to_list(Args), Context);
+-spec append_extra_args(Args, Context) -> ExpandedArgs when
+    Args :: proplists:proplist(),
+    Context :: z:context(),
+    ExpandedArgs :: proplists:proplist().
 append_extra_args(Args, Context) ->
     append_qargs(append_varargs(Args, Context), Context).
 
 
-%% @doc Append all query arguments iff they are not mentioned in the arglist and if qargs parameter is set
+%% @doc Append all query arguments iff they are not mentioned in the arglist
+%% and if qargs parameter is set.
 append_qargs(Args, Context) ->
-    case proplists:get_value(qargs, Args) of
-        undefined ->
-            Args;
-        false ->
-            proplists:delete(qargs, Args);
-        true ->
-            Args1 = proplists:delete(qargs, Args),
-            merge_qargs(z_context:get_qargs(Context), Args1);
-        L when is_list(L) ->
-            Args1 = proplists:delete(qargs, Args),
-            merge_qargs(L, Args1);
-        M when is_map(M) ->
-            Args1 = proplists:delete(qargs, Args),
-            merge_qargs(maps:to_list(M), Args1)
-    end.
-
-merge_qargs([], Args) ->
-    Args;
-merge_qargs(Qs, Args) ->
-    Ks = [ z_convert:to_binary(A) || {A, _} <- Args ],
-    lists:foldr(
-        fun({A, _} = AV, Acc) ->
-            case lists:member(A, Ks) of
-                true ->
-                    Acc;
-                false ->
-                    [ AV | Acc ]
-            end
+    QArgs = lists:filtermap(
+        fun
+            ({qargs, QArg}) -> {true, expand_qargs(QArg, Context)};
+            (qargs) -> {true, expand_qargs(true, Context)};
+            ({<<"qargs">>, QArg}) -> {true, expand_qargs(QArg, Context)};
+            (<<"qargs">>) -> {true, expand_qargs(true, Context)};
+            (_) -> false
         end,
-        Args,
-        Qs).
+        Args),
+    merge_qargs(lists:flatten(QArgs), Args).
 
-%% @doc Append all varargs argument, names are given in a list.
+expand_qargs(undefined, _Context) -> [];
+expand_qargs(false, _Context) -> [];
+expand_qargs(true, Context) -> z_context:get_qargs(Context);
+expand_qargs(<<>>, _Context) -> [];
+expand_qargs(<<"false">>, _Context) -> [];
+expand_qargs(<<"true">>, Context) -> z_context:get_qargs(Context);
+expand_qargs(L, _Context) when is_list(L) ->
+    lists:filtermap(
+        fun
+            ({K, true}) -> {true, {z_convert:to_binary(K), true}};
+            ({K,V}) -> {true, {z_convert:to_binary(K), V}};
+            (K) when is_binary(K); is_atom(K) -> {true, {z_convert:to_binary(K), true}};
+            (_) -> false
+        end,
+        L);
+expand_qargs(M, _Context) when is_map(M) ->
+    z_props:to_qs(M).
+
+merge_qargs([], Args) -> Args;
+merge_qargs(Qs, []) -> Qs;
+merge_qargs(Qs, Args) ->
+    Ks = [ z_convert:to_binary(K) || {K, _} <- Args ],
+    lists:foldr(
+        fun({K, _} = KV, Acc) ->
+            case lists:member(K, Ks) of
+                true -> Acc;
+                false -> [ KV | Acc ]
+            end
+        end, Args, Qs).
+
+%% @doc Append all varargs argument, names are given in a list. The varargs list is
+%% either a key/value tuple or a key. If it is only a key then the value is fetched
+%% from the context variables. Typically they are set as dispatch arguments.
 append_varargs(Args, Context) ->
     case proplists:get_value(varargs, Args) of
         undefined ->

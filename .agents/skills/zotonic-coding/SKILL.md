@@ -11,7 +11,7 @@ description: Use when working in Zotonic projects, especially Erlang modules, Zo
 - Keep changes inside the requested app unless the user explicitly expands scope.
 - Files use UTF-8 and LF line endings.
 - Use `rg`/`rg --files` for discovery.
-- Prefer `make` for normal Zotonic builds; use `./rebar3 compile` after Erlang changes when you only need a compile check. Ignore `rebar.lock` changes from normal build/test commands unless the task intentionally changes dependencies.
+- Prefer `make` for normal Zotonic builds; use `./rebar3 compile` after Erlang changes when you only need a compile check. Ignore `rebar.lock` changes from normal build/test commands unless the task intentionally changes dependencies.Ignore `erl_crash.dump`; it is already in `.gitignore` and should not be reported as actionable worktree noise.
 
 ## Erlang Style
 

@@ -150,3 +150,4 @@ msginit --no-translator --locale=de --input=priv/translations/template/site.pot 
 - Run `./rebar3 compile` for Erlang/module changes.
 - Run `bin/zotonic pot sitename`, `msgmerge`/`msginit`, and `msgfmt --check` after translation-related template changes.
 - After compile, check `git diff -- rebar.lock`; remove unrelated generated lockfile dependency churn unless the task intentionally changed dependencies.
+- Ignore `erl_crash.dump`; it is already in `.gitignore` and should not be reported as actionable worktree noise.

@@ -260,9 +260,7 @@
                     {% if id.depiction or depiction %}
                     <tr>
                         <td style="background-color: #ffffff;">
-                            {% if id %}<a href="{{ id.page_url_abs }}">{% endif %}
                             <img src="{% image_url depiction|default:id.depiction upscale width=1200 height=600 crop absolute_url %}" width="600" height="" alt="{{ id.depiction.title }}" border="0" style="width: 100%; max-width: 600px; height: auto; background: #dddddd; font-family: sans-serif; font-size: 15px; line-height: 15px; color: #555555; margin: auto; display: block;" class="g-img">
-                            {% if id %}</a>{% endif %}
                         </td>
                     </tr>
                     {% endif %}
