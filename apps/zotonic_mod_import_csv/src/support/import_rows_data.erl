@@ -196,7 +196,17 @@ import_edge([ Subject, Predicate, Object | RestRowData ], RestColDef, RowNr, Imp
                 predicate => Predicate
             }),
             add_result_error(edge, predicate, ImportState3)
-    end.
+    end;
+import_edge(Row, _RestColDef, RowNr, ImportState, _Context) ->
+    ?LOG_ERROR(#{
+        text => <<"Error importing CSV edge data - edge needs subject, predicate and object">>,
+        in => zotonic_mod_import_csv,
+        result => error,
+        reason => incomplete,
+        row_nr => RowNr,
+        row => Row
+    }),
+    add_result_error(edge, incomplete, ImportState).
 
 edge_opts([ Seq | _ ], [ <<"order">> | _ ]) when is_integer(Seq) ->
     [ {seq, Seq} ];
