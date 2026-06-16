@@ -732,7 +732,7 @@ fetch_json(Uri, Options, Context) ->
                     ],
                     case z_fetch:fetch(Uri, FetchOptions, Context) of
                         {ok, {_FinalUrl, _Hs, _Size, Body}} ->
-                            JSON = jsxrecord:decode(Body),
+                            JSON = z_json:decode(Body),
                             {ok, JSON};
                         {error, {Code, FinalUrl, _Hs, _Size, _Body}} when Code =:= 403; Code =:= 401 ->
                             ?LOG_WARNING(#{

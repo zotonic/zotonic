@@ -131,10 +131,10 @@ transport(Delegate, #postback_notify{ data = Data } = Notify, Context) ->
             incoming_context_result(ContextValidation)
     end;
 transport(<<"postback">>, Map, Context) when is_map(Map) ->
-    Postback = jsxrecord:decode( maps:get(<<"z_postback">>, Map) ),
+    Postback = z_json:decode( maps:get(<<"z_postback">>, Map) ),
     transport(<<"postback">>, Postback, Context);
 transport(<<"notify">>, Map, Context) when is_map(Map) ->
-    Postback = jsxrecord:decode( maps:get(<<"z_postback">>, Map) ),
+    Postback = z_json:decode( maps:get(<<"z_postback">>, Map) ),
     transport(<<"postback">>, Postback, Context);
 transport(Delegate, Payload, Context) ->
     % Event

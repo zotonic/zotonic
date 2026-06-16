@@ -137,7 +137,7 @@ fetch_access_token(Code, AuthData, Args, _QArgs, Context) ->
                     case z_fetch:fetch(AccessTokenUrl1, [], Context) of
                         {ok, {_Final, _Hs, _Length, Body}} ->
                             try
-                                {ok, jsxrecord:decode(Body)}
+                                {ok, z_json:decode(Body)}
                             catch
                                 _:_ ->
                                     ?LOG_ERROR(#{

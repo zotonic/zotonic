@@ -42,26 +42,26 @@ oauth2_request_test() ->
 
         % No token
         {ok, {_, _, _, NoT}} = z_url_fetch:fetch(Url, [ insecure ]),
-        #{ <<"result">> := undefined, <<"status">> := <<"ok">> } = jsxrecord:decode(NoT),
+        #{ <<"result">> := undefined, <<"status">> := <<"ok">> } = z_json:decode(NoT),
 
         % Valid tokens
         {ok, {_, _, _, T1}} = z_url_fetch:fetch(Url, [ {authorization, <<"Bearer ", Token_1/binary>>}, insecure ]),
-        #{ <<"result">> := 1, <<"status">> := <<"ok">> } = jsxrecord:decode(T1),
+        #{ <<"result">> := 1, <<"status">> := <<"ok">> } = z_json:decode(T1),
 
         {ok, {_, _, _, T1a}} = z_url_fetch:fetch(Url, [ {authorization, <<"Bearer ", Token_1a/binary>>}, insecure ]),
-        #{ <<"result">> := 1, <<"status">> := <<"ok">> } = jsxrecord:decode(T1a),
+        #{ <<"result">> := 1, <<"status">> := <<"ok">> } = z_json:decode(T1a),
 
         % Expired token
         {ok, {_, _, _, T1t}} = z_url_fetch:fetch(Url, [ {authorization, <<"Bearer ", Token_1t/binary>>}, insecure ]),
-        #{ <<"result">> := undefined, <<"status">> := <<"ok">> } = jsxrecord:decode(T1t),
+        #{ <<"result">> := undefined, <<"status">> := <<"ok">> } = z_json:decode(T1t),
 
         % Illegal token
         {ok, {_, _, _, Tx}} = z_url_fetch:fetch(Url, [ {authorization, <<"Bearer ", Token_1/binary, "xxx">>}, insecure ]),
-        #{ <<"result">> := undefined, <<"status">> := <<"ok">> } = jsxrecord:decode(Tx),
+        #{ <<"result">> := undefined, <<"status">> := <<"ok">> } = z_json:decode(Tx),
 
         % Uknown token
         {ok, {_, _, _, Tu}} = z_url_fetch:fetch(Url, [ {authorization, <<"Bearer xxx">>}, insecure ]),
-        #{ <<"result">> := undefined, <<"status">> := <<"ok">> } = jsxrecord:decode(Tu),
+        #{ <<"result">> := undefined, <<"status">> := <<"ok">> } = z_json:decode(Tu),
 
         % TODO:
         % - test limitations on groups

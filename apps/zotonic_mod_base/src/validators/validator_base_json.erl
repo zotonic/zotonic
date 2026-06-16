@@ -37,7 +37,7 @@ validate(json, Id, Value, _Args, Context) ->
             {{ok, <<>>}, Context};
         Trimmed ->
             try
-                jsxrecord:decode(Trimmed),
+                z_json:decode(Trimmed),
                 {{ok, Trimmed}, Context}
             catch
                 _:_ ->

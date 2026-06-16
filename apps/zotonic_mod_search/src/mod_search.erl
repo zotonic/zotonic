@@ -23,31 +23,6 @@
 -moduledoc("
 mod_search implements various ways of searching through the main resource table using [m_search](/id/doc_model_model_search).
 
-
-
-Configuration
--------------
-
-There are two [site configuration
-variables](/id/doc_developerguide_configuration_site_configuration#ref-site-configuration) to tweak [PostgreSQL text
-search settings](https://www.postgresql.org/docs/current/static/textsearch-controls.html).
-
-
-
-### mod_search.rank_behaviour
-
-An integer representation to influence PostgreSQL search behaviour.
-
-Default: `37` (`1 | 4 | 32`)
-
-
-
-### mod_search.rank_weight
-
-A set of four numbers to override relative weights for the ABCD categories.
-
-Default: `{0.05, 0.25, 0.5, 1.0}`
-
 The following searches are implemented in mod_search:
 
 | Name                         | Description                                                                      | Required arguments           |
@@ -92,6 +67,27 @@ The following searches are implemented in mod_search:
 | `keyword_cloud`              | Return a list of `{keyword_id, count}` for all resources within a given category. The list is ordered on keyword title. Default predicate is `subject`, default category is `keyword`. Change optional `keywordpred` and `keywordcat` to create a different cloud. | `cat`, `keywordpred`, `keywordcat` |
 | `previous`                   | Given an id, return a list of “previous” ids in the given category. This list is ordered by publication date, latest first. | id, cat                      |
 | `next`                       | Given an id, return a list of “next” ids in the given category. This list is ordred by publication date, oldest first. | id, cat                      |
+
+
+Configuration
+-------------
+
+There are two [site configuration
+variables](/id/doc_developerguide_configuration_site_configuration#ref-site-configuration) to tweak [PostgreSQL text
+search settings](https://www.postgresql.org/docs/current/static/textsearch-controls.html).
+
+### mod_search.rank_behaviour
+
+An integer representation to influence PostgreSQL search behaviour.
+
+Default: `37` (`1 | 4 | 32`)
+
+### mod_search.rank_weight
+
+A set of four numbers to override relative weights for the ABCD categories.
+
+Default: `{0.05, 0.25, 0.5, 1.0}`
+
 
 Accepted Events
 ---------------
