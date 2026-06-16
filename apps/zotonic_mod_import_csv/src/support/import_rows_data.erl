@@ -176,7 +176,7 @@ import_edge([ Subject, Predicate, Object | RestRowData ], RestColDef, RowNr, Imp
                 row_nr => RowNr,
                 subject => Subject
             }),
-            add_result_error(edge, subject, ImportState3);
+            add_result_seen(edge, add_result_error(edge, subject, ImportState3));
         true when not is_integer(ObjectId) ->
             ?LOG_ERROR(#{
                 text => <<"Error importing CSV edge data - object does not exist">>,
