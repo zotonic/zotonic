@@ -1,4 +1,5 @@
-%% @author Arjan Scherpenisse <arjan@scherpenisse.net>, Marc Worrell <marc@worrell.nl>
+%% @author Arjan Scherpenisse <arjan@scherpenisse.net>
+%% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2010-2026 Marc Worrell, Arjan Scherpenisse
 %% @doc Import rows of data according to the derived file/record definitions.
 %% @end
