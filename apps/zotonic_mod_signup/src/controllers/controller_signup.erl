@@ -550,15 +550,15 @@ signup(Props, SignupProps, Context) ->
                         url => Location
                     },
                     z_mqtt:publish(<<"~client/model/auth/post/onetime-token">>, AuthMsg, Context),
-                    z_render:wire({mask, []}, Context);
-                {error, Reason} ->
+                    {ok, z_render:wire({mask, []}, Context)};
+                {error, Reason} = Error ->
                     ?LOG_ERROR(#{
                         text => <<"Error making onetime token">>,
                         in => zotonic_mod_signup,
                         result => error,
                         reason => Reason
                     }),
-                    show_errors([internal], Context)
+                    Error
             end;
         {error, {identity_in_use, username}} ->
             {error, username};
@@ -579,9 +579,3 @@ ensure_published(UserId, Context) ->
         true -> {ok, UserId};
         false -> m_rsc:update(UserId, #{ <<"is_published">> => true }, Context)
     end.
-
-
-show_errors(Errors, Context) ->
-    Errors1 = [ z_convert:to_list(E) || E <- Errors ],
-    z_render:wire({add_class, [{target, "signup_logon_box"}, {class, Errors1}]}, Context).
-
