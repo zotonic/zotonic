@@ -192,7 +192,7 @@
                 <p class="text-danger">
                     {_ There is already an account connected to your email address. _}
                 </p>
-                <a href="{% logon p=path u=email %}" class="btn btn-primary">{_ Log in _}</a>
+                <a href="{% url logon p=path u=email %}" class="btn btn-primary">{_ Log in _}</a>
             </div>
         {% endif %}
 
