@@ -89,7 +89,7 @@ Fired when a signup procedure is done and a user has been created.
 Fired when a users have signed up and confirmed their identity (e.g. via e-mail).
 
 
-### `signup_confirm_redirect{ id = UserId }`
+### `#signup_confirm_redirect{ id = UserId }`
 
 Decide to which page a user gets redirected to after signup.
 User signup module handling registration, activation, and signup-related policies.
