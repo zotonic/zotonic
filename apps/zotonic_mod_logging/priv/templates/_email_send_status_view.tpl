@@ -31,6 +31,6 @@
     {% use show_status mailer_status=status.mailer_status severity=status.severity %}
 {% else %}
     <span>
-        <span class="glyphicon glyphicon-envelope"> {_ Waiting… _} <img src="/lib/images/spinner.gif" height="16">
+        <span class="glyphicon glyphicon-envelope"></span> {_ Waiting… _} <img src="/lib/images/spinner.gif" height="16">
     </span>
 {% endif %}
