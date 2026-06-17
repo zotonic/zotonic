@@ -468,7 +468,7 @@ tag_check(Tag, Code, Codes) ->
     lists:any(fun(C) -> maps:find(Tag, C) =:= {ok, Code} end, Codes).
 
 new_code() ->
-    prepend(integer_to_binary(z_ids:number(1000000))).
+    prepend(integer_to_binary(z_ids:number(999999))).
 
 prepend(Code) when size(Code) < 6 ->
     prepend(<<"0", Code/binary>>);
