@@ -1,0 +1,3 @@
+name	title$nl	title$en	category	is_protected	> author	< relation
+import_edge_column_test_nr1	edge kolom 1	edge column 1	article	false		
+import_edge_column_test_nr2	edge kolom 2	edge column 2	text	false	import_edge_column_test_nr1	import_edge_column_test_nr1

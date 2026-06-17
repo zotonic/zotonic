@@ -484,48 +484,78 @@ import_def_edges(Id, ConnectionMapping, Row, State, Context) ->
 
 import_do_edge(Id, Row, F, State, Context) when is_function(F) ->
     [ import_do_edge(Id, Row, E, State, Context) || E <- F(Id, Row, State, Context) ];
-import_do_edge(Id, Row, {{PredCat, PredRowField}, ObjectDefinition}, State, Context) ->
-    % Find the predicate
+import_do_edge(Id, Row, {object, PredicateDef, ObjectDefinition}, State, Context) ->
+    case map_predicate(Row, PredicateDef, State, Context) of
+        undefined ->
+            fail;
+        PredicateId ->
+            case map_object_subject(Row, ObjectDefinition, State, Context) of
+                undefined ->
+                    fail;
+                ObjectId ->
+                    insert_mapped_edge(Id, PredicateId, ObjectId, Context)
+            end
+    end;
+import_do_edge(Id, Row, {subject, PredicateDef, SubjectDefinition}, State, Context) ->
+    case map_predicate(Row, PredicateDef, State, Context) of
+        undefined ->
+            fail;
+        PredicateId ->
+            case map_object_subject(Row, SubjectDefinition, State, Context) of
+                undefined ->
+                    fail;
+                SubjectId ->
+                    insert_mapped_edge(SubjectId, PredicateId, Id, Context)
+            end
+    end;
+import_do_edge(Id, Row, {PredicateDef, ObjectDefinition}, State, Context) ->
+    import_do_edge(Id, Row, {object, PredicateDef, ObjectDefinition}, State, Context);
+import_do_edge(_, _, Def, _State, _Context) ->
+    throw({import_error, {invalid_edge_definition, Def}}).
+
+map_predicate(Row, {PredCat, PredRowField}, State, Context) ->
     case map_one_normalize(<<"name">>, PredCat, map_one(PredRowField, Row, State)) of
         <<>> ->
-            fail;
+            undefined;
         Name ->
-            case name_lookup(Name, State, Context) of
-                {undefined, _State1} ->
-                    ?LOG_WARNING(#{
-                        text => <<"Import CSV: edge predicate does not exist">>,
-                        in => zotonic_mod_import_csv,
-                        result => error,
-                        reason => predicate,
-                        name => Name,
-                        subject_id => Id
-                    }),
-                    fail;
-                {PredId, State1} ->
-                    import_do_edge(Id, Row, {PredId, ObjectDefinition}, State1, Context)
-            end
+            map_predicate_name(Name, Context)
     end;
-import_do_edge(Id, Row, {Predicate, {ObjectCat, ObjectRowField}}, State, Context) ->
-    % Find the object
-    Name = map_one_normalize(<<"name">>, ObjectCat, map_one(ObjectRowField, Row, State)),
-    case Name of
-        <<>> -> fail;
-        Name ->
-            case name_lookup(Name, State, Context) of
-                %% Object doesn't exist
-                {undefined, _State1} ->
-                    fail;
-                %% Object exists
-                {RscId, _State1} ->
-                    {ok, EdgeId} = m_edge:insert(Id, Predicate, RscId, Context),
-                    EdgeId
-            end
-    end;
-import_do_edge(Id, Row, {Predicate, {ObjectCat, ObjectRowField, ObjectProps}}, State, Context) ->
+map_predicate(_Row, Predicate, _State, Context) ->
+    map_predicate_name(Predicate, Context).
+
+map_predicate_name(Predicate, Context) ->
+    case m_predicate:name_to_id(Predicate, Context) of
+        {ok, PredicateId} ->
+            PredicateId;
+        {error, Reason} ->
+            ?LOG_WARNING(#{
+                text => <<"Import CSV: edge predicate does not exist">>,
+                in => zotonic_mod_import_csv,
+                result => error,
+                reason => Reason,
+                predicate => Predicate
+            }),
+            undefined
+    end.
+
+map_object_subject(Row, {ObjectCat, ObjectRowField}, State, Context) ->
     Name = map_one_normalize(<<"name">>, ObjectCat, map_one(ObjectRowField, Row, State)),
     case Name of
         <<>> ->
-            fail;
+            undefined;
+        Name ->
+            case name_lookup(Name, State, Context) of
+                {undefined, _State1} ->
+                    undefined;
+                {RscId, _State1} ->
+                    RscId
+            end
+    end;
+map_object_subject(Row, {ObjectCat, ObjectRowField, ObjectProps}, State, Context) ->
+    Name = map_one_normalize(<<"name">>, ObjectCat, map_one(ObjectRowField, Row, State)),
+    case Name of
+        <<>> ->
+            undefined;
         Name ->
             case name_lookup(Name, State, Context) of
                 %% Object doesn't exist, create it using the objectprops
@@ -535,23 +565,38 @@ import_do_edge(Id, Row, {Predicate, {ObjectCat, ObjectRowField, ObjectProps}}, S
                         in => zotonic_mod_import_csv,
                         category => ObjectCat,
                         name => Name,
-                        subject_id => Id
+                        object_props => ObjectProps
                     }),
                     case m_rsc:insert([{category, ObjectCat}, {name, Name} | ObjectProps], Context) of
                         {ok, RscId} ->
-                            {ok, EdgeId} = m_edge:insert(Id, Predicate, RscId, Context),
-                            EdgeId;
+                            RscId;
                         {error, _Reason} ->
-                            fail
+                            undefined
                     end;
                 %% Object exists
                 {RscId, _State1} ->
-                    {ok, EdgeId} = m_edge:insert(Id, Predicate, RscId, Context),
-                    EdgeId
+                    RscId
             end
     end;
-import_do_edge(_, _, Def, _State, _Context) ->
-    throw({import_error, {invalid_edge_definition, Def}}).
+map_object_subject(_, ObjectDefinition, _State, _Context) ->
+    throw({import_error, {invalid_object_definition, ObjectDefinition}}).
+
+insert_mapped_edge(SubjectId, PredicateId, ObjectId, Context) ->
+    case m_edge:insert(SubjectId, PredicateId, ObjectId, [ no_touch ], Context) of
+        {ok, EdgeId} ->
+            EdgeId;
+        {error, Reason} ->
+            ?LOG_WARNING(#{
+                text => <<"Import CSV: could not insert edge">>,
+                in => zotonic_mod_import_csv,
+                result => error,
+                reason => Reason,
+                subject_id => SubjectId,
+                predicate_id => PredicateId,
+                object_id => ObjectId
+            }),
+            fail
+    end.
 
 %% Adds a resource Id to the list of managed resources, if the import definition allows it.
 add_managed_resource(Id, FieldMapping, State = #importstate{ managed_resources = M }) ->
@@ -781,4 +826,3 @@ prop_empty(_) -> false.
 
 checksum(X) ->
     crypto:hash(sha, term_to_binary(X)).
-

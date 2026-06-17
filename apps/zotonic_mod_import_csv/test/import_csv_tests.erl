@@ -32,7 +32,9 @@ cleanup(Context) ->
     delete_rsc(<<"import_csv_test_nr1">>, Context),
     delete_rsc(<<"import_csv_test_nr2">>, Context),
     delete_rsc(<<"import_xlsx_test_nr1">>, Context),
-    delete_rsc(<<"import_xlsx_test_nr2">>, Context).
+    delete_rsc(<<"import_xlsx_test_nr2">>, Context),
+    delete_rsc(<<"import_edge_column_test_nr1">>, Context),
+    delete_rsc(<<"import_edge_column_test_nr2">>, Context).
 
 import_csv_files(Context) ->
     fun() ->
@@ -59,7 +61,20 @@ import_csv_files(Context) ->
         ?assertEqual([{edge, 1}], proplists:get_value(seen, EdgeResult)),
         ?assertEqual([], proplists:get_value(errors, EdgeResult)),
         ?assertEqual([Nr2], m_edge:objects(Nr1, author, Context)),
-        ?assertEqual(7, edge_seq(Nr1, author, Nr2, Context))
+        ?assertEqual(7, edge_seq(Nr1, author, Nr2, Context)),
+
+        {ok, EdgeColumnDef} = mod_import_csv:can_handle("edge-columns.csv", test_file("edge-columns.csv"), Context),
+        EdgeColumnResult = import_data_csv:import(test_file("edge-columns.csv"), EdgeColumnDef, false, Context),
+        ?assertEqual([{<<"article">>, 1}, {<<"text">>, 1}],
+            lists:sort(proplists:get_value(seen, EdgeColumnResult))),
+        ?assertEqual([], proplists:get_value(errors, EdgeColumnResult)),
+
+        EdgeNr1 = m_rsc:rid(<<"import_edge_column_test_nr1">>, Context),
+        EdgeNr2 = m_rsc:rid(<<"import_edge_column_test_nr2">>, Context),
+        ?assert(is_integer(EdgeNr1)),
+        ?assert(is_integer(EdgeNr2)),
+        ?assertEqual([EdgeNr1], m_edge:objects(EdgeNr2, author, Context)),
+        ?assertEqual([EdgeNr2], m_edge:objects(EdgeNr1, relation, Context))
     end.
 
 import_xlsx_file(Context) ->
