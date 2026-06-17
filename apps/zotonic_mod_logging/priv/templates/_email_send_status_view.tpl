@@ -26,9 +26,9 @@
 {% endfragment %}
 
 {% if is_live_update %}
-    {% use show_status mailer_status=q.mailer_status severit=q.severity %}
+    {% use show_status mailer_status=q.mailer_status severity=q.severity %}
 {% elseif m.log_email.email_status[message_nr] as status %}
-    {% use show_status mailer_status=status.mailer_status severit=status.severity %}
+    {% use show_status mailer_status=status.mailer_status severity=status.severity %}
 {% else %}
     <span>
         <span class="glyphicon glyphicon-envelope"> {_ Waiting… _} <img src="/lib/images/spinner.gif" height="16">
