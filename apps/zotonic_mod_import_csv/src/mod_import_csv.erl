@@ -50,6 +50,21 @@ page_a  author    person_a 1
 
 The separator can be a tab or comma, depending on what is detected for the file.
 
+Resource rows can also define edges by using column names that start with `>` or `<`.
+The text after the marker is the predicate name, and the cell value is the resource name on the other side of the edge.
+
+- `> author` creates an outgoing edge from the imported row resource to the resource named in the cell.
+- `< relation` creates an incoming edge from the resource named in the cell to the imported row resource.
+
+For example:
+
+```text
+name   title    category  > author  < relation
+page_b Page B   text      person_a   page_a
+```
+
+This creates `page_b --author--> person_a` and `page_a --relation--> page_b`.
+
 
 Accepted Events
 ---------------
