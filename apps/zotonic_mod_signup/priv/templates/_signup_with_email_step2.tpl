@@ -71,7 +71,7 @@
     </div>
 {% endif %}
 
-{% if user_external or true %}
+{% if user_external %}
     {% if is_code_sent %}
         <div class="text-muted z-logon-extra-separator">{_ or _}</div>
     {% endif %}
@@ -100,8 +100,8 @@
     <div class="signup-error">
         {% if error == `email_send_failed` %}
             <p class="text-danger">
-                {% translate "Could not send email to <b>{email}</b>. Please check the email address and try again."
-                             email=email|escape
+                {% trans "Could not send email to <b>{email}</b>. Please check the email address and try again."
+                         email=email|escape
                 %}
             </p>
         {% else %}
