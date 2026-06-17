@@ -303,7 +303,7 @@ observe_signup_url(#signup_url{props=Props, signup_props=SignupProps}, Context) 
     {ok, z_dispatcher:url_for(signup, [{xs, CheckId}], Context)}.
 
 
-%% @doc A request to perform a verification of an idenntity. The signup module can send an email with a
+%% @doc A request to perform a verification of an identity. The signup module can send an email with a
 %% verification link to verify the email address. No other identities can be verified (yet) by the signup
 %% module.
 observe_identity_verification(#identity_verification{user_id=UserId, identity=undefined}, Context) ->
