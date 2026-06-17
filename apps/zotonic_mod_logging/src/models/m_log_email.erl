@@ -41,7 +41,9 @@ m_get([<<"email_status">>, MessageId | Rest ], _MqttMsg, Context) ->
             {ok, {Status, Rest}};
         {error, enoent} ->
             {error, enoent}
-    end.
+    end;
+m_get(_Path, _MqttMsg, _Context) ->
+    {error, unknown_path}.
 
 %% @doc Get the latest mailer_status for a given message id.
 -spec email_status(MessageId, Context) -> {ok, map()} | {error, enoent} when
