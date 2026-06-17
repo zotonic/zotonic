@@ -18,7 +18,7 @@
         <p>
             {_ You already have an account. _}
         </p>
-        <a href="{% url logon p=path u=email %}" class="btn btn-primary btn-submit">{_ Log in _}</a>
+        <a href="{% url logon p=path u=email %}" class="btn btn-primary">{_ Log in _}</a>
     </div>
 {% endif %}
 
@@ -32,7 +32,7 @@
 
         {% wire id="signup_form_step2"
                 type="submit"
-                postback={signup_email_step2 email=email p=p xs_props=xs_props}
+                postback={signup_email_step2 email=email page=page props=props signup_props=signup_props}
                 delegate=`controller_signup`
         %}
         <form id="signup_form_step2" action="postback">
@@ -71,10 +71,13 @@
     </div>
 {% endif %}
 
-{% if user_external %}
+{% if user_external or true %}
+    {% if is_code_sent %}
+        <div class="text-muted z-logon-extra-separator">{_ or _}</div>
+    {% endif %}
     <div class="signup-external">
         <p class="help-block">
-            {_ You can sign up using the following external service _}
+            {_ You can sign up using the following external service. _}
         </p>
         {% for ext in user_external %}
             {% if ext.template %}
@@ -96,9 +99,15 @@
 {% if error and error != `exists` %}
     <div class="signup-error">
         {% if error == `email_send_failed` %}
-            <p>{_ Could not send email to <b>{email}</b>. Please check the email address and try again. _}</p>
+            <p class="text-danger">
+                {% translate "Could not send email to <b>{email}</b>. Please check the email address and try again."
+                             email=email|escape
+                %}
+            </p>
         {% else %}
-            <p>{_ Something went wrong, please retry again later. _}
+            <p class="text-danger">
+                {_ Something went wrong, please retry again later. _}
+            </p>
         {% endif %}
     </div>
 {% endif %}

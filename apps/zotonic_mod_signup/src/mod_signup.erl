@@ -21,6 +21,104 @@
 -moduledoc("
 This module presents an interface for letting users register themselves.
 
+Signup flow
+-----------
+
+There are three ways to start a signup:
+
+* Visit the public `signup` dispatch rule directly.
+* Ask the notification system for a `#signup_url{}`. This is used by modules
+  that already know some user properties or identities and want to continue on
+  the normal signup page.
+* Notify `#signup{}` directly. This is typically used after an external
+  authentication service has identified a visitor and the site wants to create a
+  Zotonic user without rendering the email signup form.
+
+The `#signup_url{}` flow stores the caller supplied `props` and `signup_props`
+in `mod_server_storage`. The key is a generated check id and the generated URL
+contains that id as the `xs` query argument. The stored value is
+`{CheckId, Props, SignupProps}` so the signup controller can verify that the
+looked-up value belongs to the supplied `xs`.
+
+`props` are resource properties for the person resource that will become the
+user, for example `email`, `name_first`, `name_surname`, or `depiction_url`.
+`signup_props` are signup control values and identities, for example
+`{user_id, Id}` to update an existing person, `{ready_page, Url}` for the
+post-signup redirect, or `{identity, {Type, Key, IsUnique, IsVerified}}`.
+
+When `controller_signup` renders the page it consumes `xs`, fetches the stored
+payload, and passes the accepted values to the templates as `props`,
+`signup_props`, and optionally `email`. The templates include these values in
+the wired postbacks so the staged email signup can continue with the same
+prefilled data. If `xs` is missing, empty, unknown, or points to a different
+check id, the signup page falls back to a normal empty signup.
+
+The public email signup is staged:
+
+1. The visitor enters or confirms an email address. The controller checks for
+   existing accounts, blocked addresses, rate limits, and external providers.
+2. For a new local account, a short one-time code is stored in the
+   `mod_signup` gen_server under `{signup, EmailNorm}` and mailed with
+   `email_signup_code.tpl`.
+3. The visitor enters the code. A valid code is deleted and the final account
+   details form is rendered.
+4. The final form posts resource fields and signup identities. The controller
+   rechecks username and email uniqueness, calls `signup_existing/5`, logs the
+   new user on, and sends a one-time authentication token to the client auth
+   model for the browser redirect.
+
+The lower level `#signup{}` notification and `signup/4` API skip the staged
+email-code controller flow. They still run the signup preflight checks, insert
+or update the user resource, add identities, emit `#signup_done{}`, and either
+confirm the signup immediately or leave the account unpublished and unverified
+so identity verification can be requested through `#identity_verification{}`.
+
+Controllers
+-----------
+
+`controller_signup` renders `signup.tpl` and handles the browser postbacks for
+the email signup flow. It owns the short email-code confirmation, prefilled
+`xs` payload handling, final form validation, signup execution, logon, and
+client-side redirect token.
+
+`controller_signup_confirm` renders `signup_confirm.tpl` and handles account
+identity confirmation links. The confirmation email contains a `signup_confirm`
+URL with an identity verification key. The controller looks up that key,
+publishes the user resource, marks the account and identity as verified, emits
+`#signup_confirm{id=UserId}`, logs the user on, and redirects to
+`#signup_confirm_redirect{}` or the user's page.
+
+Adding fields to the signup form
+--------------------------------
+
+Extra person-resource fields can be added by combining template customization
+with the `signup_form_fields` fold notification.
+
+The final email-signup form is rendered by `_signup_with_email_step3.tpl`. A
+site can override that template or one of its blocks to add inputs. For every
+input that should become a user resource property, add `{Field, Validate}` to
+the `signup_form_fields` fold result. `Field` can be an atom or binary.
+`Validate` decides whether the controller reads the field with
+`z_context:get_q_validated/2` or with `z_context:get_q/2`. Values are trimmed,
+uploaded files are ignored, and values from the stored `props` payload take
+precedence over posted form values.
+
+An observer can add fields like this:
+
+```erlang
+observe_signup_form_fields(Fields, _Context) ->
+    [
+        {phone, false},
+        {address_street_1, true}
+        | Fields
+    ].
+```
+
+For fields that are not plain user resource properties, observe
+`#signup_check{}` to inspect or rewrite `Props` and `SignupProps` before the
+user is created, or observe `#signup_done{}` to perform follow-up work after a
+successful signup.
+
 Configuration
 -------------
 
@@ -52,7 +150,7 @@ Notifications
 
 ### `signup_form_fields`
 
-Fold for determining which signup fields to validate. This is an array of `{Fieldname, Validate}` tuples, defaulting to:
+Fold for determining which signup fields to validate. This is a list of `{Fieldname, Validate}` tuples, defaulting to:
 
 
 ```erlang
@@ -67,7 +165,7 @@ Fold for determining which signup fields to validate. This is an array of `{Fiel
 Observers can add / remove fields using the accumulator value that is passed into the notification.
 
 
-### `#identify_verification{ user_id = UserId, identity = Ident }`
+### `#identity_verification{ user_id = UserId, identity = Ident }`
 
 Send verification requests to unverified identities.
 
@@ -437,14 +535,14 @@ do_signup(UserId, Props, SignupProps, RequestConfirm, Context) ->
 -spec maybe_add_depiction( UserId :: m_rsc:resource_id(), map(), z:context() ) -> ok | {error, term()}.
 maybe_add_depiction(Id, #{ <<"depiction_url">> := Url }, ContextUser)
     when Url =/= <<>>, Url =/= "", Url =/= undefined ->
-    case z_convert:to_bool( m_config:get_value(mod_signup, depiction_as_medium, ContextUser) ) of
+    case m_config:get_boolean(mod_signup, depiction_as_medium, ContextUser) of
         false ->
             case m_edge:objects(Id, depiction, ContextUser) of
                 [] ->
                     MediaProps = #{
                         <<"is_dependent">> => true,
                         <<"is_published">> => true,
-                        <<"content_group_id">> => m_rsc:p_no_acl(Id, content_group_id, ContextUser)
+                        <<"content_group_id">> => m_rsc:p_no_acl(Id, <<"content_group_id">>, ContextUser)
                     },
                     case m_media:insert_url(Url, MediaProps, ContextUser) of
                         {ok, MediaId} ->
@@ -523,20 +621,52 @@ insert_or_update(undefined, Props, Context) ->
         <<"email">>
     ],
     InsertProps = maps:with(Ks, Props),
-    case m_rsc:insert(InsertProps, z_acl:sudo(Context)) of
+    SudoContext = z_acl:sudo(Context),
+    case m_rsc:insert(InsertProps, SudoContext) of
         {ok, UserId} ->
             UpdateProps = maps:without(Ks, Props),
             case maps:size(UpdateProps) of
                 0 ->
                     {ok, UserId};
                 _ ->
-                    m_rsc:update(UserId, UpdateProps, z_acl:logon(UserId, Context))
+                    case m_rsc:update(UserId, UpdateProps, z_acl:logon(UserId, Context)) of
+                        {ok, _UserId} ->
+                            {ok, UserId};
+                        {error, Reason} = Error ->
+                            ?LOG_ERROR(#{
+                                text => <<"Signup: failed to update user after insert - deleting user again">>,
+                                in => zotonic_mod_signup,
+                                user_id => UserId,
+                                result => error,
+                                reason => Reason
+                            }),
+                            _ = m_rsc:delete(UserId, SudoContext),
+                            Error
+                    end
             end;
-        {error, _} = Error ->
+        {error, Reason} = Error ->
+            ?LOG_ERROR(#{
+                text => <<"Signup: failed to insert">>,
+                in => zotonic_mod_signup,
+                result => error,
+                reason => Reason
+            }),
             Error
     end;
 insert_or_update(UserId, Props, Context) when is_integer(UserId) ->
-    m_rsc:update(UserId, Props, z_acl:logon(UserId, Context)).
+    case m_rsc:update(UserId, Props, z_acl:logon(UserId, Context)) of
+        {ok, _UserId} ->
+            {ok, UserId};
+        {error, Reason} = Error ->
+            ?LOG_ERROR(#{
+                text => <<"Signup: failed to update existing user">>,
+                in => zotonic_mod_signup,
+                user_id => UserId,
+                result => error,
+                reason => Reason
+            }),
+            Error
+    end.
 
 
 has_verified_identity([]) -> false;

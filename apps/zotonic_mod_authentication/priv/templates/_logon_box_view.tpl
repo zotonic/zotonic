@@ -44,7 +44,6 @@ Params:
         {% include form_support_tpl
             update_target=update_target
             update_template=update_template
-            logon_state=logon_state
             style_boxed=style_boxed
         %}
     {% endif %}
@@ -54,7 +53,6 @@ Params:
     {% include form_outside_tpl
         update_target=update_target
         update_template=update_template
-        logon_state=logon_state
         style_boxed=style_boxed
     %}
 {% endif %}

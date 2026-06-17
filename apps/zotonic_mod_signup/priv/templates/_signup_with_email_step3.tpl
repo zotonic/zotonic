@@ -14,7 +14,7 @@
 {% block signup_form_step3 %}
 {% wire id="signup_form_step3"
         type="submit"
-        postback={signup_email_step3 email=email p=p xs_props=xs_props form_fields=signup_form_fields}
+        postback={signup_email_step3 email=email page=page props=props signup_props=signup_props form_fields=signup_form_fields}
         delegate=`controller_signup`
 %}
 <form id="signup_form_step3" action="postback">
@@ -28,8 +28,8 @@
                 {% if show_signup_name_first|default_if_none:true %}
                     <div class="form-group" id="signup_name_first">
                         <label for="name_first" class="control-label">{_ First name _}</label>
-                        {% if name_first %}
-                            <span>{{ name_first|escape }}</span>
+                        {% if props.name_first %}
+                            <p><b class="form-control-prefilled">{{ props.name_first|escape }}</b></p>
                         {% else %}
                             <input class="form-control" id="name_first" name="name_first" type="text" value=""
                                    placeholder="{_ First name _}" autocomplete="given-name" required>
@@ -45,8 +45,8 @@
                 {% if show_signup_name_prefix|default_if_none:true %}
                     <div class="form-group" id="signup_surname_prefix">
                         <label for="surprefix" class="control-label">{_ Prefix _}</label>
-                        {% if name_surname_prefix %}
-                            <span>{{ name_surname_prefix|escape }}</span>
+                        {% if props.name_surname_prefix %}
+                            <p class="form-control-prefilled">{{ props.name_surname_prefix|escape }}</p>
                         {% else %}
                             <input class="form-control" id="surprefix" name="surprefix" type="text" value="" autocomplete="additional-name">
                         {% endif %}
@@ -56,8 +56,8 @@
                 {% if show_signup_name_last|default_if_none:true %}
                     <div class="form-group" id="signup_name_surname">
                         <label for="name_surname" class="control-label">{_ Last name _}</label>
-                        {% if name_surname %}
-                            <span>{{ name_surname|escape }}</span>
+                        {% if props.name_surname %}
+                            <p class="form-control-prefilled">{{ props.name_surname|escape }}</p>
                         {% else %}
                             <input class="form-control" id="name_surname" name="name_surname" type="text" value=""
                                    placeholder="{_ Last name _}" autocomplete="family-name" required>

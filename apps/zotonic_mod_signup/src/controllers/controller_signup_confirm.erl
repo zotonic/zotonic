@@ -21,11 +21,14 @@
 -moduledoc("
 Controller which displays the confirmation page where the user can confirm his signup.
 
-The template used is `signup_confirm.tpl`.
+The template used is `signup_confirm.tpl`. It extends `base.tpl` and posts the
+verification key back to this controller using a `{confirm, ...}` postback.
 
-Todo
-
-Extend documentation
+The key is created for an email identity by `mod_signup` when an account needs
+identity verification. On a valid key this controller publishes the user
+resource, marks the account and identity as verified, emits
+`#signup_confirm{id=UserId}`, logs the user on, and redirects to the first
+`#signup_confirm_redirect{}` result or to the user's page.
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

@@ -73,6 +73,8 @@ body.err403 {
 
     /* Extra login options */
     .z-logon-extra {
+        width: 100%;
+
         li {
             margin: 0 0 $button_spacing 0 ;
         }
@@ -83,46 +85,54 @@ body.err403 {
             text-decoration: none;
         }
 
-        .z-logon-extra-separator {
-            $line_height: 16px;
+        li.z-logon-extra-separator:first-child {
+            display: none;
 
-            position: relative;
-            z-index: 1;
-            text-align: center;
-            line-height: $line_height;
-            margin: $vertical_element_spacing 0;
-
-            &:before {
-                // background behind "or"
-                $label_width: 40px;
-                $label_height: $line_height;
-
-                position: absolute;
-                left: 50%;
-                top: 50%;
-                height: $label_height;
-                top: calc($line_height / 2);
-                width: $label_width;
-                background-color: $background_color;
-                content: "";
-                margin: calc(-#{$label_height} / 2) 0 0 calc(-#{$label_height} / 2);
-                z-index: -1;
-                
-            }
-
-            &:after {
-                // horizontal line
-                position: absolute;
-                left: 0;
-                top: calc($line_height / 2);
-                content: " ";
-                width: 100%;
-                border-bottom: 1px solid $border_color;
-                z-index: -2;
+            &.-first {
+                display: block;
             }
         }
-        .z-logon-extra-separator:first-child {
+
+        li.z-logon-extra-separator.-first:last-child {
             display: none;
+        }
+    }
+
+    .z-logon-extra-separator {
+        $line_height: 16px;
+
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        line-height: $line_height;
+        margin: $vertical_element_spacing 0;
+
+        &:before {
+            // background behind "or"
+            $label_width: 40px;
+            $label_height: $line_height;
+
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            height: $label_height;
+            top: calc($line_height / 2);
+            width: $label_width;
+            background-color: $background_color;
+            content: "";
+            margin: calc(-#{$label_height} / 2) 0 0 calc(-#{$label_height} / 2);
+            z-index: -1;
+        }
+
+        &:after {
+            // horizontal line
+            position: absolute;
+            left: 0;
+            top: calc($line_height / 2);
+            content: " ";
+            width: 100%;
+            border-bottom: 1px solid $border_color;
+            z-index: -2;
         }
     }
 
@@ -137,7 +147,6 @@ body.err403 {
     }
 
     .alert {
-
         :first-child {
             margin-top: 0;
         }
@@ -191,6 +200,10 @@ body.err403 {
         display: flex;
         flex-flow: column nowrap;
         gap: 1em;
+
+        .btn {
+            width: 100%;
+        }
     }
 
     .signup-name {
@@ -239,6 +252,13 @@ body.err403 {
     .z_validation {
         &.z_invalid {
             color: $error_color;
+        }
+    }
+
+    .form-control-prefilled {
+        font-weight: bold;
+        span {
+            font-weight: normal;
         }
     }
 }

@@ -53,6 +53,9 @@ body.err403 .z-logon-box {
 .z-logon-box .z-logon-form {
   margin: 15px auto 0 auto;
 }
+.z-logon-box .z-logon-extra {
+  width: 100%;
+}
 .z-logon-box .z-logon-extra li {
   margin: 0 0 10px 0;
 }
@@ -61,14 +64,23 @@ body.err403 .z-logon-box {
   text-align: center;
   text-decoration: none;
 }
-.z-logon-box .z-logon-extra .z-logon-extra-separator {
+.z-logon-box .z-logon-extra li.z-logon-extra-separator:first-child {
+  display: none;
+}
+.z-logon-box .z-logon-extra li.z-logon-extra-separator:first-child.-first {
+  display: block;
+}
+.z-logon-box .z-logon-extra li.z-logon-extra-separator.-first:last-child {
+  display: none;
+}
+.z-logon-box .z-logon-extra-separator {
   position: relative;
   z-index: 1;
   text-align: center;
   line-height: 16px;
   margin: 15px 0;
 }
-.z-logon-box .z-logon-extra .z-logon-extra-separator:before {
+.z-logon-box .z-logon-extra-separator:before {
   position: absolute;
   left: 50%;
   top: 50%;
@@ -80,7 +92,7 @@ body.err403 .z-logon-box {
   margin: calc(-16px / 2) 0 0 calc(-16px / 2);
   z-index: -1;
 }
-.z-logon-box .z-logon-extra .z-logon-extra-separator:after {
+.z-logon-box .z-logon-extra-separator:after {
   position: absolute;
   left: 0;
   top: 8px;
@@ -88,9 +100,6 @@ body.err403 .z-logon-box {
   width: 100%;
   border-bottom: 1px solid #ddd;
   z-index: -2;
-}
-.z-logon-box .z-logon-extra .z-logon-extra-separator:first-child {
-  display: none;
 }
 .z-logon-box .z-logon-support {
   margin: 15px 0 0 0;
@@ -135,6 +144,9 @@ body.err403 .z-logon-box {
   flex-flow: column nowrap;
   gap: 1em;
 }
+.z-logon-box .signup-external .btn {
+  width: 100%;
+}
 .z-logon-box .signup-name {
   display: flex;
   flex-wrap: wrap;
@@ -168,4 +180,10 @@ body.err403 .z-logon-box {
 }
 .z-logon-box .z_validation.z_invalid {
   color: #C21C3D;
+}
+.z-logon-box .form-control-prefilled {
+  font-weight: bold;
+}
+.z-logon-box .form-control-prefilled span {
+  font-weight: normal;
 }

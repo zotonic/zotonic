@@ -23,9 +23,119 @@ Controller which displays a form to sign up (rendered from `signup.tpl`).
 
 It also implements the necessary postbacks to perform the signup and log a user in.
 
-Todo
+Data flow
+---------
 
-Extend documentation
+The signup page can be reached directly through the `signup` dispatch rule, or by
+asking the notification system for a `#signup_url{}`. The `mod_signup`
+`observe_signup_url/2` observer stores the caller supplied arguments in
+`mod_server_storage`:
+
+```erlang
+#signup_url{
+    props = Props,
+    signup_props = SignupProps
+}
+```
+
+`Props` are resource properties for the person that will be created or updated,
+for example a prefilled `email`, `name_first`, or `depiction_url`. `SignupProps`
+are signup control values and identities, for example `{user_id, Id}`,
+`{ready_page, Url}`, or `{identity, {Type, Key, IsUnique, IsVerified}}`.
+
+The observer generates a random check id, stores
+`{CheckId, Props, SignupProps}`, and returns the signup URL with `xs=CheckId`.
+When this controller renders the page it reads the `xs` query argument, performs
+`m_server_storage:secure_lookup/2`, and only accepts the stored payload when the
+returned check id matches the query value. Accepted values are exposed to
+`signup.tpl` as:
+
+* `props`: a map with prefilled resource properties. Empty email values are
+  removed so the email step can still ask for an address.
+* `signup_props`: the stored signup properties as a proplist.
+* `email`: the prefilled email from `props`, when present.
+
+Without a valid `xs`, the controller renders with empty signup properties and
+default `props`. The `xs` value itself is not posted back. Instead, the stored
+payload is carried forward as template variables in each wire postback
+(`props=props signup_props=signup_props`). This keeps the browser-visible form
+state limited to the values the template already needs to render, while the
+original `xs` token is only used to bootstrap the first page render.
+
+The controller accepts these postbacks:
+
+* `signup_email_step1`: validates and prechecks the email address. If the address
+  is new and local signup is possible, a short one-time code is mailed using
+  `email_signup_code.tpl`. If the address is already known, or an external
+  provider handles the domain, the second step shows a logon link and/or external
+  provider buttons instead.
+* `signup_email_step2`: checks the mailed one-time code. On success, the code is
+  deleted and the account details form is rendered.
+* `signup_email_step3`: verifies the email did not change, checks the terms
+  checkbox, merges posted form properties with any prefilled `props`, combines
+  identities from `signup_props` with the verified email identity, creates or
+  updates the user through `mod_signup:signup_existing/5`, logs the user on, and
+  sends a one-time authentication token to the client auth model for redirect.
+* `signup_go_step1`: returns the browser UI to the first email step.
+* `signup_resend_code`: replaces the stored one-time code for the email address
+  and sends a new `email_signup_code.tpl` message.
+
+Template structure
+------------------
+
+The public signup page is `signup.tpl`. It extends `base.tpl`, adds the logon
+CSS in `html_head_extra`, redirects already logged-on users to
+`m.signup.confirm_redirect`, and fills `content_area` with the signup box. The
+page includes:
+
+* `_signup_with_email.tpl` for the three-step email signup flow.
+* all `_logon_extra.tpl` templates supplied by active authentication modules for
+  SSO signup options.
+
+`_signup_with_email.tpl` renders the first email form and empty containers for
+steps two and three. The controller fills those containers with
+`_signup_with_email_step2.tpl` and `_signup_with_email_step3.tpl` after the
+corresponding postbacks.
+
+`_signup_with_email_step2.tpl` shows the selected email address, the mailed code
+form, send status, resend action, existing-account logon link, external-provider
+options, and error states.
+
+`_signup_with_email_step3.tpl` renders the final signup form. It defines blocks
+around the form, field set, individual field groups, and error area so sites can
+override the shape of the final step. It uses the configuration exposed through
+`m.signup.config.username_equals_email` to decide whether the username is hidden
+and equal to the email address, or entered separately by the user.
+
+Email address confirmation
+--------------------------
+
+There are two email checks in the complete signup lifecycle.
+
+The first check happens before account creation. `signup_email_step1` sends the
+short code rendered by `email_signup_code.tpl`. Codes are stored in the
+`mod_signup` gen_server under the tag `{signup, EmailNorm}`. They are replaced on
+resend, expire by generational garbage collection, are rate-limit checked through
+`#auth_precheck{}`, and are deleted after a successful `signup_email_step2`.
+This confirms that the visitor can read the mailbox before the account is
+created. The verified email is then added to the signup identities as
+`{identity, {email, Email, false, true}}` unless an email identity was already
+supplied in `signup_props`.
+
+The second check is the account identity confirmation handled by `mod_signup`
+and `controller_signup_confirm`. If signup is requested with confirmation
+enabled and no non-password identity is already verified, `mod_signup` creates
+the user unpublished and unverified, inserts unverified identities, and sends
+`email_verify.tpl` through the `#identity_verification{}` observer. The email
+contains a `signup_confirm` URL with the identity verification key.
+
+`controller_signup_confirm` renders `signup_confirm.tpl`. That template extends
+`base.tpl` and immediately posts the key back to the confirmation controller.
+The confirmation controller looks up the identity by verification key, publishes
+the user resource, marks the account and identity as verified, emits
+`#signup_confirm{id=UserId}`, logs the user on, and redirects to the first
+`#signup_confirm_redirect{}` result or to the user's page.
+
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 
@@ -40,26 +150,47 @@ Extend documentation
 process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     Context2 = z_context:ensure_qs(Context),
     z_context:logger_md(Context2),
+    DefaultVars = [
+        {signup_props, []},
+        {props, #{}}
+    ],
     Vars = case z_context:get_q(<<"xs">>, Context2) of
-        undefined ->
-            [];
-        <<>> ->
-            [];
-        Check ->
+        undefined -> DefaultVars;
+        <<>> -> DefaultVars;
+        QXs ->
             % Set in mod_signup when fetching signup_url
-            case m_server_storage:secure_lookup(Check, Context) of
-                {ok, {Check, Props, SignupProps}} ->
+            case m_server_storage:secure_lookup(QXs, Context) of
+                {ok, {Check, Props, SignupProps}} when QXs =:= Check ->
+                    Props1 = maybe_drop_email(as_props_map(Props)),
                     [
-                        {xs_props, {Props, SignupProps}}
-                        | Props
+                        {signup_props, as_list(SignupProps)},
+                        {props, Props1},
+                        {email, maps:get(<<"email">>, Props1, undefined)}
                     ];
-                {error, _} ->
-                    []
+                {ok, _} -> DefaultVars;
+                {error, _} -> DefaultVars
             end
     end,
     % z_session:set(signup_xs, undefined, Context),
     Rendered = z_template:render(<<"signup.tpl">>, Vars, Context2),
     z_context:output(Rendered, Context2).
+
+as_list(undefined) -> [];
+as_list(L) when is_list(L) -> L.
+
+as_props_map(undefined) -> #{};
+as_props_map(L) when is_list(L) -> z_props:from_props(L);
+as_props_map(M) when is_map(M) -> z_props:from_map(M).
+
+%% @doc Check if the email property is non-empty, if it is empty then delete it.
+%% This is makes email property handling easier in the event routines.
+maybe_drop_email(#{ <<"email">> := Email } = Props) when is_binary(Email); is_list(Email) ->
+    case z_string:trim(z_convert:to_binary(Email)) of
+        <<>> -> maps:remove(<<"email">>, Props);
+        EmailTrimmed -> Props#{ <<"email">> => EmailTrimmed }
+    end;
+maybe_drop_email(Props) ->
+    maps:remove(<<"email">>, Props).
 
 precheck_email(EmailNorm, Context) ->
     lists:foldl(
@@ -154,7 +285,11 @@ normalize_username(Username) ->
     z_string:to_lower(z_string:trim(Username)).
 
 event(#submit{ message={signup_email_step1, Args} }, Context) ->
-    Email = z_string:trim(z_context:get_q_validated(<<"email">>, Context)),
+    Props = proplists:get_value(props, Args, #{}),
+    Email = case Props of
+        #{ <<"email">> := EmailProp } -> EmailProp;
+        _ -> z_string:trim(z_context:get_q_validated(<<"email">>, Context))
+    end,
     EmailNorm = m_identity:normalize_key(email, Email),
     Page = proplists:get_value(page, Args),
     Vars = case precheck_email(EmailNorm, Context) of
@@ -291,6 +426,7 @@ event(#submit{ message={signup_email_step3, Args} }, Context) ->
     % Check:
     % - check the email address in the args with the email address in the post data
     {email, Email} = proplists:lookup(email, Args),
+    Page = proplists:get_value(page, Args, <<>>),
     case z_context:get_q(<<"email">>, Context) of
         QEmail when QEmail =:= Email ->
             Agree = z_convert:to_bool(z_context:get_q(<<"signup_tos_agree">>, Context)),
@@ -319,7 +455,7 @@ event(#submit{ message={signup_email_step3, Args} }, Context) ->
                                 Context);
                         true ->
                             % All ok - do the signup
-                            case signup(FormProps1, SignupProps, Context) of
+                            case signup(FormProps1, SignupProps, Page, Context) of
                                 {ok, ContextSignup} ->
                                     ContextSignup;
                                 {error, #context{} = ContextError} ->
@@ -419,15 +555,8 @@ email_idn_check(SignupProps, Context) ->
 
 form_props(Args, Context) ->
     % Optional XsProps from the signup url generation.
-    {XsProps0, XsSignupProps} = case proplists:get_value(xs_props, Args) of
-        {A,B} -> {A,B};
-        undefined -> {undefined, undefined}
-    end,
-    XsProps = if
-        is_list(XsProps0) -> XsProps0;
-        is_map(XsProps0) -> XsProps0;
-        true -> []
-    end,
+    XsProps = proplists:get_value(props, Args, #{}),
+    XsSignupProps = proplists:get_value(signup_props, Args, []),
     % Call observers to fetch the required signup form fields and if
     % they should be validated.
     FormFields0 = [
@@ -496,9 +625,10 @@ fetch_prop(Prop, IsValidated, XsProps, Context) ->
                 IsValidated ->
                     {PropB, z_context:get_q_validated(PropB, Context)};
                 true ->
+                    AltProp = maybe_alternate_prop(PropB),
                     case z_context:get_q(PropB, Context) of
-                        undefined when PropB =:= <<"name_surname_prefix">> ->
-                            {<<"surprefix">>, z_context:get_q(<<"surprefix">>, Context)};
+                        undefined when is_binary(AltProp) ->
+                            {PropB, z_context:get_q(AltProp, Context)};
                         QV ->
                             {PropB, QV}
                     end
@@ -507,6 +637,10 @@ fetch_prop(Prop, IsValidated, XsProps, Context) ->
         V ->
             {PropB, V}
     end.
+
+maybe_alternate_prop(<<"name_surname_prefix">>) -> <<"surprefix">>;
+maybe_alternate_prop(_) -> false.
+
 
 % Do not accept uploaded files; trim all string values.
 maybe_trim(V) when is_binary(V); is_list(V) -> z_string:trim(z_convert:to_binary(V));
@@ -529,14 +663,14 @@ find_identity(Type, [_ | SignupProps])  ->
     find_identity(Type, SignupProps).
 
 %% @doc Sign up a new user. Check if the identity is available.
-signup(Props, SignupProps, Context) ->
+signup(Props, SignupProps, Page, Context) ->
     UserId = proplists:get_value(user_id, SignupProps),
     SignupProps1 = proplists:delete(user_id, SignupProps),
     case mod_signup:signup_existing(UserId, Props, SignupProps1, false, Context) of
         {ok, NewUserId} ->
             ensure_published(NewUserId, z_acl:sudo(Context)),
             {ok, ContextUser} = z_auth:logon(NewUserId, Context),
-            Location = case get_redirect_page(SignupProps) of
+            Location = case get_redirect_page(SignupProps, Page) of
                 <<>> -> m_signup:confirm_redirect(ContextUser);
                 Url -> Url
             end,
@@ -570,9 +704,8 @@ signup(Props, SignupProps, Context) ->
             Error
     end.
 
-get_redirect_page(SignupProps) ->
-    z_convert:to_binary(proplists:get_value(ready_page, SignupProps, <<>>)).
-
+get_redirect_page(SignupProps, Page) ->
+    z_string:trim(z_convert:to_binary(proplists:get_value(ready_page, SignupProps, Page))).
 
 ensure_published(UserId, Context) ->
     case m_rsc:p(UserId, <<"is_published">>, Context) of

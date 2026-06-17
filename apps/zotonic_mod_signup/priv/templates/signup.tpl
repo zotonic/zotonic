@@ -15,9 +15,8 @@
 {% endblock %}
 
 {% block content_area %}
-	<div id="signup_logon_box" class="z-logon-box{% if style_boxed %} z-logon-box-boxed{% endif %}" {% if style_width %}style="width: {{ style_width }};"{% endif %}>
+	<div id="signup_logon_box" class="signup z-logon-box{% if style_boxed %} z-logon-box-boxed{% endif %}" {% if style_width %}style="width: {{ style_width }};"{% endif %}>
 		<h1 class="z-logon-title">{_ Sign Up _}</h1>
-	    {% comment %}{% include "_signup_config.tpl" %}{% endcomment %}
 
    		<div id="signup-login">
 			<p>{_ If you already have an account, _} <a href="{% url logon p=q.p %}" id="back_to_logon">{_ log in _}</a>.</p>
@@ -28,7 +27,10 @@
 
 		<!-- Show all signup SSO buttons -->
 		<div id="signup-services">
-			{% all include "_signup_with_service.tpl" %}
+		    <ul class="z-logon-extra">
+				<li class="text-muted z-logon-extra-separator -first">{_ or _}</li>
+				{% all include "_logon_extra.tpl" is_signup %}
+			</ul>
 		</div>
 	</div>
 {% endblock %}
