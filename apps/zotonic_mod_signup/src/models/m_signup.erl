@@ -31,7 +31,7 @@ Available Model API Paths
 | Method | Path pattern | Description |
 | --- | --- | --- |
 | `get` | `/confirm_redirect/...` | Return post-signup redirect URL: `#signup_confirm_redirect{id=UserId}` notifier result when provided, otherwise user `page_url`, and `home` URL when no user is logged in. |
-| `get` | `/config/email_unique/...` | Return `mod_signup.email_unique` boolean setting (default `true`) indicating whether signup email addresses must be unique. |
+| `get` | `/config/email_unique/...` | Return `mod_signup.email_unique` boolean setting (default `true`). If enabled, signup e-mail addresses must be unique among user accounts and must not match another resource's e-mail identity when that identity is marked `is_unique`. Non-account resources with non-unique e-mail identities do not block signup. |
 | `get` | `/config/username_equals_email/...` | Return `mod_signup.username_equals_email` boolean setting (default `true`) indicating whether signup usernames must equal email addresses. |
 
 `/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.

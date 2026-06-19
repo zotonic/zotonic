@@ -52,7 +52,7 @@
         {% wire action={focus target="signup-code-input"} %}
 
         <div class="help-block" id="signup-code-email-status">
-            {% include "_email_send_status.tpl" message_nr=message_nr %}
+            {% optional include "_email_send_status.tpl" message_nr=message_nr %}
         </div>
 
         <p class="help-block">

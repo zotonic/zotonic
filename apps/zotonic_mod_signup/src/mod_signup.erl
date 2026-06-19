@@ -134,7 +134,7 @@ You can adjust this module’s behaviour with the following [Module configuratio
 | --- | --- | --- |
 | `mod_signup.request_confirm` | `true` | Send a signup confirmation e-mail to new users. If set to `false`, users are verified immediately. |
 | `mod_signup.username_equals_email` | `true` | If `true`, the user’s e-mail address is also the username (users can log in with their e-mail). If `false`, users can choose a separate username. |
-| `mod_signup.email_unique` | `false` | If `true`, the e-mail address of a user must be unique among all verified identities. If `false`, multiple users can have the same (verified) e-mail address.  |
+| `mod_signup.email_unique` | `false` | If `true`, a signup e-mail address may not already belong to another user account. It also may not match an e-mail identity on another resource where that identity has `is_unique` set. E-mail identities on non-account resources do not block signup when they are not marked unique. If `false`, multiple users can have the same verified e-mail address. |
 | `mod_signup.member_category` | `person` | Name of the category that users created through sign up will be placed in. |
 | `mod_signup.content_group` | empty string | Name of the content group that users created through sign up will be placed in. The empty string means the default content group for the current ACL module. |
 | `mod_signup.depiction_as_medium` | `false` | If set then any depiction URL is added as a medium record to the person who signed up. Normally the depiction is added as a separate *depending* image resource and connected from the person using a `depiction` predicate. |
@@ -261,8 +261,10 @@ This module handles the following notifier callbacks:
             key => email_unique,
             type => boolean,
             default => false,
-            description => "If true, the email address may not be associated with any other user. "
-                           "If false, multiple users can have the same (verified) email address."
+            description => "If true, the email address may not be associated with any other user, "
+                           "or with another resource that has a unique email identity. "
+                           "Non-account resources with non-unique email identities are ignored. "
+                           "If false, multiple users can have the same verified email address."
         }
     ]).
 
@@ -516,6 +518,16 @@ check_identity(UserId, [{identity, {username_pw, {Username, _Password}, true, _V
         false -> check_identity(UserId, Idents, Context);
         true -> {error, {identity_in_use, username_pw}}
     end;
+check_identity(UserId, [{identity, {email, Email, true, _Verified}}|Idents], Context) ->
+    case email_identity_exists(UserId, email, Email, Context) of
+        false -> check_identity(UserId, Idents, Context);
+        true -> {error, {identity_in_use, email}}
+    end;
+check_identity(UserId, [{identity, {<<"email">>, Email, true, _Verified}}|Idents], Context) ->
+    case email_identity_exists(UserId, <<"email">>, Email, Context) of
+        false -> check_identity(UserId, Idents, Context);
+        true -> {error, {identity_in_use, <<"email">>}}
+    end;
 check_identity(UserId, [{identity, {Type, Key, true, _Verified}}|Idents], Context) ->
     case identity_exists(UserId, Type, Key, Context) of
         false -> check_identity(UserId, Idents, Context);
@@ -754,6 +766,29 @@ identity_exists(UserId, Type, Key, Context) ->
         undefined -> false;
         Props -> UserId =/= proplists:get_value(rsc_id, Props)
     end.
+
+%% @doc Check if the email identity conflicts with an existing user account,
+%% or with another resource that already claimed the email as unique.
+email_identity_exists(UserId, Type, Key, Context) ->
+    has_other_user_identity(UserId, Type, Key, Context)
+    orelse has_other_unique_identity(UserId, Type, Key, Context).
+
+has_other_user_identity(UserId, Type, Key, Context) ->
+    Idns = m_identity:lookup_users_by_type_and_key(Type, Key, Context),
+    lists:any(
+        fun(Idn) ->
+            UserId =/= proplists:get_value(rsc_id, Idn)
+        end,
+        Idns).
+
+has_other_unique_identity(UserId, Type, Key, Context) ->
+    Idns = m_identity:lookup_by_type_and_key_multi(Type, Key, Context),
+    lists:any(
+        fun(Idn) ->
+            proplists:get_bool(is_unique, Idn)
+            andalso UserId =/= proplists:get_value(rsc_id, Idn)
+        end,
+        Idns).
 
 
 send_verify_email(UserId, Ident, Context) ->

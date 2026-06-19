@@ -385,7 +385,7 @@ encode_onetime_token(UserId, Context) ->
 encode_onetime_token(UserId, AuthOptions, Context) when is_map(AuthOptions) ->
     case z_context:session_id(Context) of
         {ok, SId} ->
-            encode_onetime_token(UserId, SId, #{}, Context);
+            encode_onetime_token(UserId, SId, AuthOptions, Context);
         {error, _} = Error ->
             Error
     end;
