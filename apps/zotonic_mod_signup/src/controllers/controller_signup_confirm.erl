@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2021 Marc Worrell
+%% @copyright 2010-2026 Marc Worrell
 %% @doc Handle the signup confirmation link
 %% @end
 
-%% Copyright 2010-2021 Marc Worrell
+%% Copyright 2010-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -49,10 +49,14 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
 %% @doc Handle the submit of the signup form.
 event(#postback{ message={confirm, [ {key, Key} ]}}, Context) ->
     case confirm(Key, Context) of
-        {ok, UserId} ->
+        {ok, {UserId, IdnType, IdnKey}} ->
             {ok, ContextUser} = z_auth:logon(UserId, Context),
             Url = z_convert:to_binary( confirm_location(UserId, ContextUser) ),
-            ok = z_auth:logon_redirect(UserId, Url, ContextUser),
+            AuthOptions = #{
+                auth_service => z_convert:to_binary(IdnType),
+                auth_service_uid => IdnKey
+            },
+            ok = z_auth:logon_redirect(UserId, Url, AuthOptions, ContextUser),
             z_render:growl(?__("Redirecting...", Context), Context);
         {error, _Reason} ->
             z_render:wire([
@@ -67,7 +71,10 @@ confirm(Key, Context) ->
         undefined ->
             {error, unknown_key};
         Row ->
-            UserId = proplists:get_value(rsc_id, Row),
+            {id, IdnId} = proplists:lookup(id, Row),
+            {type, IdnType} = proplists:lookup(type, Row),
+            {key, IdnKey} = proplists:lookup(key, Row),
+            {rsc_id, UserId} = proplists:lookup(rsc_id, Row),
             {ok, UserId} = m_rsc:update(
                 UserId,
                 #{
@@ -75,13 +82,13 @@ confirm(Key, Context) ->
                     <<"is_verified_account">> => true
                 },
                 z_acl:sudo(Context)),
-            m_identity:set_verified(proplists:get_value(id, Row), Context),
-            z_notifier:map(#signup_confirm{id=UserId}, Context),
-            {ok, UserId}
+            m_identity:set_verified(IdnId, Context),
+            z_notifier:map(#signup_confirm{ id = UserId }, Context),
+            {ok, {UserId, IdnType, IdnKey}}
     end.
 
 confirm_location(UserId, ContextUser) ->
     case z_convert:to_binary( z_notifier:first(#signup_confirm_redirect{ id = UserId }, ContextUser) ) of
-        <<>> -> m_rsc:p_no_acl(UserId, page_url, ContextUser);
+        <<>> -> m_rsc:p_no_acl(UserId, <<"page_url">>, ContextUser);
         Loc -> Loc
     end.

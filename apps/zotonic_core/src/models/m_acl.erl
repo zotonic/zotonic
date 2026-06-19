@@ -27,10 +27,12 @@ The following m_acl model properties are available in templates:
 | Property                                       | Description                                                                      |
 | ---------------------------------------------- | -------------------------------------------------------------------------------- |
 | user                                           | Returns the current user id. If not logged in, this returns `undefined`.         |
-| is_admin                                     | Check if the current user is alllowed to access the admin. Internally, this checks the `use, mod_admin_config` ACL. |
+| is_admin                                       | Check if the current user is alllowed to access the admin. Internally, this checks the `use, mod_admin_config` ACL. |
 | use, admin, view, delete, update, insert, link | These properties are shortcuts to check if the current user is allowed to do some action. |
-| is_allowed                                   | Perform custom ACL checks which are different from the ones mentioned.           |
+| is_allowed                                     | Perform custom ACL checks which are different from the ones mentioned.           |
 | authenticated                                  | Used before the other ACL checks to check if a *typical* user is allowed to perform some actions. Example: `m.acl.authenticated.insert.article` If a user is logged on the that user's permissions are used. |
+| auth_service                                   | Service used to authenticate the user. |
+| auth_service_uid                               | Service user identification used to authenticate the user. |
 
 This example prints a greeting to the currently logged in user, if logged in:
 
@@ -83,6 +85,8 @@ Available Model API Paths
 | Method | Path pattern | Description |
 | --- | --- | --- |
 | `get` | `/user/...` | Return the current ACL user id from the request context. |
+| `get` | `/auth_service  | Service used to authenticate the user. |
+| `get` | `/auth_service_uid | Service user identification used to authenticate the user. |
 | `get` | `/sudo_user/...` | Return the current sudo user id from the request context. |
 | `get` | `/is_admin/...` | Return whether the current user has admin rights. |
 | `get` | `/is_admin_editable/...` | Return whether admin users are editable in the current ACL setup. |
@@ -109,10 +113,21 @@ Available Model API Paths
 
 -include_lib("zotonic.hrl").
 
-
 -spec m_get( list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:return().
 m_get([ <<"user">> | Rest ], _Msg, Context) -> {ok, {z_acl:user(Context), Rest}};
 m_get([ <<"sudo_user">> | Rest ], _Msg, Context) -> {ok, {z_acl:sudo_user(Context), Rest}};
+m_get([ <<"auth_service">> | Rest ], _Msg, Context) ->
+    AuthService = case z_context:get(auth_options, Context) of
+        #{ auth_service := Service } -> Service;
+        _ -> undefined
+    end,
+    {ok, {AuthService, Rest}};
+m_get([ <<"auth_service_uid">> | Rest ], _Msg, Context) ->
+    AuthServiceUid = case z_context:get(auth_options, Context) of
+        #{ auth_service_uid := SUid } -> SUid;
+        _ -> undefined
+    end,
+    {ok, {AuthServiceUid, Rest}};
 m_get([ <<"is_admin">> | Rest ], _Msg, Context) -> {ok, {z_acl:is_admin(Context), Rest}};
 m_get([ <<"is_admin_editable">> | Rest ], _Msg, Context) -> {ok, {z_acl:is_admin_editable(Context), Rest}};
 m_get([ <<"is_read_only">> | Rest ], _Msg, Context) -> {ok, {z_acl:is_read_only(Context), Rest}};

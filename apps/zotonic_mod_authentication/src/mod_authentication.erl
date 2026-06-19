@@ -340,13 +340,9 @@ check_username(Username, Acc, Context) ->
 %% @doc Send a request to the client to login a user. The zotonic.auth.worker.js will
 %% send a request to controller_authentication to exchange the one time token with
 %% a z,auth cookie for the given user. The client will redirect to the Url.
-observe_auth_client_logon_user(#auth_client_logon_user{ user_id = UserId, url = Url, auth_service = Service, auth_service_uid = ServiceUid }, Context) ->
+observe_auth_client_logon_user(#auth_client_logon_user{ user_id = UserId, url = Url, auth_options = AuthOptions }, Context) ->
     case z_context:client_topic(Context) of
         {ok, ClientTopic} ->
-            AuthOptions = #{
-                auth_service => z_convert:to_binary(Service),
-                auth_service_uid => ServiceUid
-            },
             case z_authentication_tokens:encode_onetime_token(UserId, AuthOptions, Context) of
                 {ok, Token} ->
                     z_mqtt:publish(
