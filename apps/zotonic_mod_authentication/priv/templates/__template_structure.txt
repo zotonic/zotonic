@@ -49,23 +49,29 @@ SIGN UP
 =======
 
 signup.tpl // public sign up page, extends base.tpl
-|-- _signup_with_email.tpl // staged email signup flow
-|   |-- step 1 inline // email address form, postback signup_email_step1
-|   |-- _signup_with_email_step2.tpl // inserted by controller_signup
-|   |   |-- email code form, postback signup_email_step2
-|   |   |-- _email_send_status.tpl // status of email_signup_code.tpl
-|   |   |-- logon link for existing local accounts
-|   |   `-- external service links for managed domains
-|   `-- _signup_with_email_step3.tpl // inserted after a valid email code
-|       |-- name fields
-|       |-- username/password fields
-|       |-- terms checkbox
-|       `-- signup errors
-`-- _logon_extra.tpl // all-include from external auth modules
+`-- _signup_box.tpl // reusable signup box for includes on other pages
+    |-- logged-in message with logoff link
+    |-- _signup_with_email.tpl // staged email signup flow
+    |   |-- _signup_with_email_step1.tpl // email address form, postback signup_email_step1
+    |   |-- _signup_with_email_step2.tpl // inserted by controller_signup
+    |   |   |-- email code form, postback signup_email_step2
+    |   |   |-- _email_send_status.tpl // status of email_signup_code.tpl
+    |   |   |-- logon link for existing local accounts
+    |   |   `-- external service links for managed domains
+    |   `-- _signup_with_email_step3.tpl // inserted after a valid email code
+    |       |-- name fields
+    |       |-- username/password fields
+    |       |-- terms checkbox
+    |       `-- signup errors
+    `-- _logon_extra.tpl // all-include from external auth modules
 
 controller_signup renders signup.tpl. If the URL contains xs, it fetches the
 stored #signup_url{} props and signup_props and passes them to the templates.
 The step templates carry those values forward in their wired postbacks.
+Step 1 is included by _signup_with_email.tpl on initial render and is re-rendered
+by controller_signup when the visitor changes a prefilled email address.
+Other pages can include `_signup_box.tpl` directly when they need the signup UI
+without the surrounding `signup.tpl` page inheritance.
 
 Email messages and account confirmation:
 |-- email_signup_code.tpl // one-time code for step 2

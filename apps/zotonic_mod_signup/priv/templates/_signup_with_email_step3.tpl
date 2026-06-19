@@ -3,10 +3,10 @@
  #}
 <p class="clearfix">
     <b>{{ email|escape }}</b>
-    <a id="signup-go-step1" class="pull-right" href="{% url signup %}" role="button">{_ Change _}</a>
-    {% wire id="signup-go-step1"
+    <a id="signup-go-step1-3" class="pull-right" href="{% url signup p=page %}" role="button">{_ Change _}</a>
+    {% wire id="signup-go-step1-3"
             type="click"
-            postback={signup_go_step1}
+            postback={signup_go_step1 page=page props=props signup_props=signup_props email=email}
             delegate=`controller_signup`
     %}
 </p>
@@ -28,44 +28,32 @@
                 {% if show_signup_name_first|default_if_none:true %}
                     <div class="form-group" id="signup_name_first">
                         <label for="name_first" class="control-label">{_ First name _}</label>
-                        {% if props.name_first %}
-                            <p><b class="form-control-prefilled">{{ props.name_first|escape }}</b></p>
-                        {% else %}
-                            <input class="form-control" id="name_first" name="name_first" type="text" value=""
-                                   placeholder="{_ First name _}" autocomplete="given-name" required>
-                            {% validate id="name_first"
-                                type={presence failure_message=_"Enter first name"}
-                                only_on_blur
-                            %}
-                            {% wire action={focus target="name_first"} %}
-                        {% endif %}
+                        <input class="form-control" id="name_first" name="name_first" type="text" value="{{ props.name_first|escape }}"
+                               placeholder="{_ First name _}" autocomplete="given-name" required>
+                        {% validate id="name_first"
+                            type={presence failure_message=_"Enter first name"}
+                            only_on_blur
+                        %}
+                        {% wire action={focus target="name_first"} %}
                     </div>
                 {% endif %}
 
                 {% if show_signup_name_prefix|default_if_none:true %}
                     <div class="form-group" id="signup_surname_prefix">
                         <label for="surprefix" class="control-label">{_ Prefix _}</label>
-                        {% if props.name_surname_prefix %}
-                            <p class="form-control-prefilled">{{ props.name_surname_prefix|escape }}</p>
-                        {% else %}
-                            <input class="form-control" id="surprefix" name="surprefix" type="text" value="" autocomplete="additional-name">
-                        {% endif %}
+                        <input class="form-control" id="surprefix" name="surprefix" type="text" value="{{ props.name_surname_prefix|escape }}" autocomplete="additional-name">
                     </div>
                 {% endif %}
 
                 {% if show_signup_name_last|default_if_none:true %}
                     <div class="form-group" id="signup_name_surname">
                         <label for="name_surname" class="control-label">{_ Last name _}</label>
-                        {% if props.name_surname %}
-                            <p class="form-control-prefilled">{{ props.name_surname|escape }}</p>
-                        {% else %}
-                            <input class="form-control" id="name_surname" name="name_surname" type="text" value=""
-                                   placeholder="{_ Last name _}" autocomplete="family-name" required>
-                            {% validate id="name_surname"
-                                type={presence failure_message=_"Enter last name"}
-                                only_on_blur
-                            %}
-                        {% endif %}
+                        <input class="form-control" id="name_surname" name="name_surname" type="text" value="{{ props.name_surname|escape }}"
+                               placeholder="{_ Last name _}" autocomplete="family-name" required>
+                        {% validate id="name_surname"
+                            type={presence failure_message=_"Enter last name"}
+                            only_on_blur
+                        %}
                     </div>
                 {% endif %}
             </div>
@@ -146,8 +134,8 @@
             </p>
 
             <div class="form-group" id="signup_tos">
-                <div class="checkbox" id="signup_tos_agree_group">
-                    <label for="signup_tos_agree">
+                <div id="signup_tos_agree_group">
+                    <label class="checkbox" for="signup_tos_agree">
                         <input type="checkbox" name="signup_tos_agree" id="signup_tos_agree" value="1">
                         {_ I agree to the Terms of Service and the Privacy policies. _}
                     </label>
@@ -192,7 +180,7 @@
                 <p class="text-danger">
                     {_ There is already an account connected to your email address. _}
                 </p>
-                <a href="{% url logon p=path u=email %}" class="btn btn-primary">{_ Log in _}</a>
+                <a href="{% url logon p=page u=email %}" class="btn btn-primary">{_ Log in _}</a>
             </div>
         {% endif %}
 
@@ -200,7 +188,7 @@
             <p class="text-danger">
                 {_ There is already an account connected to your email address. _}
             </p>
-            <a href="{% url logon p=path u=email %}" class="btn btn-primary">{_ Log in _}</a>
+            <a href="{% url logon p=page u=email %}" class="btn btn-primary">{_ Log in _}</a>
         </div>
 
         <div style="display: none" id="signup_error_generic" class="signup-error">

@@ -3,29 +3,7 @@
      # - Request email address
      #}
     <div id="signup-email-step1">
-        {% wire id="signup_form"
-                type="submit"
-                postback={signup_email_step1 page=q.p props=props signup_props=signup_props}
-                delegate=`controller_signup`
-        %}
-        <form id="signup_form" method="post" action="postback">
-            <div class="form-group">
-                {% if props.email %}
-                    <p class="form-control-prefilled">
-                        <span>{_ Your email address: _}</span> {{ props.email|escape }}
-                    </p>
-                {% else %}
-                    <input id="signup-email-input" class="form-control" autofocus type="email" name="email" autocomplete="email" placeholder="you@example.com" required>
-                    {% validate id="signup-email-input" name="email" type={email} %}
-                {% endif %}
-            </div>
-            <div class="form-group">
-                <button class="btn btn-primary" type="submit">{_ Next _}</button>
-            </div>
-            <p class="help-block">
-                {_ We will mail you a code to confirm your email address. _}
-            </p>
-        </form>
+        {% include "_signup_with_email_step1.tpl" %}
     </div>
 
     {# Step 2:

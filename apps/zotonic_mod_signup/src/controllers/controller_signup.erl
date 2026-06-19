@@ -84,18 +84,25 @@ Template structure
 ------------------
 
 The public signup page is `signup.tpl`. It extends `base.tpl`, adds the logon
-CSS in `html_head_extra`, redirects already logged-on users to
-`m.signup.confirm_redirect`, and fills `content_area` with the signup box. The
-page includes:
+CSS in `html_head_extra`, and fills `content_area` by including
+`_signup_box.tpl`. Other pages can include `_signup_box.tpl` directly when they
+need the signup UI without the surrounding page inheritance. The signup box
+handles already logged-on users and otherwise includes:
 
 * `_signup_with_email.tpl` for the three-step email signup flow.
 * all `_logon_extra.tpl` templates supplied by active authentication modules for
   SSO signup options.
 
-`_signup_with_email.tpl` renders the first email form and empty containers for
-steps two and three. The controller fills those containers with
-`_signup_with_email_step2.tpl` and `_signup_with_email_step3.tpl` after the
-corresponding postbacks.
+`_signup_with_email.tpl` includes `_signup_with_email_step1.tpl` for the first
+email form and renders empty containers for steps two and three. The controller
+fills those containers with `_signup_with_email_step2.tpl` and
+`_signup_with_email_step3.tpl` after the corresponding postbacks.
+
+`_signup_with_email_step1.tpl` renders the email address form and posts
+`signup_email_step1`. If an email address was supplied through `props`, it shows
+that address with a Change link. The Change postback re-renders
+`_signup_with_email_step1.tpl` without the prefilled email so the visitor can
+enter another address.
 
 `_signup_with_email_step2.tpl` shows the selected email address, the mailed code
 form, send status, resend action, existing-account logon link, external-provider
@@ -146,6 +153,7 @@ the user resource, marks the account and identity as verified, emits
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
+-define(TIMEOUT, 3600).
 
 process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     Context2 = z_context:ensure_qs(Context),
@@ -160,13 +168,25 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
         QXs ->
             % Set in mod_signup when fetching signup_url
             case m_server_storage:secure_lookup(QXs, Context) of
-                {ok, {Check, Props, SignupProps}} when QXs =:= Check ->
-                    Props1 = maybe_drop_email(as_props_map(Props)),
-                    [
-                        {signup_props, as_list(SignupProps)},
-                        {props, Props1},
-                        {email, maps:get(<<"email">>, Props1, undefined)}
-                    ];
+                {ok, {Check, Timestamp, Props, SignupProps}} when QXs =:= Check ->
+                    Now = z_datetime:timestamp(),
+                    if
+                        Timestamp + ?TIMEOUT > Now ->
+                            Props1 = maybe_drop_email(as_props_map(Props)),
+                            Email = maps:get(<<"email">>, Props1, undefined),
+                            SignupProps1 = as_list(SignupProps),
+                            [
+                                {signup_props, SignupProps1},
+                                {props, Props1},
+                                {email, Email},
+                                {page, z_context:get_q(<<"p">>, Context)},
+                                {is_email_verified, is_email_idn_verified(Email, SignupProps1)}
+                            ];
+                        true ->
+                            % Expired, delete from server storage
+                            m_server_storage:secure_delete(QXs, Context),
+                            DefaultVars
+                    end;
                 {ok, _} -> DefaultVars;
                 {error, _} -> DefaultVars
             end
@@ -174,6 +194,38 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     % z_session:set(signup_xs, undefined, Context),
     Rendered = z_template:render(<<"signup.tpl">>, Vars, Context2),
     z_context:output(Rendered, Context2).
+
+is_email_idn_verified(undefined, _SignupProps) ->
+    false;
+is_email_idn_verified(Email, SignupProps)->
+    case m_identity:normalize_key(email, Email) of
+        <<>> -> false;
+        EmailNorm ->
+            lists:any(
+                fun
+                    ({identity, {email, EmailIdn, _Unique, true}}) ->
+                        EmailIdnNorm = m_identity:normalize_key(email, EmailIdn),
+                        EmailIdnNorm =:= EmailNorm;
+                    (_) ->
+                        false
+                end,
+                SignupProps)
+    end.
+
+remove_email_idn(Email, SignupProps) ->
+    case m_identity:normalize_key(email, Email) of
+        <<>> -> SignupProps;
+        EmailNorm ->
+            lists:filter(
+                fun
+                    ({identity, {email, EmailIdn, _Unique, _Verified}}) ->
+                        EmailIdnNorm = m_identity:normalize_key(email, EmailIdn),
+                        EmailIdnNorm =/= EmailNorm;
+                    (_) ->
+                        true
+                end,
+                SignupProps)
+    end.
 
 as_list(undefined) -> [];
 as_list(L) when is_list(L) -> L.
@@ -286,17 +338,19 @@ normalize_username(Username) ->
 
 event(#submit{ message={signup_email_step1, Args} }, Context) ->
     Props = proplists:get_value(props, Args, #{}),
+    SignupProps = proplists:get_value(signup_props, Args, []),
     Email = case Props of
         #{ <<"email">> := EmailProp } -> EmailProp;
         _ -> z_string:trim(z_context:get_q_validated(<<"email">>, Context))
     end,
     EmailNorm = m_identity:normalize_key(email, Email),
+    IsEmailVerified = is_email_idn_verified(EmailNorm, SignupProps),
     Page = proplists:get_value(page, Args),
     Vars = case precheck_email(EmailNorm, Context) of
         ok ->
             % Check if email domain is managed by a service provider
             case precheck_managed(Email, Page, Context) of
-                {ok, false, []} ->
+                {ok, false, []} when not IsEmailVerified ->
                     % Account unknown and no external providers
                     % - Mail a code to the email address
                     % - Show form to enter code
@@ -308,6 +362,7 @@ event(#submit{ message={signup_email_step1, Args} }, Context) ->
                                 {message_nr, MsgNr},
                                 {is_code_sent, true},
                                 {is_logon_link, false},
+                                {is_email_verified, false},
                                 {user_external, []}
                             ];
                         {error, _Reason} ->
@@ -317,9 +372,20 @@ event(#submit{ message={signup_email_step1, Args} }, Context) ->
                                 {message_nr, undefined},
                                 {is_code_sent, false},
                                 {is_logon_link, false},
+                                {is_email_verified, false},
                                 {user_external, []}
                             ]
                     end;
+                {ok, false, []} when IsEmailVerified ->
+                    % Account unknown and no external providers
+                    % - Email is verified - no email with code needed
+                    [
+                        {email, Email},
+                        {is_code_sent, false},
+                        {is_logon_link, false},
+                        {is_email_verified, true},
+                        {user_external, []}
+                    ];
                 {ok, local, UserExternal} ->
                     % Account exists, and maybe has external providers
                     % Show buttons for managed and logon link
@@ -327,6 +393,7 @@ event(#submit{ message={signup_email_step1, Args} }, Context) ->
                         {email, Email},
                         {is_code_sent, false},
                         {is_logon_link, true},
+                        {is_email_verified, false},
                         {user_external, UserExternal}
                     ];
                 {ok, external, UserExternal} ->
@@ -336,6 +403,7 @@ event(#submit{ message={signup_email_step1, Args} }, Context) ->
                         {email, Email},
                         {is_code_sent, false},
                         {is_logon_link, false},
+                        {is_email_verified, false},
                         {user_external, UserExternal}
                     ]
             end;
@@ -349,6 +417,7 @@ event(#submit{ message={signup_email_step1, Args} }, Context) ->
                         {email, Email},
                         {is_code_sent, false},
                         {is_logon_link, true},
+                        {is_email_verified, false},
                         {user_external, []}
                     ];
                 {ok, local, UserExternal} ->
@@ -356,6 +425,7 @@ event(#submit{ message={signup_email_step1, Args} }, Context) ->
                         {email, Email},
                         {is_code_sent, false},
                         {is_logon_link, true},
+                        {is_email_verified, false},
                         {user_external, UserExternal}
                     ];
                 {ok, external, UserExternal} ->
@@ -363,6 +433,7 @@ event(#submit{ message={signup_email_step1, Args} }, Context) ->
                         {email, Email},
                         {is_code_sent, false},
                         {is_logon_link, false},
+                        {is_email_verified, false},
                         {user_external, UserExternal}
                     ]
             end;
@@ -373,54 +444,106 @@ event(#submit{ message={signup_email_step1, Args} }, Context) ->
                 {email, Email},
                 {is_code_sent, false},
                 {is_logon_link, false},
+                {is_email_verified, false},
                 {user_external, []}
             ]
     end,
-    Vars1 = z_utils:props_merge(Vars, Args),
-    Context1 = z_render:update("signup-email-step2", #render{ template = "_signup_with_email_step2.tpl", vars = Vars1 }, Context),
-    z_render:wire([
-            {hide, [ {target, "signup-login"}]},
-            {hide, [ {target, "signup-services"}]},
-            {hide, [ {target, "signup-email-step1"} ]},
-            {fade_in, [ {target, "signup-email-step2"} ]},
-            {hide, [ {target, "signup-email-step3"} ]}
-        ], Context1);
+    HasError = proplists:get_value(error, Vars) =/= undefined,
+    HasExternal = length(proplists:get_value(user_external, Vars)) > 0,
+    HasIsEmailVerified = proplists:get_bool(is_email_verified, Vars),
+    HasCodeSent = proplists:get_bool(is_code_sent, Vars),
+    HasLogonLink = proplists:get_bool(is_logon_link, Vars),
+    if
+        not HasError
+        andalso not HasExternal
+        andalso HasIsEmailVerified
+        andalso not HasCodeSent
+        andalso not HasLogonLink ->
+            % Email was verified, no external providers, no errors and no existing account
+            % Skip step 2 and continue to the signup form of step3
+            Vs = [
+                {email, Email},
+                {is_code_checked, true}
+            ],
+            Vars1 = z_utils:props_merge(Vs, Args),
+            Context1 = z_render:update("signup-email-step3", #render{ template = "_signup_with_email_step3.tpl", vars = Vars1 }, Context),
+            z_render:wire([
+                    {hide, [ {target, "signup-login"}]},
+                    {hide, [ {target, "signup-services"}]},
+                    {hide, [ {target, "signup-email-step1"} ]},
+                    {hide, [ {target, "signup-email-step2"} ]},
+                    {fade_in, [ {target, "signup-email-step3"} ]},
+                    {update, [
+                        {target, "signup-email-step2"},
+                        {text, <<>>}
+                    ]}
+                ], Context1);
+        true ->
+            Vars1 = z_utils:props_merge(Vars, Args),
+            Context1 = z_render:update("signup-email-step2", #render{ template = "_signup_with_email_step2.tpl", vars = Vars1 }, Context),
+            z_render:wire([
+                    {hide, [ {target, "signup-login"}]},
+                    {hide, [ {target, "signup-services"}]},
+                    {hide, [ {target, "signup-email-step1"} ]},
+                    {fade_in, [ {target, "signup-email-step2"} ]},
+                    {hide, [ {target, "signup-email-step3"} ]}
+                ], Context1)
+    end;
 event(#submit{ message={signup_email_step2, Args} }, Context) ->
     % Check:the verification code and show the form to enter the rest of the details
     {email, Email} = proplists:lookup(email, Args),
+    {signup_props, SignupProps} = proplists:lookup(signup_props, Args),
     EmailNorm = m_identity:normalize_key(email, Email),
-    Code = z_string:trim(z_convert:to_binary(z_context:get_q(<<"code">>, Context))),
-    case is_ratelimit_code(EmailNorm, Context) of
-        true ->
-            z_render:wire([
-                    {hide, [ {target, "signup-code-error"} ]},
-                    {fade_in, [ {target, "signup-code-ratelimit"} ]}
-                ], Context);
+    case is_email_idn_verified(EmailNorm, SignupProps) of
         false ->
-            case mod_signup:check_onetime_code({signup, EmailNorm}, Code, Context) of
+            Code = z_string:trim(z_convert:to_binary(z_context:get_q(<<"code">>, Context))),
+            case is_ratelimit_code(EmailNorm, Context) of
                 true ->
-                    ok = mod_signup:delete_onetime_code({signup, EmailNorm}, Context),
-                    % Code is correct, render step3
-                    Vars = [
-                        {is_code_checked, true}
-                        | Args
-                    ],
-                    Context1 = z_render:update("signup-email-step3", #render{ template = "_signup_with_email_step3.tpl", vars = Vars }, Context),
                     z_render:wire([
-                            {hide, [ {target, "signup-email-step1"} ]},
-                            {hide, [ {target, "signup-email-step2"} ]},
-                            {fade_in, [ {target, "signup-email-step3"} ]},
-                            {update, [
-                                {target, "signup-email-step2"},
-                                {text, <<>>}
-                            ]}
-                        ], Context1);
+                            {hide, [ {target, "signup-code-error"} ]},
+                            {fade_in, [ {target, "signup-code-ratelimit"} ]}
+                        ], Context);
                 false ->
-                    z_render:wire([
-                            {hide, [ {target, "signup-code-ratelimit"} ]},
-                            {fade_in, [ {target, "signup-code-error"} ]}
-                        ], Context)
-            end
+                    case mod_signup:check_onetime_code({signup, EmailNorm}, Code, Context) of
+                        true ->
+                            ok = mod_signup:delete_onetime_code({signup, EmailNorm}, Context),
+                            % Code is correct, render step3
+                            Vars = [
+                                {is_code_checked, true}
+                                | Args
+                            ],
+                            Context1 = z_render:update("signup-email-step3", #render{ template = "_signup_with_email_step3.tpl", vars = Vars }, Context),
+                            z_render:wire([
+                                    {hide, [ {target, "signup-email-step1"} ]},
+                                    {hide, [ {target, "signup-email-step2"} ]},
+                                    {fade_in, [ {target, "signup-email-step3"} ]},
+                                    {update, [
+                                        {target, "signup-email-step2"},
+                                        {text, <<>>}
+                                    ]}
+                                ], Context1);
+                        false ->
+                            z_render:wire([
+                                    {hide, [ {target, "signup-code-ratelimit"} ]},
+                                    {fade_in, [ {target, "signup-code-error"} ]}
+                                ], Context)
+                    end
+            end;
+        true ->
+            Vars = [
+                {is_code_checked, true}
+                | Args
+            ],
+            Context1 = z_render:update("signup-email-step3", #render{ template = "_signup_with_email_step3.tpl", vars = Vars }, Context),
+            z_render:wire([
+                    {hide, [ {target, "signup-email-step1"} ]},
+                    {hide, [ {target, "signup-email-step2"} ]},
+                    {fade_in, [ {target, "signup-email-step3"} ]},
+                    {update, [
+                        {target, "signup-email-step2"},
+                        {text, <<>>}
+                    ]}
+                ], Context1)
     end;
 event(#submit{ message={signup_email_step3, Args} }, Context) ->
     % Check:
@@ -496,17 +619,28 @@ event(#submit{ message={signup_email_step3, Args} }, Context) ->
                     {text, ?__(<<"The email address you entered does not match the email address you provided in the previous step. Please check your input and try again.">>, Context)}
                 ]}, Context)
     end;
-event(#postback{ message={signup_go_step1, _Args} }, Context) ->
+event(#postback{ message={signup_go_step1, Args} }, Context) ->
+    % Allow user to edit their email address, even if it was passed
+    % in the props/signup_props.
+    % - Re-render step1 form with the email address form.
+    Email = proplists:get_value(email, Args),
+    Args1 = [
+        {signup_props, remove_email_idn(Email, proplists:get_value(signup_props, Args))},
+        {props, maps:remove(<<"email">>, proplists:get_value(props, Args))},
+        {email, Email},
+        {is_email_verified, false}
+    ],
+    Context1 = z_render:update("signup-email-step1", #render{ template = "_signup_with_email_step1.tpl", vars = Args1 }, Context),
     z_render:wire([
             {hide, [{target, "signup-email-step2"}]},
             {hide, [{target, "signup-email-step3"}]},
+            {update, [{target, "signup-email-step2"}, {text, <<>>}]},
+            {update, [{target, "signup-email-step3"}, {text, <<>>}]},
             {fade_in, [{target, "signup-email-step1"}]},
             {fade_in, [ {target, "signup-login"}]},
             {fade_in, [ {target, "signup-services"}]},
-            {update, [{target, "signup-email-step2"}, {text, <<>>}]},
-            {update, [{target, "signup-email-step3"}, {text, <<>>}]},
             {focus, [{target, "signup-email-input"}]}
-        ], Context);
+        ], Context1);
 event(#postback{ message={signup_resend_code, Args} }, Context) ->
     {email, Email} = proplists:lookup(email, Args),
     case send_code(Email, Context) of
@@ -705,7 +839,10 @@ signup(Props, SignupProps, Page, Context) ->
     end.
 
 get_redirect_page(SignupProps, Page) ->
-    z_string:trim(z_convert:to_binary(proplists:get_value(ready_page, SignupProps, Page))).
+    case z_string:trim(z_convert:to_binary(proplists:get_value(ready_page, SignupProps))) of
+        <<>> -> z_string:trim(z_convert:to_binary(Page));
+        ReadyPage -> ReadyPage
+    end.
 
 ensure_published(UserId, Context) ->
     case m_rsc:p(UserId, <<"is_published">>, Context) of

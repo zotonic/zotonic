@@ -79,7 +79,9 @@ Controllers
 `controller_signup` renders `signup.tpl` and handles the browser postbacks for
 the email signup flow. It owns the short email-code confirmation, prefilled
 `xs` payload handling, final form validation, signup execution, logon, and
-client-side redirect token.
+client-side redirect token. The page itself includes `_signup_box.tpl`; other
+pages can include `_signup_box.tpl` directly to show the same signup UI without
+using the public signup page template.
 
 `controller_signup_confirm` renders `signup_confirm.tpl` and handles account
 identity confirmation links. The confirmation email contains a `signup_confirm`
@@ -128,6 +130,7 @@ You can adjust this module’s behaviour with the following [Module configuratio
 | --- | --- | --- |
 | `mod_signup.request_confirm` | `true` | Send a signup confirmation e-mail to new users. If set to `false`, users are verified immediately. |
 | `mod_signup.username_equals_email` | `true` | If `true`, the user’s e-mail address is also the username (users can log in with their e-mail). If `false`, users can choose a separate username. |
+| `mod_signup.email_unique` | `false` | If `true`, the e-mail address of a user must be unique among all verified identities. If `false`, multiple users can have the same (verified) e-mail address.  |
 | `mod_signup.member_category` | `person` | Name of the category that users created through sign up will be placed in. |
 | `mod_signup.content_group` | empty string | Name of the content group that users created through sign up will be placed in. The empty string means the default content group for the current ACL module. |
 | `mod_signup.depiction_as_medium` | `false` | If set then any depiction URL is added as a medium record to the person who signed up. Normally the depiction is added as a separate *depending* image resource and connected from the person using a `depiction` predicate. |
@@ -247,6 +250,13 @@ This module handles the following notifier callbacks:
             default => true,
             description => "If true, the username will be set to the email address of the user. "
                            "If false, the user can choose a different username."
+        },
+        #{
+            key => email_unique,
+            type => boolean,
+            default => false,
+            description => "If true, the email address may not be associated with any other user. "
+                           "If false, multiple users can have the same (verified) email address."
         }
     ]).
 
@@ -299,7 +309,8 @@ observe_signup(#signup{id=UserId, props=Props, signup_props=SignupProps, request
 %% on the passed properties.
 observe_signup_url(#signup_url{props=Props, signup_props=SignupProps}, Context) ->
     CheckId = z_ids:id(),
-    ok = m_server_storage:secure_store(CheckId, {CheckId, Props, SignupProps}, Context),
+    Timestamp = z_datetime:timestamp(),
+    ok = m_server_storage:secure_store(CheckId, {CheckId, Timestamp, Props, SignupProps}, Context),
     {ok, z_dispatcher:url_for(signup, [{xs, CheckId}], Context)}.
 
 

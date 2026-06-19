@@ -136,9 +136,6 @@ body.err403 .z-logon-box {
 .z-logon-box.z-logon-box-boxed .z-logon-support p:last-child {
   margin-bottom: 0;
 }
-.z-logon-box #signup_verify {
-  display: none;
-}
 .z-logon-box .signup-external {
   display: flex;
   flex-flow: column nowrap;
@@ -166,12 +163,7 @@ body.err403 .z-logon-box {
   flex-grow: 2;
   min-width: 60%;
 }
-.z-logon-box #signup_error_tos_agree,
-.z-logon-box #signup_error_duplicate_username,
-.z-logon-box #signup_error_duplicate_identity {
-  display: none;
-}
-.z-logon-box.error_tos_agree #signup_error_tos_agree, .z-logon-box.error_duplicate_username #signup_error_duplicate_username, .z-logon-box.error_duplicate_identity #signup_error_duplicate_identity, .z-logon-box.error_custom_1 #signup_error_custom_1, .z-logon-box.error_custom_2 #signup_error_custom_2 {
+.z-logon-box.error_custom_1 #signup_error_custom_1, .z-logon-box.error_custom_2 #signup_error_custom_2 {
   display: block;
 }
 .z-logon-box .z_validation_message {

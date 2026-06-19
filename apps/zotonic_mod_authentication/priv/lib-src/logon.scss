@@ -192,10 +192,6 @@ body.err403 {
 
     /* Sign up specific*/
 
-    #signup_verify {
-        display: none;
-    }
-
     .signup-external {
         display: flex;
         flex-flow: column nowrap;
@@ -230,15 +226,6 @@ body.err403 {
         }
     }
 
-    #signup_error_tos_agree,
-    #signup_error_duplicate_username,
-    #signup_error_duplicate_identity {
-        display: none;
-    }
-
-    &.error_tos_agree #signup_error_tos_agree,
-    &.error_duplicate_username #signup_error_duplicate_username,
-    &.error_duplicate_identity #signup_error_duplicate_identity,
     &.error_custom_1 #signup_error_custom_1,
     &.error_custom_2 #signup_error_custom_2 {
         display: block;

@@ -5,10 +5,10 @@
  #}
 <p class="clearfix">
     <b>{{ email|escape }}</b>
-    <a id="signup-go-step1" class="pull-right" href="{% url signup %}" role="button">{_ Change _}</a>
-    {% wire id="signup-go-step1"
+    <a id="signup-go-step1-2" class="pull-right" href="{% url signup p=page %}" role="button">{_ Change _}</a>
+    {% wire id="signup-go-step1-2"
             type="click"
-            postback={signup_go_step1}
+            postback={signup_go_step1 page=page props=props signup_props=signup_props email=email}
             delegate=`controller_signup`
     %}
 </p>
@@ -18,7 +18,7 @@
         <p>
             {_ You already have an account. _}
         </p>
-        <a href="{% url logon p=path u=email %}" class="btn btn-primary">{_ Log in _}</a>
+        <a href="{% url logon p=page u=email %}" class="btn btn-primary">{_ Log in _}</a>
     </div>
 {% endif %}
 
@@ -73,7 +73,7 @@
 
 {% if user_external %}
     {% if is_code_sent %}
-        <div class="text-muted z-logon-extra-separator">{_ or _}</div>
+        <div class="text-muted z-logon-extra-separator"><span>{_ or _}</span></div>
     {% endif %}
     <div class="signup-external">
         <p class="help-block">
