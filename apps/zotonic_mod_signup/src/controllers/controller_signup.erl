@@ -723,16 +723,12 @@ form_props(Args, Context) ->
 %% Fetch the signup identities. Either from the XsSignupProps passed by the signup
 %% caller, or from the query arguments.
 fetch_signup_props(Email, XsSignupProps, Context) ->
-    SignupProps = if
-        is_list(XsSignupProps), length(XsSignupProps) > 0 ->
-            XsSignupProps;
-        true ->
-            Username = normalize_username(z_context:get_q(<<"username">>, Context)),
-            Password = z_string:trim(z_context:get_q_validated(<<"password">>, Context)),
-            [
-                {identity, {username_pw, {Username, Password}, true, true}}
-            ]
-    end,
+    Username = normalize_username(z_context:get_q(<<"username">>, Context)),
+    Password = z_string:trim(z_context:get_q_validated(<<"password">>, Context)),
+    SignupProps = [
+        {identity, {username_pw, {Username, Password}, true, true}}
+        | XsSignupProps
+    ],
     case z_utils:is_empty(Email) of
         true ->
             SignupProps;
@@ -811,7 +807,18 @@ signup(Props, SignupProps, Page, Context) ->
             % Post a onetime-token to the auth worker on the page
             % The auth worker will exchange it for a valid cookie and then perform
             % the redirect to the url.
-            case z_authentication_tokens:encode_onetime_token(NewUserId, ContextUser) of
+            AuthOptions = case find_identity(username_pw, SignupProps) of
+                undefined ->
+                    % TODO: determine which identity was used for the signup
+                    #{
+                    };
+                {Username, _Password} ->
+                    #{
+                        auth_service => <<"username_pw">>,
+                        auth_service_uid => Username
+                    }
+            end,
+            case z_authentication_tokens:encode_onetime_token(NewUserId, AuthOptions, ContextUser) of
                 {ok, Token} ->
                     AuthMsg = #{
                         token => Token,
@@ -828,7 +835,7 @@ signup(Props, SignupProps, Page, Context) ->
                     }),
                     Error
             end;
-        {error, {identity_in_use, username}} ->
+        {error, {identity_in_use, username_pw}} ->
             {error, username};
         {error, {identity_in_use, _}} ->
             {error, duplicate};

@@ -508,7 +508,7 @@ check_identity(_UserId, [], _Context) ->
 check_identity(UserId, [{identity, {username_pw, {Username, _Password}, true, _Verified}}|Idents], Context) ->
     case username_exists(UserId, Username, Context) of
         false -> check_identity(UserId, Idents, Context);
-        true -> {error, {identity_in_use, username}}
+        true -> {error, {identity_in_use, username_pw}}
     end;
 check_identity(UserId, [{identity, {Type, Key, true, _Verified}}|Idents], Context) ->
     case identity_exists(UserId, Type, Key, Context) of

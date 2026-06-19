@@ -340,10 +340,14 @@ check_username(Username, Acc, Context) ->
 %% @doc Send a request to the client to login a user. The zotonic.auth.worker.js will
 %% send a request to controller_authentication to exchange the one time token with
 %% a z,auth cookie for the given user. The client will redirect to the Url.
-observe_auth_client_logon_user(#auth_client_logon_user{ user_id = UserId, url = Url }, Context) ->
+observe_auth_client_logon_user(#auth_client_logon_user{ user_id = UserId, url = Url, auth_service = Service, auth_service_uid = ServiceUid }, Context) ->
     case z_context:client_topic(Context) of
         {ok, ClientTopic} ->
-            case z_authentication_tokens:encode_onetime_token(UserId, Context) of
+            AuthOptions = #{
+                auth_service => z_convert:to_binary(Service),
+                auth_service_uid => ServiceUid
+            },
+            case z_authentication_tokens:encode_onetime_token(UserId, AuthOptions, Context) of
                 {ok, Token} ->
                     z_mqtt:publish(
                         ClientTopic ++ [ <<"model">>, <<"auth">>, <<"post">>, <<"onetime-token">> ],
@@ -418,7 +422,7 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
 %%      If identity is known: log on the associated user and set auth cookies.
 %%      If unknown, add identity to current user or signup a new user
 observe_auth_validated(#auth_validated{ is_connect = IsConnect } = Auth, Context) ->
-    Context1 = z_context:set(auth_method, Auth#auth_validated.service, Context),
+    Context1 = z_context:set(auth_service, Auth#auth_validated.service, Context),
     case IsConnect of
         true ->
             maybe_add_identity_connect(z_acl:user(Context1), Auth, Context1);
