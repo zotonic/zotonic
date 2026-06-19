@@ -809,10 +809,10 @@ signup(Props, SignupProps, Page, Context) ->
             % the redirect to the url.
             AuthOptions = case find_identity(username_pw, SignupProps) of
                 undefined ->
-                    % TODO: determine which identity was used for the signup
                     #{
+                        % TODO: determine which identity was used for the signup
                     };
-                {Username, _Password} ->
+                {username_pw, {Username, _Password}, _IsUnique, _IsVerified} ->
                     #{
                         auth_service => <<"username_pw">>,
                         auth_service_uid => Username
