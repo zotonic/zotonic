@@ -37,8 +37,11 @@ There are three ways to start a signup:
 The `#signup_url{}` flow stores the caller supplied `props` and `signup_props`
 in `mod_server_storage`. The key is a generated check id and the generated URL
 contains that id as the `xs` query argument. The stored value is
-`{CheckId, Props, SignupProps}` so the signup controller can verify that the
-looked-up value belongs to the supplied `xs`.
+`{CheckId, Timestamp, Props, SignupProps}` so the signup controller can verify
+that the looked-up value belongs to the supplied `xs` and reject expired
+payloads. The stored payload is accepted for one hour after it was generated;
+after that the signup page falls back to a normal empty signup and deletes the
+expired server-storage entry.
 
 `props` are resource properties for the person resource that will become the
 user, for example `email`, `name_first`, `name_surname`, or `depiction_url`.
@@ -47,11 +50,12 @@ user, for example `email`, `name_first`, `name_surname`, or `depiction_url`.
 post-signup redirect, or `{identity, {Type, Key, IsUnique, IsVerified}}`.
 
 When `controller_signup` renders the page it consumes `xs`, fetches the stored
-payload, and passes the accepted values to the templates as `props`,
-`signup_props`, and optionally `email`. The templates include these values in
-the wired postbacks so the staged email signup can continue with the same
-prefilled data. If `xs` is missing, empty, unknown, or points to a different
-check id, the signup page falls back to a normal empty signup.
+payload, checks the stored timestamp, and passes the accepted values to the
+templates as `props`, `signup_props`, and optionally `email`. The templates
+include these values in the wired postbacks so the staged email signup can
+continue with the same prefilled data. If `xs` is missing, empty, unknown,
+expired, or points to a different check id, the signup page falls back to a
+normal empty signup.
 
 The public email signup is staged:
 
@@ -158,12 +162,14 @@ Fold for determining which signup fields to validate. This is a list of `{Fieldn
 
 ```erlang
 [
-    {email, true},
     {name_first, true},
     {name_surname_prefix, false},
     {name_surname, true}
 ]
 ```
+
+The email address is handled separately in the first signup step and is not part
+of the final form field fold.
 
 Observers can add / remove fields using the accumulator value that is passed into the notification.
 
