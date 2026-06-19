@@ -28,6 +28,7 @@
             {% endif %}
             &ndash; {_ uploaded on _} {{ medium.created|date:"Y-m-d H:i:s" }}
         </span>
+        <span class="text-muted">&ndash; file hash digest (SHA-256) {{ medium.digest }}</span>
     </p>
 
     <hr>

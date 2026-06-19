@@ -267,6 +267,16 @@ get_column_type(C, Table, Column, Database, Schema) ->
               and column_name = $4", [Database, Schema, Table, Column]),
     ColumnType.
 
+get_column_type_and_length(C, Table, Column, Database, Schema) ->
+    {ok, _, [{ColumnType, CharacterMaximumLength}]} = epgsql:equery(C, "
+            select data_type, character_maximum_length
+            from information_schema.columns
+            where table_catalog = $1
+              and table_schema = $2
+              and table_name = $3
+              and column_name = $4", [Database, Schema, Table, Column]),
+    {ColumnType, CharacterMaximumLength}.
+
 is_column_nullable(C, Table, Column, Database, Schema) ->
     {ok, _, [{IsNullable}]} = epgsql:equery(C, "
             select is_nullable
@@ -339,6 +349,7 @@ upgrade(C, Database, Schema) ->
     ok = medium_update_v2(C, Database, Schema),
     ok = pivot_page_path(C, Database, Schema),
     ok = medium_update_function_check(C, Database, Schema),
+    ok = medium_digest_field(C, Database, Schema),
     ok.
 
 
@@ -1092,6 +1103,29 @@ medium_size_bigint(C, Database, Schema) ->
             ok;
         _ ->
             {ok,[],[]} = epgsql:squery(C, "alter table medium alter column size type bigint"),
+            ok
+    end.
+
+medium_digest_field(C, Database, Schema) ->
+    ok =
+        case has_column(C, "medium", "sha1", Database, Schema) of
+            true ->
+                {ok,[],[]} = epgsql:squery(C, "alter table medium drop column sha1"),
+                ok;
+            false ->
+                ok
+        end,
+    case has_column(C, "medium", "digest", Database, Schema) of
+        true ->
+            case get_column_type_and_length(C, "medium", "digest", Database, Schema) of
+                {<<"character varying">>, 64} ->
+                   ok;
+                _ ->
+                    {ok,[],[]} = epgsql:squery(C, "alter table medium alter column digest type character varying(64)"),
+                    ok
+            end;
+        false ->
+            {ok, [], []} = epgsql:squery(C, "alter table medium add column digest character varying(64)"),
             ok
     end.
 
