@@ -38,7 +38,7 @@
             <div class="widget">
                 <h3 class="widget-header">{_ Email status _}</h3>
                 <div class="widget-content" id="{{ #statuspanel }}">
-                    {% optional include "_email_status_view.tpl" email=q.to panel_id=#statuspanel %}
+                    {% optional include "_email_status_view.tpl" email=q.to panel_id=#statuspanel hide_log %}
                 </div>
             </div>
         </div>

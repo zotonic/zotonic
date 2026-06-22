@@ -21,9 +21,9 @@
 
     <input type="hidden" name="email" value="{{ email|escape }}">
 
-    {% block signup_fields %}
+    {% block signup_form_fields %}
 
-        {% block signup_fields_props %}
+        {% block signup_form_fields_name %}
             <div class="signup-name">
                 {% if show_signup_name_first|default_if_none:true %}
                     <div class="form-group" id="signup_name_first">
@@ -59,10 +59,14 @@
             </div>
         {% endblock %}
 
+        {% block signup_form_fields_extra %}
+            {% all include "_signup_form_fields_extra.tpl" %}
+        {% endblock %}
+
         {% if m.signup.config.username_equals_email %}
             <input type="hidden" name="username" value="{{ email|escape }}">
         {% else %}
-            {% block signup_fields_username %}
+            {% block signup_form_fields_username %}
                 <div class="form-group" id="signup_username">
                     <label for="username" class="control-label">{_ Username _}</label>
                     <input class="form-control" id="username" name="username" type="text" value="{{ email|escape }}"
@@ -81,7 +85,7 @@
             {% endblock %}
         {% endif %}
 
-        {% block signup_fields_password %}
+        {% block signup_form_fields_password %}
             <div class="form-group" id="signup_password">
                 <label for="password" class="control-label">{_ Password _}</label>
                 <input class="form-control" id="password" name="password" type="password" value=""
@@ -128,7 +132,7 @@
             </p>
         {% endblock %}
 
-        {% block signup_fields_tos %}
+        {% block signup_form_fields_tos %}
             <p class="help-block">
                 {_ We will be very careful with all the information given to us and will never give your name or address away without your permission. We do have some rules that we need you to agree with. _}
             </p>
@@ -174,7 +178,7 @@
         <button class="btn btn-primary" type="submit">{_ Sign Up _}</button>
     </div>
 
-    {% block signup_errors %}
+    {% block signup_form_errors %}
         {% if m.signup.config.username_equals_email %}
             <div style="display: none" id="signup_error_username" class="signup-error">
                 <p class="text-danger">

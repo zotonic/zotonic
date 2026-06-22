@@ -1,6 +1,6 @@
 {% wire id="signup_form"
         type="submit"
-        postback={signup_email_step1 page=signup_props.ready_page|default:page props=props signup_props=signup_props}
+        postback={signup_email_step1 page=page props=props signup_props=signup_props}
         delegate=`controller_signup`
 %}
 <form id="signup_form" method="post" action="postback">

@@ -82,7 +82,7 @@
         {% for ext in user_external %}
             {% if ext.template %}
                 <div>
-                    {% include ext.template ext=ext %}
+                    {% include ext.template ext=ext p=page %}
                 </div>
             {% elseif ext.url %}
                 <p>

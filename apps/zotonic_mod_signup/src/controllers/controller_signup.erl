@@ -179,7 +179,7 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
                                 {signup_props, SignupProps1},
                                 {props, Props1},
                                 {email, Email},
-                                {page, z_context:get_q(<<"p">>, Context)},
+                                {page, get_redirect_page(SignupProps1, z_context:get_q(<<"p">>, Context))},
                                 {is_email_verified, is_email_idn_verified(Email, SignupProps1)}
                             ];
                         true ->
