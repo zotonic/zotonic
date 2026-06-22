@@ -319,7 +319,11 @@ observe_signup_url(#signup_url{props=Props, signup_props=SignupProps}, Context) 
     CheckId = z_ids:id(),
     Timestamp = z_datetime:timestamp(),
     ok = m_server_storage:secure_store(CheckId, {CheckId, Timestamp, Props, SignupProps}, Context),
-    {ok, z_dispatcher:url_for(signup, [{xs, CheckId}], Context)}.
+    UrlArgs = [
+        {xs, CheckId},
+        {p, proplists:get_value(ready_page, SignupProps)}
+    ],
+    {ok, z_dispatcher:url_for(signup, UrlArgs, Context)}.
 
 
 %% @doc A request to perform a verification of an identity. The signup module can send an email with a
