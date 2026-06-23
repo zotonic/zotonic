@@ -57,6 +57,12 @@
     <div class="form-group">
         <button class="btn btn-primary" type="submit">{_ Log in _}</button>
     </div>
+
+    <div class="z-logon-support">
+        <p>
+            <a href="{% url logon_reminder %}" data-onclick-topic="model/auth-ui/post/view/reminder">{_ Forgot your password? _}</a>
+        </p>
+    </div>
 {% else %}
     {% if q.options.is_username_checked %}
         <div class="form-group x-hidden" id="form-username" style="height: 0; overflow: hidden;" aria-hidden="true">
@@ -180,11 +186,23 @@
                     {_ Log in _}
                 </button>
             </div>
+
+            <div class="z-logon-support">
+                <p>
+                    <a href="{% url logon_reminder %}" data-onclick-topic="model/auth-ui/post/view/reminder">{_ Forgot your password? _}</a>
+                </p>
+            </div>
         {% endif %}
     {% else %}
         <input type="hidden" name="is_username_check" value="1">
         <div class="form-group">
             <button class="btn btn-primary" type="submit">{_ Next _}</button>
+        </div>
+
+        <div class="z-logon-support">
+            <p>
+                <a href="{% url logon_reminder %}" data-onclick-topic="model/auth-ui/post/view/reminder">{_ Forgot your password? _}</a>
+            </p>
         </div>
     {% endif %}
 
