@@ -1,3 +1,4 @@
+{# Messages shown in popup window after authentication with an external identity provider. #}
 {% with error|default:q.error as qerror %}
 
     {% if qerror == "confirm" %}
@@ -25,6 +26,29 @@
             >
                 <input type="hidden" name="auth" value="{{ q.auth|escape }}">
                 <input type="hidden" name="url" value="{{ q.url|escape }}">
+                <div class="form-group" id="signup_tos">
+                    <div id="signup_tos_agree_group">
+                        <label class="checkbox" for="signup_tos_agree">
+                            <input type="checkbox" name="signup_tos_agree" id="signup_tos_agree" value="1" required>
+                            {_ I agree to the Terms of Service and the Privacy policies. _}
+                        </label>
+                        {% with m.rsc.signup_tos.page_url as tos_url %}
+                        {% with m.rsc.signup_privacy.page_url as privacy_url %}
+                            {% if tos_url or privacy_url %}
+                                <p class="help-block">
+                                    {_ You can read them here: _}
+                                    {% if tos_url %}
+                                        <a target="_blank" href="{{ tos_url }}">{_ Terms of Service _} <span class="fa fa-external-link"></span></a>
+                                    {% endif %}
+                                    {% if privacy_url %}
+                                        <a target="_blank" href="{{ privacy_url }}">{_ Privacy policies _} <span class="fa fa-external-link"></span></a>
+                                    {% endif %}
+                                </p>
+                            {% endif %}
+                        {% endwith %}
+                        {% endwith %}
+                    </div>
+                </div>
                 <a class="btn btn-default" href="/" data-onclick-topic="model/window/post/close">{_ Cancel _}</a>
                 <button class="btn btn-primary" type="submit">{_ I want to create a new account _}</button>
             </form>

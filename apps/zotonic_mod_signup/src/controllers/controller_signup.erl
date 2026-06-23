@@ -147,6 +147,9 @@ the user resource, marks the account and identity as verified, emits
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
+    resource_exists/1,
+    previously_existed/1,
+    moved_temporarily/1,
     process/4
 ]).
 -export([event/2]).
@@ -155,16 +158,57 @@ the user resource, marks the account and identity as verified, emits
 
 -define(TIMEOUT, 3600).
 
+%% @doc Redirect back to the ready_page if a user is logged on.
+-spec resource_exists( z:context() ) -> {boolean(), z:context()}.
+resource_exists(Context) ->
+    {not z_auth:is_auth(Context), Context}.
+
+-spec previously_existed( z:context() ) -> {boolean(), z:context()}.
+previously_existed(Context) ->
+    {true, Context}.
+
+%% @doc Do not let the browser remember this redirect; use a temporary redirect.
+-spec moved_temporarily( z:context() ) -> {{true, binary()}, z:context()}.
+moved_temporarily(Context) ->
+    SignupProps = case maybe_fetch_xs(Context) of
+        {ok, _Props, SProps} -> SProps;
+        false -> []
+    end,
+    Page = get_redirect_page(SignupProps, z_context:get_q(<<"p">>, Context)),
+    Page1 = case z_utils:is_empty(Page) of
+        true -> m_rsc:p(z_acl:user(Context), <<"page_url">>, Context);
+        false -> Page
+    end,
+    {{true, Page1}, Context}.
+
 process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
-    Context2 = z_context:ensure_qs(Context),
-    z_context:logger_md(Context2),
+    z_context:logger_md(Context),
     DefaultVars = [
         {signup_props, []},
         {props, #{}}
     ],
-    Vars = case z_context:get_q(<<"xs">>, Context2) of
-        undefined -> DefaultVars;
-        <<>> -> DefaultVars;
+    Vars = case maybe_fetch_xs(Context) of
+        {ok, Props, SignupProps} ->
+            Props1 = drop_empty_email(Props),
+            Email = maps:get(<<"email">>, Props1, undefined),
+            [
+                {signup_props, SignupProps},
+                {props, Props1},
+                {email, Email},
+                {page, get_redirect_page(SignupProps, z_context:get_q(<<"p">>, Context))},
+                {is_email_verified, is_email_idn_verified(Email, SignupProps)}
+            ];
+        false ->
+            DefaultVars
+    end,
+    % z_session:set(signup_xs, undefined, Context),
+    Rendered = z_template:render(<<"signup.tpl">>, Vars, Context),
+    z_context:output(Rendered, Context).
+
+maybe_fetch_xs(Context) ->
+    case z_context:get_q(<<"xs">>, Context) of
+        undefined -> false;
+        <<>> -> false;
         QXs ->
             % Set in mod_signup when fetching signup_url
             case m_server_storage:secure_lookup(QXs, Context) of
@@ -172,28 +216,18 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
                     Now = z_datetime:timestamp(),
                     if
                         Timestamp + ?TIMEOUT > Now ->
-                            Props1 = maybe_drop_email(as_props_map(Props)),
-                            Email = maps:get(<<"email">>, Props1, undefined),
+                            Props1 = as_props_map(Props),
                             SignupProps1 = as_list(SignupProps),
-                            [
-                                {signup_props, SignupProps1},
-                                {props, Props1},
-                                {email, Email},
-                                {page, get_redirect_page(SignupProps1, z_context:get_q(<<"p">>, Context))},
-                                {is_email_verified, is_email_idn_verified(Email, SignupProps1)}
-                            ];
+                            {ok, Props1, SignupProps1};
                         true ->
                             % Expired, delete from server storage
                             m_server_storage:secure_delete(QXs, Context),
-                            DefaultVars
+                            false
                     end;
-                {ok, _} -> DefaultVars;
-                {error, _} -> DefaultVars
+                {ok, _} -> false;
+                {error, _} -> false
             end
-    end,
-    % z_session:set(signup_xs, undefined, Context),
-    Rendered = z_template:render(<<"signup.tpl">>, Vars, Context2),
-    z_context:output(Rendered, Context2).
+    end.
 
 is_email_idn_verified(undefined, _SignupProps) ->
     false;
@@ -236,12 +270,12 @@ as_props_map(M) when is_map(M) -> z_props:from_map(M).
 
 %% @doc Check if the email property is non-empty, if it is empty then delete it.
 %% This is makes email property handling easier in the event routines.
-maybe_drop_email(#{ <<"email">> := Email } = Props) when is_binary(Email); is_list(Email) ->
+drop_empty_email(#{ <<"email">> := Email } = Props) when is_binary(Email); is_list(Email) ->
     case z_string:trim(z_convert:to_binary(Email)) of
         <<>> -> maps:remove(<<"email">>, Props);
         EmailTrimmed -> Props#{ <<"email">> => EmailTrimmed }
     end;
-maybe_drop_email(Props) ->
+drop_empty_email(Props) ->
     maps:remove(<<"email">>, Props).
 
 precheck_email(EmailNorm, Context) ->

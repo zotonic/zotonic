@@ -140,7 +140,7 @@
             <div class="form-group" id="signup_tos">
                 <div id="signup_tos_agree_group">
                     <label class="checkbox" for="signup_tos_agree">
-                        <input type="checkbox" name="signup_tos_agree" id="signup_tos_agree" value="1">
+                        <input type="checkbox" name="signup_tos_agree" id="signup_tos_agree" value="1" required>
                         {_ I agree to the Terms of Service and the Privacy policies. _}
                     </label>
                     {% with m.rsc.signup_tos.page_url as tos_url %}
