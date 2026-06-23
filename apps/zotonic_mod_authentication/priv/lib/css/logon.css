@@ -68,6 +68,7 @@ body.err403 .z-logon-box {
   display: none;
 }
 .z-logon-box .z-logon-extra li.z-logon-extra-separator:first-child.-first {
+  margin-top: 15px;
   display: block;
 }
 .z-logon-box .z-logon-extra li.z-logon-extra-separator.-first:last-child {

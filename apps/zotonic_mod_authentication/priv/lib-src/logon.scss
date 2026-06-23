@@ -89,6 +89,7 @@ body.err403 {
             display: none;
 
             &.-first {
+                margin-top: $vertical_element_spacing;
                 display: block;
             }
         }
