@@ -1,5 +1,5 @@
 {% if m.microsoft.useauth %}
-<li id="logon_microsoft">
+<div id="logon_microsoft">
     {% include "_microsoft_login_link.tpl" %}
-</li>
+</div>
 {% endif %}

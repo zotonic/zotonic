@@ -72,12 +72,8 @@ body.err403 {
     }
 
     /* Extra login options */
-    .z-logon-extra {
+    .z-logon-external {
         width: 100%;
-
-        li {
-            margin: 0 0 $button_spacing 0 ;
-        }
 
         .z-btn-social {
             display: block;
@@ -85,7 +81,7 @@ body.err403 {
             text-decoration: none;
         }
 
-        li.z-logon-extra-separator:first-child {
+        > .z-logon-extra-separator:first-child {
             display: none;
 
             &.-first {
@@ -94,7 +90,7 @@ body.err403 {
             }
         }
 
-        li.z-logon-extra-separator.-first:last-child {
+        > .z-logon-extra-separator.-first:last-child {
             display: none;
         }
     }
@@ -191,10 +187,8 @@ body.err403 {
         }
     }
 
-    /* Sign up specific*/
-
     .signup-external,
-    .logon-external {
+    .z-logon-external {
         display: flex;
         flex-flow: column nowrap;
         gap: 1em;
@@ -203,6 +197,8 @@ body.err403 {
             width: 100%;
         }
     }
+
+    /* Sign up specific*/
 
     .signup-name {
         display: flex;

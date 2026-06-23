@@ -215,7 +215,7 @@
             {_ You can log in using the following external service _}
         </p>
 
-        <div class="logon-external">
+        <div class="z-logon-external">
             {% for ext in q.options.user_external %}
                 {% if ext.template %}
                     <div>

@@ -53,25 +53,22 @@ body.err403 .z-logon-box {
 .z-logon-box .z-logon-form {
   margin: 15px auto 0 auto;
 }
-.z-logon-box .z-logon-extra {
+.z-logon-box .z-logon-external {
   width: 100%;
 }
-.z-logon-box .z-logon-extra li {
-  margin: 0 0 10px 0;
-}
-.z-logon-box .z-logon-extra .z-btn-social {
+.z-logon-box .z-logon-external .z-btn-social {
   display: block;
   text-align: center;
   text-decoration: none;
 }
-.z-logon-box .z-logon-extra li.z-logon-extra-separator:first-child {
+.z-logon-box .z-logon-external > .z-logon-extra-separator:first-child {
   display: none;
 }
-.z-logon-box .z-logon-extra li.z-logon-extra-separator:first-child.-first {
+.z-logon-box .z-logon-external > .z-logon-extra-separator:first-child.-first {
   margin-top: 15px;
   display: block;
 }
-.z-logon-box .z-logon-extra li.z-logon-extra-separator.-first:last-child {
+.z-logon-box .z-logon-external > .z-logon-extra-separator.-first:last-child {
   display: none;
 }
 .z-logon-box .z-logon-extra-separator {
@@ -138,13 +135,13 @@ body.err403 .z-logon-box {
   margin-bottom: 0;
 }
 .z-logon-box .signup-external,
-.z-logon-box .logon-external {
+.z-logon-box .z-logon-external {
   display: flex;
   flex-flow: column nowrap;
   gap: 1em;
 }
 .z-logon-box .signup-external .btn,
-.z-logon-box .logon-external .btn {
+.z-logon-box .z-logon-external .btn {
   width: 100%;
 }
 .z-logon-box .signup-name {
