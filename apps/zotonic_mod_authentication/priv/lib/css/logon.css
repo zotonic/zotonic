@@ -137,12 +137,14 @@ body.err403 .z-logon-box {
 .z-logon-box.z-logon-box-boxed .z-logon-support p:last-child {
   margin-bottom: 0;
 }
-.z-logon-box .signup-external {
+.z-logon-box .signup-external,
+.z-logon-box .logon-external {
   display: flex;
   flex-flow: column nowrap;
   gap: 1em;
 }
-.z-logon-box .signup-external .btn {
+.z-logon-box .signup-external .btn,
+.z-logon-box .logon-external .btn {
   width: 100%;
 }
 .z-logon-box .signup-name {

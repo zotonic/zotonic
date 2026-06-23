@@ -99,33 +99,11 @@
         IF unknown: pretend local and show password field
     #}
 
-    {% if q.options.is_user_external %}
-        <p class="help-block">
-            {_ You can log in using the following external service _}
-        </p>
-        {% for ext in q.options.user_external %}
-            {% if ext.template %}
-                <p class="clearfix">
-                    {% include ext.template ext=ext %}
-                </p>
-            {% elseif ext.url %}
-                <p class="clearfix">
-                    <a href="{{ ext.url|escape }}" class="btn btn-default" style="display: block">
-                        <span class="fal fa-globe"></span>
-                        {_ Log on with _} {{ ext.title|escape|default:_"external service" }}
-                    </a>
-                </p>
-            {% endif %}
-        {% endfor %}
-
-        {% if q.options.is_user_local %}
-            <p class="help-block">
-                {_ or you can enter the password that you have for _} {{ m.site.title }}.
-            </p>
-        {% endif %}
-    {% endif %}
-
     {% if q.options.is_user_local %}
+        <p class="help-block">
+            {_ You can enter the password that you have for _} {{ m.site.title }}.
+        </p>
+
         <div class="form-group {% if is_show_passcode or is_set_passcode %}x-hidden{% endif %}" id="form-password"
             {% if is_show_passcode or is_set_passcode %}style="padding:0; height:0; margin:0; overflow:hidden;" aria-hidden="true"{% endif %}>
             <label for="password" class="control-label">{_ Password _}</label>
@@ -207,6 +185,33 @@
         <input type="hidden" name="is_username_check" value="1">
         <div class="form-group">
             <button class="btn btn-primary" type="submit">{_ Next _}</button>
+        </div>
+    {% endif %}
+
+    {% if q.options.is_user_external %}
+        {% if q.options.is_user_local %}
+            <p class="z-logon-extra-separator"><span>{_ or _}</span></p>
+        {% endif %}
+
+        <p class="help-block">
+            {_ You can log in using the following external service _}
+        </p>
+
+        <div class="logon-external">
+            {% for ext in q.options.user_external %}
+                {% if ext.template %}
+                    <div>
+                        {% include ext.template ext=ext %}
+                    </div>
+                {% elseif ext.url %}
+                    <p class="clearfix">
+                        <a href="{{ ext.url|escape }}" class="btn btn-default" style="display: block">
+                            <span class="fal fa-globe"></span>
+                            {_ Log on with _} {{ ext.title|escape|default:_"external service" }}
+                        </a>
+                    </p>
+                {% endif %}
+            {% endfor %}
         </div>
     {% endif %}
 

@@ -193,7 +193,8 @@ body.err403 {
 
     /* Sign up specific*/
 
-    .signup-external {
+    .signup-external,
+    .logon-external {
         display: flex;
         flex-flow: column nowrap;
         gap: 1em;
