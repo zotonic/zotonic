@@ -459,7 +459,8 @@ maybe_add_identity_logon(Auth, Context) ->
                             service_props = Auth#auth_validated.service_props,
                             id = UserId,
                             query_args = #{}
-                        }, Context) of
+                        }, Context)
+                    of
                         {error, need_passcode} ->
                             % Local 2FA enabled - let the user enter their code
                             {error, {need_passcode, UserId}};
@@ -487,8 +488,8 @@ maybe_add_identity_logon(Auth, Context) ->
                             {ok, UserId}
                     end;
                 {[], [UserId]} when not Auth#auth_validated.is_signup_confirmed ->
-                    % As the external email address is not verified, the user has to log on
-                    % using their local username and password.
+                    % Local email is verified and external email address is not verified, the user
+                    % has to authenticate to continue.
                     {error, {logon_confirm, UserId, hd(UnVerifiedEmails)}};
                 {_, []}  ->
                     % Ambiguous - multiple matching accounts

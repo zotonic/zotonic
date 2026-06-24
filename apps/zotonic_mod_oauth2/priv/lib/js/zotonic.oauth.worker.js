@@ -198,14 +198,13 @@ model.present = function(data) {
                     break;
                 case "need_logon":
                     // Found matching account - need confirmation before connecting
-                    // Reload the opener window with the logon confirm form. The external
-                    // logon buttons will be hidden.
+                    // Reload the opener as if the username was entered in step 1.
+                    // Pass the authuser data with the encrypted SSO information.
                     // TODO: check if there is an opener, otherwise we need to redirect to
                     // the confirm form, keeping the url.
                     self.publish(
-                        "bridge/opener/model/auth-ui/post/form/confirm",
+                        "bridge/opener/model/auth-ui/post/confirm-authuser",
                         {
-                            // url: data.payload.result.url || undefined,
                             authuser: data.payload.result.authuser,
                             username: data.payload.result.username
                         });
