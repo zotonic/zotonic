@@ -336,6 +336,7 @@ upgrade(C, Database, Schema) ->
     ok = medium_update_v2(C, Database, Schema),
     ok = pivot_page_path(C, Database, Schema),
     ok = medium_update_function_check(C, Database, Schema),
+    ok = medium_digest_field(C, Database, Schema),
     ok.
 
 
@@ -1089,6 +1090,42 @@ medium_size_bigint(C, Database, Schema) ->
             ok;
         _ ->
             {ok,[],[]} = epgsql:squery(C, "alter table medium alter column size type bigint"),
+            ok
+    end.
+
+medium_digest_field(C, Database, Schema) ->
+    ok =
+        case has_column(C, "medium", "sha1", Database, Schema) of
+            true ->
+                ?LOG_NOTICE(#{
+                    text => <<"Upgrade: dropping obsolete and sofar unused sha1 column from medium">>,
+                    in => zotonic_core,
+                    database => Database,
+                    schema => Schema,
+                    table => medium
+                }),
+                {ok,[],[]} = epgsql:squery(C, "alter table medium drop column sha1"),
+                ok;
+            false ->
+                ok
+        end,
+    case has_column(C, "medium", "digest", Database, Schema) of
+        true ->
+            <<"bytea">> = get_column_type(C, "medium", "digest", Database, Schema),
+            % Dropping the column with existing data automatically is not wise
+            % and to bytea we cannot implicitly cast. We would need to know the
+            % exact source type and encoding (to specify USING for the field
+            % conversion), so better fail on conflict.
+            ok;
+        false ->
+            ?LOG_NOTICE(#{
+                text => <<"Upgrade: adding digest column to medium">>,
+                in => zotonic_core,
+                database => Database,
+                schema => Schema,
+                table => medium
+            }),
+            {ok,[],[]} = epgsql:squery(C, "alter table medium add column digest bytea"),
             ok
     end.
 
