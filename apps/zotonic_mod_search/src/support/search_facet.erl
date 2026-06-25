@@ -761,9 +761,7 @@ render_block(Block, Template, Vars, Context) ->
 
 %% @doc Convert a value into a type ok for the search query args. Array values are not
 %% used here, only single valued types.
-convert_single_type(Type, L, Context) when
-        is_list(L),
-        (Type =:= list orelse Type =:= ids) ->
+convert_single_type(Type, L, Context) when is_list(L), (Type =:= list orelse Type =:= ids) ->
     case convert_type(Type, L, Context) of
         [V|_] -> V;
         [] -> undefined
@@ -792,8 +790,7 @@ convert_type(Type, V, Context) ->
     end.
 
 % Blank values result in undefined
-convert_type_1(list, [], _Context) -> undefined;
-convert_type_1(ids, [], _Context) -> undefined;
+convert_type_1(_, [], _Context) -> undefined;
 convert_type_1(_, <<>>, _Context) -> undefined;
 convert_type_1(_, undefined, _Context) -> undefined;
 
@@ -805,13 +802,13 @@ convert_type_1(ListType, V, Context) when (ListType =:= list orelse ListType =:=
 
 %% list and ids types, filter undefined values
 convert_type_1(list, L, _Context) when is_list(L) ->
-    [B || V <- L, (B = z_string:trim(z_convert:to_binary(V))) =/= <<>>];
+    empty_to_undefined([B || V <- L, (B = z_string:trim(z_convert:to_binary(V))) =/= <<>>]);
 convert_type_1(ids, L, Context) when is_list(L) ->
     L1 = [convert_type_1(id, V, Context) || V <- L],
-    lists:uniq([V || V <- L1, V =/= undefined]);
+    empty_to_undefined(lists:uniq([V || V <- L1, V =/= undefined]));
 convert_type_1(Type, L, Context) when is_list(L) ->
     L1 = [convert_type_1(Type, V, Context) || V <- L],
-    [V || V <- L1, V =/= undefined];
+    empty_to_undefined([V || V <- L1, V =/= undefined]);
 
 %% Scalar types
 convert_type_1(boolean, V, _Context) -> z_convert:to_bool(V);
@@ -834,6 +831,8 @@ convert_type_1(text, V, _Context) ->
     V1 = z_string:trim(z_html:unescape(z_html:strip(z_convert:to_binary(V)))),
     z_string:truncatechars(V1, ?FULLTEXT_LENGTH).
 
+empty_to_undefined([]) -> undefined;
+empty_to_undefined(L)  -> L.
 
 %% @doc Ensure that the facet table is correct, if not then drop the existing
 %% table and request a pivot of all resources to fill the table.  Check if there
