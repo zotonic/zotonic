@@ -791,22 +791,30 @@ convert_type(Type, V, Context) ->
             undefined
     end.
 
-convert_type_1(list, [], _Context) ->
-    undefined;
-convert_type_1(list, L, _Context) when is_list(L) ->
-    L1 = lists:map(fun z_convert:to_binary/1, L),
-    L2 = lists:map(fun z_string:trim/1, L1),
-    lists:filter( fun(B) -> B =/= <<>> end, L2 );
-convert_type_1(ids, [], _Context) ->
-    undefined;
-convert_type_1(ids, L, Context) when is_list(L) ->
-    lists:uniq(lists:map(fun(V) -> convert_type_1(id, V, Context) end, L));
-convert_type_1(Type, L, Context) when is_list(L) ->
-    L1 = lists:map(fun(V) -> convert_type_1(Type, V, Context) end, L),
-    lists:filter(fun(V) -> V =/= <<>> andalso V =/= undefined end, L1);
-convert_type_1(boolean, V, _Context) -> z_convert:to_bool(V);
+% Blank values result in undefined
+convert_type_1(list, [], _Context) -> undefined;
+convert_type_1(ids, [], _Context) -> undefined;
 convert_type_1(_, <<>>, _Context) -> undefined;
 convert_type_1(_, undefined, _Context) -> undefined;
+
+%% Convert scalar list types to list
+convert_type_1(ListType, Id, Context) when (ListType =:= list orelse ListType =:= ids) andalso is_integer(Id) ->
+    convert_type_1(ListType, [Id], Context);
+convert_type_1(ListType, V, Context) when (ListType =:= list orelse ListType =:= ids), is_binary(V) ->
+    convert_type_1(ListType, binary:split(V, <<"||">>, [global]), Context);
+
+%% list and ids types, filter undefined values
+convert_type_1(list, L, _Context) when is_list(L) ->
+    [B || V <- L, (B = z_string:trim(z_convert:to_binary(V))) =/= <<>>];
+convert_type_1(ids, L, Context) when is_list(L) ->
+    L1 = [convert_type_1(id, V, Context) || V <- L],
+    lists:uniq([V || V <- L1, V =/= undefined]);
+convert_type_1(Type, L, Context) when is_list(L) ->
+    L1 = [convert_type_1(Type, V, Context) || V <- L],
+    [V || V <- L1, V =/= undefined];
+
+%% Scalar types
+convert_type_1(boolean, V, _Context) -> z_convert:to_bool(V);
 convert_type_1(id, V, Context) ->
     % Allow non-existing ids, so first try an integer conversion.
     try
@@ -820,17 +828,7 @@ convert_type_1(id, V, Context) ->
 convert_type_1(integer, V, _Context) -> z_convert:to_integer(V);
 convert_type_1(float, V, _Context) -> z_convert:to_float(V);
 convert_type_1(datetime, V, _Context) -> z_datetime:to_datetime(V);
-convert_type_1(list, V, Context) when is_binary(V) ->
-    L = binary:split(V, <<"||">>, [ global ]),
-    L1 = lists:map(fun z_string:trim/1, L),
-    convert_type_1(list, lists:filter( fun(B) -> B =/= <<>> end, L1 ), Context);
-convert_type_1(ids, V, Context) when is_binary(V) ->
-    L = binary:split(V, <<"||">>, [ global ]),
-    L1 = lists:map(fun z_string:trim/1, L),
-    convert_type_1(ids, lists:filter( fun(B) -> B =/= <<>> end, L1 ), Context);
-convert_type_1(fulltext, V, _Context) ->
-    z_string:truncatechars(z_convert:to_binary(V), ?FULLTEXT_LENGTH);
-convert_type_1(fts, V, _Context) ->
+convert_type_1(FtsType, V, _Context) when FtsType =:= fulltext; FtsType =:= fts ->
     z_string:truncatechars(z_convert:to_binary(V), ?FULLTEXT_LENGTH);
 convert_type_1(text, V, _Context) ->
     V1 = z_string:trim(z_html:unescape(z_html:strip(z_convert:to_binary(V)))),
