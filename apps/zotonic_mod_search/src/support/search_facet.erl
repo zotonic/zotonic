@@ -764,7 +764,7 @@ render_block(Block, Template, Vars, Context) ->
 convert_single_type(Type, L, Context) when is_list(L), (Type =:= list orelse Type =:= ids) ->
     case convert_type(Type, L, Context) of
         [V|_] -> V;
-        [] -> undefined
+        undefined -> undefined
     end;
 convert_single_type(ids, V, Context) ->
     convert_type(id, V, Context);
