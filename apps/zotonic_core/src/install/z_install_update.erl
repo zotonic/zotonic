@@ -267,16 +267,6 @@ get_column_type(C, Table, Column, Database, Schema) ->
               and column_name = $4", [Database, Schema, Table, Column]),
     ColumnType.
 
-get_column_type_and_length(C, Table, Column, Database, Schema) ->
-    {ok, _, [{ColumnType, CharacterMaximumLength}]} = epgsql:equery(C, "
-            select data_type, character_maximum_length
-            from information_schema.columns
-            where table_catalog = $1
-              and table_schema = $2
-              and table_name = $3
-              and column_name = $4", [Database, Schema, Table, Column]),
-    {ColumnType, CharacterMaximumLength}.
-
 is_column_nullable(C, Table, Column, Database, Schema) ->
     {ok, _, [{IsNullable}]} = epgsql:equery(C, "
             select is_nullable
@@ -1110,6 +1100,13 @@ medium_digest_field(C, Database, Schema) ->
     ok =
         case has_column(C, "medium", "sha1", Database, Schema) of
             true ->
+                ?LOG_NOTICE(#{
+                    text => <<"Upgrade: dropping obsolete and sofar unused sha1 column from medium">>,
+                    in => zotonic_core,
+                    database => Database,
+                    schema => Schema,
+                    table => medium
+                }),
                 {ok,[],[]} = epgsql:squery(C, "alter table medium drop column sha1"),
                 ok;
             false ->
@@ -1117,15 +1114,21 @@ medium_digest_field(C, Database, Schema) ->
         end,
     case has_column(C, "medium", "digest", Database, Schema) of
         true ->
-            case get_column_type_and_length(C, "medium", "digest", Database, Schema) of
-                {<<"character varying">>, 64} ->
-                   ok;
-                _ ->
-                    {ok,[],[]} = epgsql:squery(C, "alter table medium alter column digest type character varying(64)"),
-                    ok
-            end;
+            <<"bytea">> = get_column_type(C, "medium", "digest", Database, Schema),
+            % Dropping the column with existing data automatically is not wise
+            % and to bytea we cannot implicitly cast. We would need to know the
+            % exact source type and encoding (to specify USING for the field
+            % conversion), so better fail on conflict.
+            ok;
         false ->
-            {ok, [], []} = epgsql:squery(C, "alter table medium add column digest character varying(64)"),
+            ?LOG_NOTICE(#{
+                text => <<"Upgrade: adding digest column to medium">>,
+                in => zotonic_core,
+                database => Database,
+                schema => Schema,
+                table => medium
+            }),
+            {ok,[],[]} = epgsql:squery(C, "alter table medium add column digest bytea"),
             ok
     end.
 
