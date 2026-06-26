@@ -76,8 +76,7 @@ description: Use when creating, refactoring, or reviewing Zotonic template_compi
 - In HTML attributes, embed normal translation tags, for example `placeholder="{_ Search _}"`.
 - Use `z_language` for the current language. For language-specific resource URLs, use `{{ id.page_url with z_language = code }}`.
 - Translation strings are extracted to POT files under `priv/translations/template/`, for example `priv/translations/template/sitename.pot`.
-- Generate or refresh site/module translations with `bin/zotonic pot sitename`; this connects to the running Zotonic node.
-- For Zotonic core translations, meaning everything under `apps`, generate the POT file with `bin/zotonic pot zotonic`.
+- Do not regenerate or commit POT files during normal feature work. POT files are generated on the `master` branch with `bin/zotonic pot zotonic`; if a feature/test command creates POT diffs, restore or leave them out unless the user explicitly asks to update POT files.
 - Never update Zotonic core `.po` files directly; they are managed through Crowdin at `crowdin.com`.
 - Merge site/user-module PO files with `msgmerge --backup=none --update priv/translations/nl.po priv/translations/template/sitename.pot` and validate with `msgfmt --check --output-file=/dev/null priv/translations/nl.po`.
 - Use `_translations.tpl` for strings that must be extracted but are not otherwise visible in templates.

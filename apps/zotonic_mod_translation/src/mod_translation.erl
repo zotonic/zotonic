@@ -49,6 +49,18 @@ a checkbox labelled “Show the language in the URL”.
 Alternatively you can set the config key `mod_translation.rewrite_url` to `false`.
 
 
+Default language fallback
+-------------------------
+
+By default, the site default language is added as the first fallback after the selected languages. This makes
+untranslated content use the site default language before other fallback languages are tried. Set
+`i18n.default_language_is_fallback` to `false` to keep the fallback language order based only on the selected request
+language and the previous context language fallbacks.
+
+This can be changed in the admin by going to Structure, Translation. There is a checkbox labelled “Use the default
+language for untranslated texts”.
+
+
 
 Programmatically switching languages
 ------------------------------------
@@ -157,6 +169,15 @@ Delegate callbacks:
             default => "en",
             description => "The default language stemmer to use for this site. Defaults to 'en'. "
                            "This is used for search indexing and stemming."
+        },
+        #{
+            module => i18n,
+            key => default_language_is_fallback,
+            type => boolean,
+            default => true,
+            description => "Add the default language as a fallback language for requests in another language. "
+                           "This makes untranslated texts fall back to the site default language instead of "
+                           "the previous request language fallback order."
         },
         #{
             key => rewrite_url,

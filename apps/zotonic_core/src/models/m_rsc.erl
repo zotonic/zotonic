@@ -386,26 +386,29 @@ name_to_id(Name, Context) ->
         _ -> {error, {unknown_rsc, Name}}
     end.
 
+%% @doc Lookup the name of a resource, the resource must be in the given category
+%% or one of its subcategories.
 -spec name_to_id_cat(resource(), resource_name(), z:context()) ->
         {ok, resource_id()} | {error, {unknown_rsc_cat, resource(), resource_name()}}.
 name_to_id_cat(Name, Cat, Context) when is_integer(Name) ->
     F = fun() ->
-        {ok, CatId} = m_category:name_to_id(Cat, Context),
-        case z_db:q1("select id from rsc where id = $1 and category_id = $2", [Name, CatId], Context) of
+        CatIds = m_category:contains(Cat, Context),
+        case z_db:q1("select id from rsc where id = $1 and category_id = any($2::int[])", [Name, CatIds], Context) of
             undefined -> {error, {unknown_rsc_cat, Name, Cat}};
             Id -> {ok, Id}
         end
     end,
-    z_depcache:memo(F, {rsc_name, Name, Cat}, ?DAY, [Cat], Context);
+    z_depcache:memo(F, {rsc_name, Name, Cat}, ?DAY, [Cat, Name], Context);
 name_to_id_cat(Name, Cat, Context) ->
+    Name1 = z_string:to_name(z_convert:to_binary(Name)),
     F = fun() ->
-        {ok, CatId} = m_category:name_to_id(Cat, Context),
-        case z_db:q1("select id from rsc where Name = $1 and category_id = $2", [Name, CatId], Context) of
+        CatIds = m_category:contains(Cat, Context),
+        case z_db:q1("select id from rsc where name = $1 and category_id = any($2::int[])", [Name1, CatIds], Context) of
             undefined -> {error, {unknown_rsc_cat, Name, Cat}};
             Id -> {ok, Id}
         end
     end,
-    z_depcache:memo(F, {rsc_name, Name, Cat}, ?DAY, [Cat], Context).
+    z_depcache:memo(F, {rsc_name, Name, Cat}, ?DAY, [Cat, {rsc_name, Name}], Context).
 
 %% @doc Given a page path, return {ok, Id} with the id of the found
 %% resource. If a resource does not have the page path, but did so

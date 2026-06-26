@@ -71,6 +71,7 @@ Available Model API Paths
 | `get` | `/language_list/...` | Return language list with metadata. |
 | `get` | `/language_list_sorted/...` | Return language list sorted for UI/display usage. |
 | `get` | `/language_stemmer/...` | Return configured stemmer language used for search/indexing. |
+| `get` | `/default_language_is_fallback/...` | Return whether the default language is added as fallback language. |
 | `get` | `/name/+code/...` | Return local/native language name for code `+code`. |
 | `get` | `/english_name/+code/...` | Return English language name for code `+code`. |
 | `get` | `/localized_name/+code/...` | Return language name for `+code` localized to the current request language. |
@@ -168,6 +169,8 @@ m_get([ <<"language_stemmer">> | Rest ], _Msg, Context) ->
         St -> St
     end,
     {ok, {Stemmer, Rest}};
+m_get([ <<"default_language_is_fallback">> | Rest ], _Msg, Context) ->
+    {ok, {m_config:get_boolean(i18n, default_language_is_fallback, true, Context), Rest}};
 m_get([ <<"name">>, Code | Rest ], _Msg, _Context) ->
     {ok, {z_language:local_name(Code), Rest}};
 m_get([ <<"english_name">>, Code | Rest ], _Msg, _Context) ->
