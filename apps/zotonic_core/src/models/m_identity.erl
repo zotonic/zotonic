@@ -1046,13 +1046,13 @@ username_unique_x(U, X, Context) ->
 
 base_username(Id, Context) ->
     T1 = iolist_to_binary([
-        z_convert:to_binary(m_rsc:p_no_acl(Id, name_first, Context)),
+        z_convert:to_binary(m_rsc:p_no_acl(Id, <<"name_first">>, Context)),
         " ",
-        z_convert:to_binary(m_rsc:p_no_acl(Id, name_surname, Context))
+        z_convert:to_binary(m_rsc:p_no_acl(Id, <<"name_surname">>, Context))
     ]),
     case nospace(z_string:trim(T1)) of
         <<>> ->
-            case nospace(m_rsc:p_no_acl(Id, title, Context)) of
+            case nospace(m_rsc:p_no_acl(Id, <<"title">>, Context)) of
                 <<>> -> z_ids:identifier(6);
                 Title -> Title
             end;
@@ -1367,7 +1367,7 @@ get_rsc_by_type(Id, email, Context) ->
     get_rsc_by_type(Id, <<"email">>, Context);
 get_rsc_by_type(Id, <<"email">>, Context) ->
     Idns = get_rsc_by_type_1(Id, <<"email">>, Context),
-    case normalize_key(<<"email">>, m_rsc:p_no_acl(Id, email_raw, Context)) of
+    case normalize_key(<<"email">>, m_rsc:p_no_acl(Id, <<"email_raw">>, Context)) of
         undefined ->
             Idns;
         Email ->
@@ -1460,7 +1460,7 @@ is_email_verified(Context) ->
     is_email_verified(z_acl:user(Context), Context).
 
 is_email_verified(UserId, Context) ->
-    case m_rsc:p_no_acl(UserId, email_raw, Context) of
+    case m_rsc:p_no_acl(UserId, <<"email_raw">>, Context) of
         undefined -> false;
         <<>> -> false;
         Email ->
@@ -1971,7 +1971,7 @@ is_unique_identity_type(_) -> false.
 
 %% @doc If an email identity is deleted, then ensure that the 'email' property is reset accordingly.
 maybe_reset_email_property(Id, <<"email">>, Email, Context) when is_binary(Email) ->
-    case normalize_key(<<"email">>, m_rsc:p_no_acl(Id, email_raw, Context)) of
+    case normalize_key(<<"email">>, m_rsc:p_no_acl(Id, <<"email_raw">>, Context)) of
         Email ->
             NewEmail = z_db:q1("
                     select key

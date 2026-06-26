@@ -50,11 +50,13 @@ body.err403 {
 
     p {
         margin-bottom: $button_spacing;
+        width: 100%;
     }
 
     // full width submit button
     button[type="submit"],
-    input[type="submit"] {
+    input[type="submit"],
+    .btn-submit {
         width: 100%;
     }
 
@@ -70,10 +72,8 @@ body.err403 {
     }
 
     /* Extra login options */
-    .z-logon-extra {
-        li {
-            margin: 0 0 $button_spacing 0 ;
-        }
+    .z-logon-external {
+        width: 100%;
 
         .z-btn-social {
             display: block;
@@ -81,46 +81,55 @@ body.err403 {
             text-decoration: none;
         }
 
-        .z-logon-extra-separator {
-            $line_height: 16px;
+        > .z-logon-extra-separator:first-child {
+            display: none;
 
-            position: relative;
-            z-index: 1;
-            text-align: center;
-            line-height: $line_height;
-            margin: $vertical_element_spacing 0;
-
-            &:before {
-                // background behind "or"
-                $label_width: 40px;
-                $label_height: $line_height;
-
-                position: absolute;
-                left: 50%;
-                top: 50%;
-                height: $label_height;
-                top: calc($line_height / 2);
-                width: $label_width;
-                background-color: $background_color;
-                content: "";
-                margin: calc(-#{$label_height} / 2) 0 0 calc(-#{$label_height} / 2);
-                z-index: -1;
-                
-            }
-
-            &:after {
-                // horizontal line
-                position: absolute;
-                left: 0;
-                top: calc($line_height / 2);
-                content: " ";
-                width: 100%;
-                border-bottom: 1px solid $border_color;
-                z-index: -2;
+            &.-first {
+                margin-top: $vertical_element_spacing;
+                display: block;
             }
         }
-        .z-logon-extra-separator:first-child {
+
+        > .z-logon-extra-separator.-first:last-child {
             display: none;
+        }
+    }
+
+    .z-logon-extra-separator {
+        $line_height: 16px;
+
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        line-height: $line_height;
+        margin: $vertical_element_spacing 0;
+
+        &:before {
+            // background behind "or"
+            $label_width: 40px;
+            $label_height: $line_height;
+
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            height: $label_height;
+            top: calc($line_height / 2);
+            width: $label_width;
+            background-color: $background_color;
+            content: "";
+            margin: calc(-#{$label_height} / 2) 0 0 calc(-#{$label_height} / 2);
+            z-index: -1;
+        }
+
+        &:after {
+            // horizontal line
+            position: absolute;
+            left: 0;
+            top: calc($line_height / 2);
+            content: " ";
+            width: 100%;
+            border-bottom: 1px solid $border_color;
+            z-index: -2;
         }
     }
 
@@ -135,7 +144,6 @@ body.err403 {
     }
 
     .alert {
-
         :first-child {
             margin-top: 0;
         }
@@ -179,25 +187,43 @@ body.err403 {
         }
     }
 
+    .signup-external,
+    .z-logon-external {
+        display: flex;
+        flex-flow: column nowrap;
+        gap: 1em;
+
+        .btn {
+            width: 100%;
+        }
+    }
+
     /* Sign up specific*/
 
-    #signup_verify {
-        display: none;
+    .signup-name {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+
+        #signup_name_first {
+            flex-grow: 1;
+            min-width: 60%;
+        }
+
+        #signup_surname_prefix {
+            flex-shrink: 0;
+
+            input[name="surprefix"] {
+                width: 8ch;
+            }
+        }
+
+        #signup_name_surname {
+            flex-grow: 2;
+            min-width: 60%;
+        }
     }
 
-    input#surprefix {
-        width: 50px;
-    }
-
-    #signup_error_tos_agree,
-    #signup_error_duplicate_username,
-    #signup_error_duplicate_identity {
-        display: none;
-    }
-
-    &.error_tos_agree #signup_error_tos_agree,
-    &.error_duplicate_username #signup_error_duplicate_username,
-    &.error_duplicate_identity #signup_error_duplicate_identity,
     &.error_custom_1 #signup_error_custom_1,
     &.error_custom_2 #signup_error_custom_2 {
         display: block;
@@ -206,5 +232,18 @@ body.err403 {
     .z_validation_message {
         display: block;
         margin: 5px 0 0 0;
+    }
+
+    .z_validation {
+        &.z_invalid {
+            color: $error_color;
+        }
+    }
+
+    .form-control-prefilled {
+        font-weight: bold;
+        span {
+            font-weight: normal;
+        }
     }
 }

@@ -10,5 +10,5 @@
 {% endblock %}
 
 {% block content_area %}
-    {% include "_signup_config.tpl" %}
+	{% include "_signup_box.tpl" %}
 {% endblock %}

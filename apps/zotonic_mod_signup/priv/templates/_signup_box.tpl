@@ -1,74 +1,35 @@
-{#
-Params:
-page
-error_reason
-xs_props
-style_boxed -- creates a colored background box
-form_title_tpl
-form_extra_tpl
-form_form_tpl
-form_support_tpl
-form_outside_tpl
-#}
-<div id="signup_logon_box" class="z-logon-box{% if style_boxed %} z-logon-box-boxed{% endif %}" {% if style_width %}style="width: {{ style_width }};"{% endif %}>
-    {% if form_title_tpl %}
-        {% include form_title_tpl %}
-    {% endif %}
-
-    <div class="z-logon-form">
-        {% if form_extra_tpl %}
-            {% include form_extra_tpl xs_props=xs_props %}
-        {% endif %}
-
-        <div id="signup_error_duplicate_identity" class="alert alert-danger">
-            {_ Sorry, there is already an account coupled to your account at your service provider. Maybe your account here was suspended. _}
-        </div>
-
-        <div id="signup_error_duplicate_username" class="alert alert-danger">
-            {% if m.signup.config.username_equals_email %} 
-                {_ You already have an account, _} <a href="{% url logon p=q.p %}" id="back_to_logon">{_ log in _}</a>.
-            {% else %}
-                {_ Sorry, this username is already in use. Please try another one. _}
-            {% endif %}
-        </div>
-
-        {% if form_form_tpl %}
-            {% include form_form_tpl
-                page=page
-                signup_delegate=signup_delegate
-                form_fields_tpl=form_fields_tpl
-                show_signup_name_title=show_signup_name_title
-                show_signup_name_first=show_signup_name_first
-                show_signup_name_prefix=show_signup_name_prefix
-                show_signup_name_last=show_signup_name_last
-                show_signup_name_email=show_signup_name_email
-                show_signup_username_title=show_signup_username_title
-                show_signup_username=show_signup_username
-                show_signup_password=show_signup_password
-                show_signup_password2=show_signup_password2
-                show_signup_tos_title=show_signup_tos_title
-                show_signup_tos_info=show_signup_tos_info
-                show_signup_tos_checkbox=show_signup_tos_checkbox
-            %}
-        {% endif %}
-
-        {% if form_support_tpl %}
-            {% include form_support_tpl
-                update_target=update_target
-                update_template=update_template
-                logon_state=logon_state
-                logon_context=logon_context
-            %}
-        {% endif %}
-    </div>
-
-    {% if form_outside_tpl %}
-        {% include form_outside_tpl
-            update_target=update_target
-            update_template=update_template
-            logon_state=logon_state
-            logon_context=logon_context
+{% if m.acl.user as user_id %}
+    <p>
+        {% trans 'You are already logged in as <a href="{url}">{name}</a>.'
+                 url=user_id.page_url
+                 name="_name.tpl"|render:%{ id: user_id }
         %}
-    {% endif %}
-</div>
+        <a href="{% url logoff p=page %}">{_ Log off _}</a>
+    </p>
+{% else %}
+    <div id="signup_logon_box" class="signup z-logon-box{% if style_boxed %} z-logon-box-boxed{% endif %}" {% if style_width %}style="width: {{ style_width }};"{% endif %}>
 
+        {% block signup_title %}
+            <h1 class="z-logon-title">{_ Sign Up _}</h1>
+        {% endblock %}
+
+        {% block signup_logon %}
+            <div id="signup-logon">
+                {% trans 'If you already have an account, <a href="{url}" id="back_to_logon">log in now</a>.'
+                         url={logon p=page}|url
+                %}
+            </div>
+        {% endblock %}
+
+        <!-- Show signup with email -->
+        {% include "_signup_with_email.tpl" %}
+
+        <!-- Show all signup SSO buttons -->
+        <div id="signup-services">
+            <ul class="z-logon-extra">
+                <li class="text-muted z-logon-extra-separator -first"><span>{_ or _}</span></li>
+                {% all include "_logon_extra.tpl" p=page is_signup %}
+            </ul>
+        </div>
+    </div>
+{% endif %}

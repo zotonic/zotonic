@@ -200,18 +200,16 @@ mode(Context) ->
 %% 0 = optional, 1 = ask, 2 = required, 3 = forced
 -spec session_mode( z:context() ) -> 0 | 1 | 2 | 3.
 session_mode(Context) ->
-    case auth_method(Context) of
+    case auth_service(Context) of
         <<"username_pw">> -> user_mode(Context);
         <<"autologon_cookie">> -> user_mode(Context);
         _ -> 0
     end.
 
-auth_method(Context) ->
-    case z_context:get(auth_options, Context, #{}) of
-        Options when is_map(Options) ->
-            maps:get(auth_method, Options, undefined);
-        _ ->
-            undefined
+auth_service(Context) ->
+    case z_context:get(auth_options, Context) of
+        #{ auth_service := Service } -> Service;
+        _ -> undefined
     end.
 
 %% @doc Check the totp mode for the current user:

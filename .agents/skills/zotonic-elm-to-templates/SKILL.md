@@ -81,13 +81,13 @@ for page variants, and let `page.tpl` extend `base.tpl`.
 
 ## Translation Workflow
 
-- After converting text from Elm to templates, run:
+- Do not regenerate or commit POT files during normal conversion work. Zotonic POT files are generated on the `master` branch with:
 
 ```sh
-bin/zotonic pot sitename
+bin/zotonic pot zotonic
 ```
 
-- The command uses the running Zotonic server. If Zotonic is already running, do not start it separately.
+- The command uses the running Zotonic server. If a feature/test command creates POT diffs, restore or leave them out unless the user explicitly asks to update POT files.
 - Merge existing language files with `msgmerge --backup=none --update`.
 - Add missing languages with `msginit`, for example `de.po`.
 - Fill translations for newly introduced English msgids, especially labels, email text, admin help text, and form copy.

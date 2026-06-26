@@ -1190,9 +1190,10 @@ set_language([], Context) ->
 set_language(undefined, Context) ->
     set_language('x-default', Context);
 set_language('x-default', Context) ->
-    Context#context{language=['x-default'|lists:delete('x-default', languages(Context))]};
+    Context#context{ language = [ 'x-default' | lists:delete('x-default', languages(Context)) ]};
 set_language(Lang, Context) when is_atom(Lang) ->
-    Context#context{language=[Lang|lists:delete(Lang, languages(Context))]};
+    Langs2 = maybe_set_default_as_fallback_language([Lang], lists:delete(Lang, languages(Context)), Context),
+    Context#context{language = Langs2};
 set_language(Langs, Context) when is_list(Langs) ->
     Langs1 = lists:filtermap(
         fun(Lang) ->
@@ -1201,11 +1202,36 @@ set_language(Langs, Context) when is_list(Langs) ->
                 {error, _} -> false
             end
         end, Langs),
-    Context#context{language= Langs1 ++ (Context#context.language -- Langs1)};
+    Langs2 = maybe_set_default_as_fallback_language(Langs1, Context#context.language -- Langs1, Context),
+    Context#context{language = Langs2};
 set_language(Lang, Context) when is_binary(Lang) ->
     case z_language:to_language_atom(Lang) of
         {ok, Code} -> set_language(Code, Context);
         {error, _} -> Context
+    end.
+
+maybe_set_default_as_fallback_language(Heads, Tails, Context) ->
+    case m_config:get_boolean(i18n, default_language_is_fallback, true, Context) of
+        true ->
+            DefaultLang = z_language:default_language(Context),
+            case Heads of
+                [DefaultLang|_] -> Heads ++ Tails;
+                [_, DefaultLang|_] -> Heads ++ Tails;
+                _ ->
+                    case lists:member(DefaultLang, Heads) of
+                        true ->
+                            Heads ++ Tails;
+                        false ->
+                            Tails1 = case Tails of
+                                [DefaultLang|_] -> Tails;
+                                [] -> [DefaultLang];
+                                _ -> [DefaultLang|lists:delete(DefaultLang, Tails)]
+                            end,
+                            Heads ++ Tails1
+                    end
+            end;
+        false ->
+            Heads ++ Tails
     end.
 
 %% @doc Return the selected timezone of the Context; defaults to the site's timezone

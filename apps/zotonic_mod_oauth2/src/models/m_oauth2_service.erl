@@ -237,14 +237,15 @@ user_data({ok, Auth}, InitialQArgs, SId, ServiceMod, MSec, Context) ->
                 sid => SId
             }),
             {error, auth_user_undefined};
-        {ok, UserId} ->
+        {ok, UserId} when is_integer(UserId) ->
             case m_rsc:is_published_date(UserId, Context) of
                 true ->
                     % Generate one time token to login for this user
-                    LogonOptions = #{
-                        auth_method => z_convert:to_binary(Auth#auth_validated.service)
+                    AuthOptions = #{
+                        auth_service => z_convert:to_binary(Auth#auth_validated.service),
+                        auth_service_uid => Auth#auth_validated.service_uid
                     },
-                    case z_authentication_tokens:encode_onetime_token(UserId, SId, LogonOptions, Context) of
+                    case z_authentication_tokens:encode_onetime_token(UserId, SId, AuthOptions, Context) of
                         {ok, Token} ->
                             Redirect = url(<<"p">>, InitialQArgs),
                             ?LOG_INFO(#{

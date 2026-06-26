@@ -18,10 +18,6 @@ Params:
         <div class="logon-body">{{ m.rsc.page_logon.body|show_media }}</div>
     {% endif %}
 
-    {% if form_extra_tpl %}
-        {% include form_extra_tpl %}
-    {% endif %}
-
     {% if q.error and q.error != "unknown_code"
           and (q.error != 'pw' or q.options.is_password_entered or q.logon_view == 'change')
     %}
@@ -44,9 +40,12 @@ Params:
         {% include form_support_tpl
             update_target=update_target
             update_template=update_template
-            logon_state=logon_state
             style_boxed=style_boxed
         %}
+    {% endif %}
+
+    {% if form_extra_tpl %}
+        {% include form_extra_tpl %}
     {% endif %}
 </div>
 
@@ -54,7 +53,6 @@ Params:
     {% include form_outside_tpl
         update_target=update_target
         update_template=update_template
-        logon_state=logon_state
         style_boxed=style_boxed
     %}
 {% endif %}

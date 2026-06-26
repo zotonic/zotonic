@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2024 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Handle authentication of zotonic users.  Also shows the logon screen when authentication is required.
 %% @end
 
-%% Copyright 2009-2024 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@
     logon_switch/2,
     logon_switch/3,
     logon_redirect/3,
+    logon_redirect/4,
     confirm/2,
     logon_pw/3,
     logoff/1,
@@ -134,8 +135,18 @@ is_allowed_switch_user(ToUserId, Context) ->
 %% @doc Logon a user and redirect the user agent. The MQTT websocket MUST be connected.
 -spec logon_redirect( m_rsc:resource_id(), binary() | undefined, z:context() ) -> ok | {error, term()}.
 logon_redirect(UserId, Url, Context) ->
+    logon_redirect(UserId, Url, #{}, Context).
+
+%% @doc Logon a user and redirect the user agent. The MQTT websocket MUST be connected.
+-spec logon_redirect(UserId, OptUrl, AuthOptions, Context) -> ok | {error, term()} when
+    UserId :: m_rsc:resource_id(),
+    OptUrl :: binary() | undefined,
+    AuthOptions :: map(),
+    Context :: z:context().
+logon_redirect(UserId, Url, AuthOptions, Context) ->
     case z_notifier:first(#auth_client_logon_user{
             user_id = UserId,
+            auth_options = AuthOptions,
             url = Url
         }, Context)
     of

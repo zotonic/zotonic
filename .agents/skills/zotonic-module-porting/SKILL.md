@@ -122,13 +122,13 @@ z_controller_helper:decode_request_noz(AcceptedCT, Context)
 
 - Use English template source strings and `{_ ... _}` translation tags for user-facing text.
 - Do not leave old 0.x Dutch literals in templates; replace them with English msgids and update PO files.
-- Generate POT files with the Zotonic CLI:
+- Do not regenerate or commit POT files during normal feature work. Zotonic POT files are generated on the `master` branch with:
 
 ```sh
-bin/zotonic pot sitename
+bin/zotonic pot zotonic
 ```
 
-- The POT command connects to an already-running Zotonic node. Do not start a second server if one is running.
+- The POT command connects to an already-running Zotonic node. If a feature/test command creates POT diffs, restore or leave them out unless the user explicitly asks to update POT files.
 - Merge existing translations:
 
 ```sh
@@ -148,6 +148,6 @@ msginit --no-translator --locale=de --input=priv/translations/template/site.pot 
 
 - Run `make` for asset changes.
 - Run `./rebar3 compile` for Erlang/module changes.
-- Run `bin/zotonic pot sitename`, `msgmerge`/`msginit`, and `msgfmt --check` after translation-related template changes.
+- Do not run POT generation for normal translation-related template changes; POT files are generated on `master` with `bin/zotonic pot zotonic`. Run `msgmerge`/`msginit` and `msgfmt --check` only when intentionally updating PO files.
 - After compile, check `git diff -- rebar.lock`; remove unrelated generated lockfile dependency churn unless the task intentionally changed dependencies.
 - Ignore `erl_crash.dump`; it is already in `.gitignore` and should not be reported as actionable worktree noise.

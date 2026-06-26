@@ -340,10 +340,10 @@ check_username(Username, Acc, Context) ->
 %% @doc Send a request to the client to login a user. The zotonic.auth.worker.js will
 %% send a request to controller_authentication to exchange the one time token with
 %% a z,auth cookie for the given user. The client will redirect to the Url.
-observe_auth_client_logon_user(#auth_client_logon_user{ user_id = UserId, url = Url }, Context) ->
+observe_auth_client_logon_user(#auth_client_logon_user{ user_id = UserId, url = Url, auth_options = AuthOptions }, Context) ->
     case z_context:client_topic(Context) of
         {ok, ClientTopic} ->
-            case z_authentication_tokens:encode_onetime_token(UserId, Context) of
+            case z_authentication_tokens:encode_onetime_token(UserId, AuthOptions, Context) of
                 {ok, Token} ->
                     z_mqtt:publish(
                         ClientTopic ++ [ <<"model">>, <<"auth">>, <<"post">>, <<"onetime-token">> ],
@@ -418,7 +418,7 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
 %%      If identity is known: log on the associated user and set auth cookies.
 %%      If unknown, add identity to current user or signup a new user
 observe_auth_validated(#auth_validated{ is_connect = IsConnect } = Auth, Context) ->
-    Context1 = z_context:set(auth_method, Auth#auth_validated.service, Context),
+    Context1 = z_context:set(auth_service, Auth#auth_validated.service, Context),
     case IsConnect of
         true ->
             maybe_add_identity_connect(z_acl:user(Context1), Auth, Context1);
@@ -429,15 +429,30 @@ observe_auth_validated(#auth_validated{ is_connect = IsConnect } = Auth, Context
 maybe_add_identity_logon(Auth, Context) ->
     case auth_identity(Auth, Context) of
         undefined ->
-            VerifiedUserEmails = auth_match_email(Auth, true, Context),
-            UnverifiedUserEmails = auth_match_email(Auth, false, Context),
+            VerifiedUserEmails = auth_match_verified_email(Auth, true, Context),
+            UnverifiedUserEmails = auth_match_verified_email(Auth, false, Context),
             {VerifiedUserIds, VerifiedEmails} = lists:unzip(VerifiedUserEmails),
             {UnVerifiedUserIds, UnVerifiedEmails} = lists:unzip(UnverifiedUserEmails),
             case {lists:usort(VerifiedUserIds), lists:usort(UnVerifiedUserIds)} of
                 {[], []} ->
                     % The SSO supplied email addresses do not match any locally verified
-                    % email address.
-                    maybe_signup(Auth, Context);
+                    % email address. Check if a verified SSO email matches any local
+                    % unverified email addresses.
+                    case auth_verified_match_primary_email(Auth, Context) of
+                        [] ->
+                            maybe_signup(Auth, Context);
+                        [{1, _}|_] ->
+                            % Never add an external identity to the admin user during log on.
+                            {error, duplicate};
+                        [{UserId, _}] when Auth#auth_validated.is_signup_confirmed ->
+                            {ok, _} = insert_identities(UserId, Auth, Context),
+                            {ok, UserId};
+                        [{UserId, _}] when not Auth#auth_validated.is_signup_confirmed ->
+                            local_matched(UserId, Auth, Context);
+                        [{_, Email}|_] ->
+                            % Ambiguous - multiple matching accounts
+                            {error, {multiple_email, Email}}
+                    end;
                 {[1|_], _} ->
                     % Never add an external identity to the admin user during log on.
                     {error, duplicate};
@@ -446,49 +461,16 @@ maybe_add_identity_logon(Auth, Context) ->
                 {[UserId], _} when Auth#auth_validated.is_signup_confirmed ->
                     % Local user where the user has confirmed their identity by
                     % logging in into their account.
-                    {ok, _} = insert_identity(UserId, Auth, Context),
+                    {ok, _} = insert_identities(UserId, Auth, Context),
                     {ok, UserId};
                 {[], [UserId]} when Auth#auth_validated.is_signup_confirmed ->
-                    {ok, _} = insert_identity(UserId, Auth, Context),
+                    {ok, _} = insert_identities(UserId, Auth, Context),
                     {ok, UserId};
                 {[UserId], _} when not Auth#auth_validated.is_signup_confirmed ->
-                    % Local user with matching verified email identity.
-                    case z_notifier:first(#auth_postcheck{
-                            service = Auth#auth_validated.service,
-                            service_uid = Auth#auth_validated.service_uid,
-                            service_props = Auth#auth_validated.service_props,
-                            id = UserId,
-                            query_args = #{}
-                        }, Context) of
-                        {error, need_passcode} ->
-                            % Local 2FA enabled - let the user enter their code
-                            {error, {need_passcode, UserId}};
-                        {error, set_passcode} ->
-                            % Local 2FA enabled - the user needs to set their passcode
-                            {error, {set_passcode, UserId}};
-                        {error, Reason} ->
-                            % An error occurred during the postcheck. Examples are SSO
-                            % modules that restrict certain (email) domains to log in using
-                            % their service only.
-                            % Typical reason: user_external
-                            ?LOG_WARNING(#{
-                                text => <<"Error during auth_postcheck for user with verified email identity">>,
-                                in => zotonic_mod_authentication,
-                                result => error,
-                                reason => Reason,
-                                user_id => UserId,
-                                service => Auth#auth_validated.service
-                            }),
-                            {error, Reason};
-                        OK when OK =:= ok; OK =:= undefined ->
-                            % As both SSO and local email addresses are confirmed AND there
-                            % is no local 2FA enabled, add SSO identities and allow direct logon.
-                            {ok, _} = insert_identity(UserId, Auth, Context),
-                            {ok, UserId}
-                    end;
+                    local_matched(UserId, Auth, Context);
                 {[], [UserId]} when not Auth#auth_validated.is_signup_confirmed ->
-                    % As the external email address is not verified, the user has to log on
-                    % using their local username and password.
+                    % Local email is verified and external email address is not verified, the user
+                    % has to authenticate to continue.
                     {error, {logon_confirm, UserId, hd(UnVerifiedEmails)}};
                 {_, []}  ->
                     % Ambiguous - multiple matching accounts
@@ -497,14 +479,51 @@ maybe_add_identity_logon(Auth, Context) ->
                     {error, {multiple_email, hd(UnVerifiedEmails)}}
             end;
         Ps when is_list(Ps) ->
-            update_identity(Auth, Ps, Context)
+            update_auth_identity(Auth, Ps, Context)
+    end.
+
+% Local user with matching (externally) verified email identity
+local_matched(UserId, Auth, Context) ->
+    case z_notifier:first(#auth_postcheck{
+            service = Auth#auth_validated.service,
+            service_uid = Auth#auth_validated.service_uid,
+            service_props = Auth#auth_validated.service_props,
+            id = UserId,
+            query_args = #{}
+        }, Context)
+    of
+        {error, need_passcode} ->
+            % Local 2FA enabled - let the user enter their code
+            {error, {need_passcode, UserId}};
+        {error, set_passcode} ->
+            % Local 2FA enabled - the user needs to set their passcode
+            {error, {set_passcode, UserId}};
+        {error, Reason} ->
+            % An error occurred during the postcheck. Examples are SSO
+            % modules that restrict certain (email) domains to log in using
+            % their service only.
+            % Typical reason: user_external
+            ?LOG_WARNING(#{
+                text => <<"Error during auth_postcheck for user with verified email identity">>,
+                in => zotonic_mod_authentication,
+                result => error,
+                reason => Reason,
+                user_id => UserId,
+                service => Auth#auth_validated.service
+            }),
+            {error, Reason};
+        OK when OK =:= ok; OK =:= undefined ->
+            % As both SSO and local email addresses are confirmed AND there
+            % is no local 2FA enabled, add SSO identities and allow direct logon.
+            {ok, _} = insert_identities(UserId, Auth, Context),
+            {ok, UserId}
     end.
 
 maybe_add_identity_connect(CurrUserId, Auth, Context) ->
     case auth_identity(Auth, Context) of
         undefined ->
             % Unknown identity, add it to the current user
-            {ok, _} = insert_identity(CurrUserId, Auth, Context),
+            {ok, _} = insert_auth_identity(CurrUserId, Auth, Context),
             {ok, CurrUserId};
         Ps ->
             {rsc_id, IdnRscId} = proplists:lookup(rsc_id, Ps),
@@ -517,7 +536,7 @@ maybe_add_identity_connect(CurrUserId, Auth, Context) ->
     end.
 
 % @doc Update the props of the matched identity record.
-update_identity(Auth, IdnPs, Context) ->
+update_auth_identity(Auth, IdnPs, Context) ->
     {propb, IdnPropb} = proplists:lookup(propb, IdnPs),
     {rsc_id, UserId} = proplists:lookup(rsc_id, IdnPs),
     maybe_update_identity(
@@ -541,7 +560,7 @@ maybe_signup(Auth, Context) ->
     case auth_match_primary_email(Auth, Context) of
         [] ->
             try_signup(Auth, Context);
-        [Email|_] ->
+        [ {_RscId, Email} | _ ] ->
             % External service uses an email address that is connected as
             % a primary email address to an account here.
             % Either the external service is not verified or our local
@@ -549,39 +568,69 @@ maybe_signup(Auth, Context) ->
             {error, {duplicate_email, Email}}
     end.
 
--spec auth_match_email(#auth_validated{}, IsVerified, Context) -> list( {UserId, Email} ) when
+%% @doc Find all users who have a local verified email address that matches either a verified
+%% or a non-verified external email address.
+-spec auth_match_verified_email(#auth_validated{}, IsVerified, Context) -> list( {UserId, Email} ) when
     IsVerified :: boolean(),
     Context :: z:context(),
     UserId :: m_rsc:resource_id(),
     Email :: binary().
-auth_match_email(#auth_validated{ identities = Identities }, IsVerified, Context) ->
+auth_match_verified_email(#auth_validated{ identities = Identities }, IsVerified, Context) ->
     Emails = lists:filtermap(
         fun
-            (#{ type := <<"email">>, key := E, is_verified := IsIdnVerified }) when IsIdnVerified =:= IsVerified ->
-                {true, m_identity:normalize_key(email, E)};
+            (#{ type := <<"email">>, key := E } = ExtIdn) ->
+                ExtIsVerified = maps:get(is_verified, ExtIdn, false),
+                if
+                    IsVerified =:= ExtIsVerified ->
+                        {true, m_identity:normalize_key(email, E)};
+                    true ->
+                        false
+                end;
             (_) ->
                 false
         end,
         Identities),
     find_verified_email_idns(Emails, Context).
 
-%% Find all user ids with a verified email address matching the given email addresses.
+%% @doc Find all user ids with a verified local email address matching a verified external
+%% email address.
 find_verified_email_idns(Emails, Context) ->
     lists:usort(lists:flatten(lists:map(
         fun(Email) ->
             Idns = m_identity:lookup_users_by_verified_type_and_key(email, Email, Context),
-            RscIds = lists:map(
+            lists:map(
                 fun(Idn) ->
                     Id = proplists:get_value(rsc_id, Idn),
                     {Id, Email}
-                end, Idns),
-            lists:filter(fun({Id, _}) -> m_identity:is_user(Id, Context) end, RscIds)
+                end, Idns)
         end,
         Emails))).
 
+%% @doc For all verified external email addresses, find local users
+%% that have the email address as their primary email address. The local user does
+%% not need to have verified their email address.
+-spec auth_verified_match_primary_email(#auth_validated{}, Context) -> list( {Id, Email} ) when
+    Context :: z:context(),
+    Email :: binary(),
+    Id :: m_rsc:resource_id().
+auth_verified_match_primary_email(#auth_validated{ identities = Identities }, Context) ->
+    ExtEmails = lists:filtermap(
+        fun
+            (#{ type := <<"email">>, key := E, is_verified := true }) ->
+                {true, m_identity:normalize_key(email, E)};
+            (_) ->
+                false
+        end,
+        Identities),
+    find_by_primary_email(ExtEmails, Context).
 
-
--spec auth_match_primary_email(#auth_validated{}, z:context()) -> list( Email::binary() ).
+%% @doc For all verified _and_ unverified external email addresses, find local users
+%% that have the email address as their primary email address. The local user does
+%% not need to have verified their email address.
+-spec auth_match_primary_email(#auth_validated{}, Context) -> list( {Id, Email} ) when
+    Context :: z:context(),
+    Email :: binary(),
+    Id :: m_rsc:resource_id().
 auth_match_primary_email(#auth_validated{ identities = Identities }, Context) ->
     ExtEmails = lists:filtermap(
         fun
@@ -591,22 +640,24 @@ auth_match_primary_email(#auth_validated{ identities = Identities }, Context) ->
                 false
         end,
         Identities),
+    find_by_primary_email(ExtEmails, Context).
+
+find_by_primary_email(Emails, Context) ->
     lists:usort(lists:flatten(lists:map(
-        fun(ExtEmail) ->
-            Idns = m_identity:lookup_users_by_type_and_key(email, ExtEmail, Context),
+        fun(Email) ->
+            Idns = m_identity:lookup_users_by_type_and_key(email, Email, Context),
             lists:filtermap(
                 fun(Idn) ->
                     RscId = proplists:get_value(rsc_id, Idn),
-                    PrimaryEmail = m_identity:normalize_key(email, m_rsc:p_no_acl(RscId, email_raw, Context)),
+                    PrimaryEmail = m_identity:normalize_key(email, m_rsc:p_no_acl(RscId, <<"email_raw">>, Context)),
                     if
-                        ExtEmail =:= PrimaryEmail -> {true, ExtEmail};
+                        Email =:= PrimaryEmail -> {true, {RscId, Email}};
                         true -> false
                     end
                 end,
                 Idns)
         end,
-        ExtEmails))).
-
+        Emails))).
 
 try_signup(Auth, Context) ->
     case not Auth#auth_validated.is_signup_confirmed
@@ -645,9 +696,42 @@ try_signup(Auth, Context) ->
 %% identity is not already connected to any resource.
 maybe_add_auth_identity(Auth, UserId, Context) ->
     case auth_identity(Auth, Context) of
-        undefined -> insert_identity(UserId, Auth, z_acl:sudo(Context));
+        undefined -> insert_auth_identity(UserId, Auth, z_acl:sudo(Context));
         _ -> ok
     end.
+
+maybe_add_email_identities(Auth, UserId, Context) ->
+    lists:foreach(
+        fun
+            (#{ type := <<"email">>, key := Email } = ExtIdn) ->
+                EmailNorm = m_identity:normalize_key(email, Email),
+                ExtIsVerified = maps:get(is_verified, ExtIdn, false),
+                case m_identity:get_rsc_by_type_key(UserId, email, EmailNorm, Context) of
+                    [] ->
+                        Props = [
+                            {is_unique, false},
+                            {is_verified, ExtIsVerified}
+                        ],
+                        m_identity:insert(UserId, email, Email, Props, z_acl:sudo(Context));
+                    Idns when ExtIsVerified ->
+                        lists:foreach(
+                            fun(Idn) ->
+                                case proplists:get_bool(is_verified, Idn) of
+                                    true ->
+                                        ok;
+                                    false ->
+                                        IdnId = proplists:get_value(id, Idn),
+                                        m_identity:set_verified(IdnId, Context)
+                                end
+                            end,
+                            Idns);
+                    _Idn ->
+                        ok
+                end;
+            (_) ->
+                ok
+        end,
+        Auth#auth_validated.identities).
 
 %% @doc Ensure a username_pw identity when signing up, unless the identity service explicitly asks to not
 %% add the username_pw identity.
@@ -657,19 +741,31 @@ maybe_ensure_username_pw(#auth_validated{ ensure_username_pw = true, is_connect 
 maybe_ensure_username_pw(#auth_validated{}, _UserId, _Context) ->
     ok.
 
-email_identities(Identities) ->
+email_identities(AuthIdentities) ->
     lists:filtermap(
         fun
-            (#{ type := <<"email">>, key := Email, is_verified := IsVerified }) ->
+            (#{ type := <<"email">>, key := Email } = ExtIdn) ->
+                IsVerified = maps:get(is_verified, ExtIdn, false),
                 IsUnique = false,
                 Idn = {identity, {email, Email, IsUnique, IsVerified}},
                 {true, Idn};
             (_) ->
                 false
         end,
-        Identities).
+        AuthIdentities).
 
-insert_identity(UserId, Auth, Context) ->
+%% @doc Insert the external authentication identity and the email identities.
+insert_identities(UserId, Auth, Context) ->
+    case insert_auth_identity(UserId, Auth, Context) of
+        {ok, _} = OK ->
+            maybe_add_email_identities(Auth, UserId, Context),
+            OK;
+        {error, _} = Error ->
+            Error
+    end.
+
+%% @doc Insert the external authentication identity.
+insert_auth_identity(UserId, Auth, Context) ->
     Type = Auth#auth_validated.service,
     Key = Auth#auth_validated.service_uid,
     Props = [

@@ -3,13 +3,13 @@ SIGN IN
 
 logon.tpl // log on page
 |-- _logon_config.tpl // template and field configuration
-|   `-- _logon.tpl or _logon_modal.tpl // logon module
+|   `-- _logon.tpl // logon module
 |       `-- _logon_form.tpl
 `-- logoff.tpl // log off page, redirects to q.p or homepage
 
 
 
-Depending on the dispatch/logon_state value, _logon_form.tpl is filled with different sub templates:
+Depending on the dispatch value, _logon_form.tpl is filled with different sub templates:
 
 state::
 |== logon_reminder:
@@ -30,12 +30,6 @@ state::
 |       |-- _logon_change_form.tpl
 |       |   `-- _logon_change_form_fields.tpl
 |       `-- _logon_change_support.tpl
-|== signup (logon_state only)
-|   `-- _logon_form.tpl
-|       |-- _signup_title.tpl
-|       |-- _signup_form.tpl
-|       |   `-- _signup_form_fields.tpl
-|       |-- _signup_support.tpl // backlink to logon form
 `== else:
     `-- _logon_form.tpl
         |== awaiting verification:
@@ -54,24 +48,35 @@ state::
 SIGN UP
 =======
 
-signup.tpl // sign up page
-`-- _signup_config.tpl // template and field configuration
-    `-- _signup.tpl
-        `-- _signup_form.tpl
-            `-- _signup_stage.tpl // feedback message
+signup.tpl // public sign up page, extends base.tpl
+`-- _signup_box.tpl // reusable signup box for includes on other pages
+    |-- logged-in message with logoff link
+    |-- _signup_with_email.tpl // staged email signup flow
+    |   |-- _signup_with_email_step1.tpl // email address form, postback signup_email_step1
+    |   |-- _signup_with_email_step2.tpl // inserted by controller_signup
+    |   |   |-- email code form, postback signup_email_step2
+    |   |   |-- _email_send_status.tpl // status of email_signup_code.tpl
+    |   |   |-- logon link for existing local accounts
+    |   |   `-- external service links for managed domains
+    |   `-- _signup_with_email_step3.tpl // inserted after a valid email code
+    |       |-- name fields
+    |       |-- username/password fields
+    |       |-- terms checkbox
+    |       `-- signup errors
+    `-- _logon_extra.tpl // all-include from external auth modules
 
-_signup_form.tpl is populated by sub templates:
-|-- _signup_title.tpl // header "Sign up"
-|-- _signup_extra.tpl // space for other auth modules, for instance mod_facebook
-|-- _signup_form_form.tpl // html form
-|   `-- _signup_form_fields.tpl
-|       |-- _signup_form_fields_email.tpl
-|       |-- _signup_form_fields_username.tpl
-|       `-- _signup_form_fields_tos.tpl
-|-- _signup_support.tpl
-`-- _signup_outside.tpl
+controller_signup renders signup.tpl. If the URL contains xs, it fetches the
+stored #signup_url{} props and signup_props and passes them to the templates.
+The step templates carry those values forward in their wired postbacks.
+Step 1 is included by _signup_with_email.tpl on initial render and is re-rendered
+by controller_signup when the visitor changes a prefilled email address.
+Other pages can include `_signup_box.tpl` directly when they need the signup UI
+without the surrounding `signup.tpl` page inheritance.
 
-
+Email messages and account confirmation:
+|-- email_signup_code.tpl // one-time code for step 2
+|-- email_verify.tpl // account identity verification link
+`-- signup_confirm.tpl // rendered by controller_signup_confirm, extends base.tpl
 
 OTHER
 =====
@@ -105,4 +110,3 @@ Not used by any module or template:
 
 -- _logon_off.tpl
 -- logon_confirm_form.tpl
-

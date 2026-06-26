@@ -257,7 +257,11 @@ handle_auth_confirm(Auth, Url, Context) ->
             }),
             {error, nohandler};
         {ok, UserId} ->
-            case z_authentication_tokens:encode_onetime_token(UserId, Context) of
+            AuthOptions = #{
+                auth_service => z_convert:to_binary(Auth1#auth_validated.service),
+                auth_service_uid => Auth1#auth_validated.service_uid
+            },
+            case z_authentication_tokens:encode_onetime_token(UserId, AuthOptions, Context) of
                 {ok, Token} ->
                     {ok, #{
                         result => token,
@@ -380,7 +384,7 @@ lookup_email_identities(EmailOrUsername, Context) ->
 
 %% @doc Email a reset code to the user.
 send_reminder(Id, Context) ->
-    Email = m_rsc:p_no_acl(Id, email_raw, Context),
+    Email = m_rsc:p_no_acl(Id, <<"email_raw">>, Context),
     send_reminder(Id, Email, Context).
 
 send_reminder(_Id, undefined, _Context) ->
@@ -396,7 +400,7 @@ send_reminder(1, _Email, _Context) ->
 send_reminder(undefined, Email, Context) ->
     send_password_reset_email(Email, <<>>, undefined, [], Context);
 send_reminder(Id, Email, Context) ->
-    PrefEmail = case m_rsc:p_no_acl(Id, email_raw, Context) of
+    PrefEmail = case m_rsc:p_no_acl(Id, <<"email_raw">>, Context) of
         undefined -> Email;
         <<>> -> Email;
         E -> m_identity:normalize_key(email, E)

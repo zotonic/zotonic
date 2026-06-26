@@ -69,7 +69,16 @@ m_get([ <<"is_valid">>, Email | Rest ], _Msg, Context) ->
 m_get([ Email | Rest ], _Msg, Context) ->
     case is_allowed(Email, Context) of
         true ->
-            {ok, {get(Email, Context), Rest}};
+            case get(Email, Context) of
+                undefined ->
+                    {error, enoent};
+                Status ->
+                    Status1 = [
+                        {log, log_email(Email, Context)}
+                        | Status
+                    ],
+                    {ok, {Status1, Rest}}
+            end;
         false ->
             {error, eacces}
     end;
@@ -88,8 +97,8 @@ is_user_email(Email, Context) ->
     case z_acl:user(Context) of
         undefined -> false;
         UserId ->
-            m_rsc:p_no_acl(UserId, email, Context) =:= Email
-            orelse m_rsc:p_no_acl(UserId, email_raw, Context) =:= Email
+            m_rsc:p_no_acl(UserId, <<"email">>, Context) =:= Email
+            orelse m_rsc:p_no_acl(UserId, <<"email_raw">>, Context) =:= Email
             orelse is_visible_email(Email, Context)
     end.
 
@@ -244,15 +253,49 @@ is_valid_nocache(Email, Context) ->
     end.
 
 
-%% @doc Fetch the stats from an email address
+%% @doc Fetch the stats from an email address. Assume the current user has the rights to view
+%% the email status for this email address.
 -spec get(Email, Context) -> EmailStatus | undefined when
     Email :: binary(),
     Context :: z:context(),
     EmailStatus :: proplists:proplist().
 get(Email0, Context) ->
+    Email = normalize(Email0),
     z_db:assoc_row("select * from email_status where email = $1",
-                   [normalize(Email0)],
+                   [Email],
                    Context).
+
+%% @doc Fetch the latest log entries for the email address. Assume the current user has rights
+%% to see the log for this email address.
+-spec log_email(Email, Context) -> list() when
+    Email :: binary(),
+    Context :: z:context().
+log_email(<<>>, _Context) ->
+    [];
+log_email(Email0, Context) ->
+    IsUseEmailStatus = z_acl:is_allowed(use, mod_email_status, Context),
+    Email = normalize(Email0),
+    #search_result{ result = List } = z_search:search(<<"log_email">>, #{ <<"to">> => Email }, 1, 20, Context),
+    lists:map(
+        fun(Log) ->
+            L = #{
+                <<"severity">> => proplists:get_value(severity, Log),
+                <<"mailer_status">> => proplists:get_value(mailer_status, Log),
+                <<"envelop_to">> => proplists:get_value(envelop_to, Log),
+                <<"envelop_from">> => proplists:get_value(envelop_from, Log),
+                <<"created">> => proplists:get_value(created, Log)
+            },
+            if
+                IsUseEmailStatus ->
+                    L#{
+                        <<"mailer_message">> => proplists:get_value(mailer_message, Log),
+                        <<"message_template">> => proplists:get_value(message_template, Log)
+                    };
+                true ->
+                    L
+            end
+        end,
+        List).
 
 
 %% @doc Increment the email receive counter. This doesn't say anything about the validity

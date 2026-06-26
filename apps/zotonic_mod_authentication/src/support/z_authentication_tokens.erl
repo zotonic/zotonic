@@ -308,7 +308,7 @@ req_autologon_cookie(Context) ->
                         {ok, Context1} ->
                             ReplayToken = z_replay_token:new_token(),
                             Options = #{
-                                auth_method => <<"autologon_cookie">>
+                                auth_service => <<"autologon_cookie">>
                             },
                             Context2 = set_auth_cookie(UserId, Options, ReplayToken, Context1),
                             z_context:set(auth_is_autologon, true, Context2);
@@ -381,9 +381,18 @@ encode_onetime_token(UserId, Context) ->
             Error
     end.
 
--spec encode_onetime_token( m_rsc:resource_id(), binary() | undefined, z:context() ) -> {ok, binary()} | {error, no_session}.
-encode_onetime_token(UserId, SId, Context) ->
-    encode_onetime_token(UserId, SId, #{}, Context).
+-spec encode_onetime_token( m_rsc:resource_id(), binary() | undefined | map(), z:context() ) -> {ok, binary()} | {error, no_session}.
+encode_onetime_token(UserId, AuthOptions, Context) when is_map(AuthOptions) ->
+    case z_context:session_id(Context) of
+        {ok, SId} ->
+            encode_onetime_token(UserId, SId, AuthOptions, Context);
+        {error, _} = Error ->
+            Error
+    end;
+encode_onetime_token(UserId, SId, Context) when is_binary(SId) ->
+    encode_onetime_token(UserId, SId, #{}, Context);
+encode_onetime_token(_UserId, undefined, _Context) ->
+    {error, no_session}.
 
 -spec encode_onetime_token(UserId, SId, AuthOptions, Context) -> {ok, OnetimeToken} | {error, no_session} when
     UserId :: m_rsc:resource_id(),

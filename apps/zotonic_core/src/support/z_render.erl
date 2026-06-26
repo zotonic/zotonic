@@ -874,9 +874,11 @@ css_selector_1(window) -> window;
 css_selector_1("window") -> window;
 css_selector_1(<<"window">>) -> window;
 css_selector_1(<<"#", _/binary>> = Sel) -> Sel;
+css_selector_1(<<".", _/binary>> = Sel) -> Sel;
 css_selector_1(<<" ", _/binary>> = Sel) -> Sel;
 css_selector_1(Sel) when is_list(Sel) -> css_selector_1(iolist_to_binary(Sel));
-css_selector_1(Sel) -> <<"#", Sel/binary>>.
+css_selector_1(Sel) when is_binary(Sel) -> <<"#", Sel/binary>>;
+css_selector_1(Sel) -> css_selector_1(z_convert:to_binary(Sel)).
 
 
 %% @doc Quote a css selector (assume no escaping needed...)
@@ -889,7 +891,7 @@ quote_css_selector([]) -> [];
 quote_css_selector([$'|_] = S) -> S;
 quote_css_selector([$"|_] = S) -> S;
 quote_css_selector([$$|_] = S) -> S;
-quote_css_selector(S) -> [$", S, $"].
+quote_css_selector(S) -> [$", z_convert:to_binary(S), $"].
 
 
 %% @doc Render a css selector, allow direct expressions like
