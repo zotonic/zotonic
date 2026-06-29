@@ -26,7 +26,7 @@
 
         <!-- Show all signup SSO buttons -->
         <div id="signup-services">
-            <ul class="z-logon-extra">
+            <ul class="z-logon-external">
                 <li class="text-muted z-logon-extra-separator -first"><span>{_ or _}</span></li>
                 {% all include "_logon_extra.tpl" p=page is_signup %}
             </ul>

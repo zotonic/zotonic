@@ -7,6 +7,6 @@ Add other login options
         {% all include "_logon_extra.tpl" %}
     </div>
 {% else %}
-    <div class="z-logon-extra" style="display: none">
+    <div class="z-logon-external" style="display: none">
     </div>
 {% endif %}

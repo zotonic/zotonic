@@ -104,21 +104,13 @@ body.err403 {
         line-height: $line_height;
         margin: $vertical_element_spacing 0;
 
-        &:before {
-            // background behind "or"
-            $label_width: 40px;
-            $label_height: $line_height;
-
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            height: $label_height;
-            top: calc($line_height / 2);
-            width: $label_width;
+        > span {
+            display: inline-block;
+            text-align: center;
+            width: fit-content;
+            padding-left: 2ch;
+            padding-right: 2ch;
             background-color: $background_color;
-            content: "";
-            margin: calc(-#{$label_height} / 2) 0 0 calc(-#{$label_height} / 2);
-            z-index: -1;
         }
 
         &:after {

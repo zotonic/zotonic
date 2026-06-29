@@ -78,17 +78,13 @@ body.err403 .z-logon-box {
   line-height: 16px;
   margin: 15px 0;
 }
-.z-logon-box .z-logon-extra-separator:before {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  height: 16px;
-  top: 8px;
-  width: 40px;
+.z-logon-box .z-logon-extra-separator > span {
+  display: inline-block;
+  text-align: center;
+  width: fit-content;
+  padding-left: 2ch;
+  padding-right: 2ch;
   background-color: #fff;
-  content: "";
-  margin: calc(-16px / 2) 0 0 calc(-16px / 2);
-  z-index: -1;
 }
 .z-logon-box .z-logon-extra-separator:after {
   position: absolute;
