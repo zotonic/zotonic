@@ -24,6 +24,10 @@ Model for email log lookups used by logging/admin views.
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
+    m_get/3,
+
+    email_status/2,
+
     search/2,
     periodic_cleanup/1,
     install/1
@@ -31,7 +35,45 @@ Model for email log lookups used by logging/admin views.
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
+m_get([<<"email_status">>, MessageId | Rest ], _MqttMsg, Context) ->
+    case email_status(MessageId, Context) of
+        {ok, Status} ->
+            {ok, {Status, Rest}};
+        {error, enoent} ->
+            {error, enoent}
+    end;
+m_get(_Path, _MqttMsg, _Context) ->
+    {error, unknown_path}.
 
+%% @doc Get the latest mailer_status for a given message id.
+-spec email_status(MessageId, Context) -> {ok, map()} | {error, enoent} when
+    MessageId :: binary(),
+    Context :: z:context().
+email_status(MessageId, Context) ->
+    case z_db:q_row("
+            select severity, mailer_status
+            from log_email
+            where message_nr = $1
+            order by id desc
+            limit 1
+        ", [MessageId], Context)
+    of
+        {Severity, MailerStatus} ->
+            SeverityText = case Severity of
+                0 -> <<"fatal">>;
+                1 -> <<"error">>;
+                2 -> <<"warning">>;
+                3 -> <<"info">>;
+                4 -> <<"debug">>
+            end,
+            {ok, #{
+                <<"mailer_status">> => MailerStatus,
+                <<"severity">> => Severity,
+                <<"severity_text">> => SeverityText
+            }};
+        undefined ->
+            {error, enoent}
+    end.
 
 search(Query, Context) ->
     Terms = maps:get(<<"q">>, Query, []),

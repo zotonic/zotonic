@@ -2732,8 +2732,9 @@ Return:
 
 `#auth_client_logon_user{}` properties:
 
-*   user\\_id: `m_rsc:resource_id()`
-*   url: `union`
+*   user_id: `m_rsc:resource_id()`
+*   auth_options: `map`
+*   url: `binary | undefined`
 ").
 -callback observe_auth_client_logon_user(#auth_client_logon_user{}, z:context()) -> Result when
     Result :: ok

@@ -1,5 +1,5 @@
 {% if m.facebook.useauth %}
-<li id="logon_facebook">
+<div id="logon_facebook">
 	{% include "_facebook_login_link.tpl" %}
-</li>
+</div>
 {% endif %}

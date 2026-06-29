@@ -39,9 +39,11 @@ body.err403 .z-logon-box {
 }
 .z-logon-box p {
   margin-bottom: 10px;
+  width: 100%;
 }
 .z-logon-box button[type=submit],
-.z-logon-box input[type=submit] {
+.z-logon-box input[type=submit],
+.z-logon-box .btn-submit {
   width: 100%;
 }
 .z-logon-box .z-logon-title:first-of-type,
@@ -51,34 +53,45 @@ body.err403 .z-logon-box {
 .z-logon-box .z-logon-form {
   margin: 15px auto 0 auto;
 }
-.z-logon-box .z-logon-extra li {
-  margin: 0 0 10px 0;
+.z-logon-box .z-logon-extra,
+.z-logon-box .z-logon-external {
+  width: 100%;
 }
-.z-logon-box .z-logon-extra .z-btn-social {
+.z-logon-box .z-logon-extra .z-btn-social,
+.z-logon-box .z-logon-external .z-btn-social {
   display: block;
   text-align: center;
   text-decoration: none;
 }
-.z-logon-box .z-logon-extra .z-logon-extra-separator {
+.z-logon-box .z-logon-extra > .z-logon-extra-separator:first-child,
+.z-logon-box .z-logon-external > .z-logon-extra-separator:first-child {
+  display: none;
+}
+.z-logon-box .z-logon-extra > .z-logon-extra-separator:first-child.-first,
+.z-logon-box .z-logon-external > .z-logon-extra-separator:first-child.-first {
+  margin-top: 15px;
+  display: block;
+}
+.z-logon-box .z-logon-extra > .z-logon-extra-separator.-first:last-child,
+.z-logon-box .z-logon-external > .z-logon-extra-separator.-first:last-child {
+  display: none;
+}
+.z-logon-box .z-logon-extra-separator {
   position: relative;
   z-index: 1;
   text-align: center;
   line-height: 16px;
   margin: 15px 0;
 }
-.z-logon-box .z-logon-extra .z-logon-extra-separator:before {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  height: 16px;
-  top: 8px;
-  width: 40px;
+.z-logon-box .z-logon-extra-separator > span {
+  display: inline-block;
+  text-align: center;
+  width: fit-content;
+  padding-left: 2ch;
+  padding-right: 2ch;
   background-color: #fff;
-  content: "";
-  margin: calc(-16px / 2) 0 0 calc(-16px / 2);
-  z-index: -1;
 }
-.z-logon-box .z-logon-extra .z-logon-extra-separator:after {
+.z-logon-box .z-logon-extra-separator:after {
   position: absolute;
   left: 0;
   top: 8px;
@@ -86,9 +99,6 @@ body.err403 .z-logon-box {
   width: 100%;
   border-bottom: 1px solid #ddd;
   z-index: -2;
-}
-.z-logon-box .z-logon-extra .z-logon-extra-separator:first-child {
-  display: none;
 }
 .z-logon-box .z-logon-support {
   margin: 15px 0 0 0;
@@ -108,11 +118,13 @@ body.err403 .z-logon-box {
   padding: 15px 20px;
   background-color: #f2f2f2;
 }
-.z-logon-box.z-logon-box-boxed .z-logon-extra .z-logon-extra-separator {
+.z-logon-box.z-logon-box-boxed .z-logon-extra .z-logon-extra-separator,
+.z-logon-box.z-logon-box-boxed .z-logon-external .z-logon-extra-separator {
   margin-left: -20px;
   margin-right: -20px;
 }
-.z-logon-box.z-logon-box-boxed .z-logon-extra .z-logon-extra-separator:before {
+.z-logon-box.z-logon-box-boxed .z-logon-extra .z-logon-extra-separator:before,
+.z-logon-box.z-logon-box-boxed .z-logon-external .z-logon-extra-separator:before {
   background-color: #f2f2f2;
 }
 .z-logon-box.z-logon-box-boxed .z-logon-support {
@@ -125,21 +137,50 @@ body.err403 .z-logon-box {
 .z-logon-box.z-logon-box-boxed .z-logon-support p:last-child {
   margin-bottom: 0;
 }
-.z-logon-box #signup_verify {
-  display: none;
+.z-logon-box .signup-external,
+.z-logon-box .z-logon-external,
+.z-logon-box .z-logon-extra {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 1em;
 }
-.z-logon-box input#surprefix {
-  width: 50px;
+.z-logon-box .signup-external .btn,
+.z-logon-box .z-logon-external .btn,
+.z-logon-box .z-logon-extra .btn {
+  width: 100%;
 }
-.z-logon-box #signup_error_tos_agree,
-.z-logon-box #signup_error_duplicate_username,
-.z-logon-box #signup_error_duplicate_identity {
-  display: none;
+.z-logon-box .signup-name {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
-.z-logon-box.error_tos_agree #signup_error_tos_agree, .z-logon-box.error_duplicate_username #signup_error_duplicate_username, .z-logon-box.error_duplicate_identity #signup_error_duplicate_identity, .z-logon-box.error_custom_1 #signup_error_custom_1, .z-logon-box.error_custom_2 #signup_error_custom_2 {
+.z-logon-box .signup-name #signup_name_first {
+  flex-grow: 1;
+  min-width: 60%;
+}
+.z-logon-box .signup-name #signup_surname_prefix {
+  flex-shrink: 0;
+}
+.z-logon-box .signup-name #signup_surname_prefix input[name=surprefix] {
+  width: 8ch;
+}
+.z-logon-box .signup-name #signup_name_surname {
+  flex-grow: 2;
+  min-width: 60%;
+}
+.z-logon-box.error_custom_1 #signup_error_custom_1, .z-logon-box.error_custom_2 #signup_error_custom_2 {
   display: block;
 }
 .z-logon-box .z_validation_message {
   display: block;
   margin: 5px 0 0 0;
+}
+.z-logon-box .z_validation.z_invalid {
+  color: #C21C3D;
+}
+.z-logon-box .form-control-prefilled {
+  font-weight: bold;
+}
+.z-logon-box .form-control-prefilled span {
+  font-weight: normal;
 }

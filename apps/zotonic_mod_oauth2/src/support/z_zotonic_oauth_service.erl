@@ -204,8 +204,18 @@ auth_validated(#{
                 service_uid = ServiceUidPrefixed1,
                 service_props = #{ <<"access_token">> => AccessToken },
                 props = User1,
+                identities = email_identities(User1),
                 is_connect = z_convert:to_bool(proplists:get_value(<<"is_connect">>, Args))
             }};
         {error, _} = Error ->
             Error
     end.
+
+email_identities(#{ <<"email">> := Email }) when is_binary(Email) ->
+    case m_identity:normalize_key(email, Email) of
+        <<>> -> [];
+        E -> [ #{ type => <<"email">>, key => E, is_verified => false } ]
+    end;
+email_identities(#{}) ->
+    [].
+

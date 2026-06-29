@@ -85,14 +85,14 @@ description: Use when working in Zotonic projects, especially Erlang modules, Zo
 ```
 
 - For include arguments or template variables that should be translated, use translated values such as `title=_"Important pages"`.
-- After changing translatable template strings for a site, regenerate the site POT file:
+- Do not regenerate or commit POT files during normal feature work. Zotonic POT files are generated on the `master` branch with:
 
 ```sh
-bin/zotonic pot sitename
+bin/zotonic pot zotonic
 ```
 
-- `bin/zotonic pot sitename` connects to the running Zotonic node. If the server is already running, do not start another one; use the CLI command against the running instance.
-- Site POT files live under `priv/translations/template`, for example `priv/translations/template/nom.pot`.
+- The POT command connects to the running Zotonic node. If a feature/test command creates POT diffs, restore or leave them out unless the user explicitly asks to update POT files.
+- POT files live under `priv/translations/template` for sites and under core/module translation directories for Zotonic modules.
 - Merge existing PO files with gettext:
 
 ```sh

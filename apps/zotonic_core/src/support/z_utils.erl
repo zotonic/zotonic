@@ -695,10 +695,10 @@ prop_delete(Prop, List) ->
 
 %% @doc Overlay property list List1 over List2, keys in List1 overrule
 %% keys in List2.
--spec props_merge(List1, List2) -> List3 when
+-spec props_merge(List1, List2) -> Result when
     List1 :: proplists:proplist(),
     List2 :: proplists:proplist(),
-    List3 :: proplists:property().
+    Result :: proplists:proplist().
 props_merge([], Ps) ->
     Ps;
 props_merge(Ps, []) ->

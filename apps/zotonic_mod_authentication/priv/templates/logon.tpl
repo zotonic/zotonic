@@ -51,9 +51,6 @@
             {% endif %}
         </ul>
     {% else %}
-        {% include
-            "_logon_config.tpl"
-            logon_modal=0
-        %}
+        {% include "_logon_config.tpl" %}
     {% endif %}
 {% endblock %}

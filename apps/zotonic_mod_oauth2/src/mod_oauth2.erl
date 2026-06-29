@@ -72,7 +72,6 @@ Delegate callbacks:
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_mod_admin/include/admin_menu.hrl").
 
-
 event(#submit{ message={oauth2_authorize, Args}}, Context) ->
     {client_id, ClientId} = proplists:lookup(client_id, Args),
     {redirect_uri, RedirectUri} = proplists:lookup(redirect_uri, Args),

@@ -31,7 +31,8 @@ Available Model API Paths
 | Method | Path pattern | Description |
 | --- | --- | --- |
 | `get` | `/confirm_redirect/...` | Return post-signup redirect URL: `#signup_confirm_redirect{id=UserId}` notifier result when provided, otherwise user `page_url`, and `home` URL when no user is logged in. |
-| `get` | `/config/username_equals_email/...` | Return `mod_signup.username_equals_email` boolean setting (default `false`) indicating whether signup usernames must equal email addresses. |
+| `get` | `/config/email_unique/...` | Return `mod_signup.email_unique` boolean setting (default `true`). If enabled, signup e-mail addresses must be unique among user accounts and must not match another resource's e-mail identity when that identity is marked `is_unique`. Non-account resources with non-unique e-mail identities do not block signup. |
+| `get` | `/config/username_equals_email/...` | Return `mod_signup.username_equals_email` boolean setting (default `true`) indicating whether signup usernames must equal email addresses. |
 
 `/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
@@ -50,8 +51,13 @@ m_get([ <<"confirm_redirect">> | Rest ], _Msg, Context) ->
     Url = confirm_redirect(Context),
     {ok, {Url, Rest}};
 m_get([ <<"config">>, <<"username_equals_email">> | Rest ], _Msg, Context) ->
-    V = m_config:get_boolean(mod_signup, username_equals_email, false, Context),
-    {ok, {V, Rest}}.
+    V = m_config:get_boolean(mod_signup, username_equals_email, true, Context),
+    {ok, {V, Rest}};
+m_get([ <<"config">>, <<"email_unique">> | Rest ], _Msg, Context) ->
+    V = m_config:get_boolean(mod_signup, email_unique, true, Context),
+    {ok, {V, Rest}};
+m_get(_Path, _Msg, _Context) ->
+    {error, unknown_path}.
 
 -spec confirm_redirect( z:context() ) -> binary().
 confirm_redirect(Context) ->
@@ -60,7 +66,7 @@ confirm_redirect(Context) ->
             z_dispatcher:url_for(home, Context);
         UserId ->
             case z_notifier:first(#signup_confirm_redirect{id=UserId}, Context) of
-                undefined -> m_rsc:p(UserId, page_url, Context);
+                undefined -> m_rsc:p(UserId, <<"page_url">>, Context);
                 Loc -> Loc
             end
     end,

@@ -1,5 +1,5 @@
 /**
- * Copyright 2019-2021 Marc Worrell <marc@worrell.nl>
+ * Copyright 2019-2026 Marc Worrell <marc@worrell.nl>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,8 +74,8 @@ model.present = function(data) {
             function(msg) { actions.changeForm(msg.payload); });
 
         self.subscribe(
-            "model/auth-ui/post/form/confirm",
-            function(msg) { actions.confirmForm(msg.payload); });
+            "model/auth-ui/post/confirm-authuser",
+            function(msg) { actions.confirmAuthuser(msg.payload); });
 
         model.status = "waiting";
 
@@ -248,10 +248,19 @@ model.present = function(data) {
     }
 
     if (data.confirm) {
-        model.logon_view = "confirm";
+        // Request a confirmation of the authuser, display the second step
+        // of the logon form, after entry of the username/email address.
+        model.logon_view = "logon";
         model.username = data.username;
-        model.options = data.options || {};
         model.authuser = data.authuser;
+        self.publish("model/auth/post/form/logon", {
+            value: {
+                username: model.username,
+                is_username_check: true,
+                authuser: model.authuser
+            }
+        });
+        model.status = "waiting"
     }
 
     state.render(model) ;
@@ -289,15 +298,13 @@ var state =  { view: view };
 
 model.state = state ;
 
-// Derive the state representation as a function of the systen control state
+// Derive the state representation as a function of the system control state
 state.representation = function(model) {
     if (state.waiting(model)) {
         self.publish(
             "model/ui/insert/signup_logon_box",
             { inner: true, initialData: "<img src='/lib/images/spinner.gif' class='loading'>" });
-    }
-
-    if (state.running(model)) {
+    } else if (state.running(model)) {
         self.publish(
             "model/ui/render-template/signup_logon_box",
             {
@@ -443,7 +450,7 @@ actions.changeForm = function(data) {
     model.present(dataChange);
 };
 
-actions.confirmForm = function(data) {
+actions.confirmAuthuser = function(data) {
     let dataConfirm = {
         confirm: true,
         username: data.username,

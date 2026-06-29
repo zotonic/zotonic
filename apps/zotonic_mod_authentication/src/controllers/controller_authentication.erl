@@ -136,8 +136,8 @@ logon_1({ok, UserId}, Payload, AuthOptions, Context) when is_integer(UserId) ->
             Options = z_context:get(auth_options, Context, #{}),
             Options1 = maps:merge(Options, AuthOptions),
             Options2 = case Options1 of
-                #{ auth_method := _ } -> Options1;
-                _ -> Options1#{ auth_method => <<"username_pw">> }
+                #{ auth_service := _ } -> Options1;
+                _ -> Options1#{ auth_service => <<"username_pw">> }
             end,
             Context2 = z_authentication_tokens:set_auth_cookie(UserId, Options2, Context1),
             Context3 = maybe_setautologon(Payload, Context2),
@@ -340,8 +340,8 @@ switch_user(#{ <<"user_id">> := UserId } = Payload, Context) when is_integer(Use
             z:warning(
                 "Sudo as user ~p (~s) by user ~p (~s)",
                 [
-                    UserId, z_convert:to_binary( m_rsc:p_no_acl(UserId, email, Context) ),
-                    z_acl:user(Context), z_convert:to_binary( m_rsc:p_no_acl(z_acl:user(Context), email, Context) )
+                    UserId, z_convert:to_binary( m_rsc:p_no_acl(UserId, <<"email">>, Context) ),
+                    z_acl:user(Context), z_convert:to_binary( m_rsc:p_no_acl(z_acl:user(Context), <<"email">>, Context) )
                 ],
                 [
                     {module, ?MODULE}, {line, ?LINE}, {auth_user_id, UserId}
@@ -349,8 +349,8 @@ switch_user(#{ <<"user_id">> := UserId } = Payload, Context) when is_integer(Use
                 Context),
             Options2 = AuthOptions#{
                 sudo_user_id => SudoUserId,
-                sudo_auth_method => maps:get(auth_method, AuthOptions, undefined),
-                auth_method => <<"sudo">>
+                sudo_auth_service => maps:get(auth_service, AuthOptions, undefined),
+                auth_service => <<"sudo">>
             },
             Context2 = z_authentication_tokens:set_auth_cookie(UserId, Options2, undefined, Context1),
             return_status(Payload, Context2);
@@ -462,7 +462,7 @@ change_1(UserId, Username, Password, NewPassword, Passcode, Context) ->
                             delete_reminder_secret(UserId, Context),
                             Options = z_context:get(auth_options, Context, #{}),
                             Options1 = Options#{
-                                auth_method => <<"username_pw">>
+                                auth_service => <<"username_pw">>
                             },
                             Context1 = z_acl:logon(UserId, Context),
                             Context2 = z_authentication_tokens:set_auth_cookie(UserId, Options1, Context1),

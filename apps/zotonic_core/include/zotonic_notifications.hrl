@@ -798,6 +798,7 @@
 %% Return: ``ok | {error, term()}``
 -record(auth_client_logon_user, {
         user_id :: m_rsc:resource_id(),
+        auth_options = #{} :: map(),
         url = <<"#reload">> :: binary() | undefined
     }).
 

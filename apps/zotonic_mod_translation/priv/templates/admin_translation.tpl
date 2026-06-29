@@ -108,6 +108,24 @@
                         </span>
                     </label>
                 </div>
+
+                <div class="form-group">
+                    {% wire id=#fallback_default
+                        action={config_toggle module="i18n" key="default_language_is_fallback"}
+                    %}
+                    <label class="checkbox-inline">
+                        <input type="checkbox" id="{{ #fallback_default }}" value="1"
+                        {% if m.translation.default_language_is_fallback %}checked="checked"{% endif %}
+                        />
+                        <span>
+                            {_ Use the default language for untranslated texts _}
+                            ({{ m.translation.language_list_configured[m.translation.default_language].name }})
+                        </span>
+                    </label>
+                    <p class="help-block">
+                        {_ When a text has no translation in the selected language, try the site default language before the other fallback languages. _}
+                    </p>
+                </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
