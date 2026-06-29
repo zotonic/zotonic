@@ -72,6 +72,7 @@ body.err403 {
     }
 
     /* Extra login options */
+    .z-logon-extra,
     .z-logon-external {
         width: 100%;
 
@@ -155,7 +156,8 @@ body.err403 {
             background-color: $background_color;
         }
 
-        .z-logon-extra {
+        .z-logon-extra,
+        .z-logon-external {
             .z-logon-extra-separator {
                 margin-left: -$horizontal_spacing;
                 margin-right: -$horizontal_spacing;
@@ -180,7 +182,8 @@ body.err403 {
     }
 
     .signup-external,
-    .z-logon-external {
+    .z-logon-external,
+    .z-logon-extra {
         display: flex;
         flex-flow: column nowrap;
         gap: 1em;

@@ -53,21 +53,26 @@ body.err403 .z-logon-box {
 .z-logon-box .z-logon-form {
   margin: 15px auto 0 auto;
 }
+.z-logon-box .z-logon-extra,
 .z-logon-box .z-logon-external {
   width: 100%;
 }
+.z-logon-box .z-logon-extra .z-btn-social,
 .z-logon-box .z-logon-external .z-btn-social {
   display: block;
   text-align: center;
   text-decoration: none;
 }
+.z-logon-box .z-logon-extra > .z-logon-extra-separator:first-child,
 .z-logon-box .z-logon-external > .z-logon-extra-separator:first-child {
   display: none;
 }
+.z-logon-box .z-logon-extra > .z-logon-extra-separator:first-child.-first,
 .z-logon-box .z-logon-external > .z-logon-extra-separator:first-child.-first {
   margin-top: 15px;
   display: block;
 }
+.z-logon-box .z-logon-extra > .z-logon-extra-separator.-first:last-child,
 .z-logon-box .z-logon-external > .z-logon-extra-separator.-first:last-child {
   display: none;
 }
@@ -113,11 +118,13 @@ body.err403 .z-logon-box {
   padding: 15px 20px;
   background-color: #f2f2f2;
 }
-.z-logon-box.z-logon-box-boxed .z-logon-extra .z-logon-extra-separator {
+.z-logon-box.z-logon-box-boxed .z-logon-extra .z-logon-extra-separator,
+.z-logon-box.z-logon-box-boxed .z-logon-external .z-logon-extra-separator {
   margin-left: -20px;
   margin-right: -20px;
 }
-.z-logon-box.z-logon-box-boxed .z-logon-extra .z-logon-extra-separator:before {
+.z-logon-box.z-logon-box-boxed .z-logon-extra .z-logon-extra-separator:before,
+.z-logon-box.z-logon-box-boxed .z-logon-external .z-logon-extra-separator:before {
   background-color: #f2f2f2;
 }
 .z-logon-box.z-logon-box-boxed .z-logon-support {
@@ -131,13 +138,15 @@ body.err403 .z-logon-box {
   margin-bottom: 0;
 }
 .z-logon-box .signup-external,
-.z-logon-box .z-logon-external {
+.z-logon-box .z-logon-external,
+.z-logon-box .z-logon-extra {
   display: flex;
   flex-flow: column nowrap;
   gap: 1em;
 }
 .z-logon-box .signup-external .btn,
-.z-logon-box .z-logon-external .btn {
+.z-logon-box .z-logon-external .btn,
+.z-logon-box .z-logon-extra .btn {
   width: 100%;
 }
 .z-logon-box .signup-name {
