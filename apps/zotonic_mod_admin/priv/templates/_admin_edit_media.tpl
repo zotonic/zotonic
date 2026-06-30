@@ -28,6 +28,9 @@
             {% endif %}
             &ndash; {_ uploaded on _} {{ medium.created|date:"Y-m-d H:i:s" }}
         </span>
+        {% if medium.digest %}
+            <span class="text-muted">&ndash; {_ SHA-256 checksum _}: {{ medium.digest|escape }}</span>
+        {% endif %}
     </p>
 
     <hr>
