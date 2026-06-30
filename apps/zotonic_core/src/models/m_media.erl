@@ -967,12 +967,16 @@ replace_file_db(RscId, PreProc, Props, Opts, Context) ->
                 medium_delete(RscId, Ctx),
                 {ok, RscId}
         end,
-        FileAbs = z_media_archive:abspath(maps:get(<<"filename">>, Medium1), Context),
-        Digest = case z_crypto:hex_sha2_file(FileAbs) of
-            {ok, HexHash} -> HexHash;
-            {error, Reason} ->
-                ?zError("Could not calculate the hash digest of ~p, reason: ~p", [ FileAbs, Reason ], Context),
-                undefined
+        Digest = case maps:get(<<"filename">>, Medium1) of
+            undefined -> undefined;
+            MediumFilename ->
+                FileAbs = z_media_archive:abspath(MediumFilename, Context),
+                case z_crypto:hex_sha2_file(FileAbs) of
+                    {ok, HexHash} -> HexHash;
+                    {error, Reason} ->
+                        ?zError("Could not calculate the hash digest of ~p, reason: ~p", [ FileAbs, Reason ], Context),
+                        undefined
+                end
         end,
         Medium2 = Medium1#{
             <<"id">> => Id,

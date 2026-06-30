@@ -11,30 +11,6 @@
     </p>
     {% endif %}
 
-    <p>
-        {{ medium.mime }}
-        {% if medium.width and medium.height %}
-            <span class="text-muted">&ndash;</span> {{ medium.width }} x {{ medium.height }} {_ pixels _}
-        {% endif %}
-        {% if medium.duration %}
-            <span class="text-muted">&ndash;</span> {{ medium.duration|format_duration }}
-        {% endif %}
-        {% if medium.size %}
-            <span class="text-muted">&ndash;</span> {{ medium.size|filesizeformat }}
-        {% endif %}
-        <span class="text-muted">
-            {% if medium.filename %}
-                &ndash; {{ medium.filename }}
-            {% endif %}
-            &ndash; {_ uploaded on _} {{ medium.created|date:"Y-m-d H:i:s" }}
-        </span>
-        {% if medium.digest %}
-            <span class="text-muted">&ndash; {_ SHA-256 checksum _}: {{ medium.digest|escape }}</span>
-        {% endif %}
-    </p>
-
-    <hr>
-
     <div class="admin-edit-media" id="rsc-image" data-original-width="{{ medium.width }}">
         {% if medium.width < 597 and medium.height < 597 %}
             {% media medium mediaclass="admin-media-cropcenter" %}
@@ -114,11 +90,6 @@
         {% endif %}
     </div>
 {% else %}
-    {% if medium.created %}
-        <p>
-            {_ uploaded on _} {{ medium.created|date:"Y-m-d H:i:s" }}
-        </p>
-    {% endif %}
     <div class="form-group clearfix">
         <div class="pull-right">
             {% button text=medium|if:_"Replace":_"Add media content"
@@ -132,5 +103,21 @@
     	        disabled=not id.is_editable
     	    %}
         </div>
+    </div>
+{% endif %}
+
+{% if medium.mime or medium.created %}
+    <div class="form-group">
+        <details class="admin-edit-media-metadata">
+            <summary>{_ Media details _}</summary>
+            <div class="table-responsive">
+                <table class="table table-condensed table-striped">
+                    <tbody>
+                        {% include "_admin_edit_media_metadata.tpl" id=id medium=medium %}
+                        {% all include "_admin_edit_media_metadata_extra.tpl" id=id medium=medium %}
+                    </tbody>
+                </table>
+            </div>
+        </details>
     </div>
 {% endif %}
