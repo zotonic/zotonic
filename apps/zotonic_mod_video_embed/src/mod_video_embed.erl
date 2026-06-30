@@ -322,11 +322,14 @@ media_import_retry(_Service, _Descr, _MD, _MI, _Context) ->
     undefined.
 
 media_import_props_video(Service, Descr, MD, MI, H, W, VideoId, PreviewUrl, VideoMetadata, Context) ->
+    JsonLDVideo = json_ld_video(MD),
     VideoIdBin = z_convert:to_binary(VideoId),
-    PreviewUrl1 = case PreviewUrl of
-        undefined -> z_url_metadata:p(image, MD);
-        PU -> PU
-    end,
+    PreviewUrl1 = first_defined([
+        PreviewUrl,
+        z_url_metadata:p(image, MD),
+        json_ld_value(<<"thumbnailUrl">>, JsonLDVideo),
+        json_ld_thumbnail_url(JsonLDVideo)
+    ]),
     VideoEmbedMetadata = video_embed_metadata(MD, PreviewUrl1, VideoMetadata),
     #media_import_props{
         prio = 1,
@@ -334,8 +337,14 @@ media_import_props_video(Service, Descr, MD, MI, H, W, VideoId, PreviewUrl, Vide
         module = ?MODULE,
         description = Descr,
         rsc_props = #{
-            <<"title">> => z_url_metadata:p(title, MD),
-            <<"summary">> => z_url_metadata:p(summary, MD),
+            <<"title">> => first_defined([
+                z_url_metadata:p(title, MD),
+                json_ld_value(<<"name">>, JsonLDVideo)
+            ]),
+            <<"summary">> => first_defined([
+                z_url_metadata:p(summary, MD),
+                json_ld_value(<<"description">>, JsonLDVideo)
+            ]),
             <<"website">> => MI#media_import.url
         },
         medium_props = maps:merge(#{
@@ -351,29 +360,39 @@ media_import_props_video(Service, Descr, MD, MI, H, W, VideoId, PreviewUrl, Vide
     }.
 
 video_embed_metadata(MD, PreviewUrl, VideoMetadata) ->
+    JsonLDVideo = json_ld_video(MD),
     filter_metadata(#{
         <<"video_embed_site">> => z_url_metadata:p(site_name, MD),
-        <<"video_embed_author">> => z_url_metadata:p(author, MD),
+        <<"video_embed_author">> => first_defined([
+            json_ld_author(JsonLDVideo),
+            z_url_metadata:p(author, MD)
+        ]),
         <<"video_embed_canonical_url">> => z_url_metadata:p(canonical_url, MD),
         <<"video_embed_final_url">> => z_url_metadata:p(final_url, MD),
-        <<"video_embed_thumbnail_url">> => PreviewUrl,
+        <<"video_embed_thumbnail_url">> => first_defined([
+            PreviewUrl,
+            json_ld_value(<<"thumbnailUrl">>, JsonLDVideo),
+            json_ld_thumbnail_url(JsonLDVideo)
+        ]),
         <<"duration">> => first_defined([
             duration_seconds(maps:get(<<"duration">>, VideoMetadata, undefined)),
-            duration_seconds(z_url_metadata:p([
-                duration,
-                <<"og:video:duration">>,
-                <<"video:duration">>
-            ], MD))
+            duration_seconds(json_ld_value(<<"duration">>, JsonLDVideo)),
+            duration_seconds(z_url_metadata:p([<<"og:video:duration">>, <<"video:duration">>], MD))
         ]),
-        <<"video_embed_published">> => z_url_metadata:p([
-            date_published,
-            date_uploaded,
-            <<"article:published_time">>,
-            <<"video:release_date">>,
-            <<"datepublished">>,
-            <<"publishdate">>
-        ], MD),
-        <<"video_embed_tags">> => z_url_metadata:p(tags, MD)
+        <<"video_embed_published">> => first_defined([
+            json_ld_value(<<"datePublished">>, JsonLDVideo),
+            json_ld_value(<<"uploadDate">>, JsonLDVideo),
+            z_url_metadata:p([
+                <<"article:published_time">>,
+                <<"video:release_date">>,
+                <<"datepublished">>,
+                <<"publishdate">>
+            ], MD)
+        ]),
+        <<"video_embed_tags">> => first_defined([
+            tags_metadata(json_ld_value(<<"keywords">>, JsonLDVideo)),
+            z_url_metadata:p(tags, MD)
+        ])
     }).
 
 import_video_embed_metadata(Medium) ->
@@ -409,6 +428,8 @@ first_defined([V | _]) ->
 
 tags_metadata(Tags) when is_list(Tags) ->
     [ text_metadata(Tag) || Tag <- Tags, not z_utils:is_empty(Tag) ];
+tags_metadata(Tags) when is_binary(Tags) ->
+    tags_metadata(binary:split(Tags, <<",">>, [global]));
 tags_metadata(_Tags) ->
     undefined.
 
@@ -421,6 +442,63 @@ sanitize_uri(undefined) ->
     undefined;
 sanitize_uri(Uri) ->
     z_sanitize:uri(Uri).
+
+json_ld_video(MD) ->
+    json_ld_video(z_url_metadata:p(json_ld, MD), z_url_metadata:p(url, MD)).
+
+json_ld_video(JsonLDs, Url) when is_list(JsonLDs) ->
+    case json_ld_by_id(Url, JsonLDs) of
+        undefined -> json_ld_video_object(JsonLDs);
+        Video -> Video
+    end;
+json_ld_video(_JsonLDs, _Url) ->
+    undefined.
+
+json_ld_by_id(undefined, _JsonLDs) ->
+    undefined;
+json_ld_by_id(Url, JsonLDs) ->
+    lists:foldl(
+        fun
+            (#{ <<"@id">> := ItemId } = JsonLD, undefined) when ItemId =:= Url -> JsonLD;
+            (_JsonLD, Acc) -> Acc
+        end,
+        undefined,
+        JsonLDs).
+
+json_ld_video_object(JsonLDs) ->
+    lists:foldl(
+        fun
+            (#{ <<"@type">> := <<"VideoObject">> } = JsonLD, undefined) -> JsonLD;
+            (_JsonLD, Acc) -> Acc
+        end,
+        undefined,
+        JsonLDs).
+
+json_ld_value(_Key, undefined) ->
+    undefined;
+json_ld_value(Key, JsonLD) when is_map(JsonLD) ->
+    case maps:get(Key, JsonLD, undefined) of
+        [Value | _] -> Value;
+        Value -> Value
+    end.
+
+json_ld_author(undefined) ->
+    undefined;
+json_ld_author(#{ <<"author">> := Author }) when is_map(Author) ->
+    first_defined([
+        maps:get(<<"name">>, Author, undefined),
+        maps:get(<<"url">>, Author, undefined),
+        maps:get(<<"@id">>, Author, undefined)
+    ]);
+json_ld_author(#{ <<"author">> := Author }) ->
+    Author;
+json_ld_author(_) ->
+    undefined.
+
+json_ld_thumbnail_url(#{ <<"thumbnail">> := Thumbnail }) when is_map(Thumbnail) ->
+    maps:get(<<"url">>, Thumbnail, undefined);
+json_ld_thumbnail_url(_) ->
+    undefined.
 
 media_import_props_image(_MD, undefined, _Context) ->
     undefined;
