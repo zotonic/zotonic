@@ -974,7 +974,10 @@ replace_file_db(RscId, PreProc, Props, Opts, Context) ->
                 ?zError("Could not calculate the hash digest of ~p, reason: ~p", [ FileAbs, Reason ], Context),
                 undefined
         end,
-        Medium2 = Medium1#{ <<"id">> => Id, <<"digest">> => Digest },
+        Medium2 = Medium1#{
+            <<"id">> => Id,
+            <<"digest">> => Digest
+        },
         case medium_insert(Id, Medium2, Ctx) of
             {ok, _MediaId} ->
                 {ok, Id};

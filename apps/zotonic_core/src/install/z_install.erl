@@ -322,7 +322,7 @@ model_pgsql() ->
       height int NOT NULL DEFAULT 0,
       orientation int NOT NULL DEFAULT 1,
       frame_count int,
-      digest bytea,
+      digest character varying(80),
       size bigint NOT NULL DEFAULT 0,
       preview_filename character varying(400),
       preview_width int NOT NULL DEFAULT 0,
