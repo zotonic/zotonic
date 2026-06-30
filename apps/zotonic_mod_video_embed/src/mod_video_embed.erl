@@ -788,8 +788,6 @@ pad_duration_parts([]) ->
 
 as_int0(<<>>) ->
     0;
-as_int0(undefined) ->
-    0;
 as_int0(N) ->
     z_convert:to_integer(N).
 
