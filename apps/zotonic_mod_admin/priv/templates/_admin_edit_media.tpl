@@ -30,7 +30,7 @@
         </span>
         {% if medium.digest %}
             <span class="text-muted">&ndash; {_ SHA-256 checksum _}: {{ medium.digest|escape }}</span>
-        {% endif %
+        {% endif %}
     </p>
 
     <hr>
