@@ -2,7 +2,13 @@
     {% if medium.bit_rate %}
         <tr>
             <th>{_ Audio bit rate _}</th>
-            <td>{{ medium.bit_rate|format_integer }} bps</td>
+            <td>
+                {% if medium.bit_rate > 1024 %}
+                    {{ (medium.bit_rate / 1000)|round|format_integer }} kbps
+                {% else %}
+                    {{ medium.bit_rate|format_integer }} bps
+                {% endif %}
+            </td>
         </tr>
     {% endif %}
     {% if medium.tags %}
