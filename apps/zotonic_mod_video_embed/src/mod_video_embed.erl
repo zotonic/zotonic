@@ -75,7 +75,6 @@ See also
     ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
--include_lib("zotonic_stdlib/include/z_url_metadata.hrl").
 
 %% Fantasy mime type to distinguish embeddable html fragments.
 -define(EMBED_MIME, <<"text/html-video-embed">>).
@@ -359,11 +358,11 @@ video_embed_metadata(MD, PreviewUrl, VideoMetadata) ->
         <<"video_embed_final_url">> => z_url_metadata:p(final_url, MD),
         <<"video_embed_thumbnail_url">> => PreviewUrl,
         <<"duration">> => first_defined([
-            maps:get(<<"duration">>, VideoMetadata, undefined),
-            as_int(z_url_metadata:p([
+            duration_seconds(maps:get(<<"duration">>, VideoMetadata, undefined)),
+            duration_seconds(z_url_metadata:p([
+                <<"duration">>,
                 <<"og:video:duration">>,
-                <<"video:duration">>,
-                <<"duration">>
+                <<"video:duration">>
             ], MD))
         ]),
         <<"video_embed_published">> => z_url_metadata:p([
@@ -382,7 +381,7 @@ import_video_embed_metadata(Medium) ->
         <<"video_embed_canonical_url">> => sanitize_uri(maps:get(<<"video_embed_canonical_url">>, Medium, undefined)),
         <<"video_embed_final_url">> => sanitize_uri(maps:get(<<"video_embed_final_url">>, Medium, undefined)),
         <<"video_embed_thumbnail_url">> => sanitize_uri(maps:get(<<"video_embed_thumbnail_url">>, Medium, undefined)),
-        <<"duration">> => as_int(maps:get(<<"duration">>, Medium, undefined)),
+        <<"duration">> => duration_seconds(maps:get(<<"duration">>, Medium, undefined)),
         <<"video_embed_published">> => text_metadata(maps:get(<<"video_embed_published">>, Medium, undefined)),
         <<"video_embed_tags">> => tags_metadata(maps:get(<<"video_embed_tags">>, Medium, undefined))
     }).
@@ -644,10 +643,9 @@ videoid_to_image(<<"vimeo">>, EmbedId) ->
 videoid_to_image(_, _) ->
     undefined.
 
-videoid_metadata(<<"youtube">>, EmbedId, MD) ->
+videoid_metadata(<<"youtube">>, EmbedId, _MD) ->
     filter_metadata(#{
-        <<"thumbnail_url">> => videoid_to_image(<<"youtube">>, EmbedId),
-        <<"duration">> => youtube_duration(MD)
+        <<"thumbnail_url">> => videoid_to_image(<<"youtube">>, EmbedId)
     });
 videoid_metadata(<<"vimeo">>, EmbedId, _MD) ->
     JsonUrl = "https://vimeo.com/api/v2/video/" ++ z_convert:to_list(EmbedId) ++ ".json",
@@ -678,47 +676,16 @@ vimeo_thumbnail_url(#{ <<"thumbnail_large">> := Thumbnail }) ->
 vimeo_thumbnail_url(_) ->
     undefined.
 
-youtube_duration(#url_metadata{partial_data = Data}) when is_binary(Data) ->
-    first_defined([
-        youtube_itemprop_duration(Data),
-        youtube_length_seconds(Data),
-        youtube_iso8601_duration(Data)
-    ]);
-youtube_duration(_) ->
-    undefined.
-
-youtube_itemprop_duration(Data) ->
-    Patterns = [
-        <<"<meta[^>]+itemprop=[\"']duration[\"'][^>]+content=[\"'](PT[^\"']+)[\"']">>,
-        <<"<meta[^>]+content=[\"'](PT[^\"']+)[\"'][^>]+itemprop=[\"']duration[\"']">>
-    ],
-    youtube_itemprop_duration_1(Patterns, Data).
-
-youtube_itemprop_duration_1([Pattern | Patterns], Data) ->
-    case re:run(Data, Pattern, [caseless, {capture, all_but_first, binary}]) of
-        {match, [Duration]} -> iso8601_duration(Duration);
-        nomatch -> youtube_itemprop_duration_1(Patterns, Data)
-    end;
-youtube_itemprop_duration_1([], _Data) ->
-    undefined.
-
-youtube_length_seconds(Data) ->
-    case re:run(Data, <<"\"lengthSeconds\"\\s*:\\s*\"?([0-9]+)\"?">>, [{capture, all_but_first, binary}]) of
-        {match, [Seconds]} -> as_int(Seconds);
-        nomatch -> undefined
-    end.
-
-youtube_iso8601_duration(Data) ->
-    case re:run(
-        Data,
-        <<"\"duration\"\\s*:\\s*\"PT(?:(\\d+)H)?(?:(\\d+)M)?(?:(\\d+)S)?\"">>,
-        [{capture, all_but_first, binary}]
-    ) of
-        {match, Parts} ->
-            duration_parts(Parts);
-        nomatch ->
-            undefined
-    end.
+duration_seconds(undefined) ->
+    undefined;
+duration_seconds(<<>>) ->
+    undefined;
+duration_seconds(N) when is_integer(N) ->
+    N;
+duration_seconds(<<"PT", _/binary>> = Duration) ->
+    iso8601_duration(Duration);
+duration_seconds(N) ->
+    z_convert:to_integer(N).
 
 iso8601_duration(Duration) ->
     case re:run(Duration, <<"PT(?:(\\d+)H)?(?:(\\d+)M)?(?:(\\d+)S)?">>, [{capture, all_but_first, binary}]) of
