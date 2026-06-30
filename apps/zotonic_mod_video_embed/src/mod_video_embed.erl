@@ -360,12 +360,14 @@ video_embed_metadata(MD, PreviewUrl, VideoMetadata) ->
         <<"duration">> => first_defined([
             duration_seconds(maps:get(<<"duration">>, VideoMetadata, undefined)),
             duration_seconds(z_url_metadata:p([
-                <<"duration">>,
+                duration,
                 <<"og:video:duration">>,
                 <<"video:duration">>
             ], MD))
         ]),
         <<"video_embed_published">> => z_url_metadata:p([
+            date_published,
+            date_uploaded,
             <<"article:published_time">>,
             <<"video:release_date">>,
             <<"datepublished">>,
