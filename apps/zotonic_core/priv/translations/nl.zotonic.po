@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-05-20 12:13\n"
+"PO-Revision-Date: 2026-06-30 12:26\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "X-Crowdin-Project: zotonic\n"
 "X-Crowdin-Project-ID: 3405\n"
 "X-Crowdin-Language: nl\n"
-"X-Crowdin-File: /master/apps/zotonic_core/priv/translations/zotonic.pot\n"
+"X-Crowdin-File: /[zotonic.zotonic] master/apps/zotonic_core/priv/translations/zotonic.pot\n"
 "X-Crowdin-File-ID: 8692\n"
 "Language: nl_NL\n"
 
@@ -2718,7 +2718,7 @@ msgstr "Toon pagina op meerdere paginapaden"
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:55
 msgid "Show query as JSON"
-msgstr "Vraag weergeven als JSON"
+msgstr "Zoekopdracht weergeven als JSON"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:37
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:23
@@ -2967,7 +2967,7 @@ msgstr "De query kon niet worden geparseerd, controleer de syntaxis."
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:16
 msgid "The query text is empty."
-msgstr "De querytekst is leeg."
+msgstr "De De zoekopdracht is leeg."
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:58
 msgid "The search index is rebuilding. Depending on the database size, this can take a long time."
@@ -4982,7 +4982,7 @@ msgstr "Verbinding verwijderen"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:23
 msgid "Remove object filter"
-msgstr "Object verwijderen filter"
+msgstr "Object filter verwijderen"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:15
 msgid "Remove predicate filter"
@@ -4990,7 +4990,7 @@ msgstr "Predicaat filter verwijderen"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:7
 msgid "Remove subject filter"
-msgstr "Verwijder onderwerp filter"
+msgstr "Verwijder onderwerpfilter"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:3
 msgid "Selected page"
@@ -7487,7 +7487,7 @@ msgstr "Hostalias"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:415
 msgid "Included by"
-msgstr "Inbegrepen door"
+msgstr "Included door"
 
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:63
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:125
@@ -7746,7 +7746,7 @@ msgstr "Gestopt met het loggen naar de console van alle browsertabbladen."
 
 #: zotonic_mod_development/src/mod_development.erl:342
 msgid "Stopped tracing template inclusions for all sessions."
-msgstr "Het traceren van sjablooninsluitingen voor alle sessies is gestopt."
+msgstr "Het traceren van sjabloon includes voor alle sessies is gestopt."
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:49
 msgid "Stopped."
@@ -7822,7 +7822,7 @@ msgstr "Deze pagina is onbekend of heeft geen URI"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:540
 msgid "This template is used by"
-msgstr "Deze sjabloon wordt gebruikt door"
+msgstr "Dit sjabloon wordt gebruikt door"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:13
 msgid "Tools and settings that are useful for site development."
@@ -7839,7 +7839,7 @@ msgstr "Functie-aanroepen traceren"
 #: zotonic_mod_development/priv/templates/_html_head_development.tpl:35
 #: zotonic_mod_development/priv/templates/_html_head_development.tpl:36
 msgid "Trace templates"
-msgstr "Traceersjablonen"
+msgstr "Sjablonen traceren"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:195
 msgid "Traces all templates for the current session-id, or all sessions, and renders them as a graph."
@@ -9245,7 +9245,7 @@ msgstr "Log wissen"
 
 #: zotonic_mod_logging/src/mod_logging.erl:191
 msgid "Cleared the CSP reports."
-msgstr "De CSP-rapporten gewist."
+msgstr "De CSP-rapporten zijn gewist."
 
 #: zotonic_mod_logging/priv/templates/admin_log_base.tpl:13
 #: zotonic_mod_logging/src/mod_logging.erl:358
@@ -10602,11 +10602,11 @@ msgstr "Weet je zeker dat je deze app wilt verwijderen?"
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:22
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:36
 msgid "Are you sure you want to delete this Consumer App?"
-msgstr "Weet je zeker dat je deze consumenten-app wilt verwijderen?"
+msgstr "Weet je zeker dat je deze client-app wilt verwijderen?"
 
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:88
 msgid "Are you sure you want to delete this access token?"
-msgstr "Weet u zeker dat u dit toegangstoken wilt verwijderen?"
+msgstr "Weet je zeker dat je dit toegangstoken wilt verwijderen?"
 
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:65
 msgid "Are you sure you want to delete this client token?"
@@ -10647,11 +10647,11 @@ msgstr "Waarschuwing: dit toegangstoken geeft volledige toegang tot je account."
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:99
 msgid "Client Credentials token expiration"
-msgstr "Vervaldatum token Client Credentials"
+msgstr "Vervaldatum token Client credentials"
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:121
 msgid "Client Credentials user"
-msgstr "Clientgegevens gebruiker"
+msgstr "Client credentials gebruiker"
 
 #: zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:32
 msgid "Connect with"
@@ -11006,7 +11006,7 @@ msgstr "De App ID en App Secret zijn nodig als je deze website wilt gebruiken vo
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:102
 msgid "The client must extend the token before it expires."
-msgstr "De cliënt moet het token verlengen voordat het verloopt."
+msgstr "De cliënt moet het token verlengen voordat het vervalt."
 
 #: zotonic_mod_oauth2/src/mod_oauth2.erl:242
 msgid "The token will be registered with the selected user account."
@@ -11026,7 +11026,7 @@ msgstr "Dit moeten volledige URL's zijn, maar zonder de query- (?..) of hash- (#
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:19
 msgid "This must be an unique name to identify the remote service. This can not be changed. Only <tt>A-Z</tt>, <tt>a-z</tt>, <tt>0-9</tt>, <tt>-</tt> and <tt>_</tt> characters are allowed."
-msgstr "Dit moet een unieke naam zijn om de dienst op afstand te identificeren. Deze kan niet worden gewijzigd. Alleen <tt>A-Z</tt>, <tt>a-z</tt>, <tt>0-9</tt>, <tt>-</tt> en <tt>_</tt> tekens zijn toegestaan."
+msgstr "Dit moet een unieke naam zijn om de remote service te identificeren. Deze kan niet worden gewijzigd. Alleen <tt>A-Z</tt>, <tt>a-z</tt>, <tt>0-9</tt>, <tt>-</tt> en <tt>_</tt> tekens zijn toegestaan."
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:14
 msgid "This user will be able to use the token."
@@ -11089,7 +11089,7 @@ msgstr "Week"
 
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:11
 msgid "With a client token this website can:"
-msgstr "Met een klanttoken kan deze website:"
+msgstr "Met een client token kan deze website:"
 
 #: zotonic_mod_oauth2/src/mod_oauth2.erl:314
 msgid "You are not allowed to fetch a consumer token."
@@ -12031,7 +12031,7 @@ msgstr "Nadat alle vragen zijn beantwoord en ingediend, wordt een van de volgend
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:199
 msgid "After the form is submitted, an email with all answers can be sent to the configured email addresses below."
-msgstr "Nadat het formulier is verzonden, kan een e-mail met alle antwoorden worden verzonden naar de hieronder geconfigureerde e-mailadressen."
+msgstr "Nadat het formulier is ingediend, kan een e-mail met alle antwoorden worden verzonden naar de hieronder geconfigureerde e-mailadressen."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:135
 msgid "Aggregated results from all respondents"
@@ -12170,7 +12170,7 @@ msgstr "Gesloten"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:246
 msgid "Closed-question answers for anonymous and logged-in respondents"
-msgstr "Antwoorden met gesloten vragen voor anonieme en ingelogde respondenten"
+msgstr "Antwoorden op gesloten vragen voor anonieme en ingelogde respondenten"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:241
 msgid "Closed-question answers for anonymous respondents; all answers for logged-in respondents"
@@ -12855,7 +12855,7 @@ msgstr "Toon voortgang als <em>Vraag 3/10</em>"
 
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:106
 msgid "Show results"
-msgstr "Toon resultaten"
+msgstr "Resultaten weergeven"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:30
 msgid "Show “Continue later” button to save answers and return later to submit"
@@ -13587,7 +13587,7 @@ msgstr "Toon de taal in de URL"
 
 #: zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:42
 msgid "Show translations"
-msgstr "Vertalingen tonen"
+msgstr "Vertalingen weergeven"
 
 #: zotonic_mod_translation/src/mod_translation.erl:578
 #: zotonic_mod_translation/src/mod_translation.erl:626
@@ -13746,11 +13746,11 @@ msgstr "Controleren van de database ..."
 
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:86
 msgid "Checkout an existing site from Git"
-msgstr "Een bestaande site van Git ophalen"
+msgstr "Een bestaande site uitchecken bij Git"
 
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:74
 msgid "Checkout existing site from Git"
-msgstr "Bestaande site van Git ophalen"
+msgstr "Een bestaande site uitchecken vanuit Git"
 
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:138
 msgid "Configure PostgreSQL Database Connection"
