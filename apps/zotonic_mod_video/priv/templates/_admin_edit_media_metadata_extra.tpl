@@ -39,7 +39,13 @@
     {% if medium.video_bit_rate %}
         <tr>
             <th>{_ Video bit rate _}</th>
-            <td>{{ medium.video_bit_rate|format_integer }} bps</td>
+            <td>
+                {% if medium.video_bit_rate > 1024 %}
+                    {{ (medium.video_bit_rate / 1000)|round|format_integer }} kbps
+                {% else %}
+                    {{ medium.video_bit_rate|format_integer }} bps
+                {% endif %}
+            </td>
         </tr>
     {% endif %}
     {% if medium.audio_codec %}
@@ -62,7 +68,13 @@
     {% if medium.audio_sample_rate %}
         <tr>
             <th>{_ Audio sample rate _}</th>
-            <td>{{ medium.audio_sample_rate|format_integer }} Hz</td>
+            <td>
+                {% if medium.audio_sample_rate > 1024 %}
+                    {{ (medium.audio_sample_rate / 1000)|round|format_integer }} kHz
+                {% else %}
+                    {{ medium.audio_sample_rate|format_integer }} Hz
+                {% endif %}
+            </td>
         </tr>
     {% endif %}
     {% if medium.audio_bit_rate %}
