@@ -20,9 +20,9 @@ $env-backup:        #37474f;        // Gray
 .environment-backup {
 
     body {
-        padding-left: 24px;
-
         @media (min-width: $screen-phone) {
+            padding-left: 24px;
+
             &::before {
                 position: fixed;
                 top: 0;
@@ -49,7 +49,7 @@ $env-backup:        #37474f;        // Gray
     @media (min-width: $screen-phone) {
         body::before {
             background-color: $color;
-            background-image: linear-gradient($color, white);
+            background-image: linear-gradient($color, var(--z-admin-bg));
             content: $name;
         }
     }

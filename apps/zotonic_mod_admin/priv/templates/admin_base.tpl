@@ -13,7 +13,7 @@
         <meta name="robots" content="noindex,nofollow">
 
         {% lib
-            "css/admin-bootstrap3.css"
+            "css/admin-bootstrap5.min.css"
             minify
         %}
 
@@ -30,7 +30,7 @@
             minify
         %}
 
-        {% all include "_html_head_admin.tpl" no_prism %}
+        {% all include "_html_head_admin.tpl" no_prism is_admin %}
 
         {% block head_extra %}
         {% endblock %}
