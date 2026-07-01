@@ -473,8 +473,8 @@ msgstr ""
 #: zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:10
 #: zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:41
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:49
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:69
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:78
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:48
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:57
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:83
 #: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:32
 #: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:41
@@ -1127,7 +1127,7 @@ msgstr ""
 msgid "Add a note about this page."
 msgstr ""
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:121
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:95
 msgid "Add media content"
 msgstr ""
 
@@ -1223,7 +1223,7 @@ msgstr ""
 msgid "Are you sure you want to delete all tasks for this module and function?"
 msgstr ""
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:74
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:53
 msgid "Are you sure you want to delete the media from this page?"
 msgstr ""
 
@@ -1420,12 +1420,33 @@ msgstr ""
 msgid "Content type"
 msgstr ""
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:63
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:42
 msgid "Copied download link to clipboard"
 msgstr ""
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:56
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:73
+#: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:17
+#: zotonic_mod_auth2fa/priv/templates/_logon_login_set_passcode.tpl:20
+#: zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:33
+#: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_view.tpl:18
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:28
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:60
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:91
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:119
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:108
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:46
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:62
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:78
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:94
+msgid "Copy"
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:35
 msgid "Copy download link"
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:72
+msgid "Copy the SHA-256 checksum to the clipboard."
 msgstr ""
 
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:161
@@ -1583,6 +1604,10 @@ msgstr ""
 msgid "Dependent"
 msgstr ""
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:9
+msgid "Dimensions"
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:26
 #: zotonic_mod_admin/priv/templates/_rsc_edge.tpl:22
 #: zotonic_mod_admin/priv/templates/_rsc_edge_media.tpl:8
@@ -1618,7 +1643,7 @@ msgstr ""
 msgid "Do you want to remove this page block?"
 msgstr ""
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:53
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:32
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:33
 msgid "Download"
 msgstr ""
@@ -1647,6 +1672,8 @@ msgid "Duplicate this page..."
 msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:31
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:42
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:70
 msgid "Duration"
 msgstr ""
 
@@ -1829,6 +1856,7 @@ msgid "File / media content"
 msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:35
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:48
 msgid "File size"
 msgstr ""
 
@@ -1837,6 +1865,7 @@ msgid "File uploaded to the drop folder, will be handled shortly."
 msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:39
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:54
 #: zotonic_mod_base/priv/templates/directory_index.tpl:14
 msgid "Filename"
 msgstr ""
@@ -2086,6 +2115,10 @@ msgstr ""
 msgid "Log Off"
 msgstr ""
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:3
+msgid "MIME type"
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:131
 msgid "Mailing address"
 msgstr ""
@@ -2145,6 +2178,10 @@ msgstr ""
 msgid "Media content"
 msgstr ""
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:112
+msgid "Media details"
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:84
 msgid ""
 "Media encompasses all uploaded images, movies and documents. Media can be "
@@ -2186,6 +2223,22 @@ msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:121
 msgid "Mine"
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:20
+msgid "Mirrored horizontally"
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:26
+msgid "Mirrored horizontally, rotated 270 degrees"
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:30
+msgid "Mirrored horizontally, rotated 90 degrees"
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:24
+msgid "Mirrored vertically"
 msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:21
@@ -2352,6 +2405,10 @@ msgstr ""
 msgid "No results."
 msgstr ""
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:18
+msgid "Normal"
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:238
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:68
 msgid "Not dependent"
@@ -2380,6 +2437,10 @@ msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:171
 msgid "Ongoing"
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:15
+msgid "Orientation"
 msgstr ""
 
 #: zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_header.tpl:4
@@ -2533,6 +2594,7 @@ msgstr ""
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:21
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:49
 #: zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:44
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:31
 msgid "Published"
 msgstr ""
 
@@ -2644,8 +2706,8 @@ msgstr ""
 msgid "Renumber category tree"
 msgstr ""
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:88
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:121
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:67
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:95
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:195
 msgid "Replace"
 msgstr ""
@@ -2665,6 +2727,18 @@ msgstr ""
 msgid "Retrieving status..."
 msgstr ""
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:22
+msgid "Rotated 180 degrees"
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:32
+msgid "Rotated 270 degrees"
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:28
+msgid "Rotated 90 degrees"
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:113
 msgid "Runs the schema install command from the site's module again."
 msgstr ""
@@ -2676,6 +2750,10 @@ msgstr ""
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:74
 #: zotonic_mod_seo/src/mod_seo.erl:288
 msgid "SEO"
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:66
+msgid "SHA-256 checksum"
 msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:5
@@ -3024,7 +3102,7 @@ msgstr ""
 msgid "The page"
 msgstr ""
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:76
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:55
 msgid "The page will stay, but without the media item."
 msgstr ""
 
@@ -3104,15 +3182,15 @@ msgstr ""
 msgid "This file contains links to other files or locations."
 msgstr ""
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:105
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:84
 msgid "This file has been scanned for viruses."
 msgstr ""
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:101
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:80
 msgid "This file has not been scanned for viruses because it is too large."
 msgstr ""
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:109
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:88
 msgid "This file has not been scanned for viruses."
 msgstr ""
 
@@ -3202,6 +3280,7 @@ msgstr ""
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:25
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:16
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:20
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:44
 msgid "Title"
 msgstr ""
 
@@ -3330,6 +3409,7 @@ msgid "Uploaded"
 msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:42
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:60
 msgid "Uploaded on"
 msgstr ""
 
@@ -3360,7 +3440,7 @@ msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish_view.tpl:2
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:10
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:52
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:31
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:142
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:26
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:41
@@ -3617,7 +3697,7 @@ msgid "page block"
 msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:28
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:17
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:10
 msgid "pixels"
 msgstr ""
 
@@ -3645,8 +3725,6 @@ msgid "untitled"
 msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:51
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:29
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:116
 msgid "uploaded on"
 msgstr ""
 
@@ -5383,6 +5461,15 @@ msgstr ""
 msgid "Artist"
 msgstr ""
 
+#: zotonic_mod_audio/priv/templates/_admin_edit_media_metadata_extra.tpl:4
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:70
+msgid "Audio bit rate"
+msgstr ""
+
+#: zotonic_mod_audio/priv/templates/_admin_edit_media_metadata_extra.tpl:16
+msgid "Audio tags"
+msgstr ""
+
 #: zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:31
 #: zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:32
 msgid "Composer"
@@ -5445,14 +5532,6 @@ msgstr ""
 
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:26
 msgid "Copied to clipboard"
-msgstr ""
-
-#: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:17
-#: zotonic_mod_auth2fa/priv/templates/_logon_login_set_passcode.tpl:20
-#: zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:33
-#: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_view.tpl:18
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:108
-msgid "Copy"
 msgstr ""
 
 #: zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:22
@@ -5873,6 +5952,7 @@ msgstr ""
 #: zotonic_mod_authentication/priv/templates/logon_service_error.tpl:10
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:14
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:143
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:7
 #: zotonic_mod_survey/priv/templates/_survey_block_name_check.tpl:2
 msgid "Error"
 msgstr ""
@@ -7199,6 +7279,7 @@ msgid "This tests the communication with the server."
 msgstr ""
 
 #: zotonic_mod_base/priv/templates/directory_index.tpl:15
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:38
 msgid "Type"
 msgstr ""
 
@@ -7778,7 +7859,7 @@ msgstr ""
 
 #: zotonic_mod_development/priv/templates/_development_template_graph.tpl:3
 msgid ""
-"Dependency graph of all templates. Only template includes using a direct "
+"Dependency graph of all templates. Only template includes using a Immediate "
 "string value for the template name are shown."
 msgstr ""
 
@@ -9185,6 +9266,7 @@ msgid "Save Settings"
 msgstr ""
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:35
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:7
 msgid "Service"
 msgstr ""
 
@@ -11902,6 +11984,22 @@ msgstr ""
 msgid "Attempting to fix ~p videos."
 msgstr ""
 
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:50
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:25
+msgid "Author"
+msgstr ""
+
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:27
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:59
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:90
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:118
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:45
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:61
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:77
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:93
+msgid "Copy the URL to the clipboard."
+msgstr ""
+
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media.tpl:4
 msgid "Embedding of media item failed with HTTP code"
 msgstr ""
@@ -11914,12 +12012,42 @@ msgstr ""
 msgid "No embedded videos found which need fixing."
 msgstr ""
 
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:3
+msgid "OEmbed"
+msgstr ""
+
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:110
+msgid "OEmbed URL"
+msgstr ""
+
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:18
+msgid "Provider"
+msgstr ""
+
 #: zotonic_mod_oembed/priv/templates/_admin_authentication_service.tpl:18
 msgid "Save Embedly Key"
 msgstr ""
 
 #: zotonic_mod_oembed/src/mod_oembed.erl:470
 msgid "Saved the Embedly settings."
+msgstr ""
+
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:82
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:85
+msgid "Thumbnail URL"
+msgstr ""
+
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:98
+msgid "Thumbnail size"
+msgstr ""
+
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:104
+msgid "Version"
+msgstr ""
+
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:76
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:13
+msgid "Video ID"
 msgstr ""
 
 #: zotonic_mod_oembed/src/mod_oembed.erl:472
@@ -14702,8 +14830,72 @@ msgstr ""
 msgid "page break"
 msgstr ""
 
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:53
+msgid "Audio channels"
+msgstr ""
+
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:47
+msgid "Audio codec"
+msgstr ""
+
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:64
+msgid "Audio sample rate"
+msgstr ""
+
 #: zotonic_mod_video/priv/templates/_video_viewer.tpl:11
 msgid "Converting"
+msgstr ""
+
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:7
+msgid "Format"
+msgstr ""
+
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:35
+msgid "Frame rate"
+msgstr ""
+
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:29
+msgid "Pixel format"
+msgstr ""
+
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:3
+msgid "Video"
+msgstr ""
+
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:41
+msgid "Video bit rate"
+msgstr ""
+
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:18
+msgid "Video codec"
+msgstr ""
+
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:82
+msgid "Video tags"
+msgstr ""
+
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:53
+msgid "Canonical URL"
+msgstr ""
+
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:69
+msgid "Final URL"
+msgstr ""
+
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:37
+msgid "Imported from"
+msgstr ""
+
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:19
+msgid "Site"
+msgstr ""
+
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:101
+msgid "Tags"
+msgstr ""
+
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:3
+msgid "Video embed"
 msgstr ""
 
 #: zotonic_mod_video_embed/src/mod_video_embed.erl:274
