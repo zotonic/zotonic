@@ -311,7 +311,7 @@ format_ascii(Bin) when is_binary(Bin) ->
     Bin1 = trim_nul(Bin),
     case maybe_printable_binary(Bin1) of
         true -> Bin1;
-        false -> format_binary_bytes(Bin)
+        false -> format_binary_bytes(Bin1)
     end;
 format_ascii(Value) ->
     format_any(Value).
