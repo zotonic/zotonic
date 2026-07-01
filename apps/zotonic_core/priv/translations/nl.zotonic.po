@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-06-30 12:26\n"
+"PO-Revision-Date: 2026-07-01 08:40\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -289,9 +289,9 @@ msgstr "Weet je zeker dat je alle regels wilt terugzetten vanaf de gepubliceerde
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:33
 #: zotonic_mod_authentication/priv/templates/_dialog_session_close.tpl:16
 #: zotonic_mod_authentication/priv/templates/_logon_box.tpl:120
-#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:28
-#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:66
-#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:137
+#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:52
+#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:90
+#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:161
 #: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:35
 #: zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:13
@@ -466,8 +466,8 @@ msgstr "Kon niet naar de samenwerkingsgroep verplaatsen."
 #: zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:10
 #: zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:41
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:49
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:69
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:78
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:48
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:57
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:83
 #: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:32
 #: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:41
@@ -1099,7 +1099,7 @@ msgstr "Nieuw media-item"
 msgid "Add a note about this page."
 msgstr "Voeg een notitie over deze pagina toe."
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:121
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:95
 msgid "Add media content"
 msgstr "Media toevoegen"
 
@@ -1193,7 +1193,7 @@ msgstr "Iedereen"
 msgid "Are you sure you want to delete all tasks for this module and function?"
 msgstr "Weet u zeker dat u alle taken voor deze module en functie wilt verwijderen?"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:74
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:53
 msgid "Are you sure you want to delete the media from this page?"
 msgstr "Weet je zeker dat je de media van deze pagina wilt verwijderen?"
 
@@ -1387,13 +1387,34 @@ msgstr "Verbindingen"
 msgid "Content type"
 msgstr "Type inhoud"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:63
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:42
 msgid "Copied download link to clipboard"
 msgstr "Download link naar klembord gekopieerd"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:56
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:73
+#: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:17
+#: zotonic_mod_auth2fa/priv/templates/_logon_login_set_passcode.tpl:20
+#: zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:33
+#: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_view.tpl:18
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:28
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:60
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:91
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:119
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:108
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:46
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:62
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:78
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:94
+msgid "Copy"
+msgstr "Kopieer"
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:35
 msgid "Copy download link"
 msgstr "Kopieer download link"
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:72
+msgid "Copy the SHA-256 checksum to the clipboard."
+msgstr "Kopieer de SHA-256-controlesom naar het klembord."
 
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:161
 msgid "Could not connect to the website."
@@ -1479,6 +1500,7 @@ msgstr "Database versie"
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:36
 #: zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:5
 #: zotonic_mod_base/priv/templates/directory_index.tpl:16
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:226
 #: zotonic_mod_logging/priv/templates/admin_log.tpl:21
 #: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:34
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:136
@@ -1549,6 +1571,10 @@ msgstr "Verwijderen kan niet ongedaan gemaakt worden."
 msgid "Dependent"
 msgstr "Afhankelijk"
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:9
+msgid "Dimensions"
+msgstr "Afmetingen"
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:26
 #: zotonic_mod_admin/priv/templates/_rsc_edge.tpl:22
 #: zotonic_mod_admin/priv/templates/_rsc_edge_media.tpl:8
@@ -1584,7 +1610,7 @@ msgstr "Stuur geen mailings (opt-out)"
 msgid "Do you want to remove this page block?"
 msgstr "Wil je dit paginablok verwijderen?"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:53
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:32
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:33
 msgid "Download"
 msgstr "Download"
@@ -1613,6 +1639,8 @@ msgid "Duplicate this page..."
 msgstr "Deze pagina dupliceren..."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:31
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:42
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:70
 msgid "Duration"
 msgstr "Duur"
 
@@ -1787,6 +1815,7 @@ msgid "File / media content"
 msgstr "Bestand / mediainhoud"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:35
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:48
 msgid "File size"
 msgstr "Bestandsgrootte"
 
@@ -1795,6 +1824,7 @@ msgid "File uploaded to the drop folder, will be handled shortly."
 msgstr "Bestand dat is geüpload naar de drop-map, wordt binnenkort verwerkt."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:39
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:54
 #: zotonic_mod_base/priv/templates/directory_index.tpl:14
 msgid "Filename"
 msgstr "Bestandsnaam"
@@ -1861,6 +1891,7 @@ msgid "Follow connections and import all (deep copy)."
 msgstr "Volg verbindingen en importeer alles (diepe kopie)."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:59
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:225
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:132
 msgid "From"
 msgstr "Van"
@@ -2030,6 +2061,10 @@ msgstr "Logboekmap"
 msgid "Log Off"
 msgstr "Uitloggen"
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:3
+msgid "MIME type"
+msgstr "MIME-type"
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:131
 msgid "Mailing address"
 msgstr "Postadres"
@@ -2089,6 +2124,10 @@ msgstr "Media-URL of HTML"
 msgid "Media content"
 msgstr "Media-inhoud"
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:112
+msgid "Media details"
+msgstr "Media-informatie"
+
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:84
 msgid "Media encompasses all uploaded images, movies and documents. Media can be attached to pages."
 msgstr "Mediabestanden omvatten alle geüploade afbeeldingen, filmpjes en documenten. Ze kunnen worden gekoppeld aan pagina's."
@@ -2129,6 +2168,22 @@ msgstr "Middennaam"
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:121
 msgid "Mine"
 msgstr "Mijn"
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:20
+msgid "Mirrored horizontally"
+msgstr "Horizontaal gespiegeld"
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:26
+msgid "Mirrored horizontally, rotated 270 degrees"
+msgstr "Horizontaal gespiegeld, 270 graden gedraaid"
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:30
+msgid "Mirrored horizontally, rotated 90 degrees"
+msgstr "Horizontaal gespiegeld, 90 graden gedraaid"
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:24
+msgid "Mirrored vertically"
+msgstr "Verticaal gespiegeld"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:21
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:22
@@ -2294,6 +2349,10 @@ msgstr "Geen pagina's geselecteerd"
 msgid "No results."
 msgstr "Geen resultaten."
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:18
+msgid "Normal"
+msgstr "Normaal"
+
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:238
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:68
 msgid "Not dependent"
@@ -2323,6 +2382,10 @@ msgstr "OS-geheugen"
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:171
 msgid "Ongoing"
 msgstr "Doorlopend"
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:15
+msgid "Orientation"
+msgstr "Oriëntatie"
 
 #: zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_header.tpl:4
 #: zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_text.tpl:4
@@ -2475,6 +2538,7 @@ msgstr "Publiceer deze pagina"
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:21
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:49
 #: zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:44
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:31
 msgid "Published"
 msgstr "Gepubliceerd"
 
@@ -2512,7 +2576,7 @@ msgid "Rebuild all search-indices by putting all pages and data from the databas
 msgstr "Bouw de zoek-index opnieuw op door alle pagina's langs te gaan. Dit kan lang duren!"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:89
-#: zotonic_mod_translation/priv/templates/admin_translation.tpl:151
+#: zotonic_mod_translation/priv/templates/admin_translation.tpl:169
 msgid "Rebuild search indices"
 msgstr "Zoek-index opnieuw maken"
 
@@ -2581,8 +2645,8 @@ msgstr "Connectie verwijderd naar"
 msgid "Renumber category tree"
 msgstr "Hernummer categorieboom"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:88
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:121
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:67
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:95
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:195
 msgid "Replace"
 msgstr "Vervang"
@@ -2600,6 +2664,18 @@ msgstr "Resources in de <em>meta</em> categorie kunnen ‘features’ hebben:\n"
 msgid "Retrieving status..."
 msgstr "Status ophalen..."
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:22
+msgid "Rotated 180 degrees"
+msgstr "180 graden gedraaid"
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:32
+msgid "Rotated 270 degrees"
+msgstr "270 graden gedraaid"
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:28
+msgid "Rotated 90 degrees"
+msgstr "90 graden gedraaid"
+
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:113
 msgid "Runs the schema install command from the site's module again."
 msgstr "Installeer het schema van de sitemodule opnieuw."
@@ -2612,6 +2688,10 @@ msgstr "Voert de schema-installatie voor de Zotonic core opnieuw uit."
 #: zotonic_mod_seo/src/mod_seo.erl:288
 msgid "SEO"
 msgstr "SEO"
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:66
+msgid "SHA-256 checksum"
+msgstr "SHA-256-controlesom"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:5
 msgid "SSL Application uses Erlang defaults, it is recommended to change this configuration in your <tt>erlang.config</tt>."
@@ -2821,6 +2901,7 @@ msgstr "Staat"
 #: zotonic_mod_admin/src/mod_admin.erl:517
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
 #: zotonic_mod_base/priv/templates/_session_info.tpl:12
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:221
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:111
 #: zotonic_site_status/priv/templates/_navbar.tpl:15
 #: zotonic_site_status/priv/templates/_sites.tpl:4
@@ -2949,7 +3030,7 @@ msgstr "De categorieboom wordt herberekend. Dit kan lang duren."
 msgid "The page"
 msgstr "De pagina"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:76
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:55
 msgid "The page will stay, but without the media item."
 msgstr "De pagina blijft over, maar zonder het media-item."
 
@@ -3021,15 +3102,15 @@ msgstr "Deze connectie bestaat al"
 msgid "This file contains links to other files or locations."
 msgstr "Dit bestand bevat links naar andere bestanden of locaties."
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:105
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:84
 msgid "This file has been scanned for viruses."
 msgstr "Dit bestand is gescand op virussen."
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:101
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:80
 msgid "This file has not been scanned for viruses because it is too large."
 msgstr "Dit bestand is niet gescand op virussen omdat het te groot is."
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:109
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:88
 msgid "This file has not been scanned for viruses."
 msgstr "Dit bestand is niet gescand op virussen."
 
@@ -3113,6 +3194,7 @@ msgstr "Time-out tijdens het ophalen van gegevens van de website."
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:25
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:16
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:20
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:44
 msgid "Title"
 msgstr "Titel"
 
@@ -3239,6 +3321,7 @@ msgid "Uploaded"
 msgstr "Geüpload"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:42
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:60
 msgid "Uploaded on"
 msgstr "Geüpload op"
 
@@ -3269,7 +3352,7 @@ msgstr "Geldig voor:"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish_view.tpl:2
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:10
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:52
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:31
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:142
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:26
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:41
@@ -3524,7 +3607,7 @@ msgid "page block"
 msgstr "paginablok"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:28
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:17
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:10
 msgid "pixels"
 msgstr "pixels"
 
@@ -3552,8 +3635,6 @@ msgid "untitled"
 msgstr "zonder titel"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:51
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:29
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:116
 msgid "uploaded on"
 msgstr "geüpload op"
 
@@ -3831,13 +3912,12 @@ msgstr "Alleen beheerders kunnen configuratieregels toevoegen."
 #: zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:11
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:22
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:25
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:131
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:138
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:159
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:161
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:115
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:122
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:143
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:145
 #: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:15
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:16
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:72
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:90
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:202
 msgid "Password"
 msgstr "Wachtwoord"
@@ -3979,7 +4059,8 @@ msgstr "Gebruik relay om e-mail te verzenden"
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:53
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:81
 #: zotonic_mod_authentication/priv/templates/email_password_reset.tpl:21
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:57
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:71
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:73
 msgid "Username"
 msgstr "Gebruikersnaam"
 
@@ -4112,8 +4193,8 @@ msgid "Are you sure you want to delete this entry?"
 msgstr "Weet je zeker dat je dit wilt verwijderen?"
 
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:19
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:37
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:87
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:45
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:99
 #: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:36
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:159
 msgid "Blocked"
@@ -4176,7 +4257,6 @@ msgstr "Gebruikersnaam bestaat al, kies a.u.b. een andere."
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:8
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:9
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:39
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:52
 msgid "E-mail"
 msgstr "E-mail"
 
@@ -4343,8 +4423,8 @@ msgid "Set username / password"
 msgstr "Stel gebruikersnaam / wachtwoord in"
 
 #: zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:27
-#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:73
-#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:128
+#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:97
+#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:152
 #: zotonic_mod_survey/src/mod_survey.erl:1237
 #: zotonic_mod_survey/src/mod_survey.erl:1259
 #: zotonic_mod_survey/src/mod_survey.erl:1267
@@ -4352,7 +4432,6 @@ msgid "Sorry"
 msgstr "Excuses"
 
 #: zotonic_mod_admin_identity/src/validators/validator_admin_identity_username_unique.erl:59
-#: zotonic_mod_signup/priv/templates/_signup_box.tpl:31
 msgid "Sorry, this username is already in use. Please try another one."
 msgstr "Sorry, deze gebruikersnaam is al in gebruik. Probeer een andere."
 
@@ -4554,8 +4633,7 @@ msgstr "Je gebruikersgegevens voor"
 #: zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:19
 #: zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:42
 #: zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:1
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:26
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:82
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:97
 msgid "Your new password is too short or not strong enough. Use a: uppercase letter, lowercase letter, number, and symbol."
 msgstr "Je nieuwe wachtwoord is te kort of niet sterk genoeg. Gebruik een: hoofdletter, kleine letter, cijfer en symbool."
 
@@ -4778,7 +4856,7 @@ msgid "Rescanning will rebuild the index of all modules, actions, templates etc.
 msgstr "Opnieuw scannen zal de index van alle modules, acties, templates etc. opnieuw opbouwen. Ook alle dispatchregels worden herladen."
 
 #: zotonic_mod_admin_modules/src/controllers/controller_admin_module_manager.erl:77
-#: zotonic_mod_search/src/mod_search.erl:203
+#: zotonic_mod_search/src/mod_search.erl:199
 #: zotonic_mod_survey/src/support/survey_admin.erl:40
 #: zotonic_mod_survey/src/support/survey_admin.erl:62
 #: zotonic_mod_survey/src/support/survey_admin.erl:107
@@ -5181,6 +5259,15 @@ msgstr "Album is een compilatie van liedjes van verschillende artiesten"
 msgid "Artist"
 msgstr "Kunstenaar"
 
+#: zotonic_mod_audio/priv/templates/_admin_edit_media_metadata_extra.tpl:4
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:70
+msgid "Audio bit rate"
+msgstr "Audiobitsnelheid"
+
+#: zotonic_mod_audio/priv/templates/_admin_edit_media_metadata_extra.tpl:16
+msgid "Audio tags"
+msgstr "Audiotags"
+
 #: zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:31
 #: zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:32
 msgid "Composer"
@@ -5240,13 +5327,6 @@ msgstr "De 2FA-instelling zijn gewijzigd."
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:26
 msgid "Copied to clipboard"
 msgstr "Gekopieerd naar het klembord"
-
-#: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:17
-#: zotonic_mod_auth2fa/priv/templates/_logon_login_set_passcode.tpl:20
-#: zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:33
-#: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_view.tpl:18
-msgid "Copy"
-msgstr "Kopieer"
 
 #: zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:22
 msgid "Default configuration"
@@ -5352,7 +5432,7 @@ msgid "Sorry, you are not allowed to set the 2FA."
 msgstr "Sorry, u mag de 2FA niet instellen."
 
 #: zotonic_mod_auth2fa/src/mod_auth2fa.erl:156
-#: zotonic_mod_oauth2/src/mod_oauth2.erl:289
+#: zotonic_mod_oauth2/src/mod_oauth2.erl:288
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:41
 msgid "Success"
 msgstr "Succes"
@@ -5412,10 +5492,10 @@ msgstr "Twee-factor-authenticatie is niet ingeschakeld voor dit account."
 #: zotonic_mod_auth2fa/priv/templates/_logon_login_set_passcode.tpl:30
 #: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:37
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:38
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:147
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:171
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:131
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:155
 #: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:23
-#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:59
+#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:83
 msgid "Two-factor passcode"
 msgstr "Twee-factor-toegangscode"
 
@@ -5464,7 +5544,7 @@ msgstr "Actieve sessies in het laatste uur"
 msgid "Afterwards, you'll be asked to log in again."
 msgstr "Daarna wordt je gevraagd om opnieuw in te loggen."
 
-#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:83
+#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:107
 msgid "Already connected"
 msgstr "Al verbonden"
 
@@ -5505,7 +5585,10 @@ msgstr "Hieronder staan de laatst bekende aanmeldingen voor je account."
 msgid "Browser info"
 msgstr "Browser info"
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:78
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:84
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:11
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:8
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:6
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:42
 msgid "Change"
 msgstr "Wijzigen"
@@ -5518,12 +5601,13 @@ msgstr "Wijzig wachtwoord"
 msgid "Change your password"
 msgstr "Wijzig je wachtwoord"
 
-#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:78
+#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:102
 msgid "Change your permissions"
 msgstr "Verander je toegangsrechten"
 
 #: zotonic_mod_authentication/priv/templates/_logon_box.tpl:93
 #: zotonic_mod_authentication/priv/templates/_logon_box.tpl:109
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:27
 msgid "Check your email"
 msgstr "Controleer je e-mail"
 
@@ -5535,19 +5619,19 @@ msgstr "Reset-code controleren…"
 msgid "Click on the link to enter a new password or copy and paste the whole link."
 msgstr "Klik op de link om een nieuw wachtwoord in te voeren of kopieer en plak de hele link."
 
-#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:16
+#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:17
 msgid "Close this window and log on if you are already a user of {site}."
 msgstr "Sluit dit venster en log in aan als je al een gebruiker bent van {site}."
 
 #: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:25
-#: zotonic_mod_authentication/priv/templates/logon_service_error.tpl:5
+#: zotonic_mod_authentication/priv/templates/logon_service_error.tpl:8
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:72
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:18
 #: zotonic_mod_wires/src/actions/action_wires_confirm.erl:82
 msgid "Confirm"
 msgstr "Bevestig"
 
-#: zotonic_mod_authentication/priv/templates/_logon_box.tpl:126
+#: zotonic_mod_authentication/priv/templates/_logon_login_title.tpl:4
 msgid "Confirm to connect"
 msgstr "Bevestig om verbinding te maken"
 
@@ -5555,7 +5639,7 @@ msgstr "Bevestig om verbinding te maken"
 msgid "Confirmation failure"
 msgstr "Fout bij bevestiging"
 
-#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:67
+#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:91
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:104
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:48
 msgid "Continue"
@@ -5565,11 +5649,11 @@ msgstr "Doorgaan"
 msgid "Current password"
 msgstr "Huidig wachtwoord"
 
-#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:118
+#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:142
 msgid "Disabled account"
 msgstr "Uitgeschakeld account"
 
-#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:89
+#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:113
 msgid "Duplicate email"
 msgstr "Dubbele e-mail"
 
@@ -5579,8 +5663,8 @@ msgstr "Het e-mailadres of het wachtwoord dat je hebt ingevoerd, is onjuist. Pro
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:7
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:13
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:63
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:82
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:69
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:88
 msgid "Email or username"
 msgstr "E-mail of gebruikersnaam"
 
@@ -5608,9 +5692,10 @@ msgstr "Vul je e-mailadres of gebruikersnaam in"
 msgid "Enter your email address to receive instructions on how to reset your password."
 msgstr "Voer je e-mailadres in om instructies te ontvangen om je wachtwoord opnieuw in te stellen."
 
-#: zotonic_mod_authentication/priv/templates/logon_service_error.tpl:5
+#: zotonic_mod_authentication/priv/templates/logon_service_error.tpl:10
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:14
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:143
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:7
 #: zotonic_mod_survey/priv/templates/_survey_block_name_check.tpl:2
 msgid "Error"
 msgstr "Fout"
@@ -5619,13 +5704,13 @@ msgstr "Fout"
 msgid "Every session will be interrupted and you will be logged out."
 msgstr "Alle sessies worden onderbroken en je wordt uitgelogd."
 
-#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:108
+#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:132
 msgid "Expected another account"
 msgstr "Ander account verwacht"
 
 #: zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3
 #: zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7
-#: zotonic_mod_authentication/src/mod_authentication.erl:451
+#: zotonic_mod_authentication/src/mod_authentication.erl:411
 msgid "External Services"
 msgstr "Externe diensten"
 
@@ -5642,7 +5727,9 @@ msgid "Force-close all active sessions"
 msgstr "Alle actieve sessies geforceerd sluiten"
 
 #: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:9
-#: zotonic_mod_authentication/priv/templates/_logon_login_support.tpl:3
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:63
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:192
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:204
 #: zotonic_mod_authentication/priv/templates/logon_error/message.passcode.tpl:8
 #: zotonic_mod_authentication/priv/templates/logon_error/message.pw.tpl:2
 msgid "Forgot your password?"
@@ -5693,15 +5780,20 @@ msgstr "Hoe je wachtwoord te veranderen"
 msgid "However this email address does not belong to one of our users or you have simply not added a password yet so that you will not be able to change it."
 msgstr "Dit e-mailadres behoort echter niet toe aan een van onze gebruikers of u hebt gewoon nog geen wachtwoord toegevoegd, zodat u het niet kunt wijzigen."
 
+#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:33
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:144
+msgid "I agree to the Terms of Service and the Privacy policies."
+msgstr "Ik ga akkoord met de gebruiksvoorwaarden en het privacybeleid."
+
 #: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:30
 msgid "I forgot my password"
 msgstr "Wachtwoord vergeten?"
 
-#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:29
+#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:53
 msgid "I want to create a new account"
 msgstr "Ik wil een nieuw account aanmaken"
 
-#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:9
+#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:10
 msgid "If you are already a user of {site} then <a href=\"{logon_url}\">log on</a>."
 msgstr "<a href=\"{logon_url}\">Log in</a> als je al een gebruiker van {site} bent."
 
@@ -5732,7 +5824,7 @@ msgid "Interrupted sessions might still be visible in the sessions overview, but
 msgstr "Onderbroken sessies kunnen nog steeds zichtbaar zijn in het sessiesoverzicht, maar worden niet meer bijgewerkt."
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:51
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:187
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:171
 #: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:37
 msgid "Keep me logged in"
 msgstr "Ik wil ingelogd blijven"
@@ -5746,21 +5838,25 @@ msgid "Last seen"
 msgstr "Laatst gezien"
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:58
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:202
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:186
 #: zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:21
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:187
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:195
 msgid "Log in"
 msgstr "Log in"
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_title.tpl:1
+#: zotonic_mod_authentication/priv/templates/_logon_login_title.tpl:16
 #: zotonic_mod_authentication/priv/templates/logon.tpl:11
 msgid "Log in to"
 msgstr "Inloggen op"
 
-#: zotonic_mod_authentication/priv/templates/_logon_box.tpl:127
+#: zotonic_mod_authentication/priv/templates/_logon_login_title.tpl:6
 msgid "Log in with your existing {site} account to connect the accounts. You only have to do this once."
 msgstr "Log in met jouw bestaande {site} account om de accounts te koppelen. Dit hoeft je maar één keer te doen."
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:115
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:228
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:91
 msgid "Log on with"
 msgstr "Log in met"
 
@@ -5777,15 +5873,21 @@ msgstr "Inlogtijd"
 msgid "Make sure you have verified your e-mail address."
 msgstr "Zorg ervoor dat je je e-mailadres hebt geverifieerd."
 
-#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:101
+#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:125
 msgid "Multiple accounts"
 msgstr "Meerdere accounts"
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:209
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:199
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:24
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:49
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:165
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:170
 msgid "Next"
 msgstr "Volgende"
+
+#: zotonic_mod_authentication/priv/templates/_logon_login_title.tpl:11
+msgid "Next time, enter your email address first to log in faster."
+msgstr "Voer de volgende keer eerst je e-mailadres in om sneller in te loggen."
 
 #: zotonic_mod_authentication/priv/templates/error.403.tpl:3
 #: zotonic_mod_base/priv/templates/error.403.tpl:3
@@ -5818,10 +5920,10 @@ msgstr "Een ogenblik geduld"
 
 #: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:34
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:35
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:144
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:168
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:128
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:152
 #: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:20
-#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:55
+#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:79
 msgid "Passcode"
 msgstr "Toegangscode"
 
@@ -5862,7 +5964,7 @@ msgstr "Probeer het over {n} uur opnieuw."
 msgid "Please try again in {n} minutes."
 msgstr "Probeer het over {n} minuten opnieuw."
 
-#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:132
+#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:156
 msgid "Please try again later."
 msgstr "Probeer het straks nog eens"
 
@@ -5870,12 +5972,17 @@ msgstr "Probeer het straks nog eens"
 msgid "Please use a different method to sign in. You can’t sign in using a username and password."
 msgstr "Gebruik een andere methode om in te loggen. U kunt niet inloggen met een gebruikersnaam en wachtwoord."
 
+#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:44
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:155
+msgid "Privacy policies"
+msgstr "Privacy reglement"
+
 #: zotonic_mod_authentication/priv/templates/logon_service.tpl:13
 msgid "Redirecting to"
 msgstr "Omleiding naar"
 
 #: zotonic_mod_authentication/priv/templates/logon_service.tpl:15
-#: zotonic_mod_signup/src/controllers/controller_signup_confirm.erl:53
+#: zotonic_mod_signup/src/controllers/controller_signup_confirm.erl:60
 msgid "Redirecting..."
 msgstr "Omleiding..."
 
@@ -5911,7 +6018,7 @@ msgstr "Sessies die het afgelopen uur door een browser zijn gebruikt."
 msgid "Simply try again:"
 msgstr "Probeer het opnieuw:"
 
-#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:85
+#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:109
 msgid "Somebody else is already connected with this account on {service}."
 msgstr "Iemand anders is al verbonden met dit account op {service}."
 
@@ -5932,9 +6039,14 @@ msgstr "Sorry, te veel pogingen"
 msgid "Sorry, your password reset code is unknown or expired"
 msgstr "Sorry, de code waarmee je wachtwoord kan worden veranderd is onbekend of verlopen"
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:184
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:168
 msgid "Stay logged on unless I log off."
 msgstr "Blijf ingelogd gedurende twee weken, behalve als ik uitlog"
+
+#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:41
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:152
+msgid "Terms of Service"
+msgstr "Gebruiksvoorwaarden"
 
 #: zotonic_mod_authentication/priv/templates/logon_error/message.password_change_match.tpl:2
 msgid "The new password must be different from the previous one. Please try again."
@@ -5956,15 +6068,15 @@ msgstr "De registratiemodule is actief. Gebruikers die inloggen via onderstaande
 msgid "The two new passwords should be equal. Please retype them."
 msgstr "De twee nieuwe wachtwoorden moeten hetzelfde zijn. Voer ze opnieuw in."
 
-#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:91
+#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:115
 msgid "There is already an account with your email address on {site}."
 msgstr "Er is al een account met jouw e-mailadres op {site}."
 
-#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:103
+#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:127
 msgid "There is more than one account with your email address on {site}."
 msgstr "Er is meer dan één account met jouw e-mailadres op {site}."
 
-#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:130
+#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:154
 msgid "There was a problem authenticating with {service}."
 msgstr "Er is een probleem opgetreden bij het verifiëren met {service}."
 
@@ -5994,6 +6106,10 @@ msgstr "Te veel pogingen."
 msgid "Use a: uppercase letter, lowercase letter, number, and symbol."
 msgstr "Gebruik een: hoofdletter, kleine letter, cijfer en symbool."
 
+#: zotonic_mod_authentication/priv/templates/_logon_login_title.tpl:9
+msgid "Use different method"
+msgstr "Gebruik een andere methode"
+
 #: zotonic_mod_authentication/priv/templates/logon_error/message.unequal.tpl:2
 msgid "Use non alphabetical characters, digits and upper/lower case letters to make it harder to guess."
 msgstr "Gebruik niet-alfabetische tekens, cijfers en hoofdletters/kleine letters om het raden moeilijker te maken."
@@ -6002,7 +6118,7 @@ msgstr "Gebruik niet-alfabetische tekens, cijfers en hoofdletters/kleine letters
 msgid "Verify your account"
 msgstr "Bevestig je account"
 
-#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:104
+#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:128
 msgid "We cannot connect you to the right account. Contact support of {site} to help you merge the accounts and then try again."
 msgstr "We kunnen je niet aan het juiste account koppelen. Neem contact op met support van {site} om je te helpen de accounts samen te voegen en probeer het opnieuw."
 
@@ -6020,11 +6136,11 @@ msgstr "We hebben een e-mail gestuurd met een link om je wachtwoord te resetten 
 msgid "Y-m-d"
 msgstr "Y-m-d"
 
-#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:5
+#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:6
 msgid "You are about to create a new account."
 msgstr "Je staat op het punt een nieuw account aan te maken."
 
-#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:34
+#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:58
 msgid "You are about to log on."
 msgstr "Je staat op het punt om in te loggen."
 
@@ -6036,24 +6152,33 @@ msgstr "Je bent ingelogd"
 msgid "You are now logged in."
 msgstr "Je bent nu ingelogd."
 
-#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:93
+#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:117
 msgid "You can connect the account on {site} with your account on {service} if both accounts have a verified email address but this is not the case. Check both sites and then try again."
 msgstr "Je kunt het account op {site} koppelen aan je account op {service} als beide accounts een geverifieerd e-mailadres hebben, maar dit is niet het geval. Controleer beide sites en probeer het opnieuw."
+
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:110
+msgid "You can enter the password that you have for"
+msgstr "Je kunt het wachtwoord invoeren dat je hebt voor"
 
 #: zotonic_mod_authentication/priv/templates/logon_error/message.need_passcode.tpl:2
 msgid "You can find the code in your authentication App."
 msgstr "Je vindt de code in je authenticatie-app."
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:104
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:215
 msgid "You can log in using the following external service"
 msgstr "U kunt inloggen met de volgende externe dienst"
+
+#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:39
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:150
+msgid "You can read them here:"
+msgstr "Je kunt ze hier lezen:"
 
 #: zotonic_mod_authentication/priv/templates/email_password_reset.tpl:9
 #: zotonic_mod_authentication/priv/templates/email_password_reset.tpl:18
 msgid "You have requested a new password for"
 msgstr "Je hebt een nieuw wachtwoord aangevraagd voor"
 
-#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:75
+#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:99
 msgid "You have to share your email address to be able to log in."
 msgstr "Je moet je e-mailadres delen om in te kunnen loggen."
 
@@ -6069,7 +6194,7 @@ msgstr "Om de App Keys te wijzigen, moet je rechten hebben om de systeemconfigur
 msgid "You received this email as you entered your username or email address to reset your password. You will not receive any other emails because of this request."
 msgstr "Je hebt deze e-mail ontvangen omdat je je gebruikersnaam of e-mailadres hebt ingevoerd om je wachtwoord opnieuw in te stellen. Je zult geen andere e-mails ontvangen vanwege dit verzoek."
 
-#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:111
+#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:135
 msgid "You used another account on {service} than was expected."
 msgstr "Je hebt op {service} een ander account gebruikt dan verwacht."
 
@@ -6077,7 +6202,7 @@ msgstr "Je hebt op {service} een ander account gebruikt dan verwacht."
 msgid "You're almost done! To make sure you are really you, we ask you to confirm your account from your email address."
 msgstr "Bijna klaar! Om er zeker van te zijn dat jij het bent, vragen we je je e-mailadres te bevestigen."
 
-#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:121
+#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:145
 msgid "Your account on {site} is disabled."
 msgstr "Je account op {site} is uitgeschakeld."
 
@@ -6110,23 +6235,22 @@ msgstr "Jouw gebruikersnaam is"
 msgid "an hour"
 msgstr "een uur"
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:115
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:228
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:91
 msgid "external service"
 msgstr "externe dienst"
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_extra.tpl:7
-#: zotonic_mod_signup/priv/templates/_signup_extra.tpl:9
+#: zotonic_mod_authentication/priv/templates/_logon_login_extra.tpl:6
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:211
+#: zotonic_mod_signup/priv/templates/_signup_box.tpl:30
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:76
 msgid "or"
 msgstr "of"
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:123
-msgid "or you can enter the password that you have for"
-msgstr "of je kan het wachtwoord invoeren dat je hebt voor"
-
-#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:85
-#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:95
-#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:112
-#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:130
+#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:109
+#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:119
+#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:136
+#: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:154
 msgid "the service"
 msgstr "de dienst"
 
@@ -6712,7 +6836,7 @@ msgstr "Pong-latency"
 msgid "Powered by Zotonic"
 msgstr "Powered by Zotonic"
 
-#: zotonic_mod_base/priv/templates/email_base.tpl:338
+#: zotonic_mod_base/priv/templates/email_base.tpl:336
 msgid "Read this page on the web"
 msgstr "Lees deze pagina op het web."
 
@@ -6797,6 +6921,7 @@ msgid "This tests the communication with the server."
 msgstr "Dit test de communicatie met de server."
 
 #: zotonic_mod_base/priv/templates/directory_index.tpl:15
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:38
 msgid "Type"
 msgstr "Type"
 
@@ -7347,8 +7472,8 @@ msgid "Dependency graph of all templates"
 msgstr "Afhankelijkheidsgrafiek van alle sjablonen"
 
 #: zotonic_mod_development/priv/templates/_development_template_graph.tpl:3
-msgid "Dependency graph of all templates. Only template includes using a direct string value for the template name are shown."
-msgstr "Dependency-graaf van alle sjablonen. Alleen sjablonen met een onmiddelijke string-waarde voor de sjabloonnaam worden getoond."
+msgid "Dependency graph of all templates. Only template includes using a Immediate string value for the template name are shown."
+msgstr "Afhankelijkheidsgrafiek van alle sjablonen. Alleen sjabloon-includes waarbij een directe tekenreekswaarde voor de sjabloonnaam wordt gebruikt, worden weergegeven."
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:66
 msgid "Dependency graph of all traced templates. All includes are shown."
@@ -7768,6 +7893,7 @@ msgstr "Syntaxfouten"
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:61
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:123
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:190
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:223
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:135
 msgid "Template"
 msgstr "Template"
@@ -8108,7 +8234,15 @@ msgstr "URL voor de e-mail relay API"
 msgid "Zotonic Relay"
 msgstr "Zotonic Relay"
 
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:7
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:240
+msgid "Accepted for delivery"
+msgstr "Geaccepteerd voor levering"
+
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:238
+msgid "Being sent"
+msgstr "Verzonden worden"
+
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:15
 #: zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:4
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:4
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:4
@@ -8126,43 +8260,76 @@ msgstr "Zotonic Relay"
 msgid "Block"
 msgstr "Blok"
 
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:188
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:194
 msgid "Bounces"
 msgstr "Teruggestuurd"
 
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:121
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:133
 msgid "Clear error for this email address."
 msgstr "Wis de foutmelding voor dit e-mailadres."
 
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:174
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:242
+msgid "Could not be sent"
+msgstr "Kon niet worden verzonden"
+
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:180
 msgid "Errors since last clear"
 msgstr "Fouten sinds de laatste reset"
 
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:111
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:123
 msgid "If you are sure this email address is correct, the problem was probably temporary so you can clear the error message."
 msgstr "Als je zeker weet dat dit e-mailadres correct is, was het probleem waarschijnlijk tijdelijk en kan je de foutmelding wissen."
 
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:78
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:86
 msgid "Information about"
 msgstr "Informatie over"
 
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:184
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:190
 msgid "Last error status"
 msgstr "Laatste fout"
 
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:161
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:167
 msgid "Most Recent"
 msgstr "Recentste"
 
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:6
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:284
+msgid "No email activity information is available for the email address &lt;{email}&gt;."
+msgstr "Er is geen informatie over e-mailactiviteit beschikbaar voor het e-mailadres &lt;{email}&gt;."
+
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:202
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:268
+msgid "No recent email activity for this address."
+msgstr "Er is geen recente e-mailactiviteit voor dit adres."
+
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:14
 msgid "Prevent sending email to, and receiving email from this address."
 msgstr "Voorkom dat e-mails worden verzonden naar en ontvangen van dit adres."
 
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:164
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:245
+msgid "Received from sender"
+msgstr "Ontvangen van afzender"
+
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:170
 msgid "Received from this address"
 msgstr "Ontvangen vanaf dit adres"
 
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:169
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:205
+msgid "Recent email activity for &lt;{email}&gt;"
+msgstr "Recente e-mailactiviteit voor &lt;{email}&gt;"
+
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:241
+msgid "Returned by recipient"
+msgstr "Teruggestuurd door de ontvanger"
+
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:244
+msgid "Sending blocked"
+msgstr "Verzenden geblokkeerd"
+
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:239
+msgid "Sent to recipient"
+msgstr "Verzonden naar de ontvanger"
+
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:175
 msgid "Sent to this address"
 msgstr "Verstuurd naar dit adres"
 
@@ -8174,7 +8341,7 @@ msgstr "Sorry, je mag dit e-mailadres niet blokkeren."
 msgid "Sorry, you are not allowed to reset this email address."
 msgstr "Sorry, je mag dit e-mailadres niet resetten."
 
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:71
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:79
 msgid "The block has been cleared and emails are being sent and received."
 msgstr "De blokkade is opgeheven en e-mails worden verzonden en ontvangen."
 
@@ -8186,64 +8353,76 @@ msgstr "Het e-mailadres is geblokkeerd."
 msgid "The email error flag has been cleared."
 msgstr "De error status is gereset."
 
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:145
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:157
 msgid "The error message has been cleared and emails are being sent."
 msgstr "De foutmelding is gewist en e-mails worden verzonden."
+
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:210
+msgid "The template name and mail server messages are hidden for regular users."
+msgstr "De naam van het sjabloon en de berichten van de e-mailserver zijn verborgen voor gewone gebruikers."
 
 #: zotonic_mod_email_status/priv/templates/_email_status_flag.tpl:10
 msgid "There are email problems."
 msgstr "Er zijn e-mail problemen."
 
 #: zotonic_mod_email_status/priv/templates/_email_status_flag.tpl:7
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:109
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:121
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_status_flag.tpl:7
 msgid "There are problems with this email address."
 msgstr "Er zijn problemen met dit e-mailadres."
 
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:97
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:109
 msgid "There have been some problems but they have been cleared. This message will disappear as soon as an email has been received succesfully."
 msgstr "Er waren problemen maar die zijn opgelost. Dit bericht zal verdwijnen zo gauw een e-mail succesvol is ontvangen."
 
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:39
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:47
 msgid "This email address has been blocked, no emails will be sent or received from this address."
 msgstr "Dit e-mailadres is geblokkeerd, er worden geen e-mails verzonden of ontvangen vanaf dit adres."
 
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:89
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:101
 msgid "This email address has been blocked."
 msgstr "Dit e-mailadres is geblokkeerd."
 
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:153
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:93
 msgid "This email address is not valid."
 msgstr "Dit e-mailadres is ongeldig."
 
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:96
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:108
 msgid "This email address is now ok."
 msgstr "Dit e-mailadres is momenteel goed."
 
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:102
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:114
 msgid "This email address is ok."
 msgstr "Dit e-mailadres is goed."
 
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:179
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:185
 msgid "Total send errors"
 msgstr "Totaal aantal fouten"
 
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:160
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:166
 msgid "Total/Status"
 msgstr "Totaal/status"
 
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:44
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:52
 msgid "Unblock"
 msgstr "Deblokkeer"
 
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:111
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:213
+msgid "View email log"
+msgstr "E-maillogboek bekijken"
+
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:123
 msgid "We are retrying email delivery."
 msgstr "We proberen opnieuw e-mail te versturen."
 
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:90
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:113
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:102
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:125
 msgid "We stopped email delivery."
 msgstr "We zijn gestopt met het afleveren van e-mail."
+
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:243
+msgid "Will try again"
+msgstr "Ik probeer het nog eens"
 
 #: zotonic_mod_export/priv/templates/_vcalendar_header.tpl:7
 msgid "Calendar"
@@ -8618,6 +8797,7 @@ msgid "Save Settings"
 msgstr "Bewaar instellingen"
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:35
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:7
 msgid "Service"
 msgstr "Service"
 
@@ -8835,7 +9015,7 @@ msgid "Import CSV XLSX file"
 msgstr "CSV XLSX-bestand importeren"
 
 #: zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:7
-#: zotonic_mod_import_csv/src/mod_import_csv.erl:114
+#: zotonic_mod_import_csv/src/mod_import_csv.erl:145
 msgid "Import CSV or XLSX file"
 msgstr "CSV- of XLSX-bestand importeren"
 
@@ -8856,11 +9036,11 @@ msgstr "Importeer gegevens uit een CSV- of XLSX-bestand."
 msgid "Multilingual properties can be set by specifying the language after the property name."
 msgstr "Meertalige eigenschappen kunnen worden ingesteld door de taal te specificeren achter de naam van de eigenschap."
 
-#: zotonic_mod_import_csv/src/mod_import_csv.erl:178
+#: zotonic_mod_import_csv/src/mod_import_csv.erl:209
 msgid "Only admins can import CSV files."
 msgstr "Alleen admins kunnen CSV-bestanden importeren."
 
-#: zotonic_mod_import_csv/src/mod_import_csv.erl:151
+#: zotonic_mod_import_csv/src/mod_import_csv.erl:182
 msgid "Please hold on while the file is importing. You will get a notification when it is ready."
 msgstr "Een moment geduld terwijl het bestand wordt geïmporteerd. Je krijgt een notificatie wanneer het klaar is."
 
@@ -8920,12 +9100,12 @@ msgstr "De titel van de pagina."
 msgid "The unique name of the page, used to identify the page."
 msgstr "De unieke naam van de pagina die wordt gebruikt om de pagina te identificeren."
 
-#: zotonic_mod_import_csv/src/mod_import_csv.erl:161
-#: zotonic_mod_import_csv/src/mod_import_csv.erl:199
+#: zotonic_mod_import_csv/src/mod_import_csv.erl:192
+#: zotonic_mod_import_csv/src/mod_import_csv.erl:230
 msgid "The uploaded file has been imported."
 msgstr "Het geüploade bestand is geïmporteerd."
 
-#: zotonic_mod_import_csv/src/mod_import_csv.erl:174
+#: zotonic_mod_import_csv/src/mod_import_csv.erl:205
 msgid "This file cannot be imported."
 msgstr "Dit bestand kan niet worden geïmporteerd."
 
@@ -9248,7 +9428,7 @@ msgid "Cleared the CSP reports."
 msgstr "De CSP-rapporten zijn gewist."
 
 #: zotonic_mod_logging/priv/templates/admin_log_base.tpl:13
-#: zotonic_mod_logging/src/mod_logging.erl:358
+#: zotonic_mod_logging/src/mod_logging.erl:366
 msgid "Content-Security log"
 msgstr "Inhoud-beveiligingslogboek"
 
@@ -9269,7 +9449,7 @@ msgid "Directive"
 msgstr "Richtlijn"
 
 #: zotonic_mod_logging/priv/templates/admin_log_base.tpl:12
-#: zotonic_mod_logging/src/mod_logging.erl:353
+#: zotonic_mod_logging/src/mod_logging.erl:361
 msgid "Email log"
 msgstr "E-mail log"
 
@@ -9313,7 +9493,7 @@ msgid "Latest reported security policy:"
 msgstr "Laatst gerapporteerde beveiligingsbeleid:"
 
 #: zotonic_mod_logging/priv/templates/admin_log_base.tpl:3
-#: zotonic_mod_logging/src/mod_logging.erl:348
+#: zotonic_mod_logging/src/mod_logging.erl:356
 msgid "Log"
 msgstr "Logboek"
 
@@ -9385,6 +9565,10 @@ msgstr "Opnieuw"
 msgid "Sending"
 msgstr "Versturen"
 
+#: zotonic_mod_logging/priv/templates/_email_send_status_view.tpl:12
+msgid "Sending…"
+msgstr "… verzenden"
+
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:154
 msgid "Sent"
 msgstr "Verstuurd"
@@ -9407,6 +9591,26 @@ msgstr "Bronnen"
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:26
 msgid "Stack"
 msgstr "Stack"
+
+#: zotonic_mod_logging/priv/templates/_email_send_status_view.tpl:18
+msgid "The email bounced, and could not be delivered. Check if the address is correct."
+msgstr "De e-mail is teruggestuurd en kon niet worden afgeleverd. Controleer of het adres juist is."
+
+#: zotonic_mod_logging/priv/templates/_email_send_status_view.tpl:16
+msgid "The email has been relayed."
+msgstr "De e-mail is doorgestuurd."
+
+#: zotonic_mod_logging/priv/templates/_email_send_status_view.tpl:14
+msgid "The email has been sent."
+msgstr "De e-mail is verzonden."
+
+#: zotonic_mod_logging/priv/templates/_email_send_status_view.tpl:22
+msgid "The email is not sent because the address is blocked by us."
+msgstr "De e-mail wordt niet verzonden omdat het adres door ons is geblokkeerd."
+
+#: zotonic_mod_logging/priv/templates/_email_send_status_view.tpl:20
+msgid "The email is not yet sent. We are retrying."
+msgstr "De e-mail is nog niet verzonden. We proberen het opnieuw."
 
 #: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:23
 msgid "The latest 100 reported directives and blocked contents are kept. For each, the last 10 reported source locations are shown."
@@ -9444,13 +9648,17 @@ msgid "User interface events log"
 msgstr "Gebeurtenissenlogboek gebruikersinterface"
 
 #: zotonic_mod_logging/priv/templates/admin_log_base.tpl:14
-#: zotonic_mod_logging/src/mod_logging.erl:363
+#: zotonic_mod_logging/src/mod_logging.erl:371
 msgid "User interface log"
 msgstr "Logboek van de gebruikersinterface"
 
 #: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:40
 msgid "User-Agents"
 msgstr "Gebruikers-agenten"
+
+#: zotonic_mod_logging/priv/templates/_email_send_status_view.tpl:34
+msgid "Waiting…"
+msgstr "… in afwachting"
 
 #: zotonic_mod_logging/src/mod_logging.erl:193
 msgid "You don't have permission to clear the CSP reports."
@@ -9655,7 +9863,8 @@ msgid "Externally managed list &mdash; no unsubscribe/subscribe links"
 msgstr "Extern beheerde lijst &mdash; geen links voor afmelden / aanmelden"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:46
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:16
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:30
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:32
 msgid "First name"
 msgstr "Voornaam"
 
@@ -9854,7 +10063,7 @@ msgid "Please unsubscribe"
 msgstr "Schrijf uit"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:53
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:30
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:43
 msgid "Prefix"
 msgstr "Voorvoegsel"
 
@@ -10482,7 +10691,7 @@ msgstr "Doorverwijzen naar Microsoft."
 msgid "Save Microsoft Settings"
 msgstr "Sla Microsoft-instellingen op"
 
-#: zotonic_mod_microsoft/src/mod_microsoft.erl:119
+#: zotonic_mod_microsoft/src/mod_microsoft.erl:118
 msgid "Saved the Microsoft settings."
 msgstr "Microsoft-instellingen opgeslagen."
 
@@ -10499,7 +10708,7 @@ msgstr "Tenant"
 msgid "Use Microsoft authentication"
 msgstr "Gebruik Microsoft-authenticatie"
 
-#: zotonic_mod_microsoft/src/mod_microsoft.erl:121
+#: zotonic_mod_microsoft/src/mod_microsoft.erl:120
 msgid "You don't have permission to change the Microsoft settings."
 msgstr "Je hebt geen toestemming om de Microsoft instellingen te veranderen."
 
@@ -10580,7 +10789,7 @@ msgstr "Sta gebruikers op de externe website toe om zich hier te authenticeren (
 msgid "Allow users registered on the other website to logon on this website."
 msgstr "Gebruikers die geregistreerd zijn op de andere website toestaan om in te loggen op deze website."
 
-#: zotonic_mod_oauth2/src/mod_oauth2.erl:201
+#: zotonic_mod_oauth2/src/mod_oauth2.erl:200
 msgid "An OAuth2 consumer with this name already exsists, please use another name."
 msgstr "Er bestaat al een OAuth2-consument met deze naam, gebruik een andere naam."
 
@@ -10661,36 +10870,36 @@ msgstr "Verbind met"
 msgid "Consumer App not found, or no view permission."
 msgstr "Consumenten-app niet gevonden of geen toestemming om te bekijken."
 
-#: zotonic_mod_oauth2/src/mod_oauth2.erl:160
-#: zotonic_mod_oauth2/src/mod_oauth2.erl:271
+#: zotonic_mod_oauth2/src/mod_oauth2.erl:159
+#: zotonic_mod_oauth2/src/mod_oauth2.erl:270
 msgid "Could not delete the token."
 msgstr "Kan het token niet verwijderen."
 
-#: zotonic_mod_oauth2/src/mod_oauth2.erl:307
+#: zotonic_mod_oauth2/src/mod_oauth2.erl:306
 msgid "Could not fetch a new access token."
 msgstr "Kan geen nieuw toegangstoken ophalen."
 
-#: zotonic_mod_oauth2/src/mod_oauth2.erl:152
-#: zotonic_mod_oauth2/src/mod_oauth2.erl:180
+#: zotonic_mod_oauth2/src/mod_oauth2.erl:151
+#: zotonic_mod_oauth2/src/mod_oauth2.erl:179
 msgid "Could not generate the access token."
 msgstr "Kan het toegangstoken niet genereren."
 
-#: zotonic_mod_oauth2/src/mod_oauth2.erl:101
-#: zotonic_mod_oauth2/src/mod_oauth2.erl:118
-#: zotonic_mod_oauth2/src/mod_oauth2.erl:125
+#: zotonic_mod_oauth2/src/mod_oauth2.erl:100
+#: zotonic_mod_oauth2/src/mod_oauth2.erl:117
+#: zotonic_mod_oauth2/src/mod_oauth2.erl:124
 msgid "Could not insert the App."
 msgstr "Kan de app niet invoegen."
 
-#: zotonic_mod_oauth2/src/mod_oauth2.erl:203
-#: zotonic_mod_oauth2/src/mod_oauth2.erl:229
+#: zotonic_mod_oauth2/src/mod_oauth2.erl:202
+#: zotonic_mod_oauth2/src/mod_oauth2.erl:228
 msgid "Could not insert the Consumer."
 msgstr "Kon de consument niet invoegen."
 
-#: zotonic_mod_oauth2/src/mod_oauth2.erl:259
+#: zotonic_mod_oauth2/src/mod_oauth2.erl:258
 msgid "Could not save the access token."
 msgstr "Kan het toegangstoken niet opslaan."
 
-#: zotonic_mod_oauth2/src/mod_oauth2.erl:222
+#: zotonic_mod_oauth2/src/mod_oauth2.erl:221
 msgid "Could not update the Consumer."
 msgstr "Kon de consument niet updaten."
 
@@ -10748,7 +10957,7 @@ msgid "Edit Client"
 msgstr "Client bewerken"
 
 #: zotonic_mod_oauth2/priv/templates/_oauth2_apps_list.tpl:24
-#: zotonic_mod_oauth2/src/mod_oauth2.erl:99
+#: zotonic_mod_oauth2/src/mod_oauth2.erl:98
 msgid "Edit OAuth2 App"
 msgstr "OAuth2-app bewerken"
 
@@ -10767,19 +10976,19 @@ msgid "Enabled"
 msgstr "Ingeschakeld"
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:65
-#: zotonic_mod_oauth2/src/mod_oauth2.erl:246
+#: zotonic_mod_oauth2/src/mod_oauth2.erl:245
 msgid "Fetch Token"
 msgstr "Token ophalen"
 
-#: zotonic_mod_oauth2/src/mod_oauth2.erl:240
+#: zotonic_mod_oauth2/src/mod_oauth2.erl:239
 msgid "Fetch an access token to this site?"
 msgstr "Een toegangstoken voor deze site ophalen?"
 
-#: zotonic_mod_oauth2/src/mod_oauth2.erl:290
+#: zotonic_mod_oauth2/src/mod_oauth2.erl:289
 msgid "Fetched a new access token."
 msgstr "Er is een nieuwe toegangstoken opgehaald."
 
-#: zotonic_mod_oauth2/src/mod_oauth2.erl:244
+#: zotonic_mod_oauth2/src/mod_oauth2.erl:243
 msgid "Fetching a token can take some time."
 msgstr "Het ophalen van een token kan enige tijd duren."
 
@@ -10879,8 +11088,8 @@ msgstr "Voeg handmatig een token toe, zoals gekopieerd van {domain}."
 msgid "Month"
 msgstr "Maand"
 
-#: zotonic_mod_oauth2/src/mod_oauth2.erl:142
-#: zotonic_mod_oauth2/src/mod_oauth2.erl:172
+#: zotonic_mod_oauth2/src/mod_oauth2.erl:141
+#: zotonic_mod_oauth2/src/mod_oauth2.erl:171
 msgid "New access token"
 msgstr "Nieuw toegangstoken"
 
@@ -10902,7 +11111,7 @@ msgstr "OAuth2-toepassing - toegangstokens"
 
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:7
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:15
-#: zotonic_mod_oauth2/src/mod_oauth2.erl:470
+#: zotonic_mod_oauth2/src/mod_oauth2.erl:469
 msgid "OAuth2 Applications"
 msgstr "OAuth2-toepassingen"
 
@@ -10913,7 +11122,7 @@ msgstr "OAuth2-toepassingen &gt; Toegangstokens"
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:3
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:7
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:15
-#: zotonic_mod_oauth2/src/mod_oauth2.erl:475
+#: zotonic_mod_oauth2/src/mod_oauth2.erl:474
 msgid "OAuth2 Clients"
 msgstr "OAuth2-clients"
 
@@ -10953,8 +11162,8 @@ msgstr "Optionele opmerking"
 msgid "Permission"
 msgstr "Toestemming"
 
-#: zotonic_mod_oauth2/src/mod_oauth2.erl:135
-#: zotonic_mod_oauth2/src/mod_oauth2.erl:234
+#: zotonic_mod_oauth2/src/mod_oauth2.erl:134
+#: zotonic_mod_oauth2/src/mod_oauth2.erl:233
 msgid "Please select a user."
 msgstr "Selecteer een gebruiker."
 
@@ -11008,7 +11217,7 @@ msgstr "De App ID en App Secret zijn nodig als je deze website wilt gebruiken vo
 msgid "The client must extend the token before it expires."
 msgstr "De cliënt moet het token verlengen voordat het vervalt."
 
-#: zotonic_mod_oauth2/src/mod_oauth2.erl:242
+#: zotonic_mod_oauth2/src/mod_oauth2.erl:241
 msgid "The token will be registered with the selected user account."
 msgstr "Het token wordt geregistreerd met de geselecteerde gebruikersaccount."
 
@@ -11091,7 +11300,7 @@ msgstr "Week"
 msgid "With a client token this website can:"
 msgstr "Met een client token kan deze website:"
 
-#: zotonic_mod_oauth2/src/mod_oauth2.erl:314
+#: zotonic_mod_oauth2/src/mod_oauth2.erl:313
 msgid "You are not allowed to fetch a consumer token."
 msgstr "Het is niet toegestaan om een consumententoken op te halen."
 
@@ -11123,6 +11332,22 @@ msgstr "Probeer ingesloten video’s te corrigeren waarbij de vorige keer het in
 msgid "Attempting to fix ~p videos."
 msgstr "Aan het proberen om ~p videos opnieuw in te sluiten."
 
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:50
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:25
+msgid "Author"
+msgstr "Auteur"
+
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:27
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:59
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:90
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:118
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:45
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:61
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:77
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:93
+msgid "Copy the URL to the clipboard."
+msgstr "Kopieer de URL naar het klembord."
+
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media.tpl:4
 msgid "Embedding of media item failed with HTTP code"
 msgstr "Insluiten van video mislukt met HTTP code"
@@ -11135,6 +11360,18 @@ msgstr "Repareer ingesloten video’s"
 msgid "No embedded videos found which need fixing."
 msgstr "Geen ingesloten video’s gevonden die gerepareerd moeten worden."
 
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:3
+msgid "OEmbed"
+msgstr "OEmbed"
+
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:110
+msgid "OEmbed URL"
+msgstr "OEmbed-URL"
+
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:18
+msgid "Provider"
+msgstr "Aanbieder"
+
 #: zotonic_mod_oembed/priv/templates/_admin_authentication_service.tpl:18
 msgid "Save Embedly Key"
 msgstr "Embedly-sleutel opslaan"
@@ -11142,6 +11379,24 @@ msgstr "Embedly-sleutel opslaan"
 #: zotonic_mod_oembed/src/mod_oembed.erl:470
 msgid "Saved the Embedly settings."
 msgstr "Embedly-instellingen opgeslagen."
+
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:82
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:85
+msgid "Thumbnail URL"
+msgstr "URL van de miniatuurafbeelding"
+
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:98
+msgid "Thumbnail size"
+msgstr "Grootte van de miniatuurafbeelding"
+
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:104
+msgid "Version"
+msgstr "Versie"
+
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:76
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:13
+msgid "Video ID"
+msgstr "Video-ID"
 
 #: zotonic_mod_oembed/src/mod_oembed.erl:472
 msgid "You don't have permission to change the Embedly settings."
@@ -11192,7 +11447,7 @@ msgstr "Overeenkomende tekst"
 msgid "Rebuild search facets"
 msgstr "Zoekfacetten opnieuw opbouwen"
 
-#: zotonic_mod_search/src/mod_search.erl:201
+#: zotonic_mod_search/src/mod_search.erl:197
 msgid "Rebuilding the faceted search table."
 msgstr "De gefacetteerde zoektabel opnieuw opbouwen."
 
@@ -11532,17 +11787,9 @@ msgstr "standaard"
 msgid "not in sitemap"
 msgstr "niet in sitemap"
 
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:9
-msgid "Check our Terms of Service and Privacy policies"
-msgstr "Raadpleeg de algemene voorwaarden en privacy policy"
-
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:11
-msgid "Choose a password"
-msgstr "Kies een wachtwoord"
-
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:52
-msgid "Choose a username and password"
-msgstr "Kies een gebruikersnaam / wachtwoord"
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:69
+msgid "A new verification code has been sent to your email address. Please check your inbox and spam folder."
+msgstr "Er is een nieuwe verificatiecode naar je e-mailadres verzonden. Controleer je inbox en je spamfolder."
 
 #: zotonic_mod_signup/priv/templates/signup_confirm.tpl:3
 #: zotonic_mod_signup/priv/templates/signup_confirm.tpl:21
@@ -11553,162 +11800,195 @@ msgstr "Bevestig mijn account"
 msgid "Confirm my account."
 msgstr "Bevestig mijn account"
 
-#: zotonic_mod_signup/priv/templates/_signup_stage.tpl:1
-msgid "Confirm your account by email"
-msgstr "Bevestig je account via e-mail"
-
 #: zotonic_mod_signup/priv/templates/signup_confirm.tpl:7
 msgid "Confirming..."
 msgstr "Bevestigen ..."
 
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:22
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:43
-msgid "Enter a name"
-msgstr "Vul je naam in"
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:107
+msgid "Copy the password to the clipboard."
+msgstr "Kopieer het wachtwoord naar het klembord."
 
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:24
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:80
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:103
+msgid "Could not send email to <b>{email}</b>. Please check the email address and try again."
+msgstr "Het is niet gelukt om een e-mail te versturen naar <b>{email}</b>. Controleer het e-mailadres en probeer het opnieuw."
+
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:59
+msgid "Didn’t receive the email?"
+msgstr "Heb je de e-mail niet ontvangen?"
+
+#: zotonic_mod_signup/src/controllers/controller_signup.erl:652
+msgid "Email address mismatch"
+msgstr "E-mailadres komt niet overeen"
+
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:95
 msgid "Enter a password"
 msgstr "Vul een wachtwoord in"
 
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:64
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:76
 msgid "Enter a username"
 msgstr "Vul een gebruikersnaam in"
 
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:62
-msgid "Enter a valid address"
-msgstr "Voer een geldig e-mailadres in"
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:40
+msgid "Enter code"
+msgstr "Voer de code in"
 
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:63
-msgid "Enter an e-mail address"
-msgstr "Vul een e-mailadres in"
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:34
+msgid "Enter first name"
+msgstr "Voer je voornaam in"
 
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:54
+msgid "Enter last name"
+msgstr "Voer de achternaam in"
+
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:104
+msgid "Generate a new and secure password."
+msgstr "Maak een nieuw en veilig wachtwoord aan."
+
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:105
+msgid "Generate a secure password"
+msgstr "Een veilig wachtwoord aanmaken"
+
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:14
 #: zotonic_mod_signup/priv/templates/email_verify.tpl:14
 msgid "Hope to see you soon."
 msgstr "Hoop je snel weer te zien."
 
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:22
-msgid "I agree to the"
-msgstr "Ik ga akkoord met de"
+#: zotonic_mod_signup/priv/templates/_signup_box.tpl:18
+msgid "If you already have an account, <a href=\"{url}\" id=\"back_to_logon\">log in now</a>."
+msgstr "Als je al een account hebt, <a href=\"{url}\" id=\"back_to_logon\">log dan nu in</a>."
 
-#: zotonic_mod_signup/priv/templates/_signup_outside.tpl:1
-msgid "If you already have an account,"
-msgstr "Als je al een account hebt,"
-
-#: zotonic_mod_signup/priv/templates/_signup_stage.tpl:9
-msgid "If you do not receive the e-mail within a few minutes, please check your spam folder."
-msgstr "Als je deze e-mail niet in een paar minuten ontvangt, controleer dan je spamfolder."
-
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:37
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:50
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:52
 msgid "Last name"
 msgstr "Achternaam"
+
+#: zotonic_mod_signup/priv/templates/_signup_box.tpl:7
+msgid "Log off"
+msgstr "Uitloggen"
+
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:103
+msgid "Need a new password?"
+msgstr "Heb je een nieuw wachtwoord nodig?"
 
 #: zotonic_mod_signup/priv/templates/_logon_link.tpl:2
 msgid "No account yet?"
 msgstr "Nog geen account?"
 
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:30
+msgid "Please check your email and enter the code in the form below."
+msgstr "Controleer je e-mail en voer de code in het onderstaande formulier in."
+
 #: zotonic_mod_signup/priv/templates/email_verify.tpl:3
 msgid "Please confirm your account"
 msgstr "Bevestig je account"
-
-#: zotonic_mod_signup/priv/templates/_signup_stage.tpl:3
-msgid "Please follow the instructions in the email we've sent you."
-msgstr "Volg de instructies in de e-mail die we je net gestuurd hebben."
 
 #: zotonic_mod_signup/priv/templates/email_verify.tpl:10
 msgid "Please follow the link below."
 msgstr "Volg de onderstaande link"
 
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:23
-msgid "Privacy policies"
-msgstr "Privacy reglement"
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:60
+msgid "Resend code"
+msgstr "Code opnieuw verzenden"
 
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:42
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:98
-msgid "Repeat your password"
-msgstr "Herhaal je wachtwoord"
-
-#: zotonic_mod_signup/priv/templates/_signup_form_fields.tpl:5
+#: zotonic_mod_signup/priv/templates/_signup_box.tpl:13
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:178
 #: zotonic_mod_signup/priv/templates/signup.tpl:3
 msgid "Sign Up"
 msgstr "Registreer"
 
 #: zotonic_mod_signup/priv/templates/_logon_link.tpl:2
-#: zotonic_mod_signup/priv/templates/_signup_title.tpl:1
 msgid "Sign up"
 msgstr "Registreer"
 
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:11
-msgid "Sign up with your e-mail address"
-msgstr "Registreer je met je e-mailadres"
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:109
+msgid "Something went wrong, please retry again later."
+msgstr "Er is een fout opgetreden. Probeer het later nog eens."
 
-#: zotonic_mod_signup/priv/templates/_signup_box.tpl:24
-msgid "Sorry, there is already an account coupled to your account at your service provider. Maybe your account here was suspended."
-msgstr "Sorry, er is hier al een account gekoppeld aan het account van de service provider. Misschien is het account hier geblokkeerd."
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:200
+msgid "Something went wrong. Please try again later."
+msgstr "Er is een fout opgetreden. Probeer het later nog eens."
 
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:22
-msgid "Terms of Service"
-msgstr "Gebruiksvoorwaarden"
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:206
+msgid "Sorry, you already have an account. Maybe your account here was suspended."
+msgstr "Sorry, je hebt al een account. Misschien is je account hier geblokkeerd."
 
 #: zotonic_mod_signup/priv/templates/email_verify.tpl:8
 msgid "Thank you for registering at our site. We request you to confirm your account before you can use it."
 msgstr "Bedankt voor het registreren bij onze website.  Wij verzoeken je om je account te bevestigen voordat je het kan gebruiken."
 
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:43
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:99
-msgid "This does not match the first password"
-msgstr "Dit komt niet overeen met het eerste wachtwoord"
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:6
+msgid "Thank you for signing up."
+msgstr "Bedankt voor je aanmelding."
 
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:14
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:43
+msgid "The code you entered is incorrect. Please try again."
+msgstr "De code die u hebt ingevoerd, is onjuist. Probeer het nog eens."
+
+#: zotonic_mod_signup/src/controllers/controller_signup.erl:653
+msgid "The email address you entered does not match the email address you provided in the previous step. Please check your input and try again."
+msgstr "Het e-mailadres dat u hebt ingevoerd, komt niet overeen met het e-mailadres dat u in de vorige stap hebt opgegeven. Controleer uw invoer en probeer het nog eens."
+
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:185
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:193
+msgid "There is already an account connected to your email address."
+msgstr "Er is al een account gekoppeld aan je e-mailadres."
+
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:82
+msgid "There is already an account with this username."
+msgstr "Er bestaat al een account met deze gebruikersnaam."
+
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:8
+msgid "This is your one-time code to continue:"
+msgstr "Dit is je eenmalige code om verder te gaan:"
+
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:170
 msgid "To sign up you must agree with the Terms of Service and Privacy policies."
 msgstr "Om je aan te melden, moet je akkoord gaan met de Servicevoorwaarden en het privacybeleid."
 
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:35
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:91
-msgid "Verify password"
-msgstr "Wachtwoord bevestigen"
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:46
+msgid "Too many tries, you can try to signup again in an hour."
+msgstr "Er zijn te veel pogingen gedaan. Probeer het over een uur nog eens."
 
-#: zotonic_mod_signup/priv/templates/_signup_stage.tpl:6
-msgid "We sent the email to"
-msgstr "We hebben de e-mail gestuurd naar"
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:29
+msgid "We have sent a code to <b>{email}</b> to confirm your email address."
+msgstr "We hebben een code naar <b>{email}</b> om je e-mailadres te bevestigen."
 
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:13
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:137
 msgid "We will be very careful with all the information given to us and will never give your name or address away without your permission. We do have some rules that we need you to agree with."
 msgstr "We zijn erg zorgvuldig met alle persoonlijke informatie die ons wordt verstrekt en zullen nooit je naam of adres weggeven zonder je toestemming.\n"
 "We hebben wel een aantal regels waarmee je moet instemmen."
+
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:28
+msgid "We will mail you a code to confirm your email address."
+msgstr "We sturen je een code per e-mail om je e-mailadres te bevestigen."
 
 #: zotonic_mod_signup/priv/templates/signup_confirm.tpl:23
 msgid "When you created your account, you received an email with a link but it looks like something went wrong."
 msgstr "Toen je je account aanmaakte, heb je een e-mail ontvangen met een link, maar het lijkt erop dat er iets mis is gegaan."
 
-#: zotonic_mod_signup/priv/templates/_signup_box.tpl:29
-msgid "You already have an account,"
-msgstr "Je hebt al een account,"
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:19
+msgid "You already have an account."
+msgstr "Je hebt al een account."
 
-#: zotonic_mod_signup/priv/templates/_signup_extra.tpl:2
-msgid "You can also"
-msgstr "Je kunt ook"
+#: zotonic_mod_signup/priv/templates/_signup_box.tpl:3
+msgid "You are already logged in as <a href=\"{url}\">{name}</a>."
+msgstr "Je bent al ingelogd als <a href=\"{url}\">{name}</a>."
+
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:80
+msgid "You can sign up using the following external service."
+msgstr "Je kunt je aanmelden via de volgende externe dienst."
 
 #: zotonic_mod_signup/priv/templates/signup_confirm.tpl:12
 msgid "You might have confirmed your account twice so that the account is already confirmed. If so, try logging in.<br>If that doesn’t work, make sure you copied the link correctly and try again."
 msgstr "Misschien heb je je account twee keer bevestigd, zodat het account al is bevestigd. Als dit het geval is, probeer dan in te loggen.<br>Als dat niet werkt, zorg er dan voor dat je de link in zijn geheel hebt gekopieerd en probeer het opnieuw."
 
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:26
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:162
 msgid "You must agree to the Terms in order to sign up."
 msgstr "Je moet akkoord gaan met de voorwaarden."
 
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:23
-msgid "and the"
-msgstr "en de"
-
-#: zotonic_mod_signup/priv/templates/_signup_box.tpl:29
-#: zotonic_mod_signup/priv/templates/_signup_outside.tpl:1
-msgid "log in"
-msgstr "Inloggen"
-
-#: zotonic_mod_signup/priv/templates/_signup_extra.tpl:2
-msgid "sign up for a username and password"
-msgstr "registreer voor een gebruikersnaam en wachtwoord"
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:3
+msgid "Your one-time code is:"
+msgstr "Je eenmalige code is:"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:174
 msgid "Building Zotonic in the background..."
@@ -13324,7 +13604,7 @@ msgstr "Automatische vertaling"
 msgid "Available sub-languages"
 msgstr "Beschikbare subtalen"
 
-#: zotonic_mod_translation/src/mod_translation.erl:666
+#: zotonic_mod_translation/src/mod_translation.erl:687
 msgid "Cannot generate translation files because <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext is not installed</a>."
 msgstr "Kan de vertaalbestanden niet genereren omdat <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext niet is geïnstalleerd</a>."
 
@@ -13344,7 +13624,7 @@ msgstr "Het kopiëren en vertalen van teksten wordt gebruikt om lege tekstvelden
 msgid "Current translations"
 msgstr "Huidige vertalingen"
 
-#: zotonic_mod_translation/priv/templates/admin_translation.tpl:126
+#: zotonic_mod_translation/priv/templates/admin_translation.tpl:144
 msgid "Danish"
 msgstr "Deens"
 
@@ -13373,7 +13653,7 @@ msgstr "Heb je alle teksten nagekeken en eventuele fouten gecorrigeerd?"
 msgid "Drag languages to define the preferred order, the first 'view' language will be the default language."
 msgstr "Sleep talen om de voorkeursvolgorde te bepalen. De eerste 'weergavetaal' zal de standaardtaal zijn."
 
-#: zotonic_mod_translation/priv/templates/admin_translation.tpl:128
+#: zotonic_mod_translation/priv/templates/admin_translation.tpl:146
 msgid "Dutch"
 msgstr "Nederlands"
 
@@ -13385,7 +13665,7 @@ msgstr "Bewerkbaar"
 msgid "Editable languages"
 msgstr "Bewerkbare talen"
 
-#: zotonic_mod_translation/priv/templates/admin_translation.tpl:127
+#: zotonic_mod_translation/priv/templates/admin_translation.tpl:145
 msgid "English"
 msgstr "Engels"
 
@@ -13397,11 +13677,11 @@ msgstr "Terugvaltaal"
 msgid "Find language by name or ISO"
 msgstr "Vind taal op naam of op ISO"
 
-#: zotonic_mod_translation/priv/templates/admin_translation.tpl:129
+#: zotonic_mod_translation/priv/templates/admin_translation.tpl:147
 msgid "Finnish"
 msgstr "Fins"
 
-#: zotonic_mod_translation/priv/templates/admin_translation.tpl:166
+#: zotonic_mod_translation/priv/templates/admin_translation.tpl:184
 msgid "For Developers"
 msgstr "Voor ontwikkelaars"
 
@@ -13409,7 +13689,7 @@ msgstr "Voor ontwikkelaars"
 msgid "For new visitors, set the language to the default language"
 msgstr "Hanteer de standaardtaal voor nieuwe bezoekers"
 
-#: zotonic_mod_translation/priv/templates/admin_translation.tpl:130
+#: zotonic_mod_translation/priv/templates/admin_translation.tpl:148
 msgid "French"
 msgstr "Frans"
 
@@ -13417,11 +13697,11 @@ msgstr "Frans"
 msgid "From existing language"
 msgstr "Vanuit bestaande taal"
 
-#: zotonic_mod_translation/priv/templates/admin_translation.tpl:172
+#: zotonic_mod_translation/priv/templates/admin_translation.tpl:190
 msgid "Generate .pot files"
 msgstr "Genereer .pot-bestanden"
 
-#: zotonic_mod_translation/priv/templates/admin_translation.tpl:131
+#: zotonic_mod_translation/priv/templates/admin_translation.tpl:149
 msgid "German"
 msgstr "Duits"
 
@@ -13429,7 +13709,7 @@ msgstr "Duits"
 msgid "Heads up! Removing this language will <strong>not</strong> delete any of the existing translations. But until you add (and activate) the language again, you will not be able to select or edit content written in this language."
 msgstr "Let op! Met het verwijderen van deze taal zullen bestaande vertalingen <em>niet</em> worden verwijderd. Maar totdat je de taal weer activeert, kan je content niet in deze taal bewerken."
 
-#: zotonic_mod_translation/priv/templates/admin_translation.tpl:132
+#: zotonic_mod_translation/priv/templates/admin_translation.tpl:150
 msgid "Hungarian"
 msgstr "Hongaars"
 
@@ -13445,7 +13725,7 @@ msgstr "Als een taal is ingesteld op 'bekijken' of 'bewerkbaar' dan zijn teksten
 msgid "If you automatically translate texts then your texts will be sent to a remote translation service."
 msgstr "Als u teksten automatisch vertaalt, worden uw teksten naar een vertaaldienst op afstand gestuurd."
 
-#: zotonic_mod_translation/priv/templates/admin_translation.tpl:147
+#: zotonic_mod_translation/priv/templates/admin_translation.tpl:165
 msgid "If you change the stemmer language then you will need to reindex all data."
 msgstr "Als je de stemmer-taal verandert, moet je de zoekindex opnieuw opbouwen."
 
@@ -13453,7 +13733,7 @@ msgstr "Als je de stemmer-taal verandert, moet je de zoekindex opnieuw opbouwen.
 msgid "Incomplete translation"
 msgstr "Onvolledige vertaling"
 
-#: zotonic_mod_translation/priv/templates/admin_translation.tpl:133
+#: zotonic_mod_translation/priv/templates/admin_translation.tpl:151
 msgid "Italian"
 msgstr "Italiaans"
 
@@ -13461,7 +13741,7 @@ msgstr "Italiaans"
 msgid "Language in URL"
 msgstr "Taal in URL"
 
-#: zotonic_mod_translation/priv/templates/admin_translation.tpl:117
+#: zotonic_mod_translation/priv/templates/admin_translation.tpl:135
 msgid "Language used for stemming of the search indices"
 msgstr "Taal gebruikt voor het stemmen van zoekindexen."
 
@@ -13485,7 +13765,7 @@ msgstr "Naam in menu"
 msgid "No languages configured."
 msgstr "Geen talen geconfigureerd."
 
-#: zotonic_mod_translation/priv/templates/admin_translation.tpl:134
+#: zotonic_mod_translation/priv/templates/admin_translation.tpl:152
 msgid "Norwegian"
 msgstr "Noors"
 
@@ -13528,15 +13808,15 @@ msgstr "Klaar"
 msgid "Region"
 msgstr "Regio"
 
-#: zotonic_mod_translation/priv/templates/admin_translation.tpl:181
+#: zotonic_mod_translation/priv/templates/admin_translation.tpl:199
 msgid "Reload Translations"
 msgstr "Vertalingen opnieuw laden"
 
-#: zotonic_mod_translation/priv/templates/admin_translation.tpl:183
+#: zotonic_mod_translation/priv/templates/admin_translation.tpl:201
 msgid "Reload all translations from the modules and site. All templates will be recompiled."
 msgstr "Laad alle vertalingen van de modules en de site. Alle templates worden opnieuw gecompileerd."
 
-#: zotonic_mod_translation/src/mod_translation.erl:681
+#: zotonic_mod_translation/src/mod_translation.erl:702
 msgid "Reloading all .po files in the background."
 msgstr "Alle .po bestanden worden opnieuw geladen in een achtergrondproces."
 
@@ -13548,15 +13828,15 @@ msgstr "Verwijder taal"
 msgid "Removing a language will hide it on the edit form. If the page is saved then the translation will be deleted from the database."
 msgstr "Als je een taal verwijdert, wordt deze verborgen op het bewerkingsformulier. Als de pagina wordt opgeslagen, wordt de vertaling verwijderd uit de database."
 
-#: zotonic_mod_translation/priv/templates/admin_translation.tpl:135
+#: zotonic_mod_translation/priv/templates/admin_translation.tpl:153
 msgid "Romanian"
 msgstr "Roemeens"
 
-#: zotonic_mod_translation/priv/templates/admin_translation.tpl:136
+#: zotonic_mod_translation/priv/templates/admin_translation.tpl:154
 msgid "Russian"
 msgstr "Russisch"
 
-#: zotonic_mod_translation/priv/templates/admin_translation.tpl:174
+#: zotonic_mod_translation/priv/templates/admin_translation.tpl:192
 msgid "Scan all templates for translation tags and generate .pot files that can be used for translating the templates. The <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext package must be installed</a>."
 msgstr "Vind alle vertaaltags in templates en genereer .pot-bestanden die je kunt gebruiken om de templates te vertalen. Het <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext-pakket moet zijn geïnstalleerd</a>."
 
@@ -13589,44 +13869,44 @@ msgstr "Toon de taal in de URL"
 msgid "Show translations"
 msgstr "Vertalingen weergeven"
 
-#: zotonic_mod_translation/src/mod_translation.erl:578
-#: zotonic_mod_translation/src/mod_translation.erl:626
+#: zotonic_mod_translation/src/mod_translation.erl:599
+#: zotonic_mod_translation/src/mod_translation.erl:647
 msgid "Sorry, could not change the language."
 msgstr "Sorry, kon de taal niet veranderen."
 
-#: zotonic_mod_translation/src/mod_translation.erl:756
+#: zotonic_mod_translation/src/mod_translation.erl:777
 msgid "Sorry, that language is unknown or not enabled."
 msgstr "Sorry, die taal is onbekend of niet ingeschakeld."
 
-#: zotonic_mod_translation/src/mod_translation.erl:565
-#: zotonic_mod_translation/src/mod_translation.erl:594
-#: zotonic_mod_translation/src/mod_translation.erl:606
-#: zotonic_mod_translation/src/mod_translation.erl:629
+#: zotonic_mod_translation/src/mod_translation.erl:586
+#: zotonic_mod_translation/src/mod_translation.erl:615
+#: zotonic_mod_translation/src/mod_translation.erl:627
+#: zotonic_mod_translation/src/mod_translation.erl:650
 msgid "Sorry, you don't have permission to change the language list."
 msgstr "Sorry, je hebt geen toestemming om de taallijst te wijzigen."
 
-#: zotonic_mod_translation/src/mod_translation.erl:683
+#: zotonic_mod_translation/src/mod_translation.erl:704
 msgid "Sorry, you don't have permission to reload translations."
 msgstr "Sorry, je hebt geen toestemming om talen opnieuw te laden."
 
-#: zotonic_mod_translation/src/mod_translation.erl:673
+#: zotonic_mod_translation/src/mod_translation.erl:694
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr "Sorry, je hebt geen toestemming om te scannen voor vertalingen."
 
-#: zotonic_mod_translation/src/mod_translation.erl:581
-#: zotonic_mod_translation/src/mod_translation.erl:759
+#: zotonic_mod_translation/src/mod_translation.erl:602
+#: zotonic_mod_translation/src/mod_translation.erl:780
 msgid "Sorry, you don't have permission to set the default language."
 msgstr "Sorry, je hebt geen toestemming om de standaard taal in te stellen."
 
-#: zotonic_mod_translation/priv/templates/admin_translation.tpl:137
+#: zotonic_mod_translation/priv/templates/admin_translation.tpl:155
 msgid "Spanish"
 msgstr "Spaans"
 
-#: zotonic_mod_translation/src/mod_translation.erl:653
+#: zotonic_mod_translation/src/mod_translation.erl:674
 msgid "Started building the .pot files. This may take a while..."
 msgstr "Gestart met het genereren van .pot bestanden. Dit kan enige tijd duren..."
 
-#: zotonic_mod_translation/priv/templates/admin_translation.tpl:138
+#: zotonic_mod_translation/priv/templates/admin_translation.tpl:156
 msgid "Swedish"
 msgstr "Zweeds"
 
@@ -13639,12 +13919,17 @@ msgid "The source language text was used for the missing translations."
 msgstr "Voor de ontbrekende vertalingen werd de tekst in de brontaal gebruikt."
 
 #: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:48
+#: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:189
 msgid "There was an error translating the texts. Please try again later."
 msgstr "Er is een fout opgetreden bij het vertalen van de teksten. Probeer het later opnieuw."
 
 #: zotonic_mod_translation/priv/templates/_translation_status.tpl:4
 msgid "This translation has been automatically generated."
 msgstr "Deze vertaling is automatisch gegenereerd."
+
+#: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:188
+msgid "Timeout"
+msgstr "Time-out"
 
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:72
 msgid "To new language"
@@ -13660,7 +13945,7 @@ msgid "Translated page texts for every editable language that has a translation 
 msgstr "Vertaalde paginateksten voor elke bewerkbare taal met een vertaling in de bron."
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:3
-#: zotonic_mod_translation/src/mod_translation.erl:1052
+#: zotonic_mod_translation/src/mod_translation.erl:1073
 msgid "Translation"
 msgstr "Vertaling"
 
@@ -13668,9 +13953,17 @@ msgstr "Vertaling"
 msgid "Translations"
 msgstr "Vertalingen"
 
-#: zotonic_mod_translation/priv/templates/admin_translation.tpl:139
+#: zotonic_mod_translation/priv/templates/admin_translation.tpl:157
 msgid "Turkish"
 msgstr "Turks"
+
+#: zotonic_mod_translation/priv/templates/admin_translation.tpl:121
+msgid "Use the default language for untranslated texts"
+msgstr "Gebruik de standaardtaal voor niet-vertaalde teksten"
+
+#: zotonic_mod_translation/priv/templates/admin_translation.tpl:126
+msgid "When a text has no translation in the selected language, try the site default language before the other fallback languages."
+msgstr "Als een tekst geen vertaling in de geselecteerde taal heeft, probeer dan eerst de standaardtaal van de website en pas daarna de andere reservetalen."
 
 #: zotonic_mod_translation/priv/templates/_admin_overview_filter_panel.tpl:5
 msgid "With language"
@@ -13689,9 +13982,73 @@ msgstr "niet actief"
 msgid "page break"
 msgstr "pagina-einde"
 
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:53
+msgid "Audio channels"
+msgstr "Audiokanalen"
+
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:47
+msgid "Audio codec"
+msgstr "Audiocodec"
+
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:64
+msgid "Audio sample rate"
+msgstr "Audio-afnamfrequentie"
+
 #: zotonic_mod_video/priv/templates/_video_viewer.tpl:11
 msgid "Converting"
 msgstr "Converteren"
+
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:7
+msgid "Format"
+msgstr "Formaat"
+
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:35
+msgid "Frame rate"
+msgstr "Beeldsnelheid"
+
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:29
+msgid "Pixel format"
+msgstr "Pixelformaat"
+
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:3
+msgid "Video"
+msgstr "Video"
+
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:41
+msgid "Video bit rate"
+msgstr "Videobitsnelheid"
+
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:18
+msgid "Video codec"
+msgstr "Videocodec"
+
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:82
+msgid "Video tags"
+msgstr "Videotags"
+
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:53
+msgid "Canonical URL"
+msgstr "Canonische URL"
+
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:69
+msgid "Final URL"
+msgstr "Eind-URL"
+
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:37
+msgid "Imported from"
+msgstr "Geïmporteerd uit"
+
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:19
+msgid "Site"
+msgstr "Website"
+
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:101
+msgid "Tags"
+msgstr "Tags"
+
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:3
+msgid "Video embed"
+msgstr "Video insluiten"
 
 #: zotonic_mod_video_embed/src/mod_video_embed.erl:274
 msgid "Vimeo Video"
