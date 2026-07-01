@@ -110,7 +110,7 @@ format_value(Name, Value)
 format_value(Name, Value)
     when Name =:= <<"subsec_time">>;
          Name =:= <<"subsec_time_original">>;
-         % Keep the historical misspelling; EXIF metadata from an iPhone SE can contain this key.
+         % Accept the historical misspelling in the erlang_exif library
          Name =:= <<"subsec_time_orginal">>;
          Name =:= <<"subsec_time_digitized">> ->
     format_ascii(Value);
