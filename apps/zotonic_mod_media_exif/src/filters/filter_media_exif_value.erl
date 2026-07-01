@@ -110,7 +110,6 @@ format_value(Name, Value)
 format_value(Name, Value)
     when Name =:= <<"subsec_time">>;
          Name =:= <<"subsec_time_original">>;
-         Name =:= <<"subsec_time_orginal">>;
          Name =:= <<"subsec_time_digitized">> ->
     format_ascii(Value);
 format_value(_Name, Value) ->
