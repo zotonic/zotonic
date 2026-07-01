@@ -122,7 +122,7 @@ format_any(Value) ->
 format_gps([{ratio, D, DF}, {ratio, M, MF}, {ratio, S, SF}]) ->
     [
         format_decimal(ratio_to_float(D, DF), 0),
-        " deg ",
+        "˚ ",
         format_decimal(ratio_to_float(M, MF), 0),
         "' ",
         format_decimal(ratio_to_float(S, SF), 2),
@@ -187,9 +187,13 @@ format_exif_date(Value) ->
     format_any(Value).
 
 
-format_decimal(N, Decimals) ->
+format_decimal(N, 0) when is_number(N) ->
+    integer_to_binary(round(N));
+format_decimal(N, Decimals) when is_number(N), is_integer(Decimals), Decimals > 0 ->
     Formatted = iolist_to_binary(io_lib:format("~.*f", [Decimals, N])),
-    trim_decimal(Formatted).
+    trim_decimal(Formatted);
+format_decimal(N, _Decimals) ->
+    format_any(N).
 
 
 trim_decimal(Bin) ->
