@@ -60,8 +60,36 @@ media_exif_value(Value, Name, _Context) ->
 
 format_value(Name, Value) when Name =:= <<"gps_latitude">>; Name =:= <<"gps_longitude">> ->
     format_gps(Value);
+format_value(<<"gps_altitude">>, {ratio, N, D}) ->
+    [ format_decimal(ratio_to_float(N, D), 1), " m" ];
+format_value(<<"gps_altitude_ref">>, 0) ->
+    <<"Above sea level">>;
+format_value(<<"gps_altitude_ref">>, 1) ->
+    <<"Below sea level">>;
+format_value(Name, Value)
+    when Name =:= <<"gps_dest_bearing">>;
+         Name =:= <<"gps_img_direction">> ->
+    format_degrees(Value);
+format_value(Name, Value)
+    when Name =:= <<"gps_dest_bearing_ref">>;
+         Name =:= <<"gps_img_direction_ref">> ->
+    format_direction_ref(Value);
+format_value(<<"gps_latitude_ref">>, Value) ->
+    format_latitude_ref(Value);
+format_value(<<"gps_longitude_ref">>, Value) ->
+    format_longitude_ref(Value);
+format_value(<<"gps_speed">>, {ratio, N, D}) ->
+    format_decimal(ratio_to_float(N, D), 1);
+format_value(<<"gps_speed_ref">>, Value) ->
+    format_speed_ref(Value);
+format_value(<<"gps_date_stamp">>, Value) ->
+    format_exif_date(Value);
+format_value(<<"gps_time_stamp">>, Value) ->
+    format_gps_time(Value);
 format_value(<<"exposure_time">>, {ratio, N, D}) ->
     format_exposure_time(N, D);
+format_value(<<"shutter_speed_value">>, {ratio, N, D}) ->
+    format_exposure_seconds(1 / math:pow(2, ratio_to_float(N, D)));
 format_value(<<"f_number">>, {ratio, N, D}) ->
     [ "f/", format_decimal(ratio_to_float(N, D), 1) ];
 format_value(<<"aperture_value">>, {ratio, N, D}) ->
@@ -72,11 +100,19 @@ format_value(<<"focal_length">>, {ratio, N, D}) ->
     [ format_decimal(ratio_to_float(N, D), 1), " mm" ];
 format_value(<<"components_configuration">>, Value) ->
     format_components(Value);
+format_value(<<"subject_area">>, Value) ->
+    format_subject_area(Value);
 format_value(Name, Value)
     when Name =:= <<"date_time">>;
          Name =:= <<"date_time_original">>;
          Name =:= <<"date_time_digitized">> ->
     format_exif_date(Value);
+format_value(Name, Value)
+    when Name =:= <<"subsec_time">>;
+         Name =:= <<"subsec_time_original">>;
+         Name =:= <<"subsec_time_orginal">>;
+         Name =:= <<"subsec_time_digitized">> ->
+    format_ascii(Value);
 format_value(_Name, Value) ->
     format_any(Value).
 
@@ -132,6 +168,60 @@ format_gps(Value) ->
     format_any(Value).
 
 
+format_degrees({ratio, N, D}) ->
+    [ format_decimal(ratio_to_float(N, D), 2), "˚" ];
+format_degrees(Value) when is_number(Value) ->
+    [ format_decimal(Value, 2), "˚" ];
+format_degrees(Value) ->
+    format_any(Value).
+
+
+format_direction_ref(Value) ->
+    case ascii_first(Value) of
+        $T -> <<"True north">>;
+        $M -> <<"Magnetic north">>;
+        _ -> format_ascii(Value)
+    end.
+
+
+format_latitude_ref(Value) ->
+    case ascii_first(Value) of
+        $N -> <<"North">>;
+        $S -> <<"South">>;
+        _ -> format_ascii(Value)
+    end.
+
+
+format_longitude_ref(Value) ->
+    case ascii_first(Value) of
+        $E -> <<"East">>;
+        $W -> <<"West">>;
+        _ -> format_ascii(Value)
+    end.
+
+
+format_speed_ref(Value) ->
+    case ascii_first(Value) of
+        $K -> <<"km/h">>;
+        $M -> <<"mph">>;
+        $N -> <<"knots">>;
+        _ -> format_ascii(Value)
+    end.
+
+
+format_gps_time([{ratio, H, HF}, {ratio, M, MF}, {ratio, S, SF}]) ->
+    [
+        two_digits(round(ratio_to_float(H, HF))),
+        ":",
+        two_digits(round(ratio_to_float(M, MF))),
+        ":",
+        two_digits(round(ratio_to_float(S, SF))),
+        " UTC"
+    ];
+format_gps_time(Value) ->
+    format_any(Value).
+
+
 format_components(Components) when is_list(Components) ->
     Labels = [
         component_label(Component)
@@ -164,7 +254,32 @@ format_exposure_time(N, D) when N > 0, D > 0, N < D ->
     RoundedDenominator = round(D / N),
     [ "1/", integer_to_binary(RoundedDenominator), " sec" ];
 format_exposure_time(N, D) ->
-    [ format_decimal(ratio_to_float(N, D), 2), " sec" ].
+    format_exposure_seconds(ratio_to_float(N, D)).
+
+
+format_exposure_seconds(Sec) when Sec > 0, Sec < 1 ->
+    [ "1/", integer_to_binary(round(1 / Sec)), " sec" ];
+format_exposure_seconds(Sec) ->
+    [ format_decimal(Sec, 2), " sec" ].
+
+
+format_subject_area([X, Y]) when is_integer(X), is_integer(Y) ->
+    [ "x ", integer_to_binary(X), ", y ", integer_to_binary(Y) ];
+format_subject_area([X, Y, W, H]) when is_integer(X), is_integer(Y), is_integer(W), is_integer(H) ->
+    [
+        "x ", integer_to_binary(X),
+        ", y ", integer_to_binary(Y),
+        ", width ", integer_to_binary(W),
+        ", height ", integer_to_binary(H)
+    ];
+format_subject_area([X, Y, D]) when is_integer(X), is_integer(Y), is_integer(D) ->
+    [
+        "x ", integer_to_binary(X),
+        ", y ", integer_to_binary(Y),
+        ", diameter ", integer_to_binary(D)
+    ];
+format_subject_area(Value) ->
+    format_any(Value).
 
 
 format_ratio(_N, 0) ->
@@ -183,8 +298,44 @@ ratio_to_float(N, D) ->
 
 format_exif_date(<<Y:4/binary, $:, M:2/binary, $:, D:2/binary, " ", H:2/binary, $:, I:2/binary, $:, S:2/binary>>) ->
     <<Y/binary, $-, M/binary, $-, D/binary, " ", H/binary, $:, I/binary, $:, S/binary>>;
+format_exif_date(<<Y:4/binary, $:, M:2/binary, $:, D:2/binary>>) ->
+    <<Y/binary, $-, M/binary, $-, D/binary>>;
 format_exif_date(Value) ->
     format_any(Value).
+
+
+format_ascii(Bin) when is_binary(Bin) ->
+    Bin1 = trim_nul(Bin),
+    case maybe_printable_binary(Bin1) of
+        true -> Bin1;
+        false -> format_binary_bytes(Bin)
+    end;
+format_ascii(Value) ->
+    format_any(Value).
+
+
+ascii_first(Bin) when is_binary(Bin) ->
+    case trim_nul(Bin) of
+        <<C, _/binary>> -> C;
+        <<>> -> undefined
+    end;
+ascii_first([C | _]) when is_integer(C) ->
+    C;
+ascii_first(_) ->
+    undefined.
+
+
+trim_nul(Bin) ->
+    case binary:match(Bin, <<0>>) of
+        {Pos, _Len} -> binary:part(Bin, 0, Pos);
+        nomatch -> Bin
+    end.
+
+
+two_digits(N) when is_integer(N), N >= 0, N < 10 ->
+    [ $0, integer_to_binary(N) ];
+two_digits(N) when is_integer(N) ->
+    integer_to_binary(N).
 
 
 format_decimal(N, 0) when is_number(N) ->
