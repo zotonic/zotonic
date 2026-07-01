@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-07-01 08:40\n"
+"PO-Revision-Date: 2026-07-01 09:46\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -3048,7 +3048,7 @@ msgstr "De query kon niet worden geparseerd, controleer de syntaxis."
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:16
 msgid "The query text is empty."
-msgstr "De De zoekopdracht is leeg."
+msgstr "De zoekopdracht is leeg."
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:58
 msgid "The search index is rebuilding. Depending on the database size, this can take a long time."
@@ -4912,9 +4912,9 @@ msgstr "Weet je zeker dat je wilt verwijderen:"
 msgid "Are you sure you want to remove the <strong>{{ predicate }}</strong>\n"
 "    connection between <strong>{{ subject }}</strong>\n"
 "          and <strong>{{ object }}</strong>?"
-msgstr "Weet je zeker dat je de <strong>{{ predicate }}</strong>\n"
-"    verbinding tussen <strong>{{ subject }}</strong>\n"
-"          en <strong>{{ object }}</strong>?"
+msgstr "Weet je zeker dat je de verbinding <strong>{{ predicate }}</strong>\n"
+"    tussen <strong>{{ subject }}</strong>\n"
+"          en <strong>{{ object }}</strong> wilt verwijderen?"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:34
 msgid "Beta"
@@ -5133,7 +5133,7 @@ msgstr "Deze functie is nog in ontwikkeling en werkt mogelijk niet perfect."
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_filter_predicates.tpl:16
 msgid "This filter only affects which predicates are shown in the graph. If a resource has many incoming or outgoing connections, some connections might already be omitted from the graph data due to the edge limit, regardless of which predicates are checked."
-msgstr "Dit filter beïnvloedt alleen welke predicaten worden getoond in de grafiek. Als een bron veel inkomende of uitgaande verbindingen heeft, kunnen sommige verbindingen al weggelaten zijn uit de grafiekgegevens vanwege de randlimiet, ongeacht welke predicaten gecontroleerd zijn."
+msgstr "Dit filter beïnvloedt alleen welke predicaten worden getoond in de grafiek. Als een resource veel inkomende of uitgaande verbindingen heeft, kunnen sommige verbindingen al weggelaten zijn uit de grafiekgegevens vanwege de verbindingen-limiet, ongeacht welke predicaten gecontroleerd zijn."
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:22
 msgid "This is used to filter the predicates in the <i>Page connections</i> panel and the pages in the connect dialogs."
@@ -7340,7 +7340,7 @@ msgstr "Alle <tt>{optional}</tt> statements verwijzen naar bestaande sjablonen."
 
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:101
 msgid "All non-optional <tt>{include}</tt> statements are referring to existing templates."
-msgstr "Alle niet-optionele <tt>{include}</tt> uitspraken verwijzen naar bestaande sjablonen."
+msgstr "Alle niet-optionele <tt>{include}</tt> statements verwijzen naar bestaande sjablonen."
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:184
 msgid "All templates are checked for missing includes or missing <tt>{ext}</tt> template references."
@@ -7378,7 +7378,7 @@ msgstr "Bereken en visualiseer een dependency-graaf van alle sjablonen."
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:43
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:906
 msgid "Check debug points in the template source to see debug data here."
-msgstr "Controleer debug-punten in de sjabloonbron om hier debug-gegevens te zien."
+msgstr "Controleer de debug-punten in de broncode van de sjabloon om hier de debug-gegevens te bekijken."
 
 #: zotonic_mod_development/src/mod_development.erl:301
 #: zotonic_mod_development/src/mod_development.erl:316
@@ -7473,7 +7473,7 @@ msgstr "Afhankelijkheidsgrafiek van alle sjablonen"
 
 #: zotonic_mod_development/priv/templates/_development_template_graph.tpl:3
 msgid "Dependency graph of all templates. Only template includes using a Immediate string value for the template name are shown."
-msgstr "Afhankelijkheidsgrafiek van alle sjablonen. Alleen sjabloon-includes waarbij een directe tekenreekswaarde voor de sjabloonnaam wordt gebruikt, worden weergegeven."
+msgstr "Afhankelijkheidsgrafiek van alle sjablonen. Alleen sjabloon-includes waarbij een directe string-waarde voor de sjabloonnaam wordt gebruikt, worden weergegeven."
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:66
 msgid "Dependency graph of all traced templates. All includes are shown."
@@ -8422,7 +8422,7 @@ msgstr "We zijn gestopt met het afleveren van e-mail."
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:243
 msgid "Will try again"
-msgstr "Ik probeer het nog eens"
+msgstr "Wordt opnieuw geprobeerd"
 
 #: zotonic_mod_export/priv/templates/_vcalendar_header.tpl:7
 msgid "Calendar"
@@ -9486,7 +9486,7 @@ msgstr "Identiteiten"
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:3
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:28
 msgid "Incoming/outgoing e-mail log"
-msgstr "Logboek inkomende/uitgaande e-mail"
+msgstr "Logboek van inkomende/uitgaande e-mail"
 
 #: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:76
 msgid "Latest reported security policy:"
@@ -9567,7 +9567,7 @@ msgstr "Versturen"
 
 #: zotonic_mod_logging/priv/templates/_email_send_status_view.tpl:12
 msgid "Sending…"
-msgstr "… verzenden"
+msgstr "Verzenden…"
 
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:154
 msgid "Sent"
@@ -9658,7 +9658,7 @@ msgstr "Gebruikers-agenten"
 
 #: zotonic_mod_logging/priv/templates/_email_send_status_view.tpl:34
 msgid "Waiting…"
-msgstr "… in afwachting"
+msgstr "Wachten…"
 
 #: zotonic_mod_logging/src/mod_logging.erl:193
 msgid "You don't have permission to clear the CSP reports."
@@ -13992,7 +13992,7 @@ msgstr "Audiocodec"
 
 #: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:64
 msgid "Audio sample rate"
-msgstr "Audio-afnamfrequentie"
+msgstr "Audio-samplingfrequentie"
 
 #: zotonic_mod_video/priv/templates/_video_viewer.tpl:11
 msgid "Converting"
