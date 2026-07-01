@@ -256,9 +256,13 @@ format_exposure_time(N, D) ->
     format_exposure_seconds(ratio_to_float(N, D)).
 
 
-format_exposure_seconds(Sec) when Sec > 0, Sec < 1 ->
-    [ "1/", integer_to_binary(round(1 / Sec)), " sec" ];
-format_exposure_seconds(Sec) ->
+format_exposure_seconds(Sec) when is_number(Sec), Sec > 0, Sec < 1 ->
+    Den = round(1 / Sec),
+    case Den of
+        1 -> <<"1 sec">>;
+        _ -> [ "1/", integer_to_binary(Den), " sec" ]
+    end;
+format_exposure_seconds(Sec) when is_number(Sec) ->
     [ format_decimal(Sec, 2), " sec" ].
 
 
