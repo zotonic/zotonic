@@ -5,6 +5,3 @@
         {% endfor %}
     {% endif %}
 {% endfor %}
-{% if id.content_group_id %}
-    {% catinclude "pivot/_title.tpl" id.content_group_id %}
-{% endif %}
