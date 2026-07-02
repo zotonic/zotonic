@@ -47,5 +47,9 @@ See also
 is_user(Id, Context) ->
     case m_rsc:rid(Id, Context) of
         undefined -> false;
-        RscId -> m_identity:is_user(RscId, Context)
+        RscId ->
+            case z_acl:rsc_visible(RscId, Context) of
+                true -> m_identity:is_user(RscId, Context);
+                false -> false
+            end
     end.
