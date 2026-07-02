@@ -28,6 +28,8 @@ A resource is a user when it has at least one identity of a user-defining type. 
 The filter accepts a resource id, unique name, or other value accepted by `m_rsc:rid/2`. It returns `true` when the
 resource exists and is a user, otherwise it returns `false`.
 
+If the resource is not visible to the current user, it will return `false`, even if the resource is a user.
+
 For example:
 
 ```django
