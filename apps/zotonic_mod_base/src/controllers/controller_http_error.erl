@@ -309,8 +309,8 @@ set_headers(Context) ->
     Context1 = z_context:set_noindex_header(is_noindex_error(error_code(Context)), Context),
     z_context:set_nocache_headers(Context1).
 
-%% Signal search engines to remove certain 4xx pages (401/403/405/414/451), as Google can keep them if
-%% they were previously a 2xx page (which is now made inaccessible).
+%% Signal search engines to remove certain 4xx pages (401/403/405/414/451), as Google et al can keep
+%% them if they were previously a 2xx page (which is now made inaccessible).
 is_noindex_error(401) -> true;
 is_noindex_error(403) -> true;
 is_noindex_error(405) -> true;
