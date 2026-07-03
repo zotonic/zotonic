@@ -275,7 +275,8 @@ log_email(<<>>, _Context) ->
 log_email(Email0, Context) ->
     IsUseEmailStatus = z_acl:is_allowed(use, mod_email_status, Context),
     Email = normalize(Email0),
-    #search_result{ result = List } = z_search:search(<<"log_email">>, #{ <<"to">> => Email }, 1, 20, Context),
+    ContextSudo = z_acl:sudo(Context),
+    #search_result{ result = List } = z_search:search(<<"log_email">>, #{ <<"to">> => Email }, 1, 20, ContextSudo),
     lists:map(
         fun(Log) ->
             L = #{
