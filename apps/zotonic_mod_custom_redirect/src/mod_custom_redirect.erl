@@ -100,6 +100,8 @@ See also
 
 
 %% @doc Called when the host didn't match any site config
+observe_dispatch_host(#dispatch_host{ host = _Host, path = <<"/.", _/binary>> }, _Context) ->
+    undefined;
 observe_dispatch_host(#dispatch_host{ host = Host, path = Path }, Context) ->
     case m_custom_redirect:list_dispatch_host(Host, Path, Context) of
         [{BestPath,_,_}=Best|Rest] -> select_best(Rest, size(BestPath), Best);
@@ -107,6 +109,8 @@ observe_dispatch_host(#dispatch_host{ host = Host, path = Path }, Context) ->
     end.
 
 %% @doc Called when the path didn't match any dispatch rule
+observe_dispatch(#dispatch{ path = <<"/.", _/binary>> }, _Context) ->
+    undefined;
 observe_dispatch(#dispatch{ path = Path }, Context) ->
     case m_custom_redirect:get_dispatch(Path, Context) of
         {Redirect,IsPermanent} -> {ok, #dispatch_redirect{location=Redirect, is_permanent=IsPermanent}};
