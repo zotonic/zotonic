@@ -295,7 +295,7 @@ bin(B) when is_binary(B) -> B;
 bin(L) -> unicode:characters_to_binary(L, utf8).
 
 check_resource_1(Context) ->
-    Context1 = z_context:set_noindex_header(Context),
+    Context1 = z_context:set_noindex_header(false, Context),
     DispPath = bin(cow_qs:urldecode(cowmachine_req:disp_path(Context1))),
     SafePath = bin(mochiweb_util:safe_relative_path(unicode:characters_to_list(DispPath, utf8))),
     Cached = case z_context:get(use_cache, Context, false) of

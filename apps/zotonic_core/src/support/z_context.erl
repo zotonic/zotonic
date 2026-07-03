@@ -1631,17 +1631,17 @@ set_cors_headers(Default, Context) ->
     end,
     set_resp_headers(CorsHeaders, Context).
 
-%% @doc Set the noindex header if the config is set, or the webmachine resource opt is set.
+%% @doc Force the noindex header.
 -spec set_noindex_header(z:context()) -> z:context().
 set_noindex_header(Context) ->
-    set_noindex_header(false, Context).
+    set_noindex_header(true, Context).
 
 %% @doc Set the noindex header if the config is set, the webmachine resource opt is set or Force is set.
 -spec set_noindex_header(Force::term(), z:context()) -> z:context().
 set_noindex_header(Force, Context) ->
-    case m_config:get_boolean(seo, noindex, Context)
+    case z_convert:to_bool(Force)
+         orelse m_config:get_boolean(seo, noindex, Context)
          orelse get(seo_noindex, Context, false)
-         orelse z_convert:to_bool(Force)
     of
        true ->
             set_resp_header(<<"x-robots-tag">>, <<"noindex,nofollow">>, Context);
