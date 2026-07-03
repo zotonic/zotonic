@@ -568,9 +568,13 @@ LiveValidation.prototype = {
     insertMessage: function(elementToInsert){
         const self = this;
 
+        if (this.insertMessageTimeout) {
+            cancelTimeout(this.insertMessageTimeout);
+        }
         // Use a timeout to let any clicks on buttons continue, as the appearance of the new
         // content cancels(?) the click on another element (that triggered this validation).
-        setTimeout(function() {
+        self.insertMessageTimeout = setTimeout(function() {
+            self.insertMessageTimeout = undefined;
             self.removeMessage();
             if (elementToInsert) {
               if( (self.displayMessageWhenEmpty && (self.elementType == LiveValidation.CHECKBOX || self.element.value === ''))
@@ -653,6 +657,10 @@ LiveValidation.prototype = {
     removeMessage: function(){
       let nextEl;
       let el = this.insertAfterWhatNode;
+
+      if (this.insertMessageTimeout) {
+          cancelTimeout(this.insertMessageTimeout);
+      }
       while(el.nextSibling){
           if(el.nextSibling.nodeType === 1){
             nextEl = el.nextSibling;
