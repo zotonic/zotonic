@@ -114,7 +114,6 @@
                             .then((msg) => {
                                 const password = msg.payload.result;
                                 $('#password').val(password).trigger('blur').effect('highlight');
-                                $('#copy-password').fadeIn();
                             });
                     });
 
