@@ -569,7 +569,7 @@ LiveValidation.prototype = {
         const self = this;
 
         if (this.insertMessageTimeout) {
-            cancelTimeout(this.insertMessageTimeout);
+            clearTimeout(this.insertMessageTimeout);
         }
         // Use a timeout to let any clicks on buttons continue, as the appearance of the new
         // content cancels(?) the click on another element (that triggered this validation).
@@ -659,7 +659,7 @@ LiveValidation.prototype = {
       let el = this.insertAfterWhatNode;
 
       if (this.insertMessageTimeout) {
-          cancelTimeout(this.insertMessageTimeout);
+          clearTimeout(this.insertMessageTimeout);
       }
       while(el.nextSibling){
           if(el.nextSibling.nodeType === 1){
