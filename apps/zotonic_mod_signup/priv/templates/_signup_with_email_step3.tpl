@@ -100,11 +100,10 @@
                 %}
             </div>
             <p class="help-block">
-                {_ Need a new password? _}
                 <a href="#new-password" id="new-password" role="button" title="{_ Generate a new and secure password. _}">
                     {_ Generate a secure password _}
                 </a>
-                <a href="#copy-password" id="copy-password" class="pull-right" style="display: none" role="button" title="{_ Copy the password to the clipboard. _}">
+                <a href="#copy-password" id="copy-password" class="pull-right" role="button" title="{_ Copy the password to the clipboard. _}">
                     <span class="glyphicon glyphicon-copy"></span> {_ Copy _}
                 </a>
 

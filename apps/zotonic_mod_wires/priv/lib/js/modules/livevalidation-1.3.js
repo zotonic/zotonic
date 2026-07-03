@@ -566,20 +566,26 @@ LiveValidation.prototype = {
      * @var elementToIsert {HTMLElementObject} - an element node to insert
      */
     insertMessage: function(elementToInsert){
-        this.removeMessage();
-        if (elementToInsert) {
-          if( (this.displayMessageWhenEmpty && (this.elementType == LiveValidation.CHECKBOX || this.element.value === ''))
-            || this.element.value !== '' ) {
+        const self = this;
 
-              const className = this.validationFailed ? this.invalidClass : this.validClass;
-              elementToInsert.className += ' ' + this.messageClass + ' ' + className;
-              if(this.insertAfterWhatNode.nextSibling){
-                  this.insertAfterWhatNode.parentNode.insertBefore(elementToInsert, this.insertAfterWhatNode.nextSibling);
-              }else{
-                  this.insertAfterWhatNode.parentNode.appendChild(elementToInsert);
+        // Use a timeout to let any clicks on buttons continue, as the appearance of the new
+        // content cancels(?) the click on another element (that triggered this validation).
+        setTimeout(function() {
+            self.removeMessage();
+            if (elementToInsert) {
+              if( (self.displayMessageWhenEmpty && (self.elementType == LiveValidation.CHECKBOX || self.element.value === ''))
+                || self.element.value !== '' ) {
+
+                  const className = self.validationFailed ? self.invalidClass : self.validClass;
+                  elementToInsert.className += ' ' + self.messageClass + ' ' + className;
+                  if(self.insertAfterWhatNode.nextSibling){
+                      self.insertAfterWhatNode.parentNode.insertBefore(elementToInsert, self.insertAfterWhatNode.nextSibling);
+                  }else{
+                      self.insertAfterWhatNode.parentNode.appendChild(elementToInsert);
+                  }
               }
-          }
-        }
+            }
+        }, 100);
     },
 
 
