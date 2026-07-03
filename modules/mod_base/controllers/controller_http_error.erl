@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2015 Marc Worrell
+%% @copyright 2015-2026 Marc Worrell
 %% @doc Controller for http errors. Called for 4xx errors and serving some expected content.
 
-%% Copyright 2015 Marc Worrell
+%% Copyright 2015-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -253,9 +253,20 @@ do_image(ReqData, Context0) ->
     ?WM_REPLY(trans_gif(), Context).
 
 set_headers(ReqData, Context) ->
-    Context2 = ?WM_REQ(ReqData, Context),
-    Context3 = z_context:set_noindex_header(Context2),
-    z_context:set_nocache_headers(Context3).
+    ErrorCode = webmachine_request:get_metadata(http_status_code, ReqData),
+    Context1 = ?WM_REQ(ReqData, Context),
+    Context2 = z_context:set_noindex_header(is_noindex_error(ErrorCode), Context1),
+    z_context:set_nocache_headers(Context2).
+
+%% Signal search engines to remove certain 4xx pages (401/403/405/414/451), as Google et al can keep
+%% them if they were previously a 2xx page (which is now made inaccessible).
+is_noindex_error(401) -> true;
+is_noindex_error(403) -> true;
+is_noindex_error(405) -> true;
+is_noindex_error(414) -> true;
+is_noindex_error(451) -> true;
+is_noindex_error(_) -> false.
+
 
 %% 1 pixel transparant gif
 trans_gif() ->
