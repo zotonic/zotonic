@@ -215,7 +215,7 @@
 							{% endif %}
 						</p>
 					{% endif %}
-					<table class="table table-compact">
+					<table class="table table-compact small">
 						<thead>
 							<tr>
 								<th>{_ Status _}</th>
@@ -256,9 +256,8 @@
 									</tr>
 									{% if is_allow_details and log.mailer_message %}
 										<tr>
-											<td style="border-top: 0; padding-top: 0"></td>
-											<td colspan="{% if is_allow_details %}3{% else %}2{% endif %}" style="border-top: 0; padding-top: 0">
-												<small class="text-muted">{{ log.mailer_message|escape }}</small>
+											<td colspan="{% if is_allow_details %}4{% else %}3{% endif %}" style="border-top: 0; padding-top: 0; padding-left:2em;" class="text-muted">
+												<b>{_ Mailer message _}:</b> {{ log.mailer_message|escape }}
 											</td>
 										</tr>
 									{% endif %}
