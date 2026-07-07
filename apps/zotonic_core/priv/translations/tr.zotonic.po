@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-07-01 08:40\n"
+"PO-Revision-Date: 2026-07-07 15:54\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "MIME-Version: 1.0\n"
@@ -1397,7 +1397,7 @@ msgstr "İndirme bağlantısı panoya kopyalandı"
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:60
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:91
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:119
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:108
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:107
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:46
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:62
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:78
@@ -5258,7 +5258,7 @@ msgid "Artist"
 msgstr "Sanatçı"
 
 #: zotonic_mod_audio/priv/templates/_admin_edit_media_metadata_extra.tpl:4
-#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:70
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:82
 msgid "Audio bit rate"
 msgstr "Ses bit hızı"
 
@@ -5779,7 +5779,7 @@ msgid "However this email address does not belong to one of our users or you hav
 msgstr "Ancak bu e-posta adresi kullanıcılarımızdan birine ait değil ya da henüz bir şifre eklemediniz, bu nedenle değiştiremezsiniz."
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:33
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:144
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:142
 msgid "I agree to the Terms of Service and the Privacy policies."
 msgstr "Hizmet Şartları ve Gizlilik Politikalarını kabul ediyorum."
 
@@ -5839,8 +5839,8 @@ msgstr "Son görülen"
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:186
 #: zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:21
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:187
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:195
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:185
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:193
 msgid "Log in"
 msgstr "Giriş yapmak"
 
@@ -5971,7 +5971,7 @@ msgid "Please use a different method to sign in. You can’t sign in using a use
 msgstr "Lütfen oturum açmak için farklı bir yöntem kullanın. Kullanıcı adı ve şifre kullanarak oturum açamazsınız."
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:44
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:155
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:153
 msgid "Privacy policies"
 msgstr "Gizlilik politikaları"
 
@@ -6042,7 +6042,7 @@ msgid "Stay logged on unless I log off."
 msgstr "Oturumu kapatmadığım sürece oturumunuz açık kalsın."
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:41
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:152
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:150
 msgid "Terms of Service"
 msgstr "Kullanım Şartları"
 
@@ -6167,7 +6167,7 @@ msgid "You can log in using the following external service"
 msgstr "Aşağıdaki harici hizmeti kullanarak giriş yapabilirsiniz"
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:39
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:150
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:148
 msgid "You can read them here:"
 msgstr "Bunları buradan okuyabilirsiniz:"
 
@@ -7280,7 +7280,7 @@ msgid "Domain"
 msgstr "Alan Adı"
 
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:7
-#: zotonic_mod_custom_redirect/src/mod_custom_redirect.erl:121
+#: zotonic_mod_custom_redirect/src/mod_custom_redirect.erl:125
 msgid "Domains and redirects"
 msgstr "Alan adları ve yeniden yönlendirmeler"
 
@@ -7303,7 +7303,7 @@ msgstr "Bilinmeyen alan adlarını ve yolları, bilinen konumlara ya da sayfalar
 msgid "The new location can be a local path or a complete URL. Leave the host empty for redirects within this site."
 msgstr "Yeni konum yerel bir yol ya da tamamen bir URL olabilir. Bu site içindeki yönlendirmeler için ana makineyi boş bırakın."
 
-#: zotonic_mod_custom_redirect/src/mod_custom_redirect.erl:135
+#: zotonic_mod_custom_redirect/src/mod_custom_redirect.erl:139
 msgid "You are not allowed to change this."
 msgstr "Bunu değiştirmenize izin yok."
 
@@ -8286,16 +8286,20 @@ msgstr "Hakkında bilgi"
 msgid "Last error status"
 msgstr "Son hata durumu"
 
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:260
+msgid "Mailer message"
+msgstr "Posta mesajı"
+
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:167
 msgid "Most Recent"
 msgstr "En Güncel"
 
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:284
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:283
 msgid "No email activity information is available for the email address &lt;{email}&gt;."
 msgstr "&lt;{email}&gt; e-posta adresi için herhangi bir e-posta etkinliği bilgisi bulunmamaktadır."
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:202
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:268
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:267
 msgid "No recent email activity for this address."
 msgstr "Bu adres için son zamanlarda herhangi bir e-posta etkinliği kaydedilmemiştir."
 
@@ -9883,6 +9887,7 @@ msgid "Go to mailinglist page"
 msgstr "Posta listesi sayfasına git"
 
 #: zotonic_mod_mailinglist/priv/templates/_email_mailinglist_hello.tpl:6
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:6
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:7
 msgid "Hello,"
 msgstr "Merhaba,"
@@ -11802,13 +11807,21 @@ msgstr "Hesabımı onayla."
 msgid "Confirming..."
 msgstr "Onaylanıyor ..."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:107
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:106
 msgid "Copy the password to the clipboard."
 msgstr "Şifreyi panoya kopyalayın."
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:103
 msgid "Could not send email to <b>{email}</b>. Please check the email address and try again."
 msgstr "Şu adrese e-posta gönderilemedi <b>{email}</b>adresine e-posta gönderilemedi. Lütfen e-posta adresini kontrol edin ve tekrar deneyin."
+
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:19
+msgid "Did you start this signup?"
+msgstr "Bu kayıt işlemini siz mi başlattınız?"
+
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:24
+msgid "Didn't start this signup?"
+msgstr "Bu kayıt işlemini siz başlatmadınız mı?"
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:59
 msgid "Didn’t receive the email?"
@@ -11838,15 +11851,18 @@ msgstr "Adınızı girin"
 msgid "Enter last name"
 msgstr "Soyadınızı girin"
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:104
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:20
+msgid "Enter the code only on the signup page. Do not share it with anyone."
+msgstr "Kodu yalnızca kayıt sayfasında girin. Kimseyle paylaşmayın."
+
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:103
 msgid "Generate a new and secure password."
 msgstr "Yeni ve güvenli bir şifre oluşturun."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:105
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:104
 msgid "Generate a secure password"
 msgstr "Güvenli bir şifre oluşturun"
 
-#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:14
 #: zotonic_mod_signup/priv/templates/email_verify.tpl:14
 msgid "Hope to see you soon."
 msgstr "Yakında görüşmek ümidiyle."
@@ -11863,10 +11879,6 @@ msgstr "Soyadı"
 #: zotonic_mod_signup/priv/templates/_signup_box.tpl:7
 msgid "Log off"
 msgstr "Çıkış yap"
-
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:103
-msgid "Need a new password?"
-msgstr "Yeni bir şifreye mi ihtiyacınız var?"
 
 #: zotonic_mod_signup/priv/templates/_logon_link.tpl:2
 msgid "No account yet?"
@@ -11889,7 +11901,7 @@ msgid "Resend code"
 msgstr "Kodu yeniden gönder"
 
 #: zotonic_mod_signup/priv/templates/_signup_box.tpl:13
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:178
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:176
 #: zotonic_mod_signup/priv/templates/signup.tpl:3
 msgid "Sign Up"
 msgstr "Kaydol"
@@ -11898,25 +11910,25 @@ msgstr "Kaydol"
 msgid "Sign up"
 msgstr "Kaydol"
 
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:9
+msgid "Someone started signing up for an account at {site} using this email address."
+msgstr "Birisi bu e-posta adresini kullanarak {site} adresinde bir hesap açmaya başladı."
+
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:109
 msgid "Something went wrong, please retry again later."
 msgstr "Bir hata oluştu, lütfen daha sonra tekrar deneyin."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:200
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:198
 msgid "Something went wrong. Please try again later."
 msgstr "Bir hata oluştu. Lütfen daha sonra tekrar deneyin."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:206
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:204
 msgid "Sorry, you already have an account. Maybe your account here was suspended."
 msgstr "Üzgünüz, zaten bir hesabınız var. Belki de buradaki hesabınız askıya alınmıştır."
 
 #: zotonic_mod_signup/priv/templates/email_verify.tpl:8
 msgid "Thank you for registering at our site. We request you to confirm your account before you can use it."
 msgstr "Sitemize kayıt olduğunuz için teşekkür ederiz. Hesabınızı kullanmadan önce onaylamanızı istiyoruz."
-
-#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:6
-msgid "Thank you for signing up."
-msgstr "Kaydolduğunuz için teşekkür ederiz."
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:43
 msgid "The code you entered is incorrect. Please try again."
@@ -11926,8 +11938,8 @@ msgstr "Girdiğiniz kod yanlış. Lütfen tekrar deneyin."
 msgid "The email address you entered does not match the email address you provided in the previous step. Please check your input and try again."
 msgstr "Girdiğiniz e-posta adresi, önceki adımda verdiğiniz e-posta adresiyle uyuşmuyor. Lütfen girdilerinizi kontrol edip tekrar deneyin."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:185
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:193
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:183
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:191
 msgid "There is already an account connected to your email address."
 msgstr "E-posta adresinize bağlı bir hesap zaten mevcut."
 
@@ -11935,11 +11947,15 @@ msgstr "E-posta adresinize bağlı bir hesap zaten mevcut."
 msgid "There is already an account with this username."
 msgstr "Bu kullanıcı adıyla zaten bir hesap mevcut."
 
-#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:8
-msgid "This is your one-time code to continue:"
-msgstr "Devam etmek için kullanacağınız tek seferlik kodunuz şudur:"
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:16
+msgid "This code expires in 10 minutes."
+msgstr "Bu kodun geçerlilik süresi 10 dakika sonra sona erecek."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:170
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:10
+msgid "To continue, enter this code on the signup page:"
+msgstr "Devam etmek için, kayıt sayfasına şu kodu girin:"
+
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:168
 msgid "To sign up you must agree with the Terms of Service and Privacy policies."
 msgstr "Kaydolmak için Hizmet Şartları ve Gizlilik politikalarını kabul etmelisiniz."
 
@@ -11951,7 +11967,7 @@ msgstr "Çok fazla deneme yapıldı; bir saat sonra tekrar kayıt olmayı deneye
 msgid "We have sent a code to <b>{email}</b> to confirm your email address."
 msgstr "E-posta adresinizi doğrulamak için <b>{email}</b> e-posta adresinizi doğrulamak için bir kod gönderdik."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:137
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:135
 msgid "We will be very careful with all the information given to us and will never give your name or address away without your permission. We do have some rules that we need you to agree with."
 msgstr "Bize verilen bütün bilgilerle çok dikkatli olacağız ve izniniz olmadan isminizi veya adresinizi asla vermeyeceğiz. Anlaşmamız gereken bazı kurallarımız var."
 
@@ -11963,6 +11979,10 @@ msgstr "E-posta adresinizi doğrulamak için size bir kod göndereceğiz."
 msgid "When you created your account, you received an email with a link but it looks like something went wrong."
 msgstr "Hesabınızı oluşturduğunuzda, bağlantı içeren bir e-posta aldınız ancak bir şeylerin ters gittiği anlaşılıyor."
 
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:26
+msgid "Without this code, they cannot continue signing up with your email address."
+msgstr "Bu kod olmadan, e-posta adresinizle kayıt işlemine devam edemezler."
+
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:19
 msgid "You already have an account."
 msgstr "Zaten bir hesabınız var."
@@ -11970,6 +11990,10 @@ msgstr "Zaten bir hesabınız var."
 #: zotonic_mod_signup/priv/templates/_signup_box.tpl:3
 msgid "You are already logged in as <a href=\"{url}\">{name}</a>."
 msgstr "Şu anda şu kullanıcıyla oturum açmış durumdasınız: <a href=\"{url}\">{name}</a>."
+
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:25
+msgid "You can safely ignore this email. Someone may have entered your email address by mistake."
+msgstr "Bu e-postayı rahatlıkla göz ardı edebilirsiniz. Birisi yanlışlıkla e-posta adresinizi girmiş olabilir."
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:80
 msgid "You can sign up using the following external service."
@@ -11979,13 +12003,13 @@ msgstr "Aşağıdaki harici hizmeti kullanarak kayıt olabilirsiniz."
 msgid "You might have confirmed your account twice so that the account is already confirmed. If so, try logging in.<br>If that doesn’t work, make sure you copied the link correctly and try again."
 msgstr "Hesabınızın zaten onaylanmış olması için hesabınızı iki kez onaylamış olabilirsiniz. Öyleyse, oturum açmayı deneyin.<br>Bu işe yaramazsa, bağlantıyı doğru kopyaladığınızdan emin olun ve tekrar deneyin."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:162
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:160
 msgid "You must agree to the Terms in order to sign up."
 msgstr "Kaydolmak için Şartları kabul etmeniz gerekir."
 
 #: zotonic_mod_signup/priv/templates/email_signup_code.tpl:3
-msgid "Your one-time code is:"
-msgstr "Tek kullanımlık kodunuz şudur:"
+msgid "Your signup code"
+msgstr "Kayıt kodunuz"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:174
 msgid "Building Zotonic in the background..."
@@ -13979,15 +14003,15 @@ msgstr "aktif değil"
 msgid "page break"
 msgstr "sayfa sonu"
 
-#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:53
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:59
 msgid "Audio channels"
 msgstr "Ses kanalları"
 
-#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:47
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:53
 msgid "Audio codec"
 msgstr "Ses kodekleri"
 
-#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:64
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:70
 msgid "Audio sample rate"
 msgstr "Ses örnekleme hızı"
 
@@ -14019,7 +14043,7 @@ msgstr "Video bit hızı"
 msgid "Video codec"
 msgstr "Video kodek"
 
-#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:82
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:94
 msgid "Video tags"
 msgstr "Video etiketleri"
 
