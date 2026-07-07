@@ -193,6 +193,8 @@ identify_file_unix(Cmd, File, OriginalFilename) ->
                             "text/plain"
                     end,
                     {ok, [{mime, Mime2}]};
+                "text/xml" ->
+                    {ok, [{mime, "application/xml"}]};
                 "application/x-gzip" ->
                     %% Special case for the often used extension ".tgz" instead of ".tar.gz"
                     case filename:extension(OriginalFilename) of
