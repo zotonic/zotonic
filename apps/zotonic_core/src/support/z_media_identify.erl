@@ -224,6 +224,8 @@ identify_file_unix(Cmd, File, OriginalFilename) ->
                             <<"text/plain">>
                     end,
                     {ok, #{ <<"mime">> => MText }};
+                <<"text/xml">> ->
+                    {ok, #{ <<"mime">> => <<"application/xml">>}};
                 <<"application/x-gzip">> ->
                     %% Special case for the often used extension ".tgz" instead of ".tar.gz"
                     MGZip = case filename:extension(OriginalFilename) of
