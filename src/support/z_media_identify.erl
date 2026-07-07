@@ -473,7 +473,6 @@ guess_mime(File) ->
 	end.
 
 maybe_map_mime("audio/x-wav") -> "audio/wav";
-maybe_map_mime("audio/x-wav") -> "audio/wav";
 maybe_map_mime(Mime) -> Mime.
 
 % Fetch the EXIF information from the file, we remove the maker_note as it can be huge
