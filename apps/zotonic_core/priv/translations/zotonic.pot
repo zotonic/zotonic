@@ -1433,7 +1433,7 @@ msgstr ""
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:60
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:91
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:119
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:108
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:107
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:46
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:62
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:78
@@ -5462,7 +5462,7 @@ msgid "Artist"
 msgstr ""
 
 #: zotonic_mod_audio/priv/templates/_admin_edit_media_metadata_extra.tpl:4
-#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:70
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:82
 msgid "Audio bit rate"
 msgstr ""
 
@@ -6046,7 +6046,7 @@ msgid ""
 msgstr ""
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:33
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:144
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:142
 msgid "I agree to the Terms of Service and the Privacy policies."
 msgstr ""
 
@@ -6115,8 +6115,8 @@ msgstr ""
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:186
 #: zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:21
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:187
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:195
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:185
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:193
 msgid "Log in"
 msgstr ""
 
@@ -6257,7 +6257,7 @@ msgid ""
 msgstr ""
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:44
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:155
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:153
 msgid "Privacy policies"
 msgstr ""
 
@@ -6328,7 +6328,7 @@ msgid "Stay logged on unless I log off."
 msgstr ""
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:41
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:152
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:150
 msgid "Terms of Service"
 msgstr ""
 
@@ -6465,7 +6465,7 @@ msgid "You can log in using the following external service"
 msgstr ""
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:39
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:150
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:148
 msgid "You can read them here:"
 msgstr ""
 
@@ -7654,7 +7654,7 @@ msgid "Domain"
 msgstr ""
 
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:7
-#: zotonic_mod_custom_redirect/src/mod_custom_redirect.erl:121
+#: zotonic_mod_custom_redirect/src/mod_custom_redirect.erl:125
 msgid "Domains and redirects"
 msgstr ""
 
@@ -7679,7 +7679,7 @@ msgid ""
 "for redirects within this site."
 msgstr ""
 
-#: zotonic_mod_custom_redirect/src/mod_custom_redirect.erl:135
+#: zotonic_mod_custom_redirect/src/mod_custom_redirect.erl:139
 msgid "You are not allowed to change this."
 msgstr ""
 
@@ -8723,18 +8723,22 @@ msgstr ""
 msgid "Last error status"
 msgstr ""
 
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:260
+msgid "Mailer message"
+msgstr ""
+
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:167
 msgid "Most Recent"
 msgstr ""
 
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:284
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:283
 msgid ""
 "No email activity information is available for the email address &lt;{email}"
 "&gt;."
 msgstr ""
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:202
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:268
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:267
 msgid "No recent email activity for this address."
 msgstr ""
 
@@ -10423,6 +10427,7 @@ msgid "Go to mailinglist page"
 msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_email_mailinglist_hello.tpl:6
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:6
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:7
 msgid "Hello,"
 msgstr ""
@@ -12486,7 +12491,7 @@ msgstr ""
 msgid "Confirming..."
 msgstr ""
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:107
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:106
 msgid "Copy the password to the clipboard."
 msgstr ""
 
@@ -12494,6 +12499,14 @@ msgstr ""
 msgid ""
 "Could not send email to <b>{email}</b>. Please check the email address and "
 "try again."
+msgstr ""
+
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:19
+msgid "Did you start this signup?"
+msgstr ""
+
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:24
+msgid "Didn't start this signup?"
 msgstr ""
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:59
@@ -12524,15 +12537,18 @@ msgstr ""
 msgid "Enter last name"
 msgstr ""
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:104
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:20
+msgid "Enter the code only on the signup page. Do not share it with anyone."
+msgstr ""
+
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:103
 msgid "Generate a new and secure password."
 msgstr ""
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:105
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:104
 msgid "Generate a secure password"
 msgstr ""
 
-#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:14
 #: zotonic_mod_signup/priv/templates/email_verify.tpl:14
 msgid "Hope to see you soon."
 msgstr ""
@@ -12550,10 +12566,6 @@ msgstr ""
 
 #: zotonic_mod_signup/priv/templates/_signup_box.tpl:7
 msgid "Log off"
-msgstr ""
-
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:103
-msgid "Need a new password?"
 msgstr ""
 
 #: zotonic_mod_signup/priv/templates/_logon_link.tpl:2
@@ -12577,7 +12589,7 @@ msgid "Resend code"
 msgstr ""
 
 #: zotonic_mod_signup/priv/templates/_signup_box.tpl:13
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:178
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:176
 #: zotonic_mod_signup/priv/templates/signup.tpl:3
 msgid "Sign Up"
 msgstr ""
@@ -12586,15 +12598,20 @@ msgstr ""
 msgid "Sign up"
 msgstr ""
 
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:9
+msgid ""
+"Someone started signing up for an account at {site} using this email address."
+msgstr ""
+
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:109
 msgid "Something went wrong, please retry again later."
 msgstr ""
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:200
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:198
 msgid "Something went wrong. Please try again later."
 msgstr ""
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:206
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:204
 msgid ""
 "Sorry, you already have an account. Maybe your account here was suspended."
 msgstr ""
@@ -12603,10 +12620,6 @@ msgstr ""
 msgid ""
 "Thank you for registering at our site. We request you to confirm your "
 "account before you can use it."
-msgstr ""
-
-#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:6
-msgid "Thank you for signing up."
 msgstr ""
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:43
@@ -12619,8 +12632,8 @@ msgid ""
 "in the previous step. Please check your input and try again."
 msgstr ""
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:185
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:193
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:183
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:191
 msgid "There is already an account connected to your email address."
 msgstr ""
 
@@ -12628,11 +12641,15 @@ msgstr ""
 msgid "There is already an account with this username."
 msgstr ""
 
-#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:8
-msgid "This is your one-time code to continue:"
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:16
+msgid "This code expires in 10 minutes."
 msgstr ""
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:170
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:10
+msgid "To continue, enter this code on the signup page:"
+msgstr ""
+
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:168
 msgid ""
 "To sign up you must agree with the Terms of Service and Privacy policies."
 msgstr ""
@@ -12645,7 +12662,7 @@ msgstr ""
 msgid "We have sent a code to <b>{email}</b> to confirm your email address."
 msgstr ""
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:137
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:135
 msgid ""
 "We will be very careful with all the information given to us and will never "
 "give your name or address away without your permission. We do have some "
@@ -12662,12 +12679,23 @@ msgid ""
 "looks like something went wrong."
 msgstr ""
 
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:26
+msgid ""
+"Without this code, they cannot continue signing up with your email address."
+msgstr ""
+
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:19
 msgid "You already have an account."
 msgstr ""
 
 #: zotonic_mod_signup/priv/templates/_signup_box.tpl:3
 msgid "You are already logged in as <a href=\"{url}\">{name}</a>."
+msgstr ""
+
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:25
+msgid ""
+"You can safely ignore this email. Someone may have entered your email "
+"address by mistake."
 msgstr ""
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:80
@@ -12681,12 +12709,12 @@ msgid ""
 "copied the link correctly and try again."
 msgstr ""
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:162
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:160
 msgid "You must agree to the Terms in order to sign up."
 msgstr ""
 
 #: zotonic_mod_signup/priv/templates/email_signup_code.tpl:3
-msgid "Your one-time code is:"
+msgid "Your signup code"
 msgstr ""
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:174
@@ -14830,15 +14858,15 @@ msgstr ""
 msgid "page break"
 msgstr ""
 
-#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:53
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:59
 msgid "Audio channels"
 msgstr ""
 
-#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:47
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:53
 msgid "Audio codec"
 msgstr ""
 
-#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:64
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:70
 msgid "Audio sample rate"
 msgstr ""
 
@@ -14870,7 +14898,7 @@ msgstr ""
 msgid "Video codec"
 msgstr ""
 
-#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:82
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:94
 msgid "Video tags"
 msgstr ""
 
