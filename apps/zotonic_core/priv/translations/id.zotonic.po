@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-07-07 15:55\n"
+"PO-Revision-Date: 2026-07-08 07:25\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -11910,10 +11910,6 @@ msgstr "Daftar"
 msgid "Sign up"
 msgstr "Daftar"
 
-#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:9
-msgid "Someone started signing up for an account at {site} using this email address."
-msgstr "Ada seseorang yang mulai mendaftar akun di {site} menggunakan alamat email ini."
-
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:109
 msgid "Something went wrong, please retry again later."
 msgstr "Terjadi kesalahan, silakan coba lagi nanti."
@@ -11929,6 +11925,10 @@ msgstr "Maaf, Anda sudah memiliki akun. Mungkin akun Anda di sini telah dinonakt
 #: zotonic_mod_signup/priv/templates/email_verify.tpl:8
 msgid "Thank you for registering at our site. We request you to confirm your account before you can use it."
 msgstr "Terima kasih untuk mendaftar di situs kami. Kami meminta anda untuk mengkonfirmasi akun anda sebelum anda dapat menggunakannya."
+
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:9
+msgid "Thank you for signing up for an account at {site}."
+msgstr "Terima kasih telah mendaftar akun di {site}."
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:43
 msgid "The code you entered is incorrect. Please try again."
