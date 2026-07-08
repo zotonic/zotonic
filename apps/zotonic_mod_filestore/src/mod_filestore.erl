@@ -263,7 +263,7 @@ See also
 -include_lib("zotonic_core/include/zotonic_file.hrl").
 -include_lib("zotonic_mod_admin/include/admin_menu.hrl").
 
--define(BATCH_SIZE, 200).
+-define(BATCH_SIZE, 500).  %% Max batch size for filestore batch operations (queue_all and upload/download/delete processing)
 -define(MAX_FILENAME_LENGTH, 64).
 
 -export([
@@ -797,8 +797,8 @@ handle_cast(fail, #state{ backoff = Backoff } = State) ->
 
 current_batch_size(Backoff) ->
     case z_sidejob:space() of
-        N when N > (?BATCH_SIZE + 50) ->
-            erlang:min(?BATCH_SIZE - backoff:get(Backoff), N);
+        N when N > 50 ->
+            erlang:max(erlang:min(?BATCH_SIZE - backoff:get(Backoff), N - 50), 0);
         _ ->
             0
     end.
