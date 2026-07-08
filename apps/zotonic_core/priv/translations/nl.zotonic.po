@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-07-07 15:54\n"
+"PO-Revision-Date: 2026-07-08 07:25\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -11912,10 +11912,6 @@ msgstr "Registreer"
 msgid "Sign up"
 msgstr "Registreer"
 
-#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:9
-msgid "Someone started signing up for an account at {site} using this email address."
-msgstr "Iemand is begonnen met het aanmaken van een account op {site} met dit e-mailadres."
-
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:109
 msgid "Something went wrong, please retry again later."
 msgstr "Er is een fout opgetreden. Probeer het later nog eens."
@@ -11931,6 +11927,10 @@ msgstr "Sorry, je hebt al een account. Misschien is je account hier geblokkeerd.
 #: zotonic_mod_signup/priv/templates/email_verify.tpl:8
 msgid "Thank you for registering at our site. We request you to confirm your account before you can use it."
 msgstr "Bedankt voor het registreren bij onze website.  Wij verzoeken je om je account te bevestigen voordat je het kan gebruiken."
+
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:9
+msgid "Thank you for signing up for an account at {site}."
+msgstr ""
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:43
 msgid "The code you entered is incorrect. Please try again."
