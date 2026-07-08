@@ -6,7 +6,7 @@
 <p>{_ Hello, _}</p>
 
 <p>
-    {% trans "Someone started signing up for an account at {site} using this email address." site=m.site.title %}
+    {% trans "Thank you for signing up for an account at {site}." site=m.site.title %}
     {_ To continue, enter this code on the signup page: _}
 </p>
 

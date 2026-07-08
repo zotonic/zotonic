@@ -12598,11 +12598,6 @@ msgstr ""
 msgid "Sign up"
 msgstr ""
 
-#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:9
-msgid ""
-"Someone started signing up for an account at {site} using this email address."
-msgstr ""
-
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:109
 msgid "Something went wrong, please retry again later."
 msgstr ""
@@ -12620,6 +12615,10 @@ msgstr ""
 msgid ""
 "Thank you for registering at our site. We request you to confirm your "
 "account before you can use it."
+msgstr ""
+
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:9
+msgid "Thank you for signing up for an account at {site}."
 msgstr ""
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:43
