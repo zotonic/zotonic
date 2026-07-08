@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-07-01 08:41\n"
+"PO-Revision-Date: 2026-07-08 07:25\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -1397,7 +1397,7 @@ msgstr "Tautan unduhan disalin ke papan klip"
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:60
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:91
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:119
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:108
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:107
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:46
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:62
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:78
@@ -5257,7 +5257,7 @@ msgid "Artist"
 msgstr "Artis"
 
 #: zotonic_mod_audio/priv/templates/_admin_edit_media_metadata_extra.tpl:4
-#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:70
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:82
 msgid "Audio bit rate"
 msgstr "Laju bit audio"
 
@@ -5778,7 +5778,7 @@ msgid "However this email address does not belong to one of our users or you hav
 msgstr "Namun alamat email ini bukan milik salah satu pengguna kami atau Anda belum menambahkan kata sandi sehingga Anda tidak dapat mengubahnya."
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:33
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:144
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:142
 msgid "I agree to the Terms of Service and the Privacy policies."
 msgstr "Saya menyetujui Ketentuan Layanan dan Kebijakan Privasi."
 
@@ -5838,8 +5838,8 @@ msgstr "Terakhir terlihat"
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:186
 #: zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:21
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:187
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:195
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:185
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:193
 msgid "Log in"
 msgstr "Gabung"
 
@@ -5970,7 +5970,7 @@ msgid "Please use a different method to sign in. You can’t sign in using a use
 msgstr "Harap gunakan metode lain untuk masuk. Anda tidak dapat masuk menggunakan nama pengguna dan kata sandi."
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:44
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:155
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:153
 msgid "Privacy policies"
 msgstr "Kebijakan Privasi"
 
@@ -6041,7 +6041,7 @@ msgid "Stay logged on unless I log off."
 msgstr "Tetap masuk kecuali saya keluar."
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:41
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:152
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:150
 msgid "Terms of Service"
 msgstr "Ketentuan Layanan"
 
@@ -6166,7 +6166,7 @@ msgid "You can log in using the following external service"
 msgstr "Anda dapat masuk menggunakan layanan eksternal berikut"
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:39
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:150
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:148
 msgid "You can read them here:"
 msgstr "Anda bisa membacanya di sini:"
 
@@ -7279,7 +7279,7 @@ msgid "Domain"
 msgstr "Domain"
 
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:7
-#: zotonic_mod_custom_redirect/src/mod_custom_redirect.erl:121
+#: zotonic_mod_custom_redirect/src/mod_custom_redirect.erl:125
 msgid "Domains and redirects"
 msgstr "Domain dan pengalihan"
 
@@ -7302,7 +7302,7 @@ msgstr "Pengalihan domain yang tidak diketahui dan jalan untuk dikenal halaman a
 msgid "The new location can be a local path or a complete URL. Leave the host empty for redirects within this site."
 msgstr "Lokasi baru bisa menjadi sebuah jalan lokal atau sebuah URL lengkap. Meninggalkan tuan rumah kosong untuk mengarahkan dalam situs ini."
 
-#: zotonic_mod_custom_redirect/src/mod_custom_redirect.erl:135
+#: zotonic_mod_custom_redirect/src/mod_custom_redirect.erl:139
 msgid "You are not allowed to change this."
 msgstr "Anda tidak diizinkan untuk mengubah ini."
 
@@ -8285,16 +8285,20 @@ msgstr "Informasi tentang"
 msgid "Last error status"
 msgstr "Status kesalahan terakhir"
 
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:260
+msgid "Mailer message"
+msgstr "Pesan Mailer"
+
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:167
 msgid "Most Recent"
 msgstr "Terakhir"
 
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:284
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:283
 msgid "No email activity information is available for the email address &lt;{email}&gt;."
 msgstr "Tidak ada informasi aktivitas email yang tersedia untuk alamat email &lt;{email}&gt;."
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:202
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:268
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:267
 msgid "No recent email activity for this address."
 msgstr "Tidak ada aktivitas email terbaru untuk alamat ini."
 
@@ -9882,6 +9886,7 @@ msgid "Go to mailinglist page"
 msgstr "Pergi ke halaman daftar surat"
 
 #: zotonic_mod_mailinglist/priv/templates/_email_mailinglist_hello.tpl:6
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:6
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:7
 msgid "Hello,"
 msgstr "Halo,"
@@ -11802,13 +11807,21 @@ msgstr "Konfirmasikan akun saya."
 msgid "Confirming..."
 msgstr "Mengkonfirmasi ..."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:107
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:106
 msgid "Copy the password to the clipboard."
 msgstr "Salin kata sandi ke papan klip."
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:103
 msgid "Could not send email to <b>{email}</b>. Please check the email address and try again."
 msgstr "Tidak dapat mengirim email ke <b>{email}</b>. Silakan periksa alamat email tersebut dan coba lagi."
+
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:19
+msgid "Did you start this signup?"
+msgstr "Apakah Anda yang memulai pendaftaran ini?"
+
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:24
+msgid "Didn't start this signup?"
+msgstr "Bukan Anda yang memulai pendaftaran ini?"
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:59
 msgid "Didn’t receive the email?"
@@ -11838,15 +11851,18 @@ msgstr "Masukkan nama depan"
 msgid "Enter last name"
 msgstr "Masukkan nama belakang"
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:104
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:20
+msgid "Enter the code only on the signup page. Do not share it with anyone."
+msgstr "Masukkan kode tersebut hanya di halaman pendaftaran. Jangan bagikan kode tersebut kepada siapa pun."
+
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:103
 msgid "Generate a new and secure password."
 msgstr "Buat kata sandi baru yang aman."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:105
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:104
 msgid "Generate a secure password"
 msgstr "Buat kata sandi yang aman"
 
-#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:14
 #: zotonic_mod_signup/priv/templates/email_verify.tpl:14
 msgid "Hope to see you soon."
 msgstr "Berharap untuk segera melihat anda."
@@ -11863,10 +11879,6 @@ msgstr "Nama belakang"
 #: zotonic_mod_signup/priv/templates/_signup_box.tpl:7
 msgid "Log off"
 msgstr "Keluar"
-
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:103
-msgid "Need a new password?"
-msgstr "Butuh kata sandi baru?"
 
 #: zotonic_mod_signup/priv/templates/_logon_link.tpl:2
 msgid "No account yet?"
@@ -11889,7 +11901,7 @@ msgid "Resend code"
 msgstr "Kirim ulang kode"
 
 #: zotonic_mod_signup/priv/templates/_signup_box.tpl:13
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:178
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:176
 #: zotonic_mod_signup/priv/templates/signup.tpl:3
 msgid "Sign Up"
 msgstr "Daftar"
@@ -11902,11 +11914,11 @@ msgstr "Daftar"
 msgid "Something went wrong, please retry again later."
 msgstr "Terjadi kesalahan, silakan coba lagi nanti."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:200
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:198
 msgid "Something went wrong. Please try again later."
 msgstr "Terjadi kesalahan. Silakan coba lagi nanti."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:206
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:204
 msgid "Sorry, you already have an account. Maybe your account here was suspended."
 msgstr "Maaf, Anda sudah memiliki akun. Mungkin akun Anda di sini telah dinonaktifkan."
 
@@ -11914,9 +11926,9 @@ msgstr "Maaf, Anda sudah memiliki akun. Mungkin akun Anda di sini telah dinonakt
 msgid "Thank you for registering at our site. We request you to confirm your account before you can use it."
 msgstr "Terima kasih untuk mendaftar di situs kami. Kami meminta anda untuk mengkonfirmasi akun anda sebelum anda dapat menggunakannya."
 
-#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:6
-msgid "Thank you for signing up."
-msgstr "Terima kasih telah mendaftar."
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:9
+msgid "Thank you for signing up for an account at {site}."
+msgstr "Terima kasih telah mendaftar akun di {site}."
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:43
 msgid "The code you entered is incorrect. Please try again."
@@ -11926,8 +11938,8 @@ msgstr "Kode yang Anda masukkan salah. Silakan coba lagi."
 msgid "The email address you entered does not match the email address you provided in the previous step. Please check your input and try again."
 msgstr "Alamat email yang Anda masukkan tidak sesuai dengan alamat email yang Anda berikan pada langkah sebelumnya. Silakan periksa kembali masukan Anda dan coba lagi."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:185
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:193
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:183
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:191
 msgid "There is already an account connected to your email address."
 msgstr "Sudah ada akun yang terhubung dengan alamat email Anda."
 
@@ -11935,11 +11947,15 @@ msgstr "Sudah ada akun yang terhubung dengan alamat email Anda."
 msgid "There is already an account with this username."
 msgstr "Sudah ada akun dengan nama pengguna ini."
 
-#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:8
-msgid "This is your one-time code to continue:"
-msgstr "Ini adalah kode satu kali yang harus Anda gunakan untuk melanjutkan:"
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:16
+msgid "This code expires in 10 minutes."
+msgstr "Kode ini akan kedaluwarsa dalam 10 menit."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:170
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:10
+msgid "To continue, enter this code on the signup page:"
+msgstr "Untuk melanjutkan, masukkan kode ini di halaman pendaftaran:"
+
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:168
 msgid "To sign up you must agree with the Terms of Service and Privacy policies."
 msgstr "Untuk mendaftar, Anda harus setuju dengan Persyaratan Layanan dan kebijakan Privasi."
 
@@ -11951,7 +11967,7 @@ msgstr "Sudah terlalu banyak upaya. Silakan coba mendaftar lagi satu jam lagi."
 msgid "We have sent a code to <b>{email}</b> to confirm your email address."
 msgstr "Kami telah mengirimkan kode ke <b>{email}</b> untuk mengonfirmasi alamat email Anda."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:137
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:135
 msgid "We will be very careful with all the information given to us and will never give your name or address away without your permission. We do have some rules that we need you to agree with."
 msgstr "Kami akan sangat berhati-hati dengan semua informasi yang sudah diberikan kepada kami dan kami tidak akan pernah memberikan nama atau alamat anda tanpa izin dari anda. Kami memiliki beberapa aturan yang kami membutuhkan anda untuk setuju dengan."
 
@@ -11963,6 +11979,10 @@ msgstr "Kami akan mengirimkan kode melalui email kepada Anda untuk mengonfirmasi
 msgid "When you created your account, you received an email with a link but it looks like something went wrong."
 msgstr "Saat membuat akun, Anda menerima email berisi tautan, tetapi sepertinya ada yang tidak beres."
 
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:26
+msgid "Without this code, they cannot continue signing up with your email address."
+msgstr "Tanpa kode ini, mereka tidak dapat melanjutkan proses pendaftaran menggunakan alamat email Anda."
+
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:19
 msgid "You already have an account."
 msgstr "Anda sudah memiliki akun."
@@ -11970,6 +11990,10 @@ msgstr "Anda sudah memiliki akun."
 #: zotonic_mod_signup/priv/templates/_signup_box.tpl:3
 msgid "You are already logged in as <a href=\"{url}\">{name}</a>."
 msgstr "Anda sudah masuk sebagai <a href=\"{url}\">{name}</a>."
+
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:25
+msgid "You can safely ignore this email. Someone may have entered your email address by mistake."
+msgstr "Anda bisa mengabaikan email ini tanpa perlu khawatir. Mungkin ada seseorang yang secara tidak sengaja memasukkan alamat email Anda."
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:80
 msgid "You can sign up using the following external service."
@@ -11979,13 +12003,13 @@ msgstr "Anda dapat mendaftar menggunakan layanan eksternal berikut ini."
 msgid "You might have confirmed your account twice so that the account is already confirmed. If so, try logging in.<br>If that doesn’t work, make sure you copied the link correctly and try again."
 msgstr "Anda mungkin telah mengkonfirmasi akun Anda dua kali sehingga akun tersebut sudah dikonfirmasi. Jika demikian, coba masuk.<br>Jika tidak berhasil, pastikan Anda menyalin tautan dengan benar dan coba lagi."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:162
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:160
 msgid "You must agree to the Terms in order to sign up."
 msgstr "Anda harus menyetujui Persyaratan untuk mendaftar."
 
 #: zotonic_mod_signup/priv/templates/email_signup_code.tpl:3
-msgid "Your one-time code is:"
-msgstr "Kode satu kali Anda adalah:"
+msgid "Your signup code"
+msgstr "Kode pendaftaran Anda"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:174
 msgid "Building Zotonic in the background..."
@@ -13979,15 +14003,15 @@ msgstr "tidak diaktifkan"
 msgid "page break"
 msgstr "jeda halaman"
 
-#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:53
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:59
 msgid "Audio channels"
 msgstr "Saluran audio"
 
-#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:47
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:53
 msgid "Audio codec"
 msgstr "Codec audio"
 
-#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:64
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:70
 msgid "Audio sample rate"
 msgstr "Laju sampel audio"
 
@@ -14019,7 +14043,7 @@ msgstr "Laju bit video"
 msgid "Video codec"
 msgstr "Codec video"
 
-#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:82
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:94
 msgid "Video tags"
 msgstr "Tag video"
 

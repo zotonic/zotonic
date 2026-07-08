@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-07-01 08:40\n"
+"PO-Revision-Date: 2026-07-08 10:09\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -1397,7 +1397,7 @@ msgstr "קישור להורדה שהועתק ללוח"
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:60
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:91
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:119
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:108
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:107
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:46
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:62
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:78
@@ -5258,7 +5258,7 @@ msgid "Artist"
 msgstr "אמן"
 
 #: zotonic_mod_audio/priv/templates/_admin_edit_media_metadata_extra.tpl:4
-#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:70
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:82
 msgid "Audio bit rate"
 msgstr "קצב סיביות אודיו"
 
@@ -5779,7 +5779,7 @@ msgid "However this email address does not belong to one of our users or you hav
 msgstr "עם זאת, כתובת דוא\"ל זו אינה שייכת לאחד המשתמשים שלנו, או שפשוט לא הוספת סיסמה עדיין, ולכן לא תוכל לשנות אותה."
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:33
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:144
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:142
 msgid "I agree to the Terms of Service and the Privacy policies."
 msgstr "אני מסכים לתנאי השימוש ולמדיניות הפרטיות."
 
@@ -5839,8 +5839,8 @@ msgstr "נראה לאחרונה"
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:186
 #: zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:21
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:187
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:195
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:185
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:193
 msgid "Log in"
 msgstr "התחברות"
 
@@ -5971,7 +5971,7 @@ msgid "Please use a different method to sign in. You can’t sign in using a use
 msgstr "אנא השתמש בשיטה אחרת כדי להיכנס. אינך יכול להיכנס באמצעות שם משתמש וסיסמה."
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:44
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:155
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:153
 msgid "Privacy policies"
 msgstr "מדיניות פרטיות"
 
@@ -6042,7 +6042,7 @@ msgid "Stay logged on unless I log off."
 msgstr "הישאר מחובר אלא אם כן אני מתנתק."
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:41
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:152
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:150
 msgid "Terms of Service"
 msgstr "תנאי השירות"
 
@@ -6167,7 +6167,7 @@ msgid "You can log in using the following external service"
 msgstr "ניתן להיכנס באמצעות השירות החיצוני הבא"
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:39
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:150
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:148
 msgid "You can read them here:"
 msgstr "ניתן לקרוא אותם כאן:"
 
@@ -7280,7 +7280,7 @@ msgid "Domain"
 msgstr "תְחוּם"
 
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:7
-#: zotonic_mod_custom_redirect/src/mod_custom_redirect.erl:121
+#: zotonic_mod_custom_redirect/src/mod_custom_redirect.erl:125
 msgid "Domains and redirects"
 msgstr "תחומים והפניות מחדש"
 
@@ -7303,7 +7303,7 @@ msgstr "הפנה תחומים ונתיבים לא ידועים לדפים או �
 msgid "The new location can be a local path or a complete URL. Leave the host empty for redirects within this site."
 msgstr "המיקום החדש יכול להיות נתיב מקומי או כתובת אתר מלאה. השאר את המארח ריק להפניות מחדש באתר זה."
 
-#: zotonic_mod_custom_redirect/src/mod_custom_redirect.erl:135
+#: zotonic_mod_custom_redirect/src/mod_custom_redirect.erl:139
 msgid "You are not allowed to change this."
 msgstr "אינך רשאי לשנות זאת."
 
@@ -8286,16 +8286,20 @@ msgstr "מידע על"
 msgid "Last error status"
 msgstr "מצב שגיאה אחרון"
 
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:260
+msgid "Mailer message"
+msgstr "הודעת דואר אלקטרוני"
+
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:167
 msgid "Most Recent"
 msgstr "הכי עדכני"
 
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:284
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:283
 msgid "No email activity information is available for the email address &lt;{email}&gt;."
 msgstr "אין מידע זמין על פעילות הדוא\"ל של כתובת הדוא\"ל &lt;{email}&gt;."
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:202
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:268
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:267
 msgid "No recent email activity for this address."
 msgstr "לא נרשמה פעילות דוא\"ל לאחרונה בכתובת זו."
 
@@ -9883,6 +9887,7 @@ msgid "Go to mailinglist page"
 msgstr "עבור לדף רשימת התפוצה"
 
 #: zotonic_mod_mailinglist/priv/templates/_email_mailinglist_hello.tpl:6
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:6
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:7
 msgid "Hello,"
 msgstr "שלום,"
@@ -11802,13 +11807,21 @@ msgstr "אשר את חשבוני."
 msgid "Confirming..."
 msgstr "מאשר ..."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:107
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:106
 msgid "Copy the password to the clipboard."
 msgstr "העתק את הסיסמה ללוח."
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:103
 msgid "Could not send email to <b>{email}</b>. Please check the email address and try again."
 msgstr "לא ניתן לשלוח דוא\"ל לכתובת <b>{email}</b>. אנא בדוק את כתובת הדוא\"ל ונסה שוב."
+
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:19
+msgid "Did you start this signup?"
+msgstr "האם אתה זה שהתחלת את תהליך ההרשמה הזה?"
+
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:24
+msgid "Didn't start this signup?"
+msgstr "לא אתה פתחת את ההרשמה הזו?"
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:59
 msgid "Didn’t receive the email?"
@@ -11838,15 +11851,18 @@ msgstr "הזן את השם הפרטי"
 msgid "Enter last name"
 msgstr "הזן שם משפחה"
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:104
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:20
+msgid "Enter the code only on the signup page. Do not share it with anyone."
+msgstr "הזן את הקוד רק בדף ההרשמה. אל תשתף אותו עם אף אחד."
+
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:103
 msgid "Generate a new and secure password."
 msgstr "צור סיסמה חדשה ובטוחה."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:105
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:104
 msgid "Generate a secure password"
 msgstr "צור סיסמה מאובטחת"
 
-#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:14
 #: zotonic_mod_signup/priv/templates/email_verify.tpl:14
 msgid "Hope to see you soon."
 msgstr "מקווה לראותך בקרוב."
@@ -11863,10 +11879,6 @@ msgstr "שם משפחה"
 #: zotonic_mod_signup/priv/templates/_signup_box.tpl:7
 msgid "Log off"
 msgstr "התנתק"
-
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:103
-msgid "Need a new password?"
-msgstr "צריך סיסמה חדשה?"
 
 #: zotonic_mod_signup/priv/templates/_logon_link.tpl:2
 msgid "No account yet?"
@@ -11889,7 +11901,7 @@ msgid "Resend code"
 msgstr "שלח את הקוד שוב"
 
 #: zotonic_mod_signup/priv/templates/_signup_box.tpl:13
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:178
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:176
 #: zotonic_mod_signup/priv/templates/signup.tpl:3
 msgid "Sign Up"
 msgstr "הירשם"
@@ -11902,11 +11914,11 @@ msgstr "הירשם"
 msgid "Something went wrong, please retry again later."
 msgstr "אירעה תקלה, אנא נסה שוב מאוחר יותר."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:200
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:198
 msgid "Something went wrong. Please try again later."
 msgstr "אירעה תקלה. אנא נסה שוב מאוחר יותר."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:206
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:204
 msgid "Sorry, you already have an account. Maybe your account here was suspended."
 msgstr "מצטערים, כבר יש לך חשבון. ייתכן שהחשבון שלך כאן הושעה."
 
@@ -11914,9 +11926,9 @@ msgstr "מצטערים, כבר יש לך חשבון. ייתכן שהחשבון �
 msgid "Thank you for registering at our site. We request you to confirm your account before you can use it."
 msgstr "תודה שנרשמת לאתר שלנו. אנו מבקשים ממך לאשר את חשבונך לפני שתוכל להשתמש בו."
 
-#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:6
-msgid "Thank you for signing up."
-msgstr "תודה על ההרשמה."
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:9
+msgid "Thank you for signing up for an account at {site}."
+msgstr "תודה שנרשמתם לחשבון באתר {site}."
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:43
 msgid "The code you entered is incorrect. Please try again."
@@ -11926,8 +11938,8 @@ msgstr "הקוד שהזנת אינו נכון. אנא נסה שוב."
 msgid "The email address you entered does not match the email address you provided in the previous step. Please check your input and try again."
 msgstr "כתובת הדוא\"ל שהזנת אינה תואמת לכתובת הדוא\"ל שמסרת בשלב הקודם. אנא בדוק את הפרטים שהזנת ונסה שוב."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:185
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:193
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:183
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:191
 msgid "There is already an account connected to your email address."
 msgstr "כבר קיים חשבון המקושר לכתובת הדוא\"ל שלך."
 
@@ -11935,11 +11947,15 @@ msgstr "כבר קיים חשבון המקושר לכתובת הדוא\"ל שלך
 msgid "There is already an account with this username."
 msgstr "כבר קיים חשבון עם שם המשתמש הזה."
 
-#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:8
-msgid "This is your one-time code to continue:"
-msgstr "זהו הקוד החד-פעמי שלך להמשך:"
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:16
+msgid "This code expires in 10 minutes."
+msgstr "תוקף הקוד יפוג בעוד 10 דקות."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:170
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:10
+msgid "To continue, enter this code on the signup page:"
+msgstr "כדי להמשיך, הזן את הקוד הזה בדף ההרשמה:"
+
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:168
 msgid "To sign up you must agree with the Terms of Service and Privacy policies."
 msgstr "כדי להירשם עליך להסכים לתנאי השירות ולמדיניות הפרטיות."
 
@@ -11951,7 +11967,7 @@ msgstr "ניסיונות רבים מדי. תוכל לנסות להירשם שו�
 msgid "We have sent a code to <b>{email}</b> to confirm your email address."
 msgstr "שלחנו קוד לכתובת <b>{email}</b> כדי לאמת את כתובת הדוא\"ל שלך."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:137
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:135
 msgid "We will be very careful with all the information given to us and will never give your name or address away without your permission. We do have some rules that we need you to agree with."
 msgstr "אנו נהיה זהירים מאוד בכל המידע שנמסר לנו ולעולם לא נמסור את שמך או כתובתך ללא רשותך. יש לנו כמה כללים שאנחנו צריכים שתסכים איתם."
 
@@ -11963,6 +11979,10 @@ msgstr "נשלח לך בדואר אלקטרוני קוד לאימות כתובת
 msgid "When you created your account, you received an email with a link but it looks like something went wrong."
 msgstr "כשיצרת את החשבון שלך, קיבלת אימייל עם קישור אבל נראה שמשהו השתבש."
 
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:26
+msgid "Without this code, they cannot continue signing up with your email address."
+msgstr "ללא קוד זה, הם לא יוכלו להמשיך בתהליך ההרשמה באמצעות כתובת הדוא\"ל שלך."
+
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:19
 msgid "You already have an account."
 msgstr "כבר יש לך חשבון."
@@ -11970,6 +11990,10 @@ msgstr "כבר יש לך חשבון."
 #: zotonic_mod_signup/priv/templates/_signup_box.tpl:3
 msgid "You are already logged in as <a href=\"{url}\">{name}</a>."
 msgstr "אתה כבר מחובר בתור <a href=\"{url}\">{name}</a>."
+
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:25
+msgid "You can safely ignore this email. Someone may have entered your email address by mistake."
+msgstr "אתה יכול להתעלם מהמייל הזה ללא חשש. ייתכן שמישהו הזין את כתובת הדוא\"ל שלך בטעות."
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:80
 msgid "You can sign up using the following external service."
@@ -11979,13 +12003,13 @@ msgstr "ניתן להירשם באמצעות השירות החיצוני הבא.
 msgid "You might have confirmed your account twice so that the account is already confirmed. If so, try logging in.<br>If that doesn’t work, make sure you copied the link correctly and try again."
 msgstr "יתכן ואישרת את חשבונך פעמיים כך שהחשבון כבר אושר. אם כן, נסה להיכנס.<br>אם זה לא עובד, ודא שהעתקת את הקישור כהלכה ונסה שוב."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:162
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:160
 msgid "You must agree to the Terms in order to sign up."
 msgstr "עליכם להסכים לתנאים על מנת להירשם."
 
 #: zotonic_mod_signup/priv/templates/email_signup_code.tpl:3
-msgid "Your one-time code is:"
-msgstr "הקוד החד-פעמי שלך הוא:"
+msgid "Your signup code"
+msgstr "קוד ההרשמה שלך"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:174
 msgid "Building Zotonic in the background..."
@@ -13979,15 +14003,15 @@ msgstr "לא מופעלת"
 msgid "page break"
 msgstr "מעבר עמוד"
 
-#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:53
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:59
 msgid "Audio channels"
 msgstr "ערוצי אודיו"
 
-#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:47
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:53
 msgid "Audio codec"
 msgstr "קודק אודיו"
 
-#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:64
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:70
 msgid "Audio sample rate"
 msgstr "קצב דגימת האודיו"
 
@@ -14019,7 +14043,7 @@ msgstr "קצב העברת הנתונים של הווידאו"
 msgid "Video codec"
 msgstr "קודק וידאו"
 
-#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:82
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:94
 msgid "Video tags"
 msgstr "תגיות וידאו"
 

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-07-01 08:41\n"
+"PO-Revision-Date: 2026-07-08 07:26\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -1397,7 +1397,7 @@ msgstr "Allalaadimise link kopeeriti lõikelauale"
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:60
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:91
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:119
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:108
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:107
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:46
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:62
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:78
@@ -5258,7 +5258,7 @@ msgid "Artist"
 msgstr "Kunstnik"
 
 #: zotonic_mod_audio/priv/templates/_admin_edit_media_metadata_extra.tpl:4
-#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:70
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:82
 msgid "Audio bit rate"
 msgstr "Heli bitikiirus"
 
@@ -5779,7 +5779,7 @@ msgid "However this email address does not belong to one of our users or you hav
 msgstr "Kuid see e-posti aadress ei kuulu ühele meie kasutajale või te pole lihtsalt veel salasõna lisanud, nii et te ei saa seda muuta."
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:33
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:144
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:142
 msgid "I agree to the Terms of Service and the Privacy policies."
 msgstr "Nõustun kasutustingimuste ja privaatsuspoliitikaga."
 
@@ -5839,8 +5839,8 @@ msgstr "Viimati nähtud"
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:186
 #: zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:21
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:187
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:195
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:185
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:193
 msgid "Log in"
 msgstr "Logi sisse"
 
@@ -5971,7 +5971,7 @@ msgid "Please use a different method to sign in. You can’t sign in using a use
 msgstr "Kasutage sisselogimiseks teist meetodit. Te ei saa sisse logida kasutajanime ja parooliga."
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:44
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:155
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:153
 msgid "Privacy policies"
 msgstr "Privaatsuseeskirjad"
 
@@ -6042,7 +6042,7 @@ msgid "Stay logged on unless I log off."
 msgstr "Püsige sisselogituna, kui ma välja ei logi."
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:41
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:152
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:150
 msgid "Terms of Service"
 msgstr "Kasutustingimused"
 
@@ -6167,7 +6167,7 @@ msgid "You can log in using the following external service"
 msgstr "Võite sisse logida järgmise välise teenuse abil"
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:39
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:150
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:148
 msgid "You can read them here:"
 msgstr "Neid saab lugeda siit:"
 
@@ -7280,7 +7280,7 @@ msgid "Domain"
 msgstr "Domeen"
 
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:7
-#: zotonic_mod_custom_redirect/src/mod_custom_redirect.erl:121
+#: zotonic_mod_custom_redirect/src/mod_custom_redirect.erl:125
 msgid "Domains and redirects"
 msgstr "Domeenid ja ümbersuunamised"
 
@@ -7303,7 +7303,7 @@ msgstr "Suunage tundmatud domeenid ja teed teadaolevatele lehtedele või asukoht
 msgid "The new location can be a local path or a complete URL. Leave the host empty for redirects within this site."
 msgstr "Uus asukoht võib olla kohalik tee või täielik URL. Jätke host selle saidi ümbersuunamiseks tühjaks."
 
-#: zotonic_mod_custom_redirect/src/mod_custom_redirect.erl:135
+#: zotonic_mod_custom_redirect/src/mod_custom_redirect.erl:139
 msgid "You are not allowed to change this."
 msgstr "Teil pole lubatud seda muuta."
 
@@ -8286,16 +8286,20 @@ msgstr "Teave"
 msgid "Last error status"
 msgstr "Viimase vea olek"
 
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:260
+msgid "Mailer message"
+msgstr "Maileri sõnum"
+
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:167
 msgid "Most Recent"
 msgstr "Viimased"
 
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:284
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:283
 msgid "No email activity information is available for the email address &lt;{email}&gt;."
 msgstr "E-posti aadressi &lt;{email}&gt; kohta ei ole kättesaadavat teavet e-posti tegevuse kohta."
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:202
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:268
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:267
 msgid "No recent email activity for this address."
 msgstr "Selle aadressi puhul ei ole viimasel ajal e-kirju saadetud."
 
@@ -9883,6 +9887,7 @@ msgid "Go to mailinglist page"
 msgstr "Minge postiloendi lehele"
 
 #: zotonic_mod_mailinglist/priv/templates/_email_mailinglist_hello.tpl:6
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:6
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:7
 msgid "Hello,"
 msgstr "Tere,"
@@ -11802,13 +11807,21 @@ msgstr "Kinnitage minu konto."
 msgid "Confirming..."
 msgstr "Kinnitamine ..."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:107
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:106
 msgid "Copy the password to the clipboard."
 msgstr "Kopeeri parool lõikelauale."
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:103
 msgid "Could not send email to <b>{email}</b>. Please check the email address and try again."
 msgstr "E-kirja ei õnnestunud saata aadressile <b>{email}</b>. Palun kontrollige e-posti aadressi ja proovige uuesti."
+
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:19
+msgid "Did you start this signup?"
+msgstr "Kas sina alustasid seda registreerimist?"
+
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:24
+msgid "Didn't start this signup?"
+msgstr "Kas sa ei alustanud seda registreerimist?"
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:59
 msgid "Didn’t receive the email?"
@@ -11838,15 +11851,18 @@ msgstr "Sisesta eesnimi"
 msgid "Enter last name"
 msgstr "Sisesta perekonnanimi"
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:104
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:20
+msgid "Enter the code only on the signup page. Do not share it with anyone."
+msgstr "Sisesta kood ainult registreerimislehel. Ära jaga seda kellegagi."
+
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:103
 msgid "Generate a new and secure password."
 msgstr "Loo uus ja turvaline parool."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:105
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:104
 msgid "Generate a secure password"
 msgstr "Loo turvaline parool"
 
-#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:14
 #: zotonic_mod_signup/priv/templates/email_verify.tpl:14
 msgid "Hope to see you soon."
 msgstr "Loodan sind varsti näha."
@@ -11863,10 +11879,6 @@ msgstr "Perekonnanimi"
 #: zotonic_mod_signup/priv/templates/_signup_box.tpl:7
 msgid "Log off"
 msgstr "Välju"
-
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:103
-msgid "Need a new password?"
-msgstr "Kas vajate uut parooli?"
 
 #: zotonic_mod_signup/priv/templates/_logon_link.tpl:2
 msgid "No account yet?"
@@ -11889,7 +11901,7 @@ msgid "Resend code"
 msgstr "Saada kood uuesti"
 
 #: zotonic_mod_signup/priv/templates/_signup_box.tpl:13
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:178
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:176
 #: zotonic_mod_signup/priv/templates/signup.tpl:3
 msgid "Sign Up"
 msgstr "Registreeri"
@@ -11902,11 +11914,11 @@ msgstr "Registreeri"
 msgid "Something went wrong, please retry again later."
 msgstr "Midagi läks valesti, palun proovi hiljem uuesti."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:200
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:198
 msgid "Something went wrong. Please try again later."
 msgstr "Midagi läks valesti. Palun proovi hiljem uuesti."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:206
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:204
 msgid "Sorry, you already have an account. Maybe your account here was suspended."
 msgstr "Vabandame, sul on juba konto olemas. Võib-olla on su konto siin blokeeritud."
 
@@ -11914,9 +11926,9 @@ msgstr "Vabandame, sul on juba konto olemas. Võib-olla on su konto siin blokeer
 msgid "Thank you for registering at our site. We request you to confirm your account before you can use it."
 msgstr "Täname teid meie saidil registreerumise eest. Enne selle kasutamist palume teil oma konto kinnitada."
 
-#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:6
-msgid "Thank you for signing up."
-msgstr "Täname registreerumise eest."
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:9
+msgid "Thank you for signing up for an account at {site}."
+msgstr "Täname, et registreerisite end veebilehel {site}."
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:43
 msgid "The code you entered is incorrect. Please try again."
@@ -11926,8 +11938,8 @@ msgstr "Sisestatud kood on vale. Palun proovi uuesti."
 msgid "The email address you entered does not match the email address you provided in the previous step. Please check your input and try again."
 msgstr "Sisestatud e-posti aadress ei vasta eelmises etapis esitatud e-posti aadressile. Palun kontrollige oma sisestust ja proovige uuesti."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:185
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:193
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:183
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:191
 msgid "There is already an account connected to your email address."
 msgstr "Teie e-posti aadressiga on juba seotud üks konto."
 
@@ -11935,11 +11947,15 @@ msgstr "Teie e-posti aadressiga on juba seotud üks konto."
 msgid "There is already an account with this username."
 msgstr "Selle kasutajanimega on juba olemas konto."
 
-#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:8
-msgid "This is your one-time code to continue:"
-msgstr "See on sinu ühekordne kood, millega saad jätkata:"
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:16
+msgid "This code expires in 10 minutes."
+msgstr "See kood kaotab kehtivuse 10 minuti pärast."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:170
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:10
+msgid "To continue, enter this code on the signup page:"
+msgstr "Jätkamiseks sisesta see kood registreerimislehel:"
+
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:168
 msgid "To sign up you must agree with the Terms of Service and Privacy policies."
 msgstr "Registreerumiseks peate nõustuma teenusetingimuste ja privaatsuseeskirjadega."
 
@@ -11951,7 +11967,7 @@ msgstr "Liiga palju katseid – proovi uuesti registreeruda tunni pärast."
 msgid "We have sent a code to <b>{email}</b> to confirm your email address."
 msgstr "Oleme saatnud koodi aadressile <b>{email}</b> , et kinnitada teie e-posti aadressi."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:137
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:135
 msgid "We will be very careful with all the information given to us and will never give your name or address away without your permission. We do have some rules that we need you to agree with."
 msgstr "Oleme kogu meile edastatud teabega väga ettevaatlikud ega anna kunagi teie nime ega aadressi ilma teie loata ära. Meil on mõned reeglid, millega peame nõustuma."
 
@@ -11963,6 +11979,10 @@ msgstr "Saadame sulle e-postiga koodi, millega saad oma e-posti aadressi kinnita
 msgid "When you created your account, you received an email with a link but it looks like something went wrong."
 msgstr "Kui lõite oma konto, saite lingiga meili, kuid tundub, et midagi läks valesti."
 
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:26
+msgid "Without this code, they cannot continue signing up with your email address."
+msgstr "Ilma selle koodita ei saa nad oma e-posti aadressiga registreerimist jätkata."
+
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:19
 msgid "You already have an account."
 msgstr "Teil on juba konto olemas."
@@ -11970,6 +11990,10 @@ msgstr "Teil on juba konto olemas."
 #: zotonic_mod_signup/priv/templates/_signup_box.tpl:3
 msgid "You are already logged in as <a href=\"{url}\">{name}</a>."
 msgstr "Olete juba sisse logitud kasutajana <a href=\"{url}\">{name}</a>."
+
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:25
+msgid "You can safely ignore this email. Someone may have entered your email address by mistake."
+msgstr "Võite selle e-kirja julgelt ignoreerida. Keegi on teie e-posti aadressi ilmselt kogemata sisestanud."
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:80
 msgid "You can sign up using the following external service."
@@ -11979,13 +12003,13 @@ msgstr "Võite registreeruda järgmise välise teenuse kaudu."
 msgid "You might have confirmed your account twice so that the account is already confirmed. If so, try logging in.<br>If that doesn’t work, make sure you copied the link correctly and try again."
 msgstr "Võimalik, et olete oma konto kaks korda kinnitanud, nii et konto on juba kinnitatud. Sel juhul proovige sisse logida.<br>Kui see ei aita, veenduge, et kopeerisite lingi õigesti, ja proovige uuesti."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:162
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:160
 msgid "You must agree to the Terms in order to sign up."
 msgstr "Registreerumiseks peate nõustuma tingimustega."
 
 #: zotonic_mod_signup/priv/templates/email_signup_code.tpl:3
-msgid "Your one-time code is:"
-msgstr "Teie ühekordne kood on:"
+msgid "Your signup code"
+msgstr "Sinu registreerimiskood"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:174
 msgid "Building Zotonic in the background..."
@@ -13979,15 +14003,15 @@ msgstr "pole lubatud"
 msgid "page break"
 msgstr "lehekülje katkestus"
 
-#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:53
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:59
 msgid "Audio channels"
 msgstr "Helikanalid"
 
-#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:47
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:53
 msgid "Audio codec"
 msgstr "Helikoodek"
 
-#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:64
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:70
 msgid "Audio sample rate"
 msgstr "Heli sämplimiskiirus"
 
@@ -14019,7 +14043,7 @@ msgstr "Video bitikiirus"
 msgid "Video codec"
 msgstr "Videokoodek"
 
-#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:82
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:94
 msgid "Video tags"
 msgstr "Video sildid"
 
