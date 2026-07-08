@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-07-07 15:54\n"
+"PO-Revision-Date: 2026-07-08 07:25\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -11910,10 +11910,6 @@ msgstr "注册 "
 msgid "Sign up"
 msgstr "报名"
 
-#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:9
-msgid "Someone started signing up for an account at {site} using this email address."
-msgstr "有人使用该电子邮箱地址在 {site} 上开始注册账户。"
-
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:109
 msgid "Something went wrong, please retry again later."
 msgstr "出现了一些问题，请稍后再试。"
@@ -11929,6 +11925,10 @@ msgstr "抱歉，您已有账户。可能是您的该账户已被暂停。"
 #: zotonic_mod_signup/priv/templates/email_verify.tpl:8
 msgid "Thank you for registering at our site. We request you to confirm your account before you can use it."
 msgstr "感谢您注册本站点。接下来将需要您在使用账户前对账户进行确认。"
+
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:9
+msgid "Thank you for signing up for an account at {site}."
+msgstr "感谢您在 {site} 注册账户。"
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:43
 msgid "The code you entered is incorrect. Please try again."
