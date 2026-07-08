@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-07-07 15:55\n"
+"PO-Revision-Date: 2026-07-08 07:26\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -11910,10 +11910,6 @@ msgstr "Registreeri"
 msgid "Sign up"
 msgstr "Registreeri"
 
-#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:9
-msgid "Someone started signing up for an account at {site} using this email address."
-msgstr "Keegi hakkas selle e-posti aadressi abil looma kontot veebilehel {site}."
-
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:109
 msgid "Something went wrong, please retry again later."
 msgstr "Midagi läks valesti, palun proovi hiljem uuesti."
@@ -11929,6 +11925,10 @@ msgstr "Vabandame, sul on juba konto olemas. Võib-olla on su konto siin blokeer
 #: zotonic_mod_signup/priv/templates/email_verify.tpl:8
 msgid "Thank you for registering at our site. We request you to confirm your account before you can use it."
 msgstr "Täname teid meie saidil registreerumise eest. Enne selle kasutamist palume teil oma konto kinnitada."
+
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:9
+msgid "Thank you for signing up for an account at {site}."
+msgstr "Täname, et registreerisite end veebilehel {site}."
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:43
 msgid "The code you entered is incorrect. Please try again."
