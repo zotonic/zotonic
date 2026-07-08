@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-07-07 15:54\n"
+"PO-Revision-Date: 2026-07-08 07:25\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -11910,10 +11910,6 @@ msgstr "Зарегистрироваться"
 msgid "Sign up"
 msgstr "Зарегистрироваться"
 
-#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:9
-msgid "Someone started signing up for an account at {site} using this email address."
-msgstr "Кто-то начал регистрировать аккаунт на сайте {site} с использованием этого адреса электронной почты."
-
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:109
 msgid "Something went wrong, please retry again later."
 msgstr "Произошла ошибка. Пожалуйста, попробуйте позже."
@@ -11929,6 +11925,10 @@ msgstr "Извините, у вас уже есть аккаунт. Возмож
 #: zotonic_mod_signup/priv/templates/email_verify.tpl:8
 msgid "Thank you for registering at our site. We request you to confirm your account before you can use it."
 msgstr "Спасибо за регистрацию на нашем сайте. Мы просим вас подтвердить ваш аккаунт до того, как вы сможете им пользоваться."
+
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:9
+msgid "Thank you for signing up for an account at {site}."
+msgstr ""
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:43
 msgid "The code you entered is incorrect. Please try again."
