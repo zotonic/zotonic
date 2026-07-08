@@ -263,7 +263,7 @@ See also
 -include_lib("zotonic_core/include/zotonic_file.hrl").
 -include_lib("zotonic_mod_admin/include/admin_menu.hrl").
 
--define(BATCH_SIZE, 200).
+-define(BATCH_SIZE, 500).
 -define(MAX_FILENAME_LENGTH, 64).
 
 -export([
