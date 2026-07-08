@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-07-08 07:25\n"
+"PO-Revision-Date: 2026-07-08 10:09\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -11928,7 +11928,7 @@ msgstr "Спасибо за регистрацию на нашем сайте. �
 
 #: zotonic_mod_signup/priv/templates/email_signup_code.tpl:9
 msgid "Thank you for signing up for an account at {site}."
-msgstr ""
+msgstr "Благодарим вас за регистрацию учетной записи на сайте {site}."
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:43
 msgid "The code you entered is incorrect. Please try again."
