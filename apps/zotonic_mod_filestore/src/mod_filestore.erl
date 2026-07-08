@@ -797,8 +797,8 @@ handle_cast(fail, #state{ backoff = Backoff } = State) ->
 
 current_batch_size(Backoff) ->
     case z_sidejob:space() of
-        N when N > (?BATCH_SIZE + 50) ->
-            erlang:min(?BATCH_SIZE - backoff:get(Backoff), N);
+        N when N > 50 ->
+            erlang:max(erlang:min(?BATCH_SIZE - backoff:get(Backoff), N - 50), 0);
         _ ->
             0
     end.
