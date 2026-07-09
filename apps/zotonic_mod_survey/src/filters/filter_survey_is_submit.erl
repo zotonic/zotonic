@@ -40,15 +40,9 @@ survey_is_submit(Qs, Context) ->
 
 find_first_question([], _Context) ->
 	false;
-find_first_question([#{ <<"type">> := <<"survey_page_break">> }|Qs], Context) ->
-	find_first_question(Qs, Context);
-find_first_question([#{ <<"type">> := <<"survey_page_options">> }|Qs], Context) ->
-	find_first_question(Qs, Context);
-find_first_question([#{ <<"type">> := <<"survey_", _/binary>> } = Q | Qs], Context) ->
+find_first_question([Q | Qs], Context) ->
 	case z_notifier:first(#survey_is_submit{block=Q}, Context) of
 		undefined -> find_first_question(Qs, Context);
 		true -> true;
 		false -> false
-	end;
-find_first_question([_Q|Qs], Context) ->
-	find_first_question(Qs, Context).
+	end.
