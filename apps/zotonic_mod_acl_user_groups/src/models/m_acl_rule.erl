@@ -113,21 +113,41 @@ m_get([ <<"acl_user_groups_state">> | Rest ], _Msg, Context) ->
 m_get([ T, <<"actions">> | Rest ], _Msg, Context) when ?valid_acl_kind(T) ->
     {ok, {actions(to_atom(T), Context), Rest}};
 m_get([ T, S, {all, Opts} | Rest ], _Msg, Context) when ?valid_acl_kind(T), ?valid_acl_state(S) ->
-    {ok, {all_rules(to_atom(T), to_atom(S), Opts, Context), Rest}};
+    case z_acl:is_allowed(use, mod_acl_user_groups, Context)
+        orelse z_acl:is_admin(Context)
+    of
+        true ->
+            {ok, {all_rules(to_atom(T), to_atom(S), Opts, Context), Rest}};
+        false ->
+            {error, eacces}
+    end;
 m_get([ T, S | Rest ], _Msg, Context) when ?valid_acl_kind(T), ?valid_acl_state(S) ->
-    {ok, {all_rules(to_atom(T), to_atom(S), [], Context), Rest}};
+    case z_acl:is_allowed(use, mod_acl_user_groups, Context)
+        orelse z_acl:is_admin(Context)
+    of
+        true ->
+            {ok, {all_rules(to_atom(T), to_atom(S), [], Context), Rest}};
+        false ->
+            {error, eacces}
+    end;
 m_get([ T, <<"undefined">> | Rest ], _Msg, _Context) when ?valid_acl_kind(T) ->
     {ok, {undefined, Rest}};
 m_get([ T, Id | Rest ], _Msg, Context) when ?valid_acl_kind(T) ->
-    try
-        IdInt = z_convert:to_integer(Id),
-        {ok, Props} = get(to_atom(T), IdInt, Context),
-        {ok, {Props, Rest}}
-    catch
-        error:badarg ->
-            {ok, {undefined, Rest}}
+    case z_acl:is_allowed(use, mod_acl_user_groups, Context)
+        orelse z_acl:is_admin(Context)
+    of
+        true ->
+            try
+                IdInt = z_convert:to_integer(Id),
+                {ok, Props} = get(to_atom(T), IdInt, Context),
+                {ok, {Props, Rest}}
+            catch
+                error:badarg ->
+                    {ok, {undefined, Rest}}
+            end;
+        false ->
+            {error, eacces}
     end;
-
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
