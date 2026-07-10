@@ -82,6 +82,7 @@ sanitize_host(Host) ->
     Result :: binary().
 sanitize_host(<<>>, Acc) -> Acc;
 sanitize_host(<<C, Rest/binary>>, Acc) when C >= $a, C =< $z -> sanitize_host(Rest, <<Acc/binary, C>>);
+sanitize_host(<<C, Rest/binary>>, Acc) when C >= $A, C =< $Z -> sanitize_host(Rest, <<Acc/binary, (C + 32)>>);
 sanitize_host(<<C, Rest/binary>>, Acc) when C >= $0, C =< $9 -> sanitize_host(Rest, <<Acc/binary, C>>);
 sanitize_host(<<$-, Rest/binary>>, Acc) -> sanitize_host(Rest, <<Acc/binary, $->>);
 sanitize_host(<<$., Rest/binary>>, Acc) -> sanitize_host(Rest, <<Acc/binary, $.>>);
