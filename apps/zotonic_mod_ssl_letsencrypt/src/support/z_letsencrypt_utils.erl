@@ -93,7 +93,10 @@ sanitize_host(<<_, Rest/binary>>, Acc) -> sanitize_host(Rest, <<Acc/binary, $->>
     Host :: binary() | string(),
     Result :: boolean().
 check_host(Host) when is_list(Host) ->
-    check_host(unicode:characters_to_binary(Host));
+    case unicode:characters_to_binary(Host) of
+        B when is_binary(B) -> check_host(B);
+        _ -> false
+    end;
 check_host(Host) when is_binary(Host) ->
     case re:run(Host, "^([a-z0-9\\-]+\\.)+[a-z][a-z]+$", [{capture, none}]) of
         match -> true;
