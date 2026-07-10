@@ -420,7 +420,7 @@ active(Module, Context) ->
             Deps = [
                 {?MODULE, active, z_context:site(Context)}
             ],
-            z_depcache:memo(F, {?MODULE, active, Module}, 3600, Deps, Context);
+            z_depcache:memo(F, {?MODULE, active_module, Module}, 3600, Deps, Context);
         false ->
             lists:member(Module, active(Context))
     end.
