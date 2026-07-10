@@ -18,6 +18,7 @@
 -export([private_key/2, cert_request/3, cert_autosigned/3, certificate/3]).
 
 -include_lib("public_key/include/public_key.hrl").
+-include_lib("kernel/include/logger.hrl").
 
 % create key
 -spec private_key(undefined|{new, file:filename_all()}|file:filename_all(), file:filename_all()) -> z_letsencrypt:ssl_privatekey().
@@ -46,6 +47,8 @@ private_key(KeyFile, _) ->
 
 -spec cert_request(z_letsencrypt:domain(), file:filename_all(), list(z_letsencrypt:domain())) -> z_letsencrypt:ssl_csr().
 cert_request(Domain, CertsPath, SANs) ->
+    true = z_letsencrypt_utils:check_host(Domain),
+    true = lists:all(fun z_letsencrypt_utils:check_host/1, SANs),
     DomainStr = z_letsencrypt_utils:str(Domain),
     KeyFile  = filename:join(CertsPath, DomainStr ++ ".key"),
     CertFile = filename:join(CertsPath, DomainStr ++ ".csr"),
@@ -55,15 +58,28 @@ cert_request(Domain, CertsPath, SANs) ->
             [{'CertificationRequest', Csr, not_encrypted}] = public_key:pem_decode(RawCsr),
             z_letsencrypt_utils:b64encode(Csr);
         {error, enoent} ->
-            io:format("cert_request: cert file ~p not found~n", [CertFile]),
+            ?LOG_ERROR(#{
+                in => zotonic_mod_ssl_letsencrypt,
+                message => <<"cert_request: cert file not found">>,
+                result => error,
+                reason => enoent,
+                file => CertFile
+            }),
             throw(file_not_found);
         {error, Err} ->
-            io:format("cert_request: unknown error ~p~n", [Err]),
+            ?LOG_ERROR(#{
+                in => zotonic_mod_ssl_letsencrypt,
+                message => <<"cert_request: unknown error reading cert file">>,
+                result => error,
+                reason => Err,
+                file => CertFile
+            }),
             throw(unknown_error)
     end.
 
 % domain certificate only
 certificate(Domain, DomainCert, CertsPath) ->
+    true = z_letsencrypt_utils:check_host(Domain),
     DomainStr = z_letsencrypt_utils:str(Domain),
     FileName = filename:join(CertsPath, DomainStr ++ ".crt"),
     file:write_file(FileName, DomainCert),
@@ -73,6 +89,7 @@ certificate(Domain, DomainCert, CertsPath) ->
 % used for tls-sni-01 challenge
 -spec cert_autosigned(z_letsencrypt:domain(), file:filename_all(), list(z_letsencrypt:domain())) -> {ok, file:filename_all()}.
 cert_autosigned(Domain, KeyFile, SANs) ->
+    true = z_letsencrypt_utils:check_host(Domain),
     DomainStr = z_letsencrypt_utils:str(Domain),
     KeyDir = filename:dirname(KeyFile),
     CertFile = filename:join(KeyDir, DomainStr ++ "-tlssni-autosigned.pem"),

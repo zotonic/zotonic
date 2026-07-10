@@ -203,12 +203,15 @@ observe_tick_24h(tick_24h, Context) ->
 %% @doc Handle UI events
 %% @todo ACL check
 event(#submit{message = {request_cert, Args}}, Context) ->
-    case z_acl:is_admin_editable(Context) of
+    case z_acl:is_allowed(use, mod_ssl_letsencrypt, Context)
+        orelse z_acl:is_admin(Context)
+    of
         true ->
             {hostname, Hostname} = proplists:lookup(hostname, Args),
             SANs = z_context:get_q_all(<<"san">>, Context),
-            SANs1 = [ San || San <- SANs, San /= <<>> ],
-            case gen_server:call(z_utils:name_for_site(?MODULE, Context), {cert_request, Hostname, SANs1}) of
+            SANs1 = [ z_letsencrypt_utils:sanitize_host(San) || San <- SANs, San /= <<>> ],
+            Hostname1 = z_letsencrypt_utils:sanitize_host(Hostname),
+            case gen_server:call(z_utils:name_for_site(?MODULE, Context), {cert_request, Hostname1, SANs1}) of
                 ok ->
                     z_render:growl(?__("Requesting certificates", Context), Context);
                 {error, Reason} ->
@@ -217,7 +220,7 @@ event(#submit{message = {request_cert, Args}}, Context) ->
                         in => zotonic_mod_ssl_letsencrypt,
                         result => error,
                         reason => Reason,
-                        hostname => Hostname,
+                        hostname => Hostname1,
                         san => SANs1
                     }),
                     z_render:wire({alert, [
