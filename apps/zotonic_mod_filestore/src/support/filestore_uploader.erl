@@ -105,6 +105,8 @@ try_upload(MaybeEntry, QueueId, Path, MInfo, Context) ->
                         skip ->
                             % Nothing to do, remove entry, no backoff change.
                             m_filestore:dequeue(QueueId, Context);
+                        retry_no_backoff ->
+                            ok;
                         retry ->
                             % Failure uploading, backoff.
                             mod_filestore:update_backoff(fail, Context)
@@ -213,6 +215,18 @@ finish_upload(ok, Path, AbsPath, Size, #filestore_credentials{service=Service, l
                     ok
             end
     end;
+finish_upload({error, Reason}, Path, _AbsPath, _Size, #filestore_credentials{service=Service, location=Location}, _Context)
+    when Reason =:= enoent; Reason =:= epath ->
+    ?LOG_WARNING(#{
+        text => <<"Filestore upload remote path error, will retry">>,
+        in => zotonic_mod_filestore,
+        result => error,
+        reason => Reason,
+        src => Path,
+        dst => Location,
+        service => Service
+    }),
+    retry_no_backoff;
 finish_upload({error, Reason}, Path, _AbsPath, _Size, #filestore_credentials{service=Service, location=Location}, _Context) ->
     ?LOG_ERROR(#{
         text => <<"Filestore upload error, will retry">>,
