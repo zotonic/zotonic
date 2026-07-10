@@ -90,6 +90,7 @@ certificate(Domain, DomainCert, CertsPath) ->
 -spec cert_autosigned(z_letsencrypt:domain(), file:filename_all(), list(z_letsencrypt:domain())) -> {ok, file:filename_all()}.
 cert_autosigned(Domain, KeyFile, SANs) ->
     true = z_letsencrypt_utils:check_host(Domain),
+    true = lists:all(fun z_letsencrypt_utils:check_host/1, SANs),
     DomainStr = z_letsencrypt_utils:str(Domain),
     KeyDir = filename:dirname(KeyFile),
     CertFile = filename:join(KeyDir, DomainStr ++ "-tlssni-autosigned.pem"),
