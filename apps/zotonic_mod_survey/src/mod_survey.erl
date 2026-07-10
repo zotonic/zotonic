@@ -373,6 +373,8 @@ observe_admin_rscform(#admin_rscform{is_a=IsA}, Post, _Context) ->
 %% @doc Check if the given block is a survey question with submit button
 observe_survey_is_submit(#survey_is_submit{block=Q}, _Context) ->
     case maps:get(<<"type">>, Q, undefined) of
+        <<"survey_page_options">> -> undefined;
+        <<"survey_page_break">> -> undefined;
         <<"survey_button">> -> true;
         <<"survey_", _/binary>> -> maps:get(<<"input_type">>, Q, undefined) =:= <<"submit">>;
         _ -> undefined
