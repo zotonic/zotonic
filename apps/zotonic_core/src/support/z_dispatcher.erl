@@ -779,7 +779,16 @@ append_qargs(Args, Context) ->
             (_) -> false
         end,
         Args),
-    merge_qargs(lists:flatten(QArgs), Args).
+    Args1 = lists:filter(
+        fun
+            ({qargs, _}) -> false;
+            (qargs) -> false;
+            ({<<"qargs">>, _}) -> false;
+            (<<"qargs">>) -> false;
+            (_) -> true
+        end,
+        Args),
+    merge_qargs(lists:flatten(QArgs), Args1).
 
 expand_qargs(undefined, _Context) -> [];
 expand_qargs(false, _Context) -> [];
