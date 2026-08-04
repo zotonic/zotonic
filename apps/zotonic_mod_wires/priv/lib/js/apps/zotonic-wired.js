@@ -811,13 +811,6 @@ function z_queue_postback(
     },
   };
 
-  // if (!transport) {
-  //     if ((trigger_id == "logon_form") || (trigger && $(trigger).hasClass("setcookie"))) {
-  //         transport = 'ajax';
-  //     }
-  // }
-
-  // logon_form and .setcookie forms are always posted, as they will set cookies.
   const options = {
     transport: transport,
     trigger_id: trigger_id,
@@ -828,18 +821,6 @@ function z_queue_postback(
   z_transport_queue_add("postback", "ubf", pb_event, options);
   z_transport_queue_check();
 }
-
-// function z_postback_opt_qs(extraParams)
-// {
-//     if (typeof extraParams == 'object' && extraParams instanceof Array) {
-//         return {
-//             _type: "q",
-//             q: ensure_name_value(extraParams)
-//         };
-//     } else {
-//         return extraParams;
-//     }
-// }
 
 function z_mask(id) {
   if (id && typeof id == "string") {
@@ -1311,7 +1292,7 @@ window.onerror = function (message, file, line, col, error) {
 /* Form element validations
 ----------------------------------------------------------
 
-Grab all "postback" forms, let them be handled by Ajax postback calls.
+Grab all "postback" forms, let them be handled by postback calls.
 This function can be run multiple times.
 
 ---------------------------------------------------------- */
@@ -2080,8 +2061,6 @@ function z_jquery_init() {
    *
    * [ { name: 'username', value: 'jresig' }, { name: 'password', value: 'secret' } ]
    *
-   * It is this array that is passed to pre-submit callback functions provided to the
-   * ajaxSubmit() and ajaxForm() methods.
    */
   $.fn.formToArray = function (options) {
     const a = [];
