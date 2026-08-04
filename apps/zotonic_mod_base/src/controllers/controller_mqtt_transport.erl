@@ -143,7 +143,18 @@ websocket_start(Context) ->
             end
     end,
     Context3 = cowmachine_req:set_resp_header(<<"sec-websocket-protocol">>, Protocol, Context2),
-    cowmachine_websocket_upgrade:upgrade(Handler, Context3).
+    % MQTT CONNECT authentication happens after the WebSocket upgrade, so this
+    % only increases the limit for users authenticated with the z.auth cookie.
+    Context4 = case z_auth:is_auth(Context3) of
+        true ->
+            WsOpts = #{
+                max_frame_size => mqtt_sessions:max_incoming_packet_size()
+            },
+            cowmachine_req:set_metadata(ws_opts, WsOpts, Context3);
+        false ->
+            Context3
+    end,
+    cowmachine_websocket_upgrade:upgrade(Handler, Context4).
 
 %% ---------------------------------------------------------------------------------------------
 %% External entry points
