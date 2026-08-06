@@ -7,7 +7,8 @@
     <div class="form-group">
         {% if props.email %}
             <p>
-                <b>{{ props.email|escape }}</b>
+                <strong>{{ props.email|escape }}</strong>
+                
                 <a id="signup-go-step1-1" class="pull-right" href="{% url signup p=page %}" role="button">{_ Change _}</a>
                 {% wire id="signup-go-step1-1"
                         type="click"
@@ -16,6 +17,7 @@
                 %}
             </p>
         {% else %}
+            <label for="signup-email-input" class="control-label">{_ E-mail _}</label>
             <input id="signup-email-input" class="form-control" autofocus type="email" name="email" autocomplete="email" placeholder="you@example.com" value="{{ email|escape }}" required>
             {% validate id="signup-email-input" name="email" type={email} %}
         {% endif %}
