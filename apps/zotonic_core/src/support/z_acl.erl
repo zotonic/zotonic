@@ -101,6 +101,12 @@ is_allowed(UpdateAction, _Object, #context{ acl_is_read_only = true }) when ?is_
     false;
 is_allowed(_Action, _Object, #context{ user_id=?ACL_ADMIN_USER_ID }) ->
     true;
+is_allowed(UpdateAction, _Object, #context{ user_id = undefined }) when ?is_update_action(UpdateAction) ->
+    % Hard-wired disallow for anonymous users, use a separate user context for anonymous updates.
+    false;
+is_allowed(use, mod_admin_config, #context{ user_id = undefined }) ->
+    % Prevent problems with mis-configured ACL.
+    false;
 is_allowed(link, Object, Context) ->
     is_allowed(insert, #acl_edge{subject_id=Object, predicate=relation, object_id=Object}, Context);
 is_allowed(Action, Object, Context) ->
