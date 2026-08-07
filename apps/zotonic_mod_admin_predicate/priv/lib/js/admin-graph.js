@@ -1,16 +1,78 @@
 (function () {
-  const DEFAULT_COLORS = {
-    nodeDefault: "#0f4c5c",
-    edgeDefault: "#6b6b6b",
-    edgeIncoming: "#2a9d8f",
-    edgeOutgoing: "#e4572e",
-    edgePath: "#4c6ef5",
-    edgeHoverPath: "#7c3aed",
-    nodeActive: "#e4572e",
-    nodeStartOutline: "#1b1b1b",
-    dimNode: "#c7c3bb",
-    dimEdge: "#d1ccc4"
+  const THEME_DEFAULT_COLORS = {
+    light: {
+      nodeDefault: "#0f4c5c",
+      edgeDefault: "#6b6b6b",
+      label: "#1b1b1b",
+      outlinedLabel: "#1b1b1b",
+      hoverLabelBg: "#fff8ef",
+      edgeIncoming: "#2a9d8f",
+      edgeOutgoing: "#e4572e",
+      edgePath: "#4c6ef5",
+      edgeHoverPath: "#7c3aed",
+      nodeActive: "#e4572e",
+      nodeStartOutline: "#1b1b1b",
+      dimNode: "#c7c3bb",
+      dimEdge: "#d1ccc4",
+      muted: "#7a7368"
+    },
+    dark: {
+      nodeDefault: "#7dd3e6",
+      edgeDefault: "#8b97a6",
+      label: "#f3efe9",
+      outlinedLabel: "#f3efe9",
+      hoverLabelBg: "#18202a",
+      edgeIncoming: "#5ad1be",
+      edgeOutgoing: "#ff8f70",
+      edgePath: "#89a8ff",
+      edgeHoverPath: "#b68cff",
+      nodeActive: "#ff8f70",
+      nodeStartOutline: "#f3efe9",
+      dimNode: "#44505f",
+      dimEdge: "#3f4956",
+      muted: "#a8b1bd"
+    }
   };
+
+  const THEME_CATEGORY_STYLES = {
+    article: {
+      size: 8,
+      light: "#355c7d",
+      dark: "#8fb0d8"
+    },
+    person: {
+      size: 9,
+      light: "#6c5b7b",
+      dark: "#b7a1d1"
+    },
+    keyword: {
+      size: 7,
+      light: "#c06c84",
+      dark: "#f09ab1"
+    },
+    collection: {
+      size: 9,
+      light: "#2a9d8f",
+      dark: "#64d6c7"
+    },
+    image: {
+      size: 8,
+      light: "#f4a261",
+      dark: "#ffc78f"
+    },
+    video: {
+      size: 8,
+      light: "#e76f51",
+      dark: "#ff9c85"
+    }
+  };
+
+  let themeObserver = null;
+
+  // Read the active Bootstrap theme from the root element.
+  function getThemeName() {
+    return document.documentElement.getAttribute("data-bs-theme") === "dark" ? "dark" : "light";
+  }
 
   // Read a CSS variable with a fallback for theming.
   function readCssColor(varName, fallback) {
@@ -20,18 +82,34 @@
 
   // Resolve the runtime color palette from CSS variables.
   function resolveColors() {
+    const theme = getThemeName();
+    const fallback = THEME_DEFAULT_COLORS[theme];
     return {
-      nodeDefault: readCssColor("--graph-node", DEFAULT_COLORS.nodeDefault),
-      edgeDefault: readCssColor("--graph-edge", DEFAULT_COLORS.edgeDefault),
-      edgeIncoming: readCssColor("--graph-edge-incoming", DEFAULT_COLORS.edgeIncoming),
-      edgeOutgoing: readCssColor("--graph-edge-outgoing", DEFAULT_COLORS.edgeOutgoing),
-      edgePath: readCssColor("--graph-edge-path", DEFAULT_COLORS.edgePath),
-      edgeHoverPath: readCssColor("--graph-edge-hover-path", DEFAULT_COLORS.edgeHoverPath),
-      nodeActive: readCssColor("--graph-node-active", DEFAULT_COLORS.nodeActive),
-      nodeStartOutline: readCssColor("--graph-node-outline", DEFAULT_COLORS.nodeStartOutline),
-      dimNode: readCssColor("--graph-dim-node", DEFAULT_COLORS.dimNode),
-      dimEdge: readCssColor("--graph-dim-edge", DEFAULT_COLORS.dimEdge)
+      nodeDefault: readCssColor("--graph-node", fallback.nodeDefault),
+      edgeDefault: readCssColor("--graph-edge", fallback.edgeDefault),
+      label: readCssColor("--graph-label", fallback.label),
+      outlinedLabel: readCssColor("--graph-label-outlined", fallback.outlinedLabel),
+      hoverLabelBg: readCssColor("--graph-label-hover-bg", fallback.hoverLabelBg),
+      edgeIncoming: readCssColor("--graph-edge-incoming", fallback.edgeIncoming),
+      edgeOutgoing: readCssColor("--graph-edge-outgoing", fallback.edgeOutgoing),
+      edgePath: readCssColor("--graph-edge-path", fallback.edgePath),
+      edgeHoverPath: readCssColor("--graph-edge-hover-path", fallback.edgeHoverPath),
+      nodeActive: readCssColor("--graph-node-active", fallback.nodeActive),
+      nodeStartOutline: readCssColor("--graph-node-outline", fallback.nodeStartOutline),
+      dimNode: readCssColor("--graph-dim-node", fallback.dimNode),
+      dimEdge: readCssColor("--graph-dim-edge", fallback.dimEdge),
+      muted: readCssColor("--graph-muted", fallback.muted)
     };
+  }
+
+  // Resolve the default category color for the current theme.
+  function resolveCategoryColor(category) {
+    if (!category) return null;
+    const key = String(category).toLowerCase();
+    const style = THEME_CATEGORY_STYLES[key];
+    if (!style) return null;
+    const theme = getThemeName();
+    return readCssColor(`--graph-category-${key}`, style[theme]);
   }
 
   let COLORS = resolveColors();
@@ -121,15 +199,77 @@
       sigma.kill();
     }
 
+    const drawHoverLabel = (context, data, settings) => {
+      const label = data.fullLabel || data.label;
+      if (!label) return;
+
+      const fontSize = typeof settings.labelSize === "number" ? settings.labelSize : 14;
+      const fontFamily = settings.labelFont || "Source Serif 4, Palatino, Georgia, serif";
+      const paddingX = 10;
+      const paddingY = 7;
+      const radius = 6;
+      const textX = data.x + data.size + 6;
+      const textY = data.y;
+
+      context.save();
+      context.font = `${fontSize}px ${fontFamily}`;
+      const textWidth = context.measureText(label).width;
+      const boxX = textX - paddingX;
+      const boxWidth = textWidth + paddingX * 2;
+      const boxHeight = fontSize + paddingY * 2;
+      const boxY = textY - boxHeight / 2;
+
+      context.shadowColor = "rgba(0, 0, 0, 0.18)";
+      context.shadowBlur = 12;
+      context.shadowOffsetX = 0;
+      context.shadowOffsetY = 3;
+      context.fillStyle = COLORS.hoverLabelBg;
+      context.beginPath();
+      context.moveTo(boxX + radius, boxY);
+      context.lineTo(boxX + boxWidth - radius, boxY);
+      context.quadraticCurveTo(boxX + boxWidth, boxY, boxX + boxWidth, boxY + radius);
+      context.lineTo(boxX + boxWidth, boxY + boxHeight - radius);
+      context.quadraticCurveTo(boxX + boxWidth, boxY + boxHeight, boxX + boxWidth - radius, boxY + boxHeight);
+      context.lineTo(boxX + radius, boxY + boxHeight);
+      context.quadraticCurveTo(boxX, boxY + boxHeight, boxX, boxY + boxHeight - radius);
+      context.lineTo(boxX, boxY + radius);
+      context.quadraticCurveTo(boxX, boxY, boxX + radius, boxY);
+      context.closePath();
+      context.fill();
+      context.shadowColor = "transparent";
+
+      const outlineSize = data.size + (data.borderSize || 2);
+      context.fillStyle = data.borderColor || COLORS.nodeStartOutline;
+      context.beginPath();
+      context.arc(data.x, data.y, outlineSize, 0, Math.PI * 2);
+      context.closePath();
+      context.fill();
+
+      context.fillStyle = data.color || COLORS.nodeDefault;
+      context.beginPath();
+      context.arc(data.x, data.y, data.size, 0, Math.PI * 2);
+      context.closePath();
+      context.fill();
+
+      context.fillStyle = COLORS.label;
+      context.textBaseline = "middle";
+      context.fillText(label, textX, textY);
+      context.restore();
+    };
+
     sigma = new SigmaCtor(graph, container, {
       defaultNodeColor: COLORS.nodeDefault,
       defaultEdgeColor: COLORS.edgeDefault,
       defaultEdgeType: "arrow",
       renderEdgeLabels: true,
+      defaultDrawNodeHover: drawHoverLabel,
+      hoverRenderer: drawHoverLabel,
       labelFont: "Source Serif 4, Palatino, Georgia, serif",
       labelSize: 14,
+      defaultLabelColor: COLORS.label,
+      labelColor: { color: COLORS.label },
       edgeLabelSize: 12,
-      edgeLabelColor: { color: "#7a7368" },
+      edgeLabelColor: { color: COLORS.muted },
       nodeReducer: (node, data) => {
         if (data.hidden) return { ...data, hidden: true };
         const isActive = node === activeNodeId;
@@ -156,7 +296,8 @@
           size: isActive ? data.size + 2 : data.size,
           borderColor: showOutline ? COLORS.nodeStartOutline : data.borderColor,
           borderSize: showOutline ? 2 : data.borderSize,
-          label: isHover ? data.fullLabel || data.label : data.label
+          label: isHover ? data.fullLabel || data.label : data.label,
+          labelColor: COLORS.label
         };
       },
       edgeReducer: (edge, data) => {
@@ -947,20 +1088,16 @@
     }
   }
 
-  const CATEGORY_STYLES = {
-    article: { color: "#355c7d", size: 8 },
-    person: { color: "#6c5b7b", size: 9 },
-    keyword: { color: "#c06c84", size: 7 },
-    collection: { color: "#2a9d8f", size: 9 },
-    image: { color: "#f4a261", size: 8 },
-    video: { color: "#e76f51", size: 8 }
-  };
-
   // Map category names to default style hints.
   function resolveCategoryStyle(category) {
     if (!category) return null;
     const key = String(category).toLowerCase();
-    return CATEGORY_STYLES[key] || null;
+    const style = THEME_CATEGORY_STYLES[key];
+    if (!style) return null;
+    return {
+      color: resolveCategoryColor(key),
+      size: style.size
+    };
   }
 
   // Bulk-add resources, optionally tracking created nodes.
@@ -992,7 +1129,8 @@
         edgesLoaded: resource.edgesLoaded !== undefined ? Boolean(resource.edgesLoaded) : undefined,
         edgesLoading: resource.edgesLoading !== undefined ? Boolean(resource.edgesLoading) : undefined,
         size: resource.size || (categoryStyle && categoryStyle.size) || 8,
-        color: resource.color || (categoryStyle && categoryStyle.color) || "#0f4c5c"
+        color: resource.color || (categoryStyle && categoryStyle.color) || COLORS.nodeDefault,
+        colorAuto: !resource.color
       };
       Object.entries(updates).forEach(([key, value]) => {
         if (value !== undefined) {
@@ -1021,6 +1159,7 @@
       edgesLoading: Boolean(resource.edgesLoading),
       size: resource.size || (categoryStyle && categoryStyle.size) || 8,
       color: resource.color || (categoryStyle && categoryStyle.color) || COLORS.nodeDefault,
+      colorAuto: !resource.color,
       x: position.x,
       y: position.y,
       posAuto: !explicitPos
@@ -1119,6 +1258,7 @@
       label: edge.label || "rel",
       predicate_id: predicateId,
       color: edge.color || COLORS.edgeDefault,
+      colorAuto: !edge.color,
       size: edge.size || 1,
       type: "arrow"
     });
@@ -1835,13 +1975,42 @@
   // Reload CSS-driven colors and refresh the renderer.
   function refreshColors() {
     COLORS = resolveColors();
+    graph.forEachNode((nodeId, attrs) => {
+      if (attrs.colorAuto === false) return;
+      const categoryStyle = resolveCategoryStyle(attrs.category);
+      graph.setNodeAttribute(nodeId, "color", (categoryStyle && categoryStyle.color) || COLORS.nodeDefault);
+    });
+    graph.forEachEdge((edgeId, attrs) => {
+      if (attrs.colorAuto === false) return;
+      graph.setEdgeAttribute(edgeId, "color", COLORS.edgeDefault);
+    });
     if (sigma) {
       sigma.setSettings({
         defaultNodeColor: COLORS.nodeDefault,
-        defaultEdgeColor: COLORS.edgeDefault
+        defaultEdgeColor: COLORS.edgeDefault,
+        defaultLabelColor: COLORS.label,
+        labelColor: { color: COLORS.label },
+        edgeLabelColor: { color: COLORS.muted }
       });
       sigma.refresh();
     }
+  }
+
+  // Watch the Bootstrap theme attribute so graph colors stay in sync.
+  function ensureThemeObserver() {
+    if (themeObserver) return;
+    themeObserver = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        if (mutation.type === "attributes" && mutation.attributeName === "data-bs-theme") {
+          refreshColors();
+          break;
+        }
+      }
+    });
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-bs-theme"]
+    });
   }
 
   function setDefaultUseWorker(enabled) {
@@ -1871,6 +2040,7 @@
   }
 
   ensureSigma();
+  ensureThemeObserver();
 
   if (resetButton) {
     resetButton.addEventListener("click", () => resetGraph());

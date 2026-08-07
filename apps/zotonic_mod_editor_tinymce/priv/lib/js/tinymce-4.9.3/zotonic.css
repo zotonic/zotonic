@@ -5,14 +5,14 @@ body {
 }
 
 img.z-tinymce-media {
-    border: 1px solid #eee;
+    border: 1px solid var(--z-tinymce-media-border-color, var(--z-admin-border, #eee));
     height: auto ! important;
     cursor: pointer ! important;
     width: 270px;
 }
 
 img.z-tinymce-media.z-active:hover {
-    border: 1px solid #039ed4;
+    border: 1px solid var(--z-tinymce-media-active-border-color, var(--bs-primary, #039ed4));
 }
 
 img.z-tinymce-media-align-block {
@@ -29,4 +29,3 @@ img.z-tinymce-media-align-left {
     float: left;
     margin: 0 4px 0 0;
 }
-
