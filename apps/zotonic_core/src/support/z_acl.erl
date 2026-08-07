@@ -129,6 +129,9 @@ maybe_allowed(_Action, _Object, #context{ user_id = ?ACL_ADMIN_USER_ID}) ->
 maybe_allowed(UpdateAction, _Object, #context{ user_id = undefined }) when ?is_update_action(UpdateAction) ->
     % Hard-wired disallow for anonymous users, use a separate user context for anonymous updates.
     false;
+maybe_allowed(use, mod_admin_config, #context{ user_id = undefined }) ->
+    % Prevent problems with mis-configured ACL.
+    false;
 maybe_allowed(Action, Object, Context) ->
     maybe_allowed_memo(Action, Object, Context).
 
