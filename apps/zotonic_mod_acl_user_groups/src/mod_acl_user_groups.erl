@@ -374,16 +374,13 @@ See also
 -export([
     is_acl_admin/1,
     status/1,
-    table/1,
-    table/2,
-    await_table/1,
-    await_table/2,
-    await_table/3,
-    lookup/2,
-    await_lookup/2,
-    match/2,
-    await_match/2,
+
+    rebuild/1,
     rebuild/2,
+    await_rebuilding/1,
+    await_rebuilding/2,
+    await_rebuilding/3,
+
     observe_admin_menu/3,
     observe_rsc_update_done/2,
     observe_rsc_delete/2,
@@ -842,71 +839,39 @@ rebuild(edit, Context) ->
 rebuild(publish, Context) ->
     gen_server:cast(name(Context), rebuild_publish).
 
--spec table(#context{}) -> ets:tab() | undefined.
-table(Context) ->
-    table(acl_user_groups_checks:state(Context), Context).
 
--spec await_table(#context{}) -> ets:tab() | undefined.
-await_table(Context) ->
-    await_table(acl_user_groups_checks:state(Context), Context).
+-spec await_rebuilding(#context{}) -> ok.
+await_rebuilding(Context) ->
+    await_rebuilding(acl_user_groups_checks:state(Context), Context).
 
+-spec await_rebuilding(edit|publish, #context{}) -> ok.
+await_rebuilding(State, Context) ->
+    await_rebuilding(State, infinity, Context).
 
--spec table(edit|publish, #context{}) -> ets:tab() | undefined.
-table(State, Context) when State =:= edit; State =:= publish ->
-    try
-        gproc:get_value_shared({p,l,{z_context:site(Context), ?MODULE, State}})
-    catch
-        error:badarg ->
-            undefined
-    end.
-
--spec await_table(edit|publish, #context{}) -> ets:tab() | undefined.
-await_table(State, Context) ->
-    await_table(State, infinity, Context).
-
--spec await_table(edit|publish, integer()|infinity, #context{}) -> ets:tab() | undefined.
-await_table(State, infinity, Context) ->
-    case table(State, Context) of
-        undefined ->
+-spec await_rebuilding(edit|publish, integer()|infinity, #context{}) -> ok.
+await_rebuilding(State, MaybeTimeout, Context) ->
+    IsReady = case status(Context) of
+        {ok, Status} ->
+            IsRebuilding = proplists:get_value(is_rebuilding, Status, true),
+            RebuildingState = proplists:get_value(rebuilding, Status, undefined),
+            case {IsRebuilding, RebuildingState} of
+                {true, State} -> false;
+                {true, undefined} -> false;
+                _ -> true
+            end;
+        _ ->
+            false
+    end,
+    case {IsReady, MaybeTimeout} of
+        {false, infinity} ->
             timer:sleep(100),
-            await_table(State, infinity, Context);
-        TId ->
-            TId
-    end;
-await_table(State, Timeout, Context) when Timeout > 0 ->
-    case table(State, Context) of
-        undefined ->
-            timer:sleep(10),
-            await_table(State, Timeout-10, Context);
-        TId ->
-            TId
+            await_rebuilding(State, infinity, Context);
+        {false, Timeout} when Timeout > 0 ->
+            timer:sleep(100),
+            await_rebuilding(State, Timeout-10, Context);
+        {true, _} ->
+            ok
     end.
-
-lookup(Key, Context) ->
-    lookup1(table(Context), Key).
-
-await_lookup(Key, Context) ->
-    lookup1(await_table(Context), Key).
-
-lookup1(undefined, _Key) ->
-    undefined;
-lookup1(TId, Key) ->
-    case ets:lookup(TId, Key) of
-        [] -> undefined;
-        [{_,V}|_] -> V
-    end.
-
-match(Pattern, Context) ->
-    match1(table(Context), Pattern).
-
-await_match(Pattern, Context) ->
-    match1(await_table(Context), Pattern).
-
-match1(undefined, _Pattern) ->
-    [];
-match1(TId, Pattern) ->
-    ets:match(TId, Pattern).
-
 
 -spec observe_admin_menu(#admin_menu{}, Acc, z:context()) -> Result when
     Acc :: MenuItems,
@@ -1023,21 +988,6 @@ handle_info({'DOWN', MRef, process, _Pid, Reason}, #state{rebuilder_mref=MRef} =
                     rebuilder_mref=undefined
                 }};
 
-handle_info({'ETS-TRANSFER', TId, _FromPid, publish}, State) ->
-    ?LOG_DEBUG("[mod_acl_user_groups] 'ETS-TRANSFER' for 'publish' (~p)", [TId]),
-    gproc_new_ets(TId, publish, State#state.site),
-    State1 = store_new_ets(TId, publish, State),
-    Context = z_context:new(State#state.site),
-    z_depcache:flush(mod_acl_user_groups, Context),
-    z_mqtt:publish(<<"model/acl_user_groups/event/acl-rules/publish">>, true, Context),
-    {noreply, State1};
-handle_info({'ETS-TRANSFER', TId, _FromPid, edit}, State) ->
-    ?LOG_DEBUG("[mod_acl_user_groups] 'ETS-TRANSFER' for 'edit' (~p)", [TId]),
-    gproc_new_ets(TId, edit, State#state.site),
-    State1 = store_new_ets(TId, edit, State),
-    z_mqtt:publish(<<"model/acl_user_groups/event/acl-rules/edit">>, true, z_context:new(State#state.site)),
-    {noreply, State1};
-
 handle_info({'EXIT', _Pid, normal}, State) ->
     {noreply, State};
 
@@ -1085,38 +1035,13 @@ maybe_rebuild(#state{} = State) ->
 
 
 start_rebuilder(EditState, Site) ->
-    Self = self(),
     Pid = z_proc:spawn_link_md(fun() ->
-                                Context = z_acl:sudo(z_context:new(Site)),
-                                acl_user_group_rebuilder:rebuild(Self, EditState, Context)
-                            end),
+        Context = z_acl:sudo(z_context:new(Site)),
+        acl_user_groups_checks:flush(Context),
+        acl_user_group_rebuilder:digest(EditState, Context)
+    end),
     MRef = erlang:monitor(process, Pid),
     {Pid, MRef}.
-
-gproc_new_ets(TId, EditState, Site) ->
-    Key = {Site, ?MODULE, EditState},
-    try
-        gproc:unreg_shared({p,l,Key})
-    catch
-        error:badarg -> ok
-    end,
-    true = gproc:reg_shared({p,l,Key}, TId).
-
-store_new_ets(TId, publish, #state{table_publish=Ts} = State) ->
-    Ts1 = drop_old_ets(Ts),
-    State#state{table_publish=[TId|Ts1]};
-store_new_ets(TId, edit, #state{table_edit=Ts} = State) ->
-    Ts1 = drop_old_ets(Ts),
-    State#state{table_edit=[TId|Ts1]}.
-
-drop_old_ets([A|Rest]) ->
-    lists:foreach(fun(TId) ->
-                    ets:delete(TId)
-                  end,
-                  Rest),
-    [A];
-drop_old_ets([]) ->
-    [].
 
 %%====================================================================
 %% Manage Schema
