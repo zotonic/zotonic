@@ -129,7 +129,7 @@ maybe_allowed(_Action, _Object, #context{ acl = admin }) ->
 maybe_allowed(UpdateAction, _Object, #context{ acl_is_read_only = true }) when ?is_update_action(UpdateAction) ->
     % Read-only context - maybe from an OAuth token
     false;
-maybe_allowed(_Action, _Object, #context{ user_id = ?ACL_ADMIN_USER_ID}) ->
+maybe_allowed(_Action, _Object, #context{user_id = ?ACL_ADMIN_USER_ID}) ->
     % Shortcut for the admin user
     true;
 maybe_allowed(UpdateAction, _Object, #context{ user_id = undefined }) when ?is_update_action(UpdateAction) ->
