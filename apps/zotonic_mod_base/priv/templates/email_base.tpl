@@ -179,7 +179,7 @@
 {% endcomment %}
 {% with bgcolor|default:"#ffffff" as bgcolor %}
 <body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: {{ bgcolor }};">
-    <center role="article" aria-roledescription="email" lang="en" style="width: 100%; background-color: {{ bgcolor }};">
+    <center role="article" aria-roledescription="email" lang="{{ z_language }}" style="width: 100%; background-color: {{ bgcolor }};">
     <!--[if mso | IE]>
     <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: {{ bgcolor }};">
     <tr>
