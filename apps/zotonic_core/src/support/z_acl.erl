@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2024 Marc Worrell
+%% @copyright 2010-2026 Marc Worrell
 %% @doc Access control for Zotonic.  Interfaces to modules implementing the ACL events.
 %% @end
 
-%% Copyright 2010-2024 Marc Worrell
+%% Copyright 2010-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -43,6 +43,7 @@
          is_admin_editable/1,
          is_admin/1,
          is_sudo/1,
+         is_anonymous/1,
          sudo/1,
          sudo/2,
          anondo/1,
@@ -100,6 +101,12 @@ is_allowed(UpdateAction, _Object, #context{ acl_is_read_only = true }) when ?is_
     false;
 is_allowed(_Action, _Object, #context{ user_id=?ACL_ADMIN_USER_ID }) ->
     true;
+is_allowed(UpdateAction, _Object, #context{ user_id = undefined }) when ?is_update_action(UpdateAction) ->
+    % Hard-wired disallow for anonymous users, use a separate user context for anonymous updates.
+    false;
+is_allowed(use, mod_admin_config, #context{ user_id = undefined }) ->
+    % Prevent problems with mis-configured ACL.
+    false;
 is_allowed(link, Object, Context) ->
     is_allowed(insert, #acl_edge{subject_id=Object, predicate=relation, object_id=Object}, Context);
 is_allowed(Action, Object, Context) ->
@@ -125,6 +132,12 @@ maybe_allowed(UpdateAction, _Object, #context{ acl_is_read_only = true }) when ?
 maybe_allowed(_Action, _Object, #context{user_id = ?ACL_ADMIN_USER_ID}) ->
     % Shortcut for the admin user
     true;
+maybe_allowed(UpdateAction, _Object, #context{ user_id = undefined }) when ?is_update_action(UpdateAction) ->
+    % Hard-wired disallow for anonymous users, use a separate user context for anonymous updates.
+    false;
+maybe_allowed(use, mod_admin_config, #context{ user_id = undefined }) ->
+    % Prevent problems with mis-configured ACL.
+    false;
 maybe_allowed(Action, Object, Context) ->
     maybe_allowed_memo(Action, Object, Context).
 
@@ -154,6 +167,8 @@ is_allowed_prop(UpdateAction, _Object, _Property, #context{ acl_is_read_only = t
     false;
 is_allowed_prop(_Action, _Object, _Property, #context{ user_id = ?ACL_ADMIN_USER_ID }) ->
     true;
+is_allowed_prop(UpdateAction, _Object, _Property, #context{ user_id = undefined }) when ?is_update_action(UpdateAction) ->
+    false;
 is_allowed_prop(Action, Object, Property, Context) when is_atom(Property) ->
     is_allowed_prop(Action, Object, atom_to_binary(Property, utf8), Context);
 is_allowed_prop(Action, Object, Property, Context) ->
@@ -340,6 +355,16 @@ is_sudo(#context{ acl = admin }) ->
     true;
 is_sudo(_) ->
     false.
+
+%% @doc Check if the current user is an anonymous non-sudo user.
+-spec is_anonymous( z:context() ) -> boolean().
+is_anonymous(#context{ acl = admin }) ->
+    false;
+is_anonymous(#context{ user_id = undefined }) ->
+    true;
+is_anonymous(_) ->
+    false.
+
 
 %% @doc Call a function with admin privileges. If the function is a MFA
 %% then the sudo-context is appended to the argument list as the last

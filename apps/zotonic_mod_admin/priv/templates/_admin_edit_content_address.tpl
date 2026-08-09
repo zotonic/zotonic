@@ -19,7 +19,7 @@
 			</div>
 			<div class="form-group label-floating">
 				<input class="form-control" id="phone_mobile" type="text" name="phone_mobile" inputmode="tel" value="{{ id.phone_mobile }}" placeholder="{_ Mobile _}">
-				<label class="control-label" for="phone">{_ Mobile _}</label>
+				<label class="control-label" for="phone_mobile">{_ Mobile _}</label>
 			</div>
 		</div>
 

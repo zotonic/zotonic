@@ -63,6 +63,7 @@ Available Model API Paths
     insert/3,
     delete/3,
     replace_managed/3,
+    delete_managed/2,
 
     revert/2,
     publish/2,
@@ -446,7 +447,7 @@ delete(Kind, Id, Context) ->
     ok.
 
 replace_managed(Rules, Module, Context) ->
-    delete_managed(Module, Context),
+    delete_managed_rules(Module, Context),
     lists:foreach(
         fun(Rule) ->
             manage_acl_rule(Rule, Module, Context)
@@ -455,6 +456,9 @@ replace_managed(Rules, Module, Context) ->
     m_acl_rule:publish(rsc, Context),
     m_acl_rule:publish(module, Context),
     m_acl_rule:publish(collab, Context).
+
+delete_managed(Module, Context) ->
+    replace_managed([], Module, Context).
 
 manage_acl_rule({Type, Props}, Module, Context) ->
     insert(Type, [{managed_by, Module} | Props], Context).
@@ -835,13 +839,13 @@ implode_actions(L) ->
     iolist_to_binary( lists:join($,, Keys) ).
 
 %% @doc Delete ACL rules that are managed by a module
--spec delete_managed(atom(), #context{}) -> integer().
-delete_managed(Module, Context) ->
-    delete_managed(Module, rsc, Context)
-        + delete_managed(Module, module, Context)
-        + delete_managed(Module, collab, Context).
+-spec delete_managed_rules(atom(), #context{}) -> integer().
+delete_managed_rules(Module, Context) ->
+    delete_managed_rules_1(Module, rsc, Context)
+        + delete_managed_rules_1(Module, module, Context)
+        + delete_managed_rules_1(Module, collab, Context).
 
--spec delete_managed(atom(), atom(), #context{}) -> non_neg_integer().
-delete_managed(Module, Kind, Context) ->
+-spec delete_managed_rules_1(atom(), atom(), #context{}) -> non_neg_integer().
+delete_managed_rules_1(Module, Kind, Context) ->
     T = z_convert:to_list(table(Kind)),
     z_db:q1("DELETE FROM " ++ T ++ " WHERE managed_by = $1", [Module], Context).
