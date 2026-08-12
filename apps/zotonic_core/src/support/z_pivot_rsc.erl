@@ -35,6 +35,7 @@
     queue_all/1,
     queue_count/1,
     queue_count_backlog/1,
+    queue_action/3,
     insert_queue/2,
 
     get_pivot_title/1,
@@ -81,6 +82,9 @@
 % Interval (in seconds) to check if there are any items to be pivoted.
 -define(PIVOT_POLL_INTERVAL_FAST, 2).
 -define(PIVOT_POLL_INTERVAL_SLOW, 20).
+
+% Time for grouping quick successive resource updates into a single pivot.
+-define(PIVOT_STABILIZATION_SECONDS, 10).
 
 % Interval to check for stuck pivot or task jobs (seconds)
 -define(JOB_CHECK_INTERVAL, 10*60).
@@ -1085,7 +1089,9 @@ get_args(undefined) ->
     Ids :: [ m_rsc:resource_id() ],
     DueDate :: calendar:datetime().
 fetch_queue(Context) ->
-    PivotDate = z_db:q1("select current_timestamp - '10 second'::interval", Context),
+    Now = z_db:q1("select current_timestamp", Context),
+    PivotDate = z_datetime:prev_second(Now, ?PIVOT_STABILIZATION_SECONDS),
+    FutureDate = z_datetime:next_second(Now, ?PIVOT_STABILIZATION_SECONDS),
     Rows = z_db:q("
         select rsc_id
         from rsc_pivot_log
@@ -1098,26 +1104,38 @@ fetch_queue(Context) ->
         Rows =:= [] ->
             {[], PivotDate};
         true ->
-            % Remove log entries that have a pivot date after the cutoff date.
-            % They will be pivoted at a later date.
+            % Group recent updates and supersede scheduled repivots when an
+            % older resource update is already due.
             ToPivot = lists:foldl(
                 fun({Id}, Acc) ->
-                    case z_db:q_row("
-                        select max(due), max(due) >= $2
+                    {MinDue, MaxDue} = z_db:q_row("
+                        select min(due), max(due)
                         from rsc_pivot_log
                         where rsc_id = $1
-                        ", [ Id, PivotDate ], Context)
-                    of
-                        {_MaxDue, false} ->
+                        ", [ Id ], Context),
+                    case queue_action(MaxDue, PivotDate, FutureDate) of
+                        pivot ->
                             [ Id | Acc ];
-                        {MaxDue, true} ->
+                        delay ->
                             z_db:q("
                                 delete from rsc_pivot_log
                                 where rsc_id = $1
                                   and due < $2
                                 ", [ Id, MaxDue ],
                                 Context),
-                            Acc
+                            Acc;
+                        pivot_reschedule ->
+                            % A future repivot must not delay a due resource update.
+                            % Move it into this batch; the pivot will schedule a new
+                            % repivot using the current resource properties.
+                            z_db:q("
+                                update rsc_pivot_log
+                                set due = $2
+                                where rsc_id = $1
+                                  and due > $3
+                                ", [ Id, MinDue, FutureDate ],
+                                Context),
+                            [ Id | Acc ]
                     end
                 end,
                 [],
@@ -1129,6 +1147,22 @@ fetch_queue(Context) ->
                     {ToPivot, PivotDate}
             end
         end.
+
+
+%% @doc Decide how a queued resource should handle its latest due date.
+%% A date beyond the stabilization window is a scheduled repivot. If an older
+%% update is already due then that repivot is superseded by the upcoming pivot.
+-spec queue_action(MaxDue, PivotDate, FutureDate) -> Action when
+    MaxDue :: calendar:datetime(),
+    PivotDate :: calendar:datetime(),
+    FutureDate :: calendar:datetime(),
+    Action :: pivot | delay | pivot_reschedule.
+queue_action(MaxDue, _PivotDate, FutureDate) when MaxDue > FutureDate ->
+    pivot_reschedule;
+queue_action(MaxDue, PivotDate, _FutureDate) when MaxDue >= PivotDate ->
+    delay;
+queue_action(_MaxDue, _PivotDate, _FutureDate) ->
+    pivot.
 
 
 %% @doc Delete pivot log entries for all pivoted ids. Use the due date
