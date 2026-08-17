@@ -1003,12 +1003,17 @@ maybe_start_pivot(#state{ pivot_queue = Queue } = State, Context) ->
     end.
 
 do_poll_queue(Context) ->
-    try
-        fetch_queue(Context)
-    catch
-        exit:{timeout, _} ->
-            {[], undefined};
-        throw:{error, econnrefused} ->
+    case z_db:has_connection(Context) of
+        true ->
+            try
+                fetch_queue(Context)
+            catch
+                exit:{timeout, _} ->
+                    {[], undefined};
+                throw:{error, econnrefused} ->
+                    {[], undefined}
+            end;
+        false ->
             {[], undefined}
     end.
 
