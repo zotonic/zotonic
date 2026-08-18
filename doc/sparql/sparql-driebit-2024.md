@@ -1,5 +1,9 @@
 # Onderzoek ZZC + NDE
 
+> Historical research note from 2024. This file records background sources and
+> design exploration; it is not the current mod_sparql feature matrix. See
+> `query-plan.md`, `sql-mapping.md` and `builtins.txt` for implementation status.
+
 # Onderzoek SPARQL + Postgres
 
 Vraag: zien we mogelijkheden voor een hybride oplossing SPARQL + Postgres?

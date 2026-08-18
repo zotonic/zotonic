@@ -1,19 +1,35 @@
-W3C SPARQL 1.1 documentation
+SPARQL grammar
+==============
+
+W3C SPARQL 1.1 query specification:
 
 https://www.w3.org/TR/sparql11-query/
 
-Grammar in EBNF:
+EBNF grammar:
 
 https://www.w3.org/TR/sparql11-query/#grammar
 
-This grammar has been adapated to a LALR grammar, compatible with Yecc.
-See sparqlz_parser.yrl
+The W3C EBNF has been adapted to a Yecc-compatible LALR grammar in:
 
+    apps/zotonic_mod_sparql/src/support/z_sparql_parser.yrl
 
-LALR/Bison-based SPARQL parsers:
+Lexical scanning is implemented in:
 
-* Rasqal: SPARQL requires Bison 3.0,” which can generate LALR parsers.
-* RDFLib's old parser: listed by W3C as "BisonGen-based"
-* Elixir sparql - but seems incomplete when compared to the EBNF (https://github.com/langens-jonathan/sparql)
+    apps/zotonic_mod_sparql/src/support/z_sparql_scanner.erl
 
-So: there is no canonical W3C LALR grammar, but there are some examples.
+The parser intentionally recognizes more syntax than the query planner and SQL
+generator execute. In particular, it parses SELECT, CONSTRUCT, DESCRIBE and ASK,
+while the planner currently accepts only SELECT. It also parses dataset clauses,
+OPTIONAL, BIND, GRAPH, LIMIT and OFFSET, which SQL generation currently rejects.
+
+The executable subset includes basic triple patterns, nested groups, UNION,
+FILTER, VALUES, projection expressions, DISTINCT, GROUP BY, HAVING, ORDER BY,
+aggregates and a single inverse predicate path. See query-plan.md and
+builtins.txt for the exact implementation status.
+
+REDUCED is accepted and currently behaves like the default projection; no
+additional duplicate elimination is requested from PostgreSQL.
+
+There is no canonical W3C LALR grammar. Other LALR/Bison-based SPARQL parsers
+include Rasqal and older RDFLib parsers. The Elixir `sparql` project is another
+reference but does not cover the complete W3C EBNF.

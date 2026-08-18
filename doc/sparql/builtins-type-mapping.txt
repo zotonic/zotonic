@@ -1,87 +1,105 @@
-Mapping types for operators/builtins
-====================================
+SQL expression type mapping
+===========================
 
-1. For select results do nothing, use #> for jsonb
-2. Operators:
+The SQL generator walks SPARQL expression trees bottom-up. Every generated
+expression records:
 
-   Unitary:
+    sql       PostgreSQL expression
+    type      logical value type
+    source    argument, column, expression or jsonb
+    defined   whether an OPTIONAL/VALUES binding is defined
 
-        <op> <$arg>     do nothing
-        <op> <column>   map to proper type if type info says non-proper type
-        <op> <jsonb>    map to proper type for <op> (or expression tree)
-        <op> <expr>     map tree to proper type, if it is not already of that type
-
-   Binary (either side can be a column, jsonb, or query argument):
-
-       <any> op <$arg>        -- do nothing postgresql $arg will be mapped  (use #> for jsonb)
-       <column> op <column>   -- do nothing (may need to cast to compatible type)
-       <column> op <jsonb>    -- convert jsonb to proper type
+Values keep their storage representation until an operator or built-in needs a
+concrete type. In particular, JSONB selectors use #> and are not converted when
+they are only projected.
 
 
-Method:
+Value types
+-----------
 
-- Walk expression tree
-- Mark expression nodes with type, from bottom to top  (assuming #> for jsonb)
-- See also builtins below, mark builtin result with result type
-- Check types for operator, in generated sql map to compatible types, use type
-  signature of operator:
+    any         Type is not yet known; commonly an unbound/query argument
+    boolean     PostgreSQL boolean
+    datetime    PostgreSQL timestamptz
+    float       PostgreSQL real or double precision
+    integer     PostgreSQL integer/bigint family
+    number      Numeric supertype used before integer/float is resolved
+    text        PostgreSQL text
+    uri         IRI text value
+    id          Zotonic resource id stored as an integer
+    ids         Array of resource ids
+    list        Array/list value
+    fts         PostgreSQL tsvector search value
+    fulltext    Trigram/full-text search value
 
-    -   <number>, <number>   -> <number>
-    +   <number>, <number>   -> <number>
-    *   <number>, <number>   -> <number>
-    /   <number>, <number>   -> <number>
-    or  <boolean>, <boolean> -> <boolean>
-    and <boolean>, <boolean> -> <boolean>
-    =   <a>, <a>             -> <boolean>
-    !=  <a>, <a>             -> <boolean>
-    <   <a>, <a>             -> <boolean>
-    <=  <a>, <a>             -> <boolean>
-    >   <a>, <a>             -> <boolean>
-    >=  <a>, <a>             -> <boolean>
+Resource bindings are represented separately from scalar expressions as a
+resource table alias. This prevents an rsc.id from automatically becoming a
+numeric RDF literal in places where the binding is known to be a resource.
+An id-typed property remains ambiguous: its SQL storage is numeric, while its
+RDF interpretation can be an IRI.
+
+
+Operators
+---------
+
+Arithmetic operators require numbers and produce a numeric result:
 
     - <number>               -> <number>
     + <number>               -> <number>
+    <number> - <number>      -> <number>
+    <number> + <number>      -> <number>
+    <number> * <number>      -> <number>
+    <number> / <number>      -> <number>
+
+If either known operand is a float, the result is a float. Otherwise the result
+is integer unless an operand is only known as number.
+
+Boolean operators require booleans:
+
     ! <boolean>              -> <boolean>
+    <boolean> && <boolean>   -> <boolean>
+    <boolean> || <boolean>   -> <boolean>
 
-Where <a> is any type, "<a>, <a>" means same type of both sides of the operator.
-<a> Is the "super type", <integer>/<float> are sub-types of <number> and compatible
-with each other.
-Any query argument is of any compatible type, we denote this with <$>, when this
-type appears, then it can be assumed to be compatible with the type of the other
-argument.
+Comparison operators coerce both operands to a common compatible type and
+return boolean:
 
-Types could be:
+    =  !=  <  <=  >  >=
 
-    <number>    -- either <integer> or <float>, but not yet determined
-    <integer>   -- subtype of <number>
-    <float>     -- subtype of <number>
-    <boolean>
-    <text>
-    <uri>       -- subtype of <text>
-    <datetime>  -- maps to postgresql timestamptz
-
-Special types:
-
-    <$>         -- argument, assume it will be in correct type needed
-    <id>        -- integer, but could be considered an <uri> (https://domain/id/<id>)
-
-    <ids>       -- list of <id>     postgresql "integer[]"
-    <list>      -- list of <text>   postgresql "text[]"
-
-Not considered for now:
-
-    <fts>
-    <fulltext>
+Compatibility currently includes integer/float/number, text/uri and
+integer/id. Incompatible known types return an incompatible_types error.
+Parameterized arguments are left for PostgreSQL to infer from the surrounding
+expression where possible.
 
 
-Note that if any side of a  "-+*/" operator is a float, then the result is a float.
-If we don't know if the type is an integer or a float, then denote it as a number.
+JSONB coercion
+--------------
 
-"datetime" is converted to postgresql timestamptz, when needed as datetime.
+JSONB property expressions retain #> output until a concrete value is needed.
+They are then mapped as follows:
 
-3. Builtins/functions
+    text, uri       jsonb #>> '{}'
+    datetime        (jsonb #>> '{}')::timestamptz
+    integer, id     jsonb::bigint
+    float           jsonb::double precision
+    number          jsonb::numeric
+    boolean         jsonb::boolean
 
-Builtins know their type-signature, convert the arguments to those types.
-This is similar to the operators, except with functions.
-Mark the resulting node with the expected output-type of the builtin.
+isLITERAL and isNUMERIC inspect jsonb_typeof directly so that structured JSON
+objects and arrays are not treated as RDF scalar literals.
 
+
+Built-ins and constructors
+--------------------------
+
+Each supported built-in declares argument and result types in
+z_sparql_sql_function.erl. Arguments are coerced before the PostgreSQL
+expression is emitted. The common pseudo-type used by COALESCE and IF requires
+their value alternatives to resolve to a compatible type.
+
+Well-known XSD constructor IRIs are handled separately by
+z_sparql_sql_datatype.erl. They map string, boolean, integer variants, decimal,
+float, double, dateTime and dateTimeStamp to PostgreSQL casts. Date/time
+construction also accepts integer Unix seconds.
+
+Aggregates declare their input and result types in
+z_sparql_sql_aggregate.erl. MIN, MAX and SAMPLE preserve their argument type;
+SUM and AVG require numeric input; GROUP_CONCAT coerces input to text.

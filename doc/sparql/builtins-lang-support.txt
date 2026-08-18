@@ -1,42 +1,49 @@
 Language support (#trans)
 =========================
 
-Problem: the translatable properties in the JSONB are encoded as either
-a string (default language), of a #trans{} record with translation.
+Current status: language-aware SPARQL expressions are not supported by SQL
+generation.
 
-The available translations for a resource are in the "language" property.
-This is an array of ISO639-1 language codes.
+The scanner and parser accept RDF literals with language tags, for example:
 
-In the generated SQL we can't readily access the translated properties.
-We might need extra stored procedures to easily inspect values. The values
-might be 'text' (psql) and 'jsonb' types (text and object).
+    "title"@en
 
+The query plan normalizes the language tag to lowercase and keeps it on the
+literal term. When the literal becomes a SQL value, however, only its lexical
+value and general value type are retained. The SQL expression record does not
+carry a language tag.
 
-Functions:
+Zotonic translatable JSONB properties add another mismatch. They can be stored
+as a plain string or as a serialized #trans{} value containing multiple
+translations. The resource "language" property lists available languages, but
+the current SPARQL-to-SQL mapping does not expand a #trans{} value into RDF
+language-tagged literals.
 
-STRLANG(Expr,Lang) -> LangString
+Functions
+---------
 
-    Create a language tagged string from the expression.
-    Maybe a JSONB value?
+These built-ins are recognized but rejected by SQL generation:
 
 LANG(Expr) -> Lang
 
-    LANG(SomeTranslatableString) --- return language of the string
+    Return the language tag of a language-tagged literal. For a literal
+    without a language tag, return the empty string.
 
-LANGMATCHES(Lang1, Lang2)
+LANGMATCHES(Lang, Range) -> Boolean
 
-    Check if Lang2 is Lang2 or a sublanguage of Lang2
-    Example: LANGMATCHES("nl-be", "nl")
+    Test a language tag against a language range. A range also matches
+    sublanguages; for example, LANGMATCHES("nl-be", "nl") is true.
 
+STRLANG(Expr, Lang) -> LangString
 
-Also:
+    Construct a language-tagged literal from the lexical value of Expr and
+    the supplied language tag. This needs a result representation that
+    preserves both the lexical value and its language tag.
 
-  "...."@en -->  mark string as having a language
+DATATYPE depends on the same metadata because a language-tagged literal has
+datatype rdf:langString.
 
-
-We could actually do a kind of "superset" of the above. Instead of a
-single language tagged string we use a trans record. That can contain
-zero or more languages.
-
-The LANG could return the first language.  LANGMATCHES could be extended
-to also accept a trans record as the first argument.
+A future implementation must first decide whether a Zotonic #trans{} value is
+exposed as one value selected by context language or as multiple RDF bindings.
+Only after that decision can LANG, LANGMATCHES, STRLANG and rdf:langString be
+mapped consistently.

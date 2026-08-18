@@ -1,79 +1,114 @@
-Builtin functions
-=================
+SPARQL built-in status
+=======================
 
-These need to be mapped to PostgreSQL equivalents.
+The scanner and parser recognize the SPARQL 1.1 built-in names below. The SQL
+generator supports only the functions marked supported or partial. See
+builtins-mapping.txt for the PostgreSQL expressions and compatibility notes.
 
 
-BuiltInCall   ::= Aggregate
-                | 'STR' '(' Expression ')'                                      # Bit tricky, due to rDF types
-                | 'LANG' '(' Expression ')'                                     # Needs lang support
-                | 'LANGMATCHES' '(' Expression ',' Expression ')'               # Needs lang support
-                | 'DATATYPE' '(' Expression ')'                                 # Expects RDF data type...
-                | 'BOUND' '(' Var ')'                                           # done
-                | 'IRI' '(' Expression ')'
-                | 'URI' '(' Expression ')'
-                | 'BNODE' ( '(' Expression ')' | NIL )                          # ? check semantics of this one
-                | 'RAND' NIL                                                    # done
-                | 'ABS' '(' Expression ')'                                      # done
-                | 'CEIL' '(' Expression ')'                                     # done
-                | 'FLOOR' '(' Expression ')'                                    # done
-                | 'ROUND' '(' Expression ')'                                    # done
-                | 'CONCAT' ExpressionList                                       # done
-                | SubstringExpression                                           # done
-                | 'STRLEN' '(' Expression ')'                                   # done
-                | StrReplaceExpression                                          # done
-                | 'UCASE' '(' Expression ')'                                    # done
-                | 'LCASE' '(' Expression ')'                                    # done
-                | 'ENCODE_FOR_URI' '(' Expression ')'
-                | 'CONTAINS' '(' Expression ',' Expression ')'                  # done
-                | 'STRSTARTS' '(' Expression ',' Expression ')'                 # done
-                | 'STRENDS' '(' Expression ',' Expression ')'                   # done
-                | 'STRBEFORE' '(' Expression ',' Expression ')'                 # done
-                | 'STRAFTER' '(' Expression ',' Expression ')'                  # done
-                | 'YEAR' '(' Expression ')'                                     # done
-                | 'MONTH' '(' Expression ')'                                    # done
-                | 'DAY' '(' Expression ')'                                      # done
-                | 'HOURS' '(' Expression ')'                                    # done
-                | 'MINUTES' '(' Expression ')'                                  # done
-                | 'SECONDS' '(' Expression ')'                                  # done
-                | 'TIMEZONE' '(' Expression ')'                                 # check diff with psql tz support
-                | 'TZ' '(' Expression ')'
-                | 'NOW' NIL                                                     # done
-                | 'UUID' NIL                                                    # needs psql extensions
-                | 'STRUUID' NIL
-                | 'MD5' '(' Expression ')'                                      # done
-                | 'SHA1' '(' Expression ')'                                     # needs psql extensions
-                | 'SHA256' '(' Expression ')'
-                | 'SHA384' '(' Expression ')'
-                | 'SHA512' '(' Expression ')'
-                | 'COALESCE' ExpressionList                                     # done
-                | 'IF' '(' Expression ',' Expression ',' Expression ')'         # done
-                | 'STRLANG' '(' Expression ',' Expression ')'                   # trans rec problem
-                | 'STRDT' '(' Expression ',' Expression ')'
-                | 'sameTerm' '(' Expression ',' Expression ')'                  # done - 80/20
-                | 'isIRI' '(' Expression ')'                                    # we use rsc-ids, so no direct test
-                | 'isURI' '(' Expression ')'
-                | 'isBLANK' '(' Expression ')'
-                | 'isLITERAL' '(' Expression ')'                                # done
-                | 'isNUMERIC' '(' Expression ')'                                # done
-                | RegexExpression                                               # done
-                | ExistsFunc
-                | NotExistsFunc
+Supported scalar functions
+--------------------------
 
-RegexExpression   ::=   'REGEX' '(' Expression ',' Expression ( ',' Expression )? ')'           # check this one
+    BOUND
+    RAND
+    ABS
+    CEIL
+    FLOOR
+    ROUND
+    CONCAT
+    SUBSTR
+    STRLEN
+    UCASE
+    LCASE
+    CONTAINS
+    STRSTARTS
+    STRENDS
+    STRBEFORE
+    STRAFTER
+    YEAR
+    MONTH
+    DAY
+    HOURS
+    MINUTES
+    SECONDS
+    NOW
+    MD5
+    COALESCE
+    IF
 
-SubstringExpression   ::=   'SUBSTR' '(' Expression ',' Expression ( ',' Expression )? ')'      # done
+Supported with differences from complete SPARQL RDF semantics:
 
-StrReplaceExpression      ::=   'REPLACE' '(' Expression ',' Expression ',' Expression ( ',' Expression )? ')'   # kind of done
+    REPLACE
+    REGEX
+    isLITERAL
+    isNUMERIC
+    sameTerm
 
-ExistsFunc    ::=   'EXISTS' GroupGraphPattern
+The regex functions use the common subset of XPath and PostgreSQL POSIX regular
+expressions. The RDF term tests use the available SQL and JSONB types as an
+approximation because complete RDF term metadata is not stored in expressions.
 
-NotExistsFunc     ::=   'NOT' 'EXISTS' GroupGraphPattern
 
-Aggregate     ::=     'COUNT' '(' 'DISTINCT'? ( '*' | Expression ) ')'                          # done
-                | 'SUM' '(' 'DISTINCT'? Expression ')'                                          # done
-                | 'MIN' '(' 'DISTINCT'? Expression ')'                                          # done
-                | 'MAX' '(' 'DISTINCT'? Expression ')'                                          # done
-                | 'AVG' '(' 'DISTINCT'? Expression ')'                                          # done
-                | 'SAMPLE' '(' 'DISTINCT'? Expression ')'                                       # done, needs PostgreSQL 16+
-                | 'GROUP_CONCAT' '(' 'DISTINCT'? Expression ( ';' 'SEPARATOR' '=' String )? ')' # done
+Supported aggregates
+--------------------
+
+    COUNT, including COUNT(DISTINCT *)
+    SUM
+    MIN
+    MAX
+    AVG
+    GROUP_CONCAT, including SEPARATOR
+    SAMPLE on PostgreSQL 16 and newer
+
+GROUP BY, HAVING and aggregate expressions in SELECT and ORDER BY are supported.
+SAMPLE uses PostgreSQL any_value() and returns an error on older versions.
+
+
+Supported XSD constructor functions
+-----------------------------------
+
+Expanded datatype IRIs are handled as function calls for:
+
+    xsd:string
+    xsd:boolean
+    xsd:integer
+    xsd:long
+    xsd:int
+    xsd:short
+    xsd:decimal
+    xsd:float
+    xsd:double
+    xsd:dateTime
+    xsd:dateTimeStamp
+
+
+Recognized but unsupported
+--------------------------
+
+    STR
+    LANG
+    LANGMATCHES
+    DATATYPE
+    IRI
+    URI
+    BNODE
+    ENCODE_FOR_URI
+    TIMEZONE
+    TZ
+    UUID
+    STRUUID
+    SHA1
+    SHA256
+    SHA384
+    SHA512
+    STRLANG
+    STRDT
+    isIRI
+    isURI
+    isBLANK
+
+EXISTS and NOT EXISTS graph-pattern filters are also unsupported. The scanner
+recognizes the keywords, but the parser does not build these expression nodes.
+
+URI is defined by SPARQL as a synonym for IRI; it is not an obsolete grammar
+entry.

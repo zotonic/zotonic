@@ -1,37 +1,15 @@
-Parametrized SPARQL
-===================
+Parameterized SPARQL queries
+============================
 
+`z_sparql:search/3` and `z_sparql:search/4` accept a map of pre-bound query
+variables. Values remain PostgreSQL parameters throughout SQL generation, which
+prevents SPARQL values from being assembled through string concatenation.
 
-We want to prevent SPARQL injection attacks by adding parameters to the SPARQL queries.
+The argument map is semantically similar to adding `VALUES` bindings to the
+query, but it is applied by the query planner rather than by rewriting SPARQL
+source text.
 
-These parameters might be pre-bound values. In this way we can parametrize every spot
-where a constant or an IRI is used.
-
-Discussions:
-
-https://web.archive.org/web/20150512231123/http://answers.semanticweb.com/questions/12147/whats-the-best-way-to-parameterize-sparql-queries
-
-Many implementations use a dynamic way to build SPARQL with arguments. By concatenation and
-escaping the arguments manually.
-
-Looks like the method of pre-binding the arguments to variables is the way to go.
-In this way we could supply a map of arguments, which is then used by the SPARQL planner.
-This prevents any need for escaping, as the SQL mapper already uses PostgreSQL bindings
-for all values in the SPARQL query.
-
-Questions:
-
-1. Types. We might need to add type hints for IRIs?  Numeric and boolean arguments are clear.
-2. Should we be able to pass JSONB structured objects  (why not?)
-
-
-Solution
-========
-
-We can use the 'VALUES' SPARQL feature to bind the arguments to their values. As if extra
-VALUES clauses are added to the query.
-
-For example:
+Example query:
 
     PREFIX zotonic: <http://zotonic.net/predicate/>
     SELECT ?r ?title
@@ -44,7 +22,7 @@ For example:
         FILTER (?date_start >= ?since)
     }
 
-With arguments:
+Arguments:
 
     #{
         <<"published">> => false,
@@ -52,34 +30,52 @@ With arguments:
         <<"related">> => {rsc, RelatedId}
     }
 
-The query can be executed with:
+Execute with the default page length:
 
     z_sparql:search(Sparql, Arguments, Context)
 
-Or, with explicit pagination:
+Or with explicit Zotonic search pagination:
 
     z_sparql:search(Sparql, Arguments, {1, 20}, Context)
 
-Argument names can be binaries or atoms, atoms are converted to binaries.
-All atom values (except 'true', 'false', and 'undefined') are converted to binaries.
-The value 'undefined' is mapped to SPARQL 'UNDEF', which is an unbound variable.
-
-This would then be as if the following query was written:
+This is equivalent in intent to bindings such as:
 
     PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-    PREFIX zotonic: <http://zotonic.net/predicate/>
-    SELECT ?r ?title
-    WHERE {
-        VALUES ?published { false }
-        VALUES ?since { "2008-12-10T00:00:00Z"^^xsd:dateTime }
-        VALUES ?related { <https://example.test/id/123> }
+    VALUES ?published { false }
+    VALUES ?since { "2008-12-10T00:00:00Z"^^xsd:dateTime }
+    VALUES ?related { <https://example.test/id/123> }
 
-        ?r zotonic:is_published ?published .
-        ?r zotonic:date_start ?date_start .
-        ?r zotonic:relation ?related .
-        ?r zotonic:title ?title .
 
-        FILTER (?date_start >= ?since)
-    }
+Accepted argument names
+-----------------------
 
-So we add the values, and the namespace (if needed).
+Names can be non-empty binaries or atoms. Atoms are converted to UTF-8 binary
+variable names. Supplying the same name once as an atom and once as a binary is
+rejected as a duplicate argument.
+
+
+Accepted argument values
+------------------------
+
+    undefined                 Unbound variable (SPARQL UNDEF semantics)
+    true, false               boolean
+    integer()                 integer
+    float()                   float
+    binary()                  text
+    atom()                    UTF-8 text, except true/false/undefined
+    unicode character list    text
+    {Y, M, D}                 datetime at 00:00:00
+    {{Y, M, D}, {H, I, S}}    datetime
+    {iri, BinaryIri}          IRI
+    {rsc, Reference}          Zotonic resource reference resolved by m_rsc
+
+Invalid dates, invalid Unicode lists, empty/invalid argument names and other
+structured Erlang values return an error.
+
+A pre-bound resource variable accepts `{rsc, Reference}` or `{iri, Iri}`. For a
+resource position, integer and text arguments are also resolved through
+`m_rsc:rid/2`. Scalar expression arguments retain their normalized type so that
+the SQL expression mapper can infer or validate casts.
+
+The query-level SPARQL `LIMIT` and `OFFSET` syntax is parsed but rejected by SQL
+generation. Use the separate Zotonic `OffsetLimit` argument shown above.

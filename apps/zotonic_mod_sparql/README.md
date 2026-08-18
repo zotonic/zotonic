@@ -118,6 +118,8 @@ TODO
  - [x] Accept multi value VALUES in parser and planner (currently only single value is accepted)
  - [x] Optimize sort for generated SQL, remove all non-one-column sub-sorts after 'id' / 'created' / 'modified'
  - [x] With the new joins, fix the z_search checks on cat/cat_exact and acl for the subqueries
+ - [ ] Support EXISTS / NOT EXISTS
+ - [ ] Support OPTIONAL (if not too inefficient)
  - [ ] Support language handling, using the JSON objects: { _type: "trans", tr = { "en":"..." } }, including LANG etc.
  - [ ] Check PostgreSQL functions for functions like: DATATYPE and isIRI/isBLANK/etc
  - [ ] Add Zotonic m_sparql model for querying
