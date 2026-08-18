@@ -432,6 +432,84 @@ values_test() ->
         ok = m_rsc:delete(OtherId, Context)
     end.
 
+optional_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    Context = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+    Title = <<"SPARQL optional title">>,
+    {ok, WithTitleId} = m_rsc:insert([
+        {category, article},
+        {title, Title}
+    ], Context),
+    {ok, WithoutTitleId} = m_rsc:insert([
+        {category, article}
+    ], Context),
+    {ok, ObjectId} = m_rsc:insert([
+        {category, article},
+        {title, <<"SPARQL optional relation object">>}
+    ], Context),
+    try
+        {ok, _EdgeId} = m_edge:insert(WithTitleId, relation, ObjectId, Context),
+        WithTitleUri = m_rsc:uri(WithTitleId, Context),
+        WithoutTitleUri = m_rsc:uri(WithoutTitleId, Context),
+        PropertySparql = <<
+            "PREFIX zotonic: <http://zotonic.net/predicate/>\n"
+            "SELECT ?subject ?title WHERE {\n"
+            "    VALUES ?subject {\n"
+            "        <", WithTitleUri/binary, ">\n"
+            "        <", WithoutTitleUri/binary, ">\n"
+            "    }\n"
+            "    OPTIONAL { ?subject zotonic:title ?title }\n"
+            "}"
+        >>,
+        ?assertEqual(
+            lists:sort([
+                {WithTitleId, Title},
+                {WithoutTitleId, undefined}
+            ]),
+            lists:sort(search(PropertySparql, Context))),
+
+        FilteredPropertySparql = <<
+            "PREFIX zotonic: <http://zotonic.net/predicate/>\n"
+            "SELECT ?subject ?title WHERE {\n"
+            "    VALUES ?subject {\n"
+            "        <", WithTitleUri/binary, ">\n"
+            "        <", WithoutTitleUri/binary, ">\n"
+            "    }\n"
+            "    OPTIONAL {\n"
+            "        ?subject zotonic:title ?title .\n"
+            "        FILTER (?title = \"does not match\")\n"
+            "    }\n"
+            "}"
+        >>,
+        ?assertEqual(
+            lists:sort([
+                {WithTitleId, undefined},
+                {WithoutTitleId, undefined}
+            ]),
+            lists:sort(search(FilteredPropertySparql, Context))),
+
+        RelationSparql = <<
+            "PREFIX dcterms: <http://purl.org/dc/terms/>\n"
+            "SELECT ?subject ?object WHERE {\n"
+            "    VALUES ?subject {\n"
+            "        <", WithTitleUri/binary, ">\n"
+            "        <", WithoutTitleUri/binary, ">\n"
+            "    }\n"
+            "    OPTIONAL { ?subject dcterms:relation ?object }\n"
+            "}"
+        >>,
+        ?assertEqual(
+            lists:sort([
+                {WithTitleId, ObjectId},
+                {WithoutTitleId, undefined}
+            ]),
+            lists:sort(search(RelationSparql, Context)))
+    after
+        ok = m_rsc:delete(WithTitleId, Context),
+        ok = m_rsc:delete(WithoutTitleId, Context),
+        ok = m_rsc:delete(ObjectId, Context)
+    end.
+
 facet_and_pivot_column_mapping_test() ->
     ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
     Context = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),

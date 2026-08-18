@@ -86,6 +86,55 @@ mod_sparql_content_group_acl_test() ->
                 end)
         end).
 
+mod_sparql_optional_content_group_acl_test() ->
+    with_acl_fixture(
+        fun(AllowedContentGroupId, DeniedContentGroupId, UserContext, SudoContext) ->
+            with_resources(
+                [
+                    article_props(<<"Allowed OPTIONAL object">>, AllowedContentGroupId),
+                    article_props(<<"Denied OPTIONAL object">>, DeniedContentGroupId),
+                    article_props(<<"Subject with allowed OPTIONAL">>, AllowedContentGroupId),
+                    article_props(<<"Subject with denied OPTIONAL">>, AllowedContentGroupId)
+                ],
+                SudoContext,
+                fun([AllowedObjectId, DeniedObjectId, AllowedSubjectId, DeniedSubjectId]) ->
+                    {ok, _} = m_edge:insert(
+                        AllowedSubjectId, relation, AllowedObjectId, SudoContext),
+                    {ok, _} = m_edge:insert(
+                        DeniedSubjectId, relation, DeniedObjectId, SudoContext),
+                    Sparql = optional_sparql_query(
+                        AllowedSubjectId, DeniedSubjectId, SudoContext),
+                    {ok, ParsedQuery} = z_sparql:parse(Sparql),
+                    {ok, SqlTerms} = z_sparql_sql:to_sql_term(
+                        ParsedQuery,
+                        UserContext),
+                    Query0 = z_search_terms:combine(SqlTerms, UserContext),
+                    ?assertNotEqual(
+                        nomatch,
+                        binary:match(Query0#search_sql.from, <<"left join LATERAL (SELECT">>)),
+                    ?assertNotEqual(
+                        nomatch,
+                        binary:match(Query0#search_sql.from, <<".content_group_id">>)),
+                    ?assertEqual(
+                        nomatch,
+                        binary:match(Query0#search_sql.where, <<".content_group_id">>)),
+                    FlatArgs = lists:flatten(Query0#search_sql.args),
+                    ?assert(lists:member(AllowedContentGroupId, FlatArgs)),
+                    ?assertNot(lists:member(DeniedContentGroupId, FlatArgs)),
+
+                    {ok, #search_result{ result = Result }} = z_sparql:search(
+                        Sparql,
+                        {1, 20},
+                        UserContext),
+                    ?assertEqual(
+                        lists:sort([
+                            {AllowedSubjectId, AllowedObjectId},
+                            {DeniedSubjectId, undefined}
+                        ]),
+                        lists:sort(Result))
+                end)
+        end).
+
 sparql_query(AllowedObjectId, DeniedObjectId) ->
     AllowedId = integer_to_binary(AllowedObjectId),
     DeniedId = integer_to_binary(DeniedObjectId),
@@ -101,6 +150,22 @@ sparql_query(AllowedObjectId, DeniedObjectId) ->
         "        ?subject dcterms:relation ?object_b .\n"
         "        ?object_b zotonic:id ", DeniedId/binary, "\n"
         "    }\n"
+        "}"
+    >>.
+
+optional_sparql_query(AllowedSubjectId, DeniedSubjectId, Context) ->
+    AllowedSubjectUri = m_rsc:uri(AllowedSubjectId, Context),
+    DeniedSubjectUri = m_rsc:uri(DeniedSubjectId, Context),
+    <<
+        "PREFIX dcterms: <http://purl.org/dc/terms/>\n"
+        "PREFIX zotonic: <http://zotonic.net/predicate/>\n"
+        "SELECT ?subject ?object WHERE {\n"
+        "    ?subject zotonic:id ?subject_id .\n"
+        "    VALUES ?subject {\n"
+        "        <", AllowedSubjectUri/binary, ">\n"
+        "        <", DeniedSubjectUri/binary, ">\n"
+        "    }\n"
+        "    OPTIONAL { ?subject dcterms:relation ?object }\n"
         "}"
     >>.
 

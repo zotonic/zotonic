@@ -57,6 +57,31 @@ union_resource_acl_test() ->
             ?assert(contains(Query1#search_sql.where, <<"rsc.acl_marker = $">>))
         end).
 
+optional_resource_acl_stays_inside_lateral_scope_test() ->
+    with_observers(
+        fun(Context) ->
+            Query0 = sparql_sql(<<
+                "PREFIX test: <https://example.test/vocab#>\n"
+                "SELECT ?subject ?object WHERE {\n"
+                "    ?subject test:id ?subject_id .\n"
+                "    OPTIONAL { ?object test:id ?object_id }\n"
+                "}"
+            >>, Context),
+            [LocalAlias] = acl_aliases(Query0#search_sql.args),
+            ?assert(LocalAlias =/= <<"rsc">>),
+            ?assert(contains(Query0#search_sql.from, <<"left join LATERAL (SELECT">>)),
+            ?assert(contains(
+                Query0#search_sql.from,
+                <<LocalAlias/binary, ".acl_marker = $1">>)),
+            ?assertNot(contains(Query0#search_sql.where, <<"acl_marker">>)),
+
+            Query1 = z_search_acl:reformat_sql_query(Query0, #{}, Context),
+            ?assertEqual(
+                lists:sort([<<"rsc">>, LocalAlias]),
+                lists:sort(acl_aliases(Query1#search_sql.args))),
+            ?assert(contains(Query1#search_sql.where, <<"rsc.acl_marker = $2">>))
+        end).
+
 sparql_sql(Sparql, Context) ->
     {ok, ParsedQuery} = z_sparql:parse(Sparql),
     {ok, Terms} = z_sparql_sql:to_sql_term(ParsedQuery, Context),

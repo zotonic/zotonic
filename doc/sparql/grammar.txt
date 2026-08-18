@@ -20,11 +20,11 @@ Lexical scanning is implemented in:
 The parser intentionally recognizes more syntax than the query planner and SQL
 generator execute. In particular, it parses SELECT, CONSTRUCT, DESCRIBE and ASK,
 while the planner currently accepts only SELECT. It also parses dataset clauses,
-OPTIONAL, BIND, GRAPH, LIMIT and OFFSET, which SQL generation currently rejects.
+BIND, GRAPH, LIMIT and OFFSET, which SQL generation currently rejects.
 
 The executable subset includes basic triple patterns, nested groups, UNION,
-FILTER, VALUES, projection expressions, DISTINCT, GROUP BY, HAVING, ORDER BY,
-aggregates and a single inverse predicate path. See query-plan.md and
+OPTIONAL, FILTER, VALUES, projection expressions, DISTINCT, GROUP BY, HAVING,
+ORDER BY, aggregates and a single inverse predicate path. See query-plan.md and
 builtins.txt for the exact implementation status.
 
 REDUCED is accepted and currently behaves like the default projection; no

@@ -30,12 +30,19 @@ SQL.
 
 - A graph group is a conjunction of search terms.
 - `UNION` becomes an `anyof` nested search term.
+- `OPTIONAL` becomes a correlated `LEFT JOIN LATERAL`; bindings produced by its
+  right-hand graph pattern are projected as nullable columns.
 - Joins local to a nested alternative are compiled into correlated `EXISTS`
   subqueries.
 - Shared/projected aliases remain in the outer query when required there.
 
-`OPTIONAL`, `BIND` and `GRAPH` are represented by the parser and plan but are
-currently rejected by SQL generation.
+The complete right-hand side of an `OPTIONAL`, including its filters, tables,
+category restrictions and nested alternatives, stays inside the lateral
+subquery. This prevents a right-hand restriction from leaking into the outer
+`WHERE` and changing the left join into an inner join.
+
+`BIND` and `GRAPH` are represented by the parser and plan but are currently
+rejected by SQL generation.
 
 ## Resource IRIs
 
@@ -58,9 +65,10 @@ The generated search terms include projection, `GROUP BY`, `HAVING` and
 
 `z_search_acl` applies Zotonic ACL and category checks to resource aliases.
 Checks for resource aliases local to a nested branch are added before that
-branch is compiled into an `EXISTS` subquery. Checks for outer aliases are added
-when the combined search query is reformatted. This prevents a subquery from
-bypassing content-group or other resource visibility restrictions.
+branch is compiled into an `EXISTS` or OPTIONAL lateral subquery. Checks for
+outer aliases are added when the combined search query is reformatted. This
+prevents a subquery from bypassing content-group or other resource visibility
+restrictions without making a failed OPTIONAL remove its left-hand row.
 
 Predicate mapping itself also prevents access to protected resource properties:
 properties which are not exposed by the mapping cannot be queried.

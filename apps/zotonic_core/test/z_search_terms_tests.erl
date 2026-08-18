@@ -362,6 +362,74 @@ outer_resource_alias_is_declared_for_acl_test() ->
         [{rsc, <<"rsc">>}, {rsc, Alias}],
         Query#search_sql.tables).
 
+left_lateral_join_keeps_right_scope_isolated_test() ->
+    OptionalAlias = <<"optional_a">>,
+    EdgeAlias = <<"edge_optional">>,
+    Query = z_search_terms:combine([
+        #search_sql_nested{
+            operator = {left_join, OptionalAlias},
+            terms = [
+                #search_sql_term{
+                    select = [[EdgeAlias, <<".object_id AS value_1">>]],
+                    tables = #{ <<"rsc">> => <<"rsc">> },
+                    join_inner = #{
+                        EdgeAlias => {
+                            <<"edge">>,
+                            [EdgeAlias, <<".subject_id = rsc.id">>]
+                        }
+                    },
+                    where = [[EdgeAlias, <<".predicate_id = 10">>]]
+                }
+            ]
+        },
+        #search_sql_term{
+            select = [[OptionalAlias, <<".value_1">>]]
+        }
+    ]),
+    ?assert(contains(Query#search_sql.from, <<"left join LATERAL (SELECT">>)),
+    ?assert(contains(Query#search_sql.from, <<"FROM edge edge_optional">>)),
+    ?assert(contains(Query#search_sql.from, <<"edge_optional.predicate_id = 10">>)),
+    ?assertNot(contains(Query#search_sql.where, <<"edge_optional">>)),
+    ?assertNot(contains(Query#search_sql.from, <<"FROM rsc rsc">>)).
+
+left_lateral_join_adds_local_acl_inside_subquery_test() ->
+    with_acl_observer(
+        fun(Context) ->
+            OptionalAlias = <<"optional_acl">>,
+            ResourceAlias = <<"rsc_optional">>,
+            Query0 = z_search_terms:combine([
+                #search_sql_nested{
+                    operator = {left_join, OptionalAlias},
+                    terms = [
+                        (resource_term(ResourceAlias))#search_sql_term{
+                            select = [[ResourceAlias, <<".id AS value_1">>]]
+                        },
+                        #search_sql_term{
+                            select = [],
+                            tables = #{},
+                            where = [[ResourceAlias, <<".is_published">>]]
+                        }
+                    ]
+                },
+                #search_sql_term{
+                    select = [[OptionalAlias, <<".value_1">>]]
+                }
+            ], Context),
+            ?assert(contains(
+                Query0#search_sql.from,
+                <<"rsc_optional.visible_for = $1">>)),
+            ?assert(contains(Query0#search_sql.from, <<"rsc_optional.is_published">>)),
+            ?assert(count(Query0#search_sql.from, <<") AND (">>) >= 2),
+            ?assertNot(contains(Query0#search_sql.where, <<"rsc_optional">>)),
+            ?assertEqual([{acl, ResourceAlias}], Query0#search_sql.args),
+
+            Query1 = z_search_acl:reformat_sql_query(Query0, #{}, Context),
+            ?assert(contains(Query1#search_sql.where, <<"rsc.visible_for = $2">>)),
+            ?assertEqual(
+                [{acl, ResourceAlias}, {acl, <<"rsc">>}],
+                Query1#search_sql.args)
+        end).
+
 
 edge_term(Alias, Where) ->
     #search_sql_term{

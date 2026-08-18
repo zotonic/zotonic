@@ -210,6 +210,33 @@ compile_terms([Term | Rest], AllAliases, OutsideAliases, BeforeAliases, Args0, C
         Rest, AllAliases, OutsideAliases, BeforeAliases1, Args1, Context),
     {[Term1 | Rest1], Args2}.
 
+compile_term(#search_sql_nested{ operator = {left_join, Alias}, terms = Terms },
+        _AllAliases, OutsideAliases, Args0, Context) ->
+    % Compile the right-hand side in its own scope. It can reference aliases
+    % from the left, but none of its tables, filters, categories, or ACL checks
+    % are allowed to escape into the outer query.
+    InnerAliases = defined_aliases(Terms),
+    InnerAllAliases = alias_union(InnerAliases, OutsideAliases),
+    {Terms1, Args1} = compile_terms(
+        Terms, InnerAllAliases, OutsideAliases, Args0, Context),
+    Term0 = lists:foldr(
+        fun merge_term/2,
+        #search_sql_term{ select = [], tables = #{} },
+        Terms1),
+    {Subquery, Args2} = lateral_subquery(Term0, Args1, Context),
+    {
+        #search_sql_term{
+            select = [],
+            tables = #{},
+            join_left = #{
+                Alias => {
+                    [<<"LATERAL (">>, Subquery, $)],
+                    <<"true">>
+                }
+            }
+        },
+        Args2
+    };
 compile_term(#search_sql_nested{ operator = <<"allof">>, terms = Terms },
         AllAliases, OutsideAliases, Args0, Context) ->
     {Terms1, Args1} = compile_terms(Terms, AllAliases, OutsideAliases, Args0, Context),
@@ -230,6 +257,45 @@ compile_term(#search_sql_nested{ operator = <<"noneof">>, terms = Terms },
         OutsideAliases, AllAliases, Args1, Context);
 compile_term(#search_sql_term{} = Term, _AllAliases, _OutsideAliases, Args, _Context) ->
     {Term, Args}.
+
+lateral_subquery(#search_sql_term{
+        select = Select0,
+        tables = Tables0,
+        join_inner = JoinInner,
+        join_left = JoinLeft,
+        where = Where,
+        cats = Cats,
+        cats_exclude = CatsExclude,
+        cats_exact = CatsExact,
+        extra = Extra
+    }, Args0, Context) ->
+    % `rsc` is the implicit outer search resource. References to it in an
+    % OPTIONAL are correlations, not a new local table with the same alias.
+    Tables = maps:remove(<<"rsc">>, Tables0),
+    Select = case Select0 of
+        [] -> [<<"1 AS optional_match">>];
+        _ -> Select0
+    end,
+    {Where1, Args1} = add_local_sql_checks(
+        Tables,
+        JoinInner,
+        JoinLeft,
+        Where,
+        Cats,
+        CatsExclude,
+        CatsExact,
+        Extra,
+        Args0,
+        Context),
+    {From, FromWhere} = subquery_from(Tables, JoinInner, JoinLeft),
+    {
+        [
+            <<"SELECT ">>, lists:join(<<", ">>, Select),
+            From,
+            subquery_where(FromWhere, Where1)
+        ],
+        Args1
+    }.
 
 compile_alternatives(Terms, AllAliases, OutsideAliases, Args, Context) ->
     compile_alternatives(Terms, AllAliases, OutsideAliases, #{}, Args, Context).
@@ -357,7 +423,7 @@ add_local_sql_checks(Tables, JoinInner, JoinLeft, Where,
 merge_sql_checks(Where, Checks) ->
     Clauses = [
         Clause
-        || Sql <- [Where | Checks],
+        || Sql <- Where ++ Checks,
            Clause <- [iolist_to_binary(Sql)],
            Clause =/= <<>>
     ],
@@ -556,6 +622,8 @@ defined_aliases(Terms) when is_list(Terms) ->
         fun(Term, Acc) -> alias_union(Acc, defined_aliases(Term)) end,
         #{},
         Terms);
+defined_aliases(#search_sql_nested{ operator = {left_join, Alias} }) ->
+    alias_set([Alias]);
 defined_aliases(#search_sql_nested{ terms = Terms }) ->
     defined_aliases(Terms);
 defined_aliases(#search_sql_term{
@@ -571,6 +639,15 @@ used_aliases(Terms, AllAliases) when is_list(Terms) ->
         fun(Term, Acc) -> alias_union(Acc, used_aliases(Term, AllAliases)) end,
         #{},
         Terms);
+used_aliases(#search_sql_nested{
+        operator = {left_join, Alias},
+        terms = Terms
+    }, AllAliases) ->
+    % Internal aliases are private to the lateral subquery. Only its exported
+    % alias and references to aliases defined outside count in the outer scope.
+    alias_union(
+        alias_set([Alias]),
+        alias_intersection(used_aliases(Terms, AllAliases), AllAliases));
 used_aliases(#search_sql_nested{ terms = Terms }, AllAliases) ->
     used_aliases(Terms, AllAliases);
 used_aliases(#search_sql_term{} = Term, AllAliases) ->

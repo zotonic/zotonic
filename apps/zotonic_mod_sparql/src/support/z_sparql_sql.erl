@@ -149,14 +149,138 @@ pattern_to_sql({filter, Expression, Pattern}, State0) ->
     {Expression1, FilterTerm} = expression_to_sql(Expression, State1, empty_term()),
     FilterTerm1 = FilterTerm#search_sql_term{ where = [expression_sql(Expression1)] },
     {Terms ++ [FilterTerm1], State1};
+pattern_to_sql({left_join, Left, Right, none}, State0) ->
+    {LeftTerms, LeftState} = pattern_to_sql(Left, State0),
+    {RightTerms, RightState0} = pattern_to_sql(Right, LeftState),
+    {OptionalAlias, RightState1} = new_alias(<<"optional">>, RightState0),
+    {Projection, Bindings} = optional_projection(
+        LeftState#sql_state.bindings,
+        RightState1#sql_state.bindings,
+        OptionalAlias),
+    Optional = #search_sql_nested{
+        operator = {left_join, OptionalAlias},
+        terms = RightTerms ++ [Projection]
+    },
+    {
+        LeftTerms ++ [Optional],
+        RightState1#sql_state{ bindings = Bindings }
+    };
 pattern_to_sql({left_join, _, _, _}, _State) ->
-    throw({error, {unsupported, optional}});
+    throw({error, {unsupported, optional_expression}});
 pattern_to_sql({extend, _, _, _}, _State) ->
     throw({error, {unsupported, bind}});
 pattern_to_sql({values, Variables, Rows}, State) ->
     values_to_sql(Variables, Rows, State);
 pattern_to_sql({graph, _, _}, _State) ->
     throw({error, {unsupported, graph}}).
+
+optional_projection(LeftBindings, RightBindings, OptionalAlias) ->
+    Changed = [
+        {Variable, Binding}
+        || {Variable, Binding} <- lists:sort(maps:to_list(RightBindings)),
+           maps:get(Variable, LeftBindings, undefined) =/= Binding
+    ],
+    optional_projection(
+        Changed, LeftBindings, OptionalAlias, 1, [], LeftBindings).
+
+optional_projection([], _LeftBindings, _OptionalAlias, _Nr, [], Bindings) ->
+    {#search_sql_term{
+        select = [<<"1 AS optional_match">>],
+        tables = #{}
+    }, Bindings};
+optional_projection([], _LeftBindings, _OptionalAlias, _Nr, Select, Bindings) ->
+    {#search_sql_term{
+        select = lists:reverse(Select),
+        tables = #{}
+    }, Bindings};
+optional_projection(
+        [{Variable, RightBinding} | Rest],
+        LeftBindings,
+        OptionalAlias,
+        Nr,
+        Select,
+        Bindings) ->
+    {Kind, RightExpression} = binding_expression(RightBinding),
+    ValueColumn = optional_column_name(value, Nr),
+    DefinedColumn = optional_column_name(defined, Nr),
+    ValueSelect = [
+        <<"CASE WHEN ">>, expression_defined_sql(RightExpression),
+        <<" THEN ">>, expression_sql(RightExpression),
+        <<" ELSE NULL END AS ">>, ValueColumn
+    ],
+    DefinedSelect = [
+        expression_defined_sql(RightExpression),
+        <<" AS ">>, DefinedColumn
+    ],
+    OptionalExpression = RightExpression#sql_expression{
+        sql = column_expression(OptionalAlias, ValueColumn),
+        source = optional_source(RightExpression#sql_expression.source),
+        defined = [
+            <<"COALESCE(">>,
+            column_expression(OptionalAlias, DefinedColumn),
+            <<", false)">>
+        ]
+    },
+    Binding = case maps:find(Variable, LeftBindings) of
+        {ok, LeftBinding} ->
+            {LeftKind, LeftExpression} = binding_expression(LeftBinding),
+            case LeftKind of
+                Kind -> {Kind, merge_optional_expressions(LeftExpression, OptionalExpression)};
+                _ -> throw({error, {incompatible_variable, Variable}})
+            end;
+        error ->
+            {Kind, OptionalExpression}
+    end,
+    optional_projection(
+        Rest,
+        LeftBindings,
+        OptionalAlias,
+        Nr + 1,
+        [DefinedSelect, ValueSelect | Select],
+        Bindings#{ Variable => Binding }).
+
+optional_column_name(value, Nr) ->
+    <<"value_", (integer_to_binary(Nr))/binary>>;
+optional_column_name(defined, Nr) ->
+    <<"defined_", (integer_to_binary(Nr))/binary>>.
+
+optional_source(jsonb) -> jsonb;
+optional_source(_Source) -> column.
+
+merge_optional_expressions(Left, Right) ->
+    Type = common_type(Left#sql_expression.type, Right#sql_expression.type),
+    Left1 = coerce_expression(Left, Type),
+    Right1 = coerce_expression(Right, Type),
+    #sql_expression{
+        sql = [
+            <<"COALESCE(">>, expression_sql(Left1), <<", ">>,
+            expression_sql(Right1), $)
+        ],
+        type = Type,
+        source = merged_optional_source(Left1, Right1),
+        defined = [
+            $(, expression_defined_sql(Left1),
+            <<" OR ">>, expression_defined_sql(Right1), $)
+        ]
+    }.
+
+merged_optional_source(
+        #sql_expression{ source = Source },
+        #sql_expression{ source = Source }) ->
+    Source;
+merged_optional_source(_Left, _Right) ->
+    expression.
+
+binding_expression({resource, Alias}) when is_binary(Alias) ->
+    {resource, #sql_expression{
+        sql = column_expression(Alias, <<"id">>),
+        type = id,
+        source = column
+    }};
+binding_expression({resource, #sql_expression{} = Expression}) ->
+    {resource, Expression};
+binding_expression({value, #sql_expression{} = Expression}) ->
+    {value, Expression}.
 
 values_to_sql(Variables, Rows, State0) ->
     Columns = values_columns(Variables, Rows),
@@ -284,9 +408,16 @@ bind_values_column({Variable, Nr, Kind, Type}, Alias, Term0,
         defined = column_expression(Alias, values_column_name(defined, Nr))
     },
     case maps:find(Variable, Bindings) of
-        {ok, {resource, ResourceAlias}} when Kind =:= resource ->
+        {ok, {resource, ResourceAlias}}
+            when Kind =:= resource, is_binary(ResourceAlias) ->
             Where = values_resource_where(ResourceAlias, Expression),
             {add_where(Where, Term0), State};
+        {ok, {resource, #sql_expression{} = BoundExpression}}
+            when Kind =:= resource ->
+            {Where, MergedExpression} = merge_values_expressions(
+                BoundExpression, Expression),
+            Bindings1 = Bindings#{ Variable => {resource, MergedExpression} },
+            {add_where(Where, Term0), State#sql_state{ bindings = Bindings1 }};
         {ok, {resource, _ResourceAlias}} ->
             Where = [<<"NOT (">>, expression_defined_sql(Expression), $\)],
             {add_where(Where, Term0), State};
@@ -471,8 +602,22 @@ resource_alias(Term, _SqlTerm, _State) ->
 
 resource_binding_alias(Key, Term, #sql_state{ bindings = Bindings } = State) ->
     case maps:find(Key, Bindings) of
-        {ok, {resource, Alias}} ->
+        {ok, {resource, Alias}} when is_binary(Alias) ->
             {Alias, Term, State};
+        {ok, {resource, #sql_expression{} = BoundExpression}} ->
+            {Alias, State1} = new_alias(<<"rsc">>, State),
+            Term1 = add_table(Alias, <<"rsc">>, Term),
+            Where = [
+                $\(, <<"NOT ">>, expression_defined_sql(BoundExpression),
+                <<" OR ">>, column_expression(Alias, <<"id">>),
+                <<" = ">>, expression_sql(BoundExpression), $)
+            ],
+            Bindings1 = Bindings#{ Key => {resource, Alias} },
+            {
+                Alias,
+                add_where(Where, Term1),
+                State1#sql_state{ bindings = Bindings1 }
+            };
         {ok, {value, _Expression}} ->
             throw({error, {incompatible_variable, Key}});
         error ->
@@ -625,12 +770,9 @@ bind_edge_object(Object, _EdgeAlias, _Column, _Term, _State) ->
 
 expression_to_sql({var, _} = Variable, State, Term) ->
     case maps:find(Variable, State#sql_state.bindings) of
-        {ok, {resource, Alias}} ->
-            {#sql_expression{
-                sql = column_expression(Alias, <<"id">>),
-                type = id,
-                source = column
-            }, Term};
+        {ok, {resource, _} = Binding} ->
+            {_Kind, Expression} = binding_expression(Binding),
+            {Expression, Term};
         {ok, {value, #sql_expression{} = Expression}} ->
             {Expression, Term};
         error -> argument_to_expression(Variable, State, Term)
@@ -735,14 +877,18 @@ fulltext_query_text(Query, _State) ->
 fulltext_resource_alias({var, _} = Variable, Term,
         #sql_state{ bindings = Bindings } = State) ->
     case maps:find(Variable, Bindings) of
-        {ok, {resource, Alias}} ->
+        {ok, {resource, Alias}} when is_binary(Alias) ->
             {Alias, bind_resource_argument(Variable, Alias, Term, State)};
+        {ok, {resource, #sql_expression{} = Expression}} ->
+            resource_expression_alias(Expression, Term);
         {ok, _} -> throw({error, {incompatible_variable, Variable}});
         error -> throw({error, {unbound_variable, Variable}})
     end;
 fulltext_resource_alias({bnode, _} = BlankNode, Term, #sql_state{ bindings = Bindings }) ->
     case maps:find(BlankNode, Bindings) of
-        {ok, {resource, Alias}} -> {Alias, Term};
+        {ok, {resource, Alias}} when is_binary(Alias) -> {Alias, Term};
+        {ok, {resource, #sql_expression{} = Expression}} ->
+            resource_expression_alias(Expression, Term);
         {ok, _} -> throw({error, {incompatible_variable, BlankNode}});
         error -> throw({error, {unbound_variable, BlankNode}})
     end;
@@ -757,6 +903,16 @@ fulltext_resource_alias({iri, Iri}, Term0, #sql_state{ context = Context }) ->
     end;
 fulltext_resource_alias(Resource, _Term, _State) ->
     throw({error, {expected_resource, Resource}}).
+
+resource_expression_alias(Expression, Term0) ->
+    Alias = search_alias({nullable_resource, expression_sql(Expression)}),
+    Term1 = add_table(Alias, <<"rsc">>, Term0),
+    Where = [
+        expression_defined_sql(Expression), <<" AND ">>,
+        column_expression(Alias, <<"id">>), <<" = ">>,
+        expression_sql(Expression)
+    ],
+    {Alias, add_where(Where, Term1)}.
 
 fulltext_search_expression(default, ResourceAlias, Term) ->
     {column_expression(ResourceAlias, <<"pivot_tsv">>), fts, <<"pivot_tsv">>, Term};
@@ -862,8 +1018,20 @@ normalize_fulltext(Name, QueryText, Context) ->
 %% through the jsonb conversions.
 type_test_to_sql(Function, {var, _} = Variable, State, Term) ->
     case maps:find(Variable, State#sql_state.bindings) of
-        {ok, {resource, _Alias}} ->
+        {ok, {resource, Alias}} when is_binary(Alias) ->
             {constant_expression(resource_type_test(Function)), Term};
+        {ok, {resource, #sql_expression{} = Expression}} ->
+            Result = resource_type_test(Function),
+            {#sql_expression{
+                sql = [
+                    <<"CASE WHEN ">>, expression_defined_sql(Expression),
+                    <<" THEN ">>, atom_to_binary(Result, utf8),
+                    <<" ELSE NULL END">>
+                ],
+                type = boolean,
+                source = expression,
+                defined = expression_defined_sql(Expression)
+            }, Term};
         {ok, {value, #sql_expression{ source = jsonb } = Expression}} ->
             % JSON properties can still contain a structured value despite a
             % name-derived hint, so inspect their actual JSON scalar type.
@@ -1254,8 +1422,10 @@ solution_row_sql(Bindings) ->
     ],
     [<<"ROW(">>, lists:join(<<", ">>, Expressions), $)].
 
-solution_binding_sql({resource, Alias}) ->
+solution_binding_sql({resource, Alias}) when is_binary(Alias) ->
     column_expression(Alias, <<"id">>);
+solution_binding_sql({resource, #sql_expression{} = Expression}) ->
+    expression_sql(Expression);
 solution_binding_sql({value, Expression}) ->
     expression_sql(Expression).
 
@@ -1518,8 +1688,9 @@ projection_expressions([{as, Expression, Variable} | Rest], State0, Term0, Nr, A
 
 projection_variable(Variable, State, Term) ->
     case maps:find(Variable, State#sql_state.bindings) of
-        {ok, {resource, Alias}} ->
-            {column_expression(Alias, <<"id">>), Term};
+        {ok, {resource, _} = Binding} ->
+            {_Kind, Expression} = binding_expression(Binding),
+            {expression_sql(Expression), Term};
         {ok, {value, BoundExpression}} ->
             {expression_sql(BoundExpression), Term};
         error ->

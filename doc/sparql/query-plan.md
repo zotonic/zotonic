@@ -28,6 +28,7 @@ The current pipeline is:
 - Triple patterns with a fixed mapped predicate
 - Nested graph groups
 - `UNION`
+- `OPTIONAL`
 - `FILTER` expressions using supported operators and built-ins
 - `VALUES`, including `UNDEF`
 - Projection expressions and `DISTINCT`
@@ -40,13 +41,18 @@ The current pipeline is:
 are compiled to correlated SQL `EXISTS` subqueries instead of being lifted into
 the outer query.
 
+`OPTIONAL` becomes a correlated SQL `LEFT JOIN LATERAL`. Its right-hand graph
+pattern is compiled in a separate scope. Local tables, filters, categories and
+ACL checks stay inside the lateral subquery, and bindings exported from it are
+nullable in the outer query. Multiple matching right-hand solutions retain the
+normal SPARQL row-multiplication behavior.
+
 ## Parsed or planned but rejected by SQL generation
 
 - `CONSTRUCT`, `DESCRIBE` and `ASK` (the planner accepts only `SELECT`)
 - Dataset clauses (`FROM` and `FROM NAMED`)
 - Query `LIMIT` and `OFFSET`; pagination is supplied separately to
   `z_sparql:search`
-- `OPTIONAL`
 - `BIND`
 - `GRAPH`
 - Variable predicates

@@ -119,7 +119,7 @@ TODO
  - [x] Optimize sort for generated SQL, remove all non-one-column sub-sorts after 'id' / 'created' / 'modified'
  - [x] With the new joins, fix the z_search checks on cat/cat_exact and acl for the subqueries
  - [ ] Support EXISTS / NOT EXISTS
- - [ ] Support OPTIONAL (if not too inefficient)
+ - [x] Support OPTIONAL using isolated correlated lateral joins
  - [ ] Support language handling, using the JSON objects: { _type: "trans", tr = { "en":"..." } }, including LANG etc.
  - [x] Add isIRI/isURI/isBLANK RDF term tests
  - [ ] Add DATATYPE support

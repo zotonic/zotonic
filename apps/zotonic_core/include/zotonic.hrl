@@ -202,7 +202,7 @@
 
 -record(search_sql_nested, {
     terms = [] :: [ #search_sql_term{} | #search_sql_nested{} ],
-    operator = <<"allof">> :: binary()
+    operator = <<"allof">> :: binary() | {left_join, binary()}
 }).
 
 -record(search_sql_terms, {
