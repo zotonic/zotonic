@@ -68,6 +68,18 @@ leave existing IRI expressions unchanged. Dynamic text expressions pass
 through as IRI text; dynamic relative values are not resolved against BASE.
 
 
+Supported graph-pattern filters
+-------------------------------
+
+    FILTER EXISTS { ... }
+    FILTER NOT EXISTS { ... }
+
+The graph pattern is correlated with bindings from the enclosing group. Any
+variables introduced inside the graph pattern remain local and are not added to
+the result bindings. Combining EXISTS with other expressions, or using it as a
+projected value, is not yet supported.
+
+
 Supported aggregates
 --------------------
 
@@ -118,9 +130,6 @@ Recognized but unsupported
     SHA512
     STRLANG
     STRDT
-
-EXISTS and NOT EXISTS graph-pattern filters are also unsupported. The scanner
-recognizes the keywords, but the parser does not build these expression nodes.
 
 URI is defined by SPARQL as a synonym for IRI; it is not an obsolete grammar
 entry.

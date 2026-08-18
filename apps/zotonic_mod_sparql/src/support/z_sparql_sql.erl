@@ -144,6 +144,10 @@ pattern_to_sql({union, Branches}, State0) ->
     {BranchTerms, BranchStates, State1} = union_branches_to_sql(Branches, State0, State0),
     State2 = common_branch_bindings(BranchStates, State1),
     {[#search_sql_nested{ operator = <<"anyof">>, terms = BranchTerms }], State2};
+pattern_to_sql({filter, {exists, ExistsPattern}, Pattern}, State0) ->
+    filter_exists_to_sql(exists, Pattern, ExistsPattern, State0);
+pattern_to_sql({filter, {not_exists, ExistsPattern}, Pattern}, State0) ->
+    filter_exists_to_sql(not_exists, Pattern, ExistsPattern, State0);
 pattern_to_sql({filter, Expression, Pattern}, State0) ->
     {Terms, State1} = pattern_to_sql(Pattern, State0),
     {Expression1, FilterTerm} = expression_to_sql(Expression, State1, empty_term()),
@@ -173,6 +177,23 @@ pattern_to_sql({values, Variables, Rows}, State) ->
     values_to_sql(Variables, Rows, State);
 pattern_to_sql({graph, _, _}, _State) ->
     throw({error, {unsupported, graph}}).
+
+filter_exists_to_sql(Operator, Pattern, ExistsPattern, State0) ->
+    {Terms, State1} = pattern_to_sql(Pattern, State0),
+    {ExistsTerms, ExistsState} = pattern_to_sql(ExistsPattern, State1),
+    NestedOperator = case Operator of
+        exists -> <<"anyof">>;
+        not_exists -> <<"noneof">>
+    end,
+    ExistsTerm = #search_sql_nested{
+        operator = NestedOperator,
+        % Keep the complete graph pattern conjunctive before applying EXISTS.
+        terms = [allof(ExistsTerms)]
+    },
+    % Variables introduced by the graph pattern are local to EXISTS. Only the
+    % advanced alias counter is retained so following terms remain unique.
+    State2 = State1#sql_state{ alias_nr = ExistsState#sql_state.alias_nr },
+    {Terms ++ [ExistsTerm], State2}.
 
 optional_projection(LeftBindings, RightBindings, OptionalAlias) ->
     Changed = [
@@ -796,6 +817,9 @@ expression_to_sql({'u+', Expression}, State, Term0) ->
 expression_to_sql({'u-', Expression}, State, Term0) ->
     {Expression1, Term1} = expression_to_sql(Expression, State, Term0),
     {unary_expression('u-', Expression1), Term1};
+expression_to_sql({Exists, _Pattern}, _State, _Term0)
+    when Exists =:= exists; Exists =:= not_exists ->
+    throw({error, {unsupported, exists_expression}});
 expression_to_sql({aggregate, Function, Distinct, Argument, Separator}, State, Term0) ->
     aggregate_to_sql(Function, Distinct, Argument, Separator, State, Term0);
 expression_to_sql({call, Function, [Argument]}, State, Term0)

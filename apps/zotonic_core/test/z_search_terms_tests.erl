@@ -45,6 +45,30 @@ noneof_local_joins_use_subqueries_test() ->
     ?assert(contains(Query#search_sql.where, <<"NOT ">>)),
     ?assert(contains(Query#search_sql.where, <<" OR ">>)).
 
+noneof_single_allof_uses_direct_not_exists_test() ->
+    Query = z_search_terms:combine([
+        #search_sql_nested{
+            operator = <<"noneof">>,
+            terms = [
+                #search_sql_nested{
+                    operator = <<"allof">>,
+                    terms = [
+                        edge_term(
+                            <<"edge_a">>,
+                            <<"edge_a.predicate_id = 10">>),
+                        #search_sql_term{
+                            select = [],
+                            where = [<<"rsc.is_published">>]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]),
+    ?assertEqual(1, count(Query#search_sql.where, <<"NOT EXISTS (">>)),
+    ?assert(contains(Query#search_sql.where, <<"edge_a.predicate_id = 10">>)),
+    ?assert(contains(Query#search_sql.where, <<"rsc.is_published">>)).
+
 where_iolist_is_kept_as_one_condition_test() ->
     Query = z_search_terms:combine([
         #search_sql_nested{

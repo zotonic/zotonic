@@ -30,6 +30,7 @@ The current pipeline is:
 - `UNION`
 - `OPTIONAL`
 - `FILTER` expressions using supported operators and built-ins
+- Standalone `FILTER EXISTS` and `FILTER NOT EXISTS`
 - `VALUES`, including `UNDEF`
 - Projection expressions and `DISTINCT`
 - `GROUP BY`, `HAVING` and supported aggregates
@@ -64,6 +65,7 @@ keeps syntax recognition separate from the currently implemented SQL subset.
 permitted because SPARQL allows but does not require duplicate elimination for
 that modifier.
 
-SPARQL `EXISTS` and `NOT EXISTS` filter expressions are not parsed. The SQL
-`EXISTS` generated for local nested search terms is an implementation detail and
-does not provide those SPARQL built-ins.
+`EXISTS` and `NOT EXISTS` are supported as standalone filter expressions. Their
+graph pattern is planned with the enclosing bindings but does not export any
+new bindings. EXISTS inside a larger expression or used as a projected value is
+parsed but rejected by SQL generation.

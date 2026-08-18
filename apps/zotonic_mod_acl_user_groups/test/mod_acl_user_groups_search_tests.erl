@@ -135,6 +135,56 @@ mod_sparql_optional_content_group_acl_test() ->
                 end)
         end).
 
+mod_sparql_exists_content_group_acl_test() ->
+    with_acl_fixture(
+        fun(AllowedContentGroupId, DeniedContentGroupId, UserContext, SudoContext) ->
+            with_resources(
+                [
+                    article_props(<<"Allowed EXISTS object">>, AllowedContentGroupId),
+                    article_props(<<"Denied EXISTS object">>, DeniedContentGroupId),
+                    article_props(<<"Subject with allowed EXISTS">>, AllowedContentGroupId),
+                    article_props(<<"Subject with denied EXISTS">>, AllowedContentGroupId)
+                ],
+                SudoContext,
+                fun([AllowedObjectId, DeniedObjectId, AllowedSubjectId, DeniedSubjectId]) ->
+                    {ok, _} = m_edge:insert(
+                        AllowedSubjectId, relation, AllowedObjectId, SudoContext),
+                    {ok, _} = m_edge:insert(
+                        DeniedSubjectId, relation, DeniedObjectId, SudoContext),
+                    ExistsSparql = exists_sparql_query(
+                        <<"EXISTS">>, AllowedSubjectId, DeniedSubjectId, SudoContext),
+                    NotExistsSparql = exists_sparql_query(
+                        <<"NOT EXISTS">>, AllowedSubjectId, DeniedSubjectId, SudoContext),
+
+                    {ok, ParsedQuery} = z_sparql:parse(ExistsSparql),
+                    {ok, SqlTerms} = z_sparql_sql:to_sql_term(
+                        ParsedQuery,
+                        UserContext),
+                    Query0 = z_search_terms:combine(SqlTerms, UserContext),
+                    ?assertNotEqual(
+                        nomatch,
+                        binary:match(Query0#search_sql.where, <<"EXISTS (">>)),
+                    ?assertNotEqual(
+                        nomatch,
+                        binary:match(Query0#search_sql.where, <<".content_group_id">>)),
+                    FlatArgs = lists:flatten(Query0#search_sql.args),
+                    ?assert(lists:member(AllowedContentGroupId, FlatArgs)),
+                    ?assertNot(lists:member(DeniedContentGroupId, FlatArgs)),
+
+                    {ok, #search_result{ result = ExistsResult }} = z_sparql:search(
+                        ExistsSparql,
+                        {1, 20},
+                        UserContext),
+                    ?assertEqual([AllowedSubjectId], ExistsResult),
+
+                    {ok, #search_result{ result = NotExistsResult }} = z_sparql:search(
+                        NotExistsSparql,
+                        {1, 20},
+                        UserContext),
+                    ?assertEqual([DeniedSubjectId], NotExistsResult)
+                end)
+        end).
+
 sparql_query(AllowedObjectId, DeniedObjectId) ->
     AllowedId = integer_to_binary(AllowedObjectId),
     DeniedId = integer_to_binary(DeniedObjectId),
@@ -166,6 +216,21 @@ optional_sparql_query(AllowedSubjectId, DeniedSubjectId, Context) ->
         "        <", DeniedSubjectUri/binary, ">\n"
         "    }\n"
         "    OPTIONAL { ?subject dcterms:relation ?object }\n"
+        "}"
+    >>.
+
+exists_sparql_query(Keyword, AllowedSubjectId, DeniedSubjectId, Context) ->
+    AllowedSubjectUri = m_rsc:uri(AllowedSubjectId, Context),
+    DeniedSubjectUri = m_rsc:uri(DeniedSubjectId, Context),
+    <<
+        "PREFIX dcterms: <http://purl.org/dc/terms/>\n"
+        "SELECT ?subject WHERE {\n"
+        "    VALUES ?subject {\n"
+        "        <", AllowedSubjectUri/binary, ">\n"
+        "        <", DeniedSubjectUri/binary, ">\n"
+        "    }\n"
+        "    FILTER ", Keyword/binary,
+            " { ?subject dcterms:relation ?object }\n"
         "}"
     >>.
 

@@ -248,6 +248,20 @@ compile_term(#search_sql_nested{ operator = <<"anyof">>, terms = Terms },
     scope_term(
         combine_operator(<<"anyof">>, Terms1),
         OutsideAliases, exists, AllAliases, Args1, Context);
+compile_term(#search_sql_nested{
+        operator = <<"noneof">>,
+        terms = [#search_sql_nested{ operator = <<"allof">> } = Term]
+    }, AllAliases, OutsideAliases, Args0, Context) ->
+    % Preserve a single conjunctive pattern until it is scoped, so it becomes
+    % one NOT EXISTS subquery instead of NOT(EXISTS(...)).
+    {Term1, Args1} = compile_term(
+        Term, AllAliases, OutsideAliases, Args0, Context),
+    scope_noneof(Term1, OutsideAliases, AllAliases, Args1, Context);
+compile_term(#search_sql_nested{
+        operator = <<"noneof">>,
+        terms = [#search_sql_term{} = Term]
+    }, AllAliases, OutsideAliases, Args, Context) ->
+    scope_noneof(Term, OutsideAliases, AllAliases, Args, Context);
 compile_term(#search_sql_nested{ operator = <<"noneof">>, terms = Terms },
         AllAliases, OutsideAliases, Args0, Context) ->
     {Terms1, Args1} = compile_alternatives(

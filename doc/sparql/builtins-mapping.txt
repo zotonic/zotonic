@@ -12,6 +12,20 @@ special handling in z_sparql_sql.erl for RDF-aware type tests, aggregates,
 datatype constructors and Zotonic full-text functions.
 
 
+Supported graph-pattern filters
+-------------------------------
+
+SPARQL                         PostgreSQL
+------------------------------ ------------------------------------------
+FILTER EXISTS { pattern }      WHERE EXISTS (SELECT 1 ...)
+FILTER NOT EXISTS { pattern }  WHERE NOT EXISTS (SELECT 1 ...)
+
+The subquery is correlated with bindings from the enclosing group. Its graph
+pattern remains conjunctive, its local bindings are discarded, and ACL checks
+for local resource aliases are added inside the subquery. EXISTS used inside a
+larger expression or as a result expression is not yet supported.
+
+
 Supported scalar built-ins
 --------------------------
 
@@ -169,12 +183,6 @@ SHA1(E), SHA256(E), SHA384(E), SHA512(E)
 STRDT(E,E)
     Constructs an RDF typed literal, which the SQL expression record cannot
     currently preserve as an RDF term.
-
-EXISTS { ... }, NOT EXISTS { ... }
-    Filter graph-pattern expressions are not in the implemented parser/SQL
-    path. SQL EXISTS subqueries are used internally for nested search terms,
-    but this does not implement the SPARQL EXISTS built-in.
-
 
 SQL value types
 ---------------

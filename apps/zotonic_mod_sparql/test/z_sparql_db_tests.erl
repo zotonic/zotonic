@@ -510,6 +510,51 @@ optional_test() ->
         ok = m_rsc:delete(ObjectId, Context)
     end.
 
+exists_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    Context = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+    {ok, WithRelationId} = m_rsc:insert([
+        {category, article},
+        {title, <<"SPARQL EXISTS relation subject">>}
+    ], Context),
+    {ok, WithoutRelationId} = m_rsc:insert([
+        {category, article},
+        {title, <<"SPARQL EXISTS subject without relation">>}
+    ], Context),
+    {ok, ObjectId} = m_rsc:insert([
+        {category, article},
+        {title, <<"SPARQL EXISTS relation object">>}
+    ], Context),
+    try
+        {ok, _EdgeId} = m_edge:insert(
+            WithRelationId, relation, ObjectId, Context),
+        WithRelationUri = m_rsc:uri(WithRelationId, Context),
+        WithoutRelationUri = m_rsc:uri(WithoutRelationId, Context),
+        ExistsSparql = exists_query(
+            <<"EXISTS">>, WithRelationUri, WithoutRelationUri),
+        NotExistsSparql = exists_query(
+            <<"NOT EXISTS">>, WithRelationUri, WithoutRelationUri),
+        ?assertEqual([WithRelationId], search(ExistsSparql, Context)),
+        ?assertEqual([WithoutRelationId], search(NotExistsSparql, Context))
+    after
+        ok = m_rsc:delete(WithRelationId, Context),
+        ok = m_rsc:delete(WithoutRelationId, Context),
+        ok = m_rsc:delete(ObjectId, Context)
+    end.
+
+exists_query(Keyword, WithRelationUri, WithoutRelationUri) ->
+    <<
+        "PREFIX dcterms: <http://purl.org/dc/terms/>\n"
+        "SELECT ?subject WHERE {\n"
+        "    VALUES ?subject {\n"
+        "        <", WithRelationUri/binary, ">\n"
+        "        <", WithoutRelationUri/binary, ">\n"
+        "    }\n"
+        "    FILTER ", Keyword/binary,
+            " { ?subject dcterms:relation ?object }\n"
+        "}"
+    >>.
+
 facet_and_pivot_column_mapping_test() ->
     ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
     Context = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),

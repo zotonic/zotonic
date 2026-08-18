@@ -39,6 +39,7 @@ Terminals
     lbrace rbrace lparen rparen lbracket rbracket dot comma semicolon
     plus minus star slash bang eq ne lt gt le ge andand oror
     hat hat2
+    exists 'not'
     str lang langmatches datatype bound iri uri bnode rand abs ceil floor round
     concat substr strlen replace ucase lcase encode_for_uri contains strstarts
     strends strbefore strafter year month day hours minutes seconds timezone tz
@@ -326,6 +327,10 @@ built_in_call -> built_in_function lparen arg_list rparen :
 built_in_call -> aggregate : '$1'.
 built_in_call -> built_in_function nil :
     {call, '$1', []}.
+built_in_call -> exists group_graph_pattern :
+    {exists, '$2'}.
+built_in_call -> 'not' exists group_graph_pattern :
+    {not_exists, '$3'}.
 
 built_in_function -> str : str.
 built_in_function -> lang : lang.

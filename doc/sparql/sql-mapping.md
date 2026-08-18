@@ -32,6 +32,8 @@ SQL.
 - `UNION` becomes an `anyof` nested search term.
 - `OPTIONAL` becomes a correlated `LEFT JOIN LATERAL`; bindings produced by its
   right-hand graph pattern are projected as nullable columns.
+- Standalone `FILTER EXISTS` and `FILTER NOT EXISTS` become correlated
+  `EXISTS` and `NOT EXISTS` subqueries. Inner bindings remain private.
 - Joins local to a nested alternative are compiled into correlated `EXISTS`
   subqueries.
 - Shared/projected aliases remain in the outer query when required there.
@@ -64,8 +66,9 @@ The generated search terms include projection, `GROUP BY`, `HAVING` and
 ## Access control
 
 `z_search_acl` applies Zotonic ACL and category checks to resource aliases.
-Checks for resource aliases local to a nested branch are added before that
-branch is compiled into an `EXISTS` or OPTIONAL lateral subquery. Checks for
+Checks for resource aliases local to a nested branch or graph-pattern filter are
+added before that branch is compiled into an `EXISTS`, `NOT EXISTS`, or OPTIONAL
+lateral subquery. Checks for
 outer aliases are added when the combined search query is reformatted. This
 prevents a subquery from bypassing content-group or other resource visibility
 restrictions without making a failed OPTIONAL remove its left-hand row.

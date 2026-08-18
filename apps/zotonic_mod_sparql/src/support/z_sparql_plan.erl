@@ -560,6 +560,12 @@ map_expression({Operator, Expression}, State0)
     when Operator =:= 'not'; Operator =:= 'u+'; Operator =:= 'u-' ->
     {Expression1, State1} = map_expression(Expression, State0),
     {{Operator, Expression1}, State1};
+map_expression({exists, Group}, State0) ->
+    {Pattern, State1} = map_group(Group, State0),
+    {{exists, Pattern}, State1};
+map_expression({not_exists, Group}, State0) ->
+    {Pattern, State1} = map_group(Group, State0),
+    {{not_exists, Pattern}, State1};
 map_expression({aggregate, Function, Distinct, Argument, Separator}, State0) ->
     {Argument1, State1} = map_aggregate_argument(Argument, State0),
     {Separator1, State2} = map_aggregate_separator(Separator, State1),
@@ -690,6 +696,9 @@ term_variables(_) -> [].
 expression_resource_variables({call, Function, [Resource | _]})
     when Function =:= fulltext; Function =:= fulltext_rank ->
     term_variables(Resource);
+expression_resource_variables({Exists, _Pattern})
+    when Exists =:= exists; Exists =:= not_exists ->
+    [];
 expression_resource_variables({_Operator, Left, Right}) ->
     expression_resource_variables(Left) ++ expression_resource_variables(Right);
 expression_resource_variables({_Operator, Expression}) ->

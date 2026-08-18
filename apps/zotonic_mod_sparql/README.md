@@ -118,10 +118,11 @@ TODO
  - [x] Accept multi value VALUES in parser and planner (currently only single value is accepted)
  - [x] Optimize sort for generated SQL, remove all non-one-column sub-sorts after 'id' / 'created' / 'modified'
  - [x] With the new joins, fix the z_search checks on cat/cat_exact and acl for the subqueries
- - [ ] Support EXISTS / NOT EXISTS
- - [x] Support OPTIONAL using isolated correlated lateral joins
- - [ ] Support language handling, using the JSON objects: { _type: "trans", tr = { "en":"..." } }, including LANG etc.
  - [x] Add isIRI/isURI/isBLANK RDF term tests
+ - [x] Support OPTIONAL using isolated correlated lateral joins
+ - [x] Support standalone FILTER EXISTS / FILTER NOT EXISTS
+ - [ ] Support EXISTS / NOT EXISTS inside compound and result expressions
+ - [ ] Support language handling, using the JSON objects: { _type: "trans", tr = { "en":"..." } }, including LANG etc.
  - [ ] Add DATATYPE support
  - [ ] Add Zotonic m_sparql model for querying
  - [ ] Add SPARQL endpoint, with expected results (for use with 3rd parties -- check API standards)
