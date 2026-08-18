@@ -73,14 +73,16 @@ isLITERAL(E), isNUMERIC(E)
 
 sameTerm(E,E)
     Known equal types use SQL equality. JSONB scalars are compared after JSONB
-    type checks. This is an approximation because the SQL representation does
-    not retain complete RDF term metadata.
+    type checks. Untagged JSONB objects use structural equality, including when
+    they originate at different resources or selectors. This value-based blank
+    node identity is a Zotonic-specific approximation.
 
 isIRI(E), isURI(E), isBLANK(E)
     Resource bindings and uri-typed expressions are IRIs; isURI is the SPARQL
     synonym for isIRI. Known literal types are not IRIs. JSONB values declared
-    as uri are IRIs when their stored value is a JSON string. Zotonic SQL
-    values do not represent blank nodes, so isBLANK is false for them.
+    as uri are IRIs when their stored value is a JSON string. An untagged JSONB
+    object selected from props_json is a blank node. JSON arrays and objects
+    with a _type key, such as translations, are not blank nodes.
 
 IRI(E), URI(E)
     URI is a SPARQL synonym for IRI. Constant simple and xsd:string literals

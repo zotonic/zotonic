@@ -943,8 +943,18 @@ jsonb_type_test_expression(isiri, #sql_expression{ type = uri } = Expression, Te
     ]), Term};
 jsonb_type_test_expression(isuri, Expression, Term) ->
     jsonb_type_test_expression(isiri, Expression, Term);
+jsonb_type_test_expression(isblank, Expression, Term) ->
+    {boolean_expression(plain_json_object_sql(expression_sql(Expression))), Term};
 jsonb_type_test_expression(_Function, _Expression, Term) ->
     {constant_expression(false), Term}.
+
+%% @doc Untagged JSON objects selected from props_json are treated as blank
+%% nodes. Objects with a _type key are Zotonic typed values, such as #trans{}.
+plain_json_object_sql(Sql) ->
+    [
+        <<"(jsonb_typeof(">>, Sql, <<") = 'object' AND NOT ((">>,
+        Sql, <<") ? '_type'))">>
+    ].
 
 same_term_to_sql(Left, Right, State, Term0) ->
     {Left1, Term1} = expression_to_sql(Left, State, Term0),
@@ -952,17 +962,17 @@ same_term_to_sql(Left, Right, State, Term0) ->
     {same_term_expression(Left1, Right1), Term2}.
 
 same_term_expression(
-        #sql_expression{ type = Type, source = jsonb } = Left,
-        #sql_expression{ type = Type, source = jsonb } = Right) ->
-    jsonb_same_term_expression(Left, Right);
+        #sql_expression{ source = jsonb } = Left,
+        #sql_expression{ source = jsonb } = Right) ->
+    jsonb_same_term_expression(Left, Right, true);
 same_term_expression(
         #sql_expression{ type = Type, source = jsonb } = Left,
         #sql_expression{ type = Type } = Right) ->
-    jsonb_same_term_expression(Left, scalar_to_jsonb_expression(Right));
+    jsonb_same_term_expression(Left, scalar_to_jsonb_expression(Right), false);
 same_term_expression(
         #sql_expression{ type = Type } = Left,
         #sql_expression{ type = Type, source = jsonb } = Right) ->
-    jsonb_same_term_expression(scalar_to_jsonb_expression(Left), Right);
+    jsonb_same_term_expression(scalar_to_jsonb_expression(Left), Right, false);
 same_term_expression(
         #sql_expression{ type = Type } = Left,
         #sql_expression{ type = Type } = Right) ->
@@ -972,15 +982,36 @@ same_term_expression(
 same_term_expression(#sql_expression{}, #sql_expression{}) ->
     constant_expression(false).
 
-%% @doc Directly compare JSONB scalar values, assume structured values are
-%% not the same term.
-jsonb_same_term_expression(Left, Right) ->
+%% @doc Compare scalar JSONB values of the same logical type. Plain objects use
+%% structural JSONB equality as a Zotonic-specific blank-node identity: equal
+%% objects are the same term even when selected from different properties.
+jsonb_same_term_expression(
+        #sql_expression{ type = LeftType } = Left,
+        #sql_expression{ type = RightType } = Right,
+        true) ->
     LeftSql = expression_sql(Left),
     RightSql = expression_sql(Right),
+    ScalarEquality = case LeftType =:= RightType of
+        true -> jsonb_scalar_same_term_sql(LeftSql, RightSql);
+        false ->
+            <<"false">>
+    end,
     boolean_expression([
+        $\(, ScalarEquality, <<" OR (">>,
+        plain_json_object_sql(LeftSql), <<" AND ">>,
+        plain_json_object_sql(RightSql), <<" AND (">>,
+        LeftSql, <<") = (">>, RightSql, <<")))">>
+    ]);
+jsonb_same_term_expression(Left, Right, false) ->
+    boolean_expression(jsonb_scalar_same_term_sql(
+        expression_sql(Left),
+        expression_sql(Right))).
+
+jsonb_scalar_same_term_sql(LeftSql, RightSql) ->
+    [
         <<"(jsonb_typeof(">>, LeftSql, <<") IN ('string', 'number', 'boolean') ">>,
         <<"AND (">>, LeftSql, <<")::text = (">>, RightSql, <<")::text)">>
-    ]).
+    ].
 
 scalar_to_jsonb_expression(#sql_expression{ sql = Sql } = Expression) ->
     Expression#sql_expression{

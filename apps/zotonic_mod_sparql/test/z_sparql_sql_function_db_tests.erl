@@ -23,6 +23,8 @@ literal_numeric_test() ->
             <<"boolean">> => true,
             <<"is_enabled">> => true,
             <<"object">> => #{<<"number">> => 42},
+            <<"object_copy">> => #{<<"number">> => 42},
+            <<"object_other">> => #{<<"number">> => 43},
             <<"translation">> => #trans{ tr = [
                 {en, <<"Number">>},
                 {nl, <<"Nummer">>}
@@ -53,6 +55,27 @@ literal_numeric_test() ->
         ?assertEqual(
             [],
             search(property_filter(<<"sparql_type_check.translation">>, <<"isLiteral">>, ObjectUri), Context)),
+        ?assertEqual(
+            [SubjectId],
+            search(property_filter(<<"sparql_type_check.object">>, <<"isBLANK">>, ObjectUri), Context)),
+        ?assertEqual(
+            [],
+            search(property_filter(<<"sparql_type_check.translation">>, <<"isBLANK">>, ObjectUri), Context)),
+        ?assertEqual(
+            [],
+            search(property_filter(<<"sparql_type_check.number">>, <<"isBLANK">>, ObjectUri), Context)),
+        ?assertEqual(
+            [SubjectId],
+            search(same_term_filter(
+                <<"sparql_type_check.object">>,
+                <<"sparql_type_check.object_copy">>,
+                ObjectUri), Context)),
+        ?assertEqual(
+            [],
+            search(same_term_filter(
+                <<"sparql_type_check.object">>,
+                <<"sparql_type_check.object_other">>,
+                ObjectUri), Context)),
         ?assertEqual(
             [SubjectId],
             search(property_filter(<<"is_published">>, <<"isLiteral">>, ObjectUri), Context)),
@@ -149,6 +172,18 @@ property_expression_filter(Predicate, Expression, ObjectUri) ->
         "    ?subject dcterms:relation <", ObjectUri/binary, "> .\n"
         "    ?subject zotonic:", Predicate/binary, " ?value .\n"
         "    FILTER(", Expression/binary, ")\n"
+        "}"
+    >>.
+
+same_term_filter(LeftPredicate, RightPredicate, ObjectUri) ->
+    <<
+        "PREFIX dcterms: <http://purl.org/dc/terms/>\n"
+        "PREFIX zotonic: <http://zotonic.net/predicate/>\n"
+        "SELECT ?subject WHERE {\n"
+        "    ?subject dcterms:relation <", ObjectUri/binary, "> .\n"
+        "    ?subject zotonic:", LeftPredicate/binary, " ?left .\n"
+        "    ?subject zotonic:", RightPredicate/binary, " ?right .\n"
+        "    FILTER(sameTerm(?left, ?right))\n"
         "}"
     >>.
 

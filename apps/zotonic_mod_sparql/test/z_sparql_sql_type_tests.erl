@@ -154,6 +154,23 @@ rdf_term_type_test() ->
             ?assertEqual(2, length(binary:matches(Where, <<"false">>)))
         end).
 
+jsonb_blank_node_test() ->
+    with_observers(
+        fun(Context) ->
+            {ok, Terms} = sql_terms(<<
+                "PREFIX test: <https://example.test/> "
+                "SELECT ?person WHERE { "
+                    "?person test:object ?object . "
+                    "FILTER(isBLANK(?object)) "
+                    "FILTER(sameTerm(?object, ?object)) "
+                "}"
+            >>, Context),
+            Where = terms_where(Terms),
+            ?assertNotEqual(nomatch, binary:match(Where, <<"= 'object'">>)),
+            ?assertNotEqual(nomatch, binary:match(Where, <<"? '_type'">>)),
+            ?assertNotEqual(nomatch, binary:match(Where, <<") = (">>))
+        end).
+
 sql_terms(Sparql, Context) ->
     {ok, Query} = z_sparql:parse(Sparql),
     z_sparql_sql:to_sql_term(Query, Context).
@@ -206,5 +223,7 @@ observe_sparql_mapping(#sparql_mapping{ ns_prefix = <<"test">>, predicate = <<"c
     {ok, {column, <<"rsc">>, <<"created">>, datetime}};
 observe_sparql_mapping(#sparql_mapping{ ns_prefix = <<"test">>, predicate = <<"website">> }, _Context) ->
     {ok, {jsonb, <<"rsc">>, <<"props_json">>, [<<"website">>], uri}};
+observe_sparql_mapping(#sparql_mapping{ ns_prefix = <<"test">>, predicate = <<"object">> }, _Context) ->
+    {ok, {jsonb, <<"rsc">>, <<"props_json">>, [<<"object">>], text}};
 observe_sparql_mapping(#sparql_mapping{}, _Context) ->
     undefined.

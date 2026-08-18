@@ -88,8 +88,10 @@ objects and arrays are not treated as RDF scalar literals.
 
 isIRI and isURI use resource bindings and the uri value type. A JSONB property
 declared as uri additionally checks that its stored value is a JSON string.
-isBLANK returns false for SQL values because no SQL expression type represents
-a blank node.
+isBLANK recognizes untagged JSON objects selected from props_json. JSON arrays
+and tagged Zotonic objects are not blank nodes. Structurally equal JSON blank
+nodes satisfy sameTerm even when they originate at different selectors or
+resources; this deliberately uses value identity instead of RDF node identity.
 
 
 Built-ins and constructors

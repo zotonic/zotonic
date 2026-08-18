@@ -54,8 +54,14 @@ Supported with differences from complete SPARQL RDF semantics:
 The regex functions use the common subset of XPath and PostgreSQL POSIX regular
 expressions. The RDF term tests use the available SQL and JSONB types as an
 approximation because complete RDF term metadata is not stored in expressions.
-`isURI` is an alias of `isIRI`. `isBLANK` is false for Zotonic values because
-blank nodes are not represented as SQL values.
+`isURI` is an alias of `isIRI`. Untagged JSON objects selected from props_json
+are treated as blank nodes. JSON arrays and tagged Zotonic values such as
+translation objects are not blank nodes.
+
+For these JSON blank nodes, sameTerm uses structural JSONB equality. Identical
+objects from different resources or selectors are consequently considered the
+same term. This is a documented Zotonic-specific difference from RDF blank-node
+identity.
 
 IRI and URI constructors resolve constant strings against the query BASE and
 leave existing IRI expressions unchanged. Dynamic text expressions pass
