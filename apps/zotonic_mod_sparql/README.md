@@ -121,7 +121,8 @@ TODO
  - [ ] Support EXISTS / NOT EXISTS
  - [ ] Support OPTIONAL (if not too inefficient)
  - [ ] Support language handling, using the JSON objects: { _type: "trans", tr = { "en":"..." } }, including LANG etc.
- - [ ] Check PostgreSQL functions for functions like: DATATYPE and isIRI/isBLANK/etc
+ - [x] Add isIRI/isURI/isBLANK RDF term tests
+ - [ ] Add DATATYPE support
  - [ ] Add Zotonic m_sparql model for querying
  - [ ] Add SPARQL endpoint, with expected results (for use with 3rd parties -- check API standards)
  - [ ] Allow SPARQL query in search_query resources (needs extra notifier for mapping/validation/execution?)

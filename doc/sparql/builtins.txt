@@ -32,6 +32,8 @@ Supported scalar functions
     MINUTES
     SECONDS
     NOW
+    UUID
+    STRUUID
     MD5
     COALESCE
     IF
@@ -42,11 +44,22 @@ Supported with differences from complete SPARQL RDF semantics:
     REGEX
     isLITERAL
     isNUMERIC
+    isIRI
+    isURI
+    isBLANK
     sameTerm
+    IRI
+    URI
 
 The regex functions use the common subset of XPath and PostgreSQL POSIX regular
 expressions. The RDF term tests use the available SQL and JSONB types as an
 approximation because complete RDF term metadata is not stored in expressions.
+`isURI` is an alias of `isIRI`. `isBLANK` is false for Zotonic values because
+blank nodes are not represented as SQL values.
+
+IRI and URI constructors resolve constant strings against the query BASE and
+leave existing IRI expressions unchanged. Dynamic text expressions pass
+through as IRI text; dynamic relative values are not resolved against BASE.
 
 
 Supported aggregates
@@ -89,23 +102,16 @@ Recognized but unsupported
     LANG
     LANGMATCHES
     DATATYPE
-    IRI
-    URI
     BNODE
     ENCODE_FOR_URI
     TIMEZONE
     TZ
-    UUID
-    STRUUID
     SHA1
     SHA256
     SHA384
     SHA512
     STRLANG
     STRDT
-    isIRI
-    isURI
-    isBLANK
 
 EXISTS and NOT EXISTS graph-pattern filters are also unsupported. The scanner
 recognizes the keywords, but the parser does not build these expression nodes.

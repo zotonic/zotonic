@@ -564,6 +564,10 @@ map_expression({aggregate, Function, Distinct, Argument, Separator}, State0) ->
     {Argument1, State1} = map_aggregate_argument(Argument, State0),
     {Separator1, State2} = map_aggregate_separator(Separator, State1),
     {{aggregate, Function, Distinct, Argument1, Separator1}, State2};
+map_expression({call, Function, [Argument]}, State0)
+    when Function =:= iri; Function =:= uri ->
+    {Argument1, State1} = map_expression(Argument, State0),
+    {map_iri_constructor(Function, Argument1, State1), State1};
 map_expression({call, Function, Arguments}, State0) when is_atom(Function) ->
     {Arguments1, State1} = map_expressions(Arguments, State0),
     {{call, Function, Arguments1}, State1};
@@ -572,6 +576,21 @@ map_expression({call, Function, Arguments}, State0) ->
     map_extension_call(Function1, Arguments, State1);
 map_expression(Expression, State) ->
     map_term(Expression, State).
+
+%% @doc Resolve constant IRI constructor arguments while the query BASE is
+%% available. Existing IRIs are unchanged. Remaining dynamic calls are mapped
+%% by SQL generation without relative-IRI resolution.
+map_iri_constructor(_Function, {iri, _Iri} = Iri, _State) ->
+    Iri;
+map_iri_constructor(_Function, {literal, Value, undefined, undefined}, State) ->
+    {iri, resolve_iri(Value, State#plan_state.base)};
+map_iri_constructor(
+        _Function,
+        {literal, Value, <<"http://www.w3.org/2001/XMLSchema#string">>, undefined},
+        State) ->
+    {iri, resolve_iri(Value, State#plan_state.base)};
+map_iri_constructor(Function, Argument, _State) ->
+    {call, Function, [Argument]}.
 
 map_extension_call({iri, <<?NAMESPACE_ZOTONIC, "fullText">>}, Arguments, State) ->
     map_fulltext_call(fulltext, Arguments, State);

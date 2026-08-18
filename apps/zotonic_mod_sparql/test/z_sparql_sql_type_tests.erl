@@ -132,6 +132,28 @@ same_term_storage_optimization_test() ->
             ?assertEqual(1, length(binary:matches(Where, <<"false">>)))
         end).
 
+rdf_term_type_test() ->
+    with_observers(
+        fun(Context) ->
+            {ok, Terms} = sql_terms(<<
+                "PREFIX test: <https://example.test/> "
+                "SELECT ?person WHERE { "
+                    "?person test:name ?name . "
+                    "?person test:website ?website . "
+                    "FILTER(isIRI(?person)) "
+                    "FILTER(isURI(?website)) "
+                    "FILTER(!isIRI(?name)) "
+                    "FILTER(!isBLANK(?person)) "
+                    "FILTER(isIRI(<https://example.test/resource>)) "
+                "}"
+            >>, Context),
+            Where = terms_where(Terms),
+            ?assertNotEqual(nomatch, binary:match(Where, <<"jsonb_typeof(rsc.props_json">>)),
+            ?assertNotEqual(nomatch, binary:match(Where, <<"= 'string'">>)),
+            ?assertEqual(2, length(binary:matches(Where, <<"true">>))),
+            ?assertEqual(2, length(binary:matches(Where, <<"false">>)))
+        end).
+
 sql_terms(Sparql, Context) ->
     {ok, Query} = z_sparql:parse(Sparql),
     z_sparql_sql:to_sql_term(Query, Context).
@@ -182,5 +204,7 @@ observe_sparql_mapping(#sparql_mapping{ ns_prefix = <<"test">>, predicate = <<"v
     {ok, {column, <<"rsc">>, <<"version">>, integer}};
 observe_sparql_mapping(#sparql_mapping{ ns_prefix = <<"test">>, predicate = <<"created">> }, _Context) ->
     {ok, {column, <<"rsc">>, <<"created">>, datetime}};
+observe_sparql_mapping(#sparql_mapping{ ns_prefix = <<"test">>, predicate = <<"website">> }, _Context) ->
+    {ok, {jsonb, <<"rsc">>, <<"props_json">>, [<<"website">>], uri}};
 observe_sparql_mapping(#sparql_mapping{}, _Context) ->
     undefined.

@@ -42,9 +42,13 @@ postgresql_mapping_test_() ->
         mapping(seconds, [<<"value">>], <<"EXTRACT(SECOND FROM value)">>),
         mapping(now, [], <<"CURRENT_TIMESTAMP">>),
         mapping(rand, [], <<"random()">>),
+        mapping(uuid, [], <<"concat('urn:uuid:', CAST(gen_random_uuid() AS text))">>),
+        mapping(struuid, [], <<"CAST(gen_random_uuid() AS text)">>),
         mapping(md5, [<<"value">>], <<"md5(value)">>),
         mapping(coalesce, [<<"a">>, <<"b">>], <<"coalesce(a, b)">>),
         mapping('if', [<<"condition">>, <<"a">>, <<"b">>], <<"(CASE WHEN condition THEN a ELSE b END)">>),
+        mapping(iri, [<<"value">>], <<"value">>),
+        mapping(uri, [<<"value">>], <<"value">>),
         % Following are now handled by the SQL generator
         % mapping(isliteral, [<<"value">>], <<"(jsonb_typeof(to_jsonb(value)) IN ('string', 'number', 'boolean'))">>),
         % mapping(isnumeric, [<<"value">>], <<"(jsonb_typeof(to_jsonb(value)) = 'number')">>),
@@ -87,6 +91,15 @@ type_signature_test() ->
         {ok, {[boolean, common, common], common}},
         z_sparql_sql_function:type_signature('if', 3)),
     ?assertEqual(
+        {ok, {[], uri}},
+        z_sparql_sql_function:type_signature(uuid, 0)),
+    ?assertEqual(
+        {ok, {[any], boolean}},
+        z_sparql_sql_function:type_signature(isiri, 1)),
+    ?assertEqual(
+        {ok, {[uri], uri}},
+        z_sparql_sql_function:type_signature(iri, 1)),
+    ?assertEqual(
         {error, {invalid_function_arity, substr, 1}},
         z_sparql_sql_function:type_signature(substr, 1)).
 
@@ -123,6 +136,40 @@ function_to_sql_term_test() ->
         ?assertEqual(
             <<"(strpos(upper(rsc.name), $1) > 0)">>,
             sql_binary(FilterTerm#search_sql_term.where))
+    after
+        z_notifier:detach(rdf_ns, Context),
+        z_notifier:detach(sparql_mapping, Context)
+    end.
+
+iri_constructor_test() ->
+    {ok, _} = application:ensure_all_started(zotonic_notifier),
+    Context = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+    ok = z_notifier:observe(rdf_ns, {?MODULE, observe_rdf_ns}, 100, Context),
+    ok = z_notifier:observe(sparql_mapping, {?MODULE, observe_sparql_mapping}, 100, Context),
+    try
+        {ok, Query} = z_sparql:parse(<<
+            "BASE <https://example.test/base/> "
+            "PREFIX test: <https://example.test/> "
+            "SELECT ?person (IRI(\"child\") AS ?relative) "
+                "(URI(<https://example.test/absolute>) AS ?absolute) WHERE { "
+                "?person test:name ?name "
+            "}"
+        >>),
+        {ok, Terms} = z_sparql_sql:to_sql_term(Query, Context),
+        Args = lists:append([ Term#search_sql_term.args || Term <- Terms ]),
+        ?assertEqual(
+            [<<"https://example.test/base/child">>, <<"https://example.test/absolute">>],
+            Args),
+        {ok, DynamicQuery} = z_sparql:parse(<<
+            "PREFIX test: <https://example.test/> "
+            "SELECT ?person (IRI(?name) AS ?iri) (URI(?person) AS ?resource_iri) WHERE { "
+                "?person test:name ?name . "
+                "FILTER(isIRI(IRI(?person))) "
+            "}"
+        >>),
+        ?assertMatch(
+            {ok, [_ | _]},
+            z_sparql_sql:to_sql_term(DynamicQuery, Context))
     after
         z_notifier:detach(rdf_ns, Context),
         z_notifier:detach(sparql_mapping, Context)

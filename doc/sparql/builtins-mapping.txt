@@ -40,6 +40,8 @@ HOURS(E)               EXTRACT(HOUR FROM E)
 MINUTES(E)             EXTRACT(MINUTE FROM E)
 SECONDS(E)             EXTRACT(SECOND FROM E)
 NOW()                  CURRENT_TIMESTAMP
+UUID()                 concat('urn:uuid:', gen_random_uuid()::text)
+STRUUID()              gen_random_uuid()::text
 MD5(E)                 md5(E)
 COALESCE(Es)           coalesce(Es)
 IF(E,E,E)              CASE WHEN ... THEN ... ELSE ... END
@@ -73,6 +75,19 @@ sameTerm(E,E)
     Known equal types use SQL equality. JSONB scalars are compared after JSONB
     type checks. This is an approximation because the SQL representation does
     not retain complete RDF term metadata.
+
+isIRI(E), isURI(E), isBLANK(E)
+    Resource bindings and uri-typed expressions are IRIs; isURI is the SPARQL
+    synonym for isIRI. Known literal types are not IRIs. JSONB values declared
+    as uri are IRIs when their stored value is a JSON string. Zotonic SQL
+    values do not represent blank nodes, so isBLANK is false for them.
+
+IRI(E), URI(E)
+    URI is a SPARQL synonym for IRI. Constant simple and xsd:string literals
+    are resolved against BASE during query planning, and existing IRI-valued
+    expressions pass through unchanged. Dynamic text expressions are treated
+    as IRI text, but relative dynamic values are not resolved against BASE
+    because PostgreSQL does not provide the required RFC 3986 resolution.
 
 
 Supported datatype constructors
@@ -135,12 +150,8 @@ DATATYPE(E)
     This inspects RDF term metadata. Do not confuse it with the supported XSD
     datatype constructor calls described above.
 
-IRI(E), URI(E)
-    URI is a SPARQL synonym for IRI. Query IRIs and prefixed names are resolved
-    during planning, but the IRI()/URI() expression function is not mapped.
-
-BNODE((E) | NIL), isBLANK(E)
-    Blank nodes are not represented as SQL result values.
+BNODE((E) | NIL)
+    Constructed blank nodes are not represented as SQL result values.
 
 ENCODE_FOR_URI(E)
     PostgreSQL has no directly equivalent built-in used by this module.
@@ -149,10 +160,6 @@ TIMEZONE(E), TZ(E)
     PostgreSQL timestamptz does not retain the original lexical timezone, and
     TIMEZONE requires an xsd:dayTimeDuration result type that is not modeled.
 
-UUID(), STRUUID()
-    Not mapped yet. PostgreSQL 13 and newer provide gen_random_uuid(), so these
-    can be added without an extension when that version floor is acceptable.
-
 SHA1(E), SHA256(E), SHA384(E), SHA512(E)
     PostgreSQL requires an extension such as pgcrypto for these hashes. The
     SPARQL module does not install or depend on that extension.
@@ -160,10 +167,6 @@ SHA1(E), SHA256(E), SHA384(E), SHA512(E)
 STRDT(E,E)
     Constructs an RDF typed literal, which the SQL expression record cannot
     currently preserve as an RDF term.
-
-isIRI(E), isURI(E)
-    The expression type system knows uri values and resource bindings, but the
-    RDF-aware tests are not implemented yet.
 
 EXISTS { ... }, NOT EXISTS { ... }
     Filter graph-pattern expressions are not in the implemented parser/SQL

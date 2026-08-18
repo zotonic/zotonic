@@ -5,12 +5,10 @@
 %% Only functions which have a matching SQL expression with (very) similar
 %% enough semantics are supported.
 %%
-%% Functions inspecting RDF term metadata, such as LANG, DATATYPE and isIRI,
-%% need typed bindings and are not yet added. isLITERAL, isNUMERIC and sameTerm
-%% use the PostgreSQL scalar type as a useful approximation.
-%%
-%% SHA hashes and UUID functions are omitted as they depend on PostgreSQL
-%% extensions or version-specific functions.
+%% Functions inspecting RDF term metadata, such as LANG and DATATYPE, need
+%% typed bindings and are not yet added. RDF term tests are handled by
+%% z_sparql_sql.erl, where resource bindings can be distinguished from scalar
+%% expressions.
 %%
 %% REPLACE supports a subset of SPARQL XPath and PostgreSQL regexps.
 %% @end
@@ -47,6 +45,7 @@
     | integer
     | number
     | text
+    | uri
     | common.
 
 -type argument_type() ::
@@ -110,6 +109,10 @@ to_sql(now, []) ->
     {ok, <<"CURRENT_TIMESTAMP">>};
 to_sql(rand, []) ->
     sql_call(<<"random">>, []);
+to_sql(uuid, []) ->
+    {ok, <<"concat('urn:uuid:', CAST(gen_random_uuid() AS text))">>};
+to_sql(struuid, []) ->
+    {ok, <<"CAST(gen_random_uuid() AS text)">>};
 to_sql(md5, [Value]) ->
     sql_call(<<"md5">>, [Value]);
 to_sql(coalesce, [_ | _] = Arguments) ->
@@ -121,6 +124,16 @@ to_sql('if', [Condition, Then, Else]) ->
         <<" ELSE ">>, Else,
         <<" END)">>
     ]};
+to_sql(iri, [Value]) ->
+    {ok, Value};
+to_sql(uri, [Value]) ->
+    {ok, Value};
+to_sql(isiri, [_Value]) ->
+    {ok, <<"false">>};
+to_sql(isuri, [_Value]) ->
+    {ok, <<"false">>};
+to_sql(isblank, [_Value]) ->
+    {ok, <<"false">>};
 % %% PostgreSQL scalars and JSONB scalars are normalized to JSONB so that one
 % %% check handles both storage forms. Objects and arrays are structured Zotonic
 % %% values and are not considered RDF literals by this approximation.
@@ -192,12 +205,19 @@ type_signature(minutes, 1) -> {ok, {[datetime], integer}};
 type_signature(seconds, 1) -> {ok, {[datetime], float}};
 type_signature(now, 0) -> {ok, {[], datetime}};
 type_signature(rand, 0) -> {ok, {[], float}};
+type_signature(uuid, 0) -> {ok, {[], uri}};
+type_signature(struuid, 0) -> {ok, {[], text}};
 type_signature(md5, 1) -> {ok, {[text], text}};
 type_signature(coalesce, Arity) when Arity > 0 -> {ok, {lists:duplicate(Arity, common), common}};
 type_signature('if', 3) -> {ok, {[boolean, common, common], common}};
 type_signature(isliteral, 1) -> {ok, {[any], boolean}};
 type_signature(isnumeric, 1) -> {ok, {[any], boolean}};
+type_signature(isiri, 1) -> {ok, {[any], boolean}};
+type_signature(isuri, 1) -> {ok, {[any], boolean}};
+type_signature(isblank, 1) -> {ok, {[any], boolean}};
 type_signature(sameterm, 2) -> {ok, {[any, any], boolean}};
+type_signature(iri, 1) -> {ok, {[uri], uri}};
+type_signature(uri, 1) -> {ok, {[uri], uri}};
 type_signature(regex, 2) -> {ok, {[text, text], boolean}};
 type_signature(regex, 3) -> {ok, {[text, text, text], boolean}};
 type_signature(replace, 3) -> {ok, {[text, text, text], text}};
@@ -288,13 +308,20 @@ is_supported(minutes) -> true;
 is_supported(seconds) -> true;
 is_supported(now) -> true;
 is_supported(rand) -> true;
+is_supported(uuid) -> true;
+is_supported(struuid) -> true;
 is_supported(md5) -> true;
 is_supported(coalesce) -> true;
 is_supported('if') -> true;
 is_supported(bound) -> true;
 is_supported(isliteral) -> true;
 is_supported(isnumeric) -> true;
+is_supported(isiri) -> true;
+is_supported(isuri) -> true;
+is_supported(isblank) -> true;
 is_supported(sameterm) -> true;
+is_supported(iri) -> true;
+is_supported(uri) -> true;
 is_supported(regex) -> true;
 is_supported(replace) -> true;
 is_supported(_) -> false.

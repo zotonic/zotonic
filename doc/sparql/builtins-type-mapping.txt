@@ -86,6 +86,11 @@ They are then mapped as follows:
 isLITERAL and isNUMERIC inspect jsonb_typeof directly so that structured JSON
 objects and arrays are not treated as RDF scalar literals.
 
+isIRI and isURI use resource bindings and the uri value type. A JSONB property
+declared as uri additionally checks that its stored value is a JSON string.
+isBLANK returns false for SQL values because no SQL expression type represents
+a blank node.
+
 
 Built-ins and constructors
 --------------------------
@@ -94,6 +99,11 @@ Each supported built-in declares argument and result types in
 z_sparql_sql_function.erl. Arguments are coerced before the PostgreSQL
 expression is emitted. The common pseudo-type used by COALESCE and IF requires
 their value alternatives to resolve to a compatible type.
+
+UUID produces a uri value containing a `urn:uuid:` IRI; STRUUID produces text.
+Constant IRI/URI constructor strings are resolved by the query planner while
+BASE is available. Resource and uri values pass through unchanged. Text values
+also pass through, but dynamic relative values are not resolved against BASE.
 
 Well-known XSD constructor IRIs are handled separately by
 z_sparql_sql_datatype.erl. They map string, boolean, integer variants, decimal,

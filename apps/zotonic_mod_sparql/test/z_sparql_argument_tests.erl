@@ -86,6 +86,28 @@ undefined_argument_test() ->
             ?assertNotEqual(nomatch, binary:match(Select, <<"NULL AS sparql_1">>))
         end).
 
+rdf_term_argument_test() ->
+    with_observers(
+        fun(Context) ->
+            {ok, Query} = z_sparql:parse(<<
+                "PREFIX test: <https://example.test/> "
+                "SELECT ?person WHERE { "
+                    "?person test:name ?name . "
+                    "FILTER(isIRI(?iri)) "
+                    "FILTER(isIRI(?resource)) "
+                    "FILTER(!isBLANK(?resource)) "
+                "}"
+            >>),
+            Arguments = #{
+                iri => {iri, <<"https://example.test/id/1">>},
+                resource => {rsc, 123}
+            },
+            {ok, Terms} = z_sparql_sql:to_sql_term(Query, Arguments, Context),
+            #search_sql{ where = Where } = z_search_terms:combine(Terms, Context),
+            ?assertEqual(2, length(binary:matches(Where, <<"true">>))),
+            ?assertEqual(1, length(binary:matches(Where, <<"false">>)))
+        end).
+
 
 with_observers(Fun) ->
     {ok, _} = application:ensure_all_started(zotonic_notifier),

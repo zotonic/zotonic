@@ -657,13 +657,17 @@ expression_to_sql({'u-', Expression}, State, Term0) ->
 expression_to_sql({aggregate, Function, Distinct, Argument, Separator}, State, Term0) ->
     aggregate_to_sql(Function, Distinct, Argument, Separator, State, Term0);
 expression_to_sql({call, Function, [Argument]}, State, Term0)
-    when Function =:= isliteral; Function =:= isnumeric ->
+    when Function =:= isliteral; Function =:= isnumeric;
+         Function =:= isiri; Function =:= isuri; Function =:= isblank ->
     type_test_to_sql(Function, Argument, State, Term0);
 expression_to_sql({call, sameterm, [Left, Right]}, State, Term0) ->
     same_term_to_sql(Left, Right, State, Term0);
 expression_to_sql({call, Function, Arguments}, State, Term0)
     when Function =:= fulltext; Function =:= fulltext_rank ->
     fulltext_to_sql(Function, Arguments, State, Term0);
+expression_to_sql({call, Function, [Argument]}, State, Term0)
+    when Function =:= iri; Function =:= uri ->
+    iri_constructor_to_sql(Function, Argument, State, Term0);
 expression_to_sql({call, {iri, Iri} = Function, Arguments}, State, Term0) ->
     case z_sparql_sql_datatype:mapping(Iri) of
         {ok, Mapping} ->
@@ -859,7 +863,7 @@ normalize_fulltext(Name, QueryText, Context) ->
 type_test_to_sql(Function, {var, _} = Variable, State, Term) ->
     case maps:find(Variable, State#sql_state.bindings) of
         {ok, {resource, _Alias}} ->
-            {constant_expression(false), Term};
+            {constant_expression(resource_type_test(Function)), Term};
         {ok, {value, #sql_expression{ source = jsonb } = Expression}} ->
             % JSON properties can still contain a structured value despite a
             % name-derived hint, so inspect their actual JSON scalar type.
@@ -870,10 +874,12 @@ type_test_to_sql(Function, {var, _} = Variable, State, Term) ->
                 Result -> {constant_expression(Result), Term}
             end;
         error ->
-            throw({error, {unbound_variable, Variable}})
+            argument_type_test_to_sql(Function, Variable, State, Term)
     end;
-type_test_to_sql(_Function, {iri, _Iri}, _State, Term) ->
-    {constant_expression(false), Term};
+type_test_to_sql(Function, {iri, _Iri}, _State, Term) ->
+    {constant_expression(known_type_test(Function, uri)), Term};
+type_test_to_sql(isblank, {bnode, _Name}, _State, Term) ->
+    {constant_expression(true), Term};
 type_test_to_sql(_Function, {bnode, _Name}, _State, Term) ->
     {constant_expression(false), Term};
 type_test_to_sql(Function, {literal, _Value, _Datatype, _Language} = Literal, _State, Term) ->
@@ -901,6 +907,25 @@ type_test_expression(Function, #sql_expression{ type = Type } = Expression, Term
         Result -> {constant_expression(Result), Term}
     end.
 
+argument_type_test_to_sql(Function, Variable, State, Term) ->
+    case maps:find(Variable, State#sql_state.arguments) of
+        {ok, {resource, _Reference}} ->
+            {constant_expression(resource_type_test(Function)), Term};
+        {ok, {iri, _Iri}} ->
+            {constant_expression(known_type_test(Function, uri)), Term};
+        {ok, _Argument} ->
+            {Expression, Term1} = expression_to_sql(Variable, State, Term),
+            type_test_expression(Function, Expression, Term1);
+        error ->
+            throw({error, {unbound_variable, Variable}})
+    end.
+
+resource_type_test(isiri) -> true;
+resource_type_test(isuri) -> true;
+resource_type_test(_) -> false.
+
+jsonb_type_test_expression(isliteral, #sql_expression{ type = uri }, Term) ->
+    {constant_expression(false), Term};
 jsonb_type_test_expression(isliteral, Expression, Term) ->
     Sql = expression_sql(Expression),
     {boolean_expression([
@@ -910,7 +935,16 @@ jsonb_type_test_expression(isnumeric, Expression, Term) ->
     Sql = expression_sql(Expression),
     {boolean_expression([
         <<"(jsonb_typeof(">>, Sql, <<") = 'number')">>
-    ]), Term}.
+    ]), Term};
+jsonb_type_test_expression(isiri, #sql_expression{ type = uri } = Expression, Term) ->
+    Sql = expression_sql(Expression),
+    {boolean_expression([
+        <<"(jsonb_typeof(">>, Sql, <<") = 'string')">>
+    ]), Term};
+jsonb_type_test_expression(isuri, Expression, Term) ->
+    jsonb_type_test_expression(isiri, Expression, Term);
+jsonb_type_test_expression(_Function, _Expression, Term) ->
+    {constant_expression(false), Term}.
 
 same_term_to_sql(Left, Right, State, Term0) ->
     {Left1, Term1} = expression_to_sql(Left, State, Term0),
@@ -964,6 +998,31 @@ function_to_sql(Function, Arguments, Term) ->
         {error, Reason} ->
             throw({error, Reason})
     end.
+
+%% @doc Constant string arguments have already been resolved against BASE by
+%% the planner. Resource bindings retain their integer representation but are
+%% marked as IRIs. Other arguments use the normal uri coercion, which accepts
+%% uri and text expressions. Dynamic relative text is not resolved against BASE.
+iri_constructor_to_sql(Function, Argument, State, Term0) ->
+    {Argument1, Term1} = expression_to_sql(Argument, State, Term0),
+    case is_resource_argument(Argument, State) of
+        true ->
+            {Argument1#sql_expression{ type = uri, source = expression }, Term1};
+        false ->
+            function_to_sql(Function, [Argument1], Term1)
+    end.
+
+is_resource_argument({var, _} = Variable, #sql_state{ bindings = Bindings, arguments = Arguments }) ->
+    case maps:find(Variable, Bindings) of
+        {ok, {resource, _Alias}} -> true;
+        _ ->
+            case maps:find(Variable, Arguments) of
+                {ok, {resource, _Reference}} -> true;
+                _ -> false
+            end
+    end;
+is_resource_argument(_Argument, _State) ->
+    false.
 
 function_expression(Function, Arguments, ResultType, Term) ->
     SqlArguments = [ expression_sql(Argument) || Argument <- Arguments ],
@@ -1348,6 +1407,12 @@ known_type_test(isnumeric, Type)
     when Type =:= text; Type =:= boolean; Type =:= datetime;
          Type =:= uri; Type =:= ids; Type =:= list;
          Type =:= fts; Type =:= fulltext -> false;
+known_type_test(isiri, uri) -> true;
+known_type_test(isiri, any) -> undefined;
+known_type_test(isiri, _Type) -> false;
+known_type_test(isuri, Type) -> known_type_test(isiri, Type);
+known_type_test(isblank, any) -> undefined;
+known_type_test(isblank, _Type) -> false;
 known_type_test(_Function, _Type) -> undefined.
 
 constant_expression(Value) ->
