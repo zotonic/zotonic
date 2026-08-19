@@ -9,10 +9,10 @@
     padding: 4px;
     margin-bottom: 4px;
     margin-right: 4px;
-    background-color: #f8f8f8;
+    background-color: var(--z-admin-surface-muted);
     cursor: hand;
-    border: 1px solid #ddd;
-    border-left: 5px solid #ddd;
+    border: 1px solid var(--z-admin-border);
+    border-left: 5px solid var(--z-admin-border);
 }
 
 .survey-editor ul li textarea {
@@ -20,7 +20,7 @@
 }
 
 .survey-info {
-    color: #777;
+    color: var(--z-admin-text-muted);
     font-style: italic;
 }
 
@@ -42,9 +42,9 @@ ol.pages {
             left: -0.5em;
             top: -0.2em;
             padding: 0 0.4em;
-            background-color: #0F93D5;
-            color: white;
-            border: 4px solid white;
+            background-color: var(--bs-primary);
+            color: var(--bs3-nav-pills-active-color);
+            border: 4px solid var(--z-admin-surface);
             border-radius: 0.8em;
             font-size: 3em;
             min-width: 1.8em;
@@ -59,12 +59,12 @@ ol.pages {
 
 .page-header {
     cursor: move;
-    border-color: #0F93D5;
+    border-color: var(--bs-primary);
     border-width: 3px;
 }
 
 .page-header:hover {
-    background-color: #eee;
+    background-color: var(--z-admin-surface-hover);
 }
 
 .jump-list {
@@ -72,11 +72,11 @@ ol.pages {
     margin-left: 12px;
     // min-height: 2em;
     list-style: none;
-    border-top: 1px solid #eee;
-    border-bottom: 1px solid #eee;
+    border-top: 1px solid var(--z-admin-table-border);
+    border-bottom: 1px solid var(--z-admin-table-border);
 
     .page-jump {
-        background-color: #fcfcfc;
+        background-color: var(--z-admin-surface-muted);
 
         display: -ms-grid;
         -ms-grid-columns: auto 1fr;
@@ -114,7 +114,7 @@ ol.pages {
     padding: 0.5em 0;
     min-height: 2em;
     list-style: none;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--z-admin-table-border);
     min-height: 4em;
 
     > li.block {
@@ -129,7 +129,7 @@ ol.pages {
         grid-template-rows: auto 1fr;
 
         margin-bottom: 10px;
-        background-color: white;
+        background-color: var(--z-admin-surface);
 
         > .drag-handle {
             -ms-grid-column: 1;
@@ -169,7 +169,7 @@ ol.pages {
 
 label.block-type {
     padding: 4px;
-    color: #ccc;
+    color: var(--z-admin-text-light);
 }
 
 .hide-expanded .view-expanded {
@@ -186,7 +186,7 @@ label.block-type {
 }
 
 #survey li {
-    background-color: #f8f8f8;
+    background-color: var(--z-admin-surface-muted);
     border-left-width: 1px;
 }
 
@@ -205,7 +205,7 @@ label.block-type {
     top: 10px;
 
     .hover {
-        background-color: #f8f8ff;
+        background-color: var(--z-admin-surface-hover);
     }
 
     .col-md-4 {
@@ -232,4 +232,3 @@ label.block-type {
         }
     }
 }
-

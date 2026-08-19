@@ -82,15 +82,19 @@ Sites have the following default config settings:
 
 | Property                    | Description                                                                      | Example value       |
 | --------------------------- | -------------------------------------------------------------------------------- | ------------------- |
+| site | The name of the site, an atom. | `wwwzotonic.` |
 | environment | Set the DTAP status of the site. Can be one of production, development, test, acceptance, education or backup. Default: production | `development` |
 | hostname | The hostname of the site | `example.com` |
 | title | The title of the site. | `\"My Awesome Blog\"` |
+| subtitle | The subtitle of the site. | `\"Where content lives.\"` |
+| ui_theme | The fixed theme for the user interface. `light`, `dark` or `auto`. | `light` |
+| pagelen | The default page length for searches and pagers. | `20` |
+| email_from | The email address configured as the From for outgoing emails. | `noreply@example.com` |
 | protocol | The main protocol of the site. Used to construct urls. Default \"http\". | `\"https\"` |
 | document_domain | The document domain used for cross domain iframe javascripts. Default is the same as the cookie_domain. | `www.example.com` |
 | cookie_domain | The domain to use on cookies. This defaults to undefined, which will equal the domain of the current request. | `.example.com` |
 | session_expire_inactive | User inactivity timeout after seeing that the user has not been active. Default: 14400 (4 hours) | `3600 (1 hour)` |
 | autologon_expire | Auto logon cookie timeout setting. Default: 15552000 (3 months) | `31536000 (365 days)` |
-| site | The name of the site, an atom. | `wwwzotonic.` |
 | hsts | Indicate if the site should use Strict Transport Security. When set, the browser will no longer use insecure http to access the site. Warning: Be sure your site is accessible via https before enabeling this feature. Default: false | `true` |
 | hsts_maxage               | The time, in seconds which browsers are allowed to remember the HSTS setting of the site. Default: 17280000 (200 days) |                     |
 | hsts_include_subdomains | When set, the browser also does not use http for subdomains. Default: false      |                     |
@@ -111,6 +115,7 @@ Available Model API Paths
 | `get` | `/is_ssl/...` | Return whether the site is currently considered SSL-enabled. |
 | `get` | `/title/...` | Return the configured site title as binary text. |
 | `get` | `/subtitle/...` | Return the configured site subtitle as binary text (empty binary when unset). |
+| `get` | `/ui_theme/...` | Return the configured fixed UI theme (`light`, `dark`, or `auto`) (undefined when unset). |
 | `get` | `/email_from/...` | Return the effective sender address used for outgoing email. |
 | `get` | `/pagelen/...` | Return default search page length (configured value or fallback default). |
 | `get` | `/language/...` | Return the current request language. |
@@ -168,6 +173,8 @@ m_get([ <<"subtitle">> | Rest ], _Msg, Context) ->
         T -> unicode:characters_to_binary(T)
     end,
     {ok, {SubTitle, Rest}};
+m_get([ <<"ui_theme">> | Rest ], _Msg, Context) ->
+    {ok, {m_config:get_value(site, ui_theme, Context), Rest}};
 m_get([ <<"email_from">> | Rest ], _Msg, Context) ->
     EmailFrom = z_email:get_email_from(Context),
     {ok, {EmailFrom, Rest}};

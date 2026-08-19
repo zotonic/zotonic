@@ -69,7 +69,7 @@ ul.media {
         $_height: $_image_height;
 
         margin: 0 $_item_spacing $_item_spacing 0;
-        background: $gray;
+        background: var(--z-admin-media-item-bg);
         width: $_width;
         height: $_height;
         float: left;
@@ -99,7 +99,7 @@ ul.media {
             position: absolute;
             top: 6px;
             right: 6px;
-            background: rgb(240,240,240,0.5);
+            background: var(--z-admin-media-remove-bg);
             border-radius: 50%;
             width: 20px;
             height: 20px;
@@ -115,7 +115,7 @@ ul.media {
             bottom: 0;
             left: 0;
             right: 0;
-            background-color: rgba(255,255,255,0.5);
+            background-color: var(--z-admin-media-caption-bg);
 
             .caption {
                 height: $roundBtnSize;
@@ -131,7 +131,7 @@ ul.media {
                     width: calc($_image_width - $roundBtnSize - 3px);
                     vertical-align: text-top;
                     color: white;
-                    text-shadow: 2px 2px black;
+                    text-shadow: var(--z-admin-image-text-shadow);
                 }
             }
         }
@@ -214,7 +214,8 @@ $_leaderImageHeight: 60px;
     z-index: 10;
 
     margin-bottom: 4px;
-    background-color: $backgroundColorLighter;
+    background-color: var(--z-admin-surface-muted);
+    border-color: var(--z-admin-table-border);
 }
 
 
@@ -227,7 +228,7 @@ img.mediaclass-admin-leader-image {
 }
 
 .admin-edit-media {
-    background: white;
+    background: var(--z-admin-edit-media-bg);
     padding: 0;
     margin: 0 0 10px 0;
     @extend .admin-image-border;
