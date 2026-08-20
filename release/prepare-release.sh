@@ -1,21 +1,48 @@
 #!/bin/bash
 
-if [ "$1" = "" ]; then
+set -euo pipefail
+
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd -- "$SCRIPT_DIR/.." && pwd)"
+RELEASE_HEADER="$REPO_ROOT/apps/zotonic_core/include/zotonic_release.hrl"
+VERSION_FILE="$REPO_ROOT/VERSION"
+
+if [ "$#" -ne 1 ]; then
     echo "Usage example: $0 1.2.3"
     exit 1
 fi
 
 VERSION="$1"
-MINOR=$(echo $VERSION | sed -e 's/^\([0-9][0-9]*.[0-9][0-9]*\).*$/\1/')
+
+if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z]+([.-][0-9A-Za-z]+)*)?(\+[0-9A-Za-z]+([.-][0-9A-Za-z]+)*)?$ ]]; then
+    echo "Invalid release version: $VERSION" >&2
+    echo "Expected a semantic version such as 1.2.3 or 1.2.3-rc.1." >&2
+    exit 1
+fi
+
+cd "$REPO_ROOT"
+
+if ! git diff --quiet -- "$RELEASE_HEADER" "$VERSION_FILE" \
+    || ! git diff --cached --quiet -- "$RELEASE_HEADER" "$VERSION_FILE"
+then
+    echo "The release version files already contain uncommitted changes." >&2
+    echo "Commit or restore them before preparing a release." >&2
+    exit 1
+fi
 
 # Increments version numbers where needed
 # Usage: ./prepare-release.sh 1.2.3
 
-sed -i.bck -e "s/ZOTONIC_VERSION, .*)./ZOTONIC_VERSION, \"$VERSION\")./" apps/zotonic_core/include/zotonic_release.hrl
-echo -n "$VERSION" > VERSION
+if ! grep -Eq '^-define\(ZOTONIC_VERSION, "[^"]+"\)\.$' "$RELEASE_HEADER"; then
+    echo "Could not find ZOTONIC_VERSION in $RELEASE_HEADER" >&2
+    exit 1
+fi
 
-rm -f doc/conf.py.bck
-rm -f apps/zotonic_core/include/zotonic_release.hrl.bck
+sed -E -i.bck \
+    -e "s/^-define\(ZOTONIC_VERSION, \"[^\"]+\"\)\.$/-define(ZOTONIC_VERSION, \"$VERSION\")./" \
+    "$RELEASE_HEADER"
+rm -f -- "$RELEASE_HEADER.bck"
+printf '%s' "$VERSION" > "$VERSION_FILE"
 
-git add doc/conf.py apps/zotonic_core/include/zotonic_release.hrl VERSION
+git add -- "$RELEASE_HEADER" "$VERSION_FILE"
 git status
