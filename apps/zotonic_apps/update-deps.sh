@@ -57,4 +57,4 @@ sed \
     -e '}' \
     "$TEMPLATE" > "$TEMP_CONFIG"
 
-cp "$TEMP_CONFIG" "$CONFIG"
+cat "$TEMP_CONFIG" > "$CONFIG"
