@@ -5,13 +5,26 @@
 {% block body %}
 
 {% if is_result_email %}
-	<p>{_ This is a result for: _} <a href="{{ id.page_url_abs }}">{{ id.title }}</a><br/>
-	{_ You cannot reply to this email. _}</p>
-	{% block edit_answer %}
-		{% if is_result_email %}
+	<div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 16px; background-color: #eee;">
+		<p>
+			{_ This is a result for: _} <a href="{{ id.page_url_abs }}">{{ id.title }}</a>
+			{% if respondent_id %}
+				<br>
+				{% if user_id and respondent_id /= user_id %}
+					{_ It was filled in for: _} <a href="{{ respondent_id.page_url_abs }}">{% include "_name.tpl" id=respondent_id %}</a>
+					({_ by _} {% include "_name.tpl" id=user_id %})
+				{% else %}
+					{_ It was filled in by: _} <a href="{{ respondent_id.page_url_abs }}">{% include "_name.tpl" id=respondent_id %}</a>
+				{% endif %}
+			{% endif %}
+		</p>
+		<p>
+			{_ You cannot reply to this email. _}
+		</p>
+		{% block edit_answer %}
 			<p><a href="{% url admin_edit_rsc id=id absolute_url %}">{_ Check the answer in the admin. _}</a></p>
-		{% endif %}
-	{% endblock %}
+		{% endblock %}
+	</div>
 {% endif %}
 
 {% block feedback %}
@@ -24,50 +37,52 @@
 	{% endif %}
 {% endblock %}
 
+{% with id|survey_test_max_points as max_points %}
+
 {% block test_result %}
-	{% if id.survey_test_percentage and result %}
-	    {% if id|survey_test_max_points as max_points %}
-	    	{% with result.points >= max_points * (id.survey_test_percentage / 100) as is_passed %}
-		        <h2>
-		        	<br/>
-		            {{ (result.points / max_points * 100)|round }}% &ndash;
-		            {% if is_passed %}
-		                {_ Passed _}
-		            {% else %}
-		                {_ Failed _}
-		            {% endif %}
-		        </h2>
+	{% if max_points and id.survey_test_percentage and result %}
+    	{% with result.points >= max_points * (id.survey_test_percentage / 100) as is_passed %}
+	        <h2>
+	        	<br>
+	            {{ (result.points / max_points * 100)|round }}% &ndash;
+	            {% if is_passed %}
+	                {_ Passed _}
+	            {% else %}
+	                {_ Failed _}
+	            {% endif %}
+	        </h2>
 
-		        <table class="table" style="width: auto">
-		            <tr style="border-top: 1px solid #ccc">
-		                <td style="text-align: left; padding: 4px; vertical-align: top; border-top: 1px solid #dddddd;">{_ Points _}</td>
-		                <th valign="top" style="text-align: right; padding: 4px; vertical-align: top; border-top: 1px solid #dddddd;">{{ result.points }} / {{ max_points }}</th>
-		            </tr>
-		            <tr style="border-top: 1px solid #ccc">
-		                <td style="text-align: left; padding: 4px; vertical-align: top; border-top: 1px solid #dddddd;">{_ Needed for pass _}</td>
-		                <th valign="top" style="text-align: right; padding: 4px; vertical-align: top; border-top: 1px solid #dddddd;">{{ id.survey_test_percentage }}%</th>
-		            </tr>
-		            <tr style="border-top: 1px solid #ccc">
-		                <td style="text-align: left; padding: 4px; vertical-align: top; border-top: 1px solid #dddddd;">{_ Your result _}</td>
-		                <th valign="top" style="text-align: right; padding: 4px; vertical-align: top; border-top: 1px solid #dddddd;">{{ (result.points / max_points * 100)|round }}%</th>
-		            </tr>
-		        </table>
+	        <table class="table" style="width: auto">
+	            <tr style="border-top: 1px solid #ccc">
+	                <td style="text-align: left; padding: 4px; vertical-align: top; border-top: 1px solid #dddddd;">{_ Points _}</td>
+	                <th valign="top" style="text-align: right; padding: 4px; vertical-align: top; border-top: 1px solid #dddddd;">{{ result.points }} / {{ max_points }}</th>
+	            </tr>
+	            <tr style="border-top: 1px solid #ccc">
+	                <td style="text-align: left; padding: 4px; vertical-align: top; border-top: 1px solid #dddddd;">{_ Needed for pass _}</td>
+	                <th valign="top" style="text-align: right; padding: 4px; vertical-align: top; border-top: 1px solid #dddddd;">{{ id.survey_test_percentage }}%</th>
+	            </tr>
+	            <tr style="border-top: 1px solid #ccc">
+	                <td style="text-align: left; padding: 4px; vertical-align: top; border-top: 1px solid #dddddd;">{_ Your result _}</td>
+	                <th valign="top" style="text-align: right; padding: 4px; vertical-align: top; border-top: 1px solid #dddddd;">{{ (result.points / max_points * 100)|round }}%</th>
+	            </tr>
+	        </table>
 
-		        <p>
-		        	<br/>
-		        	<br/>
-		        </p>
-	        {% endwith %}
-        {% endif %}
-	{% endif %}
+	        <p>
+	        	<br/>
+	        	<br/>
+	        </p>
+        {% endwith %}
+    {% endif %}
 {% endblock %}
 
-{% if is_result_email or id.survey_email_answers /= 3 %}
-{% if id.survey_show_results /= 3
+{% if is_result_email
+	or max_points == 0
+	or id.survey_show_results /= 3
 	or (
-			id.survey_test_percentage
+			id.survey_show_results == 3
+		and id.survey_test_percentage
 		and result
-		and result.points >= id|survey_test_max_points * (id.survey_test_percentage / 100)
+		and result.points >= max_points * (id.survey_test_percentage / 100)
 	)
 %}
 	{% with is_result_email
@@ -171,6 +186,7 @@
 	</table>
 	{% endwith %}
 {% endif %}
-{% endif %}
+
+{% endwith %}
 
 {% endblock %}

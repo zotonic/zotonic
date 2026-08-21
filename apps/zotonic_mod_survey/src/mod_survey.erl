@@ -1371,7 +1371,7 @@ maybe_mail(SurveyId, Answers, ResultId, IsEditing, Context) ->
                 _ -> m_survey:single_result(SurveyId, ResultId, Context)
             end,
             mail_respondent(SurveyId, Answers, ResultId, PrepAnswers, SurveyResult, IsEditing, Context),
-            mail_result(SurveyId, PrepAnswers, SurveyResult, Attachments, Context);
+            mail_result(SurveyId, ResultId, PrepAnswers, SurveyResult, IsEditing, Attachments, Context);
         false ->
             nop
     end.
@@ -1385,17 +1385,23 @@ probably_email(SurveyId, Context) ->
     orelse z_convert:to_bool(m_rsc:p_no_acl(SurveyId, <<"survey_email_respondent">>, Context)).
 
 %% @doc mail the survey result to an e-mail address
-mail_result(SurveyId, PrepAnswers, SurveyResult, Attachments, Context) ->
+mail_result(SurveyId, ResultId, PrepAnswers, SurveyResult, IsEditing, Attachments, Context) ->
     case m_survey:survey_emails(SurveyId, Context) of
         [] -> skip;
         Es ->
             % We use a sudo for the mailing, as the survey might be filled in
             % using a special access link, so there is no user or ACL context available.
+            RespondentId = case IsEditing of
+                false -> z_acl:user(Context);
+                true -> m_survey:answer_user(ResultId, Context)
+            end,
             lists:foreach(
                 fun(E) ->
                     Vars = [
                         {is_result_email, true},
                         {id, SurveyId},
+                        {respondent_id, RespondentId},
+                        {user_id, z_acl:user(Context)},
                         {answers, PrepAnswers},
                         {result, SurveyResult}
                     ],

@@ -28,7 +28,7 @@
 
 -spec max_points(integer(), #context{}) -> integer().
 max_points(Id, Context) ->
-    case m_rsc:p(Id, blocks, Context) of
+    case m_rsc:p(Id, <<"blocks">>, Context) of
         [] ->
             0;
         Blocks when is_list(Blocks) ->
