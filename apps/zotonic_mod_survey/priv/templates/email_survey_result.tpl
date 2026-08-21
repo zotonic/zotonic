@@ -75,6 +75,11 @@
     {% endif %}
 {% endblock %}
 
+{# Check email answers setting for result email #}
+{% if is_result_email
+	  or id.survey_email_answers /= 3
+%}
+{# For tests, also follow the survey_show_results setting #}
 {% if is_result_email
 	or max_points == 0
 	or id.survey_show_results /= 3
@@ -185,6 +190,7 @@
 		{% endif %}
 	</table>
 	{% endwith %}
+{% endif %}
 {% endif %}
 
 {% endwith %}
