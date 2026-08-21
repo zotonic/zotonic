@@ -119,7 +119,7 @@
 				</p>
 				<div class="controls">
 					<label class="radio">
-	        			<input type="radio" name="survey_show_results" value="" {% if not id.survey_show_results %}checked{% endif %}>
+	        			<input type="radio" name="survey_show_results" value="0" {% if not id.survey_show_results %}checked{% endif %}>
 	        			{_ Thank you text only _}
 					</label>
 					<label class="radio">
@@ -233,7 +233,7 @@
 			{% with id.survey_email_answers|to_integer as survey_email_answers %}
 				<div class="radio">
 					<label>
-						<input type="radio" name="survey_email_answers" value="" {% if not survey_email_answers %}checked{% endif %}> {_ All answers for anonymous and logged-in respondents _}
+						<input type="radio" name="survey_email_answers" value="0" {% if not survey_email_answers %}checked{% endif %}> {_ All answers for anonymous and logged-in respondents _}
 					</label>
 				</div>
 				<div class="radio">
