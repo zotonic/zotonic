@@ -35,7 +35,10 @@
     out_mime/2,
     string2filter/2,
     cmd_args/3,
-    calc_size/7
+    calc_size/7,
+
+    is_legacy_imagemagick/0,
+    imagemagick_detect/1
 ]).
 
 %% Default resize timeout is 5 minutes (300_000 msec)
@@ -69,7 +72,7 @@ convert(InFile, MediumFilename, OutFile, Filters, Context) ->
                 true ->
                     case z_mediaclass:expand_mediaclass_checksum(Filters) of
                         {ok, FiltersExpanded} ->
-                            convert_1(os:find_executable("convert"), InFile, OutFile, Mime, FileProps, FiltersExpanded);
+                            convert_1(imagemagick_convert_cmd(), InFile, OutFile, Mime, FileProps, FiltersExpanded);
                         {error, _} = Error ->
                             lager:warning("cannot expand mediaclass for ~p (~p)", [Filters, Error]),
                             Error
@@ -82,9 +85,55 @@ convert(InFile, MediumFilename, OutFile, Filters, Context) ->
             {error, Reason}
     end.
 
+%% @doc Find ImageMagick's 'convert' command on the current system, if any.
+%% This prefers the 'magick' command introduced in v7 if possible and
+%% otherwise falls back to the 'convert' one of previous ImageMagick's versions.
+%% Note: since system installations don't change that often, the result is cached.
+-spec imagemagick_convert_cmd() -> Cmd | false when Cmd :: string().
+imagemagick_convert_cmd() ->
+    #{ cmd := Cmd } = imagemagick_find_executable(),
+    Cmd.
+
+%% @doc Internal helper to discover and cache the ImageMagick executable and
+%% whether we are running a legacy (pre-v7) installation.
+-spec imagemagick_find_executable() -> #{ cmd := string() | false, legacy := boolean() }.
+imagemagick_find_executable() ->
+    Key = {?MODULE, imagemagick_find_executable},
+    case persistent_term:get(Key, undefined) of
+        undefined ->
+            Result = imagemagick_detect(fun os:find_executable/1),
+            persistent_term:put(Key, Result),
+            Result;
+        Result ->
+            Result
+    end.
+
+%% @doc Detect the ImageMagick executable using the supplied finder function.
+%% The finder has the same signature as os:find_executable/1 and returns either
+%% a path string or false.  Separating this logic from the caching wrapper makes
+%% the v6/v7 detection deterministically testable.
+-spec imagemagick_detect(FindExe) -> #{ cmd := string() | false, legacy := boolean() } when
+    FindExe :: fun((string()) -> string() | false).
+imagemagick_detect(FindExe) ->
+    case FindExe("magick") of
+        false ->
+            Cmd0 = case FindExe("convert") of
+                false -> false;
+                Cmd1 -> z_utils:os_filename(Cmd1)
+            end,
+            #{ cmd => Cmd0, legacy => true };
+        CmdMagick ->
+            #{ cmd => z_utils:os_filename(CmdMagick), legacy => false }
+    end.
+
+-spec is_legacy_imagemagick() -> boolean().
+is_legacy_imagemagick() ->
+    #{ legacy := Legacy } = imagemagick_find_executable(),
+    Legacy.
+
 convert_1(false, _InFile, _OutFile, _Mime, _FileProps, _Filters) ->
-    lager:error("Install ImageMagick 'convert' to generate previews of images."),
-    {error, convert_missing};
+    lager:error("Install ImageMagick to generate previews of images."),
+    {error, imagemagick_missing};
 convert_1(ConvertCmd, InFile, OutFile, Mime, FileProps, Filters) ->
     OutMime = z_media_identify:guess_mime(OutFile),
     case cmd_args(FileProps, Filters, OutMime) of
@@ -98,7 +147,7 @@ convert_2(CmdArgs, ConvertCmd, InFile, OutFile, Mime, FileProps) ->
     file:delete(OutFile),
     ok = filelib:ensure_dir(OutFile),
     Cmd = lists:flatten([
-        z_utils:os_filename(ConvertCmd), " ",
+        ConvertCmd, " ",
         opt_density(FileProps),
         z_utils:os_filename(InFile++infile_suffix(Mime)), " ",
         lists:flatten(z_utils:combine(32, CmdArgs)), " ",
@@ -436,27 +485,25 @@ filter2arg({removebg, MatteFuzz}, Width, Height, AllFilters) ->
     {Matte, Fuzz} = case binary:split(z_convert:to_binary(MatteFuzz), <<",">>) of
         [ M, F ] ->
             {"-mattecolor "++z_utils:os_escape(z_convert:to_list(M)), z_convert:to_integer(F)};
-        F ->
-            {"-matte", z_convert:to_integer(F)}
+        [ F ] ->
+            {"-alpha set", z_convert:to_integer(F)}
     end,
-    Filter = case lists:member(lossless, AllFilters) of
-                 true ->
-                     %% PNG images get the alpha channel flood-filled to remove the background.
-                     [Matte ++ " -fill none -fuzz ", integer_to_list(Fuzz), "% ",
-                      "-draw 'matte 0,0 floodfill' ",
-                      "-draw 'matte 0,", integer_to_list(Height-1), " floodfill' ",
-                      "-draw 'matte ", integer_to_list(Width-1), ",0 floodfill' ",
-                      "-draw 'matte ", integer_to_list(Width-1), ",", integer_to_list(Height-1), " floodfill' "
-                     ];
-                 false ->
-                     %% JPEG images get flood-filled with white to remove the background.
-                     [Matte ++ "-fill white -fuzz ", integer_to_list(Fuzz), "% ",
-                      "-draw 'color 0,0 floodfill' ",
-                      "-draw 'color 0,", integer_to_list(Height-1), " floodfill' ",
-                      "-draw 'color ", integer_to_list(Width-1), ",0 floodfill' ",
-                      "-draw 'color ", integer_to_list(Width-1), ",", integer_to_list(Height-1), " floodfill' "
-                     ]
-             end,
+    {Draw, Fill} = case {lists:member(lossless, AllFilters), is_legacy_imagemagick()} of
+        %% PNG images get the alpha channel flood-filled to remove the background.
+        {true, true} -> {"matte", "none"};
+        {true, false} -> {"alpha", "none"};
+        %% JPEG images get flood-filled with white to remove the background.
+        _ -> {"color", "white"}
+    end,
+    Height_1 = integer_to_list(Height-1),
+    Width_1 = integer_to_list(Width-1),
+    Filter = [
+        Matte ++ " -fill " ++ Fill ++ " -fuzz ", integer_to_list(Fuzz), "% ",
+        "-draw '" ++ Draw ++ " 0,0 floodfill' ",
+        "-draw '" ++ Draw ++ " 0,", Height_1, " floodfill' ",
+        "-draw '" ++ Draw ++ " ", Width_1, ",0 floodfill' ",
+        "-draw '" ++ Draw ++ " ", Width_1, ",", Height_1, " floodfill' "
+    ],
     {Width, Height, Filter};
 % Custom ImageMagick command line arguments -- only available from a mediaclass file
 filter2arg({magick, Arg}, Width, Height, _AllFilters) ->

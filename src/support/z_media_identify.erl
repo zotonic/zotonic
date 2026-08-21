@@ -266,14 +266,39 @@ identify_file_unix(Cmd, File, OriginalFilename) ->
 %% @doc Try to identify the file using image magick
 -spec identify_file_imagemagick(win32|unix, Filename::string(), MimeFile::string()|undefined) -> {ok, Props::list()} | {error, term()}.
 identify_file_imagemagick(OsFamily, ImageFile, MimeFile) ->
-    identify_file_imagemagick_1(os:find_executable("identify"), OsFamily, ImageFile, MimeFile).
+    identify_file_imagemagick_1(imagemagick_identify_cmd(), OsFamily, ImageFile, MimeFile).
+
+
+%% @doc Find ImageMagick's 'identify' command on the current system, if any.
+%% This prefers the 'magick identify' command introduced in v7 if possible and
+%% otherwise falls back to the 'identify' one of previous ImageMagick's versions.
+%% Note: since system installations don't change that often, the result is cached.
+-spec imagemagick_identify_cmd() -> Cmd | false when Cmd :: string().
+imagemagick_identify_cmd() ->
+    Key = {?MODULE, imagemagick_identify_cmd},
+    case persistent_term:get(Key, undefined) of
+        undefined ->
+            ResultCmd = case os:find_executable("magick") of
+                false ->
+                    case os:find_executable("identify") of
+                        false -> false;
+                        Cmd -> z_filelib:os_filename(Cmd)
+                    end;
+                Cmd ->
+                    z_filelib:os_filename(Cmd) ++ " identify"
+            end,
+            persistent_term:put(Key, ResultCmd),
+            ResultCmd;
+        ResultCmd ->
+            ResultCmd
+    end.
 
 identify_file_imagemagick_1(false, _OsFamily, _ImageFile, _MimeFile) ->
-    lager:error("Please install ImageMagick 'identify' for identifying the type of uploaded files."),
-    {error, "'identify' not installed"};
+    lager:error("Please install ImageMagick for identifying the type of uploaded files."),
+    {error, imagemagick_missing};
 identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeFile) ->
     CleanedImageFile = z_utils:os_filename(ImageFile ++ "[0]"),
-    CmdOutput = os:cmd(z_utils:os_filename(Cmd)
+    CmdOutput = os:cmd(Cmd
                        ++" -quiet "
                        ++CleanedImageFile
                        ++" 2> " ++ devnull(OsFamily)),
@@ -287,7 +312,7 @@ identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeFile) ->
                     string:tokens(CmdOutput, "\n")),
     case Lines of
         [] ->
-            Err = os:cmd(z_utils:os_filename(Cmd)
+            Err = os:cmd(Cmd
                          ++" -quiet "
                          ++CleanedImageFile
                          ++" 2>&1"),
