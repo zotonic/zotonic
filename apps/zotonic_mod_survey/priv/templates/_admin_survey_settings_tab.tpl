@@ -119,7 +119,7 @@
 				</p>
 				<div class="controls">
 					<label class="radio">
-	        			<input type="radio" name="survey_show_results" value="" {% if not id.survey_show_results %}checked{% endif %}>
+	        			<input type="radio" name="survey_show_results" value="0" {% if not id.survey_show_results %}checked{% endif %}>
 	        			{_ Thank you text only _}
 					</label>
 					<label class="radio">

@@ -77,14 +77,14 @@
 
 {# Check email answers setting for result email #}
 {% if is_result_email
-	  or id.survey_email_answers /= 3
+	  or id.survey_email_answers|default:0 /= 3
 %}
 {# For tests, also follow the survey_show_results setting #}
 {% if is_result_email
 	or max_points == 0
-	or id.survey_show_results /= 3
+	or id.survey_show_results|default:0 /= 3
 	or (
-			id.survey_show_results == 3
+			id.survey_show_results|default:0 == 3
 		and id.survey_test_percentage
 		and result
 		and result.points >= max_points * (id.survey_test_percentage / 100)
