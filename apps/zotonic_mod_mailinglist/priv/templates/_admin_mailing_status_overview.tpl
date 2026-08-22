@@ -1,6 +1,6 @@
 
 {% with m.mailinglist.rsc_stats[id] as rsc_stats %}
-{% with m.mailinglist.scheduled[id] as scheduled %}
+{% with m.mailinglist.tasks[id] as mailing_tasks %}
 
 <h3>{_ Mailing lists _}</h3>
 
@@ -16,7 +16,7 @@
 	    <th width="30%">{_ Title _}</th>
 	    <th width="10%">{_ Actions _}</th>
 	    <th width="10%">{_ Recipients _}</th>
-	    <th width="15%">{_ Sent on _}</th>
+	    <th width="15%">{_ Sent on / Status _}</th>
 	    <th width="35%">{_ Statistics _}</th>
         </tr>
     </thead>
@@ -24,12 +24,19 @@
     <tbody>
     {% for title, mid in m.search[{all_bytitle cat="mailinglist" pagelen=1000}] %}
     {% with m.mailinglist.stats[mid] as stats %}
+	{% with mailing_tasks[mid] as tasks %}
 	<tr id="mailinglist-{{ mid }}">
 	    <td>
             <a href="{% url admin_mailinglist_recipients id=mid %}">{{ title|default:"untitled" }}</a>
         </td>
         <td>
-            {% if mid|member:scheduled %}
+            {% if m.rsc[mid].name == "mailinglist_test" %}
+                {% button class="btn btn-default btn-xs"
+                          text=_"send test now"
+                          action={mailing_page_test id=id}
+                          title=_"Send immediately; the page does not need to be published."
+                %}
+            {% elif tasks %}
                 {% button class="btn btn-default btn-xs"
                           text=_"cancel"
                           postback={dialog_mailing_cancel_confirm list_id=mid page_id=id}
@@ -60,10 +67,21 @@
         <td>
             {% if rsc_stats[mid].created %}
                 <a href="{% url admin_log_email content=id other=mid severity=4 %}" title="{_ Click to view log entries _}">{{ rsc_stats[mid].created|date:"Y-m-d H:i" }}</a>
-                {% if mid|member:scheduled %}{_ scheduled _}{% endif %}
-            {% else %}
-                {% if mid|member:scheduled %}{_ scheduled _}{% endif %}
             {% endif %}
+            {% for task in tasks %}
+                <div>
+                    {% if task.type == "date" %}
+                        <span class="label label-info">{_ scheduled _}</span>
+                        {{ task.due|date:_"Y-m-d H:i" }}
+                    {% else %}
+                        <span class="label label-info">{_ scheduled _}</span>
+                        {{ task.due|date:_"Y-m-d H:i" }}
+                        <div class="text-muted">{_ when the page becomes published _}</div>
+                    {% endif %}
+                </div>
+            {% empty %}
+                {% if not rsc_stats[mid].created %}-{% endif %}
+            {% endfor %}
         </td>
 
         <td>
@@ -77,10 +95,11 @@
             {% endif %}
         </td>
     </tr>
+	{% endwith %}
     {% endwith %}
 	{% empty %}
         <tr>
-            <td colspan="4">{_ No items found _}</td>
+            <td colspan="5">{_ No items found _}</td>
         </tr>
 	{% endfor %}
     </tbody>

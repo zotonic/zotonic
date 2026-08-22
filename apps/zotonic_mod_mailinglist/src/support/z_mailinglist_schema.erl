@@ -1,9 +1,9 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2011 Arjan Scherpenisse <arjan@scherpenisse.net>
+%% @copyright 2011-2026 Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @doc Schema definition for mailinglist module, including upgraders
 %% @end
 
-%% Copyright 2011 Arjan Scherpenisse
+%% Copyright 2011-2026 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -18,6 +18,12 @@
 %% limitations under the License.
 
 -module(z_mailinglist_schema).
+-moduledoc("
+Installs and upgrades the mailing-list recipient and scheduled-mailing tables.
+
+Scheduled rows have type publication when waiting for the page publication
+period, or type date when waiting for their due timestamp.
+").
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -78,7 +84,7 @@ datamodel() ->
     }.
 
 
-%% @doc Install the SQL tables to track recipients and scheduled mailings.
+%% @doc Install or upgrade the SQL tables used for recipients and waiting mailings.
 manage_schema(_Upgrade, Context) ->
     case z_db:table_exists(mailinglist_recipient, Context) of
         false ->
@@ -104,10 +110,46 @@ manage_schema(_Upgrade, Context) ->
                     z_db:flush(Context);
                 true ->
                     ok
-            end
+            end,
+            ensure_scheduled_columns(Context)
     end,
     datamodel().
 
+ensure_scheduled_columns(Context) ->
+    case z_db:column_exists(mailinglist_scheduled, due, Context) of
+        true ->
+            ok;
+        false ->
+            [] = z_db:q("
+                alter table mailinglist_scheduled
+                add column due timestamp with time zone not null default now()",
+                Context)
+    end,
+    case z_db:column_exists(mailinglist_scheduled, type, Context) of
+        true ->
+            ok;
+        false ->
+            [] = z_db:q("
+                alter table mailinglist_scheduled
+                add column type character varying(20) not null default 'publication',
+                add constraint mailinglist_scheduled_type_check
+                    check (type in ('date', 'publication'))",
+                Context)
+    end,
+    [] = z_db:q("
+        create index if not exists mailinglist_scheduled_type_due_key
+        on mailinglist_scheduled (type, due)",
+        Context),
+    _ = z_db:q("
+        update mailinglist_scheduled m
+        set due = coalesce(r.publication_start, $1)
+        from rsc r
+        where m.page_id = r.id
+          and m.type = 'publication'
+          and m.due is distinct from coalesce(r.publication_start, $1)",
+        [?ST_JUTTEMIS],
+        Context),
+    z_db:flush(Context).
 
 do_install(Context) ->
     z_db:q("
@@ -133,9 +175,12 @@ do_install(Context) ->
 					page_id INT NOT NULL,
 					mailinglist_id INT NOT NULL,
                     props bytea,
+                    type character varying(20) NOT NULL DEFAULT 'publication',
+                    due timestamp with time zone NOT NULL DEFAULT now(),
                     timestamp timestamp with time zone NOT NULL DEFAULT now(),
 
 					CONSTRAINT mailinglist_scheduled_pkey PRIMARY KEY (page_id, mailinglist_id),
+					CONSTRAINT mailinglist_scheduled_type_check CHECK (type IN ('date', 'publication')),
 					CONSTRAINT fk_mailinglist_id FOREIGN KEY (mailinglist_id)
 				      REFERENCES rsc (id)
 				      ON UPDATE CASCADE ON DELETE CASCADE,
@@ -143,5 +188,8 @@ do_install(Context) ->
 				      REFERENCES rsc (id)
 				      ON UPDATE CASCADE ON DELETE CASCADE
 				)", Context),
+    z_db:q("
+                CREATE INDEX mailinglist_scheduled_type_due_key
+                ON mailinglist_scheduled (type, due)", Context),
     z_db:flush(Context),
     ok.
