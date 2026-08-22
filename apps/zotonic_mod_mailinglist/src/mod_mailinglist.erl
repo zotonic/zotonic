@@ -137,32 +137,34 @@ The mailing status page
 From the mailing status page you can send the current resource to a mailing list, to the test mailing list or to an
 email address.
 
-
-
 ### Sending mailings
 
 The status page lists every mailing list in the system. On each row you see how many recipients the list has, and the
 status, e.g. if the mailing has already been sent to this list or not.
-Mailing list module for managing recipient lists, subscriptions, and bulk mail delivery workflows.
 
-finish description of the mailing status page
+By default a mailing is queued for immediate sending. It can also be scheduled for a specific date and time. This
+explicit date is independent of the publication period, just like sending immediately.
 
-Mailings are only send when the to be send page is published and publicly visible. The page should also be within its
-publication period.
+For pages that are not yet public, a mailing can instead wait until the page is published and within its publication
+period. Dated and publication-dependent mailings are stored together in the mailinglist_scheduled table. The mailing
+list module checks every three minutes if one of these waiting mailings can be sent.
 
-You can schedule a mailing by publishing the page but setting its publication start date to the date and time you want
-your mailing to be send. The mailing list module checks every hour if there are any mailings ready for sending.
+All mailings to a mailing list are first stored in mailinglist_scheduled, including mailings that should be sent
+immediately. The only exception is a test mailing to a single e-mail address, which is sent directly.
 
-An exception is made for the test mailing list, mailings to that mailing list are always sent.
+An exception is made for the test mailing list. A resource does not need to be published to be mailed to this list,
+but the sender must be allowed to view the resource. Test-list mailings are always sent immediately and cannot be
+scheduled.
 
 Accepted Events
 ---------------
 
 This module handles the following notifier callbacks:
 
-- `observe_acl_is_allowed`: Allow mailinglist admin to add or remove subscribers to mailinglists using `z_acl:is_allowed`.
+- `observe_acl_is_allowed`: Allow mailinglist admins to add or remove subscriber edges to mailinglists.
 - `observe_admin_menu`: Contribute module entries to the admin menu tree.
-- `observe_mailinglist_message`: Send status messages to a recipient using `z_context:set_language`.
+- `observe_mailinglist_message`: Send status messages (like welcome and goodbye) to a recipient.
+- `observe_rsc_pivot_done`: Update publication mailing due dates after their page is pivoted.
 - `observe_search_query`: Add mailing-list specific search query handling for `mailinglist_recipients`.
 - `observe_tick_24h`: Every 24h cleanup the mailinglists recipients using `m_mailinglist:periodic_cleanup`.
 
@@ -178,7 +180,7 @@ Delegate callbacks:
 -mod_title("Mailing list").
 -mod_description("Mailing lists. Send a page to a list of recipients.").
 -mod_prio(600).
--mod_schema(3).
+-mod_schema(4).
 -mod_depends([ admin, mod_wires, mod_logging, mod_email_status ]).
 -mod_provides([ mailinglist ]).
 -mod_config([
@@ -216,9 +218,11 @@ Delegate callbacks:
     observe_acl_is_allowed/2,
     observe_search_query/2,
     observe_mailinglist_message/2,
+    observe_rsc_pivot_done/2,
     observe_tick_24h/2,
     event/2,
-    observe_admin_menu/3
+    observe_admin_menu/3,
+    queue_mailing/4
 ]).
 
 -export([
@@ -324,6 +328,12 @@ observe_mailinglist_message(#mailinglist_message{what=Message, list_id=ListId, r
 observe_tick_24h(tick_24h, Context) ->
     m_mailinglist:periodic_cleanup(Context).
 
+%% @doc Keep publication mailing due dates in sync with publication_start.
+-spec observe_rsc_pivot_done(#rsc_pivot_done{}, z:context()) -> ok.
+observe_rsc_pivot_done(#rsc_pivot_done{ id = Id }, Context) ->
+    _ = m_mailinglist:update_scheduled_publication_due(Id, Context),
+    ok.
+
 
 %% @doc Request confirmation of canceling this mailing.
 event(#postback{message={dialog_mailing_cancel_confirm, Args}}, Context) ->
@@ -341,9 +351,12 @@ event(#postback{message={dialog_mailing_cancel_confirm, Args}}, Context) ->
 event(#postback{message={mailing_cancel, Args}}, Context) ->
     MailingId = proplists:get_value(list_id, Args),
     PageId = proplists:get_value(page_id, Args),
-    case is_allowed_mailing(MailingId, Context) and z_acl:rsc_visible(MailingId, Context) of
+    case is_allowed_mailing(MailingId, Context)
+        andalso m_rsc:is_a(MailingId, mailinglist, Context)
+        andalso z_acl:rsc_visible(PageId, Context)
+    of
         true ->
-            m_mailinglist:delete_scheduled(MailingId, PageId, Context),
+            _ = m_mailinglist:delete_scheduled(MailingId, PageId, Context),
             z_render:growl(?__("The mailing has been canceled.", Context), Context);
         false ->
             z_render:growl_error(?__("You are not allowed to cancel this mailing.", Context), Context)
@@ -504,6 +517,7 @@ init(Args) ->
     z_notifier:observe(mailinglist_mailing, self(), Context),
     z_notifier:observe(dropbox_file, self(), 100, Context),
     timer:send_interval(?MAILING_POLL_SCHEDULED_INTERVAL, poll),
+    self() ! poll,
     {ok, #state{ context = z_context:new(Context) }}.
 
 
@@ -524,21 +538,21 @@ handle_call({#dropbox_file{ filename = File }, _SenderContext}, _From, State = #
             {reply, undefined, State};
         ListId ->
             HandleF = fun() ->
-                C = z_acl:sudo(Context),
-                case import_file(File, true, ListId, C) of
+                ContextSudo = z_acl:sudo(Context),
+                case import_file(File, true, ListId, ContextSudo) of
                     ok ->
-                        Title = case z_trans:lookup_fallback(m_rsc:p_no_acl(ListId, <<"title">>, C), C) of
+                        Title = case z_trans:lookup_fallback(m_rsc:p_no_acl(ListId, <<"title">>, ContextSudo), ContextSudo) of
                             <<>> -> integer_to_binary(ListId);
                             T -> T
                         end,
                         z_email:send_admin(
                           "mod_mailinglist: Import from drop folder",
-                          ["Replaced all recipients of ", Title, " with the contents of ", File, "."], Context);
+                          ["Replaced all recipients of ", Title, " with the contents of ", File, "."], ContextSudo);
                     {error, Msg} ->
-                        z_email:send_admin("mod_mailinglist: Import from drop folder FAILED", Msg, Context)
+                        z_email:send_admin("mod_mailinglist: Import from drop folder FAILED", Msg, ContextSudo)
                 end
             end,
-            spawn(HandleF),
+            z_proc:spawn_md(HandleF),
             {reply, ok, State}
     end;
 
@@ -554,23 +568,20 @@ handle_cast({#mailinglist_mailing{
     }, SenderContext}, State) when List =/= undefined ->
     ListId = m_rsc:rid(List, SenderContext),
     PageId = m_rsc:rid(Page, SenderContext),
-    ?LOG_INFO(#{
-        in => zotonic_mod_mailinglist,
-        text => <<"Mailing page to mailing list">>,
-        list_id => ListId,
-        page_id => PageId,
-        sender_id => z_acl:user(SenderContext),
-        options => Options
-    }),
-    case proplists:get_bool(is_send_all, Options) of
+    case can_queue_mailing(ListId, PageId, SenderContext) of
         true ->
-            % Reset the recipient stats so that the mailing can be
-            % sent again to all recipients.
-            m_mailinglist:reset_log_email(ListId, PageId, SenderContext);
+            ?LOG_INFO(#{
+                in => zotonic_mod_mailinglist,
+                text => <<"Queueing page for mailing to mailing list">>,
+                list_id => ListId,
+                page_id => PageId,
+                sender_id => z_acl:user(SenderContext),
+                options => Options
+            }),
+            queue_mailing(ListId, PageId, Options, SenderContext);
         false ->
-            ok
+            log_mailing_not_visible(ListId, PageId, SenderContext)
     end,
-    send_mailing(ListId, PageId, Options, SenderContext),
     {noreply, State};
 handle_cast({#mailinglist_mailing{
         list_id = undefined,
@@ -580,15 +591,20 @@ handle_cast({#mailinglist_mailing{
     }, SenderContext}, State) when Email =/= undefined ->
     PageId = m_rsc:rid(Page, SenderContext),
     Email1 = unicode:characters_to_binary(Email),
-    ?LOG_INFO(#{
-        in => zotonic_mod_mailinglist,
-        text => <<"Mailing page to test mailing address">>,
-        email => Email1,
-        page_id => PageId,
-        sender_id => z_acl:user(SenderContext),
-        options => Options
-    }),
-    send_mailing({single_test_address, Email}, PageId, Options, SenderContext),
+    case can_send_page(PageId, SenderContext) of
+        true ->
+            ?LOG_INFO(#{
+                in => zotonic_mod_mailinglist,
+                text => <<"Mailing page to test mailing address">>,
+                email => Email1,
+                page_id => PageId,
+                sender_id => z_acl:user(SenderContext),
+                options => Options
+            }),
+            send_mailing({single_test_address, Email}, PageId, Options, SenderContext);
+        false ->
+            log_mailing_not_visible(undefined, PageId, SenderContext)
+    end,
     {noreply, State};
 handle_cast({#mailinglist_mailing{} = Mailing, _Context}, State) ->
     ?LOG_ERROR(#{
@@ -652,20 +668,83 @@ import_file(TmpFile, IsTruncate, Id, Context) ->
 poll_scheduled(Context) ->
     case m_mailinglist:check_scheduled(Context) of
         {ListId, PageId, Options} ->
-            m_mailinglist:delete_scheduled(ListId, PageId, Context),
-            send_mailing(ListId, PageId, Options, Context);
+            case send_mailing(ListId, PageId, Options, Context) of
+                {ok, _Pid} ->
+                    m_mailinglist:delete_scheduled(ListId, PageId, Context),
+                    poll_scheduled(Context);
+                {error, overload} ->
+                    ok
+            end;
         undefined ->
             ok
     end.
 
 
-%% @doc Send the page to the mailinglist.
+%% @doc Queue an immediate mailing and wake the scheduler.
+-spec queue_mailing(ListId, PageId, Options, Context) -> ok when
+    ListId :: m_rsc:resource_id(),
+    PageId :: m_rsc:resource_id(),
+    Options :: mailing_options(),
+    Context :: z:context().
+queue_mailing(ListId, PageId, Options, Context) ->
+    ok = m_mailinglist:insert_scheduled(
+        ListId,
+        PageId,
+        Options,
+        calendar:universal_time(),
+        Context),
+    case proplists:get_bool(is_send_all, Options) of
+        true ->
+            % Reset the recipient stats so that the mailing can be
+            % sent again to all recipients.
+            m_mailinglist:reset_log_email(ListId, PageId, Context);
+        false ->
+            ok
+    end,
+    wake_scheduler(Context),
+    ok.
+
+wake_scheduler(Context) ->
+    case z_module_manager:whereis(?MODULE, Context) of
+        {ok, Pid} ->
+            Pid ! poll,
+            ok;
+        {error, _} -> ok
+    end.
+
+
+%% @doc Start sending a mailing that has been taken from the scheduled table,
+%% or a test mailing to a single address.
 send_mailing(undefined, _PageId, _Options, _Context) ->
     ok;
 send_mailing(_ListId, undefined, _Options, _Context) ->
     ok;
 send_mailing(ListId, PageId, Options, Context) ->
     z_sidejob:start(?MODULE, send_mailing_process, [ ListId, PageId, Options ], Context).
+
+can_send_page(PageId, Context) ->
+    is_integer(PageId)
+    andalso z_acl:rsc_visible(PageId, Context).
+
+can_queue_mailing(ListId, PageId, Context) ->
+    is_integer(ListId)
+    andalso m_rsc:is_a(ListId, mailinglist, Context)
+    andalso can_send_page(PageId, Context)
+    andalso (
+        ListId =:= m_rsc:rid(mailinglist_test, Context)
+        orelse z_acl:rsc_editable(ListId, Context)
+    ).
+
+log_mailing_not_visible(ListId, PageId, Context) ->
+    ?LOG_WARNING(#{
+        in => zotonic_mod_mailinglist,
+        text => <<"Not allowed to mail a page that is not visible to the sender">>,
+        result => error,
+        reason => eacces,
+        list_id => ListId,
+        page_id => PageId,
+        sender_id => z_acl:user(Context)
+    }).
 
 send_mailing_process({single_test_address, Email}, PageId, Options, Context) ->
     Email1 = m_mailinglist:normalize_email(Email),

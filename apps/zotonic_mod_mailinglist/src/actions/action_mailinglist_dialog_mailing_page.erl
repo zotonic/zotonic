@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2024 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Open a dialog for sending an e-mail to a mailing list.
 %% @end
 
-%% Copyright 2009-2024 Marc Worrell, Arjan Scherpenisse
+%% Copyright 2009-2026 Marc Worrell, Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,11 +20,8 @@
 -module(action_mailinglist_dialog_mailing_page).
 -moduledoc("
 Shows the dialog to mail the current page ([resource](/id/doc_glossary#term-resource)) to a mailing list. This is used
-in the admin “mailing status” interface.
-
-Todo
-
-Extend documentation
+in the admin “mailing status” interface. A mailing can be sent immediately, when the page becomes publicly visible, or
+at an explicitly selected date and time.
 ").
 -author("Marc Worrell <marc@worrell.nl").
 
@@ -45,37 +42,115 @@ render_action(TriggerId, TargetId, Args, Context) ->
 	{PostbackMsgJS, Context}.
 
 event(#postback{message={dialog_mailing_page, Id, ListId, OnSuccess}}, Context) ->
-	Vars = [
-            {id, Id},
-            {list_id, ListId},
-            {on_success, OnSuccess}
-	],
-	z_render:dialog(?__("Confirm sending to mailinglist", Context), "_dialog_mailing_page.tpl", Vars, Context);
+    case is_allowed(Id, ListId, Context) of
+        true ->
+            IsTest = is_test_mailinglist(ListId, Context),
+            Vars = [
+                {id, Id},
+                {list_id, ListId},
+                {is_test, IsTest},
+                {on_success, OnSuccess}
+            ],
+            z_render:dialog(
+                dialog_title(IsTest, Context),
+                "_dialog_mailing_page.tpl",
+                Vars,
+                Context);
+        false ->
+            z_render:growl_error(?__("You are not allowed to send this page.", Context), Context)
+    end;
 
-%% When the page is not yet visible and the user did not choose the
-%% "now" button, the mailing is queued.
 event(#submit{message={mailing_page, Args}}, Context) ->
-	PageId = proplists:get_value(id, Args),
-	OnSuccess = proplists:get_all_values(on_success, Args),
-	ListId = m_rsc:rid(z_context:get_q(<<"list_id">>, Context), Context),
-	IsMatchLanguage = z_convert:to_bool(z_context:get_q(<<"is_match_language">>, Context)),
-	IsSendAll = z_convert:to_bool(z_context:get_q(<<"is_send_all">>, Context)),
+    PageId = m_rsc:rid(proplists:get_value(id, Args), Context),
+    OnSuccess = proplists:get_all_values(on_success, Args),
+    ListId = m_rsc:rid(z_context:get_q(<<"list_id">>, Context), Context),
+    IsMatchLanguage = z_convert:to_bool(z_context:get_q(<<"is_match_language">>, Context)),
+    IsSendAll = z_convert:to_bool(z_context:get_q(<<"is_send_all">>, Context)),
     When = z_context:get_q(<<"mail_when">>, Context),
     Options = [
-    	{is_match_language, IsMatchLanguage},
-    	{is_send_all, IsSendAll}
+        {is_match_language, IsMatchLanguage},
+        {is_send_all, IsSendAll}
     ],
-	Context1 = case z_acl:rsc_visible(PageId, z_acl:anondo(Context)) orelse When =:= <<"now">> of
-		true ->
-			Notification = #mailinglist_mailing{
-				list_id = ListId,
-				page_id = PageId,
-				options = Options
-			},
-			z_notifier:notify(Notification, Context),
-			z_render:growl(?__("The e-mails are being sent...", Context), Context);
-		false ->
-			m_mailinglist:insert_scheduled(ListId, PageId, Options, Context),
-			z_render:growl(?__("The mailing will be sent when the page becomes visible.", Context), Context)
-	end,
-	z_render:wire(OnSuccess, Context1).
+    case is_allowed(PageId, ListId, Context) of
+        true ->
+            When1 = case is_test_mailinglist(ListId, Context) of
+                true -> <<"now">>;
+                false -> When
+            end,
+            handle_mailing(When1, ListId, PageId, Options, OnSuccess, Context);
+        false ->
+            z_render:growl_error(?__("You are not allowed to send this page.", Context), Context)
+    end.
+
+dialog_title(true, Context) ->
+    ?__("Confirm sending test mailing", Context);
+dialog_title(false, Context) ->
+    ?__("Confirm sending to mailinglist", Context).
+
+
+handle_mailing(undefined, ListId, PageId, Options, OnSuccess, Context) ->
+    handle_mailing(<<"now">>, ListId, PageId, Options, OnSuccess, Context);
+handle_mailing(<<"now">>, ListId, PageId, Options, OnSuccess, Context) ->
+    ok = mod_mailinglist:queue_mailing(ListId, PageId, Options, Context),
+    finish(?__("The mailing has been queued for immediate sending...", Context), OnSuccess, Context);
+handle_mailing(<<"scheduled">>, ListId, PageId, Options, OnSuccess, Context) ->
+    ok = m_mailinglist:insert_scheduled(ListId, PageId, Options, Context),
+    finish(
+        ?__("The mailing will be sent when the page becomes visible.", Context),
+        OnSuccess,
+        Context);
+handle_mailing(<<"date">>, ListId, PageId, Options, OnSuccess, Context) ->
+    case mailing_date(Context) of
+        {ok, Due} ->
+            ok = m_mailinglist:insert_scheduled(ListId, PageId, Options, Due, Context),
+            finish(?__("The mailing has been scheduled.", Context), OnSuccess, Context);
+        {error, past} ->
+            z_render:growl_error(?__("The mailing date must be in the future.", Context), Context);
+        {error, invalid} ->
+            z_render:growl_error(?__("Enter a valid mailing date and time.", Context), Context)
+    end;
+handle_mailing(_When, _ListId, _PageId, _Options, _OnSuccess, Context) ->
+    z_render:growl_error(?__("Select when the mailing should be sent.", Context), Context).
+
+finish(Message, OnSuccess, Context) ->
+    Context1 = z_render:growl(Message, Context),
+    z_render:wire([{dialog_close, []} | OnSuccess], Context1).
+
+mailing_date(Context) ->
+    Date = z_context:get_q(<<"dt:ymd:0:mailing_date">>, Context),
+    Time = z_context:get_q(<<"dt:hi:0:mailing_date">>, Context),
+    case z_utils:is_empty(Date) orelse z_utils:is_empty(Time) of
+        true ->
+            {error, invalid};
+        false ->
+            try
+                Props = z_context:get_q_map_noz(Context),
+                LocalDate = maps:get(<<"mailing_date">>, Props),
+                Now = calendar:universal_time(),
+                case z_datetime:to_utc(LocalDate, Context) of
+                    undefined ->
+                        {error, invalid};
+                    Due when Due > Now ->
+                        {ok, Due};
+                    _Due ->
+                        {error, past}
+                end
+            catch
+                _:_ -> {error, invalid}
+            end
+    end.
+
+is_allowed(PageId, ListId, Context) ->
+    is_integer(PageId)
+    andalso is_integer(ListId)
+    andalso m_rsc:is_a(ListId, mailinglist, Context)
+    andalso z_acl:is_allowed(use, mod_mailinglist, Context)
+    andalso z_acl:rsc_visible(PageId, Context)
+    andalso is_allowed_list(ListId, Context).
+
+is_allowed_list(ListId, Context) ->
+    is_test_mailinglist(ListId, Context)
+    orelse z_acl:rsc_editable(ListId, Context).
+
+is_test_mailinglist(ListId, Context) ->
+    ListId =:= m_rsc:rid(mailinglist_test, Context).

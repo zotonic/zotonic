@@ -21,6 +21,9 @@
 -moduledoc("
 Post a message to the test mailing list, given with the `id` argument.
 
+The page does not need to be published. The sender must be allowed to use
+mod_mailinglist and view the page. The mailing is queued for immediate sending.
+
 The `on_success` argument decides which actions are triggered after the page has been sent.
 
 Todo
@@ -45,20 +48,33 @@ render_action(TriggerId, TargetId, Args, Context) ->
     {PostbackMsgJS, Context}.
 
 event(#postback{ message = {mailing_page_test, PageId, OnSuccess} }, Context) ->
+    PageId1 = m_rsc:rid(PageId, Context),
+    case is_allowed(PageId1, Context) of
+        true ->
+            send_test_mailing(PageId1, OnSuccess, Context);
+        false ->
+            z_render:growl_error(?__("You are not allowed to send this page.", Context), Context)
+    end.
+
+send_test_mailing(PageId, OnSuccess, Context) ->
     case m_rsc:name_to_id(mailinglist_test, Context) of
         {ok, ListId} ->
-            case z_acl:rsc_visible(ListId, Context) of
-                true ->
-                    z_notifier:notify(#mailinglist_mailing{
-                            list_id = ListId,
-                            page_id = PageId,
-                            options = [ {is_send_all, true} ]
-                        }, Context),
-                    Context1 = z_render:growl(?__("Sending the page to the test mailing list...", Context), Context),
-                    z_render:wire(OnSuccess, Context1);
-                false ->
-                    z_render:growl_error(?__("You are not allowed to send mail to the test mailing list.", Context), Context)
-            end;
+            ok = mod_mailinglist:queue_mailing(
+                ListId,
+                PageId,
+                [{is_send_all, true}],
+                Context),
+            Context1 = z_render:growl(
+                ?__("The test mailing has been queued for immediate sending...", Context),
+                Context),
+            z_render:wire(OnSuccess, Context1);
         {error, _} ->
-            z_render:growl_error(?__("There is no mailing list with the name ‘mailinglist_test’.", Context), Context)
+            z_render:growl_error(
+                ?__("There is no mailing list with the name ‘mailinglist_test’.", Context),
+                Context)
     end.
+
+is_allowed(PageId, Context) ->
+    is_integer(PageId)
+    andalso z_acl:is_allowed(use, mod_mailinglist, Context)
+    andalso z_acl:rsc_visible(PageId, Context).

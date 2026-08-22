@@ -31,6 +31,8 @@ Available Model API Paths
 | `get` | `/rsc_stats/+rscid/...` | Return rsc stats from `z_acl:is_allowed`. |
 | `get` | `/recipient/+recipientid/...` | Return mailinglist recipient record for recipient id `+recipientid`. |
 | `get` | `/scheduled/+rscid/...` | Return scheduled mailing jobs/entries associated with resource `+rscid`. |
+| `get` | `/tasks` | Return all visible publication-dependent and dated mailing tasks. |
+| `get` | `/tasks/+rscid/...` | Return publication-dependent and dated mailing tasks associated with resource `+rscid`, grouped by mailing list id. |
 | `get` | `/confirm_key/+confirmkey/...` | Return subscription confirmation payload for confirmation key `+confirmkey`. |
 | `get` | `/subscription/+listid/+email/...` | Return `subscription` result for `+listid` and `+email` using `z_acl:is_allowed`. |
 | `get` | `/subscriptions` | Return mailinglist subscriptions for the currently authenticated user. No further lookups. |
@@ -79,8 +81,12 @@ Available Model API Paths
 
     insert_scheduled/3,
     insert_scheduled/4,
+    insert_scheduled/5,
     delete_scheduled/3,
     get_scheduled/2,
+    get_all_mailing_tasks/1,
+    get_mailing_tasks/2,
+    update_scheduled_publication_due/2,
     check_scheduled/1,
 
     get_email_from/2,
@@ -134,6 +140,18 @@ m_get([ <<"recipient">>, RecipientId | Rest ], _Msg, Context) ->
 m_get([ <<"scheduled">>, RscId | Rest ], _Msg, Context) ->
     case z_acl:rsc_visible(RscId, Context) of
         true -> {ok, {get_scheduled(RscId, Context), Rest}};
+        false -> {error, eacces}
+    end;
+m_get([ <<"tasks">> ], _Msg, Context) ->
+    case z_acl:is_allowed(use, mod_mailinglist, Context) of
+        true -> {ok, {get_all_mailing_tasks(Context), []}};
+        false -> {error, eacces}
+    end;
+m_get([ <<"tasks">>, RscId | Rest ], _Msg, Context) ->
+    case z_acl:is_allowed(use, mod_mailinglist, Context)
+        andalso z_acl:rsc_visible(RscId, Context)
+    of
+        true -> {ok, {get_mailing_tasks(RscId, Context), Rest}};
         false -> {error, eacces}
     end;
 m_get([ <<"confirm_key">>, ConfirmKey | Rest ], _Msg, Context) ->
@@ -226,9 +244,8 @@ get_stats(ListId, Context) when is_integer(ListId) ->
     Scheduled = z_db:q("
         select page_id
         from mailinglist_scheduled
-                join rsc on id = page_id
         where mailinglist_id = $1
-        order by publication_start", [ListId], Context),
+        order by due", [ListId], Context),
     Counts#{
         scheduled => Scheduled
     };
@@ -918,36 +935,56 @@ insert_scheduled(ListId, PageId, Context) ->
 
 %% @doc Insert a mailing to be send when the page becomes visible
 insert_scheduled(ListId, PageId, Options, Context) ->
-    true = z_acl:rsc_editable(ListId, Context),
+    Due = case m_rsc:p(PageId, <<"publication_start">>, Context) of
+        undefined -> ?ST_JUTTEMIS;
+        PublicationStart -> PublicationStart
+    end,
+    insert_scheduled(ListId, PageId, <<"publication">>, Due, Options, Context).
+
+%% @doc Insert a mailing to be sent on a specific UTC date.
+-spec insert_scheduled(ListId, PageId, Options, Due, Context) -> ok when
+    ListId :: m_rsc:resource_id(),
+    PageId :: m_rsc:resource_id(),
+    Options :: mod_mailinglist:mailing_options(),
+    Due :: calendar:datetime() | undefined,
+    Context :: z:context().
+insert_scheduled(ListId, PageId, Options, Due, Context) ->
+    Due1 = case Due of
+        undefined -> calendar:universal_time();
+        _ -> Due
+    end,
+    insert_scheduled(ListId, PageId, <<"date">>, Due1, Options, Context).
+
+insert_scheduled(ListId, PageId, Type, Due, Options, Context) ->
+    true = is_allowed_scheduled(ListId, PageId, Context),
     Exists = z_db:q1("
                 select count(*)
                 from mailinglist_scheduled
                 where page_id = $1 and mailinglist_id = $2", [PageId,ListId], Context),
-    case Exists of
-        0 ->
-           z_mqtt:publish(
-                [ <<"model">>, <<"mailinglist">>, <<"event">>, ListId, <<"scheduled">> ],
-                #{ id => ListId, page_id => PageId, action => <<"insert">> },
-                Context);
-        1 ->
-            nop
-    end,
     z_db:q("
         insert into mailinglist_scheduled
-            (page_id, mailinglist_id, props)
+            (page_id, mailinglist_id, props, type, due)
         values
-            ($1, $2, $3)
+            ($1, $2, $3, $4, $5)
         on conflict (page_id, mailinglist_id)
-        do update set props = $3
+        do update set
+            props = $3,
+            type = $4,
+            due = $5,
+            timestamp = now()
         ",
-        [ PageId, ListId, ?DB_PROPS([ {options, Options} ]) ],
+        [PageId, ListId, ?DB_PROPS([{options, Options}]), Type, Due],
         Context),
+    case Exists of
+        0 -> publish_scheduled_event(ListId, PageId, <<"insert">>, Context);
+        1 -> ok
+    end,
     ok.
 
 
 %% @doc Delete a scheduled mailing
 delete_scheduled(ListId, PageId, Context) ->
-    true = z_acl:rsc_editable(ListId, Context),
+    true = is_allowed_scheduled(ListId, PageId, Context),
     case z_db:q("
             delete from mailinglist_scheduled
             where page_id = $1
@@ -958,12 +995,19 @@ delete_scheduled(ListId, PageId, Context) ->
         0 ->
             0;
         N when N > 0 ->
-            z_mqtt:publish(
-                [ <<"model">>, <<"mailinglist">>, <<"event">>, ListId, <<"scheduled">> ],
-                #{ id => ListId, page_id => PageId, action => <<"delete">> },
-                Context),
+            publish_scheduled_event(ListId, PageId, <<"delete">>, Context),
             N
     end.
+
+is_allowed_scheduled(ListId, PageId, Context) ->
+    is_integer(ListId)
+    andalso is_integer(PageId)
+    andalso m_rsc:is_a(ListId, mailinglist, Context)
+    andalso z_acl:rsc_visible(PageId, Context)
+    andalso (
+        ListId =:= m_rsc:rid(mailinglist_test, Context)
+        orelse z_acl:rsc_editable(ListId, Context)
+    ).
 
 
 %% @doc Get the list of scheduled mailings for a page.
@@ -979,7 +1023,91 @@ get_scheduled(PageId, Context) ->
     [ ListId || {ListId} <- Lists ].
 
 
-%% @doc Fetch the next scheduled mailing that are published and in the publication date range.
+%% @doc Return all pending mailing tasks for a page, grouped by mailing list id.
+%% Publication tasks have type publication; explicitly dated tasks have type
+%% date. Both include their UTC due date.
+-spec get_mailing_tasks(PageId, Context) -> Tasks when
+    PageId :: m_rsc:resource_id(),
+    Context :: z:context(),
+    Tasks :: #{ m_rsc:resource_id() => [ map() ] }.
+get_mailing_tasks(PageId, Context) ->
+    WaitingMailings = z_db:q("
+        select mailinglist_id, type, due
+        from mailinglist_scheduled
+        where page_id = $1", [PageId], Context),
+    Tasks = [
+        mailing_task(ListId, PageId, Type, Due)
+        || {ListId, Type, Due} <- WaitingMailings
+    ],
+    lists:foldl(
+        fun(#{ <<"mailinglist_id">> := ListId } = Task, Acc) ->
+            case z_acl:rsc_visible(ListId, Context) of
+                true ->
+                    add_mailing_task(ListId, Task, Acc);
+                false ->
+                    Acc
+            end
+        end,
+        #{},
+        Tasks).
+
+
+%% @doc Return all pending mailing tasks for resources and mailing lists visible
+%% to the current user.
+-spec get_all_mailing_tasks(Context) -> Tasks when
+    Context :: z:context(),
+    Tasks :: [ map() ].
+get_all_mailing_tasks(Context) ->
+    WaitingMailings = z_db:q("
+        select mailinglist_id, page_id, type, due
+        from mailinglist_scheduled
+        order by due, timestamp", Context),
+    Tasks = [
+        mailing_task(ListId, PageId, Type, Due)
+        || {ListId, PageId, Type, Due} <- WaitingMailings
+    ],
+    lists:filter(
+        fun(#{ <<"mailinglist_id">> := ListId, <<"page_id">> := PageId }) ->
+            z_acl:rsc_visible(ListId, Context) andalso z_acl:rsc_visible(PageId, Context)
+        end,
+        Tasks).
+
+mailing_task(ListId, PageId, Type, Due) ->
+    #{
+        <<"type">> => Type,
+        <<"due">> => Due,
+        <<"mailinglist_id">> => ListId,
+        <<"page_id">> => PageId
+    }.
+
+add_mailing_task(ListId, Task, Tasks) ->
+    maps:update_with(ListId, fun(List) -> List ++ [Task] end, [Task], Tasks).
+
+
+%% @doc Update the due date of publication mailings after their page was pivoted.
+-spec update_scheduled_publication_due(PageId, Context) -> non_neg_integer() when
+    PageId :: m_rsc:resource_id(),
+    Context :: z:context().
+update_scheduled_publication_due(PageId, Context) ->
+    N = z_db:q("
+        update mailinglist_scheduled m
+        set due = coalesce(r.publication_start, $2)
+        from rsc r
+        where m.page_id = $1
+          and m.page_id = r.id
+          and m.type = 'publication'
+          and m.due is distinct from coalesce(r.publication_start, $2)",
+        [PageId, ?ST_JUTTEMIS],
+        Context),
+    case N of
+        0 -> ok;
+        _ -> publish_scheduled_event(undefined, PageId, <<"update">>, Context)
+    end,
+    N.
+
+
+%% @doc Fetch the next dated mailing that is due, or publication mailing whose
+%% page is published and in its publication date range.
 -spec check_scheduled(Context) -> undefined | Mailing when
     Context :: z:context(),
     Mailing :: { ListId, PageId, Options },
@@ -990,13 +1118,19 @@ check_scheduled(Context) ->
     case z_db:assoc_props_row("
         select m.*
         from mailinglist_scheduled m
-        where (
-            select r.is_published
-               and r.publication_start <= now()
-               and r.publication_end >= now()
-            from rsc r
-            where r.id = m.mailinglist_id
-        )
+        where (m.type = 'date' and m.due <= now())
+           or (
+                m.type = 'publication'
+                and m.due <= now()
+                and (
+                    select r.is_published
+                       and r.publication_start <= now()
+                       and r.publication_end >= now()
+                    from rsc r
+                    where r.id = m.page_id
+                )
+           )
+        order by m.due, m.timestamp
         limit 1", Context)
     of
         undefined ->
@@ -1014,11 +1148,14 @@ check_scheduled(Context) ->
 reset_log_email(ListId, PageId, Context) ->
     z_db:q("delete from log_email where other_id = $1 and content_id = $2", [ListId, PageId], Context),
     z_depcache:flush({mailinglist_stats, PageId}, Context),
-    z_mqtt:publish(
-        [ <<"model">>, <<"mailinglist">>, <<"event">>, ListId, <<"scheduled">> ],
-        #{ id => ListId, page_id => PageId, action => <<"reset">> },
-        Context),
+    publish_scheduled_event(ListId, PageId, <<"reset">>, Context),
     ok.
+
+publish_scheduled_event(ListId, PageId, Action, Context) ->
+    z_mqtt:publish(
+        [<<"model">>, <<"mailinglist">>, <<"event">>, PageId, <<"scheduled">>],
+        #{ id => PageId, list_id => ListId, action => Action },
+        Context).
 
 
 %% @doc Get the "from" address used for this mailing list. Looks first in the mailinglist rsc for a ' mailinglist_reply_to' field; falls back to site.email_from config variable.
