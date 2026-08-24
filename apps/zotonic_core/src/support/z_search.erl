@@ -830,9 +830,6 @@ reformat_sql_query(#search_sql{where=Where, from=From, tables=Tables0, args=Args
 
 %% @doc Compute the final set of category IDs to filter on for each table alias, by
 %% resolving the Include/Exclude/Exact category constraints from the search query.
-%% Returns a list of {Alias, all | [CategoryId]} pairs.  'all' means no category
-%% @doc Compute the final set of category IDs to filter on for each table alias, by
-%% resolving the Include/Exclude/Exact category constraints from the search query.
 %% Returns a list of {Alias, all | [CategoryId], [ExcludeCategoryId]} triples.  'all' means no
 %% positive category restriction for that alias.  ExcludeCategoryId is the expanded set of
 %% category IDs (including subcategories) that must be explicitly excluded via a NOT clause.
