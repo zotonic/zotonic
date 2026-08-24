@@ -715,8 +715,6 @@ wake_scheduler(Context) ->
 
 %% @doc Start sending a mailing that has been taken from the scheduled table,
 %% or a test mailing to a single address.
-send_mailing(undefined, _PageId, _Options, _Context) ->
-    ok;
 send_mailing(_ListId, undefined, _Options, _Context) ->
     ok;
 send_mailing(ListId, PageId, Options, Context) ->

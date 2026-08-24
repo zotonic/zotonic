@@ -1089,7 +1089,7 @@ add_mailing_task(ListId, Task, Tasks) ->
     PageId :: m_rsc:resource_id(),
     Context :: z:context().
 update_scheduled_publication_due(PageId, Context) ->
-    N = z_db:q("
+    case z_db:q("
         update mailinglist_scheduled m
         set due = coalesce(r.publication_start, $2)
         from rsc r
@@ -1098,12 +1098,14 @@ update_scheduled_publication_due(PageId, Context) ->
           and m.type = 'publication'
           and m.due is distinct from coalesce(r.publication_start, $2)",
         [PageId, ?ST_JUTTEMIS],
-        Context),
-    case N of
-        0 -> ok;
-        _ -> publish_scheduled_event(undefined, PageId, <<"update">>, Context)
-    end,
-    N.
+        Context)
+    of
+        0 ->
+            0;
+        N when is_integer(N) ->
+            _ = publish_scheduled_event(undefined, PageId, <<"update">>, Context),
+            N
+    end.
 
 
 %% @doc Fetch the next dated mailing that is due, or publication mailing whose
