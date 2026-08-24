@@ -69,7 +69,9 @@
     frame_ancestors = [] :: [ binary() ],
     form_action = [] :: [ binary() ],
     % Reporting directives
-    report_to = [] :: [ binary() ]
+    report_to = [] :: [ binary() ],
+    % Include samples of blocked inline scripts and styles in violation reports
+    report_sample = false :: boolean()
 }).
 
 %% @doc A content-security report, received by the report controller.

@@ -87,7 +87,8 @@ admin interface to display recent CSP violations without needing to query the da
 
 Only the most recent 100 unique CSP violation reports are kept in memory to prevent unbounded growth in memory usage. When the limit is
 exceeded, the oldest report is dropped. For each unique CSP violation, the number of occurrences and the most recent occurrence timestamp
-are tracked, along with the original policy, the document URL, and the source file and line number of the violation when available.
+are tracked, along with the original policy, the document URL, the source file and line number, and up to ten distinct report samples
+when available.
 
 
 UI Log
@@ -260,6 +261,7 @@ pid_observe_content_security_report(Pid, #content_security_report{ type = <<"csp
     BlockedUrl = sanitize_uri(trim(maps:get(<<"blockedURL">>, Report, <<>>))),
     EffectiveDirective = trim(maps:get(<<"effectiveDirective">>, Report, <<>>)),
     OriginalPolicy = trim(maps:get(<<"originalPolicy">>, Report, <<>>)),
+    Sample = trim(maps:get(<<"sample">>, Report, <<>>)),
     DocumentUrl = sanitize_uri(trim(maps:get(<<"documentURL">>, Report, <<>>))),
     SourceFile = case trim(maps:get(<<"sourceFile">>, Report, <<>>)) of
         <<>> -> DocumentUrl;
@@ -273,34 +275,25 @@ pid_observe_content_security_report(Pid, #content_security_report{ type = <<"csp
             if
                 is_integer(LineNumber1), is_integer(ColumnNumber1),
                 size(EffectiveDirective) > 0 ->
-                    ?LOG_INFO(#{
-                        in => zotonic_mod_logging,
-                        text => <<"Received CSP violation report">>,
-                        result => error,
-                        reason => csp_violation,
+                    CspReport = #{
                         effective_directive => EffectiveDirective,
                         blocked_url => BlockedUrl,
                         original_policy => OriginalPolicy,
+                        sample => Sample,
                         reporting_url => trim(Url),
                         document_url => DocumentUrl,
                         source_file => SourceFile,
                         line_number => LineNumber1,
                         column_number => ColumnNumber1,
                         user_agent => trim(UA)
+                    },
+                    ?LOG_INFO(CspReport#{
+                        in => zotonic_mod_logging,
+                        text => <<"Received CSP violation report">>,
+                        result => error,
+                        reason => csp_violation
                     }),
-                    gen_server:call(Pid,
-                        {csp_report, #{
-                            effective_directive => EffectiveDirective,
-                            blocked_url => BlockedUrl,
-                            original_policy => OriginalPolicy,
-                            reporting_url => trim(Url),
-                            document_url => DocumentUrl,
-                            source_file => SourceFile,
-                            line_number => LineNumber1,
-                            column_number => ColumnNumber1,
-                            user_agent => trim(UA)
-                        }
-                    }, infinity);
+                    gen_server:call(Pid, {csp_report, CspReport}, infinity);
                 true ->
                     ok
             end;
@@ -686,6 +679,7 @@ log_csp_report(Report, #state{ csp_reports = Reports } = State) ->
         effective_directive := EffectiveDirective,
         blocked_url := BlockedUrl,
         original_policy := OriginalPolicy,
+        sample := Sample,
         reporting_url := ReportingUrl,
         document_url := DocumentUrl,
         source_file := SourceFile,
@@ -702,6 +696,7 @@ log_csp_report(Report, #state{ csp_reports = Reports } = State) ->
                     original_policy => OriginalPolicy,
                     document_url => DocumentUrl,
                     count => 1,
+                    samples => add_csp_sample(Sample, []),
                     source => [ {SourceFile, LineNumber, ColumnNumber} ],
                     user_agent => [ UA ],
                     reporting_url => [ ReportingUrl ]
@@ -726,11 +721,13 @@ log_csp_report(Report, #state{ csp_reports = Reports } = State) ->
                 true -> Urls;
                 false -> [ ReportingUrl | lists:sublist(Urls, 9) ]
             end,
+            Samples1 = add_csp_sample(Sample, maps:get(samples, R, [])),
             Reports#{
                 CspKey => R#{
                     timestamp => z_datetime:timestamp(),
                     count => Count + 1,
                     original_policy => OriginalPolicy,
+                    samples => Samples1,
                     source => Sources1,
                     reporting_url => Urls1,
                     user_agent => UAs1
@@ -754,6 +751,15 @@ log_csp_report(Report, #state{ csp_reports = Reports } = State) ->
             Reports1
     end,
     State#state{ csp_reports = Reports2 }.
+
+-spec add_csp_sample(binary(), [binary()]) -> [binary()].
+add_csp_sample(<<>>, Samples) ->
+    Samples;
+add_csp_sample(Sample, Samples) ->
+    case lists:member(Sample, Samples) of
+        true -> Samples;
+        false -> [ Sample | lists:sublist(Samples, 9) ]
+    end.
 
 
 %% @doc Check if the log client is still Active.

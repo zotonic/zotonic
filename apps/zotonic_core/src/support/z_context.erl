@@ -1498,7 +1498,8 @@ set_security_headers(Context) ->
         worker_src     = [ <<"'self'">>, <<"blob:">> ],
         connect_src    = [ <<"'self'">>, <<"https:">>, <<"wss:">> ],
         frame_ancestors = [ <<"'self'">> ],
-        report_to      = [ <<"site">> ]
+        report_to      = [ <<"site">> ],
+        report_sample  = true
     },
     Headers = [
         {<<"x-content-type-options">>, <<"nosniff">>},
@@ -1554,12 +1555,15 @@ set_security_headers(Context) ->
     end,
     set_resp_headers(SecurityHeaders1, Context).
 
+-spec flatten_csp(#content_security_header{}) -> binary().
 flatten_csp(CSP) ->
+    ReportSample = CSP#content_security_header.report_sample,
     Directives = lists:filtermap(
         fun
             ({_Directive, []}) -> false;
-            ({Directive, L}) ->
-                L1 = lists:usort(L),
+            ({Directive, Sources}) ->
+                Sources1 = csp_report_sample(Directive, Sources, ReportSample),
+                L1 = lists:usort(Sources1),
                 L2 = case lists:member(<<"'unsafe-inline'">>, L1) of
                     true -> lists:delete(<<"'nonce-'">>, L1);
                     false -> L1
@@ -1594,6 +1598,14 @@ flatten_csp(CSP) ->
             {<<"report-to">>, CSP#content_security_header.report_to}
         ]),
     iolist_to_binary(lists:join("; ", Directives)).
+
+-spec csp_report_sample(binary(), [binary()], boolean()) -> [binary()].
+csp_report_sample(<<"script-src", _/binary>>, Sources, true) ->
+    [ <<"'report-sample'">> | Sources ];
+csp_report_sample(<<"style-src", _/binary>>, Sources, true) ->
+    [ <<"'report-sample'">> | Sources ];
+csp_report_sample(_Directive, Sources, _ReportSample) ->
+    Sources.
 
 %% @doc Create a hsts header based on the current settings. The result is cached
 %%      for quick access.
