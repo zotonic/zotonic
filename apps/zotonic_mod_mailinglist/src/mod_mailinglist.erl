@@ -748,6 +748,8 @@ depickle_context({pickled_context, _, _, _, _} = PickledContext) ->
     depickle_context_1(PickledContext);
 depickle_context({pickled_context, _, _, _, _, _} = PickledContext) ->
     depickle_context_1(PickledContext);
+depickle_context({pickled_context, _, 2, State} = PickledContext) when is_map(State) ->
+    depickle_context_1(PickledContext);
 depickle_context(_PickledContext) ->
     {error, missing_context}.
 
@@ -860,8 +862,6 @@ queue_mailing(ListId, PageId, Options, SenderContext) ->
 
 %% @doc Start sending a mailing that has been taken from the scheduled table,
 %% or a test mailing to a single address.
-send_mailing(_ListId, undefined, _Options, _Context) ->
-    ok;
 send_mailing(ListId, PageId, Options, Context) ->
     z_sidejob:start(?MODULE, send_mailing_process, [ ListId, PageId, Options ], Context).
 

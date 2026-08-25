@@ -578,7 +578,7 @@ depickle({pickled_context, Site, 2, State}) ->
     end.
 
 %% @doc Depickle a context, return the site name. Accept older pickle formats.
--spec depickle_site( tuple() ) -> z:context().
+-spec depickle_site( tuple() ) -> atom().
 depickle_site({pickled_context, Site, _UserId, _Language, _VisitorId}) ->
     Site;
 depickle_site({pickled_context, Site, _UserId, _Language, _Tz, _VisitorId}) ->

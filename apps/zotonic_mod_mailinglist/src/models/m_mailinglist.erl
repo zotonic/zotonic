@@ -1122,6 +1122,8 @@ depickle_context({pickled_context, _, _, _, _} = PickledContext) ->
     depickle_context_1(PickledContext);
 depickle_context({pickled_context, _, _, _, _, _} = PickledContext) ->
     depickle_context_1(PickledContext);
+depickle_context({pickled_context, _, 2, State} = PickledContext) when is_map(State) ->
+    depickle_context_1(PickledContext);
 depickle_context(_PickledContext) ->
     {error, missing_context}.
 
