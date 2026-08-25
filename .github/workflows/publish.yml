@@ -18,7 +18,7 @@ jobs:
 
     strategy:
       matrix:
-        otp_version: [26]
+        otp_version: [28.5]
         os: [ubuntu-latest]
 
     container:
@@ -27,7 +27,7 @@ jobs:
     # Start PostgreSQL wth 'zotonic' as the default user.
     services:
       postgres:
-        image: postgres:11
+        image: postgres:16
         env:
           POSTGRES_DB: zotonic
           POSTGRES_USER: zotonic
@@ -42,7 +42,7 @@ jobs:
           - 5432:5432
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
       - name: Add user Zotonic
         run: |
           apt-get update
@@ -50,8 +50,15 @@ jobs:
           adduser --disabled-login zotonic
       - name: Compile
         run: |
-          VERSION=`git describe --tags`
-          release/prepare-release.sh $VERSION
+          if [ "$GITHUB_REF_TYPE" != "tag" ]; then
+            echo "Publishing is only allowed from an exact release tag."
+            exit 1
+          fi
+          if [ "$(cat VERSION)" != "$GITHUB_REF_NAME" ]; then
+            echo "VERSION does not match release tag $GITHUB_REF_NAME."
+            echo "Run release/prepare-release.sh before committing and tagging the release."
+            exit 1
+          fi
           make
       - name: Test
         run: |
