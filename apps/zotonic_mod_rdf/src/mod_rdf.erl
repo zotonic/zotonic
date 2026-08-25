@@ -41,11 +41,17 @@ Support for mapping between Zotonic and RDF data.
 
 observe_rdf_ns(#rdf_ns{ ns = ?NS_ZOTONIC }, _Context) ->
     {ok, <<"zotonic">>};
-observe_rdf_ns(#rdf_ns{ ns = NS }, _Context) ->
+observe_rdf_ns(#rdf_ns{ ns = NS }, Context) ->
+    case NS =:= m_rsc:uri_prefix(Context) of
+        true ->
+            {ok, <<"site">>};
+        false ->
+            observe_rdf_ns_1(NS)
+    end.
+
+observe_rdf_ns_1(NS) ->
     case zotonic_rdf:ns_compact(NS) of
         Prefix when Prefix =:= NS ->
-            % Might be the base URL of the local site.
-            % TODO: should we compact that? Maybe to <<"">>?
             undefined;
         Prefix ->
             case binary:last(Prefix) of

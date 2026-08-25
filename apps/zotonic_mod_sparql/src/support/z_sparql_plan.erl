@@ -137,7 +137,7 @@ to_query_plan(Query, Context) ->
 to_query_plan({query, Prologue, {select, Distinct, Select, Dataset, Where, SolutionModifier}}, Arguments, Context)
         when is_map(Arguments) ->
     try
-        State0 = map_prologue(Prologue, #plan_state{ context = Context }),
+        State0 = map_prologue(Prologue, default_state(Context)),
         {Dataset1, State1} = map_dataset(Dataset, State0),
         {Where1, State2} = map_group(Where, State1),
         {Select1, State3} = map_select(Select, State2),
@@ -169,6 +169,22 @@ to_query_plan(_Query, Arguments, _Context) when not is_map(Arguments) ->
     {error, {invalid_arguments, Arguments}};
 to_query_plan(Query, _Arguments, _Context) ->
     {error, {invalid_query, Query}}.
+
+
+%% @doc Initialize the implicit Zotonic SPARQL prologue. Explicit BASE and
+%% PREFIX declarations are applied afterwards and override these defaults.
+default_state(Context) ->
+    ContextNoLang = z_context:set_language('x-default', Context),
+    SiteNamespace = m_rsc:uri_prefix(ContextNoLang),
+    #plan_state{
+        base = z_context:abs_url(<<"/">>, ContextNoLang),
+        namespaces = #{
+            <<>> => SiteNamespace,
+            <<"site">> => SiteNamespace,
+            <<"zotonic">> => <<?NAMESPACE_ZOTONIC>>
+        },
+        context = Context
+    }.
 
 
 %% @doc Normalize Erlang argument values to typed SPARQL values. Date tuples

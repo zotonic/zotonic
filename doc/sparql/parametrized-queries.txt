@@ -13,7 +13,6 @@ source text.
 
 Example query:
 
-    PREFIX zotonic: <http://zotonic.net/predicate/>
     SELECT ?r ?title
     WHERE {
         ?r zotonic:is_published ?published .

@@ -16,6 +16,33 @@ Because a notifier is used to map to the properties, this module can use pivot a
 for the queries.
 
 
+Default BASE and prefixes
+-------------------------
+
+Every SPARQL query has a site-aware implicit prologue:
+
+- `BASE` is the language-neutral base URL of the site.
+- The default `:` prefix is the language-neutral resource URI namespace from
+  the site's `id` dispatch rule.
+- `site:` is an alias for that same local resource namespace. Local namespaces
+  are normalized to this prefix in query plans.
+- `zotonic:` is `http://zotonic.net/predicate/`.
+
+Explicit `BASE` and `PREFIX` declarations override these defaults. Both local
+`site:` IRIs and generic `zotonic:` IRIs are resolved to local resources when
+possible. This allows concise site queries such as:
+
+```sparql
+SELECT ?article WHERE {
+    ?article zotonic:is_published true .
+    ?article :relation :123
+}
+```
+
+Local resources after `:` can be identified by either their numeric id or their
+unique name, for example `:1` and `:administrator` identify the same resource.
+
+
 Full-text search
 ----------------
 
@@ -63,7 +90,6 @@ Args = #{
    myrsc => {rsc, 1}
 },
 Query = <<"
-      PREFIX zotonic: <http://zotonic.net/predicate/>
       SELECT ?r WHERE {
          ?r zotonic:relation ?myrsc .
          ?r zotonic:count ?count .
@@ -181,12 +207,15 @@ TODO
  - [x] Add isIRI/isURI/isBLANK RDF term tests
  - [x] Support OPTIONAL using isolated correlated lateral joins
  - [x] Support standalone FILTER EXISTS / FILTER NOT EXISTS
+ - [x] Set default PREFIX (`:`) to the base URL of the `id` dispatch (no language)
+ - [x] Set BASE to the base URL of the site (no language)
+ - [x] Add default Zotonic PREFIX (`zotonic:`) set to `http://zotonic.net/predicate/`
+ - [x] Add Zotonic m_sparql model for querying
+ - [x] Allow SPARQL query in search_query resources
  - [ ] Support EXISTS / NOT EXISTS inside compound and result expressions
  - [ ] Support language handling, using the JSON objects: { _type: "trans", tr = { "en":"..." } }, including LANG etc.
  - [ ] Add DATATYPE support
- - [x] Add Zotonic m_sparql model for querying
  - [ ] Add SPARQL endpoint, with expected results (for use with 3rd parties -- check API standards)
- - [x] Allow SPARQL query in search_query resources
 
 After merge:
  - [ ] Ensure the types of z_props, mod_rdf and search_facet are the same (bool -> boolean, int -> integer)

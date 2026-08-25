@@ -8,7 +8,8 @@ The current pipeline is:
 1. Parse the query with `z_sparql_scanner` and `z_sparql_parser`.
 2. Accept a `SELECT` query; other parsed query forms return
    `unsupported_query`.
-3. Resolve `BASE` declarations and expand prefixed names.
+3. Initialize the site-aware default `BASE`, `:`, `site:` and `zotonic:`
+   namespaces, apply explicit prologue declarations, and expand prefixed names.
 4. Normalize RDF literals, IRIs and query blank-node identifiers.
 5. Normalize pre-bound Erlang arguments to typed query variables.
 6. Map graph groups to plan nodes: joins, unions, filters, optional joins,
@@ -22,6 +23,14 @@ The current pipeline is:
 10. Find the root resource variable used by Zotonic search and collect the
     projection, grouping, having and ordering expressions.
 11. Pass the plan to `z_sparql_sql`, which emits nested Zotonic SQL search terms.
+
+The default `BASE` is the language-neutral site URL. The default `:` namespace
+and its `site:` alias are the language-neutral base URL of the site's `id`
+dispatch rule. The `zotonic:` namespace defaults to
+`http://zotonic.net/predicate/`. Explicit query declarations take precedence.
+During normalization the local resource namespace is represented by `site:`;
+both it and the generic `zotonic:` namespace can resolve predicates and other
+resource names against the current site.
 
 ## SQL-supported plan nodes
 

@@ -94,6 +94,7 @@ resource_identifier_test() ->
     ], Context),
     try
         {ok, _EdgeId} = m_edge:insert(RscId, relation, RscId, Context),
+        {ok, _AuthorEdgeId} = m_edge:insert(RscId, author, 1, Context),
         CompactNameSparql = <<
             "PREFIX zotonic: <http://zotonic.net/predicate/>\n"
             "SELECT ?subject WHERE {\n"
@@ -132,12 +133,57 @@ resource_identifier_test() ->
                 (integer_to_binary(RscId))/binary, ">\n"
             "}"
         >>,
+        DefaultZotonicSparql = <<
+            "SELECT ?subject WHERE {\n"
+            "    ?subject zotonic:relation zotonic:", UniqueName/binary, "\n"
+            "}"
+        >>,
+        DefaultSiteSparql = <<
+            "SELECT ?subject WHERE {\n"
+            "    ?subject :relation :", (integer_to_binary(RscId))/binary, "\n"
+            "}"
+        >>,
+        DefaultSiteNameSparql = <<
+            "SELECT ?subject WHERE {\n"
+            "    ?subject :relation :", UniqueName/binary, "\n"
+            "}"
+        >>,
+        AdministratorIdSparql = <<
+            "SELECT ?subject WHERE {\n"
+            "    ?subject :author :1\n"
+            "}"
+        >>,
+        AdministratorNameSparql = <<
+            "SELECT ?subject WHERE {\n"
+            "    ?subject :author :administrator\n"
+            "}"
+        >>,
+        SiteAliasSparql = <<
+            "SELECT ?subject WHERE {\n"
+            "    ?subject site:relation site:", (integer_to_binary(RscId))/binary, "\n"
+            "}"
+        >>,
         ?assertEqual([RscId], search(CompactNameSparql, Context)),
         ?assertEqual([RscId], search(FullNameSparql, Context)),
         ?assertEqual([RscId], search(CompactIdSparql, Context)),
         ?assertEqual([RscId], search(FullIdSparql, Context)),
         ?assertEqual([RscId], search(CompactRscSparql, Context)),
         ?assertEqual([RscId], search(FullRscSparql, Context)),
+        ?assertEqual([RscId], search(DefaultZotonicSparql, Context)),
+        SiteNamespace = m_rsc:uri_prefix(Context),
+        ?assertEqual(
+            RscId,
+            m_rsc:uri_lookup(
+                <<SiteNamespace/binary, (integer_to_binary(RscId))/binary>>,
+                Context)),
+        ?assertEqual(
+            RscId,
+            m_rsc:uri_lookup(<<SiteNamespace/binary, UniqueName/binary>>, Context)),
+        ?assertEqual([RscId], search(DefaultSiteSparql, Context)),
+        ?assertEqual([RscId], search(DefaultSiteNameSparql, Context)),
+        ?assertEqual([RscId], search(AdministratorIdSparql, Context)),
+        ?assertEqual([RscId], search(AdministratorNameSparql, Context)),
+        ?assertEqual([RscId], search(SiteAliasSparql, Context)),
         RscIdBinary = integer_to_binary(RscId),
         ?assertEqual(RscId, m_rsc:uri_lookup(<<"zotonic:", UniqueName/binary>>, Context)),
         ?assertEqual(

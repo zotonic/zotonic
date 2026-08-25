@@ -247,6 +247,7 @@ Available Model API Paths
 
     name_lookup/2,
     uri/2,
+    uri_prefix/1,
     uri_lookup/2,
     remember_uri/3,
     uri_alias/2,
@@ -1278,6 +1279,32 @@ uri_dispatch(Id, Context) ->
             iolist_to_binary(z_context:abs_url(Url, Context))
     end.
 
+%% @doc Return the language-neutral URI prefix for authoritative resources.
+%% This is the absolute base URL of the `id` dispatch rule, up to its `id`
+%% argument. It can be used as an RDF namespace for local resources.
+-spec uri_prefix(z:context()) -> binary().
+uri_prefix(Context) ->
+    MemoKey = {?MODULE, uri_prefix, z_context:site(Context)},
+    case z_memo:get(MemoKey) of
+        undefined ->
+            z_memo:set(MemoKey, uri_prefix_1(Context));
+        Prefix ->
+            Prefix
+    end.
+
+uri_prefix_1(Context) ->
+    ContextNoLang = z_context:set_language('x-default', Context),
+    Placeholder = integer_to_binary(?MAX_RSC_ID),
+    Url = case z_dispatcher:url_for(id, [{id, Placeholder}], ContextNoLang) of
+        undefined -> <<"/id/", Placeholder/binary>>;
+        DispatchUrl -> DispatchUrl
+    end,
+    AbsoluteUrl = iolist_to_binary(z_context:abs_url(Url, ContextNoLang)),
+    case binary:split(AbsoluteUrl, Placeholder) of
+        [Prefix, _Suffix] -> Prefix;
+        [_] -> iolist_to_binary(z_context:abs_url(<<"/id/">>, ContextNoLang))
+    end.
+
 is_named_meta(Id, Context) ->
     case p_cached(Id, <<"name">>, Context) of
         Empty when Empty =:= <<>>; Empty =:= undefined ->
@@ -1667,6 +1694,16 @@ local_uri_to_id(<<"/">> = Path, Context) ->
 local_uri_to_id(<<"/", C, _/binary>> = Path, Context) when C =/= $/ ->
     local_uri_to_id_1(Path, Context);
 local_uri_to_id(Uri, Context) ->
+    Prefix = uri_prefix(Context),
+    PrefixSize = byte_size(Prefix),
+    case Uri of
+        <<Prefix:PrefixSize/binary, NameOrId/binary>> ->
+            zotonic_name_or_id_lookup(NameOrId, Context);
+        _ ->
+            local_uri_to_id_dispatch(Uri, Context)
+    end.
+
+local_uri_to_id_dispatch(Uri, Context) ->
     Site = z_context:site(Context),
     case z_sites_dispatcher:dispatch_url(Uri) of
         {ok, #{

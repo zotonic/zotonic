@@ -78,6 +78,64 @@ query_parse_error_message_test() ->
             arguments = #{}
         }, Context)).
 
+default_prologue_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    Context = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+    ContextNoLang = z_context:set_language('x-default', Context),
+    SiteBase = z_context:abs_url(<<"/">>, ContextNoLang),
+    SiteNamespace = m_rsc:uri_prefix(ContextNoLang),
+    RelativeIri = <<SiteBase/binary, "relative">>,
+    LocalIri = <<SiteNamespace/binary, "local">>,
+    LocalPublishedIri = <<SiteNamespace/binary, "is_published">>,
+
+    {ok, DefaultQuery} = z_sparql:parse(<<
+        "SELECT ?r WHERE { <relative> zotonic:id :local }"
+    >>),
+    ?assertMatch(
+        {ok, #{ where := {triple,
+            {iri, RelativeIri},
+            #{
+                iri := <<"http://zotonic.net/predicate/id">>,
+                ns_prefix := <<"zotonic">>
+            },
+            {iri, LocalIri}
+        }}},
+        z_sparql_plan:to_query_plan(DefaultQuery, Context)),
+
+    {ok, SiteQuery} = z_sparql:parse(<<
+        "SELECT ?r WHERE { ?r :is_published true }"
+    >>),
+    ?assertMatch(
+        {ok, #{ where := {triple, _, #{
+            iri := LocalPublishedIri,
+            ns_prefix := <<"site">>
+        }, true}}},
+        z_sparql_plan:to_query_plan(SiteQuery, Context)),
+
+    {ok, SiteAliasQuery} = z_sparql:parse(<<
+        "SELECT ?r WHERE { ?r site:is_published true }"
+    >>),
+    ?assertMatch(
+        {ok, #{ where := {triple, _, #{
+            iri := LocalPublishedIri,
+            ns_prefix := <<"site">>
+        }, true}}},
+        z_sparql_plan:to_query_plan(SiteAliasQuery, Context)),
+
+    {ok, ExplicitQuery} = z_sparql:parse(<<
+        "BASE <https://example.test/base/> "
+        "PREFIX : <https://example.test/id/> "
+        "PREFIX zotonic: <https://example.test/predicate/> "
+        "SELECT ?r WHERE { <relative> zotonic:id :local }"
+    >>),
+    ?assertMatch(
+        {ok, #{ where := {triple,
+            {iri, <<"https://example.test/base/relative">>},
+            #{ iri := <<"https://example.test/predicate/id">> },
+            {iri, <<"https://example.test/id/local">>}
+        }}},
+        z_sparql_plan:to_query_plan(ExplicitQuery, Context)).
+
 blank_node_property_list_test() ->
     {ok, _} = application:ensure_all_started(zotonic_notifier),
     Context = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
