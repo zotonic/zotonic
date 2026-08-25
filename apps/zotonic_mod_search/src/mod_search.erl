@@ -104,6 +104,7 @@ This module handles the following notifier callbacks:
 - `observe_module_activate`: Trigger asynchronous initialization when the search module is activated.
 - `observe_module_reindexed`: Check the search facet table if all modules are running and the indexer reindexed using `search_facet:ensure_table`.
 - `observe_search_query`: Execute supported full-text and facet search query operators.
+- `observe_search_query_parse`: Classify and compile query-resource text in search-term or JSON format.
 
 Delegate callbacks:
 
@@ -163,6 +164,7 @@ Delegate callbacks:
 -export([
     event/2,
     observe_search_query/2,
+    observe_search_query_parse/2,
     observe_module_activate/2,
     observe_custom_pivot/2,
     observe_filewatcher/2,
@@ -233,6 +235,28 @@ observe_search_query(#search_query{ name = <<"facet_values">> }, Context) ->
     end;
 observe_search_query(#search_query{ name = Name, args = Args, offsetlimit = OffsetLimit }, Context) ->
     search(Name, Args, OffsetLimit, Context).
+
+observe_search_query_parse(#search_query_parse{
+        query = Query,
+        query_type = undefined,
+        arguments = Arguments
+    }, Context) ->
+    QueryType = case is_json_query(Query) of
+        true -> <<"search_json">>;
+        false -> <<"search">>
+    end,
+    parse_search_query(Query, QueryType, Arguments, Context);
+observe_search_query_parse(#search_query_parse{
+        query = Query,
+        query_type = QueryType,
+        arguments = Arguments
+    }, Context) when QueryType =:= <<"search">>; QueryType =:= <<"search_json">> ->
+    case is_query_type(Query, QueryType) of
+        true -> parse_search_query(Query, QueryType, Arguments, Context);
+        false -> query_parse_error(QueryType, query_type_mismatch, Context)
+    end;
+observe_search_query_parse(#search_query_parse{}, _Context) ->
+    undefined.
 
 observe_module_activate(#module_activate{module=?MODULE, pid=Pid}, _Context) ->
     gen_server:cast(Pid, init_query_watches);
@@ -769,8 +793,15 @@ search(<<"all_bytitle_featured">>, Args, _OffsetLimit, Context) ->
             search_all_bytitle:search_cat_is(CatIs, all_bytitle_featured, Context)
     end;
 
+search(<<"query">>, #{ <<"query_id">> := _ } = Args, _OffsetLimit, Context) ->
+    compile_query_resource(Args, Context);
+search(<<"query">>, #{ <<"query_text">> := _ } = Args, _OffsetLimit, Context) ->
+    compile_query_resource(Args, Context);
 search(<<"query">>, Args, _OffsetLimit, Context) ->
-    search_query:search(Args, Context);
+    case is_query_resource_search(Args) of
+        true -> compile_query_resource(Args, Context);
+        false -> search_query:search(Args, Context)
+    end;
 
 search(<<"events">>, #{
         <<"end">> := End,
@@ -791,6 +822,54 @@ search(<<"events">>, #{
 
 search(_, _, _, _) ->
     undefined.
+
+compile_query_resource(Args, Context) ->
+    case search_query_resource:compile(Args, Context) of
+        {error, Reason} -> throw(Reason);
+        Result -> Result
+    end.
+
+is_query_resource_search(Args) ->
+    z_search:lookup_qarg_value(<<"query_id">>, Args, undefined) =/= undefined
+        orelse z_search:lookup_qarg_value(<<"query_text">>, Args, undefined) =/= undefined.
+
+parse_search_query(_Query, QueryType, Arguments, Context) when map_size(Arguments) =/= 0 ->
+    query_parse_error(QueryType, arguments_not_supported, Context);
+parse_search_query(Query, QueryType, #{}, Context) ->
+    try
+        Parsed = z_search_props:from_text(Query),
+        SearchTerms = search_query:search(Parsed, Context),
+        {ok, (query_descriptor(QueryType, Context))#{
+            parsed => Parsed,
+            search_terms => SearchTerms
+        }}
+    catch
+        Class:Reason ->
+            query_parse_error(QueryType, {Class, Reason}, Context)
+    end.
+
+query_parse_error(QueryType, Reason, Context) ->
+    {error, {query_parse, (query_descriptor(QueryType, Context))#{
+        reason => Reason
+    }}}.
+
+query_descriptor(QueryType, Context) ->
+    #{
+        query_type => QueryType,
+        query_type_label => query_type_label(QueryType, Context),
+        is_live => true,
+        show_parsed => true
+    }.
+
+query_type_label(<<"search">>, Context) -> ?__("Search terms", Context);
+query_type_label(<<"search_json">>, Context) -> ?__("Search query (JSON)", Context).
+
+is_query_type(Query, <<"search_json">>) -> is_json_query(Query);
+is_query_type(Query, <<"search">>) -> not is_json_query(Query).
+
+is_json_query(<<"{", _/binary>>) -> true;
+is_json_query(<<"[", _/binary>>) -> true;
+is_json_query(_) -> false.
 
 -spec trim( binary() | string() | z:trans()| undefined, z:context() ) -> binary().
 trim(undefined, _Context) -> <<>>;

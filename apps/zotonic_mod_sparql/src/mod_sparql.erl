@@ -25,12 +25,14 @@ The mod_sparql module adds support to use the SPARQL query language for accessin
 -mod_title("SPARQL").
 -mod_description("SPARQL for Zotonic data.").
 -mod_provides([ sparql ]).
--mod_depends([ mod_search ]).
+-mod_depends([ mod_search, mod_rdf ]).
 
 -author('Marc Worrell <marc@worrell.nl>').
 
 -export([
-    observe_sparql_mapping/2
+    observe_sparql_mapping/2,
+    observe_search_query/2,
+    observe_search_query_parse/2
 ]).
 
 % For testing
@@ -40,6 +42,162 @@ The mod_sparql module adds support to use the SPARQL query language for accessin
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include("../include/sparql.hrl").
+
+
+observe_search_query(#search_query{ name = <<"sparql">>, args = Args }, Context) ->
+    case sparql_args(Args) of
+        {ok, Query, Arguments} ->
+            case compile_sparql(Query, Arguments, Context) of
+                {ok, SearchTerms} -> SearchTerms;
+                {error, Reason} -> throw(Reason)
+            end;
+        {error, Reason} ->
+            throw(Reason)
+    end;
+observe_search_query(#search_query{}, _Context) ->
+    undefined.
+
+observe_search_query_parse(#search_query_parse{
+        query = Query,
+        query_type = undefined,
+        arguments = Arguments
+    }, Context) ->
+    case is_sparql_query(Query) of
+        true -> parse_query_resource(Query, Arguments, Context);
+        false -> undefined
+    end;
+observe_search_query_parse(#search_query_parse{
+        query = Query,
+        query_type = <<"sparql">>,
+        arguments = Arguments
+    }, Context) ->
+    parse_query_resource(Query, Arguments, Context);
+observe_search_query_parse(#search_query_parse{}, _Context) ->
+    undefined.
+
+sparql_args(Args) when is_map(Args) ->
+    case search_arg(<<"query">>, Args, undefined) of
+        Query when is_binary(Query); is_list(Query) ->
+            case search_arg(<<"args">>, Args, #{}) of
+                Arguments when is_map(Arguments) -> {ok, Query, Arguments};
+                _ -> {error, invalid_arguments}
+            end;
+        undefined ->
+            {error, missing_query};
+        _ ->
+            {error, invalid_query}
+    end;
+sparql_args(_Args) ->
+    {error, invalid_arguments}.
+
+search_arg(Key, Args, Default) ->
+    case maps:find(Key, Args) of
+        {ok, Value} -> Value;
+        error -> z_search:lookup_qarg_value(Key, Args, Default)
+    end.
+
+compile_sparql(Query, Arguments, Context) ->
+    case z_sparql:parse(Query) of
+        {ok, ParsedQuery} ->
+            case z_sparql_sql:to_sql_term(ParsedQuery, Arguments, Context) of
+                {ok, SqlTerms} -> {ok, #search_sql_terms{ terms = SqlTerms }};
+                {error, _} = Error -> Error
+            end;
+        {error, _} = Error -> Error
+    end.
+
+parse_query_resource(Query, Arguments, Context) ->
+    case z_sparql:parse(Query) of
+        {ok, ParsedQuery} ->
+            parse_query_resource_1(ParsedQuery, Arguments, Context);
+        {error, Reason} ->
+            query_parse_error(Reason, Context)
+    end.
+
+parse_query_resource_1(ParsedQuery, Arguments, Context) ->
+    case z_sparql_plan:to_query_plan(ParsedQuery, Arguments, Context) of
+        {ok, #{ root := Root, select := [Root] } = Plan} ->
+            case z_sparql_sql:query_plan_to_sql(Plan, Context) of
+                {ok, SqlTerms} ->
+                    {ok, (query_descriptor(Context))#{
+                        parsed => Plan,
+                        search_terms => #search_sql_terms{ terms = SqlTerms }
+                    }};
+                {error, Reason} ->
+                    query_parse_error(Reason, Context)
+            end;
+        {ok, _Plan} ->
+            query_parse_error(single_resource_projection_required, Context);
+        {error, Reason} ->
+            query_parse_error(Reason, Context)
+    end.
+
+query_parse_error(Reason, Context) ->
+    {error, {query_parse, maps:merge(
+        query_descriptor(Context),
+        sparql_error(Reason))}}.
+
+sparql_error(Reason) when is_binary(Reason) ->
+    case re:run(
+        Reason,
+        <<"^undefined:([0-9]+):([0-9]+):\\s*(.*)$">>,
+        [{capture, [1, 2, 3], binary}, dotall])
+    of
+        {match, [Line, Column, Message]} ->
+            #{
+                reason => Reason,
+                message => Message,
+                line => binary_to_integer(Line),
+                column => binary_to_integer(Column)
+            };
+        nomatch ->
+            #{ reason => Reason, message => Reason }
+    end;
+sparql_error({{_Source, Line, Column}, z_sparql_parser, Message} = Reason) ->
+    #{
+        reason => Reason,
+        message => parser_error_message(Message),
+        line => Line,
+        column => Column
+    };
+sparql_error(single_resource_projection_required = Reason) ->
+    #{
+        reason => Reason,
+        message => <<"The query must select exactly one resource variable.">>
+    };
+sparql_error(Reason) ->
+    #{
+        reason => Reason,
+        message => unicode:characters_to_binary(io_lib:format("~tp", [Reason]))
+    }.
+
+parser_error_message(Message) ->
+    MessageBin = iolist_to_binary(z_sparql_parser:format_error(Message)),
+    case re:run(
+        MessageBin,
+        <<"^syntax error before: <<\\\"(.*)\\\">>$">>,
+        [{capture, [1], binary}])
+    of
+        {match, [Token]} ->
+            <<"Syntax error before \"", Token/binary, "\".">>;
+        nomatch ->
+            MessageBin
+    end.
+
+query_descriptor(Context) ->
+    #{
+        query_type => <<"sparql">>,
+        query_type_label => ?__("SPARQL query", Context),
+        is_live => false,
+        show_parsed => false
+    }.
+
+is_sparql_query(Query) ->
+    Pattern = <<
+        "^(?:\\s|#[^\\r\\n]*(?:\\r?\\n|$))*"
+        "(?:BASE\\s|PREFIX\\s|SELECT(?=\\s|\\*|\\?|\\())"
+    >>,
+    re:run(Query, Pattern, [caseless, {capture, none}]) =:= match.
 
 
 observe_sparql_mapping(#sparql_mapping{ ns_prefix = Prefix, ns = NS, predicate = Predicate }, Context) ->

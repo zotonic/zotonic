@@ -45,6 +45,7 @@
 -type predicate_mapping() ::
       category
     | subclass
+    | type_unavailable
     | {column, binary(), binary(), atom()}
     | {search_column, binary(), binary(), binary(), fulltext | fts}
     | {jsonb, binary(), binary(), term(), atom()}
@@ -194,7 +195,11 @@ argument_value({rsc, Reference}) ->
     {resource, Reference};
 argument_value({iri, Iri}) when is_binary(Iri) ->
     {iri, Iri};
+argument_value(#{ <<"type">> := Type, <<"value">> := Value }) ->
+    typed_argument_value(Type, Value);
 argument_value(undefined) ->
+    undefined;
+argument_value(null) ->
     undefined;
 argument_value({{Y, M, D}, {H, I, S}} = DateTime)
         when is_integer(Y), is_integer(M), is_integer(D),
@@ -226,6 +231,33 @@ argument_value(Value) when is_list(Value) ->
     end;
 argument_value(Value) ->
     throw({error, {invalid_argument_value, Value}}).
+
+typed_argument_value(Type, Reference) when Type =:= <<"rsc">>; Type =:= <<"resource">> ->
+    {resource, Reference};
+typed_argument_value(<<"iri">>, Iri) when is_binary(Iri) ->
+    {iri, Iri};
+typed_argument_value(<<"date">>, Value) ->
+    case argument_datetime(Value) of
+        {{Y, M, D}, _Time} -> {value, {{Y, M, D}, {0, 0, 0}}, datetime};
+        undefined -> throw({error, {invalid_argument_date, Value}})
+    end;
+typed_argument_value(<<"datetime">>, Value) ->
+    case argument_datetime(Value) of
+        undefined -> throw({error, {invalid_argument_datetime, Value}});
+        DateTime -> {value, DateTime, datetime}
+    end;
+typed_argument_value(Type, Value) ->
+    throw({error, {invalid_typed_argument, Type, Value}}).
+
+argument_datetime(Value) ->
+    try
+        case z_datetime:to_datetime(Value) of
+            undefined -> undefined;
+            DateTime -> z_datetime:undefined_if_invalid_date(DateTime)
+        end
+    catch
+        _:_ -> undefined
+    end.
 
 
 %% @doc Collect all namespaces from the prologue.
@@ -430,7 +462,10 @@ map_predicate({var, _} = Variable, _State) ->
 map_predicate({inverse, Predicate}, State) ->
     {inverse, map_predicate(Predicate, State)};
 map_predicate(rdf_type, State) ->
-    map_predicate_iri(?NS_RDF, <<"type">>, State);
+    case map_predicate_iri(?NS_RDF, <<"type">>, State) of
+        #{ mapping := category } = Predicate -> Predicate;
+        Predicate -> Predicate#{ mapping => type_unavailable }
+    end;
 map_predicate({pname, PName}, State) ->
     {Prefix, LocalName} = split_pname(PName),
     case maps:find(Prefix, State#plan_state.namespaces) of

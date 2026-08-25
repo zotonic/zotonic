@@ -1747,23 +1747,32 @@ preflight_check_uri(Id, #{ <<"uri">> := Uri }, Context) when Uri =/= undefined -
 preflight_check_uri(_Id, _Props, _Context) ->
     ok.
 
-preflight_check_query(Id, #{ <<"query">> := Query }, Context) when Query =/= undefined ->
-    try
-        SearchContext = z_context:new( Context ),
-        search_query:search(z_search_props:from_text(z_html:unescape(Query)), SearchContext),
-        ok
-    catch
-        _:Reason:Stack ->
-            ?LOG_WARNING(#{
-                in => zotonic_core,
-                text => <<"Error in preflight test of query text">>,
-                rsc_id => Id,
-                result => error,
-                reason => Reason,
-                stack => Stack,
-                query => Query
-            }),
-            {error, invalid_query}
+preflight_check_query(Id, #{ <<"query">> := Query } = Props, Context) when Query =/= undefined ->
+    case z_utils:is_empty(z_string:trim(z_convert:to_binary(Query))) of
+        true ->
+            ok;
+        false ->
+            SearchContext = z_context:new(Context),
+            QueryType = maps:get(<<"query_type">>, Props, undefined),
+            case search_query_resource:parse(
+                z_html:unescape(Query),
+                QueryType,
+                #{},
+                SearchContext)
+            of
+                {ok, _Parsed} ->
+                    ok;
+                {error, Reason} ->
+                    ?LOG_WARNING(#{
+                        in => zotonic_core,
+                        text => <<"Error in preflight test of query text">>,
+                        rsc_id => Id,
+                        query_type => QueryType,
+                        result => error,
+                        reason => Reason
+                    }),
+                    {error, invalid_query}
+            end
     end;
 preflight_check_query(_Id, _Props, _Context) ->
     ok.

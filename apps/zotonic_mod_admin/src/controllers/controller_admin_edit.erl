@@ -215,44 +215,73 @@ event(#sort{items=Sorted, drop={dragdrop, {object_sorter, Props}, _, _}}, Contex
 event(#postback{message={query_preview, Opts}}, Context) ->
     DivId = proplists:get_value(div_id, Opts),
     RscId = proplists:get_value(rsc_id, Opts),
+    QueryTypeId = proplists:get_value(query_type_id, Opts),
+    LiveGroupId = proplists:get_value(live_group_id, Opts),
+    LiveInputId = proplists:get_value(live_input_id, Opts),
     QueryText = z_string:trim(z_convert:to_binary(z_context:get_q(<<"query">>, Context))),
-    Vars = try
-        if
-            QueryText == <<>> ->
-                [
-                    {id, RscId},
-                    {result, undefined},
-                    {is_empty, true}
-                ];
-            true ->
-                Q = z_search_props:from_text(QueryText),
-                S = z_search:search(<<"query">>, Q, 1, 20, Context),
-                [
-                    {id, RscId},
-                    {result, S}
-                ]
-        end
-    catch
-        throw:{error, {Kind, Arg}} ->
-            [
-                {id, RscId},
-                {result, undefined},
-                {error, throw},
-                {reason, #{
-                    kind => z_convert:to_binary(Kind),
-                    arg => z_convert:to_binary(Arg)
-                }}
-            ];
-        error:Reason ->
-            [
-                {id, RscId},
-                {result, undefined},
-                {error, error},
-                {reason, z_convert:to_binary(Reason)}
-            ]
-    end,
+    BaseVars = [
+        {id, RscId},
+        {query_type_id, QueryTypeId},
+        {live_group_id, LiveGroupId},
+        {live_input_id, LiveInputId}
+    ],
+    Vars = query_preview_vars(QueryText, Context) ++ BaseVars,
     {Html, Context1} = z_template:render_to_iolist("_admin_query_preview.tpl", Vars, Context),
     z_render:update(DivId, Html, Context1).
+
+query_preview_vars(<<>>, _Context) ->
+    [
+        {result, undefined},
+        {is_empty, true}
+    ];
+query_preview_vars(QueryText, Context) ->
+    case search_query_resource:parse(QueryText, Context) of
+        {ok, Parsed} ->
+            QueryType = maps:get(query_type, Parsed),
+            SearchArgs = #{
+                <<"query_text">> => QueryText,
+                <<"query_type">> => QueryType,
+                <<"page">> => 1,
+                <<"pagelen">> => 20
+            },
+            case m_search:search(<<"query">>, SearchArgs, Context) of
+                {ok, Result} ->
+                    [
+                        {result, Result},
+                        {query_type, QueryType},
+                        {query_type_label, maps:get(query_type_label, Parsed)},
+                        {parsed, maps:get(parsed, Parsed)},
+                        {show_parsed, maps:get(show_parsed, Parsed)},
+                        {is_live, maps:get(is_live, Parsed)}
+                    ];
+                {error, Reason} ->
+                    query_preview_error(Parsed#{ reason => Reason })
+            end;
+        {error, {query_parse, Error}} when is_map(Error) ->
+            query_preview_error(Error);
+        {error, Reason} ->
+            query_preview_error(#{ reason => Reason })
+    end.
+
+query_preview_error(#{ reason := Reason } = Error) ->
+    [
+        {result, undefined},
+        {error, true},
+        {reason, query_preview_error_message(Error, Reason)},
+        {error_line, maps:get(line, Error, undefined)},
+        {error_column, maps:get(column, Error, undefined)},
+        {query_type, maps:get(query_type, Error, undefined)},
+        {query_type_label, maps:get(query_type_label, Error, undefined)},
+        {is_live, maps:get(is_live, Error, false)},
+        {show_parsed, maps:get(show_parsed, Error, false)}
+    ].
+
+query_preview_error_message(#{ message := Message }, _Reason) ->
+    z_convert:to_binary(Message);
+query_preview_error_message(_Error, Reason) when is_binary(Reason) ->
+    Reason;
+query_preview_error_message(_Error, Reason) ->
+    unicode:characters_to_binary(io_lib:format("~tp", [Reason])).
 
 
 set_value_slug(undefined, Context) ->

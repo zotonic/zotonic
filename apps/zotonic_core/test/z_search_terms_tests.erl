@@ -10,6 +10,15 @@
 -export([observe_acl_add_sql_check/2]).
 
 
+query_check_scope_test() ->
+    ?assertNot(z_search:is_query_check()),
+    ?assert(z_search:with_query_check(fun z_search:is_query_check/0)),
+    ?assertNot(z_search:is_query_check()),
+    ?assertError(
+        query_check_error,
+        z_search:with_query_check(fun() -> error(query_check_error) end)),
+    ?assertNot(z_search:is_query_check()).
+
 anyof_local_joins_use_subqueries_test() ->
     Query = z_search_terms:combine([
         #search_sql_nested{

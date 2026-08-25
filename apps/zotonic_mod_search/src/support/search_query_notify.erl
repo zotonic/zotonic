@@ -43,22 +43,18 @@ init(Context) ->
 
 
 watches_update(Id, Watches, Context) ->
-    case m_rsc:p(Id, 'query', Context) of
-        undefined ->
-            proplists:delete(Id, Watches);
-        Q ->
-            case z_convert:to_bool(m_rsc:p_no_acl(Id, is_query_live, Context)) of
-                true ->
-                    try
-                        Query = z_search_props:from_text(z_html:unescape(Q)),
-                        [{Id, Query} | proplists:delete(Id, Watches)]
-                    catch
-                        throw:{error,{unknown_query_term, _Term}} ->
-                            proplists:delete(Id, Watches)
-                    end;
-                false ->
+    case z_convert:to_bool(m_rsc:p_no_acl(Id, is_query_live, Context)) of
+        true ->
+            case search_query_resource:from_resource(Id, #{}, Context) of
+                {ok, #{ is_live := true, parsed := Query }} ->
+                    [{Id, Query} | proplists:delete(Id, Watches)];
+                {ok, #{ is_live := false }} ->
+                    proplists:delete(Id, Watches);
+                {error, _Reason} ->
                     proplists:delete(Id, Watches)
-            end
+            end;
+        false ->
+            proplists:delete(Id, Watches)
     end.
 
 watches_remove(Id, Watches, _Context) ->
@@ -119,4 +115,3 @@ execute_query_check(CheckId, #{ <<"q">> := Terms } = Query, Context) ->
         [CheckId] -> true;
         [] -> false
     end.
-

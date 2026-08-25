@@ -25,11 +25,11 @@ The Zotonic extension functions `zotonic:fullText` and `zotonic:fullTextRank` se
 # Two parameter searches, using default pivot
 FILTER(zotonic:fullText(?r, "search text"))
 zotonic:fullTextRank(?r, "search text")
-``
+```
 
 Or search a fulltext or fts column:
 
-``
+```sparql
 # Three parameter searches on columns or text values
 FILTER(zotonic:fullText(?r, zotonic:facet.sometextindex, "search text"))
 zotonic:fullTextRank(?r, zotonic:pivot.name.texts, "search text")
@@ -84,6 +84,66 @@ The value of an argument is one of:
 - Date: {Y,M,D}, converted to {{Y,M,D}, {0,0,0}}
 - Undefined: use the atom `undefined`
 
+JSON callers can represent values that need an explicit RDF interpretation as:
+
+```json
+{
+  "related": { "type": "resource", "value": 123 },
+  "homepage": { "type": "iri", "value": "https://example.test/" },
+  "since": { "type": "datetime", "value": "2026-08-20T10:00:00Z" },
+  "day": { "type": "date", "value": "2026-08-20" }
+}
+```
+
+Model API
+---------
+
+`m.sparql` and `m.search.sparql` both run SPARQL through Zotonic's normal
+search pipeline. Consequently paging, result formatting and resource ACL
+restrictions are the same as for other searches.
+
+The arguments are a map containing `query` and, optionally, a nested `args`
+map of named pre-bound SPARQL variables:
+
+```erlang
+SearchArgs = #{
+    <<"query">> => Sparql,
+    <<"args">> => #{
+        <<"related">> => #{ <<"type">> => <<"resource">>, <<"value">> => 123 }
+    },
+    <<"page">> => 1,
+    <<"pagelen">> => 20
+},
+{ok, Result} = m_sparql:search(SearchArgs, Context),
+{ok, Result} = m_search:search(<<"sparql">>, SearchArgs, Context).
+```
+
+The model paths `/`, `/paged` and `/count` are available through the normal
+Zotonic model API. SPARQL can project multiple values when called directly;
+the result rows then use the normal SPARQL result shape.
+
+Query resources
+---------------
+
+The admin query editor automatically classifies search-term, JSON search and
+SPARQL text, shows its classification and reports parser errors before saving.
+The detected classifier name is stored in the `query_type` property, but it is
+always checked again on the server.
+
+A SPARQL query stored in a `query` resource can be invoked by its resource
+name through `m.search`, like any other named search. Named pre-bound variables
+are passed in the nested `args` map. Stored SPARQL queries must select exactly
+one variable, and that variable must be the root resource. This preserves the
+resource-id result contract of query resources.
+
+Live query notifications remain limited to mod_search's search-term and JSON
+formats. SPARQL query resources are never registered as live watches, even if
+the old `is_query_live` property was set.
+
+Additional modules can provide future query formats by observing the
+`search_query_parse` notification and returning a classified, compiled search
+descriptor.
+
 
 Translations
 ------------
@@ -124,9 +184,9 @@ TODO
  - [ ] Support EXISTS / NOT EXISTS inside compound and result expressions
  - [ ] Support language handling, using the JSON objects: { _type: "trans", tr = { "en":"..." } }, including LANG etc.
  - [ ] Add DATATYPE support
- - [ ] Add Zotonic m_sparql model for querying
+ - [x] Add Zotonic m_sparql model for querying
  - [ ] Add SPARQL endpoint, with expected results (for use with 3rd parties -- check API standards)
- - [ ] Allow SPARQL query in search_query resources (needs extra notifier for mapping/validation/execution?)
+ - [x] Allow SPARQL query in search_query resources
 
 After merge:
  - [ ] Ensure the types of z_props, mod_rdf and search_facet are the same (bool -> boolean, int -> integer)

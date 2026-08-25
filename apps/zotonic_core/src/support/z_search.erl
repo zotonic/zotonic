@@ -45,6 +45,9 @@
 
     default_pagelen/1,
 
+    with_query_check/1,
+    is_query_check/0,
+
     normalize_value/4
 ]).
 
@@ -69,6 +72,36 @@
 
 -define(SEARCH_ALL_LIMIT, 30000).
 -define(MIN_LOOKAHEAD, 200).
+-define(QUERY_CHECK_KEY, {z_search, is_query_check}).
+
+
+%% @doc Run a quick query syntax/type check. Parser implementations can use
+%% is_query_check/0 to suppress diagnostics for formats which are being tried
+%% as part of query classification.
+-spec with_query_check(Fun) -> Result
+    when
+        Fun :: fun(() -> Result),
+        Result :: term().
+with_query_check(Fun) ->
+    Previous = erlang:get(?QUERY_CHECK_KEY),
+    erlang:put(?QUERY_CHECK_KEY, true),
+    try
+        Fun()
+    after
+        restore_query_check(Previous)
+    end.
+
+%% @doc Check if the current process is doing a quick query syntax/type check.
+-spec is_query_check() -> boolean().
+is_query_check() ->
+    erlang:get(?QUERY_CHECK_KEY) =:= true.
+
+restore_query_check(undefined) ->
+    erlang:erase(?QUERY_CHECK_KEY),
+    ok;
+restore_query_check(Previous) ->
+    erlang:put(?QUERY_CHECK_KEY, Previous),
+    ok.
 
 %% @doc Perform a named search with arguments.
 -spec search(Name, Args, Page, PageLen, Context) -> Result when

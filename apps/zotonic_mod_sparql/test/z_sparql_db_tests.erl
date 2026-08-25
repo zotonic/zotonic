@@ -277,6 +277,15 @@ category_type_test() ->
         ok = m_rsc:delete(ObjectId, Context)
     end.
 
+unavailable_type_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    Context = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+    ?assertEqual([], search(<<
+        "SELECT ?r WHERE { "
+        "?r a <http://example.test/UnavailableType> "
+        "}"
+    >>, Context)).
+
 is_published_column_test() ->
     ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
     Context = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),

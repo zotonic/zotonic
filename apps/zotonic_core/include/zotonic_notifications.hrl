@@ -889,6 +889,18 @@
     } | undefined
 }).
 
+%% @doc Classify and compile query-resource text to search SQL terms.
+%% Type: first
+%% Return: ``{ok, map()}``, ``{error, {query_parse, map()}}`` or ``undefined``.
+%% A successful result contains ``query_type``, ``query_type_label``, ``parsed``,
+%% ``search_terms``, ``is_live`` and ``show_parsed``. An error map contains the
+%% type, label and flags together with ``reason``.
+-record(search_query_parse, {
+    query :: binary(),
+    query_type = undefined :: binary() | undefined,
+    arguments = #{} :: map()
+}).
+
 %% @doc Map a custom search term to a ``#search_sql_term{}`` record.
 %% Type: first
 %% Return: ``#search_sql_term{}``, ``[]``, or ``undefined``

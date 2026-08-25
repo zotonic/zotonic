@@ -1,14 +1,22 @@
+{% if not is_empty %}
+    <p class="text-info">
+        <span class="glyphicon glyphicon-info-sign"></span>
+        {_ Query format: _}
+        <strong>{{ query_type_label|escape }}</strong>
+        {% if query_type %}<code>{{ query_type|escape }}</code>{% endif %}
+    </p>
+{% endif %}
+
 {% if error %}
     <p class="text-danger">
         <span class="glyphicon glyphicon-alert"></span>
-        {_ There is an error in the query: _}
-        {% if error == `throw` %}
-            {{ reason.kind|escape }} {{ reason.arg|escape }}
-        {% elseif reason == 'badarg' %}
-            {_ The query could not be parsed, check the syntax. _} (badarg)
-        {% else %}
-            {{ reason|escape }}
+        <strong>{_ There is an error in the query. _}</strong><br>
+        {% if error_line and error_column %}
+            {% trans "Line {line}, column {column}:" line=error_line column=error_column %}
+        {% elseif error_line %}
+            {% trans "Line {line}:" line=error_line %}
         {% endif %}
+        {{ reason|escape }}
     </p>
 {% elseif is_empty %}
     <p class="text-info">
@@ -19,7 +27,7 @@
     <h4>{_ Query results _}</h4>
 
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-{% if show_parsed %}6{% else %}12{% endif %}">
             <p>
                 {% if result.is_total_estimated %}{% trans "About {n} items found." n=result.total|round_significant:2 %}
                 {% else %}{% trans "{n} items found." n=result.total %}
@@ -50,10 +58,11 @@
             {% endfor %}
             </ul>
         </div>
+        {% if show_parsed %}
         <div class="col-lg-6">
             <details>
                 <summary>{_ Show query as JSON _}</summary>
-                <pre><code id="{{ #json }}">{{ result.search_args.q|to_json|escape }}</code></pre>
+                <pre><code id="{{ #json }}">{{ parsed.q|to_json|escape }}</code></pre>
             </details>
 
             {% javascript %}
@@ -69,5 +78,27 @@
             }
             {% endjavascript %}
         </div>
+        {% endif %}
     </div>
 {% endif %}
+
+{% javascript %}
+{
+    const typeInput = document.getElementById('{{ query_type_id }}');
+    const liveGroup = document.getElementById('{{ live_group_id }}');
+    const liveInput = document.getElementById('{{ live_input_id }}');
+    const isLive = {% if is_live %}true{% else %}false{% endif %};
+
+    if (typeInput) {
+        typeInput.value = '{{ query_type|escapejs }}';
+    }
+    if (liveGroup) {
+        liveGroup.classList.toggle('hidden', !isLive);
+    }
+    if (liveInput) {
+        if (!isLive) {
+            liveInput.checked = false;
+        }
+    }
+}
+{% endjavascript %}

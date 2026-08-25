@@ -52,6 +52,32 @@ parser_error_test() ->
         {error, {_Location, z_sparql_parser, _Message}},
         z_sparql:parse(<<"SELECT WHERE {}">>)).
 
+query_parse_error_message_test() ->
+    Context = z_context:new(zotonic_site_testsandbox),
+    ?assertMatch(
+        {error, {query_parse, #{
+            reason := <<"undefined:1:18: Unknown keyword or invalid prefixed name zotonic">>,
+            message := <<"Unknown keyword or invalid prefixed name zotonic">>,
+            line := 1,
+            column := 18
+        }}},
+        mod_sparql:observe_search_query_parse(#search_query_parse{
+            query = <<"SELECT ?r WHERE {zotonic }">>,
+            query_type = <<"sparql">>,
+            arguments = #{}
+        }, Context)),
+    ?assertMatch(
+        {error, {query_parse, #{
+            message := <<"Syntax error before \"WHERE\".">>,
+            line := 1,
+            column := 8
+        }}},
+        mod_sparql:observe_search_query_parse(#search_query_parse{
+            query = <<"SELECT WHERE {}">>,
+            query_type = <<"sparql">>,
+            arguments = #{}
+        }, Context)).
+
 blank_node_property_list_test() ->
     {ok, _} = application:ensure_all_started(zotonic_notifier),
     Context = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
@@ -141,6 +167,28 @@ category_mapping_test() ->
         <<"article">>,
         z_rdf_props:category_mapping(<<"https://schema.org/Article">>)).
 
+rdf_type_mapping_failure_test() ->
+    {ok, _} = application:ensure_all_started(zotonic_notifier),
+    Context = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+    ok = z_notifier:observe(sparql_mapping, {?MODULE, observe_sparql_mapping}, 100, Context),
+    try
+        {ok, Query} = z_sparql:parse(<<
+            "SELECT ?r WHERE { "
+            "?r a <http://example.test/UnavailableType> "
+            "}"
+        >>),
+        ?assertMatch(
+            {ok, #{
+                where := {triple, _, #{ mapping := type_unavailable }, _}
+            }},
+            z_sparql_plan:to_query_plan(Query, Context)),
+        ?assertMatch(
+            {ok, [#search_sql_term{ where = [<<"false">>] }, #search_sql_term{}]},
+            z_sparql_sql:to_sql_term(Query, Context))
+    after
+        z_notifier:detach(sparql_mapping, Context)
+    end.
+
 zotonic_rsc_mapping_test() ->
     ?assertEqual(<<"name">>, z_rdf_props:mapping(<<"zotonic:name">>)),
     ?assertEqual(<<"id">>, z_rdf_props:mapping(<<"zotonic:id">>)).
@@ -212,6 +260,8 @@ observe_rdf_ns(#rdf_ns{}, _Context) ->
 
 observe_sparql_mapping(#sparql_mapping{ ns_prefix = <<"foaf">>, predicate = <<"name">> }, _Context) ->
     {ok, {jsonb, <<"rsc">>, <<"props_json">>, [<<"title">>], text}};
+observe_sparql_mapping(#sparql_mapping{ predicate = <<"type">> }, _Context) ->
+    {ok, {jsonb, <<"rsc">>, <<"props_json">>, [<<"type">>], text}};
 observe_sparql_mapping(#sparql_mapping{ ns_prefix = <<"https://example.test/vocab#">>, predicate = <<"label">> }, _Context) ->
     {ok, {jsonb, <<"rsc">>, <<"props_json">>, [<<"label">>], text}};
 observe_sparql_mapping(#sparql_mapping{}, _Context) ->

@@ -23,9 +23,25 @@ argument_normalization_test() ->
         <<"ratio">> => 1.5,
         <<"date">> => {2008, 12, 10},
         <<"datetime">> => DateTime,
+        <<"json_date">> => #{
+            <<"type">> => <<"date">>,
+            <<"value">> => <<"2008-12-10">>
+        },
+        <<"json_datetime">> => #{
+            <<"type">> => <<"datetime">>,
+            <<"value">> => <<"2008-12-10T11:12:13Z">>
+        },
         <<"optional">> => undefined,
         <<"iri">> => {iri, <<"https://example.test/id/1">>},
-        <<"resource">> => {rsc, 123}
+        <<"resource">> => {rsc, 123},
+        <<"json_iri">> => #{
+            <<"type">> => <<"iri">>,
+            <<"value">> => <<"https://example.test/id/2">>
+        },
+        <<"json_resource">> => #{
+            <<"type">> => <<"resource">>,
+            <<"value">> => 456
+        }
     }, Context),
     ?assertEqual({value, true, boolean}, maps:get({var, <<"enabled">>}, Arguments)),
     ?assertEqual({value, <<"draft">>, text}, maps:get({var, <<"status">>}, Arguments)),
@@ -33,9 +49,19 @@ argument_normalization_test() ->
     ?assertEqual({value, 1.5, float}, maps:get({var, <<"ratio">>}, Arguments)),
     ?assertEqual({value, {{2008, 12, 10}, {0, 0, 0}}, datetime}, maps:get({var, <<"date">>}, Arguments)),
     ?assertEqual({value, DateTime, datetime}, maps:get({var, <<"datetime">>}, Arguments)),
+    ?assertEqual(
+        {value, {{2008, 12, 10}, {0, 0, 0}}, datetime},
+        maps:get({var, <<"json_date">>}, Arguments)),
+    ?assertEqual(
+        {value, DateTime, datetime},
+        maps:get({var, <<"json_datetime">>}, Arguments)),
     ?assertEqual(undefined, maps:get({var, <<"optional">>}, Arguments)),
     ?assertEqual({iri, <<"https://example.test/id/1">>}, maps:get({var, <<"iri">>}, Arguments)),
-    ?assertEqual({resource, 123}, maps:get({var, <<"resource">>}, Arguments)).
+    ?assertEqual({resource, 123}, maps:get({var, <<"resource">>}, Arguments)),
+    ?assertEqual(
+        {iri, <<"https://example.test/id/2">>},
+        maps:get({var, <<"json_iri">>}, Arguments)),
+    ?assertEqual({resource, 456}, maps:get({var, <<"json_resource">>}, Arguments)).
 
 invalid_argument_test() ->
     Context = test_context(),

@@ -1,9 +1,11 @@
 Parameterized SPARQL queries
 ============================
 
-`z_sparql:search/3` and `z_sparql:search/4` accept a map of pre-bound query
-variables. Values remain PostgreSQL parameters throughout SQL generation, which
-prevents SPARQL values from being assembled through string concatenation.
+`z_sparql:search/3`, `z_sparql:search/4`, `m.sparql` and
+`m.search.sparql` accept a map of pre-bound query variables. The model/search
+forms place that map in the `args` key next to the SPARQL `query`. Values remain
+PostgreSQL parameters throughout SQL generation, which prevents potential injection
+attacks against the SPARQL queries.
 
 The argument map is semantically similar to adding `VALUES` bindings to the
 query, but it is applied by the query planner rather than by rewriting SPARQL
@@ -69,6 +71,15 @@ Accepted argument values
     {iri, BinaryIri}          IRI
     {rsc, Reference}          Zotonic resource reference resolved by m_rsc
 
+For JSON model clients, values with an RDF type use an object with `type` and
+`value` members:
+
+    { "type": "resource", "value": 123 }
+    { "type": "rsc",      "value": "page_name" }
+    { "type": "iri",      "value": "https://example.test/id/123" }
+    { "type": "date",     "value": "2008-12-10" }
+    { "type": "datetime", "value": "2008-12-10T11:12:13Z" }
+
 Invalid dates, invalid Unicode lists, empty/invalid argument names and other
 structured Erlang values return an error.
 
@@ -78,4 +89,5 @@ resource position, integer and text arguments are also resolved through
 the SQL expression mapper can infer or validate casts.
 
 The query-level SPARQL `LIMIT` and `OFFSET` syntax is parsed but rejected by SQL
-generation. Use the separate Zotonic `OffsetLimit` argument shown above.
+generation. Use Zotonic's `page` and `pagelen` search arguments, or the explicit
+`OffsetLimit` argument shown above.

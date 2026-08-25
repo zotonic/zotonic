@@ -3343,6 +3343,59 @@ Return:
 
 -optional_callbacks([ observe_search_query/2, pid_observe_search_query/3 ]).
 
+%% Classify and compile query-resource text to search SQL terms.
+%% Type: first
+-doc("
+Classify and compile query-resource text to search terms.
+
+This notification makes query resources extensible with additional query
+languages. If `query_type` is `undefined`, observers can inspect `query` and
+claim a recognized format. If it is set, only the observer supporting that
+type should handle the notification. The `arguments` map contains named
+arguments supplied by the caller. During classification, with an undefined
+`query_type`, `z_search:is_query_check/0` returns `true`. Observers can use this
+to suppress parser diagnostics for candidate formats; structured parse errors
+must still be returned normally.
+
+Type:
+
+[first](/id/doc_developerguide_notifications#notification-first)
+
+Return:
+
+`{ok, Query}`, `{error, {query_parse, Error}}`, or `undefined`.
+The returned `Query` map has the following properties:
+
+*   query\\_type: stable binary identifier for the recognized format
+*   query\\_type\\_label: translated or binary editor label
+*   parsed: parser-specific representation used for diagnostics
+*   search\\_terms: compiled `#search_sql_terms{}` or `#search_result{}`
+*   is\\_live: whether query resources of this type support live matching
+*   show\\_parsed: whether the editor can display `parsed` as JSON
+
+The `Error` map contains `query_type`, `query_type_label`, `is_live`, and
+`show_parsed` with the same meanings, and a `reason` property containing the
+parser-specific error. It can include a human-readable `message` and the
+one-based `line` and `column` of the error. These optional properties are used
+when displaying parse errors in the query editor.
+
+`#search_query_parse{}` properties:
+
+*   query: query text as a binary
+*   query\\_type: saved type hint as a binary, or `undefined`
+*   arguments: map of named query arguments
+").
+-callback observe_search_query_parse(#search_query_parse{}, z:context()) -> Result when
+    Result :: {ok, map()}
+            | {error, {query_parse, map()}}
+            | undefined.
+-callback pid_observe_search_query_parse(pid(), #search_query_parse{}, z:context()) -> Result when
+    Result :: {ok, map()}
+            | {error, {query_parse, map()}}
+            | undefined.
+
+-optional_callbacks([ observe_search_query_parse/2, pid_observe_search_query_parse/3 ]).
+
 %% Map a custom search term to a ``#search_sql_term{}`` record.
 %% Type: first
 -doc(#{

@@ -96,7 +96,7 @@ is_request_arg(<<"pagelen">>) -> false;
 is_request_arg(<<"options">>) -> false;
 % Complain about deprecated terms
 is_request_arg(<<"custompivot">>)         ->
-    ?LOG_ERROR(#{
+    maybe_log(error, #{
         in => zotonic_mod_search,
         text => <<"The query term 'custompivot' has been removed. Use filters with 'pivot:pivotname:field' instead.">>,
         result => error,
@@ -271,7 +271,7 @@ qterm(#{ <<"term">> := <<"visible_for">>, <<"value">> := VisFor}, _IsNested, _Co
         }
     catch
         error:badarg ->
-            ?LOG_WARNING(#{
+            maybe_log(warning, #{
                 in => zotonic_mod_search,
                 text => <<"Search: error converting visible_for search term">>,
                 result => error,
@@ -296,7 +296,7 @@ qterm(#{ <<"term">> := <<"visible_for">>, <<"value">> := VisFor} = T, _IsNested,
         end
     catch
         error:badarg ->
-            ?LOG_WARNING(#{
+            maybe_log(warning, #{
                 in => zotonic_mod_search,
                 text => <<"Search: error converting visible_for search term">>,
                 result => error,
@@ -786,27 +786,18 @@ qterm(#{ <<"term">> := <<"qargs">>, <<"value">> := Boolean}, IsNested, Context) 
         false ->
             []
     end;
-qterm(#{ <<"term">> := <<"query_id">>, <<"value">> := Id}, IsNested, Context) ->
+qterm(#{ <<"term">> := <<"query_id">>, <<"value">> := Id}, _IsNested, Context) ->
     %% query_id=<rsc id>
-    %% Get the query terms from given resource ID, and use those terms.
-    QueryText = z_html:unescape(m_rsc:p(Id, <<"query">>, Context)),
-    QueryTerms = try
-        #{ <<"q">> := Terms } = z_search_props:from_text(QueryText),
-        filter_empty(Terms)
-    catch
-        throw:{error,{unknown_query_term,Term}}:S ->
-            ?LOG_ERROR(#{
-                text => <<"Unknown query term in search query">>,
-                in => zotonic_mod_search,
-                result => error,
-                reason => unknown_query_term,
-                query_id => Id,
-                term => Term,
-                stack => S
-            }),
-            []
-    end,
-    qterm(QueryTerms, IsNested, Context);
+    %% Compile the stored query using its saved or detected query language.
+    %% Named arguments are only supported for top-level query-resource calls.
+    case search_query_resource:from_resource(Id, #{}, Context) of
+        {ok, #{ search_terms := #search_sql_terms{ terms = Terms } }} ->
+            Terms;
+        {ok, #{ search_terms := #search_result{} }} ->
+            none();
+        {error, Reason} ->
+            throw(Reason)
+    end;
 qterm(#{ <<"term">> := <<"rsc_id">>, <<"value">> := Id} = T, _IsNested, Context) ->
     %% rsc_id=<rsc id>
     %% Filter to *only* include the given rsc id. Can be used for resource existence check.
@@ -1251,7 +1242,7 @@ qterm(#{ <<"term">> := Term, <<"value">> := Arg}, IsNested, Context) ->
                     },
                     qterm(NewTerm, IsNested, Context);
                 {error, _} ->
-                    ?LOG_WARNING(#{
+                    maybe_log(warning, #{
                         in => zotonic_mod_search,
                         text => <<"Ignored unknown query search term">>,
                         term => Term,
@@ -1736,7 +1727,7 @@ assure_category_1(Name, Context) ->
         _ ->
             case m_rsc:rid(Name, Context) of
                 undefined ->
-                    ?LOG_NOTICE(#{
+                    maybe_log(notice, #{
                         text => <<"Query: unknown category">>,
                         in => zotonic_mod_search,
                         name => Name
@@ -1745,7 +1736,7 @@ assure_category_1(Name, Context) ->
                 CatId ->
                     case m_category:id_to_name(CatId, Context) of
                         undefined ->
-                            ?LOG_NOTICE(#{
+                            maybe_log(notice, #{
                                 text => <<"Query: term is not a category">>,
                                 in => zotonic_mod_search,
                                 name => Name
@@ -1831,7 +1822,7 @@ pivot_qterm_op(Tab, Alias, Col, Op, Value, Query, Context) ->
             },
             {ok, Query3};
         {error, Reason} = Error ->
-            ?LOG_WARNING(#{
+            maybe_log(warning, #{
                 text => <<"Pivot value error, dropping query term.">>,
                 in => zotonic_mod_search,
                 result => error,
@@ -2034,12 +2025,22 @@ map_filter_operator(<<"overlaps">>) -> <<"&&">>;
 map_filter_operator(<<"@>">>) -> <<"@>">>;
 map_filter_operator(<<"contains">>) -> <<"@>">>;
 map_filter_operator(Op) ->
-    ?LOG_WARNING(#{
+    maybe_log(warning, #{
         in => zotonic_mod_search,
         text => <<"Query: unknown filter operator, defaulting to '='">>,
         operator => Op
     }),
     <<"=">>.
+
+maybe_log(Level, Event) ->
+    case z_search:is_query_check() of
+        true -> ok;
+        false -> log(Level, Event)
+    end.
+
+log(error, Event) -> ?LOG_ERROR(Event);
+log(warning, Event) -> ?LOG_WARNING(Event);
+log(notice, Event) -> ?LOG_NOTICE(Event).
 
 %% Expand the argument for hasanyobject, make pairs of {ObjectId,PredicateId}
 expand_object_predicates(Bin, Context) when is_binary(Bin) ->

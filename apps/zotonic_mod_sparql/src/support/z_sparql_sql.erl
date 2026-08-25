@@ -21,7 +21,8 @@
 
 -export([
     to_sql_term/2,
-    to_sql_term/3
+    to_sql_term/3,
+    query_plan_to_sql/2
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -521,6 +522,8 @@ mapped_triple_to_sql({edge, Predicate, true}, SubjectAlias, Object, Term0, State
     edge_to_sql(
         Predicate, <<"object_id">>, <<"subject_id">>,
         SubjectAlias, Object, Term0, State0);
+mapped_triple_to_sql(type_unavailable, _SubjectAlias, _Object, Term0, State) ->
+    {[add_where(<<"false">>, Term0)], State};
 mapped_triple_to_sql(category, SubjectAlias, {iri, Iri}, Term0, State) ->
     Context = State#sql_state.context,
     case m_rsc:uri_lookup(Iri, Context) of

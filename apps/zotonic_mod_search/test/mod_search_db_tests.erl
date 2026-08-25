@@ -57,6 +57,25 @@ search_count_test() ->
     ?assert(is_integer(N) andalso N >= 0),
     ok.
 
+query_resource_json_text_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    Context = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+    QueryText = <<
+        "[\n"
+        "  {\n"
+        "    \"term\": \"cat\",\n"
+        "    \"value\": \"text\"\n"
+        "  }\n"
+        "]"
+    >>,
+    ?assertMatch(
+        {ok, #search_result{}},
+        m_search:search(<<"query">>, #{
+            <<"query_text">> => QueryText,
+            <<"query_type">> => <<"search_json">>,
+            <<"pagelen">> => 20
+        }, Context)).
+
 query_hooks_test() ->
     ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
     C = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
