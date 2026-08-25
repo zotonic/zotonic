@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-08-25 14:48\n"
+"PO-Revision-Date: 2026-08-25 16:33\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -9788,7 +9788,7 @@ msgstr "Bersih"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:54
 msgid "Clear the delivery history and send to all recipients again."
-msgstr ""
+msgstr "Hapus riwayat pengiriman dan kirim kembali ke semua penerima."
 
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:10
 msgid "Click <strong>unsubscribe</strong> to remove yourself from the mailing list."
@@ -9820,7 +9820,7 @@ msgstr "Konfirmasikan jadwal pembatalan."
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:86
 msgid "Confirm sending test mailing"
-msgstr ""
+msgstr "Konfirmasi pengiriman surat uji coba"
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:88
 msgid "Confirm sending to mailinglist"
@@ -9896,11 +9896,11 @@ msgstr "E-mail halaman ini"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:29
 msgid "Edit list"
-msgstr ""
+msgstr "Edit daftar"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:116
 msgid "Edit mailinglist"
-msgstr ""
+msgstr "Edit milis"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:82
 #: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:72
@@ -9909,7 +9909,7 @@ msgstr "Edit penerima"
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:112
 msgid "Enter a valid mailing date and time."
-msgstr ""
+msgstr "Masukkan tanggal dan waktu pengiriman yang valid."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipient.tpl:2
 msgid "Enter the e-mail address of the recipient. The name of the recipient is optional."
@@ -9927,7 +9927,7 @@ msgstr "Nama depan"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:63
 msgid "For recipients with a preferred language, only send if this page has a matching translation."
-msgstr ""
+msgstr "Bagi penerima yang memiliki bahasa pilihan, kirimkan pesan hanya jika halaman ini memiliki terjemahan yang sesuai."
 
 #: zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:13
 msgid "From now on you will receive mail from our mailing list."
@@ -9953,7 +9953,7 @@ msgstr "Bantuan tentang daftar surat"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:16
 msgid "Help with sending a page"
-msgstr ""
+msgstr "Bantuan untuk mengirim halaman"
 
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:24
 msgid "Here you can change subscriptions connected to your email address <b>{email}</b>."
@@ -9981,7 +9981,7 @@ msgstr "Simpan surat"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:106
 msgid "Language:"
-msgstr ""
+msgstr "Bahasa:"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar_mailinglist.tpl:32
 msgid "Mail"
@@ -9989,7 +9989,7 @@ msgstr "Surat"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:7
 msgid "Mailing"
-msgstr ""
+msgstr "Pengiriman Surat"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:3
 msgid "Mailing Lists"
@@ -10040,11 +10040,11 @@ msgstr "Tidak ditemukan item"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:106
 msgid "No mailing lists found."
-msgstr ""
+msgstr "Tidak ditemukan milis."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:53
 msgid "No pending mailings."
-msgstr ""
+msgstr "Tidak ada pengiriman yang tertunda."
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:39
 msgid "Number of recipients on this list:"
@@ -10084,7 +10084,7 @@ msgstr "Halaman yang cocok dengan permintaan pencarian penerima di bawah ini."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:2
 msgid "Pending mailings"
-msgstr ""
+msgstr "Pengiriman yang masih tertunda"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:51
 msgid "Perform operation"
@@ -10131,7 +10131,7 @@ msgstr "Tinjau surat"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:23
 msgid "Publication date"
-msgstr ""
+msgstr "Tanggal terbit"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:110
 msgid "Query, for example:"
@@ -10164,7 +10164,7 @@ msgstr "Penerima untuk"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:8
 msgid "Recipients for “{title}”"
-msgstr ""
+msgstr "Penerima penghargaan “{title}”"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:103
 msgid "Recipients search query"
@@ -10181,7 +10181,7 @@ msgstr "Langganan dihapus."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:39
 msgid "Reset the statistics before sending."
-msgstr ""
+msgstr "Atur ulang statistik sebelum mengirim."
 
 #: zotonic_mod_mailinglist/src/mod_mailinglist.erl:518
 msgid "Saved the opt-out preference."
@@ -10193,19 +10193,19 @@ msgstr "Terjadwal"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:11
 msgid "Scheduled for"
-msgstr ""
+msgstr "Dijadwalkan pada"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:14
 msgid "Select a mailing list below, or preview and test the mailing first."
-msgstr ""
+msgstr "Pilih salah satu milis di bawah ini, atau lihat pratinjau dan uji milis tersebut terlebih dahulu."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:63
 msgid "Select page to send"
-msgstr ""
+msgstr "Pilih halaman yang akan dikirim"
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:115
 msgid "Select when the mailing should be sent."
-msgstr ""
+msgstr "Pilih kapan surat tersebut harus dikirim."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:36
 msgid "Select..."
@@ -10213,7 +10213,7 @@ msgstr "Pilih..."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:92
 msgid "Send date:"
-msgstr ""
+msgstr "Tanggal pengiriman:"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:15
 msgid "Send e-mail"
@@ -10221,11 +10221,11 @@ msgstr "Kirim e-mail"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:17
 msgid "Send immediately"
-msgstr ""
+msgstr "Kirim segera"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:48
 msgid "Send immediately; the page does not need to be published."
-msgstr ""
+msgstr "Kirim segera; halaman tersebut tidak perlu dipublikasikan."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:67
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:112
@@ -10234,20 +10234,20 @@ msgstr "Kirim surat"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:55
 msgid "Send now"
-msgstr ""
+msgstr "Kirim sekarang"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:59
 msgid "Send page to this list..."
-msgstr ""
+msgstr "Kirim halaman ini ke milis ini..."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:110
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:24
 msgid "Send test mailing now"
-msgstr ""
+msgstr "Kirim surat uji coba sekarang"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:46
 msgid "Send test now"
-msgstr ""
+msgstr "Kirim tes sekarang"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar_mailinglist.tpl:34
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:29
@@ -10261,19 +10261,19 @@ msgstr "Mengirim surat secara otomatis setelah publikasi tanggal mulai"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:82
 msgid "Send the mailing immediately after the page has been published."
-msgstr ""
+msgstr "Kirimkan surat tersebut segera setelah halaman tersebut dipublikasikan."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:89
 msgid "Send the mailing on a specific date and time."
-msgstr ""
+msgstr "Kirimkan surat tersebut pada tanggal dan waktu tertentu."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:73
 msgid "Send the mailing right now."
-msgstr ""
+msgstr "Kirim surat itu sekarang juga."
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:26
 msgid "Send this page immediately to the test mailing list. The page does not need to be published."
-msgstr ""
+msgstr "Segera kirim halaman ini ke milis pengujian. Halaman ini tidak perlu dipublikasikan."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar_mailinglist.tpl:13
 msgid "Send this page to a mailinglist and view mailinglist statistics."
@@ -10287,7 +10287,7 @@ msgstr "Kirimkan halaman ini ke satu alamat"
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:52
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:69
 msgid "Send to"
-msgstr ""
+msgstr "Kirim ke"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:90
 msgid "Send welcome"
@@ -10295,16 +10295,16 @@ msgstr "Kirim Selamat datang"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:8
 msgid "Send “{title}”"
-msgstr ""
+msgstr "Kirim “{title}”"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:3
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:12
 msgid "Send “{title}” to a mailing list"
-msgstr ""
+msgstr "Kirim “{title}” ke milis"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:9
 msgid "Sender"
-msgstr ""
+msgstr "Pengirim"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:28
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:30
@@ -10318,7 +10318,7 @@ msgstr "Nama pengirim e-mail (pilihan)"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:103
 msgid "Sender:"
-msgstr ""
+msgstr "Pengirim:"
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mail_page.erl:60
 msgid "Sending the e-mail..."
@@ -10330,7 +10330,7 @@ msgstr "Mengirimkan halaman ke"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:22
 msgid "Sent on / Status"
-msgstr ""
+msgstr "Dikirim pada / Status"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:57
 msgid "Show all recipients"
@@ -10390,11 +10390,11 @@ msgstr "Daftar Target mailing"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:81
 msgid "Test mailing list"
-msgstr ""
+msgstr "Daftar milis uji coba"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:41
 msgid "Test mailings are sent immediately. The page does not need to be published, but you must have permission to view it."
-msgstr ""
+msgstr "Email uji coba langsung dikirim. Halaman tersebut tidak perlu dipublikasikan, tetapi Anda harus memiliki izin untuk melihatnya."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:85
 msgid "Text shown below the confirmation, welcome and unsubscribe e-mails."
@@ -10418,7 +10418,7 @@ msgstr "Kunci dalam link anda tidak ada langganan. Entah anda sudah berhenti ber
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:110
 msgid "The mailing date must be in the future."
-msgstr ""
+msgstr "Tanggal pengiriman harus di masa depan."
 
 #: zotonic_mod_mailinglist/src/mod_mailinglist.erl:374
 msgid "The mailing has been canceled."
@@ -10426,11 +10426,11 @@ msgstr "Surat tersebut tidak jadi dikirim."
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:95
 msgid "The mailing has been queued for immediate sending..."
-msgstr ""
+msgstr "Surat tersebut telah dimasukkan ke dalam antrian untuk segera dikirim..."
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:108
 msgid "The mailing has been scheduled."
-msgstr ""
+msgstr "Pengiriman surat tersebut telah dijadwalkan."
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:100
 msgid "The mailing will be sent when the page becomes visible."
@@ -10438,19 +10438,19 @@ msgstr "Email akan dikirim ketika halaman tersebut terlihat."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:37
 msgid "The page does not need to be published, but you must have permission to view it."
-msgstr ""
+msgstr "Halaman tersebut tidak perlu dipublikasikan, tetapi Anda harus memiliki izin untuk melihatnya."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:75
 msgid "The page is unpublished, no link back to the website in the mailing."
-msgstr ""
+msgstr "Halaman tersebut belum dipublikasikan, dan tidak ada tautan kembali ke situs web dalam email tersebut."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:10
 msgid "The page “{title}” has been sent to the following lists:"
-msgstr ""
+msgstr "Halaman “{title}” telah dikirimkan ke milis-milis berikut:"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:12
 msgid "The page “{title}” has never been sent yet."
-msgstr ""
+msgstr "Halaman “{title}” belum pernah dikirim."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:3
 msgid "The recipients list of the mailing list will be deleted as well."
@@ -10458,7 +10458,7 @@ msgstr "Daftar penerima mailing daftar akan dihapus juga."
 
 #: zotonic_mod_mailinglist/src/mod_mailinglist.erl:407
 msgid "The selected page could not be found."
-msgstr ""
+msgstr "Halaman yang dipilih tidak dapat ditemukan."
 
 #: zotonic_mod_mailinglist/src/mod_mailinglist.erl:384
 msgid "The statistics have been cleared."
@@ -10466,11 +10466,11 @@ msgstr "Statistik telah dihapus."
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_mailing_page_test.erl:68
 msgid "The test mailing has been queued for immediate sending..."
-msgstr ""
+msgstr "Surat uji coba telah dimasukkan ke dalam antrian untuk segera dikirim..."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:7
 msgid "The test will be sent immediately, even if the page is not published."
-msgstr ""
+msgstr "Tes tersebut akan segera dikirim, meskipun halaman tersebut belum dipublikasikan."
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_mailing_page_test.erl:73
 msgid "There is no mailing list with the name ‘mailinglist_test’."
@@ -10490,11 +10490,11 @@ msgstr "Ini adalah daftar \"pribadi\" yang dikelola secara eksternal. Penerima t
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:49
 msgid "This page has already been sent to this list. If you send it again, only recipients who have not yet received it will be emailed."
-msgstr ""
+msgstr "Halaman ini sudah dikirimkan ke milis ini. Jika Anda mengirimkannya lagi, hanya penerima yang belum menerimanya yang akan menerima email tersebut."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:36
 msgid "This test mailing will be sent immediately."
-msgstr ""
+msgstr "Surat uji coba ini akan segera dikirim."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipient.tpl:6
 msgid "Tick the checkbox if you want the recipient to receive a welcome e-mail message."
@@ -10502,7 +10502,7 @@ msgstr "Centang kotak centang jika anda ingin penerima untuk menerima sebuah pes
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_task_language.tpl:4
 msgid "Unknown language"
-msgstr ""
+msgstr "Bahasa yang tidak dikenal"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:17
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:21
@@ -10539,7 +10539,7 @@ msgstr "Gunakan tautan di email Anda untuk mengelola langganan Anda."
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:17
 msgid "Use this overview to send the current page as an email to the recipients of a mailing list. You can preview the mailing or send a test before selecting a mailing list below. Test mailings can be sent while the page is unpublished. The table shows the status and statistics for each mailing list."
-msgstr ""
+msgstr "Gunakan ikhtisar ini untuk mengirim halaman saat ini sebagai email ke para penerima dalam sebuah milis. Anda dapat melihat pratinjau pengiriman atau mengirim email percobaan sebelum memilih milis di bawah ini. Pengiriman percobaan dapat dilakukan meskipun halaman tersebut belum dipublikasikan. Tabel tersebut menampilkan status dan statistik untuk setiap milis."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:38
 msgid "Used for uploading CSV files with recipients."
@@ -10555,7 +10555,7 @@ msgstr "Selamat datang di"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:70
 msgid "When should the mailing be sent?"
-msgstr ""
+msgstr "Kapan surat tersebut sebaiknya dikirim?"
 
 #: zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:110
 msgid "You are not allowed to add or enable recipients."
@@ -10659,7 +10659,7 @@ msgstr "batal"
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:98
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:35
 msgid "delayed"
-msgstr ""
+msgstr "tertunda"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:10
 #: zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:13
@@ -10691,7 +10691,7 @@ msgstr "Lihat di bawah"
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:100
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:37
 msgid "when the page becomes published"
-msgstr ""
+msgstr "ketika halaman tersebut telah dipublikasikan"
 
 #: zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:30
 msgid "Add after"
@@ -11987,7 +11987,7 @@ msgstr "Salin kata sandi ke papan klip."
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:112
 msgid "Could not send email to <strong>{email}</strong>. Please check the email address and try again."
-msgstr ""
+msgstr "Tidak dapat mengirim email ke <strong>{email}</strong>. Silakan periksa alamat email tersebut dan coba lagi."
 
 #: zotonic_mod_signup/priv/templates/email_signup_code.tpl:19
 msgid "Did you start this signup?"
@@ -12139,7 +12139,7 @@ msgstr "Sudah terlalu banyak upaya. Silakan coba mendaftar lagi satu jam lagi."
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:30
 msgid "We have sent a code to <strong>{email}</strong> to confirm your email address."
-msgstr ""
+msgstr "Kami telah mengirimkan kode ke <strong>{email}</strong> untuk mengonfirmasi alamat email Anda."
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:145
 msgid "We will be very careful with all the information given to us and will never give your name or address away without your permission. We do have some rules that we need you to agree with."
@@ -12927,11 +12927,11 @@ msgstr "Terbalik"
 
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:17
 msgid "It was filled in by:"
-msgstr ""
+msgstr "Hal itu diisi oleh:"
 
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:14
 msgid "It was filled in for:"
-msgstr ""
+msgstr "Hal itu diisi untuk:"
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:65
 msgid "Jump to a question on a next page."
