@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-08-25 14:47\n"
+"PO-Revision-Date: 2026-08-25 16:32\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -9789,7 +9789,7 @@ msgstr "Despejado"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:54
 msgid "Clear the delivery history and send to all recipients again."
-msgstr ""
+msgstr "Borra el historial de envíos y vuelve a enviarlos a todos los destinatarios."
 
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:10
 msgid "Click <strong>unsubscribe</strong> to remove yourself from the mailing list."
@@ -9821,7 +9821,7 @@ msgstr "Confirmar la cancelación de envió."
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:86
 msgid "Confirm sending test mailing"
-msgstr ""
+msgstr "Confirmar el envío del correo de prueba"
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:88
 msgid "Confirm sending to mailinglist"
@@ -9897,11 +9897,11 @@ msgstr "Enviar correo electrónico a esta página"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:29
 msgid "Edit list"
-msgstr ""
+msgstr "Editar lista"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:116
 msgid "Edit mailinglist"
-msgstr ""
+msgstr "Editar lista de correo"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:82
 #: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:72
@@ -9910,7 +9910,7 @@ msgstr "Editar destinatario"
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:112
 msgid "Enter a valid mailing date and time."
-msgstr ""
+msgstr "Introduce una fecha y una hora de envío válidas."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipient.tpl:2
 msgid "Enter the e-mail address of the recipient. The name of the recipient is optional."
@@ -9928,7 +9928,7 @@ msgstr "Nombre"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:63
 msgid "For recipients with a preferred language, only send if this page has a matching translation."
-msgstr ""
+msgstr "En el caso de los destinatarios que hayan indicado un idioma preferido, envía el mensaje solo si esta página cuenta con una traducción en ese idioma."
 
 #: zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:13
 msgid "From now on you will receive mail from our mailing list."
@@ -9954,7 +9954,7 @@ msgstr "Ayuda sobre listas de distribución de correo"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:16
 msgid "Help with sending a page"
-msgstr ""
+msgstr "Ayuda para enviar una página"
 
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:24
 msgid "Here you can change subscriptions connected to your email address <b>{email}</b>."
@@ -9982,7 +9982,7 @@ msgstr "Mantener la distribución de correo"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:106
 msgid "Language:"
-msgstr ""
+msgstr "Idioma:"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar_mailinglist.tpl:32
 msgid "Mail"
@@ -9990,7 +9990,7 @@ msgstr "Correo"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:7
 msgid "Mailing"
-msgstr ""
+msgstr "Correo"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:3
 msgid "Mailing Lists"
@@ -10041,11 +10041,11 @@ msgstr "No se han encontrado artículos"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:106
 msgid "No mailing lists found."
-msgstr ""
+msgstr "No se han encontrado listas de correo."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:53
 msgid "No pending mailings."
-msgstr ""
+msgstr "No hay envíos pendientes."
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:39
 msgid "Number of recipients on this list:"
@@ -10085,7 +10085,7 @@ msgstr "Páginas que coinciden con la consulta de búsqueda de destinatarios a c
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:2
 msgid "Pending mailings"
-msgstr ""
+msgstr "Envíos pendientes"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:51
 msgid "Perform operation"
@@ -10132,7 +10132,7 @@ msgstr "Vista previa del correo"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:23
 msgid "Publication date"
-msgstr ""
+msgstr "Fecha de publicación"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:110
 msgid "Query, for example:"
@@ -10165,7 +10165,7 @@ msgstr "Destinatarios para"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:8
 msgid "Recipients for “{title}”"
-msgstr ""
+msgstr "Beneficiarios del programa «{title}»"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:103
 msgid "Recipients search query"
@@ -10182,7 +10182,7 @@ msgstr "Suscripción eliminada."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:39
 msgid "Reset the statistics before sending."
-msgstr ""
+msgstr "Restablece las estadísticas antes de enviar."
 
 #: zotonic_mod_mailinglist/src/mod_mailinglist.erl:518
 msgid "Saved the opt-out preference."
@@ -10194,19 +10194,19 @@ msgstr "Programado"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:11
 msgid "Scheduled for"
-msgstr ""
+msgstr "Previsto para el"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:14
 msgid "Select a mailing list below, or preview and test the mailing first."
-msgstr ""
+msgstr "Selecciona una lista de correo de las que aparecen a continuación o echa un vistazo previo y prueba primero el envío."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:63
 msgid "Select page to send"
-msgstr ""
+msgstr "Selecciona la página que deseas enviar"
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:115
 msgid "Select when the mailing should be sent."
-msgstr ""
+msgstr "Selecciona cuándo debe enviarse el correo."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:36
 msgid "Select..."
@@ -10214,7 +10214,7 @@ msgstr "Seleccionar..."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:92
 msgid "Send date:"
-msgstr ""
+msgstr "Fecha de envío:"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:15
 msgid "Send e-mail"
@@ -10222,11 +10222,11 @@ msgstr "Enviar correo electrónico"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:17
 msgid "Send immediately"
-msgstr ""
+msgstr "Envía inmediatamente"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:48
 msgid "Send immediately; the page does not need to be published."
-msgstr ""
+msgstr "Envíalo inmediatamente; no es necesario que la página se publique."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:67
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:112
@@ -10235,20 +10235,20 @@ msgstr "Enviar correo"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:55
 msgid "Send now"
-msgstr ""
+msgstr "Enviar ahora"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:59
 msgid "Send page to this list..."
-msgstr ""
+msgstr "Enviar esta página a esta lista..."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:110
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:24
 msgid "Send test mailing now"
-msgstr ""
+msgstr "Enviar ahora el correo de prueba"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:46
 msgid "Send test now"
-msgstr ""
+msgstr "Enviar prueba ahora"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar_mailinglist.tpl:34
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:29
@@ -10262,19 +10262,19 @@ msgstr "Enviar el correo automáticamente después de la fecha de inicio publica
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:82
 msgid "Send the mailing immediately after the page has been published."
-msgstr ""
+msgstr "Envía el correo tan pronto como se haya publicado la página."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:89
 msgid "Send the mailing on a specific date and time."
-msgstr ""
+msgstr "Envía el correo en una fecha y hora concretas."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:73
 msgid "Send the mailing right now."
-msgstr ""
+msgstr "Envía el correo ahora mismo."
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:26
 msgid "Send this page immediately to the test mailing list. The page does not need to be published."
-msgstr ""
+msgstr "Envía esta página inmediatamente a la lista de correo de prueba. No es necesario que se publique la página."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar_mailinglist.tpl:13
 msgid "Send this page to a mailinglist and view mailinglist statistics."
@@ -10288,7 +10288,7 @@ msgstr "Enviar esta página a una única dirección"
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:52
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:69
 msgid "Send to"
-msgstr ""
+msgstr "Enviar a"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:90
 msgid "Send welcome"
@@ -10296,16 +10296,16 @@ msgstr "Enviar bienvenida"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:8
 msgid "Send “{title}”"
-msgstr ""
+msgstr "Envía «{title}»"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:3
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:12
 msgid "Send “{title}” to a mailing list"
-msgstr ""
+msgstr "Enviar «{title}» a una lista de correo"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:9
 msgid "Sender"
-msgstr ""
+msgstr "Remitente"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:28
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:30
@@ -10319,7 +10319,7 @@ msgstr "Nombre del remitente para correos electrónicos (opcional)"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:103
 msgid "Sender:"
-msgstr ""
+msgstr "Remitente:"
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mail_page.erl:60
 msgid "Sending the e-mail..."
@@ -10331,7 +10331,7 @@ msgstr "Enviar la página a"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:22
 msgid "Sent on / Status"
-msgstr ""
+msgstr "Enviado el / Estado"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:57
 msgid "Show all recipients"
@@ -10391,11 +10391,11 @@ msgstr "Destino de la lista de distribución de correo"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:81
 msgid "Test mailing list"
-msgstr ""
+msgstr "Lista de correo de prueba"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:41
 msgid "Test mailings are sent immediately. The page does not need to be published, but you must have permission to view it."
-msgstr ""
+msgstr "Los correos de prueba se envían de inmediato. No es necesario que la página esté publicada, pero debes tener permiso para verla."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:85
 msgid "Text shown below the confirmation, welcome and unsubscribe e-mails."
@@ -10419,7 +10419,7 @@ msgstr "La clave en su enlace no coincide con ninguna suscripción. Ya usted can
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:110
 msgid "The mailing date must be in the future."
-msgstr ""
+msgstr "La fecha de envío debe ser futura."
 
 #: zotonic_mod_mailinglist/src/mod_mailinglist.erl:374
 msgid "The mailing has been canceled."
@@ -10427,11 +10427,11 @@ msgstr "La distribución de correo ha sido cancelada."
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:95
 msgid "The mailing has been queued for immediate sending..."
-msgstr ""
+msgstr "El correo se ha puesto en cola para su envío inmediato..."
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:108
 msgid "The mailing has been scheduled."
-msgstr ""
+msgstr "El envío ya está programado."
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:100
 msgid "The mailing will be sent when the page becomes visible."
@@ -10439,19 +10439,19 @@ msgstr "El mailing se enviará cuando la página sea visible."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:37
 msgid "The page does not need to be published, but you must have permission to view it."
-msgstr ""
+msgstr "No es necesario que la página esté publicada, pero debes tener permiso para verla."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:75
 msgid "The page is unpublished, no link back to the website in the mailing."
-msgstr ""
+msgstr "La página no está publicada; en el correo no hay ningún enlace que redirija a la página web."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:10
 msgid "The page “{title}” has been sent to the following lists:"
-msgstr ""
+msgstr "La página «{title}» se ha enviado a las siguientes listas:"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:12
 msgid "The page “{title}” has never been sent yet."
-msgstr ""
+msgstr "La página «{title}» aún no se ha enviado."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:3
 msgid "The recipients list of the mailing list will be deleted as well."
@@ -10459,7 +10459,7 @@ msgstr "La lista de destinatarios de la lista de distribución de correo tambié
 
 #: zotonic_mod_mailinglist/src/mod_mailinglist.erl:407
 msgid "The selected page could not be found."
-msgstr ""
+msgstr "No se ha encontrado la página seleccionada."
 
 #: zotonic_mod_mailinglist/src/mod_mailinglist.erl:384
 msgid "The statistics have been cleared."
@@ -10467,11 +10467,11 @@ msgstr "Las estadísticas han sido borradas."
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_mailing_page_test.erl:68
 msgid "The test mailing has been queued for immediate sending..."
-msgstr ""
+msgstr "El correo de prueba se ha puesto en cola para su envío inmediato..."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:7
 msgid "The test will be sent immediately, even if the page is not published."
-msgstr ""
+msgstr "La prueba se enviará de inmediato, aunque la página no esté publicada."
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_mailing_page_test.erl:73
 msgid "There is no mailing list with the name ‘mailinglist_test’."
@@ -10491,11 +10491,11 @@ msgstr "Esta es una lista \"privada\" administrada externamente. Los destinatari
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:49
 msgid "This page has already been sent to this list. If you send it again, only recipients who have not yet received it will be emailed."
-msgstr ""
+msgstr "Esta página ya se ha enviado a esta lista. Si la envías de nuevo, solo se enviará por correo electrónico a los destinatarios que aún no la hayan recibido."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:36
 msgid "This test mailing will be sent immediately."
-msgstr ""
+msgstr "Este correo de prueba se enviará de inmediato."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipient.tpl:6
 msgid "Tick the checkbox if you want the recipient to receive a welcome e-mail message."
@@ -10503,7 +10503,7 @@ msgstr "Seleccione la casilla si desea que el destinatario reciba un mensaje de 
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_task_language.tpl:4
 msgid "Unknown language"
-msgstr ""
+msgstr "Idioma desconocido"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:17
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:21
@@ -10540,7 +10540,7 @@ msgstr "Use el enlace en su correo electrónico para administrar sus suscripcion
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:17
 msgid "Use this overview to send the current page as an email to the recipients of a mailing list. You can preview the mailing or send a test before selecting a mailing list below. Test mailings can be sent while the page is unpublished. The table shows the status and statistics for each mailing list."
-msgstr ""
+msgstr "Utiliza esta vista general para enviar la página actual por correo electrónico a los destinatarios de una lista de distribución. Puedes obtener una vista previa del envío o enviar un mensaje de prueba antes de seleccionar una lista de distribución de las que aparecen a continuación. Los envíos de prueba se pueden realizar aunque la página no esté publicada. La tabla muestra el estado y las estadísticas de cada lista de distribución."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:38
 msgid "Used for uploading CSV files with recipients."
@@ -10556,7 +10556,7 @@ msgstr "Bienvenido a"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:70
 msgid "When should the mailing be sent?"
-msgstr ""
+msgstr "¿Cuándo se debe enviar el correo?"
 
 #: zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:110
 msgid "You are not allowed to add or enable recipients."
@@ -10660,7 +10660,7 @@ msgstr "cancelar"
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:98
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:35
 msgid "delayed"
-msgstr ""
+msgstr "retrasado"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:10
 #: zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:13
@@ -10692,7 +10692,7 @@ msgstr "ver abajo"
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:100
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:37
 msgid "when the page becomes published"
-msgstr ""
+msgstr "cuando la página se publique"
 
 #: zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:30
 msgid "Add after"
@@ -11987,7 +11987,7 @@ msgstr "Copia la contraseña en el portapapeles."
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:112
 msgid "Could not send email to <strong>{email}</strong>. Please check the email address and try again."
-msgstr ""
+msgstr "No se ha podido enviar el correo electrónico a <strong>{email}</strong>. Comprueba la dirección de correo electrónico e inténtalo de nuevo."
 
 #: zotonic_mod_signup/priv/templates/email_signup_code.tpl:19
 msgid "Did you start this signup?"
@@ -12139,7 +12139,7 @@ msgstr "Se han realizado demasiados intentos. Puedes volver a intentar registrar
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:30
 msgid "We have sent a code to <strong>{email}</strong> to confirm your email address."
-msgstr ""
+msgstr "Te hemos enviado un código a <strong>{email}</strong> para confirmar tu dirección de correo electrónico."
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:145
 msgid "We will be very careful with all the information given to us and will never give your name or address away without your permission. We do have some rules that we need you to agree with."
@@ -12927,11 +12927,11 @@ msgstr "Inverso"
 
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:17
 msgid "It was filled in by:"
-msgstr ""
+msgstr "Lo rellenó:"
 
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:14
 msgid "It was filled in for:"
-msgstr ""
+msgstr "Se rellenó para:"
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:65
 msgid "Jump to a question on a next page."
