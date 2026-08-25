@@ -14,6 +14,66 @@
     {% button class="btn btn-primary" text=_"New mailing list" action={dialog_new_rsc cat="mailinglist"} %}
 </div>
 
+
+{% with m.mailinglist.tasks as mailing_tasks %}
+<h3>{_ Pending mailings _}</h3>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>{_ Mailing _}</th>
+            <th>{_ Mailing list _}</th>
+            <th>{_ Sender _}</th>
+            <th>{_ Language _}</th>
+            <th>{_ Scheduled for _}</th>
+            <th>{_ Actions _}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for task in mailing_tasks %}
+            <tr>
+                <td>
+                    <a href="{% url admin_mailing_status id=task.page_id %}">
+                        {{ m.rsc[task.page_id].title|default:_"untitled" }}
+                    </a>
+                </td>
+                <td>
+                    <a href="{% url admin_mailinglist_recipients id=task.mailinglist_id %}">
+                        {{ m.rsc[task.mailinglist_id].title|default:_"untitled" }}
+                    </a>
+                </td>
+                <td>{% include "_name.tpl" id=task.sender_id %}</td>
+                <td>{% include "_mailinglist_task_language.tpl" language=task.language %}</td>
+                <td>
+                    {% if task.type == "date" %}
+                        <span class="label label-info">{_ delayed _}</span>
+                        {{ task.due|date:_"Y-m-d H:i" }}
+                    {% else %}
+                        <span class="label label-info">{_ scheduled _}</span>
+                        {{ task.due|date:_"Y-m-d H:i" }}
+                        <div class="text-muted">{_ when the page becomes published _}</div>
+                    {% endif %}
+                </td>
+                <td>
+                    {% with m.rsc[task.mailinglist_id].is_editable as is_editable %}
+                    {% button class="btn btn-default btn-xs"
+                              text=_"cancel"
+                              postback={dialog_mailing_cancel_confirm list_id=task.mailinglist_id page_id=task.page_id}
+                              delegate="mod_mailinglist"
+                              disabled=not is_editable
+                    %}
+                    {% endwith %}
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="6">{_ No pending mailings. _}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endwith %}
+
 <table class="table table-striped do_adminLinkedTable">
     <thead>
         <tr>
@@ -49,64 +109,10 @@
     	    </tr>
 	    {% empty %}
     	    <tr>
-                <td colspan="4"> {_ No items found _} </td>
+                <td colspan="4"> {_ No pending mailings found. _} </td>
             </tr>
 	    {% endfor %}
     </tbody>
 </table>
 
-{% with m.mailinglist.tasks as mailing_tasks %}
-<h3>{_ Pending mailings _}</h3>
-
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>{_ Mailing _}</th>
-            <th>{_ Mailing list _}</th>
-            <th>{_ Scheduled for _}</th>
-            <th>{_ Actions _}</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for task in mailing_tasks %}
-            <tr>
-                <td>
-                    <a href="{% url admin_mailing_status id=task.page_id %}">
-                        {{ m.rsc[task.page_id].title|default:_"untitled" }}
-                    </a>
-                </td>
-                <td>
-                    <a href="{% url admin_mailinglist_recipients id=task.mailinglist_id %}">
-                        {{ m.rsc[task.mailinglist_id].title|default:_"untitled" }}
-                    </a>
-                </td>
-                <td>
-                    {% if task.type == "date" %}
-                        <span class="label label-info">{_ delayed _}</span>
-                        {{ task.due|date:_"Y-m-d H:i" }}
-                    {% else %}
-                        <span class="label label-info">{_ scheduled _}</span>
-                        {{ task.due|date:_"Y-m-d H:i" }}
-                        <div class="text-muted">{_ when the page becomes published _}</div>
-                    {% endif %}
-                </td>
-                <td>
-                    {% with m.rsc[task.mailinglist_id].is_editable as is_editable %}
-                    {% button class="btn btn-default btn-xs"
-                              text=_"cancel"
-                              postback={dialog_mailing_cancel_confirm list_id=task.mailinglist_id page_id=task.page_id}
-                              delegate="mod_mailinglist"
-                              disabled=not is_editable
-                    %}
-                    {% endwith %}
-                </td>
-            </tr>
-        {% empty %}
-            <tr>
-                <td colspan="4">{_ No pending mailings. _}</td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
-{% endwith %}
 {% endblock %}

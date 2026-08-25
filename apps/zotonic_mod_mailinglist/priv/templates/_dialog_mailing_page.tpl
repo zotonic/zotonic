@@ -1,18 +1,35 @@
 {% with m.mailinglist.rsc_stats[id] as rsc_stats %}
+{% with m.mailinglist.stats[list_id] as list_stats %}
 
-<p>
-    {% if is_test %}
-        {% trans "Please confirm that you want to send the page <i>{page}</i> to the test mailing list <i>{list}</i>."
-                page=m.rsc[id].title
-                list=m.rsc[list_id].title
-        %}
-    {% else %}
-        {% trans "Please confirm that you want to send the page <i>{page}</i> to the list <i>{list}</i>."
-                page=m.rsc[id].title
-                list=m.rsc[list_id].title
-        %}
-    {% endif %}
-</p>
+<p>{_ Are you sure you want to send this mailing? _}</p>
+
+<table class="table table-condensed">
+    <tbody>
+        <tr>
+            <th scope="row">{_ Mailing list _}</th>
+            <td>{{ m.rsc[list_id].title|default:_"Untitled" }}</td>
+        </tr>
+        <tr>
+            <th scope="row">{_ Page _}</th>
+            <td>
+                {{ m.rsc[id].title|default:_"Untitled" }}
+                {% if not m.rsc[id].is_published %}
+                    <span class="label label-warning">{_ Unpublished _}</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% if m.rsc[id].publication_start|in_future %}
+            <tr>
+                <th scope="row">{_ Publication date _}</th>
+                <td>{{ m.rsc[id].publication_start|date:_"Y-m-d H:i" }}</td>
+            </tr>
+        {% endif %}
+        <tr>
+            <th scope="row">{_ Recipients _}</th>
+            <td>{{ list_stats.total|default:0 }}</td>
+        </tr>
+    </tbody>
+</table>
 
 {% if is_test %}
     <div class="alert alert-info">
@@ -26,95 +43,101 @@
     <input type="hidden" name="list_id" value="{{ list_id }}" />
 
     {% if rsc_stats[list_id].total > 0 %}
-    <div class="alert alert-info">
-    <p><strong>{_ Please note: _}</strong> {_ It appears you have sent
-        this page once already to this list. If you send it again, only
-        the recipients that did not yet receive the mail will get it. As a
-        safety-caution, it is impossible to send the same page twice to
-        the same e-mail address. _}</p>
+        <div class="alert alert-info">
+            <p>
+                <strong>{_ Please note: _}</strong>
+                {_ This page has already been sent to this list. If you send it again, only recipients who have not yet received it will be emailed. _}
+            </p>
 
-        <div class="form-group">
-            <label class="checkbox">
-                <input type="checkbox" name="is_send_all" value="1">
-                {_ Forget previous e-mails, mail all recipients again. _}
-            </label>
+            <div class="form-group">
+                <label class="checkbox">
+                    <input type="checkbox" name="is_send_all" value="1"> {_ Clear the delivery history and send to all recipients again. _}
+                </label>
+            </div>
         </div>
-    </div>
     {% endif %}
 
     <div class="form-group">
         <label class="checkbox">
             <input type="checkbox" name="is_match_language" value="1">
-            {_ Only send to recipients whose preferred language match the translations of the mailing. _}
+            {_ For recipients with a preferred language, only send if this page has a matching translation. _}
         </label>
     </div>
 
     {% if not is_test %}
-    <div class="form-group">
-        <p><strong>{_ When should the mailing be sent? _}</strong></p>
+        {% with not m.rsc[id].is_published or m.rsc[id].publication_start|in_future as is_unpublished %}
+            <div class="form-group">
+                <p><strong>{_ When should the mailing be sent? _}</strong></p>
 
-        <label class="radio">
-            <input type="radio" name="mail_when" value="now" checked="checked">
-            {% if not m.rsc[id].is_published or m.rsc[id].publication_start|in_future %}
-                {_ Send the mailing right now, but do not include a link back to the website. _}
-            {% else %}
-                {_ Send the mailing right now. _}
-            {% endif %}
-        </label>
-
-        <label class="radio">
-            <input type="radio" name="mail_when" value="date"> {_ Send the mailing on a specific date and time. _}
-        </label>
-        <div class="row">
-            <div class="col-sm-6">
-                <label for="{{ #mailing_date }}">{_ Mailing date _}</label>
-                <input type="date"
-                       id="{{ #mailing_date }}"
-                       name="dt:ymd:0:mailing_date"
-                       class="form-control">
-            </div>
-            <div class="col-sm-6">
-                <label for="{{ #mailing_time }}">{_ Mailing time _}</label>
-                <input type="time"
-                       id="{{ #mailing_time }}"
-                       name="dt:hi:0:mailing_date"
-                       class="form-control">
-            </div>
-        </div>
-        <p class="help-block">
-            {% trans "The date and time use the {timezone} time zone." timezone=m.req.timezone %}
-        </p>
-
-        {% if not m.rsc[id].is_published or m.rsc[id].publication_start|in_future %}
-            <label class="radio">
-                <input type="radio" name="mail_when" value="scheduled">
-                {% if not m.rsc[id].is_published %}
-                    {_ Send the mailing immediately after the "published" checkbox has been checked in the edit page. _}
-                {% else %}
-                    {_ Send the mailing automatically after the publication start date of _} {{ m.rsc[id].publication_start|date:_"d M Y, H:i" }}.
+                <label class="radio">
+                    <input type="radio" name="mail_when" value="now" {% if not is_unpublished %}checked="checked" {% endif %}> {_ Send the mailing right now. _}
+                    {% if is_unpublished %}
+                        <span class="text-muted">{_ The page is unpublished, no link back to the website in the mailing. _}</span>
+                    {% endif %}
+                </label>
+                {% if is_unpublished %}
+                    <label class="radio">
+                        <input type="radio" name="mail_when" value="scheduled" checked="checked">
+                        {% if not m.rsc[id].is_published %}
+                            {_ Send the mailing immediately after the page has been published. _}
+                        {% else %}
+                            {_ Send the mailing automatically after the publication start date of _} {{ m.rsc[id].publication_start|date:_"Y-m-d H:i" }}.
+                        {% endif %}
+                    </label>
                 {% endif %}
-            </label>
-        {% endif %}
-    </div>
+                <label class="radio">
+                    <input type="radio" name="mail_when" value="date"> {_ Send the mailing on a specific date and time. _}
+                </label>
+                <div id="{{ #send_date }}" style="margin-left: 15px" hidden>
+                    <label>{_ Send date: _}</label>
+                    <input type="date"
+                           id="{{ #mailing_date }}"
+                           name="dt:ymd:0:mailing_date"
+                           class="form-control">
+                    <input type="time"
+                           id="{{ #mailing_time }}"
+                           name="dt:hi:0:mailing_date"
+                           class="form-control">
+                    <span class="text-muted">{{ m.req.timezone }}</span>
+                </div>
+            </div>
+        {% endwith %}
     {% endif %}
 
     <div class="modal-footer">
-            {% button class="btn btn-default" text=_"Cancel" action={dialog_close} tag="a" %}
-            {% if is_test %}
-                {% button class="btn btn-primary" type="submit" text=_"Send test mailing now" %}
-            {% else %}
-                {% button class="btn btn-primary" type="submit" text=_"Send mailing" %}
-            {% endif %}
+        {% button class="btn btn-default" text=_"Cancel" action={dialog_close} tag="a" %}
+        {% if is_test %}
+            {% button class="btn btn-primary" type="submit" text=_"Send test mailing now" %}
+        {% else %}
+            {% button class="btn btn-primary" type="submit" text=_"Send mailing" %}
+        {% endif %}
+
+        <a href="{% url admin_edit_rsc id=id %}" class="btn btn-default pull-left">{_ Edit page _}</a>
+        <a href="{% url admin_edit_rsc id=list_id %}" class="btn btn-default pull-left">{_ Edit mailinglist _}</a>
     </div>
 </form>
 
 {% if not is_test %}
 {% javascript %}
+    const form = document.getElementById("{{ #form }}");
+    const mailWhenDate = form.querySelector("input[name='mail_when'][value='date']");
+    const sendDate = document.getElementById("{{ #send_date }}");
+    const toggleSendDate = () => {
+        sendDate.hidden = !mailWhenDate.checked;
+    };
+
+    form.querySelectorAll("input[name='mail_when']")
+        .forEach((input) => input.addEventListener("change", toggleSendDate));
+
     [document.getElementById("{{ #mailing_date }}"), document.getElementById("{{ #mailing_time }}")]
         .forEach((input) => input.addEventListener("input", () => {
-            document.querySelector("#{{ #form }} input[name='mail_when'][value='date']").checked = true;
+            mailWhenDate.checked = true;
+            toggleSendDate();
         }));
+
+    toggleSendDate();
 {% endjavascript %}
 {% endif %}
 
+{% endwith %}
 {% endwith %}

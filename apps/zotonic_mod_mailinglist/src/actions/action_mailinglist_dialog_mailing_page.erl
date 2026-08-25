@@ -95,6 +95,7 @@ handle_mailing(<<"now">>, ListId, PageId, Options, OnSuccess, Context) ->
     finish(?__("The mailing has been queued for immediate sending...", Context), OnSuccess, Context);
 handle_mailing(<<"scheduled">>, ListId, PageId, Options, OnSuccess, Context) ->
     ok = m_mailinglist:insert_scheduled(ListId, PageId, Options, Context),
+    ok = mod_mailinglist:ensure_scheduled_task(Context),
     finish(
         ?__("The mailing will be sent when the page becomes visible.", Context),
         OnSuccess,
@@ -103,6 +104,7 @@ handle_mailing(<<"date">>, ListId, PageId, Options, OnSuccess, Context) ->
     case mailing_date(Context) of
         {ok, Due} ->
             ok = m_mailinglist:insert_scheduled(ListId, PageId, Options, Due, Context),
+            ok = mod_mailinglist:ensure_scheduled_task(Context),
             finish(?__("The mailing has been scheduled.", Context), OnSuccess, Context);
         {error, past} ->
             z_render:growl_error(?__("The mailing date must be in the future.", Context), Context);
@@ -141,16 +143,7 @@ mailing_date(Context) ->
     end.
 
 is_allowed(PageId, ListId, Context) ->
-    is_integer(PageId)
-    andalso is_integer(ListId)
-    andalso m_rsc:is_a(ListId, mailinglist, Context)
-    andalso z_acl:is_allowed(use, mod_mailinglist, Context)
-    andalso z_acl:rsc_visible(PageId, Context)
-    andalso is_allowed_list(ListId, Context).
-
-is_allowed_list(ListId, Context) ->
-    is_test_mailinglist(ListId, Context)
-    orelse z_acl:rsc_editable(ListId, Context).
+    mod_mailinglist:is_allowed_to_send(ListId, PageId, Context).
 
 is_test_mailinglist(ListId, Context) ->
     ListId =:= m_rsc:rid(mailinglist_test, Context).

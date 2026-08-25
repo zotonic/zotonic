@@ -75,6 +75,4 @@ send_test_mailing(PageId, OnSuccess, Context) ->
     end.
 
 is_allowed(PageId, Context) ->
-    is_integer(PageId)
-    andalso z_acl:is_allowed(use, mod_mailinglist, Context)
-    andalso z_acl:rsc_visible(PageId, Context).
+    mod_mailinglist:is_allowed_to_send(PageId, Context).
