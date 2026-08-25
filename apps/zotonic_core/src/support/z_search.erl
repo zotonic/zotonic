@@ -1054,10 +1054,10 @@ add_cat_check(Alias, Cats, ExcludeIds, Args, Context) ->
 add_cat_check_pivot(Alias, Cats, Args, Context) ->
     Ranges = m_category:ranges(Cats, Context),
     CatChecks = [ cat_check_pivot1(Alias, Range) || Range <- Ranges ],
-    if
-        CatChecks =:= [] ->
+    case CatChecks of
+        [] ->
             {[], Args};
-        true ->
+        _ ->
             {[ "(", lists:join(" or ", CatChecks), ")" ], Args}
     end.
 
