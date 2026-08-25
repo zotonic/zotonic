@@ -76,7 +76,7 @@
                     {% with m.rsc[id].is_editable as editable %}
                     {% with m.mailinglist.stats[id] as stats %}
                         <td width="20%">
-                            <a href="{% url admin_edit_rsc id=id %}">{{ title|default:"untitled" }}</a>
+                            <a href="{% url admin_mailinglist_recipients id=id %}">{{ title|default:"untitled" }}</a>
                             {% if id.name == 'mailinglist_test' %}
                                 <br><span class="label label-default">{_ Test mailing list _}</span>
                             {% endif %}

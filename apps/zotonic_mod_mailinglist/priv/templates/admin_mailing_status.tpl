@@ -5,7 +5,7 @@
 {% block content %}
 <ul class="breadcrumb">
     <li><a href="{% url admin_mailinglist %}">{_ Mailing lists _}</a></li>
-    <li class="active">{_ Send page _}</li>
+    <li class="active">{% trans "Send “{title}”" title=m.rsc[id].title %}</li>
 </ul>
 
 <div class="admin-header">

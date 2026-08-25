@@ -3,6 +3,11 @@
 {% block title %}{_ Recipients for _} “{{ m.rsc[id].title }}”{% endblock %}
 
 {% block content %}
+<ul class="breadcrumb">
+    <li><a href="{% url admin_mailinglist %}">{_ Mailing lists _}</a></li>
+    <li class="active">{% trans "Recipients for “{title}”" title=m.rsc[id].title %}</li>
+</ul>
+
 <div class="admin-header">
     <h2>{_ Recipients for _} “{{ m.rsc[id].title }}”</h2>
 	{% if not m.rsc[id].is_editable %}
