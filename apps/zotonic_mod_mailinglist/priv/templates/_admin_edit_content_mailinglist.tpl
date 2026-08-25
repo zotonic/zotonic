@@ -54,7 +54,29 @@
         <li>{_ Pages that match the recipients search query below. _}</li>
     </ul>
     <p>
-         <a class="btn btn-default" href="{% url admin_mailinglist_recipients id=id %}">{_ Show all recipients _} &raquo;</a>
+        <a class="btn btn-default" href="{% url admin_mailinglist_recipients id=id %}">{_ Show all recipients _} &raquo;</a>
+        <button class="btn btn-default" id="{{ #send_page }}" type="button">
+            {_ Send page to this list... _}
+        </button>
+        {% wire id=#send_page
+                action={dialog_open
+                    title=_"Select page to send"
+                    template="_action_dialog_connect.tpl"
+                    intent="select"
+                    content_group="any"
+                    tabs_enabled=[ "find" ]
+                    center=false
+                    autoclose
+                    width="large"
+                    actions=[
+                        {postback
+                            postback={mailing_page_redirect select_id list_id=id}
+                            delegate=`mod_mailinglist`
+                            inject_args
+                        }
+                    ]
+                }
+        %}
     </p>
 {% endblock %}
 

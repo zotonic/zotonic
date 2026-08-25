@@ -3,6 +3,11 @@
 {% block title %}{_ Recipients for _} “{{ m.rsc[id].title }}”{% endblock %}
 
 {% block content %}
+<ul class="breadcrumb">
+    <li><a href="{% url admin_mailinglist %}">{_ Mailing lists _}</a></li>
+    <li class="active">{% trans "Recipients for “{title}”" title=m.rsc[id].title %}</li>
+</ul>
+
 <div class="admin-header">
     <h2>{_ Recipients for _} “{{ m.rsc[id].title }}”</h2>
 	{% if not m.rsc[id].is_editable %}
@@ -16,12 +21,13 @@
 </div>
 {% else %}
 <div>
-	<p>{_ All recipients of the mailing list. You can upload or download this list, which must be a file with one e-mail address per line. _}<br/>
-    	<a href="{% url admin_edit_rsc id=id %}">{_ Edit the mailing list &raquo; _}</a><br/>
+	<p>
+        {_ All recipients of the mailing list. You can upload or download this list, which must be a file with one e-mail address per line. _}
 	</p>
 
 	<div class="well">
-	    {% button class="btn btn-primary" text=_"Add recipient" title=_"Add a new recipient." postback={dialog_recipient_add id=id} %}
+        <a class="btn btn-primary" href="{% url admin_edit_rsc id=id %}">{_ Edit list _}</a>
+        {% button class="btn btn-primary" text=_"Add recipient" title=_"Add a new recipient." postback={dialog_recipient_add id=id} %}
 	    {% button class="btn btn-default" text=_"Download all" title=_"Download list of all active recipients." action={growl text=_"Downloading active recipients list. Check your download window."} action={redirect dispatch="mailinglist_export" id=id} %}
 	    {% button class="btn btn-default" text=_"Upload file" title=_"Upload a list of recipients." action={dialog_open title=_"Upload a list of recipients."  template="_dialog_mailinglist_recipients_upload.tpl" id=id} %}
         {% button class="btn btn-default" text=_"Clear" action={confirm text=_"Delete all recipients from this list?" postback={recipients_clear id=id} delegate='controller_admin_mailinglist_recipients'} %}
@@ -56,10 +62,9 @@
     {% endwith %}
 </div>
 
+{% with m.search.paged[{mailinglist_recipients id=id pagelen=150 page=q.page}] as recipients %}
 <div class="widget">
     <div class="row">
-        {% with m.search.paged[{mailinglist_recipients id=id pagelen=150 page=q.page}] as recipients %}
-
         {% for list in recipients|vsplit_in:3 %}
             <div class="col-lg-4 col-md-4">
                 <table class="table table-striped">
@@ -91,10 +96,8 @@
         {% endfor %}
     </div>
     {% pager result=recipients dispatch="admin_mailinglist_recipients" id=id qargs %}
-    {% endwith %}
-
-
 </div>
+{% endwith %}
 
 {% endif %}
 
