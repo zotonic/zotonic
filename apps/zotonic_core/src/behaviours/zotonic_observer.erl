@@ -118,6 +118,7 @@ Return:
 *   frame\\_ancestors: `list`
 *   form\\_action: `list`
 *   report\\_to: `list`
+*   report\\_sample: `boolean`
 ").
 -callback observe_content_security_header(Default, Acc, Context) -> Result when
     Default :: #content_security_header{},

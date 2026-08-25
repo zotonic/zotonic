@@ -1,6 +1,7 @@
 -module(log_ui_tests).
 
 -include_lib("eunit/include/eunit.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 ui_log_ringbuffer_dedup_test() ->
     {timeout, 20,
@@ -33,6 +34,49 @@ ui_log_ringbuffer_dedup_test() ->
         ?assertEqual(2, length(Rows2)),
         ?assertEqual([10, 11], lists:sort([ line(Row) || Row <- Rows2 ])),
         ok
+    end}.
+
+csp_report_sample_test() ->
+    {timeout, 20,
+     fun() ->
+        ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+        Context = z_context:new(zotonic_site_testsandbox),
+        ?assertEqual(true, z_module_manager:active(mod_logging, Context)),
+        ok = mod_logging:clear_csp_reports(Context),
+
+        {ok, Pid} = z_module_manager:whereis(mod_logging, Context),
+        Prefix = z_convert:to_binary(erlang:unique_integer([positive])),
+        BlockedUrl = <<"https://blocked.example/", Prefix/binary>>,
+        DocumentUrl = z_context:abs_url(<<"/csp-sample-test">>, Context),
+        Sample = <<"<script>alert('sample')</script>">>,
+        Report = #{
+            <<"blockedURL">> => BlockedUrl,
+            <<"effectiveDirective">> => <<"script-src-elem">>,
+            <<"originalPolicy">> => <<"script-src 'self' 'report-sample'">>,
+            <<"documentURL">> => DocumentUrl,
+            <<"sourceFile">> => DocumentUrl,
+            <<"lineNumber">> => 10,
+            <<"columnNumber">> => 20,
+            <<"sample">> => Sample
+        },
+        Notification = #content_security_report{
+            type = <<"csp-violation">>,
+            url = DocumentUrl,
+            body = Report,
+            user_agent = <<"CSP sample test">>
+        },
+        ?assertEqual(ok,
+            mod_logging:pid_observe_content_security_report(Pid, Notification, Context)),
+        ?assertEqual(ok,
+            mod_logging:pid_observe_content_security_report(
+                Pid,
+                Notification#content_security_report{body = maps:remove(<<"sample">>, Report)},
+                Context)),
+
+        {ok, Reports} = mod_logging:csp_reports(Context),
+        [Stored] = [ R || R <- Reports, maps:get(blocked_url, R) =:= BlockedUrl ],
+        ?assertEqual(2, maps:get(count, Stored)),
+        ?assertEqual([ Sample ], maps:get(samples, Stored))
     end}.
 
 event(Message, Line, UserAgent, Url) ->
