@@ -1079,10 +1079,10 @@ add_cat_check_any(Alias, Cats, Args, _Context) ->
 add_cat_exclude_check_pivot(Alias, ExcludeIds, Args, Context) ->
     Ranges = m_category:ranges(ExcludeIds, Context),
     ExcludeChecks = [ cat_check_pivot1(Alias, Range) || Range <- Ranges ],
-    if
-        ExcludeChecks =:= [] ->
+    case ExcludeChecks of
+        [] ->
             {[], Args};
-        true ->
+        _ ->
             {[ "not (", lists:join(" or ", ExcludeChecks), ")" ], Args}
     end.
 
