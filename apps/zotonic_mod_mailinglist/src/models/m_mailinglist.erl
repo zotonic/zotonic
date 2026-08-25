@@ -980,10 +980,11 @@ insert_scheduled(ListId, PageId, Type, Due, Options, Context) ->
                 ",
                 [PageId, ListId, ?DB_PROPS([{options, Options}, {pickled_context, PickledContext}]), Type, Due],
                 Context),
-            case Exists of
-                0 -> publish_scheduled_event(ListId, PageId, <<"insert">>, Context);
-                1 -> ok
+            Action = case Exists of
+                0 -> <<"insert">>;
+                _ -> <<"update">>
             end,
+            publish_scheduled_event(ListId, PageId, Action, Context),
             ok;
         false ->
             {error, eacces}

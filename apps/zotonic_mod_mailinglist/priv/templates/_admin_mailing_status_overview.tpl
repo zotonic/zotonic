@@ -95,7 +95,7 @@
                         <span class="label label-info">{_ scheduled _}</span>
                         {{ task.due|date:_"Y-m-d H:i" }}
                     {% else %}
-                        <span class="label label-info">{_ scheduled _}</span>
+                        <span class="label label-info">{_ delayed _}</span>
                         {{ task.due|date:_"Y-m-d H:i" }}
                         <div class="text-muted">{_ when the page becomes published _}</div>
                     {% endif %}

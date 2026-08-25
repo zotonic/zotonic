@@ -237,7 +237,10 @@ Delegate callbacks:
 -include_lib("zotonic_mod_admin/include/admin_menu.hrl").
 -include_lib("epgsql/include/epgsql.hrl").
 
--record(state, { context :: z:context() }).
+-record(state, {
+    context :: z:context(),
+    send_after :: integer()
+}).
 
 -type mailing_options() :: [ mailing_option() ].
 -type mailing_option() :: {is_match_language, boolean()}
@@ -252,6 +255,7 @@ Delegate callbacks:
 -define(MAILING_CHECK_TASK_INTERVAL, 2 * ?HOUR * 1000).
 -define(MAILING_POLL_TASK_KEY, <<"scheduled-mailings">>).
 -define(MAILING_POLL_OVERLOAD_DELAY, 10).
+-define(MAILING_STARTUP_DELAY, 60).
 
 
 %% @doc Install the tables needed for the mailinglist and return the rsc datamodel.
@@ -550,11 +554,16 @@ init(Args) ->
     z_notifier:observe(mailinglist_mailing, self(), Context),
     z_notifier:observe(dropbox_file, self(), 100, Context),
     timer:send_interval(?MAILING_CHECK_TASK_INTERVAL, ensure_scheduled_task),
-    self() ! ensure_scheduled_task,
-    {ok, #state{ context = z_context:new(Context) }}.
+    erlang:send_after(?MAILING_STARTUP_DELAY * 1000, self(), ensure_scheduled_task),
+    {ok, #state{
+        context = z_context:new(Context),
+        send_after = mailing_startup_deadline()
+    }}.
 
 
 %% @doc Handle a drop folder file with recipients.
+handle_call(is_ready_to_send, _From, State) ->
+    {reply, is_ready_to_send(State), State};
 handle_call({#dropbox_file{ filename = File }, _SenderContext}, _From, State = #state{ context = Context }) ->
     GetFiles = fun() ->
         #search_result{ result = Ids } = z_search:search(
@@ -618,27 +627,9 @@ handle_cast({#mailinglist_mailing{
     {noreply, State};
 handle_cast({#mailinglist_mailing{
         list_id = undefined,
-        email = Email,
-        page_id = Page,
-        options = Options
-    }, SenderContext}, State) when Email =/= undefined ->
-    PageId = m_rsc:rid(Page, SenderContext),
-    Email1 = unicode:characters_to_binary(Email),
-    case is_allowed_to_send(PageId, SenderContext) of
-        true ->
-            ?LOG_INFO(#{
-                in => zotonic_mod_mailinglist,
-                text => <<"Mailing page to test mailing address">>,
-                email => Email1,
-                page_id => PageId,
-                sender_id => z_acl:user(SenderContext),
-                options => Options
-            }),
-            send_mailing({single_test_address, Email}, PageId, Options, SenderContext);
-        false ->
-            log_mailing_not_allowed(undefined, PageId, SenderContext)
-    end,
-    {noreply, State};
+        email = Email
+    } = Mailing, SenderContext}, State) when Email =/= undefined ->
+    handle_test_mailing(Mailing, SenderContext, State);
 handle_cast({#mailinglist_mailing{} = Mailing, _Context}, State) ->
     ?LOG_ERROR(#{
         in => zotonic_mod_mailinglist,
@@ -654,6 +645,8 @@ handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
 
 %% @doc Verify that the task for the next scheduled mailing is present.
+handle_info({send_test_mailing, Mailing, SenderContext}, State) ->
+    handle_test_mailing(Mailing, SenderContext, State);
 handle_info(ensure_scheduled_task, State) ->
     ok = ensure_scheduled_task(State#state.context),
     z_utils:flush_message(ensure_scheduled_task),
@@ -673,6 +666,11 @@ terminate(_Reason, State) ->
     ok.
 
 %% @doc Convert process state when code is changed
+code_change(_OldVsn, {state, Context}, _Extra) ->
+    {ok, #state{
+        context = Context,
+        send_after = mailing_startup_deadline()
+    }};
 code_change(_OldVsn, State, _Extra) ->
     {ok, State}.
 
@@ -680,6 +678,73 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 %% support functions
 %%====================================================================
+
+
+handle_test_mailing(#mailinglist_mailing{
+        email = Email,
+        page_id = Page,
+        options = Options
+    } = Mailing, SenderContext, State) ->
+    PageId = m_rsc:rid(Page, SenderContext),
+    case is_allowed_to_send(PageId, SenderContext) of
+        true ->
+            case is_ready_to_send(State) of
+                true ->
+                    Email1 = unicode:characters_to_binary(Email),
+                    ?LOG_INFO(#{
+                        in => zotonic_mod_mailinglist,
+                        text => <<"Mailing page to test mailing address">>,
+                        email => Email1,
+                        page_id => PageId,
+                        sender_id => z_acl:user(SenderContext),
+                        options => Options
+                    }),
+                    send_mailing({single_test_address, Email}, PageId, Options, SenderContext);
+                false ->
+                    erlang:send_after(
+                        test_mailing_retry_delay(State) * 1000,
+                        self(),
+                        {send_test_mailing, Mailing, SenderContext})
+            end;
+        false ->
+            log_mailing_not_allowed(undefined, PageId, SenderContext)
+    end,
+    {noreply, State}.
+
+is_ready_to_send(#state{ context = Context, send_after = SendAfter }) ->
+    erlang:monotonic_time(second) >= SendAfter
+    andalso is_site_module_running(Context);
+is_ready_to_send(#context{} = Context) ->
+    try z_module_manager:whereis(?MODULE, Context) of
+        {ok, Pid} ->
+            try gen_server:call(Pid, is_ready_to_send, 1000) of
+                IsReady when is_boolean(IsReady) -> IsReady;
+                _ -> false
+            catch
+                exit:_ -> false
+            end;
+        {error, _} ->
+            false
+    catch
+        exit:_ -> false
+    end.
+
+is_site_module_running(Context) ->
+    Site = z_context:site(Context),
+    try z_module_manager:get_modules_status(Context) of
+        Status -> proplists:get_value(Site, Status) =:= running
+    catch
+        exit:_ -> false
+    end.
+
+test_mailing_retry_delay(#state{ send_after = SendAfter }) ->
+    case SendAfter - erlang:monotonic_time(second) of
+        Delay when Delay > 0 -> Delay;
+        _ -> ?MAILING_STARTUP_DELAY
+    end.
+
+mailing_startup_deadline() ->
+    erlang:monotonic_time(second) + ?MAILING_STARTUP_DELAY.
 
 
 %% @doc Import a file, replacing the recipients of the list.
@@ -703,18 +768,24 @@ import_file(TmpFile, IsTruncate, Id, Context) ->
 poll_scheduled(Context) ->
     case z_module_manager:active(?MODULE, Context) of
         true ->
-            ContextSudo = z_acl:sudo(Context),
-            case send_scheduled(ContextSudo) of
-                ok ->
-                    case m_mailinglist:next_scheduled(ContextSudo) of
-                        undefined -> ok;
-                        Due -> {delay, Due}
-                    end;
-                {error, overload} ->
-                    {delay, ?MAILING_POLL_OVERLOAD_DELAY}
+            case is_ready_to_send(Context) of
+                true -> poll_scheduled_ready(Context);
+                false -> {delay, ?MAILING_STARTUP_DELAY}
             end;
         false ->
             ok
+    end.
+
+poll_scheduled_ready(Context) ->
+    ContextSudo = z_acl:sudo(Context),
+    case send_scheduled(ContextSudo) of
+        ok ->
+            case m_mailinglist:next_scheduled(ContextSudo) of
+                undefined -> ok;
+                Due -> {delay, Due}
+            end;
+        {error, overload} ->
+            {delay, ?MAILING_POLL_OVERLOAD_DELAY}
     end.
 
 send_scheduled(Context) ->
