@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-08-25 14:48\n"
+"PO-Revision-Date: 2026-08-25 16:33\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -9789,7 +9789,7 @@ msgstr "清除"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:54
 msgid "Clear the delivery history and send to all recipients again."
-msgstr ""
+msgstr "清除发送记录，并再次发送给所有收件人。"
 
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:10
 msgid "Click <strong>unsubscribe</strong> to remove yourself from the mailing list."
@@ -9821,7 +9821,7 @@ msgstr "确认邮件取消。"
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:86
 msgid "Confirm sending test mailing"
-msgstr ""
+msgstr "确认发送测试邮件"
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:88
 msgid "Confirm sending to mailinglist"
@@ -9897,11 +9897,11 @@ msgstr "通过电子邮件发送此页面"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:29
 msgid "Edit list"
-msgstr ""
+msgstr "编辑列表"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:116
 msgid "Edit mailinglist"
-msgstr ""
+msgstr "编辑邮件列表"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:82
 #: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:72
@@ -9910,7 +9910,7 @@ msgstr "编辑接收人"
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:112
 msgid "Enter a valid mailing date and time."
-msgstr ""
+msgstr "请输入有效的邮寄日期和时间。"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipient.tpl:2
 msgid "Enter the e-mail address of the recipient. The name of the recipient is optional."
@@ -9928,7 +9928,7 @@ msgstr "名字"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:63
 msgid "For recipients with a preferred language, only send if this page has a matching translation."
-msgstr ""
+msgstr "对于有首选语言的收件人，仅当本页面有对应的翻译版本时才发送。"
 
 #: zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:13
 msgid "From now on you will receive mail from our mailing list."
@@ -9954,7 +9954,7 @@ msgstr "邮件列表帮助。"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:16
 msgid "Help with sending a page"
-msgstr ""
+msgstr "关于发送页面的帮助"
 
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:24
 msgid "Here you can change subscriptions connected to your email address <b>{email}</b>."
@@ -9982,7 +9982,7 @@ msgstr "继续邮寄"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:106
 msgid "Language:"
-msgstr ""
+msgstr "语言："
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar_mailinglist.tpl:32
 msgid "Mail"
@@ -9990,7 +9990,7 @@ msgstr "郵件"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:7
 msgid "Mailing"
-msgstr ""
+msgstr "邮件"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:3
 msgid "Mailing Lists"
@@ -10041,11 +10041,11 @@ msgstr "没有找到"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:106
 msgid "No mailing lists found."
-msgstr ""
+msgstr "未找到任何邮件列表。"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:53
 msgid "No pending mailings."
-msgstr ""
+msgstr "没有待寄的邮件。"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:39
 msgid "Number of recipients on this list:"
@@ -10085,7 +10085,7 @@ msgstr "与以下收件人搜索查询相匹配的页面。"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:2
 msgid "Pending mailings"
-msgstr ""
+msgstr "待寄邮件"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:51
 msgid "Perform operation"
@@ -10132,7 +10132,7 @@ msgstr "预览邮件"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:23
 msgid "Publication date"
-msgstr ""
+msgstr "出版日期"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:110
 msgid "Query, for example:"
@@ -10165,7 +10165,7 @@ msgstr "收件人位于"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:8
 msgid "Recipients for “{title}”"
-msgstr ""
+msgstr "“{title} ”的获奖者"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:103
 msgid "Recipients search query"
@@ -10182,7 +10182,7 @@ msgstr "已删除订阅。"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:39
 msgid "Reset the statistics before sending."
-msgstr ""
+msgstr "发送前请重置统计数据。"
 
 #: zotonic_mod_mailinglist/src/mod_mailinglist.erl:518
 msgid "Saved the opt-out preference."
@@ -10194,19 +10194,19 @@ msgstr "计划中"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:11
 msgid "Scheduled for"
-msgstr ""
+msgstr "计划于"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:14
 msgid "Select a mailing list below, or preview and test the mailing first."
-msgstr ""
+msgstr "请从下方选择一个邮件列表，或者先预览并测试该邮件。"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:63
 msgid "Select page to send"
-msgstr ""
+msgstr "选择要发送的页面"
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:115
 msgid "Select when the mailing should be sent."
-msgstr ""
+msgstr "请选择应何时发送邮件。"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:36
 msgid "Select..."
@@ -10214,7 +10214,7 @@ msgstr "选择..."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:92
 msgid "Send date:"
-msgstr ""
+msgstr "发送日期："
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:15
 msgid "Send e-mail"
@@ -10222,11 +10222,11 @@ msgstr "发送 e-mail"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:17
 msgid "Send immediately"
-msgstr ""
+msgstr "立即发送"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:48
 msgid "Send immediately; the page does not need to be published."
-msgstr ""
+msgstr "立即发送；该页面无需发布。"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:67
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:112
@@ -10235,20 +10235,20 @@ msgstr "发送邮件"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:55
 msgid "Send now"
-msgstr ""
+msgstr "立即发送"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:59
 msgid "Send page to this list..."
-msgstr ""
+msgstr "将此页面发送至该列表……"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:110
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:24
 msgid "Send test mailing now"
-msgstr ""
+msgstr "立即发送测试邮件"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:46
 msgid "Send test now"
-msgstr ""
+msgstr "立即发送测试"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar_mailinglist.tpl:34
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:29
@@ -10262,19 +10262,19 @@ msgstr "自动发送邮件在发布日期"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:82
 msgid "Send the mailing immediately after the page has been published."
-msgstr ""
+msgstr "页面发布后，请立即发送邮件。"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:89
 msgid "Send the mailing on a specific date and time."
-msgstr ""
+msgstr "请在特定日期和时间寄出邮件。"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:73
 msgid "Send the mailing right now."
-msgstr ""
+msgstr "现在就寄出这封信。"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:26
 msgid "Send this page immediately to the test mailing list. The page does not need to be published."
-msgstr ""
+msgstr "立即将此页面发送至测试邮件列表。该页面无需发布。"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar_mailinglist.tpl:13
 msgid "Send this page to a mailinglist and view mailinglist statistics."
@@ -10288,7 +10288,7 @@ msgstr "发送本页面到单个地址"
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:52
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:69
 msgid "Send to"
-msgstr ""
+msgstr "发送至"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:90
 msgid "Send welcome"
@@ -10296,16 +10296,16 @@ msgstr "发送欢迎消息"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:8
 msgid "Send “{title}”"
-msgstr ""
+msgstr "发送“{title}”"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:3
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:12
 msgid "Send “{title}” to a mailing list"
-msgstr ""
+msgstr "将“{title}”发送至邮件列表"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:9
 msgid "Sender"
-msgstr ""
+msgstr "发件人"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:28
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:30
@@ -10319,7 +10319,7 @@ msgstr "E-mail 的发送者名字（可选）"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:103
 msgid "Sender:"
-msgstr ""
+msgstr "发件人："
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mail_page.erl:60
 msgid "Sending the e-mail..."
@@ -10331,7 +10331,7 @@ msgstr "发送页面到"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:22
 msgid "Sent on / Status"
-msgstr ""
+msgstr "发送时间 / 状态"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:57
 msgid "Show all recipients"
@@ -10391,11 +10391,11 @@ msgstr "目标邮寄名单"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:81
 msgid "Test mailing list"
-msgstr ""
+msgstr "测试邮件列表"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:41
 msgid "Test mailings are sent immediately. The page does not need to be published, but you must have permission to view it."
-msgstr ""
+msgstr "测试邮件将立即发送。该页面无需发布，但您必须拥有查看权限。"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:85
 msgid "Text shown below the confirmation, welcome and unsubscribe e-mails."
@@ -10419,7 +10419,7 @@ msgstr "您链接中的 key 不匹配任何订阅。可能是您已经取消订�
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:110
 msgid "The mailing date must be in the future."
-msgstr ""
+msgstr "邮寄日期必须是未来的日期。"
 
 #: zotonic_mod_mailinglist/src/mod_mailinglist.erl:374
 msgid "The mailing has been canceled."
@@ -10427,11 +10427,11 @@ msgstr "该邮件已被取消。"
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:95
 msgid "The mailing has been queued for immediate sending..."
-msgstr ""
+msgstr "该邮件已排入队列，即将发送……"
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:108
 msgid "The mailing has been scheduled."
-msgstr ""
+msgstr "邮件已安排发送。"
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:100
 msgid "The mailing will be sent when the page becomes visible."
@@ -10439,19 +10439,19 @@ msgstr "邮件将在页面可见时发送。"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:37
 msgid "The page does not need to be published, but you must have permission to view it."
-msgstr ""
+msgstr "该页面无需发布，但您必须拥有查看权限。"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:75
 msgid "The page is unpublished, no link back to the website in the mailing."
-msgstr ""
+msgstr "该页面尚未发布，邮件中没有返回该网站的链接。"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:10
 msgid "The page “{title}” has been sent to the following lists:"
-msgstr ""
+msgstr "页面“{title}”已发送至以下邮件列表："
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:12
 msgid "The page “{title}” has never been sent yet."
-msgstr ""
+msgstr "页面“{title}”尚未发送。"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:3
 msgid "The recipients list of the mailing list will be deleted as well."
@@ -10459,7 +10459,7 @@ msgstr "邮件列表中的收件人也会被一同删除。"
 
 #: zotonic_mod_mailinglist/src/mod_mailinglist.erl:407
 msgid "The selected page could not be found."
-msgstr ""
+msgstr "找不到所选页面。"
 
 #: zotonic_mod_mailinglist/src/mod_mailinglist.erl:384
 msgid "The statistics have been cleared."
@@ -10467,11 +10467,11 @@ msgstr "统计数据已被清除。"
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_mailing_page_test.erl:68
 msgid "The test mailing has been queued for immediate sending..."
-msgstr ""
+msgstr "测试邮件已排入队列，即将发送……"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:7
 msgid "The test will be sent immediately, even if the page is not published."
-msgstr ""
+msgstr "即使该页面尚未发布，测试也会立即发送。"
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_mailing_page_test.erl:73
 msgid "There is no mailing list with the name ‘mailinglist_test’."
@@ -10491,11 +10491,11 @@ msgstr "这是一个“私有的”，外部管理的列表。收件人不会收
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:49
 msgid "This page has already been sent to this list. If you send it again, only recipients who have not yet received it will be emailed."
-msgstr ""
+msgstr "此页面已发送至该邮件列表。如果您再次发送，系统只会向尚未收到该页面的收件人发送邮件。"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:36
 msgid "This test mailing will be sent immediately."
-msgstr ""
+msgstr "这封测试邮件将立即发送。"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipient.tpl:6
 msgid "Tick the checkbox if you want the recipient to receive a welcome e-mail message."
@@ -10503,7 +10503,7 @@ msgstr "如果你需要收到欢迎消息，请选取。"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_task_language.tpl:4
 msgid "Unknown language"
-msgstr ""
+msgstr "未知语言"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:17
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:21
@@ -10540,7 +10540,7 @@ msgstr "使用电子邮件中的链接来管理您的订阅。"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:17
 msgid "Use this overview to send the current page as an email to the recipients of a mailing list. You can preview the mailing or send a test before selecting a mailing list below. Test mailings can be sent while the page is unpublished. The table shows the status and statistics for each mailing list."
-msgstr ""
+msgstr "使用此概览，可将当前页面作为电子邮件发送给邮件列表的收件人。在下方选择邮件列表之前，您可以预览邮件或发送测试邮件。即使页面处于未发布状态，也可以发送测试邮件。下表显示了每个邮件列表的状态和统计信息。"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:38
 msgid "Used for uploading CSV files with recipients."
@@ -10556,7 +10556,7 @@ msgstr "欢迎来到"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:70
 msgid "When should the mailing be sent?"
-msgstr ""
+msgstr "应该什么时候寄出这封信？"
 
 #: zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:110
 msgid "You are not allowed to add or enable recipients."
@@ -10660,7 +10660,7 @@ msgstr "取消"
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:98
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:35
 msgid "delayed"
-msgstr ""
+msgstr "延迟的"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:10
 #: zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:13
@@ -10692,7 +10692,7 @@ msgstr "见下文"
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:100
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:37
 msgid "when the page becomes published"
-msgstr ""
+msgstr "当页面发布时"
 
 #: zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:30
 msgid "Add after"
@@ -11987,7 +11987,7 @@ msgstr "将密码复制到剪贴板。"
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:112
 msgid "Could not send email to <strong>{email}</strong>. Please check the email address and try again."
-msgstr ""
+msgstr "无法向 <strong>{email}</strong>。请检查电子邮箱地址后重试。"
 
 #: zotonic_mod_signup/priv/templates/email_signup_code.tpl:19
 msgid "Did you start this signup?"
@@ -12139,7 +12139,7 @@ msgstr "尝试次数过多，请一小时后再试。"
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:30
 msgid "We have sent a code to <strong>{email}</strong> to confirm your email address."
-msgstr ""
+msgstr "我们已向 <strong>{email}</strong> 以确认您的电子邮箱地址。"
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:145
 msgid "We will be very careful with all the information given to us and will never give your name or address away without your permission. We do have some rules that we need you to agree with."
@@ -12927,11 +12927,11 @@ msgstr "反色"
 
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:17
 msgid "It was filled in by:"
-msgstr ""
+msgstr "填写者为："
 
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:14
 msgid "It was filled in for:"
-msgstr ""
+msgstr "该内容已替换为："
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:65
 msgid "Jump to a question on a next page."
