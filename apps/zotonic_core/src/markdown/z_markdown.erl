@@ -68,11 +68,11 @@ to_html(Markdown) ->
 to_binary(CharData) ->
     case unicode:characters_to_binary(CharData, utf8) of
         {error, Binary, _Restdata} ->
-            ?LOG_INFO(#{
+            ?LOG_WARNING(#{
                 in => zotonic_core,
-                text => <<"Error for UTF-8 input in Markdown input">>,
+                text => <<"Invalid UTF-8 sequence in Markdown/HTML input">>,
                 result => error,
-                reason => error
+                reason => invalid_utf8
             }),
             Binary;
         {incomplete, Binary, _Restdata} ->
