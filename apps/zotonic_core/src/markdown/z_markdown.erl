@@ -62,6 +62,9 @@ to_markdown(Html, Options) ->
 to_html(Markdown) ->
     markdownz:to_binary(to_binary(Markdown)).
 
+-spec to_binary(CharData) -> Binary when
+    CharData :: unicode:chardata(),
+    Binary :: binary().
 to_binary(CharData) ->
     case unicode:characters_to_binary(CharData, utf8) of
         {error, Binary, _Restdata} ->
