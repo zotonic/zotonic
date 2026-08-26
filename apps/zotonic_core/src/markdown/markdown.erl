@@ -21,9 +21,9 @@
 -export([conv/1]).
 -deprecated({conv, 1}).
 
-%% @deprecated Use `markdownz:to_binary/1' instead.
+%% @deprecated Use `z_markdown:to_html/1' instead.
 -spec conv(MarkdownText) -> Html when
     MarkdownText :: iodata(),
     Html :: binary().
 conv(MarkdownText) ->
-    markdownz:to_binary(MarkdownText).
+    z_markdown:to_html(MarkdownText).
