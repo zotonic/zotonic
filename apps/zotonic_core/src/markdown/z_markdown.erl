@@ -35,13 +35,15 @@
                  | markupz:options()
                  | [legacy_option()].
 
+-include_lib("zotonic_core/include/zotonic.hrl").
+
 
 %% @doc Convert HTML to Markdown using the default `markupz' configuration.
 -spec to_markdown(Html) -> Markdown when
     Html :: unicode:chardata(),
     Markdown :: binary().
 to_markdown(Html) ->
-    markupz:to_markdown(Html).
+    markupz:to_markdown(to_binary(Html)).
 
 %% @doc Convert HTML to Markdown using a `markupz' preset or option map.
 %% The legacy options `no_html' and `no_tables' are accepted for compatibility.
@@ -50,18 +52,40 @@ to_markdown(Html) ->
     Options :: options(),
     Markdown :: binary().
 to_markdown(Html, Options) ->
-    markupz:to_markdown(Html, markupz_options(Options)).
+    markupz:to_markdown(to_binary(Html), markupz_options(Options)).
 
 
 %% @doc Convert Markdown to HTML using `markdownz'.
 -spec to_html(Markdown) -> Html when
     Markdown :: unicode:chardata(),
     Html :: binary().
-to_html(Markdown) when is_list(Markdown) ->
-    markdownz:to_binary(unicode:characters_to_binary(Markdown, utf8));
-to_html(Markdown) when is_binary(Markdown) ->
-    markdownz:to_binary(Markdown).
+to_html(Markdown) ->
+    markdownz:to_binary(to_binary(Markdown)).
 
+-spec to_binary(CharData) -> Binary when
+    CharData :: unicode:chardata(),
+    Binary :: binary().
+to_binary(CharData) ->
+    case unicode:characters_to_binary(CharData, utf8) of
+        {error, Binary, _Restdata} ->
+            ?LOG_WARNING(#{
+                in => zotonic_core,
+                text => <<"Invalid UTF-8 sequence in Markdown/HTML input">>,
+                result => error,
+                reason => invalid_utf8
+            }),
+            Binary;
+        {incomplete, Binary, _Restdata} ->
+            ?LOG_INFO(#{
+                in => zotonic_core,
+                text => <<"Incomplete UTF-8 sequence in Markdown input">>,
+                result => error,
+                reason => incomplete
+            }),
+            Binary;
+        Binary ->
+            Binary
+    end.
 
 -spec markupz_options(options()) -> default | faithful | email | markupz:options().
 markupz_options(Options) when is_list(Options) ->
