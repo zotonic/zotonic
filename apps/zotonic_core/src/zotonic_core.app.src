@@ -12,7 +12,7 @@
                   os_mon,
                   bert, dh_date, eiconv, exometer_core,
                   epgsql,
-                  depcache, zotonic_stdlib,
+                  depcache, zotonic_stdlib, markdownz, markupz,
                   erlexec,
                   cowboy, cowmachine,
                   poolboy,

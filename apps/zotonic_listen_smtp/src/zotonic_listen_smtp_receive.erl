@@ -432,7 +432,7 @@ append(A, B) -> <<A/binary, B/binary>>.
 generate_text(#email{ text = undefined, html = undefined } = E) ->
     E;
 generate_text(#email{ text = undefined, html = Html } = E) ->
-    E#email{ text = z_markdown:to_markdown(Html, [no_html, no_tables]) };
+    E#email{ text = markupz:to_markdown(Html, email) };
 generate_text(E) ->
     E.
 
@@ -465,4 +465,3 @@ attachment({Type, SubType}, Params, Body) ->
 append_mime(undefined, B) -> B;
 append_mime(A, undefined) -> A;
 append_mime(A, B) -> <<A/binary, $/, B/binary>>.
-
