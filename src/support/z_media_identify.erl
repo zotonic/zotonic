@@ -282,10 +282,10 @@ imagemagick_identify_cmd() ->
                 false ->
                     case os:find_executable("identify") of
                         false -> false;
-                        Cmd -> z_filelib:os_filename(Cmd)
+                        Cmd -> z_utils:os_filename(Cmd)
                     end;
                 Cmd ->
-                    z_filelib:os_filename(Cmd) ++ " identify"
+                    z_utils:os_filename(Cmd) ++ " identify"
             end,
             persistent_term:put(Key, ResultCmd),
             ResultCmd;
