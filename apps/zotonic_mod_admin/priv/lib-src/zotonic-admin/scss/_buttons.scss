@@ -1,8 +1,8 @@
 .z-btn-remove {
-    color: $textColorButton;
+    color: var(--z-admin-btn-remove-color);
 
     &:hover {
-        color: $textColorDark;
+        color: var(--z-admin-btn-remove-hover-color);
     }
 }
 
@@ -60,8 +60,8 @@
 .btn-primary.disabled:hover, .btn-primary[disabled]:hover, fieldset[disabled] .btn-primary:hover, .btn-primary.disabled:focus, .btn-primary[disabled]:focus, fieldset[disabled] .btn-primary:focus, .btn-primary.disabled.focus, .btn-primary[disabled].focus,
 fieldset[disabled] .btn-primary.focus, .btn-primary.disabled:active, .btn-primary[disabled]:active, fieldset[disabled] .btn-primary:active, .btn-primary.disabled.active, .btn-primary[disabled].active,
 fieldset[disabled] .btn-primary.active {
-    background-color: #c0c0c0;
-    border-color: #bbb;
+    background-color: var(--z-admin-btn-primary-disabled-bg);
+    border-color: var(--z-admin-btn-primary-disabled-border-color);
 }
 
 .btn.is-active::after {

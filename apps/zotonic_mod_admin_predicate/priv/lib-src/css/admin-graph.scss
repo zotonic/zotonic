@@ -6,6 +6,9 @@
   --graph-accent: #e4572e;
   --graph-node: #0f4c5c;
   --graph-edge: #6b6b6b;
+  --graph-label: #1b1b1b;
+  --graph-label-outlined: #1b1b1b;
+  --graph-label-hover-bg: rgba(255, 248, 239, 0.88);
   --graph-node-active: #e4572e;
   --graph-edge-incoming: #2a9d8f;
   --graph-edge-outgoing: #e4572e;
@@ -14,7 +17,53 @@
   --graph-node-outline: #1b1b1b;
   --graph-dim-node: #c7c3bb;
   --graph-dim-edge: #d1ccc4;
+  --graph-surface: #fbf6ef;
+  --graph-shadow: rgba(15, 12, 10, 0.12);
+  --graph-detail-bg: rgba(255, 255, 255, 0.75);
+  --graph-button-secondary: #c9b8a1;
+  --graph-button-secondary-ink: #2b2b2b;
+  --graph-category-article: #355c7d;
+  --graph-category-person: #6c5b7b;
+  --graph-category-keyword: #c06c84;
+  --graph-category-collection: #2a9d8f;
+  --graph-category-image: #f4a261;
+  --graph-category-video: #e76f51;
 }
+
+:root[data-bs-theme="dark"] {
+  --graph-bg: #0f141a;
+  --graph-ink: #f3efe9;
+  --graph-muted: #a8b1bd;
+  --graph-panel: #18202a;
+  --graph-accent: #ff8f70;
+  --graph-node: #7dd3e6;
+  --graph-edge: #8b97a6;
+  --graph-label: #f3efe9;
+  --graph-label-outlined: #f3efe9;
+  --graph-label-hover-bg: rgba(24, 32, 42, 0.84);
+  --graph-node-active: #ff8f70;
+  --graph-edge-incoming: #5ad1be;
+  --graph-edge-outgoing: #ff8f70;
+  --graph-edge-path: #89a8ff;
+  --graph-edge-hover-path: #b68cff;
+  --graph-node-outline: #1b1b1b;
+  --graph-dim-node: #44505f;
+  --graph-dim-edge: #3f4956;
+  --graph-surface: #121922;
+  --graph-shadow: rgba(0, 0, 0, 0.35);
+  --graph-detail-bg: rgba(12, 18, 24, 0.8);
+  --graph-button-secondary: #485564;
+  --graph-button-secondary-ink: #f3efe9;
+  --graph-category-article: #8fb0d8;
+  --graph-category-person: #b7a1d1;
+  --graph-category-keyword: #f09ab1;
+  --graph-category-collection: #64d6c7;
+  --graph-category-image: #ffc78f;
+  --graph-category-video: #ff9c85;
+}
+
+
+
 
 * {
   box-sizing: border-box;
@@ -28,9 +77,9 @@
     position: relative;
     height: 100%;
     padding: 4px;
-    background: #fbf6ef;
+    background: var(--z-admin-surface, var(--graph-surface));
     border: 0;
-    border-top: 1px solid #ccc;
+    border-top: 1px solid var(--z-admin-border, var(--graph-dim-edge));
 
     .graph-viewer {
         height: 100%;
@@ -45,8 +94,9 @@
         width: 300px;
         height: auto;
         padding: 10px;
-        border: 1px solid #ccc;
-        background: #fff;
+        border: 1px solid var(--z-admin-border, var(--graph-dim-edge));
+        background: var(--z-admin-surface, var(--graph-panel));
+        color: var(--z-admin-text, var(--graph-ink));
         max-width: 30%;
         max-height: 80%;
         overflow-y: scroll;
@@ -56,7 +106,7 @@
             color: var(--graph-muted);
 
             span {
-              color: black;
+              color: var(--z-admin-text, var(--graph-ink));
             }
         }
 
@@ -65,5 +115,3 @@
         }
     }
 }
-
-

@@ -1,6 +1,6 @@
 .nav-tabs {
     > li > a {
-        text-shadow: $darkOnLightTextShadow;
+        text-shadow: none;
     }
 }
 
@@ -12,7 +12,7 @@
 .minimalTabs ul.nav-tabs,
 .minimalTabs {
 	padding: 0;
-	border-color: $borderColorMediumTransparent;
+	border-color: var(--z-admin-tab-border);
 	margin: 0;
 
 	> li {
@@ -33,14 +33,14 @@
 	}
 
     > li:not(.disabled) > a {
-	    color: $textColorButton;
+	    color: var(--z-admin-text);
 	}
 
     > li.disabled > a {
         &,
         &:hover,
         &:focus {
-           color: $textColorLight;
+           color: var(--z-admin-text-muted);
        }
 	}
 
@@ -48,8 +48,8 @@
 	    background-color: transparent;
 
 	    &:hover {
-	    	color: black;
-		    border-bottom-color: $textColorLight;
+	    	color: var(--bs-emphasis-color);
+		    border-bottom-color: var(--z-admin-text-muted);
 	    }
 	}
 	
@@ -57,25 +57,25 @@
 		&,
 		&:focus,
 		&:hover {
-			border-style: none none solid none;
+		    border-style: none none solid none;
 		    border-width: 2px;
-		    border-bottom-color: #00C853;
-		    color: black;
-		    background: none;
+		    border-bottom-color: var(--z-admin-tab-active-border);
+		    color: var(--bs-emphasis-color);
+		    background: var(--z-admin-surface);
 		}
 	}
 
 	li.tab-action {
 		> a {
 			&:hover {
-				color: black;
+				color: var(--bs-emphasis-color);
 				border-bottom-color: transparent;
 			}
 		}
 	}
 
 	&.nav-justified {
-		border-bottom: 1px solid $borderColorMedium;
+		border-bottom: 1px solid var(--z-admin-border);
 
 		> li > a {
 			margin-bottom: -1px;

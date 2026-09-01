@@ -17,7 +17,7 @@ ul.tree-list {
         @_side_spacing: (@_toggle_width - @_icon_size) / 2;
 
         &.placeholder {
-            background: #aaa;
+            background: var(--z-admin-text-light, #aaa);
             border-radius: 4px;
         }
 
@@ -45,7 +45,7 @@ ul.tree-list {
             display: grid;
             grid-template-columns: minmax(10px,auto) auto 1fr auto auto;
             grid-template-rows: minmax(34px,auto);
-            border: 1px solid #aaa; // #e0e0e0;
+            border: 1px solid var(--z-admin-border, #aaa); // #e0e0e0;
             line-height: @_item_height;
             border-radius: 4px;
 
@@ -60,13 +60,13 @@ ul.tree-list {
                 grid-column: 2;
                 width: @_toggle_width;
                 height: @_item_height;
-                color: #ccc;
+                color: var(--z-admin-text-light, #ccc);
                 display: none;
 
                 &:hover {
                     cursor: pointer;
                     text-decoration: none;
-                    color: black;
+                    color: var(--z-admin-text, black);
                 }
                 > i {
                     cursor: pointer;
@@ -151,7 +151,7 @@ ul.tree-list {
 
 .menu-item {
     .category {
-        color: #999;
+        color: var(--z-admin-text-muted, #999);
     }
 }
 
@@ -164,4 +164,3 @@ ul.tree-list {
         }
     }
 }
-
