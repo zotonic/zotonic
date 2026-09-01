@@ -111,7 +111,13 @@ check_db_and_upgrade(Context, Tries) when Tries =< 2 ->
             DbOptions = proplists:delete(dbpassword, z_db_pool:get_database_options(Context)),
             case {z_db:table_exists(config, Context), z_config:get(dbinstall)} of
                 {false, false} ->
-                    ?LOG_ERROR("config table does not exist and dbinstall is false; not installing"),
+                    ?LOG_ERROR(#{
+                        text => <<"Config table does not exist and dbinstall is false; not installing">>,
+                        in => zotonic_core,
+                        result => error,
+                        reason => nodbinstall,
+                        site => z_context:site(Context)
+                    }),
                     {error, nodbinstall};
                 {false, _} ->
                     %% Install database
@@ -161,7 +167,7 @@ check_db_and_upgrade(Context, Tries) when Tries =< 2 ->
             Error;
         {error, Reason} ->
             ?LOG_WARNING(#{
-                text => "Database connection failure",
+                text => <<"Database connection failure">>,
                 in => zotonic_core,
                 result => error,
                 reason => Reason,
@@ -198,8 +204,15 @@ check_db_and_upgrade(Context, Tries) when Tries =< 2 ->
                     end
                 end
     end;
-check_db_and_upgrade(_Context, _Tries) ->
-    ?LOG_ERROR("Could not connect to database and db creation failed"),
+check_db_and_upgrade(Context, Tries) ->
+    ?LOG_ERROR(#{
+        text => <<"Could not connect to database and database creation failed">>,
+        in => zotonic_core,
+        result => error,
+        reason => database,
+        site => z_context:site(Context),
+        tries => Tries
+    }),
     {error, database}.
 
 maybe_drop_db(Context) ->
