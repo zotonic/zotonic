@@ -53,6 +53,7 @@ description: Use when creating, refactoring, or reviewing Zotonic template_compi
 - Use subfolders to group related partials in larger sites, following patterns such as `cards/`, `header/`, `nav/`, `footer/`, `search/`, `page/`, `page-actions/`, `edit/`, `icons/`, `email/`, `pivot/`, or feature-specific folders.
 - Keep path and category naming together for category-aware partials, for example `cards/card.tpl`, `cards/card.event.tpl`, `header/header.tpl`, `header/header.name.page_art_agenda.tpl`, `page/content-left.tpl`, `page/content-left.person.tpl`.
 - Use `{% include "partial.tpl" arg=value %}` for a single known partial.
+- For boolean include arguments, use the bare flag form, such as `{% include "partial.tpl" is_resultless %}`. The template compiler adds the `true` value, analogous to an Erlang proplist flag.
 - Use `{% optional include "partial.tpl" %}` when the partial can be absent.
 - Use `{% all include "_html_head.tpl" %}` or `{% all include "_admin_overview_filter_panel.tpl" %}` when all modules should contribute same-named templates in module priority order.
 - Use include cache arguments (`max_age`, `vary`, `sudo`, `anondo`, `runtime`) only when needed; be explicit because they affect ACL/runtime behavior.

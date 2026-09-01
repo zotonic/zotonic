@@ -59,6 +59,7 @@ description: Use when working in Zotonic projects, especially Erlang modules, Zo
 ## Templates
 
 - Zotonic templates use `template_compiler` tags, loosely Django-like.
+- Use bare boolean tag arguments, such as `is_resultless`, instead of `is_resultless=true`. The template compiler adds the `true` value, matching flag entries in Erlang proplists.
 - Documentation for the tags is in doc/template-tags
 - Use `{% extends "base.tpl" %}` and blocks for page composition.
 - Use `{% catinclude %}` for category-specific page/header variants.
