@@ -67,14 +67,29 @@
 			{% else %}
 				{% with answers ++ answers_novalidate as answers_prefill %}
 					{% for blk in questions %}
-						{% optional include ["blocks/_block_view_",blk.type,".tpl"]|join
-									id=id
-									blk=blk
-									answers=answers_prefill
+						{% if blk.is_editor_only and not id.is_editable %}
+							{% if blk.name|member:readonly_answer_blocks %}
+								{% optional include ["blocks/_block_view_",blk.type,".tpl"]|join
+										id=id
+										blk=blk
+										answers=answers_prefill
+										result=readonly_result
+					                            answer_user_id=answer_user_id|default:m.acl.user
+										editing=editing
+										nr=forloop.counter
+										is_survey_answer_view
+								%}
+							{% endif %}
+						{% else %}
+							{% optional include ["blocks/_block_view_",blk.type,".tpl"]|join
+										id=id
+										blk=blk
+										answers=answers_prefill
 		                            answer_user_id=answer_user_id|default:m.acl.user
-									editing=editing
-									nr=forloop.counter
-						%}
+										editing=editing
+										nr=forloop.counter
+							%}
+						{% endif %}
 					{% endfor %}
 				{% endwith %}
 			{% endif %}

@@ -146,7 +146,7 @@ Delegate callbacks:
 -mod_title("Survey").
 -mod_description("Create and publish questionnaires.").
 -mod_prio(400).
--mod_schema(7).
+-mod_schema(8).
 -mod_depends([ admin, mod_wires ]).
 -mod_provides([ survey, poll ]).
 -mod_config([
@@ -644,7 +644,10 @@ save_page(SurveyId, Answers, Args, Context) when is_integer(SurveyId) ->
         true ->
             AnswersNoValidate = z_convert:to_list(proplists:get_value(answers_novalidate, Args, [])),
             {SubmittedAnswers, _Submitter0} = get_args(Context),
-            SubmittedAnswers1 = group_multiselect(SubmittedAnswers),
+            SubmittedAnswers1 = filter_editor_only_answers(
+                SurveyId,
+                group_multiselect(SubmittedAnswers),
+                Context),
             % Remove the newly submitted question answers from both the validated and the unvalidated lists.
             % The user could be backing through multiple pages, effectively removing the answers from the validated answers.
             Answers1 = lists:foldl(fun({Arg,_Val}, Acc) -> proplists:delete(Arg, Acc) end, Answers, SubmittedAnswers1),
@@ -691,7 +694,10 @@ render_next_page(SurveyId, PageNr, Direction, Answers, History, Editing, Args, C
             {Answers, AnswersNoValidate, proplists:get_value(feedback_submitter, Args)};
         _ ->
             {SubmittedAnswers, Submitter0} = get_args(Context),
-            SubmittedAnswers1 = group_multiselect(SubmittedAnswers),
+            SubmittedAnswers1 = filter_editor_only_answers(
+                SurveyId,
+                group_multiselect(SubmittedAnswers),
+                Context),
             % Remove the newly submitted question answers from both the validated and the unvalidated lists.
             % The user could be backing through multiple pages, effectively removing the answers from the validated answers.
             AnswersWithoutSubmitted = lists:foldl(fun({Arg,_Val}, Acc) -> proplists:delete(Arg, Acc) end, Answers, SubmittedAnswers1),
@@ -760,6 +766,14 @@ render_next_page(SurveyId, PageNr, Direction, Answers, History, Editing, Args, C
                             undefined
                     end,
 
+                    {ReadOnlyFoundAnswers, _ReadOnlyMissing} = collect_answers(
+                        SurveyId,
+                        Questions,
+                        Answers2 ++ AnswersNoValidate2,
+                        Context),
+                    ReadOnlyAnswerBlocks = [ Name || {Name, _} <- ReadOnlyFoundAnswers ],
+                    ReadOnlyAnswers = survey_answers_to_storage(ReadOnlyFoundAnswers),
+
                     % A new list of questions, PageNr might be another than expected
                     TargetId = proplists:get_value(element_id, Args, <<"survey-question">>),
                     SurveySessionNonce = proplists:get_value(survey_session_nonce, Args),
@@ -778,6 +792,8 @@ render_next_page(SurveyId, PageNr, Direction, Answers, History, Editing, Args, C
                         {survey_session_nonce, SurveySessionNonce},
                         {is_feedback_view, IsFeedbackView},
                         {feedback_result, #{ <<"answers">> => AnswersFeedback}},
+                        {readonly_result, #{ <<"answers">> => ReadOnlyAnswers}},
+                        {readonly_answer_blocks, ReadOnlyAnswerBlocks},
                         {feedback_submitter, Submitter}
                     ],
                     #render{template="_survey_question_page.tpl", vars=Vars};
@@ -1004,6 +1020,45 @@ group_multiselect([{K,V}|KVs], undefined, [], Acc) -> group_multiselect(KVs, K, 
 group_multiselect([{K,V}|KVs], K, Vs, Acc) -> group_multiselect(KVs, K, [V|Vs], Acc);
 group_multiselect([{K,V}|KVs], K1, [V1], Acc) -> group_multiselect(KVs, K, [V], [{K1,V1}|Acc]);
 group_multiselect([{K,V}|KVs], K1, V1s, Acc) -> group_multiselect(KVs, K, [V], [{K1,V1s}|Acc]).
+
+
+%% @doc Ignore submitted values for editor-only questions when the current user
+%% cannot edit the survey. Existing values remain in the accumulated answers.
+filter_editor_only_answers(SurveyId, SubmittedAnswers, Context) ->
+    case z_acl:rsc_editable(SurveyId, Context) of
+        true ->
+            SubmittedAnswers;
+        false ->
+            Questions = m_rsc:p(SurveyId, <<"blocks">>, Context),
+            EditorOnlyNames = editor_only_input_names(Questions, Context),
+            [
+                Answer
+                || {Name, _} = Answer <- SubmittedAnswers,
+                   not lists:member(Name, EditorOnlyNames)
+            ]
+    end.
+
+editor_only_input_names(Questions, Context) when is_list(Questions) ->
+    lists:usort(lists:append([
+        question_input_names(Question, Context)
+        || Question <- Questions,
+           z_convert:to_bool(maps:get(<<"is_editor_only">>, Question, false))
+    ]));
+editor_only_input_names(_Questions, _Context) ->
+    [].
+
+question_input_names(#{ <<"type">> := <<"survey_narrative">> } = Question, Context) ->
+    Narrative = z_trans:lookup_fallback(maps:get(<<"narrative">>, Question, <<>>), Context),
+    {_Parts, Inputs} = filter_survey_prepare_narrative:parse(Narrative),
+    [ z_convert:to_binary(Name) || {_IsSelect, Name} <- Inputs ];
+question_input_names(#{ <<"type">> := <<"survey_matching">>, <<"name">> := Name } = Question, Context) ->
+    Prepared = filter_survey_prepare_matching:survey_prepare_matching(Question, Context),
+    [ iolist_to_binary([Name, $_, ItemName]) || {ItemName, _} <- maps:get(<<"items">>, Prepared, []) ];
+question_input_names(Question, _Context) ->
+    case maps:get(<<"name">>, Question, undefined) of
+        undefined -> [];
+        Name -> [Name]
+    end.
 
 
 %% @doc Count the number of pages in the survey
@@ -1365,7 +1420,7 @@ maybe_mail(SurveyId, Answers, ResultId, IsEditing, Context) ->
     case IsEditing orelse probably_email(SurveyId, Context) of
         true ->
             PrepAnswers = survey_answer_prep:readable(SurveyId, Answers, Context),
-            Attachments = uploads(Context),
+            Attachments = uploads(SurveyId, Context),
             SurveyResult = case ResultId of
                 undefined -> undefined;
                 _ -> m_survey:single_result(SurveyId, ResultId, Context)
@@ -1376,9 +1431,17 @@ maybe_mail(SurveyId, Answers, ResultId, IsEditing, Context) ->
             nop
     end.
 
-uploads(Context) ->
+uploads(SurveyId, Context) ->
     Qs = z_context:get_q_all_noz(Context),
-    [ Upload || {_, #upload{} = Upload} <- Qs ].
+    EditorOnlyNames = case z_acl:rsc_editable(SurveyId, Context) of
+        true -> [];
+        false -> editor_only_input_names(m_rsc:p(SurveyId, <<"blocks">>, Context), Context)
+    end,
+    [
+        Upload
+        || {Name, #upload{} = Upload} <- Qs,
+           not lists:member(Name, EditorOnlyNames)
+    ].
 
 probably_email(SurveyId, Context) ->
     not z_utils:is_empty(m_rsc:p_no_acl(SurveyId, <<"survey_email">>, Context))
@@ -1486,7 +1549,9 @@ collect_answers(SurveyId, [Q|Qs], Answers, FoundAnswers, Missing, Context) ->
                 {ok, AnswerList} ->
                     collect_answers(SurveyId, Qs, Answers, [{QName, AnswerList}|FoundAnswers], Missing, Context);
                 {error, missing} ->
-                    case z_convert:to_bool(maps:get(<<"is_required">>, Q, false)) of
+                    IsRequired = z_convert:to_bool(maps:get(<<"is_required">>, Q, false)),
+                    IsEditorOnly = z_convert:to_bool(maps:get(<<"is_editor_only">>, Q, false)),
+                    case IsRequired andalso not (IsEditorOnly andalso not z_acl:rsc_editable(SurveyId, Context)) of
                         true ->
                             collect_answers(SurveyId, Qs, Answers, FoundAnswers, [QName|Missing], Context);
                         false ->

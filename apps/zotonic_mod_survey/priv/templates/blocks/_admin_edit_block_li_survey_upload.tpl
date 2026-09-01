@@ -34,15 +34,9 @@
                 </label>
             </div>
 
-            <div class=" question-options">
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" id="block-{{name}}-is_required" name="blocks[].is_required" value="1" {% if blk.is_required or is_new %}checked="checked"{% endif %} />
-                        {_ Required, this question must be answered. _}
-                    </label>
-                </div>
+            <div class="question-options">
+                {% include "blocks/_admin_survey_question_options.tpl" is_resultless %}
             </div>
         </div>
     </div>
 {% endblock %}
-
