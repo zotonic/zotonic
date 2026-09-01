@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2020-2023 Marc Worrell
+%% @copyright 2020-2026 Marc Worrell
 %% @doc 'url_abs' filter, generates an url with hostname/protocol.
 %% @end
 
-%% Copyright 2020-2023 Marc Worrell
+%% Copyright 2020-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ This is similar to:
 
 
 ```django
-{% url_abs home hello=\"world\" %}
+{% url home hello=\"world\" absolute_url %}
 ```
 
 Difference between the tag and the filter is that the filter can be used in expressions or with passed values.
