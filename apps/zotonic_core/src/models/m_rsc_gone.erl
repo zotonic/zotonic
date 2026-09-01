@@ -275,7 +275,12 @@ install(Context) ->
             % Check for rsc_gone_uri_key
             case z_db:key_exists(rsc_gone, rsc_gone_uri_key, Context) of
                 false ->
-                    [] = z_db:q("CREATE INDEX IF NOT EXISTS rsc_gone_uri_key ON rsc_gone(uri)", Context),
+                    % This can take longer on sites with an extensive deletion history.
+                    [] = z_db:q(
+                        "CREATE INDEX IF NOT EXISTS rsc_gone_uri_key ON rsc_gone(uri)",
+                        [],
+                        Context,
+                        10*60*1000),
                     ok;
                 true ->
                     ok

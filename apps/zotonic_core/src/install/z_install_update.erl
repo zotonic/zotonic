@@ -129,10 +129,13 @@ check_db_and_upgrade(Context, Tries) when Tries =< 2 ->
                                 {ok, C} = z_db_pgsql:get_raw_connection(Context1),
                                 Database = proplists:get_value(dbdatabase, DbOptions),
                                 Schema = proplists:get_value(dbschema, DbOptions),
-                                ok = upgrade(C, Database, Schema),
-                                ok = upgrade_models(Context),
-                                ok = sanity_check(C, Database, Schema),
-                                ok = z_db_pgsql:release_raw_connection(Context1)
+                                try
+                                    ok = upgrade(C, Database, Schema),
+                                    ok = sanity_check(C, Database, Schema)
+                                after
+                                    ok = z_db_pgsql:release_raw_connection(Context1)
+                                end,
+                                ok = upgrade_models(Context1)
                             end,
                             Context),
                     ok
@@ -300,7 +303,6 @@ upgrade(C, Database, Schema) ->
     ok = install_task_due(C, Database, Schema),
     ok = install_module_schema_version(C, Database, Schema),
     ok = install_geocode(C, Database, Schema),
-    ok = install_rsc_gone(C, Database, Schema),
     ok = install_rsc_page_path_log(C, Database, Schema),
     ok = upgrade_config_schema(C, Database, Schema),
     % 0.10.x
@@ -512,42 +514,6 @@ install_geocode(C, Database, Schema) ->
                     ok
             end
     end.
-
-%% Install the table tracking deleted (or moved) resources
-install_rsc_gone(C, Database, Schema) ->
-    case has_table(C, "rsc_gone", Database, Schema) of
-        false ->
-            install_rsc_gone_1(C);
-        true ->
-            case has_column(C, "rsc_gone", "new_id", Database, Schema) of
-                false ->
-                    _ = epgsql:squery(C, "DROP TABLE rsc_gone"),
-                    install_rsc_gone_1(C);
-                true ->
-                    ok
-            end
-    end.
-
-install_rsc_gone_1(C) ->
-    {ok,[],[]} = epgsql:squery(C, "create table rsc_gone ( "
-                              "  id bigint not null,"
-                              "  new_id bigint,"
-                              "  new_uri character varying(250),"
-                              "  version int not null, "
-                              "  uri character varying(250),"
-                              "  name character varying(80),"
-                              "  page_path character varying(80),"
-                              "  is_authoritative boolean NOT NULL DEFAULT true,"
-                              "  creator_id bigint,"
-                              "  modifier_id bigint,"
-                              "  created timestamp with time zone NOT NULL DEFAULT now(),"
-                              "  modified timestamp with time zone NOT NULL DEFAULT now(),"
-                              "  CONSTRAINT rsc_gone_pkey PRIMARY KEY (id)"
-                              ")"),
-    {ok, [], []} = epgsql:squery(C, "CREATE INDEX rsc_gone_name ON rsc_gone(name)"),
-    {ok, [], []} = epgsql:squery(C, "CREATE INDEX rsc_gone_page_path ON rsc_gone(page_path)"),
-    {ok, [], []} = epgsql:squery(C, "CREATE INDEX rsc_gone_modified ON rsc_gone(modified)"),
-    ok.
 
 %% Table with all uploaded filenames, used to ensure unique filenames in the upload archive
 install_medium_log(C, Database, Schema) ->
@@ -1181,4 +1147,3 @@ pivot_page_path(C, Database, Schema) ->
                 Rscs),
             ok
     end.
-
