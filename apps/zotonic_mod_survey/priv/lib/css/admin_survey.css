@@ -1,3 +1,107 @@
+.survey-status-label {
+  display: inline-block;
+  min-width: 2em;
+  padding: 0.25em 0.5em;
+  color: var(--survey-status-text-color, inherit);
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.25em; }
+  .survey-status-label-none {
+    color: #555;
+    background-color: #fff;
+    border: 1px solid #ccc; }
+  .survey-status-label button {
+    color: inherit;
+    background-color: transparent;
+    border: none; }
+  .survey-status-label-0 {
+    --survey-status-color: #6c757d;
+    --survey-status-text-color: #fff;
+    --survey-status-foreground-color: #495057;
+    background-color: var(--survey-status-color); }
+  .survey-status-label-1 {
+    --survey-status-color: #337ab7;
+    --survey-status-text-color: #fff;
+    --survey-status-foreground-color: #245580;
+    background-color: var(--survey-status-color); }
+  .survey-status-label-2 {
+    --survey-status-color: #5bc0de;
+    --survey-status-text-color: #173e47;
+    --survey-status-foreground-color: #117a8b;
+    background-color: var(--survey-status-color); }
+  .survey-status-label-3 {
+    --survey-status-color: #5cb85c;
+    --survey-status-text-color: #173817;
+    --survey-status-foreground-color: #2e7d32;
+    background-color: var(--survey-status-color); }
+  .survey-status-label-4 {
+    --survey-status-color: #a56708;
+    --survey-status-text-color: #fff;
+    --survey-status-foreground-color: #7a4b00;
+    background-color: var(--survey-status-color); }
+  .survey-status-label-5 {
+    --survey-status-color: #d9534f;
+    --survey-status-text-color: #fff;
+    --survey-status-foreground-color: #a02622;
+    background-color: var(--survey-status-color); }
+
+.survey-status-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  width: 100%; }
+  .survey-status-options .survey-status-option {
+    position: relative;
+    flex: 1 1 2.75em;
+    min-width: 2.75em;
+    margin: 0;
+    cursor: pointer; }
+    .survey-status-options .survey-status-option > input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none; }
+      .survey-status-options .survey-status-option > input:checked + .survey-status-label {
+        outline: 3px solid #222;
+        outline-offset: 2px; }
+      .survey-status-options .survey-status-option > input:focus + .survey-status-label {
+        box-shadow: 0 0 0 2px #fff, 0 0 0 4px #337ab7; }
+    .survey-status-options .survey-status-option .survey-status-label {
+      display: block;
+      width: 100%;
+      min-height: 2.5em; }
+
+.table .survey-status-cell {
+  min-width: 8em;
+  padding: 0;
+  vertical-align: middle; }
+  .table .survey-status-cell.survey-status-label {
+    display: table-cell;
+    color: var(--survey-status-foreground-color);
+    background-color: transparent;
+    border-radius: 0; }
+  .table .survey-status-cell > button {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-height: 2.75em;
+    padding: 8px;
+    overflow: hidden;
+    color: inherit;
+    text-align: left;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    background: transparent;
+    border: 0; }
+    .table .survey-status-cell > button:hover, .table .survey-status-cell > button:focus {
+      background-color: transparent;
+      text-decoration: underline;
+      outline: 0;
+      box-shadow: none; }
+
 .survey-editor ul {
   min-height: 1300px;
   padding: 0;
@@ -144,6 +248,7 @@ label.block-type {
 
 .dialog-content #survey-question form p {
   margin: 0; }
+
 .dialog-content #survey-question form div {
   margin: 0 0 18px; }
 

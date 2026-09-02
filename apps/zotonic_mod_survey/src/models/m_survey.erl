@@ -30,7 +30,7 @@ Available Model API Paths
 | `get` | `/all_results/+list/...` | Return editable-only full result matrix for survey id `+list[1]`, sorted by column `+list[2]`, with captions row followed by answer rows. |
 | `get` | `/all_results/+id/...` | Return editable-only full result matrix for survey `+id` (`[captions | answers]`) from stored submissions. |
 | `get` | `/list_results/+id/...` | Return editable-only list view of survey submissions for `+id` via `list_results/2`. |
-| `get` | `/get_result/+surveyid/+answerid/...` | Return one submission (`+answerid`) for survey `+surveyid`; requires `view_result` ACL when a row exists. |
+| `get` | `/get_result/+surveyid/+answerid/...` | Return one submission (`+answerid`) for survey `+surveyid`; requires `view_result` ACL when a row exists, and includes status metadata only when the survey is editable. |
 | `get` | `/captions/+surveyid/...` | Return survey result/export captions for `+surveyid` from question block metadata. |
 | `get` | `/totals/+surveyid/...` | Return editable-only aggregate totals/statistics for survey `+surveyid`. |
 | `get` | `/did_survey/+surveyid/...` | Return whether the current user (or anonymous session id) already has a submission for survey `+surveyid`. |
@@ -95,6 +95,9 @@ Available Model API Paths
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_mod_survey/include/survey.hrl").
+
+%% Keep in sync with the status note textarea maxlength.
+-define(STATUS_NOTE_MAX_LENGTH, 64 * 1024).
 
 
 %% @doc Fetch the value for the key from a model source
@@ -1146,33 +1149,44 @@ set_answer_user(SurveyId, AnswerId, UserId, Context) ->
     Status :: integer() | undefined,
     Note :: binary() | undefined,
     Context :: z:context(),
-    Result :: ok | {error, eacces | enoent}.
+    Result :: ok | {error, badarg | eacces | enoent}.
 set_answer_status(SurveyId, AnswerId, Status, Note, Context) ->
     case z_acl:rsc_editable(SurveyId, Context) of
         true ->
-            case z_db:q1("
-                update survey_answers
-                set status = $1,
-                    status_date = $2,
-                    status_note = $3,
-                    status_modifier_id = $4
-                where id = $5
-                  and survey_id = $6",
-                [
-                    Status,
-                    erlang:universaltime(),
-                    Note,
-                    z_acl:user(Context),
-                    AnswerId,
-                    SurveyId
-                ],
-                Context)
-            of
-                1 -> ok;
-                0 -> {error, enoent}
-            end;
+            set_answer_status_1(SurveyId, AnswerId, Status, Note, Context);
         false ->
             {error, eacces}
+    end.
+
+set_answer_status_1(SurveyId, AnswerId, Status, undefined, Context) ->
+    set_answer_status_2(SurveyId, AnswerId, Status, undefined, Context);
+set_answer_status_1(SurveyId, AnswerId, Status, Note, Context) when is_binary(Note) ->
+    TruncatedNote = z_string:truncatechars(Note, ?STATUS_NOTE_MAX_LENGTH),
+    set_answer_status_2(SurveyId, AnswerId, Status, TruncatedNote, Context);
+set_answer_status_1(_SurveyId, _AnswerId, _Status, _Note, _Context) ->
+    {error, badarg}.
+
+set_answer_status_2(SurveyId, AnswerId, Status, Note, Context) ->
+    case z_db:q1("
+        update survey_answers
+        set status = $1,
+            status_date = $2,
+            status_note = $3,
+            status_modifier_id = $4
+        where id = $5
+          and survey_id = $6",
+        [
+            Status,
+            erlang:universaltime(),
+            Note,
+            z_acl:user(Context),
+            AnswerId,
+            SurveyId
+        ],
+        Context)
+    of
+        1 -> ok;
+        0 -> {error, enoent}
     end.
 
 
@@ -1225,7 +1239,7 @@ single_result(SurveyId, UserId, PersistentId, Context) ->
         Row -> filter_single_result(SurveyId, Row, Context)
     end.
 
-%% @private Hide the internal status note from people who cannot edit the survey.
+%% @private Hide all internal status fields from people who cannot set them.
 -spec filter_single_result(SurveyId, Row, Context) -> Row1 when
     SurveyId :: m_rsc:resource_id(),
     Row :: proplists:proplist(),
@@ -1236,7 +1250,10 @@ filter_single_result(SurveyId, Row, Context) ->
         true ->
             Row;
         false ->
-            proplists:delete(status_note, Row)
+            lists:foldl(
+                fun proplists:delete/2,
+                Row,
+                [status, status_date, status_note, status_modifier_id])
     end.
 
 %% @doc Delete all survey results

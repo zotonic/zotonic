@@ -1,3 +1,43 @@
+@import "survey_status";
+
+.table {
+    .survey-status-cell {
+        min-width: 8em;
+        padding: 0;
+        vertical-align: middle;
+
+        &.survey-status-label {
+            display: table-cell;
+            color: var(--survey-status-foreground-color);
+            background-color: transparent;
+            border-radius: 0;
+        }
+
+        > button {
+            display: block;
+            width: 100%;
+            max-width: 100%;
+            min-height: 2.75em;
+            padding: 8px;
+            overflow: hidden;
+            color: inherit;
+            text-align: left;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            background: transparent;
+            border: 0;
+
+            &:hover,
+            &:focus {
+                background-color: transparent;
+                text-decoration: underline;
+                outline: 0;
+                box-shadow: none;
+            }
+        }
+    }
+}
+
 .survey-editor ul {
     min-height: 1300px;
     padding: 0;
@@ -232,4 +272,3 @@ label.block-type {
         }
     }
 }
-

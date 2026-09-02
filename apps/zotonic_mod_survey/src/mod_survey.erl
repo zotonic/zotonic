@@ -318,6 +318,34 @@ event(#postback{message={survey_remove_result_confirm, Args}}, Context) ->
             z_render:growl(?__("You are not allowed to change these results.", Context), Context)
     end;
 
+event(#submit{message={survey_answer_status, Args}}, Context) ->
+    {id, SurveyId0} = proplists:lookup(id, Args),
+    {answer_id, AnswerId0} = proplists:lookup(answer_id, Args),
+    SurveyId = m_rsc:rid(SurveyId0, Context),
+    AnswerId = z_convert:to_integer(AnswerId0),
+    Status = survey_answer_status(z_context:get_q(<<"status">>, Context)),
+    Note = survey_answer_status_note(z_context:get_q(<<"status_note">>, Context, <<>>)),
+    case {Status, Note} of
+        {{ok, StatusIndex}, {ok, StatusNote}} when is_integer(SurveyId), is_integer(AnswerId) ->
+            case m_survey:set_answer_status(SurveyId, AnswerId, StatusIndex, StatusNote, Context) of
+                ok ->
+                    OnSuccess = proplists:get_all_values(on_success, Args),
+                    z_render:wire([
+                        {dialog_close, []},
+                        {growl, [{text, ?__("Status saved.", Context)}]}
+                        | OnSuccess
+                    ], Context);
+                {error, enoent} ->
+                    z_render:growl_error(?__("Sorry, that survey answer is unknown.", Context), Context);
+                {error, eacces} ->
+                    z_render:growl_error(?__("You are not allowed to change the status.", Context), Context);
+                {error, badarg} ->
+                    z_render:growl_error(?__("Sorry, the status could not be saved.", Context), Context)
+            end;
+        _ ->
+            z_render:growl_error(?__("Sorry, the status could not be saved.", Context), Context)
+    end;
+
 event(#postback{message={survey_remove_result, Args}}, Context) ->
     {id, SurveyId} = proplists:lookup(id, Args),
     {answer_id, AnswerId} = proplists:lookup(answer_id, Args),
@@ -332,6 +360,35 @@ event(#postback{message={survey_remove_result, Args}}, Context) ->
         false ->
             z_render:growl(?__("You are not allowed to change these results.", Context), Context)
     end.
+
+%% @private Convert the optional status index without accepting other values.
+-spec survey_answer_status(term()) -> {ok, non_neg_integer() | undefined} | error.
+survey_answer_status(undefined) ->
+    {ok, undefined};
+survey_answer_status(<<>>) ->
+    {ok, undefined};
+survey_answer_status(Status) when is_binary(Status) ->
+    try
+        survey_answer_status(binary_to_integer(Status))
+    catch
+        error:badarg -> error
+    end;
+survey_answer_status(Status) when is_integer(Status), Status >= 0 ->
+    {ok, Status};
+survey_answer_status(_) ->
+    error.
+
+%% @private Normalize the status note without trusting the submitted value type.
+-spec survey_answer_status_note(term()) -> {ok, binary() | undefined} | error.
+survey_answer_status_note(undefined) ->
+    {ok, undefined};
+survey_answer_status_note(Note) when is_binary(Note) ->
+    case z_string:trim(Note) of
+        <<>> -> {ok, undefined};
+        Text -> {ok, Text}
+    end;
+survey_answer_status_note(_) ->
+    error.
 
 %% @doc Append the possible blocks for a survey's edit page.
 observe_admin_edit_blocks(#admin_edit_blocks{id=Id}, Menu, Context) ->
