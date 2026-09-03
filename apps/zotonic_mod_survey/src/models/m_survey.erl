@@ -30,7 +30,7 @@ Available Model API Paths
 | `get` | `/all_results/+list/...` | Return editable-only full result matrix for survey id `+list[1]`, sorted by column `+list[2]`, with captions row followed by answer rows. |
 | `get` | `/all_results/+id/...` | Return editable-only full result matrix for survey `+id` (`[captions | answers]`) from stored submissions. |
 | `get` | `/list_results/+id/...` | Return editable-only list view of survey submissions for `+id` via `list_results/2`. |
-| `get` | `/get_result/+surveyid/+answerid/...` | Return one submission (`+answerid`) for survey `+surveyid`; requires `view_result` ACL when a row exists. |
+| `get` | `/get_result/+surveyid/+answerid/...` | Return one submission (`+answerid`) for survey `+surveyid`; requires `view_result` ACL when a row exists, and includes status metadata only when the survey is editable. |
 | `get` | `/captions/+surveyid/...` | Return survey result/export captions for `+surveyid` from question block metadata. |
 | `get` | `/totals/+surveyid/...` | Return editable-only aggregate totals/statistics for survey `+surveyid`. |
 | `get` | `/did_survey/+surveyid/...` | Return whether the current user (or anonymous session id) already has a submission for survey `+surveyid`. |
@@ -66,6 +66,7 @@ Available Model API Paths
     survey_stats/2,
     survey_results/3,
     survey_results_prompts/3,
+    survey_results_prompts/4,
     survey_results_sorted/3,
     prepare_results/2,
 
@@ -77,6 +78,7 @@ Available Model API Paths
     is_answer_user/3,
     answer_user/2,
     set_answer_user/4,
+    set_answer_status/5,
 
     did_survey/2,
     find_answer_id/4,
@@ -94,6 +96,9 @@ Available Model API Paths
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_mod_survey/include/survey.hrl").
+
+%% Keep in sync with the status note textarea maxlength.
+-define(STATUS_NOTE_MAX_LENGTH, 64 * 1024).
 
 
 %% @doc Fetch the value for the key from a model source
@@ -376,16 +381,22 @@ replace_survey_submission(SurveyId, {user, UserId}, Answers, Context) ->
             replace_survey_submission(SurveyId, AnswerId, Answers, Context)
     end;
 replace_survey_submission(SurveyId, AnswerId, Answers, Context) when is_integer(AnswerId) ->
-    {Points, AnswersPoints} = survey_test_results:calc_test_results(SurveyId, Answers, Context),
+    ExistingAnswers = case single_result(SurveyId, AnswerId, Context) of
+        [] -> [];
+        Result -> proplists:get_value(answers, Result, [])
+    end,
+    Answers1 = protect_editor_only_answers(SurveyId, Answers, ExistingAnswers, Context),
+    {Points, AnswersPoints} = survey_test_results:calc_test_results(SurveyId, Answers1, Context),
+    Update = #{
+        <<"modified">> => erlang:universaltime(),
+        <<"modifier_id">> => z_acl:user(Context),
+        <<"points">> => Points,
+        <<"answers">> => AnswersPoints
+    },
     case z_db:update(
         survey_answers,
         AnswerId,
-        #{
-            <<"modified">> => erlang:universaltime(),
-            <<"modifier_id">> => z_acl:user(Context),
-            <<"points">> => Points,
-            <<"answers">> => AnswersPoints
-        },
+        maybe_set_submitted(AnswerId, Update, Context),
         Context)
     of
         {ok, 1} ->
@@ -557,7 +568,8 @@ do_insert_checked(SurveyId, UserId, PersistentId, Answers, Context) ->
 
 %% @private
 do_insert_unchecked(SurveyId, UserId, PersistentId, Answers, Context) ->
-    {Points, AnswersPoints} = survey_test_results:calc_test_results(SurveyId, Answers, Context),
+    Answers1 = protect_editor_only_answers(SurveyId, Answers, [], Context),
+    {Points, AnswersPoints} = survey_test_results:calc_test_results(SurveyId, Answers1, Context),
     z_db:insert(
         survey_answers,
         #{
@@ -567,9 +579,69 @@ do_insert_unchecked(SurveyId, UserId, PersistentId, Answers, Context) ->
             <<"is_anonymous">> => z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_anonymous, Context)),
             <<"language">> => z_context:language(Context),
             <<"points">> => Points,
-            <<"answers">> => AnswersPoints
+            <<"answers">> => AnswersPoints,
+            <<"submitted">> => erlang:universaltime()
         },
         Context).
+
+%% @private Non-editors cannot supply values for editor-only questions. When an
+%% answer is replaced, retain the protected values from the stored submission.
+protect_editor_only_answers(SurveyId, Answers, ExistingAnswers, Context) ->
+    case z_acl:rsc_editable(SurveyId, Context) of
+        true ->
+            Answers;
+        false ->
+            EditorOnlyBlocks = editor_only_block_names(SurveyId, Context),
+            ExistingProtected = [
+                Answer
+                || Answer <- ExistingAnswers,
+                   is_editor_only_answer(Answer, EditorOnlyBlocks)
+            ],
+            ExistingProtectedNames = [ Name || {Name, _} <- ExistingProtected ],
+            SubmittedUnprotected = [
+                Answer
+                || {Name, _} = Answer <- Answers,
+                   not is_editor_only_answer(Answer, EditorOnlyBlocks),
+                   not lists:member(Name, ExistingProtectedNames)
+            ],
+            SubmittedUnprotected ++ ExistingProtected
+    end.
+
+editor_only_block_names(SurveyId, Context) ->
+    case m_rsc:p_no_acl(SurveyId, <<"blocks">>, Context) of
+        Questions when is_list(Questions) ->
+            [
+                maps:get(<<"name">>, Question)
+                || Question <- Questions,
+                   maps:is_key(<<"name">>, Question),
+                   z_convert:to_bool(maps:get(<<"is_editor_only">>, Question, false))
+            ];
+        _ ->
+            []
+    end.
+
+is_editor_only_answer({Name, Props}, EditorOnlyBlocks) when is_list(Props) ->
+    BlockName = proplists:get_value(
+        block,
+        Props,
+        proplists:get_value(<<"block">>, Props, Name)),
+    lists:member(BlockName, EditorOnlyBlocks) orelse lists:member(Name, EditorOnlyBlocks);
+is_editor_only_answer(_Answer, _EditorOnlyBlocks) ->
+    false.
+
+%% @private Set the submission date only when a participant edits their own answer.
+-spec maybe_set_submitted(AnswerId, Update, Context) -> Update1 when
+    AnswerId :: pos_integer(),
+    Update :: map(),
+    Context :: z:context(),
+    Update1 :: map().
+maybe_set_submitted(AnswerId, Update, Context) ->
+    case is_answer_user(AnswerId, Context) of
+        true ->
+            Update#{ <<"submitted">> => erlang:universaltime() };
+        false ->
+            Update
+    end.
 
 
 maybe_mail_max_results_reached(SurveyId, Context) ->
@@ -810,11 +882,31 @@ survey_results(SurveyId, IsAnonymous, Context) ->
 survey_results_prompts(undefined, _IsForceAnonymous, _Context) ->
     {[], [], []};
 survey_results_prompts(SurveyId, IsForceAnonymous, Context) when is_integer(SurveyId) ->
+    survey_results_prompts(SurveyId, IsForceAnonymous, false, Context);
+survey_results_prompts(SurveyId, IsForceAnonymous, Context) ->
+    survey_results_prompts(m_rsc:rid(SurveyId, Context), IsForceAnonymous, false, Context).
+
+%% @doc Return all results, optionally including the answer status fields.
+%% Status information is only included for users who can edit the survey.
+-spec survey_results_prompts(SurveyId, IsForceAnonymous, IsIncludeStatus, Context) -> {Headers, Prompts, Data} when
+    SurveyId :: m_rsc:resource() | undefined,
+    IsForceAnonymous :: boolean(),
+    IsIncludeStatus :: boolean(),
+    Context :: z:context(),
+    Headers :: [ binary() ],
+    Prompts :: [ binary() ],
+    Data :: [ {AnswerId, [ RowValue ]} ],
+    AnswerId :: integer(),
+    RowValue :: binary() | number() | boolean() | calendar:datetime() | #trans{} | export_encoder:cell() | undefined.
+survey_results_prompts(undefined, _IsForceAnonymous, _IsIncludeStatus, _Context) ->
+    {[], [], []};
+survey_results_prompts(SurveyId, IsForceAnonymous, IsIncludeStatus, Context) when is_integer(SurveyId) ->
     case get_questions(SurveyId, Context) of
         NQs0 when is_list(NQs0) ->
             NQs = drop_hidden_results(NQs0),
             {MaxPoints, PassPercent} = test_pass_values(SurveyId, Context),
             IsAnonymous = IsForceAnonymous orelse z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_anonymous, Context)),
+            IsStatusAllowed = IsIncludeStatus andalso z_acl:rsc_editable(SurveyId, Context),
             {ok, ExtraColumns} = result_columns(SurveyId, text, Context),
             Rows = z_db:assoc_props("
                         select *
@@ -823,7 +915,19 @@ survey_results_prompts(SurveyId, IsForceAnonymous, Context) when is_integer(Surv
                         order by created asc",
                         [SurveyId],
                         Context),
-            Answers = [ user_answer_row(SurveyId, Row, NQs, MaxPoints, PassPercent, IsAnonymous, ExtraColumns, Context) || Row <- Rows ],
+            Answers = [
+                user_answer_row(
+                    SurveyId,
+                    Row,
+                    NQs,
+                    MaxPoints,
+                    PassPercent,
+                    IsAnonymous,
+                    IsStatusAllowed,
+                    ExtraColumns,
+                    Context)
+                || Row <- Rows
+            ],
             Hs = [ {B, answer_header(B, MaxPoints, Context)} || {_,B} <- NQs ],
             Prompts = [ {B, z_trans:lookup_fallback(answer_prompt(B), Context)} || {_,B} <- NQs ],
             Hs1 = lists:flatten([
@@ -836,6 +940,7 @@ survey_results_prompts(SurveyId, IsForceAnonymous, Context) when is_integer(Surv
                             ?__(<<"Name">>, Context)
                         ]
                 end,
+                status_headers(IsStatusAllowed, IsAnonymous, Context),
                 case MaxPoints of
                     0 -> [];
                     _ -> [
@@ -852,6 +957,7 @@ survey_results_prompts(SurveyId, IsForceAnonymous, Context) when is_integer(Surv
                     true -> [ <<>> ];
                     false -> [ <<>>, <<>>, <<>> ]
                 end,
+                [ <<>> || _ <- status_headers(IsStatusAllowed, IsAnonymous, Context) ],
                 case MaxPoints of
                     0 -> [];
                     _ -> [ <<>>, <<>>, <<>> ]
@@ -874,8 +980,8 @@ survey_results_prompts(SurveyId, IsForceAnonymous, Context) when is_integer(Surv
         undefined ->
             {[], [], []}
     end;
-survey_results_prompts(SurveyId, IsForceAnonymous, Context) ->
-    survey_results_prompts(m_rsc:rid(SurveyId, Context), IsForceAnonymous, Context).
+survey_results_prompts(SurveyId, IsForceAnonymous, IsIncludeStatus, Context) ->
+    survey_results_prompts(m_rsc:rid(SurveyId, Context), IsForceAnonymous, IsIncludeStatus, Context).
 
 drop_hidden_results(NQs) ->
     lists:filter(
@@ -898,7 +1004,7 @@ test_pass_values(SurveyId, Context) ->
             {survey_test_results:max_points(SurveyId, Context), z_convert:to_integer(Percentage)}
     end.
 
-user_answer_row(SurveyId, Row, Questions, MaxPoints, PassPercent, IsAnonymous, ExtraColumns, Context) ->
+user_answer_row(SurveyId, Row, Questions, MaxPoints, PassPercent, IsAnonymous, IsIncludeStatus, ExtraColumns, Context) ->
     Points = proplists:get_value(points, Row),
     Answers = proplists:get_value(answers, Row),
     ByBlock = [
@@ -909,6 +1015,7 @@ user_answer_row(SurveyId, Row, Questions, MaxPoints, PassPercent, IsAnonymous, E
     {proplists:get_value(id, Row),
      lists:flatten([
         opt_userinfo(IsAnonymous, Row, Context),
+        opt_status(IsIncludeStatus, IsAnonymous, Row, Context),
         opt_totals(Points, MaxPoints, PassPercent),
         [
             answer_row_question(proplists:get_all_values(QId, ByBlock),
@@ -925,7 +1032,7 @@ user_answer_row(SurveyId, Row, Questions, MaxPoints, PassPercent, IsAnonymous, E
 
 opt_userinfo(true, Row, _Context) ->
     [
-        proplists:get_value(created, Row)
+        submitted(Row)
     ];
 opt_userinfo(false, Row, Context) ->
     IsAnonymous = proplists:get_value(is_anonymous, Row),
@@ -933,24 +1040,89 @@ opt_userinfo(false, Row, Context) ->
     case {IsAnonymous, UserId} of
         {true, _} ->
             [
-                proplists:get_value(created, Row),
+                submitted(Row),
                 <<>>,
                 <<>>
             ];
         {_, undefined} ->
             [
-                proplists:get_value(created, Row),
+                submitted(Row),
                 <<>>,
                 <<>>
             ];
         _ ->
             {Name, _Context} = z_template:render_to_iolist("_name.tpl", [{id, UserId}], z_acl:sudo(Context)),
             [
-                proplists:get_value(created, Row),
+                submitted(Row),
                 UserId,
                 iolist_to_binary(Name)
             ]
     end.
+
+submitted(Row) ->
+    case proplists:get_value(submitted, Row) of
+        undefined -> proplists:get_value(created, Row);
+        Submitted -> Submitted
+    end.
+
+status_headers(false, _IsAnonymous, _Context) ->
+    [];
+status_headers(true, true, Context) ->
+    [
+        ?__(<<"Status">>, Context),
+        ?__(<<"Status date">>, Context),
+        ?__(<<"Status note">>, Context)
+    ];
+status_headers(true, false, Context) ->
+    [
+        ?__(<<"Status">>, Context),
+        ?__(<<"Status date">>, Context),
+        ?__(<<"Status note">>, Context),
+        ?__(<<"Status modifier id">>, Context),
+        ?__(<<"Status modifier">>, Context)
+    ].
+
+opt_status(false, _IsAnonymous, _Row, _Context) ->
+    [];
+opt_status(true, true, Row, _Context) ->
+    [
+        export_status(proplists:get_value(status, Row)),
+        proplists:get_value(status_date, Row),
+        proplists:get_value(status_note, Row)
+    ];
+opt_status(true, false, Row, Context) ->
+    ModifierId = proplists:get_value(status_modifier_id, Row),
+    [
+        export_status(proplists:get_value(status, Row)),
+        proplists:get_value(status_date, Row),
+        proplists:get_value(status_note, Row),
+        ModifierId,
+        status_modifier_name(ModifierId, Context)
+    ].
+
+export_status(Status) ->
+    case status_color(Status) of
+        undefined -> Status;
+        Color -> export_encoder:cell(Status, #{ background_color => Color })
+    end.
+
+%% Keep this palette in sync with priv/lib-src/css/_survey_status.scss.
+status_color(0) -> <<"#E2E8F0">>;
+status_color(1) -> <<"#B8E9C0">>;
+status_color(2) -> <<"#BBE1FA">>;
+status_color(3) -> <<"#E2C6FF">>;
+status_color(4) -> <<"#FAC112">>;
+status_color(5) -> <<"#F87171">>;
+status_color(_Status) -> undefined.
+
+status_modifier_name(undefined, _Context) ->
+    <<>>;
+status_modifier_name(ModifierId, Context) ->
+    {Name, _Context} = z_template:render_to_iolist(
+        "_name.tpl",
+        [{id, ModifierId}],
+        z_acl:sudo(Context)),
+    iolist_to_binary(Name).
 
 opt_totals(_Points, 0, _PassPercent) -> [];
 opt_totals(Points, MaxPoints, PassPercent) ->
@@ -1065,6 +1237,53 @@ set_answer_user(SurveyId, AnswerId, UserId, Context) ->
         0 -> {error, enoent}
     end.
 
+%% @doc Set all status fields of an answer and record who changed the status.
+-spec set_answer_status(SurveyId, AnswerId, Status, Note, Context) -> Result when
+    SurveyId :: m_rsc:resource_id(),
+    AnswerId :: pos_integer(),
+    Status :: integer() | undefined,
+    Note :: binary() | undefined,
+    Context :: z:context(),
+    Result :: ok | {error, badarg | eacces | enoent}.
+set_answer_status(SurveyId, AnswerId, Status, Note, Context) ->
+    case z_acl:rsc_editable(SurveyId, Context) of
+        true ->
+            set_answer_status_1(SurveyId, AnswerId, Status, Note, Context);
+        false ->
+            {error, eacces}
+    end.
+
+set_answer_status_1(SurveyId, AnswerId, Status, undefined, Context) ->
+    set_answer_status_2(SurveyId, AnswerId, Status, undefined, Context);
+set_answer_status_1(SurveyId, AnswerId, Status, Note, Context) when is_binary(Note) ->
+    TruncatedNote = z_string:truncatechars(Note, ?STATUS_NOTE_MAX_LENGTH),
+    set_answer_status_2(SurveyId, AnswerId, Status, TruncatedNote, Context);
+set_answer_status_1(_SurveyId, _AnswerId, _Status, _Note, _Context) ->
+    {error, badarg}.
+
+set_answer_status_2(SurveyId, AnswerId, Status, Note, Context) ->
+    case z_db:q1("
+        update survey_answers
+        set status = $1,
+            status_date = $2,
+            status_note = $3,
+            status_modifier_id = $4
+        where id = $5
+          and survey_id = $6",
+        [
+            Status,
+            erlang:universaltime(),
+            Note,
+            z_acl:user(Context),
+            AnswerId,
+            SurveyId
+        ],
+        Context)
+    of
+        1 -> ok;
+        0 -> {error, enoent}
+    end.
+
 
 -spec list_results(m_rsc:resource_id(), z:context()) -> list().
 list_results(SurveyId, Context) when is_integer(SurveyId) ->
@@ -1087,7 +1306,7 @@ single_result(SurveyId, AnswerId, Context) when is_integer(SurveyId), is_integer
             Context)
     of
         undefined -> [];
-        Row -> Row
+        Row -> filter_single_result(SurveyId, Row, Context)
     end.
 
 %% @doc Retrieve the latest survey result for a user or persistent id.
@@ -1112,7 +1331,24 @@ single_result(SurveyId, UserId, PersistentId, Context) ->
             Context)
     of
         undefined -> [];
-        Row -> Row
+        Row -> filter_single_result(SurveyId, Row, Context)
+    end.
+
+%% @private Hide all internal status fields from people who cannot set them.
+-spec filter_single_result(SurveyId, Row, Context) -> Row1 when
+    SurveyId :: m_rsc:resource_id(),
+    Row :: proplists:proplist(),
+    Context :: z:context(),
+    Row1 :: proplists:proplist().
+filter_single_result(SurveyId, Row, Context) ->
+    case z_acl:rsc_editable(SurveyId, Context) of
+        true ->
+            Row;
+        false ->
+            lists:foldl(
+                fun proplists:delete/2,
+                Row,
+                [status, status_date, status_note, status_modifier_id])
     end.
 
 %% @doc Delete all survey results

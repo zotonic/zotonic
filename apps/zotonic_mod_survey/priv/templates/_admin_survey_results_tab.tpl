@@ -32,15 +32,7 @@
         <fieldset>
             <legend>{_ Download _}</legend>
             <div>
-                <a id="{{ #download1 }}" class="btn btn-default" href="{% url survey_results_download type='csv' id=id %}">{_ Download CSV _}</a>
-                {% wire id=#download1 propagate
-                        action={alert text=_"Download will start in the background. Please check your download window."}
-                %}
-
-                <a id="{{ #download2 }}" class="btn btn-default" href="{% url survey_results_download type='xlsx' id=id %}">{_ Download Excel _}</a>
-                {% wire id=#download2 propagate
-                        action={alert text=_"Download will start in the background. Please check your download window."}
-                %}
+                {% include "_survey_results_download_button.tpl" id=id %}
             </div>
             <p class="help-block">{_ Download a spreadsheet with all answers. _}</p>
         </fieldset>

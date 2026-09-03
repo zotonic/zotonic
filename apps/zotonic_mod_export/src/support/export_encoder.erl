@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2016-2024 Marc Worrell
+%% @copyright 2016-2026 Marc Worrell
 %% @doc Interface with the export encoders.
 %% @end
 
-%% Copyright 2016-2024 Marc Worrell
+%% Copyright 2016-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -25,10 +25,24 @@
     content_types_dispatch/2,
     stream/4,
 
+    cell/2,
+    cell_value/1,
+    cell_options/1,
+
     lookup_header/2,
     lookup_value/2,
     lookup_value/3
     ]).
+
+-export_type([
+    cell/0,
+    cell_options/0
+]).
+
+-type cell_options() :: #{
+    background_color => binary()
+}.
+-opaque cell() :: {'$export_cell', term(), cell_options()}.
 
 -record(stream_state, {
         id,
@@ -100,6 +114,30 @@ encoders() ->
         export_encoder_bert,
         export_encoder_ubf
     ].
+
+
+%% @doc Wrap an export value with optional presentation metadata.
+%% Encoders without presentation support export the unwrapped value.
+-spec cell(Value, Options) -> cell()
+    when
+        Value :: term(),
+        Options :: cell_options().
+cell(Value, Options) when is_map(Options) ->
+    {'$export_cell', Value, Options}.
+
+%% @doc Return the value of a possibly styled export cell.
+-spec cell_value(term()) -> term().
+cell_value({'$export_cell', Value, Options}) when is_map(Options) ->
+    Value;
+cell_value(Value) ->
+    Value.
+
+%% @doc Return the options of a possibly styled export cell.
+-spec cell_options(cell() | term()) -> cell_options().
+cell_options({'$export_cell', _Value, Options}) when is_map(Options) ->
+    Options;
+cell_options(_Value) ->
+    #{}.
 
 do_header(StreamState, Context) ->
     case export_helper:call(#export_resource_header{

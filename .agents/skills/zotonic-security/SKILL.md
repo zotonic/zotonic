@@ -40,6 +40,7 @@ description: Use when reviewing or implementing security-sensitive Zotonic code 
 ## Erlang Security
 
 - Use binary query keys in Zotonic 1.x, for example `z_context:get_q(<<"id">>, Context)`.
+- For text manipulation, use Unicode-aware `unicode` or `z_string` routines. Do not slice or truncate text with byte-oriented binary operations, as those can split UTF-8 codepoints.
 - Never create new atoms from external content. Do not use `binary_to_atom/2`, `list_to_atom/1`, or unconstrained conversions on `q`, JSON, MQTT, filenames, headers, cookies, or uploaded data; use binaries or map to an existing allowlisted atom.
 - Prefer `z_context:get_q_validated/2` when a validator exists. Use `z_context:get_q_all_noz/1` or `z_context:get_q_map_noz/1` to drop Zotonic internal args before processing ordinary form data.
 - Validate ids with `m_rsc:rid/2` and authorize with `z_acl:is_allowed/3`, `m_rsc:is_visible/2`, or resource APIs that perform ACL checks.

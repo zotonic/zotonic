@@ -67,6 +67,13 @@ See also
         },
         #{
             module => site,
+            key => chart_palette,
+            type => string,
+            default => "",
+            description => "Optional comma or whitespace separated hexadecimal RGB colors used as the default chart palette."
+        },
+        #{
+            module => site,
             key => pagelen,
             type => integer,
             default => 20,
