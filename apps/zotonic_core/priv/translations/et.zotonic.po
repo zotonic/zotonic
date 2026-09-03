@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-09-03 13:50\n"
+"PO-Revision-Date: 2026-09-03 14:55\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -6787,7 +6787,7 @@ msgstr "Lõpetada"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:130
 msgid "Completion"
-msgstr ""
+msgstr "Lõpetamine"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:229
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:240
@@ -6805,7 +6805,7 @@ msgstr "Ühenduse test"
 
 #: zotonic_mod_base/src/support/z_chart_svg.erl:581
 msgid "Data points"
-msgstr ""
+msgstr "Andmepunktid"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:115
 #: zotonic_mod_l10n/src/support/l10n_date.erl:50
@@ -6814,19 +6814,19 @@ msgstr "Detsembril"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:225
 msgid "Donut alias"
-msgstr ""
+msgstr "Donuti hüüdnimi"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:44
 msgid "Donut chart with map data"
-msgstr ""
+msgstr "Rõngasdiagramm koos kaardiannetega"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:81
 msgid "East"
-msgstr ""
+msgstr "Ida"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:168
 msgid "Empty data"
-msgstr ""
+msgstr "Tühjad andmed"
 
 #: zotonic_mod_base/src/filters/filter_content_type_label.erl:50
 msgid "Excel Workbook"
@@ -6834,11 +6834,11 @@ msgstr "Exceli töövihik"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:62
 msgid "Excellent"
-msgstr ""
+msgstr "Suurepärane"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:139
 msgid "Existing external data table"
-msgstr ""
+msgstr "Olemasolev väliste andmete tabel"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:114
 #: zotonic_mod_l10n/src/support/l10n_date.erl:40
@@ -6867,11 +6867,11 @@ msgstr "Verdwenen"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:63
 msgid "Good"
-msgstr ""
+msgstr "Hea"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:77
 msgid "Horizontal bar chart"
-msgstr ""
+msgstr "Horisontaalne tulpdiagramm"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:47
 msgid "If the authentication with the server works."
@@ -6885,12 +6885,12 @@ msgstr "bestandsoverzicht van"
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:3
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:19
 msgid "Inline SVG chart test"
-msgstr ""
+msgstr "SVG-diagrammi testimine tekstisiseselt"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:193
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:210
 msgid "Item"
-msgstr ""
+msgstr "Kaup"
 
 #: zotonic_mod_base/src/filters/filter_content_type_label.erl:48
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:39
@@ -6923,19 +6923,19 @@ msgstr "Silt"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:187
 msgid "Large data set with palette shades"
-msgstr ""
+msgstr "Suur andmekogum värvipaleti toonidega"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:200
 msgid "Large pie chart with palette shades"
-msgstr ""
+msgstr "Suur sektoridιάagramm värvipaleti toonidega"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:228
 msgid "Legacy pie alias"
-msgstr ""
+msgstr "Vana nimetus"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:109
 msgid "Line chart"
-msgstr ""
+msgstr "Joondiagramm"
 
 #: zotonic_mod_base/priv/templates/error.403.tpl:30
 msgid "Login"
@@ -6962,7 +6962,7 @@ msgstr "Mai"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:80
 msgid "Net change"
-msgstr ""
+msgstr "Muutus, neto"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:34
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:145
@@ -6981,15 +6981,15 @@ msgstr "Ei"
 
 #: zotonic_mod_base/src/support/z_chart_svg.erl:1290
 msgid "No data"
-msgstr ""
+msgstr "Andmeid pole"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:170
 msgid "No measurements yet"
-msgstr ""
+msgstr "Mõõtmistulemusi pole veel"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:81
 msgid "North"
-msgstr ""
+msgstr "Põhi"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:231
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:243
@@ -7030,11 +7030,11 @@ msgstr "Lehe ID"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:222
 msgid "Pie alias"
-msgstr ""
+msgstr "Pie'i alias"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:28
 msgid "Pie chart"
-msgstr ""
+msgstr "Ringdiagramm"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:115
 msgid "Pong Count"
@@ -7050,7 +7050,7 @@ msgstr "Pongi latentsus"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:65
 msgid "Poor"
-msgstr ""
+msgstr "Vaene"
 
 #: zotonic_mod_base/priv/templates/_powered_by_zotonic.tpl:1
 msgid "Powered by Zotonic"
@@ -7058,7 +7058,7 @@ msgstr "Powered by Zotonic"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:95
 msgid "Quarterly balance"
-msgstr ""
+msgstr "Kvartali bilanss"
 
 #: zotonic_mod_base/priv/templates/email_base.tpl:336
 msgid "Read this page on the web"
@@ -7072,7 +7072,7 @@ msgstr "Piirkond"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:60
 msgid "Responses using one color"
-msgstr ""
+msgstr "Ühe värvi kasutamisega vastused"
 
 #: zotonic_mod_base/priv/templates/error.tpl:14
 msgid "Return to the homepage"
@@ -7088,7 +7088,7 @@ msgstr "Skoor"
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:190
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:203
 msgid "Scores for 32 items"
-msgstr ""
+msgstr "32 küsimuse tulemused"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:115
 #: zotonic_mod_l10n/src/support/l10n_date.erl:47
@@ -7097,7 +7097,7 @@ msgstr "Septembrini"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:21
 msgid "Server-rendered charts without JavaScript, CSS, or external services."
-msgstr ""
+msgstr "Serveris renderdatud graafikud, mis ei vaja JavaScripti, CSS-i ega väliseid teenuseid."
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:144
 msgid "Service Worker?"
@@ -7113,15 +7113,15 @@ msgstr "Ühenduse mitmeid aspekte testitakse"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:153
 msgid "Share"
-msgstr ""
+msgstr "Jaga"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:128
 msgid "Single value"
-msgstr ""
+msgstr "Üksikväärtus"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:57
 msgid "Single-color pie chart"
-msgstr ""
+msgstr "Ühevärviline sektoridιάagramm"
 
 #: zotonic_mod_base/priv/templates/error.tpl:11
 msgid "Sorry, this page has been deleted."
@@ -7133,7 +7133,7 @@ msgstr "Sorry, je hebt geen toegang tot deze pagina."
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:81
 msgid "South"
-msgstr ""
+msgstr "Lõuna"
 
 #: zotonic_mod_base/priv/templates/error.tpl:23
 msgid "Stack trace"
@@ -7145,7 +7145,7 @@ msgstr "Toetus võrguühenduseta töötamiseks ja suhtlemiseks mitme brauseri va
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:31
 msgid "Survey answers"
-msgstr ""
+msgstr "Küsitluse vastused"
 
 #: zotonic_mod_base/priv/templates/_bridge_warning.tpl:4
 msgid "Test your connection"
@@ -7203,15 +7203,15 @@ msgstr "T√º√ºp"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:35
 msgid "Unknown"
-msgstr ""
+msgstr "Teadmata"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:92
 msgid "Vertical bar chart"
-msgstr ""
+msgstr "Vertikaalne tulpdiagramm"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:112
 msgid "Visitors per month"
-msgstr ""
+msgstr "Külastajate arv kuus"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:131
 msgid "Web Worker Status"
@@ -7227,11 +7227,11 @@ msgstr "Websockti tugi?"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:81
 msgid "West"
-msgstr ""
+msgstr "Lääs"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:47
 msgid "Work items"
-msgstr ""
+msgstr "Tööülesanded"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:33
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:187
@@ -12963,11 +12963,11 @@ msgstr "Laadige alla arvutustabel kõigi vastustega."
 #: zotonic_mod_survey/priv/templates/_survey_results_download_button.tpl:6
 #: zotonic_mod_survey/priv/templates/_survey_results_download_button.tpl:11
 msgid "Download survey results"
-msgstr ""
+msgstr "Lae alla uuringu tulemused"
 
 #: zotonic_mod_survey/priv/templates/_survey_results_download_button.tpl:7
 msgid "Download..."
-msgstr ""
+msgstr "Lae alla..."
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:46
 msgid "Drop-down menu"
@@ -12980,13 +12980,13 @@ msgstr "E-posti aadressid"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:118
 msgid "Edit answers"
-msgstr ""
+msgstr "Vastuste muutmine"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_result_status.tpl:5
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_result_status.tpl:12
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_result_status.tpl:18
 msgid "Edit status"
-msgstr ""
+msgstr "Muuda staatust"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:119
 msgid "Edit survey result"
@@ -13006,7 +13006,7 @@ msgstr "Näide:"
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:37
 msgid "Excel (XLSX)"
-msgstr ""
+msgstr "Excel (XLSX)"
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:24
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:20
@@ -13132,11 +13132,11 @@ msgstr "Alustage kohe küsimustega, mitte nuppu „Start”"
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:30
 msgid "Include prompts as the first row"
-msgstr ""
+msgstr "Lisa juhised esimesele reale"
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:22
 msgid "Include the status, status date, and note. The status modifier is omitted for anonymous downloads."
-msgstr ""
+msgstr "Lisage staatus, staatuse kuupäev ja märkus. Anonüümsete allalaadimiste puhul jäetakse staatuse täpsustus välja."
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:40
 msgid "Informational"
@@ -13185,7 +13185,7 @@ msgstr "Liikuge sellele küsimusesildile (peab asuma teisel alloleval lehel)"
 
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:65
 msgid "Last status change"
-msgstr ""
+msgstr "Viimane staatuse muutus"
 
 #: zotonic_mod_survey/src/mod_survey.erl:500
 msgid "Likert"
@@ -13313,7 +13313,7 @@ msgstr "Tulemusi veel pole."
 
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:27
 msgid "No status"
-msgstr ""
+msgstr "Puudub staatus"
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:103
 msgid "Not all the required fields are filled in. You can go back to the previous page without saving your answers."
@@ -13346,7 +13346,7 @@ msgstr "Aktsepteerige ainult pilte."
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_survey_question_options.tpl:11
 msgid "Only editors can answer"
-msgstr ""
+msgstr "Vastata saavad ainult toimetajad"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:210
 msgid "Optional confirmation email for the respondent"
@@ -13487,7 +13487,7 @@ msgstr "Eemaldage nupp \"Järgmine\". Vastuseid ei esitata, kui te ei lisa nupu 
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:11
 msgid "Remove respondent names, user ids, and other respondent identity columns."
-msgstr ""
+msgstr "Kustutage vastajate nimed, kasutajatunnused ja muud vastajate identiteeti käsitlevad veerud."
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_survey_question_options.tpl:4
 msgid "Required, this question must be answered."
@@ -13495,7 +13495,7 @@ msgstr "Vajalik, sellele küsimusele tuleb vastata."
 
 #: zotonic_mod_survey/priv/templates/_survey_result_chart.tpl:24
 msgid "Responses"
-msgstr ""
+msgstr "Vastused"
 
 #: zotonic_mod_survey/src/mod_survey.erl:456
 msgid "Result deleted."
@@ -13560,7 +13560,7 @@ msgstr "Eraldage mitu e-posti aadressi komaga."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_result_status.tpl:10
 msgid "Set status"
-msgstr ""
+msgstr "Seadista staatus"
 
 #: zotonic_mod_survey/src/mod_survey.erl:505
 msgid "Short answer"
@@ -13613,7 +13613,7 @@ msgstr "Kahjuks ei saanud uut inimest sisestada."
 
 #: zotonic_mod_survey/src/mod_survey.erl:438
 msgid "Sorry, that survey answer is unknown."
-msgstr ""
+msgstr "Vabandame, selle küsitluse vastus on teadmata."
 
 #: zotonic_mod_survey/src/mod_survey.erl:1481
 msgid "Sorry, the maximum number of submissions has been reached. You can no longer submit this form."
@@ -13622,7 +13622,7 @@ msgstr "Vabandame, et maksimaalne esitatavate taotluste arv on saavutatud. Te ei
 #: zotonic_mod_survey/src/mod_survey.erl:442
 #: zotonic_mod_survey/src/mod_survey.erl:445
 msgid "Sorry, the status could not be saved."
-msgstr ""
+msgstr "Vabandame, staatust ei õnnestunud salvestada."
 
 #: zotonic_mod_survey/src/mod_survey.erl:1494
 msgid "Sorry, you already submitted your answers. Reload the page if you want to fill in the form again."
@@ -13635,29 +13635,29 @@ msgstr "Alusta"
 #: zotonic_mod_survey/src/models/m_survey.erl:1073
 #: zotonic_mod_survey/src/models/m_survey.erl:1079
 msgid "Status date"
-msgstr ""
+msgstr "Seisukorra kuupäev"
 
 #: zotonic_mod_survey/src/models/m_survey.erl:1082
 msgid "Status modifier"
-msgstr ""
+msgstr "Staatuse modifikaator"
 
 #: zotonic_mod_survey/src/models/m_survey.erl:1081
 msgid "Status modifier id"
-msgstr ""
+msgstr "Staatuse modifikaatori ID"
 
 #: zotonic_mod_survey/src/models/m_survey.erl:1074
 #: zotonic_mod_survey/src/models/m_survey.erl:1080
 msgid "Status note"
-msgstr ""
+msgstr "Märkus staatuse kohta"
 
 #: zotonic_mod_survey/src/mod_survey.erl:434
 msgid "Status saved."
-msgstr ""
+msgstr "Staatus salvestatud."
 
 #: zotonic_mod_survey/priv/templates/_survey_answer_status.tpl:20
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:40
 msgid "Status {status}"
-msgstr ""
+msgstr "Staatus {status}"
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:154
 msgid "Stop and continue later"
@@ -13746,7 +13746,7 @@ msgstr "Diagrammid näitavad suletud küsimuste koondtulemusi, nagu Thurstone v�
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:66
 msgid "The download has started. Please check your download window."
-msgstr ""
+msgstr "Allalaadimine on alanud. Palun vaadake oma allalaadimisakent."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:4
 msgid "The email address is shown if there is a question with label “email” or if there is a person with an email address that has been linked."
@@ -13774,7 +13774,7 @@ msgstr "Tulemused on salvestatud."
 
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:59
 msgid "The status and note are only visible to people who can edit the survey."
-msgstr ""
+msgstr "Staatus ja märkus on nähtavad ainult neile, kes saavad küsitlust muuta."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:147
 msgid "The uploaded file will be attached to the result email."
@@ -13818,7 +13818,7 @@ msgstr "See on viktoriini või testi sooritamiseks vajalik protsent. Kasutatakse
 
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:78
 msgid "This survey answer could not be found."
-msgstr ""
+msgstr "Seda küsitluse vastust ei õnnestunud leida."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:18
 msgid "This text is shown after the form has been submitted."
@@ -13922,7 +13922,7 @@ msgstr "Selle olete juba täitnud."
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:82
 #: zotonic_mod_survey/src/mod_survey.erl:440
 msgid "You are not allowed to change the status."
-msgstr ""
+msgstr "Te ei tohi staatust muuta."
 
 #: zotonic_mod_survey/src/mod_survey.erl:417
 #: zotonic_mod_survey/src/mod_survey.erl:460
@@ -13932,7 +13932,7 @@ msgstr "Teil pole lubatud neid tulemusi muuta."
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:70
 msgid "You are not allowed to download the survey results."
-msgstr ""
+msgstr "Küsitluse tulemusi ei tohi alla laadida."
 
 #: zotonic_mod_survey/priv/templates/_survey_results.tpl:41
 msgid "You are not allowed to see the results."
