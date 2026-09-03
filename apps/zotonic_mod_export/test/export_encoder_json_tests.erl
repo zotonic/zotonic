@@ -25,9 +25,13 @@ map_row_is_unchanged_test() ->
     ?assertEqual([Map], encode_rows([<<"Ignored">>], [Map])).
 
 styled_list_row_exports_plain_value_test() ->
-    [Row] = encode_rows(
-        [<<"Status">>],
-        [[export_encoder:cell(2, #{ background_color => <<"#BBE1FA">> })]]),
+    Context = #context{},
+    {ok, State0} = export_encoder_json:init([{rsc_props, []}], Context),
+    {ok, Start, State1} = export_encoder_json:header([<<"Status">>], State0, Context),
+    Cell = export_encoder:cell(2, #{ background_color => <<"#BBE1FA">> }),
+    {ok, Encoded, State2} = export_encoder_json:row([Cell], State1, Context),
+    {ok, End} = export_encoder_json:footer(undefined, State2, Context),
+    [Row] = z_json:decode(iolist_to_binary([Start, Encoded, End])),
     ?assertEqual(#{ <<"Status">> => 2 }, Row).
 
 styled_map_row_exports_plain_value_test() ->
