@@ -461,12 +461,26 @@ observe_export_resource_filename(#export_resource_filename{}, _Context) ->
     undefined.
 
 %% @doc Fetch the header for the survey download
-observe_export_resource_header(#export_resource_header{dispatch=survey_results_download, id=Id}, Context) ->
+observe_export_resource_header(#export_resource_header{
+        dispatch = survey_results_download,
+        id = Id,
+        content_type = ContentType
+    }, Context) ->
     case m_survey:is_allowed_results_download(Id, Context) of
         true ->
-            {Hs, Prompts, Data} = m_survey:survey_results_prompts(Id, false, Context),
+            IsAnonymous = z_convert:to_bool(z_context:get_q(<<"anonymous">>, Context)),
+            IsIncludeStatus = z_convert:to_bool(z_context:get_q(<<"status">>, Context)),
+            {Hs, Prompts, Data} = m_survey:survey_results_prompts(
+                Id,
+                IsAnonymous,
+                IsIncludeStatus,
+                Context),
             Data1 = [ Row || {_Id, Row} <- Data ],
-            {ok, Hs, [ Prompts | Data1 ]};
+            ExportData = case is_include_prompts(ContentType, Context) of
+                true -> [ Prompts | Data1 ];
+                false -> Data1
+            end,
+            {ok, Hs, ExportData};
         false ->
             throw({stop_request, 403})
     end;
@@ -478,6 +492,21 @@ observe_export_resource_data(#export_resource_data{dispatch=survey_results_downl
     {ok, Data, undefined};
 observe_export_resource_data(#export_resource_data{}, _Context) ->
     undefined.
+
+is_include_prompts(ContentType, Context) ->
+    case z_context:get_q(<<"prompts">>, Context) of
+        undefined ->
+            not is_json_content_type(ContentType);
+        Value ->
+            z_convert:to_bool(Value)
+    end.
+
+is_json_content_type({<<"application">>, <<"json">>, _Options}) ->
+    true;
+is_json_content_type(<<"application/json", _/binary>>) ->
+    true;
+is_json_content_type(_ContentType) ->
+    false.
 
 %% @doc Check access to the survey answers.
 observe_acl_is_allowed(#acl_is_allowed{

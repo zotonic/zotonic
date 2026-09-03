@@ -5,13 +5,21 @@
         {% endif %}
 
         <div class="pull-left clearfix">
-            {% chart_pie3d height=100 width=400 data=chart.data %}
+            {% chart type="pie"
+                     height=180
+                     width=400
+                     data=chart.values
+                     title=chart.name|default:chart.question
+                     aria_describedby=#chart_data
+                     hide_table
+            %}
         </div>
 
-        <table class="table table-compact pull-left" style="width:auto">
+        <table id="{{ #chart_data }}" class="table table-compact pull-left" style="width:auto">
+            <tbody>
             {% for label,value in chart.values %}
                 <tr>
-                    <td>
+                    <th scope="row">
                         {% with chart.answers[label] as text %}
                             {% if text %}
                                 {{ label }}) {{ text }}
@@ -19,7 +27,7 @@
                                 {{ label }}
                             {% endif %}
                         {% endwith %}
-                    </td>
+                    </th>
                     <td>
                         {{ value }}
                     </td>
@@ -31,6 +39,7 @@
                     <th>{{ chart.totals }}</th>
                 </tr>
             {% endif %}
+            </tbody>
         </table>
     </div>
 {% endif %}

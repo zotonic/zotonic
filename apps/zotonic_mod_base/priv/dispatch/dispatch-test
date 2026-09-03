@@ -5,5 +5,9 @@
 
     {connection_test, [ "test", "connection" ],
                    controller_template,
-                   [ {template, "tests/connection_test.tpl"}, seo_noindex ]}
+                   [ {template, "tests/connection_test.tpl"}, seo_noindex ]},
+
+    {chart_test, [ "test", "chart" ],
+                   controller_template,
+                   [ {template, "tests/chart_test.tpl"}, seo_noindex ]}
 ].

@@ -66,6 +66,7 @@ Available Model API Paths
     survey_stats/2,
     survey_results/3,
     survey_results_prompts/3,
+    survey_results_prompts/4,
     survey_results_sorted/3,
     prepare_results/2,
 
@@ -881,11 +882,31 @@ survey_results(SurveyId, IsAnonymous, Context) ->
 survey_results_prompts(undefined, _IsForceAnonymous, _Context) ->
     {[], [], []};
 survey_results_prompts(SurveyId, IsForceAnonymous, Context) when is_integer(SurveyId) ->
+    survey_results_prompts(SurveyId, IsForceAnonymous, false, Context);
+survey_results_prompts(SurveyId, IsForceAnonymous, Context) ->
+    survey_results_prompts(m_rsc:rid(SurveyId, Context), IsForceAnonymous, false, Context).
+
+%% @doc Return all results, optionally including the answer status fields.
+%% Status information is only included for users who can edit the survey.
+-spec survey_results_prompts(SurveyId, IsForceAnonymous, IsIncludeStatus, Context) -> {Headers, Prompts, Data} when
+    SurveyId :: m_rsc:resource() | undefined,
+    IsForceAnonymous :: boolean(),
+    IsIncludeStatus :: boolean(),
+    Context :: z:context(),
+    Headers :: [ binary() ],
+    Prompts :: [ binary() ],
+    Data :: [ {AnswerId, [ RowValue ]} ],
+    AnswerId :: integer(),
+    RowValue :: binary() | number() | boolean() | calendar:datetime() | #trans{} | undefined.
+survey_results_prompts(undefined, _IsForceAnonymous, _IsIncludeStatus, _Context) ->
+    {[], [], []};
+survey_results_prompts(SurveyId, IsForceAnonymous, IsIncludeStatus, Context) when is_integer(SurveyId) ->
     case get_questions(SurveyId, Context) of
         NQs0 when is_list(NQs0) ->
             NQs = drop_hidden_results(NQs0),
             {MaxPoints, PassPercent} = test_pass_values(SurveyId, Context),
             IsAnonymous = IsForceAnonymous orelse z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_anonymous, Context)),
+            IsStatusAllowed = IsIncludeStatus andalso z_acl:rsc_editable(SurveyId, Context),
             {ok, ExtraColumns} = result_columns(SurveyId, text, Context),
             Rows = z_db:assoc_props("
                         select *
@@ -894,7 +915,19 @@ survey_results_prompts(SurveyId, IsForceAnonymous, Context) when is_integer(Surv
                         order by created asc",
                         [SurveyId],
                         Context),
-            Answers = [ user_answer_row(SurveyId, Row, NQs, MaxPoints, PassPercent, IsAnonymous, ExtraColumns, Context) || Row <- Rows ],
+            Answers = [
+                user_answer_row(
+                    SurveyId,
+                    Row,
+                    NQs,
+                    MaxPoints,
+                    PassPercent,
+                    IsAnonymous,
+                    IsStatusAllowed,
+                    ExtraColumns,
+                    Context)
+                || Row <- Rows
+            ],
             Hs = [ {B, answer_header(B, MaxPoints, Context)} || {_,B} <- NQs ],
             Prompts = [ {B, z_trans:lookup_fallback(answer_prompt(B), Context)} || {_,B} <- NQs ],
             Hs1 = lists:flatten([
@@ -907,6 +940,7 @@ survey_results_prompts(SurveyId, IsForceAnonymous, Context) when is_integer(Surv
                             ?__(<<"Name">>, Context)
                         ]
                 end,
+                status_headers(IsStatusAllowed, IsAnonymous, Context),
                 case MaxPoints of
                     0 -> [];
                     _ -> [
@@ -923,6 +957,7 @@ survey_results_prompts(SurveyId, IsForceAnonymous, Context) when is_integer(Surv
                     true -> [ <<>> ];
                     false -> [ <<>>, <<>>, <<>> ]
                 end,
+                [ <<>> || _ <- status_headers(IsStatusAllowed, IsAnonymous, Context) ],
                 case MaxPoints of
                     0 -> [];
                     _ -> [ <<>>, <<>>, <<>> ]
@@ -945,8 +980,8 @@ survey_results_prompts(SurveyId, IsForceAnonymous, Context) when is_integer(Surv
         undefined ->
             {[], [], []}
     end;
-survey_results_prompts(SurveyId, IsForceAnonymous, Context) ->
-    survey_results_prompts(m_rsc:rid(SurveyId, Context), IsForceAnonymous, Context).
+survey_results_prompts(SurveyId, IsForceAnonymous, IsIncludeStatus, Context) ->
+    survey_results_prompts(m_rsc:rid(SurveyId, Context), IsForceAnonymous, IsIncludeStatus, Context).
 
 drop_hidden_results(NQs) ->
     lists:filter(
@@ -969,7 +1004,7 @@ test_pass_values(SurveyId, Context) ->
             {survey_test_results:max_points(SurveyId, Context), z_convert:to_integer(Percentage)}
     end.
 
-user_answer_row(SurveyId, Row, Questions, MaxPoints, PassPercent, IsAnonymous, ExtraColumns, Context) ->
+user_answer_row(SurveyId, Row, Questions, MaxPoints, PassPercent, IsAnonymous, IsIncludeStatus, ExtraColumns, Context) ->
     Points = proplists:get_value(points, Row),
     Answers = proplists:get_value(answers, Row),
     ByBlock = [
@@ -980,6 +1015,7 @@ user_answer_row(SurveyId, Row, Questions, MaxPoints, PassPercent, IsAnonymous, E
     {proplists:get_value(id, Row),
      lists:flatten([
         opt_userinfo(IsAnonymous, Row, Context),
+        opt_status(IsIncludeStatus, IsAnonymous, Row, Context),
         opt_totals(Points, MaxPoints, PassPercent),
         [
             answer_row_question(proplists:get_all_values(QId, ByBlock),
@@ -1028,6 +1064,50 @@ submitted(Row) ->
         undefined -> proplists:get_value(created, Row);
         Submitted -> Submitted
     end.
+
+status_headers(false, _IsAnonymous, _Context) ->
+    [];
+status_headers(true, true, Context) ->
+    [
+        ?__(<<"Status">>, Context),
+        ?__(<<"Status date">>, Context),
+        ?__(<<"Status note">>, Context)
+    ];
+status_headers(true, false, Context) ->
+    [
+        ?__(<<"Status">>, Context),
+        ?__(<<"Status date">>, Context),
+        ?__(<<"Status note">>, Context),
+        ?__(<<"Status modifier id">>, Context),
+        ?__(<<"Status modifier">>, Context)
+    ].
+
+opt_status(false, _IsAnonymous, _Row, _Context) ->
+    [];
+opt_status(true, true, Row, _Context) ->
+    [
+        proplists:get_value(status, Row),
+        proplists:get_value(status_date, Row),
+        proplists:get_value(status_note, Row)
+    ];
+opt_status(true, false, Row, Context) ->
+    ModifierId = proplists:get_value(status_modifier_id, Row),
+    [
+        proplists:get_value(status, Row),
+        proplists:get_value(status_date, Row),
+        proplists:get_value(status_note, Row),
+        ModifierId,
+        status_modifier_name(ModifierId, Context)
+    ].
+
+status_modifier_name(undefined, _Context) ->
+    <<>>;
+status_modifier_name(ModifierId, Context) ->
+    {Name, _Context} = z_template:render_to_iolist(
+        "_name.tpl",
+        [{id, ModifierId}],
+        z_acl:sudo(Context)),
+    iolist_to_binary(Name).
 
 opt_totals(_Points, 0, _PassPercent) -> [];
 opt_totals(Points, MaxPoints, PassPercent) ->
