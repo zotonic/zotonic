@@ -11,7 +11,6 @@
   vertical-align: baseline;
   border-radius: 0.25em; }
   .survey-status-label-none {
-    color: #555;
     background-color: #fff;
     border: 1px solid #ccc; }
   .survey-status-label button {
@@ -19,34 +18,34 @@
     background-color: transparent;
     border: none; }
   .survey-status-label-0 {
-    --survey-status-color: #6c757d;
-    --survey-status-text-color: #fff;
-    --survey-status-foreground-color: #495057;
+    --survey-status-color: #E2E8F0;
+    --survey-status-text-color: #000;
+    --survey-status-foreground-color: #000;
     background-color: var(--survey-status-color); }
   .survey-status-label-1 {
-    --survey-status-color: #337ab7;
-    --survey-status-text-color: #fff;
-    --survey-status-foreground-color: #245580;
+    --survey-status-color: #B8E9C0;
+    --survey-status-text-color: #000;
+    --survey-status-foreground-color: #000;
     background-color: var(--survey-status-color); }
   .survey-status-label-2 {
-    --survey-status-color: #5bc0de;
-    --survey-status-text-color: #173e47;
-    --survey-status-foreground-color: #117a8b;
+    --survey-status-color: #BBE1FA;
+    --survey-status-text-color: #000;
+    --survey-status-foreground-color: #000;
     background-color: var(--survey-status-color); }
   .survey-status-label-3 {
-    --survey-status-color: #5cb85c;
-    --survey-status-text-color: #173817;
-    --survey-status-foreground-color: #2e7d32;
+    --survey-status-color: #E2C6FF;
+    --survey-status-text-color: #000;
+    --survey-status-foreground-color: #000;
     background-color: var(--survey-status-color); }
   .survey-status-label-4 {
-    --survey-status-color: #a56708;
-    --survey-status-text-color: #fff;
-    --survey-status-foreground-color: #7a4b00;
+    --survey-status-color: #FAC112;
+    --survey-status-text-color: #000;
+    --survey-status-foreground-color: #000;
     background-color: var(--survey-status-color); }
   .survey-status-label-5 {
-    --survey-status-color: #d9534f;
-    --survey-status-text-color: #fff;
-    --survey-status-foreground-color: #a02622;
+    --survey-status-color: #F87171;
+    --survey-status-text-color: #000;
+    --survey-status-foreground-color: #000;
     background-color: var(--survey-status-color); }
 
 .survey-status-options {

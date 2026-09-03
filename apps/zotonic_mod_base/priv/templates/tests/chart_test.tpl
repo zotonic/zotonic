@@ -23,7 +23,7 @@
     </header>
 
     <div class="row">
-        <section class="col-md-6">
+        <section class="col-md-4">
             <div class="panel panel-default">
                 <div class="panel-heading"><h2 class="panel-title">{_ Pie chart _}</h2></div>
                 <div class="panel-body">
@@ -39,7 +39,7 @@
             </div>
         </section>
 
-        <section class="col-md-6">
+        <section class="col-md-4">
             <div class="panel panel-default">
                 <div class="panel-heading"><h2 class="panel-title">{_ Donut chart with map data _}</h2></div>
                 <div class="panel-body">
@@ -47,6 +47,24 @@
                              title=_"Work items"
                              data=%{"Backlog": 12, "In progress": 7, "Done": 18}
                              height=280
+                    %}
+                </div>
+            </div>
+        </section>
+
+        <section class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading"><h2 class="panel-title">{_ Single-color pie chart _}</h2></div>
+                <div class="panel-body">
+                    {% chart type="pie"
+                             title=_"Responses using one color"
+                             data=[
+                                 [ _"Excellent", 35],
+                                 [ _"Good", 28],
+                                 [ _"Average", 21],
+                                 [ _"Poor", 16]
+                             ]
+                             color="#4477aa"
                     %}
                 </div>
             </div>
@@ -78,7 +96,7 @@
                              data=[["Q1", -3], ["Q2", 8], ["Q3", 14], ["Q4", 6]]
                              width=640
                              height=260
-                             colors=["228833", "66ccee"]
+                             palette=["228833", "66ccee"]
                     %}
                 </div>
             </div>
@@ -92,11 +110,14 @@
                 <div class="panel-body">
                     {% chart type="line"
                              title=_"Visitors per month"
-                             labels=[ _"January", _"February", _"March", _"April", _"May", _"June"]
-                             values=[12, 19, 15, 28, 24, 35]
+                             labels=[
+                                 _"January", _"February", _"March", _"April", _"May", _"June",
+                                 _"July", _"August", _"September", _"October", _"November", _"December"
+                             ]
+                             values=[12, 19, 15, 28, 24, 35, 31, 42, 38, 47, 44, 53]
                              width=800
                              height=300
-                             colors=["#aa3377"]
+                             color="#aa3377"
                     %}
                 </div>
             </div>
@@ -182,6 +203,8 @@
                      title=_"Scores for 32 items"
                      data=large_chart_data
                      sort="-value"
+                     label_min_percent=2
+                     max_pie_values=12
                      width=960
                      height=480
                      label_header=_"Item"

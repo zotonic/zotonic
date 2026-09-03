@@ -33,6 +33,7 @@ description: Use when working in Zotonic projects, especially Erlang modules, Zo
 - Use Zotonic records such as `#datamodel{}` and `#rsc_tree{}` when fixtures/menu structures require them.
 - Use `m_site`/context environment data for environment-dependent behavior instead of duplicating dev/prod fixtures.
 - For Zotonic 1.x code, expect request keys, query keys, JSON keys, and most external textual data to be binaries, not strings.
+- For text manipulation, use Unicode-aware `unicode` or `z_string` routines. Do not slice or truncate text with byte-oriented binary operations, as those can split UTF-8 codepoints.
 
 ## App Structure
 

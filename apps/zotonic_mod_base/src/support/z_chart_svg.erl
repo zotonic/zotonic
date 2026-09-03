@@ -3,6 +3,20 @@
 %% @doc Render bounded chart data as inline SVG and an optional data table.
 %% @end
 
+%% Copyright 2026 Marc Worrell
+%%
+%% Licensed under the Apache License, Version 2.0 (the "License");
+%% you may not use this file except in compliance with the License.
+%% You may obtain a copy of the License at
+%%
+%%     http://www.apache.org/licenses/LICENSE-2.0
+%%
+%% Unless required by applicable law or agreed to in writing, software
+%% distributed under the License is distributed on an "AS IS" BASIS,
+%% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%% See the License for the specific language governing permissions and
+%% limitations under the License.
+
 -module(z_chart_svg).
 -moduledoc(<<
     "Render a small, single-series chart as inline SVG.\n\n",
@@ -15,9 +29,12 @@
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
--define(MAX_POINTS, 256).
+-define(MAX_POINTS, 1000).
+-define(DEFAULT_MAX_PIE_VALUES, 50).
 -define(MAX_LABEL_LENGTH, 512).
 -define(MAX_CLASS_LENGTH, 256).
+-define(MAX_PALETTE_LENGTH, 32).
+-define(MAX_PALETTE_TEXT_LENGTH, 1024).
 -define(MAX_DIMENSION, 4096).
 -define(MIN_DIMENSION, 64).
 -define(MAX_VALUE, 1000000000000000).
@@ -25,15 +42,31 @@
 -define(DEFAULT_WIDTH, 400).
 -define(DEFAULT_HEIGHT, 240).
 
+-define(PIE_LABEL_FONT_SIZE, 11).
+-define(PIE_LABEL_LINE_HEIGHT, 13).
+-define(PIE_LABEL_GAP, 14).
+-define(LINE_TICK_COUNT, 6).
+-define(LINE_LABEL_CHARACTER_WIDTH, 6).
+-define(LINE_LABEL_GAP, 12).
+-define(MAX_DARKEN_AMOUNT, 0.35).
+
 -define(PALETTE, [
     <<"#4477aa">>,
     <<"#ee6677">>,
     <<"#228833">>,
     <<"#ccbb44">>,
-    <<"#66ccee">>,
     <<"#aa3377">>,
-    <<"#bbbbbb">>,
-    <<"#000000">>
+    <<"#66ccee">>,
+    <<"#ee8866">>,
+    <<"#009988">>,
+    <<"#332288">>,
+    <<"#cc79a7">>,
+    <<"#999933">>,
+    <<"#117733">>,
+    <<"#ddcc77">>,
+    <<"#882255">>,
+    <<"#44aa99">>,
+    <<"#888888">>
 ]).
 
 -type chart_type() :: pie | donut | horizontal_bar | vertical_bar | line.
@@ -48,8 +81,13 @@ render(Params, Context) when is_list(Params) ->
     case normalize_type(proplists:get_value(type, Params, pie)) of
         {ok, Type} ->
             Data0 = normalize_params_data(Params, Context),
-            Data = sort_data(Data0, proplists:get_value(sort, Params, false)),
-            Colors = normalize_colors(proplists:get_value(colors, Params)),
+            LabelMinPercent = normalize_percentage(proplists:get_value(label_min_percent, Params)),
+            MaxPieValues = normalize_max_pie_values(proplists:get_value(max_pie_values, Params)),
+            {Data1, OtherValue} = compact_pie_data(Type, Data0, LabelMinPercent, MaxPieValues),
+            Sort = proplists:get_value(sort, Params, false),
+            Data2 = sort_data(Data1, Sort),
+            Data = place_other(Data2, OtherValue, Sort, Context),
+            Colors = chart_colors(Params, Context),
             ColoredData = colorize_data(Type, Data, Colors),
             Width = normalize_dimension(proplists:get_value(width, Params), ?DEFAULT_WIDTH),
             Height0 = normalize_dimension(proplists:get_value(height, Params), ?DEFAULT_HEIGHT),
@@ -59,7 +97,17 @@ render(Params, Context) when is_list(Params) ->
             Class = normalize_class(proplists:get_value(class, Params)),
             AriaDescribedBy = normalize_reference(proplists:get_value(aria_describedby, Params)),
             HideTable = z_convert:to_bool(proplists:get_value(hide_table, Params, false)),
-            Svg = render_svg(Type, ColoredData, Width, Height, Id, Title, AriaDescribedBy, Context),
+            ShowLabels = z_convert:to_bool(proplists:get_value(show_labels, Params, default_show_labels(Type))),
+            Svg = render_svg(
+                Type,
+                ColoredData,
+                Width,
+                Height,
+                Id,
+                Title,
+                AriaDescribedBy,
+                ShowLabels,
+                Context),
             Table = case HideTable of
                 true ->
                     <<>>;
@@ -237,6 +285,67 @@ normalize_number(Value) when is_binary(Value), byte_size(Value) =< 64 ->
 normalize_number(_Value) ->
     error.
 
+normalize_percentage(undefined) ->
+    0;
+normalize_percentage(Value) ->
+    case normalize_number(Value) of
+        {ok, Number} -> erlang:max(0, erlang:min(100, Number));
+        error -> 0
+    end.
+
+normalize_max_pie_values(undefined) ->
+    ?DEFAULT_MAX_PIE_VALUES;
+normalize_max_pie_values(Value) when is_integer(Value) ->
+    clamp(Value, 1, ?MAX_POINTS);
+normalize_max_pie_values(Value) when is_binary(Value); is_list(Value) ->
+    case z_convert:to_integer(Value) of
+        undefined -> ?DEFAULT_MAX_PIE_VALUES;
+        Integer -> clamp(Integer, 1, ?MAX_POINTS)
+    end;
+normalize_max_pie_values(_Value) ->
+    ?DEFAULT_MAX_PIE_VALUES.
+
+default_show_labels(pie) -> true;
+default_show_labels(donut) -> true;
+default_show_labels(_Type) -> false.
+
+compact_pie_data(pie, Data, MinPercent, MaxValues) ->
+    compact_pie_data_1(Data, MinPercent, MaxValues);
+compact_pie_data(donut, Data, MinPercent, MaxValues) ->
+    compact_pie_data_1(Data, MinPercent, MaxValues);
+compact_pie_data(_Type, Data, _MinPercent, _MaxValues) ->
+    {Data, undefined}.
+
+compact_pie_data_1(Data, MinPercent, MaxValues) ->
+    PositiveData = [Point || {_Label, Value, _Color} = Point <- Data, Value > 0],
+    Total = lists:sum([Value || {_Label, Value, _Color} <- PositiveData]),
+    {AboveThreshold, BelowThreshold} = lists:partition(
+        fun({_Label, Value, _Color}) ->
+            Value * 100 / Total >= MinPercent
+        end,
+        PositiveData),
+    {Kept, BeyondLimit} = case length(AboveThreshold) > MaxValues of
+        true ->
+            lists:split(MaxValues, sort_data(AboveThreshold, value, descending));
+        false ->
+            {AboveThreshold, []}
+    end,
+    {Kept, other_value(BelowThreshold ++ BeyondLimit)}.
+
+other_value([]) ->
+    undefined;
+other_value(OtherData) ->
+    lists:sum([Value || {_Label, Value, _Color} <- OtherData]).
+
+place_other(Data, undefined, _Sort, _Context) ->
+    Data;
+place_other(Data, OtherValue, Sort, Context) ->
+    Other = {?__("Other", Context), OtherValue, undefined},
+    case normalize_sort(Sort) of
+        {value, ascending} -> [Other | Data];
+        _ -> Data ++ [Other]
+    end.
+
 sort_data(Data, Sort) ->
     case normalize_sort(Sort) of
         undefined -> Data;
@@ -336,44 +445,80 @@ normalize_class(Value) ->
     Class0 = normalize_text(Value, ?MAX_CLASS_LENGTH, undefined),
     re:replace(Class0, <<"[^A-Za-z0-9 _-]">>, <<>>, [global, {return, binary}]).
 
-normalize_colors(Colors) when is_list(Colors) ->
-    case normalize_colors(Colors, 0, []) of
-        [] -> ?PALETTE;
-        Valid -> lists:reverse(Valid)
-    end;
-normalize_colors(_Colors) ->
-    ?PALETTE.
+chart_colors(Params, Context) ->
+    case normalize_palette(proplists:get_value(color, Params)) of
+        [Color | _] ->
+            [Color];
+        [] ->
+            first_palette([
+                proplists:get_value(palette, Params),
+                proplists:get_value(colors, Params)
+            ], Context)
+    end.
 
-normalize_colors(_Colors, 16, Acc) ->
-    Acc;
+first_palette([], Context) ->
+    case normalize_palette(configured_palette(Context)) of
+        [] -> ?PALETTE;
+        Colors -> Colors
+    end;
+first_palette([Palette | Rest], Context) ->
+    case normalize_palette(Palette) of
+        [] -> first_palette(Rest, Context);
+        Colors -> Colors
+    end.
+
+configured_palette(Context) ->
+    try m_config:get_value(site, chart_palette, Context)
+    catch
+        exit:{noproc, _} -> undefined
+    end.
+
+normalize_palette(Palette) when is_binary(Palette) ->
+    Text = z_string:truncatechars(Palette, ?MAX_PALETTE_TEXT_LENGTH),
+    normalize_colors(re:split(Text, <<"[\\s,;]+">>, [{return, binary}, trim]), 0, []);
+normalize_palette([C | _] = Palette) when is_integer(C) ->
+    Prefix = take_list(Palette, ?MAX_PALETTE_TEXT_LENGTH, []),
+    try unicode:characters_to_binary(Prefix) of
+        Text when is_binary(Text) -> normalize_palette(Text);
+        _ -> []
+    catch
+        _:_ -> []
+    end;
+normalize_palette(Palette) when is_list(Palette) ->
+    normalize_colors(Palette, 0, []);
+normalize_palette(_Palette) ->
+    [].
+
+normalize_colors(_Colors, ?MAX_PALETTE_LENGTH, Acc) ->
+    lists:reverse(Acc);
 normalize_colors([Color | Rest], Count, Acc) ->
     case normalize_color(Color) of
         {ok, Valid} -> normalize_colors(Rest, Count + 1, [Valid | Acc]);
         error -> normalize_colors(Rest, Count + 1, Acc)
     end;
 normalize_colors(_ImproperOrEmpty, _Count, Acc) ->
-    Acc.
+    lists:reverse(Acc).
 
 -spec colorize_data(chart_type(), [data_point()], [binary()]) -> [colored_data_point()].
 colorize_data(line, [], _Colors) ->
     [];
 colorize_data(line, [{_Label, _Value, CustomColor} | _] = Data, Colors) ->
     LineColor = case CustomColor of
-        undefined -> color(0, Colors);
+        undefined -> color(0, 1, Colors);
         _ -> CustomColor
     end,
     [{Label, Value, LineColor} || {Label, Value, _Color} <- Data];
 colorize_data(Type, Data, Colors) ->
-    colorize_data(Type, Data, Colors, 0, []).
+    colorize_data(Type, Data, Colors, length(Data), 0, []).
 
-colorize_data(_Type, [], _Colors, _Index, Acc) ->
+colorize_data(_Type, [], _Colors, _ColorCount, _Index, Acc) ->
     lists:reverse(Acc);
-colorize_data(Type, [{Label, Value, CustomColor} | Rest], Colors, Index, Acc) ->
+colorize_data(Type, [{Label, Value, CustomColor} | Rest], Colors, ColorCount, Index, Acc) ->
     PointColor = case CustomColor of
-        undefined -> color(Index, Colors);
+        undefined -> color(Index, ColorCount, Colors);
         _ -> CustomColor
     end,
-    colorize_data(Type, Rest, Colors, Index + 1, [{Label, Value, PointColor} | Acc]).
+    colorize_data(Type, Rest, Colors, ColorCount, Index + 1, [{Label, Value, PointColor} | Acc]).
 
 normalize_color(Color) when is_binary(Color), byte_size(Color) =< 7 ->
     Color1 = case Color of
@@ -417,14 +562,18 @@ take_list(_ImproperOrEmpty, _Count, Acc) ->
     lists:reverse(Acc).
 
 truncate_text(Text, MaxLength) ->
-    MaxBytes = MaxLength * 4,
-    Prefix = case byte_size(Text) > MaxBytes of
-        true -> binary:part(Text, 0, MaxBytes);
-        false -> Text
-    end,
-    z_string:truncatechars(z_string:sanitize_utf8(Prefix), MaxLength, <<>>).
+    z_string:truncatechars(Text, MaxLength).
 
-render_svg(Type, Data, Width, Height, Id, Title, AriaDescribedBy, Context) ->
+render_svg(
+        Type,
+        Data,
+        Width,
+        Height,
+        Id,
+        Title,
+        AriaDescribedBy,
+        ShowLabels,
+        Context) ->
     TitleId = <<Id/binary, "-title">>,
     DescId = <<Id/binary, "-description">>,
     Description = iolist_to_binary([
@@ -437,7 +586,7 @@ render_svg(Type, Data, Width, Height, Id, Title, AriaDescribedBy, Context) ->
     Content = [
         z_tags:render_tag(<<"title">>, [{<<"id">>, TitleId}], escape(Title)),
         z_tags:render_tag(<<"desc">>, [{<<"id">>, DescId}], escape(Description)),
-        render_plot(Type, Data, Width, Height, Context)
+        render_plot(Type, Data, Width, Height, ShowLabels, Context)
     ],
     z_tags:render_tag(
         <<"svg">>,
@@ -456,51 +605,218 @@ render_svg(Type, Data, Width, Height, Id, Title, AriaDescribedBy, Context) ->
         ],
         Content).
 
-render_plot(pie, Data, Width, Height, Context) ->
-    render_pie(Data, Width, Height, false, Context);
-render_plot(donut, Data, Width, Height, Context) ->
-    render_pie(Data, Width, Height, true, Context);
-render_plot(horizontal_bar, Data, Width, Height, _Context) ->
+render_plot(pie, Data, Width, Height, ShowLabels, Context) ->
+    render_pie(Data, Width, Height, false, ShowLabels, Context);
+render_plot(donut, Data, Width, Height, ShowLabels, Context) ->
+    render_pie(Data, Width, Height, true, ShowLabels, Context);
+render_plot(horizontal_bar, Data, Width, Height, _ShowLabels, _Context) ->
     render_horizontal_bar(Data, Width, Height);
-render_plot(vertical_bar, Data, Width, Height, _Context) ->
+render_plot(vertical_bar, Data, Width, Height, _ShowLabels, _Context) ->
     render_vertical_bar(Data, Width, Height);
-render_plot(line, Data, Width, Height, _Context) ->
+render_plot(line, Data, Width, Height, _ShowLabels, _Context) ->
     render_line(Data, Width, Height).
 
-render_pie(Data, Width, Height, IsDonut, Context) ->
-    PieData = [Point || {_Label, Value, _Color} = Point <- Data, Value > 0],
-    case lists:sum([Value || {_Label, Value, _Color} <- PieData]) of
+render_pie(Data, Width, Height, IsDonut, ShowLabels, Context) ->
+    case lists:sum([Value || {_Label, Value, _Color} <- Data]) of
         Total when Total > 0 ->
             CX = Width / 2,
             CY = Height / 2,
-            Radius = erlang:max(1, erlang:min(Width, Height) / 2 - 8),
-            case PieData of
-                [{Label, Value, Color}] ->
-                    render_full_pie(Label, Value, CX, CY, Radius, Color, IsDonut);
-                _ ->
-                    {Segments, _Angle} = lists:mapfoldl(
-                        fun({Label, Value, Color}, StartAngle) ->
-                            Delta = 2 * math:pi() * Value / Total,
-                            Segment = render_pie_segment(
-                                Label,
-                                Value,
-                                Total,
-                                StartAngle,
-                                StartAngle + Delta,
-                                CX,
-                                CY,
-                                Radius,
-                                Color,
-                                IsDonut),
-                            {Segment, StartAngle + Delta}
-                        end,
-                        -math:pi() / 2,
-                        PieData),
-                    Segments
-            end;
+            {Radius, LabelSpace} = pie_geometry(ShowLabels, Width, Height),
+            Slices = pie_slices(Data, Total),
+            [
+                render_pie_slices(Slices, Total, CX, CY, Radius, IsDonut),
+                render_pie_labels(
+                    ShowLabels,
+                    Slices,
+                    Total,
+                    CX,
+                    CY,
+                    Radius,
+                    LabelSpace,
+                    Width,
+                    Height)
+            ];
         _ ->
             render_no_data(Width, Height, Context)
     end.
+
+pie_geometry(false, Width, Height) ->
+    {erlang:max(1, erlang:min(Width, Height) / 2 - 8), 0};
+pie_geometry(true, Width, Height) ->
+    LabelSpace = erlang:min(140.0, erlang:max(20.0, Width * 0.24)),
+    Radius = erlang:max(1, erlang:min((Width - 2 * LabelSpace) / 2 - 6, Height / 2 - 12)),
+    {Radius, LabelSpace}.
+
+pie_slices([{Label, Value, Color}], _Total) ->
+    [#{
+        label => Label,
+        value => Value,
+        color => Color,
+        start => -math:pi() / 2,
+        finish => 3 * math:pi() / 2,
+        angle => 0,
+        index => 1
+    }];
+pie_slices(Data, Total) ->
+    {Slices, _Angle} = lists:mapfoldl(
+        fun({{Label, Value, Color}, Index}, StartAngle) ->
+            FinishAngle = StartAngle + 2 * math:pi() * Value / Total,
+            Slice = #{
+                label => Label,
+                value => Value,
+                color => Color,
+                start => StartAngle,
+                finish => FinishAngle,
+                angle => (StartAngle + FinishAngle) / 2,
+                index => Index
+            },
+            {Slice, FinishAngle}
+        end,
+        -math:pi() / 2,
+        lists:zip(Data, lists:seq(1, length(Data)))),
+    Slices.
+
+render_pie_slices([#{label := Label, value := Value, color := Color}], _Total, CX, CY, Radius, IsDonut) ->
+    render_full_pie(Label, Value, CX, CY, Radius, Color, IsDonut);
+render_pie_slices(Slices, Total, CX, CY, Radius, IsDonut) ->
+    [
+        render_pie_segment(
+            Label,
+            Value,
+            Total,
+            Start,
+            Finish,
+            CX,
+            CY,
+            Radius,
+            Color,
+            IsDonut)
+        || #{
+            label := Label,
+            value := Value,
+            color := Color,
+            start := Start,
+            finish := Finish
+        } <- Slices
+    ].
+
+render_pie_labels(false, _Slices, _Total, _CX, _CY, _Radius, _LabelSpace, _Width, _Height) ->
+    <<>>;
+render_pie_labels(true, Slices, _Total, CX, CY, Radius, LabelSpace, Width, Height) ->
+    MinY = ?PIE_LABEL_LINE_HEIGHT,
+    MaxY = Height - ?PIE_LABEL_LINE_HEIGHT,
+    Candidates = [
+        pie_label_candidate(Slice, CX, CY, Radius, MinY, MaxY)
+        || Slice <- Slices
+    ],
+    Left = [Label || #{side := left} = Label <- Candidates],
+    Right = [Label || #{side := right} = Label <- Candidates],
+    MaxLabels = erlang:max(1, trunc((MaxY - MinY) / ?PIE_LABEL_GAP) + 1),
+    Positioned =
+        position_pie_labels(limit_pie_labels(Left, MaxLabels), MinY, MaxY, ?PIE_LABEL_GAP)
+        ++ position_pie_labels(
+            limit_pie_labels(Right, MaxLabels),
+            MinY,
+            MaxY,
+            ?PIE_LABEL_GAP),
+    case Positioned of
+        [] ->
+            <<>>;
+        _ ->
+            z_tags:render_tag(
+                <<"g">>,
+                [{<<"class">>, <<"z-chart-segment-labels">>}],
+                [
+                    render_pie_label(Label, CX, CY, Radius, LabelSpace, Width)
+                    || Label <- Positioned
+                ])
+    end.
+
+pie_label_candidate(#{angle := Angle} = Slice, CX, CY, Radius, MinY, MaxY) ->
+    {_X, NaturalY} = polar(CX, CY, Radius + 8, Angle),
+    Side = case math:cos(Angle) >= 0 of
+        true -> right;
+        false -> left
+    end,
+    Slice#{
+        side => Side,
+        natural_y => erlang:max(MinY, erlang:min(MaxY, NaturalY))
+    }.
+
+limit_pie_labels(Labels, MaxLabels) when length(Labels) =< MaxLabels ->
+    Labels;
+limit_pie_labels(Labels, MaxLabels) ->
+    ByValue = lists:sort(
+        fun(#{value := ValueA, index := IndexA}, #{value := ValueB, index := IndexB}) ->
+            case ValueA == ValueB of
+                true -> IndexA < IndexB;
+                false -> ValueA > ValueB
+            end
+        end,
+        Labels),
+    lists:sublist(ByValue, MaxLabels).
+
+position_pie_labels([], _MinY, _MaxY, _Gap) ->
+    [];
+position_pie_labels(Labels, MinY, MaxY, Gap) ->
+    ByPosition = lists:sort(
+        fun(#{natural_y := YA, index := IndexA}, #{natural_y := YB, index := IndexB}) ->
+            {YA, IndexA} < {YB, IndexB}
+        end,
+        Labels),
+    {PositionedDown, _LastY} = lists:mapfoldl(
+        fun(#{natural_y := NaturalY} = Label, PreviousY) ->
+            Y = erlang:max(NaturalY, PreviousY + Gap),
+            {Label#{y => Y}, Y}
+        end,
+        MinY - Gap,
+        ByPosition),
+    position_pie_labels_up(lists:reverse(PositionedDown), MaxY + Gap, Gap, []).
+
+position_pie_labels_up([], _NextY, _Gap, Acc) ->
+    Acc;
+position_pie_labels_up([#{y := Y} = Label | Rest], NextY, Gap, Acc) ->
+    BoundedY = erlang:min(Y, NextY - Gap),
+    position_pie_labels_up(Rest, BoundedY, Gap, [Label#{y => BoundedY} | Acc]).
+
+render_pie_label(#{label := Label, angle := Angle, side := Side, y := Y}, CX, CY, Radius, LabelSpace, Width) ->
+    {StartX, StartY} = polar(CX, CY, Radius, Angle),
+    {OuterX, OuterY} = polar(CX, CY, Radius + 8, Angle),
+    {TextX, LineX, TextAnchor} = case Side of
+        left -> {LabelSpace - 8, LabelSpace - 4, <<"end">>};
+        right -> {Width - LabelSpace + 8, Width - LabelSpace + 4, <<"start">>}
+    end,
+    Points = iolist_to_binary(lists:join($\s, [
+        [coordinate(StartX), $,, coordinate(StartY)],
+        [coordinate(OuterX), $,, coordinate(OuterY)],
+        [coordinate(LineX), $,, coordinate(Y)]
+    ])),
+    LabelLength = erlang:max(4, erlang:min(24, trunc((LabelSpace - 12) / 6))),
+    [
+        z_tags:render_tag(
+            <<"polyline">>,
+            [
+                {<<"class">>, <<"z-chart-segment-label-line">>},
+                {<<"points">>, Points},
+                {<<"fill">>, <<"none">>},
+                {<<"stroke">>, <<"currentColor">>},
+                {<<"stroke-width">>, 1},
+                {<<"aria-hidden">>, <<"true">>}
+            ],
+            <<>>),
+        z_tags:render_tag(
+            <<"text">>,
+            [
+                {<<"class">>, <<"z-chart-segment-label">>},
+                {<<"x">>, coordinate(TextX)},
+                {<<"y">>, coordinate(Y)},
+                {<<"text-anchor">>, TextAnchor},
+                {<<"dominant-baseline">>, <<"middle">>},
+                {<<"fill">>, <<"currentColor">>},
+                {<<"font-size">>, ?PIE_LABEL_FONT_SIZE}
+            ],
+            escape(short_label(Label, LabelLength)))
+    ].
 
 render_full_pie(Label, Value, CX, CY, Radius, Color, false) ->
     z_tags:render_tag(
@@ -690,9 +1006,9 @@ render_line([], Width, Height) ->
     render_no_data(Width, Height, undefined);
 render_line([{_FirstLabel, _FirstValue, LineColor} | _] = Data, Width, Height) ->
     Values = [Value || {_Label, Value, _Color} <- Data],
-    {Minimum, Maximum} = value_range(Values),
-    Left = 36,
-    Top = 8,
+    {Minimum, Maximum, TickStep, Ticks} = nice_value_scale(Values),
+    Left = 44,
+    Top = 10,
     Bottom = Height - 28,
     PlotWidth = erlang:max(1, Width - Left - 8),
     PlotHeight = erlang:max(1, Bottom - Top),
@@ -706,6 +1022,18 @@ render_line([{_FirstLabel, _FirstValue, LineColor} | _] = Data, Width, Height) -
     PolylinePoints = iolist_to_binary(lists:join($\s, [
         [coordinate(X), $,, coordinate(Y)] || {_Label, _Value, X, Y} <- Points
     ])),
+    LabelPoints = line_label_points(Points),
+    Grid = render_line_grid(
+        Ticks,
+        TickStep,
+        Points,
+        Left,
+        Width - 8,
+        Top,
+        Bottom,
+        PlotHeight,
+        Minimum,
+        Span),
     Axis = [
         z_tags:render_tag(<<"line">>, [
             {<<"x1">>, Left}, {<<"y1">>, Bottom},
@@ -728,7 +1056,13 @@ render_line([{_FirstLabel, _FirstValue, LineColor} | _] = Data, Width, Height) -
             {<<"stroke-linejoin">>, <<"round">>}
         ],
         <<>>),
-    [Axis, Polyline, render_line_markers(Points, LineColor), render_line_labels(Points, Bottom)].
+    [
+        Grid,
+        Axis,
+        Polyline,
+        render_line_markers(Points, LineColor),
+        render_line_labels(LabelPoints, Bottom, Left, Width - 8)
+    ].
 
 line_points([], _Index, _Step, _Left, _Bottom, _PlotHeight, _Minimum, _Span, Acc) ->
     lists:reverse(Acc);
@@ -751,22 +1085,180 @@ render_line_markers(Points, Color) ->
         || {Label, Value, X, Y} <- Points
     ].
 
-render_line_labels([], _Bottom) ->
-    [];
-render_line_labels([First], Bottom) ->
-    [render_line_label(First, Bottom)];
-render_line_labels(Points, Bottom) ->
-    [render_line_label(hd(Points), Bottom), render_line_label(lists:last(Points), Bottom)].
+render_line_grid(Ticks, TickStep, Points, Left, Right, Top, Bottom, PlotHeight, Minimum, Span) ->
+    Horizontal = [
+        begin
+            Y = Bottom - (Tick - Minimum) / Span * PlotHeight,
+            [
+                z_tags:render_tag(
+                    <<"line">>,
+                    [
+                        {<<"class">>, <<"z-chart-grid-line z-chart-grid-line-horizontal">>},
+                        {<<"x1">>, Left},
+                        {<<"y1">>, coordinate(Y)},
+                        {<<"x2">>, Right},
+                        {<<"y2">>, coordinate(Y)},
+                        {<<"stroke">>, <<"#d9d9d9">>},
+                        {<<"stroke-opacity">>, <<"0.7">>},
+                        {<<"stroke-width">>, 1}
+                    ],
+                    <<>>),
+                z_tags:render_tag(
+                    <<"text">>,
+                    [
+                        {<<"class">>, <<"z-chart-axis-label z-chart-axis-label-y">>},
+                        {<<"x">>, Left - 6},
+                        {<<"y">>, coordinate(Y)},
+                        {<<"text-anchor">>, <<"end">>},
+                        {<<"dominant-baseline">>, <<"middle">>},
+                        {<<"fill">>, <<"#666666">>},
+                        {<<"font-size">>, 10}
+                    ],
+                    format_axis_value(Tick, TickStep))
+            ]
+        end
+        || Tick <- Ticks
+    ],
+    Vertical = [
+        z_tags:render_tag(
+            <<"line">>,
+            [
+                {<<"class">>, <<"z-chart-grid-line z-chart-grid-line-vertical">>},
+                {<<"x1">>, coordinate(X)},
+                {<<"y1">>, Top},
+                {<<"x2">>, coordinate(X)},
+                {<<"y2">>, Bottom},
+                {<<"stroke">>, <<"#d9d9d9">>},
+                {<<"stroke-opacity">>, <<"0.7">>},
+                {<<"stroke-width">>, 1}
+            ],
+            <<>>)
+        || {_Label, _Value, X, _Y} <- Points
+    ],
+    z_tags:render_tag(
+        <<"g">>,
+        [
+            {<<"class">>, <<"z-chart-grid">>},
+            {<<"aria-hidden">>, <<"true">>}
+        ],
+        [Horizontal, Vertical]).
 
-render_line_label({Label, _Value, X, _Y}, Bottom) ->
+line_label_points([]) ->
+    [];
+line_label_points([Point]) ->
+    [Point];
+line_label_points([First, Second | _] = Points) ->
+    {_Label1, _Value1, X1, _Y1} = First,
+    {_Label2, _Value2, X2, _Y2} = Second,
+    PointSpacing = abs(X2 - X1),
+    RequiredSpacing = lists:max([
+        line_label_width(Label) + ?LINE_LABEL_GAP
+        || {Label, _Value, _X, _Y} <- Points
+    ]),
+    InitialInterval = erlang:max(1, trunc(math:ceil(RequiredSpacing / PointSpacing))),
+    {_LastLabel, _LastValue, Right, _LastY} = lists:last(Points),
+    Interval = line_label_interval(Points, X1, Right, InitialInterval),
+    line_label_points(Points, Interval, 0).
+
+line_label_interval(Points, Left, Right, Interval) ->
+    LabelPoints = line_label_points(Points, Interval, 0),
+    case line_labels_fit(LabelPoints, Left, Right) of
+        true -> Interval;
+        false -> line_label_interval(Points, Left, Right, Interval + 1)
+    end.
+
+line_label_points([], _Interval, _Index) ->
+    [];
+line_label_points([Point | Rest], Interval, Index) when Index rem Interval =:= 0 ->
+    [Point | line_label_points(Rest, Interval, Index + 1)];
+line_label_points([_Point | Rest], Interval, Index) ->
+    line_label_points(Rest, Interval, Index + 1).
+
+line_label_width(Label) ->
+    z_string:len(short_label(Label, 12)) * ?LINE_LABEL_CHARACTER_WIDTH.
+
+line_labels_fit([], _Left, _Right) ->
+    true;
+line_labels_fit([_Point], _Left, _Right) ->
+    true;
+line_labels_fit([Point1, Point2 | Rest], Left, Right) ->
+    {_LabelLeft1, LabelRight1} = line_label_bounds(Point1, Left, Right),
+    {LabelLeft2, _LabelRight2} = line_label_bounds(Point2, Left, Right),
+    LabelRight1 + ?LINE_LABEL_GAP =< LabelLeft2
+        andalso line_labels_fit([Point2 | Rest], Left, Right).
+
+line_label_bounds({Label, _Value, X, _Y}, Left, _Right) when X =< Left ->
+    {X, X + line_label_width(Label)};
+line_label_bounds({Label, _Value, X, _Y}, _Left, Right) when X >= Right ->
+    {X - line_label_width(Label), X};
+line_label_bounds({Label, _Value, X, _Y}, _Left, _Right) ->
+    HalfWidth = line_label_width(Label) / 2,
+    {X - HalfWidth, X + HalfWidth}.
+
+render_line_labels(Points, Bottom, Left, Right) ->
+    [render_line_label(Point, Bottom, Left, Right) || Point <- Points].
+
+render_line_label({Label, _Value, X, _Y}, Bottom, Left, Right) ->
     z_tags:render_tag(
         <<"text">>,
         [
+            {<<"class">>, <<"z-chart-axis-label z-chart-axis-label-x">>},
             {<<"x">>, coordinate(X)},
             {<<"y">>, Bottom + 18},
-            {<<"text-anchor">>, <<"middle">>}
+            {<<"text-anchor">>, line_label_anchor(X, Left, Right)},
+            {<<"fill">>, <<"#666666">>},
+            {<<"font-size">>, 10}
         ],
-        escape(short_label(Label, 16))).
+        escape(short_label(Label, 12))).
+
+line_label_anchor(X, Left, _Right) when X =< Left ->
+    <<"start">>;
+line_label_anchor(X, _Left, Right) when X >= Right ->
+    <<"end">>;
+line_label_anchor(_X, _Left, _Right) ->
+    <<"middle">>.
+
+nice_value_scale(Values) ->
+    {Minimum0, Maximum0} = value_range(Values),
+    {ScaleMinimum, ScaleMaximum} = case Minimum0 == Maximum0 of
+        true -> {0, 1};
+        false -> {Minimum0, Maximum0}
+    end,
+    Step = nice_step((ScaleMaximum - ScaleMinimum) / (?LINE_TICK_COUNT - 1)),
+    Minimum = math:floor(ScaleMinimum / Step) * Step,
+    Maximum = math:ceil(ScaleMaximum / Step) * Step,
+    TickIntervals = round((Maximum - Minimum) / Step),
+    Ticks = [normalize_tick(Minimum + I * Step, Step) || I <- lists:seq(0, TickIntervals)],
+    {Minimum, Maximum, Step, Ticks}.
+
+nice_step(Value) ->
+    Exponent = math:floor(math:log(Value) / math:log(10)),
+    Magnitude = math:pow(10, Exponent),
+    Fraction = Value / Magnitude,
+    NiceFraction = if
+        Fraction =< 1 -> 1;
+        Fraction =< 2 -> 2;
+        Fraction =< 5 -> 5;
+        true -> 10
+    end,
+    NiceFraction * Magnitude.
+
+normalize_tick(Value, Step) when abs(Value) < Step / 1000 ->
+    0;
+normalize_tick(Value, _Step) ->
+    Value.
+
+format_axis_value(Value, Step) when Step >= 1 ->
+    integer_to_binary(round(Value));
+format_axis_value(Value, Step) ->
+    Exponent = math:floor(math:log(Step) / math:log(10)),
+    case Exponent >= -12 of
+        true ->
+            Decimals = -trunc(Exponent),
+            float_to_binary(Value * 1.0, [{decimals, Decimals}, compact]);
+        false ->
+            float_to_binary(Value * 1.0, [{scientific, 6}])
+    end.
 
 render_no_data(Width, Height, undefined) ->
     render_no_data_1(Width, Height, <<"No data">>);
@@ -905,20 +1397,21 @@ tooltip(Label, Value, Total) ->
 short_label(Label, Length) ->
     z_string:truncatechars(Label, Length, <<"…"/utf8>>).
 
-color(Index, Colors) ->
+color(Index, ColorCount, Colors) ->
     PaletteLength = length(Colors),
     BaseColor = lists:nth((Index rem PaletteLength) + 1, Colors),
     Shade = Index div PaletteLength,
-    shade_color(BaseColor, Shade).
+    ShadeCount = (ColorCount + PaletteLength - 1) div PaletteLength,
+    shade_color(BaseColor, Shade, ShadeCount).
 
-shade_color(Color, 0) ->
+shade_color(Color, 0, _ShadeCount) ->
     Color;
-shade_color(<<"#", R1, R2, G1, G2, B1, B2>>, Shade) ->
+shade_color(<<"#", R1, R2, G1, G2, B1, B2>>, Shade, ShadeCount) ->
     R = hex_byte(R1, R2),
     G = hex_byte(G1, G2),
     B = hex_byte(B1, B2),
     Driver = shade_driver(R, G, B),
-    Target = shade_target(Driver, Shade),
+    Target = shade_target(Driver, Shade, ShadeCount),
     case Target > Driver of
         true ->
             Amount = (Target - Driver) / (255 - Driver),
@@ -942,16 +1435,18 @@ shade_driver(R, G, B) ->
     ]),
     Driver.
 
-shade_target(Driver, Shade) ->
-    % 31 is coprime with 255, so all possible shades are visited without repeats.
-    Position = ((Shade * 31 - 1) rem 255) + 1,
+shade_target(Driver, Shade, ShadeCount) ->
+    % Keep dark shades readable and spread the required shades over the remaining range.
+    MinTarget = round(Driver * (1.0 - ?MAX_DARKEN_AMOUNT)),
     Targets = [
         Value
         || Delta <- lists:seq(1, 255),
            Value <- [Driver + Delta, Driver - Delta],
-           Value >= 0,
+           Value >= MinTarget,
            Value =< 255
     ],
+    TargetCount = length(Targets),
+    Position = (Shade * TargetCount + ShadeCount - 1) div ShadeCount,
     lists:nth(Position, Targets).
 
 mix_channel(Channel, Target, Amount) ->
