@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-09-03 13:49\n"
+"PO-Revision-Date: 2026-09-03 14:54\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "MIME-Version: 1.0\n"
@@ -6787,7 +6787,7 @@ msgstr "Concluir"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:130
 msgid "Completion"
-msgstr ""
+msgstr "Conclusão"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:229
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:240
@@ -6805,7 +6805,7 @@ msgstr "Teste de Conexão"
 
 #: zotonic_mod_base/src/support/z_chart_svg.erl:581
 msgid "Data points"
-msgstr ""
+msgstr "Dados"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:115
 #: zotonic_mod_l10n/src/support/l10n_date.erl:50
@@ -6814,19 +6814,19 @@ msgstr "Dezembro"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:225
 msgid "Donut alias"
-msgstr ""
+msgstr "Alias «Donut»"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:44
 msgid "Donut chart with map data"
-msgstr ""
+msgstr "Gráfico em anel com dados cartográficos"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:81
 msgid "East"
-msgstr ""
+msgstr "Leste"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:168
 msgid "Empty data"
-msgstr ""
+msgstr "Dados em branco"
 
 #: zotonic_mod_base/src/filters/filter_content_type_label.erl:50
 msgid "Excel Workbook"
@@ -6834,11 +6834,11 @@ msgstr "Pasta de Trabalho Excel"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:62
 msgid "Excellent"
-msgstr ""
+msgstr "Excelente"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:139
 msgid "Existing external data table"
-msgstr ""
+msgstr "Tabela de dados externos existente"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:114
 #: zotonic_mod_l10n/src/support/l10n_date.erl:40
@@ -6867,11 +6867,11 @@ msgstr "Foi-se"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:63
 msgid "Good"
-msgstr ""
+msgstr "Bom"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:77
 msgid "Horizontal bar chart"
-msgstr ""
+msgstr "Gráfico de barras horizontais"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:47
 msgid "If the authentication with the server works."
@@ -6885,12 +6885,12 @@ msgstr "Índice de"
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:3
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:19
 msgid "Inline SVG chart test"
-msgstr ""
+msgstr "Teste de gráfico SVG incorporado"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:193
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:210
 msgid "Item"
-msgstr ""
+msgstr "Artigo"
 
 #: zotonic_mod_base/src/filters/filter_content_type_label.erl:48
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:39
@@ -6923,19 +6923,19 @@ msgstr "Rótulo"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:187
 msgid "Large data set with palette shades"
-msgstr ""
+msgstr "Conjunto de dados de grande dimensão com tonalidades de paleta"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:200
 msgid "Large pie chart with palette shades"
-msgstr ""
+msgstr "Grande gráfico circular com tons de paleta"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:228
 msgid "Legacy pie alias"
-msgstr ""
+msgstr "Alias de «pie» antigo"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:109
 msgid "Line chart"
-msgstr ""
+msgstr "Gráfico de linhas"
 
 #: zotonic_mod_base/priv/templates/error.403.tpl:30
 msgid "Login"
@@ -6962,7 +6962,7 @@ msgstr "Maio"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:80
 msgid "Net change"
-msgstr ""
+msgstr "Variação líquida"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:34
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:145
@@ -6981,15 +6981,15 @@ msgstr "Não"
 
 #: zotonic_mod_base/src/support/z_chart_svg.erl:1290
 msgid "No data"
-msgstr ""
+msgstr "Sem dados"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:170
 msgid "No measurements yet"
-msgstr ""
+msgstr "Ainda não há medições"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:81
 msgid "North"
-msgstr ""
+msgstr "Norte"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:231
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:243
@@ -7030,11 +7030,11 @@ msgstr "Identificação da página"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:222
 msgid "Pie alias"
-msgstr ""
+msgstr "Alias de Pie"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:28
 msgid "Pie chart"
-msgstr ""
+msgstr "Gráfico circular"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:115
 msgid "Pong Count"
@@ -7050,7 +7050,7 @@ msgstr "Latência Pong"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:65
 msgid "Poor"
-msgstr ""
+msgstr "Pobre"
 
 #: zotonic_mod_base/priv/templates/_powered_by_zotonic.tpl:1
 msgid "Powered by Zotonic"
@@ -7058,7 +7058,7 @@ msgstr "Desenvolvido por Zotonic"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:95
 msgid "Quarterly balance"
-msgstr ""
+msgstr "Balanço trimestral"
 
 #: zotonic_mod_base/priv/templates/email_base.tpl:336
 msgid "Read this page on the web"
@@ -7072,7 +7072,7 @@ msgstr "Região"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:60
 msgid "Responses using one color"
-msgstr ""
+msgstr "Respostas utilizando uma única cor"
 
 #: zotonic_mod_base/priv/templates/error.tpl:14
 msgid "Return to the homepage"
@@ -7088,7 +7088,7 @@ msgstr "Pontuação"
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:190
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:203
 msgid "Scores for 32 items"
-msgstr ""
+msgstr "Pontuações relativas a 32 itens"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:115
 #: zotonic_mod_l10n/src/support/l10n_date.erl:47
@@ -7097,7 +7097,7 @@ msgstr "Setembro"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:21
 msgid "Server-rendered charts without JavaScript, CSS, or external services."
-msgstr ""
+msgstr "Gráficos gerados no servidor sem JavaScript, CSS nem serviços externos."
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:144
 msgid "Service Worker?"
@@ -7113,15 +7113,15 @@ msgstr "Vários aspectos da conexão são testados"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:153
 msgid "Share"
-msgstr ""
+msgstr "Partilhar"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:128
 msgid "Single value"
-msgstr ""
+msgstr "Valor único"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:57
 msgid "Single-color pie chart"
-msgstr ""
+msgstr "Gráfico circular de uma única cor"
 
 #: zotonic_mod_base/priv/templates/error.tpl:11
 msgid "Sorry, this page has been deleted."
@@ -7133,7 +7133,7 @@ msgstr "Desculpe, você não tem acesso a esta página."
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:81
 msgid "South"
-msgstr ""
+msgstr "Sul"
 
 #: zotonic_mod_base/priv/templates/error.tpl:23
 msgid "Stack trace"
@@ -7145,7 +7145,7 @@ msgstr "Suporte para trabalho offline e comunicação entre várias guias em seu
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:31
 msgid "Survey answers"
-msgstr ""
+msgstr "Respostas ao inquérito"
 
 #: zotonic_mod_base/priv/templates/_bridge_warning.tpl:4
 msgid "Test your connection"
@@ -7203,15 +7203,15 @@ msgstr "Tipo"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:35
 msgid "Unknown"
-msgstr ""
+msgstr "Desconhecido"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:92
 msgid "Vertical bar chart"
-msgstr ""
+msgstr "Gráfico de barras verticais"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:112
 msgid "Visitors per month"
-msgstr ""
+msgstr "Visitantes por mês"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:131
 msgid "Web Worker Status"
@@ -7227,11 +7227,11 @@ msgstr "Suporte para Websocket?"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:81
 msgid "West"
-msgstr ""
+msgstr "Oeste"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:47
 msgid "Work items"
-msgstr ""
+msgstr "Tarefas"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:33
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:187
@@ -12963,11 +12963,11 @@ msgstr "Baixe uma planilha com todas as respostas."
 #: zotonic_mod_survey/priv/templates/_survey_results_download_button.tpl:6
 #: zotonic_mod_survey/priv/templates/_survey_results_download_button.tpl:11
 msgid "Download survey results"
-msgstr ""
+msgstr "Descarregar os resultados do inquérito"
 
 #: zotonic_mod_survey/priv/templates/_survey_results_download_button.tpl:7
 msgid "Download..."
-msgstr ""
+msgstr "Descarregar..."
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:46
 msgid "Drop-down menu"
@@ -12980,13 +12980,13 @@ msgstr "Endereços de e-mail"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:118
 msgid "Edit answers"
-msgstr ""
+msgstr "Editar respostas"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_result_status.tpl:5
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_result_status.tpl:12
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_result_status.tpl:18
 msgid "Edit status"
-msgstr ""
+msgstr "Editar estado"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:119
 msgid "Edit survey result"
@@ -13006,7 +13006,7 @@ msgstr "Exemplo:"
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:37
 msgid "Excel (XLSX)"
-msgstr ""
+msgstr "Excel (XLSX)"
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:24
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:20
@@ -13132,11 +13132,11 @@ msgstr "Começar imediatamente com as perguntas, sem botão \"Iniciar\"."
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:30
 msgid "Include prompts as the first row"
-msgstr ""
+msgstr "Incluir instruções na primeira linha"
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:22
 msgid "Include the status, status date, and note. The status modifier is omitted for anonymous downloads."
-msgstr ""
+msgstr "Indique o estado, a data do estado e a nota. O modificador de estado é omitido nos downloads anónimos."
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:40
 msgid "Informational"
@@ -13185,7 +13185,7 @@ msgstr "Ir para este rótulo de pergunta (deve estar em outra página abaixo)"
 
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:65
 msgid "Last status change"
-msgstr ""
+msgstr "Última alteração de estado"
 
 #: zotonic_mod_survey/src/mod_survey.erl:500
 msgid "Likert"
@@ -13313,7 +13313,7 @@ msgstr "Ainda não há resultados."
 
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:27
 msgid "No status"
-msgstr ""
+msgstr "Sem estado"
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:103
 msgid "Not all the required fields are filled in. You can go back to the previous page without saving your answers."
@@ -13346,7 +13346,7 @@ msgstr "Só aceito imagens."
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_survey_question_options.tpl:11
 msgid "Only editors can answer"
-msgstr ""
+msgstr "Apenas os editores podem responder"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:210
 msgid "Optional confirmation email for the respondent"
@@ -13487,7 +13487,7 @@ msgstr "Remova o botão \"Avançar\". Nenhuma resposta será enviada a menos que
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:11
 msgid "Remove respondent names, user ids, and other respondent identity columns."
-msgstr ""
+msgstr "Remova os nomes dos inquiridos, os identificadores de utilizador e outras colunas relacionadas com a identidade dos inquiridos."
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_survey_question_options.tpl:4
 msgid "Required, this question must be answered."
@@ -13495,7 +13495,7 @@ msgstr "Obrigatório, esta pergunta deve ser respondida."
 
 #: zotonic_mod_survey/priv/templates/_survey_result_chart.tpl:24
 msgid "Responses"
-msgstr ""
+msgstr "Respostas"
 
 #: zotonic_mod_survey/src/mod_survey.erl:456
 msgid "Result deleted."
@@ -13560,7 +13560,7 @@ msgstr "Separe vários endereços de e-mail com uma vírgula."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_result_status.tpl:10
 msgid "Set status"
-msgstr ""
+msgstr "Definir estado"
 
 #: zotonic_mod_survey/src/mod_survey.erl:505
 msgid "Short answer"
@@ -13613,7 +13613,7 @@ msgstr "Desculpe, não foi possível inserir a nova pessoa."
 
 #: zotonic_mod_survey/src/mod_survey.erl:438
 msgid "Sorry, that survey answer is unknown."
-msgstr ""
+msgstr "Lamentamos, mas não sabemos a resposta a essa pergunta do inquérito."
 
 #: zotonic_mod_survey/src/mod_survey.erl:1481
 msgid "Sorry, the maximum number of submissions has been reached. You can no longer submit this form."
@@ -13622,7 +13622,7 @@ msgstr "Lamentamos, mas o número máximo de submissões foi atingido. Já não 
 #: zotonic_mod_survey/src/mod_survey.erl:442
 #: zotonic_mod_survey/src/mod_survey.erl:445
 msgid "Sorry, the status could not be saved."
-msgstr ""
+msgstr "Lamentamos, mas não foi possível guardar o estado."
 
 #: zotonic_mod_survey/src/mod_survey.erl:1494
 msgid "Sorry, you already submitted your answers. Reload the page if you want to fill in the form again."
@@ -13635,29 +13635,29 @@ msgstr "Início"
 #: zotonic_mod_survey/src/models/m_survey.erl:1073
 #: zotonic_mod_survey/src/models/m_survey.erl:1079
 msgid "Status date"
-msgstr ""
+msgstr "Data de referência"
 
 #: zotonic_mod_survey/src/models/m_survey.erl:1082
 msgid "Status modifier"
-msgstr ""
+msgstr "Modificador de estado"
 
 #: zotonic_mod_survey/src/models/m_survey.erl:1081
 msgid "Status modifier id"
-msgstr ""
+msgstr "ID do modificador de estado"
 
 #: zotonic_mod_survey/src/models/m_survey.erl:1074
 #: zotonic_mod_survey/src/models/m_survey.erl:1080
 msgid "Status note"
-msgstr ""
+msgstr "Nota sobre o estado"
 
 #: zotonic_mod_survey/src/mod_survey.erl:434
 msgid "Status saved."
-msgstr ""
+msgstr "O estado foi guardado."
 
 #: zotonic_mod_survey/priv/templates/_survey_answer_status.tpl:20
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:40
 msgid "Status {status}"
-msgstr ""
+msgstr "Estado {status}"
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:154
 msgid "Stop and continue later"
@@ -13746,7 +13746,7 @@ msgstr "Os gráficos mostram resultados agregados de perguntas fechadas como thu
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:66
 msgid "The download has started. Please check your download window."
-msgstr ""
+msgstr "O download já começou. Por favor, verifique a janela de download."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:4
 msgid "The email address is shown if there is a question with label “email” or if there is a person with an email address that has been linked."
@@ -13774,7 +13774,7 @@ msgstr "Os resultados foram gravados."
 
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:59
 msgid "The status and note are only visible to people who can edit the survey."
-msgstr ""
+msgstr "O estado e a nota só são visíveis para as pessoas que podem editar o inquérito."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:147
 msgid "The uploaded file will be attached to the result email."
@@ -13818,7 +13818,7 @@ msgstr "Esta é a porcentagem necessária para passar em um questionário ou tes
 
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:78
 msgid "This survey answer could not be found."
-msgstr ""
+msgstr "Não foi possível encontrar esta resposta ao inquérito."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:18
 msgid "This text is shown after the form has been submitted."
@@ -13922,7 +13922,7 @@ msgstr "Você já preencheu isto."
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:82
 #: zotonic_mod_survey/src/mod_survey.erl:440
 msgid "You are not allowed to change the status."
-msgstr ""
+msgstr "Não está autorizado a alterar o estado."
 
 #: zotonic_mod_survey/src/mod_survey.erl:417
 #: zotonic_mod_survey/src/mod_survey.erl:460
@@ -13932,7 +13932,7 @@ msgstr "Você não tem permissão para alterar estes resultados."
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:70
 msgid "You are not allowed to download the survey results."
-msgstr ""
+msgstr "Não é permitido descarregar os resultados do inquérito."
 
 #: zotonic_mod_survey/priv/templates/_survey_results.tpl:41
 msgid "You are not allowed to see the results."
