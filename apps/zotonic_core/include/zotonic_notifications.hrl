@@ -1334,7 +1334,7 @@
 -record(export_resource_header, {
     dispatch :: atom(),
     id :: m_rsc:resource_id() | undefined,
-    content_type :: binary()
+    content_type :: binary() | cow_http_hd:media_type()
 }).
 
 %% @doc mod_export - fetch a row for the export, can return a list of rows, a binary, and optionally a continuation state.
@@ -1345,7 +1345,7 @@
 -record(export_resource_data, {
     dispatch :: atom(),
     id :: m_rsc:resource_id() | undefined,
-    content_type :: binary(),
+    content_type :: binary() | cow_http_hd:media_type(),
     state :: term()
 }).
 
@@ -1355,7 +1355,7 @@
 -record(export_resource_encode, {
     dispatch :: atom(),
     id :: m_rsc:resource_id() | undefined,
-    content_type :: binary(),
+    content_type :: binary() | cow_http_hd:media_type(),
     data :: term(),
     state :: term()
 }).
@@ -1366,7 +1366,7 @@
 -record(export_resource_footer, {
     dispatch :: atom(),
     id :: m_rsc:resource_id() | undefined,
-    content_type :: binary(),
+    content_type :: binary() | cow_http_hd:media_type(),
     state :: term()
 }).
 
