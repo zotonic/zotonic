@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-08-25 16:32\n"
+"PO-Revision-Date: 2026-09-03 14:54\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -327,9 +327,11 @@ msgstr "هل أنت متأكد أنك تريد استعادة كل قواعد AC
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:113
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:88
 #: zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:49
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:140
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:152
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:160
+#: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:44
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:73
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:155
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:167
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:175
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
 #: zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:115
@@ -354,7 +356,7 @@ msgstr "ألغي"
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:45
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:11
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:28
-#: zotonic_mod_survey/src/mod_survey.erl:346
+#: zotonic_mod_survey/src/mod_survey.erl:502
 msgid "Category"
 msgstr "فئة"
 
@@ -391,8 +393,8 @@ msgstr "التكوين المتغير."
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:7
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:14
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:21
-#: zotonic_mod_survey/priv/templates/_survey_results.tpl:56
-#: zotonic_mod_survey/priv/templates/_survey_results.tpl:61
+#: zotonic_mod_survey/priv/templates/_survey_results.tpl:50
+#: zotonic_mod_survey/priv/templates/_survey_results.tpl:55
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:57
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:62
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:75
@@ -498,10 +500,10 @@ msgstr "تعذر الانتقال إلى مجموعة التعاون."
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:61
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:66
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:71
-#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:106
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:121
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125
-#: zotonic_mod_survey/src/mod_survey.erl:312
+#: zotonic_mod_survey/src/mod_survey.erl:411
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:25
 msgid "Delete"
 msgstr "احذف"
@@ -777,6 +779,7 @@ msgstr "القواعد التي تم إرجاعها"
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:136
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:100
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:60
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:74
 msgid "Save"
 msgstr "حفظ"
 
@@ -1243,8 +1246,8 @@ msgstr "متاح"
 #: zotonic_mod_survey/priv/templates/_survey_end.tpl:28
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:22
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:23
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:110
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:112
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:125
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:127
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:23
 msgid "Back"
 msgstr "الرجوع"
@@ -1505,8 +1508,8 @@ msgstr "إصدار قاعدة البيانات"
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:136
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:22
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:16
-#: zotonic_mod_survey/src/models/m_survey.erl:831
-#: zotonic_mod_survey/src/models/m_survey.erl:834
+#: zotonic_mod_survey/src/models/m_survey.erl:935
+#: zotonic_mod_survey/src/models/m_survey.erl:938
 msgid "Date"
 msgstr "التاريخ"
 
@@ -1611,6 +1614,7 @@ msgstr "هل تريد إزالة كتلة هذه الصفحة؟"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:32
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:33
+#: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:45
 msgid "Download"
 msgstr "تحميل"
 
@@ -1662,7 +1666,6 @@ msgstr "بريد إلكتروني"
 #: zotonic_mod_menu/priv/templates/_admin_menu_menu_view.collection.tpl:40
 #: zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:23
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:131
-#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:103
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:113
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:115
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:35
@@ -2095,7 +2098,7 @@ msgid "Make a new page or media"
 msgstr "أنشئ صفحة جديدة أو عنصر وسائط جديد"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:6
-#: zotonic_mod_survey/src/mod_survey.erl:347
+#: zotonic_mod_survey/src/mod_survey.erl:503
 msgid "Matching"
 msgstr "مطابقة"
 
@@ -2250,7 +2253,7 @@ msgstr "تحرك كتلة لأعلى"
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:13
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:14
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:38
-#: zotonic_mod_survey/src/models/m_survey.erl:836
+#: zotonic_mod_survey/src/models/m_survey.erl:940
 msgid "Name"
 msgstr "الاسم"
 
@@ -2900,6 +2903,11 @@ msgstr "الوضع"
 #: zotonic_mod_base/priv/templates/_session_info.tpl:12
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:221
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:111
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:17
+#: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:19
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:21
+#: zotonic_mod_survey/src/models/m_survey.erl:1072
+#: zotonic_mod_survey/src/models/m_survey.erl:1078
 #: zotonic_site_status/priv/templates/_navbar.tpl:15
 #: zotonic_site_status/priv/templates/_sites.tpl:4
 msgid "Status"
@@ -3439,7 +3447,8 @@ msgstr "دليل العمل"
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:36
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:24
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:84
-#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:35
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:36
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:65
 msgid "Y-m-d H:i"
 msgstr "Y-m-d H:i"
 
@@ -3519,6 +3528,7 @@ msgstr "إضافة عنصر وسائط"
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:63
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:6
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:16
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:67
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:15
 msgid "by"
 msgstr "بواسطة"
@@ -4084,6 +4094,7 @@ msgstr "صالح حتى"
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:20
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:21
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:21
+#: zotonic_mod_base/src/support/z_chart_svg.erl:1349
 msgid "Value"
 msgstr "القيمة"
 
@@ -4274,7 +4285,7 @@ msgstr "البريد الإلكتروني"
 #: zotonic_mod_authentication/priv/templates/email_password_reset.tpl:23
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:22
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:74
-#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:18
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:19
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:29
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:30
 msgid "Email"
@@ -4435,9 +4446,9 @@ msgstr "قم بتعيين اسم المستخدم / كلمة المرور"
 #: zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:27
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:97
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:152
-#: zotonic_mod_survey/src/mod_survey.erl:1239
-#: zotonic_mod_survey/src/mod_survey.erl:1261
-#: zotonic_mod_survey/src/mod_survey.erl:1269
+#: zotonic_mod_survey/src/mod_survey.erl:1479
+#: zotonic_mod_survey/src/mod_survey.erl:1501
+#: zotonic_mod_survey/src/mod_survey.erl:1509
 msgid "Sorry"
 msgstr "آسف"
 
@@ -5600,10 +5611,11 @@ msgid "Browser info"
 msgstr "معلومات المتصفح"
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:84
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:84
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:12
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:9
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:7
-#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:42
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:48
 msgid "Change"
 msgstr "يتغيرون"
 
@@ -5654,7 +5666,7 @@ msgid "Confirmation failure"
 msgstr "فشل التأكيد"
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:91
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:104
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:119
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:48
 msgid "Continue"
 msgstr "استمر"
@@ -5894,8 +5906,8 @@ msgstr "حسابات متعددة"
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:199
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:26
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:55
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:165
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:170
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:180
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:185
 msgid "Next"
 msgstr "التالى"
 
@@ -6700,12 +6712,23 @@ msgid "A latency of less than 50 milliseconds is very good, more than 250 millis
 msgstr "وقت الاستجابة أقل من 50 مللي ثانية جيد جدًا ، وأكثر من 250 مللي ثانية يكون بطيئًا."
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:263
+#: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:8
 msgid "Anonymous"
 msgstr "مجهول"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:114
+#: zotonic_mod_l10n/src/support/l10n_date.erl:42
+msgid "April"
+msgstr "نيسان / أبريل"
 
 #: zotonic_mod_base/priv/templates/error.tpl:80
 msgid "Arguments"
 msgstr "الحجج"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:115
+#: zotonic_mod_l10n/src/support/l10n_date.erl:46
+msgid "August"
+msgstr "آب / أغسطس"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:140
 msgid "Auth Web Worker?"
@@ -6715,6 +6738,11 @@ msgstr "عامل الويب المصدق؟"
 msgid "Authentication"
 msgstr "المصادقة"
 
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:64
+msgid "Average"
+msgstr "المتوسط"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:152
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:69
 msgid "Browser"
 msgstr "المستعرض"
@@ -6723,13 +6751,43 @@ msgstr "المستعرض"
 msgid "Browser Connectivity"
 msgstr "اتصال المتصفح"
 
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:142
+msgid "Browser share"
+msgstr "حصة المتصفح"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:149
+msgid "Browser share data"
+msgstr "بيانات حصة المتصفحات"
+
 #: zotonic_mod_base/src/filters/filter_content_type_label.erl:54
+#: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:38
 msgid "CSV"
 msgstr "CSV"
+
+#: zotonic_mod_base/src/support/z_chart_svg.erl:437
+#: zotonic_mod_base/src/support/z_chart_svg.erl:439
+msgid "Chart"
+msgstr "الرسم البياني"
+
+#: zotonic_mod_base/src/support/z_chart_svg.erl:1339
+msgid "Chart legend"
+msgstr "شرح الرموز في الرسم البياني"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:71
 msgid "Client IP address"
 msgstr "عنوان IP للعميل"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:218
+msgid "Compatibility tags"
+msgstr "علامات التوافق"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:130
+msgid "Complete"
+msgstr "كامل"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:130
+msgid "Completion"
+msgstr "الإنجاز"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:229
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:240
@@ -6745,9 +6803,47 @@ msgstr "توصيل..."
 msgid "Connection Test"
 msgstr "اختبار الاتصال"
 
+#: zotonic_mod_base/src/support/z_chart_svg.erl:581
+msgid "Data points"
+msgstr "نقاط البيانات"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:115
+#: zotonic_mod_l10n/src/support/l10n_date.erl:50
+msgid "December"
+msgstr "كانون أول / ديسمبر"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:225
+msgid "Donut alias"
+msgstr "الاسم المستعار «دونات»"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:44
+msgid "Donut chart with map data"
+msgstr "مخطط دائري مع بيانات خريطة"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:81
+msgid "East"
+msgstr "الشرق"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:168
+msgid "Empty data"
+msgstr "بيانات فارغة"
+
 #: zotonic_mod_base/src/filters/filter_content_type_label.erl:50
 msgid "Excel Workbook"
 msgstr "مصنف Excel"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:62
+msgid "Excellent"
+msgstr "ممتاز"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:139
+msgid "Existing external data table"
+msgstr "جدول البيانات الخارجية الحالي"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:114
+#: zotonic_mod_l10n/src/support/l10n_date.erl:40
+msgid "February"
+msgstr "شباط / فبراير"
 
 #: zotonic_mod_base/priv/templates/error.tpl:81
 msgid "File"
@@ -6769,6 +6865,14 @@ msgstr "سرعة وجودة الاتصال العامة ، والتي نقوم �
 msgid "Gone"
 msgstr "ذهب"
 
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:63
+msgid "Good"
+msgstr "جيد"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:77
+msgid "Horizontal bar chart"
+msgstr "مخطط شريطي أفقي"
+
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:47
 msgid "If the authentication with the server works."
 msgstr "إذا كانت المصادقة مع الخادم تعمل."
@@ -6778,13 +6882,60 @@ msgstr "إذا كانت المصادقة مع الخادم تعمل."
 msgid "Index of"
 msgstr "مؤشر"
 
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:3
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:19
+msgid "Inline SVG chart test"
+msgstr "اختبار مخطط SVG مضمن"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:193
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:210
+msgid "Item"
+msgstr "العنصر"
+
 #: zotonic_mod_base/src/filters/filter_content_type_label.erl:48
+#: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:39
 msgid "JSON"
 msgstr "جسون"
 
 #: zotonic_mod_base/src/filters/filter_content_type_label.erl:46
 msgid "JSON-LD"
 msgstr "JSON-LD"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:114
+#: zotonic_mod_l10n/src/support/l10n_date.erl:39
+msgid "January"
+msgstr "كانون الثاني / يناير"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:115
+#: zotonic_mod_l10n/src/support/l10n_date.erl:45
+msgid "July"
+msgstr "تموز / يوليو"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:114
+#: zotonic_mod_l10n/src/support/l10n_date.erl:44
+msgid "June"
+msgstr "حزيران / يونيو"
+
+#: zotonic_mod_base/src/support/z_chart_svg.erl:1345
+#: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:41
+msgid "Label"
+msgstr "ملصق"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:187
+msgid "Large data set with palette shades"
+msgstr "مجموعة بيانات كبيرة تحتوي على درجات ألوان"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:200
+msgid "Large pie chart with palette shades"
+msgstr "مخطط دائري كبير بألوان متدرجة"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:228
+msgid "Legacy pie alias"
+msgstr "الاسم المستعار القديم للفطيرة"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:109
+msgid "Line chart"
+msgstr "الرسم البياني الخطي"
 
 #: zotonic_mod_base/priv/templates/error.403.tpl:30
 msgid "Login"
@@ -6798,6 +6949,22 @@ msgstr "جسر MQTT"
 msgid "MQTT Bridge Connection Status"
 msgstr "حالة اتصال MQTT Bridge"
 
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:114
+#: zotonic_mod_l10n/src/support/l10n_date.erl:41
+msgid "March"
+msgstr "آذار/ مارس"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:114
+#: zotonic_mod_l10n/src/support/l10n_date.erl:43
+#: zotonic_mod_l10n/src/support/l10n_date.erl:58
+msgid "May"
+msgstr "أيار / مايو"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:80
+msgid "Net change"
+msgstr "التغير الصافي"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:34
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:145
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:187
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:267
@@ -6812,10 +6979,27 @@ msgstr "حالة اتصال MQTT Bridge"
 msgid "No"
 msgstr "لا"
 
+#: zotonic_mod_base/src/support/z_chart_svg.erl:1290
+msgid "No data"
+msgstr "لا توجد بيانات"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:170
+msgid "No measurements yet"
+msgstr "لا توجد قياسات حتى الآن"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:81
+msgid "North"
+msgstr "الشمال"
+
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:231
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:243
 msgid "Not connected"
 msgstr "غير متصل"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:115
+#: zotonic_mod_l10n/src/support/l10n_date.erl:49
+msgid "November"
+msgstr "تشرين ثاني / نوفمبر"
 
 #: zotonic_mod_base/priv/templates/_action_dialog_alert.tpl:5
 #: zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:8
@@ -6826,13 +7010,31 @@ msgstr "غير متصل"
 msgid "OK"
 msgstr "موافق"
 
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:115
+#: zotonic_mod_l10n/src/support/l10n_date.erl:48
+msgid "October"
+msgstr "تشرين أول / أكتوبر"
+
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:35
 msgid "On this page you can test the connection of your browser to our server and to the internet in general."
 msgstr "في هذه الصفحة ، يمكنك اختبار اتصال متصفحك بخادمنا والإنترنت بشكل عام."
 
+#: zotonic_mod_base/src/support/z_chart_svg.erl:344
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:134
+msgid "Other"
+msgstr "آخر"
+
 #: zotonic_mod_base/priv/templates/_session_info.tpl:12
 msgid "Page Id"
 msgstr "معرف الصفحة"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:222
+msgid "Pie alias"
+msgstr "الاسم المستعار لـ «Pie»"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:28
+msgid "Pie chart"
+msgstr "مخطط دائري"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:115
 msgid "Pong Count"
@@ -6846,17 +7048,56 @@ msgstr "أخطاء بونغ"
 msgid "Pong Latency"
 msgstr "بونغ الكمون"
 
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:65
+msgid "Poor"
+msgstr "فقير"
+
 #: zotonic_mod_base/priv/templates/_powered_by_zotonic.tpl:1
 msgid "Powered by Zotonic"
 msgstr "مدعوم من Zotonic"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:95
+msgid "Quarterly balance"
+msgstr "الرصيد الفصلي"
 
 #: zotonic_mod_base/priv/templates/email_base.tpl:336
 msgid "Read this page on the web"
 msgstr "اقرأ هذه الصفحة على الويب"
 
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:83
+#: zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:38
+#: zotonic_mod_translation/priv/templates/admin_translation.tpl:43
+msgid "Region"
+msgstr "منطقة"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:60
+msgid "Responses using one color"
+msgstr "الردود التي تستخدم لونًا واحدًا"
+
 #: zotonic_mod_base/priv/templates/error.tpl:14
 msgid "Return to the homepage"
 msgstr "العودة إلى الصفحة الرئيسية"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:194
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:211
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:24
+#: zotonic_mod_survey/src/models/m_survey.erl:948
+msgid "Score"
+msgstr "أحرز هدفا"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:190
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:203
+msgid "Scores for 32 items"
+msgstr "النتائج الخاصة بـ 32 بندًا"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:115
+#: zotonic_mod_l10n/src/support/l10n_date.erl:47
+msgid "September"
+msgstr "أيلول / سبتمبر"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:21
+msgid "Server-rendered charts without JavaScript, CSS, or external services."
+msgstr "رسوم بيانية يتم عرضها على الخادم دون الحاجة إلى JavaScript أو CSS أو خدمات خارجية."
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:144
 msgid "Service Worker?"
@@ -6870,6 +7111,18 @@ msgstr "معرف جلسة العمل"
 msgid "Several aspects of the connection are tested"
 msgstr "يتم اختبار العديد من جوانب الاتصال"
 
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:153
+msgid "Share"
+msgstr "مشاركة"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:128
+msgid "Single value"
+msgstr "قيمة واحدة"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:57
+msgid "Single-color pie chart"
+msgstr "مخطط دائري أحادي اللون"
+
 #: zotonic_mod_base/priv/templates/error.tpl:11
 msgid "Sorry, this page has been deleted."
 msgstr "عذرا ، تم حذف هذه الصفحة."
@@ -6878,6 +7131,10 @@ msgstr "عذرا ، تم حذف هذه الصفحة."
 msgid "Sorry, you don’t have access to this page."
 msgstr "عذرا ، ليس لديك حق الوصول إلى هذه الصفحة."
 
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:81
+msgid "South"
+msgstr "الجنوب"
+
 #: zotonic_mod_base/priv/templates/error.tpl:23
 msgid "Stack trace"
 msgstr "تتبع المكدس"
@@ -6885,6 +7142,10 @@ msgstr "تتبع المكدس"
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:50
 msgid "Support for offline work and communication between several tabs in your browser."
 msgstr "دعم العمل دون اتصال بالإنترنت والتواصل بين عدة علامات تبويب في متصفحك."
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:31
+msgid "Survey answers"
+msgstr "إجابات الاستبيان"
 
 #: zotonic_mod_base/priv/templates/_bridge_warning.tpl:4
 msgid "Test your connection"
@@ -6936,8 +7197,21 @@ msgstr "هذا يختبر الاتصال بالخادم."
 
 #: zotonic_mod_base/priv/templates/directory_index.tpl:15
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:38
+#: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:35
 msgid "Type"
 msgstr "نوع"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:35
+msgid "Unknown"
+msgstr "مجهول"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:92
+msgid "Vertical bar chart"
+msgstr "مخطط شريطي عمودي"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:112
+msgid "Visitors per month"
+msgstr "عدد الزوار شهريًا"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:131
 msgid "Web Worker Status"
@@ -6951,6 +7225,15 @@ msgstr "مقبس ويب"
 msgid "Websocket Support?"
 msgstr "دعم Websocket؟"
 
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:81
+msgid "West"
+msgstr "الغرب"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:47
+msgid "Work items"
+msgstr "بنود العمل"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:33
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:187
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:251
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:274
@@ -7876,8 +8159,8 @@ msgid "Started tracing template inclusions for your session."
 msgstr "تم بدء تتبع تضمينات القالب لجلستك."
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:33
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:147
-#: zotonic_mod_survey/src/mod_survey.erl:355
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:162
+#: zotonic_mod_survey/src/mod_survey.erl:511
 msgid "Stop"
 msgstr "توقف"
 
@@ -8459,7 +8742,6 @@ msgstr "لا تنس حفظ التغييرات التي أجريتها قبل ا�
 #: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:24
 #: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:37
 #: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:46
-#: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:35
 msgid "Download CSV"
 msgstr "تنزيل ملف CSV"
 
@@ -8472,7 +8754,6 @@ msgstr "تحميل الحدث"
 #: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:25
 #: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:38
 #: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:47
-#: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:40
 msgid "Download Excel"
 msgstr "قم بتنزيل Excel"
 
@@ -9173,17 +9454,9 @@ msgstr "يتم تخزين جميع التواريخ في التوقيت العا
 msgid "Apr"
 msgstr "أبريل"
 
-#: zotonic_mod_l10n/src/support/l10n_date.erl:42
-msgid "April"
-msgstr "نيسان / أبريل"
-
 #: zotonic_mod_l10n/src/support/l10n_date.erl:61
 msgid "Aug"
 msgstr "أغسطس"
-
-#: zotonic_mod_l10n/src/support/l10n_date.erl:46
-msgid "August"
-msgstr "آب / أغسطس"
 
 #: zotonic_mod_l10n/src/support/l10n_date.erl:24
 msgid "BCE"
@@ -9201,17 +9474,9 @@ msgstr "سيؤدي تغيير المنطقة الزمنية إلى تغيير ف
 msgid "Dec"
 msgstr "ديسمبر"
 
-#: zotonic_mod_l10n/src/support/l10n_date.erl:50
-msgid "December"
-msgstr "كانون أول / ديسمبر"
-
 #: zotonic_mod_l10n/src/support/l10n_date.erl:55
 msgid "Feb"
 msgstr "فبراير"
-
-#: zotonic_mod_l10n/src/support/l10n_date.erl:40
-msgid "February"
-msgstr "شباط / فبراير"
 
 #: zotonic_mod_l10n/priv/templates/_admin_l10n_config.tpl:24
 msgid "Fix timezone, show all dates in the above timezone."
@@ -9229,25 +9494,13 @@ msgstr "هنا يمكنك تعيين تكوينات الترجمة الافتر�
 msgid "Jan"
 msgstr "يناير"
 
-#: zotonic_mod_l10n/src/support/l10n_date.erl:39
-msgid "January"
-msgstr "كانون الثاني / يناير"
-
 #: zotonic_mod_l10n/src/support/l10n_date.erl:60
 msgid "Jul"
 msgstr "يوليو"
 
-#: zotonic_mod_l10n/src/support/l10n_date.erl:45
-msgid "July"
-msgstr "تموز / يوليو"
-
 #: zotonic_mod_l10n/src/support/l10n_date.erl:59
 msgid "Jun"
 msgstr "يونيو"
-
-#: zotonic_mod_l10n/src/support/l10n_date.erl:44
-msgid "June"
-msgstr "حزيران / يونيو"
 
 #: zotonic_mod_l10n/priv/templates/admin_l10n.tpl:3
 msgid "L10N Configuration"
@@ -9262,15 +9515,6 @@ msgstr "الموقع"
 msgid "Mar"
 msgstr "مارس"
 
-#: zotonic_mod_l10n/src/support/l10n_date.erl:41
-msgid "March"
-msgstr "آذار/ مارس"
-
-#: zotonic_mod_l10n/src/support/l10n_date.erl:43
-#: zotonic_mod_l10n/src/support/l10n_date.erl:58
-msgid "May"
-msgstr "أيار / مايو"
-
 #: zotonic_mod_l10n/src/support/l10n_date.erl:29
 msgid "Monday"
 msgstr "الإثنين"
@@ -9279,17 +9523,9 @@ msgstr "الإثنين"
 msgid "Nov"
 msgstr "نوفمبر"
 
-#: zotonic_mod_l10n/src/support/l10n_date.erl:49
-msgid "November"
-msgstr "تشرين ثاني / نوفمبر"
-
 #: zotonic_mod_l10n/src/support/l10n_date.erl:63
 msgid "Oct"
 msgstr "أكتوبر"
-
-#: zotonic_mod_l10n/src/support/l10n_date.erl:48
-msgid "October"
-msgstr "تشرين أول / أكتوبر"
 
 #: zotonic_mod_l10n/src/support/l10n_date.erl:34
 msgid "Saturday"
@@ -9298,10 +9534,6 @@ msgstr "السبت"
 #: zotonic_mod_l10n/src/support/l10n_date.erl:62
 msgid "Sep"
 msgstr "سبتمبر"
-
-#: zotonic_mod_l10n/src/support/l10n_date.erl:47
-msgid "September"
-msgstr "أيلول / سبتمبر"
 
 #: zotonic_mod_l10n/src/support/l10n_date.erl:35
 msgid "Sunday"
@@ -9488,7 +9720,7 @@ msgid "Explanation of email status"
 msgstr "شرح حالة البريد الإلكتروني"
 
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:157
-#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:97
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:112
 #: zotonic_mod_survey/priv/templates/_survey_results_user.tpl:12
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:51
 #: zotonic_site_status/priv/templates/_sites.tpl:17
@@ -9552,10 +9784,6 @@ msgstr "الرسائل المسجلة من قبل النظام والوحدات 
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:61
 msgid "No log messages."
 msgstr "لا توجد رسائل سجل."
-
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:134
-msgid "Other"
-msgstr "آخر"
 
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:160
 msgid "Received"
@@ -9659,7 +9887,7 @@ msgstr "المستعمل"
 
 #: zotonic_mod_logging/priv/templates/admin_log.tpl:43
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:43
-#: zotonic_mod_survey/src/models/m_survey.erl:835
+#: zotonic_mod_survey/src/models/m_survey.erl:939
 msgid "User Id"
 msgstr "معرف المستخدم"
 
@@ -11215,10 +11443,6 @@ msgstr "استيراد المحتوى من موقع الويب الآخر إلى
 msgid "It is good practice to have users with limited access permissions for access tokens."
 msgstr "من الجيد أن يكون لدى المستخدمين أذونات وصول محدودة لرموز الوصول."
 
-#: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:41
-msgid "Label"
-msgstr "ملصق"
-
 #: zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:29
 msgid "Log in to {remote} with your {local} account."
 msgstr "قم بتسجيل الدخول إلى {remote} باستخدام حساب {local} الخاص بك."
@@ -11270,6 +11494,7 @@ msgid "No user selected."
 msgstr "لم يتم تحديد أي مستخدم."
 
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:43
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:51
 msgid "Note"
 msgstr "ملحوظة"
 
@@ -12491,8 +12716,8 @@ msgstr "أضف أسئلة عن طريق إضافة كتل مع القائمة."
 msgid "Add to existing mailinglist"
 msgstr "أضف إلى القائمة البريدية الموجودة"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:56
-#: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:58
+#: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:48
+#: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:50
 msgid "Add to mailinglist"
 msgstr "أضف إلى القائمة البريدية"
 
@@ -12524,7 +12749,7 @@ msgstr "جميع الإجابات للمجيبين المجهولين والذي
 msgid "Allow non-linear forms; answers are saved with “Back” button and a “Back to start” is added at the top of each page"
 msgstr "إتاحة النماذج غير الخطية؛ يتم حفظ الإجابات باستخدام زر \"رجوع\" وإضافة \"رجوع للبدء\" في أعلى كل صفحة"
 
-#: zotonic_mod_survey/src/mod_survey.erl:1252
+#: zotonic_mod_survey/src/mod_survey.erl:1492
 msgid "Already submitted"
 msgstr "تم تقديمه بالفعل"
 
@@ -12536,6 +12761,7 @@ msgstr "صفحة أو مقطع فيديو أو صورة أخرى."
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:79
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:80
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:81
+#: zotonic_mod_survey/priv/templates/_survey_result_chart.tpl:23
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:101
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:86
 msgid "Answer"
@@ -12572,15 +12798,15 @@ msgstr "هل أنت متأكد أنك تريد حذف هذه الصفحة؟<br/>
 msgid "Are you sure you want to delete this question?"
 msgstr "هل أنت متأكد أنك تريد حذف هذا السؤال؟"
 
-#: zotonic_mod_survey/src/mod_survey.erl:311
+#: zotonic_mod_survey/src/mod_survey.erl:410
 msgid "Are you sure you want to delete this result?"
 msgstr "هل أنت متأكد أنك تريد حذف هذه النتيجة؟"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:150
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:165
 msgid "Are you sure you want to stop without saving?"
 msgstr "هل أنت متأكد أنك تريد التوقف دون حفظ؟"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:91
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:106
 msgid "Back without saving"
 msgstr "العودة بدون حفظ"
 
@@ -12589,7 +12815,7 @@ msgid "Because you can edit, you can proceed for testing."
 msgstr "نظرًا لأنه يمكنك التعديل ، يمكنك المتابعة للاختبار."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:112
-#: zotonic_mod_survey/src/mod_survey.erl:352
+#: zotonic_mod_survey/src/mod_survey.erl:508
 msgid "Button"
 msgstr "زر"
 
@@ -12610,7 +12836,7 @@ msgstr "زر كتابة"
 msgid "Can only be used on the last questions page."
 msgstr "يمكن استخدامه فقط في صفحة الأسئلة الأخيرة."
 
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:68
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:56
 msgid "Category to choose from"
 msgstr "فئة للاختيار من بينها"
 
@@ -12651,7 +12877,7 @@ msgstr "إجابات الأسئلة المغلقة للمجيبين المجهو
 msgid "Closed-question answers for anonymous respondents; all answers for logged-in respondents"
 msgstr "إجابات الأسئلة المغلقة للمجيبين مجهولي الهوية؛ جميع الإجابات للمجيبين الذين قاموا بتسجيل الدخول"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:130
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:145
 msgid "Continue later"
 msgstr "تابع لاحقًا"
 
@@ -12670,7 +12896,7 @@ msgstr "تعذرت إضافة المستلمين."
 msgid "Could not create the mailinglist."
 msgstr "تعذر إنشاء القائمة البريدية."
 
-#: zotonic_mod_survey/src/mod_survey.erl:351
+#: zotonic_mod_survey/src/mod_survey.erl:507
 msgid "Country select"
 msgstr "اختر البلد"
 
@@ -12698,7 +12924,7 @@ msgstr "إنشاء قائمة بريدية جديدة"
 msgid "Create new person"
 msgstr "قم بإنشاء شخص جديد"
 
-#: zotonic_mod_survey/src/models/m_survey.erl:1180
+#: zotonic_mod_survey/src/models/m_survey.erl:1416
 msgid "Created"
 msgstr "خلقت"
 
@@ -12726,29 +12952,43 @@ msgstr "حذف السؤال"
 msgid "Disagree"
 msgstr "تعارض"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:135
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:150
 msgid "Do you want to stop for now and continue later?"
 msgstr "هل تريد التوقف الآن والمتابعة لاحقاً؟"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:45
+#: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:37
 msgid "Download a spreadsheet with all answers."
 msgstr "تنزيل جدول بيانات يحتوي على جميع الإجابات."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:37
-#: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:42
-msgid "Download will start in the background. Please check your download window."
-msgstr "سيبدأ التنزيل في الخلفية. يرجى التحقق من نافذة التنزيل الخاصة بك."
+#: zotonic_mod_survey/priv/templates/_survey_results_download_button.tpl:6
+#: zotonic_mod_survey/priv/templates/_survey_results_download_button.tpl:11
+msgid "Download survey results"
+msgstr "تنزيل نتائج الاستطلاع"
+
+#: zotonic_mod_survey/priv/templates/_survey_results_download_button.tpl:7
+msgid "Download..."
+msgstr "تنزيل..."
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:46
 msgid "Drop-down menu"
 msgstr "القائمة المنسدلة"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:50
+#: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:42
 #: zotonic_mod_survey/src/support/survey_admin.erl:116
 msgid "E-mail addresses"
 msgstr "عناوين البريد الإلكتروني"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:104
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:118
+msgid "Edit answers"
+msgstr "تحرير الإجابات"
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_result_status.tpl:5
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_result_status.tpl:12
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_result_status.tpl:18
+msgid "Edit status"
+msgstr "تعديل الحالة"
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:119
 msgid "Edit survey result"
 msgstr "تحرير نتيجة الاستطلاع"
 
@@ -12763,6 +13003,10 @@ msgstr "كل سؤال يحتاج إلى تسمية سؤال"
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:27
 msgid "Example:"
 msgstr "مثال:"
+
+#: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:37
+msgid "Excel (XLSX)"
+msgstr "إكسل (XLSX)"
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:24
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:20
@@ -12803,7 +13047,7 @@ msgstr "ردود الفعل إذا كانت صحيحة"
 msgid "Feedback if wrong"
 msgstr "ردود الفعل إذا كانت خاطئة"
 
-#: zotonic_mod_survey/src/mod_survey.erl:356
+#: zotonic_mod_survey/src/mod_survey.erl:512
 msgid "File upload"
 msgstr "تحميل الملف"
 
@@ -12853,17 +13097,7 @@ msgid "Hidden value, saved with the form but not shown to the person filling in 
 msgstr "القيمة المخفية ، يتم حفظها مع النموذج ولكن لا تظهر للشخص الذي يملأ النموذج."
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:72
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:60
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:36
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:65
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:39
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:64
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:53
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:47
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:89
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:174
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:62
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:64
+#: zotonic_mod_survey/priv/templates/blocks/_admin_survey_question_options.tpl:19
 msgid "Hide from results"
 msgstr "إخفاء من النتائج"
 
@@ -12896,6 +13130,14 @@ msgstr "إذا تم إرسال الحد الأقصى لعدد النماذج، �
 msgid "Immediately start with the questions, no “Start” button"
 msgstr "ابدأ فورًا بالأسئلة ، بدون زر \"ابدأ\""
 
+#: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:30
+msgid "Include prompts as the first row"
+msgstr "أدرج المطالبات في الصف الأول"
+
+#: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:22
+msgid "Include the status, status date, and note. The status modifier is omitted for anonymous downloads."
+msgstr "يرجى تضمين الحالة وتاريخ الحالة والملاحظة. يتم حذف مُعدِّل الحالة في حالة التنزيلات المجهولة."
+
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:40
 msgid "Informational"
 msgstr "معلوماتية"
@@ -12912,7 +13154,7 @@ msgstr "قيمة المدخلات"
 msgid "Input value placeholder text"
 msgstr "أدخل نص قيمة العنصر النائب"
 
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:186
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:174
 msgid "Instant feedback (Learning Mode)"
 msgstr "ردود الفعل الفورية (وضع التعلم)"
 
@@ -12941,18 +13183,22 @@ msgstr "القفز إلى سؤال في الصفحة التالية."
 msgid "Jump to this question label (must be on an other page below)"
 msgstr "انتقل إلى تسمية السؤال هذه (يجب أن تكون في صفحة أخرى أدناه)"
 
-#: zotonic_mod_survey/src/mod_survey.erl:344
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:65
+msgid "Last status change"
+msgstr "آخر تغيير في الحالة"
+
+#: zotonic_mod_survey/src/mod_survey.erl:500
 msgid "Likert"
 msgstr "ليكرت"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:49
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:58
-#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:65
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:73
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:80
 #: zotonic_mod_survey/src/support/survey_admin.erl:56
 msgid "Link with person"
 msgstr "ربط مع شخص"
 
-#: zotonic_mod_survey/src/mod_survey.erl:350
+#: zotonic_mod_survey/src/mod_survey.erl:506
 msgid "Long answer"
 msgstr "اجابة طويلة"
 
@@ -13018,7 +13264,7 @@ msgstr "إجابات متعددة ممكنة"
 msgid "Multiple answers possible: points are given for the correct answer <i>and</i> points are given for <i>not</i> choosing the wrong answer. Default: 1 point for a correct answer, 1 point for not choosing a wrong answer."
 msgstr "إجابات متعددة ممكنة: يتم إعطاء نقاط للإجابة الصحيحة <i>وتعطى نقطة</i> مقابل <i>وليس</i> لاختيار الإجابة الخاطئة. الافتراضي: نقطة واحدة للإجابة الصحيحة ، ونقطة واحدة لعدم اختيار إجابة خاطئة."
 
-#: zotonic_mod_survey/src/mod_survey.erl:357
+#: zotonic_mod_survey/src/mod_survey.erl:513
 msgid "Multiple choice"
 msgstr "متعدد الخيارات"
 
@@ -13035,7 +13281,7 @@ msgstr "يتم دمج كتل فواصل الصفحات المتعددة في و�
 msgid "Multiple times – each time with new results"
 msgstr "عدة مرات - في كل مرة بنتائج جديدة"
 
-#: zotonic_mod_survey/src/mod_survey.erl:348
+#: zotonic_mod_survey/src/mod_survey.erl:504
 msgid "Narrative"
 msgstr "سرد"
 
@@ -13061,11 +13307,15 @@ msgstr "لا يوجد زر \"رجوع\" إلى هذه الصفحة. إذا تم 
 msgid "No answers; confirmation text only"
 msgstr "لا توجد إجابات؛ نص التأكيد فقط"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:118
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:133
 msgid "No results yet."
 msgstr "لا توجد نتائج بعد."
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:88
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:27
+msgid "No status"
+msgstr "لا يوجد حالة"
+
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:103
 msgid "Not all the required fields are filled in. You can go back to the previous page without saving your answers."
 msgstr "لم يتم ملء جميع الحقول المطلوبة. يمكنك العودة إلى الصفحة السابقة دون حفظ إجاباتك."
 
@@ -13078,7 +13328,7 @@ msgstr "لاحظ أنه إذا قمت بتحديد معالج خاص أدناه�
 msgid "Number of recipients added to mailinglist:"
 msgstr "عدد المستلمين المضافين إلى القائمة البريدية:"
 
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:46
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:39
 msgid "Numeric input, show totals for this field in the results."
 msgstr "إدخال رقمي ، إظهار الإجماليات لهذا الحقل في النتائج."
 
@@ -13094,6 +13344,10 @@ msgstr "مرة واحدة - الإرسال نهائي (لا يوجد تحرير 
 msgid "Only accept images."
 msgstr "قبول الصور فقط."
 
+#: zotonic_mod_survey/priv/templates/blocks/_admin_survey_question_options.tpl:11
+msgid "Only editors can answer"
+msgstr "يمكن للمحررين فقط الإجابة"
+
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:210
 msgid "Optional confirmation email for the respondent"
 msgstr "رسالة تأكيد البريد الإلكتروني الاختيارية للمستجيب"
@@ -13102,7 +13356,7 @@ msgstr "رسالة تأكيد البريد الإلكتروني الاختيار
 msgid "Options from a page category"
 msgstr "خيارات من فئة الصفحة"
 
-#: zotonic_mod_survey/src/mod_survey.erl:353
+#: zotonic_mod_survey/src/mod_survey.erl:509
 msgid "Page break"
 msgstr "فاصل صفحة"
 
@@ -13110,18 +13364,18 @@ msgstr "فاصل صفحة"
 msgid "Page jump condition"
 msgstr "شرط الانتقال إلى الصفحة"
 
-#: zotonic_mod_survey/src/mod_survey.erl:354
+#: zotonic_mod_survey/src/mod_survey.erl:510
 msgid "Page options"
 msgstr "خيارات الصفحة"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:25
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:26
 msgid "Pass?"
 msgstr "يمر؟"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:95
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:110
 #: zotonic_mod_survey/priv/templates/_survey_results_user.tpl:10
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:49
-#: zotonic_mod_survey/src/models/m_survey.erl:842
+#: zotonic_mod_survey/src/models/m_survey.erl:947
 msgid "Passed"
 msgstr "تم الاجتياز بنجاح"
 
@@ -13129,15 +13383,15 @@ msgstr "تم الاجتياز بنجاح"
 msgid "Passing score"
 msgstr "درجة النجاح"
 
-#: zotonic_mod_survey/src/models/m_survey.erl:844
+#: zotonic_mod_survey/src/models/m_survey.erl:949
 msgid "Percent"
 msgstr "نسبه مئويه"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:17
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:18
 msgid "Person"
 msgstr "شخص"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:93
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:108
 msgid "Please fill in all the required fields."
 msgstr "يرجى ملء جميع الحقول المطلوبة."
 
@@ -13153,7 +13407,7 @@ msgstr "يرجى تحميل الملف الخاص بك."
 msgid "Please upload your image."
 msgstr "يرجى تحميل صورتك."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:24
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:25
 #: zotonic_mod_survey/priv/templates/_survey_results_user.tpl:18
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:57
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:80
@@ -13205,11 +13459,11 @@ msgstr "سؤال مع إجابة قصيرة"
 #: zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:7
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:5
 #: zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:8
-#: zotonic_mod_survey/src/mod_survey.erl:341
+#: zotonic_mod_survey/src/mod_survey.erl:497
 msgid "Questions"
 msgstr "أسئلة"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:64
+#: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:56
 msgid "Questions with the question label “email” can be exported."
 msgstr "يمكن تصدير الأسئلة مع تسمية السؤال \"البريد الإلكتروني\"."
 
@@ -13231,22 +13485,19 @@ msgstr "أحمر"
 msgid "Remove \"Next\" button. No answers will be submitted unless you add a button jump to a next page."
 msgstr "إزالة زر \"التالي\". لن يتم إرسال أي إجابات إلا إذا قمت بإضافة زر للانتقال إلى الصفحة التالية."
 
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:53
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:29
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:58
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:32
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:58
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:39
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:40
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:82
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:167
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:55
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:41
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:57
+#: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:11
+msgid "Remove respondent names, user ids, and other respondent identity columns."
+msgstr "احذف أسماء المستجيبين، ومعرّفات المستخدمين، وأي أعمدة أخرى تتعلق بهوية المستجيبين."
+
+#: zotonic_mod_survey/priv/templates/blocks/_admin_survey_question_options.tpl:4
 msgid "Required, this question must be answered."
 msgstr "مطلوب ، يجب الإجابة على هذا السؤال."
 
-#: zotonic_mod_survey/src/mod_survey.erl:329
+#: zotonic_mod_survey/priv/templates/_survey_result_chart.tpl:24
+msgid "Responses"
+msgstr "الردود"
+
+#: zotonic_mod_survey/src/mod_survey.erl:456
 msgid "Result deleted."
 msgstr "تم حذف النتيجة."
 
@@ -13274,18 +13525,13 @@ msgstr "النتائج من المستجيب - إذا نجح فقط"
 msgid "Results until"
 msgstr "النتائج حتى"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:129
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:144
 msgid "Save your answers without submitting them yet so you can continue later."
 msgstr "احفظ إجاباتك دون إرسالها بعد حتى تتمكن من المتابعة لاحقاً."
 
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:1
 msgid "Saved"
 msgstr "تم الحفظ"
-
-#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:23
-#: zotonic_mod_survey/src/models/m_survey.erl:843
-msgid "Score"
-msgstr "أحرز هدفا"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:138
 msgid "Second page in category"
@@ -13312,7 +13558,11 @@ msgstr "إرسال رسالة تأكيد بالبريد الإلكتروني إ�
 msgid "Separate multiple email addresses with a comma."
 msgstr "افصل بين عناوين البريد الإلكتروني المتعددة بفاصلة."
 
-#: zotonic_mod_survey/src/mod_survey.erl:349
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_result_status.tpl:10
+msgid "Set status"
+msgstr "تحديد الحالة"
+
+#: zotonic_mod_survey/src/mod_survey.erl:505
 msgid "Short answer"
 msgstr "اجابة قصيرة"
 
@@ -13324,7 +13574,7 @@ msgstr "إظهار بعد الإرسال النهائي للنموذج"
 msgid "Show charts"
 msgstr "عرض الرسوم البيانية"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:52
+#: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:44
 msgid "Show email addresses"
 msgstr "إظهار عناوين البريد الإلكتروني"
 
@@ -13361,11 +13611,20 @@ msgstr "هناك خطأ ما"
 msgid "Sorry, could not insert the new person."
 msgstr "عذرا ، لا يمكن إدراج الشخص الجديد."
 
-#: zotonic_mod_survey/src/mod_survey.erl:1241
+#: zotonic_mod_survey/src/mod_survey.erl:438
+msgid "Sorry, that survey answer is unknown."
+msgstr "عذرًا، إجابة هذا الاستطلاع غير معروفة."
+
+#: zotonic_mod_survey/src/mod_survey.erl:1481
 msgid "Sorry, the maximum number of submissions has been reached. You can no longer submit this form."
 msgstr "عذرًا، تم الوصول إلى الحد الأقصى لعدد الطلبات المقدمة. لم يعد بإمكانك إرسال هذا النموذج."
 
-#: zotonic_mod_survey/src/mod_survey.erl:1254
+#: zotonic_mod_survey/src/mod_survey.erl:442
+#: zotonic_mod_survey/src/mod_survey.erl:445
+msgid "Sorry, the status could not be saved."
+msgstr "عذرًا، تعذر حفظ الحالة."
+
+#: zotonic_mod_survey/src/mod_survey.erl:1494
 msgid "Sorry, you already submitted your answers. Reload the page if you want to fill in the form again."
 msgstr "عذراً، لقد قمت بإرسال إجاباتك بالفعل. قم بإعادة تحميل الصفحة إذا كنت تريد ملء النموذج مرة أخرى."
 
@@ -13373,11 +13632,38 @@ msgstr "عذراً، لقد قمت بإرسال إجاباتك بالفعل. ق�
 msgid "Start"
 msgstr "إبدأ/ي"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:139
+#: zotonic_mod_survey/src/models/m_survey.erl:1073
+#: zotonic_mod_survey/src/models/m_survey.erl:1079
+msgid "Status date"
+msgstr "تاريخ الحالة"
+
+#: zotonic_mod_survey/src/models/m_survey.erl:1082
+msgid "Status modifier"
+msgstr "مُعدِّل الحالة"
+
+#: zotonic_mod_survey/src/models/m_survey.erl:1081
+msgid "Status modifier id"
+msgstr "معرّف مُعدِّل الحالة"
+
+#: zotonic_mod_survey/src/models/m_survey.erl:1074
+#: zotonic_mod_survey/src/models/m_survey.erl:1080
+msgid "Status note"
+msgstr "ملاحظة بشأن الحالة"
+
+#: zotonic_mod_survey/src/mod_survey.erl:434
+msgid "Status saved."
+msgstr "تم حفظ الحالة."
+
+#: zotonic_mod_survey/priv/templates/_survey_answer_status.tpl:20
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:40
+msgid "Status {status}"
+msgstr "الحالة {status}"
+
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:154
 msgid "Stop and continue later"
 msgstr "التوقف والمتابعة لاحقاً"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:151
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:166
 msgid "Stop without saving"
 msgstr "توقف دون حفظ"
 
@@ -13405,8 +13691,8 @@ msgstr "موافق بشدة"
 msgid "Strongly Disagree"
 msgstr "أرفض بشدة"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:165
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:168
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:180
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:183
 #: zotonic_mod_wires/src/scomps/scomp_wires_button.erl:81
 msgid "Submit"
 msgstr "إرسال"
@@ -13418,7 +13704,7 @@ msgstr "إرسال"
 msgid "Submit on clicking an option"
 msgstr "إرسال عند النقر فوق خيار"
 
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:193
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:181
 msgid "Subtract points for wrong answers (total never less than 0)"
 msgstr "طرح نقاط للإجابات الخاطئة (لا يقل الإجمالي أبدًا عن 0)"
 
@@ -13458,6 +13744,10 @@ msgstr "تعرض المخططات النتائج المجمعة من الأسئ�
 msgid "The charts show aggregated results from closed questions like thurstone or multiple choice and yes/no."
 msgstr "تعرض المخططات النتائج المجمعة من الأسئلة المغلقة مثل Thurstone أو الاختيار من متعدد ونعم / لا."
 
+#: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:66
+msgid "The download has started. Please check your download window."
+msgstr "لقد بدأ التنزيل. يرجى التحقق من نافذة التنزيل."
+
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:4
 msgid "The email address is shown if there is a question with label “email” or if there is a person with an email address that has been linked."
 msgstr "يظهر عنوان البريد الإلكتروني إذا كان هناك سؤال بالتسمية \"بريد إلكتروني\" أو إذا كان هناك شخص لديه عنوان بريد إلكتروني تم ربطه."
@@ -13481,6 +13771,10 @@ msgstr "يمكن ربط النتيجة بشخص موجود أو بشخص تم إ
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:3
 msgid "The results have been saved."
 msgstr "تم حفظ النتائج."
+
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:59
+msgid "The status and note are only visible to people who can edit the survey."
+msgstr "لا يمكن رؤية الحالة والملاحظة إلا للأشخاص الذين يمكنهم تعديل الاستبيان."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:147
 msgid "The uploaded file will be attached to the result email."
@@ -13522,6 +13816,10 @@ msgstr "هذه نتيجة لـ:"
 msgid "This is the percentage needed to pass a quiz or test. Only used if you have added quiz or test questions."
 msgstr "هذه هي النسبة المئوية المطلوبة لاجتياز اختبار أو اختبار. تستخدم فقط إذا كنت قد أضفت اختبارًا أو أسئلة اختبار."
 
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:78
+msgid "This survey answer could not be found."
+msgstr "لم يتم العثور على إجابة هذا الاستطلاع."
+
 #: zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:18
 msgid "This text is shown after the form has been submitted."
 msgstr "يظهر هذا النص بعد تقديم النموذج."
@@ -13536,7 +13834,7 @@ msgstr "يتم عرض هذا النص كمقدمة للمسح."
 msgid "This text is shown below the start button."
 msgstr "يظهر هذا النص أسفل زر البداية."
 
-#: zotonic_mod_survey/src/mod_survey.erl:345
+#: zotonic_mod_survey/src/mod_survey.erl:501
 msgid "Thurstone"
 msgstr "ثورستون"
 
@@ -13552,7 +13850,7 @@ msgstr "يسأل"
 msgid "Toggle outline view"
 msgstr "تبديل عرض المخطط التفصيلي"
 
-#: zotonic_mod_survey/priv/templates/_survey_result_chart.tpl:30
+#: zotonic_mod_survey/priv/templates/_survey_result_chart.tpl:46
 #: zotonic_mod_survey/priv/templates/survey_results_printable.tpl:71
 msgid "Totals"
 msgstr "المجاميع"
@@ -13571,7 +13869,7 @@ msgstr "صحيح"
 msgid "True or false question"
 msgstr "سؤال صحيح أم خطأ"
 
-#: zotonic_mod_survey/src/mod_survey.erl:342
+#: zotonic_mod_survey/src/mod_survey.erl:498
 msgid "True/False"
 msgstr "خطأ صحيح"
 
@@ -13587,7 +13885,7 @@ msgstr "التحقق من الصحة"
 msgid "View and edit results."
 msgstr "عرض وتحرير النتائج."
 
-#: zotonic_mod_survey/src/mod_survey.erl:1262
+#: zotonic_mod_survey/src/mod_survey.erl:1502
 msgid "We are experiencing an overload, please try again in 10 minutes."
 msgstr "نحن نواجه مشكلة التحميل الزائد، يرجى المحاولة مرة أخرى بعد 10 دقائق."
 
@@ -13609,7 +13907,7 @@ msgstr "خاطئ"
 msgid "Yes or no question"
 msgstr "نعم أو لا سؤال"
 
-#: zotonic_mod_survey/src/mod_survey.erl:343
+#: zotonic_mod_survey/src/mod_survey.erl:499
 msgid "Yes/No"
 msgstr "نعم / لا"
 
@@ -13621,13 +13919,22 @@ msgstr "لقد ملأت هذا بالفعل ، لكن يمكنك تغيير إج
 msgid "You already filled this in."
 msgstr "لقد ملأت هذا بالفعل."
 
-#: zotonic_mod_survey/src/mod_survey.erl:318
-#: zotonic_mod_survey/src/mod_survey.erl:333
-#: zotonic_mod_survey/src/mod_survey.erl:1329
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:82
+#: zotonic_mod_survey/src/mod_survey.erl:440
+msgid "You are not allowed to change the status."
+msgstr "لا يُسمح لك بتغيير الحالة."
+
+#: zotonic_mod_survey/src/mod_survey.erl:417
+#: zotonic_mod_survey/src/mod_survey.erl:460
+#: zotonic_mod_survey/src/mod_survey.erl:1569
 msgid "You are not allowed to change these results."
 msgstr "لا يسمح لك بتغيير هذه النتائج."
 
-#: zotonic_mod_survey/priv/templates/_survey_results.tpl:47
+#: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:70
+msgid "You are not allowed to download the survey results."
+msgstr "لا يُسمح لك بتنزيل نتائج الاستطلاع."
+
+#: zotonic_mod_survey/priv/templates/_survey_results.tpl:41
 msgid "You are not allowed to see the results."
 msgstr "لا يسمح لك برؤية النتائج."
 
@@ -13647,7 +13954,7 @@ msgstr "لقد استلمت هذا البريد الإلكتروني لأن عن
 msgid "You started filling this in and will continue where you left off."
 msgstr "لقد بدأت في ملء هذا وسوف تكمل من حيث توقفت."
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:137
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:152
 msgid "Your answers will be saved so that you can return later to submit them."
 msgstr "سيتم حفظ إجاباتك بحيث يمكنك العودة لاحقاً لإرسالها."
 
@@ -13656,7 +13963,7 @@ msgstr "سيتم حفظ إجاباتك بحيث يمكنك العودة لاحق
 msgid "Your result"
 msgstr "نتيجتك"
 
-#: zotonic_mod_survey/src/mod_survey.erl:1270
+#: zotonic_mod_survey/src/mod_survey.erl:1510
 msgid "Your session was expired, please restart and try again."
 msgstr "لقد انتهت الجلسة الخاصة بك، يرجى إعادة التشغيل والمحاولة مرة أخرى."
 
@@ -14001,11 +14308,6 @@ msgstr "يرجى مراجعة كافة النصوص وتصحيح أي أخطاء
 #: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:25
 msgid "Ready"
 msgstr "مستعد"
-
-#: zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:38
-#: zotonic_mod_translation/priv/templates/admin_translation.tpl:43
-msgid "Region"
-msgstr "منطقة"
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:199
 msgid "Reload Translations"
