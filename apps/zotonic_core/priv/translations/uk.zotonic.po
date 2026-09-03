@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-09-03 13:49\n"
+"PO-Revision-Date: 2026-09-03 14:54\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -6787,7 +6787,7 @@ msgstr "Завершити"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:130
 msgid "Completion"
-msgstr ""
+msgstr "Завершення"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:229
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:240
@@ -6805,7 +6805,7 @@ msgstr "Перевірка підключення"
 
 #: zotonic_mod_base/src/support/z_chart_svg.erl:581
 msgid "Data points"
-msgstr ""
+msgstr "Точки даних"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:115
 #: zotonic_mod_l10n/src/support/l10n_date.erl:50
@@ -6814,19 +6814,19 @@ msgstr "Грудень"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:225
 msgid "Donut alias"
-msgstr ""
+msgstr "Псевдонім «Donut»"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:44
 msgid "Donut chart with map data"
-msgstr ""
+msgstr "Кругова діаграма з даними карти"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:81
 msgid "East"
-msgstr ""
+msgstr "Схід"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:168
 msgid "Empty data"
-msgstr ""
+msgstr "Порожні дані"
 
 #: zotonic_mod_base/src/filters/filter_content_type_label.erl:50
 msgid "Excel Workbook"
@@ -6834,11 +6834,11 @@ msgstr "Робочий зошит Excel"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:62
 msgid "Excellent"
-msgstr ""
+msgstr "Чудово"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:139
 msgid "Existing external data table"
-msgstr ""
+msgstr "Існуюча зовнішня таблиця даних"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:114
 #: zotonic_mod_l10n/src/support/l10n_date.erl:40
@@ -6867,11 +6867,11 @@ msgstr "Пішли"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:63
 msgid "Good"
-msgstr ""
+msgstr "Добре"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:77
 msgid "Horizontal bar chart"
-msgstr ""
+msgstr "Горизонтальна гістограма"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:47
 msgid "If the authentication with the server works."
@@ -6885,12 +6885,12 @@ msgstr "Індекс"
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:3
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:19
 msgid "Inline SVG chart test"
-msgstr ""
+msgstr "Тест вбудованої діаграми SVG"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:193
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:210
 msgid "Item"
-msgstr ""
+msgstr "Позиція"
 
 #: zotonic_mod_base/src/filters/filter_content_type_label.erl:48
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:39
@@ -6923,19 +6923,19 @@ msgstr "Мітка"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:187
 msgid "Large data set with palette shades"
-msgstr ""
+msgstr "Великий набір даних із відтінками палітри"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:200
 msgid "Large pie chart with palette shades"
-msgstr ""
+msgstr "Велика кругова діаграма з відтінками палітри"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:228
 msgid "Legacy pie alias"
-msgstr ""
+msgstr "Старий псевдонім пі"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:109
 msgid "Line chart"
-msgstr ""
+msgstr "Лінійний графік"
 
 #: zotonic_mod_base/priv/templates/error.403.tpl:30
 msgid "Login"
@@ -6962,7 +6962,7 @@ msgstr "Травень"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:80
 msgid "Net change"
-msgstr ""
+msgstr "Чиста зміна"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:34
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:145
@@ -6981,15 +6981,15 @@ msgstr "Ні"
 
 #: zotonic_mod_base/src/support/z_chart_svg.erl:1290
 msgid "No data"
-msgstr ""
+msgstr "Даних немає"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:170
 msgid "No measurements yet"
-msgstr ""
+msgstr "Поки що немає вимірювань"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:81
 msgid "North"
-msgstr ""
+msgstr "Північ"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:231
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:243
@@ -7030,11 +7030,11 @@ msgstr "Ідентифікатор сторінки"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:222
 msgid "Pie alias"
-msgstr ""
+msgstr "Прізвисько «Пай»"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:28
 msgid "Pie chart"
-msgstr ""
+msgstr "Кругова діаграма"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:115
 msgid "Pong Count"
@@ -7050,7 +7050,7 @@ msgstr "Затримка Pong"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:65
 msgid "Poor"
-msgstr ""
+msgstr "Бідний"
 
 #: zotonic_mod_base/priv/templates/_powered_by_zotonic.tpl:1
 msgid "Powered by Zotonic"
@@ -7058,7 +7058,7 @@ msgstr "Працює на Zotonic"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:95
 msgid "Quarterly balance"
-msgstr ""
+msgstr "Квартальний баланс"
 
 #: zotonic_mod_base/priv/templates/email_base.tpl:336
 msgid "Read this page on the web"
@@ -7072,7 +7072,7 @@ msgstr "Регіон"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:60
 msgid "Responses using one color"
-msgstr ""
+msgstr "Відповіді, виконані одним кольором"
 
 #: zotonic_mod_base/priv/templates/error.tpl:14
 msgid "Return to the homepage"
@@ -7088,7 +7088,7 @@ msgstr "Оцінка"
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:190
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:203
 msgid "Scores for 32 items"
-msgstr ""
+msgstr "Оцінки за 32 пункти"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:115
 #: zotonic_mod_l10n/src/support/l10n_date.erl:47
@@ -7097,7 +7097,7 @@ msgstr "Вересень"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:21
 msgid "Server-rendered charts without JavaScript, CSS, or external services."
-msgstr ""
+msgstr "Діаграми, що відображаються на сервері без використання JavaScript, CSS або зовнішніх сервісів."
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:144
 msgid "Service Worker?"
@@ -7113,15 +7113,15 @@ msgstr "Перевірено кілька аспектів підключенн�
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:153
 msgid "Share"
-msgstr ""
+msgstr "Поділитися"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:128
 msgid "Single value"
-msgstr ""
+msgstr "Одне значення"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:57
 msgid "Single-color pie chart"
-msgstr ""
+msgstr "Одноколірна кругова діаграма"
 
 #: zotonic_mod_base/priv/templates/error.tpl:11
 msgid "Sorry, this page has been deleted."
@@ -7133,7 +7133,7 @@ msgstr "На жаль, у Вас немає доступу до цієї сто�
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:81
 msgid "South"
-msgstr ""
+msgstr "Південь"
 
 #: zotonic_mod_base/priv/templates/error.tpl:23
 msgid "Stack trace"
@@ -7145,7 +7145,7 @@ msgstr "Підтримка роботи в автономному режимі �
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:31
 msgid "Survey answers"
-msgstr ""
+msgstr "Відповіді на опитування"
 
 #: zotonic_mod_base/priv/templates/_bridge_warning.tpl:4
 msgid "Test your connection"
@@ -7203,15 +7203,15 @@ msgstr "Тип"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:35
 msgid "Unknown"
-msgstr ""
+msgstr "Невідомо"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:92
 msgid "Vertical bar chart"
-msgstr ""
+msgstr "Вертикальна гістограма"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:112
 msgid "Visitors per month"
-msgstr ""
+msgstr "Кількість відвідувачів на місяць"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:131
 msgid "Web Worker Status"
@@ -7227,11 +7227,11 @@ msgstr "Підтримка Websocket?"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:81
 msgid "West"
-msgstr ""
+msgstr "Захід"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:47
 msgid "Work items"
-msgstr ""
+msgstr "Робочі завдання"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:33
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:187
@@ -12963,11 +12963,11 @@ msgstr "Завантажте таблицю з усіма відповідями
 #: zotonic_mod_survey/priv/templates/_survey_results_download_button.tpl:6
 #: zotonic_mod_survey/priv/templates/_survey_results_download_button.tpl:11
 msgid "Download survey results"
-msgstr ""
+msgstr "Завантажити результати опитування"
 
 #: zotonic_mod_survey/priv/templates/_survey_results_download_button.tpl:7
 msgid "Download..."
-msgstr ""
+msgstr "Завантажити..."
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:46
 msgid "Drop-down menu"
@@ -12980,13 +12980,13 @@ msgstr "Адреси електронної пошти"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:118
 msgid "Edit answers"
-msgstr ""
+msgstr "Редагувати відповіді"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_result_status.tpl:5
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_result_status.tpl:12
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_result_status.tpl:18
 msgid "Edit status"
-msgstr ""
+msgstr "Редагувати статус"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:119
 msgid "Edit survey result"
@@ -13006,7 +13006,7 @@ msgstr "Приклад:"
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:37
 msgid "Excel (XLSX)"
-msgstr ""
+msgstr "Excel (XLSX)"
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:24
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:20
@@ -13132,11 +13132,11 @@ msgstr "Негайно почніть із запитань, без кнопки
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:30
 msgid "Include prompts as the first row"
-msgstr ""
+msgstr "Включити підказки в перший рядок"
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:22
 msgid "Include the status, status date, and note. The status modifier is omitted for anonymous downloads."
-msgstr ""
+msgstr "Вкажіть статус, дату статусу та примітку. У разі анонімного завантаження модифікатор статусу не вказується."
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:40
 msgid "Informational"
@@ -13185,7 +13185,7 @@ msgstr "Перейти до цієї мітки запитання (повине
 
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:65
 msgid "Last status change"
-msgstr ""
+msgstr "Остання зміна статусу"
 
 #: zotonic_mod_survey/src/mod_survey.erl:500
 msgid "Likert"
@@ -13313,7 +13313,7 @@ msgstr "Результатів ще немає."
 
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:27
 msgid "No status"
-msgstr ""
+msgstr "Статус відсутній"
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:103
 msgid "Not all the required fields are filled in. You can go back to the previous page without saving your answers."
@@ -13346,7 +13346,7 @@ msgstr "Приймайте лише зображення."
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_survey_question_options.tpl:11
 msgid "Only editors can answer"
-msgstr ""
+msgstr "Відповісти можуть лише редактори"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:210
 msgid "Optional confirmation email for the respondent"
@@ -13487,7 +13487,7 @@ msgstr "Видаліть кнопку «Далі». Відповіді не бу
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:11
 msgid "Remove respondent names, user ids, and other respondent identity columns."
-msgstr ""
+msgstr "Видаліть імена респондентів, ідентифікатори користувачів та інші стовпці, що містять дані, які дозволяють ідентифікувати респондентів."
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_survey_question_options.tpl:4
 msgid "Required, this question must be answered."
@@ -13495,7 +13495,7 @@ msgstr "Обов’язково, на це запитання потрібно �
 
 #: zotonic_mod_survey/priv/templates/_survey_result_chart.tpl:24
 msgid "Responses"
-msgstr ""
+msgstr "Відповіді"
 
 #: zotonic_mod_survey/src/mod_survey.erl:456
 msgid "Result deleted."
@@ -13560,7 +13560,7 @@ msgstr "Розділіть кілька адрес електронної пош
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_result_status.tpl:10
 msgid "Set status"
-msgstr ""
+msgstr "Встановити статус"
 
 #: zotonic_mod_survey/src/mod_survey.erl:505
 msgid "Short answer"
@@ -13613,7 +13613,7 @@ msgstr "На жаль, не вдалося вставити нову особу.
 
 #: zotonic_mod_survey/src/mod_survey.erl:438
 msgid "Sorry, that survey answer is unknown."
-msgstr ""
+msgstr "Вибачте, відповідь на це запитання в опитуванні невідома."
 
 #: zotonic_mod_survey/src/mod_survey.erl:1481
 msgid "Sorry, the maximum number of submissions has been reached. You can no longer submit this form."
@@ -13622,7 +13622,7 @@ msgstr "Вибачте, максимальна кількість заявок �
 #: zotonic_mod_survey/src/mod_survey.erl:442
 #: zotonic_mod_survey/src/mod_survey.erl:445
 msgid "Sorry, the status could not be saved."
-msgstr ""
+msgstr "Вибачте, статус не вдалося зберегти."
 
 #: zotonic_mod_survey/src/mod_survey.erl:1494
 msgid "Sorry, you already submitted your answers. Reload the page if you want to fill in the form again."
@@ -13635,29 +13635,29 @@ msgstr "Почати"
 #: zotonic_mod_survey/src/models/m_survey.erl:1073
 #: zotonic_mod_survey/src/models/m_survey.erl:1079
 msgid "Status date"
-msgstr ""
+msgstr "Дата стану"
 
 #: zotonic_mod_survey/src/models/m_survey.erl:1082
 msgid "Status modifier"
-msgstr ""
+msgstr "Модифікатор стану"
 
 #: zotonic_mod_survey/src/models/m_survey.erl:1081
 msgid "Status modifier id"
-msgstr ""
+msgstr "Ідентифікатор модифікатора стану"
 
 #: zotonic_mod_survey/src/models/m_survey.erl:1074
 #: zotonic_mod_survey/src/models/m_survey.erl:1080
 msgid "Status note"
-msgstr ""
+msgstr "Примітка щодо статусу"
 
 #: zotonic_mod_survey/src/mod_survey.erl:434
 msgid "Status saved."
-msgstr ""
+msgstr "Статус збережено."
 
 #: zotonic_mod_survey/priv/templates/_survey_answer_status.tpl:20
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:40
 msgid "Status {status}"
-msgstr ""
+msgstr "Статус {status}"
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:154
 msgid "Stop and continue later"
@@ -13746,7 +13746,7 @@ msgstr "Діаграми показують зведені результати 
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:66
 msgid "The download has started. Please check your download window."
-msgstr ""
+msgstr "Завантаження розпочалося. Будь ласка, перевірте вікно завантаження."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:4
 msgid "The email address is shown if there is a question with label “email” or if there is a person with an email address that has been linked."
@@ -13774,7 +13774,7 @@ msgstr "Результати збережено."
 
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:59
 msgid "The status and note are only visible to people who can edit the survey."
-msgstr ""
+msgstr "Статус і примітка видимі лише тим, хто має право редагувати опитування."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:147
 msgid "The uploaded file will be attached to the result email."
@@ -13818,7 +13818,7 @@ msgstr "Це відсоток, необхідний для проходженн�
 
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:78
 msgid "This survey answer could not be found."
-msgstr ""
+msgstr "Цю відповідь в опитуванні не вдалося знайти."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:18
 msgid "This text is shown after the form has been submitted."
@@ -13922,7 +13922,7 @@ msgstr "Ви вже заповнили це."
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:82
 #: zotonic_mod_survey/src/mod_survey.erl:440
 msgid "You are not allowed to change the status."
-msgstr ""
+msgstr "Вам заборонено змінювати статус."
 
 #: zotonic_mod_survey/src/mod_survey.erl:417
 #: zotonic_mod_survey/src/mod_survey.erl:460
@@ -13932,7 +13932,7 @@ msgstr "Вам не дозволено змінювати ці результа�
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:70
 msgid "You are not allowed to download the survey results."
-msgstr ""
+msgstr "Завантажувати результати опитування заборонено."
 
 #: zotonic_mod_survey/priv/templates/_survey_results.tpl:41
 msgid "You are not allowed to see the results."
