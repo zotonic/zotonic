@@ -44,7 +44,7 @@
                 {% if chart.has_totals %}
                     <tr>
                         <th scope="row">{_ Totals _}</th>
-                        <th>{{ chart.totals }}</th>
+                        <td>{{ chart.totals }}</td>
                     </tr>
                 {% endif %}
                 </tbody>
