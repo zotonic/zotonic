@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-09-03 13:50\n"
+"PO-Revision-Date: 2026-09-03 14:54\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -6786,7 +6786,7 @@ msgstr "Selesai"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:130
 msgid "Completion"
-msgstr ""
+msgstr "Penyelesaian"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:229
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:240
@@ -6804,7 +6804,7 @@ msgstr "Uji Sambungan"
 
 #: zotonic_mod_base/src/support/z_chart_svg.erl:581
 msgid "Data points"
-msgstr ""
+msgstr "Titik data"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:115
 #: zotonic_mod_l10n/src/support/l10n_date.erl:50
@@ -6813,19 +6813,19 @@ msgstr "Desember"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:225
 msgid "Donut alias"
-msgstr ""
+msgstr "Nama panggilan donat"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:44
 msgid "Donut chart with map data"
-msgstr ""
+msgstr "Bagan donat dengan data peta"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:81
 msgid "East"
-msgstr ""
+msgstr "Timur"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:168
 msgid "Empty data"
-msgstr ""
+msgstr "Data kosong"
 
 #: zotonic_mod_base/src/filters/filter_content_type_label.erl:50
 msgid "Excel Workbook"
@@ -6833,11 +6833,11 @@ msgstr "Buku Kerja Excel"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:62
 msgid "Excellent"
-msgstr ""
+msgstr "Luar biasa"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:139
 msgid "Existing external data table"
-msgstr ""
+msgstr "Tabel data eksternal yang sudah ada"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:114
 #: zotonic_mod_l10n/src/support/l10n_date.erl:40
@@ -6866,11 +6866,11 @@ msgstr "Pergi"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:63
 msgid "Good"
-msgstr ""
+msgstr "Bagus"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:77
 msgid "Horizontal bar chart"
-msgstr ""
+msgstr "Diagram batang horizontal"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:47
 msgid "If the authentication with the server works."
@@ -6884,12 +6884,12 @@ msgstr "Indeks dari"
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:3
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:19
 msgid "Inline SVG chart test"
-msgstr ""
+msgstr "Uji coba grafik SVG inline"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:193
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:210
 msgid "Item"
-msgstr ""
+msgstr "Barang"
 
 #: zotonic_mod_base/src/filters/filter_content_type_label.erl:48
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:39
@@ -6922,19 +6922,19 @@ msgstr "Label"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:187
 msgid "Large data set with palette shades"
-msgstr ""
+msgstr "Kumpulan data besar dengan nuansa palet"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:200
 msgid "Large pie chart with palette shades"
-msgstr ""
+msgstr "Diagram lingkaran besar dengan nuansa palet warna"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:228
 msgid "Legacy pie alias"
-msgstr ""
+msgstr "Alias pie warisan"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:109
 msgid "Line chart"
-msgstr ""
+msgstr "Grafik garis"
 
 #: zotonic_mod_base/priv/templates/error.403.tpl:30
 msgid "Login"
@@ -6961,7 +6961,7 @@ msgstr "Mei"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:80
 msgid "Net change"
-msgstr ""
+msgstr "Perubahan bersih"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:34
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:145
@@ -6980,15 +6980,15 @@ msgstr "Tidak"
 
 #: zotonic_mod_base/src/support/z_chart_svg.erl:1290
 msgid "No data"
-msgstr ""
+msgstr "Tidak ada data"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:170
 msgid "No measurements yet"
-msgstr ""
+msgstr "Belum ada pengukuran"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:81
 msgid "North"
-msgstr ""
+msgstr "Utara"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:231
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:243
@@ -7029,11 +7029,11 @@ msgstr "Id halaman"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:222
 msgid "Pie alias"
-msgstr ""
+msgstr "Alias Pie"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:28
 msgid "Pie chart"
-msgstr ""
+msgstr "Diagram lingkaran"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:115
 msgid "Pong Count"
@@ -7049,7 +7049,7 @@ msgstr "Latensi Pong"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:65
 msgid "Poor"
-msgstr ""
+msgstr "Miskin"
 
 #: zotonic_mod_base/priv/templates/_powered_by_zotonic.tpl:1
 msgid "Powered by Zotonic"
@@ -7057,7 +7057,7 @@ msgstr "Didukung oleh Zotonic"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:95
 msgid "Quarterly balance"
-msgstr ""
+msgstr "Neraca triwulanan"
 
 #: zotonic_mod_base/priv/templates/email_base.tpl:336
 msgid "Read this page on the web"
@@ -7071,7 +7071,7 @@ msgstr "Wilayah"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:60
 msgid "Responses using one color"
-msgstr ""
+msgstr "Tanggapan yang menggunakan satu warna"
 
 #: zotonic_mod_base/priv/templates/error.tpl:14
 msgid "Return to the homepage"
@@ -7087,7 +7087,7 @@ msgstr "Nilai"
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:190
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:203
 msgid "Scores for 32 items"
-msgstr ""
+msgstr "Nilai untuk 32 butir soal"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:115
 #: zotonic_mod_l10n/src/support/l10n_date.erl:47
@@ -7096,7 +7096,7 @@ msgstr "September"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:21
 msgid "Server-rendered charts without JavaScript, CSS, or external services."
-msgstr ""
+msgstr "Grafik yang dirender oleh server tanpa JavaScript, CSS, atau layanan eksternal."
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:144
 msgid "Service Worker?"
@@ -7116,11 +7116,11 @@ msgstr "Berbagi"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:128
 msgid "Single value"
-msgstr ""
+msgstr "Nilai tunggal"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:57
 msgid "Single-color pie chart"
-msgstr ""
+msgstr "Diagram lingkaran satu warna"
 
 #: zotonic_mod_base/priv/templates/error.tpl:11
 msgid "Sorry, this page has been deleted."
@@ -7132,7 +7132,7 @@ msgstr "Maaf, Anda tidak memiliki akses ke halaman ini."
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:81
 msgid "South"
-msgstr ""
+msgstr "Selatan"
 
 #: zotonic_mod_base/priv/templates/error.tpl:23
 msgid "Stack trace"
@@ -7144,7 +7144,7 @@ msgstr "Dukungan untuk pekerjaan offline dan komunikasi antara beberapa tab di b
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:31
 msgid "Survey answers"
-msgstr ""
+msgstr "Jawaban survei"
 
 #: zotonic_mod_base/priv/templates/_bridge_warning.tpl:4
 msgid "Test your connection"
@@ -7202,15 +7202,15 @@ msgstr "Tipe"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:35
 msgid "Unknown"
-msgstr ""
+msgstr "Tidak diketahui"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:92
 msgid "Vertical bar chart"
-msgstr ""
+msgstr "Diagram batang vertikal"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:112
 msgid "Visitors per month"
-msgstr ""
+msgstr "Jumlah pengunjung per bulan"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:131
 msgid "Web Worker Status"
@@ -7226,11 +7226,11 @@ msgstr "Dukungan Websocket?"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:81
 msgid "West"
-msgstr ""
+msgstr "Barat"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:47
 msgid "Work items"
-msgstr ""
+msgstr "Item pekerjaan"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:33
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:187
@@ -12963,11 +12963,11 @@ msgstr "Unduh spreadsheet dengan semua jawaban."
 #: zotonic_mod_survey/priv/templates/_survey_results_download_button.tpl:6
 #: zotonic_mod_survey/priv/templates/_survey_results_download_button.tpl:11
 msgid "Download survey results"
-msgstr ""
+msgstr "Unduh hasil survei"
 
 #: zotonic_mod_survey/priv/templates/_survey_results_download_button.tpl:7
 msgid "Download..."
-msgstr ""
+msgstr "Unduh..."
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:46
 msgid "Drop-down menu"
@@ -12980,13 +12980,13 @@ msgstr "Alamat e-mail"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:118
 msgid "Edit answers"
-msgstr ""
+msgstr "Sunting jawaban"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_result_status.tpl:5
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_result_status.tpl:12
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_result_status.tpl:18
 msgid "Edit status"
-msgstr ""
+msgstr "Edit status"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:119
 msgid "Edit survey result"
@@ -13006,7 +13006,7 @@ msgstr "Contoh:"
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:37
 msgid "Excel (XLSX)"
-msgstr ""
+msgstr "Excel (XLSX)"
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:24
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:20
@@ -13132,11 +13132,11 @@ msgstr "Segera mulai dengan pertanyaan, tidak ada tombol \"Mulai\""
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:30
 msgid "Include prompts as the first row"
-msgstr ""
+msgstr "Sertakan petunjuk sebagai baris pertama"
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:22
 msgid "Include the status, status date, and note. The status modifier is omitted for anonymous downloads."
-msgstr ""
+msgstr "Cantumkan status, tanggal status, dan catatan. Pengubah status dihilangkan untuk unduhan anonim."
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:40
 msgid "Informational"
@@ -13185,7 +13185,7 @@ msgstr "Lompat ke label pertanyaan ini (harus ada di halaman lain di bawah)"
 
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:65
 msgid "Last status change"
-msgstr ""
+msgstr "Perubahan status terakhir"
 
 #: zotonic_mod_survey/src/mod_survey.erl:500
 msgid "Likert"
@@ -13313,7 +13313,7 @@ msgstr "Belum ada hasil."
 
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:27
 msgid "No status"
-msgstr ""
+msgstr "Tanpa status"
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:103
 msgid "Not all the required fields are filled in. You can go back to the previous page without saving your answers."
@@ -13346,7 +13346,7 @@ msgstr "Hanya menerima gambar."
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_survey_question_options.tpl:11
 msgid "Only editors can answer"
-msgstr ""
+msgstr "Hanya editor yang dapat menjawab"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:210
 msgid "Optional confirmation email for the respondent"
@@ -13487,7 +13487,7 @@ msgstr "Hapus tombol \"Berikutnya\". Tidak ada jawaban yang akan dikirimkan kecu
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:11
 msgid "Remove respondent names, user ids, and other respondent identity columns."
-msgstr ""
+msgstr "Hapus nama responden, ID pengguna, dan kolom identitas responden lainnya."
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_survey_question_options.tpl:4
 msgid "Required, this question must be answered."
@@ -13495,7 +13495,7 @@ msgstr "Diperlukan, pertanyaan ini harus dijawab."
 
 #: zotonic_mod_survey/priv/templates/_survey_result_chart.tpl:24
 msgid "Responses"
-msgstr ""
+msgstr "Tanggapan"
 
 #: zotonic_mod_survey/src/mod_survey.erl:456
 msgid "Result deleted."
@@ -13560,7 +13560,7 @@ msgstr "Pisahkan alamat email dengan koma."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_result_status.tpl:10
 msgid "Set status"
-msgstr ""
+msgstr "Tetapkan status"
 
 #: zotonic_mod_survey/src/mod_survey.erl:505
 msgid "Short answer"
@@ -13613,7 +13613,7 @@ msgstr "Maaf, tidak dapat memasukkan orang baru."
 
 #: zotonic_mod_survey/src/mod_survey.erl:438
 msgid "Sorry, that survey answer is unknown."
-msgstr ""
+msgstr "Maaf, jawaban survei tersebut tidak diketahui."
 
 #: zotonic_mod_survey/src/mod_survey.erl:1481
 msgid "Sorry, the maximum number of submissions has been reached. You can no longer submit this form."
@@ -13622,7 +13622,7 @@ msgstr "Maaf, jumlah pengiriman maksimum telah tercapai. Anda tidak dapat lagi m
 #: zotonic_mod_survey/src/mod_survey.erl:442
 #: zotonic_mod_survey/src/mod_survey.erl:445
 msgid "Sorry, the status could not be saved."
-msgstr ""
+msgstr "Maaf, status tersebut tidak dapat disimpan."
 
 #: zotonic_mod_survey/src/mod_survey.erl:1494
 msgid "Sorry, you already submitted your answers. Reload the page if you want to fill in the form again."
@@ -13635,29 +13635,29 @@ msgstr "Mulai"
 #: zotonic_mod_survey/src/models/m_survey.erl:1073
 #: zotonic_mod_survey/src/models/m_survey.erl:1079
 msgid "Status date"
-msgstr ""
+msgstr "Tanggal status"
 
 #: zotonic_mod_survey/src/models/m_survey.erl:1082
 msgid "Status modifier"
-msgstr ""
+msgstr "Pengubah status"
 
 #: zotonic_mod_survey/src/models/m_survey.erl:1081
 msgid "Status modifier id"
-msgstr ""
+msgstr "ID pengubah status"
 
 #: zotonic_mod_survey/src/models/m_survey.erl:1074
 #: zotonic_mod_survey/src/models/m_survey.erl:1080
 msgid "Status note"
-msgstr ""
+msgstr "Catatan status"
 
 #: zotonic_mod_survey/src/mod_survey.erl:434
 msgid "Status saved."
-msgstr ""
+msgstr "Status telah disimpan."
 
 #: zotonic_mod_survey/priv/templates/_survey_answer_status.tpl:20
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:40
 msgid "Status {status}"
-msgstr ""
+msgstr "Status {status}"
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:154
 msgid "Stop and continue later"
@@ -13746,7 +13746,7 @@ msgstr "Bagan menampilkan hasil gabungan dari pertanyaan tertutup seperti thurst
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:66
 msgid "The download has started. Please check your download window."
-msgstr ""
+msgstr "Pengunduhan telah dimulai. Silakan periksa jendela pengunduhan Anda."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:4
 msgid "The email address is shown if there is a question with label “email” or if there is a person with an email address that has been linked."
@@ -13774,7 +13774,7 @@ msgstr "Hasilnya sudah disimpan."
 
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:59
 msgid "The status and note are only visible to people who can edit the survey."
-msgstr ""
+msgstr "Status dan catatan hanya dapat dilihat oleh orang-orang yang berhak mengedit survei tersebut."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:147
 msgid "The uploaded file will be attached to the result email."
@@ -13818,7 +13818,7 @@ msgstr "Ini adalah persentase yang dibutuhkan untuk lulus kuis atau tes. Hanya d
 
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:78
 msgid "This survey answer could not be found."
-msgstr ""
+msgstr "Jawaban survei ini tidak dapat ditemukan."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:18
 msgid "This text is shown after the form has been submitted."
@@ -13922,7 +13922,7 @@ msgstr "Anda sudah mengisi ini."
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:82
 #: zotonic_mod_survey/src/mod_survey.erl:440
 msgid "You are not allowed to change the status."
-msgstr ""
+msgstr "Anda tidak diperbolehkan mengubah statusnya."
 
 #: zotonic_mod_survey/src/mod_survey.erl:417
 #: zotonic_mod_survey/src/mod_survey.erl:460
@@ -13932,7 +13932,7 @@ msgstr "Anda tidak diizinkan untuk mengubah hasil tersebut."
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:70
 msgid "You are not allowed to download the survey results."
-msgstr ""
+msgstr "Anda tidak diperbolehkan mengunduh hasil survei tersebut."
 
 #: zotonic_mod_survey/priv/templates/_survey_results.tpl:41
 msgid "You are not allowed to see the results."
