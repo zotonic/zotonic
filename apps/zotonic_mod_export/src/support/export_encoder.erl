@@ -126,7 +126,7 @@ cell(Value, Options) when is_map(Options) ->
     {'$export_cell', Value, Options}.
 
 %% @doc Return the value of a possibly styled export cell.
--spec cell_value(cell() | Value) -> Value when Value :: term().
+-spec cell_value(term()) -> term().
 cell_value({'$export_cell', Value, Options}) when is_map(Options) ->
     Value;
 cell_value(Value) ->

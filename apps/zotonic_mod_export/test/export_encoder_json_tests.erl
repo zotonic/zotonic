@@ -78,10 +78,6 @@ list_row_values_are_normalized_test() ->
         },
         Row).
 
--spec encode_rows(Headers, Rows) -> term()
-    when
-        Headers :: [term()],
-        Rows :: [term()].
 encode_rows(Headers, Rows) ->
     Context = #context{},
     {ok, State0} = export_encoder_json:init([{rsc_props, []}], Context),
