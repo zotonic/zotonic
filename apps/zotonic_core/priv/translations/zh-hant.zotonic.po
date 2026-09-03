@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-09-03 13:49\n"
+"PO-Revision-Date: 2026-09-03 14:54\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -6787,7 +6787,7 @@ msgstr "完成"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:130
 msgid "Completion"
-msgstr ""
+msgstr "完成"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:229
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:240
@@ -6805,7 +6805,7 @@ msgstr "連接測試"
 
 #: zotonic_mod_base/src/support/z_chart_svg.erl:581
 msgid "Data points"
-msgstr ""
+msgstr "資料點"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:115
 #: zotonic_mod_l10n/src/support/l10n_date.erl:50
@@ -6814,19 +6814,19 @@ msgstr "十二月"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:225
 msgid "Donut alias"
-msgstr ""
+msgstr "Donut 別名"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:44
 msgid "Donut chart with map data"
-msgstr ""
+msgstr "包含地圖資料的環形圖"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:81
 msgid "East"
-msgstr ""
+msgstr "東"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:168
 msgid "Empty data"
-msgstr ""
+msgstr "空資料"
 
 #: zotonic_mod_base/src/filters/filter_content_type_label.erl:50
 msgid "Excel Workbook"
@@ -6834,11 +6834,11 @@ msgstr "Excel工作簿"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:62
 msgid "Excellent"
-msgstr ""
+msgstr "非常棒"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:139
 msgid "Existing external data table"
-msgstr ""
+msgstr "現有的外部資料表"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:114
 #: zotonic_mod_l10n/src/support/l10n_date.erl:40
@@ -6867,11 +6867,11 @@ msgstr "前进"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:63
 msgid "Good"
-msgstr ""
+msgstr "好"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:77
 msgid "Horizontal bar chart"
-msgstr ""
+msgstr "橫向條形圖"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:47
 msgid "If the authentication with the server works."
@@ -6885,12 +6885,12 @@ msgstr "索引"
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:3
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:19
 msgid "Inline SVG chart test"
-msgstr ""
+msgstr "內嵌 SVG 圖表測試"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:193
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:210
 msgid "Item"
-msgstr ""
+msgstr "項目"
 
 #: zotonic_mod_base/src/filters/filter_content_type_label.erl:48
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:39
@@ -6923,19 +6923,19 @@ msgstr "標籤"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:187
 msgid "Large data set with palette shades"
-msgstr ""
+msgstr "包含色盤色調的大型資料集"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:200
 msgid "Large pie chart with palette shades"
-msgstr ""
+msgstr "帶有調色盤色調的大型圓餅圖"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:228
 msgid "Legacy pie alias"
-msgstr ""
+msgstr "舊版派別別名"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:109
 msgid "Line chart"
-msgstr ""
+msgstr "線圖"
 
 #: zotonic_mod_base/priv/templates/error.403.tpl:30
 msgid "Login"
@@ -6962,7 +6962,7 @@ msgstr "五月"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:80
 msgid "Net change"
-msgstr ""
+msgstr "淨變動"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:34
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:145
@@ -6981,15 +6981,15 @@ msgstr "否"
 
 #: zotonic_mod_base/src/support/z_chart_svg.erl:1290
 msgid "No data"
-msgstr ""
+msgstr "無資料"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:170
 msgid "No measurements yet"
-msgstr ""
+msgstr "目前尚無測量數據"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:81
 msgid "North"
-msgstr ""
+msgstr "北方"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:231
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:243
@@ -7030,11 +7030,11 @@ msgstr "页码"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:222
 msgid "Pie alias"
-msgstr ""
+msgstr "Pie 別名"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:28
 msgid "Pie chart"
-msgstr ""
+msgstr "圓餅圖"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:115
 msgid "Pong Count"
@@ -7050,7 +7050,7 @@ msgstr "乒乓延遲"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:65
 msgid "Poor"
-msgstr ""
+msgstr "貧窮"
 
 #: zotonic_mod_base/priv/templates/_powered_by_zotonic.tpl:1
 msgid "Powered by Zotonic"
@@ -7058,7 +7058,7 @@ msgstr "由 Zotonic 提供支持"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:95
 msgid "Quarterly balance"
-msgstr ""
+msgstr "季度結餘"
 
 #: zotonic_mod_base/priv/templates/email_base.tpl:336
 msgid "Read this page on the web"
@@ -7072,7 +7072,7 @@ msgstr "地区"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:60
 msgid "Responses using one color"
-msgstr ""
+msgstr "僅使用一種顏色的回應"
 
 #: zotonic_mod_base/priv/templates/error.tpl:14
 msgid "Return to the homepage"
@@ -7088,7 +7088,7 @@ msgstr "分数"
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:190
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:203
 msgid "Scores for 32 items"
-msgstr ""
+msgstr "32 項目的分數"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:115
 #: zotonic_mod_l10n/src/support/l10n_date.erl:47
@@ -7097,7 +7097,7 @@ msgstr "九月"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:21
 msgid "Server-rendered charts without JavaScript, CSS, or external services."
-msgstr ""
+msgstr "無需 JavaScript、CSS 或外部服務即可在伺服器端渲染的圖表。"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:144
 msgid "Service Worker?"
@@ -7117,11 +7117,11 @@ msgstr "共享"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:128
 msgid "Single value"
-msgstr ""
+msgstr "單一數值"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:57
 msgid "Single-color pie chart"
-msgstr ""
+msgstr "單色圓餅圖"
 
 #: zotonic_mod_base/priv/templates/error.tpl:11
 msgid "Sorry, this page has been deleted."
@@ -7133,7 +7133,7 @@ msgstr "对不起，你没有权限访问本页面。"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:81
 msgid "South"
-msgstr ""
+msgstr "南方"
 
 #: zotonic_mod_base/priv/templates/error.tpl:23
 msgid "Stack trace"
@@ -7145,7 +7145,7 @@ msgstr "支持離線工作和瀏覽器中多個選項卡之間的通信。"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:31
 msgid "Survey answers"
-msgstr ""
+msgstr "問卷調查結果"
 
 #: zotonic_mod_base/priv/templates/_bridge_warning.tpl:4
 msgid "Test your connection"
@@ -7203,15 +7203,15 @@ msgstr "类型"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:35
 msgid "Unknown"
-msgstr ""
+msgstr "未知"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:92
 msgid "Vertical bar chart"
-msgstr ""
+msgstr "垂直條形圖"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:112
 msgid "Visitors per month"
-msgstr ""
+msgstr "每月訪客數"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:131
 msgid "Web Worker Status"
@@ -7227,11 +7227,11 @@ msgstr "網絡套接字支持？"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:81
 msgid "West"
-msgstr ""
+msgstr "西部"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:47
 msgid "Work items"
-msgstr ""
+msgstr "工作項目"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:33
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:187
@@ -12963,11 +12963,11 @@ msgstr "下載包含所有答案的電子表格。"
 #: zotonic_mod_survey/priv/templates/_survey_results_download_button.tpl:6
 #: zotonic_mod_survey/priv/templates/_survey_results_download_button.tpl:11
 msgid "Download survey results"
-msgstr ""
+msgstr "下載調查結果"
 
 #: zotonic_mod_survey/priv/templates/_survey_results_download_button.tpl:7
 msgid "Download..."
-msgstr ""
+msgstr "下載中..."
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:46
 msgid "Drop-down menu"
@@ -12980,13 +12980,13 @@ msgstr "电子邮件地址"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:118
 msgid "Edit answers"
-msgstr ""
+msgstr "編輯答案"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_result_status.tpl:5
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_result_status.tpl:12
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_result_status.tpl:18
 msgid "Edit status"
-msgstr ""
+msgstr "編輯狀態"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:119
 msgid "Edit survey result"
@@ -13006,7 +13006,7 @@ msgstr "例如："
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:37
 msgid "Excel (XLSX)"
-msgstr ""
+msgstr "Excel (XLSX)"
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:24
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:20
@@ -13132,11 +13132,11 @@ msgstr "立即开始做题，不需要 \"开始 \"按钮"
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:30
 msgid "Include prompts as the first row"
-msgstr ""
+msgstr "將提示語作為第一行加入"
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:22
 msgid "Include the status, status date, and note. The status modifier is omitted for anonymous downloads."
-msgstr ""
+msgstr "請包含狀態、狀態日期及備註。若為匿名下載，則省略狀態修飾詞。"
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:40
 msgid "Informational"
@@ -13185,7 +13185,7 @@ msgstr "跳轉到這個問題標籤（必須在下面的其他頁面上）"
 
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:65
 msgid "Last status change"
-msgstr ""
+msgstr "最近一次狀態變更"
 
 #: zotonic_mod_survey/src/mod_survey.erl:500
 msgid "Likert"
@@ -13313,7 +13313,7 @@ msgstr "還沒有結果。"
 
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:27
 msgid "No status"
-msgstr ""
+msgstr "無狀態"
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:103
 msgid "Not all the required fields are filled in. You can go back to the previous page without saving your answers."
@@ -13346,7 +13346,7 @@ msgstr "只接受图片。"
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_survey_question_options.tpl:11
 msgid "Only editors can answer"
-msgstr ""
+msgstr "只有編輯才能回答"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:210
 msgid "Optional confirmation email for the respondent"
@@ -13487,7 +13487,7 @@ msgstr "刪除“下一步”按鈕。除非您新增跳到下一頁的按鈕，
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:11
 msgid "Remove respondent names, user ids, and other respondent identity columns."
-msgstr ""
+msgstr "移除受訪者姓名、使用者 ID 及其他可識別受訪者身分的欄位。"
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_survey_question_options.tpl:4
 msgid "Required, this question must be answered."
@@ -13495,7 +13495,7 @@ msgstr "必须填写"
 
 #: zotonic_mod_survey/priv/templates/_survey_result_chart.tpl:24
 msgid "Responses"
-msgstr ""
+msgstr "回應"
 
 #: zotonic_mod_survey/src/mod_survey.erl:456
 msgid "Result deleted."
@@ -13560,7 +13560,7 @@ msgstr "用逗号分隔多个电子邮件地址。"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_result_status.tpl:10
 msgid "Set status"
-msgstr ""
+msgstr "設定狀態"
 
 #: zotonic_mod_survey/src/mod_survey.erl:505
 msgid "Short answer"
@@ -13613,7 +13613,7 @@ msgstr "抱歉，無法插入新人。"
 
 #: zotonic_mod_survey/src/mod_survey.erl:438
 msgid "Sorry, that survey answer is unknown."
-msgstr ""
+msgstr "抱歉，該問卷的答案未知。"
 
 #: zotonic_mod_survey/src/mod_survey.erl:1481
 msgid "Sorry, the maximum number of submissions has been reached. You can no longer submit this form."
@@ -13622,7 +13622,7 @@ msgstr "抱歉，已達到提交的最大數量。您不能再提交此表格。
 #: zotonic_mod_survey/src/mod_survey.erl:442
 #: zotonic_mod_survey/src/mod_survey.erl:445
 msgid "Sorry, the status could not be saved."
-msgstr ""
+msgstr "抱歉，無法儲存該狀態。"
 
 #: zotonic_mod_survey/src/mod_survey.erl:1494
 msgid "Sorry, you already submitted your answers. Reload the page if you want to fill in the form again."
@@ -13635,29 +13635,29 @@ msgstr "开始"
 #: zotonic_mod_survey/src/models/m_survey.erl:1073
 #: zotonic_mod_survey/src/models/m_survey.erl:1079
 msgid "Status date"
-msgstr ""
+msgstr "狀態日期"
 
 #: zotonic_mod_survey/src/models/m_survey.erl:1082
 msgid "Status modifier"
-msgstr ""
+msgstr "狀態修飾符"
 
 #: zotonic_mod_survey/src/models/m_survey.erl:1081
 msgid "Status modifier id"
-msgstr ""
+msgstr "狀態修飾碼 ID"
 
 #: zotonic_mod_survey/src/models/m_survey.erl:1074
 #: zotonic_mod_survey/src/models/m_survey.erl:1080
 msgid "Status note"
-msgstr ""
+msgstr "狀態說明"
 
 #: zotonic_mod_survey/src/mod_survey.erl:434
 msgid "Status saved."
-msgstr ""
+msgstr "狀態已儲存。"
 
 #: zotonic_mod_survey/priv/templates/_survey_answer_status.tpl:20
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:40
 msgid "Status {status}"
-msgstr ""
+msgstr "狀態 {status}"
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:154
 msgid "Stop and continue later"
@@ -13746,7 +13746,7 @@ msgstr "圖表顯示了諸如瑟斯通或多項選擇以及是/否等封閉式�
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:66
 msgid "The download has started. Please check your download window."
-msgstr ""
+msgstr "下載已開始。請查看您的下載視窗。"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:4
 msgid "The email address is shown if there is a question with label “email” or if there is a person with an email address that has been linked."
@@ -13774,7 +13774,7 @@ msgstr "结果已经保存下来了。"
 
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:59
 msgid "The status and note are only visible to people who can edit the survey."
-msgstr ""
+msgstr "「狀態」和「備註」僅對具有編輯問卷權限的人員可見。"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:147
 msgid "The uploaded file will be attached to the result email."
@@ -13818,7 +13818,7 @@ msgstr "這是通過測驗或測試所需的百分比。僅在您添加了測驗
 
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:78
 msgid "This survey answer could not be found."
-msgstr ""
+msgstr "找不到這份問卷的回答。"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:18
 msgid "This text is shown after the form has been submitted."
@@ -13922,7 +13922,7 @@ msgstr "你已经填好了"
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:82
 #: zotonic_mod_survey/src/mod_survey.erl:440
 msgid "You are not allowed to change the status."
-msgstr ""
+msgstr "您無權變更該狀態。"
 
 #: zotonic_mod_survey/src/mod_survey.erl:417
 #: zotonic_mod_survey/src/mod_survey.erl:460
@@ -13932,7 +13932,7 @@ msgstr "你不允许改变这些结果。"
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:70
 msgid "You are not allowed to download the survey results."
-msgstr ""
+msgstr "您不得下載問卷調查結果。"
 
 #: zotonic_mod_survey/priv/templates/_survey_results.tpl:41
 msgid "You are not allowed to see the results."
