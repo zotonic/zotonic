@@ -1,6 +1,7 @@
 /* CSS for surveys, overrules the bootstrap css */
 
 @import "survey_status";
+@import "survey_charts";
 
 .survey-is-correct:after {
     color: green;

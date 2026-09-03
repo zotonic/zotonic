@@ -1,4 +1,5 @@
 @import "survey_status";
+@import "survey_charts";
 
 .table {
     .survey-status-cell {
@@ -8,6 +9,9 @@
 
         &.survey-status-label {
             display: table-cell;
+            // Allow the table column to shrink below the note's intrinsic width.
+            max-width: 0;
+            overflow: hidden;
             color: var(--survey-status-foreground-color);
             background-color: transparent;
             border-radius: 0;

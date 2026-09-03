@@ -12,31 +12,31 @@
 
 {% block widget_content %}
     <p class="help-block">{_ The charts show aggregated results from closed questions like thurstone and yes/no. _}</p>
-    <div class="survey-results">
+    <div class="survey-results survey-chart-results">
         {% for result, chart, question in m.survey.results[id] %}
-            <div class="survey-result">
-                {% if question.is_hide_result %}
-                    {# nothing #}
-                {% elseif not result %}
-                    {% if question.type == 'header' %}
-                        {% optional include ["blocks/_block_view_",question.type,".tpl"]|join id=id blk=question answers=answers %}
-                    {% endif %}
-                {% else %}
+            {% if question.is_hide_result %}
+                {# nothing #}
+            {% elseif not result %}
+                {% if question.type == 'header' %}
+                    {% optional include ["blocks/_block_view_",question.type,".tpl"]|join id=id blk=question answers=answers %}
+                {% endif %}
+            {% elseif chart.type == "pie" or chart.charts %}
+                <div class="survey-result">
                     {% if chart.question %}
-                        <h4>{{ chart.question }}</h4>
+                        <h4 class="survey-result-question">{{ chart.question }}</h4>
                     {% endif %}
                     {% if chart.charts %}
                         {% for c in chart.charts %}
                             {% if c.question %}
-                                <h5>{{ c.question }}</h5>
+                                <h5 class="survey-result-subquestion">{{ c.question }}</h5>
                             {% endif %}
                             {% include "_survey_result_chart.tpl" chart=c %}
                         {% endfor %}
                     {% else %}
                         {% include "_survey_result_chart.tpl" %}
                     {% endif %}
-                {% endif %}
-            </div>
+                </div>
+            {% endif %}
         {% endfor %}
     </div>
 {% endblock %}

@@ -250,6 +250,19 @@ pie_segment_labels_test() ->
     {ok, HiddenHtml} = render([{type, pie}, {show_labels, false}, {data, Data}]),
     ?assertEqual(nomatch, binary:match(HiddenHtml, <<"class='z-chart-segment-labels'">>)).
 
+pie_short_labels_use_larger_font_test() ->
+    {ok, ShortHtml} = render([
+        {type, pie},
+        {data, [[<<"Yes">>, 4], [<<"No">>, 1]]}
+    ]),
+    ?assertEqual(2, length(binary:matches(ShortHtml, <<"font-size='14'">>))),
+    {ok, LongHtml} = render([
+        {type, pie},
+        {data, [[<<"Short">>, 4], [<<"A longer label">>, 1]]}
+    ]),
+    ?assertEqual(2, length(binary:matches(LongHtml, <<"font-size='11'">>))),
+    ?assertEqual(nomatch, binary:match(LongHtml, <<"font-size='14'">>)).
+
 pie_segment_label_threshold_test() ->
     Data = [[<<"Large">>, 98], [<<"Small">>, 2]],
     {ok, Html} = render([

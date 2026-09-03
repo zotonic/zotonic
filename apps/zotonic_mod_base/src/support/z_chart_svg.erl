@@ -43,8 +43,9 @@
 -define(DEFAULT_HEIGHT, 240).
 
 -define(PIE_LABEL_FONT_SIZE, 11).
--define(PIE_LABEL_LINE_HEIGHT, 13).
--define(PIE_LABEL_GAP, 14).
+-define(PIE_LABEL_SHORT_FONT_SIZE, 14).
+-define(PIE_LABEL_SHORT_MAX_LENGTH, 8).
+-define(PIE_LABEL_SHORT_MAX_COUNT, 6).
 -define(LINE_TICK_COUNT, 6).
 -define(LINE_LABEL_CHARACTER_WIDTH, 6).
 -define(LINE_LABEL_GAP, 12).
@@ -703,22 +704,25 @@ render_pie_slices(Slices, Total, CX, CY, Radius, IsDonut) ->
 render_pie_labels(false, _Slices, _Total, _CX, _CY, _Radius, _LabelSpace, _Width, _Height) ->
     <<>>;
 render_pie_labels(true, Slices, _Total, CX, CY, Radius, LabelSpace, Width, Height) ->
-    MinY = ?PIE_LABEL_LINE_HEIGHT,
-    MaxY = Height - ?PIE_LABEL_LINE_HEIGHT,
+    FontSize = pie_label_font_size(Slices),
+    LineHeight = FontSize + 2,
+    LabelGap = FontSize + 3,
+    MinY = LineHeight,
+    MaxY = Height - LineHeight,
     Candidates = [
         pie_label_candidate(Slice, CX, CY, Radius, MinY, MaxY)
         || Slice <- Slices
     ],
     Left = [Label || #{side := left} = Label <- Candidates],
     Right = [Label || #{side := right} = Label <- Candidates],
-    MaxLabels = erlang:max(1, trunc((MaxY - MinY) / ?PIE_LABEL_GAP) + 1),
+    MaxLabels = erlang:max(1, trunc((MaxY - MinY) / LabelGap) + 1),
     Positioned =
-        position_pie_labels(limit_pie_labels(Left, MaxLabels), MinY, MaxY, ?PIE_LABEL_GAP)
+        position_pie_labels(limit_pie_labels(Left, MaxLabels), MinY, MaxY, LabelGap)
         ++ position_pie_labels(
             limit_pie_labels(Right, MaxLabels),
             MinY,
             MaxY,
-            ?PIE_LABEL_GAP),
+            LabelGap),
     case Positioned of
         [] ->
             <<>>;
@@ -727,10 +731,23 @@ render_pie_labels(true, Slices, _Total, CX, CY, Radius, LabelSpace, Width, Heigh
                 <<"g">>,
                 [{<<"class">>, <<"z-chart-segment-labels">>}],
                 [
-                    render_pie_label(Label, CX, CY, Radius, LabelSpace, Width)
+                    render_pie_label(Label, CX, CY, Radius, LabelSpace, Width, FontSize)
                     || Label <- Positioned
                 ])
     end.
+
+pie_label_font_size(Slices) when length(Slices) =< ?PIE_LABEL_SHORT_MAX_COUNT ->
+    case lists:all(
+        fun(#{label := Label}) ->
+            z_string:len(Label) =< ?PIE_LABEL_SHORT_MAX_LENGTH
+        end,
+        Slices)
+    of
+        true -> ?PIE_LABEL_SHORT_FONT_SIZE;
+        false -> ?PIE_LABEL_FONT_SIZE
+    end;
+pie_label_font_size(_Slices) ->
+    ?PIE_LABEL_FONT_SIZE.
 
 pie_label_candidate(#{angle := Angle} = Slice, CX, CY, Radius, MinY, MaxY) ->
     {_X, NaturalY} = polar(CX, CY, Radius + 8, Angle),
@@ -779,7 +796,14 @@ position_pie_labels_up([#{y := Y} = Label | Rest], NextY, Gap, Acc) ->
     BoundedY = erlang:min(Y, NextY - Gap),
     position_pie_labels_up(Rest, BoundedY, Gap, [Label#{y => BoundedY} | Acc]).
 
-render_pie_label(#{label := Label, angle := Angle, side := Side, y := Y}, CX, CY, Radius, LabelSpace, Width) ->
+render_pie_label(
+        #{label := Label, angle := Angle, side := Side, y := Y},
+        CX,
+        CY,
+        Radius,
+        LabelSpace,
+        Width,
+        FontSize) ->
     {StartX, StartY} = polar(CX, CY, Radius, Angle),
     {OuterX, OuterY} = polar(CX, CY, Radius + 8, Angle),
     {TextX, LineX, TextAnchor} = case Side of
@@ -813,7 +837,7 @@ render_pie_label(#{label := Label, angle := Angle, side := Side, y := Y}, CX, CY
                 {<<"text-anchor">>, TextAnchor},
                 {<<"dominant-baseline">>, <<"middle">>},
                 {<<"fill">>, <<"currentColor">>},
-                {<<"font-size">>, ?PIE_LABEL_FONT_SIZE}
+                {<<"font-size">>, FontSize}
             ],
             escape(short_label(Label, LabelLength)))
     ].
