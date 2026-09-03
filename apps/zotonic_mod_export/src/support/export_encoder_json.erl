@@ -67,6 +67,12 @@ header(Header, #state{} = State, Context) when is_list(Header) ->
 header(_Header, #state{} = State, _Context) ->
     {ok, <<"[">>, State}.
 
+-spec row(Row, State, Context) -> {ok, Data, State}
+    when
+        Row :: term(),
+        State :: #state{},
+        Context :: z:context(),
+        Data :: iodata().
 row(Row, #state{ props = Props } = State, Context) when is_integer(Row) ->
     case row_value(Row, Props, Context) of
         {ok, JSON} ->
