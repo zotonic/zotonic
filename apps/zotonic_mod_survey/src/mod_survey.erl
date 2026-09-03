@@ -18,129 +18,228 @@
 %% limitations under the License.
 
 -module(mod_survey).
--moduledoc("
-Adds the concept of survey [resources](/id/doc_glossary#term-resource): user-definable forms which can be created in the
-admin interface and filled out by the website’s visitors.
-
+-moduledoc(<<"
+Adds survey [resources](/id/doc_glossary#term-resource): user-defined forms that
+can be created in the admin interface and filled in by site visitors. The module
+renders multi-page forms, validates and stores answers, supports quizzes, and
+reports or exports the collected results.
 
 
 Survey question types
 ---------------------
 
-The following question types are defined in the survey:
-
 | Type | Description |
-| ==== | =========== |
-| likert | Answer a question on a scale of 5 points, from “completely disagree” (1) to “completely agree” (5). |
-| short answer | An open question with a single-lined text field. You have the option of specifying a validation like email, date, numeric. |
-| long answer | An open question with a big text field. |
-| matching | Question type which allows you to match given answers to each other. |
-| thurstone | A multiple choice field. Like multiple choice, but more powerful. The choices are translatable, and you have the possibility to select either a single answer, multiple answers or submit the form directly when choosing an answer. |
-| multiple choice | A simple multiple choice field that has the added option that the multiple choice can be a numeric value, in which case an overview of the total value will be shown in the printable list and beneath the survey pie chart. This is useful for creating forms which require you to enter an amount or quantity, e.g. for a reservation system. Multiple choice fields cannot currently be translated, use the “thurstone” question type in that case. |
-| true or false | Answers a true or false question. You have the option to specify custom texts for both the options. |
-| yes or no | Like true or false, answers a true or false question. You have the option to specify custom texts for both the options. |
-| narrative | Question type for specifying inline questions in a narrative fashion. |
-| category | Choose a single resource from a given category as the answer to this question. |
-| country | Select a country from a drop-down list. |
-| hidden | A hidden input value. Can be used to register that a specific page of questions has been submitted. |
-| upload | Upload a file. Can be used on the last survey page, you have to add your own survey handler to handle the uploaded file. |
-| header | Renders a sub-heading between questions. |
-| prompt | Renders an extra prompt block. |
-| text block | Renders a text block between questions. |
+| ---- | ----------- |
+| likert | A five-point scale from completely disagree (1) to completely agree (5). |
+| short answer | A single-line text field with optional validation such as email, date, or numeric. |
+| long answer | A multi-line text field. |
+| matching | Match each item to one of the supplied options. |
+| thurstone | Translatable single or multiple choice, optionally submitting immediately after a choice. |
+| multiple choice | Simple choices. Numeric choice values can also be totaled in printable and chart results. Use thurstone for translatable choices. |
+| true or false | A boolean question with configurable option text. |
+| yes or no | A boolean question with configurable option text. |
+| narrative | Inline questions embedded in narrative text. |
+| category | Select one resource from a category. |
+| country | Select a country. |
+| hidden | A hidden value, for example to record that a page was submitted. |
+| upload | A file upload for the final page. The upload question has no stored result; a custom survey handler must process the file. |
+| header | A subheading between questions. |
+| prompt | An additional prompt block. |
+| text block | Explanatory text between questions. |
+
+
+Tests and quizzes
+-----------------
+
+Thurstone and matching questions can be marked as test questions with
+`is_test`. This selects their test rendering and makes the configured correct
+answers available to the feedback templates. `is_test_direct` shows feedback
+while filling in the question.
+
+Scoring is currently implemented for thurstone questions. Each choice can have
+an `is_correct` flag and `points_int`; the default is one point. A single-choice
+question awards the selected correct answer. A multiple-choice question can
+award correct selections and correctly omitted wrong selections. With
+`is_test_neg`, wrong selections and omitted correct answers subtract their
+configured points. The score for an individual question never goes below zero.
+Matching test questions support direct correctness feedback but currently add
+no points to the stored total.
+
+`survey_test_results` stores the calculated total in the answer's `points`
+field and annotates the stored answers with their points. Set the survey
+property `survey_test_percentage` to the percentage needed to pass. The
+`survey_show_results` setting controls whether the final page shows only the
+thank-you text, the respondent's result, the respondent's result only after a
+pass, or aggregated results.
+
+Templates can use `survey_test_max_points` to retrieve the maximum score and
+the `survey_any_correct_answer` and `survey_any_wrong_answer` filters when
+rendering answer feedback.
+
+
+Editing submitted answers
+-------------------------
+
+The `survey_multiple` resource property controls repeat submissions and edits:
+
+* `0` means one final submission; it cannot be edited by the respondent.
+* `1` allows multiple submissions, each stored as a new answer.
+* `2` allows one submission and lets a logged-in respondent edit their own
+  stored answer.
+
+People who can edit the survey resource can edit any of its saved answers by
+answer id. A participant can update only their own answer, and only in mode `2`.
+Anonymous respondents cannot edit a final submission in this mode. These checks
+are made server-side with the `update_result` ACL action; hiding an edit button
+is not the access control.
+
+`m_survey:replace_survey_submission/4` recalculates the test score and updates
+the answer's `modified` and `modifier_id` fields. The `submitted` date is set
+when a new answer is stored. On an edit it is refreshed only when the current
+user owns the saved answer; an editor changing somebody else's answer leaves
+the original submitted date intact.
+
+Saving intermediate progress is separate from editing a submitted answer. Also
+note that edit-after-submit and submission-count limits depend on the selected
+survey handler storing results in `survey_answers`.
+
+
+Editor-only questions
+---------------------
+
+Set `is_editor_only` on a question block when only people with edit permission
+on the survey should supply that answer. Editors see the normal input and can
+change it. A non-editor sees the stored answer in read-only form when one is
+present, and otherwise does not see the question.
+
+This restriction is enforced in both the form flow and the storage layer.
+Submitted values for editor-only questions are discarded for non-editors,
+including the expanded input names used by narrative and matching questions.
+When a non-editor updates an answer, any existing editor-only values are copied
+from the stored answer instead of being overwritten. An editor-only question
+marked required is not considered missing for a non-editor.
+
+
+Answer status
+-------------
+
+Every saved answer has optional workflow metadata, separate from the answer
+audit fields:
+
+* `status` - a non-negative numeric status index, or `undefined` for no status.
+  The bundled interface presents status values 0 through 5 as color swatches.
+* `status_date` - UTC date and time of the last status change.
+* `status_note` - an optional internal note. It is trimmed and limited to
+  65,536 Unicode characters; longer input is truncated safely.
+* `status_modifier_id` - the user who last changed the status.
+
+Use `m_survey:set_answer_status/5` to replace all four status fields together.
+The answer id must belong to the supplied survey, and the current user must be
+allowed to edit that survey. Changing status does not update `modified` or
+`modifier_id`, because those fields describe changes to the submitted answers.
+
+Status is internal editor information. `m_survey:single_result/3` and
+`single_result/4` remove all status fields when the current user cannot edit the
+survey. The read-only `_survey_answer_status.tpl` and the editable
+`_survey_answer_status_edit.tpl` apply the same editor check. The latter is
+included by `_dialog_survey_answer_status.tpl`, which handles saving through
+the `survey_answer_status` submit event.
+
+Both status templates accept an optional `status_labels` list for values 0
+through 5. Without labels they show only the color swatches. For example:
+
+```django
+{% include \"_survey_answer_status.tpl\"
+    id=id
+    answer_id=answer_id
+    status_labels=[_\"New\", _\"Accepted\", _\"Rejected\"]
+%}
+```
 
 
 Intercepting survey submissions
 -------------------------------
 
-When a survey is submitted, the survey module sends out a `#survey_submit{}` notification.
+When a survey is submitted, the module sends a first `#survey_submit{}`
+notification with these fields:
 
-This notification has the following fields:
+* `id` - id of the submitted survey.
+* `handler` - selected handler name, described below.
+* `answers` - normalized answers.
+* `missing` - names of required answers that were missing.
+* `answers_raw` - unprocessed submitted values.
 
-*   id - The id of survey being submitted
-*   handler - A handler name (see below)
-*   answers - The answers that were filled in
-*   missing - answers that were missing
-*   answers_raw - Unprocessed answers, e.g. the raw submission
-
-To intercept a survey submission you would observe this survey_submit notification, and return `ok`:
-
+An observer can handle a submission by returning `ok`:
 
 ```erlang
-observe_survey_submit(#survey_submit{ id = SurveyId }, Context) ->
+observe_survey_submit(#survey_submit{id = SurveyId}, Context) ->
     ?DEBUG(SurveyId),
     ok.
 ```
 
 
-
 Creating a custom survey handler
 --------------------------------
 
-The survey edit page has a dropdown for so-called “survey handlers”. A survey handler is a property that is set on
-the resource that indicates the handler that needs to be taken. Handlers are collected using the
-`#survey_get_handlers{}` fold notification.
-
-For instance, the following defines a handler called “email_me”:
-
+The survey edit page has a dropdown of survey handlers. A handler is a survey
+resource property that selects how a submission is processed. Handlers are
+collected with the `#survey_get_handlers{}` fold notification:
 
 ```erlang
 observe_survey_get_handlers(#survey_get_handlers{}, All, Context) ->
-  [
-   {<<\"email_me\">>, ?__(<<\"E-mail me when survey is submitted\">>, Context)}
-   | All
-  ].
+    [
+        {<<\"email_me\">>,
+            ?__(<<\"E-mail me when the survey is submitted\">>, Context)}
+        | All
+    ].
 ```
 
-Each handler will show up in the dropdown list and the editor can pick which handler he wants. The value chosen is
-passed along in the `handler` property of the survey submission, and as such can be used to intercept the survey submission:
-
+The selected value is passed in the `handler` field of `#survey_submit{}`. An
+observer should match its handler and return `undefined` for the others:
 
 ```erlang
-observe_survey_submit(#survey_submit{ handler = <<\"email_me\">>, id = SurveyId }, Context) ->
-    %% Do something here for surveys which have 'email_me' selected as handler
+observe_survey_submit(
+        #survey_submit{handler = <<\"email_me\">>, id = SurveyId},
+        Context) ->
+    %% Handle and, if desired, store this submission.
     ok;
 observe_survey_submit(#survey_submit{}, _Context) ->
-    %% Let other surveys use the default submision mechanism
     undefined.
 ```
 
 
+Configuration keys
+------------------
 
-Configurations keys
--------------------
+The result editor can link an answer to a newly created person. Its category
+and content group are configured with:
 
-In the survey result editor it is possible to link an answer to a newly created person.
-
-The category and content group for this person can be configured via the following two keys:
-
-*   `mod_survey.person_category`, default to `person`
-*   `mod_survey.person_content_group`, defaults to `default_content_group`
-Survey/form module for creating questionnaires and collecting/reporting submitted answers.
+* `mod_survey.person_category`, default `person`.
+* `mod_survey.person_content_group`, default `default_content_group`. If empty,
+  the active ACL module selects the default content group.
 
 
-Accepted Events
+Accepted events
 ---------------
 
 This module handles the following notifier callbacks:
 
-- `observe_acl_is_allowed`: Check access to the survey answers using `z_acl:rsc_editable`.
-- `observe_admin_edit_blocks`: Append the possible blocks for a survey's edit page using `m_rsc:is_a`.
-- `observe_admin_rscform`: Redo the page jumps into correct page break blocks using `survey_admin:admin_rscform`.
-- `observe_export_resource_data`: Fetch all ids making up the export, handles collections and search queries using `z_acl:rsc_editable`.
-- `observe_export_resource_filename`: Fetch the filename for the export using `m_survey:is_allowed_results_download`.
-- `observe_export_resource_header`: Fetch the header for the survey download using `m_survey:is_allowed_results_download`.
-- `observe_rsc_merge`: Rename the answers of the loser to the winner using `m_survey:rsc_merge`.
-- `observe_survey_get_handlers`: Add module-provided survey handlers to the available handler list.
-- `observe_survey_is_submit`: Check if the given block is a survey question with submit button using `m_survey:rsc_merge`.
-- `observe_survey_submit`: Process survey submissions for module handlers and return `undefined` for non-matching handlers.
-- `observe_tick_24h`: Every day prune old saved intermediate survey results using `m_survey_saved:prune_saved`.
+* `observe_acl_is_allowed/2` checks view, update, delete, and MQTT access for
+  survey answers.
+* `observe_admin_edit_blocks/3` adds the survey question blocks to the editor.
+* `observe_admin_rscform/3` normalizes page jumps into page-break blocks.
+* `observe_export_resource_filename/2`, `observe_export_resource_header/2`, and
+  `observe_export_resource_data/2` provide the survey results download.
+* `observe_rsc_merge/2` moves answers from a merged resource to the winner.
+* `observe_survey_get_handlers/3` adds built-in survey handlers.
+* `observe_survey_is_submit/2` checks whether a block submits the survey.
+* `observe_survey_submit/2` processes submissions for built-in handlers.
+* `observe_tick_24h/2` removes expired intermediate survey results.
 
-Delegate callbacks:
-
-- `event/2` with `postback` messages: `survey_back`, `survey_remove_result`, `survey_remove_result_confirm`, `survey_start`.
-- `event/2` with `submit` messages: `survey_next`.
-
-").
+Delegate callbacks handled by `event/2` include the `survey_start`,
+`survey_back`, `survey_remove_result`, and `survey_remove_result_confirm`
+postbacks, and the `survey_next` and `survey_answer_status` submit events.
+">>).
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Survey").

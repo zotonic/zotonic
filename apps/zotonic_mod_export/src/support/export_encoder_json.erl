@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2016-2024 Marc Worrell <marc@worrell.nl>
+%% @copyright 2016-2026 Marc Worrell <marc@worrell.nl>
 %% @doc Format exports for JSON format
 %% @end
 
-%% Copyright 2016-2024 Marc Worrell
+%% Copyright 2016-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -83,7 +83,9 @@ row(Row, #state{ is_first_row = IsFirstRow } = State, _Context) when is_map(Row)
             true -> <<>>;
             false -> $,
         end,
-        z_json:encode(Row)
+        z_json:encode(maps:map(
+            fun(_Key, Value) -> export_encoder:cell_value(Value) end,
+            Row))
     ],
     {ok, Data, State#state{ is_first_row = false }};
 row(_Row, #state{} = State, _Context) ->
@@ -147,18 +149,21 @@ row_map([], [Value | Values], N, Used, Acc, Context) ->
 row_map([], [], _N, _Used, Acc, _Context) ->
     Acc.
 
-json_value(#trans{} = Trans, Context) ->
+json_value(Value, Context) ->
+    json_value_1(export_encoder:cell_value(Value), Context).
+
+json_value_1(#trans{} = Trans, Context) ->
     z_trans:lookup_fallback(Trans, Context);
-json_value(?ST_JUTTEMIS, _Context) ->
+json_value_1(?ST_JUTTEMIS, _Context) ->
     undefined;
-json_value({{9999, _M, _D}, {_H, _I, _S}}, _Context) ->
+json_value_1({{9999, _M, _D}, {_H, _I, _S}}, _Context) ->
     undefined;
-json_value({Y, M, D} = Date, Context)
+json_value_1({Y, M, D} = Date, Context)
         when is_integer(Y), is_integer(M), is_integer(D) ->
     z_datetime:format_utc({Date, {0, 0, 0}}, "Y-m-d", Context);
-json_value({{Y, M, D}, {H, I, S}} = Date, Context)
+json_value_1({{Y, M, D}, {H, I, S}} = Date, Context)
         when is_integer(Y), is_integer(M), is_integer(D),
              is_integer(H), is_integer(I), is_integer(S) ->
     z_datetime:format_utc(Date, "c", Context);
-json_value(Value, _Context) ->
+json_value_1(Value, _Context) ->
     Value.

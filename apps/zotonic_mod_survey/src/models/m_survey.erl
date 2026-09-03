@@ -897,7 +897,7 @@ survey_results_prompts(SurveyId, IsForceAnonymous, Context) ->
     Prompts :: [ binary() ],
     Data :: [ {AnswerId, [ RowValue ]} ],
     AnswerId :: integer(),
-    RowValue :: binary() | number() | boolean() | calendar:datetime() | #trans{} | undefined.
+    RowValue :: binary() | number() | boolean() | calendar:datetime() | #trans{} | export_encoder:cell() | undefined.
 survey_results_prompts(undefined, _IsForceAnonymous, _IsIncludeStatus, _Context) ->
     {[], [], []};
 survey_results_prompts(SurveyId, IsForceAnonymous, IsIncludeStatus, Context) when is_integer(SurveyId) ->
@@ -1086,19 +1086,34 @@ opt_status(false, _IsAnonymous, _Row, _Context) ->
     [];
 opt_status(true, true, Row, _Context) ->
     [
-        proplists:get_value(status, Row),
+        export_status(proplists:get_value(status, Row)),
         proplists:get_value(status_date, Row),
         proplists:get_value(status_note, Row)
     ];
 opt_status(true, false, Row, Context) ->
     ModifierId = proplists:get_value(status_modifier_id, Row),
     [
-        proplists:get_value(status, Row),
+        export_status(proplists:get_value(status, Row)),
         proplists:get_value(status_date, Row),
         proplists:get_value(status_note, Row),
         ModifierId,
         status_modifier_name(ModifierId, Context)
     ].
+
+export_status(Status) ->
+    case status_color(Status) of
+        undefined -> Status;
+        Color -> export_encoder:cell(Status, #{ background_color => Color })
+    end.
+
+%% Keep this palette in sync with priv/lib-src/css/_survey_status.scss.
+status_color(0) -> <<"#E2E8F0">>;
+status_color(1) -> <<"#B8E9C0">>;
+status_color(2) -> <<"#BBE1FA">>;
+status_color(3) -> <<"#E2C6FF">>;
+status_color(4) -> <<"#FAC112">>;
+status_color(5) -> <<"#F87171">>;
+status_color(_Status) -> undefined.
 
 status_modifier_name(undefined, _Context) ->
     <<>>;

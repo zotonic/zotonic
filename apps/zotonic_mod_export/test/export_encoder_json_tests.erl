@@ -24,6 +24,18 @@ map_row_is_unchanged_test() ->
     },
     ?assertEqual([Map], encode_rows([<<"Ignored">>], [Map])).
 
+styled_list_row_exports_plain_value_test() ->
+    [Row] = encode_rows(
+        [<<"Status">>],
+        [[export_encoder:cell(2, #{ background_color => <<"#BBE1FA">> })]]),
+    ?assertEqual(#{ <<"Status">> => 2 }, Row).
+
+styled_map_row_exports_plain_value_test() ->
+    Map = #{
+        <<"status">> => export_encoder:cell(2, #{ background_color => <<"#BBE1FA">> })
+    },
+    ?assertEqual([#{ <<"status">> => 2 }], encode_rows([<<"Ignored">>], [Map])).
+
 headers_are_unique_and_rows_are_not_truncated_test() ->
     [Row] = encode_rows(
         [<<"Name">>, <<"Name">>, <<>>],
