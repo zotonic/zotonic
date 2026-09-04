@@ -172,13 +172,14 @@ cotonic.ready.then(() => {
 
     cotonic.broker.call(
         "bridge/origin/model/template/get/render/_item.tpl",
-        { vars: { id: 123 } },
+        { id: 123 },
         { qos: 1 }
-    ).then((html) => cotonic.broker.publish("model/ui/replace/item", html));
+    ).then((resp) => cotonic.broker.publish("model/ui/replace/item", resp.payload.result));
 });
 ```
 
 - Use `cotonic.broker.publish(topic, payload, options)` for fire-and-forget messages, `subscribe(filter, callback, options)` for subscriptions, and `call(topic, payload, options)` when a response topic is expected.
+- The `m_template` model adds the call payload as query arguments before rendering. In this example `_item.tpl` reads `q.id`; the payload does not create a top-level `id` template variable.
 
 ## Server Publish Subscribe
 
@@ -234,3 +235,27 @@ z_mqtt:publish([<<"my">>, <<"topic">>], #{status => ok}, #{qos => 1, retain => t
 - Core Zotonic widgets under `apps/` include base widgets `do_clickable`, `do_smiley`, `do_feedback`, `do_timesince`, `do_tooltip`, `do_inputoverlay`, `do_autocomplete`, `do_zeditor`, `do_datepicker`, `do_formdirty`, `do_popupwindow`, `do_filepreview`, `do_forminit`, and `do_dialog`.
 - Additional core module widgets include `do_live` (`mod_mqtt`), `do_adminwidget` (`mod_admin`), `do_menuedit`/`do_trash`/Superfish menu behavior (`mod_menu`), `do_cookie_consent`, `do_survey_test_feedback`, `do_gaq_track`, and `do_make_diff`.
 - Before adding a new widget, run `rg "do_<name>|\$\.widget|\.defaults" apps/*/priv/lib/js` to avoid duplicating an existing core widget.
+
+## Live Search With `do_feedback`
+
+- Prefer the existing `do_feedback` widget for a debounced server-rendered live search. Ensure `js/modules/z.feedback.js` is included by the active page or admin JavaScript bundle before relying on the class.
+- Put `class="do_feedback"` and a JSON `data-feedback` attribute on the result container. `trigger` is the id of a form or input; the widget listens for `keyup` and `change`, with a default debounce of 600 ms that can be overridden with `timeout`.
+- A form trigger serializes all named form fields into the request payload. A single input trigger sends its value as `triggervalue`. Prefer a form when the result template needs multiple values, including hidden context fields.
+- With a `template` option, the widget calls `bridge/origin/model/template/get/render/<template>` and replaces the result container with `resp.payload.result`. Payload fields are query arguments in the rendered template, so read them through `q.*`.
+
+```django
+{% wire id=#search_form type="submit" action={script script=""} %}
+<form id="{{ #search_form }}" role="search">
+    <input type="search" name="text" autocomplete="off">
+</form>
+<div class="do_feedback"
+     data-feedback='{ "trigger": "{{ #search_form }}", "template": "_search_results.tpl" }'>
+    {% include "_search_results.tpl" text=text %}
+</div>
+```
+
+- Use `text|default:q.text` in a result partial that is both included normally and rendered dynamically. Keep an initial include in the result container when useful, because `do_feedback` only updates after the trigger changes.
+- Keep a live-search form separate from a surrounding action form. Otherwise pressing Enter in the search field can submit an unrelated default button. Wire the search form to an empty script action, as above, to suppress native submission.
+- If dynamically rendered selection buttons must submit another form, pass that form's generated id through a hidden search field and set the button's HTML `form="{{ form_id|escape }}"` attribute.
+- Without a `template` option, `do_feedback` sends `z_notify("feedback", ...)` to the configured `delegate` as a `#postback_notify{}`. The handler must validate inputs and permissions, update the target, and remove its `loading` class. Use this delegate mode when the search needs an explicit server-side ACL check or other application logic.
+- Direct template rendering retains the caller context and the called models' ACL checks, but does not add permission checks. Treat all live-search payload fields as untrusted and escape them at output boundaries.

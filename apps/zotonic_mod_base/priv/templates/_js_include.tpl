@@ -6,6 +6,8 @@
     "cotonic/cotonic.js"
 	"js/apps/zotonic-wired.js"
 	"js/apps/z.widgetmanager.js"
+	"js/modules/z.autofocus.js"
+	"js/modules/z.autoheight.js"
 	"js/modules/z.notice.js"
 	"js/modules/z.imageviewer.js"
 	"js/modules/z.dialog.js"
@@ -24,4 +26,3 @@
 </script>
 
 {% worker name="auth" src="js/zotonic.auth.worker.js" args=%{  auth: m.authentication.status  } %}
-

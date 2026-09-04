@@ -156,6 +156,16 @@
               .append($modalDialog)
               .appendTo($('body'));
 
+            $dialog.one('shown.bs.modal', function() {
+                // Bootstrap focuses the modal when it has finished opening.
+                // Apply an explicit autofocus after that focus change.
+                $dialog
+                  .find('[autofocus], .do_autofocus')
+                  .filter(':visible:not(:disabled)')
+                  .first()
+                  .focus();
+            });
+
             $dialog
               .modal({backdrop: options.backdrop, keyboard: options.keyboard ?? true})
               .css({
@@ -179,8 +189,9 @@
             z_editor_add($dialog);
 
             setTimeout(function() {
-                // If there already is an input field with focus, do nothing
-                if ($dialog.find("input:focus").length == 0) {
+                // Keep an explicit autofocus target in control of the initial focus.
+                const hasAutofocus = $dialog.find("[autofocus], .do_autofocus").length > 0;
+                if (!hasAutofocus && $dialog.find("input:focus").length == 0) {
                     $dialog.find('a.close').focus();
                 }
             }, 50);

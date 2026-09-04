@@ -187,6 +187,14 @@ description: Use when creating, refactoring, or reviewing Zotonic template_compi
 - Use tuple-style only when maintaining existing code that depends on the deprecated search representation or when the target model explicitly documents tuple input.
 - Treat payload values from `q` as unsafe. A structured payload can safely pass `q.page` to the model for validation, but never render `q.*` directly without escaping.
 
+## Dynamic Template Rendering
+
+- The `m_template` model renders a template dynamically through the model path `/render/...`, exposed to browser code as `bridge/origin/model/template/get/render/<template-path>`.
+- The request payload is added to the render context as query arguments. It does not become ordinary top-level template variables: a payload `{ text: "alice" }` is available as `q.text`, not `text`.
+- When a partial must work both as a normal include and as a dynamic template-model response, explicitly fall back to the query argument: `{% with text|default:q.text as search_text %}`.
+- Dynamic rendering keeps the caller's context, so model calls in the rendered template retain their normal ACL behavior. It does not add an authorization boundary of its own; use a server-side delegate when the operation needs an explicit permission check beyond the called models' ACL checks.
+- Treat every `q.*` value supplied to a dynamically rendered template as untrusted. Pass it to models that validate their input, and escape it whenever it is rendered into HTML, attributes, URLs, or JavaScript.
+
 ## Resource And URL Patterns
 
 - Prefer `{{ id.title }}`, `{{ id.summary }}`, `{{ id.body }}`, and `{{ id.depiction }}` when `id` is the sanitized page resource.
