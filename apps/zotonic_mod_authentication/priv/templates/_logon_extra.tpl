@@ -1,4 +1,4 @@
 {#
 Will be all-included.
-Content should be list items: <li>item></li>
+Content should be divs: <div>item></div>
 #}

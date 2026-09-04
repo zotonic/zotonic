@@ -309,9 +309,11 @@ msgstr ""
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:125
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:134
 #: zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:50
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:61
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:43
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:14
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:57
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:13
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:108
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:16
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:9
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:26
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:96
@@ -324,16 +326,18 @@ msgstr ""
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:26
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:85
 #: zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:60
-#: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:226
-#: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:234
+#: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:229
+#: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:237
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:70
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:157
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:113
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:88
 #: zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:49
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:140
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:152
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:160
+#: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:44
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:73
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:155
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:167
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:175
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
 #: zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:115
@@ -358,7 +362,7 @@ msgstr ""
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:45
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:11
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:28
-#: zotonic_mod_survey/src/mod_survey.erl:346
+#: zotonic_mod_survey/src/mod_survey.erl:502
 msgid "Category"
 msgstr ""
 
@@ -395,8 +399,8 @@ msgstr ""
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:7
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:14
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:21
-#: zotonic_mod_survey/priv/templates/_survey_results.tpl:56
-#: zotonic_mod_survey/priv/templates/_survey_results.tpl:61
+#: zotonic_mod_survey/priv/templates/_survey_results.tpl:50
+#: zotonic_mod_survey/priv/templates/_survey_results.tpl:55
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:57
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:62
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:75
@@ -473,8 +477,8 @@ msgstr ""
 #: zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:10
 #: zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:41
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:49
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:69
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:78
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:48
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:57
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:83
 #: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:32
 #: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:41
@@ -493,8 +497,8 @@ msgstr ""
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:52
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:75
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:97
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:96
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:10
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:43
 #: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:256
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:19
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:34
@@ -503,10 +507,10 @@ msgstr ""
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:61
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:66
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:71
-#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:106
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:121
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125
-#: zotonic_mod_survey/src/mod_survey.erl:312
+#: zotonic_mod_survey/src/mod_survey.erl:411
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:25
 msgid "Delete"
 msgstr ""
@@ -793,6 +797,7 @@ msgstr ""
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:136
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:100
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:60
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:74
 msgid "Save"
 msgstr ""
 
@@ -997,12 +1002,12 @@ msgid "closing this browser tab"
 msgstr ""
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
-#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:273
+#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:294
 msgid "delete (acl action)"
 msgstr ""
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
-#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:272
+#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:293
 msgid "edit (acl action)"
 msgstr ""
 
@@ -1011,12 +1016,12 @@ msgid "in the group"
 msgstr ""
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
-#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:271
+#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:292
 msgid "insert (acl action)"
 msgstr ""
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
-#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:274
+#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:295
 msgid "link (acl action)"
 msgstr ""
 
@@ -1029,7 +1034,7 @@ msgstr ""
 msgid "send this URL to somebody else for testing"
 msgstr ""
 
-#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:278
+#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:299
 msgid "use (acl action)"
 msgstr ""
 
@@ -1042,7 +1047,7 @@ msgid "use another browser (eg. Chrome if you are now using Firefox)"
 msgstr ""
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
-#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:270
+#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:291
 msgid "view (acl action)"
 msgstr ""
 
@@ -1127,7 +1132,7 @@ msgstr ""
 msgid "Add a note about this page."
 msgstr ""
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:121
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:95
 msgid "Add media content"
 msgstr ""
 
@@ -1223,7 +1228,7 @@ msgstr ""
 msgid "Are you sure you want to delete all tasks for this module and function?"
 msgstr ""
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:74
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:53
 msgid "Are you sure you want to delete the media from this page?"
 msgstr ""
 
@@ -1274,8 +1279,8 @@ msgstr ""
 #: zotonic_mod_survey/priv/templates/_survey_end.tpl:28
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:22
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:23
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:110
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:112
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:125
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:127
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:23
 msgid "Back"
 msgstr ""
@@ -1420,12 +1425,33 @@ msgstr ""
 msgid "Content type"
 msgstr ""
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:63
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:42
 msgid "Copied download link to clipboard"
 msgstr ""
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:56
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:73
+#: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:17
+#: zotonic_mod_auth2fa/priv/templates/_logon_login_set_passcode.tpl:20
+#: zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:33
+#: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_view.tpl:18
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:28
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:60
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:91
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:119
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:117
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:46
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:62
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:78
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:94
+msgid "Copy"
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:35
 msgid "Copy download link"
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:72
+msgid "Copy the SHA-256 checksum to the clipboard."
 msgstr ""
 
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:161
@@ -1518,8 +1544,8 @@ msgstr ""
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:136
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:22
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:16
-#: zotonic_mod_survey/src/models/m_survey.erl:831
-#: zotonic_mod_survey/src/models/m_survey.erl:834
+#: zotonic_mod_survey/src/models/m_survey.erl:935
+#: zotonic_mod_survey/src/models/m_survey.erl:938
 msgid "Date"
 msgstr ""
 
@@ -1583,6 +1609,10 @@ msgstr ""
 msgid "Dependent"
 msgstr ""
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:9
+msgid "Dimensions"
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:26
 #: zotonic_mod_admin/priv/templates/_rsc_edge.tpl:22
 #: zotonic_mod_admin/priv/templates/_rsc_edge_media.tpl:8
@@ -1618,8 +1648,9 @@ msgstr ""
 msgid "Do you want to remove this page block?"
 msgstr ""
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:53
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:32
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:33
+#: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:45
 msgid "Download"
 msgstr ""
 
@@ -1647,6 +1678,8 @@ msgid "Duplicate this page..."
 msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:31
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:42
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:70
 msgid "Duration"
 msgstr ""
 
@@ -1665,12 +1698,10 @@ msgstr ""
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:23
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:21
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:121
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:19
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:39
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:92
 #: zotonic_mod_menu/priv/templates/_admin_menu_menu_view.collection.tpl:40
 #: zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:23
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:131
-#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:103
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:113
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:115
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:35
@@ -1829,6 +1860,7 @@ msgid "File / media content"
 msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:35
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:48
 msgid "File size"
 msgstr ""
 
@@ -1837,6 +1869,7 @@ msgid "File uploaded to the drop folder, will be handled shortly."
 msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:39
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:54
 #: zotonic_mod_base/priv/templates/directory_index.tpl:14
 msgid "Filename"
 msgstr ""
@@ -2086,6 +2119,10 @@ msgstr ""
 msgid "Log Off"
 msgstr ""
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:3
+msgid "MIME type"
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:131
 msgid "Mailing address"
 msgstr ""
@@ -2118,7 +2155,7 @@ msgid "Make a new page or media"
 msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:6
-#: zotonic_mod_survey/src/mod_survey.erl:347
+#: zotonic_mod_survey/src/mod_survey.erl:503
 msgid "Matching"
 msgstr ""
 
@@ -2143,6 +2180,10 @@ msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:4
 msgid "Media content"
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:112
+msgid "Media details"
 msgstr ""
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:84
@@ -2186,6 +2227,22 @@ msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:121
 msgid "Mine"
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:20
+msgid "Mirrored horizontally"
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:26
+msgid "Mirrored horizontally, rotated 270 degrees"
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:30
+msgid "Mirrored horizontally, rotated 90 degrees"
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:24
+msgid "Mirrored vertically"
 msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:21
@@ -2255,7 +2312,7 @@ msgstr ""
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:13
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:14
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:38
-#: zotonic_mod_survey/src/models/m_survey.erl:836
+#: zotonic_mod_survey/src/models/m_survey.erl:940
 msgid "Name"
 msgstr ""
 
@@ -2276,7 +2333,7 @@ msgstr ""
 #: zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:18
 #: zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:13
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:13
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:16
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:19
 msgid "Need more help?"
 msgstr ""
 
@@ -2352,6 +2409,10 @@ msgstr ""
 msgid "No results."
 msgstr ""
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:18
+msgid "Normal"
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:238
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:68
 msgid "Not dependent"
@@ -2380,6 +2441,10 @@ msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:171
 msgid "Ongoing"
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:15
+msgid "Orientation"
 msgstr ""
 
 #: zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_header.tpl:4
@@ -2533,6 +2598,7 @@ msgstr ""
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:21
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:49
 #: zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:44
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:31
 msgid "Published"
 msgstr ""
 
@@ -2644,8 +2710,8 @@ msgstr ""
 msgid "Renumber category tree"
 msgstr ""
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:88
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:121
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:67
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:95
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:195
 msgid "Replace"
 msgstr ""
@@ -2665,6 +2731,18 @@ msgstr ""
 msgid "Retrieving status..."
 msgstr ""
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:22
+msgid "Rotated 180 degrees"
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:32
+msgid "Rotated 270 degrees"
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:28
+msgid "Rotated 90 degrees"
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:113
 msgid "Runs the schema install command from the site's module again."
 msgstr ""
@@ -2676,6 +2754,10 @@ msgstr ""
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:74
 #: zotonic_mod_seo/src/mod_seo.erl:288
 msgid "SEO"
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:66
+msgid "SHA-256 checksum"
 msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:5
@@ -2896,6 +2978,11 @@ msgstr ""
 #: zotonic_mod_base/priv/templates/_session_info.tpl:12
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:221
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:111
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:17
+#: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:19
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:21
+#: zotonic_mod_survey/src/models/m_survey.erl:1072
+#: zotonic_mod_survey/src/models/m_survey.erl:1078
 #: zotonic_site_status/priv/templates/_navbar.tpl:15
 #: zotonic_site_status/priv/templates/_sites.tpl:4
 msgid "Status"
@@ -2995,7 +3082,7 @@ msgid "Templates will be recompiled."
 msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:31
-#: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:94
+#: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:116
 msgid "Test query"
 msgstr ""
 
@@ -3024,7 +3111,7 @@ msgstr ""
 msgid "The page"
 msgstr ""
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:76
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:55
 msgid "The page will stay, but without the media item."
 msgstr ""
 
@@ -3104,15 +3191,15 @@ msgstr ""
 msgid "This file contains links to other files or locations."
 msgstr ""
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:105
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:84
 msgid "This file has been scanned for viruses."
 msgstr ""
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:101
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:80
 msgid "This file has not been scanned for viruses because it is too large."
 msgstr ""
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:109
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:88
 msgid "This file has not been scanned for viruses."
 msgstr ""
 
@@ -3200,8 +3287,9 @@ msgstr ""
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:11
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:27
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:25
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:16
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:20
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:19
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:65
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:44
 msgid "Title"
 msgstr ""
 
@@ -3249,6 +3337,7 @@ msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:53
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:22
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:17
 msgid "Unpublished"
 msgstr ""
 
@@ -3264,6 +3353,10 @@ msgstr ""
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:57
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:60
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:59
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:20
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:25
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:10
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:15
 #: zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:13
 #: zotonic_mod_search/priv/templates/_search_view_list_item.tpl:8
 #: zotonic_mod_seo/src/support/seo_jsonld_webpage.erl:276
@@ -3319,7 +3412,7 @@ msgstr ""
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:74
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:148
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:27
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:26
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:32
 msgid "Upload file"
 msgstr ""
 
@@ -3330,6 +3423,7 @@ msgid "Uploaded"
 msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:42
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:60
 msgid "Uploaded on"
 msgstr ""
 
@@ -3360,10 +3454,10 @@ msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish_view.tpl:2
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:10
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:52
+#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:31
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:142
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:26
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:41
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:94
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:20
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:38
 msgid "View"
@@ -3439,7 +3533,14 @@ msgstr ""
 #: zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
 #: zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:54
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:94
-#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:35
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:96
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:99
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:33
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:36
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:24
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:84
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:36
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:65
 msgid "Y-m-d H:i"
 msgstr ""
 
@@ -3521,6 +3622,8 @@ msgstr ""
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:63
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:6
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:16
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:67
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:15
 msgid "by"
 msgstr ""
 
@@ -3540,7 +3643,6 @@ msgstr ""
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:78
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:59
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:31
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:50
 #: zotonic_mod_oauth2/priv/templates/_oauth2_apps_list.tpl:14
 #: zotonic_mod_oauth2/priv/templates/_oauth2_apps_list.tpl:15
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:79
@@ -3554,7 +3656,7 @@ msgstr ""
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:167
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:43
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:39
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:79
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:84
 msgid "delete"
 msgstr ""
 
@@ -3617,7 +3719,7 @@ msgid "page block"
 msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:28
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:17
+#: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:10
 msgid "pixels"
 msgstr ""
 
@@ -3645,8 +3747,6 @@ msgid "untitled"
 msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:51
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:29
-#: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:116
 msgid "uploaded on"
 msgstr ""
 
@@ -3815,7 +3915,7 @@ msgstr ""
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:45
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:28
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:44
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:21
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:66
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:21
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:22
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:19
@@ -3949,7 +4049,7 @@ msgstr ""
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:143
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:145
 #: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:15
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:90
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:97
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:202
 msgid "Password"
 msgstr ""
@@ -4103,8 +4203,8 @@ msgstr ""
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:53
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:81
 #: zotonic_mod_authentication/priv/templates/email_password_reset.tpl:21
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:71
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:73
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:77
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:79
 msgid "Username"
 msgstr ""
 
@@ -4120,6 +4220,7 @@ msgstr ""
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:20
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:21
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:21
+#: zotonic_mod_base/src/support/z_chart_svg.erl:1349
 msgid "Value"
 msgstr ""
 
@@ -4158,6 +4259,7 @@ msgstr ""
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:70
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:100
 #: zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:24
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:10
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:75
 #: zotonic_mod_translation/priv/templates/_dialog_new_rsc_extra.tpl:2
 #: zotonic_mod_translation/priv/templates/_translation_language_status.tpl:46
@@ -4307,17 +4409,18 @@ msgstr ""
 #: zotonic_mod_contact/priv/templates/email_contact.tpl:13
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:8
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:9
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:8
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:9
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:11
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:12
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:39
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:20
 msgid "E-mail"
 msgstr ""
 
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:10
 #: zotonic_mod_authentication/priv/templates/email_password_reset.tpl:23
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:22
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:69
-#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:18
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:74
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:19
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:29
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:30
 msgid "Email"
@@ -4489,9 +4592,9 @@ msgstr ""
 #: zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:27
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:97
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:152
-#: zotonic_mod_survey/src/mod_survey.erl:1237
-#: zotonic_mod_survey/src/mod_survey.erl:1259
-#: zotonic_mod_survey/src/mod_survey.erl:1267
+#: zotonic_mod_survey/src/mod_survey.erl:1479
+#: zotonic_mod_survey/src/mod_survey.erl:1501
+#: zotonic_mod_survey/src/mod_survey.erl:1509
 msgid "Sorry"
 msgstr ""
 
@@ -4706,7 +4809,7 @@ msgstr ""
 #: zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:19
 #: zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:42
 #: zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:1
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:97
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:105
 msgid ""
 "Your new password is too short or not strong enough. Use a: uppercase "
 "letter, lowercase letter, number, and symbol."
@@ -4745,6 +4848,8 @@ msgstr ""
 
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:44
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:50
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:115
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:22
 msgid "Edit page"
 msgstr ""
 
@@ -5349,7 +5454,7 @@ msgstr ""
 #: zotonic_mod_cookie_consent/priv/templates/_admin_edit_content.name.cookie_consent.tpl:26
 #: zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:34
 #: zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:51
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:20
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:23
 #: zotonic_site_status/priv/templates/stats.tpl:3
 #: zotonic_site_status/priv/templates/stats.tpl:8
 msgid "Statistics"
@@ -5381,6 +5486,15 @@ msgstr ""
 #: zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:17
 #: zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:18
 msgid "Artist"
+msgstr ""
+
+#: zotonic_mod_audio/priv/templates/_admin_edit_media_metadata_extra.tpl:4
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:82
+msgid "Audio bit rate"
+msgstr ""
+
+#: zotonic_mod_audio/priv/templates/_admin_edit_media_metadata_extra.tpl:16
+msgid "Audio tags"
 msgstr ""
 
 #: zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:31
@@ -5445,14 +5559,6 @@ msgstr ""
 
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:26
 msgid "Copied to clipboard"
-msgstr ""
-
-#: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:17
-#: zotonic_mod_auth2fa/priv/templates/_logon_login_set_passcode.tpl:20
-#: zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:33
-#: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_view.tpl:18
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:108
-msgid "Copy"
 msgstr ""
 
 #: zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:22
@@ -5758,10 +5864,11 @@ msgid "Browser info"
 msgstr ""
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:84
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:11
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:8
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:6
-#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:42
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:84
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:12
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:9
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:7
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:48
 msgid "Change"
 msgstr ""
 
@@ -5779,7 +5886,7 @@ msgstr ""
 
 #: zotonic_mod_authentication/priv/templates/_logon_box.tpl:93
 #: zotonic_mod_authentication/priv/templates/_logon_box.tpl:109
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:27
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:28
 msgid "Check your email"
 msgstr ""
 
@@ -5813,7 +5920,7 @@ msgid "Confirmation failure"
 msgstr ""
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:91
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:104
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:119
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:48
 msgid "Continue"
 msgstr ""
@@ -5873,6 +5980,7 @@ msgstr ""
 #: zotonic_mod_authentication/priv/templates/logon_service_error.tpl:10
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:14
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:143
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:7
 #: zotonic_mod_survey/priv/templates/_survey_block_name_check.tpl:2
 msgid "Error"
 msgstr ""
@@ -5966,7 +6074,7 @@ msgid ""
 msgstr ""
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:33
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:144
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:152
 msgid "I agree to the Terms of Service and the Privacy policies."
 msgstr ""
 
@@ -6034,9 +6142,9 @@ msgstr ""
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:58
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:186
 #: zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:21
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:187
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:195
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:22
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:196
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:205
 msgid "Log in"
 msgstr ""
 
@@ -6052,7 +6160,7 @@ msgid ""
 msgstr ""
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:228
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:91
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:100
 msgid "Log on with"
 msgstr ""
 
@@ -6074,10 +6182,10 @@ msgid "Multiple accounts"
 msgstr ""
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:199
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:24
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:49
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:165
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:170
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:26
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:55
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:180
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:185
 msgid "Next"
 msgstr ""
 
@@ -6177,7 +6285,7 @@ msgid ""
 msgstr ""
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:44
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:155
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:164
 msgid "Privacy policies"
 msgstr ""
 
@@ -6248,7 +6356,7 @@ msgid "Stay logged on unless I log off."
 msgstr ""
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:41
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:152
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:161
 msgid "Terms of Service"
 msgstr ""
 
@@ -6385,7 +6493,7 @@ msgid "You can log in using the following external service"
 msgstr ""
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:39
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:150
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:159
 msgid "You can read them here:"
 msgstr ""
 
@@ -6463,14 +6571,14 @@ msgid "an hour"
 msgstr ""
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:228
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:91
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:100
 msgid "external service"
 msgstr ""
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_extra.tpl:6
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:211
 #: zotonic_mod_signup/priv/templates/_signup_box.tpl:30
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:76
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:83
 msgid "or"
 msgstr ""
 
@@ -6952,11 +7060,22 @@ msgid ""
 msgstr ""
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:263
+#: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:8
 msgid "Anonymous"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:114
+#: zotonic_mod_l10n/src/support/l10n_date.erl:42
+msgid "April"
 msgstr ""
 
 #: zotonic_mod_base/priv/templates/error.tpl:80
 msgid "Arguments"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:115
+#: zotonic_mod_l10n/src/support/l10n_date.erl:46
+msgid "August"
 msgstr ""
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:140
@@ -6967,6 +7086,11 @@ msgstr ""
 msgid "Authentication"
 msgstr ""
 
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:64
+msgid "Average"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:152
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:69
 msgid "Browser"
 msgstr ""
@@ -6975,12 +7099,42 @@ msgstr ""
 msgid "Browser Connectivity"
 msgstr ""
 
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:142
+msgid "Browser share"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:149
+msgid "Browser share data"
+msgstr ""
+
 #: zotonic_mod_base/src/filters/filter_content_type_label.erl:54
+#: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:38
 msgid "CSV"
+msgstr ""
+
+#: zotonic_mod_base/src/support/z_chart_svg.erl:437
+#: zotonic_mod_base/src/support/z_chart_svg.erl:439
+msgid "Chart"
+msgstr ""
+
+#: zotonic_mod_base/src/support/z_chart_svg.erl:1339
+msgid "Chart legend"
 msgstr ""
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:71
 msgid "Client IP address"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:218
+msgid "Compatibility tags"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:130
+msgid "Complete"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:130
+msgid "Completion"
 msgstr ""
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:229
@@ -6997,8 +7151,46 @@ msgstr ""
 msgid "Connection Test"
 msgstr ""
 
+#: zotonic_mod_base/src/support/z_chart_svg.erl:581
+msgid "Data points"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:115
+#: zotonic_mod_l10n/src/support/l10n_date.erl:50
+msgid "December"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:225
+msgid "Donut alias"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:44
+msgid "Donut chart with map data"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:81
+msgid "East"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:168
+msgid "Empty data"
+msgstr ""
+
 #: zotonic_mod_base/src/filters/filter_content_type_label.erl:50
 msgid "Excel Workbook"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:62
+msgid "Excellent"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:139
+msgid "Existing external data table"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:114
+#: zotonic_mod_l10n/src/support/l10n_date.erl:40
+msgid "February"
 msgstr ""
 
 #: zotonic_mod_base/priv/templates/error.tpl:81
@@ -7023,6 +7215,14 @@ msgstr ""
 msgid "Gone"
 msgstr ""
 
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:63
+msgid "Good"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:77
+msgid "Horizontal bar chart"
+msgstr ""
+
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:47
 msgid "If the authentication with the server works."
 msgstr ""
@@ -7032,12 +7232,59 @@ msgstr ""
 msgid "Index of"
 msgstr ""
 
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:3
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:19
+msgid "Inline SVG chart test"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:193
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:210
+msgid "Item"
+msgstr ""
+
 #: zotonic_mod_base/src/filters/filter_content_type_label.erl:48
+#: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:39
 msgid "JSON"
 msgstr ""
 
 #: zotonic_mod_base/src/filters/filter_content_type_label.erl:46
 msgid "JSON-LD"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:114
+#: zotonic_mod_l10n/src/support/l10n_date.erl:39
+msgid "January"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:115
+#: zotonic_mod_l10n/src/support/l10n_date.erl:45
+msgid "July"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:114
+#: zotonic_mod_l10n/src/support/l10n_date.erl:44
+msgid "June"
+msgstr ""
+
+#: zotonic_mod_base/src/support/z_chart_svg.erl:1345
+#: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:41
+msgid "Label"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:187
+msgid "Large data set with palette shades"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:200
+msgid "Large pie chart with palette shades"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:228
+msgid "Legacy pie alias"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:109
+msgid "Line chart"
 msgstr ""
 
 #: zotonic_mod_base/priv/templates/error.403.tpl:30
@@ -7052,6 +7299,22 @@ msgstr ""
 msgid "MQTT Bridge Connection Status"
 msgstr ""
 
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:114
+#: zotonic_mod_l10n/src/support/l10n_date.erl:41
+msgid "March"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:114
+#: zotonic_mod_l10n/src/support/l10n_date.erl:43
+#: zotonic_mod_l10n/src/support/l10n_date.erl:58
+msgid "May"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:80
+msgid "Net change"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:34
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:145
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:187
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:267
@@ -7066,18 +7329,40 @@ msgstr ""
 msgid "No"
 msgstr ""
 
+#: zotonic_mod_base/src/support/z_chart_svg.erl:1290
+msgid "No data"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:170
+msgid "No measurements yet"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:81
+msgid "North"
+msgstr ""
+
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:231
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:243
 msgid "Not connected"
 msgstr ""
 
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:115
+#: zotonic_mod_l10n/src/support/l10n_date.erl:49
+msgid "November"
+msgstr ""
+
 #: zotonic_mod_base/priv/templates/_action_dialog_alert.tpl:5
 #: zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:8
 #: zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:11
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:72
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:117
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:69
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:15
 msgid "OK"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:115
+#: zotonic_mod_l10n/src/support/l10n_date.erl:48
+msgid "October"
 msgstr ""
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:35
@@ -7086,8 +7371,21 @@ msgid ""
 "to the internet in general."
 msgstr ""
 
+#: zotonic_mod_base/src/support/z_chart_svg.erl:344
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:134
+msgid "Other"
+msgstr ""
+
 #: zotonic_mod_base/priv/templates/_session_info.tpl:12
 msgid "Page Id"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:222
+msgid "Pie alias"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:28
+msgid "Pie chart"
 msgstr ""
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:115
@@ -7102,16 +7400,55 @@ msgstr ""
 msgid "Pong Latency"
 msgstr ""
 
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:65
+msgid "Poor"
+msgstr ""
+
 #: zotonic_mod_base/priv/templates/_powered_by_zotonic.tpl:1
 msgid "Powered by Zotonic"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:95
+msgid "Quarterly balance"
 msgstr ""
 
 #: zotonic_mod_base/priv/templates/email_base.tpl:336
 msgid "Read this page on the web"
 msgstr ""
 
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:83
+#: zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:38
+#: zotonic_mod_translation/priv/templates/admin_translation.tpl:43
+msgid "Region"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:60
+msgid "Responses using one color"
+msgstr ""
+
 #: zotonic_mod_base/priv/templates/error.tpl:14
 msgid "Return to the homepage"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:194
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:211
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:24
+#: zotonic_mod_survey/src/models/m_survey.erl:948
+msgid "Score"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:190
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:203
+msgid "Scores for 32 items"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:115
+#: zotonic_mod_l10n/src/support/l10n_date.erl:47
+msgid "September"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:21
+msgid "Server-rendered charts without JavaScript, CSS, or external services."
 msgstr ""
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:144
@@ -7126,12 +7463,28 @@ msgstr ""
 msgid "Several aspects of the connection are tested"
 msgstr ""
 
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:153
+msgid "Share"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:128
+msgid "Single value"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:57
+msgid "Single-color pie chart"
+msgstr ""
+
 #: zotonic_mod_base/priv/templates/error.tpl:11
 msgid "Sorry, this page has been deleted."
 msgstr ""
 
 #: zotonic_mod_base/priv/templates/error.tpl:8
 msgid "Sorry, you don’t have access to this page."
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:81
+msgid "South"
 msgstr ""
 
 #: zotonic_mod_base/priv/templates/error.tpl:23
@@ -7142,6 +7495,10 @@ msgstr ""
 msgid ""
 "Support for offline work and communication between several tabs in your "
 "browser."
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:31
+msgid "Survey answers"
 msgstr ""
 
 #: zotonic_mod_base/priv/templates/_bridge_warning.tpl:4
@@ -7199,7 +7556,21 @@ msgid "This tests the communication with the server."
 msgstr ""
 
 #: zotonic_mod_base/priv/templates/directory_index.tpl:15
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:38
+#: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:35
 msgid "Type"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:35
+msgid "Unknown"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:92
+msgid "Vertical bar chart"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:112
+msgid "Visitors per month"
 msgstr ""
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:131
@@ -7214,6 +7585,15 @@ msgstr ""
 msgid "Websocket Support?"
 msgstr ""
 
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:81
+msgid "West"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:47
+msgid "Work items"
+msgstr ""
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:33
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:187
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:251
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:274
@@ -7241,7 +7621,7 @@ msgid ""
 msgstr ""
 
 #: zotonic_mod_base/priv/templates/error.tpl:16
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:74
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:119
 msgid "error"
 msgstr ""
 
@@ -7313,6 +7693,7 @@ msgid "Note: Comments are moderated"
 msgstr ""
 
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:20
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:13
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:186
 msgid "Page"
 msgstr ""
@@ -7558,7 +7939,8 @@ msgstr ""
 
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:27
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:234
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:17
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:20
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:12
 #: zotonic_site_status/priv/templates/_sites.tpl:6
 msgid "Actions"
 msgstr ""
@@ -7573,7 +7955,7 @@ msgid "Domain"
 msgstr ""
 
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:7
-#: zotonic_mod_custom_redirect/src/mod_custom_redirect.erl:121
+#: zotonic_mod_custom_redirect/src/mod_custom_redirect.erl:125
 msgid "Domains and redirects"
 msgstr ""
 
@@ -7598,7 +7980,7 @@ msgid ""
 "for redirects within this site."
 msgstr ""
 
-#: zotonic_mod_custom_redirect/src/mod_custom_redirect.erl:135
+#: zotonic_mod_custom_redirect/src/mod_custom_redirect.erl:139
 msgid "You are not allowed to change this."
 msgstr ""
 
@@ -7778,7 +8160,7 @@ msgstr ""
 
 #: zotonic_mod_development/priv/templates/_development_template_graph.tpl:3
 msgid ""
-"Dependency graph of all templates. Only template includes using a direct "
+"Dependency graph of all templates. Only template includes using a Immediate "
 "string value for the template name are shown."
 msgstr ""
 
@@ -8184,8 +8566,8 @@ msgid "Started tracing template inclusions for your session."
 msgstr ""
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:33
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:147
-#: zotonic_mod_survey/src/mod_survey.erl:355
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:162
+#: zotonic_mod_survey/src/mod_survey.erl:511
 msgid "Stop"
 msgstr ""
 
@@ -8642,18 +9024,22 @@ msgstr ""
 msgid "Last error status"
 msgstr ""
 
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:260
+msgid "Mailer message"
+msgstr ""
+
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:167
 msgid "Most Recent"
 msgstr ""
 
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:284
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:283
 msgid ""
 "No email activity information is available for the email address &lt;{email}"
 "&gt;."
 msgstr ""
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:202
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:268
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:267
 msgid "No recent email activity for this address."
 msgstr ""
 
@@ -8802,7 +9188,6 @@ msgstr ""
 #: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:24
 #: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:37
 #: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:46
-#: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:35
 msgid "Download CSV"
 msgstr ""
 
@@ -8815,7 +9200,6 @@ msgstr ""
 #: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:25
 #: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:38
 #: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:47
-#: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:40
 msgid "Download Excel"
 msgstr ""
 
@@ -9185,6 +9569,7 @@ msgid "Save Settings"
 msgstr ""
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:35
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:7
 msgid "Service"
 msgstr ""
 
@@ -9564,16 +9949,8 @@ msgstr ""
 msgid "Apr"
 msgstr ""
 
-#: zotonic_mod_l10n/src/support/l10n_date.erl:42
-msgid "April"
-msgstr ""
-
 #: zotonic_mod_l10n/src/support/l10n_date.erl:61
 msgid "Aug"
-msgstr ""
-
-#: zotonic_mod_l10n/src/support/l10n_date.erl:46
-msgid "August"
 msgstr ""
 
 #: zotonic_mod_l10n/src/support/l10n_date.erl:24
@@ -9594,16 +9971,8 @@ msgstr ""
 msgid "Dec"
 msgstr ""
 
-#: zotonic_mod_l10n/src/support/l10n_date.erl:50
-msgid "December"
-msgstr ""
-
 #: zotonic_mod_l10n/src/support/l10n_date.erl:55
 msgid "Feb"
-msgstr ""
-
-#: zotonic_mod_l10n/src/support/l10n_date.erl:40
-msgid "February"
 msgstr ""
 
 #: zotonic_mod_l10n/priv/templates/_admin_l10n_config.tpl:24
@@ -9622,24 +9991,12 @@ msgstr ""
 msgid "Jan"
 msgstr ""
 
-#: zotonic_mod_l10n/src/support/l10n_date.erl:39
-msgid "January"
-msgstr ""
-
 #: zotonic_mod_l10n/src/support/l10n_date.erl:60
 msgid "Jul"
 msgstr ""
 
-#: zotonic_mod_l10n/src/support/l10n_date.erl:45
-msgid "July"
-msgstr ""
-
 #: zotonic_mod_l10n/src/support/l10n_date.erl:59
 msgid "Jun"
-msgstr ""
-
-#: zotonic_mod_l10n/src/support/l10n_date.erl:44
-msgid "June"
 msgstr ""
 
 #: zotonic_mod_l10n/priv/templates/admin_l10n.tpl:3
@@ -9655,15 +10012,6 @@ msgstr ""
 msgid "Mar"
 msgstr ""
 
-#: zotonic_mod_l10n/src/support/l10n_date.erl:41
-msgid "March"
-msgstr ""
-
-#: zotonic_mod_l10n/src/support/l10n_date.erl:43
-#: zotonic_mod_l10n/src/support/l10n_date.erl:58
-msgid "May"
-msgstr ""
-
 #: zotonic_mod_l10n/src/support/l10n_date.erl:29
 msgid "Monday"
 msgstr ""
@@ -9672,16 +10020,8 @@ msgstr ""
 msgid "Nov"
 msgstr ""
 
-#: zotonic_mod_l10n/src/support/l10n_date.erl:49
-msgid "November"
-msgstr ""
-
 #: zotonic_mod_l10n/src/support/l10n_date.erl:63
 msgid "Oct"
-msgstr ""
-
-#: zotonic_mod_l10n/src/support/l10n_date.erl:48
-msgid "October"
 msgstr ""
 
 #: zotonic_mod_l10n/src/support/l10n_date.erl:34
@@ -9690,10 +10030,6 @@ msgstr ""
 
 #: zotonic_mod_l10n/src/support/l10n_date.erl:62
 msgid "Sep"
-msgstr ""
-
-#: zotonic_mod_l10n/src/support/l10n_date.erl:47
-msgid "September"
 msgstr ""
 
 #: zotonic_mod_l10n/src/support/l10n_date.erl:35
@@ -9843,12 +10179,12 @@ msgstr ""
 msgid "Clear log"
 msgstr ""
 
-#: zotonic_mod_logging/src/mod_logging.erl:191
+#: zotonic_mod_logging/src/mod_logging.erl:192
 msgid "Cleared the CSP reports."
 msgstr ""
 
 #: zotonic_mod_logging/priv/templates/admin_log_base.tpl:13
-#: zotonic_mod_logging/src/mod_logging.erl:366
+#: zotonic_mod_logging/src/mod_logging.erl:359
 msgid "Content-Security log"
 msgstr ""
 
@@ -9871,7 +10207,7 @@ msgid "Directive"
 msgstr ""
 
 #: zotonic_mod_logging/priv/templates/admin_log_base.tpl:12
-#: zotonic_mod_logging/src/mod_logging.erl:361
+#: zotonic_mod_logging/src/mod_logging.erl:354
 msgid "Email log"
 msgstr ""
 
@@ -9890,9 +10226,9 @@ msgid "Explanation of email status"
 msgstr ""
 
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:157
-#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:97
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:112
 #: zotonic_mod_survey/priv/templates/_survey_results_user.tpl:12
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:37
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:51
 #: zotonic_site_status/priv/templates/_sites.tpl:17
 msgid "Failed"
 msgstr ""
@@ -9910,12 +10246,12 @@ msgstr ""
 msgid "Incoming/outgoing e-mail log"
 msgstr ""
 
-#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:76
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:82
 msgid "Latest reported security policy:"
 msgstr ""
 
 #: zotonic_mod_logging/priv/templates/admin_log_base.tpl:3
-#: zotonic_mod_logging/src/mod_logging.erl:356
+#: zotonic_mod_logging/src/mod_logging.erl:349
 msgid "Log"
 msgstr ""
 
@@ -9953,14 +10289,10 @@ msgid "Messages logged by the system and modules."
 msgstr ""
 
 #: zotonic_mod_logging/priv/templates/admin_log.tpl:61
-#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:68
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:74
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:200
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:61
 msgid "No log messages."
-msgstr ""
-
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:134
-msgid "Other"
 msgstr ""
 
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:160
@@ -9985,6 +10317,10 @@ msgstr ""
 
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:158
 msgid "Retry"
+msgstr ""
+
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:40
+msgid "Samples"
 msgstr ""
 
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:153
@@ -10043,7 +10379,7 @@ msgstr ""
 #: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:23
 msgid ""
 "The latest 100 reported directives and blocked contents are kept. For each, "
-"the last 10 reported source locations are shown."
+"the last 10 reported source locations and samples are shown."
 msgstr ""
 
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:131
@@ -10065,7 +10401,7 @@ msgstr ""
 
 #: zotonic_mod_logging/priv/templates/admin_log.tpl:43
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:43
-#: zotonic_mod_survey/src/models/m_survey.erl:835
+#: zotonic_mod_survey/src/models/m_survey.erl:939
 msgid "User Id"
 msgstr ""
 
@@ -10078,11 +10414,11 @@ msgid "User interface events log"
 msgstr ""
 
 #: zotonic_mod_logging/priv/templates/admin_log_base.tpl:14
-#: zotonic_mod_logging/src/mod_logging.erl:371
+#: zotonic_mod_logging/src/mod_logging.erl:364
 msgid "User interface log"
 msgstr ""
 
-#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:40
+#: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:41
 msgid "User-Agents"
 msgstr ""
 
@@ -10090,7 +10426,7 @@ msgstr ""
 msgid "Waiting…"
 msgstr ""
 
-#: zotonic_mod_logging/src/mod_logging.erl:193
+#: zotonic_mod_logging/src/mod_logging.erl:194
 msgid "You don't have permission to clear the CSP reports."
 msgstr ""
 
@@ -10127,15 +10463,19 @@ msgid ""
 "mailing list is allowed to add an e-mail address to the mailing list.</p>"
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:68
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:395
+msgid "A mailing list cannot be sent as a mailing."
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:73
 msgid "Act"
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:24
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:30
 msgid "Add a new recipient."
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:24
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:30
 #: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:65
 msgid "Add recipient"
 msgstr ""
@@ -10144,11 +10484,12 @@ msgstr ""
 msgid "Added the recipient."
 msgstr ""
 
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:60
 #: zotonic_mod_mailinglist/priv/templates/mailinglist.tpl:14
 msgid "All mailing lists"
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:19
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:25
 msgid ""
 "All recipients of the mailing list. You can upload or download this list, "
 "which must be a file with one e-mail address per line."
@@ -10168,11 +10509,19 @@ msgstr ""
 msgid "Are you sure you want to delete the mailing list"
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:49
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:78
 msgid ""
 "Are you sure you want to reset the statistics for this mailing? This means "
 "that if you send the mailing again afterwards, recipients might have gotten "
 "the mailing twice."
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:54
+msgid "Are you sure you want to send the page to test mailing list?"
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:4
+msgid "Are you sure you want to send this mailing?"
 msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:13
@@ -10185,16 +10534,25 @@ msgstr ""
 msgid "Cancel mailing"
 msgstr ""
 
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:37
+msgid "Cancel the current mailing before sending again."
+msgstr ""
+
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:21
 msgid "Change subscriptions connected to your account."
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:76
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:81
 msgid "Check to activate the e-mail address."
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:27
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:76
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:33
 msgid "Clear"
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:54
+msgid "Clear the delivery history and send to all recipients again."
 msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:10
@@ -10207,27 +10565,31 @@ msgid ""
 "Click the button below to confirm your subscription to this mailing list."
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:62
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:71
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:72
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:73
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:74
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:90
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:116
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:117
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:118
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:119
 msgid "Click to view log entries"
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:28
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:34
 msgid "Combine mailing list"
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:28
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:34
 msgid "Combine…"
 msgstr ""
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:334
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:357
 msgid "Confirm mailing cancelation."
 msgstr ""
 
-#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:53
+#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:86
+msgid "Confirm sending test mailing"
+msgstr ""
+
+#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:88
 msgid "Confirm sending to mailinglist"
 msgstr ""
 
@@ -10243,7 +10605,7 @@ msgstr ""
 msgid "Could not delete the mailing list."
 msgstr ""
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:472
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:520
 msgid "Could not save the opt-out preference."
 msgstr ""
 
@@ -10256,7 +10618,7 @@ msgstr ""
 msgid "Delete all current recipients before adding the file."
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:27
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:33
 msgid "Delete all recipients from this list?"
 msgstr ""
 
@@ -10269,15 +10631,15 @@ msgstr ""
 msgid "Do you want to remove this subscription?"
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:25
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:31
 msgid "Download all"
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:25
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:31
 msgid "Download list of all active recipients."
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:25
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:31
 msgid "Downloading active recipients list. Check your download window."
 msgstr ""
 
@@ -10299,13 +10661,21 @@ msgstr ""
 msgid "E-mail this page"
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:77
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:29
+msgid "Edit list"
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:116
+msgid "Edit mailinglist"
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:82
 #: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:72
 msgid "Edit recipient"
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:20
-msgid "Edit the mailing list &raquo;"
+#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:112
+msgid "Enter a valid mailing date and time."
 msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipient.tpl:2
@@ -10319,13 +10689,15 @@ msgid "Externally managed list &mdash; no unsubscribe/subscribe links"
 msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:46
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:30
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:32
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:31
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:34
 msgid "First name"
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:25
-msgid "Forget previous e-mails, mail all recipients again."
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:63
+msgid ""
+"For recipients with a preferred language, only send if this page has a "
+"matching translation."
 msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:13
@@ -10336,11 +10708,12 @@ msgstr ""
 msgid "Give your e-mail address to subscribe to {title}."
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:15
+#: zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar_mailinglist.tpl:15
 msgid "Go to mailinglist page"
 msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_email_mailinglist_hello.tpl:6
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:6
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:7
 msgid "Hello,"
 msgstr ""
@@ -10349,8 +10722,8 @@ msgstr ""
 msgid "Help about mailing lists"
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:13
-msgid "Help about the mailing page"
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:16
+msgid "Help with sending a page"
 msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:24
@@ -10359,7 +10732,7 @@ msgid ""
 "</b>."
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:84
+#: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:106
 msgid ""
 "Here you can edit the arguments of the search query. Every argument goes on "
 "its own line. For more information, see the <a href=\"https://"
@@ -10383,39 +10756,38 @@ msgid ""
 "an e-mail address (instead of your account)."
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:16
-msgid ""
-"It appears you have sent\n"
-"        this page once already to this list. If you send it again, only\n"
-"        the recipients that did not yet receive the mail will get it. As a\n"
-"        safety-caution, it is impossible to send the same page twice to\n"
-"        the same e-mail address."
-msgstr ""
-
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_cancel_confirm.tpl:4
 msgid "Keep mailing"
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:32
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:106
+msgid "Language:"
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar_mailinglist.tpl:32
 msgid "Mail"
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:7
+msgid "Mailing"
 msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:3
 msgid "Mailing Lists"
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:4
+#: zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar_mailinglist.tpl:4
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:8
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:9
 msgid "Mailing list"
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:5
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:6
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:7
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:7
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:799
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:7
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:1115
 msgid "Mailing lists"
-msgstr ""
-
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:3
-msgid "Mailing status"
 msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:6
@@ -10435,7 +10807,7 @@ msgstr ""
 msgid "Manage your mailing list subscriptions"
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:38
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:44
 msgid "Matched via Query"
 msgstr ""
 
@@ -10443,23 +10815,24 @@ msgstr ""
 msgid "New mailing list"
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:83
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:52
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:129
 msgid "No items found"
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:33
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:106
+msgid "No mailing lists found."
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:53
+msgid "No pending mailings."
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:39
 msgid "Number of recipients on this list:"
 msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:26
 msgid "Only keep recipients on this list that appear <em>on both lists</em>"
-msgstr ""
-
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:34
-msgid ""
-"Only send to recipients whose preferred language match the translations of "
-"the mailing."
 msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:46
@@ -10492,14 +10865,12 @@ msgstr ""
 msgid "Pages that match the recipients search query below."
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:51
-msgid "Perform operation"
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:2
+msgid "Pending mailings"
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:4
-msgid ""
-"Please confirm that you want to send the page <i>{page}</i> to the list "
-"<i>{list}</i>."
+#: zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:51
+msgid "Perform operation"
 msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:12
@@ -10510,7 +10881,7 @@ msgstr ""
 msgid "Please confirm your subscription on"
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:5
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:6
 msgid "Please enter the e-mail address you want to send a test mail to."
 msgstr ""
 
@@ -10524,7 +10895,7 @@ msgid ""
 "the address below in your browser."
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:16
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:48
 msgid "Please note:"
 msgstr ""
 
@@ -10534,16 +10905,20 @@ msgid "Please unsubscribe"
 msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:53
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:43
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:47
 msgid "Prefix"
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:20
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:20
+#: zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar_mailinglist.tpl:20
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:23
 msgid "Preview mailing"
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:88
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:23
+msgid "Publication date"
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:110
 msgid "Query, for example:"
 msgstr ""
 
@@ -10555,10 +10930,11 @@ msgstr ""
 msgid "Recipient deleted."
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:18
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:22
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:37
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:36
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:21
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:67
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:90
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:28
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:42
 msgid "Recipients"
 msgstr ""
 
@@ -10569,15 +10945,19 @@ msgid ""
 msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:3
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:7
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:12
 msgid "Recipients for"
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:81
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:8
+msgid "Recipients for “{title}”"
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:103
 msgid "Recipients search query"
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:79
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:84
 msgid "Remove this recipient. No undo possible."
 msgstr ""
 
@@ -10586,66 +10966,133 @@ msgstr ""
 msgid "Removed subscription."
 msgstr ""
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:470
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:39
+msgid "Reset the statistics before sending."
+msgstr ""
+
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:518
 msgid "Saved the opt-out preference."
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:23
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:68
 msgid "Scheduled"
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:11
+msgid "Scheduled for"
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:14
+msgid "Select a mailing list below, or preview and test the mailing first."
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:63
+msgid "Select page to send"
+msgstr ""
+
+#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:115
+msgid "Select when the mailing should be sent."
 msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:36
 msgid "Select..."
 msgstr ""
 
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:92
+msgid "Send date:"
+msgstr ""
+
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:15
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:14
 msgid "Send e-mail"
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:58
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:17
+msgid "Send immediately"
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:48
+msgid "Send immediately; the page does not need to be published."
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:67
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:112
 msgid "Send mailing"
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:21
-msgid "Send test mailing"
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:55
+msgid "Send now"
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:34
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:22
+#: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:59
+msgid "Send page to this list..."
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:110
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:24
+msgid "Send test mailing now"
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:46
+msgid "Send test now"
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar_mailinglist.tpl:34
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:29
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:34
 msgid "Send test to address"
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:50
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:84
 msgid "Send the mailing automatically after the publication start date of"
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:48
-msgid ""
-"Send the mailing immediately after the \"published\" checkbox has been "
-"checked in the edit page."
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:82
+msgid "Send the mailing immediately after the page has been published."
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:43
-msgid ""
-"Send the mailing right now, but do not include a link back to the website."
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:89
+msgid "Send the mailing on a specific date and time."
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:13
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:73
+msgid "Send the mailing right now."
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:26
+msgid ""
+"Send this page immediately to the test mailing list. The page does not need "
+"to be published."
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar_mailinglist.tpl:13
 msgid "Send this page to a mailinglist and view mailinglist statistics."
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:30
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:22
+#: zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar_mailinglist.tpl:30
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:31
 msgid "Send this page to a single address"
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:21
-msgid "Send this page to the test mailing list."
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:52
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:69
+msgid "Send to"
 msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:90
 msgid "Send welcome"
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:8
+msgid "Send “{title}”"
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:3
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:12
+msgid "Send “{title}” to a mailing list"
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:9
+msgid "Sender"
 msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:28
@@ -10658,20 +11105,20 @@ msgstr ""
 msgid "Sender name for e-mails (optional)"
 msgstr ""
 
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:103
+msgid "Sender:"
+msgstr ""
+
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mail_page.erl:60
 msgid "Sending the e-mail..."
 msgstr ""
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:403
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:451
 msgid "Sending the page to"
 msgstr ""
 
-#: zotonic_mod_mailinglist/src/actions/action_mailinglist_mailing_page_test.erl:57
-msgid "Sending the page to the test mailing list..."
-msgstr ""
-
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:19
-msgid "Sent on"
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:22
+msgid "Sent on / Status"
 msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:57
@@ -10720,7 +11167,7 @@ msgstr ""
 msgid "Subscribed with"
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:37
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:43
 msgid "Subscriber Edges"
 msgstr ""
 
@@ -10732,7 +11179,17 @@ msgstr ""
 msgid "Target mailing list"
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:63
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:81
+msgid "Test mailing list"
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:41
+msgid ""
+"Test mailings are sent immediately. The page does not need to be published, "
+"but you must have permission to view it."
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:85
 msgid "Text shown below the confirmation, welcome and unsubscribe e-mails."
 msgstr ""
 
@@ -10750,39 +11207,71 @@ msgid ""
 "else went wrong."
 msgstr ""
 
-#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:76
-msgid "The e-mails are being sent..."
-msgstr ""
-
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:22
 msgid ""
 "The key in your link does not match any subscription. Either you already "
 "unsubscribed, or the mailing list has been deleted."
 msgstr ""
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:347
+#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:110
+msgid "The mailing date must be in the future."
+msgstr ""
+
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:374
 msgid "The mailing has been canceled."
 msgstr ""
 
-#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:79
+#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:95
+msgid "The mailing has been queued for immediate sending..."
+msgstr ""
+
+#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:108
+msgid "The mailing has been scheduled."
+msgstr ""
+
+#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:100
 msgid "The mailing will be sent when the page becomes visible."
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:40
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:37
 msgid ""
-"The page you are trying to e-mail is not yet published. What do you want to "
-"do?"
+"The page does not need to be published, but you must have permission to view "
+"it."
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:75
+msgid "The page is unpublished, no link back to the website in the mailing."
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:10
+msgid "The page “{title}” has been sent to the following lists:"
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:12
+msgid "The page “{title}” has never been sent yet."
 msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:3
 msgid "The recipients list of the mailing list will be deleted as well."
 msgstr ""
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:357
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:407
+msgid "The selected page could not be found."
+msgstr ""
+
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:384
 msgid "The statistics have been cleared."
 msgstr ""
 
-#: zotonic_mod_mailinglist/src/actions/action_mailinglist_mailing_page_test.erl:63
+#: zotonic_mod_mailinglist/src/actions/action_mailinglist_mailing_page_test.erl:68
+msgid "The test mailing has been queued for immediate sending..."
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:7
+msgid "The test will be sent immediately, even if the page is not published."
+msgstr ""
+
+#: zotonic_mod_mailinglist/src/actions/action_mailinglist_mailing_page_test.erl:73
 msgid "There is no mailing list with the name ‘mailinglist_test’."
 msgstr ""
 
@@ -10803,25 +11292,24 @@ msgid ""
 "any subscribe/unsubscribe messages."
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:14
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:49
 msgid ""
-"This overview allows you to send the current page to a group of recipients, "
-"grouped into mailing lists. Choose 'preview mailing' to open a popup window "
-"which shows how the mailing will look like when it is sent; choose 'send "
-"test mailing' to send it to the predefined list of test e-mail addresses. "
-"Choose 'edit' to go back to editing the page.  Each mailinglist is listed in "
-"the table below, together with statistics on when it was sent and to how "
-"many recipients."
+"This page has already been sent to this list. If you send it again, only "
+"recipients who have not yet received it will be emailed."
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:11
-msgid "This page can be sent to different mailing lists."
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:36
+msgid "This test mailing will be sent immediately."
 msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipient.tpl:6
 msgid ""
 "Tick the checkbox if you want the recipient to receive a welcome e-mail "
 "message."
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_task_language.tpl:4
+msgid "Unknown language"
 msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:17
@@ -10851,7 +11339,7 @@ msgid ""
 "per line. The file’s character set must be utf-8."
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:26
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:32
 msgid "Upload a list of recipients."
 msgstr ""
 
@@ -10859,11 +11347,19 @@ msgstr ""
 msgid "Use the link in your email to manage your subscriptions."
 msgstr ""
 
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:17
+msgid ""
+"Use this overview to send the current page as an email to the recipients of "
+"a mailing list. You can preview the mailing or send a test before selecting "
+"a mailing list below. Test mailings can be sent while the page is "
+"unpublished. The table shows the status and statistics for each mailing list."
+msgstr ""
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:38
 msgid "Used for uploading CSV files with recipients."
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:18
+#: zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar_mailinglist.tpl:18
 msgid "View this page as mailing."
 msgstr ""
 
@@ -10871,12 +11367,16 @@ msgstr ""
 msgid "Welcome to"
 msgstr ""
 
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:70
+msgid "When should the mailing be sent?"
+msgstr ""
+
 #: zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:110
 msgid "You are not allowed to add or enable recipients."
 msgstr ""
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:339
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:349
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:362
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:376
 msgid "You are not allowed to cancel this mailing."
 msgstr ""
 
@@ -10888,20 +11388,20 @@ msgstr ""
 msgid "You are not allowed to edit recipients."
 msgstr ""
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:359
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:391
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:386
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:439
 msgid "You are not allowed to reset this mailing."
 msgstr ""
 
-#: zotonic_mod_mailinglist/src/actions/action_mailinglist_mailing_page_test.erl:60
-msgid "You are not allowed to send mail to the test mailing list."
-msgstr ""
-
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:406
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:403
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:454
+#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:60
+#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:82
+#: zotonic_mod_mailinglist/src/actions/action_mailinglist_mailing_page_test.erl:56
 msgid "You are not allowed to send this page."
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:9
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:14
 msgid ""
 "You are not allowed to view or edit the recipients list. You need to have "
 "edit permission on the mailing list to change and view the recipients."
@@ -10979,25 +11479,17 @@ msgstr ""
 msgid "Your subscriptions"
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:73
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:118
 msgid "bounced"
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:34
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:15
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:20
 msgid "cancel"
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:47
-msgid "clear"
-msgstr ""
-
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:8
-msgid "has been sent to the following lists:"
-msgstr ""
-
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:10
-msgid "has never been sent yet."
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:98
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:35
+msgid "delayed"
 msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:10
@@ -11009,34 +11501,27 @@ msgstr ""
 msgid "mailing list"
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:8
-msgid "mailinglist status page"
-msgstr ""
-
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:46
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:51
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:52
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:57
 msgid "pages"
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:71
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:116
 msgid "processed"
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:63
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:65
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:95
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:32
 msgid "scheduled"
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:42
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:48
 msgid "see below"
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:41
-msgid "send mailing"
-msgstr ""
-
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:43
-msgid "send to"
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:100
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:37
+msgid "when the page becomes published"
 msgstr ""
 
 #: zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:30
@@ -11589,10 +12074,6 @@ msgid ""
 "tokens."
 msgstr ""
 
-#: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:41
-msgid "Label"
-msgstr ""
-
 #: zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:29
 msgid "Log in to {remote} with your {local} account."
 msgstr ""
@@ -11648,6 +12129,7 @@ msgid "No user selected."
 msgstr ""
 
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:43
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:51
 msgid "Note"
 msgstr ""
 
@@ -11902,6 +12384,22 @@ msgstr ""
 msgid "Attempting to fix ~p videos."
 msgstr ""
 
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:50
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:25
+msgid "Author"
+msgstr ""
+
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:27
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:59
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:90
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:118
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:45
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:61
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:77
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:93
+msgid "Copy the URL to the clipboard."
+msgstr ""
+
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media.tpl:4
 msgid "Embedding of media item failed with HTTP code"
 msgstr ""
@@ -11914,12 +12412,42 @@ msgstr ""
 msgid "No embedded videos found which need fixing."
 msgstr ""
 
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:3
+msgid "OEmbed"
+msgstr ""
+
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:110
+msgid "OEmbed URL"
+msgstr ""
+
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:18
+msgid "Provider"
+msgstr ""
+
 #: zotonic_mod_oembed/priv/templates/_admin_authentication_service.tpl:18
 msgid "Save Embedly Key"
 msgstr ""
 
 #: zotonic_mod_oembed/src/mod_oembed.erl:470
 msgid "Saved the Embedly settings."
+msgstr ""
+
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:82
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:85
+msgid "Thumbnail URL"
+msgstr ""
+
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:98
+msgid "Thumbnail size"
+msgstr ""
+
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:104
+msgid "Version"
+msgstr ""
+
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:76
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:13
+msgid "Video ID"
 msgstr ""
 
 #: zotonic_mod_oembed/src/mod_oembed.erl:472
@@ -12339,10 +12867,15 @@ msgstr ""
 msgid "not in sitemap"
 msgstr ""
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:69
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:76
 msgid ""
 "A new verification code has been sent to your email address. Please check "
 "your inbox and spam folder."
+msgstr ""
+
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:41
+#: zotonic_mod_translation/priv/templates/admin_translation.tpl:42
+msgid "Code"
 msgstr ""
 
 #: zotonic_mod_signup/priv/templates/signup_confirm.tpl:3
@@ -12358,17 +12891,25 @@ msgstr ""
 msgid "Confirming..."
 msgstr ""
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:107
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:116
 msgid "Copy the password to the clipboard."
 msgstr ""
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:103
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:112
 msgid ""
-"Could not send email to <b>{email}</b>. Please check the email address and "
-"try again."
+"Could not send email to <strong>{email}</strong>. Please check the email "
+"address and try again."
 msgstr ""
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:59
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:19
+msgid "Did you start this signup?"
+msgstr ""
+
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:24
+msgid "Didn't start this signup?"
+msgstr ""
+
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:65
 msgid "Didn’t receive the email?"
 msgstr ""
 
@@ -12376,35 +12917,38 @@ msgstr ""
 msgid "Email address mismatch"
 msgstr ""
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:95
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:103
 msgid "Enter a password"
 msgstr ""
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:76
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:82
 msgid "Enter a username"
 msgstr ""
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:40
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:43
 msgid "Enter code"
 msgstr ""
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:34
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:37
 msgid "Enter first name"
 msgstr ""
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:54
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:60
 msgid "Enter last name"
 msgstr ""
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:104
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:20
+msgid "Enter the code only on the signup page. Do not share it with anyone."
+msgstr ""
+
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:112
 msgid "Generate a new and secure password."
 msgstr ""
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:105
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:113
 msgid "Generate a secure password"
 msgstr ""
 
-#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:14
 #: zotonic_mod_signup/priv/templates/email_verify.tpl:14
 msgid "Hope to see you soon."
 msgstr ""
@@ -12415,17 +12959,13 @@ msgid ""
 "in now</a>."
 msgstr ""
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:50
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:52
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:55
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:58
 msgid "Last name"
 msgstr ""
 
 #: zotonic_mod_signup/priv/templates/_signup_box.tpl:7
 msgid "Log off"
-msgstr ""
-
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:103
-msgid "Need a new password?"
 msgstr ""
 
 #: zotonic_mod_signup/priv/templates/_logon_link.tpl:2
@@ -12444,12 +12984,12 @@ msgstr ""
 msgid "Please follow the link below."
 msgstr ""
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:60
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:66
 msgid "Resend code"
 msgstr ""
 
 #: zotonic_mod_signup/priv/templates/_signup_box.tpl:13
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:178
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:186
 #: zotonic_mod_signup/priv/templates/signup.tpl:3
 msgid "Sign Up"
 msgstr ""
@@ -12458,15 +12998,15 @@ msgstr ""
 msgid "Sign up"
 msgstr ""
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:109
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:118
 msgid "Something went wrong, please retry again later."
 msgstr ""
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:200
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:210
 msgid "Something went wrong. Please try again later."
 msgstr ""
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:206
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:216
 msgid ""
 "Sorry, you already have an account. Maybe your account here was suspended."
 msgstr ""
@@ -12477,11 +13017,11 @@ msgid ""
 "account before you can use it."
 msgstr ""
 
-#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:6
-msgid "Thank you for signing up."
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:9
+msgid "Thank you for signing up for an account at {site}."
 msgstr ""
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:43
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:47
 msgid "The code you entered is incorrect. Please try again."
 msgstr ""
 
@@ -12491,40 +13031,46 @@ msgid ""
 "in the previous step. Please check your input and try again."
 msgstr ""
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:185
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:193
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:202
 msgid "There is already an account connected to your email address."
 msgstr ""
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:82
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:89
 msgid "There is already an account with this username."
 msgstr ""
 
-#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:8
-msgid "This is your one-time code to continue:"
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:16
+msgid "This code expires in 10 minutes."
 msgstr ""
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:170
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:10
+msgid "To continue, enter this code on the signup page:"
+msgstr ""
+
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:179
 msgid ""
 "To sign up you must agree with the Terms of Service and Privacy policies."
 msgstr ""
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:46
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:51
 msgid "Too many tries, you can try to signup again in an hour."
 msgstr ""
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:29
-msgid "We have sent a code to <b>{email}</b> to confirm your email address."
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:30
+msgid ""
+"We have sent a code to <strong>{email}</strong> to confirm your email "
+"address."
 msgstr ""
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:137
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:145
 msgid ""
 "We will be very careful with all the information given to us and will never "
 "give your name or address away without your permission. We do have some "
 "rules that we need you to agree with."
 msgstr ""
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:28
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:30
 msgid "We will mail you a code to confirm your email address."
 msgstr ""
 
@@ -12534,7 +13080,12 @@ msgid ""
 "looks like something went wrong."
 msgstr ""
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:19
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:26
+msgid ""
+"Without this code, they cannot continue signing up with your email address."
+msgstr ""
+
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:20
 msgid "You already have an account."
 msgstr ""
 
@@ -12542,7 +13093,13 @@ msgstr ""
 msgid "You are already logged in as <a href=\"{url}\">{name}</a>."
 msgstr ""
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:80
+#: zotonic_mod_signup/priv/templates/email_signup_code.tpl:25
+msgid ""
+"You can safely ignore this email. Someone may have entered your email "
+"address by mistake."
+msgstr ""
+
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:88
 msgid "You can sign up using the following external service."
 msgstr ""
 
@@ -12553,12 +13110,12 @@ msgid ""
 "copied the link correctly and try again."
 msgstr ""
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:162
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:172
 msgid "You must agree to the Terms in order to sign up."
 msgstr ""
 
 #: zotonic_mod_signup/priv/templates/email_signup_code.tpl:3
-msgid "Your one-time code is:"
+msgid "Your signup code"
 msgstr ""
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:174
@@ -12695,7 +13252,7 @@ msgstr ""
 msgid "Check the following urls:"
 msgstr ""
 
-#: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:225
+#: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:228
 msgid "Could not start fetching the SSL certificate. Try again later."
 msgstr ""
 
@@ -12738,7 +13295,7 @@ msgstr ""
 msgid "Read more at the Let’s Encrypt website"
 msgstr ""
 
-#: zotonic_mod_ssl_letsencrypt/priv/templates/_admin_ssl_letsencrypt_form.tpl:55
+#: zotonic_mod_ssl_letsencrypt/priv/templates/_admin_ssl_letsencrypt_form.tpl:54
 msgid "Request Certificate"
 msgstr ""
 
@@ -12746,7 +13303,7 @@ msgstr ""
 msgid "Requesting a certificate from Let’s Encrypt for"
 msgstr ""
 
-#: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:213
+#: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:216
 msgid "Requesting certificates"
 msgstr ""
 
@@ -12754,8 +13311,8 @@ msgstr ""
 msgid "Retry the request below."
 msgstr ""
 
-#: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:224
-#: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:232
+#: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:227
+#: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:235
 msgid "SSL Let’s Encrypt Certificate"
 msgstr ""
 
@@ -12767,7 +13324,7 @@ msgstr ""
 msgid "The certificate status will be updated when the request finishes."
 msgstr ""
 
-#: zotonic_mod_ssl_letsencrypt/priv/templates/_admin_ssl_letsencrypt_form.tpl:15
+#: zotonic_mod_ssl_letsencrypt/priv/templates/_admin_ssl_letsencrypt_form.tpl:14
 msgid "The checked hostnames will be added to the certificate."
 msgstr ""
 
@@ -12810,11 +13367,11 @@ msgid ""
 "tt> configuration file."
 msgstr ""
 
-#: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:233
+#: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:236
 msgid "You need to be an administrator to request certificates."
 msgstr ""
 
-#: zotonic_mod_ssl_letsencrypt/priv/templates/_admin_ssl_letsencrypt_form.tpl:47
+#: zotonic_mod_ssl_letsencrypt/priv/templates/_admin_ssl_letsencrypt_form.tpl:46
 msgid "not reachable or local IP"
 msgstr ""
 
@@ -12899,8 +13456,8 @@ msgstr ""
 msgid "Add to existing mailinglist"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:56
-#: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:58
+#: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:48
+#: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:50
 msgid "Add to mailinglist"
 msgstr ""
 
@@ -12938,7 +13495,7 @@ msgid ""
 "start” is added at the top of each page"
 msgstr ""
 
-#: zotonic_mod_survey/src/mod_survey.erl:1250
+#: zotonic_mod_survey/src/mod_survey.erl:1492
 msgid "Already submitted"
 msgstr ""
 
@@ -12950,7 +13507,8 @@ msgstr ""
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:79
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:80
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:81
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:81
+#: zotonic_mod_survey/priv/templates/_survey_result_chart.tpl:23
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:101
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:86
 msgid "Answer"
 msgstr ""
@@ -12988,15 +13546,15 @@ msgstr ""
 msgid "Are you sure you want to delete this question?"
 msgstr ""
 
-#: zotonic_mod_survey/src/mod_survey.erl:311
+#: zotonic_mod_survey/src/mod_survey.erl:410
 msgid "Are you sure you want to delete this result?"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:150
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:165
 msgid "Are you sure you want to stop without saving?"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:91
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:106
 msgid "Back without saving"
 msgstr ""
 
@@ -13005,7 +13563,7 @@ msgid "Because you can edit, you can proceed for testing."
 msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:112
-#: zotonic_mod_survey/src/mod_survey.erl:352
+#: zotonic_mod_survey/src/mod_survey.erl:508
 msgid "Button"
 msgstr ""
 
@@ -13026,7 +13584,7 @@ msgstr ""
 msgid "Can only be used on the last questions page."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:68
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:56
 msgid "Category to choose from"
 msgstr ""
 
@@ -13034,7 +13592,7 @@ msgstr ""
 msgid "Charts"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:12
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:25
 msgid "Check the answer in the admin."
 msgstr ""
 
@@ -13069,12 +13627,12 @@ msgid ""
 "respondents"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:130
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:145
 msgid "Continue later"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:119
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:160
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:139
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:180
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:77
 msgid "Correct"
 msgstr ""
@@ -13088,7 +13646,7 @@ msgstr ""
 msgid "Could not create the mailinglist."
 msgstr ""
 
-#: zotonic_mod_survey/src/mod_survey.erl:351
+#: zotonic_mod_survey/src/mod_survey.erl:507
 msgid "Country select"
 msgstr ""
 
@@ -13116,7 +13674,7 @@ msgstr ""
 msgid "Create new person"
 msgstr ""
 
-#: zotonic_mod_survey/src/models/m_survey.erl:1180
+#: zotonic_mod_survey/src/models/m_survey.erl:1416
 msgid "Created"
 msgstr ""
 
@@ -13144,30 +13702,43 @@ msgstr ""
 msgid "Disagree"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:135
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:150
 msgid "Do you want to stop for now and continue later?"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:45
+#: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:37
 msgid "Download a spreadsheet with all answers."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:37
-#: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:42
-msgid ""
-"Download will start in the background. Please check your download window."
+#: zotonic_mod_survey/priv/templates/_survey_results_download_button.tpl:6
+#: zotonic_mod_survey/priv/templates/_survey_results_download_button.tpl:11
+msgid "Download survey results"
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/_survey_results_download_button.tpl:7
+msgid "Download..."
 msgstr ""
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:46
 msgid "Drop-down menu"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:50
+#: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:42
 #: zotonic_mod_survey/src/support/survey_admin.erl:116
 msgid "E-mail addresses"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:104
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:118
+msgid "Edit answers"
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_result_status.tpl:5
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_result_status.tpl:12
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_result_status.tpl:18
+msgid "Edit status"
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:119
 msgid "Edit survey result"
 msgstr ""
 
@@ -13181,6 +13752,10 @@ msgstr ""
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:27
 msgid "Example:"
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:37
+msgid "Excel (XLSX)"
 msgstr ""
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:24
@@ -13222,7 +13797,7 @@ msgstr ""
 msgid "Feedback if wrong"
 msgstr ""
 
-#: zotonic_mod_survey/src/mod_survey.erl:356
+#: zotonic_mod_survey/src/mod_survey.erl:512
 msgid "File upload"
 msgstr ""
 
@@ -13280,17 +13855,7 @@ msgid ""
 msgstr ""
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:72
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:60
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:36
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:65
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:39
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:64
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:53
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:47
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:89
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:174
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:62
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:64
+#: zotonic_mod_survey/priv/templates/blocks/_admin_survey_question_options.tpl:19
 msgid "Hide from results"
 msgstr ""
 
@@ -13333,6 +13898,16 @@ msgstr ""
 msgid "Immediately start with the questions, no “Start” button"
 msgstr ""
 
+#: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:30
+msgid "Include prompts as the first row"
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:22
+msgid ""
+"Include the status, status date, and note. The status modifier is omitted "
+"for anonymous downloads."
+msgstr ""
+
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:40
 msgid "Informational"
 msgstr ""
@@ -13349,7 +13924,7 @@ msgstr ""
 msgid "Input value placeholder text"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:186
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:174
 msgid "Instant feedback (Learning Mode)"
 msgstr ""
 
@@ -13362,6 +13937,14 @@ msgstr ""
 msgid "Inverse"
 msgstr ""
 
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:17
+msgid "It was filled in by:"
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:14
+msgid "It was filled in for:"
+msgstr ""
+
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:65
 msgid "Jump to a question on a next page."
 msgstr ""
@@ -13370,18 +13953,22 @@ msgstr ""
 msgid "Jump to this question label (must be on an other page below)"
 msgstr ""
 
-#: zotonic_mod_survey/src/mod_survey.erl:344
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:65
+msgid "Last status change"
+msgstr ""
+
+#: zotonic_mod_survey/src/mod_survey.erl:500
 msgid "Likert"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:49
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:58
-#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:65
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:73
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:80
 #: zotonic_mod_survey/src/support/survey_admin.erl:56
 msgid "Link with person"
 msgstr ""
 
-#: zotonic_mod_survey/src/mod_survey.erl:350
+#: zotonic_mod_survey/src/mod_survey.erl:506
 msgid "Long answer"
 msgstr ""
 
@@ -13450,7 +14037,7 @@ msgid ""
 "point for a correct answer, 1 point for not choosing a wrong answer."
 msgstr ""
 
-#: zotonic_mod_survey/src/mod_survey.erl:357
+#: zotonic_mod_survey/src/mod_survey.erl:513
 msgid "Multiple choice"
 msgstr ""
 
@@ -13467,12 +14054,12 @@ msgstr ""
 msgid "Multiple times – each time with new results"
 msgstr ""
 
-#: zotonic_mod_survey/src/mod_survey.erl:348
+#: zotonic_mod_survey/src/mod_survey.erl:504
 msgid "Narrative"
 msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_survey_results_user.tpl:22
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:47
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:61
 msgid "Needed for pass"
 msgstr ""
 
@@ -13495,11 +14082,15 @@ msgstr ""
 msgid "No answers; confirmation text only"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:118
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:133
 msgid "No results yet."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:88
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:27
+msgid "No status"
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:103
 msgid ""
 "Not all the required fields are filled in. You can go back to the previous "
 "page without saving your answers."
@@ -13516,7 +14107,7 @@ msgstr ""
 msgid "Number of recipients added to mailinglist:"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:46
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:39
 msgid "Numeric input, show totals for this field in the results."
 msgstr ""
 
@@ -13532,6 +14123,10 @@ msgstr ""
 msgid "Only accept images."
 msgstr ""
 
+#: zotonic_mod_survey/priv/templates/blocks/_admin_survey_question_options.tpl:11
+msgid "Only editors can answer"
+msgstr ""
+
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:210
 msgid "Optional confirmation email for the respondent"
 msgstr ""
@@ -13540,7 +14135,7 @@ msgstr ""
 msgid "Options from a page category"
 msgstr ""
 
-#: zotonic_mod_survey/src/mod_survey.erl:353
+#: zotonic_mod_survey/src/mod_survey.erl:509
 msgid "Page break"
 msgstr ""
 
@@ -13548,18 +14143,18 @@ msgstr ""
 msgid "Page jump condition"
 msgstr ""
 
-#: zotonic_mod_survey/src/mod_survey.erl:354
+#: zotonic_mod_survey/src/mod_survey.erl:510
 msgid "Page options"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:25
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:26
 msgid "Pass?"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:95
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:110
 #: zotonic_mod_survey/priv/templates/_survey_results_user.tpl:10
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:35
-#: zotonic_mod_survey/src/models/m_survey.erl:842
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:49
+#: zotonic_mod_survey/src/models/m_survey.erl:947
 msgid "Passed"
 msgstr ""
 
@@ -13567,15 +14162,15 @@ msgstr ""
 msgid "Passing score"
 msgstr ""
 
-#: zotonic_mod_survey/src/models/m_survey.erl:844
+#: zotonic_mod_survey/src/models/m_survey.erl:949
 msgid "Percent"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:17
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:18
 msgid "Person"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:93
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:108
 msgid "Please fill in all the required fields."
 msgstr ""
 
@@ -13591,9 +14186,9 @@ msgstr ""
 msgid "Please upload your image."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:24
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:25
 #: zotonic_mod_survey/priv/templates/_survey_results_user.tpl:18
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:43
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:57
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:80
 msgid "Points"
 msgstr ""
@@ -13614,7 +14209,7 @@ msgstr ""
 msgid "Prompt"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:80
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:100
 msgid "Question"
 msgstr ""
 
@@ -13643,11 +14238,11 @@ msgstr ""
 #: zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:7
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:5
 #: zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:8
-#: zotonic_mod_survey/src/mod_survey.erl:341
+#: zotonic_mod_survey/src/mod_survey.erl:497
 msgid "Questions"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:64
+#: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:56
 msgid "Questions with the question label “email” can be exported."
 msgstr ""
 
@@ -13671,22 +14266,20 @@ msgid ""
 "jump to a next page."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:53
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:29
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:58
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:32
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:58
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:39
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:40
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:82
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:167
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:55
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:41
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:57
+#: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:11
+msgid ""
+"Remove respondent names, user ids, and other respondent identity columns."
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/blocks/_admin_survey_question_options.tpl:4
 msgid "Required, this question must be answered."
 msgstr ""
 
-#: zotonic_mod_survey/src/mod_survey.erl:329
+#: zotonic_mod_survey/priv/templates/_survey_result_chart.tpl:24
+msgid "Responses"
+msgstr ""
+
+#: zotonic_mod_survey/src/mod_survey.erl:456
 msgid "Result deleted."
 msgstr ""
 
@@ -13714,18 +14307,13 @@ msgstr ""
 msgid "Results until"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:129
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:144
 msgid ""
 "Save your answers without submitting them yet so you can continue later."
 msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:1
 msgid "Saved"
-msgstr ""
-
-#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:23
-#: zotonic_mod_survey/src/models/m_survey.erl:843
-msgid "Score"
 msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:138
@@ -13753,7 +14341,11 @@ msgstr ""
 msgid "Separate multiple email addresses with a comma."
 msgstr ""
 
-#: zotonic_mod_survey/src/mod_survey.erl:349
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_result_status.tpl:10
+msgid "Set status"
+msgstr ""
+
+#: zotonic_mod_survey/src/mod_survey.erl:505
 msgid "Short answer"
 msgstr ""
 
@@ -13765,7 +14357,7 @@ msgstr ""
 msgid "Show charts"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:52
+#: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:44
 msgid "Show email addresses"
 msgstr ""
 
@@ -13804,13 +14396,22 @@ msgstr ""
 msgid "Sorry, could not insert the new person."
 msgstr ""
 
-#: zotonic_mod_survey/src/mod_survey.erl:1239
+#: zotonic_mod_survey/src/mod_survey.erl:438
+msgid "Sorry, that survey answer is unknown."
+msgstr ""
+
+#: zotonic_mod_survey/src/mod_survey.erl:1481
 msgid ""
 "Sorry, the maximum number of submissions has been reached. You can no longer "
 "submit this form."
 msgstr ""
 
-#: zotonic_mod_survey/src/mod_survey.erl:1252
+#: zotonic_mod_survey/src/mod_survey.erl:442
+#: zotonic_mod_survey/src/mod_survey.erl:445
+msgid "Sorry, the status could not be saved."
+msgstr ""
+
+#: zotonic_mod_survey/src/mod_survey.erl:1494
 msgid ""
 "Sorry, you already submitted your answers. Reload the page if you want to "
 "fill in the form again."
@@ -13820,11 +14421,38 @@ msgstr ""
 msgid "Start"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:139
+#: zotonic_mod_survey/src/models/m_survey.erl:1073
+#: zotonic_mod_survey/src/models/m_survey.erl:1079
+msgid "Status date"
+msgstr ""
+
+#: zotonic_mod_survey/src/models/m_survey.erl:1082
+msgid "Status modifier"
+msgstr ""
+
+#: zotonic_mod_survey/src/models/m_survey.erl:1081
+msgid "Status modifier id"
+msgstr ""
+
+#: zotonic_mod_survey/src/models/m_survey.erl:1074
+#: zotonic_mod_survey/src/models/m_survey.erl:1080
+msgid "Status note"
+msgstr ""
+
+#: zotonic_mod_survey/src/mod_survey.erl:434
+msgid "Status saved."
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/_survey_answer_status.tpl:20
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:40
+msgid "Status {status}"
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:154
 msgid "Stop and continue later"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:151
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:166
 msgid "Stop without saving"
 msgstr ""
 
@@ -13852,8 +14480,8 @@ msgstr ""
 msgid "Strongly Disagree"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:165
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:168
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:180
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:183
 #: zotonic_mod_wires/src/scomps/scomp_wires_button.erl:81
 msgid "Submit"
 msgstr ""
@@ -13865,7 +14493,7 @@ msgstr ""
 msgid "Submit on clicking an option"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:193
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:181
 msgid "Subtract points for wrong answers (total never less than 0)"
 msgstr ""
 
@@ -13911,13 +14539,17 @@ msgid ""
 "multiple choice and yes/no."
 msgstr ""
 
+#: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:66
+msgid "The download has started. Please check your download window."
+msgstr ""
+
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:4
 msgid ""
 "The email address is shown if there is a question with label “email” or if "
 "there is a person with an email address that has been linked."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:22
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:35
 msgid "The following has been filled in:"
 msgstr ""
 
@@ -13940,6 +14572,10 @@ msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:3
 msgid "The results have been saved."
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:59
+msgid "The status and note are only visible to people who can edit the survey."
 msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:147
@@ -13986,7 +14622,7 @@ msgid ""
 "This form is disabled. Because you can edit, you can proceed for testing."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:8
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:10
 msgid "This is a result for:"
 msgstr ""
 
@@ -13994,6 +14630,10 @@ msgstr ""
 msgid ""
 "This is the percentage needed to pass a quiz or test. Only used if you have "
 "added quiz or test questions."
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:78
+msgid "This survey answer could not be found."
 msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:18
@@ -14010,7 +14650,7 @@ msgstr ""
 msgid "This text is shown below the start button."
 msgstr ""
 
-#: zotonic_mod_survey/src/mod_survey.erl:345
+#: zotonic_mod_survey/src/mod_survey.erl:501
 msgid "Thurstone"
 msgstr ""
 
@@ -14029,7 +14669,7 @@ msgstr ""
 msgid "Toggle outline view"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_survey_result_chart.tpl:30
+#: zotonic_mod_survey/priv/templates/_survey_result_chart.tpl:46
 #: zotonic_mod_survey/priv/templates/survey_results_printable.tpl:71
 msgid "Totals"
 msgstr ""
@@ -14048,7 +14688,7 @@ msgstr ""
 msgid "True or false question"
 msgstr ""
 
-#: zotonic_mod_survey/src/mod_survey.erl:342
+#: zotonic_mod_survey/src/mod_survey.erl:498
 msgid "True/False"
 msgstr ""
 
@@ -14066,7 +14706,7 @@ msgstr ""
 msgid "View and edit results."
 msgstr ""
 
-#: zotonic_mod_survey/src/mod_survey.erl:1260
+#: zotonic_mod_survey/src/mod_survey.erl:1502
 msgid "We are experiencing an overload, please try again in 10 minutes."
 msgstr ""
 
@@ -14080,8 +14720,8 @@ msgstr ""
 msgid "White"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:119
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:160
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:139
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:180
 msgid "Wrong"
 msgstr ""
 
@@ -14090,7 +14730,7 @@ msgstr ""
 msgid "Yes or no question"
 msgstr ""
 
-#: zotonic_mod_survey/src/mod_survey.erl:343
+#: zotonic_mod_survey/src/mod_survey.erl:499
 msgid "Yes/No"
 msgstr ""
 
@@ -14102,17 +14742,26 @@ msgstr ""
 msgid "You already filled this in."
 msgstr ""
 
-#: zotonic_mod_survey/src/mod_survey.erl:318
-#: zotonic_mod_survey/src/mod_survey.erl:333
-#: zotonic_mod_survey/src/mod_survey.erl:1327
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:82
+#: zotonic_mod_survey/src/mod_survey.erl:440
+msgid "You are not allowed to change the status."
+msgstr ""
+
+#: zotonic_mod_survey/src/mod_survey.erl:417
+#: zotonic_mod_survey/src/mod_survey.erl:460
+#: zotonic_mod_survey/src/mod_survey.erl:1569
 msgid "You are not allowed to change these results."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_survey_results.tpl:47
+#: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:70
+msgid "You are not allowed to download the survey results."
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/_survey_results.tpl:41
 msgid "You are not allowed to see the results."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:9
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:22
 msgid "You cannot reply to this email."
 msgstr ""
 
@@ -14130,16 +14779,16 @@ msgstr ""
 msgid "You started filling this in and will continue where you left off."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:137
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:152
 msgid "Your answers will be saved so that you can return later to submit them."
 msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_survey_results_user.tpl:26
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:51
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:65
 msgid "Your result"
 msgstr ""
 
-#: zotonic_mod_survey/src/mod_survey.erl:1268
+#: zotonic_mod_survey/src/mod_survey.erl:1510
 msgid "Your session was expired, please restart and try again."
 msgstr ""
 
@@ -14294,10 +14943,6 @@ msgstr ""
 msgid ""
 "Cannot generate translation files because <a href=\"http://docs.zotonic.com/"
 "en/latest/developer-guide/translation.html\">gettext is not installed</a>."
-msgstr ""
-
-#: zotonic_mod_translation/priv/templates/admin_translation.tpl:42
-msgid "Code"
 msgstr ""
 
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:90
@@ -14508,11 +15153,6 @@ msgstr ""
 msgid "Ready"
 msgstr ""
 
-#: zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:38
-#: zotonic_mod_translation/priv/templates/admin_translation.tpl:43
-msgid "Region"
-msgstr ""
-
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:199
 msgid "Reload Translations"
 msgstr ""
@@ -14702,8 +15342,72 @@ msgstr ""
 msgid "page break"
 msgstr ""
 
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:59
+msgid "Audio channels"
+msgstr ""
+
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:53
+msgid "Audio codec"
+msgstr ""
+
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:70
+msgid "Audio sample rate"
+msgstr ""
+
 #: zotonic_mod_video/priv/templates/_video_viewer.tpl:11
 msgid "Converting"
+msgstr ""
+
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:7
+msgid "Format"
+msgstr ""
+
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:35
+msgid "Frame rate"
+msgstr ""
+
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:29
+msgid "Pixel format"
+msgstr ""
+
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:3
+msgid "Video"
+msgstr ""
+
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:41
+msgid "Video bit rate"
+msgstr ""
+
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:18
+msgid "Video codec"
+msgstr ""
+
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:94
+msgid "Video tags"
+msgstr ""
+
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:53
+msgid "Canonical URL"
+msgstr ""
+
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:69
+msgid "Final URL"
+msgstr ""
+
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:37
+msgid "Imported from"
+msgstr ""
+
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:19
+msgid "Site"
+msgstr ""
+
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:101
+msgid "Tags"
+msgstr ""
+
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:3
+msgid "Video embed"
 msgstr ""
 
 #: zotonic_mod_video_embed/src/mod_video_embed.erl:274

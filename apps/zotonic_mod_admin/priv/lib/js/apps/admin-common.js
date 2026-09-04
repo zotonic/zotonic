@@ -83,14 +83,6 @@ limitations under the License.
         }
     });
 
-    $.widget("ui.autofocus",
-    {
-        _init: function() {
-            self = this;
-            setTimeout(() => self.element.focus(), 0);
-        }
-    });
-
     var scrollTimer = undefined;
     $(window).scroll(function() {
         if (scrollTimer) clearTimeout(scrollTimer);

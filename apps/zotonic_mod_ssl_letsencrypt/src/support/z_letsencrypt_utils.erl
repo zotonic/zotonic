@@ -1,4 +1,4 @@
-%% Copyright 2015-2020 Guillaume Bour
+%% Copyright 2015-2026 Guillaume Bour, Marc Worrell
 %% 
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -15,7 +15,13 @@
 -module(z_letsencrypt_utils).
 -author("Guillaume Bour <guillaume@bour.cc>").
 
--export([b64encode/1, hexdigest/1, hashdigest/2, bin/1, str/1]).
+-export([
+    b64encode/1,
+    hexdigest/1, hashdigest/2,
+    bin/1, str/1,
+    sanitize_host/1,
+    check_host/1
+]).
 
 -type character() :: integer().
 
@@ -64,3 +70,35 @@ str(X) when is_binary(X); is_list(X) ->
 str(X) when is_integer(X) ->
     z_convert:to_list(X).
 
+-spec sanitize_host(Host) -> Result when
+    Host :: binary(),
+    Result :: binary().
+sanitize_host(Host) ->
+    sanitize_host(Host, <<>>).
+
+-spec sanitize_host(Host, Acc) -> Result when
+    Host :: binary(),
+    Acc ::  binary(),
+    Result :: binary().
+sanitize_host(<<>>, Acc) -> Acc;
+sanitize_host(<<C, Rest/binary>>, Acc) when C >= $a, C =< $z -> sanitize_host(Rest, <<Acc/binary, C>>);
+sanitize_host(<<C, Rest/binary>>, Acc) when C >= $A, C =< $Z -> sanitize_host(Rest, <<Acc/binary, (C + 32)>>);
+sanitize_host(<<C, Rest/binary>>, Acc) when C >= $0, C =< $9 -> sanitize_host(Rest, <<Acc/binary, C>>);
+sanitize_host(<<$-, Rest/binary>>, Acc) -> sanitize_host(Rest, <<Acc/binary, $->>);
+sanitize_host(<<$., Rest/binary>>, Acc) -> sanitize_host(Rest, <<Acc/binary, $.>>);
+sanitize_host(<<$:, _/binary>>, Acc) -> Acc;
+sanitize_host(<<_, Rest/binary>>, Acc) -> sanitize_host(Rest, <<Acc/binary, $->>).
+
+-spec check_host(Host) -> Result when
+    Host :: binary() | string(),
+    Result :: boolean().
+check_host(Host) when is_list(Host) ->
+    case unicode:characters_to_binary(Host) of
+        B when is_binary(B) -> check_host(B);
+        _ -> false
+    end;
+check_host(Host) when is_binary(Host) ->
+    case re:run(Host, "^([a-z0-9\\-]+\\.)+[a-z][a-z]+$", [{capture, none}]) of
+        match -> true;
+        nomatch -> false
+    end.

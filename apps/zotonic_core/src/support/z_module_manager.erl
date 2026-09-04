@@ -417,7 +417,10 @@ active(Module, Context) ->
             F = fun() ->
                 is_module_activated(Module, Context)
             end,
-            z_depcache:memo(F, {?MODULE, {active, Module}, z_context:site(Context)}, Context);
+            Deps = [
+                {?MODULE, active, z_context:site(Context)}
+            ],
+            z_depcache:memo(F, {?MODULE, {active, Module}, z_context:site(Context)}, 3600, Deps, Context);
         false ->
             lists:member(Module, active(Context))
     end.

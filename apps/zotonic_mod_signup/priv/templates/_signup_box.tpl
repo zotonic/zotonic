@@ -15,9 +15,9 @@
 
         {% block signup_logon %}
             <div id="signup-logon">
-                {% trans 'If you already have an account, <a href="{url}" id="back_to_logon">log in now</a>.'
+                <p>{% trans 'If you already have an account, <a href="{url}" id="back_to_logon">log in now</a>.'
                          url={logon p=page}|url
-                %}
+                %}</p>
             </div>
         {% endblock %}
 

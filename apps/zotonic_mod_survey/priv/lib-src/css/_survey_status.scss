@@ -1,0 +1,67 @@
+.survey-status-label {
+    display: inline-block;
+    min-width: 2em;
+    padding: 0.25em 0.5em;
+    color: var(--survey-status-text-color, inherit);
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25em;
+
+    &-none {
+        background-color: #fff;
+        border: 1px solid #ccc;
+    }
+
+    button {
+        color: inherit;
+        background-color: transparent;
+        border: none;
+    }
+
+    &-0 { --survey-status-color: #E2E8F0; --survey-status-text-color: #000; --survey-status-foreground-color: #000; background-color: var(--survey-status-color); }
+    &-1 { --survey-status-color: #B8E9C0; --survey-status-text-color: #000; --survey-status-foreground-color: #000; background-color: var(--survey-status-color); }
+    &-2 { --survey-status-color: #BBE1FA; --survey-status-text-color: #000; --survey-status-foreground-color: #000; background-color: var(--survey-status-color); }
+    &-3 { --survey-status-color: #E2C6FF; --survey-status-text-color: #000; --survey-status-foreground-color: #000; background-color: var(--survey-status-color); }
+    &-4 { --survey-status-color: #FAC112; --survey-status-text-color: #000; --survey-status-foreground-color: #000; background-color: var(--survey-status-color); }
+    &-5 { --survey-status-color: #F87171; --survey-status-text-color: #000; --survey-status-foreground-color: #000; background-color: var(--survey-status-color); }
+}
+
+.survey-status-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5em;
+    width: 100%;
+
+    .survey-status-option {
+        position: relative;
+        flex: 1 1 2.75em;
+        min-width: 2.75em;
+        margin: 0;
+        cursor: pointer;
+
+        > input {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+            pointer-events: none;
+
+            &:checked + .survey-status-label {
+                outline: 3px solid #222;
+                outline-offset: 2px;
+            }
+
+            &:focus + .survey-status-label {
+                box-shadow: 0 0 0 2px #fff, 0 0 0 4px #337ab7;
+            }
+        }
+
+        .survey-status-label {
+            display: block;
+            width: 100%;
+            min-height: 2.5em;
+        }
+    }
+}

@@ -72,6 +72,7 @@ z_controller_helper:decode_request_noz(AcceptedCT, Context)
 ## Data And Types
 
 - In Zotonic 1.x, request keys, JSON keys, and query keys are generally binaries.
+- For text manipulation, use Unicode-aware `unicode` or `z_string` routines. Do not slice or truncate text with byte-oriented binary operations, as those can split UTF-8 codepoints.
 - Use maps for decoded JSON and payment/resource data.
 - Avoid atoms for validation of external values unless they are already internal finite-state values.
 - Use named `-spec` variables with `when` clauses:

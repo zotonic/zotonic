@@ -125,6 +125,23 @@ For fields that are not plain user resource properties, observe
 user is created, or observe `#signup_done{}` to perform follow-up work after a
 successful signup.
 
+Standard pages
+--------------
+
+On installation, `mod_signup` creates two published text resources used by the
+signup and logon templates:
+
+| Resource name | Default page path | Purpose |
+| --- | --- | --- |
+| `signup_tos` | `/terms` | Terms of Service |
+| `signup_privacy` | `/privacy` | Privacy Policy |
+
+The templates resolve the links by resource name using
+`m.rsc.signup_tos.page_url` and `m.rsc.signup_privacy.page_url`. The page paths
+and contents can be changed, but the resource names must remain available for
+the links to be shown. The installed pages contain placeholder text that should
+be replaced with the site's own terms and privacy policy.
+
 Configuration
 -------------
 

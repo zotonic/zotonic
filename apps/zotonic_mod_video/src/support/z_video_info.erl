@@ -55,12 +55,22 @@ info(Path) ->
                     <<"duration">> => fetch_duration(Ps),
                     <<"bit_rate">> => fetch_bit_rate(Ps),
                     <<"tags">> => fetch_tags(Ps),
+                    <<"format_name">> => fetch_format_name(Ps),
+                    <<"format_long_name">> => fetch_format_long_name(Ps),
                     <<"width">> => Width,
                     <<"height">> => Height,
                     <<"orientation">> => Orientation,
                     <<"size">> => fetch_datasize(Ps),
                     <<"audio_codec">> => fetch_codec(Ps, <<"audio">>),
-                    <<"video_codec">> => fetch_codec(Ps, <<"video">>)
+                    <<"audio_bit_rate">> => fetch_stream_bit_rate(Ps, <<"audio">>),
+                    <<"audio_channels">> => fetch_audio_channels(Ps),
+                    <<"audio_channel_layout">> => fetch_audio_channel_layout(Ps),
+                    <<"audio_sample_rate">> => fetch_audio_sample_rate(Ps),
+                    <<"video_codec">> => fetch_codec(Ps, <<"video">>),
+                    <<"video_bit_rate">> => fetch_stream_bit_rate(Ps, <<"video">>),
+                    <<"video_frame_rate">> => fetch_video_frame_rate(Ps),
+                    <<"video_pixel_format">> => fetch_video_pixel_format(Ps),
+                    <<"video_profile">> => fetch_video_profile(Ps)
                 },
                 maps:filter(
                     fun(_K, V) -> V =/= undefined end,
@@ -99,6 +109,16 @@ fetch_duration(_) ->
 fetch_bit_rate(#{<<"format">> := #{<<"bit_rate">> := BitRate}}) ->
     round(z_convert:to_float(BitRate));
 fetch_bit_rate(_) ->
+    undefined.
+
+fetch_format_name(#{<<"format">> := #{<<"format_name">> := FormatName}}) ->
+    FormatName;
+fetch_format_name(_) ->
+    undefined.
+
+fetch_format_long_name(#{<<"format">> := #{<<"format_long_name">> := FormatLongName}}) ->
+    FormatLongName;
+fetch_format_long_name(_) ->
     undefined.
 
 fetch_tags(#{ <<"format">> := #{ <<"tags">> := Tags }}) when is_map(Tags) ->
@@ -162,3 +182,79 @@ fetch_codec_1([ _ | Streams ], Type) ->
     fetch_codec_1(Streams, Type);
 fetch_codec_1([], _Type) ->
     undefined.
+
+fetch_stream_bit_rate(#{<<"streams">> := Streams}, Type) ->
+    fetch_stream_prop(Streams, Type, <<"bit_rate">>, fun z_convert:to_integer/1);
+fetch_stream_bit_rate(_, _) ->
+    undefined.
+
+fetch_audio_channels(#{<<"streams">> := Streams}) ->
+    fetch_stream_prop(Streams, <<"audio">>, <<"channels">>, fun z_convert:to_integer/1);
+fetch_audio_channels(_) ->
+    undefined.
+
+fetch_audio_channel_layout(#{<<"streams">> := Streams}) ->
+    fetch_stream_prop(Streams, <<"audio">>, <<"channel_layout">>);
+fetch_audio_channel_layout(_) ->
+    undefined.
+
+fetch_audio_sample_rate(#{<<"streams">> := Streams}) ->
+    fetch_stream_prop(Streams, <<"audio">>, <<"sample_rate">>, fun z_convert:to_integer/1);
+fetch_audio_sample_rate(_) ->
+    undefined.
+
+fetch_video_frame_rate(#{<<"streams">> := Streams}) ->
+    fetch_stream_prop(Streams, <<"video">>, <<"avg_frame_rate">>, fun frame_rate/1);
+fetch_video_frame_rate(_) ->
+    undefined.
+
+fetch_video_pixel_format(#{<<"streams">> := Streams}) ->
+    fetch_stream_prop(Streams, <<"video">>, <<"pix_fmt">>);
+fetch_video_pixel_format(_) ->
+    undefined.
+
+fetch_video_profile(#{<<"streams">> := Streams}) ->
+    fetch_stream_prop(Streams, <<"video">>, <<"profile">>);
+fetch_video_profile(_) ->
+    undefined.
+
+fetch_stream_prop(Streams, Type, Prop) ->
+    fetch_stream_prop(Streams, Type, Prop, fun(V) -> V end).
+
+fetch_stream_prop([ #{ <<"codec_type">> := CT } = S | _ ], Type, Prop, Convert) when CT =:= Type ->
+    case maps:get(Prop, S, undefined) of
+        undefined -> undefined;
+        Value -> safe_convert(Value, Convert)
+    end;
+fetch_stream_prop([ _ | Streams ], Type, Prop, Convert) ->
+    fetch_stream_prop(Streams, Type, Prop, Convert);
+fetch_stream_prop([], _Type, _Prop, _Convert) ->
+    undefined.
+
+safe_convert(Value, Convert) ->
+    try
+        Convert(Value)
+    catch
+        _:_ -> undefined
+    end.
+
+frame_rate(<<"0/0">>) ->
+    undefined;
+frame_rate(Rate) ->
+    try
+        case binary:split(z_convert:to_binary(Rate), <<"/">>) of
+            [N, D] ->
+                Denominator = z_convert:to_float(D),
+                case Denominator == 0.0 of
+                    true -> undefined;
+                    false -> round_frame_rate(z_convert:to_float(N) / Denominator)
+                end;
+            [N] ->
+                round_frame_rate(z_convert:to_float(N))
+        end
+    catch
+        _:_ -> undefined
+    end.
+
+round_frame_rate(FrameRate) ->
+    round(FrameRate * 100) / 100.

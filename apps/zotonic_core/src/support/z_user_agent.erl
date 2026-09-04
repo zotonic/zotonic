@@ -60,6 +60,7 @@ is_bot_prefix(<<"googlebot", _/binary>>) -> true;
 is_bot_prefix(<<"iaskspider", _/binary>>) -> true;
 is_bot_prefix(<<"ia_archiver", _/binary>>) -> true;
 is_bot_prefix(<<"linkedinbot", _/binary>>) -> true;
+is_bot_prefix(<<"meta-externalagent", _/binary>>) -> true;
 is_bot_prefix(<<"msnbot", _/binary>>) -> true;
 is_bot_prefix(<<"msrbot", _/binary>>) -> true;
 is_bot_prefix(<<"htdig", _/binary>>) -> true;
@@ -199,6 +200,7 @@ bots() -> [
     <<"curl">>,
     <<"wget">>,
     <<"archive.org_bot">>,
+    <<"applebot">>,
 
     % Catch alls on some substrings for the lesser known bots
     <<"crawl">>,

@@ -63,6 +63,7 @@ Available Model API Paths
     insert/3,
     delete/3,
     replace_managed/3,
+    delete_managed/2,
 
     revert/2,
     publish/2,
@@ -113,21 +114,41 @@ m_get([ <<"acl_user_groups_state">> | Rest ], _Msg, Context) ->
 m_get([ T, <<"actions">> | Rest ], _Msg, Context) when ?valid_acl_kind(T) ->
     {ok, {actions(to_atom(T), Context), Rest}};
 m_get([ T, S, {all, Opts} | Rest ], _Msg, Context) when ?valid_acl_kind(T), ?valid_acl_state(S) ->
-    {ok, {all_rules(to_atom(T), to_atom(S), Opts, Context), Rest}};
+    case z_acl:is_allowed(use, mod_acl_user_groups, Context)
+        orelse z_acl:is_admin(Context)
+    of
+        true ->
+            {ok, {all_rules(to_atom(T), to_atom(S), Opts, Context), Rest}};
+        false ->
+            {error, eacces}
+    end;
 m_get([ T, S | Rest ], _Msg, Context) when ?valid_acl_kind(T), ?valid_acl_state(S) ->
-    {ok, {all_rules(to_atom(T), to_atom(S), [], Context), Rest}};
+    case z_acl:is_allowed(use, mod_acl_user_groups, Context)
+        orelse z_acl:is_admin(Context)
+    of
+        true ->
+            {ok, {all_rules(to_atom(T), to_atom(S), [], Context), Rest}};
+        false ->
+            {error, eacces}
+    end;
 m_get([ T, <<"undefined">> | Rest ], _Msg, _Context) when ?valid_acl_kind(T) ->
     {ok, {undefined, Rest}};
 m_get([ T, Id | Rest ], _Msg, Context) when ?valid_acl_kind(T) ->
-    try
-        IdInt = z_convert:to_integer(Id),
-        {ok, Props} = get(to_atom(T), IdInt, Context),
-        {ok, {Props, Rest}}
-    catch
-        error:badarg ->
-            {ok, {undefined, Rest}}
+    case z_acl:is_allowed(use, mod_acl_user_groups, Context)
+        orelse z_acl:is_admin(Context)
+    of
+        true ->
+            try
+                IdInt = z_convert:to_integer(Id),
+                {ok, Props} = get(to_atom(T), IdInt, Context),
+                {ok, {Props, Rest}}
+            catch
+                error:badarg ->
+                    {ok, {undefined, Rest}}
+            end;
+        false ->
+            {error, eacces}
     end;
-
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
@@ -426,7 +447,7 @@ delete(Kind, Id, Context) ->
     ok.
 
 replace_managed(Rules, Module, Context) ->
-    delete_managed(Module, Context),
+    delete_managed_rules(Module, Context),
     lists:foreach(
         fun(Rule) ->
             manage_acl_rule(Rule, Module, Context)
@@ -435,6 +456,9 @@ replace_managed(Rules, Module, Context) ->
     m_acl_rule:publish(rsc, Context),
     m_acl_rule:publish(module, Context),
     m_acl_rule:publish(collab, Context).
+
+delete_managed(Module, Context) ->
+    replace_managed([], Module, Context).
 
 manage_acl_rule({Type, Props}, Module, Context) ->
     insert(Type, [{managed_by, Module} | Props], Context).
@@ -815,13 +839,13 @@ implode_actions(L) ->
     iolist_to_binary( lists:join($,, Keys) ).
 
 %% @doc Delete ACL rules that are managed by a module
--spec delete_managed(atom(), #context{}) -> integer().
-delete_managed(Module, Context) ->
-    delete_managed(Module, rsc, Context)
-        + delete_managed(Module, module, Context)
-        + delete_managed(Module, collab, Context).
+-spec delete_managed_rules(atom(), #context{}) -> integer().
+delete_managed_rules(Module, Context) ->
+    delete_managed_rules_1(Module, rsc, Context)
+        + delete_managed_rules_1(Module, module, Context)
+        + delete_managed_rules_1(Module, collab, Context).
 
--spec delete_managed(atom(), atom(), #context{}) -> non_neg_integer().
-delete_managed(Module, Kind, Context) ->
+-spec delete_managed_rules_1(atom(), atom(), #context{}) -> non_neg_integer().
+delete_managed_rules_1(Module, Kind, Context) ->
     T = z_convert:to_list(table(Kind)),
     z_db:q1("DELETE FROM " ++ T ++ " WHERE managed_by = $1", [Module], Context).

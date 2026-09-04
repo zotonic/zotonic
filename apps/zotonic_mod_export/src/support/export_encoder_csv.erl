@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2016 Marc Worrell <marc@worrell.nl>
+%% @copyright 2016-2026 Marc Worrell <marc@worrell.nl>
 %% @doc Format exports for CSV format
 %% @end
 
-%% Copyright 2016 Marc Worrell
+%% Copyright 2016-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -89,6 +89,9 @@ flatten_row(undefined, _IsRaw, _Context) ->
 flatten_row(Row, _IsRaw, _Context) when is_binary(Row) ->
     Row;
 flatten_row(Row, IsRaw, Context) when is_list(Row) ->
-    export_encode_csv:encode(Row, IsRaw, Context);
+    export_encode_csv:encode(
+        [ export_encoder:cell_value(Value) || Value <- Row ],
+        IsRaw,
+        Context);
 flatten_row(Value, IsRaw, Context) ->
-    export_encode_csv:encode([Value], IsRaw, Context).
+    export_encode_csv:encode([export_encoder:cell_value(Value)], IsRaw, Context).

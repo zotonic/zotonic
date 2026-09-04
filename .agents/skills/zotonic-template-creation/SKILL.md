@@ -53,6 +53,7 @@ description: Use when creating, refactoring, or reviewing Zotonic template_compi
 - Use subfolders to group related partials in larger sites, following patterns such as `cards/`, `header/`, `nav/`, `footer/`, `search/`, `page/`, `page-actions/`, `edit/`, `icons/`, `email/`, `pivot/`, or feature-specific folders.
 - Keep path and category naming together for category-aware partials, for example `cards/card.tpl`, `cards/card.event.tpl`, `header/header.tpl`, `header/header.name.page_art_agenda.tpl`, `page/content-left.tpl`, `page/content-left.person.tpl`.
 - Use `{% include "partial.tpl" arg=value %}` for a single known partial.
+- For boolean include arguments, use the bare flag form, such as `{% include "partial.tpl" is_resultless %}`. The template compiler adds the `true` value, analogous to an Erlang proplist flag.
 - Use `{% optional include "partial.tpl" %}` when the partial can be absent.
 - Use `{% all include "_html_head.tpl" %}` or `{% all include "_admin_overview_filter_panel.tpl" %}` when all modules should contribute same-named templates in module priority order.
 - Use include cache arguments (`max_age`, `vary`, `sudo`, `anondo`, `runtime`) only when needed; be explicit because they affect ACL/runtime behavior.
@@ -185,6 +186,14 @@ description: Use when creating, refactoring, or reviewing Zotonic template_compi
 - Older tuple-style search syntax, such as `m.search[{latest cat="text" pagelen=10}]`, is still encountered in existing templates and docs but should not be copied for new code.
 - Use tuple-style only when maintaining existing code that depends on the deprecated search representation or when the target model explicitly documents tuple input.
 - Treat payload values from `q` as unsafe. A structured payload can safely pass `q.page` to the model for validation, but never render `q.*` directly without escaping.
+
+## Dynamic Template Rendering
+
+- The `m_template` model renders a template dynamically through the model path `/render/...`, exposed to browser code as `bridge/origin/model/template/get/render/<template-path>`.
+- The request payload is added to the render context as query arguments. It does not become ordinary top-level template variables: a payload `{ text: "alice" }` is available as `q.text`, not `text`.
+- When a partial must work both as a normal include and as a dynamic template-model response, explicitly fall back to the query argument: `{% with text|default:q.text as search_text %}`.
+- Dynamic rendering keeps the caller's context, so model calls in the rendered template retain their normal ACL behavior. It does not add an authorization boundary of its own; use a server-side delegate when the operation needs an explicit permission check beyond the called models' ACL checks.
+- Treat every `q.*` value supplied to a dynamically rendered template as untrusted. Pass it to models that validate their input, and escape it whenever it is rendered into HTML, attributes, URLs, or JavaScript.
 
 ## Resource And URL Patterns
 

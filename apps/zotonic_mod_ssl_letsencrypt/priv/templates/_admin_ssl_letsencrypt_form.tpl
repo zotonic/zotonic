@@ -10,7 +10,6 @@
         </ul>
     </div>
 {% else %}
-
     <div class="well">
         <p>{_ The checked hostnames will be added to the certificate. _}</p>
 
@@ -35,14 +34,14 @@
                         {% if hostalias|is_letsencrypt_valid_hostname %}
                             <li>
                                 <label>
-                                    <input type="checkbox" name="san" value="{{ hostalias }}" checked> {{ hostalias }}
+                                    <input type="checkbox" name="san" value="{{ hostalias|escape }}" checked> {{ hostalias|escape }}
                                 </label>
                                 <span class="text-success">√ – alias</span>
                             </li>
                         {% else %}
                             <li>
                                 <label class="text-muted">
-                                    <input type="checkbox" disabled> {{ hostalias }}
+                                    <input type="checkbox" disabled> {{ hostalias|escape }}
                                 </label>
                                 <em class="text-danger">&times; – {_ not reachable or local IP _}</em>
                             </li>

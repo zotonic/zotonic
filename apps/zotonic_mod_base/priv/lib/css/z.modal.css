@@ -16,6 +16,13 @@ div.modal-body div.modal-footer {
   margin: -15px;
   margin-top: 0;
 }
+div.modal-body div.modal-footer.modal-footer-sticky {
+  position: -webkit-sticky;
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  background-color: #fff;
+}
 /* modal overlay - full screen dialog - below normal dialog */
 .modal-overlay {
   position: fixed;

@@ -2,7 +2,7 @@
 pkgs.mkShell {
   buildInputs = with pkgs; [
     bashInteractive
-    erlang_26
+    erlang_28
     rebar3
     erlfmt
     imagemagick
@@ -12,7 +12,7 @@ pkgs.mkShell {
     gettext
     libiconv
     (if stdenv.isDarwin then fswatch else inotify-tools)
-    python
-    python310Packages.pip
+    python3
+    python314Packages.python
   ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) libcap;
 }

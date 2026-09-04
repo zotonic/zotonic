@@ -15,32 +15,26 @@
 
 {% elseif id.survey_show_results or m.survey.is_allowed_results_download[id] %}
 
-    {# Aggregated results #}
+	{# Aggregated results #}
 
 	{% for result, chart, question in m.survey.results[id] %}
-	<div class="survey_result">
-        {% if question.is_hide_result %}
-            {# nothing #}
-        {% elseif not result %}
-            {#
-    			{% optional include ["blocks/_block_view_",question.type,".tpl"]|join id=id blk=question answers=answers %}
-            #}
-		{% else %}
+		{% if not question.is_hide_result and result and (chart.type == "pie" or chart.charts) %}
+		<div class="survey_result survey-result">
 			{% if chart.question %}
-				<h4>{{ chart.question }}</h4>
+				<h4 class="survey-result-question">{{ chart.question }}</h4>
 			{% endif %}
 			{% if chart.charts %}
 				{% for c in chart.charts %}
 					{% if c.question %}
-						<h5>{{ c.question }}</h5>
+						<h5 class="survey-result-subquestion">{{ c.question }}</h5>
 					{% endif %}
 					{% include "_survey_result_chart.tpl" chart=c %}
 				{% endfor %}
 			{% else %}
 				{% include "_survey_result_chart.tpl" %}
 			{% endif %}
+		</div>
 		{% endif %}
-	</div>
 	{% endfor %}
 
 {% else %}

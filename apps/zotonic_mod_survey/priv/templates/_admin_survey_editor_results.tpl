@@ -14,6 +14,7 @@
             <tr>
                 <th style="text-align:right">#</th>
                 <th>{_ Date _}</th>
+                <th>{_ Status _}</th>
                 <th>{_ Person _}</th>
                 <th>{_ Email _}</th>
                 {% for col, colname in columns %}
@@ -34,12 +35,20 @@
                     <td>
                         {{ r.created|date:_"Y-m-d H:i" }}
                     </td>
+                    {% include "_admin_survey_editor_result_status.tpl"
+                        id=id
+                        answer_id=r_id
+                        result=r
+                    %}
                     <td>
                         {% if r.user_id %}
                             <a href="{% url admin_edit_rsc id=r.user_id %}">
                                 {% include "_name.tpl" id=r.user_id sudo %}
                             </a>
                             <a id="{{ #link.r_id }}" class="btn btn-default btn-xs">{_ Change _}</a>
+                            {% if not r.is_anonymous and r.user_id %}
+                                <span class="muted">({{ r.user_id }})</span>
+                            {% endif %}
                             {% wire id=#link.r_id
                                     action={dialog_open
                                         template="_dialog_survey_link_person.tpl"
@@ -51,9 +60,15 @@
                             %}
                         {% else %}
                             <span>
-                                {{ answers['name_first'].answer|escape }}
-                                {{ answers['name_surname_prefix'].answer|escape }}
-                                {{ answers['name_surname'].answer|escape }}
+                                {% if answers['name'].answer %}
+                                    {{ answers['name'].answer|escape }}
+                                {% elseif answers['Naam'].answer %}
+                                    {{ answers['Naam'].answer|escape }}
+                                {% else %}
+                                    {{ answers['name_first'].answer|escape }}
+                                    {{ answers['name_surname_prefix'].answer|escape }}
+                                    {{ answers['name_surname'].answer|escape }}
+                                {% endif %}
                             </span>
                             <a id="{{ #link.r_id }}" class="btn btn-default btn-xs">{_ Link with person _}</a>
                             {% wire id=#link.r_id
@@ -100,7 +115,7 @@
                     {% endif %}
                     <td>
                         <div class="pull-right">
-                            {% button class="btn btn-default" text=_"Edit"
+                            {% button class="btn btn-default" text=_"Edit answers"
                                       action={dialog_open template="_dialog_survey_editor.tpl" id=id answer_id=r_id title=_"Edit survey result"}
                             %}
                             {% button class="btn btn-default" text=_"Delete"

@@ -185,6 +185,11 @@ body.noframe > .admin-container {
   hyphens: auto;
 }
 
+.admin-url-break {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
 p .z-btn-help,
 label .z-btn-help {
   display: inline;

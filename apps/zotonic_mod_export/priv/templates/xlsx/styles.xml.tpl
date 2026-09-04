@@ -11,13 +11,21 @@
         </font>
         <font/>
     </fonts>
-    <fills count="2">
+    <fills count="{{ fill_count }}">
         <fill>
             <patternFill patternType="none"/>
         </fill>
         <fill>
             <patternFill patternType="lightGray"/>
         </fill>
+        {% for color in fill_colors %}
+        <fill>
+            <patternFill patternType="solid">
+                <fgColor rgb="{{ color }}"/>
+                <bgColor indexed="64"/>
+            </patternFill>
+        </fill>
+        {% endfor %}
     </fills>
     <borders count="1">
         <border>
@@ -26,7 +34,7 @@
     </borders>
     <cellStyleXfs count="1"><xf borderId="0" fillId="0" fontId="0" numFmtId="0" applyAlignment="1" applyFont="1"/>
     </cellStyleXfs>
-    <cellXfs count="3">
+    <cellXfs count="{{ cell_xf_count }}">
         <xf borderId="0" fillId="0" fontId="0" numFmtId="0" xfId="0" applyAlignment="1" applyFont="1">
            <alignment/>
         </xf>
@@ -36,6 +44,11 @@
         <xf borderId="0" fillId="0" fontId="1" numFmtId="164" xfId="0" applyAlignment="1" applyFont="1" applyNumberFormat="1">
             <alignment/>
         </xf>
+        {% for style in cell_styles %}
+        <xf borderId="0" fillId="{{ style.fill_id }}" fontId="{{ style.font_id }}" numFmtId="{{ style.num_fmt_id }}" xfId="0" applyAlignment="1" applyFont="1" applyFill="1"{% if style.apply_number_format %} applyNumberFormat="1"{% endif %}>
+            <alignment/>
+        </xf>
+        {% endfor %}
     </cellXfs>
     <cellStyles count="1">
         <cellStyle xfId="0" name="Normal" builtinId="0"/>

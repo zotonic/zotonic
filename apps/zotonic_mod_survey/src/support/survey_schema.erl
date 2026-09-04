@@ -78,6 +78,11 @@ install_schema_v2(Context) ->
                     language character varying(16),
                     points int not null default 0,
                     props bytea,
+                    status int,
+                    status_date timestamp with time zone,
+                    status_note text,
+                    status_modifier_id int,
+                    submitted timestamp with time zone,
                     created timestamp with time zone not null default current_timestamp,
                     modified timestamp with time zone,
                     modifier_id int,
@@ -119,7 +124,8 @@ install_schema_v2(Context) ->
                     z_db:flush(Context);
                 _ ->
                     ok
-            end
+            end,
+            ensure_survey_answers_status_columns(Context)
     end,
     case z_db:table_exists(survey_answers_saved, Context) of
         false ->
@@ -167,6 +173,33 @@ install_schema_v2(Context) ->
             end
     end.
 
+-spec ensure_survey_answers_status_columns(z:context()) -> ok.
+ensure_survey_answers_status_columns(Context) ->
+    case z_db:column_exists(survey_answers, status, Context) of
+        false ->
+            [] = z_db:q("
+                alter table survey_answers
+                add column status int,
+                add column status_date timestamp with time zone,
+                add column status_note text,
+                add column status_modifier_id int
+                ",
+                Context),
+            z_db:flush(Context);
+        true ->
+            ok
+    end,
+    case z_db:column_exists(survey_answers, submitted, Context) of
+        false ->
+            [] = z_db:q("
+                alter table survey_answers
+                add column submitted timestamp with time zone",
+                Context),
+            z_db:flush(Context);
+        true ->
+            ok
+    end.
+
 %% @doc Redo the results storage, group individual questions by user/answer
 upgrade_results_v2(Context) ->
     SurveyIds = z_db:q("
@@ -199,16 +232,6 @@ v1_survey_results(SurveyId, Context) ->
             Grouped = group_users(Rows),
             Qs1 = map_questions_is_multi(Qs),
             [ v1_row_to_v2(SurveyId, Qs1, UserRow) || UserRow <- Grouped ];
-            % IsAnonymous = z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_anonymous, Context)),
-            % UnSorted = [ user_answer_row(IsAnonymous, User, Created, Answers, NQs, Context) || {User, Created, Answers} <- Grouped ],
-            % Sorted = lists:sort(fun([_,_,A|_], [_,_,B|_]) -> A < B end, UnSorted), %% sort by created date
-            % Hs = lists:flatten([ <<"user_id">>, <<"anonymous">>, <<"created">>
-            %                      | [ answer_header(B, Context) || {_,B} <- NQs ]
-            %                    ]),
-            % Prompts = lists:flatten([ <<>>, <<>>, <<>>
-            %             | [ z_trans:lookup_fallback(answer_prompt(B), Context) || {_,B} <- NQs ]
-            %           ]),
-            % {Hs, Prompts, Sorted};
         undefined ->
             []
     end.
@@ -305,44 +328,6 @@ unpack_user_row({UserId, Persistent, IsAnonymous, Question, Name, Value, Text, C
     }.
 
 
-% install_survey_answer_table(Context) ->
-%     case z_db:table_exists(survey_answer, Context) of
-%         false ->
-%             z_db:create_table(survey_answer, [
-%                         #column_def{name=id, type="serial", is_nullable=false},
-%                         #column_def{name=survey_id, type="integer", is_nullable=false},
-%                         #column_def{name=user_id, type="integer", is_nullable=true},
-%                         #column_def{name=persistent, type="character varying", length=32, is_nullable=true},
-%                         #column_def{name=is_anonymous, type="boolean", is_nullable=false, default="false"},
-%                         #column_def{name=question, type="character varying", length=32, is_nullable=false},
-%                         #column_def{name=name, type="character varying", length=32, is_nullable=false},
-%                         #column_def{name=value, type="character varying", length=80, is_nullable=true},
-%                         #column_def{name=text, type="bytea", is_nullable=true},
-%                         #column_def{name=created, type="timestamp with time zone", is_nullable=true}
-%                     ], Context),
-
-%             % Add some indices and foreign keys, ignore errors
-%             z_db:equery("create index fki_survey_answer_survey_id on survey_answer(survey_id)", Context),
-%             z_db:equery("alter table survey_answer add
-%                         constraint fk_survey_answer_survey_id foreign key (survey_id) references rsc(id)
-%                         on update cascade on delete cascade", Context),
-
-%             z_db:equery("create index fki_survey_answer_user_id on survey_answer(user_id)", Context),
-%             z_db:equery("alter table survey_answer add
-%                         constraint fk_survey_answer_user_id foreign key (user_id) references rsc(id)
-%                         on update cascade on delete cascade", Context),
-
-%             %% For aggregating answers to survey questions (group by name)
-%             z_db:equery("create index survey_answer_survey_name_key on survey_answer(survey_id, name)", Context),
-%             z_db:equery("create index survey_answer_survey_question_key on survey_answer(survey_id, question)", Context),
-%             z_db:equery("create index survey_answer_survey_user_key on survey_answer(survey_id, user_id)", Context),
-%             z_db:equery("create index survey_answer_survey_persistent_key on survey_answer(survey_id, persistent)", Context);
-
-%         true ->
-%             ok
-%     end.
-
-
 survey_to_blocks(Id, Context) ->
     case m_rsc:p_no_acl(Id, survey, Context) of
         undefined ->
@@ -395,4 +380,3 @@ question_to_block(#survey_question{type=textblock, name=Name, question=Q}) ->
         <<"name">> => z_convert:to_binary(Name),
         <<"body">> => z_convert:to_binary(["<p>",Q,"</p>"])
     }.
-

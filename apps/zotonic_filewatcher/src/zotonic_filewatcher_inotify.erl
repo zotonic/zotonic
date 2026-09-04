@@ -63,7 +63,7 @@ is_installed() ->
 
 -spec is_running() -> boolean().
 is_running() ->
-    case whereis(zotonic_filewatcher_fswatch) of
+    case whereis(?MODULE) of
         undefined ->
             false;
         Pid ->

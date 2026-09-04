@@ -189,17 +189,35 @@ new(Site) when is_atom(Site) ->
     Context.
 
 %% @doc Create a new context record for a site with a certain language
--spec new( Site :: atom(), Language :: atom() | [ atom() ] ) -> z:context().
+-spec new(Site, Language) -> Context
+    when
+        Site :: atom(),
+        Language :: z_language:language_code() | [ z_language:language_code() ],
+        Context :: z:context().
 new(Site, Lang) when is_atom(Site) ->
     Context = new(Site),
     set_language(Lang, Context).
 
--spec new( Site :: atom(), Language :: atom() | [ atom() ], Timezone :: binary() ) -> z:context().
-new(Site, Lang, Timezone) when is_atom(Site), is_binary(Timezone) ->
+%% @doc Create a new context record for a site with a certain language and timezone
+-spec new(Site, Language, Timezone) -> Context
+    when
+        Site :: atom(),
+        Language :: undefined | z_language:language_code() | [ z_language:language_code() ],
+        Timezone :: undefined | binary(),
+        Context :: z:context().
+new(Site, undefined, undefined) ->
+    new(Site);
+new(Site, undefined, Timezone) when is_binary(Timezone) ->
+    Context = new(Site),
+    Context#context{ tz = Timezone };
+new(Site, Lang, undefined) ->
+    new(Site, Lang);
+new(Site, Lang, Timezone) when is_binary(Timezone) ->
     Context = new(Site, Lang),
     Context#context{ tz = Timezone }.
 
-
+%% @doc Set the default language and timezone for a context. This is used when creating a new context.
+%% The language and timezone come from the site configuration and are cached in the depcache for performance.
 -spec set_default_language_tz(z:context()) -> z:context().
 set_default_language_tz(Context) ->
     try
@@ -521,14 +539,16 @@ is_ssl_site(_Context) ->
 %% @doc Pickle a context for storing in the database
 -spec pickle( z:context() ) -> tuple().
 pickle(Context) ->
-    {pickled_context,
-        Context#context.site,
-        Context#context.user_id,
-        Context#context.language,
-        Context#context.tz,
-        undefined}.
+    {pickled_context, Context#context.site, 2, #{
+        user_id => Context#context.user_id,
+        language => Context#context.language,
+        tz => Context#context.tz,
+        is_sudo => z_acl:is_sudo(Context),
+        is_read_only => z_acl:is_read_only(Context)
+    }}.
 
-%% @doc Depickle a context for restoring from a database
+%% @doc Depickle a context for restoring from a database. Accept older pickled
+%% context formats.
 -spec depickle( tuple() ) -> z:context().
 depickle({pickled_context, Site, UserId, Language, _VisitorId}) ->
     Context = new(Site, Language),
@@ -541,17 +561,40 @@ depickle({pickled_context, Site, UserId, Language, Tz, _VisitorId}) ->
     case UserId of
         undefined -> Context;
         _ -> z_acl:logon(UserId, Context)
+    end;
+depickle({pickled_context, Site, 2, State}) ->
+    Language = maps:get(language, State, undefined),
+    Tz = maps:get(tz, State, undefined),
+    Context = new(Site, Language, Tz),
+    Context1 = case maps:get(user_id, State, undefined) of
+        undefined -> Context;
+        UserId when is_integer(UserId) -> z_acl:logon(UserId, Context);
+        _ -> Context
+    end,
+    Context2 = z_acl:set_read_only(maps:get(is_read_only, State, false), Context1),
+    case maps:get(is_sudo, State, false) of
+        false -> Context2;
+        true -> z_acl:sudo(Context2)
     end.
 
-%% @doc Depickle a context, return the site name.
--spec depickle_site( tuple() ) -> z:context().
+%% @doc Depickle a context, return the site name. Accept older pickle formats.
+-spec depickle_site( tuple() ) -> atom().
 depickle_site({pickled_context, Site, _UserId, _Language, _VisitorId}) ->
     Site;
 depickle_site({pickled_context, Site, _UserId, _Language, _Tz, _VisitorId}) ->
+    Site;
+depickle_site({pickled_context, Site, _Version, _State}) ->
     Site.
 
-
--spec output( MixedHtml::term(), z:context() ) -> {iolist(), z:context()}.
+%% @doc Output a mixed html term to the response. This is a wrapper around z_output_html:output/2.
+%% The MixedHtml can contain iodata, contexts, and other values like dates and undefined.
+%% This accumulates all actions in the MixedHtml in the given Context and returns the new Context
+%% and clean iodata that can be used for output.
+-spec output(MixedHtml, Context) -> {iodata(), OutContext}
+    when
+        MixedHtml :: term(),
+        Context :: z:context(),
+        OutContext :: z:context().
 output(MixedHtml, Context) ->
     z_output_html:output(MixedHtml, Context).
 
@@ -1498,7 +1541,8 @@ set_security_headers(Context) ->
         worker_src     = [ <<"'self'">>, <<"blob:">> ],
         connect_src    = [ <<"'self'">>, <<"https:">>, <<"wss:">> ],
         frame_ancestors = [ <<"'self'">> ],
-        report_to      = [ <<"site">> ]
+        report_to      = [ <<"site">> ],
+        report_sample  = true
     },
     Headers = [
         {<<"x-content-type-options">>, <<"nosniff">>},
@@ -1554,12 +1598,15 @@ set_security_headers(Context) ->
     end,
     set_resp_headers(SecurityHeaders1, Context).
 
+-spec flatten_csp(#content_security_header{}) -> binary().
 flatten_csp(CSP) ->
+    ReportSample = CSP#content_security_header.report_sample,
     Directives = lists:filtermap(
         fun
             ({_Directive, []}) -> false;
-            ({Directive, L}) ->
-                L1 = lists:usort(L),
+            ({Directive, Sources}) ->
+                Sources1 = csp_report_sample(Directive, Sources, ReportSample),
+                L1 = lists:usort(Sources1),
                 L2 = case lists:member(<<"'unsafe-inline'">>, L1) of
                     true -> lists:delete(<<"'nonce-'">>, L1);
                     false -> L1
@@ -1594,6 +1641,14 @@ flatten_csp(CSP) ->
             {<<"report-to">>, CSP#content_security_header.report_to}
         ]),
     iolist_to_binary(lists:join("; ", Directives)).
+
+-spec csp_report_sample(binary(), [binary()], boolean()) -> [binary()].
+csp_report_sample(<<"script-src", _/binary>>, Sources, true) ->
+    [ <<"'report-sample'">> | Sources ];
+csp_report_sample(<<"style-src", _/binary>>, Sources, true) ->
+    [ <<"'report-sample'">> | Sources ];
+csp_report_sample(_Directive, Sources, _ReportSample) ->
+    Sources.
 
 %% @doc Create a hsts header based on the current settings. The result is cached
 %%      for quick access.
@@ -1631,17 +1686,17 @@ set_cors_headers(Default, Context) ->
     end,
     set_resp_headers(CorsHeaders, Context).
 
-%% @doc Set the noindex header if the config is set, or the webmachine resource opt is set.
+%% @doc Force the noindex header.
 -spec set_noindex_header(z:context()) -> z:context().
 set_noindex_header(Context) ->
-    set_noindex_header(false, Context).
+    set_noindex_header(true, Context).
 
 %% @doc Set the noindex header if the config is set, the webmachine resource opt is set or Force is set.
 -spec set_noindex_header(Force::term(), z:context()) -> z:context().
 set_noindex_header(Force, Context) ->
-    case m_config:get_boolean(seo, noindex, Context)
+    case z_convert:to_bool(Force)
+         orelse m_config:get_boolean(seo, noindex, Context)
          orelse get(seo_noindex, Context, false)
-         orelse z_convert:to_bool(Force)
     of
        true ->
             set_resp_header(<<"x-robots-tag">>, <<"noindex,nofollow">>, Context);

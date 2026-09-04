@@ -11,7 +11,9 @@ description: Use when working in Zotonic projects, especially Erlang modules, Zo
 - Keep changes inside the requested app unless the user explicitly expands scope.
 - Files use UTF-8 and LF line endings.
 - Use `rg`/`rg --files` for discovery.
-- Prefer `make` for normal Zotonic builds; use `./rebar3 compile` after Erlang changes when you only need a compile check. Ignore `rebar.lock` changes from normal build/test commands unless the task intentionally changes dependencies.Ignore `erl_crash.dump`; it is already in `.gitignore` and should not be reported as actionable worktree noise.
+- Prefer `make` for normal Zotonic builds; use `./rebar3 compile` after Erlang changes when you only need a compile check.
+- Ignore `rebar.lock` changes from normal build/test commands unless the task intentionally changes dependencies.
+- Ignore `erl_crash.dump` and `rebar3.crashdump`; they are build artifacts and should not be reported as actionable worktree noise.
 
 ## Erlang Style
 
@@ -31,6 +33,7 @@ description: Use when working in Zotonic projects, especially Erlang modules, Zo
 - Use Zotonic records such as `#datamodel{}` and `#rsc_tree{}` when fixtures/menu structures require them.
 - Use `m_site`/context environment data for environment-dependent behavior instead of duplicating dev/prod fixtures.
 - For Zotonic 1.x code, expect request keys, query keys, JSON keys, and most external textual data to be binaries, not strings.
+- For text manipulation, use Unicode-aware `unicode` or `z_string` routines. Do not slice or truncate text with byte-oriented binary operations, as those can split UTF-8 codepoints.
 
 ## App Structure
 
@@ -57,6 +60,7 @@ description: Use when working in Zotonic projects, especially Erlang modules, Zo
 ## Templates
 
 - Zotonic templates use `template_compiler` tags, loosely Django-like.
+- Use bare boolean tag arguments, such as `is_resultless`, instead of `is_resultless=true`. The template compiler adds the `true` value, matching flag entries in Erlang proplists.
 - Documentation for the tags is in doc/template-tags
 - Use `{% extends "base.tpl" %}` and blocks for page composition.
 - Use `{% catinclude %}` for category-specific page/header variants.

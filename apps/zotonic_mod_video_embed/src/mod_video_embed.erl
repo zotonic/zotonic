@@ -232,7 +232,7 @@ observe_media_import_medium(#media_import_medium{
             <<"video_embed_service">> := EmbedService,
             <<"video_embed_id">> := EmbedId
         } = Medium }, Context) ->
-    MediaProps = #{
+    MediaProps = maps:merge(#{
         <<"mime">> => ?EMBED_MIME,
         <<"video_embed_code">> => z_sanitize:html(EmbedCode, Context),
         <<"video_embed_service">> => z_string:to_name(EmbedService),
@@ -241,7 +241,7 @@ observe_media_import_medium(#media_import_medium{
         <<"width">> => as_int(maps:get(<<"width">>, Medium, undefined)),
         <<"orientation">> => as_int(maps:get(<<"orientation">>, Medium, undefined)),
         <<"media_import">> => z_sanitize:uri( maps:get(<<"media_import">>, Medium, undefined ))
-    },
+    }, import_video_embed_metadata(Medium)),
     OldMediaProps = m_media:get(Id, Context),
     case OldMediaProps of
         #{ <<"mime">> := ?EMBED_MIME } ->
@@ -290,9 +290,10 @@ media_import_1(Service, Descr, MD, MI, Context) ->
     case is_integer(H) andalso is_integer(W) andalso VideoId =/= <<>> of
         true ->
             VideoIdBin = z_convert:to_binary(VideoId),
-            PreviewUrl = videoid_to_image(Service, VideoIdBin),
+            VideoMetadata = videoid_metadata(Service, VideoIdBin, MD),
+            PreviewUrl = maps:get(<<"thumbnail_url">>, VideoMetadata, undefined),
             [
-                media_import_props_video(Service, Descr, MD, MI, H, W, VideoId, PreviewUrl, Context),
+                media_import_props_video(Service, Descr, MD, MI, H, W, VideoId, PreviewUrl, VideoMetadata, Context),
                 media_import_props_image(MD, PreviewUrl, Context)
             ];
         false ->
@@ -320,23 +321,33 @@ media_import_retry(<<"youtube">>, Descr, MD, MI, Context) ->
 media_import_retry(_Service, _Descr, _MD, _MI, _Context) ->
     undefined.
 
-media_import_props_video(Service, Descr, MD, MI, H, W, VideoId, PreviewUrl, Context) ->
+media_import_props_video(Service, Descr, MD, MI, H, W, VideoId, PreviewUrl, VideoMetadata, Context) ->
+    JsonLDVideo = json_ld_video(MD),
     VideoIdBin = z_convert:to_binary(VideoId),
-    PreviewUrl1 = case PreviewUrl of
-        undefined -> z_url_metadata:p(image, MD);
-        PU -> PU
-    end,
+    PreviewUrl1 = first_defined([
+        PreviewUrl,
+        z_url_metadata:p(image, MD),
+        json_ld_value(<<"thumbnailUrl">>, JsonLDVideo),
+        json_ld_thumbnail_url(JsonLDVideo)
+    ]),
+    VideoEmbedMetadata = video_embed_metadata(MD, PreviewUrl1, VideoMetadata),
     #media_import_props{
         prio = 1,
         category = video,
         module = ?MODULE,
         description = Descr,
         rsc_props = #{
-            <<"title">> => z_url_metadata:p(title, MD),
-            <<"summary">> => z_url_metadata:p(summary, MD),
+            <<"title">> => first_defined([
+                z_url_metadata:p(title, MD),
+                json_ld_value(<<"name">>, JsonLDVideo)
+            ]),
+            <<"summary">> => first_defined([
+                z_url_metadata:p(summary, MD),
+                json_ld_value(<<"description">>, JsonLDVideo)
+            ]),
             <<"website">> => MI#media_import.url
         },
-        medium_props = #{
+        medium_props = maps:merge(#{
             <<"mime">> => ?EMBED_MIME,
             <<"width">> => W,
             <<"height">> => H,
@@ -344,9 +355,150 @@ media_import_props_video(Service, Descr, MD, MI, H, W, VideoId, PreviewUrl, Cont
             <<"video_embed_code">> => embed_code(Service, H, W, VideoId, Context),
             <<"video_embed_id">> => VideoIdBin,
             <<"media_import">> => MI#media_import.url
-        },
+        }, VideoEmbedMetadata),
         preview_url = PreviewUrl1
     }.
+
+video_embed_metadata(MD, PreviewUrl, VideoMetadata) ->
+    JsonLDVideo = json_ld_video(MD),
+    filter_metadata(#{
+        <<"video_embed_site">> => z_url_metadata:p(site_name, MD),
+        <<"video_embed_author">> => first_defined([
+            json_ld_author(JsonLDVideo),
+            z_url_metadata:p(author, MD)
+        ]),
+        <<"video_embed_canonical_url">> => z_url_metadata:p(canonical_url, MD),
+        <<"video_embed_final_url">> => z_url_metadata:p(final_url, MD),
+        <<"video_embed_thumbnail_url">> => first_defined([
+            PreviewUrl,
+            json_ld_value(<<"thumbnailUrl">>, JsonLDVideo),
+            json_ld_thumbnail_url(JsonLDVideo)
+        ]),
+        <<"duration">> => first_defined([
+            duration_seconds(maps:get(<<"duration">>, VideoMetadata, undefined)),
+            duration_seconds(json_ld_value(<<"duration">>, JsonLDVideo)),
+            duration_seconds(z_url_metadata:p([<<"og:video:duration">>, <<"video:duration">>], MD))
+        ]),
+        <<"video_embed_published">> => first_defined([
+            json_ld_value(<<"datePublished">>, JsonLDVideo),
+            json_ld_value(<<"uploadDate">>, JsonLDVideo),
+            z_url_metadata:p([
+                <<"article:published_time">>,
+                <<"video:release_date">>,
+                <<"datepublished">>,
+                <<"publishdate">>
+            ], MD)
+        ]),
+        <<"video_embed_tags">> => first_defined([
+            tags_metadata(json_ld_value(<<"keywords">>, JsonLDVideo)),
+            z_url_metadata:p(tags, MD)
+        ])
+    }).
+
+import_video_embed_metadata(Medium) ->
+    filter_metadata(#{
+        <<"video_embed_site">> => text_metadata(maps:get(<<"video_embed_site">>, Medium, undefined)),
+        <<"video_embed_author">> => text_metadata(maps:get(<<"video_embed_author">>, Medium, undefined)),
+        <<"video_embed_canonical_url">> => sanitize_uri(maps:get(<<"video_embed_canonical_url">>, Medium, undefined)),
+        <<"video_embed_final_url">> => sanitize_uri(maps:get(<<"video_embed_final_url">>, Medium, undefined)),
+        <<"video_embed_thumbnail_url">> => sanitize_uri(maps:get(<<"video_embed_thumbnail_url">>, Medium, undefined)),
+        <<"duration">> => duration_seconds(maps:get(<<"duration">>, Medium, undefined)),
+        <<"video_embed_published">> => text_metadata(maps:get(<<"video_embed_published">>, Medium, undefined)),
+        <<"video_embed_tags">> => tags_metadata(maps:get(<<"video_embed_tags">>, Medium, undefined))
+    }).
+
+filter_metadata(Metadata) ->
+    maps:filter(
+        fun
+            (_K, undefined) -> false;
+            (_K, <<>>) -> false;
+            (_K, []) -> false;
+            (_K, _V) -> true
+        end,
+        Metadata).
+
+first_defined([]) ->
+    undefined;
+first_defined([undefined | Vs]) ->
+    first_defined(Vs);
+first_defined([<<>> | Vs]) ->
+    first_defined(Vs);
+first_defined([V | _]) ->
+    V.
+
+tags_metadata(Tags) when is_list(Tags) ->
+    [ text_metadata(Tag) || Tag <- Tags, not z_utils:is_empty(Tag) ];
+tags_metadata(Tags) when is_binary(Tags) ->
+    tags_metadata(binary:split(Tags, <<",">>, [global]));
+tags_metadata(_Tags) ->
+    undefined.
+
+text_metadata(undefined) ->
+    undefined;
+text_metadata(Text) ->
+    z_convert:to_binary(Text).
+
+sanitize_uri(undefined) ->
+    undefined;
+sanitize_uri(Uri) ->
+    z_sanitize:uri(Uri).
+
+json_ld_video(MD) ->
+    json_ld_video(z_url_metadata:p(json_ld, MD), z_url_metadata:p(url, MD)).
+
+json_ld_video(JsonLDs, Url) when is_list(JsonLDs) ->
+    case json_ld_by_id(Url, JsonLDs) of
+        undefined -> json_ld_video_object(JsonLDs);
+        Video -> Video
+    end;
+json_ld_video(_JsonLDs, _Url) ->
+    undefined.
+
+json_ld_by_id(undefined, _JsonLDs) ->
+    undefined;
+json_ld_by_id(Url, JsonLDs) ->
+    lists:foldl(
+        fun
+            (#{ <<"@id">> := ItemId } = JsonLD, undefined) when ItemId =:= Url -> JsonLD;
+            (_JsonLD, Acc) -> Acc
+        end,
+        undefined,
+        JsonLDs).
+
+json_ld_video_object(JsonLDs) ->
+    lists:foldl(
+        fun
+            (#{ <<"@type">> := <<"VideoObject">> } = JsonLD, undefined) -> JsonLD;
+            (_JsonLD, Acc) -> Acc
+        end,
+        undefined,
+        JsonLDs).
+
+json_ld_value(_Key, undefined) ->
+    undefined;
+json_ld_value(Key, JsonLD) when is_map(JsonLD) ->
+    case maps:get(Key, JsonLD, undefined) of
+        [Value | _] -> Value;
+        Value -> Value
+    end.
+
+json_ld_author(undefined) ->
+    undefined;
+json_ld_author(#{ <<"author">> := Author }) when is_map(Author) ->
+    first_defined([
+        maps:get(<<"name">>, Author, undefined),
+        maps:get(<<"url">>, Author, undefined),
+        maps:get(<<"@id">>, Author, undefined)
+    ]);
+json_ld_author(#{ <<"author">> := Author }) ->
+    Author;
+json_ld_author(_) ->
+    undefined.
+
+json_ld_thumbnail_url(#{ <<"thumbnail">> := Thumbnail }) when is_map(Thumbnail) ->
+    maps:get(<<"url">>, Thumbnail, undefined);
+json_ld_thumbnail_url(_) ->
+    undefined.
 
 media_import_props_image(_MD, undefined, _Context) ->
     undefined;
@@ -567,12 +719,23 @@ preview_vimeo(MediaId, InsertProps, Context) ->
 videoid_to_image(<<"youtube">>, EmbedId) ->
     "https://img.youtube.com/vi/"++z_convert:to_list(EmbedId)++"/0.jpg";
 videoid_to_image(<<"vimeo">>, EmbedId) ->
+    maps:get(<<"thumbnail_url">>, videoid_metadata(<<"vimeo">>, EmbedId, undefined), undefined);
+videoid_to_image(_, _) ->
+    undefined.
+
+videoid_metadata(<<"youtube">>, EmbedId, _MD) ->
+    filter_metadata(#{
+        <<"thumbnail_url">> => videoid_to_image(<<"youtube">>, EmbedId)
+    });
+videoid_metadata(<<"vimeo">>, EmbedId, _MD) ->
     JsonUrl = "https://vimeo.com/api/v2/video/" ++ z_convert:to_list(EmbedId) ++ ".json",
     case httpc:request(get, {JsonUrl, []}, [], [ {body_format, binary} ]) of
         {ok, {{_Http, 200, _Ok}, _Header, Data}} ->
             [ JSON | _ ] = z_json:decode(Data),
-            #{ <<"thumbnail_large">> := Thumbnail } = JSON,
-            iolist_to_binary(re:replace(Thumbnail, <<"_[0-9]+(x[0-9]+)?$">>, <<"_1280">>));
+            filter_metadata(#{
+                <<"thumbnail_url">> => vimeo_thumbnail_url(JSON),
+                <<"duration">> => maps:get(<<"duration">>, JSON, undefined)
+            });
         {ok, {StatusCode, _Header, Data}} ->
             ?LOG_WARNING(#{
                 text => <<"Vimeo metadata fetch returned error">>,
@@ -581,12 +744,52 @@ videoid_to_image(<<"vimeo">>, EmbedId) ->
                 result => StatusCode,
                 date => Data
             }),
-            undefined;
+            #{};
         _ ->
-            undefined
+            #{}
     end;
-videoid_to_image(_, _) ->
+videoid_metadata(_Service, _EmbedId, _MD) ->
+    #{}.
+
+vimeo_thumbnail_url(#{ <<"thumbnail_large">> := Thumbnail }) ->
+    iolist_to_binary(re:replace(Thumbnail, <<"_[0-9]+(x[0-9]+)?$">>, <<"_1280">>));
+vimeo_thumbnail_url(_) ->
     undefined.
+
+duration_seconds(undefined) ->
+    undefined;
+duration_seconds(<<>>) ->
+    undefined;
+duration_seconds(N) when is_integer(N) ->
+    N;
+duration_seconds(<<"PT", _/binary>> = Duration) ->
+    iso8601_duration(Duration);
+duration_seconds(N) ->
+    z_convert:to_integer(N).
+
+iso8601_duration(Duration) ->
+    case re:run(Duration, <<"PT(?:(\\d+)H)?(?:(\\d+)M)?(?:(\\d+)S)?">>, [{capture, all_but_first, binary}]) of
+        {match, Parts} -> duration_parts(Parts);
+        nomatch -> undefined
+    end.
+
+duration_parts(Parts) ->
+    [Hours, Minutes, Seconds] = pad_duration_parts(Parts),
+    3600 * as_int0(Hours) + 60 * as_int0(Minutes) + as_int0(Seconds).
+
+pad_duration_parts([Hours, Minutes, Seconds]) ->
+    [Hours, Minutes, Seconds];
+pad_duration_parts([Hours, Minutes]) ->
+    [Hours, Minutes, <<>>];
+pad_duration_parts([Hours]) ->
+    [Hours, <<>>, <<>>];
+pad_duration_parts([]) ->
+    [<<>>, <<>>, <<>>].
+
+as_int0(<<>>) ->
+    0;
+as_int0(N) ->
+    z_convert:to_integer(N).
 
 
 -spec static_preview( m_rsc:resource_id(), binary(), z:context() ) -> nop | {ok, file:filename_all()} | {error, term()}.

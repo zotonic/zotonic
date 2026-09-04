@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2020-2025 Marc Worrell, Maas-Maarten Zeeman
+%% @copyright 2020-2026 Marc Worrell, Maas-Maarten Zeeman
 %% @doc Interface to erlang-letsencrypt
 %% @end
 
-%% Copyright 2020-2025 Marc Worrell, Maas-Maarten Zeeman
+%% Copyright 2020-2026 Marc Worrell, Maas-Maarten Zeeman
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -31,6 +31,8 @@
 %% @doc Start a letsencrypt server for requesting this hostname
 -spec request( pid(), binary(), list( binary() ), list(), z:context()) -> {ok, pid()} | {error, overload}.
 request(ModulePid, Hostname, SANs, LetsOpts, Context) ->
+    true = z_letsencrypt_utils:check_host(Hostname),
+    true = lists:all(fun z_letsencrypt_utils:check_host/1, SANs),
     z_sidejob:start(?MODULE, request_process, [ ModulePid, Hostname, SANs, LetsOpts, Context ]).
 
 request_process(ModulePid, Hostname, SANs, LetsOpts, Context) ->

@@ -1560,7 +1560,7 @@ build_and_encode_mail(Headers, Text, Html, Attachment, Context) ->
                 [ _, MDH ] -> MDH;
                 _ -> Html
             end,
-            ContextText = drop_header_lines(expand_cr(z_convert:to_binary(z_markdown:to_markdown(ContentHtml, [no_html, no_tables])))),
+            ContextText = expand_cr(markupz:to_markdown(ContentHtml, email)),
             [{<<"text">>, <<"plain">>, [], Params, ContextText}];
         true ->
             []
@@ -1725,15 +1725,6 @@ filename(#upload{filename=undefined, tmpfile=Tmpfile}) ->
     z_convert:to_binary(filename:basename(z_convert:to_list(Tmpfile)));
 filename(#upload{filename=Filename}) ->
     z_convert:to_binary(Filename).
-
-% Drop header lines from Markdown texts. Just the header text line should
-% be enough in text emails.
-drop_header_lines(Text) ->
-    re:replace(
-        Text,
-        <<13,10,"===+",13,10,13,10>>,
-        <<13,10,13,10>>,
-        [global, {return, binary}]).
 
 % Make sure that loose \n characters are expanded to \r\n
 expand_cr(B) -> expand_cr(B, <<>>).

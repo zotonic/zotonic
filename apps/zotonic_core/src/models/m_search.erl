@@ -69,6 +69,51 @@ Available Model API Paths
 
 `/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 
+HTTP API example
+----------------
+
+The following request finds events, orders them by their start date, and returns the title, summary, start date, and end
+date for the first 20 results:
+
+
+```shell
+curl --get 'https://example.com/api/model/search/get/paged' \\
+  --header 'Accept: application/json' \\
+  --data-urlencode 'cat=event' \\
+  --data-urlencode 'sort=pivot.date_start' \\
+  --data-urlencode 'page=1' \\
+  --data-urlencode 'pagelen=20' \\
+  --data-urlencode 'options.properties=title,summary,date_start,date_end'
+```
+
+The `options.properties` argument expands every result id into a resource property map. The `id` property is always
+included. Without this option, the `result` array contains resource ids. An abbreviated response is:
+
+
+```json
+{
+  \"result\": [
+    {
+      \"id\": 123,
+      \"title\": {
+        \"_type\": \"trans\",
+        \"tr\": { \"en\": \"Open Studio\" }
+      },
+      \"summary\": {
+        \"_type\": \"trans\",
+        \"tr\": { \"en\": \"An afternoon with local artists.\" }
+      },
+      \"date_start\": \"2026-09-12T13:00:00Z\",
+      \"date_end\": \"2026-09-12T17:00:00Z\"
+    }
+  ]
+}
+```
+
+The dates are returned as ISO 8601 UTC values. On multilingual sites, translated properties such as `title` and
+`summary` are returned as translation objects. Add `unfinished=true` to restrict the results to ongoing and future
+events.
+
 See also
 
 [Search](/id/doc_developerguide_search#guide-datamodel-query-model) , [pager](/id/doc_template_scomp_scomp_pager#scomp-pager) tag , [mod_search](/id/doc_module_mod_search) module , [Custom search](/id/doc_cookbook_custom_search#cookbook-custom-search)").
