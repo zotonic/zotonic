@@ -435,7 +435,7 @@ event(#submit{message={survey_answer_status, Args}}, Context) ->
                         | OnSuccess
                     ], Context);
                 {error, enoent} ->
-                    z_render:growl_error(?__("Sorry, that survey answer is unknown.", Context), Context);
+                    z_render:growl_error(?__("Sorry, that answer is unknown.", Context), Context);
                 {error, eacces} ->
                     z_render:growl_error(?__("You are not allowed to change the status.", Context), Context);
                 {error, badarg} ->
