@@ -11,6 +11,8 @@
 
     "js/apps/zotonic-wired.js"
     "js/apps/z.widgetmanager.js"
+    "js/modules/z.autofocus.js"
+    "js/modules/z.autoheight.js"
 
     "js/modules/jquery.hotkeys.js"
 
