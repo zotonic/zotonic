@@ -219,3 +219,5 @@ TODO
 
 After merge:
  - [ ] Ensure the types of z_props, mod_rdf and search_facet are the same (bool -> boolean, int -> integer)
+ - [ ] Import and export of Turtle, JSON-LD, and other formats (TBD)
+ - [ ] Endpoint with: Turtle, JSON-LD, and other formats as output
