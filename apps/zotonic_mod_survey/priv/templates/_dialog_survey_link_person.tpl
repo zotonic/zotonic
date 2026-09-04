@@ -96,7 +96,7 @@
     </div>
 {% endwith %}
 
-<div class="modal-footer">
+<div class="modal-footer modal-footer-sticky">
     {% button class="btn btn-default" text=_"Cancel" action={dialog_close} %}
     {% button class="btn btn-primary" text=_"Create new person"
               postback={link_new_person survey_id=id answer_id=answer_id}
