@@ -8,7 +8,7 @@
 <div class="checkbox">
     <label>
         <input type="checkbox" id="block-{{ name }}-is_editor_only" name="blocks[].is_editor_only" value="1" {% if blk.is_editor_only %}checked="checked"{% endif %}>
-        {_ Only editors can answer _}
+         {_ Only editors can answer _} ({_ answers visible to respondents _}) 
     </label>
 </div>
 
