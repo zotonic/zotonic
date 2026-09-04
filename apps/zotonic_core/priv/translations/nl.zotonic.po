@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-09-04 13:05\n"
+"PO-Revision-Date: 2026-09-04 14:47\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -8055,7 +8055,7 @@ msgstr "Alleen de beheerder kan het traceren van functieaanroepen gebruiken."
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:528
 msgid "Open included template"
-msgstr "Bijgeleverde sjabloon openen"
+msgstr "Open ingesloten sjabloon"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:163
 msgid "Optional category for catinclude"
@@ -9134,7 +9134,7 @@ msgstr "De instellingen worden vergrendeld door de systeemconfiguratie."
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:83
 msgid "The settings are tested by uploading (and removing) a small file."
-msgstr "De instellingen worden getest door een klein bestand te uploaden (en te verwijderen)."
+msgstr "De instellingen worden getest door een klein bestand te uploaden (en weer te verwijderen)."
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:239
 msgid "There is a 1 minute wait before files are uploaded."
@@ -10275,7 +10275,7 @@ msgstr "Er zijn geen mailinglijsten gevonden."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:53
 msgid "No pending mailings."
-msgstr "Er zijn geen openstaande verzendingen."
+msgstr "Geen openstaande verzendingen."
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:39
 msgid "Number of recipients on this list:"
@@ -10412,7 +10412,7 @@ msgstr "Abonnement verwijderd."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:39
 msgid "Reset the statistics before sending."
-msgstr "Zet de statistieken terug voordat je het verstuurt."
+msgstr "Stel de statistieken opnieuw in voordat je het verstuurt."
 
 #: zotonic_mod_mailinglist/src/mod_mailinglist.erl:518
 msgid "Saved the opt-out preference."
@@ -10469,16 +10469,16 @@ msgstr "Nu verzenden"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:59
 msgid "Send page to this list..."
-msgstr "Deze pagina naar deze lijst sturen..."
+msgstr "Pagina naar deze lijst sturen..."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:110
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:24
 msgid "Send test mailing now"
-msgstr "Nu een testmail versturen"
+msgstr "Testmail nu verzenden"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:46
 msgid "Send test now"
-msgstr "Nu test verzenden"
+msgstr "Test nu verzenden"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar_mailinglist.tpl:34
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:29
@@ -10625,7 +10625,7 @@ msgstr "Test-mailinglijst"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:41
 msgid "Test mailings are sent immediately. The page does not need to be published, but you must have permission to view it."
-msgstr "Testberichten worden onmiddellijk verzonden. De pagina hoeft niet te worden gepubliceerd, maar je moet wel toestemming hebben om deze te bekijken."
+msgstr "Testmails worden onmiddellijk verzonden. De pagina hoeft niet te worden gepubliceerd, maar je moet wel toestemming hebben om deze te bekijken."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:85
 msgid "Text shown below the confirmation, welcome and unsubscribe e-mails."
@@ -12222,7 +12222,7 @@ msgstr "Heb jij deze aanmelding gestart?"
 
 #: zotonic_mod_signup/priv/templates/email_signup_code.tpl:24
 msgid "Didn't start this signup?"
-msgstr "Heb je deze aanmelding niet zelf gestart?"
+msgstr "Deze aanmelding niet zelf gestart?"
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:65
 msgid "Didn’t receive the email?"
@@ -12333,7 +12333,7 @@ msgstr "Hartelijk dank voor het aanmaken van een account op {site}."
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:47
 msgid "The code you entered is incorrect. Please try again."
-msgstr "De code die u hebt ingevoerd, is onjuist. Probeer het nog eens."
+msgstr "De code die je hebt ingevoerd, is onjuist. Probeer het nog eens."
 
 #: zotonic_mod_signup/src/controllers/controller_signup.erl:653
 msgid "The email address you entered does not match the email address you provided in the previous step. Please check your input and try again."
@@ -13498,7 +13498,7 @@ msgstr "Verplicht, deze vraag moet beantwoord worden."
 
 #: zotonic_mod_survey/priv/templates/_survey_result_chart.tpl:24
 msgid "Responses"
-msgstr "Reacties"
+msgstr "Antwoorden"
 
 #: zotonic_mod_survey/src/mod_survey.erl:456
 msgid "Result deleted."
@@ -14524,11 +14524,11 @@ msgstr "Videobit-snelheid"
 
 #: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:18
 msgid "Video codec"
-msgstr "Videocodec"
+msgstr "Video-codec"
 
 #: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:94
 msgid "Video tags"
-msgstr "Videotags"
+msgstr "Video-tags"
 
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:53
 msgid "Canonical URL"
