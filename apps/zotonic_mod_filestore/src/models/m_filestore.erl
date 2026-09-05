@@ -257,46 +257,42 @@ dequeue(Id, Context) ->
     end.
 
 %% @doc Store a mapping of a local file at path to a file at the service location.
-%% The path must be unique and is used to identify the file.
--spec store(Path, Size, Service, Location, IsLocal, Context) -> {ok, FileId} when
+%% The path must be unique and is used to identify the file. Use an upsert so
+%% concurrent uploaders storing the same path are idempotent.
+-spec store(Path, Size, Service, Location, IsLocal, Context) -> Result when
     Path :: binary(),
     Size :: non_neg_integer(),
     Service :: atom() | binary(),
     Location :: binary(),
     IsLocal :: boolean(),
     Context :: z:context(),
-    FileId :: integer().
+    FileId :: integer(),
+    Result :: {ok, FileId} | {error, term()}.
 store(Path, Size, Service, Location, IsLocal, Context)
     when is_binary(Path), is_integer(Size), is_binary(Location) ->
-    z_db:transaction(fun(Ctx) ->
-            case z_db:q1("select id from filestore where path = $1",
-                        [Path], Ctx)
-            of
-                undefined ->
-                    z_db:insert(filestore, #{
-                            <<"path">> => Path,
-                            <<"service">> => Service,
-                            <<"location">> => Location,
-                            <<"size">> => Size,
-                            <<"is_local">> => IsLocal
-                        }, Ctx);
-                Id ->
-                    1 = z_db:q("
-                            update filestore
-                            set location = $1,
-                                service = $2,
-                                size = $3,
-                                is_deleted = false,
-                                is_local = $5,
-                                is_move_to_local = false,
-                                error = null,
-                                modified = now()
-                            where id = $4",
-                            [ Location, Service, Size, Id, IsLocal ],
-                            Ctx),
-                    {ok, Id}
-            end
-        end, Context).
+    case z_db:qmap_row("
+            insert into filestore
+                (path, service, location, size, is_local)
+            values
+                ($1, $2, $3, $4, $5)
+            on conflict (path)
+            do update set
+                location = excluded.location,
+                service = excluded.service,
+                size = excluded.size,
+                is_deleted = false,
+                is_local = excluded.is_local,
+                is_move_to_local = false,
+                error = null,
+                modified = now()
+            returning id",
+            [ Path, Service, Location, Size, IsLocal ],
+            [ {keys, atom} ],
+            Context)
+    of
+        {ok, #{ id := Id }} -> {ok, Id};
+        {error, _} = Error -> Error
+    end.
 
 -spec lookup( binary(), z:context() ) -> {ok, map()} | {error, term()}.
 lookup(Path, Context) ->
