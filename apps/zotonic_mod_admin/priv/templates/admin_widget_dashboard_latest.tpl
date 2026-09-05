@@ -29,18 +29,20 @@
     {% with m.search[{latest cat=cat pagelen=pagelen|default:5}] as latest %}
         {% if latest %}
             <table class="table do_adminLinkedTable">
-                <thead>
-                    <tr>
-                        {% if show_date %}
-                            <th width="40%">{_ Title _}</th>
-                            <th width="30%">{_ Date _}</th>
-                            <th width="30%">{_ Category _}</th>
-                        {% else %}
-                            <th width="55%">{_ Title _}</th>
-                            <th width="45%">{_ Category _}</th>
-                        {% endif %}
-                    </tr>
-                </thead>
+                {#
+                    <thead>
+                        <tr>
+                            {% if show_date %}
+                                <th width="40%">{_ Title _}</th>
+                                <th width="30%">{_ Date _}</th>
+                                <th width="30%">{_ Category _}</th>
+                            {% else %}
+                                <th width="55%">{_ Title _}</th>
+                                <th width="45%">{_ Category _}</th>
+                            {% endif %}
+                        </tr>
+                    </thead>
+                #}
                 <tbody>
                     {% for id in latest %}
                         {% if m.rsc[id].is_visible %}

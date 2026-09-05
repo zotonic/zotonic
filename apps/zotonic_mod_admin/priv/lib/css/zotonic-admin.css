@@ -489,9 +489,6 @@ fieldset[disabled] .btn-primary.active {
   width: 40%;
   color: #999;
 }
-.dashboard .table th {
-  display: none;
-}
 
 .modal #dialog-new-rsc-tab {
   margin: -15px;
