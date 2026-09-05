@@ -1,4 +1,5 @@
 %% @copyright 2015-2023 Marc Worrell
+%% TODO: update docs:
 %% @doc Rebuilder process. Expands all rules and updated the in-memory ets tables
 %%
 %% This function requests an expansion of all ACL rules. These are then processed and
@@ -41,72 +42,138 @@
 -module(acl_user_group_rebuilder).
 
 -export([
-	rebuild/3
-	]).
+    digest/2,
+    rsc_digest_table/1,
+    collab_digest_table/1
+]).
 
-%% @doc Fetch a the new rules and store them in a fresh ets table.
-%%      The completed table is transfered to the acl module gen_server.
-rebuild(ModulePid, State, Context) ->
-	{ContentGroupIds, UserGroupIds, UserGroupPaths, Rules} = acl_user_groups_rules:expand(State, Context),
-	Name = list_to_atom("rules$"++atom_to_list(z_context:site(Context))++"$"++atom_to_list(State)),
-	Table = ets:new(Name, [
-					set,
-					protected,
-					{read_concurrency, true},
-					{heir, ModulePid, State}
-				]),
-	lists:foreach(
-		fun(K0) ->
-			{IsAllow, K} = extract_is_allow(K0),
-			case K of
-				{CId, {CatId, Visibility, insert, _IfOwner}, GId} when IsAllow =:= true ->
-					% Also store generic allow rules, to allow for rough filtering
-					% on content group for allowed actions.
-					ets:insert(Table, {{CId, {CatId, Visibility, insert, false}, GId}, true}),
-					ets:insert(Table, {{CId, {CatId, Visibility, insert, true}, GId}, true}),
-					ets:insert(Table, {{CatId, insert, GId}, true}),
-					ets:insert(Table, {{CId, insert, GId}, true});
-				{CId, {CatId, Visibility, insert, _IfOwner}, GId} when IsAllow =:= false ->
-					% Only store specific deny rules
-					ets:insert(Table, {{CId, {CatId, Visibility, insert, false}, GId}, false}),
-					ets:insert(Table, {{CId, {CatId, Visibility, insert, true}, GId}, false});
-				{CId, {CatId, Visibility, Action, IfOwner}, GId} when IsAllow =:= true ->
-					% Also store generic allow rules, to allow for rough filtering
-					% on content group for allowed actions.
-					ets:insert(Table, {{CId, {CatId, Visibility, Action, IfOwner}, GId}, true}),
-					ets:insert(Table, {{CId, Action, GId}, true});
-				_ ->
-					ets:insert(Table, {K, IsAllow})
-			end
-		end,
-		Rules),
-	lists:foreach(
-		fun({Id,Path}) ->
-			ets:insert(Table, {Id, Path})
-		end,
-		UserGroupPaths),
-	can_action(Table, view, UserGroupIds, ContentGroupIds),
-	can_action(Table, insert, UserGroupIds, ContentGroupIds).
+%% @doc "Digests" ACL rsc and collab rules into a more usable form (aka expanded)
+%% and stores them in dedicated database tables, for easier 'JOIN'/'EXISTS's.
+digest(State, Context) ->
+    ExpandedRscRules = acl_user_groups_rules:expand_rsc(State, Context),
+    ExpandedCollabRules = acl_user_groups_rules:expand_collab(State, Context),
+    z_db:transaction(
+        fun (TrCtx) ->
+            ensure_clear_tables(State, TrCtx),
+            lists:foreach(
+                fun (ExpandedRule) -> digest_rule(ExpandedRule, State, TrCtx) end,
+                ExpandedRscRules ++ ExpandedCollabRules
+            )
+        end,
+        Context
+    ),
+    ok.
+
+% TODO: check (dis)allow rules order:
+digest_rule({collab, {CatId, Visibility, Action, OnlyOwner, IsAllow}, collab}, State, Context) ->
+    z_db:q1(
+        "INSERT INTO " ++ collab_digest_table(State) ++ "
+            (cat_id, visibility, action, only_owner, is_allow)
+        VALUES ($1, $2, $3, $4, $5)
+        ON CONFLICT (cat_id, visibility, action, only_owner)
+        DO UPDATE SET is_allow = $5
+        RETURNING id",
+        [CatId, Visibility, Action, OnlyOwner, IsAllow],
+        Context
+    );
+digest_rule({CgId, {CatId, Visibility, Action, OnlyOwner, IsAllow}, UgId}, State, Context) ->
+    z_db:q1(
+        "INSERT INTO " ++ rsc_digest_table(State) ++ "
+            (cg_id, cat_id, ug_id, visibility, action, only_owner, is_allow)
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
+        ON CONFLICT (cg_id, cat_id, ug_id, visibility, action, only_owner)
+        DO UPDATE SET is_allow = $7
+        RETURNING id",
+        [CgId, CatId, UgId, Visibility, Action, OnlyOwner, IsAllow],
+        Context
+    ).
 
 
-extract_is_allow({CId, {CatId, Visibility, Action, IfOwner, IsAllow}, GId}) ->
-	K1 = {CId, {CatId, Visibility, Action, IfOwner}, GId},
-	{IsAllow, K1};
-extract_is_allow({Module, Action, GId, IsAllow}) ->
-	K1 = {Module, Action, GId},
-	{IsAllow, K1}.
+ensure_clear_tables(State, Context) ->
+    RscTableName = rsc_digest_table(State),
+    CollabTableName = collab_digest_table(State),
+    [] = z_db:q("
+        CREATE TABLE IF NOT EXISTS " ++ RscTableName ++ " (
+            id bigserial NOT NULL,
+            cg_id int NOT NULL,
+            cat_id int NOT NULL,
+            ug_id int NOT NULL,
+            visibility int,
+            action character varying(32) NOT NULL,
+            only_owner boolean NOT NULL DEFAULT false,
+            is_allow boolean NOT NULL,
 
-%% @doc Add lookups to see per user-group on which content-groups an action can be done.
-can_action(_Table, _Action, [], _CIds) ->
-	ok;
-can_action(Table, Action, [UId|UIds], CIds) ->
-	CIds1 = lists:filter(fun(CId) ->
-					case ets:lookup(Table, {CId, Action, UId}) of
-						[{_,true}] -> true;
-						_ -> false
-					end
-				  end,
-				  CIds),
-	ets:insert(Table, {{Action, UId}, CIds1}),
-	can_action(Table, Action, UIds, CIds).
+            CONSTRAINT " ++ RscTableName ++ "_pkey
+                PRIMARY KEY (id),
+            CONSTRAINT fk_" ++ RscTableName ++ "_cg_id
+                FOREIGN KEY (cg_id) REFERENCES rsc (id)
+                ON UPDATE CASCADE ON DELETE CASCADE,
+            CONSTRAINT fk_" ++ RscTableName ++ "_cat_id
+                FOREIGN KEY (cat_id) REFERENCES rsc (id)
+                ON UPDATE CASCADE ON DELETE CASCADE,
+            CONSTRAINT fk_" ++ RscTableName ++ "_ug_id
+                FOREIGN KEY (ug_id) REFERENCES rsc (id)
+                ON UPDATE CASCADE ON DELETE CASCADE,
+            CONSTRAINT " ++ RscTableName ++ "_ukey
+                UNIQUE (cg_id, cat_id, ug_id, visibility, action, only_owner)
+        )",
+        Context
+    ),
+    z_db:q("DELETE FROM " ++ RscTableName, Context),
+    ensure_indexes(RscTableName, Context),
+    [] = z_db:q("
+        CREATE TABLE IF NOT EXISTS " ++ CollabTableName ++ " (
+            id bigserial NOT NULL,
+            cat_id int NOT NULL,
+            visibility int,
+            action character varying(32) NOT NULL,
+            only_owner boolean NOT NULL DEFAULT false,
+            is_allow boolean NOT NULL,
 
+            CONSTRAINT " ++ CollabTableName ++ "_pkey
+                PRIMARY KEY (id),
+            CONSTRAINT fk_" ++ CollabTableName ++ "_cat_id
+                FOREIGN KEY (cat_id) REFERENCES rsc (id)
+                ON UPDATE CASCADE ON DELETE CASCADE,
+            CONSTRAINT " ++ CollabTableName ++ "_ukey
+                UNIQUE (cat_id, visibility, action, only_owner)
+        )",
+        Context
+    ),
+    z_db:q("DELETE FROM " ++ CollabTableName, Context),
+    ensure_indexes(CollabTableName, Context),
+       ok.
+
+ensure_indexes(TableName, Context) ->
+    [] = z_db:q("
+        CREATE INDEX IF NOT EXISTS " ++ TableName ++ "_visibility_idx
+        ON " ++ TableName ++ " (visibility)
+        ",
+        Context
+    ),
+    [] = z_db:q("
+        CREATE INDEX IF NOT EXISTS " ++ TableName ++ "_action_idx
+        ON " ++ TableName ++ " (action)
+        ",
+        Context
+    ),
+    [] = z_db:q("
+        CREATE INDEX IF NOT EXISTS " ++ TableName ++ "_only_owner_idx
+        ON " ++ TableName ++ " (only_owner)
+        ",
+        Context
+    ),
+    [] = z_db:q("
+        CREATE INDEX IF NOT EXISTS " ++ TableName ++ "_is_allow_idx
+        ON " ++ TableName ++ " (is_allow)
+        ",
+        Context
+    ),
+    ok.
+
+
+rsc_digest_table(State) ->
+    "acl_rule_digest_rsc_" ++ z_convert:to_list(State).
+
+collab_digest_table(State) ->
+    "acl_rule_digest_collab_" ++ z_convert:to_list(State).
