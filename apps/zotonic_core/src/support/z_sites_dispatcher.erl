@@ -739,7 +739,7 @@ remove_dotdot([A|Rest], Acc) ->
 unescape(P) ->
     case binary:match(P, <<"%">>) of
         nomatch -> P;
-        _ -> cow_qs:urldecode(P)
+        _ -> z_string:sanitize_utf8(cow_qs:urldecode(P))
     end.
 
 -spec dispatch_rewrite(binary(), binary(), list(), boolean(), pid(), z:context()) -> tuple().
