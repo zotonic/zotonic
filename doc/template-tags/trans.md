@@ -1,6 +1,18 @@
+---
+keywords:
+  - reference
+  - frontend_developer
+  - template
+  - localization_and_translation
+  - translated_text
+  - render
+---
+
+::: aside
 See also
 
 [trans (variable substitution)](/id/doc_template_tag_tag_trans_ext).
+:::
 
 Translate a text value using gettext.
 

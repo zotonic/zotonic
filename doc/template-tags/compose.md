@@ -1,6 +1,16 @@
+---
+keywords:
+  - reference
+  - frontend_developer
+  - template
+  - render
+---
+
+::: aside
 See also
 
 [catcompose](/id/doc_template_tag_tag_catcompose), [block](/id/doc_template_tag_tag_block), [fragment](/id/doc_template_tag_tag_fragment) and [useblock](/id/doc_template_tag_tag_useblock).
+:::
 
 Compose another template and override its named blocks.
 
@@ -37,6 +47,6 @@ Like the [include](/id/doc_template_tag_tag_include) tag, the `with` keyword is 
 
 The supplied arguments extend the current template context for the composed template render.
 
-Note
-
+::: note
 The template name can be an expression. If it is not a string literal then the template is selected at runtime.
+:::

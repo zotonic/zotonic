@@ -1,6 +1,18 @@
+---
+keywords:
+  - reference
+  - frontend_developer
+  - template
+  - categorization
+  - module_management
+  - render
+---
+
+::: aside
 See also
 
 tags [catinclude](/id/doc_template_tag_tag_catinclude) and [all include](/id/doc_template_tag_tag_all_include).
+:::
 
 Include a template for all a resource’s categories from all modules.
 

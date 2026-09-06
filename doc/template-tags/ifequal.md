@@ -1,6 +1,17 @@
+---
+keywords:
+  - reference
+  - frontend_developer
+  - template
+  - compare
+  - boolean
+---
+
+::: aside
 See also
 
 [if](/id/doc_template_tag_tag_if) and [ifnotequal](/id/doc_template_tag_tag_ifnotequal).
+:::
 
 Show something if two values are equal.
 

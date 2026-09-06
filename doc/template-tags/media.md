@@ -1,14 +1,21 @@
+---
+keywords:
+  - reference
+  - frontend_developer
+  - template
+  - media_management
+  - video_management
+  - audio_management
+  - render
+---
+
+::: aside
 See also
 
-[Media](/id/doc_developerguide_media#guide-media) developer guide.
-
-See also
-
-[Media classes](/id/doc_developerguide_media#guide-media-classes) for some options that are only available in mediaclass files.
-
-See also
-
-[image](/id/doc_template_tag_tag_image), [image\_url](/id/doc_template_tag_tag_image_url) and [image\_data\_url](/id/doc_template_tag_tag_image_data_url) tags.
+- [Media](/id/doc_developerguide_media#guide-media) developer guide.
+- [Media classes](/id/doc_developerguide_media#guide-media-classes) for options that are only available in mediaclass files.
+- [image](/id/doc_template_tag_tag_image), [image\_url](/id/doc_template_tag_tag_image_url) and [image\_data\_url](/id/doc_template_tag_tag_image_data_url) tags.
+:::
 
 Show embed, video or audio media.
 

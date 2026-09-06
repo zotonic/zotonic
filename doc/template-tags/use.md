@@ -1,6 +1,17 @@
+---
+keywords:
+  - reference
+  - frontend_developer
+  - template
+  - maintainability
+  - render
+---
+
+::: aside
 See also
 
 [fragment](/id/doc_template_tag_tag_fragment) and [useblock](/id/doc_template_tag_tag_useblock).
+:::
 
 Render a named [fragment](/id/doc_template_tag_tag_fragment).
 
@@ -20,8 +31,7 @@ Example:
 {% use answer_row label="Email" value=user.email %}
 ```
 
-Note
-
+::: note
 Like the [include](/id/doc_template_tag_tag_include) tag, the `with` keyword is optional:
 
 
@@ -29,5 +39,6 @@ Like the [include](/id/doc_template_tag_tag_include) tag, the `with` keyword is 
 {% use answer_row label="Email" value=user.email %}
 {% use answer_row with label="Phone" value=user.phone %}
 ```
+:::
 
 The fragment is rendered with the current template context, extended with the supplied arguments.

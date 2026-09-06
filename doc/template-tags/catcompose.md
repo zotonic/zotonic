@@ -1,6 +1,17 @@
+---
+keywords:
+  - reference
+  - frontend_developer
+  - template
+  - categorization
+  - render
+---
+
+::: aside
 See also
 
 [compose](/id/doc_template_tag_tag_compose), [catinclude](/id/doc_template_tag_tag_catinclude) and [block](/id/doc_template_tag_tag_block).
+:::
 
 Compose another template based on the category of a resource.
 

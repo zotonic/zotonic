@@ -1,6 +1,17 @@
+---
+keywords:
+  - reference
+  - frontend_developer
+  - template
+  - maintainability
+  - render
+---
+
+::: aside
 See also
 
 [use](/id/doc_template_tag_tag_use), [useblock](/id/doc_template_tag_tag_useblock), [block](/id/doc_template_tag_tag_block), [extends](/id/doc_template_tag_tag_extends) and [overrules](/id/doc_template_tag_tag_overrules).
+:::
 
 Define a named reusable template fragment.
 

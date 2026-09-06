@@ -1,3 +1,12 @@
+---
+keywords:
+  - reference
+  - frontend_developer
+  - template
+  - erlang_otp
+  - render
+---
+
 Call an Erlang function.
 
 The `{% call %}` tag is used to call the `render/3` function of the module specified by the argument.

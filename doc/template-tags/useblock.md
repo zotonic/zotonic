@@ -1,6 +1,17 @@
+---
+keywords:
+  - reference
+  - frontend_developer
+  - template
+  - maintainability
+  - render
+---
+
+::: aside
 See also
 
 [fragment](/id/doc_template_tag_tag_fragment) and [use](/id/doc_template_tag_tag_use).
+:::
 
 Render a named [fragment](/id/doc_template_tag_tag_fragment), pass it enclosed body content, and optionally override its named blocks.
 
@@ -41,8 +52,7 @@ Example with block overrides:
 {% enduseblock %}
 ```
 
-Note
-
+::: note
 Like the [include](/id/doc_template_tag_tag_include) tag, the `with` keyword is optional:
 
 
@@ -55,3 +65,4 @@ Like the [include](/id/doc_template_tag_tag_include) tag, the `with` keyword is 
     <p>Hello world</p>
 {% enduseblock %}
 ```
+:::

@@ -1,3 +1,12 @@
+---
+keywords:
+  - reference
+  - frontend_developer
+  - template
+  - javascript
+  - parse
+---
+
 Make a literal section which does not interpret tags.
 
 The `{% raw %}` tag takes everything between the `{% raw %}` and `{% endraw %}` without interpretation. It is useful for surrounding javascript or pieces of code with (for example) `{%` in it.

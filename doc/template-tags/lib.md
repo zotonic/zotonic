@@ -1,6 +1,18 @@
+---
+keywords:
+  - reference
+  - frontend_developer
+  - template
+  - javascript
+  - performance
+  - url
+---
+
+::: aside
 See also
 
 [mod\_development](/id/doc_module_mod_development).
+:::
 
 Combine css and javascript includes in a single request.
 
@@ -56,6 +68,6 @@ Accepted arguments are:
 
 The `` `minify` `` argument can be enabled for all lib tags by setting the config `` `site.minification_enabled` `` to a true-ish value (like `` `1` ``).
 
-Note
-
+::: note
 The `defer` argument is set even if the `async` attribute is specified to cause legacy Web browsers that only support defer (and not async) to fall back to the defer behavior instead of the synchronous blocking behavior that is the default. See more in [W3](https://www.w3.org/TR/2011/WD-html5-20110525/scripting-1.html#attr-script-async) documentation.
+:::

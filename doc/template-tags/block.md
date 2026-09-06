@@ -1,6 +1,17 @@
+---
+keywords:
+  - reference
+  - frontend_developer
+  - template
+  - user_interface_and_interaction
+  - render
+---
+
+::: aside
 See also
 
 [extends](/id/doc_template_tag_tag_extends) and [overrules](/id/doc_template_tag_tag_overrules).
+:::
 
 Define a template block and overrules a template block from an inherited template.
 

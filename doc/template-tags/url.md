@@ -1,3 +1,13 @@
+---
+keywords:
+  - reference
+  - frontend_developer
+  - template
+  - routing_and_redirects
+  - url
+  - render
+---
+
 Generate the URL for a named dispatch rule. In this way it is possible to automatically change the generated URLs when the dispatch rules are modified.
 
 For example to generate the URL to the admin for editing a [page](/id/doc_glossary#term-page), use:
@@ -20,12 +30,14 @@ Arguments not named in the path of the dispatch rule are added to the query stri
 
 Returns the URL “/admin/edit/42?foo=bar”.
 
-Please note that the best way to generate the URL of a page (resource) is to use:
+::: note
+The preferred way to generate the URL of a page (resource) is:
 
 
 ```erlang
 {{ m.rsc[myid].page_url }}
 ```
+:::
 
 
 

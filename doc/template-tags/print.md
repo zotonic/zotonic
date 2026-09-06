@@ -1,6 +1,17 @@
+---
+keywords:
+  - reference
+  - frontend_developer
+  - template
+  - development_and_debugging
+  - structured_data
+---
+
+::: aside
 See also
 
 [debug](/id/doc_template_scomp_scomp_debug#scomp-debug)
+:::
 
 Show the contents of a value expression.
 

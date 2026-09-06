@@ -1,12 +1,23 @@
+---
+keywords:
+  - reference
+  - frontend_developer
+  - template
+  - module_management
+  - render
+---
+
+::: aside
 See also
 
 [template block](/id/doc_template_tag_tag_block), [inherit](/id/doc_template_tag_tag_inherit), [fragment](/id/doc_template_tag_tag_fragment) and [overrules](/id/doc_template_tag_tag_overrules).
+:::
 
 Inherit markup from another template.
 
-Note
-
+::: note
 A template that extends another template contains only the extends tag and template [template block](/id/doc_template_tag_tag_block) tags.
+:::
 
 Signal that this template extends another template. The extends tag must be the first tag in a template that inherits from another template.
 

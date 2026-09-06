@@ -1,15 +1,26 @@
+---
+keywords:
+  - reference
+  - frontend_developer
+  - template
+  - cache
+  - render
+---
+
+::: aside
 See also
 
 [all include](/id/doc_template_tag_tag_all_include) and [catinclude](/id/doc_template_tag_tag_catinclude).
+:::
 
 Include another template. The include tag is replaced with the contents of the included template file. You can give arguments to the included template, they will be assigned as variables in the context of the included template.
 
-Note
-
+::: note
 For compatibility with DTL we accept the optional with keyword between the template name and the arguments:
 
 
 > \{% include "\_hello.tpl" with name="Peter" %\}
+:::
 
 Example:
 
@@ -53,9 +64,11 @@ Automatically generated ids (`{{ #name }}`) are unique within an included templa
 Caching of the included template
 --------------------------------
 
+::: aside
 See also
 
 [cache](/id/doc_template_tag_tag_cache)
+:::
 
 The output of the included template can be cached. This is useful when rendering the template takes considerable time, for example when the template shows a list of recent news items, which comprises a query, fetching and rendering a list of news items. To cache such a list:
 

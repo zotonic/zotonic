@@ -1,6 +1,17 @@
+---
+keywords:
+  - reference
+  - frontend_developer
+  - template
+  - module_management
+  - render
+---
+
+::: aside
 See also
 
 tag [include](/id/doc_template_tag_tag_include).
+:::
 
 Call all modules to include a certain template.
 

@@ -1,14 +1,20 @@
+---
+keywords:
+  - reference
+  - frontend_developer
+  - template
+  - image_management
+  - url
+  - render
+---
+
+::: aside
 See also
 
-[Media](/id/doc_developerguide_media#guide-media) developer guide.
-
-See also
-
-[Media classes](/id/doc_developerguide_media#guide-media-classes) for some options that are only available in mediaclass files.
-
-See also
-
-[image](/id/doc_template_tag_tag_image), [image\_data\_url](/id/doc_template_tag_tag_image_data_url) and [media](/id/doc_template_tag_tag_media) tags.
+- [Media](/id/doc_developerguide_media#guide-media) developer guide.
+- [Media classes](/id/doc_developerguide_media#guide-media-classes) for options that are only available in mediaclass files.
+- [image](/id/doc_template_tag_tag_image), [image\_data\_url](/id/doc_template_tag_tag_image_data_url) and [media](/id/doc_template_tag_tag_media) tags.
+:::
 
 Generate the url of a still image.
 
