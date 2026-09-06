@@ -91,9 +91,14 @@
                                 </li>
                                 <li class="divider"></li>
                                 <li>
-                                    <a href="#" id="{{ #logoff }}">{_ Log Off _}</a>
-                                    {% wire id=#logoff action={confirm title=_"Confirm logoff" text=_"Are you sure you want to exit the admin interface?"
-                                            action={redirect dispatch=`logoff`}} %}
+                                    <a href="{% url logoff %}" id="{{ #logoff }}">{_ Log Off _}</a>
+                                    {% wire id=#logoff
+                                            action={confirm
+                                                title=_"Confirm logoff"
+                                                text=_"Are you sure you want to exit the admin interface?"
+                                            action={redirect dispatch=`logoff`}
+                                        }
+                                    %}
                                 </li>
                             </ul>
                         </li>

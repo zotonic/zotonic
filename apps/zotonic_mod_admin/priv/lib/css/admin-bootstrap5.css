@@ -12300,6 +12300,10 @@ button.close {
   white-space: nowrap;
 }
 
+.fade.in {
+  opacity: 1;
+}
+
 .collapse.in {
   display: block;
 }
@@ -12596,6 +12600,11 @@ button.close {
 
 .pull-right {
   float: right !important;
+}
+
+.hide,
+.hidden {
+  display: none !important;
 }
 
 @media (max-width: 767.98px) {
