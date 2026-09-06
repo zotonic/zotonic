@@ -67,28 +67,30 @@
                                 <li>
                                     <a href="{% url admin_edit_rsc id=m.acl.user %}">{_ User page _}</a>
                                 </li>
-                                <li class="divider"></li>
-                                <li class="dropdown-header">
-                                    {_ Theme _}
-                                </li>
-                                <li>
-                                    <a href="#" class="admin-theme-menu-item" data-admin-theme-value="light">
-                                        <span class="glyphicon glyphicon-ok admin-theme-check"></span>
-                                        {_ Light _}
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="admin-theme-menu-item" data-admin-theme-value="dark">
-                                        <span class="glyphicon glyphicon-ok admin-theme-check"></span>
-                                        {_ Dark _}
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="admin-theme-menu-item" data-admin-theme-value="auto">
-                                        <span class="glyphicon glyphicon-ok admin-theme-check"></span>
-                                        {_ Automatic _}
-                                    </a>
-                                </li>
+                                {% if not m.site.ui_theme %}
+                                    <li class="divider"></li>
+                                    <li class="dropdown-header">
+                                        {_ Theme _}
+                                    </li>
+                                    <li>
+                                        <a href="#" class="admin-theme-menu-item" data-admin-theme-value="light">
+                                            <span class="glyphicon glyphicon-ok admin-theme-check"></span>
+                                            {_ Light _}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="admin-theme-menu-item" data-admin-theme-value="dark">
+                                            <span class="glyphicon glyphicon-ok admin-theme-check"></span>
+                                            {_ Dark _}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="admin-theme-menu-item" data-admin-theme-value="auto">
+                                            <span class="glyphicon glyphicon-ok admin-theme-check"></span>
+                                            {_ Automatic _}
+                                        </a>
+                                    </li>
+                                {% endif %}
                                 <li class="divider"></li>
                                 <li>
                                     <a href="{% url logoff %}" id="{{ #logoff }}">{_ Log Off _}</a>

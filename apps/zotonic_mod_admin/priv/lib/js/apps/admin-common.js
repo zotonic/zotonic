@@ -64,8 +64,6 @@ limitations under the License.
         themeApply(theme);
     };
 
-    themeApply(themePreference());
-
     if (themeMedia && themeMedia.addEventListener) {
         themeMedia.addEventListener("change", function() {
             if (themePreference() === "auto") {
