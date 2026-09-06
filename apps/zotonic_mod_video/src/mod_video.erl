@@ -18,15 +18,18 @@
 %% limitations under the License.
 
 -module(mod_video).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "content_editor", "module", "video_management", "transform"]
+}).
 -moduledoc("
 Adds support for viewing and handling video medium items.
 
 This module converts uploaded videos to h264 and adds a poster (preview) image of the movie.
 
-Note
-
+::: note
 mod_video uses the command-line utilities `ffmpeg` and `ffprobe`. For mod_video to function correctly they must be
 present in the search path of Zotonic.
+:::
 
 
 
@@ -67,10 +70,7 @@ This module handles the following notifier callbacks:
 - `observe_media_upload_preprocess`: If a video file is uploaded, queue it for conversion to video/mp4 using `z_video_info:info`.
 - `observe_media_upload_props`: After a video file is processed, generate a preview image using `z_media_archive:abspath`.
 - `observe_media_viewer`: Return the media viewer for the mp4 video using `z_template:render`.
-
-See also
-
-[mod_video_embed](/id/doc_module_mod_video_embed), [mod_oembed](/id/doc_module_mod_oembed), [mod_audio](/id/doc_module_mod_audio), [media](/id/doc_template_tag_tag_media)").
+").
 
 -author("Marc Worrell <marc@worrell.nl>").
 

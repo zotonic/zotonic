@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_truncatechars).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "text", "transform"]
+}).
 -moduledoc("
 Truncate a text to a maximum length in characters.
 
@@ -49,10 +52,7 @@ An optional second argument defines which text will be added if the text is trun
 ```
 
 If the value is `hello world.` then the output is `hello wo (more)`.
-
-See also
-
-[truncate](/id/doc_template_filter_filter_truncate), [truncate_html](/id/doc_template_filter_filter_truncate_html)").
+").
 -export([truncatechars/2, truncatechars/3, truncatechars/4]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -113,4 +113,3 @@ entity(<<C, _/binary>> = R, Acc) when C =< $0 ->
     {Acc, R};
 entity(<<C/utf8, R/binary>>, Acc) ->
     entity(R, <<Acc/binary, C/utf8>>).
-

@@ -18,12 +18,11 @@
 %% limitations under the License.
 
 -module(action_admin_zmedia_choose).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "media_management", "upload"]
+}).
 -moduledoc("
 Used after a media item is selected in the media chooser for the TinyMCE editor.
-
-Todo
-
-Extend documentation
 ").
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 -include_lib("zotonic_core/include/zotonic.hrl").

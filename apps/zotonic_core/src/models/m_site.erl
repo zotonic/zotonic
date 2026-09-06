@@ -18,15 +18,18 @@
 %% limitations under the License.
 
 -module(m_site).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "model", "site_management", "site", "configuration"]
+}).
 -moduledoc("
 Retrieve information that is stored in the [site
 configuration](/id/doc_developerguide_configuration_site_configuration#ref-site-configuration). If you want to query
 values from the config table instead, you should use [m_config](/id/doc_model_model_config).
 
-Note
-
+::: note
 In general the site configurarion is only accessible via the `m.site` template model for users with administrator
 rights. Exceptions are keys starting with `public` or `{{ m.site.title }}`, hostname configurations and the *paglen*.
+:::
 
 
 

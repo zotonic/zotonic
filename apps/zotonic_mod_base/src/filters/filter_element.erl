@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_element).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "collection", "query"]
+}).
 -moduledoc("
 Select an element from a tuple or list of tuples.
 
@@ -31,10 +34,7 @@ For example:
 When value is a list of tuples `[{312,0.34}, {200,0.81}]` then the output is the list `[312,200]`.
 
 When value is just a tuple, `{123, 22, 11}`, the output of `|element:1` is `123`.
-
-See also
-
-[before](/id/doc_template_filter_filter_before), [after](/id/doc_template_filter_filter_after)").
+").
 -export([element/3]).
 
 

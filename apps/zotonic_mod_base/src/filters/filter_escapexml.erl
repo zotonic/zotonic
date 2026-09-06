@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_escapexml).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "xml", "serialize"]
+}).
 -moduledoc("
 Escape the value for insertion in xml output.
 
@@ -28,7 +31,7 @@ For example:
 {{ value|escapexml }}
 ```
 
-When the value is `<hel'lo\\>` then the output is `&#60;hel&#39;lo&#62;`.
+When the value is `<hel'lo>` then the output is `&#60;hel&#39;lo&#62;`.
 ").
 -export([escapexml/2]).
 

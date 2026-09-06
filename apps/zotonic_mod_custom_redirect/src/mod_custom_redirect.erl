@@ -19,6 +19,9 @@
 %% limitations under the License.
 
 -module(mod_custom_redirect).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "site_administrator", "module", "routing_and_redirects", "configure"]
+}).
 -moduledoc("
 Enables redirects from unknown hosts and paths to other locations. The other location can be a known path or another web site.
 
@@ -76,10 +79,7 @@ This module handles the following notifier callbacks:
 Delegate callbacks:
 
 - `event/2` with `submit` messages: `custom_redirects`.
-
-See also
-
-[Dispatch rules](/id/doc_developerguide_dispatch_rules), [mod_base](/id/doc_module_mod_base)").
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Custom Redirects").
@@ -238,4 +238,3 @@ get_prefix(Prefix, Acc, [{Q,_}=QV|Qs]) ->
         true -> get_prefix(Prefix, [QV|Acc], Qs);
         false -> get_prefix(Prefix, Acc, Qs)
     end.
-

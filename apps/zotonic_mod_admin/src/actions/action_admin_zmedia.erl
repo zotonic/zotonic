@@ -18,12 +18,11 @@
 %% limitations under the License.
 
 -module(action_admin_zmedia).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "media_management", "upload"]
+}).
 -moduledoc("
 Used for triggering the insertion of a media item in the TinyMCE editor in the admin.
-
-Todo
-
-Extend documentation
 ").
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -45,5 +44,3 @@ event(#postback{message={zmedia_choose, Args}}, Context) ->
     z_render:dialog("Add/edit media", "_action_dialog_zmedia_choose.tpl", Args, Context).
 
 %z_render:wire([{growl, [{text, "Yay."}]}], Context).
-
-

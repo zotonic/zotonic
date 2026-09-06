@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(scomp_wires_wire).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "scomp", "user_interface_and_interaction", "javascript"]
+}).
 -moduledoc("
 Connect actions and events to a HTML element.
 
@@ -146,9 +149,9 @@ See: [Wires](/id/doc_developerguide_server_browser_interaction#guide-named-wire)
 Wire an action to a MQTT topic
 ------------------------------
 
-Note
-
+::: note
 [mod_mqtt](/id/doc_module_mod_mqtt) must be enabled before wiring to a topic
+:::
 
 Use `{% wire type={mqtt topic=... topic=...} %}` to connect to one or more MQTT topics.
 
@@ -185,9 +188,6 @@ The wire tag accepts the following arguments:
 | `postback`  | Postback that will be sent to the event handler of the controller or the delegate. Either a string, which will be sent as an atom, or a tagged property list. The example will be in Erlang `{myevent, [{foo,1},{bar,2}]}`. | `postback=\"ajaxevent\" postback={myevent foo=1 bar=2}` |
 | `delegate`  | Name of the Erlang module that will receive the postback. Defaults to the controller that handled the page request. | `delegate=\"event_handler\"`                            |
 
-See also
-
-the tag [wire_args](/id/doc_template_scomp_scomp_wire_args#scomp-wire-args) and the list of predefined [Actions](/id/template_action#actions).
 ").
 -behaviour(zotonic_scomp).
 

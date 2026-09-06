@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(mod_seo).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "content_editor", "module", "search_engine_optimization", "metadata"]
+}).
 -moduledoc("
 Adds basic search engine optimization to the base templates and provides an admin interface for configuring SEO options
 and Google Universal Analytics.

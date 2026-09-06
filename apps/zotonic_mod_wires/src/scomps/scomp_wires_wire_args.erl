@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(scomp_wires_wire_args).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "scomp", "user_interface_and_interaction", "javascript"]
+}).
 -moduledoc("
 Add extra arguments to wired actions.
 
@@ -41,9 +44,6 @@ This wires the action `{my_action some_arg=some_value the_link_id=...}` to the l
 The following arguments are part of the wire tag and can’t be used for argument appending: “id”, “type”,
 “target”, “action”, “postback” and “delegate”.
 
-See also
-
-the [wire](/id/doc_template_scomp_scomp_wire#scomp-wire) tag.
 ").
 -behaviour(zotonic_scomp).
 

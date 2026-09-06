@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_media_exif_value).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "metadata", "media_management"]
+}).
 -moduledoc("
 Formats EXIF values for display in templates.
 

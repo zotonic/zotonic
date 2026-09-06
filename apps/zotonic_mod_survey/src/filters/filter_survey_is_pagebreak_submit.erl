@@ -19,6 +19,9 @@
 %% limitations under the License.
 
 -module(filter_survey_is_pagebreak_submit).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "surveys", "forms"]
+}).
 -moduledoc("
 Check if a list of questions contains a pagebreak block with an unconditional submit.
 ").

@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_edge).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "model", "content_relationships", "edge"]
+}).
 -moduledoc("
 Access information about page connections.
 
@@ -197,10 +200,7 @@ cotonic.broker.call(
     {}
 );
 ```
-
-See also
-
-[m_rsc](/id/doc_model_model_rsc), [m_media](/id/doc_model_model_media)").
+").
 -author("Marc Worrell <marc@worrell.nl").
 
 -behaviour(zotonic_model).

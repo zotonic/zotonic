@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_urldecode).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "url", "parse"]
+}).
 -moduledoc("
 Decode a text where characters are encoded as URL-safe characters.
 
@@ -31,10 +34,7 @@ For example:
 ```
 
 When value is “msg%3DHello%26World” then the output is “msg=Hello&World”.
-
-See also
-
-[sanitize_url](/id/doc_template_filter_filter_sanitize_url), [is_site_url](/id/doc_template_filter_filter_is_site_url), [url_abs](/id/doc_template_filter_filter_url_abs), [url](/id/doc_template_filter_filter_url), [urlencode](/id/doc_template_filter_filter_urlencode)").
+").
 -export([urldecode/2]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").

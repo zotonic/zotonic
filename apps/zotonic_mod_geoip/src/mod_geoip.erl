@@ -17,15 +17,18 @@
 %% limitations under the License.
 
 -module(mod_geoip).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "integrator", "module", "geolocation", "http"]
+}).
 -moduledoc("
 Used to map IP addresses to geographical locations.
 
 This modules uses the freely available MaxMind databases for the IP mapping. The database is updated automatically.
 
-Note
-
+::: note
 As the database is only once downloaded per Zotonic instance the license key is shared between all sites. It is not
 possible to have a specific per-site key.
+:::
 
 For downloading the database you need a License Key from MaxMind. The License Key can be generated after [registering
 with MaxMind](https://www.maxmind.com/en/geolite2/signup).

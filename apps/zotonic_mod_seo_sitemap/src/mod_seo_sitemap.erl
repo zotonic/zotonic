@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(mod_seo_sitemap).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "operator", "module", "search_engine_optimization", "index"]
+}).
 -moduledoc("
 Creates a `sitemap.xml` file for your site, containing links to all publicly accessible pages.
 

@@ -3,6 +3,18 @@
 %% @doc Example webmachine_controller.
 
 -module(controller_test_helloworld).
+-moduledoc(#{
+    zotonic_keywords => [
+        "reference", "backend_developer", "controller", "development_and_debugging", "user_interface_and_interaction"
+    ]
+}).
+-moduledoc("
+Example controller used by the Zotonic test sandbox.
+
+It renders `test_helloworld.tpl` and demonstrates handling postbacks, form
+submissions, drag-and-drop events, sorting, updates, dialogs, alerts, and growl
+messages.
+").
 -export([
     process/4,
     event/2
@@ -60,6 +72,5 @@ event(Event, Context) ->
 %     z_context:add_script_session([<<"z_growl_add('According to the server, the Universal Sprout Time is now<br/><strong>">>,Date,<<"</strong>', 0);">>], Context),
 %     timer:sleep(10000),
 %     ?MODULE:periodic([], Context).
-
 
 

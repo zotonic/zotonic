@@ -18,6 +18,16 @@
 %% limitations under the License.
 
 -module(zotonic_listen_mqtt).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "integrator", "module", "messaging_and_pubsub", "mqtt"]
+}).
+-moduledoc("
+Start and supervise the external MQTT listeners.
+
+The listeners accept plain and TLS MQTT connections using the configured
+addresses and ports, then connect clients to Zotonic's topic-based messaging
+system.
+").
 
 -behaviour(gen_server).
 

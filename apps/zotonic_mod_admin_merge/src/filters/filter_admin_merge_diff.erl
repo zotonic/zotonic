@@ -18,10 +18,22 @@
 %% limitations under the License.
 
 -module(filter_admin_merge_diff).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "content_authoring", "edit"]
+}).
 -moduledoc("
-Todo
+Compare two resources and return a formatted list of their differences.
 
-Not yet documented.
+Both inputs can be resource ids or names. The result is intended for the
+resource merge interface, where editors select which values to retain.
+
+For example:
+
+```django
+{% for difference in id|admin_merge_diff:other_id %}
+    {{ difference }}
+{% endfor %}
+```
 ").
 
 -export([
@@ -32,4 +44,3 @@ admin_merge_diff(Id1, Id2, Context) ->
     Rsc1 = m_rsc:get(Id1, Context),
     Rsc2 = m_rsc:get(Id2, Context),
     admin_rsc_diff:format(Rsc1, Rsc2, Context).
-

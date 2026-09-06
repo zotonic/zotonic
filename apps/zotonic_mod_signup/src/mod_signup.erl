@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(mod_signup).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "module", "identity_and_accounts", "create"]
+}).
 -moduledoc("
 This module presents an interface for letting users register themselves.
 

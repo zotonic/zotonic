@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(scomp_base_pager).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "scomp", "user_interface_and_interaction", "render"]
+}).
 -moduledoc("
 Show a pager for search results.
 
@@ -41,10 +44,10 @@ For example, a fulltext search where the search parameters come from the query s
 
 This will show a list of titles and above that the links to the next, previous and other pages.
 
-Note
-
+::: note
 that we are using `m.search.paged` here and not [m.search](/id/doc_model_model_search). The pager only works with
 results from `m.search.paged`.
+:::
 
 The generated pager code will look something like (when searching for the text “filter”):
 

@@ -18,12 +18,11 @@
 %% limitations under the License.
 
 -module(controller_admin_backup).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "operator", "controller", "backup_and_restore", "schedule"]
+}).
 -moduledoc("
 Shows the admin backup screen where you can download nightly backups that were made by [mod_backup](/id/doc_module_mod_backup).
-
-Todo
-
-Extend documentation
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

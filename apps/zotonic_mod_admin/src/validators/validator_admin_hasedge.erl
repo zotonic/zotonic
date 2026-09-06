@@ -23,6 +23,9 @@
 %% limitations under the License.
 
 -module(validator_admin_hasedge).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_validator", "validate", "content_relationships"]
+}).
 -moduledoc("
 A [validator](/id/doc_developerguide_forms_and_validation#guide-validators) to check if a resource has a certain number
 of edges with a predicate.

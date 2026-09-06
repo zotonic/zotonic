@@ -18,6 +18,11 @@
 %% limitations under the License.
 
 -module(mod_mqtt).
+-moduledoc(#{
+    zotonic_keywords => [
+        "reference", "integrator", "module", "messaging_and_pubsub", "publish_and_subscribe", "mqtt"
+    ]
+}).
 -moduledoc("
 [MQTT](http://mqtt.org) is a machine-to-machine (M2M)/“Internet of Things” connectivity protocol. It was designed as an extremely lightweight publish/subscribe messaging transport. It is useful for connections with remote locations where a small code footprint is required and/or network bandwidth is at a premium. For example, it has been used in sensors communicating to a broker via satellite link, over occasional dial-up connections with healthcare providers, and in a range of home automation and small device scenarios
 
@@ -247,71 +252,6 @@ z_mqtt:publish(Msg, Context)
 
 
 ### JavaScript API
-
-See also
-
-[live tag](/id/doc_template_scomp_scomp_live#scomp-live), which uses MQTT topics.
-
-There is a separate topic tree in the browser. To be able to send message from/to the browser there are special *bridge*
-topics on both ends.
-
-The browser receives a unique client and routing id on connecting to the server. On the server those ids can be used to
-route messages back to the client using a bridge topic.
-
-For example the server side topic:
-
-
-```erlang
-bridge/MyClientId/browser/topic
-```
-
-Is mapped on the client to:
-
-
-```erlang
-browser/topic
-```
-
-It is possible to send messages to the server, or subscribe to topics on the server. For this there is a special
-`bridge/origin` (the *bridge to origin*, ie. the server serving the page) topic.
-
-Any subscribe or publish action on this topic is relayed to the server. For example, to access the server side topic
-`my/server/topic`, use the client side topic `bridge/origin/server/topic` (both for publish and subscribe).
-
-The JavaScript API uses callback functions:
-
-
-```javascript
-cotonic.broker.subscribe(\"bridge/origin/test/#\", function(msg, bindings, options) { console.log(msg); });
-cotonic.broker.publish(\"bridge/origin/test/foo\", \"hello world\");
-```
-
-The received message is a JSON object:
-
-
-```javascript
-{
-  type: \"publish\",
-  qos: 0,
-  payload: \"hello world\",
-  properties: {
-      ...
-  },
-  ...
-}
-```
-
-The transport between the server and the browser uses a websocket connection and binary encoded MQTT v5 messages.
-
-
-### Quality of service
-
-Currently there is no quality of service implemented for the JavaScript API and relay. The server side page process will
-buffer all messages till the browser connects to the page session. This happens on connects with comet, WebSocket, and postbacks.
-
-On the browser all messages are queued and sent one by one to the server. This uses either the WebSocket connection or
-the postback interface.
-
 
 
 Enabling the MQTT listener

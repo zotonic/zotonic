@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(action_wires_mask_progress).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "user_interface_and_interaction", "javascript"]
+}).
 -moduledoc("
 Sets the progress bar of a [mask](/id/doc_template_action_action_mask).
 

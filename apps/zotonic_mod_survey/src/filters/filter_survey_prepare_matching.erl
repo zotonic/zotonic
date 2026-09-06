@@ -16,10 +16,16 @@
 %% limitations under the License.
 
 -module(filter_survey_prepare_matching).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "surveys", "forms"]
+}).
 -moduledoc("
-Todo
+Prepare the items and options of a survey matching question for rendering.
 
-Not yet documented.
+Each translated input line is split at `=` into an item and its matching
+option. Optional `value#label` markers provide stable submitted values. The
+result contains separate `items` and randomized `options` lists, together with
+the question's test settings.
 ").
 
 -export([

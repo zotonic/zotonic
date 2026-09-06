@@ -18,6 +18,16 @@
 %% limitations under the License.
 
 -module(zotonic_fileindexer).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "module", "development_and_debugging", "index"]
+}).
+-moduledoc("
+Index files supplied by Zotonic applications and sites.
+
+The indexer scans module directories and provides cached file lookups used for
+templates, translations, libraries, and other module resources. Its index can
+be flushed after filesystem or module changes.
+").
 
 -behaviour(application).
 

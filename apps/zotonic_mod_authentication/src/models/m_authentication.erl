@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_authentication).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "model", "authentication", "authenticate"]
+}).
 -moduledoc("
 Model for authentication state and login support checks, including password authentication flow helpers and reminder/verification actions.
 

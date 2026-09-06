@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(scomp_wires_button).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "scomp", "user_interface_and_interaction", "javascript"]
+}).
 -moduledoc("
 Makes a button with an action attached.
 

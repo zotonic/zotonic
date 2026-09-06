@@ -18,12 +18,11 @@
 %% limitations under the License.
 
 -module(action_admin_config_dialog_config_new).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "configuration", "create"]
+}).
 -moduledoc("
 Open a dialog to create a new configuration key/value pair.
-
-Todo
-
-Extend documentation
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

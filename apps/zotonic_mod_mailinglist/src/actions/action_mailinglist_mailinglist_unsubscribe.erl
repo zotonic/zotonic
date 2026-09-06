@@ -18,15 +18,14 @@
 %% limitations under the License.
 
 -module(action_mailinglist_mailinglist_unsubscribe).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "mailing_lists", "send_and_receive"]
+}).
 -moduledoc("
 Cancel a mailing list subscription. The recipient id is given with the `id` argument.
 
 The `on_success` argument decides which actions are triggered after unsubscribe is successful; `on_error` actions are
 triggered when unsubscribe fails.
-
-Todo
-
-Extend documentation
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

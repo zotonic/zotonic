@@ -18,13 +18,12 @@
 %% limitations under the License.
 
 -module(action_admin_identity_dialog_user_add).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "identity_and_accounts", "create"]
+}).
 -moduledoc("
 Show a dialog for adding a user. This creates a person [resource](/id/doc_glossary#term-resource) and adds a username /
 password to it.
-
-Todo
-
-Extend documentation
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

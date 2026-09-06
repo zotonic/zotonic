@@ -18,12 +18,11 @@
 %% limitations under the License.
 
 -module(action_wires_replace).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "template", "render"]
+}).
 -moduledoc("
 Replace the target HTML element by new one.
-
-Todo
-
-Extend documentation
 ").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([

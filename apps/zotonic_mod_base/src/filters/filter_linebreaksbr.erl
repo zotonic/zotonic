@@ -18,8 +18,11 @@
 %% limitations under the License.
 
 -module(filter_linebreaksbr).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "text", "format"]
+}).
 -moduledoc("
-Translate ASCII newlines (`\\n`) into HTML `<br /\\>` elements.
+Translate ASCII newlines (`\\n`) into HTML `<br />` elements.
 
 The following string:
 
@@ -28,11 +31,8 @@ The following string:
 {{ \"foo\\nbar\"|linebreaksbr }}
 ```
 
-will evaluate to `foo<br /\\>bar`.
-
-See also
-
-[brlinebreaks](/id/doc_template_filter_filter_brlinebreaks)").
+will evaluate to `foo<br />bar`.
+").
 -export([linebreaksbr/2]).
 
 linebreaksbr(S, Context) ->

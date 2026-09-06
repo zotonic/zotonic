@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(action_wires_slide_fade_out).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "user_interface_and_interaction", "javascript"]
+}).
 -moduledoc("
 Hide an element by animating the height and opacity.
 
@@ -29,13 +32,7 @@ Example:
 ```
 
 Hides the element with id myid when the button is clicked.
-
-See also
-
-actions [toggle](/id/doc_template_action_action_toggle), [show](/id/doc_template_action_action_show),
-[hide](/id/doc_template_action_action_hide), [fade_in](/id/doc_template_action_action_fade_in),
-[fade_out](/id/doc_template_action_action_fade_out), [slide_down](/id/doc_template_action_action_slide_down),
-[slide_up](/id/doc_template_action_action_slide_up) and [slide_fade_in](/id/doc_template_action_action_slide_fade_in).").
+").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).
 

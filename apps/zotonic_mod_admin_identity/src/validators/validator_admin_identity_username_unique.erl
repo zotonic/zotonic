@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(validator_admin_identity_username_unique).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_validator", "validate", "identifier"]
+}).
 -moduledoc("
 Check if an entered username is unique, by looking in the [m_identity](/id/doc_model_model_identity) table for the
 given username:
@@ -30,10 +33,7 @@ given username:
 
 Optionally, an `id` parameter can be given to the validator to skip that particular id when doing the uniqueness check.
 This is useful when you are displaying a form in which the user is editing his own user name.
-
-See also
-
-[m_identity](/id/doc_model_model_identity), [email_unique](/id/doc_template_validator_validator_email_unique), [Forms and validation](/id/doc_developerguide_forms_and_validation#guide-validators)").
+").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([
     render_validator/5,

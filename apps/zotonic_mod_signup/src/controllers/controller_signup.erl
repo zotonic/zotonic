@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(controller_signup).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "controller", "identity_and_accounts", "create"]
+}).
 -moduledoc("
 Controller which displays a form to sign up (rendered from `signup.tpl`).
 

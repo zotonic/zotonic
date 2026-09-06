@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(z_chart_svg).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "html", "render", "performance"]
+}).
 -moduledoc(<<
     "Render a small, single-series chart as inline SVG.\n\n",
     "The renderer does not fetch data, load external resources, emit scripts, or\n",

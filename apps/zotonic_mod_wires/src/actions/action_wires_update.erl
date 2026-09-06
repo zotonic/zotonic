@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(action_wires_update).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "template", "render"]
+}).
 -moduledoc("
 Updates the content of an HTML element with a template or a literal HTML text.
 
@@ -31,9 +34,9 @@ Example:
 
 When clicked, the contents of the div will be set to the HTML fragment &lt;p>Hello World!</p>. This replaces any content present.
 
-Note
-
+::: note
 Use the [update_iframe](/id/doc_template_action_action_update_iframe) action for updating the contents of an `iframe` element.
+:::
 
 Another example, now rendering a template:
 
@@ -55,11 +58,7 @@ also arguments to the template.
 | catinclude    | Add this argument to use a [catinclude](/id/doc_template_tag_tag_catinclude) instead of a normal include of the template. The `id` argument *must* be present for a catinclude to work. | `catinclude id=1`               |
 
 All other arguments are passed as-is to the included template(s).
-
-See also
-
-actions [update_iframe](/id/doc_template_action_action_update_iframe),
-[insert_top](/id/doc_template_action_action_insert_top) and [insert_bottom](/id/doc_template_action_action_insert_bottom).").
+").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([
     render_action/4,

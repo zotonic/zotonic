@@ -16,12 +16,11 @@
 %% limitations under the License.
 
 -module(action_admin_zmedia_has_chosen).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "media_management", "upload"]
+}).
 -moduledoc("
 Used by the admin as a callback when a media file has been selected for insertion into the rich-text editor.
-
-Todo
-
-Extend documentation
 ").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).

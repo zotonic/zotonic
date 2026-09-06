@@ -27,6 +27,9 @@
 %%% THE SOFTWARE.
 
 -module(filter_force_escape).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "html", "security"]
+}).
 -moduledoc("
 HTML escapes a text.
 
@@ -43,10 +46,7 @@ For example:
 ```
 
 If the value is `hel&lo` then the output is `hel&amp;lo`.
-
-See also
-
-[escape](/id/doc_template_filter_filter_escape), [escape_check](/id/doc_template_filter_filter_escape_check)").
+").
 -export([force_escape/2]).
 
 -author('rsaccon@gmail.com').

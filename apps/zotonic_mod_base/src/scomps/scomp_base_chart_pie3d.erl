@@ -4,6 +4,9 @@
 %% @end
 
 -module(scomp_base_chart_pie3d).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "scomp", "user_interface_and_interaction", "render"]
+}).
 -moduledoc(<<
     "Deprecated compatibility alias for [`chart_pie`](scomp-base-chart-pie).\n\n",
     "The old external chart service is no longer used and the misleading 3D effect\n",

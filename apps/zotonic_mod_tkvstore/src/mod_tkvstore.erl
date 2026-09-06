@@ -20,6 +20,11 @@
 %% limitations under the License.
 
 -module(mod_tkvstore).
+-moduledoc(#{
+    zotonic_keywords => [
+        "reference", "backend_developer", "module", "data_processing_and_formatting", "database", "postgresql"
+    ]
+}).
 -moduledoc("
 Simple (type,key)/value store. Stores data in the store with minimal latency and (local) serialization of get/put requests.
 
@@ -28,10 +33,7 @@ given type+key combination.
 
 A model, [m_tkvstore](/id/doc_model_model_tkvstore), is provided to give easy access to the type+key combinations from
 the templates, and to perform get/put operations from within Erlang.
-
-See also
-
-[m_tkvstore](/id/doc_model_model_tkvstore)").
+").
 -author("Marc Worrell <marc@worrell.nl>").
 -behaviour(gen_server).
 

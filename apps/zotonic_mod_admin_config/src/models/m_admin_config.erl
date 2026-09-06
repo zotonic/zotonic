@@ -19,6 +19,9 @@
 %% limitations under the License.
 
 -module(m_admin_config).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "site_administrator", "model", "configuration", "configure"]
+}).
 -moduledoc("
 Model for admin configuration views, including SSL certificate info, security directory info, and selected module config values.
 

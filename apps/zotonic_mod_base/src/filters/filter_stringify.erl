@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_stringify).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "text", "format"]
+}).
 -moduledoc("
 Translates atoms, integers and floats to strings. The undefined value is translated to the empty string. Does not
 translate tuples.
@@ -30,10 +33,7 @@ For example:
 ```
 
 When value is undefined then the output will be “”.
-
-See also
-
-[slugify](/id/doc_template_filter_filter_slugify), [to_binary](/id/doc_template_filter_filter_to_binary)").
+").
 -export([stringify/2]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -62,4 +62,3 @@ stringify_1(N, _Context) when is_integer(N); is_float(N); is_atom(N) ->
     z_convert:to_binary(N);
 stringify_1(L, Context) when is_list(L) ->
     [ stringify_1(X, Context) || X <- L ].
-

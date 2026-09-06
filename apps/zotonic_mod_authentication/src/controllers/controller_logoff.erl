@@ -18,17 +18,13 @@
 %% limitations under the License.
 
 -module(controller_logoff).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "controller", "authentication", "authenticate"]
+}).
 -moduledoc("
 Controller that logs off a user, destroying the session. It also removes any “remember me” cookies the user has, so
 that auto-logon is disabled.
 
-Todo
-
-Extend documentation
-
-See also
-
-[controller_authentication](/id/doc_controller_controller_authentication), [Authentication](/id/doc_developerguide_access_control#guide-authentication).
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 
@@ -60,4 +56,3 @@ moved_temporarily(Context) ->
     end,
     LocationAbs = z_context:abs_url(z_sanitize:uri(Location1), Context),
     {{true, LocationAbs}, Context}.
-

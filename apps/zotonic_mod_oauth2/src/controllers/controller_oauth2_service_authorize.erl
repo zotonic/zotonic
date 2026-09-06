@@ -18,10 +18,16 @@
 %% limitations under the License.
 
 -module(controller_oauth2_service_authorize).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "integrator", "controller", "authentication", "oauth_2_0"]
+}).
 -moduledoc("
-Todo
+Start an OAuth login with an external identity provider.
 
-Not yet documented.
+The configured service module supplies the provider authorization URL. The
+controller stores the service data and original request arguments in a signed,
+expiring state value, then renders the Cotonic worker that performs the
+redirect. The state expires after one hour.
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

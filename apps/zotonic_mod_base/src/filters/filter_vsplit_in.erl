@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_vsplit_in).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "collection", "transform"]
+}).
 -moduledoc("
 This filter splits a list in shorter lists. It splits an array in N sub-arrays of more or less equal length. This is
 useful when displaying a list of items in columns.
@@ -36,10 +39,7 @@ For example:
 ```
 
 This displays `1 2`. The variable b will be `[3,4]` and the variable c will be `[5,6]`.
-
-See also
-
-[chunk](/id/doc_template_filter_filter_chunk), [split_in](/id/doc_template_filter_filter_split_in)").
+").
 -export([vsplit_in/3]).
 
 

@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_log).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "operator", "model", "logging_and_monitoring", "monitor"]
+}).
 -moduledoc("
 Model for runtime logging state and access to server log entries for clients allowed to read logs.
 

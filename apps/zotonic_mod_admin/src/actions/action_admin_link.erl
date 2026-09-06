@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(action_admin_link).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "content_relationships", "edit"]
+}).
 -moduledoc("
 Add an [edge](/id/doc_glossary#term-edge) between two [resources](/id/doc_glossary#term-resource). Used in the admin.
 
@@ -50,14 +53,7 @@ Other arguments:
 *   element_id
 *   edge_template
 *   action - actions executed after linking
-
-Todo
-
-Extend documentation
-
-See also
-
-[unlink](/id/doc_template_action_action_unlink)").
+").
 -author("Marc Worrell <marc@worrell.nl").
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -120,4 +116,3 @@ do_link(SubjectId, Predicate, ObjectId, ElementId, EdgeTemplate, Actions, Contex
         false ->
             z_render:growl_error(?__("Sorry, you don't have permission to add the connection.", Context), Context)
     end.
-

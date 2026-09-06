@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_inject_recipientdetails).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "mailing_lists", "send_and_receive"]
+}).
 -moduledoc("
 Adds recipient query string details to hyperlinks.
 
@@ -60,4 +63,3 @@ inject_recipientdetails(Body, Recipient, _Context) ->
         true ->
             Body
     end.
-

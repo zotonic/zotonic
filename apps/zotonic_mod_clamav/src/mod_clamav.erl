@@ -19,6 +19,9 @@
 %% limitations under the License.
 
 -module(mod_clamav).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "operator", "module", "malware_scanning", "security"]
+}).
 -moduledoc("
 Uses `clamd` to scan all uploaded files for viruses.
 

@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(action_wires_unmask).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "user_interface_and_interaction", "javascript"]
+}).
 -moduledoc("
 Removes a mask that was placed over an element using the [mask](/id/doc_template_action_action_mask) action.
 
@@ -29,10 +32,7 @@ Example:
 ```
 
 In this example the mask over the logon_outer div will be removed.
-
-See also
-
-action [mask](/id/doc_template_action_action_mask).").
+").
 
 -export([render_action/4]).
 

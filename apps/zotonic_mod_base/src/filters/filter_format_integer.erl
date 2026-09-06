@@ -26,6 +26,9 @@
 %%% THE SOFTWARE.
 
 -module(filter_format_integer).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "number", "format"]
+}).
 -moduledoc("
 Show an integer value.
 
@@ -57,10 +60,7 @@ Will output `00123`. And when the number does not fit:
 Will output “\\*\\*”.
 
 **Note:** This option only works for positive integers.
-
-See also
-
-[to_integer](/id/doc_template_filter_filter_to_integer), [format_number](/id/doc_template_filter_filter_format_number), [format_price](/id/doc_template_filter_filter_format_price), [format_duration](/id/doc_template_filter_filter_format_duration)").
+").
 -export([format_integer/2, format_integer/3]).
 
 -author('rsaccon@gmail.com').

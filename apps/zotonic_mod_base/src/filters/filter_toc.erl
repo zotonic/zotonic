@@ -17,14 +17,17 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 -module(filter_toc).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "html", "render"]
+}).
 -moduledoc("
 Filter to derive a Table Of Contents from a HTML body.
 
 This filter extracts a nested table of contents from the h2..h6 elements in a HTML text.
 
-The headers may not have any attributes (ie. only `<h2\\>`).
+The headers may not have any attributes (ie. only `<h2>`).
 
-All sections are wrapped in `<div\\>` elements, this to make it possible to make the headers sticky without having them overlap.
+All sections are wrapped in `<div>` elements, this to make it possible to make the headers sticky without having them overlap.
 
 Example usage:
 
@@ -176,4 +179,3 @@ test() ->
         <h5>2.1.1.1</h5>
     ">>,
     toc(Html, x).
-

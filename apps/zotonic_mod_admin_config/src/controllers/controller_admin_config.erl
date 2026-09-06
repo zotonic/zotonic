@@ -18,14 +18,13 @@
 %% limitations under the License.
 
 -module(controller_admin_config).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "site_administrator", "controller", "configuration", "configure"]
+}).
 -moduledoc("
 Shows the admin config editor. Here you can edit the key/value pairs of [m_config](/id/doc_model_model_config).
 
 
-
-Todo
-
-Extend documentation
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 
@@ -80,4 +79,3 @@ is_value_config_props([{props,undefined}|Rest]) ->
     is_value_config_props(Rest);
 is_value_config_props(_X) ->
     false.
-

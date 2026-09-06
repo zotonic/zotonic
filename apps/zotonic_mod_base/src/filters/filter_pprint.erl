@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_pprint).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "structured_data", "format"]
+}).
 -moduledoc("
 Pretty print a zotonic value in a template.
 
@@ -31,11 +34,8 @@ Usage:
 ```
 
 This output is similar to the [print](/id/doc_template_tag_tag_print) tag, only are the values of the pprint filter not
-wrapped in `<pre\\>` tag.
-
-See also
-
-[print](/id/doc_template_tag_tag_print)").
+wrapped in `<pre>` tag.
+").
 -export([pprint/2]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").

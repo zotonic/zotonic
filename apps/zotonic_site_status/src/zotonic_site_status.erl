@@ -18,6 +18,16 @@
 %% limitations under the License.
 
 -module(zotonic_site_status).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "operator", "module", "site_management", "monitor"]
+}).
+-moduledoc("
+Provide the built-in Zotonic status site.
+
+The status site handles hosts not claimed by another site, publishes live site
+status updates, authenticates the system administrator, and restricts access
+using the system-management IP allowlist.
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Zotonic Status").
@@ -126,4 +136,3 @@ is_equal(<<>>, _B, _Eq) -> false;
 is_equal(<<_, A/binary>>, <<>>, _Eq) -> is_equal(A, <<>>, false);
 is_equal(<<C, A/binary>>, <<C, B/binary>>, Eq) -> is_equal(A, B, Eq);
 is_equal(<<_, A/binary>>, <<_, B/binary>>, _Eq) -> is_equal(A, B, false).
-

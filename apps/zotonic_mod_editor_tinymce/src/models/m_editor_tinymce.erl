@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_editor_tinymce).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "model", "content_authoring", "edit"]
+}).
 -moduledoc("
 Model exposing TinyMCE editor version metadata used by admin/editor integration.
 

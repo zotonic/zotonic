@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(action_mailinglist_mailing_page_test).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "mailing_lists", "send_and_receive"]
+}).
 -moduledoc("
 Post a message to the test mailing list, given with the `id` argument.
 
@@ -25,10 +28,6 @@ The page does not need to be published. The sender must be allowed to use
 mod_mailinglist and view the page. The mailing is queued for immediate sending.
 
 The `on_success` argument decides which actions are triggered after the page has been sent.
-
-Todo
-
-Extend documentation
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

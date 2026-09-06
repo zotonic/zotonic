@@ -18,12 +18,11 @@
 %% limitations under the License.
 
 -module(controller_admin_mailing_preview).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "controller", "mailing_lists", "send_and_receive"]
+}).
 -moduledoc("
 This controller shows a preview of what a resource that is being mailed would look like, in a popup window.
-
-Todo
-
-Extend documentation
 ").
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 

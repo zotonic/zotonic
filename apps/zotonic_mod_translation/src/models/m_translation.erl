@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_translation).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "model", "localization_and_translation", "translated_text"]
+}).
 -moduledoc("
 The m_translation model gives easy access to language and translation related information.
 

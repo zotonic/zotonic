@@ -18,12 +18,11 @@
 %% limitations under the License.
 
 -module(action_wires_insert_before).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "template", "render"]
+}).
 -moduledoc("
 Insert the result of a render action before an HTML element.
-
-Todo
-
-Extend documentation
 ").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([

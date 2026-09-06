@@ -18,11 +18,14 @@
 %% limitations under the License.
 
 -module(mod_admin_category).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "site_administrator", "module", "categorization", "configure"]
+}).
 -moduledoc("
-Note
-
+::: note
 This module requires the presence of [mod_menu](/id/doc_module_mod_menu) for the required JavaScript files which make
 up the menu editor.
+:::
 
 Add support for editing [Categories](/id/doc_userguide_datamodel#guide-datamodel-categories) in the admin, by presenting
 an editable category tree at `http://yoursite.com/admin/category`.
@@ -247,4 +250,3 @@ ids([], Acc) ->
 ids([{Id,Sub}|Rest], Acc) ->
     Acc1 = ids(Sub, Acc),
     ids(Rest, [Id|Acc1]).
-

@@ -18,10 +18,22 @@
 %% limitations under the License.
 
 -module(filter_is_valid_email).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "email", "validate"]
+}).
 -moduledoc("
-Todo
+Test whether a value has valid email-address syntax.
 
-Not yet documented.
+Empty values and values of another type return `false`. This filter checks
+syntax only; it does not verify that the address or domain exists.
+
+For example:
+
+```django
+{% if email|is_valid_email %}
+    The address has valid syntax.
+{% endif %}
+```
 ").
 -export([is_valid_email/2]).
 

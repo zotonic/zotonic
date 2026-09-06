@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(action_wires_remove).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "user_interface_and_interaction", "javascript"]
+}).
 -moduledoc("
 Remove an element from the page.
 
@@ -35,10 +38,7 @@ Without target, the action removes its triggering element:
 ```django
 {% button text=\"Click me to remove me\" action={remove} %}
 ```
-
-See also
-
-[Actions](/id/template_action#actions), [button](/id/doc_template_scomp_scomp_button#scomp-button)").
+").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).
 

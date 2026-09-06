@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_log_ui).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "operator", "model", "logging_and_monitoring", "monitor"]
+}).
 -moduledoc("
 Model for admin UI log retrieval by index, gated by admin permissions.
 

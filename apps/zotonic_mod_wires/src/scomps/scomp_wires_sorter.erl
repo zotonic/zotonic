@@ -21,6 +21,9 @@
 %% limitations under the License.
 
 -module(scomp_wires_sorter).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "scomp", "user_interface_and_interaction", "javascript"]
+}).
 -moduledoc("
 A sorter is a container for sortables.
 
@@ -63,9 +66,9 @@ Where “Sortables” is the list of sortables and “Sorter” is the sorter. B
 Where “tag” is the tag of the sortable or sorter, “delegate” is the module that handles the event and “id”
 is the HTML id of the sortable or sorter.
 
-Note
-
+::: note
 If the tag is a string then the `#dragdrop` tag will be an atom.
+:::
 
 The sorter can have the following arguments:
 
@@ -83,9 +86,6 @@ The sorter can have the following arguments:
 | `opacity`       | Opacity a sortable is set to when being dragged. Defaults to “1.0”.              | `opacity=\"0.8\"`         |
 | `placeholder`   | Class that gets applied to the otherwise white space that will show between sortables as the new place of the sortable. | `class=\"drophere\"`      |
 
-See also
-
-the [sortable](/id/doc_template_scomp_scomp_sortable#scomp-sortable) tag.
 ").
 -behaviour(zotonic_scomp).
 

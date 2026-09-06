@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_mqtt_ticket).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "model", "user_interface_and_interaction", "html"]
+}).
 -moduledoc("
 A ticketing system for out of band MQTT posts via HTTP.
 

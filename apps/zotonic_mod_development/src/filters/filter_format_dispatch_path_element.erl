@@ -18,14 +18,17 @@
 %% limitations under the License.
 
 -module(filter_format_dispatch_path_element).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "development_and_debugging", "monitor"]
+}).
 -moduledoc("
 Format dispatch path element so variables will be more visible.
 
 See [mod_development](/id/doc_module_mod_development)
 
-Todo
-
-Not yet documented.
+Atoms are rendered as highlighted path variables, strings and binaries as
+literal path segments, and other terms using the `pprint` filter. All displayed
+values are HTML escaped.
 ").
 -export([format_dispatch_path_element/2]).
 

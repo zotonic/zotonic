@@ -19,6 +19,9 @@
 %% limitations under the License.
 
 -module(m_backup_revision).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "operator", "model", "backup_and_restore", "schedule"]
+}).
 -moduledoc("
 Model for resource revision backup metadata, including revision list/title retrieval and revision retention settings.
 

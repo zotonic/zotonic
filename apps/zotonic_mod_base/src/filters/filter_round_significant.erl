@@ -20,6 +20,9 @@
 %% limitations under the License.
 
 -module(filter_round_significant).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "number", "format"]
+}).
 -moduledoc("
 Round a number value to a number of significant digits. The significance defaults to two digits.
 
@@ -108,4 +111,3 @@ digits(0) ->
     1;
 digits(N) ->
     1 + erlang:trunc(math:log10(N)).
-

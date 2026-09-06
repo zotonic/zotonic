@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_first).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "collection", "query"]
+}).
 -moduledoc("
 Returns the first character or element.
 
@@ -60,10 +63,7 @@ Or, with a string:
 ```
 
 The filtered value is `\"he\"`.
-
-See also
-
-[tail](/id/doc_template_filter_filter_tail), [last](/id/doc_template_filter_filter_last)").
+").
 -export([
     first/2,
     first/3

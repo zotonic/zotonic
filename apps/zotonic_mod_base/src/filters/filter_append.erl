@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_append).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "text", "transform"]
+}).
 -moduledoc("
 Appends the argument to the value.
 
@@ -29,10 +32,7 @@ For example:
 ```
 
 When value is `hello` then the output will be `hello world`.
-
-See also
-
-[insert](/id/doc_template_filter_filter_insert)").
+").
 -export([append/3]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -50,5 +50,4 @@ append(Input, Append, _Context) when is_binary(Input), is_binary(Append) ->
 append(Input, Append, Context) ->
     z_template_compiler_runtime:to_list(Input, Context)
     ++ z_template_compiler_runtime:to_list(Append, Context).
-
 

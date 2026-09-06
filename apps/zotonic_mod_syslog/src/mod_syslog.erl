@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(mod_syslog).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "operator", "module", "logging_and_monitoring", "send_and_receive"]
+}).
 -moduledoc("
 Syslog integration module for forwarding Zotonic log events to external syslog services.
 

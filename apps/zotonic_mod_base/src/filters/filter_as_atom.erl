@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_as_atom).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "structured_data", "transform"]
+}).
 -moduledoc("
 Convert a value to an Erlang atom.
 

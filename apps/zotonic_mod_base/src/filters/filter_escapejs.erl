@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_escapejs).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "javascript", "security"]
+}).
 -moduledoc("
 Escapes the value for insertion in JavaScript output.
 
@@ -34,10 +37,7 @@ Internally, this calls `z_utils:js_escape/1` to perform the escaping.
 
 Note: when generating JSON output, be sure to use [escapejson](/id/doc_template_filter_filter_escapejson), as JSON
 escaping is subtly different from JS escaping.
-
-See also
-
-[escape](/id/doc_template_filter_filter_escape), [escapejson](/id/doc_template_filter_filter_escapejson)").
+").
 -export([escapejs/2]).
 
 escapejs(Input, Context) when is_map(Input) ->

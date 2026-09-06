@@ -17,6 +17,12 @@
 
 
 -module(action_mqtt_publish).
+-moduledoc(#{
+    zotonic_keywords => [
+        "reference", "frontend_developer", "wire_action", "messaging_and_pubsub",
+        "publish_and_subscribe", "publish", "mqtt"
+    ]
+}).
 -moduledoc("
 Publishes a message on the topic tree of the current page.
 

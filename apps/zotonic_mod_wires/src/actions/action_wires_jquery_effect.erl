@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(action_wires_jquery_effect).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "user_interface_and_interaction", "javascript"]
+}).
 -moduledoc("
 Trigger various jQuery effects on the target element. Mostly, each of these effects have their own action as a shortcut,
 for example [show](/id/doc_template_action_action_show), [hide](/id/doc_template_action_action_hide).
@@ -30,10 +33,6 @@ Arguments:
 *   easing
 *   effect
 *   options
-
-Todo
-
-Extend documentation
 ").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).
@@ -111,4 +110,3 @@ to_js(Options) ->
         end
     end,
     [${, string:join([F(X) || X <- Options], ","), $}].
-

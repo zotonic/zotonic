@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(action_wires_set_class).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "user_interface_and_interaction", "javascript"]
+}).
 -moduledoc("
 Set the class of an element.
 

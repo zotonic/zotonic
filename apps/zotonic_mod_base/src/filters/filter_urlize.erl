@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_urlize).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "url", "serialize"]
+}).
 -moduledoc("
 Find urls in the given input and make them clickable.
 
@@ -36,10 +39,7 @@ Outputs:
 ```
 
 This filter is very similar to the [escape_link](/id/doc_template_filter_filter_escape_link) filter.
-
-See also
-
-[escape_link](/id/doc_template_filter_filter_escape_link)").
+").
 
 -export([urlize/2]).
 

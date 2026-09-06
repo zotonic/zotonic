@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_gravatar_code).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "email", "validate"]
+}).
 -moduledoc("
 Calculate the gravatar code for an e-mail address:
 

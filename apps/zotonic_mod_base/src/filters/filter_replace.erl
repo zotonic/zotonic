@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_replace).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "text", "transform"]
+}).
 -moduledoc("
 Regular expression replacement of a pattern with a string.
 

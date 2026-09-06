@@ -16,12 +16,11 @@
 %% limitations under the License.
 
 -module(action_admin_zlink).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "content_relationships", "edit"]
+}).
 -moduledoc("
 Used for inserting an internal link in the TinyMCE editor in the admin.
-
-Todo
-
-Extend documentation
 ").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).

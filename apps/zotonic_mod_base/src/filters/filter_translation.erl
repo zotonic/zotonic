@@ -19,6 +19,9 @@
 %% limitations under the License.
 
 -module(filter_translation).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "localization_and_translation", "translated_text"]
+}).
 -moduledoc("
 Lookup a specific translation in a translated text. If the text is not translated then the text is returned as-is.
 
@@ -41,10 +44,7 @@ If the variable `text` has the value:
 Then this will show `Hello`, even if the current template language is set to `nl`.
 
 This filter is especially useful for filling in forms with language specific strings to be edited.
-
-See also
-
-[translate](/id/doc_template_filter_filter_translate)").
+").
 
 -export([
     translation/3

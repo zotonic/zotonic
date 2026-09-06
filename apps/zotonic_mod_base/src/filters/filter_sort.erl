@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_sort).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "collection", "transform"]
+}).
 -moduledoc("
 The sort filter takes a list of items to sort. Items can be an ordinary list of terms, property lists, or maps. It can
 also be a list of resource ids to be filtered based on their properties. Sort order and properties to sort on are given

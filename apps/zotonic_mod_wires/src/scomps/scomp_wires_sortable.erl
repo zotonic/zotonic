@@ -21,6 +21,9 @@
 %% limitations under the License.
 
 -module(scomp_wires_sortable).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "scomp", "user_interface_and_interaction", "javascript"]
+}).
 -moduledoc("
 Mark an element as sortable.
 
@@ -62,9 +65,9 @@ Where “Sortables” is the list of sortables and “Sorter” is the sorter. B
 Where “tag” is the tag of the sortable or sorter, “delegate” is the module that handles the event and “id”
 is the HTML id of the sortable or sorter.
 
-Note
-
+::: note
 if the tag is a string then the `#dragdrop` tag will be an atom.
+:::
 
 The sortable can have the following arguments:
 
@@ -75,9 +78,6 @@ The sortable can have the following arguments:
 | `delegate` | The delegate of the sortable, currently unused will be passed in the sortables’s #dragdrop record. | `delegate=”mymodule”`   |
 | `class`    | A CSS class that will be added to the sortable. The class “sortable” will always be added. | `class=”dragitem”`      |
 
-See also
-
-the [sorter](/id/doc_template_scomp_scomp_sorter#scomp-sorter) tag.
 ").
 -behaviour(zotonic_scomp).
 

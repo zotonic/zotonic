@@ -18,6 +18,24 @@
 %% limitations under the License.
 
 -module(filter_survey_is_history_back).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "surveys", "boolean"]
+}).
+-moduledoc("
+Test whether a survey respondent may return to the previous page in a history.
+
+The first value is the survey resource. The argument can be a previous page
+number or a history list whose first two entries are the current and previous
+page numbers.
+
+For example:
+
+```django
+{% if id|survey_is_history_back:history %}
+    <button name=\"back\">Back</button>
+{% endif %}
+```
+").
 
 -export([
     survey_is_history_back/3

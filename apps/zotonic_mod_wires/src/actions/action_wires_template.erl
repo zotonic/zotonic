@@ -19,6 +19,9 @@
 %% limitations under the License.
 
 -module(action_wires_template).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "template", "render"]
+}).
 -moduledoc("
 Render a template. When used in a postback action, the result will be sent back with the response data for the postback.
 

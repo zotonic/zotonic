@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(scomp_base_chart).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "scomp", "user_interface_and_interaction", "render"]
+}).
 -moduledoc(<<
     "Render a chart without JavaScript, CSS, external services, or external assets.\n\n",
     "The `data` argument can be a list of `{Label, Value}` tuples, `[Label, Value]`\n",

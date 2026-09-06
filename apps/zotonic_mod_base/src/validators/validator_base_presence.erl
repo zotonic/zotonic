@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(validator_base_presence).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_validator", "validate", "forms"]
+}).
 -moduledoc("
 Check if an input has been filled in or checked.
 
@@ -36,11 +39,8 @@ Arguments
 
 | Argument          | Description                                                | Example                           |
 | ----------------- | ---------------------------------------------------------- | --------------------------------- |
-| `failure_message` | Message to be shown when field is empty. Defaults to “\\\\*” | `failure_message=\"Please enter.\"` |
-
-See also
-
-[Forms and validation](/id/doc_developerguide_forms_and_validation#guide-validators)").
+| `failure_message` | Message to be shown when field is empty. Defaults to “\\*” | `failure_message=\"Please enter.\"` |
+").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_validator/5, validate/5]).
 

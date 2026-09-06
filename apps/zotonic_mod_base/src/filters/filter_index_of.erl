@@ -19,6 +19,9 @@
 %% limitations under the License.
 
 -module(filter_index_of).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "collection", "query"]
+}).
 -moduledoc("
 Returns the index of the first occurrence of the item in the given list.
 
@@ -32,10 +35,7 @@ For example:
 Returns `2`.
 
 **Note:** Erlang list indices are always 1-based.
-
-See also
-
-[element](/id/doc_template_filter_filter_element)").
+").
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -include_lib("zotonic_core/include/zotonic.hrl").

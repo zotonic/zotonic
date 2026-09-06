@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(action_admin_dialog_new_rsc).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "content_authoring", "create"]
+}).
 -moduledoc("
 Show the admin dialog for creating a new [resource](/id/doc_glossary#term-resource).
 
@@ -47,10 +50,6 @@ objects=[ [m.acl.user, \"author\"] ]
 ```
 
 creates an “author” edge from the new page to the currently logged in user.
-
-Todo
-
-Extend documentation
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

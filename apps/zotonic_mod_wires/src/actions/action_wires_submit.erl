@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(action_wires_submit).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "forms", "validate"]
+}).
 -moduledoc("
 Submits the enclosing form, a specifically targeted form or the closest form to an element.
 

@@ -16,12 +16,11 @@
 %% limitations under the License.
 
 -module(action_backup_backup_start).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "backup_and_restore", "schedule"]
+}).
 -moduledoc("
 Action which starts a manual backup.
-
-Todo
-
-Extend documentation
 ").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([
@@ -58,4 +57,3 @@ event(#postback{message={backup_start, IsFullBackup}}, Context) ->
         false ->
             z_render:growl_error(?__("Only administrators can start a backup.", Context), Context)
     end.
-

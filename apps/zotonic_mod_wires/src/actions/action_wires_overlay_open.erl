@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(action_wires_overlay_open).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "user_interface_and_interaction", "javascript"]
+}).
 -moduledoc("
 Renders a template on the server and opens a full screen overlay with the HTML output of the template.
 
@@ -47,11 +50,7 @@ The overlay action has the following arguments:
 | level    | Nesting of the overlay. Non negative integer, higher numbered levels are displayed above lower levels. Special level `\"top\"` to force display on top, above all dialogs and other overlays. | `level=\"top\"`             |
 
 All (extra) arguments are passed to the rendered template.
-
-See also
-
-actions [overlay_close](/id/doc_template_action_action_overlay_close),
-[dialog_open](/id/doc_template_action_action_dialog_open) and [dialog](/id/doc_template_action_action_dialog).").
+").
 -author("Marc Worrell <marc@worrell.nl").
 
 %% interface functions

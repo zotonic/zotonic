@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_yesno).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "boolean", "compare"]
+}).
 -moduledoc("
 Show a boolean value as a text.
 
@@ -72,4 +75,3 @@ yesno(B, Values, Context) ->
         true -> Yes;
         false -> No
     end.
-

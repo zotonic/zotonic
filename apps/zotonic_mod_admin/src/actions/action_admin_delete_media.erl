@@ -18,12 +18,11 @@
 %% limitations under the License.
 
 -module(action_admin_delete_media).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "content_authoring", "edit"]
+}).
 -moduledoc("
 Delete a media file from a [resource](/id/doc_glossary#term-resource), without confirmation.
-
-Todo
-
-Extend documentation
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

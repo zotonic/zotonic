@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_admin_status).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "model", "content_authoring", "monitor"]
+}).
 -moduledoc("
 Model for admin status endpoints, including Zotonic version and health/status overview values.
 

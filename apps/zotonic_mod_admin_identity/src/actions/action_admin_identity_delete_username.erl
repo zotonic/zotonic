@@ -18,12 +18,11 @@
 %% limitations under the License.
 
 -module(action_admin_identity_delete_username).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "identity_and_accounts", "edit"]
+}).
 -moduledoc("
 Delete the username from a user, no confirmation.
-
-Todo
-
-Extend documentation
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

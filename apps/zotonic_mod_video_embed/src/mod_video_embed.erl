@@ -20,11 +20,14 @@
 %% limitations under the License.
 
 -module(mod_video_embed).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "integrator", "module", "video_management", "oembed"]
+}).
 -moduledoc("
 This module, if activated, checks the pasted URLs in the *create media / page* dialog of the admin. It will show an
 embed option for Youtube and Vimeo URLs. It will also cleanup pasted embed code for these and other services.
 
-When used in the Zotonic site, the \\{% media %\\} tag then displays the embed code.
+When used in the Zotonic site, the {% media %} tag then displays the embed code.
 
 This module accompanies [mod_oembed](/id/doc_module_mod_oembed) and can be used for integrating with services that
 do not have oEmbed support but do provide HTML embed-code functionality.
@@ -45,10 +48,7 @@ This module handles the following notifier callbacks:
 Delegate callbacks:
 
 - `event/2` with `submit` messages: `add_video_embed`.
-
-See also
-
-[mod_oembed](/id/doc_module_mod_oembed), [mod_video](/id/doc_module_mod_video), [mod_audio](/id/doc_module_mod_audio), [media](/id/doc_template_tag_tag_media)").
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Video embed").

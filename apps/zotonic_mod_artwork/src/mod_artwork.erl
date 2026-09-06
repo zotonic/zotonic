@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(mod_artwork).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "content_editor", "module", "image_management", "create"]
+}).
 -moduledoc("
 This module contains many useful icons and images.
 

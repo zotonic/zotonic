@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_after).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "date_and_time", "compare"]
+}).
 -moduledoc("
 Return the first element after another element in a list. For example:
 
@@ -46,4 +49,3 @@ next_of1([V,N|_T], V) ->
     N;
 next_of1([_|T], V) ->
     next_of1(T, V).
-

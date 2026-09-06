@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_group_title_firstchar).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "collection", "query"]
+}).
 -moduledoc("
 Similar to [group_firstchar](/id/doc_template_filter_filter_group_firstchar), but always uses the `title` column from
 the rsc table.
@@ -43,10 +46,7 @@ This is merely a shortcut, simplifying the template syntax:
 ```
 
 Groups alphabetically on title, in four columns.
-
-See also
-
-[group_firstchar](/id/doc_template_filter_filter_group_firstchar)").
+").
 -export([group_title_firstchar/3]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").

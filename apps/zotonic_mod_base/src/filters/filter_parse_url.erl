@@ -19,6 +19,9 @@
 %% limitations under the License.
 
 -module(filter_parse_url).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "url", "parse"]
+}).
 -moduledoc("
 Parses an URL (URI) using `uri_string:parse/1`.
 
@@ -52,4 +55,3 @@ parse_url(#trans{} = Tr, Context) ->
     parse_url(z_trans:lookup_fallback(Tr, Context), Context);
 parse_url(V, Context) ->
     parse_url(z_convert:to_binary(V), Context).
-

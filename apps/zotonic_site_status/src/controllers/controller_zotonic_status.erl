@@ -18,6 +18,16 @@
 %% limitations under the License.
 
 -module(controller_zotonic_status).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "operator", "controller", "site_management", "monitor"]
+}).
+-moduledoc("
+Serve the Zotonic status site and fallback templates.
+
+The controller renders fallback error pages for unmatched hosts. For allowed
+administrators it also handles starting, stopping, restarting, and flushing
+sites from the status interface.
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([

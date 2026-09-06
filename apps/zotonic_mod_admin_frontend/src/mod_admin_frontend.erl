@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(mod_admin_frontend).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "module", "user_interface_and_interaction", "render"]
+}).
 -moduledoc("
 Adds editing of resources, menu-trees and collections for non-admin users.
 
@@ -106,9 +109,6 @@ overrule the block `meta_data_after`.
 If you click on the cog icon on the right, then a meta data panel is shown (for access-control options and language
 settings). This panel can be extended with extra tabs using the blocks `meta_tabs` and `meta_panels`.
 
-See also
-
-[mod_admin](/id/doc_module_mod_admin), [menu_rsc](/id/doc_template_filter_filter_menu_rsc)
 
 Accepted Events
 ---------------

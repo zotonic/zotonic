@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_custom_redirect).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "site_administrator", "model", "routing_and_redirects", "configure"]
+}).
 -moduledoc("
 Model for custom redirect records, exposing redirect list and individual redirect lookup by id.
 

@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_menu_trail).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "navigation", "edit"]
+}).
 -moduledoc("
 Return a breadcrumb navigation trail for the given id.
 
@@ -66,10 +69,7 @@ The key here is `{% if parents|length > 1 %}` instead of just `{% if parents %}`
 
 The [if](/id/doc_template_tag_tag_if) tag is now rendering the menu_trail only if there are two or more items in it
 which - as I mentioned before - happens when you are at least two levels deep in the menu.
-
-See also
-
-[menu_subtree](/id/doc_template_filter_filter_menu_subtree), [menu_flat](/id/doc_template_filter_filter_menu_flat)").
+").
 -export([menu_trail/2, menu_trail/3, test/0]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").

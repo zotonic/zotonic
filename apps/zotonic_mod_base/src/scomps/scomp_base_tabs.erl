@@ -18,15 +18,18 @@
 %% limitations under the License.
 
 -module(scomp_base_tabs).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "scomp", "user_interface_and_interaction", "render"]
+}).
 -moduledoc("
 Make a HTML element into a tab set.
 
-Note
-
+::: note
 There is no default styling for jQuery UI elements in the zotonic CSS files. See these two threads in the zotonic users
 mailinglist: [does tabs scomp still work?](https://groups.google.com/d/topic/zotonic-users/mIxPpKSzugM/discussion), and
 [playing with tabs scomp](https://groups.google.com/d/topic/zotonic-users/BnZtNvVWds0/discussion). See also the [jQuery
 UI](http://jqueryui.com) documentation.
+:::
 
 This is a simple interface to the jQuery UI tabs functionality. It will show tabs to switch between different panes.
 
@@ -72,4 +75,3 @@ render(Params, _Vars, Context) ->
                     [ "$('#", Id, "').tabs();" ]
              end,
     {ok, z_render:wire({script, [{script, Script}]}, Context)}.
-

@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_slugify).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "identifier", "transform"]
+}).
 -moduledoc("
 Converts a text into a slug.
 
@@ -31,10 +34,7 @@ For example:
 ```
 
 When value is “Nichts is unmöglich!” then the output will be “nichts-is-unmoglich”.
-
-See also
-
-[stringify](/id/doc_template_filter_filter_stringify)").
+").
 -export([slugify/2]).
 
 

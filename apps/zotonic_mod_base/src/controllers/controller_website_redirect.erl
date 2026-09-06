@@ -16,12 +16,11 @@
 %% limitations under the License.
 
 -module(controller_website_redirect).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "controller", "routing_and_redirects", "http"]
+}).
 -moduledoc("
 This controller does a redirect to the `website` property of the given [resource](/id/doc_glossary#term-resource).
-
-Todo
-
-Extend documentation
 ").
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
@@ -55,4 +54,3 @@ moved_temporarily(Context) ->
             AbsUrl = iolist_to_binary(z_context:abs_url(z_html:unescape(Url), Context)),
             {{true, AbsUrl}, Context}
     end.
-

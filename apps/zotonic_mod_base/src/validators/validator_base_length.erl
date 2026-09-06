@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(validator_base_length).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_validator", "validate", "number"]
+}).
 -moduledoc("
 Check the length of a text input.
 
@@ -46,10 +49,7 @@ Arguments
 | `wrong_length_message` | Message for when the length is unequal to the value of the “is” argument. Defaults to “Must be . characters long.” |              |
 | `too_short_message`    | Message for when there are not enough characters entered. Defaults to “Must not be less than . characters long.” |              |
 | `too_long_message`     | Message for when there are too many characters entered. Defaults to “Must not be more than . characters long.” |              |
-
-See also
-
-[Forms and validation](/id/doc_developerguide_forms_and_validation#guide-validators)").
+").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_validator/5, validate/5]).
 

@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(action_wires_event).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "messaging_and_pubsub", "javascript"]
+}).
 -moduledoc("
 Bind actions to a jQuery event or submit a form.
 

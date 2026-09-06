@@ -21,6 +21,9 @@
 %% limitations under the License.
 
 -module(controller_csp_report).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "controller", "security", "http"]
+}).
 -moduledoc("
 Controller handling Content-Security-Policy reports.
 

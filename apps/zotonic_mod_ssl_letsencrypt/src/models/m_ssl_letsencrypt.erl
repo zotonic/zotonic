@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_ssl_letsencrypt).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "operator", "model", "tls_and_certificates", "configure"]
+}).
 -moduledoc("
 Model for Let's Encrypt status information, available to administrators.
 

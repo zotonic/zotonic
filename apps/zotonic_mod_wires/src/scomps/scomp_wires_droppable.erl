@@ -22,6 +22,9 @@
 %% limitations under the License.
 
 -module(scomp_wires_droppable).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "scomp", "user_interface_and_interaction", "javascript"]
+}).
 -moduledoc("
 Mark an element as valid drag destination.
 
@@ -65,9 +68,6 @@ The droppable tag accepts the following arguments:
 | `accept`   | The group the droppable accepts. See the group argument of the draggable. A droppable can accept multiple groups, just repeat the accept argument. | `accept=\"edges\"`         |
 | `delegate` | The Erlang module that will receive the drop event after a successful drop.      |                          |
 
-See also
-
-the [draggable](/id/doc_template_scomp_scomp_draggable#scomp-draggable) tag.
 ").
 -behaviour(zotonic_scomp).
 

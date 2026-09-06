@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_ne_day).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "date_and_time", "compare"]
+}).
 -moduledoc("
 Tests if two dates are not equal.
 
@@ -34,10 +37,7 @@ For example:
 This outputs “different days” if value and othervalue are dates and different.
 
 This is useful in combination with for example the if tag.
-
-See also
-
-[eq_day](/id/doc_template_filter_filter_eq_day)").
+").
 -export([ne_day/3]).
 
 

@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_survey_test_max_points).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "surveys", "forms"]
+}).
 -moduledoc("
 Counts the total of all points that can be received for all *test* questions. Non *test* questions are not counted.
 
@@ -42,4 +45,3 @@ survey_test_max_points(Id, Context) ->
         undefined -> 0;
         RId -> survey_test_results:max_points(RId, Context)
     end.
-

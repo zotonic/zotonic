@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(controller_admin_mailing_status).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "controller", "mailing_lists", "send_and_receive"]
+}).
 -moduledoc("
 This controller shows the mailing status of a [resource](/id/doc_glossary#term-resource). It lists each mailing list
 available in the system, and shows whether or not the current resource has already been sent to the list.
@@ -25,10 +28,6 @@ available in the system, and shows whether or not the current resource has alrea
 Per mailinglist, it offers the options to send the resource right now, or schedule it for later delivery.
 
 There are also buttons for sending the resource to a test mailing list or to a single email address.
-
-Todo
-
-Extend documentation
 ").
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 

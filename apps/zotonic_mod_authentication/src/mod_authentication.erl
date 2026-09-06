@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(mod_authentication).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "module", "authentication", "authenticate"]
+}).
 -moduledoc("
 This module contains the main Zotonic authentication mechanism. It contains the logon and logoff controllers, and
 implements the various hooks as described in the [Access control](/id/doc_developerguide_access_control#guide-auth) manual.

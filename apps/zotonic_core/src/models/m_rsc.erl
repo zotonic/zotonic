@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_rsc).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "model", "content_management", "resource"]
+}).
 -moduledoc("
 The main resource model, which is the central part of the [Zotonic data
 model](/id/doc_userguide_datamodel#guide-datamodel). This model provides an interface to all resource (\"page\")
@@ -43,7 +46,7 @@ A resource has the following properties accessible from the templates:
 | name | Unique name of the page. Returns a binary or undefined. Valid characters are a-z, 0-9 and _ | `<<\"page_home\">>` |
 | page_path | Unique path of the page, used for url generation. Returns a binary or undefined. Valid characters are a-z, 0-9, / and - | `<<\"/\">>` |
 | is_page_path_multiple | Allow the page to be served on multiple URLs | `false` |
-| page_url | The url of the page. Derived using the page's category, the page id and its slug. Returns a non flattened list. Returns the binary page_path when it is set.  The additional parameter `with` can be used to pass extra (optional) query arguments to the url, for instance:  `{{ id.page_url with t=now\\|date:\"U\" }}`  `{{ id.page_url with t=\"new\" u=m.acl.user.id }}` | `<<\"/blog/42\">>` |
+| page_url | The url of the page. Derived using the page's category, the page id and its slug. Returns a non flattened list. Returns the binary page_path when it is set.  The additional parameter `with` can be used to pass extra (optional) query arguments to the url, for instance:  `{{ id.page_url with t=now|date:\"U\" }}`  `{{ id.page_url with t=\"new\" u=m.acl.user.id }}` | `<<\"/blog/42\">>` |
 | page_url_abs | The absolute url of the page. Same as `page_url` but then with added protocol, hostname and port. | `<<\"<http://example.org/blog/42>\">>` |
 | default_page_url | The page without considering its page_path setting. | `<<\"/page/42/my-slug\">>` |
 | is_authoritative | Whether this page originated on this site or is imported and maintained on another site. Return a boolean. | `true` |
@@ -164,10 +167,7 @@ Available Model API Paths
 | `delete` | `/+id` | Delete resource `+id`. No further lookups. |
 
 `/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
-
-See also
-
-[Resources](/id/doc_developerguide_resources#guide-datamodel-resources), [The Zotonic data model](/id/doc_userguide_datamodel#guide-datamodel), [m_edge](/id/doc_model_model_edge), [m_media](/id/doc_model_model_media), [m_rsc_gone](/id/doc_model_model_rsc_gone).").
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -behaviour(zotonic_model).

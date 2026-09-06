@@ -18,13 +18,12 @@
 %% limitations under the License.
 
 -module(controller_admin_category_sorter).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "site_administrator", "controller", "categorization", "configure"]
+}).
 -moduledoc("
 Shows the admin category screen where you can edit the [category](/id/doc_glossary#term-category) tree, rearranging the
 categories, adding new categories, or removing existing ones.
-
-Todo
-
-Extend documentation
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 
@@ -45,4 +44,3 @@ is_authorized(Context) ->
 process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     Html = z_template:render("admin_category_sorter.tpl", [{page_admin_category_sorter, true}], Context),
     z_context:output(Html, Context).
-

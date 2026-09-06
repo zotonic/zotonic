@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(mod_import_csv).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "integrator", "module", "import_and_migration", "interoperability", "import"]
+}).
 -moduledoc("
 Module which adds “import CSV” button to the admin status screen.
 

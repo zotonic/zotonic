@@ -18,12 +18,11 @@
 %% limitations under the License.
 
 -module(controller_admin_seo).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "controller", "search_engine_optimization", "metadata"]
+}).
 -moduledoc("
 Shows a form with settings related to Search Engine Optimization.
-
-Todo
-
-Extend documentation
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_seo_sitemap).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "operator", "model", "search_engine_optimization", "index"]
+}).
 -moduledoc("
 Model for sitemap generation metadata, including available urlsets and paged urlset export values.
 

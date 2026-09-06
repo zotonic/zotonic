@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_tkvstore).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "model", "data_processing_and_formatting", "structured_data"]
+}).
 -moduledoc("
 Simple read-only interface to the typed key-value store of [mod_tkvstore](/id/doc_module_mod_tkvstore). To get a value
 from the store: use m.tkvstore.type.key, like this:
@@ -69,10 +72,7 @@ Available Model API Paths
 | `get` | `/+type/+key/...` | Return admin-only typed-key value from `tkvstore` row (`type = +type`, `key = +key`), yielding stored `props` term or `undefined` when missing. |
 
 `/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
-
-See also
-
-[mod_tkvstore](/id/doc_module_mod_tkvstore)").
+").
 -author("Marc Worrell <marc@worrell.nl").
 
 -behaviour(zotonic_model).

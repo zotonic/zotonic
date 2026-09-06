@@ -18,13 +18,12 @@
 %% limitations under the License.
 
 -module(controller_admin_referrers).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "controller", "content_authoring", "user_interface_and_interaction"]
+}).
 -moduledoc("
 Shows the list of pages ([resources](/id/doc_glossary#term-resource)) which refer to this
 [resource](/id/doc_glossary#term-resource) through an [edge](/id/doc_glossary#term-edge).
-
-Todo
-
-Extend documentation
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

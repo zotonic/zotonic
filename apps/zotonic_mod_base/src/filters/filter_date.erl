@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_date).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "date_and_time", "format"]
+}).
 -moduledoc("
 Formats a date or datetime according to the format specified in the argument.
 
@@ -158,10 +161,7 @@ Will output 10 October 1990. This also works with datetimes:
 ```
 
 Will output 10 October 1990 - 10:11:12.
-
-See also
-
-[date_range](/id/doc_template_filter_filter_date_range), [datediff](/id/doc_template_filter_filter_datediff), [timesince](/id/doc_template_filter_filter_timesince), [now](/id/doc_template_tag_tag_now)").
+").
 
 -export([
   date/3,

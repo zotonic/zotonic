@@ -1,4 +1,7 @@
 -module(m_copyright).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "model", "copyright_and_licensing", "metadata"]
+}).
 -moduledoc("
 Model for copyright and rights metadata helpers, including Creative Commons lists, rights statement lookup, and attribution/year values.
 

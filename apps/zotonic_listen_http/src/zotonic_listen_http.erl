@@ -18,6 +18,16 @@
 %% limitations under the License.
 
 -module(zotonic_listen_http).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "operator", "module", "routing_and_redirects", "http"]
+}).
+-moduledoc("
+Start and supervise Zotonic's HTTP and HTTPS listeners.
+
+Listener addresses, ports, protocol options, and TLS settings are read from
+the system configuration. Incoming requests are handed to Zotonic's HTTP
+request handler.
+").
 
 -behaviour(gen_server).
 

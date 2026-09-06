@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(action_admin_unlink).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "content_relationships", "edit"]
+}).
 -moduledoc("
 Remove an [edge](/id/doc_glossary#term-edge) between two [resources](/id/doc_glossary#term-resource). Used in the admin.
 
@@ -54,14 +57,7 @@ Other arguments:
 *   undo_message_id - defaults to unlink-undo-message
 
 After update, an undo message is rendered in the undo_message_id target, with the template `_action_unlink_undo.tpl`.
-
-Todo
-
-Extend documentation
-
-See also
-
-[link](/id/doc_template_action_action_link)").
+").
 -author("Marc Worrell <marc@worrell.nl").
 -include_lib("zotonic_core/include/zotonic.hrl").
 

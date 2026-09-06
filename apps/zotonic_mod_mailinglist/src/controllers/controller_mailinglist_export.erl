@@ -18,12 +18,11 @@
 %% limitations under the License.
 
 -module(controller_mailinglist_export).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "controller", "export_and_syndication", "export"]
+}).
 -moduledoc("
 Controller which downloads the given mailinglist id as a CSV file.
-
-Todo
-
-Extend documentation
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

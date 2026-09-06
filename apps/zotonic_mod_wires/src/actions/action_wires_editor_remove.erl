@@ -18,12 +18,11 @@
 %% limitations under the License.
 
 -module(action_wires_editor_remove).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "user_interface_and_interaction", "javascript"]
+}).
 -moduledoc("
 Remove any WYSIWYG editor controls from all textarea’s with the `z_editor` class in the target.
-
-Todo
-
-Extend documentation
 ").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([

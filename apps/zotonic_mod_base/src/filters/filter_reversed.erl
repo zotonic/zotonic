@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_reversed).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "collection", "transform"]
+}).
 -moduledoc("
 Reverse a list.
 
@@ -28,7 +31,7 @@ For example:
 {{ value|reversed }}
 ```
 
-When value is \\[“hello”, “world”\\] then the output is “worldhello”.
+When value is [“hello”, “world”] then the output is “worldhello”.
 
 The main use for this filter is to reverse lists of values or search results. There is no support for multi-byte unicode
 characters, this is only a problem when applying the filter directly to a string value.

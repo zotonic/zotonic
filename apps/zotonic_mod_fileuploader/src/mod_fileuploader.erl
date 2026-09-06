@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(mod_fileuploader).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "module", "file_uploads", "upload"]
+}).
 -moduledoc("
 Upload files using a parallel web worker.
 

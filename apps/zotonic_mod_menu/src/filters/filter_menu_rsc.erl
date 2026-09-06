@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_menu_rsc).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "navigation", "edit"]
+}).
 -moduledoc("
 Return the menu to be displayed with a resource.
 

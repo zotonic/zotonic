@@ -17,6 +17,24 @@
 %% limitations under the License.
 
 -module(filter_ip2geo).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "geolocation", "structured_data"]
+}).
+-moduledoc("
+Return geographic information associated with an IP address.
+
+The input can be a textual or tuple IP address. The result is a map supplied by
+the configured GeoIP database, or `undefined` when the address cannot be
+located.
+
+For example:
+
+```django
+{% with \"8.8.8.8\"|ip2geo as geo %}
+    {{ geo.country.iso_code }}
+{% endwith %}
+```
+").
 
 -export([
     ip2geo/2

@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_without_embedded_media).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "html", "render"]
+}).
 -moduledoc("
 Filter out media ids that are embedded in the `body`, `body_extra` and *text* blocks of your page.
 
@@ -41,10 +44,7 @@ There is an optional second argument to only consider media ids in the `body` an
     {% media media_id width=315 extent %}
 {% endfor %}
 ```
-
-See also
-
-[show_media](/id/doc_template_filter_filter_show_media), [embedded_media](/id/doc_template_filter_filter_embedded_media), [media_for_language](/id/doc_template_filter_filter_media_for_language)").
+").
 -export([
     without_embedded_media/3,
     without_embedded_media/4

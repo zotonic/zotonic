@@ -19,6 +19,9 @@
 %% limitations under the License.
 
 -module(mod_admin_predicate).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "site_administrator", "module", "content_relationships", "configure"]
+}).
 -moduledoc("
 Add support for editing [predicates](/id/doc_userguide_datamodel#guide-datamodel-edge-predicates) in the admin, by
 presenting a list of all defined predicates on `http://yoursite.com/admin/predicate`.

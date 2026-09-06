@@ -18,8 +18,11 @@
 %% limitations under the License.
 
 -module(filter_brlinebreaks).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "text", "format"]
+}).
 -moduledoc("
-Translate HTML `<br/\\>` elements into ASCII newlines (`\\n`).
+Translate HTML `<br/>` elements into ASCII newlines (`\\n`).
 
 The following string:
 
@@ -30,13 +33,9 @@ The following string:
 
 will evaluate to `foo\\nbar`.
 
-**Note:** Non-closing line breaks (`<br\\>`) are currently not converted.
-
-See also
-
-[linebreaksbr](/id/doc_template_filter_filter_linebreaksbr)").
+**Note:** Non-closing line breaks (`<br>`) are currently not converted.
+").
 -export([brlinebreaks/2]).
 
 brlinebreaks(S, Context) ->
     z_html:br2nl(z_convert:to_binary(S, Context)).
-

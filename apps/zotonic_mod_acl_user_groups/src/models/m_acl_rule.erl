@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_acl_rule).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "site_administrator", "model", "authorization_and_access_control", "authorize"]
+}).
 -moduledoc("
 Model for ACL rule inspection and helper checks in mod_acl_user_groups, including insert/move checks, upload limits, mime checks, and ACL state lookups.
 

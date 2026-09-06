@@ -19,6 +19,9 @@
 %% limitations under the License.
 
 -module(filter_language_dir).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "localization_and_translation", "language_code"]
+}).
 -moduledoc("
 Return `rtl` or `ltr` depening on the direction of the language.
 
@@ -45,9 +48,6 @@ Example:
 
 It currently returns `rtl` for Arabic (`ar`), Farsi (`fa`) and Hebrew (`he`).
 
-See also
-
-[language](/id/doc_template_filter_filter_language), [is_rtl](/id/doc_template_filter_filter_is_rtl)
 ").
 -export([
     language_dir/2
@@ -75,4 +75,3 @@ is_rtl(LanguageCode) when is_binary(LanguageCode); is_atom(LanguageCode) ->
     z_language:is_rtl(LanguageCode);
 is_rtl(LanguageCode) ->
     is_rtl(z_convert:to_binary(LanguageCode)).
-

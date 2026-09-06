@@ -25,6 +25,9 @@
 %% /media/attachment/<filepath>
 
 -module(controller_file).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "controller", "file_storage", "http"]
+}).
 -moduledoc("
 Serve an uploaded-, resized- or library file.
 
@@ -98,9 +101,9 @@ are visible for new requests.
 CSS and JavaScript templates
 ----------------------------
 
-Note
-
+::: note
 `controller_file` replaces `controller_file_readonly` and `controller_lib`
+:::
 
 If a file with a lib or template root is not found, then the same filename with the addition of .tpl is checked. For
 example styles.css.tpl. If found then the template will be rendered against an empty site context. This means that, with
@@ -108,10 +111,7 @@ the current implementation, the template will not receive the current language, 
 the future.
 
 New in version 0.11.
-
-See also
-
-[controller_file_id](/id/doc_controller_controller_file_id), [lib](/id/doc_template_tag_tag_lib), [image](/id/doc_template_tag_tag_image), [image_url](/id/doc_template_tag_tag_image_url)").
+").
 -export([
     service_available/1,
     allowed_methods/1,

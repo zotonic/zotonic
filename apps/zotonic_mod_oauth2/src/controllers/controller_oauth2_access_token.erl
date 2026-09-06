@@ -18,10 +18,16 @@
 %% limitations under the License.
 
 -module(controller_oauth2_access_token).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "integrator", "controller", "authentication", "oauth_2_0"]
+}).
 -moduledoc("
-Todo
+Exchange OAuth 2.0 credentials for a bearer access token.
 
-Not yet documented.
+The JSON endpoint supports the `authorization_code` and `client_credentials`
+grant types. It validates the client id and secret, and for authorization codes
+also the code and redirect URI. Successful responses contain the token type,
+user id, user data, and `expires_in` when applicable.
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

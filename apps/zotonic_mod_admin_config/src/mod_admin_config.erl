@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(mod_admin_config).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "site_administrator", "module", "configuration", "configure"]
+}).
 -moduledoc("
 Add support for editing the site’s configuration values, as accessed through [m_config](/id/doc_model_model_config).
 
@@ -44,17 +47,6 @@ Here the module `mod_ssl_letsencrypt` lets you request a free certificate from t
 Email configuration
 -------------------
 
-See also
-
-[m_config](/id/doc_model_model_config)
-
-Configuration of outgoing email. This module provides a settings page via the admin menu System > Email configuration,
-where all email related settings are grouped.
-
-On this page it is possible to send a test email.
-
-Email modules like `zotonic_mod_mailgun` provide additional settings panels on this page. This is possible by adding a
-template with the name `_admin_config_email_panel.tpl`.
 
 Accepted Events
 ---------------

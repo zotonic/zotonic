@@ -18,12 +18,11 @@
 %% limitations under the License.
 
 -module(action_wires_editor_add).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "user_interface_and_interaction", "javascript"]
+}).
 -moduledoc("
 Add WYSIWYG editor controls to all textarea’s with the `z_editor` class in the target.
-
-Todo
-
-Extend documentation
 ").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([
@@ -33,4 +32,3 @@ Extend documentation
 render_action(_TriggerId, TargetId, Args, Context) ->
     CssSelector = z_render:css_selector(proplists:get_value(id, Args, TargetId), Args),
     {[ <<"z_editor_add(\"">>, z_utils:js_escape(CssSelector), $", $), $;], Context}.
-

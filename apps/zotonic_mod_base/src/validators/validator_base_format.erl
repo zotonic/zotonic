@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(validator_base_format).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_validator", "validate", "forms"]
+}).
 -moduledoc("
 Regular expression test.
 
@@ -50,10 +53,7 @@ Arguments
 | `pattern`         | The regular expression to match against.                                         | `pattern=\"[0-9][a-z]+\"`              |
 | `negate`          | Specify negate when you want to accept values that do not match the pattern.     | `negate`                             |
 | `failure_message` | Message to show when the input value does not match the pattern (or does match the pattern when the negate argument is given). Defaults to “Not valid.” | `failure_message=\"Invalid postcode\"` |
-
-See also
-
-[Forms and validation](/id/doc_developerguide_forms_and_validation#guide-validators)").
+").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_validator/5, validate/5]).
 

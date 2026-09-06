@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_language_sort_localized).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "localization_and_translation", "language_code"]
+}).
 -moduledoc("
 Sort a list of language codes or map with languages on their localized name in the currently selected language. This is
 useful for editorial interfaces where editors pick a language from a list.

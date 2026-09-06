@@ -18,6 +18,11 @@
 %% limitations under the License.
 
 -module(mod_cron).
+-moduledoc(#{
+    zotonic_keywords => [
+        "reference", "operator", "module", "scheduled_and_background_work", "background_task", "schedule"
+    ]
+}).
 -moduledoc("
 Provides periodic tick notifications and module-defined cron job scheduling.
 

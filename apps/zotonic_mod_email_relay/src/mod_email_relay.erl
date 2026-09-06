@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(mod_email_relay).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "operator", "module", "email_delivery", "send_and_receive"]
+}).
 -moduledoc("
 This module supports relaying email between Zotonic servers.
 
@@ -43,10 +46,7 @@ This module handles the following notifier callbacks:
 - `observe_email_sent`: If the sent email is a relayed email, then forward a delivery report using `z_db:q`.
 - `observe_email_status`: Forward blocking/unblocking of email addresses to the relaying Zotonic server using `m_config:get_boolean`.
 - `observe_tick_24h`: Run daily cleanup of relay queues and stale relay status records.
-
-See also
-
-[mod_email_receive](/id/doc_module_mod_email_receive), [E-mail handling](/id/doc_developerguide_email#guide-email).").
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Email Relay").
@@ -454,4 +454,3 @@ observe_tick_24h(tick_24h, Context) ->
 
 manage_schema(_Version, Context) ->
     m_email_relay:install(Context).
-

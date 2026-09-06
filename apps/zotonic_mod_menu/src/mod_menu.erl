@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(mod_menu).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "content_editor", "module", "navigation", "edit"]
+}).
 -moduledoc("
 Create nested navigation menus for your site.
 
@@ -59,11 +62,7 @@ Delegate callbacks:
 
 - `event/2` with `postback` messages: `ensure_hasmenupart`.
 - `event/2` with `postback_notify` messages: `<<\"menuedit\">>`.
-
-See also
-
-The filters [menu_flat](/id/doc_template_filter_filter_menu_flat),
-[menu_subtree](/id/doc_template_filter_filter_menu_subtree) and [menu_trail](/id/doc_template_filter_filter_menu_trail).").
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Menus").

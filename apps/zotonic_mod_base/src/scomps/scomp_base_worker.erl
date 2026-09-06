@@ -18,10 +18,21 @@
 %% limitations under the License.
 
 -module(scomp_base_worker).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "scomp", "messaging_and_pubsub", "mqtt"]
+}).
 -moduledoc("
-Todo
+Start a named Cotonic worker from a template.
 
-Not yet documented.
+The required `src` argument names the worker module. Optional `name`, `base`,
+and `args` arguments set the worker name, Cotonic base worker, and JSON-encoded
+startup arguments. The generated script uses the request's CSP nonce.
+
+For example:
+
+```django
+{% worker src=\"js/my-worker.js\" name=\"example\" args=worker_args %}
+```
 ").
 
 -behaviour(zotonic_scomp).

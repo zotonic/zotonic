@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_unescape).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "html", "security"]
+}).
 -moduledoc("
 Removes HTML escaping from a text.
 
@@ -33,10 +36,7 @@ Title: {{ m.rsc[id].title|unescape }}
 ```
 
 Be careful that you only use this filter when you are absolutely sure that the output is not used in HTML or XML.
-
-See also
-
-[escape](/id/doc_template_filter_filter_escape), [force_escape](/id/doc_template_filter_filter_force_escape)").
+").
 -export([unescape/2]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -47,4 +47,3 @@ unescape(#trans{} = Tr, Context) ->
     unescape(z_trans:lookup_fallback(Tr, Context), Context);
 unescape(In, _Context) ->
 	z_html:unescape(In).
-

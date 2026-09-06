@@ -18,12 +18,11 @@
 %% limitations under the License.
 
 -module(action_wires_slide_toggle).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "user_interface_and_interaction", "javascript"]
+}).
 -moduledoc("
 Toggle an element by sliding it up and down.
-
-Todo
-
-Extend documentation
 ").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).

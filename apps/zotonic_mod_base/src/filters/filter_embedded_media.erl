@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_embedded_media).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "html", "render"]
+}).
 -moduledoc("
 Fetch media ids that are embedded in the `body`, `body_extra` and *text* blocks of your page.
 
@@ -50,10 +53,7 @@ You can also fetch all media ids embedded in a text:
     {% media media_id width=315 extent %}
 {% endfor %}
 ```
-
-See also
-
-[show_media](/id/doc_template_filter_filter_show_media), [without_embedded_media](/id/doc_template_filter_filter_without_embedded_media), [media_for_language](/id/doc_template_filter_filter_media_for_language)").
+").
 -export([
     embedded_media/2,
     embedded_media/3

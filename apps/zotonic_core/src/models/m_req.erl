@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_req).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "model", "http", "structured_data"]
+}).
 -moduledoc("
 This model gives access to the request variables from within a template.
 

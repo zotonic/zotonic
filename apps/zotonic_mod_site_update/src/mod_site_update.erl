@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(mod_site_update).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "operator", "module", "site_management", "migrate"]
+}).
 -moduledoc("
 This module pulls updates of a site‘s code from a remote version control system. The supported version control systems
 are git and mercurial.
@@ -48,7 +51,7 @@ The URL for GitHub et al is:
 https://yoursite.test/api/model/site_update/post/webhook/<token>
 ```
 
-Where `<token\\>` should be replaced with your configured token.
+Where `<token>` should be replaced with your configured token.
 
 The token is saved in the config key `mod_site_update.webhook_token`.
 
@@ -215,4 +218,3 @@ notice(SiteName, Text) ->
 %             Vcs = [ {SiteName, has_vcs(SiteName)} || SiteName <- Sites ],
 %             [{vcs, Vcs}, {vcs_zotonic, has_vcs()} | Vars]
 %     end.
-

@@ -18,14 +18,17 @@
 %% limitations under the License.
 
 -module(filter_format_dispatch_controller_option).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "development_and_debugging", "monitor"]
+}).
 -moduledoc("
 Format dispatch controller options.
 
 See [mod_development](/id/doc_module_mod_development)
 
-Todo
-
-Not yet documented.
+The filter formats a controller option as escaped HTML for the development
+dispatch-rule inspector. Important options such as `id`, `acl`, and `template`
+receive distinct label styles. Internal source-location options are omitted.
 ").
 -export([
     format_dispatch_controller_option/2,
@@ -65,4 +68,3 @@ format_option(Value, Context) ->
 
 pprint(Something, Context) ->
     filter_pprint:pprint(Something, Context).
-

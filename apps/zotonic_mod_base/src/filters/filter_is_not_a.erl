@@ -19,6 +19,9 @@
 %% limitations under the License.
 
 -module(filter_is_not_a).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "boolean", "compare"]
+}).
 -moduledoc("
 is_not_a mirrors [is_a](/id/doc_template_filter_filter_is_a). It is particularly useful when iterating over a
 category and excluding members of a sub-category (iterating over all images associated with a page except images in the
@@ -32,10 +35,7 @@ Example for looping over all media in a rsc but excluding the thumbnail resource
 ...
 {% endfor %}
 ```
-
-See also
-
-[is_a](/id/doc_template_filter_filter_is_a), [is_visible](/id/doc_template_filter_filter_is_visible), [filter](/id/doc_template_filter_filter_filter)").
+").
 -export([is_not_a/3, is_not_a/4]).
 
 

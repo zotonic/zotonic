@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(scomp_wires_validate).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "scomp", "forms", "validate"]
+}).
 -moduledoc("
 The validator tag accepts the following arguments:
 
@@ -35,10 +38,6 @@ The validator tag accepts the following arguments:
 | `wait`             | Time in msec to wait for validation after the last keystroke. Default: 0.        | `wait=100`                              |
 | `only_on_submit`   | Whether the validation should be done when entering data or only on submit of the form. Set this to suppress validation when entering data. | `only_on_submit`                      |
 
-See also
-
-*   the list of [Validators](/id/template_validator#validators)
-*   [Forms and validation](/id/doc_developerguide_forms_and_validation#guide-validators) in the Developer Guide
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

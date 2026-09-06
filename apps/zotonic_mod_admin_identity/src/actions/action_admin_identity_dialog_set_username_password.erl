@@ -18,13 +18,12 @@
 %% limitations under the License.
 
 -module(action_admin_identity_dialog_set_username_password).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "identity_and_accounts", "edit"]
+}).
 -moduledoc("
 Show a dialog for setting a username / password on the given [resource](/id/doc_glossary#term-resource) (which is
 usually a person).
-
-Todo
-
-Extend documentation
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

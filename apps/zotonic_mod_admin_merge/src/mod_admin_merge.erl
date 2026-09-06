@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(mod_admin_merge).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "content_editor", "module", "content_authoring", "edit"]
+}).
 -moduledoc("
 Adds functonality to merge two pages together into a single page.
 

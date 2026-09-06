@@ -18,12 +18,11 @@
 %% limitations under the License.
 
 -module(action_wires_effect).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "user_interface_and_interaction", "javascript"]
+}).
 -moduledoc("
 Add a `$(..).effect` jQuery call to the target element.
-
-Todo
-
-Extend documentation
 ").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).

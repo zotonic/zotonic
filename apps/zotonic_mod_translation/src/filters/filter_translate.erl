@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_translate).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "localization_and_translation", "translated_text"]
+}).
 -moduledoc("
 Translates a (English) value to the current language or the given language.
 
@@ -41,10 +44,7 @@ An example with a specific language:
 ```
 
 The output would be `\"Annuleer\"`.
-
-See also
-
-[translation](/id/doc_template_filter_filter_translation)").
+").
 -export([
     translate/2,
     translate/3

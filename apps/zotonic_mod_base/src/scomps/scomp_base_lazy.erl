@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(scomp_base_lazy).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "scomp", "user_interface_and_interaction", "render"]
+}).
 -moduledoc("
 Custom tag which adds a ‘loader’ image to the page and performs a one-time action when loader comes into view.
 

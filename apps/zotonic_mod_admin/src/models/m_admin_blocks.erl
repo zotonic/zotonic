@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_admin_blocks).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "model", "content_authoring", "user_interface_and_interaction"]
+}).
 -moduledoc("
 Model for listing editable content blocks for a resource in the admin interface.
 

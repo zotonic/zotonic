@@ -18,12 +18,11 @@
 %% limitations under the License.
 
 -module(action_admin_dialog_delete_rsc).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "content_authoring", "edit"]
+}).
 -moduledoc("
 Open a dialog to confirm the deletion of a [resource](/id/doc_glossary#term-resource).
-
-Todo
-
-Extend documentation
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

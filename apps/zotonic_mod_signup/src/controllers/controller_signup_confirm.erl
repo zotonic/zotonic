@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(controller_signup_confirm).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "controller", "identity_and_accounts", "create"]
+}).
 -moduledoc("
 Controller which displays the confirmation page where the user can confirm his signup.
 

@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_is_defined).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "boolean", "compare"]
+}).
 -moduledoc("
 Tests if a value is defined.
 
@@ -32,10 +35,7 @@ For example:
 ```
 
 When the value is “foo” then the output “The value was defined”.
-
-See also
-
-[is_undefined](/id/doc_template_filter_filter_is_undefined), [if_undefined](/id/doc_template_filter_filter_if_undefined), [if](/id/doc_template_filter_filter_if)").
+").
 -export([is_defined/2]).
 
 

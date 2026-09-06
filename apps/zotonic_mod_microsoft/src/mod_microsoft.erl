@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(mod_microsoft).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "integrator", "module", "api_and_integration", "oauth_2_0"]
+}).
 -moduledoc("
 Adds logon using the Microsoft identity platform.
 

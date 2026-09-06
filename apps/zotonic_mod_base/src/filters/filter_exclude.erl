@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_exclude).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "collection", "query"]
+}).
 -moduledoc("
 Filters a list on the value of a property, either on absence or inequality.
 
@@ -81,10 +84,7 @@ Below is another example of inversely filtering a list:
 ```
 
 The example above filters against a search result and returns only elements whose `name` **is not** “page_home_gallery”.
-
-See also
-
-[is_visible](/id/doc_template_filter_filter_is_visible), [is_a](/id/doc_template_filter_filter_is_a), [filter](/id/doc_template_filter_filter_filter)").
+").
 -export([
 	exclude/3,
 	exclude/4
@@ -110,4 +110,3 @@ exclude(In, Prop, Value, Context) ->
 
 find_value(Prop, Elt, Context) ->
     z_template_compiler_runtime:find_value(Prop, Elt, #{}, Context).
-

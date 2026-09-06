@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_sum).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "collection", "number", "transform"]
+}).
 -moduledoc("
 Sum a list of numbers.
 

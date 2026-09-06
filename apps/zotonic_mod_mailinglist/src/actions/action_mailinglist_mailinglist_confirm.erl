@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(action_mailinglist_mailinglist_confirm).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "mailing_lists", "send_and_receive"]
+}).
 -moduledoc("
 Confirm a mailinglist subscription. Required argument is the `confirm_key`.
 
@@ -25,10 +28,6 @@ Other arguments:
 
 *   `on_success` - actions which get executed when the subscription is confirmed.
 *   `on_error` - actions which get executed when the subscription fails (e.g. wrong confirm key).
-
-Todo
-
-Extend documentation
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

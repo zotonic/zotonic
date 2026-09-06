@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(controller_template).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "controller", "routing_and_redirects", "render"]
+}).
 -moduledoc("
 Show a template.
 
@@ -78,9 +81,6 @@ ACL options
 | `[{Action, Resource}]` | A list of checks to be performed, as above.                                      | `{acl, [{view, secret_page}, {update, 345}]}` |
 | `ignore`               | Don’t perform any access control checks. Be careful to add your own checks in the rendered template and all its included templates. | `{acl, ignore}`                                                           |
 
-See also
-
-[controller_page](/id/doc_controller_controller_page).
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

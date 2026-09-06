@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_add_year).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "date_and_time", "transform"]
+}).
 -moduledoc("
 Adds a year to a date. The value must be of the form `{{Y,M,D},{H,I,S}}`.
 
@@ -50,4 +53,3 @@ add_year(undefined, _N, _Context) ->
 	undefined;
 add_year(Date, N, _Context) ->
 	z_datetime:next_year(Date, N).
-

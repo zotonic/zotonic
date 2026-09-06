@@ -19,13 +19,12 @@
 %% limitations under the License.
 
 -module(action_wires_trigger_event).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "messaging_and_pubsub", "javascript"]
+}).
 -moduledoc("
 Trigger a named {% wire %} with an action. All args will be args to the named wire. The trigger’s `name` argument
 is the name of the wire.
-
-Todo
-
-Extend documentation
 ").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).
@@ -33,4 +32,3 @@ Extend documentation
 render_action(_TriggerId, _TargetId, Args, Context) ->
     Name = z_utils:js_escape(proplists:get_value(name, Args, "")),
     {[<<"z_event(\"">>,Name,<<"\", ">>, z_utils:js_object(Args), $), $;], Context}.
-

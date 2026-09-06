@@ -20,6 +20,9 @@
 
 
 -module(scomp_base_inplace_textbox).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "scomp", "content_authoring", "edit"]
+}).
 -moduledoc("
 Render a JS-aided inplace textbox.
 
@@ -30,9 +33,11 @@ Example:
 {% inplace_textbox value=\"def.val.\" delegate=\"my_resource\" hint=\"edit\" %}
 ```
 
-Todo
-
-Improve documentation
+Clicking the displayed value replaces it with a text input. Leaving the input,
+or pressing Enter, sends a postback to `delegate`. Use `tag` to set the
+postback message and `no_data_text` for the label shown when the value is empty.
+The `class_input`, `class_label`, `class_hint`, and `class_no_data` arguments
+customize the generated elements.
 ").
 -behaviour(zotonic_scomp).
 

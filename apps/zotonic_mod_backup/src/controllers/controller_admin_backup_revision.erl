@@ -18,12 +18,11 @@
 %% limitations under the License.
 
 -module(controller_admin_backup_revision).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "operator", "controller", "backup_and_restore", "schedule"]
+}).
 -moduledoc("
 Shows the admin backup revisions screen where you can see older version for a [resource](/id/doc_glossary#term-resource).
-
-Todo
-
-Extend documentation
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 
@@ -186,4 +185,3 @@ format_diff(A, B, Context) ->
                     maps:get(<<"data">>, A, undefined),
                     maps:get(<<"data">>, B, undefined),
                     Context).
-

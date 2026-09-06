@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(action_wires_reset).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "user_interface_and_interaction", "javascript"]
+}).
 -moduledoc("
 Resets the enclosing form, a specifically targeted form or the closest form to an element.
 

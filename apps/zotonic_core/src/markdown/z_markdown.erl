@@ -21,6 +21,7 @@
 
 -export([
     to_html/1,
+    to_html_document/1,
     to_markdown/1,
     to_markdown/2
 ]).
@@ -61,6 +62,23 @@ to_markdown(Html, Options) ->
     Html :: binary().
 to_html(Markdown) ->
     markdownz:to_binary(to_binary(Markdown)).
+
+%% @doc Convert a Markdown document to HTML while retaining optional front
+%% matter. The metadata source is kept raw so callers can select a decoder and
+%% apply their own schema.
+-spec to_html_document(Markdown) ->
+    {ok, markdownz:document(binary())} | {error, term(), term()}
+    when
+        Markdown :: unicode:chardata().
+to_html_document(Markdown) ->
+    case markdownz:split_document(to_binary(Markdown)) of
+        {ok, #{content := Content} = Document} ->
+            {ok, Document#{content := markdownz:to_binary(Content)}};
+        {error, _Kind, _Details} = Error ->
+            Error;
+        {incomplete, _Encoded, _Rest} = Error ->
+            Error
+    end.
 
 -spec to_binary(CharData) -> Binary when
     CharData :: unicode:chardata(),

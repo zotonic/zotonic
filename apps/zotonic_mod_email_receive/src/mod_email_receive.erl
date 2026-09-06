@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(mod_email_receive).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "integrator", "module", "email_receiving", "send_and_receive"]
+}).
 -moduledoc("
 Enables the Zotonic site to receive emails for the site’s users. The user’s email address is username@hostname,
 where the hostname is the hostname as configured in the [site’s config file](/id/doc_developerguide_sites#guide-site-anatomy).
@@ -37,10 +40,7 @@ This module handles the following notifier callbacks:
 - `observe_email_received`: Route incoming email to the recipient-specific module handler based on recipient address.
 
 Delegate callbacks:
-
-See also
-
-[mod_email_relay](/id/doc_module_mod_email_relay), [E-mail handling](/id/doc_developerguide_email#guide-email).").
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Email Receive Handler").
@@ -108,4 +108,3 @@ observe_email_received(#email_received{localpart=Recipient} = Received, Context)
 		undefined ->
 			undefined
 	end.
-

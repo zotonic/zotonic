@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_microsoft).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "integrator", "model", "api_and_integration", "oauth_2_0"]
+}).
 -moduledoc("
 Check with `useauth` if the authentication using the Microsoft identity platform is enabled and configured.
 

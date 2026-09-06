@@ -16,6 +16,9 @@
 %% limitations under the License.
 
 -module(filter_survey_result_column_values).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "surveys", "forms"]
+}).
 -moduledoc("
 Used by the survey module to add extra column values to the result editor.
 
@@ -33,10 +36,7 @@ Example usage:
 ```
 
 Where columns has been returned by the `#survey_result_columns{}` notification.
-
-See also
-
-[survey_result_columns](/id/doc_notification_survey_result_columns#survey-result-columns), [survey_result_column_values](/id/doc_notification_survey_result_column_values#survey-result-column-values)").
+").
 
 -export([
     survey_result_column_values/5

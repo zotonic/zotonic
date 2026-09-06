@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_date_range).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "date_and_time", "format"]
+}).
 -moduledoc("
 Show a date range.
 
@@ -73,10 +76,7 @@ Instead of the timezone, the following arguments are also accepted:
 *   `false` leave the timezone as is
 *   `undefined` leave the timezone as is
 *   a resource id (integer), set the timezone according to the tz property of the resource
-
-See also
-
-[date](/id/doc_template_filter_filter_date)").
+").
 -export([
 	date_range/3,
 	date_range/4
@@ -95,4 +95,3 @@ date_range([A, B], [WithDate, Sep, EqDate], Context) ->
         true -> [ filter_date:date(A, WithDate, Context), Sep, filter_date:date(B, EqDate, Context) ];
         false -> [ filter_date:date(A, WithDate, Context), Sep, filter_date:date(B, WithDate, Context) ]
     end.
-

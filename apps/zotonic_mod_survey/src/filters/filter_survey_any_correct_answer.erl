@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_survey_any_correct_answer).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "surveys", "forms"]
+}).
 -moduledoc("
 Determine if any answer of a question was correct. Used for showing results of thurstone test questions.
 ").
@@ -49,4 +52,3 @@ survey_any_correct_answer(Answer, Question, _Context) when is_list(Answer) ->
 member(A, A) -> true;
 member(A, L) when is_list(L) -> lists:member(A, L);
 member(_, _) -> false.
-

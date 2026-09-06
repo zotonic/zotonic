@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_ratelimit).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "operator", "model", "security", "performance"]
+}).
 -moduledoc("
 Model for exposing current ratelimit timeout information for the active request context.
 

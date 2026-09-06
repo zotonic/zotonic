@@ -19,6 +19,9 @@
 %% limitations under the License.
 
 -module(filter_length).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "collection", "query"]
+}).
 -moduledoc("
 Returns the length of the value.
 

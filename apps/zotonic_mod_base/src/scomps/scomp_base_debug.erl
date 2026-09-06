@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(scomp_base_debug).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "scomp", "development_and_debugging", "monitor"]
+}).
 -moduledoc("
 Shows which variables are assigned for use in the current template’s scope:
 
@@ -52,9 +55,6 @@ The debug scomp contains three buttons at the top right:
 
 There is also a resizer at the bottom right corner to resize the `debug` element horizontally.
 
-See also
-
-[print](/id/doc_template_tag_tag_print)
 ").
 -behaviour(zotonic_scomp).
 
@@ -107,4 +107,3 @@ get_key(K, Vars, _Context) ->
         {ok, _} = V ->
             V
     end.
-

@@ -18,10 +18,15 @@
 %% limitations under the License.
 
 -module(controller_keyserver_key).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "controller", "security", "http"]
+}).
 -moduledoc("
-Todo
+Publish the site's RSA encryption public key as JavaScript.
 
-Not yet documented.
+The response assigns a JSON Web Key-shaped object to
+`keyserver_public_encrypt_key`. The exponent and modulus are base64url encoded,
+and the public response may be cached for ten minutes.
 ").
 -author("Maas-Maarten Zeeman <maas@channel.me>").
 

@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(validator_base_confirmation).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_validator", "validate", "forms"]
+}).
 -moduledoc("
 Check if two inputs are the same.
 
@@ -43,10 +46,7 @@ Arguments
 | ----------------- | -------------------------------------------------------------------------------- | --------------------------------- |
 | `match`           | The id of the input field that should have the same value.                       | `match=\"field1\"`                  |
 | `failure_message` | Message to be shown when the two fields are unequal. Defaults to “Does not match.” | `failure_message=\"Please retry.\"` |
-
-See also
-
-[Forms and validation](/id/doc_developerguide_forms_and_validation#guide-validators)").
+").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_validator/5, validate/5]).
 

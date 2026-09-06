@@ -19,10 +19,16 @@
 %% limitations under the License.
 
 -module(controller_export_resource).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "integrator", "controller", "export_and_syndication", "export"]
+}).
 -moduledoc("
-Todo
+Stream one resource, or a resource-derived list, in a negotiated export format.
 
-Not yet documented.
+The resource is resolved from the controller or request `id`. Visibility,
+content type, filename, rows, and encoding can be customized with export
+notifications or an export module. If no fixed content type is configured, the
+controller advertises all formats supported by the export encoder.
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 
@@ -105,4 +111,3 @@ get_id(Context) ->
             RscId = m_rsc:rid(Id, Context),
             {RscId, z_context:set(id, {ok, RscId}, Context)}
     end.
-

@@ -18,12 +18,11 @@
 %% limitations under the License.
 
 -module(action_admin_modules_module_toggle).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "module_management", "configure"]
+}).
 -moduledoc("
 Activate/deactivate a module in the module manager in the admin interface.
-
-Todo
-
-Extend documentation
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

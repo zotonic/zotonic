@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_sub_hour).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "date_and_time", "transform"]
+}).
 -moduledoc("
 Subtracts an hour from a date. The value must be of the form `{{Y,M,D},{H,I,S}}`.
 
@@ -40,10 +43,7 @@ For example:
 ```
 
 When the value is `{{2008,12,10},{15,30,0}}` then the output is `{{2008,12,10},{12,30,0}}`.
-
-See also
-
-[add_hour](/id/doc_template_filter_filter_add_hour), [sub_day](/id/doc_template_filter_filter_sub_day), [sub_week](/id/doc_template_filter_filter_sub_week), [sub_month](/id/doc_template_filter_filter_sub_month), [sub_year](/id/doc_template_filter_filter_sub_year)").
+").
 -export([sub_hour/2, sub_hour/3]).
 
 sub_hour(undefined, _Context) ->
@@ -55,4 +55,3 @@ sub_hour(undefined, _N, _Context) ->
 	undefined;
 sub_hour(Date, N, _Context) ->
 	z_datetime:prev_hour(Date, N).
-

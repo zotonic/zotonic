@@ -22,6 +22,9 @@
 %% limitations under the License.
 
 -module(mod_linkedin).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "integrator", "module", "api_and_integration", "oauth_2_0"]
+}).
 -moduledoc("
 The mod_linkedin module plugs into the [authentication system](/id/doc_developerguide_access_control#guide-authentication)
 to enable LinkedIn login on your site.
@@ -33,9 +36,6 @@ Configuration
 admin interface to enter your LinkedIn app ID and secret. Enable LinkedIn login by checking the ‘Use LinkedIn authentication’ box.
 This will add a ‘Log in with LinkedIn’ button to the logon form on your site.
 
-See also
-
-*   [mod_facebook](/id/doc_module_mod_facebook)
 
 Accepted Events
 ---------------
@@ -114,4 +114,3 @@ get_config(Context) ->
       z_convert:to_list(m_config:get_value(mod_linkedin, appsecret, Context)),
       ?LINKEDIN_SCOPE
     }.
-

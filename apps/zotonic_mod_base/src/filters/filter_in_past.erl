@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_in_past).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "date_and_time", "compare"]
+}).
 -moduledoc("
 Tests if a date is in the past.
 
@@ -32,10 +35,7 @@ For example:
 ```
 
 This outputs “Those days have gone.” if the value is a date and in the past.
-
-See also
-
-[in_future](/id/doc_template_filter_filter_in_future)").
+").
 -export([in_past/2]).
 
 
@@ -46,5 +46,4 @@ in_past({{_,_,_}, {_,_,_}} = DateTime, _Context) ->
 	DateTime < erlang:universaltime();
 in_past(_, _Context) ->
 	undefined.
-
 

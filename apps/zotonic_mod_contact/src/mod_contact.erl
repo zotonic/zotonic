@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(mod_contact).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "content_editor", "module", "forms", "email"]
+}).
 -moduledoc("
 Implements a basic contact form, which gets emailed to the configuration value `mod_contact.email`, when submitted.
 Contact form module handling form submission, validation, and delivery to configured recipients.

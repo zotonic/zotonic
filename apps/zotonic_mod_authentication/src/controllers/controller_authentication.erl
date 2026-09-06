@@ -18,12 +18,16 @@
 %% limitations under the License.
 
 -module(controller_authentication).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "controller", "authentication", "authenticate"]
+}).
 -moduledoc("
 This controller manages all authentication cookies. It is called by the `auth` model in the browser.
 
-Todo
-
-Not yet documented.
+It accepts POST requests and dispatches commands including logon, logoff,
+session refresh, automatic-logon configuration, password changes and resets,
+user switching, one-time tokens, and authentication status. Responses use the
+same JSON, UBF, or BERT representation negotiated by the request.
 ").
 
 -author("Marc Worrell <marc@worrell.nl>").
@@ -735,4 +739,3 @@ auth_postcheck(UserId, QueryArgs, Context) when is_map(QueryArgs) ->
         ok -> ok;
         Error -> Error
     end.
-

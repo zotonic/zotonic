@@ -19,6 +19,9 @@
 
 
 -module(filter_filter_by).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "collection", "query"]
+}).
 -moduledoc("
 Filter a list of items based on a property value and optional predicate.
 
@@ -87,12 +90,7 @@ Works seamlessly with Zotonic resources:
 ```
 
 If the input is undefined, the filter returns undefined.
-
-See also
-
-[filter](/id/doc_template_filter_filter_filter),
-[exclude](/id/doc_template_filter_filter_exclude),
-and [extract](/id/doc_template_filter_filter_extract)").
+").
 
 -export([filter_by/3, filter_by/4, filter_by/5]).
 
@@ -196,4 +194,3 @@ normalize_builtin_predicate(between) -> between;
 normalize_builtin_predicate(in) -> in;
 normalize_builtin_predicate(not_in) -> not_in;
 normalize_builtin_predicate(_) -> eq.
-

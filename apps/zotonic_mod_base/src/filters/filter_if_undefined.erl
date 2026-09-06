@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_if_undefined).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "boolean", "compare"]
+}).
 -moduledoc("
 Tests whether a value is undefined, returning the given argument.
 
@@ -36,11 +39,7 @@ For example:
 If the value is `undefined`, the output will be “The value is true or undefined”.
 
 Alias for [default_if_none](/id/doc_template_filter_filter_default_if_none).
-
-See also
-
-[default](/id/doc_template_filter_filter_default), [is_defined](/id/doc_template_filter_filter_is_defined),
-[is_undefined](/id/doc_template_filter_filter_is_undefined), [if](/id/doc_template_filter_filter_if)").
+").
 -export([if_undefined/3]).
 
 if_undefined(V, Default, Context) ->

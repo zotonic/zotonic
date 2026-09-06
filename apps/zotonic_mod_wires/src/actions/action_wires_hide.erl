@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(action_wires_hide).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "user_interface_and_interaction", "javascript"]
+}).
 -moduledoc("
 Hide an element without any animation.
 
@@ -29,13 +32,7 @@ Example:
 ```
 
 Hides the element with id “myid” when the button is clicked.
-
-See also
-
-actions [toggle](/id/doc_template_action_action_toggle), [show](/id/doc_template_action_action_show),
-[fade_in](/id/doc_template_action_action_fade_in), [fade_out](/id/doc_template_action_action_fade_out),
-[slide_down](/id/doc_template_action_action_slide_down), [slide_up](/id/doc_template_action_action_slide_up),
-[slide_fade_in](/id/doc_template_action_action_slide_fade_in) and [slide_fade_out](/id/doc_template_action_action_slide_fade_out).").
+").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).
 

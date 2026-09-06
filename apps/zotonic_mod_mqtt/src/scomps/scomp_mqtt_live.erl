@@ -18,12 +18,15 @@
 %% limitations under the License.
 
 -module(scomp_mqtt_live).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "scomp", "messaging_and_pubsub", "mqtt"]
+}).
 -moduledoc("
 Live updating templates connected to [MQTT topics](/id/doc_module_mod_mqtt).
 
-Note
-
+::: note
 The live tag is provided by [mod_mqtt](/id/doc_module_mod_mqtt), which must be enabled.
+:::
 
 This tag renders templates that are automatically re-rendered after a publication to an MQTT topic.
 

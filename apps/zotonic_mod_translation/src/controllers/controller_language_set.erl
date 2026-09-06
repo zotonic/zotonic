@@ -18,13 +18,12 @@
 %% limitations under the License.
 
 -module(controller_language_set).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "controller", "localization_and_translation", "language_code"]
+}).
 -moduledoc("
 Controller which sets the language as given in the `code` argument, and redirects the user back to the page given in the
 `p` argument.
-
-Todo
-
-Extend documentation
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 
@@ -75,4 +74,3 @@ add_language(<<>>, Context) ->
     add_language(<<"/">>, Context);
 add_language(Url, Context) ->
     iolist_to_binary([$/, z_convert:to_binary(z_context:language(Context)), Url]).
-

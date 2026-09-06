@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_survey_page_options).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "surveys", "forms"]
+}).
 -moduledoc("
 Check the list of blocks and collect all options for that page.
 

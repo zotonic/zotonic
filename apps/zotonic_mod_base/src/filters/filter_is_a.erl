@@ -19,6 +19,9 @@
 %% limitations under the License.
 
 -module(filter_is_a).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "boolean", "compare"]
+}).
 -moduledoc("
 Filter a list of resource ids on category, or test if a single resource id belongs to a category.
 
@@ -68,10 +71,7 @@ This will list all collection members that are a person. While:
 ```
 
 Lists only the first three collection members that are a person.
-
-See also
-
-[is_not_a](/id/doc_template_filter_filter_is_not_a), [is_visible](/id/doc_template_filter_filter_is_visible), [filter](/id/doc_template_filter_filter_filter)").
+").
 -export([is_a/3, is_a/4]).
 
 is_a(Arg, Cat, Context) when not is_integer(Cat), not is_atom(Cat) ->

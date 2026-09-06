@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_match).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "text", "compare"]
+}).
 -moduledoc("
 Match a value with a regular expression.
 
