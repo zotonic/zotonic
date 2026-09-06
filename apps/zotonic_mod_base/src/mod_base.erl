@@ -92,6 +92,13 @@ This module handles the following notifier callbacks:
         },
         #{
             module => site,
+            key => ui_theme,
+            type => string,
+            default => "",
+            description => "Set to the 'auto', 'light' or 'dark' to fix the UI theme and remove the admin theme selector."
+        },
+        #{
+            module => site,
             key => chart_palette,
             type => string,
             default => "",
