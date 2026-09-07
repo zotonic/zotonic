@@ -19,7 +19,7 @@
 
 -module(filter_is_visible).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "boolean", "compare"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "authorization_and_access_control", "collection", "query"]
 }).
 -moduledoc("
 Filter a list of resource ids so that only the visible ids remain.

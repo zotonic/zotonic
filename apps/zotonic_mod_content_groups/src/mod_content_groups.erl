@@ -18,7 +18,10 @@
 
 -module(mod_content_groups).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "site_administrator", "module", "authorization_and_access_control", "content_group"]
+    zotonic_keywords => [
+        "reference", "site_administrator", "module", "content_modeling",
+        "authorization_and_access_control", "content_group"
+    ]
 }).
 -moduledoc("
 Module for content group support and ACL-aware content group behavior.

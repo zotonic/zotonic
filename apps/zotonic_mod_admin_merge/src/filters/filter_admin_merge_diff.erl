@@ -19,7 +19,7 @@
 
 -module(filter_admin_merge_diff).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "content_authoring", "edit"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "content_authoring", "resource", "compare"]
 }).
 -moduledoc("
 Compare two resources and return a formatted list of their differences.

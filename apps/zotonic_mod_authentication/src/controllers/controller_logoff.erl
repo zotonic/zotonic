@@ -19,7 +19,7 @@
 
 -module(controller_logoff).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "controller", "authentication", "authenticate"]
+    zotonic_keywords => ["reference", "backend_developer", "controller", "authentication", "identity_and_accounts", "security"]
 }).
 -moduledoc("
 Controller that logs off a user, destroying the session. It also removes any “remember me” cookies the user has, so

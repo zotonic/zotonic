@@ -19,7 +19,9 @@
 
 -module(mod_filestore).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "operator", "module", "file_storage", "file_store", "reliability"]
+    zotonic_keywords => [
+        "reference", "operator", "module", "file_storage", "file_store", "file_uploads", "reliability"
+    ]
 }).
 -moduledoc("
 Support for storing uploaded and generated images and documents on external services.

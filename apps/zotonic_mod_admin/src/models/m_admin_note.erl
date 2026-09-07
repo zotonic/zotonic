@@ -19,7 +19,7 @@
 
 -module(m_admin_note).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "model", "content_authoring", "user_interface_and_interaction"]
+    zotonic_keywords => ["reference", "backend_developer", "model", "content_authoring", "metadata", "edit"]
 }).
 -moduledoc("
 Add an editorial note to any resource.

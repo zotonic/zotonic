@@ -19,7 +19,7 @@
 
 -module(m_rsc).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "model", "content_management", "resource"]
+    zotonic_keywords => ["reference", "backend_developer", "model", "content_management", "resource", "query"]
 }).
 -moduledoc("
 The main resource model, which is the central part of the [Zotonic data

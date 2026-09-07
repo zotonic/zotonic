@@ -14,7 +14,7 @@
 %% limitations under the License.
 -module(validator_base_page_path_unique).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_validator", "validate", "identifier"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_validator", "validate", "identifier", "url"]
 }).
 -moduledoc("
 A [validator](/id/doc_developerguide_forms_and_validation#guide-validators) to check whether a resource’s page path is unique:

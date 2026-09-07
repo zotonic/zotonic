@@ -19,7 +19,7 @@
 
 -module(action_wires_moreresults).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "user_interface_and_interaction", "javascript"]
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "search_and_discovery", "query", "javascript"]
 }).
 -moduledoc("
 Show more results of the current search query inline on the page.

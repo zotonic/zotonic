@@ -19,7 +19,7 @@
 
 -module(scomp_base_pager).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "scomp", "user_interface_and_interaction", "render"]
+    zotonic_keywords => ["reference", "frontend_developer", "scomp", "search_and_discovery", "navigation", "render"]
 }).
 -moduledoc("
 Show a pager for search results.

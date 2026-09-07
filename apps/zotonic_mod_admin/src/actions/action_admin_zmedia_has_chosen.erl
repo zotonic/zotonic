@@ -17,7 +17,7 @@
 
 -module(action_admin_zmedia_has_chosen).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "media_management", "upload"]
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "content_authoring", "media_management", "edit"]
 }).
 -moduledoc("
 Used by the admin as a callback when a media file has been selected for insertion into the rich-text editor.

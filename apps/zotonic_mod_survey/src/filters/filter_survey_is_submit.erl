@@ -19,7 +19,7 @@
 
 -module(filter_survey_is_submit).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "surveys", "forms"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "surveys", "boolean", "compare"]
 }).
 -moduledoc("
 Check if the questions end with a question type that is a submit button.

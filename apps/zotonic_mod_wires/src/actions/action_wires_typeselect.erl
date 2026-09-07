@@ -19,7 +19,7 @@
 
 -module(action_wires_typeselect).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "search_and_discovery", "query"]
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "search_and_discovery", "query", "javascript"]
 }).
 -moduledoc("
 Show possible selections whilst typing.

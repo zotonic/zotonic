@@ -19,7 +19,7 @@
 
 -module(filter_is_number).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "number", "compare"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "number", "boolean", "compare"]
 }).
 -moduledoc("
 Test if a value is a number (integer or floating point):

@@ -20,7 +20,7 @@
 
 -module(filter_is_a).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "boolean", "compare"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "categorization", "boolean", "compare"]
 }).
 -moduledoc("
 Filter a list of resource ids on category, or test if a single resource id belongs to a category.

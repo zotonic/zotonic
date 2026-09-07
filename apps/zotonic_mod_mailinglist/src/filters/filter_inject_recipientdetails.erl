@@ -19,7 +19,7 @@
 
 -module(filter_inject_recipientdetails).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "mailing_lists", "send_and_receive"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "mailing_lists", "url", "transform"]
 }).
 -moduledoc("
 Adds recipient query string details to hyperlinks.

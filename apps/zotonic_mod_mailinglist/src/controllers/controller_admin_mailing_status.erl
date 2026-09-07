@@ -19,7 +19,7 @@
 
 -module(controller_admin_mailing_status).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "controller", "mailing_lists", "send_and_receive"]
+    zotonic_keywords => ["reference", "backend_developer", "controller", "mailing_lists", "monitor", "query"]
 }).
 -moduledoc("
 This controller shows the mailing status of a [resource](/id/doc_glossary#term-resource). It lists each mailing list

@@ -19,7 +19,7 @@
 
 -module(filter_is_rtl).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "localization_and_translation", "language_code"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "localization_and_translation", "language_code", "boolean"]
 }).
 -moduledoc("
 Check if the given language is a rtl or ltr language.

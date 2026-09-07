@@ -19,7 +19,7 @@
 
 -module(m_mailinglist).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "model", "mailing_lists", "send_and_receive"]
+    zotonic_keywords => ["reference", "backend_developer", "model", "mailing_lists", "query", "schedule", "send_and_receive"]
 }).
 -moduledoc("
 Model for mailinglist operations and reporting, including recipient counts, delivery stats, subscriptions, and scheduled mailings.

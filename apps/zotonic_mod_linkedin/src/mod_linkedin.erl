@@ -23,7 +23,7 @@
 
 -module(mod_linkedin).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "integrator", "module", "api_and_integration", "oauth_2_0"]
+    zotonic_keywords => ["reference", "integrator", "module", "authentication", "api_and_integration", "oauth_2_0"]
 }).
 -moduledoc("
 The mod_linkedin module plugs into the [authentication system](/id/doc_developerguide_access_control#guide-authentication)

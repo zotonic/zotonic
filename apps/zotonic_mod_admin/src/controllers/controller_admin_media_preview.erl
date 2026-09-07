@@ -19,7 +19,7 @@
 
 -module(controller_admin_media_preview).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "controller", "media_management", "render"]
+    zotonic_keywords => ["reference", "backend_developer", "controller", "media_management", "image_management", "media_resource", "render"]
 }).
 -moduledoc("
 A controller for rendering preview thumbnails of any media embedded in a richtext-editor component of a

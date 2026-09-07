@@ -22,7 +22,7 @@
 
 -module(scomp_wires_sortable).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "scomp", "user_interface_and_interaction", "javascript"]
+    zotonic_keywords => ["reference", "frontend_developer", "scomp", "wire_action", "user_interface_and_interaction", "javascript"]
 }).
 -moduledoc("
 Mark an element as sortable.

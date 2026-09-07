@@ -19,7 +19,9 @@
 
 -module(mod_image_edit).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "content_editor", "module", "image_management", "edit"]
+    zotonic_keywords => [
+        "reference", "content_editor", "module", "image_management", "media_resource", "transform", "edit"
+    ]
 }).
 -moduledoc("
 Non destructive edits of images.

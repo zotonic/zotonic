@@ -19,7 +19,7 @@
 
 -module(validator_base_postback).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_validator", "validate", "forms"]
+    zotonic_keywords => ["reference", "frontend_developer", "backend_developer", "template_validator", "validate", "forms"]
 }).
 -moduledoc("
 Performs a custom server side validation of an input value. This allows you to add your own validation logic to HTML

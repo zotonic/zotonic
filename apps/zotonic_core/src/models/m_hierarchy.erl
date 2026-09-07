@@ -18,7 +18,7 @@
 
 -module(m_hierarchy).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "model", "content_modeling", "collection"]
+    zotonic_keywords => ["reference", "backend_developer", "model", "content_modeling", "resource", "collection", "query"]
 }).
 -moduledoc("
 The category hierarchy tables have been replaced by *m_hierarchy*. This model defines named hierarchies of resources (pages).

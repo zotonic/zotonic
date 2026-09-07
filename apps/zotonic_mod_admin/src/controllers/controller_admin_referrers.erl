@@ -19,7 +19,7 @@
 
 -module(controller_admin_referrers).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "controller", "content_authoring", "user_interface_and_interaction"]
+    zotonic_keywords => ["reference", "backend_developer", "controller", "content_relationships", "edge", "query"]
 }).
 -moduledoc("
 Shows the list of pages ([resources](/id/doc_glossary#term-resource)) which refer to this

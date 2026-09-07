@@ -1,6 +1,6 @@
 -module(filter_get_admin_url).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "site_management", "url"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "site_management", "routing_and_redirects", "url"]
 }).
 -moduledoc("
 Return the absolute administration URL for a Zotonic site.

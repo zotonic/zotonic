@@ -19,7 +19,7 @@
 
 -module(mod_fileuploader).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "module", "file_uploads", "upload"]
+    zotonic_keywords => ["reference", "frontend_developer", "module", "file_uploads", "javascript", "upload"]
 }).
 -moduledoc("
 Upload files using a parallel web worker.

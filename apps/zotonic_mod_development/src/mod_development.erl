@@ -20,7 +20,7 @@
 
 -module(mod_development).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "module", "development_and_debugging", "monitor"]
+    zotonic_keywords => ["reference", "backend_developer", "module", "development_and_debugging", "configure", "monitor"]
 }).
 -moduledoc("
 Presents various tools for development.

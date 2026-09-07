@@ -18,7 +18,10 @@
 
 -module(mod_acl_user_groups).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "site_administrator", "module", "authorization_and_access_control", "authorize"]
+    zotonic_keywords => [
+        "reference", "site_administrator", "module", "authorization_and_access_control",
+        "identity_and_accounts", "content_group", "authorize"
+    ]
 }).
 -moduledoc("
 This module adds rule-based access control.

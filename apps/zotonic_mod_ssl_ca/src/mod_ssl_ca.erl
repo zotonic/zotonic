@@ -19,7 +19,7 @@
 
 -module(mod_ssl_ca).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "operator", "module", "tls_and_certificates", "security"]
+    zotonic_keywords => ["reference", "operator", "module", "tls_and_certificates", "security", "configure"]
 }).
 -moduledoc("
 The mod_ssl_ca module adds support for using SSL certificates bought from a Certificate Authority.

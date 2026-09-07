@@ -19,7 +19,7 @@
 
 -module(action_wires_form_reset).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "forms", "validate"]
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "forms", "edit", "javascript"]
 }).
 -moduledoc("
 Resets the target form to its initial state.

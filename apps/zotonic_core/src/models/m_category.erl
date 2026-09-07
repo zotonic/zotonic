@@ -19,7 +19,7 @@
 
 -module(m_category).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "model", "categorization", "category"]
+    zotonic_keywords => ["reference", "backend_developer", "model", "categorization", "category", "query"]
 }).
 -moduledoc("
 This model can retrieve information about the resource category hierarchy in different ways.

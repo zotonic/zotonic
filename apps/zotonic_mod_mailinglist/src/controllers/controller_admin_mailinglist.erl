@@ -19,7 +19,7 @@
 
 -module(controller_admin_mailinglist).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "controller", "mailing_lists", "send_and_receive"]
+    zotonic_keywords => ["reference", "backend_developer", "controller", "mailing_lists", "query"]
 }).
 -moduledoc("
 This controller shows the mailing lists that are available in the system.

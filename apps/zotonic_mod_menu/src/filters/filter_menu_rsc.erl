@@ -19,7 +19,7 @@
 
 -module(filter_menu_rsc).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "navigation", "edit"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "navigation", "resource", "query"]
 }).
 -moduledoc("
 Return the menu to be displayed with a resource.

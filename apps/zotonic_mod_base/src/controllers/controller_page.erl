@@ -21,7 +21,7 @@
 
 -module(controller_page).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "controller", "routing_and_redirects", "render"]
+    zotonic_keywords => ["reference", "backend_developer", "controller", "routing_and_redirects", "resource", "html", "render"]
 }).
 -moduledoc("
 Show a rsc as a HTML page.

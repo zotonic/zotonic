@@ -19,7 +19,7 @@
 
 -module(mod_email_receive).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "integrator", "module", "email_receiving", "send_and_receive"]
+    zotonic_keywords => ["reference", "integrator", "module", "email_receiving", "email", "parse", "send_and_receive"]
 }).
 -moduledoc("
 Enables the Zotonic site to receive emails for the site’s users. The user’s email address is username@hostname,

@@ -14,7 +14,7 @@
 %% limitations under the License.
 -module(validator_base_name_unique).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_validator", "validate", "identifier"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_validator", "validate", "resource", "identifier"]
 }).
 -moduledoc("
 A [validator](/id/doc_developerguide_forms_and_validation#guide-validators) to check whether a resource’s name is unique:

@@ -19,7 +19,9 @@
 
 -module(mod_comment).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "content_editor", "module", "comments_and_community", "edit"]
+    zotonic_keywords => [
+        "reference", "content_editor", "module", "comments_and_community", "forms", "create", "edit"
+    ]
 }).
 -moduledoc("
 Implements a basic commenting system, enabling commenting on [resources](/id/doc_glossary#term-resource).

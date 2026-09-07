@@ -19,7 +19,9 @@
 
 -module(mod_import_csv).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "integrator", "module", "import_and_migration", "interoperability", "import"]
+    zotonic_keywords => [
+        "reference", "integrator", "module", "import_and_migration", "structured_data", "parse", "import"
+    ]
 }).
 -moduledoc("
 Module which adds “import CSV” button to the admin status screen.

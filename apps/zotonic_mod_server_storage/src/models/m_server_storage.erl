@@ -19,7 +19,7 @@
 
 -module(m_server_storage).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "model", "data_processing_and_formatting", "structured_data"]
+    zotonic_keywords => ["reference", "backend_developer", "model", "structured_data", "query", "edit"]
 }).
 -moduledoc("
 Model to access the server side storage of data.

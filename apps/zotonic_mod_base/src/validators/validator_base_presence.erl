@@ -19,7 +19,7 @@
 
 -module(validator_base_presence).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_validator", "validate", "forms"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_validator", "validate", "forms", "boolean"]
 }).
 -moduledoc("
 Check if an input has been filled in or checked.

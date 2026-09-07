@@ -20,7 +20,7 @@
 
 -module(scomp_survey_poll).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "scomp", "surveys", "render"]
+    zotonic_keywords => ["reference", "frontend_developer", "scomp", "surveys", "forms", "render"]
 }).
 -moduledoc("
 Show a given survey (with the `id` parameter) as a “poll”. This presents a simpler interface, in which the user is

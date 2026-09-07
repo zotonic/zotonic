@@ -19,7 +19,7 @@
 
 -module(validator_admin_identity_username_unique).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_validator", "validate", "identifier"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_validator", "validate", "identity_and_accounts", "identifier"]
 }).
 -moduledoc("
 Check if an entered username is unique, by looking in the [m_identity](/id/doc_model_model_identity) table for the

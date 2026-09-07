@@ -19,7 +19,7 @@
 
 -module(filter_translate).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "localization_and_translation", "translated_text"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "localization_and_translation", "translated_text", "render"]
 }).
 -moduledoc("
 Translates a (English) value to the current language or the given language.

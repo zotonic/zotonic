@@ -20,7 +20,7 @@
 
 -module(m_content_group).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "site_administrator", "model", "authorization_and_access_control", "content_group"]
+    zotonic_keywords => ["reference", "site_administrator", "model", "authorization_and_access_control", "content_group", "query"]
 }).
 -moduledoc("
 Model for content-group checks, currently exposing whether a content group is in use.

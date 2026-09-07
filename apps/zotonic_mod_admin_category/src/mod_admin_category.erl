@@ -19,7 +19,7 @@
 
 -module(mod_admin_category).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "site_administrator", "module", "categorization", "configure"]
+    zotonic_keywords => ["reference", "site_administrator", "module", "categorization", "category", "configure"]
 }).
 -moduledoc("
 ::: note

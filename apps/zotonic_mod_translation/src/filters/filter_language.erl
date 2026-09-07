@@ -19,7 +19,7 @@
 
 -module(filter_language).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "localization_and_translation", "language_code"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "localization_and_translation", "language_code", "query"]
 }).
 -moduledoc("
 Return the language the resource (or translated text) will be displayed in.

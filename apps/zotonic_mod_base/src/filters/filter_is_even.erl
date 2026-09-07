@@ -19,7 +19,7 @@
 
 -module(filter_is_even).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "number", "compare"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "number", "boolean", "compare"]
 }).
 -moduledoc("
 Test if an integer value is even:

@@ -19,7 +19,7 @@
 
 -module(validator_admin_identity_email_unique).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_validator", "validate", "email"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_validator", "validate", "email", "identity_and_accounts"]
 }).
 -moduledoc("
 Check if an entered e-mail address is unique, by looking in the [m_identity](/id/doc_model_model_identity) table for

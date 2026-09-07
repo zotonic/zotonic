@@ -19,7 +19,7 @@
 
 -module(action_authentication_auth_disconnect).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "authentication", "authenticate"]
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "authentication", "identity_and_accounts", "edit"]
 }).
 -moduledoc("
 Disconnect an external authentication identity from a resource.

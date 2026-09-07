@@ -19,7 +19,7 @@
 
 -module(filter_survey_as_pages).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "surveys", "forms"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "surveys", "collection", "transform"]
 }).
 -moduledoc("
 Split the page blocks into pages, prepare them for easy display in the survey question editor.

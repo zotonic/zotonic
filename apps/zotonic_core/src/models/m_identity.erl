@@ -20,7 +20,7 @@
 
 -module(m_identity).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "model", "identity_and_accounts", "identifier"]
+    zotonic_keywords => ["reference", "backend_developer", "model", "identity_and_accounts", "identifier", "query"]
 }).
 -moduledoc("
 The m_identity model manages usernames and other user identities.

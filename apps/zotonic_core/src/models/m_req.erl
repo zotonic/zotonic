@@ -19,7 +19,7 @@
 
 -module(m_req).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "model", "http", "structured_data"]
+    zotonic_keywords => ["reference", "frontend_developer", "backend_developer", "model", "http", "structured_data", "query"]
 }).
 -moduledoc("
 This model gives access to the request variables from within a template.

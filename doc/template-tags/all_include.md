@@ -3,7 +3,8 @@ keywords:
   - reference
   - frontend_developer
   - template
-  - module_management
+  - module
+  - maintainability
   - render
 ---
 

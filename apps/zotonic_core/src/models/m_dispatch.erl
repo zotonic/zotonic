@@ -19,7 +19,7 @@
 
 -module(m_dispatch).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "model", "routing_and_redirects", "dispatch_rule"]
+    zotonic_keywords => ["reference", "backend_developer", "model", "routing_and_redirects", "dispatch_rule", "url"]
 }).
 -moduledoc("
 Dispatch or generate URLs or page paths. Useful to check dispatch rules or for client side code to dispatch page paths.

@@ -19,7 +19,9 @@
 
 -module(mod_signup).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "module", "identity_and_accounts", "create"]
+    zotonic_keywords => [
+        "reference", "backend_developer", "module", "identity_and_accounts", "authentication", "forms", "create"
+    ]
 }).
 -moduledoc("
 This module presents an interface for letting users register themselves.

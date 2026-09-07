@@ -19,7 +19,7 @@
 
 -module(filter_ne_day).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "date_and_time", "compare"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "date_and_time", "boolean", "compare"]
 }).
 -moduledoc("
 Tests if two dates are not equal.

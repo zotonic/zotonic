@@ -20,7 +20,7 @@
 
 -module(mod_custom_redirect).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "site_administrator", "module", "routing_and_redirects", "configure"]
+    zotonic_keywords => ["reference", "site_administrator", "module", "routing_and_redirects", "url", "configure"]
 }).
 -moduledoc("
 Enables redirects from unknown hosts and paths to other locations. The other location can be a known path or another web site.

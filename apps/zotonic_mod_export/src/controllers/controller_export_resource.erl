@@ -20,7 +20,7 @@
 
 -module(controller_export_resource).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "integrator", "controller", "export_and_syndication", "export"]
+    zotonic_keywords => ["reference", "integrator", "controller", "export_and_syndication", "resource", "http", "export"]
 }).
 -moduledoc("
 Stream one resource, or a resource-derived list, in a negotiated export format.

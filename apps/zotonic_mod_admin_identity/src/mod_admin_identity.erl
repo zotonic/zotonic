@@ -19,7 +19,7 @@
 
 -module(mod_admin_identity).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "site_administrator", "module", "identity_and_accounts", "edit"]
+    zotonic_keywords => ["reference", "site_administrator", "module", "identity_and_accounts", "authentication", "edit"]
 }).
 -moduledoc("
 Provides identity management in the admin - for example the storage of usernames and passwords.
@@ -537,4 +537,3 @@ search({users, QArgs}, _OffsetLimit, Context) ->
       };
 search(_, _, _) ->
     undefined.
-

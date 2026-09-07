@@ -19,7 +19,9 @@
 
 -module(mod_import_wordpress).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "integrator", "module", "import_and_migration", "interoperability", "migrate"]
+    zotonic_keywords => [
+        "reference", "integrator", "module", "import_and_migration", "api_and_integration", "structured_data", "migrate"
+    ]
 }).
 -moduledoc("
 Import WordPress .wxr files in your site.

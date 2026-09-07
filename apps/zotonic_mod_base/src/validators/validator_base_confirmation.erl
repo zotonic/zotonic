@@ -19,7 +19,7 @@
 
 -module(validator_base_confirmation).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_validator", "validate", "forms"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_validator", "validate", "forms", "compare"]
 }).
 -moduledoc("
 Check if two inputs are the same.

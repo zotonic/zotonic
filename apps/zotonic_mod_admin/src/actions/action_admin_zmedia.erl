@@ -19,7 +19,7 @@
 
 -module(action_admin_zmedia).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "media_management", "upload"]
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "content_authoring", "media_management", "edit"]
 }).
 -moduledoc("
 Used for triggering the insertion of a media item in the TinyMCE editor in the admin.

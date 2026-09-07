@@ -4,7 +4,7 @@ keywords:
   - frontend_developer
   - template
   - javascript
-  - parse
+  - text
 ---
 
 Make a literal section which does not interpret tags.

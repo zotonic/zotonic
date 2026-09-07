@@ -19,7 +19,9 @@
 
 -module(mod_wires).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "module", "user_interface_and_interaction", "javascript"]
+    zotonic_keywords => [
+        "reference", "frontend_developer", "module", "user_interface_and_interaction", "javascript", "wire_action", "scomp"
+    ]
 }).
 -moduledoc("
 Actions, tags (also known as screen components), and javascript for user interfaces using *wires*.

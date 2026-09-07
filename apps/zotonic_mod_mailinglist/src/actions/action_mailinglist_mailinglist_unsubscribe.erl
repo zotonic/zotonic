@@ -19,7 +19,7 @@
 
 -module(action_mailinglist_mailinglist_unsubscribe).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "mailing_lists", "send_and_receive"]
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "mailing_lists", "edit"]
 }).
 -moduledoc("
 Cancel a mailing list subscription. The recipient id is given with the `id` argument.

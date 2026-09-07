@@ -19,7 +19,7 @@
 
 -module(filter_urlize).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "url", "serialize"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "url", "html", "render"]
 }).
 -moduledoc("
 Find urls in the given input and make them clickable.

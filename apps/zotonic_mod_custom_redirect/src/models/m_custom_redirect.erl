@@ -19,7 +19,7 @@
 
 -module(m_custom_redirect).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "site_administrator", "model", "routing_and_redirects", "configure"]
+    zotonic_keywords => ["reference", "site_administrator", "model", "routing_and_redirects", "query"]
 }).
 -moduledoc("
 Model for custom redirect records, exposing redirect list and individual redirect lookup by id.

@@ -19,7 +19,7 @@
 
 -module(filter_eq_day).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "date_and_time", "compare"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "date_and_time", "boolean", "compare"]
 }).
 -moduledoc("
 Tests if the value is a date and equal to the argument. The value and the argument must be a tuple of the format

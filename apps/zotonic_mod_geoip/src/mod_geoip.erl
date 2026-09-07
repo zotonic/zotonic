@@ -18,7 +18,7 @@
 
 -module(mod_geoip).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "integrator", "module", "geolocation", "http"]
+    zotonic_keywords => ["reference", "integrator", "module", "geolocation", "query"]
 }).
 -moduledoc("
 Used to map IP addresses to geographical locations.

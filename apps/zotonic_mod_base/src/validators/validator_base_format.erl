@@ -19,7 +19,7 @@
 
 -module(validator_base_format).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_validator", "validate", "forms"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_validator", "validate", "text", "compare"]
 }).
 -moduledoc("
 Regular expression test.

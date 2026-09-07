@@ -19,7 +19,7 @@
 
 -module(filter_sum).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "collection", "number", "transform"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "collection", "number", "query"]
 }).
 -moduledoc("
 Sum a list of numbers.

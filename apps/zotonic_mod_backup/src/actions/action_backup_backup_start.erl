@@ -17,7 +17,7 @@
 
 -module(action_backup_backup_start).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "backup_and_restore", "schedule"]
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "backup_and_restore", "export"]
 }).
 -moduledoc("
 Action which starts a manual backup.

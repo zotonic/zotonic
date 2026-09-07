@@ -20,7 +20,7 @@
 
 -module(m_oauth2).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "integrator", "model", "authentication", "oauth_2_0"]
+    zotonic_keywords => ["reference", "integrator", "model", "api_and_integration", "authorization_and_access_control", "oauth_2_0"]
 }).
 -moduledoc("
 Model for OAuth2 app/client/token administration and user token listings.

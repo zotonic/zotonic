@@ -19,7 +19,7 @@
 
 -module(m_template).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "model", "template", "render"]
+    zotonic_keywords => ["reference", "frontend_developer", "backend_developer", "model", "template", "render"]
 }).
 -moduledoc("
 Model for dynamic template rendering. It renders a template path passed in the request path and returns the rendered template output.

@@ -21,7 +21,9 @@
 
 -module(mod_search).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "module", "search_and_discovery", "pivot_index", "query"]
+    zotonic_keywords => [
+        "reference", "backend_developer", "module", "search_and_discovery", "pivot_index", "database", "query"
+    ]
 }).
 -moduledoc("
 mod_search implements various ways of searching through the main resource table using [m_search](/id/doc_model_model_search).

@@ -19,7 +19,7 @@
 
 -module(action_admin_dialog_duplicate_rsc).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "content_authoring", "edit"]
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "content_authoring", "resource", "create"]
 }).
 -moduledoc("
 Open a dialog to duplicate the current [resource](/id/doc_glossary#term-resource) with a new id and title.

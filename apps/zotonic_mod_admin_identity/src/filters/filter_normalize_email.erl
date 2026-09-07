@@ -19,7 +19,7 @@
 
 -module(filter_normalize_email).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "email", "validate"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "email", "transform"]
 }).
 -moduledoc("
 Normalize an email address, used in the identity management.

@@ -284,7 +284,7 @@ Return:
 %% The accumulator is the list of headers to be set.
 %% Type: foldl
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "security", "http"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "resource", "metadata", "http"]
 }).
 -doc("
 Let all modules add resource specific response headers to the request. The accumulator is the list of headers to be set.
@@ -337,6 +337,16 @@ Return:
 
 %% 'module_ready' - Sent when modules have changed, z_module_indexer reindexes all modules' templates, actions etc.
 %% Type: notify_sync
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "module_management", "module", "monitor"]
+}).
+-doc("
+Signals that the active modules or their indexed templates, actions, models, and other components have changed.
+
+Type:
+
+[notify_sync](/id/doc_developerguide_notifications#notification-notify-sync)
+").
 -callback observe_module_ready(module_ready, z:context()) -> any().
 -callback pid_observe_module_ready(pid(), module_ready, z:context()) -> any().
 
@@ -520,7 +530,7 @@ Return:
 %% Type: first
 %% Identity may be undefined, or is an identity used for the verification.
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "identity_and_accounts", "authenticate"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "identity_and_accounts", "send_and_receive"]
 }).
 -doc("
 Request to send a verification to the user. Return ok or an error. Handled by mod_signup to send out verification
@@ -553,7 +563,7 @@ Return:
 %% to call the m_identity model for this type/key.
 %% Type: notify
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "identity_and_accounts", "authenticate"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "identity_and_accounts", "edit"]
 }).
 -doc("
 Notify that a user’s identity has been verified. Signals to modules handling identities to mark this identity as
@@ -579,7 +589,7 @@ Return:
 %% Check if passwords are matching. Uses the password hashing algorithms.
 %% Type: first
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "identity_and_accounts", "authenticate"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "identity_and_accounts", "security", "compare"]
 }).
 -doc("
 Check if passwords are matching. Uses the password hashing algorithms.
@@ -604,7 +614,7 @@ Return:
 %% Notify that a user's identity has been updated by the identity model.
 %% Type: notify
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "identity_and_accounts", "authenticate"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "identity_and_accounts", "edit"]
 }).
 -doc("
 Notify that a user’s identity has been updated by the identity model.
@@ -876,7 +886,7 @@ Return:
 %% Notify that the session's language has been changed
 %% Type: notify
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "localization_and_translation", "translated_text"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "localization_and_translation", "language_code", "edit"]
 }).
 -doc("
 Notify that the session’s language has been changed
@@ -899,7 +909,7 @@ Return:
 %% Set the language of the context to a user's prefered language
 %% Type: first
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "localization_and_translation", "translated_text"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "localization_and_translation", "language_code", "edit"]
 }).
 -doc("
 Set the language of the context to a user’s prefered language
@@ -1045,7 +1055,7 @@ Return:
 %% Used in the admin to fetch the possible blocks for display
 %% Type: foldl
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "content_authoring", "edit"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "content_authoring", "structured_data", "query"]
 }).
 -doc("
 Used in the admin to fetch the possible blocks for display
@@ -1080,7 +1090,7 @@ Return:
 %% Used in the admin to process a submitted resource form's query args.
 %% Type: foldl
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "content_authoring", "edit"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "content_authoring", "forms", "edit"]
 }).
 -doc("
 Used in the admin to process a submitted resource form
@@ -1112,7 +1122,7 @@ Return:
 %% Type: foldl
 %% Return: list of admin menu items
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "content_authoring", "edit"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "navigation", "module", "query"]
 }).
 -doc("
 Used for fetching the menu in the admin.
@@ -1171,7 +1181,7 @@ you are free to add your own submenus.
 %% Fetch the menu id belonging to a certain resource.
 %% Type: first
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "navigation", "edit"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "navigation", "resource", "query"]
 }).
 -doc("
 Fetch the menu id belonging to a certain resource
@@ -1290,7 +1300,7 @@ Return:
 %% Notification sent to a site when e-mail for that site is received
 %% Type: first
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "email_delivery", "send_and_receive"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "email_receiving", "send_and_receive"]
 }).
 -doc("
 Notification sent to a site when e-mail for that site is received
@@ -1341,7 +1351,7 @@ Return:
 %% Check if an email address is blocked
 %% Type: first
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "email_delivery", "send_and_receive"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "email_delivery", "boolean", "validate"]
 }).
 -doc("
 Check if an email address is blocked
@@ -1365,7 +1375,7 @@ Return:
 %% and is not marked as bouncing.
 %% Type: first
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "email_delivery", "send_and_receive"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "email_delivery", "boolean", "validate"]
 }).
 -doc("
 Check if an email address is safe to send email to. The email address is not blocked and is not marked as bouncing.
@@ -1728,7 +1738,7 @@ Return:
 %% Save (and update) the complete category hierarchy
 %% Type: notify
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "categorization", "edit"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "categorization", "category", "edit"]
 }).
 -doc("
 Save (and update) the complete category hierarchy
@@ -1751,7 +1761,7 @@ Return:
 %% Save the menu tree of a menu resource
 %% Type: notify
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "navigation", "edit"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "navigation", "collection", "edit"]
 }).
 -doc("
 Save the menu tree of a menu resource
@@ -1775,7 +1785,7 @@ Return:
 %% Signal that the hierarchy underneath a resource has been changed by mod_menu
 %% Type: notify
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "categorization", "edit"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "navigation", "resource", "edit"]
 }).
 -doc("
 Signal that the hierarchy underneath a resource has been changed by mod_menu
@@ -1802,7 +1812,7 @@ Return:
 %% Used in a foldr with the read properties as accumulator.
 %% Type: foldr
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "content_management", "edit"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "content_management", "resource", "query"]
 }).
 -doc("
 Resource is read, opportunity to add computed fields Used in a foldr with the read properties as accumulator.
@@ -1831,7 +1841,7 @@ Return:
 %% associated data.
 %% Type: notify
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "content_management", "edit"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "content_management", "resource", "edit"]
 }).
 -doc("
 Resource will be deleted. This notification is part of the delete transaction, it’s purpose is to clean up associated data.
@@ -1857,7 +1867,7 @@ Return:
 %% the later insert, after escaping/filtering but before the #rsc_update{} notification below.
 %% Type: foldr
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "content_management", "edit"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "content_management", "resource", "create"]
 }).
 -doc("
 Foldr for a resource insert, these are the initial properties and will overrule the properties in the insert request.
@@ -1889,7 +1899,7 @@ proplist accumulator
 %% winner. The loser will be deleted.
 %% Type: notify_sync
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "content_management", "edit"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "content_management", "resource", "edit"]
 }).
 -doc("
 Map to signal merging two resources. Move any information from the loser to the winner. The loser will be deleted.
@@ -1919,7 +1929,7 @@ Return:
 %% Type: foldr
 %% Return: ``{ok, UpdateProps}`` or ``{error, term()}``
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "content_management", "edit"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "content_management", "resource", "edit"]
 }).
 -doc("
 An updated resource is about to be persisted. Observe this notification to change the resource properties before they
@@ -2002,7 +2012,7 @@ observe_rsc_update(#rsc_update{action = insert, id = Id}, {error, _} = Error, Co
 %% Type: notify
 %% Return: return value is ignored
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "content_management", "edit"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "content_management", "resource", "edit"]
 }).
 -doc("
 An updated resource has just been persisted. Observe this notification to execute follow-up actions for a resource update.
@@ -2071,7 +2081,7 @@ observe_rsc_update_done(#rsc_update_done{}, _Context) ->
 %% Type: first
 %% Return: {ok, Id} or {error, Reason}, return {error, badarg} when the data is corrupt.
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "media_management", "upload"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "media_management", "resource", "import"]
 }).
 -doc("
 Upload and replace the resource with the given data. The data is in the given format.
@@ -2299,7 +2309,7 @@ Return:
 %% Type: first
 %% Return: ``undefined``, ``false`` or a binary with a acceptable hostpath
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "html", "security"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "html", "url", "security"]
 }).
 -doc("
 Sanitize an embed url. The hostpart is of the format: `<<\"youtube.com/v...\">>`.
@@ -2502,7 +2512,7 @@ authenticated `#context{}` or `undefined`
 %% Initialize context with the access policy for the user.
 %% Type: first
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "authentication", "authenticate"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "authorization_and_access_control", "authenticate"]
 }).
 -doc("
 Initialize context with the access policy for the user.
@@ -2528,7 +2538,7 @@ updated `z:context()` or `undefined`
 %% Clear the associated access policy for the context.
 %% Type: first
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "authentication", "authenticate"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "authorization_and_access_control", "authenticate"]
 }).
 -doc("
 Clear the associated access policy for the context.
@@ -2668,7 +2678,7 @@ Return:
 %% Confirm a user id.
 %% Type: foldl
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "authentication", "authenticate"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "authentication", "identity_and_accounts", "authenticate"]
 }).
 -doc("
 Confirm a user id.
@@ -2697,7 +2707,7 @@ Return:
 % %% A user id has been confirmed.
 % %% Type: notify
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "authentication", "authenticate"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "authentication", "identity_and_accounts", "authenticate"]
 }).
 -doc("
 A user id has been confirmed.
@@ -2966,7 +2976,7 @@ Return:
 %%      Note that the request options are from the client and are unsafe.
 %% Type: foldl
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "authentication", "authenticate"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "authentication", "structured_data", "transform"]
 }).
 -doc("
 Update the given (accumulator) authentication options with the request options.
@@ -3000,7 +3010,7 @@ Return:
 %% Type: first
 %% Return: ``ok | {error, term()}``
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "authentication", "authenticate"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "authentication", "user_interface_and_interaction", "javascript"]
 }).
 -doc("
 Send a request to the client to login a user. The zotonic.auth.worker.js will
@@ -3037,7 +3047,7 @@ Return:
 %%      send a request to controller_authentication to perform the switch.
 %% Type: first
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "authentication", "authenticate"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "authentication", "user_interface_and_interaction", "javascript"]
 }).
 -doc("
 Send a request to the client to switch users. The zotonic.auth.worker.js will
@@ -3073,7 +3083,7 @@ Return:
 %% can be requested, think of 'contact' - to be able to contact someone.
 %% Type: foldl
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "authentication", "authenticate"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "authentication", "identity_and_accounts", "query"]
 }).
 -doc("
 Return the list of identity types that allow somebody to logon and become an active user of the system. Defaults to [
@@ -3106,7 +3116,7 @@ Return:
 %%      * auth_status - called on every authentication status poll
 %% Type: foldl
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "http", "validate"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "http", "structured_data", "transform"]
 }).
 -doc("
 Refresh the context or request process for the given request or action
@@ -3142,7 +3152,7 @@ Return:
 %%      dictionary.
 %% Type: foldl
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "http", "validate"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "http", "structured_data", "transform"]
 }).
 -doc("
 Refresh the context or request process for the given request or action
@@ -3211,7 +3221,7 @@ Return:
 %% Return ``true``, ``false`` or ``undefined``. If ``undefined`` is returned,
 %% the user is considered enabled if the user resource is published.
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "authorization_and_access_control", "authorize"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "authorization_and_access_control", "boolean", "authorize"]
 }).
 -doc("
 Check if a user is enabled. Enabled users are allowed to log in. Return `true`, `false` or `undefined`. If `undefined`
@@ -3235,7 +3245,7 @@ Return:
 %% Set #context fields depending on the user and/or the preferences of the user.
 %% Type: foldl
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "authorization_and_access_control", "authorize"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "authorization_and_access_control", "structured_data", "transform"]
 }).
 -doc("
 Set #context fields depending on the user and/or the preferences of the user.
@@ -3366,7 +3376,7 @@ Return:
 %% Normalize a text value for a search query.
 %% Type: first
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "search_and_discovery", "query"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "search_and_discovery", "text", "transform"]
 }).
 -doc("
 Normalize a search value for queries and indexing.
@@ -3398,7 +3408,7 @@ Return:
 %% created the edge.
 %% Type: notify
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "content_relationships", "edit"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "content_relationships", "edge", "edit"]
 }).
 -doc("
 An edge has been inserted. Note that the Context for this notification does not have the user who created the edge.
@@ -3428,7 +3438,7 @@ return value is ignored
 %% deleted the edge.
 %% Type: notify
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "content_relationships", "edit"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "content_relationships", "edge", "edit"]
 }).
 -doc("
 An edge has been deleted Note that the Context for this notification does not have the user who deleted the edge.
@@ -3484,7 +3494,7 @@ observe_edge_delete(#edge_delete{edge_id = Id}, Context) ->
 %% updated the edge.
 %% Type: notify
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "content_relationships", "edit"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "content_relationships", "edge", "edit"]
 }).
 -doc("
 An edge has been updated Note that the Context for this notification does not have the user who updated the edge.
@@ -3609,7 +3619,7 @@ Return:
 %% about resources.  The metadata is the result returned by z_url_metadata.
 %% Type: map
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "media_management", "import"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "media_management", "media_resource", "import"]
 }).
 -doc("
 Notification to translate or map a file after upload, before insertion into the database Used in mod_video to queue
@@ -3648,7 +3658,7 @@ modified `#media_upload_preprocess{}`
 %% medium record as it is inserted.
 %% Type: first
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "file_uploads", "upload"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "file_uploads", "media_resource", "transform"]
 }).
 -doc("
 Notification to translate or map a file after upload, before insertion into the database Used in mod_video to queue
@@ -3686,7 +3696,7 @@ modified `#media_upload_preprocess{}`
 %% The folded accumulator is the map with updated medium properties.
 %% Type: foldl
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "file_uploads", "upload"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "file_uploads", "media_resource", "edit"]
 }).
 -doc("
 Notification that a medium file has been uploaded. This is the moment to change properties, modify the file etc. The
@@ -3723,7 +3733,7 @@ modified medium properties map
 %% The folded accumulator is the map with updated resource properties.
 %% Type: foldl
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "file_uploads", "upload"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "file_uploads", "media_resource", "edit"]
 }).
 -doc("
 Notification that a medium file has been uploaded. This is the moment to change resource properties, modify the file
@@ -3762,7 +3772,7 @@ modified resource properties map
 %% record.
 %% Type: first
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "media_management", "import"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "media_management", "media_resource", "import"]
 }).
 -doc("
 Notification to import a medium record from external source. This is called for non-file medium records, for example
@@ -3797,7 +3807,7 @@ Return:
 %% The id is the resource id, medium contains the medium's property list.
 %% Type: notify
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "media_management", "edit"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "media_management", "media_resource", "edit"]
 }).
 -doc("
 Notification that a medium file has been changed (notify) The id is the resource id, medium contains the medium’s
@@ -3824,7 +3834,7 @@ return value is ignored
 %% Media update done notification. action is 'insert', 'update' or 'delete'
 %% Type: notify
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "media_management", "edit"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "media_management", "media_resource", "edit"]
 }).
 -doc("
 Media update done notification. action is ‘insert’, ‘update’ or ‘delete’
@@ -3891,7 +3901,7 @@ modified property list of image options
 %% that interface to external translation services like DeepL or Google Translate.
 %% Type: first
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "localization_and_translation", "translated_text"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "localization_and_translation", "translated_text", "api_and_integration", "send_and_receive"]
 }).
 -doc("
 Request a translation of a list of strings. The resulting translations must be in the same order as the request. This notification is handled by modules that interface to external translation services like DeepL or Google Translate. Return {ok, List} | {error, Reason} | undefined.
@@ -3925,7 +3935,7 @@ Return:
 %% to detect any language, even if the language is not enabled for the site.
 %% Type: first
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "localization_and_translation", "translated_text"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "localization_and_translation", "language_code", "parse"]
 }).
 -doc("
 Try to detect the language of a translation. Set is_editable_only to false to detect any language, even if the language is not enabled for the site. Return atom() | undefined.
@@ -3980,7 +3990,7 @@ return value is ignored
 %% Used to let modules inject extra javascript depending on the arguments of the {% script %} tag.
 %% Type: map
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "user_interface_and_interaction", "render"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "user_interface_and_interaction", "javascript", "render"]
 }).
 -doc("
 Add extra javascript with the {% script %} tag. (map) Used to let modules inject extra javascript depending on the
@@ -4116,7 +4126,7 @@ Return:
 %% ``<<"mime">>``, ``<<"width">>``, ``<<"height">>``, ``<<"orientation">>``
 %% Type: first
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "metadata", "parse"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "media_management", "media_resource", "metadata", "parse"]
 }).
 -doc("
 Try to identify a file, returning a map with file properties.
@@ -4149,7 +4159,7 @@ map with binary keys, especially `<<\"mime\">>`, `<<\"width\">>`, `<<\"height\">
 %% Try to find a filename extension for a mime type (example: ``<<".jpg">>``)
 %% Type: first
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "metadata", "parse"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "media_management", "identifier", "query"]
 }).
 -doc("
 Try to find a filename extension for a mime type (example: `<<\".jpg\">>`)
@@ -4183,7 +4193,7 @@ Extension (for example `<<\".png\">>`) or `undefined`
 %% set or if the media viewer is part of a direct DOM update.
 %% Type: first
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "media_management", "render"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "media_management", "media_resource", "html", "render"]
 }).
 -doc("
 Request to generate a HTML media viewer for a resource. The HTML data can not contain any Javascript, as it might be
@@ -4218,7 +4228,7 @@ Return:
 %% See if there is a 'still' image preview of a media item. (eg posterframe of a movie)
 %% Type: first
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "image_management", "transform"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "image_management", "media_resource", "query"]
 }).
 -doc("
 See if there is a ‘still’ image preview of a media item. (eg posterframe of a movie) Return:: `{ok, ResourceId}` or `undefined`
@@ -4289,7 +4299,7 @@ Return:
 %% Fetch list of handlers for survey submits.
 %% Type: foldr
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "surveys", "validate"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "surveys", "forms", "query"]
 }).
 -doc("
 Fetch list of handlers for survey submits.
@@ -4322,7 +4332,7 @@ list with tuples: `[ {handler_name, TitleForDisplay}, ... ]`
 %% A survey has been filled in and submitted.
 %% Type: first
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "surveys", "validate"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "surveys", "forms", "send_and_receive"]
 }).
 -doc("
 A survey has been filled in and submitted.
@@ -4394,7 +4404,7 @@ Return:
 %% Check if a question (page block) is a submitting question.
 %% Type: first
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "surveys", "validate"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "surveys", "boolean", "compare"]
 }).
 -doc("
 Check if a question (page block) is a submitting question.
@@ -4426,7 +4436,7 @@ Return:
 %% Type: foldl
 -doc(#{
     zotonic_keywords => [
-        "reference", "backend_developer", "notification", "surveys", "structured_data", "format"
+        "reference", "backend_developer", "notification", "surveys", "structured_data", "export", "format"
     ]
 }).
 -doc("
@@ -4468,7 +4478,7 @@ Return:
 %% Type: foldl
 -doc(#{
     zotonic_keywords => [
-        "reference", "backend_developer", "notification", "surveys", "structured_data", "format"
+        "reference", "backend_developer", "notification", "surveys", "structured_data", "export", "format"
     ]
 }).
 -doc("
@@ -4512,7 +4522,7 @@ Return:
 -doc(#{
     zotonic_keywords => [
         "reference", "backend_developer", "notification",
-        "data_processing_and_formatting", "structured_data", "database"
+        "database", "structured_data", "edit"
     ]
 }).
 -doc("
@@ -4540,7 +4550,7 @@ Return:
 -doc(#{
     zotonic_keywords => [
         "reference", "backend_developer", "notification",
-        "data_processing_and_formatting", "structured_data", "database"
+        "database", "structured_data", "query"
     ]
 }).
 -doc("
@@ -4567,7 +4577,7 @@ Return:
 -doc(#{
     zotonic_keywords => [
         "reference", "backend_developer", "notification",
-        "data_processing_and_formatting", "structured_data", "database"
+        "database", "structured_data", "edit"
     ]
 }).
 -doc("
@@ -4720,7 +4730,7 @@ Return:
 %% mod_export - Check if the resource or dispatch is visible for export.
 %% Type: first
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "export_and_syndication", "export"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "export_and_syndication", "authorization_and_access_control", "export"]
 }).
 -doc("
 mod_export - Check if the resource or dispatch is visible for export.
@@ -4746,7 +4756,7 @@ Return:
 %% mod_export - Determine the mime type for the export.
 %% Type: first
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "export_and_syndication", "export"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "export_and_syndication", "metadata", "export"]
 }).
 -doc("
 mod_export - Determine the mime type for the export.
@@ -4776,7 +4786,7 @@ Return:
 %% mod_export - return the {ok, Filename} for the content disposition.
 %% Type: first
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "export_and_syndication", "export"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "export_and_syndication", "identifier", "export"]
 }).
 -doc("
 mod_export - return the {ok, Filename} for the content disposition.
@@ -4999,7 +5009,7 @@ Return:
 %% Determine the URL fetch options for fetching the content of an URL. Used by z_fetch.erl.
 %% Type: first
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "api_and_integration", "http"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "api_and_integration", "http", "url", "configure"]
 }).
 -doc("
 Determine the URL fetch options for fetching the content of an URL. Used by z_fetch.erl.
@@ -5031,7 +5041,7 @@ Return:
 %% Delegates the request processing.
 %% Type: foldl
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "api_and_integration", "http"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "api_and_integration", "http", "send_and_receive"]
 }).
 -doc("
 Delegates the request processing.
@@ -5059,6 +5069,16 @@ updated `z:context()`
 
 % Reload all template, modules etc. Triggered by manual request.
 % Type: notify
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "development_and_debugging", "module_management", "edit"]
+}).
+-doc("
+Reloads templates, modules, translations, and other indexed development files after a manual request.
+
+Type:
+
+[notify](/id/doc_developerguide_notifications#notification-notify)
+").
 -callback observe_development_reload(development_reload, z:context()) -> any().
 -callback pid_observe_development_reload(pid(), development_reload, z:context()) -> any().
 
@@ -5066,6 +5086,16 @@ updated `z:context()`
 
 % Perform a 'make' on Zotonic, reload all new beam files. Triggered by manual request.
 % Type: notify
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "development_and_debugging", "module_management", "configure"]
+}).
+-doc("
+Runs the development make process and reloads newly compiled BEAM files after a manual request.
+
+Type:
+
+[notify](/id/doc_developerguide_notifications#notification-notify)
+").
 -callback observe_development_make(development_make, z:context()) -> any().
 -callback pid_observe_development_make(pid(), development_make, z:context()) -> any().
 

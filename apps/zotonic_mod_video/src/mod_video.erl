@@ -19,7 +19,9 @@
 
 -module(mod_video).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "content_editor", "module", "video_management", "transform"]
+    zotonic_keywords => [
+        "reference", "content_editor", "module", "video_management", "media_management", "file_uploads", "transform"
+    ]
 }).
 -moduledoc("
 Adds support for viewing and handling video medium items.

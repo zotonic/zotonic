@@ -17,7 +17,7 @@
 
 -module(filter_survey_prepare_narrative).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "surveys", "forms"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "surveys", "text", "parse"]
 }).
 -moduledoc("
 Parse a survey narrative question into renderable text and input parts.

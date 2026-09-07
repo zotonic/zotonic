@@ -19,7 +19,7 @@
 
 -module(filter_survey_any_wrong_answer).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "surveys", "forms"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "surveys", "boolean", "compare"]
 }).
 -moduledoc("
 Determine if any answer of a question was wrong. Used for showing results of thurstone test questions.

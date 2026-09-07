@@ -19,7 +19,7 @@
 
 -module(filter_is_site_url).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "url", "parse"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "url", "boolean", "compare"]
 }).
 -moduledoc("
 Test if the given URL is a url for the current site.

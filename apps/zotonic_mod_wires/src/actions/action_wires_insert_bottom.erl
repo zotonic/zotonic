@@ -19,7 +19,7 @@
 
 -module(action_wires_insert_bottom).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "template", "render"]
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "template", "user_interface_and_interaction", "render"]
 }).
 -moduledoc("
 Inserts HTML after the contents of an HTML element.

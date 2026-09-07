@@ -19,7 +19,7 @@
 
 -module(controller_language_set).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "controller", "localization_and_translation", "language_code"]
+    zotonic_keywords => ["reference", "backend_developer", "controller", "localization_and_translation", "language_code", "routing_and_redirects", "edit"]
 }).
 -moduledoc("
 Controller which sets the language as given in the `code` argument, and redirects the user back to the page given in the

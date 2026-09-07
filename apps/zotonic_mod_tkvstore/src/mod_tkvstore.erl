@@ -22,7 +22,7 @@
 -module(mod_tkvstore).
 -moduledoc(#{
     zotonic_keywords => [
-        "reference", "backend_developer", "module", "data_processing_and_formatting", "database", "postgresql"
+        "reference", "backend_developer", "module", "database", "postgresql", "structured_data", "query"
     ]
 }).
 -moduledoc("

@@ -19,7 +19,7 @@
 
 -module(m_site_update).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "operator", "model", "site_management", "migrate"]
+    zotonic_keywords => ["reference", "operator", "model", "site_management", "security", "migrate"]
 }).
 -moduledoc("
 Model for checking if a site has version control enabled.

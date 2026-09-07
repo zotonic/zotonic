@@ -19,7 +19,7 @@
 
 -module(controller_mqtt_transport).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "controller", "messaging_and_pubsub", "mqtt"]
+    zotonic_keywords => ["reference", "backend_developer", "controller", "messaging_and_pubsub", "mqtt", "http", "send_and_receive"]
 }).
 -moduledoc("
 Controller for transport of MQTT data between the browser (client) and server.

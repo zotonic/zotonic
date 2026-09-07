@@ -19,7 +19,7 @@
 
 -module(filter_media_exif_value).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "metadata", "media_management"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "metadata", "media_management", "format"]
 }).
 -moduledoc("
 Formats EXIF values for display in templates.

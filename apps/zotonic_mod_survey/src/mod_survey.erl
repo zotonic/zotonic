@@ -19,7 +19,7 @@
 
 -module(mod_survey).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "content_editor", "module", "surveys", "forms"]
+    zotonic_keywords => ["reference", "content_editor", "module", "surveys", "forms", "export"]
 }).
 -moduledoc(<<"
 Adds survey [resources](/id/doc_glossary#term-resource): user-defined forms that

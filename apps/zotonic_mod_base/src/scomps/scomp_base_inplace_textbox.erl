@@ -21,7 +21,7 @@
 
 -module(scomp_base_inplace_textbox).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "scomp", "content_authoring", "edit"]
+    zotonic_keywords => ["reference", "frontend_developer", "scomp", "content_authoring", "user_interface_and_interaction", "edit"]
 }).
 -moduledoc("
 Render a JS-aided inplace textbox.

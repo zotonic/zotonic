@@ -19,7 +19,7 @@
 
 -module(action_wires_editor_add).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "user_interface_and_interaction", "javascript"]
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "content_authoring", "edit", "javascript"]
 }).
 -moduledoc("
 Add WYSIWYG editor controls to all textarea’s with the `z_editor` class in the target.

@@ -19,7 +19,7 @@
 
 -module(validator_base_custom).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_validator", "validate", "forms"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_validator", "validate", "forms", "javascript"]
 }).
 -moduledoc("
 Support for custom client-side (JavaScript-based) validators.

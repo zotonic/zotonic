@@ -19,7 +19,7 @@
 
 -module(controller_oauth2_service_authorize).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "integrator", "controller", "authentication", "oauth_2_0"]
+    zotonic_keywords => ["reference", "integrator", "controller", "api_and_integration", "authentication", "oauth_2_0"]
 }).
 -moduledoc("
 Start an OAuth login with an external identity provider.

@@ -24,7 +24,9 @@
 
 -module(mod_cookie_consent).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "site_administrator", "module", "privacy_and_consent", "privacy"]
+    zotonic_keywords => [
+        "reference", "site_administrator", "module", "privacy_and_consent", "user_interface_and_interaction", "javascript", "privacy"
+    ]
 }).
 -moduledoc("
 Wrap external content in such a way that it is only loaded if the user consented to the inclusion of the content (and

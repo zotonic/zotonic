@@ -18,7 +18,7 @@
 %% limitations under the License.
 -module(filter_menu_ids).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "navigation", "edit"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "navigation", "collection", "query"]
 }).
 -moduledoc("
 Returns all resource ids in a menu. Could return invisible and non existing resource ids. The returned ids are a flat

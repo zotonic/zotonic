@@ -19,7 +19,7 @@
 
 -module(controller_file_id).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "controller", "file_storage", "http"]
+    zotonic_keywords => ["reference", "backend_developer", "controller", "file_storage", "routing_and_redirects", "http"]
 }).
 -moduledoc("
 Redirect to the controller controller_file.

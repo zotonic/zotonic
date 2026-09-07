@@ -19,7 +19,7 @@
 
 -module(m_rsc_gone).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "model", "routing_and_redirects", "resource"]
+    zotonic_keywords => ["reference", "backend_developer", "model", "routing_and_redirects", "resource", "query"]
 }).
 -moduledoc("
 This model tracks deleted resources (see [m_rsc](/id/doc_model_model_rsc)). Its primary goal is to be able to

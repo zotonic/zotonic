@@ -17,7 +17,7 @@
 
 -module(scomp_base_loremipsum).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "scomp", "user_interface_and_interaction", "render"]
+    zotonic_keywords => ["reference", "frontend_developer", "scomp", "development_and_debugging", "text", "create", "render"]
 }).
 -moduledoc("
 Inserts a piece of “lorem ipsum” text into the page.

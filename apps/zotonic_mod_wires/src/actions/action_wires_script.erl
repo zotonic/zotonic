@@ -19,7 +19,7 @@
 
 -module(action_wires_script).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "user_interface_and_interaction", "javascript"]
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "javascript", "interoperability"]
 }).
 -moduledoc("
 This action executes JavaScript directly. It can be used to interface with non-Zotonic JavaScript libraries and functions.

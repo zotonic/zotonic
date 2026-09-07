@@ -19,7 +19,7 @@
 
 -module(scomp_wires_button).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "scomp", "user_interface_and_interaction", "javascript"]
+    zotonic_keywords => ["reference", "frontend_developer", "scomp", "wire_action", "user_interface_and_interaction", "javascript", "render"]
 }).
 -moduledoc("
 Makes a button with an action attached.

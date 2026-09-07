@@ -19,7 +19,7 @@
 
 -module(filter_menu_is_visible).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "navigation", "edit"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "navigation", "authorization_and_access_control", "query"]
 }).
 -moduledoc("
 Filters a list of menu items on visibility and existance. Only top-level menu items that are both visible and exist are

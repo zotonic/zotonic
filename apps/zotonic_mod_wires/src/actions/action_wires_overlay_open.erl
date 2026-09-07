@@ -19,7 +19,7 @@
 
 -module(action_wires_overlay_open).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "user_interface_and_interaction", "javascript"]
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "user_interface_and_interaction", "template", "javascript", "render"]
 }).
 -moduledoc("
 Renders a template on the server and opens a full screen overlay with the HTML output of the template.

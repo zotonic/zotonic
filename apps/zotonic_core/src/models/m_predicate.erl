@@ -19,7 +19,7 @@
 
 -module(m_predicate).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "model", "content_relationships", "predicate"]
+    zotonic_keywords => ["reference", "backend_developer", "model", "content_relationships", "predicate", "query"]
 }).
 -moduledoc("
 Retrieve information about predicates. Predicates are the labels on edges (connections between resources) that give

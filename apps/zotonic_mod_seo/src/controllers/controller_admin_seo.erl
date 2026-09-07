@@ -19,7 +19,7 @@
 
 -module(controller_admin_seo).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "controller", "search_engine_optimization", "metadata"]
+    zotonic_keywords => ["reference", "site_administrator", "controller", "search_engine_optimization", "metadata", "configure"]
 }).
 -moduledoc("
 Shows a form with settings related to Search Engine Optimization.

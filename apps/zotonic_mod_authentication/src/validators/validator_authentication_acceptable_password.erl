@@ -19,7 +19,7 @@
 
 -module(validator_authentication_acceptable_password).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_validator", "validate", "authentication"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_validator", "validate", "authentication", "security"]
 }).
 -moduledoc("
 A [validator](/id/doc_developerguide_forms_and_validation#guide-validators) to check whether a password conforms to the

@@ -19,7 +19,7 @@
 
 -module(filter_language_sort).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "localization_and_translation", "language_code"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "localization_and_translation", "language_code", "collection", "transform"]
 }).
 -moduledoc("
 Sort a list of language codes or map with languages on their sort key. Return a list of `{Code, LanguageProps}` pairs.

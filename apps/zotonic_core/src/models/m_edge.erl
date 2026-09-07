@@ -19,7 +19,7 @@
 
 -module(m_edge).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "model", "content_relationships", "edge"]
+    zotonic_keywords => ["reference", "backend_developer", "model", "content_relationships", "edge", "query"]
 }).
 -moduledoc("
 Access information about page connections.

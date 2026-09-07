@@ -19,7 +19,7 @@
 
 -module(filter_menu_subtree).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "navigation", "edit"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "navigation", "collection", "query"]
 }).
 -moduledoc("
 Get the subtree of an id in a menu (if any).

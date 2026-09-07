@@ -19,7 +19,7 @@
 
 -module(filter_format_dispatch_controller_option).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "development_and_debugging", "monitor"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "development_and_debugging", "html", "format"]
 }).
 -moduledoc("
 Format dispatch controller options.

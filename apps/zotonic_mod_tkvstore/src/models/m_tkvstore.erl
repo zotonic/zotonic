@@ -19,7 +19,7 @@
 
 -module(m_tkvstore).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "model", "data_processing_and_formatting", "structured_data"]
+    zotonic_keywords => ["reference", "backend_developer", "model", "database", "structured_data", "query"]
 }).
 -moduledoc("
 Simple read-only interface to the typed key-value store of [mod_tkvstore](/id/doc_module_mod_tkvstore). To get a value

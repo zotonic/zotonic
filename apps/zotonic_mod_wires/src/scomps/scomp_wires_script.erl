@@ -19,7 +19,7 @@
 
 -module(scomp_wires_script).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "scomp", "user_interface_and_interaction", "javascript"]
+    zotonic_keywords => ["reference", "frontend_developer", "scomp", "javascript", "render"]
 }).
 -moduledoc("
 This tag is the placeholder where all generated JavaScript scripts will be output on the page.

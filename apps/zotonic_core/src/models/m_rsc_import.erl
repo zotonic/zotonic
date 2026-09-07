@@ -19,7 +19,7 @@
 
 -module(m_rsc_import).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "model", "import_and_migration", "import"]
+    zotonic_keywords => ["reference", "backend_developer", "model", "import_and_migration", "resource", "import"]
 }).
 -moduledoc("
 Import model for resources exported by `m_rsc_export`.

@@ -19,7 +19,7 @@
 
 -module(m_modules).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "model", "module_management", "module"]
+    zotonic_keywords => ["reference", "backend_developer", "model", "module_management", "module", "query"]
 }).
 -moduledoc("
 Access information about which [modules](/id/doc_developerguide_modules#guide-modules) are installed and which ones are active.

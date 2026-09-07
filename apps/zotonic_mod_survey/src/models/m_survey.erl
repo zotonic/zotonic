@@ -19,7 +19,7 @@
 
 -module(m_survey).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "model", "surveys", "forms"]
+    zotonic_keywords => ["reference", "backend_developer", "model", "surveys", "forms", "query", "export"]
 }).
 -moduledoc("
 Model for survey reporting and participant state, including results, totals, per-user answers, exports, and result handlers.

@@ -20,7 +20,7 @@
 
 -module(mod_clamav).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "operator", "module", "malware_scanning", "security"]
+    zotonic_keywords => ["reference", "operator", "module", "malware_scanning", "file_uploads", "security"]
 }).
 -moduledoc("
 Uses `clamd` to scan all uploaded files for viruses.

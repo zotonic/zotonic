@@ -19,7 +19,7 @@
 
 -module(scomp_wires_validate).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "scomp", "forms", "validate"]
+    zotonic_keywords => ["reference", "frontend_developer", "scomp", "template_validator", "forms", "validate"]
 }).
 -moduledoc("
 The validator tag accepts the following arguments:

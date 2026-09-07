@@ -20,7 +20,7 @@
 
 -module(m_backup_revision).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "operator", "model", "backup_and_restore", "schedule"]
+    zotonic_keywords => ["reference", "operator", "model", "backup_and_restore", "resource", "metadata", "query"]
 }).
 -moduledoc("
 Model for resource revision backup metadata, including revision list/title retrieval and revision retention settings.

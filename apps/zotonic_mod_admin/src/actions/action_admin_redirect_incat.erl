@@ -19,7 +19,7 @@
 
 -module(action_admin_redirect_incat).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "content_authoring", "user_interface_and_interaction"]
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "routing_and_redirects", "categorization", "navigation"]
 }).
 -moduledoc("
 Redirect the admin editor to the next or previous resource in a category.

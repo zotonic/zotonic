@@ -19,7 +19,7 @@
 
 -module(mod_site_update).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "operator", "module", "site_management", "migrate"]
+    zotonic_keywords => ["reference", "operator", "module", "site_management", "database", "migrate"]
 }).
 -moduledoc("
 This module pulls updates of a site‘s code from a remote version control system. The supported version control systems

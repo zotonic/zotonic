@@ -6,7 +6,7 @@
 
 -module(action_wires_validation_error).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "forms", "validate"]
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "forms", "user_interface_and_interaction", "validate"]
 }).
 -moduledoc("
 Render a validation error on the target. Text is given in the text argument.

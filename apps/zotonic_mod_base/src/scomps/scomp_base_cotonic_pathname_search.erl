@@ -19,7 +19,7 @@
 
 -module(scomp_base_cotonic_pathname_search).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "scomp", "routing_and_redirects", "url"]
+    zotonic_keywords => ["reference", "frontend_developer", "scomp", "routing_and_redirects", "url", "serialize"]
 }).
 -moduledoc("
 Render the current dispatch `path_info` values as a URL query string.

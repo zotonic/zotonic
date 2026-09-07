@@ -17,7 +17,7 @@
 
 -module(filter_survey_result_column_values).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "surveys", "forms"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "surveys", "structured_data", "query"]
 }).
 -moduledoc("
 Used by the survey module to add extra column values to the result editor.

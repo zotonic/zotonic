@@ -19,7 +19,7 @@
 
 -module(action_mailinglist_mailinglist_confirm).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "mailing_lists", "send_and_receive"]
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "mailing_lists", "edit"]
 }).
 -moduledoc("
 Confirm a mailinglist subscription. Required argument is the `confirm_key`.

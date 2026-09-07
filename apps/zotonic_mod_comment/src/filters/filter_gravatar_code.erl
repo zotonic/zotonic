@@ -19,7 +19,7 @@
 
 -module(filter_gravatar_code).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "email", "validate"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "email", "identifier", "transform"]
 }).
 -moduledoc("
 Calculate the gravatar code for an e-mail address:

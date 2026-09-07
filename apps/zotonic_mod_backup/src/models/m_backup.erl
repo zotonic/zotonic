@@ -19,7 +19,7 @@
 
 -module(m_backup).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "operator", "model", "backup_and_restore", "schedule"]
+    zotonic_keywords => ["reference", "operator", "model", "backup_and_restore", "configure", "monitor"]
 }).
 -moduledoc("
 Model for backup configuration and operational status, including backup permissions, listing, directory, encryption settings, and active backup state.

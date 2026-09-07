@@ -19,7 +19,7 @@
 
 -module(m_mqtt_ticket).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "model", "user_interface_and_interaction", "html"]
+    zotonic_keywords => ["reference", "backend_developer", "model", "messaging_and_pubsub", "mqtt", "http", "security"]
 }).
 -moduledoc("
 A ticketing system for out of band MQTT posts via HTTP.

@@ -20,7 +20,7 @@
 
 -module(filter_is_user).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "boolean", "compare"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "identity_and_accounts", "resource", "boolean"]
 }).
 -moduledoc("
 Test if a resource is a user.

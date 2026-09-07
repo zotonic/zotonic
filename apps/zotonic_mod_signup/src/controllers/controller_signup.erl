@@ -19,7 +19,7 @@
 
 -module(controller_signup).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "controller", "identity_and_accounts", "create"]
+    zotonic_keywords => ["reference", "backend_developer", "controller", "identity_and_accounts", "authentication", "forms", "create"]
 }).
 -moduledoc("
 Controller which displays a form to sign up (rendered from `signup.tpl`).

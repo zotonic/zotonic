@@ -17,7 +17,7 @@
 
 -module(controller_website_redirect).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "controller", "routing_and_redirects", "http"]
+    zotonic_keywords => ["reference", "backend_developer", "controller", "routing_and_redirects", "resource", "url", "http"]
 }).
 -moduledoc("
 This controller does a redirect to the `website` property of the given [resource](/id/doc_glossary#term-resource).

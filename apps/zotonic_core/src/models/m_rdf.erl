@@ -20,7 +20,7 @@
 -module(m_rdf).
 -moduledoc(#{
     zotonic_keywords => [
-        "reference", "backend_developer", "model", "structured_data", "rdf_and_linked_data", "json_ld", "semantic_web"
+        "reference", "backend_developer", "model", "resource", "structured_data", "rdf_and_linked_data", "json_ld", "semantic_web"
     ]
 }).
 -moduledoc("

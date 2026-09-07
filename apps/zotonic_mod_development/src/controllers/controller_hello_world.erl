@@ -19,7 +19,7 @@
 
 -module(controller_hello_world).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "controller", "development_and_debugging", "monitor"]
+    zotonic_keywords => ["reference", "backend_developer", "controller", "development_and_debugging", "text", "render"]
 }).
 -moduledoc("
 Simple controller that always serves the string `Hello, World!`

@@ -19,7 +19,7 @@
 
 -module(filter_mailinglist_recipient_key_decode).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "mailing_lists", "send_and_receive"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "mailing_lists", "identifier", "parse"]
 }).
 -moduledoc("
 Used on the mailing list subscriptions page where users and recipients can unsubscribe from mailinglists.

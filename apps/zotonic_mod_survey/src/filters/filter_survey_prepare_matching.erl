@@ -17,7 +17,7 @@
 
 -module(filter_survey_prepare_matching).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "surveys", "forms"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "surveys", "structured_data", "transform"]
 }).
 -moduledoc("
 Prepare the items and options of a survey matching question for rendering.

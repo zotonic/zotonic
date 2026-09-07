@@ -19,7 +19,7 @@
 
 -module(action_wires_insert_before).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "template", "render"]
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "template", "user_interface_and_interaction", "render"]
 }).
 -moduledoc("
 Insert the result of a render action before an HTML element.

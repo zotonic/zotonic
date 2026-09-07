@@ -19,7 +19,7 @@
 
 -module(filter_truncate_html).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "html", "render"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "html", "text", "transform"]
 }).
 -moduledoc("
 Truncate a HTML text to a maximum length.

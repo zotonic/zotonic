@@ -19,7 +19,7 @@
 
 -module(controller_api).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "controller", "api_and_integration", "http"]
+    zotonic_keywords => ["reference", "backend_developer", "controller", "api_and_integration", "authorization_and_access_control", "http"]
 }).
 -moduledoc("
 `controler_api` processes authorized REST API requests: It provides an easy way to create API calls to allow computer programs to perform functions on your Zotonic site.

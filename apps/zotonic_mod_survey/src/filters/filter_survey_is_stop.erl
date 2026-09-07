@@ -19,7 +19,7 @@
 
 -module(filter_survey_is_stop).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "surveys", "forms"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "surveys", "boolean", "compare"]
 }).
 -moduledoc("
 Check if there is a ‘stop’ question in list of (survey) blocks

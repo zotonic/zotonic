@@ -19,7 +19,7 @@
 
 -module(controller_admin).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "controller", "content_authoring", "user_interface_and_interaction"]
+    zotonic_keywords => ["reference", "backend_developer", "controller", "content_authoring", "authorization_and_access_control", "user_interface_and_interaction"]
 }).
 -moduledoc("
 The admin controller is the main controller behind which admin pages are served. Its main purpose is that it does an

@@ -19,7 +19,7 @@
 
 -module(filter_brlinebreaks).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "text", "format"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "text", "html", "transform"]
 }).
 -moduledoc("
 Translate HTML `<br/>` elements into ASCII newlines (`\\n`).

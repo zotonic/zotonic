@@ -5,6 +5,7 @@ keywords:
   - template
   - compare
   - boolean
+  - render
 ---
 
 ::: aside

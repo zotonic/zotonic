@@ -19,7 +19,7 @@
 
 -module(filter_embedded_media).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "html", "render"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "html", "media_resource", "query"]
 }).
 -moduledoc("
 Fetch media ids that are embedded in the `body`, `body_extra` and *text* blocks of your page.

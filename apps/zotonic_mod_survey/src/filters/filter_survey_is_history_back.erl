@@ -19,7 +19,7 @@
 
 -module(filter_survey_is_history_back).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "surveys", "boolean"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "surveys", "boolean", "compare"]
 }).
 -moduledoc("
 Test whether a survey respondent may return to the previous page in a history.

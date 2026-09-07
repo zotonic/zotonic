@@ -17,7 +17,7 @@
 
 -module(action_admin_zlink).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "content_relationships", "edit"]
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "content_authoring", "content_relationships", "edit"]
 }).
 -moduledoc("
 Used for inserting an internal link in the TinyMCE editor in the admin.

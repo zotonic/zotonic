@@ -19,7 +19,7 @@
 
 -module(m_admin_menu).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "model", "content_authoring", "user_interface_and_interaction"]
+    zotonic_keywords => ["reference", "backend_developer", "model", "navigation", "module", "user_interface_and_interaction"]
 }).
 -moduledoc("
 This model holds the admin menu, which is built up by calling each module to add items to the menu.

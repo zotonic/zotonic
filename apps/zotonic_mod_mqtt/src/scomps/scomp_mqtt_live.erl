@@ -19,7 +19,7 @@
 
 -module(scomp_mqtt_live).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "scomp", "messaging_and_pubsub", "mqtt"]
+    zotonic_keywords => ["reference", "frontend_developer", "scomp", "messaging_and_pubsub", "mqtt", "render"]
 }).
 -moduledoc("
 Live updating templates connected to [MQTT topics](/id/doc_module_mod_mqtt).

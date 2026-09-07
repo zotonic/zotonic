@@ -21,7 +21,7 @@
 
 -module(filter_round_significant).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "number", "format"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "number", "transform"]
 }).
 -moduledoc("
 Round a number value to a number of significant digits. The significance defaults to two digits.

@@ -19,7 +19,7 @@
 
 -module(mod_contact).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "content_editor", "module", "forms", "email"]
+    zotonic_keywords => ["reference", "content_editor", "module", "forms", "email", "send_and_receive"]
 }).
 -moduledoc("
 Implements a basic contact form, which gets emailed to the configuration value `mod_contact.email`, when submitted.

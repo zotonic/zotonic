@@ -19,7 +19,7 @@
 
 -module(controller_admin_edit).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "controller", "content_authoring", "user_interface_and_interaction"]
+    zotonic_keywords => ["reference", "backend_developer", "controller", "content_authoring", "resource", "edit", "user_interface_and_interaction"]
 }).
 -moduledoc("
 The main admin edit controller. This controller serves the edit page where [resources](/id/doc_glossary#term-resource)

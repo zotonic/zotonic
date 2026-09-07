@@ -19,7 +19,7 @@
 
 -module(controller_admin_backup_revision).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "operator", "controller", "backup_and_restore", "schedule"]
+    zotonic_keywords => ["reference", "operator", "controller", "backup_and_restore", "resource", "query"]
 }).
 -moduledoc("
 Shows the admin backup revisions screen where you can see older version for a [resource](/id/doc_glossary#term-resource).

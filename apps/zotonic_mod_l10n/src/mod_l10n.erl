@@ -23,7 +23,10 @@
 
 -module(mod_l10n).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "content_editor", "module", "localization_and_translation", "format"]
+    zotonic_keywords => [
+        "reference", "content_editor", "module", "localization_and_translation",
+        "date_and_time", "language_code", "format"
+    ]
 }).
 -moduledoc("
 Localization of Zotonic. Provides lookups for country, month, week names.

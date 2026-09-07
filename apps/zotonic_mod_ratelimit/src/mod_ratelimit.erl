@@ -20,7 +20,7 @@
 
 -module(mod_ratelimit).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "operator", "module", "security", "performance"]
+    zotonic_keywords => ["reference", "operator", "module", "security", "http", "performance"]
 }).
 -moduledoc("
 Implements rate limiting for various resources.

@@ -20,7 +20,7 @@
 
 -module(filter_survey_is_save_intermediate).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "surveys", "forms"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "surveys", "boolean", "compare"]
 }).
 -moduledoc("
 Check if the given survey is configured to save intermediate results.

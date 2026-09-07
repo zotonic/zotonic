@@ -19,7 +19,7 @@
 
 -module(filter_in_past).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "date_and_time", "compare"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "date_and_time", "boolean", "compare"]
 }).
 -moduledoc("
 Tests if a date is in the past.
@@ -46,4 +46,3 @@ in_past({{_,_,_}, {_,_,_}} = DateTime, _Context) ->
 	DateTime < erlang:universaltime();
 in_past(_, _Context) ->
 	undefined.
-

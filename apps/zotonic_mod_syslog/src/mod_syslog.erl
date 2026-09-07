@@ -19,7 +19,9 @@
 
 -module(mod_syslog).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "operator", "module", "logging_and_monitoring", "send_and_receive"]
+    zotonic_keywords => [
+        "reference", "operator", "module", "logging_and_monitoring", "api_and_integration", "send_and_receive"
+    ]
 }).
 -moduledoc("
 Syslog integration module for forwarding Zotonic log events to external syslog services.

@@ -19,7 +19,10 @@
 
 -module(mod_base).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "module", "user_interface_and_interaction", "html"]
+    zotonic_keywords => [
+        "reference", "frontend_developer", "module", "user_interface_and_interaction",
+        "dispatch_rule", "wire_action", "scomp"
+    ]
 }).
 -moduledoc("
 mod_base is the base module, which acts as a container module holding most of Zotonic basic [dispatch

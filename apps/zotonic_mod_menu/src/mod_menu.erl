@@ -19,7 +19,7 @@
 
 -module(mod_menu).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "content_editor", "module", "navigation", "edit"]
+    zotonic_keywords => ["reference", "content_editor", "module", "navigation", "resource", "collection", "edit"]
 }).
 -moduledoc("
 Create nested navigation menus for your site.

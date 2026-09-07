@@ -19,7 +19,9 @@
 
 -module(mod_audio).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "content_editor", "module", "audio_management", "media_management"]
+    zotonic_keywords => [
+        "reference", "content_editor", "module", "audio_management", "media_management", "media_resource", "file_uploads"
+    ]
 }).
 -moduledoc("
 Adds support for viewing and handling audio medium items.

@@ -29,7 +29,10 @@
 
 -module(mod_translation).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "content_editor", "module", "localization_and_translation", "translated_text"]
+    zotonic_keywords => [
+        "reference", "content_editor", "module", "localization_and_translation",
+        "translated_text", "language_code", "render"
+    ]
 }).
 -moduledoc("
 This module provides support for dealing with multiple languages.

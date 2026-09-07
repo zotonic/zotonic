@@ -19,7 +19,9 @@
 
 -module(mod_export).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "integrator", "module", "export_and_syndication", "interoperability", "export"]
+    zotonic_keywords => [
+        "reference", "integrator", "module", "export_and_syndication", "structured_data", "serialize", "export"
+    ]
 }).
 -moduledoc(<<"
 Provides a generic framework for exporting

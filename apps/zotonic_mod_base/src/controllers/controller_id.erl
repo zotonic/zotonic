@@ -19,7 +19,7 @@
 
 -module(controller_id).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "controller", "routing_and_redirects", "render"]
+    zotonic_keywords => ["reference", "backend_developer", "controller", "routing_and_redirects", "resource", "http", "render"]
 }).
 -moduledoc("
 Handle different content representations of a page.

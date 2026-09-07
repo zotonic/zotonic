@@ -21,7 +21,7 @@
 
 -module(filter_media_for_language).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "localization_and_translation", "translated_text"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "localization_and_translation", "media_resource", "language_code", "query"]
 }).
 -moduledoc("
 Filter a list of media items by their `medium_language` property, return the best matching with the current or given

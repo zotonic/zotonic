@@ -19,7 +19,7 @@
 
 -module(mod_bootstrap).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "module", "user_interface_and_interaction", "html"]
+    zotonic_keywords => ["reference", "frontend_developer", "module", "user_interface_and_interaction", "html", "render"]
 }).
 -moduledoc("
 Adds support for the [Twitter Bootstrap](https://twitter.github.com/bootstrap/) CSS / JavaScript framework.

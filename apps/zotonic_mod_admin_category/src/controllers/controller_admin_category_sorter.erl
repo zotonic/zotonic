@@ -19,7 +19,7 @@
 
 -module(controller_admin_category_sorter).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "site_administrator", "controller", "categorization", "configure"]
+    zotonic_keywords => ["reference", "site_administrator", "controller", "categorization", "category", "edit"]
 }).
 -moduledoc("
 Shows the admin category screen where you can edit the [category](/id/doc_glossary#term-category) tree, rearranging the

@@ -19,7 +19,7 @@
 
 -module(mod_email_dkim).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "operator", "module", "email_delivery", "dkim"]
+    zotonic_keywords => ["reference", "operator", "module", "email_delivery", "security", "dkim"]
 }).
 -moduledoc("
 Signs outgoing e-mails with DomainKeys Identified Mail Signatures ([RFC 6376](https://tools.ietf.org/html/rfc6376)).

@@ -63,7 +63,7 @@
 
 -module(m_rsc_export).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "model", "export_and_syndication", "export"]
+    zotonic_keywords => ["reference", "backend_developer", "model", "export_and_syndication", "resource", "export"]
 }).
 -moduledoc("
 Export a full resource representation for API and model access.

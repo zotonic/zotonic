@@ -19,7 +19,7 @@
 
 -module(controller_oauth2_access_token).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "integrator", "controller", "authentication", "oauth_2_0"]
+    zotonic_keywords => ["reference", "integrator", "controller", "api_and_integration", "authorization_and_access_control", "oauth_2_0", "http"]
 }).
 -moduledoc("
 Exchange OAuth 2.0 credentials for a bearer access token.

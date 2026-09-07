@@ -24,7 +24,7 @@
 
 -module(m_oauth2_consumer).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "integrator", "model", "authentication", "oauth_2_0"]
+    zotonic_keywords => ["reference", "integrator", "model", "api_and_integration", "authentication", "oauth_2_0"]
 }).
 -moduledoc("
 Model for OAuth2 consumer configuration and token access, including consumer lists and per-consumer token retrieval.

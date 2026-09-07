@@ -19,7 +19,7 @@
 
 -module(scomp_base_debug).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "scomp", "development_and_debugging", "monitor"]
+    zotonic_keywords => ["reference", "frontend_developer", "scomp", "development_and_debugging", "structured_data", "format"]
 }).
 -moduledoc("
 Shows which variables are assigned for use in the current template’s scope:

@@ -19,7 +19,7 @@
 
 -module(filter_show_media).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "html", "render"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "html", "image_management", "render"]
 }).
 -moduledoc("
 Convert the image markers in HTML from the Rich Text editor into image tags.

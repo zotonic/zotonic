@@ -20,7 +20,7 @@
 
 -module(controller_static_pages).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "controller", "routing_and_redirects", "render"]
+    zotonic_keywords => ["reference", "backend_developer", "controller", "routing_and_redirects", "template", "html", "render"]
 }).
 -moduledoc("
 Serve a static page or pages.

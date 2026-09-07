@@ -19,7 +19,7 @@
 
 -module(filter_is_letsencrypt_valid_hostname).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "tls_and_certificates", "configure"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "tls_and_certificates", "validate"]
 }).
 -moduledoc("
 Test if a hostname can be used for a Let’s Encrypt certificate.

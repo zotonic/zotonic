@@ -19,7 +19,7 @@
 
 -module(action_admin_zmedia_choose).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "media_management", "upload"]
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "content_authoring", "media_management", "edit"]
 }).
 -moduledoc("
 Used after a media item is selected in the media chooser for the TinyMCE editor.

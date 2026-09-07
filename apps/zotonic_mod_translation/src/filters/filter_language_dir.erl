@@ -20,7 +20,7 @@
 
 -module(filter_language_dir).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "localization_and_translation", "language_code"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "localization_and_translation", "language_code", "format"]
 }).
 -moduledoc("
 Return `rtl` or `ltr` depening on the direction of the language.

@@ -19,7 +19,7 @@
 
 -module(controller_keyserver_key).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "controller", "security", "http"]
+    zotonic_keywords => ["reference", "backend_developer", "controller", "security", "javascript", "http"]
 }).
 -moduledoc("
 Publish the site's RSA encryption public key as JavaScript.

@@ -19,7 +19,7 @@
 
 -module(filter_round).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "number", "format"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "number", "transform"]
 }).
 -moduledoc("
 Round a floating point value to the nearest integer.

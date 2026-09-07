@@ -5,7 +5,7 @@
 
 -module(scomp_base_chart_pie).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "scomp", "user_interface_and_interaction", "render"]
+    zotonic_keywords => ["reference", "frontend_developer", "scomp", "user_interface_and_interaction", "structured_data", "accessibility", "render"]
 }).
 -moduledoc(<<
     "Render a pie chart as inline SVG.\n\n",

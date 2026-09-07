@@ -19,7 +19,10 @@
 
 -module(mod_email_relay).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "operator", "module", "email_delivery", "send_and_receive"]
+    zotonic_keywords => [
+        "reference", "operator", "module", "email_delivery", "email_receiving",
+        "api_and_integration", "send_and_receive"
+    ]
 }).
 -moduledoc("
 This module supports relaying email between Zotonic servers.

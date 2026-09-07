@@ -20,7 +20,7 @@
 
 -module(m_client_session_storage).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "integrator", "model", "messaging_and_pubsub", "structured_data"]
+    zotonic_keywords => ["reference", "frontend_developer", "model", "messaging_and_pubsub", "javascript", "structured_data"]
 }).
 -moduledoc("
 Model to access the `sessionStorage` on the client (browser).

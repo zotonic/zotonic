@@ -22,7 +22,7 @@
 
 -module(controller_csp_report).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "controller", "security", "http"]
+    zotonic_keywords => ["reference", "backend_developer", "controller", "security", "logging_and_monitoring", "http"]
 }).
 -moduledoc("
 Controller handling Content-Security-Policy reports.

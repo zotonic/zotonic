@@ -19,7 +19,9 @@
 
 -module(mod_authentication).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "module", "authentication", "authenticate"]
+    zotonic_keywords => [
+        "reference", "backend_developer", "module", "authentication", "identity_and_accounts", "security", "authenticate"
+    ]
 }).
 -moduledoc("
 This module contains the main Zotonic authentication mechanism. It contains the logon and logoff controllers, and

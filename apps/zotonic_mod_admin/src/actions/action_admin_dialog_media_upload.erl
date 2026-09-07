@@ -19,7 +19,7 @@
 
 -module(action_admin_dialog_media_upload).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "media_management", "upload"]
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "media_management", "media_resource", "file_uploads", "upload"]
 }).
 -moduledoc("
 Shows the admin dialog for uploading a media item. See [Media](/id/doc_developerguide_media#guide-media).

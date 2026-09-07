@@ -18,7 +18,7 @@
 
 -module(filter_ip2geo).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "geolocation", "structured_data"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "geolocation", "structured_data", "query"]
 }).
 -moduledoc("
 Return geographic information associated with an IP address.

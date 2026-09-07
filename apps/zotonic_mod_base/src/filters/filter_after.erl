@@ -19,7 +19,7 @@
 
 -module(filter_after).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "date_and_time", "compare"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "date_and_time", "boolean", "compare"]
 }).
 -moduledoc("
 Return the first element after another element in a list. For example:

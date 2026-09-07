@@ -20,7 +20,7 @@
 
 -module(filter_translation).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "localization_and_translation", "translated_text"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "localization_and_translation", "translated_text", "query"]
 }).
 -moduledoc("
 Lookup a specific translation in a translated text. If the text is not translated then the text is returned as-is.

@@ -19,7 +19,7 @@
 
 -module(action_admin_link).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "content_relationships", "edit"]
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "content_relationships", "edge", "edit"]
 }).
 -moduledoc("
 Add an [edge](/id/doc_glossary#term-edge) between two [resources](/id/doc_glossary#term-resource). Used in the admin.

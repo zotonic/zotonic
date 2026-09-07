@@ -4,7 +4,8 @@ keywords:
   - frontend_developer
   - template
   - categorization
-  - module_management
+  - module
+  - maintainability
   - render
 ---
 
@@ -33,7 +34,7 @@ Includes all templates with the base name hello.tpl for the id’s category hier
 
 For example, in the case of a *news* article:
 
-*   all templates with the name .hello.news.tpl.
-*   all templates with the name .hello.article.tpl.
-*   all templates with the name .hello.text.tpl.
-*   all templates with the name .hello.tpl.
+*   all templates with the name `hello.news.tpl`
+*   all templates with the name `hello.article.tpl`
+*   all templates with the name `hello.text.tpl`
+*   all templates with the name `hello.tpl`

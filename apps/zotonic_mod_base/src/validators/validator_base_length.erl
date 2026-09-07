@@ -19,7 +19,7 @@
 
 -module(validator_base_length).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_validator", "validate", "number"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_validator", "validate", "text", "number"]
 }).
 -moduledoc("
 Check the length of a text input.

@@ -19,7 +19,7 @@
 
 -module(scomp_base_worker).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "scomp", "messaging_and_pubsub", "mqtt"]
+    zotonic_keywords => ["reference", "frontend_developer", "scomp", "messaging_and_pubsub", "mqtt", "javascript"]
 }).
 -moduledoc("
 Start a named Cotonic worker from a template.

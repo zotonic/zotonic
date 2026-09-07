@@ -19,7 +19,7 @@
 
 -module(validator_base_acceptance).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_validator", "validate", "forms"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_validator", "validate", "forms", "boolean"]
 }).
 -moduledoc("
 Check if an input value evaluates to true.

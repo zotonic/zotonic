@@ -2,6 +2,7 @@
 keywords:
   - reference
   - frontend_developer
+  - backend_developer
   - template
   - erlang_otp
   - render

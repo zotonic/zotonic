@@ -19,7 +19,7 @@
 
 -module(controller_admin_mailinglist_recipients).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "controller", "mailing_lists", "send_and_receive"]
+    zotonic_keywords => ["reference", "backend_developer", "controller", "mailing_lists", "query", "edit"]
 }).
 -moduledoc("
 Shows the recipients of the current mailing list. The recipients are listed in three columns, and have a checkbox next

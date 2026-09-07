@@ -19,7 +19,7 @@
 
 -module(controller_oauth2_service_redirect).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "integrator", "controller", "routing_and_redirects", "http"]
+    zotonic_keywords => ["reference", "integrator", "controller", "routing_and_redirects", "authentication", "oauth_2_0", "http"]
 }).
 -moduledoc("
 Complete the browser-facing redirect step of an external OAuth login.

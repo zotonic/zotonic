@@ -19,7 +19,7 @@
 
 -module(action_admin_dialog_new_rsc).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "content_authoring", "create"]
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "content_authoring", "resource", "create"]
 }).
 -moduledoc("
 Show the admin dialog for creating a new [resource](/id/doc_glossary#term-resource).

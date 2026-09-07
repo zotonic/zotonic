@@ -19,7 +19,7 @@
 
 -module(mod_artwork).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "content_editor", "module", "image_management", "create"]
+    zotonic_keywords => ["reference", "content_editor", "module", "image_management", "media_resource", "create"]
 }).
 -moduledoc("
 This module contains many useful icons and images.

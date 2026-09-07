@@ -19,7 +19,7 @@
 
 -module(m_editor_tinymce).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "model", "content_authoring", "edit"]
+    zotonic_keywords => ["reference", "backend_developer", "model", "content_authoring", "metadata", "query"]
 }).
 -moduledoc("
 Model exposing TinyMCE editor version metadata used by admin/editor integration.

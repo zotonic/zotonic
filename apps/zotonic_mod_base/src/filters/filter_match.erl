@@ -19,7 +19,7 @@
 
 -module(filter_match).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "text", "compare"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "text", "boolean", "compare"]
 }).
 -moduledoc("
 Match a value with a regular expression.

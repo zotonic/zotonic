@@ -20,7 +20,7 @@
 
 -module(scomp_mailinglist_mailinglist_subscribe).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "scomp", "mailing_lists", "create"]
+    zotonic_keywords => ["reference", "frontend_developer", "scomp", "mailing_lists", "forms", "render"]
 }).
 -moduledoc("
 Show the mailinglist subscription form to subscribe to a certain mailinglist id.

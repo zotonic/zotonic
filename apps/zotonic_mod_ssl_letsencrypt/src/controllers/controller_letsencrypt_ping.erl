@@ -19,7 +19,7 @@
 
 -module(controller_letsencrypt_ping).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "operator", "controller", "tls_and_certificates", "configure"]
+    zotonic_keywords => ["reference", "operator", "controller", "tls_and_certificates", "http", "monitor"]
 }).
 -moduledoc("
 Return the site's current Let's Encrypt reachability token as plain text.

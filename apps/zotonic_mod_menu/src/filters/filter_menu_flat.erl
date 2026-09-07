@@ -19,7 +19,7 @@
 
 -module(filter_menu_flat).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "navigation", "edit"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "navigation", "collection", "transform"]
 }).
 -moduledoc("
 Flattens the rsc menu structure for use in a template loop.

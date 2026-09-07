@@ -19,7 +19,7 @@
 
 -module(m_survey_saved).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "model", "surveys", "forms"]
+    zotonic_keywords => ["reference", "backend_developer", "model", "surveys", "forms", "structured_data", "edit"]
 }).
 -moduledoc("
 Model for saving and retrieving intermediate survey answers for users. There can

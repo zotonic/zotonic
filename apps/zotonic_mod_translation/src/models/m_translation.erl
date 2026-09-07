@@ -19,7 +19,7 @@
 
 -module(m_translation).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "model", "localization_and_translation", "translated_text"]
+    zotonic_keywords => ["reference", "backend_developer", "model", "localization_and_translation", "translated_text", "language_code", "query"]
 }).
 -moduledoc("
 The m_translation model gives easy access to language and translation related information.

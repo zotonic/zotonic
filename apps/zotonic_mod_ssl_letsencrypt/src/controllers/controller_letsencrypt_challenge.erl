@@ -19,7 +19,7 @@
 
 -module(controller_letsencrypt_challenge).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "operator", "controller", "tls_and_certificates", "configure"]
+    zotonic_keywords => ["reference", "operator", "controller", "tls_and_certificates", "http", "validate"]
 }).
 -moduledoc("
 Serve an ACME HTTP-01 challenge for Let's Encrypt certificate issuance.

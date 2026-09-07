@@ -19,7 +19,7 @@
 
 -module(filter_survey_page_options).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "surveys", "forms"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "surveys", "structured_data", "query"]
 }).
 -moduledoc("
 Check the list of blocks and collect all options for that page.

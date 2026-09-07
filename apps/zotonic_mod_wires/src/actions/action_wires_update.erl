@@ -19,7 +19,7 @@
 
 -module(action_wires_update).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "template", "render"]
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "template", "user_interface_and_interaction", "render"]
 }).
 -moduledoc("
 Updates the content of an HTML element with a template or a literal HTML text.

@@ -19,7 +19,7 @@
 
 -module(filter_survey_answer_split).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "surveys", "forms"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "surveys", "collection", "parse"]
 }).
 -moduledoc("
 Filter to split multi-value survey answers on the '#' character.
@@ -48,4 +48,3 @@ survey_answer_split(V, _Block, _Context) when is_binary(V) ->
     binary:split(V, <<$#>>);
 survey_answer_split(V, _Block, _Context) ->
     V.
-

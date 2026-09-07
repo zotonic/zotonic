@@ -21,7 +21,9 @@
 
 -module(mod_video_embed).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "integrator", "module", "video_management", "oembed"]
+    zotonic_keywords => [
+        "reference", "integrator", "module", "video_management", "media_management", "api_and_integration", "oembed"
+    ]
 }).
 -moduledoc("
 This module, if activated, checks the pasted URLs in the *create media / page* dialog of the admin. It will show an

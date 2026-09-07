@@ -20,7 +20,7 @@
 
 -module(filter_translated_texts).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "localization_and_translation", "translated_text"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "localization_and_translation", "translated_text", "structured_data", "query"]
 }).
 -moduledoc("
 Check all properties of a map, list or resource. Returns a list of

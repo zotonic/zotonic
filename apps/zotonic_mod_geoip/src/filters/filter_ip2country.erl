@@ -18,7 +18,7 @@
 
 -module(filter_ip2country).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "geolocation", "identifier"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "geolocation", "identifier", "query"]
 }).
 -moduledoc("
 Return the lowercase ISO country code associated with an IP address.

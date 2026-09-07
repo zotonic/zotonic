@@ -19,7 +19,7 @@
 
 -module(filter_yesno).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "boolean", "compare"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "boolean", "format"]
 }).
 -moduledoc("
 Show a boolean value as a text.

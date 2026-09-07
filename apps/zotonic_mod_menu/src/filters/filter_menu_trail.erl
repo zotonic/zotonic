@@ -19,7 +19,7 @@
 
 -module(filter_menu_trail).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "navigation", "edit"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "navigation", "collection", "query"]
 }).
 -moduledoc("
 Return a breadcrumb navigation trail for the given id.

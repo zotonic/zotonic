@@ -19,7 +19,7 @@
 
 -module(action_admin_delete_rsc).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "content_authoring", "edit"]
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "content_authoring", "resource", "edit"]
 }).
 -moduledoc("
 Delete a [resource](/id/doc_glossary#term-resource), without confirmation.

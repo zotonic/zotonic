@@ -20,7 +20,9 @@
 
 -module(mod_media_exif).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "content_editor", "module", "metadata", "media_management"]
+    zotonic_keywords => [
+        "reference", "content_editor", "module", "image_management", "media_management", "metadata", "parse"
+    ]
 }).
 -moduledoc("
 When uploading a file, this module extracts properties from the uploaded media and sets them in the resource.
