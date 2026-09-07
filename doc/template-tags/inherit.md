@@ -10,7 +10,7 @@ keywords:
 ::: aside
 See also
 
-[template block](/id/doc_template_tag_tag_block), [extends](/id/doc_template_tag_tag_extends), [fragment](/id/doc_template_tag_tag_fragment) and [overrules](/id/doc_template_tag_tag_overrules).
+`tag#block`, `tag#extends`, `tag#fragment` and `tag#overrules`.
 :::
 
 Include the markup of an extended template into the extending template.

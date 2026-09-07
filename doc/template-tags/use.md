@@ -10,12 +10,12 @@ keywords:
 ::: aside
 See also
 
-[fragment](/id/doc_template_tag_tag_fragment) and [useblock](/id/doc_template_tag_tag_useblock).
+`tag#fragment` and `tag#useblock`.
 :::
 
-Render a named [fragment](/id/doc_template_tag_tag_fragment).
+Render a named fragment defined with `tag#fragment`.
 
-The `use` tag renders a fragment that was defined with the [fragment](/id/doc_template_tag_tag_fragment) tag.
+The `use` tag renders a fragment that was defined with the `tag#fragment` tag.
 
 Example:
 
@@ -32,7 +32,7 @@ Example:
 ```
 
 ::: note
-Like the [include](/id/doc_template_tag_tag_include) tag, the `with` keyword is optional:
+Like the `tag#include` tag, the `with` keyword is optional:
 
 
 ```django

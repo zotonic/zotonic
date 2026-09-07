@@ -11,12 +11,12 @@ keywords:
 ::: aside
 See also
 
-[compose](/id/doc_template_tag_tag_compose), [catinclude](/id/doc_template_tag_tag_catinclude) and [block](/id/doc_template_tag_tag_block).
+`tag#compose`, `tag#catinclude` and `tag#block`.
 :::
 
 Compose another template based on the category of a resource.
 
-The `catcompose` tag is the category-aware variant of [compose](/id/doc_template_tag_tag_compose). It selects the template using category lookup, like [catinclude](/id/doc_template_tag_tag_catinclude), and also lets the caller override named blocks in the selected template.
+The `catcompose` tag is the category-aware variant of `tag#compose`. It selects the template using category lookup, like `tag#catinclude`, and also lets the caller override named blocks in the selected template.
 
 Example:
 
@@ -29,7 +29,7 @@ Example:
 {% endcompose %}
 ```
 
-The selected template depends on the category hierarchy of `id`, using the same lookup rules as [catinclude](/id/doc_template_tag_tag_catinclude).
+The selected template depends on the category hierarchy of `id`, using the same lookup rules as `tag#catinclude`.
 
 Arguments
 ---------

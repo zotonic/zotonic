@@ -10,7 +10,7 @@ keywords:
 ::: aside
 See also
 
-the [date](/id/doc_template_filter_filter_date) filter for the possible format characters.
+the `filter#date` filter for the possible format characters.
 :::
 
 Show the current date and time.

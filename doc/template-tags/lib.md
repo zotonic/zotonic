@@ -11,7 +11,7 @@ keywords:
 ::: aside
 See also
 
-[mod\_development](/id/doc_module_mod_development).
+`module#mod_development`.
 :::
 
 Combine css and javascript includes in a single request.

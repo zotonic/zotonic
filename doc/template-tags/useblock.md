@@ -10,14 +10,14 @@ keywords:
 ::: aside
 See also
 
-[fragment](/id/doc_template_tag_tag_fragment) and [use](/id/doc_template_tag_tag_use).
+`tag#fragment` and `tag#use`.
 :::
 
-Render a named [fragment](/id/doc_template_tag_tag_fragment), pass it enclosed body content, and optionally override its named blocks.
+Render a named `tag#fragment`, pass it enclosed body content, and optionally override its named blocks.
 
-The `useblock` tag is like [use](/id/doc_template_tag_tag_use), but also passes the enclosed rendered content to the fragment in the special variable `_body`.
+The `useblock` tag is like `tag#use`, but also passes the enclosed rendered content to the fragment in the special variable `_body`.
 
-If the fragment contains named [template block](/id/doc_template_tag_tag_block) definitions, then the `useblock` body can also define blocks with the same names. Those caller blocks override the fragment’s block definitions, similar to [compose](/id/doc_template_tag_tag_compose).
+If the fragment contains named `tag#block` definitions, then the `useblock` body can also define blocks with the same names. Those caller blocks override the fragment’s block definitions, similar to `tag#compose`.
 
 Example:
 
@@ -53,7 +53,7 @@ Example with block overrides:
 ```
 
 ::: note
-Like the [include](/id/doc_template_tag_tag_include) tag, the `with` keyword is optional:
+Like the `tag#include` tag, the `with` keyword is optional:
 
 
 ```django

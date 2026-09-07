@@ -13,10 +13,10 @@ See also
 
 - [Media](/id/doc_developerguide_media#guide-media) developer guide.
 - [Media classes](/id/doc_developerguide_media#guide-media-classes) for options that are only available in mediaclass files.
-- [image\_url](/id/doc_template_tag_tag_image_url), [image\_data\_url](/id/doc_template_tag_tag_image_data_url) and [media](/id/doc_template_tag_tag_media) tags.
+- `tag#image_url`, `tag#image_data_url` and `tag#media` tags.
 :::
 
-Show a still image using an `<img\>` element. The image will be automatically resized to the desired size and filters. For video, use the [media](/id/doc_template_tag_tag_media) tag instead.
+Show a still image using an `<img\>` element. The image will be automatically resized to the desired size and filters. For video, use the `tag#media` tag instead.
 
 For example:
 
@@ -218,7 +218,7 @@ crop="+100+100"
 crop=[100, 100]
 ```
 
-The cropping center can also be determined by editors on the media item’s admin page (using [mod\_image\_edit](/id/doc_module_mod_image_edit)). Without any argument, the image will be cropped around the user-defined cropping center:
+The cropping center can also be determined by editors on the media item’s admin page (using `module#mod_image_edit`). Without any argument, the image will be cropped around the user-defined cropping center:
 
 
 ```django
@@ -227,7 +227,7 @@ crop
 
 The coordinate of the cropping center is relative to the original image, before rotate and cropp operations.
 
-If [mod\_media\_exif](/id/doc_module_mod_media_exif) and [mod\_image\_edit](/id/doc_module_mod_image_edit) are enabled then the focal point information of the image is taken as the cropping center for automatic cropping.
+If `module#mod_media_exif` and `module#mod_image_edit` are enabled then the focal point information of the image is taken as the cropping center for automatic cropping.
 
 
 
@@ -385,4 +385,4 @@ format=`webp`
 
 ### absolute\_url
 
-Ensure that the generated URL contains the [hostname and port](/id/doc_template_tag_tag_url).
+Ensure that the generated URL contains the `tag#url`.

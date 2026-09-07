@@ -10,7 +10,7 @@ keywords:
 ::: aside
 See also
 
-[debug](/id/doc_template_scomp_scomp_debug#scomp-debug)
+`scomp#debug`
 :::
 
 Show the contents of a value expression.

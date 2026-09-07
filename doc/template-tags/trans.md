@@ -11,7 +11,7 @@ keywords:
 ::: aside
 See also
 
-[trans (variable substitution)](/id/doc_template_tag_tag_trans_ext).
+`tag#trans_ext`.
 :::
 
 Translate a text value using gettext.

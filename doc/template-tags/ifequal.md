@@ -11,7 +11,7 @@ keywords:
 ::: aside
 See also
 
-[if](/id/doc_template_tag_tag_if) and [ifnotequal](/id/doc_template_tag_tag_ifnotequal).
+`tag#if` and `tag#ifnotequal`.
 :::
 
 Show something if two values are equal.

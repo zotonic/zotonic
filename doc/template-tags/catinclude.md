@@ -11,7 +11,7 @@ keywords:
 ::: aside
 See also
 
-[all catinclude](/id/doc_template_tag_tag_all_catinclude), which is useful to include multiple templates.
+`tag#all_catinclude`, which is useful to include multiple templates.
 :::
 
 Include another template based on the category of a resource. The include tag is replaced with the contents of the included template file. You can give arguments to the included template, they will be assigned as variables in the context of the included template.
@@ -62,4 +62,4 @@ hello.tpl
 The search order is reversed from the list order; add the *most specific selector last*.
 :::
 
-See the [include](/id/doc_template_tag_tag_include) for caching options and argument handling.
+See the `tag#include` for caching options and argument handling.

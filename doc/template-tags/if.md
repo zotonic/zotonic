@@ -10,7 +10,7 @@ keywords:
 ::: aside
 See also
 
-[ifequal](/id/doc_template_tag_tag_ifequal) and [ifnotequal](/id/doc_template_tag_tag_ifnotequal).
+`tag#ifequal` and `tag#ifnotequal`.
 :::
 
 Show something if the condition is true.
