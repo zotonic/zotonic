@@ -40,49 +40,52 @@
 
 
 %% @doc Convert HTML to Markdown using the default `markupz' configuration.
--spec to_markdown(Html) -> Markdown when
-    Html :: unicode:chardata(),
-    Markdown :: binary().
+-spec to_markdown(Html) -> Markdown
+    when
+        Html :: unicode:chardata(),
+        Markdown :: binary().
 to_markdown(Html) ->
     markupz:to_markdown(to_binary(Html)).
 
 %% @doc Convert HTML to Markdown using a `markupz' preset or option map.
 %% The legacy options `no_html' and `no_tables' are accepted for compatibility.
--spec to_markdown(Html, Options) -> Markdown when
-    Html :: unicode:chardata(),
-    Options :: options(),
-    Markdown :: binary().
+-spec to_markdown(Html, Options) -> Markdown
+    when
+        Html :: unicode:chardata(),
+        Options :: options(),
+        Markdown :: binary().
 to_markdown(Html, Options) ->
     markupz:to_markdown(to_binary(Html), markupz_options(Options)).
 
 
 %% @doc Convert Markdown to HTML using `markdownz'.
--spec to_html(Markdown) -> Html when
-    Markdown :: unicode:chardata(),
-    Html :: binary().
+-spec to_html(Markdown) -> Html
+    when
+        Markdown :: unicode:chardata(),
+        Html :: binary().
 to_html(Markdown) ->
     markdownz:to_binary(to_binary(Markdown)).
 
 %% @doc Convert a Markdown document to HTML while retaining optional front
 %% matter. The metadata source is kept raw so callers can select a decoder and
 %% apply their own schema.
--spec to_html_document(Markdown) ->
-    {ok, markdownz:document(binary())} | {error, term(), term()}
+-spec to_html_document(Markdown) -> {ok, markdownz:document(binary())} | {error, unicode}
     when
         Markdown :: unicode:chardata().
 to_html_document(Markdown) ->
     case markdownz:split_document(to_binary(Markdown)) of
         {ok, #{content := Content} = Document} ->
             {ok, Document#{content := markdownz:to_binary(Content)}};
-        {error, _Kind, _Details} = Error ->
-            Error;
-        {incomplete, _Encoded, _Rest} = Error ->
-            Error
+        {error, _Kind, _Details} ->
+            {error, unicode};
+        {incomplete, _Encoded, _Rest} ->
+            {error, unicode}
     end.
 
--spec to_binary(CharData) -> Binary when
-    CharData :: unicode:chardata(),
-    Binary :: binary().
+-spec to_binary(CharData) -> Binary
+    when
+        CharData :: unicode:chardata(),
+        Binary :: binary().
 to_binary(CharData) ->
     case unicode:characters_to_binary(CharData, utf8) of
         {error, Binary, _Restdata} ->
