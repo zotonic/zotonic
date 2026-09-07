@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-09-03 14:54\n"
+"PO-Revision-Date: 2026-09-04 14:47\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -3053,7 +3053,7 @@ msgstr "Het pad <em>achter de taalcode</em> voor de URL, als dit leeg blijft wor
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:8
 msgid "The query could not be parsed, check the syntax."
-msgstr "De query kon niet worden geparseerd, controleer de syntaxis."
+msgstr "De query kon niet worden geparst, controleer de syntaxis."
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:16
 msgid "The query text is empty."
@@ -6759,7 +6759,7 @@ msgstr "Marktaandeel van browsers"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:149
 msgid "Browser share data"
-msgstr "Gegevens over het marktaandeel van browsers"
+msgstr "Browser marktaandeel-gegevens"
 
 #: zotonic_mod_base/src/filters/filter_content_type_label.erl:54
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:38
@@ -6781,11 +6781,11 @@ msgstr "IP-adres van client"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:218
 msgid "Compatibility tags"
-msgstr "Compatibiliteitslabels"
+msgstr "Compatibiliteits-labels"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:130
 msgid "Complete"
-msgstr "Voltooien"
+msgstr "Voltooid"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:130
 msgid "Completion"
@@ -6807,7 +6807,7 @@ msgstr "Verbindingstest"
 
 #: zotonic_mod_base/src/support/z_chart_svg.erl:581
 msgid "Data points"
-msgstr "Gegevenspunten"
+msgstr "Datapunten"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:115
 #: zotonic_mod_l10n/src/support/l10n_date.erl:50
@@ -6820,7 +6820,7 @@ msgstr "Donut-alias"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:44
 msgid "Donut chart with map data"
-msgstr "Donutdiagram met kaartgegevens"
+msgstr "Donut-diagram met kaartgegevens"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:81
 msgid "East"
@@ -6828,7 +6828,7 @@ msgstr "Oosten"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:168
 msgid "Empty data"
-msgstr "Lege gegevens"
+msgstr "Lege data"
 
 #: zotonic_mod_base/src/filters/filter_content_type_label.erl:50
 msgid "Excel Workbook"
@@ -6892,7 +6892,7 @@ msgstr "Test van een inline SVG-grafiek"
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:193
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:210
 msgid "Item"
-msgstr "Artikel"
+msgstr "Item"
 
 #: zotonic_mod_base/src/filters/filter_content_type_label.erl:48
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:39
@@ -6929,11 +6929,11 @@ msgstr "Grote dataset met kleuren uit het kleurenpalet"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:200
 msgid "Large pie chart with palette shades"
-msgstr "Groot cirkeldiagram met kleurschakeringen"
+msgstr "Groot cirkeldiagram met kleurenpalet"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:228
 msgid "Legacy pie alias"
-msgstr "Oude taart-alias"
+msgstr "Legacy pie alias"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:109
 msgid "Line chart"
@@ -6991,7 +6991,7 @@ msgstr "Nog geen metingen"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:81
 msgid "North"
-msgstr "Noorden"
+msgstr "Noord"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:231
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:243
@@ -7147,7 +7147,7 @@ msgstr "Ondersteuning voor offline werken en communicatie tussen verschillende t
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:31
 msgid "Survey answers"
-msgstr "Antwoorden op de enquête"
+msgstr "Antwoorden"
 
 #: zotonic_mod_base/priv/templates/_bridge_warning.tpl:4
 msgid "Test your connection"
@@ -7233,7 +7233,7 @@ msgstr "West"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:47
 msgid "Work items"
-msgstr "Werkitems"
+msgstr "Werk items"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:33
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:187
@@ -8055,7 +8055,7 @@ msgstr "Alleen de beheerder kan het traceren van functieaanroepen gebruiken."
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:528
 msgid "Open included template"
-msgstr "Bijgeleverde sjabloon openen"
+msgstr "Open ingesloten sjabloon"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:163
 msgid "Optional category for catinclude"
@@ -8233,7 +8233,7 @@ msgstr "Deze sjablonen bevatten niet-optionele <tt>{include}</tt> -statements di
 
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:4
 msgid "These templates have syntax errors and could not be checked for included templates."
-msgstr "Deze sjablonen bevatten syntax-fouten en konden niet worden gecontroleerd op opgenomen sjablonen."
+msgstr "Deze sjablonen bevatten syntaxfouten en konden niet worden gecontroleerd op ingesloten sjablonen."
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:17
 msgid "This calculates and visualizes the dependency graph of all templates."
@@ -8541,7 +8541,7 @@ msgstr "Geaccepteerd voor levering"
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:238
 msgid "Being sent"
-msgstr "Verzonden worden"
+msgstr "Wordt verzonden"
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:15
 #: zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:4
@@ -9134,7 +9134,7 @@ msgstr "De instellingen worden vergrendeld door de systeemconfiguratie."
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:83
 msgid "The settings are tested by uploading (and removing) a small file."
-msgstr "De instellingen worden getest door een klein bestand te uploaden (en te verwijderen)."
+msgstr "De instellingen worden getest door een klein bestand te uploaden (en weer te verwijderen)."
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:239
 msgid "There is a 1 minute wait before files are uploaded."
@@ -9659,14 +9659,14 @@ msgid "<ul>\n"
 "                                            <li><b>Received</b>: a remote mailer sent email to us</li>\n"
 "              </ul>"
 msgstr "<ul>\n"
-"                                            <li><b>Verstuurd</b>: de e-mail wordt verzonden naar de externe mailer</li>\n"
-"                           <li><b>Sent</b>: de e-mail is verzonden naar de externe mailer</li>\n"
+"                                            <li><b>Wordt verzonden</b>: de e-mail wordt verzonden naar de externe mailer</li>\n"
+"                           <li><b>Verzonden</b>: de e-mail is verzonden naar de externe mailer</li>\n"
 "      <li><b>Relayed</b>: de mailer op afstand meldt dat de e-mail is doorgestuurd naar de volgende server</li>\n"
 "                                            <li><b>Bounce</b>: de e-mail is teruggekaatst van een mailer op afstand, dit is een fatale fout</li>\n"
-"                                            <li><b>Mislukt</b>: de mailer op afstand accepteerde onze e-mail niet, geen verdere pogingen meer</li>\n"
-"                                            <li><b>Retry</b>: we konden de e-mail niet verzenden en zullen het later opnieuw proberen</li>\n"
+"                                            <li><b>Mislukt</b>: de remote mailer accepteerde onze e-mail niet, geen verdere pogingen meer</li>\n"
+"                                            <li><b>Opnieuw proberen</b>: we konden de e-mail niet verzenden en zullen het later opnieuw proberen</li>\n"
 " <li><b>Geblokkeerd</b>: het e-mailadres van de ontvanger is geblokkeerd, controleer de status van het e-mailadres</li>\n"
-"                                            <li><b>Received</b>: een mailer op afstand heeft ons een e-mail gestuurd</li>\n"
+"                                            <li><b>Ontvangen</b>: een mailer op afstand heeft ons een e-mail gestuurd</li>\n"
 "              </ul>"
 
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:156
@@ -9684,7 +9684,7 @@ msgstr "De CSP-rapporten zijn gewist."
 #: zotonic_mod_logging/priv/templates/admin_log_base.tpl:13
 #: zotonic_mod_logging/src/mod_logging.erl:359
 msgid "Content-Security log"
-msgstr "Inhoud-beveiligingslogboek"
+msgstr "Inhoud-beveiligings-logboek"
 
 #: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:3
 msgid "Content-Security-Policy violations"
@@ -10275,7 +10275,7 @@ msgstr "Er zijn geen mailinglijsten gevonden."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:53
 msgid "No pending mailings."
-msgstr "Er zijn geen openstaande verzendingen."
+msgstr "Geen openstaande verzendingen."
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:39
 msgid "Number of recipients on this list:"
@@ -10412,7 +10412,7 @@ msgstr "Abonnement verwijderd."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:39
 msgid "Reset the statistics before sending."
-msgstr "Zet de statistieken terug voordat je het verstuurt."
+msgstr "Stel de statistieken opnieuw in voordat je het verstuurt."
 
 #: zotonic_mod_mailinglist/src/mod_mailinglist.erl:518
 msgid "Saved the opt-out preference."
@@ -10469,16 +10469,16 @@ msgstr "Nu verzenden"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:59
 msgid "Send page to this list..."
-msgstr "Deze pagina naar deze lijst sturen..."
+msgstr "Pagina naar deze lijst sturen..."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:110
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:24
 msgid "Send test mailing now"
-msgstr "Nu een testmail versturen"
+msgstr "Testmail nu verzenden"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:46
 msgid "Send test now"
-msgstr "Nu test verzenden"
+msgstr "Test nu verzenden"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar_mailinglist.tpl:34
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:29
@@ -10526,12 +10526,12 @@ msgstr "Stuur welkomst e-mail"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:8
 msgid "Send “{title}”"
-msgstr "Stuur “{title}”"
+msgstr "Verzend “{title}”"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:3
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:12
 msgid "Send “{title}” to a mailing list"
-msgstr "Stuur “{title}” naar een mailinglijst"
+msgstr "Verzend “{title}” naar een mailinglijst"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:9
 msgid "Sender"
@@ -10625,7 +10625,7 @@ msgstr "Test-mailinglijst"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:41
 msgid "Test mailings are sent immediately. The page does not need to be published, but you must have permission to view it."
-msgstr "Testberichten worden onmiddellijk verzonden. De pagina hoeft niet te worden gepubliceerd, maar je moet wel toestemming hebben om deze te bekijken."
+msgstr "Testmails worden onmiddellijk verzonden. De pagina hoeft niet te worden gepubliceerd, maar je moet wel toestemming hebben om deze te bekijken."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:85
 msgid "Text shown below the confirmation, welcome and unsubscribe e-mails."
@@ -12222,7 +12222,7 @@ msgstr "Heb jij deze aanmelding gestart?"
 
 #: zotonic_mod_signup/priv/templates/email_signup_code.tpl:24
 msgid "Didn't start this signup?"
-msgstr "Heb je deze aanmelding niet zelf gestart?"
+msgstr "Deze aanmelding niet zelf gestart?"
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:65
 msgid "Didn’t receive the email?"
@@ -12258,7 +12258,7 @@ msgstr "Voer de code alleen in op de aanmeldpagina. Deel deze code met niemand."
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:112
 msgid "Generate a new and secure password."
-msgstr "Maak een nieuw en veilig wachtwoord aan."
+msgstr "Een nieuw en veilig wachtwoord aanmaken."
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:113
 msgid "Generate a secure password"
@@ -12333,7 +12333,7 @@ msgstr "Hartelijk dank voor het aanmaken van een account op {site}."
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:47
 msgid "The code you entered is incorrect. Please try again."
-msgstr "De code die u hebt ingevoerd, is onjuist. Probeer het nog eens."
+msgstr "De code die je hebt ingevoerd, is onjuist. Probeer het nog eens."
 
 #: zotonic_mod_signup/src/controllers/controller_signup.erl:653
 msgid "The email address you entered does not match the email address you provided in the previous step. Please check your input and try again."
@@ -13349,7 +13349,7 @@ msgstr "Sta alleen afbeeldingen toe."
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_survey_question_options.tpl:11
 msgid "Only editors can answer"
-msgstr "Alleen redacteuren kunnen hierop antwoorden"
+msgstr "Alleen bewerkers kunnen hier op antwoorden"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:210
 msgid "Optional confirmation email for the respondent"
@@ -13498,7 +13498,7 @@ msgstr "Verplicht, deze vraag moet beantwoord worden."
 
 #: zotonic_mod_survey/priv/templates/_survey_result_chart.tpl:24
 msgid "Responses"
-msgstr "Reacties"
+msgstr "Antwoorden"
 
 #: zotonic_mod_survey/src/mod_survey.erl:456
 msgid "Result deleted."
@@ -14508,11 +14508,11 @@ msgstr "Formaat"
 
 #: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:35
 msgid "Frame rate"
-msgstr "Beeldsnelheid"
+msgstr "Frame-snelheid"
 
 #: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:29
 msgid "Pixel format"
-msgstr "Pixelformaat"
+msgstr "Pixel-formaat"
 
 #: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:3
 msgid "Video"
@@ -14520,15 +14520,15 @@ msgstr "Video"
 
 #: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:41
 msgid "Video bit rate"
-msgstr "Videobitsnelheid"
+msgstr "Videobit-snelheid"
 
 #: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:18
 msgid "Video codec"
-msgstr "Videocodec"
+msgstr "Video-codec"
 
 #: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:94
 msgid "Video tags"
-msgstr "Videotags"
+msgstr "Video-tags"
 
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:53
 msgid "Canonical URL"
@@ -14740,7 +14740,7 @@ msgstr "PostgreSQL databaseverbinding"
 
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:123
 msgid "PostgreSQL database, username and password. The schema defaults to the site name filled in above."
-msgstr "PostgreSQL database, gebruikersnaam en wachtwoord. Het schema is standaard ingesteld op de sitenaam die hierboven is ingevuld."
+msgstr "PostgreSQL-database, gebruikersnaam en wachtwoord. Het schema gebruikt standaard de hierboven ingevulde sitenaam."
 
 #: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:50
 msgid "Resolving the hostname ..."
@@ -14772,7 +14772,7 @@ msgstr "De site is met succes gecreëerd."
 
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:98
 msgid "The config file in <tt>priv/zotonic_site.config</tt> will be overwritten with the database settings from above."
-msgstr "Het configuratiebestand in <tt>priv/zotonic_site.config</tt> wordt overschreven met de database-instellingen van hierboven."
+msgstr "Het configuratiebestand in <tt>priv/zotonic_site.config</tt> wordt overschreven met de hierboven weergegeven database-instellingen."
 
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:126
 msgid "The default database for the schema is <b>{db}</b>."
