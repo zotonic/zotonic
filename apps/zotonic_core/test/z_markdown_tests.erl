@@ -135,3 +135,9 @@ html_document_test() ->
             content => <<"<p>A <strong>document</strong>.</p>">>
         }},
         z_markdown:to_html_document(Markdown)).
+
+html_document_front_matter_error_test() ->
+    Markdown = <<"---\nkeywords:\n  - cache\n">>,
+    ?assertEqual(
+        {error, invalid_front_matter, #{reason => missing_closing_delimiter}},
+        z_markdown:to_html_document(Markdown)).

@@ -35,6 +35,18 @@
                  | email
                  | markupz:options()
                  | [legacy_option()].
+-type html_document_error() ::
+    {error, invalid_front_matter,
+          #{ reason := missing_closing_delimiter }
+        | #{
+            reason := too_large,
+            maximum := non_neg_integer(),
+            size := non_neg_integer()
+        }}
+    | {error, unicode | incomplete, #{
+        encoded := binary(),
+        rest := term()
+    }}.
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
@@ -69,17 +81,21 @@ to_html(Markdown) ->
 %% @doc Convert a Markdown document to HTML while retaining optional front
 %% matter. The metadata source is kept raw so callers can select a decoder and
 %% apply their own schema.
--spec to_html_document(Markdown) -> {ok, markdownz:document(binary())} | {error, unicode}
+-spec to_html_document(Markdown) ->
+    {ok, markdownz:document(binary())}
+    | html_document_error()
     when
         Markdown :: unicode:chardata().
 to_html_document(Markdown) ->
     case markdownz:split_document(to_binary(Markdown)) of
         {ok, #{content := Content} = Document} ->
             {ok, Document#{content := markdownz:to_binary(Content)}};
-        {error, _Kind, _Details} ->
-            {error, unicode};
-        {incomplete, _Encoded, _Rest} ->
-            {error, unicode}
+        {error, invalid_front_matter, _Details} = Error ->
+            Error;
+        {error, Encoded, Rest} when is_binary(Encoded) ->
+            {error, unicode, #{encoded => Encoded, rest => Rest}};
+        {incomplete, Encoded, Rest} ->
+            {error, incomplete, #{encoded => Encoded, rest => Rest}}
     end.
 
 -spec to_binary(CharData) -> Binary
