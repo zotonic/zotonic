@@ -1,6 +1,6 @@
 ---
 name: zotonic-coding
-description: Use when working in Zotonic projects, especially Erlang modules, Zotonic template_compiler templates, dispatch rules, site templates, logging, datamodel fixtures, or site/module structure. Provides project conventions for pragmatic Zotonic 1.x coding.
+description: Use when working in Zotonic projects, especially Erlang modules, Zotonic template_compiler templates, dispatch rules, site templates, logging, datamodel fixtures, site/module structure, or inspecting and importing site data through Zotonic models and APIs. Provides project conventions for pragmatic Zotonic 1.x coding.
 ---
 
 # Zotonic Coding
@@ -123,6 +123,11 @@ msgfmt --check --output-file=/dev/null priv/translations/de.po
 - Zotonic handles language prefixes in page paths; do not add language-code-specific dispatch rules for normal pages.
 - Keep dispatch rule names language-neutral.
 - Do not create dispatch rules for named page resources that can use `page_path`/`m.rsc.name.page_url`.
+
+## Site Data and APIs
+
+- When a task requires inspecting data from a running Zotonic site, using a model over HTTP/MQTT, exporting resources, or copying data into a local test site, read [references/site-data-and-apis.md](references/site-data-and-apis.md).
+- Prefer structured model or resource-export data over scraping rendered HTML. Keep inspection read-only unless the user requested a mutation, and apply the site's normal ACLs unless privileged inspection was explicitly authorized.
 
 ## Frontend Assets
 
