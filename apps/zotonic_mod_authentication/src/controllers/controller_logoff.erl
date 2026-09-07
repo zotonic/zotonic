@@ -25,6 +25,16 @@
 Controller that logs off a user, destroying the session. It also removes any “remember me” cookies the user has, so
 that auto-logon is disabled.
 
+The optional `p` query argument selects the page to visit after logging out and
+defaults to `/`. Only same-site URLs are accepted; external values are replaced
+with `/` before the redirect is made.
+
+```django
+<a href=\"{% url logoff p=m.rsc.page_home.page_url %}\">Log out</a>
+```
+
+The response is not cached or indexed. Logging out resets authentication-token
+cookies before ending the current authenticated session.
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

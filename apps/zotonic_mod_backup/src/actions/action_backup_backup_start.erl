@@ -21,6 +21,19 @@
 }).
 -moduledoc("
 Action which starts a manual backup.
+
+The optional `is_full_backup` argument selects a full backup; it defaults to
+`false`. A full backup includes locally stored files from the site's archive
+directory in addition to the database and configuration covered by the normal
+backup. When filestore is enabled, those files are not copied into the backup.
+
+```django
+{% button text=\"Start full backup\" action={backup_start is_full_backup} %}
+```
+
+The action requires permission to use `mod_backup`, a writable site, and manual
+backups enabled in the backup configuration. It reports when another backup is
+already running.
 ").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([

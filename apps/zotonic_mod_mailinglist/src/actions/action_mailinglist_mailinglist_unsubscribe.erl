@@ -26,6 +26,14 @@ Cancel a mailing list subscription. The recipient id is given with the `id` argu
 
 The `on_success` argument decides which actions are triggered after unsubscribe is successful; `on_error` actions are
 triggered when unsubscribe fails.
+
+Both action arguments can be repeated. The `id` is passed to
+`m_mailinglist:recipient_delete/2`; the resource representing the mailing list
+is not deleted.
+
+```django
+{% button text=\"Unsubscribe\" action={mailinglist_unsubscribe id=q.id on_success={show target=\"done\"} on_error={show target=\"failed\"}} %}
+```
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

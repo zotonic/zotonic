@@ -23,6 +23,13 @@
 }).
 -moduledoc("
 Shows the admin backup revisions screen where you can see older version for a [resource](/id/doc_glossary#term-resource).
+
+Handled events
+--------------
+
+* The `rev-diff` postback notification compares two selected revisions.
+* `{revert, Args}` restores a selected revision and, when requested, its edges
+  and dependent resources.
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

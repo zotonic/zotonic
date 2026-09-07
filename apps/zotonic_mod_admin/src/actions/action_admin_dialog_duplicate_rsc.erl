@@ -23,6 +23,14 @@
 }).
 -moduledoc("
 Open a dialog to duplicate the current [resource](/id/doc_glossary#term-resource) with a new id and title.
+
+The required `id` argument identifies the source resource. Submitting the
+dialog calls `m_rsc:duplicate/3`, creates the copy as unpublished, closes the
+dialog, and redirects to the new resource's admin edit page.
+
+```django
+{% button text=\"Duplicate\" action={dialog_duplicate_rsc id=id} %}
+```
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

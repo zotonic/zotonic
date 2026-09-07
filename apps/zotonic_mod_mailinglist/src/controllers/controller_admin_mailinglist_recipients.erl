@@ -29,6 +29,16 @@ Clicking a recipient shows a popup with information about the recipient, where y
 recipient’s name details.
 
 The page also offers buttons for importing and exporting lists of email addresses.
+
+Handled events
+--------------
+
+* `dialog_recipient_add` opens the add-recipient dialog.
+* `dialog_recipient_edit` opens the edit-recipient dialog.
+* `recipient_is_enabled_toggle` activates or deactivates a recipient.
+* `recipient_change_email` updates a recipient's email address.
+* `recipient_delete` deletes a recipient and removes it from the list.
+* `recipients_clear` removes all recipients from the mailing list.
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

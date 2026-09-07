@@ -27,6 +27,12 @@ Shows the list of Zotonic modules currently known to the system.
 The list is sorted based on the module’s status: active modules are listed first, non-active modules next.
 
 Each module has a button which let you toggle the active status of the module.
+
+Handled events
+--------------
+
+* `{reinstall, [{module, Module}]}` reinstalls the module's data model when the
+  current user is allowed to use the module manager.
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

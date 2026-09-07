@@ -25,7 +25,16 @@
 The main admin edit controller. This controller serves the edit page where [resources](/id/doc_glossary#term-resource)
 can be edited.
 
+Handled events
+--------------
 
+* `rscform` and `{rscform, Args}` submit the resource edit form.
+* `{view, Args}` saves the resource and opens its public page.
+* `{reload_media, Opts}` refreshes the media-edit area.
+* `{delete_media, Opts}` removes the resource's attached medium.
+* `#sort{drop = {dragdrop, {object_sorter, Props}, ...}}` stores a reordered
+  list of connected resources.
+* `{query_preview, Opts}` renders a preview for a query resource.
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

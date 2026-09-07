@@ -24,6 +24,14 @@
 -moduledoc("
 Shows the admin category screen where you can edit the [category](/id/doc_glossary#term-category) tree, rearranging the
 categories, adding new categories, or removing existing ones.
+
+The controller is available through the `admin_category_sorter` dispatch rule
+and requires permission to use `mod_admin_category`. It renders
+`admin_category_sorter.tpl` with `page_admin_category_sorter` set, allowing the
+admin navigation to mark the category screen as active.
+
+Tree mutations are handled by the category admin actions and postbacks used by
+that template; this controller only authorizes and renders the screen.
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

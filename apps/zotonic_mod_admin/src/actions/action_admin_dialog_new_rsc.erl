@@ -50,6 +50,14 @@ objects=[ [m.acl.user, \"author\"] ]
 ```
 
 creates an “author” edge from the new page to the currently logged in user.
+
+The dialog action itself also accepts `cat`, `nocatselect`, `tabs_enabled`,
+`title`, `redirect`, `subject_id`, `object_id`, `predicate`, repeatable `action`,
+repeatable `object`, and `callback` arguments. `redirect` defaults to `true`.
+
+```django
+{% button text=\"New article\" action={dialog_new_rsc cat=\"article\" redirect} %}
+```
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

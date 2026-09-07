@@ -23,6 +23,12 @@
 }).
 -moduledoc("
 Shows a form with settings related to Search Engine Optimization.
+
+Handled events
+--------------
+
+* `admin_seo` saves submitted `seo-*` settings when the current user is
+  allowed to use `mod_seo`.
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

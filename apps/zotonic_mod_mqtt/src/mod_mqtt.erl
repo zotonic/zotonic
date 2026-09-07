@@ -253,6 +253,41 @@ z_mqtt:publish(Msg, Context)
 
 ### JavaScript API
 
+Every browser page has a local Cotonic broker. Use `cotonic.broker.subscribe` and `cotonic.broker.publish` for messages
+within that browser context:
+
+```javascript
+cotonic.broker.subscribe(\"example/+name\", function (msg, bindings) {
+    console.log(bindings.name, msg.payload);
+});
+
+cotonic.broker.publish(\"example/world\", { greeting: \"Hello\" });
+```
+
+The browser broker is connected to the Zotonic server through the `origin` bridge. Prefix a server-side topic with
+`bridge/origin/` when publishing or subscribing in the browser. For example, this subscribes to the server topic
+`public/hello`:
+
+```javascript
+cotonic.broker.subscribe(\"bridge/origin/public/hello\", function (msg) {
+    console.log(msg.payload);
+});
+```
+
+Messages sent by Erlang to a `~client` topic are routed back to that client. This publishes to the browser-local topic
+`example/notice` belonging to the current client:
+
+```erlang
+z_mqtt:publish(
+    [ <<\"~client\">>, <<\"example\">>, <<\"notice\">> ],
+    #{ text => <<\"Updated\">> },
+    Context
+).
+```
+
+`subscribe` accepts options including `qos`; `publish` accepts `qos` and `retain`. QoS defaults to 0. Access control
+is checked on the server after bridge topic mappings have been applied.
+
 
 Enabling the MQTT listener
 --------------------------

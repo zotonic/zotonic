@@ -24,6 +24,20 @@
 -moduledoc("
 Controller which sets the language as given in the `code` argument, and redirects the user back to the page given in the
 `p` argument.
+
+Arguments:
+
+* `code` is the requested enabled language code and is normally supplied by the
+  `language_select` dispatch path.
+* `p` is the optional return URL and defaults to `/`.
+
+Only same-site return URLs are accepted. The controller removes any existing
+language prefix, adds the newly selected language, and responds with a permanent
+redirect. The response is not cached or indexed.
+
+```django
+<a href=\"{% url language_select code=\"nl\" p=q.p %}\">Nederlands</a>
+```
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

@@ -23,6 +23,13 @@
 }).
 -moduledoc("
 Toggle an element by sliding it up and down.
+
+The `target` argument selects the element. `speed` can be a duration in
+milliseconds or a named jQuery duration.
+
+```django
+{% button text=\"Details\" action={slide_toggle target=\"details\" speed=200} %}
+```
 ").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).

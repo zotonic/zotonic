@@ -24,6 +24,15 @@
 }).
 -moduledoc("
 Rescans all modules, to find all templates, lib files, dispatch rules, etc. again.
+
+The optional repeatable `action` argument runs after the rescan has been
+requested. The action flushes the file indexer, emits the `module_ready`
+notification, and shows a progress message. It does not wait for all dependent
+module work to finish.
+
+```django
+{% button text=\"Rescan modules\" action={module_rescan action={reload}} %}
+```
 ").
 -author("Marc Worrell <marc@worrell.nl").
 -include_lib("zotonic_core/include/zotonic.hrl").

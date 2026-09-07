@@ -23,6 +23,14 @@
 }).
 -moduledoc("
 Open a dialog to create a new configuration key/value pair.
+
+The optional repeatable `on_success` argument runs actions after creation. The
+dialog asks for a module, key, and value, normalizes the module and key to valid
+names, and rejects duplicates. Only editable administrators may create entries.
+
+```django
+{% button text=\"Add setting\" action={dialog_config_new on_success={reload}} %}
+```
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

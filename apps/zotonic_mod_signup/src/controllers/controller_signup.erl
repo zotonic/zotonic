@@ -65,6 +65,9 @@ payload is carried forward as template variables in each wire postback
 state limited to the values the template already needs to render, while the
 original `xs` token is only used to bootstrap the first page render.
 
+Handled events
+--------------
+
 The controller accepts these postbacks:
 
 * `signup_email_step1`: validates and prechecks the email address. If the address

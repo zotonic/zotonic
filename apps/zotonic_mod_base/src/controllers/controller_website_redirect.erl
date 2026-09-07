@@ -21,6 +21,15 @@
 }).
 -moduledoc("
 This controller does a redirect to the `website` property of the given [resource](/id/doc_glossary#term-resource).
+
+The required `id` argument can be a resource id or name. The resource must
+exist and be visible to the current user. When its `website` property is not
+empty, the controller returns a temporary redirect to that URL; otherwise no
+redirect is produced.
+
+This controller is selected by `controller_page` when a resource has
+`is_website_redirect` enabled. Relative website values are expanded against the
+current site URL.
 ").
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 

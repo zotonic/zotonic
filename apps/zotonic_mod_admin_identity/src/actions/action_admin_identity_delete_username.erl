@@ -23,6 +23,15 @@
 }).
 -moduledoc("
 Delete the username from a user, no confirmation.
+
+Arguments:
+
+* `id` identifies the user resource.
+* `on_success` can be repeated to run actions after deletion.
+
+The action removes the username identity, not the person resource. It requires
+a writable site and permission to use `mod_admin_identity`. Use
+`dialog_delete_username` when confirmation is required.
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

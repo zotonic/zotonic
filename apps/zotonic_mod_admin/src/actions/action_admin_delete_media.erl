@@ -23,6 +23,19 @@
 }).
 -moduledoc("
 Delete a media file from a [resource](/id/doc_glossary#term-resource), without confirmation.
+
+Arguments:
+
+* `id` is the resource whose medium is deleted.
+* `on_success` can be repeated to run actions after a successful deletion.
+
+The action checks whether the resource is deletable before calling
+`m_media:delete/2`. Use `dialog_media_upload` when the user should replace the
+medium, or add an explicit confirmation before wiring this destructive action.
+
+```django
+{% button text=\"Remove image\" action={delete_media id=id on_success={hide target=\"media-preview\"}} %}
+```
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

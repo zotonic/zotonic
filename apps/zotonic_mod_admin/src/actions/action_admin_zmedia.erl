@@ -23,6 +23,17 @@
 }).
 -moduledoc("
 Used for triggering the insertion of a media item in the TinyMCE editor in the admin.
+
+The action opens `_action_dialog_zmedia_choose.tpl`. Its arguments are passed to
+that dialog, including the current resource `id`, `subject_id`, and the editor's
+`media_div_id` when supplied.
+
+```django
+{% button text=\"Add media\" action={zmedia id=id subject_id=id media_div_id=\"body-media\"} %}
+```
+
+The chooser finishes through the internal `zmedia_choose` and
+`zmedia_has_chosen` actions.
 ").
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 -include_lib("zotonic_core/include/zotonic.hrl").

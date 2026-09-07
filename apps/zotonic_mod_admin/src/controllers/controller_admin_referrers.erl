@@ -24,6 +24,13 @@
 -moduledoc("
 Shows the list of pages ([resources](/id/doc_glossary#term-resource)) which refer to this
 [resource](/id/doc_glossary#term-resource) through an [edge](/id/doc_glossary#term-edge).
+
+The required `id` path argument can be a resource id or name. The controller
+requires permission to use `mod_admin`, renders `admin_referrers.tpl`, and
+passes the resolved resource as `id`. It also honors Zotonic's gone-resource
+redirect when the requested resource was replaced.
+
+Use `{% url admin_referrers id=id %}` to construct its URL.
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

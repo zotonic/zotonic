@@ -28,6 +28,14 @@ available in the system, and shows whether or not the current resource has alrea
 Per mailinglist, it offers the options to send the resource right now, or schedule it for later delivery.
 
 There are also buttons for sending the resource to a test mailing list or to a single email address.
+
+The required `id` argument identifies the page to inspect. The current user
+must be allowed to use `mod_mailinglist` and view that page. The controller
+passes the resolved `id` to the category-aware `admin_mailing_status.tpl`;
+sending, scheduling, and test-mail actions are implemented by that template's
+wired controls.
+
+Use `{% url admin_mailing_status id=id %}` to construct the URL.
 ").
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 

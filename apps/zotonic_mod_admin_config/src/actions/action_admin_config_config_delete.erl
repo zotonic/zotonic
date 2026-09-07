@@ -23,6 +23,19 @@
 }).
 -moduledoc("
 Trigger the deletion of a configuration value. Used in the admin.
+
+Arguments:
+
+* `module` and `key` identify the configuration entry.
+* `on_success` can be repeated to run actions after deletion.
+
+The deletion is performed only for an editable administrator. This action does
+not ask for confirmation; use `dialog_config_delete` for a user-facing delete
+control.
+
+```django
+{% wire id=\"delete-config\" action={config_delete module=\"mod_example\" key=\"enabled\" on_success={reload}} %}
+```
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

@@ -27,6 +27,15 @@ Serve the Zotonic status site and fallback templates.
 The controller renders fallback error pages for unmatched hosts. For allowed
 administrators it also handles starting, stopping, restarting, and flushing
 sites from the status interface.
+
+Handled events
+--------------
+
+* `site_start` starts a site.
+* `site_restart` restarts a site.
+* `site_stop` stops a site.
+* `site_flush` flushes a site's caches and reloads its dispatch rules.
+* `site_admin` opens the administration interface for a site.
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

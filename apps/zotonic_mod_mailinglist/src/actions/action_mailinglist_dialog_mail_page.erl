@@ -24,6 +24,15 @@
 -moduledoc("
 Shows the dialog to mail the current page ([resource](/id/doc_glossary#term-resource)) to a single e-mail address. This
 is used in the frontend of a site to “share” the current page over e-mail.
+
+The required `id` argument identifies the page. `on_success` can be repeated to
+run actions after the message has been queued. The dialog validates the entered
+email address and sends the category-aware mailing representation through
+`z_email:send_page/3`.
+
+```django
+{% button text=\"Email this page\" action={dialog_mail_page id=id on_success={dialog_close}} %}
+```
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

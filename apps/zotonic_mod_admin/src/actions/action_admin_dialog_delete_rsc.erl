@@ -23,6 +23,18 @@
 }).
 -moduledoc("
 Open a dialog to confirm the deletion of a [resource](/id/doc_glossary#term-resource).
+
+Arguments:
+
+* `id` is the resource to delete.
+* `on_success` can be repeated and is forwarded to the actual deletion action.
+
+The dialog is only opened when the current user may delete the resource. Its
+body is selected with the category-aware `_action_dialog_delete_rsc.tpl`.
+
+```django
+{% button text=\"Delete\" action={dialog_delete_rsc id=id on_success={redirect back}} %}
+```
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

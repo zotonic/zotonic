@@ -28,6 +28,17 @@ The page does not need to be published. The sender must be allowed to use
 mod_mailinglist and view the page. The mailing is queued for immediate sending.
 
 The `on_success` argument decides which actions are triggered after the page has been sent.
+
+The required `id` argument identifies the page to send. `on_success` can be
+repeated. The action resolves the named `mailinglist_test` resource and queues
+the mailing with `is_send_all`, so all active test recipients receive it.
+
+```django
+{% button text=\"Send test\" action={mailing_page_test id=id on_success={reload}} %}
+```
+
+An error is shown when the test list is missing or the current user is not
+allowed to send the page.
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

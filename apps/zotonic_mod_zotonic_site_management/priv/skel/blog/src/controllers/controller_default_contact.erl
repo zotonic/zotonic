@@ -3,6 +3,15 @@
 %% @doc Example contact-form handler.
 
 -module(controller_default_contact).
+-moduledoc("
+Example contact-form controller from the blog site scaffold.
+
+Handled events
+--------------
+
+* `{contact, []}` submits the contact form, emails its contents to the site
+  administrator, and replaces the form with a confirmation message.
+").
 -export([event/2]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").

@@ -29,6 +29,26 @@ The basic information usually comprises of the title, the summary and the catego
 category by making a category specific template named `_admin_edit_basics_form.tpl` which is included using a [catinclude](/id/doc_template_tag_tag_catinclude).
 
 For instance, to create a special “basics” dialog for the category news, you would create a template called `_admin_edit_basics_form.news.tpl`
+
+Arguments:
+
+* `id` identifies the resource. If omitted, the action resolves it from
+  `edge_id` or from the request.
+* `edge_id` identifies an edge whose object is edited.
+* `template` selects the template used to refresh the edited item; it defaults
+  to the category-aware `_rsc_edge.tpl`.
+* `update_element` selects the element refreshed after saving. By default it is
+  the wire target; `none` or `window` disables refreshing.
+* `is_update` updates the contents of `update_element` instead of replacing the
+  element itself.
+* `action` can be repeated to run actions after saving.
+* `callback` names a safe JavaScript callback receiving the resource id and
+  title.
+* `level` is passed to the dialog template for nested editing.
+
+```django
+{% button text=\"Edit title\" action={dialog_edit_basics id=id update_element=\"card\" template=\"_card.tpl\"} %}
+```
 ").
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 

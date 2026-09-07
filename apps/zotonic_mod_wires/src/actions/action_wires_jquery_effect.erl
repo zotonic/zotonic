@@ -27,12 +27,24 @@ for example [show](/id/doc_template_action_action_show), [hide](/id/doc_template
 
 Arguments:
 
-*   type - one of show, hide, remove, slide_toggle, toggle, set_class, add_class, remove_class, fade_in, fade_out, slide_up, slide_fade_out, slide_fade_in, disable, enable, effect, animate.
-*   speed
-*   class
-*   easing
-*   effect
-*   options
+* `target` selects the affected element.
+* `type` is one of `show`, `hide`, `remove`, `toggle`, `set_class`,
+  `add_class`, `remove_class`, `toggle_class`, `fade_in`, `fade_out`,
+  `slide_down`, `slide_up`, `slide_toggle`, `slide_fade_out`,
+  `slide_fade_in`, `disable`, `enable`, `effect`, or `animate`.
+* `speed` is a duration in milliseconds or a named jQuery duration. Effects
+  and animations default to 350 milliseconds.
+* `class` is used by the class-changing types.
+* `effect` and `options` configure the `effect` type.
+* `options` and `easing` configure the `animate` type.
+* `fadeout` makes `remove` fade the element before removing it.
+
+Prefer a dedicated action such as `show`, `hide`, or `slide_toggle` when one is
+available. For example:
+
+```django
+{% button text=\"Toggle details\" action={jquery_effect target=\"details\" type=\"slide_toggle\" speed=200} %}
+```
 ").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).

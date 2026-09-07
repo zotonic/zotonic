@@ -22,8 +22,18 @@
     zotonic_keywords => ["reference", "frontend_developer", "wire_action", "user_interface_and_interaction", "javascript"]
 }).
 -moduledoc("
-Move an element to another place, appending it to the target. The element is given by id with the `element` argument, or
-with the `element_sel` argument for a CSS selector.
+Move the target element by appending it to another element.
+
+Arguments:
+
+* `target` is the element being moved.
+* `element` is the id of the destination container.
+* `element_sel` is a CSS selector for the destination and takes precedence over
+  `element`.
+
+```django
+{% button text=\"Move notice\" action={move target=\"notice\" element=\"sidebar\"} %}
+```
 ").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).

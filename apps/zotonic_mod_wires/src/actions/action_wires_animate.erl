@@ -26,9 +26,18 @@ Add a `$(..).animate` jQuery call to the target element.
 
 Arguments:
 
-*   speed
-*   easing
-*   options
+* `target` selects the element to animate.
+* `options` is a list or map of CSS properties and target values passed to
+  jQuery's `animate` function.
+* `speed` is the duration in milliseconds, or a jQuery duration such as
+  `\"slow\"`. The default is 350 milliseconds.
+* `easing` is the name of the jQuery easing function.
+
+For example, this fades an element to half opacity:
+
+```django
+{% button text=\"Dim\" action={animate target=\"panel\" options=[{opacity, 0.5}] speed=250} %}
+```
 ").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).

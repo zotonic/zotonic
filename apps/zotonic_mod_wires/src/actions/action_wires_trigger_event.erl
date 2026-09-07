@@ -23,8 +23,16 @@
     zotonic_keywords => ["reference", "frontend_developer", "wire_action", "messaging_and_pubsub", "javascript"]
 }).
 -moduledoc("
-Trigger a named {% wire %} with an action. All args will be args to the named wire. The trigger’s `name` argument
-is the name of the wire.
+Trigger a named `{% wire %}` event in the browser. The required `name` argument
+identifies the wire; every other action argument is passed to the named event.
+
+```django
+{% wire name=\"refresh-preview\" action={update target=\"preview\" template=\"_preview.tpl\"} %}
+{% button text=\"Refresh\" action={trigger_event name=\"refresh-preview\" id=id} %}
+```
+
+In this example the named wire receives `id` as an event argument when the
+button is clicked.
 ").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).

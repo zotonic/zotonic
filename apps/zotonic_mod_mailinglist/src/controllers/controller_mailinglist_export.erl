@@ -23,6 +23,19 @@
 }).
 -moduledoc("
 Controller which downloads the given mailinglist id as a CSV file.
+
+The required `id` argument can be a mailing-list resource id or name. The
+caller must be allowed to edit that mailing list. `GET` and `HEAD` requests are
+supported.
+
+The UTF-8 CSV contains active recipients only, with the columns `Email`,
+`First`, `Surname`, `Prefix`, `Language`, and `Id`. Both explicit mailing-list
+recipients and connected resource recipients are included. The download name is
+`mailinglist-<list-title>.csv`.
+
+```django
+<a href=\"{% url mailinglist_export id=id %}\">Download recipients</a>
+```
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

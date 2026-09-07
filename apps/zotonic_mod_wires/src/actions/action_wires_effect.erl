@@ -22,7 +22,19 @@
     zotonic_keywords => ["reference", "frontend_developer", "wire_action", "user_interface_and_interaction", "javascript"]
 }).
 -moduledoc("
-Add a `$(..).effect` jQuery call to the target element.
+Run a jQuery UI effect on the target element.
+
+Arguments:
+
+* `target` selects the element receiving the effect.
+* `effect` is the jQuery UI effect name.
+* `options` contains effect-specific options.
+* `speed` is the duration in milliseconds or a named jQuery duration. The
+  default is 350 milliseconds.
+
+```django
+{% button text=\"Highlight\" action={effect target=\"notice\" effect=\"highlight\" speed=500} %}
+```
 ").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).

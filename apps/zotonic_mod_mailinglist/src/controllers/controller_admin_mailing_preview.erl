@@ -23,6 +23,16 @@
 }).
 -moduledoc("
 This controller shows a preview of what a resource that is being mailed would look like, in a popup window.
+
+The required `id` argument identifies the page being mailed. The current user
+must be allowed to use `mod_mailinglist` and view that page. The controller
+renders the category-aware `mailing_page.tpl` with:
+
+* `id`: the page being previewed;
+* `list_id`: the named `mailinglist_test` resource;
+* `email_from`: the sender address configured for that test list.
+
+Use `{% url admin_mailing_preview id=id %}` to construct the preview URL.
 ").
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 

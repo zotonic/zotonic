@@ -120,6 +120,25 @@ left to see the tabs. If mod_translation disabled, then i18n-widgets are display
 Making an admin widget conditionally visible
 --------------------------------------------
 
+An admin widget can decide whether its complete wrapper is rendered. Override the `widget_wrapper` block, test the
+condition, and use [inherit](/id/doc_template_tag_tag_inherit) to render the wrapper supplied by the parent template.
+
+For example, the backup module only shows its edit-page widget when its admin panel is enabled:
+
+```django
+{% extends \"admin_edit_widget_std.tpl\" %}
+
+{% block widget_wrapper %}
+    {% if m.backup.admin_panel %}
+        {% inherit %}
+    {% endif %}
+{% endblock %}
+```
+
+When the condition is false, the overridden block renders nothing. When it is true, `{% inherit %}` renders the normal
+widget wrapper and all of its content. This keeps the visibility decision inside the widget instead of repeating the
+condition at every include site.
+
 
 Extending the admin overview page
 ---------------------------------
