@@ -66,6 +66,7 @@ This module handles the following notifier callbacks:
 Delegate callbacks:
 
 - `event/2` with `submit` messages: `config_save`, `test_email`.
+- `event/2` with the `regenerate_self_signed` postback: Replace Zotonic’s fallback certificate for the site hostname.
 
 ").
 -author("Marc Worrell <marc@worrell.nl>").
@@ -152,6 +153,33 @@ event(#submit{ message = {test_email, []} }, Context) ->
                 ?__("View email status", Context),
                 "_dialog_email_status.tpl",
                 [ {email, Email} ],
+                Context)
+    end;
+event(#postback{ message = {regenerate_self_signed, []} }, Context) ->
+    case z_acl:is_admin(Context) of
+        true ->
+            Hostname = z_context:hostname(Context),
+            case z_ssl_certs:regenerate_self_signed(Hostname) of
+                {ok, _} ->
+                    Context1 = z_render:growl(
+                        ?__("Generated a new self-signed certificate.", Context),
+                        Context),
+                    z_render:wire({reload, []}, Context1);
+                {error, Reason} ->
+                    ?LOG_ERROR(#{
+                        text => <<"Could not regenerate self-signed certificate">>,
+                        in => zotonic_mod_admin_config,
+                        result => error,
+                        reason => Reason,
+                        hostname => Hostname
+                    }),
+                    z_render:growl_error(
+                        ?__("Could not generate a new self-signed certificate.", Context),
+                        Context)
+            end;
+        false ->
+            z_render:growl_error(
+                ?__("Only administrators can regenerate the self-signed certificate.", Context),
                 Context)
     end.
 

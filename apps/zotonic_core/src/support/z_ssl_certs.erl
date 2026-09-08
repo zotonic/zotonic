@@ -31,7 +31,8 @@
     get_ssl_options/2,
 
     sni_self_signed/1,
-    ensure_self_signed/1
+    ensure_self_signed/1,
+    regenerate_self_signed/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -195,6 +196,24 @@ ensure_self_signed(Hostname) ->
             end
     end.
 
+%% @doc Replace the self-signed certificate and private key for a hostname.
+-spec regenerate_self_signed( string() | binary() ) ->
+    {ok, list(ssl:tls_option())} | {error, term()}.
+regenerate_self_signed(Hostname) ->
+    HostnameS = z_convert:to_list(Hostname),
+    case get_self_signed_files(HostnameS) of
+        {ok, Certs} ->
+            case generate_self_signed(HostnameS, Certs) of
+                {ok, _} = Ok ->
+                    ok = ssl:clear_pem_cache(),
+                    Ok;
+                {error, _} = Error ->
+                    Error
+            end;
+        {error, _} = Error ->
+            Error
+    end.
+
 -spec site_hostname(z:context() | undefined) -> binary().
 site_hostname(undefined) ->
     {ok, LocalHostname} = inet:gethostname(),
@@ -223,7 +242,7 @@ generate_self_signed(Hostname, Opts) ->
                 hostname => Hostname,
                 servername => server_name()
             },
-            case zotonic_ssl_certs:ensure_self_signed(CertFile, PemFile, Options) of
+            case zotonic_ssl_certs:generate_self_signed(CertFile, PemFile, Options) of
                 ok ->
                     {ok, [
                         {certfile, CertFile},
