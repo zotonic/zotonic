@@ -1271,7 +1271,15 @@ set_answer_user(SurveyId, AnswerId, UserId, Context) ->
         [UserId, AnswerId, SurveyId],
         Context)
     of
-        1 -> ok;
+        1 ->
+            {UserId, Persistent} = z_db:q_row("
+                select user_id, persistent
+                from survey_answers
+                where id = $1",
+                [AnswerId],
+                Context),
+            publish(SurveyId, UserId, Persistent, Context),
+            ok;
         0 -> {error, enoent}
     end.
 
@@ -1318,7 +1326,15 @@ set_answer_status_2(SurveyId, AnswerId, Status, Note, Context) ->
         ],
         Context)
     of
-        1 -> ok;
+        1 ->
+            {UserId, Persistent} = z_db:q_row("
+                select user_id, persistent
+                from survey_answers
+                where id = $1",
+                [AnswerId],
+                Context),
+            publish(SurveyId, UserId, Persistent, Context),
+            ok;
         0 -> {error, enoent}
     end.
 
