@@ -183,10 +183,6 @@ moved_temporarily(Context) ->
 
 process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     z_context:logger_md(Context),
-    DefaultVars = [
-        {signup_props, []},
-        {props, #{}}
-    ],
     Vars = case maybe_fetch_xs(Context) of
         {ok, Props, SignupProps} ->
             Props1 = drop_empty_email(Props),
@@ -199,7 +195,11 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
                 {is_email_verified, is_email_idn_verified(Email, SignupProps)}
             ];
         false ->
-            DefaultVars
+            [
+                {signup_props, []},
+                {props, #{}},
+                {page, get_redirect_page([], z_context:get_q(<<"p">>, Context))}
+            ]
     end,
     % z_session:set(signup_xs, undefined, Context),
     Rendered = z_template:render(<<"signup.tpl">>, Vars, Context),
