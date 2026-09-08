@@ -8,6 +8,7 @@ description: Use when working in Zotonic projects, especially Erlang modules, Zo
 ## First Pass
 
 - Read the local app/module before editing. Prefer existing project patterns over inventing new abstractions.
+- Before implementing a special case, inspect related resources, categories, modules, and callers to identify the underlying pattern. Prefer a generic, data-driven or convention-driven solution that covers the pattern over branches for individual names or instances; keep a specific override only when the behavior is genuinely unique.
 - Keep changes inside the requested app unless the user explicitly expands scope.
 - Files use UTF-8 and LF line endings.
 - Use `rg`/`rg --files` for discovery.

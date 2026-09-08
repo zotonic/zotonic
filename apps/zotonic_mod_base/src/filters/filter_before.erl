@@ -19,7 +19,7 @@
 
 -module(filter_before).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "date_and_time", "boolean", "compare"]
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "collection", "query"]
 }).
 -moduledoc("
 Return the first element before another element in a list. For example:
