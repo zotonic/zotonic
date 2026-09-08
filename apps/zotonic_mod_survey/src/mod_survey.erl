@@ -145,6 +145,12 @@ survey. The read-only `_survey_answer_status.tpl` and the editable
 included by `_dialog_survey_answer_status.tpl`, which handles saving through
 the `survey_answer_status` submit event.
 
+`_dialog_survey_result_view.tpl` shows an entire saved result without paging.
+For editors it combines the status fields with editable editor-only questions;
+all respondent answers are read-only and unanswered respondent questions are
+omitted. Its `survey_result_view_save` event accepts only status and
+editor-only values. The full paged editor remains available from the dialog.
+
 Both status templates accept an optional `status_labels` list for values 0
 through 5. Without labels they show only the color swatches. For example:
 
@@ -238,7 +244,8 @@ This module handles the following notifier callbacks:
 
 Delegate callbacks handled by `event/2` include the `survey_start`,
 `survey_back`, `survey_remove_result`, and `survey_remove_result_confirm`
-postbacks, and the `survey_next` and `survey_answer_status` submit events.
+postbacks, and the `survey_next`, `survey_answer_status`, and
+`survey_result_view_save` submit events.
 ">>).
 -author("Marc Worrell <marc@worrell.nl>").
 
@@ -445,6 +452,20 @@ event(#submit{message={survey_answer_status, Args}}, Context) ->
             z_render:growl_error(?__("Sorry, the status could not be saved.", Context), Context)
     end;
 
+event(#submit{message={survey_result_view_save, Args}}, Context) ->
+    {id, SurveyId0} = proplists:lookup(id, Args),
+    {answer_id, AnswerId0} = proplists:lookup(answer_id, Args),
+    SurveyId = m_rsc:rid(SurveyId0, Context),
+    AnswerId = z_convert:to_integer(AnswerId0),
+    Status = survey_answer_status(z_context:get_q(<<"status">>, Context)),
+    Note = survey_answer_status_note(z_context:get_q(<<"status_note">>, Context, <<>>)),
+    case {Status, Note} of
+        {{ok, StatusIndex}, {ok, StatusNote}} when is_integer(SurveyId), is_integer(AnswerId) ->
+            save_survey_result_view(SurveyId, AnswerId, StatusIndex, StatusNote, Args, Context);
+        _ ->
+            z_render:growl_error(?__("Sorry, the survey result could not be saved.", Context), Context)
+    end;
+
 event(#postback{message={survey_remove_result, Args}}, Context) ->
     {id, SurveyId} = proplists:lookup(id, Args),
     {answer_id, AnswerId} = proplists:lookup(answer_id, Args),
@@ -472,7 +493,7 @@ survey_answer_status(Status) when is_binary(Status) ->
     catch
         error:badarg -> error
     end;
-survey_answer_status(Status) when is_integer(Status), Status >= 0 ->
+survey_answer_status(Status) when is_integer(Status), Status >= 0, Status =< 5 ->
     {ok, Status};
 survey_answer_status(_) ->
     error.
@@ -488,6 +509,100 @@ survey_answer_status_note(Note) when is_binary(Note) ->
     end;
 survey_answer_status_note(_) ->
     error.
+
+%% @private Save the fields exposed by the result view dialog. Respondent
+%% answers are not accepted by this endpoint.
+save_survey_result_view(SurveyId, AnswerId, Status, Note, Args, Context) ->
+    case z_acl:rsc_editable(SurveyId, Context) of
+        false ->
+            z_render:growl_error(?__("You are not allowed to change these results.", Context), Context);
+        true ->
+            Questions = case m_rsc:p_no_acl(SurveyId, <<"blocks">>, Context) of
+                Blocks when is_list(Blocks) -> Blocks;
+                _ -> []
+            end,
+            EditorQuestions = [
+                Question
+                || Question <- Questions,
+                   z_convert:to_bool(maps:get(<<"is_editor_only">>, Question, false))
+            ],
+            EditorInputNames = editor_only_input_names(Questions, Context),
+            {SubmittedAnswers, _Submitter} = get_args(Context),
+            EditorAnswers = [
+                Answer
+                || {Name, _} = Answer <- group_multiselect(SubmittedAnswers),
+                   lists:member(Name, EditorInputNames)
+            ],
+            {FoundAnswers, Missing} = collect_answers(
+                SurveyId,
+                EditorQuestions,
+                EditorAnswers,
+                Context),
+            case Missing of
+                [] ->
+                    StorageAnswers = survey_answers_to_storage(FoundAnswers),
+                    save_survey_result_view_1(
+                        SurveyId,
+                        AnswerId,
+                        StorageAnswers,
+                        Status,
+                        Note,
+                        Args,
+                        Context);
+                _ ->
+                    z_render:growl_error(?__("Please fill in all the required fields.", Context), Context)
+            end
+    end.
+
+save_survey_result_view_1(SurveyId, AnswerId, Answers, Status, Note, Args, Context) ->
+    case m_survey:single_result(SurveyId, AnswerId, Context) of
+        [] ->
+            z_render:growl_error(?__("Sorry, that answer is unknown.", Context), Context);
+        Result ->
+            case m_survey:replace_editor_only_submission(
+                SurveyId,
+                AnswerId,
+                Answers,
+                Context)
+            of
+                {ok, AnswerId} ->
+                    StatusResult = case {
+                        proplists:get_value(status, Result),
+                        proplists:get_value(status_note, Result)
+                    } of
+                        {Status, Note} -> ok;
+                        _ -> m_survey:set_answer_status(SurveyId, AnswerId, Status, Note, Context)
+                    end,
+                    render_saved_survey_result_view(
+                        StatusResult,
+                        SurveyId,
+                        AnswerId,
+                        Args,
+                        Context);
+                {error, enoent} ->
+                    z_render:growl_error(?__("Sorry, that answer is unknown.", Context), Context);
+                {error, eacces} ->
+                    z_render:growl_error(?__("You are not allowed to change these results.", Context), Context)
+            end
+    end.
+
+render_saved_survey_result_view(ok, _SurveyId, _AnswerId, Args, Context) ->
+    OnSuccess = case proplists:get_value(on_success, Args) of
+        undefined -> [];
+        Actions when is_list(Actions) -> Actions;
+        Action1 -> [Action1]
+    end,
+    z_render:wire([
+        {dialog_close, []},
+        {growl, [{text, ?__("Survey result saved.", Context)}]}
+        | OnSuccess
+    ], Context);
+render_saved_survey_result_view({error, enoent}, _SurveyId, _AnswerId, _Args, Context) ->
+    z_render:growl_error(?__("Sorry, that answer is unknown.", Context), Context);
+render_saved_survey_result_view({error, eacces}, _SurveyId, _AnswerId, _Args, Context) ->
+    z_render:growl_error(?__("You are not allowed to change these results.", Context), Context);
+render_saved_survey_result_view({error, badarg}, _SurveyId, _AnswerId, _Args, Context) ->
+    z_render:growl_error(?__("Sorry, the survey result could not be saved.", Context), Context).
 
 %% @doc Append the possible blocks for a survey's edit page.
 observe_admin_edit_blocks(#admin_edit_blocks{id=Id}, Menu, Context) ->

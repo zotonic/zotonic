@@ -30,7 +30,7 @@ Available Model API Paths
 | `get` | `/all_results/+list/...` | Return editable-only full result matrix for survey id `+list[1]`, sorted by column `+list[2]`, with captions row followed by answer rows. |
 | `get` | `/all_results/+id/...` | Return editable-only full result matrix for survey `+id` (`[captions | answers]`) from stored submissions. |
 | `get` | `/list_results/+id/...` | Return editable-only list view of survey submissions for `+id` via `list_results/2`. |
-| `get` | `/get_result/+surveyid/+answerid/...` | Return one submission (`+answerid`) for survey `+surveyid`; requires `view_result` ACL when a row exists, and includes status metadata only when the survey is editable. |
+| `get` | `/get_result/+surveyid/+answerid/...` | Return one submission (`+answerid`) for survey `+surveyid`; requires `view_result` ACL when a row exists. The result includes `answers_edit` for form prefilling and `answered_blocks` for compact result views. Status metadata is included only when the survey is editable. |
 | `get` | `/captions/+surveyid/...` | Return survey result/export captions for `+surveyid` from question block metadata. |
 | `get` | `/totals/+surveyid/...` | Return editable-only aggregate totals/statistics for survey `+surveyid`. |
 | `get` | `/did_survey/+surveyid/...` | Return whether the current user (or anonymous session id) already has a submission for survey `+surveyid`. |
@@ -63,6 +63,7 @@ Available Model API Paths
     insert_survey_submission/3,
     insert_survey_submission/5,
     replace_survey_submission/4,
+    replace_editor_only_submission/4,
     survey_stats/2,
     survey_results/3,
     survey_results_prompts/3,
@@ -165,7 +166,7 @@ m_get([ <<"get_result">>, SurveyId, AnswerId | Rest ], _Msg, Context) ->
                     {ok, {[], Rest}};
                 Result ->
                     case z_acl:is_allowed(view_result, #acl_survey{id=RId, answer_id=AnswerId}, Context) of
-                        true -> {ok, {Result, Rest}};
+                        true -> {ok, {prepare_result_view(Result), Rest}};
                         false -> {error, eacces}
                     end
             end
@@ -418,6 +419,43 @@ replace_survey_submission(SurveyId, AnswerId, Answers, Context) when is_integer(
                 answer_id => AnswerId
             }),
             {error, enoent}
+    end.
+
+%% @doc Replace only the answers belonging to editor-only blocks. Existing
+%% respondent answers are retained exactly as stored.
+-spec replace_editor_only_submission(SurveyId, AnswerId, Answers, Context) ->
+    {ok, AnswerId} | {error, eacces | enoent} when
+    SurveyId :: m_rsc:resource_id(),
+    AnswerId :: pos_integer(),
+    Answers :: list(),
+    Context :: z:context().
+replace_editor_only_submission(SurveyId, AnswerId, Answers, Context) ->
+    case z_acl:rsc_editable(SurveyId, Context) of
+        true ->
+            case single_result(SurveyId, AnswerId, Context) of
+                [] ->
+                    {error, enoent};
+                Result ->
+                    ExistingAnswers = proplists:get_value(answers, Result, []),
+                    EditorOnlyBlocks = editor_only_block_names(SurveyId, Context),
+                    SubmittedEditorAnswers = [
+                        Answer
+                        || Answer <- Answers,
+                           is_editor_only_answer(Answer, EditorOnlyBlocks)
+                    ],
+                    RespondentAnswers = [
+                        Answer
+                        || Answer <- ExistingAnswers,
+                           not is_editor_only_answer(Answer, EditorOnlyBlocks)
+                    ],
+                    MergedAnswers = RespondentAnswers ++ SubmittedEditorAnswers,
+                    case lists:sort(MergedAnswers) =:= lists:sort(ExistingAnswers) of
+                        true -> {ok, AnswerId};
+                        false -> replace_survey_submission(SurveyId, AnswerId, MergedAnswers, Context)
+                    end
+            end;
+        false ->
+            {error, eacces}
     end.
 
 publish(_SurveyId, undefined, _Persistent, _Context) ->
@@ -1283,6 +1321,28 @@ set_answer_status_2(SurveyId, AnswerId, Status, Note, Context) ->
         1 -> ok;
         0 -> {error, enoent}
     end.
+
+
+%% @private Add the two derived answer representations used by the result
+%% dialog. Keep the original stored answers for read-only question rendering.
+prepare_result_view(Result) ->
+    StoredAnswers = proplists:get_value(answers, Result, []),
+    EditAnswers = [
+        {Name, proplists:get_value(answer, Props)}
+        || {Name, Props} <- StoredAnswers,
+           is_list(Props)
+    ],
+    AnsweredBlocks = lists:usort([
+        proplists:get_value(block, Props, proplists:get_value(<<"block">>, Props, Name))
+        || {Name, Props} <- StoredAnswers,
+           is_list(Props),
+           not z_utils:is_empty(proplists:get_value(answer, Props))
+    ]),
+    [
+        {answers_edit, EditAnswers},
+        {answered_blocks, AnsweredBlocks}
+        | Result
+    ].
 
 
 -spec list_results(m_rsc:resource_id(), z:context()) -> list().

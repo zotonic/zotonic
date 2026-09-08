@@ -1,0 +1,107 @@
+.survey-result-status {
+    padding: 1.25rem;
+    margin-bottom: 2rem;
+    background: #f7f7f7;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.survey-result-test-score {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 2rem;
+    padding: 1.25rem 1.5rem;
+    margin: 0 0 2rem;
+    color: #245c2e;
+    background: #edf8ef;
+    border: 1px solid #78b883;
+    border-left-width: 5px;
+    border-radius: 4px;
+
+    &.is-failed {
+        color: #7a2525;
+        background: #fff0f0;
+        border-color: #d78585;
+    }
+
+    &__outcome {
+        display: flex;
+        flex: 1 1 14rem;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    &__icon {
+        flex: 0 0 auto;
+        font-size: 2rem;
+        font-weight: bold;
+        line-height: 1;
+    }
+
+    &__label {
+        display: block;
+        font-size: 0.8em;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        opacity: 0.8;
+    }
+
+    &__status {
+        display: block;
+        font-size: 1.35rem;
+        line-height: 1.25;
+    }
+
+    &__score {
+        display: flex;
+        flex-direction: column;
+        flex: 0 0 auto;
+        text-align: right;
+
+        strong {
+            font-size: 2rem;
+            line-height: 1;
+        }
+
+        span {
+            margin-top: 0.25rem;
+            opacity: 0.8;
+        }
+    }
+
+    &__threshold {
+        flex: 0 0 100%;
+        padding-top: 0.75rem;
+        border-top: 1px solid currentColor;
+        opacity: 0.8;
+    }
+}
+
+.survey-result-answers {
+    min-width: 0;
+}
+
+.survey-editor-only-answer {
+    position: relative;
+    padding: 1.25rem;
+    margin: 0 0 1.5rem;
+    background: #fff8dc;
+    border: 1px solid #ead68a;
+    border-radius: 4px;
+
+    .form-group:last-child,
+    > :last-child {
+        margin-bottom: 0;
+    }
+}
+
+.survey-editor-only-label {
+    margin: 0 0 0.75rem;
+    color: #765f00;
+    font-size: 0.85em;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}

@@ -115,8 +115,21 @@
                     {% endif %}
                     <td>
                         <div class="pull-right">
-                            {% button class="btn btn-default" text=_"Edit answers"
-                                      action={dialog_open template="_dialog_survey_editor.tpl" id=id answer_id=r_id title=_"Edit survey result"}
+                            {% button class="btn btn-default" text=_"View answers"
+                                      action={dialog_open
+                                          template="_dialog_survey_result_view.tpl"
+                                          id=id
+                                          answer_id=r_id
+                                          on_success={replace
+                                              target=["survey-result-status-",r_id]|join
+                                              template="_admin_survey_editor_result_status_update.tpl"
+                                              id=id
+                                              answer_id=r_id
+                                          }
+                                          title=_"Survey result"
+                                          width="large"
+                                          backdrop="static"
+                                      }
                             %}
                             {% button class="btn btn-default" text=_"Delete"
                                       postback={survey_remove_result_confirm id=id answer_id=r_id}
