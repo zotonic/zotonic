@@ -200,18 +200,24 @@ ensure_self_signed(Hostname) ->
 -spec regenerate_self_signed( string() | binary() ) ->
     {ok, list(ssl:tls_option())} | {error, term()}.
 regenerate_self_signed(Hostname) ->
-    HostnameS = z_convert:to_list(Hostname),
-    case get_self_signed_files(HostnameS) of
-        {ok, Certs} ->
-            case generate_self_signed(HostnameS, Certs) of
-                {ok, _} = Ok ->
-                    ok = ssl:clear_pem_cache(),
-                    Ok;
+    HostnameS0 = z_convert:to_list(Hostname),
+    HostnameS = normalize_hostname(HostnameS0),
+    case HostnameS of
+        [] ->
+            {error, invalid_hostname};
+        _ ->
+            case get_self_signed_files(HostnameS) of
+                {ok, Certs} ->
+                    case generate_self_signed(HostnameS, Certs) of
+                        {ok, _} = Ok ->
+                            ok = ssl:clear_pem_cache(),
+                            Ok;
+                        {error, _} = Error ->
+                            Error
+                    end;
                 {error, _} = Error ->
                     Error
-            end;
-        {error, _} = Error ->
-            Error
+            end
     end.
 
 -spec site_hostname(z:context() | undefined) -> binary().
