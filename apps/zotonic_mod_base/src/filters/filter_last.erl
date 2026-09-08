@@ -36,7 +36,9 @@ For example:
 
 When value is the list `hello` then the output will be `o`.
 
-**Note:** This function is not safe to use with multibyte character values, use with care.
+::: note
+This function is not safe to use with multibyte character values, use with care.
+:::
 ").
 -export([last/2]).
 

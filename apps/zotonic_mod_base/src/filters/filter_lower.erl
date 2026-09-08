@@ -33,7 +33,9 @@ For example:
 
 When value is “Hello World” then the output is “hello world”.
 
-**Note:** There is partial support for multi-byte unicode characters.
+::: note
+There is partial support for multi-byte unicode characters.
+:::
 ").
 -export([lower/2]).
 
@@ -46,5 +48,4 @@ lower(Input, _Context) when is_list(Input) or is_binary(Input) ->
     z_string:to_lower(Input);
 lower(Input, Context) ->
     lower(z_template_compiler_runtime:to_list(Input, Context), Context).
-
 

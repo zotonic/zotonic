@@ -59,7 +59,9 @@ Will output `00123`. And when the number does not fit:
 
 Will output “\\*\\*”.
 
-**Note:** This option only works for positive integers.
+::: note
+This option only works for positive integers.
+:::
 ").
 -export([format_integer/2, format_integer/3]).
 

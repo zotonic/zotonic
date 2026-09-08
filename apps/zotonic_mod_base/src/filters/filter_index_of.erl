@@ -34,7 +34,9 @@ For example:
 
 Returns `2`.
 
-**Note:** Erlang list indices are always 1-based.
+::: note
+Erlang list indices are always 1-based.
+:::
 ").
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 

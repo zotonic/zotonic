@@ -35,7 +35,9 @@ For example:
 
 If the value is `hello` then the output is `h`.
 
-**Note:** This function is safe to use with multibyte character values, if the input is a binary.
+::: note
+This function is safe to use with multibyte character values, if the input is a binary.
+:::
 
 For a regular list:
 

@@ -33,7 +33,9 @@ For example:
 
 When value is “Hello World” then the output is “HELLO WORLD”.
 
-**Note:** There is partial support for multi-byte unicode characters.
+::: note
+There is partial support for multi-byte unicode characters.
+:::
 ").
 -export([upper/2]).
 

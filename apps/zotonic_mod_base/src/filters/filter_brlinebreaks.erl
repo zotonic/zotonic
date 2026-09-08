@@ -33,7 +33,9 @@ The following string:
 
 will evaluate to `foo\\nbar`.
 
-**Note:** Non-closing line breaks (`<br>`) are currently not converted.
+::: note
+Non-closing line breaks (`<br>`) are currently not converted.
+:::
 ").
 -export([brlinebreaks/2]).
 
