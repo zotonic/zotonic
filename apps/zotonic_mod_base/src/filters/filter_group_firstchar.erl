@@ -25,7 +25,7 @@
     zotonic_keywords => ["reference", "frontend_developer", "template_filter", "collection", "query"]
 }).
 -moduledoc("
-Group a list of sorted [resource](/id/doc_model_model_rsc) ids on their first letter of the title or another rsc
+Group a list of sorted `model#rsc` resource IDs on their first letter of the title or another resource
 property. After grouping, it splits this list in a number of more-or-less even columns.
 
 This is useful for displaying multiple columns of alphabetically sorted pages, in which the pages are grouped by the

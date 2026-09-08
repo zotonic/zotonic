@@ -29,7 +29,7 @@ Admin backend module that wires the core admin interface, assets, and admin-spec
 Extending the admin menu
 ------------------------
 
-See [m_admin_menu](/id/doc_model_model_admin_menu) on how to extend the admin menu.
+See `model#admin_menu` on how to extend the admin menu.
 
 
 
@@ -51,7 +51,7 @@ Will be automatically included into main (left) div (at bottom).
 
 Will be automatically included into right sidebar (near middle/bottom).
 
-These templates are included using the [all catinclude](/id/doc_template_tag_tag_all_catinclude) tag; so if you need
+These templates are included using the `tag#all_catinclude` tag; so if you need
 something in the sidebar just for persons, create a `_admin_edit_sidebar.person.tpl` file in your project.
 
 
@@ -121,7 +121,7 @@ Making an admin widget conditionally visible
 --------------------------------------------
 
 An admin widget can decide whether its complete wrapper is rendered. Override the `widget_wrapper` block, test the
-condition, and use [inherit](/id/doc_template_tag_tag_inherit) to render the wrapper supplied by the parent template.
+condition, and use `tag#inherit` to render the wrapper supplied by the parent template.
 
 For example, the backup module only shows its edit-page widget when its admin panel is enabled:
 
@@ -292,7 +292,7 @@ And on the edit page there is this check to conditionally include the geodata bo
 {% if id.category_id.is_feature_show_geodata|if_undefined:true %}
 ```
 
-The filter [if_undefined](/id/doc_template_filter_filter_if_undefined) is used so that the default value can be true
+The filter `filter#if_undefined` is used so that the default value can be true
 when the checkbox has never been touched.
 
 

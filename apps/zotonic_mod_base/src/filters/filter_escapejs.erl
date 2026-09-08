@@ -35,7 +35,7 @@ When the value is `he'llo` then the output is `he\\x27llo`.
 
 Internally, this calls `z_utils:js_escape/1` to perform the escaping.
 
-Note: when generating JSON output, be sure to use [escapejson](/id/doc_template_filter_filter_escapejson), as JSON
+Note: when generating JSON output, be sure to use `filter#escapejson`, as JSON
 escaping is subtly different from JS escaping.
 ").
 -export([escapejs/2]).

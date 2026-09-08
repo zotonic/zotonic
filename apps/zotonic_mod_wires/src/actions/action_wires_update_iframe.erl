@@ -23,7 +23,7 @@
 }).
 -moduledoc("
 ::: note
-This action is only used to update an `iframe` element. Use the [update](/id/doc_template_action_action_update) action
+This action is only used to update an `iframe` element. Use the `action#update` action
 for updating the contents of a normal HTML element.
 :::
 
@@ -44,7 +44,7 @@ When clicked, the contents of the iframe will be set to the rendered `email.tpl`
 | target     | The id of the iframe receiving the rendered HTML document.                       | target=”my-view”           |
 | text       | Literal HTML doc to be inserted, no escaping will be done.                       | text=”&lt;html>...</html>” |
 | template   | Name of the template to be rendered.                                             | template=”page.tpl”        |
-| catinclude | Add this argument to use a [catinclude](/id/doc_template_tag_tag_catinclude) instead of a normal include of the template. The id argument *must* be present for a catinclude to work. | catinclude id=1            |
+| catinclude | Add this argument to use a `tag#catinclude` instead of a normal include of the template. The id argument *must* be present for a catinclude to work. | catinclude id=1            |
 
 All other arguments are passed as-is to the included template(s).
 ").

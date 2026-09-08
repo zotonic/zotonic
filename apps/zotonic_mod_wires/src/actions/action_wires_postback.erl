@@ -30,11 +30,11 @@ Example:
 ```
 
 ::: note
-The [button](/id/doc_template_scomp_scomp_button#scomp-button) scomp can also take a postback argument directly.
+The `scomp#button` scomp can also take a postback argument directly.
 :::
 
 After clicking the button the event go will be sent to the [controller](/id/doc_glossary#term-controller) module on the
-server and a [growl](/id/doc_template_action_action_growl) message will be displayed.
+server and an `action#growl` message will be displayed.
 
 The event/2 function in the controller module will be called as:
 

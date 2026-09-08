@@ -22,7 +22,7 @@
     zotonic_keywords => ["reference", "backend_developer", "model", "routing_and_redirects", "resource", "query"]
 }).
 -moduledoc("
-This model tracks deleted resources (see [m_rsc](/id/doc_model_model_rsc)). Its primary goal is to be able to
+This model tracks deleted resources (see `model#rsc`). Its primary goal is to be able to
 determine if a resource never existed, has been deleted or has been replaced by another resource.
 
 
@@ -33,7 +33,7 @@ Information kept
 Only very basic information of the deleted resource is kept in the `rsc_gone` table. It is enough for referring to a new
 location, giving correct errors or to determine who deleted a resource.
 
-It is not enough to undelete a resource. The module [mod_backup](/id/doc_module_mod_backup) retains enough information
+It is not enough to undelete a resource. The module `module#mod_backup` retains enough information
 about past versions to be able to undelete a resource. Currently there is no support for an undelete.
 
 
@@ -41,8 +41,8 @@ about past versions to be able to undelete a resource. Currently there is no sup
 Properties
 ----------
 
-Whenever a [m_rsc](/id/doc_model_model_rsc) record is deleted some information from that resource is copied to the
-`rsc_gone` table.
+Whenever a resource is deleted through `model#rsc`, some information from that resource
+is copied to the `rsc_gone` table.
 
 The following properties are saved:
 

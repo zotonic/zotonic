@@ -24,7 +24,7 @@
 -moduledoc("
 Format dispatch controller options.
 
-See [mod_development](/id/doc_module_mod_development)
+See `module#mod_development`
 
 The filter formats a controller option as escaped HTML for the development
 dispatch-rule inspector. Important options such as `id`, `acl`, and `template`

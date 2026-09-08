@@ -154,8 +154,8 @@ Configuration options
 
 `mod_development.libsep`
 
-Boolean value. If true, [lib](/id/doc_template_tag_tag_lib) files will be included separately instead of in one big
-concatenated file.
+Boolean value. If true, files requested with `tag#lib` will be included separately instead
+of in one big concatenated file.
 
 Accepted Events
 ---------------

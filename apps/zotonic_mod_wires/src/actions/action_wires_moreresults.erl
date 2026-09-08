@@ -70,7 +70,7 @@ Contains template that will be appended.
 
 `catinclude`
 
-Render `template` through a [catinclude](/id/doc_template_tag_tag_catinclude).
+Render `template` through a `tag#catinclude`.
 
 `is_result_render`
 

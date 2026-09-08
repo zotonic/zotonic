@@ -67,7 +67,7 @@ One simple condition change to _article_chapeau.tpl from the blog skeleton makes
 
 The key here is `{% if parents|length > 1 %}` instead of just `{% if parents %}`.
 
-The [if](/id/doc_template_tag_tag_if) tag is now rendering the menu_trail only if there are two or more items in it
+The `tag#if` tag is now rendering the menu_trail only if there are two or more items in it
 which - as I mentioned before - happens when you are at least two levels deep in the menu.
 ").
 -export([menu_trail/2, menu_trail/3, test/0]).

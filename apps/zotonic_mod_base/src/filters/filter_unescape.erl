@@ -24,8 +24,8 @@
 -moduledoc("
 Removes HTML escaping from a text.
 
-Expands the entities added by the [escape](/id/doc_template_filter_filter_escape) filter or
-[force_escape](/id/doc_template_filter_filter_force_escape) filter. This is useful when you want to display a field
+Expands the entities added by the `filter#escape` filter or
+`filter#force_escape` filter. This is useful when you want to display a field
 from the database in a text-only format medium.
 
 For example:

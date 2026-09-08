@@ -32,7 +32,7 @@
 -moduledoc("
 The m_search model provides access to different kinds of search queries for searching through models.
 
-Most searches in Zotonic are implemented in the [mod_search](/id/doc_module_mod_search) module, searching through the
+Most searches in Zotonic are implemented in the `module#mod_search` module, searching through the
 `rsc` table in different kinds of ways.
 
 Though, any module can implement a search by observing the `search_query` notification.

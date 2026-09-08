@@ -24,7 +24,7 @@
 -moduledoc("
 This model holds the admin menu, which is built up by calling each module to add items to the menu.
 
-You can extend the admin menu by observing the [admin_menu](/id/doc_notification_admin_menu#admin-menu) notification.
+You can extend the admin menu by observing the `notification#admin_menu` notification.
 
 Available Model API Paths
 -------------------------

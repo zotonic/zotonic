@@ -50,11 +50,11 @@ stored in a safe location to be able to decrypt the backups. When encryption is 
 
 The zotonic shell command `decrypt` can be used to decrypt encrypted zotonic backup files.
 
-If [mod_filestore](/id/doc_module_mod_filestore) is enabled then the media files are not backed up, as it is assumed
+If `module#mod_filestore` is enabled then the media files are not backed up, as it is assumed
 that the files are already backed up on the cloud filestore. The data backups are uploaded to the cloud filestore, so
 they are also backed up.
 
-If [mod_filestore](/id/doc_module_mod_filestore) is not enabled then we advise to add a
+If `module#mod_filestore` is not enabled then we advise to add a
 [cron](http://en.wikipedia.org/wiki/Cron) script to the server for copying the data to remote storage.
 
 

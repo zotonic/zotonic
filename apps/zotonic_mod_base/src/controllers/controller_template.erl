@@ -55,7 +55,7 @@ The following options can be given to the dispatch rule:
 
 | Option         | Description                                                                      | Example                                                           |
 | -------------- | -------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
-| `template`     | Name of the template to be rendered. Can also be a tuple of the following form: `{cat, Name}`. See also: [catinclude](/id/doc_template_tag_tag_catinclude). | `{template, \"home.tpl\"}` `{template, {cat, \"home.tpl\"}}` |
+| `template`     | Name of the template to be rendered. Can also be a tuple of the following form: `{cat, Name}`. See also: `tag#catinclude`. | `{template, \"home.tpl\"}` `{template, {cat, \"home.tpl\"}}` |
 | `anonymous`    | Render the template always as the anonymous user, even when a user is logged on. Defaults to false. | `{anonymous, true}`                                         |
 | `content_type` | The content type provided by the dispatch rule. Defaults to `\"text/html\"`.       | `{content_type, \"application/json\"}`                      |
 | `max_age`      | The number of seconds of how long to cache this file in the browser. Sets the response header `Cache-Control: public; max-age=X`. | `{max_age, 3600}`                                           |

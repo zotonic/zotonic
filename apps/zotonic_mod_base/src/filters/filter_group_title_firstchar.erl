@@ -22,7 +22,7 @@
     zotonic_keywords => ["reference", "frontend_developer", "template_filter", "collection", "query"]
 }).
 -moduledoc("
-Similar to [group_firstchar](/id/doc_template_filter_filter_group_firstchar), but always uses the `title` column from
+Similar to `filter#group_firstchar`, but always uses the `title` column from
 the rsc table.
 
 This is merely a shortcut, simplifying the template syntax:

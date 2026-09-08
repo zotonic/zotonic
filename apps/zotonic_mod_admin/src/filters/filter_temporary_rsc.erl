@@ -56,7 +56,7 @@ Example:
 {% endwith %}
 ```
 
-See [mod_admin](/id/doc_module_mod_admin), [mod_server_storage](/id/doc_module_mod_server_storage)
+See `module#mod_admin`, `module#mod_server_storage`
 ").
 -export([
     temporary_rsc/2,

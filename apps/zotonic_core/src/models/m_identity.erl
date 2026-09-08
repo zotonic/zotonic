@@ -24,8 +24,8 @@
 }).
 -moduledoc("
 The m_identity model manages usernames and other user identities.
-[mod_authentication](/id/doc_module_mod_authentication) uses it to store and check salted passwords, but also provides
-a safe storage for user tokens of any kind, as used by [mod_facebook](/id/doc_module_mod_facebook).
+`module#mod_authentication` uses it to store and check salted passwords, but also provides
+a safe storage for user tokens of any kind, as used by `module#mod_facebook`.
 
 Note that a user does not have to be of the person category per se, in Zotonic anything can have identities attached to it.
 

@@ -22,7 +22,7 @@
     zotonic_keywords => ["reference", "frontend_developer", "wire_action", "user_interface_and_interaction", "javascript"]
 }).
 -moduledoc("
-Sets the progress bar of a [mask](/id/doc_template_action_action_mask).
+Sets the progress bar of an `action#mask`.
 
 The progress bar can be set to a percentage in the range 0…100. The target of the `mask_progress` must be the same as
 the target of an earlier `mask` action.

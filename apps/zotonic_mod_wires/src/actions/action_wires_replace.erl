@@ -25,7 +25,7 @@
 Replace the target HTML element, including the target element itself, with
 rendered HTML.
 
-It accepts the same arguments as the [update](/id/doc_template_action_action_update)
+It accepts the same arguments as the `action#update`
 action: use `text` for literal HTML or `template` to render a template. All
 additional arguments are passed to that template. `catinclude`, `include_all`,
 and `appear` are also supported.

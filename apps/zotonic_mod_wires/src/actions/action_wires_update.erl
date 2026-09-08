@@ -35,7 +35,7 @@ Example:
 When clicked, the contents of the div will be set to the HTML fragment &lt;p>Hello World!</p>. This replaces any content present.
 
 ::: note
-Use the [update_iframe](/id/doc_template_action_action_update_iframe) action for updating the contents of an `iframe` element.
+Use the `action#update_iframe` action for updating the contents of an `iframe` element.
 :::
 
 Another example, now rendering a template:
@@ -55,7 +55,7 @@ also arguments to the template.
 | text          | Literal HTML text to be inserted, no escaping will be done.                      | `text=\"Hello &lt;b>World</b>\"` |
 | template      | Name of the template to be rendered.                                             | `template=\"_list_view.tpl\"` |
 | include_all | Add this argument to include all templates with the same name. If not added then the best template will be used. | `include_all`                 |
-| catinclude    | Add this argument to use a [catinclude](/id/doc_template_tag_tag_catinclude) instead of a normal include of the template. The `id` argument *must* be present for a catinclude to work. | `catinclude id=1`               |
+| catinclude    | Add this argument to use a `tag#catinclude` instead of a normal include of the template. The `id` argument *must* be present for a catinclude to work. | `catinclude id=1`               |
 
 All other arguments are passed as-is to the included template(s).
 ").

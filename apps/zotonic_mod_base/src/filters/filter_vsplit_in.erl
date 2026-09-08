@@ -25,7 +25,7 @@
 This filter splits a list in shorter lists. It splits an array in N sub-arrays of more or less equal length. This is
 useful when displaying a list of items in columns.
 
-Note that it splits the array in a different way than [split_in](/id/doc_template_filter_filter_split_in) does: The
+Note that it splits the array in a different way than `filter#split_in` does: The
 filter split_in takes alternating elements from the array, where vsplit_in takes complete runs at a time. See the
 example below.
 

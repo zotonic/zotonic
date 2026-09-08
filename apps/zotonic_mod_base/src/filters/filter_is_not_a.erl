@@ -23,7 +23,7 @@
     zotonic_keywords => ["reference", "frontend_developer", "template_filter", "categorization", "boolean", "compare"]
 }).
 -moduledoc("
-is_not_a mirrors [is_a](/id/doc_template_filter_filter_is_a). It is particularly useful when iterating over a
+is_not_a mirrors `filter#is_a`. It is particularly useful when iterating over a
 category and excluding members of a sub-category (iterating over all images associated with a page except images in the
 thumbnail category).
 

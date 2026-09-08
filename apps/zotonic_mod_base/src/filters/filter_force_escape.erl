@@ -33,10 +33,10 @@
 -moduledoc("
 HTML escapes a text.
 
-Applies HTML escaping to a string (see the [escape](/id/doc_template_filter_filter_escape) filter for details). In
+Applies HTML escaping to a string (see the `filter#escape` filter for details). In
 contrary to the escape filter, the force_escape filter is applied immediately and returns a new, escaped string. This
 is useful in the rare cases where you need multiple escaping or want to apply other filters to the escaped results.
-Normally, you want to use the [escape](/id/doc_template_filter_filter_escape) filter.
+Normally, you want to use the `filter#escape` filter.
 
 For example:
 

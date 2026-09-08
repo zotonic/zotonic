@@ -37,7 +37,7 @@ For details on configuring e-mail sending and receiving in Zotonic, see [E-mail 
 Including the subscribe custom tag on your pages
 ------------------------------------------------
 
-The module includes the [signup tag](/id/doc_template_scomp_scomp_mailinglist_subscribe#scomp-mailinglist-subscribe) tag
+The module includes the `scomp#mailinglist_subscribe` tag
 (and template) that you can use on your site.
 
 When you want to add a subscribe template to your page then you will need the following scomp include in your template:

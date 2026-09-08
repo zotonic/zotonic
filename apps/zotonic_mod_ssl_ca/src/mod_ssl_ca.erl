@@ -24,7 +24,7 @@
 -moduledoc("
 The mod_ssl_ca module adds support for using SSL certificates bought from a Certificate Authority.
 
-A free alternative to CA provided tickets is Let’s Encrypt, see [mod_ssl_letsencrypt](/id/doc_module_mod_ssl_letsencrypt).
+A free alternative to CA provided tickets is Let’s Encrypt, see `module#mod_ssl_letsencrypt`.
 
 
 

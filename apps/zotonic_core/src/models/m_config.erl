@@ -25,7 +25,7 @@
 -moduledoc("
 Zotonic has two places where a site's configuration is kept:
 
-*   the site's [config file](/id/doc_developerguide_configuration_site_configuration#ref-site-configuration) (accessible through [m_site](/id/doc_model_model_site))
+*   the site's [config file](/id/doc_developerguide_configuration_site_configuration#ref-site-configuration) (accessible through `model#site`)
 *   the site's `config` database table. Entries in the config table overrule any module settings from the config file.
 
 ::: note

@@ -52,9 +52,9 @@ Redirect unknown paths
 
 After the site has been selected, the dispatcher matches the path to the dispatch rules.
 
-When no dispatch rule matches, then the `#dispatch` notification is sent. The [mod_base](/id/doc_module_mod_base)
-module observes that notification to check the path against the page_path properties of all resources. If
-[mod_base](/id/doc_module_mod_base) didn’t find match then [mod_custom_redirect](#mod-custom-redirect) will
+When no dispatch rule matches, then the `#dispatch` notification is sent. `module#mod_base`
+observes that notification to check the path against the page_path properties of all resources. If it
+doesn’t find a match then [mod_custom_redirect](#mod-custom-redirect) will
 check all custom redirect with an empty domain and a matching path. The visitor will be redirected to the corresponding
 redirect location.
 

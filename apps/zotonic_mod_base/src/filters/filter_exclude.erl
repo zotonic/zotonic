@@ -24,7 +24,7 @@
 -moduledoc("
 Filters a list on the value of a property, either on absence or inequality.
 
-This is the inverse of [filter](/id/doc_template_filter_filter_filter).
+This is the inverse of `filter#filter`.
 
 
 

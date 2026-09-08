@@ -23,7 +23,7 @@
 }).
 -moduledoc("
 A controller for rendering preview thumbnails of any media embedded in a richtext-editor component of a
-[resource](/id/doc_glossary#term-resource) on the [admin edit controller](/id/doc_controller_controller_admin_edit) page.
+[resource](/id/doc_glossary#term-resource) on the `controller#controller_admin_edit` page.
 
 The `id` path or query argument can be a resource id or name. The resource must
 exist and be visible to the current user. A successful request redirects with

@@ -40,7 +40,7 @@ This controller serves all files with a very long client side caching time and h
 files are served with gzip compression if the user-agent supports it.
 
 Multiple files can be served in a single request; the controller concatenates them into a single file. See the
-[lib](/id/doc_template_tag_tag_lib) tag for more information. The creators of the files have to ensure that they can be
+`tag#lib` tag for more information. The creators of the files have to ensure that they can be
 properly concatenated.
 
 

@@ -23,7 +23,7 @@
 }).
 -moduledoc("
 Trigger various jQuery effects on the target element. Mostly, each of these effects have their own action as a shortcut,
-for example [show](/id/doc_template_action_action_show), [hide](/id/doc_template_action_action_hide).
+for example `action#show`, `action#hide`.
 
 Arguments:
 

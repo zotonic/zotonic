@@ -27,7 +27,7 @@ Create nested navigation menus for your site.
 Activating the module in the admin enables a “menu” item in the admin navigation under “content”, which lets you
 define a simple menu. Every item in the menu references a Zotonic page and can be looked up using the autocompletion widget.
 
-This menu can be rendered in the frontend with the [menu](/id/doc_template_scomp_scomp_menu#scomp-menu) custom tag.
+This menu can be rendered in the frontend with the `scomp#menu` custom tag.
 
 It will use the _menu.tpl template which is by default able to render a Twitter Bootstrap compatible menu structure
 using nested `<ul>` elements.

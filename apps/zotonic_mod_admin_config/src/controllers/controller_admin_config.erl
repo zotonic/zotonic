@@ -22,7 +22,7 @@
     zotonic_keywords => ["reference", "site_administrator", "controller", "configuration", "configure"]
 }).
 -moduledoc("
-Shows the admin config editor. Here you can edit the key/value pairs of [m_config](/id/doc_model_model_config).
+Shows the admin config editor. Here you can edit the key/value pairs of `model#config`.
 
 The controller is available through the `admin_config` dispatch rule and
 requires permission to use `mod_admin_config`. It renders `admin_config.tpl`

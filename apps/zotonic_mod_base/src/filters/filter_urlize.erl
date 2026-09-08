@@ -38,7 +38,7 @@ Outputs:
 <a href=\"http://foo.bar/\">http://foo.bar/</a>
 ```
 
-This filter is very similar to the [escape_link](/id/doc_template_filter_filter_escape_link) filter.
+This filter is very similar to the `filter#escape_link` filter.
 ").
 
 -export([urlize/2]).

@@ -39,7 +39,7 @@ The following characters are replaced:
 | `'`       | `&#039;`    |
 | `&`       | `&amp;`     |
 
-If you always want escaping to be applied, use the [force_escape](/id/doc_template_filter_filter_force_escape) filter.
+If you always want escaping to be applied, use the `filter#force_escape` filter.
 
 For example:
 

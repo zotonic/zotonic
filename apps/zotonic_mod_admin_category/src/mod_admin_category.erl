@@ -23,7 +23,7 @@
 }).
 -moduledoc("
 ::: note
-This module requires the presence of [mod_menu](/id/doc_module_mod_menu) for the required JavaScript files which make
+This module requires the presence of `module#mod_menu` for the required JavaScript files which make
 up the menu editor.
 :::
 
@@ -37,9 +37,9 @@ ACL permissions
 
 The following [ACL permissions](/id/doc_developerguide_access_control#guide-authorization) are required:
 
-*   to view the page, [use permission](/id/doc_module_mod_acl_user_groups) on the ‘mod_admin_category’ module
-*   to view the list of categories, [view permissions](/id/doc_module_mod_acl_user_groups#content-acl) on category ‘category’
-*   to edit and re-order the categories, [edit permissions](/id/doc_module_mod_acl_user_groups#content-acl) on category ‘category’.
+*   to view the page, the `use` permission on the ‘mod_admin_category’ module; see `module#mod_acl_user_groups`
+*   to view the list of categories, `view` permission on category ‘category’; see `module#mod_acl_user_groups`
+*   to edit and re-order the categories, `edit` permission on category ‘category’; see `module#mod_acl_user_groups`.
 Admin module for managing category trees and category resources in the backend.
 
 

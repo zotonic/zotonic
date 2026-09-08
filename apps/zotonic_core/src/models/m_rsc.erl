@@ -24,8 +24,8 @@
 -moduledoc("
 The main resource model, which is the central part of the [Zotonic data
 model](/id/doc_userguide_datamodel#guide-datamodel). This model provides an interface to all resource (\"page\")
-information. It also provides an easy way to fetch edges from pages without needing to use the
-[m_edge](/id/doc_model_model_edge) model.
+information. It also provides an easy way to fetch edges from pages without needing to use
+`model#edge` directly.
 
 
 
@@ -72,7 +72,7 @@ A resource has the following properties accessible from the templates:
 | publication_end | End date of the publication period. Returns a datetime tuple. | `{{9999,8,17},{12,0,0}}` |
 | is_published_date | If this page is published and the current date/time is within the set publication_start/end range. Note that no ACL checks are performed, use is_visible to check if a resource is visible for the current user. | `true` |
 | visible_for | Visibility level. Returns an integer. The actual meaning depends on the active ACL module. | `0` |
-| content_group_id | Content group this resource belongs to. Defaults to the id of the content group named *default_content_group* or *system_content_group* for resources within the *meta* category. See [mod_content_groups](/id/doc_module_mod_content_groups) | `31415` |
+| content_group_id | Content group this resource belongs to. Defaults to the id of the content group named *default_content_group* or *system_content_group* for resources within the *meta* category. See `module#mod_content_groups` | `31415` |
 | o | Used to access the objects of page: the pages this page refers to. Returns a function which should be indexed with the edge's predicate name (atom). When indexed the function will return a list of integers.  Example usage: `{{ m.rsc[id].o.author[1].title }}`  This returns the first author that is linked from this page. | `fun(Predicate,Context)` |
 | s | Access the subjects of a page: the pages that are referring to this page. Returns a function which should be indexed with the edge's predicate name (atom). When indexed the function will return a list of integers.  Example usage: `{{ m.rsc[id].s.author[1].title }}`  This returns the first article that links to me with a author connection. | `fun(Predicate,Context)` |
 | op | Returns a list of all predicates on edges from this page. The predicates are atoms. | `[about, related]` |
@@ -125,7 +125,7 @@ Dates
 -----
 
 Dates are stored as a standard Erlang date time tuple, for example `{{2008,12,10},{15,30,00}}`. Dates are stored and
-retrieved in UTC (universal time). When displaying a date, (e.g. with the [date](/id/doc_template_filter_filter_date)
+retrieved in UTC (universal time). When displaying a date, (e.g. with the `filter#date`
 filter), the date is automatically converted into the time zone of the site or that of the user.
 
 
@@ -142,7 +142,7 @@ In your templates, you can loop over the properties of a resource like this:
 {% endfor %}
 ```
 
-And also using the [print](/id/doc_template_tag_tag_print) tag:
+And also using the `tag#print` tag:
 
 
 ```erlang

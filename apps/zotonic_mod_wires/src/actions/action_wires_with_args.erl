@@ -27,7 +27,7 @@ Apply actions with arguments added.
 
 This action takes a list of other actions. One or more arguments are added to the actions before the actions are
 executed. This action is mostly used in included templates or callbacks. An example can be seen with the
-[typeselect](/id/doc_template_action_action_typeselect) action.
+`action#typeselect` action.
 
 Another example, assume we have a template “_list_action.tpl”:
 

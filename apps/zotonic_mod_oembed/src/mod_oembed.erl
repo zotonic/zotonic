@@ -62,7 +62,7 @@ So, to display the HTML of an OEmbedded medium, you would do the following in a 
 {{ id.medium.html }}
 ```
 
-The module also supports the use of the [media](/id/doc_template_tag_tag_media) tag:
+The module also supports the use of the `tag#media` tag:
 
 
 ```erlang
@@ -77,7 +77,7 @@ taken from the provider.
 Configuration options
 ---------------------
 
-The following [m_config](/id/doc_model_model_config) options are supported:
+The following `model#config` options are supported:
 
 `mod_oembed.embedly_key`
 

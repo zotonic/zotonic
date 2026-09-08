@@ -24,8 +24,8 @@
 -moduledoc("
 This controller shows the mailing lists that are available in the system.
 
-For each list, it shows the number of recipients and the title. Clicking a list shows the
-[recipients](/id/doc_controller_controller_admin_mailinglist_recipients) of the mailing list.
+For each list, it shows the number of recipients and the title. Clicking a list shows its
+recipients with `controller#controller_admin_mailinglist_recipients`.
 
 Handled events
 --------------

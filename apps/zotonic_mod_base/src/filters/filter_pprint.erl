@@ -33,7 +33,7 @@ Usage:
 {{ value | pprint }}
 ```
 
-This output is similar to the [print](/id/doc_template_tag_tag_print) tag, only are the values of the pprint filter not
+This output is similar to the `tag#print` tag, only are the values of the pprint filter not
 wrapped in `<pre>` tag.
 ").
 -export([pprint/2]).

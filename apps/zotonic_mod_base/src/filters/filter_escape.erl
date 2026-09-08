@@ -37,7 +37,7 @@ The following characters are replaced:
 | `&`       | `&amp;`     |
 
 The escaping is only applied if the filter is not within an `{% autoescape on %}` block. If you always want escaping to
-be applied, use the [force_escape](/id/doc_template_filter_filter_force_escape) filter.
+be applied, use the `filter#force_escape` filter.
 
 For example:
 

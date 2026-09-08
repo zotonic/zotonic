@@ -25,7 +25,7 @@
 Truncate a text to a maximum length in characters.
 
 The text is truncated to the maximum length specified with the argument. The text is truncated at a characters boundary,
-use [truncate](/id/doc_template_filter_filter_truncate) to truncate at a word boundary. If the truncation is not after
+use `filter#truncate` to truncate at a word boundary. If the truncation is not after
 punctuation then the unicode ellipsis … character is appended.
 
 For example:

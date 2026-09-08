@@ -24,7 +24,7 @@
 -moduledoc("
 Format dispatch path element so variables will be more visible.
 
-See [mod_development](/id/doc_module_mod_development)
+See `module#mod_development`
 
 Atoms are rendered as highlighted path variables, strings and binaries as
 literal path segments, and other terms using the `pprint` filter. All displayed

@@ -24,7 +24,7 @@
 -moduledoc("
 Check if there is a ‘stop’ question in list of (survey) blocks
 
-See [mod_survey](/id/doc_module_mod_survey)
+See `module#mod_survey`
 
 The result is `true` when the list contains a `survey_stop` block or a survey
 page-options block marked as a stop page.

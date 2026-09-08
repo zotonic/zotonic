@@ -22,7 +22,7 @@
     zotonic_keywords => ["reference", "frontend_developer", "wire_action", "user_interface_and_interaction", "javascript"]
 }).
 -moduledoc("
-Removes a mask that was placed over an element using the [mask](/id/doc_template_action_action_mask) action.
+Removes a mask that was placed over an element using the `action#mask` action.
 
 Example:
 

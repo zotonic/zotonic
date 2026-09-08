@@ -26,7 +26,7 @@
     ]
 }).
 -moduledoc("
-mod_search implements various ways of searching through the main resource table using [m_search](/id/doc_model_model_search).
+mod_search implements various ways of searching through the main resource table using `model#search`.
 
 The following searches are implemented in mod_search:
 

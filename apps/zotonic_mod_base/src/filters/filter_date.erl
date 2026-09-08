@@ -43,7 +43,7 @@ To show the year of the current date:
 {{ now|date:\"Y\" }}
 ```
 
-See also the [timesince](/id/doc_template_filter_filter_timesince) filter to display a human readable relative time like
+See also the `filter#timesince` filter to display a human readable relative time like
 10 hours ago.
 
 

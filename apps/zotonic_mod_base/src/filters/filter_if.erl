@@ -31,7 +31,7 @@ For example:
 {{ value|if:\"yes\":\"no\" }}
 ```
 
-This is a shortcut for using the [if](/id/doc_template_tag_tag_if) tag. The same can be expressed as follows:
+This is a shortcut for using the `tag#if` tag. The same can be expressed as follows:
 
 
 ```django

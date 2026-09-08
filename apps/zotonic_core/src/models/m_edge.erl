@@ -28,7 +28,7 @@ Edges represent the connections between resources. They are implemented as tuple
 OrderNr}`. The edge id is a unique id representing the edge, it can be used with edit actions. The OrderNr defines the
 order of the edges with respect to the subject.
 
-Most edge information is accessed using the [m_rsc](/id/doc_model_model_rsc) model, but some information can only
+Most edge information is accessed using the `model#rsc` model, but some information can only
 accessed with the m_edge model.
 
 This model implements two template accessible options. They are mainly used to obtain the edge's id for edit pages.

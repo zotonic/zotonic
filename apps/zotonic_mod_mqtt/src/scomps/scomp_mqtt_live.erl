@@ -22,10 +22,10 @@
     zotonic_keywords => ["reference", "frontend_developer", "scomp", "messaging_and_pubsub", "mqtt", "render"]
 }).
 -moduledoc("
-Live updating templates connected to [MQTT topics](/id/doc_module_mod_mqtt).
+Live-updating templates driven by MQTT topics.
 
 ::: note
-The live tag is provided by [mod_mqtt](/id/doc_module_mod_mqtt), which must be enabled.
+This scomp is provided by `module#mod_mqtt`, which must be enabled.
 :::
 
 This tag renders templates that are automatically re-rendered after a publication to an MQTT topic.
@@ -47,8 +47,8 @@ a freshly rendered template.
 
 The tag can subscribe to multiple topics at once.
 
-Add the argument `catinclude` to do a [catinclude](/id/doc_template_tag_tag_catinclude) instead of a normal
-[include](/id/doc_template_tag_tag_include). For a catinclude the argument `id` must be present:
+Add the argument `catinclude` to do a `tag#catinclude` instead of a normal
+`tag#include`. For a catinclude the argument `id` must be present:
 
 
 ```erlang
@@ -78,7 +78,7 @@ Live actions
 
 It is possible to wire actions or postbacks to a MQTT topic.
 
-Use the [wire tag](/id/doc_template_scomp_scomp_wire#scomp-wire) with argument `type={mqtt topic=... topic=...}` to
+Use the `scomp#wire` with argument `type={mqtt topic=... topic=...}` to
 connect to one or more MQTT topics:
 
 

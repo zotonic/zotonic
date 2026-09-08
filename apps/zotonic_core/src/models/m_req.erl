@@ -44,7 +44,7 @@ You can fetch individual values by key, for example:
 Viewing all request variables
 -----------------------------
 
-Use the [print](/id/doc_template_tag_tag_print) tag to get a complete overview of all request variables:
+Use the `tag#print` tag to get a complete overview of all request variables:
 
 
 ```django
@@ -85,9 +85,9 @@ This will show something like:
 ```
 
 Please note that all values are raw and not escaped, take care to escape the values before you use them in your
-templates, using the [escape](/id/doc_template_filter_filter_escape) filter.
+templates, using the `filter#escape` filter.
 
-The [make_list](/id/doc_template_filter_filter_make_list) filter is used to force the evaluation of the model;
+The `filter#make_list` filter is used to force the evaluation of the model;
 otherwise it would just print `{m,req,undefined}`.
 
 Available Model API Paths

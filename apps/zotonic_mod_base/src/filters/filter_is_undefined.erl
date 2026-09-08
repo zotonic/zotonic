@@ -25,7 +25,7 @@
 Tests if a value is undefined.
 
 Checks if the value is empty and outputs a boolean true or false. This is useful in combination with the
-[if](/id/doc_template_tag_tag_if) tag.
+`tag#if` tag.
 
 For example:
 

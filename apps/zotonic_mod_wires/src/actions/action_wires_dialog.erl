@@ -31,8 +31,8 @@ Example:
 
 This opens a dialog with the title “Wisdom”. The dialog is empty except for the text “The world is a pancake”.
 
-Normally, instead of this action, the action [dialog_open](/id/doc_template_action_action_dialog_open) is used. The
-action [dialog_open](/id/doc_template_action_action_dialog_open) shows a dialog that is rendered on the server.
+Normally, instead of this action, the action `action#dialog_open` is used. The
+action `action#dialog_open` shows a dialog that is rendered on the server.
 
 There can be many levels of dialogs open, they are designated by a *level*, the default dialog opens at level 0. Higher
 levels are displayed above lower levels. There is a special level `\"top\"` which ensures that a dialog is always opened

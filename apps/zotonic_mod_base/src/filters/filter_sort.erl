@@ -58,7 +58,7 @@ Example:
 This will sort on title in ascending order first, then on modified in descending order. Any number of properties may be
 added, each one can have it’s own sort order, or use the current one.
 
-See [m_rsc](/id/doc_model_model_rsc) for a list of properties available to sort on.
+See `model#rsc` for a list of properties available to sort on.
 
 Sort order may be either ascending or descending (may be abbreviated as asc, +, desc, - or as string version of those).
 ").

@@ -22,7 +22,7 @@
     zotonic_keywords => ["reference", "backend_developer", "model", "database", "structured_data", "query"]
 }).
 -moduledoc("
-Simple read-only interface to the typed key-value store of [mod_tkvstore](/id/doc_module_mod_tkvstore). To get a value
+Simple read-only interface to the typed key-value store of `module#mod_tkvstore`. To get a value
 from the store: use m.tkvstore.type.key, like this:
 
 

@@ -24,7 +24,7 @@
 -moduledoc("
 Retrieve information that is stored in the [site
 configuration](/id/doc_developerguide_configuration_site_configuration#ref-site-configuration). If you want to query
-values from the config table instead, you should use [m_config](/id/doc_model_model_config).
+values from the config table instead, you should use `model#config`.
 
 ::: note
 In general the site configurarion is only accessible via the `m.site` template model for users with administrator
@@ -63,7 +63,7 @@ Overriding config values
 ------------------------
 
 Zotonic has two places where a site's configuration is kept. One is in the site's config files, the other in the
-config table. The config table (accessible through [m_config](/id/doc_model_model_config)) overrules any module
+config table. The config table (accessible through `model#config`) overrules any module
 settings from the config file, for rows where the module key of the config value is set to site.
 
 Within the site configuration, you can override module-specific configuration: Module configurations are defined with a

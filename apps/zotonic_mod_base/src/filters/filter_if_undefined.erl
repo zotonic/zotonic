@@ -38,7 +38,7 @@ For example:
 
 If the value is `undefined`, the output will be “The value is true or undefined”.
 
-Alias for [default_if_none](/id/doc_template_filter_filter_default_if_none).
+Alias for `filter#default_if_none`.
 ").
 -export([if_undefined/3]).
 

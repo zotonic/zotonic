@@ -22,7 +22,7 @@
     zotonic_keywords => ["reference", "site_administrator", "module", "configuration", "configure"]
 }).
 -moduledoc("
-Add support for editing the site’s configuration values, as accessed through [m_config](/id/doc_model_model_config).
+Add support for editing the site’s configuration values, as accessed through `model#config`.
 
 The page in the admin is a list of every configuration module, key and textual value. Entries can be added, removed, and
 edited, if the user has the permission to do so.
@@ -52,7 +52,7 @@ a test message, which is useful for checking the effective SMTP configuration.
 
 Other e-mail modules can add their own settings panel by providing an `_admin_config_email_panel.tpl` template. The page
 uses an `all include`, so every matching module template is rendered. Configuration values shown by those panels are
-available through [m_config](/id/doc_model_model_config).
+available through `model#config`.
 
 
 Accepted Events
