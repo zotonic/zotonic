@@ -1,0 +1,299 @@
+$keyword-blue: #0fa2db;
+$keyword-ink: #263238;
+$keyword-muted: #6b7780;
+$keyword-grid: #dce3e7;
+
+.keyword-dashboard__filters {
+    .panel-body {
+        padding-bottom: 12px;
+    }
+}
+
+.keyword-dashboard__filter-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.keyword-dashboard__resource-count {
+    color: $keyword-muted;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+}
+
+.keyword-dashboard__filter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 12px 18px;
+
+    .form-group {
+        margin-bottom: 0;
+    }
+}
+
+.keyword-dashboard__filter-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 15px;
+}
+
+.keyword-dashboard__tabs {
+    margin-bottom: 0;
+}
+
+.keyword-dashboard__views {
+    > .panel {
+        margin-bottom: 20px;
+        border-top: 0;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+    }
+}
+
+.keyword-dashboard__panel-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+
+    .panel-title {
+        flex: 0 0 auto;
+    }
+}
+
+.keyword-usage {
+    display: grid;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.keyword-usage__row {
+    display: grid;
+    grid-template-columns: minmax(180px, 2fr) minmax(180px, 5fr) minmax(3ch, auto);
+    align-items: center;
+    gap: 12px;
+    min-height: 32px;
+}
+
+.keyword-usage__label {
+    min-width: 0;
+
+    > a,
+    > span {
+        display: block;
+        overflow: hidden;
+        color: $keyword-ink;
+        font-weight: 600;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    small {
+        display: block;
+        overflow: hidden;
+        color: $keyword-muted;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+.keyword-usage progress {
+    width: 100%;
+    height: 12px;
+    overflow: hidden;
+    border: 0;
+    border-radius: 999px;
+    background: #edf2f5;
+    color: $keyword-blue;
+}
+
+.keyword-usage progress::-webkit-progress-bar {
+    border-radius: 999px;
+    background: #edf2f5;
+}
+
+.keyword-usage progress::-webkit-progress-value {
+    border-radius: 999px;
+    background: $keyword-blue;
+}
+
+.keyword-usage progress::-moz-progress-bar {
+    border-radius: 999px;
+    background: $keyword-blue;
+}
+
+.keyword-usage__count {
+    min-width: 3ch;
+    color: $keyword-ink;
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    text-align: right;
+}
+
+.keyword-overlap-matrix {
+    max-height: 72vh;
+    overflow: auto;
+    border: 1px solid $keyword-grid;
+    border-radius: 4px;
+
+    &:focus {
+        outline: 3px solid rgba($keyword-blue, .35);
+        outline-offset: 2px;
+    }
+}
+
+.keyword-overlap-matrix__table {
+    width: max-content;
+    margin: 0 auto;
+    border-collapse: separate;
+    border-spacing: 2px;
+    background: white;
+
+    th {
+        color: $keyword-ink;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    thead th {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        height: 130px;
+        padding: 8px 5px;
+        background: white;
+        vertical-align: bottom;
+    }
+
+    tbody th {
+        position: sticky;
+        left: 0;
+        z-index: 1;
+        max-width: 190px;
+        padding: 7px 10px;
+        overflow: hidden;
+        background: white;
+        text-align: right;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+.keyword-overlap-matrix__corner {
+    left: 0;
+    z-index: 3 !important;
+    min-width: 190px;
+    text-align: right;
+}
+
+.keyword-overlap-matrix__column-label {
+    display: block;
+    width: 30px;
+    max-height: 112px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+}
+
+.keyword-overlap-matrix__cell {
+    width: 42px;
+    min-width: 42px;
+    height: 38px;
+    padding: 3px;
+    border-radius: 3px;
+    color: $keyword-ink;
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+
+    &.is-diagonal {
+        background: #dfe5e8;
+        font-weight: 700;
+    }
+
+    &.is-level-0 { background: #f4f7f8; color: #65727a; }
+    &.is-level-1 { background: #e8f5fb; }
+    &.is-level-2 { background: #d2ecf7; }
+    &.is-level-3 { background: #b8e2f3; }
+    &.is-level-4 { background: #92d3ec; }
+    &.is-level-5 { background: #65c1e4; }
+    &.is-level-6 { background: #32addd; }
+    &.is-level-7 { background: #0f9acb; color: white; }
+    &.is-level-8 { background: #087eaa; color: white; }
+    &.is-level-9 { background: #066589; color: white; }
+    &.is-level-10 { background: #044b66; color: white; }
+}
+
+.keyword-pairs {
+    margin-bottom: 0;
+
+    .is-active {
+        background-color: #e8f5fb;
+        color: #075d7c;
+        font-weight: 700;
+    }
+
+    td small {
+        margin-left: 5px;
+        font-variant-numeric: tabular-nums;
+    }
+}
+
+.keyword-dashboard__method {
+    p {
+        max-width: 85ch;
+        margin: 4px 0 0;
+    }
+}
+
+@media (max-width: 767px) {
+    .keyword-dashboard__filter-heading {
+        display: block;
+    }
+
+    .keyword-dashboard__resource-count {
+        display: block;
+        margin-top: 4px;
+        text-align: left;
+    }
+
+    .keyword-dashboard__panel-heading {
+        display: block;
+
+        .text-muted {
+            display: block;
+            margin-top: 4px;
+        }
+    }
+
+    .keyword-usage__row {
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 4px 10px;
+
+        progress {
+            grid-column: 1 / -1;
+            grid-row: 2;
+        }
+    }
+
+    .keyword-overlap-matrix__table {
+        thead th {
+            height: 105px;
+        }
+
+        tbody th,
+        .keyword-overlap-matrix__corner {
+            max-width: 130px;
+            min-width: 130px;
+        }
+    }
+
+    .keyword-overlap-matrix__column-label {
+        max-height: 90px;
+    }
+}

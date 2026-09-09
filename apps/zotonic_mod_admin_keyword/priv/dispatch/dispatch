@@ -1,0 +1,9 @@
+%% -*- mode: erlang -*-
+[
+    {admin_keyword, ["admin", "keywords"], controller_admin, [
+        {acl_module, mod_admin_keyword},
+        {template, <<"admin_keyword.tpl">>},
+        {selected, <<"keyword">>},
+        seo_noindex
+    ]}
+].
