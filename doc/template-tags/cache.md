@@ -1,3 +1,13 @@
+---
+keywords:
+  - reference
+  - frontend_developer
+  - template
+  - cache
+  - performance
+  - render
+---
+
 Cache frequently used rendered template output for later reuse.
 
 Cache the output of the enclosed cached template code. The cached output can be named. Cache tags with the same name will use each others cached entries, when the cache entry is still valid.

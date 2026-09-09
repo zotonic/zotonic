@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_without).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "collection", "query"]
+}).
 -moduledoc("
 Remove the items given in the argument from the filter value.
 

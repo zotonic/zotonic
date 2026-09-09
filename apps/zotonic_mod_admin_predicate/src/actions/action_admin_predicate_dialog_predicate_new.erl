@@ -18,12 +18,24 @@
 %% limitations under the License.
 
 -module(action_admin_predicate_dialog_predicate_new).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "content_relationships", "create"]
+}).
 -moduledoc("
 Show a dialog for creating a new [predicate](/id/doc_glossary#term-predicate).
 
-Todo
+Arguments:
 
-Extend documentation
+* `title` pre-fills the predicate title.
+* `redirect` controls whether the browser opens the new predicate's admin edit
+  page and defaults to `true`.
+
+The submitted title is passed to `m_predicate:insert/2`; duplicate names and
+permission errors are reported in the dialog.
+
+```django
+{% button text=\"New predicate\" action={dialog_predicate_new redirect} %}
+```
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

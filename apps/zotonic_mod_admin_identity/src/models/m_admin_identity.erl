@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_admin_identity).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "site_administrator", "model", "identity_and_accounts", "identifier"]
+}).
 -moduledoc("
 Model for admin identity configuration values, including password policy regex and default category/content-group for new users.
 

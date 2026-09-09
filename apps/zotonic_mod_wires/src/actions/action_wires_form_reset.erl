@@ -18,12 +18,19 @@
 %% limitations under the License.
 
 -module(action_wires_form_reset).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "forms", "edit", "javascript"]
+}).
 -moduledoc("
 Resets the target form to its initial state.
 
-Todo
+The `target` argument is the form's element id. The common `id` or `selector`
+action arguments can override it. Resetting restores the values from the
+rendered HTML; it does not submit the form or run server-side validation.
 
-Extend documentation
+```django
+{% button text=\"Clear changes\" action={form_reset target=\"profile-form\"} %}
+```
 ").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).

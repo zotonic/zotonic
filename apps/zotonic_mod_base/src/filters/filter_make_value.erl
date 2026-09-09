@@ -18,10 +18,22 @@
 %% limitations under the License.
 
 -module(filter_make_value).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "structured_data", "transform"]
+}).
 -moduledoc("
-Todo
+Convert a template value to its simple value representation.
 
-Not yet documented.
+This resolves values such as model lookups and converts template runtime
+wrappers before they are passed to code that expects a plain Erlang value.
+
+For example:
+
+```django
+{% with value|make_value as plain_value %}
+    {{ plain_value }}
+{% endwith %}
+```
 ").
 -export([make_value/2]).
 

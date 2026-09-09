@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_is_visible).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "authorization_and_access_control", "collection", "query"]
+}).
 -moduledoc("
 Filter a list of resource ids so that only the visible ids remain.
 
@@ -49,10 +52,7 @@ Whilst:
 ```
 
 Lists only the first three collection members that are visible.
-
-See also
-
-[is_a](/id/doc_template_filter_filter_is_a), [is_not_a](/id/doc_template_filter_filter_is_not_a), [filter](/id/doc_template_filter_filter_filter)").
+").
 -export([is_visible/2, is_visible/3]).
 
 

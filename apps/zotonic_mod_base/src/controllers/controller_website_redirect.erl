@@ -16,12 +16,20 @@
 %% limitations under the License.
 
 -module(controller_website_redirect).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "controller", "routing_and_redirects", "resource", "url", "http"]
+}).
 -moduledoc("
 This controller does a redirect to the `website` property of the given [resource](/id/doc_glossary#term-resource).
 
-Todo
+The required `id` argument can be a resource id or name. The resource must
+exist and be visible to the current user. When its `website` property is not
+empty, the controller returns a temporary redirect to that URL; otherwise no
+redirect is produced.
 
-Extend documentation
+This controller is selected by `controller_page` when a resource has
+`is_website_redirect` enabled. Relative website values are expanded against the
+current site URL.
 ").
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
@@ -55,4 +63,3 @@ moved_temporarily(Context) ->
             AbsUrl = iolist_to_binary(z_context:abs_url(z_html:unescape(Url), Context)),
             {{true, AbsUrl}, Context}
     end.
-

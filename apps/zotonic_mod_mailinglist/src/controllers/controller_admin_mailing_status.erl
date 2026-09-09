@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(controller_admin_mailing_status).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "controller", "mailing_lists", "monitor", "query"]
+}).
 -moduledoc("
 This controller shows the mailing status of a [resource](/id/doc_glossary#term-resource). It lists each mailing list
 available in the system, and shows whether or not the current resource has already been sent to the list.
@@ -26,9 +29,13 @@ Per mailinglist, it offers the options to send the resource right now, or schedu
 
 There are also buttons for sending the resource to a test mailing list or to a single email address.
 
-Todo
+The required `id` argument identifies the page to inspect. The current user
+must be allowed to use `mod_mailinglist` and view that page. The controller
+passes the resolved `id` to the category-aware `admin_mailing_status.tpl`;
+sending, scheduling, and test-mail actions are implemented by that template's
+wired controls.
 
-Extend documentation
+Use `{% url admin_mailing_status id=id %}` to construct the URL.
 ").
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 

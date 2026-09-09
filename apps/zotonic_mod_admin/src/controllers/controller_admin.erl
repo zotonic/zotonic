@@ -18,15 +18,40 @@
 %% limitations under the License.
 
 -module(controller_admin).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "controller", "content_authoring", "authorization_and_access_control", "user_interface_and_interaction"]
+}).
 -moduledoc("
 The admin controller is the main controller behind which admin pages are served. Its main purpose is that it does an
 authentication check (Is current user allowed to `use` the module `mod_admin`).
 
 The template parameter decides which admin template gets served, and defaults to admin.tpl.
 
-Todo
+Dispatch options
+----------------
 
-Extend documentation
+| Option | Description |
+| ------ | ----------- |
+| `template` | Template rendered for the request. Defaults to `admin.tpl`. |
+| `selected` | Name of the active admin navigation item. Defaults to `dashboard`. |
+| `acl_module` | Module checked for the `{use, Module}` permission. Defaults to `mod_admin`. |
+
+All dispatch and request arguments are passed to the template. A typical dispatch rule is:
+
+```erlang
+{admin_overview_rsc, [\"admin\", \"overview\"], controller_admin, [
+    {template, <<\"admin_overview.tpl\">>},
+    {selected, <<\"overview\">>},
+    seo_noindex
+]}
+```
+
+Request handling
+----------------
+
+The controller disables caching and indexing, checks the configured module permission, renders the selected template,
+and returns the generated HTML. Use a more specific controller when a page needs resource lookup, form processing, or a
+response format other than the standard admin HTML page.
 ").
 -author("Tim Benniks <tim@timbenniks.com>").
 

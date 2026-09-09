@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(action_wires_redirect).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "routing_and_redirects", "javascript"]
+}).
 -moduledoc("
 This action redirects the browser to another page or back to the previous page.
 
@@ -113,4 +116,3 @@ sanitize(undefined) ->
     undefined;
 sanitize(Url) ->
     z_html:sanitize_uri(Url).
-

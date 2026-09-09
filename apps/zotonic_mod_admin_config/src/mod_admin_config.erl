@@ -18,13 +18,16 @@
 %% limitations under the License.
 
 -module(mod_admin_config).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "site_administrator", "module", "configuration", "configure"]
+}).
 -moduledoc("
-Add support for editing the site’s configuration values, as accessed through [m_config](/id/doc_model_model_config).
+Add support for editing the site’s configuration values, as accessed through `model#config`.
 
 The page in the admin is a list of every configuration module, key and textual value. Entries can be added, removed, and
 edited, if the user has the permission to do so.
 
-When a value is large than 65 characters, it will be truncated in the admin config list view. To view the whole value,
+When a value is longer than 65 characters, it will be truncated in the admin config list view. To view the whole value,
 click the row.
 
 
@@ -44,17 +47,13 @@ Here the module `mod_ssl_letsencrypt` lets you request a free certificate from t
 Email configuration
 -------------------
 
-See also
+The System > Email configuration page groups the settings used for outgoing e-mail. It also provides a form for sending
+a test message, which is useful for checking the effective SMTP configuration.
 
-[m_config](/id/doc_model_model_config)
+Other e-mail modules can add their own settings panel by providing an `_admin_config_email_panel.tpl` template. The page
+uses an `all include`, so every matching module template is rendered. Configuration values shown by those panels are
+available through `model#config`.
 
-Configuration of outgoing email. This module provides a settings page via the admin menu System > Email configuration,
-where all email related settings are grouped.
-
-On this page it is possible to send a test email.
-
-Email modules like `zotonic_mod_mailgun` provide additional settings panels on this page. This is possible by adding a
-template with the name `_admin_config_email_panel.tpl`.
 
 Accepted Events
 ---------------

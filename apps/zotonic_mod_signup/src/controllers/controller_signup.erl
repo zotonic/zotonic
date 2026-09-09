@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(controller_signup).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "controller", "identity_and_accounts", "authentication", "forms", "create"]
+}).
 -moduledoc("
 Controller which displays a form to sign up (rendered from `signup.tpl`).
 
@@ -61,6 +64,9 @@ payload is carried forward as template variables in each wire postback
 (`props=props signup_props=signup_props`). This keeps the browser-visible form
 state limited to the values the template already needs to render, while the
 original `xs` token is only used to bootstrap the first page render.
+
+Handled events
+--------------
 
 The controller accepts these postbacks:
 

@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(mod_email_dkim).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "operator", "module", "email_delivery", "security", "dkim"]
+}).
 -moduledoc("
 Signs outgoing e-mails with DomainKeys Identified Mail Signatures ([RFC 6376](https://tools.ietf.org/html/rfc6376)).
 
@@ -32,9 +35,9 @@ DKIM works by signing each e-mail that Zotonic sends with a private key. The pub
 TXT record, with which email receiver can check whether the email actually originated from the domain that it claimed to
 come from.
 
-Note
-
+::: note
 The generating of the keypair depends on the `openssl` utility to be available in `$PATH`.
+:::
 
 This RSA keypair is generated automatically when the module is installed, and the private/public keys are put in the
 site security directory: `security/$site/dkim/dkim.key` and `security/$site/dkim/dkim.pub`. Existing keys in the old

@@ -18,12 +18,20 @@
 %% limitations under the License.
 
 -module(action_wires_insert_before).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "template", "user_interface_and_interaction", "render"]
+}).
 -moduledoc("
 Insert the result of a render action before an HTML element.
 
-Todo
+It accepts the same arguments as the `action#update`
+action: use `text` for literal HTML or `template` to render a template. All
+additional arguments are passed to that template. `catinclude`, `include_all`,
+and `appear` are also supported.
 
-Extend documentation
+```django
+{% button text=\"Add warning\" action={insert_before target=\"submit\" template=\"_form_warning.tpl\"} %}
+```
 ").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([

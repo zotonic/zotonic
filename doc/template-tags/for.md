@@ -1,3 +1,12 @@
+---
+keywords:
+  - reference
+  - frontend_developer
+  - template
+  - collection
+  - render
+---
+
 Loop over multiple values in a list or search result.
 
 `{% for %}` loops over a list of values. For example to loop over a list of colors:

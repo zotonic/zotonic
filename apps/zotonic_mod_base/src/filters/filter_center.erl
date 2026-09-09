@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_center).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "text", "format"]
+}).
 -moduledoc("
 Centers the value in a field of a certain width using spaces.
 
@@ -31,10 +34,7 @@ For example:
 When value is `hello` then the output is `_hello_` (with spaces).
 
 Centering only works for single byte character values. At this moment there is no support for multi-byte unicode characters.
-
-See also
-
-[rjust](/id/doc_template_filter_filter_rjust), [ljust](/id/doc_template_filter_filter_ljust)").
+").
 -export([center/3]).
 
 center(undefined, _Number, _Context) ->

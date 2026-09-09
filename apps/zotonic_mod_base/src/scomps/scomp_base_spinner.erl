@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(scomp_base_spinner).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "scomp", "user_interface_and_interaction", "javascript", "render"]
+}).
 -moduledoc("
 Add an AJAX activity indicator.
 

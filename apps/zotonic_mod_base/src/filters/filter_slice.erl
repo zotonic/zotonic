@@ -43,6 +43,9 @@
 %
 
 -module(filter_slice).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "collection", "query"]
+}).
 -moduledoc("
 Perform array-slice operations on a list or string.
 

@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_survey_page_options).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "surveys", "structured_data", "query"]
+}).
 -moduledoc("
 Check the list of blocks and collect all options for that page.
 
@@ -32,7 +35,7 @@ The `survey_stop` block is deprecated in favor of the `survey_page_options` bloc
 When displaying or editing a survey, the `survey_page_options` block is collected together with all
 page jump blocks.
 
-See [mod_survey](/id/doc_module_mod_survey)
+See `module#mod_survey`
 ").
 
 -export([

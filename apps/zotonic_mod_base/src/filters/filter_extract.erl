@@ -19,6 +19,9 @@
 
 
 -module(filter_extract).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "collection", "query"]
+}).
 -moduledoc("
 Extract a specific property from each item in a list.
 

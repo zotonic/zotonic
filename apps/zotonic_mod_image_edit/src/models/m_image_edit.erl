@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_image_edit).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "model", "image_management", "edit"]
+}).
 -moduledoc("
 Manages the `medium_edit_settings` property for non destructive image editing.
 
@@ -29,10 +32,7 @@ Available Model API Paths
 | `get` | `/settings/+id/...` | Return image-editor settings for media/resource `+id`, combining stored crop/edit settings with module defaults. |
 
 `/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
-
-See also
-
-[image](/id/doc_template_tag_tag_image), [Arguments](/id/doc_template_tag_tag_image)").
+").
 -author("Marc Worrell <marc@worrell.nl").
 
 -behaviour(zotonic_model).

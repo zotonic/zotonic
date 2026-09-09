@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(action_wires_typeselect).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "search_and_discovery", "query", "javascript"]
+}).
 -moduledoc("
 Show possible selections whilst typing.
 

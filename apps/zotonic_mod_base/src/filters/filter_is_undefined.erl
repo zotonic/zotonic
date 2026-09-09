@@ -18,11 +18,14 @@
 %% limitations under the License.
 
 -module(filter_is_undefined).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "boolean", "compare"]
+}).
 -moduledoc("
 Tests if a value is undefined.
 
 Checks if the value is empty and outputs a boolean true or false. This is useful in combination with the
-[if](/id/doc_template_tag_tag_if) tag.
+`tag#if` tag.
 
 For example:
 
@@ -32,12 +35,8 @@ For example:
 ```
 
 If the value is `[]` then the output is `The first elemeent of value was undefined`.
-
-See also
-
-[is_defined](/id/doc_template_filter_filter_is_defined), [if_undefined](/id/doc_template_filter_filter_if_undefined), [if](/id/doc_template_filter_filter_if)").
+").
 -export([is_undefined/2]).
 
 is_undefined(V, Context) ->
     not(filter_is_defined:is_defined(V, Context)).
-

@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_menu_expand).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "navigation", "collection", "transform"]
+}).
 -moduledoc("
 Takes a menu, or a menu resource id, and adds all `haspart` objects connected to the menu ids.
 

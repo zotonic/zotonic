@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_auth2fa).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "site_administrator", "model", "two_factor_authentication", "authenticate"]
+}).
 -moduledoc("
 Model for two-factor authentication state and setup, including TOTP QR/image generation, mode checks, reset checks, and clock skew checks.
 

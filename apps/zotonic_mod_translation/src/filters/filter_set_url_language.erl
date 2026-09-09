@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_set_url_language).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "localization_and_translation", "language_code", "url", "transform"]
+}).
 -moduledoc("
 Change the language of an URL to another language. Useful to generate alternative URLs for a page.
 

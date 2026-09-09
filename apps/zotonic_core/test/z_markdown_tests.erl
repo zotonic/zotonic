@@ -117,3 +117,27 @@ email_preset_test() ->
     ?assertEqual(
         <<"Read the update <https://example.test/update>.\n\nLeft | Right">>,
         markupz:to_markdown(Html, email)).
+
+html_document_test() ->
+    Markdown = <<
+        "---\n",
+        "keywords:\n",
+        "  - cache\n",
+        "---\n",
+        "A **document**.\n"
+    >>,
+    ?assertEqual(
+        {ok, #{
+            front_matter => #{
+                format => yaml,
+                source => <<"keywords:\n  - cache">>
+            },
+            content => <<"<p>A <strong>document</strong>.</p>">>
+        }},
+        z_markdown:to_html_document(Markdown)).
+
+html_document_front_matter_error_test() ->
+    Markdown = <<"---\nkeywords:\n  - cache\n">>,
+    ?assertEqual(
+        {error, invalid_front_matter, #{reason => missing_closing_delimiter}},
+        z_markdown:to_html_document(Markdown)).

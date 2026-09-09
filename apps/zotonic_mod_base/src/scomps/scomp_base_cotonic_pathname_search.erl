@@ -18,10 +18,21 @@
 %% limitations under the License.
 
 -module(scomp_base_cotonic_pathname_search).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "scomp", "routing_and_redirects", "url", "serialize"]
+}).
 -moduledoc("
-Todo
+Render the current dispatch `path_info` values as a URL query string.
 
-Not yet documented.
+The component is used by Cotonic navigation code to preserve wildcard and
+variable path values while changing the pathname. Boolean `true` values are
+encoded without an explicit value.
+
+For example:
+
+```django
+{% cotonic_pathname_search %}
+```
 ").
 -author("Marc Worrell <marc@worrell.nl").
 -behaviour(zotonic_scomp).
@@ -41,4 +52,3 @@ render(_Params, _Vars, Context) ->
         [],
         cowmachine_req:path_info(Context)),
     {ok, cow_qs:qs(PathInfo)}.
-

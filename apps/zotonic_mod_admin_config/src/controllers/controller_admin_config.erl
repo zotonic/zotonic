@@ -18,14 +18,20 @@
 %% limitations under the License.
 
 -module(controller_admin_config).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "site_administrator", "controller", "configuration", "configure"]
+}).
 -moduledoc("
-Shows the admin config editor. Here you can edit the key/value pairs of [m_config](/id/doc_model_model_config).
+Shows the admin config editor. Here you can edit the key/value pairs of `model#config`.
 
+The controller is available through the `admin_config` dispatch rule and
+requires permission to use `mod_admin_config`. It renders `admin_config.tpl`
+with all editable configuration entries, grouped by module and sorted.
 
-
-Todo
-
-Extend documentation
+Only simple value entries are shown. Configuration records with additional
+structured properties are deliberately filtered out, preventing the generic
+editor from overwriting settings managed by a specialized interface. The page
+is not cached or indexed.
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 
@@ -80,4 +86,3 @@ is_value_config_props([{props,undefined}|Rest]) ->
     is_value_config_props(Rest);
 is_value_config_props(_X) ->
     false.
-

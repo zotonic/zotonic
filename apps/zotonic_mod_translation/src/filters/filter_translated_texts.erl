@@ -19,6 +19,9 @@
 %% limitations under the License.
 
 -module(filter_translated_texts).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "localization_and_translation", "translated_text", "structured_data", "query"]
+}).
 -moduledoc("
 Check all properties of a map, list or resource. Returns a list of
 all properties that are translated (have a `#trans{}` record) and their translations.
@@ -39,10 +42,7 @@ Then the output will be:
     {<<\"title\">>, #trans{tr = [{en, <<\"Hello\">>}, {nl, <<\"Hallo\">>}]} }
 ]
 ```
-
-See also
-
-[translation](/id/doc_template_filter_filter_translation)").
+").
 
 -export([
     translated_texts/2

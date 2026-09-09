@@ -18,8 +18,11 @@
 %% limitations under the License.
 
 -module(filter_sanitize_html).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "html", "security"]
+}).
 -moduledoc("
-Sanitize a HTML code. Removes elements and attributes that might be dangerous, like `<script\\>` elements.
+Sanitize a HTML code. Removes elements and attributes that might be dangerous, like `<script>` elements.
 
 This filter parses the complete HTML string and ensures that the output is safe and valid HTML.
 

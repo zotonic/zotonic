@@ -18,6 +18,11 @@
 %% limitations under the License.
 
 -module(m_rsc_update).
+-moduledoc(#{
+    zotonic_keywords => [
+        "reference", "backend_developer", "model", "content_authoring", "editorial_workflow", "publishing", "edit"
+    ]
+}).
 -moduledoc("
 Resource update helper module used by `m_rsc`.
 

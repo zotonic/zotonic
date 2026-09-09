@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_minmax).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "number", "compare"]
+}).
 -moduledoc("
 Force the given value in the given range.
 
@@ -33,15 +36,11 @@ Example:
 This will print `10`, since that is the minimum value allowed.
 
 Passing in `undefined` will not clamp the value but return `undefined`.
-
-See also
-
-[max](/id/doc_template_filter_filter_max), [min](/id/doc_template_filter_filter_min)").
+").
 -export([minmax/4]).
 
 minmax(undefined, _Min, _Max, _Context) ->
     undefined;
 minmax(Value, Min, Max, Context) ->
     filter_max:max(filter_min:min(Value, Max, Context), Min, Context).
-
 

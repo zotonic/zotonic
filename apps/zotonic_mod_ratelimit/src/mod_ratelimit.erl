@@ -19,6 +19,9 @@
 %% limitations under the License.
 
 -module(mod_ratelimit).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "operator", "module", "security", "http", "performance"]
+}).
 -moduledoc("
 Implements rate limiting for various resources.
 
@@ -252,4 +255,3 @@ generate_device_secret(Context) ->
     Secret = z_ids:id(?DEVICE_SECRET_LENGTH),
     m_config:set_value(mod_ratelimit, device_secret, Secret, Context),
     Secret.
-

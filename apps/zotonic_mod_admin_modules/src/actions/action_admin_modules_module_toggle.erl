@@ -18,12 +18,24 @@
 %% limitations under the License.
 
 -module(action_admin_modules_module_toggle).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "module_management", "configure"]
+}).
 -moduledoc("
 Activate/deactivate a module in the module manager in the admin interface.
 
-Todo
+Arguments:
 
-Extend documentation
+* `module` is the Erlang module atom to change.
+* `is_activate` forces activation.
+* `is_deactivate` forces deactivation and takes precedence over `is_activate`.
+* With neither flag, the current active state is toggled.
+* `status_id` is retained in the signed postback for the admin status control.
+
+Activation and deactivation run dependency prechecks. Missing or cyclic
+dependencies are shown in a confirmation dialog; successful changes reload the
+page. The site must be writable and the current user must be allowed to use the
+module manager.
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

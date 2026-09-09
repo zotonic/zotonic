@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(action_wires_dialog_open).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "user_interface_and_interaction", "template", "javascript", "render"]
+}).
 -moduledoc("
 Renders a template on the server and opens a dialog with the HTML output of the template.
 
@@ -49,11 +52,7 @@ Example, opening a dialog above any open dialog:
 ```django
 {% button text=\"ok\" action={dialog_open title=\"Confirm\" template=\"_confirm.tpl\" level=\"top\"} %}
 ```
-
-See also
-
-actions [dialog_close](/id/doc_template_action_action_dialog_close), [dialog](/id/doc_template_action_action_dialog)
-and [overlay_open](/id/doc_template_action_action_overlay_open).").
+").
 -author("Marc Worrell <marc@worrell.nl").
 
 %% interface functions

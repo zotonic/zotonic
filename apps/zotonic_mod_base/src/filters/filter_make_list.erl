@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_make_list).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "collection", "transform"]
+}).
 -moduledoc("
 Forces the value to a list.
 
@@ -44,6 +47,5 @@ This filter is especially useful for loops using the `{% for %}` tag:
 
 make_list(In, Context) ->
     z_template_compiler_runtime:to_list(In, Context).
-
 
 

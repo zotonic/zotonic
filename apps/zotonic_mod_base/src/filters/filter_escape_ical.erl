@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_escape_ical).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "text", "serialize"]
+}).
 -moduledoc("
 Escape the value according to the RFC2445 rules.
 
@@ -34,10 +37,7 @@ For example:
 ```
 
 When the value is `abc:d;e` then the output is `abc\":\"d\\;e`.
-
-See also
-
-[escape](/id/doc_template_filter_filter_escape)").
+").
 -export([escape_ical/2]).
 
 

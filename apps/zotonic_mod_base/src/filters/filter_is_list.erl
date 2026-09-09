@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_is_list).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "boolean", "compare"]
+}).
 -moduledoc("
 Test if a value is a list:
 
@@ -30,4 +33,3 @@ Test if a value is a list:
 
 is_list(L, _Context) when is_list(L) -> true;
 is_list(_, _Context) -> false.
-

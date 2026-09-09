@@ -18,10 +18,15 @@
 %% limitations under the License.
 
 -module(controller_letsencrypt_challenge).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "operator", "controller", "tls_and_certificates", "http", "validate"]
+}).
 -moduledoc("
-Todo
+Serve an ACME HTTP-01 challenge for Let's Encrypt certificate issuance.
 
-Not yet documented.
+The GET endpoint looks up the requested `token` in the site's active challenge
+set and returns its key authorization as plain text. Unknown tokens receive a
+404 response. Challenge responses are not cached or indexed.
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

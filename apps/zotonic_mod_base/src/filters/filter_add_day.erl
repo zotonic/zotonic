@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_add_day).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "date_and_time", "transform"]
+}).
 -moduledoc("
 Adds a day to a date. The value must be of the form `{{Y,M,D},{H,I,S}}`.
 
@@ -38,10 +41,7 @@ The filter has an optional argument which defines the number of days to add:
 ```
 
 When the value is `{{2008,12,10},{15,30,0}}`, the output is `{{2008,12,13},{15,30,0}}`.
-
-See also
-
-[sub_day](/id/doc_template_filter_filter_sub_day), [add_week](/id/doc_template_filter_filter_add_week), [add_month](/id/doc_template_filter_filter_add_month), [add_year](/id/doc_template_filter_filter_add_year)").
+").
 -export([add_day/2, add_day/3]).
 
 add_day(undefined, _Context) ->

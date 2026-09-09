@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(action_wires_add_class).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "user_interface_and_interaction", "javascript"]
+}).
 -moduledoc("
 Add a css class to an html element.
 
@@ -29,10 +32,7 @@ Example:
 ```
 
 Adds the CSS class “newclass” to the element with HTML id “myid”.
-
-See also
-
-actions [remove_class](/id/doc_template_action_action_remove_class) and [toggle_class](/id/doc_template_action_action_toggle_class).").
+").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).
 

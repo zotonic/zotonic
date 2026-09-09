@@ -18,13 +18,18 @@
 %% limitations under the License.
 
 -module(mod_wires).
+-moduledoc(#{
+    zotonic_keywords => [
+        "reference", "frontend_developer", "module", "user_interface_and_interaction", "javascript", "wire_action", "scomp"
+    ]
+}).
 -moduledoc("
 Actions, tags (also known as screen components), and javascript for user interfaces using *wires*.
 
-Used by [mod_admin](/id/doc_module_mod_admin) and the other administrative modules.
+Used by `module#mod_admin` and the other administrative modules.
 
 Wires are actions that are directly coupled to user interface elements. These couplings are defined in the templates
-using the [wire](/id/doc_template_scomp_scomp_wire#scomp-wire) tag.
+using the `scomp#wire` tag.
 
 Accepted Events
 ---------------

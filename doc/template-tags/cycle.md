@@ -1,10 +1,19 @@
+---
+keywords:
+  - reference
+  - frontend_developer
+  - template
+  - collection
+  - render
+---
+
 Rotate through a list of values.
 
 Rotates through a list of values and outputs them. `{% cycle %}` Is used within a `{% for %}` loop.
 
-Note
-
+::: note
 You can not apply filters to the cycle values.
+:::
 
 Example:
 

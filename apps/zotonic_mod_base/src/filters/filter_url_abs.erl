@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_url_abs).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "url", "serialize"]
+}).
 -moduledoc("
 Generates an absolute URL for the given dispatch information.
 
@@ -38,10 +41,7 @@ This is similar to:
 ```
 
 Difference between the tag and the filter is that the filter can be used in expressions or with passed values.
-
-See also
-
-[url](/id/doc_template_filter_filter_url), [url](/id/doc_template_tag_tag_url), [sanitize_url](/id/doc_template_filter_filter_sanitize_url), [is_site_url](/id/doc_template_filter_filter_is_site_url), [urlencode](/id/doc_template_filter_filter_urlencode)").
+").
 -export([url_abs/2]).
 
 url_abs(undefined, _Context) ->

@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_development).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "model", "development_and_debugging", "monitor"]
+}).
 -moduledoc("
 Model for development and diagnostics controls, including tracing flags, observer lists, cache/compile/reindex actions, and dispatch info.
 

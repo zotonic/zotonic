@@ -19,6 +19,9 @@
 %% limitations under the License.
 
 -module(action_wires_reload).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "routing_and_redirects", "javascript"]
+}).
 -moduledoc("
 Reload the current page.
 

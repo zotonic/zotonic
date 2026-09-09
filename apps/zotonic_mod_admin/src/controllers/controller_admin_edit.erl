@@ -18,15 +18,23 @@
 %% limitations under the License.
 
 -module(controller_admin_edit).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "controller", "content_authoring", "resource", "edit", "user_interface_and_interaction"]
+}).
 -moduledoc("
 The main admin edit controller. This controller serves the edit page where [resources](/id/doc_glossary#term-resource)
 can be edited.
 
+Handled events
+--------------
 
-
-Todo
-
-Extend documentation
+* `rscform` and `{rscform, Args}` submit the resource edit form.
+* `{view, Args}` saves the resource and opens its public page.
+* `{reload_media, Opts}` refreshes the media-edit area.
+* `{delete_media, Opts}` removes the resource's attached medium.
+* `#sort{drop = {dragdrop, {object_sorter, Props}, ...}}` stores a reordered
+  list of connected resources.
+* `{query_preview, Opts}` renders a preview for a query resource.
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

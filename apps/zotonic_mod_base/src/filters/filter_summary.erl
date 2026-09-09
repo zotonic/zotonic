@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_summary).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "text", "format"]
+}).
 -moduledoc("
 Extract a summary from a resource.
 

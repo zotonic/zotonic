@@ -18,13 +18,20 @@
 %% limitations under the License.
 
 -module(action_admin_config_config_toggle).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "configuration", "configure"]
+}).
 -moduledoc("
 Toggle a configuration value. Used in the admin, for instance when displaying a “live” checkbox the state of which
 should reflect a config value.
 
-Todo
+The required `module` and `key` arguments identify the entry. On click, the
+action stores the triggering input's `triggervalue`; for a checkbox this is its
+new checked value. Only editable administrators may change configuration.
 
-Extend documentation
+```django
+{% wire id=\"feature-enabled\" action={config_toggle module=\"mod_example\" key=\"enabled\"} %}
+```
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

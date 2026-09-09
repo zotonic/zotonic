@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_sanitize_url).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "url", "security"]
+}).
 -moduledoc("
 Sanitize an URL. Removes URLs that might be dangerous, like `javascript:` URLs.
 

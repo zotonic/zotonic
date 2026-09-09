@@ -18,6 +18,11 @@
 %% limitations under the License.
 
 -module(mod_import_wordpress).
+-moduledoc(#{
+    zotonic_keywords => [
+        "reference", "integrator", "module", "import_and_migration", "api_and_integration", "structured_data", "migrate"
+    ]
+}).
 -moduledoc("
 Import WordPress .wxr files in your site.
 
@@ -29,7 +34,9 @@ The import module works incrementally: if you import a .wxr file twice, it will 
 entries. If you delete posts, a next import will not re-create the entries: it will remember that you have deleted them.
 You can override this behaviour by checking the “import previously deleted content” button.
 
-**Note:** YMMV with importing 2 .wxr files from different blogs: as the unique keys of the entries are based on the WordPress numeric ids, it is possible that content from the second one will overwrite content from the previous import.
+::: note
+YMMV with importing 2 .wxr files from different blogs: as the unique keys of the entries are based on the WordPress numeric ids, it is possible that content from the second one will overwrite content from the previous import.
+:::
 
 Accepted Events
 ---------------

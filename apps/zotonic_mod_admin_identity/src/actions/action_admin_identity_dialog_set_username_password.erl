@@ -18,13 +18,25 @@
 %% limitations under the License.
 
 -module(action_admin_identity_dialog_set_username_password).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "identity_and_accounts", "edit"]
+}).
 -moduledoc("
 Show a dialog for setting a username / password on the given [resource](/id/doc_glossary#term-resource) (which is
 usually a person).
 
-Todo
+The required `id` argument accepts a resource id or name. `on_delete` can be
+repeated to run actions after the account's username is removed. The built-in
+administrator account cannot be changed with this action.
 
-Extend documentation
+The dialog can change only the username by leaving the password empty, or set
+both username and password. An administrator may optionally send the welcome
+email. Administrators and the user editing their own account are authorized to
+set credentials; username deletion has stricter safeguards.
+
+```django
+{% button text=\"Set login\" action={dialog_set_username_password id=id on_delete={reload}} %}
+```
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

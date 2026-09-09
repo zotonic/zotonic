@@ -18,10 +18,13 @@
 %% limitations under the License.
 
 -module(m_server_storage).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "model", "structured_data", "query", "edit"]
+}).
 -moduledoc("
 Model to access the server side storage of data.
 
-See the module documentation of [mod_server_storage](/id/doc_module_mod_server_storage) for information.
+See the module documentation of `module#mod_server_storage` for information.
 
 Available Model API Paths
 -------------------------

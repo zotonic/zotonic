@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(controller_log_client).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "operator", "controller", "logging_and_monitoring", "http", "send_and_receive"]
+}).
 -moduledoc("
 Controller to log UI errors and events.
 
@@ -92,4 +95,3 @@ req_body(Context) ->
         {undefined, Context1} -> {<<>>, Context1};
         {Body, Context1} -> {Body, Context1}
     end.
-

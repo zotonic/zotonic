@@ -19,6 +19,16 @@
 %% limitations under the License.
 
 -module(zotonic_core).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "module", "content_management", "erlang_otp"]
+}).
+-moduledoc("
+Initialize the Zotonic core runtime.
+
+This module detects Zotonic project and test-sandbox environments, loads the
+required OTP applications, applies runtime configuration, and prepares the
+Mnesia schema before the system starts.
+").
 
 -author('Marc Worrell <marc@worrell.nl>').
 

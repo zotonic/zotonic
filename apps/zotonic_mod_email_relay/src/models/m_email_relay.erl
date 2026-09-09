@@ -19,6 +19,9 @@
 %% limitations under the License.
 
 -module(m_email_relay).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "operator", "integrator", "model", "email_delivery", "api_and_integration", "send_and_receive"]
+}).
 -moduledoc("
 Model for email relay API endpoints, handling relay delivery requests and relay status updates.
 

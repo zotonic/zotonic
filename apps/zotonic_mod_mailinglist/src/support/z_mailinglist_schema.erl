@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(z_mailinglist_schema).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "mailing_lists", "database", "maintainability"]
+}).
 -moduledoc("
 Installs and upgrades the mailing-list recipient and scheduled-mailing tables.
 

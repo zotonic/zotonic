@@ -18,18 +18,26 @@
 %% limitations under the License.
 
 -module(action_wires_animate).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "user_interface_and_interaction", "javascript"]
+}).
 -moduledoc("
 Add a `$(..).animate` jQuery call to the target element.
 
 Arguments:
 
-*   speed
-*   easing
-*   options
+* `target` selects the element to animate.
+* `options` is a list or map of CSS properties and target values passed to
+  jQuery's `animate` function.
+* `speed` is the duration in milliseconds, or a jQuery duration such as
+  `\"slow\"`. The default is 350 milliseconds.
+* `easing` is the name of the jQuery easing function.
 
-Todo
+For example, this fades an element to half opacity:
 
-Extend documentation
+```django
+{% button text=\"Dim\" action={animate target=\"panel\" options=[{opacity, 0.5}] speed=250} %}
+```
 ").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).

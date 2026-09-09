@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(controller_ping).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "controller", "api_and_integration", "http"]
+}).
 -moduledoc("
 Simple controller for connection tests, used on the `/test/connection` page.
 

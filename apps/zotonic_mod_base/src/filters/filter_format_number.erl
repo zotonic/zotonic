@@ -26,6 +26,9 @@
 %%% THE SOFTWARE.
 
 -module(filter_format_number).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "number", "format"]
+}).
 -moduledoc("
 Show an integer or float.
 
@@ -39,10 +42,7 @@ For example:
 ```
 
 When the value is the float `12.0` then the output is the list `12.0`.
-
-See also
-
-[format_integer](/id/doc_template_filter_filter_format_integer), [format_price](/id/doc_template_filter_filter_format_price), [format_duration](/id/doc_template_filter_filter_format_duration)").
+").
 -export([format_number/2]).
 
 -author('rsaccon@gmail.com').

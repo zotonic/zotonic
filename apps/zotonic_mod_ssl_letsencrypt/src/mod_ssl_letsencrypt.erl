@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(mod_ssl_letsencrypt).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "operator", "module", "tls_and_certificates", "configure"]
+}).
 -moduledoc("
 Request certificates from Let’s Encrypt.
 
@@ -107,10 +110,7 @@ This module handles the following notifier callbacks:
 Delegate callbacks:
 
 - `event/2` with `submit` messages: `request_cert`.
-
-See also
-
-[mod_ssl_ca](/id/doc_module_mod_ssl_ca), [Port configurations](/id/doc_developerguide_configuration_port_ssl_configuration#ref-port-ssl-configuration)").
+").
 
 -mod_title("SSL - Let's Encrypt").
 -mod_description("Use SSL Certificate from Let's Encrypt.").

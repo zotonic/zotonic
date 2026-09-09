@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_filestore).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "operator", "model", "file_storage", "file_store", "reliability"]
+}).
 -moduledoc("
 The filestore uses two tables for its administration.
 

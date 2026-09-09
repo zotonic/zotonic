@@ -15,6 +15,15 @@
 %% limitations under the License.
 
 -module(zotonic_site_testsandbox).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "module", "development_and_debugging", "maintainability"]
+}).
+-moduledoc("
+Define the database-backed sandbox site used by Zotonic's automated tests.
+
+The site supplies predictable templates, dispatch rules, resources, and module
+configuration for integration and browser-level tests.
+").
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -mod_title("Test sandbox").

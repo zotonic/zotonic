@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_predicate).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "model", "content_relationships", "predicate", "query"]
+}).
 -moduledoc("
 Retrieve information about predicates. Predicates are the labels on edges (connections between resources) that give
 meaning to an edge. An example is the predicate \"author\" which refers to the authors of an article. Predicates form

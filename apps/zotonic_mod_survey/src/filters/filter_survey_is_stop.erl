@@ -18,14 +18,22 @@
 %% limitations under the License.
 
 -module(filter_survey_is_stop).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "surveys", "boolean", "compare"]
+}).
 -moduledoc("
 Check if there is a ‘stop’ question in list of (survey) blocks
 
-See [mod_survey](/id/doc_module_mod_survey)
+See `module#mod_survey`
 
-Todo
+The result is `true` when the list contains a `survey_stop` block or a survey
+page-options block marked as a stop page.
 
-Not yet documented.
+For example:
+
+```django
+{% if blocks|survey_is_stop %}This page ends the survey.{% endif %}
+```
 ").
 
 -export([

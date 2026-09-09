@@ -18,10 +18,15 @@
 %% limitations under the License.
 
 -module(controller_oauth2_service_redirect).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "integrator", "controller", "routing_and_redirects", "authentication", "oauth_2_0", "http"]
+}).
 -moduledoc("
-Todo
+Complete the browser-facing redirect step of an external OAuth login.
 
-Not yet documented.
+The controller renders the Cotonic OAuth completion worker with the returned
+`state` value. The worker validates the signed state and continues the login
+handshake with the configured service module.
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 
@@ -46,4 +51,3 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
         worker_args => Args
     },
     z_template:render_to_iolist("logon_service_oauth_done.tpl", Vars, Context).
-

@@ -18,6 +18,25 @@
 %% limitations under the License.
 
 -module(validator_base_email_unique).
+-moduledoc(#{
+    zotonic_keywords => [
+        "reference", "frontend_developer", "template_validator", "validate", "email", "identity_and_accounts"
+    ]
+}).
+-moduledoc("
+Validate that an email address is not already attached to a user account.
+
+The validator trims the submitted address and performs an asynchronous lookup
+of validated email identities. It marks the field invalid when another user
+account already owns the address.
+
+For example:
+
+```django
+<input id=\"email\" name=\"email\" type=\"email\">
+{% validate id=\"email\" type={email_unique} %}
+```
+").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([
     render_validator/5,

@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_site_update).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "operator", "model", "site_management", "security", "migrate"]
+}).
 -moduledoc("
 Model for checking if a site has version control enabled.
 
@@ -30,7 +33,7 @@ The URL for the webhook is:
 https://yoursite.test/api/model/site_update/post/webhook/<token>
 ```
 
-Where `<token\\>` should be replaced with your configured token.
+Where `<token>` should be replaced with your configured token.
 
 The token can be configured in the admin on System > Modules and then the config of the mod_site_update module.
 

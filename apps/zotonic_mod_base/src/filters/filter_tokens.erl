@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_tokens).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "text", "collection", "parse"]
+}).
 -moduledoc("
 Returns a list of tokens from input string, separated by the characters in the filter argument.
 

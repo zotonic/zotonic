@@ -18,13 +18,21 @@
 %% limitations under the License.
 
 -module(action_mailinglist_dialog_mail_page).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "mailing_lists", "send_and_receive"]
+}).
 -moduledoc("
 Shows the dialog to mail the current page ([resource](/id/doc_glossary#term-resource)) to a single e-mail address. This
 is used in the frontend of a site to “share” the current page over e-mail.
 
-Todo
+The required `id` argument identifies the page. `on_success` can be repeated to
+run actions after the message has been queued. The dialog validates the entered
+email address and sends the category-aware mailing representation through
+`z_email:send_page/3`.
 
-Extend documentation
+```django
+{% button text=\"Email this page\" action={dialog_mail_page id=id on_success={dialog_close}} %}
+```
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

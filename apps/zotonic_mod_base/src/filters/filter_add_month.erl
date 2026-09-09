@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_add_month).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "date_and_time", "transform"]
+}).
 -moduledoc("
 Adds a month to a date. The value must be of the form `{{Y,M,D},{H,I,S}}`.
 

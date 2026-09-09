@@ -18,12 +18,21 @@
 %% limitations under the License.
 
 -module(action_wires_replace).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "template", "user_interface_and_interaction", "render"]
+}).
 -moduledoc("
-Replace the target HTML element by new one.
+Replace the target HTML element, including the target element itself, with
+rendered HTML.
 
-Todo
+It accepts the same arguments as the `action#update`
+action: use `text` for literal HTML or `template` to render a template. All
+additional arguments are passed to that template. `catinclude`, `include_all`,
+and `appear` are also supported.
 
-Extend documentation
+```django
+{% button text=\"Refresh\" action={replace target=\"card\" template=\"_card.tpl\" id=id} %}
+```
 ").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([

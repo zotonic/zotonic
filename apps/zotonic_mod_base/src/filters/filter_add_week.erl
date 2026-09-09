@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_add_week).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "date_and_time", "transform"]
+}).
 -moduledoc("
 Adds a week to a date. The value must be of the form `{{Y,M,D},{H,I,S}}`.
 
@@ -50,4 +53,3 @@ add_week(undefined, _N, _Context) ->
 	undefined;
 add_week(Date, N, _Context) ->
 	z_datetime:next_week(Date, N).
-

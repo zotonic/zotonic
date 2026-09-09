@@ -1,0 +1,14 @@
+{application, zotonic_mod_admin_keyword, [
+    {description, "Analyze keyword use and overlap in the Zotonic admin."},
+    {vsn, {file, "../../VERSION"}},
+    {registered, []},
+    {applications, [kernel, stdlib, zotonic_core]},
+    {env, []},
+    {modules, []},
+    {doc, "doc"},
+    {licenses, ["Apache-2.0"]},
+    {links, [
+        {"Website", "https://zotonic.com/"},
+        {"GitHub", "https://github.com/zotonic/zotonic"}
+    ]}
+]}.

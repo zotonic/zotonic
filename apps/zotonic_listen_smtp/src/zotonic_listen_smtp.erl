@@ -22,6 +22,16 @@
 
 
 -module(zotonic_listen_smtp).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "operator", "module", "email_receiving", "send_and_receive"]
+}).
+-moduledoc("
+Accept incoming and bounced email over SMTP.
+
+This module implements the SMTP server session, including STARTTLS, recipient
+validation, size limits, DNS blocklist checks, and delivery of accepted
+messages to Zotonic's email handling pipeline.
+").
 
 -behaviour(gen_smtp_server_session).
 

@@ -16,6 +16,9 @@
 %% limitations under the License.
 
 -module(scomp_base_loremipsum).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "scomp", "development_and_debugging", "text", "create", "render"]
+}).
 -moduledoc("
 Inserts a piece of “lorem ipsum” text into the page.
 
@@ -67,4 +70,3 @@ render(Params, _Vars, _Context) ->
         undefined -> {ok, ?LOREM_IPSUM};
         Words -> {ok, z_string:truncatewords(?LOREM_IPSUM, z_convert:to_integer(Words), ".")}
     end.
-

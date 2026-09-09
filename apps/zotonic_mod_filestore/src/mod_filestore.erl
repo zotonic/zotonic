@@ -18,6 +18,11 @@
 %% limitations under the License.
 
 -module(mod_filestore).
+-moduledoc(#{
+    zotonic_keywords => [
+        "reference", "operator", "module", "file_storage", "file_store", "file_uploads", "reliability"
+    ]
+}).
 -moduledoc("
 Support for storing uploaded and generated images and documents on external services.
 
@@ -196,10 +201,7 @@ This module handles the following notifier callbacks:
 - `observe_filestore_credentials_revlookup`: Given the service, find the credentials to do a lookup of the remote file using `filestore_config:service`.
 - `observe_filestore_request`: Handle filestore upload, download and delete requests via the configured backend credentials.
 - `observe_media_update_done`: Push newly uploaded local media files to the configured filestore backend.
-
-See also
-
-[m_filestore](/id/doc_model_model_filestore).").
+").
 
 -author("Marc Worrell <marc@worrell.nl>").
 -mod_title("File Storage").

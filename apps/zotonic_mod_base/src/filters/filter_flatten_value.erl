@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_flatten_value).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "collection", "serialize"]
+}).
 -moduledoc("
 Flatten a list to a comma separated string.
 
@@ -61,4 +64,3 @@ flatten_value(V, _Context) ->
 flatten_list(V, Context) ->
     Vs1 = [ flatten_value(X, Context) || X <- V ],
     iolist_to_binary( lists:join($,, Vs1) ).
-

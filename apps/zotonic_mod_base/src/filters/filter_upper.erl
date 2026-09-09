@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_upper).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "text", "format"]
+}).
 -moduledoc("
 Translates the value to upper case.
 
@@ -30,11 +33,10 @@ For example:
 
 When value is “Hello World” then the output is “HELLO WORLD”.
 
-**Note:** There is partial support for multi-byte unicode characters.
-
-See also
-
-[capfirst](/id/doc_template_filter_filter_capfirst), [lower](/id/doc_template_filter_filter_lower)").
+::: note
+There is partial support for multi-byte unicode characters.
+:::
+").
 -export([upper/2]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").

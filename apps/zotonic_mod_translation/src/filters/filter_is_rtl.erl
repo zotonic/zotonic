@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_is_rtl).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "localization_and_translation", "language_code", "boolean"]
+}).
 -moduledoc("
 Check if the given language is a rtl or ltr language.
 
@@ -31,10 +34,7 @@ Example:
 ```
 
 It currently returns `true` only for Arabic (`ar`), Farsi (`fa`) and Hebrew (`he`).
-
-See also
-
-[language_dir](/id/doc_template_filter_filter_language_dir), [language](/id/doc_template_filter_filter_language)").
+").
 -export([
     is_rtl/2
 ]).
@@ -51,4 +51,3 @@ is_rtl(LanguageCode) when is_binary(LanguageCode); is_atom(LanguageCode) ->
     z_language:is_rtl(LanguageCode);
 is_rtl(LanguageCode) ->
     is_rtl(z_convert:to_binary(LanguageCode)).
-

@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_group_by).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "collection", "query"]
+}).
 -moduledoc("
 Groups items of a list by a property.
 
@@ -65,4 +68,3 @@ group_by(In, Prop, Context) ->
         z_template_compiler_runtime:to_list(In, Context),
         z_convert:to_atom(Prop),
         Context).
-

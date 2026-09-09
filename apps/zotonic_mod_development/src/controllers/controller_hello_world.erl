@@ -18,14 +18,14 @@
 %% limitations under the License.
 
 -module(controller_hello_world).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "controller", "development_and_debugging", "text", "render"]
+}).
 -moduledoc("
 Simple controller that always serves the string `Hello, World!`
 
 This controller can be used for a dispatch rule to check if the server is responding.
-
-See also
-
-[controller_ping](/id/doc_controller_controller_ping)").
+").
 -author("Maas-Maarten Zeeman <mmzeeman@xs4all.nl").
 
 -export([

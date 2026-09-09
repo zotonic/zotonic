@@ -20,10 +20,13 @@
 %%----------------------------------------------------------------------------------------------------------------
 
 -module(filter_datediff).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "duration", "compare"]
+}).
 -moduledoc("
 Calculate the difference between two dates, returning a single part of that difference.
 
-The filter takes a list with 2 parts \\[start, end\\] as date range argument.
+The filter takes a list with 2 parts [start, end] as date range argument.
 
 The filter argument the “part” that will be extracted, and is one of Y, M, D, H, I, S.
 
@@ -35,10 +38,7 @@ Example, where start = 2012-02-02, end = 2012-03-01:
 ```
 
 Returns 1, since the difference in months between those 2 dates is 1.
-
-See also
-
-[date](/id/doc_template_filter_filter_date)").
+").
 -export([datediff/3]).
 
 datediff(undefined, _X, _Context) ->

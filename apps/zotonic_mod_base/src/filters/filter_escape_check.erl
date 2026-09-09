@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_escape_check).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "html", "security"]
+}).
 -moduledoc("
 Ensures thant an HTML escaped value is properly escaped.
 
@@ -30,13 +33,13 @@ The following characters are replaced:
 
 | Character | Replacement |
 | --------- | ----------- |
-| `\\\\>`     | `&gt;`      |
+| `>`     | `&gt;`      |
 | `<`       | `&lt;`      |
 | `\"`       | `&quot;`    |
 | `'`       | `&#039;`    |
 | `&`       | `&amp;`     |
 
-If you always want escaping to be applied, use the [force_escape](/id/doc_template_filter_filter_force_escape) filter.
+If you always want escaping to be applied, use the `filter#force_escape` filter.
 
 For example:
 
@@ -45,11 +48,8 @@ For example:
 {{ value|escape_check }}
 ```
 
-When the value is `<hel&amp;lo\\>` then the output is `&lt;hel&amp;lo&gt;`.
-
-See also
-
-[force_escape](/id/doc_template_filter_filter_force_escape), [escape](/id/doc_template_filter_filter_escape)").
+When the value is `<hel&amp;lo>` then the output is `&lt;hel&amp;lo&gt;`.
+").
 
 -export([ escape_check/ 2]).
 

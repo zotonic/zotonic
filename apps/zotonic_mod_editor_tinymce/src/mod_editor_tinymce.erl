@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(mod_editor_tinymce).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "content_editor", "module", "content_authoring", "edit"]
+}).
 -moduledoc("
 Adds wysiwyg tinyMCE editors to the admin.
 
@@ -26,9 +29,9 @@ The module packs various versions, the version to be used can be selected on the
 Two additional tinyMCE plugins are added:
 
 *   The plugin `zmedia` for selecting images, videos and other media items. In a dialog the centering, size, and optional caption can be choosen. The selected media are added to the page with a `depiction` connection.
-*   The plugin `zlink` for adding links (`<a href=\"...\"\\>...</a\\>`) to Zotonic pages in the edited text. The title and URL to the page are automatically added.
+*   The plugin `zlink` for adding links (`<a href=\"...\">...</a>`) to Zotonic pages in the edited text. The title and URL to the page are automatically added.
 
-Media are added as HTML comments in the body text. The filter [show_media](/id/doc_template_filter_filter_show_media)
+Media are added as HTML comments in the body text. The filter `filter#show_media`
 is used to translate the HTML comment into a figure or other tags. This is done using the template `_body_media.tpl`,
 though other templates can also be used.
 

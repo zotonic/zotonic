@@ -43,7 +43,7 @@ cotonic.ready.then(() => {
 
     function is_replace_location(msg) {
         const r = msg.payload.replace_location
-                  ?? msg.payload?.message['data-replace-location']
+                  ?? msg.payload?.message?.['data-replace-location']
                   ?? true;
 
         if (typeof r === "string") {
@@ -61,6 +61,28 @@ cotonic.ready.then(() => {
         }
     }
 
+    function observe_initial_loaders() {
+        const loaders = document.querySelectorAll(
+            '[data-onvisible-topic="model/loadmore/post/replace"]'
+        );
+
+        loaders.forEach((element) => {
+            const observer = new IntersectionObserver((entries) => {
+                if (entries.some((entry) => entry.isIntersecting)) {
+                    observer.disconnect();
+                    cotonic.broker.publish("model/loadmore/post/replace", {
+                        id: element.id,
+                        template: element.dataset.template,
+                        url: element.dataset.url,
+                        replace_location: element.dataset.replaceLocation
+                    });
+                }
+            });
+
+            observer.observe(element);
+        });
+    }
+
     cotonic.broker.subscribe("model/loadmore/post/replace", (msg) => {
         let target;
         let template;
@@ -75,10 +97,11 @@ cotonic.ready.then(() => {
 
         if (target && template) {
             const element = document.getElementById(target);
-            if (!element) {
+            if (!element || element.classList.contains("loading")) {
                 return;
             }
             element.classList.add("loading");
+            element.setAttribute("aria-busy", "true");
 
             const url = payload_url(msg);
             let qargs;
@@ -110,5 +133,7 @@ cotonic.ready.then(() => {
             console.log("'model/loadmore/post/replace' missing target or template", msg);
         }
     });
+
+    observe_initial_loaders();
 
 });

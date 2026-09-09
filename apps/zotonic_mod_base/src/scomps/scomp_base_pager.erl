@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(scomp_base_pager).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "scomp", "search_and_discovery", "navigation", "render"]
+}).
 -moduledoc("
 Show a pager for search results.
 
@@ -41,10 +44,10 @@ For example, a fulltext search where the search parameters come from the query s
 
 This will show a list of titles and above that the links to the next, previous and other pages.
 
-Note
-
-that we are using `m.search.paged` here and not [m.search](/id/doc_model_model_search). The pager only works with
+::: note
+that we are using `m.search.paged` here and not `model#search`. The pager only works with
 results from `m.search.paged`.
+:::
 
 The generated pager code will look something like (when searching for the text “filter”):
 
@@ -104,7 +107,7 @@ Result argument
 
 It is also possible to pass a list, a `#rsc_list{ list=Ids }` record, or a list of lists (pages) for the resut. In this
 case you need to perform the pagination for displaying the results yourself. You can use the
-[chunk](/id/doc_template_filter_filter_chunk) for this. The pager scomp will fetch the `page` and `pagelen` from the
+`filter#chunk` for this. The pager scomp will fetch the `page` and `pagelen` from the
 pager arguments, or from the query arguments (if any). If the list is pre-chunked then the pages does not need the
 `pagelen` argument.
 

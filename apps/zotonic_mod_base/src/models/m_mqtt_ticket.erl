@@ -18,10 +18,13 @@
 %% limitations under the License.
 
 -module(m_mqtt_ticket).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "model", "messaging_and_pubsub", "mqtt", "http", "security"]
+}).
 -moduledoc("
 A ticketing system for out of band MQTT posts via HTTP.
 
-The controller [controller_mqtt_transport](/id/doc_controller_controller_mqtt_transport) can accept HTTP posts.
+The controller `controller#controller_mqtt_transport` can accept HTTP posts.
 These posts MUST include a ticket and a topic for the payload to be sent.
 
 The ticket is obtained via `model/mqtt_ticket/post/new`. This can only be accessed via MQTT, as the routines will check

@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(controller_file_id).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "controller", "file_storage", "routing_and_redirects", "http"]
+}).
 -moduledoc("
 Redirect to the controller controller_file.
 
@@ -35,9 +38,6 @@ Examples from mod_base:
 
 The first dispatch rule will redirect to the second. If no associated file was found, then a 404 is returned.
 
-See also
-
-[controller_file](/id/doc_controller_controller_file)
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 
@@ -149,4 +149,3 @@ get_id(Context) ->
         undefined -> m_rsc:rid(z_context:get_q(<<"id">>, Context), Context);
         ArgId -> m_rsc:rid(ArgId, Context)
     end.
-
