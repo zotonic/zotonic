@@ -5,7 +5,7 @@
 {% block body %}
 <p>{_ Dear _} {% include "_name.tpl" id=user_id %},</p>
 
-<p>{_ Thank you for registering at our site. We request you to confirm your account before you can use it. _}</p>
+<p>{_ Thank you for signing up. Please confirm your email address to activate your account. _}</p>
 
 <p>{_ Please follow the link below. _}</p>
 
