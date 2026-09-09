@@ -116,7 +116,7 @@
                     <td>
                         <div class="pull-right">
                             {% button class="btn btn-default" text=_"Edit answers"
-                                      action={dialog_open template="_dialog_survey_editor.tpl" id=id answer_id=r_id title=_"Edit survey result"}
+                                      action={dialog_open template="_dialog_survey_editor.tpl" id=id answer_id=r_id title=_"Edit result"}
                             %}
                             {% button class="btn btn-default" text=_"Delete"
                                       postback={survey_remove_result_confirm id=id answer_id=r_id}

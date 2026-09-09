@@ -56,7 +56,7 @@
                               maxlength="65536"
                               class="form-control">{{ result.status_note|escape }}</textarea>
                     <p class="help-block">
-                        {_ The status and note are only visible to people who can edit the survey. _}
+                        {_ The status and note are only visible to people who can edit. _}
                     </p>
                 </div>
 
