@@ -174,7 +174,7 @@ scan_lines(Device, Fs, Chunk, Index, Acc, Remainder, Quoted) ->
                 eof ->
                     All = case Remainder of
                               <<>> ->
-                                Acc;
+                                finalize_empty_field(Acc);
                               _ ->
                                 case EmptyChunk of
                                     <<$">> -> append_last_field(<<$">>, Remainder, Acc);
@@ -265,6 +265,13 @@ append_field(Prefix, Field, [Row|Rows]) ->
 append_last_field(Prefix, Field, Acc) ->
     [R|RS] = append_field(Prefix, Field, Acc),
     [lists:reverse(R)|RS].
+
+%% At EOF a non-empty current row means the file ended with a field separator.
+%% Add the pending empty field and restore the row's field order.
+finalize_empty_field([[]|_] = Acc) ->
+    Acc;
+finalize_empty_field(Acc) ->
+    append_last_field(<<>>, <<>>, Acc).
 
 
 %% Remove any quotes and whitespace around the fields.
