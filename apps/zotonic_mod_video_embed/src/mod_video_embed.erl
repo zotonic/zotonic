@@ -1,7 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009-2026 Marc Worrell
 %% @doc Enables embedding video's as media pages.  Handles the embed information for showing video's.
-%% The embed information is stored in the medium table associated with the page. You can not have embed
+%% The embed information is stored in the medium table associated with the page. You cannot have embed
 %% information and a medium file. Either one or the other.
 %% @end
 

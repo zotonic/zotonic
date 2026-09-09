@@ -82,9 +82,9 @@ event(#postback{message={delete_username, Args}}, Context) ->
         {true, _, _} ->
             z_render:growl_error(?__("Only an administrator or the user him/herself can set a password.", Context), Context);
         {false, _, Id} ->
-            z_render:growl_error(?__("Sorry, you can not remove your own username.", Context), Context);
+            z_render:growl_error(?__("Sorry, you cannot remove your own username.", Context), Context);
         {false, true, _} when Id =:= 1 ->
-            z_render:growl_error(?__("The admin user can not be removed.", Context), Context);
+            z_render:growl_error(?__("The admin user cannot be removed.", Context), Context);
         {false, true, _} ->
             case m_identity:delete_username(Id, Context) of
                 ok ->
