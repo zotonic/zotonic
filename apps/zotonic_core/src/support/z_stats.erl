@@ -385,11 +385,3 @@ add_system_reporter() ->
         {error, already_running} -> ok
     end.
 
-% datapoints() ->
-%     [counter, spiral, gauge, histogram, meter].
-
-% datapoints(counter) ->[value];
-% datapoints(spiral) -> [count, one];
-% datapoints(gauge) -> [value];
-% datapoints(histogram) -> [mean, min, max, 50, 95, 99, 999];
-% datapoints(meter) -> [count, one, five, fifteen, day, mean].
