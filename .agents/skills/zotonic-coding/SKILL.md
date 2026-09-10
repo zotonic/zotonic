@@ -13,6 +13,7 @@ description: Use when working in Zotonic projects, especially Erlang modules, Zo
 - Files use UTF-8 and LF line endings.
 - Use `rg`/`rg --files` for discovery.
 - Prefer `make` for normal Zotonic builds; use `./rebar3 compile` after Erlang changes when you only need a compile check.
+- Use `bin/zotonic shell` from the umbrella root to inspect a running Zotonic node and run local Erlang or SQL checks. Obtain a site context with `z:c(site_name).` Exit the remote shell with Ctrl-D; do not call `q().`, as that stops the connected Zotonic node.
 - Ignore `rebar.lock` changes from normal build/test commands unless the task intentionally changes dependencies.
 - Ignore `erl_crash.dump` and `rebar3.crashdump`; they are build artifacts and should not be reported as actionable worktree noise.
 
