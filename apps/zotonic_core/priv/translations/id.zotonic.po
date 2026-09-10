@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-09-10 09:51\n"
+"PO-Revision-Date: 2026-09-10 11:26\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -3886,19 +3886,19 @@ msgstr "Aktifkan <strong>mod_ssl_letsencrypt</strong> untuk meminta sertifikat S
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:55
 msgid "Fedora and Red Hat"
-msgstr ""
+msgstr "Fedora dan Red Hat"
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:46
 msgid "Finish the wizard and restart the browser. Administrator permission may be required."
-msgstr ""
+msgstr "Selesaikan proses wizard dan mulai ulang browser. Mungkin diperlukan izin administrator."
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:61
 msgid "Firefox"
-msgstr ""
+msgstr "Firefox"
 
 #: zotonic_mod_admin_config/src/mod_admin_config.erl:164
 msgid "Generated a new self-signed certificate."
-msgstr ""
+msgstr "Telah dibuat sertifikat baru yang ditandatangani sendiri."
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:10
 msgid "Here you can see all the email configurations and send test emails."
@@ -3917,7 +3917,7 @@ msgstr "Klien SMTP Nama Host"
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:28
 msgid "How to trust this certificate on a development device"
-msgstr ""
+msgstr "Cara mempercayai sertifikat ini pada perangkat pengembangan"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:118
 msgid "If (and only if) there is an e-mail intercept address defined above, then all e-mail is sent to that address <em>except</em> for the e-mail addresses and domains defined here."
@@ -3929,11 +3929,11 @@ msgstr "Jika Anda mengubahnya, Anda mungkin perlu meminta sertifikat SSL baru ya
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:71
 msgid "In Settings, open General, About, Certificate Trust Settings, and enable full trust for the certificate."
-msgstr ""
+msgstr "Di menu Pengaturan, buka Umum, Tentang, Pengaturan Kepercayaan Sertifikat, lalu aktifkan kepercayaan penuh untuk sertifikat tersebut."
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:77
 msgid "In Settings, open the security or credentials section and install it as a CA certificate. Menu names vary by device."
-msgstr ""
+msgstr "Di Pengaturan, buka bagian keamanan atau kredensial, lalu pasang sertifikat tersebut sebagai sertifikat CA. Nama menu dapat berbeda-beda tergantung perangkat."
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:106
 msgid "It is possible to intercept all email and send it to a single address. Configure this address here."
@@ -3966,7 +3966,7 @@ msgstr "Tidak ada konfigurasi yang ditemukan."
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:64
 msgid "On the Authorities tab, import the certificate file and trust it to identify websites."
-msgstr ""
+msgstr "Di tab \"Otoritas\", impor berkas sertifikat dan tetapkan sebagai tepercaya untuk mengidentifikasi situs web."
 
 #: zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_edit.erl:88
 msgid "Only administrators can change the configuration."
@@ -3978,7 +3978,7 @@ msgstr "Hanya administrasi yang dapat menghapus konfigurasi."
 
 #: zotonic_mod_admin_config/src/mod_admin_config.erl:181
 msgid "Only administrators can regenerate the self-signed certificate."
-msgstr ""
+msgstr "Hanya administrator yang dapat membuat ulang sertifikat yang ditandatangani sendiri."
 
 #: zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_new.erl:79
 msgid "Only an administrator can add configuration keys."
@@ -3986,15 +3986,15 @@ msgstr "Hanya administrator yang dapat menambahkan tombol konfigurasi."
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:63
 msgid "Open Settings, Privacy &amp; Security, Certificates, then View Certificates."
-msgstr ""
+msgstr "Buka Pengaturan, Privasi &amp; Keamanan, Sertifikat, lalu Lihat Sertifikat."
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:37
 msgid "Open the certificate file in Keychain Access and add it to the System keychain."
-msgstr ""
+msgstr "Buka berkas sertifikat di Keychain Access, lalu tambahkan ke keychain Sistem."
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:38
 msgid "Open the imported certificate, expand Trust, and select Always Trust."
-msgstr ""
+msgstr "Buka sertifikat yang telah diimpor, buka menu \"Trust\", lalu pilih \"Selalu Percaya\"."
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:91
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:92
@@ -4022,15 +4022,15 @@ msgstr "Silahkan isi modul, kunci dan nilai untuk konfigurasi baru kunci."
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_panel.tpl:29
 msgid "Regenerate certificate"
-msgstr ""
+msgstr "Perbarui sertifikat"
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_panel.tpl:24
 msgid "Regenerate self-signed certificate"
-msgstr ""
+msgstr "Membuat ulang sertifikat yang ditandatangani sendiri"
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_panel.tpl:26
 msgid "Regenerate self-signed certificate?"
-msgstr ""
+msgstr "Mau membuat ulang sertifikat yang ditandatangani sendiri?"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:52
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:53
@@ -4047,16 +4047,16 @@ msgstr "Port relai"
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:65
 msgid "Restart Firefox. This separate import can be needed when Firefox does not use the operating system trust store."
-msgstr ""
+msgstr "Mulai ulang Firefox. Proses impor terpisah ini mungkin diperlukan jika Firefox tidak menggunakan penyimpanan tepercaya sistem operasi."
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:78
 msgid "Restart the browser. Some apps do not accept user-installed certificates."
-msgstr ""
+msgstr "Mulai ulang peramban. Beberapa aplikasi tidak menerima sertifikat yang dipasang oleh pengguna."
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:52
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:58
 msgid "Run"
-msgstr ""
+msgstr "Lari"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:125
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:126
@@ -4070,7 +4070,7 @@ msgstr "Sertifikat SSL"
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:45
 msgid "Select Local Machine, then place the certificate in Trusted Root Certification Authorities."
-msgstr ""
+msgstr "Pilih \"Komputer Lokal\", lalu letakkan sertifikat tersebut di dalam folder \"Otoritas Sertifikat Akar Tepercaya\"."
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_panel.tpl:5
 msgid "Self signed certificate"
@@ -4162,19 +4162,19 @@ msgstr "Modul ini tidak menyediakan sertifikat."
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_panel.tpl:27
 msgid "This replaces the current self-signed certificate and private key. Any trust granted to the current certificate must be granted again to the new certificate."
-msgstr ""
+msgstr "Hal ini menggantikan sertifikat yang ditandatangani sendiri dan kunci pribadi yang saat ini digunakan. Setiap kepercayaan yang telah diberikan kepada sertifikat saat ini harus diberikan kembali kepada sertifikat yang baru."
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:70
 msgid "Transfer the certificate file to the device, open it, and install the downloaded profile in Settings."
-msgstr ""
+msgstr "Pindahkan berkas sertifikat ke perangkat, buka berkas tersebut, lalu pasang profil yang telah diunduh di Pengaturan."
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:76
 msgid "Transfer the certificate file to the device."
-msgstr ""
+msgstr "Pindahkan berkas sertifikat ke perangkat."
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:32
 msgid "Trust this certificate only on devices used for development. Remove it when it is no longer needed."
-msgstr ""
+msgstr "Gunakan sertifikat ini hanya pada perangkat yang digunakan untuk pengembangan. Hapus sertifikat ini jika sudah tidak diperlukan lagi."
 
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:35
 msgid "Type to find configuration keys..."
@@ -4223,7 +4223,7 @@ msgstr "Lihat status email"
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:42
 msgid "Windows"
-msgstr ""
+msgstr "Windows"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:170
 msgid "You must be an administrator to view or change the email configuration."
@@ -4236,15 +4236,15 @@ msgstr "Zotonic mengirim email menggunakan server email bawaan. Anda dapat mengi
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:52
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:58
 msgid "and restart the browser."
-msgstr ""
+msgstr "dan jalankan ulang peramban."
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:68
 msgid "iOS and iPadOS"
-msgstr ""
+msgstr "iOS dan iPadOS"
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:35
 msgid "macOS"
-msgstr ""
+msgstr "macOS"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:192
 msgid "test@example.com"
@@ -4596,7 +4596,7 @@ msgstr "Maaf, Anda tidak diizinkan memverifikasi alamat email ini."
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:97
 msgid "Sorry, you cannot remove your own username."
-msgstr ""
+msgstr "Maaf, Anda tidak dapat menghapus nama pengguna Anda sendiri."
 
 #: zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:16
 #: zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:24
@@ -4610,7 +4610,7 @@ msgstr "Alamat tidak sah."
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:99
 msgid "The admin user cannot be removed."
-msgstr ""
+msgstr "Pengguna admin tidak dapat dihapus."
 
 #: zotonic_mod_admin_identity/src/mod_admin_identity.erl:282
 msgid "The e-mail address has been verified."
@@ -4802,99 +4802,99 @@ msgstr "mengatur nama pengguna / kata sandi"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:307
 msgid "<em>Jaccard similarity</em> divides the common content by all distinct content using either keyword. <em>Smaller-set overlap</em> divides it by the least-used keyword and helps reveal keywords that may be redundant or nested. Very small keyword sets can score highly, so use the minimum-uses filter when looking for meaningful patterns."
-msgstr ""
+msgstr "<em>Kesamaan Jaccard</em> menghitung rasio antara konten yang sama dengan seluruh konten yang berbeda berdasarkan salah satu kata kunci. <em>Tumpang tindih himpunan terkecil</em> menghitung rasio tersebut berdasarkan kata kunci yang paling jarang digunakan dan membantu mengidentifikasi kata kunci yang mungkin berlebihan atau saling tumpang tindih. Himpunan kata kunci yang sangat kecil pun dapat memperoleh skor tinggi, jadi gunakan filter penggunaan minimum saat mencari pola yang bermakna."
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:68
 msgid "All content"
-msgstr ""
+msgstr "Seluruh konten"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:56
 msgid "All content categories"
-msgstr ""
+msgstr "Semua kategori konten"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:34
 msgid "Analyzing {count} resources across all content categories"
-msgstr ""
+msgstr "Menganalisis sumber daya di {count} di seluruh kategori konten"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:30
 msgid "Analyzing {count} resources in {category} and its subcategories"
-msgstr ""
+msgstr "Menganalisis sumber daya di {count} dalam {category} dan subkategorinya"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:103
 msgid "Apply filters"
-msgstr ""
+msgstr "Terapkan filter"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:254
 msgid "At least two used keywords are needed for an overlap matrix."
-msgstr ""
+msgstr "Setidaknya diperlukan dua kata kunci yang sama untuk membuat matriks tumpang tindih."
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:204
 msgid "Cells show the number of content items using both keywords."
-msgstr ""
+msgstr "Sel-sel tersebut menampilkan jumlah item konten yang menggunakan kedua kata kunci tersebut."
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:208
 msgid "Cells show the shared percentage of the combined keyword sets."
-msgstr ""
+msgstr "Sel-sel tersebut menunjukkan persentase kesamaan dari gabungan kumpulan kata kunci."
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:206
 msgid "Cells show which percentage of the smaller keyword set is shared."
-msgstr ""
+msgstr "Sel-sel tersebut menunjukkan persentase kesamaan dari kumpulan kata kunci yang lebih kecil."
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:273
 msgid "Common"
-msgstr ""
+msgstr "Umum"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:97
 msgid "Common content count"
-msgstr ""
+msgstr "Jumlah konten umum"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:54
 msgid "Content category"
-msgstr ""
+msgstr "Kategori konten"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:26
 msgid "Filters"
-msgstr ""
+msgstr "Filter"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:138
 msgid "Heat map"
-msgstr ""
+msgstr "Peta panas"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:305
 msgid "How to read the overlap"
-msgstr ""
+msgstr "Cara membaca tumpang tindih"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:274
 msgid "Jaccard"
-msgstr ""
+msgstr "Jaccard"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:95
 msgid "Jaccard similarity"
-msgstr ""
+msgstr "Kesamaan Jaccard"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:221
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:271
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:272
 msgid "Keyword"
-msgstr ""
+msgstr "Kata kunci"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:43
 msgid "Keyword category"
-msgstr ""
+msgstr "Kategori kata kunci"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:201
 msgid "Keyword overlap"
-msgstr ""
+msgstr "Tumpang tindih kata kunci"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:3
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:20
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:160
 msgid "Keyword usage"
-msgstr ""
+msgstr "Penggunaan kata kunci"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:167
 msgid "Keyword usage histogram"
-msgstr ""
+msgstr "Histogram penggunaan kata kunci"
 
 #: zotonic_mod_admin_keyword/src/mod_admin_keyword.erl:60
 #: zotonic_mod_seo/priv/templates/admin_seo.tpl:20
@@ -4904,43 +4904,43 @@ msgstr "Kata kunci"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:84
 msgid "Keywords in overlap matrix"
-msgstr ""
+msgstr "Kata kunci dalam matriks tumpang tindih"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:75
 msgid "Minimum uses"
-msgstr ""
+msgstr "Penggunaan minimum"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:295
 msgid "No keyword pairs have content in common."
-msgstr ""
+msgstr "Tidak ada pasangan kata kunci yang memiliki konten yang sama."
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:191
 msgid "No keywords match these filters."
-msgstr ""
+msgstr "Tidak ada kata kunci yang sesuai dengan filter ini."
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:187
 msgid "Only the first {count} keywords are shown. Use the filters to narrow the list."
-msgstr ""
+msgstr "Hanya kata kunci pertama dari {count} yang ditampilkan. Gunakan filter untuk mempersempit daftar."
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:93
 msgid "Overlap measure"
-msgstr ""
+msgstr "Ukuran tumpang tindih"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:217
 msgid "Pairwise keyword overlap. The diagonal shows the usage count of each keyword."
-msgstr ""
+msgstr "Tumpang tindih kata kunci berpasangan. Bagian diagonal menunjukkan jumlah penggunaan masing-masing kata kunci."
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:66
 msgid "Publication flag"
-msgstr ""
+msgstr "Tanda publikasi"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:265
 msgid "Ranked by the selected overlap measure."
-msgstr ""
+msgstr "Diurutkan berdasarkan ukuran tumpang tindih yang dipilih."
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:149
 msgid "Ranked pairs"
-msgstr ""
+msgstr "Pasangan yang diurutkan"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:104
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:135
@@ -4949,47 +4949,47 @@ msgstr "Mengatur ulang"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:214
 msgid "Scrollable keyword overlap matrix"
-msgstr ""
+msgstr "Matriks tumpang tindih kata kunci yang dapat digulir"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:21
 msgid "See which keywords are used and which keywords occur on the same content."
-msgstr ""
+msgstr "Lihat kata kunci mana saja yang digunakan dan kata kunci mana saja yang muncul dalam konten yang sama."
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:162
 msgid "Showing {shown} of {matched} keywords"
-msgstr ""
+msgstr "Menampilkan {shown} dari {matched} kata kunci"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:275
 msgid "Smaller set"
-msgstr ""
+msgstr "Kumpulan yang lebih kecil"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:96
 msgid "Smaller-set overlap"
-msgstr ""
+msgstr "Tumpang tindih himpunan yang lebih kecil"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:264
 msgid "Strongest keyword pairs"
-msgstr ""
+msgstr "Pasangan kata kunci terkuat"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:111
 msgid "The keyword analysis could not be calculated. Check the server log for details."
-msgstr ""
+msgstr "Analisis kata kunci tidak dapat dihitung. Silakan periksa log server untuk detailnya."
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:115
 msgid "This site does not have a keyword category."
-msgstr ""
+msgstr "Situs ini tidak memiliki kategori kata kunci."
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:179
 msgid "View content using this keyword"
-msgstr ""
+msgstr "Lihat konten yang menggunakan kata kunci ini"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:238
 msgid "{keyword}: {count} uses"
-msgstr ""
+msgstr "{keyword}: {count} menggunakan"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:243
 msgid "{row_keyword} &amp; {column_keyword}: {count} common items"
-msgstr ""
+msgstr "{row_keyword} &amp; {column_keyword}: {count} barang-barang umum"
 
 #: zotonic_mod_admin_merge/priv/templates/_confirm_merge.tpl:19
 msgid "1. Merge loser into winner"
@@ -8109,7 +8109,7 @@ msgstr "Grafik ketergantungan semua templat"
 
 #: zotonic_mod_development/priv/templates/_development_template_graph.tpl:3
 msgid "Dependency graph of all templates. Only template includes using an immediate string value for the template name are shown."
-msgstr ""
+msgstr "Diagram ketergantungan semua templat. Hanya templat yang menggunakan nilai string langsung sebagai nama templat yang ditampilkan."
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:66
 msgid "Dependency graph of all traced templates. All includes are shown."
@@ -12656,7 +12656,7 @@ msgstr "Terima kasih telah mendaftar akun di {site}."
 
 #: zotonic_mod_signup/priv/templates/email_verify.tpl:8
 msgid "Thank you for signing up. Please confirm your email address to activate your account."
-msgstr ""
+msgstr "Terima kasih telah mendaftar. Silakan konfirmasi alamat email Anda untuk mengaktifkan akun Anda."
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:47
 msgid "The code you entered is incorrect. Please try again."
@@ -13313,7 +13313,7 @@ msgstr "Sunting jawaban"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:119
 msgid "Edit result"
-msgstr ""
+msgstr "Hasil pengeditan"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_result_status.tpl:5
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_result_status.tpl:12
@@ -13638,7 +13638,7 @@ msgstr "Tidak ada jawaban; hanya teks konfirmasi"
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_results.tpl:48
 msgid "No persons found."
-msgstr ""
+msgstr "Tidak ditemukan siapa pun."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:133
 msgid "No results yet."
@@ -13868,7 +13868,7 @@ msgstr "Disimpan"
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:78
 msgid "Search for a person"
-msgstr ""
+msgstr "Cari seseorang"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:138
 msgid "Second page in category"
@@ -13950,7 +13950,7 @@ msgstr "Maaf, tidak dapat memasukkan orang baru."
 
 #: zotonic_mod_survey/src/mod_survey.erl:441
 msgid "Sorry, that answer is unknown."
-msgstr ""
+msgstr "Maaf, jawaban tersebut tidak diketahui."
 
 #: zotonic_mod_survey/src/mod_survey.erl:1484
 msgid "Sorry, the maximum number of submissions has been reached. You can no longer submit this form."
@@ -14111,7 +14111,7 @@ msgstr "Hasilnya sudah disimpan."
 
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:59
 msgid "The status and note are only visible to people who can edit."
-msgstr ""
+msgstr "Status dan catatan tersebut hanya dapat dilihat oleh orang-orang yang memiliki hak akses untuk mengedit."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:147
 msgid "The uploaded file will be attached to the result email."
@@ -14306,7 +14306,7 @@ msgstr "Sesi Anda telah kedaluwarsa, silakan mulai ulang dan coba lagi."
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_survey_question_options.tpl:11
 msgid "answers visible to respondents"
-msgstr ""
+msgstr "jawaban yang dapat dilihat oleh responden"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:99
 msgid "chocolate"
