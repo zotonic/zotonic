@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-09-10 09:51\n"
+"PO-Revision-Date: 2026-09-10 11:26\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -3886,19 +3886,19 @@ msgstr "เปิดใช้งาน <strong>mod_ssl_letsencrypt</strong> เ�
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:55
 msgid "Fedora and Red Hat"
-msgstr ""
+msgstr "Fedora และ Red Hat"
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:46
 msgid "Finish the wizard and restart the browser. Administrator permission may be required."
-msgstr ""
+msgstr "ทำตามขั้นตอนในตัวช่วยสร้างจนเสร็จ แล้วเปิดเบราว์เซอร์ใหม่ อาจจำเป็นต้องมีสิทธิ์ผู้ดูแลระบบ"
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:61
 msgid "Firefox"
-msgstr ""
+msgstr "Firefox"
 
 #: zotonic_mod_admin_config/src/mod_admin_config.erl:164
 msgid "Generated a new self-signed certificate."
-msgstr ""
+msgstr "ได้สร้างใบรับรองที่ลงนามเองใหม่แล้ว"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:10
 msgid "Here you can see all the email configurations and send test emails."
@@ -3917,7 +3917,7 @@ msgstr "ชื่อโฮสต์ไคลเอนต์ SMTP"
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:28
 msgid "How to trust this certificate on a development device"
-msgstr ""
+msgstr "วิธีตั้งค่าให้เชื่อถือใบรับรองนี้บนอุปกรณ์พัฒนา"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:118
 msgid "If (and only if) there is an e-mail intercept address defined above, then all e-mail is sent to that address <em>except</em> for the e-mail addresses and domains defined here."
@@ -3929,11 +3929,11 @@ msgstr "หากคุณเปลี่ยนแปลงสิ่งนี้
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:71
 msgid "In Settings, open General, About, Certificate Trust Settings, and enable full trust for the certificate."
-msgstr ""
+msgstr "ในเมนูการตั้งค่า ให้เปิด \"ทั่วไป\" > \"ข้อมูลเกี่ยวกับ\" > \"การตั้งค่าความเชื่อถือของใบรับรอง\" และเปิดใช้งาน \"ความเชื่อถืออย่างเต็มที่\" สำหรับใบรับรองนั้น"
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:77
 msgid "In Settings, open the security or credentials section and install it as a CA certificate. Menu names vary by device."
-msgstr ""
+msgstr "ในส่วนการตั้งค่า ให้เปิดส่วนความปลอดภัยหรือข้อมูลรับรอง และติดตั้งมันเป็นใบรับรอง CA ชื่อเมนูอาจแตกต่างกันไปตามอุปกรณ์"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:106
 msgid "It is possible to intercept all email and send it to a single address. Configure this address here."
@@ -3966,7 +3966,7 @@ msgstr "ไม่พบการกำหนดค่า"
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:64
 msgid "On the Authorities tab, import the certificate file and trust it to identify websites."
-msgstr ""
+msgstr "ในแท็บ \"หน่วยงาน\" ให้นำเข้าไฟล์ใบรับรองและกำหนดให้เชื่อถือเพื่อระบุเว็บไซต์"
 
 #: zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_edit.erl:88
 msgid "Only administrators can change the configuration."
@@ -3978,7 +3978,7 @@ msgstr "เฉพาะผู้ดูแลระบบเท่านั้น
 
 #: zotonic_mod_admin_config/src/mod_admin_config.erl:181
 msgid "Only administrators can regenerate the self-signed certificate."
-msgstr ""
+msgstr "มีเพียงผู้ดูแลระบบเท่านั้นที่สามารถสร้างใบรับรองที่ลงนามเองใหม่ได้"
 
 #: zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_new.erl:79
 msgid "Only an administrator can add configuration keys."
@@ -3986,15 +3986,15 @@ msgstr "มีเพียงผู้ดูแลระบบเท่านั
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:63
 msgid "Open Settings, Privacy &amp; Security, Certificates, then View Certificates."
-msgstr ""
+msgstr "เปิด \"การตั้งค่า\", \"ความเป็นส่วนตัว\" &amp; \"ความปลอดภัย\", \"ใบรับรอง\", แล้วคลิก \"ดูใบรับรอง\""
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:37
 msgid "Open the certificate file in Keychain Access and add it to the System keychain."
-msgstr ""
+msgstr "เปิดไฟล์ใบรับรองใน Keychain Access และเพิ่มมันเข้าไปใน System keychain."
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:38
 msgid "Open the imported certificate, expand Trust, and select Always Trust."
-msgstr ""
+msgstr "เปิดใบรับรองที่นำเข้า ขยายส่วน Trust แล้วเลือก Always Trust."
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:91
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:92
@@ -4022,15 +4022,15 @@ msgstr "โปรดกรอกโมดูลคีย์และค่าส
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_panel.tpl:29
 msgid "Regenerate certificate"
-msgstr ""
+msgstr "สร้างใบรับรองใหม่"
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_panel.tpl:24
 msgid "Regenerate self-signed certificate"
-msgstr ""
+msgstr "สร้างใบรับรองที่ลงนามเองใหม่"
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_panel.tpl:26
 msgid "Regenerate self-signed certificate?"
-msgstr ""
+msgstr "สร้างใบรับรองที่ลงนามเองใหม่ได้ไหม?"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:52
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:53
@@ -4047,16 +4047,16 @@ msgstr "พอร์ตรีเลย์"
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:65
 msgid "Restart Firefox. This separate import can be needed when Firefox does not use the operating system trust store."
-msgstr ""
+msgstr "เริ่มต้น Firefox ใหม่ การนำเข้าแบบแยกนี้อาจจำเป็นเมื่อ Firefox ไม่ใช้ที่เก็บข้อมูลความเชื่อถือของระบบปฏิบัติการ"
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:78
 msgid "Restart the browser. Some apps do not accept user-installed certificates."
-msgstr ""
+msgstr "เริ่มต้นเบราว์เซอร์ใหม่ บางแอปไม่ยอมรับใบรับรองที่ผู้ใช้ติดตั้งเอง"
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:52
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:58
 msgid "Run"
-msgstr ""
+msgstr "วิ่ง"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:125
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:126
@@ -4070,7 +4070,7 @@ msgstr "ใบรับรอง SSL"
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:45
 msgid "Select Local Machine, then place the certificate in Trusted Root Certification Authorities."
-msgstr ""
+msgstr "เลือก \"เครื่องท้องถิ่น\" แล้ววางใบรับรองลงใน \"หน่วยงานออกใบรับรองระดับรากที่เชื่อถือได้\""
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_panel.tpl:5
 msgid "Self signed certificate"
@@ -4162,19 +4162,19 @@ msgstr "โมดูลนี้ไม่ได้ให้ใบรับรอ
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_panel.tpl:27
 msgid "This replaces the current self-signed certificate and private key. Any trust granted to the current certificate must be granted again to the new certificate."
-msgstr ""
+msgstr "สิ่งนี้จะแทนที่ใบรับรองที่ลงนามเองและกุญแจส่วนตัวที่มีอยู่ในปัจจุบัน ความเชื่อถือที่มอบให้กับใบรับรองปัจจุบันต้องถูกมอบให้ใบรับรองใหม่ด้วย"
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:70
 msgid "Transfer the certificate file to the device, open it, and install the downloaded profile in Settings."
-msgstr ""
+msgstr "โอนไฟล์ใบรับรองไปยังอุปกรณ์ เปิดไฟล์นั้น และติดตั้งโปรไฟล์ที่ดาวน์โหลดมาในส่วนการตั้งค่า"
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:76
 msgid "Transfer the certificate file to the device."
-msgstr ""
+msgstr "โอนไฟล์ใบรับรองไปยังอุปกรณ์"
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:32
 msgid "Trust this certificate only on devices used for development. Remove it when it is no longer needed."
-msgstr ""
+msgstr "ให้เชื่อถือใบรับรองนี้เฉพาะบนอุปกรณ์ที่ใช้สำหรับการพัฒนาเท่านั้น และให้ลบใบรับรองนี้ออกเมื่อไม่จำเป็นแล้ว"
 
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:35
 msgid "Type to find configuration keys..."
@@ -4223,7 +4223,7 @@ msgstr "ดูสถานะอีเมล"
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:42
 msgid "Windows"
-msgstr ""
+msgstr "Windows"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:170
 msgid "You must be an administrator to view or change the email configuration."
@@ -4236,15 +4236,15 @@ msgstr "Zotonic ส่งอีเมลโดยใช้เซิร์ฟเ�
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:52
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:58
 msgid "and restart the browser."
-msgstr ""
+msgstr "และเปิดเบราว์เซอร์ใหม่"
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:68
 msgid "iOS and iPadOS"
-msgstr ""
+msgstr "iOS และ iPadOS"
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:35
 msgid "macOS"
-msgstr ""
+msgstr "macOS"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:192
 msgid "test@example.com"
@@ -4596,7 +4596,7 @@ msgstr "ขออภัย คุณไม่ได้รับอนุญา�
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:97
 msgid "Sorry, you cannot remove your own username."
-msgstr ""
+msgstr "ขอโทษครับ คุณไม่สามารถลบชื่อผู้ใช้ของตัวเองได้"
 
 #: zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:16
 #: zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:24
@@ -4610,7 +4610,7 @@ msgstr "ที่อยู่ไม่ถูกต้อง"
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:99
 msgid "The admin user cannot be removed."
-msgstr ""
+msgstr "ไม่สามารถลบผู้ใช้ผู้ดูแลระบบได้"
 
 #: zotonic_mod_admin_identity/src/mod_admin_identity.erl:282
 msgid "The e-mail address has been verified."
@@ -4802,99 +4802,99 @@ msgstr "ตั้งชื่อผู้ใช้ / รหัสผ่าน"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:307
 msgid "<em>Jaccard similarity</em> divides the common content by all distinct content using either keyword. <em>Smaller-set overlap</em> divides it by the least-used keyword and helps reveal keywords that may be redundant or nested. Very small keyword sets can score highly, so use the minimum-uses filter when looking for meaningful patterns."
-msgstr ""
+msgstr "<em>ความคล้ายคลึงแบบ Jaccard</em>จะแบ่งเนื้อหาที่ซ้ำกันด้วยเนื้อหาทั้งหมดที่ไม่ซ้ำกัน โดยใช้คำสำคัญใดก็ตาม<em>ส่วนการทับซ้อนของชุดคำสำคัญที่เล็กกว่า</em>จะแบ่งด้วยคำสำคัญที่ใช้บ่อยน้อยที่สุด และช่วยเปิดเผยคำสำคัญที่อาจซ้ำซ้อนหรือซ้อนกัน ชุดคำสำคัญที่เล็กมากอาจได้คะแนนสูง ดังนั้นควรใช้ตัวกรอง \"จำนวนการใช้ต่ำสุด\" เมื่อค้นหาแบบแผนที่มีความหมาย"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:68
 msgid "All content"
-msgstr ""
+msgstr "เนื้อหาทั้งหมด"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:56
 msgid "All content categories"
-msgstr ""
+msgstr "ทุกหมวดหมู่เนื้อหา"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:34
 msgid "Analyzing {count} resources across all content categories"
-msgstr ""
+msgstr "วิเคราะห์ทรัพยากรของ {count} ในทุกหมวดหมู่เนื้อหา"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:30
 msgid "Analyzing {count} resources in {category} and its subcategories"
-msgstr ""
+msgstr "การวิเคราะห์ทรัพยากรใน {count} บน {category} และหมวดหมู่ย่อยของมัน"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:103
 msgid "Apply filters"
-msgstr ""
+msgstr "ใช้ตัวกรอง"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:254
 msgid "At least two used keywords are needed for an overlap matrix."
-msgstr ""
+msgstr "จำเป็นต้องมีคำสำคัญที่ใช้แล้วอย่างน้อยสองคำเพื่อสร้างแมทริกซ์การทับซ้อน"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:204
 msgid "Cells show the number of content items using both keywords."
-msgstr ""
+msgstr "เซลล์แสดงจำนวนรายการเนื้อหาที่ใช้คำค้นหาทั้งสองคำ"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:208
 msgid "Cells show the shared percentage of the combined keyword sets."
-msgstr ""
+msgstr "เซลล์แสดงเปอร์เซ็นต์ที่ตรงกันของชุดคำค้นหาที่รวมกัน"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:206
 msgid "Cells show which percentage of the smaller keyword set is shared."
-msgstr ""
+msgstr "เซลล์แสดงว่าเปอร์เซ็นต์ของชุดคำค้นหาที่เล็กกว่านั้นมีกี่เปอร์เซ็นต์ที่ซ้ำกัน"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:273
 msgid "Common"
-msgstr ""
+msgstr "ทั่วไป"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:97
 msgid "Common content count"
-msgstr ""
+msgstr "จำนวนเนื้อหาทั่วไป"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:54
 msgid "Content category"
-msgstr ""
+msgstr "ประเภทเนื้อหา"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:26
 msgid "Filters"
-msgstr ""
+msgstr "ตัวกรอง"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:138
 msgid "Heat map"
-msgstr ""
+msgstr "แผนที่ความร้อน"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:305
 msgid "How to read the overlap"
-msgstr ""
+msgstr "วิธีอ่านส่วนที่ทับซ้อนกัน"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:274
 msgid "Jaccard"
-msgstr ""
+msgstr "Jaccard"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:95
 msgid "Jaccard similarity"
-msgstr ""
+msgstr "ความคล้ายคลึงแบบแจการ์ด"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:221
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:271
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:272
 msgid "Keyword"
-msgstr ""
+msgstr "คำค้นหา"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:43
 msgid "Keyword category"
-msgstr ""
+msgstr "หมวดหมู่คำค้นหา"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:201
 msgid "Keyword overlap"
-msgstr ""
+msgstr "การทับซ้อนของคำสำคัญ"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:3
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:20
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:160
 msgid "Keyword usage"
-msgstr ""
+msgstr "การใช้คำสำคัญ"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:167
 msgid "Keyword usage histogram"
-msgstr ""
+msgstr "ฮิสโตแกรมการใช้คำสำคัญ"
 
 #: zotonic_mod_admin_keyword/src/mod_admin_keyword.erl:60
 #: zotonic_mod_seo/priv/templates/admin_seo.tpl:20
@@ -4904,43 +4904,43 @@ msgstr "คำหลัก"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:84
 msgid "Keywords in overlap matrix"
-msgstr ""
+msgstr "คำสำคัญในแมทริกซ์การทับซ้อน"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:75
 msgid "Minimum uses"
-msgstr ""
+msgstr "การใช้งานขั้นต่ำ"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:295
 msgid "No keyword pairs have content in common."
-msgstr ""
+msgstr "ไม่มีคู่คำสำคัญใดที่มีเนื้อหาที่เหมือนกัน"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:191
 msgid "No keywords match these filters."
-msgstr ""
+msgstr "ไม่มีคำค้นหาที่ตรงกับตัวกรองเหล่านี้"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:187
 msgid "Only the first {count} keywords are shown. Use the filters to narrow the list."
-msgstr ""
+msgstr "แสดงเฉพาะคำค้นหาแรกๆ เท่านั้น {count} ใช้ตัวกรองเพื่อจำกัดรายการ"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:93
 msgid "Overlap measure"
-msgstr ""
+msgstr "ค่าการทับซ้อน"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:217
 msgid "Pairwise keyword overlap. The diagonal shows the usage count of each keyword."
-msgstr ""
+msgstr "การทับซ้อนของคำสำคัญแบบคู่ต่อคู่ เส้นทแยงมุมแสดงจำนวนการใช้ของแต่ละคำสำคัญ"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:66
 msgid "Publication flag"
-msgstr ""
+msgstr "เครื่องหมายการเผยแพร่"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:265
 msgid "Ranked by the selected overlap measure."
-msgstr ""
+msgstr "จัดอันดับตามเกณฑ์การทับซ้อนที่เลือกไว้"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:149
 msgid "Ranked pairs"
-msgstr ""
+msgstr "คู่ที่มีอันดับ"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:104
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:135
@@ -4949,47 +4949,47 @@ msgstr "รีเซ็ต"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:214
 msgid "Scrollable keyword overlap matrix"
-msgstr ""
+msgstr "แมทริกซ์การทับซ้อนของคำค้นหาที่สามารถเลื่อนได้"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:21
 msgid "See which keywords are used and which keywords occur on the same content."
-msgstr ""
+msgstr "ดูว่าคำค้นหาใดถูกใช้ และคำค้นหาใดปรากฏในเนื้อหาเดียวกัน"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:162
 msgid "Showing {shown} of {matched} keywords"
-msgstr ""
+msgstr "แสดง {shown} จาก {matched} คำค้นหา"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:275
 msgid "Smaller set"
-msgstr ""
+msgstr "ชุดที่เล็กกว่า"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:96
 msgid "Smaller-set overlap"
-msgstr ""
+msgstr "พื้นที่ทับซ้อนที่เล็กกว่า"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:264
 msgid "Strongest keyword pairs"
-msgstr ""
+msgstr "คู่คำค้นหาที่มีประสิทธิภาพสูงสุด"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:111
 msgid "The keyword analysis could not be calculated. Check the server log for details."
-msgstr ""
+msgstr "ไม่สามารถคำนวณผลการวิเคราะห์คำสำคัญได้ โปรดตรวจสอบบันทึกเซิร์ฟเวอร์เพื่อดูรายละเอียด"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:115
 msgid "This site does not have a keyword category."
-msgstr ""
+msgstr "เว็บไซต์นี้ไม่มีหมวดหมู่คำค้นหา"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:179
 msgid "View content using this keyword"
-msgstr ""
+msgstr "ดูเนื้อหาโดยใช้คำค้นหานี้"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:238
 msgid "{keyword}: {count} uses"
-msgstr ""
+msgstr "{keyword}: {count} ใช้"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:243
 msgid "{row_keyword} &amp; {column_keyword}: {count} common items"
-msgstr ""
+msgstr "{row_keyword} &amp; {column_keyword}: {count} สินค้าทั่วไป"
 
 #: zotonic_mod_admin_merge/priv/templates/_confirm_merge.tpl:19
 msgid "1. Merge loser into winner"
@@ -8110,7 +8110,7 @@ msgstr "กราฟการขึ้นต่อกันของเทมเ
 
 #: zotonic_mod_development/priv/templates/_development_template_graph.tpl:3
 msgid "Dependency graph of all templates. Only template includes using an immediate string value for the template name are shown."
-msgstr ""
+msgstr "แผนผังความพึ่งพาของเทมเพลตทั้งหมด แสดงเฉพาะเทมเพลตที่รวมชื่อเทมเพลตโดยใช้ค่าสตริงโดยตรงเท่านั้น"
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:66
 msgid "Dependency graph of all traced templates. All includes are shown."
@@ -12656,7 +12656,7 @@ msgstr "ขอบคุณที่สมัครบัญชีที่ {site
 
 #: zotonic_mod_signup/priv/templates/email_verify.tpl:8
 msgid "Thank you for signing up. Please confirm your email address to activate your account."
-msgstr ""
+msgstr "ขอบคุณที่สมัครแล้ว โปรดยืนยันที่อยู่อีเมลของคุณเพื่อเปิดใช้งานบัญชี"
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:47
 msgid "The code you entered is incorrect. Please try again."
@@ -13313,7 +13313,7 @@ msgstr "แก้ไขคำตอบ"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:119
 msgid "Edit result"
-msgstr ""
+msgstr "แก้ไขผลลัพธ์"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_result_status.tpl:5
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_result_status.tpl:12
@@ -13638,7 +13638,7 @@ msgstr "ไม่มีคำตอบ; ข้อความยืนยัน�
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_results.tpl:48
 msgid "No persons found."
-msgstr ""
+msgstr "ไม่พบใครทั้งสิ้น"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:133
 msgid "No results yet."
@@ -13868,7 +13868,7 @@ msgstr "บันทึกแล้ว"
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:78
 msgid "Search for a person"
-msgstr ""
+msgstr "ค้นหาบุคคล"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:138
 msgid "Second page in category"
@@ -13950,7 +13950,7 @@ msgstr "ขออภัย ไม่สามารถแทรกคนให�
 
 #: zotonic_mod_survey/src/mod_survey.erl:441
 msgid "Sorry, that answer is unknown."
-msgstr ""
+msgstr "ขอโทษครับ คำตอบนั้นไม่ทราบ"
 
 #: zotonic_mod_survey/src/mod_survey.erl:1484
 msgid "Sorry, the maximum number of submissions has been reached. You can no longer submit this form."
@@ -14111,7 +14111,7 @@ msgstr "บันทึกผลลัพธ์แล้ว"
 
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:59
 msgid "The status and note are only visible to people who can edit."
-msgstr ""
+msgstr "สถานะและหมายเหตุจะแสดงให้เฉพาะผู้ที่สามารถแก้ไขได้เท่านั้น"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:147
 msgid "The uploaded file will be attached to the result email."
@@ -14306,7 +14306,7 @@ msgstr "เซสชั่นของคุณหมดอายุแล้ว
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_survey_question_options.tpl:11
 msgid "answers visible to respondents"
-msgstr ""
+msgstr "คำตอบที่ผู้ตอบแบบสอบถามสามารถเห็นได้"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:99
 msgid "chocolate"
