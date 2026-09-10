@@ -23,7 +23,7 @@
     data :: any()
 }).
 
-%% Record used for logging site access. It was a system wide notifiction which
+%% Record used for logging site access. It was a system wide notification which
 %% has now been replaced by a publish on the system topic:
 %% $SYS/site/<Site>/log/access. It should no longer be used. The previous
 %% notification is no longer available.
