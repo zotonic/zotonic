@@ -91,7 +91,8 @@ log(#{}=Log) ->
 init([]) ->
     Ident = z_config:get(syslog_ident),
     Opts = z_config:get(syslog_opts),
-    Facility =     Level = z_config:get(syslog_level),
+    Facility = z_config:get(syslog_facility),
+    Level = z_config:get(syslog_level),
     {ok, Log} = syslog:open(Ident, Opts, Facility),
     {ok, #state{
         priority = Level,
