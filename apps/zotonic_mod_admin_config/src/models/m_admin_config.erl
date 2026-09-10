@@ -133,9 +133,24 @@ ssl_certificate({Module, observe_ssl_options}, Context) ->
             end
     end.
 
+-spec self_signed(z:context()) -> proplists:proplist().
 self_signed(Context) ->
     Options = z_ssl_certs:sni_self_signed(z_context:hostname(Context)),
-    {certfile, CertFile} = proplists:lookup(certfile, Options),
+    self_signed_options(Options, Context).
+
+-spec self_signed_options(undefined | proplists:proplist(), z:context()) -> proplists:proplist().
+self_signed_options(undefined, _Context) ->
+    self_signed_info();
+self_signed_options(Options, Context) ->
+    case proplists:lookup(certfile, Options) of
+        {certfile, CertFile} when is_binary(CertFile); is_list(CertFile) ->
+            self_signed_certificate(CertFile, Context);
+        _ ->
+            self_signed_info()
+    end.
+
+-spec self_signed_certificate(file:filename_all(), z:context()) -> proplists:proplist().
+self_signed_certificate(CertFile, Context) ->
     Info = self_signed_info(CertFile, Context),
     case zotonic_ssl_certs:decode_cert(CertFile) of
         {ok, CertProps} ->
@@ -146,9 +161,13 @@ self_signed(Context) ->
             Info
     end.
 
+-spec self_signed_info() -> proplists:proplist().
+self_signed_info() ->
+    [{is_zotonic_self_signed, true}].
+
 -spec self_signed_info(file:filename_all(), z:context()) -> proplists:proplist().
 self_signed_info(CertFile, Context) ->
-    [{is_zotonic_self_signed, true}]
+    self_signed_info()
     ++ case m_site:environment(Context) of
         development -> [{certfile, CertFile}];
         _ -> []
