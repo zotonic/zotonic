@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-09-10 09:50\n"
+"PO-Revision-Date: 2026-09-10 11:26\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "MIME-Version: 1.0\n"
@@ -3886,19 +3886,19 @@ msgstr "Habilitar <strong>mod_ssl_letsencrypt</strong> para solicitar certificad
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:55
 msgid "Fedora and Red Hat"
-msgstr ""
+msgstr "Fedora e Red Hat"
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:46
 msgid "Finish the wizard and restart the browser. Administrator permission may be required."
-msgstr ""
+msgstr "Conclua o assistente e reinicie o navegador. Poderá ser necessária autorização de administrador."
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:61
 msgid "Firefox"
-msgstr ""
+msgstr "Firefox"
 
 #: zotonic_mod_admin_config/src/mod_admin_config.erl:164
 msgid "Generated a new self-signed certificate."
-msgstr ""
+msgstr "Foi gerado um novo certificado autoassinado."
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:10
 msgid "Here you can see all the email configurations and send test emails."
@@ -3917,7 +3917,7 @@ msgstr "Nome do host do cliente SMTP"
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:28
 msgid "How to trust this certificate on a development device"
-msgstr ""
+msgstr "Como confiar neste certificado num dispositivo de desenvolvimento"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:118
 msgid "If (and only if) there is an e-mail intercept address defined above, then all e-mail is sent to that address <em>except</em> for the e-mail addresses and domains defined here."
@@ -3929,11 +3929,11 @@ msgstr "Se você alterar isso, pode ser necessário solicitar um novo certificad
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:71
 msgid "In Settings, open General, About, Certificate Trust Settings, and enable full trust for the certificate."
-msgstr ""
+msgstr "Em «Definições», abra «Geral», «Sobre», «Definições de confiança do certificado» e ative a confiança total para o certificado."
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:77
 msgid "In Settings, open the security or credentials section and install it as a CA certificate. Menu names vary by device."
-msgstr ""
+msgstr "Em «Definições», abra a secção de segurança ou de credenciais e instale-o como um certificado de autoridade certificadora (CA). Os nomes dos menus variam consoante o dispositivo."
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:106
 msgid "It is possible to intercept all email and send it to a single address. Configure this address here."
@@ -3966,7 +3966,7 @@ msgstr "Não foram encontradas configurações."
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:64
 msgid "On the Authorities tab, import the certificate file and trust it to identify websites."
-msgstr ""
+msgstr "No separador «Autoridades», importe o ficheiro do certificado e defina-o como confiável para identificar sítios Web."
 
 #: zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_edit.erl:88
 msgid "Only administrators can change the configuration."
@@ -3978,7 +3978,7 @@ msgstr "Somente administradores podem excluir configurações."
 
 #: zotonic_mod_admin_config/src/mod_admin_config.erl:181
 msgid "Only administrators can regenerate the self-signed certificate."
-msgstr ""
+msgstr "Apenas os administradores podem regenerar o certificado autoassinado."
 
 #: zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_new.erl:79
 msgid "Only an administrator can add configuration keys."
@@ -3986,15 +3986,15 @@ msgstr "Apenas um administrador pode adicionar chaves de configuração."
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:63
 msgid "Open Settings, Privacy &amp; Security, Certificates, then View Certificates."
-msgstr ""
+msgstr "Abra «Definições», «Privacidade» &amp; «Segurança», «Certificados» e, em seguida, «Ver certificados»."
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:37
 msgid "Open the certificate file in Keychain Access and add it to the System keychain."
-msgstr ""
+msgstr "Abra o ficheiro do certificado no Acesso ao Chaveiro e adicione-o ao chaveiro do sistema."
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:38
 msgid "Open the imported certificate, expand Trust, and select Always Trust."
-msgstr ""
+msgstr "Abra o certificado importado, desenvolva a secção «Confiança» e selecione «Confiar sempre»."
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:91
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:92
@@ -4022,15 +4022,15 @@ msgstr "Por favor, preencha o módulo, chave e valor para a nova chave de config
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_panel.tpl:29
 msgid "Regenerate certificate"
-msgstr ""
+msgstr "Regenerar certificado"
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_panel.tpl:24
 msgid "Regenerate self-signed certificate"
-msgstr ""
+msgstr "Regenerar certificado autoassinado"
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_panel.tpl:26
 msgid "Regenerate self-signed certificate?"
-msgstr ""
+msgstr "Regenerar o certificado autoassinado?"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:52
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:53
@@ -4047,16 +4047,16 @@ msgstr "Porta de retransmissão"
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:65
 msgid "Restart Firefox. This separate import can be needed when Firefox does not use the operating system trust store."
-msgstr ""
+msgstr "Reinicie o Firefox. Esta importação separada pode ser necessária quando o Firefox não utiliza o repositório de confiança do sistema operativo."
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:78
 msgid "Restart the browser. Some apps do not accept user-installed certificates."
-msgstr ""
+msgstr "Reinicie o navegador. Algumas aplicações não aceitam certificados instalados pelo utilizador."
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:52
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:58
 msgid "Run"
-msgstr ""
+msgstr "Correr"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:125
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:126
@@ -4070,7 +4070,7 @@ msgstr "Certificados SSL"
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:45
 msgid "Select Local Machine, then place the certificate in Trusted Root Certification Authorities."
-msgstr ""
+msgstr "Selecione «Máquina local» e, em seguida, coloque o certificado na pasta «Entidades certificadoras raiz de confiança»."
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_panel.tpl:5
 msgid "Self signed certificate"
@@ -4162,19 +4162,19 @@ msgstr "Este módulo não fornece um certificado."
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_panel.tpl:27
 msgid "This replaces the current self-signed certificate and private key. Any trust granted to the current certificate must be granted again to the new certificate."
-msgstr ""
+msgstr "Isto substitui o certificado autoassinado e a chave privada atuais. Qualquer confiança concedida ao certificado atual deve ser concedida novamente ao novo certificado."
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:70
 msgid "Transfer the certificate file to the device, open it, and install the downloaded profile in Settings."
-msgstr ""
+msgstr "Transfira o ficheiro do certificado para o dispositivo, abra-o e instale o perfil descarregado nas Definições."
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:76
 msgid "Transfer the certificate file to the device."
-msgstr ""
+msgstr "Transfira o ficheiro do certificado para o dispositivo."
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:32
 msgid "Trust this certificate only on devices used for development. Remove it when it is no longer needed."
-msgstr ""
+msgstr "Confie neste certificado apenas em dispositivos utilizados para desenvolvimento. Elimine-o quando já não for necessário."
 
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:35
 msgid "Type to find configuration keys..."
@@ -4223,7 +4223,7 @@ msgstr "Ver o estado do e-mail"
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:42
 msgid "Windows"
-msgstr ""
+msgstr "Windows"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:170
 msgid "You must be an administrator to view or change the email configuration."
@@ -4236,15 +4236,15 @@ msgstr "Zotonic envia e-mail usando um servidor de e-mail integrado. Você pode 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:52
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:58
 msgid "and restart the browser."
-msgstr ""
+msgstr "e reinicie o navegador."
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:68
 msgid "iOS and iPadOS"
-msgstr ""
+msgstr "iOS e iPadOS"
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:35
 msgid "macOS"
-msgstr ""
+msgstr "macOS"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:192
 msgid "test@example.com"
@@ -4596,7 +4596,7 @@ msgstr "Desculpe, você não tem permissão para verificar este endereço de e-m
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:97
 msgid "Sorry, you cannot remove your own username."
-msgstr ""
+msgstr "Lamentamos, mas não é possível eliminar o seu próprio nome de utilizador."
 
 #: zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:16
 #: zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:24
@@ -4610,7 +4610,7 @@ msgstr "O endereço é inválido."
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:99
 msgid "The admin user cannot be removed."
-msgstr ""
+msgstr "O utilizador «admin» não pode ser eliminado."
 
 #: zotonic_mod_admin_identity/src/mod_admin_identity.erl:282
 msgid "The e-mail address has been verified."
@@ -4802,99 +4802,99 @@ msgstr "definir nome de usuário / senha"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:307
 msgid "<em>Jaccard similarity</em> divides the common content by all distinct content using either keyword. <em>Smaller-set overlap</em> divides it by the least-used keyword and helps reveal keywords that may be redundant or nested. Very small keyword sets can score highly, so use the minimum-uses filter when looking for meaningful patterns."
-msgstr ""
+msgstr "<em>A similaridade de Jaccard</em> divide o conteúdo comum pelo conteúdo distinto associado a qualquer uma das palavras-chave. <em>A sobreposição do conjunto mais pequeno</em> divide-o pela palavra-chave menos utilizada e ajuda a revelar palavras-chave que possam ser redundantes ou aninhadas. Conjuntos de palavras-chave muito pequenos podem obter pontuações elevadas; por isso, utilize o filtro de utilizações mínimas ao procurar padrões significativos."
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:68
 msgid "All content"
-msgstr ""
+msgstr "Todo o conteúdo"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:56
 msgid "All content categories"
-msgstr ""
+msgstr "Todas as categorias de conteúdo"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:34
 msgid "Analyzing {count} resources across all content categories"
-msgstr ""
+msgstr "Análise dos recursos do site {count} em todas as categorias de conteúdo"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:30
 msgid "Analyzing {count} resources in {category} and its subcategories"
-msgstr ""
+msgstr "Análise dos recursos de {count} em {category} e nas suas subcategorias"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:103
 msgid "Apply filters"
-msgstr ""
+msgstr "Aplicar filtros"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:254
 msgid "At least two used keywords are needed for an overlap matrix."
-msgstr ""
+msgstr "São necessárias, pelo menos, duas palavras-chave utilizadas para uma matriz de sobreposição."
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:204
 msgid "Cells show the number of content items using both keywords."
-msgstr ""
+msgstr "As células apresentam o número de itens de conteúdo que utilizam ambas as palavras-chave."
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:208
 msgid "Cells show the shared percentage of the combined keyword sets."
-msgstr ""
+msgstr "As células apresentam a percentagem comum dos conjuntos de palavras-chave combinados."
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:206
 msgid "Cells show which percentage of the smaller keyword set is shared."
-msgstr ""
+msgstr "As células indicam qual a percentagem do conjunto de palavras-chave mais pequeno que é comum."
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:273
 msgid "Common"
-msgstr ""
+msgstr "Comum"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:97
 msgid "Common content count"
-msgstr ""
+msgstr "Contagem de conteúdos comuns"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:54
 msgid "Content category"
-msgstr ""
+msgstr "Categoria de conteúdo"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:26
 msgid "Filters"
-msgstr ""
+msgstr "Filtros"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:138
 msgid "Heat map"
-msgstr ""
+msgstr "Mapa de calor"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:305
 msgid "How to read the overlap"
-msgstr ""
+msgstr "Como interpretar a sobreposição"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:274
 msgid "Jaccard"
-msgstr ""
+msgstr "Jaccard"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:95
 msgid "Jaccard similarity"
-msgstr ""
+msgstr "Semelhança de Jaccard"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:221
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:271
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:272
 msgid "Keyword"
-msgstr ""
+msgstr "Palavra-chave"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:43
 msgid "Keyword category"
-msgstr ""
+msgstr "Categoria de palavras-chave"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:201
 msgid "Keyword overlap"
-msgstr ""
+msgstr "Sobreposição de palavras-chave"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:3
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:20
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:160
 msgid "Keyword usage"
-msgstr ""
+msgstr "Utilização de palavras-chave"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:167
 msgid "Keyword usage histogram"
-msgstr ""
+msgstr "Histograma de utilização de palavras-chave"
 
 #: zotonic_mod_admin_keyword/src/mod_admin_keyword.erl:60
 #: zotonic_mod_seo/priv/templates/admin_seo.tpl:20
@@ -4904,43 +4904,43 @@ msgstr "Palavras-chave"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:84
 msgid "Keywords in overlap matrix"
-msgstr ""
+msgstr "Palavras-chave na matriz de sobreposição"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:75
 msgid "Minimum uses"
-msgstr ""
+msgstr "Utilizações mínimas"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:295
 msgid "No keyword pairs have content in common."
-msgstr ""
+msgstr "Nenhum par de palavras-chave tem conteúdo em comum."
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:191
 msgid "No keywords match these filters."
-msgstr ""
+msgstr "Não existem palavras-chave que correspondam a estes filtros."
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:187
 msgid "Only the first {count} keywords are shown. Use the filters to narrow the list."
-msgstr ""
+msgstr "Apenas as primeiras palavras-chave de « {count} » são apresentadas. Utilize os filtros para restringir a lista."
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:93
 msgid "Overlap measure"
-msgstr ""
+msgstr "Medida de sobreposição"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:217
 msgid "Pairwise keyword overlap. The diagonal shows the usage count of each keyword."
-msgstr ""
+msgstr "Sobreposição de palavras-chave em pares. A diagonal mostra o número de ocorrências de cada palavra-chave."
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:66
 msgid "Publication flag"
-msgstr ""
+msgstr "Indicador de publicação"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:265
 msgid "Ranked by the selected overlap measure."
-msgstr ""
+msgstr "Classificados de acordo com a medida de sobreposição selecionada."
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:149
 msgid "Ranked pairs"
-msgstr ""
+msgstr "Paros classificados"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:104
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:135
@@ -4949,47 +4949,47 @@ msgstr "Redefinir"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:214
 msgid "Scrollable keyword overlap matrix"
-msgstr ""
+msgstr "Matriz de sobreposição de palavras-chave com rolagem"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:21
 msgid "See which keywords are used and which keywords occur on the same content."
-msgstr ""
+msgstr "Veja quais são as palavras-chave utilizadas e quais as que aparecem no mesmo conteúdo."
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:162
 msgid "Showing {shown} of {matched} keywords"
-msgstr ""
+msgstr "A apresentar {shown} das {matched} palavras-chave"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:275
 msgid "Smaller set"
-msgstr ""
+msgstr "Conjunto mais pequeno"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:96
 msgid "Smaller-set overlap"
-msgstr ""
+msgstr "Sobreposição de conjuntos menores"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:264
 msgid "Strongest keyword pairs"
-msgstr ""
+msgstr "Os pares de palavras-chave mais fortes"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:111
 msgid "The keyword analysis could not be calculated. Check the server log for details."
-msgstr ""
+msgstr "Não foi possível calcular a análise de palavras-chave. Consulte o registo do servidor para obter mais detalhes."
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:115
 msgid "This site does not have a keyword category."
-msgstr ""
+msgstr "Este site não tem uma categoria de palavras-chave."
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:179
 msgid "View content using this keyword"
-msgstr ""
+msgstr "Ver conteúdos que incluam esta palavra-chave"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:238
 msgid "{keyword}: {count} uses"
-msgstr ""
+msgstr "{keyword}:  O site {count} utiliza"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:243
 msgid "{row_keyword} &amp; {column_keyword}: {count} common items"
-msgstr ""
+msgstr "{row_keyword} &amp; {column_keyword}: {count} artigos comuns"
 
 #: zotonic_mod_admin_merge/priv/templates/_confirm_merge.tpl:19
 msgid "1. Merge loser into winner"
@@ -8110,7 +8110,7 @@ msgstr "Gráfico de dependência de todos os modelos"
 
 #: zotonic_mod_development/priv/templates/_development_template_graph.tpl:3
 msgid "Dependency graph of all templates. Only template includes using an immediate string value for the template name are shown."
-msgstr ""
+msgstr "Gráfico de dependências de todos os modelos. Apenas são apresentadas as inclusões de modelos que utilizam um valor de cadeia de caracteres imediato para o nome do modelo."
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:66
 msgid "Dependency graph of all traced templates. All includes are shown."
@@ -12656,7 +12656,7 @@ msgstr "Obrigado por se registar no site {site}."
 
 #: zotonic_mod_signup/priv/templates/email_verify.tpl:8
 msgid "Thank you for signing up. Please confirm your email address to activate your account."
-msgstr ""
+msgstr "Obrigado por se registar. Por favor, confirme o seu endereço de e-mail para ativar a sua conta."
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:47
 msgid "The code you entered is incorrect. Please try again."
@@ -13313,7 +13313,7 @@ msgstr "Editar respostas"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:119
 msgid "Edit result"
-msgstr ""
+msgstr "Editar resultado"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_result_status.tpl:5
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_result_status.tpl:12
@@ -13638,7 +13638,7 @@ msgstr "Sem respostas; apenas texto de confirmação"
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_results.tpl:48
 msgid "No persons found."
-msgstr ""
+msgstr "Não foram encontradas pessoas."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:133
 msgid "No results yet."
@@ -13868,7 +13868,7 @@ msgstr "Guardado"
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:78
 msgid "Search for a person"
-msgstr ""
+msgstr "Pesquisar uma pessoa"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:138
 msgid "Second page in category"
@@ -13950,7 +13950,7 @@ msgstr "Desculpe, não foi possível inserir a nova pessoa."
 
 #: zotonic_mod_survey/src/mod_survey.erl:441
 msgid "Sorry, that answer is unknown."
-msgstr ""
+msgstr "Lamento, mas não se conhece essa resposta."
 
 #: zotonic_mod_survey/src/mod_survey.erl:1484
 msgid "Sorry, the maximum number of submissions has been reached. You can no longer submit this form."
@@ -14111,7 +14111,7 @@ msgstr "Os resultados foram gravados."
 
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:59
 msgid "The status and note are only visible to people who can edit."
-msgstr ""
+msgstr "O estado e a nota só são visíveis para as pessoas com direitos de edição."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:147
 msgid "The uploaded file will be attached to the result email."
@@ -14306,7 +14306,7 @@ msgstr "Sua sessão expirou, reinicie e tente novamente."
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_survey_question_options.tpl:11
 msgid "answers visible to respondents"
-msgstr ""
+msgstr "respostas visíveis para os inquiridos"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:99
 msgid "chocolate"
