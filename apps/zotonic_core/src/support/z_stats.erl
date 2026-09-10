@@ -206,36 +206,30 @@ report_skipped(Count) -> record_count(stats, skipped, Count, zotonic).
 %%     metrics => UserData#{ peer_ip => PeerIP }
 %% }
 %% '''
-log_access(#{
-        site := Site,
-        req_start := ReqStart,
-        resp_status := Status,
-        resp_status_category := StatusCat,
-        method := Method
-    } = MetricsData) when Site =/= undefined, is_atom(Site) ->
+log_access(MetricsData) ->
     try
         handle_cowmachine_stats(MetricsData)
     after
-        Context = z_context:new(Site, 'en', <<"UTC">>),
-        Msg = #http_log_access{
-            timestamp = monotonic_time_to_timestamp(ReqStart),
-            status = Status,
-            status_category = StatusCat,
-            method = Method,
-            metrics = MetricsData
-        },
-        z_notifier:notify_sync(Msg, Context)
-    end;
-log_access(_Metrics) ->
+        handle_mqtt_publish(MetricsData)
+    end.
+
+% @private Register the request.
+
+handle_mqtt_publish(#{ site := Site, req_start := ReqStart } = MetricsData) ->
+    Payload = MetricsData#{ timestamp => monotonic_time_to_timestamp(ReqStart) },
+    SiteBinary = case Site of undefined -> <<"-nosite-">>; _ -> atom_to_binary(Site, utf8) end,
+    SysContext = #context{ site = '-mqtt-', acl = admin },
+    z_mqtt:publish([<<"$SYS">>, <<"site">>, SiteBinary, <<"log">>, <<"access">>], Payload, #{}, SysContext);
+handle_mqtt_publish(_) ->
     ok.
 
 monotonic_time_to_timestamp(MonotonicTime) ->
-    Time = erlang:convert_time_unit(MonotonicTime, native, second) + erlang:time_offset(second),
-    MegaSecs = Time div 1000000,
-    Secs = Time rem 1000000,
-    {MegaSecs, Secs, 0}.
+    Time = erlang:convert_time_unit(MonotonicTime, native, millisecond) + erlang:time_offset(millisecond),
+    MegaSecs = Time div 1000000000,
+    Secs = (Time rem 1000000000) div 1000,
+    Millis = Time rem 1000,
+    {MegaSecs, Secs, Millis * 1000}.
 
-% @private Register the request.
 handle_cowmachine_stats(#{
         site := Site,
         duration_process_usec := DurationUSec,
@@ -243,7 +237,8 @@ handle_cowmachine_stats(#{
         req_bytes := DataIn,
         resp_bytes := DataOut,
         metrics := Metrics
-    }) ->
+    })
+  when Site =/= undefined, is_atom(Site) ->
     DispatchRule = maps:get(dispatch_rule, Metrics, unknown),
     PathPrefix = [site, Site, cowmachine, DispatchRule],
     exometer:update_or_create(PathPrefix ++ [StatusCategory], 1, spiral, []),
@@ -262,6 +257,9 @@ handle_cowmachine_stats(#{
         0 -> ok;
         _ -> exometer:update_or_create(PathPrefix ++ [data_out], DataOut, spiral, [])
     end,
+    ok;
+handle_cowmachine_stats(_) ->
+    % The stats do not belong to a site.
     ok.
 
 % Return the usage in percentage, for atoms, ports and processes.

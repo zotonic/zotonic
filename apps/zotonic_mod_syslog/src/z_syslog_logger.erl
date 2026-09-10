@@ -47,20 +47,18 @@ start_link() ->
 
 % @doc Format the reguest. We use a format similar to apache's vhost_commont
 % The site and dispatch rule is also included in the log line.
-log(#http_log_access{
-        timestamp = StartTime,
-        status = Status,
-        method = Method,
-        metrics = #{
-            site := Site,
-            http_version := Version,
-            user_agent := UserAgent,
-            referer := Referer,
-            path := Path,
-            resp_bytes := Size,
-            metrics := UserMetrics
-        }
-    }) ->
+log(#{
+      timestamp := StartTime,
+      resp_status := Status,
+      method := Method,
+      site := Site,
+      http_version := Version,
+      user_agent := UserAgent,
+      referer := Referer,
+      path := Path,
+      resp_bytes := Size,
+      metrics := UserMetrics
+     }) ->
     Dispatch = maps:get(dispatch_rule, UserMetrics, '-'),
     UserId = maps:get(user_id, UserMetrics, <<$->>),
     PeerIP = maps:get(peer_ip, UserMetrics, undefined),
@@ -77,11 +75,11 @@ log(#http_log_access{
         sanitize(Referer),
         sanitize(UserAgent)),
     gen_server:call(?MODULE, {log, Msg});
-log(#http_log_access{ metrics = Metrics }) ->
+log(#{}=Log) ->
     ?LOG_DEBUG(#{
         text => <<"z_syslog_logger: could not log metrics">>,
         in => zotonic_mod_syslog,
-        metrics => Metrics
+        log => Log
     }),
     ok.
 
@@ -93,8 +91,7 @@ log(#http_log_access{ metrics = Metrics }) ->
 init([]) ->
     Ident = z_config:get(syslog_ident),
     Opts = z_config:get(syslog_opts),
-    Facility = z_config:get(syslog_facility),
-    Level = z_config:get(syslog_level),
+    Facility =     Level = z_config:get(syslog_level),
     {ok, Log} = syslog:open(Ident, Opts, Facility),
     {ok, #state{
         priority = Level,
@@ -102,7 +99,7 @@ init([]) ->
     }}.
 
 handle_call({log, Message}, _From, #state{ log = Log, priority = Priority } = State) ->
-    syslog:log(Log, Priority, Message),
+    ok = syslog:log(Log, Priority, Message),
     {reply, ok, State}.
 
 handle_cast(_Msg, State) ->

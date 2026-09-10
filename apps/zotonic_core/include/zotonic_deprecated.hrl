@@ -22,3 +22,20 @@
     % Payload data
     data :: any()
 }).
+
+%% Record used for logging site access. It was a system wide notifiction which
+%% has now been replaced by a publish on the system topic:
+%% $SYS/site/<Site>/log/access. It should no longer be used. The previous
+%% notification is no longer available.
+%%
+%% @doc Access log event for http. Called from the z_stats.
+%% Type: notify_sync
+-record(http_log_access, {
+    timestamp :: erlang:timestamp(),
+    status :: undefined | non_neg_integer(),
+    status_category :: 'xxx' | '1xx' | '2xx' | '3xx' | '4xx' | '5xx',
+    method :: binary(),
+    metrics :: map()
+}).
+
+

@@ -103,16 +103,6 @@
     id :: m_rsc:resource_id() | undefined
 }).
 
-%% @doc Access log event for http. Called from the z_stats.
-%% Type: notify_sync
--record(http_log_access, {
-    timestamp :: erlang:timestamp(),
-    status :: undefined | non_neg_integer(),
-    status_category :: 'xxx' | '1xx' | '2xx' | '3xx' | '4xx' | '5xx',
-    method :: binary(),
-    metrics :: map()
-}).
-
 % 'module_ready' - Sent when modules have changed, z_module_indexer reindexes all modules' templates, actions etc.
 
 %% @doc A module has been activated and started.

@@ -287,30 +287,6 @@ Return:
 
 -optional_callbacks([ observe_resource_headers/3 ]).
 
-%% Access log event for http. Called from the z_stats.
-%% Type: notify_sync
--doc("
-Access log event for http. Called from the z\\_stats.
-
-Type:
-
-[notify\\_sync](/id/doc_developerguide_notifications#notification-notify-sync)
-
-Return:
-
-`#http_log_access{}` properties:
-
-*   timestamp: `erlang:timestamp()`
-*   status: `undefined|non_neg_integer`
-*   status\\_category: `xxx|1xx|2xx|3xx|4xx|5xx`
-*   method: `binary`
-*   metrics: `map`
-").
--callback observe_http_log_access(#http_log_access{}, z:context()) -> any().
--callback pid_observe_http_log_access(pid(), #http_log_access{}, z:context()) -> any().
-
--optional_callbacks([ observe_http_log_access/2, pid_observe_http_log_access/3 ]).
-
 %% 'module_ready' - Sent when modules have changed, z_module_indexer reindexes all modules' templates, actions etc.
 %% Type: notify_sync
 -callback observe_module_ready(module_ready, z:context()) -> any().

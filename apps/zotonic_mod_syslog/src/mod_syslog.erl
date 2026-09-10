@@ -37,11 +37,29 @@ This module handles the following notifier callbacks:
 -mod_depends([]).
 -mod_provides([]).
 
--export([
-    observe_http_log_access/2
-]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-observe_http_log_access(#http_log_access{} = Log, _Context) ->
-    z_syslog_logger:log(Log).
+-export([
+    init/1,
+    handle_site_log_access/1
+]).
+
+init(Context) ->
+    Site = z_context:site(Context),
+    SiteBinary = z_convert:to_binary(Site),
+
+    ok = z_mqtt:subscribe([<<"$SYS">>, <<"site">>, SiteBinary, <<"log">>, <<"access">>],
+                          {?MODULE, handle_site_log_access, []},
+                          self(),
+                          z_acl:sudo(Context)),
+
+    ok.
+
+% Note: The handler has the context pre-pended.
+handle_site_log_access(#{ message := #{ payload := Log }}) ->
+    _ = z_syslog_logger:log(Log),
+    ok;
+handle_site_log_access(_Msg) ->
+    ok.
+
