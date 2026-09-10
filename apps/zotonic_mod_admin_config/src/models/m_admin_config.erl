@@ -30,7 +30,7 @@ Available Model API Paths
 
 | Method | Path pattern | Description |
 | --- | --- | --- |
-| `get` | `/ssl_certificates/...` | Return discovered SSL certificate metadata for admin users; returns `[]` for non-admin requests. |
+| `get` | `/ssl_certificates/...` | Return discovered SSL certificate metadata for admin users; the self-signed certificate path is included only in development; returns `[]` for non-admin requests. |
 | `get` | `/security_dir/...` | Return the resolved security directory path for admin users; returns empty binary for non-admin requests or lookup errors. |
 | `get` | `/configs/...` | Return collected admin-config entries (`mod_admin_config:collect_configs/1`) for admin users; returns `[]` for non-admin requests. |
 | `get` | `/config/+module/+key/...` | Return the config entry map matching module `+module` and key `+key` from collected admin-config entries, or `undefined` if not found (admin-only). |
@@ -136,16 +136,22 @@ ssl_certificate({Module, observe_ssl_options}, Context) ->
 self_signed(Context) ->
     Options = z_ssl_certs:sni_self_signed(z_context:hostname(Context)),
     {certfile, CertFile} = proplists:lookup(certfile, Options),
+    Info = self_signed_info(CertFile, Context),
     case zotonic_ssl_certs:decode_cert(CertFile) of
         {ok, CertProps} ->
-            [
-                {is_zotonic_self_signed, true},
+            Info ++ [
                 {certificate, CertProps}
             ];
         {error, _} ->
-            [
-                {is_zotonic_self_signed, true}
-            ]
+            Info
+    end.
+
+-spec self_signed_info(file:filename_all(), z:context()) -> proplists:proplist().
+self_signed_info(CertFile, Context) ->
+    [{is_zotonic_self_signed, true}]
+    ++ case m_site:environment(Context) of
+        development -> [{certfile, CertFile}];
+        _ -> []
     end.
 
 modinfo(Module) ->
