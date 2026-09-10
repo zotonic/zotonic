@@ -16,10 +16,15 @@
 %% limitations under the License.
 
 -module(filter_survey_prepare_narrative).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "surveys", "text", "parse"]
+}).
 -moduledoc("
-Todo
+Parse a survey narrative question into renderable text and input parts.
 
-Not yet documented.
+Text outside square brackets is HTML escaped and retained as text. A bracketed
+name such as `[age]` becomes a text input; `[color=red|green|blue]` becomes a
+select input. The result is a map containing the parsed `parts` list.
 ").
 
 -export([

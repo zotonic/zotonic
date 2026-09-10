@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_l10n).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "model", "localization_and_translation", "language_code", "query"]
+}).
 -moduledoc("
 Model for localization helpers, including countries, country names, available timezones, and site timezone settings.
 

@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_pickle).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "structured_data", "serialize", "security"]
+}).
 -moduledoc("
 Pickle an Erlang value so that it can be safely submitted with a form.
 

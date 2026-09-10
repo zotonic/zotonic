@@ -16,12 +16,18 @@
 %% limitations under the License.
 
 -module(action_admin_zmedia_has_chosen).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "content_authoring", "media_management", "edit"]
+}).
 -moduledoc("
 Used by the admin as a callback when a media file has been selected for insertion into the rich-text editor.
 
-Todo
+The required `id` argument is the selected media resource. The action closes
+the dialog and calls `window.z_choose_zmedia(Id)`, allowing the active editor to
+insert the corresponding media marker.
 
-Extend documentation
+This is the final internal step of the `zmedia` chooser workflow and is not
+normally wired directly.
 ").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).

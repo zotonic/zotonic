@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(validator_base_email).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_validator", "validate", "email"]
+}).
 -moduledoc("
 Check if the content of the input field is an e-mail address.
 
@@ -37,10 +40,7 @@ Arguments
 | Argument          | Description                                                                      | Example                                               |
 | ----------------- | -------------------------------------------------------------------------------- | ----------------------------------------------------- |
 | `failure_message` | Message to show when the entered value is not an e-mail address. Defaults to “Incorrect E-mail” | `failure_message=\"Please enter your e-mail address.\"` |
-
-See also
-
-[Forms and validation](/id/doc_developerguide_forms_and_validation#guide-validators)").
+").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_validator/5, validate/5]).
 

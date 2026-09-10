@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_language).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "localization_and_translation", "language_code", "query"]
+}).
 -moduledoc("
 Return the language the resource (or translated text) will be displayed in.
 
@@ -30,10 +33,7 @@ Example:
 
 The languages of the resource will be fetched and using the currently selected interface language (variable
 `z_language`) the language for the resource to be displayed in will be returned.
-
-See also
-
-[language_dir](/id/doc_template_filter_filter_language_dir), [is_rtl](/id/doc_template_filter_filter_is_rtl)").
+").
 -export([
     language/2
 ]).

@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_to_json).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "json", "serialize"]
+}).
 -moduledoc("
 Display any value as in JSON (JavaScript Object Notation).
 

@@ -18,12 +18,19 @@
 %% limitations under the License.
 
 -module(controller_admin_backup).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "operator", "controller", "backup_and_restore", "monitor", "export"]
+}).
 -moduledoc("
-Shows the admin backup screen where you can download nightly backups that were made by [mod_backup](/id/doc_module_mod_backup).
+Shows the admin backup screen where you can download nightly backups that were made by `module#mod_backup`.
 
-Todo
+Handled events
+--------------
 
-Extend documentation
+* `config_backup_panel` enables or disables the backup panel.
+* `config_encrypt_backups` enables or disables backup encryption.
+* `config_backup_daily` enables or disables daily backups.
+* `{restore, Args}` uploads and restores a resource backup.
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_seo).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "model", "search_engine_optimization", "metadata"]
+}).
 -moduledoc("
 Model for SEO-related settings and generated SEO metadata, including webmaster verification keys, analytics settings, and JSON-LD output.
 

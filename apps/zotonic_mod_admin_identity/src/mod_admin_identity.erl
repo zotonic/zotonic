@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(mod_admin_identity).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "site_administrator", "module", "identity_and_accounts", "authentication", "edit"]
+}).
 -moduledoc("
 Provides identity management in the admin - for example the storage of usernames and passwords.
 
@@ -64,11 +67,11 @@ After saving, your password complexity rule will now be enforced on all future p
 A typical password_regex should start with ^.\\* and end with .\\*$. This allows everything by default and allows you
 to assert typical password rules like:
 
-*   must be at least 8 characters long (?=.\\{8,\\})
-*   must have at least one number (?=.\\*\\[0-9\\])
-*   must have at least one lower-case letter (?=.\\*\\[a-z\\])
-*   must have at least one upper-case letter (?=.\\*\\[A-Z\\])
-*   must have at least one special character (?=.\\*\\[@#$%^&+=\\])
+*   must be at least 8 characters long (?=.{8,})
+*   must have at least one number (?=.\\*[0-9])
+*   must have at least one lower-case letter (?=.\\*[a-z])
+*   must have at least one upper-case letter (?=.\\*[A-Z])
+*   must have at least one special character (?=.\\*[@#$%^&+=])
 
 Putting those rules all together gives the following password_regex:
 
@@ -534,5 +537,3 @@ search({users, QArgs}, _OffsetLimit, Context) ->
       };
 search(_, _, _) ->
     undefined.
-
-

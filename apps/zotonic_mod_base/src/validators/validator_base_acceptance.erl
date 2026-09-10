@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(validator_base_acceptance).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_validator", "validate", "forms", "boolean"]
+}).
 -moduledoc("
 Check if an input value evaluates to true.
 
@@ -39,10 +42,7 @@ Arguments
 | Argument          | Description                                                                 | Example                                      |
 | ----------------- | --------------------------------------------------------------------------- | -------------------------------------------- |
 | `failure_message` | Message to be shown when the input is true. Defaults to “Must be accepted.” | `failure_message=\"Please agree to our TOS.\"` |
-
-See also
-
-[Forms and validation](/id/doc_developerguide_forms_and_validation#guide-validators)").
+").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_validator/5, validate/5]).
 

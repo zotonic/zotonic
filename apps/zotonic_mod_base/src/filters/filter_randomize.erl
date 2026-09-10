@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_randomize).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "collection", "transform"]
+}).
 -moduledoc("
 Shuffle a list of values.
 
@@ -28,11 +31,8 @@ For example:
 {{ [\"a\",\"b\",\"c\"]|randomize }}
 ```
 
-The output of this is the same list, but the order of the elements randomized. So for instance: \\[“c”, “a”, “b”\\].
-
-See also
-
-[rand](/id/doc_template_filter_filter_rand), [random](/id/doc_template_filter_filter_random)").
+The output of this is the same list, but the order of the elements randomized. So for instance: [“c”, “a”, “b”].
+").
 -export([randomize/2]).
 
 

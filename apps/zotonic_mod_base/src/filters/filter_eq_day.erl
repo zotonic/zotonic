@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_eq_day).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "date_and_time", "boolean", "compare"]
+}).
 -moduledoc("
 Tests if the value is a date and equal to the argument. The value and the argument must be a tuple of the format
 `{Y,M,D}` or `{{Y,M,D},{H,I,S}}`.
@@ -32,10 +35,7 @@ For example:
 This outputs “same day” if value and othervalue are dates and on the same day.
 
 This is useful for conditions, in combination with for example the if tag.
-
-See also
-
-[ne_day](/id/doc_template_filter_filter_ne_day)").
+").
 -export([eq_day/3]).
 
 eq_day({Y,M,D}, {Y,M,D}, _Context) ->

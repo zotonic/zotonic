@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_before).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "collection", "query"]
+}).
 -moduledoc("
 Return the first element before another element in a list. For example:
 
@@ -46,5 +49,3 @@ prev_of1([P,V|_T], V) ->
     P;
 prev_of1([_|T], V) ->
     prev_of1(T, V).
-
-

@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(action_wires_insert_bottom).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "template", "user_interface_and_interaction", "render"]
+}).
 -moduledoc("
 Inserts HTML after the contents of an HTML element.
 
@@ -44,11 +47,6 @@ Another example, now rendering a template:
 This inserts the output of the template `_list_item.tpl` below the existing `<li>`. All arguments to the update
 action are also arguments to the template.
 
-See also
-
-actions [insert_after](/id/doc_template_action_action_insert_after),
-[insert_before](/id/doc_template_action_action_insert_before),
-[insert_top](/id/doc_template_action_action_insert_top) and [update](/id/doc_template_action_action_update).
 ").
 
 -export([

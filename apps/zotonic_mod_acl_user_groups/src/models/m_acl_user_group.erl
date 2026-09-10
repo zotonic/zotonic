@@ -19,6 +19,9 @@
 %% limitations under the License.
 
 -module(m_acl_user_group).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "site_administrator", "model", "authorization_and_access_control", "authorize"]
+}).
 -moduledoc("
 Model for ACL user-group helper values in mod_acl_user_groups, including collaboration-group settings and category usage checks.
 

@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(controller_http_error).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "controller", "http", "reliability"]
+}).
 -moduledoc("
 This controller is called for serving http error pages.
 
@@ -436,4 +439,3 @@ is_template(Module) ->
         false ->
             false
     end.
-

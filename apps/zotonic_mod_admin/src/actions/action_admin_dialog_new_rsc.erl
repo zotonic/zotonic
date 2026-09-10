@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(action_admin_dialog_new_rsc).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "content_authoring", "resource", "create"]
+}).
 -moduledoc("
 Show the admin dialog for creating a new [resource](/id/doc_glossary#term-resource).
 
@@ -48,9 +51,13 @@ objects=[ [m.acl.user, \"author\"] ]
 
 creates an “author” edge from the new page to the currently logged in user.
 
-Todo
+The dialog action itself also accepts `cat`, `nocatselect`, `tabs_enabled`,
+`title`, `redirect`, `subject_id`, `object_id`, `predicate`, repeatable `action`,
+repeatable `object`, and `callback` arguments. `redirect` defaults to `true`.
 
-Extend documentation
+```django
+{% button text=\"New article\" action={dialog_new_rsc cat=\"article\" redirect} %}
+```
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

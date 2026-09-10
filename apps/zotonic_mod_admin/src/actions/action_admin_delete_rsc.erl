@@ -18,12 +18,24 @@
 %% limitations under the License.
 
 -module(action_admin_delete_rsc).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "content_authoring", "resource", "edit"]
+}).
 -moduledoc("
 Delete a [resource](/id/doc_glossary#term-resource), without confirmation.
 
-Todo
+Arguments:
 
-Extend documentation
+* `id` is the resource to delete.
+* `on_success` can be repeated to run actions after a successful deletion.
+
+The server checks `z_acl:rsc_deletable/2` before deleting. For user-facing
+controls, prefer `action#dialog_delete_rsc`
+so deletion must first be confirmed.
+
+```django
+{% wire id=\"delete-now\" action={delete_rsc id=id on_success={redirect back}} %}
+```
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

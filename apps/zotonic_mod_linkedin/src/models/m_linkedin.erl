@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_linkedin).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "integrator", "model", "api_and_integration", "oauth_2_0"]
+}).
 -moduledoc("
 Model for LinkedIn integration helpers, currently exposing whether LinkedIn auth integration is enabled.
 

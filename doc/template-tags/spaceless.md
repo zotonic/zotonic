@@ -1,8 +1,18 @@
+---
+keywords:
+  - reference
+  - frontend_developer
+  - template
+  - html
+  - performance
+  - transform
+---
+
 Removes whitespace between HTML tags.
 
-Note
-
+::: note
 spaceless does not remove non breaking spaces and other whitespace.
+:::
 
 Example:
 

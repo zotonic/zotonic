@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_capfirst).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "text", "format"]
+}).
 -moduledoc("
 Converts the first character of the value to uppercase.
 
@@ -31,10 +34,7 @@ For example:
 When value is `hello world` then the output is `Hello world`.
 
 At the moment this only works for the characters a through z. Accented characters (like ü) are not yet supported.
-
-See also
-
-[upper](/id/doc_template_filter_filter_upper)").
+").
 -export([capfirst/2]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").

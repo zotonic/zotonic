@@ -8,6 +8,7 @@ description: Use when creating, refactoring, or reviewing Zotonic template_compi
 ## First Pass
 
 - Inspect nearby templates before editing. Preserve local structure, blocks, naming, and CSS class conventions.
+- Look across related pages and categories before adding a one-off template or conditional. Express shared behavior with inheritance, reusable partials, category templates, `catinclude`/`catcompose`, or resource data; use a named-resource template only when that resource is genuinely exceptional.
 - Put templates under the app or site `priv/templates` directory.
 - Use Zotonic `template_compiler` syntax, which is Django-like but has Zotonic-specific tags, models, scomps, category-aware includes, and runtime compilation.
 - Use semantic HTML and accessible attributes; avoid inline styles unless the value is truly dynamic.

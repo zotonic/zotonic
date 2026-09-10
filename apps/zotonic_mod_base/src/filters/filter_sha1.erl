@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_sha1).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "identifier", "transform"]
+}).
 -moduledoc("
 Translate a string to a sha1 hex value.
 

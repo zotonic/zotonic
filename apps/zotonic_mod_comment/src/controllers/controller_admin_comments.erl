@@ -18,13 +18,19 @@
 %% limitations under the License.
 
 -module(controller_admin_comments).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "controller", "comments_and_community", "edit"]
+}).
 -moduledoc("
 Shows an admin screen with an overview of most recently created comments. The screen offers the option to moderate the
 comments or delete them entirely.
 
-Todo
+Handled events
+--------------
 
-Extend documentation
+* `{comment_delete, Args}` deletes a comment and runs its success actions.
+* `{comment_toggle, Args}` toggles comment visibility and updates the controls
+  in the comments list.
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 
@@ -95,7 +101,3 @@ event(#postback{message={comment_toggle, Args}}, Context) ->
 
 event(Else, _Context) ->
     error_logger:info_msg("Other Event: ~p", [Else]).
-
-
-
-

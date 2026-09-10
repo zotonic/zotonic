@@ -18,12 +18,15 @@
 %% limitations under the License.
 
 -module(scomp_wires_wire).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "scomp", "wire_action", "user_interface_and_interaction", "javascript"]
+}).
 -moduledoc("
 Connect actions and events to a HTML element.
 
 The wire tag is the basis for most Ajax interaction on web pages. It allows to connect actions to HTML elements.
-Examples of [Actions](/id/template_action#actions) are [show](/id/doc_template_action_action_show) /
-[hide](/id/doc_template_action_action_hide) elements or [postback](/id/doc_template_action_action_postback) to the server.
+Examples of [Actions](/id/template_action#actions) are `action#show` /
+`action#hide` elements or `action#postback` to the server.
 
 
 
@@ -146,9 +149,9 @@ See: [Wires](/id/doc_developerguide_server_browser_interaction#guide-named-wire)
 Wire an action to a MQTT topic
 ------------------------------
 
-Note
-
-[mod_mqtt](/id/doc_module_mod_mqtt) must be enabled before wiring to a topic
+::: note
+`module#mod_mqtt` must be enabled before wiring to a topic
+:::
 
 Use `{% wire type={mqtt topic=... topic=...} %}` to connect to one or more MQTT topics.
 
@@ -166,7 +169,7 @@ And in Erlang this will trigger the above *growl*:
 z_mqtt:publish(<<\"~site/public/hello\">>, <<>>, z_acl:sudo(z:c(mysite))).
 ```
 
-See also [live](/id/doc_template_scomp_scomp_live#scomp-live)
+See also `scomp#live`
 
 
 
@@ -178,16 +181,13 @@ The wire tag accepts the following arguments:
 | Argument  | Description                                                                      | Example                                                 |
 | --------- | -------------------------------------------------------------------------------- | ------------------------------------------------------- |
 | `id`        | HTML id of the element the action gets connected to. When the id is not given then the event is bound to the window. | `id=”mybutton”`                                         |
-| `type`      | The type of the event triggering the action. Defaults to “click”. Other types are: “enterkey”, “interval”, “continuation”, “submit” or one of the jQuery events “blur”, “focus”, “load”, “resize”, “scroll”, “unload”, “beforeunload”, “click”, “dblclick”, “mousedown”, “mouseup”, “mousemove”, “mouseover”, “mouseout”, “mouseenter”, “mouseleave”, “change”, “select”, “keydown”, “keypress”, “keyup” or “error”.  The types can be extended by modules using the `#action_event_type` notification. The type must be a tuple, an example is the `{mqtt topic=...}` type provided by [mod_mqtt](/id/doc_module_mod_mqtt) | `type=”submit”`                                         |
+| `type`      | The type of the event triggering the action. Defaults to “click”. Other types are: “enterkey”, “interval”, “continuation”, “submit” or one of the jQuery events “blur”, “focus”, “load”, “resize”, “scroll”, “unload”, “beforeunload”, “click”, “dblclick”, “mousedown”, “mouseup”, “mousemove”, “mouseover”, “mouseout”, “mouseenter”, “mouseleave”, “change”, “select”, “keydown”, “keypress”, “keyup” or “error”.  The types can be extended by modules using the `#action_event_type` notification. The type must be a tuple, an example is the `{mqtt topic=...}` type provided by `module#mod_mqtt` | `type=”submit”`                                         |
 | `propagate` | Specify this when you don’t want the event to be canceled after handling the wire. Useful for event types like focus, click etc. .. versionadded:: 0.6.1 | `propagate`                                             |
 | `target`    | Possible target for the action. The meaning of this argument depends on the action, defaults to id. |                                                         |
 | `action`    | Action wired to the element. This parameter can be repeated to wire more than one action at a time. The value is a single or a list of action records. | `action={toggle target=\"message\"}`                |
 | `postback`  | Postback that will be sent to the event handler of the controller or the delegate. Either a string, which will be sent as an atom, or a tagged property list. The example will be in Erlang `{myevent, [{foo,1},{bar,2}]}`. | `postback=\"ajaxevent\" postback={myevent foo=1 bar=2}` |
 | `delegate`  | Name of the Erlang module that will receive the postback. Defaults to the controller that handled the page request. | `delegate=\"event_handler\"`                            |
 
-See also
-
-the tag [wire_args](/id/doc_template_scomp_scomp_wire_args#scomp-wire-args) and the list of predefined [Actions](/id/template_action#actions).
 ").
 -behaviour(zotonic_scomp).
 

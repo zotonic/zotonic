@@ -18,6 +18,11 @@
 %% limitations under the License.
 
 -module(mod_auth2fa).
+-moduledoc(#{
+    zotonic_keywords => [
+        "reference", "site_administrator", "module", "two_factor_authentication", "authentication", "security", "authenticate"
+    ]
+}).
 -moduledoc("
 Two-factor authentication module adding TOTP setup, verification flows, and related auth checks.
 

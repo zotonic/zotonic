@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_to_binary).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "text", "transform"]
+}).
 -moduledoc("
 Convert the input to a binary value.
 
@@ -28,13 +31,10 @@ Example:
 {{ 42|to_binary }}
 ```
 
-Results in the binary value `<<\"42\"\\>\\>`.
+Results in the binary value `<<\"42\">>`.
 
 This filter uses the `z_convert:to_binary/1` function.
-
-See also
-
-[stringify](/id/doc_template_filter_filter_stringify)").
+").
 -export([to_binary/2]).
 
 to_binary(undefined, _Context) ->
@@ -43,4 +43,3 @@ to_binary({trans, _} = Tr, Context) ->
     to_binary(z_trans:lookup_fallback(Tr, Context), Context);
 to_binary(V, _Context) ->
     z_convert:to_binary(V).
-

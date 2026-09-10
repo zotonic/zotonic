@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_merge_tags).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "template", "text", "render"]
+}).
 -moduledoc("
 A mail-merge like filter where tag-expressions in a text are replaced with the value of their evaluation.
 

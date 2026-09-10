@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_trans_languages).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "localization_and_translation", "translated_text", "language_code", "query"]
+}).
 -moduledoc("
 Return a list of all languages present in the given translated text (`#trans{}` record).
 

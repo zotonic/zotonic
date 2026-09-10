@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_admin_status).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "site_administrator", "model", "site_management", "logging_and_monitoring", "monitor"]
+}).
 -moduledoc("
 Model for admin status endpoints, including Zotonic version and health/status overview values.
 

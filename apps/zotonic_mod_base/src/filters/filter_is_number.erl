@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_is_number).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "number", "boolean", "compare"]
+}).
 -moduledoc("
 Test if a value is a number (integer or floating point):
 
@@ -30,4 +33,3 @@ Test if a value is a number (integer or floating point):
 
 is_number(V, _Context) when is_number(V) -> true;
 is_number(_, _Context) -> false.
-

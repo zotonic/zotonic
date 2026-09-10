@@ -18,13 +18,24 @@
 %% limitations under the License.
 
 -module(controller_admin_media_preview).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "controller", "media_management", "image_management", "media_resource", "render"]
+}).
 -moduledoc("
 A controller for rendering preview thumbnails of any media embedded in a richtext-editor component of a
-[resource](/id/doc_glossary#term-resource) on the [admin edit controller](/id/doc_controller_controller_admin_edit) page.
+[resource](/id/doc_glossary#term-resource) on the `controller#controller_admin_edit` page.
 
-Todo
+The `id` path or query argument can be a resource id or name. The resource must
+exist and be visible to the current user. A successful request redirects with
+HTTP 303 to the image generated with the `admin-editor` mediaclass; missing
+media returns 404.
 
-Extend documentation
+The controller is normally addressed through the `admin_media_preview`
+dispatch rule:
+
+```django
+<img src=\"{% url admin_media_preview id=id %}\" alt=\"\">
+```
 ").
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
@@ -73,4 +84,3 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
         {error, enoent} ->
             {{halt, 404}, Context}
     end.
-

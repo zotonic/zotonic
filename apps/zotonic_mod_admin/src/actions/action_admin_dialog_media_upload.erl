@@ -18,12 +18,30 @@
 %% limitations under the License.
 
 -module(action_admin_dialog_media_upload).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "media_management", "media_resource", "file_uploads", "upload"]
+}).
 -moduledoc("
 Shows the admin dialog for uploading a media item. See [Media](/id/doc_developerguide_media#guide-media).
 
-Todo
+The dialog accepts either a local file or a URL.
 
-Extend documentation
+Arguments:
+
+* `intent` is `create`, `connect`, `select`, or `update`. It defaults to
+  `update` when `id` is present and to `connect` otherwise.
+* `id` identifies the media resource whose file is replaced for `update`.
+* `subject_id` and `predicate` connect a newly created medium to a resource;
+  `predicate` defaults to `depiction`.
+* `title` overrides the dialog heading.
+* `stay` prevents redirecting after creation.
+* `center` controls the dialog's centering option and defaults to `1`.
+* `action` can be repeated to run actions after a successful upload.
+* `callback` names a safe JavaScript callback that receives the new media id.
+
+```django
+{% button text=\"Add image\" action={dialog_media_upload intent=\"connect\" subject_id=id predicate=\"depiction\"} %}
+```
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

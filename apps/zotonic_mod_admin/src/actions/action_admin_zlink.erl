@@ -16,12 +16,18 @@
 %% limitations under the License.
 
 -module(action_admin_zlink).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "content_authoring", "content_relationships", "edit"]
+}).
 -moduledoc("
 Used for inserting an internal link in the TinyMCE editor in the admin.
 
-Todo
+The required `id` argument identifies the selected resource. The action looks
+up its translated title and page URL, then passes both to the editor's
+`window.z_zlink` callback.
 
-Extend documentation
+This is an internal callback action used by the admin link chooser; it normally
+does not need to be wired directly by site templates.
 ").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).

@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(mod_email_status).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "operator", "module", "email_delivery", "monitor"]
+}).
 -moduledoc("
 This module tracks for all outgoing email addresses:
 

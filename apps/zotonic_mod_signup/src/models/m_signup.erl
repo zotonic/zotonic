@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_signup).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "model", "identity_and_accounts", "create"]
+}).
 -moduledoc("
 Exported APIs:
 

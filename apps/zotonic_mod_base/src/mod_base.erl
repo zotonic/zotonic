@@ -18,6 +18,12 @@
 %% limitations under the License.
 
 -module(mod_base).
+-moduledoc(#{
+    zotonic_keywords => [
+        "reference", "frontend_developer", "module", "user_interface_and_interaction",
+        "dispatch_rule", "wire_action", "scomp"
+    ]
+}).
 -moduledoc("
 mod_base is the base module, which acts as a container module holding most of Zotonic basic [dispatch
 rules](/id/doc_dispatch_index#all-dispatch-rules), [Actions](/id/template_action#actions) and [Module tags](/id/template_tag#scomps).
@@ -38,10 +44,7 @@ This module handles the following notifier callbacks:
 - `observe_edge_insert`: If an edge is inserted, then force a repivot of the subject using `z_pivot_rsc:insert_queue`.
 - `observe_hierarchy_updated`: Renumber category ranges after hierarchy edits so tree lookups remain consistent.
 - `observe_media_stillimage`: Return the filename of a still image to be used for image tags using `z_media_preview:can_generate_preview`.
-
-See also
-
-[dispatch rules](/id/doc_dispatch_index#all-dispatch-rules).").
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Zotonic Base").

@@ -20,8 +20,13 @@
 %% limitations under the License.
 
 -module(mod_search).
+-moduledoc(#{
+    zotonic_keywords => [
+        "reference", "backend_developer", "module", "search_and_discovery", "pivot_index", "database", "query"
+    ]
+}).
 -moduledoc("
-mod_search implements various ways of searching through the main resource table using [m_search](/id/doc_model_model_search).
+mod_search implements various ways of searching through the main resource table using `model#search`.
 
 The following searches are implemented in mod_search:
 
@@ -104,9 +109,6 @@ Delegate callbacks:
 
 - `event/2` with `postback` messages: `facet_rebuild`.
 
-See also
-
-[Search](/id/doc_developerguide_search#guide-datamodel-query-model), [Custom search](/id/doc_cookbook_custom_search#cookbook-custom-search)
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 -behaviour(gen_server).

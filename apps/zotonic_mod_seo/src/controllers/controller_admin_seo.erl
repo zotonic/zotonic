@@ -18,12 +18,17 @@
 %% limitations under the License.
 
 -module(controller_admin_seo).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "site_administrator", "controller", "search_engine_optimization", "metadata", "configure"]
+}).
 -moduledoc("
 Shows a form with settings related to Search Engine Optimization.
 
-Todo
+Handled events
+--------------
 
-Extend documentation
+* `admin_seo` saves submitted `seo-*` settings when the current user is
+  allowed to use `mod_seo`.
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

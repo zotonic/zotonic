@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(mod_logging).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "operator", "module", "logging_and_monitoring", "monitor"]
+}).
 -moduledoc("
 Logs messages to the database and adds log views to the admin.
 
@@ -108,10 +111,7 @@ period. The duplicate detection key is based on the error `type`, `message`, `fi
 and `line`, specifically so that the same site problem reported by many different
 users is coalesced into a single logged event even when user ids, user agents, or
 other request-specific values differ.
-
-See also
-
-For regular application logging, use [Logger](/id/doc_developerguide_logging#dev-logging) instead.").
+").
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 -behaviour(gen_server).
 

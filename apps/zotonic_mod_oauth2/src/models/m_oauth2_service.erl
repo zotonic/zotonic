@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_oauth2_service).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "integrator", "model", "api_and_integration", "authentication", "oauth_2_0"]
+}).
 -moduledoc("
 Model for OAuth2 service flow helpers, including redirect URL generation and oauth redirect processing.
 
@@ -480,4 +483,3 @@ url(Arg, InitialQArgs) ->
         _ ->
             undefined
     end.
-

@@ -18,13 +18,24 @@
 %% limitations under the License.
 
 -module(action_admin_identity_dialog_user_add).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "identity_and_accounts", "create"]
+}).
 -moduledoc("
 Show a dialog for adding a user. This creates a person [resource](/id/doc_glossary#term-resource) and adds a username /
 password to it.
 
-Todo
+The optional repeatable `on_success` argument runs actions after the user is
+created. The submitted name and email fields become properties of a published
+person resource; the username and password are stored as an identity in the
+same database transaction. The dialog can optionally send a welcome email.
 
-Extend documentation
+The site must be writable and the current user must be allowed to use
+`mod_admin_identity`.
+
+```django
+{% button text=\"Add user\" action={dialog_user_add on_success={reload}} %}
+```
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

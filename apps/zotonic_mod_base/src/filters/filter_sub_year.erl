@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_sub_year).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "date_and_time", "transform"]
+}).
 -moduledoc("
 Subtracts a year from a date. The value must be of the form `{{Y,M,D},{H,I,S}}`.
 
@@ -40,10 +43,7 @@ For example:
 ```
 
 When the value is `{{2008,12,10},{15,30,0}}` then the output is `{{2005,12,10},{15,30,0}}`.
-
-See also
-
-[sub_day](/id/doc_template_filter_filter_sub_day), [sub_week](/id/doc_template_filter_filter_sub_week), [sub_month](/id/doc_template_filter_filter_sub_month), [add_year](/id/doc_template_filter_filter_add_year)").
+").
 -export([sub_year/2, sub_year/3]).
 
 sub_year(undefined, _Context) ->

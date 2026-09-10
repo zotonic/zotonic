@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_to_name).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "identifier", "transform"]
+}).
 -moduledoc("
 Map a string to a *name*. That is a lowercased string with only `[a-z0-9_]` characters.
 

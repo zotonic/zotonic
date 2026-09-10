@@ -18,12 +18,24 @@
 %% limitations under the License.
 
 -module(action_admin_config_dialog_config_edit).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "configuration", "edit"]
+}).
 -moduledoc("
 Open a dialog to edit a configuration key/value pair.
 
-Todo
+Arguments:
 
-Extend documentation
+* `module` and `key` identify the current entry.
+* `value` pre-fills the value field.
+* `on_success` can be repeated to run actions after saving.
+
+An editable administrator can change the module, key, and value. If the module
+or key changes then the old entry is deleted before the new entry is stored.
+
+```django
+{% button text=\"Edit\" action={dialog_config_edit module=module key=key value=value on_success={reload}} %}
+```
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

@@ -34,5 +34,9 @@
                 %}
             </div>
         {% endif %}
+
+        {% if cert.is_zotonic_self_signed and m.site.environment == `development` %}
+            {% include "_admin_config_ssl_self_signed_trust.tpl" %}
+        {% endif %}
     </div>
 </div>

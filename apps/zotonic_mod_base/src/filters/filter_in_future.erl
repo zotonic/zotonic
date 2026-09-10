@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_in_future).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "date_and_time", "boolean", "compare"]
+}).
 -moduledoc("
 Tests if a date is in the future.
 
@@ -32,10 +35,7 @@ For example:
 ```
 
 This outputs “That day has yet to come.” if the value is a date and in the future.
-
-See also
-
-[in_past](/id/doc_template_filter_filter_in_past)").
+").
 -export([in_future/2]).
 
 

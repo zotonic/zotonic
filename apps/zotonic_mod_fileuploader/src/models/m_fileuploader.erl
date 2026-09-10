@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_fileuploader).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "model", "file_uploads", "upload"]
+}).
 -moduledoc("
 Model to start uploads, upload a block and delete uploads.
 

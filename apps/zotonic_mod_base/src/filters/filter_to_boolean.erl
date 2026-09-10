@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_to_boolean).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "boolean", "transform"]
+}).
 -moduledoc("
 Convert the input to a boolean value.
 
@@ -31,10 +34,7 @@ Example:
 Results in the boolean value `true`.
 
 This filter uses the `z_convert:to_bool/1` function.
-
-See also
-
-[to_binary](/id/doc_template_filter_filter_to_binary), [format_number](/id/doc_template_filter_filter_format_number), [format_integer](/id/doc_template_filter_filter_format_integer)").
+").
 -export([to_boolean/2]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -51,4 +51,3 @@ to_boolean(B, _Context) when is_binary(B) ->
     end;
 to_boolean(N, _Context) ->
     z_convert:to_bool(N).
-

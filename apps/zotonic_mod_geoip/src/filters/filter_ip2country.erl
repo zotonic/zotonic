@@ -17,6 +17,21 @@
 %% limitations under the License.
 
 -module(filter_ip2country).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "geolocation", "identifier", "query"]
+}).
+-moduledoc("
+Return the lowercase ISO country code associated with an IP address.
+
+The input can be a textual or tuple IP address. The result is `undefined` when
+the address cannot be located.
+
+For example:
+
+```django
+{{ \"8.8.8.8\"|ip2country }}
+```
+").
 
 -export([
     ip2country/2

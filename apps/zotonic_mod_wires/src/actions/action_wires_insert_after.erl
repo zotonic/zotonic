@@ -18,12 +18,20 @@
 %% limitations under the License.
 
 -module(action_wires_insert_after).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "template", "user_interface_and_interaction", "render"]
+}).
 -moduledoc("
-Insert the result of a render action after of an HTML element.
+Insert rendered HTML immediately after the target element.
 
-Todo
+It accepts the same arguments as the `action#update`
+action: use `text` for literal HTML or `template` to render a template. All
+additional arguments are passed to that template. `catinclude`, `include_all`,
+and `appear` are also supported.
 
-Extend documentation
+```django
+{% button text=\"Add help\" action={insert_after target=\"email\" text=\"<p>Please use a work address.</p>\"} %}
+```
 ").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([

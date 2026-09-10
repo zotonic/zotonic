@@ -18,11 +18,14 @@
 %% limitations under the License.
 
 -module(filter_truncatechars).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "text", "transform"]
+}).
 -moduledoc("
 Truncate a text to a maximum length in characters.
 
 The text is truncated to the maximum length specified with the argument. The text is truncated at a characters boundary,
-use [truncate](/id/doc_template_filter_filter_truncate) to truncate at a word boundary. If the truncation is not after
+use `filter#truncate` to truncate at a word boundary. If the truncation is not after
 punctuation then the unicode ellipsis … character is appended.
 
 For example:
@@ -49,10 +52,7 @@ An optional second argument defines which text will be added if the text is trun
 ```
 
 If the value is `hello world.` then the output is `hello wo (more)`.
-
-See also
-
-[truncate](/id/doc_template_filter_filter_truncate), [truncate_html](/id/doc_template_filter_filter_truncate_html)").
+").
 -export([truncatechars/2, truncatechars/3, truncatechars/4]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -113,4 +113,3 @@ entity(<<C, _/binary>> = R, Acc) when C =< $0 ->
     {Acc, R};
 entity(<<C/utf8, R/binary>>, Acc) ->
     entity(R, <<Acc/binary, C/utf8>>).
-

@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(mod_facebook).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "integrator", "module", "authentication", "api_and_integration", "oauth_2_0"]
+}).
 -moduledoc("
 The mod_facebook module plugs into the [authentication system](/id/doc_developerguide_access_control#guide-authentication)
 to enable [Facebook login](https://developers.facebook.com/docs/facebook-login/) on your site.
@@ -43,10 +46,7 @@ Delegate callbacks:
 
 - `event/2` with `postback` messages: `logon_redirect`.
 - `event/2` with `submit` messages: `admin_facebook`.
-
-See also
-
-[mod_linkedin](/id/doc_module_mod_linkedin)").
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Facebook").
@@ -153,4 +153,3 @@ is_setting(_) -> false.
 %                 ]},
 %             {redirect, [{dispatch, facebook_authorize}, {pk, Pickled}]}
 %         ], Context).
-

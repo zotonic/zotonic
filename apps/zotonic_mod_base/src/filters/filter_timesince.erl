@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_timesince).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "duration", "format"]
+}).
 -moduledoc("
 Show a readable version of a date/time difference.
 
@@ -66,10 +69,7 @@ This might display something like:
 ```django
 10 days
 ```
-
-See also
-
-[date](/id/doc_template_filter_filter_date), [now](/id/doc_template_tag_tag_now)").
+").
 -export([timesince/2, timesince/3, timesince/4, timesince/5]).
 
 
@@ -85,4 +85,3 @@ timesince(Date, Base, When, Context) ->
     z_datetime:timesince(Date, Base, When, Context).
 timesince(Date, Base, When, Mode, Context) ->
     z_datetime:timesince(Date, Base, When, Mode, Context).
-

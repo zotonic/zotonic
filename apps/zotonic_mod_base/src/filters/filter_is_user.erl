@@ -19,6 +19,9 @@
 %% limitations under the License.
 
 -module(filter_is_user).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "identity_and_accounts", "resource", "boolean"]
+}).
 -moduledoc("
 Test if a resource is a user.
 
@@ -39,10 +42,7 @@ For example:
 ```
 
 Note that a user does not have to be a person. Any resource can have identities attached to it.
-
-See also
-
-[m_identity](/id/doc_model_model_identity), [mod_authentication](/id/doc_module_mod_authentication)").
+").
 
 -export([ is_user/2 ]).
 

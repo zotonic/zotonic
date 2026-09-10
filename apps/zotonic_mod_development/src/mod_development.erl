@@ -19,6 +19,9 @@
 %% limitations under the License.
 
 -module(mod_development).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "module", "development_and_debugging", "configure", "monitor"]
+}).
 -moduledoc("
 Presents various tools for development.
 
@@ -48,7 +51,7 @@ block %} ... {% endblock %}`.
 
 Download css and javascript files as separate files (ie. don’t combine them in one url).
 
-Checking this will generate separate `<link\\>` and `<script\\>` tags for all files mentioned in a single `{% lib %}`
+Checking this will generate separate `<link>` and `<script>` tags for all files mentioned in a single `{% lib %}`
 tag. This makes debugging those files easier but makes loading pages slower as more requests will be done per page.
 
 Enable API to recompile &amp;amp; build Zotonic
@@ -100,9 +103,9 @@ environments this dispatch option is ignored.
 Automatic recompilation
 -----------------------
 
-Note
-
+::: note
 The system can only scan for changed files if either `inotify-tools` or `fswatch` is installed.
+:::
 
 The core Zotonic system starts either `inotify-tools` or `fswatch`, depending on which one is available. You have to
 install one of these to enable auto-compile and auto-load of changed files.
@@ -151,8 +154,8 @@ Configuration options
 
 `mod_development.libsep`
 
-Boolean value. If true, [lib](/id/doc_template_tag_tag_lib) files will be included separately instead of in one big
-concatenated file.
+Boolean value. If true, files requested with `tag#lib` will be included separately instead
+of in one big concatenated file.
 
 Accepted Events
 ---------------

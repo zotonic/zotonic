@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_menu_flat).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "navigation", "collection", "transform"]
+}).
 -moduledoc("
 Flattens the rsc menu structure for use in a template loop.
 
@@ -29,10 +32,7 @@ Example:
 ...
 {% endif %}
 ```
-
-See also
-
-[menu_subtree](/id/doc_template_filter_filter_menu_subtree), [menu_trail](/id/doc_template_filter_filter_menu_trail)").
+").
 -export([menu_flat/2]).
 
 

@@ -16,6 +16,9 @@
 %% limitations under the License.
 
 -module(action_wires_dialog).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "user_interface_and_interaction", "javascript"]
+}).
 -moduledoc("
 Opens a dialog with a predefined HTML content and title.
 
@@ -28,8 +31,8 @@ Example:
 
 This opens a dialog with the title “Wisdom”. The dialog is empty except for the text “The world is a pancake”.
 
-Normally, instead of this action, the action [dialog_open](/id/doc_template_action_action_dialog_open) is used. The
-action [dialog_open](/id/doc_template_action_action_dialog_open) shows a dialog that is rendered on the server.
+Normally, instead of this action, the action `action#dialog_open` is used. The
+action `action#dialog_open` shows a dialog that is rendered on the server.
 
 There can be many levels of dialogs open, they are designated by a *level*, the default dialog opens at level 0. Higher
 levels are displayed above lower levels. There is a special level `\"top\"` which ensures that a dialog is always opened
@@ -45,11 +48,7 @@ above any other open dialog.
 | center   | optional | boolean (0, 1) default 1; set to 0 to align the dialog at the top                |
 | keyboard | optional | boolean (true, false) default: true; if true, closes when escape keys is pressed |
 | level    | optional | Nesting of the dialog. Non negative integer, higher numbered levels are displayed above lower levels. Special level `\"top\"` to force display on top. |
-
-See also
-
-actions [dialog_open](/id/doc_template_action_action_dialog_open),
-[dialog_close](/id/doc_template_action_action_dialog_close) and [overlay_open](/id/doc_template_action_action_overlay_open).").
+").
 -author("Marc Worrell <marc@worrell.nl").
 
 %% interface functions

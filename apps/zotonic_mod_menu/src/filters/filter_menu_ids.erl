@@ -17,6 +17,9 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 -module(filter_menu_ids).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "navigation", "collection", "query"]
+}).
 -moduledoc("
 Returns all resource ids in a menu. Could return invisible and non existing resource ids. The returned ids are a flat
 list, the hierarchy of the menu is lost.
@@ -29,10 +32,7 @@ Example:
     {{ mid.title }}
 {% endif %}
 ```
-
-See also
-
-[menu_flat](/id/doc_template_filter_filter_menu_flat), [menu_is_visible](/id/doc_template_filter_filter_menu_is_visible)").
+").
 
 -export([ menu_ids/2 ]).
 
@@ -76,4 +76,3 @@ menu_list_ids([{Id, SubMenu}|Rest], Acc) when is_list(SubMenu) ->
 menu_list_ids([#rsc_tree{ id = Id, tree = SubMenu }|Rest], Acc) ->
     Acc1 = menu_list_ids(SubMenu, Acc),
     menu_list_ids(Rest, [Id|Acc1]).
-

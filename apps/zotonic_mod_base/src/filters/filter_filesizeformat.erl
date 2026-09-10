@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_filesizeformat).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "number", "format"]
+}).
 -moduledoc("
 This filter formats a numeric value as KB, MB etc. This filter can be used to display a number of bytes in a human
 readable format of kilo- or megabytes.
@@ -62,4 +65,3 @@ filesizeformat(N, _Context) when is_integer(N) ->
     end;
 filesizeformat(_, _Context) ->
     undefined.
-

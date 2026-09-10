@@ -18,13 +18,16 @@
 %% limitations under the License.
 
 -module(mod_menu).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "content_editor", "module", "navigation", "resource", "collection", "edit"]
+}).
 -moduledoc("
 Create nested navigation menus for your site.
 
 Activating the module in the admin enables a “menu” item in the admin navigation under “content”, which lets you
 define a simple menu. Every item in the menu references a Zotonic page and can be looked up using the autocompletion widget.
 
-This menu can be rendered in the frontend with the [menu](/id/doc_template_scomp_scomp_menu#scomp-menu) custom tag.
+This menu can be rendered in the frontend with the `scomp#menu` custom tag.
 
 It will use the _menu.tpl template which is by default able to render a Twitter Bootstrap compatible menu structure
 using nested `<ul>` elements.
@@ -59,11 +62,7 @@ Delegate callbacks:
 
 - `event/2` with `postback` messages: `ensure_hasmenupart`.
 - `event/2` with `postback_notify` messages: `<<\"menuedit\">>`.
-
-See also
-
-The filters [menu_flat](/id/doc_template_filter_filter_menu_flat),
-[menu_subtree](/id/doc_template_filter_filter_menu_subtree) and [menu_trail](/id/doc_template_filter_filter_menu_trail).").
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Menus").

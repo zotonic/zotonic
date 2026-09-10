@@ -18,11 +18,12 @@
 %% limitations under the License.
 
 -module(mod_seo).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "content_editor", "module", "search_engine_optimization", "metadata"]
+}).
 -moduledoc("
 Adds basic search engine optimization to the base templates and provides an admin interface for configuring SEO options
 and Google Universal Analytics.
-
-
 
 SEO data
 --------
@@ -37,27 +38,30 @@ Following Google’s recommendations, mod_seo adds data in the [Schema.org](http
 JSON-LD format. This enables [search features](https://developers.google.com/search/docs/guides/search-features) such as
 rich results, carousels and the sitelinks searchbox.
 
-Tip
-
+::: {.note title=\"Tip\"}
 If you wish to alter the structured data, you can do so by overriding the `schema_org/schema.*.tpl` templates. When you
 do so, make sure to validate your changes with Google’s [structured data testing tool](https://search.google.com/structured-data/testing-tool).
-
-
+:::
 
 Configuration
 -------------
-
-
 
 ### Disable search engine indexing
 
 To prevent search engines from indexing a page, check the ‘Ask Google not to index this page’ checkbox in the admin.
 Programmatically, you can set the `seo_noindex` flag on a resource to do the same.
 
+Generated pages can pass the `seo_noindex` template variable. By default this emits `noindex,nofollow`. Pass
+`seo_follow` as well for navigation or search pages whose linked content should remain discoverable:
+
+```django
+{% extends \"base.tpl\" seo_noindex seo_follow %}
+```
+
+The site-wide noindex setting always emits `noindex,nofollow`, regardless of these page-level variables.
+
 To disable indexing for the site as a whole, go to Modules > SEO in the Admin (`https://yoursite/admin/seo`) and tick
 the ‘Exclude this site from search engines’ checkbox.
-
-
 
 ### Google Analytics
 
@@ -81,8 +85,6 @@ template to add the parameter:
     {% endif %}
 }
 ```
-
-
 
 ### Extra parameters
 

@@ -18,10 +18,15 @@
 %% limitations under the License.
 
 -module(controller_admin_acl_rules_export).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "site_administrator", "controller", "export_and_syndication", "export"]
+}).
 -moduledoc("
-Todo
+Download the site's access-control rules as a compressed Erlang term.
 
-Not yet documented.
+The exported `acl-rules-SITE.dat` file can be imported by the ACL rules editor.
+Access requires permission to use `mod_acl_user_groups`; the response is never
+cached or indexed.
 ").
 
 -export([

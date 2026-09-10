@@ -18,12 +18,22 @@
 %% limitations under the License.
 
 -module(action_admin_config_dialog_config_delete).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "configuration", "edit"]
+}).
 -moduledoc("
 Open a dialog that asks confirmation to delete a configuration key/value pair.
 
-Todo
+Arguments:
 
-Extend documentation
+* `module` and `key` identify the configuration entry.
+* `on_success` can be repeated and is forwarded to the confirmed deletion.
+
+The dialog is only shown to an editable administrator.
+
+```django
+{% button text=\"Delete\" action={dialog_config_delete module=module key=key on_success={reload}} %}
+```
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

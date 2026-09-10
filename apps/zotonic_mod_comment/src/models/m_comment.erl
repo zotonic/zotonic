@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_comment).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "model", "comments_and_community", "query", "edit"]
+}).
 -moduledoc("
 Model for comments attached to resources. It provides listing, moderation checks, counting, and retrieval of individual comments.
 

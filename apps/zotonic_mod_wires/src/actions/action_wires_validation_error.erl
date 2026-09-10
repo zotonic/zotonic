@@ -5,12 +5,20 @@
 %% @todo Adapt this for Zotonic.
 
 -module(action_wires_validation_error).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "forms", "user_interface_and_interaction", "validate"]
+}).
 -moduledoc("
 Render a validation error on the target. Text is given in the text argument.
 
-Todo
+The `text` argument supplies the failure message.
 
-Extend documentation
+::: note
+This action is an incomplete legacy implementation and still needs to be
+adapted for Zotonic's current validation JavaScript. It constructs a
+`LiveValidation` validator around an implicit `me` object and should not be used
+as the basis for new validation code.
+:::
 ").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).

@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(mod_admin_statistics).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "operator", "module", "logging_and_monitoring", "monitor"]
+}).
 -moduledoc("
 Admin module exposing site statistics views and related dashboard metrics.
 
@@ -65,5 +68,4 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
 %%
 %% Helpers
 %%
-
 

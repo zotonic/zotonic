@@ -18,10 +18,16 @@
 %% limitations under the License.
 
 -module(action_authentication_auth_disconnect).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "authentication", "identity_and_accounts", "edit"]
+}).
 -moduledoc("
-Todo
+Disconnect an external authentication identity from a resource.
 
-Not yet documented.
+Pass the resource `id` and identity `type`. The optional `keyprefix` limits the
+deletion to identities whose keys start with that value. The current user must
+be allowed to edit the resource. Username/password and email identities are
+protected from this action.
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -64,4 +70,3 @@ event(#postback{message={auth_disconnect, RscId, Type, KeyPrefix}}, Context) whe
         false ->
             z_render:growl(?__("Access denied", Context), Context)
     end.
-

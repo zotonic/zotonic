@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(scomp_menu_menu).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "scomp", "navigation", "render"]
+}).
 -moduledoc("
 Show a page menu.
 

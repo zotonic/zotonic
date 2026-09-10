@@ -19,10 +19,16 @@
 %% limitations under the License.
 
 -module(controller_export).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "integrator", "controller", "export_and_syndication", "export"]
+}).
 -moduledoc("
-Todo
+Stream an export that is not tied to one resource.
 
-Not yet documented.
+The dispatch rule or its configured export module determines visibility,
+content type, filename, data rows, and encoding through the export
+notifications. Set the controller option `is_query` for query exports. The
+request argument `raw` selects raw values where the encoder supports them.
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 
@@ -74,4 +80,3 @@ process(_Method, _AcceptedCT, ProvidedCT, Context) ->
 
 set_filename(ProvidedCT, Dispatch, Context) ->
     export_helper:set_filename(undefined, ProvidedCT, Dispatch, Context).
-

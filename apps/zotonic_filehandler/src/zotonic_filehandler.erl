@@ -20,6 +20,15 @@
 
 
 -module(zotonic_filehandler).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "module", "development_and_debugging", "monitor"]
+}).
+-moduledoc("
+Coordinate development-time handling of changed source and asset files.
+
+The file handler receives filesystem changes, maps files to handlers, and
+triggers compilation, reload, or other configured development actions.
+").
 
 -export([
     compile_all/0,
@@ -68,5 +77,4 @@ compile_options(ErlangFile) ->
 %% @doc Send a message to the user as a system notification
 terminal_notifier(Msg) ->
     zotonic_filehandler_terminal:notify(Msg).
-
 

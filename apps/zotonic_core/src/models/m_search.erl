@@ -26,10 +26,13 @@
 %%
 
 -module(m_search).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "model", "search_and_discovery", "query"]
+}).
 -moduledoc("
 The m_search model provides access to different kinds of search queries for searching through models.
 
-Most searches in Zotonic are implemented in the [mod_search](/id/doc_module_mod_search) module, searching through the
+Most searches in Zotonic are implemented in the `module#mod_search` module, searching through the
 `rsc` table in different kinds of ways.
 
 Though, any module can implement a search by observing the `search_query` notification.
@@ -113,10 +116,7 @@ included. Without this option, the `result` array contains resource ids. An abbr
 The dates are returned as ISO 8601 UTC values. On multilingual sites, translated properties such as `title` and
 `summary` are returned as translation objects. Add `unfinished=true` to restrict the results to ongoing and future
 events.
-
-See also
-
-[Search](/id/doc_developerguide_search#guide-datamodel-query-model) , [pager](/id/doc_template_scomp_scomp_pager#scomp-pager) tag , [mod_search](/id/doc_module_mod_search) module , [Custom search](/id/doc_cookbook_custom_search#cookbook-custom-search)").
+").
 -author("Marc Worrell <marc@worrell.nl").
 
 -behaviour(zotonic_model).

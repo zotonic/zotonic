@@ -22,6 +22,9 @@
 %% limitations under the License.
 
 -module(scomp_wires_draggable).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "scomp", "wire_action", "user_interface_and_interaction", "javascript"]
+}).
 -moduledoc("
 Mark a html element as draggable.
 
@@ -67,9 +70,6 @@ The draggable tag accepts the following arguments:
 | `opacity`  | Change the opacity while dragging. Defaults to “0.8”.                            | `opacity=”0.5”`                              |
 | `delegate` | The Erlang module that will receive the drag event after a successful drop.      |                                              |
 
-See also
-
-the [droppable](/id/doc_template_scomp_scomp_droppable#scomp-droppable) tag.
 ").
 -behaviour(zotonic_scomp).
 

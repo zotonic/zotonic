@@ -18,12 +18,21 @@
 %% limitations under the License.
 
 -module(action_wires_editor_remove).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "content_authoring", "edit", "javascript"]
+}).
 -moduledoc("
-Remove any WYSIWYG editor controls from all textarea’s with the `z_editor` class in the target.
+Remove WYSIWYG editor controls from the textareas selected by the target. Use
+this before replacing or moving editor-managed markup so the editor can release
+its browser state cleanly.
 
-Todo
+The `target` argument normally names a container holding one or more
+`textarea.z_editor` elements. The common `id` or `selector` action arguments can
+be used to override that target.
 
-Extend documentation
+```django
+{% wire action={editor_remove target=\"edit-form\"} %}
+```
 ").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([

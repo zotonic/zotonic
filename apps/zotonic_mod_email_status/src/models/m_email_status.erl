@@ -19,6 +19,9 @@
 
 
 -module(m_email_status).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "operator", "model", "email_delivery", "monitor"]
+}).
 -moduledoc("
 Tracks the send/bounce/error status of all outgoing emails.
 

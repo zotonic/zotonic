@@ -18,6 +18,11 @@
 %% limitations under the License.
 
 -module(mod_mqtt).
+-moduledoc(#{
+    zotonic_keywords => [
+        "reference", "integrator", "module", "messaging_and_pubsub", "publish_and_subscribe", "mqtt"
+    ]
+}).
 -moduledoc("
 [MQTT](http://mqtt.org) is a machine-to-machine (M2M)/“Internet of Things” connectivity protocol. It was designed as an extremely lightweight publish/subscribe messaging transport. It is useful for connections with remote locations where a small code footprint is required and/or network bandwidth is at a premium. For example, it has been used in sensors communicating to a broker via satellite link, over occasional dial-up connections with healthcare providers, and in a range of home automation and small device scenarios
 
@@ -122,9 +127,9 @@ Note that there are not automatic subscriptions for user topics. All subscriptio
 
 ### Access control
 
-All topics have access control added. For this an extra ACL object
-[#acl_mqtt{}](/id/doc_notification_acl_mqtt#acl-mqtt) is defined, with the actions `publish` and `subscribe`.
-Modules can observe the usual [acl_is_allowed](/id/doc_notification_acl_is_allowed#acl-is-allowed) notification to
+All topics have access control added. For this an extra `#acl_mqtt{}` ACL object is
+defined, with the actions `publish` and `subscribe`; see `notification#acl_mqtt`.
+Modules can observe the usual `notification#acl_is_allowed` notification to
 allow access to MQTT topics:
 
 your_site.erl
@@ -248,70 +253,40 @@ z_mqtt:publish(Msg, Context)
 
 ### JavaScript API
 
-See also
-
-[live tag](/id/doc_template_scomp_scomp_live#scomp-live), which uses MQTT topics.
-
-There is a separate topic tree in the browser. To be able to send message from/to the browser there are special *bridge*
-topics on both ends.
-
-The browser receives a unique client and routing id on connecting to the server. On the server those ids can be used to
-route messages back to the client using a bridge topic.
-
-For example the server side topic:
-
-
-```erlang
-bridge/MyClientId/browser/topic
-```
-
-Is mapped on the client to:
-
-
-```erlang
-browser/topic
-```
-
-It is possible to send messages to the server, or subscribe to topics on the server. For this there is a special
-`bridge/origin` (the *bridge to origin*, ie. the server serving the page) topic.
-
-Any subscribe or publish action on this topic is relayed to the server. For example, to access the server side topic
-`my/server/topic`, use the client side topic `bridge/origin/server/topic` (both for publish and subscribe).
-
-The JavaScript API uses callback functions:
-
+Every browser page has a local Cotonic broker. Use `cotonic.broker.subscribe` and `cotonic.broker.publish` for messages
+within that browser context:
 
 ```javascript
-cotonic.broker.subscribe(\"bridge/origin/test/#\", function(msg, bindings, options) { console.log(msg); });
-cotonic.broker.publish(\"bridge/origin/test/foo\", \"hello world\");
+cotonic.broker.subscribe(\"example/+name\", function (msg, bindings) {
+    console.log(bindings.name, msg.payload);
+});
+
+cotonic.broker.publish(\"example/world\", { greeting: \"Hello\" });
 ```
 
-The received message is a JSON object:
-
+The browser broker is connected to the Zotonic server through the `origin` bridge. Prefix a server-side topic with
+`bridge/origin/` when publishing or subscribing in the browser. For example, this subscribes to the server topic
+`public/hello`:
 
 ```javascript
-{
-  type: \"publish\",
-  qos: 0,
-  payload: \"hello world\",
-  properties: {
-      ...
-  },
-  ...
-}
+cotonic.broker.subscribe(\"bridge/origin/public/hello\", function (msg) {
+    console.log(msg.payload);
+});
 ```
 
-The transport between the server and the browser uses a websocket connection and binary encoded MQTT v5 messages.
+Messages sent by Erlang to a `~client` topic are routed back to that client. This publishes to the browser-local topic
+`example/notice` belonging to the current client:
 
+```erlang
+z_mqtt:publish(
+    [ <<\"~client\">>, <<\"example\">>, <<\"notice\">> ],
+    #{ text => <<\"Updated\">> },
+    Context
+).
+```
 
-### Quality of service
-
-Currently there is no quality of service implemented for the JavaScript API and relay. The server side page process will
-buffer all messages till the browser connects to the page session. This happens on connects with comet, WebSocket, and postbacks.
-
-On the browser all messages are queued and sent one by one to the server. This uses either the WebSocket connection or
-the postback interface.
-
+`subscribe` accepts options including `qos`; `publish` accepts `qos` and `retain`. QoS defaults to 0. Access control
+is checked on the server after bridge topic mappings have been applied.
 
 
 Enabling the MQTT listener

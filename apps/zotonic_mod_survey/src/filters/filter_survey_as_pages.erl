@@ -18,13 +18,16 @@
 %% limitations under the License.
 
 -module(filter_survey_as_pages).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "surveys", "collection", "transform"]
+}).
 -moduledoc("
 Split the page blocks into pages, prepare them for easy display in the survey question editor.
 
 A page is split in two lists: one with questions and one with the page break/options/stop
 blocks.
 
-See [mod_survey](/id/doc_module_mod_survey)
+See `module#mod_survey`
 ").
 
 -export([

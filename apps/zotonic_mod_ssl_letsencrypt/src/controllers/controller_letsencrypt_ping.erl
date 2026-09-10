@@ -18,10 +18,15 @@
 %% limitations under the License.
 
 -module(controller_letsencrypt_ping).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "operator", "controller", "tls_and_certificates", "http", "monitor"]
+}).
 -moduledoc("
-Todo
+Return the site's current Let's Encrypt reachability token as plain text.
 
-Not yet documented.
+The certificate workflow requests this GET endpoint to verify that the public
+hostname reaches the correct Zotonic site before starting an ACME challenge.
+The response is not cached or indexed.
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

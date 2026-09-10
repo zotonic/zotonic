@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_member).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "collection", "boolean", "compare"]
+}).
 -moduledoc("
 Finds a value in a list.
 
@@ -62,5 +65,3 @@ member(S, L, _Context) when is_list(L) ->
 member(S, Value, Context) ->
 	L = z_template_compiler_runtime:to_list(Value, Context),
 	member(S, L, Context).
-
-

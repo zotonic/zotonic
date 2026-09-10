@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_range).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "number", "collection", "create"]
+}).
 -moduledoc("
 Generate a list of integers, with an optional step.
 

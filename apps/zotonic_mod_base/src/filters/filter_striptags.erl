@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_striptags).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "html", "security"]
+}).
 -moduledoc("
 Removes all HTML tags from the value.
 

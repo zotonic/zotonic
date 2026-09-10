@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_filter).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "collection", "query"]
+}).
 -moduledoc("
 Filters a list on the value of a property, either on presence or equality.
 
@@ -64,10 +67,7 @@ A second argument can be added to test on equality:
 ```
 
 Shows all elements whose `title` property is “Untitled”.
-
-See also
-
-[is_visible](/id/doc_template_filter_filter_is_visible), [is_a](/id/doc_template_filter_filter_is_a), [exclude](/id/doc_template_filter_filter_exclude)").
+").
 -export([
 	filter/2,
 	filter/3,
@@ -100,4 +100,3 @@ filter(In, Prop, Value, Context) ->
 
 find_value(Prop, Elt, Context) ->
 	z_template_compiler_runtime:find_value(Prop, Elt, #{}, Context).
-

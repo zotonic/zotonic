@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_if).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "boolean", "compare"]
+}).
 -moduledoc("
 Selects an argument depending on a condition.
 
@@ -28,7 +31,7 @@ For example:
 {{ value|if:\"yes\":\"no\" }}
 ```
 
-This is a shortcut for using the [if](/id/doc_template_tag_tag_if) tag. The same can be expressed as follows:
+This is a shortcut for using the `tag#if` tag. The same can be expressed as follows:
 
 
 ```django
@@ -55,10 +58,7 @@ So if `is_i18n` evaluates to true, `body` is assigned to `r.translation[lang_cod
 ```
 
 Add parameter `class` to the included template; when `pid` equals `id`, `class` is `\"active\"`, otherwise an empty string.
-
-See also
-
-[if](/id/doc_template_tag_tag_if), [if_undefined](/id/doc_template_filter_filter_if_undefined)").
+").
 -export(['if'/4]).
 
 

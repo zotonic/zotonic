@@ -1,3 +1,13 @@
+---
+keywords:
+  - reference
+  - frontend_developer
+  - template
+  - security
+  - html
+  - render
+---
+
 Automatically apply HTML escaping to values.
 
 The autoescape tag controls the current auto-escaping behavior. This tag takes either on or off as an argument and that determines whether auto-escaping is in effect inside the autoescape block.

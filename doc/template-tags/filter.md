@@ -1,3 +1,13 @@
+---
+keywords:
+  - reference
+  - frontend_developer
+  - template
+  - template_filter
+  - data_processing_and_formatting
+  - transform
+---
+
 Filter the contents of a block through variable filters.
 
 Filters can also be piped through to each other.

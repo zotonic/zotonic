@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_join).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "collection", "transform"]
+}).
 -moduledoc("
 Joins the elements of a list. Joins the elements of the input list together, separated by the argument.
 
@@ -46,10 +49,7 @@ Jan, Piet or Klaas
 ```
 
 The spaces around the last separator are added by the filter.
-
-See also
-
-[element](/id/doc_template_filter_filter_element), [tail](/id/doc_template_filter_filter_tail), [split](/id/doc_template_filter_filter_split)").
+").
 -export([join/2, join/3, join/4]).
 
 
@@ -79,4 +79,3 @@ join(Input, Separator, <<32, _Rest/binary>> = LastSeparator, Context) ->
 join(Input, Separator, LastSeparator, Context) ->
     %% Translated strings will have leading spaces tripped, add them here.
     join(Input, Separator, <<32, (z_convert:to_binary(LastSeparator))/binary, 32>>, Context).
-

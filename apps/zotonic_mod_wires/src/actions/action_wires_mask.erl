@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(action_wires_mask).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "user_interface_and_interaction", "javascript"]
+}).
 -moduledoc("
 Places a mask over an element, useful for blocking user interaction during lengthy postbacks.
 
@@ -53,10 +56,7 @@ This action takes three possible arguments:
 | target   | The id of the element to be masked.                                              | target=”search-form”   |
 | message  | Message to show next to the spinner image.                                       | message=”Searching...” |
 | delay    | Delay (in milliseconds) before the mask is shown. Only shows the mask during lengthy actions. | delay=200              |
-
-See also
-
-action [unmask](/id/doc_template_action_action_unmask), [mask_progress](/id/doc_template_action_action_mask_progress)").
+").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).
 

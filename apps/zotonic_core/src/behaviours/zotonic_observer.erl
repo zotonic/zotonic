@@ -26,6 +26,9 @@
 %% Try to find the site for the request
 %% Called when the request Host doesn't match any active site.
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "routing_and_redirects", "http"]
+}).
 -doc("
 Try to find the site for the request Called when the request Host doesn’t match any active site.
 
@@ -52,6 +55,9 @@ Return:
 %% Final try for dispatch, try to match the request.
 %% Called when the site is known, but no match is found for the path
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "routing_and_redirects", "dispatch_rule"]
+}).
 -doc("
 Final try for dispatch, try to match the request. Called when the site is known, but no match is found for the path
 
@@ -69,7 +75,7 @@ Return:
 *   path: `binary`
 *   method: `binary`
 *   protocol: `union`
-*   tracer\\_pid: `union`
+*   tracer_pid: `union`
 ").
 -callback observe_dispatch(#dispatch{}, z:context()) -> {ok, Result} | undefined when
     Result :: m_rsc:resource_id()
@@ -86,6 +92,9 @@ Return:
 %% Accumulator is the modified CSP headers, notification is the default
 %% set of CSP headers as provided by the Zotonic core routines.
 %% Type: foldr
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "security", "http"]
+}).
 -doc("
 Check and possibly modify the http response security headers All headers are in lowercase.
 
@@ -97,28 +106,28 @@ Return:
 
 `#content_security_header{}` properties:
 
-*   child\\_src: `list`
-*   connect\\_src: `list`
-*   default\\_src: `list`
-*   font\\_src: `list`
-*   frame\\_src: `list`
-*   img\\_src: `list`
-*   manifest\\_src: `list`
-*   media\\_src: `list`
-*   object\\_src: `list`
-*   script\\_src: `list`
-*   script\\_src\\_elem: `list`
-*   script\\_src\\_attr: `list`
-*   style\\_src: `list`
-*   style\\_src\\_elem: `list`
-*   style\\_src\\_attr: `list`
-*   worker\\_src: `list`
-*   base\\_uri: `list`
+*   child_src: `list`
+*   connect_src: `list`
+*   default_src: `list`
+*   font_src: `list`
+*   frame_src: `list`
+*   img_src: `list`
+*   manifest_src: `list`
+*   media_src: `list`
+*   object_src: `list`
+*   script_src: `list`
+*   script_src_elem: `list`
+*   script_src_attr: `list`
+*   style_src: `list`
+*   style_src_elem: `list`
+*   style_src_attr: `list`
+*   worker_src: `list`
+*   base_uri: `list`
 *   sandbox: `list`
-*   frame\\_ancestors: `list`
-*   form\\_action: `list`
-*   report\\_to: `list`
-*   report\\_sample: `boolean`
+*   frame_ancestors: `list`
+*   form_action: `list`
+*   report_to: `list`
+*   report_sample: `boolean`
 ").
 -callback observe_content_security_header(Default, Acc, Context) -> Result when
     Default :: #content_security_header{},
@@ -135,12 +144,15 @@ Return:
 
 %% Handle a content security report.
 %% Type: notify_sync
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "security", "http"]
+}).
 -doc("
 Handle a content security report
 
 Type:
 
-[notify\\_sync](/id/doc_developerguide_notifications#notification-notify-sync)
+[notify_sync](/id/doc_developerguide_notifications#notification-notify-sync)
 
 This is called when a content security report is received by the report controller.
 The notification contains the type, url and body of the report.
@@ -167,6 +179,9 @@ See also: https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Co
 %% Check and possibly modify the http response security headers
 %% All headers are in lowercase.
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "security", "http"]
+}).
 -doc("
 Check and possibly modify the http response security headers All headers are in lowercase.
 
@@ -205,7 +220,7 @@ If the controller option `allow_frame` is set to true then the `x-frame-options`
 The `security_headers` notification does a *first* to fetch the security headers. The default headers are passed in the
 `headers` field of the notification.
 
-If the notification returns a list with `<<\"content-security-policy\"\\>\\>` then in the value of the
+If the notification returns a list with `<<\"content-security-policy\">>` then in the value of the
 Content-Security-Policy header the string `'nonce-'` is replaced with the unique nonce for the request.
 
 The nonce can de added to script tags:
@@ -242,6 +257,9 @@ Note that the nonce is only set iff the Context is a HTTP request context. It is
 
 %% Set CORS headers on the HTTP response.
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "security", "http"]
+}).
 -doc("
 Set CORS headers on the HTTP response.
 
@@ -265,6 +283,9 @@ Return:
 %% Let all modules add resource specific response headers to the request.
 %% The accumulator is the list of headers to be set.
 %% Type: foldl
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "resource", "metadata", "http"]
+}).
 -doc("
 Let all modules add resource specific response headers to the request. The accumulator is the list of headers to be set.
 
@@ -289,6 +310,16 @@ Return:
 
 %% 'module_ready' - Sent when modules have changed, z_module_indexer reindexes all modules' templates, actions etc.
 %% Type: notify_sync
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "module_management", "module", "monitor"]
+}).
+-doc("
+Signals that the active modules or their indexed templates, actions, models, and other components have changed.
+
+Type:
+
+[notify_sync](/id/doc_developerguide_notifications#notification-notify-sync)
+").
 -callback observe_module_ready(module_ready, z:context()) -> any().
 -callback pid_observe_module_ready(pid(), module_ready, z:context()) -> any().
 
@@ -296,6 +327,9 @@ Return:
 
 %% A module has been activated and started.
 %% Type: notify
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "module_management", "configure"]
+}).
 -doc("
 A module has been activated and started.
 
@@ -317,6 +351,9 @@ Return:
 
 %% A module has been stopped and deactivated.
 %% Type: notify
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "module_management", "configure"]
+}).
 -doc("
 A module has been stopped and deactivated.
 
@@ -339,9 +376,12 @@ Return:
 %% Example: {{<<"text">>, <<"html">>, []}, page}
 %% A special dispatch rule is 'page_url', which refers to the page_url property of the resource.
 %% Type: foldr
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "routing_and_redirects", "metadata"]
+}).
 -doc("
-Get available content types and their dispatch rules Example: \\{\\{<<”text”>>, <<”html”>>, \\[\\]\\}, page\\} A
-special dispatch rule is ‘page\\_url’, which refers to the page\\_url property of the resource.
+Get available content types and their dispatch rules Example: {{<<”text”>>, <<”html”>>, []}, page} A
+special dispatch rule is ‘page_url’, which refers to the page_url property of the resource.
 
 Type:
 
@@ -372,6 +412,9 @@ Return:
 %% Check where to go after a user logs on.
 %% Type: first
 %% Return: a URL or ``undefined``
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "authentication", "authenticate"]
+}).
 -doc("
 Check where to go after a user logs on.
 
@@ -385,7 +428,7 @@ a URL or `undefined`
 
 `#logon_ready_page{}` properties:
 
-*   request\\_page: `union`
+*   request_page: `union`
 ").
 -callback observe_logon_ready_page(#logon_ready_page{}, z:context()) -> Result when
     Result :: binary() | undefined.
@@ -396,6 +439,9 @@ a URL or `undefined`
 
 %% Handle a user logon. The posted query args are included.
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "authentication", "authenticate"]
+}).
 -doc("
 Handle a user logon. The posted query args are included. Return:: `{ok, UserId}` or `{error, Reason}`
 
@@ -424,8 +470,11 @@ Return:
 %% This is used to fetch external (or local) authentication links for an
 %% username.
 %% Type: foldl
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "authentication", "authenticate"]
+}).
 -doc("
-Check for logon options, called if logon\\_submit returns undefined. This is used to fetch external (or local)
+Check for logon options, called if logon_submit returns undefined. This is used to fetch external (or local)
 authentication links for a username. Return:: `map()`
 
 Type:
@@ -453,8 +502,11 @@ Return:
 %% Handled by mod_signup to send out verification emails.
 %% Type: first
 %% Identity may be undefined, or is an identity used for the verification.
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "identity_and_accounts", "send_and_receive"]
+}).
 -doc("
-Request to send a verification to the user. Return ok or an error. Handled by mod\\_signup to send out verification
+Request to send a verification to the user. Return ok or an error. Handled by mod_signup to send out verification
 emails. Identity may be undefined, or is an identity used for the verification.
 
 Type:
@@ -465,7 +517,7 @@ Return:
 
 `#identity_verification{}` properties:
 
-*   user\\_id: `m_rsc:resource_id()`
+*   user_id: `m_rsc:resource_id()`
 *   identity: `undefined|m_identity:identity()`
 ").
 -callback observe_identity_verification(#identity_verification{}, z:context()) -> Result when
@@ -483,9 +535,12 @@ Return:
 %% handling identities to mark this identity as verified. Handled by mod_admin_identity
 %% to call the m_identity model for this type/key.
 %% Type: notify
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "identity_and_accounts", "edit"]
+}).
 -doc("
 Notify that a user’s identity has been verified. Signals to modules handling identities to mark this identity as
-verified. Handled by mod\\_admin\\_identity to call the m\\_identity model for this type/key.
+verified. Handled by mod_admin_identity to call the m_identity model for this type/key.
 
 Type:
 
@@ -495,7 +550,7 @@ Return:
 
 `#identity_verified{}` properties:
 
-*   user\\_id: `m_rsc:resource_id()`
+*   user_id: `m_rsc:resource_id()`
 *   type: `m_identity:type()`
 *   key: `m_identity:key()`
 ").
@@ -506,6 +561,9 @@ Return:
 
 %% Check if passwords are matching. Uses the password hashing algorithms.
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "identity_and_accounts", "security", "compare"]
+}).
 -doc("
 Check if passwords are matching. Uses the password hashing algorithms.
 
@@ -517,7 +575,7 @@ Return:
 
 `#identity_password_match{}` properties:
 
-*   rsc\\_id: `m_rsc:resource_id()|undefined`
+*   rsc_id: `m_rsc:resource_id()|undefined`
 *   password: `binary`
 *   hash: `m_identity:hash()|tuple`
 ").
@@ -528,6 +586,9 @@ Return:
 
 %% Notify that a user's identity has been updated by the identity model.
 %% Type: notify
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "identity_and_accounts", "edit"]
+}).
 -doc("
 Notify that a user’s identity has been updated by the identity model.
 
@@ -540,10 +601,10 @@ Return:
 `#identity_update_done{}` properties:
 
 *   action: `insert|update|delete|verify`
-*   rsc\\_id: `m_rsc:resource_id()`
+*   rsc_id: `m_rsc:resource_id()`
 *   type: `binary`
 *   key: `m_identity:key()|undefined`
-*   is\\_verified: `boolean|undefined`
+*   is_verified: `boolean|undefined`
 ").
 -callback observe_identity_update_done(#identity_update_done{}, z:context()) -> any().
 -callback pid_observe_identity_update_done(pid(), #identity_update_done{}, z:context()) -> any().
@@ -555,10 +616,13 @@ Return:
 %% 'props' is a map with properties for the person resource (email, name, etc)
 %% 'signup_props' is a proplist with 'identity' definitions and optional follow on url 'ready_page'
 %% An identity definition is {Kind, Identifier, IsUnique, IsVerified}
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "identity_and_accounts", "create"]
+}).
 -doc("
 Handle a signup of a user, return the follow on page for after the signup. Return `{ok, Url}` ‘props’ is a map with
-properties for the person resource (email, name, etc) ‘signup\\_props’ is a proplist with ‘identity’ definitions
-and optional follow on url ‘ready\\_page’ An identity definition is \\{Kind, Identifier, IsUnique, IsVerified\\}
+properties for the person resource (email, name, etc) ‘signup_props’ is a proplist with ‘identity’ definitions
+and optional follow on url ‘ready_page’ An identity definition is {Kind, Identifier, IsUnique, IsVerified}
 
 Type:
 
@@ -569,7 +633,7 @@ Return:
 `#signup_url{}` properties:
 
 *   props: `map`
-*   signup\\_props: `list`
+*   signup_props: `list`
 ").
 -callback observe_signup_url(#signup_url{}, z:context()) -> Result when
     Result :: {ok, Url :: binary()}
@@ -583,9 +647,12 @@ Return:
 %% Request a signup of a new or existing user. Arguments are similar to #signup_url{}
 %% Type: first
 %% Returns {ok, UserId} or {error, Reason}
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "identity_and_accounts", "create"]
+}).
 -doc("
-Request a signup of a new or existing user. Arguments are similar to #signup\\_url\\{\\} Returns \\{ok, UserId\\} or
-\\{error, Reason\\}
+Request a signup of a new or existing user. Arguments are similar to #signup_url{} Returns {ok, UserId} or
+{error, Reason}
 
 Type:
 
@@ -597,8 +664,8 @@ Return:
 
 *   id: `m_rsc:resource_id()|undefined`
 *   props: `map`
-*   signup\\_props: `list`
-*   request\\_confirm: `boolean`
+*   signup_props: `list`
+*   request_confirm: `boolean`
 ").
 -callback observe_signup(#signup{}, z:context()) -> Result when
     Result :: {ok, UserId :: m_rsc:resource_id()}
@@ -614,8 +681,11 @@ Return:
 %% Signup failed, give the error page URL. Return {ok, Url} or undefined.
 %% Reason is returned by the signup handler for the particular signup method (username, facebook etc)
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "identity_and_accounts", "create"]
+}).
 -doc("
-Signup failed, give the error page URL. Return \\{ok, Url\\} or undefined. Reason is returned by the signup handler for
+Signup failed, give the error page URL. Return {ok, Url} or undefined. Reason is returned by the signup handler for
 the particular signup method (username, facebook etc)
 
 Type:
@@ -642,9 +712,12 @@ Return:
 %% Fold argument/result is {ok, Props, SignupProps} or {error, Reason}
 %% Type: foldl
 %% Return: ``{ok, Props, SignupProps}`` or ``{error, Reason}``
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "identity_and_accounts", "create"]
+}).
 -doc("
-signup\\_check Check if the signup can be handled, a fold over all modules. Fold argument/result is \\{ok, Props,
-SignupProps\\} or \\{error, Reason\\}
+signup_check Check if the signup can be handled, a fold over all modules. Fold argument/result is {ok, Props,
+SignupProps} or {error, Reason}
 
 Type:
 
@@ -657,7 +730,7 @@ Return:
 `#signup_check{}` properties:
 
 *   props: `map`
-*   signup\\_props: `list`
+*   signup_props: `list`
 ").
 -callback observe_signup_check(signup_check, Acc, Context) -> Result when
     Acc :: {ok, Props, SignupProps} | {error, term()},
@@ -677,6 +750,9 @@ Return:
 
 %% Signal that a user has been signed up (map, result is ignored)
 %% Type: notify_sync
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "identity_and_accounts", "create"]
+}).
 -doc("
 Signal that a user has been signed up (map, result is ignored)
 
@@ -689,9 +765,9 @@ Return:
 `#signup_done{}` properties:
 
 *   id: `m_rsc:resource()`
-*   is\\_verified: `boolean`
+*   is_verified: `boolean`
 *   props: `map`
-*   signup\\_props: `list`
+*   signup_props: `list`
 ").
 -callback observe_signup_done(#signup_done{}, z:context()) -> any().
 -callback pid_observe_signup_done(pid(), #signup_done{}, z:context()) -> any().
@@ -701,6 +777,9 @@ Return:
 
 %% Signal that a user has been confirmed. (map, result is ignored)
 %% Type: notify
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "identity_and_accounts", "create"]
+}).
 -doc("
 Signal that a user has been confirmed. (map, result is ignored)
 
@@ -722,6 +801,9 @@ Return:
 %% Fetch the page a user is redirected to after signing up with a confirmed identity
 %% Type: first
 %% Return: a URL or ``undefined``
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "identity_and_accounts", "create"]
+}).
 -doc("
 Fetch the page a user is redirected to after signing up with a confirmed identity
 
@@ -751,8 +833,11 @@ a URL or `undefined`
 %% Notification to signal an inserted comment.
 %% 'comment_id' is the id of the inserted comment, 'id' is the id of the resource commented on.
 %% Type: notify
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "comments_and_community", "create"]
+}).
 -doc("
-Notification to signal an inserted comment. ‘comment\\_id’ is the id of the inserted comment, ‘id’ is the id of
+Notification to signal an inserted comment. ‘comment_id’ is the id of the inserted comment, ‘id’ is the id of
 the resource commented on.
 
 Type:
@@ -763,7 +848,7 @@ Return:
 
 `#comment_insert{}` properties:
 
-*   comment\\_id: `integer`
+*   comment_id: `integer`
 *   id: `m_rsc:resource_id()`
 ").
 -callback observe_comment_insert(#comment_insert{}, z:context()) -> any().
@@ -773,6 +858,9 @@ Return:
 
 %% Notify that the session's language has been changed
 %% Type: notify
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "localization_and_translation", "language_code", "edit"]
+}).
 -doc("
 Notify that the session’s language has been changed
 
@@ -793,6 +881,9 @@ Return:
 
 %% Set the language of the context to a user's prefered language
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "localization_and_translation", "language_code", "edit"]
+}).
 -doc("
 Set the language of the context to a user’s prefered language
 
@@ -813,8 +904,13 @@ Return:
 
 %% Make a generated URL absolute, optionally called after url_rewrite by z_dispatcher
 %% Type: first
+-doc(#{
+    zotonic_keywords => [
+        "reference", "backend_developer", "notification", "routing_and_redirects", "dispatch_rule", "url"
+    ]
+}).
 -doc("
-Make a generated URL absolute, optionally called after url\\_rewrite by z\\_dispatcher
+Make a generated URL absolute, optionally called after url_rewrite by z_dispatcher
 
 Type:
 
@@ -826,7 +922,7 @@ Return:
 
 *   url: `unknown`
 *   dispatch: `unknown`
-*   dispatch\\_options: `unknown`
+*   dispatch_options: `unknown`
 ").
 -callback observe_url_abs(#url_abs{}, z:context()) -> URL | undefined when
     URL :: binary().
@@ -837,8 +933,13 @@ Return:
 
 %% Rewrite a URL after it has been generated using the z_dispatcher
 %% Type: foldl
+-doc(#{
+    zotonic_keywords => [
+        "reference", "backend_developer", "notification", "routing_and_redirects", "dispatch_rule", "url"
+    ]
+}).
 -doc("
-Rewrite a URL after it has been generated using the z\\_dispatcher
+Rewrite a URL after it has been generated using the z_dispatcher
 
 Type:
 
@@ -862,8 +963,11 @@ Return:
 
 %% Rewrite a URL before it will be dispatched using the z_sites_dispatcher
 %% Type: foldl
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "routing_and_redirects", "dispatch_rule"]
+}).
 -doc("
-Rewrite a URL before it will be dispatched using the z\\_sites\\_dispatcher
+Rewrite a URL before it will be dispatched using the z_sites_dispatcher
 
 Type:
 
@@ -873,7 +977,7 @@ Return:
 
 `#dispatch_rewrite{}` properties:
 
-*   is\\_dir: `boolean`
+*   is_dir: `boolean`
 *   path: `binary`
 *   host: `unknown`
 ").
@@ -897,9 +1001,12 @@ Return:
 %% Request the SSL certificates for this site. The server_name property contains the hostname used by the client.
 %% Type: first
 %% Returns either 'undefined' or a list of ssl options (type ssl:ssl_option())
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "tls_and_certificates", "configure"]
+}).
 -doc("
-Request the SSL certificates for this site. The server\\_name property contains the hostname used by the client. (first)
-Returns either ‘undefined’ or a list of ssl options (type ssl:ssl\\_option())
+Request the SSL certificates for this site. The server_name property contains the hostname used by the client. (first)
+Returns either ‘undefined’ or a list of ssl options (type ssl:ssl_option())
 
 Type:
 
@@ -909,7 +1016,7 @@ Return:
 
 `#ssl_options{}` properties:
 
-*   server\\_name: `binary`
+*   server_name: `binary`
 ").
 -callback observe_ssl_options(#ssl_options{}, z:context()) -> SSLOptions | undefined when
     SSLOptions :: {ok, list( ssl:tls_option() )}.
@@ -920,6 +1027,9 @@ Return:
 
 %% Used in the admin to fetch the possible blocks for display
 %% Type: foldl
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "content_authoring", "structured_data", "query"]
+}).
 -doc("
 Used in the admin to fetch the possible blocks for display
 
@@ -952,6 +1062,9 @@ Return:
 
 %% Used in the admin to process a submitted resource form's query args.
 %% Type: foldl
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "content_authoring", "forms", "edit"]
+}).
 -doc("
 Used in the admin to process a submitted resource form
 
@@ -964,7 +1077,7 @@ Return:
 `#admin_rscform{}` properties:
 
 *   id: `m_rsc:resource_id()`
-*   is\\_a: `list`
+*   is_a: `list`
 ").
 -callback observe_admin_rscform(#admin_rscform{}, Acc, z:context()) -> Result when
     Acc :: Props,
@@ -981,6 +1094,9 @@ Return:
 %% type #menu_item{}, as defined in mod_menu.hrl
 %% Type: foldl
 %% Return: list of admin menu items
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "navigation", "module", "query"]
+}).
 -doc("
 Used for fetching the menu in the admin.
 
@@ -1021,7 +1137,7 @@ observe_admin_menu(#admin_menu{}, Acc, _Context) ->
 ].
 ```
 
-The default submenu names are admin\\_content, admin\\_structure, admin\\_modules, admin\\_auth and admin\\_system, but
+The default submenu names are admin_content, admin_structure, admin_modules, admin_auth and admin_system, but
 you are free to add your own submenus.
 ").
 -callback observe_admin_menu(#admin_menu{}, Acc, z:context()) -> Result when
@@ -1037,6 +1153,9 @@ you are free to add your own submenus.
 
 %% Fetch the menu id belonging to a certain resource.
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "navigation", "resource", "query"]
+}).
 -doc("
 Fetch the menu id belonging to a certain resource
 
@@ -1059,10 +1178,13 @@ Return:
 %% Used when outputting a rendered HTML tree.
 %% Folded accumulator is: { MixedHtml, Context }
 %% Type: foldl
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "html", "render"]
+}).
 -doc("
 Fold for mapping non-iolist output to iolist values.
 
-Used when outputting a rendered HTML tree. Folded accumulator is: \\{ MixedHtml, Context \\}
+Used when outputting a rendered HTML tree. Folded accumulator is: { MixedHtml, Context }
 
 Type:
 
@@ -1091,6 +1213,9 @@ Return:
 %% of patterns matching this activity.  These patterns are then used to find interested
 %% subscribers.
 %% Type: map
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "messaging_and_pubsub", "send_and_receive"]
+}).
 -doc("
 An activity in Zotonic. When this is handled as a notification then return a list of patterns matching this activity.
 These patterns are then used to find interested subscribers.
@@ -1104,7 +1229,7 @@ Return:
 `#activity{}` properties:
 
 *   version: `pos_integer`
-*   posted\\_time: `unknown`
+*   posted_time: `unknown`
 *   actor: `unknown`
 *   verb: `atom`
 *   object: `unknown`
@@ -1120,9 +1245,12 @@ Return:
 %% Push a list of activities via a 'channel' (eg 'email') to a recipient.
 %% The activities are a list of #activity{} records.
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "messaging_and_pubsub", "send_and_receive"]
+}).
 -doc("
 Push a list of activities via a ‘channel’ (eg ‘email’) to a recipient. The activities are a list of
-#activity\\{\\} records.
+#activity{} records.
 
 Type:
 
@@ -1132,7 +1260,7 @@ Return:
 
 `#activity_send{}` properties:
 
-*   recipient\\_id: `unknown`
+*   recipient_id: `unknown`
 *   channel: `unknown`
 *   queue: `unknown`
 *   activities: `list`
@@ -1144,6 +1272,9 @@ Return:
 
 %% Notification sent to a site when e-mail for that site is received
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "email_receiving", "send_and_receive"]
+}).
 -doc("
 Notification sent to a site when e-mail for that site is received
 
@@ -1163,8 +1294,8 @@ Return:
 *   reference: `binary`
 *   email: `record`
 *   headers: `list`
-*   is\\_bulk: `boolean`
-*   is\\_auto: `boolean`
+*   is_bulk: `boolean`
+*   is_auto: `boolean`
 *   decoded: `unknown`
 *   raw: `unknown`
 ").
@@ -1192,6 +1323,9 @@ Return:
 
 %% Check if an email address is blocked
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "email_delivery", "boolean", "validate"]
+}).
 -doc("
 Check if an email address is blocked
 
@@ -1213,6 +1347,9 @@ Return:
 %% Check if an email address is safe to send email to. The email address is not blocked
 %% and is not marked as bouncing.
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "email_delivery", "boolean", "validate"]
+}).
 -doc("
 Check if an email address is safe to send email to. The email address is not blocked and is not marked as bouncing.
 
@@ -1233,6 +1370,9 @@ Return:
 
 %% Email status notification, sent when the validity of an email recipient changes
 %% Type: notify
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "email_delivery", "monitor"]
+}).
 -doc("
 Email status notification, sent when the validity of an email recipient changes
 
@@ -1245,9 +1385,9 @@ Return:
 `#email_status{}` properties:
 
 *   recipient: `binary`
-*   is\\_valid: `boolean`
-*   is\\_final: `boolean`
-*   is\\_manual: `boolean`
+*   is_valid: `boolean`
+*   is_final: `boolean`
+*   is_manual: `boolean`
 ").
 -callback observe_email_status(#email_status{}, z:context()) -> any().
 -callback pid_observe_email_status(pid(), #email_status{}, z:context()) -> any().
@@ -1258,10 +1398,13 @@ Return:
 %% the message_nr is unknown the it is set to 'undefined'. This can happen if it is a "late bounce".
 %% If the recipient is defined then the Context is the depickled z_email:send/2 context.
 %% Type: notify
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "email_delivery", "monitor"]
+}).
 -doc("
-Bounced e-mail notification. The recipient is the e-mail that is bouncing. When the the message\\_nr is unknown the it
+Bounced e-mail notification. The recipient is the e-mail that is bouncing. When the the message_nr is unknown the it
 is set to ‘undefined’. This can happen if it is a “late bounce”. If the recipient is defined then the Context is
-the depickled z\\_email:send/2 context.
+the depickled z_email:send/2 context.
 
 Type:
 
@@ -1271,7 +1414,7 @@ Return:
 
 `#email_bounced{}` properties:
 
-*   message\\_nr: `binary|undefined`
+*   message_nr: `binary|undefined`
 *   recipient: `binary|undefined`
 ").
 -callback observe_email_bounced(#email_bounced{}, z:context()) -> any().
@@ -1282,8 +1425,11 @@ Return:
 %% Notify that we could send an e-mail (there might be a bounce later...)
 %% The Context is the depickled z_email:send/2 context.
 %% Type: notify
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "email_delivery", "monitor"]
+}).
 -doc("
-Notify that we could NOT send an e-mail (there might be a bounce later...) The Context is the depickled z\\_email:send/2 context.
+Notify that we could NOT send an e-mail (there might be a bounce later...) The Context is the depickled z_email:send/2 context.
 
 Type:
 
@@ -1293,9 +1439,9 @@ Return:
 
 `#email_sent{}` properties:
 
-*   message\\_nr: `binary`
+*   message_nr: `binary`
 *   recipient: `binary`
-*   is\\_final: `boolean`
+*   is_final: `boolean`
 ").
 -callback observe_email_sent(#email_sent{}, z:context()) -> any().
 -callback pid_observe_email_sent(pid(), #email_sent{}, z:context()) -> any().
@@ -1305,8 +1451,11 @@ Return:
 %% Notify that we could NOT send an e-mail (there might be a bounce later...)
 %% The Context is the depickled z_email:send/2 context.
 %% Type: notify
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "email_delivery", "monitor"]
+}).
 -doc("
-Notify that we could NOT send an e-mail (there might be a bounce later...) The Context is the depickled z\\_email:send/2 context.
+Notify that we could NOT send an e-mail (there might be a bounce later...) The Context is the depickled z_email:send/2 context.
 
 Type:
 
@@ -1316,11 +1465,11 @@ Return:
 
 `#email_failed{}` properties:
 
-*   message\\_nr: `binary`
+*   message_nr: `binary`
 *   recipient: `binary`
-*   is\\_final: `boolean`
+*   is_final: `boolean`
 *   reason: `bounce|retry|illegal_address|smtphost|sender_disabled|error`
-*   retry\\_ct: `non_neg_integer|undefined`
+*   retry_ct: `non_neg_integer|undefined`
 *   status: `binary|tuple|undefined`
 ").
 -callback observe_email_failed(#email_failed{}, z:context()) -> any().
@@ -1332,6 +1481,11 @@ Return:
 %% email encoding.
 %% Type: first
 %% Return: ``list()`` options for the DKIM signature
+-doc(#{
+    zotonic_keywords => [
+        "reference", "backend_developer", "notification", "email_delivery", "send_and_receive", "dkim"
+    ]
+}).
 -doc("
 Return the options for the DKIM signature on outgoing emails. Called during email encoding.
 
@@ -1365,6 +1519,9 @@ Return:
 %%         ``smtp`` use the built-in smtp server; or
 %%         ``{error, Reason::atom(), {FailureType, Host, Message}}`` when FailureType
 %%         is one of ``permanent_failure`` or ``temporary_failure``.
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "email_delivery", "send_and_receive"]
+}).
 -doc("
 Add a handler for receiving e-mail notifications
 
@@ -1378,7 +1535,7 @@ Return:
 
 `#email_send_encoded{}` properties:
 
-*   message\\_nr: `binary`
+*   message_nr: `binary`
 *   from: `binary`
 *   to: `binary`
 *   encoded: `binary`
@@ -1412,6 +1569,9 @@ Return:
 %% Add a handler for receiving e-mail notifications
 %% Type: first
 %% Return: ``{ok, LocalFrom}``, the unique localpart of an e-mail address on this server.
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "email_delivery", "send_and_receive"]
+}).
 -doc("
 Add a handler for receiving e-mail notifications
 
@@ -1426,8 +1586,8 @@ Return:
 `#email_add_handler{}` properties:
 
 *   notification: `unknown`
-*   user\\_id: `unknown`
-*   resource\\_id: `unknown`
+*   user_id: `unknown`
+*   resource_id: `unknown`
 ").
 -callback observe_email_add_handler(#email_add_handler{}, z:context()) -> Result when
     Result :: {ok, LocalForm :: binary()}
@@ -1438,6 +1598,9 @@ Return:
 
 -optional_callbacks([ observe_email_add_handler/2, pid_observe_email_add_handler/3 ]).
 
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "email_delivery", "send_and_receive"]
+}).
 -doc("
 Add a handler for receiving e-mail notifications
 
@@ -1452,8 +1615,8 @@ Return:
 `#email_ensure_handler{}` properties:
 
 *   notification: `unknown`
-*   user\\_id: `unknown`
-*   resource\\_id: `unknown`
+*   user_id: `unknown`
+*   resource_id: `unknown`
 ").
 -callback observe_email_ensure_handler(#email_ensure_handler{}, z:context()) -> Result when
     Result :: {ok, LocalForm :: binary()}
@@ -1466,6 +1629,9 @@ Return:
 
 %% Drop an e-mail handler for a user/resource id. (notify).
 %% The notification, user and resource should be the same as when the handler was registered.
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "email_delivery", "send_and_receive"]
+}).
 -doc("
 Drop an e-mail handler for a user/resource id. (notify). The notification, user and resource should be the same as when
 the handler was registered.
@@ -1479,8 +1645,8 @@ Return:
 `#email_drop_handler{}` properties:
 
 *   notification: `unknown`
-*   user\\_id: `unknown`
-*   resource\\_id: `unknown`
+*   user_id: `unknown`
+*   resource_id: `unknown`
 ").
 -callback observe_email_drop_handler(#email_drop_handler{}, z:context()) -> any().
 -callback pid_observe_email_drop_handler(pid(), #email_drop_handler{}, z:context()) -> any().
@@ -1489,8 +1655,11 @@ Return:
 
 %% Send a page to a mailinglist (notify)
 %% Use {single_test_address, Email} when sending to a specific e-mail address.
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "mailing_lists", "send_and_receive"]
+}).
 -doc("
-Send a page to a mailinglist (notify) Use \\{single\\_test\\_address, Email\\} when sending to a specific e-mail address.
+Send a page to a mailinglist (notify) Use {single_test_address, Email} when sending to a specific e-mail address.
 
 Type:
 
@@ -1500,9 +1669,9 @@ Return:
 
 `#mailinglist_mailing{}` properties:
 
-*   list\\_id: `union`
+*   list_id: `union`
 *   email: `union`
-*   page\\_id: `m_rsc:resource()`
+*   page_id: `m_rsc:resource()`
 *   options: `list`
 ").
 -callback observe_mailinglist_mailing(#mailinglist_mailing{}, z:context()) -> any().
@@ -1515,9 +1684,12 @@ Return:
 %% The recipient is either a recipient-id or a recipient props.
 %% 'what' is send_welcome, send_confirm, send_goobye or silent.
 %% Type: notify
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "mailing_lists", "send_and_receive"]
+}).
 -doc("
 Send a welcome or goodbye message to the given recipient. The recipient is either a recipient-id or a recipient props.
-‘what’ is send\\_welcome, send\\_confirm, send\\_goobye or silent.
+‘what’ is send_welcome, send_confirm, send_goobye or silent.
 
 Type:
 
@@ -1528,7 +1700,7 @@ Return:
 `#mailinglist_message{}` properties:
 
 *   what: `send_welcome|send_confirm|send_goodbye|silent`
-*   list\\_id: `m_rsc:resource()`
+*   list_id: `m_rsc:resource()`
 *   recipient: `proplists:proplist()|integer`
 ").
 -callback observe_mailinglist_message(#mailinglist_message{}, z:context()) -> any().
@@ -1538,6 +1710,9 @@ Return:
 
 %% Save (and update) the complete category hierarchy
 %% Type: notify
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "categorization", "category", "edit"]
+}).
 -doc("
 Save (and update) the complete category hierarchy
 
@@ -1558,6 +1733,9 @@ Return:
 
 %% Save the menu tree of a menu resource
 %% Type: notify
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "navigation", "collection", "edit"]
+}).
 -doc("
 Save the menu tree of a menu resource
 
@@ -1579,8 +1757,11 @@ Return:
 
 %% Signal that the hierarchy underneath a resource has been changed by mod_menu
 %% Type: notify
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "navigation", "resource", "edit"]
+}).
 -doc("
-Signal that the hierarchy underneath a resource has been changed by mod\\_menu
+Signal that the hierarchy underneath a resource has been changed by mod_menu
 
 Type:
 
@@ -1590,10 +1771,10 @@ Return:
 
 `#hierarchy_updated{}` properties:
 
-*   root\\_id: `binary|integer`
+*   root_id: `binary|integer`
 *   predicate: `atom`
-*   inserted\\_ids: `list`
-*   deleted\\_ids: `list`
+*   inserted_ids: `list`
+*   deleted_ids: `list`
 ").
 -callback observe_hierarchy_updated(#hierarchy_updated{}, z:context()) -> any().
 -callback pid_observe_hierarchy_updated(pid(), #hierarchy_updated{}, z:context()) -> any().
@@ -1603,6 +1784,9 @@ Return:
 %% Resource is read, opportunity to add computed fields
 %% Used in a foldr with the read properties as accumulator.
 %% Type: foldr
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "content_management", "resource", "query"]
+}).
 -doc("
 Resource is read, opportunity to add computed fields Used in a foldr with the read properties as accumulator.
 
@@ -1629,6 +1813,9 @@ Return:
 %% This notification is part of the delete transaction, it's purpose is to clean up
 %% associated data.
 %% Type: notify
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "content_management", "resource", "edit"]
+}).
 -doc("
 Resource will be deleted. This notification is part of the delete transaction, it’s purpose is to clean up associated data.
 
@@ -1641,7 +1828,7 @@ Return:
 `#rsc_delete{}` properties:
 
 *   id: `m_rsc:resource_id()`
-*   is\\_a: `list`
+*   is_a: `list`
 ").
 -callback observe_rsc_delete(#rsc_delete{}, z:context()) -> any().
 -callback pid_observe_rsc_delete(pid(), #rsc_delete{}, z:context()) -> any().
@@ -1652,10 +1839,13 @@ Return:
 %% the properties in the insert request. Use with care.  The props are the properties of
 %% the later insert, after escaping/filtering but before the #rsc_update{} notification below.
 %% Type: foldr
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "content_management", "resource", "create"]
+}).
 -doc("
 Foldr for a resource insert, these are the initial properties and will overrule the properties in the insert request.
 Use with care. The props are the properties of the later insert, after escaping/filtering but before the
-#rsc\\_update\\{\\} notification below.
+#rsc_update{} notification below.
 
 Type:
 
@@ -1681,20 +1871,23 @@ proplist accumulator
 %% Map to signal merging two resources. Move any information from the loser to the
 %% winner. The loser will be deleted.
 %% Type: notify_sync
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "content_management", "resource", "edit"]
+}).
 -doc("
 Map to signal merging two resources. Move any information from the loser to the winner. The loser will be deleted.
 
 Type:
 
-[notify\\_sync](/id/doc_developerguide_notifications#notification-notify-sync)
+[notify_sync](/id/doc_developerguide_notifications#notification-notify-sync)
 
 Return:
 
 `#rsc_merge{}` properties:
 
-*   winner\\_id: `m_rsc:resource_id()`
-*   loser\\_id: `m_rsc:resource_id()`
-*   is\\_merge\\_trans: `boolean`
+*   winner_id: `m_rsc:resource_id()`
+*   loser_id: `m_rsc:resource_id()`
+*   is_merge_trans: `boolean`
 ").
 -callback observe_rsc_merge(#rsc_merge{}, z:context()) -> any().
 -callback pid_observe_rsc_merge(pid(), #rsc_merge{}, z:context()) -> any().
@@ -1708,11 +1901,14 @@ Return:
 %% and sanitization. The folded value is ``{ok, UpdateProps}`` for the update itself.
 %% Type: foldr
 %% Return: ``{ok, UpdateProps}`` or ``{error, term()}``
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "content_management", "resource", "edit"]
+}).
 -doc("
 An updated resource is about to be persisted. Observe this notification to change the resource properties before they
 are persisted.
 
-The props are the resource’s props \\_before\\_ the update, but \\_after\\_ filtering and sanitization. The folded
+The props are the resource’s props _before_ the update, but _after_ filtering and sanitization. The folded
 value is `{ok, UpdateProps}` for the update itself.
 
 Type:
@@ -1788,6 +1984,9 @@ observe_rsc_update(#rsc_update{action = insert, id = Id}, {error, _} = Error, Co
 %% execute follow-up actions for a resource update.
 %% Type: notify
 %% Return: return value is ignored
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "content_management", "resource", "edit"]
+}).
 -doc("
 An updated resource has just been persisted. Observe this notification to execute follow-up actions for a resource update.
 
@@ -1803,10 +2002,10 @@ return value is ignored
 
 *   action: `insert|update|delete`
 *   id: `m_rsc:resource_id()`
-*   pre\\_is\\_a: `list`
-*   post\\_is\\_a: `list`
-*   pre\\_props: `m_rsc:props()`
-*   post\\_props: `m_rsc:props()`
+*   pre_is_a: `list`
+*   post_is_a: `list`
+*   pre_props: `m_rsc:props()`
+*   post_props: `m_rsc:props()`
 
 `pre_is_a`
 
@@ -1854,6 +2053,9 @@ observe_rsc_update_done(#rsc_update_done{}, _Context) ->
 %% Upload and replace the resource with the given data. The data is in the given format.
 %% Type: first
 %% Return: {ok, Id} or {error, Reason}, return {error, badarg} when the data is corrupt.
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "media_management", "resource", "import"]
+}).
 -doc("
 Upload and replace the resource with the given data. The data is in the given format.
 
@@ -1863,7 +2065,7 @@ Type:
 
 Return:
 
-\\{ok, Id\\} or \\{error, Reason\\}, return \\{error, badarg\\} when the data is corrupt.
+{ok, Id} or {error, Reason}, return {error, badarg} when the data is corrupt.
 
 `#rsc_upload{}` properties:
 
@@ -1893,11 +2095,14 @@ Return:
 %% table. If you define the pivot table using ``z_pivot_rsc:define_custom_pivot/3`` then
 %% this column and foreign key constraint are automatically added.
 %% Type: map
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "search_and_discovery", "index"]
+}).
 -doc("
 Add custom pivot fields to a resource’s search index (map) Result is a single tuple or list of tuples `{pivotname,
 props}`, where “pivotname” is the pivot defined in a call to `z_pivot_rsc:define_custom_pivot/3` or a table with
 created using a SQL command during (eg.) in a module `manage_schema/2` call. The name of the table is
-`pivot_<pivotname\\>`. The `props` is either a property list or a map with column/value pairs.
+`pivot_<pivotname>`. The `props` is either a property list or a map with column/value pairs.
 
 The table MUST have an `id` column, with a foreign key constraint to the `rsc` table. If you define the pivot table
 using `z_pivot_rsc:define_custom_pivot/3` then this column and foreign key constraint are automatically added.
@@ -1935,6 +2140,9 @@ Return:
 
 %% Fold over the resource props map to extend/remove data to be pivoted
 %% Type: foldl
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "search_and_discovery", "index"]
+}).
 -doc("
 Fold over the resource props map to extend/remove data to be pivoted
 
@@ -1959,8 +2167,11 @@ Return:
 
 %% Pivot just before a m_rsc_update update. Used to pivot fields before the pivot itself.
 %% Type: foldr
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "search_and_discovery", "index"]
+}).
 -doc("
-Pivot just before a m\\_rsc\\_update update. Used to pivot fields before the pivot itself.
+Pivot just before a m_rsc_update update. Used to pivot fields before the pivot itself.
 
 Type:
 
@@ -1971,7 +2182,7 @@ Return:
 `#pivot_update{}` properties:
 
 *   id: `m_rsc:resource_id()`
-*   raw\\_props: `m_rsc:props()`
+*   raw_props: `m_rsc:props()`
 ").
 -callback observe_pivot_update(#pivot_update{}, Acc, z:context()) -> Result when
     Acc :: m_rsc:props(),
@@ -1986,6 +2197,9 @@ Return:
 %% The rsc contains all rsc properties for this resource, including pivot properties.
 %% Fold with a map containing the pivot fields.
 %% Type: foldl
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "search_and_discovery", "index"]
+}).
 -doc("
 Foldr to change or add pivot fields for the main pivot table. The rsc contains all rsc properties for this resource,
 including pivot properties. Fold with a map containing the pivot fields.
@@ -1999,7 +2213,7 @@ Return:
 `#pivot_fields{}` properties:
 
 *   id: `m_rsc:resource_id()`
-*   raw\\_props: `m_rsc:props()`
+*   raw_props: `m_rsc:props()`
 ").
 -callback observe_pivot_fields(#pivot_fields{}, Acc, z:context()) -> Result when
     Acc :: #{ binary() => term() },
@@ -2012,6 +2226,9 @@ Return:
 
 %% Signal that a resource pivot has been done.
 %% Type: notify
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "search_and_discovery", "index"]
+}).
 -doc("
 Signal that a resource pivot has been done.
 
@@ -2024,7 +2241,7 @@ Return:
 `#rsc_pivot_done{}` properties:
 
 *   id: `m_rsc:resource_id()`
-*   is\\_a: `list`
+*   is_a: `list`
 ").
 -callback observe_rsc_pivot_done(#rsc_pivot_done{}, z:context()) -> any().
 -callback pid_observe_rsc_pivot_done(pid(), #rsc_pivot_done{}, z:context()) -> any().
@@ -2033,6 +2250,9 @@ Return:
 
 %% Sanitize an HTML element.
 %% Type: foldl
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "html", "security"]
+}).
 -doc("
 Sanitize an HTML element.
 
@@ -2061,8 +2281,11 @@ Return:
 %% Sanitize an embed url. The hostpart is of the format: ``<<"youtube.com/v...">>``.
 %% Type: first
 %% Return: ``undefined``, ``false`` or a binary with a acceptable hostpath
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "html", "url", "security"]
+}).
 -doc("
-Sanitize an embed url. The hostpart is of the format: `<<\"youtube.com/v...\"\\>\\>`.
+Sanitize an embed url. The hostpart is of the format: `<<\"youtube.com/v...\">>`.
 
 Type:
 
@@ -2112,6 +2335,9 @@ Note the `undefined` returned if no other patterns match. This allows other modu
 %% Check if a user is the owner of a resource.
 %% ``id`` is the resource id.
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "authorization_and_access_control", "authorize"]
+}).
 -doc("
 Check if a user is the owner of a resource. `id` is the resource id.
 
@@ -2126,8 +2352,8 @@ Return:
 `#acl_is_owner{}` properties:
 
 *   id: `m_rsc:resource_id()`
-*   creator\\_id: `m_rsc:resource_id()`
-*   user\\_id: `m_rsc:resource_id()`
+*   creator_id: `m_rsc:resource_id()`
+*   user_id: `m_rsc:resource_id()`
 ").
 -callback observe_acl_is_owner(#acl_is_owner{}, z:context()) -> boolean() | undefined.
 -callback pid_observe_acl_is_owner(pid(), #acl_is_owner{}, z:context()) -> boolean() | undefined.
@@ -2140,6 +2366,9 @@ Return:
 %% interface. Defaults to ``false``.
 %% Type: first
 %% Return: ``true`` to allow the operation, ``false`` to deny it or ``undefined`` to let the next observer decide
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "authorization_and_access_control", "authorize"]
+}).
 -doc("
 Check if a user is authorized to perform an operation on a an object (some resource or module). Observe this
 notification to do complex or more fine-grained authorization checks than you can do through the ACL rules admin
@@ -2205,6 +2434,9 @@ resource’s category and content group and the user’s group).
 %% Defaults to ``true``.
 %% Type: first
 %% Return: ``true`` to grant access, ``false`` to deny it, ``undefined`` to let the next observer decide
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "authorization_and_access_control", "authorize"]
+}).
 -doc("
 Check if a user is authorizded to perform an action on a property. Defaults to `true`.
 
@@ -2229,8 +2461,11 @@ Return:
 
 %% Set the context to a typical authenticated user. Used by m_acl.erl
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "authorization_and_access_control", "authorize"]
+}).
 -doc("
-Set the context to a typical authenticated user. Used by m\\_acl.erl
+Set the context to a typical authenticated user. Used by m_acl.erl
 
 Type:
 
@@ -2249,6 +2484,9 @@ authenticated `#context{}` or `undefined`
 
 %% Initialize context with the access policy for the user.
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "authorization_and_access_control", "authenticate"]
+}).
 -doc("
 Initialize context with the access policy for the user.
 
@@ -2272,6 +2510,9 @@ updated `z:context()` or `undefined`
 
 %% Clear the associated access policy for the context.
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "authorization_and_access_control", "authenticate"]
+}).
 -doc("
 Clear the associated access policy for the context.
 
@@ -2292,6 +2533,9 @@ updated `z:context()` or `undefined`
 
 %% Return the groups for the current user.
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "authorization_and_access_control", "authorize"]
+}).
 -doc("
 Return the groups for the current user.
 
@@ -2314,6 +2558,12 @@ Return:
 
 %% Return the maximum upload size for the current user.
 %% Type: first
+-doc(#{
+    zotonic_keywords => [
+        "reference", "backend_developer", "notification",
+        "authorization_and_access_control", "file_uploads", "authorize"
+    ]
+}).
 -doc("
 Return the maximum upload size in bytes for the current user, as defined by the ACL configuration.
 
@@ -2336,6 +2586,9 @@ positive integer bytes or `undefined`
 %% by the ACL modules when fetching the list of user groups a user
 %% is member of.
 %% Type: foldl
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "authorization_and_access_control", "authorize"]
+}).
 -doc("
 Modify the list of user groups of a user. Called internally by the ACL modules when fetching the list of user groups a
 user is member of.
@@ -2366,6 +2619,9 @@ Return:
 %% by the ACL modules when fetching the list of collaboration groups a user
 %% is member of.
 %% Type: foldl
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "authorization_and_access_control", "authorize"]
+}).
 -doc("
 Modify the list of collaboration groups of a user. Called internally by the ACL modules when fetching the list of
 collaboration groups a user is member of.
@@ -2394,6 +2650,9 @@ Return:
 
 %% Confirm a user id.
 %% Type: foldl
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "authentication", "identity_and_accounts", "authenticate"]
+}).
 -doc("
 Confirm a user id.
 
@@ -2420,6 +2679,9 @@ Return:
 
 % %% A user id has been confirmed.
 % %% Type: notify
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "authentication", "identity_and_accounts", "authenticate"]
+}).
 -doc("
 A user id has been confirmed.
 
@@ -2440,6 +2702,9 @@ Return:
 
 %% First for logon of user with username, check for ratelimit, blocks etc.
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "authentication", "authenticate"]
+}).
 -doc("
 First for logon of user with username, check for ratelimit, blocks etc.
 
@@ -2449,7 +2714,7 @@ Type:
 
 Return:
 
-‘undefined’ | ok | \\{error, Reason\\}
+‘undefined’ | ok | {error, Reason}
 
 `#auth_precheck{}` properties:
 
@@ -2468,6 +2733,9 @@ Return:
 
 %% First for logon of user with username, called after successful password check.
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "authentication", "authenticate"]
+}).
 -doc("
 First for logon of user with username, called after successful password check.
 
@@ -2477,13 +2745,13 @@ Type:
 
 Return:
 
-‘undefined’ | ok | \\{error, Reason\\}
+‘undefined’ | ok | {error, Reason}
 
 `#auth_postcheck{}` properties:
 
 *   service: `atom`
 *   id: `m_rsc:resource_id()`
-*   query\\_args: `map`
+*   query_args: `map`
 ").
 -callback observe_auth_postcheck(#auth_postcheck{}, z:context()) -> Result when
     Result :: ok
@@ -2498,12 +2766,15 @@ Return:
 
 %% Notify after logon of user with username, communicates valid or invalid password
 %% Type: notify_sync
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "authentication", "authenticate"]
+}).
 -doc("
 Notify after logon of user with username, communicates valid or invalid password
 
 Type:
 
-[notify\\_sync](/id/doc_developerguide_notifications#notification-notify-sync)
+[notify_sync](/id/doc_developerguide_notifications#notification-notify-sync)
 
 Return:
 
@@ -2511,7 +2782,7 @@ Return:
 
 *   id: `undefined|m_rsc:resource_id()`
 *   username: `binary`
-*   is\\_accepted: `boolean`
+*   is_accepted: `boolean`
 ").
 -callback observe_auth_checked(#auth_checked{}, z:context()) -> any().
 -callback pid_observe_auth_checked(pid(), #auth_checked{}, z:context()) -> any().
@@ -2520,8 +2791,11 @@ Return:
 
 %% First to check for password reset forms, return undefined, ok, or {error, Reason}.
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "authentication", "authenticate"]
+}).
 -doc("
-First to check for password reset forms, return undefined, ok, or \\{error, Reason\\}.
+First to check for password reset forms, return undefined, ok, or {error, Reason}.
 
 Type:
 
@@ -2546,8 +2820,11 @@ Return:
 
 %% First to validate a password. Return {ok, RscId} or {error, Reason}.
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "authentication", "authenticate"]
+}).
 -doc("
-First to validate a password. Return \\{ok, RscId\\} or \\{error, Reason\\}.
+First to validate a password. Return {ok, RscId} or {error, Reason}.
 
 Type:
 
@@ -2573,6 +2850,9 @@ Return:
 
 %% User logs on. Add user-related properties to the logon request context.
 %% Type: foldl
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "authentication", "authenticate"]
+}).
 -doc("
 User logs on. Add user-related properties to the logon request context.
 
@@ -2599,6 +2879,9 @@ Return:
 
 %% User is about to log off. Modify (if needed) the logoff request context.
 %% Type: foldl
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "authentication", "authenticate"]
+}).
 -doc("
 User is about to log off. Modify (if needed) the logoff request context.
 
@@ -2626,6 +2909,9 @@ Return:
 %% Authentication against some (external or internal) service was validated
 %% Type: first
 %% TODO: check when Context return is expected and when RscId
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "authentication", "authenticate"]
+}).
 -doc("
 Authentication against some (external or internal) service was validated
 
@@ -2638,13 +2924,13 @@ Return:
 `#auth_validated{}` properties:
 
 *   service: `atom`
-*   service\\_uid: `binary`
-*   service\\_props: `map`
+*   service_uid: `binary`
+*   service_props: `map`
 *   unknown: `unknown`
 *   identities: `list`
-*   ensure\\_username\\_pw: `boolean`
-*   is\\_connect: `boolean`
-*   is\\_signup\\_confirmed: `boolean`
+*   ensure_username_pw: `boolean`
+*   is_connect: `boolean`
+*   is_signup_confirmed: `boolean`
 ").
 -callback observe_auth_validated(#auth_validated{}, z:context()) -> Result when
     Result :: {ok, m_rsc:resource_id()}
@@ -2662,6 +2948,9 @@ Return:
 %% Update the given (accumulator) authentication options with the request options.
 %%      Note that the request options are from the client and are unsafe.
 %% Type: foldl
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "authentication", "structured_data", "transform"]
+}).
 -doc("
 Update the given (accumulator) authentication options with the request options.
 
@@ -2677,7 +2966,7 @@ Return:
 
 `#auth_options_update{}` properties:
 
-*   request\\_options: `map`
+*   request_options: `map`
 ").
 -callback observe_auth_options_update(#auth_options_update{}, Acc, z:context()) -> Result when
     Acc :: map(),
@@ -2693,10 +2982,13 @@ Return:
 %%      a z.auth cookie for the given user. The client will redirect to the Url.
 %% Type: first
 %% Return: ``ok | {error, term()}``
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "authentication", "user_interface_and_interaction", "javascript"]
+}).
 -doc("
 Send a request to the client to login a user. The zotonic.auth.worker.js will
 
-send a request to controller\\_authentication to exchange the one time token with a z.auth cookie for the given user.
+send a request to controller_authentication to exchange the one time token with a z.auth cookie for the given user.
 The client will redirect to the Url.
 
 Type:
@@ -2727,10 +3019,13 @@ Return:
 %% Send a request to the client to switch users. The zotonic.auth.worker.js will
 %%      send a request to controller_authentication to perform the switch.
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "authentication", "user_interface_and_interaction", "javascript"]
+}).
 -doc("
 Send a request to the client to switch users. The zotonic.auth.worker.js will
 
-send a request to controller\\_authentication to perform the switch.
+send a request to controller_authentication to perform the switch.
 
 Type:
 
@@ -2742,7 +3037,7 @@ Return:
 
 `#auth_client_switch_user{}` properties:
 
-*   user\\_id: `m_rsc:resource_id()`
+*   user_id: `m_rsc:resource_id()`
 ").
 -callback observe_auth_client_switch_user(#auth_client_switch_user{}, z:context()) -> Result when
     Result :: ok
@@ -2760,9 +3055,12 @@ Return:
 %% active user of the system. Defaults to [ username_pw ].  In the future more types
 %% can be requested, think of 'contact' - to be able to contact someone.
 %% Type: foldl
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "authentication", "identity_and_accounts", "query"]
+}).
 -doc("
-Return the list of identity types that allow somebody to logon and become an active user of the system. Defaults to \\[
-username\\_pw \\]. In the future more types can be requested, think of ‘contact’ - to be able to contact someone.
+Return the list of identity types that allow somebody to logon and become an active user of the system. Defaults to [
+username_pw ]. In the future more types can be requested, think of ‘contact’ - to be able to contact someone.
 
 Type:
 
@@ -2790,10 +3088,13 @@ Return:
 %%      * refresh - called after init and on mqtt context updates
 %%      * auth_status - called on every authentication status poll
 %% Type: foldl
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "http", "structured_data", "transform"]
+}).
 -doc("
 Refresh the context or request process for the given request or action
 
-Called for every request that is not anonymous and before every MQTT relay from the client. Example: mod\\_development
+Called for every request that is not anonymous and before every MQTT relay from the client. Example: mod_development
 uses this to set flags in the process dictionary.
 
 Type:
@@ -2823,10 +3124,13 @@ Return:
 %%      the client.  Example: mod_development uses this to set flags in the process
 %%      dictionary.
 %% Type: foldl
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "http", "structured_data", "transform"]
+}).
 -doc("
 Refresh the context or request process for the given request or action
 
-Called for every request that is not anonymous and before every MQTT relay from the client. Example: mod\\_development
+Called for every request that is not anonymous and before every MQTT relay from the client. Example: mod_development
 uses this to set flags in the process dictionary.
 
 Type:
@@ -2839,7 +3143,7 @@ Return:
 
 `#session_context{}` properties:
 
-*   request\\_type: `http|mqtt`
+*   request_type: `http|mqtt`
 *   payload: `union`
 ").
 -callback observe_session_context(#session_context{}, Acc, z:context()) -> Result when
@@ -2856,8 +3160,11 @@ Return:
 %%      This is the moment to filter any illegal arguments or change query
 %%      arguments.
 %% Type: foldl
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "http", "validate"]
+}).
 -doc("
-Called just before validation of all query arguments by z\\_validation.
+Called just before validation of all query arguments by z_validation.
 
 This is the moment to filter any illegal arguments or change query arguments.
 
@@ -2886,6 +3193,9 @@ Return:
 %% Type: first
 %% Return ``true``, ``false`` or ``undefined``. If ``undefined`` is returned,
 %% the user is considered enabled if the user resource is published.
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "authorization_and_access_control", "boolean", "authorize"]
+}).
 -doc("
 Check if a user is enabled. Enabled users are allowed to log in. Return `true`, `false` or `undefined`. If `undefined`
 is returned, the user is considered enabled if the user resource is published.
@@ -2907,6 +3217,9 @@ Return:
 
 %% Set #context fields depending on the user and/or the preferences of the user.
 %% Type: foldl
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "authorization_and_access_control", "structured_data", "transform"]
+}).
 -doc("
 Set #context fields depending on the user and/or the preferences of the user.
 
@@ -2932,6 +3245,11 @@ Return:
 %% Fetch the url of a resource's html representation
 %% Type: first
 %% Return: ``{ok, Url}`` or ``undefined``
+-doc(#{
+    zotonic_keywords => [
+        "reference", "backend_developer", "notification", "routing_and_redirects", "dispatch_rule", "url"
+    ]
+}).
 -doc("
 Fetch the url of a resource’s html representation
 
@@ -2946,7 +3264,7 @@ Return:
 `#page_url{}` properties:
 
 *   id: `m_rsc:resource_id()`
-*   is\\_a: `list`
+*   is_a: `list`
 ").
 -callback observe_page_url(#page_url{}, z:context()) -> {ok, binary()} | undefined.
 -callback pid_observe_page_url(pid(), #page_url{}, z:context()) -> {ok, binary()} | undefined.
@@ -2955,6 +3273,9 @@ Return:
 
 %% Handle custom named search queries in your function.
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "search_and_discovery", "query"]
+}).
 -doc("
 Map a custom search term to a `#search_sql_term{}` record.
 
@@ -2974,9 +3295,6 @@ Return:
 *   unknown: `unknown`
 *   search: `union`
 
-See also
-
-[Custom search](/id/doc_cookbook_custom_search#cookbook-custom-search), [Search](/id/doc_developerguide_search#guide-datamodel-query-model)
 ").
 -callback observe_search_query(#search_query{}, z:context()) -> Result when
     Result :: #search_sql{}
@@ -2993,6 +3311,9 @@ See also
 
 %% Map a custom search term to a ``#search_sql_term{}`` record.
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "search_and_discovery", "query"]
+}).
 -doc("
 Map a custom search term to a `#search_sql_term{}` record.
 
@@ -3027,6 +3348,9 @@ Return:
 
 %% Normalize a text value for a search query.
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "search_and_discovery", "text", "transform"]
+}).
 -doc("
 Normalize a search value for queries and indexing.
 An example is the normalization of texts by transliteration
@@ -3056,6 +3380,9 @@ Return:
 %% Note that the Context for this notification does not have the user who
 %% created the edge.
 %% Type: notify
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "content_relationships", "edge", "edit"]
+}).
 -doc("
 An edge has been inserted. Note that the Context for this notification does not have the user who created the edge.
 
@@ -3069,10 +3396,10 @@ return value is ignored
 
 `#edge_insert{}` properties:
 
-*   subject\\_id: `m_rsc:resource()`
+*   subject_id: `m_rsc:resource()`
 *   predicate: `atom`
-*   object\\_id: `m_rsc:resource()`
-*   edge\\_id: `pos_integer`
+*   object_id: `m_rsc:resource()`
+*   edge_id: `pos_integer`
 ").
 -callback observe_edge_insert(#edge_insert{}, z:context()) -> any().
 -callback pid_observe_edge_insert(pid(), #edge_insert{}, z:context()) -> any().
@@ -3083,6 +3410,9 @@ return value is ignored
 %% Note that the Context for this notification does not have the user who
 %% deleted the edge.
 %% Type: notify
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "content_relationships", "edge", "edit"]
+}).
 -doc("
 An edge has been deleted Note that the Context for this notification does not have the user who deleted the edge.
 
@@ -3096,10 +3426,10 @@ return value is ignored
 
 `#edge_delete{}` properties:
 
-*   subject\\_id: `m_rsc:resource()`
+*   subject_id: `m_rsc:resource()`
 *   predicate: `atom`
-*   object\\_id: `m_rsc:resource()`
-*   edge\\_id: `pos_integer`
+*   object_id: `m_rsc:resource()`
+*   edge_id: `pos_integer`
 
 
 
@@ -3136,6 +3466,9 @@ observe_edge_delete(#edge_delete{edge_id = Id}, Context) ->
 %% Note that the Context for this notification does not have the user who
 %% updated the edge.
 %% Type: notify
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "content_relationships", "edge", "edit"]
+}).
 -doc("
 An edge has been updated Note that the Context for this notification does not have the user who updated the edge.
 
@@ -3149,10 +3482,10 @@ return value is ignored
 
 `#edge_update{}` properties:
 
-*   subject\\_id: `m_rsc:resource()`
+*   subject_id: `m_rsc:resource()`
 *   predicate: `atom`
-*   object\\_id: `m_rsc:resource()`
-*   edge\\_id: `pos_integer`
+*   object_id: `m_rsc:resource()`
+*   edge_id: `pos_integer`
 ").
 -callback observe_edge_update(#edge_update{}, z:context()) -> any().
 -callback pid_observe_edge_update(pid(), #edge_update{}, z:context()) -> any().
@@ -3161,6 +3494,9 @@ return value is ignored
 
 %% Site configuration parameter was changed
 %% Type: notify
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "configuration", "configure"]
+}).
 -doc("
 Site configuration parameter was changed
 
@@ -3185,6 +3521,9 @@ return value is ignored
 
 % %% Site configuration parameter was changed
 % %% Type: notify
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "configuration", "configure"]
+}).
 -doc("
 Site configuration parameter was changed
 
@@ -3213,8 +3552,11 @@ return value is ignored
 %% imported resource id, or the resource id and a map with a mapping from URIs to
 %% resource ids.
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "import_and_migration", "import"]
+}).
 -doc("
-Fetch the data for an import of a resource. Returns data in the format used by m\\_rsc\\_export and m\\_rsc\\_import.
+Fetch the data for an import of a resource. Returns data in the format used by m_rsc_export and m_rsc_import.
 Either returns the JSON data, the imported resource id, or the resource id and a map with a mapping from URIs to
 resource ids.
 
@@ -3224,7 +3566,7 @@ Type:
 
 Return:
 
-\\{ok, map()\\} | \\{ok, m\\_rsc:resource\\_id()\\} | \\{ok, \\{m\\_rsc:resource\\_id(), map()\\}\\} | \\{error, term()\\} | undefined
+{ok, map()} | {ok, m_rsc:resource_id()} | {ok, {m_rsc:resource_id(), map()}} | {error, term()} | undefined
 
 `#rsc_import_fetch{}` properties:
 
@@ -3249,9 +3591,12 @@ Return:
 %% This is used by z_media_import.erl for fetching properties and medium information (map)
 %% about resources.  The metadata is the result returned by z_url_metadata.
 %% Type: map
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "media_management", "media_resource", "import"]
+}).
 -doc("
-Notification to translate or map a file after upload, before insertion into the database Used in mod\\_video to queue
-movies for conversion to mp4. You can set the post\\_insert\\_fun to something like fun(Id, Medium, Context) to receive
+Notification to translate or map a file after upload, before insertion into the database Used in mod_video to queue
+movies for conversion to mp4. You can set the post_insert_fun to something like fun(Id, Medium, Context) to receive
 the medium record as it is inserted.
 
 Type:
@@ -3265,7 +3610,7 @@ modified `#media_upload_preprocess{}`
 `#media_import{}` properties:
 
 *   url: `binary`
-*   host\\_rev: `list`
+*   host_rev: `list`
 *   mime: `binary`
 *   metadata: `tuple`
 ").
@@ -3285,9 +3630,12 @@ modified `#media_upload_preprocess{}`
 %% You can set the post_insert_fun to something like fun(Id, Medium, Context) to receive the
 %% medium record as it is inserted.
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "file_uploads", "media_resource", "transform"]
+}).
 -doc("
-Notification to translate or map a file after upload, before insertion into the database Used in mod\\_video to queue
-movies for conversion to mp4. You can set the post\\_insert\\_fun to something like fun(Id, Medium, Context) to receive
+Notification to translate or map a file after upload, before insertion into the database Used in mod_video to queue
+movies for conversion to mp4. You can set the post_insert_fun to something like fun(Id, Medium, Context) to receive
 the medium record as it is inserted.
 
 Type:
@@ -3303,9 +3651,9 @@ modified `#media_upload_preprocess{}`
 *   id: `union`
 *   mime: `binary`
 *   file: `file:filename_all()|undefined`
-*   original\\_filename: `file:filename_all()|undefined`
+*   original_filename: `file:filename_all()|undefined`
 *   medium: `z_media_identify:media_info()`
-*   post\\_insert\\_fun: `function|undefined`
+*   post_insert_fun: `function|undefined`
 ").
 -callback observe_media_upload_preprocess(#media_upload_preprocess{}, z:context()) -> Result when
     Result :: #media_upload_preprocess{}
@@ -3320,6 +3668,9 @@ modified `#media_upload_preprocess{}`
 %% This is the moment to change properties, modify the file etc.
 %% The folded accumulator is the map with updated medium properties.
 %% Type: foldl
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "file_uploads", "media_resource", "edit"]
+}).
 -doc("
 Notification that a medium file has been uploaded. This is the moment to change properties, modify the file etc. The
 folded accumulator is the map with updated medium properties.
@@ -3336,7 +3687,7 @@ modified medium properties map
 
 *   id: `m_rsc:resource_id()|insert_rsc`
 *   mime: `binary`
-*   archive\\_file: `file:filename_all()|undefined`
+*   archive_file: `file:filename_all()|undefined`
 *   options: `list`
 ").
 -callback observe_media_upload_props(#media_upload_props{}, Acc, z:context()) -> Result when
@@ -3354,6 +3705,9 @@ modified medium properties map
 %% This is the moment to change resource properties, modify the file etc.
 %% The folded accumulator is the map with updated resource properties.
 %% Type: foldl
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "file_uploads", "media_resource", "edit"]
+}).
 -doc("
 Notification that a medium file has been uploaded. This is the moment to change resource properties, modify the file
 etc. The folded accumulator is the map with updated resource properties.
@@ -3370,7 +3724,7 @@ modified resource properties map
 
 *   id: `m_rsc:resource_id()|insert_rsc`
 *   mime: `binary`
-*   archive\\_file: `unknown`
+*   archive_file: `unknown`
 *   options: `list`
 *   medium: `z_media_identify:media_info()`
 ").
@@ -3390,6 +3744,9 @@ modified resource properties map
 %% will not be imported. The handling module is responsible for sanitizing and inserting the medium
 %% record.
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "media_management", "media_resource", "import"]
+}).
 -doc("
 Notification to import a medium record from external source. This is called for non-file medium records, for example
 embedded video. If the medium record is not recognized then it will not be imported. The handling module is responsible
@@ -3422,6 +3779,9 @@ Return:
 %% Notification that a medium file has been changed (notify)
 %% The id is the resource id, medium contains the medium's property list.
 %% Type: notify
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "media_management", "media_resource", "edit"]
+}).
 -doc("
 Notification that a medium file has been changed (notify) The id is the resource id, medium contains the medium’s
 complete property map.
@@ -3446,6 +3806,9 @@ return value is ignored
 
 %% Media update done notification. action is 'insert', 'update' or 'delete'
 %% Type: notify
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "media_management", "media_resource", "edit"]
+}).
 -doc("
 Media update done notification. action is ‘insert’, ‘update’ or ‘delete’
 
@@ -3459,10 +3822,10 @@ Return:
 
 *   action: `insert|update|delete`
 *   id: `m_rsc:resource_id()`
-*   pre\\_is\\_a: `list`
-*   post\\_is\\_a: `list`
-*   pre\\_props: `map|undefined`
-*   post\\_props: `map|undefined`
+*   pre_is_a: `list`
+*   post_is_a: `list`
+*   pre_props: `map|undefined`
+*   post_props: `map|undefined`
 ").
 -callback observe_media_update_done(#media_update_done{}, z:context()) -> any().
 -callback pid_observe_media_update_done(pid(), #media_update_done{}, z:context()) -> any().
@@ -3473,6 +3836,9 @@ Return:
 %% image url generation, except if the 'original' image option is passed. The mediaclass
 %% in the options is not yet expanded.
 %% Type: foldl
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "image_management", "transform"]
+}).
 -doc("
 Modify the options for an image preview url or tag. This is called for every image url generation, except if the
 ‘original’ image option is passed. The mediaclass in the options is not yet expanded.
@@ -3507,8 +3873,11 @@ modified property list of image options
 %% be in the same order as the request. This notification is handled by modules
 %% that interface to external translation services like DeepL or Google Translate.
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "localization_and_translation", "translated_text", "api_and_integration", "send_and_receive"]
+}).
 -doc("
-Request a translation of a list of strings. The resulting translations must be in the same order as the request. This notification is handled by modules that interface to external translation services like DeepL or Google Translate. Return \\{ok, List\\} | \\{error, Reason\\} | undefined.
+Request a translation of a list of strings. The resulting translations must be in the same order as the request. This notification is handled by modules that interface to external translation services like DeepL or Google Translate. Return {ok, List} | {error, Reason} | undefined.
 
 Type:
 
@@ -3538,8 +3907,11 @@ Return:
 %% Try to detect the language of a translation. Set is_editable_only to false
 %% to detect any language, even if the language is not enabled for the site.
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "localization_and_translation", "language_code", "parse"]
+}).
 -doc("
-Try to detect the language of a translation. Set is\\_editable\\_only to false to detect any language, even if the language is not enabled for the site. Return atom() | undefined.
+Try to detect the language of a translation. Set is_editable_only to false to detect any language, even if the language is not enabled for the site. Return atom() | undefined.
 
 Type:
 
@@ -3550,7 +3922,7 @@ Return:
 `#language_detect{}` properties:
 
 *   text: `binary`
-*   is\\_editable\\_only: `boolean`
+*   is_editable_only: `boolean`
 ").
 -callback observe_language_detect(#language_detect{}, z:context()) -> Result when
     Result :: z_language:language_code()
@@ -3563,8 +3935,11 @@ Return:
 
 % %% Send a notification that the resource 'id' is added to the query query_id.
 % %% Type: notify
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "search_and_discovery", "query"]
+}).
 -doc("
-Send a notification that the resource ‘id’ is added to the query query\\_id.
+Send a notification that the resource ‘id’ is added to the query query_id.
 
 Type:
 
@@ -3576,8 +3951,8 @@ return value is ignored
 
 `#rsc_query_item{}` properties:
 
-*   query\\_id: `m_rsc:resource_id()`
-*   match\\_id: `m_rsc:resource_id()`
+*   query_id: `m_rsc:resource_id()`
+*   match_id: `m_rsc:resource_id()`
 ").
 -callback observe_rsc_query_item(#rsc_query_item{}, z:context()) -> any().
 -callback pid_observe_rsc_query_item(pid(), #rsc_query_item{}, z:context()) -> any().
@@ -3587,9 +3962,12 @@ return value is ignored
 %% Add extra javascript with the {% script %} tag. (map)
 %% Used to let modules inject extra javascript depending on the arguments of the {% script %} tag.
 %% Type: map
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "user_interface_and_interaction", "javascript", "render"]
+}).
 -doc("
-Add extra javascript with the \\{% script %\\} tag. (map) Used to let modules inject extra javascript depending on the
-arguments of the \\{% script %\\} tag. Must return an iolist()
+Add extra javascript with the {% script %} tag. (map) Used to let modules inject extra javascript depending on the
+arguments of the {% script %} tag. Must return an iolist()
 
 Type:
 
@@ -3599,7 +3977,7 @@ Return:
 
 `#scomp_script_render{}` properties:
 
-*   is\\_nostartup: `boolean`
+*   is_nostartup: `boolean`
 *   args: `list`
 ").
 -callback observe_scomp_script_render(#scomp_script_render{}, z:context()) -> iodata().
@@ -3611,9 +3989,12 @@ Return:
 %% The custom event type must be a tuple, for example:
 %% ``{% wire type={live id=myid} action={...} %}</code>``
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "user_interface_and_interaction", "javascript"]
+}).
 -doc("
 Render the javascript for a custom action event type. The custom event type must be a tuple, for example: `{% wire
-type={live id=myid} action={...} %}</code\\>` Must return \\{ok, Javascript, Context\\}
+type={live id=myid} action={...} %}</code>` Must return {ok, Javascript, Context}
 
 Type:
 
@@ -3624,11 +4005,11 @@ Return:
 `#action_event_type{}` properties:
 
 *   event: `tuple`
-*   trigger\\_id: `string`
+*   trigger_id: `string`
 *   trigger: `string`
-*   postback\\_js: `iolist`
-*   postback\\_pickled: `string|binary`
-*   action\\_js: `iolist`
+*   postback_js: `iolist`
+*   postback_pickled: `string|binary`
+*   action_js: `iolist`
 ").
 -callback observe_action_event_type(#action_event_type{}, z:context()) -> Result when
     Result :: {ok, Javascript, z:context()}
@@ -3643,6 +4024,12 @@ Return:
 
 %% Find an import definition for a CSV file by checking the filename of the to be imported file.
 %% Type: first
+-doc(#{
+    zotonic_keywords => [
+        "reference", "backend_developer", "notification",
+        "import_and_migration", "structured_data", "import"
+    ]
+}).
 -doc("
 Find an import definition for a CSV file by checking the filename of the to be imported file.
 
@@ -3676,6 +4063,11 @@ Return:
 %% Unhandled files are deleted after an hour. If the handler returns 'ok' then
 %% the file is moved from the files/processing folder to files/handled.
 %% Type: first
+-doc(#{
+    zotonic_keywords => [
+        "reference", "backend_developer", "notification", "file_uploads", "api_and_integration", "upload"
+    ]
+}).
 -doc("
 Handle a new file received in the ‘files/dropbox’ folder of a site. Unhandled files are deleted after an hour. If
 the handler returns ‘ok’ then the file is moved from the files/processing folder to files/handled. folder.
@@ -3706,6 +4098,9 @@ Return:
 %% Most interesting keys for the returned map:
 %% ``<<"mime">>``, ``<<"width">>``, ``<<"height">>``, ``<<"orientation">>``
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "media_management", "media_resource", "metadata", "parse"]
+}).
 -doc("
 Try to identify a file, returning a map with file properties.
 
@@ -3715,12 +4110,12 @@ Type:
 
 Return:
 
-map with binary keys, especially `<<\"mime\"\\>\\>`, `<<\"width\"\\>\\>`, `<<\"height\"\\>\\>`, `<<\"orientation\"\\>\\>`
+map with binary keys, especially `<<\"mime\">>`, `<<\"width\">>`, `<<\"height\">>`, `<<\"orientation\">>`
 
 `#media_identify_file{}` properties:
 
 *   filename: `file:filename_all()`
-*   original\\_filename: `binary`
+*   original_filename: `binary`
 *   extension: `binary`
 ").
 -callback observe_media_identify_file(#media_identify_file{}, z:context()) -> Result when
@@ -3736,8 +4131,11 @@ map with binary keys, especially `<<\"mime\"\\>\\>`, `<<\"width\"\\>\\>`, `<<\"h
 
 %% Try to find a filename extension for a mime type (example: ``<<".jpg">>``)
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "media_management", "identifier", "query"]
+}).
 -doc("
-Try to find a filename extension for a mime type (example: `<<\".jpg\"\\>\\>`)
+Try to find a filename extension for a mime type (example: `<<\".jpg\">>`)
 
 Type:
 
@@ -3745,7 +4143,7 @@ Type:
 
 Return:
 
-Extension (for example `<<\".png\"\\>\\>`) or `undefined`
+Extension (for example `<<\".png\">>`) or `undefined`
 
 `#media_identify_extension{}` properties:
 
@@ -3767,6 +4165,9 @@ Extension (for example `<<\".png\"\\>\\>`) or `undefined`
 %% Javascript, as it might be serialized. This could happen if the correct cookies are not yet
 %% set or if the media viewer is part of a direct DOM update.
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "media_management", "media_resource", "html", "render"]
+}).
 -doc("
 Request to generate a HTML media viewer for a resource. The HTML data can not contain any Javascript, as it might be
 serialized. This could happen if the correct cookies are not yet set or if the media viewer is part of a direct DOM update.
@@ -3799,6 +4200,9 @@ Return:
 
 %% See if there is a 'still' image preview of a media item. (eg posterframe of a movie)
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "image_management", "media_resource", "query"]
+}).
 -doc("
 See if there is a ‘still’ image preview of a media item. (eg posterframe of a movie) Return:: `{ok, ResourceId}` or `undefined`
 
@@ -3827,6 +4231,12 @@ Return:
 %% generated the media viewer HTML, as that code has the knowledge if viewing the generated code
 %% has any privacy or cookie implications.
 %% Type: first
+-doc(#{
+    zotonic_keywords => [
+        "reference", "backend_developer", "notification",
+        "media_management", "privacy_and_consent", "render", "privacy"
+    ]
+}).
 -doc("
 Optionally wrap HTML with external content so that it adheres to the cookie/privacy settings of the current site
 visitor. Typically called with a ‘first’ by the code that generated the media viewer HTML, as that code has the
@@ -3838,15 +4248,15 @@ Type:
 
 Return:
 
-\\{ok, HTML\\} or undefined
+{ok, HTML} or undefined
 
 `#media_viewer_consent{}` properties:
 
 *   id: `m_rsc:resource_id()|undefined`
 *   consent: `union`
 *   html: `iodata`
-*   viewer\\_props: `z_media_identify:media_info()`
-*   viewer\\_options: `list`
+*   viewer_props: `z_media_identify:media_info()`
+*   viewer_options: `list`
 ").
 -callback observe_media_viewer_consent(#media_viewer_consent{}, z:context()) -> Result when
     Result :: {ok, HTML}
@@ -3861,6 +4271,9 @@ Return:
 
 %% Fetch list of handlers for survey submits.
 %% Type: foldr
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "surveys", "forms", "query"]
+}).
 -doc("
 Fetch list of handlers for survey submits.
 
@@ -3891,6 +4304,9 @@ list with tuples: `[ {handler_name, TitleForDisplay}, ... ]`
 
 %% A survey has been filled in and submitted.
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "surveys", "forms", "send_and_receive"]
+}).
 -doc("
 A survey has been filled in and submitted.
 
@@ -3908,8 +4324,8 @@ Return:
 *   handler: `binary|undefined`
 *   answers: `list`
 *   missing: `list`
-*   answers\\_raw: `list`
-*   submit\\_args: `proplists:proplist()`
+*   answers_raw: `list`
+*   submit_args: `proplists:proplist()`
 ").
 -callback observe_survey_submit(#survey_submit{}, z:context()) -> Result when
     Result :: ok
@@ -3928,6 +4344,12 @@ Return:
 
 %% Check if the current user is allowed to download a survey.
 %% Type: first
+-doc(#{
+    zotonic_keywords => [
+        "reference", "backend_developer", "notification",
+        "surveys", "authorization_and_access_control", "authorize"
+    ]
+}).
 -doc("
 Check if the current user is allowed to download a survey.
 
@@ -3954,6 +4376,9 @@ Return:
 
 %% Check if a question (page block) is a submitting question.
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "surveys", "boolean", "compare"]
+}).
 -doc("
 Check if a question (page block) is a submitting question.
 
@@ -3982,6 +4407,11 @@ Return:
 %% the text displayed above the column. The ``text`` format is for a complete export, the
 %% ``html`` format is for the limited result overview of the Survey Results Editor.
 %% Type: foldl
+-doc(#{
+    zotonic_keywords => [
+        "reference", "backend_developer", "notification", "surveys", "structured_data", "export", "format"
+    ]
+}).
 -doc("
 Add header columns for export. The values are the names of the answers and the text displayed above the column. The
 `text` format is for a complete export, the `html` format is for the limited result overview of the Survey Results Editor.
@@ -4019,9 +4449,14 @@ Return:
 %% values that are known are set in the folded value. The user_id is the user who
 %% filled in the answers for this row.
 %% Type: foldl
+-doc(#{
+    zotonic_keywords => [
+        "reference", "backend_developer", "notification", "surveys", "structured_data", "export", "format"
+    ]
+}).
 -doc("
 Modify row with answers for export. The header columns are given and the values that are known are set in the folded
-value. The user\\_id is the user who filled in the answers for this row.
+value. The user_id is the user who filled in the answers for this row.
 
 Type:
 
@@ -4029,14 +4464,14 @@ Type:
 
 Return:
 
-`#{ binary() =\\> iodata() }`
+`#{ binary() => iodata() }`
 
 `#survey_result_column_values{}` properties:
 
 *   id: `m_rsc:resource_id()`
 *   handler: `binary|undefined`
 *   format: `html|text`
-*   user\\_id: `m_rsc:resource_id()`
+*   user_id: `m_rsc:resource_id()`
 *   answer: `proplists:proplist()`
 *   columns: `list`
 ").
@@ -4057,6 +4492,12 @@ Return:
 
 %% Put a value into the typed key/value store
 %% Type: first
+-doc(#{
+    zotonic_keywords => [
+        "reference", "backend_developer", "notification",
+        "database", "structured_data", "edit"
+    ]
+}).
 -doc("
 Put a value into the typed key/value store
 
@@ -4079,6 +4520,12 @@ Return:
 
 %% Get a value from the typed key/value store
 %% Type: first
+-doc(#{
+    zotonic_keywords => [
+        "reference", "backend_developer", "notification",
+        "database", "structured_data", "query"
+    ]
+}).
 -doc("
 Get a value from the typed key/value store
 
@@ -4100,6 +4547,12 @@ Return:
 
 %% Delete a value from the typed key/value store
 %% Type: notify
+-doc(#{
+    zotonic_keywords => [
+        "reference", "backend_developer", "notification",
+        "database", "structured_data", "edit"
+    ]
+}).
 -doc("
 Delete a value from the typed key/value store
 
@@ -4123,9 +4576,12 @@ return value is ignored
 
 %% Push some information to the debug page in the user-agent.
 %% Will be displayed with io_lib:format("~p: ~p~n", [What, Arg]), be careful with escaping information!
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "development_and_debugging", "monitor"]
+}).
 -doc("
-Push some information to the debug page in the user-agent. Will be displayed with io\\_lib:format(“~p: ~p~n”,
-\\[What, Arg\\]), be careful with escaping information!
+Push some information to the debug page in the user-agent. Will be displayed with io_lib:format(“~p: ~p~n”,
+[What, Arg]), be careful with escaping information!
 
 Type:
 
@@ -4145,8 +4601,11 @@ Return:
 
 %% Broadcast some file changed, used for livereload by mod_development
 %% Type: notify
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "development_and_debugging", "monitor"]
+}).
 -doc("
-Broadcast some file changed, used for livereload by mod\\_development
+Broadcast some file changed, used for livereload by mod_development
 
 Type:
 
@@ -4170,6 +4629,9 @@ return value is ignored
 
 %% An external feed delivered a resource. First handler can import it.
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "import_and_migration", "import"]
+}).
 -doc("
 An external feed delivered a resource. First handler can import it. Return:: `{ok, m_rsc:resource_id()}`, `{error,
 Reason}`, or `undefined`
@@ -4183,14 +4645,14 @@ Return:
 `#import_resource{}` properties:
 
 *   source: `atom|binary`
-*   source\\_id: `integer|binary`
-*   source\\_url: `binary`
-*   source\\_user\\_id: `binary|integer`
-*   user\\_id: `integer`
+*   source_id: `integer|binary`
+*   source_url: `binary`
+*   source_user_id: `binary|integer`
+*   user_id: `integer`
 *   name: `binary`
 *   props: `m_rsc:props_all()`
 *   urls: `list`
-*   media\\_urls: `list`
+*   media_urls: `list`
 *   data: `any`
 ").
 -callback observe_import_resource(#import_resource{}, z:context()) -> Result when
@@ -4207,8 +4669,11 @@ Return:
 %% mod_export - return the {ok, Disposition} for the content disposition.
 %% The content disposition is either ``<<"inline">>`` or ``<<"attachment">>``.
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "export_and_syndication", "export"]
+}).
 -doc("
-mod\\_export - return the \\{ok, Disposition\\} for the content disposition.
+mod_export - return the {ok, Disposition} for the content disposition.
 
 Type:
 
@@ -4216,13 +4681,13 @@ Type:
 
 Return:
 
-\\{ok, <<”inline”>>\\} or \\{ok, <<”attachment”>>\\}
+{ok, <<”inline”>>} or {ok, <<”attachment”>>}
 
 `#export_resource_content_disposition{}` properties:
 
 *   dispatch: `atom`
 *   id: `m_rsc:resource_id()|undefined`
-*   content\\_type: `binary`
+*   content_type: `binary`
 ").
 -callback observe_export_resource_content_disposition(#export_resource_content_disposition{}, z:context()) -> Result when
     Result :: {ok, Disposition}
@@ -4237,8 +4702,11 @@ Return:
 
 %% mod_export - Check if the resource or dispatch is visible for export.
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "export_and_syndication", "authorization_and_access_control", "export"]
+}).
 -doc("
-mod\\_export - Check if the resource or dispatch is visible for export.
+mod_export - Check if the resource or dispatch is visible for export.
 
 Type:
 
@@ -4260,8 +4728,11 @@ Return:
 
 %% mod_export - Determine the mime type for the export.
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "export_and_syndication", "metadata", "export"]
+}).
 -doc("
-mod\\_export - Determine the mime type for the export.
+mod_export - Determine the mime type for the export.
 
 Type:
 
@@ -4287,8 +4758,11 @@ Return:
 
 %% mod_export - return the {ok, Filename} for the content disposition.
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "export_and_syndication", "identifier", "export"]
+}).
 -doc("
-mod\\_export - return the \\{ok, Filename\\} for the content disposition.
+mod_export - return the {ok, Filename} for the content disposition.
 
 Type:
 
@@ -4302,7 +4776,7 @@ Return:
 
 *   dispatch: `atom`
 *   id: `m_rsc:resource_id()|undefined`
-*   content\\_type: `binary`
+*   content_type: `binary`
 ").
 -callback observe_export_resource_filename(#export_resource_filename{}, z:context()) -> Result when
     Result :: {ok, binary() | string()}
@@ -4315,8 +4789,11 @@ Return:
 
 %% mod_export - Fetch the header for the export.
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "export_and_syndication", "export"]
+}).
 -doc("
-mod\\_export - Fetch the header for the export.
+mod_export - Fetch the header for the export.
 
 Type:
 
@@ -4330,7 +4807,7 @@ Return:
 
 *   dispatch: `atom`
 *   id: `m_rsc:resource_id()|undefined`
-*   content\\_type: `binary`
+*   content_type: `binary`
 ").
 -callback observe_export_resource_header(#export_resource_header{}, z:context()) -> Result when
     Result :: {ok, binary() | [ binary() ]}
@@ -4351,9 +4828,12 @@ Return:
 %% Where Values is [ term() ], i.e. a list of opaque values, to be formatted with #export_resource_format.
 %% Return the empty list of values to signify the end of the data stream.
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "export_and_syndication", "export"]
+}).
 -doc("
-mod\\_export - fetch a row for the export, can return a list of rows, a binary, and optionally a continuation state.
-Where Values is \\[ term() \\], i.e. a list of opaque values, to be formatted with #export\\_resource\\_format. Return
+mod_export - fetch a row for the export, can return a list of rows, a binary, and optionally a continuation state.
+Where Values is [ term() ], i.e. a list of opaque values, to be formatted with #export_resource_format. Return
 the empty list of values to signify the end of the data stream.
 
 Type:
@@ -4368,7 +4848,7 @@ Return:
 
 *   dispatch: `atom`
 *   id: `m_rsc:resource_id()|undefined`
-*   content\\_type: `binary`
+*   content_type: `binary`
 *   state: `term`
 ").
 -callback observe_export_resource_data(#export_resource_data{}, z:context()) -> Result when
@@ -4390,8 +4870,13 @@ Return:
 
 %% mod_export - Encode a single data element.
 %% Type: first
+-doc(#{
+    zotonic_keywords => [
+        "reference", "backend_developer", "notification", "export_and_syndication", "serialize", "export"
+    ]
+}).
 -doc("
-mod\\_export - Encode a single data element.
+mod_export - Encode a single data element.
 
 Type:
 
@@ -4405,7 +4890,7 @@ Return:
 
 *   dispatch: `atom`
 *   id: `m_rsc:resource_id()|undefined`
-*   content\\_type: `binary`
+*   content_type: `binary`
 *   data: `term`
 *   state: `term`
 ").
@@ -4426,8 +4911,11 @@ Return:
 
 %% mod_export - Fetch the footer for the export. Should cleanup the continuation state, if needed.
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "export_and_syndication", "export"]
+}).
 -doc("
-mod\\_export - Fetch the footer for the export. Should cleanup the continuation state, if needed.
+mod_export - Fetch the footer for the export. Should cleanup the continuation state, if needed.
 
 Type:
 
@@ -4441,7 +4929,7 @@ Return:
 
 *   dispatch: `atom`
 *   id: `m_rsc:resource_id()|undefined`
-*   content\\_type: `binary`
+*   content_type: `binary`
 *   state: `term`
 ").
 -callback observe_export_resource_footer(#export_resource_footer{}, z:context()) -> Result when
@@ -4459,6 +4947,9 @@ Return:
 %% ``trigger`` the id of the element which triggered the postback, and ``target`` the
 %% id of the element which should receive possible updates. ``#postback_notify`` is also used as an event.
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "user_interface_and_interaction", "javascript"]
+}).
 -doc("
 Handle a javascript notification from the postback handler. The `message` is the the request, `trigger` the id of the
 element which triggered the postback, and `target` the id of the element which should receive possible updates.
@@ -4490,8 +4981,11 @@ Return:
 
 %% Determine the URL fetch options for fetching the content of an URL. Used by z_fetch.erl.
 %% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "api_and_integration", "http", "url", "configure"]
+}).
 -doc("
-Determine the URL fetch options for fetching the content of an URL. Used by z\\_fetch.erl.
+Determine the URL fetch options for fetching the content of an URL. Used by z_fetch.erl.
 
 Type:
 
@@ -4519,6 +5013,9 @@ Return:
 
 %% Delegates the request processing.
 %% Type: foldl
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "api_and_integration", "http", "send_and_receive"]
+}).
 -doc("
 Delegates the request processing.
 
@@ -4545,6 +5042,16 @@ updated `z:context()`
 
 % Reload all template, modules etc. Triggered by manual request.
 % Type: notify
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "development_and_debugging", "module_management", "edit"]
+}).
+-doc("
+Reloads templates, modules, translations, and other indexed development files after a manual request.
+
+Type:
+
+[notify](/id/doc_developerguide_notifications#notification-notify)
+").
 -callback observe_development_reload(development_reload, z:context()) -> any().
 -callback pid_observe_development_reload(pid(), development_reload, z:context()) -> any().
 
@@ -4552,6 +5059,16 @@ updated `z:context()`
 
 % Perform a 'make' on Zotonic, reload all new beam files. Triggered by manual request.
 % Type: notify
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "development_and_debugging", "module_management", "configure"]
+}).
+-doc("
+Runs the development make process and reloads newly compiled BEAM files after a manual request.
+
+Type:
+
+[notify](/id/doc_developerguide_notifications#notification-notify)
+").
 -callback observe_development_make(development_make, z:context()) -> any().
 -callback pid_observe_development_make(pid(), development_make, z:context()) -> any().
 

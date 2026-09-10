@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(action_mailinglist_dialog_mailing_page).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "mailing_lists", "send_and_receive"]
+}).
 -moduledoc("
 Shows the dialog to mail the current page ([resource](/id/doc_glossary#term-resource)) to a mailing list. This is used
 in the admin “mailing status” interface. A mailing can be sent immediately, when the page becomes publicly visible, or

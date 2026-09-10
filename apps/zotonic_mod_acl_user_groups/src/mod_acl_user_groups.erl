@@ -17,6 +17,12 @@
 %% limitations under the License.
 
 -module(mod_acl_user_groups).
+-moduledoc(#{
+    zotonic_keywords => [
+        "reference", "site_administrator", "module", "authorization_and_access_control",
+        "identity_and_accounts", "content_group", "authorize"
+    ]
+}).
 -moduledoc("
 This module adds rule-based access control.
 
@@ -330,10 +336,7 @@ Delegate callbacks:
 
 - `event/2` with `postback` messages: `delete_all`, `set_config`.
 - `event/2` with `submit` messages: `delete_move`.
-
-See also
-
-[mod_content_groups](/id/doc_module_mod_content_groups), [Access control](/id/doc_developerguide_access_control#guide-auth)").
+").
 
 -mod_title("ACL User Groups").
 -mod_description("Organize users into hierarchical groups").

@@ -18,9 +18,12 @@
 %% limitations under the License.
 
 -module(filter_escape_link).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "html", "security"]
+}).
 -moduledoc("
 Convert any URLs in a plaintext into HTML links, with adding the `rel=\"nofollow\"` attribute, and replaces all newlines
-with `<br\\>` tags.
+with `<br>` tags.
 
 Example:
 
@@ -37,13 +40,9 @@ Outputs:
 ```
 
 This filter is very useful when displaying user-generated plaintexts, like comments.
-
-See also
-
-[urlize](/id/doc_template_filter_filter_urlize)").
+").
 
 -export([escape_link/2]).
 
 escape_link(Text, Context) ->
     z_sanitize:escape_link(Text, Context).
-

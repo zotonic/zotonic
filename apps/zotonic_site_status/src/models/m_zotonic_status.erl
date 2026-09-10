@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_zotonic_status).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "operator", "model", "site_management", "monitor"]
+}).
 -moduledoc("
 Model for system-wide site status information.
 

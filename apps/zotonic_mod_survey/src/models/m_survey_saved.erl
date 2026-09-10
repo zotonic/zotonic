@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_survey_saved).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "model", "surveys", "forms", "structured_data", "edit"]
+}).
 -moduledoc("
 Model for saving and retrieving intermediate survey answers for users. There can
 only be a single intermediate result per user/survey or, for anonymous users per

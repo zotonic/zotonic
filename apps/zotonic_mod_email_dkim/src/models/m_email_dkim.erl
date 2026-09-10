@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_email_dkim).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "operator", "model", "email_delivery", "dkim"]
+}).
 -moduledoc("
 DomainKeys Identified Mail Signatures (RFC 6376) is a method to add a signature to outgoing emails. This enables
 recipients to check who sent an email and if the email was not changed in transit.

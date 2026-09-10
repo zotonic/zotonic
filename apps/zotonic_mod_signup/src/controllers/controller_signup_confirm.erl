@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(controller_signup_confirm).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "controller", "identity_and_accounts", "authentication", "create"]
+}).
 -moduledoc("
 Controller which displays the confirmation page where the user can confirm his signup.
 
@@ -29,6 +32,12 @@ identity verification. On a valid key this controller publishes the user
 resource, marks the account and identity as verified, emits
 `#signup_confirm{id=UserId}`, logs the user on, and redirects to the first
 `#signup_confirm_redirect{}` result or to the user's page.
+
+Handled events
+--------------
+
+* `{confirm, [{key, Key}]}` verifies the email identity associated with `Key`,
+  publishes the account, logs the user on, and redirects after confirmation.
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

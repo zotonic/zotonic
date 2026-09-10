@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_floor).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "number", "transform"]
+}).
 -moduledoc("
 Round down a floating point value.
 
@@ -44,4 +47,3 @@ floor(N, _Context) ->
     catch
         _:_ -> undefined
     end.
-

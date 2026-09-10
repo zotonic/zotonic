@@ -1,7 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2023-2025 Maximonster Interactive Things BV
-%% @doc Ensure that alle embedded ids in a resource are connected using
-%% a 'refers' edge.
+%% @doc Ensure that all embedded ids and linked resources in a resource are
+%% connected using a 'refers' edge.
 %% @end
 
 %% Copyright 2023-2025 Maximonster Interactive Things BV
@@ -120,17 +120,17 @@ ids(K, V, Context) when is_integer(V); is_binary(V) ->
         false when is_binary(V) ->
             case is_html_prop(K) of
                 true ->
-                    embedded_media(V);
+                    embedded_ids(V, Context);
                 false ->
                     []
             end;
         false ->
             []
     end;
-ids(K, #trans{} = V, _Context) ->
+ids(K, #trans{} = V, Context) ->
     case is_html_prop(K) of
         true ->
-            embedded_media(V);
+            embedded_ids(V, Context);
         false ->
             []
     end;
@@ -179,23 +179,58 @@ is_html_prop(P) ->
         _ -> false
     end.
 
-embedded_media(undefined) ->
+-spec embedded_ids(Value, Context) -> Ids when
+    Value :: term(),
+    Context :: z:context(),
+    Ids :: [ m_rsc:resource_id() ].
+embedded_ids(undefined, _Context) ->
     [];
-embedded_media(<<>>) ->
+embedded_ids(<<>>, _Context) ->
     [];
-embedded_media(Input) when is_binary(Input) ->
-    case re:run(Input, "\\<\\!-- z-media ([0-9]+) ", [global, {capture, all_but_first, binary}]) of
-        nomatch ->
-            [];
-        {match, L} ->
-            [ z_convert:to_integer(I) || [I] <- L ]
-    end;
-embedded_media(#trans{ tr = Tr }) ->
+embedded_ids(Input, Context) when is_binary(Input) ->
+    lists:filtermap(
+        fun(Token) ->
+            token_to_id(Token, Context)
+        end,
+        z_html_parse:tokens(Input));
+embedded_ids(#trans{ tr = Tr }, Context) ->
     lists:flatmap(
-        fun({_, B}) ->
-            embedded_media(B)
+        fun({_, Html}) ->
+            embedded_ids(Html, Context)
         end,
         Tr);
-embedded_media(_) ->
+embedded_ids(_, _Context) ->
     [].
 
+-spec token_to_id(z_html_parse:html_token(), z:context()) ->
+    false | {true, m_rsc:resource_id()}.
+token_to_id({comment, <<" z-media ", Rest/binary>>}, _Context) ->
+    case binary:split(Rest, <<" ">>) of
+        [ IdBin, _ ] ->
+            case z_utils:only_digits(IdBin) of
+                true -> {true, z_convert:to_integer(IdBin)};
+                false -> false
+            end;
+        [ _ ] ->
+            false
+    end;
+token_to_id({start_tag, _Tag, Attrs, _IsSingleton}, Context) ->
+    href_to_id(proplists:get_value(<<"href">>, Attrs), Context);
+token_to_id(_Token, _Context) ->
+    false.
+
+-spec href_to_id(Uri, Context) -> Result when
+    Uri :: undefined | binary(),
+    Context :: z:context(),
+    Result :: false | {true, m_rsc:resource_id()}.
+href_to_id(undefined, _Context) ->
+    false;
+href_to_id(<<>>, _Context) ->
+    false;
+href_to_id(Uri, Context) when is_binary(Uri) ->
+    case m_rsc:uri_lookup(Uri, Context) of
+        Id when is_integer(Id) -> {true, Id};
+        undefined -> false
+    end;
+href_to_id(_Uri, _Context) ->
+    false.

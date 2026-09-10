@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_md5).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "identifier", "transform"]
+}).
 -moduledoc("
 Translates a string to a [md5](http://en.wikipedia.org/wiki/MD5) hex value.
 
