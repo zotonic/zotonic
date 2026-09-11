@@ -682,6 +682,7 @@ event(#postback_notify{message = <<"feedback">>, trigger = Trigger, target=Targe
         {intent, z_context:get_q(<<"intent">>, Context)},
         {creator_id, CreatorId},
         {subject_id, SubjectId},
+        {object_id, ObjectId},
         {cat, Cats},
         {cat_exclude, z_context:get_q(<<"cat_exclude">>, Context)},
         {predicate, Predicate},

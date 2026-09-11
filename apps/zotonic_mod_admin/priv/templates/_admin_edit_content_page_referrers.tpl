@@ -18,40 +18,29 @@
 {% block widget_id %}sidebar-referrers{% endblock %}
 
 {% block widget_content %}
-    {% if m.search[{query hasobject=id sort="-seq" pagelen=10}] as incoming %}
-        <p class="help-block">{_ Newest incoming connections. _}</p>
-
-        <ul class="tree-list connections-list">
-            {% for s_id in incoming %}
-                {% with forloop.counter as index %}
-                <li id="{{ #unlink_wrapper }}" class="menu-item">
-                    <div class="menu-wrapper">
-                        <a id="{{ #edit.index }}" href="{% url admin_edit_rsc id=s_id %}" title="{_ Edit _}">
-                            {% catinclude "_rsc_edge_item.tpl" s_id %}
-                        </a>
-                        {% wire id=#edit.index
-                            action={dialog_edit_basics id=s_id update_element=#edit.index template="_rsc_edge_item.tpl" is_update}
-                        %}
-                    </div>
-                </li>
-                {% endwith %}
-            {% endfor %}
-        </ul>
-
-        {% with m.search.count::%{ hasobject: id } as count %}
-        {% if count.result[1] > 10 %}
-            <p class="help-block">
-                {% trans "And {n} more." n=count.result[1]-10 %}
-            </p>
-        {% endif %}
-        {% endwith %}
-    {% else %}
-        <p class="help-block">{_ There are no incoming connections. _}</p>
-    {% endif %}
-
     <div class="form-group">
         <a class="btn btn-default btn-sm" href="{% url admin_edges qhasobject=id %}">
             →○ {_ View all referrers _}
         </a>
+        <button id="{{ #connect_subject }}" type="button" class="btn btn-default btn-sm">
+            + {_ Add connection _}
+        </button>
+        {% wire id=#connect_subject
+            action={dialog_open
+                template="_action_dialog_connect_select_predicate.tpl"
+                title=_"Add an incoming connection"
+                object_id=id
+                center=0
+                width="large"
+            }
+        %}
     </div>
+
+    <div id="{{ #referrers_undo }}"></div>
+
+    {% live template="_admin_edit_content_page_referrers_list.tpl"
+        topic={subject id=id}
+        id=id
+        undo_message_id=#referrers_undo
+    %}
 {% endblock %}

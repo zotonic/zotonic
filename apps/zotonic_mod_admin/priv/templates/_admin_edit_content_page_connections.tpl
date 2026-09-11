@@ -19,6 +19,28 @@
 
 {% block widget_content %}
 
+{% if not hide_all_connections %}
+    <div class="form-group">
+        <a class="btn btn-default btn-sm" href="{% url admin_edges qhassubject=id %}">
+            ○→ {_ View all connections _}
+        </a>
+        {% if m.acl.is_allowed.link[id] %}
+            <button id="{{ #connect_object }}" type="button" class="btn btn-default btn-sm">
+                + {_ Add connection _}
+            </button>
+            {% wire id=#connect_object
+                action={dialog_open
+                    template="_action_dialog_connect_select_predicate.tpl"
+                    title=_"Add a connection"
+                    subject_id=id
+                    center=0
+                    width="large"
+                }
+            %}
+        {% endif %}
+    </div>
+{% endif %}
+
 <div id="unlink-undo-message"></div>
 
 {% with predicate_ids|default:id.predicates_edit as pred_shown %}
@@ -49,13 +71,5 @@
         {% endif %}
     {% endfor %}
 {% endwith %}
-
-{% if not hide_all_connections %}
-    <div class="form-group">
-       <a class="btn btn-default btn-sm" href="{% url admin_edges qhassubject=id %}">
-          ○→ {_ View all connections _}
-      </a>
-    </div>
-{% endif %}
 
 {% endblock %}
