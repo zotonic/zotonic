@@ -98,7 +98,7 @@ m_post([<<"publish">>, IdBin], #{payload := Payload}, Context) ->
 ## HTTP Security
 
 - Use Zotonic controllers and context helpers instead of raw Cowboy response handling where possible.
-- `z_context:set_security_headers/1` installs the default security headers early in request handling. Defaults include `content-security-policy`, `x-content-type-options: nosniff`, `x-permitted-cross-domain-policies: none`, `referrer-policy: strict-origin-when-cross-origin`, and `x-frame-options: SAMEORIGIN` when `frame-ancestors` is `'self'`.
+- `z_context:set_security_headers/1` installs the default security headers early in request handling. Defaults include `content-security-policy`, `x-content-type-options: nosniff`, `x-permitted-cross-domain-policies: none`, `referrer-policy: same-origin`, and `x-frame-options: SAMEORIGIN` when `frame-ancestors` is `'self'`.
 - For normal HTTP requests, `z_cowmachine_middleware` always calls `z_context:set_csp_nonce/1` and then `z_context:set_security_headers/1` after the site, dispatch rule, controller, request data, and context are initialized, before Cowmachine controller callbacks run.
 - Do not manually call `set_csp_nonce/1` or `set_security_headers/1` in ordinary controllers/templates. Use the nonce from `m.req.csp_nonce` in templates or `z_context:csp_nonce(Context)` in Erlang, and extend headers through notifications.
 - Default CSP includes `default-src 'self'`, nonce-based scripts, `object-src 'none'`, `form-action 'self'`, `worker-src 'self' blob:`, `connect-src 'self' https: wss:`, and CSP reporting to the site endpoint.
