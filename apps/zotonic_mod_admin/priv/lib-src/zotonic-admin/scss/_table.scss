@@ -1,6 +1,6 @@
 /* override table-striped */
 .table-striped > tbody > tr:nth-child(odd) {
-    background-color: #fff;
+    background-color: var(--z-admin-surface);
 }
 
 td.clickable,
@@ -14,11 +14,11 @@ tr.clickable td {
 .table > thead > tr > td,
 .table > tbody > tr > td,
 .table > tfoot > tr > td {
-    border-top: 1px solid $borderColorLight;
+    border-top: 1px solid var(--z-admin-table-border);
 }
 
 .table {
-    border-bottom: 1px solid $borderColorLight;
+    border-bottom: 1px solid var(--z-admin-table-border);
 }
 
 table.data-table {
@@ -99,7 +99,7 @@ table.do_adminLinkedTable {
 .table tbody tr.clickable:hover th,
 .table tbody tr:hover td.clickable,
 .table tbody tr:hover th.clickable {
-    background-color: $backgroundColorRowHover;
+    background-color: var(--z-admin-surface-hover);
 }
 
 table.table tr.unpublished td a.btn-success {

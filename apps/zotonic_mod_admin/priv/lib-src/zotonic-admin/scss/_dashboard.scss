@@ -27,7 +27,7 @@
   			};
   			&:last-child {
   				width: 40%;
-  				color: $textColorMuted;
+  				color: var(--z-admin-text-muted);
   			};
   		}
   	}
