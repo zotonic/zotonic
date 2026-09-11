@@ -1537,6 +1537,7 @@ set_security_headers(Context) ->
         font_src       = [ <<"'self'">>, <<"https:">> ],
         frame_src      = [ <<"'self'">>, <<"https:">> ],
         object_src     = [ <<"'none'">> ],
+        base_uri       = [ <<"'none'">> ],
         form_action    = [ <<"'self'">> ],
         worker_src     = [ <<"'self'">>, <<"blob:">> ],
         connect_src    = [ <<"'self'">>, <<"https:">>, <<"wss:">> ],
