@@ -737,10 +737,21 @@ remove_dotdot([A|Rest], Acc) ->
     remove_dotdot(Rest, [A|Acc]).
 
 unescape(P) ->
-    case binary:match(P, <<"%">>) of
+    Decoded = case binary:match(P, <<"%">>) of
         nomatch -> P;
         _ -> cow_qs:urldecode(P)
-    end.
+    end,
+    validate_path_segment(Decoded),
+    Decoded.
+
+%% Reject invalid UTF-8 and characters 0..31 before dispatch observers can query with them.
+%% Keep valid paths unchanged instead of stripping bytes from malformed paths.
+validate_path_segment(<<>>) ->
+    ok;
+validate_path_segment(<<C/utf8, Rest/binary>>) when C >= 32 ->
+    validate_path_segment(Rest);
+validate_path_segment(_) ->
+    throw({stop_request, 400}).
 
 -spec dispatch_rewrite(binary(), binary(), list(), boolean(), pid(), z:context()) -> tuple().
 dispatch_rewrite(Hostname, Path, Tokens0, IsDir, TracerPid, Context) ->
@@ -1332,3 +1343,36 @@ add_port(https, Hostname, 443) ->
 add_port(_, Hostname, Port) ->
     PortBin = z_convert:to_binary(Port),
     <<Hostname/binary, $:, PortBin/binary>>.
+
+-ifdef(TEST).
+-include_lib("eunit/include/eunit.hrl").
+
+invalid_path_test_() ->
+    Controls = lists:seq(0, 31),
+    RawPaths = [ <<"/foo", C, "bar">> || C <- Controls ],
+    EncodedPaths = [
+        iolist_to_binary(io_lib:format("/foo%~2.16.0Bbar", [C]))
+        || C <- Controls
+    ],
+    Paths = RawPaths ++ EncodedPaths ++ [
+        <<"/%FF">>,
+        <<"/", 255>>,
+        <<"/%C0%AF">>, % Overlong encoding
+        <<"/%ED%A0%80">>, % Surrogate
+        <<"/%F4%90%80%80">>, % Above the Unicode range
+        <<"/%E2%82">> % Incomplete sequence
+    ],
+    % No context is needed: reject before rewriting, matching or querying.
+    [ ?_assertEqual(
+        #stop_request{status = 400},
+        dispatch_site(#dispatch{path = Path}, undefined, []))
+      || Path <- Paths ].
+
+valid_path_test_() ->
+    [ ?_assertEqual({[<<"caf", 16#e9/utf8>>], false}, split_path(<<"/caf%C3%A9">>)),
+      ?_assertEqual({[<<16#1f600/utf8>>], false}, split_path(<<"/%F0%9F%98%80">>)),
+      ?_assertEqual({[<<"caf", 16#e9/utf8>>], false}, split_path(<<"/caf", 16#e9/utf8>>)),
+      ?_assertEqual({[<<"foo bar">>], true}, split_path(<<"/foo%20bar/">>)),
+      ?_assertEqual({[<<"foo%00bar">>], false}, split_path(<<"/foo%2500bar">>)) ].
+
+-endif.

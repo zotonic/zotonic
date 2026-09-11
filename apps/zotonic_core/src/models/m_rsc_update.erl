@@ -1993,6 +1993,8 @@ props_filter(<<"privacy">>, Privacy, Acc, _RscUpd, _Context) ->
 props_filter(P, V, Acc, _RscUpd, _Context) ->
     Acc#{ P => V }.
 
+%% @doc Convert Unicode text to UTF-8. On invalid or incomplete input, return
+%% only the valid prefix, discarding the offending sequence and all remaining text.
 unicode_characters_to_binary(Path) ->
     case unicode:characters_to_binary(Path) of
         Bin when is_binary(Bin) -> Bin;
@@ -2021,6 +2023,8 @@ normalize_page_path(Path, false) ->
 normalize_page_path(undefined) -> <<>>;
 normalize_page_path(<<>>) -> <<>>;
 normalize_page_path("") -> <<>>;
+normalize_page_path(Path) when is_list(Path) ->
+    normalize_page_path(unicode_characters_to_binary(Path));
 normalize_page_path(Path) ->
     Path1 = z_string:trim(z_string:trim(Path), $/),
     Path2 = iolist_to_binary([
@@ -2121,6 +2125,8 @@ to_slug(#trans{ tr = Tr }) ->
 to_slug(B) when is_binary(B) ->
     B1 = z_string:to_lower(z_html:unescape(B)),
     truncate_slug(slugify(B1, false, <<>>));
+to_slug(Text) when is_list(Text) ->
+    to_slug(unicode_characters_to_binary(Text));
 to_slug(X) ->
     to_slug(z_convert:to_binary(X)).
 

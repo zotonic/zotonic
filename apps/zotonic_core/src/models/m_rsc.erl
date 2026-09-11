@@ -308,7 +308,7 @@ Available Model API Paths
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
 m_get([ <<"-">>, <<"lookup">>, <<"page_path">> | Path ], _Msg, Context) ->
-    Path1 = iolist_to_binary(lists:join($/, Path)),
+    Path1 = lists:join($/, Path),
     case page_path_to_id(Path1, Context) of
         {ok, Id} ->
             {ok, {#{
@@ -400,7 +400,7 @@ name_to_id_cat(Name, Cat, Context) when is_integer(Name) ->
     end,
     z_depcache:memo(F, {rsc_name, Name, Cat}, ?DAY, [Cat, Name], Context);
 name_to_id_cat(Name, Cat, Context) ->
-    Name1 = z_string:to_name(z_convert:to_binary(Name)),
+    Name1 = z_string:to_name(Name),
     F = fun() ->
         CatIds = m_category:contains(Cat, Context),
         case z_db:q1("select id from rsc where name = $1 and category_id = any($2::int[])", [Name1, CatIds], Context) of
@@ -417,15 +417,16 @@ name_to_id_cat(Name, Cat, Context) ->
 %% resource.
 %% The page path is normalized by ensuring that the path starts with
 %% a single "/" and removing trailing "/" characters.
+%% Invalid UTF-8 and characters in the range 0..31 are rejected before querying.
 %% Note that the path "" is mapped to "/" (the home page) but the same
 %% "" path in a trans record is ignored. This is to be consistent with
 %% the behavior that empty translations should map to a translation that
 %% is filled.
--spec page_path_to_id( binary() | string() | #trans{}, z:context() ) ->
+-spec page_path_to_id( unicode:chardata() | #trans{}, z:context() ) ->
               {ok, resource_id()}
             | {redirect, resource_id()}
             | {error, {unknown_page_path, binary() | #trans{}}}
-            | {error, {illegal_page_path, binary(), length|unicode}}.
+            | {error, {illegal_page_path, unicode:chardata(), length|unicode}}.
 page_path_to_id(#trans{ tr = Tr } = Paths, Context) ->
     Tr1 = lists:filter(
         fun({_, Path}) when is_binary(Path) andalso size(Path) > 0 -> true;
@@ -443,10 +444,27 @@ page_path_to_id(#trans{ tr = Tr } = Paths, Context) ->
                     Other
             end
     end;
-page_path_to_id(Path, Context) ->
-    Path1 = iolist_to_binary([ $/, z_string:trim(Path, $/) ]),
-    case is_utf8(Path1) of
-        true when size(Path1) < 200 ->
+page_path_to_id(Path, Context) when is_list(Path) ->
+    case unicode:characters_to_binary(Path) of
+        PathBin when is_binary(PathBin) ->
+            page_path_to_id(PathBin, Context);
+        {error, _, _} ->
+            {error, {illegal_page_path, Path, unicode}};
+        {incomplete, _, _} ->
+            {error, {illegal_page_path, Path, unicode}}
+    end;
+page_path_to_id(Path, Context) when is_binary(Path) ->
+    case is_valid_page_path(Path) of
+        true ->
+            page_path_to_id_valid(Path, Context);
+        false ->
+            {error, {illegal_page_path, Path, unicode}}
+    end.
+
+page_path_to_id_valid(Path, Context) ->
+    Path1 = unicode:characters_to_binary([ $/, z_string:trim(Path, $/) ]),
+    case size(Path1) < 200 of
+        true ->
             case z_db:q1("select id from rsc where pivot_page_path && $1", [ [Path1] ], Context) of
                 undefined ->
                     case z_db:q1(
@@ -462,10 +480,8 @@ page_path_to_id(Path, Context) ->
                 Id ->
                     {ok, Id}
             end;
-        true ->
-            {error, {illegal_page_path, Path1, length}};
         false ->
-            {error, {illegal_page_path, Path1, unicode}}
+            {error, {illegal_page_path, Path1, length}}
     end.
 
 page_path_to_id_1([], _Context) ->
@@ -478,9 +494,10 @@ page_path_to_id_1([{_, Path}|Tr], Context) ->
         Other -> Other
     end.
 
-is_utf8(<<>>) -> true;
-is_utf8(<<_/utf8, S/binary>>) -> is_utf8(S);
-is_utf8(_) -> false.
+%% Page paths must be UTF-8 without control characters (including PostgreSQL's forbidden NUL).
+is_valid_page_path(<<>>) -> true;
+is_valid_page_path(<<C/utf8, S/binary>>) when C >= 32 -> is_valid_page_path(S);
+is_valid_page_path(_) -> false.
 
 
 %% @doc Get all properties of a resource for export. This adds the
@@ -1495,6 +1512,13 @@ uri_lookup(Uri, Context) when is_binary(Uri) ->
                     end
             end;
         false ->
+            undefined
+    end;
+uri_lookup(Uri, Context) when is_list(Uri) ->
+    case unicode:characters_to_binary(Uri) of
+        UriBin when is_binary(UriBin) ->
+            uri_lookup(UriBin, Context);
+        _ ->
             undefined
     end;
 uri_lookup(Uri, Context) ->
