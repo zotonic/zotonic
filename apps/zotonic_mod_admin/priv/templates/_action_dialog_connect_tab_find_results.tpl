@@ -1,9 +1,15 @@
 <div id="dialog_connect_results" class="connect-results">
     {% if intent == 'connect' %}
         <p class="text-muted">
-            {% trans "Showing pages you can connect to using <b>{predicate}</b>."
-                     predicate=m.rsc[predicate].title
-            %}
+            {% if object_id %}
+                {% trans "Showing pages that can refer to this page using <b>{predicate}</b>."
+                         predicate=m.rsc[predicate].title
+                %}
+            {% else %}
+                {% trans "Showing pages you can connect to using <b>{predicate}</b>."
+                         predicate=m.rsc[predicate].title
+                %}
+            {% endif %}
         </p>
     {% endif %}
 
