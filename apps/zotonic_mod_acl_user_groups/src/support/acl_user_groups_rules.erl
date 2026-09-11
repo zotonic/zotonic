@@ -21,7 +21,10 @@
 -export([
     expand/2,
     expand_rsc/2,
-    expand_collab/2
+    expand_collab/2,
+    expand_module/2,
+
+    expand_group_path/1
 ]).
 
 -export([
@@ -84,6 +87,11 @@ expand_rsc(State, Context) ->
     GroupTree = m_hierarchy:menu(content_group, Context),
     UserTree = m_hierarchy:menu(acl_user_group, Context),
     expand_rsc(State, m_acl_rule:all_rules(rsc, State, Context), GroupTree, UserTree, Context).
+
+-spec expand_module(edit|publish, z:context()) -> list(module_rule()).
+expand_module(State, Context) ->
+    UserTree = m_hierarchy:menu(acl_user_group, Context),
+    expand_module(State, UserTree, Context).
 
 -spec expand_module(edit|publish, list(), z:context()) -> list(module_rule()).
 expand_module(State, UserTree, Context) ->
