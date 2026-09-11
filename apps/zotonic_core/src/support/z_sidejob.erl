@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2024 Marc Worrell
+%% @copyright 2024-2026 Marc Worrell
 %% @doc The supervisor for websocket requests and other transient processes.
 %% @end
 
-%% Copyright 2024 Marc Worrell
+%% Copyright 2024-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -27,7 +27,15 @@
     start/1,
     start/3,
     start/2,
-    start/4
+    start/4,
+    start_site_unique/3,
+    start_site_unique/5,
+    start_system_unique/2,
+    start_system_unique/4,
+    run_unique/2,
+    run_unique/3,
+    run_unique_started/4,
+    run_unique_started/5
 ]).
 
 
@@ -91,3 +99,144 @@ start(Module, Function, Args, Context) ->
     sidejob_supervisor:spawn(
             zotonic_sidejobs,
             {Module, Function, Args ++ [ ContextAsync ]}).
+
+%% @doc Start a sidejob unique for a site. If a same-named sidejob is already running
+%% for this site then the job is skipped.
+-spec start_site_unique(Name, MFA, Context) -> {ok, pid()} | {error, Reason} when
+    Name :: atom(),
+    MFA :: {module(), atom(), list()},
+    Context :: z:context(),
+    Reason :: overload | already_running.
+start_site_unique(Name, {M, F, A}, Context) when is_atom(Name) ->
+    start_site_unique(Name, M, F, A, Context).
+
+-spec start_site_unique(Name, Module, Function, Args, Context) -> {ok, pid()} | {error, Reason} when
+    Name :: atom(),
+    Module :: module(),
+    Function :: atom(),
+    Args :: list(),
+    Context :: z:context(),
+    Reason :: overload | already_running.
+start_site_unique(Name, Module, Function, Args, Context) when is_atom(Name) ->
+    RegName = site_unique_name(Name, Context),
+    start_unique(RegName, Module, Function, Args, Context).
+
+%% @doc Start a sidejob unique for the whole Erlang system. If a same-named sidejob
+%% is already running then the job is skipped.
+-spec start_system_unique(Name, MFA) -> {ok, pid()} | {error, Reason} when
+    Name :: atom(),
+    MFA :: {module(), atom(), list()},
+    Reason :: overload | already_running.
+start_system_unique(Name, {M, F, A}) when is_atom(Name) ->
+    start_system_unique(Name, M, F, A).
+
+-spec start_system_unique(Name, Module, Function, Args) -> {ok, pid()} | {error, Reason} when
+    Name :: atom(),
+    Module :: module(),
+    Function :: atom(),
+    Args :: list(),
+    Reason :: overload | already_running.
+start_system_unique(Name, Module, Function, Args) when is_atom(Name) ->
+    RegName = system_unique_name(Name),
+    start_unique(RegName, Module, Function, Args).
+
+-spec run_unique(atom(), {module(), atom(), list()}) -> ok.
+run_unique(RegName, {Module, Function, Args}) ->
+    try
+        true = erlang:register(RegName, self()),
+        try
+            erlang:apply(Module, Function, Args),
+            ok
+        after
+            catch erlang:unregister(RegName)
+        end
+    catch
+        error:badarg ->
+            ok
+    end.
+
+-spec run_unique(atom(), {module(), atom(), list()}, z:context()) -> ok.
+run_unique(RegName, {Module, Function, Args}, Context) ->
+    try
+        true = erlang:register(RegName, self()),
+        try
+            erlang:apply(Module, Function, Args ++ [ Context ]),
+            ok
+        after
+            catch erlang:unregister(RegName)
+        end
+    catch
+        error:badarg ->
+            ok
+    end.
+
+-spec run_unique_started(pid(), reference(), atom(), {module(), atom(), list()}) -> ok.
+run_unique_started(Caller, Ref, RegName, {Module, Function, Args}) ->
+    try
+        true = erlang:register(RegName, self()),
+        Caller ! {Ref, {ok, self()}},
+        try
+            erlang:apply(Module, Function, Args),
+            ok
+        after
+            catch erlang:unregister(RegName)
+        end
+    catch
+        error:badarg ->
+            Caller ! {Ref, {error, already_running}},
+            ok
+    end.
+
+-spec run_unique_started(pid(), reference(), atom(), {module(), atom(), list()}, z:context()) -> ok.
+run_unique_started(Caller, Ref, RegName, {Module, Function, Args}, Context) ->
+    try
+        true = erlang:register(RegName, self()),
+        Caller ! {Ref, {ok, self()}},
+        try
+            erlang:apply(Module, Function, Args ++ [ Context ]),
+            ok
+        after
+            catch erlang:unregister(RegName)
+        end
+    catch
+        error:badarg ->
+            Caller ! {Ref, {error, already_running}},
+            ok
+    end.
+
+start_unique(RegName, Module, Function, Args) ->
+    Ref = make_ref(),
+    case start(?MODULE, run_unique_started, [self(), Ref, RegName, {Module, Function, Args}]) of
+        {ok, Pid} ->
+            receive
+                {Ref, {ok, Pid}} ->
+                    {ok, Pid};
+                {Ref, {error, already_running}} ->
+                    {error, already_running}
+            end;
+        {error, Reason} ->
+            {error, Reason}
+    end.
+
+start_unique(RegName, Module, Function, Args, Context) ->
+    Ref = make_ref(),
+    case start(?MODULE, run_unique_started, [self(), Ref, RegName, {Module, Function, Args}], Context) of
+        {ok, Pid} ->
+            receive
+                {Ref, {ok, Pid}} ->
+                    {ok, Pid};
+                {Ref, {error, already_running}} ->
+                    {error, already_running}
+            end;
+        {error, Reason} ->
+            {error, Reason}
+    end.
+
+site_unique_name(Name, Context) ->
+    z_utils:name_for_site(unique_name(Name), Context).
+
+system_unique_name(Name) ->
+    unique_name(Name).
+
+unique_name(Name) ->
+    binary_to_atom(<<"sidejob_unique$", (z_convert:to_binary(Name))/binary>>, utf8).
