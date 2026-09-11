@@ -24,16 +24,20 @@
     ]
 }).
 -moduledoc("
-Syslog integration module for forwarding Zotonic log events to external syslog services.
+Syslog integration module for forwarding Zotonic access logs to external syslog services.
 
+This module subscribes to `$SYS/site/<name>/log/access` and sends access log events
+to syslog.
 
-Accepted Events
----------------
+It uses the following node-wide Zotonic configuration options:
 
-This module handles the following notifier callbacks:
+- `syslog_ident`: The ident used to open the syslog port. It will be prepended to each message. Default: `zotonic`.
+- `syslog_opts`: The options used to open the syslog port. Default: `[ndelay]`.
+- `syslog_facility`: The facility part of the priority. Default: `local0`.
+- `syslog_level`: The level part of the priority. Default: `info`.
 
-- `observe_http_log_access`: Write HTTP access log entries to syslog.
-
+For more information, see the Erlang syslog module documentation at https://github.com/Vagabond/erlang-syslog
+and your system's syslog manual (`man 3 syslog`).
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 
@@ -42,11 +46,27 @@ This module handles the following notifier callbacks:
 -mod_depends([]).
 -mod_provides([]).
 
--export([
-    observe_http_log_access/2
-]).
-
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-observe_http_log_access(#http_log_access{} = Log, _Context) ->
-    z_syslog_logger:log(Log).
+-export([
+    init/1,
+    handle_site_log_access/1
+]).
+
+init(Context) ->
+    Site = z_context:site(Context),
+    SiteBinary = z_convert:to_binary(Site),
+
+    ok = z_mqtt:subscribe([<<"$SYS">>, <<"site">>, SiteBinary, <<"log">>, <<"access">>],
+                          {?MODULE, handle_site_log_access, []},
+                          self(),
+                          z_acl:sudo(Context)),
+
+    ok.
+
+handle_site_log_access(#{ message := #{ payload := Log }}) ->
+    _ = z_syslog_logger:log(Log),
+    ok;
+handle_site_log_access(_Msg) ->
+    ok.
+
