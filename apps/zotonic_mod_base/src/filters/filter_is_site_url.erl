@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_is_site_url).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "url", "boolean", "compare"]
+}).
 -moduledoc("
 Test if the given URL is a url for the current site.
 
@@ -39,10 +42,7 @@ The following will echo `false`:
 {{ \"example.com\"|is_site_url }}
 {{ \"//foo.test\"|is_site_url }}
 ```
-
-See also
-
-[sanitize_url](/id/doc_template_filter_filter_sanitize_url), [url_abs](/id/doc_template_filter_filter_url_abs), [url](/id/doc_template_filter_filter_url), [urlencode](/id/doc_template_filter_filter_urlencode)").
+").
 -export([is_site_url/2]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -55,4 +55,3 @@ is_site_url(Url, Context) when is_binary(Url) ->
     z_context:is_site_url(Url, Context);
 is_site_url(_, _Context) ->
     false.
-

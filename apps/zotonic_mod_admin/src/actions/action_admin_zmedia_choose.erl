@@ -18,12 +18,19 @@
 %% limitations under the License.
 
 -module(action_admin_zmedia_choose).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "content_authoring", "media_management", "edit"]
+}).
 -moduledoc("
 Used after a media item is selected in the media chooser for the TinyMCE editor.
 
-Todo
+Pass the selected resource with the `id` argument. When no arguments are
+provided, the action reads `media_id` from the triggering form. It then wires
+`zmedia_has_chosen`, which closes the chooser and sends the selected id to the
+editor.
 
-Extend documentation
+This is an internal action used by `_choose_media.tpl`; normal site templates
+should open the higher-level `zmedia` action instead.
 ").
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 -include_lib("zotonic_core/include/zotonic.hrl").

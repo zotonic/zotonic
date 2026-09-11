@@ -18,12 +18,17 @@
 %% limitations under the License.
 
 -module(controller_admin_comments_settings).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "controller", "comments_and_community", "configure"]
+}).
 -moduledoc("
-Shows an admin settings screen where you can edit settings related to [mod_comment](/id/doc_module_mod_comment).
+Shows an admin settings screen where you can edit settings related to `module#mod_comment`.
 
-Todo
+Handled events
+--------------
 
-Extend documentation
+* `admin_comments_settings` saves the comment moderation settings when the
+  current user has permission to change them.
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

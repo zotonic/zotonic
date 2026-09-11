@@ -13,6 +13,16 @@ cotonic.bridgeSocket = new WebSocket(
     [ 'mqtt' ]);
 cotonic.bridgeSocket.binaryType = 'arraybuffer';
 
+{# Close the preconnection if navigation happens before Cotonic can adopt it. #}
+(function(bridgeSocket) {
+    window.addEventListener("pagehide", function() {
+        if (cotonic.bridgeSocket === bridgeSocket) {
+            cotonic.bridgeSocket = undefined;
+            bridgeSocket.close();
+        }
+    }, { once: true });
+})(cotonic.bridgeSocket);
+
 {# Click and submit events triggered before cotonic.ready are buffered
  # cotonic.model.ui will replay the buffered events.
  #}

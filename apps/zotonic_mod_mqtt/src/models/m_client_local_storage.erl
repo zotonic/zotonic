@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_client_local_storage).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "model", "messaging_and_pubsub", "javascript", "structured_data"]
+}).
 -moduledoc("
 Model to access the `localStorage` on the client (browser).
 

@@ -18,11 +18,14 @@
 %% limitations under the License.
 
 -module(m_rsc).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "model", "content_management", "resource", "query"]
+}).
 -moduledoc("
 The main resource model, which is the central part of the [Zotonic data
 model](/id/doc_userguide_datamodel#guide-datamodel). This model provides an interface to all resource (\"page\")
-information. It also provides an easy way to fetch edges from pages without needing to use the
-[m_edge](/id/doc_model_model_edge) model.
+information. It also provides an easy way to fetch edges from pages without needing to use
+`model#edge` directly.
 
 
 
@@ -43,7 +46,7 @@ A resource has the following properties accessible from the templates:
 | name | Unique name of the page. Returns a binary or undefined. Valid characters are a-z, 0-9 and _ | `<<\"page_home\">>` |
 | page_path | Unique path of the page, used for url generation. Returns a binary or undefined. Valid characters are a-z, 0-9, / and - | `<<\"/\">>` |
 | is_page_path_multiple | Allow the page to be served on multiple URLs | `false` |
-| page_url | The url of the page. Derived using the page's category, the page id and its slug. Returns a non flattened list. Returns the binary page_path when it is set.  The additional parameter `with` can be used to pass extra (optional) query arguments to the url, for instance:  `{{ id.page_url with t=now\\|date:\"U\" }}`  `{{ id.page_url with t=\"new\" u=m.acl.user.id }}` | `<<\"/blog/42\">>` |
+| page_url | The url of the page. Derived using the page's category, the page id and its slug. Returns a non flattened list. Returns the binary page_path when it is set.  The additional parameter `with` can be used to pass extra (optional) query arguments to the url, for instance:  `{{ id.page_url with t=now|date:\"U\" }}`  `{{ id.page_url with t=\"new\" u=m.acl.user.id }}` | `<<\"/blog/42\">>` |
 | page_url_abs | The absolute url of the page. Same as `page_url` but then with added protocol, hostname and port. | `<<\"<http://example.org/blog/42>\">>` |
 | default_page_url | The page without considering its page_path setting. | `<<\"/page/42/my-slug\">>` |
 | is_authoritative | Whether this page originated on this site or is imported and maintained on another site. Return a boolean. | `true` |
@@ -69,7 +72,7 @@ A resource has the following properties accessible from the templates:
 | publication_end | End date of the publication period. Returns a datetime tuple. | `{{9999,8,17},{12,0,0}}` |
 | is_published_date | If this page is published and the current date/time is within the set publication_start/end range. Note that no ACL checks are performed, use is_visible to check if a resource is visible for the current user. | `true` |
 | visible_for | Visibility level. Returns an integer. The actual meaning depends on the active ACL module. | `0` |
-| content_group_id | Content group this resource belongs to. Defaults to the id of the content group named *default_content_group* or *system_content_group* for resources within the *meta* category. See [mod_content_groups](/id/doc_module_mod_content_groups) | `31415` |
+| content_group_id | Content group this resource belongs to. Defaults to the id of the content group named *default_content_group* or *system_content_group* for resources within the *meta* category. See `module#mod_content_groups` | `31415` |
 | o | Used to access the objects of page: the pages this page refers to. Returns a function which should be indexed with the edge's predicate name (atom). When indexed the function will return a list of integers.  Example usage: `{{ m.rsc[id].o.author[1].title }}`  This returns the first author that is linked from this page. | `fun(Predicate,Context)` |
 | s | Access the subjects of a page: the pages that are referring to this page. Returns a function which should be indexed with the edge's predicate name (atom). When indexed the function will return a list of integers.  Example usage: `{{ m.rsc[id].s.author[1].title }}`  This returns the first article that links to me with a author connection. | `fun(Predicate,Context)` |
 | op | Returns a list of all predicates on edges from this page. The predicates are atoms. | `[about, related]` |
@@ -122,7 +125,7 @@ Dates
 -----
 
 Dates are stored as a standard Erlang date time tuple, for example `{{2008,12,10},{15,30,00}}`. Dates are stored and
-retrieved in UTC (universal time). When displaying a date, (e.g. with the [date](/id/doc_template_filter_filter_date)
+retrieved in UTC (universal time). When displaying a date, (e.g. with the `filter#date`
 filter), the date is automatically converted into the time zone of the site or that of the user.
 
 
@@ -139,7 +142,7 @@ In your templates, you can loop over the properties of a resource like this:
 {% endfor %}
 ```
 
-And also using the [print](/id/doc_template_tag_tag_print) tag:
+And also using the `tag#print` tag:
 
 
 ```erlang
@@ -164,10 +167,7 @@ Available Model API Paths
 | `delete` | `/+id` | Delete resource `+id`. No further lookups. |
 
 `/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
-
-See also
-
-[Resources](/id/doc_developerguide_resources#guide-datamodel-resources), [The Zotonic data model](/id/doc_userguide_datamodel#guide-datamodel), [m_edge](/id/doc_model_model_edge), [m_media](/id/doc_model_model_media), [m_rsc_gone](/id/doc_model_model_rsc_gone).").
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -behaviour(zotonic_model).

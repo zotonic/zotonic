@@ -17,6 +17,12 @@
 %% limitations under the License.
 
 -module(mod_content_groups).
+-moduledoc(#{
+    zotonic_keywords => [
+        "reference", "site_administrator", "module", "content_modeling",
+        "authorization_and_access_control", "content_group"
+    ]
+}).
 -moduledoc("
 Module for content group support and ACL-aware content group behavior.
 
@@ -35,9 +41,6 @@ Delegate callbacks:
 - `event/2` with `postback` messages: `delete_all`.
 - `event/2` with `submit` messages: `delete_move`.
 
-See also
-
-[mod_acl_user_groups](/id/doc_module_mod_acl_user_groups)
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

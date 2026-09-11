@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_format_duration).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "duration", "format"]
+}).
 -moduledoc("
 Show a duration in hours, minutes and seconds.
 
@@ -40,10 +43,7 @@ And:
 ```
 
 Will ouput `1h0m1s`.
-
-See also
-
-[format_number](/id/doc_template_filter_filter_format_number), [format_integer](/id/doc_template_filter_filter_format_integer), [format_price](/id/doc_template_filter_filter_format_price)").
+").
 -export([format_duration/2]).
 
 
@@ -70,4 +70,3 @@ format_duration(Input, _Context) when is_number(Input), Input >= 0 ->
     end;
 format_duration(Input, _Context) ->
     Input.
-

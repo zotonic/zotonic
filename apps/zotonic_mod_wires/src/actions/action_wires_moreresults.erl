@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(action_wires_moreresults).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "search_and_discovery", "query", "javascript"]
+}).
 -moduledoc("
 Show more results of the current search query inline on the page.
 
@@ -67,7 +70,7 @@ Contains template that will be appended.
 
 `catinclude`
 
-Render `template` through a [catinclude](/id/doc_template_tag_tag_catinclude).
+Render `template` through a `tag#catinclude`.
 
 `is_result_render`
 

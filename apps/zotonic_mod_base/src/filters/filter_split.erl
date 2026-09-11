@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_split).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "text", "transform"]
+}).
 -moduledoc("
 Splits the filter value into a list of values.
 
@@ -29,10 +32,7 @@ The input value is split by the filter argument, for example:
 ```
 
 Will create the list `[\"foo\", \"bar\", \"baz\"]`.
-
-See also
-
-[join](/id/doc_template_filter_filter_join)").
+").
 -export([split/3]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -53,4 +53,3 @@ split(String, Sep, _Context) when is_binary(String) ->
 	binary:split(String, z_convert:to_binary(Sep), [global]);
 split(String, Sep, _Context) ->
     z_string:split(z_convert:to_list(String), z_convert:to_list(Sep)).
-

@@ -16,5 +16,27 @@
         {% endif %}
 
         {% include "_admin_config_ssl_certinfo.tpl" %}
+
+        {% if cert.is_zotonic_self_signed and m.acl.is_admin %}
+            <div class="form-group">
+                {% button
+                    class="btn btn-default"
+                    text=_"Regenerate self-signed certificate"
+                    action={confirm
+                        title=_"Regenerate self-signed certificate?"
+                        text=_"This replaces the current self-signed certificate and private key. Any trust granted to the current certificate must be granted again to the new certificate."
+                        cancel=_"Cancel"
+                        ok=_"Regenerate certificate"
+                        is_danger
+                        postback={regenerate_self_signed}
+                        delegate=`mod_admin_config`
+                    }
+                %}
+            </div>
+        {% endif %}
+
+        {% if cert.is_zotonic_self_signed and m.site.environment == `development` %}
+            {% include "_admin_config_ssl_self_signed_trust.tpl" %}
+        {% endif %}
     </div>
 </div>

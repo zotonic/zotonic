@@ -18,10 +18,22 @@
 %% limitations under the License.
 
 -module(validator_base_json).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_validator", "validate", "json"]
+}).
 -moduledoc("
-Todo
+Validate that a form value is JSON.
 
-Not yet documented.
+Whitespace is trimmed before decoding. An empty value is accepted; combine the
+validator with `presence` when the field is required. A valid value is returned
+unchanged apart from surrounding whitespace.
+
+For example:
+
+```django
+<textarea id=\"settings\" name=\"settings\"></textarea>
+{% validate id=\"settings\" type={json} %}
+```
 ").
 
 -export([render_validator/5, validate/5]).

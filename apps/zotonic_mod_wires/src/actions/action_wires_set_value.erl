@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(action_wires_set_value).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "forms", "edit", "javascript"]
+}).
 -moduledoc("
 Set the value of a form field.
 

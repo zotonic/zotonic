@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_log_csp).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "operator", "model", "logging_and_monitoring", "security", "monitor"]
+}).
 -moduledoc("
 Model for admin Content-Security Report log retrieval by index, gated by admin permissions.
 

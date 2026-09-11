@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_log_email).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "operator", "model", "logging_and_monitoring", "monitor"]
+}).
 -moduledoc("
 Model for email log lookups used by logging/admin views.
 ").
@@ -205,4 +208,3 @@ install(Context) ->
                       ],
             [ z_db:q("create index "++Name++" on log_email ("++Cols++")", Context) || {Name, Cols} <- Indices ]
     end.
-

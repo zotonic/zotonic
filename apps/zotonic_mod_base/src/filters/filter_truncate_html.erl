@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_truncate_html).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "html", "text", "transform"]
+}).
 -moduledoc("
 Truncate a HTML text to a maximum length.
 
@@ -31,11 +34,11 @@ For example:
 {{ value|truncate_html:8 }}
 ```
 
-If the value is `hello <b\\>world</b\\>` then the output is `hello <b\\>wo…</b\\>`.
+If the value is `hello <b>world</b>` then the output is `hello <b>wo…</b>`.
 
 Entities like “&amp;amp;” are counted as a single character.
 
-Self closing entities like `<img/\\>` and `<br/\\>` are not counted as characters.
+Self closing entities like `<img/>` and `<br/>` are not counted as characters.
 
 
 
@@ -49,11 +52,8 @@ An optional second argument defines which text will be added if the text is trun
 {{ value|truncate_html:8:\" (more)\" }}
 ```
 
-If the value is `hello <b\\>world</b\\>` then the output is `hello <b\\>wo (more)</b\\>`.
-
-See also
-
-[truncate](/id/doc_template_filter_filter_truncate), [truncatechars](/id/doc_template_filter_filter_truncatechars)").
+If the value is `hello <b>world</b>` then the output is `hello <b>wo (more)</b>`.
+").
 -export([truncate_html/2, truncate_html/3, truncate_html/4]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -83,4 +83,3 @@ truncate_html(In, N, Append, Context) ->
         _ ->
             undefined
     end.
-

@@ -1,6 +1,17 @@
+---
+keywords:
+  - reference
+  - frontend_developer
+  - template
+  - maintainability
+  - render
+---
+
+::: aside
 See also
 
-[extends](/id/doc_template_tag_tag_extends) and [overrules](/id/doc_template_tag_tag_overrules).
+`tag#extends` and `tag#overrules`.
+:::
 
 Define a template block and overrules a template block from an inherited template.
 
@@ -13,7 +24,7 @@ For example, when we have a template base.tpl, in which we define a template blo
 Hello {% block name %}my{% endblock %} world.
 ```
 
-And we define a second template, page.tpl, which [extends](/id/doc_template_tag_tag_extends) the first template:
+And we define a second template, page.tpl, which uses `tag#extends` to extend the first template:
 
 
 ```django
@@ -28,7 +39,7 @@ Then the result of rendering page.tpl will be:
 Hello Peter's world.
 ```
 
-If we do not include the template block definition, so page.tpl just contains the [extends](/id/doc_template_tag_tag_extends) tag:
+If we do not include the template block definition, so page.tpl just contains the `tag#extends` tag:
 
 
 ```django

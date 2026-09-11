@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_rand).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "number", "create"]
+}).
 -moduledoc("
 Generates a random number. The number is from, and including, 1 up to, and including, the input value.
 
@@ -39,10 +42,7 @@ floating point number as input. It will generate a number from, but not includin
 ```
 
 Might output “3.1415926536”
-
-See also
-
-[randomize](/id/doc_template_filter_filter_randomize), [random](/id/doc_template_filter_filter_random)").
+").
 -export([rand/1, rand/2]).
 
 

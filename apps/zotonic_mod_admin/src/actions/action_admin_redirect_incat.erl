@@ -18,10 +18,21 @@
 %% limitations under the License.
 
 -module(action_admin_redirect_incat).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "routing_and_redirects", "categorization", "navigation"]
+}).
 -moduledoc("
-Todo
+Redirect the admin editor to the next or previous resource in a category.
 
-Not yet documented.
+Pass `id` and `cat_id`; set `is_prev` to select the previous resource instead
+of the next one. Navigation wraps at either end of the category. When no other
+resource exists, the action displays a notification.
+
+For example:
+
+```django
+{% button text=\"Next\" action={admin_redirect_incat id=id cat_id=q.qcat} %}
+```
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

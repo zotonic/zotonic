@@ -18,13 +18,18 @@
 %% limitations under the License.
 
 -module(mod_admin).
+-moduledoc(#{
+    zotonic_keywords => [
+        "reference", "content_editor", "module", "content_authoring", "editorial_workflow", "user_interface_and_interaction"
+    ]
+}).
 -moduledoc("
 Admin backend module that wires the core admin interface, assets, and admin-specific event handling.
 
 Extending the admin menu
 ------------------------
 
-See [m_admin_menu](/id/doc_model_model_admin_menu) on how to extend the admin menu.
+See `model#admin_menu` on how to extend the admin menu.
 
 
 
@@ -46,7 +51,7 @@ Will be automatically included into main (left) div (at bottom).
 
 Will be automatically included into right sidebar (near middle/bottom).
 
-These templates are included using the [all catinclude](/id/doc_template_tag_tag_all_catinclude) tag; so if you need
+These templates are included using the `tag#all_catinclude` tag; so if you need
 something in the sidebar just for persons, create a `_admin_edit_sidebar.person.tpl` file in your project.
 
 
@@ -108,37 +113,31 @@ These widgets do not provide any localization abilities. Also note that there ar
 `_admin_widget_i18n.tpl`
 
 Complex widget example. Is used to edit localized rsc properties. It will be rendered as tabs. See /admin/edit/N top
-left to see the tabs. If mod_translation disabled, then i18n-widgets are displayed same as \\_admin_widget_std.tpl.
+left to see the tabs. If mod_translation disabled, then i18n-widgets are displayed same as _admin_widget_std.tpl.
 
 
 
 Making an admin widget conditionally visible
 --------------------------------------------
 
-See also
+An admin widget can decide whether its complete wrapper is rendered. Override the `widget_wrapper` block, test the
+condition, and use `tag#inherit` to render the wrapper supplied by the parent template.
 
-[admin_edit_widget_i18n.tpl](../templates/template_admin_edit_widget_i18n.html#template-admin-edit-widget-i18n), [inherit](/id/doc_template_tag_tag_inherit)
-
-To make an entire admin widget visible or not, depending on some condition that you want to calculate inside the
-widget’s code, you can use the widget_wrapper block (which sits around the entire widget) in combination with the
-[inherit](/id/doc_template_tag_tag_inherit) tag, wrapping that with a condition.
-
-For instance, [mod_backup](/id/doc_module_mod_backup) uses this technique to display the import/export sidebar widget.
-Excerpt from mod_backup’s \\_admin_edit_sidebar.tpl:
-
+For example, the backup module only shows its edit-page widget when its admin panel is enabled:
 
 ```django
-{# Make the widget conditional, based on the config value mod_backup.admin_panel #}
+{% extends \"admin_edit_widget_std.tpl\" %}
+
 {% block widget_wrapper %}
-    {% if m.config.mod_backup.admin_panel.value %}
+    {% if m.backup.admin_panel %}
         {% inherit %}
     {% endif %}
 {% endblock %}
 ```
 
-In this example, when the condition is true, the wrapper is rendered normally (content is inherited from the extended
-template); when false, the wrapper block is overridden by new (but void) content.
-
+When the condition is false, the overridden block renders nothing. When it is true, `{% inherit %}` renders the normal
+widget wrapper and all of its content. This keeps the visibility decision inside the widget instead of repeating the
+condition at every include site.
 
 
 Extending the admin overview page
@@ -293,7 +292,7 @@ And on the edit page there is this check to conditionally include the geodata bo
 {% if id.category_id.is_feature_show_geodata|if_undefined:true %}
 ```
 
-The filter [if_undefined](/id/doc_template_filter_filter_if_undefined) is used so that the default value can be true
+The filter `filter#if_undefined` is used so that the default value can be true
 when the checkbox has never been touched.
 
 
@@ -320,8 +319,8 @@ The configuration `mod_admin.rsc_dialog_is_published` defines the default *is_pu
 Setting this key to 1 will check the *is_published* checkbox.
 
 The configuration `mod_admin.edge_list_max_length` defines the maximum number of connections shown per predicate in the
-connection list sidebar. If there are more connections then the list truncated, and the message \\_Too many connections,
-only the first and last are shown.\\_ is displayed. The default is 100 connections.
+connection list sidebar. If there are more connections then the list truncated, and the message _Too many connections,
+only the first and last are shown._ is displayed. The default is 100 connections.
 
 The configuration `mod_admin.rsc_dialog_is_dependent` defines the default *is_dependent* state for new resources.
 Setting this key to 1 will check the *is_dependent* checkbox.

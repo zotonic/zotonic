@@ -18,6 +18,11 @@
 %% limitations under the License.
 
 -module(mod_copyright).
+-moduledoc(#{
+    zotonic_keywords => [
+        "reference", "content_editor", "module", "copyright_and_licensing", "media_resource", "metadata"
+    ]
+}).
 -moduledoc("
 Module for copyright metadata, rights statements, and attribution helpers.
 

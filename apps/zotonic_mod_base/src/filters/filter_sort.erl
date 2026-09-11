@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_sort).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "collection", "transform"]
+}).
 -moduledoc("
 The sort filter takes a list of items to sort. Items can be an ordinary list of terms, property lists, or maps. It can
 also be a list of resource ids to be filtered based on their properties. Sort order and properties to sort on are given
@@ -55,7 +58,7 @@ Example:
 This will sort on title in ascending order first, then on modified in descending order. Any number of properties may be
 added, each one can have it’s own sort order, or use the current one.
 
-See [m_rsc](/id/doc_model_model_rsc) for a list of properties available to sort on.
+See `model#rsc` for a list of properties available to sort on.
 
 Sort order may be either ascending or descending (may be abbreviated as asc, +, desc, - or as string version of those).
 ").

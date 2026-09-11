@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_admin).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "model", "content_authoring", "user_interface_and_interaction"]
+}).
 -moduledoc("
 This model exposes some meta-information for the use in `mod_admin` templates.
 

@@ -18,10 +18,15 @@
 %% limitations under the License.
 
 -module(controller_admin_statistics).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "operator", "controller", "logging_and_monitoring", "monitor"]
+}).
 -moduledoc("
-Todo
+Render the administration dashboard for live Zotonic system statistics.
 
-Not yet documented.
+The page is available to users allowed to use `mod_admin_statistics`. It is
+served without browser caching or search-engine indexing so its runtime values
+remain current.
 ").
 -author("Maas-Maarten Zeeman <mmzeeman@xs4all.nl>").
 
@@ -45,4 +50,3 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     ],
     Html = z_template:render("admin_statistics.tpl", Vars, Context),
     z_context:output(Html, Context).
-

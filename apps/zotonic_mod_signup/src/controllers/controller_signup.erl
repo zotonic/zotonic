@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(controller_signup).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "controller", "identity_and_accounts", "authentication", "forms", "create"]
+}).
 -moduledoc("
 Controller which displays a form to sign up (rendered from `signup.tpl`).
 
@@ -61,6 +64,9 @@ payload is carried forward as template variables in each wire postback
 (`props=props signup_props=signup_props`). This keeps the browser-visible form
 state limited to the values the template already needs to render, while the
 original `xs` token is only used to bootstrap the first page render.
+
+Handled events
+--------------
 
 The controller accepts these postbacks:
 
@@ -183,10 +189,6 @@ moved_temporarily(Context) ->
 
 process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     z_context:logger_md(Context),
-    DefaultVars = [
-        {signup_props, []},
-        {props, #{}}
-    ],
     Vars = case maybe_fetch_xs(Context) of
         {ok, Props, SignupProps} ->
             Props1 = drop_empty_email(Props),
@@ -199,7 +201,11 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
                 {is_email_verified, is_email_idn_verified(Email, SignupProps)}
             ];
         false ->
-            DefaultVars
+            [
+                {signup_props, []},
+                {props, #{}},
+                {page, get_redirect_page([], z_context:get_q(<<"p">>, Context))}
+            ]
     end,
     % z_session:set(signup_xs, undefined, Context),
     Rendered = z_template:render(<<"signup.tpl">>, Vars, Context),

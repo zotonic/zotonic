@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(controller_admin_module_manager).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "site_administrator", "controller", "module_management", "configure"]
+}).
 -moduledoc("
 Shows the list of Zotonic modules currently known to the system.
 
@@ -25,9 +28,11 @@ The list is sorted based on the module’s status: active modules are listed fir
 
 Each module has a button which let you toggle the active status of the module.
 
-Todo
+Handled events
+--------------
 
-Extend documentation
+* `{reinstall, [{module, Module}]}` reinstalls the module's data model when the
+  current user is allowed to use the module manager.
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

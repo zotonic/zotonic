@@ -18,6 +18,12 @@
 %% limitations under the License.
 
 -module(mod_oauth2).
+-moduledoc(#{
+    zotonic_keywords => [
+        "reference", "integrator", "module", "authentication",
+        "authorization_and_access_control", "api_and_integration", "oauth_2_0"
+    ]
+}).
 -moduledoc("
 OAuth2 provider module for app/client/token management and authorization flows.
 

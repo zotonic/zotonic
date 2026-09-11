@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_min).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "number", "compare"]
+}).
 -moduledoc("
 Take the minimum of the filter value and its first argument.
 
@@ -60,10 +63,7 @@ Edge cases
 - `undefined | min:1000` returns `undefined`
 - `[] | max` (empty list) returns `undefined`
 - Works with translation tuple values.
-
-See also
-
-[max](/id/doc_template_filter_filter_max)").
+").
 
 -compile({no_auto_import, [min/2]}).
 
@@ -82,4 +82,3 @@ min(_Value, undefined, _Context) ->
     undefined;
 min(Value, Arg, Context) ->
     min([Value, Arg], Context).
-

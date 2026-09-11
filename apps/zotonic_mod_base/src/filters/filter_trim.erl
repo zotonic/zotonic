@@ -1,5 +1,8 @@
 %% @doc 'trim' filter, removes whitespace at the start and end of a string
 -module(filter_trim).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "text", "transform"]
+}).
 -moduledoc("
 Removes whitespace at the start and end of a string.
 

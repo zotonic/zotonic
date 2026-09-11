@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_acl).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "model", "authorization_and_access_control", "authorize"]
+}).
 -moduledoc("
 The m_acl model gives access the id of the currently logged in user, and provides a mechanism to do basic access
 control checks.

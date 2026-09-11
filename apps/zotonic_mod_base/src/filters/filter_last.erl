@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_last).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "collection", "query"]
+}).
 -moduledoc("
 Returns the last character or element.
 
@@ -33,11 +36,10 @@ For example:
 
 When value is the list `hello` then the output will be `o`.
 
-**Note:** This function is not safe to use with multibyte character values, use with care.
-
-See also
-
-[first](/id/doc_template_filter_filter_first)").
+::: note
+This function is not safe to use with multibyte character values, use with care.
+:::
+").
 -export([last/2]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").

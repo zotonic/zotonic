@@ -18,6 +18,11 @@
 %% limitations under the License.
 
 -module(mod_image_edit).
+-moduledoc(#{
+    zotonic_keywords => [
+        "reference", "content_editor", "module", "image_management", "media_resource", "transform", "edit"
+    ]
+}).
 -moduledoc("
 Non destructive edits of images.
 
@@ -54,10 +59,7 @@ This module handles the following notifier callbacks:
 Delegate callbacks:
 
 - `event/2` with `submit` messages: `edit_form`.
-
-See also
-
-[image](/id/doc_template_tag_tag_image), [Arguments](/id/doc_template_tag_tag_image)").
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Image Edit").

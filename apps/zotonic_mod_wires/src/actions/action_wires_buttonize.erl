@@ -18,10 +18,20 @@
 %% limitations under the License.
 
 -module(action_wires_buttonize).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "user_interface_and_interaction", "javascript"]
+}).
 -moduledoc("
-Todo
+Add button interaction classes to an element.
 
-Not yet documented.
+The action adds `hover` during pointer hover and `clicked` while the pointer is
+pressed, removing each class when its corresponding interaction ends.
+
+For example:
+
+```django
+{% wire id=\"preview\" action={buttonize} %}
+```
 ").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).

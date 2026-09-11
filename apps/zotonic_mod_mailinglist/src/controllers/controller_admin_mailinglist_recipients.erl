@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(controller_admin_mailinglist_recipients).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "controller", "mailing_lists", "query", "edit"]
+}).
 -moduledoc("
 Shows the recipients of the current mailing list. The recipients are listed in three columns, and have a checkbox next
 to them to deactivate them.
@@ -27,9 +30,15 @@ recipient’s name details.
 
 The page also offers buttons for importing and exporting lists of email addresses.
 
-Todo
+Handled events
+--------------
 
-Extend documentation
+* `dialog_recipient_add` opens the add-recipient dialog.
+* `dialog_recipient_edit` opens the edit-recipient dialog.
+* `recipient_is_enabled_toggle` activates or deactivates a recipient.
+* `recipient_change_email` updates a recipient's email address.
+* `recipient_delete` deletes a recipient and removes it from the list.
+* `recipients_clear` removes all recipients from the mailing list.
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

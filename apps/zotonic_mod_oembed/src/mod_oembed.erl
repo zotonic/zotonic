@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(mod_oembed).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "integrator", "module", "api_and_integration", "interoperability", "oembed"]
+}).
 -moduledoc("
 Makes media [resources](/id/doc_glossary#term-resource) from embeddable URLs through the
 [OEmbed](http://www.oembed.com/) protocol.
@@ -59,7 +62,7 @@ So, to display the HTML of an OEmbedded medium, you would do the following in a 
 {{ id.medium.html }}
 ```
 
-The module also supports the use of the [media](/id/doc_template_tag_tag_media) tag:
+The module also supports the use of the `tag#media` tag:
 
 
 ```erlang
@@ -74,7 +77,7 @@ taken from the provider.
 Configuration options
 ---------------------
 
-The following [m_config](/id/doc_model_model_config) options are supported:
+The following `model#config` options are supported:
 
 `mod_oembed.embedly_key`
 
@@ -103,10 +106,7 @@ Delegate callbacks:
 
 - `event/2` with `postback` messages: `fix_missing`.
 - `event/2` with `submit` messages: `admin_oembed`.
-
-See also
-
-[mod_video_embed](/id/doc_module_mod_video_embed), [mod_video](/id/doc_module_mod_video), [mod_audio](/id/doc_module_mod_audio), [media](/id/doc_template_tag_tag_media)").
+").
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -mod_title("OEmbed support").

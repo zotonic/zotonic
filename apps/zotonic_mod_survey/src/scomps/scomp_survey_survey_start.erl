@@ -22,6 +22,9 @@
 %% limitations under the License.
 
 -module(scomp_survey_survey_start).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "scomp", "surveys", "forms", "render"]
+}).
 -moduledoc("
 Show the first page for a given survey (with the `id` parameter):
 

@@ -18,10 +18,14 @@
 %% limitations under the License.
 
 -module(controller_nocontent).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "controller", "http", "reliability"]
+}).
 -moduledoc("
-Todo
+Return an empty HTTP `204 No Content` response.
 
-Not yet documented.
+The controller accepts GET, PUT, POST, HEAD, and DELETE. It is useful as a
+dispatch target when a successful request deliberately has no representation.
 ").
 
 -author("Maas-Maarten Zeeman <mmzeeman@xs4all.nl>").

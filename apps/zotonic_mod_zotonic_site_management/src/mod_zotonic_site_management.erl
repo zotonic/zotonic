@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(mod_zotonic_site_management).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "site_administrator", "module", "site_management", "create"]
+}).
 -moduledoc("
 Site management module for creating, configuring, and controlling managed Zotonic sites.
 
@@ -172,4 +175,3 @@ notice_actions(Sitename, Text) ->
             {selector, "#notices > div:gt(0)"}, {speed, 2000}
         ]}
     ].
-

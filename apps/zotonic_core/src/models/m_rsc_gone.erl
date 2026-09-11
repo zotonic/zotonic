@@ -18,8 +18,11 @@
 %% limitations under the License.
 
 -module(m_rsc_gone).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "model", "routing_and_redirects", "resource", "query"]
+}).
 -moduledoc("
-This model tracks deleted resources (see [m_rsc](/id/doc_model_model_rsc)). Its primary goal is to be able to
+This model tracks deleted resources (see `model#rsc`). Its primary goal is to be able to
 determine if a resource never existed, has been deleted or has been replaced by another resource.
 
 
@@ -30,7 +33,7 @@ Information kept
 Only very basic information of the deleted resource is kept in the `rsc_gone` table. It is enough for referring to a new
 location, giving correct errors or to determine who deleted a resource.
 
-It is not enough to undelete a resource. The module [mod_backup](/id/doc_module_mod_backup) retains enough information
+It is not enough to undelete a resource. The module `module#mod_backup` retains enough information
 about past versions to be able to undelete a resource. Currently there is no support for an undelete.
 
 
@@ -38,8 +41,8 @@ about past versions to be able to undelete a resource. Currently there is no sup
 Properties
 ----------
 
-Whenever a [m_rsc](/id/doc_model_model_rsc) record is deleted some information from that resource is copied to the
-`rsc_gone` table.
+Whenever a resource is deleted through `model#rsc`, some information from that resource
+is copied to the `rsc_gone` table.
 
 The following properties are saved:
 
@@ -66,10 +69,7 @@ Available Model API Paths
 | `get` | `/+id/is_gone/...` | Return whether gone (`is_gone`). |
 
 `/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
-
-See also
-
-[The Zotonic data model](/id/doc_userguide_datamodel#guide-datamodel), [m_rsc](/id/doc_model_model_rsc)").
+").
 -author("Marc Worrell <marc@worrell.nl").
 
 -behaviour(zotonic_model).
@@ -275,7 +275,12 @@ install(Context) ->
             % Check for rsc_gone_uri_key
             case z_db:key_exists(rsc_gone, rsc_gone_uri_key, Context) of
                 false ->
-                    [] = z_db:q("CREATE INDEX IF NOT EXISTS rsc_gone_uri_key ON rsc_gone(uri)", Context),
+                    % This can take longer on sites with an extensive deletion history.
+                    [] = z_db:q(
+                        "CREATE INDEX IF NOT EXISTS rsc_gone_uri_key ON rsc_gone(uri)",
+                        [],
+                        Context,
+                        10*60*1000),
                     ok;
                 true ->
                     ok

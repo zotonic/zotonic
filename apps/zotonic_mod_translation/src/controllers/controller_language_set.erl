@@ -18,13 +18,26 @@
 %% limitations under the License.
 
 -module(controller_language_set).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "controller", "localization_and_translation", "language_code", "routing_and_redirects", "edit"]
+}).
 -moduledoc("
 Controller which sets the language as given in the `code` argument, and redirects the user back to the page given in the
 `p` argument.
 
-Todo
+Arguments:
 
-Extend documentation
+* `code` is the requested enabled language code and is normally supplied by the
+  `language_select` dispatch path.
+* `p` is the optional return URL and defaults to `/`.
+
+Only same-site return URLs are accepted. The controller removes any existing
+language prefix, adds the newly selected language, and responds with a permanent
+redirect. The response is not cached or indexed.
+
+```django
+<a href=\"{% url language_select code=\"nl\" p=q.p %}\">Nederlands</a>
+```
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 
@@ -75,4 +88,3 @@ add_language(<<>>, Context) ->
     add_language(<<"/">>, Context);
 add_language(Url, Context) ->
     iolist_to_binary([$/, z_convert:to_binary(z_context:language(Context)), Url]).
-

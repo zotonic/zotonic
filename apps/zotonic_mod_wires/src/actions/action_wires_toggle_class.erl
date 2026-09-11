@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(action_wires_toggle_class).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "user_interface_and_interaction", "javascript"]
+}).
 -moduledoc("
 Toggle a CSS class from an HTML element.
 
@@ -29,10 +32,7 @@ Example:
 ```
 
 When the HTML element with id “myid” has the CSS class “newclass” then it is removed, otherwise it is added.
-
-See also
-
-actions [add_class](/id/doc_template_action_action_add_class) and [remove_class](/id/doc_template_action_action_remove_class).").
+").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).
 

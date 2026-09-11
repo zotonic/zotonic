@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(action_wires_enable).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "user_interface_and_interaction", "javascript"]
+}).
 -moduledoc("
 Resets the “disabled” attribute of a HTML tag and removes the CSS class “disabled”.
 
@@ -35,10 +38,7 @@ After clicking the button the input will be:
 ```django
 <input id=\"myid\" class=\"\" type=\"text\" value=\"hello\" />
 ```
-
-See also
-
-action [disable](/id/doc_template_action_action_disable).").
+").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).
 

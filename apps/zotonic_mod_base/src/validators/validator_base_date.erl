@@ -17,6 +17,9 @@
 %% limitations under the License.
 
 -module(validator_base_date).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_validator", "validate", "date_and_time"]
+}).
 -moduledoc("
 Validate input date against a given date format.
 
@@ -42,7 +45,7 @@ Arguments
 
 | Argument  | Description                                                                      | Example         |
 | --------- | -------------------------------------------------------------------------------- | --------------- |
-| `separator` | Character used to separate date parts, such as `/` `-` `\\\\`. Defaults to `\"-\"`.  | `separator=\"-\"` |
+| `separator` | Character used to separate date parts, such as `/` `-` `\\`. Defaults to `\"-\"`.  | `separator=\"-\"` |
 | `format`    | Date format, big endian (starting with year), little endian (starting with day) or middle endian (starting with month). Defaults to `\"l\"` (little). | `format=\"m\"`    |
 ").
 -include_lib("zotonic_core/include/zotonic.hrl").

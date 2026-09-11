@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_tail).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "collection", "transform"]
+}).
 -moduledoc("
 Fetch the tail of a list.
 
@@ -31,10 +34,7 @@ For example:
 ```
 
 When value is the list `[1,2,3]` then the output is `23`.
-
-See also
-
-[first](/id/doc_template_filter_filter_first), [nthtail](/id/doc_template_filter_filter_nthtail)").
+").
 -export([tail/2]).
 
 
@@ -43,5 +43,4 @@ tail(In, Context) ->
         [_|T] -> T;
         _ -> []
     end.
-
 

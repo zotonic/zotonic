@@ -18,12 +18,21 @@
 %% limitations under the License.
 
 -module(action_wires_editor_add).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "content_authoring", "edit", "javascript"]
+}).
 -moduledoc("
-Add WYSIWYG editor controls to all textarea’s with the `z_editor` class in the target.
+Add WYSIWYG editor controls to the textareas selected by the target. The active
+editor integration, such as TinyMCE, implements the actual controls; the action
+does nothing when no editor integration is loaded.
 
-Todo
+The `target` argument normally names a container holding one or more
+`textarea.z_editor` elements. The common `id` or `selector` action arguments can
+be used to override that target.
 
-Extend documentation
+```django
+{% wire action={editor_add target=\"edit-form\"} %}
+```
 ").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([
@@ -33,4 +42,3 @@ Extend documentation
 render_action(_TriggerId, TargetId, Args, Context) ->
     CssSelector = z_render:css_selector(proplists:get_value(id, Args, TargetId), Args),
     {[ <<"z_editor_add(\"">>, z_utils:js_escape(CssSelector), $", $), $;], Context}.
-

@@ -18,8 +18,11 @@
 %% limitations under the License.
 
 -module(mod_admin_merge).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "content_editor", "module", "content_management", "resource", "edit"]
+}).
 -moduledoc("
-Adds functonality to merge two pages together into a single page.
+Adds functionality to merge two pages together into a single page.
 
 In an interface the *winner* and *loser* can be selected. All connections and properties from the loser are merged into
 the winner. Properties of the winner are unchanged.

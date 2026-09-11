@@ -1,3 +1,12 @@
+---
+keywords:
+  - reference
+  - frontend_developer
+  - template
+  - development_and_debugging
+  - maintainability
+---
+
 Ignore part of a template.
 
 Everything between a `{% comment %}` and a `{% endcomment %}` tag is not output.

@@ -1,10 +1,21 @@
+---
+keywords:
+  - reference
+  - frontend_developer
+  - template
+  - maintainability
+  - render
+---
+
+::: aside
 See also
 
-[catcompose](/id/doc_template_tag_tag_catcompose), [block](/id/doc_template_tag_tag_block), [fragment](/id/doc_template_tag_tag_fragment) and [useblock](/id/doc_template_tag_tag_useblock).
+`tag#catcompose`, `tag#block`, `tag#fragment` and `tag#useblock`.
+:::
 
 Compose another template and override its named blocks.
 
-The `compose` tag renders another template, like [include](/id/doc_template_tag_tag_include), but also lets the caller define [template block](/id/doc_template_tag_tag_block) overrides for the composed template.
+The `compose` tag renders another template, like `tag#include`, but also lets the caller define `tag#block` overrides for the composed template.
 
 Example:
 
@@ -22,7 +33,7 @@ The composed template can define blocks such as `body`, and the `compose` caller
 Arguments
 ---------
 
-Like the [include](/id/doc_template_tag_tag_include) tag, the `with` keyword is optional:
+Like the `tag#include` tag, the `with` keyword is optional:
 
 
 ```django
@@ -37,6 +48,6 @@ Like the [include](/id/doc_template_tag_tag_include) tag, the `with` keyword is 
 
 The supplied arguments extend the current template context for the composed template render.
 
-Note
-
+::: note
 The template name can be an expression. If it is not a string literal then the template is selected at runtime.
+:::

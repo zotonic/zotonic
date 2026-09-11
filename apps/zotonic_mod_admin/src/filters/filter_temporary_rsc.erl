@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_temporary_rsc).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "resource", "create"]
+}).
 -moduledoc("
 Creates a temporary resource if its input value is not defined.
 
@@ -26,9 +29,9 @@ The created resource receives the properties of the second parameter.
 After the resource is created, every hour a check is made if the resource has been edited and still registered in the
 Server Storage.
 
-Note
-
+::: note
 `mod_server_storage` must be enabled for this filter to work.
+:::
 
 If the resource is abandoned and not changed since its creation, then it is automatically deleted.
 
@@ -53,7 +56,7 @@ Example:
 {% endwith %}
 ```
 
-See [mod_admin](/id/doc_module_mod_admin), [mod_server_storage](/id/doc_module_mod_server_storage)
+See `module#mod_admin`, `module#mod_server_storage`
 ").
 -export([
     temporary_rsc/2,
@@ -225,4 +228,3 @@ ensure_category(Props) ->
 cat(#{ <<"category">> := Cat }) -> Cat;
 cat(#{ <<"category_id">> := Cat }) -> Cat;
 cat(_) -> undefined.
-

@@ -19,10 +19,15 @@
 %% limitations under the License.
 
 -module(filter_survey_prepare_thurstone).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "surveys", "structured_data", "transform"]
+}).
 -moduledoc("
-Todo
+Normalize a survey Thurstone question before rendering or processing it.
 
-Not yet documented.
+Current answer lists are retained. Legacy newline-separated answer text is
+converted to answer maps, including translated labels, values, correctness,
+and test points. The optional filter argument overrides answer randomization.
 ").
 
 -export([

@@ -6,16 +6,17 @@
 %% @end
 
 -module(action_admin_admin_tasks).
+-moduledoc(#{
+    zotonic_keywords => [
+        "reference", "site_administrator", "wire_action", "logging_and_monitoring", "cache", "pivot_index", "monitor"
+    ]
+}).
 -moduledoc("
 Action module which provides postback handlers for the “status” view of the admin:
 
 *   Rebuild search index
 *   Flush cache
 *   Renumber categories
-
-Todo
-
-Extend documentation
 ").
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 -include_lib("zotonic_core/include/zotonic.hrl").

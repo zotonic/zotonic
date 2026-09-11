@@ -1,4 +1,7 @@
 -module(filter_log_format_stack).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "logging_and_monitoring", "javascript", "html", "format"]
+}).
 -moduledoc("
 Escapes and formats a Javascript string with a stack trace to readable HTML.
 

@@ -17,6 +17,9 @@
 %% limitations under the License.
 
 -module(m_import_csv_data).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "integrator", "model", "import_and_migration", "structured_data", "import"]
+}).
 -moduledoc("
 Model to track resources imported from CSV and XLSX files.
 

@@ -18,10 +18,21 @@
 %% limitations under the License.
 
 -module(filter_content_type_label).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "metadata", "format"]
+}).
 -moduledoc("
-Todo
+Return a translated, human-readable label for a MIME content type.
 
-Not yet documented.
+Known types have descriptive labels such as `JSON`, `Excel Workbook`, and
+`iCalendar`. Other types are represented by their uppercase file extension.
+The input can be a MIME type string or a parsed Cowboy media-type tuple.
+
+For example:
+
+```django
+{{ \"application/json\"|content_type_label }}
+```
 ").
 -export([
     content_type_label/2

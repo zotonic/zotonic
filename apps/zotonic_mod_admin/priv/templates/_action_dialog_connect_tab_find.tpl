@@ -16,22 +16,57 @@
         <div id="find-connect-objects">
             {% for cat in m.predicate.object_resources[predicate] %}
                 {% if ocats|length > 1 %}
-                    <h4 class="text-muted">{{ cat.category.title }}</h4>
+                    {% with cat.category.summary|striptags as category_summary %}
+                        <header class="checkbox-list-heading">
+                            <h4 class="checkbox-list-heading__title">{{ cat.category.title }}</h4>
+                            {% if category_summary %}
+                                <p class="checkbox-list-heading__summary">
+                                    {{ category_summary|escape_check }}
+                                </p>
+                            {% endif %}
+                        </header>
+                    {% endwith %}
                 {% endif %}
 
-                <div class="checkbox-list" {% if not forloop.last %}style="border-bottom: 1px solid #e5e5e5"{% endif %}>
+                <div class="checkbox-list{% if not forloop.last %} checkbox-list--separated{% endif %}">
                     {% for id in cat.resources %}
                         {% if id.is_visible %}
-                            <label class="checkbox">
-                                <input type="checkbox" value="{{ id }}" {% if id|member:oids %}checked{% endif %}>
-                                {{ id.title|default:id.short_title }}
-                            </label>
+                            {% with id.summary|striptags as description %}
+                                <div
+                                    class="checkbox connection-checkbox{% if description %} connection-checkbox--described{% endif %}"
+                                >
+                                    <label class="connection-checkbox__label">
+                                        <input
+                                            type="checkbox"
+                                            value="{{ id }}"
+                                            {% if id|member:oids %}checked{% endif %}
+                                            {% if description %}aria-describedby="{{ #description }}-{{ id }}"{% endif %}
+                                        >
+                                        <span class="connection-checkbox__title">
+                                            {{ id.title|default:id.short_title }}
+                                        </span>
+                                    </label>
+                                    {% if description %}
+                                        <details class="connection-checkbox__help">
+                                            <summary
+                                                class="connection-checkbox__help-toggle"
+                                                title="{_ Show keyword description _}"
+                                                aria-label="{_ Show keyword description _}"
+                                            >
+                                                <span class="connection-checkbox__info" aria-hidden="true">i</span>
+                                            </summary>
+                                        </details>
+                                        <span
+                                            id="{{ #description }}-{{ id }}"
+                                            class="connection-checkbox__description"
+                                        >
+                                            {{ description|escape_check }}
+                                        </span>
+                                    {% endif %}
+                                </div>
+                            {% endwith %}
                         {% endif %}
                     {% endfor %}
-                    {# Padding for flexbox last row #}
-                    <label class="checkbox"></label>
-                    <label class="checkbox"></label>
-                    <label class="checkbox"></label>
                 </div>
             {% endfor %}
         </div>

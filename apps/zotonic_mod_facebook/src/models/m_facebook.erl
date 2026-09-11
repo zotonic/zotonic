@@ -19,6 +19,9 @@
 %% limitations under the License.
 
 -module(m_facebook).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "integrator", "model", "api_and_integration", "oauth_2_0"]
+}).
 -moduledoc("
 Model for Facebook integration helpers, including auth-use flag, profile picture fetch, and Graph API proxy calls.
 

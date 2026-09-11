@@ -18,6 +18,11 @@
 %% limitations under the License.
 
 -module(mod_server_storage).
+-moduledoc(#{
+    zotonic_keywords => [
+        "reference", "frontend_developer", "module", "database", "structured_data", "query", "edit"
+    ]
+}).
 -moduledoc("
 Server side storage for the client (aka browser) and server.
 

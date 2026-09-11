@@ -19,6 +19,9 @@
 %% limitations under the License.
 
 -module(m_admin_config).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "site_administrator", "model", "configuration", "configure"]
+}).
 -moduledoc("
 Model for admin configuration views, including SSL certificate info, security directory info, and selected module config values.
 
@@ -27,7 +30,7 @@ Available Model API Paths
 
 | Method | Path pattern | Description |
 | --- | --- | --- |
-| `get` | `/ssl_certificates/...` | Return discovered SSL certificate metadata for admin users; returns `[]` for non-admin requests. |
+| `get` | `/ssl_certificates/...` | Return discovered SSL certificate metadata for admin users; the self-signed certificate path is included only in development; returns `[]` for non-admin requests. |
 | `get` | `/security_dir/...` | Return the resolved security directory path for admin users; returns empty binary for non-admin requests or lookup errors. |
 | `get` | `/configs/...` | Return collected admin-config entries (`mod_admin_config:collect_configs/1`) for admin users; returns `[]` for non-admin requests. |
 | `get` | `/config/+module/+key/...` | Return the config entry map matching module `+module` and key `+key` from collected admin-config entries, or `undefined` if not found (admin-only). |
@@ -130,19 +133,44 @@ ssl_certificate({Module, observe_ssl_options}, Context) ->
             end
     end.
 
+-spec self_signed(z:context()) -> proplists:proplist().
 self_signed(Context) ->
     Options = z_ssl_certs:sni_self_signed(z_context:hostname(Context)),
-    {certfile, CertFile} = proplists:lookup(certfile, Options),
+    self_signed_options(Options, Context).
+
+-spec self_signed_options(undefined | proplists:proplist(), z:context()) -> proplists:proplist().
+self_signed_options(undefined, _Context) ->
+    self_signed_info();
+self_signed_options(Options, Context) ->
+    case proplists:lookup(certfile, Options) of
+        {certfile, CertFile} when is_binary(CertFile); is_list(CertFile) ->
+            self_signed_certificate(CertFile, Context);
+        _ ->
+            self_signed_info()
+    end.
+
+-spec self_signed_certificate(file:filename_all(), z:context()) -> proplists:proplist().
+self_signed_certificate(CertFile, Context) ->
+    Info = self_signed_info(CertFile, Context),
     case zotonic_ssl_certs:decode_cert(CertFile) of
         {ok, CertProps} ->
-            [
-                {is_zotonic_self_signed, true},
+            Info ++ [
                 {certificate, CertProps}
             ];
         {error, _} ->
-            [
-                {is_zotonic_self_signed, true}
-            ]
+            Info
+    end.
+
+-spec self_signed_info() -> proplists:proplist().
+self_signed_info() ->
+    [{is_zotonic_self_signed, true}].
+
+-spec self_signed_info(file:filename_all(), z:context()) -> proplists:proplist().
+self_signed_info(CertFile, Context) ->
+    self_signed_info()
+    ++ case m_site:environment(Context) of
+        development -> [{certfile, CertFile}];
+        _ -> []
     end.
 
 modinfo(Module) ->

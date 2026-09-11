@@ -18,6 +18,18 @@
 %% limitations under the License.
 
 -module(zotonic_notifier).
+-moduledoc(#{
+    zotonic_keywords => [
+        "reference", "backend_developer", "module", "messaging_and_pubsub", "publish_and_subscribe", "erlang_otp"
+    ]
+}).
+-moduledoc("
+Provide Zotonic's extensibility mechanism through typed notifications.
+
+Observers can be attached with priorities and invoked asynchronously,
+synchronously, as first-response requests, maps, or folds. Observer ownership
+is monitored so registrations are removed when their owning process exits.
+").
 
 -behaviour(application).
 

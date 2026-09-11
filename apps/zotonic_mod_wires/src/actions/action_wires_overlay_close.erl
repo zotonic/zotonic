@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(action_wires_overlay_close).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "user_interface_and_interaction", "javascript"]
+}).
 -moduledoc("
 Closes the currently open overlay. When there is no overlay open then nothing happens.
 
@@ -29,11 +32,7 @@ Example:
 ```
 
 This button closes any open overlay when clicked.
-
-See also
-
-actions [overlay_open](/id/doc_template_action_action_overlay_open),
-[dialog_open](/id/doc_template_action_action_dialog_open) and [dialog](/id/doc_template_action_action_dialog).").
+").
 -author("Marc Worrell <marc@worrell.nl").
 
 %% interface functions

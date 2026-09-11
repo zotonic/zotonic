@@ -18,12 +18,20 @@
 %% limitations under the License.
 
 -module(action_admin_identity_dialog_delete_username).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "identity_and_accounts", "edit"]
+}).
 -moduledoc("
 Open a dialog to confirm the deletion of the username of a user.
 
-Todo
+The required `id` argument identifies the user resource. `on_success` can be
+repeated and is forwarded to the confirmed deletion. The dialog is only opened
+on a writable site for users allowed to use `mod_admin_identity`, and only when
+the resource currently has a username.
 
-Extend documentation
+```django
+{% button text=\"Remove login\" action={dialog_delete_username id=id on_success={reload}} %}
+```
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

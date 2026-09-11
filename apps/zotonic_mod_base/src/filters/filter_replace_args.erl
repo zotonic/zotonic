@@ -30,6 +30,9 @@
 %% For single arg, {{ value|replace_args:"first" }} is also allowed.
 
 -module(filter_replace_args).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "text", "transform"]
+}).
 -moduledoc("
 Replace `$N` placeholders in string from a list of replacement values.
 
@@ -47,7 +50,7 @@ Will result in: “Replace item and give it some meaning.”
 
 The `$N` tag may be escaped by \\ to avoid replacement.
 
-N may be in the range \\[1..9\\]. If N is out of range of the provided args, the $N tag is left as-is.
+N may be in the range [1..9]. If N is out of range of the provided args, the $N tag is left as-is.
 
 The $N tags may come in any order, any number of times.
 

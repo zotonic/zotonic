@@ -17,20 +17,35 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 -module(filter_toc).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "html", "render"]
+}).
 -moduledoc("
 Filter to derive a Table Of Contents from a HTML body.
 
 This filter extracts a nested table of contents from the h2..h6 elements in a HTML text.
 
-The headers may not have any attributes (ie. only `<h2\\>`).
+The headers may not have any attributes (ie. only `<h2>`).
 
-All sections are wrapped in `<div\\>` elements, this to make it possible to make the headers sticky without having them overlap.
+All sections are wrapped in `<div>` elements, this to make it possible to make the headers sticky without having them overlap.
 
 Example usage:
 
 
 ```django
 {% with id.body|toc as toc, body %}
+    {% include \"page-parts/_toc.tpl\" toc=toc %}
+    {{ body|show_media }}
+{% endwith %}
+```
+
+An optional minimum number of headers suppresses the table of contents for
+short texts. The processed body is returned with header anchors regardless of
+whether the table of contents is suppressed:
+
+
+```django
+{% with id.body|toc:4 as toc, body %}
     {% include \"page-parts/_toc.tpl\" toc=toc %}
     {{ body|show_media }}
 {% endwith %}
@@ -73,21 +88,36 @@ And then the `page-parts/_toc.tpl` as:
 
 -export([
     toc/2,
+    toc/3,
 
     test/0
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-toc(undefined, _Context) ->
+toc(Value, Context) ->
+    toc(Value, 0, Context).
+
+toc(undefined, _MinimumHeaders, _Context) ->
     {[], <<>>};
-toc(#trans{} = Tr, Context) ->
-    toc(z_trans:lookup_fallback(Tr, Context), Context);
-toc(B, _Context) when is_binary(B) ->
+toc(#trans{} = Tr, MinimumHeaders, Context) ->
+    toc(z_trans:lookup_fallback(Tr, Context), MinimumHeaders, Context);
+toc(B, MinimumHeaders, _Context) when is_binary(B) ->
     {Toc, Html1} = parse_toc(B, $1, [], [], <<>>),
-    {nested(lists:reverse(Toc)), <<"<div>", Html1/binary, "</div>">>};
-toc(V, Context) ->
-    toc(z_convert:to_binary(V), Context).
+    NestedToc = nested(lists:reverse(Toc)),
+    VisibleToc = case length(Toc) >= minimum_headers(MinimumHeaders) of
+        true -> NestedToc;
+        false -> []
+    end,
+    {VisibleToc, <<"<div>", Html1/binary, "</div>">>};
+toc(V, MinimumHeaders, Context) ->
+    toc(z_convert:to_binary(V), MinimumHeaders, Context).
+
+minimum_headers(MinimumHeaders) ->
+    case z_convert:to_integer(MinimumHeaders) of
+        N when is_integer(N), N > 0 -> N;
+        _ -> 0
+    end.
 
 parse_toc(<<>>, _Level, _Path, Toc, Html) ->
     {Toc, Html};
@@ -176,4 +206,3 @@ test() ->
         <h5>2.1.1.1</h5>
     ">>,
     toc(Html, x).
-

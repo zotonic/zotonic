@@ -17,6 +17,9 @@
 %% limitations under the License.
 
 -module(m_search_status).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "model", "search_and_discovery", "monitor"]
+}).
 -moduledoc("
 Model for search subsystem status, including facet table health checks and facet definition metadata.
 

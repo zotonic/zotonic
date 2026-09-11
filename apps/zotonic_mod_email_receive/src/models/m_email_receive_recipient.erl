@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_email_receive_recipient).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "integrator", "model", "email_receiving", "structured_data", "parse", "send_and_receive"]
+}).
 -moduledoc("
 Model for received-email recipient extraction and matching used by mod_email_receive.
 ").

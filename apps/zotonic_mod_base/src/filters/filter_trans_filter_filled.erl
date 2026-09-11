@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_trans_filter_filled).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "localization_and_translation", "translated_text", "transform"]
+}).
 -moduledoc("
 Filters all empty translations from a property.
 

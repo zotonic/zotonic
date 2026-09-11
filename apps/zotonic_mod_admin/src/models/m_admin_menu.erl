@@ -18,10 +18,51 @@
 %% limitations under the License.
 
 -module(m_admin_menu).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "model", "navigation", "module", "user_interface_and_interaction"]
+}).
 -moduledoc("
 This model holds the admin menu, which is built up by calling each module to add items to the menu.
 
-You can extend the admin menu by observing the [admin_menu](/id/doc_notification_admin_menu#admin-menu) notification.
+You can extend the admin menu by observing the `notification#admin_menu` notification.
+
+
+Menu Item Visibility
+--------------------
+
+The `visiblecheck` field of `#menu_item{}` and `#menu_separator{}` controls
+whether an entry is included in the resulting menu. It accepts the following
+values:
+
+| Value | Description |
+| --- | --- |
+| `undefined` | Use the default behavior. A menu item is shown when it has a URL or at least one visible non-separator child. Separators are shown. |
+| `true` or `false` | Always show or hide the entry. |
+| `{acl, Action, Object}` | Show the entry when `z_acl:is_allowed(Action, Object, Context)` returns `true`. |
+| `{allof, Checks}` | Show the entry when all recursively evaluated checks succeed. |
+| `{anyof, Checks}` | Show the entry when at least one recursively evaluated check succeeds. |
+| `Checks` | A list of checks is equivalent to `{allof, Checks}`. |
+| `fun(() -> boolean())` | Evaluate a zero-argument visibility function. |
+| `fun((z:context()) -> boolean())` | Evaluate a visibility function with the current context. |
+
+Checks can be nested. For example, the following entry is visible when the
+user may use either module:
+
+```erlang
+#menu_item{
+    id = admin_example,
+    parent = admin_structure,
+    label = ?__(\"Example\", Context),
+    url = admin_example,
+    visiblecheck = {anyof, [
+        {acl, use, mod_example},
+        {acl, use, mod_admin_config}
+    ]}
+}
+```
+
+`visiblecheck` only controls menu visibility. The target controller, model,
+and event handlers must perform their own authorization checks.
 
 Available Model API Paths
 -------------------------
@@ -144,6 +185,7 @@ item_visible({_Key, ItemProps}, Context) ->
             visiblecheck(C, Context)
     end.
 
+-spec visiblecheck(menu_visiblecheck(), z:context()) -> boolean().
 visiblecheck(F, _Context) when is_function(F, 0) ->
     F();
 visiblecheck(F, Context) when is_function(F, 1) ->

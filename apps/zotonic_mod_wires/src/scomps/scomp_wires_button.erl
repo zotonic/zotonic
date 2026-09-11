@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(scomp_wires_button).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "scomp", "wire_action", "user_interface_and_interaction", "javascript", "render"]
+}).
 -moduledoc("
 Makes a button with an action attached.
 
@@ -31,7 +34,7 @@ For example:
 ```
 
 This show a button with the text “Click me”. When clicked it will trigger the
-[alert](/id/doc_template_action_action_alert) action, showing an alert message with the text “Hello World!”.
+`action#alert` action, showing an alert message with the text “Hello World!”.
 
 Another example:
 

@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(controller_fileuploader).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "controller", "file_uploads", "upload"]
+}).
 -moduledoc("
 The `fileuploader` controller is used to upload parts of a file.
 
@@ -150,4 +153,3 @@ process(<<"POST">>, _, Provided, Context) ->
             },
             {z_controller_helper:encode_response(Provided, Resp), Context}
     end.
-

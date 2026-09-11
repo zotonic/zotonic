@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_nthtail).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "collection", "query"]
+}).
 -moduledoc("
 Fetch the nth tail of a list.
 
@@ -31,10 +34,7 @@ For example:
 ```
 
 When value is the list `[1,2,3]` then the output is `3`.
-
-See also
-
-[first](/id/doc_template_filter_filter_first), [tail](/id/doc_template_filter_filter_tail)").
+").
 -export([nthtail/3]).
 
 

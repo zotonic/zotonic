@@ -1,10 +1,23 @@
 %% @author David de Boer <david@ddeboer.nl>
 %% @doc Get a list of content type URLs for a resource
 -module(filter_content_type_urls).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "metadata", "url", "http"]
+}).
 -moduledoc("
-Todo
+Return the available content representations and URLs for a resource.
 
-Not yet documented.
+The result is a list of `{ContentType, Url}` pairs derived from the resource's
+content-type dispatch rules. This can be used to present links to HTML, JSON,
+or other export formats.
+
+For example:
+
+```django
+{% for content_type, url in id|content_type_urls %}
+    <a href=\"{{ url }}\">{{ content_type|content_type_label }}</a>
+{% endfor %}
+```
 ").
 -export([
     content_type_urls/2

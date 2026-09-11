@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(validator_base_custom).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_validator", "validate", "forms", "javascript"]
+}).
 -moduledoc("
 Support for custom client-side (JavaScript-based) validators.
 
@@ -51,10 +54,7 @@ The `args` are available if the validation is added using the LiveValidation Jav
 
 Note that this validation does not do any server side validation. Because there is no server side validation, the value
 of the `input` element is not available via `z_context:get_q_validated/2` but only via `z_context:get_q/2`.
-
-See also
-
-[Forms and validation](/id/doc_developerguide_forms_and_validation#guide-validators)").
+").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_validator/5, validate/5]).
 

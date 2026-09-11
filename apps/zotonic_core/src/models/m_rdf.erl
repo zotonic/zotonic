@@ -18,6 +18,11 @@
 %% limitations under the License.
 
 -module(m_rdf).
+-moduledoc(#{
+    zotonic_keywords => [
+        "reference", "backend_developer", "model", "resource", "structured_data", "rdf_and_linked_data", "json_ld", "semantic_web"
+    ]
+}).
 -moduledoc("
 Model for RDF summaries of resources. It provides short RDF-oriented summary maps for resources, with translated and non-translated variants.
 

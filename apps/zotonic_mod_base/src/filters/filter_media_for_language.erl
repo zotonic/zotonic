@@ -20,6 +20,9 @@
 %% limitations under the License.
 
 -module(filter_media_for_language).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "localization_and_translation", "media_resource", "language_code", "query"]
+}).
 -moduledoc("
 Filter a list of media items by their `medium_language` property, return the best matching with the current or given
 language. Only visible media items are returned.
@@ -87,10 +90,7 @@ This filter can be used to show all connected media that are in a certain langua
    {% media media_id %}
 {% endfor %}
 ```
-
-See also
-
-[show_media](/id/doc_template_filter_filter_show_media), [embedded_media](/id/doc_template_filter_filter_embedded_media), [without_embedded_media](/id/doc_template_filter_filter_without_embedded_media)").
+").
 
 -export([
     media_for_language/2,

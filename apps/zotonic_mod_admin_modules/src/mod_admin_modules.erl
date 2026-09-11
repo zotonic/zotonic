@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(mod_admin_modules).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "site_administrator", "module", "module_management", "configure"]
+}).
 -moduledoc("
 Adds support in the admin for activating and deactivating [modules](/id/doc_glossary#term-zotonic-module).
 

@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_from_json).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "json", "parse"]
+}).
 -moduledoc("
 Parse a string as a JSON (JavaScript Object Notation) value. The returned value can be processed futher.
 

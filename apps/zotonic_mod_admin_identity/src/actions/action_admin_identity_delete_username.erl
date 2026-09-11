@@ -18,12 +18,20 @@
 %% limitations under the License.
 
 -module(action_admin_identity_delete_username).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "identity_and_accounts", "edit"]
+}).
 -moduledoc("
 Delete the username from a user, no confirmation.
 
-Todo
+Arguments:
 
-Extend documentation
+* `id` identifies the user resource.
+* `on_success` can be repeated to run actions after deletion.
+
+The action removes the username identity, not the person resource. It requires
+a writable site and permission to use `mod_admin_identity`. Use
+`dialog_delete_username` when confirmation is required.
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

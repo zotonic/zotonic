@@ -19,6 +19,9 @@
 %% limitations under the License.
 
 -module(mod_backup).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "operator", "module", "backup_and_restore", "schedule"]
+}).
 -moduledoc("
 mod_backup serves two different purposes: it makes a nightly backup of your files and database, and can also
 backup/restore individual [resource](/id/doc_glossary#term-resource) items.
@@ -37,8 +40,8 @@ the last 7 daily copies of the data and a weekly backup for the last 4 weeks, so
 The backups are stored under `backup` in the files directory of your site. Check in the admin under System > Status to
 see where the site files directory is located.
 
-The site’s media files are stored as a `<site-name\\>-N.tar.gz` file. The configuration is named
-`config-<site-name\\>-N.tar.gz`, while the database is stored compressed in a `<site-name\\>-N.sql.gz` file. N is the
+The site’s media files are stored as a `<site-name>-N.tar.gz` file. The configuration is named
+`config-<site-name>-N.tar.gz`, while the database is stored compressed in a `<site-name>-N.sql.gz` file. N is the
 day number. Sunday (day 1) is stored as the weekly backup, which rotates over w1..w4.
 
 It is possible to encrypt the backups by enabeling the Encrypt Backups option on the configuration page of the backup
@@ -47,11 +50,11 @@ stored in a safe location to be able to decrypt the backups. When encryption is 
 
 The zotonic shell command `decrypt` can be used to decrypt encrypted zotonic backup files.
 
-If [mod_filestore](/id/doc_module_mod_filestore) is enabled then the media files are not backed up, as it is assumed
+If `module#mod_filestore` is enabled then the media files are not backed up, as it is assumed
 that the files are already backed up on the cloud filestore. The data backups are uploaded to the cloud filestore, so
 they are also backed up.
 
-If [mod_filestore](/id/doc_module_mod_filestore) is not enabled then we advise to add a
+If `module#mod_filestore` is not enabled then we advise to add a
 [cron](http://en.wikipedia.org/wiki/Cron) script to the server for copying the data to remote storage.
 
 

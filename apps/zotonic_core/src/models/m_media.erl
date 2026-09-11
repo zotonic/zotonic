@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_media).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "model", "media_management", "media_resource", "query"]
+}).
 -moduledoc("
 Access to data about uploaded files and other media.
 

@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(controller_redirect).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "controller", "routing_and_redirects", "http"]
+}).
 -moduledoc("
 Redirect to another url.
 

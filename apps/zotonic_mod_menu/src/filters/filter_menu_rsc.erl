@@ -18,10 +18,13 @@
 %% limitations under the License.
 
 -module(filter_menu_rsc).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "navigation", "resource", "query"]
+}).
 -moduledoc("
 Return the menu to be displayed with a resource.
 
-Checks the results of the [menu_rsc](/id/doc_notification_menu_rsc#menu-rsc) notification. If that returns undefined
+Checks the results of the `notification#menu_rsc` notification. If that returns undefined
 then the predicate `hasmenu` is used to find menus attached to the resource. The first in the list is returned by this filter.
 
 If no menu is found then the menu resource id with name `main_menu` is returned.

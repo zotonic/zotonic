@@ -18,12 +18,18 @@
 %% limitations under the License.
 
 -module(controller_admin_backup_revision).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "operator", "controller", "backup_and_restore", "resource", "query"]
+}).
 -moduledoc("
 Shows the admin backup revisions screen where you can see older version for a [resource](/id/doc_glossary#term-resource).
 
-Todo
+Handled events
+--------------
 
-Extend documentation
+* The `rev-diff` postback notification compares two selected revisions.
+* `{revert, Args}` restores a selected revision and, when requested, its edges
+  and dependent resources.
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 
@@ -186,4 +192,3 @@ format_diff(A, B, Context) ->
                     maps:get(<<"data">>, A, undefined),
                     maps:get(<<"data">>, B, undefined),
                     Context).
-

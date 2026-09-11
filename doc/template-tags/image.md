@@ -1,16 +1,22 @@
+---
+keywords:
+  - reference
+  - frontend_developer
+  - template
+  - image_management
+  - media_resource
+  - render
+---
+
+::: aside
 See also
 
-[Media](/id/doc_developerguide_media#guide-media) developer guide.
+- [Media](/id/doc_developerguide_media#guide-media) developer guide.
+- [Media classes](/id/doc_developerguide_media#guide-media-classes) for options that are only available in mediaclass files.
+- `tag#image_url`, `tag#image_data_url` and `tag#media` tags.
+:::
 
-See also
-
-[Media classes](/id/doc_developerguide_media#guide-media-classes) for some options that are only available in mediaclass files.
-
-See also
-
-[image\_url](/id/doc_template_tag_tag_image_url), [image\_data\_url](/id/doc_template_tag_tag_image_data_url) and [media](/id/doc_template_tag_tag_media) tags.
-
-Show a still image using an `<img\>` element. The image will be automatically resized to the desired size and filters. For video, use the [media](/id/doc_template_tag_tag_media) tag instead.
+Show a still image using an `<img\>` element. The image will be automatically resized to the desired size and filters. For video, use the `tag#media` tag instead.
 
 For example:
 
@@ -39,7 +45,9 @@ So, to render a resource’s depiction:
 {% image id width=200 height=200 %}
 ```
 
-Please note that even if you supply no arguments, the image will be processed to be scaled, based on the [quality](#image-quality) argument’s default value.
+::: note
+Even without arguments, the image is processed and scaled according to the [quality](#image-quality) argument’s default value.
+:::
 
 
 
@@ -210,7 +218,7 @@ crop="+100+100"
 crop=[100, 100]
 ```
 
-The cropping center can also be determined by editors on the media item’s admin page (using [mod\_image\_edit](/id/doc_module_mod_image_edit)). Without any argument, the image will be cropped around the user-defined cropping center:
+The cropping center can also be determined by editors on the media item’s admin page (using `module#mod_image_edit`). Without any argument, the image will be cropped around the user-defined cropping center:
 
 
 ```django
@@ -219,7 +227,7 @@ crop
 
 The coordinate of the cropping center is relative to the original image, before rotate and cropp operations.
 
-If [mod\_media\_exif](/id/doc_module_mod_media_exif) and [mod\_image\_edit](/id/doc_module_mod_image_edit) are enabled then the focal point information of the image is taken as the cropping center for automatic cropping.
+If `module#mod_media_exif` and `module#mod_image_edit` are enabled then the focal point information of the image is taken as the cropping center for automatic cropping.
 
 
 
@@ -309,7 +317,11 @@ Make the image black and white.
 
 ### quality
 
-Set the quality of the resulting JPEG. An integer between 0 and 100, where 100 is best quality. The default quality is inversely proportional to the output image resolution: higher-resolution images still look good even with a limited quality. Note that images smaller than 400x400 are sharpened before JPEG compression.
+Set the quality of the resulting JPEG. An integer between 0 and 100, where 100 is best quality. The default quality is inversely proportional to the output image resolution: higher-resolution images still look good even with a limited quality.
+
+::: note
+Images smaller than 400x400 are sharpened before JPEG compression.
+:::
 
 Example:
 
@@ -356,7 +368,13 @@ class="figure"
 
 ### format
 
-Use `webp` to produce an image in WEBP format. This reduces the size of images about about 30%. When used with `lossless` set to `auto` it uses lossless compresson when the input image is in gif or or png format. Note: `webp` is currently the only possible option. Example:
+Use `webp` to produce an image in WebP format. This reduces the image size by approximately 30%. With `lossless` set to `auto`, it uses lossless compression when the input image is a GIF or PNG.
+
+::: note
+`webp` is currently the only possible option.
+:::
+
+Example:
 
 
 ```django
@@ -367,4 +385,4 @@ format=`webp`
 
 ### absolute\_url
 
-Ensure that the generated URL contains the [hostname and port](/id/doc_template_tag_tag_url).
+Ensure that the generated URL contains the `tag#url`.

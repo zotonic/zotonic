@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_first).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "collection", "query"]
+}).
 -moduledoc("
 Returns the first character or element.
 
@@ -32,7 +35,9 @@ For example:
 
 If the value is `hello` then the output is `h`.
 
-**Note:** This function is safe to use with multibyte character values, if the input is a binary.
+::: note
+This function is safe to use with multibyte character values, if the input is a binary.
+:::
 
 For a regular list:
 
@@ -60,10 +65,7 @@ Or, with a string:
 ```
 
 The filtered value is `\"he\"`.
-
-See also
-
-[tail](/id/doc_template_filter_filter_tail), [last](/id/doc_template_filter_filter_last)").
+").
 -export([
     first/2,
     first/3

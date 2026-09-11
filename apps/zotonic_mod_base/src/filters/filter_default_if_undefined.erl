@@ -19,6 +19,9 @@
 %% limitations under the License.
 
 -module(filter_default_if_undefined).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "boolean", "compare"]
+}).
 -moduledoc("
 Provide an alternative value in case a value is undefined.
 
@@ -29,15 +32,10 @@ For example:
 {{ value|default_if_undefined:1 }}
 ```
 
-Same as [default_if_none](/id/doc_template_filter_filter_default_if_none).
+Same as `filter#default_if_none`.
 
 This filter is built-in in the template compiler and inlined when compiling templates.
-
-See also
-
-[default](/id/doc_template_filter_filter_default), [if](/id/doc_template_filter_filter_if),
-[is_defined](/id/doc_template_filter_filter_is_defined), [is_undefined](/id/doc_template_filter_filter_is_undefined),
-[if_undefined](/id/doc_template_filter_filter_if_undefined)").
+").
 -export([
     default_if_undefined/3
     ]).

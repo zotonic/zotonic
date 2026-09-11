@@ -18,15 +18,18 @@
 %% limitations under the License.
 
 -module(m_site).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "model", "site_management", "site", "configuration"]
+}).
 -moduledoc("
 Retrieve information that is stored in the [site
 configuration](/id/doc_developerguide_configuration_site_configuration#ref-site-configuration). If you want to query
-values from the config table instead, you should use [m_config](/id/doc_model_model_config).
+values from the config table instead, you should use `model#config`.
 
-Note
-
+::: note
 In general the site configurarion is only accessible via the `m.site` template model for users with administrator
 rights. Exceptions are keys starting with `public` or `{{ m.site.title }}`, hostname configurations and the *paglen*.
+:::
 
 
 
@@ -60,7 +63,7 @@ Overriding config values
 ------------------------
 
 Zotonic has two places where a site's configuration is kept. One is in the site's config files, the other in the
-config table. The config table (accessible through [m_config](/id/doc_model_model_config)) overrules any module
+config table. The config table (accessible through `model#config`) overrules any module
 settings from the config file, for rows where the module key of the config value is set to site.
 
 Within the site configuration, you can override module-specific configuration: Module configurations are defined with a

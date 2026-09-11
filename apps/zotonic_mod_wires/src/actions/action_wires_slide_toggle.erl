@@ -18,12 +18,18 @@
 %% limitations under the License.
 
 -module(action_wires_slide_toggle).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "user_interface_and_interaction", "javascript"]
+}).
 -moduledoc("
 Toggle an element by sliding it up and down.
 
-Todo
+The `target` argument selects the element. `speed` can be a duration in
+milliseconds or a named jQuery duration.
 
-Extend documentation
+```django
+{% button text=\"Details\" action={slide_toggle target=\"details\" speed=200} %}
+```
 ").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).

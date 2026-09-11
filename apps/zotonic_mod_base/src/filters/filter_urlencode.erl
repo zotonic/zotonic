@@ -26,6 +26,9 @@
 %%% THE SOFTWARE.
 
 -module(filter_urlencode).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "url", "serialize"]
+}).
 -moduledoc("
 Make a text safe for URLs.
 
@@ -39,10 +42,7 @@ For example:
 ```
 
 When value is “msg=Hello&World” then the output is “msg%3DHello%26World”.
-
-See also
-
-[sanitize_url](/id/doc_template_filter_filter_sanitize_url), [is_site_url](/id/doc_template_filter_filter_is_site_url), [url_abs](/id/doc_template_filter_filter_url_abs), [url](/id/doc_template_filter_filter_url), [urldecode](/id/doc_template_filter_filter_urldecode)").
+").
 -export([urlencode/2]).
 
 -author('rsaccon@gmail.com').
@@ -101,5 +101,4 @@ process_binary_match(Pre, Insertion, SizePost, Post) ->
         {_, 0} -> [Pre, Insertion];
         _ -> [Pre, Insertion, Post]
     end.
-
 

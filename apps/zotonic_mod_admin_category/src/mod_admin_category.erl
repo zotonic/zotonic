@@ -18,11 +18,14 @@
 %% limitations under the License.
 
 -module(mod_admin_category).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "site_administrator", "module", "categorization", "category", "configure"]
+}).
 -moduledoc("
-Note
-
-This module requires the presence of [mod_menu](/id/doc_module_mod_menu) for the required JavaScript files which make
+::: note
+This module requires the presence of `module#mod_menu` for the required JavaScript files which make
 up the menu editor.
+:::
 
 Add support for editing [Categories](/id/doc_userguide_datamodel#guide-datamodel-categories) in the admin, by presenting
 an editable category tree at `http://yoursite.com/admin/category`.
@@ -34,9 +37,9 @@ ACL permissions
 
 The following [ACL permissions](/id/doc_developerguide_access_control#guide-authorization) are required:
 
-*   to view the page, [use permission](/id/doc_module_mod_acl_user_groups) on the ‘mod_admin_category’ module
-*   to view the list of categories, [view permissions](/id/doc_module_mod_acl_user_groups#content-acl) on category ‘category’
-*   to edit and re-order the categories, [edit permissions](/id/doc_module_mod_acl_user_groups#content-acl) on category ‘category’.
+*   to view the page, the `use` permission on the ‘mod_admin_category’ module; see `module#mod_acl_user_groups`
+*   to view the list of categories, `view` permission on category ‘category’; see `module#mod_acl_user_groups`
+*   to edit and re-order the categories, `edit` permission on category ‘category’; see `module#mod_acl_user_groups`.
 Admin module for managing category trees and category resources in the backend.
 
 
@@ -247,4 +250,3 @@ ids([], Acc) ->
 ids([{Id,Sub}|Rest], Acc) ->
     Acc1 = ids(Sub, Acc),
     ids(Rest, [Id|Acc1]).
-

@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_render).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "html", "render"]
+}).
 -moduledoc("
 Render a template.
 
@@ -83,4 +86,3 @@ set_arg(Vars, K, V) when is_map(Vars) ->
     Vars1#{
         K1 => V
     }.
-

@@ -20,6 +20,9 @@
 %% limitations under the License.
 
 -module(mod_mailinglist).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "content_editor", "module", "mailing_lists", "send_and_receive"]
+}).
 -moduledoc("
 This module implements a mailing list system. You can make as many mailing lists as you like and send any page to any
 mailing list, including confirm mail and unsubscribe page.
@@ -34,7 +37,7 @@ For details on configuring e-mail sending and receiving in Zotonic, see [E-mail 
 Including the subscribe custom tag on your pages
 ------------------------------------------------
 
-The module includes the [signup tag](/id/doc_template_scomp_scomp_mailinglist_subscribe#scomp-mailinglist-subscribe) tag
+The module includes the `scomp#mailinglist_subscribe` tag
 (and template) that you can use on your site.
 
 When you want to add a subscribe template to your page then you will need the following scomp include in your template:
@@ -103,9 +106,9 @@ template. The following templates are used for e-mails:
 
 | Template                                                                         | Description                                                                      |
 | -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
-| [email\\\\_mailinglist\\\\_confirm.tpl](../templates/template_email_mailinglist_confirm.html#template-email-mailinglist-confirm) | Sent after subscribing to a mailing list, requests to click on an url to confirm the subscription. |
-| [email\\\\_mailinglist\\\\_goodbye.tpl](../templates/template_email_mailinglist_goodbye.html#template-email-mailinglist-goodbye) | Sent after unsubscribing from a mailing list.                                    |
-| [email\\\\_mailinglist\\\\_welcome.tpl](../templates/template_email_mailinglist_welcome.html#template-email-mailinglist-welcome) | Sent after subscribing and confirming the subscription.                          |
+| [email_mailinglist_confirm.tpl](../templates/template_email_mailinglist_confirm.html#template-email-mailinglist-confirm) | Sent after subscribing to a mailing list, requests to click on an url to confirm the subscription. |
+| [email_mailinglist_goodbye.tpl](../templates/template_email_mailinglist_goodbye.html#template-email-mailinglist-goodbye) | Sent after unsubscribing from a mailing list.                                    |
+| [email_mailinglist_welcome.tpl](../templates/template_email_mailinglist_welcome.html#template-email-mailinglist-welcome) | Sent after subscribing and confirming the subscription.                          |
 
 
 

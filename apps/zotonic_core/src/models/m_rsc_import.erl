@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_rsc_import).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "model", "import_and_migration", "resource", "import"]
+}).
 -moduledoc("
 Import model for resources exported by `m_rsc_export`.
 
@@ -2089,4 +2092,3 @@ install(Context) ->
             [ z_db:q("create index if not exists "++Name++" on rsc_import ("++Cols++")", Context) || {Name, Cols} <- Indices ],
             z_db:flush(Context)
     end.
-

@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(action_mailinglist_mailing_page_test).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "mailing_lists", "send_and_receive"]
+}).
 -moduledoc("
 Post a message to the test mailing list, given with the `id` argument.
 
@@ -26,9 +29,16 @@ mod_mailinglist and view the page. The mailing is queued for immediate sending.
 
 The `on_success` argument decides which actions are triggered after the page has been sent.
 
-Todo
+The required `id` argument identifies the page to send. `on_success` can be
+repeated. The action resolves the named `mailinglist_test` resource and queues
+the mailing with `is_send_all`, so all active test recipients receive it.
 
-Extend documentation
+```django
+{% button text=\"Send test\" action={mailing_page_test id=id on_success={reload}} %}
+```
+
+An error is shown when the test list is missing or the current user is not
+allowed to send the page.
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

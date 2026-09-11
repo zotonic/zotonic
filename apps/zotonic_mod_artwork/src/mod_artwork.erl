@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(mod_artwork).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "content_editor", "module", "image_management", "media_resource", "create"]
+}).
 -moduledoc("
 This module contains many useful icons and images.
 
@@ -102,7 +105,7 @@ Domain. These icons are only 64x64 pixels (all others are 256x256).
 ### How to use images in your templates
 
 Most of the icons are in 256x256 PNG format. That is too large for normal usage. Best is to resize the images in your
-templates using the [image](/id/doc_template_tag_tag_image).
+templates using the `tag#image`.
 
 For example, to display a 64x64 pixel image:
 

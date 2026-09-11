@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_admin_note).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "model", "content_authoring", "metadata", "edit"]
+}).
 -moduledoc("
 Add an editorial note to any resource.
 

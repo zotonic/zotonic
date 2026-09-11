@@ -1,6 +1,15 @@
+---
+keywords:
+  - reference
+  - frontend_developer
+  - template
+  - structured_data
+  - render
+---
+
 Assign a complex value to a variable.
 
-The `{% with %}` tag assigns the result of a variable expression to a new variable. This is useful when accessing an “expensive” method (e.g., one that hits the database) multiple times. The `{% with %}` tag is often used in conjunction with the search model [m.search](/id/doc_model_model_search).
+The `{% with %}` tag assigns the result of a variable expression to a new variable. This is useful when accessing an “expensive” method (e.g., one that hits the database) multiple times. The `{% with %}` tag is often used in conjunction with the search model `model#search`.
 
 For example:
 

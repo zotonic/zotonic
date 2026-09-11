@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(action_wires_logoff).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "authentication", "authenticate"]
+}).
 -moduledoc("
 This action logs off the current user and reloads the current page as the anonymous visitor.
 

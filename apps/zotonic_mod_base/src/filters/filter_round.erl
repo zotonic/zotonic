@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(filter_round).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter", "number", "transform"]
+}).
 -moduledoc("
 Round a floating point value to the nearest integer.
 
@@ -42,4 +45,3 @@ round(N, _Context) ->
     catch
         _:_ -> undefined
     end.
-
