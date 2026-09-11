@@ -7,7 +7,7 @@
        as is_connected
     %}
     {% with (subject_id and m.acl.is_allowed.link[subject_id])
-         or (object_id and m.acl.is_allowed.link[object_id])
+         or (object_id and m.acl.is_allowed.link[id])
        as is_linkable
     %}
         <div class="thumbnail{% if depict %} z-image-thumbnail{% endif %}{% if predicate %} thumbnail-{{ predicate }}{% endif %}{% if is_connected %} thumbnail-connected{% endif %}{% if is_linkable %} thumbnail-linkable{% endif %}{% if not id.is_published %} unpublished{% endif %}" data-id="{{ id }}">
