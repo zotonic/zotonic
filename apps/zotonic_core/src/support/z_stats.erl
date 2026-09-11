@@ -1,9 +1,9 @@
 %% @author Maas-Maarten Zeeman <mmzeeman@xs4all.nl>
-%% @copyright 2013-2024 Maas-Maarten Zeeman
+%% @copyright 2013-2026 Maas-Maarten Zeeman
 %% @doc Module for handling request statistics.
 %% @end
 
-%% Copyright 2013-2024 Maas-Maarten Zeeman
+%% Copyright 2013-2026 Maas-Maarten Zeeman
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
