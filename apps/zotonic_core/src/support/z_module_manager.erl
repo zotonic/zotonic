@@ -1663,7 +1663,10 @@ module_spec(ModuleName, Site) ->
 
 %% When a module does not implement a gen_server then we use a dummy gen_server.
 gen_server_module(M) ->
-    case has_behaviour(M, gen_server) orelse has_behaviour(M, supervisor) of
+    case has_behaviour(M, gen_server)
+         orelse has_behaviour(M, gen_statem)
+         orelse has_behaviour(M, supervisor)
+    of
         true -> M;
         false -> z_module_dummy
     end.
