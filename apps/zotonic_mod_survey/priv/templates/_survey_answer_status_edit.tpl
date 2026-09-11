@@ -52,9 +52,10 @@
                     {# Keep in sync with STATUS_NOTE_MAX_LENGTH in m_survey. #}
                     <textarea id="{{ #status_note }}"
                               name="status_note"
-                              rows="5"
+                              rows="2"
                               maxlength="65536"
-                              class="form-control">{{ result.status_note|escape }}</textarea>
+                              class="form-control do_autoheight"
+                              data-autoheight='{ "maxHeight": 320 }'>{{ result.status_note|escape }}</textarea>
                     <p class="help-block">
                         {_ The status and note are only visible to people who can edit. _}
                     </p>

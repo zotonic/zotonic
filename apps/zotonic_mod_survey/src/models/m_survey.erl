@@ -83,6 +83,7 @@ Available Model API Paths
     answer_user/2,
     set_answer_user/4,
     set_answer_status/5,
+    status_color/1,
 
     did_survey/2,
     find_answer_id/4,
@@ -1147,11 +1148,13 @@ export_status(Status) ->
         Color -> export_encoder:cell(Status, #{ background_color => Color })
     end.
 
+%% @doc Return the background color for a survey status index.
 %% Keep this palette in sync with priv/lib-src/css/_survey_status.scss.
+-spec status_color(term()) -> binary() | undefined.
 status_color(0) -> <<"#E2E8F0">>;
 status_color(1) -> <<"#B8E9C0">>;
-status_color(2) -> <<"#BBE1FA">>;
-status_color(3) -> <<"#E2C6FF">>;
+status_color(2) -> <<"#E2C6FF">>;
+status_color(3) -> <<"#F9F749">>;
 status_color(4) -> <<"#FAC112">>;
 status_color(5) -> <<"#F87171">>;
 status_color(_Status) -> undefined.
