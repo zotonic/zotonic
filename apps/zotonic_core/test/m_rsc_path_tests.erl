@@ -26,3 +26,16 @@ invalid_unicode_list_test() ->
     ?assertEqual(
         {error, {illegal_page_path, Path, unicode}},
         m_rsc:page_path_to_id(Path, #context{})).
+
+unicode_model_path_test() ->
+    Segment = lists:duplicate(100, 16#1f600),
+    Path = [<<"parent">>, Segment],
+    ?assertEqual(
+        {error, {illegal_page_path,
+            unicode:characters_to_binary(["/parent/", Segment]), length}},
+        m_rsc:m_get([<<"-">>, <<"lookup">>, <<"page_path">> | Path], undefined, #context{})).
+
+unicode_uri_test_() ->
+    % These are not resource URIs, so no site or database is needed.
+    [ ?_assertEqual(undefined, m_rsc:uri_lookup(Path, #context{}))
+      || Path <- [[99, 97, 102, 233], [16#1f600], [16#d800]] ].

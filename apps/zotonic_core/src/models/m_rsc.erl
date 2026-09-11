@@ -308,7 +308,7 @@ See also
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
 m_get([ <<"-">>, <<"lookup">>, <<"page_path">> | Path ], _Msg, Context) ->
-    Path1 = iolist_to_binary(lists:join($/, Path)),
+    Path1 = lists:join($/, Path),
     case page_path_to_id(Path1, Context) of
         {ok, Id} ->
             {ok, {#{
@@ -400,7 +400,7 @@ name_to_id_cat(Name, Cat, Context) when is_integer(Name) ->
     end,
     z_depcache:memo(F, {rsc_name, Name, Cat}, ?DAY, [Cat, Name], Context);
 name_to_id_cat(Name, Cat, Context) ->
-    Name1 = z_string:to_name(z_convert:to_binary(Name)),
+    Name1 = z_string:to_name(Name),
     F = fun() ->
         CatIds = m_category:contains(Cat, Context),
         case z_db:q1("select id from rsc where name = $1 and category_id = any($2::int[])", [Name1, CatIds], Context) of
@@ -422,11 +422,11 @@ name_to_id_cat(Name, Cat, Context) ->
 %% "" path in a trans record is ignored. This is to be consistent with
 %% the behavior that empty translations should map to a translation that
 %% is filled.
--spec page_path_to_id( binary() | string() | #trans{}, z:context() ) ->
+-spec page_path_to_id( unicode:chardata() | #trans{}, z:context() ) ->
               {ok, resource_id()}
             | {redirect, resource_id()}
             | {error, {unknown_page_path, binary() | #trans{}}}
-            | {error, {illegal_page_path, binary() | string(), length|unicode}}.
+            | {error, {illegal_page_path, unicode:chardata(), length|unicode}}.
 page_path_to_id(#trans{ tr = Tr } = Paths, Context) ->
     Tr1 = lists:filter(
         fun({_, Path}) when is_binary(Path) andalso size(Path) > 0 -> true;
@@ -1512,6 +1512,13 @@ uri_lookup(Uri, Context) when is_binary(Uri) ->
                     end
             end;
         false ->
+            undefined
+    end;
+uri_lookup(Uri, Context) when is_list(Uri) ->
+    case unicode:characters_to_binary(Uri) of
+        UriBin when is_binary(UriBin) ->
+            uri_lookup(UriBin, Context);
+        _ ->
             undefined
     end;
 uri_lookup(Uri, Context) ->
