@@ -210,7 +210,7 @@ The default security header list is:
     {<<\"x-xss-protection\">>, <<\"1\">>},
     {<<\"x-content-type-options\">>, <<\"nosniff\">>},
     {<<\"x-permitted-cross-domain-policies\">>, <<\"none\">>},
-    {<<\"referrer-policy\">>, <<\"same-origin\">>}
+    {<<\"referrer-policy\">>, <<\"same-origin\">>},
     {<<\"x-frame-options\">>, <<\"SAMEORIGIN\">>}
 ]
 ```
