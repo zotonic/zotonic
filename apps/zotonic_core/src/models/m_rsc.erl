@@ -417,6 +417,7 @@ name_to_id_cat(Name, Cat, Context) ->
 %% resource.
 %% The page path is normalized by ensuring that the path starts with
 %% a single "/" and removing trailing "/" characters.
+%% Invalid UTF-8 and characters in the range 0..31 are rejected before querying.
 %% Note that the path "" is mapped to "/" (the home page) but the same
 %% "" path in a trans record is ignored. This is to be consistent with
 %% the behavior that empty translations should map to a translation that
@@ -444,9 +445,18 @@ page_path_to_id(#trans{ tr = Tr } = Paths, Context) ->
             end
     end;
 page_path_to_id(Path, Context) ->
+    PathBin = iolist_to_binary(Path),
+    case is_valid_page_path(PathBin) of
+        true ->
+            page_path_to_id_valid(PathBin, Context);
+        false ->
+            {error, {illegal_page_path, PathBin, unicode}}
+    end.
+
+page_path_to_id_valid(Path, Context) ->
     Path1 = iolist_to_binary([ $/, z_string:trim(Path, $/) ]),
-    case is_utf8(Path1) of
-        true when size(Path1) < 200 ->
+    case size(Path1) < 200 of
+        true ->
             case z_db:q1("select id from rsc where pivot_page_path && $1", [ [Path1] ], Context) of
                 undefined ->
                     case z_db:q1(
@@ -462,10 +472,8 @@ page_path_to_id(Path, Context) ->
                 Id ->
                     {ok, Id}
             end;
-        true ->
-            {error, {illegal_page_path, Path1, length}};
         false ->
-            {error, {illegal_page_path, Path1, unicode}}
+            {error, {illegal_page_path, Path1, length}}
     end.
 
 page_path_to_id_1([], _Context) ->
@@ -478,9 +486,10 @@ page_path_to_id_1([{_, Path}|Tr], Context) ->
         Other -> Other
     end.
 
-is_utf8(<<>>) -> true;
-is_utf8(<<_/utf8, S/binary>>) -> is_utf8(S);
-is_utf8(_) -> false.
+%% Page paths must be UTF-8 without control characters (including PostgreSQL's forbidden NUL).
+is_valid_page_path(<<>>) -> true;
+is_valid_page_path(<<C/utf8, S/binary>>) when C >= 32 -> is_valid_page_path(S);
+is_valid_page_path(_) -> false.
 
 
 %% @doc Get all properties of a resource for export. This adds the
