@@ -1536,7 +1536,7 @@ convert_value(<<"smallserial">>, _, V) -> z_convert:to_integer(V);
 convert_value(<<"numeric">>, _, V) -> z_convert:to_float(V);
 convert_value(<<"decimal">>, _, V) -> z_convert:to_float(V);
 convert_value(<<"float">>, _, V) -> z_convert:to_float(V);
-convert_value(<<"double">>, _, V) -> z_convert:to_float(V);
+convert_value(<<"double", _/binary>>, _, V) -> z_convert:to_float(V);
 convert_value(<<"boolean">>, _, V) -> z_convert:to_bool_strict(V);
 convert_value(<<"timestamp", _/binary>>, _, V) -> z_datetime:to_datetime(V);
 convert_value(<<"datetime", _/binary>>, _, V) -> z_datetime:to_datetime(V);
