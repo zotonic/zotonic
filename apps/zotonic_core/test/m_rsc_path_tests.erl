@@ -12,3 +12,17 @@ invalid_page_path_test_() ->
         {error, {illegal_page_path, Path, unicode}},
         m_rsc:page_path_to_id(Path, #context{}))
       || Path <- Paths ].
+
+unicode_page_path_test_() ->
+    % Long paths exercise conversion and normalization without querying a database.
+    Paths = [lists:duplicate(100, 16#e9), lists:duplicate(100, 16#1f600)],
+    [ ?_assertEqual(
+        {error, {illegal_page_path, unicode:characters_to_binary([$/ | Path]), length}},
+        m_rsc:page_path_to_id(Path, #context{}))
+      || Path <- Paths ].
+
+invalid_unicode_list_test() ->
+    Path = [$/, 16#d800],
+    ?assertEqual(
+        {error, {illegal_page_path, Path, unicode}},
+        m_rsc:page_path_to_id(Path, #context{})).

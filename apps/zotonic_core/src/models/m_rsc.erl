@@ -426,7 +426,7 @@ name_to_id_cat(Name, Cat, Context) ->
               {ok, resource_id()}
             | {redirect, resource_id()}
             | {error, {unknown_page_path, binary() | #trans{}}}
-            | {error, {illegal_page_path, binary(), length|unicode}}.
+            | {error, {illegal_page_path, binary() | string(), length|unicode}}.
 page_path_to_id(#trans{ tr = Tr } = Paths, Context) ->
     Tr1 = lists:filter(
         fun({_, Path}) when is_binary(Path) andalso size(Path) > 0 -> true;
@@ -444,17 +444,25 @@ page_path_to_id(#trans{ tr = Tr } = Paths, Context) ->
                     Other
             end
     end;
-page_path_to_id(Path, Context) ->
-    PathBin = iolist_to_binary(Path),
-    case is_valid_page_path(PathBin) of
+page_path_to_id(Path, Context) when is_list(Path) ->
+    case unicode:characters_to_binary(Path) of
+        PathBin when is_binary(PathBin) ->
+            page_path_to_id(PathBin, Context);
+        {error, _, _} ->
+            {error, {illegal_page_path, Path, unicode}};
+        {incomplete, _, _} ->
+            {error, {illegal_page_path, Path, unicode}}
+    end;
+page_path_to_id(Path, Context) when is_binary(Path) ->
+    case is_valid_page_path(Path) of
         true ->
-            page_path_to_id_valid(PathBin, Context);
+            page_path_to_id_valid(Path, Context);
         false ->
-            {error, {illegal_page_path, PathBin, unicode}}
+            {error, {illegal_page_path, Path, unicode}}
     end.
 
 page_path_to_id_valid(Path, Context) ->
-    Path1 = iolist_to_binary([ $/, z_string:trim(Path, $/) ]),
+    Path1 = unicode:characters_to_binary([ $/, z_string:trim(Path, $/) ]),
     case size(Path1) < 200 of
         true ->
             case z_db:q1("select id from rsc where pivot_page_path && $1", [ [Path1] ], Context) of
