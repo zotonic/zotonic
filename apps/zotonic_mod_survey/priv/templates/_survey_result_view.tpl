@@ -26,7 +26,7 @@
                             {# A caller can limit a result dialog to one question block. #}
                         {% elseif blk.is_editor_only %}
                             <div class="survey-editor-only-answer">
-                                <p class="survey-editor-only-label">{_ Editor only _}</p>
+                                <span class="survey-editor-only-label">{_ Editor only _}</span>
                                 {% optional include ["blocks/_block_view_",blk.type,".tpl"]|join
                                     id=id
                                     blk=blk
@@ -83,6 +83,9 @@
                         }
                     %}
                     {% button class="btn btn-primary" type="submit" text=_"Save" %}
+                    {% if id.is_a.survey %}
+                        <button class="btn btn-primary" type="submit" name="submit-email">{_ Save &amp; Email _}</button>
+                    {% endif %}
                 </div>
             </form>
         {% else %}

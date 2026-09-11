@@ -112,15 +112,17 @@ Editor-only questions
 
 Set `is_editor_only` on a question block when only people with edit permission
 on the survey should supply that answer. Editors see the normal input and can
-change it. A non-editor sees the stored answer in read-only form when one is
-present, and otherwise does not see the question.
+change it. A non-editor sees the question in read-only form, including its
+prompt and explanation, and also sees the stored answer when one is present.
 
 This restriction is enforced in both the form flow and the storage layer.
 Submitted values for editor-only questions are discarded for non-editors,
 including the expanded input names used by narrative and matching questions.
 When a non-editor updates an answer, any existing editor-only values are copied
 from the stored answer instead of being overwritten. An editor-only question
-marked required is not considered missing for a non-editor.
+marked required is not considered missing for a non-editor. When an editor uses
+**Save & Email**, editor-only answers are included in the respondent email even
+if the survey's normal confirmation settings omit open or all answers.
 
 
 Answer status
@@ -152,7 +154,9 @@ the `survey_answer_status` submit event.
 For editors it combines the status fields with editable editor-only questions;
 all respondent answers are read-only and unanswered respondent questions are
 omitted. Its `survey_result_view_save` event accepts only status and
-editor-only values. The full paged editor remains available from the dialog.
+editor-only values. Both this view and the final page of the full paged editor
+offer **Save & Email**; the extra mail is sent only after the same server-side
+answer-edit permission check as a normal save.
 
 Both status templates accept an optional `status_labels` list for values 0
 through 5. Without labels they show only the color swatches. For example:
@@ -576,6 +580,7 @@ save_survey_result_view_1(SurveyId, AnswerId, Answers, Status, Note, Args, Conte
                         {Status, Note} -> ok;
                         _ -> m_survey:set_answer_status(SurveyId, AnswerId, Status, Note, Context)
                     end,
+                    maybe_mail_saved_result(StatusResult, SurveyId, AnswerId, Context),
                     render_saved_survey_result_view(
                         StatusResult,
                         SurveyId,
@@ -588,6 +593,35 @@ save_survey_result_view_1(SurveyId, AnswerId, Answers, Status, Note, Args, Conte
                     z_render:growl_error(?__("You are not allowed to change these results.", Context), Context)
             end
     end.
+
+%% @private Send the complete updated result when the editor used the
+%% "Save & Email" submit button. The result is fetched again so that the mail
+%% contains respondent answers as well as the fields exposed by this dialog.
+-spec maybe_mail_saved_result(StatusResult, SurveyId, AnswerId, Context) -> Result
+    when
+        StatusResult :: ok | {error, term()},
+        SurveyId :: m_rsc:resource_id(),
+        AnswerId :: pos_integer(),
+        Context :: z:context(),
+        Result :: ok | skip | nop.
+maybe_mail_saved_result(ok, SurveyId, AnswerId, Context) ->
+    case z_context:get_q(<<"submit-email">>, Context) of
+        undefined ->
+            ok;
+        _ ->
+            case m_survey:single_result(SurveyId, AnswerId, Context) of
+                [] ->
+                    ok;
+                Result ->
+                    Answers = [
+                        {Name, proplists:get_value(answer, Answer)}
+                        || {Name, Answer} <- proplists:get_value(answers, Result, [])
+                    ],
+                    maybe_mail(SurveyId, Answers, AnswerId, true, Context)
+            end
+    end;
+maybe_mail_saved_result(_Error, _SurveyId, _AnswerId, _Context) ->
+    ok.
 
 render_saved_survey_result_view(ok, _SurveyId, _AnswerId, Args, Context) ->
     OnSuccess = case proplists:get_value(on_success, Args) of
@@ -1675,14 +1709,13 @@ do_submit_1(SurveyId, Questions, Answers, {editing, AnswerId, _Actions}, _Submit
         true ->
             {FoundAnswers, _Missing} = collect_answers(SurveyId, Questions, Answers, Context),
             StorageAnswers = survey_answers_to_storage(FoundAnswers),
-            m_survey:replace_survey_submission(SurveyId, AnswerId, StorageAnswers, Context),
-            case z_context:get_q(<<"submit-email">>, Context) of
-                undefined ->
+            case m_survey:replace_survey_submission(SurveyId, AnswerId, StorageAnswers, Context) of
+                {ok, AnswerId} ->
+                    maybe_mail_saved_result(ok, SurveyId, AnswerId, Context),
                     ok;
-                _SomeValue ->
-                    maybe_mail(SurveyId, Answers, AnswerId, true, Context)
-            end,
-            ok;
+                {error, _} = Error ->
+                    Error
+            end;
         false ->
             {ok, z_render:growl(?__("You are not allowed to change these results.", Context), Context)}
     end.
@@ -1806,6 +1839,7 @@ mail_respondent(SurveyId, Answers, ResultId, PrepAnswers, SurveyResult, IsEditin
                         {id, SurveyId},
                         {answers, PrepAnswers},
                         {result, SurveyResult},
+                        {include_editor_only_answers, IsEditing},
                         {recipient_id, z_acl:user(Context)}
                     ],
                     z_email:send_render(Email, "email_survey_result.tpl", Vars, z_acl:sudo(Context)),

@@ -68,7 +68,8 @@
 				{% with answers ++ answers_novalidate as answers_prefill %}
 					{% for blk in questions %}
 						{% if blk.is_editor_only and not id.is_editable %}
-							{% if blk.name|member:readonly_answer_blocks %}
+							<div class="survey-editor-only-answer">
+								<span class="survey-editor-only-label">{_ Editor only _}</span>
 								{% optional include ["blocks/_block_view_",blk.type,".tpl"]|join
 										id=id
 										blk=blk
@@ -79,10 +80,10 @@
 										nr=forloop.counter
 										is_survey_answer_view
 								%}
-							{% endif %}
+							</div>
 						{% elseif blk.is_editor_only %}
 							<div class="survey-editor-only-answer">
-								<p class="survey-editor-only-label">{_ Editor only _}</p>
+								<span class="survey-editor-only-label">{_ Editor only _}</span>
 								{% optional include ["blocks/_block_view_",blk.type,".tpl"]|join
 										id=id
 										blk=blk
@@ -194,7 +195,10 @@
 				{% endif %}
 
 				{% if editing %}
-					<button type="submit" class="btn btn-primary btn-lg">{% if page_nr == pages %}{_ Submit _}{% else %}{_ Next _}{% endif %}</button>
+					<button type="submit" class="btn btn-primary btn-lg">{% if page_nr == pages %}{_ Save _}{% else %}{_ Next _}{% endif %}</button>
+					{% if page_nr == pages %}
+						<button type="submit" class="btn btn-primary btn-lg" name="submit-email">{_ Save &amp; Email _}</button>
+					{% endif %}
 				{% elseif not options.is_stop_page and not questions|survey_is_submit %}
 					{% if page_nr == pages or questions|survey_is_pagebreak_submit %}
 						<button type="submit" class="btn btn-primary btn-lg survey-submit">{_ Submit _}</button>

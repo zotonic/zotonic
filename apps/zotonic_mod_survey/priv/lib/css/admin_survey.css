@@ -242,22 +242,35 @@
 
 .survey-editor-only-answer {
   position: relative;
-  padding: 1.25rem;
-  margin: 0 0 1.5rem;
+  display: flow-root;
+  width: 100%;
+  padding: 1.5rem 1.25rem 1.25rem;
+  margin: 0.75rem 0 1.5rem;
   background: #fff8dc;
   border: 1px solid #ead68a;
+  border-left-width: 4px;
   border-radius: 4px; }
   .survey-editor-only-answer .form-group:last-child,
   .survey-editor-only-answer > :last-child {
     margin-bottom: 0; }
 
 .survey-editor-only-label {
-  margin: 0 0 0.75rem;
+  position: absolute;
+  top: 0;
+  right: 0.75rem;
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  margin: 0;
   color: #765f00;
-  font-size: 0.85em;
+  background: #fff8dc;
+  border: 1px solid #ead68a;
+  border-radius: 999px;
+  font-size: 0.75em;
   font-weight: 600;
+  line-height: 1.4;
   letter-spacing: 0.03em;
-  text-transform: uppercase; }
+  text-transform: uppercase;
+  transform: translateY(-50%); }
 
 .table .survey-status-cell {
   min-width: 8em;
