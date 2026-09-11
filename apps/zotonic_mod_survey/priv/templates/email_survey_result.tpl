@@ -77,10 +77,12 @@
 
 {# Check email answers setting for result email #}
 {% if is_result_email
+	  or include_editor_only_answers
 	  or id.survey_email_answers|default:0 /= 3
 %}
 {# For tests, also follow the survey_show_results setting #}
 {% if is_result_email
+	or include_editor_only_answers
 	or max_points == 0
 	or id.survey_show_results|default:0 /= 3
 	or (
@@ -116,7 +118,8 @@
 			    	  and blk.type != 'survey_stop'
 			    	  and blk.name != 'survey_feedback'
 			   	%}
-			   		{% if include_open_questions
+						{% if blk.is_editor_only
+							or include_open_questions
 			   			  or (
 			   			  		blk.type != 'survey_short_answer'
 			   			  	and blk.type != 'survey_long_answer'
@@ -158,8 +161,9 @@
 							</td>
 						</tr>
 					{% elseif ans %}
-				   		{% if include_open_questions
-				   			  or (
+					{% if blk.is_editor_only
+						or include_open_questions
+						or (
 				   			  		blk.type != 'survey_short_answer'
 				   			  	and blk.type != 'survey_long_answer'
 				   			  )

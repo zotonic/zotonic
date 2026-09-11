@@ -1,6 +1,6 @@
 {% with m.rsc[id].id as survey_id %}
 {% if survey_id.is_editable and result.id == answer_id %}
-    <td id="{{ #status_cell.answer_id }}"
+    <td id="survey-result-status-{{ answer_id }}"
         class="survey-status-cell{% if result.status|is_defined %} survey-status-label survey-status-label-{{ result.status }}{% endif %}">
         <button id="{{ #status_button.answer_id }}" type="button" title="{_ Edit status _}">
             {% if result.status_note %}
@@ -19,7 +19,7 @@
                     id=survey_id
                     answer_id=result.id
                     on_success={replace
-                        target=#status_cell.answer_id
+                        target=["survey-result-status-",answer_id]|join
                         template="_admin_survey_editor_result_status_update.tpl"
                         id=survey_id
                         answer_id=result.id
