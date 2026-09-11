@@ -26,7 +26,7 @@
 }).
 -moduledoc("
 mod_base is the base module, which acts as a container module holding most of Zotonic basic [dispatch
-rules](/id/doc_dispatch_index#all-dispatch-rules), [Actions](/id/template_action#actions) and [Module tags](/id/template_tag#scomps).
+rules](/id/dispatch), [Actions](/id/template_action#actions) and [Module tags](/id/template_tag#scomps).
 
 Note that the amount of templates has been kept to a minimum in this module, so that sites are free to implement
 whatever templates they want.
