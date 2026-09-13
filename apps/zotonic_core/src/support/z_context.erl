@@ -1548,7 +1548,8 @@ set_security_headers(Context) ->
     Headers = [
         {<<"x-content-type-options">>, <<"nosniff">>},
         {<<"x-permitted-cross-domain-policies">>, <<"none">>},
-        {<<"referrer-policy">>, <<"same-origin">>}
+        % Note that embedded Youtube videos will not play if set to 'same-origin'
+        {<<"referrer-policy">>, <<"strict-origin-when-cross-origin">>}
     ],
     CSP = case z_context:get(allow_frame, Context, false) of
         true -> CSP0#content_security_header{ frame_ancestors = [] };
