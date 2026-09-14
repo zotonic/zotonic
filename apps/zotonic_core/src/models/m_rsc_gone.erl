@@ -417,7 +417,7 @@ followup(Id, Context) ->
     followup(m_rsc:rid(Id, Context), [], Context).
 
 followup(undefined, _Seen, _Context) -> undefined;
-followup(Id, Seen, Context) ->
+followup(Id, Seen, Context) when is_integer(Id) ->
     case lists:member(Id, Seen) of
         true -> undefined;
         false ->

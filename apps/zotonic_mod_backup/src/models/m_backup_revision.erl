@@ -396,7 +396,7 @@ save_deleted(Id, Props, Context) when is_integer(Id), is_map(Props) ->
         ok = save_revision(Id, Props, true, Ctx),
         % Keep the cached title consistent with the deletion revision.
         z_db:q("update rsc_gone set props_json = coalesce(props_json, '{}'::jsonb) || $2::jsonb
-                where id = $1", [Id, maps:with([<<"title">>], Props)], Ctx),
+                where id = $1", [Id, ?DB_PROPS_JSON(maps:with([<<"title">>], Props))], Ctx),
         ok
     end, Context).
 
