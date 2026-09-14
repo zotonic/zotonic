@@ -134,7 +134,7 @@ cg_move_and_delete(Ids, ToGroupId, Context) ->
     RscIds = in_content_groups(Ids, Context),
     ok = move_all(RscIds, ToGroupId, 0, length(RscIds), Context),
     lists:foreach(fun(Id) ->
-                     m_rsc:delete(Id, Context)
+                     m_rsc:delete(Id, ToGroupId, Context)
                   end,
                   Ids),
     page_actions({unmask, []}, Context),

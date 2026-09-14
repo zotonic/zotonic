@@ -48,18 +48,8 @@ service_available(Context) ->
     {true, Context2}.
 
 is_authorized(Context) ->
-    case z_acl:is_allowed(use, mod_admin, Context) of
-        true ->
-            Id = m_rsc:rid(z_context:get_q(<<"id">>, Context), Context),
-            case m_rsc:exists(Id, Context) of
-                false ->
-                    {z_acl:is_allowed(use, mod_backup, Context), Context};
-                true ->
-                    {z_acl:rsc_editable(Id, Context), Context}
-            end;
-        false ->
-            {true, Context}
-    end.
+    Id = m_rsc:rid(z_context:get_q(<<"id">>, Context), Context),
+    {m_backup_revision:can_view(Id, Context), Context}.
 
 
 process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
@@ -73,7 +63,7 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
 
 event(#postback_notify{message= <<"rev-diff">>}, Context) ->
     Id = m_rsc:rid(z_context:get_q(<<"id">>, Context), Context),
-    case z_acl:rsc_editable(Id, Context) of
+    case m_backup_revision:can_view(Id, Context) of
         true ->
             A = z_context:get_q(<<"a">>, Context),
             B = z_context:get_q(<<"b">>, Context),
@@ -95,9 +85,7 @@ event(#submit{message={revert, Args}}, Context) ->
         ], Context),
     RscId = proplists:get_value(rsc_id, Args),
     RevId = proplists:get_value(rev_id, Args),
-    case z_acl:is_allowed(use, mod_backup, Context1)
-        orelse (m_rsc:exists(RscId, Context1) andalso z_acl:rsc_editable(RscId, Context1))
-    of
+    case m_backup_revision:can_view(RscId, Context1) of
         true ->
             Options0 = case z_convert:to_bool(z_context:get_q(<<"incoming_edges">>, Context1)) of
                 true -> [ incoming_edges ];
@@ -111,7 +99,13 @@ event(#submit{message={revert, Args}}, Context) ->
                 true -> [ dependent | Options1 ];
                 false -> Options1
             end,
-            do_revert(RscId, RevId, Options2, Context1);
+            Options3 = lists:foldl(fun(Key, Acc) ->
+                case z_context:get_q(atom_to_binary(Key, utf8), Context1) of
+                    undefined -> Acc;
+                    Value -> [{Key, m_rsc:rid(Value, Context1)} | Acc]
+                end
+            end, Options2, [category_id, content_group_id]),
+            do_revert(RscId, RevId, Options3, Context1);
         false ->
             z_render:growl_error(?__("You are not allowed to see the revisions", Context1), Context1)
     end.
@@ -123,6 +117,8 @@ do_revert(Id, RevId, Options, Context) ->
             z_render:wire({redirect, [ {dispatch, admin_edit_rsc}, {id, Id} ]}, Context);
         {error, eacces} ->
             z_render:growl_error(?__("You are not allowed to recover this page.", Context), Context);
+        {error, missing_reference} ->
+            z_render:growl_error(?__("Select an existing category and content group before restoring this page.", Context), Context);
         {error, enoent} ->
             z_render:growl_error(?__("Sorry, this backup has been deleted.", Context), Context);
         {error, _} ->
@@ -175,14 +171,14 @@ fetch_props(Id, Rev, Context) ->
 check_access(undefined, undefined, _Context) ->
     true;
 check_access({ok, PropsA}, undefined, Context) ->
-    z_acl:rsc_editable(maps:get(<<"rsc_id">>, PropsA), Context);
+    m_backup_revision:can_view(maps:get(<<"rsc_id">>, PropsA), Context);
 check_access(undefined, {ok, PropsA}, Context) ->
-    z_acl:rsc_editable(maps:get(<<"rsc_id">>, PropsA), Context);
+    m_backup_revision:can_view(maps:get(<<"rsc_id">>, PropsA), Context);
 check_access({ok, PropsA}, {ok, PropsB}, Context) ->
     case {maps:get(<<"rsc_id">>, PropsA),
           maps:get(<<"rsc_id">>, PropsB)}
     of
-        {Id,Id} -> z_acl:rsc_editable(Id, Context);
+        {Id,Id} -> m_backup_revision:can_view(Id, Context);
         _ -> false
     end.
 

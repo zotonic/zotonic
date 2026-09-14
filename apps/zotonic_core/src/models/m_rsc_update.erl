@@ -48,6 +48,7 @@ It is not exposed as a standalone model path endpoint.
     flush/2,
 
     delete_nocheck/2,
+    delete_nocheck/3,
 
     to_slug/1,
     normalize_page_path/1
@@ -142,6 +143,9 @@ delete(Name, FollowUpId, Context) ->
 delete_nocheck(Id, Context) ->
     delete_nocheck(m_rsc:rid(Id, Context), undefined, Context).
 
+%% @doc Delete after the caller has checked permissions, retaining a local replacement.
+-spec delete_nocheck(Id, FollowUpId, Context) -> ok | {error, term()} when
+    Id :: integer(), FollowUpId :: integer() | undefined, Context :: z:context().
 delete_nocheck(1, _OptFollowUpId, _Context) ->
     {error, eacces};
 delete_nocheck(Id, OptFollowUpId, Context) when is_integer(Id) ->
@@ -149,14 +153,16 @@ delete_nocheck(Id, OptFollowUpId, Context) when is_integer(Id) ->
     CatList = m_rsc:is_a(Id, Context),
     Props = m_rsc:get(Id, Context),
 
-    % Outside transaction as due to race conditions we might
-    % have a duplicate insert into the rsc_gone table. That
-    % triggers an error which cancels the transaction F below.
-    _ = m_rsc_gone:gone(Id, OptFollowUpId, Context),
-
+    % Serialize deletion on the resource row. The tombstone and deletion must
+    % commit together, including while the background gone migration is running.
     F = fun(Ctx) ->
-        z_notifier:notify_sync(#rsc_delete{id = Id, is_a = CatList}, Ctx),
-        z_db:delete(rsc, Id, Ctx)
+        case z_db:q1("select id from rsc where id = $1 for update", [Id], Ctx) of
+            undefined -> {ok, 0};
+            Id ->
+                {ok, Id} = m_rsc_gone:gone(Id, OptFollowUpId, Ctx),
+                z_notifier:notify_sync(#rsc_delete{id = Id, is_a = CatList}, Ctx),
+                z_db:delete(rsc, Id, Ctx)
+        end
     end,
     case z_db:transaction(F, Context) of
         {ok, _RowsDeleted} ->
@@ -1092,7 +1098,12 @@ update_result({error, _} = Error, _RscUpd, _Context) ->
 update_transaction_fun_props(#rscupd{id = Id} = RscUpd, Func, Context) ->
     case get_raw_lock(Id, Context) of
         {ok, Raw} ->
-            update_transaction_fun_props_1(RscUpd, Raw, Func, Context);
+            Result = update_transaction_fun_props_1(RscUpd, Raw, Func, Context),
+            case {RscUpd#rscupd.is_import, Result} of
+                {true, {ok, Id, _}} -> m_rsc_gone:delete(Id, Context);
+                _ -> ok
+            end,
+            Result;
         {error, _} = Error ->
             {rollback, Error}
     end.

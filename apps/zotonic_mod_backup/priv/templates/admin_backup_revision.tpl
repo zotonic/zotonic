@@ -28,23 +28,15 @@
 
 {% block content %}
 
-{% if id.exists and not id.is_editable %}
-     <div class="alert alert-warning" role="alert">
-        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-        {_ You are not allowed to edit this page. _}
-    </div>
-{% elseif not id.exists and not m.acl.use.mod_backup %}
-     <div class="alert alert-warning" role="alert">
-        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-        {_ You are not allowed to recover this page. _}
-    </div>
+{% if not m.backup_revision.can_view[id] %}
+    <div class="alert alert-warning" role="alert">{_ You are not allowed to see the revisions. _}</div>
 {% else %}
 	{% with not id.exists as is_deleted %}
 	{% with m.backup_revision.list[id] as revs %}
 		<div class="admin-header">
         	<h2>
         		<span class="text-muted">{_ Revisions for _}:</span>
-	        	{{ m.backup_revision.title[id]|default:_"<em>Untitled</em>" }}
+            {{ m.backup_revision.title[id]|escape|default:_"Untitled" }}
         	</h2>
 
 	    	{% if id.exists %}
@@ -92,7 +84,7 @@
 						</label>
 						<span>
 							{{ rev.created|date:_"Y-m-d H:i" }}
-							{{ rev.user_id.title|default:rev.user_name }}
+							{{ rev.user_id.title|default:rev.user_name|escape }}
 						</span>
 					</li>
 				{% endfor %}
@@ -101,7 +93,7 @@
 
 			<div class="col-lg-9 col-md-9">
 				<div id="page-diff" >
-				</div
+				</div>
 			</div>
 
 		</div>

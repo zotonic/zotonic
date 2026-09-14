@@ -357,6 +357,7 @@ upgrade(C, Database, Schema) ->
 
 -spec upgrade_models( z:context() ) -> ok.
 upgrade_models(Context) ->
+    ok = m_rsc:install(Context),
     ok = m_rsc_gone:install(Context),
     ok = m_rsc_import:install(Context).
 

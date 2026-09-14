@@ -405,6 +405,7 @@ Delegate callbacks:
     event/2,
 
     observe_acl_is_owner/2,
+    observe_acl_rsc_gone_sql/2,
     observe_acl_is_allowed/2,
     observe_acl_is_allowed_prop/2,
     observe_acl_logon/2,
@@ -1191,3 +1192,8 @@ manage_data(_Version, _Context) ->
 
 page_actions(Actions, Context) ->
     z_notifier:first(#page_actions{ actions = Actions }, Context).
+
+
+%% @doc Filter deleted resources by saved update permissions, not publication visibility.
+observe_acl_rsc_gone_sql(#acl_rsc_gone_sql{ alias = Alias }, Context) ->
+    acl_user_groups_checks:gone_sql(Alias, Context).
