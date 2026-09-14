@@ -888,23 +888,32 @@ restore_props(Id, Props, Options, Context) ->
                             % The archived update and target insert permissions were checked above.
                             % Keep placeholder insertion, update and tombstone removal atomic.
                             z_db:transaction(fun(Ctx) ->
-                                z_db:q("select id from rsc_gone where id = $1 for update", [Id], Ctx),
-                                case can_view(Id, Ctx) of
-                                    false -> {rollback, {error, eacces}};
-                                    true ->
-                                        UpdateOptions = [is_import, {is_acl_check, not IsNew}],
-                                        ResourceProps = maps:remove(<<"backup_uri_aliases">>, Props1),
-                                        case m_rsc_update:update(Id, ResourceProps, UpdateOptions, Ctx) of
-                                            {ok, _} = Ok ->
-                                                ok = m_rsc:restore_uri_aliases(Id,
-                                                    maps:get(<<"backup_uri_aliases">>, Props, []), Ctx),
-                                                m_rsc_gone:delete(Id, Ctx),
-                                                Ok;
-                                            Error -> {rollback, Error}
-                                        end
+                                Gone = z_db:q("select id from rsc_gone where id = $1 for update", [Id], Ctx),
+                                case {IsNew, Gone} of
+                                    {true, []} ->
+                                        % A concurrent restore or purge removed the tombstone.
+                                        {rollback, {error, enoent}};
+                                    _ ->
+                                        restore_props_locked(Id, Props, Props1, IsNew, Ctx)
                                 end
                             end, Context)
                     end
+            end
+    end.
+
+restore_props_locked(Id, Props, Props1, IsNew, Ctx) ->
+    case can_view(Id, Ctx) of
+        false -> {rollback, {error, eacces}};
+        true ->
+            UpdateOptions = [is_import, {is_acl_check, not IsNew}],
+            ResourceProps = maps:remove(<<"backup_uri_aliases">>, Props1),
+            case m_rsc_update:update(Id, ResourceProps, UpdateOptions, Ctx) of
+                {ok, _} = Ok ->
+                    ok = m_rsc:restore_uri_aliases(Id,
+                        maps:get(<<"backup_uri_aliases">>, Props, []), Ctx),
+                    % The import update already removed the locked tombstone.
+                    Ok;
+                Error -> {rollback, Error}
             end
     end.
 

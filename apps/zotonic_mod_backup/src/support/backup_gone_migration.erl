@@ -23,7 +23,7 @@ Resumable migration of deleted-resource ACL fields and display metadata.
 Progress is kept in a separate table which is dropped upon completion.
 This internal worker reads revisions without user ACL filtering.").
 
--export([start/1, migrate/2]).
+-export([start/1, resume/1, migrate/2]).
 
 % -include_lib("zotonic_core/include/zotonic.hrl").
 
@@ -32,6 +32,7 @@ This internal worker reads revisions without user ACL filtering.").
 
 %% @doc Store resumable migration progress separately from permanent resource data.
 %% A fixed upper bound lets the migration finish while new deletions keep arriving.
+%% Called inside the schema transaction; scheduling must wait until it commits.
 -spec start(Context) -> ok when Context :: z:context().
 start(Context) ->
     [] = z_db:q("create table if not exists backup_gone_migration (
@@ -43,8 +44,24 @@ start(Context) ->
             values (true, coalesce((select max(id) from rsc_gone), 0))
             on conflict (id) do nothing", Context),
     z_db:flush(Context),
-    {ok, _} = z_pivot_rsc:insert_task(?MODULE, migrate, <<>>, [0], Context),
     ok.
+
+%% @doc Schedule committed progress after upgrade or on normal site startup.
+%% Backup sites retain the cursor until they restart in a normal environment.
+-spec resume(Context) -> ok when Context :: z:context().
+resume(Context) ->
+    case m_site:environment(Context) =/= backup
+        andalso z_db:has_connection(Context)
+        andalso z_db:table_exists(backup_gone_migration, Context)
+    of
+        true ->
+            case z_pivot_rsc:insert_task(?MODULE, migrate, <<>>, [0], Context) of
+                {ok, _} -> ok;
+                {error, backup} -> ok
+            end;
+        false ->
+            ok
+    end.
 
 %% @doc At most 100 tombstones per task invocation. Progress commits with each row;
 %% retries use the saved cursor, including tasks queued by older code versions.

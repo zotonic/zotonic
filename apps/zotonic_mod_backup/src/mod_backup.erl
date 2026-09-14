@@ -280,7 +280,8 @@ This module handles the following notifier callbacks:
     backup_in_progress/1,
     is_uploading/1,
 
-    manage_schema/2
+    manage_schema/2,
+    manage_data/2
 ]).
 
 
@@ -570,6 +571,10 @@ manage_schema({upgrade, 6}, Context) ->
 manage_schema(_Version, Context) ->
     m_backup_revision:install(Context).
 
+%% Schema changes are committed before the module manager calls manage_data/2.
+manage_data(_Version, Context) ->
+    backup_gone_migration:resume(Context).
+
 
 %%====================================================================
 %% API
@@ -593,6 +598,7 @@ init(Args) ->
     {context, Context} = proplists:lookup(context, Args),
     z_context:logger_md(Context),
     IsEnvBackup = (m_site:environment(Context) =:= backup),
+    ok = backup_gone_migration:resume(Context),
     % A jobs queue to ensure that we only run a single Database dump at a time.
     ensure_job_queue(?MODULE, [ {regulators, [{counter, [{limit, 1} ]} ]} ]),
     ensure_job_queue(?CONFIG_UPDATE_JOB, [ {regulators, [{counter, [{limit, 1} ]} ]} ]),
