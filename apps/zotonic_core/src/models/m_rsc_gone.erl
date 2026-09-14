@@ -37,6 +37,8 @@ The saved category, content group, visibility and ownership fields are used for 
 
 Display labels are kept in `props_json`; complete resource data remains in `module#mod_backup` revisions.
 Restoring a resource removes its tombstone.
+Only category/content-group labels are copied. `props_json.deleter_id` identifies the deletion actor;
+person titles are read from live resources through the normal ACL checks.
 
 The public model paths below expose only routing information. Reading archived metadata requires admin
 access plus update permission on the saved ACL fields (`is_editable/2`). ACL modules implement
@@ -73,6 +75,7 @@ Available Model API Paths
 | --- | --- | --- |
 | `get` | `/+id/new_location/...` | Return category data for +id. Uses `get_new_location`. |
 | `get` | `/+id/is_gone/...` | Return whether gone (`is_gone`). |
+| `get` | `/+id/followup/...` | Resolve a live local resource, following replacement IDs. Does not authorize access to its properties. |
 
 `/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
@@ -111,6 +114,8 @@ m_get([ Id, <<"new_location">> | Rest ], _Msg, Context) ->
     {ok, {get_new_location(Id, Context), Rest}};
 m_get([ Id, <<"is_gone">> | Rest ], _Msg, Context) ->
     {ok, {is_gone(Id, Context), Rest}};
+m_get([ Id, <<"followup">> | Rest ], _Msg, Context) ->
+    {ok, {followup(Id, Context), Rest}};
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
@@ -209,7 +214,7 @@ gone(Id, NewId, Context) when is_integer(Id), is_integer(NewId) orelse NewId =:=
                         {ok, RscProps} = m_rsc:get_raw(Id, Ctx),
                         Props1 = [
                             {props_json, (snapshot(RscProps, Ctx))#{
-                                <<"deleted_by">> => reference_label(z_acl:user(Context), Context)
+                                <<"deleter_id">> => z_acl:user(Ctx)
                             }},
                             {modified, calendar:universal_time()},
                             {new_id, NewId},
@@ -351,7 +356,8 @@ install(Context) ->
     end.
 
 
-%% @doc Retain display labels and author ownership without retaining the resource body.
+%% @doc Retain category/content-group labels and author ownership without the resource body.
+%% Person labels are read from live resources with ACL checks at display time.
 %% Internal deletion/migration API: the caller already has access to the source props.
 -spec snapshot(Props, Context) -> map()
     when
@@ -360,7 +366,7 @@ install(Context) ->
 snapshot(Props, Context) ->
     Labels = maps:from_list([
         {Key, reference_label(maps:get(Key, Props, undefined), Context)}
-        || Key <- [ <<"category_id">>, <<"content_group_id">>, <<"creator_id">>, <<"modifier_id">> ] ]),
+        || Key <- [ <<"category_id">>, <<"content_group_id">> ] ]),
     #{ <<"title">> => maps:get(<<"title">>, Props, undefined),
        <<"resource_modified">> => maps:get(<<"modified">>, Props, undefined),
        <<"references">> => Labels,

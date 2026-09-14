@@ -167,7 +167,7 @@ This module handles the following notifier callbacks:
 - `observe_edge_insert`: Record edge insertions as backup revisions for changed resources.
 - `observe_m_config_update`: Toggle revision backup behavior immediately when backup config flags change.
 - `observe_media_update_done`: Store a backup revision when media metadata or file references are updated.
-- `observe_rsc_delete`: Preserve media revision data before deleting resources that own media.
+- `observe_rsc_delete`: Preserve media and complete resource revisions, including URI aliases and deleted-page metadata, before resource deletion.
 - `observe_rsc_update_done`: Save a resource revision snapshot after successful updates.
 - `observe_rsc_upload`: Include uploaded files in backup revision tracking and metadata.
 - `observe_search_query`: Provide module-specific search query handlers with ACL-aware filtering.
@@ -343,8 +343,10 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
 
 observe_rsc_delete(#rsc_delete{ id = Id }, Context) ->
     m_backup_revision:medium_delete_check(Id, Context),
-    % Save before the resource deletion cascades to its URI aliases.
-    m_backup_revision:save_deleted(Id, m_rsc:get(Id, Context), Context).
+    % Deletion is already authorized and holds the resource lock. Preserve all
+    % properties before deletion cascades to the URI aliases, regardless of view ACLs.
+    {ok, Props} = m_rsc:get_raw(Id, Context),
+    m_backup_revision:save_deleted(Id, Props, Context).
 
 observe_rsc_update_done(#rsc_update_done{ action = insert, id = Id, post_props = Props }, Context) ->
     m_backup_revision:save_revision(Id, Props, Context);
@@ -565,6 +567,16 @@ backup_in_progress(Context) ->
 is_uploading(Context) ->
     gen_server:call(z_utils:name_for_site(?MODULE, Context), is_uploading).
 
+manage_schema(install, Context) ->
+    ok = m_backup_revision:install(Context),
+    % Datamodel reinstalls also use 'install'. Only initialize migration before
+    % the module manager has recorded the first installed schema version.
+    case z_db:q1("select schema_version from module where name = $1", [?MODULE], Context) =:= undefined
+        andalso z_db:q1("select exists(select 1 from rsc_gone)", Context)
+    of
+        true -> backup_gone_migration:start(Context);
+        false -> ok
+    end;
 manage_schema({upgrade, 6}, Context) ->
     ok = m_backup_revision:install(Context),
     backup_gone_migration:start(Context);

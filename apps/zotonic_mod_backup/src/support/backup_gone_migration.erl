@@ -27,9 +27,6 @@ This internal worker reads revisions without user ACL filtering.").
 
 % -include_lib("zotonic_core/include/zotonic.hrl").
 
-% Match the edge-log recovery margin used by m_backup_revision.
--define(DELTA_LOG_REVERT, 2).
-
 %% @doc Store resumable migration progress separately from permanent resource data.
 %% A fixed upper bound lets the migration finish while new deletions keep arriving.
 %% Called inside the schema transaction; scheduling must wait until it commits.
@@ -97,10 +94,13 @@ migrate(_After, Context) ->
     end.
 
 migrate_gone_row(Id, Context) ->
+    % Alias insertion needs a resource FK lock. Acquire it before the tombstone,
+    % matching deletion and restoration, even when the live row is absent.
+    LiveId = z_db:q1("select id from rsc where id = $1 for update", [Id], Context),
     case z_db:qmap_row("select * from rsc_gone where id = $1 for update", [Id], Context) of
         {error, enoent} -> ok;
         {ok, Gone} ->
-            case z_db:q1("select id from rsc where id = $1", [Id], Context) of
+            case LiveId of
                 Id ->
                     ok = m_rsc:remember_uri(Id, maps:get(<<"uri">>, Gone, undefined), Context),
                     m_rsc_gone:delete(Id, Context),
@@ -124,28 +124,15 @@ migrate_gone_props(Id, Gone, Context) ->
     Labels = maps:from_list([
         {Key, (m_backup_revision:historical_label(maps:get(Key, Props, undefined), Context))#{
             <<"id">> => maps:get(Key, Props, undefined) }}
-        || Key <- [<<"category_id">>, <<"content_group_id">>, <<"creator_id">>, <<"modifier_id">>] ]),
+        || Key <- [<<"category_id">>, <<"content_group_id">>] ]),
     Snapshot = (m_rsc_gone:snapshot(Props, Context))#{
         <<"references">> => Labels,
-        <<"author_ids">> => deleted_authors(Id, maps:get(<<"modified">>, Gone), Context),
-        <<"deleted_by">> => m_backup_revision:historical_label(maps:get(<<"modifier_id">>, Gone, undefined), Context) },
+        % Nearby edge deletions cannot establish ownership at deletion time.
+        % Legacy tombstones retain creator-based ownership only.
+        <<"author_ids">> => [],
+        <<"deleter_id">> => maps:get(<<"modifier_id">>, Gone, undefined) },
     Update = (maps:with([<<"category_id">>, <<"content_group_id">>, <<"visible_for">>,
                         <<"creator_id">>, <<"version">>], Props))#{
         <<"props_json">> => Snapshot },
     {ok, _} = z_db:update(rsc_gone, Id, Update, Context),
     ok.
-
-
-%% Recover author ownership from the edge deletions around the resource deletion.
-%% Old sites without an edge log conservatively retain creator ownership only.
-deleted_authors(Id, Deleted, Context) ->
-    From = z_datetime:prev_second(Deleted, ?DELTA_LOG_REVERT),
-    To = z_datetime:next_second(Deleted, ?DELTA_LOG_REVERT),
-    [ Author || {Author} <- z_db:q(
-        "select distinct object_id
-         from backup_edge_log
-         where subject_id = $1
-           and predicate = 'author'
-           and not is_insert
-           and timestamp between $2 and $3",
-        [Id, From, To], Context) ].

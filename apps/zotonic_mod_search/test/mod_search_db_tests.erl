@@ -8,17 +8,34 @@ EUnit tests for database-backed search query behavior and notifications.
 
 
 wait_for(QueryId, ItemId) ->
+    % EUnit can reuse a process whose mailbox still contains other notifications.
     receive
         {'$gen_cast',
          {#rsc_query_item{query_id=QueryId, match_id=ItemId}, _}} ->
-            ok;
-        _X ->
-            ?DEBUG("Got wrong message, waiting for rsc_query_item:"),
-            ?DEBUG(_X),
-            ?assert(false)
+            ok
     after 1000 ->
             ?debugMsg("Did not receive a rsc_query_item."),
             ?assert(false)
+    end.
+
+wait_for_ignores_unrelated_messages_test() ->
+    Ref = make_ref(),
+    Mqtt = {mqtt_msg, #{ topic => [<<"model">>, <<"acl_user_groups">>, <<"event">>,
+        <<"acl-rules">>, <<"publish-rebuild">>], payload => Ref }},
+    OtherQuery = {'$gen_cast', {#rsc_query_item{query_id=1, match_id=2}, Ref}},
+    Match = {'$gen_cast', {#rsc_query_item{query_id=3, match_id=4}, Ref}},
+    self() ! Mqtt,
+    self() ! OtherQuery,
+    self() ! Match,
+    try
+        ?assertEqual(ok, wait_for(3, 4)),
+        % Selective receive leaves unrelated messages for their intended consumers.
+        receive Mqtt -> ok after 0 -> ?assert(false) end,
+        receive OtherQuery -> ok after 0 -> ?assert(false) end
+    after
+        receive Mqtt -> ok after 0 -> ok end,
+        receive OtherQuery -> ok after 0 -> ok end,
+        receive Match -> ok after 0 -> ok end
     end.
 
 

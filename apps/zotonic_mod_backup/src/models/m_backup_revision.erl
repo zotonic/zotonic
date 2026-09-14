@@ -888,10 +888,15 @@ restore_props(Id, Props, Options, Context) ->
                             % The archived update and target insert permissions were checked above.
                             % Keep placeholder insertion, update and tombstone removal atomic.
                             z_db:transaction(fun(Ctx) ->
+                                % Match deletion's lock order: live resource, then tombstone.
+                                LiveId = z_db:q1("select id from rsc where id = $1 for update", [Id], Ctx),
                                 Gone = z_db:q("select id from rsc_gone where id = $1 for update", [Id], Ctx),
-                                case {IsNew, Gone} of
-                                    {true, []} ->
+                                case {IsNew, LiveId, Gone} of
+                                    {true, _, []} ->
                                         % A concurrent restore or purge removed the tombstone.
+                                        {rollback, {error, enoent}};
+                                    {false, undefined, _} ->
+                                        % The live resource was deleted while we waited.
                                         {rollback, {error, enoent}};
                                     _ ->
                                         restore_props_locked(Id, Props, Props1, IsNew, Ctx)

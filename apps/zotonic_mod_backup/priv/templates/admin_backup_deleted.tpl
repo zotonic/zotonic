@@ -71,14 +71,12 @@
                             {{ r.resource_modified|date:"Y-m-d H:i" }}
                         </td>
                         <td>
-                            {% if m.rsc[r.modifier_id].exists %}
-                                {% include "_name.tpl" id=r.modifier_id %}
-                            {% else %}
-                                <span class="text-muted">{{ r.deleted_by.title|escape }}</span>
-                            {% endif %}
+                            {% with r.deleter_id|default:r.modifier_id as deleter_id %}
+                                {{ m.rsc[m.rsc_gone[deleter_id].followup].title }}
+                            {% endwith %}
                         </td>
                         <td>
-                            {{ m.rsc[r.creator_id].title|default:r.references.creator_id.title|escape }}
+                            {{ m.rsc[m.rsc_gone[r.creator_id].followup].title }}
                         </td>
                         <td>
                             <a href="{% url admin_backup_revision id=r.id %}" class="btn btn-xs btn-default">{_ Revisions _}</a>

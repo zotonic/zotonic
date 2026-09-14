@@ -22,7 +22,188 @@ deleted_pages() ->
     pruning(Admin),
     uri_alias(Admin),
     templates(Admin),
+    legacy_author_ownership(Admin),
+    person_labels(Admin),
+    deletion_without_view_access(Admin),
+    lock_order(restore, Admin),
+    lock_order(migrate, Admin),
     ok.
+
+deletion_without_view_access(Admin) ->
+    {ok, Group} = m_rsc:insert(#{ <<"category_id">> => acl_user_group }, Admin),
+    {ok, User} = m_rsc:insert(#{ <<"category_id">> => person }, Admin),
+    {ok, _} = m_edge:insert(User, hasusergroup, Group, Admin),
+    rules(Group, [delete], Admin),
+    Context = z_acl:logon(User, z_context:new(Admin)),
+    {ok, Id} = m_rsc:insert(#{ <<"category_id">> => article,
+        <<"creator_id">> => User, <<"is_published">> => false }, Admin),
+    ?assertEqual(undefined, m_rsc:get(Id, Context)),
+    ?assert(z_acl:is_allowed(delete, Id, Context)),
+    % The deletion revision must capture current raw data, not an earlier revision.
+    {ok, 1} = z_db:update(rsc, Id, #{ <<"body">> => <<"Hidden final body">> }, Admin),
+    ok = m_rsc:delete(Id, Context),
+    {ok, #{ <<"type">> := $D, <<"data">> := Props }} =
+        m_backup_revision:get_revision(revision(Id, Admin), Admin),
+    ?assertEqual(<<"Hidden final body">>, maps:get(<<"body">>, Props)).
+
+%% Hold deletion's first lock while the competing operation starts. Its wait
+%% must not hold the tombstone, which deletion still needs to lock.
+lock_order(Operation, Admin) ->
+    {ok, Id} = m_rsc:insert(#{ <<"category_id">> => article,
+        <<"uri">> => <<"https://example.test/lock-order/", (atom_to_binary(Operation, utf8))/binary>> }, Admin),
+    {ok, Id} = m_rsc_gone:gone(Id, Admin),
+    Rev = revision(Id, Admin),
+    case Operation of
+        migrate ->
+            start_migration(Admin),
+            z_db:q("update backup_gone_migration set last_id = $1, max_id = $2", [Id-1, Id], Admin);
+        restore -> ok
+    end,
+    Parent = self(),
+    Ref = make_ref(),
+    {Worker, Monitor} = spawn_monitor(fun() ->
+        receive {run, Ref} -> ok end,
+        WorkerContext = z_acl:sudo(z_context:new(Admin)),
+        Result = case Operation of
+            restore -> m_backup_revision:revert_resource(Id, Rev, [], WorkerContext);
+            migrate -> backup_gone_migration:migrate(0, WorkerContext)
+        end,
+        Parent ! {Ref, Result}
+    end),
+    try
+        ?assertEqual(ok, z_db:transaction(fun(Ctx) ->
+            Id = z_db:q1("select id from rsc where id = $1 for update", [Id], Ctx),
+            Backend = z_db:q1("select pg_backend_pid()", Ctx),
+            Worker ! {run, Ref},
+            wait_for_blocked_transaction(Backend, Ctx, 200),
+            Id = z_db:q1("select id from rsc_gone where id = $1 for update nowait", [Id], Ctx),
+            m_rsc:delete(Id, Ctx)
+        end, Admin)),
+        receive
+            {Ref, Result} ->
+                case Operation of
+                    restore -> ?assertEqual({error, enoent}, Result);
+                    migrate -> ?assertMatch({delay, _, [Id]}, Result)
+                end;
+            {'DOWN', Monitor, process, Worker, Reason} -> error({worker_failed, Reason})
+        after 10000 -> error(worker_timeout)
+        end,
+        ?assertNot(m_rsc:exists(Id, Admin)),
+        case Operation of
+            migrate -> migrate(0, Admin);
+            restore -> ok
+        end
+    after
+        exit(Worker, kill),
+        erlang:demonitor(Monitor, [flush]),
+        receive {Ref, _} -> ok after 0 -> ok end
+    end.
+
+wait_for_blocked_transaction(_Backend, _Context, 0) ->
+    error(transaction_not_blocked);
+wait_for_blocked_transaction(Backend, Context, Attempts) ->
+    case z_db:q1("select exists(select 1 from pg_stat_activity where $1 = any(pg_blocking_pids(pid)))",
+        [Backend], Context)
+    of
+        true -> ok;
+        false ->
+            timer:sleep(10),
+            wait_for_blocked_transaction(Backend, Context, Attempts-1)
+    end.
+
+legacy_author_ownership(Admin) ->
+    {ok, Group} = m_rsc:insert(#{ <<"category_id">> => acl_user_group }, Admin),
+    {ok, User} = m_rsc:insert(#{ <<"category_id">> => person }, Admin),
+    {ok, _} = m_edge:insert(User, hasusergroup, Group, Admin),
+    rules(Group, [update], Admin),
+    Context = z_acl:logon(User, z_context:new(Admin)),
+    m_config:set_value(mod_acl_user_groups, author_is_owner, true, Admin),
+    try
+        {ok, Id} = m_rsc:insert(#{ <<"category_id">> => article }, Admin),
+        {ok, _} = m_edge:insert(Id, author, User, Admin),
+        ok = m_edge:delete(Id, author, User, Admin),
+        ok = m_rsc:delete(Id, Admin),
+        ?assertNot(m_backup_revision:can_view(Id, Context)),
+        % Put the revoked edge inside the old migration's inference window.
+        z_db:q("update backup_edge_log set timestamp = (
+                    select modified - interval '1 second' from rsc_gone where id = $1)
+                where subject_id = $1 and predicate = 'author' and not is_insert", [Id], Admin),
+        {ok, Owned} = m_rsc:insert(#{ <<"category_id">> => article,
+            <<"creator_id">> => User }, Admin),
+        ok = m_rsc:delete(Owned, Admin),
+        z_db:q("update rsc_gone set category_id = null, props_json = null where id = any($1)",
+            [[Id, Owned]], Admin),
+        start_migration(Admin),
+        migrate(0, Admin),
+        ?assertNot(m_backup_revision:can_view(Id, Context)),
+        ?assertEqual({error, eacces}, m_backup_revision:get_revision(revision(Id, Admin), Context)),
+        ?assert(m_backup_revision:can_view(Owned, Context)),
+        {ok, Gone} = z_db:qmap_props_row("select * from rsc_gone where id = $1", [Owned], Admin),
+        assert_no_person_labels(Gone)
+    after
+        m_config:set_value(mod_acl_user_groups, author_is_owner, false, Admin)
+    end.
+
+person_labels(Admin) ->
+    {ok, Group} = m_rsc:insert(#{ <<"category_id">> => acl_user_group }, Admin),
+    {ok, User} = m_rsc:insert(#{ <<"category_id">> => person }, Admin),
+    {ok, _} = m_edge:insert(User, hasusergroup, Group, Admin),
+    rules(Group, [update], [
+        {rsc, [{acl_user_group_id, Group}, {actions, [view]},
+            {category_id, person}, {content_group_id, default_content_group}]}
+    ], Admin),
+    Context = z_acl:logon(User, z_context:new(Admin)),
+    {ok, Creator} = m_rsc:insert(#{ <<"category_id">> => person,
+        <<"title">> => <<"Old creator label">> }, Admin),
+    {ok, Deleter} = m_rsc:insert(#{ <<"category_id">> => person,
+        <<"title">> => <<"Old deletion actor label">> }, Admin),
+    {ok, Followup} = m_rsc:insert(#{ <<"category_id">> => person,
+        <<"title">> => <<"Current followup label">>, <<"is_published">> => true }, Admin),
+    {ok, Id} = m_rsc:insert(#{ <<"category_id">> => article,
+        <<"creator_id">> => Creator }, Admin),
+    {ok, _} = m_edge:insert(Id, author, User, Admin),
+    m_config:set_value(mod_acl_user_groups, author_is_owner, true, Admin),
+    try
+        ok = m_rsc:delete(Id, Admin),
+        {ok, Gone} = z_db:qmap_props_row("select * from rsc_gone where id = $1", [Id], Admin),
+        assert_no_person_labels(Gone),
+        ?assert(m_backup_revision:can_view(Id, Context)),
+        ok = m_rsc:delete(Creator, Followup, Admin),
+        ok = m_rsc:delete(Deleter, Followup, Admin),
+        % Existing copied labels remain stored, but must never be used for display.
+        OldLabels = #{
+            <<"deleter_id">> => Deleter,
+            <<"deleted_by">> => #{ <<"title">> => <<"Old deletion actor label">> },
+            <<"references">> => (maps:get(<<"references">>, Gone))#{
+                <<"creator_id">> => #{ <<"title">> => <<"Old creator label">> }
+            }
+        },
+        z_db:q("update rsc_gone set props_json = props_json || $2::jsonb where id = $1",
+            [Id, ?DB_PROPS_JSON(OldLabels)], Admin),
+        ?assertEqual({ok, {Followup, []}}, m_rsc_gone:m_get([Creator, <<"followup">>], undefined, Context)),
+        ?assertEqual(<<"Current followup label">>, m_rsc:p(Followup, title, Context)),
+        {Html0, _} = z_template:render_block_to_iolist(content, <<"admin_backup_deleted.tpl">>, [], Context),
+        Html = iolist_to_binary(Html0),
+        ?assertEqual(2, length(binary:matches(Html, <<"Current followup label">>))),
+        {ok, Followup} = m_rsc:update(Followup, #{ <<"is_published">> => false }, Admin),
+        ?assertEqual(undefined, m_rsc:p(Followup, title, Context)),
+        {HiddenHtml0, _} = z_template:render_block_to_iolist(content, <<"admin_backup_deleted.tpl">>, [], Context),
+        HiddenHtml = iolist_to_binary(HiddenHtml0),
+        ?assertEqual(nomatch, binary:match(HiddenHtml, <<"Current followup label">>)),
+        ?assertEqual(nomatch, binary:match(HiddenHtml, <<"Old creator label">>)),
+        ?assertEqual(nomatch, binary:match(HiddenHtml, <<"Old deletion actor label">>)),
+        ?assertEqual(<<"Old deletion actor label">>, z_db:q1(
+            "select props_json->'deleted_by'->>'title' from rsc_gone where id = $1", [Id], Admin))
+    after
+        m_config:set_value(mod_acl_user_groups, author_is_owner, false, Admin)
+    end.
+
+assert_no_person_labels(Gone) ->
+    ?assertNot(maps:is_key(<<"deleted_by">>, Gone)),
+    ?assertEqual(1, maps:get(<<"deleter_id">>, Gone)),
+    References = maps:get(<<"references">>, Gone),
+    ?assertNot(maps:is_key(<<"creator_id">>, References)),
+    ?assertNot(maps:is_key(<<"modifier_id">>, References)).
 
 authorization(Anon, Admin) ->
     {ok, Group} = m_rsc:insert(#{ <<"category_id">> => acl_user_group }, Admin),
@@ -102,13 +283,24 @@ migration(Admin) ->
     z_db:q("update rsc_gone set category_id = null, props_json = null where id = $1", [Id], Admin),
     {ok, Live} = m_rsc:insert(#{ <<"category_id">> => article }, Admin),
     {ok, Live} = m_rsc_gone:gone(Live, Admin),
-    start_migration(Admin),
+    % First enabling mod_backup on an existing site must also initialize migration.
+    ok = z_db:transaction(fun(Ctx) ->
+        Version = z_db:q1("select schema_version from module where name = 'mod_backup'", Ctx),
+        z_db:q("update module set schema_version = null where name = 'mod_backup'", Ctx),
+        ok = mod_backup:manage_schema(install, Ctx),
+        z_db:q("update module set schema_version = $1 where name = 'mod_backup'", [Version], Ctx),
+        ok
+    end, Admin),
+    ?assert(z_db:table_exists(backup_gone_migration, Admin)),
     migrate(0, Admin),
     ?assertEqual(0, z_db:q1("select count(*) from rsc_gone where id = $1", [Live], Admin)),
     ?assertEqual(m_rsc:rid(article, Admin), z_db:q1("select category_id from rsc_gone where id = $1", [Id], Admin)),
     {ok, Gone} = z_db:qmap_props_row("select * from rsc_gone where id = $1", [Id], Admin),
     ?assertEqual(<<"Latest">>, maps:get(<<"title">>, Gone)),
     ?assertNot(z_db:column_exists(rsc_gone, acl_migrated, Admin)),
+    ?assertNot(z_db:table_exists(backup_gone_migration, Admin)),
+    % Reinstalling the datamodel must not recreate a completed migration.
+    ok = z_module_manager:reinstall(mod_backup, Admin),
     ?assertNot(z_db:table_exists(backup_gone_migration, Admin)),
     migrate(0, Admin),
     % A batch commits at most 100 rows and supplies a cursor for the next invocation.
@@ -137,14 +329,30 @@ revision(Id, Context) ->
     z_db:q1("select id from backup_revision where rsc_id = $1 order by created desc, id desc limit 1", [Id], Context).
 
 rules(Group, Actions, Context) ->
-    z_mqtt:subscribe(<<"model/acl_user_groups/event/acl-rules/publish-rebuild">>, Context),
+    rules(Group, Actions, [], Context).
+
+rules(Group, Actions, ExtraRules, Context) ->
     m_acl_rule:replace_managed([
         {module, [{acl_user_group_id, Group}, {actions, [use]}, {module, mod_admin}]},
         {rsc, [{acl_user_group_id, Group}, {actions, Actions}, {is_owner, true},
                {category_id, article}, {content_group_id, default_content_group}]}
-    ], ?MODULE, Context),
-    receive {mqtt_msg, _} -> ok after 30000 -> error(acl_rebuild_timeout) end,
-    z_mqtt:unsubscribe(<<"model/acl_user_groups/event/acl-rules/publish-rebuild">>, Context).
+    ] ++ ExtraRules, ?MODULE, Context),
+    await_acl_rebuild(Context, 3000).
+
+await_acl_rebuild(_Context, 0) ->
+    error(acl_rebuild_timeout);
+await_acl_rebuild(Context, Attempts) ->
+    % The status call follows this process's rebuild casts. A completion event
+    % alone could belong to an older rebuild while our rules are still queued.
+    {ok, Status} = mod_acl_user_groups:status(Context),
+    case lists:any(fun(Key) -> proplists:get_bool(Key, Status) end,
+        [is_rebuilding, is_rebuild_publish, is_rebuild_edit])
+    of
+        false -> ok;
+        true ->
+            timer:sleep(10),
+            await_acl_rebuild(Context, Attempts-1)
+    end.
 
 
 uri_alias(Admin) ->
