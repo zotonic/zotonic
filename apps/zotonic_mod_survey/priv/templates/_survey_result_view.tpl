@@ -55,6 +55,10 @@
                                 nr=forloop.counter
                                 is_survey_answer_view
                             %}
+                        {% elseif blk.type|match:"^survey_" and blk.prompt %}
+                            <div class="form-group">
+                                <label class="control-label text-muted">{{ blk.prompt }}</label>
+                            </div>
                         {% endif %}
                     {% endfor %}
                 </fieldset>
