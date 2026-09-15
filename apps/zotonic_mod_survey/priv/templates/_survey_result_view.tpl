@@ -36,6 +36,8 @@
                                     nr=forloop.counter
                                 %}
                             </div>
+                        {% elseif blk.is_hide_result %}
+                            {# Question was opted-out from the results #}
                         {% elseif blk.type == 'header' or blk.type == 'text' %}
                             {% optional include ["blocks/_block_view_",blk.type,".tpl"]|join
                                 id=id
