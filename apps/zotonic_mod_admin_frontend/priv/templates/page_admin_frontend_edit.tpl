@@ -8,7 +8,7 @@
 			"css/z.icons.css"
 			"css/zotonic-admin.css"
 			"css/z.modal.css"
-			"css/admin-bootstrap3.css"
+			"css/admin-bootstrap5.min.css"
 			"css/admin-frontend.css"
             "font-awesome/css/font-awesome.css"
             "css/image-edit.css"
