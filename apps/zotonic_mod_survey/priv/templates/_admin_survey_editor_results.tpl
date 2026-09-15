@@ -128,7 +128,6 @@
                                           }
                                           title=_"Survey result"
                                           width="large"
-                                          backdrop="static"
                                       }
                             %}
                             {% button class="btn btn-default" text=_"Delete"
