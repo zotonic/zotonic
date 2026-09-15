@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-09-15 11:41\n"
+"PO-Revision-Date: 2026-09-15 14:18\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -2765,15 +2765,15 @@ msgstr "选择一个连接图片"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_select_predicate.tpl:5
 msgid "Select a predicate"
-msgstr ""
+msgstr "選擇一個謂詞"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_select_predicate_find.tpl:23
 msgid "Select a predicate to find pages that can refer to this page."
-msgstr ""
+msgstr "請選擇一個謂詞，以查找可能引用此頁面的頁面。"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_select_predicate_find.tpl:21
 msgid "Select a predicate to find pages this page can connect to."
-msgstr ""
+msgstr "選擇一個謂詞，以查找本頁面可連結到的頁面。"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:80
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:110
@@ -2813,7 +2813,7 @@ msgstr "显示为"
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:53
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:54
 msgid "Show keyword description"
-msgstr ""
+msgstr "顯示關鍵字說明"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:59
 msgid "Show page on multiple paths"
@@ -2830,7 +2830,7 @@ msgstr "顯示日期"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results.tpl:5
 msgid "Showing pages that can refer to this page using <b>{predicate}</b>."
-msgstr ""
+msgstr "顯示可透過以下方式連結至此頁面的頁面 <b>{predicate}</b>。"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results.tpl:9
 msgid "Showing pages you can connect to using <b>{predicate}</b>."
@@ -13243,7 +13243,7 @@ msgstr "單擊“編輯”以查看和更改輸入的數據。"
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:147
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:193
 msgid "Close without saving"
-msgstr ""
+msgstr "不儲存就關閉"
 
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:6
 #: zotonic_mod_survey/priv/templates/survey.tpl:23
@@ -13361,7 +13361,7 @@ msgstr "电子邮件地址"
 
 #: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:77
 msgid "Edit all answers"
-msgstr ""
+msgstr "編輯所有答案"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_result_status.tpl:5
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_result_status.tpl:12
@@ -13377,7 +13377,7 @@ msgstr "编辑问卷调查结果"
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:86
 #: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:29
 msgid "Editor only"
-msgstr ""
+msgstr "僅限編輯"
 
 #: zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:20
 msgid "End of questions"
@@ -13779,7 +13779,7 @@ msgstr "合格分數"
 
 #: zotonic_mod_survey/priv/templates/_survey_result_test_score.tpl:25
 msgid "Passing score: {percentage}%"
-msgstr ""
+msgstr "及格分數： {percentage}%"
 
 #: zotonic_mod_survey/src/models/m_survey.erl:991
 msgid "Percent"
@@ -13927,7 +13927,7 @@ msgstr "結果直到"
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:200
 #: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:93
 msgid "Save &amp; Email"
-msgstr ""
+msgstr "儲存 &amp; 電子郵件"
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:162
 msgid "Save your answers without submitting them yet so you can continue later."
@@ -14038,7 +14038,7 @@ msgstr "抱歉，無法儲存該狀態。"
 #: zotonic_mod_survey/src/mod_survey.erl:473
 #: zotonic_mod_survey/src/mod_survey.erl:642
 msgid "Sorry, the survey result could not be saved."
-msgstr ""
+msgstr "抱歉，無法儲存問卷結果。"
 
 #: zotonic_mod_survey/src/mod_survey.erl:1646
 msgid "Sorry, you already submitted your answers. Reload the page if you want to fill in the form again."
@@ -14122,7 +14122,7 @@ msgstr "点击选项时提交"
 
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:72
 msgid "Submitted"
-msgstr ""
+msgstr "已提交"
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:181
 msgid "Subtract points for wrong answers (total never less than 0)"
@@ -14134,11 +14134,11 @@ msgstr "问卷调查编辑器"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:129
 msgid "Survey result"
-msgstr ""
+msgstr "調查結果"
 
 #: zotonic_mod_survey/src/mod_survey.erl:634
 msgid "Survey result saved."
-msgstr ""
+msgstr "問卷調查結果已儲存。"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:177
 msgid "Test pass percentage"
@@ -14147,7 +14147,7 @@ msgstr "考试合格率"
 #: zotonic_mod_survey/priv/templates/_survey_result_test_score.tpl:6
 #: zotonic_mod_survey/priv/templates/_survey_result_test_score.tpl:12
 msgid "Test result"
-msgstr ""
+msgstr "測試結果"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:123
 msgid "Text, image, video"
@@ -14207,7 +14207,7 @@ msgstr "结果已经保存下来了。"
 
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_fields.tpl:46
 msgid "The status and note are only visible to people who can edit the survey."
-msgstr ""
+msgstr "「狀態」和「備註」僅對具有編輯問卷權限的人員可見。"
 
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:60
 msgid "The status and note are only visible to people who can edit."
@@ -14255,7 +14255,7 @@ msgstr "這是通過測驗或測試所需的百分比。僅在您添加了測驗
 
 #: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:126
 msgid "This survey answer could not be found or you are not allowed to view it."
-msgstr ""
+msgstr "找不到這份問卷的回答，或者您無權查看該回答。"
 
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:79
 msgid "This survey answer could not be found."
@@ -14328,7 +14328,7 @@ msgstr "查看和編輯結果。"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:118
 msgid "View answers"
-msgstr ""
+msgstr "檢視答案"
 
 #: zotonic_mod_survey/src/mod_survey.erl:1654
 msgid "We are experiencing an overload, please try again in 10 minutes."
@@ -14450,7 +14450,7 @@ msgstr "成員"
 
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:76
 msgid "modified"
-msgstr ""
+msgstr "已修改"
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:43
 msgid "must be a date"
@@ -14513,7 +14513,7 @@ msgstr "岁。我喜欢"
 
 #: zotonic_mod_survey/priv/templates/_survey_result_test_score.tpl:21
 msgid "{points} of {max} points"
-msgstr ""
+msgstr "{points} 來自 {max} 的 點數"
 
 #: zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:5
 #: zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:10
