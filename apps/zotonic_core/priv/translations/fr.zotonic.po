@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-09-15 11:40\n"
+"PO-Revision-Date: 2026-09-15 14:17\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -2765,15 +2765,15 @@ msgstr "Sélectionner une image connectée"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_select_predicate.tpl:5
 msgid "Select a predicate"
-msgstr ""
+msgstr "Sélectionnez un prédicat"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_select_predicate_find.tpl:23
 msgid "Select a predicate to find pages that can refer to this page."
-msgstr ""
+msgstr "Sélectionnez un prédicat pour trouver les pages susceptibles de faire référence à cette page."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_select_predicate_find.tpl:21
 msgid "Select a predicate to find pages this page can connect to."
-msgstr ""
+msgstr "Sélectionnez un prédicat pour trouver les pages auxquelles cette page peut renvoyer."
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:80
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:110
@@ -2813,7 +2813,7 @@ msgstr "Afficher comme"
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:53
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:54
 msgid "Show keyword description"
-msgstr ""
+msgstr "Afficher la description du mot-clé"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:59
 msgid "Show page on multiple paths"
@@ -2830,7 +2830,7 @@ msgstr "Affichage des dates en"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results.tpl:5
 msgid "Showing pages that can refer to this page using <b>{predicate}</b>."
-msgstr ""
+msgstr "Affichage des pages pouvant renvoyer vers cette page à l'aide de <b>{predicate}</b>."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results.tpl:9
 msgid "Showing pages you can connect to using <b>{predicate}</b>."
@@ -13243,7 +13243,7 @@ msgstr "Cliquez sur \"Modifier\" pour voir et modifier les données saisies."
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:147
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:193
 msgid "Close without saving"
-msgstr ""
+msgstr "Fermer sans enregistrer"
 
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:6
 #: zotonic_mod_survey/priv/templates/survey.tpl:23
@@ -13361,7 +13361,7 @@ msgstr "Adresse E-mail"
 
 #: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:77
 msgid "Edit all answers"
-msgstr ""
+msgstr "Modifier toutes les réponses"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_result_status.tpl:5
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_result_status.tpl:12
@@ -13377,7 +13377,7 @@ msgstr "Editer le résultat du sondage"
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:86
 #: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:29
 msgid "Editor only"
-msgstr ""
+msgstr "Réservé aux éditeurs"
 
 #: zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:20
 msgid "End of questions"
@@ -13779,7 +13779,7 @@ msgstr "Note de passage"
 
 #: zotonic_mod_survey/priv/templates/_survey_result_test_score.tpl:25
 msgid "Passing score: {percentage}%"
-msgstr ""
+msgstr "Note minimale requise : {percentage}%"
 
 #: zotonic_mod_survey/src/models/m_survey.erl:991
 msgid "Percent"
@@ -13927,7 +13927,7 @@ msgstr "Résultats jusqu'au"
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:200
 #: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:93
 msgid "Save &amp; Email"
-msgstr ""
+msgstr "Enregistrer &amp; E-mail"
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:162
 msgid "Save your answers without submitting them yet so you can continue later."
@@ -14038,7 +14038,7 @@ msgstr "Désolé, le statut n'a pas pu être enregistré."
 #: zotonic_mod_survey/src/mod_survey.erl:473
 #: zotonic_mod_survey/src/mod_survey.erl:642
 msgid "Sorry, the survey result could not be saved."
-msgstr ""
+msgstr "Désolé, le résultat du sondage n'a pas pu être enregistré."
 
 #: zotonic_mod_survey/src/mod_survey.erl:1646
 msgid "Sorry, you already submitted your answers. Reload the page if you want to fill in the form again."
@@ -14122,7 +14122,7 @@ msgstr "Soumettre en cliquant sur une option"
 
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:72
 msgid "Submitted"
-msgstr ""
+msgstr "Soumis"
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:181
 msgid "Subtract points for wrong answers (total never less than 0)"
@@ -14134,11 +14134,11 @@ msgstr "Éditeur de sondage"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:129
 msgid "Survey result"
-msgstr ""
+msgstr "Résultats de l'enquête"
 
 #: zotonic_mod_survey/src/mod_survey.erl:634
 msgid "Survey result saved."
-msgstr ""
+msgstr "Résultat du sondage enregistré."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:177
 msgid "Test pass percentage"
@@ -14147,7 +14147,7 @@ msgstr "Pourcentage de réussite au test"
 #: zotonic_mod_survey/priv/templates/_survey_result_test_score.tpl:6
 #: zotonic_mod_survey/priv/templates/_survey_result_test_score.tpl:12
 msgid "Test result"
-msgstr ""
+msgstr "Résultat du test"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:123
 msgid "Text, image, video"
@@ -14207,7 +14207,7 @@ msgstr "Les résultats ont été enregistrés."
 
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_fields.tpl:46
 msgid "The status and note are only visible to people who can edit the survey."
-msgstr ""
+msgstr "Le statut et la remarque ne sont visibles que par les personnes autorisées à modifier le questionnaire."
 
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:60
 msgid "The status and note are only visible to people who can edit."
@@ -14255,7 +14255,7 @@ msgstr "C'est le pourcentage nécessaire pour réussir un quiz ou un test. Uniqu
 
 #: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:126
 msgid "This survey answer could not be found or you are not allowed to view it."
-msgstr ""
+msgstr "Cette réponse au sondage est introuvable ou vous n'êtes pas autorisé à la consulter."
 
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:79
 msgid "This survey answer could not be found."
@@ -14328,7 +14328,7 @@ msgstr "Afficher et modifier les résultats."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:118
 msgid "View answers"
-msgstr ""
+msgstr "Voir les réponses"
 
 #: zotonic_mod_survey/src/mod_survey.erl:1654
 msgid "We are experiencing an overload, please try again in 10 minutes."
@@ -14450,7 +14450,7 @@ msgstr "membre"
 
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:76
 msgid "modified"
-msgstr ""
+msgstr "modifié"
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:43
 msgid "must be a date"
@@ -14513,7 +14513,7 @@ msgstr "ans. J'aime"
 
 #: zotonic_mod_survey/priv/templates/_survey_result_test_score.tpl:21
 msgid "{points} of {max} points"
-msgstr ""
+msgstr "{points} de {max} points"
 
 #: zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:5
 #: zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:10
