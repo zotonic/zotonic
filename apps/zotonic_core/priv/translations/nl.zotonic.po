@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-09-10 11:26\n"
+"PO-Revision-Date: 2026-09-15 11:40\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -256,8 +256,8 @@ msgstr "Weet je zeker dat je alle regels wilt terugzetten vanaf de gepubliceerde
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:182
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:78
 #: zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:39
-#: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:41
-#: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:174
+#: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:76
+#: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:209
 #: zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:9
 #: zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:7
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:76
@@ -329,10 +329,9 @@ msgstr "Weet je zeker dat je alle regels wilt terugzetten vanaf de gepubliceerde
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:88
 #: zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:49
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:44
-#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:73
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:155
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:167
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:175
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:74
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:173
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:185
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
 #: zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:115
@@ -355,7 +354,7 @@ msgstr "Annuleer"
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:45
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:11
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:28
-#: zotonic_mod_survey/src/mod_survey.erl:505
+#: zotonic_mod_survey/src/mod_survey.erl:654
 msgid "Category"
 msgstr "Categorie"
 
@@ -373,8 +372,9 @@ msgid "Changed configuration."
 msgstr "Configuratie veranderd."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:22
-#: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:41
-#: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:174
+#: zotonic_mod_admin/priv/templates/_action_dialog_connect_select_predicate_find.tpl:27
+#: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:76
+#: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:209
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:67
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:69
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_filter_predicates.tpl:20
@@ -392,12 +392,14 @@ msgstr "Configuratie veranderd."
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:7
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:14
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:21
+#: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:74
+#: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:121
 #: zotonic_mod_survey/priv/templates/_survey_results.tpl:50
 #: zotonic_mod_survey/priv/templates/_survey_results.tpl:55
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:57
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:62
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:75
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:80
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:61
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:66
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:79
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:84
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:12
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:17
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:22
@@ -415,7 +417,7 @@ msgstr "Samenwerkingsgroep leden"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:22
 #: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:927
-#: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:123
+#: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:158
 msgid "Collaboration groups"
 msgstr "Samenwerkingsgroepen"
 
@@ -450,7 +452,7 @@ msgid "Content group"
 msgstr "Paginagroep"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_collab_select.tpl:16
-#: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:131
+#: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:166
 #: zotonic_mod_content_groups/src/mod_content_groups.erl:223
 msgid "Content groups"
 msgstr "Paginagroepen"
@@ -499,10 +501,10 @@ msgstr "Kon niet naar de samenwerkingsgroep verplaatsen."
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:61
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:66
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:71
-#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:121
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:133
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125
-#: zotonic_mod_survey/src/mod_survey.erl:414
+#: zotonic_mod_survey/src/mod_survey.erl:425
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:25
 msgid "Delete"
 msgstr "Verwijder"
@@ -778,7 +780,9 @@ msgstr "Regels zijn teruggezet"
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:136
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:100
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:60
-#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:74
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:75
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:198
+#: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:91
 msgid "Save"
 msgstr "Opslaan"
 
@@ -1085,6 +1089,10 @@ msgstr "Ongeveer {n} items gevonden."
 msgid "Access control"
 msgstr "Toegangsrechten"
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:34
+msgid "Add a connection"
+msgstr "Een verbinding toevoegen"
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:53
 #: zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:24
 msgid "Add a connection:"
@@ -1103,6 +1111,15 @@ msgstr "Nieuw media-item"
 msgid "Add a note about this page."
 msgstr "Voeg een notitie over deze pagina toe."
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:31
+msgid "Add an incoming connection"
+msgstr "Een inkomende verbinding toevoegen"
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:29
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:26
+msgid "Add connection"
+msgstr "Verbinding toevoegen"
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:95
 msgid "Add media content"
 msgstr "Media toevoegen"
@@ -1116,7 +1133,7 @@ msgstr "Media toevoegen aan pagina"
 msgid "Add note"
 msgstr "Notitie toevoegen"
 
-#: zotonic_mod_admin/src/mod_admin.erl:1116
+#: zotonic_mod_admin/src/mod_admin.erl:1117
 msgid "Added the connection to"
 msgstr "Connectie gemaakt naar"
 
@@ -1180,16 +1197,16 @@ msgstr "Aantal"
 msgid "And media can also be viewed on their own page."
 msgstr "Media-items hebben ook een eigen pagina."
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:44
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers_list.tpl:38
 msgid "And {n} more."
 msgstr "En {n} meer."
 
-#: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:96
+#: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:131
 #: zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:14
 msgid "Any category"
 msgstr "Willekeurige categorie"
 
-#: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:120
+#: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:155
 msgid "Anybody’s"
 msgstr "Iedereen"
 
@@ -1248,8 +1265,8 @@ msgstr "Beschikbaar"
 #: zotonic_mod_survey/priv/templates/_survey_end.tpl:28
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:22
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:23
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:125
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:127
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:138
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:140
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:23
 msgid "Back"
 msgstr "Terug"
@@ -1541,7 +1558,7 @@ msgstr "Verwijder deze pagina."
 msgid "Delete this page..."
 msgstr "Verwijder deze pagina..."
 
-#: zotonic_mod_admin/src/mod_admin.erl:949
+#: zotonic_mod_admin/src/mod_admin.erl:950
 msgid "Deleted tasks."
 msgstr "Verwijderde taken."
 
@@ -1567,6 +1584,7 @@ msgid "Dimensions"
 msgstr "Afmetingen"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:26
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers_list.tpl:15
 #: zotonic_mod_admin/priv/templates/_rsc_edge.tpl:22
 #: zotonic_mod_admin/priv/templates/_rsc_edge_media.tpl:8
 #: zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:8
@@ -1641,7 +1659,7 @@ msgstr "Duur"
 msgid "E-mail address"
 msgstr "E-mailadres"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:29
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers_list.tpl:10
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:34
 #: zotonic_mod_admin/priv/templates/_rsc_edge.tpl:19
 #: zotonic_mod_admin/priv/templates/admin_edit.tpl:3
@@ -1655,8 +1673,8 @@ msgstr "E-mailadres"
 #: zotonic_mod_menu/priv/templates/_admin_menu_menu_view.collection.tpl:40
 #: zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:23
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:131
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:113
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:115
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:117
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:119
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:35
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:14
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:16
@@ -1809,7 +1827,7 @@ msgstr "Bestand / mediainhoud"
 msgid "File size"
 msgstr "Bestandsgrootte"
 
-#: zotonic_mod_admin/src/mod_admin.erl:854
+#: zotonic_mod_admin/src/mod_admin.erl:855
 msgid "File uploaded to the drop folder, will be handled shortly."
 msgstr "Bestand dat is geüpload naar de drop-map, wordt binnenkort verwerkt."
 
@@ -2087,11 +2105,11 @@ msgid "Make a new page or media"
 msgstr "Maak een nieuwe pagina of media-item"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:6
-#: zotonic_mod_survey/src/mod_survey.erl:506
+#: zotonic_mod_survey/src/mod_survey.erl:655
 msgid "Matching"
 msgstr "Voldoet aan"
 
-#: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results.tpl:23
+#: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results.tpl:29
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:14
 msgid "Matching id, name, page path or redirection"
 msgstr "Overeenkomende id, naam, paginapad of omleiding"
@@ -2155,7 +2173,7 @@ msgstr "Geheugen"
 msgid "Middle"
 msgstr "Middennaam"
 
-#: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:121
+#: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:156
 msgid "Mine"
 msgstr "Mijn"
 
@@ -2242,7 +2260,7 @@ msgstr "Verplaats blok omhoog"
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:13
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:14
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:38
-#: zotonic_mod_survey/src/models/m_survey.erl:943
+#: zotonic_mod_survey/src/models/m_survey.erl:982
 msgid "Name"
 msgstr "Naam"
 
@@ -2276,7 +2294,7 @@ msgstr "Netwerkverbindingen"
 msgid "New Page"
 msgstr "Nieuwe pagina"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:22
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers_list.tpl:3
 msgid "Newest incoming connections."
 msgstr "Nieuwste inkomende verbindingen."
 
@@ -2463,6 +2481,7 @@ msgstr "Postcode"
 msgid "Powered by"
 msgstr "Powered by"
 
+#: zotonic_mod_admin/priv/templates/_action_dialog_connect_select_predicate.tpl:3
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:23
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:13
 msgid "Predicate"
@@ -2628,7 +2647,7 @@ msgstr "Opmerkingen"
 msgid "Remove"
 msgstr "Verwijder"
 
-#: zotonic_mod_admin/src/mod_admin.erl:1120
+#: zotonic_mod_admin/src/mod_admin.erl:1121
 msgid "Removed the connection to"
 msgstr "Connectie verwijderd naar"
 
@@ -2707,7 +2726,7 @@ msgstr "Bewaar de pagina en bekijk aan de voorkant."
 msgid "Save this page."
 msgstr "Bewaar deze pagina."
 
-#: zotonic_mod_admin/src/mod_admin.erl:938
+#: zotonic_mod_admin/src/mod_admin.erl:939
 msgid "Scheduled a background task to check all refers connections."
 msgstr "Een achtergrondtaak is ingepland om alle verwijzingen te controleren."
 
@@ -2727,7 +2746,7 @@ msgstr "Zoek naar andere media"
 msgid "Search query"
 msgstr "Zoekopdracht"
 
-#: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results.tpl:38
+#: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results.tpl:44
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:77
 msgid "Search results"
 msgstr "Zoekresultaten"
@@ -2747,6 +2766,18 @@ msgstr "Zie ook: <a href=\"https://zotonic.com/en/stable/ref/configuration/zoton
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_depictions.tpl:2
 msgid "Select a connected image"
 msgstr "Selecteer een gekoppelde afbeelding"
+
+#: zotonic_mod_admin/priv/templates/_action_dialog_connect_select_predicate.tpl:5
+msgid "Select a predicate"
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/_action_dialog_connect_select_predicate_find.tpl:23
+msgid "Select a predicate to find pages that can refer to this page."
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/_action_dialog_connect_select_predicate_find.tpl:21
+msgid "Select a predicate to find pages this page can connect to."
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:80
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:110
@@ -2783,6 +2814,11 @@ msgstr "Toon alle {title} pagina's"
 msgid "Show as"
 msgstr "Toon als"
 
+#: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:53
+#: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:54
+msgid "Show keyword description"
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:59
 msgid "Show page on multiple paths"
 msgstr "Toon pagina op meerdere paginapaden"
@@ -2796,7 +2832,11 @@ msgstr "Zoekopdracht weergeven als JSON"
 msgid "Showing dates in"
 msgstr "Datums weergeven in"
 
-#: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results.tpl:4
+#: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results.tpl:5
+msgid "Showing pages that can refer to this page using <b>{predicate}</b>."
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results.tpl:9
 msgid "Showing pages you can connect to using <b>{predicate}</b>."
 msgstr "Pagina's tonen waarmee je verbinding kunt maken via <b>{predicate}</b>."
 
@@ -2826,31 +2866,31 @@ msgstr "Sommige taken worden opnieuw geprobeerd.<br>Totaal aantal fouten: {total
 msgid "Something went wrong. Sorry."
 msgstr "Er ging iets mis, onze excuses."
 
-#: zotonic_mod_admin/src/mod_admin.erl:827
+#: zotonic_mod_admin/src/mod_admin.erl:828
 msgid "Sorry, could not handle this filename."
 msgstr "Deze bestandsnaam kon niet worden verwerkt."
 
-#: zotonic_mod_admin/src/mod_admin.erl:866
+#: zotonic_mod_admin/src/mod_admin.erl:867
 msgid "Sorry, could not move the file to the drop folder."
 msgstr "Sorry, kon het bestand niet verplaatsen naar de drop-map."
 
-#: zotonic_mod_admin/src/mod_admin.erl:940
-#: zotonic_mod_admin/src/mod_admin.erl:951
+#: zotonic_mod_admin/src/mod_admin.erl:941
+#: zotonic_mod_admin/src/mod_admin.erl:952
 #: zotonic_mod_menu/src/mod_menu.erl:133
 msgid "Sorry, only an admin is allowed to do this"
 msgstr "Dit mag alleen worden gedaan door een admin"
 
-#: zotonic_mod_admin/src/mod_admin.erl:802
-#: zotonic_mod_admin/src/mod_admin.erl:813
+#: zotonic_mod_admin/src/mod_admin.erl:803
+#: zotonic_mod_admin/src/mod_admin.erl:814
 msgid "Sorry, that page is unknown."
 msgstr "Deze pagina is onbekend."
 
-#: zotonic_mod_admin/src/mod_admin.erl:804
-#: zotonic_mod_admin/src/mod_admin.erl:815
+#: zotonic_mod_admin/src/mod_admin.erl:805
+#: zotonic_mod_admin/src/mod_admin.erl:816
 msgid "Sorry, you are not allowed to edit notes."
 msgstr "Je mag geen notities bewerken."
 
-#: zotonic_mod_admin/src/mod_admin.erl:870
+#: zotonic_mod_admin/src/mod_admin.erl:871
 msgid "Sorry, you are not allowed to upload drop folder files."
 msgstr "Sorry, het is niet toegestaan om drop-mapbestanden te uploaden."
 
@@ -2858,11 +2898,11 @@ msgstr "Sorry, het is niet toegestaan om drop-mapbestanden te uploaden."
 msgid "Sorry, you don't have permission to add the connection."
 msgstr "Je hebt geen rechten om deze verbinding te maken."
 
-#: zotonic_mod_admin/src/mod_admin.erl:1102
+#: zotonic_mod_admin/src/mod_admin.erl:1103
 msgid "Sorry, you have no permission to add the connection."
 msgstr "Je hebt geen rechten om deze verbinding te maken."
 
-#: zotonic_mod_admin/src/mod_admin.erl:1104
+#: zotonic_mod_admin/src/mod_admin.erl:1105
 msgid "Sorry, you have no permission to delete the connection."
 msgstr "Je hebt geen rechten om deze verbinding te verwijderen."
 
@@ -2897,8 +2937,9 @@ msgstr "Staat"
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:17
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:19
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:21
-#: zotonic_mod_survey/src/models/m_survey.erl:1075
-#: zotonic_mod_survey/src/models/m_survey.erl:1081
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_fields.tpl:7
+#: zotonic_mod_survey/src/models/m_survey.erl:1114
+#: zotonic_mod_survey/src/models/m_survey.erl:1120
 #: zotonic_site_status/priv/templates/_navbar.tpl:15
 #: zotonic_site_status/priv/templates/_sites.tpl:4
 msgid "Status"
@@ -3062,7 +3103,7 @@ msgstr "De sitedata wordt opnieuw geïnstalleerd. Houd de console in de gaten vo
 msgid "The system has allocated more than the specified threshold of available memory, as reported by the underlying operating system."
 msgstr "Het systeem heeft meer geheugen toegewezen dan de opgegeven drempelwaarde, zoals gerapporteerd door het onderliggende besturingssysteem."
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:49
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers_list.tpl:43
 msgid "There are no incoming connections."
 msgstr "Er zijn geen inkomende verbindingen."
 
@@ -3210,7 +3251,7 @@ msgstr "Te veel verbindingen, alleen de eerste en laatste worden weergegeven."
 msgid "Total"
 msgstr "Totaal"
 
-#: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:84
+#: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:119
 #: zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:9
 msgid "Type text to search"
 msgstr "Typ een tekst om te zoeken"
@@ -3244,7 +3285,7 @@ msgstr "Ongepubliceerd"
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results_item.tpl:29
 #: zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:2
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:29
-#: zotonic_mod_admin/src/mod_admin.erl:1110
+#: zotonic_mod_admin/src/mod_admin.erl:1111
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:118
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:182
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:9
@@ -3347,7 +3388,7 @@ msgstr "Gebruikt"
 msgid "User page"
 msgstr "Gebruikerspagina"
 
-#: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:94
+#: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:129
 msgid "Valid for:"
 msgstr "Geldig voor:"
 
@@ -3362,7 +3403,7 @@ msgstr "Geldig voor:"
 msgid "View"
 msgstr "Bekijk"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:56
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:25
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:71
 #: zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:27
 msgid "View all connections"
@@ -3372,7 +3413,7 @@ msgstr "Bekijk alle connecties"
 msgid "View all pages from this category"
 msgstr "Bekijk alle pagina's binnen deze categorie"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:54
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:23
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:74
 msgid "View all referrers"
 msgstr "Bekijk verwijzende pagina's"
@@ -3439,7 +3480,10 @@ msgstr "Werk Directory"
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:24
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:84
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:36
-#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:65
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:66
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_fields.tpl:52
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:74
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:76
 msgid "Y-m-d H:i"
 msgstr "Y-m-d H:i"
 
@@ -3519,7 +3563,8 @@ msgstr "Media-item toevoegen"
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:63
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:6
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:16
-#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:67
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:68
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_fields.tpl:54
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:15
 msgid "by"
 msgstr "door"
@@ -4584,9 +4629,9 @@ msgstr "Stel gebruikersnaam / wachtwoord in"
 #: zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:27
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:97
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:152
-#: zotonic_mod_survey/src/mod_survey.erl:1482
-#: zotonic_mod_survey/src/mod_survey.erl:1504
-#: zotonic_mod_survey/src/mod_survey.erl:1512
+#: zotonic_mod_survey/src/mod_survey.erl:1631
+#: zotonic_mod_survey/src/mod_survey.erl:1653
+#: zotonic_mod_survey/src/mod_survey.erl:1661
 msgid "Sorry"
 msgstr "Excuses"
 
@@ -5993,7 +6038,7 @@ msgid "Confirmation failure"
 msgstr "Fout bij bevestiging"
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:91
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:119
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:132
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:48
 msgid "Continue"
 msgstr "Doorgaan"
@@ -6233,8 +6278,8 @@ msgstr "Meerdere accounts"
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:199
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:26
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:55
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:180
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:185
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:198
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:206
 msgid "Next"
 msgstr "Volgende"
 
@@ -6697,8 +6742,8 @@ msgstr "Kan de back-up niet starten omdat er al een back-up bezig is."
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:136
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:22
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:16
-#: zotonic_mod_survey/src/models/m_survey.erl:938
-#: zotonic_mod_survey/src/models/m_survey.erl:941
+#: zotonic_mod_survey/src/models/m_survey.erl:977
+#: zotonic_mod_survey/src/models/m_survey.erl:980
 msgid "Date"
 msgstr "Datum"
 
@@ -7421,7 +7466,7 @@ msgstr "Terug naar de homepage"
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:194
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:211
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:24
-#: zotonic_mod_survey/src/models/m_survey.erl:951
+#: zotonic_mod_survey/src/models/m_survey.erl:990
 msgid "Score"
 msgstr "Score"
 
@@ -8499,8 +8544,8 @@ msgid "Started tracing template inclusions for your session."
 msgstr "Begonnen met het traceren van sjablooninsluitsels voor je sessie."
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:33
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:162
-#: zotonic_mod_survey/src/mod_survey.erl:514
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:180
+#: zotonic_mod_survey/src/mod_survey.erl:663
 msgid "Stop"
 msgstr "Stop"
 
@@ -10057,8 +10102,9 @@ msgstr "Uitleg over e-mailstatus"
 
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:157
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:112
+#: zotonic_mod_survey/priv/templates/_survey_result_test_score.tpl:14
 #: zotonic_mod_survey/priv/templates/_survey_results_user.tpl:12
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:51
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:54
 #: zotonic_site_status/priv/templates/_sites.tpl:17
 msgid "Failed"
 msgstr "Gefaald"
@@ -10223,7 +10269,7 @@ msgstr "Gebruiker"
 
 #: zotonic_mod_logging/priv/templates/admin_log.tpl:43
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:43
-#: zotonic_mod_survey/src/models/m_survey.erl:942
+#: zotonic_mod_survey/src/models/m_survey.erl:981
 msgid "User Id"
 msgstr "Gebruikers ID"
 
@@ -11831,6 +11877,7 @@ msgstr "Geen gebruiker geselecteerd."
 
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:43
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:51
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_fields.tpl:37
 msgid "Note"
 msgstr "Opmerking"
 
@@ -13053,7 +13100,7 @@ msgstr "Toevoegen aan bestaande mailinglijst"
 msgid "Add to mailinglist"
 msgstr "Toevoegen aan mailinglijst"
 
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:104
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:108
 msgid "Admin only"
 msgstr "Alleen admin"
 
@@ -13081,7 +13128,7 @@ msgstr "Alle antwoorden voor anonieme en ingelogde respondenten"
 msgid "Allow non-linear forms; answers are saved with “Back” button and a “Back to start” is added at the top of each page"
 msgstr "Niet-lineaire formulieren toestaan; antwoorden worden opgeslagen met de \"Terug\" knop en er wordt een \"Terug naar start\" toegevoegd bovenaan elke pagina"
 
-#: zotonic_mod_survey/src/mod_survey.erl:1495
+#: zotonic_mod_survey/src/mod_survey.erl:1644
 msgid "Already submitted"
 msgstr "Reeds ingediend"
 
@@ -13094,7 +13141,7 @@ msgstr "Een andere pagina, video of afbeelding."
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:80
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:81
 #: zotonic_mod_survey/priv/templates/_survey_result_chart.tpl:23
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:101
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:110
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:86
 msgid "Answer"
 msgstr "Antwoord"
@@ -13130,15 +13177,15 @@ msgstr "Weet je zeker dat je deze pagina wilt verwijderen?<br/>Alle vragen op de
 msgid "Are you sure you want to delete this question?"
 msgstr "Weet je zeker dat je deze vraag wilt verwijderen?"
 
-#: zotonic_mod_survey/src/mod_survey.erl:413
+#: zotonic_mod_survey/src/mod_survey.erl:424
 msgid "Are you sure you want to delete this result?"
 msgstr "Weet je zeker dat je dit resultaat wilt verwijderen?"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:165
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:183
 msgid "Are you sure you want to stop without saving?"
 msgstr "Weet je zeker dat je wilt stoppen zonder op te slaan?"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:106
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:119
 msgid "Back without saving"
 msgstr "Terug zonder op te slaan"
 
@@ -13147,7 +13194,7 @@ msgid "Because you can edit, you can proceed for testing."
 msgstr "Omdat je kunt bewerken, kan je doorgaan met testen."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:112
-#: zotonic_mod_survey/src/mod_survey.erl:511
+#: zotonic_mod_survey/src/mod_survey.erl:660
 msgid "Button"
 msgstr "Knop"
 
@@ -13196,6 +13243,11 @@ msgstr "Kies hoe vaak een respondent dit formulier kan invullen."
 msgid "Click on “Edit” to see and change the entered data."
 msgstr "Klik op \"Bewerken\" om de ingevoerde gegevens te bekijken en te wijzigen."
 
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:147
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:193
+msgid "Close without saving"
+msgstr ""
+
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:6
 #: zotonic_mod_survey/priv/templates/survey.tpl:23
 msgid "Closed"
@@ -13209,12 +13261,12 @@ msgstr "Antwoorden op gesloten vragen voor anonieme en ingelogde respondenten"
 msgid "Closed-question answers for anonymous respondents; all answers for logged-in respondents"
 msgstr "Antwoorden met gesloten vragen voor anonieme respondenten; alle antwoorden voor ingelogde respondenten"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:145
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:163
 msgid "Continue later"
 msgstr "Later verdergaan"
 
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:139
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:180
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:149
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:191
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:77
 msgid "Correct"
 msgstr "Correct"
@@ -13228,7 +13280,7 @@ msgstr "De ontvangers konden niet toegevoegd worden."
 msgid "Could not create the mailinglist."
 msgstr "De mailinglijst kon niet worden gemaakt."
 
-#: zotonic_mod_survey/src/mod_survey.erl:510
+#: zotonic_mod_survey/src/mod_survey.erl:659
 msgid "Country select"
 msgstr "Landenselectie"
 
@@ -13256,7 +13308,7 @@ msgstr "Nieuwe mailinglijst maken"
 msgid "Create new person"
 msgstr "Nieuwe persoon aanmaken"
 
-#: zotonic_mod_survey/src/models/m_survey.erl:1419
+#: zotonic_mod_survey/src/models/m_survey.erl:1498
 msgid "Created"
 msgstr "Gemaakt"
 
@@ -13284,7 +13336,7 @@ msgstr "Verwijder vraag"
 msgid "Disagree"
 msgstr "Oneens"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:150
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:168
 msgid "Do you want to stop for now and continue later?"
 msgstr "Wil je voor nu stoppen om later verder te gaan?"
 
@@ -13310,19 +13362,25 @@ msgstr "Menu"
 msgid "E-mail addresses"
 msgstr "E-mailadressen"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:118
-msgid "Edit answers"
-msgstr "Antwoorden bewerken"
-
-#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:119
-msgid "Edit result"
-msgstr "Resultaat bewerken"
+#: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:77
+msgid "Edit all answers"
+msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_result_status.tpl:5
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_result_status.tpl:12
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_result_status.tpl:18
 msgid "Edit status"
 msgstr "Status bewerken"
+
+#: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:82
+msgid "Edit survey result"
+msgstr "Toon/bewerk resultaten"
+
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:72
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:86
+#: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:29
+msgid "Editor only"
+msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:20
 msgid "End of questions"
@@ -13379,7 +13437,7 @@ msgstr "Feedback indien correct"
 msgid "Feedback if wrong"
 msgstr "Feedback indien foutief"
 
-#: zotonic_mod_survey/src/mod_survey.erl:515
+#: zotonic_mod_survey/src/mod_survey.erl:664
 msgid "File upload"
 msgstr "Bestandsupload"
 
@@ -13515,11 +13573,12 @@ msgstr "Spring naar een vraag op een volgende pagina."
 msgid "Jump to this question label (must be on an other page below)"
 msgstr "Ga naar dit vraaglabel (moet op een andere pagina hieronder staan)"
 
-#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:65
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:66
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_fields.tpl:52
 msgid "Last status change"
 msgstr "Laatste statuswijziging"
 
-#: zotonic_mod_survey/src/mod_survey.erl:503
+#: zotonic_mod_survey/src/mod_survey.erl:652
 msgid "Likert"
 msgstr "Likert"
 
@@ -13530,7 +13589,7 @@ msgstr "Likert"
 msgid "Link with person"
 msgstr "Koppel aan persoon"
 
-#: zotonic_mod_survey/src/mod_survey.erl:509
+#: zotonic_mod_survey/src/mod_survey.erl:658
 msgid "Long answer"
 msgstr "Lang antwoord"
 
@@ -13596,7 +13655,7 @@ msgstr "Meerdere antwoorden mogelijk"
 msgid "Multiple answers possible: points are given for the correct answer <i>and</i> points are given for <i>not</i> choosing the wrong answer. Default: 1 point for a correct answer, 1 point for not choosing a wrong answer."
 msgstr "Meerdere antwoorden mogelijk: punten worden gegeven voor het juiste antwoord <i>en</i> punten worden gegeven voor het <i>niet</i> kiezen van het verkeerde antwoord. Standaard: 1 punt voor een correct antwoord, 1 punt voor het niet kiezen van een fout antwoord."
 
-#: zotonic_mod_survey/src/mod_survey.erl:516
+#: zotonic_mod_survey/src/mod_survey.erl:665
 msgid "Multiple choice"
 msgstr "Meerkeuze"
 
@@ -13613,12 +13672,12 @@ msgstr "Meerdere pagina-onderbrekingen worden samengevoegd tot één."
 msgid "Multiple times – each time with new results"
 msgstr "Meerdere keren  — iedere keer met nieuwe resultaten"
 
-#: zotonic_mod_survey/src/mod_survey.erl:507
+#: zotonic_mod_survey/src/mod_survey.erl:656
 msgid "Narrative"
 msgstr "Verhalend"
 
 #: zotonic_mod_survey/priv/templates/_survey_results_user.tpl:22
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:61
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:64
 msgid "Needed for pass"
 msgstr "Noodzakelijk voor slagen"
 
@@ -13643,15 +13702,16 @@ msgstr "Geen antwoorden; alleen bevestigingstekst"
 msgid "No persons found."
 msgstr "Er zijn geen personen gevonden."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:133
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:145
 msgid "No results yet."
 msgstr "Nog geen resultaten."
 
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:27
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_fields.tpl:13
 msgid "No status"
 msgstr "Geen status"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:103
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:116
 msgid "Not all the required fields are filled in. You can go back to the previous page without saving your answers."
 msgstr "Niet alle verplichte velden zijn ingevuld. Je kunt teruggaan naar de vorige pagina zonder je antwoorden op te slaan."
 
@@ -13692,7 +13752,7 @@ msgstr "Optionele bevestigingsmail voor de respondent"
 msgid "Options from a page category"
 msgstr "Opties van een pagina categorie"
 
-#: zotonic_mod_survey/src/mod_survey.erl:512
+#: zotonic_mod_survey/src/mod_survey.erl:661
 msgid "Page break"
 msgstr "Pagina-onderbreking"
 
@@ -13700,7 +13760,7 @@ msgstr "Pagina-onderbreking"
 msgid "Page jump condition"
 msgstr "Paginasprong voorwaarde"
 
-#: zotonic_mod_survey/src/mod_survey.erl:513
+#: zotonic_mod_survey/src/mod_survey.erl:662
 msgid "Page options"
 msgstr "Pagina opties"
 
@@ -13709,9 +13769,10 @@ msgid "Pass?"
 msgstr "Geslaagd?"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:110
+#: zotonic_mod_survey/priv/templates/_survey_result_test_score.tpl:14
 #: zotonic_mod_survey/priv/templates/_survey_results_user.tpl:10
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:49
-#: zotonic_mod_survey/src/models/m_survey.erl:950
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:52
+#: zotonic_mod_survey/src/models/m_survey.erl:989
 msgid "Passed"
 msgstr "Geslaagd"
 
@@ -13719,7 +13780,11 @@ msgstr "Geslaagd"
 msgid "Passing score"
 msgstr "Slagingsscore"
 
-#: zotonic_mod_survey/src/models/m_survey.erl:952
+#: zotonic_mod_survey/priv/templates/_survey_result_test_score.tpl:25
+msgid "Passing score: {percentage}%"
+msgstr ""
+
+#: zotonic_mod_survey/src/models/m_survey.erl:991
 msgid "Percent"
 msgstr "Percentage"
 
@@ -13727,7 +13792,8 @@ msgstr "Percentage"
 msgid "Person"
 msgstr "Persoon"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:108
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:121
+#: zotonic_mod_survey/src/mod_survey.erl:560
 msgid "Please fill in all the required fields."
 msgstr "Gelieve alle verplichte velden in te vullen."
 
@@ -13745,7 +13811,7 @@ msgstr "Upload een afbeelding."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:25
 #: zotonic_mod_survey/priv/templates/_survey_results_user.tpl:18
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:57
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:60
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:80
 msgid "Points"
 msgstr "Punten"
@@ -13766,7 +13832,7 @@ msgstr "Voortgang"
 msgid "Prompt"
 msgstr "Vraag"
 
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:100
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:109
 msgid "Question"
 msgstr "Vraag"
 
@@ -13795,7 +13861,7 @@ msgstr "Vraag met een kort antwoord"
 #: zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:7
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:5
 #: zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:8
-#: zotonic_mod_survey/src/mod_survey.erl:500
+#: zotonic_mod_survey/src/mod_survey.erl:649
 msgid "Questions"
 msgstr "Vragen"
 
@@ -13833,7 +13899,7 @@ msgstr "Verplicht, deze vraag moet beantwoord worden."
 msgid "Responses"
 msgstr "Antwoorden"
 
-#: zotonic_mod_survey/src/mod_survey.erl:459
+#: zotonic_mod_survey/src/mod_survey.erl:484
 msgid "Result deleted."
 msgstr "Resultaat verwijderd."
 
@@ -13861,7 +13927,12 @@ msgstr "Resultaten van de respondent - alleen indien geslaagd"
 msgid "Results until"
 msgstr "Resultaten tot en met"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:144
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:200
+#: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:93
+msgid "Save &amp; Email"
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:162
 msgid "Save your answers without submitting them yet so you can continue later."
 msgstr "Sla je antwoorden op zonder ze al in te sturen, zodat je later verder kunt gaan."
 
@@ -13902,7 +13973,7 @@ msgstr "Scheid meerdere e-mailadressen met een komma."
 msgid "Set status"
 msgstr "Status instellen"
 
-#: zotonic_mod_survey/src/mod_survey.erl:508
+#: zotonic_mod_survey/src/mod_survey.erl:657
 msgid "Short answer"
 msgstr "Kort antwoord"
 
@@ -13926,7 +13997,7 @@ msgstr "Toon voortgang"
 msgid "Show progress information as “<em>Question 3/10</em>”"
 msgstr "Toon voortgang als <em>Vraag 3/10</em>"
 
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:106
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:110
 msgid "Show results"
 msgstr "Resultaten weergeven"
 
@@ -13951,20 +14022,28 @@ msgstr "Er ging iets mis"
 msgid "Sorry, could not insert the new person."
 msgstr "De nieuwe persoon kon niet worden toegevoegd."
 
-#: zotonic_mod_survey/src/mod_survey.erl:441
+#: zotonic_mod_survey/src/mod_survey.erl:452
+#: zotonic_mod_survey/src/mod_survey.erl:567
+#: zotonic_mod_survey/src/mod_survey.erl:591
+#: zotonic_mod_survey/src/mod_survey.erl:638
 msgid "Sorry, that answer is unknown."
 msgstr "Sorry, dat antwoord is onbekend."
 
-#: zotonic_mod_survey/src/mod_survey.erl:1484
+#: zotonic_mod_survey/src/mod_survey.erl:1633
 msgid "Sorry, the maximum number of submissions has been reached. You can no longer submit this form."
 msgstr "Sorry, het maximum aantal inzendingen is bereikt. Je kan dit formulier niet langer indienen."
 
-#: zotonic_mod_survey/src/mod_survey.erl:445
-#: zotonic_mod_survey/src/mod_survey.erl:448
+#: zotonic_mod_survey/src/mod_survey.erl:456
+#: zotonic_mod_survey/src/mod_survey.erl:459
 msgid "Sorry, the status could not be saved."
 msgstr "Sorry, de status kon niet worden opgeslagen."
 
-#: zotonic_mod_survey/src/mod_survey.erl:1497
+#: zotonic_mod_survey/src/mod_survey.erl:473
+#: zotonic_mod_survey/src/mod_survey.erl:642
+msgid "Sorry, the survey result could not be saved."
+msgstr ""
+
+#: zotonic_mod_survey/src/mod_survey.erl:1646
 msgid "Sorry, you already submitted your answers. Reload the page if you want to fill in the form again."
 msgstr "Sorry, je hebt je antwoorden al ingediend. Herlaad de pagina als je het formulier opnieuw wilt invullen."
 
@@ -13972,38 +14051,39 @@ msgstr "Sorry, je hebt je antwoorden al ingediend. Herlaad de pagina als je het 
 msgid "Start"
 msgstr "Begin"
 
-#: zotonic_mod_survey/src/models/m_survey.erl:1076
-#: zotonic_mod_survey/src/models/m_survey.erl:1082
+#: zotonic_mod_survey/src/models/m_survey.erl:1115
+#: zotonic_mod_survey/src/models/m_survey.erl:1121
 msgid "Status date"
 msgstr "Statusdatum"
 
-#: zotonic_mod_survey/src/models/m_survey.erl:1085
+#: zotonic_mod_survey/src/models/m_survey.erl:1124
 msgid "Status modifier"
 msgstr "Statusmodificator"
 
-#: zotonic_mod_survey/src/models/m_survey.erl:1084
+#: zotonic_mod_survey/src/models/m_survey.erl:1123
 msgid "Status modifier id"
 msgstr "ID van statusmodificator"
 
-#: zotonic_mod_survey/src/models/m_survey.erl:1077
-#: zotonic_mod_survey/src/models/m_survey.erl:1083
+#: zotonic_mod_survey/src/models/m_survey.erl:1116
+#: zotonic_mod_survey/src/models/m_survey.erl:1122
 msgid "Status note"
 msgstr "Statusopmerking"
 
-#: zotonic_mod_survey/src/mod_survey.erl:437
+#: zotonic_mod_survey/src/mod_survey.erl:448
 msgid "Status saved."
 msgstr "Status opgeslagen."
 
 #: zotonic_mod_survey/priv/templates/_survey_answer_status.tpl:20
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:40
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_fields.tpl:26
 msgid "Status {status}"
 msgstr "Status {status}"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:154
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:172
 msgid "Stop and continue later"
 msgstr "Stoppen en later doorgaan"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:166
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:184
 msgid "Stop without saving"
 msgstr "Stop zonder op te slaan"
 
@@ -14018,7 +14098,7 @@ msgstr "Opgeslagen waarde"
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:43
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:21
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:43
-#: zotonic_mod_survey/src/questions/survey_q_likert.erl:55
+#: zotonic_mod_survey/src/questions/survey_q_likert.erl:56
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:143
 msgid "Strongly Agree"
 msgstr "Helemaal mee eens"
@@ -14026,13 +14106,12 @@ msgstr "Helemaal mee eens"
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:33
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:11
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:35
-#: zotonic_mod_survey/src/questions/survey_q_likert.erl:59
+#: zotonic_mod_survey/src/questions/survey_q_likert.erl:60
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:144
 msgid "Strongly Disagree"
 msgstr "Helemaal mee oneens"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:180
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:183
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:204
 #: zotonic_mod_wires/src/scomps/scomp_wires_button.erl:84
 msgid "Submit"
 msgstr "Verstuur"
@@ -14044,6 +14123,10 @@ msgstr "Verstuur"
 msgid "Submit on clicking an option"
 msgstr "Verstuur bij aanklikken van keuze"
 
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:72
+msgid "Submitted"
+msgstr ""
+
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:181
 msgid "Subtract points for wrong answers (total never less than 0)"
 msgstr "Trek punten af voor foute antwoorden (totaal nooit minder dan 0)"
@@ -14052,9 +14135,22 @@ msgstr "Trek punten af voor foute antwoorden (totaal nooit minder dan 0)"
 msgid "Survey editor"
 msgstr "Vragen bewerken"
 
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:129
+msgid "Survey result"
+msgstr ""
+
+#: zotonic_mod_survey/src/mod_survey.erl:634
+msgid "Survey result saved."
+msgstr ""
+
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:177
 msgid "Test pass percentage"
 msgstr "Test slagingspercentage"
+
+#: zotonic_mod_survey/priv/templates/_survey_result_test_score.tpl:6
+#: zotonic_mod_survey/priv/templates/_survey_result_test_score.tpl:12
+msgid "Test result"
+msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:123
 msgid "Text, image, video"
@@ -14100,7 +14196,7 @@ msgstr "Het volgende is ingevuld:"
 msgid "The maximum number of submissions for <a href=\"{url}\"><b>{title}</b></a> on {site} has been reached."
 msgstr "Het maximum aantal inzendingen voor <a href=\"{url}\"><b>{title}</b></a> op {site} is bereikt."
 
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:71
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:75
 msgid "The maximum number of submissions has been reached, you cannot fill this in anymore."
 msgstr "Het maximum aantal inzendingen is bereikt. Dit kan niet meer worden ingevuld."
 
@@ -14112,7 +14208,11 @@ msgstr "Het resultaat kan worden gekoppeld aan een bestaand persoon of aan een n
 msgid "The results have been saved."
 msgstr "De resultaten zijn bewaard.."
 
-#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:59
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_fields.tpl:46
+msgid "The status and note are only visible to people who can edit the survey."
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:60
 msgid "The status and note are only visible to people who can edit."
 msgstr "De status en de opmerking zijn alleen zichtbaar voor mensen die bewerkingsrechten hebben."
 
@@ -14140,7 +14240,7 @@ msgstr "Dit blok toont een veld voor het uploaden van bestanden. Dit kan alleen 
 msgid "This block signals a stop in the flow. The user can't continue further and it is counted as a page break."
 msgstr "Dit blok geeft aan dat de survey ten einde is. De gebruiker kan niet verder."
 
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:131
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:135
 msgid "This form has been submitted in another tab, so your current session has been stopped."
 msgstr "Dit formulier is ingediend in een ander tabblad waardoor jouw huidige sessie is gestopt."
 
@@ -14156,7 +14256,11 @@ msgstr "Dit is een resultaat voor:"
 msgid "This is the percentage needed to pass a quiz or test. Only used if you have added quiz or test questions."
 msgstr "Dit is het percentage dat nodig is om te slagen voor een een quiz of toets. Dit wordt alleen gebruikt als je quiz- of toetsvragen hebt toegevoegd."
 
-#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:78
+#: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:126
+msgid "This survey answer could not be found or you are not allowed to view it."
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:79
 msgid "This survey answer could not be found."
 msgstr "Dit antwoord op de enquête kon niet worden gevonden."
 
@@ -14174,7 +14278,7 @@ msgstr "Deze tekst wordt getoond als introductie."
 msgid "This text is shown below the start button."
 msgstr "Deze tekst staat onder de startknop."
 
-#: zotonic_mod_survey/src/mod_survey.erl:504
+#: zotonic_mod_survey/src/mod_survey.erl:653
 msgid "Thurstone"
 msgstr "Vragen met puntenschaal"
 
@@ -14209,7 +14313,7 @@ msgstr "Waar"
 msgid "True or false question"
 msgstr "Waar of onwaar vraag"
 
-#: zotonic_mod_survey/src/mod_survey.erl:501
+#: zotonic_mod_survey/src/mod_survey.erl:650
 msgid "True/False"
 msgstr "Waar/Onwaar"
 
@@ -14225,7 +14329,11 @@ msgstr "Validatie"
 msgid "View and edit results."
 msgstr "Resultaten bekijken en bewerken."
 
-#: zotonic_mod_survey/src/mod_survey.erl:1505
+#: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:118
+msgid "View answers"
+msgstr ""
+
+#: zotonic_mod_survey/src/mod_survey.erl:1654
 msgid "We are experiencing an overload, please try again in 10 minutes."
 msgstr "Er is een overbelasting. Probeer het over 10 minuten nog eens."
 
@@ -14237,8 +14345,8 @@ msgstr "Wanneer aan geen conditie is voldaan, is de vraag na deze onderbreking d
 msgid "White"
 msgstr "Wit"
 
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:139
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:180
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:149
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:191
 msgid "Wrong"
 msgstr "Fout"
 
@@ -14247,26 +14355,29 @@ msgstr "Fout"
 msgid "Yes or no question"
 msgstr "Ja/nee-vraag"
 
-#: zotonic_mod_survey/src/mod_survey.erl:502
+#: zotonic_mod_survey/src/mod_survey.erl:651
 msgid "Yes/No"
 msgstr "Ja/Nee"
 
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:41
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:44
 msgid "You already filled this in, but you can change your previous answers."
 msgstr "Je hebt dit al ingevuld, maar je kan je vorige antwoorden wijzigen."
 
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:53
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:57
 msgid "You already filled this in."
 msgstr "Je hebt dit al ingevuld."
 
-#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:82
-#: zotonic_mod_survey/src/mod_survey.erl:443
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:83
+#: zotonic_mod_survey/src/mod_survey.erl:454
 msgid "You are not allowed to change the status."
 msgstr "Je mag de status niet wijzigen."
 
-#: zotonic_mod_survey/src/mod_survey.erl:420
-#: zotonic_mod_survey/src/mod_survey.erl:463
-#: zotonic_mod_survey/src/mod_survey.erl:1572
+#: zotonic_mod_survey/src/mod_survey.erl:431
+#: zotonic_mod_survey/src/mod_survey.erl:488
+#: zotonic_mod_survey/src/mod_survey.erl:525
+#: zotonic_mod_survey/src/mod_survey.erl:593
+#: zotonic_mod_survey/src/mod_survey.erl:640
+#: zotonic_mod_survey/src/mod_survey.erl:1720
 msgid "You are not allowed to change these results."
 msgstr "Je hebt geen rechten om de resultaten te veranderen."
 
@@ -14290,20 +14401,20 @@ msgstr "Je hebt toestemming nodig om het formulier te bewerken, om de resultaten
 msgid "You received this email because your email address is configured in the settings as the handling address."
 msgstr "Je hebt deze e-mail ontvangen omdat je e-mailadres in de formulier-instellingen is geconfigureerd als het afhandelingsadres."
 
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:21
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:22
 msgid "You started filling this in and will continue where you left off."
 msgstr "Je was eerder al begonnen met invullen en gaat verder waar je gebleven was."
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:152
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:170
 msgid "Your answers will be saved so that you can return later to submit them."
 msgstr "Je antwoorden worden opgeslagen zodat je ze later kunt indienen."
 
 #: zotonic_mod_survey/priv/templates/_survey_results_user.tpl:26
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:65
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:68
 msgid "Your result"
 msgstr "Jouw resultaat"
 
-#: zotonic_mod_survey/src/mod_survey.erl:1513
+#: zotonic_mod_survey/src/mod_survey.erl:1662
 msgid "Your session was expired, please restart and try again."
 msgstr "De sessie is verlopen, start opnieuw op en probeer het nog een keer."
 
@@ -14339,6 +14450,10 @@ msgstr "als"
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_results.tpl:20
 msgid "member"
 msgstr "lid"
+
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:76
+msgid "modified"
+msgstr ""
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:43
 msgid "must be a date"
@@ -14398,6 +14513,10 @@ msgstr "tekst"
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:98
 msgid "years old. I like"
 msgstr "jaar oud. Ik hou van"
+
+#: zotonic_mod_survey/priv/templates/_survey_result_test_score.tpl:21
+msgid "{points} of {max} points"
+msgstr ""
 
 #: zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:5
 #: zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:10
