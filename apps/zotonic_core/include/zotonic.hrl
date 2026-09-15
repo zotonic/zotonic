@@ -321,6 +321,11 @@
 }).
 
 
+%% ACL modules must explicitly support SQL update checks on deleted resource snapshots.
+-record(acl_rsc_gone_sql, {
+    alias :: string()
+}).
+
 %% ACL fields for an acl check. Fields are initialized for the visible resource.
 %% This is used for fetching the acl fields from a resource record.
 -record(acl_props, {

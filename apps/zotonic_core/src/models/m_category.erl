@@ -360,7 +360,7 @@ delete(Id, TransferId, Context) ->
                                 where category_id = $3",
                                [ToId, ToNr, m_rsc:rid(Id, Context)],
                                Ctx),
-                        ok = m_rsc_update:delete_nocheck(Id, Ctx)
+                        ok = m_rsc_update:delete_nocheck(Id, ToId, Ctx)
                     end,
                     ok = z_db:transaction(F, Context),
                     renumber_if_dirty(Context);

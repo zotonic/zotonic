@@ -959,8 +959,11 @@ do_insert_task_after(SecondsOrDate, Module, Function, UniqueKey, Args, Context) 
 
 %% @doc Insert a list of ids into the pivot queue.
 do_insert_queue(Ids, DueDate, Context) when is_list(Ids) ->
+    % A queued request can race with resource deletion. Keep selected resources
+    % alive until the FK check completes, or skip them after a concurrent delete.
     z_db:q("insert into rsc_pivot_log as p (rsc_id, due, is_update)
-            select r.id, $2, true from rsc r where r.id = any($1)",
+            select r.id, $2, true from rsc r where r.id = any($1)
+            for key share of r",
             [ Ids, DueDate ], Context),
     ok.
 

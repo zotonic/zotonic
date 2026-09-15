@@ -33,9 +33,17 @@ Information kept
 Only very basic information of the deleted resource is kept in the `rsc_gone` table. It is enough for referring to a new
 location, giving correct errors or to determine who deleted a resource.
 
-It is not enough to undelete a resource. The module `module#mod_backup` retains enough information
-about past versions to be able to undelete a resource. Currently there is no support for an undelete.
+The saved category, content group, visibility and ownership fields are used for an ACL filter on the deleted-pages overview.
 
+Display labels are kept in `props_json`; complete resource data remains in `module#mod_backup` revisions.
+Restoring a resource removes its tombstone.
+Only category/content-group labels are copied. `props_json.deleter_id` identifies the deletion actor;
+person titles are read from live resources through the normal ACL checks.
+
+The public model paths below expose only routing information. Reading archived metadata requires admin
+access plus update permission on the saved ACL fields (`is_editable/2`). ACL modules implement
+`view_deleted` on an `acl_rsc` snapshot and `acl_rsc_gone_sql` for SQL filtering; unsupported modules
+fail closed. Legacy metadata is populated in resumable background batches by `mod_backup`.
 
 
 Properties
@@ -67,6 +75,7 @@ Available Model API Paths
 | --- | --- | --- |
 | `get` | `/+id/new_location/...` | Return category data for +id. Uses `get_new_location`. |
 | `get` | `/+id/is_gone/...` | Return whether gone (`is_gone`). |
+| `get` | `/+id/followup/...` | Resolve a live local resource, following replacement IDs. Does not authorize access to its properties. |
 
 `/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
@@ -87,6 +96,10 @@ Available Model API Paths
     gone/3,
 
     delete/2,
+    snapshot/2,
+    is_editable/2,
+    followup/2,
+    acl_sql/2,
 
     install/1
 ]).
@@ -101,15 +114,19 @@ m_get([ Id, <<"new_location">> | Rest ], _Msg, Context) ->
     {ok, {get_new_location(Id, Context), Rest}};
 m_get([ Id, <<"is_gone">> | Rest ], _Msg, Context) ->
     {ok, {is_gone(Id, Context), Rest}};
+m_get([ Id, <<"followup">> | Rest ], _Msg, Context) ->
+    {ok, {followup(Id, Context), Rest}};
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
 %% @doc Get the possible 'rsc_gone' resource for the id.
+get(undefined, _Context) ->
+    undefined;
 get(Id, Context) when is_integer(Id) ->
     F = fun() ->
         z_db:assoc_row("select * from rsc_gone where id = $1", [Id], Context)
     end,
-    z_depcache:memo(F, {rsc_gone, Id}, Context);
+    z_depcache:memo(F, {rsc_gone, Id}, ?DAY, [Id], Context);
 get(Id, Context) ->
     get(m_rsc:rid(Id, Context), Context).
 
@@ -130,7 +147,7 @@ get_new_location(Id, Context) when is_integer(Id) ->
     F = fun() ->
             z_db:q_row("select new_id, new_uri from rsc_gone where id = $1 limit 1", [Id], Context)
         end,
-    case z_depcache:memo(F, {rsc_gone_new_location, Id}, Context) of
+    case z_depcache:memo(F, {rsc_gone_new_location, Id}, ?DAY, [Id], Context) of
         undefined ->
             undefined;
         {undefined, undefined} ->
@@ -159,7 +176,7 @@ is_gone(Id, Context) when is_integer(Id) ->
     F = fun() ->
             z_db:q1("select count(*) from rsc_gone where id = $1", [Id], Context) =:= 1
         end,
-    z_depcache:memo(F, {rsc_is_gone, Id}, Context).
+    z_depcache:memo(F, {rsc_is_gone, Id}, ?DAY, [Id], Context).
 
 %% @doc Check if the resource uri used to exist.
 -spec is_gone_uri(string()|binary()|undefined, z:context()) -> boolean().
@@ -184,7 +201,7 @@ gone(Id, NewId, Context) when is_integer(Id), is_integer(NewId) orelse NewId =:=
     case z_db:assoc_row("
             select id, is_authoritative, name, version,
                    pivot_page_path as page_paths, uri,
-                   creator_id, created
+                   creator_id, created, category_id, content_group_id, visible_for
             from rsc
             where id = $1
             ", [Id], Context)
@@ -194,7 +211,12 @@ gone(Id, NewId, Context) when is_integer(Id), is_integer(NewId) orelse NewId =:=
         Props when is_list(Props) ->
             Result = z_db:transaction(
                     fun(Ctx) ->
+                        {ok, RscProps} = m_rsc:get_raw(Id, Ctx),
                         Props1 = [
+                            {props_json, (snapshot(RscProps, Ctx))#{
+                                <<"deleter_id">> => z_acl:user(Ctx)
+                            }},
+                            {modified, calendar:universal_time()},
                             {new_id, NewId},
                             {new_uri, undefined},
                             {modifier_id, z_acl:user(Ctx)},
@@ -227,14 +249,22 @@ gone(Id, NewId, Context) when is_integer(Id), is_integer(NewId) orelse NewId =:=
     end.
 
 %% @doc Delete a gone entry for a resource, used after recovery of a resource.
--spec delete(Id, Context) -> ok | {error, enoent} when
-    Id :: m_rsc:resource_id(),
-    Context :: z:context().
+-spec delete(Id, Context) -> ok | {error, enoent}
+    when
+        Id :: m_rsc:resource_id(),
+        Context :: z:context().
 delete(Id, Context) ->
-    case z_db:q("delete from rsc_gone where id = $1", [ Id ], Context) of
-        1 -> ok;
-        0 -> {error, enoent}
-    end.
+    Result = case z_db:q("delete from rsc_gone where id = $1 returning uri", [ Id ], Context) of
+        [{Uri}] ->
+            z_depcache:flush({rsc_is_gone, Uri}, Context),
+            z_depcache:flush({rsc_uri, Uri}, Context),
+            ok;
+        [] -> {error, enoent}
+    end,
+    z_depcache:flush({rsc_gone, Id}, Context),
+    z_depcache:flush({rsc_is_gone, Id}, Context),
+    z_depcache:flush({rsc_gone_new_location, Id}, Context),
+    Result.
 
 %% @doc Install or upgrade the rsc_gone table.
 -spec install( z:context() ) -> ok.
@@ -258,6 +288,10 @@ install(Context) ->
                     is_authoritative boolean NOT NULL DEFAULT true,
                     creator_id bigint,
                     modifier_id bigint,
+                    category_id bigint,
+                    content_group_id bigint,
+                    visible_for integer,
+                    props_json jsonb,
                     created timestamp with time zone NOT NULL DEFAULT now(),
                     modified timestamp with time zone NOT NULL DEFAULT now(),
                     is_personal_data boolean NOT NULL DEFAULT false,
@@ -305,5 +339,98 @@ install(Context) ->
                     z_db:flush(Context);
                 true ->
                     ok
+            end,
+            lists:foreach(
+                fun({Column, Type}) ->
+                    case z_db:column_exists(rsc_gone, Column, Context) of
+                        true -> ok;
+                        false ->
+                            [] = z_db:q(["ALTER TABLE rsc_gone ADD COLUMN ", atom_to_list(Column), " ", Type], Context),
+                            z_db:flush(Context)
+                    end
+                end,
+                [ {category_id, "bigint"},
+                  {content_group_id, "bigint"},
+                  {visible_for, "integer"},
+                  {props_json, "jsonb"} ])
+    end.
+
+
+%% @doc Retain category/content-group labels and author ownership without the resource body.
+%% Person labels are read from live resources with ACL checks at display time.
+%% Internal deletion/migration API: the caller already has access to the source props.
+-spec snapshot(Props, Context) -> map()
+    when
+        Props :: map(),
+        Context :: z:context().
+snapshot(Props, Context) ->
+    Labels = maps:from_list([
+        {Key, reference_label(maps:get(Key, Props, undefined), Context)}
+        || Key <- [ <<"category_id">>, <<"content_group_id">> ] ]),
+    #{ <<"title">> => maps:get(<<"title">>, Props, undefined),
+       <<"resource_modified">> => maps:get(<<"modified">>, Props, undefined),
+       <<"references">> => Labels,
+       <<"author_ids">> => m_edge:objects(maps:get(<<"id">>, Props, undefined), author, Context) }.
+
+reference_label(undefined, _Context) -> #{};
+reference_label(Id, Context) ->
+    #{ <<"id">> => Id,
+       <<"name">> => m_rsc:p_no_acl(Id, <<"name">>, Context),
+       <<"title">> => m_rsc:p_no_acl(Id, <<"title">>, Context) }.
+
+%% @doc Deleted data requires admin access and update permission on the saved ACL fields.
+-spec is_editable(Id, Context) -> boolean()
+    when
+        Id :: m_rsc:resource(),
+        Context :: z:context().
+is_editable(Id0, Context) ->
+    Id = m_rsc:rid(Id0, Context),
+    z_acl:is_allowed(use, mod_admin, Context)
+    andalso is_integer(Id)
+    andalso case z_db:qmap_props_row("select * from rsc_gone where id = $1", [Id], Context) of
+        {ok, #{ <<"category_id">> := Cat, <<"content_group_id">> := CG } = Props}
+            when is_integer(Cat), is_integer(CG) ->
+            z_acl:is_allowed(view_deleted, #acl_rsc{ id = Id, props = Props }, Context);
+        _ ->
+            false
+    end.
+
+%% @doc SQL authorization for the gone table. Unknown ACL implementations fail closed.
+%% ACL modules handle acl_rsc_gone_sql explicitly; live visibility filters are insufficient.
+-spec acl_sql(Alias, Context) -> {SQL, Args}
+    when
+        Alias :: string(),
+        Context :: z:context(),
+        SQL :: iodata(),
+        Args :: list().
+acl_sql(Alias, Context) ->
+    case z_acl:is_admin(Context) of
+        true ->
+            {"true", []};
+        false ->
+            case z_notifier:first(#acl_rsc_gone_sql{ alias = Alias }, Context) of
+                undefined -> {"false", []};
+                {Sql, Args} -> {Sql, Args}
+            end
+    end.
+
+%% @doc Resolve local followups, stopping at missing targets and cycles. Never follows URLs.
+-spec followup(Id, Context) -> m_rsc:resource_id() | undefined
+    when
+        Id :: m_rsc:resource(),
+        Context :: z:context().
+followup(Id, Context) ->
+    followup(m_rsc:rid(Id, Context), [], Context).
+
+followup(undefined, _Seen, _Context) -> undefined;
+followup(Id, Seen, Context) when is_integer(Id) ->
+    case lists:member(Id, Seen) of
+        true -> undefined;
+        false ->
+            case m_rsc:exists(Id, Context) of
+                true -> Id;
+                false ->
+                    Next = z_db:q1("select new_id from rsc_gone where id = $1", [Id], Context),
+                    followup(Next, [Id | Seen], Context)
             end
     end.

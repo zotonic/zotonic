@@ -38,6 +38,7 @@
         acl_logoff/2,
         acl_context_authenticated/1,
         acl_add_sql_check/2,
+        gone_sql/2,
 
         rsc_update_check/3
     ]).
@@ -197,6 +198,16 @@ acl_is_allowed(_, #context{ acl = admin }) ->
     true;
 acl_is_allowed(_, #context{ user_id = 1 }) ->
     true;
+acl_is_allowed(#acl_is_allowed{ action = view_deleted, object = #acl_rsc{ id = Id, props = Props } }, Context) ->
+    User = z_acl:user(Context),
+    IsOwner = is_integer(User)
+        andalso (
+            Id =:= User
+            orelse maps:get(<<"creator_id">>, Props, undefined) =:= User
+            orelse (m_config:get_boolean(mod_acl_user_groups, author_is_owner, Context)
+                    andalso lists:member(User, maps:get(<<"author_ids">>, Props, [])))
+        ),
+    gone_allowed(Props, IsOwner, Context);
 acl_is_allowed(#acl_is_allowed{ object = undefined }, _Context) ->
     undefined;
 acl_is_allowed(#acl_is_allowed{ action = view, object = UserId}, #context{ user_id = UserId })
@@ -1130,6 +1141,8 @@ can_rsc_ug(CGId, CatId, Visibility, Action, IsOwner, UGs, Context) ->
         UGs
     ).
 
+is_owner({rsc_gone, IsOwner}, _Context) ->
+    IsOwner;
 is_owner(insert_rsc, _Context) ->
     true;
 is_owner(Id, #context{ user_id = UserId } = Context) ->
@@ -1192,3 +1205,54 @@ is_allowed(undefined) -> false;
 is_allowed(_Other) ->
     % ACL lookup unexpected return value
     erlang:error(badarg).
+
+
+%% @doc Use the same rule evaluator for a saved ACL tuple and for its SQL predicate.
+%% Grouping the gone table avoids decoding or joining the (much larger) revisions table.
+-spec gone_sql(Alias, Context) -> {iodata(), list()} when
+    Alias :: string(), Context :: z:context().
+gone_sql(Alias, Context) ->
+    {ok, Groups} = z_db:qmap(
+        "select distinct category_id, content_group_id, visible_for
+         from rsc_gone
+         where category_id is not null and content_group_id is not null", Context),
+    User = z_acl:user(Context),
+    OwnerSql = case m_config:get_boolean(mod_acl_user_groups, author_is_owner, Context) of
+        true -> ["(", Alias, ".creator_id = $1 or ", Alias, ".id = $1 or ",
+                 Alias, ".props_json->'author_ids' @> to_jsonb(array[$1::bigint]))"];
+        false -> ["(", Alias, ".creator_id = $1 or ", Alias, ".id = $1)"]
+    end,
+    {Clauses, Args} = lists:foldl(
+        fun(Props, {Acc, Args0}) ->
+            All = gone_allowed(Props, false, Context),
+            Own = is_integer(User) andalso gone_allowed(Props, true, Context),
+            case All orelse Own of
+                false -> {Acc, Args0};
+                true ->
+                    N = length(Args0),
+                    TupleSql = lists:join(" AND ", [
+                        [Alias, ".", Key, " IS NOT DISTINCT FROM $", integer_to_list(N + I)]
+                        || {Key, I} <- [{"category_id", 1}, {"content_group_id", 2}, {"visible_for", 3}] ]),
+                    Clause = case All of
+                        true -> ["(", TupleSql, ")"];
+                        false -> ["(", TupleSql, " AND ", OwnerSql, ")"]
+                    end,
+                    { [Clause | Acc], Args0 ++ [maps:get(K, Props) || K <-
+                        [<<"category_id">>, <<"content_group_id">>, <<"visible_for">>]] }
+            end
+        end,
+        {[], [User]}, Groups),
+    case Clauses of
+        [] -> {"false", []};
+        _ -> {["($1::bigint IS NOT NULL) AND (", lists:join(" OR ", Clauses), ")"], Args}
+    end.
+
+gone_allowed(#{ <<"category_id">> := Cat, <<"content_group_id">> := CG } = Props, IsOwner, Context)
+    when is_integer(Cat), is_integer(CG) ->
+    can_rsc_1({rsc_gone, IsOwner}, update,
+        maps:get(<<"content_group_id">>, Props, undefined),
+        maps:get(<<"category_id">>, Props, undefined),
+        maps:get(<<"visible_for">>, Props, undefined),
+        user_groups(Context), Context);
+gone_allowed(_Props, _IsOwner, _Context) ->
+    false.

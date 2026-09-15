@@ -28,7 +28,6 @@ information. It also provides an easy way to fetch edges from pages without need
 `model#edge` directly.
 
 
-
 Properties of the resource model
 --------------------------------
 
@@ -149,6 +148,28 @@ And also using the `tag#print` tag:
 {% print m.rsc[id] %}
 ```
 
+
+URI aliases
+-----------
+
+The `rsc_uri_alias` table preserves the association between an old (import) URI and a resource.
+When `m_rsc:make_authoritative/2` makes an imported resource locally authoritative, it clears the resource's
+`uri` property and calls `remember_uri/3` to retain that URI as an alias. References using the old URI can
+then still resolve to the same local resource without creating a `rsc_gone` entry for a resource that exists.
+
+Each row maps a unique `uri` to an `rsc_id`. A resource can have multiple aliases; remembering the same URI
+again replaces its target. An undefined URI is ignored. `remember_uri/3` invalidates the URI lookup cache
+and relies on its caller to check permissions.
+
+For database URI lookup, `m_rsc:uri_lookup/2` first checks the current `rsc.uri`, then `rsc_gone`, and consults
+`rsc_uri_alias` only when neither has a matching row. The alias supplies a resource id for URI resolution;
+it does not itself create an HTTP redirect.
+
+Deleting a resource removes its aliases through the foreign key. `module#mod_backup` preserves aliases
+in resource revisions and restores them during recovery or rollback. Aliases already assigned to another
+resource stay with their current owner; existing aliases are retained when rolling back.
+
+
 Available Model API Paths
 -------------------------
 
@@ -227,6 +248,11 @@ Available Model API Paths
     name_lookup/2,
     uri/2,
     uri_lookup/2,
+    remember_uri/3,
+    uri_alias/2,
+    uri_aliases/2,
+    restore_uri_aliases/3,
+    install/1,
     ensure_name/2,
 
     common_properties/1
@@ -908,7 +934,7 @@ touch(Id, Context) ->
 
 
 %% @doc Make a resource authoritative. This removes the uri from the resource and sets the
-%% resource as 'authoritative'. The uri is added to the m_rsc_gone delete log.
+%% resource as 'authoritative'. The old uri is retained as a resource alias.
 -spec make_authoritative( m_rsc:resource(), z:context() ) -> {ok, resource_id()} | {error, term()}.
 make_authoritative(RscId, Context)  ->
     case m_rsc:rid(RscId, Context) of
@@ -921,12 +947,19 @@ make_authoritative(RscId, Context)  ->
                 false ->
                     case z_acl:rsc_editable(Id, Context) of
                         true ->
-                            {ok, _} = m_rsc_gone:gone(Id, Id, Context),
-                            NewProps = #{
-                                <<"is_authoritative">> => true,
-                                <<"uri">> => undefined
-                            },
-                            m_rsc_update:update(Id, NewProps, Context);
+                            z_db:transaction(fun(Ctx) ->
+                                Uri = m_rsc:p_no_acl(Id, <<"uri">>, Ctx),
+                                NewProps = #{
+                                    <<"is_authoritative">> => true,
+                                    <<"uri">> => undefined
+                                },
+                                ok = remember_uri(Id, Uri, Ctx),
+                                case m_rsc_update:update(Id, NewProps, Ctx) of
+                                    {ok, Id} = Ok ->
+                                        Ok;
+                                    Error -> {rollback, Error}
+                                end
+                            end, Context);
                         false ->
                             {error, eacces}
                     end
@@ -1529,12 +1562,56 @@ uri_lookup_1(Uri, Context) ->
     case z_db:q1("select id from rsc where uri = $1", [Uri], Context) of
         undefined ->
             case m_rsc_gone:get_uri(Uri, Context) of
-                undefined -> undefined;
+                undefined -> uri_alias(Uri, Context);
                 Gone -> proplists:get_value(new_id, Gone)
             end;
         Id ->
             Id
     end.
+
+
+%% @doc Keep an old (import) URI when making a resource authoritative.
+-spec remember_uri(Id, Uri, Context) -> ok
+    when
+        Id :: resource_id(),
+        Uri :: binary() | undefined,
+        Context :: z:context().
+remember_uri(_Id, undefined, _Context) -> ok;
+remember_uri(Id, Uri, Context) ->
+    z_db:q("insert into rsc_uri_alias (uri, rsc_id) values ($1, $2)
+            on conflict (uri) do update set rsc_id = excluded.rsc_id", [Uri, Id], Context),
+    z_depcache:flush({rsc_uri, Uri}, Context),
+    ok.
+
+%% @doc Resolve an old (import) URI to a resource.
+-spec uri_alias(Uri, Context) -> resource_id() | undefined
+    when
+        Uri :: binary(),
+        Context :: z:context().
+uri_alias(Uri, Context) ->
+    z_db:q1("select rsc_id from rsc_uri_alias where uri = $1", [Uri], Context).
+
+
+%% @doc List the saved URI aliases. The caller must check access to the resource.
+-spec uri_aliases(Id, Context) -> [binary()] when
+    Id :: resource_id(),
+    Context :: z:context().
+uri_aliases(Id, Context) ->
+    [ Uri || {Uri} <- z_db:q("select uri from rsc_uri_alias where rsc_id = $1 order by uri", [Id], Context) ].
+
+%% @doc Recover archived aliases without taking aliases from other resources.
+%% The caller must authorize restoration of the resource.
+-spec restore_uri_aliases(Id, Uris, Context) -> ok when
+    Id :: resource_id(),
+    Uris :: [binary()],
+    Context :: z:context().
+restore_uri_aliases(Id, Uris, Context) ->
+    lists:foreach(fun(Uri) ->
+        z_db:q("insert into rsc_uri_alias (uri, rsc_id) values ($1, $2)
+                on conflict (uri) do nothing", [Uri, Id], Context),
+        z_depcache:flush({rsc_uri, Uri}, Context)
+    end, Uris),
+    ok.
 
 
 %% @doc Check if the hostname in an URL matches the current site
@@ -1744,3 +1821,23 @@ postfix(N) -> integer_to_list(N).
 -spec common_properties(z:context()) -> [binary()].
 common_properties(_Context) ->
     z_props:common_properties().
+
+
+%% @doc Install the URI alias table for live resources. This tracks unique URIs of
+%% merged resources.
+-spec install(Context) -> ok when
+    Context :: z:context().
+install(Context) ->
+    case z_db:table_exists(rsc_uri_alias, Context) of
+        false ->
+            [] = z_db:q("
+                CREATE TABLE IF NOT EXISTS rsc_uri_alias (
+                    uri character varying(2048) PRIMARY KEY,
+                    rsc_id bigint NOT NULL REFERENCES rsc(id) ON UPDATE CASCADE ON DELETE CASCADE
+                )", Context),
+            [] = z_db:q("CREATE INDEX IF NOT EXISTS rsc_uri_alias_rsc_id_key ON rsc_uri_alias(rsc_id)", Context),
+            z_db:flush(Context),
+            ok;
+        true ->
+            ok
+    end.

@@ -25,13 +25,28 @@
 -moduledoc("
 Model for resource revision backup metadata, including revision list/title retrieval and revision retention settings.
 
+Revision reads require admin access and edit permission on the live resource or its deleted ACL snapshot.
+Restoration additionally checks insert permission in the selected category and content group. Missing
+category/content-group references require explicit choices; local followups are suggestions only.
+Missing creator/modifier references are followed to a live resource or cleared.
+
+Revisions store URI aliases as `backup_uri_aliases` metadata, separate from resource properties.
+Deletion revisions are saved before aliases are cascade-deleted. Recovery and rollback add the archived
+aliases without removing current aliases or taking aliases assigned to another resource. Older revisions
+without alias metadata leave the current aliases unchanged.
+
+The deleted overview queries only `rsc_gone`, never serialized revision bodies. Its ACL migration runs
+in resumable keyset batches; unmigrated entries remain hidden until their metadata is available.
+
 Available Model API Paths
 -------------------------
 
 | Method | Path pattern | Description |
 | --- | --- | --- |
+| `get` | `/can_view/+id/...` | Whether the caller may read this resource’s revisions. |
+| `get` | `/restore_options/+revision_id/...` | Authorized historical reference labels and followup suggestions. |
 | `get` | `/list/+id/...` | Return revision history entries for resource `+id` as associative rows, newest-first where applicable. |
-| `get` | `/title/+id/...` | Return title for `+id`: current resource title when it exists, otherwise archived revision title (admin backup access). |
+| `get` | `/title/+id/...` | Return title for `+id`: current resource title when it exists, otherwise archived revision title (saved resource update permission). |
 | `get` | `/retention_months/...` | Return `mod_backup.revision_retention_months` (months to keep revision backups). |
 | `get` | `/user_retention_days/...` | Return retention period in days for backups tied to active user resources (`backup_config:user_retention_days/1`). |
 | `get` | `/deleted_user_retention_days/...` | Return retention period in days for backups tied to deleted user resources (`backup_config:deleted_user_retention_days/1`). |
@@ -45,10 +60,14 @@ Available Model API Paths
     m_get/3,
 
     revert_resource/4,
+    can_view/2,
+    restore_options/2,
 
     list_deleted/2,
 
     revision_title/2,
+    historical_label/2,
+    latest_props/2,
     save_deleted/3,
     save_revision/3,
     get_revision/2,
@@ -91,14 +110,19 @@ Available Model API Paths
 % the edge entries are made.
 -define(DELTA_LOG_REVERT, 2).
 
--type revert_option() :: incoming_edges | outgoing_edges | dependent.
+-type revert_option() :: incoming_edges | outgoing_edges | dependent
+    | {category_id, integer()} | {content_group_id, integer()}.
 -export_type([ revert_option/0 ]).
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ <<"can_view">>, Id | Rest ], _Msg, Context) ->
+    {ok, {can_view(Id, Context), Rest}};
+m_get([ <<"restore_options">>, RevId | Rest ], _Msg, Context) ->
+    {ok, {restore_options(RevId, Context), Rest}};
 m_get([ <<"list">>, Id | Rest ], _Msg, Context) ->
     Id1 = m_rsc:rid(Id, Context),
-    Revs = case z_acl:is_allowed(use, mod_backup, Context) orelse m_rsc:is_editable(Id1, Context) of
+    Revs = case can_view(Id1, Context) of
         true -> list_revisions_assoc(Id1, Context);
         false -> []
     end,
@@ -109,7 +133,7 @@ m_get([ <<"title">>, Id | Rest ], _Msg, Context) ->
         true ->
             m_rsc:p(Id, <<"title">>, Context);
         false ->
-            case z_acl:is_allowed(use, mod_backup, Context) of
+            case can_view(Id1, Context) of
                 true -> revision_title(Id1, Context);
                 false -> undefined
             end
@@ -140,9 +164,8 @@ revert_resource(RscId, RevId, Options, Context) ->
             <<"data">> := Props,
             <<"created">> := Created
         }} when RevRscId =:= RscId ->
-            case m_rsc_update:update(RscId, Props, [ is_import ], Context) of
+            case restore_props(RscId, Props, Options, Context) of
                 {ok, _} ->
-                    m_rsc_gone:delete(RscId, Context),
                     revert_edges(RscId, Options, Created, Context),
                     revert_medium(RscId, Created, Context),
                     z_depcache:flush(RscId, Context),
@@ -152,8 +175,8 @@ revert_resource(RscId, RevId, Options, Context) ->
             end;
         {ok, _} ->
             {error, invalid};
-        {error, _} ->
-            {error, enoent}
+        {error, _} = Error ->
+            Error
     end.
 
 %% @doc Revert a resource if and only if the resource was a dependent resource.
@@ -163,7 +186,7 @@ revert_if_dependent(RscId, Options, Context) ->
         select *
         from backup_revision
         where rsc_id = $1
-        order by id asc
+        order by created desc, id desc
         limit 1",
         [RscId],
         Context)
@@ -181,7 +204,10 @@ revert_if_dependent(RscId, Options, Context) ->
                     false
             end,
             if
-                IsRevert -> revert_resource(RscId, RevId, Options, Context);
+                IsRevert ->
+                    % Reference choices belong to the selected page, not its dependents.
+                    EdgeOptions = [Opt || Opt <- Options, is_atom(Opt)],
+                    revert_resource(RscId, RevId, EdgeOptions, Context);
                 true -> ok
             end;
         {error, _} = Error ->
@@ -347,50 +373,32 @@ revision_title(Id, Context) ->
     Context :: z:context(),
     Result :: #search_result{}.
 list_deleted({Offset, Limit}, Context) ->
-    {ok, Rs} = z_db:qmap("
-        select b.*
-        from backup_revision b
-            left join rsc r
-            on r.id = b.rsc_id
-        where b.type = $1
-          and r.id is null
-        order by b.created desc
-        offset $2
-        limit $3",
-        [ ?BACKUP_TYPE_PROPS_DELETED, Offset-1, Limit ],
-        Context),
-    Total = z_db:q1("
-        select count(*)
-        from backup_revision b
-            left join rsc r
-            on r.id = b.rsc_id
-        where b.type = $1
-          and r.id is null",
-        [ ?BACKUP_TYPE_PROPS_DELETED ],
-        Context),
-    Rs1 = lists:map(fun expand/1, Rs),
-    #search_result{
-        result = Rs1,
-        total = Total,
-        is_total_estimated = false
-    }.
-
-expand(#{
-        <<"data_type">> := <<"erlang">>,
-        <<"data">> := Data
-    } = R) ->
-    R#{
-        <<"data_type">> => <<"term">>,
-        <<"data">> => erlang:binary_to_term(Data)
-    };
-expand(R) ->
-    R.
+    case z_acl:is_allowed(use, mod_admin, Context) of
+        false -> #search_result{};
+        true ->
+            {AclSql, Args} = m_rsc_gone:acl_sql("g", Context),
+            Where = ["g.category_id IS NOT NULL AND g.content_group_id IS NOT NULL AND (", AclSql, ")"],
+            N = length(Args),
+            {ok, Rs} = z_db:qmap_props([
+                "select g.* from rsc_gone g where ", Where,
+                " order by g.modified desc, g.id desc offset $", integer_to_list(N+1),
+                " limit $", integer_to_list(N+2)],
+                Args ++ [Offset-1, Limit], Context),
+            Total = z_db:q1(["select count(*) from rsc_gone g where ", Where], Args, Context),
+            #search_result{ result = Rs, total = Total, is_total_estimated = false }
+    end.
 
 
 save_deleted(_Id, undefined, _Context) ->
     ok;
 save_deleted(Id, Props, Context) when is_integer(Id), is_map(Props) ->
-    save_revision(Id, Props, true, Context).
+    z_db:transaction(fun(Ctx) ->
+        ok = save_revision(Id, Props, true, Ctx),
+        % Keep the cached title consistent with the deletion revision.
+        z_db:q("update rsc_gone set props_json = coalesce(props_json, '{}'::jsonb) || $2::jsonb
+                where id = $1", [Id, ?DB_PROPS_JSON(maps:with([<<"title">>], Props))], Ctx),
+        ok
+    end, Context).
 
 save_revision(Id, Props, Context) when is_integer(Id), is_map(Props) ->
     save_revision(Id, Props, false, Context).
@@ -413,6 +421,8 @@ save_revision(Id, #{ <<"version">> := Version } = Props, IsDeleted, Context) whe
                 true ->
                     ?BACKUP_TYPE_PROPS_DELETED
             end,
+            % Revision-only metadata, removed before updating resource properties.
+            SavedProps = Props#{ <<"backup_uri_aliases">> => m_rsc:uri_aliases(Id, Context) },
             RevId = z_db:q1("
                 insert into backup_revision
                     (rsc_id, type, version, user_id, user_name, data_type, data)
@@ -429,7 +439,7 @@ save_revision(Id, #{ <<"version">> := Version } = Props, IsDeleted, Context) whe
                             Context),
                         60),
                     <<"erlang">>,
-                    erlang:term_to_binary(Props, [compressed])
+                    erlang:term_to_binary(SavedProps, [compressed])
                 ],
                 Context),
             case IsDeleted of
@@ -458,8 +468,10 @@ get_revision(RevId0, Context) ->
     RevId = z_convert:to_integer(RevId0),
     case z_db:qmap_row("select * from backup_revision where id = $1", [RevId], Context) of
         {ok, #{ <<"data">> := Data } = Row} ->
-            R1 = Row#{ <<"data">> => erlang:binary_to_term(Data) },
-            {ok, R1};
+            case can_view(maps:get(<<"rsc_id">>, Row), Context) of
+                true -> {ok, Row#{ <<"data">> => revision_props(Data) }};
+                false -> {error, eacces}
+            end;
         {error, _} = Error ->
             Error
     end.
@@ -629,11 +641,16 @@ medium_delete_check(Id, Context) ->
 -spec periodic_cleanup(Context) -> ok when
     Context :: z:context().
 periodic_cleanup(Context) ->
+    % Commit removal of revisions and their cached deleted-page titles together.
+    z_db:transaction(fun periodic_cleanup_1/1, Context).
+
+periodic_cleanup_1(Context) ->
     Months = backup_config:retention_months(Context),
     Threshold = z_datetime:prev_month(calendar:universal_time(), Months),
-    z_db:q("
+    Expired = z_db:q("
         delete from backup_revision
-        where created < $1",
+        where created < $1
+        returning rsc_id",
         [Threshold],
         Context),
     z_db:q("
@@ -653,26 +670,44 @@ periodic_cleanup(Context) ->
     % see 'm_identity:is_user/2':
     IdentityTypes = m_identity:user_types(Context),
     IdentityTypes1 = [ z_convert:to_binary(Idn) || Idn <- lists:usort(IdentityTypes) ],
-    z_db:q("
+    UserExpired = z_db:q("
         DELETE FROM backup_revision
         WHERE created < $1
-        AND rsc_id IN (SELECT rsc_id FROM identity WHERE type = any($2))",
+        AND rsc_id IN (SELECT rsc_id FROM identity WHERE type = any($2))
+        RETURNING rsc_id",
         [UserRevThreshold, IdentityTypes1],
         Context),
 
     % Join with 'rsc_gone' to find user resources that have been deleted
     UserDelDays = backup_config:deleted_user_retention_days(Context),
     UserDelThreshold = z_datetime:prev_day(calendar:universal_time(), UserDelDays),
-    z_db:q("
+    DeletedUserExpired = z_db:q("
         DELETE FROM backup_revision
         WHERE rsc_id IN (
             SELECT id FROM rsc_gone
             WHERE is_personal_data = true
             AND modified < $1
-        )",
+        )
+        RETURNING rsc_id",
         [UserDelThreshold],
         Context),
+    % Only check resources whose revisions were pruned in this transaction.
+    PrunedIds = lists:usort([ Id || {Id} <- Expired ++ UserExpired ++ DeletedUserExpired ]),
+    case PrunedIds of
+        [] ->
+            ok;
+        _ ->
+            z_db:q("update rsc_gone g
+                    set props_json = props_json - 'title'
+                    where g.id = any($1)
+                      and props_json ? 'title'
+                      and not exists (select 1 from backup_revision b where b.rsc_id = g.id)",
+                [PrunedIds],
+                Context)
+    end,
     ok.
+
+
 
 %% @doc Install the revisions table.
 install(Context) ->
@@ -714,7 +749,6 @@ install(Context) ->
                             on backup_revision (created, type)
                             where type = 'D'
                         ", Context),
-                    z_pivot_rsc:insert_task(?MODULE, insert_deleted_revisions, <<>>, Context),
                     z_db:flush(Context)
             end
     end,
@@ -767,7 +801,8 @@ install(Context) ->
             z_db:flush(Context);
         true ->
             ok
-    end.
+    end,
+    ok.
 
 backup_medium_log_delete() ->
     "
@@ -790,61 +825,156 @@ backup_medium_log_delete_trigger() ->
     ON medium FOR EACH ROW EXECUTE PROCEDURE backup_medium_log_delete()
     ".
 
-insert_deleted_revisions(Context) ->
-    ?LOG_INFO(#{
-        in => zotonic_mod_backup,
-        text => <<"Inserting deleted revisions for resources">>
-    }),
-    Rs = z_db:q("
-        select rsc_gone.id, rsc_gone.modified, max(rev.id)
-        from rsc_gone
-        join backup_revision rev
-            on rsc_gone.id = rev.rsc_id
-        where rev.type = $1
-        group by rsc_gone.id
-        ",
-        [ ?BACKUP_TYPE_PROPS ],
-        Context),
-    lists:foreach(
-        fun({RscId, GoneDate, RevId}) ->
-            case z_db:q1("
-                select id
-                from backup_revision
-                where rsc_id = $1
-                  and type = $2",
-                [ RscId, ?BACKUP_TYPE_PROPS_DELETED ],
-                Context)
-            of
-                undefined ->
-                    {ok, R} = z_db:qmap_row("
-                        select *
-                        from backup_revision
-                        where id = $1",
-                        [ RevId ],
-                        Context),
-                    #{
-                        <<"version">> := Version,
-                        <<"user_id">> := UserId,
-                        <<"user_name">> := Username,
-                        <<"data">> := Data
-                    } = R,
-                    1 = z_db:q("
-                        insert into backup_revision
-                            (rsc_id, type, version, user_id, user_name, data_type, data, created)
-                        values ($1, $2, $3, $4, $5, $6, $7, $8)
-                        ", [
-                            RscId,
-                            ?BACKUP_TYPE_PROPS_DELETED,
-                            Version,
-                            UserId,
-                            Username,
-                            <<"erlang">>,
-                            Data,
-                            GoneDate
-                        ],
-                        Context);
-                _DelRevId ->
-                    ok
+%% @doc Complete an obsolete queued migration. The deleted-page ACL migration
+%% is started only by the mod_backup schema version 6 upgrade.
+insert_deleted_revisions(_Context) ->
+    ok.
+
+
+%% @doc Revision data is available only to admin users who can edit the live or saved resource.
+-spec can_view(Id, Context) -> boolean() when Id :: term(), Context :: z:context().
+can_view(Id0, Context) ->
+    Id = m_rsc:rid(Id0, Context),
+    z_acl:is_allowed(use, mod_admin, Context)
+    andalso case m_rsc:exists(Id, Context) of
+        true -> z_acl:rsc_editable(Id, Context);
+        false -> m_rsc_gone:is_editable(Id, Context)
+    end.
+
+%% @doc Resolve historical references for a confirmation dialog, after checking revision access.
+-spec restore_options(RevId, Context) -> map() | undefined when
+    RevId :: term(), Context :: z:context().
+restore_options(RevId, Context) ->
+    case get_revision(RevId, Context) of
+        {ok, #{ <<"rsc_id">> := RscId, <<"data">> := Props }} ->
+            Saved = case z_db:qmap_props_row("select * from rsc_gone where id = $1", [RscId], Context) of
+                {ok, Gone} -> maps:get(<<"references">>, Gone, #{});
+                _ -> #{}
+            end,
+            maps:from_list([
+                {Key, reference_option(Key, Props, Saved, Context)}
+                || Key <- [<<"category_id">>, <<"content_group_id">>] ]);
+        _ -> undefined
+    end.
+
+reference_option(Key, Props, Saved, Context) ->
+    Id = maps:get(Key, Props, undefined),
+    Resolved = m_rsc_gone:followup(Id, Context),
+    Label = case maps:get(Key, Saved, #{}) of
+        #{ <<"id">> := Id } = L -> L;
+        _ -> historical_label(Id, Context)
+    end,
+    Label#{ <<"id">> => Id, <<"suggested_id">> => Resolved,
+            <<"is_missing">> => not m_rsc:exists(Id, Context) }.
+
+restore_props(Id, Props, Options, Context) ->
+    case can_view(Id, Context) of
+        false -> {error, eacces};
+        true ->
+            case restore_references(Props, Options, Context) of
+                {error, _} = Error -> Error;
+                {ok, Props1} ->
+                    Cat = maps:get(<<"category_id">>, Props1),
+                    CG = maps:get(<<"content_group_id">>, Props1),
+                    IsNew = not m_rsc:exists(Id, Context),
+                    NeedsInsert = IsNew
+                        orelse Cat =/= m_rsc:p_no_acl(Id, category_id, Context)
+                        orelse CG =/= m_rsc:p_no_acl(Id, content_group_id, Context),
+                    case not NeedsInsert orelse z_acl:is_allowed(insert,
+                        #acl_rsc{ category = Cat, props = Props1 }, Context)
+                    of
+                        false -> {error, eacces};
+                        true ->
+                            % The archived update and target insert permissions were checked above.
+                            % Keep placeholder insertion, update and tombstone removal atomic.
+                            z_db:transaction(fun(Ctx) ->
+                                % Match deletion's lock order: live resource, then tombstone.
+                                LiveId = z_db:q1("select id from rsc where id = $1 for update", [Id], Ctx),
+                                Gone = z_db:q("select id from rsc_gone where id = $1 for update", [Id], Ctx),
+                                case {IsNew, LiveId, Gone} of
+                                    {true, _, []} ->
+                                        % A concurrent restore or purge removed the tombstone.
+                                        {rollback, {error, enoent}};
+                                    {false, undefined, _} ->
+                                        % The live resource was deleted while we waited.
+                                        {rollback, {error, enoent}};
+                                    _ ->
+                                        restore_props_locked(Id, Props, Props1, IsNew, Ctx)
+                                end
+                            end, Context)
+                    end
             end
-        end,
-        Rs).
+    end.
+
+restore_props_locked(Id, Props, Props1, IsNew, Ctx) ->
+    case can_view(Id, Ctx) of
+        false -> {rollback, {error, eacces}};
+        true ->
+            UpdateOptions = [is_import, {is_acl_check, not IsNew}],
+            ResourceProps = maps:remove(<<"backup_uri_aliases">>, Props1),
+            case m_rsc_update:update(Id, ResourceProps, UpdateOptions, Ctx) of
+                {ok, _} = Ok ->
+                    ok = m_rsc:restore_uri_aliases(Id,
+                        maps:get(<<"backup_uri_aliases">>, Props, []), Ctx),
+                    % The import update already removed the locked tombstone.
+                    Ok;
+                Error -> {rollback, Error}
+            end
+    end.
+
+restore_references(Props, Options, Context) ->
+    Cat = target_reference(category_id, Props, Options, Context),
+    CG = target_reference(content_group_id, Props, Options, Context),
+    case is_integer(Cat) andalso m_rsc:is_a(Cat, category, Context)
+        andalso is_integer(CG) andalso (m_rsc:is_a(CG, content_group, Context)
+            orelse m_rsc:is_a(CG, acl_collaboration_group, Context))
+    of
+        false -> {error, missing_reference};
+        true ->
+            Props1 = Props#{ <<"category_id">> => Cat, <<"content_group_id">> => CG },
+            {ok, lists:foldl(fun(Key, Acc) ->
+                Ref = m_rsc_gone:followup(maps:get(Key, Props, undefined), Context),
+                Acc#{ Key => Ref }
+            end, Props1, [<<"creator_id">>, <<"modifier_id">>])}
+    end.
+
+target_reference(Key, Props, Options, Context) ->
+    case proplists:lookup(Key, Options) of
+        none ->
+            Id = maps:get(atom_to_binary(Key, utf8), Props, undefined),
+            case m_rsc:exists(Id, Context) of
+                true -> Id;
+                false -> undefined % Missing references always require explicit confirmation.
+            end;
+        {Key, Id} -> m_rsc:rid(Id, Context)
+    end.
+
+%% @doc Internal unfiltered reference labels. Callers must authorize the revision first,
+%% or run as the background migration worker.
+-spec historical_label(Id, Context) -> map() when
+    Id :: integer() | undefined, Context :: z:context().
+historical_label(undefined, _Context) -> #{};
+historical_label(Id, Context) ->
+    Props = case m_rsc:get_raw(Id, Context) of
+        {error, enoent} -> latest_props(Id, Context);
+        {ok, P} -> P
+    end,
+    maps:with([<<"name">>, <<"title">>], Props).
+
+%% @doc Internal unfiltered revision properties for migration and authorized reference lookup.
+-spec latest_props(Id, Context) -> map() when
+    Id :: integer() | undefined, Context :: z:context().
+latest_props(Id, Context) ->
+    case z_db:q1("select data from backup_revision where rsc_id = $1 order by created desc, id desc limit 1",
+                [Id], Context) of
+        undefined -> #{};
+        Data -> revision_props(Data)
+    end.
+
+revision_props(Data) ->
+    case binary_to_term(Data) of
+        Props when is_map(Props) -> Props;
+        Props when is_list(Props) ->
+            {ok, Map} = z_props:from_list(Props),
+            Map
+    end.
