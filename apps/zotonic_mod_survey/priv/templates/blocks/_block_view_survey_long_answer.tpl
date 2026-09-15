@@ -15,7 +15,7 @@
              <p class="help-block">{{ blk.explanation|linebreaksbr }}</p>
         {% endif %}
         <div>
-            <textarea type="text" class="form-control" rows="4" name="{{ blk.name }}" id="{{ #id }}">{{ answers[blk.name]|escape }}</textarea>
+            <textarea type="text" class="form-control do_autoheight" rows="4" name="{{ blk.name }}" id="{{ #id }}">{{ answers[blk.name]|escape }}</textarea>
         </div>
     </div>
     {% if blk.is_required %}

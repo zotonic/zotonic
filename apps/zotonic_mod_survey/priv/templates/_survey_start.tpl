@@ -3,7 +3,7 @@
 {% with m.survey.is_max_results_reached[id] as is_max_results_reached %}
 
 {% if id.survey_is_disabled and not id.is_editable %}
-    <p><em>{_ Closed _}</em></p>
+    <p><em>{% block survey_start_text_closed %}{_ Closed _}{% endblock %}</em></p>
 {% elseif answer_id and id.is_editable %}
     {# Change existing answer from any user by an editor/admin #}
     {% wire
@@ -17,8 +17,10 @@
     %}
 {% elseif id|survey_is_save_intermediate and m.survey_saved.has_saved[id] and not is_max_results_reached %}
     {# Single entry form with intermediate saved results that will be continued. #}
-    <p><span class="fa fa-info-circle"></span>
-    {_ You started filling this in and will continue where you left off. _}</p>
+    <p>
+        <span class="fa fa-info-circle"></span>
+        {% block survey_start_text_continue %}{_ You started filling this in and will continue where you left off. _}{% endblock %}
+    </p>
     {% include "_survey_start_button.tpl"
                 id=id
                 answers=answers|default:m.survey.did_survey_answers[id]
@@ -37,8 +39,10 @@
     %}
 {% elseif id.survey_multiple == 2 and did_survey and m.acl.user %}
     {# Single entry form and previous answers are allowed to be changed by a logged in user #}
-    <p><span class="fa fa-info-circle"></span>
-    {_ You already filled this in, but you can change your previous answers. _}</p>
+    <p>
+        <span class="fa fa-info-circle"></span>
+        {% block survey_start_text_change %}{_ You already filled this in, but you can change your previous answers. _}{% endblock %}
+    </p>
     {% include "_survey_start_button.tpl"
                 id=id
                 answers=answers|default:m.survey.did_survey_answers[id]
@@ -50,16 +54,16 @@
     {# Previously filled in by this user/browser. #}
     <p class="alert alert-info">
         <span class="fa fa-exclamation-triangle"></span>
-        {_ You already filled this in. _}
+        {% block survey_start_text_already_filled %}{_ You already filled this in. _}{% endblock %}
     </p>
 
     {% if viewer == 'overlay' %}
-        <button id="{{ #survey_close }}" class="btn btn-lg btn-default">{_ Close _}</button>
+        <button id="{{ #survey_close }}" class="btn btn-lg btn-default">{% block survey_start_text_close_already_filled_overlay %}{_ Close _}{% endblock %}</button>
         {% wire id=#survey_close
                 action={overlay_close}
         %}
     {% elseif viewer == 'dialog' %}
-        <button id="{{ #survey_close }}" class="btn btn-lg btn-default">{_ Close _}</button>
+        <button id="{{ #survey_close }}" class="btn btn-lg btn-default">{% block survey_start_text_close_already_filled_dialog %}{_ Close _}{% endblock %}</button>
         {% wire id=#survey_close
                 action={dialog_close}
         %}
@@ -68,16 +72,16 @@
     {# Maximum number of submissions has been reached. #}
     <p class="alert alert-info">
         <span class="fa fa-exclamation-triangle"></span>
-        {_ The maximum number of submissions has been reached, you cannot fill this in anymore. _}
+        {% block survey_start_text_max_results %}{_ The maximum number of submissions has been reached, you cannot fill this in anymore. _}{% endblock %}
     </p>
 
     {% if viewer == 'overlay' %}
-        <button id="{{ #survey_close }}" class="btn btn-lg btn-default">{_ Close _}</button>
+        <button id="{{ #survey_close }}" class="btn btn-lg btn-default">{% block survey_start_text_close_max_results_overlay %}{_ Close _}{% endblock %}</button>
         {% wire id=#survey_close
                 action={overlay_close}
         %}
     {% elseif viewer == 'dialog' %}
-        <button id="{{ #survey_close }}" class="btn btn-lg btn-default">{_ Close _}</button>
+        <button id="{{ #survey_close }}" class="btn btn-lg btn-default">{% block survey_start_text_close_max_results_dialog %}{_ Close _}{% endblock %}</button>
         {% wire id=#survey_close
                 action={dialog_close}
         %}
@@ -101,18 +105,18 @@
 {% with m.survey.is_allowed_results_download[id] as is_download %}
 {% if id.is_editable or is_download %}
     <p>
-        <span class="text-muted">{_ Admin only _}:</span>
+        <span class="text-muted">{% block survey_start_text_admin_only %}{_ Admin only _}{% endblock %}:</span>
         {% if is_download %}
-            <a href="{% url survey_results id=id %}">{_ Show results _}</a>
+            <a href="{% url survey_results id=id %}">{% block survey_start_text_show_results %}{_ Show results _}{% endblock %}</a>
         {% endif %}
         {% if id.is_editable %}
             {% if is_download %}
                 <span class="text-muted">|</span>
             {% endif %}
             {% if {admin_frontend_edit id=id}|url as url %}
-                <a href="{{ url }}">{_ Edit _}</a>
+                <a href="{{ url }}">{% block survey_start_text_edit_frontend %}{_ Edit _}{% endblock %}</a>
             {% else %}
-                <a href="{% url admin_edit_rsc id=id %}">{_ Edit _}</a>
+                <a href="{% url admin_edit_rsc id=id %}">{% block survey_start_text_edit_admin %}{_ Edit _}{% endblock %}</a>
             {% endif %}
         {% endif %}
     </p>
@@ -128,7 +132,7 @@
                 const $form = $('.form-survey[data-id={{ id }}]');
                 if (!$form.hasClass('masked')) {
                     setTimeout(() => {
-                        $form.replaceWith('<p class="alert alert-info">{_ This form has been submitted in another tab, so your current session has been stopped. _}</p>');
+                        $form.replaceWith('<p class="alert alert-info">{% block survey_start_text_submitted_other_tab %}{_ This form has been submitted in another tab, so your current session has been stopped. _}{% endblock %}</p>');
                     }, 500);
                 }
             });

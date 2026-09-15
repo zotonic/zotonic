@@ -41,46 +41,55 @@
 
 {% block test_result %}
 	{% if max_points and id.survey_test_percentage and result %}
-    	{% with result.points >= max_points * (id.survey_test_percentage / 100) as is_passed %}
-	        <h2>
-	        	<br>
-	            {{ (result.points / max_points * 100)|round }}% &ndash;
-	            {% if is_passed %}
-	                {_ Passed _}
-	            {% else %}
-	                {_ Failed _}
-	            {% endif %}
-	        </h2>
-
-	        <table class="table" style="width: auto">
-	            <tr style="border-top: 1px solid #ccc">
-	                <td style="text-align: left; padding: 4px; vertical-align: top; border-top: 1px solid #dddddd;">{_ Points _}</td>
-	                <th valign="top" style="text-align: right; padding: 4px; vertical-align: top; border-top: 1px solid #dddddd;">{{ result.points }} / {{ max_points }}</th>
-	            </tr>
-	            <tr style="border-top: 1px solid #ccc">
-	                <td style="text-align: left; padding: 4px; vertical-align: top; border-top: 1px solid #dddddd;">{_ Needed for pass _}</td>
-	                <th valign="top" style="text-align: right; padding: 4px; vertical-align: top; border-top: 1px solid #dddddd;">{{ id.survey_test_percentage }}%</th>
-	            </tr>
-	            <tr style="border-top: 1px solid #ccc">
-	                <td style="text-align: left; padding: 4px; vertical-align: top; border-top: 1px solid #dddddd;">{_ Your result _}</td>
-	                <th valign="top" style="text-align: right; padding: 4px; vertical-align: top; border-top: 1px solid #dddddd;">{{ (result.points / max_points * 100)|round }}%</th>
-	            </tr>
-	        </table>
-
-	        <p>
-	        	<br/>
-	        	<br/>
-	        </p>
-        {% endwith %}
-    {% endif %}
+		{% with result.points >= max_points * (id.survey_test_percentage / 100) as is_passed %}
+		{# Inline styles and table layout keep the result summary compatible with email clients. #}
+		<table class="table" width="100%" cellspacing="0" cellpadding="0" style="width: 100%; border-collapse: collapse; margin: 24px 0; background-color: #f3f6fa; color: #243247; border: 1px solid #d8e1ec;">
+			<tr>
+				<td colspan="2" style="padding: 20px; border-top: 4px solid {% if is_passed %}#28734a{% else %}#a33a32{% endif %};">
+					<h2 style="margin: 0; font-size: 28px; line-height: 36px; color: {% if is_passed %}#28734a{% else %}#a33a32{% endif %};">
+						{{ (result.points / max_points * 100)|round }}% &ndash;
+						{% if is_passed %}
+							{_ Passed _}
+						{% else %}
+							{_ Failed _}
+						{% endif %}
+					</h2>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row" style="text-align: left; padding: 12px 20px; vertical-align: top; border-top: 1px solid #d8e1ec; font-weight: normal;">{_ Points _}</th>
+				<td style="text-align: right; padding: 12px 20px; vertical-align: top; border-top: 1px solid #d8e1ec; font-weight: bold;">{{ result.points }} / {{ max_points }}</td>
+			</tr>
+			<tr>
+				<th scope="row" style="text-align: left; padding: 12px 20px; vertical-align: top; border-top: 1px solid #d8e1ec; font-weight: normal;">{_ Needed for pass _}</th>
+				<td style="text-align: right; padding: 12px 20px; vertical-align: top; border-top: 1px solid #d8e1ec; font-weight: bold;">{{ id.survey_test_percentage }}%</td>
+			</tr>
+			<tr>
+				<th scope="row" style="text-align: left; padding: 12px 20px; vertical-align: top; border-top: 1px solid #d8e1ec; font-weight: normal;">{_ Your result _}</th>
+				<td style="text-align: right; padding: 12px 20px; vertical-align: top; border-top: 1px solid #d8e1ec; font-weight: bold;">{{ (result.points / max_points * 100)|round }}%</td>
+			</tr>
+			<tr>
+				<th scope="row" style="text-align: left; padding: 12px 20px; vertical-align: top; border-top: 1px solid #d8e1ec; font-weight: normal;">{_ Submitted _}</th>
+				<td style="text-align: right; padding: 12px 20px; vertical-align: top; border-top: 1px solid #d8e1ec;">
+					{{ result.created|date:_"Y-m-d H:i" }}
+					{% if result.modified > result.created %}
+						<span style="font-size: 13px;">({_ modified _} {{ result.modified|date:_"Y-m-d H:i" }})</span>
+					{% endif %}
+				</td>
+			</tr>
+		</table>
+		{% endwith %}
+	{% endif %}
 {% endblock %}
 
 {# Check email answers setting for result email #}
 {% if is_result_email
+	  or include_editor_only_answers
 	  or id.survey_email_answers|default:0 /= 3
 %}
 {# For tests, also follow the survey_show_results setting #}
 {% if is_result_email
+	or include_editor_only_answers
 	or max_points == 0
 	or id.survey_show_results|default:0 /= 3
 	or (
@@ -116,7 +125,8 @@
 			    	  and blk.type != 'survey_stop'
 			    	  and blk.name != 'survey_feedback'
 			   	%}
-			   		{% if include_open_questions
+						{% if blk.is_editor_only
+							or include_open_questions
 			   			  or (
 			   			  		blk.type != 'survey_short_answer'
 			   			  	and blk.type != 'survey_long_answer'
@@ -158,8 +168,9 @@
 							</td>
 						</tr>
 					{% elseif ans %}
-				   		{% if include_open_questions
-				   			  or (
+					{% if blk.is_editor_only
+						or include_open_questions
+						or (
 				   			  		blk.type != 'survey_short_answer'
 				   			  	and blk.type != 'survey_long_answer'
 				   			  )

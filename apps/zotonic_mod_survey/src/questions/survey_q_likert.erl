@@ -41,6 +41,7 @@ to_block(Q) ->
 answer(_SurveyId, Block, Answers, _Context) ->
     Name = maps:get(<<"name">>, Block, undefined),
     case proplists:get_value(Name, Answers) of
+        N when is_integer(N), N >= 1, N =< 5 -> {ok, [{Name, N}]};
         <<C>> when C >= $1, C =< $5 -> {ok, [{Name, C - $0}]};
         undefined -> {error, missing}
     end.
@@ -99,4 +100,21 @@ prep_answer(_Q, [{_Name, Value}|_], _Context) ->
 prep_block(B, _Context) ->
     B.
 
+
+-ifdef(TEST).
+-include_lib("eunit/include/eunit.hrl").
+
+answer_stored_integer_test() ->
+    Block = #{<<"name">> => <<"likert">>},
+    ?assertEqual(
+        {ok, [{<<"likert">>, 4}]},
+        answer(undefined, Block, [{<<"likert">>, 4}], undefined)).
+
+answer_submitted_binary_test() ->
+    Block = #{<<"name">> => <<"likert">>},
+    ?assertEqual(
+        {ok, [{<<"likert">>, 4}]},
+        answer(undefined, Block, [{<<"likert">>, <<"4">>}], undefined)).
+
+-endif.
 

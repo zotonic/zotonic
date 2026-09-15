@@ -68,7 +68,8 @@
 				{% with answers ++ answers_novalidate as answers_prefill %}
 					{% for blk in questions %}
 						{% if blk.is_editor_only and not id.is_editable %}
-							{% if blk.name|member:readonly_answer_blocks %}
+							<div class="survey-editor-only-answer">
+								<span class="survey-editor-only-label">{_ Editor only _}</span>
 								{% optional include ["blocks/_block_view_",blk.type,".tpl"]|join
 										id=id
 										blk=blk
@@ -79,15 +80,27 @@
 										nr=forloop.counter
 										is_survey_answer_view
 								%}
-							{% endif %}
-						{% else %}
-							{% optional include ["blocks/_block_view_",blk.type,".tpl"]|join
+							</div>
+						{% elseif blk.is_editor_only %}
+							<div class="survey-editor-only-answer">
+								<span class="survey-editor-only-label">{_ Editor only _}</span>
+								{% optional include ["blocks/_block_view_",blk.type,".tpl"]|join
 										id=id
 										blk=blk
 										answers=answers_prefill
-		                            answer_user_id=answer_user_id|default:m.acl.user
+					                            answer_user_id=answer_user_id|default:m.acl.user
 										editing=editing
 										nr=forloop.counter
+								%}
+							</div>
+						{% else %}
+							{% optional include ["blocks/_block_view_",blk.type,".tpl"]|join
+									id=id
+									blk=blk
+									answers=answers_prefill
+		                            answer_user_id=answer_user_id|default:m.acl.user
+									editing=editing
+									nr=forloop.counter
 							%}
 						{% endif %}
 					{% endfor %}
@@ -129,7 +142,12 @@
 				{% endif %}
 
 				{% if not editing or pages > 1 %}
-					{% if not id.survey_is_autostart or page_nr > 1 %}
+					{% if editing and viewer == 'dialog' %}
+						<button id="{{ #close_without_saving }}" class="btn btn-default" type="button">
+							{_ Close without saving _}
+						</button>
+						{% wire id=#close_without_saving action={dialog_close} %}
+					{% elseif not id.survey_is_autostart or page_nr > 1 %}
 						{% with (viewer == 'overlay')|if
 									:{overlay_close}
 									:(
@@ -172,12 +190,15 @@
 						{% endwith %}
 					{% endif %}
 				{% else %}
-					<button id="{{ #cancel }}" class="btn btn-lg btn-default" type="button">{_ Cancel _}</button>
+					<button id="{{ #cancel }}" class="btn btn-lg btn-default" type="button">{_ Close without saving _}</button>
 					{% wire id=#cancel action={dialog_close} %}
 				{% endif %}
 
 				{% if editing %}
-					<button type="submit" class="btn btn-primary btn-lg">{% if page_nr == pages %}{_ Submit _}{% else %}{_ Next _}{% endif %}</button>
+					<button type="submit" class="btn btn-primary btn-lg">{% if page_nr == pages %}{_ Save _}{% else %}{_ Next _}{% endif %}</button>
+					{% if page_nr == pages %}
+						<button type="submit" class="btn btn-primary btn-lg" name="submit-email">{_ Save &amp; Email _}</button>
+					{% endif %}
 				{% elseif not options.is_stop_page and not questions|survey_is_submit %}
 					{% if page_nr == pages or questions|survey_is_pagebreak_submit %}
 						<button type="submit" class="btn btn-primary btn-lg survey-submit">{_ Submit _}</button>
