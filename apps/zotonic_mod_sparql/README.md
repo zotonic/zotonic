@@ -212,6 +212,7 @@ TODO
  - [x] Add default Zotonic PREFIX (`zotonic:`) set to `http://zotonic.net/predicate/`
  - [x] Add Zotonic m_sparql model for querying
  - [x] Allow SPARQL query in search_query resources
+ - [ ] ACL checks for private properties, only allow 'administrator users' to query on private properties
  - [ ] Support EXISTS / NOT EXISTS inside compound and result expressions
  - [ ] Support language handling, using the JSON objects: { _type: "trans", tr = { "en":"..." } }, including LANG etc.
  - [ ] Add DATATYPE support
@@ -221,3 +222,4 @@ After merge:
  - [ ] Ensure the types of z_props, mod_rdf and search_facet are the same (bool -> boolean, int -> integer)
  - [ ] Import and export of Turtle, JSON-LD, and other formats (TBD)
  - [ ] Endpoint with: Turtle, JSON-LD, and other formats as output
+ - [ ] Fulltext query ranking, add options for trigram operator, thresholds and sorting (maybe named combos?)
