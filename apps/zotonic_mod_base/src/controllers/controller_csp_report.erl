@@ -48,9 +48,10 @@ the fields, delivery semantics and validation requirements.
     process/4
 ]).
 
--ifdef(TEST).
--export([is_extension_report/1, handle_report/3]).
--endif.
+% For testing
+-export([
+    is_extension_report/1, handle_report/3
+]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
