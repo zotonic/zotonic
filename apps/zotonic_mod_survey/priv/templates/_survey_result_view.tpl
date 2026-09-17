@@ -24,6 +24,12 @@
                     {% for blk in id.blocks %}
                         {% if question_name and blk.name != question_name %}
                             {# A caller can limit a result dialog to one question block. #}
+                        {% elseif blk.name == 'survey_feedback'
+                                or blk.type|member:['survey_page_break', 'survey_page_options', 'survey_stop']
+                        %}
+                            {# Post-submit content and survey controls are not answers. #}
+                        {% elseif blk.is_hide_result %}
+                            {# Question was opted-out from the results. #}
                         {% elseif blk.is_editor_only %}
                             <div class="survey-editor-only-answer">
                                 <span class="survey-editor-only-label">{_ Editor only _}</span>
@@ -36,8 +42,6 @@
                                     nr=forloop.counter
                                 %}
                             </div>
-                        {% elseif blk.is_hide_result %}
-                            {# Question was opted-out from the results #}
                         {% elseif blk.type == 'header' or blk.type == 'text' %}
                             {% optional include ["blocks/_block_view_",blk.type,".tpl"]|join
                                 id=id
@@ -100,7 +104,15 @@
 
                 <fieldset class="survey-result-answers">
                     {% for blk in id.blocks %}
-                        {% if (not question_name or blk.name == question_name) and (blk.type == 'header' or blk.type == 'text' or blk.name|member:result.answered_blocks) %}
+                        {% if question_name and blk.name != question_name %}
+                            {# A caller can limit a result dialog to one question block. #}
+                        {% elseif blk.name == 'survey_feedback'
+                                or blk.type|member:['survey_page_break', 'survey_page_options', 'survey_stop']
+                        %}
+                            {# Post-submit content and survey controls are not answers. #}
+                        {% elseif blk.is_hide_result %}
+                            {# Question was opted-out from the results. #}
+                        {% elseif blk.type == 'header' or blk.type == 'text' or blk.name|member:result.answered_blocks %}
                             {% optional include ["blocks/_block_view_",blk.type,".tpl"]|join
                                 id=id
                                 blk=blk

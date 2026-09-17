@@ -156,7 +156,9 @@ all respondent answers are read-only and unanswered respondent questions are
 omitted. Its `survey_result_view_save` event accepts only status and
 editor-only values. Both this view and the final page of the full paged editor
 offer **Save & Email**; the extra mail is sent only after the same server-side
-answer-edit permission check as a normal save.
+answer-edit permission check as a normal save. Post-submit content such as the
+reserved `survey_feedback` block, and resultless survey flow-control blocks,
+are omitted from the saved-answer view.
 
 Both status templates accept an optional `status_labels` list for values 0
 through 5. Without labels they show only the color swatches. For example:
