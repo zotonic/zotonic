@@ -74,7 +74,10 @@
     report_sample = false :: boolean()
 }).
 
-%% @doc A content-security report, received by the report controller.
+%% @doc A CSP violation accepted by controller_csp_report after site URL checks
+%% and browser extension filtering. Observers receive the untrusted report body
+%% with binary JSON keys. See zotonic_observer:observe_content_security_report/2.
+%% Type: notify_sync
 -record(content_security_report, {
     type :: binary(),
     url :: binary(),
