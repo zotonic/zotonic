@@ -65,7 +65,7 @@
                     {% endfor %}
                 </fieldset>
 
-                <div class="modal-footer">
+                <div class="modal-footer modal-footer-sticky">
                     {% optional include extra_actions_template
                         id=id
                         answer_id=answer_id
@@ -112,7 +112,7 @@
                         {% endif %}
                     {% endfor %}
                 </fieldset>
-                <div class="modal-footer">
+                <div class="modal-footer modal-footer-sticky">
                     {% optional include extra_actions_template
                         id=id
                         answer_id=answer_id

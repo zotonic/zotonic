@@ -122,8 +122,8 @@
 			{% endif %}
 		</div>
 
-		{% if editing and pages == 1 %}
-			<div class="modal-footer">
+		{% if editing and viewer == 'dialog' %}
+			<div class="modal-footer modal-footer-sticky">
 		{% else %}
 			<div class="form-actions">
 		{% endif %}
