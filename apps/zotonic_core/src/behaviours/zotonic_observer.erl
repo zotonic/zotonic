@@ -154,20 +154,37 @@ Type:
 
 [notify_sync](/id/doc_developerguide_notifications#notification-notify-sync)
 
-This is called when a content security report is received by the report controller.
-The notification contains the type, url and body of the report.
+`controller_csp_report` forwards each accepted Reporting API CSP violation using
+`z_notifier:notify_sync/2`. It checks that the request origin (or the Referer when
+the origin is `null`) and the report URL are HTTPS URLs belonging to the site.
+The report must have type `csp-violation` and a map as its body.
 
-Be aware that the content security report may contain untrusted data, so make sure to
-properly sanitize any output when handling this notification. The `url` field is
-sanitized and checked if it indeed belongs to the site, but the `body` field is not
-sanitized by Zotonic and may contain any data.
+Reports with a `blockedURL` or `sourceFile` using `safari-extension:`,
+`safari-web-extension:`, `chrome-extension:`, `moz-extension:` or
+`ms-browser-extension:` are ignored before notification delivery. Inline and eval
+violations without an identifiable extension URL are still forwarded.
+
+Export `observe_content_security_report/2` in an active module to receive reports,
+or `pid_observe_content_security_report/3` for an observer that also receives the
+module process PID. Observer functions run synchronously in the request process;
+their return values are ignored. Keep handling brief or delegate expensive work
+to a worker. `mod_logging` uses the PID observer to store reports for the admin log.
+
+All report data is browser-supplied and untrusted. The `url` is checked for site
+membership, but is not escaped for output. The body is passed through unchanged:
+validate field types and sanitize or escape data before storing or displaying it.
+The origin and URL checks do not authenticate the sender.
 
 `#content_security_report{}` properties:
 
-*   type: `binary`
-*   url: `binary`
-*   body: `map`
-*   user_agent: `binary`
+*   `type`: `binary`, currently `<<\"csp-violation\">>`.
+*   `url`: `binary`, the top-level report URL, checked to belong to the site.
+*   `body`: `map`, the original report body with binary JSON keys, such as
+    `<<\"blockedURL\">>`, `<<\"sourceFile\">>`, `<<\"documentURL\">>`,
+    `<<\"effectiveDirective\">>`, `<<\"originalPolicy\">>`, `<<\"sample\">>`,
+    `<<\"lineNumber\">>` and `<<\"columnNumber\">>`. Fields may be absent.
+*   `user_agent`: `binary`, taken from `body.user_agent` when present, otherwise
+    from the request's `User-Agent` header, and converted to a binary.
 
 See also: https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy/report-to
 ").

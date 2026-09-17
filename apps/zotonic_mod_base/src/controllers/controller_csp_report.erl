@@ -29,6 +29,16 @@ Controller handling Content-Security-Policy reports.
 
 Set in the `report-to` header of your Content-Security-Policy the
 URL to this controller to receive reports about policy violations.
+
+Reports whose blocked URL or source file uses a known browser extension scheme
+are ignored. Inline and eval violations without an extension URL are retained,
+as they cannot reliably be distinguished from site violations.
+
+Accepted reports are forwarded with `z_notifier:notify_sync/2` as
+`#content_security_report{}` notifications. Modules can export
+`observe_content_security_report/2` or `pid_observe_content_security_report/3`
+to receive them. See `zotonic_observer:observe_content_security_report/2` for
+the fields, delivery semantics and validation requirements.
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 
@@ -37,6 +47,10 @@ URL to this controller to receive reports about policy violations.
     content_types_accepted/1,
     process/4
 ]).
+
+-ifdef(TEST).
+-export([is_extension_report/1, handle_report/3]).
+-endif.
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
@@ -80,7 +94,16 @@ handle_report(Origin, #{
         <<"type">> := <<"csp-violation">> = Type,
         <<"url">> := ReportUrl,
         <<"body">> := ReportBody
-    }, Context) ->
+    }, Context) when is_map(ReportBody) ->
+    case is_extension_report(ReportBody) of
+        true -> ok;
+        false -> forward_report(Origin, Type, ReportUrl, ReportBody, Context)
+    end;
+handle_report(_Origin, _Report, _Context) ->
+    % Ignore other reports
+    ok.
+
+forward_report(Origin, Type, ReportUrl, ReportBody, Context) ->
     case is_site_url(ReportUrl, Context) of
         true ->
             UserAgent = maps:get(<<"user_agent">>, ReportBody,
@@ -104,10 +127,25 @@ handle_report(Origin, #{
                 origin => Origin,
                 report_url => ReportUrl
             })
-    end;
-handle_report(_Origin, _Report, _Context) ->
-    % Ignore other reports
-    ok.
+    end.
+
+%% Only explicit extension URLs identify extension noise reliably. Do not match
+%% extension names in samples or ordinary HTTP URLs, or suppress inline/eval.
+-spec is_extension_report(ReportBody) -> boolean() when
+    ReportBody :: map().
+is_extension_report(ReportBody) ->
+    lists:any(
+        fun(Key) -> is_extension_url(maps:get(Key, ReportBody, undefined)) end,
+        [ <<"blockedURL">>, <<"sourceFile">> ]).
+
+-spec is_extension_url(Url) -> boolean() when
+    Url :: term().
+is_extension_url(<<"safari-extension:", _/binary>>) -> true;
+is_extension_url(<<"safari-web-extension:", _/binary>>) -> true;
+is_extension_url(<<"chrome-extension:", _/binary>>) -> true;
+is_extension_url(<<"moz-extension:", _/binary>>) -> true;
+is_extension_url(<<"ms-browser-extension:", _/binary>>) -> true;
+is_extension_url(_Url) -> false.
 
 is_site_url(<<"https://", _/binary>> = Url, Context) -> z_context:is_site_url(Url, Context);
 is_site_url(_Url, _Context) -> false.
