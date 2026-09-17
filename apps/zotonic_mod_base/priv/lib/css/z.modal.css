@@ -21,7 +21,7 @@ div.modal-body div.modal-footer.modal-footer-sticky {
   position: sticky;
   bottom: 0;
   z-index: 1;
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.5);
 }
 /* modal overlay - full screen dialog - below normal dialog */
 .modal-overlay {
