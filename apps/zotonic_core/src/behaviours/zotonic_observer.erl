@@ -100,7 +100,7 @@ Check and possibly modify the http response security headers All headers are in 
 
 Type:
 
-[first](/id/doc_developerguide_notifications#notification-first)
+[foldr](/id/doc_developerguide_notifications#notification-foldr)
 
 Return:
 
