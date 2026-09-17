@@ -88,6 +88,7 @@ install(Context) ->
         Context).
 
 install_models(Context) ->
+    ok = m_rsc:install(Context),
     m_rsc_gone:install(Context),
     m_rsc_import:install(Context).
 

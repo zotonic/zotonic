@@ -9,14 +9,14 @@
     <h2>{_ Deleted pages _}</h2>
 
     <p>
-        {_ List of recently deleted pages found in the resource revisions log. _}<br>
-        {_ You can select a revision to revover. _}
+        {_ Deleted pages you have permission to edit. _}<br>
+        {_ You can select a revision to recover. _}
         {_ Note that files are only retained for 5 weeks after deletion, this is the same as the Zotonic database backup retention period. _}<br>
         {_ If the Cloud File Store module is used, then deleted files can be retained indefinitely. _}
     </p>
 </div>
 
-{% if m.acl.use.mod_backup %}
+{% if m.acl.use.mod_admin %}
     {% with m.search.backup_deleted::%{ page: q.page } as result %}
         <table class="table table-striped do_adminLinkedTable">
             <thead>
@@ -38,19 +38,18 @@
                     </th>
                     <th width="15%" class="hidden-xs">
                         {_ Created by _}
-                    </th
-                    <th>
-                    </tr>
+                    </th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
                 {% for r in result.result %}
-                    <tr class="do_clickable" data-href="{% url admin_backup_revision id=r.rsc_id %}">
+                    <tr class="do_clickable" data-href="{% url admin_backup_revision id=r.id %}">
                         <td>
-                            {% if r.data.title %}
-                                {{ r.data.title }}
+                            {% if r.title %}
+                                {{ r.title|escape }}
                             {% else %}
-                                {{ r.rsc_id }}
+                                {{ r.id }}
                             {% endif %}
 
                             {% if r.new_id %}
@@ -63,26 +62,24 @@
                             {% endif %}
                         </td>
                         <td>
-                            {{ m.rsc[r.data.category_id].title|default:_"<i>Unknown</i>" }}
+                            {{ m.rsc[r.category_id].title|default:r.references.category_id.title|escape|default:_"Unknown" }}
                         </td>
                         <td>
-                            {{ r.created|date:"Y-m-d H:i" }}
+                            {{ r.modified|date:"Y-m-d H:i" }}
                         </td>
                         <td>
-                            {{ r.data.modified|date:"Y-m-d H:i" }}
+                            {{ r.resource_modified|date:"Y-m-d H:i" }}
                         </td>
                         <td>
-                            {% if m.rsc[r.user_id].exists %}
-                                {% include "_name.tpl" id=r.user_id %}
-                            {% else %}
-                                <span class="text-muted">{{ r.user_name|escape }}</span>
-                            {% endif %}
+                            {% with r.deleter_id|default:r.modifier_id as deleter_id %}
+                                {{ m.rsc[m.rsc_gone[deleter_id].followup].title }}
+                            {% endwith %}
                         </td>
                         <td>
-                            {% include "_name.tpl" id=r.data.creator_id %}
+                            {{ m.rsc[m.rsc_gone[r.creator_id].followup].title }}
                         </td>
                         <td>
-                            <a href="{% url admin_backup_revision id=r.rsc_id %}" class="btn btn-xs btn-default">{_ Recover _}</a>
+                            <a href="{% url admin_backup_revision id=r.id %}" class="btn btn-xs btn-default">{_ Revisions _}</a>
                         </td>
                     </tr>
                 {% endfor %}
@@ -92,7 +89,7 @@
         {% pager result=result qargs %}
     {% endwith %}
 {% else %}
-    <div class="alert alert-info">{_ You need to have access rights to the backup module. _}</div>
+    <div class="alert alert-info">{_ You need access to the admin. _}</div>
 {% endif %}
 
 {% endblock %}

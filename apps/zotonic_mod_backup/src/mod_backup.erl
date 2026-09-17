@@ -110,8 +110,48 @@ After this the site will restart.
 Because the file `priv/BACKUP` is present the environment of the site will be forced to `backup` and the site will start
 checking again for a new backup.
 
-If a failover is needed, then change the DNS to point to the new server, remove the `priv/BACKUP` file and restart the
-site to start the site normally.
+If a failover is needed, then:
+
+ 1. change the DNS to point to the new server; and
+ 2. remove the `priv/BACKUP` file; and
+ 3. restart the site to start the site normally.
+
+
+Command-line backups
+--------------------
+
+Run these commands from the Zotonic installation directory. The `backup` commands connect to a running
+Zotonic node and require `mod_backup` to be enabled for the named site. Replace `mysite` with the site name.
+
+| Command | Description |
+| --- | --- |
+| `bin/zotonic backup mysite list` | List available backups and their names and file metadata. |
+| `bin/zotonic backup mysite start` | Start a backup in the background using the site's backup configuration. Reports an error if a backup is already running. |
+| `bin/zotonic backup mysite restore BACKUP_NAME` | Restore the backup identified by a name from `list`. |
+| `bin/zotonic backup mysite restore recent` | Restore the most recent available backup. |
+| `bin/zotonic backup mysite download` | Download and restore the newest backup from the configured filestore. Requires the site's environment to be `backup`. |
+
+Both `restore` and `download` ask you to type the site name to confirm. The site is unavailable during
+restoration and restarts afterwards. The `download` command starts the download and restoration in the
+background; its return does not mean that restoration has finished.
+
+The `restore` command also asks which configuration and security files to restore. Database and media
+files are always selected. Press Enter or type `N` to keep the current configuration and security files,
+`c` to restore configuration, `s` to restore certificates and other security files, or `a` to restore both.
+The `download` command follows the replication and failover workflow described above.
+
+Encrypted backup files can be decrypted separately:
+
+```sh
+bin/zotonic decrypt PASSWORD BACKUP_FILE.enc
+bin/zotonic decrypt PASSWORD BACKUP_FILE.enc OUTPUT_FILE
+```
+
+The password is the backup encryption password (`mod_backup.backup_encrypt_password`). If no output
+filename is given, the command removes the `.enc` suffix to determine the output filename. Decryption
+operates on local files and does not require a running site. It decrypts the file; it does not restore
+the database or unpack the archive.
+
 
 Accepted Events
 ---------------
@@ -127,7 +167,7 @@ This module handles the following notifier callbacks:
 - `observe_edge_insert`: Record edge insertions as backup revisions for changed resources.
 - `observe_m_config_update`: Toggle revision backup behavior immediately when backup config flags change.
 - `observe_media_update_done`: Store a backup revision when media metadata or file references are updated.
-- `observe_rsc_delete`: Preserve media revision data before deleting resources that own media.
+- `observe_rsc_delete`: Preserve media and complete resource revisions, including URI aliases and deleted-page metadata, before resource deletion.
 - `observe_rsc_update_done`: Save a resource revision snapshot after successful updates.
 - `observe_rsc_upload`: Include uploaded files in backup revision tracking and metadata.
 - `observe_search_query`: Provide module-specific search query handlers with ACL-aware filtering.
@@ -142,7 +182,7 @@ This module handles the following notifier callbacks:
 -mod_prio(600).
 -mod_provides([backup]).
 -mod_depends([]).
--mod_schema(4).
+-mod_schema(6).
 -mod_config([
         #{
             key => daily_dump,
@@ -240,7 +280,8 @@ This module handles the following notifier callbacks:
     backup_in_progress/1,
     is_uploading/1,
 
-    manage_schema/2
+    manage_schema/2,
+    manage_data/2
 ]).
 
 
@@ -287,28 +328,30 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
         % Menu to view and recover deleted pages
         #menu_separator{
             parent = admin_content,
-            visiblecheck = {acl, use, mod_backup},
+            visiblecheck = {acl, use, mod_admin},
             sort=2000000
         },
         #menu_item{id=admin_backup_deleted,
             parent = admin_content,
             label = ?__("Deleted pages", Context),
             url = {admin_backup_deleted},
-            visiblecheck = {acl, use, mod_backup},
+            visiblecheck = {acl, use, mod_admin},
             sort=2000000
         }
         | Acc
     ].
 
 observe_rsc_delete(#rsc_delete{ id = Id }, Context) ->
-    m_backup_revision:medium_delete_check(Id, Context).
+    m_backup_revision:medium_delete_check(Id, Context),
+    % Deletion is already authorized and holds the resource lock. Preserve all
+    % properties before deletion cascades to the URI aliases, regardless of view ACLs.
+    {ok, Props} = m_rsc:get_raw(Id, Context),
+    m_backup_revision:save_deleted(Id, Props, Context).
 
 observe_rsc_update_done(#rsc_update_done{ action = insert, id = Id, post_props = Props }, Context) ->
     m_backup_revision:save_revision(Id, Props, Context);
 observe_rsc_update_done(#rsc_update_done{ action = update, id = Id, post_props = Props }, Context) ->
     m_backup_revision:save_revision(Id, Props, Context);
-observe_rsc_update_done(#rsc_update_done{ action = delete, id = Id, pre_props = Props }, Context) ->
-    m_backup_revision:save_deleted(Id, Props, Context);
 observe_rsc_update_done(#rsc_update_done{}, _Context) ->
     ok.
 
@@ -327,12 +370,7 @@ observe_media_update_done(#media_update_done{ id = Id, action = delete, pre_prop
 
 
 observe_search_query(#search_query{ name = <<"backup_deleted">>, offsetlimit = OffsetLimit }, Context) ->
-    case z_acl:is_allowed(use, mod_backup, Context) of
-        true ->
-            m_backup_revision:list_deleted(OffsetLimit, Context);
-        false ->
-            []
-    end;
+    m_backup_revision:list_deleted(OffsetLimit, Context);
 observe_search_query(#search_query{}, _Context) ->
     undefined.
 
@@ -529,8 +567,25 @@ backup_in_progress(Context) ->
 is_uploading(Context) ->
     gen_server:call(z_utils:name_for_site(?MODULE, Context), is_uploading).
 
+manage_schema(install, Context) ->
+    ok = m_backup_revision:install(Context),
+    % Datamodel reinstalls also use 'install'. Only initialize migration before
+    % the module manager has recorded the first installed schema version.
+    case z_db:q1("select schema_version from module where name = $1", [?MODULE], Context) =:= undefined
+        andalso z_db:q1("select exists(select 1 from rsc_gone)", Context)
+    of
+        true -> backup_gone_migration:start(Context);
+        false -> ok
+    end;
+manage_schema({upgrade, 6}, Context) ->
+    ok = m_backup_revision:install(Context),
+    backup_gone_migration:start(Context);
 manage_schema(_Version, Context) ->
     m_backup_revision:install(Context).
+
+%% Schema changes are committed before the module manager calls manage_data/2.
+manage_data(_Version, Context) ->
+    backup_gone_migration:resume(Context).
 
 
 %%====================================================================
@@ -555,6 +610,7 @@ init(Args) ->
     {context, Context} = proplists:lookup(context, Args),
     z_context:logger_md(Context),
     IsEnvBackup = (m_site:environment(Context) =:= backup),
+    ok = backup_gone_migration:resume(Context),
     % A jobs queue to ensure that we only run a single Database dump at a time.
     ensure_job_queue(?MODULE, [ {regulators, [{counter, [{limit, 1} ]} ]} ]),
     ensure_job_queue(?CONFIG_UPDATE_JOB, [ {regulators, [{counter, [{limit, 1} ]} ]} ]),

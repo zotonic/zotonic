@@ -321,6 +321,7 @@ This module handles the following notifier callbacks:
 - `observe_acl_logoff`: Clear cached ACL group state from the context on logoff.
 - `observe_acl_logon`: Populate ACL group state for the logging-in user.
 - `observe_acl_max_upload_size`: Return the ACL configured maximum upload size for the current user.
+- `observe_acl_rsc_gone_sql`: Build SQL predicates for deleted resources using update permissions on their saved ACL fields and ownership.
 - `observe_acl_user_groups`: Return the full effective user-group list for the current user.
 - `observe_admin_menu`: Add admin menu entries for User groups, Collaboration groups, and Access control rules.
 - `observe_edge_delete`: Log removal of `hasusergroup`, `hascollabmember`, and `hascollabmanager` membership edges.
@@ -405,6 +406,7 @@ Delegate callbacks:
     event/2,
 
     observe_acl_is_owner/2,
+    observe_acl_rsc_gone_sql/2,
     observe_acl_is_allowed/2,
     observe_acl_is_allowed_prop/2,
     observe_acl_logon/2,
@@ -1191,3 +1193,8 @@ manage_data(_Version, _Context) ->
 
 page_actions(Actions, Context) ->
     z_notifier:first(#page_actions{ actions = Actions }, Context).
+
+
+%% @doc Filter deleted resources by saved update permissions, not publication visibility.
+observe_acl_rsc_gone_sql(#acl_rsc_gone_sql{ alias = Alias }, Context) ->
+    acl_user_groups_checks:gone_sql(Alias, Context).
