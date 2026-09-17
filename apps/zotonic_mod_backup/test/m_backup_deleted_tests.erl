@@ -396,7 +396,15 @@ templates(Context) ->
     lists:foreach(fun(T) ->
         {ok, _} = z_template:template_module(T, #{}, Context)
     end, [<<"admin_backup_deleted.tpl">>, <<"admin_backup_revision.tpl">>,
-          <<"_dialog_backup_revert_confirm.tpl">>]),
+          <<"_admin_backup_diff.tpl">>, <<"_dialog_backup_revert_confirm.tpl">>]),
+    lists:foreach(fun({RscId, Text, Class}) ->
+        {ButtonHtml, _} = z_template:render_to_iolist(<<"_admin_backup_diff.tpl">>,
+            [{a, #{id => 1, rsc_id => RscId}}], Context),
+        Button = iolist_to_binary(ButtonHtml),
+        ?assertNotEqual(nomatch, binary:match(Button, Text)),
+        ?assertNotEqual(nomatch, binary:match(Button, Class))
+    end, [{1, <<"Revert to this version...">>, <<"btn-danger">>},
+          {undefined, <<"Restore this page...">>, <<"btn-primary">>}]),
     _ = z_template:render_block(content, <<"admin_backup_deleted.tpl">>, [], Context),
     Id = z_db:q1("select rsc_id from backup_revision order by id desc limit 1", Context),
     {Html, _} = z_template:render_to_iolist(<<"_dialog_backup_revert_confirm.tpl">>,

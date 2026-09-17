@@ -6,7 +6,11 @@
         delegate=`controller_admin_backup_revision`
 %}
 <form class="form" id="revertconfirm" action="postback">
-    <p>{_ Are you sure you want to revert to this version? _}</p>
+    {% if rsc_id.exists %}
+        <p>{_ Are you sure you want to revert to this version? _}</p>
+    {% else %}
+        <p>{_ Are you sure you want to restore this deleted page using the selected version? _}</p>
+    {% endif %}
     <p class="help-block">{_ Recovering a deleted page requires permission to create pages in the selected category and content group. _}</p>
 
     {% if restore.category_id.is_missing or restore.content_group_id.is_missing %}
@@ -62,7 +66,7 @@
 
     <div class="modal-footer">
         {% button class="btn btn-default" action={dialog_close} text=_"Cancel" type="button" %}
-        <button class="btn btn-primary" type="submit">{_ Revert _}</button>
+        <button class="btn btn-primary" type="submit">{% if rsc_id.exists %}{_ Revert _}{% else %}{_ Restore page _}{% endif %}</button>
     </div>
 </form>
 

@@ -22,6 +22,7 @@
 	<tr>
 		<td></td>
 		<td colspan="2">
+			{% if a.rsc_id.exists %}
 			{% button
                 text=[_"Revert to this version..."]
                 class="btn btn-danger"
@@ -32,6 +33,18 @@
 					rev_id=a.id
 				}
 			%}
+			{% else %}
+			{% button
+                text=[_"Restore this page..."]
+                class="btn btn-primary"
+				action={dialog_open
+					title=_"Restore deleted page"
+					template="_dialog_backup_revert_confirm.tpl"
+					rsc_id=a.rsc_id
+					rev_id=a.id
+				}
+			%}
+			{% endif %}
 		</td>
 	</tr>
 {% endif %}
