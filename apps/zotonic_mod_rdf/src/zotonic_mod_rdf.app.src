@@ -2,7 +2,7 @@
     {description, "RDF for Zotonic data."},
     {vsn, {file, "../../VERSION"}},
     {registered, []},
-    {applications, [kernel, stdlib, zotonic_core]},
+    {applications, [kernel, stdlib, zotonic_core, zotonic_jsonld, zotonic_turtle]},
     {env, []},
     {modules, []},
     {doc, "doc"},

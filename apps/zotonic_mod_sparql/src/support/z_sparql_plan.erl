@@ -112,9 +112,6 @@
     context :: z:context()          % just to make the calls a bit more compact
 }).
 
-%% Zotonic namespace, do not use NS_... as this will clash with binary zotonic_rdf defines.
--define(NAMESPACE_ZOTONIC, "http://zotonic.net/predicate/").
-
 
 %% @doc Make a normalized query plan from a parsed SPARQL SELECT query.
 %% Predicates in the plan contain the result of the sparql_mapping notification.
@@ -181,7 +178,7 @@ default_state(Context) ->
         namespaces = #{
             <<>> => SiteNamespace,
             <<"site">> => SiteNamespace,
-            <<"zotonic">> => <<?NAMESPACE_ZOTONIC>>
+            ?PREFIX_ZOTONIC => ?NS_ZOTONIC
         },
         context = Context
     }.

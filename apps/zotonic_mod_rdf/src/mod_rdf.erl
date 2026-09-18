@@ -29,13 +29,14 @@
 Resolve RDF namespaces used when mapping Zotonic data to RDF vocabulary terms.
 
 The module observes the `rdf_ns` notification and returns a compact prefix for
-a known namespace. It recognizes these site-specific mappings:
+a known namespace. It recognizes these mappings:
 
 | Namespace | Prefix |
 | --- | --- |
 | `http://zotonic.net/predicate/` | `zotonic` |
 | The local resource URI namespace from `m_rsc:uri_prefix/1` | `site` |
 
+The Zotonic prefix and namespace are defined centrally in `zotonic_rdf`.
 Other namespaces are resolved through `zotonic_rdf:ns_compact/1`. A recognized
 namespace returns `{ok, Prefix}` without a trailing colon. An unknown namespace
 returns `undefined`, allowing other notification observers to provide a mapping.
@@ -50,9 +51,11 @@ It handles predicate-to-property and predicate-to-edge mappings through the
 
 The core `m_rdf` model provides JSON-LD summary maps for resources, including
 Schema.org properties and translated variants. The `zotonic_rdf` library supplies
-shared vocabulary and namespace utilities. See those APIs for resource summaries
-and vocabulary handling; enabling this module does not install an RDF import
-service or a SPARQL protocol endpoint.
+shared vocabulary and namespace utilities. The `zotonic_jsonld` and
+`zotonic_turtle` applications parse and generate documents with those standard
+prefixes; JSON-LD contexts are expanded before normalization. See those APIs for
+serialization options and supported formats. Enabling this module does not install
+an RDF import service or a SPARQL protocol endpoint.
 ").
 
 -mod_title("RDF").
@@ -68,11 +71,6 @@ service or a SPARQL protocol endpoint.
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-%% @todo Check this and if ok then move to zotonic_rdf app.
--define(NS_ZOTONIC, <<"http://zotonic.net/predicate/">>).
-
-observe_rdf_ns(#rdf_ns{ ns = ?NS_ZOTONIC }, _Context) ->
-    {ok, <<"zotonic">>};
 observe_rdf_ns(#rdf_ns{ ns = NS }, Context) ->
     case NS =:= m_rsc:uri_prefix(Context) of
         true ->

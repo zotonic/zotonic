@@ -278,9 +278,9 @@ TODO
  - [ ] ACL checks for private properties, only allow 'administrator users' to query on private properties
  - [ ] Support language handling, using the JSON objects: { _type: "trans", tr = { "en":"..." } }, including LANG etc.
  - [ ] Add SPARQL endpoint, with expected results (for use with 3rd parties -- check API standards)
+ - [ ] Check usage of rsc props_json vs props, migrate to props_json (accept both for now)
+ - [ ] Ensure the types of z_props, mod_rdf and search_facet are the same (bool -> boolean, int -> integer)
 
 After merge:
- - [ ] Check gebruik props_json vs props
- - [ ] Ensure the types of z_props, mod_rdf and search_facet are the same (bool -> boolean, int -> integer)
  - [ ] Endpoint with: Turtle, JSON-LD, and other formats as output
  - [ ] Fulltext query ranking, add options for trigram operator, thresholds and sorting (maybe named combos?)
