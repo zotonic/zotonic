@@ -54,7 +54,7 @@ parser_error_test() ->
 
 blank_node_property_list_test() ->
     {ok, _} = application:ensure_all_started(zotonic_notifier),
-    Context = z_context:new(zotonic_site_testsandbox),
+    Context = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
     ok = z_notifier:observe(rdf_ns, {?MODULE, observe_rdf_ns}, 100, Context),
     ok = z_notifier:observe(sparql_mapping, {?MODULE, observe_sparql_mapping}, 100, Context),
     try
@@ -97,7 +97,7 @@ blank_node_property_list_test() ->
 
 inverse_predicate_path_test() ->
     {ok, _} = application:ensure_all_started(zotonic_notifier),
-    Context = z_context:new(zotonic_site_testsandbox),
+    Context = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
     ok = z_notifier:observe(rdf_ns, {?MODULE, observe_rdf_ns}, 100, Context),
     ok = z_notifier:observe(sparql_mapping, {?MODULE, observe_sparql_mapping}, 100, Context),
     try
@@ -147,7 +147,7 @@ zotonic_rsc_mapping_test() ->
 
 select_query_plan_test() ->
     {ok, _} = application:ensure_all_started(zotonic_notifier),
-    Context = z_context:new(zotonic_site_testsandbox),
+    Context = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
     ok = z_notifier:observe(rdf_ns, {?MODULE, observe_rdf_ns}, 100, Context),
     ok = z_notifier:observe(sparql_mapping, {?MODULE, observe_sparql_mapping}, 100, Context),
     try
@@ -201,7 +201,9 @@ non_select_query_plan_test() ->
     {ok, Query} = z_sparql:parse(<<"ASK WHERE {}">>),
     ?assertEqual(
         {error, {unsupported_query, ask}},
-        z_sparql_plan:to_query_plan(Query, z_context:new(zotonic_site_testsandbox))).
+        z_sparql_plan:to_query_plan(
+            Query,
+            z_acl:sudo(z_context:new(zotonic_site_testsandbox)))).
 
 observe_rdf_ns(#rdf_ns{ ns = <<"http://xmlns.com/foaf/0.1/">> }, _Context) ->
     {ok, <<"foaf">>};

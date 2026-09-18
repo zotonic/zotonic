@@ -61,7 +61,7 @@ sql_argument_binding_test() ->
                 "}"
             >>),
             {ok, Terms} = z_sparql_sql:to_sql_term(Query, #{ name => published, minimum => 10 }, Context),
-            #search_sql{ args = Args, where = Where } = z_search_terms:combine(Terms),
+            #search_sql{ args = Args, where = Where } = z_search_terms:combine(Terms, Context),
             ?assert(lists:member({term_json, <<"published">>}, Args)),
             ?assert(lists:member(10, Args)),
             ?assertNotEqual(nomatch, binary:match(Where, <<"::jsonb">>))
@@ -78,7 +78,8 @@ undefined_argument_test() ->
                 "}"
             >>),
             {ok, Terms} = z_sparql_sql:to_sql_term(Query, #{ name => undefined, optional => undefined }, Context),
-            #search_sql{ args = Args, where = Where, select = Select } = z_search_terms:combine(Terms),
+            #search_sql{ args = Args, where = Where, select = Select } =
+                z_search_terms:combine(Terms, Context),
             ?assertNot(lists:member({term_json, <<"undefined">>}, Args)),
             ?assertEqual(nomatch, binary:match(Where, <<"::jsonb">>)),
             ?assertNotEqual(nomatch, binary:match(Where, <<"NULL = ">>)),
@@ -88,7 +89,7 @@ undefined_argument_test() ->
 
 with_observers(Fun) ->
     {ok, _} = application:ensure_all_started(zotonic_notifier),
-    Context = z_context:new(zotonic_site_testsandbox),
+    Context = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
     ok = z_notifier:observe(rdf_ns, {?MODULE, observe_rdf_ns}, 100, Context),
     ok = z_notifier:observe(sparql_mapping, {?MODULE, observe_sparql_mapping}, 100, Context),
     try
@@ -100,7 +101,7 @@ with_observers(Fun) ->
 
 test_context() ->
     {ok, _} = application:ensure_all_started(zotonic_notifier),
-    z_context:new(zotonic_site_testsandbox).
+    z_acl:sudo(z_context:new(zotonic_site_testsandbox)).
 
 observe_rdf_ns(#rdf_ns{ ns = <<"https://example.test/">> }, _Context) ->
     {ok, <<"test">>};

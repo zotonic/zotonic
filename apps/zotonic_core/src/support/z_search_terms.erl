@@ -22,6 +22,7 @@
 
 -export([
     combine/1,
+    combine/2,
 
     merge_args/2,
     map/2
@@ -30,20 +31,27 @@
 
 -include_lib("../../include/zotonic.hrl").
 
-combine(#search_sql_terms{ terms = Terms, post_func = PostFunc }) ->
-    Q = combine(Terms),
+combine(Terms) ->
+    combine(Terms, undefined).
+
+combine(#search_sql_terms{ terms = Terms, post_func = PostFunc }, Context) ->
+    Q = combine(Terms, Context),
     Q#search_sql{
         post_func = PostFunc
     };
-combine(Terms) when is_list(Terms) ->
+combine(Terms, Context) when is_list(Terms) ->
     % Map all arguments before splitting nested terms into subqueries. This
     % keeps the argument numbers unique across the complete query.
     {Terms1, Args} = map_tree_args(Terms),
     AllAliases = defined_aliases(Terms1),
-    Terms2 = compile_terms(Terms1, AllAliases, #{}),
+    {Terms2, Args1} = compile_terms(Terms1, AllAliases, #{}, Args, Context),
     Q0 = lists:foldr(fun merge_term/2, #search_sql_term{}, Terms2),
     Q1 = maybe_remove_default_select(Q0),
-    Q = Q1#search_sql_term{ args = Args },
+    Q = Q1#search_sql_term{ args = Args1 },
+    Sort = optimize_sort(
+        make_sort(Q#search_sql_term.asort, Q)
+        ++ make_sort(Q#search_sql_term.sort, Q)
+        ++ make_sort(Q#search_sql_term.zsort, Q)),
     From = iolist_to_binary([
         <<"rsc rsc">>,
         make_join(Q#search_sql_term.join_inner, "join"),
@@ -64,20 +72,56 @@ combine(Terms) when is_list(Terms) ->
         where = iolist_to_binary(lists:join(" AND ", Q#search_sql_term.where)),
         group_by = iolist_to_binary(lists:join(", ", Q#search_sql_term.group_by)),
         having = iolist_to_binary(lists:join(" AND ", Q#search_sql_term.having)),
-        order = iolist_to_binary(
-                    lists:join(", ",   make_sort(Q#search_sql_term.asort, Q)
-                                    ++ make_sort(Q#search_sql_term.sort, Q)
-                                    ++ make_sort(Q#search_sql_term.zsort, Q))),
+        order = iolist_to_binary(lists:join(", ", Sort)),
         args = Q#search_sql_term.args,
-        tables = [
-            {rsc, <<"rsc">>}
-        ],
+        tables = resource_tables(
+            Q#search_sql_term.tables,
+            Q#search_sql_term.join_inner,
+            Q#search_sql_term.join_left),
         cats = Q#search_sql_term.cats,
         cats_exact = Q#search_sql_term.cats_exact,
         cats_exclude = Q#search_sql_term.cats_exclude,
         extra = Q#search_sql_term.extra,
         search_sql_terms = Terms
     }.
+
+%% @doc Remove full-text rank expressions which are assumed not to affect the
+%% result after an explicit resource id, creation, or modification date sort.
+%% Keep other expressions, as a SPARQL result can contain multiple rows for the
+%% same resource.
+optimize_sort(Sort) ->
+    optimize_sort(Sort, false, []).
+
+optimize_sort([], _IsComplete, Acc) ->
+    lists:reverse(Acc);
+optimize_sort([Sort | Rest], true, Acc) ->
+    case is_fulltext_rank_sort(Sort) of
+        true -> optimize_sort(Rest, true, Acc);
+        false -> optimize_sort(Rest, true, [Sort | Acc])
+    end;
+optimize_sort([Sort | Rest], false, Acc) ->
+    optimize_sort(Rest, is_complete_sort(Sort), [Sort | Acc]).
+
+is_complete_sort(Sort) ->
+    case re:run(
+        iolist_to_binary(Sort),
+        <<"^\\s*rsc\\.(?:id|created|modified)(?:\\s+(?:asc|desc))?"
+          "(?:\\s+nulls\\s+(?:first|last))?\\s*$">>,
+        [caseless])
+    of
+        {match, _} -> true;
+        nomatch -> false
+    end.
+
+is_fulltext_rank_sort(Sort) ->
+    case re:run(
+        iolist_to_binary(Sort),
+        <<"(?:ts_rank(?:_cd)?|(?:public\\.)?word_similarity)\\s*\\(">>,
+        [caseless])
+    of
+        {match, _} -> true;
+        nomatch -> false
+    end.
 
 %% In group_by clauses we do not need the rsc.id select, which is always added
 %% by default (in the record definition).
@@ -152,42 +196,56 @@ find_edge_alias(Map) when is_map(Map) ->
 
 %% @doc Compile nested boolean terms. Aliases which are only used below an
 %% anyof or noneof boundary are kept inside the subquery.
-compile_terms(Terms, AllAliases, OutsideAliases) ->
-    compile_terms(Terms, AllAliases, OutsideAliases, #{}).
+compile_terms(Terms, AllAliases, OutsideAliases, Args, Context) ->
+    compile_terms(Terms, AllAliases, OutsideAliases, #{}, Args, Context).
 
-compile_terms([], _AllAliases, _OutsideAliases, _BeforeAliases) ->
-    [];
-compile_terms([Term | Rest], AllAliases, OutsideAliases, BeforeAliases) ->
+compile_terms([], _AllAliases, _OutsideAliases, _BeforeAliases, Args, _Context) ->
+    {[], Args};
+compile_terms([Term | Rest], AllAliases, OutsideAliases, BeforeAliases, Args0, Context) ->
     RestAliases = used_aliases(Rest, AllAliases),
     TermOutside = alias_union([OutsideAliases, BeforeAliases, RestAliases]),
-    Term1 = compile_term(Term, AllAliases, TermOutside),
+    {Term1, Args1} = compile_term(Term, AllAliases, TermOutside, Args0, Context),
     BeforeAliases1 = alias_union(BeforeAliases, used_aliases(Term, AllAliases)),
-    [Term1 | compile_terms(Rest, AllAliases, OutsideAliases, BeforeAliases1)].
+    {Rest1, Args2} = compile_terms(
+        Rest, AllAliases, OutsideAliases, BeforeAliases1, Args1, Context),
+    {[Term1 | Rest1], Args2}.
 
-compile_term(#search_sql_nested{ operator = <<"allof">>, terms = Terms }, AllAliases, OutsideAliases) ->
-    Terms1 = compile_terms(Terms, AllAliases, OutsideAliases),
-    combine_operator(<<"allof">>, Terms1);
-compile_term(#search_sql_nested{ operator = <<"anyof">>, terms = Terms }, AllAliases, OutsideAliases) ->
-    Terms1 = compile_alternatives(Terms, AllAliases, OutsideAliases),
-    scope_term(combine_operator(<<"anyof">>, Terms1), OutsideAliases, exists, AllAliases);
-compile_term(#search_sql_nested{ operator = <<"noneof">>, terms = Terms }, AllAliases, OutsideAliases) ->
-    Terms1 = compile_alternatives(Terms, AllAliases, OutsideAliases),
-    scope_noneof(combine_operator(<<"anyof">>, Terms1), OutsideAliases, AllAliases);
-compile_term(#search_sql_term{} = Term, _AllAliases, _OutsideAliases) ->
-    Term.
+compile_term(#search_sql_nested{ operator = <<"allof">>, terms = Terms },
+        AllAliases, OutsideAliases, Args0, Context) ->
+    {Terms1, Args1} = compile_terms(Terms, AllAliases, OutsideAliases, Args0, Context),
+    {combine_operator(<<"allof">>, Terms1), Args1};
+compile_term(#search_sql_nested{ operator = <<"anyof">>, terms = Terms },
+        AllAliases, OutsideAliases, Args0, Context) ->
+    {Terms1, Args1} = compile_alternatives(
+        Terms, AllAliases, OutsideAliases, Args0, Context),
+    scope_term(
+        combine_operator(<<"anyof">>, Terms1),
+        OutsideAliases, exists, AllAliases, Args1, Context);
+compile_term(#search_sql_nested{ operator = <<"noneof">>, terms = Terms },
+        AllAliases, OutsideAliases, Args0, Context) ->
+    {Terms1, Args1} = compile_alternatives(
+        Terms, AllAliases, OutsideAliases, Args0, Context),
+    scope_noneof(
+        combine_operator(<<"anyof">>, Terms1),
+        OutsideAliases, AllAliases, Args1, Context);
+compile_term(#search_sql_term{} = Term, _AllAliases, _OutsideAliases, Args, _Context) ->
+    {Term, Args}.
 
-compile_alternatives(Terms, AllAliases, OutsideAliases) ->
-    compile_alternatives(Terms, AllAliases, OutsideAliases, #{}).
+compile_alternatives(Terms, AllAliases, OutsideAliases, Args, Context) ->
+    compile_alternatives(Terms, AllAliases, OutsideAliases, #{}, Args, Context).
 
-compile_alternatives([], _AllAliases, _OutsideAliases, _BeforeAliases) ->
-    [];
-compile_alternatives([Term | Rest], AllAliases, OutsideAliases, BeforeAliases) ->
+compile_alternatives([], _AllAliases, _OutsideAliases, _BeforeAliases, Args, _Context) ->
+    {[], Args};
+compile_alternatives([Term | Rest], AllAliases, OutsideAliases, BeforeAliases, Args0, Context) ->
     RestAliases = used_aliases(Rest, AllAliases),
     TermOutside = alias_union([OutsideAliases, BeforeAliases, RestAliases]),
-    Term1 = compile_term(Term, AllAliases, TermOutside),
-    Term2 = scope_term(Term1, TermOutside, exists, AllAliases),
+    {Term1, Args1} = compile_term(Term, AllAliases, TermOutside, Args0, Context),
+    {Term2, Args2} = scope_term(
+        Term1, TermOutside, exists, AllAliases, Args1, Context),
     BeforeAliases1 = alias_union(BeforeAliases, used_aliases(Term, AllAliases)),
-    [Term2 | compile_alternatives(Rest, AllAliases, OutsideAliases, BeforeAliases1)].
+    {Rest1, Args3} = compile_alternatives(
+        Rest, AllAliases, OutsideAliases, BeforeAliases1, Args2, Context),
+    {[Term2 | Rest1], Args3}.
 
 combine_operator(Op, Terms) ->
     Conditions = [ where_expression(Term#search_sql_term.where) || Term <- Terms ],
@@ -214,48 +272,96 @@ where_expression([]) ->
 where_expression(Where) ->
     [<<"(">>, Where, <<")">>].
 
-scope_noneof(Term, OutsideAliases, AllAliases) ->
+scope_noneof(Term, OutsideAliases, AllAliases, Args, Context) ->
     case local_aliases(Term, OutsideAliases, AllAliases) of
         LocalAliases when map_size(LocalAliases) =:= 0 ->
-            Term#search_sql_term{
-                where = [[<<"NOT ">>, where_expression(Term#search_sql_term.where)]]
+            {
+                Term#search_sql_term{
+                    where = [[<<"NOT ">>, where_expression(Term#search_sql_term.where)]]
+                },
+                Args
             };
         LocalAliases ->
-            scope_term(Term, LocalAliases, not_exists)
+            scope_local_term(Term, LocalAliases, not_exists, Args, Context)
     end.
 
-scope_term(Term, OutsideAliases, Exists, AllAliases) ->
+scope_term(Term, OutsideAliases, Exists, AllAliases, Args, Context) ->
     case local_aliases(Term, OutsideAliases, AllAliases) of
         LocalAliases when map_size(LocalAliases) =:= 0 ->
-            Term;
+            {Term, Args};
         LocalAliases ->
-            scope_term(Term, LocalAliases, Exists)
+            scope_local_term(Term, LocalAliases, Exists, Args, Context)
     end.
 
-scope_term(#search_sql_term{
+scope_local_term(#search_sql_term{
         tables = Tables,
         join_inner = JoinInner,
         join_left = JoinLeft,
         where = Where,
         cats = Cats,
         cats_exclude = CatsExclude,
-        cats_exact = CatsExact
-    } = Term, LocalAliases, Exists) ->
+        cats_exact = CatsExact,
+        extra = Extra
+    } = Term, LocalAliases, Exists, Args0, Context) ->
     LocalTables = take_aliases(Tables, LocalAliases),
     LocalJoinInner = take_aliases(JoinInner, LocalAliases),
     LocalJoinLeft = take_aliases(JoinLeft, LocalAliases),
-    % Category restrictions for local aliases belong to the subquery. Keep
-    % them out of the flattened outer term; the original term tree is retained
-    % in #search_sql.search_sql_terms for subquery reformatting.
-    Term#search_sql_term{
-        tables = drop_aliases(Tables, LocalAliases),
-        join_inner = drop_aliases(JoinInner, LocalAliases),
-        join_left = drop_aliases(JoinLeft, LocalAliases),
-        cats = drop_alias_cats(Cats, LocalAliases),
-        cats_exclude = drop_alias_cats(CatsExclude, LocalAliases),
-        cats_exact = drop_alias_cats(CatsExact, LocalAliases),
-        where = [exists_expression(Exists, LocalTables, LocalJoinInner, LocalJoinLeft, Where)]
+    LocalCats = take_alias_cats(Cats, LocalAliases),
+    LocalCatsExclude = take_alias_cats(CatsExclude, LocalAliases),
+    LocalCatsExact = take_alias_cats(CatsExact, LocalAliases),
+    {Where1, Args1} = add_local_sql_checks(
+        LocalTables,
+        LocalJoinInner,
+        LocalJoinLeft,
+        Where,
+        LocalCats,
+        LocalCatsExclude,
+        LocalCatsExact,
+        Extra,
+        Args0,
+        Context),
+    {
+        Term#search_sql_term{
+            tables = drop_aliases(Tables, LocalAliases),
+            join_inner = drop_aliases(JoinInner, LocalAliases),
+            join_left = drop_aliases(JoinLeft, LocalAliases),
+            cats = drop_alias_cats(Cats, LocalAliases),
+            cats_exclude = drop_alias_cats(CatsExclude, LocalAliases),
+            cats_exact = drop_alias_cats(CatsExact, LocalAliases),
+            where = [exists_expression(
+                Exists, LocalTables, LocalJoinInner, LocalJoinLeft, Where1)]
+        },
+        Args1
     }.
+
+add_local_sql_checks(_Tables, _JoinInner, _JoinLeft, Where,
+        _Cats, _CatsExclude, _CatsExact, _Extra, Args, undefined) ->
+    {Where, Args};
+add_local_sql_checks(Tables, JoinInner, JoinLeft, Where,
+        Cats, CatsExclude, CatsExact, Extra, Args, Context) ->
+    {From, _FromWhere} = subquery_from(Tables, JoinInner, JoinLeft),
+    Query = #search_sql{
+        select = <<"1">>,
+        from = From,
+        where = iolist_to_binary(Where),
+        args = Args,
+        tables = resource_tables(Tables, JoinInner, JoinLeft),
+        cats = Cats,
+        cats_exclude = CatsExclude,
+        cats_exact = CatsExact,
+        extra = Extra
+    },
+    {Checks, Args1} = z_search_acl:add_sql_checks(Query, Context),
+    {merge_sql_checks(Where, Checks), Args1}.
+
+merge_sql_checks(Where, Checks) ->
+    Clauses = [
+        Clause
+        || Sql <- [Where | Checks],
+           Clause <- [iolist_to_binary(Sql)],
+           Clause =/= <<>>
+    ],
+    lists:join(<<" AND ">>, [ [$(, Clause, $)] || Clause <- Clauses ]).
 
 exists_expression(Exists, Tables, JoinInner, JoinLeft, Where) ->
     {From, FromWhere} = subquery_from(Tables, JoinInner, JoinLeft),
@@ -355,6 +461,13 @@ take_aliases(Map, Aliases) ->
         fun(Alias, _Value) -> maps:is_key(Alias, Aliases) end,
         Map).
 
+take_alias_cats(Cats, Aliases) ->
+    lists:filter(
+        fun({Alias, _Categories}) ->
+            maps:is_key(z_convert:to_binary(Alias), Aliases)
+        end,
+        Cats).
+
 drop_aliases(Map, Aliases) ->
     maps:filter(
         fun(Alias, _Value) -> not maps:is_key(Alias, Aliases) end,
@@ -366,6 +479,31 @@ drop_alias_cats(Cats, Aliases) ->
             not maps:is_key(z_convert:to_binary(Alias), Aliases)
         end,
         Cats).
+
+resource_tables(Tables, JoinInner, JoinLeft) ->
+    lists:usort(
+        resource_tables(Tables)
+        ++ resource_join_tables(JoinInner)
+        ++ resource_join_tables(JoinLeft)).
+
+resource_tables(Tables) ->
+    [
+        {rsc, Alias}
+        || {Alias, Table} <- maps:to_list(Tables),
+           is_rsc_table(Table)
+    ].
+
+resource_join_tables(Joins) ->
+    [
+        {rsc, Alias}
+        || {Alias, {Table, _OnClause}} <- maps:to_list(Joins),
+           is_rsc_table(Table)
+    ].
+
+is_rsc_table(rsc) -> true;
+is_rsc_table(<<"rsc">>) -> true;
+is_rsc_table("rsc") -> true;
+is_rsc_table(_Table) -> false.
 
 merge_term(Term, Acc) ->
     #search_sql_term{

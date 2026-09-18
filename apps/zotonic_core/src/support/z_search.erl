@@ -383,7 +383,7 @@ handle_search_result(L, Page, PageLen, {Offset, _Limit}, Name, Args, Options, _C
         next = Next
     };
 handle_search_result(#search_sql_terms{} = Terms, Page, PageLen, OffsetLimit, Name, Args, Options, Context) ->
-    SearchSQL = z_search_terms:combine(Terms),
+    SearchSQL = z_search_terms:combine(Terms, Context),
     handle_search_result(SearchSQL, Page, PageLen, OffsetLimit, Name, Args, Options, Context);
 handle_search_result(#search_sql{} = Q, Page, PageLen, {_, Limit} = OffsetLimit, Name, Args, Options, Context) ->
     Q1 = reformat_sql_query(Q, Options, Context),
@@ -790,146 +790,6 @@ concat_sql_query(#search_sql{
     end,
     {iolist_to_binary( lists:join(" ", Parts) ), FinalArgs}.
 
-%% @doc Inject the ACL checks in the SQL query.
--spec reformat_sql_query(#search_sql{}, search_options(), z:context()) -> #search_sql{}.
-reformat_sql_query(#search_sql{where=Where, from=From, tables=Tables0, args=Args,
-                               cats=TabCats0, cats_exclude=TabCatsExclude0,
-                               cats_exact=TabCatsExact0} = Q,
-                    Options,
-                    Context) ->
-    % Normalize table names and alias names to binaries
-    TabCats = [ {z_convert:to_binary(Alias), Cats} || {Alias, Cats} <- TabCats0 ],
-    TabCatsExclude = [ {z_convert:to_binary(Alias), Cats} || {Alias, Cats} <- TabCatsExclude0 ],
-    TabCatsExact = [ {z_convert:to_binary(Alias), Cats} || {Alias, Cats} <- TabCatsExact0 ],
-    Tables = [ {z_convert:to_binary(Table), z_convert:to_binary(Alias)} || {Table, Alias} <- Tables0 ],
-    % Make a list of included category ids for each alias
-    CatsPerAliasTriples = cats_per_alias(TabCats, TabCatsExclude, TabCatsExact, Context),
-    CatsPerAlias = [ {Alias, Cats} || {Alias, Cats, _ExcludeIds} <- CatsPerAliasTriples ],
-    % Add ACL checks for the rsc tables
-    {ExtraWhere1, Args1} = lists:foldl(
-                                fun(Table, {Ws,As}) ->
-                                    {W, As1} = add_acl_check(Table, As, Q, CatsPerAlias, Context),
-                                    {[W|Ws], As1}
-                                end, {[], Args}, Tables),
-    % Add category clauses for all aliases in the category restrictions
-    {ExtraWhere2, Args2} = lists:foldl(
-                             fun({Alias, Cats, ExcludeIds}, {Ws, As}) ->
-                                     case add_cat_check(Alias, Cats, ExcludeIds, As, Context) of
-                                         {[], As1} -> {Ws, As1};
-                                         {CatCheck, As1} -> {[CatCheck | Ws], As1}
-                                     end
-                             end, {ExtraWhere1, Args1}, CatsPerAliasTriples),
-    Where1 = case Where of
-        <<>> -> [];
-        B when is_binary(B) -> [ B ];
-        L when is_list(L) -> L
-    end,
-    Where2 = iolist_to_binary(concat_where(ExtraWhere2, Where1)),
-    Q1 = Q#search_sql{ where=Where2, from=From, args=Args2 },
-    case Options of
-        #{ is_count_rows := true } ->
-            Q1#search_sql{
-                select = "count(*)",
-                limit = "",
-                order = ""
-            };
-        #{} ->
-            Q1
-    end.
-
-%% @doc Compute the final set of category IDs to filter on for each table alias, by
-%% resolving the Include/Exclude/Exact category constraints from the search query.
-%% Returns a list of {Alias, all | [CategoryId], [ExcludeCategoryId]} triples.  'all' means no
-%% positive category restriction for that alias.  ExcludeCategoryId is the expanded set of
-%% category IDs (including subcategories) that must be explicitly excluded via a NOT clause.
-cats_per_alias(TabCats, TabExclude, TabExact, Context) ->
-    AllAlias = lists:usort(
-        [ Alias || {Alias, _} <- TabCats ] ++
-        [ Alias || {Alias, _} <- TabExclude ] ++
-        [ Alias || {Alias, _} <- TabExact ]
-    ),
-    lists:map(
-        fun(Alias) ->
-            Include = make_rids(flatten(proplists:get_value(Alias, TabCats, [])), Context),
-            Exclude = make_rids(flatten(proplists:get_value(Alias, TabExclude, [])), Context),
-            Exact = case flatten(proplists:get_value(Alias, TabExact, [])) of
-                [] -> [];
-                ExactIds ->
-                    case make_rids(ExactIds, Context) of
-                        [] -> none;
-                        EIds -> EIds
-                    end
-            end,
-            ExcludeExpanded = lists:usort(
-                lists:flatmap(fun(C) -> m_category:contains(C, Context) end, Exclude)),
-            {Alias, cats_to_find(Include, Exclude, Exact, Context), ExcludeExpanded}
-        end,
-        AllAlias).
-
-flatten(L) when is_list(L) -> lists:flatten(L);
-flatten(undefined) -> [];
-flatten(A) -> [A].
-
--spec make_rids(Ids, Context) -> Ids1 when
-    Ids :: list(m_rsc:resource()),
-    Ids1 :: list(m_rsc:resource_id()),
-    Context :: z:context().
-make_rids(Ids, Context) ->
-    lists:filtermap(
-        fun(Id) ->
-            case m_rsc:rid(Id, Context) of
-                undefined -> false;
-                RId -> {true, RId}
-            end
-        end,
-        lists:flatten(Ids)).
-
-%% @doc Compute the category IDs to include in the query given Include, Exclude and Exact
-%% category lists.  Returns 'all' when there are no restrictions (empty Include, Exclude and
-%% Exact).  'Exact' takes priority over Include, Exclude is always subtracted.
-%% The empty list means no categories are matching, the resulting query should not return any
-%% resources.
--spec cats_to_find(Include, Exclude, Exact, Context) -> all | list(m_rsc:resource_id()) when
-    Include :: list(m_rsc:resource_id()),
-    Exclude :: list(m_rsc:resource_id()),
-    Exact :: list(m_rsc:resource_id()) | none,
-    Context :: z:context().
-cats_to_find(_Include, _Exclude, _Exact = none, _Context) ->
-    [];
-cats_to_find([], [], [], _Context) ->
-    all;
-cats_to_find([], Exclude, [], Context) ->
-    IncludeSet = sets:from_list(m_category:all(Context)),
-    ExcludeSet = sets:from_list(lists:flatmap(fun(C) -> m_category:contains(C, Context) end, Exclude)),
-    ToFind = sets:subtract(IncludeSet, ExcludeSet),
-    lists:sort(sets:to_list(ToFind));
-cats_to_find(Include, Exclude, [], Context) ->
-    IncludeSet = sets:from_list(lists:flatmap(fun(C) -> m_category:contains(C, Context) end, Include)),
-    ExcludeSet = sets:from_list(lists:flatmap(fun(C) -> m_category:contains(C, Context) end, Exclude)),
-    ToFind = sets:subtract(IncludeSet, ExcludeSet),
-    lists:sort(sets:to_list(ToFind));
-cats_to_find([], Exclude, Exact, Context) ->
-    ExcludeContains = lists:usort(lists:flatmap(fun(C) -> m_category:contains(C, Context) end, Exclude)),
-    Exact -- ExcludeContains;
-cats_to_find(Include, Exclude, Exact, Context) ->
-    IncludeSet = sets:from_list(lists:flatmap(fun(C) -> m_category:contains(C, Context) end, Include)),
-    ExcludeSet = sets:from_list(lists:flatmap(fun(C) -> m_category:contains(C, Context) end, Exclude)),
-    ExactSet = sets:from_list(Exact),
-    ToFind = sets:intersection(sets:subtract(ExactSet, ExcludeSet), IncludeSet),
-    lists:sort(sets:to_list(ToFind)).
-
-%% @doc Concatenate the where clause with the extra ACL checks using "and".  Skip empty clauses.
-concat_where([], Acc) ->
-    Acc;
-concat_where([<<>>|Rest], Acc) ->
-    concat_where(Rest, Acc);
-concat_where([[]|Rest], Acc) ->
-    concat_where(Rest, Acc);
-concat_where([W|Rest], []) ->
-    concat_where(Rest, [W]);
-concat_where([W|Rest], Acc) ->
-    concat_where(Rest, [W, " and " | Acc]).
-
 %% @doc Process SQL from clause. Analyzing the input (it may be a string, list of #search_sql or/and other strings)
 concat_sql_from(From) ->
     Froms = concat_sql_from1(From),
@@ -941,16 +801,16 @@ concat_sql_from1([ H | _ ] = From) when is_integer(H) ->
     [ From ]; %% from is string?
 concat_sql_from1([ #search_sql{} = From | T ]) ->
     Subquery = case concat_sql_query(From, undefined) of
-    	{SQL, []} ->
+        {SQL, []} ->
             %% postgresql: alias for inner SELECT in FROM must be defined
             iolist_to_binary([
                 "(", SQL, ") AS z_", z_ids:id()
                 ]);
-	   {SQL, [ {as, Alias} ]} when is_list(Alias); is_binary(Alias) ->
+       {SQL, [ {as, Alias} ]} when is_list(Alias); is_binary(Alias) ->
             iolist_to_binary([
                 "(", SQL, ") AS ", Alias
                 ]);
-    	{_SQL, A} ->
+        {_SQL, A} ->
             throw({badarg, "Use outer #search_sql.args to store args of inner #search_sql. Inner arg.list only can be equals to [] or to [{as, Alias=string()}] for aliasing innered select in FROM (e.g. FROM (SELECT...) AS Alias).", A})
     end,
     [ Subquery | concat_sql_from1(T) ];
@@ -970,128 +830,8 @@ concat_sql_from1(Something) ->
     % make list for records or other stuff
     concat_sql_from1([ Something ]).
 
-%% @doc Create extra 'where' conditions for checking the access control
-add_acl_check({<<"rsc">>, Alias}, Args, Q, CatsPerAlias, Context) ->
-    add_acl_check_rsc(Alias, Args, Q, CatsPerAlias, Context);
-add_acl_check(_, Args, _Q, _CatsPerAlias, _Context) ->
-    {[], Args}.
+%% @doc Inject the ACL checks in the SQL query.
+-spec reformat_sql_query(#search_sql{}, search_options(), z:context()) -> #search_sql{}.
+reformat_sql_query(Query, Options, Context) ->
+    z_search_acl:reformat_sql_query(Query, Options, Context).
 
-%% @doc Create extra 'where' conditions for checking the access control
-%% @todo This needs to be changed for the pluggable ACL
-add_acl_check_rsc(Alias, Args, SearchSql, CatsPerAlias, Context) ->
-    Cats = proplists:get_value(Alias, CatsPerAlias, all),
-    case z_notifier:first(#acl_add_sql_check{
-        alias = Alias,
-        args = Args,
-        search_sql = SearchSql,
-        cats = Cats
-    }, Context) of
-        undefined ->
-            case z_acl:is_admin(Context) of
-                true ->
-                    % Admin can see all resources
-                    {[], Args};
-                false ->
-                    %% Others can only see published resources
-                    {publish_check(Alias, SearchSql), Args}
-            end;
-        {_NewSql, _NewArgs} = Result ->
-            Result
-    end.
-
-
-publish_check(Alias, #search_sql{extra=Extra}) ->
-    case lists:member(no_publish_check, Extra) of
-        true ->
-            [];
-        false ->
-            [
-                  Alias, ".is_published = true and "
-                , Alias, ".publication_start <= now() and "
-                , Alias, ".publication_end >= now()"
-            ]
-    end.
-
-
-%% @doc Create the 'where' conditions for the category check
-add_cat_check(_Alias, all, [], Args, _Context) ->
-    {[], Args};
-add_cat_check(Alias, all, ExcludeIds, Args, Context) ->
-    % No positive category filter, but still need to exclude some categories.
-    case m_category:is_tree_dirty(Context) of
-        false ->
-            add_cat_exclude_check_pivot(Alias, ExcludeIds, Args, Context);
-        true ->
-            add_cat_exclude_check_any(Alias, ExcludeIds, Args, Context)
-    end;
-add_cat_check(_Alias, [], _ExcludeIds, Args, _Context) ->
-    {[ "false" ], Args};
-add_cat_check(Alias, Cats, ExcludeIds, Args, Context) ->
-    All = m_category:all(Context),
-    IsTreeDirty = m_category:is_tree_dirty(Context),
-    {IncludeCheck, Args1} = case lists:usort(Cats) of
-        All ->
-            {[], Args};
-        _ when IsTreeDirty ->
-            % While the category tree is rebuilding, fall back to a direct category_id check
-            % because the pivot_category_nr values are not up to date.
-            add_cat_check_any(Alias, Cats, Args, Context);
-        _ ->
-            % Use range queries on the category_nr pivot column.
-            add_cat_check_pivot(Alias, Cats, Args, Context)
-    end,
-    {ExcludeCheck, Args2} = case ExcludeIds of
-        [] ->
-            {[], Args1};
-        _ when IsTreeDirty ->
-            add_cat_exclude_check_any(Alias, ExcludeIds, Args1, Context);
-        _ ->
-            add_cat_exclude_check_pivot(Alias, ExcludeIds, Args1, Context)
-    end,
-    case {IncludeCheck, ExcludeCheck} of
-        {[], []} -> {[], Args2};
-        {Inc, []} -> {Inc, Args2};
-        {[], Exc} -> {Exc, Args2};
-        {Inc, Exc} -> {[ "(", Inc, " and ", Exc, ")" ], Args2}
-    end.
-
-add_cat_check_pivot(Alias, Cats, Args, Context) ->
-    Ranges = m_category:ranges(Cats, Context),
-    CatChecks = [ cat_check_pivot1(Alias, Range) || Range <- Ranges ],
-    case CatChecks of
-        [] ->
-            {[], Args};
-        _ ->
-            {[ "(", lists:join(" or ", CatChecks), ")" ], Args}
-    end.
-
-cat_check_pivot1(Alias, {From,From}) ->
-    [ Alias, ".pivot_category_nr = ", integer_to_list(From) ];
-cat_check_pivot1(Alias, {From,To}) ->
-    [ Alias, ".pivot_category_nr >= ", integer_to_list(From)
-    , " and ", Alias, ".pivot_category_nr <= ", integer_to_list(To)
-    ].
-
-%% Add direct lookup on category id, less optimal than range queries, used
-%% when the category tree is dirty and the pivot_category_nr values are not up to date.
-add_cat_check_any(Alias, Cats, Args, _Context) ->
-    Args1 = Args ++ [ Cats ],
-    {[ Alias, ".category_id = any($", integer_to_list(length(Args1)), "::int[])" ], Args1}.
-
-%% @doc Generate a NOT range clause to exclude categories from the result.
-%% Used when the category tree pivot numbers are up to date.
-add_cat_exclude_check_pivot(Alias, ExcludeIds, Args, Context) ->
-    Ranges = m_category:ranges(ExcludeIds, Context),
-    ExcludeChecks = [ cat_check_pivot1(Alias, Range) || Range <- Ranges ],
-    case ExcludeChecks of
-        [] ->
-            {[], Args};
-        _ ->
-            {[ "not (", lists:join(" or ", ExcludeChecks), ")" ], Args}
-    end.
-
-%% @doc Generate a NOT IN clause to exclude categories from the result.
-%% Used when the category tree is dirty and pivot_category_nr values are not up to date.
-add_cat_exclude_check_any(Alias, ExcludeIds, Args, _Context) ->
-    Args1 = Args ++ [ ExcludeIds ],
-    {[ Alias, ".category_id <> all($", integer_to_list(length(Args1)), "::int[])" ], Args1}.

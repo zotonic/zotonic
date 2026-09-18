@@ -12,9 +12,6 @@ EUnit tests for ACL user-group authorization behavior.
     is_allowed_always_true/2
 ]).
 
--define(UG_TEST, acl_user_group_test).
-
-
 tree_expand_test() ->
     [] = acl_user_groups_rules:tree_expand([]),
     [{1,[1]}, {2,[2]}] = acl_user_groups_rules:tree_expand([{1,[]}, {2,[]}]),
@@ -181,89 +178,128 @@ restrict_collab_cats_intersects_cat_list_test() ->
 person_can_edit_own_resource_test() ->
     ContextAnon = context(),
     ContextSudo = z_acl:sudo(ContextAnon),
+    with_test_group(
+        ContextSudo,
+        fun(UserGroupId) ->
+            with_managed_rules(
+                [
+                    {rsc, [
+                        {acl_user_group_id, UserGroupId},
+                        {actions, [view, update]},
+                        {is_owner, true},
+                        {category_id, person}
+                    ]}
+                ],
+                ContextAnon,
+                fun() ->
+                    with_resources(
+                        [
+                            #{ <<"category_id">> => person },
+                            #{ <<"category_id">> => person, <<"creator_id">> => self },
+                            #{ <<"category_id">> => person, <<"creator_id">> => self }
+                        ],
+                        ContextSudo,
+                        fun([UserId1, UserId2, UserId3]) ->
+                            {ok, UserId2} = m_rsc:update(
+                                UserId2,
+                                #{ <<"creator_id">> => UserId1 },
+                                ContextSudo),
+                            {ok, _} = m_edge:insert(
+                                UserId1, hasusergroup, UserGroupId, ContextSudo),
+                            {ok, _} = m_edge:insert(
+                                UserId2, hasusergroup, UserGroupId, ContextSudo),
+                            {ok, _} = m_edge:insert(
+                                UserId3, hasusergroup, UserGroupId, ContextSudo),
+                            ContextUser1 = z_acl:logon(UserId1, ContextAnon),
+                            ContextUser3 = z_acl:logon(UserId3, ContextAnon),
 
-    %% Person must be able to edit person category
-    replace_managed(
-        [
-            {rsc, [
-                {acl_user_group_id, ensure_test_group(ContextAnon)},
-                {actions, [view, update]},
-                {is_owner, true},
-                {category_id, person}
-            ]}
-        ],
-        ContextSudo),
+                            ?assertEqual(
+                                {error, eacces},
+                                m_rsc:update(
+                                    UserId1,
+                                    [{title, <<"Test">>}],
+                                    ContextAnon)),
+                            ?assertEqual(
+                                {error, eacces},
+                                m_rsc:update(
+                                    UserId1,
+                                    [{title, <<"Test">>}],
+                                    ContextUser3)),
+                            ?assertEqual(
+                                {error, eacces},
+                                m_rsc:update(
+                                    UserId2,
+                                    [{title, <<"Test">>}],
+                                    ContextUser3)),
 
-    {ok, UserId1} = m_rsc:insert(#{ <<"category_id">> => person }, ContextSudo),
-    {ok, UserId2} = m_rsc:insert(#{ <<"category_id">> => person, <<"creator_id">> => UserId1 }, ContextSudo),
-    {ok, UserId3} = m_rsc:insert(#{ <<"category_id">> => person, <<"creator_id">> => self }, ContextSudo),
-
-    m_edge:insert(UserId1, hasusergroup, ensure_test_group(ContextAnon), ContextSudo),
-    m_edge:insert(UserId2, hasusergroup, ensure_test_group(ContextAnon), ContextSudo),
-    m_edge:insert(UserId3, hasusergroup, ensure_test_group(ContextAnon), ContextSudo),
-
-    ContextUser1 = z_acl:logon(UserId1, ContextAnon),
-    ContextUser3 = z_acl:logon(UserId3, ContextAnon),
-
-    % No access for anonymous
-    ?assertEqual({error, eacces}, m_rsc:update(UserId1, [{title, <<"Test">>}], ContextAnon)),
-    % Must be owner
-    ?assertEqual({error, eacces}, m_rsc:update(UserId1, [{title, <<"Test">>}], ContextUser3)),
-    % Must be creator
-    ?assertEqual({error, eacces}, m_rsc:update(UserId2, [{title, <<"Test">>}], ContextUser3)),
-
-    % User1 can update self, as user is self
-    {ok, _} = m_rsc:update(UserId1, [{title, "Test"}], ContextUser1),
-    % User1 can update user2, as user1 is creator (owner) if user2
-    {ok, _} = m_rsc:update(UserId2, [{title, "Test"}], ContextUser1),
-    % User3 can update self, as is owner of self (and is self)
-    {ok, _} = m_rsc:update(UserId3, [{title, "Test"}], ContextUser3),
-
-    m_rsc:delete(UserId1, ContextSudo),
-    m_rsc:delete(UserId2, ContextSudo),
-    m_rsc:delete(UserId3, ContextSudo),
-    delete_managed(ContextSudo).
+                            {ok, _} = m_rsc:update(
+                                UserId1, [{title, "Test"}], ContextUser1),
+                            {ok, _} = m_rsc:update(
+                                UserId2, [{title, "Test"}], ContextUser1),
+                            {ok, _} = m_rsc:update(
+                                UserId3, [{title, "Test"}], ContextUser3)
+                        end)
+                end)
+        end).
 
 
 person_can_insert_text_in_default_content_group_only_test() ->
-    ContextAnon = context(),
-    ContextSudo = z_acl:sudo(ContextAnon),
-
-    %% Person must be able to insert text into the default user group
-    replace_managed(
-        [
-            % Allow insert of articles into default_content_group
-            {rsc, [
-                {acl_user_group_id, ensure_test_group(ContextSudo)},
-                {content_group_id, default_content_group},
-                {actions, [insert]},
-                {is_owner, true},
-                {category_id, article}
-            ]},
-            % Allow view of everything
-            {rsc, [
-                {acl_user_group_id, ensure_test_group(ContextSudo)},
-                {actions, [view]}
-            ]}
-        ],
-        ContextSudo),
-
-    % Make a new user
-    {ok, UserId} = m_rsc:insert(#{ <<"category_id">> => person }, ContextSudo),
-    {ok, _} = m_edge:insert(UserId, hasusergroup, ensure_test_group(ContextSudo), ContextSudo),
-    UserContext = z_acl:logon(UserId, ContextAnon),
-
-    %% The user is able to insert a text into the default content group
-    DefaultContentGroupId = m_rsc:p(default_content_group, id, ContextAnon),
-    {ok, _TextId} = m_rsc:insert([{category, article}, {content_group_id, DefaultContentGroupId}], UserContext),
-
-    %% But not in the system content group
-    SystemContentGroupId = m_rsc:p(system_content_group, id, ContextAnon),
-    ?assertEqual({error, eacces}, m_rsc:insert([{category, article}, {content_group_id, SystemContentGroupId}], UserContext)),
-
-    m_rsc:delete(UserId, ContextSudo),
-    delete_managed(ContextSudo),
-    ok.
+    Context = context(),
+    SudoContext = z_acl:sudo(Context),
+    with_test_group(
+        SudoContext,
+        fun(UserGroupId) ->
+            with_managed_rules(
+                [
+                    {rsc, [
+                        {acl_user_group_id, UserGroupId},
+                        {content_group_id, default_content_group},
+                        {actions, [insert]},
+                        {is_owner, true},
+                        {category_id, article}
+                    ]},
+                    {rsc, [
+                        {acl_user_group_id, UserGroupId},
+                        {actions, [view]}
+                    ]}
+                ],
+                Context,
+                fun() ->
+                    with_resource(
+                        [{category, person}],
+                        SudoContext,
+                        SudoContext,
+                        fun(UserId) ->
+                            {ok, _} = m_edge:insert(
+                                UserId,
+                                hasusergroup,
+                                UserGroupId,
+                                SudoContext),
+                            UserContext = z_acl:logon(UserId, Context),
+                            DefaultContentGroupId = m_rsc:p(
+                                default_content_group, id, Context),
+                            with_resource(
+                                [
+                                    {category, article},
+                                    {content_group_id, DefaultContentGroupId}
+                                ],
+                                UserContext,
+                                SudoContext,
+                                fun(_TextId) ->
+                                    SystemContentGroupId = m_rsc:p(
+                                        system_content_group, id, Context),
+                                    ?assertEqual(
+                                        {error, eacces},
+                                        m_rsc:insert(
+                                            [
+                                                {category, article},
+                                                {content_group_id, SystemContentGroupId}
+                                            ],
+                                            UserContext))
+                                end)
+                        end)
+                end)
+        end).
 
 
 acl_is_allowed_accepts_rsc_name_object_test() ->
@@ -273,65 +309,77 @@ acl_is_allowed_accepts_rsc_name_object_test() ->
 acl_is_allowed_override_test() ->
     ContextAnon = context(),
     ContextSudo = z_acl:sudo(ContextAnon),
-
-    {ok, UserId} = m_rsc:insert([{category_id, person}], ContextSudo),
-    {ok, _} = m_edge:insert(UserId, hasusergroup, acl_user_group_anonymous, ContextSudo),
-    ContextUser = z_acl:logon(UserId, ContextAnon),
-
-    %% Priority (10) must be before mod_acl_user_group's acl_is_allowed observer.
-    z_notifier:observe(acl_is_allowed, {?MODULE, is_allowed_always_true}, 10, ContextAnon),
-
-    % Insert unpublished resource
-    {ok, TextId} = m_rsc:insert([ {category_id, text} ], ContextUser),
-
-    % Inserted into the default_content_group
-    ?assertEqual(m_rsc:rid(default_content_group, ContextSudo), m_rsc:p_no_acl(TextId, <<"content_group_id">>, ContextSudo)),
-
-    % Anon user can view but not update (short circuit in the ACL checks)
-    ?assertEqual(true, z_acl:rsc_visible(TextId, ContextAnon)),
-    ?assertEqual(false, z_acl:rsc_editable(TextId, ContextAnon)),
-
-    % Authenticated user can view and update (due to our observer)
-    ?assertEqual(true, z_acl:rsc_visible(TextId, ContextUser)),
-    ?assertEqual(true, z_acl:rsc_editable(TextId, ContextUser)),
-
-    z_notifier:detach(acl_is_allowed, ContextAnon),
-    m_rsc:delete(UserId, ContextSudo),
-    m_rsc:delete(TextId, ContextSudo).
+    with_resource(
+        [{category_id, person}],
+        ContextSudo,
+        ContextSudo,
+        fun(UserId) ->
+            {ok, _} = m_edge:insert(
+                UserId,
+                hasusergroup,
+                acl_user_group_anonymous,
+                ContextSudo),
+            ContextUser = z_acl:logon(UserId, ContextAnon),
+            ok = z_notifier:observe(
+                acl_is_allowed,
+                {?MODULE, is_allowed_always_true},
+                10,
+                ContextAnon),
+            try
+                with_resource(
+                    [{category_id, text}],
+                    ContextUser,
+                    ContextSudo,
+                    fun(TextId) ->
+                        ?assertEqual(
+                            m_rsc:rid(default_content_group, ContextSudo),
+                            m_rsc:p_no_acl(
+                                TextId,
+                                content_group_id,
+                                ContextSudo)),
+                        ?assert(z_acl:rsc_visible(TextId, ContextAnon)),
+                        ?assertNot(z_acl:rsc_editable(TextId, ContextAnon)),
+                        ?assert(z_acl:rsc_visible(TextId, ContextUser)),
+                        ?assert(z_acl:rsc_editable(TextId, ContextUser))
+                    end)
+            after
+                z_notifier:detach(acl_is_allowed, ContextAnon)
+            end
+        end).
 
 publish_test() ->
-    ContextAnon = context(),
-    ContextSudo = z_acl:sudo(ContextAnon),
-
-    %% Anonymous can view all published content
-    replace_managed(
+    Context = context(),
+    with_managed_rules(
         [
             {rsc, [
                 {acl_user_group_id, acl_user_group_anonymous},
                 {actions, [view]}
             ]}
         ],
-        ContextSudo),
-
-    {ok, TextId} = m_rsc:insert([
-            {is_published, false},
-            {title, <<"Top secret!">>},
-            {category, text}
-        ], ContextSudo),
-
-    ?assertEqual(<<"Top secret!">>, m_rsc:p(TextId, <<"title">>, ContextSudo)),
-
-    %% invisible for anonymous
-    ?assertEqual(false, z_acl:rsc_visible(TextId, ContextAnon)),
-    ?assertEqual(undefined, m_rsc:p(TextId, <<"title">>, ContextAnon)),
-
-    {ok, TextId} = m_rsc:update(TextId, [ {is_published, true} ], ContextSudo),
-
-    %% visible for anonymous when published
-    ?assertEqual(<<"Top secret!">>, m_rsc:p(TextId, <<"title">>, ContextAnon)),
-
-    m_rsc:delete(TextId, ContextSudo),
-    delete_managed(ContextSudo).
+        Context,
+        fun() ->
+            SudoContext = z_acl:sudo(Context),
+            with_resource(
+                [
+                    {is_published, false},
+                    {title, <<"Top secret!">>},
+                    {category, text}
+                ],
+                SudoContext,
+                SudoContext,
+                fun(Id) ->
+                    ?assertEqual(
+                        <<"Top secret!">>,
+                        m_rsc:p(Id, title, SudoContext)),
+                    ?assertNot(z_acl:rsc_visible(Id, Context)),
+                    ?assertEqual(undefined, m_rsc:p(Id, title, Context)),
+                    {ok, Id} = m_rsc:update(
+                        Id,
+                        [{is_published, true}],
+                        SudoContext),
+                    ?assertEqual(<<"Top secret!">>, m_rsc:p(Id, title, Context))
+                end)
+        end).
 
 context() ->
     Context = z_context:new(zotonic_site_testsandbox),
@@ -347,32 +395,67 @@ is_allowed_always_true(#acl_is_allowed{}, _Context) ->
     true.
 
 replace_managed(Rules, Context) ->
-    z_mqtt:subscribe(<<"model/acl_user_groups/event/acl-rules/publish-rebuild">>, z_acl:sudo(Context)),
+    SudoContext = z_acl:sudo(Context),
+    ok = m_acl_rule:replace_managed(
+        Rules,
+        ?MODULE,
+        SudoContext),
+    await_acl_rebuild(SudoContext).
 
-    m_acl_rule:replace_managed(Rules, ?MODULE, z_acl:sudo(Context)),
-    receive
-        {mqtt_msg, _Msg} -> ok
-    end,
-    z_mqtt:unsubscribe(<<"model/acl_user_groups/event/acl-rules/publish-rebuild">>, z_acl:sudo(Context)).
-
-delete_managed(Context) ->
-    z_mqtt:subscribe(<<"model/acl_user_groups/event/acl-rules/publish-rebuild">>, z_acl:sudo(Context)),
-    m_acl_rule:delete_managed(?MODULE, z_acl:sudo(Context)),
-    receive
-        {mqtt_msg, _Msg} -> ok
-    end,
-    z_mqtt:unsubscribe(<<"model/acl_user_groups/event/acl-rules/publish-rebuild">>, z_acl:sudo(Context)).
-
-ensure_test_group(Context) ->
-    case m_rsc:rid(?UG_TEST, Context) of
-        undefined ->
-            {ok, Id} = m_rsc:insert([
-                    {name, ?UG_TEST},
-                    {is_published, true},
-                    {category_id, acl_user_group},
-                    {title, <<"Test user group">>}
-                ], z_acl:sudo(Context)),
-            Id;
-        Id ->
-            Id
+with_managed_rules(Rules, Context, Fun) ->
+    replace_managed(Rules, Context),
+    try
+        Fun()
+    after
+        replace_managed([], Context)
     end.
+
+with_resources(PropsList, Context, Fun) ->
+    with_resources(PropsList, Context, [], Fun).
+
+with_resources([], _Context, Ids, Fun) ->
+    Fun(lists:reverse(Ids));
+with_resources([Props | Rest], Context, Ids, Fun) ->
+    {ok, Id} = m_rsc:insert(Props, Context),
+    try
+        with_resources(Rest, Context, [Id | Ids], Fun)
+    after
+        ok = m_rsc:delete(Id, Context)
+    end.
+
+with_resource(Props, InsertContext, DeleteContext, Fun) ->
+    {ok, Id} = m_rsc:insert(Props, InsertContext),
+    try
+        Fun(Id)
+    after
+        ok = m_rsc:delete(Id, DeleteContext)
+    end.
+
+await_acl_rebuild(Context) ->
+    await_acl_rebuild(1000, Context).
+
+await_acl_rebuild(0, _Context) ->
+    error(acl_rebuild_timeout);
+await_acl_rebuild(N, Context) ->
+    {ok, Status} = mod_acl_user_groups:status(Context),
+    case {
+        proplists:get_value(is_rebuilding, Status),
+        proplists:get_value(is_rebuild_publish, Status)
+    } of
+        {false, false} ->
+            ok;
+        _ ->
+            timer:sleep(10),
+            await_acl_rebuild(N - 1, Context)
+    end.
+
+with_test_group(Context, Fun) ->
+    with_resource(
+        [
+            {is_published, true},
+            {category_id, acl_user_group},
+            {title, <<"Test user group">>}
+        ],
+        Context,
+        Context,
+        Fun).

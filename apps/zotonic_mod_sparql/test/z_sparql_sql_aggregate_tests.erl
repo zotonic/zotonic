@@ -12,7 +12,7 @@
 
 
 postgresql_mapping_test_() ->
-    Context = z_context:new(zotonic_site_testsandbox),
+    Context = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
     [
         mapping(count, default, all, undefined, Context, <<"count(*)">>),
         mapping(count, distinct, <<"value">>, undefined, Context,
@@ -41,7 +41,7 @@ type_signature_test() ->
     ?assertEqual({ok, {text, text}}, z_sparql_sql_aggregate:type_signature(group_concat)).
 
 count_distinct_star_is_not_supported_test() ->
-    Context = z_context:new(zotonic_site_testsandbox),
+    Context = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
     ?assertEqual(
         {error, {unsupported, count_distinct_star}},
         z_sparql_sql_aggregate:to_sql(count, distinct, all, undefined, Context)).
@@ -56,7 +56,7 @@ count_distinct_solution_test() ->
                 "}"
             >>),
             {ok, Terms} = z_sparql_sql:to_sql_term(Query, Context),
-            Select = (z_search_terms:combine(Terms))#search_sql.select,
+            Select = (z_search_terms:combine(Terms, Context))#search_sql.select,
             ?assertNotEqual(nomatch, binary:match(Select, <<"count(DISTINCT ROW(">>)),
             ?assertNotEqual(nomatch, binary:match(Select, <<"rsc.id">>)),
             ?assertNotEqual(nomatch, binary:match(Select, <<"props_json">>))
@@ -102,7 +102,7 @@ aggregate_sql_terms_test() ->
         fun(Context) ->
             {ok, Query} = z_sparql:parse(aggregate_query()),
             {ok, Terms} = z_sparql_sql:to_sql_term(Query, Context),
-            SearchSql = z_search_terms:combine(Terms),
+            SearchSql = z_search_terms:combine(Terms, Context),
             Select = SearchSql#search_sql.select,
             ?assertEqual(nomatch, binary:match(Select, <<"rsc.id">>)),
             ?assertNotEqual(nomatch, binary:match(Select, <<"count(*)">>)),
@@ -151,7 +151,7 @@ aggregate_query() ->
 
 with_observers(Fun) ->
     {ok, _} = application:ensure_all_started(zotonic_notifier),
-    Context = z_context:new(zotonic_site_testsandbox),
+    Context = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
     ok = z_notifier:observe(rdf_ns, {?MODULE, observe_rdf_ns}, 100, Context),
     ok = z_notifier:observe(sparql_mapping, {?MODULE, observe_sparql_mapping}, 100, Context),
     try

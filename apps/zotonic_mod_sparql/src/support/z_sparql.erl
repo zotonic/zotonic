@@ -85,7 +85,7 @@ search(Sparql, Arguments, OffsetLimit, Context) ->
 search_parsed(ParsedQuery, Arguments, OffsetLimit, Context) ->
     case z_sparql_sql:to_sql_term(ParsedQuery, Arguments, Context) of
         {ok, SqlTerms} ->
-            SearchSql = z_search_terms:combine(SqlTerms),
+            SearchSql = z_search_terms:combine(SqlTerms, Context),
             {ok, z_search:search_result(SearchSql, OffsetLimit, Context)};
         {error, _} = Error ->
             Error

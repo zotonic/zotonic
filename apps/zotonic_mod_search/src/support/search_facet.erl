@@ -220,7 +220,7 @@ search_query_facets(Result, #search_sql{ search_sql_terms = Terms }, Context) ->
         | SelectTerms
     ],
 
-    Q1 = z_search_terms:combine(SelectTerms1),
+    Q1 = z_search_terms:combine(SelectTerms1, Context),
     Q2 = Q1#search_sql{
         limit = undefined
     },

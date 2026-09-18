@@ -7,6 +7,8 @@
 -include_lib("eunit/include/eunit.hrl").
 -include_lib("zotonic.hrl").
 
+-export([observe_acl_add_sql_check/2]).
+
 
 anyof_local_joins_use_subqueries_test() ->
     Query = z_search_terms:combine([
@@ -242,6 +244,124 @@ only_local_alias_category_restrictions_are_removed_test() ->
     ?assertEqual(undefined, proplists:get_value(Alias, Query#search_sql.cats_exact)),
     ?assertEqual(undefined, proplists:get_value(Alias, Query#search_sql.cats_exclude)).
 
+fulltext_rank_after_created_is_removed_test() ->
+    Query = z_search_terms:combine([
+        #search_sql_term{
+            sort = [
+                <<"ts_rank_cd('{0.1, 0.2, 0.4, 1.0}', rsc.pivot_tsv, $1, 5) DESC">>
+            ],
+            args = [<<"query">>]
+        },
+        #search_sql_term{
+            sort = [
+                <<"rsc.created DESC">>
+            ]
+        }
+    ]),
+    ?assertEqual(<<"rsc.created DESC">>, Query#search_sql.order).
+
+fulltext_rank_after_modified_is_removed_test() ->
+    Query = z_search_terms:combine([
+        #search_sql_term{
+            sort = [
+                {<<"rsc">>, $+, <<"modified">>},
+                <<"public.word_similarity($1, rsc.pivot_title) DESC">>
+            ],
+            args = [<<"query">>]
+        }
+    ]),
+    ?assertEqual(<<"rsc.modified ASC">>, Query#search_sql.order).
+
+fulltext_rank_before_id_is_kept_test() ->
+    Query = z_search_terms:combine([
+        #search_sql_term{
+            sort = [
+                <<"ts_rank(rsc.pivot_tsv, query) DESC">>,
+                {<<"rsc">>, $+, <<"id">>}
+            ]
+        }
+    ]),
+    ?assertEqual(
+        <<"ts_rank(rsc.pivot_tsv, query) DESC, rsc.id ASC">>,
+        Query#search_sql.order).
+
+non_rank_sort_after_id_is_kept_test() ->
+    Query = z_search_terms:combine([
+        #search_sql_term{
+            sort = [
+                {<<"rsc">>, $+, <<"id">>},
+                <<"ts_rank(rsc.pivot_tsv, query) DESC">>,
+                {<<"edge">>, $+, <<"object_id">>}
+            ]
+        }
+    ]),
+    ?assertEqual(
+        <<"rsc.id ASC, edge.object_id ASC">>,
+        Query#search_sql.order).
+
+local_resource_acl_is_added_inside_exists_test() ->
+    with_acl_observer(
+        fun(Context) ->
+            Alias = <<"rsc_local">>,
+            Query0 = z_search_terms:combine([
+                #search_sql_nested{
+                    operator = <<"anyof">>,
+                    terms = [resource_term(Alias)]
+                }
+            ], Context),
+            ?assert(contains(Query0#search_sql.where, <<"EXISTS (">>)),
+            ?assert(contains(Query0#search_sql.where, <<"rsc_local.visible_for = $1">>)),
+            ?assertEqual([{acl, Alias}], Query0#search_sql.args),
+            Query1 = z_search_acl:reformat_sql_query(Query0, #{}, Context),
+            ?assert(contains(Query1#search_sql.where, <<"rsc.visible_for = $2">>)),
+            ?assertEqual([{acl, Alias}, {acl, <<"rsc">>}], Query1#search_sql.args)
+        end).
+
+local_resource_acl_is_added_inside_not_exists_test() ->
+    with_acl_observer(
+        fun(Context) ->
+            Alias = <<"rsc_local">>,
+            Query = z_search_terms:combine([
+                #search_sql_nested{
+                    operator = <<"noneof">>,
+                    terms = [resource_term(Alias)]
+                }
+            ], Context),
+            ?assert(contains(Query#search_sql.where, <<"NOT ">>)),
+            ?assert(contains(Query#search_sql.where, <<"EXISTS (">>)),
+            ?assert(contains(Query#search_sql.where, <<"rsc_local.visible_for = $1">>))
+        end).
+
+local_resource_acl_arguments_are_unique_test() ->
+    with_acl_observer(
+        fun(Context) ->
+            Query = z_search_terms:combine([
+                #search_sql_nested{
+                    operator = <<"anyof">>,
+                    terms = [
+                        resource_term(<<"rsc_a">>),
+                        resource_term(<<"rsc_b">>)
+                    ]
+                }
+            ], Context),
+            ?assert(contains(Query#search_sql.where, <<"rsc_a.visible_for = $1">>)),
+            ?assert(contains(Query#search_sql.where, <<"rsc_b.visible_for = $2">>)),
+            ?assertEqual(
+                [{acl, <<"rsc_a">>}, {acl, <<"rsc_b">>}],
+                Query#search_sql.args)
+        end).
+
+outer_resource_alias_is_declared_for_acl_test() ->
+    Alias = <<"rsc_outer">>,
+    Query = z_search_terms:combine([
+        (resource_term(Alias))#search_sql_term{
+            select = [[Alias, <<".id">>]]
+        }
+    ]),
+    ?assertEqual(
+        [{rsc, <<"rsc">>}, {rsc, Alias}],
+        Query#search_sql.tables).
+
 
 edge_term(Alias, Where) ->
     #search_sql_term{
@@ -262,6 +382,33 @@ category_edge_term(Alias) ->
         cats = [{Alias, [<<"article">>]}],
         cats_exact = [{Alias, [<<"event">>]}],
         cats_exclude = [{Alias, [<<"person">>]}]
+    }.
+
+resource_term(Alias) ->
+    #search_sql_term{
+        select = [],
+        tables = #{
+            <<"rsc">> => <<"rsc">>,
+            Alias => <<"rsc">>
+        },
+        where = [[Alias, <<".id = rsc.id">>]]
+    }.
+
+with_acl_observer(Fun) ->
+    {ok, _} = application:ensure_all_started(zotonic_notifier),
+    Context = z_context:new(zotonic_site_testsandbox),
+    ok = z_notifier:observe(acl_add_sql_check, {?MODULE, observe_acl_add_sql_check}, 100, Context),
+    try
+        Fun(Context)
+    after
+        z_notifier:detach(acl_add_sql_check, Context)
+    end.
+
+observe_acl_add_sql_check(#acl_add_sql_check{ alias = Alias, args = Args }, _Context) ->
+    Nr = length(Args) + 1,
+    {
+        [Alias, <<".visible_for = $">>, integer_to_binary(Nr)],
+        Args ++ [{acl, Alias}]
     }.
 
 contains(Text, S) ->

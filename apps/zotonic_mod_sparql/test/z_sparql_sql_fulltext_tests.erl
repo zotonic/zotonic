@@ -140,7 +140,7 @@ default_fulltext_plan_test() ->
 
 with_observers(F) ->
     {ok, _} = application:ensure_all_started(zotonic_notifier),
-    Context = z_context:new(zotonic_site_testsandbox),
+    Context = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
     ok = z_notifier:observe(rdf_ns, {?MODULE, observe_rdf_ns}, 100, Context),
     ok = z_notifier:observe(sparql_mapping, {?MODULE, observe_sparql_mapping}, 100, Context),
     try

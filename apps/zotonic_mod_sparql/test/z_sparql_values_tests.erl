@@ -69,7 +69,7 @@ values_sql_test() ->
                 Plan),
             {ok, Terms} = z_sparql_sql:to_sql_term(Query, Context),
             #search_sql{ from = From, where = Where, args = Args } =
-                z_search_terms:combine(Terms),
+                z_search_terms:combine(Terms, Context),
             ?assertNotEqual(nomatch, binary:match(From, <<"VALUES">>)),
             ?assertNotEqual(nomatch, binary:match(From, <<"defined_1">>)),
             ?assertNotEqual(nomatch, binary:match(Where, <<"NOT sparql_values_">>)),
@@ -91,7 +91,7 @@ with_observers(Fun) ->
     end.
 
 test_context() ->
-    z_context:new(zotonic_site_testsandbox).
+    z_acl:sudo(z_context:new(zotonic_site_testsandbox)).
 
 observe_rdf_ns(#rdf_ns{ ns = <<"https://example.test/">> }, _Context) ->
     {ok, <<"test">>};
