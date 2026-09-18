@@ -75,7 +75,8 @@ add_sql_checks(#search_sql{
         {z_convert:to_binary(Table), z_convert:to_binary(Alias)}
         || {Table, Alias} <- Tables0
     ],
-    CatsPerAlias = cats_per_alias(TabCats, TabCatsExclude, TabCatsExact, Context),
+    CatsPerAliasTriples = cats_per_alias(TabCats, TabCatsExclude, TabCatsExact, Context),
+    CatsPerAlias = [ {Alias, Cats} || {Alias, Cats, _ExcludeIds} <- CatsPerAliasTriples ],
     {AclWhere, Args1} = lists:foldl(
         fun(Table, {Conditions, AccArgs}) ->
             {Condition, NewArgs} = add_acl_check(
@@ -85,19 +86,20 @@ add_sql_checks(#search_sql{
         {[], Args},
         Tables),
     lists:foldl(
-        fun({Alias, Cats}, {Conditions, AccArgs}) ->
-            case add_cat_check(Alias, Cats, AccArgs, Context) of
+        fun({Alias, Cats, ExcludeIds}, {Conditions, AccArgs}) ->
+            case add_cat_check(Alias, Cats, ExcludeIds, AccArgs, Context) of
                 {[], NewArgs} -> {Conditions, NewArgs};
                 {Condition, NewArgs} -> {[Condition | Conditions], NewArgs}
             end
         end,
         {AclWhere, Args1},
-        CatsPerAlias).
+        CatsPerAliasTriples).
 
 normalize_aliases(AliasValues) ->
     [ {z_convert:to_binary(Alias), Value} || {Alias, Value} <- AliasValues ].
 
-%% @doc Compute the final category IDs for every restricted alias.
+%% @doc Compute {Alias, all | [CategoryId], [ExcludeCategoryId]} triples.
+%% Keep expanded exclusions separate so parent category ranges cannot re-include them.
 cats_per_alias(TabCats, TabExclude, TabExact, Context) ->
     AllAlias = lists:usort(
         [ Alias || {Alias, _} <- TabCats ] ++
@@ -115,7 +117,9 @@ cats_per_alias(TabCats, TabExclude, TabExact, Context) ->
                         EIds -> EIds
                     end
             end,
-            {Alias, cats_to_find(Include, Exclude, Exact, Context)}
+            ExcludeExpanded = lists:usort(
+                lists:flatmap(fun(C) -> m_category:contains(C, Context) end, Exclude)),
+            {Alias, cats_to_find(Include, Exclude, Exact, Context), ExcludeExpanded}
         end,
         AllAlias).
 
@@ -197,20 +201,46 @@ publish_check(Alias, #search_sql{ extra = Extra }) ->
             ]
     end.
 
-add_cat_check(_Alias, all, Args, _Context) ->
+%% @doc Create the 'where' conditions for the category check
+add_cat_check(_Alias, all, [], Args, _Context) ->
     {[], Args};
-add_cat_check(_Alias, [], Args, _Context) ->
+add_cat_check(Alias, all, ExcludeIds, Args, Context) ->
+    % No positive category filter, but still need to exclude some categories.
+    case m_category:is_tree_dirty(Context) of
+        false ->
+            add_cat_exclude_check_pivot(Alias, ExcludeIds, Args, Context);
+        true ->
+            add_cat_exclude_check_any(Alias, ExcludeIds, Args)
+    end;
+add_cat_check(_Alias, [], _ExcludeIds, Args, _Context) ->
     {["false"], Args};
-add_cat_check(Alias, Cats, Args, Context) ->
+add_cat_check(Alias, Cats, ExcludeIds, Args, Context) ->
     All = m_category:all(Context),
-    case lists:usort(Cats) of
+    IsTreeDirty = m_category:is_tree_dirty(Context),
+    {IncludeCheck, Args1} = case lists:usort(Cats) of
         All ->
             {[], Args};
+        _ when IsTreeDirty ->
+            % While the category tree is rebuilding, fall back to a direct category_id check
+            % because the pivot_category_nr values are not up to date.
+            add_cat_check_any(Alias, Cats, Args);
         _ ->
-            case m_category:is_tree_dirty(Context) of
-                false -> add_cat_check_pivot(Alias, Cats, Args, Context);
-                true -> add_cat_check_any(Alias, Cats, Args)
-            end
+            % Use range queries on the category_nr pivot column.
+            add_cat_check_pivot(Alias, Cats, Args, Context)
+    end,
+    {ExcludeCheck, Args2} = case ExcludeIds of
+        [] ->
+            {[], Args1};
+        _ when IsTreeDirty ->
+            add_cat_exclude_check_any(Alias, ExcludeIds, Args1);
+        _ ->
+            add_cat_exclude_check_pivot(Alias, ExcludeIds, Args1, Context)
+    end,
+    case {IncludeCheck, ExcludeCheck} of
+        {[], []} -> {[], Args2};
+        {Inc, []} -> {Inc, Args2};
+        {[], Exc} -> {Exc, Args2};
+        {Inc, Exc} -> {["(", Inc, " and ", Exc, ")"], Args2}
     end.
 
 add_cat_check_pivot(Alias, Cats, Args, Context) ->
@@ -234,3 +264,21 @@ add_cat_check_any(Alias, Cats, Args) ->
         [Alias, ".category_id = any($", integer_to_list(length(Args1)), "::int[])"],
         Args1
     }.
+
+%% @doc Generate a NOT range clause to exclude categories from the result.
+%% Used when the category tree pivot numbers are up to date.
+add_cat_exclude_check_pivot(Alias, ExcludeIds, Args, Context) ->
+    Ranges = m_category:ranges(ExcludeIds, Context),
+    ExcludeChecks = [ cat_check_pivot1(Alias, Range) || Range <- Ranges ],
+    case ExcludeChecks of
+        [] ->
+            {[], Args};
+        _ ->
+            {["not (", lists:join(" or ", ExcludeChecks), ")"], Args}
+    end.
+
+%% @doc Generate a NOT IN clause to exclude categories from the result.
+%% Used when the category tree is dirty and pivot_category_nr values are not up to date.
+add_cat_exclude_check_any(Alias, ExcludeIds, Args) ->
+    Args1 = Args ++ [ExcludeIds],
+    {[Alias, ".category_id <> all($", integer_to_list(length(Args1)), "::int[])"], Args1}.
