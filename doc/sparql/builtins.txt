@@ -70,10 +70,10 @@ ExistsFunc    ::=   'EXISTS' GroupGraphPattern
 
 NotExistsFunc     ::=   'NOT' 'EXISTS' GroupGraphPattern
 
-Aggregate     ::=     'COUNT' '(' 'DISTINCT'? ( '*' | Expression ) ')'
-                | 'SUM' '(' 'DISTINCT'? Expression ')'
-                | 'MIN' '(' 'DISTINCT'? Expression ')'
-                | 'MAX' '(' 'DISTINCT'? Expression ')'
-                | 'AVG' '(' 'DISTINCT'? Expression ')'
-                | 'SAMPLE' '(' 'DISTINCT'? Expression ')'
-                | 'GROUP_CONCAT' '(' 'DISTINCT'? Expression ( ';' 'SEPARATOR' '=' String )? ')'
+Aggregate     ::=     'COUNT' '(' 'DISTINCT'? ( '*' | Expression ) ')'                          # done
+                | 'SUM' '(' 'DISTINCT'? Expression ')'                                          # done
+                | 'MIN' '(' 'DISTINCT'? Expression ')'                                          # done
+                | 'MAX' '(' 'DISTINCT'? Expression ')'                                          # done
+                | 'AVG' '(' 'DISTINCT'? Expression ')'                                          # done
+                | 'SAMPLE' '(' 'DISTINCT'? Expression ')'                                       # done, needs PostgreSQL 16+
+                | 'GROUP_CONCAT' '(' 'DISTINCT'? Expression ( ';' 'SEPARATOR' '=' String )? ')' # done

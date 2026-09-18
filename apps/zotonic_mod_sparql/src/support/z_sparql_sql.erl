@@ -57,6 +57,7 @@
 
 -record(sql_state, {
     bindings = #{} :: map(),
+    solution_bindings = #{} :: map(),
     alias_nr = 1 :: pos_integer(),
     context :: z:context()
 }).
@@ -86,7 +87,6 @@ to_sql_term(ParsedQuery, Context) ->
     Reason :: term().
 query_plan_to_sql(#{
     dataset := [],
-    group_by := [],
     limit := undefined,
     offset := undefined,
     root := {var, RootName},
@@ -98,17 +98,18 @@ query_plan_to_sql(#{
     },
     try
         {Terms, State1} = pattern_to_sql(Pattern, State0),
-        Projection = projection_term(Plan, State1),
-        OrderTerms = order_terms(maps:get(order_by, Plan), State1),
-        {ok, Terms ++ [Projection] ++ OrderTerms}
+        State1a = State1#sql_state{ solution_bindings = State1#sql_state.bindings },
+        {Projection, State2} = projection_term(Plan, State1a),
+        GroupTerms = group_terms(maps:get(group_by, Plan), State2),
+        HavingTerms = having_terms(maps:get(having, Plan), State2),
+        OrderTerms = order_terms(maps:get(order_by, Plan), State2),
+        {ok, Terms ++ [Projection] ++ GroupTerms ++ HavingTerms ++ OrderTerms}
     catch
         throw:{error, Reason} ->
             {error, Reason}
     end;
 query_plan_to_sql(#{ dataset := [_ | _] }, _Context) ->
     {error, {unsupported, dataset}};
-query_plan_to_sql(#{ group_by := [_ | _] }, _Context) ->
-    {error, {unsupported, group_by}};
 query_plan_to_sql(#{ limit := Limit }, _Context) when Limit =/= undefined ->
     {error, {unsupported, limit}};
 query_plan_to_sql(#{ offset := Offset }, _Context) when Offset =/= undefined ->
@@ -345,6 +346,8 @@ expression_to_sql({'u+', Expression}, State, Term0) ->
 expression_to_sql({'u-', Expression}, State, Term0) ->
     {Expression1, Term1} = expression_to_sql(Expression, State, Term0),
     {unary_expression('u-', Expression1), Term1};
+expression_to_sql({aggregate, Function, Distinct, Argument, Separator}, State, Term0) ->
+    aggregate_to_sql(Function, Distinct, Argument, Separator, State, Term0);
 expression_to_sql({call, Function, [Argument]}, State, Term0)
     when Function =:= isliteral; Function =:= isnumeric ->
     type_test_to_sql(Function, Argument, State, Term0);
@@ -490,6 +493,72 @@ expression_list_to_sql([Expression | Rest], State, Term0) ->
     {Expression1, Term1} = expression_to_sql(Expression, State, Term0),
     {Rest1, Term2} = expression_list_to_sql(Rest, State, Term1),
     {[Expression1 | Rest1], Term2}.
+
+aggregate_to_sql(count, distinct, all, undefined, State, Term) ->
+    Argument = solution_row_sql(State#sql_state.solution_bindings),
+    aggregate_expression(count, distinct, Argument, undefined, integer, State, Term);
+aggregate_to_sql(Function, Distinct, all, undefined, State, Term) ->
+    aggregate_expression(Function, Distinct, all, undefined, integer, State, Term);
+aggregate_to_sql(Function, Distinct, Argument, Separator, State, Term0) ->
+    {Argument0, Term1} = expression_to_sql(Argument, State, Term0),
+    case z_sparql_sql_aggregate:type_signature(Function) of
+        {ok, {ArgumentType, ResultType}} ->
+            Argument1 = aggregate_argument(ArgumentType, Argument0),
+            ResultType1 = aggregate_result_type(ResultType, Argument1),
+            {Separator1, Term2} = aggregate_separator(Separator, State, Term1),
+            aggregate_expression(
+                Function, Distinct, expression_sql(Argument1), Separator1,
+                ResultType1, State, Term2);
+        {error, Reason} ->
+            throw({error, Reason})
+    end.
+
+aggregate_argument(any, Argument) ->
+    Argument;
+aggregate_argument(common, #sql_expression{ type = Type } = Argument) ->
+    coerce_expression(Argument, Type);
+aggregate_argument(Type, Argument) ->
+    coerce_expression(Argument, Type).
+
+aggregate_result_type(common, #sql_expression{ type = Type }) -> Type;
+aggregate_result_type(number, Argument) -> numeric_result_type([Argument]);
+aggregate_result_type(Type, _Argument) -> Type.
+
+aggregate_separator(undefined, _State, Term) ->
+    {undefined, Term};
+aggregate_separator(Separator, State, Term0) ->
+    {Separator0, Term1} = expression_to_sql(Separator, State, Term0),
+    Separator1 = coerce_expression(Separator0, text),
+    {expression_sql(Separator1), Term1}.
+
+aggregate_expression(Function, Distinct, Argument, Separator, Type, State, Term) ->
+    case z_sparql_sql_aggregate:to_sql(
+        Function, Distinct, Argument, Separator, State#sql_state.context)
+    of
+        {ok, Sql} ->
+            {#sql_expression{
+                sql = Sql,
+                type = Type,
+                source = expression
+            }, Term};
+        {error, Reason} ->
+            throw({error, Reason})
+    end.
+
+%% @doc COUNT(DISTINCT *) applies DISTINCT to complete mappings. Use only
+%% variables from the graph pattern; SELECT aliases are added after the
+%% bindings are done and are not part of the aggregate input.
+solution_row_sql(Bindings) ->
+    Expressions = [
+        solution_binding_sql(Binding)
+        || {{var, _Name}, Binding} <- lists:sort(maps:to_list(Bindings))
+    ],
+    [<<"ROW(">>, lists:join(<<", ">>, Expressions), $)].
+
+solution_binding_sql({resource, Alias}) ->
+    column_expression(Alias, <<"id">>);
+solution_binding_sql({value, Expression}) ->
+    expression_sql(Expression).
 
 %% @doc Operators determine their input types bottom-up. PostgreSQL determines
 %% the type of query arguments from the operator and the other operand.
@@ -687,26 +756,38 @@ boolean_expression(Sql) ->
 
 expression_sql(#sql_expression{ sql = Sql }) -> Sql.
 
-projection_term(#{ select := Select, distinct := Distinct, root := Root }, State) ->
-    Variables0 = case Select of
+projection_term(#{ select := Select, distinct := Distinct, root := Root } = Plan, State0) ->
+    SelectItems0 = case Select of
         all -> lists:sort([
             Variable
-            || {var, _} = Variable <- maps:keys(State#sql_state.bindings)
+            || {var, _} = Variable <- maps:keys(State0#sql_state.bindings)
         ]);
         _ -> Select
     end,
-    % The root resource is already selected as rsc.id by z_search_terms.
-    Variables = lists:delete(Root, Variables0),
-    SelectExpressions = projection_expressions(Variables, State, 1, []),
+    IsGrouped = is_grouped_query(Plan),
+    % For a normal resource query the root is already selected as rsc.id by
+    % z_search_terms. Grouped queries have their own root, so we can remove
+    % the default rsc.id select.
+    % TODO: check if we can remove the rsc.id from the record definition, as
+    %       this is a bit of a hack.
+    SelectItems = if
+        IsGrouped -> SelectItems0;
+        true -> lists:delete(Root, SelectItems0)
+    end,
+    Extra = if
+        IsGrouped -> [no_default_select];
+        true -> []
+    end,
+    {SelectExpressions, Term0, State1} = projection_expressions(SelectItems, State0, empty_term(), 1, []),
     Select1 = case {Distinct, SelectExpressions} of
         {distinct, [First | Rest]} -> [[<<"DISTINCT ">>, First] | Rest];
         _ -> SelectExpressions
     end,
-    (empty_term())#search_sql_term{ select = Select1 }.
+    {Term0#search_sql_term{ select = Select1, extra = Extra }, State1}.
 
-projection_expressions([], _State, _Nr, Acc) ->
-    lists:reverse(Acc);
-projection_expressions([{var, _} = Variable | Rest], State, Nr, Acc) ->
+projection_expressions([], State, Term, _Nr, Acc) ->
+    {lists:reverse(Acc), Term, State};
+projection_expressions([{var, _} = Variable | Rest], State, Term, Nr, Acc) ->
     Expression = case maps:find(Variable, State#sql_state.bindings) of
         {ok, {resource, Alias}} -> column_expression(Alias, <<"id">>);
         {ok, {value, BoundExpression}} -> expression_sql(BoundExpression);
@@ -714,23 +795,72 @@ projection_expressions([{var, _} = Variable | Rest], State, Nr, Acc) ->
     end,
     ColumnAlias = <<"sparql_", (integer_to_binary(Nr))/binary>>,
     SelectExpression = [Expression, <<" AS ">>, ColumnAlias],
-    projection_expressions(Rest, State, Nr + 1, [SelectExpression | Acc]).
+    projection_expressions(Rest, State, Term, Nr + 1, [SelectExpression | Acc]);
+projection_expressions([{as, Expression, Variable} | Rest], State0, Term0, Nr, Acc) ->
+    {Expression1, Term1} = expression_to_sql(Expression, State0, Term0),
+    State1 = bind_projection(Variable, Expression1, State0),
+    ColumnAlias = <<"sparql_", (integer_to_binary(Nr))/binary>>,
+    SelectExpression = [expression_sql(Expression1), <<" AS ">>, ColumnAlias],
+    projection_expressions(Rest, State1, Term1, Nr + 1, [SelectExpression | Acc]).
+
+bind_projection(Variable, Expression, #sql_state{ bindings = Bindings } = State) ->
+    case maps:is_key(Variable, Bindings) of
+        true -> throw({error, {variable_already_bound, Variable}});
+        false -> State#sql_state{ bindings = Bindings#{ Variable => {value, Expression} } }
+    end.
+
+is_grouped_query(#{ group_by := [_ | _] }) ->
+    true;
+is_grouped_query(Plan) ->
+    has_aggregate([
+        maps:get(select, Plan),
+        maps:get(having, Plan),
+        maps:get(order_by, Plan)
+    ]).
+
+has_aggregate({aggregate, _Function, _Distinct, _Argument, _Separator}) -> true;
+has_aggregate(Value) when is_tuple(Value) -> has_aggregate(tuple_to_list(Value));
+has_aggregate(Value) when is_list(Value) -> lists:any(fun has_aggregate/1, Value);
+has_aggregate(_Value) -> false.
+
+group_terms([], _State) ->
+    [];
+group_terms(GroupBy, State) ->
+    {Expressions0, Term} = expressions_to_term(GroupBy, State),
+    Expressions = [ expression_sql(Expression) || Expression <- Expressions0 ],
+    [Term#search_sql_term{ group_by = Expressions }].
+
+having_terms([], _State) ->
+    [];
+having_terms(Having, State) ->
+    {Expressions, Term} = expressions_to_term(Having, State),
+    Expressions1 = [
+        expression_sql(coerce_expression(Expression, boolean))
+        || Expression <- Expressions
+    ],
+    [Term#search_sql_term{ having = Expressions1 }].
+
+expressions_to_term(Expressions, State) ->
+    expressions_to_term(Expressions, State, empty_term(), []).
+
+expressions_to_term([], _State, Term, Acc) ->
+    {lists:reverse(Acc), Term};
+expressions_to_term([Expression | Rest], State, Term0, Acc) ->
+    {Expression1, Term1} = expression_to_sql(Expression, State, Term0),
+    expressions_to_term(Rest, State, Term1, [Expression1 | Acc]).
 
 order_terms([], _State) ->
     [];
 order_terms(Orders, State) ->
-    Sort = [ order_expression(Order, State) || Order <- Orders ],
-    [(empty_term())#search_sql_term{ sort = Sort }].
+    {Sort, Term} = order_expressions(Orders, State, empty_term(), []),
+    [Term#search_sql_term{ sort = Sort }].
 
-order_expression({order, Direction, {var, _} = Variable}, State) ->
-    Expression = case maps:find(Variable, State#sql_state.bindings) of
-        {ok, {resource, Alias}} -> column_expression(Alias, <<"id">>);
-        {ok, {value, BoundExpression}} -> expression_sql(BoundExpression);
-        error -> throw({error, {unbound_variable, Variable}})
-    end,
-    [Expression, order_direction(Direction)];
-order_expression({order, _Direction, Expression}, _State) ->
-    throw({error, {unsupported_order_expression, Expression}}).
+order_expressions([], _State, Term, Acc) ->
+    {lists:reverse(Acc), Term};
+order_expressions([{order, Direction, Expression} | Rest], State, Term0, Acc) ->
+    {Expression1, Term1} = expression_to_sql(Expression, State, Term0),
+    Sort = [expression_sql(Expression1), order_direction(Direction)],
+    order_expressions(Rest, State, Term1, [Sort | Acc]).
 
 order_direction(default) -> <<" ASC">>;
 order_direction(asc) -> <<" ASC">>;

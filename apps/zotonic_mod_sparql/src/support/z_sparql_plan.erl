@@ -73,11 +73,12 @@
 -type query_plan() :: #{
     type := select,
     distinct := default | distinct | reduced,
-    select := all | [ variable() ],
+    select := all | [ variable() | {as, term(), variable()} ],
     dataset := list(),
     where := query_pattern(),
     root := variable() | undefined,
     group_by := [ variable() ],
+    having := [ term() ],
     order_by := list(),
     limit := non_neg_integer() | undefined,
     offset := non_neg_integer() | undefined
@@ -114,16 +115,19 @@ to_query_plan({query, Prologue, {select, Distinct, Select, Dataset, Where, Solut
         State0 = map_prologue(Prologue, #plan_state{ context = Context }),
         {Dataset1, State1} = map_dataset(Dataset, State0),
         {Where1, State2} = map_group(Where, State1),
-        {GroupBy, OrderBy, Limit, Offset, _State3} = map_solution_modifier(SolutionModifier, State2),
-        Root = find_root_variable(Select, Where1),
+        {Select1, State3} = map_select(Select, State2),
+        {GroupBy, Having, OrderBy, Limit, Offset, _State4} =
+            map_solution_modifier(SolutionModifier, State3),
+        Root = find_root_variable(Select1, Where1),
         {ok, #{
             type => select,
             distinct => Distinct,
-            select => Select,
+            select => Select1,
             dataset => Dataset1,
             where => Where1,
             root => Root,
             group_by => GroupBy,
+            having => Having,
             order_by => OrderBy,
             limit => Limit,
             offset => Offset
@@ -163,12 +167,30 @@ map_dataset([{from_named, Iri} | Rest], State0) ->
     {Rest1, State2} = map_dataset(Rest, State1),
     {[{from_named, Iri1} | Rest1], State2}.
 
-map_solution_modifier({solution_modifier, GroupBy, OrderBy, LimitOffset}, State0) ->
+map_select(all, State) ->
+    {all, State};
+map_select(Select, State) ->
+    map_select_items(Select, State).
+
+map_select_items([], State) ->
+    {[], State};
+map_select_items([{var, _} = Variable | Rest], State0) ->
+    {Rest1, State1} = map_select_items(Rest, State0),
+    {[Variable | Rest1], State1};
+map_select_items([{as, Expression, {var, _} = Variable} | Rest], State0) ->
+    {Expression1, State1} = map_expression(Expression, State0),
+    {Rest1, State2} = map_select_items(Rest, State1),
+    {[{as, Expression1, Variable} | Rest1], State2};
+map_select_items([Item | _], _State) ->
+    throw({error, {invalid_select_item, Item}}).
+
+map_solution_modifier({solution_modifier, GroupBy, Having, OrderBy, LimitOffset}, State0) ->
     {GroupBy1, State1} = map_expressions(GroupBy, State0),
-    {OrderBy1, State2} = map_order(OrderBy, State1),
-    {GroupBy1, OrderBy1,
+    {Having1, State2} = map_expressions(Having, State1),
+    {OrderBy1, State3} = map_order(OrderBy, State2),
+    {GroupBy1, Having1, OrderBy1,
      limit_offset(limit, LimitOffset),
-     limit_offset(offset, LimitOffset), State2};
+     limit_offset(offset, LimitOffset), State3};
 map_solution_modifier(SolutionModifier, _State) ->
     throw({error, {invalid_solution_modifier, SolutionModifier}}).
 
@@ -406,6 +428,10 @@ map_expression({Operator, Expression}, State0)
     when Operator =:= 'not'; Operator =:= 'u+'; Operator =:= 'u-' ->
     {Expression1, State1} = map_expression(Expression, State0),
     {{Operator, Expression1}, State1};
+map_expression({aggregate, Function, Distinct, Argument, Separator}, State0) ->
+    {Argument1, State1} = map_aggregate_argument(Argument, State0),
+    {Separator1, State2} = map_aggregate_separator(Separator, State1),
+    {{aggregate, Function, Distinct, Argument1, Separator1}, State2};
 map_expression({call, Function, Arguments}, State0) when is_atom(Function) ->
     {Arguments1, State1} = map_expressions(Arguments, State0),
     {{call, Function, Arguments1}, State1};
@@ -416,6 +442,18 @@ map_expression({call, Function, Arguments}, State0) ->
 map_expression(Expression, State) ->
     map_term(Expression, State).
 
+map_aggregate_argument(all, State) ->
+    {all, State};
+map_aggregate_argument(Expression, State) ->
+    map_expression(Expression, State).
+
+map_aggregate_separator(undefined, State) ->
+    {undefined, State};
+map_aggregate_separator(Separator, State) when is_binary(Separator) ->
+    {{literal, Separator, undefined, undefined}, State};
+map_aggregate_separator(Separator, _State) ->
+    throw({error, {invalid_group_concat_separator, Separator}}).
+
 
 find_root_variable(all, Pattern) ->
     first(resource_variables(Pattern));
@@ -425,11 +463,13 @@ find_root_variable(Select, Pattern) ->
 
 first_selected_resource([], ResourceVariables) ->
     first(ResourceVariables);
-first_selected_resource([Variable | Rest], ResourceVariables) ->
+first_selected_resource([{var, _} = Variable | Rest], ResourceVariables) ->
     case lists:member(Variable, ResourceVariables) of
         true -> Variable;
         false -> first_selected_resource(Rest, ResourceVariables)
-    end.
+    end;
+first_selected_resource([_Expression | Rest], ResourceVariables) ->
+    first_selected_resource(Rest, ResourceVariables).
 
 first([Value | _]) -> Value;
 first([]) -> undefined.

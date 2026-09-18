@@ -9,9 +9,10 @@ Nonterminals
     select_query construct_query describe_query ask_query
     dataset_clauses dataset_clause
     where_clause solution_modifier
-    group_clause order_clause order_conditions order_condition
+    group_clause having_clause having_conditions having_condition
+    order_clause order_conditions order_condition
     limit_offset_clause limit_clause offset_clause
-    var_list var_or_star
+    var_list var_or_star select_items select_item
     group_graph_pattern group_graph_pattern_sub triples_block
     graph_pattern_not_triples optional_graph_pattern group_graph_pattern_inner
     union_graph_pattern filter_pattern bind_pattern inline_data
@@ -21,12 +22,13 @@ Nonterminals
     relational_expression additive_expression multiplicative_expression
     unary_expression primary_expression
     bracketted_expression built_in_call built_in_function arg_list
+    aggregate aggregate_distinct aggregate_separator
     rdf_literal numeric_literal boolean_literal string.
 
 Terminals
     select construct describe ask where distinct reduced from named graph optional
     union filter bind as values
-    group by order asc desc limit offset base prefix a
+    group by having order asc desc limit offset base prefix a
     var1 var2 iri_ref pname_ns pname_ln blank_node_label anon nil
     integer decimal double integer_positive decimal_positive double_positive
     integer_negative decimal_negative double_negative
@@ -39,7 +41,8 @@ Terminals
     concat substr strlen replace ucase lcase encode_for_uri contains strstarts
     strends strbefore strafter year month day hours minutes seconds timezone tz
     now uuid struuid md5 sha1 sha256 sha384 sha512 coalesce 'if' strlang strdt
-    sameterm isiri isuri isblank isliteral isnumeric regex.
+    sameterm isiri isuri isblank isliteral isnumeric regex
+    count sum min max avg sample group_concat separator.
 
 Rootsymbol
     query.
@@ -81,7 +84,14 @@ ask_query -> ask dataset_clauses where_clause solution_modifier :
     {ask, '$2', '$3', '$4'}.
 
 var_or_star -> star : all.
-var_or_star -> var_list : '$1'.
+var_or_star -> select_items : '$1'.
+
+select_items -> select_item : ['$1'].
+select_items -> select_items select_item : '$1' ++ ['$2'].
+
+select_item -> var : '$1'.
+select_item -> lparen expression as var rparen :
+    {as, '$2', '$4'}.
 
 var_list -> var : ['$1'].
 var_list -> var_list var : '$1' ++ ['$2'].
@@ -97,11 +107,20 @@ dataset_clause -> from named iri_term :
 where_clause -> group_graph_pattern : '$1'.
 where_clause -> where group_graph_pattern : '$2'.
 
-solution_modifier -> group_clause order_clause limit_offset_clause :
-    {solution_modifier, '$1', '$2', '$3'}.
+solution_modifier -> group_clause having_clause order_clause limit_offset_clause :
+    {solution_modifier, '$1', '$2', '$3', '$4'}.
 
 group_clause -> '$empty' : [].
 group_clause -> group by var_list : '$3'.
+
+having_clause -> '$empty' : [].
+having_clause -> having having_conditions : '$2'.
+
+having_conditions -> having_condition : ['$1'].
+having_conditions -> having_conditions having_condition : '$1' ++ ['$2'].
+
+having_condition -> bracketted_expression : '$1'.
+having_condition -> built_in_call : '$1'.
 
 order_clause -> '$empty' : [].
 order_clause -> order by order_conditions : '$3'.
@@ -262,6 +281,7 @@ built_in_call -> iri_term nil :
     {call, '$1', []}.
 built_in_call -> built_in_function lparen arg_list rparen :
     {call, '$1', '$3'}.
+built_in_call -> aggregate : '$1'.
 built_in_call -> built_in_function nil :
     {call, '$1', []}.
 
@@ -317,6 +337,29 @@ built_in_function -> isblank : isblank.
 built_in_function -> isliteral : isliteral.
 built_in_function -> isnumeric : isnumeric.
 built_in_function -> regex : regex.
+
+aggregate -> count lparen aggregate_distinct star rparen :
+    {aggregate, count, '$3', all, undefined}.
+aggregate -> count lparen aggregate_distinct expression rparen :
+    {aggregate, count, '$3', '$4', undefined}.
+aggregate -> sum lparen aggregate_distinct expression rparen :
+    {aggregate, sum, '$3', '$4', undefined}.
+aggregate -> min lparen aggregate_distinct expression rparen :
+    {aggregate, min, '$3', '$4', undefined}.
+aggregate -> max lparen aggregate_distinct expression rparen :
+    {aggregate, max, '$3', '$4', undefined}.
+aggregate -> avg lparen aggregate_distinct expression rparen :
+    {aggregate, avg, '$3', '$4', undefined}.
+aggregate -> sample lparen aggregate_distinct expression rparen :
+    {aggregate, sample, '$3', '$4', undefined}.
+aggregate -> group_concat lparen aggregate_distinct expression aggregate_separator rparen :
+    {aggregate, group_concat, '$3', '$4', '$5'}.
+
+aggregate_distinct -> '$empty' : default.
+aggregate_distinct -> distinct : distinct.
+
+aggregate_separator -> '$empty' : undefined.
+aggregate_separator -> semicolon separator eq string : '$4'.
 
 arg_list -> '$empty' : [].
 arg_list -> expression : ['$1'].

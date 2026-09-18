@@ -42,7 +42,8 @@ combine(Terms) when is_list(Terms) ->
     AllAliases = defined_aliases(Terms1),
     Terms2 = compile_terms(Terms1, AllAliases, #{}),
     Q0 = lists:foldr(fun merge_term/2, #search_sql_term{}, Terms2),
-    Q = Q0#search_sql_term{ args = Args },
+    Q1 = maybe_remove_default_select(Q0),
+    Q = Q1#search_sql_term{ args = Args },
     From = iolist_to_binary([
         <<"rsc rsc">>,
         make_join(Q#search_sql_term.join_inner, "join"),
@@ -61,6 +62,8 @@ combine(Terms) when is_list(Terms) ->
         select = iolist_to_binary(lists:join(", ", Q#search_sql_term.select)),
         from = From,
         where = iolist_to_binary(lists:join(" AND ", Q#search_sql_term.where)),
+        group_by = iolist_to_binary(lists:join(", ", Q#search_sql_term.group_by)),
+        having = iolist_to_binary(lists:join(" AND ", Q#search_sql_term.having)),
         order = iolist_to_binary(
                     lists:join(", ",   make_sort(Q#search_sql_term.asort, Q)
                                     ++ make_sort(Q#search_sql_term.sort, Q)
@@ -75,6 +78,14 @@ combine(Terms) when is_list(Terms) ->
         extra = Q#search_sql_term.extra,
         search_sql_terms = Terms
     }.
+
+%% In group_by clauses we do not need the rsc.id select, which is always added
+%% by default (in the record definition).
+maybe_remove_default_select(#search_sql_term{ extra = Extra, select = Select } = Q) ->
+    case lists:member(no_default_select, Extra) of
+        true -> Q#search_sql_term{ select = lists:delete(<<"rsc.id">>, Select) };
+        false -> Q
+    end.
 
 make_join(Joins, JoinType) ->
     maps:fold(
@@ -363,6 +374,8 @@ merge_term(Term, Acc) ->
         join_left = JoinLeft,
         join_inner = JoinInner,
         where = Where,
+        group_by = GroupBy,
+        having = Having,
         sort = Sort,
         asort = ASort,
         zsort = ZSort,
@@ -377,6 +390,8 @@ merge_term(Term, Acc) ->
         join_left = maps:merge(Acc#search_sql_term.join_left, JoinLeft),
         join_inner = maps:merge(Acc#search_sql_term.join_inner, JoinInner),
         where = merge_where(Acc#search_sql_term.where, Where),
+        group_by = Acc#search_sql_term.group_by ++ GroupBy,
+        having = Acc#search_sql_term.having ++ Having,
         sort = Acc#search_sql_term.sort ++ Sort,
         asort = Acc#search_sql_term.asort ++ ASort,
         zsort = Acc#search_sql_term.zsort ++ ZSort,
@@ -428,6 +443,8 @@ referenced_aliases(#search_sql_term{
         join_inner = JoinInner,
         join_left = JoinLeft,
         where = Where,
+        group_by = GroupBy,
+        having = Having,
         sort = Sort,
         asort = ASort,
         zsort = ZSort,
@@ -440,6 +457,8 @@ referenced_aliases(#search_sql_term{
         aliases_in_join(JoinInner, AllAliases),
         aliases_in_join(JoinLeft, AllAliases),
         aliases_in(Where, AllAliases),
+        aliases_in(GroupBy, AllAliases),
+        aliases_in(Having, AllAliases),
         aliases_in(Sort, AllAliases),
         aliases_in(ASort, AllAliases),
         aliases_in(ZSort, AllAliases),
@@ -450,12 +469,16 @@ referenced_aliases(#search_sql_term{
 
 exported_aliases(#search_sql_term{
         select = Select,
+        group_by = GroupBy,
+        having = Having,
         sort = Sort,
         asort = ASort,
         zsort = ZSort
     }, AllAliases) ->
     alias_union([
         aliases_in(Select, AllAliases),
+        aliases_in(GroupBy, AllAliases),
+        aliases_in(Having, AllAliases),
         aliases_in(Sort, AllAliases),
         aliases_in(ASort, AllAliases),
         aliases_in(ZSort, AllAliases)
@@ -601,6 +624,8 @@ map_args(Term, Mapping) ->
         join_inner = map(Term#search_sql_term.join_inner, Mapping),
         join_left = map(Term#search_sql_term.join_left, Mapping),
         where = map(Term#search_sql_term.where, Mapping),
+        group_by = map(Term#search_sql_term.group_by, Mapping),
+        having = map(Term#search_sql_term.having, Mapping),
         sort = map(Term#search_sql_term.sort, Mapping),
         asort = map(Term#search_sql_term.asort, Mapping),
         zsort = map(Term#search_sql_term.zsort, Mapping)

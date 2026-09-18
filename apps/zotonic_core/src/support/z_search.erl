@@ -724,6 +724,7 @@ concat_sql_query(#search_sql{
         from = From,
         where = Where,
         group_by = GroupBy,
+        having = Having,
         order = Order,
         limit = SearchLimit,
         args = Args
@@ -744,6 +745,11 @@ concat_sql_query(#search_sql{
         <<>> -> <<>>;
         _ -> [ "group by ", GroupBy ]
     end,
+    Having1 = case Having of
+        "" -> "";
+        <<>> -> <<>>;
+        _ -> [ "having ", Having ]
+    end,
     {Parts, FinalArgs} = case SearchLimit of
         undefined ->
             case Limit1 of
@@ -754,6 +760,7 @@ concat_sql_query(#search_sql{
                         "from", From1,
                         Where1,
                         GroupBy1,
+                        Having1,
                         Order1
                     ], Args};
                 {OffsetN, LimitN} ->
@@ -764,6 +771,7 @@ concat_sql_query(#search_sql{
                         "from", From1,
                         Where1,
                         GroupBy1,
+                        Having1,
                         Order1,
                         [ "offset $", integer_to_list(N+1) ],
                         [ "limit $", integer_to_list(N+2) ]
@@ -775,6 +783,7 @@ concat_sql_query(#search_sql{
                 "from", From1,
                 Where1,
                 GroupBy1,
+                Having1,
                 Order1,
                 SearchLimit
             ], Args}
@@ -1086,4 +1095,3 @@ add_cat_exclude_check_pivot(Alias, ExcludeIds, Args, Context) ->
 add_cat_exclude_check_any(Alias, ExcludeIds, Args, _Context) ->
     Args1 = Args ++ [ ExcludeIds ],
     {[ Alias, ".category_id <> all($", integer_to_list(length(Args1)), "::int[])" ], Args1}.
-

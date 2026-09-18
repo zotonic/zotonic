@@ -167,6 +167,7 @@
     where = "" :: iodata(),
     order = "" :: iodata(),
     group_by = "" :: iodata(),
+    having = "" :: iodata(),
     limit,
     tables = [] :: list(),
     args = [] :: list(),
@@ -187,6 +188,8 @@
     join_inner = #{},
     join_left = #{},
     where = [],
+    group_by = [],
+    having = [],
     sort = [],
     asort = [],
     zsort = [],
@@ -392,4 +395,3 @@
 -include("zotonic_log.hrl").
 -include("zotonic_wired.hrl").
 -include("zotonic_deprecated.hrl").
-
