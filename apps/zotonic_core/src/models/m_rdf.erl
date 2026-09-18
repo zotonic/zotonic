@@ -20,21 +20,62 @@
 -module(m_rdf).
 -moduledoc(#{
     zotonic_keywords => [
-        "reference", "backend_developer", "model", "resource", "structured_data", "rdf_and_linked_data", "json_ld", "semantic_web"
+        "reference", "backend_developer", "model", "resource",
+        "structured_data", "rdf_and_linked_data", "json_ld", "semantic_web",
+        "schema_org", "translation", "summary"
     ]
 }).
 -moduledoc("
-Model for RDF summaries of resources. It provides short RDF-oriented summary maps for resources, with translated and non-translated variants.
+Build JSON-LD summary maps for Zotonic resources using Schema.org vocabulary.
 
-Available Model API Paths
--------------------------
+The model resolves resource IDs, names, or URIs and checks resource visibility
+in the calling context. It returns `{error, enoent}` for an unresolved resource
+and `{error, eacces}` when the resource is not visible. Successful Erlang calls
+return `{ok, Document}`, where `Document` is a map, not encoded JSON.
+
+## Summary contents
+
+A summary contains a namespace `@context`, resource `@id`, category-derived
+`@type`, name, description, and page URL. Category-specific properties add
+information for articles, people, organizations, events, places, and media.
+Examples include publication dates, authors, addresses, event locations, and
+images. Undefined and null properties are omitted from the top-level map.
+
+Author and location summaries are included only for visible related resources.
+Nested summaries omit their own `@context`. Image URLs use the site's Schema.org
+mediaclasses, such as `schema-org-1x1`, `schema-org-4x3`, and `schema-org-16x9`.
+
+## Language variants
+
+`summary/2` uses the resource's canonical URI as `@id`. Multilingual title and
+summary values are retained as lists of `@language` and `@value` maps; a single
+translation is returned as a scalar value.
+
+`summary_trans/2` selects a content language using the resource's available
+languages and the context's fallback rules. It resolves translated values to
+that language and uses the absolute `id` dispatch URL as `@id`. Creative-work
+properties include `schema:inLanguage` for this variant.
+
+```erlang
+{ok, Summary} = m_rdf:summary(ResourceId, Context),
+{ok, TranslatedSummary} = m_rdf:summary_trans(ResourceId, Context).
+```
+
+## Available Model API Paths
 
 | Method | Path pattern | Description |
 | --- | --- | --- |
-| `get` | `/rsc/summary/trans/+id/...` | Return translated RDF summary data for resource `+id` (`summary_trans/2`). |
-| `get` | `/rsc/summary/+id/...` | Return summary data for +id. Uses `summary`. |
+| `get` | `/rsc/summary/+id/...` | Return a summary preserving multilingual values. |
+| `get` | `/rsc/summary/trans/+id/...` | Return a summary resolved to a content language. |
 
-`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
+`+id` is a resource reference. Remaining path segments are passed on for lookups
+inside the returned summary. Templates can access the same paths through
+`m.rdf.rsc.summary[id]` and `m.rdf.rsc.summary.trans[id]`.
+
+This model is part of `zotonic_core`. It produces a selected summary of resource
+properties, rather than a complete graph export. `mod_rdf` provides namespace
+resolution, `z_rdf_props` defines shared property mappings, and `mod_sparql` with
+`m_sparql` provides the SPARQL query interface.
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

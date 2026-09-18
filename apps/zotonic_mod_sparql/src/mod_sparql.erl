@@ -18,8 +18,69 @@
 %% limitations under the License.
 
 -module(mod_sparql).
+-moduledoc(#{
+    zotonic_keywords => [
+        "reference", "backend_developer", "module", "search_and_discovery",
+        "query", "sparql", "rdf_and_linked_data", "resource",
+        "content_relationships", "full_text_search"
+    ]
+}).
 -moduledoc("
-The mod_sparql module adds support to use the SPARQL query language for accessing Zotonic data.
+Query Zotonic resources, properties, categories, and edges using SPARQL SELECT.
+
+Queries are parsed and compiled to PostgreSQL through Zotonic's search pipeline.
+Resource visibility checks use the calling context. The module depends on
+`mod_search` and `mod_rdf` and provides the `sparql` search query type.
+
+## Querying resources
+
+Use `m_sparql:search/2`, the `m.sparql` model, or `m.search.sparql` with a `query`
+and an optional `args` map of named pre-bound variables. For example:
+
+```sparql
+SELECT ?article WHERE {
+    ?article zotonic:is_published true .
+    ?article :author ?author
+}
+```
+
+Pass `author` as a resource argument, such as `{rsc, AuthorId}`, instead of
+interpolating a resource identifier into the query text. See `m_sparql` for
+payloads, paging, and the model API.
+
+The implicit `BASE` is the language-neutral site URL. Both `:` and `site:` use
+the local resource URI namespace from the `id` dispatch rule; `zotonic:` uses
+`http://zotonic.net/predicate/`. Explicit BASE and PREFIX declarations override
+these defaults. Local resource IRIs can use resource IDs or unique names.
+
+## Mapping and expressions
+
+Predicate resources map to edges, including reversed predicates. Other predicates
+map through `z_rdf_props` to resource columns, nested JSONB properties, or facet
+and pivot columns. Modules can extend the mapping with the `sparql_mapping`
+notification. `rdf:type` and `rdfs:subClassOf` support category queries.
+
+Supported expressions include filters, OPTIONAL, VALUES, aggregates, common
+string and numeric functions, XSD constructors, and basic DATATYPE. EXISTS and
+NOT EXISTS work in filters and compound or result expressions and preserve the
+scope of their inner variables. `zotonic:fullText` and `zotonic:fullTextRank`
+provide full-text and trigram searches using mapped columns.
+
+RDF term kind, datatype, and language metadata follow expressions independently
+of SQL storage types. Metadata columns are generated only where their components
+are needed. DATATYPE returns NULL for non-literals or unavailable metadata;
+dynamic aggregate metadata and translation-object language handling are limited.
+
+## Stored queries and limits
+
+The admin query editor recognizes SPARQL in query resources. Stored SPARQL
+queries must select exactly the root resource variable so they retain the normal
+resource-ID search contract. They do not register live query watches.
+
+This module implements a subset of SPARQL SELECT. Use search paging parameters
+instead of query LIMIT or OFFSET. Dataset clauses, GRAPH, BIND, LANG, update
+queries, and a standards-based SPARQL protocol endpoint are not implemented.
+The module README describes mappings, full-text search, and further limitations.
 ").
 
 -mod_title("SPARQL").

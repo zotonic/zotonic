@@ -1,7 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2025 Marc Worrell
-%% @doc SPARQL support for Zotonic.  See also z_rdf_props in code and
-%% the zotonic_rdf app.
+%% @doc RDF namespace resolution for Zotonic data mappings.
 %% @end
 
 %% Copyright 2025 Marc Worrell
@@ -19,8 +18,41 @@
 %% limitations under the License.
 
 -module(mod_rdf).
+-moduledoc(#{
+    zotonic_keywords => [
+        "reference", "backend_developer", "module", "rdf_and_linked_data",
+        "semantic_web", "namespace", "mapping", "resource",
+        "sparql", "structured_data"
+    ]
+}).
 -moduledoc("
-Support for mapping between Zotonic and RDF data.
+Resolve RDF namespaces used when mapping Zotonic data to RDF vocabulary terms.
+
+The module observes the `rdf_ns` notification and returns a compact prefix for
+a known namespace. It recognizes these site-specific mappings:
+
+| Namespace | Prefix |
+| --- | --- |
+| `http://zotonic.net/predicate/` | `zotonic` |
+| The local resource URI namespace from `m_rsc:uri_prefix/1` | `site` |
+
+Other namespaces are resolved through `zotonic_rdf:ns_compact/1`. A recognized
+namespace returns `{ok, Prefix}` without a trailing colon. An unknown namespace
+returns `undefined`, allowing other notification observers to provide a mapping.
+The local namespace follows the site's resource URI configuration rather than a
+hard-coded host or path.
+
+## Related APIs
+
+`mod_sparql` depends on this module when resolving namespaces in SELECT queries.
+It handles predicate-to-property and predicate-to-edge mappings through the
+`sparql_mapping` notification, using `z_rdf_props` for known property mappings.
+
+The core `m_rdf` model provides JSON-LD summary maps for resources, including
+Schema.org properties and translated variants. The `zotonic_rdf` library supplies
+shared vocabulary and namespace utilities. See those APIs for resource summaries
+and vocabulary handling; enabling this module does not install an RDF import
+service or a SPARQL protocol endpoint.
 ").
 
 -mod_title("RDF").
