@@ -42,7 +42,9 @@
     | nil.
 
 -type predicate_mapping() ::
-      {column, binary(), binary()}
+      category
+    | subclass
+    | {column, binary(), binary()}
     | {jsonb, binary(), binary(), term()}
     | {edge, term()}
     | undefined.
@@ -318,6 +320,10 @@ predicate_mapping(Namespace, NamespacePrefix, LocalName, Context) ->
         predicate = LocalName
     },
     case z_notifier:first(Notification, Context) of
+        {ok, category} ->
+            category;
+        {ok, subclass} ->
+            subclass;
         {ok, {column, Table, Column}} ->
             z_db:assert_table_name(Table),
             z_db:assert_column_name(Column),

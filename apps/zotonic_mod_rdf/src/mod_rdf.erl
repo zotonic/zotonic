@@ -48,5 +48,8 @@ observe_rdf_ns(#rdf_ns{ ns = NS }, _Context) ->
             % TODO: should we compact that? Maybe to <<"">>?
             undefined;
         Prefix ->
-            {ok, Prefix}
+            case binary:last(Prefix) of
+                $: -> {ok, binary:part(Prefix, 0, byte_size(Prefix) - 1)};
+                _ -> {ok, Prefix}
+            end
     end.

@@ -1562,11 +1562,42 @@ uri_lookup_1(Uri, Context) ->
     case z_db:q1("select id from rsc where uri = $1", [Uri], Context) of
         undefined ->
             case m_rsc_gone:get_uri(Uri, Context) of
-                undefined -> uri_alias(Uri, Context);
-                Gone -> proplists:get_value(new_id, Gone)
+                undefined ->
+                    case zotonic_uri_lookup(Uri, Context) of
+                        undefined ->
+                            % Check for mappings known for common Zotonic categories.
+                            case z_rdf_props:category_mapping(Uri) of
+                                undefined -> uri_alias(Uri, Context);
+                                Category -> name_lookup(Category, Context)
+                            end;
+                        Id ->
+                            Id
+                    end;
+                Gone ->
+                  proplists:get_value(new_id, Gone)
             end;
         Id ->
             Id
+    end.
+
+%% @doc Resolve compact and full Zotonic IRIs against the current site.
+zotonic_uri_lookup(<<"zotonic:", NameOrId/binary>>, Context) ->
+    zotonic_name_or_id_lookup(NameOrId, Context);
+zotonic_uri_lookup(<<"http://zotonic.net/predicate/", NameOrId/binary>>, Context) ->
+    zotonic_name_or_id_lookup(NameOrId, Context);
+zotonic_uri_lookup(_Uri, _Context) ->
+    undefined.
+
+zotonic_name_or_id_lookup(NameOrId, Context) ->
+    case z_utils:only_digits(NameOrId) of
+        true ->
+            Id = binary_to_integer(NameOrId),
+            case exists(Id, Context) of
+                true -> Id;
+                false -> undefined
+            end;
+        false ->
+            name_lookup(NameOrId, Context)
     end.
 
 

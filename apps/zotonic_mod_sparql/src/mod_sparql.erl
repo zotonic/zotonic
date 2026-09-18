@@ -33,6 +33,11 @@ The mod_sparql module adds support to use the SPARQL query language for accessin
     observe_sparql_mapping/2
 ]).
 
+% For testing
+-export([
+    find_column/4
+]).
+
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include("../include/sparql.hrl").
 
@@ -42,7 +47,7 @@ observe_sparql_mapping(#sparql_mapping{ ns_prefix = Prefix, ns = NS, predicate =
     case find_predicate(NS, Predicate, Context) of
         undefined ->
             % Check known rsc and pivot properties - use z_rdf_props
-            case find_column(Prefix, Predicate, Context) of
+            case find_column(Prefix, NS, Predicate, Context) of
                 {ok, _} = Ok -> Ok;
                 undefined -> undefined
             end;
@@ -51,24 +56,79 @@ observe_sparql_mapping(#sparql_mapping{ ns_prefix = Prefix, ns = NS, predicate =
             {ok, {edge, RId}}
     end.
 
-find_column(<<"zotonic">>, Predicate, Context) ->
+find_column(<<"rdfs">>, _NS, <<"subClassOf">>, _Context) ->
+    {ok, subclass};
+find_column(Prefix, NS, Predicate, Context) ->
+    PredicateName = predicate_name(Prefix, NS, Predicate),
+    case z_rdf_props:mapping(PredicateName) of
+        <<"category_id">> ->
+            {ok, category};
+        undefined ->
+            % Just check if we know the basename, irrespective of namespace
+            find_table_column(camelcase_to_underscore(Predicate), Context);
+        Column ->
+            find_table_column(camelcase_to_underscore(Column), Context)
+    end.
+
+find_table_column(Predicate, Context) ->
     case is_protected(Predicate) of
         true -> undefined;
         false ->
             case z_db:column(<<"rsc">>, Predicate, Context) of
                 {ok, _Column} -> {ok, {column, <<"rsc">>, Predicate}};
-                {error, enoent} ->
-                    % TODO:
-                    % 1. Check facet
-                    % 2. Check pivots
-                    % 3. JSON selector in props_json
-                    undefined
+                {error, enoent} -> find_table_column_1(Predicate, Context)
             end
-    end;
-find_column(_NS, _Predicate, _Context) ->
-    % TODO: check known property mappings from z_rdf_props.
-    undefined.
+    end.
 
+%% @doc Map a facet or pivot property to its database column. If the column
+%% is not defined then assume it as a path in the resource JSON properties.
+find_table_column_1(<<"facet.", Name/binary>> = Predicate, Context) ->
+    find_table_column_2(<<"search_facet">>, <<"f_", Name/binary>>, Predicate, Context);
+find_table_column_1(<<"pivot.", Pivot/binary>> = Predicate, Context) ->
+    case binary:split(Pivot, <<".">>, [global]) of
+        [ Name ] ->
+            find_table_column_2(<<"rsc">>, <<"pivot_", Name/binary>>, Predicate, Context);
+        [ PivotTable, Name ] ->
+            find_table_column_2(<<"pivot_", PivotTable/binary>>, Name, Predicate, Context);
+        _ ->
+            json_property(Predicate)
+    end;
+find_table_column_1(Predicate, _Context) ->
+    json_property(Predicate).
+
+find_table_column_2(Table, Column, Predicate, Context) ->
+    case z_db:column(Table, Column, Context) of
+        {ok, _Column} -> {ok, {column, Table, Column}};
+        {error, enoent} -> json_property(Predicate)
+    end.
+
+%% @doc Expand a dot-separated property name to a JSON path.
+json_property(Predicate) ->
+    Path = binary:split(Predicate, <<".">>, [global]),
+    {ok, {jsonb, <<"rsc">>, <<"props_json">>, Path}}.
+
+%% @doc Expand something like FooBar to the usual zotonic lowercased
+%% property name foo_bar.
+camelcase_to_underscore(Name) ->
+    camelcase_to_underscore(Name, <<>>).
+
+camelcase_to_underscore(<<C, Rest/binary>>, <<>>) when C >= $A, C =< $Z ->
+    camelcase_to_underscore(Rest, <<(C + 32)>>);
+camelcase_to_underscore(<<$., C, Rest/binary>>, Acc) when C >= $A, C =< $Z ->
+    camelcase_to_underscore(Rest, <<Acc/binary, $., (C + 32)>>);
+camelcase_to_underscore(<<C, Rest/binary>>, Acc) when C >= $A, C =< $Z ->
+    camelcase_to_underscore(Rest, <<Acc/binary, $_, (C + 32)>>);
+camelcase_to_underscore(<<C/utf8, Rest/binary>>, Acc) ->
+    camelcase_to_underscore(Rest, <<Acc/binary, C/utf8>>);
+camelcase_to_underscore(<<>>, Acc) ->
+    Acc.
+
+predicate_name(<<>>, _NS, Predicate) ->
+    Predicate;
+predicate_name(NS, NS, Predicate) ->
+    <<NS/binary, Predicate/binary>>;
+predicate_name(Prefix, _NS, Predicate) ->
+    <<Prefix/binary, $:, Predicate/binary>>.
 
 is_protected(<<"props">>) -> true;
 is_protected(<<"props_json">>) -> true;

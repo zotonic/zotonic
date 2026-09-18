@@ -31,6 +31,200 @@ relation_edge_test() ->
         ok = m_rsc:delete(ObjectId, Context)
     end.
 
+resource_identifier_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    Context = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+    UniqueName = z_string:to_name(<<"sparql_rid_", (z_ids:id(12))/binary>>),
+    {ok, RscId} = m_rsc:insert([
+        {category, article},
+        {name, UniqueName},
+        {title, <<"SPARQL resource identifier">>}
+    ], Context),
+    try
+        {ok, _EdgeId} = m_edge:insert(RscId, relation, RscId, Context),
+        CompactNameSparql = <<
+            "PREFIX zotonic: <http://zotonic.net/predicate/>\n"
+            "SELECT ?subject WHERE {\n"
+            "    ?subject zotonic:name \"", UniqueName/binary, "\"\n"
+            "}"
+        >>,
+        FullNameSparql = <<
+            "SELECT ?subject WHERE {\n"
+            "    ?subject <http://zotonic.net/predicate/name> \"",
+                UniqueName/binary, "\"\n"
+            "}"
+        >>,
+        CompactIdSparql = <<
+            "PREFIX zotonic: <http://zotonic.net/predicate/>\n"
+            "SELECT ?subject WHERE {\n"
+            "    ?subject zotonic:id ", (integer_to_binary(RscId))/binary, "\n"
+            "}"
+        >>,
+        FullIdSparql = <<
+            "SELECT ?subject WHERE {\n"
+            "    ?subject <http://zotonic.net/predicate/id> ",
+                (integer_to_binary(RscId))/binary, "\n"
+            "}"
+        >>,
+        CompactRscSparql = <<
+            "PREFIX dcterms: <http://purl.org/dc/terms/>\n"
+            "PREFIX zotonic: <http://zotonic.net/predicate/>\n"
+            "SELECT ?subject WHERE {\n"
+            "    ?subject dcterms:relation zotonic:", UniqueName/binary, "\n"
+            "}"
+        >>,
+        FullRscSparql = <<
+            "PREFIX dcterms: <http://purl.org/dc/terms/>\n"
+            "SELECT ?subject WHERE {\n"
+            "    ?subject dcterms:relation <http://zotonic.net/predicate/",
+                (integer_to_binary(RscId))/binary, ">\n"
+            "}"
+        >>,
+        ?assertEqual([RscId], search(CompactNameSparql, Context)),
+        ?assertEqual([RscId], search(FullNameSparql, Context)),
+        ?assertEqual([RscId], search(CompactIdSparql, Context)),
+        ?assertEqual([RscId], search(FullIdSparql, Context)),
+        ?assertEqual([RscId], search(CompactRscSparql, Context)),
+        ?assertEqual([RscId], search(FullRscSparql, Context)),
+        RscIdBinary = integer_to_binary(RscId),
+        ?assertEqual(RscId, m_rsc:uri_lookup(<<"zotonic:", UniqueName/binary>>, Context)),
+        ?assertEqual(
+            RscId,
+            m_rsc:uri_lookup(
+                <<"http://zotonic.net/predicate/", UniqueName/binary>>,
+                Context)),
+        ?assertEqual(RscId, m_rsc:uri_lookup(<<"zotonic:", RscIdBinary/binary>>, Context)),
+        ?assertEqual(
+            RscId,
+            m_rsc:uri_lookup(
+                <<"http://zotonic.net/predicate/", RscIdBinary/binary>>,
+                Context))
+    after
+        ok = m_rsc:delete(RscId, Context)
+    end.
+
+json_property_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    Context = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+    {ok, RscId} = m_rsc:insert([
+        {category, article},
+        {title, <<"SPARQL nested JSON property">>},
+        {<<"sparql_nested">>, #{
+            <<"number">> => 42,
+            <<"text">> => <<"42">>,
+            <<"enabled">> => true
+        }}
+    ], Context),
+    try
+        Prefix = <<"PREFIX zotonic: <http://zotonic.net/predicate/>\n">>,
+        NumberSparql = <<
+            Prefix/binary,
+            "SELECT ?subject WHERE { ?subject zotonic:sparql_nested.number 42 }"
+        >>,
+        NumberAsTextSparql = <<
+            Prefix/binary,
+            "SELECT ?subject WHERE { ?subject zotonic:sparql_nested.number \"42\" }"
+        >>,
+        TextSparql = <<
+            Prefix/binary,
+            "SELECT ?subject WHERE { ?subject zotonic:sparql_nested.text \"42\" }"
+        >>,
+        BooleanSparql = <<
+            Prefix/binary,
+            "SELECT ?subject WHERE { ?subject zotonic:sparql_nested.enabled true }"
+        >>,
+        FullIriSparql = <<
+            "SELECT ?subject WHERE {\n"
+            "    ?subject <http://zotonic.net/predicate/sparql_nested.number> 42\n"
+            "}"
+        >>,
+        ?assertEqual([RscId], search(NumberSparql, Context)),
+        ?assertEqual([], search(NumberAsTextSparql, Context)),
+        ?assertEqual([RscId], search(TextSparql, Context)),
+        ?assertEqual([RscId], search(BooleanSparql, Context)),
+        ?assertEqual([RscId], search(FullIriSparql, Context))
+    after
+        ok = m_rsc:delete(RscId, Context)
+    end.
+
+category_type_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    Context = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+    {ok, ObjectId} = m_rsc:insert([
+        {category, event},
+        {title, <<"SPARQL category relation object">>}
+    ], Context),
+    {ok, ArticleId} = m_rsc:insert([
+        {category, article},
+        {title, <<"SPARQL category article">>}
+    ], Context),
+    {ok, NewsId} = m_rsc:insert([
+        {category, news},
+        {title, <<"SPARQL category news">>}
+    ], Context),
+    {ok, PersonId} = m_rsc:insert([
+        {category, person},
+        {title, <<"SPARQL category person">>}
+    ], Context),
+    try
+        {ok, _ArticleEdgeId} = m_edge:insert(ArticleId, relation, ObjectId, Context),
+        {ok, _NewsEdgeId} = m_edge:insert(NewsId, relation, ObjectId, Context),
+        {ok, _PersonEdgeId} = m_edge:insert(PersonId, relation, ObjectId, Context),
+        {ok, TextCategoryId} = m_category:name_to_id(text, Context),
+        {ok, ArticleCategoryId} = m_category:name_to_id(article, Context),
+        {ok, NewsCategoryId} = m_category:name_to_id(news, Context),
+        ?assertEqual(TextCategoryId, m_rsc:uri_lookup(<<"dctype:Text">>, Context)),
+        ?assertEqual(
+            TextCategoryId,
+            m_rsc:uri_lookup(<<"http://purl.org/dc/dcmitype/Text">>, Context)),
+        ?assertEqual(ArticleCategoryId, m_rsc:uri_lookup(<<"schema:Article">>, Context)),
+        ?assertEqual(
+            ArticleCategoryId,
+            m_rsc:uri_lookup(<<"https://schema.org/Article">>, Context)),
+        ObjectUri = m_rsc:uri(ObjectId, Context),
+        DctypeSparql = <<
+            "PREFIX dcterms: <http://purl.org/dc/terms/>\n"
+            "PREFIX dctype: <http://purl.org/dc/dcmitype/>\n"
+            "SELECT ?subject WHERE {\n"
+            "    ?subject dcterms:relation <", ObjectUri/binary, "> .\n"
+            "    ?subject a dctype:Text\n"
+            "}"
+        >>,
+        TypeSparql = <<
+            "PREFIX dcterms: <http://purl.org/dc/terms/>\n"
+            "PREFIX schema: <https://schema.org/>\n"
+            "SELECT ?subject WHERE {\n"
+            "    ?subject dcterms:relation <", ObjectUri/binary, "> .\n"
+            "    ?subject a schema:Article\n"
+            "}"
+        >>,
+        SubclassSparql = <<
+            "PREFIX dctype: <http://purl.org/dc/dcmitype/>\n"
+            "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"
+            "SELECT ?category WHERE {\n"
+            "    ?category rdfs:subClassOf dctype:Text\n"
+            "}"
+        >>,
+        FullSubclassSparql = <<
+            "PREFIX schema: <https://schema.org/>\n"
+            "SELECT ?category WHERE {\n"
+            "    ?category <http://www.w3.org/2000/01/rdf-schema#subClassOf> schema:Article\n"
+            "}"
+        >>,
+        Expected = lists:sort([ArticleId, NewsId]),
+        ?assertEqual(Expected, lists:sort(search(DctypeSparql, Context))),
+        ?assertEqual(Expected, lists:sort(search(TypeSparql, Context))),
+        ?assertEqual(
+            lists:sort([ArticleCategoryId, NewsCategoryId]),
+            lists:sort(search(SubclassSparql, Context))),
+        ?assertEqual([NewsCategoryId], search(FullSubclassSparql, Context))
+    after
+        ok = m_rsc:delete(ArticleId, Context),
+        ok = m_rsc:delete(NewsId, Context),
+        ok = m_rsc:delete(PersonId, Context),
+        ok = m_rsc:delete(ObjectId, Context)
+    end.
+
 is_published_column_test() ->
     ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
     Context = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
@@ -77,6 +271,29 @@ is_published_column_test() ->
         ok = m_rsc:delete(UnpublishedId, Context),
         ok = m_rsc:delete(ObjectId, Context)
     end.
+
+facet_and_pivot_column_mapping_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    Context = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+    ?assertEqual(
+        {column, <<"search_facet">>, <<"f_category">>},
+        predicate_mapping(<<"facet.category">>, Context)),
+    ?assertEqual(
+        {column, <<"rsc">>, <<"pivot_date_start">>},
+        predicate_mapping(<<"pivot.dateStart">>, Context)),
+    ?assertEqual(
+        {jsonb, <<"rsc">>, <<"props_json">>, [<<"pivot">>, <<"not_defined">>]},
+        predicate_mapping(<<"pivot.notDefined">>, Context)).
+
+predicate_mapping(Predicate, Context) ->
+    Sparql = <<
+        "PREFIX zotonic: <http://zotonic.net/predicate/>\n"
+        "SELECT ?subject WHERE { ?subject zotonic:", Predicate/binary, " ?value }"
+    >>,
+    {ok, Query} = z_sparql:parse(Sparql),
+    {ok, #{ where := {triple, _, #{ mapping := Mapping }, _} }} =
+        z_sparql_plan:to_query_plan(Query, Context),
+    Mapping.
 
 search(Sparql, Context) ->
     {ok, #search_result{ result = Result }} = z_sparql:search(Sparql, {1, 10}, Context),

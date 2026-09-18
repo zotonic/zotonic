@@ -2299,6 +2299,7 @@ Return:
 %% Map a RDF namespace to its prefix (compact form).
 %% Type: first
 %% Return: ``{ok, Prefix}``, ``{error, Reason}``, ``undefined``
+%% The prefix does not include the ``:`` separator.
 -callback observe_rdf_ns(#rdf_ns{}, z:context()) -> Result when
     Result :: {ok, binary()}
             | {error, term()}

@@ -134,7 +134,7 @@ mapped_triple_to_sql({column, Table, Column}, SubjectAlias, Object, Term0, State
 mapped_triple_to_sql({jsonb, Table, Column, Selector}, SubjectAlias, Object, Term0, State0) ->
     {Alias, Term1, State1} = property_alias(Table, SubjectAlias, Term0, State0),
     Expression = jsonb_expression(Alias, Column, Selector),
-    {Term2, State2} = bind_object(Object, value, Expression, undefined, undefined, Term1, State1),
+    {Term2, State2} = bind_jsonb_object(Object, Expression, Term1, State1),
     {[Term2], State2};
 mapped_triple_to_sql({edge, Predicate}, SubjectAlias, Object, Term0, State0) ->
     PredicateId = case m_predicate:name_to_id(Predicate, State0#sql_state.context) of
@@ -147,7 +147,49 @@ mapped_triple_to_sql({edge, Predicate}, SubjectAlias, Object, Term0, State0) ->
     {PredicateArg, Term3} = add_arg(PredicateId, Term2),
     Term4 = add_where([EdgeAlias, <<".predicate_id = ">>, PredicateArg], Term3),
     {Term5, State2} = bind_edge_object(Object, EdgeAlias, Term4, State1),
-    {[Term5], State2}.
+    {[Term5], State2};
+mapped_triple_to_sql(category, SubjectAlias, {iri, Iri}, Term0, State) ->
+    Context = State#sql_state.context,
+    case m_rsc:uri_lookup(Iri, Context) of
+        undefined ->
+            {[add_where(<<"false">>, Term0)], State};
+        CategoryId ->
+            case m_rsc:is_a(CategoryId, category, Context) of
+                true ->
+                    CategoryIds = category_ids(CategoryId, Context),
+                    {CategoryArg, Term1} = add_arg(CategoryIds, Term0),
+                    Where = [SubjectAlias, <<".category_id = ANY(">>, CategoryArg, <<"::int[])">>],
+                    {[add_where(Where, Term1)], State};
+                false ->
+                    throw({error, {not_a_category, Iri}})
+            end
+    end;
+mapped_triple_to_sql(category, _SubjectAlias, Object, _Term, _State) ->
+    throw({error, {expected_category, Object}});
+mapped_triple_to_sql(subclass, SubjectAlias, {iri, Iri}, Term0, State) ->
+    Context = State#sql_state.context,
+    case m_rsc:uri_lookup(Iri, Context) of
+        undefined ->
+            {[add_where(<<"false">>, Term0)], State};
+        CategoryId ->
+            case m_rsc:is_a(CategoryId, category, Context) of
+                true ->
+                    CategoryIds = lists:delete(CategoryId, category_ids(CategoryId, Context)),
+                    {CategoryArg, Term1} = add_arg(CategoryIds, Term0),
+                    Where = [SubjectAlias, <<".id = ANY(">>, CategoryArg, <<"::int[])">>],
+                    {[add_where(Where, Term1)], State};
+                false ->
+                    throw({error, {not_a_category, Iri}})
+            end
+    end;
+mapped_triple_to_sql(subclass, _SubjectAlias, Object, _Term, _State) ->
+    throw({error, {expected_category, Object}}).
+
+category_ids(CategoryId, Context) ->
+    [
+        proplists:get_value(id, Category)
+        || Category <- m_category:tree_flat(CategoryId, Context)
+    ].
 
 resource_alias({var, _} = Variable, Term, State) ->
     resource_binding_alias(Variable, Term, State);
@@ -204,6 +246,13 @@ bind_object(Object, value, Expression, Table, Column, Term0, State) ->
     {add_where([Expression, <<" = ">>, Arg], Term1), State};
 bind_object(Object, resource, _Expression, _Table, _Column, _Term, _State) ->
     throw({error, {expected_resource, Object}}).
+
+bind_jsonb_object({var, _} = Variable, Expression, Term, State) ->
+    bind_object(Variable, value, Expression, undefined, undefined, Term, State);
+bind_jsonb_object(Object, Expression, Term0, State) ->
+    Value = ?DB_PROPS_JSON(rdf_json_value(Object)),
+    {Arg, Term1} = add_arg(Value, Term0),
+    {add_where([Expression, <<" = ">>, Arg, <<"::jsonb">>], Term1), State}.
 
 bind_edge_object({var, _} = Variable, EdgeAlias, Term0, State0) ->
     {ObjectAlias, Term1, State1} = resource_alias(Variable, Term0, State0),
@@ -316,15 +365,19 @@ sql_operator('/') -> <<" / ">>.
 
 
 jsonb_expression(Alias, Column, Selector) ->
-    Path = case Selector of
-        SelectorList when is_list(SelectorList) -> SelectorList;
-        _ -> [Selector]
-    end,
-    Arguments = [sql_string(z_convert:to_binary(PathPart)) || PathPart <- Path],
+    Path = jsonb_path(Selector),
+    Arguments = lists:join(<<", ">>, [sql_string(PathPart) || PathPart <- Path]),
     [
-        <<"jsonb_extract_path_text(">>, column_expression(Alias, Column),
-        [[<<", ">>, Argument] || Argument <- Arguments], <<")">>
+        column_expression(Alias, Column),
+        <<" #> ARRAY[">>, Arguments, <<"]::text[]">>
     ].
+
+jsonb_path(Selector) when is_binary(Selector), Selector =/= <<>> ->
+    [Selector];
+jsonb_path([PathPart | _] = Selector) when is_binary(PathPart) ->
+    Selector;
+jsonb_path(Selector) ->
+    throw({error, {invalid_jsonb_selector, Selector}}).
 
 sql_string(Value) ->
     Escaped = binary:replace(Value, <<"'">>, <<"''">>, [global]),
@@ -347,6 +400,13 @@ rdf_value({decimal, Value}) -> Value;
 rdf_value({double, Value}) -> Value;
 rdf_value(Boolean) when is_boolean(Boolean) -> Boolean;
 rdf_value(Value) -> throw({error, {expected_value, Value}}).
+
+rdf_json_value({literal, Value, _Datatype, _Language}) -> Value;
+rdf_json_value({integer, Value}) -> binary_to_integer(Value);
+rdf_json_value({decimal, Value}) -> z_convert:to_float(Value);
+rdf_json_value({double, Value}) -> z_convert:to_float(Value);
+rdf_json_value(Boolean) when is_boolean(Boolean) -> Boolean;
+rdf_json_value(Value) -> throw({error, {expected_value, Value}}).
 
 new_alias(Prefix, #sql_state{ alias_nr = AliasNr } = State) ->
     Alias = <<"sparql_", Prefix/binary, "_", (integer_to_binary(AliasNr))/binary>>,
