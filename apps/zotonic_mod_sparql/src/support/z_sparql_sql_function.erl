@@ -5,10 +5,8 @@
 %% Only functions which have a matching SQL expression with (very) similar
 %% enough semantics are supported.
 %%
-%% Functions inspecting RDF term metadata, such as LANG and DATATYPE, need
-%% typed bindings and are not yet added. RDF term tests are handled by
-%% z_sparql_sql.erl, where resource bindings can be distinguished from scalar
-%% expressions.
+%% DATATYPE and RDF term tests are handled by z_sparql_sql.erl, where RDF
+%% metadata and resource bindings are available. LANG is not yet supported.
 %%
 %% REPLACE supports a subset of SPARQL XPath and PostgreSQL regexps.
 %% @end

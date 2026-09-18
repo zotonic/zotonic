@@ -182,6 +182,70 @@ datetime_constructor_rejects_decimal_test() ->
                 z_sparql_sql:to_sql_term(Query, Context))
         end).
 
+datatype_metadata_projection_test() ->
+    with_observers(fun(Context) ->
+        Pattern = <<" WHERE { ?person <https://example.test/name> ?name . "
+            "OPTIONAL { VALUES (?a ?b) { (\"one\"@en \"two\"@nl) } } }">>,
+        lists:foreach(fun({Select, Suffix, Expected}) ->
+            {ok, Terms} = sql_terms(<<Select/binary, Pattern/binary, Suffix/binary>>, Context),
+            #search_sql{from = From} = z_search_terms:combine(Terms, Context),
+            ?assertEqual(Expected, binary:match(From, <<"AS rdf_datatype_1">>) =/= nomatch),
+            ?assertEqual(Expected, binary:match(From, <<"rdf_kind_">>) =/= nomatch),
+            ?assertEqual(nomatch, binary:match(From, <<"rdf_language_">>)),
+            % The unrelated second VALUES binding never needs metadata.
+            ?assertEqual(nomatch, binary:match(From, <<"rdf_datatype_2">>))
+        end, [
+            {<<"SELECT ?a ?b">>, <<>>, false},
+            {<<"SELECT *">>, <<>>, false},
+            {<<"SELECT (DATATYPE(1) AS ?dt) ?a">>, <<>>, false},
+            {<<"SELECT (DATATYPE(STRLEN(?a)) AS ?dt)">>, <<>>, false},
+            {<<"SELECT (DATATYPE(?a) AS ?dt)">>, <<>>, true},
+            {<<"SELECT (UCASE(?a) AS ?alias) (DATATYPE(?alias) AS ?dt)">>, <<>>, true},
+            {<<"SELECT ?person">>, <<" ORDER BY DATATYPE(?a)">>, true}
+        ])
+    end).
+
+datatype_filter_metadata_projection_test() ->
+    with_observers(fun(Context) ->
+        {ok, Terms} = sql_terms(<<"SELECT ?person WHERE { "
+            "?person <https://example.test/name> ?name . "
+            "OPTIONAL { VALUES ?a { \"one\"@en } } "
+            "FILTER(DATATYPE(?a) = <http://www.w3.org/1999/02/22-rdf-syntax-ns#langString>) }">>, Context),
+        #search_sql{from = From, where = Where} = z_search_terms:combine(Terms, Context),
+        ?assertNotEqual(nomatch, binary:match(From, <<"AS rdf_datatype_1">>)),
+        ?assertNotEqual(nomatch, binary:match(Where, <<"rdf_datatype_1">>))
+    end).
+
+metadata_scope_and_components_test() ->
+    with_observers(fun(Context) ->
+        Root = <<"?person <https://example.test/name> ?name . ">>,
+        Local = <<"SELECT ?person WHERE { ", Root/binary,
+            "OPTIONAL { VALUES ?a { 1 } "
+            "FILTER(DATATYPE(?a) = <http://www.w3.org/2001/XMLSchema#integer>) } }">>,
+        {ok, LocalTerms} = sql_terms(Local, Context),
+        #search_sql{from = LocalFrom} = z_search_terms:combine(LocalTerms, Context),
+        % VALUES metadata is used by the local filter, but is not exported.
+        ?assertNotEqual(nomatch, binary:match(LocalFrom, <<"rdf_datatype_1">>)),
+        ?assertEqual(nomatch, binary:match(LocalFrom, <<"AS rdf_datatype_1">>)),
+        ?assertEqual(nomatch, binary:match(LocalFrom, <<"AS rdf_kind_1">>)),
+        ?assertEqual(nomatch, binary:match(LocalFrom, <<"rdf_language_">>)),
+        lists:foreach(fun(Function) ->
+            Query = <<"SELECT (DATATYPE(", Function/binary, "(?a)) AS ?dt) WHERE { ",
+                Root/binary, "OPTIONAL { VALUES ?a { 1 2 } } }">>,
+            {ok, Terms} = sql_terms(Query, Context),
+            #search_sql{from = From} = z_search_terms:combine(Terms, Context),
+            ?assertEqual(nomatch, binary:match(From, <<"rdf_">>))
+        end, [<<"MIN">>, <<"MAX">>, <<"SUM">>, <<"AVG">>]),
+        Concat = <<"SELECT (DATATYPE(CONCAT(?a, ?b)) AS ?dt) WHERE { ", Root/binary,
+            "OPTIONAL { VALUES (?a ?b) { (\"one\"@en \"two\"@en) } } }">>,
+        {ok, ConcatTerms} = sql_terms(Concat, Context),
+        #search_sql{from = ConcatFrom} = z_search_terms:combine(ConcatTerms, Context),
+        ?assertNotEqual(nomatch, binary:match(ConcatFrom, <<"AS rdf_language_1">>)),
+        ?assertNotEqual(nomatch, binary:match(ConcatFrom, <<"AS rdf_language_2">>)),
+        ?assertEqual(nomatch, binary:match(ConcatFrom, <<"rdf_kind_2">>)),
+        ?assertEqual(nomatch, binary:match(ConcatFrom, <<"rdf_datatype_2">>))
+    end).
+
 sql_terms(Sparql, Context) ->
     {ok, Query} = z_sparql:parse(Sparql),
     z_sparql_sql:to_sql_term(Query, Context).

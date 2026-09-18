@@ -192,6 +192,44 @@ Additional modules can provide future query formats by observing the
 descriptor.
 
 
+RDF expression metadata
+-----------------------
+
+SQL expressions carry RDF term kind (`iri`, `literal`, or `bnode`), datatype
+IRI, and language tag separately from their SQL storage and coercion types.
+Literal and constructor datatypes are preserved exactly, including custom
+datatype IRIs. Language tags are normalized to lowercase. Resource bindings
+remain IRIs even when represented by integer database IDs.
+
+Metadata follows VALUES rows, OPTIONAL bindings, projected aliases, IF and
+COALESCE branches, string operations, and numeric promotion. It is represented
+internally as SQL text expressions so it can vary per row. VALUES and OPTIONAL
+use hidden metadata columns only for variables whose metadata is needed by
+DATATYPE, including dependencies through projected aliases. Demand is tracked
+per component and SQL scope: a local filter does not export metadata, direct
+DATATYPE does not carry language tags, and aggregates that discard dynamic
+metadata do not request it. CONCAT still requests the language tags needed to
+determine its result datatype. Unrelated bindings do not add metadata columns.
+The public result shape is unchanged. Boundness
+is tracked separately: metadata alone does not mean that a value is bound.
+
+Mapped SQL scalars and external arguments use canonical RDF types. JSONB
+scalars use their JSON shape, refined by compatible mapping hints; numbers
+default to `xsd:decimal`. Integer hints use `xsd:integer` only for integral
+values. Arrays and tagged objects, including translation objects, have unknown
+metadata. SQL NULL represents unknown or inapplicable metadata. Aggregates
+preserve known static metadata; metadata for heterogeneous aggregate inputs
+is currently unknown.
+
+DATATYPE returns the datatype IRI for literals, including `xsd:string` for
+plain strings and `rdf:langString` for language-tagged literals. It works in
+result expressions and filters. Non-literals, unbound values, and unknown
+metadata produce SQL NULL (an unbound result or a filter that does not match).
+This is basic support; heterogeneous aggregate metadata remains unknown.
+LANG, translation selection, RDF-aware equality, and RDF result serialization
+are not yet implemented.
+
+
 Translations
 ------------
 
@@ -234,14 +272,15 @@ TODO
  - [x] Add Zotonic m_sparql model for querying
  - [x] Allow SPARQL query in search_query resources
  - [x] Support EXISTS / NOT EXISTS inside compound and result expressions
+ - [x] Carry RDF term kind, datatype and language metadata through expressions
+ - [x] Add basic DATATYPE support
+ - [ ] Import and export of Turtle, JSON-LD, and other formats (TBD)
  - [ ] ACL checks for private properties, only allow 'administrator users' to query on private properties
  - [ ] Support language handling, using the JSON objects: { _type: "trans", tr = { "en":"..." } }, including LANG etc.
- - [ ] Add DATATYPE support
  - [ ] Add SPARQL endpoint, with expected results (for use with 3rd parties -- check API standards)
 
 After merge:
  - [ ] Check gebruik props_json vs props
  - [ ] Ensure the types of z_props, mod_rdf and search_facet are the same (bool -> boolean, int -> integer)
- - [ ] Import and export of Turtle, JSON-LD, and other formats (TBD)
  - [ ] Endpoint with: Turtle, JSON-LD, and other formats as output
  - [ ] Fulltext query ranking, add options for trigram operator, thresholds and sorting (maybe named combos?)

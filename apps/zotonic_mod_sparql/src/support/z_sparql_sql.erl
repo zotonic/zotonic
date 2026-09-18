@@ -25,48 +25,29 @@
     query_plan_to_sql/2
 ]).
 
+%% Expression pipeline helpers, also used by standalone pipeline tests.
+-export([
+    expression_to_sql/3,
+    expression_metadata/1,
+    binding_expression/1,
+    values_to_sql/3,
+    metadata_columns/2,
+    optional_projection/4,
+    bind_projection/4,
+    coerce_expression/2,
+    aggregate_metadata/3,
+    empty_term/0
+]).
+
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 -type sql_term() ::
       #search_sql_term{}
     | #search_sql_nested{}.
 
--type value_type() ::
-      any
-    | boolean
-    | datetime
-    | float
-    | fts
-    | fulltext
-    | id
-    | ids
-    | integer
-    | list
-    | number
-    | text
-    | uri.
-
--record(sql_expression, {
-    % SQL values keep their stored type until an operator or builtin
-    % requests a concrete type. This keeps JSONB values as-is until
-    % they are needed as values in expressions.
-    sql :: term(),
-    type :: value_type(),
-    source :: argument | column | expression | jsonb,
-    defined = true :: true | false | term()
-}).
+-include_lib("zotonic_mod_sparql/include/z_sparql_sql.hrl").
 
 -export_type([ sql_term/0 ]).
-
--record(sql_state, {
-    arguments = #{} :: #{ z_sparql_plan:variable() := z_sparql_plan:argument() },
-    bindings = #{} :: map(),
-    solution_bindings = #{} :: map(),
-    alias_nr = 1 :: pos_integer(),
-    alias_scope = 0 :: non_neg_integer(),
-    context :: z:context()
-}).
-
 
 %% @doc Map a parsed SPARQL SELECT query to nested Zotonic SQL search terms.
 -spec to_sql_term(ParsedQuery, Context) -> {ok, [ sql_term() ]} | {error, Reason} when
@@ -110,6 +91,7 @@ query_plan_to_sql(#{
 } = Plan, Context) ->
     State0 = #sql_state{
         arguments = Arguments,
+        metadata_variables = metadata_demand(maps:remove(where, Plan)),
         bindings = #{{var, RootName} => {resource, <<"rsc">>}},
         context = Context
     },
@@ -139,8 +121,10 @@ pattern_to_sql(identity, State) ->
 pattern_to_sql({triple, Subject, Predicate, Object}, State) ->
     triple_to_sql(Subject, Predicate, Object, State);
 pattern_to_sql({join, Left, Right}, State0) ->
-    {LeftTerms, State1} = pattern_to_sql(Left, State0),
-    {RightTerms, State2} = pattern_to_sql(Right, State1),
+    Demand = State0#sql_state.metadata_variables,
+    LeftInput = add_metadata_demand(collect_metadata_demand(Right), State0),
+    {LeftTerms, State1} = pattern_to_sql(Left, LeftInput),
+    {RightTerms, State2} = pattern_to_sql(Right, State1#sql_state{metadata_variables = Demand}),
     {LeftTerms ++ RightTerms, State2};
 pattern_to_sql({union, Branches}, State0) ->
     {BranchTerms, BranchStates, State1} = union_branches_to_sql(Branches, State0, State0),
@@ -151,18 +135,23 @@ pattern_to_sql({filter, {exists, ExistsPattern}, Pattern}, State0) ->
 pattern_to_sql({filter, {not_exists, ExistsPattern}, Pattern}, State0) ->
     filter_exists_to_sql(not_exists, Pattern, ExistsPattern, State0);
 pattern_to_sql({filter, Expression, Pattern}, State0) ->
-    {Terms, State1} = pattern_to_sql(Pattern, State0),
+    Input = add_metadata_demand(collect_metadata_demand(Expression), State0),
+    {Terms, State1} = pattern_to_sql(Pattern, Input),
     {Expression1, FilterTerm} = expression_to_sql(Expression, State1, empty_term()),
     FilterTerm1 = FilterTerm#search_sql_term{ where = [expression_sql(Expression1)] },
-    {Terms ++ [FilterTerm1], State1};
+    {Terms ++ [FilterTerm1], State1#sql_state{metadata_variables = State0#sql_state.metadata_variables}};
 pattern_to_sql({left_join, Left, Right, none}, State0) ->
-    {LeftTerms, LeftState} = pattern_to_sql(Left, State0),
+    Demand = State0#sql_state.metadata_variables,
+    LeftInput = add_metadata_demand(collect_metadata_demand(Right), State0),
+    {LeftTerms, LeftState0} = pattern_to_sql(Left, LeftInput),
+    LeftState = LeftState0#sql_state{metadata_variables = Demand},
     {RightTerms, RightState0} = pattern_to_sql(Right, LeftState),
     {OptionalAlias, RightState1} = new_alias(<<"optional">>, RightState0),
     {Projection, Bindings} = optional_projection(
         LeftState#sql_state.bindings,
         RightState1#sql_state.bindings,
-        OptionalAlias),
+        OptionalAlias,
+        RightState1#sql_state.metadata_variables),
     Optional = #search_sql_nested{
         operator = {left_join, OptionalAlias},
         terms = RightTerms ++ [Projection]
@@ -181,8 +170,10 @@ pattern_to_sql({graph, _, _}, _State) ->
     throw({error, {unsupported, graph}}).
 
 filter_exists_to_sql(Operator, Pattern, ExistsPattern, State0) ->
-    {Terms, State1} = pattern_to_sql(Pattern, State0),
-    {ExistsTerms, ExistsState} = pattern_to_sql(ExistsPattern, State1),
+    Input = add_metadata_demand(collect_metadata_demand(ExistsPattern), State0),
+    {Terms, State1} = pattern_to_sql(Pattern, Input),
+    {ExistsTerms, ExistsState} = pattern_to_sql(ExistsPattern,
+        State1#sql_state{metadata_variables = #{}}),
     NestedOperator = case Operator of
         exists -> <<"anyof">>;
         not_exists -> <<"noneof">>
@@ -194,24 +185,25 @@ filter_exists_to_sql(Operator, Pattern, ExistsPattern, State0) ->
     },
     % Variables introduced by the graph pattern are local to EXISTS. Only the
     % advanced alias counter is retained so following terms remain unique.
-    State2 = State1#sql_state{ alias_nr = ExistsState#sql_state.alias_nr },
+    State2 = State1#sql_state{ alias_nr = ExistsState#sql_state.alias_nr,
+        metadata_variables = State0#sql_state.metadata_variables },
     {Terms ++ [ExistsTerm], State2}.
 
-optional_projection(LeftBindings, RightBindings, OptionalAlias) ->
+optional_projection(LeftBindings, RightBindings, OptionalAlias, Demand) ->
     Changed = [
         {Variable, Binding}
         || {Variable, Binding} <- lists:sort(maps:to_list(RightBindings)),
            maps:get(Variable, LeftBindings, undefined) =/= Binding
     ],
     optional_projection(
-        Changed, LeftBindings, OptionalAlias, 1, [], LeftBindings).
+        Changed, LeftBindings, OptionalAlias, Demand, 1, [], LeftBindings).
 
-optional_projection([], _LeftBindings, _OptionalAlias, _Nr, [], Bindings) ->
+optional_projection([], _LeftBindings, _OptionalAlias, _Demand, _Nr, [], Bindings) ->
     {#search_sql_term{
         select = [<<"1 AS optional_match">>],
         tables = #{}
     }, Bindings};
-optional_projection([], _LeftBindings, _OptionalAlias, _Nr, Select, Bindings) ->
+optional_projection([], _LeftBindings, _OptionalAlias, _Demand, _Nr, Select, Bindings) ->
     {#search_sql_term{
         select = lists:reverse(Select),
         tables = #{}
@@ -220,6 +212,7 @@ optional_projection(
         [{Variable, RightBinding} | Rest],
         LeftBindings,
         OptionalAlias,
+        Demand,
         Nr,
         Select,
         Bindings) ->
@@ -235,9 +228,16 @@ optional_projection(
         expression_defined_sql(RightExpression),
         <<" AS ">>, DefinedColumn
     ],
+    MetadataSelect = [
+        [<<"CASE WHEN ">>, expression_defined_sql(RightExpression), <<" THEN ">>,
+            maps:get(Key, expression_metadata(RightExpression)),
+            <<" ELSE NULL END AS ">>, metadata_column_name(Key, Nr)]
+        || Key <- metadata_keys(Variable, Demand)
+    ],
     OptionalExpression = RightExpression#sql_expression{
         sql = column_expression(OptionalAlias, ValueColumn),
         source = optional_source(RightExpression#sql_expression.source),
+        rdf = demanded_metadata(Variable, Demand, OptionalAlias, Nr),
         defined = [
             <<"COALESCE(">>,
             column_expression(OptionalAlias, DefinedColumn),
@@ -258,8 +258,9 @@ optional_projection(
         Rest,
         LeftBindings,
         OptionalAlias,
+        Demand,
         Nr + 1,
-        [DefinedSelect, ValueSelect | Select],
+        MetadataSelect ++ [DefinedSelect, ValueSelect | Select],
         Bindings#{ Variable => Binding }).
 
 optional_column_name(value, Nr) ->
@@ -281,6 +282,7 @@ merge_optional_expressions(Left, Right) ->
         ],
         type = Type,
         source = merged_optional_source(Left1, Right1),
+        rdf = coalesce_metadata([Left1, Right1]),
         defined = [
             $(, expression_defined_sql(Left1),
             <<" OR ">>, expression_defined_sql(Right1), $)
@@ -298,7 +300,8 @@ binding_expression({resource, Alias}) when is_binary(Alias) ->
     {resource, #sql_expression{
         sql = column_expression(Alias, <<"id">>),
         type = id,
-        source = column
+        source = column,
+        rdf = z_sparql_sql_metadata:iri()
     }};
 binding_expression({resource, #sql_expression{} = Expression}) ->
     {resource, Expression};
@@ -308,7 +311,7 @@ binding_expression({value, #sql_expression{} = Expression}) ->
 values_to_sql(Variables, Rows, State0) ->
     Columns = values_columns(Variables, Rows),
     {Alias, State1} = new_alias(<<"values">>, State0),
-    {Table, Term0} = values_table(Columns, Rows, State1#sql_state.context),
+    {Table, Term0} = values_table(Columns, Rows, State1),
     Term1 = add_table(Alias, Table, Term0),
     {Term2, State2} = bind_values_columns(Columns, Alias, Term1, State1),
     Term3 = case Rows of
@@ -339,12 +342,13 @@ values_column(Variable, Nr, Rows) ->
 values_kind({iri, _Iri}) -> resource;
 values_kind(_Value) -> value.
 
-values_table(Columns, Rows, Context) ->
+values_table(Columns, Rows, #sql_state{metadata_variables = Demand} = State) ->
     ColumnNames = lists:append([
         [values_column_name(value, Nr), values_column_name(defined, Nr)]
-        || {_Variable, Nr, _Kind, _Type} <- Columns
+        ++ [metadata_column_name(Key, Nr) || Key <- metadata_keys(Variable, Demand)]
+        || {Variable, Nr, _Kind, _Type} <- Columns
     ]),
-    {RowsSql, Term} = values_rows(Rows, Columns, Context, empty_term(), []),
+    {RowsSql, Term} = values_rows(Rows, Columns, State, empty_term(), []),
     RowsSql1 = case RowsSql of
         [] -> [<<"(1)">>];
         _ -> RowsSql
@@ -359,21 +363,25 @@ values_table(Columns, Rows, Context) ->
     ],
     {Table, Term}.
 
-values_rows([], _Columns, _Context, Term, Acc) ->
+values_rows([], _Columns, _State, Term, Acc) ->
     {lists:reverse(Acc), Term};
-values_rows([Row | Rest], Columns, Context, Term0, Acc) ->
-    {Cells, Term1} = values_row(Row, Columns, Context, Term0, []),
+values_rows([Row | Rest], Columns, State, Term0, Acc) ->
+    {Cells, Term1} = values_row(Row, Columns, State, Term0, []),
     RowSql = case Cells of
         [] -> <<"(1)">>;
         _ -> [$\(, lists:join(<<", ">>, Cells), $\)]
     end,
-    values_rows(Rest, Columns, Context, Term1, [RowSql | Acc]).
+    values_rows(Rest, Columns, State, Term1, [RowSql | Acc]).
 
-values_row([], [], _Context, Term, Acc) ->
+values_row([], [], _State, Term, Acc) ->
     {lists:reverse(Acc), Term};
-values_row([Value | Rest], [{_Variable, _Nr, Kind, Type} | Columns], Context, Term0, Acc) ->
+values_row([Value | Rest], [{Variable, _Nr, Kind, Type} | Columns],
+        #sql_state{context = Context, metadata_variables = Demand} = State, Term0, Acc) ->
     {ValueSql, DefinedSql, Term1} = values_cell(Value, Kind, Type, Context, Term0),
-    values_row(Rest, Columns, Context, Term1, [DefinedSql, ValueSql | Acc]).
+    Metadata = z_sparql_sql_metadata:from_term(Value),
+    MetadataSql = [maps:get(Key, Metadata) || Key <- metadata_keys(Variable, Demand)],
+    values_row(Rest, Columns, State, Term1,
+        lists:reverse([ValueSql, DefinedSql | MetadataSql]) ++ Acc).
 
 values_cell(undefined, _Kind, Type, _Context, Term) ->
     {[<<"CAST(NULL AS ">>, values_sql_type(Type), $\)], <<"false">>, Term};
@@ -428,7 +436,8 @@ bind_values_column({Variable, Nr, Kind, Type}, Alias, Term0,
         sql = column_expression(Alias, values_column_name(value, Nr)),
         type = Type,
         source = column,
-        defined = column_expression(Alias, values_column_name(defined, Nr))
+        defined = column_expression(Alias, values_column_name(defined, Nr)),
+        rdf = demanded_metadata(Variable, State#sql_state.metadata_variables, Alias, Nr)
     },
     case maps:find(Variable, Bindings) of
         {ok, {resource, ResourceAlias}}
@@ -473,7 +482,8 @@ merge_values_expressions(Left, Right) ->
         sql = [<<"COALESCE(">>, expression_sql(Left1), <<", ">>, expression_sql(Right1), $\)],
         type = Type,
         source = expression,
-        defined = [$(, LeftDefined, <<" OR ">>, RightDefined, $)]
+        defined = [$(, LeftDefined, <<" OR ">>, RightDefined, $)],
+        rdf = coalesce_metadata([Left1, Right1])
     },
     {Where, Merged}.
 
@@ -793,7 +803,11 @@ bind_edge_object({iri, Iri}, EdgeAlias, Column, Term0, State) ->
 bind_edge_object(Object, _EdgeAlias, _Column, _Term, _State) ->
     throw({error, {expected_resource, Object}}).
 
-expression_to_sql({var, _} = Variable, State, Term) ->
+expression_to_sql(Expression, State, Term0) ->
+    {SqlExpression, Term1} = expression_to_sql_1(Expression, State, Term0),
+    {with_rdf_metadata(SqlExpression), Term1}.
+
+expression_to_sql_1({var, _} = Variable, State, Term) ->
     case maps:find(Variable, State#sql_state.bindings) of
         {ok, {resource, _} = Binding} ->
             {_Kind, Expression} = binding_expression(Binding),
@@ -802,7 +816,7 @@ expression_to_sql({var, _} = Variable, State, Term) ->
             {Expression, Term};
         error -> argument_to_expression(Variable, State, Term)
     end;
-expression_to_sql({Operator, Left, Right}, State, Term0)
+expression_to_sql_1({Operator, Left, Right}, State, Term0)
     when Operator =:= 'or'; Operator =:= 'and';
          Operator =:= '='; Operator =:= '!=';
          Operator =:= '<'; Operator =:= '>';
@@ -812,44 +826,58 @@ expression_to_sql({Operator, Left, Right}, State, Term0)
     {Left1, Term1} = expression_to_sql(Left, State, Term0),
     {Right1, Term2} = expression_to_sql(Right, State, Term1),
     {binary_expression(Operator, Left1, Right1), Term2};
-expression_to_sql({'not', Expression}, State, Term0) ->
+expression_to_sql_1({'not', Expression}, State, Term0) ->
     {Expression1, Term1} = expression_to_sql(Expression, State, Term0),
     {unary_expression('not', Expression1), Term1};
-expression_to_sql({'u+', Expression}, State, Term0) ->
+expression_to_sql_1({'u+', Expression}, State, Term0) ->
     {Expression1, Term1} = expression_to_sql(Expression, State, Term0),
     {unary_expression('u+', Expression1), Term1};
-expression_to_sql({'u-', Expression}, State, Term0) ->
+expression_to_sql_1({'u-', Expression}, State, Term0) ->
     {Expression1, Term1} = expression_to_sql(Expression, State, Term0),
     {unary_expression('u-', Expression1), Term1};
-expression_to_sql({Exists, Pattern}, State, Term)
+expression_to_sql_1({Exists, Pattern}, State, Term)
     when Exists =:= exists; Exists =:= not_exists ->
     % Each scalar subquery owns its aliases and bindings. Sibling expressions
     % can reuse local aliases; nested expressions get a deeper namespace so
     % they cannot shadow the aliases they correlate with.
     Scope = State#sql_state.alias_scope,
     InnerState = State#sql_state{ alias_scope = Scope + 1 },
-    {Terms, _InnerState} = pattern_to_sql(Pattern, InnerState),
+    {Terms, _InnerState} = pattern_to_sql(Pattern, InnerState#sql_state{metadata_variables = #{}}),
     Expression = #sql_expression{
         sql = {search_sql_exists, Exists, Terms},
         type = boolean,
         source = expression
     },
     {Expression, Term};
-expression_to_sql({aggregate, Function, Distinct, Argument, Separator}, State, Term0) ->
+expression_to_sql_1({aggregate, Function, Distinct, Argument, Separator}, State, Term0) ->
     aggregate_to_sql(Function, Distinct, Argument, Separator, State, Term0);
-expression_to_sql({call, Function, [Argument]}, State, Term0)
+expression_to_sql_1({call, Function, [Argument]}, State, Term0)
     when Function =:= isliteral; Function =:= isnumeric;
          Function =:= isiri; Function =:= isuri; Function =:= isblank ->
     type_test_to_sql(Function, Argument, State, Term0);
-expression_to_sql({call, sameterm, [Left, Right]}, State, Term0) ->
+expression_to_sql_1({call, datatype, [Argument]}, State, Term0) ->
+    {Expression, Term1} = datatype_argument(Argument, State, Term0),
+    Metadata = expression_metadata(Expression),
+    % Constant arguments are bound and need no SQL null check (which would
+    % leave an otherwise unused parameter without a PostgreSQL type).
+    {Bound, Term} = case Expression#sql_expression.source of
+        argument -> {<<"true">>, Term0};
+        _ -> {[$(, expression_sql(Expression), <<") IS NOT NULL">>], Term1}
+    end,
+    Sql = [<<"CASE WHEN ">>, expression_defined_sql(Expression), <<" AND ">>, Bound,
+        <<" AND ">>, maps:get(kind, Metadata), <<" = 'literal' THEN ">>,
+        maps:get(datatype, Metadata), <<" ELSE NULL::text END">>],
+    {#sql_expression{sql = Sql, type = uri, source = expression,
+        rdf = z_sparql_sql_metadata:iri()}, Term};
+expression_to_sql_1({call, sameterm, [Left, Right]}, State, Term0) ->
     same_term_to_sql(Left, Right, State, Term0);
-expression_to_sql({call, Function, Arguments}, State, Term0)
+expression_to_sql_1({call, Function, Arguments}, State, Term0)
     when Function =:= fulltext; Function =:= fulltext_rank ->
     fulltext_to_sql(Function, Arguments, State, Term0);
-expression_to_sql({call, Function, [Argument]}, State, Term0)
+expression_to_sql_1({call, Function, [Argument]}, State, Term0)
     when Function =:= iri; Function =:= uri ->
     iri_constructor_to_sql(Function, Argument, State, Term0);
-expression_to_sql({call, {iri, Iri} = Function, Arguments}, State, Term0) ->
+expression_to_sql_1({call, {iri, Iri} = Function, Arguments}, State, Term0) ->
     case z_sparql_sql_datatype:mapping(Iri) of
         {ok, Mapping} ->
             datatype_to_sql(Function, Mapping, Arguments, State, Term0);
@@ -857,13 +885,32 @@ expression_to_sql({call, {iri, Iri} = Function, Arguments}, State, Term0) ->
             {Arguments1, Term1} = expression_list_to_sql(Arguments, State, Term0),
             function_to_sql(Function, Arguments1, Term1)
     end;
-expression_to_sql({call, Function, Arguments}, State, Term0) ->
+expression_to_sql_1({call, Function, Arguments}, State, Term0) ->
     {Arguments1, Term1} = expression_list_to_sql(Arguments, State, Term0),
     function_to_sql(Function, Arguments1, Term1);
-expression_to_sql(Value, _State, Term0) ->
+expression_to_sql_1(Value, _State, Term0) ->
     {ArgumentValue, Type} = rdf_typed_value(Value),
     {Arg, Term1} = add_arg(ArgumentValue, Term0),
-    {#sql_expression{ sql = Arg, type = Type, source = argument }, Term1}.
+    {#sql_expression{
+        sql = Arg, type = Type, source = argument,
+        rdf = z_sparql_sql_metadata:from_term(Value)
+    }, Term1}.
+
+% DATATYPE inspects a literal's declared type without parsing its lexical
+% value. In particular, an ill-typed literal still has a datatype IRI.
+datatype_argument({literal, _, _, _} = Value, _State, Term) ->
+    datatype_constant(Value, Term);
+datatype_argument({Kind, _} = Value, _State, Term)
+    when Kind =:= integer; Kind =:= decimal; Kind =:= double; Kind =:= iri ->
+    datatype_constant(Value, Term);
+datatype_argument(Value, _State, Term) when is_boolean(Value) ->
+    datatype_constant(Value, Term);
+datatype_argument(Argument, State, Term) ->
+    expression_to_sql(Argument, State, Term).
+
+datatype_constant(Value, Term) ->
+    {#sql_expression{sql = <<"NULL">>, type = any, source = argument,
+        rdf = z_sparql_sql_metadata:from_term(Value)}, Term}.
 
 argument_to_expression(Variable, #sql_state{ arguments = Arguments, context = Context }, Term0) ->
     case maps:find(Variable, Arguments) of
@@ -876,7 +923,9 @@ argument_to_expression(Variable, #sql_state{ arguments = Arguments, context = Co
         {ok, {resource, Reference}} ->
             case m_rsc:rid(Reference, Context) of
                 undefined -> throw({error, {unknown_resource_argument, Variable, Reference}});
-                RscId -> argument_expression(RscId, id, Term0)
+                RscId ->
+                    {Expression, Term1} = argument_expression(RscId, id, Term0),
+                    {Expression#sql_expression{ rdf = z_sparql_sql_metadata:iri() }, Term1}
             end;
         error ->
             throw({error, {unbound_variable, Variable}})
@@ -1245,7 +1294,9 @@ iri_constructor_to_sql(Function, Argument, State, Term0) ->
     {Argument1, Term1} = expression_to_sql(Argument, State, Term0),
     case is_resource_argument(Argument, State) of
         true ->
-            {Argument1#sql_expression{ type = uri, source = expression }, Term1};
+            {Argument1#sql_expression{
+                type = uri, source = expression, rdf = z_sparql_sql_metadata:iri()
+            }, Term1};
         false ->
             function_to_sql(Function, [Argument1], Term1)
     end.
@@ -1269,16 +1320,21 @@ function_expression(Function, Arguments, ResultType, Term) ->
             {#sql_expression{
                 sql = SqlExpression,
                 type = ResultType,
+                rdf = function_metadata(Function, Arguments, ResultType),
                 source = expression
             }, Term};
         {error, Reason} ->
             throw({error, Reason})
     end.
 
-datatype_to_sql(_Function, {Type, SqlType}, [Argument], State, Term0) ->
+datatype_to_sql({iri, Iri}, {Type, SqlType}, [Argument], State, Term0) ->
     {Argument1, Term1} = expression_to_sql(Argument, State, Term0),
     case is_datatype_argument(Type, Argument1#sql_expression.type) of
-        true -> {datatype_expression(Type, SqlType, Argument1), Term1};
+        true ->
+            Expression = datatype_expression(Type, SqlType, Argument1),
+            {Expression#sql_expression{
+                rdf = z_sparql_sql_metadata:literal(Iri, undefined)
+            }, Term1};
         false -> throw({error, {incompatible_types, Type, Argument1#sql_expression.type}})
     end;
 datatype_to_sql({iri, Iri}, _Mapping, Arguments, _State, _Term) ->
@@ -1412,9 +1468,12 @@ aggregate_to_sql(Function, Distinct, Argument, Separator, State, Term0) ->
             Argument1 = aggregate_argument(ArgumentType, Argument0),
             ResultType1 = aggregate_result_type(ResultType, Argument1),
             {Separator1, Term2} = aggregate_separator(Separator, State, Term1),
-            aggregate_expression(
+            {Expression, Term3} = aggregate_expression(
                 Function, Distinct, expression_sql(Argument1), Separator1,
-                ResultType1, State, Term2);
+                ResultType1, State, Term2),
+            {Expression#sql_expression{
+                rdf = aggregate_metadata(Function, Argument1, ResultType1)
+            }, Term3};
         {error, Reason} ->
             throw({error, Reason})
     end.
@@ -1497,6 +1556,7 @@ operator_expression(Operator, Left, Right, Type) ->
             <<"(">>, expression_sql(Left), sql_operator(Operator), expression_sql(Right), <<")">>
         ],
         type = Type,
+        rdf = operator_metadata(Operator, Left, Right, Type),
         source = expression
     }.
 
@@ -1515,6 +1575,7 @@ unary_expression('u-', Expression) ->
     #sql_expression{
         sql = [<<"-(">>, expression_sql(Expression1), <<")">>],
         type = Expression1#sql_expression.type,
+        rdf = expression_metadata(Expression1),
         source = expression
     }.
 
@@ -1599,6 +1660,7 @@ coerce_expression(#sql_expression{ type = Actual } = Expression, Expected) ->
 
 coerce_expression_1(#sql_expression{ source = jsonb, sql = Sql } = Expression, Type) ->
     Expression#sql_expression{
+        rdf = expression_metadata(Expression),
         sql = jsonb_value_sql(Sql, Type),
         type = Type,
         source = expression
@@ -1675,6 +1737,169 @@ float_expression(Sql) ->
         type = float,
         source = expression
     }.
+
+%% RDF metadata describes the source RDF term, not a temporary SQL coercion.
+with_rdf_metadata(#sql_expression{} = Expression) ->
+    Expression#sql_expression{ rdf = expression_metadata(Expression) }.
+
+expression_metadata(#sql_expression{ rdf = Metadata }) when is_map(Metadata) ->
+    Metadata;
+expression_metadata(#sql_expression{ source = jsonb, sql = Sql, type = Type }) ->
+    z_sparql_sql_metadata:jsonb(Sql, Type);
+expression_metadata(#sql_expression{ defined = false }) ->
+    z_sparql_sql_metadata:unknown();
+expression_metadata(#sql_expression{ type = Type }) ->
+    z_sparql_sql_metadata:from_type(Type).
+
+metadata_keys() -> [kind, datatype, language].
+
+metadata_keys(Variable, Demand) ->
+    Keys = maps:get(Variable, Demand, []),
+    [Key || Key <- metadata_keys(), lists:member(Key, Keys)].
+
+demanded_metadata(Variable, Demand, Alias, Nr) ->
+    maps:merge(z_sparql_sql_metadata:unknown(),
+        maps:with(metadata_keys(Variable, Demand), metadata_columns(Alias, Nr))).
+
+add_metadata_demand(Demand, State) ->
+    State#sql_state{metadata_variables = merge_metadata_demand(
+        State#sql_state.metadata_variables, Demand)}.
+
+merge_metadata_demand(Left, Right) ->
+    maps:merge_with(fun(_Variable, A, B) -> lists:usort(A ++ B) end, Left, Right).
+
+%% Output consumers seed demand. Pattern compilation passes local consumers
+%% backwards to their inputs without exporting that demand across OPTIONAL.
+metadata_demand(Plan) ->
+    Demand = collect_metadata_demand(Plan),
+    Select = case maps:get(select, Plan, []) of all -> []; Items -> Items end,
+    Aliases = [{Variable, Expression}
+        || {as, Expression, Variable} <- Select],
+    expand_metadata_demand(Demand, Aliases).
+
+expand_metadata_demand(Demand, Aliases) ->
+    Expanded = lists:foldl(fun({Variable, Expression}, Acc) ->
+        case maps:find(Variable, Acc) of
+            {ok, Keys} -> merge_metadata_demand(Acc, metadata_dependencies(Expression, Keys));
+            error -> Acc
+        end
+    end, Demand, Aliases),
+    case Expanded =:= Demand of
+        true -> Demand;
+        false -> expand_metadata_demand(Expanded, Aliases)
+    end.
+
+collect_metadata_demand({call, datatype, [Argument]}) ->
+    merge_metadata_demand(metadata_dependencies(Argument, [kind, datatype]),
+        collect_metadata_demand(Argument));
+collect_metadata_demand(Term) ->
+    collect_children(fun collect_metadata_demand/1, Term).
+
+metadata_dependencies({var, _} = Variable, Keys) -> #{Variable => Keys};
+metadata_dependencies({call, 'if', [_Condition, Then, Else]}, Keys) ->
+    metadata_dependencies_list([Then, Else], Keys);
+metadata_dependencies({call, coalesce, Arguments}, Keys) ->
+    metadata_dependencies_list(Arguments, Keys);
+metadata_dependencies({call, concat, [First | _] = Arguments}, Keys) ->
+    % CONCAT uses every language tag to decide whether the first argument's
+    % metadata survives. Its other components only come from that argument.
+    merge_metadata_demand(metadata_dependencies(First, Keys),
+        metadata_dependencies_list(Arguments, [language]));
+metadata_dependencies({call, Function, [First | _]}, Keys)
+    when Function =:= ucase; Function =:= lcase; Function =:= substr;
+         Function =:= replace; Function =:= strbefore; Function =:= strafter;
+         Function =:= abs; Function =:= ceil; Function =:= floor; Function =:= round ->
+    metadata_dependencies(First, Keys);
+metadata_dependencies({Operator, Left, Right}, Keys)
+    when Operator =:= '+'; Operator =:= '-'; Operator =:= '*'; Operator =:= '/' ->
+    case lists:member(kind, Keys) orelse lists:member(datatype, Keys) of
+        true -> metadata_dependencies_list([Left, Right], [datatype]);
+        false -> #{}
+    end;
+metadata_dependencies({Operator, Argument}, Keys) when Operator =:= 'u+'; Operator =:= 'u-' ->
+    metadata_dependencies(Argument, Keys);
+% Aggregates preserve static metadata only; projecting dynamic input metadata
+% cannot improve their result. Their value expressions are still compiled,
+% and collect_metadata_demand finds any DATATYPE calls inside those values.
+% Constructors and other functions establish their own RDF result type.
+metadata_dependencies(_Term, _Keys) -> #{}.
+
+metadata_dependencies_list(Expressions, Keys) ->
+    collect_children(fun(Expression) -> metadata_dependencies(Expression, Keys) end, Expressions).
+
+collect_children(Fun, Term) when is_map(Term) -> collect_children(Fun, maps:values(Term));
+collect_children(Fun, Term) when is_tuple(Term) -> collect_children(Fun, tuple_to_list(Term));
+collect_children(Fun, Terms) when is_list(Terms) ->
+    lists:foldl(fun(Term, Acc) -> merge_metadata_demand(Acc, Fun(Term)) end, #{}, Terms);
+collect_children(_Fun, _Term) -> #{}.
+
+metadata_column_name(Key, Nr) ->
+    <<"rdf_", (atom_to_binary(Key, utf8))/binary, "_", (integer_to_binary(Nr))/binary>>.
+
+metadata_columns(Alias, Nr) ->
+    maps:from_list([
+        {Key, column_expression(Alias, metadata_column_name(Key, Nr))}
+        || Key <- metadata_keys()
+    ]).
+
+coalesce_metadata([]) -> z_sparql_sql_metadata:unknown();
+coalesce_metadata([Expression | Rest]) ->
+    z_sparql_sql_metadata:choose(
+        [$(, expression_sql(Expression), <<") IS NOT NULL">>],
+        expression_metadata(Expression), coalesce_metadata(Rest)).
+
+function_metadata('if', [Condition, Then, Else], _Type) ->
+    z_sparql_sql_metadata:choose(expression_sql(Condition),
+        expression_metadata(Then), expression_metadata(Else));
+function_metadata(coalesce, Arguments, _Type) ->
+    coalesce_metadata(Arguments);
+function_metadata(Function, [First | _], _Type)
+    when Function =:= ucase; Function =:= lcase; Function =:= substr; Function =:= replace ->
+    expression_metadata(First);
+function_metadata(Function, [First, Second], _Type)
+    when Function =:= strbefore; Function =:= strafter ->
+    z_sparql_sql_metadata:choose(
+        [<<"POSITION(">>, expression_sql(Second), <<" IN ">>, expression_sql(First), <<") > 0">>],
+        expression_metadata(First), z_sparql_sql_metadata:from_type(text));
+function_metadata(concat, Arguments, _Type) ->
+    Languages = [maps:get(language, expression_metadata(A)) || A <- Arguments],
+    case Languages of
+        [] -> z_sparql_sql_metadata:from_type(text);
+        [Language | Rest] ->
+            Equal = [[Language, <<" = ">>, Other] || Other <- Rest],
+            Condition = lists:join(<<" AND ">>, [[Language, <<" IS NOT NULL">>] | Equal]),
+            Tagged = expression_metadata(hd(Arguments)),
+            z_sparql_sql_metadata:choose(Condition, Tagged, z_sparql_sql_metadata:from_type(text))
+    end;
+function_metadata(Function, [Argument], _Type)
+    when Function =:= abs; Function =:= ceil; Function =:= floor; Function =:= round ->
+    expression_metadata(Argument);
+function_metadata(_Function, _Arguments, Type) ->
+    z_sparql_sql_metadata:from_type(Type).
+
+operator_metadata(Operator, Left, Right, _Type)
+    when Operator =:= '+'; Operator =:= '-'; Operator =:= '*'; Operator =:= '/' ->
+    z_sparql_sql_metadata:numeric(Operator, expression_metadata(Left), expression_metadata(Right));
+operator_metadata(_Operator, _Left, _Right, Type) ->
+    z_sparql_sql_metadata:from_type(Type).
+
+aggregate_metadata(Function, Argument, _Type)
+    when Function =:= min; Function =:= max; Function =:= sample ->
+    Metadata = expression_metadata(Argument),
+    case z_sparql_sql_metadata:is_static(Metadata) of
+        true -> Metadata;
+        false -> z_sparql_sql_metadata:unknown()
+    end;
+aggregate_metadata(Function, Argument, _Type) when Function =:= sum; Function =:= avg ->
+    Metadata = expression_metadata(Argument),
+    case z_sparql_sql_metadata:is_static(Metadata) of
+        true ->
+            Operator = case Function of avg -> '/'; sum -> '+' end,
+            z_sparql_sql_metadata:numeric(Operator, Metadata, Metadata);
+        false -> z_sparql_sql_metadata:unknown()
+    end;
+aggregate_metadata(_Function, _Argument, Type) ->
+    z_sparql_sql_metadata:from_type(Type).
 
 expression_sql(#sql_expression{ sql = Sql }) -> Sql.
 
@@ -1755,7 +1980,10 @@ bind_projection(Variable, Expression, #search_sql_term{ args = Args },
             end,
             BoundExpression = Expression#sql_expression{
                 sql = z_search_terms:map(expression_sql(Expression), Mapping),
-                defined = Defined
+                defined = Defined,
+                rdf = z_sparql_sql_metadata:map(
+                    fun(SqlPart) -> z_search_terms:map(SqlPart, Mapping) end,
+                    expression_metadata(Expression))
             },
             State#sql_state{ bindings = Bindings#{ Variable => {value, BoundExpression} } }
     end.
