@@ -223,7 +223,7 @@ compile_term(#search_sql_nested{ operator = {left_join, Alias}, terms = Terms },
         fun merge_term/2,
         #search_sql_term{ select = [], tables = #{} },
         Terms1),
-    {Subquery, Args2} = lateral_subquery(Term0, Args1, Context),
+    {Subquery, Args2} = scoped_subquery(Term0, Args1, Context),
     {
         #search_sql_term{
             select = [],
@@ -260,8 +260,9 @@ compile_term(#search_sql_nested{
 compile_term(#search_sql_nested{
         operator = <<"noneof">>,
         terms = [#search_sql_term{} = Term]
-    }, AllAliases, OutsideAliases, Args, Context) ->
-    scope_noneof(Term, OutsideAliases, AllAliases, Args, Context);
+    }, AllAliases, OutsideAliases, Args0, Context) ->
+    {Term1, Args1} = compile_term(Term, AllAliases, OutsideAliases, Args0, Context),
+    scope_noneof(Term1, OutsideAliases, AllAliases, Args1, Context);
 compile_term(#search_sql_nested{ operator = <<"noneof">>, terms = Terms },
         AllAliases, OutsideAliases, Args0, Context) ->
     {Terms1, Args1} = compile_alternatives(
@@ -269,10 +270,26 @@ compile_term(#search_sql_nested{ operator = <<"noneof">>, terms = Terms },
     scope_noneof(
         combine_operator(<<"anyof">>, Terms1),
         OutsideAliases, AllAliases, Args1, Context);
-compile_term(#search_sql_term{} = Term, _AllAliases, _OutsideAliases, Args, _Context) ->
-    {Term, Args}.
+compile_term(#search_sql_term{} = Term, AllAliases, _OutsideAliases, Args, Context) ->
+    map_sql_expressions(
+        Term,
+        fun(Exists, Terms, Args0) ->
+            compile_exists_expression(Exists, Terms, AllAliases, Args0, Context)
+        end,
+        Args).
 
-lateral_subquery(#search_sql_term{
+%% @doc A scalar EXISTS is a scope boundary, including when used in SELECT,
+%% a function argument, or a compound condition. Its joins and checks must
+%% never become requirements on the enclosing query.
+compile_exists_expression(Exists, Terms, OuterAliases, Args0, Context) ->
+    InnerAliases = defined_aliases(Terms),
+    AllAliases = alias_union(InnerAliases, OuterAliases),
+    {Terms1, Args1} = compile_terms(Terms, AllAliases, OuterAliases, Args0, Context),
+    Term0 = lists:foldr(fun merge_term/2, #search_sql_term{ select = [], tables = #{} }, Terms1),
+    {Subquery, Args2} = scoped_subquery(Term0#search_sql_term{ select = [<<"1">>] }, Args1, Context),
+    {[exists_prefix(Exists), Subquery, $)], Args2}.
+
+scoped_subquery(#search_sql_term{
         select = Select0,
         tables = Tables0,
         join_inner = JoinInner,
@@ -283,8 +300,8 @@ lateral_subquery(#search_sql_term{
         cats_exact = CatsExact,
         extra = Extra
     }, Args0, Context) ->
-    % `rsc` is the implicit outer search resource. References to it in an
-    % OPTIONAL are correlations, not a new local table with the same alias.
+    % `rsc` is the implicit outer search resource. References to it in a
+    % scoped subquery are correlations, not a new local table with the same alias.
     Tables = maps:remove(<<"rsc">>, Tables0),
     Select = case Select0 of
         [] -> [<<"1 AS optional_match">>];
@@ -416,7 +433,7 @@ scope_local_term(#search_sql_term{
 
 add_local_sql_checks(_Tables, _JoinInner, _JoinLeft, Where,
         _Cats, _CatsExclude, _CatsExact, _Extra, Args, undefined) ->
-    {Where, Args};
+    {merge_sql_checks(Where, []), Args};
 add_local_sql_checks(Tables, JoinInner, JoinLeft, Where,
         Cats, CatsExclude, CatsExact, Extra, Args, Context) ->
     {From, _FromWhere} = subquery_from(Tables, JoinInner, JoinLeft),
@@ -729,6 +746,9 @@ aliases_in(Value, AllAliases) ->
         fun(Alias, _True) -> mentions_alias(Value, Alias) end,
         AllAliases).
 
+mentions_alias({search_sql_exists, _Exists, Terms}, Alias) ->
+    % Only correlations count as references in the enclosing query.
+    not maps:is_key(Alias, defined_aliases(Terms)) andalso mentions_alias(Terms, Alias);
 mentions_alias(Alias, Alias) when is_binary(Alias) ->
     true;
 mentions_alias(Value, Alias) when is_binary(Value) ->
@@ -811,7 +831,48 @@ map_tree_args(#search_sql_nested{ terms = Terms } = Nested, Args0) ->
 map_tree_args(#search_sql_term{ args = Args } = Term, Args0) ->
     {_, Args1, Mapping} = merge_args(Args, Args0),
     Term1 = map_args(Term, Mapping),
-    {Term1#search_sql_term{ args = [] }, Args1}.
+    map_sql_expressions(
+        Term1#search_sql_term{ args = [] },
+        fun
+            (argument, Value, AccArgs) ->
+                {_, NextArgs, ArgMapping} = merge_args([Value], AccArgs),
+                {maps:get('$1', ArgMapping), NextArgs};
+            (Exists, Terms, AccArgs) ->
+                {Terms1, NextArgs} = map_tree_args(Terms, AccArgs),
+                {{search_sql_exists, Exists, Terms1}, NextArgs}
+        end,
+        Args1).
+
+%% SQL fragments may contain deferred scalar subqueries. Visit them before
+%% rendering iodata, keeping their parameters separate from the containing
+%% term until all parameters have been assigned query-wide positions.
+map_sql_expressions(Term, Fun, Acc0) ->
+    Fields = [Term#search_sql_term.select, Term#search_sql_term.where,
+        Term#search_sql_term.group_by, Term#search_sql_term.having,
+        Term#search_sql_term.sort, Term#search_sql_term.asort, Term#search_sql_term.zsort,
+        Term#search_sql_term.join_inner, Term#search_sql_term.join_left],
+    {[Select, Where, GroupBy, Having, Sort, ASort, ZSort, JoinInner, JoinLeft], Acc1} =
+        map_sql_fragment(Fields, Fun, Acc0),
+    {Term#search_sql_term{
+        select = Select, where = Where, group_by = GroupBy, having = Having,
+        sort = Sort, asort = ASort, zsort = ZSort,
+        join_inner = JoinInner, join_left = JoinLeft
+    }, Acc1}.
+
+map_sql_fragment({search_sql_arg, Value}, Fun, Acc) ->
+    Fun(argument, Value, Acc);
+map_sql_fragment({search_sql_exists, Exists, Terms}, Fun, Acc) ->
+    Fun(Exists, Terms, Acc);
+map_sql_fragment(Values, Fun, Acc) when is_list(Values) ->
+    lists:mapfoldl(fun(Value, A) -> map_sql_fragment(Value, Fun, A) end, Acc, Values);
+map_sql_fragment(Values, Fun, Acc) when is_map(Values) ->
+    {Pairs, Acc1} = map_sql_fragment(maps:to_list(Values), Fun, Acc),
+    {maps:from_list(Pairs), Acc1};
+map_sql_fragment(Values, Fun, Acc) when is_tuple(Values) ->
+    {List, Acc1} = map_sql_fragment(tuple_to_list(Values), Fun, Acc),
+    {list_to_tuple(List), Acc1};
+map_sql_fragment(Value, _Fun, Acc) ->
+    {Value, Acc}.
 
 
 merge_select(SAcc, Select) ->
@@ -884,6 +945,12 @@ map_1(L, Mapping) when is_list(L) ->
     lists:map(fun(T) -> map_1(T, Mapping) end, L);
 map_1(B, _Mapping) when is_binary(B) ->
     B;
+map_1({search_sql_arg, _} = Argument, _Mapping) ->
+    % Captured values have no dependency on the containing term's numbering.
+    Argument;
+map_1({search_sql_exists, _, _} = Expression, _Mapping) ->
+    % These terms have their own argument lists, mapped by map_tree_args/2.
+    Expression;
 map_1({Alias, OnClause}, Mapping) ->
     {Alias, map_1(OnClause, Mapping)};
 map_1({Alias, AscDesc, Sort}, Mapping) ->

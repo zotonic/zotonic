@@ -43,6 +43,27 @@ Local resources after `:` can be identified by either their numeric id or their
 unique name, for example `:1` and `:administrator` identify the same resource.
 
 
+EXISTS expressions
+------------------
+
+`EXISTS` and `NOT EXISTS` can be used in standalone filters, compound expressions,
+and result expressions:
+
+```sparql
+SELECT ?article (EXISTS { ?article :relation ?related } AS ?hasRelation)
+WHERE {
+    ?article zotonic:is_published true .
+    FILTER (EXISTS { ?article :author ?author } || NOT EXISTS { ?article :relation ?related })
+}
+```
+
+The inner pattern uses the current outer bindings and returns a boolean. Variables
+introduced inside the pattern remain local. Projecting an existence check preserves
+outer rows, including rows without a match; multiple matches do not duplicate a row.
+The same expressions can be used in functions such as `IF`, `ORDER BY`, and `HAVING`,
+subject to the normal grouping rules. `EXISTS {}` is true and `NOT EXISTS {}` is false.
+
+
 Full-text search
 ----------------
 
@@ -212,8 +233,8 @@ TODO
  - [x] Add default Zotonic PREFIX (`zotonic:`) set to `http://zotonic.net/predicate/`
  - [x] Add Zotonic m_sparql model for querying
  - [x] Allow SPARQL query in search_query resources
+ - [x] Support EXISTS / NOT EXISTS inside compound and result expressions
  - [ ] ACL checks for private properties, only allow 'administrator users' to query on private properties
- - [ ] Support EXISTS / NOT EXISTS inside compound and result expressions
  - [ ] Support language handling, using the JSON objects: { _type: "trans", tr = { "en":"..." } }, including LANG etc.
  - [ ] Add DATATYPE support
  - [ ] Add SPARQL endpoint, with expected results (for use with 3rd parties -- check API standards)

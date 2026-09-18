@@ -597,6 +597,102 @@ exists_test() ->
         ok = m_rsc:delete(ObjectId, Context)
     end.
 
+exists_result_expressions_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    Context = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+    {ok, WithId} = m_rsc:insert(#{ <<"category">> => article }, Context),
+    {ok, WithoutId} = m_rsc:insert(#{ <<"category">> => article }, Context),
+    {ok, ObjectId} = m_rsc:insert(#{ <<"category">> => article }, Context),
+    try
+        {ok, _} = m_edge:insert(WithId, relation, ObjectId, Context),
+        {ok, _} = m_edge:insert(WithId, relation, WithoutId, Context),
+        WithUri = m_rsc:uri(WithId, Context),
+        WithoutUri = m_rsc:uri(WithoutId, Context),
+        Prefix = <<"PREFIX dcterms: <http://purl.org/dc/terms/> ">>,
+        Values = <<"VALUES ?subject { <", WithUri/binary, "> <", WithoutUri/binary, "> } ">>,
+        Pattern = <<"{ ?subject dcterms:relation ?object }">>,
+        ResultQuery = <<Prefix/binary,
+            "SELECT ?subject (EXISTS ", Pattern/binary, " AS ?hasRelation) "
+            "(NOT EXISTS ", Pattern/binary, " AS ?missing) "
+            "(IF(EXISTS ", Pattern/binary, ", \"yes\", \"no\") AS ?label) "
+            "(EXISTS {} AS ?always) (NOT EXISTS {} AS ?never) "
+            "WHERE { ", Values/binary, "} ORDER BY ?missing"
+        >>,
+        % Two inner matches still produce exactly one row for the subject.
+        ?assertEqual([
+            {WithId, true, false, <<"yes">>, true, false},
+            {WithoutId, false, true, <<"no">>, true, false}
+        ], search(ResultQuery, Context)),
+        OrQuery = <<Prefix/binary, "SELECT ?subject WHERE { ", Values/binary,
+            "FILTER (EXISTS ", Pattern/binary, " || NOT EXISTS ", Pattern/binary, ") }">>,
+        ?assertEqual(lists:sort([WithId, WithoutId]), lists:sort(search(OrQuery, Context))),
+        AndQuery = <<Prefix/binary, "SELECT ?subject WHERE { ", Values/binary,
+            "FILTER (EXISTS ", Pattern/binary, " && !(NOT EXISTS ", Pattern/binary, ")) }">>,
+        ?assertEqual([WithId], search(AndQuery, Context)),
+        NestedQuery = <<Prefix/binary,
+            "SELECT ?subject (EXISTS { ?subject dcterms:relation ?object . "
+            "FILTER (NOT EXISTS { ?object dcterms:relation ?other } && true) } AS ?found) "
+            "WHERE { ", Values/binary, "}">>,
+        ?assertEqual(lists:sort([{WithId, true}, {WithoutId, false}]),
+            lists:sort(search(NestedQuery, Context))),
+        OptionalQuery = <<Prefix/binary,
+            "SELECT ?subject (EXISTS { ?subject dcterms:relation ?object } AS ?found) "
+            "WHERE { ", Values/binary,
+            "OPTIONAL { ?subject dcterms:relation ?object } }">>,
+        ?assertEqual(lists:sort([{WithId, true}, {WithId, true}, {WithoutId, false}]),
+            lists:sort(search(OptionalQuery, Context))),
+        AggregateQuery = <<Prefix/binary,
+            "SELECT (COUNT(DISTINCT EXISTS ", Pattern/binary, ") AS ?matches) "
+            "WHERE { ", Values/binary, "}">>,
+        ?assertEqual([2], search(AggregateQuery, Context)),
+        HavingQuery = <<Prefix/binary,
+            "SELECT ?subject WHERE { ", Values/binary, "} GROUP BY ?subject "
+            "HAVING (EXISTS ", Pattern/binary, " = true)">>,
+        ?assertEqual([WithId], search(HavingQuery, Context)),
+        UnionQuery = <<Prefix/binary,
+            "SELECT ?subject (EXISTS { { ?subject dcterms:relation ?object } "
+            "UNION { ?object dcterms:relation ?subject } } AS ?found) "
+            "WHERE { ", Values/binary, "}">>,
+        ?assertEqual(lists:sort([{WithId, true}, {WithoutId, true}]),
+            lists:sort(search(UnionQuery, Context)))
+    after
+        ok = m_rsc:delete(WithId, Context),
+        ok = m_rsc:delete(WithoutId, Context),
+        ok = m_rsc:delete(ObjectId, Context)
+    end.
+
+exists_scope_regressions_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    Context = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+    {ok, Id} = m_rsc:insert(#{
+        <<"category">> => article,
+        <<"is_published">> => true
+    }, Context),
+    try
+        Uri = m_rsc:uri(Id, Context),
+        Where = <<"WHERE { VALUES ?subject { <", Uri/binary, "> } }">>,
+        Query = <<"SELECT ?subject (101 AS ?n) "
+            "(EXISTS { FILTER (?n = 202) } AS ?different) "
+            "(NOT EXISTS { FILTER (?n = 202) } AS ?negated) "
+            "(EXISTS { FILTER (?n = ?n) } AS ?same) "
+            "(EXISTS { FILTER (EXISTS { FILTER (?n = 202) } || false) } AS ?nested) "
+            "(EXISTS { FILTER (?different) } AS ?reused) ",
+            Where/binary, " ORDER BY ?n"
+        >>,
+        ?assertEqual([{Id, <<"101">>, false, true, true, false, false}], search(Query, Context)),
+        DeepExpression = deep_exists_expression(12),
+        DeepQuery = <<"SELECT ?subject (", DeepExpression/binary, " AS ?found) ", Where/binary>>,
+        ?assertEqual([{Id, true}], search(DeepQuery, Context))
+    after
+        ok = m_rsc:delete(Id, Context)
+    end.
+
+deep_exists_expression(1) ->
+    <<"EXISTS { ?a zotonic:is_published true . ?b zotonic:is_published true }">>;
+deep_exists_expression(Depth) ->
+    Inner = deep_exists_expression(Depth - 1),
+    <<"EXISTS { FILTER (", Inner/binary, " && true) }">>.
+
 exists_query(Keyword, WithRelationUri, WithoutRelationUri) ->
     <<
         "PREFIX dcterms: <http://purl.org/dc/terms/>\n"

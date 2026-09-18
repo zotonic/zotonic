@@ -1,5 +1,5 @@
 -module(z_sparql_exists_tests).
--moduledoc("SPARQL standalone FILTER EXISTS and FILTER NOT EXISTS tests.").
+-moduledoc("SPARQL EXISTS and NOT EXISTS expression tests.").
 
 -include_lib("eunit/include/eunit.hrl").
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -66,20 +66,97 @@ empty_exists_patterns_test() ->
             ?assert(contains(NotExistsSql#search_sql.where, <<"true">>))
         end).
 
-combined_exists_expression_is_explicitly_unsupported_test() ->
+compound_exists_expressions_test() ->
     with_observers(
         fun(Context) ->
+            Sql = sql(<<
+                "SELECT ?subject WHERE { ?subject test:id ?id . "
+                "FILTER ((EXISTS { ?object test:id 101 } && ?id > 202) "
+                "|| NOT EXISTS { ?other test:id 303 }) }"
+            >>, Context),
+            ?assertEqual(<<"rsc rsc">>, Sql#search_sql.from),
+            ?assert(contains(Sql#search_sql.where, <<" OR ">>)),
+            ?assert(contains(Sql#search_sql.where, <<" AND ">>)),
+            ?assert(contains(Sql#search_sql.where, <<"NOT EXISTS (SELECT 1">>)),
+            ?assertEqual([101, 202, 303], lists:sort(Sql#search_sql.args)),
+            assert_parameter(Sql#search_sql.where, <<".id = ">>, 101, Sql),
+            assert_parameter(Sql#search_sql.where, <<"rsc.id > ">>, 202, Sql),
+            assert_parameter(Sql#search_sql.where, <<".id = ">>, 303, Sql)
+        end).
+
+projected_arguments_in_exists_test() ->
+    with_observers(
+        fun(Context) ->
+            Sql = sql(<<
+                "SELECT ?subject (101 AS ?n) "
+                "(EXISTS { FILTER (?n = 202) } AS ?different) "
+                "(NOT EXISTS { FILTER (?n = 202) } AS ?negated) "
+                "(EXISTS { FILTER (?n = ?n) } AS ?same) "
+                "(EXISTS { ?subject test:id ?n } AS ?matchesId) "
+                "WHERE { ?subject test:id ?id } ORDER BY ?n"
+            >>, Context),
+            ?assertEqual([101, 202], lists:sort(Sql#search_sql.args)),
+            [N] = [I || {I, 101} <- lists:zip(lists:seq(1, length(Sql#search_sql.args)), Sql#search_sql.args)],
+            [Other] = [I || {I, 202} <- lists:zip(lists:seq(1, length(Sql#search_sql.args)), Sql#search_sql.args)],
+            NArg = <<"$", (integer_to_binary(N))/binary>>,
+            OtherArg = <<"$", (integer_to_binary(Other))/binary>>,
+            ?assert(contains(Sql#search_sql.select, <<NArg/binary, " = ", OtherArg/binary>>)),
+            ?assert(contains(Sql#search_sql.select, <<NArg/binary, " = ", NArg/binary>>)),
+            ?assert(contains(Sql#search_sql.select, <<"rsc.id = ", NArg/binary>>)),
+            ?assertEqual(<<NArg/binary, " ASC">>, Sql#search_sql.order)
+        end).
+
+result_exists_expressions_test() ->
+    with_observers(
+        fun(Context) ->
+            Sql = sql(<<
+                "SELECT ?subject (EXISTS { ?subject test:title ?title } AS ?hasTitle) "
+                "(NOT EXISTS {} AS ?never) "
+                "(IF(EXISTS { ?object test:id 101 }, 202, 303) AS ?label) "
+                "WHERE { ?subject test:id ?id } ORDER BY ?hasTitle"
+            >>, Context),
+            ?assertEqual(<<"rsc rsc">>, Sql#search_sql.from),
+            ?assertNot(contains(Sql#search_sql.where, <<"EXISTS">>)),
+            ?assert(contains(Sql#search_sql.select, <<"EXISTS (SELECT 1">>)),
+            ?assert(contains(Sql#search_sql.select, <<"NOT EXISTS (SELECT 1)">>)),
+            ?assert(contains(Sql#search_sql.select, <<"CASE WHEN">>)),
+            ?assert(contains(Sql#search_sql.order, <<"EXISTS (SELECT 1">>)),
+            assert_parameter(Sql#search_sql.select, <<".id = ">>, 101, Sql)
+        end).
+
+nested_exists_scope_test() ->
+    with_observers(
+        fun(Context) ->
+            Sql = sql(<<
+                "SELECT ?subject (EXISTS { ?object test:id ?objectId . "
+                "FILTER (EXISTS { ?inner test:id ?objectId } && true) } AS ?found) "
+                "WHERE { ?subject test:id ?id }"
+            >>, Context),
+            ?assertEqual(<<"rsc rsc">>, Sql#search_sql.from),
+            ?assert(contains(Sql#search_sql.select, <<"FROM rsc sparql_e1_rsc_1">>)),
+            ?assert(contains(Sql#search_sql.select, <<"FROM rsc sparql_e2_rsc_2">>)),
+            ?assert(contains(Sql#search_sql.select,
+                <<"sparql_e2_rsc_2.id = sparql_e1_rsc_1.id">>)),
+            ?assertNot(contains(Sql#search_sql.where, <<"sparql_e">>)),
             {ok, Query} = z_sparql:parse(<<
-                "PREFIX test: <https://example.test/exists#>\n"
-                "SELECT ?subject WHERE {\n"
-                "    ?subject test:id ?subject_id .\n"
-                "    FILTER (EXISTS { ?subject test:title ?title } && true)\n"
-                "}"
+                "PREFIX test: <https://example.test/exists#> "
+                "SELECT ?subject ?local WHERE { ?subject test:id ?id . "
+                "FILTER (EXISTS { ?local test:id ?localId } || true) }"
             >>),
-            ?assertEqual(
-                {error, {unsupported, exists_expression}},
+            ?assertEqual({error, {unbound_variable, {var, <<"local">>}}},
                 z_sparql_sql:to_sql_term(Query, Context))
         end).
+
+sql(Body, Context) ->
+    {ok, Query} = z_sparql:parse(<<
+        "PREFIX test: <https://example.test/exists#> ", Body/binary
+    >>),
+    {ok, Terms} = z_sparql_sql:to_sql_term(Query, Context),
+    z_search_terms:combine(Terms, Context).
+
+assert_parameter(Fragment, Prefix, Value, #search_sql{ args = Args }) ->
+    [Nr] = [N || {N, Arg} <- lists:zip(lists:seq(1, length(Args)), Args), Arg =:= Value],
+    ?assert(contains(Fragment, <<Prefix/binary, "$", (integer_to_binary(Nr))/binary>>)).
 
 query_and_plan(Operator, Context) ->
     Keyword = case Operator of

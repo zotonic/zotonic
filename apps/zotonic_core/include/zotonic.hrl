@@ -181,6 +181,10 @@
     search_sql_terms = undefined :: list() | undefined % Optional, if search was built using #search_sql_term{} records
 }).
 
+% SQL fragments in a search term can include {search_sql_exists, Operator, Terms},
+% with Operator = exists | not_exists and a private list of search terms.
+% Captured parameters use {search_sql_arg, Value}, independent of term numbering.
+% z_search_terms:combine/2 maps their arguments and renders the scalar subquery.
 -record(search_sql_term, {
     label = undefined,
     select = [ <<"rsc.id">> ],

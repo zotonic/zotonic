@@ -115,6 +115,22 @@ exists_resource_acl_stays_inside_subquery_test() ->
                 ])
         end).
 
+result_exists_resource_acl_test() ->
+    with_observers(
+        fun(Context) ->
+            Query = sparql_sql(<<
+                "PREFIX test: <https://example.test/vocab#> "
+                "SELECT ?subject (EXISTS { ?object test:id 123 } AS ?found) "
+                "WHERE { ?subject test:id ?id }"
+            >>, Context),
+            [LocalAlias] = acl_aliases(Query#search_sql.args),
+            ?assert(contains(Query#search_sql.select,
+                <<LocalAlias/binary, ".acl_marker = $">>)),
+            ?assertNot(contains(Query#search_sql.from, LocalAlias)),
+            ?assertNot(contains(Query#search_sql.where, <<"acl_marker">>)),
+            ?assert(lists:member(123, Query#search_sql.args))
+        end).
+
 sparql_sql(Sparql, Context) ->
     {ok, ParsedQuery} = z_sparql:parse(Sparql),
     {ok, Terms} = z_sparql_sql:to_sql_term(ParsedQuery, Context),

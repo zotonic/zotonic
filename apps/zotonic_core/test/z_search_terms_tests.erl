@@ -10,6 +10,56 @@
 -export([observe_acl_add_sql_check/2]).
 
 
+scalar_exists_arguments_and_fields_test() ->
+    Exists = {search_sql_exists, exists, [#search_sql_term{
+        select = [],
+        tables = #{<<"inner_rsc">> => <<"rsc">>},
+        where = [[<<"inner_rsc.id = ">>, '$1']],
+        args = [101]
+    }]},
+    Query = z_search_terms:combine([#search_sql_term{
+        select = [Exists],
+        where = [[Exists, <<" OR rsc.id = ">>, '$1']],
+        group_by = [Exists],
+        having = [Exists],
+        sort = [[Exists, <<" ASC">>]],
+        args = [202]
+    }]),
+    ?assertEqual(<<"rsc rsc">>, Query#search_sql.from),
+    ?assertEqual([202, 101], Query#search_sql.args),
+    lists:foreach(fun(Fragment) ->
+        ?assert(contains(Fragment, <<"EXISTS (SELECT 1 FROM rsc inner_rsc">>)),
+        ?assert(contains(Fragment, <<"inner_rsc.id = $2">>))
+    end, [Query#search_sql.select, Query#search_sql.where,
+        Query#search_sql.group_by, Query#search_sql.having, Query#search_sql.order]),
+    ?assert(contains(Query#search_sql.where, <<"rsc.id = $1">>)).
+
+scalar_exists_multiple_conditions_without_context_test() ->
+    lists:foreach(
+        fun({Operator, Prefix}) ->
+            Terms = [#search_sql_term{select = [{search_sql_exists, Operator, [
+                #search_sql_term{select = [], where = [<<"rsc.id > 0">>]},
+                #search_sql_term{select = [], where = [<<"rsc.id < 10 OR rsc.id = 20">>]}
+            ]}]}],
+            Query = z_search_terms:combine(Terms),
+            ?assertEqual(Query, z_search_terms:combine(Terms, undefined)),
+            ?assertEqual(
+                <<"rsc.id, ", Prefix/binary,
+                  " (SELECT 1 where (rsc.id < 10 OR rsc.id = 20) AND (rsc.id > 0))">>,
+                Query#search_sql.select)
+        end,
+        [{exists, <<"EXISTS">>}, {not_exists, <<"NOT EXISTS">>}]).
+
+scalar_exists_inside_noneof_test() ->
+    Query = z_search_terms:combine([#search_sql_nested{
+        operator = <<"noneof">>,
+        terms = [#search_sql_term{
+            select = [],
+            where = [{search_sql_exists, exists, []}]
+        }]
+    }]),
+    ?assert(contains(Query#search_sql.where, <<"NOT (EXISTS (SELECT 1))">>)).
+
 query_check_scope_test() ->
     ?assertNot(z_search:is_query_check()),
     ?assert(z_search:with_query_check(fun z_search:is_query_check/0)),

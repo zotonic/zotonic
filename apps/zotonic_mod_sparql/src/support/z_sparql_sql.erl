@@ -63,6 +63,7 @@
     bindings = #{} :: map(),
     solution_bindings = #{} :: map(),
     alias_nr = 1 :: pos_integer(),
+    alias_scope = 0 :: non_neg_integer(),
     context :: z:context()
 }).
 
@@ -820,9 +821,20 @@ expression_to_sql({'u+', Expression}, State, Term0) ->
 expression_to_sql({'u-', Expression}, State, Term0) ->
     {Expression1, Term1} = expression_to_sql(Expression, State, Term0),
     {unary_expression('u-', Expression1), Term1};
-expression_to_sql({Exists, _Pattern}, _State, _Term0)
+expression_to_sql({Exists, Pattern}, State, Term)
     when Exists =:= exists; Exists =:= not_exists ->
-    throw({error, {unsupported, exists_expression}});
+    % Each scalar subquery owns its aliases and bindings. Sibling expressions
+    % can reuse local aliases; nested expressions get a deeper namespace so
+    % they cannot shadow the aliases they correlate with.
+    Scope = State#sql_state.alias_scope,
+    InnerState = State#sql_state{ alias_scope = Scope + 1 },
+    {Terms, _InnerState} = pattern_to_sql(Pattern, InnerState),
+    Expression = #sql_expression{
+        sql = {search_sql_exists, Exists, Terms},
+        type = boolean,
+        source = expression
+    },
+    {Expression, Term};
 expression_to_sql({aggregate, Function, Distinct, Argument, Separator}, State, Term0) ->
     aggregate_to_sql(Function, Distinct, Argument, Separator, State, Term0);
 expression_to_sql({call, Function, [Argument]}, State, Term0)
@@ -1708,7 +1720,7 @@ projection_expressions([{var, _} = Variable | Rest], State, Term0, Nr, Acc) ->
     projection_expressions(Rest, State, Term1, Nr + 1, [SelectExpression | Acc]);
 projection_expressions([{as, Expression, Variable} | Rest], State0, Term0, Nr, Acc) ->
     {Expression1, Term1} = expression_to_sql(Expression, State0, Term0),
-    State1 = bind_projection(Variable, Expression1, State0),
+    State1 = bind_projection(Variable, Expression1, Term1, State0),
     ColumnAlias = <<"sparql_", (integer_to_binary(Nr))/binary>>,
     SelectExpression = [expression_sql(Expression1), <<" AS ">>, ColumnAlias],
     projection_expressions(Rest, State1, Term1, Nr + 1, [SelectExpression | Acc]).
@@ -1725,10 +1737,27 @@ projection_variable(Variable, State, Term) ->
             {expression_sql(Expression), Term1}
     end.
 
-bind_projection(Variable, Expression, #sql_state{ bindings = Bindings } = State) ->
+bind_projection(Variable, Expression, #search_sql_term{ args = Args },
+        #sql_state{ bindings = Bindings } = State) ->
     case maps:is_key(Variable, Bindings) of
         true -> throw({error, {variable_already_bound, Variable}});
-        false -> State#sql_state{ bindings = Bindings#{ Variable => {value, Expression} } }
+        false ->
+            % A projected expression can be reused in a different term or
+            % subquery. Capture its parameter values before leaving this term's
+            % numbered argument scope. Nested EXISTS terms own their arguments.
+            Mapping = maps:from_list([
+                {list_to_atom("$" ++ integer_to_list(Nr)), {search_sql_arg, Value}}
+                || {Nr, Value} <- lists:zip(lists:seq(1, length(Args)), Args)
+            ]),
+            Defined = case Expression#sql_expression.defined of
+                Boolean when is_boolean(Boolean) -> Boolean;
+                Sql -> z_search_terms:map(Sql, Mapping)
+            end,
+            BoundExpression = Expression#sql_expression{
+                sql = z_search_terms:map(expression_sql(Expression), Mapping),
+                defined = Defined
+            },
+            State#sql_state{ bindings = Bindings#{ Variable => {value, BoundExpression} } }
     end.
 
 is_grouped_query(#{ group_by := [_ | _] }) ->
@@ -1896,8 +1925,13 @@ rdf_json_value({double, Value}) -> z_convert:to_float(Value);
 rdf_json_value(Boolean) when is_boolean(Boolean) -> Boolean;
 rdf_json_value(Value) -> throw({error, {expected_value, Value}}).
 
-new_alias(Prefix, #sql_state{ alias_nr = AliasNr } = State) ->
-    Alias = <<"sparql_", Prefix/binary, "_", (integer_to_binary(AliasNr))/binary>>,
+new_alias(Prefix, #sql_state{ alias_nr = AliasNr, alias_scope = Scope } = State) ->
+    % A numeric depth keeps identifiers short even for deeply nested EXISTS.
+    ScopePrefix = case Scope of
+        0 -> <<>>;
+        _ -> <<"e", (integer_to_binary(Scope))/binary, "_">>
+    end,
+    Alias = <<"sparql_", ScopePrefix/binary, Prefix/binary, "_", (integer_to_binary(AliasNr))/binary>>,
     {Alias, State#sql_state{ alias_nr = AliasNr + 1 }}.
 
 empty_term() ->
