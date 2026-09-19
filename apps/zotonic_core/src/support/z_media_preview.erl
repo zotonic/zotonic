@@ -1,7 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009-2026 Marc Worrell, Driebit BV
-%% @doc Make still previews of media, using image manipulation functions.  Resize, crop, grey, etc.
-%% This uses the command line imagemagick tools for all image manipulation.
+%% @doc Generate still media previews with ImageMagick transformations.
 %% @end
 
 %% Copyright 2009-2026 Marc Worrell, Driebit BV
@@ -80,7 +79,9 @@ convert(InFile, MediumFilename, OutFile, Filters, Context) ->
                             % TODO: add the notification here to let a module pick up the resize
                             % A remote server can then handle the resize request.
                             SiteDir = z_path:site_dir(Context),
-                            convert_1(imagemagick_convert_cmd(), InFile, OutFile, Mime, FileProps, FiltersExpanded, SiteDir);
+                            convert_1(
+                                imagemagick_convert_cmd(), InFile, OutFile, Mime,
+                                FileProps, FiltersExpanded, SiteDir, Context);
                         {error, Reason} = Error ->
                             ?LOG_WARNING(#{
                                 text => <<"Cannot expand mediaclass">>,
@@ -119,6 +120,14 @@ imagemagick_convert_cmd() ->
 %% whether we are running a legacy (pre-v7) installation.
 -spec imagemagick_find_executable() -> #{ cmd := string() | false, legacy := boolean() }.
 imagemagick_find_executable() ->
+    case z_media_runner:enabled() of
+        true ->
+            imagemagick_detect(fun z_media_runner:find_executable/1);
+        false ->
+            imagemagick_find_executable_local()
+    end.
+
+imagemagick_find_executable_local() ->
     Key = {?MODULE, imagemagick_find_executable},
     case persistent_term:get(Key, undefined) of
         undefined ->
@@ -151,24 +160,24 @@ imagemagick_detect(FindExe) ->
 is_legacy_imagemagick() ->
     #{ legacy := Legacy } = imagemagick_find_executable(),
     Legacy.
-convert_1(false, _InFile, _OutFile, _InMime, _FileProps, _Filters, _SiteDir) ->
+convert_1(false, _InFile, _OutFile, _InMime, _FileProps, _Filters, _SiteDir, _Context) ->
     ?LOG_ERROR(#{
         text => <<"Install ImageMagick to generate previews of images.">>,
         in => zotonic_core
     }),
     {error, imagemagick_missing};
-convert_1(ConvertCmd, InFile, OutFile, InMime, FileProps, Filters, SiteDir) ->
+convert_1(ConvertCmd, InFile, OutFile, InMime, FileProps, Filters, SiteDir, Context) ->
     OutMime = z_media_identify:guess_mime(OutFile),
     case cmd_args(FileProps, Filters, OutMime) of
         {ok, {EndWidth, EndHeight, _CmdArgs}} when EndWidth > ?MAX_PIXSIZE; EndHeight > ?MAX_PIXSIZE ->
             {error, image_too_big};
         {ok, {_, _, CmdArgs}} ->
-            convert_2(CmdArgs, ConvertCmd, InFile, OutFile, InMime, FileProps, SiteDir);
+            convert_2(CmdArgs, ConvertCmd, InFile, OutFile, InMime, FileProps, SiteDir, Context);
         {error, _} = Error ->
             Error
     end.
 
-convert_2(CmdArgs, ConvertCmd, InFile, OutFile, InMime, FileProps, SiteDir) ->
+convert_2(CmdArgs, ConvertCmd, InFile, OutFile, InMime, FileProps, SiteDir, Context) ->
     %% Only publish a finished preview. The private directory is on the same
     %% filesystem as OutFile so publication is an atomic rename.
     Convert = fun() ->
@@ -180,7 +189,9 @@ convert_2(CmdArgs, ConvertCmd, InFile, OutFile, InMime, FileProps, SiteDir) ->
                 try
                     ok = file:change_mode(TempDir, 8#700),
                     TempFile = filename:join(TempDir, filename:basename(OutFile)),
-                    case convert_temp(CmdArgs, ConvertCmd, InFile, TempFile, InMime, FileProps, SiteDir) of
+                    case convert_temp(
+                        CmdArgs, ConvertCmd, InFile, TempFile, InMime, FileProps, SiteDir, Context)
+                    of
                         ok -> file:rename(TempFile, OutFile);
                         {error, _} = Error -> Error
                     end
@@ -192,7 +203,7 @@ convert_2(CmdArgs, ConvertCmd, InFile, OutFile, InMime, FileProps, SiteDir) ->
     end,
     jobs:run(media_preview_jobs, fun() -> once(OutFile, Convert) end).
 
-convert_temp(CmdArgs, ConvertCmd, InFile, TempFile, InMime, FileProps, SiteDir) ->
+convert_temp(CmdArgs, ConvertCmd, InFile, TempFile, InMime, FileProps, SiteDir, Context) ->
     Cmd = unicode:characters_to_binary([
         "cd ", z_filelib:os_filename(SiteDir), "; ",
         ConvertCmd, " ",
@@ -207,7 +218,7 @@ convert_temp(CmdArgs, ConvertCmd, InFile, TempFile, InMime, FileProps, SiteDir) 
         _ -> imagemagick
     end,
     Options = #{read => [InFile], write => [TempFile], cd => SiteDir},
-    case z_exec:run(Profile, Cmd, Options) of
+    case z_exec:run(Profile, Cmd, Options, Context) of
         {ok, _} ->
             %% A successful exit alone is not enough: the sandbox pre-creates
             %% the output, so reject untouched empty files as well.

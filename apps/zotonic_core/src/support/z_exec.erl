@@ -1,5 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2023-2026 Marc Worrell
+%% @doc Execute OS commands with timeouts and local or remote sandboxed media profiles.
+%% @end
 
 %% Copyright 2023-2026 Marc Worrell
 %%
@@ -20,10 +22,20 @@
 -moduledoc("
 Execute OS commands with timeouts and optional application sandboxing.
 
-`run/1` and `run/2` execute unrestricted commands. Use `run/3` for media
+`run/1` and `run/2` execute unrestricted commands. Use `run/4` with a site context for media
 processing: it runs the shell, decoder and delegates inside a native sandbox
 with explicit filesystem permissions and no network access. Command strings
 retain shell syntax; callers must still shell-escape untrusted arguments.
+
+When `media_runner_url` is configured, `run/4` submits media work to the
+external runner and waits for its authenticated callback. Remote availability
+failures are retried locally only when `media_runner_local_fallback` is true;
+local execution retains the configured sandbox policy. The runner itself always
+requires sandbox enforcement. See the
+[media runner documentation](https://github.com/zotonic/mediarunner#readme) for setup.
+
+The callback URL is generated from the site dispatcher. Context-free `run/3`
+is supported for local execution; remote processing requires the site context.
 
 ## Application profiles
 
@@ -40,7 +52,7 @@ z_exec:run(imagemagick, Command, #{
     read => [InputFile],
     write => [OutputFile],
     timeout => 120000
-}).
+}, Context).
 ```
 
 `read` grants access to existing inputs and assets. `write` grants access to
@@ -113,6 +125,9 @@ Build, deployment and integration-test details are in
     run/1,
     run/2,
     run/3,
+    run/4,
+    run_local/3,
+    run_sandbox/3,
     sandbox_status/0
 ]).
 
@@ -178,6 +193,27 @@ run(Command, Options) ->
     Reason :: term().
 run(Profile, Command, Options) ->
     case profile(Profile) of
+        {error, _} = Error ->
+            Error;
+        Defaults ->
+            z_media_runner:run(Profile, Command, maps:merge(Defaults, Options))
+    end.
+
+%% @doc Execute media commands for a site, deriving remote callbacks from its dispatcher.
+-spec run(Profile, Command, Options, Context) -> {ok, Data} | {error, Reason} when
+    Profile :: atom(),
+    Command :: iodata(),
+    Options :: map(),
+    Context :: z:context() | undefined,
+    Data :: binary(),
+    Reason :: term().
+run(Profile, Command, Options, Context) ->
+    run(Profile, Command, Options#{context => Context}).
+
+%% @doc Execute here, without remote routing, using the configured sandbox policy.
+-spec run_local(atom(), iodata(), map()) -> {ok, binary()} | {error, term()}.
+run_local(Profile, Command, Options) ->
+    case profile(Profile) of
         {error, _} = Error -> Error;
         Defaults ->
             case sandbox_mode() of
@@ -190,6 +226,17 @@ run(Profile, Command, Options) ->
             end
     end.
 
+
+%% @doc Mandatory sandbox execution for the remote runner. Never routes remotely
+%% and never honors exec_sandbox=disabled.
+-spec run_sandbox(atom(), iodata(), map()) -> {ok, binary()} | {error, term()}.
+run_sandbox(Profile, Command, Options) ->
+    case profile(Profile) of
+        {error, _} = Error ->
+            Error;
+        Defaults ->
+            sandbox_run(Profile, Command, maps:merge(Defaults, Options))
+    end.
 
 %% @doc Probe enforcement, not just the presence of the helper or kernel version.
 -spec sandbox_status() -> {ok, binary()} | {error, term()}.

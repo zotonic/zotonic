@@ -21,6 +21,7 @@
 
 -export([
     preview/2,
+    preview/3,
     orientation_to_transpose/1
 ]).
 
@@ -32,10 +33,16 @@
 -define(PREVIEW_CMDLINE, "ffmpeg -itsoffset -~p -i ~s -vcodec png -vframes 1 -an -f rawvideo -loglevel error -y").
 
 -spec preview(file:filename_all(), map()) -> {ok, file:filename_all()} | {error, string()}.
+preview(MovieFile, Info) ->
+    preview(MovieFile, Info, undefined).
+
+%% @doc Generate a video preview using the site's context for remote media processing.
+-spec preview(file:filename_all(), map(), z:context() | undefined) ->
+    {ok, file:filename_all()} | {error, term()}.
 preview(MovieFile, #{
         <<"duration">> := Duration,
         <<"orientation">> := Orientation
-    }) ->
+    }, Context) ->
     Start = case Duration of
         N when N =< 1 -> 0;
         N when N =< 30 -> 1;
@@ -67,7 +74,7 @@ preview(MovieFile, #{
             }),
             case z_exec:run(ffmpeg, FfmpegCmd, #{
                 timeout => ?FFMPEG_TIMEOUT, read => [MovieFile], write => [TmpFile]
-            }) of
+            }, Context) of
                 {ok, Stdout} ->
                    ?LOG_DEBUG(#{
                         text => <<"FFMPEG video preview ok">>,
@@ -90,7 +97,7 @@ preview(MovieFile, #{
                    {error, Reason}
             end
         end);
-preview(MovieFile, _Props) ->
+preview(MovieFile, _Props, _Context) ->
    ?LOG_WARNING(#{
         text => <<"Video preview skipped for non video">>,
         result => error,
