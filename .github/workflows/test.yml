@@ -43,10 +43,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v7
-      - name: Add user Zotonic
+      - name: Install build dependencies and add user Zotonic
         run: |
           apt-get update
-          apt-get -y install sudo
+          apt-get -y install sudo libseccomp-dev
           adduser --disabled-login zotonic
       - name: Compile
         run: make

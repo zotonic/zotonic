@@ -21,6 +21,7 @@ users:
 
 packages:
   - build-essential
+  - libseccomp-dev
   - libcap2-bin
   - libssl-dev
   - automake
@@ -86,4 +87,3 @@ runcmd:
   - sudo su zotonic -l -c "cp zotonic/cloud-init/config.d/* .config/zotonic/config/1/config.d/."
   - sudo su zotonic -l -c "cd zotonic; make"
   - sudo su zotonic -l -c "cd zotonic; bin/zotonic start"
-
