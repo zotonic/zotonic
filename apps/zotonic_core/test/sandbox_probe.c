@@ -1,4 +1,5 @@
 /* Test operations must fail even after a decoder forks a delegate. */
+#define _GNU_SOURCE
 #include <errno.h>
 #include <netinet/in.h>
 #include <signal.h>
@@ -6,6 +7,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/socket.h>
+#include <sys/resource.h>
 #include <sys/types.h>
 #include <sys/un.h>
 #include <sys/wait.h>
@@ -46,6 +48,20 @@ static int network_denied(int family, int type)
     return blocked;
 }
 
+#ifdef __linux__
+static int resource_limits_confined(void)
+{
+    struct rlimit own, other;
+    /* These must still work after fork; the filter cannot pin the original
+     * process ID as the only allowed target. */
+    if (prlimit(0, RLIMIT_NOFILE, NULL, &own)) return 0;
+    if (prlimit(0, RLIMIT_NOFILE, &own, NULL)) return 0;
+    if (prlimit(getppid(), RLIMIT_NOFILE, NULL, &other) == 0 || !denied()) return 0;
+    if (prlimit(getppid(), RLIMIT_NOFILE, &own, NULL) == 0 || !denied()) return 0;
+    return 1;
+}
+#endif
+
 int main(void)
 {
     if (!network_denied(AF_INET, SOCK_STREAM)) return 10;
@@ -53,10 +69,12 @@ int main(void)
     if (!network_denied(AF_UNIX, SOCK_STREAM)) return 12;
     if (!network_denied(AF_INET, SOCK_DGRAM)) return 13;
 #ifdef __linux__
+    if (!resource_limits_confined()) return 25;
     /* Seatbelt does not mediate setsid/setpgid; only Linux promises this. */
     pid_t pid = fork();
     if (pid < 0) return 20;
     if (pid == 0) {
+        if (!resource_limits_confined()) _exit(26);
         if (setsid() >= 0) _exit(21);
         if (setpgid(0, 0) == 0) _exit(22);
         _exit(0);

@@ -281,6 +281,12 @@ static void enforce(void)
             seccomp_rule_add(ctx, SCMP_ACT_ERRNO(EPERM), nr, 0) != 0)
             fail("seccomp_rule_add");
     }
+    /* libc uses prlimit64(0, ...) for getrlimit/setrlimit. Permit that
+     * self-only form, including in descendants, but never target another
+     * process: matching UIDs otherwise allow changing the server's limits. */
+    if (seccomp_rule_add(ctx, SCMP_ACT_ERRNO(EPERM), SCMP_SYS(prlimit64), 1,
+                         SCMP_A0(SCMP_CMP_NE, 0)) != 0)
+        fail("seccomp prlimit64");
     /* clone3 has opaque arguments: force libc's legacy clone fallback. */
     int nr = seccomp_syscall_resolve_name("clone3");
     if (nr != __NR_SCMP_ERROR &&

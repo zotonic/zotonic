@@ -53,6 +53,8 @@ libseccomp 2.5+ development files (`libseccomp-dev` on Debian/Ubuntu). The rebar
 hook builds `apps/zotonic_core/priv/bin/zotonic-sandbox`. The development Docker
 image includes the dependency. Release builds must include the resulting `priv`
 directory and the runtime libseccomp library. The helper is **not setuid**.
+Hex packages exclude the compiled helper and include its C source and Makefile,
+so dependency compilation builds it for the consumer's OS and architecture.
 
 Requires enabled Landlock ABI 3 or newer (upstream Linux 6.2+), detected by syscall
 at execution time. ABI 1/2 are rejected because they cannot restrict truncation.
@@ -61,6 +63,9 @@ rights when ABI 5 is available. Unspecified rights in newer ABIs are not claimed
 as protections. Seccomp independently blocks sockets, networking through
 io_uring, process inspection/signalling APIs and process-group/session changes.
 It is a denylist, not a general syscall allowlist or a VM boundary.
+Resource-limit operations through `prlimit64` are permitted only with PID zero
+(the calling process); explicit PID targets are denied, including other
+processes owned by the Zotonic user.
 
 A supervisor keeps the decoder and delegates in a job process group. On normal
 completion, failure, or cancellation, it kills that group with SIGKILL. The
