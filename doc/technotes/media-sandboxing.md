@@ -36,6 +36,16 @@ resource paths are readable. Executable permissions cover the shell, dynamic
 loader and selected tools. The PDF profile adds Ghostscript. Paths are resolved
 by the native launcher; missing explicit paths fail setup.
 
+On Linux the helper reads each executable's ELF `PT_INTERP` entry and grants
+execution to that exact loader. Library directories remain read-only, without
+recursive execute grants. Custom scripts need an explicit execute grant for
+their interpreter. These restrictions do not prevent an already compromised
+process from running code within its permitted filesystem and network access.
+
+Image previews are generated in a private directory alongside the destination
+and atomically renamed into place after successful conversion. Concurrent
+requests coordinate by destination path; partial outputs are never published.
+
 ## Linux
 
 Build dependencies: a C compiler, Linux headers with Landlock support and
@@ -81,9 +91,15 @@ is **best effort**. This backend does not offer Linux's process-group guarantee.
 Apple's API is deprecated; test each supported OS version. Already-sandboxed
 parents may reject Seatbelt initialization; that error is propagated.
 
-BSD backends are not implemented. Required mode reports
+Windows and BSD backends are not implemented. Required mode logs an actionable
+error and reports
 `{sandbox_unsupported, Os}` there. Capsicum/jails and pledge/unveil need separate
 implementations and platform tests.
+
+On these platforms, administrators can explicitly opt out by adding
+`{exec_sandbox, disabled}` to the Zotonic application configuration in
+`zotonic.config`, or `exec_sandbox: disabled` under `zotonic:` in YAML.
+This enables unrestricted media commands and removes sandbox protection.
 
 ## Configuration and failures
 
@@ -123,10 +139,19 @@ user on a host that permits sandbox initialization:
 ```sh
 cc -Wall -Wextra -Werror -o /tmp/zotonic-sandbox-probe \
     apps/zotonic_core/test/sandbox_probe.c
+# Linux only: install a deliberately ungranted executable in a readable tree.
+if [ "$(uname -s)" = Linux ]; then
+    sudo install -m 755 /tmp/zotonic-sandbox-probe /usr/lib/zotonic-sandbox-denied-probe
+fi
 erlc -o /tmp apps/zotonic_core/test/z_exec_tests.erl
 ZOTONIC_SANDBOX_TESTS=1 ZOTONIC_SANDBOX_PROBE=/tmp/zotonic-sandbox-probe \
+    ZOTONIC_SANDBOX_DENIED_EXEC=/usr/lib/zotonic-sandbox-denied-probe \
     erl -noshell -pa _build/default/lib/*/ebin /tmp \
     -eval 'case eunit:test(z_exec_tests, [verbose]) of ok -> halt(0); _ -> halt(1) end.'
+# After testing on Linux:
+if [ "$(uname -s)" = Linux ]; then
+    sudo rm /usr/lib/zotonic-sandbox-denied-probe
+fi
 ```
 
 Opting in makes unavailable enforcement a test failure, not a skip. Tests cover

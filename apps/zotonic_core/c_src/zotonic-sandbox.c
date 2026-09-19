@@ -15,6 +15,8 @@
 #include <unistd.h>
 
 #ifdef __linux__
+#include <elf.h>
+#include <limits.h>
 #include <linux/landlock.h>
 #include <seccomp.h>
 #include <sys/prctl.h>
@@ -107,6 +109,93 @@ static void quoted_path(const char *path)
 }
 #endif
 
+static void path_rule(const char *access, const char *path);
+
+#ifdef __linux__
+/* Read PT_INTERP without executing the tool (unlike ldd). Shared libraries only
+ * need read access; the kernel also requires EXECUTE on this exact loader.
+ * Parse both ELF classes, but only the host byte order. Foreign-endian tools
+ * cannot run natively and must not silently receive broader permissions. */
+static void read_at(int fd, void *buf, size_t size, off_t offset)
+{
+    if (pread(fd, buf, size, offset) != (ssize_t)size) {
+        errno = ENOEXEC;
+        fail("read ELF header");
+    }
+}
+
+static void interpreter_rule(const char *path)
+{
+    int fd = open(path, O_RDONLY | O_CLOEXEC);
+    if (fd < 0) fail(path);
+    unsigned char ident[EI_NIDENT];
+    ssize_t n = pread(fd, ident, sizeof(ident), 0);
+    if (n < 0) fail("read executable");
+    if (n < SELFMAG || memcmp(ident, ELFMAG, SELFMAG)) {
+        /* Script interpreters must be explicitly granted in the profile. */
+        close(fd);
+        return;
+    }
+    const uint16_t endian = 1;
+    int encoding = *(const unsigned char *)&endian ? ELFDATA2LSB : ELFDATA2MSB;
+    if (n != (ssize_t)sizeof(ident) || ident[EI_DATA] != encoding) {
+        errno = ENOEXEC;
+        fail("unsupported ELF encoding");
+    }
+    uint64_t offset, stride, count;
+    if (ident[EI_CLASS] == ELFCLASS64) {
+        Elf64_Ehdr h;
+        read_at(fd, &h, sizeof(h), 0);
+        offset = h.e_phoff; stride = h.e_phentsize; count = h.e_phnum;
+        if (stride != sizeof(Elf64_Phdr)) { errno = ENOEXEC; fail("ELF phentsize"); }
+    } else if (ident[EI_CLASS] == ELFCLASS32) {
+        Elf32_Ehdr h;
+        read_at(fd, &h, sizeof(h), 0);
+        offset = h.e_phoff; stride = h.e_phentsize; count = h.e_phnum;
+        if (stride != sizeof(Elf32_Phdr)) { errno = ENOEXEC; fail("ELF phentsize"); }
+    } else {
+        errno = ENOEXEC;
+        fail("unsupported ELF class");
+    }
+    struct stat st;
+    if (fstat(fd, &st)) fail("stat ELF");
+    if (count == PN_XNUM || offset > (uint64_t)st.st_size ||
+        count * stride > (uint64_t)st.st_size - offset) {
+        errno = ENOEXEC;
+        fail("invalid ELF program headers");
+    }
+    for (uint64_t i = 0; i < count; i++) {
+        uint32_t type;
+        uint64_t start, size;
+        if (ident[EI_CLASS] == ELFCLASS64) {
+            Elf64_Phdr h;
+            read_at(fd, &h, sizeof(h), offset + i * stride);
+            type = h.p_type; start = h.p_offset; size = h.p_filesz;
+        } else {
+            Elf32_Phdr h;
+            read_at(fd, &h, sizeof(h), offset + i * stride);
+            type = h.p_type; start = h.p_offset; size = h.p_filesz;
+        }
+        if (type != PT_INTERP) continue;
+        char loader[PATH_MAX];
+        if (size < 2 || size > sizeof(loader) || start > (uint64_t)st.st_size ||
+            size > (uint64_t)st.st_size - start) {
+            errno = ENOEXEC;
+            fail("invalid ELF interpreter");
+        }
+        read_at(fd, loader, size, start);
+        if (loader[0] != '/' || loader[size - 1] != '\0' || strlen(loader) != size - 1) {
+            errno = ENOEXEC;
+            fail("invalid ELF interpreter path");
+        }
+        /* Internal flag avoids recursive parsing of the loader itself. */
+        path_rule("--loader", loader);
+        break;
+    }
+    close(fd);
+}
+#endif
+
 static void path_rule(const char *access, const char *path)
 {
     struct stat st;
@@ -114,6 +203,10 @@ static void path_rule(const char *access, const char *path)
     if (!resolved) fail(path);
     if (stat(resolved, &st)) fail(path);
 #ifdef __linux__
+    if (!strcmp(access, "--loader") && !S_ISREG(st.st_mode)) {
+        errno = ENOEXEC;
+        fail("ELF interpreter is not a regular file");
+    }
     uint64_t rights = 0;
     if (!strcmp(access, "--read")) {
         rights = LANDLOCK_ACCESS_FS_READ_FILE;
@@ -137,6 +230,8 @@ static void path_rule(const char *access, const char *path)
     if (syscall(SYS_landlock_add_rule, ruleset, LANDLOCK_RULE_PATH_BENEATH,
                 &rule, 0)) fail("landlock_add_rule");
     close(fd);
+    if (!strcmp(access, "--execute") && S_ISREG(st.st_mode))
+        interpreter_rule(resolved);
 #elif defined(__APPLE__)
     const char *operations = !strcmp(access, "--read") ? "file-read*" :
         !strcmp(access, "--write") ? "file-read* file-write*" :

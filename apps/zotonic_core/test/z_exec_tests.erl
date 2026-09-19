@@ -16,6 +16,21 @@ sandbox_test_() ->
 sandbox_checks() ->
     {ok, _} = application:ensure_all_started(erlexec),
     ?assertMatch({ok, _}, z_exec:sandbox_status()),
+    %% Ensure the documented opt-out works in Erlang, YAML/JSON and env config.
+    OldMode = application:get_env(zotonic, exec_sandbox),
+    try
+        lists:foreach(fun(Mode) ->
+            application:set_env(zotonic, exec_sandbox, Mode),
+            ?assertEqual({ok, <<"ok">>}, z_exec:run(file, "printf ok", #{}))
+        end, [disabled, <<"disabled">>, "disabled", required, <<"required">>, "required"]),
+        application:set_env(zotonic, exec_sandbox, <<"invalid">>),
+        ?assertEqual({error, invalid_sandbox_mode}, z_exec:run(file, "printf ok", #{}))
+    after
+        case OldMode of
+            undefined -> application:unset_env(zotonic, exec_sandbox);
+            {ok, Mode} -> application:set_env(zotonic, exec_sandbox, Mode)
+        end
+    end,
     Probe = os:getenv("ZOTONIC_SANDBOX_PROBE"),
     ?assertNotEqual(false, Probe),
     application:set_env(zotonic, exec_sandbox_profiles, #{file => #{execute => [Probe]}}),
@@ -44,6 +59,16 @@ sandbox_checks() ->
         ?assertEqual({ok, <<"secret">>}, file:read_file(Secret)),
         ?assertMatch({ok, _}, z_exec:run(file, ["file -b --mime-type ", quote(Input)], #{read => [Input]})),
         ?assertMatch({error, _}, z_exec:run(file, "exec /bin/ls", #{})),
+        %% CI copies the successful probe into /usr/lib to catch accidental
+        %% recursive EXECUTE rights on readable runtime library directories.
+        case os:type() of
+            {unix, linux} ->
+                DeniedExec = os:getenv("ZOTONIC_SANDBOX_DENIED_EXEC"),
+                ?assertNotEqual(false, DeniedExec),
+                ?assert(filelib:is_regular(DeniedExec)),
+                ?assertMatch({error, _}, z_exec:run(file, ["exec ", quote(DeniedExec)], #{}));
+            _ -> ok
+        end,
         ?assertEqual({error, output_limit}, z_exec:run(file, "printf abc", #{max_size => 2})),
         ?assertEqual({error, output_limit}, z_exec:run(file, "printf abc >&2", #{max_size => 2})),
         ?assertEqual({error, timeout}, z_exec:run(file, "while :; do :; done", #{timeout => 100})),

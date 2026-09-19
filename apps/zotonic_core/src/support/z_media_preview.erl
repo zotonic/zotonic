@@ -47,6 +47,7 @@
 -define(PIX_Q50, 250000).
 
 -include_lib("zotonic.hrl").
+-include_lib("kernel/include/file.hrl").
 
 
 %% @doc Convert the Infile to an outfile with a still image using the filters.
@@ -168,41 +169,61 @@ convert_1(ConvertCmd, InFile, OutFile, InMime, FileProps, Filters, SiteDir) ->
     end.
 
 convert_2(CmdArgs, ConvertCmd, InFile, OutFile, InMime, FileProps, SiteDir) ->
-    file:delete(OutFile),
-    ok = z_filelib:ensure_dir(OutFile),
-    Cmd = lists:flatten([
+    %% Only publish a finished preview. The private directory is on the same
+    %% filesystem as OutFile so publication is an atomic rename.
+    Convert = fun() ->
+        ok = z_filelib:ensure_dir(OutFile),
+        TempDir = filename:join(filename:dirname(OutFile),
+            ".preview-" ++ filename:basename(z_convert:to_list(z_tempfile:new()))),
+        case file:make_dir(TempDir) of
+            ok ->
+                try
+                    ok = file:change_mode(TempDir, 8#700),
+                    TempFile = filename:join(TempDir, filename:basename(OutFile)),
+                    case convert_temp(CmdArgs, ConvertCmd, InFile, TempFile, InMime, FileProps, SiteDir) of
+                        ok -> file:rename(TempFile, OutFile);
+                        {error, _} = Error -> Error
+                    end
+                after
+                    file:del_dir_r(TempDir)
+                end;
+            {error, _} = Error -> Error
+        end
+    end,
+    jobs:run(media_preview_jobs, fun() -> once(OutFile, Convert) end).
+
+convert_temp(CmdArgs, ConvertCmd, InFile, TempFile, InMime, FileProps, SiteDir) ->
+    Cmd = unicode:characters_to_binary([
         "cd ", z_filelib:os_filename(SiteDir), "; ",
         ConvertCmd, " ",
         opt_density(FileProps),
-        z_filelib:os_filename( unicode:characters_to_list(InFile) ++ infile_suffix(InMime) ), " ",
-        lists:flatten(lists:join(32, CmdArgs)), " ",
-        z_filelib:os_filename(OutFile)
+        z_filelib:os_filename(unicode:characters_to_list(InFile) ++ infile_suffix(InMime)), " ",
+        lists:join(32, CmdArgs), " ",
+        z_filelib:os_filename(TempFile)
     ]),
     Profile = case InMime of
         <<"application/pdf">> -> imagemagick_pdf;
         <<"application/postscript">> -> imagemagick_pdf;
         _ -> imagemagick
     end,
-    Options = #{read => [InFile], write => [OutFile], cd => SiteDir},
-    case run_cmd(Profile, Cmd, OutFile, Options) of
-        ok ->
-            case filelib:is_regular(OutFile) of
-                true ->
-                    ok;
-                false ->
-                    case filelib:is_regular(InFile) of
-                        false -> {error, enoent};
-                        true -> {error, convert_error}
-                    end
+    Options = #{read => [InFile], write => [TempFile], cd => SiteDir},
+    case z_exec:run(Profile, Cmd, Options) of
+        {ok, _} ->
+            %% A successful exit alone is not enough: the sandbox pre-creates
+            %% the output, so reject untouched empty files as well.
+            case file:read_link_info(TempFile) of
+                {ok, #file_info{type = regular, size = Size}} when Size > 0 -> ok;
+                _ -> {error, convert_error}
             end;
-        {error, Reason} = Error ->
+        {error, Reason} ->
             ?LOG_ERROR(#{
-                text => <<"convert cmd failed">>,
+                text => <<"ImageMagick convert command failed">>,
                 in => zotonic_core,
-                command => unicode:characters_to_binary(Cmd),
+                result => error,
+                command => Cmd,
                 reason => Reason
             }),
-            Error
+            {error, convert_error}
     end.
 
 % We need to set a higher density for PDF rendering, otherwise the resulting
@@ -210,64 +231,24 @@ convert_2(CmdArgs, ConvertCmd, InFile, OutFile, InMime, FileProps, SiteDir) ->
 opt_density(#{ <<"mime">> := <<"application/pdf">> }) -> " -density 150x150 ";
 opt_density(_) -> "".
 
-run_cmd(Profile, Cmd, OutFile, Options) ->
-    jobs:run(media_preview_jobs,
-            fun() ->
-                case filelib:is_regular(OutFile) of
-                    true -> ok;
-                    false -> once(Profile, Cmd, OutFile, Options)
-                end
-            end).
-
-
-once(Profile, Cmd, OutFile, Options) ->
-    Key = {n,l,Cmd},
-    CmdBin = unicode:characters_to_binary(Cmd),
+%% Lock the destination, not the command (which contains a unique temp path).
+%% Waiters recheck after completion, and retry if the previous owner failed.
+once(OutFile, Convert) ->
+    Key = {n, l, {?MODULE, filename:absname(z_convert:to_binary(OutFile))}},
     case gproc:reg_or_locate(Key) of
         {Pid, _} when Pid =:= self() ->
-            ?LOG_DEBUG(#{
-                in => zotonic_core,
-                text => <<"ImageMagick convert command started">>,
-                command => CmdBin
-            }),
-            Result = z_exec:run(Profile, CmdBin, Options),
-            gproc:unreg(Key),
-            case Result of
-                {ok, StdOut} ->
-                    case filelib:is_regular(OutFile) of
-                        true ->
-                            ok;
-                        false ->
-                            ?LOG_ERROR(#{
-                                in => zotonic_core,
-                                text => <<"ImageMagick convert command failed - no output file">>,
-                                result => error,
-                                reason => enoent,
-                                command => CmdBin,
-                                stdout => StdOut
-                            }),
-                            {error, convert_error}
-                    end;
-                {error, Reason} ->
-                    ?LOG_ERROR(#{
-                        in => zotonic_core,
-                        text => <<"ImageMagick convert command failed">>,
-                        result => error,
-                        reason => Reason,
-                        command => CmdBin
-                    }),
-                    {error, convert_error}
+            try
+                case filelib:is_regular(OutFile) of
+                    true -> ok;
+                    false -> Convert()
+                end
+            after
+                gproc:unreg(Key)
             end;
         {_OtherPid, _} ->
-            ?LOG_DEBUG(#{
-                text => "Waiting for parallel resizer",
-                in => zotonic_core,
-                command => CmdBin
-            }),
             Ref = gproc:monitor(Key),
             receive
-                {gproc, unreg, Ref, Key} ->
-                    ok
+                {gproc, unreg, Ref, Key} -> once(OutFile, Convert)
             end
     end.
 

@@ -102,8 +102,10 @@ readable for runtime startup. Address-space limits are not applied, and
 cleanup of descendants that deliberately detach is best effort. Test each
 supported macOS version, including any restrictions imposed by the parent.
 
-BSD backends are not implemented; required mode returns an unsupported
-platform error. Build, deployment and integration-test details are in
+Windows and BSD backends are not implemented; required mode logs how to
+disable sandboxing and returns an unsupported platform error. Administrators
+can explicitly set `{exec_sandbox, disabled}` to permit unrestricted execution.
+Build, deployment and integration-test details are in
 `doc/technotes/media-sandboxing.md`.
 ").
 
@@ -115,6 +117,7 @@ platform error. Build, deployment and integration-test details are in
 ]).
 
 -include_lib("kernel/include/file.hrl").
+-include_lib("kernel/include/logger.hrl").
 
 -type profile() :: imagemagick | imagemagick_pdf | ffmpeg | ffprobe | file.
 
@@ -177,7 +180,7 @@ run(Profile, Command, Options) ->
     case profile(Profile) of
         {error, _} = Error -> Error;
         Defaults ->
-            case z_config:get(exec_sandbox, required) of
+            case sandbox_mode() of
                 disabled ->
                     run_exec(unicode:characters_to_binary(Command), maps:merge(Defaults, Options), []);
                 required ->
@@ -319,8 +322,9 @@ runtime_execute(Profile) ->
         {unix, darwin} -> ["/bin/bash"]; % /bin/sh executes its selected variant.
         _ -> []
     end,
-    %% The ELF interpreter needs execute permission too.
-    existing(["/bin/sh", "/lib", "/lib64", "/usr/lib", "/usr/lib64"] ++ Shell)
+    %% On Linux the helper also grants each executable's ELF interpreter.
+    %% Library directories are readable, but never recursively executable.
+    existing(["/bin/sh"] ++ Shell)
         ++ [P || B <- Binaries, P <- [os:find_executable(B)], P =/= false]
         ++ extra_paths(Profile, execute).
 
@@ -340,11 +344,34 @@ command_path() ->
 
 %% Sandbox preparation
 
+%% YAML/JSON and environment settings supply strings instead of Erlang atoms.
+sandbox_mode() ->
+    case z_config:get(exec_sandbox, required) of
+        required -> required;
+        <<"required">> -> required;
+        "required" -> required;
+        disabled -> disabled;
+        <<"disabled">> -> disabled;
+        "disabled" -> disabled;
+        _ -> invalid
+    end.
+
 helper() ->
     case os:type() of
         {unix, linux} -> helper_path();
         {unix, darwin} -> helper_path();
-        Os -> {error, {sandbox_unsupported, Os}}
+        Os ->
+            ?LOG_ERROR(#{
+                text => <<"Media sandboxing is unsupported on this platform. "
+                          "To allow unrestricted media commands, administrators can set "
+                          "{exec_sandbox, disabled} in zotonic.config (YAML: "
+                          "zotonic: {exec_sandbox: disabled}). This disables sandbox protection.">>,
+                in => zotonic_core,
+                os => Os,
+                result => error,
+                reason => sandbox_unsupported
+            }),
+            {error, {sandbox_unsupported, Os}}
     end.
 
 helper_path() ->
