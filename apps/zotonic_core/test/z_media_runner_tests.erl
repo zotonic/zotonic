@@ -186,6 +186,12 @@ sandbox_roundtrip_test_() ->
         "1" ->
             {timeout, 60, fun() ->
                 {ok, _} = application:ensure_all_started(erlexec),
+                %% argv conversion must not encode UTF-8 command text twice.
+                Utf8 = <<"café"/utf8>>,
+                ?assertEqual(
+                    {ok, Utf8},
+                    z_exec:run_sandbox(file, ["printf %s ", Utf8], #{})
+                ),
                 with_files(fun(Input, Output) ->
                     Options = #{read => [Input], write => [Output]},
                     Cmd = [

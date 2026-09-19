@@ -466,7 +466,8 @@ sandbox_run_1(Profile, Command, Options, Helper, Scratch) ->
                     ++ path_args("--read", Read)
                     ++ path_args("--execute", Execute)
                     ++ path_args("--write", [Scratch, "/dev/null" | Outputs])
-                    ++ ["--", "/bin/sh", "-c", unicode:characters_to_binary(Command)],
+                    %% erlexec expects string arguments and encodes them as UTF-8.
+                    ++ ["--", "/bin/sh", "-c", unicode:characters_to_list(Command)],
                 Env = [
                     clear,
                     {"PATH", command_path()},
