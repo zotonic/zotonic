@@ -117,7 +117,7 @@ observe_media_upload_preprocess(#media_upload_preprocess{mime= <<"video/", _/bin
         true ->
             undefined;
         undefined ->
-            case is_video_process_needed(Mime, File) of
+            case is_video_process_needed(Mime, File, Context) of
                 true ->
                     do_media_upload_preprocess(Upload, Context);
                 false ->
@@ -128,14 +128,14 @@ observe_media_upload_preprocess(#media_upload_preprocess{}, _Context) ->
     undefined.
 
 %% @doc Do not process landscape mp4 files with aac/h264 codecs.
-is_video_process_needed(<<"video/mp4">>, File) ->
-    Info = z_video_info:info(File),
+is_video_process_needed(<<"video/mp4">>, File, Context) ->
+    Info = z_video_info:info(File, Context),
     not (
                 is_orientation_ok(Info)
         andalso is_audio_ok(Info)
         andalso is_video_ok(Info)
     );
-is_video_process_needed(_Mime, _File) ->
+is_video_process_needed(_Mime, _File, _Context) ->
     true.
 
 is_orientation_ok(#{ <<"orientation">> := 1 }) -> true;
@@ -209,8 +209,8 @@ observe_media_upload_props(#media_upload_props{archive_file=undefined, mime= <<"
     Medium;
 observe_media_upload_props(#media_upload_props{id=Id, archive_file=File, mime= <<"video/", _/binary>>}, Medium, Context) ->
     FileAbs = z_media_archive:abspath(File, Context),
-    Info = z_video_info:info(FileAbs),
-    Info2 = case z_video_preview:preview(FileAbs, Info) of
+    Info = z_video_info:info(FileAbs, Context),
+    Info2 = case z_video_preview:preview(FileAbs, Info, Context) of
         {ok, TmpFile} ->
             PreviewFilename = preview_filename(Id, Context),
             PreviewPath = z_media_archive:abspath(PreviewFilename, Context),

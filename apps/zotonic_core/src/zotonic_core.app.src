@@ -28,6 +28,8 @@
                   zotonic_notifier, zotonic_rdf
   ]},
   {exclude_files, [
+    %% Consumers must build the helper for their own OS and architecture.
+    "priv/bin/zotonic-sandbox",
     "priv/mnesia",
     "priv/.DS_Store",
     "priv/translations/.DS_Store"

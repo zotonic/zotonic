@@ -102,7 +102,7 @@ code_change(_OldVsn, State, _Extra) ->
 -spec do_convert(file:filename_all(), #state{}) -> ok.
 do_convert(QueuePath, State) ->
     Upload = State#state.upload,
-    case video_convert(QueuePath, Upload#media_upload_preprocess.mime) of
+    case video_convert(QueuePath, Upload#media_upload_preprocess.mime, z_context:new(State#state.site)) of
         {ok, TmpFile} ->
             insert_movie(TmpFile, State);
         {error, Reason} ->
@@ -182,9 +182,9 @@ remove_task(State) ->
     Context = z_context:new(State#state.site),
     mod_video:remove_task(State#state.queue_filename, Context).
 
-video_convert(QueuePath, Mime) ->
-    Info = z_video_info:info(QueuePath),
-    video_convert_1(QueuePath, maps:get(<<"orientation">>, Info, 1), Mime).
+video_convert(QueuePath, Mime, Context) ->
+    Info = z_video_info:info(QueuePath, Context),
+    video_convert_1(QueuePath, maps:get(<<"orientation">>, Info, 1), Mime, Context).
 
 -define(CMDLINE,
         "ffmpeg -i "
@@ -199,9 +199,9 @@ video_convert(QueuePath, Mime) ->
         " -preset medium "
         " -metadata:s:v:0 rotate=0 ").
 
--spec video_convert_1(file:filename_all(), integer(), string() | binary()) ->
+-spec video_convert_1(file:filename_all(), integer(), string() | binary(), z:context()) ->
     {ok, file:filename_all()} | term().
-video_convert_1(QueuePath, Orientation, Mime) ->
+video_convert_1(QueuePath, Orientation, Mime, Context) ->
     Cmdline = case z_config:get(ffmpeg_cmdline) of
                   undefined -> ?CMDLINE;
                   <<>> -> ?CMDLINE;
@@ -211,7 +211,7 @@ video_convert_1(QueuePath, Orientation, Mime) ->
     jobs:run(video_jobs,
              fun() ->
                 TransposeOption = z_video_preview:orientation_to_transpose(Orientation),
-                case maybe_reset_metadata(TransposeOption, QueuePath, Mime) of
+                case maybe_reset_metadata(TransposeOption, QueuePath, Mime, Context) of
                     {ok, QueuePath1} ->
                         TmpFile = z_tempfile:new(),
                         FfmpegCmd = unicode:characters_to_binary(
@@ -228,10 +228,11 @@ video_convert_1(QueuePath, Orientation, Mime) ->
                             filename => unicode:characters_to_binary(QueuePath)
                         }),
                         RunOptions = #{
-                            timeout => ?FFMPEG_TIMEOUT
+                            timeout => ?FFMPEG_TIMEOUT,
+                            read => [QueuePath1], write => [TmpFile]
                         },
                         StartTimestamp = z_datetime:timestamp(),
-                        case z_exec:run(FfmpegCmd, RunOptions) of
+                        case z_exec:run(ffmpeg, FfmpegCmd, RunOptions, Context) of
                             {ok, Stdout} ->
                                 case filelib:file_size(TmpFile) of
                                     0 ->
@@ -275,12 +276,12 @@ video_convert_1(QueuePath, Orientation, Mime) ->
         "~s"
         " -strict -2 "
         " -loglevel fatal "
-        " -codec copy "
+        " -codec copy -y "
         " -metadata:s:v:0 rotate=0 ").
 
-maybe_reset_metadata("", QueuePath, _Mime) ->
+maybe_reset_metadata("", QueuePath, _Mime, _Context) ->
     {ok, QueuePath};
-maybe_reset_metadata(_TransposeOption, QueuePath, Mime) ->
+maybe_reset_metadata(_TransposeOption, QueuePath, Mime, Context) ->
     TmpFile = z_tempfile:new(z_media_identify:extension(Mime)),
     FfmpegCmd = unicode:characters_to_binary(
                     [io_lib:format(?CMDLINE_RESETMETA, [z_filelib:os_filename(QueuePath)]),
@@ -288,9 +289,10 @@ maybe_reset_metadata(_TransposeOption, QueuePath, Mime) ->
                      z_filelib:os_filename(TmpFile)
                     ]),
     RunOptions = #{
-        timeout => ?FFMPEG_TIMEOUT
+        timeout => ?FFMPEG_TIMEOUT,
+        read => [QueuePath], write => [TmpFile]
     },
-    case z_exec:run(FfmpegCmd, RunOptions) of
+    case z_exec:run(ffmpeg, FfmpegCmd, RunOptions, Context) of
         {ok, Stdout} ->
             case filelib:file_size(TmpFile) of
                 0 ->

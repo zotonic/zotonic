@@ -20,7 +20,8 @@
 -module(z_video_info).
 
 -export([
-    info/1
+    info/1,
+    info/2
 ]).
 
 -include_lib("kernel/include/logger.hrl").
@@ -32,6 +33,11 @@
 
 -spec info( file:filename_all() ) -> map().
 info(Path) ->
+    info(Path, undefined).
+
+%% @doc Fetch video metadata using the site's context for remote media processing.
+-spec info(file:filename_all(), z:context() | undefined) -> map().
+info(Path, Context) ->
     Cmdline = case z_config:get(ffprobe_cmdline) of
         undefined -> ?FFPROBE_CMDLINE;
         <<>> -> ?FFPROBE_CMDLINE;
@@ -46,7 +52,9 @@ info(Path) ->
         text => <<"Video info">>,
         command => FfprobeCmd
     }),
-    case z_exec:run(FfprobeCmd, #{ timeout => ?FFMPEG_TIMEOUT }) of
+    case z_exec:run(ffprobe, FfprobeCmd, #{
+        timeout => ?FFMPEG_TIMEOUT, read => [Path]
+    }, Context) of
         {ok, JSONText} ->
             try
                 Ps = decode_json(JSONText),
