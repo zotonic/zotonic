@@ -178,7 +178,13 @@ convert_2(CmdArgs, ConvertCmd, InFile, OutFile, InMime, FileProps, SiteDir) ->
         lists:flatten(lists:join(32, CmdArgs)), " ",
         z_filelib:os_filename(OutFile)
     ]),
-    case run_cmd(Cmd, OutFile) of
+    Profile = case InMime of
+        <<"application/pdf">> -> imagemagick_pdf;
+        <<"application/postscript">> -> imagemagick_pdf;
+        _ -> imagemagick
+    end,
+    Options = #{read => [InFile], write => [OutFile], cd => SiteDir},
+    case run_cmd(Profile, Cmd, OutFile, Options) of
         ok ->
             case filelib:is_regular(OutFile) of
                 true ->
@@ -204,17 +210,17 @@ convert_2(CmdArgs, ConvertCmd, InFile, OutFile, InMime, FileProps, SiteDir) ->
 opt_density(#{ <<"mime">> := <<"application/pdf">> }) -> " -density 150x150 ";
 opt_density(_) -> "".
 
-run_cmd(Cmd, OutFile) ->
+run_cmd(Profile, Cmd, OutFile, Options) ->
     jobs:run(media_preview_jobs,
             fun() ->
                 case filelib:is_regular(OutFile) of
                     true -> ok;
-                    false -> once(Cmd, OutFile)
+                    false -> once(Profile, Cmd, OutFile, Options)
                 end
             end).
 
 
-once(Cmd, OutFile) ->
+once(Profile, Cmd, OutFile, Options) ->
     Key = {n,l,Cmd},
     CmdBin = unicode:characters_to_binary(Cmd),
     case gproc:reg_or_locate(Key) of
@@ -224,7 +230,7 @@ once(Cmd, OutFile) ->
                 text => <<"ImageMagick convert command started">>,
                 command => CmdBin
             }),
-            Result = z_exec:run(CmdBin),
+            Result = z_exec:run(Profile, CmdBin, Options),
             gproc:unreg(Key),
             case Result of
                 {ok, StdOut} ->

@@ -65,7 +65,9 @@ preview(MovieFile, #{
                 tmp_file => TmpFile,
                 command => FfmpegCmd
             }),
-            case z_exec:run(FfmpegCmd, #{ timeout => ?FFMPEG_TIMEOUT }) of
+            case z_exec:run(ffmpeg, FfmpegCmd, #{
+                timeout => ?FFMPEG_TIMEOUT, read => [MovieFile], write => [TmpFile]
+            }) of
                 {ok, Stdout} ->
                    ?LOG_DEBUG(#{
                         text => <<"FFMPEG video preview ok">>,

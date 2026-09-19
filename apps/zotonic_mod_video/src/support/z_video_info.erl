@@ -46,7 +46,9 @@ info(Path) ->
         text => <<"Video info">>,
         command => FfprobeCmd
     }),
-    case z_exec:run(FfprobeCmd, #{ timeout => ?FFMPEG_TIMEOUT }) of
+    case z_exec:run(ffprobe, FfprobeCmd, #{
+        timeout => ?FFMPEG_TIMEOUT, read => [Path]
+    }) of
         {ok, JSONText} ->
             try
                 Ps = decode_json(JSONText),

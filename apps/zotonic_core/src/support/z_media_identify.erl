@@ -182,7 +182,13 @@ identify_file_unix(Cmd, File, OriginalFilename) ->
         " -b --mime-type ",
         z_filelib:os_filename(File)
     ]),
-    Mime = z_string:trim( unicode:characters_to_binary( os:cmd( CmdLine ) ) ),
+    case z_exec:run(file, CmdLine, #{read => [File]}) of
+        {ok, Output} -> identify_file_mime(Output, File, OriginalFilename);
+        {error, _} = Error -> Error
+    end.
+
+identify_file_mime(Output, File, OriginalFilename) ->
+    Mime = z_string:trim(Output),
     case re:run(Mime, "^[a-zA-Z0-9_\\-\\.]+/[a-zA-Z0-9\\.\\-_]+$") of
         nomatch ->
             case Mime of
@@ -343,12 +349,26 @@ imagemagick_identify_cmd() ->
 identify_file_imagemagick_1(false, _OsFamily, _ImageFile, _MimeFile) ->
     ?LOG_ERROR("Please install ImageMagick for identifying the type of uploaded files."),
     {error, imagemagick_missing};
-identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeTypeFromFile) ->
+identify_file_imagemagick_1(Cmd, _OsFamily, ImageFile, MimeTypeFromFile) ->
     CleanedImageFile = z_filelib:os_filename(z_convert:to_list(ImageFile) ++ "[0]"),
-    CmdOutput = os:cmd(Cmd
-                       ++ " -quiet "
-                       ++ z_convert:to_list(CleanedImageFile)
-                       ++ " 2> " ++ devnull(OsFamily)),
+    Profile = case MimeTypeFromFile of
+        <<"application/pdf">> -> imagemagick_pdf;
+        <<"application/postscript">> -> imagemagick_pdf;
+        _ -> imagemagick
+    end,
+    Command = [Cmd, " -quiet ", CleanedImageFile],
+    case z_exec:run(Profile, Command, #{read => [ImageFile]}) of
+        {ok, Output} ->
+            identify_imagemagick_output(z_convert:to_list(Output), ImageFile, MimeTypeFromFile);
+        {error, Reason} ->
+            ?LOG_NOTICE(#{
+                text => <<"identify of file failed">>, in => zotonic_core,
+                file => ImageFile, result => error, reason => Reason
+            }),
+            {error, Reason}
+    end.
+
+identify_imagemagick_output(CmdOutput, ImageFile, MimeTypeFromFile) ->
     Lines = lists:dropwhile(
                     fun
                         ("Warning:" ++ _) -> true;
@@ -359,17 +379,6 @@ identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeTypeFromFile) ->
                     string:tokens(CmdOutput, "\n")),
     case Lines of
         [] ->
-            Err = os:cmd(Cmd
-                         ++ " -quiet "
-                         ++ z_convert:to_list(CleanedImageFile)
-                         ++ " 2>&1"),
-            ?LOG_NOTICE(#{
-                text => <<"identify of file failed">>,
-                in => zotonic_core,
-                file => CleanedImageFile,
-                result => error,
-                output => Err
-            }),
             {error, identify};
         [Result|_] ->
             %% ["test/a.jpg","JPEG","3440x2285","3440x2285+0+0","8-bit","DirectClass","2.899mb"]
@@ -408,7 +417,7 @@ identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeTypeFromFile) ->
                     ?LOG_WARNING(#{
                         text => <<"identify of file failed">>,
                         in => zotonic_core,
-                        file => CleanedImageFile,
+                        file => ImageFile,
                         result => X,
                         reason => B,
                         output => CmdOutput,
@@ -447,11 +456,6 @@ is_mime_vector(<<"application/postscript">>) -> true;
 is_mime_vector(<<"image/svg+xml">>) -> true;
 is_mime_vector(Mime) when is_binary(Mime) -> false;
 is_mime_vector(Mime) -> is_mime_vector( z_convert:to_binary(Mime) ).
-
-
--spec devnull(win32|unix) -> string().
-devnull(win32) -> "nul";
-devnull(unix)  -> "/dev/null".
 
 
 %% @doc ImageMagick identify can identify PDF files as:

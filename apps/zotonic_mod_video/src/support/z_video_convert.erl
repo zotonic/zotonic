@@ -228,10 +228,11 @@ video_convert_1(QueuePath, Orientation, Mime) ->
                             filename => unicode:characters_to_binary(QueuePath)
                         }),
                         RunOptions = #{
-                            timeout => ?FFMPEG_TIMEOUT
+                            timeout => ?FFMPEG_TIMEOUT,
+                            read => [QueuePath1], write => [TmpFile]
                         },
                         StartTimestamp = z_datetime:timestamp(),
-                        case z_exec:run(FfmpegCmd, RunOptions) of
+                        case z_exec:run(ffmpeg, FfmpegCmd, RunOptions) of
                             {ok, Stdout} ->
                                 case filelib:file_size(TmpFile) of
                                     0 ->
@@ -275,7 +276,7 @@ video_convert_1(QueuePath, Orientation, Mime) ->
         "~s"
         " -strict -2 "
         " -loglevel fatal "
-        " -codec copy "
+        " -codec copy -y "
         " -metadata:s:v:0 rotate=0 ").
 
 maybe_reset_metadata("", QueuePath, _Mime) ->
@@ -288,9 +289,10 @@ maybe_reset_metadata(_TransposeOption, QueuePath, Mime) ->
                      z_filelib:os_filename(TmpFile)
                     ]),
     RunOptions = #{
-        timeout => ?FFMPEG_TIMEOUT
+        timeout => ?FFMPEG_TIMEOUT,
+        read => [QueuePath], write => [TmpFile]
     },
-    case z_exec:run(FfmpegCmd, RunOptions) of
+    case z_exec:run(ffmpeg, FfmpegCmd, RunOptions) of
         {ok, Stdout} ->
             case filelib:file_size(TmpFile) of
                 0 ->

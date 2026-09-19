@@ -229,7 +229,17 @@ audio_info(Path) ->
         in => zotonic_mod_audio,
         command => FfprobeCmd
     }),
-    JSONText = unicode:characters_to_binary(os:cmd(FfprobeCmd)),
+    case z_exec:run(ffprobe, FfprobeCmd, #{read => [Path]}) of
+        {ok, JSONText} -> audio_info_json(JSONText);
+        {error, Reason} ->
+            ?LOG_WARNING(#{
+                text => <<"Audio probe failed">>, in => zotonic_mod_audio,
+                result => error, reason => Reason
+            }),
+            #{}
+    end.
+
+audio_info_json(JSONText) ->
     try
         Ps = decode_json(JSONText),
         Info = #{
@@ -287,19 +297,19 @@ audio_preview(MovieFile) ->
     FfmpegCmd = z_convert:to_list(
         iolist_to_binary([
             case string:str(Cmdline, "-itsoffset") of
-                0 -> io_lib:format(Cmdline, [MovieFile]);
-                _ -> io_lib:format(Cmdline, [0, MovieFile])
+                0 -> io_lib:format(Cmdline, [z_filelib:os_filename(MovieFile)]);
+                _ -> io_lib:format(Cmdline, [0, z_filelib:os_filename(MovieFile)])
             end,
             " ",
             z_filelib:os_filename(TmpFile)
         ])),
     jobs:run(media_preview_jobs,
         fun() ->
-            case os:cmd(FfmpegCmd) of
-                [] ->
+            case z_exec:run(ffmpeg, FfmpegCmd, #{read => [MovieFile], write => [TmpFile]}) of
+                {ok, _} ->
                    {ok, TmpFile};
-                Other ->
-                   {error, Other}
+                {error, _} = Error ->
+                   Error
             end
         end).
 
