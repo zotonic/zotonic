@@ -168,7 +168,7 @@ run(Command, Options) ->
 %% exec_sandbox defaults to required. disabled is an explicit administrator
 %% opt-out. There is no automatic fallback, including after an execution error.
 -spec run(Profile, Command, Options) -> {ok, Data} | {error, Reason} when
-    Profile :: profile(),
+    Profile :: atom(),
     Command :: iodata(),
     Options :: map(),
     Data :: binary(),
@@ -179,7 +179,7 @@ run(Profile, Command, Options) ->
         Defaults ->
             case z_config:get(exec_sandbox, required) of
                 disabled ->
-                    run(unicode:characters_to_binary(Command), maps:merge(Defaults, Options));
+                    run_exec(unicode:characters_to_binary(Command), maps:merge(Defaults, Options), []);
                 required ->
                     sandbox_run(Profile, Command, maps:merge(Defaults, Options));
                 _ ->
@@ -354,6 +354,10 @@ helper_path() ->
         false -> {error, sandbox_helper_missing}
     end.
 
+-spec sandbox_run(Profile, Command, Options) -> {ok, binary()} | {error, term()} when
+    Profile :: profile(),
+    Command :: iodata(),
+    Options :: map().
 sandbox_run(Profile, Command, Options) ->
     case helper() of
         {error, _} = Error -> Error;
