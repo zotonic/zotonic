@@ -91,9 +91,13 @@ result_paths_test() ->
     ).
 
 callback_rendezvous_test() ->
-    {ok, Pid} = z_media_runner:start_link(),
+    %% The full Zotonic suite already has a supervised callback registry.
+    {Pid, IsOwned} = case z_media_runner:start_link() of
+        {ok, Started} -> {Started, true};
+        {error, {already_started, Started}} -> {Started, false}
+    end,
     Secret = <<"secret">>,
-    Id = <<"test-job">>,
+    Id = <<"test-job-", (integer_to_binary(erlang:unique_integer([positive])))/binary>>,
     try
         ok = gen_server:call(Pid, {register, Id, Secret, self()}),
         ?assertNot(z_media_runner:authorized(Id, <<"wrong">>)),
@@ -125,8 +129,13 @@ callback_rendezvous_test() ->
         %% Synchronize after the registry's monitor has fired.
         wait_removed(Id, Secret, 100)
     after
-        gen_server:stop(Pid)
+        ok = gen_server:call(Pid, {remove, Id}),
+        case IsOwned of
+            true -> gen_server:stop(Pid);
+            false -> ok
+        end
     end.
+
 wait_removed(_, _, 0) ->
     error(owner_not_removed);
 wait_removed(Id, Secret, N) ->

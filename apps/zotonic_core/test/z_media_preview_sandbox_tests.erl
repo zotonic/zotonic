@@ -1,4 +1,5 @@
 %% Copyright 2026 Marc Worrell. SPDX-License-Identifier: Apache-2.0
+%% @doc Test atomic preview publication and concurrent conversions with a paused decoder.
 -module(z_media_preview_sandbox_tests).
 -include_lib("eunit/include/eunit.hrl").
 -include("../include/zotonic.hrl").
@@ -27,7 +28,7 @@ publication_checks() ->
         ok = meck:expect(jobs, run, fun(media_preview_jobs, F) ->
             Parent ! {entered, self()}, F()
         end),
-        ok = meck:expect(z_exec, run, fun(imagemagick, _, #{write := [Temp]}) ->
+        ok = meck:expect(z_exec, run, fun(imagemagick, _, #{write := [Temp]}, #context{site = zotonic_core}) ->
             ok = file:write_file(Temp, <<"partial">>),
             Parent ! {decoding, self(), Temp},
             receive
