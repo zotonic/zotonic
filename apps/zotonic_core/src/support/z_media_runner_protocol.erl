@@ -37,7 +37,7 @@ trusted Erlang staging step; sandbox grants contain private job copies, never th
     https_url/1,
     endpoint/1,
     post/3,
-    request/3,
+    request/3, request/4,
     profile/1,
     rewrite/2
 ]).
@@ -374,7 +374,10 @@ post(Url, Token, Payload) ->
     end.
 
 -spec request(binary(), binary(), map()) -> {ok, integer(), binary()} | {error, term()}.
-request(Url, Token, Payload) ->
+request(Url, Token, Payload) -> request(Url, Token, Payload, 30000).
+
+-spec request(binary(), binary(), map(), pos_integer()) -> {ok, integer(), binary()} | {error, term()}.
+request(Url, Token, Payload, Timeout) ->
     case https_url(Url) of
         false ->
             {error, invalid_url};
@@ -389,7 +392,7 @@ request(Url, Token, Payload) ->
                 httpc:request(
                     post,
                     Request,
-                    http_options(30000),
+                    http_options(Timeout),
                     [{body_format, binary}],
                     zotonic
                 )

@@ -11,7 +11,7 @@ publication_test_() ->
 
 publication_checks() ->
     {ok, _} = application:ensure_all_started(gproc),
-    Modules = [z_exec, z_media_identify, jobs],
+    Modules = [z_exec, z_media_identify, z_media_imagemagick, jobs],
     lists:foreach(fun(M) -> ok = meck:new(M, [passthrough, no_link]) end, Modules),
     Dir = z_convert:to_list(z_tempfile:new()) ++ "-preview-test",
     ok = file:make_dir(Dir),
@@ -20,10 +20,8 @@ publication_checks() ->
     Props = #{ <<"mime">> => <<"image/jpeg">>, <<"width">> => 16, <<"height">> => 16 },
     Parent = self(),
     %% Prevent executable discovery from depending on ImageMagick installation.
-    CmdKey = {z_media_preview, imagemagick_find_executable},
-    OldCmd = persistent_term:get(CmdKey, undefined),
-    persistent_term:put(CmdKey, #{cmd => "convert", legacy => true}),
     try
+        ok = meck:expect(z_media_imagemagick, selected, fun() -> #{cmd => "convert", legacy => true} end),
         ok = meck:expect(z_media_identify, identify, fun(_, _, _, _) -> {ok, Props} end),
         ok = meck:expect(jobs, run, fun(media_preview_jobs, F) ->
             Parent ! {entered, self()}, F()
@@ -82,10 +80,6 @@ publication_checks() ->
         ?assertNot(filelib:is_file(EmptyTemp))
     after
         lists:foreach(fun meck:unload/1, Modules),
-        case OldCmd of
-            undefined -> persistent_term:erase(CmdKey);
-            _ -> persistent_term:put(CmdKey, OldCmd)
-        end,
         file:del_dir_r(Dir)
     end.
 

@@ -118,25 +118,10 @@ imagemagick_convert_cmd() ->
 
 %% @doc Internal helper to discover and cache the ImageMagick executable and
 %% whether we are running a legacy (pre-v7) installation.
--spec imagemagick_find_executable() -> #{ cmd := string() | false, legacy := boolean() }.
+-spec imagemagick_find_executable() -> map().
 imagemagick_find_executable() ->
-    case z_media_runner:enabled() of
-        true ->
-            imagemagick_detect(fun z_media_runner:find_executable/1);
-        false ->
-            imagemagick_find_executable_local()
-    end.
+    z_media_imagemagick:selected().
 
-imagemagick_find_executable_local() ->
-    Key = {?MODULE, imagemagick_find_executable},
-    case persistent_term:get(Key, undefined) of
-        undefined ->
-            Result = imagemagick_detect(fun os:find_executable/1),
-            persistent_term:put(Key, Result),
-            Result;
-        Result ->
-            Result
-    end.
 
 %% @doc Detect the ImageMagick executable using the supplied finder function.
 %% The finder has the same signature as os:find_executable/1 and returns either

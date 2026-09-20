@@ -42,8 +42,17 @@ find_executable(Name) ->
         false ->
             os:find_executable(Name);
         true ->
-            case {Name, z_config:get(media_runner_imagemagick_legacy, false)} of
-                {"magick", true} -> false;
+            case Name of
+                "magick" ->
+                    case z_media_imagemagick:selected() of
+                        #{available := true, tool := <<"magick">>} -> "magick";
+                        _ -> false
+                    end;
+                "convert" ->
+                    case z_media_imagemagick:selected() of
+                        #{available := true, tool := <<"convert">>} -> "convert";
+                        _ -> false
+                    end;
                 _ -> Name
             end
     end.

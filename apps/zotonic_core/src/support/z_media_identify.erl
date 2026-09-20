@@ -337,38 +337,10 @@ identify_file_imagemagick(OsFamily, ImageFile, MimeFile, Context) ->
 %% This prefers the 'magick identify' command introduced in v7 if possible and
 %% otherwise falls back to the 'identify' one of previous ImageMagick's versions.
 %% Note: since system installations don't change that often, the result is cached.
--spec imagemagick_identify_cmd() -> Cmd | false when Cmd :: string().
+-spec imagemagick_identify_cmd() -> string() | false.
 imagemagick_identify_cmd() ->
-    case z_media_runner:enabled() of
-        true ->
-            case z_media_runner:find_executable("magick") of
-                false ->
-                    "identify";
-                _ ->
-                    "magick identify"
-            end;
-        false ->
-            imagemagick_identify_cmd_local()
-    end.
-
-imagemagick_identify_cmd_local() ->
-    Key = {?MODULE, imagemagick_identify_cmd},
-    case persistent_term:get(Key, undefined) of
-        undefined ->
-            ResultCmd = case os:find_executable("magick") of
-                false ->
-                    case os:find_executable("identify") of
-                        false -> false;
-                        Cmd -> z_filelib:os_filename(Cmd)
-                    end;
-                Cmd ->
-                    z_filelib:os_filename(Cmd) ++ " identify"
-            end,
-            persistent_term:put(Key, ResultCmd),
-            ResultCmd;
-        ResultCmd ->
-            ResultCmd
-    end.
+    #{identify := Command} = z_media_imagemagick:selected(),
+    Command.
 
 identify_file_imagemagick_1(false, _OsFamily, _ImageFile, _MimeFile, _Context) ->
     ?LOG_ERROR("Please install ImageMagick for identifying the type of uploaded files."),
