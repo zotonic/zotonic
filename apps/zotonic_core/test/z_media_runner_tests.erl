@@ -469,17 +469,28 @@ https_environment_test() ->
         end
     end.
 
-%% Character-list and UTF-8 binary paths must produce the same portable command.
+%% Binary filenames remain UTF-8 even when the VM's native filename encoding is
+%% Latin-1 (for example OTP 26 under LANG=C). Unicode lists need a UTF-8 VM.
 unicode_paths_test() ->
     with_files(fun(Input, Output) ->
         Unicode = filename:join(filename:dirname(Input), [16#4e2d, 16#e9] ++ ".ppm"),
-        {ok, _} = file:copy(Input, Unicode),
-        Command = unicode:characters_to_binary(["convert ", z_filelib:os_filename(Unicode),
-            " ", z_filelib:os_filename(Output)]),
-        {ok, Job} = z_media_runner_protocol:pack(imagemagick, Command,
-            #{read => [Unicode], write => [Output]}),
-        ?assertEqual(nomatch, binary:match(maps:get(<<"command">>, Job),
-            unicode:characters_to_binary(Unicode))),
-        ?assertEqual({ok, Job}, z_media_runner_protocol:pack(imagemagick, Command,
-            #{read => [unicode:characters_to_binary(Unicode)], write => [unicode:characters_to_binary(Output)]}))
+        UnicodeBin = unicode:characters_to_binary(Unicode),
+        {ok, _} = file:copy(Input, UnicodeBin),
+        try
+            Command = unicode:characters_to_binary(["convert ", z_filelib:os_filename(Unicode),
+                " ", z_filelib:os_filename(Output)]),
+            {ok, Job} = z_media_runner_protocol:pack(imagemagick, Command,
+                #{read => [UnicodeBin], write => [unicode:characters_to_binary(Output)]}),
+            ?assertEqual(nomatch, binary:match(maps:get(<<"command">>, Job), UnicodeBin)),
+            case file:native_name_encoding() of
+                utf8 ->
+                    ?assertEqual({ok, Job}, z_media_runner_protocol:pack(imagemagick, Command,
+                        #{read => [Unicode], write => [Output]}));
+                latin1 ->
+                    ok
+            end
+        after
+            %% A Latin-1 directory listing cannot round-trip this name as a list.
+            file:delete(UnicodeBin)
+        end
     end).

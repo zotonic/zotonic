@@ -55,7 +55,9 @@ jobs:
           ZOTONIC_DBHOST=postgres bin/zotonic connectdb
           chown -R zotonic .
           # erlexec uses SHELL; the disabled-login account has a non-login shell.
-          sudo -u zotonic env SHELL=/bin/sh ZOTONIC_DBHOST=postgres bin/zotonic runtests
+          # OTP 26 derives filename encoding from the locale; cover Unicode paths.
+          sudo -u zotonic env SHELL=/bin/sh LANG=C.UTF-8 LC_ALL=C.UTF-8 \
+            ZOTONIC_DBHOST=postgres bin/zotonic runtests
       - name: XRef
         run: make xref
       - name: Sandbox integration tests
@@ -63,7 +65,8 @@ jobs:
           cc -Wall -Wextra -Werror -o /tmp/zotonic-sandbox-probe apps/zotonic_core/test/sandbox_probe.c
           cp /tmp/zotonic-sandbox-probe /usr/lib/zotonic-sandbox-denied-probe
           erlc -o /tmp apps/zotonic_core/test/z_exec_tests.erl apps/zotonic_core/test/z_media_preview_sandbox_tests.erl
-          sudo -u zotonic env SHELL=/bin/sh ZOTONIC_SANDBOX_TESTS=1 ZOTONIC_SANDBOX_PROBE=/tmp/zotonic-sandbox-probe \
+          sudo -u zotonic env SHELL=/bin/sh LANG=C.UTF-8 LC_ALL=C.UTF-8 \
+            ZOTONIC_SANDBOX_TESTS=1 ZOTONIC_SANDBOX_PROBE=/tmp/zotonic-sandbox-probe \
             ZOTONIC_SANDBOX_DENIED_EXEC=/usr/lib/zotonic-sandbox-denied-probe \
             erl -noshell -pa _build/default/lib/*/ebin /tmp \
             -eval 'case eunit:test([z_exec_tests, z_media_preview_sandbox_tests], [verbose]) of ok -> halt(0); _ -> halt(1) end.'
