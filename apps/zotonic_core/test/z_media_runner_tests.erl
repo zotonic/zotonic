@@ -42,6 +42,7 @@ unsupported_sandbox() ->
     ok = logger:add_handler(zmr_sandbox_test, ?MODULE, #{level => notice, config => #{pid => self()}}),
     ok = meck:new(z_exec, [passthrough]),
     try
+        %% Simulate FreeBSD on any Unix host; notices below describe the mock OS.
         ok = meck:expect(z_exec, sandbox_status, fun() -> {error, {sandbox_unsupported, {unix, freebsd}}} end),
         application:set_env(zotonic, exec_sandbox, required),
         ?assertEqual({ok, <<"local">>}, z_exec:run_local(file, "printf local", #{})),
@@ -278,6 +279,8 @@ sandbox_roundtrip_test_() ->
         "1" ->
             {timeout, 60, fun() ->
                 {ok, _} = application:ensure_all_started(erlexec),
+                %% Check the real platform before simulating unsupported probe exits.
+                ?assertMatch({ok, _}, z_exec:sandbox_status()),
                 probe_exit_boundary(),
                 with_files(fun(_, Output) ->
                     ok = file:write_file(Output, <<>>),
@@ -295,8 +298,13 @@ sandbox_roundtrip_test_() ->
                 ),
                 with_files(fun(Input, Output) ->
                     Options = #{read => [Input], write => [Output]},
+                    %% Ubuntu packages ImageMagick 6; other hosts may provide 7.
+                    {ConvertCommand, IdentifyCommand} = case os:find_executable("magick") of
+                        false -> {"convert ", "identify "};
+                        _ -> {"magick ", "magick identify "}
+                    end,
                     Cmd = [
-                        "magick ", z_filelib:os_filename(Input), " ", z_filelib:os_filename(Output)
+                        ConvertCommand, z_filelib:os_filename(Input), " ", z_filelib:os_filename(Output)
                     ],
                     {ok, Packed} = z_media_runner_protocol:pack(imagemagick, Cmd, Options),
                     Saved = Output ++ ".saved",
@@ -314,7 +322,7 @@ sandbox_roundtrip_test_() ->
                     %% ImageMagick's output path is restored for z_media_identify's parser.
                     {ok, Identify} = z_media_runner_protocol:pack(
                         imagemagick,
-                        ["magick identify ", z_filelib:os_filename(Input ++ "[0]")],
+                        [IdentifyCommand, z_filelib:os_filename(Input ++ "[0]")],
                         #{read => [Input]}
                     ),
                     {ok, Stdout} = z_media_runner_protocol:unpack(
@@ -368,6 +376,8 @@ local_file_identification_test_() ->
 
 local_file_identification() ->
     {ok, _} = application:ensure_all_started(erlexec),
+    %% The MIME dispatcher is generated at application startup, not compilation.
+    {ok, _} = application:ensure_all_started(mimetypes),
     with_files(fun(Input, _Output) ->
         ok = file:write_file(Input, <<"Plain text.\n">>),
         Keys = [media_runner_hostname, exec_sandbox],
@@ -429,4 +439,27 @@ with_files(Fun) ->
         Fun(Input, Output)
     after
         file:del_dir_r(Dir)
+    end.
+
+%% The environment is server configuration, never a value supplied in a job.
+https_environment_test() ->
+    Old = application:get_env(zotonic, environment),
+    try
+        lists:foreach(fun({Environment, Expected}) ->
+            application:set_env(zotonic, environment, Environment),
+            Options = z_media_runner_protocol:http_options(30000),
+            Ssl = proplists:get_value(ssl, Options),
+            ?assertEqual(Expected, proplists:get_value(verify, Ssl)),
+            ?assertEqual(false, proplists:get_value(autoredirect, Options)),
+            case Expected of
+                verify_peer -> ?assert(proplists:is_defined(customize_hostname_check, Ssl));
+                verify_none -> ok
+            end
+        end, [{development, verify_none}, {production, verify_peer},
+            {test, verify_peer}, {acceptance, verify_peer}, {undefined, verify_peer}])
+    after
+        case Old of
+            undefined -> application:unset_env(zotonic, environment);
+            {ok, Value} -> application:set_env(zotonic, environment, Value)
+        end
     end.

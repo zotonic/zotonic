@@ -439,17 +439,26 @@ upload_chunk({Fd, Left}) ->
     {ok, Data} = file:read(Fd, min(1048576, Left)),
     {ok, Data, {Fd, Left - byte_size(Data)}}.
 
+%% @doc Use the trusted system environment for all media-runner HTTPS traffic.
+%% Development permits self-signed peers; every other environment verifies TLS.
+-spec http_options(pos_integer()) -> list().
 http_options(Timeout) ->
+    Ssl = case z_config:get(environment) of
+        development -> [{verify, verify_none}];
+        _ -> verified_ssl_options()
+    end,
+    [{autoredirect, false}, {ssl, Ssl}, {connect_timeout, 5000}, {timeout, Timeout}].
+
+verified_ssl_options() ->
     Trust =
         case z_config:get(media_runner_cacertfile) of
             undefined -> {cacerts, certifi:cacerts()};
             File -> {cacertfile, z_convert:to_list(File)}
         end,
-    Ssl = [
+    [
         {verify, verify_peer},
         Trust,
         {customize_hostname_check, [
             {match_fun, public_key:pkix_verify_hostname_match_fun(https)}
         ]}
-    ],
-    [{autoredirect, false}, {ssl, Ssl}, {connect_timeout, 5000}, {timeout, Timeout}].
+    ].
