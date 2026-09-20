@@ -32,8 +32,7 @@
     cmd_args/3,
     calc_size/1,
 
-    is_legacy_imagemagick/0,
-    imagemagick_detect/1
+    is_legacy_imagemagick/0
 ]).
 
 % Max pixels of the target image
@@ -123,28 +122,11 @@ imagemagick_find_executable() ->
     z_media_imagemagick:selected().
 
 
-%% @doc Detect the ImageMagick executable using the supplied finder function.
-%% The finder has the same signature as os:find_executable/1 and returns either
-%% a path string or false.  Separating this logic from the caching wrapper makes
-%% the v6/v7 detection deterministically testable.
--spec imagemagick_detect(FindExe) -> #{ cmd := string() | false, legacy := boolean() } when
-    FindExe :: fun((string()) -> string() | false).
-imagemagick_detect(FindExe) ->
-    case FindExe("magick") of
-        false ->
-            Cmd0 = case FindExe("convert") of
-                false -> false;
-                Cmd1 -> z_filelib:os_filename(Cmd1)
-            end,
-            #{ cmd => Cmd0, legacy => true };
-        CmdMagick ->
-            #{ cmd => z_filelib:os_filename(CmdMagick), legacy => false }
-    end.
-
 -spec is_legacy_imagemagick() -> boolean().
 is_legacy_imagemagick() ->
     #{ legacy := Legacy } = imagemagick_find_executable(),
     Legacy.
+
 convert_1(false, _InFile, _OutFile, _InMime, _FileProps, _Filters, _SiteDir, _Context) ->
     ?LOG_ERROR(#{
         text => <<"Install ImageMagick to generate previews of images.">>,
