@@ -72,7 +72,7 @@ preview(MovieFile, #{
                 tmp_file => TmpFile,
                 command => FfmpegCmd
             }),
-            case z_exec:run(ffmpeg, FfmpegCmd, #{
+            case z_exec:run(ffmpeg_preview, FfmpegCmd, #{
                 timeout => ?FFMPEG_TIMEOUT, read => [MovieFile], write => [TmpFile]
             }, Context) of
                 {ok, Stdout} ->

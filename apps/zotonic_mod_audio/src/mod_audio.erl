@@ -310,7 +310,7 @@ audio_preview(MovieFile, Context) ->
         ]),
     jobs:run(media_preview_jobs,
         fun() ->
-            case z_exec:run(ffmpeg, FfmpegCmd, #{read => [MovieFile], write => [TmpFile]}, Context) of
+            case z_exec:run(ffmpeg_preview, FfmpegCmd, #{read => [MovieFile], write => [TmpFile]}, Context) of
                 {ok, _} ->
                    {ok, TmpFile};
                 {error, _} = Error ->

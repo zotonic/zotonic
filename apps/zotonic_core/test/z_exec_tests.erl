@@ -1,4 +1,5 @@
 %% Copyright 2026 Marc Worrell. SPDX-License-Identifier: Apache-2.0
+%% @doc Verify native media sandbox isolation, cancellation and tool execution.
 -module(z_exec_tests).
 -include_lib("eunit/include/eunit.hrl").
 
@@ -102,7 +103,7 @@ sandbox_checks() ->
             #{write => [Video]})),
         ?assertMatch({ok, _}, z_exec:run(ffprobe,
             ["ffprobe -v error -show_format -of json ", quote(Video)], #{read => [Video]})),
-        ?assertMatch({ok, _}, z_exec:run(ffmpeg,
+        ?assertMatch({ok, _}, z_exec:run(ffmpeg_preview,
             ["ffmpeg -nostdin -v error -i ", quote(Video), " -frames:v 1 -y ", quote(Output)],
             #{read => [Video], write => [Output]})),
         ?assertMatch({ok, _}, z_exec:run(imagemagick,

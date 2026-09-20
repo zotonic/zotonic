@@ -39,11 +39,13 @@ is supported for local execution; remote processing requires the site context.
 
 ## Application profiles
 
-Supported profiles are `imagemagick`, `imagemagick_pdf`, `ffmpeg`, `ffprobe`
+Supported profiles are `imagemagick`, `imagemagick_pdf`, `ffmpeg`, `ffmpeg_preview`, `ffprobe`
 and `file`. Each supplies resource limits and access to the selected tools,
 runtime libraries and application configuration/assets. The PDF profile also
 permits Ghostscript. ImageMagick's root-maintained `policy.xml` is read as
 installed and is never changed or bypassed by this module.
+`ffmpeg_preview` uses the same sandbox and configured grants as `ffmpeg`, but
+the media runner schedules it in the general pool instead of the render pool.
 
 For example, with an already escaped command and absolute file paths:
 
@@ -133,7 +135,7 @@ Build, deployment and integration-test details are in
 -include_lib("kernel/include/file.hrl").
 -include_lib("kernel/include/logger.hrl").
 
--type profile() :: imagemagick | imagemagick_pdf | ffmpeg | ffprobe | file.
+-type profile() :: imagemagick | imagemagick_pdf | ffmpeg | ffmpeg_preview | ffprobe | file.
 
 -type os_command() :: iodata().
 -type os_command_opts() :: #{
@@ -264,6 +266,8 @@ profile(imagemagick) ->
     };
 profile(imagemagick_pdf) ->
     profile(imagemagick);
+profile(ffmpeg_preview) ->
+    profile(ffmpeg);
 profile(ffmpeg) ->
     #{
         timeout => 3600000,
@@ -426,6 +430,10 @@ helper_path() ->
     Profile :: profile(),
     Command :: iodata(),
     Options :: map().
+%% Preview is a scheduling distinction only; keep the ffmpeg sandbox and all
+%% administrator-configured ffmpeg grants for local and remote execution.
+sandbox_run(ffmpeg_preview, Command, Options) ->
+    sandbox_run(ffmpeg, Command, Options);
 sandbox_run(Profile, Command, Options) ->
     case ?MODULE:sandbox_status() of
         {error, {sandbox_unsupported, Os}} ->

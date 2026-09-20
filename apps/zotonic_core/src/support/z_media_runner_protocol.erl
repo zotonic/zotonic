@@ -146,6 +146,7 @@ profile(<<"file">>) -> file;
 profile(<<"imagemagick">>) -> imagemagick;
 profile(<<"imagemagick_pdf">>) -> imagemagick_pdf;
 profile(<<"ffmpeg">>) -> ffmpeg;
+profile(<<"ffmpeg_preview">>) -> ffmpeg_preview;
 profile(<<"ffprobe">>) -> ffprobe.
 
 -spec validate(term()) -> ok | {error, invalid_job}.

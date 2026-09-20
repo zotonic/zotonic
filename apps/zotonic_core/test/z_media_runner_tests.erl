@@ -494,3 +494,10 @@ unicode_paths_test() ->
             file:delete(UnicodeBin)
         end
     end).
+
+%% Preview jobs retain a distinct wire profile so they bypass the render queue.
+ffmpeg_preview_profile_test() ->
+    {ok, Job} = z_media_runner_protocol:pack(ffmpeg_preview, <<"ffmpeg -version">>, #{}),
+    ?assertEqual(<<"ffmpeg_preview">>, maps:get(<<"profile">>, Job)),
+    ?assertEqual(ffmpeg_preview, z_media_runner_protocol:profile(<<"ffmpeg_preview">>)),
+    ?assertEqual(ok, z_media_runner_protocol:validate(Job)).

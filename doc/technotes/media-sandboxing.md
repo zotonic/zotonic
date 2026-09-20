@@ -3,7 +3,12 @@
 Media commands use `z_exec:run(Profile, Command, Options)`. Existing `run/1,2`
 callers keep their existing behavior; backups and other server commands are not
 assigned a media policy. Profiles are `file`, `imagemagick`, `imagemagick_pdf`,
-`ffmpeg`, and `ffprobe`.
+`ffmpeg`, `ffmpeg_preview`, and `ffprobe`.
+
+`ffmpeg_preview` marks lightweight video thumbnails and audio artwork extraction
+for the media runner's general worker pool. Full `ffmpeg` conversions use its
+separate render pool. Both names use the same `ffmpeg` sandbox limits and
+`exec_sandbox_profiles` grants; this distinction changes scheduling only.
 
 MIME sniffing with `file --mime-type` runs locally without sandboxing or remote
 routing, with a 10-second timeout and a 64 KiB output bound. Image inspection and
