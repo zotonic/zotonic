@@ -49,7 +49,7 @@ input_limit() -> z_config:get(media_runner_max_input_bytes, 17179869184).
 -spec output_limit() -> pos_integer().
 output_limit() -> z_config:get(media_runner_max_output_bytes, 17179869184).
 
-%% @doc Maximum encoded callback JSON bytes, also reserved per queued job.
+%% @doc Maximum encoded callback JSON bytes, reserved per starting/running job.
 %% File transfers have independent input/output limits and do not consume this budget.
 -spec callback_limit() -> pos_integer().
 callback_limit() -> z_config:get(media_runner_max_callback_bytes, 135266304).
