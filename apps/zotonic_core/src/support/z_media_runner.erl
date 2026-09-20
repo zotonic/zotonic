@@ -32,7 +32,7 @@ fallback preserves the caller's local sandbox policy.
 start_link() -> gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
 
 -spec enabled() -> boolean().
-enabled() -> not lists:member(z_config:get(media_runner_url), [undefined, <<>>, ""]).
+enabled() -> not lists:member(z_config:get(media_runner_hostname), [undefined, <<>>, ""]).
 
 %% Do not require processing tools to be installed on a remote-only client.
 
@@ -50,15 +50,15 @@ find_executable(Name) ->
 
 -spec run(atom(), iodata(), map()) -> {ok, binary()} | {error, term()}.
 run(Profile, Command, Options) ->
-    case z_config:get(media_runner_url) of
+    case z_config:get(media_runner_hostname) of
         undefined ->
             z_exec:run_local(Profile, Command, Options);
         <<>> ->
             z_exec:run_local(Profile, Command, Options);
         "" ->
             z_exec:run_local(Profile, Command, Options);
-        Url ->
-            case remote(z_convert:to_binary(Url), Profile, Command, Options) of
+        Hostname ->
+            case remote(Hostname, Profile, Command, Options) of
                 {error, {media_runner_unavailable, _}} = Error ->
                     case z_config:get(media_runner_local_fallback, false) of
                         true -> z_exec:run_local(Profile, Command, Options);
@@ -69,7 +69,13 @@ run(Profile, Command, Options) ->
             end
     end.
 
-remote(Url, Profile, Command, Options) ->
+remote(Hostname, Profile, Command, Options) ->
+    case z_media_runner_protocol:endpoint(Hostname) of
+        {ok, Url} -> remote_url(Url, Profile, Command, Options);
+        {error, _} = Error -> Error
+    end.
+
+remote_url(Url, Profile, Command, Options) ->
     Token = z_convert:to_binary(z_config:get(media_runner_oauth2_key, <<>>)),
     Callback = callback_url(maps:get(context, Options, undefined)),
     case
@@ -95,7 +101,7 @@ callback_url(Context) ->
 
 submit(Url, Token, Callback, Job, Options) ->
     Id = z_ids:id(32),
-    Secret = base64:encode(crypto:strong_rand_bytes(32)),
+    Secret = z_ids:id(44),
     Wait = z_config:get(media_runner_wait_timeout, 3900000),
     case gen_server:call(?MODULE, {register, Id, Secret, self()}) of
         ok ->
@@ -106,13 +112,23 @@ submit(Url, Token, Callback, Job, Options) ->
                     <<"callback_token">> => Secret,
                     <<"expires">> => erlang:system_time(second) + Wait div 1000
                 },
-                case submit_request(Url, Token, Request) of
+                case submit_request(Url, Token, Request, Options, 2) of
                     {ok, Code} when Code =:= 200; Code =:= 202 ->
                         receive
                             {media_runner_result, Id, Result} ->
-                                z_media_runner_protocol:unpack(Result, Options#{
-                                    media_runner_profile => maps:get(<<"profile">>, Job)
-                                })
+                                Received = z_media_runner_protocol:unpack(Result, Options#{
+                                    media_runner_profile => maps:get(<<"profile">>, Job),
+                                    media_runner_endpoint => Url,
+                                    media_runner_token => Token
+                                }),
+                                case Received of
+                                    {ok, _} ->
+                                        %% A lost receipt merely retains the cache pin until expiry.
+                                        z_media_runner_protocol:request(
+                                            <<Url/binary, "/", Id/binary, "/results-received">>, Token, #{});
+                                    _ -> ok
+                                end,
+                                Received
                         after Wait -> {error, {media_runner_unavailable, callback_timeout}}
                         end;
                     {ok, Code} when Code =:= 429; Code =:= 502; Code =:= 503; Code =:= 504 ->
@@ -133,32 +149,63 @@ submit(Url, Token, Callback, Job, Options) ->
 
 %% Optimistic hash-only submission avoids even a preflight round trip on cache hits.
 %% A 412 lists precisely which inputs were evicted or have never been uploaded.
-submit_request(Url, Token, Request) ->
-    Files = maps:get(<<"files">>, Request),
-    Thin = Request#{<<"files">> => [maps:remove(<<"data">>, F) || F <- Files]},
-    submit_request(Url, Token, Thin, Files, 2).
-submit_request(Url, Token, Request, Files, Retries) ->
+submit_request(Url, Token, Request, Options, Retries) ->
     case z_media_runner_protocol:request(Url, Token, Request) of
         {ok, 412, Body} when Retries > 0, byte_size(Body) < 8192 ->
             try z_json:decode(Body) of
-                #{<<"missing">> := Missing} when is_list(Missing) ->
-                    Upload = [
-                        case lists:member(maps:get(<<"sha256">>, F, undefined), Missing) of
-                            true -> F;
-                            false -> maps:remove(<<"data">>, F)
-                        end
-                     || F <- Files
-                    ],
-                    submit_request(Url, Token, Request#{<<"files">> => Upload}, Files, Retries - 1);
-                _ ->
-                    {error, {protocol, invalid_cache_response}}
+                #{<<"missing">> := Missing} when is_list(Missing), Missing =/= [] ->
+                    Files = maps:get(<<"files">>, Request),
+                    Known = [H || #{<<"sha256">> := H} <- Files],
+                    true = lists:all(fun(H) -> lists:member(H, Known) end, Missing),
+                    Paths = lists:usort(maps:get(read, Options, []) ++ maps:get(write, Options, [])),
+                    case upload_missing(lists:usort(Missing), Files, Paths, Url, Token) of
+                        ok -> submit_request(Url, Token, Request, Options, Retries - 1);
+                        {ok, Code} -> {ok, Code};
+                        {error, _} = Error -> Error
+                    end;
+                _ -> {error, {protocol, invalid_cache_response}}
             catch
                 _:_ -> {error, {protocol, invalid_cache_response}}
             end;
-        {ok, Code, _} ->
-            {ok, Code};
-        {error, _} = Error ->
-            Error
+        {ok, Code, _} -> {ok, Code};
+        {error, _} = Error -> Error
+    end.
+
+upload_missing([], _Files, _Paths, _Url, _Token) -> ok;
+upload_missing([Hash | Rest], Files, Paths, Url, Token) ->
+    [F | _] = [F || #{<<"sha256">> := H} = F <- Files, H =:= Hash],
+    Path = lists:nth(maps:get(<<"id">>, F), Paths),
+    FileUrl = <<Url/binary, "/files/", Hash/binary>>,
+    Deadline = erlang:monotonic_time(second) + 3600,
+    case ensure_uploaded(FileUrl, Token, Path, maps:get(<<"size">>, F), Deadline) of
+        ok -> upload_missing(Rest, Files, Paths, Url, Token);
+        Error -> Error
+    end.
+
+%% Reserving the hash serializes concurrent clients before any file bytes are sent.
+ensure_uploaded(Url, Token, Path, Size, Deadline) ->
+    case z_media_runner_protocol:request(Url, Token, #{<<"size">> => Size}) of
+        {ok, 200, _} -> ok;
+        {ok, 201, Body} when byte_size(Body) < 8192 ->
+            #{<<"upload_token">> := Lease} = z_json:decode(Body),
+            case z_media_runner_protocol:upload(Url, Token, Lease, Path, Size) of
+                {ok, 204} -> ok;
+                {ok, 409} -> wait_for_upload(Url, Token, Path, Size, Deadline);
+                Error -> Error
+            end;
+        {ok, 409, _} -> wait_for_upload(Url, Token, Path, Size, Deadline);
+        {ok, Code, _} -> {ok, Code};
+        {error, _} = Error -> Error
+    end.
+
+%% A busy hash or an expired claim must return to reservation, never resend bytes
+%% using the old token. The next POST either finds the file or elects one uploader.
+wait_for_upload(Url, Token, Path, Size, Deadline) ->
+    case erlang:monotonic_time(second) < Deadline of
+        true ->
+            timer:sleep(1000),
+            ensure_uploaded(Url, Token, Path, Size, Deadline);
+        false -> {error, upload_wait_timeout}
     end.
 
 -spec authorized(binary(), binary()) -> boolean().

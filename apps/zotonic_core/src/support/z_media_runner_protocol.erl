@@ -21,16 +21,21 @@
 
 -moduledoc("
 Versioned media job envelopes. Only explicit input/output files cross the boundary. No
-remote path is ever used as a local output path.
+remote path is ever used as a local output path. Cache paths are used only by the
+trusted Erlang staging step; sandbox grants contain private job copies, never the cache.
 ").
 -export([
     pack/3,
+    hash_file/1, hash_file/2,
+    output_limit/0, http_options/1,
+    input_limit/0,
+    upload/5,
     validate/1,
-    execute/1, execute/2,
-    unpack/2,
-    limit/0,
-    body_limit/0,
+    execute/1, execute/2, execute/3, execute/4,
+    unpack/2, unpack/3,
+    callback_limit/0,
     https_url/1,
+    endpoint/1,
     post/3,
     request/3,
     profile/1,
@@ -38,11 +43,16 @@ remote path is ever used as a local output path.
 ]).
 -include_lib("kernel/include/file.hrl").
 
--spec limit() -> pos_integer().
-limit() -> z_config:get(media_runner_max_bytes, 67108864).
+-spec input_limit() -> pos_integer().
+input_limit() -> z_config:get(media_runner_max_input_bytes, 17179869184).
 
--spec body_limit() -> pos_integer().
-body_limit() -> 2 * limit() + 1048576.
+-spec output_limit() -> pos_integer().
+output_limit() -> z_config:get(media_runner_max_output_bytes, 17179869184).
+
+%% @doc Maximum encoded callback JSON bytes, also reserved per queued job.
+%% File transfers have independent input/output limits and do not consume this budget.
+-spec callback_limit() -> pos_integer().
+callback_limit() -> z_config:get(media_runner_max_callback_bytes, 135266304).
 
 -spec pack(atom(), iodata(), map()) -> {ok, map()} | {error, term()}.
 pack(Profile, Command, Options) ->
@@ -56,9 +66,6 @@ pack(Profile, Command, Options) ->
             pack_file(P, N, lists:member(P, Reads), lists:member(P, Writes))
          || {P, N} <- Bindings
         ],
-        true =
-            lists:sum([byte_size(maps:get(<<"data">>, F, <<>>)) || F <- Files]) =<
-                (limit() * 4 div 3 + 128),
         Replacements = [{escaped(P), marker(N)} || {P, N} <- Bindings],
         Cd =
             case maps:find(cd, Options) of
@@ -67,7 +74,7 @@ pack(Profile, Command, Options) ->
             end,
         Cmd = rewrite(iolist_to_binary(Command), Replacements ++ Cd),
         Job = #{
-            <<"version">> => 1,
+            <<"version">> => 3,
             <<"profile">> => atom_to_binary(Profile, utf8),
             <<"command">> => Cmd,
             <<"files">> => Files,
@@ -86,14 +93,29 @@ pack_file(Path, N, Read, Write) ->
         false ->
             F;
         true ->
-            {ok, #file_info{type = regular, size = Size}} = file:read_link_info(Path),
-            true = Size =< limit(),
-            {ok, Data} = file:read_file(Path),
-            true = byte_size(Data) =< limit(),
-            F#{
-                <<"data">> => base64:encode(Data),
-                <<"sha256">> => binary:encode_hex(crypto:hash(sha256, Data), lowercase)
-            }
+            {ok, Size, Hash} = hash_file(Path),
+            F#{<<"size">> => Size, <<"sha256">> => Hash}
+    end.
+
+%% Reuse the incremental file hash; the protocol adds its size and type checks.
+-spec hash_file(file:filename_all()) -> {ok, non_neg_integer(), binary()} | {error, term()}.
+hash_file(Path) -> hash_file(Path, input_limit()).
+
+-spec hash_file(file:filename_all(), pos_integer()) -> {ok, non_neg_integer(), binary()} | {error, term()}.
+hash_file(Path, Limit) ->
+    case file:read_file_info(Path) of
+        {ok, #file_info{type = regular, size = Size}} when Size =< Limit ->
+            case z_crypto:hex_sha2_file(Path) of
+                {ok, Hash} ->
+                    %% Reject files that changed size while being hashed.
+                    case file:read_file_info(Path) of
+                        {ok, #file_info{type = regular, size = Size}} -> {ok, Size, Hash};
+                        _ -> {error, invalid_file}
+                    end;
+                {error, _} = Error -> Error
+            end;
+        {ok, _} -> {error, invalid_file};
+        {error, _} = Error -> Error
     end.
 
 %% Replace longest paths first, in one pass: replacements cannot rewrite each other.
@@ -128,7 +150,7 @@ profile(<<"ffprobe">>) -> ffprobe.
 
 -spec validate(term()) -> ok | {error, invalid_job}.
 validate(#{
-    <<"version">> := 1,
+    <<"version">> := 3,
     <<"profile">> := P,
     <<"command">> := Cmd,
     <<"files">> := Files,
@@ -147,11 +169,12 @@ validate(#{
                 Extension = maps:get(<<"extension">>, F, <<>>),
                 true = is_binary(Extension) andalso byte_size(Extension) =< 17,
                 match = re:run(Extension, <<"^(\\.[a-zA-Z0-9]{1,16})?$">>, [{capture, none}]),
-                Data = maps:get(<<"data">>, F, <<>>),
-                true = is_binary(Data),
+                false = maps:is_key(<<"data">>, F),
                 case maps:find(<<"sha256">>, F) of
                     {ok, Hash} when is_binary(Hash), byte_size(Hash) =:= 64 ->
-                        match = re:run(Hash, <<"^[0-9a-f]{64}$">>, [{capture, none}]);
+                        match = re:run(Hash, <<"^[0-9a-f]{64}$">>, [{capture, none}]),
+                        Size = maps:get(<<"size">>, F),
+                        true = is_integer(Size) andalso Size >= 0 andalso Size =< input_limit();
                     error ->
                         false = maps:is_key(<<"data">>, F)
                 end,
@@ -160,9 +183,6 @@ validate(#{
          || F <- Files
         ],
         true = length(Ids) =:= length(lists:usort(Ids)),
-        true =
-            lists:sum([byte_size(maps:get(<<"data">>, F, <<>>)) || F <- Files]) =<
-                (limit() * 4 div 3 + 128),
         ok
     catch
         _:_ -> {error, invalid_job}
@@ -173,21 +193,31 @@ validate(_) ->
 -spec execute(map()) -> map().
 execute(Job) -> execute(Job, fun(_) -> {error, missing} end).
 
--spec execute(map(), fun((map()) -> {ok, binary()} | {error, term()})) -> map().
+-spec execute(map(), fun((map()) -> {ok, {file, file:filename_all()}} | {error, term()})) -> map().
 execute(Job, Resolve) ->
+    execute(Job, Resolve, fun(_, _) -> error(result_storage_required) end).
+
+%% Persist outputs before the private staging directory is removed.
+-spec execute(map(), function(), function()) -> map().
+execute(Job, Resolve, Store) ->
     Dir = z_convert:to_list(z_tempfile:new()) ++ "-mediarunner",
+    execute(Job, Resolve, Store, Dir).
+
+%% @doc Execute in a caller-owned staging path, removed on normal completion or failure.
+-spec execute(map(), function(), function(), file:filename_all()) -> map().
+execute(Job, Resolve, Store, Dir) ->
     try
         ok = validate(Job),
         ok = file:make_dir(Dir),
         ok = file:change_mode(Dir, 8#700),
-        execute(Job, Dir, Resolve)
+        execute_staged(Job, Dir, Resolve, Store)
     catch
         _:_ -> #{<<"status">> => <<"error">>, <<"error">> => <<"processing_failed">>}
     after
         file:del_dir_r(Dir)
     end.
 
-execute(
+execute_staged(
     #{
         <<"profile">> := Profile,
         <<"command">> := Command,
@@ -195,7 +225,8 @@ execute(
         <<"timeout">> := Timeout
     },
     Dir,
-    Resolve
+    Resolve,
+    Store
 ) ->
     Paths = [
         {
@@ -208,32 +239,21 @@ execute(
         }
      || F <- Files
     ],
-    lists:foldl(
-        fun(F, Bytes) ->
+    lists:foreach(
+        fun(F) ->
             case maps:find(<<"sha256">>, F) of
-                {ok, Hash} ->
-                    Data =
-                        case maps:find(<<"data">>, F) of
-                            {ok, Encoded} ->
-                                base64:decode(Encoded);
-                            error ->
-                                {ok, Cached} = Resolve(F),
-                                Cached
-                        end,
-                    Hash = binary:encode_hex(crypto:hash(sha256, Data), lowercase),
-                    Total = Bytes + byte_size(Data),
-                    true = Total =< limit(),
-                    ok = file:write_file(proplists:get_value(maps:get(<<"id">>, F), Paths), Data, [
-                        exclusive
-                    ]),
-                    Total;
-                error ->
-                    Bytes
+                {ok, _Hash} ->
+                    {ok, {file, Cached}} = Resolve(F),
+                    %% Cache paths must never become sandbox grants. Copy only this
+                    %% job's inputs; never hard-link, as commands may modify read/write inputs.
+                    {ok, Size} = file:copy(Cached, proplists:get_value(maps:get(<<"id">>, F), Paths)),
+                    Size = maps:get(<<"size">>, F);
+                error -> ok
             end
         end,
-        0,
         Files
     ),
+    %% Grant individual staged files, not their directory or the source cache.
     Read = [
         proplists:get_value(maps:get(<<"id">>, F), Paths)
      || F <- Files, maps:is_key(<<"sha256">>, F)
@@ -253,18 +273,12 @@ execute(
             cd => Dir,
             timeout => Timeout,
             max_size => 16777216,
-            file_size => limit()
+            file_size => output_limit()
         })
     of
         {ok, Stdout} ->
-            true = lists:sum([output_size(Path) || Path <- Write]) =< limit(),
-            Output = [
-                #{<<"id">> => N, <<"data">> => base64:encode(read_output(Path))}
-             || {N, Path} <- Paths, lists:member(Path, Write)
-            ],
-            true =
-                lists:sum([byte_size(maps:get(<<"data">>, F)) || F <- Output]) =<
-                    (limit() * 4 div 3 + 128),
+            true = lists:sum([output_size(Path) || Path <- Write]) =< output_limit(),
+            Output = [store_output(N, Path, Store) || {N, Path} <- Paths, lists:member(Path, Write)],
             PortableStdout = rewrite(Stdout, [
                 {z_convert:to_binary(Path), marker(N)}
              || {N, Path} <- Paths
@@ -281,40 +295,36 @@ execute(
 output_size(Path) ->
     {ok, #file_info{type = regular, size = Size}} = file:read_link_info(Path),
     Size.
-read_output(Path) ->
-    true = output_size(Path) =< limit(),
-    {ok, Data} = file:read_file(Path),
-    Data.
+store_output(Id, Path, Store) ->
+    {ok, Size, Hash} = hash_file(Path, output_limit()),
+    Store(Path, #{<<"id">> => Id, <<"size">> => Size, <<"sha256">> => Hash}).
 error_code(timeout) -> <<"command_timeout">>;
 error_code(output_limit) -> <<"output_limit">>;
 error_code(_) -> <<"command_failed">>.
 
 -spec unpack(map(), map()) -> {ok, binary()} | {error, term()}.
-unpack(#{<<"status">> := <<"error">>, <<"error">> := Reason}, _Options) when is_binary(Reason) ->
+unpack(Result, Options) ->
+    unpack(Result, Options, fun z_media_runner_download:fetch/3).
+
+-spec unpack(map(), map(), function()) -> {ok, binary()} | {error, term()}.
+unpack(#{<<"status">> := <<"error">>, <<"error">> := Reason}, _Options, _Fetch) when is_binary(Reason) ->
     {error, {media_runner_processing, Reason}};
-unpack(#{<<"status">> := <<"ok">>, <<"stdout">> := Stdout, <<"files">> := Files}, Options) ->
+unpack(#{<<"status">> := <<"ok">>, <<"stdout">> := Stdout, <<"files">> := Files}, Options, Fetch) ->
     try
         Paths = lists:usort(maps:get(read, Options, []) ++ maps:get(write, Options, [])),
         Bindings = lists:zip(lists:seq(1, length(Paths)), Paths),
         Expected = [{N, P} || {N, P} <- Bindings, lists:member(P, maps:get(write, Options, []))],
         true = lists:sort([maps:get(<<"id">>, F) || F <- Files]) =:= [N || {N, _} <- Expected],
-        Decoded = [
-            {
-                proplists:get_value(maps:get(<<"id">>, F), Expected),
-                base64:decode(maps:get(<<"data">>, F))
-            }
-         || F <- Files
-        ],
-        true = lists:sum([byte_size(D) || {_, D} <- Decoded]) =< limit(),
+        true = lists:sum([maps:get(<<"size">>, F) || F <- Files]) =< output_limit(),
         Out = base64:decode(Stdout),
         true = byte_size(Out) =< maps:get(max_size, Options, 16777216),
-        lists:foreach(fun({Path, Data}) -> ok = file:write_file(Path, Data) end, Decoded),
+        ok = z_media_runner_download:install(Files, Expected, Options, Fetch),
         RestoredOut = rewrite(Out, [{marker(N), stdout_path(P, Options)} || {N, P} <- Bindings]),
         {ok, RestoredOut}
     catch
         _:_ -> {error, media_runner_invalid_result}
     end;
-unpack(_, _) ->
+unpack(_, _, _) ->
     {error, media_runner_invalid_result}.
 
 stdout_path(Path, #{media_runner_profile := <<"ffprobe">>}) ->
@@ -322,6 +332,23 @@ stdout_path(Path, #{media_runner_profile := <<"ffprobe">>}) ->
     binary:part(Quoted, 1, byte_size(Quoted) - 2);
 stdout_path(Path, _) ->
     z_convert:to_binary(Path).
+
+%% @doc Build the fixed runner endpoint from a hostname, optionally with an HTTPS port.
+-spec endpoint(binary() | string()) -> {ok, binary()} | {error, media_runner_configuration}.
+endpoint(Hostname) ->
+    try
+        Host = z_convert:to_binary(Hostname),
+        true = byte_size(Host) > 0 andalso byte_size(Host) =< 253,
+        Base = <<"https://", Host/binary>>,
+        #{scheme := <<"https">>, host := ParsedHost, path := <<>>} = Parts = uri_string:parse(Base),
+        true = byte_size(ParsedHost) > 0,
+        true = maps:without([scheme, host, path, port], Parts) =:= #{},
+        Port = maps:get(port, Parts, 443),
+        true = is_integer(Port) andalso Port > 0 andalso Port =< 65535,
+        {ok, <<Base/binary, "/media-runner/jobs">>}
+    catch
+        _:_ -> {error, media_runner_configuration}
+    end.
 
 -spec https_url(term()) -> boolean().
 https_url(Url) when is_binary(Url), byte_size(Url) =< 2048 ->
@@ -358,28 +385,11 @@ request(Url, Token, Payload) ->
                 "application/json",
                 z_json:encode(Payload)
             },
-            Trust =
-                case z_config:get(media_runner_cacertfile) of
-                    undefined -> {cacerts, certifi:cacerts()};
-                    File -> {cacertfile, z_convert:to_list(File)}
-                end,
-            Ssl = [
-                {verify, verify_peer},
-                Trust,
-                {customize_hostname_check, [
-                    {match_fun, public_key:pkix_verify_hostname_match_fun(https)}
-                ]}
-            ],
             case
                 httpc:request(
                     post,
                     Request,
-                    [
-                        {autoredirect, false},
-                        {ssl, Ssl},
-                        {connect_timeout, 5000},
-                        {timeout, 30000}
-                    ],
+                    http_options(30000),
                     [{body_format, binary}],
                     zotonic
                 )
@@ -388,3 +398,58 @@ request(Url, Token, Payload) ->
                 {error, _} = Error -> Error
             end
     end.
+
+%% The file descriptor is a file server, since httpc invokes the body generator
+%% from its own process. Each read is bounded and socket sends apply backpressure.
+-spec upload(binary(), binary(), binary(), file:filename_all(), non_neg_integer()) ->
+    {ok, integer()} | {error, term()}.
+upload(Url, Token, Lease, Path, Size) ->
+    case https_url(Url) of
+        false -> {error, invalid_url};
+        true ->
+            case file:open(Path, [read, binary]) of
+                {ok, Fd} ->
+                    try
+                        Request = {
+                            binary_to_list(Url),
+                            [{"authorization", "Bearer " ++ binary_to_list(Token)},
+                             {"x-upload-token", binary_to_list(Lease)},
+                             {"connection", "close"},
+                             {"content-length", integer_to_list(Size)}],
+                            "application/octet-stream",
+                            {fun upload_chunk/1, {Fd, Size}}
+                        },
+                        %% Per-request socket options make httpc open a dedicated
+                        %% connection. A long PUT must not block job POSTs and callbacks
+                        %% queued on a shared keep-alive connection to the same host.
+                        case httpc:request(put, Request, http_options(3600000),
+                                [{body_format, binary}, {socket_opts, [{nodelay, true}]}], zotonic) of
+                            {ok, {{_, Status, _}, _, _}} -> {ok, Status};
+                            {error, _} = Error -> Error
+                        end
+                    after
+                        file:close(Fd)
+                    end;
+                {error, _} = Error -> Error
+            end
+    end.
+
+upload_chunk({_Fd, 0}) -> eof;
+upload_chunk({Fd, Left}) ->
+    {ok, Data} = file:read(Fd, min(1048576, Left)),
+    {ok, Data, {Fd, Left - byte_size(Data)}}.
+
+http_options(Timeout) ->
+    Trust =
+        case z_config:get(media_runner_cacertfile) of
+            undefined -> {cacerts, certifi:cacerts()};
+            File -> {cacertfile, z_convert:to_list(File)}
+        end,
+    Ssl = [
+        {verify, verify_peer},
+        Trust,
+        {customize_hostname_check, [
+            {match_fun, public_key:pkix_verify_hostname_match_fun(https)}
+        ]}
+    ],
+    [{autoredirect, false}, {ssl, Ssl}, {connect_timeout, 5000}, {timeout, Timeout}].

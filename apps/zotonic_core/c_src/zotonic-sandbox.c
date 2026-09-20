@@ -67,10 +67,12 @@ static void init_policy(void)
 #ifdef __linux__
     int abi = syscall(SYS_landlock_create_ruleset, NULL, 0,
                       LANDLOCK_CREATE_RULESET_VERSION);
-    if (abi < 3) {
-        errno = ENOTSUP;
-        fail("Landlock ABI 3 or newer required");
+    if ((abi >= 0 && abi < 3) ||
+        (abi < 0 && (errno == ENOSYS || errno == EOPNOTSUPP))) {
+        fprintf(stderr, "zotonic-sandbox: Landlock ABI 3 or newer is unsupported\n");
+        exit(78);
     }
+    if (abi < 0) fail("Landlock ABI probe");
     /* Handle ALL filesystem rights through ABI 3, including truncation.
      * Handling only read rights would leave writes unrestricted. */
     handled = (LANDLOCK_ACCESS_FS_TRUNCATE << 1) - 1;

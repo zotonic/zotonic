@@ -179,18 +179,21 @@ maybe_identify_extension(Result, _OriginalFilename) ->
 identify_file_os(win32, _File, OriginalFilename, _Context) ->
     {ok, #{ <<"mime">> => guess_mime(OriginalFilename)}};
 identify_file_os(unix, File, OriginalFilename, Context) ->
-    identify_file_unix(z_media_runner:find_executable("file"), File, OriginalFilename, Context).
+    identify_file_unix(os:find_executable("file"), File, OriginalFilename, Context).
 
 identify_file_unix(false, _File, _OriginalFilename, _Context) ->
     ?LOG_ERROR("Please install 'file' for identifying the type of uploaded files."),
     {error, no_file_cmd};
-identify_file_unix(Cmd, File, OriginalFilename, Context) ->
+identify_file_unix(Cmd, File, OriginalFilename, _Context) ->
     CmdLine = unicode:characters_to_list([
         z_filelib:os_filename(Cmd),
-        " -b --mime-type ",
+        " -b --mime-type -- ",
         z_filelib:os_filename(File)
     ]),
-    case z_exec:run(file, CmdLine, #{read => [File]}, Context) of
+    %% MIME sniffing with the local file utility does not require a sandbox or
+    %% remote upload. Keep bounded execution; image inspection below still uses
+    %% the sandboxed media runner after the MIME type has been determined.
+    case z_exec:run(CmdLine, #{timeout => 10000, max_size => 65536}) of
         {ok, Output} -> identify_file_mime(Output, File, OriginalFilename);
         {error, _} = Error -> Error
     end.

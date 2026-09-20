@@ -20,6 +20,52 @@
 -module(z_media_runner_tests).
 
 -include_lib("eunit/include/eunit.hrl").
+-export([log/2]).
+
+%% Logger callback used to verify the unsupported-platform NOTICE, without mocking OS globals.
+log(#{level := notice, msg := {report, #{reason := sandbox_unsupported}}}, #{config := #{pid := Pid}}) ->
+    Pid ! sandbox_notice,
+    ok;
+log(_, _) -> ok.
+
+unsupported_sandbox_test_() ->
+    case os:type() of
+        {unix, _} -> {timeout, 30, fun unsupported_sandbox/0};
+        _ -> []
+    end.
+
+unsupported_sandbox() ->
+    {ok, _} = application:ensure_all_started(erlexec),
+    #{level := OldLevel} = logger:get_primary_config(),
+    OldMode = application:get_env(zotonic, exec_sandbox),
+    ok = logger:set_primary_config(level, notice),
+    ok = logger:add_handler(zmr_sandbox_test, ?MODULE, #{level => notice, config => #{pid => self()}}),
+    ok = meck:new(z_exec, [passthrough]),
+    try
+        ok = meck:expect(z_exec, sandbox_status, fun() -> {error, {sandbox_unsupported, {unix, freebsd}}} end),
+        application:set_env(zotonic, exec_sandbox, required),
+        ?assertEqual({ok, <<"local">>}, z_exec:run_local(file, "printf local", #{})),
+        with_files(fun(Input, _) ->
+            Cmd = ["test -f ", z_filelib:os_filename(filename:basename(Input)), " && printf runner"],
+            ?assertEqual({ok, <<"runner">>}, z_exec:run_sandbox(file, Cmd, #{cd => filename:dirname(Input)}))
+        end),
+        receive sandbox_notice -> ok after 1000 -> error(missing_notice) end,
+        ?assertEqual({error, output_limit}, z_exec:run_sandbox(file, "printf too-large", #{max_size => 2})),
+        ?assertEqual({error, timeout}, z_exec:run_sandbox(file, "while :; do :; done", #{timeout => 100})),
+        %% Broken installations and enforcement failures must never become unrestricted runs.
+        lists:foreach(fun(Reason) ->
+            ok = meck:expect(z_exec, sandbox_status, fun() -> {error, Reason} end),
+            ?assertEqual({error, Reason}, z_exec:run_sandbox(file, "printf must-not-run", #{}))
+        end, [sandbox_helper_missing, {exit_status, 32000}])
+    after
+        meck:unload(z_exec),
+        logger:remove_handler(zmr_sandbox_test),
+        logger:set_primary_config(level, OldLevel),
+        case OldMode of
+            undefined -> application:unset_env(zotonic, exec_sandbox);
+            {ok, Mode} -> application:set_env(zotonic, exec_sandbox, Mode)
+        end
+    end.
 
 url_boundary_test() ->
     ?assert(z_media_runner_protocol:https_url(<<"https://runner.example/jobs">>)),
@@ -33,6 +79,19 @@ url_boundary_test() ->
             undefined
         ]
     ).
+
+hostname_endpoint_test() ->
+    ?assertEqual({ok, <<"https://media.example.com/media-runner/jobs">>},
+        z_media_runner_protocol:endpoint(<<"media.example.com">>)),
+    ?assertEqual({ok, <<"https://localhost:18443/media-runner/jobs">>},
+        z_media_runner_protocol:endpoint("localhost:18443")),
+    ?assertEqual({ok, <<"https://[::1]:18443/media-runner/jobs">>},
+        z_media_runner_protocol:endpoint(<<"[::1]:18443">>)),
+    lists:foreach(fun(Host) ->
+        ?assertEqual({error, media_runner_configuration}, z_media_runner_protocol:endpoint(Host))
+    end, [<<>>, <<"https://media.example.com">>, <<"media.example.com/path">>,
+        <<"media.example.com/">>, <<"user@media.example.com">>, <<"media.example.com?x=1">>,
+        <<"media.example.com#fragment">>, <<"localhost:0">>, <<"localhost:65536">>]).
 
 rewrite_overlap_test() ->
     ?assertEqual(
@@ -162,6 +221,12 @@ pack_roundtrip_test() ->
         ?assertEqual(nomatch, binary:match(maps:get(<<"command">>, Packed), list_to_binary(Input))),
         ?assertNotEqual(nomatch, binary:match(maps:get(<<"command">>, Packed), <<"[0]">>)),
         Files = maps:get(<<"files">>, Packed),
+        ?assert(lists:all(fun(F) -> not maps:is_key(<<"data">>, F) end, Files)),
+        [Source] = [F || #{<<"sha256">> := _} = F <- Files],
+        {ok, SourceBytes} = file:read_file(Input),
+        ?assertEqual(byte_size(SourceBytes), maps:get(<<"size">>, Source)),
+        ?assertEqual(binary:encode_hex(crypto:hash(sha256, SourceBytes), lowercase),
+            maps:get(<<"sha256">>, Source)),
         [Out] = [F || F <- Files, maps:get(<<"write">>, F)],
         ?assertEqual(<<".png">>, maps:get(<<"extension">>, Out)),
         {ok, _} = z_media_runner_protocol:unpack(
@@ -171,13 +236,40 @@ pack_roundtrip_test() ->
                 <<"files">> => [
                     #{
                         <<"id">> => maps:get(<<"id">>, Out),
-                        <<"data">> => base64:encode(<<"output">>)
+                        <<"size">> => 6,
+                        <<"sha256">> => binary:encode_hex(crypto:hash(sha256, <<"output">>), lowercase)
                     }
                 ]
             },
-            Options
+            Options,
+            fun(_, Temp, _) ->
+                ok = file:write_file(Temp, <<"output">>),
+                z_media_runner_protocol:hash_file(Temp)
+            end
         ),
         ?assertEqual({ok, <<"output">>}, file:read_file(Output))
+    end).
+
+%% Invalid or interrupted downloads must never replace existing caller files.
+download_failure_test() ->
+    with_files(fun(_, Output) ->
+        ok = file:write_file(Output, <<"original">>),
+        Hash = binary:encode_hex(crypto:hash(sha256, <<"expected">>), lowercase),
+        Result = #{<<"status">> => <<"ok">>, <<"stdout">> => <<>>, <<"files">> => [
+            #{<<"id">> => 1, <<"size">> => 8, <<"sha256">> => Hash,
+                <<"url">> => <<"https://untrusted.example/results/", Hash/binary>>}]},
+        Options = #{write => [Output], media_runner_endpoint => <<"https://runner.example/jobs">>,
+            media_runner_token => <<"secret">>},
+        ?assertEqual({error, media_runner_invalid_result}, z_media_runner_protocol:unpack(Result, Options)),
+        lists:foreach(fun(Data) ->
+            ?assertEqual({error, media_runner_invalid_result},
+                z_media_runner_protocol:unpack(Result, Options, fun(_, Temp, _) ->
+                    ok = file:write_file(Temp, Data),
+                    z_media_runner_protocol:hash_file(Temp)
+                end)),
+            ?assertEqual({ok, <<"original">>}, file:read_file(Output)),
+            ?assertEqual([], filelib:wildcard(Output ++ ".download-*"))
+        end, [<<"truncated">>, <<"tampered">>])
     end).
 
 %% Opt-in because a real OS sandbox cannot be nested in every test environment.
@@ -186,6 +278,15 @@ sandbox_roundtrip_test_() ->
         "1" ->
             {timeout, 60, fun() ->
                 {ok, _} = application:ensure_all_started(erlexec),
+                probe_exit_boundary(),
+                with_files(fun(_, Output) ->
+                    ok = file:write_file(Output, <<>>),
+                    Command = ["printf x >> ", z_filelib:os_filename(Output), "; exit 78"],
+                    ?assertMatch({error, {sandbox_command, {exit_status, 19968}, _}},
+                        z_exec:run_sandbox(file, Command, #{write => [Output]})),
+                    %% Exactly one execution, even though its exit code matches the probe.
+                    ?assertEqual({ok, <<"x">>}, file:read_file(Output))
+                end),
                 %% argv conversion must not encode UTF-8 command text twice.
                 Utf8 = <<"café"/utf8>>,
                 ?assertEqual(
@@ -198,9 +299,16 @@ sandbox_roundtrip_test_() ->
                         "magick ", z_filelib:os_filename(Input), " ", z_filelib:os_filename(Output)
                     ],
                     {ok, Packed} = z_media_runner_protocol:pack(imagemagick, Cmd, Options),
-                    Result = z_media_runner_protocol:execute(Packed),
+                    Saved = Output ++ ".saved",
+                    Result = z_media_runner_protocol:execute(Packed, fun(_) -> {ok, {file, Input}} end,
+                        fun(Path, F) -> {ok, _} = file:copy(Path, Saved), F end),
                     ?assertMatch(#{<<"status">> := <<"ok">>}, Result),
-                    ?assertMatch({ok, _}, z_media_runner_protocol:unpack(Result, Options)),
+                    ?assertMatch({ok, _}, z_media_runner_protocol:unpack(Result, Options,
+                        fun(_, Temp, _) ->
+                            {ok, _} = file:copy(Saved, Temp),
+                            ok = file:delete(Saved),
+                            z_media_runner_protocol:hash_file(Temp)
+                        end)),
                     {ok, Png} = file:read_file(Output),
                     ?assertMatch(<<137, "PNG", _/binary>>, Png),
                     %% ImageMagick's output path is restored for z_media_identify's parser.
@@ -210,7 +318,7 @@ sandbox_roundtrip_test_() ->
                         #{read => [Input]}
                     ),
                     {ok, Stdout} = z_media_runner_protocol:unpack(
-                        z_media_runner_protocol:execute(Identify), #{read => [Input]}
+                        z_media_runner_protocol:execute(Identify, fun(_) -> {ok, {file, Input}} end), #{read => [Input]}
                     ),
                     ?assertNotEqual(nomatch, binary:match(Stdout, list_to_binary(Input)))
                 end),
@@ -229,9 +337,83 @@ sandbox_roundtrip_test_() ->
             []
     end.
 
+%% Exercise erlexec's real exit-status encoding, replacing only the OS capability probe.
+probe_exit_boundary() ->
+    ok = meck:new(exec, [passthrough]),
+    try
+        lists:foreach(fun({Exit, Expected}) ->
+            ok = meck:expect(exec, run, fun(Command, Options) ->
+                case Command of
+                    [_, "--check"] ->
+                        meck:passthrough([["/bin/sh", "-c", "exit " ++ integer_to_list(Exit)], Options]);
+                    _ -> meck:passthrough([Command, Options])
+                end
+            end),
+            ?assertEqual(Expected, z_exec:sandbox_status()),
+            case Exit of
+                78 -> ?assertEqual({ok, <<"unsupported-kernel">>},
+                    z_exec:run_sandbox(file, "printf unsupported-kernel", #{}));
+                125 -> ?assertEqual(Expected, z_exec:run_sandbox(file, "printf must-not-run", #{}))
+            end
+        end, [{78, {error, {sandbox_unsupported, os:type()}}}, {125, {error, {exit_status, 32000}}}])
+    after
+        meck:unload(exec)
+    end.
+
+local_file_identification_test_() ->
+    case {os:type(), os:find_executable("file")} of
+        {{unix, _}, Cmd} when Cmd =/= false -> fun local_file_identification/0;
+        _ -> []
+    end.
+
+local_file_identification() ->
+    {ok, _} = application:ensure_all_started(erlexec),
+    with_files(fun(Input, _Output) ->
+        ok = file:write_file(Input, <<"Plain text.\n">>),
+        Keys = [media_runner_hostname, exec_sandbox],
+        Old = [{K, application:get_env(zotonic, K)} || K <- Keys],
+        ok = meck:new(z_exec, [passthrough, no_link]),
+        try
+            application:set_env(zotonic, media_runner_hostname, <<"unavailable.invalid">>),
+            application:set_env(zotonic, exec_sandbox, invalid),
+            ok = meck:expect(z_exec, run, fun(Command, #{timeout := 10000, max_size := 65536} = Options) ->
+                meck:passthrough([Command, Options])
+            end),
+            %% Any accidental profiled call fails the test instead of routing remotely.
+            ok = meck:expect(z_exec, run, fun(_, _, _, _) -> error(unexpected_media_job) end),
+            ?assertMatch({ok, #{<<"mime">> := <<"text/plain">>}},
+                z_media_identify:identify_file_direct(z_convert:to_binary(Input), <<"input.txt">>)),
+            ?assertEqual(1, meck:num_calls(z_exec, run, ['_', '_'])),
+            ?assertEqual(0, meck:num_calls(z_exec, run, ['_', '_', '_', '_']))
+        after
+            meck:unload(z_exec),
+            lists:foreach(fun
+                ({K, undefined}) -> application:unset_env(zotonic, K);
+                ({K, {ok, V}}) -> application:set_env(zotonic, K, V)
+            end, Old)
+        end
+    end).
+
+large_input_test() ->
+    with_files(fun(Input, _Output) ->
+        %% Larger than the old 64 MiB JSON limit; the envelope stays tiny.
+        {ok, Fd} = file:open(Input, [write, raw, binary]),
+        Size = 70 * 1024 * 1024,
+        {ok, _} = file:position(Fd, Size - 1),
+        ok = file:write(Fd, <<0>>),
+        ok = file:close(Fd),
+        {ok, Job} = z_media_runner_protocol:pack(file, "file", #{read => [Input]}),
+        [F] = maps:get(<<"files">>, Job),
+        ?assertEqual(Size, maps:get(<<"size">>, F)),
+        ?assertNot(maps:is_key(<<"data">>, F)),
+        ?assert(byte_size(z_json:encode(Job)) < 1024),
+        ?assertEqual({error, invalid_job}, z_media_runner_protocol:validate(
+            Job#{<<"files">> => [F#{<<"data">> => <<"unexpected">>}]}))
+    end).
+
 job() ->
     #{
-        <<"version">> => 1,
+        <<"version">> => 3,
         <<"profile">> => <<"file">>,
         <<"command">> => <<"printf ok">>,
         <<"files">> => [],

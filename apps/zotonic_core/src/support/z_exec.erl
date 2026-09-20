@@ -27,11 +27,11 @@ processing: it runs the shell, decoder and delegates inside a native sandbox
 with explicit filesystem permissions and no network access. Command strings
 retain shell syntax; callers must still shell-escape untrusted arguments.
 
-When `media_runner_url` is configured, `run/4` submits media work to the
+When `media_runner_hostname` is configured, `run/4` submits media work to the
 external runner and waits for its authenticated callback. Remote availability
 failures are retried locally only when `media_runner_local_fallback` is true;
 local execution retains the configured sandbox policy. The runner itself always
-requires sandbox enforcement. See the
+uses sandbox enforcement when supported by the OS. See the
 [media runner documentation](https://github.com/zotonic/mediarunner#readme) for setup.
 
 The callback URL is generated from the site dispatcher. Context-free `run/3`
@@ -76,9 +76,9 @@ controls are needed to bound aggregate consumption.
 
 ## Configuration and failures
 
-The Zotonic setting `exec_sandbox` defaults to `required`. Missing helpers,
-unsupported platforms and failed sandbox setup return errors; commands are
-never retried without protection. `disabled` explicitly opts out of the
+The Zotonic setting `exec_sandbox` defaults to `required`. Unsupported OSes/kernels
+log a NOTICE and execute without isolation. Missing helpers and failed sandbox setup
+return errors; a failed command is never retried without protection. `disabled` explicitly opts out of the
 sandbox, retaining only the ordinary run/2 timeout and stdout behavior.
 
 Administrators can add trusted read/execute grants per profile:
@@ -114,9 +114,8 @@ readable for runtime startup. Address-space limits are not applied, and
 cleanup of descendants that deliberately detach is best effort. Test each
 supported macOS version, including any restrictions imposed by the parent.
 
-Windows and BSD backends are not implemented; required mode logs how to
-disable sandboxing and returns an unsupported platform error. Administrators
-can explicitly set `{exec_sandbox, disabled}` to permit unrestricted execution.
+Windows and BSD backends are not implemented. Execution logs a NOTICE and continues
+without sandbox isolation; sandbox_status/0 still reports the unsupported platform.
 Build, deployment and integration-test details are in
 `doc/technotes/media-sandboxing.md`.
 ").
@@ -227,8 +226,8 @@ run_local(Profile, Command, Options) ->
     end.
 
 
-%% @doc Mandatory sandbox execution for the remote runner. Never routes remotely
-%% and never honors exec_sandbox=disabled.
+%% @doc Execute for the remote runner, using the sandbox whenever the OS supports it.
+%% Never routes remotely or honors exec_sandbox=disabled; unsupported OSes log a NOTICE.
 -spec run_sandbox(atom(), iodata(), map()) -> {ok, binary()} | {error, term()}.
 run_sandbox(Profile, Command, Options) ->
     case profile(Profile) of
@@ -242,7 +241,13 @@ run_sandbox(Profile, Command, Options) ->
 -spec sandbox_status() -> {ok, binary()} | {error, term()}.
 sandbox_status() ->
     case helper() of
-        {ok, Helper} -> run_exec([Helper, "--check"], #{timeout => 5000}, []);
+        {ok, Helper} ->
+            case run_exec([Helper, "--check"], #{timeout => 5000, max_size => 65536}, []) of
+                %% Exit 78 is reserved for an unsupported OS/kernel in the probe.
+                %% Never interpret a media command's exit code as permission to retry.
+                {error, {exit_status, 19968}} -> {error, {sandbox_unsupported, os:type()}};
+                Result -> Result
+            end;
         {error, _} = Error -> Error
     end.
 
@@ -407,18 +412,7 @@ helper() ->
     case os:type() of
         {unix, linux} -> helper_path();
         {unix, darwin} -> helper_path();
-        Os ->
-            ?LOG_ERROR(#{
-                text => <<"Media sandboxing is unsupported on this platform. "
-                          "To allow unrestricted media commands, administrators can set "
-                          "{exec_sandbox, disabled} in zotonic.config (YAML: "
-                          "zotonic: {exec_sandbox: disabled}). This disables sandbox protection.">>,
-                in => zotonic_core,
-                os => Os,
-                result => error,
-                reason => sandbox_unsupported
-            }),
-            {error, {sandbox_unsupported, Os}}
+        Os -> {error, {sandbox_unsupported, Os}}
     end.
 
 helper_path() ->
@@ -433,6 +427,20 @@ helper_path() ->
     Command :: iodata(),
     Options :: map().
 sandbox_run(Profile, Command, Options) ->
+    case ?MODULE:sandbox_status() of
+        {error, {sandbox_unsupported, Os}} ->
+            ?LOG_NOTICE(#{text => <<"OS sandbox unsupported; continuing media command without sandbox isolation">>,
+                in => zotonic_core, os => Os, profile => Profile, reason => sandbox_unsupported}),
+            Cd = case maps:find(cd, Options) of {ok, Dir} -> [{cd, Dir}]; error -> [] end,
+            %% Retain timeout, bounded stdout/stderr and process-group cleanup.
+            run_exec(unicode:characters_to_binary(Command), Options#{sandbox => true},
+                Cd ++ [{group, 0}, kill_group, stderr]);
+        {error, _} = Error -> Error;
+        {ok, _} ->
+            sandbox_supported(Profile, Command, Options)
+    end.
+
+sandbox_supported(Profile, Command, Options) ->
     case helper() of
         {error, _} = Error -> Error;
         {ok, Helper} ->

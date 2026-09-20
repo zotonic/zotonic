@@ -5,6 +5,11 @@ callers keep their existing behavior; backups and other server commands are not
 assigned a media policy. Profiles are `file`, `imagemagick`, `imagemagick_pdf`,
 `ffmpeg`, and `ffprobe`.
 
+MIME sniffing with `file --mime-type` runs locally without sandboxing or remote
+routing, with a 10-second timeout and a 64 KiB output bound. Image inspection and
+conversion still use sandboxed profiles. The generic `file` profile remains
+sandboxed because its command string can contain arbitrary shell commands.
+
 The profile-aware API runs a standalone native launcher before executing the
 command. Configured command strings retain shell syntax, but the shell and all
 its delegates run inside the sandbox. Profile permissions are explicit; neither
@@ -96,21 +101,17 @@ is **best effort**. This backend does not offer Linux's process-group guarantee.
 Apple's API is deprecated; test each supported OS version. Already-sandboxed
 parents may reject Seatbelt initialization; that error is propagated.
 
-Windows and BSD backends are not implemented. Required mode logs an actionable
-error and reports
-`{sandbox_unsupported, Os}` there. Capsicum/jails and pledge/unveil need separate
-implementations and platform tests.
-
-On these platforms, administrators can explicitly opt out by adding
-`{exec_sandbox, disabled}` to the Zotonic application configuration in
-`zotonic.config`, or `exec_sandbox: disabled` under `zotonic:` in YAML.
-This enables unrestricted media commands and removes sandbox protection.
+Windows and BSD backends are not implemented. Unsupported platforms log a NOTICE
+and continue without OS isolation, retaining timeouts, bounded output and process-group
+cleanup. Linux kernels without Landlock ABI 3 have the same fallback. The media runner
+admin dashboard explicitly displays this state.
 
 ## Configuration and failures
 
-The Zotonic application setting `exec_sandbox` defaults to `required`. Missing
-helpers, unsupported systems, unavailable kernel features, or policy setup
-failures stop the operation. There is no automatic unrestricted retry.
+The Zotonic application setting `exec_sandbox` defaults to `required`. The helper's
+`--check` probe distinguishes unsupported OS/kernel support (exit 78) from installation
+or policy errors. Missing helpers and other setup failures stop processing. Media-command
+exit codes are never used to trigger an unrestricted retry.
 `exec_sandbox = disabled` is an explicit administrator opt-out for the media
 call sites. `z_exec:sandbox_status/0` probes actual policy enforcement, including
 seccomp on Linux; it does not prove every installed tool's resource paths fit.

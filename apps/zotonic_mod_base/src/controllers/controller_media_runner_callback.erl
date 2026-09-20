@@ -108,7 +108,7 @@ is_authorized(Context) ->
 %% @doc Decode a bounded result envelope and hand it to the waiting client's registry.
 %% The registry rechecks credentials in case the job ended after authorization.
 process(_, _, _, Context) ->
-    {Body, Context1} = cowmachine_req:req_body(z_media_runner_protocol:body_limit(), Context),
+    {Body, Context1} = cowmachine_req:req_body(z_media_runner_protocol:callback_limit(), Context),
     try
         Result = z_json:decode(Body),
         true = is_map(Result),
