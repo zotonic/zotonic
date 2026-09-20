@@ -53,6 +53,11 @@ unsupported_sandbox() ->
         receive sandbox_notice -> ok after 1000 -> error(missing_notice) end,
         ?assertEqual({error, output_limit}, z_exec:run_sandbox(file, "printf too-large", #{max_size => 2})),
         ?assertEqual({error, timeout}, z_exec:run_sandbox(file, "while :; do :; done", #{timeout => 100})),
+        %% The unsupported backend has no native supervisor to escalate TERM.
+        ?assertEqual({error, timeout}, z_exec:run_sandbox(file,
+            "trap '' TERM; while :; do :; done", #{timeout => 100})),
+        ?assertEqual({error, output_limit}, z_exec:run_sandbox(file,
+            "trap '' TERM; while :; do printf noise; done", #{max_size => 2})),
         %% Broken installations and enforcement failures must never become unrestricted runs.
         lists:foreach(fun(Reason) ->
             ok = meck:expect(z_exec, sandbox_status, fun() -> {error, Reason} end),
@@ -463,3 +468,18 @@ https_environment_test() ->
             {ok, Value} -> application:set_env(zotonic, environment, Value)
         end
     end.
+
+%% Character-list and UTF-8 binary paths must produce the same portable command.
+unicode_paths_test() ->
+    with_files(fun(Input, Output) ->
+        Unicode = filename:join(filename:dirname(Input), [16#4e2d, 16#e9] ++ ".ppm"),
+        {ok, _} = file:copy(Input, Unicode),
+        Command = unicode:characters_to_binary(["convert ", z_filelib:os_filename(Unicode),
+            " ", z_filelib:os_filename(Output)]),
+        {ok, Job} = z_media_runner_protocol:pack(imagemagick, Command,
+            #{read => [Unicode], write => [Output]}),
+        ?assertEqual(nomatch, binary:match(maps:get(<<"command">>, Job),
+            unicode:characters_to_binary(Unicode))),
+        ?assertEqual({ok, Job}, z_media_runner_protocol:pack(imagemagick, Command,
+            #{read => [unicode:characters_to_binary(Unicode)], write => [unicode:characters_to_binary(Output)]}))
+    end).

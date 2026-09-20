@@ -172,12 +172,12 @@ convert_2(CmdArgs, ConvertCmd, InFile, OutFile, InMime, FileProps, SiteDir, Cont
 
 convert_temp(CmdArgs, ConvertCmd, InFile, TempFile, InMime, FileProps, SiteDir, Context) ->
     Cmd = unicode:characters_to_binary([
-        "cd ", z_filelib:os_filename(SiteDir), "; ",
+        "cd ", z_filelib:os_filename(unicode:characters_to_list(SiteDir)), "; ",
         ConvertCmd, " ",
         opt_density(FileProps),
         z_filelib:os_filename(unicode:characters_to_list(InFile) ++ infile_suffix(InMime)), " ",
         lists:join(32, CmdArgs), " ",
-        z_filelib:os_filename(TempFile)
+        z_filelib:os_filename(unicode:characters_to_list(TempFile))
     ]),
     Profile = case InMime of
         <<"application/pdf">> -> imagemagick_pdf;

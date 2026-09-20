@@ -45,7 +45,7 @@ info(Path, Context) ->
         CmdlineCfg -> CmdlineCfg
     end,
     FfprobeCmd = unicode:characters_to_binary([
-           Cmdline, " ", z_filelib:os_filename(Path)
+           Cmdline, " ", z_filelib:os_filename(unicode:characters_to_list(Path))
        ]),
     ?LOG_DEBUG(#{
         in => zotonic_mod_video,

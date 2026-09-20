@@ -72,7 +72,7 @@ pack(Profile, Command, Options) ->
                 {ok, Dir} -> [{escaped(Dir), <<"__ZMR_CWD__">>}];
                 error -> []
             end,
-        Cmd = rewrite(iolist_to_binary(Command), Replacements ++ Cd),
+        Cmd = rewrite(unicode:characters_to_binary(Command), Replacements ++ Cd),
         Job = #{
             <<"version">> => 3,
             <<"profile">> => atom_to_binary(Profile, utf8),
@@ -137,7 +137,7 @@ rewrite_matches(Text, [{Start, Len} | Rest], Map, Pos, Acc) ->
     rewrite_matches(Text, Rest, Map, Start + Len, [maps:get(Key, Map), Prefix | Acc]).
 
 escaped(Path) ->
-    Quoted = iolist_to_binary(z_filelib:os_filename(Path)),
+    Quoted = unicode:characters_to_binary(z_filelib:os_filename(unicode:characters_to_list(Path))),
     binary:part(Quoted, 1, byte_size(Quoted) - 2).
 marker(N) -> iolist_to_binary(["__ZMR_FILE_", integer_to_binary(N), "__"]).
 
@@ -280,7 +280,7 @@ execute_staged(
             true = lists:sum([output_size(Path) || Path <- Write]) =< output_limit(),
             Output = [store_output(N, Path, Store) || {N, Path} <- Paths, lists:member(Path, Write)],
             PortableStdout = rewrite(Stdout, [
-                {z_convert:to_binary(Path), marker(N)}
+                {unicode:characters_to_binary(Path), marker(N)}
              || {N, Path} <- Paths
             ]),
             #{
@@ -328,10 +328,10 @@ unpack(_, _, _) ->
     {error, media_runner_invalid_result}.
 
 stdout_path(Path, #{media_runner_profile := <<"ffprobe">>}) ->
-    Quoted = z_json:encode(z_convert:to_binary(Path)),
+    Quoted = z_json:encode(unicode:characters_to_binary(Path)),
     binary:part(Quoted, 1, byte_size(Quoted) - 2);
 stdout_path(Path, _) ->
-    z_convert:to_binary(Path).
+    unicode:characters_to_binary(Path).
 
 %% @doc Build the fixed runner endpoint from a hostname, optionally with an HTTPS port.
 -spec endpoint(binary() | string()) -> {ok, binary()} | {error, media_runner_configuration}.
@@ -388,22 +388,11 @@ request(Url, Token, Payload, Timeout) ->
                 "application/json",
                 z_json:encode(Payload)
             },
-            case
-                httpc:request(
-                    post,
-                    Request,
-                    http_options(Timeout),
-                    [{body_format, binary}],
-                    zotonic
-                )
-            of
-                {ok, {{_, Status, _}, _, Body}} -> {ok, Status, Body};
-                {error, _} = Error -> Error
-            end
+            z_media_runner_http:request(post, Request, Timeout)
     end.
 
-%% The file descriptor is a file server, since httpc invokes the body generator
-%% from its own process. Each read is bounded and socket sends apply backpressure.
+%% The file descriptor is a file server, since the HTTPS worker invokes the body
+%% generator from its own process. Bounded reads and socket sends apply backpressure.
 -spec upload(binary(), binary(), binary(), file:filename_all(), non_neg_integer()) ->
     {ok, integer()} | {error, term()}.
 upload(Url, Token, Lease, Path, Size) ->
@@ -422,12 +411,10 @@ upload(Url, Token, Lease, Path, Size) ->
                             "application/octet-stream",
                             {fun upload_chunk/1, {Fd, Size}}
                         },
-                        %% Per-request socket options make httpc open a dedicated
-                        %% connection. A long PUT must not block job POSTs and callbacks
-                        %% queued on a shared keep-alive connection to the same host.
-                        case httpc:request(put, Request, http_options(3600000),
-                                [{body_format, binary}, {socket_opts, [{nodelay, true}]}], zotonic) of
-                            {ok, {{_, Status, _}, _, _}} -> {ok, Status};
+                        %% A dedicated connection keeps long uploads independent
+                        %% of job requests and callbacks to the same host.
+                        case z_media_runner_http:request(put, Request, 3600000) of
+                            {ok, Status, _} -> {ok, Status};
                             {error, _} = Error -> Error
                         end
                     after

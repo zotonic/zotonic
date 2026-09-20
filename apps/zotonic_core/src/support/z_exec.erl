@@ -606,16 +606,26 @@ stop_sandbox(OsPid, Reason) ->
     %% Unlike stop/1, kill/2 preserves erlexec's exit notification if the
     %% supervisor has just exited (a race observed on macOS).
     exec:kill(OsPid, sigterm),
-    flush_sandbox(OsPid),
+    flush_sandbox(OsPid, erlang:monotonic_time(millisecond) + 1000, false),
     {error, Reason}.
 
-flush_sandbox(OsPid) ->
-    receive
-        {'DOWN', OsPid, process, _, _} -> ok;
-        {stdout, OsPid, _} -> flush_sandbox(OsPid);
-        {stderr, OsPid, _} -> flush_sandbox(OsPid)
+%% Unsupported platforms have no native supervisor. Escalate if the command
+%% ignores SIGTERM, and bound reaping even if the OS cannot stop it immediately.
+flush_sandbox(OsPid, Deadline, Killed) ->
+    Remaining = Deadline - erlang:monotonic_time(millisecond),
+    case Remaining =< 0 of
+        true when Killed -> ok;
+        true ->
+            exec:kill(OsPid, sigkill),
+            flush_sandbox(OsPid, erlang:monotonic_time(millisecond) + 1000, true);
+        false ->
+            receive
+                {'DOWN', OsPid, process, _, _} -> ok;
+                {stdout, OsPid, _} -> flush_sandbox(OsPid, Deadline, Killed);
+                {stderr, OsPid, _} -> flush_sandbox(OsPid, Deadline, Killed)
+            after Remaining -> flush_sandbox(OsPid, Deadline, Killed)
+            end
     end.
-
 
 %% erlexec's monitor option reports exits, but does not monitor the caller.
 %% Cancel the native supervisor if the Erlang request process disappears.
@@ -629,6 +639,10 @@ guard_job(true, Pid, OsPid) ->
             done -> ok;
             {'DOWN', JobRef, process, Pid, _} -> ok;
             {'DOWN', OwnerRef, process, Owner, _} ->
-                catch exec:kill(OsPid, sigterm)
+                catch exec:kill(OsPid, sigterm),
+                receive
+                    {'DOWN', JobRef, process, Pid, _} -> ok
+                after 1000 -> catch exec:kill(OsPid, sigkill)
+                end
         end
     end).

@@ -57,12 +57,12 @@ preview(MovieFile, #{
     TmpFile = z_tempfile:new(),
     FfmpegCmd = unicode:characters_to_binary([
             case string:str(Cmdline, "-itsoffset") of
-                0 -> io_lib:format(Cmdline, [z_filelib:os_filename(MovieFile)]);
-                _ -> io_lib:format(Cmdline, [Start, z_filelib:os_filename(MovieFile)])
+                0 -> io_lib:format(Cmdline, [z_filelib:os_filename(unicode:characters_to_list(MovieFile))]);
+                _ -> io_lib:format(Cmdline, [Start, z_filelib:os_filename(unicode:characters_to_list(MovieFile))])
             end,
             " ",
             orientation_to_transpose(Orientation),
-            z_filelib:os_filename(TmpFile)
+            z_filelib:os_filename(unicode:characters_to_list(TmpFile))
         ]),
     jobs:run(media_preview_jobs,
         fun() ->

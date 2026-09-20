@@ -215,11 +215,11 @@ video_convert_1(QueuePath, Orientation, Mime, Context) ->
                     {ok, QueuePath1} ->
                         TmpFile = z_tempfile:new(),
                         FfmpegCmd = unicode:characters_to_binary(
-                                        [io_lib:format(Cmdline, [z_filelib:os_filename(QueuePath1)]),
+                                        [io_lib:format(Cmdline, [z_filelib:os_filename(unicode:characters_to_list(QueuePath1))]),
                                          " ",
                                          TransposeOption,
                                          " ",
-                                         z_filelib:os_filename(TmpFile)
+                                         z_filelib:os_filename(unicode:characters_to_list(TmpFile))
                                         ]),
                         ?LOG_INFO(#{
                             in => zotonic_mod_video,
@@ -284,9 +284,9 @@ maybe_reset_metadata("", QueuePath, _Mime, _Context) ->
 maybe_reset_metadata(_TransposeOption, QueuePath, Mime, Context) ->
     TmpFile = z_tempfile:new(z_media_identify:extension(Mime)),
     FfmpegCmd = unicode:characters_to_binary(
-                    [io_lib:format(?CMDLINE_RESETMETA, [z_filelib:os_filename(QueuePath)]),
+                    [io_lib:format(?CMDLINE_RESETMETA, [z_filelib:os_filename(unicode:characters_to_list(QueuePath))]),
                      " ",
-                     z_filelib:os_filename(TmpFile)
+                     z_filelib:os_filename(unicode:characters_to_list(TmpFile))
                     ]),
     RunOptions = #{
         timeout => ?FFMPEG_TIMEOUT,

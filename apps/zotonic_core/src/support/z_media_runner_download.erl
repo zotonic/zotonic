@@ -41,8 +41,8 @@ install(Files, Paths, Options, Fetch) ->
 
 pending_file(File, Paths) ->
     Path = proplists:get_value(maps:get(<<"id">>, File), Paths),
-    Suffix = binary_to_list(binary:encode_hex(crypto:strong_rand_bytes(16))),
-    {File, Path, z_convert:to_list(Path) ++ ".download-" ++ Suffix}.
+    Suffix = z_ids:id(32),
+    {File, Path, <<(unicode:characters_to_binary(Path))/binary, ".download-", Suffix/binary>>}.
 
 %% @doc Stream only from the configured runner; never forward OAuth credentials to callback-supplied hosts.
 -spec fetch(map(), file:filename_all(), map()) -> {ok, non_neg_integer(), binary()}.
@@ -50,52 +50,6 @@ fetch(#{<<"url">> := Url, <<"size">> := Size, <<"sha256">> := Hash}, Temp,
         #{media_runner_endpoint := Base, media_runner_token := Token}) ->
     Url = <<Base/binary, "/results/", Hash/binary>>,
     true = z_media_runner_protocol:https_url(Url),
-    %% {self, once} provides backpressure: only request the next HTTP chunk after
-    %% the previous chunk has been written and hashed.
-    {ok, Fd} = file:open(Temp, [write, exclusive, raw, binary]),
-    try
-        ok = file:change_mode(Temp, 8#600),
-        Headers = [{"authorization", "Bearer " ++ binary_to_list(Token)}, {"connection", "close"}],
-        {ok, Ref} = httpc:request(get, {binary_to_list(Url), Headers},
-            z_media_runner_protocol:http_options(3600000),
-            [{sync, false}, {stream, {self, once}}, {socket_opts, [{nodelay, true}]}], zotonic),
-        try
-            Deadline = erlang:monotonic_time(millisecond) + 3600000,
-            {Size, Hash} = receive_start(Ref, Fd, Size, Deadline),
-            ok = file:sync(Fd),
-            {ok, Size, Hash}
-        after
-            httpc:cancel_request(Ref, zotonic)
-        end
-    after
-        file:close(Fd)
-    end.
-
-receive_start(Ref, Fd, Size, Deadline) ->
-    receive
-        {http, {Ref, stream_start, Headers, Pid}} ->
-            undefined = proplists:get_value("content-range", Headers),
-            undefined = proplists:get_value("content-encoding", Headers),
-            Size = list_to_integer(proplists:get_value("content-length", Headers)),
-            httpc:stream_next(Pid),
-            receive_chunks(Ref, Pid, Fd, Size, 0, crypto:hash_init(sha256), Deadline);
-        {http, {Ref, Other}} -> error({download_failed, Other})
-    after remaining(Deadline) -> error(download_timeout)
-    end.
-
-receive_chunks(Ref, Pid, Fd, Limit, Count, Hash, Deadline) ->
-    receive
-        {http, {Ref, stream, Data}} ->
-            NewCount = Count + byte_size(Data),
-            true = NewCount =< Limit,
-            ok = file:write(Fd, Data),
-            httpc:stream_next(Pid),
-            receive_chunks(Ref, Pid, Fd, Limit, NewCount, crypto:hash_update(Hash, Data), Deadline);
-        {http, {Ref, stream_end, _}} ->
-            Limit = Count,
-            {Count, binary:encode_hex(crypto:hash_final(Hash), lowercase)};
-        {http, {Ref, Other}} -> error({download_failed, Other})
-    after remaining(Deadline) -> error(download_timeout)
-    end.
-
-remaining(Deadline) -> max(0, Deadline - erlang:monotonic_time(millisecond)).
+    Headers = [{"authorization", "Bearer " ++ binary_to_list(Token)}],
+    {ok, Size, Hash} = z_media_runner_http:download(Url, Headers, Temp, Size, 3600000),
+    {ok, Size, Hash}.

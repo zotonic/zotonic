@@ -228,7 +228,7 @@ audio_info(Path, Context) ->
         CmdlineCfg -> z_convert:to_list(CmdlineCfg)
     end,
     FfprobeCmd = lists:flatten([
-           Cmdline, " ", z_filelib:os_filename(Path)
+           Cmdline, " ", z_filelib:os_filename(unicode:characters_to_list(Path))
        ]),
     ?LOG_DEBUG(#{
         text => <<"Extract audio info">>,
@@ -300,15 +300,14 @@ audio_preview(MovieFile, Context) ->
         CmdlineCfg -> z_convert:to_list(CmdlineCfg)
     end,
     TmpFile = z_tempfile:new(),
-    FfmpegCmd = z_convert:to_list(
-        iolist_to_binary([
+    FfmpegCmd = unicode:characters_to_binary([
             case string:str(Cmdline, "-itsoffset") of
-                0 -> io_lib:format(Cmdline, [z_filelib:os_filename(MovieFile)]);
-                _ -> io_lib:format(Cmdline, [0, z_filelib:os_filename(MovieFile)])
+                0 -> io_lib:format(Cmdline, [z_filelib:os_filename(unicode:characters_to_list(MovieFile))]);
+                _ -> io_lib:format(Cmdline, [0, z_filelib:os_filename(unicode:characters_to_list(MovieFile))])
             end,
             " ",
-            z_filelib:os_filename(TmpFile)
-        ])),
+            z_filelib:os_filename(unicode:characters_to_list(TmpFile))
+        ]),
     jobs:run(media_preview_jobs,
         fun() ->
             case z_exec:run(ffmpeg, FfmpegCmd, #{read => [MovieFile], write => [TmpFile]}, Context) of

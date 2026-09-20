@@ -186,9 +186,9 @@ identify_file_unix(false, _File, _OriginalFilename, _Context) ->
     {error, no_file_cmd};
 identify_file_unix(Cmd, File, OriginalFilename, _Context) ->
     CmdLine = unicode:characters_to_list([
-        z_filelib:os_filename(Cmd),
+        z_filelib:os_filename(unicode:characters_to_list(Cmd)),
         " -b --mime-type -- ",
-        z_filelib:os_filename(File)
+        z_filelib:os_filename(unicode:characters_to_list(File))
     ]),
     %% MIME sniffing with the local file utility does not require a sandbox or
     %% remote upload. Keep bounded execution; image inspection below still uses
@@ -346,7 +346,7 @@ identify_file_imagemagick_1(false, _OsFamily, _ImageFile, _MimeFile, _Context) -
     ?LOG_ERROR("Please install ImageMagick for identifying the type of uploaded files."),
     {error, imagemagick_missing};
 identify_file_imagemagick_1(Cmd, _OsFamily, ImageFile, MimeTypeFromFile, Context) ->
-    CleanedImageFile = z_filelib:os_filename(z_convert:to_list(ImageFile) ++ "[0]"),
+    CleanedImageFile = z_filelib:os_filename(unicode:characters_to_list(ImageFile) ++ "[0]"),
     Profile = case MimeTypeFromFile of
         <<"application/pdf">> -> imagemagick_pdf;
         <<"application/postscript">> -> imagemagick_pdf;
