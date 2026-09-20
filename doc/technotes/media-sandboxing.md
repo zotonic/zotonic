@@ -105,6 +105,9 @@ Windows and BSD backends are not implemented. Unsupported platforms log a NOTICE
 and continue without OS isolation, retaining timeouts, bounded output and process-group
 cleanup. Linux kernels without Landlock ABI 3 have the same fallback. The media runner
 admin dashboard explicitly displays this state.
+Cancellation sends SIGTERM, escalates to SIGKILL after one second, and bounds the
+wait for exit notification. This also applies when no native sandbox supervisor
+is available and the command ignores SIGTERM.
 
 ## Configuration and failures
 
