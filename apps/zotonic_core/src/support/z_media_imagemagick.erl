@@ -170,10 +170,10 @@ warn_mismatch(Key, Remote) ->
     case z_config:get(media_runner_local_fallback, false) of
         true ->
             Local = local(),
-            Versions = {maps:get(version, Remote, missing), maps:get(version, Local, missing)},
+            Versions = {maps:get(major, Remote, missing), maps:get(major, Local, missing)},
             case Versions of
                 {Same, Same} -> persistent_term:erase({?MODULE, warning});
-                {RemoteVersion, LocalVersion} ->
+                {_, _} ->
                     Warning = {Key, Versions},
                     case persistent_term:get({?MODULE, warning}, undefined) of
                         Warning -> ok;
@@ -184,9 +184,9 @@ warn_mismatch(Key, Remote) ->
                                     _ ->
                                         persistent_term:put({?MODULE, warning}, Warning),
                                         ?LOG_WARNING(#{in => zotonic_core,
-                                            text => <<"Media runner and local ImageMagick versions differ; local fallback may fail or produce different previews">>,
-                                            remote_version => RemoteVersion,
-                                            local_version => LocalVersion})
+                                            text => <<"Media runner and local ImageMagick major versions differ; local fallback may fail or produce different previews">>,
+                                            remote_version => maps:get(version, Remote, missing),
+                                            local_version => maps:get(version, Local, missing)})
                                 end
                             end, [node()])
                     end

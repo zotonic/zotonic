@@ -54,7 +54,8 @@ jobs:
         run: |
           ZOTONIC_DBHOST=postgres bin/zotonic connectdb
           chown -R zotonic .
-          sudo -u zotonic bash -c "ZOTONIC_DBHOST=postgres bin/zotonic runtests"
+          # erlexec uses SHELL; the disabled-login account has a non-login shell.
+          sudo -u zotonic env SHELL=/bin/sh ZOTONIC_DBHOST=postgres bin/zotonic runtests
       - name: XRef
         run: make xref
       - name: Sandbox integration tests

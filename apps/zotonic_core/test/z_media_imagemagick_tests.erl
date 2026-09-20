@@ -91,6 +91,12 @@ version_probe() ->
             after 1000 -> error(missing_version_warning) end,
         z_media_imagemagick:selected(),
         receive {version_warning, _, _} -> error(repeated_warning) after 50 -> ok end,
+        %% Minor and patch differences within the same major must not warn.
+        ets:insert(Counter, {reply, {ok, 200, z_json:encode(#{imagemagick => #{
+            available => true, tool => <<"magick">>, major => 7, version => <<"7.0.8-1">>}})}}),
+        expire(remote),
+        ?assertMatch(#{major := 7}, z_media_imagemagick:selected()),
+        receive {version_warning, _, _} -> error(same_major_warning) after 50 -> ok end,
         ets:insert(Counter, {reply, {error, timeout}}),
         expire(remote),
         ?assertMatch(#{major := 7}, z_media_imagemagick:selected()),
