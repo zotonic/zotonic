@@ -1,6 +1,6 @@
 # Configure all ports
-# iptables port mappings are defined in zotonic-cloudinit.yml
-# Copy this file to ~/.zotonic/1/config.d/ports.yml
+# Low ports are enabled with setcap in zotonic-cloudinit.yml.
+# Copy this file to ~/.config/zotonic/config/1/config.d/ports.yml.
 zotonic:
     # IP addresses to listen on
     listen_ip: any

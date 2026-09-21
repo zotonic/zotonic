@@ -137,7 +137,7 @@ callback_url(Context) ->
 submit(Url, Token, Callback, Job, Options) ->
     Id = z_ids:id(32),
     Secret = z_ids:id(44),
-    Wait = z_config:get(media_runner_wait_timeout, 3900000),
+    WaitSeconds = z_config:get(media_runner_wait_timeout, 3900),
     case gen_server:call(?MODULE, {register, Id, Secret, self()}) of
         ok ->
             try
@@ -145,7 +145,7 @@ submit(Url, Token, Callback, Job, Options) ->
                     <<"id">> => Id,
                     <<"callback_url">> => Callback,
                     <<"callback_token">> => Secret,
-                    <<"expires">> => erlang:system_time(second) + Wait div 1000
+                    <<"expires">> => erlang:system_time(second) + WaitSeconds
                 },
                 case submit_request(Url, Token, Request, Options, 2) of
                     ok ->
@@ -166,7 +166,8 @@ submit(Url, Token, Callback, Job, Options) ->
                                         ok
                                 end,
                                 Received
-                        after Wait -> {error, {media_runner_unavailable, callback_timeout}}
+                        after WaitSeconds * 1000 ->
+                            {error, {media_runner_unavailable, callback_timeout}}
                         end;
                     {ok, Code} when Code =:= 429; Code =:= 502; Code =:= 503; Code =:= 504 ->
                         {error, {media_runner_unavailable, Code}};
