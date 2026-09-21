@@ -219,7 +219,11 @@
 
 %%% ClamAV settings, used by mod_clamav for virus scanning.
 %%% Check your clamd config for the correct values.
+%%% The clamav_socket path should match LocalSocket in clamd.conf. It is tried on
+%%% every connection, falling back to clamav_ip and clamav_port if unavailable.
+%%% Set clamav_socket to false or an empty string to use TCP only.
 %%% The clamav_max_size is the byte value of StreamMaxLength, which defaults to 25M
+   %% {clamav_socket, "/run/clamav/clamd.ctl"},
    %% {clamav_ip, "127.0.0.1"},
    %% {clamav_port, 3310},
    %% {clamav_max_size, 26214400},
