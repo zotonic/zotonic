@@ -448,6 +448,7 @@ with_files(Fun) ->
 
 %% The environment is server configuration, never a value supplied in a job.
 https_environment_test() ->
+    {ok, _} = application:ensure_all_started(tls_certificate_check),
     Old = application:get_env(zotonic, environment),
     try
         lists:foreach(fun({Environment, Expected}) ->

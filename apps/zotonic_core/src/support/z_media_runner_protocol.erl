@@ -27,7 +27,7 @@ trusted Erlang staging step; sandbox grants contain private job copies, never th
 -export([
     pack/3,
     hash_file/1, hash_file/2,
-    output_limit/0, http_options/1,
+    output_limit/0, http_options/1, control_url/2,
     input_limit/0,
     upload/5,
     validate/1,
@@ -351,6 +351,19 @@ endpoint(Hostname) ->
         _:_ -> {error, media_runner_configuration}
     end.
 
+%% @doc Locate a control operation on the standard model API, alongside streaming routes.
+-spec control_url(binary(), binary()) -> binary().
+control_url(Url, Operation) ->
+    Parts = uri_string:parse(Url),
+    Result = uri_string:recompose(maps:without([query, fragment], Parts#{
+        path => case Operation of
+            <<"capabilities">> -> <<"/api/model/mediarunner_job/get/capabilities">>;
+            _ -> <<"/api/model/mediarunner_job/post/", Operation/binary>>
+        end
+    })),
+    true = is_binary(Result),
+    Result.
+
 -spec https_url(term()) -> boolean().
 https_url(Url) when is_binary(Url), byte_size(Url) =< 2048 ->
     try uri_string:parse(Url) of
@@ -367,29 +380,40 @@ https_url(_) ->
 
 %% Only administrator-approved HTTPS destinations. Redirects MUST NOT receive credentials.
 
--spec post(binary(), binary(), map()) -> {ok, integer()} | {error, term()}.
+%% @doc Send a JSON callback and report whether the receiver accepted it.
+-spec post(binary(), binary(), map()) -> ok | {error, term()}.
 post(Url, Token, Payload) ->
     case request(Url, Token, Payload) of
-        {ok, Code, _Body} -> {ok, Code};
+        {ok, _} -> ok;
         {error, _} = Error -> Error
     end.
 
--spec request(binary(), binary(), map()) -> {ok, integer(), binary()} | {error, term()}.
+-spec request(binary(), binary(), map()) -> {ok, map()} | {error, term()}.
 request(Url, Token, Payload) -> request(Url, Token, Payload, 30000).
 
--spec request(binary(), binary(), map(), pos_integer()) -> {ok, integer(), binary()} | {error, term()}.
+%% @doc Exchange small JSON control messages; source and result files use streaming HTTP.
+-spec request(binary(), binary(), map(), pos_integer()) -> {ok, map()} | {error, term()}.
 request(Url, Token, Payload, Timeout) ->
     case https_url(Url) of
-        false ->
-            {error, invalid_url};
+        false -> {error, invalid_url};
         true ->
-            Request = {
-                binary_to_list(Url),
-                [{"authorization", "Bearer " ++ binary_to_list(Token)}],
-                "application/json",
-                z_json:encode(Payload)
-            },
-            z_media_runner_http:request(post, Request, Timeout)
+            Options = [
+                {autoredirect, false},
+                {content_type, <<"application/json">>},
+                {timeout, Timeout},
+                {max_length, 65536},
+                {insecure, z_config:get(environment) =:= development}
+            ] ++ case Token of
+                <<>> -> [];
+                _ -> [{authorization, <<"Bearer ", Token/binary>>}]
+            end,
+            case z_fetch:fetch_json(post, Url, Payload, Options, undefined) of
+                {ok, #{<<"status">> := <<"ok">>, <<"result">> := Map}} when is_map(Map) -> {ok, Map};
+                {ok, Map} when map_size(Map) =:= 0 -> {ok, Map};
+                {ok, _} -> {error, invalid_response};
+                {error, {Code, _, _, _, _}} -> {error, {http_status, Code}};
+                {error, _} = Error -> Error
+            end
     end.
 
 %% The file descriptor is a file server, since the HTTPS worker invokes the body
@@ -441,14 +465,9 @@ http_options(Timeout) ->
     [{autoredirect, false}, {ssl, Ssl}, {connect_timeout, 5000}, {timeout, Timeout}].
 
 verified_ssl_options() ->
-    Trust =
-        case z_config:get(media_runner_cacertfile) of
-            undefined -> {cacerts, certifi:cacerts()};
-            File -> {cacertfile, z_convert:to_list(File)}
-        end,
     [
         {verify, verify_peer},
-        Trust,
+        {cacerts, tls_certificate_check:trusted_authorities()},
         {customize_hostname_check, [
             {match_fun, public_key:pkix_verify_hostname_match_fun(https)}
         ]}

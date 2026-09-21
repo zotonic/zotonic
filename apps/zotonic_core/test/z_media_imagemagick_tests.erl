@@ -31,7 +31,7 @@ version_probe_test_() -> {timeout, 30, fun version_probe/0}.
 
 version_probe() ->
     Keys = [media_runner_hostname, media_runner_oauth2_key, media_runner_local_fallback,
-        media_runner_cacertfile, environment],
+        environment],
     Old = [{K, application:get_env(zotonic, K)} || K <- Keys],
     Counter = ets:new(version_probe, [public, set]),
     ets:insert(Counter, [{calls, 0}, {reply, version(6)}]),
@@ -42,7 +42,6 @@ version_probe() ->
         application:set_env(zotonic, media_runner_hostname, <<"runner.example">>),
         application:set_env(zotonic, media_runner_oauth2_key, <<"token-a">>),
         application:set_env(zotonic, media_runner_local_fallback, false),
-        application:unset_env(zotonic, media_runner_cacertfile),
         application:set_env(zotonic, environment, production),
         meck:expect(z_exec, run, fun(Command, #{timeout := 5000, max_size := 65536}) ->
             ?assert(is_binary(Command)),
@@ -92,7 +91,7 @@ version_probe() ->
         z_media_imagemagick:selected(),
         receive {version_warning, _, _} -> error(repeated_warning) after 50 -> ok end,
         %% Minor and patch differences within the same major must not warn.
-        ets:insert(Counter, {reply, {ok, 200, z_json:encode(#{imagemagick => #{
+        ets:insert(Counter, {reply, {ok, json(#{imagemagick => #{
             available => true, tool => <<"magick">>, major => 7, version => <<"7.0.8-1">>}})}}),
         expire(remote),
         ?assertMatch(#{major := 7}, z_media_imagemagick:selected()),
@@ -100,7 +99,7 @@ version_probe() ->
         ets:insert(Counter, {reply, {error, timeout}}),
         expire(remote),
         ?assertMatch(#{major := 7}, z_media_imagemagick:selected()),
-        ets:insert(Counter, {reply, {ok, 401, <<>>}}),
+        ets:insert(Counter, {reply, {error, {http_status, 403}}}),
         expire(remote),
         ?assertMatch(#{available := false}, z_media_imagemagick:selected()),
         application:unset_env(zotonic, media_runner_hostname),
@@ -120,7 +119,7 @@ version(Major) ->
         6 -> {<<"convert">>, <<"6.9.12-1">>};
         7 -> {<<"magick">>, <<"7.1.2-3">>}
     end,
-    {ok, 200, z_json:encode(#{imagemagick => #{available => true,
+    {ok, json(#{imagemagick => #{available => true,
         tool => Tool, major => Major, version => Version}})}.
 
 calls(Counter) -> ets:lookup_element(Counter, calls, 2).
@@ -128,3 +127,5 @@ calls(Counter) -> ets:lookup_element(Counter, calls, 2).
 expire(Scope) ->
     {Key, _, Value} = persistent_term:get({z_media_imagemagick, Scope}),
     persistent_term:put({z_media_imagemagick, Scope}, {Key, erlang:monotonic_time(second) - 1, Value}).
+
+json(Value) -> z_json:decode(z_json:encode(Value)).

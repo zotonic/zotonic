@@ -122,7 +122,7 @@ submit(Url, Token, Callback, Job, Options) ->
                     <<"expires">> => erlang:system_time(second) + Wait div 1000
                 },
                 case submit_request(Url, Token, Request, Options, 2) of
-                    {ok, Code} when Code =:= 200; Code =:= 202 ->
+                    ok ->
                         receive
                             {media_runner_result, Id, Result} ->
                                 Received = z_media_runner_protocol:unpack(Result, Options#{
@@ -134,7 +134,8 @@ submit(Url, Token, Callback, Job, Options) ->
                                     {ok, _} ->
                                         %% A lost receipt merely retains the cache pin until expiry.
                                         z_media_runner_protocol:request(
-                                            <<Url/binary, "/", Id/binary, "/results-received">>, Token, #{});
+                                            z_media_runner_protocol:control_url(Url, <<"received">>),
+                                            Token, #{<<"id">> => Id});
                                     _ -> ok
                                 end,
                                 Received
@@ -157,28 +158,35 @@ submit(Url, Token, Callback, Job, Options) ->
     end.
 
 %% Optimistic hash-only submission avoids even a preflight round trip on cache hits.
-%% A 412 lists precisely which inputs were evicted or have never been uploaded.
+%% The missing outcome lists precisely which inputs need uploading.
 submit_request(Url, Token, Request, Options, Retries) ->
-    case z_media_runner_protocol:request(Url, Token, Request) of
-        {ok, 412, Body} when Retries > 0, byte_size(Body) < 8192 ->
-            try z_json:decode(Body) of
-                #{<<"missing">> := Missing} when is_list(Missing), Missing =/= [] ->
-                    Files = maps:get(<<"files">>, Request),
-                    Known = [H || #{<<"sha256">> := H} <- Files],
-                    true = lists:all(fun(H) -> lists:member(H, Known) end, Missing),
-                    Paths = lists:usort(maps:get(read, Options, []) ++ maps:get(write, Options, [])),
-                    case upload_missing(lists:usort(Missing), Files, Paths, Url, Token) of
-                        ok -> submit_request(Url, Token, Request, Options, Retries - 1);
-                        {ok, Code} -> {ok, Code};
-                        {error, _} = Error -> Error
-                    end;
-                _ -> {error, {protocol, invalid_cache_response}}
+    ControlUrl = z_media_runner_protocol:control_url(Url, <<"submit">>),
+    case z_media_runner_protocol:request(ControlUrl, Token, Request) of
+        {ok, #{<<"outcome">> := <<"missing">>, <<"missing">> := Missing}}
+                when Retries > 0, is_list(Missing), Missing =/= [] ->
+            try
+                Files = maps:get(<<"files">>, Request),
+                Known = [H || #{<<"sha256">> := H} <- Files],
+                true = lists:all(fun(H) -> lists:member(H, Known) end, Missing),
+                Paths = lists:usort(maps:get(read, Options, []) ++ maps:get(write, Options, [])),
+                case upload_missing(lists:usort(Missing), Files, Paths, Url, Token) of
+                    ok -> submit_request(Url, Token, Request, Options, Retries - 1);
+                    {ok, Code} -> {ok, Code};
+                    {error, _} = Error -> Error
+                end
             catch
                 _:_ -> {error, {protocol, invalid_cache_response}}
             end;
-        {ok, Code, _} -> {ok, Code};
-        {error, _} = Error -> Error
+        {ok, #{<<"outcome">> := <<"accepted">>}} -> ok;
+        Reply -> control_result(Reply)
     end.
+
+control_result({ok, #{<<"outcome">> := <<"full">>}}) -> {ok, 429};
+control_result({ok, #{<<"outcome">> := <<"unavailable">>}}) -> {ok, 503};
+control_result({ok, #{<<"outcome">> := <<"conflict">>}}) -> {ok, 409};
+control_result({ok, _}) -> {error, {protocol, invalid_response}};
+control_result({error, {http_status, Code}}) -> {ok, Code};
+control_result({error, _} = Error) -> Error.
 
 upload_missing([], _Files, _Paths, _Url, _Token) -> ok;
 upload_missing([Hash | Rest], Files, Paths, Url, Token) ->
@@ -193,18 +201,18 @@ upload_missing([Hash | Rest], Files, Paths, Url, Token) ->
 
 %% Reserving the hash serializes concurrent clients before any file bytes are sent.
 ensure_uploaded(Url, Token, Path, Size, Deadline) ->
-    case z_media_runner_protocol:request(Url, Token, #{<<"size">> => Size}) of
-        {ok, 200, _} -> ok;
-        {ok, 201, Body} when byte_size(Body) < 8192 ->
-            #{<<"upload_token">> := Lease} = z_json:decode(Body),
+    Hash = lists:last(binary:split(Url, <<"/">>, [global])),
+    ControlUrl = z_media_runner_protocol:control_url(Url, <<"reserve">>),
+    case z_media_runner_protocol:request(ControlUrl, Token, #{<<"hash">> => Hash, <<"size">> => Size}) of
+        {ok, #{<<"outcome">> := <<"present">>}} -> ok;
+        {ok, #{<<"outcome">> := <<"upload">>, <<"upload_token">> := Lease}} ->
             case z_media_runner_protocol:upload(Url, Token, Lease, Path, Size) of
                 {ok, 204} -> ok;
                 {ok, 409} -> wait_for_upload(Url, Token, Path, Size, Deadline);
                 Error -> Error
             end;
-        {ok, 409, _} -> wait_for_upload(Url, Token, Path, Size, Deadline);
-        {ok, Code, _} -> {ok, Code};
-        {error, _} = Error -> Error
+        {ok, #{<<"outcome">> := <<"busy">>}} -> wait_for_upload(Url, Token, Path, Size, Deadline);
+        Reply -> control_result(Reply)
     end.
 
 %% A busy hash or an expired claim must return to reservation, never resend bytes

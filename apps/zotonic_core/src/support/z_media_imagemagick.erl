@@ -36,9 +36,8 @@ selected() ->
         false -> local();
         true ->
             Config = [z_config:get(K) || K <- [media_runner_hostname, media_runner_oauth2_key,
-                environment, media_runner_cacertfile, media_runner_local_fallback]],
-            Ca = z_config:get(media_runner_cacertfile),
-            Key = crypto:hash(sha256, term_to_binary({Config, executable_info(Ca)})),
+                environment, media_runner_local_fallback]],
+            Key = crypto:hash(sha256, term_to_binary(Config)),
             case cached(remote, Key, fun remote/0) of
                 {ok, Info} ->
                     warn_mismatch(Key, Info),
@@ -67,7 +66,6 @@ local() ->
     end.
 
 executable_info(false) -> undefined;
-executable_info(undefined) -> undefined;
 executable_info(Path) ->
     case file:read_file_info(Path, [{time, posix}]) of
         {ok, #file_info{mtime = MTime, ctime = CTime, size = Size, inode = Inode}} ->
@@ -111,18 +109,18 @@ remote() ->
     case z_media_runner_protocol:endpoint(z_config:get(media_runner_hostname)) of
         {ok, Base} ->
             Token = z_convert:to_binary(z_config:get(media_runner_oauth2_key, <<>>)),
-            case z_media_runner_protocol:request(<<Base/binary, "/capabilities">>, Token, #{}, 5000) of
-                {ok, 200, Body} when byte_size(Body) =< 4096 -> decode(Body);
-                {ok, Code, _} when Code =:= 429; Code =:= 502; Code =:= 503; Code =:= 504 ->
+            case z_media_runner_protocol:request(z_media_runner_protocol:control_url(Base, <<"capabilities">>), Token, #{}, 5000) of
+                {ok, Info} -> decode(Info);
+                {error, {http_status, Code}} when Code =:= 429; Code =:= 502; Code =:= 503; Code =:= 504 ->
                     {error, unavailable};
-                {error, _} -> {error, unavailable};
-                _ -> {error, invalid_capabilities}
+                {error, {http_status, _}} -> {error, invalid_capabilities};
+                {error, _} -> {error, unavailable}
             end;
         _ -> {error, configuration}
     end.
 
 decode(Body) ->
-    try z_json:decode(Body) of
+    try Body of
         #{<<"imagemagick">> := #{<<"available">> := false}} -> {ok, missing()};
         #{<<"imagemagick">> := #{<<"tool">> := Tool, <<"version">> := Version, <<"major">> := Major}}
                 when (Tool =:= <<"magick">> orelse Tool =:= <<"convert">>),
