@@ -178,20 +178,20 @@ number(Max) ->
         Context :: z:context(),
         Key :: binary().
 ensure_sign_key(Name, Generate, Context) ->
-    global:trans(
-        {{?MODULE, Name}, self()},
-        fun() ->
-            case application:get_env(zotonic_core, Name) of
-                undefined ->
+    case application:get_env(zotonic_core, Name) of
+        undefined ->
+            global:trans(
+                {{?MODULE, Name}, self()},
+                fun() ->
                     Key = Generate(),
-                    application:set_env(zotonic_core, Name, Key),
                     m_config:set_value(site, Name, Key, Context),
-                    Key;
-                {ok, Key} ->
                     Key
-            end
-        end,
-        [node()]).
+                end,
+                [node()]);
+        {ok, Key} ->
+            Key
+    end.
+
 
 -spec make_unique() -> binary().
 %% @doc Create an unique temporary id, safe to use in html and javascript.
