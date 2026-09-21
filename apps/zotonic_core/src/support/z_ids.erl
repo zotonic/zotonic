@@ -128,12 +128,16 @@ optid(Id) ->
 %% @doc Get the key for signing requests stored in the user agent.
 sign_key(Context) ->
     case m_config:get_value(site, sign_key, Context) of
-        undefined ->
-            Key = sign_key(),
-            m_config:set_value(site, sign_key, Key, Context),
-            Key;
-        <<>> ->
-            application_key(sign_key);
+        None when None =:= undefined; None =:= <<>> ->
+            case application:get_env(zotonic_core, sign_key) of
+                undefined ->
+                    Key = sign_key(),
+                    application:set_env(zotonic_core, sign_key, Key),
+                    m_config:set_value(site, sign_key, Key, Context),
+                    Key;
+                {ok, Key} ->
+                    Key
+            end;
         SignKey ->
             SignKey
     end.
@@ -147,12 +151,16 @@ sign_key() ->
 %% @doc Get the key for less secure signing of data (without nonce).
 sign_key_simple(Context) ->
     case m_config:get_value(site, sign_key_simple, Context) of
-        undefined ->
-            Key = sign_key_simple(),
-            m_config:set_value(site, sign_key_simple, Key, Context),
-            Key;
-        <<>> ->
-            application_key(sign_key_simple);
+        None when None =:= undefined; None =:= <<>> ->
+            case application:get_env(zotonic_core, sign_key_simple) of
+                undefined ->
+                    Key = sign_key_simple(),
+                    application:set_env(zotonic_core, sign_key_simple, Key),
+                    m_config:set_value(site, sign_key_simple, Key, Context),
+                    Key;
+                {ok, Key} ->
+                    Key
+            end;
         SignKey ->
             SignKey
     end.
@@ -161,20 +169,6 @@ sign_key_simple(Context) ->
 %% @doc Generate a key for less secure signing of data (without nonce).
 sign_key_simple() ->
     random_id('azAZ09', ?SIGN_KEY_SIMPLE_LENGTH).
-
--spec application_key(atom()) -> binary().
-%% @doc Set/get a default sign key for the zotonic core functions.
-%% Returns a binary of 50 random numbers and upper and lower case
-%% characters.
-application_key(Name) when is_atom(Name) ->
-    case application:get_env(zotonic_core, Name) of
-        undefined ->
-            Key = random_id('azAZ09', 50),
-            application:set_env(zotonic_core, Name, Key),
-            Key;
-        {ok, Key} ->
-            Key
-    end.
 
 -spec number() -> pos_integer().
 %% @doc Equivalent to `number(1000000000)'.
