@@ -127,8 +127,8 @@ optid(Id) ->
 -spec sign_key(Context::term()) -> binary().
 %% @doc Get the key for signing requests stored in the user agent.
 sign_key(Context) ->
-    case m_config:get_value(site, sign_key, Context) of
-        None when None =:= undefined; None =:= <<>> ->
+    case z_convert:to_binary(m_config:get_value(site, sign_key, Context)) of
+        <<>> ->
             case application:get_env(zotonic_core, sign_key) of
                 undefined ->
                     Key = sign_key(),
@@ -150,8 +150,8 @@ sign_key() ->
 -spec sign_key_simple(Context::term()) -> binary().
 %% @doc Get the key for less secure signing of data (without nonce).
 sign_key_simple(Context) ->
-    case m_config:get_value(site, sign_key_simple, Context) of
-        None when None =:= undefined; None =:= <<>> ->
+    case z_convert:to_binary(m_config:get_value(site, sign_key_simple, Context)) of
+        <<>> ->
             case application:get_env(zotonic_core, sign_key_simple) of
                 undefined ->
                     Key = sign_key_simple(),
