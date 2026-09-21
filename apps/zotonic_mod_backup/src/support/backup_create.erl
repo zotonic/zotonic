@@ -46,15 +46,23 @@ dir(Context) ->
 
 %% @doc Create a file with the password for the psql connectie
 pg_passfile(DbOpts, Context) ->
-    Host = proplists:get_value(dbhost, DbOpts),
+    Host = z_db_pgsql:normalize_host(proplists:get_value(dbhost, DbOpts)),
     Port = proplists:get_value(dbport, DbOpts),
     User = proplists:get_value(dbuser, DbOpts),
     Password = proplists:get_value(dbpassword, DbOpts),
     Database = proplists:get_value(dbdatabase, DbOpts),
     PgPass = filename:join([dir(Context), ".pgpass"]),
+    %% libpq uses localhost as the password lookup host for its default socket
+    %% directory. Include both forms because that default depends on its build.
+    Hosts = case Host of
+        [$/ | _] -> [Host, "localhost"];
+        <<"/", _/binary>> -> [Host, "localhost"];
+        _ -> [Host]
+    end,
     ok = file:write_file(PgPass, iolist_to_binary([
-        Host, $:, z_convert:to_binary(Port), $:,
-        Database, $:, User, $:, Password
+        [H, $:, z_convert:to_binary(Port), $:,
+         Database, $:, User, $:, Password, $\n]
+        || H <- Hosts
     ])),
     ok = file:change_mode(PgPass, 8#00600),
     {ok, PgPass}.
@@ -344,7 +352,7 @@ write_admin_file(Data, Context) ->
 %% @doc Dump the sql database into the backup directory.  The Name is the basename of the dump.
 pg_dump(Name, DbDump, Context) ->
     DbOpts = z_db_pool:get_database_options(Context),
-    Host = proplists:get_value(dbhost, DbOpts),
+    Host = z_db_pgsql:normalize_host(proplists:get_value(dbhost, DbOpts)),
     Port = proplists:get_value(dbport, DbOpts),
     User = proplists:get_value(dbuser, DbOpts),
     Database = proplists:get_value(dbdatabase, DbOpts),
@@ -540,4 +548,3 @@ archive_cmd() ->
 
 db_dump_cmd() ->
     unicode:characters_to_list(z_config:get(pg_dump, "pg_dump")).
-

@@ -54,6 +54,7 @@ Use a socket directory writable only by trusted users to prevent server spoofing
     is_connection_alive/1,
 
     build_connect_options/2,
+    normalize_host/1,
 
     ensure_all_started/0,
     test_connection/1,
@@ -886,14 +887,8 @@ build_connect_options(DatabaseName, Args) ->
         Host :: inet:socket_address() | inet:hostname(),
         Port :: inet:port_number().
 connect_address(Args) ->
-    connect_address(get_arg(dbhost, Args), get_arg(dbport, Args)).
+    connect_address(normalize_host(get_arg(dbhost, Args)), get_arg(dbport, Args)).
 
-connect_address(socket, Port) ->
-    connect_address("/run/postgresql", Port);
-connect_address("socket", Port) ->
-    connect_address(socket, Port);
-connect_address(<<"socket">>, Port) ->
-    connect_address(socket, Port);
 connect_address(<<"/", _/binary>> = Directory, Port) ->
     connect_address(unicode:characters_to_list(Directory), Port);
 connect_address([$/ | _] = Directory, Port) ->
@@ -901,6 +896,17 @@ connect_address([$/ | _] = Directory, Port) ->
     {{local, Path}, 0};
 connect_address(Host, Port) ->
     {Host, Port}.
+
+%% @doc Resolve the socket alias to a directory, also suitable for libpq clients
+%% such as pg_dump and psql. Preserve explicit directories and TCP addresses.
+-spec normalize_host(Host) -> NormalizedHost
+    when
+        Host :: socket | binary() | inet:hostname() | inet:ip_address(),
+        NormalizedHost :: binary() | inet:hostname() | inet:ip_address().
+normalize_host(socket) -> "/run/postgresql";
+normalize_host("socket") -> "/run/postgresql";
+normalize_host(<<"socket">>) -> "/run/postgresql";
+normalize_host(Host) -> Host.
 
 maybe_put_args([], _, Map) ->
     Map;

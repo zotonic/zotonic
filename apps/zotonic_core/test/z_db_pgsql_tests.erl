@@ -2,6 +2,18 @@
 
 -include_lib("eunit/include/eunit.hrl").
 
+libpq_host_test() ->
+    lists:foreach(
+        fun(Host) ->
+            ?assertEqual("/run/postgresql", z_db_pgsql:normalize_host(Host))
+        end,
+        [socket, "socket", <<"socket">>]),
+    lists:foreach(
+        fun(Host) ->
+            ?assertEqual(Host, z_db_pgsql:normalize_host(Host))
+        end,
+        ["/custom/postgresql", <<"/custom/postgresql">>, "localhost", "db.example.com", {127, 0, 0, 1}]).
+
 socket_options_test() ->
     lists:foreach(
         fun(Host) ->
