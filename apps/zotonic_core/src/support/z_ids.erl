@@ -129,15 +129,7 @@ optid(Id) ->
 sign_key(Context) ->
     case z_convert:to_binary(m_config:get_value(site, sign_key, Context)) of
         <<>> ->
-            case application:get_env(zotonic_core, sign_key) of
-                undefined ->
-                    Key = sign_key(),
-                    application:set_env(zotonic_core, sign_key, Key),
-                    m_config:set_value(site, sign_key, Key, Context),
-                    Key;
-                {ok, Key} ->
-                    Key
-            end;
+            ensure_sign_key(sign_key, fun sign_key/0, Context);
         SignKey ->
             SignKey
     end.
@@ -152,15 +144,7 @@ sign_key() ->
 sign_key_simple(Context) ->
     case z_convert:to_binary(m_config:get_value(site, sign_key_simple, Context)) of
         <<>> ->
-            case application:get_env(zotonic_core, sign_key_simple) of
-                undefined ->
-                    Key = sign_key_simple(),
-                    application:set_env(zotonic_core, sign_key_simple, Key),
-                    m_config:set_value(site, sign_key_simple, Key, Context),
-                    Key;
-                {ok, Key} ->
-                    Key
-            end;
+            ensure_sign_key(sign_key_simple, fun sign_key_simple/0, Context);
         SignKey ->
             SignKey
     end.
@@ -185,6 +169,29 @@ number(Max) ->
 %%%--------------------------------------------------------------------------
 %%% Internal functions
 %%%--------------------------------------------------------------------------
+
+%% Serialize initialization across sites, as the fallback key is node-wide.
+-spec ensure_sign_key(Name, Generate, Context) -> Key
+    when
+        Name :: sign_key | sign_key_simple,
+        Generate :: fun(() -> binary()),
+        Context :: z:context(),
+        Key :: binary().
+ensure_sign_key(Name, Generate, Context) ->
+    global:trans(
+        {{?MODULE, Name}, self()},
+        fun() ->
+            case application:get_env(zotonic_core, Name) of
+                undefined ->
+                    Key = Generate(),
+                    application:set_env(zotonic_core, Name, Key),
+                    m_config:set_value(site, Name, Key, Context),
+                    Key;
+                {ok, Key} ->
+                    Key
+            end
+        end,
+        [node()]).
 
 -spec make_unique() -> binary().
 %% @doc Create an unique temporary id, safe to use in html and javascript.
