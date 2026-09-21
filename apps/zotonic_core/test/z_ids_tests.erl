@@ -1,6 +1,8 @@
 %% @hidden
 -module(z_ids_tests).
 
+-ifdef(TEST).
+
 -include_lib("eunit/include/eunit.hrl").
 
 sign_key_test_() ->
@@ -71,3 +73,5 @@ receive_key({Pid, Ref}) ->
     after 10000 ->
         error(worker_timeout)
     end.
+
+-endif.
