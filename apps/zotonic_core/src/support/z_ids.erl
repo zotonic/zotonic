@@ -183,9 +183,14 @@ ensure_sign_key(Name, Generate, Context) ->
             global:trans(
                 {{?MODULE, Name}, self()},
                 fun() ->
-                    Key = Generate(),
-                    m_config:set_value(site, Name, Key, Context),
-                    Key
+                    case z_convert:to_binary(m_config:get_value(site, Name, Context)) of
+                        <<>> ->
+                            Key = Generate(),
+                            m_config:set_value(site, Name, Key, Context),
+                            Key;
+                        Key ->
+                            Key
+                    end
                 end,
                 [node()]);
         {ok, Key} ->
