@@ -8,7 +8,7 @@
         <h2>{_ Dashboard _}</h2>
     </div>
 
-    {% include "_admin_status_alert.tpl" %}
+    {% all include "_admin_status_alert.tpl" %}
     {% include "_admin_dashboard_buttons.tpl" %}
     {% include "_admin_dashboard.tpl" %}
 {% endblock %}

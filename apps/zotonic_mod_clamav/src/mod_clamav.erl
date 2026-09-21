@@ -34,6 +34,13 @@ Configure in the `zotonic.config` file where `clamd` is listening.
 
 The following configs are available:
 
+`clamav_socket`
+
+Unix domain socket path of `clamd`, default to `/run/clamav/clamd.ctl`. Before every scan or ping,
+the module tries to connect to this socket. If the connection fails, it falls back to `clamav_ip`
+and `clamav_port`. Set to `false` or an empty string to use TCP only. The Zotonic process must have
+permission to connect to the socket. Set this path to the `LocalSocket` value in `clamd.conf`.
+
 `clamav_ip`
 
 IP address of `clamd`, default to `\"127.0.0.1\"`
@@ -57,13 +64,16 @@ All clamav results are logged, any infected files or other errors are logged to 
 Every hour the module checks if it can reach `clamd` using the configured settings. It will log an error if `clamd`
 can’t be reached, and an info message if it can be reached.
 
+The admin dashboard also checks connectivity asynchronously on each page load. If ClamAV cannot
+be reached, it displays a warning that file uploads are blocked until the scanner is available again.
+
 Accepted Events
 ---------------
 
 This module handles the following notifier callbacks:
 
 - `observe_media_upload_preprocess`: Check the uploaded file with clamav using `z_acl:user`.
-- `observe_tick_1h`: Periodic ping of clamav to check the settings using `z_clamav:ip_port`.
+- `observe_tick_1h`: Periodic ping of clamav using the configured socket or TCP endpoint.
 
 ").
 
@@ -150,23 +160,18 @@ scan_file(File, Mime, Context) ->
 
 %% @doc Periodic ping of clamav to check the settings
 observe_tick_1h(tick_1h, _Context) ->
-    {IP, Port} = z_clamav:ip_port(),
     case z_clamav:ping() of
         pong ->
             ?LOG_INFO(#{
                 text => <<"Virus scanner: ping ok for clamav">>,
                 in => zotonic_mod_clamav,
-                result => ok,
-                ip => IP,
-                port => Port
+                result => ok
             });
         pang ->
             ?LOG_WARNING(#{
                 text => <<"Virus scanner: can not ping clamav daemon">>,
                 in => zotonic_mod_clamav,
                 result => error,
-                reason => pang,
-                ip => IP,
-                port => Port
+                reason => pang
             })
     end.

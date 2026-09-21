@@ -29,6 +29,7 @@
 
 -define(CLAMAV_IP, "127.0.0.1").
 -define(CLAMAV_PORT, 3310).
+-define(CLAMAV_SOCKET, "/run/clamav/clamd.ctl").
 -define(CLAMAV_MAX_SIZE, 25*1024*1024).  % Default for StreamMaxLength clamav config
 -define(CLAMAV_CHUNK_SIZE, 65536).
 -define(CLAMAV_RECV_TIMEOUT, 30000).
@@ -87,13 +88,12 @@ scan( Data ) when is_binary(Data) ->
 %% @doc Send a command to clamd, return the reply.
 -spec do_clam( binary(), function() ) -> {ok, binary()} | {error, term()}.
 do_clam(Command, DataFun) ->
-    {ClamIP, ClamPort} = ip_port(),
     ConnectOptions = [
         binary,
         {packet, 0},
         {active, true}
     ],
-    case gen_tcp:connect(ClamIP, ClamPort, ConnectOptions) of
+    case connect(ConnectOptions) of
         {ok, Socket} ->
             ok = gen_tcp:send(Socket, Command),
             _ = DataFun(Socket),
@@ -101,6 +101,7 @@ do_clam(Command, DataFun) ->
             _ = gen_tcp:close(Socket),
             Result;
         {error, Reason} = Error ->
+            {ClamIP, ClamPort} = ip_port(),
             ?LOG_WARNING(#{
                 text => <<"ClamAV: could not connect">>,
                 in => zotonic_mod_clamav,
@@ -111,6 +112,33 @@ do_clam(Command, DataFun) ->
             }),
             Error
     end.
+
+%% @doc Try the local socket on every connection, falling back to TCP if unavailable.
+%% Connecting also detects stale sockets and insufficient permissions.
+-spec connect(Options) -> Result
+    when
+        Options :: [gen_tcp:connect_option()],
+        Result :: {ok, gen_tcp:socket()} | {error, term()}.
+connect(Options) ->
+    case z_config:get(clamav_socket, ?CLAMAV_SOCKET) of
+        undefined -> connect_tcp(Options);
+        false -> connect_tcp(Options);
+        "" -> connect_tcp(Options);
+        <<>> -> connect_tcp(Options);
+        Path ->
+            case gen_tcp:connect({local, z_convert:to_list(Path)}, 0, Options) of
+                {ok, Socket} -> {ok, Socket};
+                {error, _} -> connect_tcp(Options)
+            end
+    end.
+
+-spec connect_tcp(Options) -> Result
+    when
+        Options :: [gen_tcp:connect_option()],
+        Result :: {ok, gen_tcp:socket()} | {error, term()}.
+connect_tcp(Options) ->
+    {ClamIP, ClamPort} = ip_port(),
+    gen_tcp:connect(ClamIP, ClamPort, Options).
 
 %% @doc Check on the result of clamav
 handle_result({ok, <<"INSTREAM size limit exceeded", _/binary>>}) ->
@@ -182,4 +210,3 @@ chop(<<Bin:?CLAMAV_CHUNK_SIZE/binary, Rest/binary>>, Acc) ->
     chop(Rest, [Bin | Acc]);
 chop(Data, Acc) ->
     lists:reverse([ Data | Acc ]).
-
