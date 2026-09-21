@@ -34,7 +34,11 @@ tcp_options_test() ->
 global_socket_defaults_test() ->
     Keys = [dbhost, dbport],
     Saved = [{Key, application:get_env(zotonic, Key)} || Key <- Keys],
+    EnvKeys = ["ZOTONIC_DBHOST", "ZOTONIC_DBPORT"],
+    SavedEnv = [{Key, os:getenv(Key)} || Key <- EnvKeys],
     try
+        %% Environment overrides (including CI's database host) take precedence.
+        lists:foreach(fun os:unsetenv/1, EnvKeys),
         application:set_env(zotonic, dbhost, "socket"),
         application:set_env(zotonic, dbport, 5435),
         %% A site port of 0 still inherits the global PostgreSQL port for the filename.
@@ -47,7 +51,13 @@ global_socket_defaults_test() ->
                 ({Key, undefined}) -> application:unset_env(zotonic, Key);
                 ({Key, {ok, Value}}) -> application:set_env(zotonic, Key, Value)
             end,
-            Saved)
+            Saved),
+        lists:foreach(
+            fun
+                ({Key, false}) -> os:unsetenv(Key);
+                ({Key, Value}) -> os:putenv(Key, Value)
+            end,
+            SavedEnv)
     end.
 
 options(Host, Port) ->
