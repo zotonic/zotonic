@@ -109,20 +109,29 @@ with_request(Method, Request, Options, Timeout, Receive) ->
     try
         case httpc:request(Method, Request, HttpOptions, RequestOptions) of
             {ok, Id} ->
-                try Receive(Alias, Id, Deadline)
-                after httpc:cancel_request(Id) end;
+                try
+                    Receive(Alias, Id, Deadline)
+                after
+                    httpc:cancel_request(Id)
+                end;
             {error, _} = Error ->
                 Error
         end
     catch
-        _:_ -> {error, invalid_response}
+        _:_ ->
+            {error, invalid_response}
     after
         unalias(Alias),
         flush(Alias)
     end.
 
-remaining(Deadline) -> max(0, Deadline - erlang:monotonic_time(millisecond)).
+remaining(Deadline) ->
+    max(0, Deadline - erlang:monotonic_time(millisecond)).
 
 flush(Alias) ->
-    receive {Alias, _} -> flush(Alias)
-    after 0 -> ok end.
+    receive
+        {Alias, _} ->
+            flush(Alias)
+    after 0 ->
+        ok
+    end.

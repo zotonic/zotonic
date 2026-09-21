@@ -26,33 +26,44 @@ trusted Erlang staging step; sandbox grants contain private job copies, never th
 ").
 -export([
     pack/3,
-    hash_file/1, hash_file/2,
-    output_limit/0, http_options/1, control_url/2,
+    hash_file/1,
+    hash_file/2,
+    output_limit/0,
+    http_options/1,
+    control_url/2,
     input_limit/0,
     upload/5,
     validate/1,
-    execute/1, execute/2, execute/3, execute/4,
-    unpack/2, unpack/3,
+    execute/1,
+    execute/2,
+    execute/3,
+    execute/4,
+    unpack/2,
+    unpack/3,
     callback_limit/0,
     https_url/1,
     endpoint/1,
     post/3,
-    request/3, request/4,
+    request/3,
+    request/4,
     profile/1,
     rewrite/2
 ]).
 -include_lib("kernel/include/file.hrl").
 
 -spec input_limit() -> pos_integer().
-input_limit() -> z_config:get(media_runner_max_input_bytes, 17179869184).
+input_limit() ->
+    z_config:get(media_runner_max_input_bytes, 17179869184).
 
 -spec output_limit() -> pos_integer().
-output_limit() -> z_config:get(media_runner_max_output_bytes, 17179869184).
+output_limit() ->
+    z_config:get(media_runner_max_output_bytes, 17179869184).
 
 %% @doc Maximum encoded callback JSON bytes, reserved per starting/running job.
 %% File transfers have independent input/output limits and do not consume this budget.
 -spec callback_limit() -> pos_integer().
-callback_limit() -> z_config:get(media_runner_max_callback_bytes, 135266304).
+callback_limit() ->
+    z_config:get(media_runner_max_callback_bytes, 135266304).
 
 -spec pack(atom(), iodata(), map()) -> {ok, map()} | {error, term()}.
 pack(Profile, Command, Options) ->
@@ -69,8 +80,10 @@ pack(Profile, Command, Options) ->
         Replacements = [{escaped(P), marker(N)} || {P, N} <- Bindings],
         Cd =
             case maps:find(cd, Options) of
-                {ok, Dir} -> [{escaped(Dir), <<"__ZMR_CWD__">>}];
-                error -> []
+                {ok, Dir} ->
+                    [{escaped(Dir), <<"__ZMR_CWD__">>}];
+                error ->
+                    []
             end,
         Cmd = rewrite(unicode:characters_to_binary(Command), Replacements ++ Cd),
         Job = #{
@@ -83,12 +96,17 @@ pack(Profile, Command, Options) ->
         ok = validate(Job),
         {ok, Job}
     catch
-        _:_ -> {error, media_runner_invalid_input}
+        _:_ ->
+            {error, media_runner_invalid_input}
     end.
 
 pack_file(Path, N, Read, Write) ->
     Extension = z_convert:to_binary(filename:extension(Path)),
-    F = #{<<"id">> => N, <<"write">> => Write, <<"extension">> => Extension},
+    F = #{
+        <<"id">> => N,
+        <<"write">> => Write,
+        <<"extension">> => Extension
+    },
     case Read of
         false ->
             F;
@@ -99,7 +117,8 @@ pack_file(Path, N, Read, Write) ->
 
 %% Reuse the incremental file hash; the protocol adds its size and type checks.
 -spec hash_file(file:filename_all()) -> {ok, non_neg_integer(), binary()} | {error, term()}.
-hash_file(Path) -> hash_file(Path, input_limit()).
+hash_file(Path) ->
+    hash_file(Path, input_limit()).
 
 -spec hash_file(file:filename_all(), pos_integer()) -> {ok, non_neg_integer(), binary()} | {error, term()}.
 hash_file(Path, Limit) ->
@@ -109,13 +128,18 @@ hash_file(Path, Limit) ->
                 {ok, Hash} ->
                     %% Reject files that changed size while being hashed.
                     case file:read_file_info(Path) of
-                        {ok, #file_info{type = regular, size = Size}} -> {ok, Size, Hash};
-                        _ -> {error, invalid_file}
+                        {ok, #file_info{type = regular, size = Size}} ->
+                            {ok, Size, Hash};
+                        _ ->
+                            {error, invalid_file}
                     end;
-                {error, _} = Error -> Error
+                {error, _} = Error ->
+                    Error
             end;
-        {ok, _} -> {error, invalid_file};
-        {error, _} = Error -> Error
+        {ok, _} ->
+            {error, invalid_file};
+        {error, _} = Error ->
+            Error
     end.
 
 %% Replace longest paths first, in one pass: replacements cannot rewrite each other.
@@ -129,6 +153,7 @@ rewrite(Text, Replacements) ->
         lists:usort([P || {P, _} <- Replacements])
     ),
     rewrite_matches(Text, binary:matches(Text, Patterns), maps:from_list(Replacements), 0, []).
+
 rewrite_matches(Text, [], _Map, Pos, Acc) ->
     iolist_to_binary(lists:reverse([binary:part(Text, Pos, byte_size(Text) - Pos) | Acc]));
 rewrite_matches(Text, [{Start, Len} | Rest], Map, Pos, Acc) ->
@@ -139,7 +164,9 @@ rewrite_matches(Text, [{Start, Len} | Rest], Map, Pos, Acc) ->
 escaped(Path) ->
     Quoted = unicode:characters_to_binary(z_filelib:os_filename(unicode:characters_to_list(Path))),
     binary:part(Quoted, 1, byte_size(Quoted) - 2).
-marker(N) -> iolist_to_binary(["__ZMR_FILE_", integer_to_binary(N), "__"]).
+
+marker(N) ->
+    iolist_to_binary(["__ZMR_FILE_", integer_to_binary(N), "__"]).
 
 -spec profile(binary()) -> atom().
 profile(<<"file">>) -> file;
@@ -186,7 +213,8 @@ validate(#{
         true = length(Ids) =:= length(lists:usort(Ids)),
         ok
     catch
-        _:_ -> {error, invalid_job}
+        _:_ ->
+            {error, invalid_job}
     end;
 validate(_) ->
     {error, invalid_job}.
@@ -213,7 +241,8 @@ execute(Job, Resolve, Store, Dir) ->
         ok = file:change_mode(Dir, 8#700),
         execute_staged(Job, Dir, Resolve, Store)
     catch
-        _:_ -> #{<<"status">> => <<"error">>, <<"error">> => <<"processing_failed">>}
+        _:_ ->
+            #{<<"status">> => <<"error">>, <<"error">> => <<"processing_failed">>}
     after
         file:del_dir_r(Dir)
     end.
@@ -249,7 +278,8 @@ execute_staged(
                     %% job's inputs; never hard-link, as commands may modify read/write inputs.
                     {ok, Size} = file:copy(Cached, proplists:get_value(maps:get(<<"id">>, F), Paths)),
                     Size = maps:get(<<"size">>, F);
-                error -> ok
+                error ->
+                    ok
             end
         end,
         Files
@@ -293,12 +323,19 @@ execute_staged(
             %% Do not return sandbox stderr or host paths to clients or the dashboard.
             #{<<"status">> => <<"error">>, <<"error">> => error_code(Reason)}
     end.
+
 output_size(Path) ->
     {ok, #file_info{type = regular, size = Size}} = file:read_link_info(Path),
     Size.
+
 store_output(Id, Path, Store) ->
     {ok, Size, Hash} = hash_file(Path, output_limit()),
-    Store(Path, #{<<"id">> => Id, <<"size">> => Size, <<"sha256">> => Hash}).
+    Store(Path, #{
+        <<"id">> => Id,
+        <<"size">> => Size,
+        <<"sha256">> => Hash
+    }).
+
 error_code(timeout) -> <<"command_timeout">>;
 error_code(output_limit) -> <<"output_limit">>;
 error_code(_) -> <<"command_failed">>.
@@ -323,7 +360,8 @@ unpack(#{<<"status">> := <<"ok">>, <<"stdout">> := Stdout, <<"files">> := Files}
         RestoredOut = rewrite(Out, [{marker(N), stdout_path(P, Options)} || {N, P} <- Bindings]),
         {ok, RestoredOut}
     catch
-        _:_ -> {error, media_runner_invalid_result}
+        _:_ ->
+            {error, media_runner_invalid_result}
     end;
 unpack(_, _, _) ->
     {error, media_runner_invalid_result}.
@@ -348,7 +386,8 @@ endpoint(Hostname) ->
         true = is_integer(Port) andalso Port > 0 andalso Port =< 65535,
         {ok, <<Base/binary, "/media-runner/jobs">>}
     catch
-        _:_ -> {error, media_runner_configuration}
+        _:_ ->
+            {error, media_runner_configuration}
     end.
 
 %% @doc Locate a control operation on the standard model API, alongside streaming routes.
@@ -358,7 +397,8 @@ control_url(Url, Operation) ->
     Result = uri_string:recompose(maps:without([query, fragment], Parts#{
         path => case Operation of
             <<"capabilities">> -> <<"/api/model/mediarunner_job/get/capabilities">>;
-            _ -> <<"/api/model/mediarunner_job/post/", Operation/binary>>
+            _ ->
+                <<"/api/model/mediarunner_job/post/", Operation/binary>>
         end
     })),
     true = is_binary(Result),
@@ -373,7 +413,8 @@ https_url(Url) when is_binary(Url), byte_size(Url) =< 2048 ->
         _ ->
             false
     catch
-        _:_ -> false
+        _:_ ->
+            false
     end;
 https_url(_) ->
     false.
@@ -385,17 +426,20 @@ https_url(_) ->
 post(Url, Token, Payload) ->
     case request(Url, Token, Payload) of
         {ok, _} -> ok;
-        {error, _} = Error -> Error
+        {error, _} = Error ->
+            Error
     end.
 
 -spec request(binary(), binary(), map()) -> {ok, map()} | {error, term()}.
-request(Url, Token, Payload) -> request(Url, Token, Payload, 30000).
+request(Url, Token, Payload) ->
+    request(Url, Token, Payload, 30000).
 
 %% @doc Exchange small JSON control messages; source and result files use streaming HTTP.
 -spec request(binary(), binary(), map(), pos_integer()) -> {ok, map()} | {error, term()}.
 request(Url, Token, Payload, Timeout) ->
     case https_url(Url) of
-        false -> {error, invalid_url};
+        false ->
+            {error, invalid_url};
         true ->
             Options = [
                 {autoredirect, false},
@@ -404,15 +448,22 @@ request(Url, Token, Payload, Timeout) ->
                 {max_length, 65536},
                 {insecure, z_config:get(environment) =:= development}
             ] ++ case Token of
-                <<>> -> [];
-                _ -> [{authorization, <<"Bearer ", Token/binary>>}]
+                <<>> ->
+                    [];
+                _ ->
+                    [{authorization, <<"Bearer ", Token/binary>>}]
             end,
             case z_fetch:fetch_json(post, Url, Payload, Options, undefined) of
-                {ok, #{<<"status">> := <<"ok">>, <<"result">> := Map}} when is_map(Map) -> {ok, Map};
-                {ok, Map} when map_size(Map) =:= 0 -> {ok, Map};
-                {ok, _} -> {error, invalid_response};
-                {error, {Code, _, _, _, _}} -> {error, {http_status, Code}};
-                {error, _} = Error -> Error
+                {ok, #{<<"status">> := <<"ok">>, <<"result">> := Map}} when is_map(Map) ->
+                    {ok, Map};
+                {ok, Map} when map_size(Map) =:= 0 ->
+                    {ok, Map};
+                {ok, _} ->
+                    {error, invalid_response};
+                {error, {Code, _, _, _, _}} ->
+                    {error, {http_status, Code}};
+                {error, _} = Error ->
+                    Error
             end
     end.
 
@@ -422,7 +473,8 @@ request(Url, Token, Payload, Timeout) ->
     {ok, integer()} | {error, term()}.
 upload(Url, Token, Lease, Path, Size) ->
     case https_url(Url) of
-        false -> {error, invalid_url};
+        false ->
+            {error, invalid_url};
         true ->
             case file:open(Path, [read, binary]) of
                 {ok, Fd} ->
@@ -439,13 +491,16 @@ upload(Url, Token, Lease, Path, Size) ->
                         %% A dedicated connection keeps long uploads independent
                         %% of job requests and callbacks to the same host.
                         case z_media_runner_http:request(put, Request, 3600000) of
-                            {ok, Status, _} -> {ok, Status};
-                            {error, _} = Error -> Error
+                            {ok, Status, _} ->
+                                {ok, Status};
+                            {error, _} = Error ->
+                                Error
                         end
                     after
                         file:close(Fd)
                     end;
-                {error, _} = Error -> Error
+                {error, _} = Error ->
+                    Error
             end
     end.
 
@@ -459,8 +514,10 @@ upload_chunk({Fd, Left}) ->
 -spec http_options(pos_integer()) -> list().
 http_options(Timeout) ->
     Ssl = case z_config:get(environment) of
-        development -> [{verify, verify_none}];
-        _ -> verified_ssl_options()
+        development ->
+            [{verify, verify_none}];
+        _ ->
+            verified_ssl_options()
     end,
     [{autoredirect, false}, {ssl, Ssl}, {connect_timeout, 5000}, {timeout, Timeout}].
 
