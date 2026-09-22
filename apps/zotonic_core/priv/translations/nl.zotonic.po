@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-09-22 13:51\n"
+"PO-Revision-Date: 2026-09-22 15:24\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -2767,7 +2767,7 @@ msgstr "Sandbox-isolatie wordt op dit systeem niet ondersteund. Commando’s voo
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:26
 msgid "Sandbox isolation is unavailable. Local sandboxed media commands cannot run."
-msgstr ""
+msgstr "Sandbox-isolatie is niet beschikbaar. Lokale mediaopdrachten in de sandbox kunnen niet worden uitgevoerd."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:6
@@ -3127,7 +3127,7 @@ msgstr "De categorieboom wordt herberekend. Dit kan lang duren."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:7
 msgid "The media runner configuration is invalid."
-msgstr ""
+msgstr "De configuratie van de media-runner is ongeldig."
 
 #: zotonic_mod_admin/priv/templates/_action_unlink_undo.tpl:15
 msgid "The page"
@@ -3330,7 +3330,7 @@ msgstr "Typ om de onderstaande lijst te filteren."
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:47
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:48
 msgid "Unavailable"
-msgstr ""
+msgstr "Niet beschikbaar"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:30
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:43
@@ -6739,7 +6739,7 @@ msgstr "Nadat de pagina is hersteld, wordt u doorgestuurd naar de bewerkingspagi
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:12
 msgid "Are you sure you want to restore this deleted page using the selected version?"
-msgstr ""
+msgstr "Weet je zeker dat je deze verwijderde pagina wilt herstellen met behulp van de geselecteerde versie?"
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:10
 msgid "Are you sure you want to revert to this version?"
@@ -6839,7 +6839,7 @@ msgstr "Verwijderde pagina's"
 
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:12
 msgid "Deleted pages you have permission to edit."
-msgstr ""
+msgstr "Verwijderde pagina’s die je mag bewerken."
 
 #: zotonic_mod_backup/priv/templates/admin_backup.tpl:14
 msgid "Directory"
@@ -6940,7 +6940,7 @@ msgstr "Alleen beheerders kunnen een back-up starten."
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:23
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:33
 msgid "Original"
-msgstr ""
+msgstr "Origineel"
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:100
 msgid "Please make sure you store the backup encryption password in a safe <u>external</u> location."
@@ -6960,7 +6960,7 @@ msgstr "Uitgaande verbindingen naar andere pagina's herstellen"
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:14
 msgid "Recovering a deleted page requires permission to create pages in the selected category and content group."
-msgstr ""
+msgstr "Om een verwijderde pagina te herstellen, heb je toestemming nodig om pagina's aan te maken in de geselecteerde categorie en inhoudsgroep."
 
 #: zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:38
 #: zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:41
@@ -6974,15 +6974,15 @@ msgstr "Verwijderde <em>afhankelijke</em> pagina's herstellen waarnaar deze pagi
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:41
 msgid "Restore deleted page"
-msgstr ""
+msgstr "Verwijderde pagina herstellen"
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:69
 msgid "Restore page"
-msgstr ""
+msgstr "Pagina herstellen"
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:38
 msgid "Restore this page..."
-msgstr ""
+msgstr "Deze pagina opnieuw laden..."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:30
 msgid "Revert page to earlier version"
@@ -7002,7 +7002,7 @@ msgstr "Terugkeren naar deze versie..."
 
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:82
 msgid "Revisions"
-msgstr ""
+msgstr "Wijzigingen"
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:14
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:52
@@ -7026,15 +7026,15 @@ msgstr "Revisies van verwijderde gebruikers worden {n} dagen bewaard."
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:25
 msgid "Select a category"
-msgstr ""
+msgstr "Kies een categorie"
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:35
 msgid "Select a content group"
-msgstr ""
+msgstr "Kies een inhoudsgroep"
 
 #: zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:121
 msgid "Select an existing category and content group before restoring this page."
-msgstr ""
+msgstr "Selecteer een bestaande categorie en inhoudsgroep voordat u deze pagina herstelt."
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:3
 msgid "Select the backup file you want to upload. The file must be a .bert file."
@@ -7117,7 +7117,7 @@ msgstr "De versleutelingsconfiguratie is ingesteld op:"
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:18
 msgid "The original category or content group no longer exists. Confirm the suggested replacement or select another one."
-msgstr ""
+msgstr "De oorspronkelijke categorie of inhoudsgroep bestaat niet meer. Bevestig de voorgestelde vervanging of kies een andere."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:5
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:15
@@ -7163,7 +7163,7 @@ msgstr "Je mag de revisies niet zien"
 
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:32
 msgid "You are not allowed to see the revisions."
-msgstr ""
+msgstr "Je hebt geen toegang tot de wijzigingen."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:9
 msgid "You can have one backup per day of the week, older ones will be overwritten."
@@ -7175,11 +7175,11 @@ msgstr "Je kunt inkomende en uitgaande verbindingen naar andere pagina's herstel
 
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:13
 msgid "You can select a revision to recover."
-msgstr ""
+msgstr "U kunt een revisie selecteren om te herstellen."
 
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:92
 msgid "You need access to the admin."
-msgstr ""
+msgstr "Je hebt toegang tot het beheerdersgedeelte nodig."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:24
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
@@ -7774,15 +7774,15 @@ msgstr "ja"
 
 #: zotonic_mod_clamav/priv/templates/_clamav_admin_status_alert.tpl:5
 msgid "ClamAV could not be reached. Files cannot be uploaded until the virus scanner is available again."
-msgstr ""
+msgstr "ClamAV is niet bereikbaar. Bestanden kunnen pas worden geüpload zodra de virusscanner weer beschikbaar is."
 
 #: zotonic_mod_clamav/priv/templates/_clamav_admin_status_alert.tpl:6
 msgid "Please contact your system administrator."
-msgstr ""
+msgstr "Neem contact op met uw systeembeheerder."
 
 #: zotonic_mod_clamav/priv/templates/_clamav_admin_status_alert.tpl:4
 msgid "Virus scanner unavailable"
-msgstr ""
+msgstr "Virusscanner niet beschikbaar"
 
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:19
 msgid "Added on"
