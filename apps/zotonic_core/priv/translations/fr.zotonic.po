@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-09-15 14:17\n"
+"PO-Revision-Date: 2026-09-22 13:50\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgstr "Impossible de récupérer l'URL de la ressource distante."
 msgid "Forbidden to access the remote resource URL."
 msgstr "Interdit d'accéder à l'URL de la ressource distante."
 
-#: zotonic_core/src/support/z_media_import.erl:328
+#: zotonic_core/src/media/z_media_import.erl:328
 msgid "Page Import"
 msgstr "Importation de pages"
 
@@ -56,7 +56,7 @@ msgstr "Trop de demandes pour le serveur distant, réessayez plus tard."
 msgid "Unauthorized to access the remote resource URL."
 msgstr "Non autorisé à accéder à l'URL de la ressource distante."
 
-#: zotonic_core/src/support/z_media_import.erl:385
+#: zotonic_core/src/media/z_media_import.erl:385
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
@@ -178,7 +178,7 @@ msgid "ACL user group"
 msgstr "Groupe d'utilisateur ACL"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:931
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:933
 msgid "Access control rules"
 msgstr "Règles du contrôle d'accès"
 
@@ -294,7 +294,7 @@ msgstr "Êtes-vous sûr de vouloir restaurer toutes les règles ACL à leur actu
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:90
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:161
 #: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:35
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:68
 #: zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:13
 #: zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:7
 #: zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:10
@@ -353,8 +353,9 @@ msgstr "Annuler"
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:22
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:45
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:11
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:22
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:28
-#: zotonic_mod_survey/src/mod_survey.erl:654
+#: zotonic_mod_survey/src/mod_survey.erl:656
 msgid "Category"
 msgstr "Categorie"
 
@@ -366,7 +367,7 @@ msgstr "Cat&eacute;gorie &amp; Groupe de contenu"
 msgid "Change category and/or content group..."
 msgstr "Changer de catégorie et/ou de groupe de contenu"
 
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:488
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:490
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:147
 msgid "Changed configuration."
 msgstr "Configuration changée."
@@ -392,8 +393,8 @@ msgstr "Configuration changée."
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:7
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:14
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:21
-#: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:74
-#: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:121
+#: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:78
+#: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:133
 #: zotonic_mod_survey/priv/templates/_survey_results.tpl:50
 #: zotonic_mod_survey/priv/templates/_survey_results.tpl:55
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:61
@@ -416,7 +417,7 @@ msgid "Collaboration group members"
 msgstr "Membres de groupe collaboratif"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:22
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:927
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:929
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:158
 msgid "Collaboration groups"
 msgstr "Groupes collaboratifs"
@@ -446,6 +447,7 @@ msgstr "Contenu"
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_visible_for.tpl:2
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:58
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:51
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:32
 #: zotonic_mod_content_groups/priv/templates/_admin_overview_filter_panel.tpl:6
 #: zotonic_mod_content_groups/priv/templates/_dialog_admin_bulk_update.tpl:5
 msgid "Content group"
@@ -504,12 +506,12 @@ msgstr "Impossible de déplacer vers le groupe collaboratif"
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:133
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125
-#: zotonic_mod_survey/src/mod_survey.erl:425
+#: zotonic_mod_survey/src/mod_survey.erl:427
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:25
 msgid "Delete"
 msgstr "Effacer"
 
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:476
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:478
 msgid "Delete is canceled, there are users in the user groups."
 msgstr "Suppression annulée, il reste des utilisateurs dans les groupes d'utilisateurs."
 
@@ -517,7 +519,7 @@ msgstr "Suppression annulée, il reste des utilisateurs dans les groupes d'utili
 msgid "Delete user group and move users"
 msgstr "Effacer le groupe d'utilisateurs et déplacer ses membres"
 
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:521
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:523
 #: zotonic_mod_admin_category/src/mod_admin_category.erl:116
 #: zotonic_mod_admin_category/src/mod_admin_category.erl:134
 #: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:124
@@ -679,11 +681,11 @@ msgstr "Aller sur {title}…"
 msgid "No ACL rules"
 msgstr "Aucune règle ACL"
 
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:514
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:516
 msgid "Not all user groups could be deleted."
 msgstr "Tous les groupes d'utilisateurs n'ont pu être supprimés."
 
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:494
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:496
 msgid "Not allowed to change ACL options."
 msgstr "Non autorisé à modifier les options ACL."
 
@@ -747,7 +749,7 @@ msgid "Publish successful"
 msgstr "Publication réussie"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:41
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:36
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:69
 msgid "Revert"
 msgstr "Annuler"
 
@@ -782,7 +784,7 @@ msgstr "Annuler les règles"
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:60
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:75
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:198
-#: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:91
+#: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:95
 msgid "Save"
 msgstr "Sauvegarder"
 
@@ -820,8 +822,8 @@ msgstr "Afficher les propriétés privées à"
 msgid "Show this ACL user group first:"
 msgstr "Afficher ce groupe d'utilisateur ACL en premier:"
 
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:455
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:471
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:457
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:473
 #: zotonic_mod_admin_category/src/mod_admin_category.erl:93
 #: zotonic_mod_admin_category/src/mod_admin_category.erl:109
 #: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:99
@@ -919,7 +921,7 @@ msgstr "Utiliser l'URL suivante avant publication afin de tester le contrôle d'
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:922
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:924
 msgid "User groups"
 msgstr "Groupes d'utilisateurs"
 
@@ -1048,7 +1050,6 @@ msgstr "<b>Attention :</b> le site va s'arrêter et redémarrer."
 #: zotonic_mod_admin/priv/templates/_admin_overview_list_title.tpl:2
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:32
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:55
-#: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:47
 #: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:250
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:24
 msgid "<em>Untitled</em>"
@@ -1249,6 +1250,7 @@ msgstr "Authentification"
 msgid "Authoritative"
 msgstr "Autoritaire"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:47
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:35
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:38
 msgid "Available"
@@ -1313,7 +1315,7 @@ msgstr "Changer la catégorie"
 msgid "Change the category of this page"
 msgstr "Changer la catégorie de cette page"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:139
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:140
 msgid "Check all pages for embedded page references and add a <i>refers</i> connection for all of those references."
 msgstr "Vérifiez toutes les pages pour les références de pages intégrées et ajoutez une connexion <i>fait référence</i> pour toutes ces références."
 
@@ -1394,6 +1396,10 @@ msgstr "Connecté depuis"
 #: zotonic_mod_admin/priv/templates/_admin_edit_sidebar_parts.tpl:22
 msgid "Connected to"
 msgstr "Connecté à"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:41
+msgid "Connection"
+msgstr "Connexion"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:72
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:134
@@ -1720,7 +1726,11 @@ msgstr "Contenu intégré"
 msgid "Emergency telephone"
 msgstr "Telephone d\\'urgence"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:135
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:41
+msgid "Endpoint"
+msgstr "Point d'extrémité"
+
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:136
 msgid "Ensure <i>refers</i> connections"
 msgstr "Assurez-vous que <i>fait référence à</i> connexion"
 
@@ -2052,9 +2062,25 @@ msgstr "Lien"
 msgid "Live query, send notifications when matching items are updated or inserted."
 msgstr "Requête en direct, envoyer des notifications lorsque les éléments correspondants sont mis à jour ou insérés."
 
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:28
+msgid "Local ImageMagick"
+msgstr "ImageMagick local"
+
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:248
 msgid "Local content"
 msgstr "Contenu local"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:13
+msgid "Local fallback is disabled."
+msgstr "La solution de secours locale est désactivée."
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:11
+msgid "Local fallback is enabled."
+msgstr "La solution de secours locale est activée."
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:20
+msgid "Local sandbox"
+msgstr "Bac à sable local"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:47
 msgid "Log Directory"
@@ -2102,7 +2128,7 @@ msgid "Make a new page or media"
 msgstr "Créer une nouvelle page ou un média"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:6
-#: zotonic_mod_survey/src/mod_survey.erl:655
+#: zotonic_mod_survey/src/mod_survey.erl:657
 msgid "Matching"
 msgstr "Correspondant"
 
@@ -2124,6 +2150,14 @@ msgstr "Médias"
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:27
 msgid "Media URL or HTML"
 msgstr "URL ou HTML du média"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:17
+msgid "Media commands run locally."
+msgstr "Les commandes multimédia s'exécutent localement."
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:9
+msgid "Media commands use remote runners."
+msgstr "Les commandes multimédia utilisent des exécutants distants."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:4
 msgid "Media content"
@@ -2150,6 +2184,14 @@ msgstr "Médias de l'élément créé."
 #: zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:4
 msgid "Media on this page"
 msgstr "Média sur cette page"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:4
+msgid "Media processing"
+msgstr "Traitement multimédia"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:37
+msgid "Media runners"
+msgstr "Coureurs médiatiques"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:27
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:28
@@ -2637,6 +2679,10 @@ msgstr "Recharger la configuration d'un site. Notez que toutes les configuration
 msgid "Remarks"
 msgstr "Remarques"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:55
+msgid "Remote sandbox isolation and queue details are available on each runner’s dashboard."
+msgstr "Les informations relatives à l'isolation dans un environnement test distant et aux files d'attente sont disponibles sur le tableau de bord de chaque exécuteur."
+
 #: zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_page.tpl:16
 #: zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:35
 #: zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:7
@@ -2682,6 +2728,10 @@ msgstr "Pivoté de 270 degrés"
 msgid "Rotated 90 degrees"
 msgstr "Pivoté de 90 degrés"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:54
+msgid "Runner availability and ImageMagick versions are cached for up to one minute. Failed probes are retried after five seconds. Refresh this page to check again."
+msgstr "La disponibilité des runners et les versions d'ImageMagick sont mises en cache pendant une durée maximale d'une minute. Les tests ayant échoué sont réessayés au bout de cinq secondes. Actualisez cette page pour vérifier à nouveau."
+
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:113
 msgid "Runs the schema install command from the site's module again."
 msgstr "Exécute à nouveau la commande d'installation du schéma à partir du module du site."
@@ -2702,6 +2752,18 @@ msgstr "Somme de contrôle SHA-256"
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:5
 msgid "SSL Application uses Erlang defaults, it is recommended to change this configuration in your <tt>erlang.config</tt>."
 msgstr "L'application SSL utilise les valeurs par défaut de Erlang, leurs modifications est recommandée dans votre <tt>erlang.config</tt>."
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:22
+msgid "Sandbox isolation is available."
+msgstr "La fonctionnalité d'isolation en bac à sable est disponible."
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:24
+msgid "Sandbox isolation is not supported on this system. Local media commands run without isolation."
+msgstr "L'isolation par bac à sable n'est pas prise en charge sur ce système. Les commandes relatives aux médias locaux s'exécutent sans isolation."
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:26
+msgid "Sandbox isolation is unavailable. Local sandboxed media commands cannot run."
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:6
@@ -3011,15 +3073,15 @@ msgstr "Status du système"
 msgid "System administration"
 msgstr "Administration du système"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:169
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:170
 msgid "Task queue"
 msgstr "File d'attente des tâches"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:176
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:177
 msgid "Tasks are functions scheduled to run at a certain time."
 msgstr "Les tâches sont des fonctions programmées pour s'exécuter à une certaine heure."
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:177
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:178
 msgid "Tasks with errors will retry 10 times before being dropped."
 msgstr "Les tâches comportant des erreurs seront réessayées 10 fois avant d'être abandonnées."
 
@@ -3058,6 +3120,10 @@ msgstr "L'adresse de facturation n'est visible que pour les personnes qui peuven
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:77
 msgid "The category tree is rebuilding. This can take a long time."
 msgstr "L'arbre de catégories est en cours de reconstruction. Cela peut prendre du temps."
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:7
+msgid "The media runner configuration is invalid."
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_action_unlink_undo.tpl:15
 msgid "The page"
@@ -3256,6 +3322,12 @@ msgstr "Saisir le texte à rechercher"
 msgid "Type to filter the list below."
 msgstr "Tapez pour filtrer la liste ci-dessous."
 
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:32
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:47
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:48
+msgid "Unavailable"
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:30
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:43
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:79
@@ -3289,7 +3361,8 @@ msgstr "Inédit"
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:54
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:57
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:60
-#: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:59
+#: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:58
+#: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:39
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:20
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:25
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:10
@@ -3328,7 +3401,7 @@ msgstr "Mettre à jour {n} pages avec les propriétés suivantes :"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:89
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:17
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:161
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:162
 msgid "Upload"
 msgstr "Télécharger"
 
@@ -3340,12 +3413,12 @@ msgstr "Téléverser un fichier"
 msgid "Upload a file from your computer."
 msgstr "télécharger un fichier depuis votre ordinateur."
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:151
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:152
 msgid "Upload a file to the drop folder. This file will be handled in the background by the mailinglists for recipient import and other modules."
 msgstr "Téléchargez un fichier dans le dossier de dépôt. Ce fichier sera géré en arrière-plan par les listes de diffusion pour l'importation des destinataires et d'autres modules."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:74
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:148
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:149
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:27
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:32
 msgid "Upload file"
@@ -3468,7 +3541,7 @@ msgstr "Répertoire de travail"
 
 #: zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
 #: zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:54
-#: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:94
+#: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:86
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:96
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:99
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:33
@@ -3506,7 +3579,6 @@ msgstr "Vous n'êtes pas autorisé à supprimer cette page."
 
 #: zotonic_mod_admin/priv/templates/admin_edit.tpl:16
 #: zotonic_mod_admin_merge/priv/templates/admin_merge.tpl:26
-#: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:34
 msgid "You are not allowed to edit this page."
 msgstr "Vous n’êtes pas autorisé à éditer cette page."
 
@@ -4625,9 +4697,9 @@ msgstr "Affecter un identifiant / mot de passe"
 #: zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:27
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:97
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:152
-#: zotonic_mod_survey/src/mod_survey.erl:1631
-#: zotonic_mod_survey/src/mod_survey.erl:1653
-#: zotonic_mod_survey/src/mod_survey.erl:1661
+#: zotonic_mod_survey/src/mod_survey.erl:1633
+#: zotonic_mod_survey/src/mod_survey.erl:1655
+#: zotonic_mod_survey/src/mod_survey.erl:1663
 msgid "Sorry"
 msgstr "Désolé"
 
@@ -6655,19 +6727,19 @@ msgstr "le service"
 msgid "user@example.com"
 msgstr "utilisateur@exemple.com"
 
-#: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:66
-msgid "<i>Unknown</i>"
-msgstr "<i>Inconnu</i>"
-
 #: zotonic_mod_backup/priv/templates/admin_backup.tpl:3
 msgid "Admin Backups"
 msgstr "Sauvegardes Admin"
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:31
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:64
 msgid "After the page has been restored, you will be redirected to the edit page."
 msgstr "Une fois la page restaurée, vous serez redirigé vers la page d'édition."
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:7
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:12
+msgid "Are you sure you want to restore this deleted page using the selected version?"
+msgstr ""
+
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:10
 msgid "Are you sure you want to revert to this version?"
 msgstr "Êtes vous sûr de vouloir revenir à cette version? "
 
@@ -6679,11 +6751,11 @@ msgstr "A tout moment vous pouvez créer une sauvegarde de votre système."
 msgid "Automatic daily backups of the database and uploaded files can be enabled. The backup is done at night and the last 7 backups are kept."
 msgstr "Des sauvegardes quotidiennes automatiques de la base de données et des fichiers téléchargés peuvent être activées. La sauvegarde est effectuée la nuit et les sept dernières sauvegardes sont conservées."
 
-#: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:53
+#: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:45
 msgid "Back to the edit page"
 msgstr "Retour à la page d'édition"
 
-#: zotonic_mod_backup/src/mod_backup.erl:282
+#: zotonic_mod_backup/src/mod_backup.erl:323
 msgid "Backup"
 msgstr "Sauvegarde"
 
@@ -6711,7 +6783,7 @@ msgstr "Par défaut, la sauvegarde de la base de données et des fichiers ne son
 msgid "Changes since"
 msgstr "Changements depuis"
 
-#: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:59
+#: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:51
 msgid "Check and possibly restore an earlier version of your page."
 msgstr "Vérifier et rétablir éventuellement une version antérieure de votre page."
 
@@ -6745,7 +6817,7 @@ msgstr "Impossible de démarrer la sauvegarde car une sauvegarde est déjà en c
 msgid "Date"
 msgstr "Date"
 
-#: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:61
+#: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:60
 msgid "Deleted"
 msgstr "Effacé"
 
@@ -6759,9 +6831,13 @@ msgstr "Supprimé le"
 
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:3
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:9
-#: zotonic_mod_backup/src/mod_backup.erl:295
+#: zotonic_mod_backup/src/mod_backup.erl:336
 msgid "Deleted pages"
 msgstr "Pages supprimées"
+
+#: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:12
+msgid "Deleted pages you have permission to edit."
+msgstr ""
 
 #: zotonic_mod_backup/priv/templates/admin_backup.tpl:14
 msgid "Directory"
@@ -6815,17 +6891,13 @@ msgstr "Si le module Cloud File Store est utilisé, les fichiers supprimés peuv
 msgid "It can be found in the"
 msgstr "On peut le trouver dans le"
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:11
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:44
 msgid "It could be that a connected dependent page was deleted because of the deletion of this page, such a deleted dependent page can also be recovered."
 msgstr "Il se peut qu'une page dépendante connectée ait été supprimée en raison de la suppression de cette page, une telle page dépendante supprimée peut également être récupérée."
 
 #: zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:29
 msgid "List and restore an earlier version"
 msgstr "Lister et restaurer une version antérieure"
-
-#: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:12
-msgid "List of recently deleted pages found in the resource revisions log."
-msgstr "Liste des pages récemment supprimées trouvées dans le journal des révisions des ressources."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:15
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:39
@@ -6839,7 +6911,7 @@ msgstr "Faire une sauvegarde journalière de la base de donnée et des fichiers 
 msgid "Make a daily backup of the database."
 msgstr "Faites une sauvegarde quotidienne de la base de données."
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:30
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:63
 msgid "Media files can only be recovered if they are not yet deleted from the file storage. Zotonic will keep media for at least 5 weeks."
 msgstr "Les fichiers multimédias ne peuvent être récupérés que s'ils n'ont pas encore été supprimés du stockage. Zotonic conservera les fichiers multimédias pendant au moins 5 semaines."
 
@@ -6863,25 +6935,30 @@ msgstr "Note:"
 msgid "Only administrators can start a backup."
 msgstr "Seuls les administrateurs peuvent démarrer une sauvegarde."
 
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:23
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:33
+msgid "Original"
+msgstr ""
+
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:100
 msgid "Please make sure you store the backup encryption password in a safe <u>external</u> location."
 msgstr "Veuillez vous assurer de stocker le mot de passe de cryptage de sauvegarde dans un emplacement <u>externe</u> sûr."
 
-#: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:83
+#: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:75
 msgid "Previous"
 msgstr "Précédente"
 
-#: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:85
-msgid "Recover"
-msgstr "Récupérer"
-
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:21
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:54
 msgid "Recover incoming connections from other pages"
 msgstr "Récupérer les connexions entrantes depuis d'autres pages"
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:17
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:50
 msgid "Recover outgoing connections to other pages"
 msgstr "Récupérer les connexions sortantes vers d'autres pages"
+
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:14
+msgid "Recovering a deleted page requires permission to create pages in the selected category and content group."
+msgstr ""
 
 #: zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:38
 #: zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:41
@@ -6889,11 +6966,23 @@ msgstr "Récupérer les connexions sortantes vers d'autres pages"
 msgid "Restore backup"
 msgstr "Restaurer sauvegarde"
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:25
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:58
 msgid "Restore deleted <em>dependent</em> pages that were referred by this page"
 msgstr "Restaurer les <em>pages dépendantes supprimées</em> qui ont été référencées par cette page"
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:29
+#: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:41
+msgid "Restore deleted page"
+msgstr ""
+
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:69
+msgid "Restore page"
+msgstr ""
+
+#: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:38
+msgid "Restore this page..."
+msgstr ""
+
+#: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:30
 msgid "Revert page to earlier version"
 msgstr "Revenir à la version antérieure de la page"
 
@@ -6905,29 +6994,45 @@ msgstr "Revenir à une révision antérieure de cette page."
 msgid "Revert to earlier version..."
 msgstr "Revenir à la version précédente..."
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:26
+#: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:27
 msgid "Revert to this version..."
 msgstr "Revenir à cette version..."
 
+#: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:82
+msgid "Revisions"
+msgstr ""
+
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:14
-#: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:60
+#: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:52
 msgid "Revisions are kept for {n} months."
 msgstr "Les révisions sont conservées {n} mois."
 
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:3
-#: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:46
+#: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:38
 msgid "Revisions for"
 msgstr "Révisions pour"
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:15
-#: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:61
+#: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:53
 msgid "Revisions of active users are kept for {n} days."
 msgstr "Les révisions des utilisateurs actifs sont conservées pendant {n} jours."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:16
-#: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:62
+#: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:54
 msgid "Revisions of deleted users are kept for {n} days."
 msgstr "Les révisions des utilisateurs supprimés sont conservées pendant {n} jours."
+
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:25
+msgid "Select a category"
+msgstr ""
+
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:35
+msgid "Select a content group"
+msgstr ""
+
+#: zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:121
+msgid "Select an existing category and content group before restoring this page."
+msgstr ""
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:3
 msgid "Select the backup file you want to upload. The file must be a .bert file."
@@ -6950,11 +7055,11 @@ msgid "Sorry, there is no module that can import this."
 msgstr "Désolé, aucun module ne peut importer ceci."
 
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:105
-#: zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:129
+#: zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:125
 msgid "Sorry, there was an error replacing your page."
 msgstr "Désolé, une erreur a empêchée le remplacement de votre page."
 
-#: zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:127
+#: zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:123
 msgid "Sorry, this backup has been deleted."
 msgstr "Désolé, cette sauvegarde a été détruite."
 
@@ -7008,6 +7113,10 @@ msgstr "Le module de sauvegarde utilise une configuration Zotonic globale. Cette
 msgid "The encryption configuration is set to:"
 msgstr "La configuration de cryptage est définie sur :"
 
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:18
+msgid "The original category or content group no longer exists. Confirm the suggested replacement or select another one."
+msgstr ""
+
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:5
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:15
 msgid "This is the version saved on"
@@ -7016,6 +7125,11 @@ msgstr "C'est la version enregistrée sur"
 #: zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:10
 msgid "This will overwrite your page with the contents of the backup file."
 msgstr "Cela remplacera votre page par le contenu du fichier de sauvegarde."
+
+#: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:65
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:35
+msgid "Unknown"
+msgstr "Inconnu"
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:53
 msgid "Uploaded to filestore"
@@ -7035,32 +7149,35 @@ msgstr "Avec le panneau d'importation/exportation, vous pouvez télécharger une
 msgid "Y-m-d H:i – l"
 msgstr "Ymd H:i – l"
 
-#: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:39
-#: zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:125
+#: zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:119
 msgid "You are not allowed to recover this page."
 msgstr "Vous n'êtes pas autorisé à récupérer cette page."
 
-#: zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:86
-#: zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:89
-#: zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:116
+#: zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:76
+#: zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:79
+#: zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:110
 msgid "You are not allowed to see the revisions"
 msgstr "Vous n'êtes pas autorisé à voir les révisions."
+
+#: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:32
+msgid "You are not allowed to see the revisions."
+msgstr ""
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:9
 msgid "You can have one backup per day of the week, older ones will be overwritten."
 msgstr "Vous pouvez avoir une sauvegarde par jour de la semaine, les plus anciennes seront écrasées."
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:10
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:43
 msgid "You can recover incoming and outgoing connections to other pages."
 msgstr "Vous pouvez récupérer les connexions entrantes et sortantes vers d'autres pages."
 
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:13
-msgid "You can select a revision to revover."
-msgstr "Vous pouvez sélectionner une révision à annuler."
+msgid "You can select a revision to recover."
+msgstr ""
 
-#: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:95
-msgid "You need to have access rights to the backup module."
-msgstr "Vous devez avoir les droits d'accès au module de sauvegarde."
+#: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:92
+msgid "You need access to the admin."
+msgstr ""
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:24
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
@@ -7584,10 +7701,6 @@ msgstr "Ceci teste la communication avec le serveur."
 msgid "Type"
 msgstr "Saisir"
 
-#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:35
-msgid "Unknown"
-msgstr "Inconnu"
-
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:92
 msgid "Vertical bar chart"
 msgstr "Diagramme à barres verticales"
@@ -7656,6 +7769,18 @@ msgstr "non"
 #: zotonic_mod_base/src/filters/filter_yesno.erl:63
 msgid "yes"
 msgstr "oui"
+
+#: zotonic_mod_clamav/priv/templates/_clamav_admin_status_alert.tpl:5
+msgid "ClamAV could not be reached. Files cannot be uploaded until the virus scanner is available again."
+msgstr ""
+
+#: zotonic_mod_clamav/priv/templates/_clamav_admin_status_alert.tpl:6
+msgid "Please contact your system administrator."
+msgstr ""
+
+#: zotonic_mod_clamav/priv/templates/_clamav_admin_status_alert.tpl:4
+msgid "Virus scanner unavailable"
+msgstr ""
 
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:19
 msgid "Added on"
@@ -8543,7 +8668,7 @@ msgstr "Début du suivi des inclusions de modèles pour votre session."
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:33
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:180
-#: zotonic_mod_survey/src/mod_survey.erl:663
+#: zotonic_mod_survey/src/mod_survey.erl:665
 msgid "Stop"
 msgstr "Cesser"
 
@@ -13125,7 +13250,7 @@ msgstr "Toutes les réponses pour les répondants anonymes et connectés"
 msgid "Allow non-linear forms; answers are saved with “Back” button and a “Back to start” is added at the top of each page"
 msgstr "Autoriser les formulaires non linéaires ; les réponses sont sauvegardées à l'aide du bouton \"Retour\" et un \"Retour au début\" est ajouté en haut de chaque page."
 
-#: zotonic_mod_survey/src/mod_survey.erl:1644
+#: zotonic_mod_survey/src/mod_survey.erl:1646
 msgid "Already submitted"
 msgstr "Déjà soumis"
 
@@ -13174,7 +13299,7 @@ msgstr "Êtes-vous sûr de vouloir supprimer cette page? <br/> Cela supprime ég
 msgid "Are you sure you want to delete this question?"
 msgstr "Êtes-vous sûr de vouloir supprimer cette question ?"
 
-#: zotonic_mod_survey/src/mod_survey.erl:424
+#: zotonic_mod_survey/src/mod_survey.erl:426
 msgid "Are you sure you want to delete this result?"
 msgstr "Êtes-vous sûr de vouloir supprimer ce résultat"
 
@@ -13191,7 +13316,7 @@ msgid "Because you can edit, you can proceed for testing."
 msgstr "Parce que vous pouvez éditer, vous pouvez procéder aux tests."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:112
-#: zotonic_mod_survey/src/mod_survey.erl:660
+#: zotonic_mod_survey/src/mod_survey.erl:662
 msgid "Button"
 msgstr "Bouton"
 
@@ -13277,7 +13402,7 @@ msgstr "Impossible d'ajouter les destinataires."
 msgid "Could not create the mailinglist."
 msgstr "Impossible de créer la liste de diffusion."
 
-#: zotonic_mod_survey/src/mod_survey.erl:659
+#: zotonic_mod_survey/src/mod_survey.erl:661
 msgid "Country select"
 msgstr "Sélection du pays"
 
@@ -13359,7 +13484,7 @@ msgstr "Menu déroulant"
 msgid "E-mail addresses"
 msgstr "Adresse E-mail"
 
-#: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:77
+#: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:81
 msgid "Edit all answers"
 msgstr "Modifier toutes les réponses"
 
@@ -13369,13 +13494,13 @@ msgstr "Modifier toutes les réponses"
 msgid "Edit status"
 msgstr "Modifier le statut"
 
-#: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:82
+#: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:86
 msgid "Edit survey result"
 msgstr "Editer le résultat du sondage"
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:72
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:86
-#: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:29
+#: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:35
 msgid "Editor only"
 msgstr "Réservé aux éditeurs"
 
@@ -13434,7 +13559,7 @@ msgstr "Confirmez si correct"
 msgid "Feedback if wrong"
 msgstr "Confirmez si incorrect"
 
-#: zotonic_mod_survey/src/mod_survey.erl:664
+#: zotonic_mod_survey/src/mod_survey.erl:666
 msgid "File upload"
 msgstr "Téléversement de fichiers"
 
@@ -13575,7 +13700,7 @@ msgstr "Aller à cette étiquette de question (doit être sur une autre page ci-
 msgid "Last status change"
 msgstr "Dernier changement de statut"
 
-#: zotonic_mod_survey/src/mod_survey.erl:652
+#: zotonic_mod_survey/src/mod_survey.erl:654
 msgid "Likert"
 msgstr "Likert"
 
@@ -13586,7 +13711,7 @@ msgstr "Likert"
 msgid "Link with person"
 msgstr "Lien avec la personne"
 
-#: zotonic_mod_survey/src/mod_survey.erl:658
+#: zotonic_mod_survey/src/mod_survey.erl:660
 msgid "Long answer"
 msgstr "Longue réponse"
 
@@ -13652,7 +13777,7 @@ msgstr "Des réponses multiples sont possibles"
 msgid "Multiple answers possible: points are given for the correct answer <i>and</i> points are given for <i>not</i> choosing the wrong answer. Default: 1 point for a correct answer, 1 point for not choosing a wrong answer."
 msgstr "Plusieurs réponses possibles : des points sont attribués pour la bonne réponse <i>et</i> des points sont attribués pour <i>et non</i> en choisissant la mauvaise réponse. Défaut : 1 point pour une bonne réponse, 1 point pour ne pas avoir choisi une mauvaise réponse."
 
-#: zotonic_mod_survey/src/mod_survey.erl:665
+#: zotonic_mod_survey/src/mod_survey.erl:667
 msgid "Multiple choice"
 msgstr "Choix multiple"
 
@@ -13669,7 +13794,7 @@ msgstr "Plusieurs blocs de rupture de page sont fusionnés en un seul."
 msgid "Multiple times – each time with new results"
 msgstr "Plusieurs fois - chaque fois avec de nouveaux résultats"
 
-#: zotonic_mod_survey/src/mod_survey.erl:656
+#: zotonic_mod_survey/src/mod_survey.erl:658
 msgid "Narrative"
 msgstr "Narratif"
 
@@ -13749,7 +13874,7 @@ msgstr "Courriel de confirmation facultatif pour le répondant"
 msgid "Options from a page category"
 msgstr "Options d'une catégorie de page"
 
-#: zotonic_mod_survey/src/mod_survey.erl:661
+#: zotonic_mod_survey/src/mod_survey.erl:663
 msgid "Page break"
 msgstr "Saut de page"
 
@@ -13757,7 +13882,7 @@ msgstr "Saut de page"
 msgid "Page jump condition"
 msgstr "Condition de saut de page"
 
-#: zotonic_mod_survey/src/mod_survey.erl:662
+#: zotonic_mod_survey/src/mod_survey.erl:664
 msgid "Page options"
 msgstr "Options de la page"
 
@@ -13790,7 +13915,7 @@ msgid "Person"
 msgstr "La personne"
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:121
-#: zotonic_mod_survey/src/mod_survey.erl:560
+#: zotonic_mod_survey/src/mod_survey.erl:562
 msgid "Please fill in all the required fields."
 msgstr "Veuillez remplir tous les champs obligatoires."
 
@@ -13858,7 +13983,7 @@ msgstr "Question avec une réponse courte"
 #: zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:7
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:5
 #: zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:8
-#: zotonic_mod_survey/src/mod_survey.erl:649
+#: zotonic_mod_survey/src/mod_survey.erl:651
 msgid "Questions"
 msgstr "Questions"
 
@@ -13896,7 +14021,7 @@ msgstr "Réponse obligatoire."
 msgid "Responses"
 msgstr "Réponses"
 
-#: zotonic_mod_survey/src/mod_survey.erl:484
+#: zotonic_mod_survey/src/mod_survey.erl:486
 msgid "Result deleted."
 msgstr "Résultat supprimé."
 
@@ -13925,7 +14050,7 @@ msgid "Results until"
 msgstr "Résultats jusqu'au"
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:200
-#: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:93
+#: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:97
 msgid "Save &amp; Email"
 msgstr "Enregistrer &amp; E-mail"
 
@@ -13970,7 +14095,7 @@ msgstr "Séparez plusieurs adresses e-mail par une virgule."
 msgid "Set status"
 msgstr "Définir le statut"
 
-#: zotonic_mod_survey/src/mod_survey.erl:657
+#: zotonic_mod_survey/src/mod_survey.erl:659
 msgid "Short answer"
 msgstr "Réponse courte"
 
@@ -14019,28 +14144,28 @@ msgstr "Erreur inattendue"
 msgid "Sorry, could not insert the new person."
 msgstr "Désolé, impossible d'insérer la nouvelle personne."
 
-#: zotonic_mod_survey/src/mod_survey.erl:452
-#: zotonic_mod_survey/src/mod_survey.erl:567
-#: zotonic_mod_survey/src/mod_survey.erl:591
-#: zotonic_mod_survey/src/mod_survey.erl:638
+#: zotonic_mod_survey/src/mod_survey.erl:454
+#: zotonic_mod_survey/src/mod_survey.erl:569
+#: zotonic_mod_survey/src/mod_survey.erl:593
+#: zotonic_mod_survey/src/mod_survey.erl:640
 msgid "Sorry, that answer is unknown."
 msgstr "Désolé, cette réponse n'est pas disponible."
 
-#: zotonic_mod_survey/src/mod_survey.erl:1633
+#: zotonic_mod_survey/src/mod_survey.erl:1635
 msgid "Sorry, the maximum number of submissions has been reached. You can no longer submit this form."
 msgstr "Désolé, le nombre maximum de soumissions a été atteint. Vous ne pouvez plus soumettre ce formulaire."
 
-#: zotonic_mod_survey/src/mod_survey.erl:456
-#: zotonic_mod_survey/src/mod_survey.erl:459
+#: zotonic_mod_survey/src/mod_survey.erl:458
+#: zotonic_mod_survey/src/mod_survey.erl:461
 msgid "Sorry, the status could not be saved."
 msgstr "Désolé, le statut n'a pas pu être enregistré."
 
-#: zotonic_mod_survey/src/mod_survey.erl:473
-#: zotonic_mod_survey/src/mod_survey.erl:642
+#: zotonic_mod_survey/src/mod_survey.erl:475
+#: zotonic_mod_survey/src/mod_survey.erl:644
 msgid "Sorry, the survey result could not be saved."
 msgstr "Désolé, le résultat du sondage n'a pas pu être enregistré."
 
-#: zotonic_mod_survey/src/mod_survey.erl:1646
+#: zotonic_mod_survey/src/mod_survey.erl:1648
 msgid "Sorry, you already submitted your answers. Reload the page if you want to fill in the form again."
 msgstr "Désolé, vous avez déjà envoyé vos réponses. Rechargez la page si vous souhaitez remplir à nouveau le formulaire."
 
@@ -14066,7 +14191,7 @@ msgstr "Identifiant du modificateur d'état"
 msgid "Status note"
 msgstr "Note sur l'état d'avancement"
 
-#: zotonic_mod_survey/src/mod_survey.erl:448
+#: zotonic_mod_survey/src/mod_survey.erl:450
 msgid "Status saved."
 msgstr "Statut enregistré."
 
@@ -14136,7 +14261,7 @@ msgstr "Éditeur de sondage"
 msgid "Survey result"
 msgstr "Résultats de l'enquête"
 
-#: zotonic_mod_survey/src/mod_survey.erl:634
+#: zotonic_mod_survey/src/mod_survey.erl:636
 msgid "Survey result saved."
 msgstr "Résultat du sondage enregistré."
 
@@ -14253,7 +14378,7 @@ msgstr "C'est un résultat pour:"
 msgid "This is the percentage needed to pass a quiz or test. Only used if you have added quiz or test questions."
 msgstr "C'est le pourcentage nécessaire pour réussir un quiz ou un test. Uniquement utilisé si vous avez ajouté des questions de quiz ou de test."
 
-#: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:126
+#: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:138
 msgid "This survey answer could not be found or you are not allowed to view it."
 msgstr "Cette réponse au sondage est introuvable ou vous n'êtes pas autorisé à la consulter."
 
@@ -14275,7 +14400,7 @@ msgstr "Ce texte est présenté comme une introduction à l'enquête."
 msgid "This text is shown below the start button."
 msgstr "Ce texte est affiché sous le bouton de démarrage."
 
-#: zotonic_mod_survey/src/mod_survey.erl:653
+#: zotonic_mod_survey/src/mod_survey.erl:655
 msgid "Thurstone"
 msgstr "Thurstone"
 
@@ -14310,7 +14435,7 @@ msgstr "Vrai"
 msgid "True or false question"
 msgstr "Question vraie ou fausse"
 
-#: zotonic_mod_survey/src/mod_survey.erl:650
+#: zotonic_mod_survey/src/mod_survey.erl:652
 msgid "True/False"
 msgstr "Vrai/Faux"
 
@@ -14330,7 +14455,7 @@ msgstr "Afficher et modifier les résultats."
 msgid "View answers"
 msgstr "Voir les réponses"
 
-#: zotonic_mod_survey/src/mod_survey.erl:1654
+#: zotonic_mod_survey/src/mod_survey.erl:1656
 msgid "We are experiencing an overload, please try again in 10 minutes."
 msgstr "Nous rencontrons une surcharge, veuillez réessayer dans 10 minutes."
 
@@ -14352,7 +14477,7 @@ msgstr "Mauvais"
 msgid "Yes or no question"
 msgstr "oui ou non question"
 
-#: zotonic_mod_survey/src/mod_survey.erl:651
+#: zotonic_mod_survey/src/mod_survey.erl:653
 msgid "Yes/No"
 msgstr "Oui/Non"
 
@@ -14365,16 +14490,16 @@ msgid "You already filled this in."
 msgstr "Vous l'avez déjà rempli."
 
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:83
-#: zotonic_mod_survey/src/mod_survey.erl:454
+#: zotonic_mod_survey/src/mod_survey.erl:456
 msgid "You are not allowed to change the status."
 msgstr "Vous n'êtes pas autorisé à modifier le statut."
 
-#: zotonic_mod_survey/src/mod_survey.erl:431
-#: zotonic_mod_survey/src/mod_survey.erl:488
-#: zotonic_mod_survey/src/mod_survey.erl:525
-#: zotonic_mod_survey/src/mod_survey.erl:593
-#: zotonic_mod_survey/src/mod_survey.erl:640
-#: zotonic_mod_survey/src/mod_survey.erl:1720
+#: zotonic_mod_survey/src/mod_survey.erl:433
+#: zotonic_mod_survey/src/mod_survey.erl:490
+#: zotonic_mod_survey/src/mod_survey.erl:527
+#: zotonic_mod_survey/src/mod_survey.erl:595
+#: zotonic_mod_survey/src/mod_survey.erl:642
+#: zotonic_mod_survey/src/mod_survey.erl:1722
 msgid "You are not allowed to change these results."
 msgstr "Vous n’êtes pas autorisé à changer ces résultats."
 
@@ -14411,7 +14536,7 @@ msgstr "Vos réponses seront sauvegardées afin que vous puissiez revenir plus t
 msgid "Your result"
 msgstr "Votre résultat"
 
-#: zotonic_mod_survey/src/mod_survey.erl:1662
+#: zotonic_mod_survey/src/mod_survey.erl:1664
 msgid "Your session was expired, please restart and try again."
 msgstr "Votre session a expiré, veuillez redémarrer et réessayer."
 
