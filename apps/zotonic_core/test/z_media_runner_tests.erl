@@ -582,11 +582,8 @@ pool_failover() ->
         application:set_env(zotonic, media_runner_local_fallback, false),
         application:set_env(zotonic, media_runner_wait_timeout, 30),
         {ok, [A, B]} = z_media_runner_pool:runners(),
-        meck:expect(z_context, site, fun(pool_context) -> pool_site end),
-        meck:expect(z_context, new, fun(pool_site) -> pool_context end),
-        meck:expect(z_dispatcher, url_for, fun(media_runner_callback, _, pool_context) ->
-            <<"https://client.example/media-runner-callback">>
-        end),
+        mock_callback_context(pool_context, pool_site,
+            <<"https://client.example/media-runner-callback">>),
         Result = #{<<"status">> => <<"ok">>, <<"stdout">> => base64:encode(<<"done">>), <<"files">> => []},
         meck:expect(z_media_runner_protocol, request, fun(Url, Token, Request) ->
             case lists:last(binary:split(Url, <<"/">>, [global])) of
@@ -677,9 +674,8 @@ pool_pinned_download_retry() ->
             #{hostname => <<"pinned-", T/binary, ".example">>, oauth2_key => T}
             || T <- [<<"a">>, <<"b">>, <<"c">>, <<"d">>, <<"e">>]]),
         application:set_env(zotonic, media_runner_local_fallback, false),
-        meck:expect(z_context, site, fun(pinned_context) -> pinned_site end),
-        meck:expect(z_context, new, fun(pinned_site) -> pinned_context end),
-        meck:expect(z_dispatcher, url_for, fun(_, _, _) -> <<"https://client.example/callback">> end),
+        mock_callback_context(pinned_context, pinned_site,
+            <<"https://client.example/callback">>),
         Version = fun(Major) ->
             Tool = case Major of 6 -> <<"convert">>; 7 -> <<"magick">> end,
             {ok, #{<<"imagemagick">> => #{<<"available">> => true, <<"tool">> => Tool,
@@ -739,6 +735,25 @@ pool_pinned_download_retry() ->
             ({K, {ok, V}}) -> application:set_env(zotonic, K, V)
         end, Old)
     end.
+
+%% Mock only the fixture: CI also runs site installation and cron processes.
+%% Meck's passthrough option does not cover unmatched arguments in a mock fun.
+mock_callback_context(TestContext, TestSite, CallbackUrl) ->
+    meck:expect(z_context, site, fun
+        (Context) when Context =:= TestContext -> TestSite;
+        (Context) -> meck:passthrough([Context])
+    end),
+    meck:expect(z_context, new, fun
+        (Site) when Site =:= TestSite -> TestContext;
+        (Site) -> meck:passthrough([Site])
+    end),
+    meck:expect(z_dispatcher, url_for, fun
+        (media_runner_callback, _, Context) when Context =:= TestContext -> CallbackUrl;
+        (Name, Args, Context) -> meck:passthrough([Name, Args, Context])
+    end),
+    %% Exercise the calls made by background processes while these mocks are active.
+    Context = z_context:new(zotonic_site_testsandbox),
+    ?assertEqual(zotonic_site_testsandbox, z_context:site(Context)).
 
 %% Standalone EUnit does not start zotonic_core's sidejob resource.
 ensure_sidejobs() ->
