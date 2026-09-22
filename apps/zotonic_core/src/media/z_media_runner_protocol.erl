@@ -378,6 +378,8 @@ unpack(#{<<"status">> := <<"ok">>, <<"stdout">> := Stdout, <<"files">> := Files}
         RestoredOut = rewrite(Out, [{marker(N), stdout_path(P, Options)} || {N, P} <- Bindings]),
         {ok, RestoredOut}
     catch
+        throw:{media_runner_download, Reason} ->
+            {error, {media_runner_unavailable, {download, Reason}}};
         _:_ ->
             {error, media_runner_invalid_result}
     end;

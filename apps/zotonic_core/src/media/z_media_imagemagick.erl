@@ -24,7 +24,7 @@ runner reports its actual local installation via authenticated HTTPS. Separate l
 and remote caches expire after 60 seconds; failures retry after 5 seconds. Configuration
 and executable changes invalidate the appropriate cache immediately.".
 
--export([selected/0, local/0, clear_cache/0, installed/1]).
+-export([selected/0, local/0, clear_cache/0, installed/1, installations/0, probe_remote/2]).
 
 -include_lib("kernel/include/logger.hrl").
 -include_lib("kernel/include/file.hrl").
@@ -109,8 +109,8 @@ info(Tool, Version, Major, Command) ->
         legacy => Major < 7, cmd => Command, identify => Identify}.
 
 remote() ->
-    case z_media_runner_pool:runners() of
-        {ok, Runners} -> majority([installed(R) || R <- Runners]);
+    case installations() of
+        {ok, Installed} -> majority([Reply || {_, Reply} <- Installed]);
         {error, _} -> {error, configuration}
     end.
 
@@ -134,27 +134,87 @@ majority(Results) ->
             {ok, Selected}
     end.
 
-%% @doc Cache each configured runner's installation independently of local discovery.
+%% @doc Look up one runner in the shared, configuration-aware capability snapshot.
 -spec installed(map()) -> {ok, map()} | {error, term()}.
 installed(Runner) ->
-    {ok, [First | _]} = z_media_runner_pool:runners(),
-    Scope = case Runner =:= First of
-        true -> remote;
-        false -> {remote, z_media_runner_pool:identity(Runner)}
-    end,
-    Key = crypto:hash(sha256, term_to_binary({Runner, z_config:get(environment),
-        z_config:get(media_runner_local_fallback, false)})),
-    cached(Scope, Key, fun() ->
-        %% Prune removed runners only on refresh, not on every thumbnail lookup.
-        {ok, Runners} = z_media_runner_pool:runners(),
-        Allowed = [{?MODULE, {remote, z_media_runner_pool:identity(R)}} || R <- Runners],
-        lists:foreach(fun
-            ({{?MODULE, {remote, _}} = K, _}) ->
-                case lists:member(K, Allowed) of true -> ok; false -> persistent_term:erase(K) end;
-            (_) -> ok
-        end, persistent_term:get()),
-        fetch_remote(Runner)
-    end).
+    case installations() of
+        {ok, Installed} ->
+            case lists:keyfind(Runner, 1, Installed) of
+                {Runner, Reply} -> Reply;
+                false -> {error, unavailable}
+            end;
+        Error -> Error
+    end.
+
+%% @doc Probe at most 32 configured runners concurrently within a 5.5-second
+%% deadline. Cache the entire snapshot, so one slow host cannot repeatedly expire
+%% earlier failure entries while later probes are still running.
+-spec installations() -> {ok, [{map(), {ok, map()} | {error, term()}}]} | {error, term()}.
+installations() ->
+    case z_media_runner_pool:runners() of
+        {ok, Runners} ->
+            Key = crypto:hash(sha256, term_to_binary({Runners, z_config:get(environment),
+                z_config:get(media_runner_local_fallback, false)})),
+            {pool, Installed} = cached(remote, Key, fun() -> {pool, probe_pool(Runners)} end),
+            {ok, Installed};
+        Error -> Error
+    end.
+
+probe_pool(Runners) ->
+    Alias = alias(),
+    Deadline = erlang:monotonic_time(millisecond) + 5500,
+    Workers = lists:foldl(fun(Runner, Acc) ->
+        case z_sidejob:start(?MODULE, probe_remote, [Alias, Runner]) of
+            {ok, Pid} ->
+                Monitor = monitor(process, Pid),
+                Pid ! {Alias, probe},
+                Acc#{Pid => {Runner, Monitor}};
+            {error, overload} -> Acc
+        end
+    end, #{}, Runners),
+    try
+        Replies = collect(Workers, Alias, Deadline, #{}),
+        [{R, maps:get(R, Replies, {error, unavailable})} || R <- Runners]
+    after
+        unalias(Alias),
+        maps:foreach(fun(Pid, {_, Monitor}) ->
+            exit(Pid, kill),
+            demonitor(Monitor, [flush])
+        end, Workers),
+        flush_replies(Alias)
+    end.
+
+%% @doc Run a supervised capability probe after the caller installs its monitor.
+%% The handshake keeps a fast reply ordered before DOWN; sidejob admission can
+%% otherwise return after the worker has already exited. Unexpected crashes are
+%% reported by the sidejob's proc_lib process instead of becoming silent failures.
+-spec probe_remote(reference(), map()) -> ok.
+probe_remote(Alias, Runner) ->
+    receive
+        {Alias, probe} ->
+            Alias ! {Alias, self(), fetch_remote(Runner)},
+            ok
+    after 5500 ->
+        ok
+    end.
+
+collect(Workers, _Alias, _Deadline, Replies) when map_size(Workers) =:= 0 -> Replies;
+collect(Workers, Alias, Deadline, Replies) ->
+    receive
+        {Alias, Pid, Reply} ->
+            {{Runner, Monitor}, Rest} = maps:take(Pid, Workers),
+            demonitor(Monitor, [flush]),
+            collect(Rest, Alias, Deadline, Replies#{Runner => Reply});
+        {'DOWN', Monitor, process, Pid, _} when is_map_key(Pid, Workers) ->
+            {{Runner, Monitor}, Rest} = maps:take(Pid, Workers),
+            collect(Rest, Alias, Deadline, Replies#{Runner => {error, unavailable}})
+    after max(0, Deadline - erlang:monotonic_time(millisecond)) ->
+        Replies
+    end.
+
+flush_replies(Alias) ->
+    receive {Alias, _, _} -> flush_replies(Alias) after 0 -> ok end.
+
 
 fetch_remote(#{url := Base, token := Token}) ->
     case z_media_runner_protocol:request(z_media_runner_protocol:control_url(Base, <<"capabilities">>), Token, #{}, 5000) of
@@ -195,13 +255,21 @@ cached(Scope, Key, Fetch) ->
                     {hit, Value} -> Value;
                     miss ->
                         Value = Fetch(),
-                        TTL = case Value of {ok, _} -> 60; _ -> 5 end,
+                        TTL = cache_ttl(Value),
                         persistent_term:put({?MODULE, Scope},
                             {Key, erlang:monotonic_time(second) + TTL, Value}),
                         Value
                 end
             end, [node()])
     end.
+
+cache_ttl({ok, _}) -> 60;
+cache_ttl({pool, Installed}) ->
+    case lists:all(fun({_, Reply}) -> element(1, Reply) =:= ok end, Installed) of
+        true -> 60;
+        false -> 5
+    end;
+cache_ttl(_) -> 5.
 
 cached_value(Scope, Key) ->
     Now = erlang:monotonic_time(second),

@@ -336,18 +336,9 @@ identify_file_mime(Output, File, OriginalFilename) ->
 %% @doc Try to identify the file using image magick
 -spec identify_file_imagemagick(os_family(), file:filename_all(), undefined | mime_type(), z:context() | undefined) -> {ok, media_info()} | {error, term()}.
 identify_file_imagemagick(OsFamily, ImageFile, MimeFile, Context) ->
-    identify_file_imagemagick_1(imagemagick_identify_cmd(), OsFamily, ImageFile, MimeFile, Context).
+    identify_file_imagemagick_1(z_media_imagemagick:selected(), OsFamily, ImageFile, MimeFile, Context).
 
-%% @doc Find ImageMagick's 'identify' command on the current system, if any.
-%% This prefers the 'magick identify' command introduced in v7 if possible and
-%% otherwise falls back to the 'identify' one of previous ImageMagick's versions.
-%% Note: since system installations don't change that often, the result is cached.
--spec imagemagick_identify_cmd() -> string() | false.
-imagemagick_identify_cmd() ->
-    #{identify := Command} = z_media_imagemagick:selected(),
-    Command.
-
-identify_file_imagemagick_1(false, _OsFamily, _ImageFile, _MimeFile, _Context) ->
+identify_file_imagemagick_1(#{identify := false}, _OsFamily, _ImageFile, _MimeFile, _Context) ->
     ?LOG_ERROR(#{
         text => <<"Please install ImageMagick for identifying the type of uploaded files.">>,
         in => zotonic_core,
@@ -355,7 +346,7 @@ identify_file_imagemagick_1(false, _OsFamily, _ImageFile, _MimeFile, _Context) -
         reason => imagemagick_missing
     }),
     {error, imagemagick_missing};
-identify_file_imagemagick_1(Cmd, _OsFamily, ImageFile, MimeTypeFromFile, Context) ->
+identify_file_imagemagick_1(#{identify := Cmd} = Installation, _OsFamily, ImageFile, MimeTypeFromFile, Context) ->
     CleanedImageFile = z_filelib:os_filename(unicode:characters_to_list(ImageFile) ++ "[0]"),
     Profile = case MimeTypeFromFile of
         <<"application/pdf">> -> imagemagick_pdf;
@@ -363,7 +354,8 @@ identify_file_imagemagick_1(Cmd, _OsFamily, ImageFile, MimeTypeFromFile, Context
         _ -> imagemagick
     end,
     Command = [Cmd, " -quiet ", CleanedImageFile],
-    case z_exec:run(Profile, Command, #{read => [ImageFile]}, Context) of
+    case z_exec:run(Profile, Command, #{read => [ImageFile],
+        media_runner_imagemagick => maps:with([major, tool], Installation)}, Context) of
         {ok, Output} ->
             identify_imagemagick_output(z_convert:to_list(Output), ImageFile, MimeTypeFromFile);
         {error, Reason} ->

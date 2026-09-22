@@ -32,7 +32,15 @@ install(Files, Paths, Options, Fetch) ->
             true = is_integer(Size) andalso Size >= 0 andalso Size =< z_media_runner_protocol:output_limit(),
             true = is_binary(Hash) andalso byte_size(Hash) =:= 64,
             match = re:run(Hash, <<"^[0-9a-f]{64}$">>, [{capture, none}]),
-            {ok, Size, Hash} = Fetch(F, Temp, Options)
+            case Fetch(F, Temp, Options) of
+                {ok, Size, Hash} -> ok;
+                {error, Reason} ->
+                    case transport_failure(Reason) of
+                        true -> throw({media_runner_download, Reason});
+                        false -> error(invalid_download)
+                    end;
+                _ -> error(invalid_download)
+            end
         end, Pending),
         lists:foreach(fun({_, Path, Temp}) -> ok = file:rename(Temp, Path) end, Pending)
     after
@@ -45,11 +53,21 @@ pending_file(File, Paths) ->
     {File, Path, <<(unicode:characters_to_binary(Path))/binary, ".download-", Suffix/binary>>}.
 
 %% @doc Stream only from the configured runner; never forward OAuth credentials to callback-supplied hosts.
--spec fetch(map(), file:filename_all(), map()) -> {ok, non_neg_integer(), binary()}.
+-spec fetch(map(), file:filename_all(), map()) -> {ok, non_neg_integer(), binary()} | {error, term()}.
 fetch(#{<<"url">> := Url, <<"size">> := Size, <<"sha256">> := Hash}, Temp,
         #{media_runner_endpoint := Base, media_runner_token := Token}) ->
     Url = <<Base/binary, "/results/", Hash/binary>>,
     true = z_media_runner_protocol:https_url(Url),
     Headers = [{"authorization", "Bearer " ++ binary_to_list(Token)}],
-    {ok, Size, Hash} = z_media_runner_http:download(Url, Headers, Temp, Size, 3600000),
-    {ok, Size, Hash}.
+    z_media_runner_http:download(Url, Headers, Temp, Size, 3600000).
+
+%% Only transport failures are retryable. Invalid headers, sizes and hashes,
+%% authentication failures and local file errors must not trigger another render.
+transport_failure({failed_connect, _}) -> true;
+transport_failure({shutdown, server_closed}) -> true;
+transport_failure({tcp_error, _, _}) -> true;
+transport_failure({ssl_error, _, _}) -> true;
+transport_failure({http_status, Code}) -> lists:member(Code, [404, 429, 502, 503, 504]);
+transport_failure(Reason) ->
+    lists:member(Reason, [timeout, socket_closed_remotely, closed, econnreset,
+        econnrefused, etimedout, enetunreach, ehostunreach, nxdomain]).

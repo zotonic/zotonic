@@ -298,6 +298,12 @@ download_failure_test() ->
         Options = #{write => [Output], media_runner_endpoint => <<"https://runner.example/jobs">>,
             media_runner_token => <<"secret">>},
         ?assertEqual({error, media_runner_invalid_result}, z_media_runner_protocol:unpack(Result, Options)),
+        lists:foreach(fun(Reason) ->
+            ?assertEqual({error, {media_runner_unavailable, {download, Reason}}},
+                z_media_runner_protocol:unpack(Result, Options, fun(_, _, _) -> {error, Reason} end)),
+            ?assertEqual({ok, <<"original">>}, file:read_file(Output))
+        end, [timeout, socket_closed_remotely, {shutdown, server_closed},
+            {tcp_error, socket, econnreset}, {ssl_error, socket, closed}]),
         lists:foreach(fun(Data) ->
             ?assertEqual({error, media_runner_invalid_result},
                 z_media_runner_protocol:unpack(Result, Options, fun(_, Temp, _) ->
@@ -633,4 +639,111 @@ pool_failover() ->
             ({K, undefined}) -> application:unset_env(zotonic, K);
             ({K, {ok, V}}) -> application:set_env(zotonic, K, V)
         end, Old)
+    end.
+
+pool_atomic_selection_test() ->
+    A = #{url => <<"https://atomic-a.example/jobs">>, token => <<"a">>},
+    B = #{url => <<"https://atomic-b.example/jobs">>, token => <<"b">>},
+    Job = #{<<"profile">> => <<"file">>, <<"files">> => [#{<<"sha256">> => <<"same-input">>, <<"size">> => 10}]},
+    {ok, Empty} = z_media_runner:init([]),
+    {reply, {ok, First}, State1} = z_media_runner:handle_call(
+        {select, [A,B], Job, <<"atomic-1">>, <<"secret">>, self()}, undefined, Empty),
+    %% Intervening load must not split the same input's upload across runners.
+    BusyJobs = (maps:get(jobs, State1))#{other => #{runner => z_media_runner_pool:identity(First),
+        profile => <<"file">>, files => []}},
+    {reply, {ok, First}, State2} = z_media_runner:handle_call(
+        {select, [A,B], Job, <<"atomic-2">>, <<"secret">>, self()}, undefined, State1#{jobs => BusyJobs}),
+    maps:foreach(fun
+        (_, #{monitor := Ref}) -> demonitor(Ref, [flush]);
+        (_, _) -> ok
+    end, maps:get(jobs, State2)).
+
+pool_pinned_download_retry_test_() -> {timeout, 15, fun pool_pinned_download_retry/0}.
+
+pool_pinned_download_retry() ->
+    ensure_sidejobs(),
+    Keys = [media_runners, media_runner_local_fallback],
+    Old = [{K, application:get_env(zotonic, K)} || K <- Keys],
+    {Pid, Owned} = case z_media_runner:start_link() of
+        {ok, Started} -> {Started, true};
+        {error, {already_started, Started}} -> {Started, false}
+    end,
+    Modules = [z_context, z_dispatcher, z_media_runner_protocol, z_media_runner_http],
+    lists:foreach(fun(M) -> meck:new(M, [passthrough, no_link]) end, Modules),
+    Calls = ets:new(pinned_retry, [public]),
+    ets:insert(Calls, {downloads, 0}),
+    try
+        application:set_env(zotonic, media_runners, [
+            #{hostname => <<"pinned-", T/binary, ".example">>, oauth2_key => T}
+            || T <- [<<"a">>, <<"b">>, <<"c">>, <<"d">>, <<"e">>]]),
+        application:set_env(zotonic, media_runner_local_fallback, false),
+        meck:expect(z_context, site, fun(pinned_context) -> pinned_site end),
+        meck:expect(z_context, new, fun(pinned_site) -> pinned_context end),
+        meck:expect(z_dispatcher, url_for, fun(_, _, _) -> <<"https://client.example/callback">> end),
+        Version = fun(Major) ->
+            Tool = case Major of 6 -> <<"convert">>; 7 -> <<"magick">> end,
+            {ok, #{<<"imagemagick">> => #{<<"available">> => true, <<"tool">> => Tool,
+                <<"major">> => Major, <<"version">> => <<(integer_to_binary(Major))/binary, ".0.0">>}}}
+        end,
+        meck:expect(z_media_runner_protocol, request, fun(_, T, _, 5000) ->
+            Version(case T of <<"a">> -> 6; <<"b">> -> 6; _ -> 7 end)
+        end),
+        z_media_imagemagick:clear_cache(),
+        #{cmd := Cmd, major := 7} = Installation = z_media_imagemagick:selected(),
+        %% Majority changes after arguments were generated: keep using IM 7.
+        meck:expect(z_media_runner_protocol, request, fun(_, T, _, 5000) ->
+            Version(case T of <<"d">> -> 7; <<"e">> -> 7; _ -> 6 end)
+        end),
+        z_media_imagemagick:clear_cache(),
+        ?assertMatch(#{major := 6}, z_media_imagemagick:selected()),
+        Data = <<"result">>,
+        Hash = binary:encode_hex(crypto:hash(sha256, Data), lowercase),
+        meck:expect(z_media_runner_protocol, request, fun(Url, T, Request) ->
+            ?assert(lists:member(T, [<<"d">>, <<"e">>])),
+            case lists:last(binary:split(Url, <<"/">>, [global])) of
+                <<"submit">> ->
+                    ?assertMatch({0, _}, binary:match(maps:get(<<"command">>, Request), <<"magick ">>)),
+                    [Out] = [F || #{<<"write">> := true} = F <- maps:get(<<"files">>, Request)],
+                    {ok, Base} = z_media_runner_protocol:endpoint(<<"pinned-", T/binary, ".example">>),
+                    Result = #{<<"status">> => <<"ok">>, <<"stdout">> => <<>>, <<"files">> => [
+                        #{<<"id">> => maps:get(<<"id">>, Out), <<"size">> => 6, <<"sha256">> => Hash,
+                            <<"url">> => <<Base/binary, "/results/", Hash/binary>>}]},
+                    ok = z_media_runner:callback(maps:get(<<"id">>, Request), maps:get(<<"callback_token">>, Request), Result),
+                    {ok, #{<<"outcome">> => <<"accepted">>}};
+                <<"received">> -> {ok, #{<<"outcome">> => <<"received">>}}
+            end
+        end),
+        with_files(fun(Input, Output) ->
+            ok = file:write_file(Output, <<"original">>),
+            meck:expect(z_media_runner_http, download, fun(_, _, Temp, 6, _) ->
+                ?assertEqual({ok, <<"original">>}, file:read_file(Output)),
+                case ets:update_counter(Calls, downloads, 1) of
+                    1 -> {error, timeout};
+                    2 -> ok = file:write_file(Temp, Data), {ok, 6, Hash}
+                end
+            end),
+            Options = #{read => [Input], write => [Output], context => pinned_context,
+                media_runner_imagemagick => maps:with([major, tool], Installation)},
+            ?assertEqual({ok, <<>>}, z_media_runner:run(imagemagick, Cmd ++ " -version", Options)),
+            ?assertEqual({ok, Data}, file:read_file(Output)),
+            ?assertEqual(2, ets:lookup_element(Calls, downloads, 2)),
+            ?assertEqual([], filelib:wildcard(Output ++ ".download-*"))
+        end)
+    after
+        ets:delete(Calls),
+        lists:foreach(fun meck:unload/1, Modules),
+        z_media_imagemagick:clear_cache(),
+        case Owned of true -> gen_server:stop(Pid); false -> ok end,
+        lists:foreach(fun
+            ({K, undefined}) -> application:unset_env(zotonic, K);
+            ({K, {ok, V}}) -> application:set_env(zotonic, K, V)
+        end, Old)
+    end.
+
+%% Standalone EUnit does not start zotonic_core's sidejob resource.
+ensure_sidejobs() ->
+    {ok, _} = application:ensure_all_started(sidejob),
+    case whereis(zotonic_sidejobs) of
+        undefined -> {ok, _} = z_sidejob:init(), ok;
+        _ -> ok
     end.
