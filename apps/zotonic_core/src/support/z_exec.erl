@@ -349,6 +349,7 @@ runtime_read(Profile) ->
         "/usr/lib",
         "/usr/lib64",
         "/usr/local/lib",
+        "/nix/store",
         "/etc/ld.so.cache",
         "/etc/localtime",
         "/usr/share/locale",
