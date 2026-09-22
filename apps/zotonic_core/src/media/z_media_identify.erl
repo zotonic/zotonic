@@ -182,7 +182,12 @@ identify_file_os(unix, File, OriginalFilename, Context) ->
     identify_file_unix(os:find_executable("file"), File, OriginalFilename, Context).
 
 identify_file_unix(false, _File, _OriginalFilename, _Context) ->
-    ?LOG_ERROR("Please install 'file' for identifying the type of uploaded files."),
+    ?LOG_ERROR(#{
+        text => <<"Please install 'file' for identifying the type of uploaded files.">>,
+        in => zotonic_core,
+        result => error,
+        reason => no_file_cmd
+    }),
     {error, no_file_cmd};
 identify_file_unix(Cmd, File, OriginalFilename, _Context) ->
     CmdLine = unicode:characters_to_list([
@@ -343,7 +348,12 @@ imagemagick_identify_cmd() ->
     Command.
 
 identify_file_imagemagick_1(false, _OsFamily, _ImageFile, _MimeFile, _Context) ->
-    ?LOG_ERROR("Please install ImageMagick for identifying the type of uploaded files."),
+    ?LOG_ERROR(#{
+        text => <<"Please install ImageMagick for identifying the type of uploaded files.">>,
+        in => zotonic_core,
+        result => error,
+        reason => imagemagick_missing
+    }),
     {error, imagemagick_missing};
 identify_file_imagemagick_1(Cmd, _OsFamily, ImageFile, MimeTypeFromFile, Context) ->
     CleanedImageFile = z_filelib:os_filename(unicode:characters_to_list(ImageFile) ++ "[0]"),
@@ -358,8 +368,11 @@ identify_file_imagemagick_1(Cmd, _OsFamily, ImageFile, MimeTypeFromFile, Context
             identify_imagemagick_output(z_convert:to_list(Output), ImageFile, MimeTypeFromFile);
         {error, Reason} ->
             ?LOG_NOTICE(#{
-                text => <<"identify of file failed">>, in => zotonic_core,
-                file => ImageFile, result => error, reason => Reason
+                text => <<"identify of file failed">>,
+                in => zotonic_core,
+                file => ImageFile,
+                result => error,
+                reason => Reason
             }),
             {error, Reason}
     end.

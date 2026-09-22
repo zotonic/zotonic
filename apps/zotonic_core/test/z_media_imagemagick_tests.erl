@@ -52,6 +52,9 @@ version_probe() ->
             [{reply, Reply}] = ets:lookup(Counter, reply), Reply
         end),
         z_media_imagemagick:clear_cache(),
+        %% Remote-only discovery must work before any local tool is probed.
+        ?assertMatch(#{major := 6, legacy := true}, z_media_imagemagick:selected()),
+        ?assertEqual(0, meck:num_calls(z_exec, run, '_')),
         ?assertMatch(#{version := <<"7.1.2-3">>}, z_media_imagemagick:local()),
         z_media_imagemagick:local(),
         ?assertEqual(1, meck:num_calls(z_exec, run, '_')),
@@ -83,6 +86,8 @@ version_probe() ->
         ?assertEqual(BeforeRetry, calls(Counter)),
         expire(remote),
         ?assertMatch(#{major := 6}, z_media_imagemagick:selected()),
+        %% Successful refreshes and remote failures must not trigger local probes.
+        ?assertEqual(1, meck:num_calls(z_exec, run, '_')),
         application:set_env(zotonic, media_runner_local_fallback, true),
         [spawn(fun() -> Parent ! {warned, z_media_imagemagick:selected()} end) || _ <- lists:seq(1, 20)],
         [receive {warned, #{major := 6}} -> ok after 10000 -> error(probe_timeout) end || _ <- lists:seq(1, 20)],

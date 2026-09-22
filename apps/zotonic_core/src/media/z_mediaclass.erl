@@ -324,7 +324,13 @@ reindex(#state{context=Context, last=Last} = State) ->
             % Something changed, parse and update all classes in the files.
             Site = z_context:site(State#state.context),
             ok = reindex_files(Fs, Site),
-            ?LOG_DEBUG("Re-indexed mediaclass definitions"),
+            ?LOG_DEBUG(#{
+                text => <<"Re-indexed mediaclass definitions">>,
+                in => zotonic_core,
+                site => Site,
+                file_count => length(Fs),
+                result => ok
+            }),
             State#state{last=New}
     end.
 

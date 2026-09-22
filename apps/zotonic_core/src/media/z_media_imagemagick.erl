@@ -29,7 +29,9 @@ and executable changes invalidate the appropriate cache immediately.".
 -include_lib("kernel/include/logger.hrl").
 -include_lib("kernel/include/file.hrl").
 
-%% @doc Select the processing host's installation, keeping local discovery separate.
+%% @doc Select the runner's ImageMagick installation when a runner is configured.
+%% Cache successful lookups for 60 seconds and failures for 5 seconds. Local tools
+%% are only probed without a runner or when local fallback is enabled.
 -spec selected() -> map().
 selected() ->
     case z_media_runner:enabled() of
@@ -181,10 +183,12 @@ warn_mismatch(Key, Remote) ->
                                     Warning -> ok;
                                     _ ->
                                         persistent_term:put({?MODULE, warning}, Warning),
-                                        ?LOG_WARNING(#{in => zotonic_core,
+                                        ?LOG_WARNING(#{
+                                            in => zotonic_core,
                                             text => <<"Media runner and local ImageMagick major versions differ; local fallback may fail or produce different previews">>,
                                             remote_version => maps:get(version, Remote, missing),
-                                            local_version => maps:get(version, Local, missing)})
+                                            local_version => maps:get(version, Local, missing)
+                                        })
                                 end
                             end, [node()])
                     end
