@@ -36,9 +36,15 @@ runners() ->
     Entries = case z_config:get(media_runners) of
         undefined ->
             case configured() of
-                false -> [];
-                true -> [#{hostname => z_config:get(media_runner_hostname),
-                    oauth2_key => z_config:get(media_runner_oauth2_key, <<>>)}]
+                false ->
+                    [];
+                true ->
+                    [
+                        #{
+                            hostname => z_config:get(media_runner_hostname),
+                            oauth2_key => z_config:get(media_runner_oauth2_key, <<>>)
+                        }
+                    ]
             end;
         Pool -> Pool
     end,
@@ -57,11 +63,14 @@ runner(Entry) ->
     Token = z_convert:to_binary(maps:get(oauth2_key, Entry, maps:get(<<"oauth2_key">>, Entry, <<>>))),
     true = is_binary(Token) andalso Token =/= <<>>,
     {ok, Url} = z_media_runner_protocol:endpoint(Host),
-    #{url => Url, token => Token}.
+    #{
+        url => Url,
+        token => Token
+    }.
 
 %% @doc Scope hints by endpoint and credential, without storing credentials in keys.
 -spec identity(map()) -> binary().
-identity(#{url := Url, token := Token}) ->
+identity(#{ url := Url, token := Token }) ->
     crypto:hash(sha256, term_to_binary({Url, Token})).
 
 %% @doc Prefer expected cached bytes, then fewer active jobs in this work class.
@@ -87,10 +96,11 @@ rank(Runners, Job, Hints, Active) ->
 remember(Id, Files, Hints) ->
     Now = erlang:monotonic_time(second),
     Fresh = maps:filter(fun(_, Until) -> Until > Now end, Hints),
-    Added = lists:foldl(fun
-        (#{<<"sha256">> := H}, Acc) -> Acc#{{Id, H} => Now + 3600};
-        (_, Acc) -> Acc
-    end, Fresh, Files),
+    Added = lists:foldl(
+        fun
+            (#{<<"sha256">> := H}, Acc) -> Acc#{{Id, H} => Now + 3600};
+            (_, Acc) -> Acc
+        end, Fresh, Files),
     case map_size(Added) =< 10000 of
         true -> Added;
         false ->
