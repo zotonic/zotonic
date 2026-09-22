@@ -122,6 +122,7 @@
             </div>
 
             {% all include "_admin_system_status.tpl" %}
+            {% include "_admin_status_media.tpl" %}
         </div>
 
         <div class="col-md-6">

@@ -51,6 +51,7 @@ Available Model API Paths
 | `get` | `/os_memory/...` | Return operating-system memory statistics. |
 | `get` | `/os_memory/alert/...` | Return whether OS memory pressure crosses alert thresholds. |
 | `get` | `/task_queue/...` | Return pivot/task queue counters from `z_pivot_rsc:count_tasks/1`. |
+| `get` | `/media_processing/...` | Return local sandbox and cached media runner availability, without credentials. |
 | `get` | `/is_ssl_application_configured/...` | Return whether the `ssl` application has session settings configured. |
 | `get` | `/init_arguments/...` | Return all Erlang VM init arguments (`init:get_arguments/0`). |
 | `get` | `/init_arguments/config/...` | Return only `-config` init argument values. |
@@ -98,6 +99,8 @@ m_get(Path, Msg, Context) ->
     end.
 
 
+m_get_1([ <<"media_processing">> | Rest ], _Msg, _Context) ->
+    {ok, {media_processing(), Rest}};
 m_get_1([ <<"database_version">> | Rest ], _Msg, Context) ->
     case z_acl:is_admin(Context) of
         true -> {ok, {database_version(Context), Rest}};
@@ -186,6 +189,33 @@ m_get_1(_Path, _Msg, _Context) ->
 %%
 %% Helpers
 %%
+
+%% @doc Summarize media execution without exposing runner credentials or raw errors.
+%% Remote probes share the bounded, configuration-aware ImageMagick cache.
+-spec media_processing() -> map().
+media_processing() ->
+    Sandbox = case z_exec:sandbox_status() of
+        {ok, _} -> available;
+        {error, {sandbox_unsupported, _}} -> unsupported;
+        {error, _} -> unavailable
+    end,
+    Base = #{
+        remote => z_media_runner_pool:configured(),
+        local_fallback => z_config:get(media_runner_local_fallback, false) =:= true,
+        sandbox => Sandbox,
+        local_imagemagick => maps:with([available, version], z_media_imagemagick:local())
+    },
+    case z_media_imagemagick:installations() of
+        {ok, Installed} ->
+            Base#{runners => [media_runner_status(Runner, Reply) || {Runner, Reply} <- Installed]};
+        {error, _} ->
+            Base#{configuration_error => true, runners => []}
+    end.
+
+media_runner_status(#{url := Url}, {ok, Info}) ->
+    #{url => Url, reachable => true, imagemagick => maps:with([available, version, major], Info)};
+media_runner_status(#{url := Url}, {error, _}) ->
+    #{url => Url, reachable => false}.
 
 % Return the total number of open tcp connections in the system.
 % This includes local sockets.
