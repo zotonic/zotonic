@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-09-22 13:51\n"
+"PO-Revision-Date: 2026-09-22 15:25\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -2763,7 +2763,7 @@ msgstr "此系統不支援沙盒隔離。本機媒體指令將在未隔離的狀
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:26
 msgid "Sandbox isolation is unavailable. Local sandboxed media commands cannot run."
-msgstr ""
+msgstr "無法使用沙盒隔離功能。無法執行本機沙盒媒體指令。"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:6
@@ -3123,7 +3123,7 @@ msgstr "类别树正在重建。这可能需要很长的时间。"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:7
 msgid "The media runner configuration is invalid."
-msgstr ""
+msgstr "媒體傳送器的設定無效。"
 
 #: zotonic_mod_admin/priv/templates/_action_unlink_undo.tpl:15
 msgid "The page"
@@ -3326,7 +3326,7 @@ msgstr "鍵入以過濾下面的清單。"
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:47
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:48
 msgid "Unavailable"
-msgstr ""
+msgstr "無法提供"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:30
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:43
@@ -6737,7 +6737,7 @@ msgstr "頁面恢復後，您將被重新導向到編輯頁面。"
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:12
 msgid "Are you sure you want to restore this deleted page using the selected version?"
-msgstr ""
+msgstr "您確定要使用所選的版本還原此已刪除的頁面嗎？"
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:10
 msgid "Are you sure you want to revert to this version?"
@@ -6837,7 +6837,7 @@ msgstr "刪除的頁面"
 
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:12
 msgid "Deleted pages you have permission to edit."
-msgstr ""
+msgstr "您有權編輯的已刪除頁面。"
 
 #: zotonic_mod_backup/priv/templates/admin_backup.tpl:14
 msgid "Directory"
@@ -6938,7 +6938,7 @@ msgstr "只有管理員可以啟動備份。"
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:23
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:33
 msgid "Original"
-msgstr ""
+msgstr "原文"
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:100
 msgid "Please make sure you store the backup encryption password in a safe <u>external</u> location."
@@ -6958,7 +6958,7 @@ msgstr "恢復到其他頁面的傳出連接"
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:14
 msgid "Recovering a deleted page requires permission to create pages in the selected category and content group."
-msgstr ""
+msgstr "要還原已刪除的頁面，必須具備在所選分類及內容群組中建立頁面的權限。"
 
 #: zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:38
 #: zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:41
@@ -6972,15 +6972,15 @@ msgstr "恢復已刪除的 <em>依賴的</em> 頁面（由此頁引用）"
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:41
 msgid "Restore deleted page"
-msgstr ""
+msgstr "還原已刪除的頁面"
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:69
 msgid "Restore page"
-msgstr ""
+msgstr "還原頁面"
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:38
 msgid "Restore this page..."
-msgstr ""
+msgstr "還原此頁面..."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:30
 msgid "Revert page to earlier version"
@@ -7000,7 +7000,7 @@ msgstr "恢復到這個版本..."
 
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:82
 msgid "Revisions"
-msgstr ""
+msgstr "修訂"
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:14
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:52
@@ -7024,15 +7024,15 @@ msgstr "已刪除用戶的修改將保留 {n} 天。"
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:25
 msgid "Select a category"
-msgstr ""
+msgstr "選擇類別"
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:35
 msgid "Select a content group"
-msgstr ""
+msgstr "選擇一個內容群組"
 
 #: zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:121
 msgid "Select an existing category and content group before restoring this page."
-msgstr ""
+msgstr "在還原此頁面之前，請先選取現有的類別和內容群組。"
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:3
 msgid "Select the backup file you want to upload. The file must be a .bert file."
@@ -7115,7 +7115,7 @@ msgstr "加密配置設定為："
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:18
 msgid "The original category or content group no longer exists. Confirm the suggested replacement or select another one."
-msgstr ""
+msgstr "原始的分類或內容群組已不存在。請確認建議的替代選項，或選擇其他選項。"
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:5
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:15
@@ -7161,7 +7161,7 @@ msgstr "您不允许查看修改的内容"
 
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:32
 msgid "You are not allowed to see the revisions."
-msgstr ""
+msgstr "您無權查看這些修訂內容。"
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:9
 msgid "You can have one backup per day of the week, older ones will be overwritten."
@@ -7173,11 +7173,11 @@ msgstr "您可以恢復與其他頁面的傳入和傳出連線。"
 
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:13
 msgid "You can select a revision to recover."
-msgstr ""
+msgstr "您可以選擇要還原的版本。"
 
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:92
 msgid "You need access to the admin."
-msgstr ""
+msgstr "您需要取得管理員權限。"
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:24
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
@@ -7772,15 +7772,15 @@ msgstr "是的"
 
 #: zotonic_mod_clamav/priv/templates/_clamav_admin_status_alert.tpl:5
 msgid "ClamAV could not be reached. Files cannot be uploaded until the virus scanner is available again."
-msgstr ""
+msgstr "無法連線至 ClamAV。在病毒掃描程式恢復運作之前，無法上傳檔案。"
 
 #: zotonic_mod_clamav/priv/templates/_clamav_admin_status_alert.tpl:6
 msgid "Please contact your system administrator."
-msgstr ""
+msgstr "請聯絡您的系統管理員。"
 
 #: zotonic_mod_clamav/priv/templates/_clamav_admin_status_alert.tpl:4
 msgid "Virus scanner unavailable"
-msgstr ""
+msgstr "無法使用病毒掃描程式"
 
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:19
 msgid "Added on"
