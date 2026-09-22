@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-09-22 13:51\n"
+"PO-Revision-Date: 2026-09-22 15:24\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -2763,7 +2763,7 @@ msgstr "لا يتم دعم عزل «Sandbox» في هذا النظام. يتم �
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:26
 msgid "Sandbox isolation is unavailable. Local sandboxed media commands cannot run."
-msgstr ""
+msgstr "عزل «الصندوق الرملي» غير متاح. لا يمكن تشغيل أوامر الوسائط المحلية الموجودة في «الصندوق الرملي»."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:6
@@ -3123,7 +3123,7 @@ msgstr "يتم إعادة بناء شجرة الفئات، قد يستغرق ه�
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:7
 msgid "The media runner configuration is invalid."
-msgstr ""
+msgstr "تكوين برنامج تشغيل الوسائط غير صالح."
 
 #: zotonic_mod_admin/priv/templates/_action_unlink_undo.tpl:15
 msgid "The page"
@@ -3326,7 +3326,7 @@ msgstr "اكتب لتصفية القائمة أدناه."
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:47
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:48
 msgid "Unavailable"
-msgstr ""
+msgstr "غير متوفر"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:30
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:43
@@ -6737,7 +6737,7 @@ msgstr "بعد استعادة الصفحة، سيتم إعادة توجيهك إ
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:12
 msgid "Are you sure you want to restore this deleted page using the selected version?"
-msgstr ""
+msgstr "هل أنت متأكد من رغبتك في استعادة هذه الصفحة المحذوفة باستخدام الإصدار المحدد؟"
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:10
 msgid "Are you sure you want to revert to this version?"
@@ -6837,7 +6837,7 @@ msgstr "الصفحات المحذوفة"
 
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:12
 msgid "Deleted pages you have permission to edit."
-msgstr ""
+msgstr "الصفحات المحذوفة التي لديك إذن بتحريرها."
 
 #: zotonic_mod_backup/priv/templates/admin_backup.tpl:14
 msgid "Directory"
@@ -6938,7 +6938,7 @@ msgstr "يمكن للمسؤولين فقط بدء النسخ الاحتياطي.
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:23
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:33
 msgid "Original"
-msgstr ""
+msgstr "الأصل"
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:100
 msgid "Please make sure you store the backup encryption password in a safe <u>external</u> location."
@@ -6958,7 +6958,7 @@ msgstr "استعادة الاتصالات الصادرة إلى الصفحات �
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:14
 msgid "Recovering a deleted page requires permission to create pages in the selected category and content group."
-msgstr ""
+msgstr "يتطلب استعادة صفحة محذوفة الحصول على إذن لإنشاء صفحات في الفئة ومجموعة المحتوى المحددتين."
 
 #: zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:38
 #: zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:41
@@ -6972,15 +6972,15 @@ msgstr "استعادة الصفحات المحذوفة <em>التابعة</em> �
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:41
 msgid "Restore deleted page"
-msgstr ""
+msgstr "استعادة الصفحة المحذوفة"
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:69
 msgid "Restore page"
-msgstr ""
+msgstr "استعادة الصفحة"
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:38
 msgid "Restore this page..."
-msgstr ""
+msgstr "استعادة هذه الصفحة..."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:30
 msgid "Revert page to earlier version"
@@ -7000,7 +7000,7 @@ msgstr "العودة إلى هذا الإصدار ..."
 
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:82
 msgid "Revisions"
-msgstr ""
+msgstr "التعديلات"
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:14
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:52
@@ -7024,15 +7024,15 @@ msgstr "يتم الاحتفاظ بمراجعات المستخدمين المحذ
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:25
 msgid "Select a category"
-msgstr ""
+msgstr "اختر فئة"
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:35
 msgid "Select a content group"
-msgstr ""
+msgstr "اختر مجموعة محتوى"
 
 #: zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:121
 msgid "Select an existing category and content group before restoring this page."
-msgstr ""
+msgstr "يرجى تحديد فئة ومجموعة محتوى موجودتين قبل استعادة هذه الصفحة."
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:3
 msgid "Select the backup file you want to upload. The file must be a .bert file."
@@ -7115,7 +7115,7 @@ msgstr "تم ضبط تكوين التشفير على:"
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:18
 msgid "The original category or content group no longer exists. Confirm the suggested replacement or select another one."
-msgstr ""
+msgstr "لم تعد الفئة أو مجموعة المحتوى الأصلية موجودة. يرجى تأكيد البديل المقترح أو اختيار بديل آخر."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:5
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:15
@@ -7161,7 +7161,7 @@ msgstr "لا يسمح لك أن ترى المراجعات"
 
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:32
 msgid "You are not allowed to see the revisions."
-msgstr ""
+msgstr "لا يُسمح لك بالاطلاع على التعديلات."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:9
 msgid "You can have one backup per day of the week, older ones will be overwritten."
@@ -7173,11 +7173,11 @@ msgstr "يمكنك استعادة الاتصالات الواردة والصاد
 
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:13
 msgid "You can select a revision to recover."
-msgstr ""
+msgstr "يمكنك اختيار نسخة سابقة لاستعادتها."
 
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:92
 msgid "You need access to the admin."
-msgstr ""
+msgstr "تحتاج إلى حق الوصول إلى حساب المسؤول."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:24
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
@@ -7772,15 +7772,15 @@ msgstr "نعم"
 
 #: zotonic_mod_clamav/priv/templates/_clamav_admin_status_alert.tpl:5
 msgid "ClamAV could not be reached. Files cannot be uploaded until the virus scanner is available again."
-msgstr ""
+msgstr "تعذر الوصول إلى ClamAV. لن يتسنى تحميل الملفات حتى يصبح برنامج فحص الفيروسات متاحًا مرة أخرى."
 
 #: zotonic_mod_clamav/priv/templates/_clamav_admin_status_alert.tpl:6
 msgid "Please contact your system administrator."
-msgstr ""
+msgstr "يرجى الاتصال بمسؤول النظام لديك."
 
 #: zotonic_mod_clamav/priv/templates/_clamav_admin_status_alert.tpl:4
 msgid "Virus scanner unavailable"
-msgstr ""
+msgstr "برنامج فحص الفيروسات غير متاح"
 
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:19
 msgid "Added on"
