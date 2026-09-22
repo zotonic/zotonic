@@ -124,15 +124,7 @@ drop_schema(_Site, Connection, Schema) ->
 
 
 open_connection(DatabaseName, Options) ->
-    epgsql:connect(
-      proplists:get_value(dbhost, Options),
-      proplists:get_value(dbuser, Options),
-      proplists:get_value(dbpassword, Options),
-      [
-       {port, proplists:get_value(dbport, Options)},
-       {database, DatabaseName}
-      ]
-     ).
+    epgsql:connect(z_db_pgsql:build_connect_options(DatabaseName, Options)).
 
 close_connection(Connection) ->
     epgsql:close(Connection).

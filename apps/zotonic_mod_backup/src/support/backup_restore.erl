@@ -495,7 +495,7 @@ restore_database_backup_file(BackupDecrypted, Context) ->
     end.
 
 import_dump(Filename, DbOpts, Context) ->
-    Host = proplists:get_value(dbhost, DbOpts),
+    Host = z_db_pgsql:normalize_host(proplists:get_value(dbhost, DbOpts)),
     Port = proplists:get_value(dbport, DbOpts),
     User = proplists:get_value(dbuser, DbOpts),
     Database = proplists:get_value(dbdatabase, DbOpts),

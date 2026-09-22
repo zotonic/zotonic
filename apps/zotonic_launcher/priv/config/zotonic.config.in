@@ -38,6 +38,11 @@
    %% {dbpassword, "zotonic"},
    %% {dbuser, "zotonic"},
    %% {dbport, 5432},
+%%% Set dbhost to socket (or "socket") for Unix sockets in /run/postgresql,
+%%% or to an absolute directory path, e.g. "/run/postgresql-custom".
+%%% The filename is .s.PGSQL.<dbport>; keep dbport set to the PostgreSQL port.
+%%% Socket connections do not fall back to TCP or search /tmp. Use a directory
+%%% writable only by trusted users to prevent server spoofing.
    %% {dbhost, "localhost"},
 
 %%% By default, Zotonic will create a postgres database for you if it doesn't

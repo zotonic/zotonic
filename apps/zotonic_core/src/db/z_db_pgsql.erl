@@ -23,6 +23,15 @@
 %% limitations under the License.
 
 -module(z_db_pgsql).
+-moduledoc("
+PostgreSQL driver. Set `dbhost` to `socket` (atom, string, or binary) to connect
+through `/run/postgresql`, or to an absolute path for another socket directory.
+The socket filename is `.s.PGSQL.<dbport>`. Socket connections do not fall back
+to TCP. Other host values use TCP as usual.
+
+Use a socket directory writable only by trusted users to prevent server spoofing.
+
+").
 -behaviour(gen_server).
 
 -behaviour(poolboy_worker).
@@ -45,6 +54,7 @@
     is_connection_alive/1,
 
     build_connect_options/2,
+    normalize_host/1,
 
     ensure_all_started/0,
     test_connection/1,
@@ -120,7 +130,7 @@ start_link(Args) when is_list(Args) ->
 
 -spec test_connection( list() ) -> ok | {error, term()}.
 test_connection(Args) ->
-    case try_connect_tcp(Args) of
+    case try_connect_socket(Args) of
         ok ->
             test_connection_1(Args);
         {error, _} = Error ->
@@ -786,9 +796,8 @@ timeout(#state{ busy_timeout = Timeout, busy_start = Start }) ->
     Now = msec(),
     erlang:max(1, Timeout - (Now - Start)).
 
-try_connect_tcp(Args) ->
-    Addr = get_arg(dbhost, Args),
-    Port = get_arg(dbport, Args),
+try_connect_socket(Args) ->
+    {Addr, Port} = connect_address(Args),
     SockOpts = [{active, false}, {packet, raw}, binary],
     case gen_tcp:connect(Addr, Port, SockOpts, ?CONNECT_TIMEOUT) of
         {ok, Sock} ->
@@ -860,12 +869,44 @@ connect_1(Args, RetryCt, MRef) ->
     end.
 
 build_connect_options(DatabaseName, Args) ->
+    {Host, Port} = connect_address(Args),
     Opts = #{
+             host => Host,
+             port => Port,
              database => DatabaseName,
              codecs => [{z_db_pgsql_codec, []}],
              nulls => [undefined, null, {term, undefined}, {term_json, undefined}]
             },
-    maybe_put_args([{dbhost, host}, {dbport, port}, {dbuser, username}, {dbpassword, password}], Args, Opts).
+    maybe_put_args([{dbuser, username}, {dbpassword, password}], Args, Opts).
+
+%% Resolve the configured port before converting a Unix socket endpoint to port 0.
+%% Share this mapping between the startup probe and all epgsql connections.
+-spec connect_address(Args) -> {Host, Port}
+    when
+        Args :: proplists:proplist(),
+        Host :: inet:socket_address() | inet:hostname(),
+        Port :: inet:port_number().
+connect_address(Args) ->
+    connect_address(normalize_host(get_arg(dbhost, Args)), get_arg(dbport, Args)).
+
+connect_address(<<"/", _/binary>> = Directory, Port) ->
+    connect_address(unicode:characters_to_list(Directory), Port);
+connect_address([$/ | _] = Directory, Port) ->
+    Path = filename:join(Directory, ".s.PGSQL." ++ integer_to_list(Port)),
+    {{local, Path}, 0};
+connect_address(Host, Port) ->
+    {Host, Port}.
+
+%% @doc Resolve the socket alias to a directory, also suitable for libpq clients
+%% such as pg_dump and psql. Preserve explicit directories and TCP addresses.
+-spec normalize_host(Host) -> NormalizedHost
+    when
+        Host :: socket | binary() | inet:hostname() | inet:ip_address(),
+        NormalizedHost :: binary() | inet:hostname() | inet:ip_address().
+normalize_host(socket) -> "/run/postgresql";
+normalize_host("socket") -> "/run/postgresql";
+normalize_host(<<"socket">>) -> "/run/postgresql";
+normalize_host(Host) -> Host.
 
 maybe_put_args([], _, Map) ->
     Map;
@@ -988,4 +1029,3 @@ maybe_log_query_plan(Other) ->
 msec() ->
     {A, B, C} = os:timestamp(),
     A * 1000000000 + B * 1000 + C div 1000.
-
