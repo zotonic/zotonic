@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2025 Marc Worrell
-%% @doc Identify files, fetch metadata about an image
+%% @copyright 2009-2026 Marc Worrell
+%% @doc Identify media types and extract file and image metadata.
 %% @end
 
-%% Copyright 2009-2025 Marc Worrell, Konstantin Nikiforov
+%% Copyright 2009-2026 Marc Worrell, Konstantin Nikiforov
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@
     identify_file/2,
     identify_file/3,
     identify_file_direct/2,
+    identify_file_direct/3,
     extension/1,
     extension/2,
     extension/3,
@@ -108,7 +109,7 @@ identify_file(File, OriginalFilename, Context) ->
         {ok, Props} ->
             {ok, Props};
         undefined ->
-            identify_file_direct(File, OriginalFilename)
+            identify_file_direct(File, OriginalFilename, Context)
     end.
 
 -spec maybe_extension(file:filename_all(), optional_filename()) -> filename_extension().
@@ -126,21 +127,28 @@ maybe_extension(Filename) ->
 %% @doc Fetch information about a file, returns mime, width, height, type, etc.
 -spec identify_file_direct( file:filename_all(), optional_filename() ) -> {ok, media_info()} | {error, term()}.
 identify_file_direct(File, OriginalFilename) ->
-    check_acceptable(File, maybe_identify_extension(identify_file_direct_1(File, OriginalFilename), OriginalFilename)).
+    identify_file_direct(File, OriginalFilename, undefined).
+
+%% @doc Identify a file directly, using the site's dispatcher for remote processing.
+-spec identify_file_direct(file:filename_all(), optional_filename(), z:context() | undefined) ->
+    {ok, media_info()} | {error, term()}.
+identify_file_direct(File, OriginalFilename, Context) ->
+    Result = identify_file_direct_1(File, OriginalFilename, Context),
+    check_acceptable(File, maybe_identify_extension(Result, OriginalFilename)).
 
 %% Images, pdf and ps are further investigated by ImageMagick
-identify_file_direct_1(File, OriginalFilename) ->
+identify_file_direct_1(File, OriginalFilename, Context) ->
     OsFamily = os_family(),
-    case identify_file_os(OsFamily, File, OriginalFilename) of
+    case identify_file_os(OsFamily, File, OriginalFilename, Context) of
         {error, _} ->
             %% Last resort, give ImageMagick a try
-            identify_file_imagemagick(OsFamily, File, undefined);
+            identify_file_imagemagick(OsFamily, File, undefined, Context);
         {ok, #{ <<"mime">> := <<"image/", _/binary>> = Mime }} ->
-            identify_file_imagemagick(OsFamily, File, Mime);
+            identify_file_imagemagick(OsFamily, File, Mime, Context);
         {ok, #{ <<"mime">> := <<"application/pdf">> = Mime }} ->
-            identify_file_imagemagick(OsFamily, File, Mime);
+            identify_file_imagemagick(OsFamily, File, Mime, Context);
         {ok, #{ <<"mime">> := <<"application/postscript">> = Mime }} ->
-            identify_file_imagemagick(OsFamily, File, Mime);
+            identify_file_imagemagick(OsFamily, File, Mime, Context);
         {ok, Props} = OK when is_map(Props) ->
             OK
     end.
@@ -166,23 +174,37 @@ maybe_identify_extension(Result, _OriginalFilename) ->
     Result.
 
 %% @doc Identify the mime type of a file using the unix "file" command.
--spec identify_file_os(win32|unix, File :: file:filename_all(), OriginalFilename :: file:filename_all()) ->
+-spec identify_file_os(win32|unix, File :: file:filename_all(), OriginalFilename :: file:filename_all(), z:context() | undefined) ->
     {ok, media_info()} | {error, term()}.
-identify_file_os(win32, _File, OriginalFilename) ->
+identify_file_os(win32, _File, OriginalFilename, _Context) ->
     {ok, #{ <<"mime">> => guess_mime(OriginalFilename)}};
-identify_file_os(unix, File, OriginalFilename) ->
-    identify_file_unix(os:find_executable("file"), File, OriginalFilename).
+identify_file_os(unix, File, OriginalFilename, Context) ->
+    identify_file_unix(os:find_executable("file"), File, OriginalFilename, Context).
 
-identify_file_unix(false, _File, _OriginalFilename) ->
-    ?LOG_ERROR("Please install 'file' for identifying the type of uploaded files."),
+identify_file_unix(false, _File, _OriginalFilename, _Context) ->
+    ?LOG_ERROR(#{
+        text => <<"Please install 'file' for identifying the type of uploaded files.">>,
+        in => zotonic_core,
+        result => error,
+        reason => no_file_cmd
+    }),
     {error, no_file_cmd};
-identify_file_unix(Cmd, File, OriginalFilename) ->
+identify_file_unix(Cmd, File, OriginalFilename, _Context) ->
     CmdLine = unicode:characters_to_list([
-        z_filelib:os_filename(Cmd),
-        " -b --mime-type ",
-        z_filelib:os_filename(File)
+        z_filelib:os_filename(unicode:characters_to_list(Cmd)),
+        " -b --mime-type -- ",
+        z_filelib:os_filename(unicode:characters_to_list(File))
     ]),
-    Mime = z_string:trim( unicode:characters_to_binary( os:cmd( CmdLine ) ) ),
+    %% MIME sniffing with the local file utility does not require a sandbox or
+    %% remote upload. Keep bounded execution; image inspection below still uses
+    %% the sandboxed media runner after the MIME type has been determined.
+    case z_exec:run(CmdLine, #{timeout => 10000, max_size => 65536}) of
+        {ok, Output} -> identify_file_mime(Output, File, OriginalFilename);
+        {error, _} = Error -> Error
+    end.
+
+identify_file_mime(Output, File, OriginalFilename) ->
+    Mime = z_string:trim(Output),
     case re:run(Mime, "^[a-zA-Z0-9_\\-\\.]+/[a-zA-Z0-9\\.\\-_]+$") of
         nomatch ->
             case Mime of
@@ -312,43 +334,50 @@ identify_file_unix(Cmd, File, OriginalFilename) ->
 
 
 %% @doc Try to identify the file using image magick
--spec identify_file_imagemagick(os_family(), file:filename_all(), undefined | mime_type()) -> {ok, media_info()} | {error, term()}.
-identify_file_imagemagick(OsFamily, ImageFile, MimeFile) ->
-    identify_file_imagemagick_1(imagemagick_identify_cmd(), OsFamily, ImageFile, MimeFile).
+-spec identify_file_imagemagick(os_family(), file:filename_all(), undefined | mime_type(), z:context() | undefined) -> {ok, media_info()} | {error, term()}.
+identify_file_imagemagick(OsFamily, ImageFile, MimeFile, Context) ->
+    identify_file_imagemagick_1(imagemagick_identify_cmd(), OsFamily, ImageFile, MimeFile, Context).
 
 %% @doc Find ImageMagick's 'identify' command on the current system, if any.
 %% This prefers the 'magick identify' command introduced in v7 if possible and
 %% otherwise falls back to the 'identify' one of previous ImageMagick's versions.
 %% Note: since system installations don't change that often, the result is cached.
--spec imagemagick_identify_cmd() -> Cmd | false when Cmd :: string().
+-spec imagemagick_identify_cmd() -> string() | false.
 imagemagick_identify_cmd() ->
-    Key = {?MODULE, imagemagick_identify_cmd},
-    case persistent_term:get(Key, undefined) of
-        undefined ->
-            ResultCmd = case os:find_executable("magick") of
-                false ->
-                    case os:find_executable("identify") of
-                        false -> false;
-                        Cmd -> z_filelib:os_filename(Cmd)
-                    end;
-                Cmd ->
-                    z_filelib:os_filename(Cmd) ++ " identify"
-            end,
-            persistent_term:put(Key, ResultCmd),
-            ResultCmd;
-        ResultCmd ->
-            ResultCmd
+    #{identify := Command} = z_media_imagemagick:selected(),
+    Command.
+
+identify_file_imagemagick_1(false, _OsFamily, _ImageFile, _MimeFile, _Context) ->
+    ?LOG_ERROR(#{
+        text => <<"Please install ImageMagick for identifying the type of uploaded files.">>,
+        in => zotonic_core,
+        result => error,
+        reason => imagemagick_missing
+    }),
+    {error, imagemagick_missing};
+identify_file_imagemagick_1(Cmd, _OsFamily, ImageFile, MimeTypeFromFile, Context) ->
+    CleanedImageFile = z_filelib:os_filename(unicode:characters_to_list(ImageFile) ++ "[0]"),
+    Profile = case MimeTypeFromFile of
+        <<"application/pdf">> -> imagemagick_pdf;
+        <<"application/postscript">> -> imagemagick_pdf;
+        _ -> imagemagick
+    end,
+    Command = [Cmd, " -quiet ", CleanedImageFile],
+    case z_exec:run(Profile, Command, #{read => [ImageFile]}, Context) of
+        {ok, Output} ->
+            identify_imagemagick_output(z_convert:to_list(Output), ImageFile, MimeTypeFromFile);
+        {error, Reason} ->
+            ?LOG_NOTICE(#{
+                text => <<"identify of file failed">>,
+                in => zotonic_core,
+                file => ImageFile,
+                result => error,
+                reason => Reason
+            }),
+            {error, Reason}
     end.
 
-identify_file_imagemagick_1(false, _OsFamily, _ImageFile, _MimeFile) ->
-    ?LOG_ERROR("Please install ImageMagick for identifying the type of uploaded files."),
-    {error, imagemagick_missing};
-identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeTypeFromFile) ->
-    CleanedImageFile = z_filelib:os_filename(z_convert:to_list(ImageFile) ++ "[0]"),
-    CmdOutput = os:cmd(Cmd
-                       ++ " -quiet "
-                       ++ z_convert:to_list(CleanedImageFile)
-                       ++ " 2> " ++ devnull(OsFamily)),
+identify_imagemagick_output(CmdOutput, ImageFile, MimeTypeFromFile) ->
     Lines = lists:dropwhile(
                     fun
                         ("Warning:" ++ _) -> true;
@@ -359,17 +388,6 @@ identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeTypeFromFile) ->
                     string:tokens(CmdOutput, "\n")),
     case Lines of
         [] ->
-            Err = os:cmd(Cmd
-                         ++ " -quiet "
-                         ++ z_convert:to_list(CleanedImageFile)
-                         ++ " 2>&1"),
-            ?LOG_NOTICE(#{
-                text => <<"identify of file failed">>,
-                in => zotonic_core,
-                file => CleanedImageFile,
-                result => error,
-                output => Err
-            }),
             {error, identify};
         [Result|_] ->
             %% ["test/a.jpg","JPEG","3440x2285","3440x2285+0+0","8-bit","DirectClass","2.899mb"]
@@ -408,7 +426,7 @@ identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeTypeFromFile) ->
                     ?LOG_WARNING(#{
                         text => <<"identify of file failed">>,
                         in => zotonic_core,
-                        file => CleanedImageFile,
+                        file => ImageFile,
                         result => X,
                         reason => B,
                         output => CmdOutput,
@@ -447,11 +465,6 @@ is_mime_vector(<<"application/postscript">>) -> true;
 is_mime_vector(<<"image/svg+xml">>) -> true;
 is_mime_vector(Mime) when is_binary(Mime) -> false;
 is_mime_vector(Mime) -> is_mime_vector( z_convert:to_binary(Mime) ).
-
-
--spec devnull(win32|unix) -> string().
-devnull(win32) -> "nul";
-devnull(unix)  -> "/dev/null".
 
 
 %% @doc ImageMagick identify can identify PDF files as:

@@ -18,7 +18,7 @@ jobs:
 
     strategy:
       matrix:
-        otp_version: [26.2]
+        otp_version: [28.5]
         os: [ubuntu-latest]
 
     container:
@@ -26,5 +26,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v7
+      - name: Install build dependencies
+        run: |
+          apt-get update
+          apt-get -y install libseccomp-dev
       - name: Dialyzer
         run: make dialyzer

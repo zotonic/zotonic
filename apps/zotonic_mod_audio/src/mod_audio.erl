@@ -104,7 +104,8 @@ This module handles the following notifier callbacks:
 
 % For testing
 -export([
-    audio_info/1
+    audio_info/1,
+    audio_info/2
 ]).
 
 -define(FFPROBE_CMDLINE, "ffprobe -loglevel quiet -show_format -show_streams -print_format json ").
@@ -131,8 +132,8 @@ observe_media_upload_props(#media_upload_props{archive_file=undefined, mime= <<"
     Medium;
 observe_media_upload_props(#media_upload_props{id=Id, archive_file=File, mime= <<"audio/", _/binary>>}, Medium, Context) ->
     FileAbs = z_media_archive:abspath(File, Context),
-    Info = audio_info(FileAbs),
-    Info2 = case audio_preview(FileAbs) of
+    Info = audio_info(FileAbs, Context),
+    Info2 = case audio_preview(FileAbs, Context) of
         {ok, TmpFile} ->
             PreviewFilename = m_media:make_preview_unique(Id, <<".png">>, Context),
             PreviewPath = z_media_archive:abspath(PreviewFilename, Context),
@@ -215,6 +216,11 @@ is_empty_prop(K, Props) ->
 
 
 audio_info(Path) ->
+    audio_info(Path, undefined).
+
+%% @doc Fetch audio metadata using the site's context for remote processing.
+-spec audio_info(file:filename_all(), z:context() | undefined) -> map().
+audio_info(Path, Context) ->
     Cmdline = case z_config:get(ffprobe_cmdline) of
         undefined -> ?FFPROBE_CMDLINE;
         <<>> -> ?FFPROBE_CMDLINE;
@@ -222,14 +228,24 @@ audio_info(Path) ->
         CmdlineCfg -> z_convert:to_list(CmdlineCfg)
     end,
     FfprobeCmd = lists:flatten([
-           Cmdline, " ", z_filelib:os_filename(Path)
+           Cmdline, " ", z_filelib:os_filename(unicode:characters_to_list(Path))
        ]),
     ?LOG_DEBUG(#{
         text => <<"Extract audio info">>,
         in => zotonic_mod_audio,
         command => FfprobeCmd
     }),
-    JSONText = unicode:characters_to_binary(os:cmd(FfprobeCmd)),
+    case z_exec:run(ffprobe, FfprobeCmd, #{read => [Path]}, Context) of
+        {ok, JSONText} -> audio_info_json(JSONText);
+        {error, Reason} ->
+            ?LOG_WARNING(#{
+                text => <<"Audio probe failed">>, in => zotonic_mod_audio,
+                result => error, reason => Reason
+            }),
+            #{}
+    end.
+
+audio_info_json(JSONText) ->
     try
         Ps = decode_json(JSONText),
         Info = #{
@@ -276,7 +292,7 @@ is_tag_ok(_, _) -> true.
 
 
 
-audio_preview(MovieFile) ->
+audio_preview(MovieFile, Context) ->
     Cmdline = case z_config:get(ffmpeg_preview_cmdline) of
         undefined -> ?PREVIEW_CMDLINE;
         <<>> -> ?PREVIEW_CMDLINE;
@@ -284,22 +300,21 @@ audio_preview(MovieFile) ->
         CmdlineCfg -> z_convert:to_list(CmdlineCfg)
     end,
     TmpFile = z_tempfile:new(),
-    FfmpegCmd = z_convert:to_list(
-        iolist_to_binary([
+    FfmpegCmd = unicode:characters_to_binary([
             case string:str(Cmdline, "-itsoffset") of
-                0 -> io_lib:format(Cmdline, [MovieFile]);
-                _ -> io_lib:format(Cmdline, [0, MovieFile])
+                0 -> io_lib:format(Cmdline, [z_filelib:os_filename(unicode:characters_to_list(MovieFile))]);
+                _ -> io_lib:format(Cmdline, [0, z_filelib:os_filename(unicode:characters_to_list(MovieFile))])
             end,
             " ",
-            z_filelib:os_filename(TmpFile)
-        ])),
+            z_filelib:os_filename(unicode:characters_to_list(TmpFile))
+        ]),
     jobs:run(media_preview_jobs,
         fun() ->
-            case os:cmd(FfmpegCmd) of
-                [] ->
+            case z_exec:run(ffmpeg_preview, FfmpegCmd, #{read => [MovieFile], write => [TmpFile]}, Context) of
+                {ok, _} ->
                    {ok, TmpFile};
-                Other ->
-                   {error, Other}
+                {error, _} = Error ->
+                   Error
             end
         end).
 

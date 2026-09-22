@@ -1,4 +1,5 @@
-#cloud-config for Ubuntu 24
+#cloud-config
+# Zotonic on Ubuntu 26.04 LTS.
 #
 # Example configs here:
 # https://cloudinit.readthedocs.io/en/latest/topics/examples.html
@@ -19,18 +20,23 @@ users:
     #   - <ssh pub key 1>
     #   - <ssh pub key 2>
 
+package_update: true
+
 packages:
   - build-essential
+  - libseccomp-dev
   - libcap2-bin
   - libssl-dev
   - automake
   - autoconf
-  - ncurses-dev
+  - libncurses-dev
   - zlib1g-dev
   - git
   - postgresql
   - postgresql-client
   - curl
+  - ca-certificates
+  - python3
   - gettext
   - inotify-tools
   - libnotify-bin
@@ -40,23 +46,36 @@ packages:
   - file
   - imagemagick
   - ffmpeg
-  - xvfb
-  - wkhtmltopdf
+  # wkhtmltopdf is no longer packaged for Ubuntu 26.04. Its upstream builds
+  # target older distributions and need separate compatibility testing.
+  # xvfb, previously used with wkhtmltopdf, is also omitted.
+
+write_files:
+  # Socket activation must agree with clamd.conf; otherwise systemd can pass
+  # only a Unix socket and clamd will not open the configured TCP listener.
+  - path: /etc/systemd/system/clamav-daemon.socket.d/listen.conf
+    owner: root:root
+    permissions: '0644'
+    content: |
+      [Socket]
+      ListenStream=
+      ListenStream=127.0.0.1:3310
 
 runcmd:
-  - apt update
+  # Stop provisioning on failure, before attempting to start Zotonic.
+  - set -e
   # Use kerl to install a good and recent version of Erlang
-  - curl -O https://raw.githubusercontent.com/kerl/kerl/master/kerl
+  - curl -fL -O https://raw.githubusercontent.com/kerl/kerl/master/kerl
   - chmod a+x kerl
   - mv kerl /usr/local/bin/kerl
   - mkdir -p /usr/local/lib/erlang
   - /usr/local/bin/kerl update releases
-  - /usr/local/bin/kerl build 27.3.4
-  - /usr/local/bin/kerl install 27.3.4 /usr/local/lib/erlang/27.3.4
-  - echo ". /usr/local/lib/erlang/27.3.4/activate" >> /etc/profile
+  - /usr/local/bin/kerl build 28.5
+  - /usr/local/bin/kerl install 28.5 /usr/local/lib/erlang/28.5
+  - echo ". /usr/local/lib/erlang/28.5/activate" >> /etc/profile
   - echo "export REBAR_CACHE_DIR=~/.cache/rebar3" >> /etc/profile
   # Allow Erlang (beam.smp) to listen on restricted ports (below 1024)
-  - setcap 'cap_net_bind_service=+ep' /usr/local/lib/erlang/27.3.4/erts-*/bin/beam.smp
+  - setcap 'cap_net_bind_service=+ep' /usr/local/lib/erlang/28.5/erts-*/bin/beam.smp
   # Restrict epmd listen IP addresses
   - echo "ERL_EPMD_ADDRESS=127.0.0.1,127.0.1.1" >> /etc/environment
   # Postgres installation
@@ -67,23 +86,45 @@ runcmd:
   - echo "zotonic   soft   nofile   60000" > /etc/security/limits.d/zotonic.conf
   - echo "zotonic   hard   nofile   60000" >> /etc/security/limits.d/zotonic.conf
   # Max inotify files setting
-  - sudo echo "fs.inotify.max_user_watches=10000" > /etc/sysctl.d/40-max-user-watches.conf
-  # Enable ImageMagick PDF rendering
-  - sed -i 's/^.*pattern="PDF".*$/<!-- &1 -->/g' /etc/ImageMagick-6/policy.xml
-  # Let clamav listen on localhost and update definitions
-  - service clamav-daemon stop
-  - systemctl stop clamav-freshclam
-  - sed -i '1s/^/# For Zotonic listen on localhost\nTCPSocket 3310\nTCPAddr 127.0.0.1\n\n/' /etc/clamav/clamd.conf
-  - sed -i 's/^LocalSocket.*$/# &1/g' /etc/clamav/clamd.conf
+  - echo "fs.inotify.max_user_watches=10000" > /etc/sysctl.d/40-max-user-watches.conf
+  - sysctl -p /etc/sysctl.d/40-max-user-watches.conf
+  # Ubuntu 26.04 ships ImageMagick 7. Allow PDF reading for previews while
+  # retaining the other ImageMagick policy restrictions.
+  - sed -i '/<\/policymap>/i\  <policy domain="coder" rights="read" pattern="PDF" />' /etc/ImageMagick-7/policy.xml
+  # Let ClamAV listen only on localhost and update definitions. Stop socket
+  # activation too, so it cannot restart clamd during configuration.
+  - systemctl stop clamav-daemon.service clamav-daemon.socket clamav-freshclam.service
+  - |
+    sed -i -E '/^[[:space:]]*(TCPSocket|TCPAddr|LocalSocket|LocalSocketGroup|LocalSocketMode)[[:space:]]/d' /etc/clamav/clamd.conf
+    printf '\n# Zotonic localhost scanner\nTCPSocket 3310\nTCPAddr 127.0.0.1\n' >> /etc/clamav/clamd.conf
   - freshclam
-  - systemctl start clamav-freshclam
-  - service clamav-daemon start
+  - systemctl daemon-reload
+  - systemctl enable --now clamav-freshclam.service clamav-daemon.socket clamav-daemon.service
+  # Wait for signatures to load and verify the protocol, not just an open port.
+  - |
+    python3 - <<'PY'
+    import socket
+    import time
+
+    deadline = time.monotonic() + 120
+    while time.monotonic() < deadline:
+        try:
+            with socket.create_connection(('127.0.0.1', 3310), timeout=2) as scanner:
+                scanner.sendall(b'nPING\n')
+                with scanner.makefile('rb') as response:
+                    if response.readline(32).strip() == b'PONG':
+                        break
+        except OSError:
+            pass
+        time.sleep(1)
+    else:
+        raise SystemExit('ClamAV did not respond on 127.0.0.1:3310 within 120 seconds')
+    PY
   # Generate ssh key for git urls
-  - sudo su zotonic -l -c "ssh-keygen -q -f /home/zotonic/.ssh/id_rsa -N ''"
+  - sudo su zotonic -l -c "mkdir -p ~/.ssh && chmod 700 ~/.ssh && ssh-keygen -q -f ~/.ssh/id_rsa -N ''"
   # Zotonic installation
   - sudo su zotonic -l -c "git clone 'https://github.com/zotonic/zotonic'"
   - sudo su zotonic -l -c "mkdir -p .config/zotonic/config/1/config.d"
   - sudo su zotonic -l -c "cp zotonic/cloud-init/config.d/* .config/zotonic/config/1/config.d/."
   - sudo su zotonic -l -c "cd zotonic; make"
   - sudo su zotonic -l -c "cd zotonic; bin/zotonic start"
-
