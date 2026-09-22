@@ -21,12 +21,12 @@ publication_checks() ->
     Parent = self(),
     %% Prevent executable discovery from depending on ImageMagick installation.
     try
-        ok = meck:expect(z_media_imagemagick, selected, fun() -> #{cmd => "convert", legacy => true} end),
+        ok = meck:expect(z_media_imagemagick, selected, fun() -> #{cmd => "convert", legacy => true, major => 6, tool => <<"convert">>} end),
         ok = meck:expect(z_media_identify, identify, fun(_, _, _, _) -> {ok, Props} end),
         ok = meck:expect(jobs, run, fun(media_preview_jobs, F) ->
             Parent ! {entered, self()}, F()
         end),
-        ok = meck:expect(z_exec, run, fun(imagemagick, _, #{write := [Temp]}, #context{site = zotonic_core}) ->
+        ok = meck:expect(z_exec, run, fun(imagemagick, _, #{write := [Temp], media_runner_imagemagick := #{major := 6, tool := <<"convert">>}}, #context{site = zotonic_core}) ->
             ok = file:write_file(Temp, <<"partial">>),
             Parent ! {decoding, self(), Temp},
             receive

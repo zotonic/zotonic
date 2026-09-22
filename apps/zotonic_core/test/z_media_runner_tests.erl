@@ -298,6 +298,12 @@ download_failure_test() ->
         Options = #{write => [Output], media_runner_endpoint => <<"https://runner.example/jobs">>,
             media_runner_token => <<"secret">>},
         ?assertEqual({error, media_runner_invalid_result}, z_media_runner_protocol:unpack(Result, Options)),
+        lists:foreach(fun(Reason) ->
+            ?assertEqual({error, {media_runner_unavailable, {download, Reason}}},
+                z_media_runner_protocol:unpack(Result, Options, fun(_, _, _) -> {error, Reason} end)),
+            ?assertEqual({ok, <<"original">>}, file:read_file(Output))
+        end, [timeout, socket_closed_remotely, {shutdown, server_closed},
+            {tcp_error, socket, econnreset}, {ssl_error, socket, closed}]),
         lists:foreach(fun(Data) ->
             ?assertEqual({error, media_runner_invalid_result},
                 z_media_runner_protocol:unpack(Result, Options, fun(_, Temp, _) ->
@@ -533,3 +539,226 @@ ffmpeg_preview_profile_test() ->
     ?assertEqual(<<"ffmpeg_preview">>, maps:get(<<"profile">>, Job)),
     ?assertEqual(ffmpeg_preview, z_media_runner_protocol:profile(<<"ffmpeg_preview">>)),
     ?assertEqual(ok, z_media_runner_protocol:validate(Job)).
+
+pool_affinity_test() ->
+    A = #{url => <<"https://a.example/media-runner">>, token => <<"a">>},
+    B = #{url => <<"https://b.example/media-runner">>, token => <<"b">>},
+    AId = z_media_runner_pool:identity(A),
+    BId = z_media_runner_pool:identity(B),
+    File = #{<<"sha256">> => <<"input-hash">>, <<"size">> => 1000},
+    Job = #{<<"files">> => [File]},
+    Hints = z_media_runner_pool:remember(AId, [File], #{}),
+    ?assertEqual([A, B], z_media_runner_pool:rank([B, A], Job, Hints, #{})),
+    Both = z_media_runner_pool:remember(BId, [File], Hints),
+    ?assertEqual([B, A], z_media_runner_pool:rank([A, B], Job, Both, #{AId => 1})),
+    Forgotten = z_media_runner_pool:forget(AId, [<<"input-hash">>], Both),
+    ?assertEqual([B, A], z_media_runner_pool:rank([A, B], Job, Forgotten, #{})),
+    %% Cold files rank identically regardless of configuration order.
+    ?assertEqual(z_media_runner_pool:rank([A, B], Job, #{}, #{}),
+        z_media_runner_pool:rank([B, A], Job, #{}, #{})),
+    ?assertNotEqual(AId, z_media_runner_pool:identity(A#{token => <<"another-consumer">>})),
+    Expired = #{{AId, <<"input-hash">>} => erlang:monotonic_time(second) - 1},
+    ?assertEqual(#{}, z_media_runner_pool:remember(BId, [], Expired)),
+    Many = [#{<<"sha256">> => integer_to_binary(N)} || N <- lists:seq(1, 10010)],
+    ?assertEqual(10000, map_size(z_media_runner_pool:remember(AId, Many, #{}))).
+
+pool_failover_test_() -> {timeout, 40, fun pool_failover/0}.
+
+pool_failover() ->
+    Keys = [media_runners, media_runner_local_fallback, media_runner_wait_timeout],
+    Old = [{K, application:get_env(zotonic, K)} || K <- Keys],
+    {Pid, Owned} = case z_media_runner:start_link() of
+        {ok, Started} -> {Started, true};
+        {error, {already_started, Started}} -> {Started, false}
+    end,
+    Modules = [z_context, z_dispatcher, z_media_runner_protocol],
+    lists:foreach(fun(M) -> meck:new(M, [passthrough, no_link]) end, Modules),
+    Calls = ets:new(pool_calls, [public]),
+    try
+        application:set_env(zotonic, media_runners, [
+            #{hostname => <<"pool-a.example">>, oauth2_key => <<"token-a">>},
+            #{<<"hostname">> => <<"pool-b.example">>, <<"oauth2_key">> => <<"token-b">>}
+        ]),
+        application:set_env(zotonic, media_runner_local_fallback, false),
+        application:set_env(zotonic, media_runner_wait_timeout, 30),
+        {ok, [A, B]} = z_media_runner_pool:runners(),
+        mock_callback_context(pool_context, pool_site,
+            <<"https://client.example/media-runner-callback">>),
+        Result = #{<<"status">> => <<"ok">>, <<"stdout">> => base64:encode(<<"done">>), <<"files">> => []},
+        meck:expect(z_media_runner_protocol, request, fun(Url, Token, Request) ->
+            case lists:last(binary:split(Url, <<"/">>, [global])) of
+                <<"submit">> ->
+                    Id = maps:get(<<"id">>, Request),
+                    Secret = maps:get(<<"callback_token">>, Request),
+                    case Token of
+                        <<"token-a">> ->
+                            ?assertMatch({0, _}, binary:match(Url, <<"https://pool-a.example/">>)),
+                            ets:insert(Calls, {rejected, Id, Secret}),
+                            {ok, #{<<"outcome">> => <<"full">>}};
+                        <<"token-b">> ->
+                            ?assertMatch({0, _}, binary:match(Url, <<"https://pool-b.example/">>)),
+                            %% A rejected attempt cannot deliver a late callback.
+                            [{rejected, OldId, OldSecret}] = ets:lookup(Calls, rejected),
+                            ?assertEqual({error, gone}, z_media_runner:callback(OldId, OldSecret, Result)),
+                            ets:insert(Calls, {accepted, Id}),
+                            %% Deliberately omit the callback; status must recover it.
+                            {ok, #{<<"outcome">> => <<"accepted">>}}
+                    end;
+                <<"received">> ->
+                    ?assertEqual(<<"token-b">>, Token),
+                    ets:insert(Calls, {received, true}),
+                    {ok, #{<<"outcome">> => <<"received">>}}
+            end
+        end),
+        meck:expect(z_media_runner_protocol, request, fun(Url, <<"token-b">>, #{<<"id">> := Id}, 5000) ->
+            ?assertEqual(<<"status">>, lists:last(binary:split(Url, <<"/">>, [global]))),
+            ?assertEqual([{accepted, Id}], ets:lookup(Calls, accepted)),
+            {ok, #{<<"outcome">> => <<"completed">>, <<"result">> => Result}}
+        end),
+        with_files(fun(Input, _) ->
+            Options = #{read => [Input], context => pool_context},
+            {ok, Job} = z_media_runner_protocol:pack(file, <<"printf done">>, Options),
+            ok = gen_server:call(Pid, {remember, z_media_runner_pool:identity(A), maps:get(<<"files">>, Job)}),
+            ?assertEqual({ok, <<"done">>}, z_media_runner:run(file, <<"printf done">>, Options)),
+            ?assertEqual([{received, true}], ets:lookup(Calls, received)),
+            ?assertEqual([B], gen_server:call(Pid, {rank, [B], Job}))
+        end),
+        application:set_env(zotonic, media_runners, [#{hostname => <<"bad/path">>, oauth2_key => <<"a">>}]),
+        ?assertEqual({error, media_runner_configuration}, z_media_runner_pool:runners()),
+        application:set_env(zotonic, media_runners, []),
+        ?assertEqual({ok, []}, z_media_runner_pool:runners()),
+        ?assertNot(z_media_runner:enabled())
+    after
+        ets:delete(Calls),
+        lists:foreach(fun meck:unload/1, Modules),
+        case Owned of true -> gen_server:stop(Pid); false -> ok end,
+        lists:foreach(fun
+            ({K, undefined}) -> application:unset_env(zotonic, K);
+            ({K, {ok, V}}) -> application:set_env(zotonic, K, V)
+        end, Old)
+    end.
+
+pool_atomic_selection_test() ->
+    A = #{url => <<"https://atomic-a.example/jobs">>, token => <<"a">>},
+    B = #{url => <<"https://atomic-b.example/jobs">>, token => <<"b">>},
+    Job = #{<<"profile">> => <<"file">>, <<"files">> => [#{<<"sha256">> => <<"same-input">>, <<"size">> => 10}]},
+    {ok, Empty} = z_media_runner:init([]),
+    {reply, {ok, First}, State1} = z_media_runner:handle_call(
+        {select, [A,B], Job, <<"atomic-1">>, <<"secret">>, self()}, undefined, Empty),
+    %% Intervening load must not split the same input's upload across runners.
+    BusyJobs = (maps:get(jobs, State1))#{other => #{runner => z_media_runner_pool:identity(First),
+        profile => <<"file">>, files => []}},
+    {reply, {ok, First}, State2} = z_media_runner:handle_call(
+        {select, [A,B], Job, <<"atomic-2">>, <<"secret">>, self()}, undefined, State1#{jobs => BusyJobs}),
+    maps:foreach(fun
+        (_, #{monitor := Ref}) -> demonitor(Ref, [flush]);
+        (_, _) -> ok
+    end, maps:get(jobs, State2)).
+
+pool_pinned_download_retry_test_() -> {timeout, 15, fun pool_pinned_download_retry/0}.
+
+pool_pinned_download_retry() ->
+    ensure_sidejobs(),
+    Keys = [media_runners, media_runner_local_fallback],
+    Old = [{K, application:get_env(zotonic, K)} || K <- Keys],
+    {Pid, Owned} = case z_media_runner:start_link() of
+        {ok, Started} -> {Started, true};
+        {error, {already_started, Started}} -> {Started, false}
+    end,
+    Modules = [z_context, z_dispatcher, z_media_runner_protocol, z_media_runner_http],
+    lists:foreach(fun(M) -> meck:new(M, [passthrough, no_link]) end, Modules),
+    Calls = ets:new(pinned_retry, [public]),
+    ets:insert(Calls, {downloads, 0}),
+    try
+        application:set_env(zotonic, media_runners, [
+            #{hostname => <<"pinned-", T/binary, ".example">>, oauth2_key => T}
+            || T <- [<<"a">>, <<"b">>, <<"c">>, <<"d">>, <<"e">>]]),
+        application:set_env(zotonic, media_runner_local_fallback, false),
+        mock_callback_context(pinned_context, pinned_site,
+            <<"https://client.example/callback">>),
+        Version = fun(Major) ->
+            Tool = case Major of 6 -> <<"convert">>; 7 -> <<"magick">> end,
+            {ok, #{<<"imagemagick">> => #{<<"available">> => true, <<"tool">> => Tool,
+                <<"major">> => Major, <<"version">> => <<(integer_to_binary(Major))/binary, ".0.0">>}}}
+        end,
+        meck:expect(z_media_runner_protocol, request, fun(_, T, _, 5000) ->
+            Version(case T of <<"a">> -> 6; <<"b">> -> 6; _ -> 7 end)
+        end),
+        z_media_imagemagick:clear_cache(),
+        #{cmd := Cmd, major := 7} = Installation = z_media_imagemagick:selected(),
+        %% Majority changes after arguments were generated: keep using IM 7.
+        meck:expect(z_media_runner_protocol, request, fun(_, T, _, 5000) ->
+            Version(case T of <<"d">> -> 7; <<"e">> -> 7; _ -> 6 end)
+        end),
+        z_media_imagemagick:clear_cache(),
+        ?assertMatch(#{major := 6}, z_media_imagemagick:selected()),
+        Data = <<"result">>,
+        Hash = binary:encode_hex(crypto:hash(sha256, Data), lowercase),
+        meck:expect(z_media_runner_protocol, request, fun(Url, T, Request) ->
+            ?assert(lists:member(T, [<<"d">>, <<"e">>])),
+            case lists:last(binary:split(Url, <<"/">>, [global])) of
+                <<"submit">> ->
+                    ?assertMatch({0, _}, binary:match(maps:get(<<"command">>, Request), <<"magick ">>)),
+                    [Out] = [F || #{<<"write">> := true} = F <- maps:get(<<"files">>, Request)],
+                    {ok, Base} = z_media_runner_protocol:endpoint(<<"pinned-", T/binary, ".example">>),
+                    Result = #{<<"status">> => <<"ok">>, <<"stdout">> => <<>>, <<"files">> => [
+                        #{<<"id">> => maps:get(<<"id">>, Out), <<"size">> => 6, <<"sha256">> => Hash,
+                            <<"url">> => <<Base/binary, "/results/", Hash/binary>>}]},
+                    ok = z_media_runner:callback(maps:get(<<"id">>, Request), maps:get(<<"callback_token">>, Request), Result),
+                    {ok, #{<<"outcome">> => <<"accepted">>}};
+                <<"received">> -> {ok, #{<<"outcome">> => <<"received">>}}
+            end
+        end),
+        with_files(fun(Input, Output) ->
+            ok = file:write_file(Output, <<"original">>),
+            meck:expect(z_media_runner_http, download, fun(_, _, Temp, 6, _) ->
+                ?assertEqual({ok, <<"original">>}, file:read_file(Output)),
+                case ets:update_counter(Calls, downloads, 1) of
+                    1 -> {error, timeout};
+                    2 -> ok = file:write_file(Temp, Data), {ok, 6, Hash}
+                end
+            end),
+            Options = #{read => [Input], write => [Output], context => pinned_context,
+                media_runner_imagemagick => maps:with([major, tool], Installation)},
+            ?assertEqual({ok, <<>>}, z_media_runner:run(imagemagick, Cmd ++ " -version", Options)),
+            ?assertEqual({ok, Data}, file:read_file(Output)),
+            ?assertEqual(2, ets:lookup_element(Calls, downloads, 2)),
+            ?assertEqual([], filelib:wildcard(Output ++ ".download-*"))
+        end)
+    after
+        ets:delete(Calls),
+        lists:foreach(fun meck:unload/1, Modules),
+        z_media_imagemagick:clear_cache(),
+        case Owned of true -> gen_server:stop(Pid); false -> ok end,
+        lists:foreach(fun
+            ({K, undefined}) -> application:unset_env(zotonic, K);
+            ({K, {ok, V}}) -> application:set_env(zotonic, K, V)
+        end, Old)
+    end.
+
+%% Mock only the fixture: CI also runs site installation and cron processes.
+%% Meck's passthrough option does not cover unmatched arguments in a mock fun.
+mock_callback_context(TestContext, TestSite, CallbackUrl) ->
+    meck:expect(z_context, site, fun
+        (Context) when Context =:= TestContext -> TestSite;
+        (Context) -> meck:passthrough([Context])
+    end),
+    meck:expect(z_context, new, fun
+        (Site) when Site =:= TestSite -> TestContext;
+        (Site) -> meck:passthrough([Site])
+    end),
+    meck:expect(z_dispatcher, url_for, fun
+        (media_runner_callback, _, Context) when Context =:= TestContext -> CallbackUrl;
+        (Name, Args, Context) -> meck:passthrough([Name, Args, Context])
+    end),
+    %% Exercise the calls made by background processes while these mocks are active.
+    Context = z_context:new(zotonic_site_testsandbox),
+    ?assertEqual(zotonic_site_testsandbox, z_context:site(Context)).
+
+%% Standalone EUnit does not start zotonic_core's sidejob resource.
+ensure_sidejobs() ->
+    {ok, _} = application:ensure_all_started(sidejob),
+    case whereis(zotonic_sidejobs) of
+        undefined -> {ok, _} = z_sidejob:init(), ok;
+        _ -> ok
+    end.

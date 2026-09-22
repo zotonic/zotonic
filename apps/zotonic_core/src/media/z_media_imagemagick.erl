@@ -24,12 +24,13 @@ runner reports its actual local installation via authenticated HTTPS. Separate l
 and remote caches expire after 60 seconds; failures retry after 5 seconds. Configuration
 and executable changes invalidate the appropriate cache immediately.".
 
--export([selected/0, local/0, clear_cache/0]).
+-export([selected/0, local/0, clear_cache/0, installed/1, installations/0, probe_remote/2]).
 
 -include_lib("kernel/include/logger.hrl").
 -include_lib("kernel/include/file.hrl").
 
-%% @doc Select the runner's ImageMagick installation when a runner is configured.
+%% @doc Select the most common available ImageMagick major version in the pool.
+%% Ties follow configuration order; unavailable installations do not vote.
 %% Cache successful lookups for 60 seconds and failures for 5 seconds. Local tools
 %% are only probed without a runner or when local fallback is enabled.
 -spec selected() -> map().
@@ -37,10 +38,10 @@ selected() ->
     case z_media_runner:enabled() of
         false -> local();
         true ->
-            Config = [z_config:get(K) || K <- [media_runner_hostname, media_runner_oauth2_key,
-                environment, media_runner_local_fallback]],
+            Config = {z_media_runner_pool:runners(), z_config:get(environment),
+                z_config:get(media_runner_local_fallback, false)},
             Key = crypto:hash(sha256, term_to_binary(Config)),
-            case cached(remote, Key, fun remote/0) of
+            case remote() of
                 {ok, Info} ->
                     warn_mismatch(Key, Info),
                     Info;
@@ -108,17 +109,120 @@ info(Tool, Version, Major, Command) ->
         legacy => Major < 7, cmd => Command, identify => Identify}.
 
 remote() ->
-    case z_media_runner_protocol:endpoint(z_config:get(media_runner_hostname)) of
-        {ok, Base} ->
-            Token = z_convert:to_binary(z_config:get(media_runner_oauth2_key, <<>>)),
-            case z_media_runner_protocol:request(z_media_runner_protocol:control_url(Base, <<"capabilities">>), Token, #{}, 5000) of
-                {ok, Info} -> decode(Info);
-                {error, {http_status, Code}} when Code =:= 429; Code =:= 502; Code =:= 503; Code =:= 504 ->
-                    {error, unavailable};
-                {error, {http_status, _}} -> {error, invalid_capabilities};
-                {error, _} -> {error, unavailable}
+    case installations() of
+        {ok, Installed} -> majority([Reply || {_, Reply} <- Installed]);
+        {error, _} -> {error, configuration}
+    end.
+
+%% Select a representative from the largest major-version group. Keep the first
+%% configured representative on a tie, so command generation remains stable.
+majority(Results) ->
+    Available = [Info || {ok, #{available := true} = Info} <- Results],
+    case Available of
+        [] ->
+            case Results of
+                [] -> {error, unavailable};
+                _ -> lists:last(Results)
             end;
-        _ -> {error, configuration}
+        _ ->
+            Counts = lists:foldl(fun(#{major := Major}, Acc) ->
+                Acc#{Major => maps:get(Major, Acc, 0) + 1}
+            end, #{}, Available),
+            Largest = lists:max(maps:values(Counts)),
+            [Selected | _] = [Info || #{major := Major} = Info <- Available,
+                maps:get(Major, Counts) =:= Largest],
+            {ok, Selected}
+    end.
+
+%% @doc Look up one runner in the shared, configuration-aware capability snapshot.
+-spec installed(map()) -> {ok, map()} | {error, term()}.
+installed(Runner) ->
+    case installations() of
+        {ok, Installed} ->
+            case lists:keyfind(Runner, 1, Installed) of
+                {Runner, Reply} -> Reply;
+                false -> {error, unavailable}
+            end;
+        Error -> Error
+    end.
+
+%% @doc Probe at most 32 configured runners concurrently within a 5.5-second
+%% deadline. Cache the entire snapshot, so one slow host cannot repeatedly expire
+%% earlier failure entries while later probes are still running.
+-spec installations() -> {ok, [{map(), {ok, map()} | {error, term()}}]} | {error, term()}.
+installations() ->
+    case z_media_runner_pool:runners() of
+        {ok, Runners} ->
+            Key = crypto:hash(sha256, term_to_binary({Runners, z_config:get(environment),
+                z_config:get(media_runner_local_fallback, false)})),
+            {pool, Installed} = cached(remote, Key, fun() -> {pool, probe_pool(Runners)} end),
+            {ok, Installed};
+        Error -> Error
+    end.
+
+probe_pool(Runners) ->
+    Alias = alias(),
+    Deadline = erlang:monotonic_time(millisecond) + 5500,
+    Workers = lists:foldl(fun(Runner, Acc) ->
+        case z_sidejob:start(?MODULE, probe_remote, [Alias, Runner]) of
+            {ok, Pid} ->
+                Monitor = monitor(process, Pid),
+                Pid ! {Alias, probe},
+                Acc#{Pid => {Runner, Monitor}};
+            {error, overload} -> Acc
+        end
+    end, #{}, Runners),
+    try
+        Replies = collect(Workers, Alias, Deadline, #{}),
+        [{R, maps:get(R, Replies, {error, unavailable})} || R <- Runners]
+    after
+        unalias(Alias),
+        maps:foreach(fun(Pid, {_, Monitor}) ->
+            exit(Pid, kill),
+            demonitor(Monitor, [flush])
+        end, Workers),
+        flush_replies(Alias)
+    end.
+
+%% @doc Run a supervised capability probe after the caller installs its monitor.
+%% The handshake keeps a fast reply ordered before DOWN; sidejob admission can
+%% otherwise return after the worker has already exited. Unexpected crashes are
+%% reported by the sidejob's proc_lib process instead of becoming silent failures.
+-spec probe_remote(reference(), map()) -> ok.
+probe_remote(Alias, Runner) ->
+    receive
+        {Alias, probe} ->
+            Alias ! {Alias, self(), fetch_remote(Runner)},
+            ok
+    after 5500 ->
+        ok
+    end.
+
+collect(Workers, _Alias, _Deadline, Replies) when map_size(Workers) =:= 0 -> Replies;
+collect(Workers, Alias, Deadline, Replies) ->
+    receive
+        {Alias, Pid, Reply} ->
+            {{Runner, Monitor}, Rest} = maps:take(Pid, Workers),
+            demonitor(Monitor, [flush]),
+            collect(Rest, Alias, Deadline, Replies#{Runner => Reply});
+        {'DOWN', Monitor, process, Pid, _} when is_map_key(Pid, Workers) ->
+            {{Runner, Monitor}, Rest} = maps:take(Pid, Workers),
+            collect(Rest, Alias, Deadline, Replies#{Runner => {error, unavailable}})
+    after max(0, Deadline - erlang:monotonic_time(millisecond)) ->
+        Replies
+    end.
+
+flush_replies(Alias) ->
+    receive {Alias, _, _} -> flush_replies(Alias) after 0 -> ok end.
+
+
+fetch_remote(#{url := Base, token := Token}) ->
+    case z_media_runner_protocol:request(z_media_runner_protocol:control_url(Base, <<"capabilities">>), Token, #{}, 5000) of
+        {ok, Info} -> decode(Info);
+        {error, {http_status, Code}} when Code =:= 429; Code =:= 502; Code =:= 503; Code =:= 504 ->
+            {error, unavailable};
+        {error, {http_status, _}} -> {error, invalid_capabilities};
+        {error, _} -> {error, unavailable}
     end.
 
 decode(Body) ->
@@ -151,13 +255,21 @@ cached(Scope, Key, Fetch) ->
                     {hit, Value} -> Value;
                     miss ->
                         Value = Fetch(),
-                        TTL = case Value of {ok, _} -> 60; _ -> 5 end,
+                        TTL = cache_ttl(Value),
                         persistent_term:put({?MODULE, Scope},
                             {Key, erlang:monotonic_time(second) + TTL, Value}),
                         Value
                 end
             end, [node()])
     end.
+
+cache_ttl({ok, _}) -> 60;
+cache_ttl({pool, Installed}) ->
+    case lists:all(fun({_, Reply}) -> element(1, Reply) =:= ok end, Installed) of
+        true -> 60;
+        false -> 5
+    end;
+cache_ttl(_) -> 5.
 
 cached_value(Scope, Key) ->
     Now = erlang:monotonic_time(second),
@@ -199,4 +311,7 @@ warn_mismatch(Key, Remote) ->
 %% @doc Clear discovery after an administrator changes the installed tools.
 -spec clear_cache() -> ok.
 clear_cache() ->
-    lists:foreach(fun(Scope) -> persistent_term:erase({?MODULE, Scope}) end, [local, remote, warning]).
+    lists:foreach(fun
+        ({{?MODULE, _} = Key, _}) -> persistent_term:erase(Key);
+        (_) -> ok
+    end, persistent_term:get()).
