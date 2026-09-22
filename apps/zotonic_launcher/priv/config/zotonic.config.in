@@ -322,8 +322,8 @@
    %% {media_runner_hostname, <<"media.example.com">>},
    %% {media_runner_oauth2_key, <<"YOUR-OAUTH2-BEARER-TOKEN">>},
    %% {media_runner_local_fallback, false},
-   %% Callback wait timeout in seconds (65 minutes).
-   %% {media_runner_wait_timeout, 3900},
+   %% Callback wait timeout in seconds (12 hours plus 5 minutes).
+   %% {media_runner_wait_timeout, 43500},
    %% Source uploads and result downloads stream to disk; JSON remains bounded.
    %% {media_runner_max_input_bytes, 17179869184},
    %% {media_runner_max_output_bytes, 17179869184},

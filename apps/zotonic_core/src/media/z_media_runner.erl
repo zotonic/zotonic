@@ -24,6 +24,7 @@ Remote media execution and bounded, process-monitored callback rendezvous. Avail
 fallback preserves the caller's local sandbox policy.
 ").
 -behaviour(gen_server).
+-include("z_media_limits.hrl").
 -export([
     start_link/0,
     run/3,
@@ -137,7 +138,7 @@ callback_url(Context) ->
 submit(Url, Token, Callback, Job, Options) ->
     Id = z_ids:id(32),
     Secret = z_ids:id(44),
-    WaitSeconds = z_config:get(media_runner_wait_timeout, 3900),
+    WaitSeconds = z_config:get(media_runner_wait_timeout, ?DEFAULT_RUNNER_WAIT_SECONDS),
     case gen_server:call(?MODULE, {register, Id, Secret, self()}) of
         ok ->
             try

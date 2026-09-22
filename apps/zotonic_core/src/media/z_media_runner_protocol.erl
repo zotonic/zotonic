@@ -51,19 +51,21 @@ trusted Erlang staging step; sandbox grants contain private job copies, never th
 ]).
 -include_lib("kernel/include/file.hrl").
 
+-include("z_media_limits.hrl").
+
 -spec input_limit() -> pos_integer().
 input_limit() ->
-    z_config:get(media_runner_max_input_bytes, 17179869184).
+    z_config:get(media_runner_max_input_bytes, ?DEFAULT_MEDIA_LIMIT).
 
 -spec output_limit() -> pos_integer().
 output_limit() ->
-    z_config:get(media_runner_max_output_bytes, 17179869184).
+    z_config:get(media_runner_max_output_bytes, ?DEFAULT_MEDIA_LIMIT).
 
 %% @doc Maximum encoded callback JSON bytes, reserved per starting/running job.
 %% File transfers have independent input/output limits and do not consume this budget.
 -spec callback_limit() -> pos_integer().
 callback_limit() ->
-    z_config:get(media_runner_max_callback_bytes, 135266304).
+    z_config:get(media_runner_max_callback_bytes, ?DEFAULT_JSON_LIMIT).
 
 -spec pack(atom(), iodata(), map()) -> {ok, map()} | {error, term()}.
 pack(Profile, Command, Options) ->
@@ -71,7 +73,7 @@ pack(Profile, Command, Options) ->
         Reads = lists:usort(maps:get(read, Options, [])),
         Writes = lists:usort(maps:get(write, Options, [])),
         Paths = lists:usort(Reads ++ Writes),
-        true = length(Paths) =< 32,
+        true = length(Paths) =< ?MAX_JOB_FILECOUNT,
         Bindings = lists:zip(Paths, lists:seq(1, length(Paths))),
         Files = [
             pack_file(P, N, lists:member(P, Reads), lists:member(P, Writes))
@@ -91,7 +93,7 @@ pack(Profile, Command, Options) ->
             <<"profile">> => atom_to_binary(Profile, utf8),
             <<"command">> => Cmd,
             <<"files">> => Files,
-            <<"timeout">> => maps:get(timeout, Options, 3600000)
+            <<"timeout">> => maps:get(timeout, Options, maps:get(timeout, z_exec:profile(Profile)))
         },
         ok = validate(Job),
         {ok, Job}
@@ -176,6 +178,17 @@ profile(<<"ffmpeg">>) -> ffmpeg;
 profile(<<"ffmpeg_preview">>) -> ffmpeg_preview;
 profile(<<"ffprobe">>) -> ffprobe.
 
+%% Remote callers may request longer than a default, within the profile ceiling.
+max_timeout(ffmpeg) -> ?MAX_JOB_TIMEOUT;
+max_timeout(ffmpeg_preview) -> ?MAX_PREVIEW_TIMEOUT;
+max_timeout(imagemagick) -> ?MAX_IMAGE_TIMEOUT;
+max_timeout(imagemagick_pdf) -> ?MAX_IMAGE_TIMEOUT;
+max_timeout(ffprobe) -> ?MAX_PROBE_TIMEOUT;
+max_timeout(file) -> ?MAX_FILE_TIMEOUT.
+
+output_limit(Profile) ->
+    min(output_limit(), maps:get(file_size, z_exec:profile(Profile))).
+
 -spec validate(term()) -> ok | {error, invalid_job}.
 validate(#{
     <<"version">> := 3,
@@ -185,14 +198,14 @@ validate(#{
     <<"timeout">> := Timeout
 }) ->
     try
-        _ = profile(P),
-        true = is_binary(Cmd) andalso byte_size(Cmd) > 0 andalso byte_size(Cmd) =< 65536,
-        true = is_integer(Timeout) andalso Timeout > 0 andalso Timeout =< 3600000,
-        true = is_list(Files) andalso length(Files) =< 32,
+        Profile = profile(P),
+        true = is_binary(Cmd) andalso byte_size(Cmd) > 0 andalso byte_size(Cmd) =< ?MAX_JOB_CMDSIZE,
+        true = is_integer(Timeout) andalso Timeout > 0 andalso Timeout =< max_timeout(Profile),
+        true = is_list(Files) andalso length(Files) =< ?MAX_JOB_FILECOUNT,
         Ids = [
             begin
                 #{<<"id">> := Id, <<"write">> := Write} = F,
-                true = is_integer(Id) andalso Id > 0 andalso Id =< 32,
+                true = is_integer(Id) andalso Id > 0 andalso Id =< ?MAX_JOB_FILECOUNT,
                 true = is_boolean(Write),
                 Extension = maps:get(<<"extension">>, F, <<>>),
                 true = is_binary(Extension) andalso byte_size(Extension) =< 17,
@@ -297,18 +310,21 @@ execute_staged(
         Command,
         [{marker(N), escaped(Path)} || {N, Path} <- Paths] ++ [{<<"__ZMR_CWD__">>, escaped(Dir)}]
     ),
+    ProfileName = profile(Profile),
+    Defaults = z_exec:profile(ProfileName),
+    OutputLimit = output_limit(ProfileName),
     case
-        z_exec:run_sandbox(profile(Profile), Cmd, #{
+        z_exec:run_sandbox(ProfileName, Cmd, #{
             read => Read,
             write => Write,
             cd => Dir,
             timeout => Timeout,
-            max_size => 16777216,
-            file_size => output_limit()
+            max_size => maps:get(max_size, Defaults),
+            file_size => OutputLimit
         })
     of
         {ok, Stdout} ->
-            true = lists:sum([output_size(Path) || Path <- Write]) =< output_limit(),
+            true = lists:sum([output_size(Path) || Path <- Write]) =< OutputLimit,
             Output = [store_output(N, Path, Store) || {N, Path} <- Paths, lists:member(Path, Write)],
             PortableStdout = rewrite(Stdout, [
                 {unicode:characters_to_binary(Path), marker(N)}
@@ -353,9 +369,11 @@ unpack(#{<<"status">> := <<"ok">>, <<"stdout">> := Stdout, <<"files">> := Files}
         Bindings = lists:zip(lists:seq(1, length(Paths)), Paths),
         Expected = [{N, P} || {N, P} <- Bindings, lists:member(P, maps:get(write, Options, []))],
         true = lists:sort([maps:get(<<"id">>, F) || F <- Files]) =:= [N || {N, _} <- Expected],
-        true = lists:sum([maps:get(<<"size">>, F) || F <- Files]) =< output_limit(),
+        Profile = profile(maps:get(media_runner_profile, Options, <<"ffmpeg">>)),
+        Defaults = z_exec:profile(Profile),
+        true = lists:sum([maps:get(<<"size">>, F) || F <- Files]) =< output_limit(Profile),
         Out = base64:decode(Stdout),
-        true = byte_size(Out) =< maps:get(max_size, Options, 16777216),
+        true = byte_size(Out) =< min(maps:get(max_size, Defaults), maps:get(max_size, Options, maps:get(max_size, Defaults))),
         ok = z_media_runner_download:install(Files, Expected, Options, Fetch),
         RestoredOut = rewrite(Out, [{marker(N), stdout_path(P, Options)} || {N, P} <- Bindings]),
         {ok, RestoredOut}
@@ -377,7 +395,7 @@ stdout_path(Path, _) ->
 endpoint(Hostname) ->
     try
         Host = z_convert:to_binary(Hostname),
-        true = byte_size(Host) > 0 andalso byte_size(Host) =< 253,
+        true = byte_size(Host) > 0 andalso byte_size(Host) =< ?MAX_HOSTNAME_SIZE,
         Base = <<"https://", Host/binary>>,
         #{scheme := <<"https">>, host := ParsedHost, path := <<>>} = Parts = uri_string:parse(Base),
         true = byte_size(ParsedHost) > 0,
@@ -405,7 +423,7 @@ control_url(Url, Operation) ->
     Result.
 
 -spec https_url(term()) -> boolean().
-https_url(Url) when is_binary(Url), byte_size(Url) =< 2048 ->
+https_url(Url) when is_binary(Url), byte_size(Url) =< ?MAX_URL_SIZE ->
     try uri_string:parse(Url) of
         #{scheme := <<"https">>, host := Host} = Parts ->
             byte_size(Host) > 0 andalso not maps:is_key(userinfo, Parts) andalso
@@ -445,7 +463,7 @@ request(Url, Token, Payload, Timeout) ->
                 {autoredirect, false},
                 {content_type, <<"application/json">>},
                 {timeout, Timeout},
-                {max_length, 65536},
+                {max_length, ?DEFAULT_JSON_LIMIT},
                 {insecure, z_config:get(environment) =:= development}
             ] ++ case Token of
                 <<>> ->
@@ -490,7 +508,7 @@ upload(Url, Token, Lease, Path, Size) ->
                         },
                         %% A dedicated connection keeps long uploads independent
                         %% of job requests and callbacks to the same host.
-                        case z_media_runner_http:request(put, Request, 3600000) of
+                        case z_media_runner_http:request(put, Request, ?UPLOAD_TIMEOUT) of
                             {ok, Status, _} ->
                                 {ok, Status};
                             {error, _} = Error ->
@@ -519,7 +537,7 @@ http_options(Timeout) ->
         _ ->
             verified_ssl_options()
     end,
-    [{autoredirect, false}, {ssl, Ssl}, {connect_timeout, 5000}, {timeout, Timeout}].
+    [{autoredirect, false}, {ssl, Ssl}, {connect_timeout, ?CONNECT_TIMEOUT}, {timeout, Timeout}].
 
 verified_ssl_options() ->
     [

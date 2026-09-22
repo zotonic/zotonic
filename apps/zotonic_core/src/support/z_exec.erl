@@ -129,10 +129,12 @@ Build, deployment and integration-test details are in
     run/4,
     run_local/3,
     run_sandbox/3,
-    sandbox_status/0
+    sandbox_status/0,
+    profile/1
 ]).
 
 -include_lib("kernel/include/file.hrl").
+-include("../media/z_media_limits.hrl").
 -include_lib("kernel/include/logger.hrl").
 
 -type profile() :: imagemagick | imagemagick_pdf | ffmpeg | ffmpeg_preview | ffprobe | file.
@@ -256,41 +258,43 @@ sandbox_status() ->
 
 %% Application profiles
 
+%% @doc Return default resource limits for a media execution profile.
+-spec profile(atom()) -> map() | {error, unknown_sandbox_profile}.
 profile(imagemagick) ->
     #{
-        timeout => 120000,
-        max_size => 1048576,
-        memory => 4294967296,
-        file_size => 1073741824,
-        cpu => 120
+        timeout => ?IMAGE_TIMEOUT,
+        max_size => ?SMALL_CONSOLE_SIZE,
+        memory => ?MEDIA_MEMORY,
+        file_size => ?IMAGE_FILE_SIZE,
+        cpu => ?IMAGE_TIMEOUT div 1000
     };
 profile(imagemagick_pdf) ->
     profile(imagemagick);
 profile(ffmpeg_preview) ->
-    profile(ffmpeg);
+    (profile(imagemagick))#{timeout => ?PREVIEW_TIMEOUT, cpu => ?MAX_PREVIEW_TIMEOUT div 1000};
 profile(ffmpeg) ->
     #{
-        timeout => 3600000,
-        max_size => 1048576,
-        memory => 4294967296,
-        file_size => 17179869184,
-        cpu => 3600
+        timeout => ?DEFAULT_JOB_TIMEOUT,
+        max_size => ?MAX_CONSOLE_SIZE,
+        memory => ?MEDIA_MEMORY,
+        file_size => ?DEFAULT_MEDIA_LIMIT,
+        cpu => ?MAX_JOB_TIMEOUT div 1000
     };
 profile(ffprobe) ->
     #{
-        timeout => 60000,
-        max_size => 16777216,
-        memory => 2147483648,
-        file_size => 1048576,
-        cpu => 60
+        timeout => ?PROBE_TIMEOUT,
+        max_size => ?SMALL_CONSOLE_SIZE,
+        memory => ?PROBE_MEMORY,
+        file_size => ?PROBE_FILE_SIZE,
+        cpu => ?MAX_PROBE_TIMEOUT div 1000
     };
 profile(file) ->
     #{
-        timeout => 10000,
-        max_size => 65536,
-        memory => 536870912,
-        file_size => 1048576,
-        cpu => 10
+        timeout => ?FILE_TIMEOUT,
+        max_size => ?FILE_CONSOLE_SIZE,
+        memory => ?FILE_MEMORY,
+        file_size => ?PROBE_FILE_SIZE,
+        cpu => ?MAX_FILE_TIMEOUT div 1000
     };
 profile(_) ->
     {error, unknown_sandbox_profile}.
@@ -430,7 +434,7 @@ helper_path() ->
     Profile :: profile(),
     Command :: iodata(),
     Options :: map().
-%% Preview is a scheduling distinction only; keep the ffmpeg sandbox and all
+%% Preview has smaller resource defaults; keep the ffmpeg sandbox and all
 %% administrator-configured ffmpeg grants for local and remote execution.
 sandbox_run(ffmpeg_preview, Command, Options) ->
     sandbox_run(ffmpeg, Command, Options);

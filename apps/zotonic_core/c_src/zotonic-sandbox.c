@@ -85,6 +85,8 @@ static void init_policy(void)
     if (!policy) fail("open_memstream");
     fputs("(version 1)\n(deny default)\n"
           "(allow file-read-metadata)\n"
+          /* dyld needs to open the root directory during process startup.
+           * A literal grant permits listing /, but not reading its descendants. */
           "(allow file-read-data (literal \"/\"))\n"
           "(allow process-fork)\n"
           "(allow signal (target self))\n"

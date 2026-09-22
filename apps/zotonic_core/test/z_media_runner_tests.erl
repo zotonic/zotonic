@@ -112,6 +112,37 @@ rewrite_overlap_test() ->
         z_media_runner_protocol:rewrite(<<"A B">>, [{<<"A">>, <<"B">>}, {<<"B">>, <<"A">>}])
     ).
 
+profile_limits_test() ->
+    %% Check both default selection and enforcement on the remote execution path.
+    Profiles = [
+        {ffmpeg, 14400000, 43200000, 16777216, 17179869184},
+        {ffmpeg_preview, 120000, 600000, 1048576, 1073741824},
+        {imagemagick, 120000, 600000, 1048576, 1073741824},
+        {imagemagick_pdf, 120000, 600000, 1048576, 1073741824},
+        {ffprobe, 60000, 600000, 1048576, 1048576},
+        {file, 10000, 60000, 65536, 1048576}
+    ],
+    ok = meck:new(z_exec, [passthrough]),
+    try
+        lists:foreach(fun({Profile, Default, Maximum, Console, FileSize}) ->
+            ?assertMatch(#{timeout := Default, max_size := Console, file_size := FileSize},
+                z_exec:profile(Profile)),
+            {ok, Job} = z_media_runner_protocol:pack(Profile, <<"printf ok">>, #{}),
+            ?assertEqual(Default, maps:get(<<"timeout">>, Job)),
+            ?assertEqual(ok, z_media_runner_protocol:validate(Job#{<<"timeout">> => Maximum})),
+            ?assertEqual({error, invalid_job},
+                z_media_runner_protocol:validate(Job#{<<"timeout">> => Maximum + 1})),
+            ok = meck:expect(z_exec, run_sandbox, fun(P, _, Options) ->
+                ?assertEqual(Profile, P),
+                ?assertMatch(#{timeout := Default, max_size := Console, file_size := FileSize}, Options),
+                {ok, <<"ok">>}
+            end),
+            ?assertMatch(#{<<"status">> := <<"ok">>}, z_media_runner_protocol:execute(Job))
+        end, Profiles)
+    after
+        meck:unload(z_exec)
+    end.
+
 validation_test() ->
     Base = job(),
     ?assertEqual(ok, z_media_runner_protocol:validate(Base)),
