@@ -1,9 +1,7 @@
 {% with m.admin_status.media_processing as media %}
 {% if media %}
 <div class="widget" id="media-processing-status">
-    <div class="widget-header">
-        <h3>{_ Media processing _}</h3>
-    </div>
+    <div class="widget-header">{_ Media processing _}</div>
     <div class="widget-content">
         {% if media.configuration_error %}
             <p class="alert alert-danger" role="alert">{_ The media runner configuration is invalid. _}</p>
