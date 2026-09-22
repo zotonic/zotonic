@@ -442,8 +442,13 @@ sandbox_run(ffmpeg_preview, Command, Options) ->
 sandbox_run(Profile, Command, Options) ->
     case ?MODULE:sandbox_status() of
         {error, {sandbox_unsupported, Os}} ->
-            ?LOG_NOTICE(#{text => <<"OS sandbox unsupported; continuing media command without sandbox isolation">>,
-                in => zotonic_core, os => Os, profile => Profile, reason => sandbox_unsupported}),
+            ?LOG_NOTICE(#{
+                text => <<"OS sandbox unsupported; continuing media command without sandbox isolation">>,
+                in => zotonic_core,
+                os => Os,
+                profile => Profile,
+                reason => sandbox_unsupported
+            }),
             Cd = case maps:find(cd, Options) of {ok, Dir} -> [{cd, Dir}]; error -> [] end,
             %% Retain timeout, bounded stdout/stderr and process-group cleanup.
             run_exec(unicode:characters_to_binary(Command), Options#{sandbox => true},
