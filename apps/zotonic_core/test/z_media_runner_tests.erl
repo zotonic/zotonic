@@ -533,3 +533,104 @@ ffmpeg_preview_profile_test() ->
     ?assertEqual(<<"ffmpeg_preview">>, maps:get(<<"profile">>, Job)),
     ?assertEqual(ffmpeg_preview, z_media_runner_protocol:profile(<<"ffmpeg_preview">>)),
     ?assertEqual(ok, z_media_runner_protocol:validate(Job)).
+
+pool_affinity_test() ->
+    A = #{url => <<"https://a.example/media-runner">>, token => <<"a">>},
+    B = #{url => <<"https://b.example/media-runner">>, token => <<"b">>},
+    AId = z_media_runner_pool:identity(A),
+    BId = z_media_runner_pool:identity(B),
+    File = #{<<"sha256">> => <<"input-hash">>, <<"size">> => 1000},
+    Job = #{<<"files">> => [File]},
+    Hints = z_media_runner_pool:remember(AId, [File], #{}),
+    ?assertEqual([A, B], z_media_runner_pool:rank([B, A], Job, Hints, #{})),
+    Both = z_media_runner_pool:remember(BId, [File], Hints),
+    ?assertEqual([B, A], z_media_runner_pool:rank([A, B], Job, Both, #{AId => 1})),
+    Forgotten = z_media_runner_pool:forget(AId, [<<"input-hash">>], Both),
+    ?assertEqual([B, A], z_media_runner_pool:rank([A, B], Job, Forgotten, #{})),
+    %% Cold files rank identically regardless of configuration order.
+    ?assertEqual(z_media_runner_pool:rank([A, B], Job, #{}, #{}),
+        z_media_runner_pool:rank([B, A], Job, #{}, #{})),
+    ?assertNotEqual(AId, z_media_runner_pool:identity(A#{token => <<"another-consumer">>})),
+    Expired = #{{AId, <<"input-hash">>} => erlang:monotonic_time(second) - 1},
+    ?assertEqual(#{}, z_media_runner_pool:remember(BId, [], Expired)),
+    Many = [#{<<"sha256">> => integer_to_binary(N)} || N <- lists:seq(1, 10010)],
+    ?assertEqual(10000, map_size(z_media_runner_pool:remember(AId, Many, #{}))).
+
+pool_failover_test_() -> {timeout, 40, fun pool_failover/0}.
+
+pool_failover() ->
+    Keys = [media_runners, media_runner_local_fallback, media_runner_wait_timeout],
+    Old = [{K, application:get_env(zotonic, K)} || K <- Keys],
+    {Pid, Owned} = case z_media_runner:start_link() of
+        {ok, Started} -> {Started, true};
+        {error, {already_started, Started}} -> {Started, false}
+    end,
+    Modules = [z_context, z_dispatcher, z_media_runner_protocol],
+    lists:foreach(fun(M) -> meck:new(M, [passthrough, no_link]) end, Modules),
+    Calls = ets:new(pool_calls, [public]),
+    try
+        application:set_env(zotonic, media_runners, [
+            #{hostname => <<"pool-a.example">>, oauth2_key => <<"token-a">>},
+            #{<<"hostname">> => <<"pool-b.example">>, <<"oauth2_key">> => <<"token-b">>}
+        ]),
+        application:set_env(zotonic, media_runner_local_fallback, false),
+        application:set_env(zotonic, media_runner_wait_timeout, 30),
+        {ok, [A, B]} = z_media_runner_pool:runners(),
+        meck:expect(z_context, site, fun(pool_context) -> pool_site end),
+        meck:expect(z_context, new, fun(pool_site) -> pool_context end),
+        meck:expect(z_dispatcher, url_for, fun(media_runner_callback, _, pool_context) ->
+            <<"https://client.example/media-runner-callback">>
+        end),
+        Result = #{<<"status">> => <<"ok">>, <<"stdout">> => base64:encode(<<"done">>), <<"files">> => []},
+        meck:expect(z_media_runner_protocol, request, fun(Url, Token, Request) ->
+            case lists:last(binary:split(Url, <<"/">>, [global])) of
+                <<"submit">> ->
+                    Id = maps:get(<<"id">>, Request),
+                    Secret = maps:get(<<"callback_token">>, Request),
+                    case Token of
+                        <<"token-a">> ->
+                            ?assertMatch({0, _}, binary:match(Url, <<"https://pool-a.example/">>)),
+                            ets:insert(Calls, {rejected, Id, Secret}),
+                            {ok, #{<<"outcome">> => <<"full">>}};
+                        <<"token-b">> ->
+                            ?assertMatch({0, _}, binary:match(Url, <<"https://pool-b.example/">>)),
+                            %% A rejected attempt cannot deliver a late callback.
+                            [{rejected, OldId, OldSecret}] = ets:lookup(Calls, rejected),
+                            ?assertEqual({error, gone}, z_media_runner:callback(OldId, OldSecret, Result)),
+                            ets:insert(Calls, {accepted, Id}),
+                            %% Deliberately omit the callback; status must recover it.
+                            {ok, #{<<"outcome">> => <<"accepted">>}}
+                    end;
+                <<"received">> ->
+                    ?assertEqual(<<"token-b">>, Token),
+                    ets:insert(Calls, {received, true}),
+                    {ok, #{<<"outcome">> => <<"received">>}}
+            end
+        end),
+        meck:expect(z_media_runner_protocol, request, fun(Url, <<"token-b">>, #{<<"id">> := Id}, 5000) ->
+            ?assertEqual(<<"status">>, lists:last(binary:split(Url, <<"/">>, [global]))),
+            ?assertEqual([{accepted, Id}], ets:lookup(Calls, accepted)),
+            {ok, #{<<"outcome">> => <<"completed">>, <<"result">> => Result}}
+        end),
+        with_files(fun(Input, _) ->
+            Options = #{read => [Input], context => pool_context},
+            {ok, Job} = z_media_runner_protocol:pack(file, <<"printf done">>, Options),
+            ok = gen_server:call(Pid, {remember, z_media_runner_pool:identity(A), maps:get(<<"files">>, Job)}),
+            ?assertEqual({ok, <<"done">>}, z_media_runner:run(file, <<"printf done">>, Options)),
+            ?assertEqual([{received, true}], ets:lookup(Calls, received)),
+            ?assertEqual([B], gen_server:call(Pid, {rank, [B], Job}))
+        end),
+        application:set_env(zotonic, media_runners, [#{hostname => <<"bad/path">>, oauth2_key => <<"a">>}]),
+        ?assertEqual({error, media_runner_configuration}, z_media_runner_pool:runners()),
+        application:set_env(zotonic, media_runners, []),
+        ?assertEqual({ok, []}, z_media_runner_pool:runners()),
+        ?assertNot(z_media_runner:enabled())
+    after
+        ets:delete(Calls),
+        lists:foreach(fun meck:unload/1, Modules),
+        case Owned of true -> gen_server:stop(Pid); false -> ok end,
+        lists:foreach(fun
+            ({K, undefined}) -> application:unset_env(zotonic, K);
+            ({K, {ok, V}}) -> application:set_env(zotonic, K, V)
+        end, Old)
+    end.

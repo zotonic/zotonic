@@ -134,3 +134,77 @@ expire(Scope) ->
     persistent_term:put({z_media_imagemagick, Scope}, {Key, erlang:monotonic_time(second) - 1, Value}).
 
 json(Value) -> z_json:decode(z_json:encode(Value)).
+
+pool_versions_test_() -> {timeout, 10, fun pool_versions/0}.
+
+pool_versions() ->
+    Keys = [media_runners, media_runner_local_fallback],
+    Old = [{K, application:get_env(zotonic, K)} || K <- Keys],
+    meck:new(z_media_runner_protocol, [passthrough, no_link]),
+    meck:new(z_exec, [passthrough, no_link]),
+    try
+        application:set_env(zotonic, media_runners, [
+            #{hostname => <<"versions-a.example">>, oauth2_key => <<"a">>},
+            #{hostname => <<"versions-b.example">>, oauth2_key => <<"b">>}
+        ]),
+        application:set_env(zotonic, media_runner_local_fallback, false),
+        meck:expect(z_media_runner_protocol, request, fun(_, Token, #{}, 5000) ->
+            case Token of <<"a">> -> version(6); <<"b">> -> version(7) end
+        end),
+        z_media_imagemagick:clear_cache(),
+        {ok, [A, B]} = z_media_runner_pool:runners(),
+        ?assertMatch(#{major := 6}, z_media_imagemagick:selected()),
+        ?assertMatch({ok, #{major := 7}}, z_media_imagemagick:installed(B)),
+        ?assertMatch({ok, #{major := 6}}, z_media_imagemagick:installed(A)),
+        ?assertMatch({ok, #{major := 7}}, z_media_imagemagick:installed(B)),
+        ?assertEqual(2, meck:num_calls(z_media_runner_protocol, request, '_')),
+        meck:expect(z_media_runner_protocol, request, fun(_, Token, #{}, 5000) ->
+            case Token of <<"a">> -> {error, timeout}; <<"b">> -> version(7) end
+        end),
+        expire(remote),
+        ?assertMatch(#{major := 7}, z_media_imagemagick:selected()),
+        ?assertEqual(3, meck:num_calls(z_media_runner_protocol, request, '_')),
+        %% The first configured runner must not outweigh two newer runners.
+        {ok, Pool} = application:get_env(zotonic, media_runners),
+        application:set_env(zotonic, media_runners, Pool ++ [
+            #{hostname => <<"versions-c.example">>, oauth2_key => <<"c">>}
+        ]),
+        meck:expect(z_media_runner_protocol, request, fun(_, Token, #{}, 5000) ->
+            case Token of
+                <<"a">> -> version(6);
+                <<"b">> -> version(7);
+                <<"c">> -> {ok, json(#{imagemagick => #{available => true,
+                    tool => <<"magick">>, major => 7, version => <<"7.0.8-1">>}})}
+            end
+        end),
+        z_media_imagemagick:clear_cache(),
+        ?assertMatch(#{major := 7, legacy := false}, z_media_imagemagick:selected()),
+        ?assertNot(z_media_preview:is_legacy_imagemagick()),
+        Before = meck:num_calls(z_media_runner_protocol, request, '_'),
+        ?assertMatch(#{major := 7}, z_media_imagemagick:selected()),
+        ?assertEqual(Before, meck:num_calls(z_media_runner_protocol, request, '_')),
+        %% Version refreshes can change the majority, including back to IM 6.
+        {ok, [_, _, C]} = z_media_runner_pool:runners(),
+        meck:expect(z_media_runner_protocol, request, fun(_, _, #{}, 5000) -> version(6) end),
+        expire({remote, z_media_runner_pool:identity(C)}),
+        ?assertMatch(#{major := 6, legacy := true}, z_media_imagemagick:selected()),
+        %% Missing and unreachable installations do not form a majority.
+        meck:expect(z_media_runner_protocol, request, fun(_, Token, #{}, 5000) ->
+            case Token of
+                <<"a">> -> {error, timeout};
+                <<"b">> -> version(7);
+                <<"c">> -> {ok, json(#{imagemagick => #{available => false}})}
+            end
+        end),
+        z_media_imagemagick:clear_cache(),
+        ?assertMatch(#{major := 7}, z_media_imagemagick:selected()),
+        ?assertEqual(0, meck:num_calls(z_exec, run, '_'))
+    after
+        meck:unload(z_media_runner_protocol),
+        meck:unload(z_exec),
+        z_media_imagemagick:clear_cache(),
+        lists:foreach(fun
+            ({K, undefined}) -> application:unset_env(zotonic, K);
+            ({K, {ok, V}}) -> application:set_env(zotonic, K, V)
+        end, Old)
+    end.

@@ -48,7 +48,7 @@ start_link() ->
 
 -spec enabled() -> boolean().
 enabled() ->
-    not lists:member(z_config:get(media_runner_hostname), [undefined, <<>>, ""]).
+    z_media_runner_pool:configured().
 
 %% Do not require processing tools to be installed on a remote-only client.
 
@@ -80,52 +80,58 @@ find_executable(Name) ->
 
 -spec run(atom(), iodata(), map()) -> {ok, binary()} | {error, term()}.
 run(Profile, Command, Options) ->
-    case z_config:get(media_runner_hostname) of
-        undefined ->
-            z_exec:run_local(Profile, Command, Options);
-        <<>> ->
-            z_exec:run_local(Profile, Command, Options);
-        "" ->
-            z_exec:run_local(Profile, Command, Options);
-        Hostname ->
-            case remote(Hostname, Profile, Command, Options) of
-                {error, {media_runner_unavailable, _}} = Error ->
-                    case z_config:get(media_runner_local_fallback, false) of
-                        true ->
-                            z_exec:run_local(Profile, Command, Options);
-                        _ ->
-                            Error
-                    end;
-                Result ->
-                    Result
-            end
-    end.
-
-remote(Hostname, Profile, Command, Options) ->
-    case z_media_runner_protocol:endpoint(Hostname) of
-        {ok, Url} ->
-            remote_url(Url, Profile, Command, Options);
-        {error, _} = Error ->
-            Error
-    end.
-
-remote_url(Url, Profile, Command, Options) ->
-    Token = z_convert:to_binary(z_config:get(media_runner_oauth2_key, <<>>)),
-    Callback = callback_url(maps:get(context, Options, undefined)),
-    case
-        Token =/= <<>> andalso z_media_runner_protocol:https_url(Url) andalso
-            z_media_runner_protocol:https_url(Callback)
-    of
-        false ->
-            {error, media_runner_configuration};
-        true ->
+    case z_media_runner_pool:runners() of
+        {ok, []} -> z_exec:run_local(Profile, Command, Options);
+        {ok, Runners} ->
             case z_media_runner_protocol:pack(Profile, Command, Options) of
                 {ok, Job} ->
-                    submit(Url, Token, Callback, Job, Options);
-                {error, _} = Error ->
-                    Error
+                    Eligible = compatible(Profile, Runners),
+                    Ordered = gen_server:call(?MODULE, {rank, Eligible, Job}),
+                    Wait = z_config:get(media_runner_wait_timeout, ?DEFAULT_RUNNER_WAIT_SECONDS),
+                    Deadline = erlang:monotonic_time(second) + Wait,
+                    Result = run_pool(Ordered, Job, Options, Deadline,
+                        {error, {media_runner_unavailable, no_runner}}),
+                    case {Result, z_config:get(media_runner_local_fallback, false)} of
+                        {{error, {media_runner_unavailable, _}}, true} ->
+                            z_exec:run_local(Profile, Command, Options);
+                        _ -> Result
+                    end;
+                Error -> Error
+            end;
+        Error -> Error
+    end.
+
+%% Commands are constructed for the selected ImageMagick installation. Do not
+%% send those arguments to a runner with a different major version or executable.
+compatible(Profile, Runners) when Profile =:= imagemagick; Profile =:= imagemagick_pdf ->
+    Selected = z_media_imagemagick:selected(),
+    [R || R <- Runners, compatible_imagemagick(Selected, z_media_imagemagick:installed(R))];
+compatible(_, Runners) -> Runners.
+
+compatible_imagemagick(#{major := Major, tool := Tool}, {ok, #{major := Major, tool := Tool}}) -> true;
+compatible_imagemagick(_, _) -> false.
+
+run_pool([], _Job, _Options, _Deadline, Error) -> Error;
+run_pool([#{url := Url, token := Token} | Rest], Job, Options, Deadline, _) ->
+    Callback = callback_url(maps:get(context, Options, undefined)),
+    case z_media_runner_protocol:https_url(Callback) of
+        false -> {error, media_runner_configuration};
+        true ->
+            case erlang:monotonic_time(second) < Deadline of
+                false -> {error, {media_runner_unavailable, callback_timeout}};
+                true ->
+                    Result = submit(Url, Token, Callback, Job, Options#{media_runner_deadline => Deadline}),
+                    case Result of
+                        {error, {media_runner_unavailable, _}} ->
+                            gen_server:call(?MODULE, {unavailable, runner_id(Url, Token)}),
+                            run_pool(Rest, Job, Options, Deadline, Result);
+                        _ -> Result
+                    end
             end
     end.
+
+runner_id(Url, Token) ->
+    z_media_runner_pool:identity(#{url => Url, token => Token}).
 
 %% Use the site's canonical dispatcher context, also for background media jobs.
 %% Do not derive the callback host from the incoming request's Host header.
@@ -138,10 +144,11 @@ callback_url(Context) ->
 submit(Url, Token, Callback, Job, Options) ->
     Id = z_ids:id(32),
     Secret = z_ids:id(44),
-    WaitSeconds = z_config:get(media_runner_wait_timeout, ?DEFAULT_RUNNER_WAIT_SECONDS),
+    WaitSeconds = max(1, maps:get(media_runner_deadline, Options) - erlang:monotonic_time(second)),
     case gen_server:call(?MODULE, {register, Id, Secret, self()}) of
         ok ->
             try
+                gen_server:call(?MODULE, {assign, Id, runner_id(Url, Token), Job}),
                 Request = Job#{
                     <<"id">> => Id,
                     <<"callback_url">> => Callback,
@@ -150,8 +157,9 @@ submit(Url, Token, Callback, Job, Options) ->
                 },
                 case submit_request(Url, Token, Request, Options, 2) of
                     ok ->
-                        receive
-                            {media_runner_result, Id, Result} ->
+                        remember(Url, Token, maps:get(<<"files">>, Job)),
+                        case await_result(Id, Url, Token, maps:get(media_runner_deadline, Options), 0) of
+                            {ok, Result} ->
                                 Received = z_media_runner_protocol:unpack(Result, Options#{
                                     media_runner_profile => maps:get(<<"profile">>, Job),
                                     media_runner_endpoint => Url,
@@ -159,16 +167,14 @@ submit(Url, Token, Callback, Job, Options) ->
                                 }),
                                 case Received of
                                     {ok, _} ->
-                                        %% A lost receipt merely retains the cache pin until expiry.
+                                        remember(Url, Token, maps:get(<<"files">>, Result, [])),
                                         z_media_runner_protocol:request(
                                             z_media_runner_protocol:control_url(Url, <<"received">>),
                                             Token, #{<<"id">> => Id});
-                                    _ ->
-                                        ok
+                                    _ -> ok
                                 end,
-                                Received
-                        after WaitSeconds * 1000 ->
-                            {error, {media_runner_unavailable, callback_timeout}}
+                                Received;
+                            Error -> Error
                         end;
                     {ok, Code} when Code =:= 429; Code =:= 502; Code =:= 503; Code =:= 504 ->
                         {error, {media_runner_unavailable, Code}};
@@ -186,6 +192,33 @@ submit(Url, Token, Callback, Job, Options) ->
             Error
     end.
 
+%% A callback is the fast path. Polling recovers lost callbacks and detects a
+%% failed runner during long renders. Three failed probes allow another attempt;
+%% the old attempt's registration is removed before accepting replacement results.
+await_result(Id, Url, Token, Deadline, Failures) ->
+    Left = Deadline - erlang:monotonic_time(second),
+    case Left =< 0 of
+        true -> {error, {media_runner_unavailable, callback_timeout}};
+        false ->
+            receive
+                {media_runner_result, Id, Result} -> {ok, Result}
+            after min(15, Left) * 1000 ->
+                Reply = z_media_runner_protocol:request(
+                    z_media_runner_protocol:control_url(Url, <<"status">>), Token, #{<<"id">> => Id}, 5000),
+                case Reply of
+                    {ok, #{<<"result">> := Result}} when is_map(Result) -> {ok, Result};
+                    {ok, #{<<"outcome">> := Status}} when
+                        Status =:= <<"queued">>; Status =:= <<"starting">>; Status =:= <<"running">> ->
+                        await_result(Id, Url, Token, Deadline, 0);
+                    _ when Failures >= 2 -> {error, {media_runner_unavailable, status_unavailable}};
+                    _ -> await_result(Id, Url, Token, Deadline, Failures + 1)
+                end
+            end
+    end.
+
+remember(Url, Token, Files) ->
+    gen_server:call(?MODULE, {remember, runner_id(Url, Token), Files}).
+
 %% Optimistic hash-only submission avoids even a preflight round trip on cache hits.
 %% The missing outcome lists precisely which inputs need uploading.
 submit_request(Url, Token, Request, Options, Retries) ->
@@ -197,6 +230,7 @@ submit_request(Url, Token, Request, Options, Retries) ->
                 Files = maps:get(<<"files">>, Request),
                 Known = [H || #{<<"sha256">> := H} <- Files],
                 true = lists:all(fun(H) -> lists:member(H, Known) end, Missing),
+                gen_server:call(?MODULE, {forget, runner_id(Url, Token), Missing}),
                 Paths = lists:usort(maps:get(read, Options, []) ++ maps:get(write, Options, [])),
                 case upload_missing(lists:usort(Missing), Files, Paths, Url, Token) of
                     ok ->
@@ -211,6 +245,18 @@ submit_request(Url, Token, Request, Options, Retries) ->
                     {error, {protocol, invalid_cache_response}}
             end;
         {ok, #{<<"outcome">> := <<"accepted">>}} -> ok;
+        {error, _} = Error ->
+            %% A failed response does not prove the submission failed. Recover
+            %% admission on this runner before creating an independent attempt.
+            case z_media_runner_protocol:request(
+                z_media_runner_protocol:control_url(Url, <<"status">>), Token,
+                #{<<"id">> => maps:get(<<"id">>, Request)}, 5000)
+            of
+                {ok, #{<<"outcome">> := Status}} when
+                    Status =:= <<"queued">>; Status =:= <<"starting">>; Status =:= <<"running">>;
+                    Status =:= <<"completed">>; Status =:= <<"failed">> -> ok;
+                _ -> control_result(Error)
+            end;
         Reply ->
             control_result(Reply)
     end.
@@ -236,6 +282,7 @@ upload_missing([Hash | Rest], Files, Paths, Url, Token) ->
     Deadline = erlang:monotonic_time(second) + 3600,
     case ensure_uploaded(FileUrl, Token, Path, maps:get(<<"size">>, F), Deadline) of
         ok ->
+            remember(Url, Token, [F]),
             upload_missing(Rest, Files, Paths, Url, Token);
         Error ->
             Error
@@ -284,9 +331,53 @@ digest(Secret) ->
     crypto:hash(sha256, Secret).
 
 init([]) ->
-    {ok, #{}}.
+    {ok, #{jobs => #{}, hints => #{}, cooldown => #{}}}.
 
-handle_call({register, Id, Secret, Pid}, _From, State) when map_size(State) < 1000 ->
+handle_call({rank, Runners, Job}, _From, #{jobs := Jobs, hints := Hints, cooldown := Cooldown} = State) ->
+    Now = erlang:monotonic_time(second),
+    Class = work_class(maps:get(<<"profile">>, Job)),
+    Active = maps:fold(fun
+        (_, #{runner := Id, profile := Profile}, Acc) ->
+            case work_class(Profile) =:= Class of
+                true -> Acc#{Id => maps:get(Id, Acc, 0) + 1};
+                false -> Acc
+            end;
+        (_, _, Acc) -> Acc
+    end, #{}, Jobs),
+    %% In-flight inputs are expected here even before an upload finishes. This
+    %% keeps concurrent commands together on the runner's existing upload lease.
+    Expected = maps:fold(fun
+        (_, #{runner := Id, files := Files}, Acc) ->
+            lists:foldl(fun
+                (#{<<"sha256">> := Hash}, A) -> A#{{Id, Hash} => Now + 1};
+                (_, A) -> A
+            end, Acc, Files);
+        (_, _, Acc) -> Acc
+    end, Hints, Jobs),
+    Ready = [R || R <- Runners, maps:get(z_media_runner_pool:identity(R), Cooldown, Now) =< Now],
+    {reply, z_media_runner_pool:rank(Ready, Job, Expected, Active), State};
+handle_call({assign, Id, Runner, Job}, _From, #{jobs := Jobs} = State) ->
+    Entry = maps:get(Id, Jobs),
+    Assigned = Entry#{runner => Runner, profile => maps:get(<<"profile">>, Job),
+        files => maps:get(<<"files">>, Job)},
+    {reply, ok, State#{jobs => Jobs#{Id => Assigned}}};
+handle_call({remember, Runner, Files}, _From, #{hints := Hints, cooldown := Cooldown} = State) ->
+    {reply, ok, State#{hints => z_media_runner_pool:remember(Runner, Files, Hints),
+        cooldown => maps:remove(Runner, Cooldown)}};
+handle_call({forget, Runner, Hashes}, _From, #{hints := Hints} = State) ->
+    {reply, ok, State#{hints => z_media_runner_pool:forget(Runner, Hashes, Hints)}};
+handle_call({unavailable, Runner}, _From, #{cooldown := Cooldown} = State) ->
+    Now = erlang:monotonic_time(second),
+    Fresh = maps:filter(fun(_, Until) -> Until > Now end, Cooldown),
+    {reply, ok, State#{cooldown => Fresh#{Runner => Now + 5}}};
+handle_call(Message, From, #{jobs := Jobs} = State) ->
+    {reply, Reply, NewJobs} = handle_job_call(Message, From, Jobs),
+    {reply, Reply, State#{jobs => NewJobs}}.
+
+work_class(<<"ffmpeg">>) -> ffmpeg;
+work_class(_) -> general.
+
+handle_job_call({register, Id, Secret, Pid}, _From, State) when map_size(State) < 1000 ->
     Ref = monitor(process, Pid),
     {reply, ok, State#{
         Id => #{
@@ -296,11 +387,11 @@ handle_call({register, Id, Secret, Pid}, _From, State) when map_size(State) < 10
             delivered => false
         }
     }};
-handle_call({register, _, _, _}, _From, State) ->
+handle_job_call({register, _, _, _}, _From, State) ->
     {reply, {error, media_runner_busy}, State};
-handle_call({authorized, Id, Hash}, _From, State) ->
+handle_job_call({authorized, Id, Hash}, _From, State) ->
     {reply, matches(Id, Hash, State), State};
-handle_call({callback, Id, Hash, Result}, _From, State) ->
+handle_job_call({callback, Id, Hash, Result}, _From, State) ->
     case matches(Id, Hash, State) of
         true ->
             Entry = maps:get(Id, State),
@@ -314,7 +405,7 @@ handle_call({callback, Id, Hash, Result}, _From, State) ->
         false ->
             {reply, {error, gone}, State}
     end;
-handle_call({remove, Id}, _From, State) ->
+handle_job_call({remove, Id}, _From, State) ->
     case maps:find(Id, State) of
         {ok, #{monitor := Ref}} ->
             demonitor(Ref, [flush]);
@@ -326,8 +417,8 @@ handle_call({remove, Id}, _From, State) ->
 handle_cast(_, State) ->
     {noreply, State}.
 
-handle_info({'DOWN', Ref, process, _, _}, State) ->
-    {noreply, maps:filter(fun(_, #{monitor := R}) -> R =/= Ref end, State)};
+handle_info({'DOWN', Ref, process, _, _}, #{jobs := Jobs} = State) ->
+    {noreply, State#{jobs => maps:filter(fun(_, #{monitor := R}) -> R =/= Ref end, Jobs)}};
 handle_info(_, State) ->
     {noreply, State}.
 

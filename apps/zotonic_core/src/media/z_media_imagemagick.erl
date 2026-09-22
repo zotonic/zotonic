@@ -24,12 +24,13 @@ runner reports its actual local installation via authenticated HTTPS. Separate l
 and remote caches expire after 60 seconds; failures retry after 5 seconds. Configuration
 and executable changes invalidate the appropriate cache immediately.".
 
--export([selected/0, local/0, clear_cache/0]).
+-export([selected/0, local/0, clear_cache/0, installed/1]).
 
 -include_lib("kernel/include/logger.hrl").
 -include_lib("kernel/include/file.hrl").
 
-%% @doc Select the runner's ImageMagick installation when a runner is configured.
+%% @doc Select the most common available ImageMagick major version in the pool.
+%% Ties follow configuration order; unavailable installations do not vote.
 %% Cache successful lookups for 60 seconds and failures for 5 seconds. Local tools
 %% are only probed without a runner or when local fallback is enabled.
 -spec selected() -> map().
@@ -37,10 +38,10 @@ selected() ->
     case z_media_runner:enabled() of
         false -> local();
         true ->
-            Config = [z_config:get(K) || K <- [media_runner_hostname, media_runner_oauth2_key,
-                environment, media_runner_local_fallback]],
+            Config = {z_media_runner_pool:runners(), z_config:get(environment),
+                z_config:get(media_runner_local_fallback, false)},
             Key = crypto:hash(sha256, term_to_binary(Config)),
-            case cached(remote, Key, fun remote/0) of
+            case remote() of
                 {ok, Info} ->
                     warn_mismatch(Key, Info),
                     Info;
@@ -108,17 +109,60 @@ info(Tool, Version, Major, Command) ->
         legacy => Major < 7, cmd => Command, identify => Identify}.
 
 remote() ->
-    case z_media_runner_protocol:endpoint(z_config:get(media_runner_hostname)) of
-        {ok, Base} ->
-            Token = z_convert:to_binary(z_config:get(media_runner_oauth2_key, <<>>)),
-            case z_media_runner_protocol:request(z_media_runner_protocol:control_url(Base, <<"capabilities">>), Token, #{}, 5000) of
-                {ok, Info} -> decode(Info);
-                {error, {http_status, Code}} when Code =:= 429; Code =:= 502; Code =:= 503; Code =:= 504 ->
-                    {error, unavailable};
-                {error, {http_status, _}} -> {error, invalid_capabilities};
-                {error, _} -> {error, unavailable}
+    case z_media_runner_pool:runners() of
+        {ok, Runners} -> majority([installed(R) || R <- Runners]);
+        {error, _} -> {error, configuration}
+    end.
+
+%% Select a representative from the largest major-version group. Keep the first
+%% configured representative on a tie, so command generation remains stable.
+majority(Results) ->
+    Available = [Info || {ok, #{available := true} = Info} <- Results],
+    case Available of
+        [] ->
+            case Results of
+                [] -> {error, unavailable};
+                _ -> lists:last(Results)
             end;
-        _ -> {error, configuration}
+        _ ->
+            Counts = lists:foldl(fun(#{major := Major}, Acc) ->
+                Acc#{Major => maps:get(Major, Acc, 0) + 1}
+            end, #{}, Available),
+            Largest = lists:max(maps:values(Counts)),
+            [Selected | _] = [Info || #{major := Major} = Info <- Available,
+                maps:get(Major, Counts) =:= Largest],
+            {ok, Selected}
+    end.
+
+%% @doc Cache each configured runner's installation independently of local discovery.
+-spec installed(map()) -> {ok, map()} | {error, term()}.
+installed(Runner) ->
+    {ok, [First | _]} = z_media_runner_pool:runners(),
+    Scope = case Runner =:= First of
+        true -> remote;
+        false -> {remote, z_media_runner_pool:identity(Runner)}
+    end,
+    Key = crypto:hash(sha256, term_to_binary({Runner, z_config:get(environment),
+        z_config:get(media_runner_local_fallback, false)})),
+    cached(Scope, Key, fun() ->
+        %% Prune removed runners only on refresh, not on every thumbnail lookup.
+        {ok, Runners} = z_media_runner_pool:runners(),
+        Allowed = [{?MODULE, {remote, z_media_runner_pool:identity(R)}} || R <- Runners],
+        lists:foreach(fun
+            ({{?MODULE, {remote, _}} = K, _}) ->
+                case lists:member(K, Allowed) of true -> ok; false -> persistent_term:erase(K) end;
+            (_) -> ok
+        end, persistent_term:get()),
+        fetch_remote(Runner)
+    end).
+
+fetch_remote(#{url := Base, token := Token}) ->
+    case z_media_runner_protocol:request(z_media_runner_protocol:control_url(Base, <<"capabilities">>), Token, #{}, 5000) of
+        {ok, Info} -> decode(Info);
+        {error, {http_status, Code}} when Code =:= 429; Code =:= 502; Code =:= 503; Code =:= 504 ->
+            {error, unavailable};
+        {error, {http_status, _}} -> {error, invalid_capabilities};
+        {error, _} -> {error, unavailable}
     end.
 
 decode(Body) ->
@@ -199,4 +243,7 @@ warn_mismatch(Key, Remote) ->
 %% @doc Clear discovery after an administrator changes the installed tools.
 -spec clear_cache() -> ok.
 clear_cache() ->
-    lists:foreach(fun(Scope) -> persistent_term:erase({?MODULE, Scope}) end, [local, remote, warning]).
+    lists:foreach(fun
+        ({{?MODULE, _} = Key, _}) -> persistent_term:erase(Key);
+        (_) -> ok
+    end, persistent_term:get()).
