@@ -1507,9 +1507,19 @@ update_transaction_fun_db_1({ok, UpdatePropsN}, Id, RscUpd, Raw, IsABefore, IsCa
         orelse is_update_allowed(IsInsert, Id, NewPropsLangPruned, Context)
     of
         true ->
-            case (IsInsert orelse is_changed(Raw, NewPropsDiffPub)) of
+            case (IsInsert orelse maps:is_key(<<"privacy">>, UpdatePropsN) orelse is_changed(Raw, NewPropsDiffPub)) of
                 true ->
-                    UpdatePropsPrePivoted = z_pivot_rsc:pivot_resource_update(Id, NewPropsDiffPub, Raw, Context),
+                    PrivacyChanges = maps:merge(NewPropsDiffPub, maps:with([<<"privacy">>], UpdatePropsN)),
+                    InsertDefaults = case {IsInsert, maps:find(<<"privacy_is_default">>, Raw)} of
+                        {true, {ok, IsDefault}} ->
+                            PrivacyChanges#{
+                                <<"privacy_is_default">> => IsDefault
+                            };
+                        _ ->
+                            PrivacyChanges
+                    end,
+                    StoredDefaults = z_rsc_defaults:prepare(Id, InsertDefaults, Raw, Context),
+                    UpdatePropsPrePivoted = z_pivot_rsc:pivot_resource_update(Id, StoredDefaults, Raw, Context),
                     case z_db:update(rsc, Id, UpdatePropsPrePivoted, Context) of
                         {ok, 1} ->
                             ok = update_page_path_log(Id, Raw, NewPropsDiffPub, Context),
@@ -2182,6 +2192,7 @@ is_protected(<<"modified">>, true) -> true;
 is_protected(<<"modifier_id">>, true) -> true;
 is_protected(<<"props">>, _IsNormal) -> true;
 is_protected(<<"props_json">>, _IsNormal) -> true;
+is_protected(<<"privacy_is_default">>, _IsNormal) -> true;
 is_protected(<<"version">>, _IsNormal) -> true;
 is_protected(<<"short_url">>, _IsNormal) -> true;
 is_protected(<<"page_url">>, _IsNormal) -> true;

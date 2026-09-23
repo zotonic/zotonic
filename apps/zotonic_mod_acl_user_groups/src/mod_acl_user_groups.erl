@@ -329,7 +329,7 @@ This module handles the following notifier callbacks:
 - `observe_hierarchy_updated`: Rebuild published/edit ACL lookup tables when category, content-group, or acl-user-group hierarchies change.
 - `observe_rsc_delete`: Block deletion of acl user groups that are still referenced by ACL rules or memberships.
 - `observe_rsc_get`: Set a default `privacy` value on resources without one (`collab_member` for persons, otherwise `public`).
-- `observe_rsc_insert`: Assign a default `content_group_id` on insert when none is provided, based on the resource category.
+- `observe_rsc_insert`: Assign default `privacy` and `content_group_id` on insert, based on the resource category.
 - `observe_rsc_update`: Validate ACL-related updates and prevent non-ACL-admin users from changing `acl_mime_allowed` and `acl_upload_size`.
 - `observe_rsc_update_done`: Rebuild the `acl_user_group` hierarchy when a resource changes into or out of that category.
 
@@ -389,6 +389,7 @@ Delegate callbacks:
     await_match/2,
     rebuild/2,
     observe_admin_menu/3,
+    observe_migration_status/3,
     observe_rsc_update_done/2,
     observe_rsc_delete/2,
     observe_rsc_insert/3,
@@ -409,6 +410,7 @@ Delegate callbacks:
     observe_acl_rsc_gone_sql/2,
     observe_acl_is_allowed/2,
     observe_acl_is_allowed_prop/2,
+    observe_acl_query_prop/2,
     observe_acl_logon/2,
     observe_acl_logoff/2,
     observe_acl_context_authenticated/2,
@@ -621,6 +623,11 @@ observe_acl_is_owner(#acl_is_owner{}, _Context) ->
 observe_acl_is_allowed(AclIsAllowed, Context) ->
     acl_user_groups_checks:acl_is_allowed(AclIsAllowed, Context).
 
+%% @doc Supply the conservative admin/anonymous/member policy for property queries.
+-spec observe_acl_query_prop(#acl_query_prop{}, z:context()) -> z_search_acl_props:policy().
+observe_acl_query_prop(#acl_query_prop{property = Property}, Context) ->
+    acl_user_groups_checks:query_prop_policy(Property, Context).
+
 -spec observe_acl_is_allowed_prop(#acl_is_allowed_prop{}, z:context()) -> boolean() | undefined.
 observe_acl_is_allowed_prop(#acl_is_allowed_prop{action=view, object=undefined}, _Context) ->
     true;
@@ -663,9 +670,22 @@ observe_hierarchy_updated(#hierarchy_updated{root_id= <<"acl_user_group">>, pred
 observe_hierarchy_updated(#hierarchy_updated{}, _Context) ->
     ok.
 
-%% @doc Add default content group when resource is inserted without one
+%% @doc Supply privacy and content-group defaults before the resource is inserted.
 -spec observe_rsc_insert(#rsc_insert{}, m_rsc:props(), z:context()) -> m_rsc:props().
 observe_rsc_insert(#rsc_insert{ props = RscProps }, InsertProps, Context) ->
+    Privacy = maps:get(<<"privacy">>, RscProps, maps:get(<<"privacy">>, InsertProps, undefined)),
+    InsertProps1 = case Privacy of
+        undefined ->
+            InsertProps#{
+                <<"privacy">> => default_privacy(maps:get(<<"category_id">>, InsertProps), Context),
+                <<"privacy_is_default">> => true
+            };
+        _ ->
+            InsertProps#{<<"privacy">> => Privacy, <<"privacy_is_default">> => false}
+    end,
+    insert_content_group(RscProps, InsertProps1, Context).
+
+insert_content_group(RscProps, InsertProps, Context) ->
     case maps:get(<<"content_group_id">>, RscProps,
             maps:get(<<"content_group_id">>, InsertProps, undefined))
     of
@@ -675,8 +695,8 @@ observe_rsc_insert(#rsc_insert{ props = RscProps }, InsertProps, Context) ->
             InsertProps#{
                 <<"content_group_id">> => ContentGroupId
             };
-        _ ->
-            InsertProps
+        ContentGroupId ->
+            InsertProps#{<<"content_group_id">> => ContentGroupId}
     end.
 
 -spec observe_rsc_update(#rsc_update{}, {ok, m_rsc:props()} | {error, term()}, z:context()) -> {ok, m_rsc:props()} | {error, term()}.
@@ -825,13 +845,18 @@ observe_rsc_get(#rsc_get{}, #{ <<"category_id">> := CatId } = Map, Context) ->
         undefined ->
             Map#{
                 <<"privacy">> =>
-                    case m_category:is_a_prim(CatId, person, Context) of
-                        true -> ?ACL_PRIVACY_COLLAB_MEMBER;
-                        false -> ?ACL_PRIVACY_PUBLIC
-                    end
+                    default_privacy(CatId, Context)
             };
         _ ->
             Map
+    end.
+
+
+%% Same category policy for inserts and conversion of existing resources.
+default_privacy(CatId, Context) ->
+    case m_category:is_a_prim(CatId, person, Context) of
+        true -> ?ACL_PRIVACY_COLLAB_MEMBER;
+        false -> ?ACL_PRIVACY_PUBLIC
     end.
 
 
@@ -1198,3 +1223,13 @@ page_actions(Actions, Context) ->
 %% @doc Filter deleted resources by saved update permissions, not publication visibility.
 observe_acl_rsc_gone_sql(#acl_rsc_gone_sql{ alias = Alias }, Context) ->
     acl_user_groups_checks:gone_sql(Alias, Context).
+
+%% @doc Describe the shared resource migration in terms of this module's ACL defaults.
+observe_migration_status(#migration_status{}, Items, Context) ->
+    [case Item of
+        #{id := <<"rsc_defaults">>} -> Item#{
+            title => ?__("Privacy and content groups", Context),
+            description => ?__("Fill missing content groups and migrate privacy and stored resource properties. Explicit settings are preserved.", Context)
+        };
+        _ -> Item
+    end || Item <- Items].

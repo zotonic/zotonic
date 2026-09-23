@@ -193,6 +193,8 @@ Available Model API Paths
 
 -behaviour(zotonic_model).
 
+-export([resolve_defaults/3]).
+
 -export([
     m_get/3,
     m_post/3,
@@ -605,8 +607,7 @@ get_cached_unsafe(Id, Context) when is_integer(Id) ->
             % be cached in the depcache.
             case get_raw(Id, false, Context) of
                 {ok, Map} ->
-                    MapDT = ensure_utc_dates(Map, Context),
-                    z_notifier:foldr(#rsc_get{ id = Id }, MapDT, Context);
+                    resolve_defaults(Id, Map, Context);
                 {error, nodb} ->
                     undefined;
                 {error, enoent} ->
@@ -616,6 +617,12 @@ get_cached_unsafe(Id, Context) when is_integer(Id) ->
         Id,
         ?WEEK,
         Context).
+
+%% @doc Apply the same normalization and module defaults for reads and stored defaults.
+-spec resolve_defaults(resource_id(), map(), z:context()) -> map().
+resolve_defaults(Id, Props, Context) ->
+    Map = ensure_utc_dates(Props, Context),
+    z_notifier:foldr(#rsc_get{id = Id}, Map, Context).
 
 -spec filter_props_acl(resource(), map() | undefined, z:context()) -> map() | undefined.
 filter_props_acl(_Id, undefined, _Context) ->

@@ -59,7 +59,8 @@
 -type search_options() :: #{
         properties => list(binary()) | boolean(),
         is_count_rows => boolean(),
-        is_single_page => boolean()
+        is_single_page => boolean(),
+        no_privacy_check => boolean() % Trusted Erlang options only.
     }.
 
 -export_type([
@@ -112,11 +113,13 @@ restore_query_check(Previous) ->
     Context :: z:context(),
     Result :: #search_result{}.
 search(Name, #{ <<"options">> := Options } = Args, Page, PageLen, Context) ->
-    search(Name, Args, Page, PageLen, Options, Context);
+    search(Name, Args, Page, PageLen, map_to_options(Options), Context);
 search(Name, Args, Page, PageLen, Context) ->
     search(Name, Args, Page, PageLen, #{}, Context).
 
-%% @doc Perform a named search with arguments.
+%% @doc Perform a named search with arguments and explicit Erlang options.
+%% The atom option no_privacy_check => true omits property guards only.
+%% Never forward untrusted options here without map_to_options/1. Resource ACLs remain active.
 -spec search(Name, Args, Page, PageLen, Options, Context) -> Result when
     Name :: binary(),
     Args :: map() | proplists:proplist() | undefined,
@@ -133,7 +136,14 @@ search(Name, Args, Page, undefined, Options, Context) ->
     search(Name, Args, Page, default_pagelen(Context), Options, Context);
 search(Name, Args0, Page, PageLen, Options0, Context) when is_binary(Name), is_map(Options0) ->
     Args = props_to_map(Args0),
-    Options = map_to_options(Options0),
+    %% Only the explicit Erlang options argument accepts this capability. Never
+    %% decode it in map_to_options/1, which also processes model/request payloads.
+    PublicOptions = map_to_options(maps:remove(no_privacy_check, Options0)),
+    Options = case Options0 of
+        #{no_privacy_check := true} ->
+            PublicOptions#{no_privacy_check => true};
+        _ -> PublicOptions
+    end,
     OffsetLimit = offset_limit(Page, PageLen, Options),
     Q = #search_query{
         name = Name,
@@ -416,7 +426,7 @@ handle_search_result(L, Page, PageLen, {Offset, _Limit}, Name, Args, Options, _C
         next = Next
     };
 handle_search_result(#search_sql_terms{} = Terms, Page, PageLen, OffsetLimit, Name, Args, Options, Context) ->
-    SearchSQL = z_search_terms:combine(Terms, Context),
+    SearchSQL = z_search_terms:combine(Terms, Options, Context),
     handle_search_result(SearchSQL, Page, PageLen, OffsetLimit, Name, Args, Options, Context);
 handle_search_result(#search_sql{} = Q, Page, PageLen, {_, Limit} = OffsetLimit, Name, Args, Options, Context) ->
     Q1 = reformat_sql_query(Q, Options, Context),

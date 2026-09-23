@@ -597,6 +597,14 @@ observe_acl_is_owner(#acl_is_owner{ id = RscId }, Context) ->
         false -> undefined
     end.
 
+event(#postback{message = {migration_start, Args}}, Context) ->
+    Id = proplists:get_value(id, Args),
+    case z_migration:start(Id, Context) of
+        ok -> z_render:wire({reload, []}, Context);
+        {error, busy} -> z_render:growl_error(?__("Another migration is already running.", Context), Context);
+        {error, eacces} -> z_render:growl_error(?__("Only administrators can start migrations.", Context), Context);
+        {error, _} -> z_render:growl_error(?__("The migration could not be started. Refresh this page and try again.", Context), Context)
+    end;
 event(#postback_notify{message= <<"admin-insert-block">>}, Context) ->
     Language = language_list(z_context:get_q(<<"language">>, Context)),
     EditLanguage = case z_context:get_q(<<"edit_language">>, Context) of

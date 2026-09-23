@@ -357,6 +357,10 @@ save_nocheck(Name, NewTree, Context) when is_binary(Name); is_atom(Name) ->
     ok.
 
 save_nocheck_trans(Name, NewFlat, Context) ->
+    case z_convert:to_binary(Name) of
+        <<"$category">> -> z_rsc_defaults:invalidate(Context);
+        _ -> ok
+    end,
     OldFlatNr = z_db:q("
                 select id, parent_id, lvl, nr
                 from hierarchy
@@ -505,7 +509,14 @@ flatten_save_tree([{Id, Cs} | Ts], ParentId, Lvl, Acc) ->
 
 append(Name0, Missing, Context) ->
     Name = z_convert:to_binary(Name0),
-    case append_1(Name, Missing, Context) of
+    Result = z_db:transaction(fun(Ctx) ->
+        case {Name, Missing} of
+            {<<"$category">>, [_ | _]} -> z_rsc_defaults:invalidate(Ctx);
+            _ -> ok
+        end,
+        append_1(Name, Missing, Ctx)
+    end, Context),
+    case Result of
         {ok, N} when N > 0 ->
             flush(Name, Context),
             z_notifier:notify(#hierarchy_updated{root_id = Name, predicate = undefined}, Context),
@@ -533,12 +544,18 @@ append_1(Name, Missing, Context) ->
 remove(_Name, [], _Context) ->
     {ok, 0};
 remove(Name, Ids, Context) ->
-    lists:foreach(fun(Id) ->
-                    z_db:q("delete from hierarchy where name = $1 and id = $2", [Name, Id], Context)
-                  end,
-                  Ids),
+    Result = z_db:transaction(fun(Ctx) ->
+        case z_convert:to_binary(Name) of
+            <<"$category">> -> z_rsc_defaults:invalidate(Ctx);
+            _ -> ok
+        end,
+        lists:foreach(fun(Id) ->
+            z_db:q("delete from hierarchy where name = $1 and id = $2", [Name, Id], Ctx)
+        end, Ids),
+        {ok, length(Ids)}
+    end, Context),
     flush(Name, Context),
-    {ok, length(Ids)}.
+    Result.
 
 next_nr(Name, Context) ->
     case z_db:q1("select max(nr) from hierarchy where name = $1", [Name], Context) of
@@ -547,7 +564,13 @@ next_nr(Name, Context) ->
     end.
 
 flush(Name, Context) ->
-    z_depcache:flush({hierarchy, z_convert:to_binary(Name)}, Context).
+    case z_convert:to_binary(Name) of
+        <<"$category">> ->
+            %% Category-derived privacy changed too, including cached query results.
+            z_depcache:flush(Context);
+        NameBin ->
+            z_depcache:flush({hierarchy, NameBin}, Context)
+    end.
 
 
 indent(Level) when Level =< 0 ->

@@ -34,6 +34,7 @@
 
         acl_is_allowed/2,
         acl_is_allowed_prop/3,
+        query_prop_policy/2,
         acl_logon/2,
         acl_logoff/2,
         acl_context_authenticated/1,
@@ -265,6 +266,27 @@ acl_is_allowed(#acl_is_allowed{ action = Action, object = ModuleName }, Context)
     can_module(Action, ModuleName, Context);
 acl_is_allowed(#acl_is_allowed{}, _Context) ->
     undefined.
+
+%% @doc Query policy deliberately excludes owner, editor and shared-group exceptions.
+%% Reuse the classifications used for individual property reads.
+-spec query_prop_policy(binary(), z:context()) -> z_search_acl_props:policy().
+query_prop_policy(Property, Context) ->
+    case z_acl:is_admin(Context) of
+        true -> allow;
+        false -> query_prop_policy_1(Property, Context)
+    end.
+
+query_prop_policy_1(Property, Context) ->
+    case {is_always_private_property(Property), is_private_property(Property)} of
+        {true, _} -> deny;
+        {false, false} -> allow;
+        {false, true} ->
+            MaxLevel = case z_acl:user(Context) of
+                undefined -> ?ACL_PRIVACY_PUBLIC;
+                _ -> ?ACL_PRIVACY_MEMBER
+            end,
+            {privacy, MaxLevel}
+    end.
 
 acl_is_allowed_prop(_Id, _Prop, #context{ acl = admin }) ->
     true;

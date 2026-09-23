@@ -1288,6 +1288,10 @@ handle_upgrade(#state{ site = Site, modules = Modules } = State) ->
     Start = sets:to_list(sets:subtract(New, sets:from_list(Running))),
     StartOk = filter_startable_status(Start, Modules),
     {ok, StartList} = dependency_sort(StartOk),
+    case StartList =/= [] orelse sets:size(Kill) > 0 of
+        true -> z_rsc_defaults:suspend(z_context:new(Site));
+        false -> ok
+    end,
 
     ?LOG_DEBUG(#{
         text => <<"Stopping/starting modules">>,
@@ -1368,6 +1372,7 @@ sidejob_finish_start(Site) ->
     Context = z_context:new(Site),
     ?zDebug("Finished starting modules", [], Context),
     z_notifier:notify_sync(module_ready, Context),
+    z_rsc_defaults:start(Context),
     z_trans_server:load_translations(Context).
 
 

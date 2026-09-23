@@ -36,11 +36,11 @@
 {% endblock %}
 
 {# Pivot fields #}
-{% block address_street %}{{ id.address_street_1|default:mail_address_street_1 }}{% endblock %}
-{% block address_city %}{{ id.address_city|default:mail_city }}{% endblock %}
-{% block address_postcode %}{{ id.address_postcode|default:mail_postcode }}{% endblock %}
-{% block address_state %}{{ id.address_state|default:mail_state }}{% endblock %}
-{% block address_country %}{{ id.address_country|default:mail_country }}{% endblock %}
+{% block address_street %}{{ id.address_country|if:id.address_street_1:id.mail_address_street_1 }}{% endblock %}
+{% block address_city %}{{ id.address_country|if:id.address_city:id.mail_city }}{% endblock %}
+{% block address_postcode %}{{ id.address_country|if:id.address_postcode:id.mail_postcode }}{% endblock %}
+{% block address_state %}{{ id.address_country|if:id.address_state:id.mail_state }}{% endblock %}
+{% block address_country %}{{ id.address_country|default:id.mail_country }}{% endblock %}
 
 {% block name_first %}{{ id.name_first }}{% endblock %}
 {% block name_surname %}{{ id.name_surname }}{% endblock %}

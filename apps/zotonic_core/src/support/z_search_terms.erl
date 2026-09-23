@@ -23,6 +23,7 @@
 -export([
     combine/1,
     combine/2,
+    combine/3,
 
     merge_args/2,
     map/2
@@ -30,6 +31,23 @@
 
 
 -include_lib("../../include/zotonic.hrl").
+
+%% @doc Compile with trusted Erlang options. Resource visibility checks remain active.
+%% This option must never be decoded from query terms or external model options.
+-spec combine(#search_sql_terms{} | list(), z_search:search_options(), z:context()) -> #search_sql{}.
+combine(Terms, #{no_privacy_check := true}, Context) ->
+    combine(without_property_sources(Terms), Context);
+combine(Terms, _Options, Context) ->
+    combine(Terms, Context).
+
+without_property_sources(#search_sql_terms{terms = Terms} = Query) ->
+    Query#search_sql_terms{terms = without_property_sources(Terms)};
+without_property_sources(#search_sql_nested{terms = Terms} = Nested) ->
+    Nested#search_sql_nested{terms = without_property_sources(Terms)};
+without_property_sources(#search_sql_term{} = Term) ->
+    Term#search_sql_term{property_sources = []};
+without_property_sources(Terms) when is_list(Terms) ->
+    [without_property_sources(T) || T <- Terms].
 
 combine(Terms) ->
     combine(Terms, undefined).
@@ -197,7 +215,19 @@ find_edge_alias(Map) when is_map(Map) ->
 %% @doc Compile nested boolean terms. Aliases which are only used below an
 %% anyof or noneof boundary are kept inside the subquery.
 compile_terms(Terms, AllAliases, OutsideAliases, Args, Context) ->
-    compile_terms(Terms, AllAliases, OutsideAliases, #{}, Args, Context).
+    %% Direct leaves form one conjunction. Emit their shared guards once, while
+    %% leaving nested alternatives and lateral/subquery scopes independent.
+    Sources = lists:usort(lists:append([
+        S || #search_sql_term{property_sources = S} <- Terms])),
+    Terms1 = [case T of
+        #search_sql_term{} -> T#search_sql_term{property_sources = []};
+        _ -> T
+    end || T <- Terms],
+    GuardTerms = case Sources of
+        [] -> [];
+        _ -> [#search_sql_term{select = [], tables = #{}, property_sources = Sources}]
+    end,
+    compile_terms(GuardTerms ++ Terms1, AllAliases, OutsideAliases, #{}, Args, Context).
 
 compile_terms([], _AllAliases, _OutsideAliases, _BeforeAliases, Args, _Context) ->
     {[], Args};
@@ -271,12 +301,13 @@ compile_term(#search_sql_nested{ operator = <<"noneof">>, terms = Terms },
         combine_operator(<<"anyof">>, Terms1),
         OutsideAliases, AllAliases, Args1, Context);
 compile_term(#search_sql_term{} = Term, AllAliases, _OutsideAliases, Args, Context) ->
+    {Guarded, Args1} = z_search_acl_props:guard(Term, Args, Context),
     map_sql_expressions(
-        Term,
+        Guarded,
         fun(Exists, Terms, Args0) ->
             compile_exists_expression(Exists, Terms, AllAliases, Args0, Context)
         end,
-        Args).
+        Args1).
 
 %% @doc A scalar EXISTS is a scope boundary, including when used in SELECT,
 %% a function argument, or a compound condition. Its joins and checks must
@@ -620,6 +651,7 @@ merge_term(Term, Acc) ->
         extra = Extra
     } = Term,
     Acc#search_sql_term{
+        property_sources = lists:usort(Acc#search_sql_term.property_sources ++ Term#search_sql_term.property_sources),
         select = merge_select(Acc#search_sql_term.select, Select),
         tables = maps:merge(Acc#search_sql_term.tables, Tables),
         join_left = maps:merge(Acc#search_sql_term.join_left, JoinLeft),
@@ -685,6 +717,7 @@ used_aliases(#search_sql_term{} = Term, AllAliases) ->
     alias_union(defined_aliases(Term), referenced_aliases(Term, AllAliases)).
 
 referenced_aliases(#search_sql_term{
+        property_sources = Sources,
         select = Select,
         join_inner = JoinInner,
         join_left = JoinLeft,
@@ -699,6 +732,7 @@ referenced_aliases(#search_sql_term{
         cats_exact = CatsExact
     }, AllAliases) ->
     alias_union([
+        alias_set([Alias || {Alias, _} <- Sources]),
         aliases_in(Select, AllAliases),
         aliases_in_join(JoinInner, AllAliases),
         aliases_in_join(JoinLeft, AllAliases),
@@ -909,6 +943,8 @@ merge_args(ArgsNew, ArgsAcc) ->
 
 map_args(Term, Mapping) ->
     Term#search_sql_term{
+        property_sources = [{map(Alias, Mapping), Source}
+            || {Alias, Source} <- Term#search_sql_term.property_sources],
         select = map(Term#search_sql_term.select, Mapping),
         tables = map(Term#search_sql_term.tables, Mapping),
         join_inner = map(Term#search_sql_term.join_inner, Mapping),

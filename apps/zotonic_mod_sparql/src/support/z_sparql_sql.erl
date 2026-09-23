@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2025 Marc Worrell
+%% @copyright 2025-2026 Marc Worrell
 %% @doc Map a parsed SPARQL SELECT query to Zotonic SQL search terms.
 %% @end
 
-%% Copyright 2025 Marc Worrell
+%% Copyright 2025-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -496,7 +496,8 @@ triple_to_sql(Subject, #{ mapping := Mapping }, Object, State0) ->
     mapped_triple_to_sql(Mapping, SubjectAlias, Object, Term0, State1).
 
 mapped_triple_to_sql({column, Table, Column, Type}, SubjectAlias, Object, Term0, State0) ->
-    {Alias, Term1, State1} = property_alias(Table, SubjectAlias, Term0, State0),
+    {Alias, TermBase, State1} = property_alias(Table, SubjectAlias, Term0, State0),
+    Term1 = z_search_acl_props:add_source(TermBase, SubjectAlias, {column, Table, Column}),
     Expression = #sql_expression{
         sql = column_expression(Alias, Column),
         type = normalize_type(Type),
@@ -507,7 +508,8 @@ mapped_triple_to_sql({column, Table, Column, Type}, SubjectAlias, Object, Term0,
 mapped_triple_to_sql(
         {search_column, Table, ValueColumn, _SearchColumn, _SearchType},
         SubjectAlias, Object, Term0, State0) ->
-    {Alias, Term1, State1} = property_alias(Table, SubjectAlias, Term0, State0),
+    {Alias, TermBase, State1} = property_alias(Table, SubjectAlias, Term0, State0),
+    Term1 = z_search_acl_props:add_source(TermBase, SubjectAlias, {column, Table, ValueColumn}),
     Expression = #sql_expression{
         sql = column_expression(Alias, ValueColumn),
         type = text,
@@ -517,7 +519,8 @@ mapped_triple_to_sql(
         Object, value, Expression, Table, ValueColumn, Term1, State1),
     {[Term2], State2};
 mapped_triple_to_sql({jsonb, Table, Column, Selector, Type}, SubjectAlias, Object, Term0, State0) ->
-    {Alias, Term1, State1} = property_alias(Table, SubjectAlias, Term0, State0),
+    {Alias, TermBase, State1} = property_alias(Table, SubjectAlias, Term0, State0),
+    Term1 = z_search_acl_props:add_source(TermBase, SubjectAlias, {jsonb, Table, Column, Selector}),
     Expression = #sql_expression{
         sql = jsonb_expression(Alias, Column, Selector),
         type = normalize_type(Type),
@@ -1003,14 +1006,16 @@ resource_expression_alias(Expression, Term0) ->
     {Alias, add_where(Where, Term1)}.
 
 fulltext_search_expression(default, ResourceAlias, Term) ->
-    {column_expression(ResourceAlias, <<"pivot_tsv">>), fts, <<"pivot_tsv">>, Term};
+    {column_expression(ResourceAlias, <<"pivot_tsv">>), fts, <<"pivot_tsv">>,
+        z_search_acl_props:add_source(Term, ResourceAlias, {column, <<"rsc">>, <<"pivot_tsv">>})};
 fulltext_search_expression(
         #{
             mapping := {search_column, Table, _ValueColumn, SearchColumn, SearchType},
             predicate := Predicate
         },
         ResourceAlias, Term0) ->
-    {Alias, Term1} = search_property_alias(Table, SearchColumn, ResourceAlias, Term0),
+    {Alias, TermBase} = search_property_alias(Table, SearchColumn, ResourceAlias, Term0),
+    Term1 = z_search_acl_props:add_source(TermBase, ResourceAlias, {column, Table, SearchColumn}),
     NormalizeName = case Predicate of
         <<"facet.", Facet/binary>> -> Facet;
         _ -> Predicate
@@ -1023,7 +1028,8 @@ fulltext_search_expression(
         },
         ResourceAlias, Term0)
     when Type =:= fts; Type =:= fulltext; Type =:= text ->
-    {Alias, Term1} = search_property_alias(Table, Column, ResourceAlias, Term0),
+    {Alias, TermBase} = search_property_alias(Table, Column, ResourceAlias, Term0),
+    Term1 = z_search_acl_props:add_source(TermBase, ResourceAlias, {column, Table, Column}),
     SearchType = case Type of
         text -> fulltext;
         _ -> Type

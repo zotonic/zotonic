@@ -186,6 +186,8 @@
 % Captured parameters use {search_sql_arg, Value}, independent of term numbering.
 % z_search_terms:combine/2 maps their arguments and renders the scalar subquery.
 -record(search_sql_term, {
+    % {ResourceAlias, Source}; source provenance is resolved by z_search_acl_props.
+    property_sources = [],
     label = undefined,
     select = [ <<"rsc.id">> ],
     tables = #{ <<"rsc">> => <<"rsc">> },

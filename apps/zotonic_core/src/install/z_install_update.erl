@@ -350,6 +350,7 @@ upgrade(C, Database, Schema) ->
     ok = identity_log(C, Database, Schema),
     ok = medium_update_v2(C, Database, Schema),
     ok = rsc_props_json(C, Database, Schema),
+    ok = rsc_privacy(C, Database, Schema),
     ok = pivot_page_path(C, Database, Schema),
     ok = medium_update_function_check(C, Database, Schema),
     ok = medium_digest_field(C, Database, Schema),
@@ -1104,6 +1105,28 @@ medium_digest_field(C, Database, Schema) ->
             {ok,[],[]} = epgsql:squery(C, "alter table medium add column digest character varying(80)"),
             ok
     end.
+
+%% Unconverted rows are deliberately excluded from private-property queries.
+rsc_privacy(C, Database, Schema) ->
+    case has_column(C, "rsc", "privacy", Database, Schema) of
+        true -> ok;
+        false ->
+            {ok, [], []} = epgsql:squery(C,
+                "alter table rsc add column privacy integer not null default -1, "
+                "add column privacy_is_default boolean"),
+            {ok, [], []} = epgsql:squery(C,
+                "create index rsc_defaults_pending_key on rsc(id) where "
+                "privacy_is_default is null or privacy = -1 or props_json is null"),
+            ok
+    end,
+    {ok, [], []} = epgsql:squery(C,
+        "create index if not exists rsc_defaults_pending_v2_key on rsc(id) where "
+        "privacy_is_default is null or privacy = -1 or props_json is null or content_group_id is null"),
+    {ok, [], []} = epgsql:squery(C, "drop index if exists rsc_defaults_pending_key"),
+    % Keep the admin status check independent of other pending property conversions.
+    {ok, [], []} = epgsql:squery(C,
+        "create index if not exists rsc_privacy_pending_key on rsc(id) where privacy = -1"),
+    ok.
 
 rsc_props_json(C, Database, Schema) ->
     case has_column(C, "rsc", "props_json", Database, Schema) of

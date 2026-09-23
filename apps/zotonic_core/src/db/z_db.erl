@@ -635,8 +635,15 @@ qmap_props(Sql, Args, Options, Context) ->
 %% @doc Make associative maps from all the rows in the result set.
 cols_map(_Cols, [], _IsMergeProps, _Keys) -> [];
 cols_map(Cols, Rows, IsMergeProps, Keys) ->
-    ColProps = build_col_props(Cols, Keys, IsMergeProps),
+    %% Physical columns win, then JSON, then legacy props, regardless of SELECT order.
+    %% map_merge_props/2 preserves keys already present in the accumulator.
+    ColProps = lists:sort(fun(A, B) -> props_priority(A) =< props_priority(B) end,
+        build_col_props(Cols, Keys, IsMergeProps)),
     [ map_row(ColProps, Row) || Row <- Rows ].
+
+props_priority({_, Col, true}) when Col =:= props; Col =:= <<"props">> -> 2;
+props_priority({_, _, true}) -> 1;
+props_priority(_) -> 0.
 
 map_row(ColProps, Row) ->
     lists:foldl(

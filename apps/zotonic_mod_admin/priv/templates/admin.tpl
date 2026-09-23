@@ -9,6 +9,7 @@
     </div>
 
     {% include "_admin_status_alert.tpl" %}
+    {% include "_admin_migrations.tpl" %}
     {% include "_admin_dashboard_buttons.tpl" %}
     {% include "_admin_dashboard.tpl" %}
 {% endblock %}
