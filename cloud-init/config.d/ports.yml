@@ -19,7 +19,9 @@ zotonic:
     # MQTT ports, opened directly
     mqtt_listen_port: 1883
     mqtt_listen_ssl_port: 8883
-    # ClamAV for scanning uploaded files
-    clamav_ip: "127.0.0.1"
-    clamav_port: 3310
+    # Connect to PostgreSQL through /run/postgresql/.s.PGSQL.5432.
+    dbhost: socket
+    dbport: 5432
+    # Scan uploads over ClamAV's default Unix socket, without TCP fallback.
+    clamav_ip: socket
     clamav_max_size: 26214400

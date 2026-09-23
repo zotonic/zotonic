@@ -101,36 +101,52 @@ do_clam(Command, DataFun) ->
             _ = gen_tcp:close(Socket),
             Result;
         {error, Reason} = Error ->
-            {ClamIP, ClamPort} = ip_port(),
-            ?LOG_WARNING(#{
+            ?LOG_WARNING(maps:merge(#{
                 text => <<"ClamAV: could not connect">>,
                 in => zotonic_mod_clamav,
-                to => ClamIP,
-                port => ClamPort,
                 result => error,
                 reason => Reason
-            }),
+            }, connection_log_fields())),
             Error
     end.
 
-%% @doc Try the local socket on every connection, falling back to TCP if unavailable.
-%% Connecting also detects stale sockets and insufficient permissions.
+%% @doc Connect using the configured transport. Setting clamav_ip to "socket"
+%% uses the configured/default socket only. An absolute path uses that socket
+%% only. Other addresses retain the socket-first, TCP-fallback behaviour.
 -spec connect(Options) -> Result
     when
         Options :: [gen_tcp:connect_option()],
         Result :: {ok, gen_tcp:socket()} | {error, term()}.
 connect(Options) ->
+    case socket_only_path() of
+        {ok, Path} -> connect_socket(Path, Options);
+        false -> connect_with_fallback(Options)
+    end.
+
+-spec connect_with_fallback(Options) -> Result
+    when
+        Options :: [gen_tcp:connect_option()],
+        Result :: {ok, gen_tcp:socket()} | {error, term()}.
+connect_with_fallback(Options) ->
     case z_config:get(clamav_socket, ?CLAMAV_SOCKET) of
         undefined -> connect_tcp(Options);
         false -> connect_tcp(Options);
         "" -> connect_tcp(Options);
         <<>> -> connect_tcp(Options);
         Path ->
-            case gen_tcp:connect({local, z_convert:to_list(Path)}, 0, Options) of
+            case connect_socket(z_convert:to_list(Path), Options) of
                 {ok, Socket} -> {ok, Socket};
                 {error, _} -> connect_tcp(Options)
             end
     end.
+
+-spec connect_socket(Path, Options) -> Result
+    when
+        Path :: file:filename(),
+        Options :: [gen_tcp:connect_option()],
+        Result :: {ok, gen_tcp:socket()} | {error, term()}.
+connect_socket(Path, Options) ->
+    gen_tcp:connect({local, z_convert:to_list(Path)}, 0, Options).
 
 -spec connect_tcp(Options) -> Result
     when
@@ -139,6 +155,36 @@ connect(Options) ->
 connect_tcp(Options) ->
     {ClamIP, ClamPort} = ip_port(),
     gen_tcp:connect(ClamIP, ClamPort, Options).
+
+%% @doc Return the exclusive socket selected through clamav_ip, if any.
+-spec socket_only_path() -> {ok, file:filename()} | false.
+socket_only_path() ->
+    case z_config:get(clamav_ip, ?CLAMAV_IP) of
+        socket -> {ok, default_socket_path()};
+        "socket" -> {ok, default_socket_path()};
+        <<"socket">> -> {ok, default_socket_path()};
+        [ $/ | _ ] = Path -> {ok, Path};
+        <<"/", _/binary>> = Path -> {ok, z_convert:to_list(Path)};
+        _ -> false
+    end.
+
+-spec default_socket_path() -> file:filename().
+default_socket_path() ->
+    case z_config:get(clamav_socket, ?CLAMAV_SOCKET) of
+        Path when is_list(Path), Path =/= [] -> Path;
+        Path when is_binary(Path), Path =/= <<>> -> z_convert:to_list(Path);
+        _ -> ?CLAMAV_SOCKET
+    end.
+
+-spec connection_log_fields() -> map().
+connection_log_fields() ->
+    case socket_only_path() of
+        {ok, Path} ->
+            #{ transport => socket, socket => z_convert:to_binary(Path) };
+        false ->
+            {ClamIP, ClamPort} = ip_port(),
+            #{ transport => tcp, to => ClamIP, port => ClamPort }
+    end.
 
 %% @doc Check on the result of clamav
 handle_result({ok, <<"INSTREAM size limit exceeded", _/binary>>}) ->

@@ -34,20 +34,23 @@ Configure in the `zotonic.config` file where `clamd` is listening.
 
 The following configs are available:
 
-`clamav_socket`
-
-Unix domain socket path of `clamd`, default to `/run/clamav/clamd.ctl`. Before every scan or ping,
-the module tries to connect to this socket. If the connection fails, it falls back to `clamav_ip`
-and `clamav_port`. Set to `false` or an empty string to use TCP only. The Zotonic process must have
-permission to connect to the socket. Set this path to the `LocalSocket` value in `clamd.conf`.
-
 `clamav_ip`
 
-IP address of `clamd`, default to `\"127.0.0.1\"`
+Address of `clamd`, default to `\"127.0.0.1\"`. Set to `socket` to connect only to the Unix domain
+socket configured by `clamav_socket`, or set it to an absolute socket path to connect only to that
+socket. Socket-only connections never fall back to TCP.
 
 `clamav_port`
 
 Port of `clamd`, default to `3310`
+
+`clamav_socket`
+
+Unix domain socket path of `clamd`, default to `/run/clamav/clamd.ctl`. When `clamav_ip` is a network
+address, the module tries this socket first and falls back to `clamav_ip` and `clamav_port`. Set to
+`false` or an empty string to use TCP only. When `clamav_ip` is `socket`, this is the exclusive socket
+path. The Zotonic process must have permission to connect to it. The path must match `LocalSocket` in
+`clamd.conf`.
 
 `clamav_max_size`
 
