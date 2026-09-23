@@ -184,6 +184,7 @@ common_properties() ->
 
         <<"location_lng">>,
         <<"location_lat">>,
+        <<"location_zoom_level">>,
 
         <<"body">>,
         <<"body_extra">>,
@@ -240,6 +241,9 @@ property_name_type_hint(Key)
     when Key =:= <<"location_lat">>;
          Key =:= <<"location_lng">> ->
     float;
+property_name_type_hint(Key)
+  when Key =:= <<"location_zoom_level">> ->
+    int;
 property_name_type_hint(<<"is_", _/binary>>) ->
     bool;
 property_name_type_hint(<<"date_is_", _/binary>>) ->

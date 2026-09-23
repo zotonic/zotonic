@@ -355,6 +355,10 @@ property_name_type_hint_test() ->
     binary   = z_props:property_name_type_hint(<<"address_city">>),
     binary   = z_props:property_name_type_hint(<<"mail_street_1">>),
     binary   = z_props:property_name_type_hint(<<"billing_country">>),
+    %% location specific keys
+    int      = z_props:property_name_type_hint(<<"location_zoom_level">>),
+    float    = z_props:property_name_type_hint(<<"location_lat">>),
+    float    = z_props:property_name_type_hint(<<"location_lng">>),
     %% Unknown key -> undefined
     undefined = z_props:property_name_type_hint(<<"unknown_key">>),
     undefined = z_props:property_name_type_hint(<<"foobar">>),
