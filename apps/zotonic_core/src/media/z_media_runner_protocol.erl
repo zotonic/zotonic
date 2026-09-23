@@ -42,7 +42,9 @@ trusted Erlang staging step; sandbox grants contain private job copies, never th
     unpack/3,
     callback_limit/0,
     https_url/1,
+    http_url/1,
     endpoint/1,
+    endpoint/2,
     post/3,
     request/3,
     request/4,
@@ -392,14 +394,27 @@ stdout_path(Path, #{media_runner_profile := <<"ffprobe">>}) ->
 stdout_path(Path, _) ->
     unicode:characters_to_binary(Path).
 
-%% @doc Build the fixed runner endpoint from a hostname, optionally with an HTTPS port.
+%% @doc Build the fixed runner endpoint using HTTPS by default.
 -spec endpoint(binary() | string()) -> {ok, binary()} | {error, media_runner_configuration}.
 endpoint(Hostname) ->
+    endpoint(Hostname, <<"https:">>).
+
+%% @doc Build a runner endpoint from a hostname with optional port and HTTP(S) protocol.
+-spec endpoint(Hostname, Protocol) -> Result
+    when
+        Hostname :: binary() | string(),
+        Protocol :: binary() | string(),
+        Result :: {ok, binary()} | {error, media_runner_configuration}.
+endpoint(Hostname, Protocol) ->
     try
+        Scheme = case z_convert:to_binary(Protocol) of
+            <<"https:">> -> <<"https">>;
+            <<"http:">> -> <<"http">>
+        end,
         Host = z_convert:to_binary(Hostname),
         true = byte_size(Host) > 0 andalso byte_size(Host) =< ?MAX_HOSTNAME_SIZE,
-        Base = <<"https://", Host/binary>>,
-        #{scheme := <<"https">>, host := ParsedHost, path := <<>>} = Parts = uri_string:parse(Base),
+        Base = <<Scheme/binary, "://", Host/binary>>,
+        #{scheme := Scheme, host := ParsedHost, path := <<>>} = Parts = uri_string:parse(Base),
         true = byte_size(ParsedHost) > 0,
         true = maps:without([scheme, host, path, port], Parts) =:= #{},
         Port = maps:get(port, Parts, 443),
@@ -424,10 +439,16 @@ control_url(Url, Operation) ->
     true = is_binary(Result),
     Result.
 
+%% @doc Callback URLs still require HTTPS.
 -spec https_url(term()) -> boolean().
-https_url(Url) when is_binary(Url), byte_size(Url) =< ?MAX_URL_SIZE ->
+https_url(<<"https://", _/binary>> = Url) -> http_url(Url);
+https_url(_) -> false.
+
+%% @doc Validate HTTP(S) URLs for administrator-configured runner traffic.
+-spec http_url(term()) -> boolean().
+http_url(Url) when is_binary(Url), byte_size(Url) =< ?MAX_URL_SIZE ->
     try uri_string:parse(Url) of
-        #{scheme := <<"https">>, host := Host} = Parts ->
+        #{scheme := Scheme, host := Host} = Parts when Scheme =:= <<"https">>; Scheme =:= <<"http">> ->
             byte_size(Host) > 0 andalso not maps:is_key(userinfo, Parts) andalso
                 not maps:is_key(fragment, Parts);
         _ ->
@@ -436,10 +457,10 @@ https_url(Url) when is_binary(Url), byte_size(Url) =< ?MAX_URL_SIZE ->
         _:_ ->
             false
     end;
-https_url(_) ->
+http_url(_) ->
     false.
 
-%% Only administrator-approved HTTPS destinations. Redirects MUST NOT receive credentials.
+%% Only administrator-approved destinations. Redirects MUST NOT receive credentials.
 
 %% @doc Send a JSON callback and report whether the receiver accepted it.
 -spec post(binary(), binary(), map()) -> ok | {error, term()}.
@@ -457,7 +478,7 @@ request(Url, Token, Payload) ->
 %% @doc Exchange small JSON control messages; source and result files use streaming HTTP.
 -spec request(binary(), binary(), map(), pos_integer()) -> {ok, map()} | {error, term()}.
 request(Url, Token, Payload, Timeout) ->
-    case https_url(Url) of
+    case http_url(Url) of
         false ->
             {error, invalid_url};
         true ->
@@ -492,7 +513,7 @@ request(Url, Token, Payload, Timeout) ->
 -spec upload(binary(), binary(), binary(), file:filename_all(), non_neg_integer()) ->
     {ok, integer()} | {error, term()}.
 upload(Url, Token, Lease, Path, Size) ->
-    case https_url(Url) of
+    case http_url(Url) of
         false ->
             {error, invalid_url};
         true ->

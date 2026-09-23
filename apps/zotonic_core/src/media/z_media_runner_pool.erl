@@ -42,6 +42,7 @@ runners() ->
                     [
                         #{
                             hostname => z_config:get(media_runner_hostname),
+                            protocol => z_config:get(media_runner_protocol, <<"https:">>),
                             oauth2_key => z_config:get(media_runner_oauth2_key, <<>>)
                         }
                     ]
@@ -60,9 +61,10 @@ runners() ->
 
 runner(Entry) ->
     Host = maps:get(hostname, Entry, maps:get(<<"hostname">>, Entry, undefined)),
+    Protocol = maps:get(protocol, Entry, maps:get(<<"protocol">>, Entry, <<"https:">>)),
     Token = z_convert:to_binary(maps:get(oauth2_key, Entry, maps:get(<<"oauth2_key">>, Entry, <<>>))),
     true = is_binary(Token) andalso Token =/= <<>>,
-    {ok, Url} = z_media_runner_protocol:endpoint(Host),
+    {ok, Url} = z_media_runner_protocol:endpoint(Host, Protocol),
     #{
         url => Url,
         token => Token

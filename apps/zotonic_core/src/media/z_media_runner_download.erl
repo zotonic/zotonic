@@ -57,7 +57,7 @@ pending_file(File, Paths) ->
 fetch(#{<<"url">> := Url, <<"size">> := Size, <<"sha256">> := Hash}, Temp,
         #{media_runner_endpoint := Base, media_runner_token := Token}) ->
     Url = <<Base/binary, "/results/", Hash/binary>>,
-    true = z_media_runner_protocol:https_url(Url),
+    true = z_media_runner_protocol:http_url(Url),
     Headers = [{"authorization", "Bearer " ++ binary_to_list(Token)}],
     z_media_runner_http:download(Url, Headers, Temp, Size, 3600000).
 
