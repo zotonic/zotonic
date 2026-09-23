@@ -117,6 +117,10 @@ pack(Profile, Command, Options) ->
         ok = validate(Job),
         {ok, Job}
     catch
+        error:media_runner_configuration ->
+            {error, media_runner_configuration};
+        throw:{media_runner_input, Reason} ->
+            {error, {media_runner_input, Reason}};
         _:_ ->
             {error, media_runner_invalid_input}
     end.
@@ -132,8 +136,10 @@ pack_file(Path, N, Read, Write) ->
         false ->
             F;
         true ->
-            {ok, Size, Hash} = hash_file(Path),
-            F#{<<"size">> => Size, <<"sha256">> => Hash}
+            case hash_file(Path) of
+                {ok, Size, Hash} -> F#{<<"size">> => Size, <<"sha256">> => Hash};
+                {error, Reason} -> throw({media_runner_input, Reason})
+            end
     end.
 
 %% Reuse the incremental file hash; the protocol adds its size and type checks.

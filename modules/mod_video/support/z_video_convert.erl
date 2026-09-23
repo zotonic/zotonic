@@ -18,6 +18,10 @@
 
 -module(z_video_convert).
 
+-ifdef(TEST).
+-export([retryable/1]).
+-endif.
+
 -behaviour(gen_server).
 
 -export([
@@ -115,6 +119,9 @@ retryable({error, {media_runner_protocol, _}}) -> true;
 retryable({error, media_runner_configuration}) -> true;
 retryable({error, media_runner_busy}) -> true;
 retryable({error, media_runner_invalid_result}) -> true;
+retryable({error, {media_runner_input, _}}) -> true;
+retryable({error, timeout}) -> true;
+retryable({error, output_limit}) -> true;
 retryable(_) -> false.
 
 insert_movie(Filename, State) ->

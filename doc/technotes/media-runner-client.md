@@ -115,7 +115,11 @@ Conversions to the same destination are serialized, and waiting callers do not
 mistake an old preview for a successful conversion.
 
 Video infrastructure/configuration failures preserve the queued source and its
-existing retry task. A confirmed processing failure follows the existing
+existing retry task. Input file access/size failures also retain the source, so
+fixing storage access or input limits allows a later retry. Local media execution
+reports timeout and output-limit failures explicitly; partial outputs are not
+published and video sources remain queued. The legacy string-returning execution
+API is unchanged. A confirmed processing failure follows the existing
 broken-video path. Intermediate rotation files and failed outputs are removed.
 
 Custom FFmpeg command settings and ImageMagick `magick` filters must work on the

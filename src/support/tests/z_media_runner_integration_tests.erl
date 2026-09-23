@@ -5,6 +5,8 @@
 
 integration_test_() ->
     {foreach, fun setup/0, fun cleanup/1, [
+        fun(S) -> {"local execution limits", fun() -> local_execution_limits(S) end} end,
+        fun(S) -> {"recoverable input failures", fun() -> recoverable_input_failures(S) end} end,
         fun(S) -> {"roundtrip", {timeout, 30, fun() -> roundtrip(S) end}} end,
         fun(S) -> {"failures", {timeout, 30, fun() -> failures(S) end}} end,
         fun(S) -> {"polling", {timeout, 30, fun() -> polling(S) end}} end,
@@ -61,6 +63,39 @@ run(#{input := In, output := Out, runners := Runners}) ->
     Cmd = "ffmpeg -i " ++ z_utils:os_filename(In) ++ " " ++ z_utils:os_filename(Out),
     z_media_runner_job:run(ffmpeg, Cmd, #{read => [In], write => [Out]}, Runners,
         <<"https://client.example/media-runner/callback">>).
+
+local_execution_limits(#{output := Out}) ->
+    application:set_env(zotonic, media_runners, []),
+    %% Simulate FFmpeg writing a partial output before it exceeds its deadline.
+    Cmd = "printf partial > " ++ z_utils:os_filename(Out) ++ "; sleep 0.3",
+    Result = z_exec:run(ffmpeg, Cmd, #{timeout => 100}),
+    ?assertEqual({error, timeout}, Result),
+    ?assertEqual({ok, <<"partial">>}, file:read_file(Out)),
+    ?assert(z_video_convert:retryable(Result)),
+    ?assertEqual({error, output_limit}, z_exec:run(ffmpeg,
+        "printf diagnostic", #{max_size => 4})),
+    ?assertEqual({ok, <<"done">>}, z_exec:run(ffprobe, "printf done", #{})),
+    %% Keep the old string-returning API, including its truncation semantics.
+    ?assertEqual("diag", z_exec:run("printf diagnostic", #{max_size => 4})).
+
+recoverable_input_failures(#{input := In, runners := Runners, table := T}) ->
+    Run = fun(Path) -> z_media_runner_job:run(ffprobe, "ffprobe " ++ z_utils:os_filename(Path),
+        #{read => [Path]}, Runners, <<"https://client.example/media-runner/callback">>) end,
+    application:set_env(zotonic, media_runner_max_input_bytes, 0),
+    BadConfig = Run(In),
+    ?assertEqual({error, media_runner_configuration}, BadConfig),
+    ?assert(z_video_convert:retryable(BadConfig)),
+    application:unset_env(zotonic, media_runner_max_input_bytes),
+    Missing = Run(In ++ ".missing"),
+    ?assertEqual({error, {media_runner_input, enoent}}, Missing),
+    ?assert(z_video_convert:retryable(Missing)),
+    application:set_env(zotonic, media_runner_max_input_bytes, 1),
+    TooLarge = Run(In),
+    ?assertMatch({error, {media_runner_input, _}}, TooLarge),
+    ?assert(z_video_convert:retryable(TooLarge)),
+    ?assertEqual(0, value(T, submits)),
+    ?assert(filelib:is_regular(In)),
+    ?assertNot(z_video_convert:retryable({error, {media_runner_processing, <<"command_failed">>}})).
 
 roundtrip(#{table := T, input := In, output := Out} = S) ->
     ?assertEqual({ok, <<"done">>}, run(S)),
@@ -207,6 +242,11 @@ preview_publication(#{dir := Dir, output := Out}) ->
     application:set_env(zotonic, media_runners, []),
     Temp = filename:join(Dir, "preview-temp.png"),
     ok = file:write_file(Out, <<"old preview">>),
+    ?assertEqual({error, timeout}, z_media_preview:run_cmd(
+        "printf partial > " ++ z_utils:os_filename(Temp) ++ "; sleep 0.3",
+        Out, Temp, imagemagick, #{timeout => 100}, undefined)),
+    ?assertEqual({ok, <<"old preview">>}, file:read_file(Out)),
+    ok = file:delete(Temp),
     ?assertEqual({error, convert_error}, z_media_preview:run_cmd("false", Out, Temp,
         imagemagick, #{}, undefined)),
     ?assertEqual({ok, <<"old preview">>}, file:read_file(Out)),
