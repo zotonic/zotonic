@@ -1966,6 +1966,17 @@ props_filter(Location, P, Acc, _RscUpd, _Context)
             _:_ -> undefined
         end,
     Acc#{ Location => X };
+props_filter(<<"location_zoom_level">>, P, Acc, _RscUpd, _Context) ->
+    X = try
+            z_convert:to_integer(P)
+        catch
+            _:_ -> undefined
+        end,
+    X1 = case X of
+             _ when X < 0 -> 0;
+             _ -> X
+         end,
+    Acc#{ <<"location_zoom_level">> => X1 };
 props_filter(<<"pref_language">>, Lang, Acc, _RscUpd, _Context) ->
     Lang1 = case z_language:to_language_atom(Lang) of
         {ok, LangAtom} -> LangAtom;
