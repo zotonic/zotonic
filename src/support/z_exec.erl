@@ -37,10 +37,11 @@
 
 -export([
     run/1,
-    run/2
+    run/2, run/3, run/4, profile/1
 ]).
 
 -include_lib("kernel/include/file.hrl").
+-include("z_media_limits.hrl").
 
 
 -type os_command() :: atom() | io_lib:chars().
@@ -247,3 +248,108 @@ badarg_with_cause(Args, Cause) ->
                                                cause => Cause}}]).
 badarg_with_info(Args) ->
     erlang:error(badarg, Args, [{error_info, #{module => erl_kernel_errors}}]).
+
+%% @doc Media-only API. Once configured, no error may route back to local execution.
+run(Profile, Command, Options, Context) ->
+    run(Profile, Command, Options#{context => Context}).
+run(Profile, Command, Options) ->
+    case profile(Profile) of
+        {error, _} = Error -> Error;
+        Defaults ->
+            case z_media_runner_pool:runners() of
+                {ok, []} ->
+                    case run_local_media(Command, maps:merge(Defaults, Options)) of
+                        {ok, Output} -> local_media_result(Profile, Output);
+                        {error, _} = Error -> Error
+                    end;
+                {ok, Runners} ->
+                    z_media_runner_job:run(Profile, Command, maps:merge(Defaults, Options), Runners);
+                Error -> Error
+            end
+    end.
+
+%% The legacy FFmpeg callers treat diagnostic output as failure. Keep that
+%% convention locally; remote jobs have an explicit processing status instead.
+local_media_result(Profile, Output) when
+        (Profile =:= ffmpeg orelse Profile =:= ffmpeg_preview), Output =/= <<>> ->
+    {error, {command_output, Output}};
+local_media_result(_, Output) -> {ok, Output}.
+
+%% The legacy executor returns captured output after timeout or truncation.
+%% Media callers need an explicit failure before publishing a partial file.
+run_local_media(Command, #{timeout := Timeout, max_size := MaxSize}) ->
+    {SpawnCmd, SpawnOpts, SpawnInput, Eot} = mk_cmd(validate(unicode:characters_to_list(Command))),
+    Port = open_port({spawn, SpawnCmd}, [binary, stderr_to_stdout, stream, in, hide | SpawnOpts]),
+    Ref = erlang:monitor(port, Port),
+    Deadline = erlang:monotonic_time(millisecond) + Timeout,
+    try
+        true = port_command(Port, SpawnInput),
+        media_data(Port, Ref, Eot, [], 0, MaxSize, Deadline)
+    after
+        %% Stop the shell on timeout/output overflow before closing its port.
+        case erlang:port_info(Port, os_pid) of
+            {os_pid, OsPid} -> os:cmd(io_lib:format("kill -9 ~p", [OsPid]));
+            undefined -> ok
+        end,
+        catch port_close(Port),
+        flush_until_down(Port, Ref)
+    end.
+
+media_data(Port, Ref, Eot, Acc, Size, Max, Deadline) ->
+    receive
+        {Port, {data, Bytes}} ->
+            case binary:match(Bytes, Eot) of
+                {Pos, _} when Size + Pos =< Max ->
+                    {ok, iolist_to_binary(lists:reverse([binary:part(Bytes, 0, Pos) | Acc]))};
+                nomatch when Size + byte_size(Bytes) =< Max ->
+                    media_data(Port, Ref, Eot, [Bytes | Acc], Size + byte_size(Bytes), Max, Deadline);
+                _ -> {error, output_limit}
+            end;
+        {'DOWN', Ref, _, _, _} = Down ->
+            %% Leave DOWN for the common cleanup; no completion marker arrived.
+            self() ! Down,
+            {error, command_failed}
+    after max(0, Deadline - erlang:monotonic_time(millisecond)) ->
+        {error, timeout}
+    end.
+
+%% @doc Return default resource limits for a media execution profile.
+-spec profile(atom()) -> map() | {error, unknown_media_profile}.
+profile(imagemagick) ->
+    #{
+        timeout => ?IMAGE_TIMEOUT,
+        max_size => ?SMALL_CONSOLE_SIZE,
+        memory => ?MEDIA_MEMORY,
+        file_size => ?IMAGE_FILE_SIZE,
+        cpu => ?IMAGE_TIMEOUT div 1000
+    };
+profile(imagemagick_pdf) ->
+    profile(imagemagick);
+profile(ffmpeg_preview) ->
+    (profile(imagemagick))#{timeout => ?PREVIEW_TIMEOUT, cpu => ?MAX_PREVIEW_TIMEOUT div 1000};
+profile(ffmpeg) ->
+    #{
+        timeout => ?DEFAULT_JOB_TIMEOUT,
+        max_size => ?MAX_CONSOLE_SIZE,
+        memory => ?MEDIA_MEMORY,
+        file_size => ?DEFAULT_MEDIA_LIMIT,
+        cpu => ?MAX_JOB_TIMEOUT div 1000
+    };
+profile(ffprobe) ->
+    #{
+        timeout => ?PROBE_TIMEOUT,
+        max_size => ?SMALL_CONSOLE_SIZE,
+        memory => ?PROBE_MEMORY,
+        file_size => ?PROBE_FILE_SIZE,
+        cpu => ?MAX_PROBE_TIMEOUT div 1000
+    };
+profile(file) ->
+    #{
+        timeout => ?FILE_TIMEOUT,
+        max_size => ?FILE_CONSOLE_SIZE,
+        memory => ?FILE_MEMORY,
+        file_size => ?PROBE_FILE_SIZE,
+        cpu => ?MAX_FILE_TIMEOUT div 1000
+    };
+profile(_) ->
+    {error, unknown_media_profile}.

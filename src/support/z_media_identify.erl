@@ -29,6 +29,7 @@
 	identify_file/2,
 	identify_file/3,
 	identify_file_direct/2,
+    identify_file_direct/3,
     extension/1,
     extension/2,
     extension/3,
@@ -88,7 +89,7 @@ identify_file(File, OriginalFilename, Context) ->
         {ok, Props} ->
 			{ok, Props};
         undefined ->
-            identify_file_direct(File, OriginalFilename)
+            identify_file_direct(File, OriginalFilename, Context)
 	end.
 
 maybe_extension(File, undefined) ->
@@ -104,20 +105,23 @@ maybe_extension(Filename) ->
 %% @doc Fetch information about a file, returns mime, width, height, type, etc.
 -spec identify_file_direct(File::string(), OriginalFilename::string()) -> {ok, Props::list()} | {error, term()}.
 identify_file_direct(File, OriginalFilename) ->
-    check_acceptable(File, maybe_identify_extension(identify_file_direct_1(File, OriginalFilename), OriginalFilename)).
+    identify_file_direct(File, OriginalFilename, undefined).
 
-identify_file_direct_1(File, OriginalFilename) ->
+identify_file_direct(File, OriginalFilename, Context) ->
+    check_acceptable(File, maybe_identify_extension(identify_file_direct_1(File, OriginalFilename, Context), OriginalFilename)).
+
+identify_file_direct_1(File, OriginalFilename, Context) ->
     {OsFamily, _} = os:type(),
 	case identify_file_os(OsFamily, File, OriginalFilename) of
 		{error, _} ->
 			%% Last resort, give ImageMagick a try
-			identify_file_imagemagick(OsFamily, File, undefined);
+			identify_file_imagemagick(OsFamily, File, undefined, Context);
 		{ok, Props} ->
 			%% Images, pdf and ps are further investigated by ImageMagick
 			case proplists:get_value(mime, Props) of
-				"image/" ++ _ = M -> identify_file_imagemagick(OsFamily, File, M);
-				"application/pdf" = M -> identify_file_imagemagick(OsFamily, File, M);
-				"application/postscript" = M -> identify_file_imagemagick(OsFamily, File, M);
+				"image/" ++ _ = M -> identify_file_imagemagick(OsFamily, File, M, Context);
+				"application/pdf" = M -> identify_file_imagemagick(OsFamily, File, M, Context);
+				"application/postscript" = M -> identify_file_imagemagick(OsFamily, File, M, Context);
 				_Mime -> {ok, Props}
 			end
 	end.
@@ -264,9 +268,30 @@ identify_file_unix(Cmd, File, OriginalFilename) ->
     end.
 
 %% @doc Try to identify the file using image magick
--spec identify_file_imagemagick(win32|unix, Filename::string(), MimeFile::string()|undefined) -> {ok, Props::list()} | {error, term()}.
-identify_file_imagemagick(OsFamily, ImageFile, MimeFile) ->
-    identify_file_imagemagick_1(imagemagick_identify_cmd(), OsFamily, ImageFile, MimeFile).
+identify_file_imagemagick(OsFamily, ImageFile, MimeFile, Context) ->
+    case z_media_runner:enabled() of
+        false -> identify_file_imagemagick_1(imagemagick_identify_cmd(), OsFamily, ImageFile, MimeFile);
+        true ->
+            case z_media_imagemagick:selected() of
+                #{available := true, identify := Cmd} = Installation ->
+                    Profile = case MimeFile of
+                        "application/pdf" -> imagemagick_pdf;
+                        "application/postscript" -> imagemagick_pdf;
+                        _ -> imagemagick
+                    end,
+                    Command = Cmd ++ " -quiet " ++ z_utils:os_filename(ImageFile ++ "[0]"),
+                    case z_exec:run(Profile, Command, #{read => [ImageFile],
+                            media_runner_imagemagick => Installation}, Context) of
+                        {ok, Output} ->
+                            case parse_image_output(unicode:characters_to_list(Output), ImageFile, MimeFile) of
+                                {ok, _} = Info -> Info;
+                                {error, _} -> {error, media_runner_invalid_result}
+                            end;
+                        Error -> Error
+                    end;
+                _ -> {error, {media_runner_unavailable, imagemagick}}
+            end
+    end.
 
 
 %% @doc Find ImageMagick's 'identify' command on the current system, if any.
@@ -275,6 +300,12 @@ identify_file_imagemagick(OsFamily, ImageFile, MimeFile) ->
 %% Note: since system installations don't change that often, the result is cached.
 -spec imagemagick_identify_cmd() -> Cmd | false when Cmd :: string().
 imagemagick_identify_cmd() ->
+    case z_media_runner:enabled() of
+        true -> maps:get(identify, z_media_imagemagick:selected());
+        false -> imagemagick_identify_cmd_local()
+    end.
+
+imagemagick_identify_cmd_local() ->
     Key = {?MODULE, imagemagick_identify_cmd},
     case persistent_term:get(Key, undefined) of
         undefined ->
@@ -302,6 +333,9 @@ identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeFile) ->
                        ++" -quiet "
                        ++CleanedImageFile
                        ++" 2> " ++ devnull(OsFamily)),
+    parse_image_output(CmdOutput, ImageFile, MimeFile).
+
+parse_image_output(CmdOutput, ImageFile, MimeFile) ->
     Lines = lists:dropwhile(
                     fun
                         ("Warning:" ++ _) -> true;
@@ -312,12 +346,7 @@ identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeFile) ->
                     string:tokens(CmdOutput, "\n")),
     case Lines of
         [] ->
-            Err = os:cmd(Cmd
-                         ++" -quiet "
-                         ++CleanedImageFile
-                         ++" 2>&1"),
-            lager:info("identify of ~s failed:~n~s", [CleanedImageFile, Err]),
-            {error, "identify error: " ++ Err};
+            {error, "identify error: " ++ CmdOutput};
         [Result|_] ->
             %% ["test/a.jpg","JPEG","3440x2285","3440x2285+0+0","8-bit","DirectClass","2.899mb"]
             %% sometimes:
@@ -351,7 +380,7 @@ identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeFile) ->
             catch
                 ?WITH_STACKTRACE(X, B, Stacktrace)
                     ?DEBUG({X, B, Stacktrace}),
-                    lager:info("identify of ~p failed - ~p", [CleanedImageFile, CmdOutput]),
+                    lager:info("identify of ~p failed - ~p", [ImageFile, CmdOutput]),
                     {error, "unknown result from 'identify': '"++CmdOutput++"'"}
             end
     end.

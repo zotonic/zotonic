@@ -161,6 +161,26 @@
 %%% XYZ, YCbCr, YCC, YIQ, YCbCr, YUV.
    %% {default_colorspace, "sRGB"},
 
+%%% Optional external media runner client (protocol v3).
+%%% Configured runners are remote-only: no local fallback or local sandbox.
+%%% HTTPS connections do not check certificates. Redirects are disabled.
+   %% {media_runner_hostname, <<"media.example.com">>},
+   %% {media_runner_protocol, <<"https">>},
+   %% {media_runner_oauth2_key, <<"YOUR-OAUTH2-BEARER-TOKEN">>},
+   %% An explicit pool overrides the single runner; [] selects local mode.
+   %% {media_runners, [
+   %%     #{hostname => <<"media-a.example.com">>, oauth2_key => <<"TOKEN-A">>},
+   %%     #{hostname => <<"media-b.example.com:8080">>, protocol => <<"http">>,
+   %%       oauth2_key => <<"TOKEN-B">>}
+   %% ]},
+   %% Pending job lifetime in seconds (12 hours plus 5 minutes).
+   %% {media_runner_wait_timeout, 43500},
+   %% Input/output file limits in bytes; profile limits also apply.
+   %% {media_runner_max_input_bytes, 17179869184},
+   %% {media_runner_max_output_bytes, 17179869184},
+   %% Maximum encoded callback body in bytes (may be reduced).
+   %% {media_runner_max_callback_bytes, 135266304},
+
 %%% Whether or not to do a modification check on the templates while
 %%% they are rendered. Turn this off in production to increase
 %%% performance. However, you need to do an explicit z:flush() to see template changes.
