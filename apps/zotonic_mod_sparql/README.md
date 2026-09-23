@@ -274,8 +274,8 @@ TODO
  - [x] Support EXISTS / NOT EXISTS inside compound and result expressions
  - [x] Carry RDF term kind, datatype and language metadata through expressions
  - [x] Add basic DATATYPE support
+ - [x] ACL checks for private properties, only allow 'administrator users' to query on private properties
  - [ ] Import and export of Turtle, JSON-LD, and other formats (TBD)
- - [ ] ACL checks for private properties, only allow 'administrator users' to query on private properties
  - [ ] Support language handling, using the JSON objects: { _type: "trans", tr = { "en":"..." } }, including LANG etc.
  - [ ] Add SPARQL endpoint, with expected results (for use with 3rd parties -- check API standards)
  - [ ] Check usage of rsc props_json vs props, migrate to props_json (accept both for now)
