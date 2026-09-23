@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-09-15 14:18\n"
+"PO-Revision-Date: 2026-09-22 15:25\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgstr "无法获取远程资源 URL。"
 msgid "Forbidden to access the remote resource URL."
 msgstr "禁止访问远程资源 URL。"
 
-#: zotonic_core/src/support/z_media_import.erl:328
+#: zotonic_core/src/media/z_media_import.erl:328
 msgid "Page Import"
 msgstr "页面导入"
 
@@ -56,7 +56,7 @@ msgstr "对远程服务器的请求过多，请稍后重试。"
 msgid "Unauthorized to access the remote resource URL."
 msgstr "未经授权访问远程资源 URL。"
 
-#: zotonic_core/src/support/z_media_import.erl:385
+#: zotonic_core/src/media/z_media_import.erl:385
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
@@ -178,7 +178,7 @@ msgid "ACL user group"
 msgstr "ACL 用户群"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:931
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:933
 msgid "Access control rules"
 msgstr "通过规则控制"
 
@@ -294,7 +294,7 @@ msgstr "你确定你要恢复所有的ACL规则到他们的最新发布版本"
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:90
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:161
 #: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:35
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:68
 #: zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:13
 #: zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:7
 #: zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:10
@@ -353,8 +353,9 @@ msgstr "取消"
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:22
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:45
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:11
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:22
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:28
-#: zotonic_mod_survey/src/mod_survey.erl:654
+#: zotonic_mod_survey/src/mod_survey.erl:656
 msgid "Category"
 msgstr "分类"
 
@@ -366,7 +367,7 @@ msgstr "分类 &amp; 内容群组"
 msgid "Change category and/or content group..."
 msgstr "更改类别和/或内容群组"
 
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:488
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:490
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:147
 msgid "Changed configuration."
 msgstr "改变了配置。"
@@ -392,8 +393,8 @@ msgstr "改变了配置。"
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:7
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:14
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:21
-#: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:74
-#: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:121
+#: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:78
+#: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:133
 #: zotonic_mod_survey/priv/templates/_survey_results.tpl:50
 #: zotonic_mod_survey/priv/templates/_survey_results.tpl:55
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:61
@@ -416,7 +417,7 @@ msgid "Collaboration group members"
 msgstr "合作团队成员"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:22
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:927
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:929
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:158
 msgid "Collaboration groups"
 msgstr "合作团队"
@@ -446,6 +447,7 @@ msgstr "内容"
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_visible_for.tpl:2
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:58
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:51
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:32
 #: zotonic_mod_content_groups/priv/templates/_admin_overview_filter_panel.tpl:6
 #: zotonic_mod_content_groups/priv/templates/_dialog_admin_bulk_update.tpl:5
 msgid "Content group"
@@ -504,12 +506,12 @@ msgstr "无法移至合作团队"
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:133
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125
-#: zotonic_mod_survey/src/mod_survey.erl:425
+#: zotonic_mod_survey/src/mod_survey.erl:427
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:25
 msgid "Delete"
 msgstr "删除"
 
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:476
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:478
 msgid "Delete is canceled, there are users in the user groups."
 msgstr "删除被取消，用户群里有用户"
 
@@ -517,7 +519,7 @@ msgstr "删除被取消，用户群里有用户"
 msgid "Delete user group and move users"
 msgstr "删除用户群并且移开用户"
 
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:521
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:523
 #: zotonic_mod_admin_category/src/mod_admin_category.erl:116
 #: zotonic_mod_admin_category/src/mod_admin_category.erl:134
 #: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:124
@@ -679,11 +681,11 @@ msgstr "移至 {title}…"
 msgid "No ACL rules"
 msgstr "无ACL规则"
 
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:514
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:516
 msgid "Not all user groups could be deleted."
 msgstr "并非所有用户组都能删除。"
 
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:494
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:496
 msgid "Not allowed to change ACL options."
 msgstr "不允许更改 ACL 选项。"
 
@@ -747,7 +749,7 @@ msgid "Publish successful"
 msgstr "发布成功"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:41
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:36
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:69
 msgid "Revert"
 msgstr "恢复"
 
@@ -782,7 +784,7 @@ msgstr "逆向规则"
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:60
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:75
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:198
-#: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:91
+#: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:95
 msgid "Save"
 msgstr "保存"
 
@@ -820,8 +822,8 @@ msgstr "显示私人物业到"
 msgid "Show this ACL user group first:"
 msgstr "先显示这个ACL用户组。"
 
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:455
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:471
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:457
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:473
 #: zotonic_mod_admin_category/src/mod_admin_category.erl:93
 #: zotonic_mod_admin_category/src/mod_admin_category.erl:109
 #: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:99
@@ -919,7 +921,7 @@ msgstr "在发布访问控制规则之前，请使用以下URL测试这些规则
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:922
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:924
 msgid "User groups"
 msgstr "用户组"
 
@@ -1048,7 +1050,6 @@ msgstr "<b>警告：</b> 站点将停止并重新启动。"
 #: zotonic_mod_admin/priv/templates/_admin_overview_list_title.tpl:2
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:32
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:55
-#: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:47
 #: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:250
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:24
 msgid "<em>Untitled</em>"
@@ -1249,6 +1250,7 @@ msgstr "作者"
 msgid "Authoritative"
 msgstr "权威性"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:47
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:35
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:38
 msgid "Available"
@@ -1313,7 +1315,7 @@ msgstr "修改分类"
 msgid "Change the category of this page"
 msgstr "更改本页面的类别"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:139
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:140
 msgid "Check all pages for embedded page references and add a <i>refers</i> connection for all of those references."
 msgstr "检查所有页面是否有嵌入页面引用，并为所有这些引用添加 <i>引用</i> 连接。"
 
@@ -1394,6 +1396,10 @@ msgstr "连接自"
 #: zotonic_mod_admin/priv/templates/_admin_edit_sidebar_parts.tpl:22
 msgid "Connected to"
 msgstr "连接到"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:41
+msgid "Connection"
+msgstr "连接"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:72
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:134
@@ -1720,7 +1726,11 @@ msgstr "嵌入内容"
 msgid "Emergency telephone"
 msgstr "紧急联系电话"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:135
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:41
+msgid "Endpoint"
+msgstr "端点"
+
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:136
 msgid "Ensure <i>refers</i> connections"
 msgstr "确保 <i>引用</i> 连接"
 
@@ -2052,9 +2062,25 @@ msgstr "鏈接"
 msgid "Live query, send notifications when matching items are updated or inserted."
 msgstr "实时查询，当匹配条目被上传或是插入时候发出通知。"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:28
+msgid "Local ImageMagick"
+msgstr "本地 ImageMagick"
+
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:248
 msgid "Local content"
 msgstr "本地内容"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:13
+msgid "Local fallback is disabled."
+msgstr "本地回退功能已禁用。"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:11
+msgid "Local fallback is enabled."
+msgstr "已启用本地备用方案。"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:20
+msgid "Local sandbox"
+msgstr "本地沙盒"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:47
 msgid "Log Directory"
@@ -2102,7 +2128,7 @@ msgid "Make a new page or media"
 msgstr "创建新页面或媒体条目"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:6
-#: zotonic_mod_survey/src/mod_survey.erl:655
+#: zotonic_mod_survey/src/mod_survey.erl:657
 msgid "Matching"
 msgstr "匹配"
 
@@ -2124,6 +2150,14 @@ msgstr "媒体"
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:27
 msgid "Media URL or HTML"
 msgstr "媒体URL或HTML"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:17
+msgid "Media commands run locally."
+msgstr "媒体命令在本地运行。"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:9
+msgid "Media commands use remote runners."
+msgstr "媒体命令使用远程执行器。"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:4
 msgid "Media content"
@@ -2150,6 +2184,14 @@ msgstr "媒体条目已创建。"
 #: zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:4
 msgid "Media on this page"
 msgstr "该页面上的媒体"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:4
+msgid "Media processing"
+msgstr "媒体处理"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:37
+msgid "Media runners"
+msgstr "媒体跑者"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:27
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:28
@@ -2637,6 +2679,10 @@ msgstr "重新加载站点配置。请注意，并非所有站点配置都可以
 msgid "Remarks"
 msgstr "附注"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:55
+msgid "Remote sandbox isolation and queue details are available on each runner’s dashboard."
+msgstr "每个运行器的仪表盘上均可查看远程沙箱隔离和队列详情。"
+
 #: zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_page.tpl:16
 #: zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:35
 #: zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:7
@@ -2682,6 +2728,10 @@ msgstr "旋转了270度"
 msgid "Rotated 90 degrees"
 msgstr "旋转了90度"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:54
+msgid "Runner availability and ImageMagick versions are cached for up to one minute. Failed probes are retried after five seconds. Refresh this page to check again."
+msgstr "运行程序的可用性和 ImageMagick 版本信息最多会缓存一分钟。检测失败后，系统将在五秒后重试。请刷新此页面以再次检查。"
+
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:113
 msgid "Runs the schema install command from the site's module again."
 msgstr "再次运行网站模块中的schema安装命令。"
@@ -2702,6 +2752,18 @@ msgstr "SHA-256 校验和"
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:5
 msgid "SSL Application uses Erlang defaults, it is recommended to change this configuration in your <tt>erlang.config</tt>."
 msgstr "SSL应用使用Erlang默认值，建议在你的 <tt>erlang.config</tt>中更改此配置。"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:22
+msgid "Sandbox isolation is available."
+msgstr "支持沙箱隔离。"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:24
+msgid "Sandbox isolation is not supported on this system. Local media commands run without isolation."
+msgstr "该系统不支持沙盒隔离。本地媒体命令将在无隔离状态下运行。"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:26
+msgid "Sandbox isolation is unavailable. Local sandboxed media commands cannot run."
+msgstr "无法使用沙箱隔离功能。无法运行本地沙箱媒体命令。"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:6
@@ -3011,15 +3073,15 @@ msgstr "系统状态"
 msgid "System administration"
 msgstr "系统管理"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:169
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:170
 msgid "Task queue"
 msgstr "任务队列"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:176
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:177
 msgid "Tasks are functions scheduled to run at a certain time."
 msgstr "任务是计划在特定时间运行的功能。"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:177
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:178
 msgid "Tasks with errors will retry 10 times before being dropped."
 msgstr "出现错误的任务将重试 10 次，然后才会被丢弃。"
 
@@ -3058,6 +3120,10 @@ msgstr "账单地址仅对可以编辑此页面的人可见。"
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:77
 msgid "The category tree is rebuilding. This can take a long time."
 msgstr "类别树正在重建。这可能需要很长的时间。"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:7
+msgid "The media runner configuration is invalid."
+msgstr "介质托盘配置无效。"
 
 #: zotonic_mod_admin/priv/templates/_action_unlink_undo.tpl:15
 msgid "The page"
@@ -3256,6 +3322,12 @@ msgstr "输入文本进行检索"
 msgid "Type to filter the list below."
 msgstr "键入以过滤下面的列表。"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:32
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:47
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:48
+msgid "Unavailable"
+msgstr "不可用"
+
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:30
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:43
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:79
@@ -3289,7 +3361,8 @@ msgstr "未发表"
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:54
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:57
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:60
-#: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:59
+#: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:58
+#: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:39
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:20
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:25
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:10
@@ -3328,7 +3401,7 @@ msgstr "使用以下属性更新 {n} 页面："
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:89
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:17
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:161
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:162
 msgid "Upload"
 msgstr "上载"
 
@@ -3340,12 +3413,12 @@ msgstr "上传文件"
 msgid "Upload a file from your computer."
 msgstr "从电脑上传一个文件。"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:151
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:152
 msgid "Upload a file to the drop folder. This file will be handled in the background by the mailinglists for recipient import and other modules."
 msgstr "将文件上传到拖放文件夹。该文件将由收件人导入和其他模块的邮件列表在后台处理。"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:74
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:148
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:149
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:27
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:32
 msgid "Upload file"
@@ -3468,7 +3541,7 @@ msgstr "工作目录"
 
 #: zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
 #: zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:54
-#: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:94
+#: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:86
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:96
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:99
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:33
@@ -3506,7 +3579,6 @@ msgstr "没有权限删除这个页面。 "
 
 #: zotonic_mod_admin/priv/templates/admin_edit.tpl:16
 #: zotonic_mod_admin_merge/priv/templates/admin_merge.tpl:26
-#: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:34
 msgid "You are not allowed to edit this page."
 msgstr "您不能编辑本页面。"
 
@@ -4625,9 +4697,9 @@ msgstr "设置用户名/密码"
 #: zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:27
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:97
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:152
-#: zotonic_mod_survey/src/mod_survey.erl:1631
-#: zotonic_mod_survey/src/mod_survey.erl:1653
-#: zotonic_mod_survey/src/mod_survey.erl:1661
+#: zotonic_mod_survey/src/mod_survey.erl:1633
+#: zotonic_mod_survey/src/mod_survey.erl:1655
+#: zotonic_mod_survey/src/mod_survey.erl:1663
 msgid "Sorry"
 msgstr "对不起"
 
@@ -6655,19 +6727,19 @@ msgstr "该处"
 msgid "user@example.com"
 msgstr "user@example.com"
 
-#: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:66
-msgid "<i>Unknown</i>"
-msgstr "<i>未知</i>"
-
 #: zotonic_mod_backup/priv/templates/admin_backup.tpl:3
 msgid "Admin Backups"
 msgstr "管理备份"
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:31
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:64
 msgid "After the page has been restored, you will be redirected to the edit page."
 msgstr "页面恢复后，您将被重定向到编辑页面。"
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:7
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:12
+msgid "Are you sure you want to restore this deleted page using the selected version?"
+msgstr "您确定要使用所选版本恢复此已删除页面吗？"
+
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:10
 msgid "Are you sure you want to revert to this version?"
 msgstr "确认恢复到这个版本？"
 
@@ -6679,11 +6751,11 @@ msgstr "任何时候你都可以创建系统的备份。"
 msgid "Automatic daily backups of the database and uploaded files can be enabled. The backup is done at night and the last 7 backups are kept."
 msgstr "可以启用数据库和上传文件的每日自动备份。备份在夜间进行，并保留最后 7 次备份。"
 
-#: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:53
+#: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:45
 msgid "Back to the edit page"
 msgstr "回到编辑页面"
 
-#: zotonic_mod_backup/src/mod_backup.erl:282
+#: zotonic_mod_backup/src/mod_backup.erl:323
 msgid "Backup"
 msgstr "备份"
 
@@ -6711,7 +6783,7 @@ msgstr "默认情况下，数据库和文件的备份未加密。\n"
 msgid "Changes since"
 msgstr "变化自"
 
-#: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:59
+#: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:51
 msgid "Check and possibly restore an earlier version of your page."
 msgstr "检查并恢复到页面的先前版本。"
 
@@ -6745,7 +6817,7 @@ msgstr "无法启动备份，因为备份已在进行中。"
 msgid "Date"
 msgstr "日期"
 
-#: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:61
+#: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:60
 msgid "Deleted"
 msgstr "已删除"
 
@@ -6759,9 +6831,13 @@ msgstr "删除于"
 
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:3
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:9
-#: zotonic_mod_backup/src/mod_backup.erl:295
+#: zotonic_mod_backup/src/mod_backup.erl:336
 msgid "Deleted pages"
 msgstr "删除的页面"
+
+#: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:12
+msgid "Deleted pages you have permission to edit."
+msgstr "您有权编辑的已删除页面。"
 
 #: zotonic_mod_backup/priv/templates/admin_backup.tpl:14
 msgid "Directory"
@@ -6815,17 +6891,13 @@ msgstr "如果使用云文件存储模块，则可以无限期保留已删除的
 msgid "It can be found in the"
 msgstr "它可以在"
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:11
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:44
 msgid "It could be that a connected dependent page was deleted because of the deletion of this page, such a deleted dependent page can also be recovered."
 msgstr "有可能是因为删除了这个页面，所以关联的依赖页面也被删除了，这样被删除的依赖页面也是可以恢复的。"
 
 #: zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:29
 msgid "List and restore an earlier version"
 msgstr "列出并恢复到之前的版本"
-
-#: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:12
-msgid "List of recently deleted pages found in the resource revisions log."
-msgstr "资源修订日志中发现的最近删除的页面列表。"
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:15
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:39
@@ -6839,7 +6911,7 @@ msgstr "对数据库和上传文件每天做备份。"
 msgid "Make a daily backup of the database."
 msgstr "每天对数据库进行备份。"
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:30
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:63
 msgid "Media files can only be recovered if they are not yet deleted from the file storage. Zotonic will keep media for at least 5 weeks."
 msgstr "媒体文件必须尚未从文件存储中删除才能恢复。Zotonic 将保留媒体文件至少 5 周。"
 
@@ -6863,25 +6935,30 @@ msgstr "笔记："
 msgid "Only administrators can start a backup."
 msgstr "只有管理员可以启动备份。"
 
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:23
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:33
+msgid "Original"
+msgstr "原文"
+
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:100
 msgid "Please make sure you store the backup encryption password in a safe <u>external</u> location."
 msgstr "请确保将备份加密密码存储在安全的 <u>外部</u> 位置。"
 
-#: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:83
+#: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:75
 msgid "Previous"
 msgstr "前一页"
 
-#: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:85
-msgid "Recover"
-msgstr "恢复"
-
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:21
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:54
 msgid "Recover incoming connections from other pages"
 msgstr "恢复来自其他页面的传入连接"
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:17
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:50
 msgid "Recover outgoing connections to other pages"
 msgstr "恢复到其他页面的传出连接"
+
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:14
+msgid "Recovering a deleted page requires permission to create pages in the selected category and content group."
+msgstr "要恢复已删除的页面，需要具备在所选分类和内容组中创建页面的权限。"
 
 #: zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:38
 #: zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:41
@@ -6889,11 +6966,23 @@ msgstr "恢复到其他页面的传出连接"
 msgid "Restore backup"
 msgstr "从备份恢复"
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:25
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:58
 msgid "Restore deleted <em>dependent</em> pages that were referred by this page"
 msgstr "恢复已删除的 <em>依赖的</em> 页面（由此页面引用）"
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:29
+#: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:41
+msgid "Restore deleted page"
+msgstr "恢复已删除的页面"
+
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:69
+msgid "Restore page"
+msgstr "恢复页面"
+
+#: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:38
+msgid "Restore this page..."
+msgstr "恢复此页面..."
+
+#: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:30
 msgid "Revert page to earlier version"
 msgstr "将页面恢复到早期版本"
 
@@ -6905,29 +6994,45 @@ msgstr "还原至本页的早期版本。"
 msgid "Revert to earlier version..."
 msgstr "恢复到早期版本..."
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:26
+#: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:27
 msgid "Revert to this version..."
 msgstr "恢复到这个版本..."
 
+#: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:82
+msgid "Revisions"
+msgstr "修订"
+
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:14
-#: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:60
+#: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:52
 msgid "Revisions are kept for {n} months."
 msgstr "修订保留 {n} 个月。"
 
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:3
-#: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:46
+#: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:38
 msgid "Revisions for"
 msgstr "订正"
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:15
-#: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:61
+#: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:53
 msgid "Revisions of active users are kept for {n} days."
 msgstr "活跃用户的修订保存期为 {n} 天。"
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:16
-#: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:62
+#: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:54
 msgid "Revisions of deleted users are kept for {n} days."
 msgstr "已删除用户的修订版本将保留 {n} 天。"
+
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:25
+msgid "Select a category"
+msgstr "选择一个类别"
+
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:35
+msgid "Select a content group"
+msgstr "选择一个内容组"
+
+#: zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:121
+msgid "Select an existing category and content group before restoring this page."
+msgstr "在恢复此页面之前，请先选择一个现有的分类和内容组。"
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:3
 msgid "Select the backup file you want to upload. The file must be a .bert file."
@@ -6950,11 +7055,11 @@ msgid "Sorry, there is no module that can import this."
 msgstr "抱歉，没有可以导入的模块。"
 
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:105
-#: zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:129
+#: zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:125
 msgid "Sorry, there was an error replacing your page."
 msgstr "对不起，您的页面更换时出现了错误。"
 
-#: zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:127
+#: zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:123
 msgid "Sorry, this backup has been deleted."
 msgstr "对不起，这个备份已经被删除了。"
 
@@ -7008,6 +7113,10 @@ msgstr "备份模块使用全局 Zotonic 配置。无法在此处更改配置。
 msgid "The encryption configuration is set to:"
 msgstr "加密配置设置为："
 
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:18
+msgid "The original category or content group no longer exists. Confirm the suggested replacement or select another one."
+msgstr "原始分类或内容组已不存在。请确认建议的替代选项，或选择其他选项。"
+
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:5
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:15
 msgid "This is the version saved on"
@@ -7016,6 +7125,11 @@ msgstr "这是保存在"
 #: zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:10
 msgid "This will overwrite your page with the contents of the backup file."
 msgstr "这将会使用备份文件内容覆盖你的页面。"
+
+#: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:65
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:35
+msgid "Unknown"
+msgstr "未知"
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:53
 msgid "Uploaded to filestore"
@@ -7035,32 +7149,35 @@ msgstr "使用导入/导出面板，您可以将页面下载为文件、查看�
 msgid "Y-m-d H:i – l"
 msgstr "Ymd H:i - l"
 
-#: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:39
-#: zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:125
+#: zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:119
 msgid "You are not allowed to recover this page."
 msgstr "您不能恢复此页面。"
 
-#: zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:86
-#: zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:89
-#: zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:116
+#: zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:76
+#: zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:79
+#: zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:110
 msgid "You are not allowed to see the revisions"
 msgstr "您不允许查看修改的内容"
+
+#: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:32
+msgid "You are not allowed to see the revisions."
+msgstr "您无权查看修订内容。"
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:9
 msgid "You can have one backup per day of the week, older ones will be overwritten."
 msgstr "您可以在一周中的每一天进行一次备份，旧的将被覆盖。"
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:10
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:43
 msgid "You can recover incoming and outgoing connections to other pages."
 msgstr "您可以恢复与其他页面的传入和传出连接。"
 
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:13
-msgid "You can select a revision to revover."
-msgstr "您可以选择要恢复的修订版本。"
+msgid "You can select a revision to recover."
+msgstr "您可以选择一个版本进行恢复。"
 
-#: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:95
-msgid "You need to have access rights to the backup module."
-msgstr "您需要拥有备份模块的访问权限。"
+#: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:92
+msgid "You need access to the admin."
+msgstr "你需要获得管理员权限。"
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:24
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
@@ -7584,10 +7701,6 @@ msgstr "这将测试与服务器的通信。"
 msgid "Type"
 msgstr "类型"
 
-#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:35
-msgid "Unknown"
-msgstr "未知"
-
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:92
 msgid "Vertical bar chart"
 msgstr "竖条形图"
@@ -7656,6 +7769,18 @@ msgstr "没有"
 #: zotonic_mod_base/src/filters/filter_yesno.erl:63
 msgid "yes"
 msgstr "是的"
+
+#: zotonic_mod_clamav/priv/templates/_clamav_admin_status_alert.tpl:5
+msgid "ClamAV could not be reached. Files cannot be uploaded until the virus scanner is available again."
+msgstr "无法连接到 ClamAV。在病毒扫描程序恢复可用之前，无法上传文件。"
+
+#: zotonic_mod_clamav/priv/templates/_clamav_admin_status_alert.tpl:6
+msgid "Please contact your system administrator."
+msgstr "请联系您的系统管理员。"
+
+#: zotonic_mod_clamav/priv/templates/_clamav_admin_status_alert.tpl:4
+msgid "Virus scanner unavailable"
+msgstr "病毒扫描程序无法使用"
 
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:19
 msgid "Added on"
@@ -8543,7 +8668,7 @@ msgstr "开始跟踪您的会话的模板包含内容。"
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:33
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:180
-#: zotonic_mod_survey/src/mod_survey.erl:663
+#: zotonic_mod_survey/src/mod_survey.erl:665
 msgid "Stop"
 msgstr "中止"
 
@@ -13125,7 +13250,7 @@ msgstr "匿名和登录受访者的所有答案"
 msgid "Allow non-linear forms; answers are saved with “Back” button and a “Back to start” is added at the top of each page"
 msgstr "允许使用非线性表单；使用 \"返回 \"按钮保存答案，并在每页顶部添加 \"返回开始 \"按钮"
 
-#: zotonic_mod_survey/src/mod_survey.erl:1644
+#: zotonic_mod_survey/src/mod_survey.erl:1646
 msgid "Already submitted"
 msgstr "已提交"
 
@@ -13174,7 +13299,7 @@ msgstr "你确定要删除本页吗？<br/>这也将删除本页的所有问题�
 msgid "Are you sure you want to delete this question?"
 msgstr "你确定要删除这个问题吗？"
 
-#: zotonic_mod_survey/src/mod_survey.erl:424
+#: zotonic_mod_survey/src/mod_survey.erl:426
 msgid "Are you sure you want to delete this result?"
 msgstr "你确定要删除这个结果吗？"
 
@@ -13191,7 +13316,7 @@ msgid "Because you can edit, you can proceed for testing."
 msgstr "因为您可以编辑，所以您可以继续进行测试。"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:112
-#: zotonic_mod_survey/src/mod_survey.erl:660
+#: zotonic_mod_survey/src/mod_survey.erl:662
 msgid "Button"
 msgstr "按钮"
 
@@ -13277,7 +13402,7 @@ msgstr "无法添加收件人。"
 msgid "Could not create the mailinglist."
 msgstr "无法创建邮件列表。"
 
-#: zotonic_mod_survey/src/mod_survey.erl:659
+#: zotonic_mod_survey/src/mod_survey.erl:661
 msgid "Country select"
 msgstr "国家选择"
 
@@ -13359,7 +13484,7 @@ msgstr "下拉菜单"
 msgid "E-mail addresses"
 msgstr "电子邮件地址"
 
-#: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:77
+#: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:81
 msgid "Edit all answers"
 msgstr "编辑所有答案"
 
@@ -13369,13 +13494,13 @@ msgstr "编辑所有答案"
 msgid "Edit status"
 msgstr "编辑状态"
 
-#: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:82
+#: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:86
 msgid "Edit survey result"
 msgstr "编辑问卷调查结果"
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:72
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:86
-#: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:29
+#: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:35
 msgid "Editor only"
 msgstr "仅限编辑"
 
@@ -13434,7 +13559,7 @@ msgstr "如果正确，请反馈"
 msgid "Feedback if wrong"
 msgstr "如有错误，请反馈"
 
-#: zotonic_mod_survey/src/mod_survey.erl:664
+#: zotonic_mod_survey/src/mod_survey.erl:666
 msgid "File upload"
 msgstr "文件上传"
 
@@ -13575,7 +13700,7 @@ msgstr "跳转到这个问题标签（必须在下面的其他页面上）"
 msgid "Last status change"
 msgstr "最近一次状态变更"
 
-#: zotonic_mod_survey/src/mod_survey.erl:652
+#: zotonic_mod_survey/src/mod_survey.erl:654
 msgid "Likert"
 msgstr "李克特量表"
 
@@ -13586,7 +13711,7 @@ msgstr "李克特量表"
 msgid "Link with person"
 msgstr "与人联系"
 
-#: zotonic_mod_survey/src/mod_survey.erl:658
+#: zotonic_mod_survey/src/mod_survey.erl:660
 msgid "Long answer"
 msgstr "长答案"
 
@@ -13652,7 +13777,7 @@ msgstr "允许选择多个答案"
 msgid "Multiple answers possible: points are given for the correct answer <i>and</i> points are given for <i>not</i> choosing the wrong answer. Default: 1 point for a correct answer, 1 point for not choosing a wrong answer."
 msgstr "可能有多个答案：正确答案 <i>分，选择错误答案 <i>而不是</i> 得</i> 分。默认值：答对得 1 分，未选错得 1 分。"
 
-#: zotonic_mod_survey/src/mod_survey.erl:665
+#: zotonic_mod_survey/src/mod_survey.erl:667
 msgid "Multiple choice"
 msgstr "多项选择"
 
@@ -13669,7 +13794,7 @@ msgstr "多个页面块会被合成一个。"
 msgid "Multiple times – each time with new results"
 msgstr "多次 - 每次都有新结果"
 
-#: zotonic_mod_survey/src/mod_survey.erl:656
+#: zotonic_mod_survey/src/mod_survey.erl:658
 msgid "Narrative"
 msgstr "陈述"
 
@@ -13749,7 +13874,7 @@ msgstr "可选择向受访者发送确认电子邮件"
 msgid "Options from a page category"
 msgstr "页面类别中的选项"
 
-#: zotonic_mod_survey/src/mod_survey.erl:661
+#: zotonic_mod_survey/src/mod_survey.erl:663
 msgid "Page break"
 msgstr "页面中断"
 
@@ -13757,7 +13882,7 @@ msgstr "页面中断"
 msgid "Page jump condition"
 msgstr "页面跳转条件"
 
-#: zotonic_mod_survey/src/mod_survey.erl:662
+#: zotonic_mod_survey/src/mod_survey.erl:664
 msgid "Page options"
 msgstr "页面选项"
 
@@ -13790,7 +13915,7 @@ msgid "Person"
 msgstr "人"
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:121
-#: zotonic_mod_survey/src/mod_survey.erl:560
+#: zotonic_mod_survey/src/mod_survey.erl:562
 msgid "Please fill in all the required fields."
 msgstr "请填写所有必填项目。"
 
@@ -13858,7 +13983,7 @@ msgstr "简短回答的问题"
 #: zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:7
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:5
 #: zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:8
-#: zotonic_mod_survey/src/mod_survey.erl:649
+#: zotonic_mod_survey/src/mod_survey.erl:651
 msgid "Questions"
 msgstr "疑问"
 
@@ -13896,7 +14021,7 @@ msgstr "必须填写"
 msgid "Responses"
 msgstr "回复"
 
-#: zotonic_mod_survey/src/mod_survey.erl:484
+#: zotonic_mod_survey/src/mod_survey.erl:486
 msgid "Result deleted."
 msgstr "结果删了。"
 
@@ -13925,7 +14050,7 @@ msgid "Results until"
 msgstr "结果直到"
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:200
-#: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:93
+#: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:97
 msgid "Save &amp; Email"
 msgstr "保存 &amp; 电子邮件"
 
@@ -13970,7 +14095,7 @@ msgstr "用逗号分隔多个电子邮件地址。"
 msgid "Set status"
 msgstr "设置状态"
 
-#: zotonic_mod_survey/src/mod_survey.erl:657
+#: zotonic_mod_survey/src/mod_survey.erl:659
 msgid "Short answer"
 msgstr "短答案"
 
@@ -14019,28 +14144,28 @@ msgstr "出错"
 msgid "Sorry, could not insert the new person."
 msgstr "抱歉，无法插入新人。"
 
-#: zotonic_mod_survey/src/mod_survey.erl:452
-#: zotonic_mod_survey/src/mod_survey.erl:567
-#: zotonic_mod_survey/src/mod_survey.erl:591
-#: zotonic_mod_survey/src/mod_survey.erl:638
+#: zotonic_mod_survey/src/mod_survey.erl:454
+#: zotonic_mod_survey/src/mod_survey.erl:569
+#: zotonic_mod_survey/src/mod_survey.erl:593
+#: zotonic_mod_survey/src/mod_survey.erl:640
 msgid "Sorry, that answer is unknown."
 msgstr "抱歉，该答案未知。"
 
-#: zotonic_mod_survey/src/mod_survey.erl:1633
+#: zotonic_mod_survey/src/mod_survey.erl:1635
 msgid "Sorry, the maximum number of submissions has been reached. You can no longer submit this form."
 msgstr "抱歉，已达到提交数量上限。您不能再提交此表格。"
 
-#: zotonic_mod_survey/src/mod_survey.erl:456
-#: zotonic_mod_survey/src/mod_survey.erl:459
+#: zotonic_mod_survey/src/mod_survey.erl:458
+#: zotonic_mod_survey/src/mod_survey.erl:461
 msgid "Sorry, the status could not be saved."
 msgstr "抱歉，无法保存该状态。"
 
-#: zotonic_mod_survey/src/mod_survey.erl:473
-#: zotonic_mod_survey/src/mod_survey.erl:642
+#: zotonic_mod_survey/src/mod_survey.erl:475
+#: zotonic_mod_survey/src/mod_survey.erl:644
 msgid "Sorry, the survey result could not be saved."
 msgstr "抱歉，无法保存调查结果。"
 
-#: zotonic_mod_survey/src/mod_survey.erl:1646
+#: zotonic_mod_survey/src/mod_survey.erl:1648
 msgid "Sorry, you already submitted your answers. Reload the page if you want to fill in the form again."
 msgstr "抱歉，您已提交答案。如果您想再次填写表格，请重新加载页面。"
 
@@ -14066,7 +14191,7 @@ msgstr "状态修饰符 ID"
 msgid "Status note"
 msgstr "状态说明"
 
-#: zotonic_mod_survey/src/mod_survey.erl:448
+#: zotonic_mod_survey/src/mod_survey.erl:450
 msgid "Status saved."
 msgstr "状态已保存。"
 
@@ -14136,7 +14261,7 @@ msgstr "问卷调查编辑器"
 msgid "Survey result"
 msgstr "调查结果"
 
-#: zotonic_mod_survey/src/mod_survey.erl:634
+#: zotonic_mod_survey/src/mod_survey.erl:636
 msgid "Survey result saved."
 msgstr "调查结果已保存。"
 
@@ -14253,7 +14378,7 @@ msgstr "这是一个结果，因为："
 msgid "This is the percentage needed to pass a quiz or test. Only used if you have added quiz or test questions."
 msgstr "这是通过测验或测试所需的百分比。仅在您添加了测验或测试问题时使用。"
 
-#: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:126
+#: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:138
 msgid "This survey answer could not be found or you are not allowed to view it."
 msgstr "找不到该调查回答，或者您无权查看该回答。"
 
@@ -14275,7 +14400,7 @@ msgstr "此文显示为调查介绍。"
 msgid "This text is shown below the start button."
 msgstr "此文本显示在开始按钮下方。"
 
-#: zotonic_mod_survey/src/mod_survey.erl:653
+#: zotonic_mod_survey/src/mod_survey.erl:655
 msgid "Thurstone"
 msgstr "瑟斯顿量表"
 
@@ -14310,7 +14435,7 @@ msgstr "真"
 msgid "True or false question"
 msgstr "真假问题"
 
-#: zotonic_mod_survey/src/mod_survey.erl:650
+#: zotonic_mod_survey/src/mod_survey.erl:652
 msgid "True/False"
 msgstr "真/假"
 
@@ -14330,7 +14455,7 @@ msgstr "查看和编辑结果。"
 msgid "View answers"
 msgstr "查看答案"
 
-#: zotonic_mod_survey/src/mod_survey.erl:1654
+#: zotonic_mod_survey/src/mod_survey.erl:1656
 msgid "We are experiencing an overload, please try again in 10 minutes."
 msgstr "我们正处于超载状态，请 10 分钟后重试。"
 
@@ -14352,7 +14477,7 @@ msgstr "错误的"
 msgid "Yes or no question"
 msgstr "是或否问题"
 
-#: zotonic_mod_survey/src/mod_survey.erl:651
+#: zotonic_mod_survey/src/mod_survey.erl:653
 msgid "Yes/No"
 msgstr "是/否"
 
@@ -14365,16 +14490,16 @@ msgid "You already filled this in."
 msgstr "你已经填好了"
 
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:83
-#: zotonic_mod_survey/src/mod_survey.erl:454
+#: zotonic_mod_survey/src/mod_survey.erl:456
 msgid "You are not allowed to change the status."
 msgstr "您无权更改该状态。"
 
-#: zotonic_mod_survey/src/mod_survey.erl:431
-#: zotonic_mod_survey/src/mod_survey.erl:488
-#: zotonic_mod_survey/src/mod_survey.erl:525
-#: zotonic_mod_survey/src/mod_survey.erl:593
-#: zotonic_mod_survey/src/mod_survey.erl:640
-#: zotonic_mod_survey/src/mod_survey.erl:1720
+#: zotonic_mod_survey/src/mod_survey.erl:433
+#: zotonic_mod_survey/src/mod_survey.erl:490
+#: zotonic_mod_survey/src/mod_survey.erl:527
+#: zotonic_mod_survey/src/mod_survey.erl:595
+#: zotonic_mod_survey/src/mod_survey.erl:642
+#: zotonic_mod_survey/src/mod_survey.erl:1722
 msgid "You are not allowed to change these results."
 msgstr "你不允许改变这些结果。"
 
@@ -14411,7 +14536,7 @@ msgstr "您的答案将被保存，以便稍后返回提交。"
 msgid "Your result"
 msgstr "您的结果"
 
-#: zotonic_mod_survey/src/mod_survey.erl:1662
+#: zotonic_mod_survey/src/mod_survey.erl:1664
 msgid "Your session was expired, please restart and try again."
 msgstr "您的会话已过期，请重新启动并重试。"
 
