@@ -36,7 +36,7 @@
 {% endblock %}
 
 {# Pivot fields #}
-{% block address_street %}{{ id.address_country|if:id.address_street_1:id.mail_address_street_1 }}{% endblock %}
+{% block address_street %}{{ id.address_country|if:id.address_street_1:id.mail_street_1 }}{% endblock %}
 {% block address_city %}{{ id.address_country|if:id.address_city:id.mail_city }}{% endblock %}
 {% block address_postcode %}{{ id.address_country|if:id.address_postcode:id.mail_postcode }}{% endblock %}
 {% block address_state %}{{ id.address_country|if:id.address_state:id.mail_state }}{% endblock %}
