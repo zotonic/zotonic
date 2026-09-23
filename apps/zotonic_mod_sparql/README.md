@@ -275,10 +275,10 @@ TODO
  - [x] Carry RDF term kind, datatype and language metadata through expressions
  - [x] Add basic DATATYPE support
  - [x] ACL checks for private properties, only allow 'administrator users' to query on private properties
+ - [x] Check usage of rsc props_json vs props, migrate to props_json (accept both for now)
  - [ ] Import and export of Turtle, JSON-LD, and other formats (TBD)
  - [ ] Support language handling, using the JSON objects: { _type: "trans", tr = { "en":"..." } }, including LANG etc.
  - [ ] Add SPARQL endpoint, with expected results (for use with 3rd parties -- check API standards)
- - [ ] Check usage of rsc props_json vs props, migrate to props_json (accept both for now)
  - [ ] Ensure the types of z_props, mod_rdf and search_facet are the same (bool -> boolean, int -> integer)
 
 After merge:
