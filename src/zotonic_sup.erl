@@ -85,6 +85,11 @@ init([]) ->
                  {z_file_sup, start_link, []},
                  permanent, 5000, supervisor, dynamic},
 
+    %% Callback registrations must be available before any site accepts requests.
+    MediaRunner = {z_media_runner,
+                   {z_media_runner, start_link, []},
+                   permanent, 5000, worker, [z_media_runner]},
+
     %% Sites supervisor, starts all enabled sites
     SitesSup = {z_sites_sup,
                 {z_sites_sup, start_link, []},
@@ -104,6 +109,7 @@ init([]) ->
                  Ids,
                  SmtpServer, SmtpReceiveServer,
                  FilesSup,
+                 MediaRunner,
                  SitesSup,
                  FSWatchSup,
                  MTime | get_extensions()

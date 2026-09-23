@@ -54,8 +54,8 @@
          convert_task/2,
          queue_path/2,
 
-         video_info/1,
-         video_preview/2,
+         video_info/1, video_info/2,
+         video_preview/2, video_preview/3,
 
          orientation_to_transpose/1
         ]).
@@ -130,24 +130,29 @@ observe_media_upload_props(#media_upload_props{archive_file=undefined, mime="vid
     Medium;
 observe_media_upload_props(#media_upload_props{id=Id, archive_file=File, mime="video/" ++ _}, Medium, Context) ->
     FileAbs = z_media_archive:abspath(File, Context),
-    Info = video_info(FileAbs),
-    Info2 = case video_preview(FileAbs, Info) of
+    case video_info(FileAbs, Context) of
+        {error, Reason} ->
+            lager:warning("Video metadata unavailable for ~p: ~p", [Id, Reason]),
+            Medium;
+        Info ->
+            Info2 = case video_preview(FileAbs, Info, Context) of
                 {ok, TmpFile} ->
-                    PreviewFilename = preview_filename(Id, Context),
-                    PreviewPath = z_media_archive:abspath(PreviewFilename, Context),
-                    ok = z_media_preview:convert(TmpFile, PreviewPath, [{quality,70}], Context),
-                    _ = file:delete(TmpFile),
-                    [
-                     {preview_filename, PreviewFilename},
-                     {preview_width, proplists:get_value(width, Info)},
-                     {preview_height, proplists:get_value(height, Info)},
-                     {is_deletable_preview, true}
-                     | Info
-                    ];
-                {error, _} ->
-                    Info
+                    try
+                        PreviewFilename = preview_filename(Id, Context),
+                        PreviewPath = z_media_archive:abspath(PreviewFilename, Context),
+                        case z_media_preview:convert(TmpFile, PreviewPath, [{quality,70}], Context) of
+                            ok -> [{preview_filename, PreviewFilename},
+                                {preview_width, proplists:get_value(width, Info)},
+                                {preview_height, proplists:get_value(height, Info)},
+                                {is_deletable_preview, true} | Info];
+                            {error, _} -> Info
+                        end
+                    after file:delete(TmpFile)
+                    end;
+                {error, _} -> Info
             end,
-    z_utils:props_merge(Info2, Medium);
+            z_utils:props_merge(Info2, Medium)
+    end;
 observe_media_upload_props(#media_upload_props{}, Medium, _Context) ->
     Medium.
 
@@ -257,6 +262,16 @@ queue_path(Filename, Context) ->
 
 
 video_info(Path) ->
+    case video_info(Path, undefined) of
+        {error, _} = Error ->
+            case z_media_runner:enabled() of
+                true -> Error;
+                false -> []
+            end;
+        Info -> Info
+    end.
+
+video_info(Path, Context) ->
     Cmdline = case z_config:get(ffprobe_cmdline) of
                   undefined -> ?FFPROBE_CMDLINE;
                   <<>> -> ?FFPROBE_CMDLINE;
@@ -268,7 +283,12 @@ video_info(Path) ->
                                 z_utils:os_filename(Path)
                                ]),
     lager:debug("Video info: ~p", [FfprobeCmd]),
-    JSONText = unicode:characters_to_binary(os:cmd(FfprobeCmd)),
+    case z_exec:run(ffprobe, FfprobeCmd, #{read => [Path]}, Context) of
+        {ok, JSONText} -> decode_video_info(JSONText);
+        Error -> Error
+    end.
+
+decode_video_info(JSONText) ->
     try
         {struct, Ps} = decode_json(JSONText),
         {Width, Height, Orientation} = fetch_size(Ps),
@@ -281,7 +301,7 @@ video_info(Path) ->
     catch
         error:E ->
             lager:warning("Unexpected ffprobe return (~p) ~p", [E, JSONText]),
-            []
+            {error, invalid_video_info}
     end.
 
 decode_json(JSONText) ->
@@ -338,7 +358,9 @@ orientation(_) ->
     1.
 
 
-video_preview(MovieFile, Props) ->
+video_preview(MovieFile, Props) -> video_preview(MovieFile, Props, undefined).
+
+video_preview(MovieFile, Props, Context) ->
     Duration = proplists:get_value(duration, Props),
     Start = case Duration of
                 N when N =< 1 -> 0;
@@ -367,11 +389,14 @@ video_preview(MovieFile, Props) ->
     jobs:run(media_preview_jobs,
              fun() ->
                      lager:debug("Video preview: ~p", [FfmpegCmd]),
-                     case os:cmd(FfmpegCmd) of
-                         [] ->
-                             {ok, TmpFile};
-                         Other ->
-                             {error, Other}
+                     case z_exec:run(ffmpeg_preview, FfmpegCmd,
+                             #{read => [MovieFile], write => [TmpFile]}, Context) of
+                         {ok, _} ->
+                             case filelib:is_regular(TmpFile) andalso filelib:file_size(TmpFile) > 0 of
+                                 true -> {ok, TmpFile};
+                                 false -> file:delete(TmpFile), {error, empty_preview}
+                             end;
+                         Error -> file:delete(TmpFile), Error
                      end
              end).
 
@@ -382,4 +407,3 @@ orientation_to_transpose(_) -> "".
 
 preview_filename(Id, Context) ->
     m_media:make_preview_unique(Id, ".jpg", Context).
-

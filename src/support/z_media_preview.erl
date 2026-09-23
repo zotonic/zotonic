@@ -20,6 +20,10 @@
 %% limitations under the License.
 
 -module(z_media_preview).
+
+-ifdef(TEST).
+-export([run_cmd/6]).
+-endif.
 -author("Marc Worrell <marc@worrell.nl").
 
 -compile([{parse_transform, lager_transform}]).
@@ -72,7 +76,7 @@ convert(InFile, MediumFilename, OutFile, Filters, Context) ->
                 true ->
                     case z_mediaclass:expand_mediaclass_checksum(Filters) of
                         {ok, FiltersExpanded} ->
-                            convert_1(imagemagick_convert_cmd(), InFile, OutFile, Mime, FileProps, FiltersExpanded);
+                            convert_1(imagemagick_find_executable(), InFile, OutFile, Mime, FileProps, FiltersExpanded, Context);
                         {error, _} = Error ->
                             lager:warning("cannot expand mediaclass for ~p (~p)", [Filters, Error]),
                             Error
@@ -85,19 +89,16 @@ convert(InFile, MediumFilename, OutFile, Filters, Context) ->
             {error, Reason}
     end.
 
-%% @doc Find ImageMagick's 'convert' command on the current system, if any.
-%% This prefers the 'magick' command introduced in v7 if possible and
-%% otherwise falls back to the 'convert' one of previous ImageMagick's versions.
-%% Note: since system installations don't change that often, the result is cached.
--spec imagemagick_convert_cmd() -> Cmd | false when Cmd :: string().
-imagemagick_convert_cmd() ->
-    #{ cmd := Cmd } = imagemagick_find_executable(),
-    Cmd.
-
 %% @doc Internal helper to discover and cache the ImageMagick executable and
 %% whether we are running a legacy (pre-v7) installation.
 -spec imagemagick_find_executable() -> #{ cmd := string() | false, legacy := boolean() }.
 imagemagick_find_executable() ->
+    case z_media_runner:enabled() of
+        true -> z_media_imagemagick:selected();
+        false -> imagemagick_find_executable_local()
+    end.
+
+imagemagick_find_executable_local() ->
     Key = {?MODULE, imagemagick_find_executable},
     case persistent_term:get(Key, undefined) of
         undefined ->
@@ -131,29 +132,37 @@ is_legacy_imagemagick() ->
     #{ legacy := Legacy } = imagemagick_find_executable(),
     Legacy.
 
-convert_1(false, _InFile, _OutFile, _Mime, _FileProps, _Filters) ->
+convert_1(#{cmd := false}, _InFile, _OutFile, _Mime, _FileProps, _Filters, _Context) ->
     lager:error("Install ImageMagick to generate previews of images."),
     {error, imagemagick_missing};
-convert_1(ConvertCmd, InFile, OutFile, Mime, FileProps, Filters) ->
+convert_1(Installation, InFile, OutFile, Mime, FileProps, Filters, Context) ->
     OutMime = z_media_identify:guess_mime(OutFile),
-    case cmd_args(FileProps, Filters, OutMime) of
+    case cmd_args(FileProps, [{media_imagemagick_legacy, maps:get(legacy, Installation)} | Filters], OutMime) of
         {EndWidth, EndHeight, _CmdArgs} when EndWidth > ?MAX_PIXSIZE; EndHeight > ?MAX_PIXSIZE ->
             {error, image_too_big};
         {_, _, CmdArgs} ->
-            convert_2(CmdArgs, ConvertCmd, InFile, OutFile, Mime, FileProps)
+            convert_2(CmdArgs, Installation, InFile, OutFile, Mime, FileProps, Context)
     end.
 
-convert_2(CmdArgs, ConvertCmd, InFile, OutFile, Mime, FileProps) ->
-    file:delete(OutFile),
+convert_2(CmdArgs, Installation, InFile, OutFile, Mime, FileProps, Context) ->
     ok = filelib:ensure_dir(OutFile),
+    TempFile = OutFile ++ ".runner-" ++ binary_to_list(z_media_runner_protocol:hex(crypto:strong_rand_bytes(8)))
+        ++ filename:extension(OutFile),
     Cmd = lists:flatten([
-        ConvertCmd, " ",
+        maps:get(cmd, Installation), " ",
         opt_density(FileProps),
         z_utils:os_filename(InFile++infile_suffix(Mime)), " ",
         lists:flatten(z_utils:combine(32, CmdArgs)), " ",
-        z_utils:os_filename(OutFile)
+        z_utils:os_filename(TempFile)
     ]),
-    case run_cmd(Cmd, OutFile) of
+    Profile = case Mime of
+        "application/pdf" -> imagemagick_pdf;
+        "application/postscript" -> imagemagick_pdf;
+        _ -> imagemagick
+    end,
+    Options = #{read => [InFile], write => [TempFile], timeout => ?CONVERT_TIMEOUT,
+        media_runner_imagemagick => Installation},
+    try run_cmd(Cmd, OutFile, TempFile, Profile, Options, Context) of
         ok ->
             case filelib:is_regular(OutFile) of
                 true ->
@@ -167,6 +176,8 @@ convert_2(CmdArgs, ConvertCmd, InFile, OutFile, Mime, FileProps) ->
         {error, _} = Error ->
             lager:error("convert cmd ~p failed, result ~p", [Cmd, Error]),
             Error
+    after
+        file:delete(TempFile)
     end.
 
 % We need to set a bigger density for PDF rendering, otherwise the resulting
@@ -178,37 +189,33 @@ opt_density(Props) ->
         _Mime -> ""
     end.
 
-run_cmd(Cmd, OutFile) ->
-    jobs:run(media_preview_jobs,
-            fun() ->
-                case filelib:is_regular(OutFile) of
-                    true -> ok;
-                    false -> once(Cmd, OutFile)
-                end
-            end).
+run_cmd(Cmd, OutFile, TempFile, Profile, Options, Context) ->
+    jobs:run(media_preview_jobs, fun() ->
+        once(Cmd, OutFile, TempFile, Profile, Options, Context)
+    end).
 
-
-once(Cmd, OutFile) ->
+once(Cmd, OutFile, TempFile, Profile, Options, Context) ->
     MyPid = self(),
-    Key = {n,l,Cmd},
+    Key = {n, l, {?MODULE, OutFile}},
     case gproc:reg_or_locate(Key) of
         {MyPid, _} ->
-            lager:debug("Convert: ~p", [Cmd]),
-            Result = z_exec:run(Cmd, #{ timeout => ?CONVERT_TIMEOUT }),
-            gproc:unreg(Key),
-            case filelib:is_regular(OutFile) of
-                true ->
-                    ok;
-                false ->
-                    lager:error("convert cmd ~p failed, result ~p", [Cmd, Result]),
-                    {error, convert_error}
+            try z_exec:run(Profile, Cmd, Options, Context) of
+                {ok, _} ->
+                    case filelib:is_regular(TempFile) andalso filelib:file_size(TempFile) > 0 of
+                        true -> file:rename(TempFile, OutFile);
+                        false -> {error, convert_error}
+                    end;
+                Error -> Error
+            after gproc:unreg(Key)
             end;
         {_OtherPid, _} ->
-            lager:debug("Waiting for parallel: ~p", [Cmd]),
             Ref = gproc:monitor(Key),
             receive
                 {gproc, unreg, Ref, Key} ->
-                    ok
+                    %% An existing preview might predate a failed conversion.
+                    %% Serialize this caller's conversion instead of treating the
+                    %% presence of that old file as proof of success.
+                    once(Cmd, OutFile, TempFile, Profile, Options, Context)
             end
     end.
 
@@ -488,7 +495,11 @@ filter2arg({removebg, MatteFuzz}, Width, Height, AllFilters) ->
         [ F ] ->
             {"-alpha set", z_convert:to_integer(F)}
     end,
-    {Draw, Fill} = case {lists:member(lossless, AllFilters), is_legacy_imagemagick()} of
+    Legacy = case proplists:lookup(media_imagemagick_legacy, AllFilters) of
+        {_, IsLegacy} -> IsLegacy;
+        none -> is_legacy_imagemagick()
+    end,
+    {Draw, Fill} = case {lists:member(lossless, AllFilters), Legacy} of
         %% PNG images get the alpha channel flood-filled to remove the background.
         {true, true} -> {"matte", "none"};
         {true, false} -> {"alpha", "none"};
@@ -512,6 +523,9 @@ filter2arg({pre_magick, Arg}, Width, Height, _AllFilters) ->
     {Width, Height, z_convert:to_list(Arg)};
 filter2arg({post_magick, Arg}, Width, Height, _AllFilters) ->
     {Width, Height, z_convert:to_list(Arg)};
+% The selected installation is pinned while generating and routing this command.
+filter2arg({media_imagemagick_legacy, _}, Width, Height, _AllFilters) ->
+    {Width, Height, []};
 % Ignore these (are already handled as other filter args)
 filter2arg(extent, Width, Height, _AllFilters) ->
     {Width, Height, []};

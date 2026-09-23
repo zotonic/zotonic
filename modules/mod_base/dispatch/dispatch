@@ -43,6 +43,10 @@
  {media_inline, ["media","inline","id",id], controller_file_id, [ {dispatch, media_inline}, {ssl, any} ]},
  {media_inline, ["media","inline",'*'], controller_file, [ {content_disposition, inline}, {ssl, any} ]},
 
+ %% Authenticated with a per-job secret, without browser sessions.
+ {media_runner_callback, ["media-runner", "callback"], controller_media_runner_callback,
+     [{ssl, true}, {no_session, true}, {anonymous, true}]},
+
  %% API access
  {api,     ["api",module,method], controller_api, [{ssl, any}]},
  {api,     ["api",module],        controller_api, [{ssl, any}]},

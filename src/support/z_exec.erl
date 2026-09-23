@@ -37,10 +37,11 @@
 
 -export([
     run/1,
-    run/2
+    run/2, run/3, run/4, profile/1
 ]).
 
 -include_lib("kernel/include/file.hrl").
+-include("z_media_limits.hrl").
 
 
 -type os_command() :: atom() | io_lib:chars().
@@ -247,3 +248,69 @@ badarg_with_cause(Args, Cause) ->
                                                cause => Cause}}]).
 badarg_with_info(Args) ->
     erlang:error(badarg, Args, [{error_info, #{module => erl_kernel_errors}}]).
+
+%% @doc Media-only API. Once configured, no error may route back to local execution.
+run(Profile, Command, Options, Context) ->
+    run(Profile, Command, Options#{context => Context}).
+run(Profile, Command, Options) ->
+    case profile(Profile) of
+        {error, _} = Error -> Error;
+        Defaults ->
+            case z_media_runner_pool:runners() of
+                {ok, []} ->
+                    Output = unicode:characters_to_binary(run(unicode:characters_to_list(Command),
+                        maps:merge(Defaults, Options))),
+                    local_media_result(Profile, Output);
+                {ok, Runners} ->
+                    z_media_runner_job:run(Profile, Command, maps:merge(Defaults, Options), Runners);
+                Error -> Error
+            end
+    end.
+
+%% The legacy FFmpeg callers treat diagnostic output as failure. Keep that
+%% convention locally; remote jobs have an explicit processing status instead.
+local_media_result(Profile, Output) when
+        (Profile =:= ffmpeg orelse Profile =:= ffmpeg_preview), Output =/= <<>> ->
+    {error, {command_output, Output}};
+local_media_result(_, Output) -> {ok, Output}.
+
+%% @doc Return default resource limits for a media execution profile.
+-spec profile(atom()) -> map() | {error, unknown_media_profile}.
+profile(imagemagick) ->
+    #{
+        timeout => ?IMAGE_TIMEOUT,
+        max_size => ?SMALL_CONSOLE_SIZE,
+        memory => ?MEDIA_MEMORY,
+        file_size => ?IMAGE_FILE_SIZE,
+        cpu => ?IMAGE_TIMEOUT div 1000
+    };
+profile(imagemagick_pdf) ->
+    profile(imagemagick);
+profile(ffmpeg_preview) ->
+    (profile(imagemagick))#{timeout => ?PREVIEW_TIMEOUT, cpu => ?MAX_PREVIEW_TIMEOUT div 1000};
+profile(ffmpeg) ->
+    #{
+        timeout => ?DEFAULT_JOB_TIMEOUT,
+        max_size => ?MAX_CONSOLE_SIZE,
+        memory => ?MEDIA_MEMORY,
+        file_size => ?DEFAULT_MEDIA_LIMIT,
+        cpu => ?MAX_JOB_TIMEOUT div 1000
+    };
+profile(ffprobe) ->
+    #{
+        timeout => ?PROBE_TIMEOUT,
+        max_size => ?SMALL_CONSOLE_SIZE,
+        memory => ?PROBE_MEMORY,
+        file_size => ?PROBE_FILE_SIZE,
+        cpu => ?MAX_PROBE_TIMEOUT div 1000
+    };
+profile(file) ->
+    #{
+        timeout => ?FILE_TIMEOUT,
+        max_size => ?FILE_CONSOLE_SIZE,
+        memory => ?FILE_MEMORY,
+        file_size => ?PROBE_FILE_SIZE,
+        cpu => ?MAX_FILE_TIMEOUT div 1000
+    };
+profile(_) ->
+    {error, unknown_media_profile}.
