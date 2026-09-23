@@ -99,6 +99,50 @@ hostname_endpoint_test() ->
         <<"media.example.com/">>, <<"user@media.example.com">>, <<"media.example.com?x=1">>,
         <<"media.example.com#fragment">>, <<"localhost:0">>, <<"localhost:65536">>]).
 
+runner_protocol_test() ->
+    ?assertEqual({ok, <<"http://localhost:8080/media-runner/jobs">>},
+        z_media_runner_protocol:endpoint("localhost:8080", "http")),
+    ?assertEqual({ok, <<"https://media.example.com/media-runner/jobs">>},
+        z_media_runner_protocol:endpoint(<<"media.example.com">>, <<"https">>)),
+    ?assertEqual({ok, <<"http://[::1]/media-runner/jobs">>},
+        z_media_runner_protocol:endpoint(<<"[::1]">>, <<"http">>)),
+    ?assertEqual({error, media_runner_configuration},
+        z_media_runner_protocol:endpoint(<<"media.example.com">>, <<"ftp:">>)),
+    ?assert(z_media_runner_protocol:http_url(<<"http://localhost:8080/media-runner/jobs">>)),
+    ?assertNot(z_media_runner_protocol:https_url(<<"http://localhost:8080/media-runner/jobs">>)),
+    lists:foreach(fun(Url) ->
+        ?assertNot(z_media_runner_protocol:http_url(Url))
+    end, [<<"ftp://runner.example/jobs">>, <<"http://user@runner.example/jobs">>,
+        <<"http://runner.example/jobs#fragment">>]).
+
+runner_protocol_config_test() ->
+    Keys = [media_runners, media_runner_hostname, media_runner_protocol, media_runner_oauth2_key],
+    Old = [{K, application:get_env(zotonic, K)} || K <- Keys],
+    try
+        application:unset_env(zotonic, media_runners),
+        application:unset_env(zotonic, media_runner_protocol),
+        application:set_env(zotonic, media_runner_hostname, <<"localhost:8080">>),
+        application:set_env(zotonic, media_runner_oauth2_key, <<"token">>),
+        ?assertMatch({ok, [#{url := <<"https://localhost:8080/media-runner/jobs">>}]},
+            z_media_runner_pool:runners()),
+        application:set_env(zotonic, media_runner_protocol, <<"http">>),
+        ?assertMatch({ok, [#{url := <<"http://localhost:8080/media-runner/jobs">>}]},
+            z_media_runner_pool:runners()),
+        application:set_env(zotonic, media_runners, [
+            #{hostname => <<"a.example">>, oauth2_key => <<"a">>},
+            #{hostname => <<"b.example:8080">>, protocol => <<"http">>, oauth2_key => <<"b">>},
+            #{<<"hostname">> => <<"c.example">>, <<"protocol">> => "http", <<"oauth2_key">> => <<"c">>}
+        ]),
+        ?assertMatch({ok, [#{url := <<"https://a.example/media-runner/jobs">>},
+            #{url := <<"http://b.example:8080/media-runner/jobs">>},
+            #{url := <<"http://c.example/media-runner/jobs">>}]}, z_media_runner_pool:runners())
+    after
+        lists:foreach(fun
+            ({K, undefined}) -> application:unset_env(zotonic, K);
+            ({K, {ok, V}}) -> application:set_env(zotonic, K, V)
+        end, Old)
+    end.
+
 rewrite_overlap_test() ->
     ?assertEqual(
         <<"B[0] A B">>,
