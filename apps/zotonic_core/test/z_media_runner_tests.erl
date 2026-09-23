@@ -101,11 +101,11 @@ hostname_endpoint_test() ->
 
 runner_protocol_test() ->
     ?assertEqual({ok, <<"http://localhost:8080/media-runner/jobs">>},
-        z_media_runner_protocol:endpoint("localhost:8080", "http:")),
+        z_media_runner_protocol:endpoint("localhost:8080", "http")),
     ?assertEqual({ok, <<"https://media.example.com/media-runner/jobs">>},
-        z_media_runner_protocol:endpoint(<<"media.example.com">>, <<"https:">>)),
+        z_media_runner_protocol:endpoint(<<"media.example.com">>, <<"https">>)),
     ?assertEqual({ok, <<"http://[::1]/media-runner/jobs">>},
-        z_media_runner_protocol:endpoint(<<"[::1]">>, <<"http:">>)),
+        z_media_runner_protocol:endpoint(<<"[::1]">>, <<"http">>)),
     ?assertEqual({error, media_runner_configuration},
         z_media_runner_protocol:endpoint(<<"media.example.com">>, <<"ftp:">>)),
     ?assert(z_media_runner_protocol:http_url(<<"http://localhost:8080/media-runner/jobs">>)),
@@ -125,13 +125,13 @@ runner_protocol_config_test() ->
         application:set_env(zotonic, media_runner_oauth2_key, <<"token">>),
         ?assertMatch({ok, [#{url := <<"https://localhost:8080/media-runner/jobs">>}]},
             z_media_runner_pool:runners()),
-        application:set_env(zotonic, media_runner_protocol, <<"http:">>),
+        application:set_env(zotonic, media_runner_protocol, <<"http">>),
         ?assertMatch({ok, [#{url := <<"http://localhost:8080/media-runner/jobs">>}]},
             z_media_runner_pool:runners()),
         application:set_env(zotonic, media_runners, [
             #{hostname => <<"a.example">>, oauth2_key => <<"a">>},
-            #{hostname => <<"b.example:8080">>, protocol => <<"http:">>, oauth2_key => <<"b">>},
-            #{<<"hostname">> => <<"c.example">>, <<"protocol">> => "http:", <<"oauth2_key">> => <<"c">>}
+            #{hostname => <<"b.example:8080">>, protocol => <<"http">>, oauth2_key => <<"b">>},
+            #{<<"hostname">> => <<"c.example">>, <<"protocol">> => "http", <<"oauth2_key">> => <<"c">>}
         ]),
         ?assertMatch({ok, [#{url := <<"https://a.example/media-runner/jobs">>},
             #{url := <<"http://b.example:8080/media-runner/jobs">>},

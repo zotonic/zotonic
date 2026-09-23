@@ -397,7 +397,7 @@ stdout_path(Path, _) ->
 %% @doc Build the fixed runner endpoint using HTTPS by default.
 -spec endpoint(binary() | string()) -> {ok, binary()} | {error, media_runner_configuration}.
 endpoint(Hostname) ->
-    endpoint(Hostname, <<"https:">>).
+    endpoint(Hostname, <<"https">>).
 
 %% @doc Build a runner endpoint from a hostname with optional port and HTTP(S) protocol.
 -spec endpoint(Hostname, Protocol) -> Result
@@ -407,10 +407,8 @@ endpoint(Hostname) ->
         Result :: {ok, binary()} | {error, media_runner_configuration}.
 endpoint(Hostname, Protocol) ->
     try
-        Scheme = case z_convert:to_binary(Protocol) of
-            <<"https:">> -> <<"https">>;
-            <<"http:">> -> <<"http">>
-        end,
+        Scheme = z_convert:to_binary(Protocol),
+        true = Scheme =:= <<"https">> orelse Scheme =:= <<"http">>,
         Host = z_convert:to_binary(Hostname),
         true = byte_size(Host) > 0 andalso byte_size(Host) =< ?MAX_HOSTNAME_SIZE,
         Base = <<Scheme/binary, "://", Host/binary>>,
