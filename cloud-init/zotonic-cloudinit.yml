@@ -1,5 +1,5 @@
 #cloud-config
-# Zotonic on Ubuntu 26.04 LTS.
+# Zotonic on Ubuntu 24.04 and 26.04 LTS.
 #
 # Example configs here:
 # https://cloudinit.readthedocs.io/en/latest/topics/examples.html
@@ -46,20 +46,22 @@ packages:
   - file
   - imagemagick
   - ffmpeg
-  # wkhtmltopdf is no longer packaged for Ubuntu 26.04. Its upstream builds
-  # target older distributions and need separate compatibility testing.
+  # wkhtmltopdf is available on Ubuntu 24.04, but is no longer packaged for
+  # Ubuntu 26.04. Its upstream builds need separate compatibility testing.
   # xvfb, previously used with wkhtmltopdf, is also omitted.
 
 write_files:
-  # Socket activation must agree with clamd.conf; otherwise systemd can pass
-  # only a Unix socket and clamd will not open the configured TCP listener.
+  # Keep ClamAV local to the host and restrict the Unix socket to its group.
   - path: /etc/systemd/system/clamav-daemon.socket.d/listen.conf
     owner: root:root
     permissions: '0644'
     content: |
       [Socket]
       ListenStream=
-      ListenStream=127.0.0.1:3310
+      ListenStream=/run/clamav/clamd.ctl
+      SocketUser=clamav
+      SocketGroup=clamav
+      SocketMode=0660
 
 runcmd:
   # Stop provisioning on failure, before attempting to start Zotonic.
@@ -78,38 +80,52 @@ runcmd:
   - setcap 'cap_net_bind_service=+ep' /usr/local/lib/erlang/28.5/erts-*/bin/beam.smp
   # Restrict epmd listen IP addresses
   - echo "ERL_EPMD_ADDRESS=127.0.0.1,127.0.1.1" >> /etc/environment
-  # Postgres installation
-  - sudo --user=postgres -- psql -c "CREATE USER zotonic WITH PASSWORD 'zotonic';"
+  # PostgreSQL uses peer authentication on its local socket, so the database
+  # role matches the Zotonic OS user and does not need a password.
+  - sudo --user=postgres -- psql -c "CREATE USER zotonic;"
   - sudo --user=postgres -- psql -c "CREATE DATABASE zotonic WITH OWNER = zotonic ENCODING = 'UTF8';"
   - sudo --user=postgres -- psql -c "GRANT ALL ON DATABASE zotonic TO zotonic;"
+  - sudo --user=zotonic -- psql --host=/run/postgresql --dbname=zotonic --no-password --command='SELECT 1;'
   # Set ulimit file handles
   - echo "zotonic   soft   nofile   60000" > /etc/security/limits.d/zotonic.conf
   - echo "zotonic   hard   nofile   60000" >> /etc/security/limits.d/zotonic.conf
   # Max inotify files setting
   - echo "fs.inotify.max_user_watches=10000" > /etc/sysctl.d/40-max-user-watches.conf
   - sysctl -p /etc/sysctl.d/40-max-user-watches.conf
-  # Ubuntu 26.04 ships ImageMagick 7. Allow PDF reading for previews while
-  # retaining the other ImageMagick policy restrictions.
-  - sed -i '/<\/policymap>/i\  <policy domain="coder" rights="read" pattern="PDF" />' /etc/ImageMagick-7/policy.xml
-  # Let ClamAV listen only on localhost and update definitions. Stop socket
-  # activation too, so it cannot restart clamd during configuration.
+  # Ubuntu 24.04 ships ImageMagick 6 and Ubuntu 26.04 ships ImageMagick 7.
+  # Allow PDF reading for previews while retaining the other restrictions.
+  - |
+    if [ -f /etc/ImageMagick-7/policy.xml ]; then
+        imagemagick_policy=/etc/ImageMagick-7/policy.xml
+    elif [ -f /etc/ImageMagick-6/policy.xml ]; then
+        imagemagick_policy=/etc/ImageMagick-6/policy.xml
+    else
+        echo "ImageMagick policy.xml not found" >&2
+        exit 1
+    fi
+    sed -i '/<\/policymap>/i\  <policy domain="coder" rights="read" pattern="PDF" />' "$imagemagick_policy"
+  # Let Zotonic access ClamAV's local socket. Stop socket activation too, so
+  # it cannot restart clamd while the socket configuration is being changed.
+  - usermod --append --groups clamav zotonic
   - systemctl stop clamav-daemon.service clamav-daemon.socket clamav-freshclam.service
   - |
     sed -i -E '/^[[:space:]]*(TCPSocket|TCPAddr|LocalSocket|LocalSocketGroup|LocalSocketMode)[[:space:]]/d' /etc/clamav/clamd.conf
-    printf '\n# Zotonic localhost scanner\nTCPSocket 3310\nTCPAddr 127.0.0.1\n' >> /etc/clamav/clamd.conf
+    printf '\n# Zotonic local scanner\nLocalSocket /run/clamav/clamd.ctl\nLocalSocketGroup clamav\nLocalSocketMode 660\n' >> /etc/clamav/clamd.conf
   - freshclam
   - systemctl daemon-reload
   - systemctl enable --now clamav-freshclam.service clamav-daemon.socket clamav-daemon.service
   # Wait for signatures to load and verify the protocol, not just an open port.
   - |
-    python3 - <<'PY'
+    sudo --user=zotonic -- python3 - <<'PY'
     import socket
     import time
 
     deadline = time.monotonic() + 120
     while time.monotonic() < deadline:
         try:
-            with socket.create_connection(('127.0.0.1', 3310), timeout=2) as scanner:
+            with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as scanner:
+                scanner.settimeout(2)
+                scanner.connect('/run/clamav/clamd.ctl')
                 scanner.sendall(b'nPING\n')
                 with scanner.makefile('rb') as response:
                     if response.readline(32).strip() == b'PONG':
@@ -118,7 +134,7 @@ runcmd:
             pass
         time.sleep(1)
     else:
-        raise SystemExit('ClamAV did not respond on 127.0.0.1:3310 within 120 seconds')
+        raise SystemExit('ClamAV did not respond on /run/clamav/clamd.ctl within 120 seconds')
     PY
   # Generate ssh key for git urls
   - sudo su zotonic -l -c "mkdir -p ~/.ssh && chmod 700 ~/.ssh && ssh-keygen -q -f ~/.ssh/id_rsa -N ''"

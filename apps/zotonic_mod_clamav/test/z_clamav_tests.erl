@@ -29,11 +29,35 @@ socket_selection_test() ->
             application:set_env(zotonic, clamav_socket, false),
             check_ping(Tcp),
             application:set_env(zotonic, clamav_socket, Path),
-            check_ping(Local)
+            check_ping(Local),
+            %% The socket address selects the configured socket exclusively.
+            lists:foreach(
+                fun(Address) ->
+                    application:set_env(zotonic, clamav_ip, Address),
+                    check_ping(Local)
+                end,
+                [socket, "socket", <<"socket">>]),
+            %% An absolute address is itself the exclusive socket path.
+            application:set_env(zotonic, clamav_socket, false),
+            lists:foreach(
+                fun(Address) ->
+                    application:set_env(zotonic, clamav_ip, Address),
+                    check_ping(Local)
+                end,
+                [Path, list_to_binary(Path)])
         after
             gen_tcp:close(Local)
         end,
+        %% Socket-only mode must not fall back to the listening TCP endpoint.
+        application:set_env(zotonic, clamav_socket, Path),
+        lists:foreach(
+            fun(Address) ->
+                application:set_env(zotonic, clamav_ip, Address),
+                assert_no_tcp_fallback(Tcp)
+            end,
+            [socket, Path]),
         %% A stale socket also falls back to TCP.
+        application:set_env(zotonic, clamav_ip, "127.0.0.1"),
         check_ping(Tcp),
         file:delete(Path),
         check_ping(Tcp),
@@ -55,6 +79,24 @@ check_ping(Listener) ->
     Ref = reply(Listener, <<"PONG\n">>),
     ?assertEqual(pong, z_clamav:ping()),
     ?assertEqual(<<"PING\n">>, request(Ref)).
+
+assert_no_tcp_fallback(Listener) ->
+    Parent = self(),
+    Ref = make_ref(),
+    spawn(fun() ->
+        Result = case gen_tcp:accept(Listener, 500) of
+            {ok, Socket} ->
+                gen_tcp:close(Socket),
+                connected;
+            {error, timeout} ->
+                timeout;
+            {error, _} = Error ->
+                Error
+        end,
+        Parent ! {Ref, Result}
+    end),
+    ?assertEqual(pang, z_clamav:ping()),
+    ?assertEqual(timeout, request(Ref)).
 
 reply(Listener, Reply) ->
     Parent = self(),
