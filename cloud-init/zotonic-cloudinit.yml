@@ -86,9 +86,14 @@ runcmd:
   - echo "ERL_EPMD_ADDRESS=127.0.0.1,127.0.1.1" >> /etc/environment
   # PostgreSQL uses peer authentication on its local socket, so the database
   # role matches the Zotonic OS user and does not need a password.
-  - sudo --user=postgres -- psql -c "CREATE USER zotonic;"
-  - sudo --user=postgres -- psql -c "CREATE DATABASE zotonic WITH OWNER = zotonic ENCODING = 'UTF8';"
-  - sudo --user=postgres -- psql -c "GRANT ALL ON DATABASE zotonic TO zotonic;"
+  - |
+    sudo --user=postgres -- psql --no-psqlrc --set=ON_ERROR_STOP=1 <<'SQL'
+    SELECT 'CREATE USER zotonic'
+    WHERE NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'zotonic') \gexec
+    SELECT 'CREATE DATABASE zotonic WITH OWNER = zotonic ENCODING = ''UTF8'''
+    WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'zotonic') \gexec
+    GRANT ALL ON DATABASE zotonic TO zotonic;
+    SQL
   - sudo --user=zotonic -- psql --host=/run/postgresql --dbname=zotonic --no-password --command='SELECT 1;'
   # Set ulimit file handles
   - echo "zotonic   soft   nofile   60000" > /etc/security/limits.d/zotonic.conf
