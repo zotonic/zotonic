@@ -34,6 +34,7 @@
     generate_message_id/0,
     send/2,
     send/3,
+    send_queued/3,
     poll/0,
 
     tempfile/0,
@@ -153,6 +154,27 @@ send(EmailId, #email{} = Email, Context) ->
             end
     end.
 
+%% @doc Submit one email and acknowledge its durable queue insertion. Unlike
+%% send/3, success means the queue transaction committed. A timeout remains
+%% ambiguous; callers must not automatically submit again. Existing ids are
+%% left untouched, including their retry and sent state.
+-spec send_queued(EmailId, Email, Context) -> {ok, binary()} | {error, term()} when
+    EmailId :: binary(), Email :: #email{}, Context :: z:context().
+send_queued(Id, #email{to=To,cc=Cc,bcc=Bcc} = Email, Context)
+        when is_binary(Id), is_binary(To), To =/= <<>> ->
+    case z_utils:is_empty(Cc) andalso z_utils:is_empty(Bcc) of
+        false -> {error, multiple_recipients};
+        true ->
+            case {m_site:environment(Context),is_sender_enabled(Email,Context)} of
+                {backup,_} -> {error,env_backup};
+                {_,false} -> {error,sender_disabled};
+                _ ->
+                    Mail = copy_attachments(Email#email{queue=true}),
+                    gen_server:call(?MODULE,{enqueue,Id,Mail,z_context:pickle(Context)},30000)
+            end
+    end;
+send_queued(_, _, _) -> {error, invalid_recipient}.
+
 %% @doc Return the filename for a tempfile that can be used for the emailer
 tempfile() ->
     z_tempfile:tempfile(?TMPFILE_EXT).
@@ -256,6 +278,19 @@ init(_Args) ->
 %%                                      {noreply, State, Timeout} |
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
+handle_call({enqueue,Id,#email{to=To}=Email,Pickled}, _From, State) ->
+    Result = mnesia:transaction(fun() ->
+        case mnesia:read(email_queue,Id,write) of
+            [] -> mnesia:write(#email_queue{id=Id,recipient=To,email=Email,
+                retry_on=inc_timestamp(os:timestamp(),0),sent=undefined,pickled_context=Pickled});
+            [_] -> ok
+        end
+    end),
+    Reply = case Result of
+        {atomic,ok} -> {ok,Id};
+        {aborted,Reason} -> {error,Reason}
+    end,
+    {reply,Reply,State};
 handle_call({is_sending_allowed, Pid, Relay}, _From, State) ->
     DomainWorkers = length(lists:filter(
                                 fun(#email_sender{domain=Domain, is_connected=IsConnected}) ->
@@ -1821,11 +1856,17 @@ optional_render(undefined, Template, Vars, Context) ->
     iolist_to_binary(Output).
 
 set_recipient_prefs(Vars, Context) ->
-    case proplists:get_value(recipient_id, Vars) of
+    Context1 = case proplists:get_value(recipient_id, Vars) of
         UserId when is_integer(UserId) ->
             z_notifier:foldl(#user_context{id=UserId}, Context, Context);
         _Other ->
             Context
+    end,
+    %% Explicit language selection wins over a resource recipient's preference.
+    %% Used by mailing runs after resolving and recording the actual language.
+    case proplists:get_value(email_language, Vars) of
+        undefined -> Context1;
+        Language -> z_context:set_language(Language, Context1)
     end.
 
 %% @doc Mark email as sent by adding the 'sent' timestamp.

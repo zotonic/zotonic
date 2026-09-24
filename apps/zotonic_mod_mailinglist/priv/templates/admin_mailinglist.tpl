@@ -11,11 +11,12 @@
 </div>
 
 <div class="well z-button-row">
+    <a class="btn btn-default" href="{% url admin_mailings %}">{_ Mailing status and history _}</a>
     {% button class="btn btn-primary" text=_"New mailing list" action={dialog_new_rsc cat="mailinglist"} %}
 </div>
 
 
-{% live topic=["bridge", "origin", "model", "mailinglist", "event", "+", "scheduled"]
+{% live topic=["bridge", "origin", "model", "mailinglist", "event", "+", "+"]
         template="_admin_mailinglist_overview.tpl"
 %}
 

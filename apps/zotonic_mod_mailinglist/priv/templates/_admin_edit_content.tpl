@@ -47,3 +47,8 @@
     </div>
     {% endif %}
 {% endif %}
+
+{% if m.acl.use.mod_mailinglist %}
+    {% live topic=["bridge","origin","model","mailinglist","event",id,"runs"]
+        template="_admin_edit_mailing_runs.tpl" id=id %}
+{% endif %}

@@ -63,6 +63,41 @@ event(#postback{message={dialog_mailing_page, Id, ListId, OnSuccess}}, Context) 
             z_render:growl_error(?__("You are not allowed to send this page.", Context), Context)
     end;
 
+event(#postback{message={mailing_resend_review, Args}}, Context) ->
+    case m_mailinglist_run:get(proplists:get_value(run_id,Args),Context) of
+        {ok,Run} ->
+            case m_mailinglist_run:allowed(Run,Context) of
+                true ->
+                    Options = [{parent_id,maps:get(<<"id">>,Run)},
+                        {single_test_address,proplists:get_value(single_test_address,maps:get(<<"options">>,Run,[]))},
+                        {send_mode,proplists:get_value(mode,Args)},
+                        {language,maps:get(<<"language">>,Run)},
+                        {fallback_language,maps:get(<<"fallback_language">>,Run)},
+                        {audience,maps:get(<<"audience">>,Run)}],
+                    handle_mailing(<<"now">>,maps:get(<<"mailinglist_id">>,Run),
+                        maps:get(<<"page_id">>,Run),Options,[],Context);
+                false -> z_render:growl_error(?__("You are not allowed to send this page.",Context),Context)
+            end;
+        _ -> z_render:growl_error(?__("This mailing is unavailable.",Context),Context)
+    end;
+event(#postback{message={mailing_back, Args}}, Context) ->
+    Page = proplists:get_value(id,Args),
+    List = proplists:get_value(list_id,Args),
+    case is_allowed(Page,List,Context) of
+        true -> z_render:dialog(dialog_title(is_test_mailinglist(List,Context),Context),
+            "_dialog_mailing_page.tpl",[{is_test,is_test_mailinglist(List,Context)}|Args],Context);
+        false -> z_render:growl_error(?__("You are not allowed to send this page.",Context),Context)
+    end;
+event(#postback{message={mailing_confirm, Args}}, Context) ->
+    List = proplists:get_value(list_id,Args),
+    Page = proplists:get_value(page_id,Args),
+    case m_mailinglist_run:create(List,Page,proplists:get_value(type,Args),
+            proplists:get_value(due,Args),proplists:get_value(options,Args),Context) of
+        {ok,RunId} ->
+            mod_mailinglist:ensure_scheduled_task(Context),
+            z_render:wire([{dialog_close,[]},{redirect,[{dispatch,admin_mailing_run},{run_id,RunId}]}],Context);
+        {error,_} -> z_render:growl_error(?__("Could not queue this mailing. Check your permissions and language selection.",Context),Context)
+    end;
 event(#submit{message={mailing_page, Args}}, Context) ->
     PageId = m_rsc:rid(proplists:get_value(id, Args), Context),
     OnSuccess = proplists:get_all_values(on_success, Args),
@@ -70,9 +105,19 @@ event(#submit{message={mailing_page, Args}}, Context) ->
     IsMatchLanguage = z_convert:to_bool(z_context:get_q(<<"is_match_language">>, Context)),
     IsSendAll = z_convert:to_bool(z_context:get_q(<<"is_send_all">>, Context)),
     When = z_context:get_q(<<"mail_when">>, Context),
+    Draft = case proplists:get_value(options,Args) of
+        D when is_list(D) -> D;
+        _ -> []
+    end,
     Options = [
+        {single_test_address,proplists:get_value(single_test_address,Draft)},
+        {parent_id,proplists:get_value(parent_id,Draft)},
         {is_match_language, IsMatchLanguage},
-        {is_send_all, IsSendAll}
+        {is_send_all, IsSendAll},
+        {language, z_context:get_q(<<"mailing_language">>, Context, <<>>)},
+        {fallback_language, z_context:get_q(<<"fallback_language">>, Context, m_mailinglist_run:fallback(PageId,Context))},
+        {audience, z_context:get_q(<<"audience">>, Context, <<"matching">>)},
+        {send_mode, z_context:get_q(<<"send_mode">>, Context, <<"new">>)}
     ],
     case is_allowed(PageId, ListId, Context) of
         true ->
@@ -80,46 +125,71 @@ event(#submit{message={mailing_page, Args}}, Context) ->
                 true -> <<"now">>;
                 false -> When
             end,
-            handle_mailing(When1, ListId, PageId, Options, OnSuccess, Context);
+            case z_context:get_q(<<"mailing_step">>,Context) of
+                <<"test">> -> send_preview_test(ListId,PageId,Options,Context);
+                _ -> handle_mailing(When1, ListId, PageId, Options, OnSuccess, Context)
+            end;
         false ->
             z_render:growl_error(?__("You are not allowed to send this page.", Context), Context)
     end.
 
 dialog_title(true, Context) ->
-    ?__("Confirm sending test mailing", Context);
+    ?__("Prepare test mailing", Context);
 dialog_title(false, Context) ->
-    ?__("Confirm sending to mailinglist", Context).
+    ?__("Choose recipients and language", Context).
 
 
 handle_mailing(undefined, ListId, PageId, Options, OnSuccess, Context) ->
     handle_mailing(<<"now">>, ListId, PageId, Options, OnSuccess, Context);
-handle_mailing(<<"now">>, ListId, PageId, Options, OnSuccess, Context) ->
-    ok = mod_mailinglist:queue_mailing(ListId, PageId, Options, Context),
-    finish(?__("The mailing has been queued for immediate sending...", Context), OnSuccess, Context);
-handle_mailing(<<"scheduled">>, ListId, PageId, Options, OnSuccess, Context) ->
-    ok = m_mailinglist:insert_scheduled(ListId, PageId, Options, Context),
-    ok = mod_mailinglist:ensure_scheduled_task(Context),
-    finish(
-        ?__("The mailing will be sent when the page becomes visible.", Context),
-        OnSuccess,
-        Context);
-handle_mailing(<<"date">>, ListId, PageId, Options, OnSuccess, Context) ->
-    case mailing_date(Context) of
-        {ok, Due} ->
-            ok = m_mailinglist:insert_scheduled(ListId, PageId, Options, Due, Context),
-            ok = mod_mailinglist:ensure_scheduled_task(Context),
-            finish(?__("The mailing has been scheduled.", Context), OnSuccess, Context);
-        {error, past} ->
-            z_render:growl_error(?__("The mailing date must be in the future.", Context), Context);
-        {error, invalid} ->
-            z_render:growl_error(?__("Enter a valid mailing date and time.", Context), Context)
-    end;
-handle_mailing(_When, _ListId, _PageId, _Options, _OnSuccess, Context) ->
-    z_render:growl_error(?__("Select when the mailing should be sent.", Context), Context).
+handle_mailing(When, ListId, PageId, Options, OnSuccess, Context) ->
+    Schedule = case When of
+        <<"now">> -> {ok, <<"date">>, calendar:universal_time()};
+        <<"scheduled">> -> {ok, <<"publication">>, case m_rsc:p(PageId,publication_start,Context) of
+            undefined -> calendar:universal_time(); D -> D end};
+        <<"date">> -> case mailing_date(Context) of {ok,D} -> {ok,<<"date">>,D}; Error -> Error end;
+        _ -> {error,invalid}
+    end,
+    case Schedule of
+        {ok,Type,Due} ->
+            try z_mailinglist_run:review(ListId,PageId,Options,Context) of
+                #{counts := Counts,reasons := Reasons} ->
+                    Rows = [#{language => L,status => S,total => N} || {{L,S},N} <- lists:sort(maps:to_list(Counts))],
+                    Vars = [{id,PageId},{list_id,ListId},{type,Type},{due,Due},{counts,Rows},{reasons,lists:sort(maps:to_list(Reasons))},
+                        {eligible,lists:sum([N || {{_,<<"pending">>},N} <- maps:to_list(Counts)])},
+                        {mail_when,When},{mailing_date,z_context:get_q(<<"dt:ymd:0:mailing_date">>,Context)},
+                        {mailing_time,z_context:get_q(<<"dt:hi:0:mailing_date">>,Context)},
+                        {is_test,is_test_mailinglist(ListId,Context)},
+                        {options,[{request_key,z_ids:id(32)}|Options]},{on_success,OnSuccess}],
+                    z_render:dialog(?__("Review mailing",Context),"_dialog_mailing_review.tpl",Vars,Context)
+            catch _:_ ->
+                z_render:growl_error(?__("Could not prepare the recipient estimate. Check the list query and language selection.",Context),Context)
+            end;
+        {error,_} -> z_render:growl_error(?__("Enter a valid future mailing date and time.",Context),Context)
+    end.
 
-finish(Message, OnSuccess, Context) ->
-    Context1 = z_render:growl(Message, Context),
-    z_render:wire([{dialog_close, []} | OnSuccess], Context1).
+%% Keep the mailing draft visible while a separate, single-address test is queued.
+send_preview_test(ListId,PageId,Options,Context) ->
+    Email = m_mailinglist:normalize_email(z_context:get_q(<<"test_email">>,Context)),
+    case Email =/= undefined andalso z_email_utils:is_email(Email) of
+        false -> z_render:growl_error(?__("Enter a valid test email address.",Context),Context);
+        true ->
+            Language = z_context:get_q(<<"test_language">>,Context),
+            TestOptions = [{single_test_address,Email},{language,Language},
+                {audience,<<"all">>},{send_mode,<<"all">>}],
+            case m_mailinglist_run:create(m_rsc:rid(mailinglist_test,Context),PageId,
+                    <<"date">>,calendar:universal_time(),TestOptions,Context) of
+                {ok,RunId} ->
+                    mod_mailinglist:ensure_scheduled_task(Context),
+                    Vars = [{id,PageId},{list_id,ListId},{options,Options},
+                        {mail_when,z_context:get_q(<<"mail_when">>,Context)},
+                        {mailing_date,z_context:get_q(<<"dt:ymd:0:mailing_date">>,Context)},
+                        {mailing_time,z_context:get_q(<<"dt:hi:0:mailing_date">>,Context)},
+                        {test_run_id,RunId},{test_email,Email},{test_language,Language}],
+                    z_render:dialog(?__("Choose recipients and language",Context),
+                        "_dialog_mailing_page.tpl",Vars,Context);
+                {error,_} -> z_render:growl_error(?__("Could not send the test. Check the test mailing list and selected language.",Context),Context)
+            end
+    end.
 
 mailing_date(Context) ->
     Date = z_context:get_q(<<"dt:ymd:0:mailing_date">>, Context),

@@ -69,15 +69,13 @@ event(#postback{ message = {mailing_page_test, PageId, OnSuccess} }, Context) ->
 send_test_mailing(PageId, OnSuccess, Context) ->
     case m_rsc:name_to_id(mailinglist_test, Context) of
         {ok, ListId} ->
-            ok = mod_mailinglist:queue_mailing(
-                ListId,
-                PageId,
-                [{is_send_all, true}],
-                Context),
-            Context1 = z_render:growl(
-                ?__("The test mailing has been queued for immediate sending...", Context),
-                Context),
-            z_render:wire(OnSuccess, Context1);
+            case m_mailinglist_run:create(ListId,PageId,<<"date">>,calendar:universal_time(),
+                    [{is_send_all,true}],Context) of
+                {ok,RunId} ->
+                    mod_mailinglist:ensure_scheduled_task(Context),
+                    z_render:wire(OnSuccess ++ [{redirect,[{dispatch,admin_mailing_run},{run_id,RunId}]}],Context);
+                {error,_} -> z_render:growl_error(?__("Could not queue the test mailing.",Context),Context)
+            end;
         {error, _} ->
             z_render:growl_error(
                 ?__("There is no mailing list with the name ‘mailinglist_test’.", Context),
