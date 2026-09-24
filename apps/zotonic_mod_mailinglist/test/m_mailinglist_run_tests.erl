@@ -41,7 +41,7 @@ back_preserves_draft_test() ->
         meck:expect(z_render,dialog,fun(_,_,_,Context) -> Context end),
         #context{} = action_mailinglist_dialog_mailing_page:event(
             #postback{message={mailing_back,Args}},#context{language=[en]}),
-        Vars = meck:capture(first,z_render,dialog,['_',"_dialog_mailing_page.tpl",'_','_'],3),
+        Vars = meck:capture(1,z_render,dialog,['_',"_dialog_mailing_page.tpl",'_','_'],3),
         lists:foreach(fun({Key,Value}) -> ?assertEqual(Value,proplists:get_value(Key,Vars)) end,Args)
     after lists:foreach(fun(M) -> catch meck:unload(M) end,Modules) end.
 
