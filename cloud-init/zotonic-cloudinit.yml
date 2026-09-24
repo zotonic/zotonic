@@ -50,6 +50,10 @@ packages:
   # Ubuntu 26.04. Its upstream builds need separate compatibility testing.
   # xvfb, previously used with wkhtmltopdf, is also omitted.
 
+bootcmd:
+  # Ensure the ClamAV socket override directory exists before write_files runs.
+  - [mkdir, -p, /etc/systemd/system/clamav-daemon.socket.d]
+
 write_files:
   # Keep ClamAV local to the host and restrict the Unix socket to its group.
   - path: /etc/systemd/system/clamav-daemon.socket.d/listen.conf
