@@ -5,6 +5,10 @@ media runner's version 3 protocol. It includes submission, cached input uploads,
 authenticated callbacks, polling recovery, verified output downloads, and image
 and video integration. It does not host runner jobs or add a local sandbox.
 
+Client updates through master commit `b0b9e6909` (#4543) are included: overload
+backoff, deadline-bounded submission/reservation requests, and short temporary
+download names. The earlier HTTP/HTTPS selection update (#4539) is also included.
+
 ## Execution contract
 
 | Configuration | Behaviour |
@@ -96,6 +100,13 @@ try another remote runner; authentication, invalid results and confirmed command
 failures do not. The legacy client does not maintain master's cross-job load and
 file-location hints; the runner remains authoritative about cached inputs.
 
+HTTP 429 and `full` responses to submission or upload reservation retry the same
+request with randomized backoff for up to one minute, bounded by the remaining
+job deadline. Busy upload reservations use a short randomized wait before
+reserving again. Submission, reservation and submission-recovery HTTP timeouts
+are capped by the remaining deadline; file transfers retain their separate
+one-hour timeout. Persistent overload can still cause remote failover.
+
 ImageMagick capabilities are cached and probed concurrently with a bounded wait.
 The selected major version and executable determine command generation and
 eligible runners, so v6 and v7 commands are not mixed. A configured remote client
@@ -113,6 +124,8 @@ Previews are generated into a temporary file next to their destination, checked
 for non-empty output, then renamed. Failure preserves an existing preview.
 Conversions to the same destination are serialized, and waiting callers do not
 mistake an old preview for a successful conversion.
+Preview and download temporary names use short random basenames in the same
+directory, so long destination filenames do not overflow the filename limit.
 
 Video infrastructure/configuration failures preserve the queued source and its
 existing retry task. Input file access/size failures also retain the source, so

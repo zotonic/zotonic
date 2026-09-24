@@ -50,7 +50,9 @@ install(Files, Paths, Options, Fetch) ->
 pending_file(File, Paths) ->
     Path = proplists:get_value(maps:get(<<"id">>, File), Paths),
     Suffix = z_media_runner_protocol:hex(crypto:strong_rand_bytes(16)),
-    {File, Path, <<(unicode:characters_to_binary(Path))/binary, ".download-", Suffix/binary>>}.
+    %% Keep the basename short and the rename on the destination filesystem.
+    Dir = filename:dirname(unicode:characters_to_binary(Path)),
+    {File, Path, filename:join(Dir, <<".download-", Suffix/binary>>)}.
 
 %% @doc Stream only from the configured runner; never forward OAuth credentials to callback-supplied hosts.
 -spec fetch(map(), file:filename_all(), map()) -> {ok, non_neg_integer(), binary()} | {error, term()}.

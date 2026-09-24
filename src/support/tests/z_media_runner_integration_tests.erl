@@ -5,6 +5,10 @@
 
 integration_test_() ->
     {foreach, fun setup/0, fun cleanup/1, [
+        fun(S) -> {"capacity bursts", {timeout, 30, fun() -> capacity_bursts(S) end}} end,
+        fun(S) -> {"sustained capacity", {timeout, 30, fun() -> sustained_capacity(S) end}} end,
+        fun(S) -> {"capacity deadlines", {timeout, 15, fun() -> capacity_deadlines(S) end}} end,
+        fun(S) -> {"long output filenames", fun() -> long_output_filenames(S) end} end,
         fun(S) -> {"local execution limits", fun() -> local_execution_limits(S) end} end,
         fun(S) -> {"recoverable input failures", fun() -> recoverable_input_failures(S) end} end,
         fun(S) -> {"roundtrip", {timeout, 30, fun() -> roundtrip(S) end}} end,
@@ -120,7 +124,7 @@ failures(#{table := T, output := Out} = S) ->
         ?assertMatch({error, _}, run(S)),
         ?assertEqual({ok, <<"original">>}, file:read_file(Out))
     end, [unauthorized, busy, processing_error, bad_hash, unexpected_output, foreign_url]),
-    ?assertEqual([], filelib:wildcard(Out ++ ".download-*")),
+    ?assertEqual([], filelib:wildcard(filename:join(filename:dirname(Out), ".download-*"))),
     ?assertEqual(#{}, sys:get_state(z_media_runner)).
 
 polling(#{table := T} = S) ->
@@ -266,6 +270,43 @@ preview_publication(#{dir := Dir, output := Out}) ->
 value(T, Key) ->
     case ets:lookup(T, Key) of [{Key, V}] -> V; [] -> undefined end.
 
+capacity_bursts(#{table := T} = S) ->
+    ets:insert(T, {mode, capacity_burst}),
+    ?assertEqual({ok, <<"done">>}, run(S)),
+    ?assertEqual(4, value(T, {attempts, "submit"})),
+    ?assertEqual(3, value(T, {attempts, "reserve"})),
+    ?assertEqual(1, value(T, uploads)),
+    ?assertEqual(#{}, sys:get_state(z_media_runner)).
+
+sustained_capacity(#{table := T} = S) ->
+    ets:insert(T, [{mode, capacity_wait}, {ready_at, erlang:monotonic_time(millisecond) + 6000}]),
+    ?assertEqual({ok, <<"done">>}, run(S)),
+    ?assert(value(T, {attempts, "submit"}) > 2).
+
+capacity_deadlines(#{table := T} = S) ->
+    application:set_env(zotonic, media_runner_wait_timeout, 2),
+    lists:foreach(fun(Operation) ->
+        ets:insert(T, {mode, {stall_operation, Operation}}),
+        Start = erlang:monotonic_time(millisecond),
+        ?assertEqual({error, {media_runner_unavailable, timeout}}, run(S)),
+        ?assert(erlang:monotonic_time(millisecond) - Start < 2500),
+        ?assertEqual(#{}, sys:get_state(z_media_runner))
+    end, ["submit", "reserve"]),
+    ets:insert(T, [{mode, capacity_wait}, {ready_at, erlang:monotonic_time(millisecond) + 60000}]),
+    Start = erlang:monotonic_time(millisecond),
+    ?assertEqual({error, {media_runner_unavailable, 429}}, run(S)),
+    ?assert(erlang:monotonic_time(millisecond) - Start < 2500),
+    ?assert(value(T, {attempts, "submit"}) > 1).
+
+long_output_filenames(#{dir := Dir} = S) ->
+    Path = filename:join(Dir, lists:duplicate(251, $a) ++ ".jpg"),
+    lists:foreach(fun(Out) ->
+        ok = file:write_file(Out, <<"original">>),
+        ?assertEqual({ok, <<"done">>}, run(S#{output => Out})),
+        ?assertEqual({ok, <<"converted">>}, file:read_file(Out)),
+        ?assertEqual([], filelib:wildcard(filename:join(Dir, ".download-*")))
+    end, [Path, list_to_binary(Path)]).
+
 handle(Req, T) ->
     Path = mochiweb_request:get(path, Req),
     Method = mochiweb_request:get(method, Req),
@@ -283,8 +324,37 @@ handle(Req, T) ->
         {redirect, _} -> mochiweb_request:respond({302, [{"Location", "/must-not-follow"}], <<>>}, Req);
         {oversized, _} -> reply(200, binary:copy(<<"x">>, 100000), Req);
         {stalled, _} -> receive after 100 -> reply(200, <<"{}">>, Req) end;
-        _ -> route(Method, Path, Body, Req, T)
+        _ -> capacity_route(Mode, Method, Path, Body, Req, T)
     end.
+
+capacity_route(Mode, Method, "/api/model/mediarunner_job/post/" ++ Operation = Path, Body, Req, T)
+        when Mode =:= capacity_burst; Mode =:= capacity_wait ->
+    N = ets:update_counter(T, {attempts, Operation}, 1, {{attempts, Operation}, 0}),
+    case Operation of
+        "submit" ->
+            #{<<"id">> := Id} = jsx:decode(Body, [return_maps]),
+            case ets:insert_new(T, {capacity_id, Id}) of
+                true -> ok;
+                false -> ?assertEqual(value(T, capacity_id), Id)
+            end;
+        _ -> ok
+    end,
+    case {Mode, Operation, N} of
+        {capacity_burst, "submit", 1} -> json(#{<<"outcome">> => <<"full">>}, Req);
+        {capacity_burst, "submit", 2} -> reply(429, <<>>, Req);
+        {capacity_burst, "reserve", 1} -> json(#{<<"outcome">> => <<"full">>}, Req);
+        {capacity_burst, "reserve", 2} -> json(#{<<"outcome">> => <<"busy">>}, Req);
+        {capacity_wait, "submit", _} ->
+            case erlang:monotonic_time(millisecond) < value(T, ready_at) of
+                true -> json(#{<<"outcome">> => <<"full">>}, Req);
+                false -> route(Method, Path, Body, Req, T)
+            end;
+        _ -> route(Method, Path, Body, Req, T)
+    end;
+capacity_route({stall_operation, Operation}, _, "/api/model/mediarunner_job/post/" ++ Operation, _, Req, _) ->
+    timer:sleep(3000),
+    reply(503, <<>>, Req);
+capacity_route(_, Method, Path, Body, Req, T) -> route(Method, Path, Body, Req, T).
 
 route('PUT', "/media-runner/jobs/files/" ++ Hash, Body, Req, T) ->
     ?assertEqual("lease", mochiweb_request:get_header_value("x-upload-token", Req)),
