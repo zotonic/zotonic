@@ -15,6 +15,10 @@
 	{% endif %}
 </div>
 
+{% if id == m.rsc.mailinglist_test.id %}
+    {% include "_mailinglist_test_public_alert.tpl" %}
+{% endif %}
+
 {% if not m.rsc[id].is_editable %}
 	<div class="well">
     {% button class="btn btn-default" text=_"cancel" action={redirect back} %}

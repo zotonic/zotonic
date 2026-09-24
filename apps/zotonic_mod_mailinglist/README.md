@@ -68,3 +68,37 @@ pending work or incomplete preparation; uncertain deliveries require administrat
 investigation. Late delivery confirmations can resolve an interrupted run.
 Resource edit panels show three recent/active mailings with links to full history.
 Single-address test resends retain their address; failed-only tests honor failures.
+
+## Retention
+
+Hourly cleanup expires recipient details three months after a run finishes.
+Abandoned unfinished runs with no updates for three months also expire; future and publication-triggered
+mailings are kept so delivery remains possible. Inactive date schedules more than
+three months overdue also expire. Each pass marks up to 100
+runs expired and deletes up to 10,000 recipient rows (message rows cascade).
+Expired details are hidden immediately while any deletion backlog drains.
+
+Run totals and language aggregates remain. Recipient email addresses, message
+identifiers and diagnostics, run errors, test addresses and saved sending contexts
+are removed. The first submission timestamp is retained without message details.
+Late notifications cannot update expired runs, and rebuilding statistics skips them.
+
+When any history for a page/list has expired, new-recipient and failed-only sends
+are blocked. Editors must explicitly review an all-recipient mailing, with a
+warning about possible duplicates. Expired runs cannot be used as resend parents,
+including single-address tests, whose original address is no longer known.
+
+## Saved content
+
+Before submitting emails, each run saves a rendered `mailing_page.tpl` for every
+language with selected recipients. Copies omit recipient-specific variables and
+are not regenerated on resume. They capture the content at sending preparation;
+individual emails still use their normal personalized rendering. Linked images
+remain external references, and attachments are not copied into this HTML archive.
+
+The status page links to the saved language copies, with capture timestamps.
+Viewing requires permission to view the run. Archived HTML is served without
+cache under a restrictive sandbox policy. These unpersonalized copies are kept
+indefinitely, independently of recipient-detail retention, and are deleted only
+when the associated run/page/list is deleted. Older runs are not backfilled from
+current page content, as that would misrepresent what was sent.

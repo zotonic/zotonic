@@ -7,10 +7,10 @@ Recipient addresses and message diagnostics are never published on MQTT.
 Internal worker functions require an already authorized sender context.").
 -behaviour(zotonic_model).
 -include_lib("zotonic_core/include/zotonic.hrl").
--export([m_get/3, create/6, import_scheduled/2, get/2, list/2, allowed/2,
+-export([m_get/3, content/3, create/6, import_scheduled/2, get/2, list/2, allowed/2,
     next_due/1, claim/1, release/2, fail/3, recover/1, cancel/2, resume/2,
     add_recipient/7, transition/4, message/6, prepared/2, refresh/2,
-    publish/2, stats/2, previous/5, language/4, next_state/2, status/3, resend/3, fallback/2, rebuild_stats/2]).
+    periodic_cleanup/1, check_history/4, publish/2, stats/2, previous/5, language/4, next_state/2, status/3, resend/3, fallback/2, rebuild_stats/2]).
 
 -spec m_get(list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:return().
 m_get([<<"run">>, Id | Rest], _Msg, Context) ->
@@ -19,8 +19,14 @@ m_get([<<"run">>, Id | Rest], _Msg, Context) ->
             case allowed(Run, Context) of
                 true ->
                     {ok, ByLanguage} = z_db:qmap("select language,status,total from mailinglist_run_stats where run_id=$1 and total>0 order by language,status", [to_id(Id)], Context),
+                    {ok,Copies} = z_db:qmap("select language,created from mailinglist_run_content
+                        where run_id=$1 order by language",[to_id(Id)],Context),
                     Public = maps:without([<<"pickled_context">>,<<"options">>,<<"props">>,<<"request_key">>],Run),
-                    {ok, {Public#{ <<"test_address">> => proplists:get_value(single_test_address, maps:get(<<"options">>,Run,[])), <<"stats">> => stats(to_id(Id), Context), <<"languages">> => ByLanguage }, Rest}};
+                    FirstSubmitted = z_db:q1("select coalesce((select first_submitted from mailinglist_run where id=$1), min(msg.created))
+                        from mailinglist_run_message msg
+                        join mailinglist_run_recipient rr on rr.id=msg.recipient_id
+                        where rr.run_id=$1", [to_id(Id)], Context),
+                    {ok, {Public#{ <<"copies">> => Copies, <<"first_submitted">> => FirstSubmitted, <<"test_address">> => proplists:get_value(single_test_address, maps:get(<<"options">>,Run,[])), <<"stats">> => stats(to_id(Id), Context), <<"languages">> => ByLanguage }, Rest}};
                 false -> {error, eacces}
             end;
         _ -> {error, eacces}
@@ -35,6 +41,7 @@ m_get([<<"recipients">>, Id | Rest], Msg, Context) ->
                     After = max(0, to_id(maps:get(<<"after">>, Payload, 0))),
                     {ok, Rows} = z_db:qmap("select id, email, language, status, reason, modified
                         from mailinglist_run_recipient where run_id=$1 and id > $2
+                        and exists(select 1 from mailinglist_run where id=$1 and details_expired is null)
                         and ($3 = '' or status=$3) order by id limit 100",
                         [to_id(Id), After, valid_status(State)], Context),
                     {ok, {Rows, Rest}};
@@ -46,6 +53,13 @@ m_get([<<"page">>, Id | Rest], _Msg, Context) ->
     {ok, {list({page, m_rsc:rid(Id, Context)}, Context), Rest}};
 m_get([<<"list">>, Id | Rest], _Msg, Context) ->
     {ok, {list({list, m_rsc:rid(Id, Context)}, Context), Rest}};
+m_get([<<"history_expired">>, Page, List | Rest], _Msg, Context) ->
+    case mod_mailinglist:is_allowed_to_send(to_id(List),to_id(Page),Context) of
+        true -> {ok,{history_expired(to_id(List),to_id(Page),Context),Rest}};
+        false -> {error,eacces}
+    end;
+m_get([<<"recent">> | Rest], _Msg, Context) ->
+    {ok, {list(recent, Context), Rest}};
 m_get([], #{payload := Filter}, Context) when is_map(Filter) ->
     {ok,{list({filter,Filter},Context),[]}};
 m_get([], _Msg, Context) -> {ok, {list(all, Context), []}};
@@ -73,6 +87,20 @@ get(Id, Context) ->
         Error -> Error
     end.
 
+%% Saved HTML has the same access boundary as the run and its recipient results.
+-spec content(Id, Language, Context) -> {ok,map()} | {error,term()} when
+    Id :: integer() | binary(), Language :: binary(), Context :: z:context().
+content(Id,Language,Context) ->
+    case get(to_id(Id),Context) of
+        {ok,Run} ->
+            case allowed(Run,Context) of
+                true -> z_db:qmap_row("select html,language,created from mailinglist_run_content
+                    where run_id=$1 and language=$2",[to_id(Id),Language],Context);
+                false -> {error,eacces}
+            end;
+        _ -> {error,eacces}
+    end.
+
 -spec allowed(Run, Context) -> boolean() when Run :: map(), Context :: z:context().
 allowed(#{<<"page_id">> := Page, <<"mailinglist_id">> := List} = Run, Context) ->
     z_acl:is_allowed(use, mod_mailinglist, Context)
@@ -83,7 +111,7 @@ allowed(#{<<"page_id">> := Page, <<"mailinglist_id">> := List} = Run, Context) -
             andalso maps:get(<<"sender_id">>,Run,undefined) =:= z_acl:user(Context)));
 allowed(_, _) -> false.
 
--spec list(Filter, Context) -> [map()] when Filter :: all | tuple(), Context :: z:context().
+-spec list(Filter, Context) -> [map()] when Filter :: all | recent | tuple(), Context :: z:context().
 list(Filter, Context) ->
     case z_acl:is_allowed(use, mod_mailinglist, Context) of
         false -> [];
@@ -96,18 +124,24 @@ list(Filter, Context) ->
                     Lang = maps:get(<<"language">>,F,<<>>),
                     {"where ($1='' or status=$1) and ($2='' or language=$2) and ($3=0 or page_id=$3) and ($4=0 or mailinglist_id=$4)",
                      [filter_text(State),filter_text(Lang),to_id(maps:get(<<"page_id">>,F,0)),to_id(maps:get(<<"list_id">>,F,0))]};
+                recent -> {"", []};
                 all -> {"", []}
             end,
             Offset = case Filter of
                 {filter,Fs} -> min(1000000,to_id(maps:get(<<"offset">>,Fs,0)));
                 _ -> 0
             end,
+            Order = case Filter of
+                recent -> "created desc, id desc";
+                _ -> "(status in ('preparing','sending','retrying','interrupted')) desc, created desc, id desc"
+            end,
             {ok, Rows} = z_db:qmap("select id, page_id, mailinglist_id, sender_id, language,
                 fallback_language, status, due, type, created, started, finished, modified,
-                error, is_test, parent_id from mailinglist_run " ++ Where ++
-                " order by (status in ('preparing','sending','retrying','interrupted')) desc,
-                created desc, id desc limit 200 offset " ++ integer_to_list(Offset), Args, Context),
-            Visible = [R || R <- Rows, allowed(R,Context)],
+                error, is_test, parent_id, details_expired from mailinglist_run " ++ Where ++
+                " order by " ++ Order ++ " limit 200 offset " ++ integer_to_list(Offset), Args, Context),
+            Allowed = [R || R <- Rows, allowed(R,Context)],
+            %% Apply the dashboard limit after access checks, before loading stats.
+            Visible = case Filter of recent -> lists:sublist(Allowed,5); _ -> Allowed end,
             Ids = [maps:get(<<"id">>,R) || R <- Visible],
             Summaries = list_stats(Ids,Context),
             [R#{<<"stats">> => totals(maps:get(maps:get(<<"id">>,R),Summaries,#{}))} || R <- Visible]
@@ -129,6 +163,15 @@ filter_text(_) -> <<>>.
     List :: integer(), Page :: integer(), Type :: binary(), Due :: calendar:datetime(),
     Options :: list(), Context :: z:context().
 create(List, Page, Type, Due, Options, Context) ->
+    case mod_mailinglist:is_allowed_to_send(List,Page,Context) of
+        false -> {error,eacces};
+        true -> case check_history(List,Page,Options,Context) of
+            ok -> create_run(List,Page,Type,Due,Options,Context);
+            Error -> Error
+        end
+    end.
+
+create_run(List, Page, Type, Due, Options, Context) ->
     case mod_mailinglist:is_allowed_to_send(List, Page, Context) of
         false -> {error, eacces};
         true ->
@@ -224,7 +267,7 @@ release(Id, Context) ->
 -spec fail(Id, Reason, Context) -> ok when Id :: integer(), Reason :: term(), Context :: z:context().
 fail(Id, Reason, Context) ->
     z_db:q("update mailinglist_run set status='failed', error=$2, modified=now(), finished=now()
-        where id=$1 and status <> 'cancelled'", [Id, detail(Reason)], Context),
+        where id=$1 and details_expired is null and status <> 'cancelled'", [Id, detail(Reason)], Context),
     publish(Id, Context).
 
 -spec recover(Context) -> ok when Context :: z:context().
@@ -335,18 +378,25 @@ next_state(_, New) -> New.
     Retry :: integer() | undefined, Detail :: term(), Context :: z:context().
 message(undefined, _, _, _, _, _) -> ok;
 message(MsgId, State, Final, Retry, Detail, Context) ->
-    case z_db:q1("select recipient_id from mailinglist_run_message where message_nr=$1", [MsgId], Context) of
-        undefined -> ok;
-        Rid ->
-            Run = z_db:transaction(fun(Ctx) ->
-                RunId = transition(Rid, State, detail(Detail), Ctx),
+    %% Lock the run before its recipient, like submission and retention cleanup.
+    %% A notification must not restore diagnostics after details have expired.
+    Run = z_db:transaction(fun(Ctx) ->
+        case z_db:q("select r.id,msg.recipient_id from mailinglist_run_message msg
+            join mailinglist_run_recipient rr on rr.id=msg.recipient_id
+            join mailinglist_run r on r.id=rr.run_id
+            where msg.message_nr=$1 and r.details_expired is null for update of r",[MsgId],Ctx) of
+            [] -> undefined;
+            [{RunId,Rid}] ->
+                RunId = transition(Rid,State,detail(Detail),Ctx),
                 z_db:q("update mailinglist_run_message set status=(select status from mailinglist_run_recipient where id=$2),
                     is_final=is_final or $3, retry_count=greatest(retry_count,$4), detail=$5, modified=now()
-                    where message_nr=$1", [MsgId,Rid,Final,case Retry of undefined -> 0; _ -> Retry end,detail(Detail)], Ctx),
+                    where message_nr=$1",[MsgId,Rid,Final,case Retry of undefined -> 0; _ -> Retry end,detail(Detail)],Ctx),
                 RunId
-            end, Context),
-            refresh(Run, Context)
-    end.
+        end
+    end,Context),
+    case Run of undefined -> ok; _ -> refresh(Run,Context) end.
+
+detail(history_expired) -> <<"Recipient history has expired. Create a new mailing and explicitly select all recipients; some people may receive this page again.">>;
 
 detail(eacces) -> <<"The sender no longer has permission to send this mailing.">>;
 detail(missing_context) -> <<"The scheduled sender context is missing. Create a new mailing.">>;
@@ -428,7 +478,7 @@ publish(Id, Context) ->
 previous(Run, Email, Lang, States, Context) ->
     z_db:q1("select exists(select 1 from mailinglist_run_recipient rr
         join mailinglist_run r on r.id=rr.run_id where r.page_id=$1 and r.mailinglist_id=$2
-        and r.id<>$3 and rr.email=$4 and rr.language=$5 and rr.status=any($6::varchar[]))",
+        and r.details_expired is null and r.id<>$3 and rr.email=$4 and rr.language=$5 and rr.status=any($6::varchar[]))",
         [maps:get(<<"page_id">>,Run), maps:get(<<"mailinglist_id">>,Run), maps:get(<<"id">>,Run),
          Email,Lang,States], Context).
 
@@ -474,12 +524,64 @@ resend(Id, Mode, Context) when Mode =:= <<"failed">>; Mode =:= <<"all">>; Mode =
 %% Maintenance repair: rebuild summaries from authoritative recipient states.
 -spec rebuild_stats(Id, Context) -> ok when Id :: integer(), Context :: z:context().
 rebuild_stats(Id, Context) ->
-    ok = z_db:transaction(fun(Ctx) ->
-        z_db:q("select id from mailinglist_run where id=$1 for update",[Id],Ctx),
-        z_db:q("select id from mailinglist_run_recipient where run_id=$1 order by id for update",[Id],Ctx),
-        z_db:q("delete from mailinglist_run_stats where run_id=$1",[Id],Ctx),
-        z_db:q("insert into mailinglist_run_stats(run_id,language,status,total)
-            select run_id,language,status,count(*) from mailinglist_run_recipient where run_id=$1
-            group by run_id,language,status",[Id],Ctx), ok
+    Rebuilt = z_db:transaction(fun(Ctx) ->
+        case z_db:q1("select details_expired is not null from mailinglist_run where id=$1 for update",[Id],Ctx) of
+            true -> false;
+            _ ->
+                z_db:q("select id from mailinglist_run_recipient where run_id=$1 order by id for update",[Id],Ctx),
+                z_db:q("delete from mailinglist_run_stats where run_id=$1",[Id],Ctx),
+                z_db:q("insert into mailinglist_run_stats(run_id,language,status,total)
+                    select run_id,language,status,count(*) from mailinglist_run_recipient where run_id=$1
+                    group by run_id,language,status",[Id],Ctx), true
+        end
     end,Context),
-    refresh(Id,Context).
+    case Rebuilt of true -> refresh(Id,Context); false -> ok end.
+
+%% Expired history cannot identify new or failed recipients reliably. An editor
+%% must explicitly choose all recipients and review the duplicate-send warning.
+-spec check_history(List, Page, Options, Context) -> ok | {error,history_expired} when
+    List :: integer(), Page :: integer(), Options :: list(), Context :: z:context().
+check_history(List,Page,Options,Context) ->
+    Parent = proplists:get_value(parent_id,Options),
+    ParentExpired = case Parent of
+        undefined -> false;
+        _ -> z_db:q1("select details_expired is not null from mailinglist_run where id=$1",[Parent],Context) =:= true
+    end,
+    Mode = proplists:get_value(send_mode,Options,
+        case proplists:get_bool(is_send_all,Options) of true -> <<"all">>; false -> <<"new">> end),
+    case ParentExpired orelse (Mode =/= <<"all">> andalso history_expired(List,Page,Context)) of
+        true -> {error,history_expired};
+        false -> ok
+    end.
+
+history_expired(List,Page,Context) ->
+    z_db:q1("select exists(select 1 from mailinglist_run
+        where mailinglist_id=$1 and page_id=$2 and details_expired is not null)",[List,Page],Context).
+
+%% Match email-log retention: hourly cleanup, at most 10,000 recipient records
+%% per pass. Expiration hides details immediately while deletion drains in batches.
+%% Keep run metadata, aggregate counts and saved content; never rebuild pruned summaries.
+-spec periodic_cleanup(Context) -> ok when Context :: z:context().
+periodic_cleanup(Context) ->
+    Expired = z_db:transaction(fun(Ctx) ->
+        Rows = z_db:q("select id from mailinglist_run where details_expired is null
+            and (status <> 'scheduled' or (type='date' and due < now()-interval '3 months'))
+            and (finished < now()-interval '3 months'
+                or (finished is null and modified < now()-interval '3 months'))
+            order by id limit 100 for update skip locked",Ctx),
+        lists:foreach(fun({Id}) ->
+            z_db:q("update mailinglist_run set details_expired=now(), props=null,
+                error=null, request_key=null,
+                first_submitted=(select min(msg.created) from mailinglist_run_message msg
+                    join mailinglist_run_recipient rr on rr.id=msg.recipient_id where rr.run_id=$1),
+                status=case when status in ('completed','completed_errors','empty','cancelled','failed') then status else 'failed' end,
+                finished=coalesce(finished,now()) where id=$1",[Id],Ctx)
+        end,Rows),
+        Rows
+    end,Context),
+    z_db:q("delete from mailinglist_run_recipient where id in (
+        select rr.id from mailinglist_run_recipient rr
+        join mailinglist_run r on r.id=rr.run_id where r.details_expired is not null
+        order by rr.id limit 10000)",Context,300000),
+    lists:foreach(fun({Id}) -> publish(Id,Context) end,Expired),
+    ok.

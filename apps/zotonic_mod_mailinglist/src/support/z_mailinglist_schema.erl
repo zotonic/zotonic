@@ -225,12 +225,22 @@ ensure_runs(Context) ->
         error text,
         props bytea
     )", Context),
+    z_db:q("alter table mailinglist_run add column if not exists details_expired timestamptz", Context),
+    z_db:q("alter table mailinglist_run add column if not exists first_submitted timestamptz", Context),
+    z_db:q("create index if not exists mailinglist_run_retention_key on mailinglist_run(finished) where details_expired is null", Context),
     z_db:q("create index if not exists mailinglist_run_due_key
         on mailinglist_run(status, due)", Context),
     z_db:q("create index if not exists mailinglist_run_page_key
         on mailinglist_run(page_id, mailinglist_id, created)", Context),
     z_db:q("create index if not exists mailinglist_run_list_key
         on mailinglist_run(mailinglist_id,created)", Context),
+    z_db:q("create table if not exists mailinglist_run_content (
+        run_id bigint not null references mailinglist_run(id) on delete cascade,
+        language varchar(32) not null,
+        html text not null,
+        created timestamptz not null default now(),
+        primary key(run_id,language)
+    )", Context),
     z_db:q("create table if not exists mailinglist_run_recipient (
         id bigserial primary key,
         run_id bigint not null references mailinglist_run(id) on delete cascade,

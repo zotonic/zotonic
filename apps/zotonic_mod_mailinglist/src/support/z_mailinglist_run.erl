@@ -13,17 +13,26 @@ send(Id, Context) ->
         {ok, Run} = m_mailinglist_run:get(Id, Context),
         true = mod_mailinglist:is_allowed_to_send(maps:get(<<"mailinglist_id">>,Run),
             maps:get(<<"page_id">>,Run), Context),
+        case m_mailinglist_run:check_history(maps:get(<<"mailinglist_id">>,Run),
+                maps:get(<<"page_id">>,Run),maps:get(<<"options">>,Run,[]),Context) of
+            ok -> ok;
+            {error,history_expired} -> throw(history_expired)
+        end,
+        undefined = maps:get(<<"details_expired">>,Run,undefined),
         prepare(Run, Context),
+        save_content(Run, Context),
         batches(Run, Context),
         m_mailinglist_run:prepared(Id, Context),
         ok
     catch
+        throw:history_expired -> m_mailinglist_run:fail(Id,history_expired,Context);
+        error:{badmatch,{error,history_expired}} -> m_mailinglist_run:fail(Id,history_expired,Context);
         Class:Reason:Stack ->
             ?LOG_ERROR(#{in => mod_mailinglist, text => <<"Mailing run interrupted">>,
                 run_id => Id, result => Class, reason => Reason, stack => Stack}),
             z_db:q("update mailinglist_run set status='interrupted', modified=now(),
                 error='Sending was interrupted. Resume to process recipients not yet submitted.'
-                where id=$1 and status <> 'cancelled'", [Id], Context),
+                where id=$1 and status <> 'cancelled' and details_expired is null", [Id], Context),
             m_mailinglist_run:publish(Id, Context),
             ok
     end.
@@ -45,6 +54,31 @@ prepare(#{<<"id">> := Id} = Run, Context) ->
             end, Context)
     end,
     m_mailinglist_run:prepared(Id, Context).
+
+%% Archive the language versions before submission, without recipient-specific
+%% variables. Existing copies are immutable when a worker resumes.
+save_content(#{<<"id">> := Id,<<"page_id">> := Page,<<"mailinglist_id">> := List},Context) ->
+    Languages = z_db:q("select distinct rr.language from mailinglist_run_recipient rr
+        where rr.run_id=$1 and rr.status='pending'
+        and not exists(select 1 from mailinglist_run_content c where c.run_id=$1 and c.language=rr.language)", [Id],Context),
+    lists:foreach(fun({Language}) ->
+        Ctx = z_context:set_language(Language,Context),
+        Vars = [{id,Page},{list_id,List},{email_from,m_mailinglist:get_email_from(List,Ctx)},
+            {email_language,Language},{mailinglist_run_id,Id},{is_mailing_snapshot,true}],
+        {Html,_} = z_template:render_to_iolist({cat,<<"mailing_page.tpl">>},Vars,Ctx),
+        %% Check expiration/cancellation under the same lock as cleanup. A stale
+        %% worker must not restore content which retention just removed.
+        z_db:transaction(fun(Tx) ->
+            case z_db:q1("select status from mailinglist_run where id=$1
+                    and details_expired is null for update",[Id],Tx) of
+                State when State =:= <<"sending">>; State =:= <<"preparing">> ->
+                    z_db:q("insert into mailinglist_run_content(run_id,language,html) values ($1,$2,$3)
+                        on conflict (run_id,language) do nothing",[Id,Language,iolist_to_binary(Html)],Tx);
+                _ -> ok
+            end
+        end,Ctx)
+    end,Languages),
+    m_mailinglist_run:publish(Id,Context).
 
 resolve(Run, Email0, Recipient, Context) ->
     Email = case Email0 of undefined -> <<>>; _ -> z_convert:to_binary(Email0) end,
@@ -198,6 +232,7 @@ preview(List,Page,Options,Context) ->
     List :: integer(), Page :: integer(), Options :: list(), Context :: z:context().
 review(List,Page,Options,Context) ->
     true = mod_mailinglist:is_allowed_to_send(List,Page,Context),
+    ok = m_mailinglist_run:check_history(List,Page,Options,Context),
     Run = #{<<"id">> => 0, <<"page_id">> => Page, <<"mailinglist_id">> => List,
         <<"is_test">> => List =:= m_rsc:rid(mailinglist_test,Context),
         <<"options">> => Options, <<"parent_id">> => proplists:get_value(parent_id,Options),
@@ -223,13 +258,17 @@ with_history(Run,Context) ->
         bool_or(rr.status in ('sent','pending','submitting','queued','retrying')) as sent,
         bool_or(rr.status in ('failed','bounced') and ($4::bigint is null or rr.run_id=$4)) as failed
         from mailinglist_run_recipient rr join mailinglist_run r on r.id=rr.run_id
-        where r.page_id=$1 and r.mailinglist_id=$2 and r.id<>$3
+        where r.page_id=$1 and r.mailinglist_id=$2 and r.id<>$3 and r.details_expired is null
         group by rr.email,rr.language",
         [maps:get(<<"page_id">>,Run),maps:get(<<"mailinglist_id">>,Run),maps:get(<<"id">>,Run),
          case maps:get(<<"send_mode">>,Run) of
              <<"failed">> -> maps:get(<<"parent_id">>,Run,undefined);
              _ -> undefined
          end],Context),
+    %% Retention may have run while the history query was executing. Recheck
+    %% before using a potentially incomplete history to select recipients.
+    ok = m_mailinglist_run:check_history(maps:get(<<"mailinglist_id">>,Run),
+        maps:get(<<"page_id">>,Run),maps:get(<<"options">>,Run,[]),Context),
     History = maps:from_list([{{maps:get(<<"email">>,R),maps:get(<<"language">>,R)},
         {maps:get(<<"sent">>,R),maps:get(<<"failed">>,R)}} || R <- Rows]),
     Run#{history => History}.

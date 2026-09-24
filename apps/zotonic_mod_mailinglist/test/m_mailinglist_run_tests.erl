@@ -77,7 +77,7 @@ postgres(Db) ->
     Context = #context{site=mailinglist_run_test,db={mailinglist_run_test,?MODULE},dbc=C,
         language=[en],user_id=1,acl=admin},
     Modules = [z_context,z_stats,z_db,z_mqtt,m_rsc,m_config,mod_mailinglist,
-        m_email_status,z_mailinglist_recipients,z_email_server,m_edge,m_mailinglist],
+        m_email_status,z_mailinglist_recipients,z_email_server,m_edge,m_mailinglist,z_template],
     try
         lists:foreach(fun(M) -> meck:new(M,[passthrough,no_link]) end,Modules),
         meck:expect(z_context,logger_md,fun(_) -> ok end),
@@ -104,6 +104,11 @@ postgres(Db) ->
         meck:expect(m_email_status,is_ok_to_send,fun(_,_) -> true end),
         meck:expect(m_mailinglist,get_email_from,fun(_,_) -> <<"test@example.com">> end),
         meck:expect(m_edge,objects,fun(_,_,_) -> [] end),
+        meck:expect(z_template,render_to_iolist,fun(_,Vars,_) ->
+            ?assertEqual(undefined,proplists:get_value(email,Vars)),
+            ?assertEqual(undefined,proplists:get_value(recipient_key,Vars)),
+            {[<<"<html><title>Original</title><body>">>,proplists:get_value(email_language,Vars),<<"</body></html>">>],undefined}
+        end),
         meck:expect(z_mailinglist_recipients,recipient_key_encode,fun(_,_,_) -> {ok,<<"test">>} end),
         meck:expect(z_mailinglist_recipients,list_candidates,fun(_,_) ->
             #{<<"one@example.com">> => 1,
@@ -122,7 +127,9 @@ postgres(Db) ->
         worker(Context),
         lifecycle(Context),
         editorial_outcomes(Context),
-        access(Context)
+        recent_mailings(Context),
+        access(Context),
+        retention(Context)
     after
         epgsql:squery(C,"rollback"), epgsql:close(C),
         lists:foreach(fun(M) -> catch meck:unload(M) end,Modules)
@@ -137,6 +144,9 @@ schema_migration(Context) ->
     ?assertEqual(<<"all">>,z_db:q1("select send_mode from mailinglist_run",Context)),
     _ = z_mailinglist_schema:manage_schema({upgrade,5},Context),
     ?assertEqual(1,z_db:q1("select count(*) from mailinglist_run",Context)),
+    z_db:q("alter table mailinglist_run drop column details_expired, drop column first_submitted",Context),
+    _ = z_mailinglist_schema:manage_schema({upgrade,6},Context),
+    ?assertEqual([{undefined,undefined}],z_db:q("select details_expired,first_submitted from mailinglist_run",Context)),
     z_db:q("delete from mailinglist_run",Context).
 
 new_run(Options,Ctx) ->
@@ -151,6 +161,9 @@ delivery(Ctx) ->
     ok = m_mailinglist_run:add_recipient(Id,<<"a@example.com">>,undefined,<<"en">>,<<"pending">>,undefined,Ctx),
     Rid = z_db:q1("select id from mailinglist_run_recipient where run_id=$1",[Id],Ctx),
     z_db:q("insert into mailinglist_run_message(message_nr,recipient_id) values ('test-message',$1)",[Rid],Ctx),
+    z_db:q("update mailinglist_run_message set created='2026-01-01 10:00:00+00' where message_nr='test-message'",Ctx),
+    {ok,{Timeline,[]}} = m_mailinglist_run:m_get([<<"run">>,Id],undefined,Ctx),
+    ?assertEqual({{2026,1,1},{10,0,0}},maps:get(<<"first_submitted">>,Timeline)),
     m_mailinglist_run:prepared(Id,Ctx),
     m_mailinglist_run:message(<<"test-message">>,<<"retrying">>,false,2,<<"Try again">>,Ctx),
     m_mailinglist_run:message(<<"test-message">>,<<"sent">>,false,0,undefined,Ctx),
@@ -175,6 +188,9 @@ worker(Ctx) ->
     Id = new_run([{language,<<"nl">>},{send_mode,<<"all">>}],Ctx),
     {ok,_} = m_mailinglist_run:claim(Ctx),
     ok = z_mailinglist_run:send(Id,Ctx),
+    {ok,NlCopy} = m_mailinglist_run:content(Id,<<"nl">>,Ctx),
+    ?assertEqual(<<"<html><title>Original</title><body>nl</body></html>">>,maps:get(<<"html">>,NlCopy)),
+    ?assertEqual(1,z_db:q1("select count(*) from mailinglist_run_content where run_id=$1",[Id],Ctx)),
     S = m_mailinglist_run:stats(Id,Ctx),
     ?assertEqual(1,maps:get(<<"sent">>,S)),
     ?assertEqual(1,maps:get(<<"skipped">>,S)),
@@ -253,6 +269,13 @@ editorial_outcomes(Ctx) ->
     z_db:q("update mailinglist_run set status='interrupted',prepared=true where id=$1",[Uncertain],Ctx),
     ?assertEqual({error,eacces},m_mailinglist_run:resume(Uncertain,Ctx)).
 
+recent_mailings(Ctx) ->
+    Ids = [new_run([],Ctx) || _ <- lists:seq(1,6)],
+    %% Older active runs must not displace newer mailings on the dashboard.
+    z_db:q("update mailinglist_run set status='sending' where id=$1",[hd(Ids)],Ctx),
+    {ok,{Recent,[]}} = m_mailinglist_run:m_get([<<"recent">>],undefined,Ctx),
+    ?assertEqual(lists:sublist(lists:reverse(Ids),5),[maps:get(<<"id">>,R) || R <- Recent]).
+
 access(Ctx) ->
     Id = new_run([],Ctx),
     {ok,{Public,[]}} = m_mailinglist_run:m_get([<<"run">>,Id],undefined,Ctx),
@@ -265,8 +288,52 @@ access(Ctx) ->
         meck:expect(z_acl,is_allowed,fun(_,_,_) -> false end),
         ?assertEqual({error,eacces},m_mailinglist_run:m_get([<<"run">>,Id],undefined,Ctx)),
         ?assertEqual({error,eacces},m_mailinglist_run:m_get([<<"recipients">>,Id],undefined,Ctx)),
+        ?assertEqual({error,eacces},m_mailinglist_run:content(Id,<<"en">>,Ctx)),
         ?assertEqual([],m_mailinglist_run:list(all,Ctx))
     after meck:unload(z_acl) end.
+
+retention(Ctx) ->
+    %% Expire both copied test addresses and per-recipient/message diagnostics.
+    {ok,Old} = m_mailinglist_run:create(3,1,<<"date">>,calendar:universal_time(),
+        [{single_test_address,<<"private@example.com">>},{send_mode,<<"all">>}],Ctx),
+    ok = m_mailinglist_run:add_recipient(Old,<<"private@example.com">>,undefined,<<"en">>,<<"sent">>,undefined,Ctx),
+    Rid = z_db:q1("select id from mailinglist_run_recipient where run_id=$1",[Old],Ctx),
+    z_db:q("insert into mailinglist_run_message(message_nr,recipient_id,detail) values ('expired-message',$1,'private details')",[Rid],Ctx),
+    ok = m_mailinglist_run:prepared(Old,Ctx),
+    z_db:q("insert into mailinglist_run_content(run_id,language,html) values ($1,'en','<html>Archived content</html>')",[Old],Ctx),
+    Before = m_mailinglist_run:stats(Old,Ctx),
+    z_db:q("update mailinglist_run set created=now()-interval '4 months',finished=now()-interval '4 months',error='private details' where id=$1",[Old],Ctx),
+    %% Keep an old but still scheduled test: its address is needed for delivery.
+    {ok,Scheduled} = m_mailinglist_run:create(3,1,<<"date">>,{{2099,1,1},{0,0,0}},
+        [{single_test_address,<<"future@example.com">>},{send_mode,<<"all">>}],Ctx),
+    z_db:q("update mailinglist_run set created=now()-interval '1 year',modified=now()-interval '1 year' where id=$1",[Scheduled],Ctx),
+    Bulk = new_run([{send_mode,<<"all">>}],Ctx),
+    z_db:q("insert into mailinglist_run_recipient(run_id,email,language,status)
+        select $1, 'person-' || n || '@example.com', 'en', 'sent' from generate_series(1,10001) n",[Bulk],Ctx),
+    ok = m_mailinglist_run:rebuild_stats(Bulk,Ctx),
+    z_db:q("update mailinglist_run set status='completed',prepared=true,finished=now()-interval '4 months' where id=$1",[Bulk],Ctx),
+    ok = m_mailinglist_run:periodic_cleanup(Ctx),
+    ?assertEqual(2,z_db:q1("select count(*) from mailinglist_run_recipient where run_id=any($1::bigint[])",[[Old,Bulk]],Ctx)),
+    ?assertEqual(0,z_db:q1("select count(*) from mailinglist_run_message where message_nr='expired-message'",Ctx)),
+    ?assertEqual([{undefined,undefined,undefined}],z_db:q("select props,error,request_key from mailinglist_run where id=$1",[Old],Ctx)),
+    ?assertEqual(Before,m_mailinglist_run:stats(Old,Ctx)),
+    {ok,SavedCopy} = m_mailinglist_run:content(Old,<<"en">>,Ctx),
+    ?assertEqual(<<"<html>Archived content</html>">>,maps:get(<<"html">>,SavedCopy)),
+    ok = m_mailinglist_run:rebuild_stats(Old,Ctx),
+    ?assertEqual(Before,m_mailinglist_run:stats(Old,Ctx)),
+    ?assertEqual({ok,{[],[]}},m_mailinglist_run:m_get([<<"recipients">>,Bulk],undefined,Ctx)),
+    ?assertEqual({error,history_expired},m_mailinglist_run:resend(Old,<<"all">>,Ctx)),
+    ?assertEqual({error,history_expired},m_mailinglist_run:check_history(2,1,[{send_mode,<<"new">>}],Ctx)),
+    ?assertEqual({error,history_expired},m_mailinglist_run:check_history(2,1,[{send_mode,<<"failed">>}],Ctx)),
+    ?assertEqual(ok,m_mailinglist_run:check_history(2,1,[{send_mode,<<"all">>}],Ctx)),
+    {ok,Future} = m_mailinglist_run:get(Scheduled,Ctx),
+    ?assertEqual(undefined,maps:get(<<"details_expired">>,Future)),
+    ?assertEqual(<<"future@example.com">>,proplists:get_value(single_test_address,maps:get(<<"options">>,Future))),
+    ok = m_mailinglist_run:message(<<"expired-message">>,<<"bounced">>,true,0,<<"private details">>,Ctx),
+    ?assertEqual(Before,m_mailinglist_run:stats(Old,Ctx)),
+    ok = m_mailinglist_run:periodic_cleanup(Ctx),
+    ?assertEqual(0,z_db:q1("select count(*) from mailinglist_run_recipient where run_id=any($1::bigint[])",[[Old,Bulk]],Ctx)),
+    ?assertEqual(10001,maps:get(<<"sent">>,m_mailinglist_run:stats(Bulk,Ctx))).
 
 queue_ack_test_() ->
     case os:getenv("MAILINGLIST_TEST_DB") of

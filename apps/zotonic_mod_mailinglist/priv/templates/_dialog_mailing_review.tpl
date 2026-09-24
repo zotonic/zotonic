@@ -1,4 +1,5 @@
 <h4>{_ Review before sending _}</h4>
+{% if m.mailinglist_run.history_expired[id][list_id] %}<p class="alert alert-warning">{_ Earlier recipient history has expired. This mailing may reach people who already received this page. _}</p>{% endif %}
 <p><strong>{{ m.rsc[id].title }}</strong> → {{ m.rsc[list_id].title }}</p>
 {% if is_test %}<p class="label label-info">{_ Test email _}</p>{% endif %}
 {% if options.single_test_address %}<p>{_ Test recipient: _} <strong>{{ options.single_test_address|escape }}</strong></p>{% endif %}

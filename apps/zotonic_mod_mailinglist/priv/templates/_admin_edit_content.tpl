@@ -1,3 +1,7 @@
+{% if id == m.rsc.mailinglist_test.id %}
+    {% include "_mailinglist_test_public_alert.tpl" %}
+{% endif %}
+
 {% if m.acl.use.mod_mailinglist or id.is_editable or id == m.acl.user %}
     {% if m.mailinglist.subscriptions[id] as subs %}
     <div id="rsc-mailinglist-subs" class="widget do_adminwidget" data-adminwidget='{ "minifiedOnInit":true, "minifier":true }'>

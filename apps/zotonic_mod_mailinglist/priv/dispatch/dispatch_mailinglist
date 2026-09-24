@@ -1,6 +1,7 @@
 %% -*- mode: erlang -*-
 [
  {admin_mailings, ["admin", "mailings"], controller_admin_mailing_run, [seo_noindex]},
+ {admin_mailing_run_content, ["admin", "mailings", "run", run_id, "content", language], controller_admin_mailing_run_content, [seo_noindex]},
  {admin_mailing_run, ["admin", "mailings", "run", run_id], controller_admin_mailing_run, [seo_noindex]},
  {admin_mailinglist,            ["admin", "mailinglists"],                    controller_admin_mailinglist,            [seo_noindex]},
 

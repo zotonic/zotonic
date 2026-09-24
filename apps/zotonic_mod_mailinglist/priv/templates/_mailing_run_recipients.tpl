@@ -1,4 +1,7 @@
 {% if m.mailinglist_run.run[run_id] as run %}
+{% if run.details_expired %}
+<p class="alert alert-info">{_ Recipient details have expired after three months. Aggregate statistics are still available above. _}</p>
+{% else %}
 {% with m.mailinglist_run.recipients[run.id]::%{status:recipient_status, after:after} as recipients %}
 <table class="table table-striped"><thead><tr><th>{_ Email _}</th><th>{_ Language _}</th><th>{_ Status _}</th><th>{_ Details _}</th></tr></thead><tbody>
 {% for recipient in recipients %}
@@ -10,4 +13,5 @@
 {% endwith %}{% endif %}
 {% if after %}<a href="{% url admin_mailing_run run_id=run.id recipient_status=recipient_status %}">{_ First page _}</a>{% endif %}
 {% endwith %}
+{% endif %}
 {% endif %}

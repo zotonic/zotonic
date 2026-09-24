@@ -184,7 +184,7 @@ Delegate callbacks:
 -mod_title("Mailing list").
 -mod_description("Mailing lists. Send a page to a list of recipients.").
 -mod_prio(600).
--mod_schema(5).
+-mod_schema(7).
 -mod_depends([ admin, mod_wires, mod_email_status ]).
 -mod_provides([ mailinglist ]).
 -mod_config([
@@ -224,6 +224,7 @@ Delegate callbacks:
     observe_mailinglist_message/2,
     observe_rsc_pivot_done/2,
     observe_tick_24h/2,
+    observe_tick_1h/2,
     observe_email_sent/2,
     observe_email_failed/2,
     observe_email_bounced/2,
@@ -347,6 +348,10 @@ observe_mailinglist_message(#mailinglist_message{what=Message, list_id=ListId, r
     end,
     z_email:send_render(Email, Template, Vars, z_acl:sudo(Context1)),
     ok.
+
+%% @doc Remove expired mailing details in bounded hourly batches.
+observe_tick_1h(tick_1h, Context) ->
+    m_mailinglist_run:periodic_cleanup(Context).
 
 %% @doc Every 24h cleanup the mailinglists recipients.
 observe_tick_24h(tick_24h, Context) ->

@@ -1,5 +1,6 @@
 {% with m.mailinglist.stats[list_id] as list_stats %}
 {% with m.mailinglist_run::%{page_id:id, list_id:list_id} as history %}
+{% with m.mailinglist_run.history_expired[id][list_id] as history_expired %}
 
 {% if options.single_test_address %}<p>{_ Test recipient: _} <strong>{{ options.single_test_address|escape }}</strong></p>{% endif %}
 <p>{_ Choose recipients and language, preview the email, then review before sending. _}</p>
@@ -69,7 +70,7 @@
     <div class="form-group">
         <label for="{{ #mode }}">{_ Recipients _}</label>
         <select class="form-control" id="{{ #mode }}" name="send_mode">
-            {% if not is_test %}
+            {% if not is_test and not history_expired %}
             <option value="new" {% if options.send_mode == "new" %}selected{% endif %}>{_ People who have not received this page in this language _}</option>
             <option value="failed" {% if options.send_mode == "failed" %}selected{% endif %}>{_ Retry previously failed recipients _}</option>
             {% endif %}
@@ -78,9 +79,10 @@
         <p class="help-block">{_ Delivery history is preserved. Sending again may result in recipients receiving the same content twice. Older mailings from before run tracking are not used for duplicate detection. _}</p>
     </div>
     {% else %}<input type="hidden" name="send_mode" value="{% if is_test %}all{% else %}new{% endif %}">{% endif %}
+    {% if history_expired %}<p class="alert alert-warning">{_ Some recipient history has expired after three months. We can no longer identify everyone who received this page. Only sending to all selected recipients is available; some people may receive it again. _}</p>{% endif %}
     <h4>{_ Preview and test _}</h4>
-    <p>{_ Open a preview before continuing: _}
-        {% for code in id.language %}<a target="_mailingpreview" href="{% url admin_mailing_preview id=id z_language=code %}">{{ m.translation.language_list_configured[code].name|default:code|escape }}</a> {% endfor %}
+    <p>{_ Open a preview in a new tab before continuing: _}
+        {% for code in id.language %}<a target="_mailingpreview" title="{_ Opens in a new tab _}" href="{% url admin_mailing_preview id=id z_language=code %}">{{ m.translation.language_list_configured[code].name|default:code|escape }} <span aria-hidden="true">↗</span></a> {% endfor %}
     </p>
     {% if not is_test %}
     {% if test_run_id %}<p class="alert alert-info">{_ Test email queued for _} {{ test_email|escape }}.
@@ -179,6 +181,8 @@
     toggleSendDate();
 {% endjavascript %}
 {% endif %}
+
+{% endwith %}
 
 {% endwith %}
 

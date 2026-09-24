@@ -66,7 +66,7 @@ event(#postback{message={dialog_mailing_page, Id, ListId, OnSuccess}}, Context) 
 event(#postback{message={mailing_resend_review, Args}}, Context) ->
     case m_mailinglist_run:get(proplists:get_value(run_id,Args),Context) of
         {ok,Run} ->
-            case m_mailinglist_run:allowed(Run,Context) of
+            case m_mailinglist_run:allowed(Run,Context) andalso maps:get(<<"details_expired">>,Run,undefined) =:= undefined of
                 true ->
                     Options = [{parent_id,maps:get(<<"id">>,Run)},
                         {single_test_address,proplists:get_value(single_test_address,maps:get(<<"options">>,Run,[]))},
@@ -96,6 +96,7 @@ event(#postback{message={mailing_confirm, Args}}, Context) ->
         {ok,RunId} ->
             mod_mailinglist:ensure_scheduled_task(Context),
             z_render:wire([{dialog_close,[]},{redirect,[{dispatch,admin_mailing_run},{run_id,RunId}]}],Context);
+        {error,history_expired} -> z_render:growl_error(?__("Recipient history has expired. Start a new mailing and explicitly select all recipients; some people may receive this page again.",Context),Context);
         {error,_} -> z_render:growl_error(?__("Could not queue this mailing. Check your permissions and language selection.",Context),Context)
     end;
 event(#submit{message={mailing_page, Args}}, Context) ->
@@ -161,7 +162,9 @@ handle_mailing(When, ListId, PageId, Options, OnSuccess, Context) ->
                         {is_test,is_test_mailinglist(ListId,Context)},
                         {options,[{request_key,z_ids:id(32)}|Options]},{on_success,OnSuccess}],
                     z_render:dialog(?__("Review mailing",Context),"_dialog_mailing_review.tpl",Vars,Context)
-            catch _:_ ->
+            catch error:{badmatch,{error,history_expired}} ->
+                z_render:growl_error(?__("Recipient history has expired. Go back and select all recipients to send again.",Context),Context);
+            _:_ ->
                 z_render:growl_error(?__("Could not prepare the recipient estimate. Check the list query and language selection.",Context),Context)
             end;
         {error,_} -> z_render:growl_error(?__("Enter a valid future mailing date and time.",Context),Context)
