@@ -45,8 +45,13 @@ back_preserves_draft_test() ->
     after lists:foreach(fun(M) -> catch meck:unload(M) end,Modules) end.
 
 language_test() ->
-    application:ensure_all_started(jobs),
-    jobs:add_queue(zotonic_singular_job,[{regulators,[{counter,[{limit,1}]}]}]),
+    {ok, _} = application:ensure_all_started(jobs),
+    %% CI already starts this queue through zotonic_core_sup. Only create it
+    %% when running these tests in a standalone Erlang VM.
+    case jobs:queue_info(zotonic_singular_job) of
+        undefined -> jobs:add_queue(zotonic_singular_job,[{regulators,[{counter,[{limit,1}]}]}]);
+        {queue, _} -> ok
+    end,
     L = fun m_mailinglist_run:language/4,
     ?assertEqual({ok,<<"nl">>},L(<<>>,nl,<<"en">>,[en,nl])),
     ?assertEqual({ok,<<"en">>},L(<<>>,undefined,<<"en">>,[en,nl])),
