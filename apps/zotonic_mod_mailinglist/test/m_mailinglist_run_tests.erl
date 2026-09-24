@@ -38,9 +38,10 @@ back_preserves_draft_test() ->
         lists:foreach(fun(M) -> meck:new(M,[passthrough,no_link]) end,Modules),
         meck:expect(mod_mailinglist,is_allowed_to_send,fun(_,_,_) -> true end),
         meck:expect(m_rsc,rid,fun(mailinglist_test,_) -> 3 end),
-        meck:expect(z_render,dialog,fun(_,Template,Vars,_) -> {Template,Vars} end),
-        {"_dialog_mailing_page.tpl",Vars} = action_mailinglist_dialog_mailing_page:event(
+        meck:expect(z_render,dialog,fun(_,_,_,Context) -> Context end),
+        #context{} = action_mailinglist_dialog_mailing_page:event(
             #postback{message={mailing_back,Args}},#context{language=[en]}),
+        Vars = meck:capture(first,z_render,dialog,['_',"_dialog_mailing_page.tpl",'_','_'],3),
         lists:foreach(fun({Key,Value}) -> ?assertEqual(Value,proplists:get_value(Key,Vars)) end,Args)
     after lists:foreach(fun(M) -> catch meck:unload(M) end,Modules) end.
 
