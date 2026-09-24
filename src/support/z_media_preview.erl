@@ -146,8 +146,9 @@ convert_1(Installation, InFile, OutFile, Mime, FileProps, Filters, Context) ->
 
 convert_2(CmdArgs, Installation, InFile, OutFile, Mime, FileProps, Context) ->
     ok = filelib:ensure_dir(OutFile),
-    TempFile = OutFile ++ ".runner-" ++ binary_to_list(z_media_runner_protocol:hex(crypto:strong_rand_bytes(8)))
-        ++ filename:extension(OutFile),
+    TempFile = filename:join(filename:dirname(OutFile),
+        ".runner-" ++ binary_to_list(z_media_runner_protocol:hex(crypto:strong_rand_bytes(16)))
+        ++ filename:extension(OutFile)),
     Cmd = lists:flatten([
         maps:get(cmd, Installation), " ",
         opt_density(FileProps),
