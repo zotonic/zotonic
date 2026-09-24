@@ -50,7 +50,10 @@ install(Files, Paths, Options, Fetch) ->
 pending_file(File, Paths) ->
     Path = proplists:get_value(maps:get(<<"id">>, File), Paths),
     Suffix = z_ids:id(32),
-    {File, Path, <<(unicode:characters_to_binary(Path))/binary, ".download-", Suffix/binary>>}.
+    %% Keep the basename short even when the preview name approaches NAME_MAX.
+    %% The same directory keeps the final rename on the destination filesystem.
+    Dir = filename:dirname(unicode:characters_to_binary(Path)),
+    {File, Path, filename:join(Dir, <<".download-", Suffix/binary>>)}.
 
 %% @doc Stream only from the configured runner; never forward OAuth credentials to callback-supplied hosts.
 -spec fetch(map(), file:filename_all(), map()) -> {ok, non_neg_integer(), binary()} | {error, term()}.

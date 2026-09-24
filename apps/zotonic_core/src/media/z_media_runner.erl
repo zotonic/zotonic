@@ -229,7 +229,7 @@ remember(Url, Token, Files) ->
 %% The missing outcome lists precisely which inputs need uploading.
 submit_request(Url, Token, Request, Options, Retries) ->
     ControlUrl = z_media_runner_protocol:control_url(Url, <<"submit">>),
-    case z_media_runner_protocol:request(ControlUrl, Token, Request) of
+    case capacity_request(ControlUrl, Token, Request, maps:get(media_runner_deadline, Options)) of
         {ok, #{<<"outcome">> := <<"missing">>, <<"missing">> := Missing}}
                 when Retries > 0, is_list(Missing), Missing =/= [] ->
             try
@@ -238,7 +238,8 @@ submit_request(Url, Token, Request, Options, Retries) ->
                 true = lists:all(fun(H) -> lists:member(H, Known) end, Missing),
                 gen_server:call(?MODULE, {forget, runner_id(Url, Token), Missing}),
                 Paths = lists:usort(maps:get(read, Options, []) ++ maps:get(write, Options, [])),
-                case upload_missing(lists:usort(Missing), Files, Paths, Url, Token) of
+                case upload_missing(lists:usort(Missing), Files, Paths, Url, Token,
+                        maps:get(media_runner_deadline, Options)) of
                     ok ->
                         submit_request(Url, Token, Request, Options, Retries - 1);
                     {ok, Code} ->
@@ -254,9 +255,10 @@ submit_request(Url, Token, Request, Options, Retries) ->
         {error, _} = Error ->
             %% A failed response does not prove the submission failed. Recover
             %% admission on this runner before creating an independent attempt.
-            case z_media_runner_protocol:request(
+            case deadline_request(
                 z_media_runner_protocol:control_url(Url, <<"status">>), Token,
-                #{<<"id">> => maps:get(<<"id">>, Request)}, 5000)
+                #{<<"id">> => maps:get(<<"id">>, Request)},
+                maps:get(media_runner_deadline, Options) * 1000, 5000)
             of
                 {ok, #{<<"outcome">> := Status}} when
                     Status =:= <<"queued">>; Status =:= <<"starting">>; Status =:= <<"running">>;
@@ -265,6 +267,38 @@ submit_request(Url, Token, Request, Options, Retries) ->
             end;
         Reply ->
             control_result(Reply)
+    end.
+
+%% Upload bursts are capacity pressure, not evidence of a failed runner.
+%% Retry the same reservation/job ID before pool failover, with jitter to avoid
+%% synchronized callers. Allow up to a minute within the overall job deadline.
+%% Waiting happens in the caller, never in the registry.
+capacity_request(Url, Token, Request, JobDeadline) ->
+    Deadline = min(JobDeadline * 1000, erlang:monotonic_time(millisecond) + 60000),
+    capacity_request(Url, Token, Request, Deadline, 100).
+
+capacity_request(Url, Token, Request, Deadline, Delay) ->
+    Reply = deadline_request(Url, Token, Request, Deadline, 30000),
+    case control_result(Reply) of
+        {ok, 429} ->
+            Left = Deadline - erlang:monotonic_time(millisecond),
+            Wait = Delay + rand:uniform(Delay),
+            case Left > Wait of
+                true ->
+                    timer:sleep(Wait),
+                    capacity_request(Url, Token, Request, Deadline, min(500, Delay * 2));
+                false -> Reply
+            end;
+        _ -> Reply
+    end.
+
+%% Check again after sleeping and bound the HTTP call itself, not just retries.
+deadline_request(Url, Token, Request, Deadline, MaxTimeout) ->
+    case Deadline - erlang:monotonic_time(millisecond) of
+        Left when Left > 0 ->
+            z_media_runner_protocol:request(Url, Token, Request, min(Left, MaxTimeout));
+        _ ->
+            {error, timeout}
     end.
 
 control_result({ok, #{<<"outcome">> := <<"full">>}}) ->
@@ -280,16 +314,15 @@ control_result({error, {http_status, Code}}) ->
 control_result({error, _} = Error) ->
     Error.
 
-upload_missing([], _Files, _Paths, _Url, _Token) -> ok;
-upload_missing([Hash | Rest], Files, Paths, Url, Token) ->
+upload_missing([], _Files, _Paths, _Url, _Token, _Deadline) -> ok;
+upload_missing([Hash | Rest], Files, Paths, Url, Token, Deadline) ->
     [F | _] = [F || #{<<"sha256">> := H} = F <- Files, H =:= Hash],
     Path = lists:nth(maps:get(<<"id">>, F), Paths),
     FileUrl = <<Url/binary, "/files/", Hash/binary>>,
-    Deadline = erlang:monotonic_time(second) + 3600,
     case ensure_uploaded(FileUrl, Token, Path, maps:get(<<"size">>, F), Deadline) of
         ok ->
             remember(Url, Token, [F]),
-            upload_missing(Rest, Files, Paths, Url, Token);
+            upload_missing(Rest, Files, Paths, Url, Token, Deadline);
         Error ->
             Error
     end.
@@ -298,7 +331,7 @@ upload_missing([Hash | Rest], Files, Paths, Url, Token) ->
 ensure_uploaded(Url, Token, Path, Size, Deadline) ->
     Hash = lists:last(binary:split(Url, <<"/">>, [global])),
     ControlUrl = z_media_runner_protocol:control_url(Url, <<"reserve">>),
-    case z_media_runner_protocol:request(ControlUrl, Token, #{<<"hash">> => Hash, <<"size">> => Size}) of
+    case capacity_request(ControlUrl, Token, #{<<"hash">> => Hash, <<"size">> => Size}, Deadline) of
         {ok, #{<<"outcome">> := <<"present">>}} -> ok;
         {ok, #{<<"outcome">> := <<"upload">>, <<"upload_token">> := Lease}} ->
             case z_media_runner_protocol:upload(Url, Token, Lease, Path, Size) of
@@ -319,8 +352,11 @@ ensure_uploaded(Url, Token, Path, Size, Deadline) ->
 wait_for_upload(Url, Token, Path, Size, Deadline) ->
     case erlang:monotonic_time(second) < Deadline of
         true ->
-            timer:sleep(1000),
-            ensure_uploaded(Url, Token, Path, Size, Deadline);
+            timer:sleep(100 + rand:uniform(200)),
+            case erlang:monotonic_time(second) < Deadline of
+                true -> ensure_uploaded(Url, Token, Path, Size, Deadline);
+                false -> {error, upload_wait_timeout}
+            end;
         false ->
             {error, upload_wait_timeout}
     end.
