@@ -331,6 +331,32 @@ pack_roundtrip_test() ->
         ?assertEqual({ok, <<"output">>}, file:read_file(Output))
     end).
 
+%% Long preview basenames must not make the temporary download exceed NAME_MAX.
+long_output_filename_test() ->
+    with_files(fun(_, Output) ->
+        Dir = filename:dirname(Output),
+        LongOutput = filename:join(Dir, lists:duplicate(251, $a) ++ ".jpg"),
+        Data = <<"output">>,
+        Hash = binary:encode_hex(crypto:hash(sha256, Data), lowercase),
+        Result = #{<<"status">> => <<"ok">>, <<"stdout">> => <<>>, <<"files">> => [
+            #{<<"id">> => 1, <<"size">> => byte_size(Data), <<"sha256">> => Hash}]},
+        lists:foreach(fun(Path) ->
+            ok = file:write_file(Path, <<"original">>),
+            Received = z_media_runner_protocol:unpack(Result,
+                #{write => [Path]}, fun(_, Temp, _) ->
+                    ?assertEqual(unicode:characters_to_binary(Dir), filename:dirname(Temp)),
+                    ?assert(byte_size(filename:basename(Temp)) < 255),
+                    ?assertEqual({ok, <<"original">>}, file:read_file(Path)),
+                    {ok, Fd} = file:open(Temp, [write, exclusive, raw, binary]),
+                    try file:write(Fd, Data) after file:close(Fd) end,
+                    z_media_runner_protocol:hash_file(Temp)
+                end),
+            ?assertEqual({ok, <<>>}, Received),
+            ?assertEqual({ok, Data}, file:read_file(Path)),
+            ?assertEqual([], filelib:wildcard(filename:join(Dir, ".download-*")))
+        end, [LongOutput, unicode:characters_to_binary(LongOutput)])
+    end).
+
 %% Invalid or interrupted downloads must never replace existing caller files.
 download_failure_test() ->
     with_files(fun(_, Output) ->
@@ -355,7 +381,7 @@ download_failure_test() ->
                     z_media_runner_protocol:hash_file(Temp)
                 end)),
             ?assertEqual({ok, <<"original">>}, file:read_file(Output)),
-            ?assertEqual([], filelib:wildcard(Output ++ ".download-*"))
+            ?assertEqual([], filelib:wildcard(filename:join(filename:dirname(Output), ".download-*")))
         end, [<<"truncated">>, <<"tampered">>])
     end).
 
@@ -606,6 +632,103 @@ pool_affinity_test() ->
     Many = [#{<<"sha256">> => integer_to_binary(N)} || N <- lists:seq(1, 10010)],
     ?assertEqual(10000, map_size(z_media_runner_pool:remember(AId, Many, #{}))).
 
+burst_capacity_test_() -> {timeout, 20, fun burst_capacity/0}.
+
+%% Bursts reuse one job ID and upload lease; persistent saturation remains bounded.
+burst_capacity() ->
+    Keys = [media_runners, media_runner_local_fallback, media_runner_wait_timeout],
+    Old = [{K, application:get_env(zotonic, K)} || K <- Keys],
+    {Pid, Owned} = case z_media_runner:start_link() of
+        {ok, Started} -> {Started, true};
+        {error, {already_started, Started}} -> {Started, false}
+    end,
+    Modules = [z_context, z_dispatcher, z_media_runner_protocol],
+    lists:foreach(fun(M) -> meck:new(M, [passthrough, no_link]) end, Modules),
+    Calls = ets:new(burst_calls, [public]),
+    try
+        application:set_env(zotonic, media_runners,
+            [#{hostname => <<"burst.example">>, oauth2_key => <<"burst">>}]),
+        application:set_env(zotonic, media_runner_local_fallback, false),
+        application:set_env(zotonic, media_runner_wait_timeout, 10),
+        mock_callback_context(burst_context, burst_site,
+            <<"https://client.example/media-runner-callback">>),
+        Result = #{<<"status">> => <<"ok">>, <<"stdout">> => base64:encode(<<"done">>), <<"files">> => []},
+        meck:expect(z_media_runner_protocol, request, fun(Url, _, Request) ->
+            case lists:last(binary:split(Url, <<"/">>, [global])) of
+                <<"submit">> ->
+                    Id = maps:get(<<"id">>, Request),
+                    case ets:insert_new(Calls, {id, Id}) of
+                        true -> ok;
+                        false -> ?assertEqual(Id, ets:lookup_element(Calls, id, 2))
+                    end,
+                    case ets:update_counter(Calls, submit, 1, {submit, 0}) of
+                        1 -> {ok, #{<<"outcome">> => <<"full">>}};
+                        2 -> {error, {http_status, 429}};
+                        3 ->
+                            [File] = maps:get(<<"files">>, Request),
+                            {ok, #{<<"outcome">> => <<"missing">>,
+                                <<"missing">> => [maps:get(<<"sha256">>, File)]}};
+                        4 ->
+                            ok = z_media_runner:callback(Id, maps:get(<<"callback_token">>, Request), Result),
+                            {ok, #{<<"outcome">> => <<"accepted">>}}
+                    end;
+                <<"reserve">> ->
+                    case ets:update_counter(Calls, reserve, 1, {reserve, 0}) of
+                        1 -> {ok, #{<<"outcome">> => <<"full">>}};
+                        2 -> {ok, #{<<"outcome">> => <<"busy">>}};
+                        3 -> {ok, #{<<"outcome">> => <<"upload">>, <<"upload_token">> => <<"lease">>}}
+                    end;
+                <<"received">> -> {ok, #{<<"outcome">> => <<"received">>}}
+            end
+        end),
+        meck:expect(z_media_runner_protocol, upload, fun(_, _, <<"lease">>, _, _) ->
+            1 = ets:update_counter(Calls, upload, 1, {upload, 0}),
+            {ok, 204}
+        end),
+        with_files(fun(Input, _) ->
+            ?assertEqual({ok, <<"done">>}, z_media_runner:run(file, <<"printf done">>,
+                #{read => [Input], context => burst_context}))
+        end),
+        ?assertEqual(4, ets:lookup_element(Calls, submit, 2)),
+        ?assertEqual(3, ets:lookup_element(Calls, reserve, 2)),
+        ?assertEqual(1, ets:lookup_element(Calls, upload, 2)),
+        %% Capacity can take longer than the former five-second retry window.
+        ReadyAt = erlang:monotonic_time(millisecond) + 6000,
+        meck:expect(z_media_runner_protocol, request, fun(Url, _, Request) ->
+            case lists:last(binary:split(Url, <<"/">>, [global])) of
+                <<"submit">> ->
+                    case erlang:monotonic_time(millisecond) >= ReadyAt of
+                        false -> {ok, #{<<"outcome">> => <<"full">>}};
+                        true ->
+                            ok = z_media_runner:callback(maps:get(<<"id">>, Request),
+                                maps:get(<<"callback_token">>, Request), Result),
+                            {ok, #{<<"outcome">> => <<"accepted">>}}
+                    end;
+                <<"received">> -> {ok, #{<<"outcome">> => <<"received">>}}
+            end
+        end),
+        ?assertEqual({ok, <<"done">>},
+            z_media_runner:run(file, <<"printf done">>, #{context => burst_context})),
+        application:set_env(zotonic, media_runner_wait_timeout, 2),
+        meck:expect(z_media_runner_protocol, request, fun(_, _, _) ->
+            ets:update_counter(Calls, full, 1, {full, 0}),
+            {ok, #{<<"outcome">> => <<"full">>}}
+        end),
+        Start = erlang:monotonic_time(millisecond),
+        ?assertEqual({error, {media_runner_unavailable, 429}},
+            z_media_runner:run(file, <<"printf done">>, #{context => burst_context})),
+        ?assert(ets:lookup_element(Calls, full, 2) > 1),
+        ?assert(erlang:monotonic_time(millisecond) - Start < 2500)
+    after
+        ets:delete(Calls),
+        lists:foreach(fun meck:unload/1, Modules),
+        case Owned of true -> gen_server:stop(Pid); false -> ok end,
+        lists:foreach(fun
+            ({K, undefined}) -> application:unset_env(zotonic, K);
+            ({K, {ok, V}}) -> application:set_env(zotonic, K, V)
+        end, Old)
+    end.
+
 pool_failover_test_() -> {timeout, 40, fun pool_failover/0}.
 
 pool_failover() ->
@@ -638,7 +761,7 @@ pool_failover() ->
                         <<"token-a">> ->
                             ?assertMatch({0, _}, binary:match(Url, <<"https://pool-a.example/">>)),
                             ets:insert(Calls, {rejected, Id, Secret}),
-                            {ok, #{<<"outcome">> => <<"full">>}};
+                            {ok, #{<<"outcome">> => <<"unavailable">>}};
                         <<"token-b">> ->
                             ?assertMatch({0, _}, binary:match(Url, <<"https://pool-b.example/">>)),
                             %% A rejected attempt cannot deliver a late callback.
@@ -767,7 +890,7 @@ pool_pinned_download_retry() ->
             ?assertEqual({ok, <<>>}, z_media_runner:run(imagemagick, Cmd ++ " -version", Options)),
             ?assertEqual({ok, Data}, file:read_file(Output)),
             ?assertEqual(2, ets:lookup_element(Calls, downloads, 2)),
-            ?assertEqual([], filelib:wildcard(Output ++ ".download-*"))
+            ?assertEqual([], filelib:wildcard(filename:join(filename:dirname(Output), ".download-*")))
         end)
     after
         ets:delete(Calls),
