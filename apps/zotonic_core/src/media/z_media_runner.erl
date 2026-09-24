@@ -255,9 +255,10 @@ submit_request(Url, Token, Request, Options, Retries) ->
         {error, _} = Error ->
             %% A failed response does not prove the submission failed. Recover
             %% admission on this runner before creating an independent attempt.
-            case z_media_runner_protocol:request(
+            case deadline_request(
                 z_media_runner_protocol:control_url(Url, <<"status">>), Token,
-                #{<<"id">> => maps:get(<<"id">>, Request)}, 5000)
+                #{<<"id">> => maps:get(<<"id">>, Request)},
+                maps:get(media_runner_deadline, Options) * 1000, 5000)
             of
                 {ok, #{<<"outcome">> := Status}} when
                     Status =:= <<"queued">>; Status =:= <<"starting">>; Status =:= <<"running">>;
@@ -277,7 +278,7 @@ capacity_request(Url, Token, Request, JobDeadline) ->
     capacity_request(Url, Token, Request, Deadline, 100).
 
 capacity_request(Url, Token, Request, Deadline, Delay) ->
-    Reply = z_media_runner_protocol:request(Url, Token, Request),
+    Reply = deadline_request(Url, Token, Request, Deadline, 30000),
     case control_result(Reply) of
         {ok, 429} ->
             Left = Deadline - erlang:monotonic_time(millisecond),
@@ -289,6 +290,15 @@ capacity_request(Url, Token, Request, Deadline, Delay) ->
                 false -> Reply
             end;
         _ -> Reply
+    end.
+
+%% Check again after sleeping and bound the HTTP call itself, not just retries.
+deadline_request(Url, Token, Request, Deadline, MaxTimeout) ->
+    case Deadline - erlang:monotonic_time(millisecond) of
+        Left when Left > 0 ->
+            z_media_runner_protocol:request(Url, Token, Request, min(Left, MaxTimeout));
+        _ ->
+            {error, timeout}
     end.
 
 control_result({ok, #{<<"outcome">> := <<"full">>}}) ->

@@ -632,7 +632,7 @@ pool_affinity_test() ->
     Many = [#{<<"sha256">> => integer_to_binary(N)} || N <- lists:seq(1, 10010)],
     ?assertEqual(10000, map_size(z_media_runner_pool:remember(AId, Many, #{}))).
 
-burst_capacity_test_() -> {timeout, 20, fun burst_capacity/0}.
+burst_capacity_test_() -> {timeout, 30, fun burst_capacity/0}.
 
 %% Bursts reuse one job ID and upload lease; persistent saturation remains bounded.
 burst_capacity() ->
@@ -653,6 +653,10 @@ burst_capacity() ->
         mock_callback_context(burst_context, burst_site,
             <<"https://client.example/media-runner-callback">>),
         Result = #{<<"status">> => <<"ok">>, <<"stdout">> => base64:encode(<<"done">>), <<"files">> => []},
+        meck:expect(z_media_runner_protocol, request, fun(Url, Token, Payload, Timeout) ->
+            ?assert(Timeout > 0 andalso Timeout =< 10000),
+            z_media_runner_protocol:request(Url, Token, Payload)
+        end),
         meck:expect(z_media_runner_protocol, request, fun(Url, _, Request) ->
             case lists:last(binary:split(Url, <<"/">>, [global])) of
                 <<"submit">> ->
@@ -709,6 +713,37 @@ burst_capacity() ->
         end),
         ?assertEqual({ok, <<"done">>},
             z_media_runner:run(file, <<"printf done">>, #{context => burst_context})),
+        %% A stalled submit/reserve must receive only the remaining job budget.
+        application:set_env(zotonic, media_runner_wait_timeout, 2),
+        lists:foreach(fun(Operation) ->
+            application:set_env(zotonic, media_runners,
+                [#{hostname => <<Operation/binary, "-timeout.example">>, oauth2_key => <<"burst">>}]),
+            meck:expect(z_media_runner_protocol, request, fun(Url, _, Payload, Timeout) ->
+                ?assert(Timeout > 0 andalso Timeout =< 2000),
+                case lists:last(binary:split(Url, <<"/">>, [global])) of
+                    <<"submit">> when Operation =:= <<"reserve">> ->
+                        [File] = maps:get(<<"files">>, Payload),
+                        {ok, #{<<"outcome">> => <<"missing">>,
+                            <<"missing">> => [maps:get(<<"sha256">>, File)]}};
+                    Operation ->
+                        timer:sleep(Timeout),
+                        {error, timeout}
+                end
+            end),
+            with_files(fun(Input, _) ->
+                T0 = erlang:monotonic_time(millisecond),
+                ?assertEqual({error, {media_runner_unavailable, timeout}},
+                    z_media_runner:run(file, <<"printf done">>,
+                        #{read => [Input], context => burst_context})),
+                ?assert(erlang:monotonic_time(millisecond) - T0 < 2500)
+            end)
+        end, [<<"submit">>, <<"reserve">>]),
+        application:set_env(zotonic, media_runners,
+            [#{hostname => <<"burst.example">>, oauth2_key => <<"burst">>}]),
+        meck:expect(z_media_runner_protocol, request, fun(Url, Token, Payload, Timeout) ->
+            ?assert(Timeout > 0 andalso Timeout =< 2000),
+            z_media_runner_protocol:request(Url, Token, Payload)
+        end),
         application:set_env(zotonic, media_runner_wait_timeout, 2),
         meck:expect(z_media_runner_protocol, request, fun(_, _, _) ->
             ets:update_counter(Calls, full, 1, {full, 0}),
@@ -777,10 +812,13 @@ pool_failover() ->
                     {ok, #{<<"outcome">> => <<"received">>}}
             end
         end),
-        meck:expect(z_media_runner_protocol, request, fun(Url, <<"token-b">>, #{<<"id">> := Id}, 5000) ->
+        meck:expect(z_media_runner_protocol, request, fun
+            (Url, <<"token-b">>, #{<<"id">> := Id}, 5000) ->
             ?assertEqual(<<"status">>, lists:last(binary:split(Url, <<"/">>, [global]))),
             ?assertEqual([{accepted, Id}], ets:lookup(Calls, accepted)),
-            {ok, #{<<"outcome">> => <<"completed">>, <<"result">> => Result}}
+            {ok, #{<<"outcome">> => <<"completed">>, <<"result">> => Result}};
+            (Url, Token, Payload, _Timeout) ->
+                z_media_runner_protocol:request(Url, Token, Payload)
         end),
         with_files(fun(Input, _) ->
             Options = #{read => [Input], context => pool_context},
@@ -854,8 +892,11 @@ pool_pinned_download_retry() ->
         z_media_imagemagick:clear_cache(),
         #{cmd := Cmd, major := 7} = Installation = z_media_imagemagick:selected(),
         %% Majority changes after arguments were generated: keep using IM 7.
-        meck:expect(z_media_runner_protocol, request, fun(_, T, _, 5000) ->
-            Version(case T of <<"d">> -> 7; <<"e">> -> 7; _ -> 6 end)
+        meck:expect(z_media_runner_protocol, request, fun
+            (_, T, _, 5000) ->
+                Version(case T of <<"d">> -> 7; <<"e">> -> 7; _ -> 6 end);
+            (Url, Token, Payload, _Timeout) ->
+                z_media_runner_protocol:request(Url, Token, Payload)
         end),
         z_media_imagemagick:clear_cache(),
         ?assertMatch(#{major := 6}, z_media_imagemagick:selected()),
