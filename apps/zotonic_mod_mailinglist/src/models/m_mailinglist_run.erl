@@ -24,10 +24,102 @@
         "schedule", "send_and_receive", "monitor"
     ]
 }).
--moduledoc("Durable mailing runs and delivery accounting. Template reads require
-use of mod_mailinglist, visibility of the page and permission to send to the list.
+-moduledoc("
+Durable mailing runs and delivery accounting, available as `m.mailinglist_run` in templates.
 Recipient addresses and message diagnostics are never published on MQTT.
-Internal worker functions require an already authorized sender context.").
+Internal worker functions require an already authorized sender context.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/` | List accessible runs, optionally filtered by a payload map. |
+| `get` | `/run/+run_id/...` | Return a run with aggregate statistics, language results and saved-content metadata. |
+| `get` | `/recipients/+run_id/...` | Return up to 100 recipient results, optionally filtered and paged using the payload. |
+| `get` | `/page/+page_id/...` | List accessible runs for a page. Resource names and ids are accepted. |
+| `get` | `/list/+list_id/...` | List accessible runs for a mailinglist. Resource names and ids are accepted. |
+| `get` | `/history_expired/+page_id/+list_id/...` | Return whether any run for this page/list pair has expired recipient details. Both ids must be numeric. |
+| `get` | `/recent/...` | Return up to five accessible recent runs, newest first, from the latest 200 runs. |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments
+are returned for further lookups. Run ids accept integers or numeric binaries.
+Unrecognized paths return `{error, unknown_path}`.
+
+Run lists and filters
+---------------------
+
+List results contain run metadata, including ids, language settings, status, timestamps,
+test/resend information, errors and `details_expired`, plus a `stats` map.
+Except for `/recent`, runs in `preparing`, `sending`, `retrying` or `interrupted` status
+come first; within each group the newest creation time and id come first.
+Each query selects at most 200 rows before checking access, so fewer rows may be returned.
+
+The root path accepts a payload map with binary keys:
+
+| Key | Default | Meaning |
+| --- | --- | --- |
+| `status` | Empty binary | Exact run status; empty means all statuses. |
+| `language` | Empty binary | Exact run language setting; empty means all languages. |
+| `page_id` | `0` | Numeric page id; zero means all pages. |
+| `list_id` | `0` | Numeric mailinglist id; zero means all lists. |
+| `offset` | `0` | Rows to skip before access checks, capped at 1,000,000. |
+
+For example, `m.mailinglist_run::%{status: \"scheduled\", list_id: id}` lists scheduled
+runs for a mailinglist. `m.mailinglist_run.page[id]` lists runs for a page.
+Filters apply only to the root path; `/page`, `/list` and `/recent` ignore the payload.
+
+Run details and statistics
+--------------------------
+
+`m.mailinglist_run.run[run_id]` returns the run without its internal `pickled_context`,
+`options`, `props` or `request_key`. It adds:
+
+* `stats`: recipient counts per status, plus `total`, `selected`, `waiting`,
+  `unsuccessful`, `processed` and integer `percent`.
+* `languages`: nonzero counts as maps containing `language`, `status` and `total`,
+  ordered by language and status.
+* `copies`: saved-content metadata containing `language` and `created`, ordered by language.
+* `first_submitted`: the first email submission timestamp, if available.
+* `test_address`: the single test recipient address, if this run has one.
+
+`selected` excludes skipped recipients; `waiting` sums pending, submitting, queued and
+retrying recipients. `unsuccessful` sums failed and bounced recipients. `processed` is
+selected minus waiting; `percent` is the integer percentage processed, or zero if none
+were selected. Individual status keys with no recorded count may be absent.
+Sent counts mean acceptance by the receiving mail server, not confirmed inbox delivery.
+Saved HTML is read through `content/3` and the saved-content controller, not an `m_get` path.
+
+Recipient results
+-----------------
+
+The `/recipients/+run_id` payload accepts `status` and `after` with binary keys.
+`status` can be `pending`, `submitting`, `queued`, `retrying`, `sent`, `failed`,
+`bounced`, `skipped` or `cancelled`. An omitted, empty or unrecognized status means all.
+`after` is a recipient-row id, defaulting to zero. Results are ordered by id ascending;
+use the last returned id as `after` to fetch the next batch of up to 100 rows.
+
+Each result contains `id`, `email`, `language`, `status`, `reason` and `modified`.
+For example: `m.mailinglist_run.recipients[run_id]::%{status: \"failed\", after: last_id}`.
+Expired recipient details return an empty list; aggregate statistics remain available.
+
+Access and expired history
+--------------------------
+
+Run reads require permission to use `mod_mailinglist`, visibility of the mailed page,
+and permission to edit the mailinglist. An authenticated sender may also read their own
+test-list runs without edit permission on the test list. List paths omit inaccessible
+runs; `/run` and `/recipients` return `{error, eacces}` for missing or inaccessible runs.
+
+`/history_expired/+page_id/+list_id` instead checks
+`mod_mailinglist:is_allowed_to_send(ListId, PageId, Context)` and returns
+`{error, eacces}` if sending is not allowed. A true result means that recipient history
+for this pair is incomplete, so a new mailing cannot reliably select only new or failed
+recipients. It does not mean that every run for the pair has expired.
+
+Successful `m_get/3` calls return `{ok, {Value, Rest}}`; templates receive `Value`
+and use any remaining path segments for further lookups.
+").
 
 -behaviour(zotonic_model).
 
