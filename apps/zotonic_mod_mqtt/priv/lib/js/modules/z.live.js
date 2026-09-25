@@ -29,40 +29,52 @@ function ZLive ()
     setInterval(function() { self.prune(); }, 10000);
 }
 
-ZLive.prototype.subscribe = function(topics, target, isUiInsert, postback, throttle) {
-    const self = this;
+// Combine notifications for a live element or MQTT wire, retaining the latest
+// callback arguments. A short initial delay keeps isolated events responsive.
+ZLive.prototype.throttle = function(callback, throttle) {
     const interval = Number(throttle);
-    // Share the interval across all topics of this live element.
-    const refresh = {
-        timer: undefined,
-        pending: undefined,
-        lastEvent: -Infinity,
-        lastRefresh: -Infinity
-    };
-    const update = function(topic, message, wid) {
+    let timer;
+    let pending;
+    let lastEvent = -Infinity;
+    let lastRefresh = -Infinity;
+    const update = function(...args) {
         if (!Number.isFinite(interval) || interval <= 0) {
-            self.update(topic, target, postback, message, wid);
+            callback(...args);
             return;
         }
         const now = performance.now();
-        const wasIdle = now - refresh.lastEvent >= interval;
-        refresh.lastEvent = now;
-        refresh.pending = { topic, message, wid };
-        if (refresh.timer === undefined) {
-            // Briefly combine the initial burst, then measure the full interval
-            // from the refresh itself. An idle subscription starts quickly again.
+        const wasIdle = now - lastEvent >= interval;
+        lastEvent = now;
+        pending = args;
+        if (timer === undefined) {
             const delay = wasIdle
                 ? Math.min(100, interval)
-                : Math.max(0, interval - (now - refresh.lastRefresh));
-            refresh.timer = setTimeout(function() {
-                const pending = refresh.pending;
-                refresh.timer = undefined;
-                refresh.pending = undefined;
-                refresh.lastRefresh = performance.now();
-                self.update(pending.topic, target, postback, pending.message, pending.wid);
+                : Math.max(0, interval - (now - lastRefresh));
+            timer = setTimeout(function() {
+                const latest = pending;
+                timer = undefined;
+                pending = undefined;
+                lastRefresh = performance.now();
+                callback(...latest);
             }, delay);
         }
     };
+    update.cancel = function() {
+        clearTimeout(timer);
+        timer = undefined;
+        pending = undefined;
+        lastEvent = -Infinity;
+        lastRefresh = -Infinity;
+    };
+    return update;
+};
+
+ZLive.prototype.subscribe = function(topics, target, isUiInsert, postback, throttle) {
+    const self = this;
+    // Share the interval across all topics of this live element.
+    const update = this.throttle(function(topic, message, wid) {
+        self.update(topic, target, postback, message, wid);
+    }, throttle);
 
     for(let i = topics.length-1; i >= 0; i--) {
         const topic = topics[i];
@@ -81,7 +93,7 @@ ZLive.prototype.subscribe = function(topics, target, isUiInsert, postback, throt
             target: target,
             postback: postback,
             is_widget: false,
-            refresh: refresh
+            refresh: update
         });
 
         if (isUiInsert) {
@@ -187,9 +199,7 @@ ZLive.prototype.unsubscribe = function(wid) {
         if (this._subscriptions[i].wid == wid) {
             const refresh = this._subscriptions[i].refresh;
             if (refresh) {
-                clearTimeout(refresh.timer);
-                refresh.timer = undefined;
-                refresh.pending = undefined;
+                refresh.cancel();
             }
             cotonic.broker.unsubscribe(this._subscriptions[i].topic, { wid: wid });
             this._subscriptions.splice(i,1);

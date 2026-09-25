@@ -135,3 +135,30 @@ test('an idle interval restores the quick first refresh', () => {
     assert.equal(s.timers.size, 0);
     assert.equal(s.updates.length, 3);
 });
+
+test('MQTT wire callbacks retain the latest message, mapping and options', () => {
+    const s = setup();
+    const calls = [];
+    const callback = s.live.throttle((...args) => calls.push(args), 3000);
+    const first = [{ payload: 1 }, { id: 1 }, { topic: 'first', wid: 'wire' }];
+    const latest = [{ payload: 2 }, { id: 2 }, { topic: 'second', wid: 'wire' }];
+    callback(...first);
+    s.advance(100);
+    assert.deepEqual(calls, [first]);
+    callback(...first);
+    callback(...latest);
+    s.advance(2999);
+    assert.equal(calls.length, 1);
+    s.advance(1);
+    assert.deepEqual(calls, [first, latest]);
+});
+
+test('MQTT wire callbacks without throttle execute every notification immediately', () => {
+    const s = setup();
+    const calls = [];
+    const callback = s.live.throttle(value => calls.push(value));
+    callback(1);
+    callback(2);
+    assert.deepEqual(calls, [1, 2]);
+    assert.equal(s.timers.size, 0);
+});
