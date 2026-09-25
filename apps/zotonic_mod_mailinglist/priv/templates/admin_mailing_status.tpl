@@ -51,6 +51,7 @@
 
 <div id="mailing-status">
     {% live topic=["bridge", "origin", "model", "mailinglist", "event", id, "+" ]
+            throttle=3000
             template="_admin_mailing_status_overview.tpl"
             id=id
     %}

@@ -126,10 +126,12 @@
                   or run.status == "interrupted"
             %}
                 {% if run.stats.pending or not run.prepared and not run.stats.total %}
-                    {% button class="btn btn-default"
+                    {% button class="btn btn-danger"
                               text=_"Stop sending"
                               action={confirm
                                     text=_"Stop sending? Only emails not yet queued can be stopped. Emails already queued will still be sent."
+                                    is_danger
+                                    ok=_"Stop sending"
                                     postback={mailing_run_cancel run_id=run.id}
                                     delegate="mod_mailinglist"
                               }

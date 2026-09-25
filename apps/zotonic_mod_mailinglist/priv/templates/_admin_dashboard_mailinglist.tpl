@@ -7,6 +7,7 @@
 
 {% block widget_content %}
     {% live topic="bridge/origin/model/mailinglist/event/+/runs"
+            throttle=3000
             template="_admin_dashboard_mailinglist_runs.tpl"
     %}
 {% endblock %}

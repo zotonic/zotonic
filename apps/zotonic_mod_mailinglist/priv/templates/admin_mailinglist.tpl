@@ -19,6 +19,7 @@
 
 
 {% live topic=["bridge", "origin", "model", "mailinglist", "event", "+", "+"]
+        throttle=3000
         template="_admin_mailinglist_overview.tpl"
 %}
 

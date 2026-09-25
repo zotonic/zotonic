@@ -12,6 +12,7 @@
     {% if m.mailinglist_run.run[q.run_id] as run %}
         {% live topic=["bridge","origin","model","mailinglist","event",run.page_id,"runs"]
                 template="_admin_mailing_run.tpl"
+                throttle=3000
                 run_id=run.id
                 recipient_status=q.recipient_status
                 after=q.after
@@ -41,6 +42,7 @@
                 </form>
                 {% live topic=["bridge","origin","model","mailinglist","event",run.page_id,"runs"]
                         template="_mailing_run_recipients.tpl"
+                        throttle=3000
                         run_id=run.id
                         recipient_status=q.recipient_status
                         after=q.after

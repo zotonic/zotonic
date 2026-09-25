@@ -57,6 +57,33 @@ Add the argument `catinclude` to do a `tag#catinclude` instead of a normal
 
 
 
+Throttling updates
+------------------
+
+| Argument | Type | Default | Description |
+| -------- | ---- | ------- | ----------- |
+| `throttle` | Non-negative integer | `0` | Interval in milliseconds between refreshes during a burst of notifications. `0` disables throttling. |
+
+Use `throttle=3000` to limit refreshes during a burst to once every three seconds.
+The first notification refreshes after a short delay (at most 100 milliseconds),
+then the full interval starts from that refresh. After no notifications for a
+full interval, the next notification refreshes quickly again. Notifications are
+combined using the latest topic and message. Continuous events do not postpone
+the refresh, and the last event is included even if events stop.
+Initial rendering is unchanged. The default is `0` (no throttling).
+
+The interval is shared by all topics on one `live` tag. Separate `live` tags
+have independent intervals. The argument applies to both template rendering
+and the `postback`/`delegate` form of the `live` tag; it is not passed to the
+rendered template as a variable. Throttling combines browser refresh requests,
+not the MQTT publications themselves.
+
+Use this for templates showing current state, not event-by-event inserts:
+
+```django
+{% live template=\"_detail.tpl\" topic=id id=id throttle=3000 %}
+```
+
 Live topics
 -----------
 
@@ -151,6 +178,7 @@ render_as_template(Template, Params, Context) ->
            ({catinclude, _}) -> true;
            ({element, _}) -> true;
            ({method, _}) -> true;
+           ({throttle, _}) -> true;
            (_) -> false
         end,
         Params),
@@ -215,7 +243,8 @@ render_as_postback(Params, Context) ->
                 Method == <<"patch">> -> <<"true">>;
                 true -> <<"false">>
             end, $,,
-            $',Postback,$',
+            $',Postback,$',$,,
+            integer_to_binary(throttle(Params)),
         $), $;
     ]),
     {ok, {javascript, Script}}.
@@ -283,9 +312,17 @@ script(Target, Method, LiveVars, TplVars, Context) ->
                 Method == <<"patch">> -> <<"true">>;
                 true -> <<"false">>
             end, $,,
-            $',Postback,$',
+            $',Postback,$',$,,
+            integer_to_binary(throttle(LiveVars)),
         $), $;
     ]).
+
+%% Minimum interval between live refreshes, in milliseconds. Disabled by default.
+throttle(Params) ->
+    case z_convert:to_integer(proplists:get_value(throttle, Params, 0)) of
+        N when is_integer(N), N > 0 -> N;
+        _ -> 0
+    end.
 
 map_topics(Topics, Context) ->
     lists:filtermap(

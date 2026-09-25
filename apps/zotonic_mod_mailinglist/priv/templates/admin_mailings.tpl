@@ -59,6 +59,7 @@
         <button type="submit" class="btn btn-default">{_ Filter _}</button>
     </form>
     {% live topic="bridge/origin/model/mailinglist/event/+/runs"
+            throttle=3000
             template="_admin_mailings_runs.tpl"
             filter_status=q.status
             filter_language=q.language
