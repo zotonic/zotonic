@@ -261,7 +261,8 @@ m_get([<<"history">> | Rest], Msg, Context) ->
         #{payload := F} when is_map(F) -> F;
         _ -> #{}
     end,
-    {ok, {list_page({filter, Filter}, Context), Rest}};
+    {Runs, NextOffset} = list_page({filter, Filter}, Context),
+    {ok, {#{<<"runs">> => Runs, <<"next_offset">> => NextOffset}, Rest}};
 m_get([], #{payload := Filter}, Context) when is_map(Filter) ->
     {ok, {list({filter, Filter}, Context), []}};
 m_get([], _Msg, Context) ->
@@ -349,14 +350,17 @@ allowed(_, _) ->
 -spec list(Filter, Context) -> [map()] when
     Filter :: all | recent | tuple(), Context :: z:context().
 list(Filter, Context) ->
-    maps:get(<<"runs">>, list_page(Filter, Context)).
+    {Runs, _NextOffset} = list_page(Filter, Context),
+    Runs.
 
 %% Keep the database-page boundary separate from the number of visible runs.
 %% Otherwise an inaccessible row can hide navigation to subsequent pages.
+-spec list_page(Filter, Context) -> {[map()], non_neg_integer() | undefined} when
+    Filter :: all | recent | tuple(), Context :: z:context().
 list_page(Filter, Context) ->
     case z_acl:is_allowed(use, mod_mailinglist, Context) of
         false ->
-            #{<<"runs">> => [], <<"next_offset">> => undefined};
+            {[], undefined};
         true ->
             {Where, Args} =
                 case Filter of
@@ -418,7 +422,7 @@ list_page(Filter, Context) ->
                 R#{<<"stats">> => totals(maps:get(maps:get(<<"id">>, R), Summaries, #{}))}
              || R <- Visible
             ],
-            #{<<"runs">> => Runs, <<"next_offset">> => NextOffset}
+            {Runs, NextOffset}
     end.
 
 list_stats([], _) ->
