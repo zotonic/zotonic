@@ -269,22 +269,29 @@ get_stats(ListId, Context) ->
 get_rsc_stats(undefined, _Context) ->
     [];
 get_rsc_stats(Id, Context) ->
-    Runs = m_mailinglist_run:list({page,m_rsc:rid(Id,Context)},Context),
-    Latest = lists:foldl(fun(R,Acc) ->
-        ListId = maps:get(<<"mailinglist_id">>,R),
-        case maps:is_key(ListId,Acc) of
-            true -> Acc;
-            false ->
-                Stats = maps:get(<<"stats">>,R),
-                Acc#{ListId => [
-                    {created,maps:get(<<"created">>,R)},
-                    {total,maps:get(<<"total">>,Stats,0)},
-                    {sent,maps:get(<<"sent">>,Stats,0)},
-                    {bounce,maps:get(<<"bounced">>,Stats,0)},
-                    {error,maps:get(<<"failed">>,Stats,0)}
-                ]}
-        end
-    end,#{},Runs),
+    Runs = m_mailinglist_run:list({page, m_rsc:rid(Id, Context)}, Context),
+    Latest = lists:foldl(
+        fun(R, Acc) ->
+            ListId = maps:get(<<"mailinglist_id">>, R),
+            case maps:is_key(ListId, Acc) of
+                true ->
+                    Acc;
+                false ->
+                    Stats = maps:get(<<"stats">>, R),
+                    Acc#{
+                        ListId => [
+                            {created, maps:get(<<"created">>, R)},
+                            {total, maps:get(<<"total">>, Stats, 0)},
+                            {sent, maps:get(<<"sent">>, Stats, 0)},
+                            {bounce, maps:get(<<"bounced">>, Stats, 0)},
+                            {error, maps:get(<<"failed">>, Stats, 0)}
+                        ]
+                    }
+            end
+        end,
+        #{},
+        Runs
+    ),
     maps:to_list(Latest).
 
 
@@ -922,10 +929,11 @@ insert_scheduled(ListId, PageId, Context) ->
 
 %% @doc Insert a mailing to be send when the page becomes visible
 insert_scheduled(ListId, PageId, Options, Context) ->
-    Due = case m_rsc:p(PageId, <<"publication_start">>, Context) of
-        undefined -> ?ST_JUTTEMIS;
-        PublicationStart -> PublicationStart
-    end,
+    Due =
+        case m_rsc:p(PageId, <<"publication_start">>, Context) of
+            undefined -> ?ST_JUTTEMIS;
+            PublicationStart -> PublicationStart
+        end,
     insert_scheduled(ListId, PageId, <<"publication">>, Due, Options, Context).
 
 %% @doc Insert a mailing to be sent on a specific UTC date.
@@ -936,79 +944,110 @@ insert_scheduled(ListId, PageId, Options, Context) ->
     Due :: calendar:datetime() | undefined,
     Context :: z:context().
 insert_scheduled(ListId, PageId, Options, Due, Context) ->
-    Due1 = case Due of
-        undefined -> calendar:universal_time();
-        _ -> Due
-    end,
+    Due1 =
+        case Due of
+            undefined -> calendar:universal_time();
+            _ -> Due
+        end,
     insert_scheduled(ListId, PageId, <<"date">>, Due1, Options, Context).
 
 insert_scheduled(ListId, PageId, Type, Due, Options, Context) ->
-    case m_mailinglist_run:create(ListId,PageId,Type,Due,Options,Context) of
-        {ok,_} -> ok;
-        {error,_} = Error -> Error
+    case m_mailinglist_run:create(ListId, PageId, Type, Due, Options, Context) of
+        {ok, _} -> ok;
+        {error, _} = Error -> Error
     end.
 
 %% Compatibility API: cancels only waiting runs. Active runs use their run id.
 delete_scheduled(ListId, PageId, Context) ->
-    Runs = m_mailinglist_run:list({page,PageId},Context),
-    lists:foreach(fun(R) ->
-        case {maps:get(<<"mailinglist_id">>,R),maps:get(<<"status">>,R)} of
-            {ListId,<<"scheduled">>} -> m_mailinglist_run:cancel(maps:get(<<"id">>,R),Context);
-            _ -> ok
-        end
-    end,Runs),
+    Runs = m_mailinglist_run:list({page, PageId}, Context),
+    lists:foreach(
+        fun(R) ->
+            case {maps:get(<<"mailinglist_id">>, R), maps:get(<<"status">>, R)} of
+                {ListId, <<"scheduled">>} ->
+                    m_mailinglist_run:cancel(maps:get(<<"id">>, R), Context);
+                _ ->
+                    ok
+            end
+        end,
+        Runs
+    ),
     ok.
 
 get_scheduled(PageId, Context) ->
-    [maps:get(<<"mailinglist_id">>,R) || R <- m_mailinglist_run:list({page,PageId},Context),
-        maps:get(<<"status">>,R) =:= <<"scheduled">>].
+    [
+        maps:get(<<"mailinglist_id">>, R)
+     || R <- m_mailinglist_run:list({page, PageId}, Context),
+        maps:get(<<"status">>, R) =:= <<"scheduled">>
+    ].
 
 get_mailing_tasks(PageId, Context) ->
-    lists:foldl(fun(R,Acc) ->
-        List = maps:get(<<"mailinglist_id">>,R),
-        maps:update_with(List,fun(Rs) -> [R|Rs] end,[R],Acc)
-    end,#{},[R || R <- m_mailinglist_run:list({page,PageId},Context),
-        maps:get(<<"status">>,R) =:= <<"scheduled">>]).
+    lists:foldl(
+        fun(R, Acc) ->
+            List = maps:get(<<"mailinglist_id">>, R),
+            maps:update_with(List, fun(Rs) -> [R | Rs] end, [R], Acc)
+        end,
+        #{},
+        [
+            R
+         || R <- m_mailinglist_run:list({page, PageId}, Context),
+            maps:get(<<"status">>, R) =:= <<"scheduled">>
+        ]
+    ).
 
 get_all_mailing_tasks(Context) ->
-    [R || R <- m_mailinglist_run:list(all,Context), maps:get(<<"status">>,R) =:= <<"scheduled">>].
+    [R || R <- m_mailinglist_run:list(all, Context), maps:get(<<"status">>, R) =:= <<"scheduled">>].
 
 update_scheduled_publication_due(PageId, Context) ->
-    z_db:q("update mailinglist_run m set due=coalesce(r.publication_start,$2)
+    z_db:q(
+        "update mailinglist_run m set due=coalesce(r.publication_start,$2)
         from rsc r where m.page_id=$1 and r.id=m.page_id
-        and m.type='publication' and m.status='scheduled'", [PageId,?ST_JUTTEMIS],Context).
+        and m.type='publication' and m.status='scheduled'",
+        [PageId, ?ST_JUTTEMIS],
+        Context
+    ).
 
 next_scheduled(Context) -> m_mailinglist_run:next_due(Context).
 
 %% Retained for callers inspecting the queue; claiming is internal to the worker.
 check_scheduled(Context) ->
-    case z_db:assoc_props_row("select m.* from mailinglist_run m join rsc r on r.id=m.page_id
+    case
+        z_db:assoc_props_row(
+            "select m.* from mailinglist_run m join rsc r on r.id=m.page_id
         where m.status='scheduled' and m.due<=now() and (m.type='date' or
         (r.is_published and r.publication_start<=now() and r.publication_end>=now()))
-        order by m.due limit 1",Context) of
-        undefined -> undefined;
-        R -> {proplists:get_value(mailinglist_id,R),proplists:get_value(page_id,R),
-            proplists:get_value(options,R,[]),proplists:get_value(pickled_context,R)}
+        order by m.due limit 1",
+            Context
+        )
+    of
+        undefined ->
+            undefined;
+        R ->
+            {
+                proplists:get_value(mailinglist_id, R),
+                proplists:get_value(page_id, R),
+                proplists:get_value(options, R, []),
+                proplists:get_value(pickled_context, R)
+            }
     end.
 
 %% Delivery history is immutable. Callers must create an explicit resend run.
 reset_log_email(_ListId, _PageId, _Context) -> {error, history_preserved}.
 
-%% @doc Get the "from" address used for this mailing list. Looks first in the mailinglist rsc for a ' mailinglist_reply_to' field; falls back to site.email_from config variable.
+%% @doc Get the sender using the mailinglist address, then mod_mailinglist.email_from,
+%% then site.email_from. Preserve the mailinglist's sender name.
 get_email_from(ListId, Context) ->
-    FromEmail = case m_rsc:p(ListId, <<"mailinglist_reply_to">>, Context) of
-                    Empty when Empty =:= undefined; Empty =:= <<>> ->
-                        z_convert:to_binary(m_config:get_value(site, email_from, Context));
-                    RT ->
-                        z_convert:to_binary(RT)
-                end,
-    FromName = case m_rsc:p(ListId, <<"mailinglist_sender_name">>, Context) of
-                  undefined -> <<>>;
-                  <<>> -> <<>>;
-                  SenderName -> z_convert:to_binary(SenderName)
-               end,
+    FromEmail = case z_convert:to_binary(m_rsc:p(ListId, <<"mailinglist_reply_to">>, Context)) of
+        <<>> -> default_email_from(Context);
+        Address -> Address
+    end,
+    FromName = z_convert:to_binary(m_rsc:p(ListId, <<"mailinglist_sender_name">>, Context)),
     z_email:combine_name_email(FromName, FromEmail).
 
+default_email_from(Context) ->
+    case z_convert:to_binary(m_config:get_value(mod_mailinglist, email_from, Context)) of
+        <<>> -> z_convert:to_binary(m_config:get_value(site, email_from, Context));
+        Address -> Address
+    end.
 
 
 %% @doc Get all recipients with this email address.

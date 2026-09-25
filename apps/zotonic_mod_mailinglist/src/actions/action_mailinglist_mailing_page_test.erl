@@ -19,7 +19,9 @@
 
 -module(action_mailinglist_mailing_page_test).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "frontend_developer", "wire_action", "mailing_lists", "send_and_receive"]
+    zotonic_keywords => [
+        "reference", "frontend_developer", "wire_action", "mailing_lists", "send_and_receive"
+    ]
 }).
 -moduledoc("
 Post a message to the test mailing list, given with the `id` argument.
@@ -38,8 +40,7 @@ the mailing with `is_send_all`, so all active test recipients receive it.
 ```
 
 An error is shown when the test list is missing or the current user is not
-allowed to send the page.
-").
+allowed to send the page.\n").
 -author("Marc Worrell <marc@worrell.nl").
 
 %% interface functions
@@ -54,10 +55,12 @@ render_action(TriggerId, TargetId, Args, Context) ->
     Id = z_convert:to_integer(proplists:get_value(id, Args)),
     OnSuccess = proplists:get_all_values(on_success, Args),
     Postback = {mailing_page_test, Id, OnSuccess},
-    {PostbackMsgJS, _PickledPostback} = z_render:make_postback(Postback, click, TriggerId, TargetId, ?MODULE, Context),
+    {PostbackMsgJS, _PickledPostback} = z_render:make_postback(
+        Postback, click, TriggerId, TargetId, ?MODULE, Context
+    ),
     {PostbackMsgJS, Context}.
 
-event(#postback{ message = {mailing_page_test, PageId, OnSuccess} }, Context) ->
+event(#postback{message = {mailing_page_test, PageId, OnSuccess}}, Context) ->
     PageId1 = m_rsc:rid(PageId, Context),
     case is_allowed(PageId1, Context) of
         true ->
@@ -69,17 +72,30 @@ event(#postback{ message = {mailing_page_test, PageId, OnSuccess} }, Context) ->
 send_test_mailing(PageId, OnSuccess, Context) ->
     case m_rsc:name_to_id(mailinglist_test, Context) of
         {ok, ListId} ->
-            case m_mailinglist_run:create(ListId,PageId,<<"date">>,calendar:universal_time(),
-                    [{is_send_all,true}],Context) of
-                {ok,RunId} ->
+            case
+                m_mailinglist_run:create(
+                    ListId,
+                    PageId,
+                    <<"date">>,
+                    calendar:universal_time(),
+                    [{is_send_all, true}],
+                    Context
+                )
+            of
+                {ok, RunId} ->
                     mod_mailinglist:ensure_scheduled_task(Context),
-                    z_render:wire(OnSuccess ++ [{redirect,[{dispatch,admin_mailing_run},{run_id,RunId}]}],Context);
-                {error,_} -> z_render:growl_error(?__("Could not queue the test mailing.",Context),Context)
+                    z_render:wire(
+                        OnSuccess ++ [{redirect, [{dispatch, admin_mailing_run}, {run_id, RunId}]}],
+                        Context
+                    );
+                {error, _} ->
+                    z_render:growl_error(?__("Could not queue the test mailing.", Context), Context)
             end;
         {error, _} ->
             z_render:growl_error(
                 ?__("There is no mailing list with the name ‘mailinglist_test’.", Context),
-                Context)
+                Context
+            )
     end.
 
 is_allowed(PageId, Context) ->
