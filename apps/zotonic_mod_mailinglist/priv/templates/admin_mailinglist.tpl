@@ -10,12 +10,16 @@
     {_ Recipients are subscribed either as email-only (via a simple signup form), or as subscribed persons in the system. _}</p>
 </div>
 
+{% include "_mailinglist_test_public_alert.tpl" %}
+
 <div class="well z-button-row">
+    <a class="btn btn-default" href="{% url admin_mailings %}">{_ Mailing status and history _}</a>
     {% button class="btn btn-primary" text=_"New mailing list" action={dialog_new_rsc cat="mailinglist"} %}
 </div>
 
 
-{% live topic=["bridge", "origin", "model", "mailinglist", "event", "+", "scheduled"]
+{% live topic=["bridge", "origin", "model", "mailinglist", "event", "+", "+"]
+        throttle=3000
         template="_admin_mailinglist_overview.tpl"
 %}
 

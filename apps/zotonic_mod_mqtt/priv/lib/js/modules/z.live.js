@@ -29,8 +29,52 @@ function ZLive ()
     setInterval(function() { self.prune(); }, 10000);
 }
 
-ZLive.prototype.subscribe = function(topics, target, isUiInsert, postback) {
+// Combine notifications for a live element or MQTT wire, retaining the latest
+// callback arguments. A short initial delay keeps isolated events responsive.
+ZLive.prototype.throttle = function(callback, throttle) {
+    const interval = Number(throttle);
+    let timer;
+    let pending;
+    let lastEvent = -Infinity;
+    let lastRefresh = -Infinity;
+    const update = function(...args) {
+        if (!Number.isFinite(interval) || interval <= 0) {
+            callback(...args);
+            return;
+        }
+        const now = performance.now();
+        const wasIdle = now - lastEvent >= interval;
+        lastEvent = now;
+        pending = args;
+        if (timer === undefined) {
+            const delay = wasIdle
+                ? Math.min(100, interval)
+                : Math.max(0, interval - (now - lastRefresh));
+            timer = setTimeout(function() {
+                const latest = pending;
+                timer = undefined;
+                pending = undefined;
+                lastRefresh = performance.now();
+                callback(...latest);
+            }, delay);
+        }
+    };
+    update.cancel = function() {
+        clearTimeout(timer);
+        timer = undefined;
+        pending = undefined;
+        lastEvent = -Infinity;
+        lastRefresh = -Infinity;
+    };
+    return update;
+};
+
+ZLive.prototype.subscribe = function(topics, target, isUiInsert, postback, throttle) {
     const self = this;
+    // Share the interval across all topics of this live element.
+    const update = this.throttle(function(topic, message, wid) {
+        self.update(topic, target, postback, message, wid);
+    }, throttle);
 
     for(let i = topics.length-1; i >= 0; i--) {
         const topic = topics[i];
@@ -39,7 +83,7 @@ ZLive.prototype.subscribe = function(topics, target, isUiInsert, postback) {
         cotonic.broker.subscribe(
             topic,
             function(msg, _mapping, opts) {
-                self.update(opts.topic, target, postback, msg, opts.wid);
+                update(opts.topic, msg, opts.wid);
             },
             { wid: wid });
 
@@ -48,7 +92,8 @@ ZLive.prototype.subscribe = function(topics, target, isUiInsert, postback) {
             topic: topic,
             target: target,
             postback: postback,
-            is_widget: false
+            is_widget: false,
+            refresh: update
         });
 
         if (isUiInsert) {
@@ -152,6 +197,10 @@ ZLive.prototype.updateWidget = function(topic, target, options, message, wid) {
 ZLive.prototype.unsubscribe = function(wid) {
     for (let i = this._subscriptions.length-1; i >= 0; i--) {
         if (this._subscriptions[i].wid == wid) {
+            const refresh = this._subscriptions[i].refresh;
+            if (refresh) {
+                refresh.cancel();
+            }
             cotonic.broker.unsubscribe(this._subscriptions[i].topic, { wid: wid });
             this._subscriptions.splice(i,1);
         }
@@ -163,8 +212,7 @@ ZLive.prototype.prune = function() {
         const target = this._subscriptions[i].target;
 
         if (!document.getElementById(target)) {
-            cotonic.broker.unsubscribe(this._subscriptions[i].topic, { wid: this._subscriptions[i].wid });
-            this._subscriptions.splice(i,1);
+            this.unsubscribe(this._subscriptions[i].wid);
         }
     }
 };
