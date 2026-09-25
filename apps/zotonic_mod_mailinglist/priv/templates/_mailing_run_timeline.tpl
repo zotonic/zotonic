@@ -16,7 +16,13 @@
                 {% elseif run.started %}{_ Done _}{% else %}{_ Stopped _}{% endif %}
             </td>
             <td>
-                {% if run.type == "publication" %}{_ After the page is published _}
+                {% if run.type == "publication" %}
+                    {_ After the page is published _}
+                    {% if m.rsc[run.page_id].is_published %}
+                        {% if m.rsc[run.page_id].publication_start as publication_start %}
+                            <br>{{ publication_start|date:"Y-m-d H:i:s" }} <span class="label label-default">{_ Publication start _}</span>
+                        {% endif %}
+                    {% endif %}
                 {% else %}{{ run.due|date:"Y-m-d H:i:s" }} <span class="label label-default">{_ Planned _}</span>{% endif %}
                 {% if run.status == "scheduled" and run.type == "date" and not run.due|in_future %}<br>{_ Waiting for the sending process to start. _}{% endif %}
             </td>

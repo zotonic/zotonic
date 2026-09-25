@@ -29,6 +29,12 @@
         {% endfor %}
         <p>
             <a class="btn btn-default" href="{% if id.is_a.mailinglist %}{% url admin_mailings list_id=id %}{% else %}{% url admin_mailings page_id=id %}{% endif %}">{_ All mailings _}</a>
+            {% if not id.is_a.mailinglist %}
+                <a class="btn btn-default" title="{_ Send this page to a mailinglist and view mailinglist statistics. _}" href="{% url admin_mailing_status id=id %}">
+                    <i class="glyphicon glyphicon-envelope"></i>
+                    {_ Send mailing _}
+                </a>
+            {% endif %}
         </p>
     </div>
 </div>
