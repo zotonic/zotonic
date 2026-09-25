@@ -32,9 +32,10 @@ or revert a successful delivery to queued/retrying; late bounces update the
 original run. “Sent” means accepted by the mail server, not inbox delivery.
 There is no open/click tracking.
 
-The worker monitor marks stale preparation or unconfirmed handoffs interrupted.
+The worker monitor marks stale preparation, pending submissions or unconfirmed handoffs interrupted.
 Resume submits only pending recipients; it never resubmits an unconfirmed
-handoff. Cancellation stops pending recipients; emails already handed to the
+handoff. Delivery notifications preserve a resumed run's scheduled state until
+the scheduler claims it. Cancellation stops pending recipients; emails already handed to the
 email queue may still arrive. SMTP retries continue through the email server.
 
 New-recipient sends exclude previous successful or pending deliveries of the
@@ -67,6 +68,8 @@ running and the result displays those counts. Continue is offered only for
 pending work or incomplete preparation; uncertain deliveries require administrator
 investigation. Late delivery confirmations can resolve an interrupted run.
 Resource edit panels show three recent/active mailings with links to full history.
+History pagination uses a separate next-page offset, so inaccessible runs do not
+hide navigation to older results, even when a page has no visible runs.
 Single-address test resends retain their address; failed-only tests honor failures.
 
 ## Retention

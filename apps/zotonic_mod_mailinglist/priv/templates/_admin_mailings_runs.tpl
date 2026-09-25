@@ -1,16 +1,14 @@
-{% with m.mailinglist_run::%{
+{% with m.mailinglist_run.history::%{
         status: filter_status,
         language: filter_language,
         page_id: filter_page,
         list_id: filter_list,
         offset: filter_offset
-    } as runs
+    } as history
 %}
-    {% include "_mailing_runs.tpl" runs=runs %}
-    {% if runs|length == 200 %}
-        {% with filter_offset|default:0|to_integer + 200 as next_offset %}
-            <a class="btn btn-default" href="{% url admin_mailings offset=next_offset status=filter_status language=filter_language page_id=filter_page list_id=filter_list %}"> {_ Next page _}</a>
-        {% endwith %}
+    {% include "_mailing_runs.tpl" runs=history.runs %}
+    {% if history.next_offset %}
+        <a class="btn btn-default" href="{% url admin_mailings offset=history.next_offset status=filter_status language=filter_language page_id=filter_page list_id=filter_list %}"> {_ Next page _}</a>
     {% endif %}
     {% if filter_offset %}
         <a class="btn btn-default" href="{% url admin_mailings status=filter_status language=filter_language page_id=filter_page list_id=filter_list %}">{_ First page _}</a>

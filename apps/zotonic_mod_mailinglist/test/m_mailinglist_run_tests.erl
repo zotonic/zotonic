@@ -235,6 +235,8 @@ postgres(Db) ->
         z_db:q("insert into rsc(id) values (1),(2),(3)", Context),
         _ = z_mailinglist_schema:manage_schema(install, Context),
         schema_migration(Context),
+        recovery_regressions(Context),
+        history_pagination(Context),
         delivery(Context),
         worker(Context),
         lifecycle(Context),
@@ -276,7 +278,10 @@ schema_migration(Context) ->
     z_db:q("delete from mailinglist_run", Context).
 
 new_run(Options, Ctx) ->
-    {ok, Id} = m_mailinglist_run:create(2, 1, <<"date">>, calendar:universal_time(), Options, Ctx),
+    %% PostgreSQL now() is fixed at the start of this suite's outer transaction.
+    %% Use the same clock so runs stay due even when the suite crosses a second.
+    Due = z_db:q1("select now()", Ctx),
+    {ok, Id} = m_mailinglist_run:create(2, 1, <<"date">>, Due, Options, Ctx),
     Id.
 
 delivery(Ctx) ->
@@ -433,8 +438,10 @@ editorial_outcomes(Ctx) ->
             Ctx
         )
     ),
+    claim_test_run(Test, Ctx),
     ok = z_mailinglist_run:send(Test, Ctx),
     {ok, Again} = m_mailinglist_run:resend(Test, <<"all">>, Ctx),
+    claim_test_run(Again, Ctx),
     ok = z_mailinglist_run:send(Again, Ctx),
     ?assertEqual(
         [{<<"editor@example.com">>}],
@@ -443,6 +450,7 @@ editorial_outcomes(Ctx) ->
         )
     ),
     {ok, Retry} = m_mailinglist_run:resend(Test, <<"failed">>, Ctx),
+    claim_test_run(Retry, Ctx),
     ok = z_mailinglist_run:send(Retry, Ctx),
     ?assertEqual(
         <<"empty">>, z_db:q1("select status from mailinglist_run where id=$1", [Retry], Ctx)
@@ -453,6 +461,7 @@ editorial_outcomes(Ctx) ->
     ok = m_mailinglist_run:add_recipient(
         Queued, <<"queued@example.com">>, undefined, <<"en">>, <<"queued">>, undefined, Ctx
     ),
+    claim_test_run(Queued, Ctx),
     ok = m_mailinglist_run:prepared(Queued, Ctx),
     ok = m_mailinglist_run:cancel(Queued, Ctx),
     ?assertEqual(
@@ -525,6 +534,7 @@ retention(Ctx) ->
         [Rid],
         Ctx
     ),
+    claim_test_run(Old, Ctx),
     ok = m_mailinglist_run:prepared(Old, Ctx),
     z_db:q(
         "insert into mailinglist_run_content(run_id,language,html) values ($1,'en','<html>Archived content</html>')",
@@ -663,4 +673,123 @@ queue_ack() ->
         application:stop(mnesia),
         mnesia:delete_schema([node()]),
         file:del_dir_r(Dir)
+    end.
+
+
+%% Fixtures which target a specific run must model the scheduler's claim before
+%% invoking worker APIs; other fixtures can still have scheduled work pending.
+claim_test_run(Id, Ctx) ->
+    1 = z_db:q(
+        "update mailinglist_run set status='preparing',started=now() where id=$1 and status='scheduled'",
+        [Id],
+        Ctx
+    ),
+    ok.
+
+recovery_regressions(Ctx) ->
+    Id = new_run([{send_mode, <<"all">>}], Ctx),
+    {ok, #{<<"id">> := Id}} = m_mailinglist_run:claim(Ctx),
+    ok = m_mailinglist_run:add_recipient(
+        Id, <<"pending@example.com">>, undefined, <<"en">>, <<"pending">>, undefined, Ctx
+    ),
+    ok = m_mailinglist_run:prepared(Id, Ctx),
+    %% A recent worker must not be interrupted.
+    ok = m_mailinglist_run:recover(Ctx),
+    ?assertEqual(
+        <<"sending">>, z_db:q1("select status from mailinglist_run where id=$1", [Id], Ctx)
+    ),
+    %% Simulate a worker lost after preparation, between submissions.
+    z_db:q(
+        "update mailinglist_run set modified=now()-interval '20 minutes' where id=$1", [Id], Ctx
+    ),
+    ok = m_mailinglist_run:recover(Ctx),
+    ?assertEqual(
+        <<"interrupted">>, z_db:q1("select status from mailinglist_run where id=$1", [Id], Ctx)
+    ),
+    ok = m_mailinglist_run:add_recipient(
+        Id, <<"queued@example.com">>, undefined, <<"en">>, <<"queued">>, undefined, Ctx
+    ),
+    Rid = z_db:q1(
+        "select id from mailinglist_run_recipient where run_id=$1 and status='queued'", [Id], Ctx
+    ),
+    z_db:q(
+        "insert into mailinglist_run_message(message_nr,recipient_id) values ('resume-queued',$1)",
+        [Rid],
+        Ctx
+    ),
+    ok = m_mailinglist_run:resume(Id, Ctx),
+    %% An old delivery result must leave the resumed run claimable.
+    ok = m_mailinglist_run:message(<<"resume-queued">>, <<"sent">>, false, 0, undefined, Ctx),
+    ?assertEqual(
+        <<"scheduled">>, z_db:q1("select status from mailinglist_run where id=$1", [Id], Ctx)
+    ),
+    {ok, #{<<"id">> := Id}} = m_mailinglist_run:claim(Ctx),
+    meck:expect(z_email_server, send_queued, fun(Msg, Mail, C) ->
+        ?assertEqual(<<"pending@example.com">>, Mail#email.to),
+        m_mailinglist_run:message(Msg, <<"sent">>, false, 0, undefined, C),
+        {ok, Msg}
+    end),
+    ok = z_mailinglist_run:send(Id, Ctx),
+    ?assertEqual(2, maps:get(<<"sent">>, m_mailinglist_run:stats(Id, Ctx))),
+    ?assertEqual(
+        <<"completed">>, z_db:q1("select status from mailinglist_run where id=$1", [Id], Ctx)
+    ),
+    z_db:q("delete from mailinglist_run where id=$1", [Id], Ctx),
+    %% A prepared run awaiting SMTP alone must remain in progress.
+    Waiting = new_run([], Ctx),
+    claim_test_run(Waiting, Ctx),
+    ok = m_mailinglist_run:add_recipient(
+        Waiting, <<"waiting@example.com">>, undefined, <<"en">>, <<"queued">>, undefined, Ctx
+    ),
+    ok = m_mailinglist_run:prepared(Waiting, Ctx),
+    z_db:q(
+        "update mailinglist_run set modified=now()-interval '20 minutes' where id=$1",
+        [Waiting],
+        Ctx
+    ),
+    ok = m_mailinglist_run:recover(Ctx),
+    ?assertEqual(
+        <<"sending">>, z_db:q1("select status from mailinglist_run where id=$1", [Waiting], Ctx)
+    ),
+    z_db:q("delete from mailinglist_run where id=$1", [Waiting], Ctx).
+
+history_pagination(Ctx) ->
+    %% One hidden run must not remove the link to the remaining accessible run.
+    z_db:q(
+        "insert into mailinglist_run(page_id,mailinglist_id,status,created)\n"
+        "        select case when n=201 then 3 else 1 end,2,'completed',now()+n*interval '1 second'\n"
+        "        from generate_series(1,201) n",
+        Ctx
+    ),
+    meck:new(z_acl, [passthrough, no_link]),
+    try
+        meck:expect(z_acl, rsc_visible, fun
+            (3, _) -> false;
+            (_, _) -> true
+        end),
+        {ok, {First, []}} = m_mailinglist_run:m_get([<<"history">>], undefined, Ctx),
+        ?assertEqual(199, length(maps:get(<<"runs">>, First))),
+        ?assertEqual(200, maps:get(<<"next_offset">>, First)),
+        ?assertEqual(maps:get(<<"runs">>, First), m_mailinglist_run:list(all, Ctx)),
+        {ok, {Second, []}} = m_mailinglist_run:m_get(
+            [<<"history">>], #{payload => #{<<"offset">> => 200}}, Ctx
+        ),
+        ?assertEqual(1, length(maps:get(<<"runs">>, Second))),
+        ?assertEqual(undefined, maps:get(<<"next_offset">>, Second)),
+        %% An entirely hidden page must still allow navigation through history.
+        z_db:q(
+            "update mailinglist_run set page_id=3 where id in (select id from mailinglist_run order by created desc limit 200)",
+            Ctx
+        ),
+        {ok, {Hidden, []}} = m_mailinglist_run:m_get([<<"history">>], undefined, Ctx),
+        ?assertEqual([], maps:get(<<"runs">>, Hidden)),
+        ?assertEqual(200, maps:get(<<"next_offset">>, Hidden)),
+        meck:expect(z_acl, is_allowed, fun(_, _, _) -> false end),
+        ?assertEqual(
+            {ok, {#{<<"runs">> => [], <<"next_offset">> => undefined}, []}},
+            m_mailinglist_run:m_get([<<"history">>], undefined, Ctx)
+        )
+    after
+        meck:unload(z_acl),
+        z_db:q("delete from mailinglist_run", Ctx)
     end.

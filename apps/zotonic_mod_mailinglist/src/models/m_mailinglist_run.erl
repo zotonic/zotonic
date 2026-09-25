@@ -35,6 +35,7 @@ Available Model API Paths
 | Method | Path pattern | Description |
 | --- | --- | --- |
 | `get` | `/` | List accessible runs, optionally filtered by a payload map. |
+| `get` | `/history/...` | Return accessible runs and a next-page offset, using the same payload filters as the root path. |
 | `get` | `/run/+run_id/...` | Return a run with aggregate statistics, language results and saved-content metadata. |
 | `get` | `/recipients/+run_id/...` | Return up to 100 recipient results, optionally filtered and paged using the payload. |
 | `get` | `/page/+page_id/...` | List accessible runs for a page. Resource names and ids are accepted. |
@@ -67,7 +68,11 @@ The root path accepts a payload map with binary keys:
 
 For example, `m.mailinglist_run::%{status: \"scheduled\", list_id: id}` lists scheduled
 runs for a mailinglist. `m.mailinglist_run.page[id]` lists runs for a page.
-Filters apply only to the root path; `/page`, `/list` and `/recent` ignore the payload.
+Filters apply to the root and `/history` paths; `/page`, `/list` and `/recent` ignore the payload.
+`/history` returns a map with `runs` and `next_offset`. Use `next_offset` as the next
+request's `offset`; `undefined` means there is no next page (or the offset cap was reached).
+Pagination is based on database rows, independently of access filtering. A page may
+contain fewer than 200 visible runs, or none, while still providing a next-page offset.
 
 Run details and statistics
 --------------------------
@@ -251,6 +256,12 @@ m_get([<<"history_expired">>, Page, List | Rest], _Msg, Context) ->
     end;
 m_get([<<"recent">> | Rest], _Msg, Context) ->
     {ok, {list(recent, Context), Rest}};
+m_get([<<"history">> | Rest], Msg, Context) ->
+    Filter = case Msg of
+        #{payload := F} when is_map(F) -> F;
+        _ -> #{}
+    end,
+    {ok, {list_page({filter, Filter}, Context), Rest}};
 m_get([], #{payload := Filter}, Context) when is_map(Filter) ->
     {ok, {list({filter, Filter}, Context), []}};
 m_get([], _Msg, Context) ->
@@ -338,9 +349,14 @@ allowed(_, _) ->
 -spec list(Filter, Context) -> [map()] when
     Filter :: all | recent | tuple(), Context :: z:context().
 list(Filter, Context) ->
+    maps:get(<<"runs">>, list_page(Filter, Context)).
+
+%% Keep the database-page boundary separate from the number of visible runs.
+%% Otherwise an inaccessible row can hide navigation to subsequent pages.
+list_page(Filter, Context) ->
     case z_acl:is_allowed(use, mod_mailinglist, Context) of
         false ->
-            [];
+            #{<<"runs">> => [], <<"next_offset">> => undefined};
         true ->
             {Where, Args} =
                 case Filter of
@@ -381,11 +397,15 @@ list(Filter, Context) ->
                         error, is_test, parent_id, details_expired
                  from mailinglist_run " ++
                     Where ++
-                    " order by " ++ Order ++ " limit 200 offset " ++ integer_to_list(Offset),
+                    " order by " ++ Order ++ " limit 201 offset " ++ integer_to_list(Offset),
                 Args,
                 Context
             ),
-            Allowed = [R || R <- Rows, allowed(R, Context)],
+            NextOffset = case length(Rows) > 200 andalso Offset < 1000000 of
+                true -> Offset + 200;
+                false -> undefined
+            end,
+            Allowed = [R || R <- lists:sublist(Rows, 200), allowed(R, Context)],
             %% Apply the dashboard limit after access checks, before loading stats.
             Visible =
                 case Filter of
@@ -394,10 +414,11 @@ list(Filter, Context) ->
                 end,
             Ids = [maps:get(<<"id">>, R) || R <- Visible],
             Summaries = list_stats(Ids, Context),
-            [
+            Runs = [
                 R#{<<"stats">> => totals(maps:get(maps:get(<<"id">>, R), Summaries, #{}))}
              || R <- Visible
-            ]
+            ],
+            #{<<"runs">> => Runs, <<"next_offset">> => NextOffset}
     end.
 
 list_stats([], _) ->
@@ -644,7 +665,11 @@ recover(Context) ->
             status = 'interrupted',
             error = 'Worker interrupted; review pending recipients before resuming.'
          where status in ('preparing','sending')
-           and not prepared
+           and (not prepared or exists(
+                select 1
+                from mailinglist_run_recipient rr
+                where rr.run_id = mailinglist_run.id
+                  and rr.status = 'pending'))
            and modified < now() - interval '10 minutes'
          returning id",
         Context
@@ -954,6 +979,9 @@ prepared(Id, Context) ->
     refresh(Id, Context).
 
 -spec status(binary(), boolean(), map()) -> binary().
+%% Delivery notifications from an earlier worker must not consume a resume.
+%% Only claim/1 can move scheduled work into the sending lifecycle.
+status(<<"scheduled">>, _, _) -> <<"scheduled">>;
 status(Old, _, _) when Old =:= <<"cancelled">>; Old =:= <<"failed">> -> Old;
 status(<<"interrupted">>, Prepared, S) ->
     case not Prepared orelse maps:get(<<"pending">>, S, 0) + maps:get(<<"submitting">>, S, 0) > 0 of
