@@ -40,7 +40,7 @@
 
     {% if run.status == "empty" %}
         <p class="alert alert-warning">
-            {_ Nobody received this mailing. Check the recipient xbelow for the reasons, then change the language or recipient selection. _}
+            {_ Nobody received this mailing. Check the recipient below for the reasons, then change the language or recipient selection. _}
         </p>
     {% endif %}
     {% if run.status == "cancelled" %}
