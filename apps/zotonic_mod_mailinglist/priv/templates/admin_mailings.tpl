@@ -11,8 +11,8 @@
     {% if m.rsc[q.page_id].id as filtered_page %}
         <p>
             {_ Mailings for: _} <strong>{{ m.rsc[filtered_page].title }}</strong>
-            <a href="{% url admin_mailings %}">{_ Show all pages _}</a><
-        /p>
+            <a href="{% url admin_mailings %}">{_ Show all pages _}</a>
+        </p>
     {% endif %}
     <form method="get" class="form-inline">
         {% if m.rsc[q.page_id].id as page_id %}
