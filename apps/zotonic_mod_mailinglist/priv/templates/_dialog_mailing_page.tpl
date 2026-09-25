@@ -1,4 +1,3 @@
-{% with m.mailinglist.stats[list_id] as list_stats %}
 {% with m.mailinglist_run::%{ page_id:id, list_id:list_id } as history %}
 {% with m.mailinglist_run.history_expired[id][list_id] as history_expired %}
 
@@ -6,13 +5,25 @@
     <p>{_ Test recipient: _} <strong>{{ options.single_test_address|escape }}</strong></p>
 {% endif %}
 
-<p>{_ Choose recipients and language, preview the email, then review before sending. _}</p>
+<p>{_ Choose recipients and language, preview the email, then review before sending. _}
+{_ Eligible recipients will be counted in the review step. _}</p>
 
 <table class="table table-condensed">
     <tbody>
         <tr>
             <th scope="row">{_ Mailing list _}</th>
             <td>{{ m.rsc[list_id].title|default:_"Untitled" }}</td>
+        </tr>
+        <tr>
+            <th scope="row">{_ Subscribers _}</th>
+            <td>
+                <span id="{{ #subscriber_count }}" aria-live="polite">{_ Loading… _}</span>
+                {% wire action={update target=#subscriber_count template="_mailing_subscriber_count.tpl" list_id=list_id} %}
+                <span class="text-muted">{_ before language and other filters _}</span>
+                {% if m.rsc[list_id].query %}
+                    <p class="help-block">{_ This rough total includes all query matches. Duplicate recipients are not removed yet. _}</p>
+                {% endif %}
+            </td>
         </tr>
         <tr>
             <th scope="row">{_ Page _}</th>
@@ -29,10 +40,6 @@
                 <td>{{ m.rsc[id].publication_start|date:_"Y-m-d H:i" }}</td>
             </tr>
         {% endif %}
-        <tr>
-            <th scope="row">{_ List members before selection _}</th>
-            <td>{{ list_stats.total|default:0 }}</td>
-        </tr>
     </tbody>
 </table>
 
@@ -52,10 +59,10 @@
     <input type="hidden" name="list_id" value="{{ list_id }}" />
 
     <div class="form-group">
-        <label for="{{ #language }}">{_ Language _}</label>
+        <label for="{{ #language }}">{_ Email language _}</label>
         <select class="form-control" id="{{ #language }}" name="mailing_language">
             <option value="" {% if not options.language %}selected{% endif %}>
-                {_ Recipient's preferred language _}
+                {_ Choose the best language for each recipient _}
             </option>
             {% for code in id.language %}
                 <option value="{{ code|escape }}" {% if options.language == code %}selected{% endif %}>
@@ -64,8 +71,27 @@
             {% endfor %}
         </select>
     </div>
+
+    <fieldset class="form-group" id="{{ #language_policy_group }}">
+        <h4>{_ Who should receive this mailing? _}</h4>
+        <div class="radio">
+            <label>
+                <input type="radio" name="language_policy" value="all" {% if not options.language_policy or options.language_policy == "all" %}checked{% endif %}>
+                <strong>{_ Send to everyone _}</strong><br>
+                {_ Use their preferred language when available. Otherwise use the fallback language below. _}
+            </label>
+        </div>
+        <div class="radio">
+            <label>
+                <input type="radio" name="language_policy" value="matching" {% if options.language_policy == "matching" %}checked{% endif %}>
+                <strong>{_ Only recipients whose preferred language is available _}</strong><br>
+                {_ Skip recipients whose preferred language is unavailable or who have not set a preference. _}
+            </label>
+        </div>
+        <p class="help-block">{_ Regional preferences can use the base language, for example Belgian Dutch can use Dutch. _}</p>
+    </fieldset>
     <div class="form-group" id="{{ #fallback_group }}">
-        <label for="{{ #fallback }}">{_ Language for recipients without a preference _}</label>
+        <label for="{{ #fallback }}">{_ Fallback language _}</label>
         <select class="form-control" id="{{ #fallback }}" name="fallback_language">
             {% for code in id.language %}
                 <option value="{{ code|escape }}" {% if code == options.fallback_language or not options.fallback_language and code == z_language %}selected{% endif %}>
@@ -75,18 +101,20 @@
                 <option value="{{ z_language|escape }}">{{ z_language|escape }}</option>
             {% endfor %}
         </select>
-        <p class="help-block">{_ Missing translations are skipped and reported. _}</p>
+        <p class="help-block">{_ Used when a preferred language is unavailable, unrecognized or not set. _}</p>
     </div>
+    <p class="help-block">{_ Unsubscribed recipients, blocked or invalid addresses, and recipients excluded by your delivery-history selection will not receive an email. _}</p>
     <div class="form-group" id="{{ #audience_group }}">
-        <label for="{{ #audience }}">{_ When selecting a language _}</label>
+        <label for="{{ #audience }}">{_ Who should receive the mailing in the selected Email language? _}</label>
         <select class="form-control" id="{{ #audience }}" name="audience">
             <option value="matching">{_ Only recipients matching that language _}</option>
+            <option value="matching_or_unset" {% if options.audience == "matching_or_unset" %}selected{% endif %}>{_ Recipients matching this language, plus those without a language preference _}</option>
             <option value="all" {% if options.audience == "all" or is_test and not options.audience %}selected{% endif %}>{_ All recipients, using that language _}</option>
         </select>
     </div>
     {% if history and not is_test %}
         <div class="form-group">
-            <label for="{{ #mode }}">{_ Recipients _}</label>
+            <label for="{{ #mode }}">{_ Previous deliveries _}</label>
             <select class="form-control" id="{{ #mode }}" name="send_mode">
                 {% if not is_test and not history_expired %}
                     <option value="new" {% if options.send_mode == "new" %}selected{% endif %}>
@@ -123,43 +151,46 @@
             <p class="alert alert-info">{_ Test email queued for _} {{ test_email|escape }}.
             <a target="_mailingtest" href="{% url admin_mailing_run run_id=test_run_id %}">{_ View test result _}</a></p>
         {% endif %}
-        <details>
-            <summary>{_ Send a test email before continuing _}</summary>
-            <label for="{{ #test_email }}">{_ Test email address _}</label>
-            <input class="form-control" id="{{ #test_email }}" name="test_email" type="email" value="{{ test_email|default:m.acl.user.email|escape }}">
-            <label for="{{ #test_language }}">{_ Test language _}</label>
-            <select class="form-control" id="{{ #test_language }}" name="test_language">
-                {% for code in id.language %}
-                    <option value="{{ code|escape }}" {% if test_language == code %}selected{% endif %}>
-                        {{ m.translation.language_list_configured[code].name|default:code|escape }}
-                    </option>
-                {% endfor %}
-            </select>
-            <button class="btn btn-default" type="submit" name="mailing_step" value="test">{_ Send test email _}</button>
-            <p class="help-block">{_ Only the test address receives this email. Your mailing choices are kept here. _}</p>
-        </details>
+
+        <div class="alert alert-info">
+            <details>
+                <summary>{_ Send a test email before continuing _}</summary>
+                <div class="form-group">
+                    <label for="{{ #test_email }}">{_ Test email address _}</label>
+                    <input class="form-control" id="{{ #test_email }}" name="test_email" type="email" value="{{ test_email|default:m.acl.user.email|escape }}">
+                </div>
+                <div class="form-group">
+                    <label for="{{ #test_language }}">{_ Test language _}</label>
+                    <select class="form-control" id="{{ #test_language }}" name="test_language">
+                        {% for code in id.language %}
+                            <option value="{{ code|escape }}" {% if test_language == code %}selected{% endif %}>
+                                {{ m.translation.language_list_configured[code].name|default:code|escape }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <button class="btn btn-default" type="submit" name="mailing_step" value="test">{_ Send test email _}</button>
+
+                <p class="help-block">{_ Only the test address receives this email. Your mailing choices are kept here. _}</p>
+            </details>
+        </div>
 
         {% with not m.rsc[id].is_published or m.rsc[id].publication_start|in_future as is_unpublished %}
             <div class="form-group">
                 <p><strong>{_ When should the mailing be sent? _}</strong></p>
 
                 <label class="radio">
-                    <input type="radio" name="mail_when" value="now" {% if mail_when == "now" or not mail_when and not is_unpublished %}checked="checked" {% endif %}> {_ Send the mailing right now. _}
+                    <input type="radio" name="mail_when" value="now" {% if not mail_when or mail_when == "now" or mail_when == "scheduled" %}checked{% endif %}>
                     {% if is_unpublished %}
-                        <span class="text-muted">{_ The page is unpublished, no link back to the website in the mailing. _}</span>
+                        {_ Send as soon as the page is published. _}
+                        {% if m.rsc[id].publication_start|in_future %}
+                            <span class="text-muted">{_ Not before _} {{ m.rsc[id].publication_start|date:_"Y-m-d H:i" }} ({{ m.req.timezone|escape }}).</span>
+                        {% endif %}
+                    {% else %}
+                        {_ Send the mailing right now. _}
                     {% endif %}
                 </label>
-                {% if is_unpublished %}
-                    <label class="radio">
-                        <input type="radio" name="mail_when" value="scheduled" {% if not mail_when or mail_when == "scheduled" %}checked{% endif %}>
-                        {% if not m.rsc[id].is_published %}
-                            {_ Send the mailing immediately after the page has been published. _}
-                        {% else %}
-                            {_ Send the mailing automatically after the publication start date of _}
-                            {{ m.rsc[id].publication_start|date:_"Y-m-d H:i" }}.
-                        {% endif %}
-                    </label>
-                {% endif %}
                 <label class="radio">
                     <input type="radio" name="mail_when" value="date" {% if mail_when == "date" %}checked{% endif %}>
                     {_ Send the mailing on a specific date and time. _}
@@ -195,11 +226,15 @@
 
 {% javascript %}
     const languageSelect = document.getElementById("{{ #language }}");
+    const languagePolicyGroup = document.getElementById("{{ #language_policy_group }}");
     const toggleLanguage = () => {
         document.getElementById("{{ #audience_group }}").hidden = !languageSelect.value;
-        document.getElementById("{{ #fallback_group }}").hidden = !!languageSelect.value;
+        languagePolicyGroup.hidden = !!languageSelect.value;
+        const matchingOnly = languagePolicyGroup.querySelector("input[value='matching']").checked;
+        document.getElementById("{{ #fallback_group }}").hidden = !!languageSelect.value || matchingOnly;
     };
     languageSelect.addEventListener("change", toggleLanguage);
+    languagePolicyGroup.addEventListener("change", toggleLanguage);
     toggleLanguage();
 {% endjavascript %}
 
@@ -225,6 +260,5 @@
     {% endjavascript %}
 {% endif %}
 
-{% endwith %}
 {% endwith %}
 {% endwith %}

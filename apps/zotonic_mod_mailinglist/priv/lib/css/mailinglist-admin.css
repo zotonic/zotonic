@@ -1,3 +1,14 @@
+.mailing-list-choices > tbody > tr > td {
+  padding-block: 1rem;
+}
+
+.mailing-list-choice-action {
+  margin-top: 0.75rem;
+}
+.mailing-list-choice-action .btn {
+  white-space: normal;
+}
+
 .table.mailing-run-timeline,
 .table.mailing-run-languages {
   width: auto;

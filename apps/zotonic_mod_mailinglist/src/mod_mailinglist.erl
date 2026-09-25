@@ -255,6 +255,7 @@ Delegate callbacks:
                         | {is_send_all, boolean()}
                         | {language, binary() | atom()}
                         | {fallback_language, binary() | atom()}
+                        | {language_policy, binary()}
                         | {audience, binary()}
                         | {send_mode, binary()}
                         | {parent_id, integer()}

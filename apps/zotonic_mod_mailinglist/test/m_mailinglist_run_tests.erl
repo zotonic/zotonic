@@ -80,7 +80,8 @@ back_preserves_draft_test() ->
     Draft = [
         {language, <<"nl">>},
         {fallback_language, <<"en">>},
-        {audience, <<"all">>},
+        {language_policy, <<"matching">>},
+        {audience, <<"matching_or_unset">>},
         {send_mode, <<"failed">>}
     ],
     Args = [
@@ -120,6 +121,7 @@ language_test() ->
     end,
     L = fun m_mailinglist_run:language/4,
     ?assertEqual({ok, <<"nl">>}, L(<<>>, nl, <<"en">>, [en, nl])),
+    ?assertEqual({ok, <<"nl">>}, L(<<>>, <<"nl-be">>, <<"en">>, [en, nl])),
     ?assertEqual({ok, <<"en">>}, L(<<>>, undefined, <<"en">>, [en, nl])),
     ?assertEqual({ok, <<"nl">>}, L(<<"nl">>, en, <<"en">>, [en, nl])),
     ?assertMatch({skip, _}, L(<<>>, fr, <<"en">>, [en, nl])),
@@ -235,6 +237,7 @@ postgres(Db) ->
         z_db:q("insert into rsc(id) values (1),(2),(3)", Context),
         _ = z_mailinglist_schema:manage_schema(install, Context),
         schema_migration(Context),
+        language_policies(Context),
         recovery_regressions(Context),
         history_pagination(Context),
         delivery(Context),
@@ -792,4 +795,281 @@ history_pagination(Ctx) ->
     after
         meck:unload(z_acl),
         z_db:q("delete from mailinglist_run", Ctx)
+    end.
+
+
+language_policies(Ctx) ->
+    Candidates = #{
+        <<"resource@example.com">> => 1,
+        <<"english@example.com">> => #{<<"pref_language">> => en},
+        <<"dutch@example.com">> => #{<<"pref_language">> => <<"nl-be">>},
+        <<"french@example.com">> => #{<<"pref_language">> => fr},
+        <<"unknown@example.com">> => #{<<"pref_language">> => <<"not-a-language">>},
+        <<"unset@example.com">> => #{}
+    },
+    Base = [{fallback_language, <<"en">>}, {send_mode, <<"all">>}],
+    meck:expect(z_mailinglist_recipients, list_candidates, fun(_, _) -> Candidates end),
+    try
+        All = [{language_policy, <<"all">>} | Base],
+        Matching = [{language_policy, <<"matching">>} | Base],
+        EnglishOnly = [{language, <<"en">>}, {audience, <<"matching">>} | Base],
+        EnglishWithUnset = [{language, <<"en">>}, {audience, <<"matching_or_unset">>} | Base],
+        DutchWithUnset = [{language, <<"nl">>}, {audience, <<"matching_or_unset">>} | Base],
+        lists:foreach(
+            fun({Options, Language, Count}) ->
+                ?assertEqual(
+                    #{{Language, <<"pending">>} => Count, {Language, <<"skipped">>} => 6 - Count},
+                    z_mailinglist_run:preview(2, 1, Options, Ctx)
+                )
+            end,
+            [{EnglishOnly, <<"en">>, 2}, {EnglishWithUnset, <<"en">>, 3},
+             {DutchWithUnset, <<"nl">>, 2}]
+        ),
+        ?assertEqual(
+            #{{<<"en">>, <<"pending">>} => 5, {<<"nl">>, <<"pending">>} => 1},
+            z_mailinglist_run:preview(2, 1, All, Ctx)
+        ),
+        Review = z_mailinglist_run:review(2, 1, Matching, Ctx),
+        ?assertEqual(
+            #{
+                {<<"en">>, <<"pending">>} => 2,
+                {<<"nl">>, <<"pending">>} => 1,
+                {<<"en">>, <<"skipped">>} => 3
+            },
+            maps:get(counts, Review)
+        ),
+        ?assertEqual(
+            #{
+                <<"Missing translation">> => 1,
+                <<"Unknown recipient language">> => 1,
+                <<"No preferred language">> => 1
+            },
+            maps:get(reasons, Review)
+        ),
+        %% Existing schedules without a policy retain the old language behavior.
+        ?assertEqual(
+            #{
+                {<<"en">>, <<"pending">>} => 3,
+                {<<"nl">>, <<"pending">>} => 1,
+                {<<"en">>, <<"skipped">>} => 2
+            },
+            z_mailinglist_run:preview(2, 1, Base, Ctx)
+        ),
+        %% Choosing one language for everyone is independent of the automatic policy.
+        ?assertEqual(
+            #{{<<"en">>, <<"pending">>} => 6},
+            z_mailinglist_run:preview(
+                2, 1, [{language, <<"en">>}, {audience, <<"all">>} | Matching], Ctx
+            )
+        ),
+        lists:foreach(
+            fun({Options, Count}) ->
+                Id = new_run(Options, Ctx),
+                {ok, #{<<"id">> := Id}} = m_mailinglist_run:claim(Ctx),
+                meck:expect(z_email_server, send_queued, fun(Msg, Mail, C) ->
+                    ExpectedLanguage =
+                        case proplists:get_value(language, Options) of
+                            undefined ->
+                                case Mail#email.to of
+                                    <<"dutch@example.com">> -> <<"nl">>;
+                                    _ -> <<"en">>
+                                end;
+                            SelectedLanguage -> SelectedLanguage
+                        end,
+                    ?assertEqual(
+                        ExpectedLanguage, proplists:get_value(email_language, Mail#email.vars)
+                    ),
+                    m_mailinglist_run:message(Msg, <<"sent">>, false, 0, undefined, C),
+                    {ok, Msg}
+                end),
+                ok = z_mailinglist_run:send(Id, Ctx),
+                ?assertEqual(Count, maps:get(<<"sent">>, m_mailinglist_run:stats(Id, Ctx))),
+                {ok, {Public, []}} = m_mailinglist_run:m_get([<<"run">>, Id], undefined, Ctx),
+                ?assertEqual(
+                    proplists:get_value(language_policy, Options),
+                    maps:get(<<"language_policy">>, Public)
+                ),
+                {ok, Again} = m_mailinglist_run:resend(Id, <<"all">>, Ctx),
+                {ok, Resend} = m_mailinglist_run:get(Again, Ctx),
+                ?assertEqual(proplists:get_value(audience, Options, <<"matching">>),
+                    maps:get(<<"audience">>, Resend)),
+                ?assertEqual(
+                    proplists:get_value(language_policy, Options),
+                    proplists:get_value(language_policy, maps:get(<<"options">>, Resend))
+                ),
+                z_db:q("delete from mailinglist_run where id=any($1::bigint[])", [[Id, Again]], Ctx)
+            end,
+            [{All, 6}, {Matching, 3}, {EnglishOnly, 2}, {EnglishWithUnset, 3}, {DutchWithUnset, 2}]
+        ),
+        ?assertEqual(
+            {error, invalid_options},
+            m_mailinglist_run:create(
+                2, 1, <<"date">>, calendar:universal_time(), [{language_policy, <<"invalid">>}], Ctx
+            )
+        )
+    after
+        meck:expect(z_mailinglist_recipients, list_candidates, fun(_, _) ->
+            #{<<"one@example.com">> => 1, <<"two@example.com">> => #{<<"pref_language">> => nl}}
+        end)
+    end.
+
+immediate_publication_test() ->
+    Modules = [m_mailinglist_run, z_mailinglist_run, m_rsc, z_render, z_sidejob],
+    Context = #context{language = [en]},
+    Future = {{2099, 1, 1}, {10, 0, 0}},
+    try
+        lists:foreach(fun(M) -> meck:new(M, [passthrough, no_link]) end, Modules),
+        meck:expect(z_sidejob, start, fun(_, _, _, _) -> {ok, self()} end),
+        meck:expect(m_mailinglist_run, allowed, fun(_, _) -> true end),
+        meck:expect(z_mailinglist_run, review, fun(_, _, _, _) ->
+            #{counts => #{{<<"en">>, <<"pending">>} => 1}, reasons => #{}}
+        end),
+        meck:expect(m_rsc, rid, fun(mailinglist_test, _) -> 3 end),
+        meck:expect(z_render, dialog, fun(_, _, _, C) -> C end),
+        lists:foreach(
+            fun({List, Start, Type}) ->
+                Run = #{
+                    <<"id">> => 1, <<"page_id">> => 1, <<"mailinglist_id">> => List,
+                    <<"language">> => <<>>, <<"fallback_language">> => <<"en">>,
+                    <<"audience">> => <<"all">>, <<"options">> => []
+                },
+                meck:expect(m_mailinglist_run, get, fun(_, _) -> {ok, Run} end),
+                meck:expect(m_rsc, p, fun(1, publication_start, _) -> Start end),
+                meck:reset(z_render),
+                #context{} = action_mailinglist_dialog_mailing_page:event(
+                    #postback{message = {mailing_resend_review, [{run_id, 1}, {mode, <<"all">>}]}},
+                    Context
+                ),
+                Vars = meck:capture(1, z_render, dialog, ['_', "_dialog_mailing_count.tpl", '_', '_'], 3),
+                ?assertEqual(Type, proplists:get_value(type, Vars)),
+                Due = proplists:get_value(due, Vars),
+                case {List, Start} of
+                    {2, Future} -> ?assertEqual(Future, Due);
+                    _ -> ?assert(Due =< calendar:universal_time())
+                end
+            end,
+            [{2, Future, <<"publication">>},
+             {2, {{2020, 1, 1}, {0, 0, 0}}, <<"publication">>},
+             {2, undefined, <<"publication">>},
+             {3, Future, <<"date">>}]
+        ),
+        meck:expect(z_sidejob, start, fun(_, _, _, _) -> {error, overload} end),
+        #context{} = action_mailinglist_dialog_mailing_page:event(
+            #postback{message = {mailing_resend_review, [{run_id, 1}, {mode, <<"all">>}]}},
+            Context
+        ),
+        Busy = meck:capture(1, z_render, dialog, ['_', "_dialog_mailing_count_error.tpl", '_', '_'], 3),
+        ?assertEqual(overload, proplists:get_value(error, Busy))
+    after
+        lists:foreach(fun(M) -> catch meck:unload(M) end, Modules)
+    end.
+
+%% A blocked count must not block its postback or offer a send button early.
+async_review_test() ->
+    Modules = [z_mailinglist_run, mod_mailinglist, m_rsc, z_render, z_transport],
+    Context = #context{language = [en]},
+    Parent = self(),
+    Vars = [{id, 1}, {list_id, 2}, {options, []}],
+    Start = fun() ->
+        spawn_monitor(fun() ->
+            action_mailinglist_dialog_mailing_page:await_review(Vars, Context)
+        end)
+    end,
+    Event = fun(Pid) ->
+        #postback{
+            message =
+                {mailing_review_count, [{target, <<"draft-1">>}, {draft, Vars}, {count_pid, Pid}]}
+        }
+    end,
+    Back = fun(Pid) ->
+        #postback{message = {mailing_back, [{count_pid, Pid} | Vars]}}
+    end,
+    try
+        lists:foreach(fun(M) -> meck:new(M, [passthrough, no_link]) end, Modules),
+        meck:expect(mod_mailinglist, is_allowed_to_send, fun(_, _, _) -> true end),
+        meck:expect(m_rsc, rid, fun(mailinglist_test, _) -> 3 end),
+        meck:expect(z_render, dialog, fun(_, _, _, C) -> C end),
+        meck:expect(z_render, update, fun(Target, Render, C) ->
+            Parent ! {updated, Target, Render},
+            C
+        end),
+        meck:expect(z_transport, reply_actions, fun(_) -> ok end),
+        meck:expect(z_mailinglist_run, review, fun(_, _, _, _) ->
+            Parent ! {counting, self()},
+            receive
+                finish_count ->
+                    #{counts => #{{<<"en">>, <<"pending">>} => 7}, reasons => #{}}
+            after 2000 -> error(test_count_not_released)
+            end
+        end),
+        {Worker, Ref} = Start(),
+        ?assertEqual(Context, action_mailinglist_dialog_mailing_page:event(Event(Worker), Context)),
+        receive
+            {counting, Worker} -> ok
+        after 1000 -> error(no_count_worker)
+        end,
+        ?assertEqual(0, meck:num_calls(z_render, update, '_')),
+        Worker ! finish_count,
+        receive
+            {updated, <<"draft-1">>, #render{
+                template = "_dialog_mailing_review.tpl", vars = Review
+            }} ->
+                ?assertEqual(7, proplists:get_value(eligible, Review))
+        after 1000 -> error(no_review)
+        end,
+        receive
+            {'DOWN', Ref, process, Worker, normal} -> ok
+        after 1000 -> error(worker_not_done)
+        end,
+        %% Back terminates both an active count and a not-yet-started count.
+        lists:foreach(
+            fun(IsStarted) ->
+                {Pid, Monitor} = Start(),
+                case IsStarted of
+                    true ->
+                        action_mailinglist_dialog_mailing_page:event(Event(Pid), Context),
+                        receive
+                            {counting, Pid} -> ok
+                        after 1000 -> error(no_count_worker)
+                        end;
+                    false ->
+                        ok
+                end,
+                ?assertEqual(
+                    Context, action_mailinglist_dialog_mailing_page:event(Back(Pid), Context)
+                ),
+                receive
+                    {'DOWN', Monitor, process, Pid, shutdown} -> ok
+                after 1000 -> error(count_not_cancelled)
+                end
+            end,
+            [true, false]
+        ),
+        ?assertEqual(1, meck:num_calls(z_render, update, '_')),
+        meck:expect(z_mailinglist_run, review, fun(_, _, _, _) -> error(timeout) end),
+        ?assertEqual(
+            ok, action_mailinglist_dialog_mailing_page:review_async(<<"draft-2">>, Vars, Context)
+        ),
+        receive
+            {updated, <<"draft-2">>, #render{
+                template = "_dialog_mailing_count_error.tpl", vars = ErrorVars
+            }} ->
+                ?assertEqual(count_failed, proplists:get_value(error, ErrorVars)),
+                ?assertEqual([], proplists:get_value(options, ErrorVars))
+        after 1000 -> error(no_count_error)
+        end,
+        meck:expect(mod_mailinglist, is_allowed_to_send, fun(_, _, _) -> false end),
+        {Denied, DeniedRef} = Start(),
+        ?assertEqual(Context, action_mailinglist_dialog_mailing_page:event(Event(Denied), Context)),
+        receive
+            {'DOWN', DeniedRef, process, Denied, shutdown} -> ok
+        after 1000 -> error(denied_worker_not_cancelled)
+        end,
+        receive
+            {updated, <<"draft-1">>, #render{vars = DeniedVars}} ->
+                ?assertEqual(eacces, proplists:get_value(error, DeniedVars))
+        after 1000 -> error(no_permission_error)
+        end
+    after
+        lists:foreach(fun(M) -> catch meck:unload(M) end, Modules)
     end.

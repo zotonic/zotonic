@@ -18,8 +18,14 @@
     <p>
         <span class="text-muted">{_ Language: _}</span>
         <strong>{% if run.language %}{{ m.translation.language_list_configured[run.language].name|default:run.language|escape }}{% else %}{_ Recipient preference _}{% endif %}</strong>
-        <br><span class="text-muted">{_ Language when no preference is known: _}</span>
+        {% if not run.language and run.language_policy %}
+            <br><span class="text-muted">{_ Language selection: _}</span>
+            <strong>{% if run.language_policy == "all" %}{_ Everyone, using their best available language _}{% else %}{_ Matching preferred languages only _}{% endif %}</strong>
+        {% endif %}
+        {% if run.language_policy != "matching" or run.language %}
+        <br><span class="text-muted">{% if run.language_policy == "all" %}{_ Fallback language: _}{% else %}{_ Language when no preference is known: _}{% endif %}</span>
         <strong>{{ m.translation.language_list_configured[run.fallback_language].name|default:run.fallback_language|escape }}</strong>
+        {% endif %}
         <br><span class="text-muted">{_ Sender: _}</span>
         <strong>
             {% if run.sender_id %}

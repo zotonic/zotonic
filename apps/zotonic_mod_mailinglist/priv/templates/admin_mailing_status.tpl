@@ -1,5 +1,10 @@
 {% extends "admin_base.tpl" %}
 
+{% block head_extra %}
+    {% inherit %}
+    {% lib "css/mailinglist-admin.css" %}
+{% endblock %}
+
 {% block title %}{% trans "Send “{title}” to a mailing list" title=m.rsc[id].title %}{% endblock %}
 
 {% block content %}

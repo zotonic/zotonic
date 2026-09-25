@@ -42,8 +42,21 @@ New-recipient sends exclude previous successful or pending deliveries of the
 same page/list/actual language. Retry sends select prior failures and recheck
 current subscriptions/suppression. Explicit “send again to everyone” creates a
 new run without clearing history. Language selection applies equally to
-resource and email-only subscribers. Missing translations are reported as
-skipped; recipients without a language use the selected fallback.
+resource and email-only subscribers. Automatic language selection offers two
+explicit choices: send to everyone using their preferred translation (or its
+base language), falling back to the selected language when necessary; or send
+only when the recipient has a matching language preference. The latter skips
+unavailable, unrecognized and unset preferences. Subscription, suppression and
+delivery-history checks still apply in both modes. The review shows the policy
+and selected counts per language. The choice survives Back, tests and resends.
+Existing runs without a language policy keep their original behavior: missing
+translations are skipped, while an unset preference uses the fallback.
+
+For a specific email language, editors can select matching preferences only,
+matching preferences plus recipients without a preference, or everyone. The
+middle choice sends the selected language to recipients without a preference,
+independently of the automatic-language fallback. Unknown or different preferences
+do not count as unset. The review states which audience will receive the mailing.
 
 ## Verification
 
@@ -60,7 +73,19 @@ opt-in tests only in a standalone Erlang VM, never in a running Zotonic node.
 Choose a list and language, preview or send a single-address test without losing
 these choices, review the estimated audience and timing, then confirm. Back
 preserves the draft, including scheduled dates. Resends use the same review.
+Eligible recipients are counted in a supervised background job, so a large
+list does not hold open the dialog request. The review shows a counting message
+until the result arrives. Back cancels the worker and preserves the draft;
+late results cannot replace a different dialog. Query failures and server
+capacity limits show an error without enabling confirmation. Database queries
+keep their normal timeout limits.
 A review with no eligible recipients cannot be confirmed.
+
+The immediate-send choice for regular mailings waits until the page is published
+and its publication start date is reached. Future dates are shown in the dialog
+and review; later publication-date changes are respected by the scheduler.
+Test mailings remain immediate. An explicitly chosen mailing date remains an
+independent schedule.
 
 Results distinguish finished, nothing sent, stopped and needs attention. Skipped
 recipients are excluded from sending progress. Cancellation leaves queued mail

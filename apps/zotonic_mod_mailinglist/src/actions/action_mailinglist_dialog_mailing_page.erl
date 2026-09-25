@@ -32,7 +32,9 @@ at an explicitly selected date and time.\n").
 %% interface functions
 -export([
     render_action/4,
-    event/2
+    event/2,
+    await_review/2,
+    review_async/3
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -83,6 +85,8 @@ event(#postback{message = {mailing_resend_review, Args}}, Context) ->
                         {send_mode, proplists:get_value(mode, Args)},
                         {language, maps:get(<<"language">>, Run)},
                         {fallback_language, maps:get(<<"fallback_language">>, Run)},
+                        {language_policy,
+                            proplists:get_value(language_policy, maps:get(<<"options">>, Run, []))},
                         {audience, maps:get(<<"audience">>, Run)}
                     ],
                     handle_mailing(
@@ -101,7 +105,21 @@ event(#postback{message = {mailing_resend_review, Args}}, Context) ->
         _ ->
             z_render:growl_error(?__("This mailing is unavailable.", Context), Context)
     end;
+%% The signed draft is posted only after the loading dialog is mounted. This
+%% avoids a fast background result arriving before its target exists.
+event(#postback{message = {mailing_review_count, Args}}, Context) ->
+    Vars = proplists:get_value(draft, Args),
+    Target = proplists:get_value(target, Args),
+    case is_allowed(proplists:get_value(id, Vars), proplists:get_value(list_id, Vars), Context) of
+        true ->
+            proplists:get_value(count_pid, Args) ! {review, Target},
+            Context;
+        false ->
+            cancel_review(Args),
+            review_error(Target, Vars, eacces, Context)
+    end;
 event(#postback{message = {mailing_back, Args}}, Context) ->
+    cancel_review(Args),
     Page = proplists:get_value(id, Args),
     List = proplists:get_value(list_id, Args),
     case is_allowed(Page, List, Context) of
@@ -169,6 +187,7 @@ event(#submit{message = {mailing_page, Args}}, Context) ->
         {is_match_language, IsMatchLanguage},
         {is_send_all, IsSendAll},
         {language, z_context:get_q(<<"mailing_language">>, Context, <<>>)},
+        {language_policy, z_context:get_q(<<"language_policy">>, Context, <<"all">>)},
         {fallback_language,
             z_context:get_q(
                 <<"fallback_language">>, Context, m_mailinglist_run:fallback(PageId, Context)
@@ -202,7 +221,14 @@ handle_mailing(When, ListId, PageId, Options, OnSuccess, Context) ->
     Schedule =
         case When of
             <<"now">> ->
-                {ok, <<"date">>, calendar:universal_time()};
+                case is_test_mailinglist(ListId, Context) of
+                    true ->
+                        {ok, <<"date">>, calendar:universal_time()};
+                    false ->
+                        %% Keep publication gating until the scheduler claims the run.
+                        %% A later change of publication date must also delay delivery.
+                        {ok, <<"publication">>, publication_due(PageId, Context)}
+                end;
             <<"scheduled">> ->
                 {ok, <<"publication">>,
                     case m_rsc:p(PageId, publication_start, Context) of
@@ -219,46 +245,31 @@ handle_mailing(When, ListId, PageId, Options, OnSuccess, Context) ->
         end,
     case Schedule of
         {ok, Type, Due} ->
-            try z_mailinglist_run:review(ListId, PageId, Options, Context) of
-                #{counts := Counts, reasons := Reasons} ->
-                    Rows = [
-                        #{language => L, status => S, total => N}
-                     || {{L, S}, N} <- lists:sort(maps:to_list(Counts))
-                    ],
-                    Vars = [
-                        {id, PageId},
-                        {list_id, ListId},
-                        {type, Type},
-                        {due, Due},
-                        {counts, Rows},
-                        {reasons, lists:sort(maps:to_list(Reasons))},
-                        {eligible,
-                            lists:sum([N || {{_, <<"pending">>}, N} <- maps:to_list(Counts)])},
-                        {mail_when, When},
-                        {mailing_date, z_context:get_q(<<"dt:ymd:0:mailing_date">>, Context)},
-                        {mailing_time, z_context:get_q(<<"dt:hi:0:mailing_date">>, Context)},
-                        {is_test, is_test_mailinglist(ListId, Context)},
-                        {options, [{request_key, z_ids:id(32)} | Options]},
-                        {on_success, OnSuccess}
-                    ],
+            Vars = [
+                {id, PageId},
+                {list_id, ListId},
+                {type, Type},
+                {due, Due},
+                {mail_when, When},
+                {mailing_date, z_context:get_q(<<"dt:ymd:0:mailing_date">>, Context)},
+                {mailing_time, z_context:get_q(<<"dt:hi:0:mailing_date">>, Context)},
+                {is_test, is_test_mailinglist(ListId, Context)},
+                {options, [{request_key, z_ids:id(32)} | Options]},
+                {on_success, OnSuccess}
+            ],
+            case z_sidejob:start(?MODULE, await_review, [Vars], Context) of
+                {ok, Pid} ->
                     z_render:dialog(
-                        ?__("Review mailing", Context), "_dialog_mailing_review.tpl", Vars, Context
-                    )
-            catch
-                error:{badmatch, {error, history_expired}} ->
-                    z_render:growl_error(
-                        ?__(
-                            "Recipient history has expired. Go back and select all recipients to send again.",
-                            Context
-                        ),
+                        ?__("Review mailing", Context),
+                        "_dialog_mailing_count.tpl",
+                        [{count_pid, Pid}, {draft, Vars} | Vars],
                         Context
                     );
-                _:_ ->
-                    z_render:growl_error(
-                        ?__(
-                            "Could not prepare the recipient estimate. Check the list query and language selection.",
-                            Context
-                        ),
+                {error, overload} ->
+                    z_render:dialog(
+                        ?__("Review mailing", Context),
+                        "_dialog_mailing_count_error.tpl",
+                        [{error, overload} | Vars],
                         Context
                     )
             end;
@@ -267,6 +278,75 @@ handle_mailing(When, ListId, PageId, Options, OnSuccess, Context) ->
                 ?__("Enter a valid future mailing date and time.", Context), Context
             )
     end.
+
+%% @doc Wait until the loading dialog exists before starting its count.
+%% Allocate the worker first so even an immediate Back has a signed pid to
+%% cancel. Abandoned requests that never mount their dialog release the slot.
+-spec await_review(list(), z:context()) -> ok | {error, term()}.
+await_review(Vars, Context) ->
+    receive
+        {review, Target} -> review_async(Target, Vars, Context)
+    after 60000 ->
+        ok
+    end.
+
+cancel_review(Args) ->
+    %% This pid is only read from signed postback arguments, never query input.
+    case proplists:get_value(count_pid, Args) of
+        Pid when is_pid(Pid) -> exit(Pid, shutdown);
+        undefined -> ok
+    end.
+
+%% @doc Count outside the browser request, retaining the editor's ACL context.
+%% Only update this draft's unique target: closing or replacing the dialog must
+%% never reopen it or overwrite a newer review with an older estimate.
+-spec review_async(binary() | string(), list(), z:context()) -> ok | {error, term()}.
+review_async(Target, Vars, Context) ->
+    Context1 =
+        try
+            ListId = proplists:get_value(list_id, Vars),
+            PageId = proplists:get_value(id, Vars),
+            true = is_allowed(PageId, ListId, Context),
+            Options = proplists:get_value(options, Vars),
+            #{counts := Counts, reasons := Reasons} =
+                z_mailinglist_run:review(ListId, PageId, Options, Context),
+            Rows = [
+                #{language => L, status => S, total => N}
+             || {{L, S}, N} <- lists:sort(maps:to_list(Counts))
+            ],
+            ReviewVars = [
+                {counts, Rows},
+                {reasons, lists:sort(maps:to_list(Reasons))},
+                {eligible, lists:sum([N || {{_, <<"pending">>}, N} <- maps:to_list(Counts)])}
+                | Vars
+            ],
+            z_render:update(
+                Target, #render{template = "_dialog_mailing_review.tpl", vars = ReviewVars}, Context
+            )
+        catch
+            error:{badmatch, {error, history_expired}} ->
+                review_error(Target, Vars, history_expired, Context);
+            Class:Reason:Stack ->
+                ?LOG_ERROR(#{
+                    in => mod_mailinglist,
+                    text => <<"Could not count eligible mailing recipients">>,
+                    result => Class,
+                    reason => Reason,
+                    stack => Stack
+                }),
+                review_error(Target, Vars, count_failed, Context)
+        end,
+    z_transport:reply_actions(Context1).
+
+review_error(Target, Vars, Error, Context) ->
+    z_render:update(
+        Target,
+        #render{
+            template = "_dialog_mailing_count_error.tpl",
+            vars = [{error, Error} | Vars]
+        },
+        Context
+    ).
 
 %% Keep the mailing draft visible while a separate, single-address test is queued.
 send_preview_test(ListId, PageId, Options, Context) ->
@@ -344,6 +424,13 @@ mailing_date(Context) ->
             catch
                 _:_ -> {error, invalid}
             end
+    end.
+
+publication_due(PageId, Context) ->
+    Now = calendar:universal_time(),
+    case m_rsc:p(PageId, publication_start, Context) of
+        undefined -> Now;
+        Start -> max(Now, Start)
     end.
 
 is_allowed(PageId, ListId, Context) ->

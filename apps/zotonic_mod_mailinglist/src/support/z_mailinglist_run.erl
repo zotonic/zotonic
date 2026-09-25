@@ -186,7 +186,7 @@ resolve(Run, Email0, Recipient, Context) ->
             L when is_list(L), L =/= [] -> L;
             _ -> [z_context:language(Context)]
         end,
-    Resolution = m_mailinglist_run:language(Lang, Pref, Fallback, Available),
+    Resolution = resolve_language(Run, Lang, Pref, Fallback, Available),
     {Actual, State, Reason} =
         case Resolution of
             {skip, Why} ->
@@ -202,6 +202,24 @@ resolve(Run, Email0, Recipient, Context) ->
         end,
     {Email, Rsc, Actual, FinalState, FinalReason}.
 
+%% New automatic-language choices are explicit. Runs without a policy keep
+%% their original behavior, including when an older schedule is resumed.
+resolve_language(Run, <<>>, Pref, Fallback, Available) ->
+    Policy = proplists:get_value(language_policy, maps:get(<<"options">>, Run, [])),
+    case {Policy, Pref} of
+        {<<"matching">>, Empty} when Empty =:= undefined; Empty =:= <<>>; Empty =:= [] ->
+            {skip, <<"No preferred language">>};
+        _ ->
+            case m_mailinglist_run:language(<<>>, Pref, Fallback, Available) of
+                {skip, _} when Policy =:= <<"all">> ->
+                    m_mailinglist_run:language(Fallback, undefined, Fallback, Available);
+                Result ->
+                    Result
+            end
+    end;
+resolve_language(_Run, Selected, Pref, Fallback, Available) ->
+    m_mailinglist_run:language(Selected, Pref, Fallback, Available).
+
 snapshot(Run, Email0, Recipient, Context) ->
     {Email, Rsc, Actual, State, Reason} = resolve(Run, Email0, Recipient, Context),
     ok = m_mailinglist_run:add_recipient(
@@ -211,11 +229,13 @@ snapshot(Run, Email0, Recipient, Context) ->
 eligibility(Run, Email, Pref, Lang, Available, Context) ->
     Selected = maps:get(<<"language">>, Run),
     Match =
-        case {Selected, maps:get(<<"audience">>, Run)} of
-            {<<>>, _} ->
+        case {Selected, maps:get(<<"audience">>, Run), Pref} of
+            {<<>>, _, _} ->
                 true;
-            {_, <<"all">>} ->
+            {_, <<"all">>, _} ->
                 true;
+            {_, Audience, Empty} when Empty =:= undefined; Empty =:= <<>>; Empty =:= [] ->
+                Audience =:= <<"matching_or_unset">>;
             _ ->
                 m_mailinglist_run:language(
                     <<>>, Pref, maps:get(<<"fallback_language">>, Run), Available

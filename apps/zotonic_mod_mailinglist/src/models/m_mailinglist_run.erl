@@ -87,6 +87,9 @@ Run details and statistics
 * `copies`: saved-content metadata containing `language` and `created`, ordered by language.
 * `first_submitted`: the first email submission timestamp, if available.
 * `test_address`: the single test recipient address, if this run has one.
+* `language_policy`: `all` to use the fallback for unavailable preferences, or
+  `matching` to skip unavailable or unset preferences when choosing languages
+  automatically. Absent on older runs, which keep their original behavior.
 
 `selected` excludes skipped recipients; `waiting` sums pending, submitting, queued and
 retrying recipients. `unsuccessful` sums failed and bounced recipients. `processed` is
@@ -203,6 +206,9 @@ m_get([<<"run">>, Id | Rest], _Msg, Context) ->
                             <<"first_submitted">> => FirstSubmitted,
                             <<"test_address">> => proplists:get_value(
                                 single_test_address, maps:get(<<"options">>, Run, [])
+                            ),
+                            <<"language_policy">> => proplists:get_value(
+                                language_policy, maps:get(<<"options">>, Run, [])
                             ),
                             <<"stats">> => stats(to_id(Id), Context),
                             <<"languages">> => ByLanguage
@@ -484,6 +490,10 @@ create_run(List, Page, Type, Due, Options, Context) ->
             Audience = proplists:get_value(audience, Options, <<"matching">>),
             case
                 valid_options(Lang, Fallback, Mode, Audience, Page, Context) andalso
+                    lists:member(
+                        proplists:get_value(language_policy, Options),
+                        [undefined, <<"all">>, <<"matching">>]
+                    ) andalso
                     lists:member(Type, [<<"date">>, <<"publication">>])
             of
                 false ->
@@ -533,7 +543,7 @@ fallback(Page, Context) ->
 
 valid_options(Lang, Fallback, Mode, Audience, Page, Context) ->
     lists:member(Mode, [<<"new">>, <<"all">>, <<"failed">>]) andalso
-        lists:member(Audience, [<<"matching">>, <<"all">>]) andalso
+        lists:member(Audience, [<<"matching">>, <<"matching_or_unset">>, <<"all">>]) andalso
         is_language(Fallback) andalso
         lists:member(z_convert:to_binary(Fallback), [
             z_convert:to_binary(L)
@@ -1120,10 +1130,14 @@ language(Selected, Preferred, Fallback, Available) ->
                 true ->
                     {ok, z_convert:to_binary(Lang)};
                 false ->
-                    Base = z_language:fallback_language(Lang),
-                    case lists:member(Base, Available) of
-                        true -> {ok, z_convert:to_binary(Base)};
-                        false -> {skip, <<"Missing translation">>}
+                    Matching = [
+                        Base
+                     || Base <- z_language:fallback_language(Lang),
+                        lists:member(Base, Available)
+                    ],
+                    case Matching of
+                        [Base | _] -> {ok, z_convert:to_binary(Base)};
+                        [] -> {skip, <<"Missing translation">>}
                     end
             end;
         _ ->
@@ -1147,6 +1161,8 @@ resend(Id, Mode, Context) when Mode =:= <<"failed">>; Mode =:= <<"all">>; Mode =
                         {send_mode, Mode},
                         {language, maps:get(<<"language">>, R)},
                         {fallback_language, maps:get(<<"fallback_language">>, R)},
+                        {language_policy,
+                            proplists:get_value(language_policy, maps:get(<<"options">>, R, []))},
                         {audience, maps:get(<<"audience">>, R)}
                     ],
                     create(
