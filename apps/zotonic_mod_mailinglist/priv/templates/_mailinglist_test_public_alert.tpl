@@ -1,5 +1,5 @@
-{% with m.rsc.mailinglist_test.id as test_list_id %}
-    {% if test_list_id and m.acl.anonymous.view[test_list_id] %}
+{% if m.rsc.mailinglist_test.id as test_list_id %}
+    {% if m.acl.anonymous.view[test_list_id] %}
         <div class="alert alert-danger" role="alert">
             <p><strong>{_ The test mailing list is publicly visible. _}</strong></p>
             <p>{_ Visitors who are not logged in can view this list. Test mailings are intended for internal review. Restrict the list’s visibility to internal users. _}</p>
@@ -10,4 +10,4 @@
             {% endif %}
         </div>
     {% endif %}
-{% endwith %}
+{% endif %}

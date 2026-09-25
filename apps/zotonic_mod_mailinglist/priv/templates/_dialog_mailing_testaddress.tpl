@@ -1,5 +1,10 @@
 
-{% wire type="submit" id=#form postback={mailing_testaddress id=id} action={dialog_close} delegate="mod_mailinglist" %}
+{% wire type="submit"
+        id=#form
+        postback={mailing_testaddress id=id}
+        action={dialog_close}
+        delegate="mod_mailinglist"
+%}
 <form id="{{ #form }}" method="post" action="postback">
 
     <p>
@@ -15,12 +20,17 @@
     <div class="form-group">
         <label for="{{ #language }}">{_ Language _}</label>
         <select id="{{ #language }}" name="mailing_language" class="form-control">
-        {% for code in id.language %}<option value="{{ code|escape }}">{{ m.translation.language_list_configured[code].name|default:code|escape }}</option>
-        {% empty %}<option value="{{ z_language|escape }}">{{ z_language|escape }}</option>{% endfor %}
+            {% for code in id.language %}
+                <option value="{{ code|escape }}">
+                    {{ m.translation.language_list_configured[code].name|default:code|escape }}
+                </option>
+            {% empty %}
+                <option value="{{ z_language|escape }}">{{ z_language|escape }}</option>
+            {% endfor %}
         </select>
     </div>
     <div class="modal-footer">
-        {% button class="btn btn-default" text=_"Cancel" action={dialog_close} tag="a" %}
+        {% button class="btn btn-default" text=_"Cancel" action={dialog_close} %}
         {% button class="btn btn-primary" type="submit" text=_"Send immediately" %}
     </div>
 </form>

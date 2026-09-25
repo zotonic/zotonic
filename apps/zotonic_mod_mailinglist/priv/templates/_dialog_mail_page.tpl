@@ -1,5 +1,10 @@
 
-{% wire type="submit" id=#form postback={mail_page id=id on_success=on_success} action={dialog_close} delegate=delegate %}
+{% wire type="submit"
+        id=#form
+        postback={mail_page id=id on_success=on_success}
+        action={dialog_close}
+        delegate=delegate
+%}
 <form id="{{ #form }}" method="post" action="postback">
 
     <p>{_ Please enter the e-mail address you want to send this page to. _}</p>
@@ -11,7 +16,7 @@
     </div>
 
     <div class="modal-footer">
-	    {% button class="btn btn-default" text=_"Cancel" action={dialog_close} tag="a" %}
+	    {% button class="btn btn-default" text=_"Cancel" action={dialog_close} %}
 	    {% button class="btn btn-primary" type="submit" text=_"Send e-mail" %}
     </div>
 </form>

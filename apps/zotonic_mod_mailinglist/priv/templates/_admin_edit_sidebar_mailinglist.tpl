@@ -28,10 +28,16 @@
                 });
         {% endjavascript %}
 
-        <a id="{{ #mailnow }}" class="btn btn-default btn-sm" title="{_ Send this page to a single address _}" href="#mail">
+        <button id="{{ #mailnow }}" class="btn btn-default btn-sm" title="{_ Send this page to a single address _}">
             <i class="glyphicon glyphicon-envelope"></i>
             {_ Send test email _}
-        </a>
-        {% wire id=#mailnow action={dialog_open template="_dialog_mailing_testaddress.tpl" title=_"Send test to address" id=id} %}
+        </button>
+        {% wire id=#mailnow
+                action={dialog_open
+                    template="_dialog_mailing_testaddress.tpl"
+                    title=_"Send test to address"
+                    id=id
+                }
+        %}
     </div>
 {% endblock %}
