@@ -960,14 +960,24 @@
 
 %% @doc Enrich a fetched resource export with import metadata. Type: foldl.
 %% The accumulator is the decoded export envelope; headers belong to final_url.
--record(rsc_import_fetch_result, {uri, final_url, headers = []}).
+-record(rsc_import_fetch_result, {
+    uri :: binary() | string(),
+    final_url :: string(),
+    headers = [] :: [{string(), string()}]
+}).
 
 %% @doc A resource import has completed. Type: notify. Options describe this import,
 %% not necessarily the options for recursively imported resources.
--record(rsc_import_done, {id, uri, options = []}).
+-record(rsc_import_done, {
+    id :: m_rsc:resource_id(),
+    uri :: binary(),
+    options = [] :: m_rsc_import:options()
+}).
 
 %% @doc Extend a resource export envelope (not its resource properties). Type: foldl.
--record(rsc_export_done, {id}).
+-record(rsc_export_done, {
+    id :: m_rsc:resource_id()
+}).
 
 
 %% @doc Notification for fetching #media_import_props{} from different modules.

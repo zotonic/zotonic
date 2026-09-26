@@ -3604,6 +3604,81 @@ Return:
 
 -optional_callbacks([ observe_rsc_import_fetch/2, pid_observe_rsc_import_fetch/3 ]).
 
+%% Enrich a fetched resource export with import metadata.
+%% Type: foldl
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "import_and_migration", "import"]
+}).
+-doc("
+Enrich the decoded resource-export envelope with import metadata. The response
+headers belong to `final_url`, after any redirects. Return the updated envelope.
+
+Type:
+
+[foldl](/id/doc_developerguide_notifications#notification-foldl)
+
+`#rsc_import_fetch_result{}` properties:
+
+*   uri: `binary() | string()` — the requested resource URI.
+*   final_url: `string()` — the final response URL.
+*   headers: `[{string(), string()}]` — response headers, defaulting to `[]`.
+").
+-callback observe_rsc_import_fetch_result(#rsc_import_fetch_result{}, Acc, z:context()) -> Acc when
+    Acc :: map().
+-callback pid_observe_rsc_import_fetch_result(pid(), #rsc_import_fetch_result{}, Acc, z:context()) -> Acc when
+    Acc :: map().
+
+-optional_callbacks([ observe_rsc_import_fetch_result/3, pid_observe_rsc_import_fetch_result/4 ]).
+
+%% A resource import has completed.
+%% Type: notify
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "import_and_migration", "import"]
+}).
+-doc("
+A resource import has completed. The options describe this particular import;
+recursively imported resources can have different options.
+
+Type:
+
+[notify](/id/doc_developerguide_notifications#notification-notify)
+
+`#rsc_import_done{}` properties:
+
+*   id: `m_rsc:resource_id()` — the imported local resource.
+*   uri: `binary()` — its source URI.
+*   options: `m_rsc_import:options()` — import options, defaulting to `[]`.
+").
+-callback observe_rsc_import_done(#rsc_import_done{}, z:context()) -> any().
+-callback pid_observe_rsc_import_done(pid(), #rsc_import_done{}, z:context()) -> any().
+
+-optional_callbacks([ observe_rsc_import_done/2, pid_observe_rsc_import_done/3 ]).
+
+%% Extend a resource export envelope, not its resource properties.
+%% Type: foldl
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "export_and_syndication", "export"]
+}).
+-doc("
+Extend the full resource-export envelope returned by `m_rsc_export:full/2`.
+The accumulator is the export map, not the nested resource-properties map.
+Return the updated export envelope.
+
+Type:
+
+[foldl](/id/doc_developerguide_notifications#notification-foldl)
+
+`#rsc_export_done{}` properties:
+
+*   id: `m_rsc:resource_id()` — the exported local resource.
+").
+-callback observe_rsc_export_done(#rsc_export_done{}, Acc, z:context()) -> Acc when
+    Acc :: map().
+-callback pid_observe_rsc_export_done(pid(), #rsc_export_done{}, Acc, z:context()) -> Acc when
+    Acc :: map().
+
+-optional_callbacks([ observe_rsc_export_done/3, pid_observe_rsc_export_done/4 ]).
+
 %% Notification for fetching #media_import_props{} from different modules.
 %% This is used by z_media_import.erl for fetching properties and medium information (map)
 %% about resources.  The metadata is the result returned by z_url_metadata.
