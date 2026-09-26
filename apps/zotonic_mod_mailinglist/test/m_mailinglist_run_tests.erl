@@ -1046,19 +1046,41 @@ async_review_test() ->
             [true, false]
         ),
         ?assertEqual(1, meck:num_calls(z_render, update, '_')),
-        meck:expect(z_mailinglist_run, review, fun(_, _, _, _) -> error(timeout) end),
-        ?assertEqual(
-            ok, action_mailinglist_dialog_mailing_page:review_async(<<"draft-2">>, Vars, Context)
-        ),
-        receive
-            {updated, <<"draft-2">>, #render{
-                template = "_dialog_mailing_count_error.tpl", vars = ErrorVars
-            }} ->
-                ?assertEqual(count_failed, proplists:get_value(error, ErrorVars)),
-                ?assertEqual([], proplists:get_value(options, ErrorVars))
-        after 1000 -> error(no_count_error)
-        end,
+        %% Timeout exceptions and gen_server timeout exits must all preserve
+        %% the draft and provide a retry path without logging an error stack.
+        lists:foreach(
+            fun(Fail) ->
+                meck:expect(z_mailinglist_run, review, fun(_, _, _, _) -> Fail() end),
+                ?assertEqual(ok,
+                    action_mailinglist_dialog_mailing_page:review_async(<<"draft-2">>, Vars, Context)),
+                receive
+                    {updated, <<"draft-2">>, #render{
+                        template = "_dialog_mailing_count_error.tpl", vars = ErrorVars
+                    }} ->
+                        ?assertEqual(count_failed, proplists:get_value(error, ErrorVars)),
+                        ?assertEqual([], proplists:get_value(options, ErrorVars))
+                after 1000 -> error(no_count_error)
+                end
+            end,
+            [
+                fun() -> error(timeout) end,
+                fun() -> exit(timeout) end,
+                fun() -> exit({timeout, {gen_server, call, [self(), count]}}) end,
+                fun() -> error({badmatch, {error, timeout}}) end
+            ]),
         meck:expect(mod_mailinglist, is_allowed_to_send, fun(_, _, _) -> false end),
+        %% Permissions can change after admission but before the worker runs.
+        CallsBeforeDenied = meck:num_calls(z_mailinglist_run, review, '_'),
+        ?assertEqual(ok,
+            action_mailinglist_dialog_mailing_page:review_async(<<"draft-denied">>, Vars, Context)),
+        ?assertEqual(CallsBeforeDenied, meck:num_calls(z_mailinglist_run, review, '_')),
+        receive
+            {updated, <<"draft-denied">>, #render{
+                template = "_dialog_mailing_count_error.tpl", vars = WorkerDeniedVars
+            }} ->
+                ?assertEqual(eacces, proplists:get_value(error, WorkerDeniedVars))
+        after 1000 -> error(no_worker_permission_error)
+        end,
         {Denied, DeniedRef} = Start(),
         ?assertEqual(Context, action_mailinglist_dialog_mailing_page:event(Event(Denied), Context)),
         receive
