@@ -1,0 +1,8 @@
+[
+    {admin_websub, [ "admin", "websub" ], controller_admin, [
+        {template, <<"admin_websub.tpl">>}, {acl_module, mod_admin_config}, {selected, admin_websub}
+    ]},
+    {websub_topic, [ ".zotonic", "websub", "topic", id ], controller_websub_topic, []},
+    {websub_callback, [ ".zotonic", "websub", token ], controller_websub, []},
+    {websub, [ ".zotonic", "websub" ], controller_websub, []}
+].
