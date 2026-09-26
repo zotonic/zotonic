@@ -129,6 +129,25 @@
                                                 </div>
                                             </div>
 
+                                            {% if m.modules.active.mod_websub %}
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input type="checkbox" name="z_import_subscribe" value="1"
+                                                            {% if not mi.props.is_websub_supported or is_authoritative %}disabled{% endif %}
+                                                            data-websub-supported="{% if mi.props.is_websub_supported %}1{% else %}0{% endif %}">
+                                                        {_ Automatically fetch updates from the original website. _}
+                                                    </label>
+                                                    <label>
+                                                        <input type="checkbox" name="z_import_subscribe_haspart" value="1">
+                                                        {_ Also subscribe to imported collection items (haspart). _}
+                                                    </label>
+                                                    <p class="help-block">{_ Requires automatic updates and imported connections. Item subscriptions remain active when items leave the collection. _}</p>
+                                                    {% if not mi.props.is_websub_supported %}
+                                                        <p class="help-block">{_ The original website does not advertise automatic updates. _}</p>
+                                                    {% endif %}
+                                                </div>
+                                            {% endif %}
+
                                             <div class="form-group">
                                                 <div class="radio form__import_edges">
                                                     <p>{_ Connections _}:</p>
@@ -202,8 +221,16 @@
     {% endfor %}
 
     {% javascript %}
+        document.getElementById('media-import-wrapper').addEventListener('change', (event) => {
+            if (event.target.name !== 'is_authoritative') return;
+            const checkbox = event.target.form.querySelector('[name="z_import_subscribe"]');
+            if (!checkbox) return;
+            checkbox.disabled = event.target.value === '1' || checkbox.dataset.websubSupported !== '1';
+            if (checkbox.disabled) checkbox.checked = false;
+        });
         $('#media-import-wrapper').on('change', 'input[type=checkbox]', function() {
             var name = $(this).attr('name');
+            if (name === 'z_import_subscribe') return;
             var id = $(this).attr('id');
             var is_checked = $(this).is(':checked');
             $('#media-import-wrapper').find('input[type=checkbox]').each(

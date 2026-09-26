@@ -1,9 +1,9 @@
 %% @author Arjan Scherpenisse, Marc Worrell
-%% @copyright 2009-2025 Arjan Scherpenisse <arjan@scherpenisse.net>, Marc Worrell <marc@worrell.nl>
+%% @copyright 2009-2026 Arjan Scherpenisse <arjan@scherpenisse.net>, Marc Worrell <marc@worrell.nl>
 %% @doc Entrypoint for model requests via HTTP.
 %% @end
 
-%% Copyright 2009-2025 Arjan Scherpenisse, Marc Worrell
+%% Copyright 2009-2026 Arjan Scherpenisse, Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -204,7 +204,7 @@ process_done({ok, #{
 process_done({ok, Resp}, ProvidedCT, Context) ->
     % z_mqtt:call response
     Body = z_controller_helper:encode_response(ProvidedCT, Resp),
-    Context1 = set_filename(ProvidedCT, Context),
+    Context1 = set_resource_headers(Resp, set_filename(ProvidedCT, Context)),
     {Body, Context1};
 process_done({error, _} = Error, ProvidedCT, Context) ->
     error_response(Error, ProvidedCT, Context).
@@ -275,6 +275,16 @@ error_response({error, Reason}, CT, Context) ->
         }),
     Context1 = cowmachine_req:set_resp_body(RespBody, Context),
     {{halt, 500}, Context1}.
+
+
+%% The resource export API is also the final target of /id content negotiation.
+%% Keep discovery on this response, not only on the redirect to it.
+set_resource_headers(#{<<"result">> := #{<<"id">> := Id}}, Context) ->
+    case z_context:get(topic, Context) of
+        [<<"model">>, <<"rsc_export">>, <<"get">> | _] -> z_context:set_resource_headers(Id, Context);
+        _ -> Context
+    end;
+set_resource_headers(_, Context) -> Context.
 
 
 set_filename(ProvidedCT, Context) ->

@@ -8,15 +8,11 @@
             <span class="pull-right">
                 <button class="btn btn-default btn-xs" id="{{ #refresh }}">{_ Fetch new version _}</button>
                 {% wire id=#refresh
-                        action={mask target="non-authoritative" message=_"Fetching new version..."}
-                        postback={import_refresh
-                                    id=id
-                                    on_success={reload}
-                                    on_error={unmask target="non-authoritative"}
-                                }
-                        delegate=`z_admin_rsc_import`
+                    postback={import_options id=id}
+                    delegate=`z_admin_rsc_import`
                 %}
             </span>
+            {% all include "_admin_rsc_import_status.tpl" id=id %}
         {% endif %}
     </div>
 {% endif %}

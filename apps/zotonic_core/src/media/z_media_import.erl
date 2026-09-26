@@ -92,7 +92,12 @@ insert_1(_, #media_import_props{ rsc_props = #{ <<"uri">> := Uri }, importer = r
         N ->
             [ {import_edges, z_convert:to_integer(N)} | Options1 ]
     end,
-    case m_rsc_import:import_uri_recursive_async(Uri, Options2, Context) of
+    Options3 = [
+        {is_subscribe, z_convert:to_bool(z_context:get_q(<<"z_import_subscribe">>, Context))},
+        {is_subscribe_haspart, z_convert:to_bool(z_context:get_q(<<"z_import_subscribe_haspart">>, Context))}
+        | Options2
+    ],
+    case m_rsc_import:import_uri_recursive_async(Uri, Options3, Context) of
         {ok, {LocalId, _ObjectIds}} ->
             {ok, LocalId};
         {error, _} = Error ->
@@ -317,7 +322,7 @@ import_as_resource(MD, Context) ->
         {ok, {Uri, #{
             <<"resource">> := Rsc,
             <<"depiction_url">> := DepUrl
-        }}} ->
+        } = Preview}} ->
             DataDepUrl = case z_fetch:as_data_url(DepUrl, [], Context) of
                 {ok, DU} -> DU;
                 {error, _} -> undefined
@@ -330,7 +335,8 @@ import_as_resource(MD, Context) ->
                     <<"is_authoritative">> => false,
                     <<"uri">> => Uri,
                     <<"title">> => maps:get(<<"title">>, Rsc, undefined),
-                    <<"summary">> => maps:get(<<"summary">>, Rsc, undefined)
+                    <<"summary">> => maps:get(<<"summary">>, Rsc, undefined),
+                    <<"is_websub_supported">> => maps:get(is_websub_supported, maps:get(<<"import_options">>, Preview, #{}), false)
                 },
                 medium_props = #{},
                 preview_url = DataDepUrl,
