@@ -84,6 +84,8 @@ Available Model API Paths
                 | {import_edges, non_neg_integer()}     % Number of edge-redirections to import
                 | is_import_deleted                     % Set if deleted resources must be re-imported
                 | {is_import_deleted, boolean()}
+                | {is_subscribe_haspart, boolean()}      % Subscribe direct collection members
+                | {is_subscribe, boolean()}              % Subscribe the selected resource via an optional module
                 | is_authoritative                      % If set then make a local copy, do not save uri
                 | {is_authoritative, boolean()}
                 | is_no_medium_download                 % If set then do not download media files
@@ -516,7 +518,10 @@ import_referred_ids(RefIds, ImportedIds, Options, Context) ->
                                 Uri => LocalId
                             };
                         false ->
-                            case reimport_1(LocalId, ImpAcc, false, Options, Context) of
+                            % Placeholders already carry their decremented depth
+                            % and filtered options. Reapplying the root options
+                            % here would reset the depth on every recursive hop.
+                            case reimport_1(LocalId, ImpAcc, false, saved, Context) of
                                 {ok, {NewLocalId, ImpAcc1}} ->
                                     ImpAcc1#{
                                         Uri => NewLocalId
@@ -734,9 +739,11 @@ fetch_json(Uri, Options, Context) ->
                         | proplists:get_value(fetch_options, Options, [])
                     ],
                     case z_fetch:fetch(Uri, FetchOptions, Context) of
-                        {ok, {_FinalUrl, _Hs, _Size, Body}} ->
+                        {ok, {FinalUrl, Hs, _Size, Body}} ->
                             JSON = z_json:decode(Body),
-                            {ok, JSON};
+                            {ok, z_notifier:foldl(#rsc_import_fetch_result{
+                                uri = Uri, final_url = FinalUrl, headers = Hs
+                            }, JSON, Context)};
                         {error, {Code, FinalUrl, _Hs, _Size, _Body}} when Code =:= 403; Code =:= 401 ->
                             ?LOG_WARNING(#{
                                 text => <<"Error fetching resource for import">>,
@@ -838,7 +845,8 @@ fetch_preview(Url, Options, Context) ->
                     % resource might have non-anonymous access permissions.
                     Result = #{
                         <<"resource">> => Rsc2,
-                        <<"depiction_url">> => maps:get(<<"depiction_url">>, JSON, undefined)
+                        <<"depiction_url">> => maps:get(<<"depiction_url">>, JSON, undefined),
+                        <<"import_options">> => maps:get(import_options, JSON, #{})
                     },
                     {ok, Result}
             end;
@@ -1037,12 +1045,17 @@ import(OptLocalId, #{
                                         {import_edges, N - 1},
                                         {props_forced, maps:remove(<<"category_id">>, PropsForced)}
                                         | proplists:delete(import_edges,
-                                            proplists:delete(props_forced, Options))
+                                            proplists:delete(props_forced,
+                                                proplists:delete(is_subscribe_haspart,
+                                                    proplists:delete(is_subscribe, Options))))
                                     ],
                                     import_edges(LocalId, JSON, ImportedAcc2, EdgeOptions, Context);
                                 _ ->
                                     ImportedAcc2
                             end,
+                            z_notifier:notify(#rsc_import_done{
+                                id = LocalId, uri = Uri, options = Options
+                            }, Context),
                             {ok, {LocalId, ImportedAcc3}};
                         {error, Reason} = Error ->
                             ?LOG_INFO(#{
@@ -1084,7 +1097,7 @@ save_import_options(RscId, Uri, Status, Options, Context) ->
         <<"uri">> => Uri,
         <<"host">> => host(Uri),
         <<"user_id">> => z_acl:user(Context),
-        <<"options">> => Options,
+        <<"options">> => proplists:delete(is_subscribe, Options),
         <<"last_import_date">> => calendar:universal_time(),
         <<"last_import_status">> => Status
     },
@@ -1237,7 +1250,8 @@ cleanup_map_ids(RemoteRId, Rsc, UriTemplate, ImportedAcc, Options, Context) ->
         {import_edges, erlang:max(0, N - 1)},
         {props_forced, maps:remove(<<"category_id">>, PropsForced)}
         | proplists:delete(import_edges,
-            proplists:delete(props_forced, Options))
+            proplists:delete(props_forced,
+                proplists:delete(is_subscribe_haspart, proplists:delete(is_subscribe, Options))))
     ],
 
     % Remove or map modifier_id, creator_id, etc

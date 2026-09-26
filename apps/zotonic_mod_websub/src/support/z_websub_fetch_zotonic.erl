@@ -45,35 +45,41 @@ fetch(Url, Options, Context) ->
 fetch_json(Url, Context) ->
     Options = [
         {accept, <<"application/json">>},
+        {timeout, 10000},
+        {max_length, 1048576},
         {user_agent, <<"Zotonic-WebSub">>}
     ],
-    case z_fetch:fetch_json(Url, Options, Context) of
-        {ok, JSON} ->
-            {ok, JSON};
+    case z_websub_http:get(Url, Options, Context) of
+        {ok, {_, _, _, Body}} ->
+            try
+                {ok, z_json:decode(Body)}
+            catch
+                _:_ ->
+                    {error, invalid_json}
+            end;
         {error, {Code, _FinalUrl, _Hs, _Size, _Body}} when Code =:= 401; Code =:= 403 ->
             {error, eacces};
         {error, {404, _FinalUrl, _Hs, _Size, _Body}} ->
             {error, enoent};
+        {error, {Code, _, _, _, _}} when is_integer(Code) ->
+            {error, {http_status, Code}};
         {error, Reason} = Error ->
             ?LOG_ERROR(#{
                 in => zotonic_mod_websub,
                 text => <<"WebSub: error fetching url">>,
                 result => error,
-                reason => Reason,
-                url => Url
+                reason => Reason
             }),
             Error
     end.
 
 import_json(_Url, #{<<"status">> := <<"ok">>, <<"result">> := JSON}, Options, Context) ->
     m_rsc_import:import(JSON, Options, Context);
-import_json(Url, JSON, _Options, _Context) ->
+import_json(_Url, _JSON, _Options, _Context) ->
     ?LOG_WARNING(#{
         in => zotonic_mod_websub,
         text => <<"WebSub: JSON without status ok">>,
         result => error,
-        reason => status,
-        url => Url,
-        json => JSON
+        reason => status
     }),
     {error, status}.

@@ -958,6 +958,18 @@
 }).
 
 
+%% @doc Enrich a fetched resource export with import metadata. Type: foldl.
+%% The accumulator is the decoded export envelope; headers belong to final_url.
+-record(rsc_import_fetch_result, {uri, final_url, headers = []}).
+
+%% @doc A resource import has completed. Type: notify. Options describe this import,
+%% not necessarily the options for recursively imported resources.
+-record(rsc_import_done, {id, uri, options = []}).
+
+%% @doc Extend a resource export envelope (not its resource properties). Type: foldl.
+-record(rsc_export_done, {id}).
+
+
 %% @doc Notification for fetching #media_import_props{} from different modules.
 %% This is used by z_media_import.erl for fetching properties and medium information (map)
 %% about resources.  The metadata is the result returned by z_url_metadata.
