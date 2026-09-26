@@ -643,3 +643,64 @@ shallow_collection_import_test() ->
             end
         end, [RootUri, ChildUri, GrandchildUri])
     end.
+
+%% Exercise real cron ticks and the unique site worker, not process/1 directly.
+automatic_renewal_test_() ->
+    {timeout, 30, fun automatic_renewal/0}.
+
+automatic_renewal() ->
+    C = z_acl:logon(1, z_context:new(zotonic_site_testsandbox)),
+    Uri = <<"https://renewal.test/id/automatic">>,
+    Data = payload(Uri, 1, <<"Automatic renewal">>),
+    {ok, {Id, _}} = m_rsc_import:import(Data, [], C),
+    TestPid = self(),
+    ok = meck:new(z_websub_discovery, [passthrough]),
+    ok = meck:new(z_websub_http, [passthrough]),
+    ok = meck:new(z_websub_fetch_zotonic, [passthrough]),
+    try
+        meck:expect(z_websub_discovery, discover, fun(Uri0, _) when Uri0 =:= Uri ->
+            {ok, #{topic => Uri, hubs => [<<"https://renewal.test/hub">>]}}
+        end),
+        meck:expect(z_websub_fetch_zotonic, fetch_json, fun(Uri0, _) when Uri0 =:= Uri ->
+            {ok, #{<<"status">> => <<"ok">>, <<"result">> => Data}}
+        end),
+        meck:expect(z_websub_http, post_form, fun(_, Form, _) ->
+            Callback = proplists:get_value(<<"hub.callback">>, Form),
+            Mode = proplists:get_value(<<"hub.mode">>, Form),
+            {ImportId, Token} = z_db:q_row(
+                "select id, callback_token from websub_import where callback_url=$1", [Callback], C),
+            ok = z_websub_subscription:verify(Token, Uri, Mode, 6, C),
+            case Mode of
+                <<"subscribe">> -> TestPid ! {automatic_lease, ImportId, Token};
+                <<"unsubscribe">> -> ok
+            end,
+            {ok, accepted}
+        end),
+        ok = m_websub:subscribe(Id, C),
+        {FirstId, FirstToken} = await_automatic_lease(),
+        ?assertEqual(true, z_db:q1(
+            "select next_check < lease from websub_import where id=$1", [FirstId], C)),
+        {NextId, NextToken} = await_automatic_lease(),
+        ?assertNotEqual(FirstId, NextId),
+        ?assertNotEqual(FirstToken, NextToken),
+        ?assertEqual(FirstId, z_db:q1(
+            "select replaces_id from websub_import where id=$1", [NextId], C)),
+        ?assertEqual(false, z_db:q1(
+            "select is_enabled from websub_import where id=$1", [FirstId], C)),
+        ?assertEqual(true, z_db:q1(
+            "select lease > now() and next_check < lease from websub_import where id=$1", [NextId], C)),
+        ?assertMatch(#{is_enabled := true, is_active := true}, z_websub_subscription:status(Id, C))
+    after
+        z_db:q("delete from websub_import where local_rsc_id=$1", [Id], C),
+        m_rsc:delete(Id, C),
+        meck:unload(z_websub_fetch_zotonic),
+        meck:unload(z_websub_http),
+        meck:unload(z_websub_discovery)
+    end.
+
+await_automatic_lease() ->
+    receive
+        {automatic_lease, Id, Token} -> {Id, Token}
+    after 10000 ->
+        error(automatic_renewal_not_triggered)
+    end.

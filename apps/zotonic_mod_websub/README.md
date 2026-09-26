@@ -71,10 +71,31 @@ WebSub discovery instead advertises a stable JSON topic at the `websub_topic`
 dispatch. That endpoint always returns the complete resource-export JSON envelope:
 
 ```json
-{"status":"ok","result":{"uri":"https://a.example/id/123","resource":{}}}
+{
+  "status": "ok",
+  "result": {
+    "uri": "https://a.example/id/123",
+    "resource": {},
+    "websub": {
+      "hub": "https://a.example/.zotonic/websub",
+      "topic": "https://a.example/.zotonic/websub/topic/123"
+    },
+    "links": [
+      {"rel": "self", "target": "https://a.example/.zotonic/websub/topic/123"},
+      {"rel": "hub", "target": "https://a.example/.zotonic/websub"}
+    ]
+  }
+}
 ```
 
 The example abbreviates the export: actual delivery contains all export fields.
+The optional `websub` object is a Zotonic JSON convenience extension: POST a
+standard WebSub subscription request to `websub.hub`, using `websub.topic` as
+`hub.topic` and your subscriber endpoint as `hub.callback`. Use the exported URLs
+as supplied, rather than constructing paths. `uri` remains the semantic identity;
+it is not replaced by the delivery topic. These fields contain no credentials or
+callback secrets. They are omitted when the resource is non-authoritative or
+`mod_websub` is inactive.
 The topic controller and publisher both use `m_rsc_export:full/2`. HTTP headers,
 HTML link elements, and the optional JSON `links` extension advertise the same
 hub and JSON topic. Imported copies do not advertise a local hub for another site's

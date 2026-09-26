@@ -66,7 +66,7 @@ publication_checks() ->
         receive {entered, Retry} -> ok after 5000 -> error(waiter_not_started) end,
         Failed ! fail,
         ?assertMatch({error, _}, finished(Failed)),
-        _ = decoding(Retry),
+        receive {decoding, Retry, _} -> ok after 5000 -> error(decoder_not_started) end,
         ?assertNot(filelib:is_file(Output)),
         ?assertNot(filelib:is_file(FailedTemp)),
         Retry ! finish,
@@ -91,7 +91,15 @@ start_convert(Input, Output) ->
     end).
 
 decoding(Pid) ->
+    %% The decoder also enters the job queue. Consume that notification so it
+    %% cannot leak into another EUnit test sharing this process's mailbox.
+    receive {entered, Pid} -> ok after 5000 -> error(decoder_not_queued) end,
     receive {decoding, Pid, Temp} -> Temp after 5000 -> error(decoder_not_started) end.
 
 finished(Pid) ->
-    receive {finished, Pid, Result} -> Result after 5000 -> error(conversion_not_finished) end.
+    receive
+        {entered, Pid} -> finished(Pid);
+        {finished, Pid, Result} -> Result
+    after 5000 ->
+        error(conversion_not_finished)
+    end.

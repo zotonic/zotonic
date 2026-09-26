@@ -42,6 +42,10 @@ private subscriptions use explicit HTTP authorization and current resource acces
 * `z_websub_discovery` and `z_websub_http` handle discovery and outbound fetch policy.
 
 The `resource_headers` and `rsc_export_done` observers advertise discovery links.
+Full resource exports also include `websub.hub` and `websub.topic` for clients
+subscribing from exported JSON. This optional JSON extension is present only on
+authoritative resources and agrees with the standard discovery links. The semantic
+resource identifier remains `uri`.
 `rsc_import_fetch_result` exposes subscription availability to the import dialog;
 `rsc_import_done` starts an explicitly requested subscription. `rsc_update_done`
 queues publication, second/minute ticks schedule the unique queue worker, and the
@@ -224,6 +228,10 @@ publisher_export(Id, Export, Context) ->
     Self = m_websub:topic_url(Id, Ctx),
     Hub = z_context:abs_url(z_dispatcher:url_for(websub, [], Ctx), Ctx),
     Export#{
+        <<"websub">> => #{
+            <<"hub">> => Hub,
+            <<"topic">> => Self
+        },
         <<"links">> => [
             #{<<"rel">> => <<"self">>, <<"target">> => Self},
             #{<<"rel">> => <<"hub">>, <<"target">> => Hub}

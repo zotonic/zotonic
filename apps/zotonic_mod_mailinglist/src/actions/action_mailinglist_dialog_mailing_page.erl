@@ -306,8 +306,11 @@ review_async(Target, Vars, Context) ->
         try
             ListId = proplists:get_value(list_id, Vars),
             PageId = proplists:get_value(id, Vars),
-            true = is_allowed(PageId, ListId, Context),
-            Options = proplists:get_value(options, Vars),
+            case is_allowed(PageId, ListId, Context) of
+                true -> ok;
+                false -> error(eacces)
+            end,
+            Options = proplists:get_value(options, Vars, []),
             #{counts := Counts, reasons := Reasons} =
                 z_mailinglist_run:review(ListId, PageId, Options, Context),
             Rows = [
@@ -324,8 +327,16 @@ review_async(Target, Vars, Context) ->
                 Target, #render{template = "_dialog_mailing_review.tpl", vars = ReviewVars}, Context
             )
         catch
+            error:eacces ->
+                review_error(Target, Vars, eacces, Context);
             error:{badmatch, {error, history_expired}} ->
                 review_error(Target, Vars, history_expired, Context);
+            _Class:timeout ->
+                review_timeout(Target, Vars, Context);
+            exit:{timeout, _Call} ->
+                review_timeout(Target, Vars, Context);
+            error:{badmatch, {error, timeout}} ->
+                review_timeout(Target, Vars, Context);
             Class:Reason:Stack ->
                 ?LOG_ERROR(#{
                     in => mod_mailinglist,
@@ -337,6 +348,20 @@ review_async(Target, Vars, Context) ->
                 review_error(Target, Vars, count_failed, Context)
         end,
     z_transport:reply_actions(Context1).
+
+%% Database and gen_server timeouts are recoverable review failures. Preserve
+%% the draft for a manual retry; repeating an expensive count automatically can
+%% compound an overloaded server. Keep unexpected failures at error severity.
+review_timeout(Target, Vars, Context) ->
+    ?LOG_WARNING(#{
+        in => mod_mailinglist,
+        text => <<"Timed out counting eligible mailing recipients">>,
+        result => error,
+        reason => timeout,
+        list_id => proplists:get_value(list_id, Vars),
+        page_id => proplists:get_value(id, Vars)
+    }),
+    review_error(Target, Vars, count_failed, Context).
 
 review_error(Target, Vars, Error, Context) ->
     z_render:update(
