@@ -9,7 +9,7 @@
 			"link unlink | zlink zmedia | code | searchreplace | fullscreen"
 		],
 
-		content_css: "/lib/css/tinymce-zotonic~2.css",
+		content_css: "/lib/css/tinymce-zotonic~3.css",
 		// language : "en", // set in _admin_tinymce_overrides_js.tpl
 
 		/* Adapted valid element list, added some html5 elements, removed controls, object, embed etc */
