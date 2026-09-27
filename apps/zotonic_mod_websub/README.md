@@ -45,6 +45,14 @@ not the complete content of every member.
   commit. It uses the subscribing editor's current permissions, saved per-resource
   depth/options, and WebSub's outbound URL/redirect checks. Already imported items
   are reused; a collection update does not refetch all existing member content.
+* **Deleted members:** manually deleted imports stay deleted when a collection or
+  another resource refers to them again. Automatic cleanup of an unconnected
+  dependent resource permits it to be imported again if it returns. Older deletion
+  records without a reason are treated as manual deletions. The import and
+  re-import dialogs offer **Always import all resources, including manually deleted
+  resources** (`is_import_deleted`). This saved option also applies to future
+  updates and new references, within the selected connection depth and permissions.
+  It does not force a refresh of already imported members.
 * **Member content:** a member edit is a change to the member's own topic. The
   collection subscription alone does not keep that content current. Enable the
   separate collection-item option, or subscribe to each item explicitly.

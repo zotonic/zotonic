@@ -82,7 +82,7 @@ Available Model API Paths
 -type option() :: {props_forced, map()}                 % Properties overlayed over the imported properties
                 | {props_default, map()}                % Default properties
                 | {import_edges, non_neg_integer()}     % Number of edge-redirections to import
-                | is_import_deleted                     % Set if deleted resources must be re-imported
+                | is_import_deleted                     % Saved preference to also import manually deleted resources
                 | {is_import_deleted, boolean()}
                 | {is_subscribe_haspart, boolean()}      % Subscribe direct collection members
                 | {is_subscribe, boolean()}              % Subscribe the selected resource via an optional module
@@ -246,7 +246,7 @@ maybe_create_empty(Rsc, ImportedAcc, Options, Context) ->
     case is_known_resource(Rsc, ImportedAcc, Options, Context) of
         false ->
             Uri = maps:get(<<"uri">>, Rsc),
-            case find_allowed_category(Rsc, #{}, Options, Context) of
+            case find_import_category(Rsc, Options, Context) of
                 {ok, Cat} ->
                     Props = #{
                         <<"category_id">> => Cat,
@@ -338,7 +338,7 @@ maybe_create_empty(Rsc, ImportedAcc, Options, Context) ->
                 {error, Reason}  ->
                     % Unknown category, deny access
                     ?LOG_INFO(#{
-                        text => <<"Not importing menu entry from remote, category disallowed">>,
+                        text => <<"Not importing reference from remote, deleted or category disallowed">>,
                         in => zotonic_core,
                         result => error,
                         reason => Reason,
@@ -350,6 +350,19 @@ maybe_create_empty(Rsc, ImportedAcc, Options, Context) ->
         {true, RscId} ->
             {ok, {RscId, ImportedAcc}}
     end.
+
+%% Deleted references must be checked before creating a placeholder: otherwise
+%% the later import sees a live resource and bypasses the deletion history.
+find_import_category(Rsc, Options, Context) ->
+    case is_import_allowed(maps:get(<<"uri">>, Rsc), Options, Context) of
+        true -> find_allowed_category(Rsc, #{}, Options, Context);
+        false -> {error, deleted}
+    end.
+
+is_import_allowed(Uri, Options, Context) ->
+    proplists:get_value(is_import_deleted, Options, false)
+    orelse not m_rsc_gone:is_import_blocked(Uri, Context).
+
 
 is_known_resource(Rsc, ImportedAcc, Options, Context) ->
     Uri = uri(Rsc),
@@ -668,7 +681,7 @@ merge_options(saved, SavedOptions) ->
 merge_options(NewOptions, SavedOptions) ->
     KeysNew = proplists:get_keys(NewOptions),
     KeysSaved = proplists:get_keys(SavedOptions),
-    KeysOnlyInSaved = KeysSaved -- KeysNew -- [ is_forced_update, is_import_deleted ],
+    KeysOnlyInSaved = KeysSaved -- KeysNew -- [ is_forced_update ],
     lists:foldl(
         fun(K, Acc) ->
             [ {K, proplists:get_value(K, SavedOptions)} | Acc ]
@@ -1189,16 +1202,13 @@ update_rsc_2(undefined, RemoteRId, Rsc, ImportedAcc, Options, Context) ->
         is_import
     ],
     Uri = maps:get(<<"uri">>, RscLang),
-    IsImportDeleted = proplists:get_value(is_import_deleted, Options, false),
     case is_known_resource(RemoteRId, ImportedAcc, Options, Context) of
-        false when IsImportDeleted ->
-            m_rsc:insert(Rsc, UpdateOptions, Context);
-        false when not IsImportDeleted ->
-            case m_rsc_gone:is_gone_uri(Uri, Context) of
+        false ->
+            case is_import_allowed(Uri, Options, Context) of
                 true ->
-                    {error, deleted};
+                    m_rsc:insert(RscLang, UpdateOptions, Context);
                 false ->
-                    m_rsc:insert(RscLang, UpdateOptions, Context)
+                    {error, deleted}
             end;
         {true, LocalId} ->
             case m_rsc:p_no_acl(LocalId, is_authoritative, Context) of

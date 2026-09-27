@@ -249,6 +249,8 @@ delete_if_unconnected(Id, Context) ->
                      limit 1",
                     [Id], Context)
     of
-        {true, false, undefined} -> m_rsc:delete(Id, z_acl:sudo(Context));
+        {true, false, undefined} ->
+            DeleteContext = z_context:set(is_dependent_delete, true, z_acl:sudo(Context)),
+            m_rsc:delete(Id, DeleteContext);
         _ -> ok
     end.

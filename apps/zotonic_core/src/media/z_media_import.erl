@@ -94,6 +94,7 @@ insert_1(_, #media_import_props{ rsc_props = #{ <<"uri">> := Uri }, importer = r
     end,
     Options3 = [
         {is_subscribe, z_convert:to_bool(z_context:get_q(<<"z_import_subscribe">>, Context))},
+        {is_import_deleted, z_convert:to_bool(z_context:get_q(<<"z_import_deleted">>, Context))},
         {is_subscribe_haspart, z_convert:to_bool(z_context:get_q(<<"z_import_subscribe_haspart">>, Context))}
         | Options2
     ],

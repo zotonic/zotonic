@@ -521,9 +521,10 @@ collection_update_test_() ->
 
 collection_update(SubscribeParts) ->
     C = z_acl:logon(1, z_context:new(zotonic_site_testsandbox)),
-    RootUri = <<"https://collection.test/id/root">>,
-    AUri = <<"https://collection.test/id/a">>,
-    BUri = <<"https://collection.test/id/b">>,
+    Suffix = integer_to_binary(erlang:unique_integer([positive, monotonic])),
+    RootUri = <<"https://collection.test/id/root/", Suffix/binary>>,
+    AUri = <<"https://collection.test/id/a/", Suffix/binary>>,
+    BUri = <<"https://collection.test/id/b/", Suffix/binary>>,
     {ok, {A, _}} = m_rsc_import:import(payload(AUri, 1, <<"Existing item">>), [], C),
     Options = [{import_edges, 1}, {is_subscribe_haspart, SubscribeParts}],
     {ok, {Root, _}} = m_rsc_import:import(collection_payload(RootUri, 1, [AUri]), Options, C),

@@ -15,6 +15,7 @@
                 <input type="checkbox" name="import_medium" value="1" {% if not import_options.is_no_medium_download %}checked{% endif %}>
                 {_ Download media from the original website. _}
             </label></div>
+            {% include "_rsc_import_deleted_options.tpl" %}
             {% all include "_rsc_import_subscription_options.tpl" id=id %}
         </div>
         <div class="modal-footer">

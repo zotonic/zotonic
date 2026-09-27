@@ -52,6 +52,7 @@ event(#submit{message = {import_refresh, Args}}, Context) ->
             Options = [
                 {is_forced_update, true},
                 {import_edges, Edges},
+                {is_import_deleted, z_convert:to_bool(z_context:get_q(<<"z_import_deleted">>, Context))},
                 {is_subscribe_haspart, z_convert:to_bool(z_context:get_q(<<"z_import_subscribe_haspart">>, Context))},
                 {is_no_medium_download, not z_convert:to_bool(z_context:get_q(<<"import_medium">>, Context))}],
             case m_rsc_import:reimport_recursive_async(Id, Options, Context) of

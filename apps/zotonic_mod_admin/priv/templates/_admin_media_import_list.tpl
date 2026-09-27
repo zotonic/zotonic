@@ -149,6 +149,7 @@
                                             {% endif %}
 
                                             <div class="form-group">
+                                                {% include "_rsc_import_deleted_options.tpl" %}
                                                 <div class="radio form__import_edges">
                                                     <p>{_ Connections _}:</p>
                                                     <label>
