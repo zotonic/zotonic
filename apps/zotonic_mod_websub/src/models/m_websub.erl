@@ -29,7 +29,7 @@
 
 | Method | Path | Result |
 | --- | --- | --- |
-| `get` | `/subscriptions` | Paginated overview; requires `use mod_admin_config`. Payload: `type` (`all`, `export`, `import`), numeric local `rsc_id`, `hostname`, `status`, `errors` (`yes`/`no`/`all`), and `page`. |
+| `get` | `/subscriptions` | Paginated overview; requires `use mod_websub`. Payload: `type` (`all`, `export`, `import`), numeric local `rsc_id`, `hostname`, `status`, `errors` (`yes`/`no`/`all`), and `page`. |
 | `get` | `/subscriber_count/+id` | Number of unexpired incoming subscriptions; requires resource edit permission. |
 | `get` | `/status/+id` | Latest import subscription status for an editable resource, or `undefined` when none exists. |
 
@@ -134,7 +134,7 @@ renewal, pending intent, callback rotation, and subscriber state persistence."/u
 
 
 m_get([<<"subscriptions">> | Rest], #{payload := Filters}, Context) ->
-    case z_acl:is_allowed(use, mod_admin_config, Context) of
+    case z_acl:is_allowed(use, mod_websub, Context) of
         true ->
             {ok, {subscriptions(Filters, Context), Rest}};
         false ->

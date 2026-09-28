@@ -34,7 +34,7 @@ private subscriptions use explicit HTTP authorization and current resource acces
 * `controller_websub` handles hub requests, callback verification, and deliveries.
 * `controller_websub_topic` serves the complete, fixed JSON topic representation.
 * The admin Content menu links to a subscription overview, filtered by direction
-  and local resource ID. It requires `use mod_admin_config`; edit pages show the
+  and local resource ID. It requires `use mod_websub`; edit pages show the
   active incoming subscriber count and a filtered overview link.
 * `m_websub` provides the ACL-checked status/start/stop API and delivery/import queues.
 * `z_websub_subscription` persists subscriber intent, leases, and renewal work.
@@ -212,7 +212,7 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
             parent = admin_content,
             label = ?__("WebSub subscriptions", Context),
             url = {admin_websub, []},
-            visiblecheck = {acl, use, mod_admin_config}
+            visiblecheck = {acl, use, mod_websub}
         }
         | Acc
     ].

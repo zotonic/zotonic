@@ -7,7 +7,7 @@
     <h2>{_ WebSub subscriptions _}</h2>
     <p>{_ Subscriptions from others to local pages and our subscriptions to external pages. _}</p>
 </div>
-{% if m.acl.use.mod_admin_config %}
+{% if m.acl.use.mod_websub %}
     {% with m.websub.subscriptions::%{type: q.type, rsc_id: q.rsc_id, page: q.page, hostname: q.hostname, status: q.status, errors: q.errors} as result %}
         <form method="get" action="{% url admin_websub %}" class="form-inline well">
             <div class="form-group">

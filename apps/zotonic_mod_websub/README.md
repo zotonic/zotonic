@@ -170,7 +170,7 @@ topics; active subscriptions rediscover on renewal.
 ## Admin subscription overview
 
 Open **Content → WebSub subscriptions** (`admin_websub`, `/admin/websub`).
-The overview requires `use mod_admin_config`, checked by the controller and model.
+The overview requires `use mod_websub`, checked by the controller and model.
 Filter by subscription type (incoming subscribers / outgoing subscriptions) and
 numeric **local resource ID**, **external hostname**, **status** (active, pending,
 expired, stopped), and **errors** (all, with errors, without errors). Filters combine
