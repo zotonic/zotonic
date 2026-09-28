@@ -1,6 +1,24 @@
 %% @copyright 2026 Marc Worrell
-%% @doc Durable subscriber intent and lease management. All network work runs in
-%% the site's unique queue worker. Tokens and secrets never leave this boundary.
+%% @author Marc Worrell <marc@worrell.nl>
+%% @doc Durable WebSub subscriber intent, verification, and lease renewal.
+%% Persist desired subscription state separately from hub confirmation and
+%% process subscription requests and retries in the site's unique queue worker.
+%% @end
+
+%% Copyright 2026 Marc Worrell
+%%
+%% Licensed under the Apache License, Version 2.0 (the "License");
+%% you may not use this file except in compliance with the License.
+%% You may obtain a copy of the License at
+%%
+%%     http://www.apache.org/licenses/LICENSE-2.0
+%%
+%% Unless required by applicable law or agreed to in writing, software
+%% distributed under the License is distributed on an "AS IS" BASIS,
+%% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%% See the License for the specific language governing permissions and
+%% limitations under the License.
+
 -module(z_websub_subscription).
 -moduledoc("Persist desired subscription state separately from hub verification.").
 -export([start/2, stop/2, stop_import/2, status/2, process/1, verify/5, denied/4,
