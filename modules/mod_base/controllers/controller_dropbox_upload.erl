@@ -86,7 +86,7 @@ do_upload([ {_, #upload{ filename = Filename, tmpfile = TempFile }} | Rest ], Co
         ok ->
             do_upload(Rest, Context);
         {error, exdev} ->
-            case file:copy(DropboxDir, Filename1) of
+            case file:copy(TempFile, Target) of
                 {ok, _} ->
                     do_upload(Rest, Context);
                 {error, Reason} ->
