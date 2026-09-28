@@ -56,7 +56,7 @@ is_letsencrypt_valid_hostname([], _Context) ->
     false;
 is_letsencrypt_valid_hostname(Hostname, Context) ->
     is_valid_hostname(Hostname)
-    andalso is_non_local(Hostname)
+    andalso is_public(Hostname)
     andalso is_this_site(Hostname, Context).
 
 is_valid_hostname(Hostname) ->
@@ -65,14 +65,14 @@ is_valid_hostname(Hostname) ->
         nomatch -> false
     end.
 
-is_non_local(Hostname) ->
+is_public(Hostname) ->
     case inet:gethostbyname(z_convert:to_list(Hostname)) of
         {ok, #hostent{h_addr_list = []}} ->
             false;
         {error, nxdomain} ->
             false;
         {ok, #hostent{h_addr_list = Addrs}} ->
-            lists:all(fun(Adr) -> not z_ip_address:is_local(Adr) end, Addrs)
+            lists:all(fun(Adr) -> z_ip_address:is_public(Adr) end, Addrs)
     end.
 
 %% Ping the url, should return our (random) secret
