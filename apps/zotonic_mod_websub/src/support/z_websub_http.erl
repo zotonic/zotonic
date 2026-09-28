@@ -1,8 +1,64 @@
 %% @copyright 2026 Marc Worrell
+%% @author Marc Worrell <marc@worrell.nl>
+%% @doc Outbound WebSub HTTP requests using z_fetch, with public-address checks,
+%% explicit redirect handling, and credential removal across origins. Subscriber
+%% callbacks additionally require DNS hostnames under Zotonic's local policy.
+%% @end
+
+%% Copyright 2026 Marc Worrell
+%%
+%% Licensed under the Apache License, Version 2.0 (the "License");
+%% you may not use this file except in compliance with the License.
+%% You may obtain a copy of the License at
+%%
+%%     http://www.apache.org/licenses/LICENSE-2.0
+%%
+%% Unless required by applicable law or agreed to in writing, software
+%% distributed under the License is distributed on an "AS IS" BASIS,
+%% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%% See the License for the specific language governing permissions and
+%% limitations under the License.
+
 -module(z_websub_http).
 -moduledoc("WebSub form requests with explicit redirect and credential policy.").
--export([post_form/3, fetch/5, get/3, is_public/1, destination/1]).
--include_lib("zotonic_core/include/zotonic.hrl").
+
+-export([post_form/3, fetch/5, get/3, destination/1, is_callback_url/1, callback/5]).
+
+%% @doc Zotonic local policy: subscriber callbacks must use DNS hostnames.
+%% WebSub section 5.1.2 permits local URL policies; IP literals are valid URLs
+%% in the protocol itself. Internationalized names must use their ASCII form.
+-spec is_callback_url(term()) -> boolean().
+is_callback_url(Url) ->
+    case z_websub_discovery:is_url(Url) of
+        true ->
+            #{host := Host} = uri_string:parse(Url),
+            Name = case Host of
+                <<Prefix:(byte_size(Host)-1)/binary, ".">> -> Prefix;
+                _ -> Host
+            end,
+            Labels = binary:split(Name, <<".">>, [global]),
+            byte_size(Name) =< 253
+                andalso lists:all(fun is_hostname_label/1, Labels)
+                andalso re:run(lists:last(Labels), <<"^[A-Za-z]">>, [{capture, none}]) =:= match;
+        false ->
+            false
+    end.
+
+is_hostname_label(Label) ->
+    byte_size(Label) >= 1
+        andalso byte_size(Label) =< 63
+        andalso re:run(Label, <<"^[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?$">>, [{capture, none}]) =:= match.
+
+%% @doc Apply the local callback policy also to queued and stored subscriptions.
+%% Public-address checks and redirect restrictions still apply in fetch/5.
+-spec callback(atom(), binary(), term(), list(), z:context()) -> term().
+callback(Method, Url, Payload, Options, Context) ->
+    case is_callback_url(Url) of
+        true ->
+            ?MODULE:fetch(Method, Url, Payload, Options, Context);
+        false ->
+            {error, callback_hostname_required}
+    end.
 
 -spec post_form(Url, Form, Context) -> {ok, term()} | {error, term()} when
     Url :: binary(), Form :: list(), Context :: z:context().
@@ -27,21 +83,25 @@ post_form(Url, Form, N, Context) ->
                         undefined ->
                             {error, missing_location};
                         _ ->
-                            try z_convert:to_binary(uri_string:resolve(z_convert:to_binary(Location), Url)) of
+                            try
+                                z_convert:to_binary(uri_string:resolve(z_convert:to_binary(Location), Url))
+                            of
                                 Next ->
                                     case {Url, Next} of
-                                    {<<"https:", _/binary>>, <<"http:", _/binary>>} ->
-                                        {error, insecure_redirect};
-                                    _ ->
-                                        NextContext = case origin(Url) =:= origin(Next) of
-                                            true ->
-                                                Context;
-                                            false ->
-                                                anonymous(Context)
-                                        end,
-                                        post_form(Next, Form, N + 1, NextContext)
-                                end
-                            catch _:_ -> {error, invalid_redirect} end
+                                        {<<"https:", _/binary>>, <<"http:", _/binary>>} ->
+                                            {error, insecure_redirect};
+                                        _ ->
+                                            NextContext = case origin(Url) =:= origin(Next) of
+                                                true ->
+                                                    Context;
+                                                false ->
+                                                    anonymous(Context)
+                                            end,
+                                            post_form(Next, Form, N + 1, NextContext)
+                                    end
+                            catch
+                                _:_ -> {error, invalid_redirect}
+                            end
                     end;
                 {error, {Code, _, _, _, _}} ->
                     {error, {http_status, Code}};
@@ -61,7 +121,9 @@ get(_, _, _, 5) ->
 get(Url, Options, Context, N) ->
     case ?MODULE:fetch(get, Url, <<>>, Options, Context) of
         {error, {Code, _, Headers, _, _}}
-            when Code =:= 301; Code =:= 302; Code =:= 303; Code =:= 307; Code =:= 308 ->
+            when
+                Code =:= 301; Code =:= 302; Code =:= 303;
+                Code =:= 307; Code =:= 308 ->
             case proplists:get_value("location", Headers) of
                 undefined ->
                     {error, missing_location};
@@ -87,10 +149,17 @@ get(Url, Options, Context, N) ->
     end.
 
 anonymous_options(Options) ->
-    Headers = [{K,V} || {K,V} <- proplists:get_value(headers, Options, []),
-        not lists:member(z_string:to_lower(z_convert:to_binary(K)),
-            [<<"authorization">>, <<"proxy-authorization">>, <<"cookie">>])],
-    [{headers, Headers} | proplists:delete(headers, proplists:delete(authorization, Options))].
+    Headers = proplists:get_value(headers, Options, []),
+    CredentialHeaders = [<<"authorization">>, <<"proxy-authorization">>, <<"cookie">>],
+    AnonymousHeaders = [
+        {Name, Value}
+        || {Name, Value} <- Headers,
+           not lists:member(z_string:to_lower(z_convert:to_binary(Name)), CredentialHeaders)
+    ],
+    % Remove the authorization option as well as credentials in explicit headers.
+    OptionsWithoutAuthorization = proplists:delete(authorization, Options),
+    OptionsWithoutHeaders = proplists:delete(headers, OptionsWithoutAuthorization),
+    [{headers, AnonymousHeaders} | OptionsWithoutHeaders].
 
 origin(Url) ->
     #{scheme := S, host := H} = P = uri_string:parse(Url),
@@ -123,34 +192,21 @@ destination(Url) ->
                 {ok, IP} ->
                     [IP];
                 _ ->
-                    lists:append([case inet:getaddrs(Name, Family) of
-                    {ok, As} ->
-                        As;
-                    _ ->
-                        []
-                end || Family <- [inet, inet6]])
+                    lists:append([
+                        case inet:getaddrs(Name, Family) of
+                            {ok, As} -> As;
+                            _ -> []
+                        end
+                        || Family <- [inet, inet6]
+                    ])
             end,
-            case IPs =/= [] andalso lists:all(fun is_public/1, IPs) of
+            case IPs =/= [] andalso lists:all(fun z_ip_address:is_public/1, IPs) of
                 true ->
                     {ok, Parts, hd(IPs)};
                 false ->
                     {error, unsafe_destination}
             end
     end.
-
--spec is_public(IP) -> boolean() when
-    IP :: inet:ip_address().
-is_public({A,B,C,D} = IP) ->
-    lists:all(fun(N) -> N >= 0 andalso N =< 255 end, [A,B,C,D]) andalso
-    not z_ip_address:ip_match(IP, ["0.0.0.0/8", "10.0.0.0/8", "100.64.0.0/10",
-        "127.0.0.0/8", "169.254.0.0/16", "172.16.0.0/12", "192.0.0.0/24",
-        "192.0.2.0/24", "192.88.99.0/24", "192.168.0.0/16", "198.18.0.0/15", "198.51.100.0/24",
-        "203.0.113.0/24", "224.0.0.0/3"]);
-is_public({_,_,_,_,_,_,_,_} = IP) ->
-    z_ip_address:ip_match(IP, ["2000::/3"]) andalso
-    not z_ip_address:ip_match(IP, ["2001::/23", "2001:db8::/32", "2002::/16", "3fff::/20"]);
-is_public(_) ->
-    false.
 
 %% @doc Fixed-endpoint request using Zotonic's fetch-options/OAuth2 integration.
 %% Redirect policy is handled by the callers, with a new destination check and
@@ -161,8 +217,11 @@ is_public(_) ->
 fetch(Method, Url, Body, Options, Context) ->
     case ?MODULE:destination(Url) of
         {ok, _, _} ->
-            SafeOptions = [{autoredirect, false}, {insecure, false}
-                | proplists:delete(autoredirect, proplists:delete(insecure, Options))],
+            SafeOptions = [
+                {autoredirect, false},
+                {insecure, false}
+                | proplists:delete(autoredirect, proplists:delete(insecure, Options))
+            ],
             case z_fetch:fetch(Method, Url, Body, SafeOptions, Context) of
                 {ok, _} = Ok ->
                     Ok;

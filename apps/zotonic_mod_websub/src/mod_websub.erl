@@ -23,8 +23,7 @@
         "reference", "integrator", "module", "export_and_syndication", "api_and_integration", "structured_data", "websub"
     ]
 }).
--moduledoc("""
-WebSub resource synchronization, following https://www.w3.org/TR/websub/.
+-moduledoc(<<"WebSub resource synchronization, following https://www.w3.org/TR/websub/.
 
 ## Integration points
 
@@ -48,7 +47,8 @@ authoritative resources and agrees with the standard discovery links. The semant
 resource identifier remains `uri`.
 `rsc_import_fetch_result` exposes subscription availability to the import dialog;
 `rsc_import_done` starts an explicitly requested subscription. `rsc_update_done`
-queues publication, second/minute ticks schedule the unique queue worker, and the
+queues publication. Second ticks consult the module server's dirty flag and next due
+time; ten-minute ticks reconcile with the database. Enqueues signal after commit, and the
 daily tick performs maintenance. The protocol adapters are documented separately
 from the resource importer: external peers need no Zotonic-specific WebSub fields.
 
@@ -144,15 +144,40 @@ by status. Imports serialize identity and permission checks with the update.
 
 The unique per-site sidejob processes renewal, delivery, and import queues. Schema
 version 3 separates source identity from topic and adds durable admission accounting.
-See README.md for deployment details and the regression suite.
-""").
+See README.md for deployment details and the regression suite."/utf8>>).
 
 -author("Marc Worrell <marc@worrell.nl>").
+-behaviour(gen_server).
+
+-export([start_link/1, init/1, handle_call/3, handle_cast/2, handle_info/2,
+         terminate/2, code_change/3]).
+
+-record(state, {
+    context :: z:context(),
+    dirty = true :: boolean(),
+    next_due :: integer() | undefined,
+    worker :: {pid(), reference(), boolean()} | undefined,
+    editors = #{} :: map()
+}).
 
 -mod_title("Resource WebSub").
 -mod_description("Publish and subscribe to resources between sites using WebSub.").
 -mod_depends([ cron ]).
 -mod_schema(3).
+-mod_config([
+    #{
+        key => push_quiet_seconds,
+        type => integer,
+        default => 10,
+        description => "Seconds without resource changes before pushing updates (0-86400)."
+    },
+    #{
+        key => push_deadline_seconds,
+        type => integer,
+        default => 300,
+        description => "Maximum batching delay from the first queued update, in seconds (1-86400)."
+    }
+]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_mod_admin/include/admin_menu.hrl").
@@ -165,26 +190,32 @@ See README.md for deployment details and the regression suite.
     observe_rsc_import_fetch_result/3,
     observe_rsc_import_fetch/2,
     observe_rsc_import_done/2,
-    observe_tick_1s/2,
+    pid_observe_tick_1s/3,
     observe_rsc_update_done/2,
     observe_edge_insert/2,
     observe_edge_update/2,
     observe_edge_delete/2,
-    observe_tick_1m/2,
+    pid_observe_tick_10m/3,
     observe_tick_24h/2,
     manage_schema/2,
-    sidejob_check_queues/1
+    sidejob_check_queues/2,
+    queue_changed/1,
+    is_editor_active/2,
+    'mqtt:presence/status/mod_admin/+'/2
 ]).
 
 %% @doc The overview has the same ACL at the menu, controller, and model boundary.
 observe_admin_menu(#admin_menu{}, Acc, Context) ->
-    [#menu_item{
-        id = admin_websub,
-        parent = admin_content,
-        label = ?__("WebSub subscriptions", Context),
-        url = {admin_websub, []},
-        visiblecheck = {acl, use, mod_admin_config}
-    } | Acc].
+    [
+        #menu_item{
+            id = admin_websub,
+            parent = admin_content,
+            label = ?__("WebSub subscriptions", Context),
+            url = {admin_websub, []},
+            visiblecheck = {acl, use, mod_admin_config}
+        }
+        | Acc
+    ].
 
 event(#postback{message = {subscription_start, Args}}, Context) ->
     subscription_result(m_websub:subscribe(m_rsc:rid(proplists:get_value(id, Args), Context), Context), Context);
@@ -198,7 +229,7 @@ subscription_result({error, _}, Context) ->
 
 
 observe_resource_headers(#resource_headers{ id = Id }, Acc, Context) when is_integer(Id) ->
-    case m_rsc:p_no_acl(Id, is_authoritative, Context) of
+    case m_rsc:p_no_acl(Id, <<"is_authoritative">>, Context) of
         true ->
             publisher_headers(Id, Acc, Context);
         _ ->
@@ -208,15 +239,17 @@ observe_resource_headers(#resource_headers{}, Acc, _Context) ->
     Acc.
 
 publisher_headers(Id, Acc, Context) ->
-    ContextNoLanguage = z_context:set_language('x-default', Context),
-    HubUrl = z_context:abs_url(z_dispatcher:url_for(websub, [], ContextNoLanguage), ContextNoLanguage),
-    SelfUrl = m_websub:topic_url(Id, ContextNoLanguage),
+    ContextNoLang = z_context:set_language('x-default', Context),
+    HubUrl = z_context:abs_url(z_dispatcher:url_for(websub, [], ContextNoLang), ContextNoLang),
+    SelfUrl = m_websub:topic_url(Id, ContextNoLang),
     % One combined header survives HTTP response maps which coalesce header names.
-    [{<<"link">>, <<"<", HubUrl/binary, ">; rel=\"hub\", <", SelfUrl/binary, ">; rel=\"self\"">>} | Acc].
-
+    [
+        {<<"link">>, <<"<", HubUrl/binary, ">; rel=\"hub\", <", SelfUrl/binary, ">; rel=\"self\"">>}
+        | Acc
+    ].
 
 observe_rsc_export_done(#rsc_export_done{id = Id}, Export, Context) ->
-    case m_rsc:p_no_acl(Id, is_authoritative, Context) of
+    case m_rsc:p_no_acl(Id, <<"is_authoritative">>, Context) of
         true ->
             publisher_export(Id, Export, Context);
         _ ->
@@ -224,9 +257,9 @@ observe_rsc_export_done(#rsc_export_done{id = Id}, Export, Context) ->
     end.
 
 publisher_export(Id, Export, Context) ->
-    Ctx = z_context:set_language('x-default', Context),
-    Self = m_websub:topic_url(Id, Ctx),
-    Hub = z_context:abs_url(z_dispatcher:url_for(websub, [], Ctx), Ctx),
+    ContextNoLang = z_context:set_language('x-default', Context),
+    Self = m_websub:topic_url(Id, ContextNoLang),
+    Hub = z_context:abs_url(z_dispatcher:url_for(websub, [], ContextNoLang), ContextNoLang),
     Export#{
         <<"websub">> => #{
             <<"hub">> => Hub,
@@ -238,16 +271,29 @@ publisher_export(Id, Export, Context) ->
         ]
     }.
 
-observe_rsc_import_fetch_result(#rsc_import_fetch_result{final_url = Url, headers = Headers},
-        #{<<"result">> := Result} = JSON, _Context) when is_map(Result) ->
-    Discovery = z_websub_discovery:links(Url, Headers, <<>>, maps:get(<<"links">>, Result, undefined)),
-    JSON#{<<"result">> => Result#{import_options => #{is_websub_supported => element(1, Discovery) =:= ok}}};
+observe_rsc_import_fetch_result(
+        #rsc_import_fetch_result{ final_url = Url, headers = Headers },
+        #{ <<"result">> := Result } = JSON,
+        _Context)
+    when
+        is_map(Result) ->
+    IsSupported = case z_websub_discovery:links(Url, Headers, <<>>, maps:get(<<"links">>, Result, undefined)) of
+        {ok, _} -> true;
+        {error, _} -> false
+    end,
+    JSON#{
+        <<"result">> => Result#{
+            <<"import_options">> => #{
+                <<"is_websub_supported">> => IsSupported
+            }
+        }
+    };
 observe_rsc_import_fetch_result(_, JSON, _) ->
     JSON.
 
 %% Automatic imports of referenced resources use the same redirect/SSRF policy
 %% as the collection fetch. Ordinary interactive imports keep their normal path.
-observe_rsc_import_fetch(#rsc_import_fetch{uri = Uri}, Context) ->
+observe_rsc_import_fetch(#rsc_import_fetch{ uri = Uri }, Context) ->
     case z_context:get(websub_safe_import, Context) of
         true ->
             z_websub_fetch_zotonic:fetch_json(Uri, Context);
@@ -257,7 +303,7 @@ observe_rsc_import_fetch(#rsc_import_fetch{uri = Uri}, Context) ->
 
 observe_rsc_import_done(#rsc_import_done{id = Id, options = Options}, Context) ->
     case proplists:get_value(is_subscribe, Options, false)
-        andalso not m_rsc:p_no_acl(Id, is_authoritative, Context)
+        andalso not m_rsc:p_no_acl(Id, <<"is_authoritative">>, Context)
     of
         true ->
             m_websub:subscribe(Id, Context);
@@ -265,14 +311,9 @@ observe_rsc_import_done(#rsc_import_done{id = Id, options = Options}, Context) -
             ok
     end.
 
-%% A cheap indexed due scan each second also supports hubs granting short leases.
-%% The unique sidejob prevents overlapping network/import work for this site.
-observe_tick_1s(tick_1s, Context) ->
-    observe_tick_1m(tick_1m, Context).
-
-
 observe_rsc_update_done(#rsc_update_done{ action = Action, id = Id, post_props = Props }, Context)
-    when Action =:= insert; Action =:= update ->
+    when
+        Action =:= insert; Action =:= update ->
     case maps:get(<<"version">>, Props, undefined) of
         Version when is_integer(Version) ->
             m_websub:queue_push(Id, Version, Context);
@@ -282,25 +323,25 @@ observe_rsc_update_done(#rsc_update_done{ action = Action, id = Id, post_props =
 observe_rsc_update_done(#rsc_update_done{}, _Context) ->
     ok.
 
-%% Edge-only changes (including collection order) change the exported topic.
+%% @doc Edge-only changes (including collection order) change the exported topic.
 observe_edge_insert(#edge_insert{subject_id = Id}, Context) ->
     m_websub:queue_edge_update(Id, Context).
 
+%% @doc Edge-only changes (including collection order) change the exported topic.
 observe_edge_update(#edge_update{subject_id = Id}, Context) ->
     m_websub:queue_edge_update(Id, Context).
 
+%% @doc Edge-only changes (including collection order) change the exported topic.
 observe_edge_delete(#edge_delete{subject_id = Id}, Context) ->
     m_websub:queue_edge_update(Id, Context).
 
-observe_tick_1m(tick_1m, Context) ->
-    case z_sidejob:start_site_unique(?MODULE, ?MODULE, sidejob_check_queues, [], Context) of
-        {ok, _Pid} ->
-            ok;
-        {error, already_running} ->
-            ok;
-        {error, overload} ->
-            ok
-    end.
+%% @doc Frequent ticks consult memory only; due work still runs in a unique sidejob.
+pid_observe_tick_1s(Pid, tick_1s, _Context) ->
+    gen_server:cast(Pid, poll).
+
+%% @doc Recover persisted work after restart, missed notifications, or remote-node writes.
+pid_observe_tick_10m(Pid, tick_10m, _Context) ->
+    gen_server:cast(Pid, slow_poll).
 
 observe_tick_24h(tick_24h, Context) ->
     ok = m_websub:cleanup_deleted_imports(Context),
@@ -309,7 +350,137 @@ observe_tick_24h(tick_24h, Context) ->
 manage_schema(Version, Context) ->
     m_websub:manage_schema(Version, Context).
 
-sidejob_check_queues(Context) ->
+%% @doc Consume the optional presence module's admin-edit heartbeat. Trust the
+%% publisher's authenticated context, never the payload's user_id or location.
+'mqtt:presence/status/mod_admin/+'(#{retain := true}, _Context) ->
+    ok;
+'mqtt:presence/status/mod_admin/+'(#{
+        topic := [ <<"presence">>, <<"status">>, <<"mod_admin">>, IdBin ],
+        payload := #{ <<"unique_id">> := Client, <<"status">> := Status }
+    }, Context)
+    when is_binary(IdBin), byte_size(IdBin) =< 20,
+         is_binary(Client), byte_size(Client) > 0, byte_size(Client) =< 128,
+         is_integer(Status), Status >= 0, Status =< 4 ->
+    Id = try binary_to_integer(IdBin) catch error:badarg -> undefined end,
+    case is_integer(Id) andalso Id > 0 andalso Id =< 2147483647
+        andalso z_module_manager:active(mod_presence, Context)
+        andalso z_auth:is_auth(Context)
+        andalso z_acl:is_allowed(use, mod_admin, Context)
+        andalso z_acl:rsc_editable(Id, Context)
+    of
+        true ->
+            case z_module_manager:whereis(?MODULE, Context) of
+                {ok, Pid} ->
+                    gen_server:cast(Pid, {editor_presence, Id, z_acl:user(Context), Client, Status});
+                _ -> ok
+            end;
+        false -> ok
+    end;
+'mqtt:presence/status/mod_admin/+'(_Message, _Context) ->
+    ok.
+
+%% @doc Whether a fresh ACTIVE heartbeat exists for this resource. Presence is an
+%% optional batching hint; an unavailable server must never block publication.
+-spec is_editor_active(Id, Context) -> boolean()
+    when Id :: m_rsc:resource_id(), Context :: z:context().
+is_editor_active(Id, Context) ->
+    try
+        case z_module_manager:whereis(?MODULE, Context) of
+            {ok, Pid} -> gen_server:call(Pid, {is_editor_active, Id}, 1000);
+            _ -> false
+        end
+    catch
+        exit:_ -> false
+    end.
+
+%% @doc Signal durable queue changes. Notifications are deferred until transaction
+%% commit, so the worker cannot consume a wakeup before the new row is visible.
+-spec queue_changed(Context) -> ok when Context :: z:context().
+queue_changed(Context) ->
+    z_notifier:notify(websub_queue_changed, Context),
+    ok.
+
+%% @doc Process one batch, then remember the earliest remaining retry or renewal.
+sidejob_check_queues(Server, Context) ->
     ok = z_websub_subscription:process(Context),
     ok = m_websub:process_push_queue(Context),
-    ok = m_websub:process_import_queue(Context).
+    ok = m_websub:process_import_queue(Context),
+    Delay = m_websub:next_queue_delay(Context),
+    NextDue = case Delay of
+        undefined -> undefined;
+        Seconds -> erlang:monotonic_time(second) + Seconds
+    end,
+    Server ! {queues_checked, self(), NextDue},
+    ok.
+
+%% @doc Start the per-site queue scheduler. Database and network work stays in sidejobs.
+start_link(Args) ->
+    gen_server:start_link(?MODULE, Args, []).
+
+init(Args) ->
+    {context, Context} = proplists:lookup(context, Args),
+    z_notifier:observe(websub_queue_changed, self(), Context),
+    {ok, #state{context = z_context:new(Context)}}.
+
+handle_call({is_editor_active, Id}, _From, #state{editors = Editors} = State) ->
+    Fresh = fresh_editors(Editors),
+    Active = lists:any(fun({{RscId, _, _}, _}) -> RscId =:= Id end, maps:to_list(Fresh)),
+    {reply, Active, State#state{editors = Fresh}};
+handle_call(_Message, _From, State) ->
+    {reply, {error, unknown_call}, State}.
+
+handle_cast({editor_presence, Id, UserId, Client, Status}, #state{editors = Editors} = State) ->
+    Fresh = fresh_editors(Editors),
+    Key = {Id, UserId, Client},
+    Editors1 = case Status of
+        4 -> Fresh#{Key => erlang:monotonic_time(second) + 20};
+        _ -> maps:remove(Key, Fresh)
+    end,
+    {noreply, State#state{editors = Editors1}};
+handle_cast({websub_queue_changed, _Context}, State) ->
+    {noreply, State#state{dirty = true}};
+handle_cast(slow_poll, State) ->
+    {noreply, maybe_start_worker(State#state{dirty = true, editors = fresh_editors(State#state.editors)})};
+handle_cast(poll, State) ->
+    {noreply, maybe_start_worker(State)};
+handle_cast(_Message, State) ->
+    {noreply, State}.
+
+handle_info({queues_checked, Pid, NextDue}, #state{worker = {Pid, Ref, false}} = State) ->
+    % Do not clear dirty here: enqueues during this batch require another pass.
+    {noreply, State#state{next_due = NextDue, worker = {Pid, Ref, true}}};
+handle_info({'DOWN', Ref, process, Pid, _Reason},
+        #state{worker = {Pid, Ref, Completed}, dirty = Dirty} = State) ->
+    {noreply, State#state{worker = undefined, dirty = Dirty orelse not Completed}};
+handle_info(_Message, State) ->
+    {noreply, State}.
+
+terminate(_Reason, #state{context = Context}) ->
+    z_notifier:detach(websub_queue_changed, self(), Context),
+    ok.
+
+code_change(_OldVersion, State, _Extra) ->
+    {ok, State}.
+
+maybe_start_worker(#state{worker = Worker} = State) when Worker =/= undefined ->
+    State;
+maybe_start_worker(#state{dirty = Dirty, next_due = NextDue, context = Context} = State) ->
+    IsDue = is_integer(NextDue) andalso NextDue =< erlang:monotonic_time(second),
+    case Dirty orelse IsDue of
+        false ->
+            State;
+        true ->
+            case z_sidejob:start_site_unique(?MODULE, ?MODULE, sidejob_check_queues, [self()], Context) of
+                {ok, Pid} ->
+                    Ref = erlang:monitor(process, Pid),
+                    State#state{dirty = false, worker = {Pid, Ref, false}};
+                {error, _} ->
+                    % Keep the pending work when overloaded or an older worker is running.
+                    State
+            end
+    end.
+
+%% Presence publishes every seven seconds and treats missing peers as gone at 20s.
+fresh_editors(Editors) ->
+    Now = erlang:monotonic_time(second),
+    maps:filter(fun(_Key, Expires) -> Expires > Now end, Editors).

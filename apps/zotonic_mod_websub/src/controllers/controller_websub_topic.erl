@@ -6,8 +6,7 @@
         "reference", "integrator", "controller", "export_and_syndication", "structured_data", "websub", "json", "http"
     ]
 }).
--moduledoc("""
-Serve the complete JSON representation advertised as a resource's WebSub topic.
+-moduledoc(<<"Serve the complete JSON representation advertised as a resource's WebSub topic.
 
 The `websub_topic` dispatch is `/.zotonic/websub/topic/:id` and supports GET and
 HEAD. It offers only `application/json`, independently of the representations
@@ -17,7 +16,7 @@ context, avoiding a language-dependent delivery topic.
 Successful responses use the resource-export envelope:
 
 ```json
-{"status":"ok","result":{"uri":"https://example.com/id/123","resource":{}}}
+{\"status\":\"ok\",\"result\":{\"uri\":\"https://example.com/id/123\",\"resource\":{}}}
 ```
 
 The example abbreviates the result; `m_rsc_export:full/2` supplies the complete
@@ -32,10 +31,9 @@ include resource discovery headers. Private exports require authorized access.
 
 `m_websub` uses the same full-export representation for delivery to verified
 subscribers, including non-Zotonic subscribers. See `mod_websub` for discovery,
-subscription, and the distinction between resource identity and delivery topic.
-""").
+subscription, and the distinction between resource identity and delivery topic."/utf8>>).
+
 -export([allowed_methods/1, content_types_provided/1, process/4]).
--include_lib("zotonic_core/include/zotonic.hrl").
 
 allowed_methods(Context) ->
     {[<<"GET">>, <<"HEAD">>], Context}.
@@ -44,7 +42,7 @@ content_types_provided(Context) ->
 process(_, _, _, Context0) ->
     Context = z_context:ensure_qs(Context0),
     Id = m_rsc:rid(z_context:get_q(<<"id">>, Context), Context),
-    case m_rsc:p_no_acl(Id, is_authoritative, Context) of
+    case m_rsc:p_no_acl(Id, <<"is_authoritative">>, Context) of
         true ->
             case m_rsc_export:full(Id, z_context:set_language('x-default', Context)) of
                 {ok, Export} ->

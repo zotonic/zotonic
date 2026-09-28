@@ -263,3 +263,58 @@ replica. Source URI checks, version checks, and the self-subscription guard prov
 additional protection. A third-party application that rewrites identity and
 republishes data as new authoritative content is outside this loop-prevention
 policy; WebSub itself cannot detect that provenance.
+
+## Queue scheduling
+
+The per-site `mod_websub` server keeps a dirty flag and the earliest persisted due
+time. One-second ticks consult this state without querying the database or starting
+idle workers. Subscription changes and queued imports/pushes signal the server via
+`queue_changed/1`; Zotonic defers these notifications until transaction commit.
+
+A unique, monitored sidejob processes a batch and reads the next due time across
+subscriptions, pushes, and imports. This preserves prompt short-lease renewal,
+retry backoff, and draining of batches. Signals received during a batch remain
+pending. Failed workers and sidejob overload retain pending work for the next tick.
+A startup scan and a ten-minute fallback scan recover persisted work after restarts,
+missed signals, or writes from another node. The database remains authoritative.
+
+## Batching outgoing updates
+
+`mod_websub.push_quiet_seconds` defaults to **10 seconds**. Each newer resource
+version restarts this quiet period. `mod_websub.push_deadline_seconds` defaults to
+**300 seconds**: publication becomes due at this deadline even if editing continues.
+The deadline starts at the first pending update for each subscriber; later changes
+retain it. Duplicate or older version notifications do not move either clock.
+Queue rows survive restarts, and each delivery contains the latest full resource.
+
+Both settings are available in module configuration. Quiet time accepts 0–86400
+seconds; the deadline accepts 1–86400 seconds. Invalid values use their defaults.
+The deadline caps the quiet period if configured shorter. It bounds batching, not
+network delivery time: sidejob capacity and transport retry backoff still apply.
+
+When optional `mod_presence` is active, WebSub consumes its MQTT
+`presence/status/mod_admin/<id>` heartbeats. Fresh `ACTIVE` (4) heartbeats defer
+publication by another quiet period, capped by the original deadline. Other states
+remove that tab's activity; multiple editors/tabs are tracked independently.
+Heartbeats expire after 20 seconds without refresh. Only authenticated publishers
+with admin access and edit permission for the topic resource can affect the delay;
+payload user IDs and locations are not trusted, and retained messages are ignored.
+No presence module dependency is required. Without it, ordinary quiet-time batching
+applies. Presence is an in-memory hint and is rebuilt from heartbeats after restart.
+
+## Local subscriber callback policy
+
+Zotonic accepts subscriber callback URLs only with a DNS hostname, using HTTP
+or HTTPS. IPv4 and IPv6 literals, including numeric IPv4 shorthand, are rejected.
+Use ASCII hostname labels (punycode for internationalized names); the final
+label must start with a letter. A single trailing DNS root dot is allowed.
+Invalid callbacks receive HTTP 400 with a plain-text policy explanation before
+verification is queued. The policy also applies before sending verification,
+denial, or delivery requests for previously stored subscriptions.
+
+This is a **local Zotonic policy**, permitted by
+[WebSub section 5.1.2](https://www.w3.org/TR/websub/#subscription-response-details),
+not a WebSub requirement to reject IP addresses. It applies to subscriber
+callbacks, not discovery URLs, remote hubs, or topics. DNS hostnames must still
+resolve exclusively to public addresses; using a hostname does not bypass the
+SSRF checks. The existing DNS pinning TODO remains open.

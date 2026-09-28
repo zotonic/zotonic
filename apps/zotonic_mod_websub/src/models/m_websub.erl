@@ -23,8 +23,7 @@
         "reference", "integrator", "model", "export_and_syndication", "api_and_integration", "authorization_and_access_control", "websub"
     ]
 }).
--moduledoc("""
-Model for WebSub resource subscriptions, delivery queues, and automatic imports.
+-moduledoc(<<"Model for WebSub resource subscriptions, delivery queues, and automatic imports.
 
 ## Available model API paths
 
@@ -93,8 +92,7 @@ subscription. Resource identity is stored separately from the discovered WebSub
 `topic_url`, so topic migration does not change the semantic resource identifier.
 
 See `mod_websub` for the two-site protocol flow and `z_websub_subscription` for
-renewal, pending intent, callback rotation, and subscriber state persistence.
-""").
+renewal, pending intent, callback rotation, and subscriber state persistence."/utf8>>).
 -behaviour(zotonic_model).
 -author("Marc Worrell <marc@worrell.nl>").
 
@@ -109,6 +107,8 @@ renewal, pending intent, callback rotation, and subscriber state persistence.
     delete_export/3,
 
     queue_push/3,
+    next_queue_delay/1,
+    push_delays/1,
     queue_edge_update/2,
     task_import_referred/4,
     queue_import/4,
@@ -144,7 +144,12 @@ m_get([<<"subscriber_count">>, Rsc | Rest], _Msg, Context) ->
     Id = m_rsc:rid(Rsc, Context),
     case z_acl:rsc_editable(Id, Context) of
         true ->
-            Count = z_db:q1("select count(*) from websub_export where local_rsc_id=$1 and lease > now()", [Id], Context),
+            Count = z_db:q1("
+                select count(*)
+                from websub_export
+                where local_rsc_id=$1
+                  and lease > now()",
+                [Id], Context),
             {ok, {Count, Rest}};
         false ->
             {error, eacces}
@@ -165,7 +170,7 @@ subscriptions(Filters, Context) when is_map(Filters) ->
     Type = maps:get(<<"type">>, Filters, undefined),
     RscId = positive_integer(maps:get(<<"rsc_id">>, Filters, undefined), undefined),
     Page = positive_integer(maps:get(<<"page">>, Filters, undefined), 1),
-    Hostname = subscription_hostname(maps:get(<<"hostname">>, Filters, undefined)),
+    Hostname = subscription_hostname_filter(maps:get(<<"hostname">>, Filters, undefined)),
     Status = subscription_status(maps:get(<<"status">>, Filters, undefined)),
     Errors = subscription_errors(maps:get(<<"errors">>, Filters, undefined)),
     case valid_subscription_type(Type) andalso RscId =/= invalid
@@ -192,11 +197,14 @@ valid_subscription_type(<<"import">>) ->
 valid_subscription_type(_) ->
     false.
 
-%% Exact, case-insensitive hostname matching, without a scheme, port or path.
-%% Accept brackets around IPv6 literals and normalize a DNS trailing dot.
-subscription_hostname(undefined) ->
+%% Normalize the admin subscriptions hostname filter for exact, case-insensitive
+%% matching, without a scheme, port or path. Accept IP literals (including bracketed
+%% IPv6) so external-resource subscriptions and existing records can be found.
+%% This is not callback URL validation; z_websub_http:is_callback_url/1 enforces
+%% the local DNS-hostname-only policy for subscriber callbacks.
+subscription_hostname_filter(undefined) ->
     undefined;
-subscription_hostname(B) when is_binary(B), byte_size(B) =< 255 ->
+subscription_hostname_filter(B) when is_binary(B), byte_size(B) =< 255 ->
     try
         case string:trim(B) of
             <<>> ->
@@ -215,9 +223,9 @@ subscription_hostname(B) when is_binary(B), byte_size(B) =< 255 ->
                 end
         end
     catch _:_ ->
-        invalid end;
-
-subscription_hostname(_) ->
+        invalid
+    end;
+subscription_hostname_filter(_) ->
     invalid.
 
 subscription_status(undefined) ->
@@ -275,7 +283,9 @@ subscriptions(Type, RscId, Page, Hostname, Status, Errors, Context) ->
              when not is_unsubscribed and lease > now() then 'active'
              when pending_mode='subscribe' then 'pending'
              when lease <= now() then 'expired' else 'pending' end as status
-        from websub_import where ($1::integer is null or local_rsc_id=$1)",
+        from websub_import
+        where ($1::integer is null
+           or local_rsc_id = $1)",
     Query = case Type of
         <<"export">> ->
             Exports;
@@ -324,8 +334,13 @@ subscribe(Id, Context) ->
         ok ->
             case subscribe_parts_option(Id, Context) of
                 true ->
-                    ImportId = z_db:q1("select id from websub_import where local_rsc_id = $1 "
-                        "and is_enabled order by id desc limit 1", [Id], Context),
+                    ImportId = z_db:q1("
+                        select id
+                        from websub_import
+                        where local_rsc_id = $1
+                          and is_enabled
+                        order by id desc
+                        limit 1", [Id], Context),
                     RefIds = maps:from_list([
                         {m_rsc:uri(PartId, Context), PartId}
                         || PartId <- m_edge:objects(Id, haspart, Context)
@@ -356,7 +371,15 @@ unsubscribe(Id, Context) ->
 %% @doc Update or insert a subscriber to a topic. The subscription is valid
 %% for LeaseSecs seconds and can be deleted afterwards.
 update_export(Callback, Topic, RscId, LeaseSecs, OptSecret, Context) ->
-    case m_rsc:p_no_acl(RscId, is_authoritative, Context) of
+    case z_websub_http:is_callback_url(Callback) of
+        true ->
+            update_export_hostname(Callback, Topic, RscId, LeaseSecs, OptSecret, Context);
+        false ->
+            {error, callback_hostname_required}
+    end.
+
+update_export_hostname(Callback, Topic, RscId, LeaseSecs, OptSecret, Context) ->
+    case m_rsc:p_no_acl(RscId, <<"is_authoritative">>, Context) of
         true ->
             z_db:transaction(fun(Ctx) ->
                 % Serialize registration with authority changes and their cleanup.
@@ -443,11 +466,14 @@ queue_edge_update(RscId, Context) ->
     UserId :: integer(),
     Context :: z:context().
 task_import_referred(ImportId, RefIds, UserId, Context) ->
-    case z_db:q_row("select local_rsc_id, source_uri from websub_import "
-            "where id = $1 and is_enabled", [ImportId], Context) of
+    case z_db:q_row("
+            select local_rsc_id, source_uri
+            from websub_import
+            where id = $1
+              and is_enabled", [ImportId], Context) of
         {LocalId, SourceUri} ->
             case can_import(LocalId, UserId, Context)
-                andalso m_rsc:p_no_acl(LocalId, uri, Context) =:= SourceUri
+                andalso m_rsc:p_no_acl(LocalId, <<"uri">>, Context) =:= SourceUri
             of
                 true ->
                     UserContext = z_context:set(websub_safe_import, true, user_context(UserId, Context)),
@@ -498,6 +524,20 @@ subscribe_imported_parts(LocalId, Context) ->
             ok
     end.
 
+%% @doc Seconds until the earliest persisted queue item or lease renewal.
+%% Each minimum uses its due-time index; an empty set lets the scheduler sleep.
+-spec next_queue_delay(Context) -> non_neg_integer() | undefined
+    when Context :: z:context().
+next_queue_delay(Context) ->
+    z_db:q1("
+        select case when min(due) is null then null
+            else greatest(0, ceil(extract(epoch from (min(due) - clock_timestamp()))))::bigint end
+        from (
+            select min(next_check) as due from websub_import
+            union all select min(due) from websub_push_queue
+            union all select min(due) from websub_import_queue
+        ) as queues", Context).
+
 queue_push(RscId, Version, Context) when is_integer(RscId), is_integer(Version) ->
     z_db:transaction(fun(Ctx) ->
         % Read the locked row, not a cached flag: a delayed update notification
@@ -527,7 +567,10 @@ queue_push_authoritative(RscId, Version, Context) ->
             queue_push_subscription(ExportId, RscId, Version, Context)
         end,
         Subs),
-    ok.
+    case Subs of
+        [] -> ok;
+        _ -> mod_websub:queue_changed(Context)
+    end.
 
 queue_import(ImportId, Version, Payload, Context) when is_integer(ImportId), is_integer(Version) ->
     % Import queue rows are single-row per subscription; newer versions overwrite older
@@ -557,7 +600,7 @@ queue_import(ImportId, Version, Payload, Context) when is_integer(ImportId), is_
         ",
         [ ImportId, Version, PayloadBin ],
         Context),
-    ok.
+    mod_websub:queue_changed(Context).
 
 
 handle_push_notification(Payload0, RawBody, Signature, Context) ->
@@ -641,7 +684,11 @@ process_push_queue(Context) ->
         [ ?PUSH_BATCH_SIZE ],
         Context),
     lists:foreach(fun(Row) ->
-        process_push_row(Row, Context) end, Rows),
+        case is_push_ready(Row, Context) of
+            true -> process_push_row(Row, Context);
+            false -> ok
+        end
+    end, Rows),
     ok.
 
 process_import_queue(Context) ->
@@ -689,6 +736,37 @@ cleanup(Context) ->
     ok.
 
 
+%% Recheck the selected version and due time: an edit may have reset the quiet
+%% period since the batch was selected. Never postpone transport retries for presence.
+is_push_ready({QueueId, _ExportId, RscId, Version, _RetryCount, _Callback,
+        _Topic, _Secret, _UserId, _LastVersion, _IsError, _AuthGroups}, Context) ->
+    {Quiet, Deadline} = push_delays(Context),
+    case z_db:q_row("
+        select retry_count, created + ($3 * interval '1 second') <= now()
+        from websub_push_queue
+        where id = $1
+          and version = $2
+          and due <= now()",
+        [QueueId, Version, Deadline], Context)
+    of
+        undefined -> false;
+        {0, false} ->
+            case mod_websub:is_editor_active(RscId, Context) of
+                true ->
+                    z_db:q("
+                        update websub_push_queue
+                        set due = least(now() + ($3 * interval '1 second'),
+                                        created + ($4 * interval '1 second'))
+                        where id = $1
+                          and version = $2
+                          and retry_count = 0",
+                        [QueueId, Version, max(1, Quiet), Deadline], Context),
+                    false;
+                false -> true
+            end;
+        {_Retries, _DeadlinePassed} -> true
+    end.
+
 process_push_row({QueueId, ExportId, RscId, Version, RetryCount, Callback, Topic, Secret, UserId, LastPushVersion, IsError, AuthGroups}, Context) ->
     % Re-checking visibility and current version here keeps the queue conservative:
     % work is dropped if access disappeared; an older notification sends current content.
@@ -699,7 +777,7 @@ process_push_row({QueueId, ExportId, RscId, Version, RetryCount, Callback, Topic
         false ->
             UserContext = subscriber_context(UserId, AuthGroups, Context),
             case z_acl:rsc_visible(RscId, UserContext)
-                andalso m_rsc:p_no_acl(RscId, is_authoritative, UserContext) of
+                andalso m_rsc:p_no_acl(RscId, <<"is_authoritative">>, UserContext) of
                 false ->
                     ?LOG_WARNING(#{
                         in => zotonic_mod_websub,
@@ -784,7 +862,7 @@ import_payload(ImportId, QueueId, QueuedVersion, Payload0, Context) ->
         case z_db:q1("select is_enabled from websub_import where id = $1 for update", [ImportId], Ctx) of
             true ->
                 Source = z_db:q1("select source_uri from websub_import where id = $1", [ImportId], Ctx),
-                case m_rsc:p_no_acl(LocalId, uri, Ctx) =:= Source
+                case m_rsc:p_no_acl(LocalId, <<"uri">>, Ctx) =:= Source
                     andalso resource_uri(normalize_payload(Payload0)) =:= Source of
                     true ->
                         import_payload_locked(ImportId, QueueId, QueuedVersion, Payload0, Ctx);
@@ -808,9 +886,11 @@ import_payload_locked(ImportId, QueueId, QueuedVersion, Payload0, Context) ->
         V ->
             V
     end,
-    case z_db:q1("select max(last_import_version) from websub_import
+    case z_db:q1("
+            select max(last_import_version)
+            from websub_import
             where local_rsc_id = (select local_rsc_id from websub_import where id = $1)
-            and source_uri = (select source_uri from websub_import where id = $1)", [ImportId], Context) of
+              and source_uri = (select source_uri from websub_import where id = $1)", [ImportId], Context) of
         LastVersion when is_integer(LastVersion), LastVersion >= Version ->
             delete_import_queue(QueueId, Version, Context);
         _ ->
@@ -865,7 +945,8 @@ retry_or_flag_push(QueueId, _ExportId, Version, RetryCount, Reason, Context) whe
             last_error = $3,
             last_error_at = now(),
             modified = now()
-        where id = $1 and version <= $4
+        where id = $1
+          and version <= $4
         ",
         [ QueueId, Delay, error_text(Reason), Version ],
         Context),
@@ -894,7 +975,8 @@ retry_import_queue(QueueId, Version, RetryCount, Reason, Context) when RetryCoun
             last_error = $3,
             last_error_at = now(),
             modified = now()
-        where id = $1 and version <= $4
+        where id = $1
+          and version <= $4
         ",
         [ QueueId, Delay, error_text(Reason), Version ],
         Context),
@@ -964,7 +1046,7 @@ post_json_callback(Callback, OptSecret, Payload, Topic, Context0) ->
     Link = <<"<", Hub/binary, ">; rel=\"hub\", <", Topic/binary, ">; rel=\"self\"">>,
     Headers = [{<<"link">>, Link} | proplists:get_value(headers, signature_headers(OptSecret, Body), [])],
     Options = [{autoredirect, false}, {timeout, 10000}, {max_length, 65536}, {headers, Headers}],
-    case z_websub_http:fetch(post, Callback, Body, [{content_type, <<"application/json">>} | Options], Context) of
+    case z_websub_http:callback(post, Callback, Body, [{content_type, <<"application/json">>} | Options], Context) of
         {ok, {_FinalUrl, _Hs, _Size, _RespBody}} ->
             {ok, 200};
         {error, {Status, _Url, _Hs, _Size, _RespBody}} ->
@@ -1001,27 +1083,49 @@ mark_import_credentials_error(ImportId, Reason, Context) ->
         Context),
     ok.
 
+%% @doc Configured quiet period and maximum batching delay, in seconds.
+-spec push_delays(Context) -> {non_neg_integer(), pos_integer()}
+    when Context :: z:context().
+push_delays(Context) ->
+    {config_seconds(push_quiet_seconds, 10, 0, Context),
+     config_seconds(push_deadline_seconds, 300, 1, Context)}.
+
+config_seconds(Key, Default, Minimum, Context) ->
+    Value = m_config:get_value(mod_websub, Key, Context),
+    try z_convert:to_integer(Value) of
+        N when is_integer(N), N >= Minimum, N =< 86400 -> N;
+        _ -> Default
+    catch
+        error:_ -> Default
+    end.
+
 queue_push_subscription(ExportId, RscId, Version, Context) ->
+    {Quiet, Deadline} = push_delays(Context),
     _ = z_db:q("
         insert into websub_push_queue
             (export_id, local_rsc_id, version, due)
         values
-            ($1, $2, $3, now())
+            ($1, $2, $3, now() + (least($4::int, $5::int) * interval '1 second'))
         on conflict (export_id)
         do update
            set local_rsc_id = excluded.local_rsc_id,
                version = greatest(websub_push_queue.version, excluded.version),
                due = case
-                    when excluded.version > websub_push_queue.version then now()
+                    when excluded.version > websub_push_queue.version then
+                        least(now() + ($4 * interval '1 second'),
+                              websub_push_queue.created + ($5 * interval '1 second'))
                     else websub_push_queue.due
                end,
                retry_count = case
                     when excluded.version > websub_push_queue.version then 0
                     else websub_push_queue.retry_count
                end,
-               modified = now()
+               modified = case
+                    when excluded.version > websub_push_queue.version then now()
+                    else websub_push_queue.modified
+               end
         ",
-        [ ExportId, RscId, Version ],
+        [ ExportId, RscId, Version, Quiet, Deadline ],
         Context),
     ok.
 
@@ -1070,7 +1174,7 @@ cleanup_deleted_import(Import, Context) ->
 can_import(Id, UserId, Context) when is_integer(Id), is_integer(UserId) ->
     UserContext = user_context(UserId, Context),
     z_auth:is_enabled(UserId, Context) andalso z_acl:rsc_editable(Id, UserContext)
-        andalso not m_rsc:p_no_acl(Id, is_authoritative, UserContext);
+        andalso not m_rsc:p_no_acl(Id, <<"is_authoritative">>, UserContext);
 can_import(_, _, _) ->
     false.
 

@@ -94,18 +94,32 @@ links(Url, Headers, Body, ExportLinks) ->
     end.
 
 urls(Rel, Links, Base) ->
-    lists:usort([Url || Link <- Links,
-        lists:member(Rel, binary:split(z_convert:to_binary(value(rel, Link)), <<" ">>, [global])),
-        not lists:keymember(<<"anchor">>, 1, maps:get(attributes, Link, [])),
-        Url <- [normalize_url(z_convert:to_binary(uri_string:resolve(value(target, Link), z_convert:to_binary(Base))))],
-        is_url(Url)]).
+    % Only use matching relations whose context is the fetched document.
+    MatchingLinks = lists:filter(
+        fun(Link) ->
+            Relations = binary:split(z_convert:to_binary(value(rel, Link)), <<" ">>, [global]),
+            Attributes = maps:get(attributes, Link, []),
+            lists:member(Rel, Relations)
+                andalso not lists:keymember(<<"anchor">>, 1, Attributes)
+        end,
+        Links),
+    BaseUrl = z_convert:to_binary(Base),
+    ResolvedUrls = [
+        uri_string:resolve(value(target, Link), BaseUrl)
+        || Link <- MatchingLinks
+    ],
+    NormalizedUrls = [normalize_url(z_convert:to_binary(Url)) || Url <- ResolvedUrls],
+    ValidUrls = [Url || Url <- NormalizedUrls, is_url(Url)],
+    lists:usort(ValidUrls).
 
 value(Key, Map) ->
     maps:get(Key, Map, maps:get(atom_to_binary(Key), Map, <<>>)).
 
 body_links(Body, Headers) ->
-    CT = z_string:to_lower(z_convert:to_binary(proplists:get_value("content-type", Headers,
-        proplists:get_value(<<"content-type">>, Headers, <<>>)))),
+    CT = z_string:to_lower(
+            z_convert:to_binary(
+                proplists:get_value("content-type", Headers,
+                    proplists:get_value(<<"content-type">>, Headers, <<>>)))),
     case {binary:match(CT, <<"html">>), binary:match(CT, <<"xml">>)} of
         {nomatch, nomatch} ->
             json_links(Body);
@@ -134,8 +148,12 @@ tree_links({<<"item">>, _, _}, false) ->
 tree_links({Tag, Attrs, Children}, Html) ->
     Here = case lists:last(binary:split(Tag, <<":">>, [global])) of
         <<"link">> ->
-            [#{rel => proplists:get_value(<<"rel">>, Attrs, <<>>),
-                         target => proplists:get_value(<<"href">>, Attrs, <<>>)}];
+            [
+                #{
+                    rel => proplists:get_value(<<"rel">>, Attrs, <<>>),
+                    target => proplists:get_value(<<"href">>, Attrs, <<>>)
+                }
+            ];
         _ ->
             []
     end,

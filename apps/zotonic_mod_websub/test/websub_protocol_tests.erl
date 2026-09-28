@@ -44,6 +44,41 @@ url_validation_test() ->
     lists:foreach(fun(Url) -> ?assertNot(z_websub_discovery:is_url(Url)) end,
         [<<"file:///etc/passwd">>, <<"ftp://host/file">>, <<"https://user:pass@host/">>, <<"https://host/#fragment">>, undefined]).
 
+callback_hostname_policy_test() ->
+    lists:foreach(fun(Url) -> ?assert(z_websub_http:is_callback_url(Url)) end, [
+        <<"https://subscriber.example/callback">>,
+        <<"http://Sub-1.example.:8080/callback?q=1">>,
+        <<"https://xn--bcher-kva.example/callback">>
+    ]),
+    lists:foreach(fun(Url) ->
+        ?assertNot(z_websub_http:is_callback_url(Url)),
+        ?assertEqual({error, callback_hostname_required},
+            z_websub_http:callback(get, Url, [], [], #context{})),
+        ?assertEqual({error, callback_hostname_required},
+            z_websub_http:callback(post, Url, <<>>, [], #context{})),
+        ?assertEqual({error, callback_hostname_required},
+            m_websub:update_export(Url, <<"https://publisher.example/topic">>, 123, 60, undefined, #context{}))
+    end, [
+        <<"https://93.184.215.14/callback">>, <<"http://127.1/">>,
+        <<"http://2130706433/">>, <<"http://0x7f000001/">>,
+        <<"http://0177.0.0.1/">>, <<"http://127.0.0.1./">>,
+        <<"http://[::1]/">>, <<"https://[2606:4700::1111]/callback">>,
+        <<"https://bad_name.example/">>, <<"https://-bad.example/">>,
+        <<"https://bad-.example/">>, <<"https://bad.example../">>,
+        <<"https://user@example.com/">>, undefined
+    ]),
+    Context = z_context:set_q([
+        {<<"hub.mode">>, <<"subscribe">>},
+        {<<"hub.callback">>, <<"https://93.184.215.14/callback">>}
+    ], (z_context:new(zotonic_site_testsandbox))#context{
+        cowreq = websub_test_support:request(#{method => <<"POST">>}),
+        cowenv = #{}
+    }),
+    {{halt, 400}, RejectedContext} = controller_websub:malformed_request(Context),
+    ?assertMatch(<<"Local policy:", _/binary>>, cowmachine_req:resp_body(RejectedContext)),
+    % General WebSub URLs remain valid with IP literals.
+    ?assert(z_websub_discovery:is_url(<<"https://93.184.215.14/topic">>)).
+
 renewal_test() ->
     lists:foreach(fun(Lease) ->
         Renew = z_websub_subscription:renewal_seconds(Lease),
@@ -72,17 +107,19 @@ redirect_discovery_test() ->
     end.
 
 public_destination_test() ->
-    lists:foreach(fun(IP) -> ?assertNot(z_websub_http:is_public(IP)) end,
+    lists:foreach(fun(IP) -> ?assertNot(z_ip_address:is_public(IP)) end,
         [{127,0,0,1}, {10,1,2,3}, {100,127,255,254}, {169,254,169,254},
          {192,168,1,1}, {224,0,0,1}, {0,0,0,0}, {0,0,0,0,0,0,0,1},
          {16#fc00,0,0,0,0,0,0,1}, {0,0,0,0,0,16#ffff,16#7f00,1},
          {16#2002,16#7f00,1,0,0,0,0,0}]),
-    ?assert(z_websub_http:is_public({93,184,215,14})),
-    ?assert(z_websub_http:is_public({16#2606,16#4700,0,0,0,0,0,16#1111})),
+    ?assert(z_ip_address:is_public({93,184,215,14})),
+    ?assert(z_ip_address:is_public({16#2606,16#4700,0,0,0,0,0,16#1111})),
     ?assertEqual({error, unsafe_destination},
         z_websub_http:fetch(get, <<"http://127.0.0.1/private">>, <<>>, [], undefined)),
     ?assertEqual({error, unsafe_destination},
-        z_websub_http:destination(<<"http://[::ffff:127.0.0.1]/private">>)).
+        z_websub_http:destination(<<"http://[::ffff:127.0.0.1]/private">>)),
+    ?assertMatch({ok, _, _},
+        z_websub_http:destination(<<"http://[::ffff:93.184.215.14]/public">>)).
 
 percent_encoded_urls_test() ->
     ?assertEqual(<<"https://example.test/id/1?token=~%2F">>,
@@ -99,7 +136,7 @@ non_authoritative_publisher_test() ->
     ok = meck:new(z_db, [passthrough]),
     try
         meck:expect(m_rsc, p_no_acl, fun
-            (123, is_authoritative, _) -> false;
+            (123, <<"is_authoritative">>, _) -> false;
             (Id, Key, Ctx) -> meck:passthrough([Id, Key, Ctx])
         end),
         meck:expect(z_db, q, fun

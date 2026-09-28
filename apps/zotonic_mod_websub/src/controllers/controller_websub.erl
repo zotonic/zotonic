@@ -25,8 +25,7 @@
         "reference", "integrator", "controller", "export_and_syndication", "api_and_integration", "authorization_and_access_control", "websub", "http"
     ]
 }).
--moduledoc("""
-HTTP hub and subscriber callback controller for `mod_websub`.
+-moduledoc(<<"HTTP hub and subscriber callback controller for `mod_websub`.
 
 ## Endpoints
 
@@ -62,8 +61,7 @@ not use the initiating user's OAuth2 credentials. Request admission is deduplica
 and bounded per site; inbound delivery bodies are limited to 1 MiB.
 
 See `mod_websub` for the complete two-site flow, resource identity versus topic,
-OAuth2 integration, and the open DNS connection-pinning TODO.
-""").
+OAuth2 integration, and the open DNS connection-pinning TODO."/utf8>>).
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
@@ -111,7 +109,17 @@ malformed_request(Context) ->
                 undefined ->
                     {false, Context1};
                 _ ->
-                    {not is_valid_subscribe_request(Context1), Context1}
+                    Callback = z_websub_discovery:normalize_url(z_context:get_q(<<"hub.callback">>, Context1)),
+                    case z_websub_http:is_callback_url(Callback) of
+                        true ->
+                            {not is_valid_subscribe_request(Context1), Context1};
+                        false ->
+                            Context2 = z_context:set_resp_header(<<"content-type">>, <<"text/plain; charset=utf-8">>, Context1),
+                            Context3 = cowmachine_req:set_resp_body(
+                                <<"Local policy: hub.callback must be an HTTP(S) URL with a DNS hostname; IP addresses are not accepted.">>,
+                                Context2),
+                            {{halt, 400}, Context3}
+                    end
             end
     end.
 
@@ -249,7 +257,7 @@ handle(<<"subscribe">>, HubCallback, HubTopic, OptHubSecret, Context) ->
                     refused(HubCallback, HubTopic, OptHubSecret, <<"invalid-topic">>, Context);
                 RscId ->
                     case z_acl:rsc_visible(RscId, Context)
-                        andalso m_rsc:p_no_acl(RscId, is_authoritative, Context) of
+                        andalso m_rsc:p_no_acl(RscId, <<"is_authoritative">>, Context) of
                         false ->
                             refused(HubCallback, HubTopic, OptHubSecret, <<"access-denied-rsc">>, Context);
                         true ->
@@ -381,7 +389,7 @@ refused(HubCallback, HubTopic, OptHubSecret, Reason, Context) ->
 -spec get_callback(binary() | string(), binary() | undefined, list(), z:context()) -> {ok, {integer(), binary()}} | {error, term()}.
 get_callback(HubCallback, _OptHubSecret, Payload, Context0) ->
     AnonContext = z_acl:anondo(z_context:new(Context0)),
-    case z_websub_http:fetch(get, HubCallback, Payload, [{autoredirect, false}, {timeout, 10000}, {max_length, 4096}], AnonContext) of
+    case z_websub_http:callback(get, HubCallback, Payload, [{autoredirect, false}, {timeout, 10000}, {max_length, 4096}], AnonContext) of
         {ok, {_FinalUrl, _Hs, _Size, Body}} ->
             {ok, {200, Body}};
         {error, {Status, _Url, _Hs, _Size, RespBody}} ->
@@ -404,7 +412,7 @@ is_valid_subscribe_request(Context) ->
     HubTopic = z_websub_discovery:normalize_url(z_context:get_q(<<"hub.topic">>, Context)),
     OptHubSecret = z_context:get_q(<<"hub.secret">>, Context),
     OptHubLease = z_context:get_q(<<"hub.lease_seconds">>, Context),
-    is_url(HubCallback)
+    z_websub_http:is_callback_url(HubCallback)
         andalso (HubMode =:= <<"subscribe">> orelse HubMode =:= <<"unsubscribe">>)
         andalso case HubMode of
             <<"unsubscribe">> ->
@@ -465,7 +473,7 @@ is_valid_topic(Topic0, Context) ->
                 undefined ->
                     false;
                 Id ->
-                    m_rsc:p_no_acl(Id, is_authoritative, Context) =:= true
+                    m_rsc:p_no_acl(Id, <<"is_authoritative">>, Context) =:= true
                         andalso Topic =:= m_websub:topic_url(Id, Context)
             end;
         false ->

@@ -3,7 +3,7 @@
 -include_lib("eunit/include/eunit.hrl").
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-lifecycle_test_() -> {timeout, 60, fun lifecycle/0}.
+lifecycle_test_() -> {timeout, 60, fun() -> without_scheduler(fun lifecycle/0) end}.
 
 lifecycle() ->
     ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
@@ -53,7 +53,7 @@ lifecycle() ->
         ?assertEqual({error, no_subscription}, m_websub:handle_push_notification(Push, Body, <<"sha256=00">>, CallbackContext)),
         ?assertEqual(ok, m_websub:handle_push_notification(Push, Body, Signature, CallbackContext)),
         ok = m_websub:process_import_queue(A),
-        ?assertEqual(<<"Updated">>, m_rsc:p(Id, title, A)),
+        ?assertEqual(<<"Updated">>, m_rsc:p(Id, <<"title">>, A)),
         {ok, Saved} = m_rsc_import:get_import_status(Id, A),
         ?assertEqual(0, proplists:get_value(import_edges, maps:get(<<"options">>, Saved))),
         ?assertEqual(2, z_db:q1("select last_import_version from websub_import where id=$1", [ImportId], A)),
@@ -121,7 +121,7 @@ payload(Topic, Version, Title) ->
       <<"is_a">> => [<<"text">>], <<"version">> => Version,
       <<"resource">> => #{<<"title">> => Title, <<"is_published">> => true}}.
 
-import_opt_in_test_() -> {timeout, 30, fun import_opt_in/0}.
+import_opt_in_test_() -> {timeout, 30, fun() -> without_scheduler(fun import_opt_in/0) end}.
 
 import_opt_in() ->
     C = z_acl:logon(1, z_context:new(zotonic_site_testsandbox)),
@@ -149,10 +149,10 @@ await_subscription(Id, Context, N) ->
         _ -> ok
     end.
 
-publisher_delivery_test_() -> {timeout, 30, fun publisher_delivery/0}.
+publisher_delivery_test_() -> {timeout, 30, fun() -> without_scheduler(fun publisher_delivery/0) end}.
 
 publisher_delivery() -> publisher_delivery(0).
-publisher_private_delivery_test_() -> {timeout, 30, fun() -> publisher_delivery(2) end}.
+publisher_private_delivery_test_() -> {timeout, 30, fun() -> without_scheduler(fun() -> publisher_delivery(2) end) end}.
 
 publisher_delivery(Visibility) ->
     C = z_acl:logon(1, z_context:new(zotonic_site_testsandbox)),
@@ -180,8 +180,10 @@ publisher_delivery(Visibility) ->
             {ok, {binary_to_list(Url), [], 0, <<>>}}
         end),
         ok = m_websub:update_export(Callback, Topic, Id, 600, Secret, C),
-        Version = m_rsc:p(Id, version, C),
+        Version = m_rsc:p(Id, <<"version">>, C),
         ok = m_websub:queue_push(Id, Version, C),
+        %% Delivery tests explicitly make the batch due; batching is tested separately.
+        z_db:q("update websub_push_queue set due=now() where local_rsc_id=$1", [Id], C),
         ok = m_websub:process_push_queue(C),
         ?assertEqual(Version, z_db:q1("select last_push_version from websub_export where callback_url=$1", [Callback], C)),
         ?assert(meck:called(z_websub_http, fetch, [post, Callback, '_', '_', '_']))
@@ -191,7 +193,7 @@ publisher_delivery(Visibility) ->
         m_rsc:delete(Id, C)
     end.
 
-identity_and_topic_test_() -> {timeout, 30, fun identity_and_topic/0}.
+identity_and_topic_test_() -> {timeout, 30, fun() -> without_scheduler(fun identity_and_topic/0) end}.
 identity_and_topic() ->
     C = z_acl:logon(1, z_context:new(zotonic_site_testsandbox)),
     Uri = <<"https://identity.test/id/123">>,
@@ -216,15 +218,15 @@ identity_and_topic() ->
         {ok, _} = m_rsc:update(Id, #{<<"uri">> => <<"https://new.test/id/1">>}, C),
         m_websub:queue_import(ImportId, 2, payload(Uri, 2, <<"Stale">>), C),
         m_websub:process_import_queue(C),
-        ?assertEqual(<<"Original">>, m_rsc:p(Id, title, C)),
-        ?assertEqual(<<"https://new.test/id/1">>, m_rsc:p(Id, uri, C)),
+        ?assertEqual(<<"Original">>, m_rsc:p(Id, <<"title">>, C)),
+        ?assertEqual(<<"https://new.test/id/1">>, m_rsc:p(Id, <<"uri">>, C)),
         {ok, _} = m_rsc:update(Id, #{<<"uri">> => Uri}, C),
         z_db:q("update websub_import set is_enabled=true, is_unsubscribed=false where id=$1", [ImportId], C),
         % An untrusted refetch cannot replace the selected resource with another identity.
         m_websub:queue_import(ImportId, 2, payload(<<"https://other.test/id/999">>, 2, <<"Wrong">>), C),
         m_websub:process_import_queue(C),
-        ?assertEqual(<<"Original">>, m_rsc:p(Id, title, C)),
-        ?assertEqual(Uri, m_rsc:p(Id, uri, C)),
+        ?assertEqual(<<"Original">>, m_rsc:p(Id, <<"title">>, C)),
+        ?assertEqual(Uri, m_rsc:p(Id, <<"uri">>, C)),
         ?assertMatch(#{is_enabled := false, last_error := <<"resource_identity_changed">>}, z_websub_subscription:status(Id, C))
     after
         meck:unload(z_websub_http), meck:unload(z_websub_discovery),
@@ -329,6 +331,9 @@ oauth_transport_test() ->
 %% Exhausting retries for an old notification must not delete a newer update
 %% queued while the HTTP request was in flight.
 queue_race_test() ->
+    without_scheduler(fun queue_race/0).
+
+queue_race() ->
     C = z_acl:logon(1, z_context:new(zotonic_site_testsandbox)),
     {ok, Id} = m_rsc:insert(#{<<"category_id">> => text, <<"is_published">> => true}, C),
     {ok, Id} = m_rsc:update(Id, #{<<"title">> => <<"Latest representation">>}, C),
@@ -347,6 +352,8 @@ queue_race_test() ->
             ok = m_websub:queue_push(Id, 100, C),
             {error, timeout}
         end),
+        %% Delivery tests explicitly make the batch due; batching is tested separately.
+        z_db:q("update websub_push_queue set due=now() where local_rsc_id=$1", [Id], C),
         ok = m_websub:process_push_queue(C),
         ?assertEqual({100, 0}, z_db:q_row("select version, retry_count from websub_push_queue where local_rsc_id=$1", [Id], C)),
         ?assert(meck:called(z_websub_http, fetch, [post, Callback, '_', '_', '_']))
@@ -355,6 +362,9 @@ queue_race_test() ->
     end.
 
 disabled_import_user_test() ->
+    without_scheduler(fun disabled_import_user/0).
+
+disabled_import_user() ->
     C = z_acl:logon(1, z_context:new(zotonic_site_testsandbox)),
     Uri = <<"https://source.test/id/disabled-user">>,
     {ok, {Id, _}} = m_rsc_import:import(payload(Uri, 1, <<"Original">>), [], C),
@@ -374,7 +384,7 @@ disabled_import_user_test() ->
         meck:expect(z_auth, is_enabled, fun(_, _) -> false end),
         ?assertEqual({error, eacces}, m_websub:subscribe(Id, C)),
         ok = m_websub:process_import_queue(C),
-        ?assertEqual(<<"Original">>, m_rsc:p(Id, title, C)),
+        ?assertEqual(<<"Original">>, m_rsc:p(Id, <<"title">>, C)),
         ok = z_websub_subscription:process(C),
         ?assertMatch(#{is_enabled := false}, z_websub_subscription:status(Id, C))
     after
@@ -428,6 +438,9 @@ cookie_authorization_test() ->
     end.
 
 self_subscription_test() ->
+    without_scheduler(fun self_subscription/0).
+
+self_subscription() ->
     C = z_acl:logon(1, z_context:new(zotonic_site_testsandbox)),
     {ok, LocalId} = m_rsc:insert(#{<<"category_id">> => text, <<"name">> => <<"websub_self_test">>,
         <<"is_published">> => true}, C),
@@ -470,6 +483,9 @@ self_subscription_test() ->
     end.
 
 authority_change_test() ->
+    without_scheduler(fun authority_change/0).
+
+authority_change() ->
     C = z_acl:logon(1, z_context:new(zotonic_site_testsandbox)),
     {ok, Id} = m_rsc:insert(#{<<"category_id">> => text, <<"is_published">> => true}, C),
     Topic = m_websub:topic_url(Id, C),
@@ -490,6 +506,9 @@ authority_change_test() ->
 
 %% Database authority, not a stale resource cache, controls publication.
 authority_cache_test() ->
+    without_scheduler(fun authority_cache/0).
+
+authority_cache() ->
     C = z_acl:logon(1, z_context:new(zotonic_site_testsandbox)),
     {ok, Id} = m_rsc:insert(#{<<"category_id">> => text}, C),
     Topic = m_websub:topic_url(Id, C),
@@ -498,14 +517,14 @@ authority_cache_test() ->
     ok = meck:new(m_rsc, [passthrough]),
     try
         meck:expect(m_rsc, p_no_acl, fun
-            (R, is_authoritative, _) when R =:= Id -> false;
+            (R, <<"is_authoritative">>, _) when R =:= Id -> false;
             (R, K, Ctx) -> meck:passthrough([R, K, Ctx])
         end),
         ok = m_websub:queue_push(Id, 1, C),
         ?assertEqual(1, z_db:q1("select count(*) from websub_export where local_rsc_id=$1", [Id], C)),
         z_db:q("update rsc set is_authoritative=false where id=$1", [Id], C),
         meck:expect(m_rsc, p_no_acl, fun
-            (R, is_authoritative, _) when R =:= Id -> true;
+            (R, <<"is_authoritative">>, _) when R =:= Id -> true;
             (R, K, Ctx) -> meck:passthrough([R, K, Ctx])
         end),
         ?assertEqual({error, not_authoritative}, m_websub:update_export(Callback, Topic, Id, 600, undefined, C)),
@@ -515,8 +534,10 @@ authority_cache_test() ->
 
 collection_update_test_() ->
     {timeout, 30, fun() ->
-        collection_update(false),
-        collection_update(true)
+        without_scheduler(fun() ->
+            collection_update(false),
+            collection_update(true)
+        end)
     end}.
 
 collection_update(SubscribeParts) ->
@@ -548,8 +569,8 @@ collection_update(SubscribeParts) ->
             [m_websub, task_import_referred], C) > 0),
         ok = m_websub:task_import_referred(ImportId, #{AUri => A, BUri => B}, 1, C),
         ?assert(m_rsc_import:is_imported(B, C)),
-        ?assertEqual(<<"New item">>, m_rsc:p(B, title, C)),
-        ?assertEqual(<<"Existing item">>, m_rsc:p(A, title, C)),
+        ?assertEqual(<<"New item">>, m_rsc:p(B, <<"title">>, C)),
+        ?assertEqual(<<"Existing item">>, m_rsc:p(A, <<"title">>, C)),
         {ok, BStatus} = m_rsc_import:get_import_status(B, C),
         ?assertNot(proplists:get_bool(is_subscribe_haspart, maps:get(<<"options">>, BStatus))),
         ExpectedSubscriptions = case SubscribeParts of true -> 2; false -> 0 end,
@@ -592,14 +613,17 @@ collection_payload(Uri, Version, Members) ->
     }.
 
 edge_publication_test() ->
+    without_scheduler(fun edge_publication/0).
+
+edge_publication() ->
     C = z_acl:logon(1, z_context:new(zotonic_site_testsandbox)),
     {ok, Id} = m_rsc:insert(#{<<"category_id">> => collection}, C),
     try
         ok = m_websub:update_export(<<"https://callback.test/edges">>, m_websub:topic_url(Id, C), Id, 600, undefined, C),
         lists:foreach(fun(Notify) ->
-            Before = m_rsc:p(Id, version, C),
+            Before = m_rsc:p(Id, <<"version">>, C),
             ok = Notify(C),
-            After = m_rsc:p(Id, version, C),
+            After = m_rsc:p(Id, <<"version">>, C),
             ?assert(After > Before),
             ?assertEqual(After, z_db:q1("select version from websub_push_queue where local_rsc_id=$1", [Id], C))
         end, [
@@ -610,6 +634,9 @@ edge_publication_test() ->
     after m_rsc:delete(Id, C) end.
 
 shallow_collection_import_test() ->
+    without_scheduler(fun shallow_collection_import/0).
+
+shallow_collection_import() ->
     C = z_context:set(websub_safe_import, true,
         z_acl:logon(1, z_context:new(zotonic_site_testsandbox))),
     RootUri = <<"https://depth.test/id/root">>,
@@ -704,4 +731,28 @@ await_automatic_lease() ->
         {automatic_lease, Id, Token} -> {Id, Token}
     after 10000 ->
         error(automatic_renewal_not_triggered)
+    end.
+
+%% These tests advance queues explicitly and assert intermediate database state.
+%% Pause cron scheduling and drain any in-flight worker before manipulating rows.
+%% The automatic renewal test deliberately does not use this helper.
+without_scheduler(Test) ->
+    Context = z_context:new(zotonic_site_testsandbox),
+    {ok, Server} = z_module_manager:whereis(mod_websub, Context),
+    ok = sys:suspend(Server),
+    try
+        Name = z_utils:name_for_site('sidejob_unique$mod_websub', Context),
+        case whereis(Name) of
+            undefined -> ok;
+            Worker ->
+                Ref = monitor(process, Worker),
+                try
+                    receive {'DOWN', Ref, process, Worker, _} -> ok
+                    after 5000 -> error(queue_worker_not_finished)
+                    end
+                after demonitor(Ref, [flush]) end
+        end,
+        Test()
+    after
+        sys:resume(Server)
     end.

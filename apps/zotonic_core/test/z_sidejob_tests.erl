@@ -46,9 +46,11 @@ run_unique_badarg_test() ->
           {run_unique_started, false, true},
           {run_unique_started, true, true} ]).
 
+-spec raise_badarg() -> no_return().
 raise_badarg() ->
     error(badarg).
 
+-spec raise_badarg(z:context()) -> no_return().
 raise_badarg(_Context) ->
     raise_badarg().
 

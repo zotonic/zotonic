@@ -18,7 +18,7 @@ start(Id, Context) ->
             false ->
                 {error, eacces};
             true ->
-                Uri = m_rsc:p_no_acl(Id, uri, Ctx),
+                Uri = m_rsc:p_no_acl(Id, <<"uri">>, Ctx),
                 case z_db:q_row("select id, source_uri, is_enabled from websub_import
                         where local_rsc_id = $1 order by id desc limit 1", [Id], Ctx) of
                     {_, Uri, true} ->
@@ -47,7 +47,7 @@ new_subscription(Id, Uri, ReplacesId, Context) ->
         is_unsubscribed => true,
         next_check => calendar:universal_time()
     }, Context),
-    ok.
+    mod_websub:queue_changed(Context).
 
 -spec stop(Id, Context) -> ok | {error, term()} when
     Id :: integer(),
@@ -76,7 +76,7 @@ stop_import(Id, Context) ->
         pending_mode = 'unsubscribe', pending_until = null, next_check = now(),
         retry_count = 0, modified = now() where id = $1", [Id], Context),
     z_db:q("delete from websub_import_queue where import_id = $1", [Id], Context),
-    ok.
+    mod_websub:queue_changed(Context).
 
 -spec status(Id, Context) -> map() | undefined | {error, eacces} when
     Id :: integer(), Context :: z:context().
@@ -134,7 +134,7 @@ process_enabled_row(#{id := Id, local_rsc_id := RscId, user_id := UserId} = Row,
         _ ->
             z_acl:logon(UserId, z_context:new(Context))
     end,
-    case eligible(RscId, UserContext) andalso m_rsc:p_no_acl(RscId, uri, UserContext) =:= maps:get(source_uri, Row) of
+    case eligible(RscId, UserContext) andalso m_rsc:p_no_acl(RscId, <<"uri">>, UserContext) =:= maps:get(source_uri, Row) of
         false ->
             stop_import(Id, Context);
         true ->
@@ -372,9 +372,9 @@ token() ->
 eligible(Id, Context) when is_integer(Id) ->
     z_acl:user(Context) =/= undefined andalso z_auth:is_enabled(z_acl:user(Context), Context)
         andalso z_acl:rsc_editable(Id, Context)
-        andalso not m_rsc:p_no_acl(Id, is_authoritative, Context)
-        andalso z_websub_discovery:is_url(m_rsc:p_no_acl(Id, uri, Context))
-        andalso not is_own_resource(m_rsc:p_no_acl(Id, uri, Context), Context);
+        andalso not m_rsc:p_no_acl(Id, <<"is_authoritative">>, Context)
+        andalso z_websub_discovery:is_url(m_rsc:p_no_acl(Id, <<"uri">>, Context))
+        andalso not is_own_resource(m_rsc:p_no_acl(Id, <<"uri">>, Context), Context);
 eligible(_, _) ->
     false.
 
@@ -387,7 +387,7 @@ is_own_resource(Url, Context) when is_binary(Url) ->
         {ok, Site} ->
             case m_rsc:uri_lookup(Normalized, Context) of
                 Id when is_integer(Id) ->
-                    m_rsc:p_no_acl(Id, is_authoritative, Context) =:= true;
+                    m_rsc:p_no_acl(Id, <<"is_authoritative">>, Context) =:= true;
                 _ ->
                     false
             end;
