@@ -100,8 +100,10 @@ start(Module, Function, Args, Context) ->
             zotonic_sidejobs,
             {Module, Function, Args ++ [ ContextAsync ]}).
 
-%% @doc Start a sidejob unique for a site. If a same-named sidejob is already running
-%% for this site then the job is skipped.
+%% @doc Start a sidejob unique for a site on the current Erlang node.
+%% Returns {ok, Pid} after registration, {error, already_running} if the name is
+%% taken, or {error, overload} if the sidejob limit is reached. The Context is
+%% pruned for async calls and appended to Args. Does not wait for job completion.
 -spec start_site_unique(Name, MFA, Context) -> {ok, pid()} | {error, Reason} when
     Name :: atom(),
     MFA :: {module(), atom(), list()},
@@ -110,6 +112,10 @@ start(Module, Function, Args, Context) ->
 start_site_unique(Name, {M, F, A}, Context) when is_atom(Name) ->
     start_site_unique(Name, M, F, A, Context).
 
+%% @doc Start a sidejob unique for a site on the current Erlang node.
+%% Returns {ok, Pid} after registration, {error, already_running} if the name is
+%% taken, or {error, overload} if the sidejob limit is reached. The Context is
+%% pruned for async calls and appended to Args. Does not wait for job completion.
 -spec start_site_unique(Name, Module, Function, Args, Context) -> {ok, pid()} | {error, Reason} when
     Name :: atom(),
     Module :: module(),
@@ -121,8 +127,10 @@ start_site_unique(Name, Module, Function, Args, Context) when is_atom(Name) ->
     RegName = site_unique_name(Name, Context),
     start_unique(RegName, Module, Function, Args, Context).
 
-%% @doc Start a sidejob unique for the whole Erlang system. If a same-named sidejob
-%% is already running then the job is skipped.
+%% @doc Start a sidejob unique across sites on the current Erlang node.
+%% Returns {ok, Pid} after registration, {error, already_running} if the name is
+%% taken, or {error, overload} if the sidejob limit is reached. Does not wait for
+%% job completion.
 -spec start_system_unique(Name, MFA) -> {ok, pid()} | {error, Reason} when
     Name :: atom(),
     MFA :: {module(), atom(), list()},
@@ -130,6 +138,10 @@ start_site_unique(Name, Module, Function, Args, Context) when is_atom(Name) ->
 start_system_unique(Name, {M, F, A}) when is_atom(Name) ->
     start_system_unique(Name, M, F, A).
 
+%% @doc Start a sidejob unique across sites on the current Erlang node.
+%% Returns {ok, Pid} after registration, {error, already_running} if the name is
+%% taken, or {error, overload} if the sidejob limit is reached. Does not wait for
+%% job completion.
 -spec start_system_unique(Name, Module, Function, Args) -> {ok, pid()} | {error, Reason} when
     Name :: atom(),
     Module :: module(),
@@ -140,70 +152,91 @@ start_system_unique(Name, Module, Function, Args) when is_atom(Name) ->
     RegName = system_unique_name(Name),
     start_unique(RegName, Module, Function, Args).
 
+%% @doc Run MFA in the current process while holding the local registered name
+%% RegName. This is a worker entry point; it does not spawn a sidejob. If registration
+%% fails with badarg (for example, the name is taken), skip MFA and return ok.
+%% Release the name after MFA finishes and discard its return value.
+%% Exceptions raised by MFA propagate after cleanup.
 -spec run_unique(atom(), {module(), atom(), list()}) -> ok.
 run_unique(RegName, {Module, Function, Args}) ->
-    try
-        true = erlang:register(RegName, self()),
-        try
-            erlang:apply(Module, Function, Args),
-            ok
-        after
-            catch erlang:unregister(RegName)
-        end
+    try erlang:register(RegName, self()) of
+        true ->
+            try
+                erlang:apply(Module, Function, Args),
+                ok
+            after
+                catch erlang:unregister(RegName)
+            end
     catch
         error:badarg ->
             ok
     end.
 
+%% @doc Run MFA under RegName as in run_unique/2, appending Context to Args.
+%% Context is passed unchanged; callers starting an async worker must prune it.
 -spec run_unique(atom(), {module(), atom(), list()}, z:context()) -> ok.
 run_unique(RegName, {Module, Function, Args}, Context) ->
-    try
-        true = erlang:register(RegName, self()),
-        try
-            erlang:apply(Module, Function, Args ++ [ Context ]),
-            ok
-        after
-            catch erlang:unregister(RegName)
-        end
+    try erlang:register(RegName, self()) of
+        true ->
+            try
+                erlang:apply(Module, Function, Args ++ [ Context ]),
+                ok
+            after
+                catch erlang:unregister(RegName)
+            end
     catch
         error:badarg ->
             ok
     end.
 
+%% @doc Worker entry point for starting a unique sidejob with an acknowledgement.
+%% Register the current process under the local name RegName, then send
+%% {Ref, {ok, self()}} to Caller before applying MFA. Release the name afterwards
+%% and discard MFA's return value. A registration badarg sends
+%% {Ref, {error, already_running}} and returns ok. Exceptions raised by MFA
+%% propagate after cleanup, without sending another acknowledgement.
 -spec run_unique_started(pid(), reference(), atom(), {module(), atom(), list()}) -> ok.
 run_unique_started(Caller, Ref, RegName, {Module, Function, Args}) ->
     try
-        true = erlang:register(RegName, self()),
-        Caller ! {Ref, {ok, self()}},
-        try
-            erlang:apply(Module, Function, Args),
-            ok
-        after
-            catch erlang:unregister(RegName)
-        end
+        erlang:register(RegName, self())
+    of
+        true ->
+            try
+                Caller ! {Ref, {ok, self()}},
+                erlang:apply(Module, Function, Args),
+                ok
+            after
+                catch erlang:unregister(RegName)
+            end
     catch
         error:badarg ->
             Caller ! {Ref, {error, already_running}},
             ok
     end.
 
+%% @doc Run the acknowledged worker as in run_unique_started/4, appending Context
+%% to Args. Context is passed unchanged; start/4 prunes it before spawning.
 -spec run_unique_started(pid(), reference(), atom(), {module(), atom(), list()}, z:context()) -> ok.
 run_unique_started(Caller, Ref, RegName, {Module, Function, Args}, Context) ->
     try
-        true = erlang:register(RegName, self()),
-        Caller ! {Ref, {ok, self()}},
-        try
-            erlang:apply(Module, Function, Args ++ [ Context ]),
-            ok
-        after
-            catch erlang:unregister(RegName)
-        end
+        erlang:register(RegName, self())
+    of
+        true ->
+            try
+                Caller ! {Ref, {ok, self()}},
+                erlang:apply(Module, Function, Args ++ [ Context ]),
+                ok
+            after
+                catch erlang:unregister(RegName)
+            end
     catch
         error:badarg ->
             Caller ! {Ref, {error, already_running}},
             ok
     end.
 
+%% @doc Spawn a unique worker and wait for its registration acknowledgement.
+%% Return the worker pid or the registration/overload error, without waiting for MFA.
 start_unique(RegName, Module, Function, Args) ->
     Ref = make_ref(),
     case start(?MODULE, run_unique_started, [self(), Ref, RegName, {Module, Function, Args}]) of
@@ -218,6 +251,7 @@ start_unique(RegName, Module, Function, Args) ->
             {error, Reason}
     end.
 
+%% @doc Spawn an acknowledged unique worker with a pruned Context appended to Args.
 start_unique(RegName, Module, Function, Args, Context) ->
     Ref = make_ref(),
     case start(?MODULE, run_unique_started, [self(), Ref, RegName, {Module, Function, Args}], Context) of

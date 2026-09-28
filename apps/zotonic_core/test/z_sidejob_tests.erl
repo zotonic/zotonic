@@ -6,7 +6,51 @@
 -include_lib("eunit/include/eunit.hrl").
 -include_lib("zotonic.hrl").
 
--export([notify_when_released/3, notify_when_released/4]).
+-export([notify_when_released/3, notify_when_released/4, raise_badarg/0, raise_badarg/1]).
+
+%% All worker entry points must preserve job errors and release their name.
+%% Acknowledged workers must not mistake a job error for registration failure.
+run_unique_badarg_test() ->
+    RegName = 'sidejob_unique$run_unique_badarg_test',
+    Context = z_context:new(zotonic_site_testsandbox),
+    MFA = {?MODULE, raise_badarg, []},
+    lists:foreach(
+        fun({Function, HasContext, Acknowledged}) ->
+            Ref = make_ref(),
+            Args = case Acknowledged of
+                true -> [self(), Ref, RegName, MFA];
+                false -> [RegName, MFA]
+            end,
+            Args1 = case HasContext of
+                true -> Args ++ [Context];
+                false -> Args
+            end,
+            ?assertEqual(undefined, whereis(RegName)),
+            ?assertError(badarg, apply(z_sidejob, Function, Args1)),
+            ?assertEqual(undefined, whereis(RegName)),
+            case Acknowledged of
+                true ->
+                    receive
+                        {Ref, {ok, Pid}} when Pid =:= self() -> ok
+                    after 0 -> error(missing_acknowledgement)
+                    end;
+                false -> ok
+            end,
+            receive
+                {Ref, Reply} -> error({unexpected_acknowledgement, Reply})
+            after 0 -> ok
+            end
+        end,
+        [ {run_unique, false, false},
+          {run_unique, true, false},
+          {run_unique_started, false, true},
+          {run_unique_started, true, true} ]).
+
+raise_badarg() ->
+    error(badarg).
+
+raise_badarg(_Context) ->
+    raise_badarg().
 
 run_unique_single_execution_test() ->
     Parent = self(),
