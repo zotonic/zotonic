@@ -2966,7 +2966,7 @@ Return:
 %% Return undefined to retain the flag from the original authentication record.
 %% Type: first
 -doc(#{
-    zotonic_keywords => ["reference", "backend_developer", "notification", "authentication", "signup", "username", "password"]
+    zotonic_keywords => ["reference", "backend_developer", "notification", "authentication", "identity_and_accounts"]
 }).
 -doc("
 Check the current authentication service policy before creating a username/password
