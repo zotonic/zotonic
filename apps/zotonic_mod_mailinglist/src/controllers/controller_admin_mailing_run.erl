@@ -18,7 +18,38 @@
 %% limitations under the License.
 
 -module(controller_admin_mailing_run).
--moduledoc("Mailing run history and delivery detail, authorized through m_mailinglist_run.").
+-moduledoc(#{
+    zotonic_keywords => [
+        "reference", "backend_developer", "controller", "mailing_lists",
+        "email_delivery", "monitor", "authorization_and_access_control"
+    ]
+}).
+-moduledoc("
+Display mailing history and the delivery status of an individual mailing run.
+
+## Routes and templates
+
+| Dispatch | Path | Template |
+| --- | --- | --- |
+| `admin_mailings` | `/admin/mailings` | `admin_mailings.tpl` |
+| `admin_mailing_run` | `/admin/mailings/run/:run_id` | `admin_mailing_run.tpl` |
+
+The presence of the `run_id` request argument selects the detail template.
+The history page accepts `status`, `language`, `page_id`, `list_id`, and `offset`
+filters. The detail page shows delivery progress and recipient results, with
+`recipient_status` and `after` arguments for filtering and pagination.
+The templates use `model#mailinglist_run` and live updates to display run data.
+
+## Access and response handling
+
+The controller requires the `use mod_mailinglist` permission. The model also
+checks access to each run's page and mailing list before exposing its data.
+An unavailable or inaccessible run displays an explanatory message in the detail
+template. Responses carry cache prevention and no-index headers.
+
+Saved mailing HTML is served separately by
+`controller#controller_admin_mailing_run_content`.
+").
 -export([service_available/1, is_authorized/1, process/4]).
 -include_lib("zotonic_core/include/zotonic.hrl").
 service_available(Context) ->

@@ -19,11 +19,25 @@
 
 -module(controller_media_runner_callback).
 
+-moduledoc(#{
+    zotonic_keywords => [
+        "reference", "integrator", "controller", "media_management",
+        "api_and_integration", "scheduled_and_background_work", "authentication",
+        "http", "json"
+    ]
+}).
 -moduledoc("
 Client-side receiver for results produced by the external
 [media runner](https://github.com/zotonic/mediarunner) site.
 This controller belongs to `mod_base`, so each client site has a callback endpoint
 without installing the runner site itself.
+
+## Endpoint
+
+The `media_runner_callback` dispatch accepts `POST /media-runner/callback?id=<job-id>`
+with `Content-Type: application/json` and `Authorization: Bearer <secret>`.
+The body must be a JSON object containing the runner's result envelope. Its size
+is bounded by `z_media_runner_protocol:callback_limit/0` before JSON decoding.
 
 ## Place in the processing flow
 

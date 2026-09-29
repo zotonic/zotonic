@@ -18,7 +18,38 @@
 %% limitations under the License.
 
 -module(controller_admin_mailing_run_content).
--moduledoc("Read-only saved mailing HTML, protected by run ACLs and a browser sandbox.").
+-moduledoc(#{
+    zotonic_keywords => [
+        "reference", "backend_developer", "controller", "mailing_lists",
+        "email_delivery", "html", "authorization_and_access_control", "security"
+    ]
+}).
+-moduledoc("
+Serve the saved HTML copy of a mailing run for a specific language.
+
+The `admin_mailing_run_content` dispatch maps
+`/admin/mailings/run/:run_id/content/:language` to this controller. The `run_id`
+identifies the mailing run and `language` selects its stored copy. The response
+contains the saved HTML directly; it does not render the current page again.
+
+## Access control
+
+The controller requires the `use mod_mailinglist` permission and retrieves the
+copy through `m_mailinglist_run:content/3`. The model requires visibility of the
+mailed page and edit access to the mailing list. For the test mailing list, the
+authenticated sender can also access their own run. Missing copies and model
+access errors are reported as a missing resource.
+
+## Browser isolation
+
+Responses carry cache prevention and no-index headers. A Content Security Policy
+sandbox blocks scripts and form submissions, restricts framing to the same site,
+and disallows base URLs. Images, styles, and fonts may load over HTTP or HTTPS;
+data images and inline styles are also allowed. This permits a preview of the
+saved email layout while keeping its HTML isolated from the administration UI.
+
+See `controller#controller_admin_mailing_run` for the history and status pages.
+").
 -export([service_available/1, is_authorized/1, resource_exists/1, process/4]).
 
 service_available(Context) ->
