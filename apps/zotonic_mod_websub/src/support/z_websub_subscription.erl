@@ -37,11 +37,14 @@ start(Id, Context) ->
                 {error, eacces};
             true ->
                 Uri = m_rsc:p_no_acl(Id, <<"uri">>, Ctx),
-                case z_db:q_row("select id, source_uri, is_enabled from websub_import
+                case z_db:q_row("select id, source_uri, is_enabled,
+                        (last_error is not null or credential_error is not null)
+                        from websub_import
                         where local_rsc_id = $1 order by id desc limit 1", [Id], Ctx) of
-                    {_, Uri, true} ->
+                    {_, Uri, true, false} ->
                         ok;
-                    {OldId, _, _} ->
+                    {OldId, _, _, _} ->
+                        % Explicit starts retry failed subscriptions immediately.
                         stop_import(OldId, Ctx),
                         new_subscription(Id, Uri, OldId, Ctx);
                     undefined ->
@@ -129,7 +132,10 @@ process(Context) ->
     Rows = z_db:assoc("select * from websub_import where next_check <= now()
         order by next_check, id limit 100", Context),
     lists:foreach(fun(Row) ->
-        process_row(maps:from_list(Row), Context) end, Rows),
+        Import = maps:from_list(Row),
+        process_row(Import, Context),
+        publish_status(maps:get(id, Import), Context)
+    end, Rows),
     ok.
 
 process_row(#{is_enabled := true} = Row, Context) ->
@@ -331,6 +337,7 @@ verify(Token, Topic, <<"subscribe">>, Lease, Context) when is_integer(Lease), Le
                     ok
             end,
             m_websub:queue_import(Id, 0, undefined, Context),
+            publish_status(Id, Context),
             ok;
         _ ->
             {error, no_intent}
@@ -342,6 +349,7 @@ verify(Token, Topic, <<"unsubscribe">>, _Lease, Context) ->
         where callback_token is not distinct from $1 and topic_url = $2 and not is_enabled
         and pending_mode = 'unsubscribe' and pending_until > now() returning id", [Token, Topic], Context) of
         Id when is_integer(Id) ->
+            publish_status(Id, Context),
             ok;
         _ ->
             {error, no_intent}
@@ -366,11 +374,23 @@ denied(Token, Topic, Reason, Context) ->
                     stop_import(N, Context);
                 _ ->
                     ok
-            end;
+            end,
+            publish_status(Id, Context);
         undefined ->
             ok
     end,
     ok.
+
+%% Publish only an invalidation signal, never callback tokens or error details.
+%% Callback requests are anonymous, so elevate only this server-generated event.
+publish_status(ImportId, Context) ->
+    case z_db:q1("select local_rsc_id from websub_import where id=$1", [ImportId], Context) of
+        RscId when is_integer(RscId) ->
+            z_mqtt:publish([<<"model">>, <<"websub">>, <<"event">>, <<"rsc">>, RscId],
+                #{}, z_acl:sudo(Context));
+        _ ->
+            ok
+    end.
 
 -spec renewal_seconds(Lease) -> pos_integer() when
     Lease :: pos_integer().
@@ -438,6 +458,8 @@ uses_credentials(Url, Context) ->
             false
     end.
 
+error_text(Reason) when is_binary(Reason) ->
+    z_string:truncate(Reason, 200);
 error_text(Reason) ->
     z_string:truncate(z_convert:to_binary(io_lib:format("~p", [Reason])), 200).
 

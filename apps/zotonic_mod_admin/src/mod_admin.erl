@@ -535,7 +535,7 @@ admin_menu_content_queries(Context) ->
             #menu_item{
                 id = {admin_query, Id},
                 parent = admin_content,
-                label = Title,
+                label = ensure_title(Id, Title, Context),
                 url = {admin_overview_rsc, [{qquery_id, Id}]},
                 sort = 10
             }
@@ -546,6 +546,17 @@ admin_menu_content_queries(Context) ->
             [];
         _ ->
             CQ ++ [ #menu_separator{ parent = admin_content, sort = 10 } ]
+    end.
+
+ensure_title(Id, Title, Context) ->
+    case z_trans:lookup_fallback(Title, Context) of
+        None when None =:= undefined; None =:= <<>> ->
+            [
+                ?__("Untitled query", Context),
+                " (", z_convert:to_binary(Id), ")"
+            ];
+        T ->
+            T
     end.
 
 %% @doc Provide standard resource block types for admin edit page.

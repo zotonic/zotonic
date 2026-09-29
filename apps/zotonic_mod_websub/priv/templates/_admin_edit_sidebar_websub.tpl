@@ -14,9 +14,9 @@
             {% endif %}
         </p>
         {% if m.acl.use.mod_websub %}
-            <p><a href="{% url admin_websub type="export" rsc_id=id %}">{_ View subscribers to this page _}</a></p>
+            <p><a href="{% url admin_websub qtype="export" qrsc_id=id %}">{_ View subscribers to this page _}</a></p>
             {% if not id.is_authoritative %}
-                <p><a href="{% url admin_websub type="import" rsc_id=id %}">{_ View subscriptions to the external page _}</a></p>
+                <p><a href="{% url admin_websub qtype="import" qrsc_id=id %}">{_ View subscriptions to the external page _}</a></p>
             {% endif %}
         {% endif %}
     {% endwith %}

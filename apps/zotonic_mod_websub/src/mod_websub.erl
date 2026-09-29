@@ -27,9 +27,9 @@
 
 ## Integration points
 
-Enable `mod_websub` on the publisher and importing site. Public subscriptions
-require the publishing ACL policy to allow anonymous `use` of `mod_websub`;
-private subscriptions use explicit HTTP authorization and current resource access.
+Enable `mod_websub` on the publisher and importing site. Anyone who can view an original resource can subscribe to it, including anonymous
+visitors for public resources. Private subscriptions use explicit HTTP authorization
+and current resource access. The `use mod_websub` permission controls administration.
 
 * `controller_websub` handles hub requests, callback verification, and deliveries.
 * `controller_websub_topic` serves the complete, fixed JSON topic representation.
@@ -96,11 +96,12 @@ version and publish its updated export. Receivers synchronize edges using saved
 import depth and filters, then fetch newly referenced placeholders after commit.
 Existing imported members are reused, not refreshed by the collection's delivery.
 
-The optional `is_subscribe_haspart` import setting subscribes direct collection
-members after import, including later additions. It defaults to false and is not
-inherited by connected resources. Members have independent subscriptions: removal
-from a collection or stopping the parent does not unsubscribe them. See the module
-README for the complete collection lifetime and retry behavior.
+The optional `is_subscribe_connections` import setting subscribes imported
+connected resources across all predicates, up to the saved connection depth.
+It defaults to false. Connected imports inherit the option with decremented depth,
+so later additions follow the same bound. Subscriptions remain independent:
+removing a connection or stopping the parent does not unsubscribe them. See the
+module README for the complete collection lifetime and retry behavior.
 
 ## Interoperation with other WebSub implementations
 
@@ -126,7 +127,9 @@ future updates. Semantic resource identity is independent of WebSub topic migrat
 
 All WebSub requests use `z_fetch` with automatic redirects disabled. Destinations
 are checked for non-public addresses on each hop; private, loopback, link-local,
-and reserved networks are rejected. HTTPS downgrades are refused. Cross-origin
+and reserved networks are rejected. Development sites may use .test peers on
+loopback/private networks with self-signed TLS. Other destinations keep verified
+TLS and public-address checks. HTTPS downgrades are refused. Cross-origin
 GET redirects permanently drop user credentials for that chain. Callback requests
 are anonymous. `z_fetch` integrates `mod_oauth2` consumer tokens using the original
 HTTPS URL, hostname, and subscribing user; the source's same-origin hub can use
@@ -160,10 +163,10 @@ See README.md for deployment details and the regression suite."/utf8>>).
     editors = #{} :: map()
 }).
 
--mod_title("Resource WebSub").
+-mod_title("WebSub resource synchronization").
 -mod_description("Publish and subscribe to resources between sites using WebSub.").
--mod_depends([ cron ]).
--mod_schema(3).
+-mod_depends([ cron, mod_mqtt ]).
+-mod_schema(4).
 -mod_config([
     #{
         key => push_quiet_seconds,
@@ -185,6 +188,7 @@ See README.md for deployment details and the regression suite."/utf8>>).
 -export([
     event/2,
     observe_admin_menu/3,
+    observe_acl_is_allowed/2,
     observe_resource_headers/3,
     observe_rsc_export_done/3,
     observe_rsc_import_fetch_result/3,
@@ -216,6 +220,19 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
         }
         | Acc
     ].
+
+%% Subscription status is private to editors; browsers may only subscribe.
+observe_acl_is_allowed(#acl_is_allowed{
+    action = subscribe,
+    object = #acl_mqtt{topic = [<<"model">>, <<"websub">>, <<"event">>, <<"rsc">>, Id]}
+}, Context) ->
+    z_acl:rsc_editable(m_rsc:rid(Id, Context), Context);
+observe_acl_is_allowed(#acl_is_allowed{
+    object = #acl_mqtt{topic = [<<"model">>, <<"websub">>, <<"event">> | _]}
+}, _Context) ->
+    false;
+observe_acl_is_allowed(#acl_is_allowed{}, _Context) ->
+    undefined.
 
 event(#postback{message = {subscription_start, Args}}, Context) ->
     subscription_result(m_websub:subscribe(m_rsc:rid(proplists:get_value(id, Args), Context), Context), Context);

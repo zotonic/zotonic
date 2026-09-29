@@ -84,7 +84,7 @@ Available Model API Paths
                 | {import_edges, non_neg_integer()}     % Number of edge-redirections to import
                 | is_import_deleted                     % Saved preference to also import manually deleted resources
                 | {is_import_deleted, boolean()}
-                | {is_subscribe_haspart, boolean()}      % Subscribe direct collection members
+                | {is_subscribe_connections, boolean()}      % Subscribe imported connections within import_edges depth
                 | {is_subscribe, boolean()}              % Subscribe the selected resource via an optional module
                 | is_authoritative                      % If set then make a local copy, do not save uri
                 | {is_authoritative, boolean()}
@@ -859,7 +859,7 @@ fetch_preview(Url, Options, Context) ->
                     Result = #{
                         <<"resource">> => Rsc2,
                         <<"depiction_url">> => maps:get(<<"depiction_url">>, JSON, undefined),
-                        <<"import_options">> => maps:get(import_options, JSON, #{})
+                        <<"import_options">> => maps:get(<<"import_options">>, JSON, #{})
                     },
                     {ok, Result}
             end;
@@ -1059,8 +1059,7 @@ import(OptLocalId, #{
                                         {props_forced, maps:remove(<<"category_id">>, PropsForced)}
                                         | proplists:delete(import_edges,
                                             proplists:delete(props_forced,
-                                                proplists:delete(is_subscribe_haspart,
-                                                    proplists:delete(is_subscribe, Options))))
+                                                proplists:delete(is_subscribe, Options)))
                                     ],
                                     import_edges(LocalId, JSON, ImportedAcc2, EdgeOptions, Context);
                                 _ ->
@@ -1261,7 +1260,7 @@ cleanup_map_ids(RemoteRId, Rsc, UriTemplate, ImportedAcc, Options, Context) ->
         {props_forced, maps:remove(<<"category_id">>, PropsForced)}
         | proplists:delete(import_edges,
             proplists:delete(props_forced,
-                proplists:delete(is_subscribe_haspart, proplists:delete(is_subscribe, Options))))
+                proplists:delete(is_subscribe_connections, proplists:delete(is_subscribe, Options))))
     ],
 
     % Remove or map modifier_id, creator_id, etc

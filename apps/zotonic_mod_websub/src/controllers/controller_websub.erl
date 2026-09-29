@@ -42,7 +42,7 @@ for unsubscription. Accepted requests receive 202 after durable queue admission;
 overload receives 503. Verification and authorization run independently in
 `task_verify/7`, so accepting a request does not activate the subscription.
 
-The hub checks permission to use `mod_websub` and visibility of the resource,
+The hub checks that the resource is visible to the subscriber and authoritative,
 then verifies the callback by GET with a random challenge. It activates or removes
 the subscription only after a successful response with the exact challenge body.
 Private subscriptions require explicit HTTP authorization; browser cookies alone
@@ -248,21 +248,16 @@ handle_verification(Context) ->
 
 
 handle(<<"subscribe">>, HubCallback, HubTopic, OptHubSecret, Context) ->
-    case z_acl:is_allowed(use, mod_websub, Context) of
-        false ->
-            refused(HubCallback, HubTopic, OptHubSecret, <<"access-denied-websub">>, Context);
-        true ->
-            case topic_id(HubTopic, Context) of
-                undefined ->
-                    refused(HubCallback, HubTopic, OptHubSecret, <<"invalid-topic">>, Context);
-                RscId ->
-                    case z_acl:rsc_visible(RscId, Context)
-                        andalso m_rsc:p_no_acl(RscId, <<"is_authoritative">>, Context) of
-                        false ->
-                            refused(HubCallback, HubTopic, OptHubSecret, <<"access-denied-rsc">>, Context);
-                        true ->
-                            subscribe(HubCallback, HubTopic, OptHubSecret, RscId, Context)
-                    end
+    case topic_id(HubTopic, Context) of
+        undefined ->
+            refused(HubCallback, HubTopic, OptHubSecret, <<"invalid-topic">>, Context);
+        RscId ->
+            case z_acl:rsc_visible(RscId, Context)
+                andalso m_rsc:p_no_acl(RscId, <<"is_authoritative">>, Context) of
+                false ->
+                    refused(HubCallback, HubTopic, OptHubSecret, <<"access-denied-rsc">>, Context);
+                true ->
+                    subscribe(HubCallback, HubTopic, OptHubSecret, RscId, Context)
             end
     end,
     {true, Context};

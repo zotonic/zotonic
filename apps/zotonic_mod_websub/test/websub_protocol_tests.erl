@@ -156,3 +156,49 @@ non_authoritative_publisher_test() ->
         ?assertEqual(ok, m_websub:queue_push(123, 2, Context)),
         ?assert(meck:called(z_db, q, ["delete from websub_export where local_rsc_id = $1", [123], Context]))
     after meck:unload(z_db), meck:unload(m_rsc) end.
+
+%% Local destinations and self-signed TLS are allowed only for development .test
+%% peers. Every redirect is checked again, including its TLS policy.
+development_destination_test() ->
+    Dev = #context{site = websub_development},
+    Prod = #context{site = websub_production},
+    ok = meck:new(m_site, [passthrough]),
+    ok = meck:new(inet, [unstick, passthrough]),
+    ok = meck:new(z_fetch, [passthrough]),
+    try
+        meck:expect(m_site, environment, fun
+            (#context{site = websub_development}) -> development;
+            (#context{site = websub_production}) -> production;
+            (C) -> meck:passthrough([C])
+        end),
+        meck:expect(inet, getaddrs, fun
+            ("peer.test", inet) -> {ok, [{127,0,0,1}]};
+            ("peer.test", inet6) -> {ok, [{0,0,0,0,0,0,0,1}]};
+            ("metadata.test", inet) -> {ok, [{169,254,169,254}]};
+            ("metadata.test", inet6) -> {error, nxdomain};
+            ("peer.test.example", inet) -> {ok, [{127,0,0,1}]};
+            ("peer.test.example", inet6) -> {error, nxdomain};
+            ("public.example", inet) -> {ok, [{93,184,215,14}]};
+            ("public.example", inet6) -> {error, nxdomain};
+            (Name, Family) -> meck:passthrough([Name, Family])
+        end),
+        Url = <<"https://peer.test:8443/id/1">>,
+        ?assertMatch({ok, _, _}, z_websub_http:destination(Url, Dev)),
+        ?assertEqual({error, unsafe_destination}, z_websub_http:destination(Url, Prod)),
+        ?assertEqual({error, unsafe_destination}, z_websub_http:destination(Url)),
+        lists:foreach(fun(Blocked) ->
+            ?assertEqual({error, unsafe_destination}, z_websub_http:destination(Blocked, Dev))
+        end, [<<"http://127.0.0.1/">>, <<"http://metadata.test/">>, <<"http://peer.test.example/">>]),
+        meck:expect(z_fetch, fetch, fun
+            (get, U, _, Options, _) when U =:= Url ->
+                ?assertEqual(true, proplists:get_value(insecure, Options)),
+                ?assertEqual(false, proplists:get_value(autoredirect, Options)),
+                {error, {302, U, [{"location", "https://public.example/export"}], 0, <<>>}};
+            (get, <<"https://public.example/export">> = U, _, Options, _) ->
+                ?assertEqual(false, proplists:get_value(insecure, Options)),
+                {ok, {U, [], 0, <<>>}}
+        end),
+        ?assertMatch({ok, _}, z_websub_http:get(Url, [], Dev))
+    after
+        meck:unload([z_fetch, inet, m_site])
+    end.

@@ -22,7 +22,7 @@
 -module(z_websub_http).
 -moduledoc("WebSub form requests with explicit redirect and credential policy.").
 
--export([post_form/3, fetch/5, get/3, destination/1, is_callback_url/1, callback/5]).
+-export([post_form/3, fetch/5, get/3, destination/1, destination/2, is_callback_url/1, callback/5]).
 
 %% @doc Zotonic local policy: subscriber callbacks must use DNS hostnames.
 %% WebSub section 5.1.2 permits local URL policies; IP literals are valid URLs
@@ -176,6 +176,15 @@ anonymous(Context) ->
 -spec destination(Url) -> {ok, map(), inet:ip_address()} | {error, term()} when
     Url :: binary().
 destination(Url) ->
+    destination_checked(Url, false).
+
+%% Development exceptions require both a development site and a .test hostname.
+-spec destination(binary(), z:context() | undefined) ->
+    {ok, map(), inet:ip_address()} | {error, term()}.
+destination(Url, Context) ->
+    destination_checked(Url, is_development_destination(Url, Context)).
+
+destination_checked(Url, IsDevelopment) ->
     % Verification appends topic/challenge parameters to the stored callback.
     Valid = try
         byte_size(Url) =< 8192 andalso z_websub_discovery:is_url(
@@ -200,7 +209,10 @@ destination(Url) ->
                         || Family <- [inet, inet6]
                     ])
             end,
-            case IPs =/= [] andalso lists:all(fun z_ip_address:is_public/1, IPs) of
+            case IPs =/= [] andalso lists:all(
+                fun(IP) -> z_ip_address:is_public(IP) orelse
+                    (IsDevelopment andalso is_development_address(IP)) end,
+                IPs) of
                 true ->
                     {ok, Parts, hd(IPs)};
                 false ->
@@ -208,18 +220,45 @@ destination(Url) ->
             end
     end.
 
+is_development_destination(_Url, undefined) ->
+    false;
+is_development_destination(Url, Context) ->
+    try uri_string:parse(Url) of
+        #{host := Host} ->
+            Name = string:lowercase(string:trim(Host, trailing, ".")),
+            re:run(Name, <<"\\.test$">>, [{capture, none}]) =:= match
+                andalso m_site:environment(Context) =:= development;
+        _ ->
+            false
+    catch _:_ ->
+        false
+    end.
+
+%% Limit the exception to loopback/private networks, excluding link-local
+%% metadata services, multicast, unspecified and other reserved destinations.
+is_development_address({127, _, _, _}) -> true;
+is_development_address({10, _, _, _}) -> true;
+is_development_address({172, N, _, _}) when N >= 16, N =< 31 -> true;
+is_development_address({192, 168, _, _}) -> true;
+is_development_address({0, 0, 0, 0, 0, 0, 0, 1}) -> true;
+is_development_address({N, _, _, _, _, _, _, _}) when N >= 16#fc00, N =< 16#fdff -> true;
+is_development_address({0, 0, 0, 0, 0, 16#ffff, High, Low}) ->
+    is_development_address({High bsr 8, High band 255, Low bsr 8, Low band 255});
+is_development_address(_) -> false.
+
 %% @doc Fixed-endpoint request using Zotonic's fetch-options/OAuth2 integration.
 %% Redirect policy is handled by the callers, with a new destination check and
-%% credential context for each hop. Never inherit development-mode insecure TLS.
+%% credential context for each hop. Self-signed TLS is accepted only for .test
+%% peers in development, consistently with the destination exception.
 -spec fetch(Method, Url, Body, Options, Context) -> term() when
     Method :: get | post, Url :: binary(), Body :: binary() | list(),
     Options :: list(), Context :: z:context() | undefined.
 fetch(Method, Url, Body, Options, Context) ->
-    case ?MODULE:destination(Url) of
+    case ?MODULE:destination(Url, Context) of
         {ok, _, _} ->
             SafeOptions = [
                 {autoredirect, false},
-                {insecure, false}
+                {insecure, is_development_destination(Url, Context)}
                 | proplists:delete(autoredirect, proplists:delete(insecure, Options))
             ],
             case z_fetch:fetch(Method, Url, Body, SafeOptions, Context) of

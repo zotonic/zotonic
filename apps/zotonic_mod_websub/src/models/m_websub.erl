@@ -43,7 +43,9 @@ The overview includes retained expired/stopped subscriptions and renewal generat
 callback host or outgoing source host, ignoring ports and a trailing DNS dot.
 Status accepts `active`, `pending`, `expired`, or `stopped`; empty/`all` means all
 states. The errors filter selects rows with or without the table’s error indicator.
-All filters apply before pagination. It returns remote hostnames, never callback URLs, tokens, secrets,
+All filters apply before pagination and counting. The overview returns a
+`search_result` record with an exact total, capped at 10,000 pages.
+It returns remote hostnames, never callback URLs, tokens, secrets,
 or authentication data. Invalid filters return `is_invalid` without broadening the query.
 
 Status includes desired state (`is_enabled`), confirmation state
@@ -265,27 +267,32 @@ positive_integer(<<>>, Default) ->
 positive_integer(N, _) when is_integer(N), N > 0, N =< 2147483647 ->
     N;
 positive_integer(B, Default) when is_binary(B), byte_size(B) =< 10 ->
-    try positive_integer(binary_to_integer(B), Default)
+    try
+        positive_integer(binary_to_integer(B), Default)
     catch error:badarg ->
-        invalid end;
+        invalid
+    end;
 positive_integer(_, _) ->
     invalid.
 
 subscriptions(Type, RscId, Page, Hostname, Status, Errors, Context) ->
-    Exports = "select id, 'export'::text as type, local_rsc_id, callback_url as peer_url,
-        lease, pushed as last_activity, is_error as has_error,
+    Exports = "
+        select id, 'export'::text as type, local_rsc_id, callback_url as peer_url,
+            lease, pushed as last_activity, is_error as has_error,
         case when lease > now() then 'active' else 'expired' end as status
-        from websub_export where ($1::integer is null or local_rsc_id=$1)",
-    Imports = "select id, 'import'::text as type, local_rsc_id, source_uri as peer_url,
-        lease, last_received as last_activity,
-        (last_error is not null or credential_error is not null) as has_error,
-        case when not is_enabled then 'stopped'
-             when not is_unsubscribed and lease > now() then 'active'
-             when pending_mode='subscribe' then 'pending'
-             when lease <= now() then 'expired' else 'pending' end as status
+        from websub_export
+        where ($1::integer is null or local_rsc_id=$1)",
+    Imports = "
+        select id, 'import'::text as type, local_rsc_id, source_uri as peer_url,
+            lease, last_received as last_activity,
+            (last_error is not null or credential_error is not null) as has_error,
+            case when not is_enabled then 'stopped'
+                 when not is_unsubscribed and lease > now() then 'active'
+                 when pending_mode='subscribe' then 'pending'
+                 when lease <= now() then 'expired' else 'pending'
+            end as status
         from websub_import
-        where ($1::integer is null
-           or local_rsc_id = $1)",
+        where ($1::integer is null or local_rsc_id = $1)",
     Query = case Type of
         <<"export">> ->
             Exports;
@@ -294,20 +301,41 @@ subscriptions(Type, RscId, Page, Hostname, Status, Errors, Context) ->
         _ ->
             [Exports, " union all ", Imports]
     end,
-    Rows = z_db:assoc(iolist_to_binary([
-        "select * from (", Query, ") s
-        where ($3::text is null or
-            rtrim(lower(trim(both '[]' from substring(peer_url from
-                '^[A-Za-z][A-Za-z0-9+.-]*://(?:[^/?#]*@)?([[][^]]+[]]|[^:/?#]+)'))), '.') = $3)
-        and ($4::text is null or status = $4)
-        and ($5::boolean is null or has_error = $5)
-        order by id desc, type limit 51 offset $2"
-    ]), [RscId, (Page - 1) * 50, Hostname, Status, Errors], Context),
-    SafeRows = [subscription_row(maps:from_list(R)) || R <- lists:sublist(Rows, 50)],
-    #{rows => SafeRows, page => Page, previous_page => Page - 1,
-      next_page => Page + 1, has_next => length(Rows) > 50 andalso Page < 10000,
-      type => Type, rsc_id => RscId, hostname => Hostname, status => Status,
-      errors => case Errors of true -> <<"yes">>; false -> <<"no">>; _ -> <<"all">> end}.
+    % Share the filtered query so the count and page use the same criteria.
+    FilteredQuery = [
+        " from (", Query, ") s
+        where ($2::text is null or ", subscription_hostname_sql("peer_url"), " = $2)
+        and ($3::text is null or status = $3)
+        and ($4::boolean is null or has_error = $4)"
+    ],
+    Args = [RscId, Hostname, Status, Errors],
+    Total = z_db:q1(iolist_to_binary(["select count(*)", FilteredQuery]), Args, Context),
+    PageLen = 50,
+    Pages = min(10000, (Total + PageLen - 1) div PageLen),
+    Rows = z_db:assoc(
+        iolist_to_binary([
+            "select *", FilteredQuery, " order by id desc, type limit $5 offset $6"
+        ]),
+        Args ++ [PageLen, (Page - 1) * PageLen],
+        Context),
+    #search_result{
+        result = [subscription_row(maps:from_list(R)) || R <- Rows],
+        page = Page,
+        pagelen = PageLen,
+        total = Total,
+        pages = Pages,
+        prev = max(1, Page - 1),
+        next = case Page < Pages of
+            true -> Page + 1;
+            false -> false
+        end
+    }.
+
+%% Keep the filter and expression indexes identical. Column is an internal SQL
+%% identifier, never request input. Normalize credentials, ports, IPv6 and DNS dots.
+subscription_hostname_sql(Column) ->
+    ["rtrim(lower(trim(both '[]' from substring(", Column, " from
+        '^[A-Za-z][A-Za-z0-9+.-]*://(?:[^/?#]*@)?([[][^]]+[]]|[^:/?#]+)'))), '.')"].
 
 subscription_row(#{peer_url := Url} = Row) ->
     Host = case catch uri_string:parse(Url) of
@@ -332,8 +360,8 @@ topic_url(Id, Context) ->
 subscribe(Id, Context) ->
     case z_websub_subscription:start(Id, Context) of
         ok ->
-            case subscribe_parts_option(Id, Context) of
-                true ->
+            case subscription_connection_depth(Id, Context) of
+                Depth when Depth > 0 ->
                     ImportId = z_db:q1("
                         select id
                         from websub_import
@@ -343,22 +371,27 @@ subscribe(Id, Context) ->
                         limit 1", [Id], Context),
                     RefIds = maps:from_list([
                         {m_rsc:uri(PartId, Context), PartId}
-                        || PartId <- m_edge:objects(Id, haspart, Context)
+                        || PartId <- m_edge:objects(Id, Context)
                     ]),
                     queue_referred_import(ImportId, RefIds, z_acl:user(Context), Context);
-                false ->
+                0 ->
                     ok
             end;
         {error, _} = Error ->
             Error
     end.
 
-subscribe_parts_option(Id, Context) ->
+subscription_connection_depth(Id, Context) ->
     case m_rsc_import:get_import_status(Id, Context) of
         {ok, Status} ->
-            proplists:get_value(is_subscribe_haspart, maps:get(<<"options">>, Status, []), false) =:= true;
+            Options = maps:get(<<"options">>, Status, []),
+            case {proplists:get_value(is_subscribe_connections, Options, false),
+                  proplists:get_value(import_edges, Options, 0)} of
+                {true, Depth} when is_integer(Depth), Depth > 0 -> Depth;
+                _ -> 0
+            end;
         _ ->
-            false
+            0
     end.
 
 -spec unsubscribe(Id, Context) -> ok | {error, term()} when
@@ -481,7 +514,7 @@ task_import_referred(ImportId, RefIds, UserId, Context) ->
                         RefIds, #{LocalId => true}, saved, UserContext),
                     case z_db:q1("select is_enabled from websub_import where id = $1", [ImportId], Context) of
                         true ->
-                            subscribe_imported_parts(LocalId, UserContext);
+                            subscribe_imported_connections(LocalId, UserContext);
                         _ ->
                             ok
                     end;
@@ -505,24 +538,33 @@ queue_referred_import(ImportId, RefIds, UserId, Context) ->
     }, Context),
     ok.
 
-subscribe_imported_parts(LocalId, Context) ->
-    case subscribe_parts_option(LocalId, Context) of
-        true ->
-            lists:foreach(
-                fun(PartId) ->
-                    case m_rsc_import:is_imported(PartId, Context) of
-                        true ->
-                            % Each item gets its own ACL-checked subscription.
-                            % Do not recursively inherit the collection option.
-                            z_websub_subscription:start(PartId, Context);
-                        false ->
-                            ok
+%% Breadth-first traversal visits each resource once, at its shallowest depth.
+%% Only follow imported resources, and keep the normal per-resource ACL checks.
+subscribe_imported_connections(LocalId, Context) ->
+    subscribe_imported_connections([LocalId], subscription_connection_depth(LocalId, Context),
+        #{LocalId => true}, Context).
+
+subscribe_imported_connections([], _Depth, _Visited, _Context) ->
+    ok;
+subscribe_imported_connections(_Ids, 0, _Visited, _Context) ->
+    ok;
+subscribe_imported_connections(Ids, Depth, Visited, Context) ->
+    Connected = lists:usort(lists:flatmap(fun(Id) -> m_edge:objects(Id, Context) end, Ids)),
+    {Next, Visited1} = lists:foldl(
+        fun(Id, {Acc, Seen}) ->
+            case maps:is_key(Id, Seen) orelse not m_rsc_import:is_imported(Id, Context) of
+                true ->
+                    {Acc, Seen};
+                false ->
+                    case z_websub_subscription:start(Id, Context) of
+                        ok -> {[Id | Acc], Seen#{Id => true}};
+                        {error, _} -> {Acc, Seen#{Id => true}}
                     end
-                end,
-                m_edge:objects(LocalId, haspart, Context));
-        false ->
-            ok
-    end.
+            end
+        end,
+        {[], Visited},
+        Connected),
+    subscribe_imported_connections(Next, Depth - 1, Visited1, Context).
 
 %% @doc Seconds until the earliest persisted queue item or lease renewal.
 %% Each minimum uses its due-time index; an empty set lets the scheduler sleep.
@@ -1224,6 +1266,8 @@ decode_payload(Bin) when is_binary(Bin) ->
 retry_delay_seconds(RetryCount) ->
     erlang:min(24 * 60 * 60, (RetryCount + 1) * (RetryCount + 1) * 300).
 
+error_text(Reason) when is_binary(Reason) ->
+    z_string:truncate(Reason, 200);
 error_text(Reason) ->
     truncate_binary(
         z_convert:to_binary(io_lib:format("~p", [Reason])),
@@ -1243,7 +1287,24 @@ install(Context) ->
     ok = install_import(Context),
     ok = install_push_queue(Context),
     ok = install_import_queue(Context),
-    z_websub_subscription:install(Context).
+    ok = z_websub_subscription:install(Context),
+    install_hostname_indexes(Context).
+
+%% Install after the subscription migration adds/backfills source_uri. Indexes
+%% also cover id ordering for a filtered page and update with their source URLs.
+install_hostname_indexes(Context) ->
+    lists:foreach(
+        fun({Table, Column, Index}) ->
+            [] = z_db:q(iolist_to_binary([
+                "create index if not exists ", Index, " on ", Table,
+                " (", subscription_hostname_sql(Column), ", id desc)"
+            ]), Context)
+        end,
+        [
+            {"websub_export", "callback_url", "websub_export_hostname_key"},
+            {"websub_import", "source_uri", "websub_import_hostname_key"}
+        ]),
+    ok.
 
 install_export(Context) ->
     case z_db:table_exists(websub_export, Context) of

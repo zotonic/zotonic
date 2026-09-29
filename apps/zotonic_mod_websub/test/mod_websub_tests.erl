@@ -5,6 +5,7 @@ EUnit tests for WebSub resource headers and HTML head links.
 
 -include_lib("eunit/include/eunit.hrl").
 -include_lib("zotonic_core/include/zotonic.hrl").
+-include_lib("zotonic_stdlib/include/z_url_metadata.hrl").
 
 
 resource_headers_test() ->
@@ -73,3 +74,74 @@ non_authoritative_export_test() ->
     after
         m_rsc:delete(Id, C)
     end.
+
+%% The detected support flag must survive both preview layers. Exercise HTTP
+%% Link discovery via the fetch-result observer, rather than mocking the preview.
+import_preview_websub_test() ->
+    C = z_acl:logon(1, z_context:new(zotonic_site_testsandbox)),
+    Uri = <<"https://preview.test/id/16449">>,
+    PageUrl = <<"https://preview.test/en/page/16449/example">>,
+    Body = z_json:encode(#{
+        <<"status">> => <<"ok">>,
+        <<"result">> => #{
+            <<"id">> => 16449,
+            <<"uri">> => Uri,
+            <<"is_a">> => [<<"text">>],
+            <<"resource">> => #{<<"title">> => <<"Import preview">>}
+        }
+    }),
+    MD = #url_metadata{
+        final_url = PageUrl,
+        content_type = <<"text/html">>,
+        content_type_options = [],
+        content_length = 0,
+        headers = [{<<"x-resource-uri">>, Uri}],
+        links = #{},
+        metadata = [],
+        partial_data = <<>>
+    },
+    ok = meck:new(z_fetch, [passthrough]),
+    try
+        meck:expect(z_fetch, as_data_url, fun(undefined, [], _) -> {error, enoent} end),
+        lists:foreach(fun(IsSupported) ->
+            Headers = case IsSupported of
+                true -> [{"link", "<https://preview.test/.zotonic/websub>; rel=hub, "
+                    "<https://preview.test/.zotonic/websub/topic/16449>; rel=self"}];
+                false -> []
+            end,
+            meck:expect(z_fetch, fetch, fun(FetchUri, _, _) when FetchUri =:= Uri ->
+                {ok, {Uri, Headers, byte_size(Body), Body}}
+            end),
+            {ok, Preview} = m_rsc_import:fetch_preview(Uri, C),
+            ?assertEqual(IsSupported, maps:get(<<"is_websub_supported">>,
+                maps:get(<<"import_options">>, Preview))),
+            {ok, Imports} = z_media_import:url_import_props(MD, C),
+            [Props] = [P || #media_import_props{importer = rsc_import, rsc_props = P} <- Imports],
+            ?assertEqual(IsSupported, maps:get(<<"is_websub_supported">>, Props))
+        end, [true, false])
+    after
+        meck:unload(z_fetch)
+    end.
+
+%% Existing persisted denial strings must render without Erlang syntax in the
+%% explanation. Unknown remote reasons stay escaped in the diagnostic details.
+subscription_error_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    C = z_context:set_language(en, z_context:new(zotonic_site_testsandbox)),
+    Reason = <<"access-denied-websub">>,
+    Legacy = iolist_to_binary(io_lib:format("~p", [Reason])),
+    Message = filter_websub_error:websub_error(Reason, C),
+    ?assertEqual(Message, filter_websub_error:websub_error(Legacy, C)),
+    ?assertNotEqual(nomatch, binary:match(Message, <<"source website">>)),
+    ?assertNotEqual(nomatch, binary:match(Message, <<"anonymous visitors">>)),
+    ?assertEqual(filter_websub_error:websub_error(unsafe_destination, C),
+        filter_websub_error:websub_error(<<"unsafe_destination">>, C)),
+    ?assertEqual(<<>>, filter_websub_error:websub_error(undefined, C)),
+    {Html, _} = z_template:render_to_iolist("_websub_error.tpl", [{error, Legacy}], C),
+    ?assertNotEqual(nomatch, binary:match(iolist_to_binary(Html), Message)),
+    Unknown = <<"<script>alert(1)</script>">>,
+    {UnknownHtml, _} = z_template:render_to_iolist("_websub_error.tpl", [{error, Unknown}], C),
+    Body = iolist_to_binary(UnknownHtml),
+    ?assertEqual(nomatch, binary:match(Body, Unknown)),
+    ?assertNotEqual(nomatch, binary:match(Body, <<"&lt;script&gt;">>)),
+    ?assertNotEqual(nomatch, binary:match(Body, <<"Technical details">>)).

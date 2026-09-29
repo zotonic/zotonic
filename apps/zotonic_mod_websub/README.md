@@ -2,8 +2,9 @@
 
 `mod_websub` implements resource publication and subscription using
 [WebSub](https://www.w3.org/TR/websub/). Enable it on both Zotonic sites. The
-publishing site's ACL policy must permit `use` of `mod_websub` to the subscribing
-user (anonymous for public subscriptions). Both sites need reachable HTTPS URLs.
+subscriber must be allowed to view the original resource; anonymous visitors can
+subscribe to public resources. The `use mod_websub` permission is only needed for
+administration. Both sites need reachable HTTPS URLs.
 
 ## Two Zotonic sites
 
@@ -21,8 +22,9 @@ Assume A publishes a resource and B imports it.
 | Stop | The editor stops updates; B requests verified unsubscription | B immediately disables local imports and discards queued work. |
 
 Initial import requires an explicit checkbox. By default it applies only to the
-selected resource. A separate **Also subscribe to imported collection items
-(haspart)** checkbox includes direct collection members. Re-import options do not
+selected resource. A separate **Also subscribe to connected resources** checkbox
+follows the **Connections** option across all predicates: none, direct connections,
+or connections up to the selected deep-copy depth. Re-import options do not
 silently restart a stopped parent subscription. Successful verification schedules
 a catch-up fetch.
 
@@ -55,12 +57,15 @@ not the complete content of every member.
   It does not force a refresh of already imported members.
 * **Member content:** a member edit is a change to the member's own topic. The
   collection subscription alone does not keep that content current. Enable the
-  separate collection-item option, or subscribe to each item explicitly.
-* **Optional item subscriptions:** after importing references, direct `haspart`
-  members with successful imports get their own ACL-checked subscriptions. New
-  members added later are included. The option is saved on the collection and is
-  not inherited by nested collections or unrelated connections. Each source must
-  support WebSub; failures appear on that item's subscription.
+  separate connected-resource option, or subscribe to each item explicitly.
+* **Optional connected-resource subscriptions:** after importing references,
+  successfully imported resources get their own ACL-checked subscriptions within
+  the selected connection depth, across all predicates. New connections added
+  later are included. Connected imports inherit `is_subscribe_connections` with
+  decremented `import_edges`; embedded resource references do not inherit it.
+  Depth zero subscribes only the selected resource. Traversal handles shared
+  resources and cycles without restarting subscriptions. Each source must support
+  WebSub; failures appear on that resource's subscription.
 * **Removal and stopping:** removing an edge does not delete the local item or stop
   its independent subscription. Stopping/deleting the collection or clearing the
   item option likewise leaves existing item subscriptions intact. Stop them on
@@ -137,7 +142,12 @@ delivery. Do not register an untrusted callback for private content.
 Outbound requests use `z_fetch` with `{autoredirect, false}` and verified TLS.
 Each destination is checked before fetching, including redirects, denial callbacks,
 and deliveries. Private, loopback, link-local, multicast, and reserved addresses
-are rejected. Internal-only or localhost peers need publicly reachable endpoints.
+are rejected. In the `development` environment, `.test` hostnames may resolve to
+loopback or private-network addresses and use self-signed TLS certificates.
+This exception applies to each request, including discovery, callbacks and
+redirects; other hostnames and environments retain the public-address and verified
+TLS requirements. Link-local metadata services and other reserved addresses remain
+blocked, even for development `.test` peers.
 
 OAuth2 consumer tokens configured with `mod_oauth2` are supported through the normal
 `z_fetch` integration. Token lookup uses the original HTTPS URL, hostname, and
@@ -178,12 +188,24 @@ and apply before pagination. Hostnames match exactly, case-insensitively, ignori
 ports and a trailing DNS dot. Enter a hostname without a scheme or path; IPv6
 literals are accepted with or without brackets. Incoming subscriptions match the
 callback host; outgoing subscriptions match the source resource host, not the hub.
+Normalized hostname expression indexes on callback/source URLs support both the
+filtered count and page query. PostgreSQL maintains them when URLs change.
+The optional `($n is null or column = $n)` filters are simplified in custom
+plans: missing arguments remove the filter; supplied arguments allow index
+conditions. Zotonic's `epgsql:equery` reparses an unnamed statement per call, so
+normal automatic planning uses custom plans. Forcing generic plans retains the
+`OR` and can prevent selective index scans.
+
 The errors filter uses the same error indicator as the table (delivery errors for
 incoming subscriptions; subscription or credential errors for outgoing ones). For an imported page, use the local copy's ID; its
 external semantic `/id` identity remains unchanged.
 
 Results show the local page, remote hostname, state, lease expiry, last sent or
-received update, and an error indicator. Pagination uses 50 rows per page. Retained
+received update, and an error indicator. Failed outgoing subscriptions have a **Retry** button for users who can edit the
+imported page. It starts a fresh subscription attempt immediately and reloads the
+overview with its current filters. The standard pager uses the filtered subscription
+count and 50 rows per page. Filter URLs use `qtype`, `qrsc_id`, `qhostname`,
+`qstatus`, and `qerrors`, preserved by the pager’s `qargs` option. Retained
 expired/stopped records are included; renewal generations appear separately, so
 two active callbacks can temporarily refer to the same imported page. Incoming
 subscriptions remain active until lease expiry even after a delivery error.
@@ -316,5 +338,21 @@ This is a **local Zotonic policy**, permitted by
 [WebSub section 5.1.2](https://www.w3.org/TR/websub/#subscription-response-details),
 not a WebSub requirement to reject IP addresses. It applies to subscriber
 callbacks, not discovery URLs, remote hubs, or topics. DNS hostnames must still
-resolve exclusively to public addresses; using a hostname does not bypass the
-SSRF checks. The existing DNS pinning TODO remains open.
+resolve exclusively to public addresses, except for the development `.test`
+exception above; using an arbitrary hostname does not bypass the SSRF checks. The existing DNS pinning TODO remains open.
+
+### Subscription errors
+
+The editor shows translated explanations with the original error under **Technical
+details**, including for older stored errors. An `access-denied-websub` denial
+can still come from older publishing sites which require `use mod_websub`.
+Current publishers authorize subscriptions by resource visibility, without that
+module permission. They recheck visibility before delivering updates.
+Browser login cookies do not authenticate the subscription request; private
+subscriptions need configured credentials. After upgrading a publisher or
+correcting access, start automatic updates again: a hub denial stops the subscription.
+
+The edit-page automatic-update status is a live template. Subscription confirmation,
+denial, and worker attempts publish an empty invalidation event on
+`model/websub/event/rsc/<id>`. Only editors of that resource can subscribe;
+the refreshed template and status model also enforce resource edit permissions.

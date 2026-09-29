@@ -181,3 +181,40 @@ block(Name, [ #{ <<"name">> := Name } = B | _ ]) ->
     B;
 block(Name, [ _ | Bs ]) ->
     block(Name, Bs).
+
+update_maps_unsupported_languages_test() ->
+    C = admin_context(),
+    OriginalLanguages = z_language:language_config(C),
+    try
+        ok = z_language:set_language_config([{nl, true}], C),
+        {ok, Id} = m_rsc:insert(#{
+            <<"category_id">> => text,
+            <<"language">> => [fr, en],
+            <<"title">> => #trans{tr = [{fr, <<"Bonjour">>}, {en, <<"Hello">>}]},
+            <<"blocks">> => [#{<<"type">> => <<"text">>,
+                <<"body">> => #trans{tr = [{de, <<"Guten Tag">>}]}}]
+        }, C),
+        try
+            ?assertEqual([nl], m_rsc:p(Id, <<"language">>, C)),
+            ?assertEqual(#trans{tr = [{nl, <<"Hello">>}]}, m_rsc:p(Id, <<"title">>, C)),
+            [Block] = m_rsc:p(Id, <<"blocks">>, C),
+            ?assertEqual(#trans{tr = [{nl, <<"Guten Tag">>}]}, maps:get(<<"body">>, Block)),
+            {ok, Id} = m_rsc:update(Id, #{
+                <<"language">> => ['nl-be'],
+                <<"title">> => #trans{tr = [{'nl-be', <<"Hallo">>}]}
+            }, C),
+            ?assertEqual([nl], m_rsc:p(Id, <<"language">>, C)),
+            ?assertEqual(#trans{tr = [{nl, <<"Hallo">>}]}, m_rsc:p(Id, <<"title">>, C)),
+            ok = z_language:set_language_config([{'nl-be', true}], C),
+            {ok, Id} = m_rsc:update(Id, #{
+                <<"language">> => [nl],
+                <<"title">> => #trans{tr = [{nl, <<"Dag">>}]}
+            }, C),
+            ?assertEqual(['nl-be'], m_rsc:p(Id, <<"language">>, C)),
+            ?assertEqual(#trans{tr = [{'nl-be', <<"Dag">>}]}, m_rsc:p(Id, <<"title">>, C))
+        after
+            ok = m_rsc:delete(Id, C)
+        end
+    after
+        ok = z_language:set_language_config(OriginalLanguages, C)
+    end.

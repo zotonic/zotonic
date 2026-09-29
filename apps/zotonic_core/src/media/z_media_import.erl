@@ -95,7 +95,7 @@ insert_1(_, #media_import_props{ rsc_props = #{ <<"uri">> := Uri }, importer = r
     Options3 = [
         {is_subscribe, z_convert:to_bool(z_context:get_q(<<"z_import_subscribe">>, Context))},
         {is_import_deleted, z_convert:to_bool(z_context:get_q(<<"z_import_deleted">>, Context))},
-        {is_subscribe_haspart, z_convert:to_bool(z_context:get_q(<<"z_import_subscribe_haspart">>, Context))}
+        {is_subscribe_connections, z_convert:to_bool(z_context:get_q(<<"z_import_subscribe_connections">>, Context))}
         | Options2
     ],
     case m_rsc_import:import_uri_recursive_async(Uri, Options3, Context) of
@@ -337,7 +337,7 @@ import_as_resource(MD, Context) ->
                     <<"uri">> => Uri,
                     <<"title">> => maps:get(<<"title">>, Rsc, undefined),
                     <<"summary">> => maps:get(<<"summary">>, Rsc, undefined),
-                    <<"is_websub_supported">> => maps:get(is_websub_supported, maps:get(<<"import_options">>, Preview, #{}), false)
+                    <<"is_websub_supported">> => maps:get(<<"is_websub_supported">>, maps:get(<<"import_options">>, Preview, #{}), false)
                 },
                 medium_props = #{},
                 preview_url = DataDepUrl,

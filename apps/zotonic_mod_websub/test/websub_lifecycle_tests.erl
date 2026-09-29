@@ -85,7 +85,8 @@ lifecycle() ->
         RestartToken = z_db:q1("select callback_token from websub_import where local_rsc_id=$1 order by id desc limit 1", [Id], A),
         ?assertNotEqual(RenewToken, RestartToken),
         ok = z_websub_subscription:denied(RestartToken, Topic, <<"not allowed">>, A),
-        ?assertMatch(#{is_enabled := false}, z_websub_subscription:status(Id, A)),
+        ?assertMatch(#{is_enabled := false, last_error := <<"not allowed">>},
+            z_websub_subscription:status(Id, A)),
         render_options(Id, A),
         {ok, _} = m_rsc:update(Id, #{<<"is_authoritative">> => true}, A),
         ?assertEqual({error, eacces}, m_websub:subscribe(Id, A)),
@@ -293,12 +294,12 @@ oauth_transport_test() ->
         meck:expect(m_oauth2_consumer, find_token, fun(1, <<"source.test">>, _) ->
             {ok, <<"oauth-websub-test">>}
         end),
-        meck:expect(z_websub_http, destination, fun(Url) ->
+        meck:expect(z_websub_http, destination, fun(Url, _) ->
             {ok, uri_string:parse(Url), {93,184,215,14}}
         end),
         meck:expect(z_url_fetch, fetch, fun(Method, Url, _, Options) ->
             ?assertEqual(false, proplists:get_value(autoredirect, Options)),
-            ?assertEqual(false, proplists:get_value(insecure, Options)),
+            ?assertEqual(m_site:environment(C) =:= development, proplists:get_value(insecure, Options)),
             case {Method, Url} of
                 {get, <<"https://source.test/id/123">>} ->
                     ?assertEqual(<<"Bearer oauth-websub-test">>, proplists:get_value(authorization, Options)),
@@ -547,7 +548,7 @@ collection_update(SubscribeParts) ->
     AUri = <<"https://collection.test/id/a/", Suffix/binary>>,
     BUri = <<"https://collection.test/id/b/", Suffix/binary>>,
     {ok, {A, _}} = m_rsc_import:import(payload(AUri, 1, <<"Existing item">>), [], C),
-    Options = [{import_edges, 1}, {is_subscribe_haspart, SubscribeParts}],
+    Options = [{import_edges, 1}, {is_subscribe_connections, SubscribeParts}],
     {ok, {Root, _}} = m_rsc_import:import(collection_payload(RootUri, 1, [AUri]), Options, C),
     ok = meck:new(z_websub_fetch_zotonic, [passthrough]),
     try
@@ -572,7 +573,7 @@ collection_update(SubscribeParts) ->
         ?assertEqual(<<"New item">>, m_rsc:p(B, <<"title">>, C)),
         ?assertEqual(<<"Existing item">>, m_rsc:p(A, <<"title">>, C)),
         {ok, BStatus} = m_rsc_import:get_import_status(B, C),
-        ?assertNot(proplists:get_bool(is_subscribe_haspart, maps:get(<<"options">>, BStatus))),
+        ?assertEqual(SubscribeParts, proplists:get_bool(is_subscribe_connections, maps:get(<<"options">>, BStatus))),
         ExpectedSubscriptions = case SubscribeParts of true -> 2; false -> 0 end,
         ?assertEqual(ExpectedSubscriptions, z_db:q1(
             "select count(*) from websub_import where local_rsc_id in ($1,$2) and is_enabled", [A, B], C)),
@@ -611,6 +612,48 @@ collection_payload(Uri, Version, Members) ->
             }
         }
     }.
+
+%% All predicates follow the selected connection depth, including when older
+%% imports already have deeper edges. Cycles must not restart the root.
+connected_subscriptions_test_() ->
+    {timeout, 30, fun() ->
+        without_scheduler(fun() ->
+            lists:foreach(fun connected_subscriptions/1, [0, 1, 2, 10])
+        end)
+    end}.
+
+connected_subscriptions(Depth) ->
+    C = z_acl:logon(1, z_context:new(zotonic_site_testsandbox)),
+    Suffix = integer_to_binary(erlang:unique_integer([positive, monotonic])),
+    Uris = [<<"https://connections.test/", Name/binary, "/", Suffix/binary>>
+        || Name <- [<<"root">>, <<"child">>, <<"grandchild">>]],
+    Options = [{import_edges, Depth}, {is_subscribe_connections, true}],
+    Ids = [begin
+        {ok, {Id, _}} = m_rsc_import:import(payload(Uri, 1, <<"Connected resource">>), Options, C),
+        Id
+    end || Uri <- Uris],
+    [Root, Child, Grandchild] = Ids,
+    [_, ChildUri, _] = Uris,
+    try
+        {ok, _} = m_edge:insert(Root, depiction, Child, C),
+        {ok, _} = m_edge:insert(Child, depiction, Grandchild, C),
+        {ok, _} = m_edge:insert(Grandchild, haspart, Root, C),
+        ok = m_websub:subscribe(Root, C),
+        ImportId = z_db:q1("select id from websub_import where local_rsc_id=$1", [Root], C),
+        ok = m_websub:task_import_referred(ImportId, #{ChildUri => Child}, 1, C),
+        Expected = lists:sublist(Ids, min(3, Depth + 1)),
+        Actual = [Id || {Id} <- z_db:q(
+            "select local_rsc_id from websub_import where local_rsc_id in ($1,$2,$3) and is_enabled",
+            Ids, C)],
+        ?assertEqual(lists:sort(Expected), lists:sort(Actual)),
+        ?assertEqual(1, z_db:q1("select count(*) from websub_import where local_rsc_id=$1", [Root], C))
+    after
+        z_db:q("delete from pivot_task_queue where module=$1 and function=$2", [m_websub, task_import_referred], C),
+        lists:foreach(fun(Id) ->
+            z_db:q("delete from websub_import where local_rsc_id=$1", [Id], C),
+            m_rsc:delete(Id, C)
+        end, Ids)
+    end.
 
 edge_publication_test() ->
     without_scheduler(fun edge_publication/0).
@@ -652,7 +695,7 @@ shallow_collection_import() ->
             {ok, #{<<"status">> => <<"ok">>, <<"result">> => Data}}
         end),
         {ok, {Root, _}} = m_rsc_import:import_uri_recursive(RootUri,
-            [{import_edges, 1}, {is_subscribe_haspart, true}], C),
+            [{import_edges, 1}, {is_subscribe_connections, true}], C),
         Child = m_rsc:uri_lookup(ChildUri, C),
         ?assertEqual([Child], m_edge:objects(Root, haspart, C)),
         ?assert(m_rsc_import:is_imported(Child, C)),
@@ -661,7 +704,7 @@ shallow_collection_import() ->
         {ok, Status} = m_rsc_import:get_import_status(Child, C),
         ChildOptions = maps:get(<<"options">>, Status),
         ?assertEqual(0, proplists:get_value(import_edges, ChildOptions)),
-        ?assertNot(proplists:get_bool(is_subscribe_haspart, ChildOptions))
+        ?assert(proplists:get_bool(is_subscribe_connections, ChildOptions))
     after
         meck:unload(z_websub_fetch_zotonic),
         lists:foreach(fun(Uri) ->
@@ -755,4 +798,126 @@ without_scheduler(Test) ->
         Test()
     after
         sys:resume(Server)
+    end.
+
+%% Public subscriptions need resource visibility, not module administration rights.
+subscription_visibility_test() ->
+    without_scheduler(fun subscription_visibility/0).
+
+subscription_visibility() ->
+    C = z_context:new(zotonic_site_testsandbox),
+    A = z_acl:logon(1, C),
+    {ok, Id} = m_rsc:insert(#{<<"category_id">> => text, <<"is_published">> => true}, A),
+    Topic = m_websub:topic_url(Id, A),
+    Callback = <<"https://callback.test/visibility">>,
+    ok = meck:new(z_acl, [passthrough]),
+    ok = meck:new(z_websub_http, [passthrough]),
+    try
+        meck:expect(z_acl, is_allowed, fun
+            (use, mod_websub, _) -> false;
+            (Action, Object, Context) -> meck:passthrough([Action, Object, Context])
+        end),
+        ?assertNot(z_acl:is_allowed(use, mod_websub, C)),
+        ?assert(z_acl:rsc_visible(Id, C)),
+        meck:expect(z_websub_http, callback, fun(get, Url, Payload, _, _) ->
+            ?assertEqual(<<"subscribe">>, proplists:get_value(<<"hub.mode">>, Payload)),
+            Challenge = proplists:get_value(<<"hub.challenge">>, Payload),
+            {ok, {Url, [], byte_size(Challenge), Challenge}}
+        end),
+        ok = controller_websub:task_verify(<<"subscribe">>, Callback, Topic, undefined, 600, undefined, C),
+        ?assertEqual(1, z_db:q1("select count(*) from websub_export where local_rsc_id=$1", [Id], A)),
+        ?assertEqual({error, eacces}, m_websub:m_get([<<"subscriptions">>], #{payload => #{}}, C)),
+
+        %% Losing access prevents both delivery and new subscriptions.
+        {ok, Id} = m_rsc:update(Id, #{<<"is_published">> => false}, A),
+        ?assertNot(z_acl:rsc_visible(Id, C)),
+        ok = m_websub:queue_push(Id, m_rsc:p(Id, <<"version">>, A), A),
+        z_db:q("update websub_push_queue set due=now() where local_rsc_id=$1", [Id], A),
+        ok = m_websub:process_push_queue(A),
+        ?assertEqual(0, z_db:q1("select count(*) from websub_export where local_rsc_id=$1", [Id], A)),
+        meck:expect(z_websub_http, callback, fun(get, Url, Payload, _, _) ->
+            ?assertEqual(<<"denied">>, proplists:get_value(<<"hub.mode">>, Payload)),
+            ?assertEqual(<<"access-denied-rsc">>, proplists:get_value(<<"hub.reason">>, Payload)),
+            {ok, {Url, [], 0, <<>>}}
+        end),
+        ok = controller_websub:task_verify(<<"subscribe">>, Callback, Topic, undefined, 600, undefined, C),
+        ?assertEqual(0, z_db:q1("select count(*) from websub_export where local_rsc_id=$1", [Id], A)),
+        ?assertNot(meck:called(z_websub_http, callback, [post, '_', '_', '_', '_']))
+    after
+        meck:unload(z_websub_http),
+        meck:unload(z_acl),
+        m_rsc:delete(Id, A)
+    end.
+
+retry_failed_subscription_test() ->
+    without_scheduler(fun retry_failed_subscription/0).
+
+retry_failed_subscription() ->
+    C = z_context:new(zotonic_site_testsandbox),
+    A = z_acl:logon(1, C),
+    {ok, Id} = m_rsc:insert(#{<<"category_id">> => text,
+        <<"is_authoritative">> => false, <<"uri">> => <<"https://external.test/id/retry">>}, A),
+    try
+        ok = m_websub:subscribe(Id, A),
+        OldId = z_db:q1("select id from websub_import where local_rsc_id=$1", [Id], A),
+        z_db:q("update websub_import set last_error='fetch_failed',
+            next_check=now()+interval '1 day' where id=$1", [OldId], A),
+        ?assertEqual({error, eacces}, m_websub:subscribe(Id, C)),
+        ?assertEqual(1, z_db:q1("select count(*) from websub_import where local_rsc_id=$1", [Id], A)),
+        _ = mod_websub:event(#postback{message = {subscription_start, [{id, Id}]}}, A),
+        ?assertEqual({false, <<"unsubscribe">>},
+            z_db:q_row("select is_enabled, pending_mode from websub_import where id=$1", [OldId], A)),
+        ?assertEqual({true, undefined, undefined, true, OldId},
+            z_db:q_row("select is_enabled, last_error, credential_error, next_check <= now(), replaces_id
+                from websub_import where local_rsc_id=$1 order by id desc limit 1", [Id], A)),
+        ok = m_websub:subscribe(Id, A),
+        ?assertEqual(2, z_db:q1("select count(*) from websub_import where local_rsc_id=$1", [Id], A))
+    after
+        z_db:q("delete from websub_import where local_rsc_id=$1", [Id], A),
+        m_rsc:delete(Id, A)
+    end.
+
+subscription_live_status_test() ->
+    without_scheduler(fun subscription_live_status/0).
+
+subscription_live_status() ->
+    C = z_context:new(zotonic_site_testsandbox),
+    A = z_acl:logon(1, C),
+    Uri = <<"https://external.test/id/live-status">>,
+    {ok, Id} = m_rsc:insert(#{<<"category_id">> => text,
+        <<"is_authoritative">> => false, <<"uri">> => Uri}, A),
+    EventTopic = [<<"model">>, <<"websub">>, <<"event">>, <<"rsc">>, integer_to_binary(Id)],
+    ACL = #acl_is_allowed{action = subscribe, object = #acl_mqtt{topic = EventTopic}},
+    ?assertEqual(true, mod_websub:observe_acl_is_allowed(ACL, A)),
+    ?assertEqual(false, mod_websub:observe_acl_is_allowed(ACL, C)),
+    ?assertEqual(false, mod_websub:observe_acl_is_allowed(ACL#acl_is_allowed{action = publish}, C)),
+    ok = meck:new(z_mqtt, [passthrough]),
+    Parent = self(),
+    try
+        meck:expect(z_mqtt, publish, fun(Topic, Payload, Context) ->
+            case Topic of
+                [<<"model">>, <<"websub">>, <<"event">>, <<"rsc">>, Id] ->
+                    ?assertEqual(#{}, Payload),
+                    ?assert(z_acl:is_admin(Context)),
+                    Status = z_websub_subscription:status(Id, A),
+                    Parent ! {subscription_status, maps:get(is_active, Status), maps:get(is_enabled, Status)},
+                    ok;
+                _ ->
+                    meck:passthrough([Topic, Payload, Context])
+            end
+        end),
+        ok = m_websub:subscribe(Id, A),
+        {ImportId, Token} = z_db:q_row("select id, callback_token from websub_import where local_rsc_id=$1", [Id], A),
+        z_db:q("update websub_import set pending_mode='subscribe', pending_until=now()+interval '2 minutes'
+            where id=$1", [ImportId], A),
+        ok = z_websub_subscription:verify(Token, Uri, <<"subscribe">>, 600, C),
+        receive {subscription_status, true, true} -> ok after 1000 -> error(no_confirmation_event) end,
+        z_db:q("update websub_import set pending_mode='subscribe', pending_until=now()+interval '2 minutes'
+            where id=$1", [ImportId], A),
+        ok = z_websub_subscription:denied(Token, Uri, <<"access-denied-rsc">>, C),
+        receive {subscription_status, false, false} -> ok after 1000 -> error(no_denial_event) end
+    after
+        meck:unload(z_mqtt),
+        z_db:q("delete from websub_import where local_rsc_id=$1", [Id], A),
+        m_rsc:delete(Id, A)
     end.

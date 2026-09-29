@@ -186,3 +186,14 @@ test_is_rtl_3() ->
     Result = z_language:is_rtl(Code),
     Expected = true,
     ?assertEqual(Expected, Result).
+
+language_map_test() ->
+    ?assertEqual(#{}, z_language:language_map([fr, de], [nl])),
+    ?assertEqual(#{nl => 'nl-be'}, z_language:language_map([nl], ['nl-be'])),
+    ?assertEqual(#{'nl-be' => nl}, z_language:language_map(['nl-be'], [nl])),
+    ?assertEqual(#{nl => nl, 'nl-be' => 'nl-be'},
+        z_language:language_map(['nl-be', nl], [nl, 'nl-be'])),
+    %% Exact matches reserve their targets, even if a related source is first.
+    ?assertEqual(#{nl => nl}, z_language:language_map(['nl-be', nl], [nl])),
+    ?assertEqual(#{'nl-be' => nl}, z_language:language_map(['nl-be', 'nl-nl'], [nl])),
+    ?assertEqual(#{nl => 'nl-be'}, z_language:language_map([nl, nl], ['nl-be', 'nl-nl'])).
