@@ -5,18 +5,12 @@
         <a href="{{ id.uri|escape }}" target="blank" rel="noopener noreferrer">{{ id.uri|escape }}</a>
 
         {% if id.is_editable %}
-            <span class="pull-right">
-                <button class="btn btn-default btn-xs" id="{{ #refresh }}">{_ Fetch new version _}</button>
-                {% wire id=#refresh
-                        action={mask target="non-authoritative" message=_"Fetching new version..."}
-                        postback={import_refresh
-                                    id=id
-                                    on_success={reload}
-                                    on_error={unmask target="non-authoritative"}
-                                }
-                        delegate=`z_admin_rsc_import`
-                %}
-            </span>
+            <button class="btn btn-default btn-xs" id="{{ #refresh }}">{_ Fetch new version _}</button>
+            {% wire id=#refresh
+                postback={import_options id=id}
+                delegate=`z_admin_rsc_import`
+            %}
+            {% all include "_admin_rsc_import_status.tpl" id=id %}
         {% endif %}
     </div>
 {% endif %}

@@ -58,6 +58,7 @@
     set_language_config/2,
     is_valid/1,
     to_language_atom/1,
+    language_map/2,
     fallback_language/1,
     fallback_language/2,
     english_name/1,
@@ -308,6 +309,47 @@ to_language_atom(Code) when is_binary(Code); is_atom(Code) ->
 to_language_atom(Code) ->
     to_language_atom(z_convert:to_binary(Code)).
 
+
+%% @doc Map source languages to supported languages, with unique targets.
+%% Exact matches win globally over parent/child matches. Ties follow source
+%% order and then target preference. Unrelated languages are not mapped.
+-spec language_map(From, To) -> Mapping when
+    From :: [language_code()],
+    To :: [language_code()],
+    Mapping :: #{language_code() => language_code()}.
+language_map(From, To) ->
+    Candidates = lists:sort([
+        {Rank, SourceIndex, TargetIndex, Source, Target}
+        || {SourceIndex, Source} <- lists:enumerate(lists:uniq(From)),
+           {TargetIndex, Target} <- lists:enumerate(lists:uniq(To)),
+           Rank <- [language_distance(Source, Target)],
+           Rank =/= undefined
+    ]),
+    {Mapping, _} = lists:foldl(
+        fun({_, _, _, Source, Target}, {Acc, Used}) ->
+            case maps:is_key(Source, Acc) orelse maps:is_key(Target, Used) of
+                true -> {Acc, Used};
+                false -> {Acc#{Source => Target}, Used#{Target => true}}
+            end
+        end,
+        {#{}, #{}},
+        Candidates),
+    Mapping.
+
+language_distance(Language, Language) ->
+    0;
+language_distance(Source, Target) ->
+    case language_position(Target, fallback_language(Source), 1) of
+        undefined -> language_position(Source, fallback_language(Target), 1);
+        Distance -> Distance
+    end.
+
+language_position(_Language, [], _Index) ->
+    undefined;
+language_position(Language, [Language | _], Index) ->
+    Index;
+language_position(Language, [_ | Rest], Index) ->
+    language_position(Language, Rest, Index + 1).
 
 %% @doc Return the list of fallback languages (atoms) for the language.
 -spec fallback_language( language() ) -> [ language_code() ].

@@ -37,6 +37,9 @@ The saved category, content group, visibility and ownership fields are used for 
 
 Display labels are kept in `props_json`; complete resource data remains in `module#mod_backup` revisions.
 Restoring a resource removes its tombstone.
+`props_json.deletion_reason` distinguishes manual deletion from automatic dependent cleanup.
+Imports respect manual deletion; dependent resources can be imported again if referenced.
+Legacy tombstones without a reason are treated as manual deletions.
 Only category/content-group labels are copied. `props_json.deleter_id` identifies the deletion actor;
 person titles are read from live resources through the normal ACL checks.
 
@@ -92,6 +95,7 @@ Available Model API Paths
     get_new_location/2,
     is_gone/2,
     is_gone_uri/2,
+    is_import_blocked/2,
     gone/2,
     gone/3,
 
@@ -190,6 +194,30 @@ is_gone_uri(Uri, Context) ->
     z_depcache:memo(F, {rsc_is_gone, UriB}, Context).
 
 
+%% @doc Only automatic dependent cleanup permits a deleted URI to be imported
+%% again. Use the latest deletion: a URI can have multiple local tombstones.
+%% Older tombstones without a reason are conservatively treated as manual.
+-spec is_import_blocked(Uri, Context) -> boolean()
+    when
+        Uri :: binary() | string() | undefined,
+        Context :: z:context().
+is_import_blocked(undefined, _Context) ->
+    false;
+is_import_blocked(Uri, Context) ->
+    case z_db:q_row("
+        select props_json->>'deletion_reason'
+        from rsc_gone
+        where uri = $1
+        order by modified desc, id desc
+        limit 1",
+        [Uri], Context)
+    of
+        undefined -> false;
+        {<<"dependent">>} -> false;
+        {_Reason} -> true
+    end.
+
+
 %% @doc Copy a resource to the 'gone' table, use the current user as the modifier (deleter).
 -spec gone(m_rsc:resource_id(), z:context()) -> {ok, integer()} | {error, term()}.
 gone(Id, Context) when is_integer(Id) ->
@@ -214,7 +242,8 @@ gone(Id, NewId, Context) when is_integer(Id), is_integer(NewId) orelse NewId =:=
                         {ok, RscProps} = m_rsc:get_raw(Id, Ctx),
                         Props1 = [
                             {props_json, (snapshot(RscProps, Ctx))#{
-                                <<"deleter_id">> => z_acl:user(Ctx)
+                                <<"deleter_id">> => z_acl:user(Ctx),
+                                <<"deletion_reason">> => deletion_reason(Ctx)
                             }},
                             {modified, calendar:universal_time()},
                             {new_id, NewId},
@@ -246,6 +275,13 @@ gone(Id, NewId, Context) when is_integer(Id), is_integer(NewId) orelse NewId =:=
                     {ok, Id};
                 Other -> Other
             end
+    end.
+
+%% This context flag is set only by automatic dependent-resource cleanup.
+deletion_reason(Context) ->
+    case z_context:get(is_dependent_delete, Context) of
+        true -> <<"dependent">>;
+        _ -> <<"manual">>
     end.
 
 %% @doc Delete a gone entry for a resource, used after recovery of a resource.

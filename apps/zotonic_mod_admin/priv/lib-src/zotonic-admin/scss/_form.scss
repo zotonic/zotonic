@@ -47,3 +47,14 @@ fieldset,
         }
     }
 }
+
+// Import checkboxes use the same text color as the adjacent radio options.
+.form__import_edges .checkbox label,
+.form__import_medium.checkbox label,
+.form__subscribe .checkbox label {
+    color: inherit;
+
+    &:has(input:disabled) {
+        color: $textColorMuted;
+    }
+}

@@ -1064,6 +1064,17 @@ fieldset > label.checkbox > input[type=radio],
   margin-left: 0;
 }
 
+.form__import_edges .checkbox label,
+.form__import_medium.checkbox label,
+.form__subscribe .checkbox label {
+  color: inherit;
+}
+.form__import_edges .checkbox label:has(input:disabled),
+.form__import_medium.checkbox label:has(input:disabled),
+.form__subscribe .checkbox label:has(input:disabled) {
+  color: #999;
+}
+
 img.thumb {
   padding: 0;
   border-radius: 0;

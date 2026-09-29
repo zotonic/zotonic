@@ -363,3 +363,32 @@ property_name_type_hint_test() ->
     undefined = z_props:property_name_type_hint(<<"unknown_key">>),
     undefined = z_props:property_name_type_hint(<<"foobar">>),
     ok.
+
+map_languages_test() ->
+    Props = #{
+        <<"title">> => #trans{tr = [{nl, <<"Hallo">>}, {en, <<"Hello">>}]},
+        <<"blocks">> => [#{<<"body">> => #trans{tr = [{fr, <<"Bonjour">>}, {en, <<"Hello">>}]}}],
+        <<"nested">> => #{<<"text">> => #trans{tr = [{de, <<"Guten Tag">>}]}},
+        <<"empty">> => #trans{tr = []},
+        <<"plain">> => <<"Untranslated">>
+    },
+    Mapped = z_props:map_languages(Props, #{nl => 'nl-be'}, ['nl-be']),
+    ?assertEqual(#trans{tr = [{'nl-be', <<"Hallo">>}]}, maps:get(<<"title">>, Mapped)),
+    ?assertEqual([#{<<"body">> => #trans{tr = [{'nl-be', <<"Hello">>}]}}],
+        maps:get(<<"blocks">>, Mapped)),
+    ?assertEqual(#{<<"text">> => #trans{tr = [{'nl-be', <<"Guten Tag">>}]}},
+        maps:get(<<"nested">>, Mapped)),
+    ?assertEqual(#trans{tr = []}, maps:get(<<"empty">>, Mapped)),
+    ?assertEqual(<<"Untranslated">>, maps:get(<<"plain">>, Mapped)).
+
+map_languages_fallback_test() ->
+    Map = fun(Tr) ->
+        maps:get(<<"text">>, z_props:map_languages(#{<<"text">> => #trans{tr = Tr}}, #{}, [nl]))
+    end,
+    ?assertEqual(#trans{tr = [{nl, <<"Hallo">>}]},
+        Map([{en, <<"Hello">>}, {'nl-be', <<"Hallo">>}])),
+    ?assertEqual(#trans{tr = [{nl, <<"Bonjour">>}]},
+        Map([{en, <<>>}, {fr, <<"Bonjour">>}])),
+    ?assertEqual(#trans{tr = [{nl, <<"Hello">>}]},
+        Map([{fr, <<"Bonjour">>}, {en, <<"Hello">>}])),
+    ?assertEqual(#trans{tr = [{nl, <<>>}]}, Map([{fr, <<>>}])).

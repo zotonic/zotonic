@@ -33,6 +33,7 @@
 
     extract_languages/1,
     prune_languages/2,
+    map_languages/3,
 
     normalize_dates/3,
     common_properties/0,
@@ -1128,6 +1129,49 @@ extract_languages_1(_, #trans{ tr = Tr }, Langs) ->
         Tr);
 extract_languages_1(_, _, Langs) ->
     Langs.
+
+
+%% @doc Remap translations recursively, preserving text when none can be mapped.
+%% Targets are in local preference order. The mapping must have unique targets.
+%% This relabels existing text; it does not translate it.
+-spec map_languages(Props, Mapping, Targets) -> map() when
+    Props :: map(),
+    Mapping :: #{atom() => atom()},
+    Targets :: [atom(), ...].
+map_languages(Props, Mapping, [_ | _] = Targets) ->
+    map_languages_1(Props, Mapping, Targets).
+
+map_languages_1(M, Mapping, Targets) when is_map(M) ->
+    maps:map(fun(_K, V) -> map_languages_1(V, Mapping, Targets) end, M);
+map_languages_1(L, Mapping, Targets) when is_list(L) ->
+    [map_languages_1(V, Mapping, Targets) || V <- L];
+map_languages_1(#trans{tr = Tr}, Mapping, Targets) ->
+    case [{maps:get(Language, Mapping), Text}
+            || {Language, Text} <- Tr, maps:is_key(Language, Mapping)] of
+        [] -> #trans{tr = fallback_translation(Tr, Targets)};
+        Mapped -> #trans{tr = Mapped}
+    end;
+map_languages_1(V, _Mapping, _Targets) ->
+    V.
+
+fallback_translation([], _Targets) ->
+    [];
+fallback_translation(Tr, Targets) ->
+    % Prefer actual text over an empty placeholder when selecting a fallback.
+    Available = case [{L, T} || {L, T} <- Tr, T =/= <<>>, T =/= undefined] of
+        [] -> Tr;
+        NonEmpty -> NonEmpty
+    end,
+    Related = z_language:language_map([L || {L, _} <- Available], Targets),
+    Matches = [{Target, Text}
+        || Target <- Targets, {Source, Text} <- Available,
+           maps:get(Source, Related, undefined) =:= Target],
+    case Matches of
+        [Best | _] -> [Best];
+        [] ->
+            Text = proplists:get_value(en, Available, element(2, hd(Available))),
+            [{hd(Targets), Text}]
+    end.
 
 
 %% @doc Check all trans records, remove languages not mentioned.

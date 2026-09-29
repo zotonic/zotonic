@@ -178,7 +178,10 @@ restrict_collab_cats_intersects_cat_list_test() ->
     Result = acl_user_groups_checks:restrict_collab_cats(Lines, [11, 12]),
     ?assertEqual([{0, [11, 12]}, {1, [11]}], Result).
 
-person_can_edit_own_resource_test() ->
+person_can_edit_own_resource_test_() ->
+    {timeout, 30, fun person_can_edit_own_resource/0}.
+
+person_can_edit_own_resource() ->
     ContextAnon = context(),
     ContextSudo = z_acl:sudo(ContextAnon),
 
@@ -198,34 +201,61 @@ person_can_edit_own_resource_test() ->
     {ok, UserId2} = m_rsc:insert(#{ <<"category_id">> => person, <<"creator_id">> => UserId1 }, ContextSudo),
     {ok, UserId3} = m_rsc:insert(#{ <<"category_id">> => person, <<"creator_id">> => self }, ContextSudo),
 
-    m_edge:insert(UserId1, hasusergroup, ensure_test_group(ContextAnon), ContextSudo),
-    m_edge:insert(UserId2, hasusergroup, ensure_test_group(ContextAnon), ContextSudo),
-    m_edge:insert(UserId3, hasusergroup, ensure_test_group(ContextAnon), ContextSudo),
+    try
+        {ok, _} = m_edge:insert(UserId1, hasusergroup, ensure_test_group(ContextAnon), ContextSudo),
+        {ok, _} = m_edge:insert(UserId2, hasusergroup, ensure_test_group(ContextAnon), ContextSudo),
+        {ok, _} = m_edge:insert(UserId3, hasusergroup, ensure_test_group(ContextAnon), ContextSudo),
 
-    ContextUser1 = z_acl:logon(UserId1, ContextAnon),
-    ContextUser3 = z_acl:logon(UserId3, ContextAnon),
+        ContextUser1 = z_acl:logon(UserId1, ContextAnon),
+        ContextUser3 = z_acl:logon(UserId3, ContextAnon),
 
-    % No access for anonymous
-    ?assertEqual({error, eacces}, m_rsc:update(UserId1, [{title, <<"Test">>}], ContextAnon)),
-    % Must be owner
-    ?assertEqual({error, eacces}, m_rsc:update(UserId1, [{title, <<"Test">>}], ContextUser3)),
-    % Must be creator
-    ?assertEqual({error, eacces}, m_rsc:update(UserId2, [{title, <<"Test">>}], ContextUser3)),
+        % No access for anonymous
+        ?assertEqual({error, eacces}, m_rsc:update(UserId1, [{title, <<"Test">>}], ContextAnon)),
+        % Must be owner
+        ?assertEqual({error, eacces}, m_rsc:update(UserId1, [{title, <<"Test">>}], ContextUser3)),
+        % Must be creator
+        ?assertEqual({error, eacces}, m_rsc:update(UserId2, [{title, <<"Test">>}], ContextUser3)),
 
-    % User1 can update self, as user is self
-    {ok, _} = m_rsc:update(UserId1, [{title, "Test"}], ContextUser1),
-    % User1 can update user2, as user1 is creator (owner) if user2
-    {ok, _} = m_rsc:update(UserId2, [{title, "Test"}], ContextUser1),
-    % User3 can update self, as is owner of self (and is self)
-    {ok, _} = m_rsc:update(UserId3, [{title, "Test"}], ContextUser3),
+        % User1 can update self, as user is self
+        ?assertMatch({ok, UserId1}, m_rsc:update(UserId1, [{title, "Test"}], ContextUser1)),
+        % User1 can update user2, as user1 is creator (owner) if user2
+        ?assertMatch({ok, UserId2}, m_rsc:update(UserId2, [{title, "Test"}], ContextUser1)),
+        % User3 can update self, as is owner of self (and is self)
+        ?assertMatch({ok, UserId3}, m_rsc:update(UserId3, [{title, "Test"}], ContextUser3))
+    after
+        m_rsc:delete(UserId1, ContextSudo),
+        m_rsc:delete(UserId2, ContextSudo),
+        m_rsc:delete(UserId3, ContextSudo),
+        delete_managed(ContextSudo)
+    end.
 
-    m_rsc:delete(UserId1, ContextSudo),
-    m_rsc:delete(UserId2, ContextSudo),
-    m_rsc:delete(UserId3, ContextSudo),
-    delete_managed(ContextSudo).
 
+%% Reproduce the old helper's premature wakeup with an already queued message.
+%% Repeat real rule publication and authorization checks to exercise rebuild overlap.
+acl_rebuild_ignores_stale_notifications_test_() ->
+    {timeout, 30, fun() ->
+        lists:foreach(
+            fun(_) ->
+                Stale = {mqtt_msg, #{test_ref => make_ref()}},
+                self() ! Stale,
+                try
+                    person_can_edit_own_resource(),
+                    receive
+                        Stale -> ok
+                    after 0 ->
+                        error(stale_notification_consumed)
+                    end
+                after
+                    receive Stale -> ok after 0 -> ok end
+                end
+            end,
+            lists:seq(1, 3))
+    end}.
 
-person_can_insert_text_in_default_content_group_only_test() ->
+person_can_insert_text_in_default_content_group_only_test_() ->
+    {timeout, 30, fun person_can_insert_text_in_default_content_group_only/0}.
+
+person_can_insert_text_in_default_content_group_only() ->
     ContextAnon = context(),
     ContextSudo = z_acl:sudo(ContextAnon),
 
@@ -299,7 +329,10 @@ acl_is_allowed_override_test() ->
     m_rsc:delete(UserId, ContextSudo),
     m_rsc:delete(TextId, ContextSudo).
 
-publish_test() ->
+publish_test_() ->
+    {timeout, 30, fun publish/0}.
+
+publish() ->
     ContextAnon = context(),
     ContextSudo = z_acl:sudo(ContextAnon),
 
@@ -347,21 +380,37 @@ is_allowed_always_true(#acl_is_allowed{}, _Context) ->
     true.
 
 replace_managed(Rules, Context) ->
-    z_mqtt:subscribe(<<"model/acl_user_groups/event/acl-rules/publish-rebuild">>, z_acl:sudo(Context)),
-
     m_acl_rule:replace_managed(Rules, ?MODULE, z_acl:sudo(Context)),
-    receive
-        {mqtt_msg, _Msg} -> ok
-    end,
-    z_mqtt:unsubscribe(<<"model/acl_user_groups/event/acl-rules/publish-rebuild">>, z_acl:sudo(Context)).
+    await_rebuild(Context).
 
 delete_managed(Context) ->
-    z_mqtt:subscribe(<<"model/acl_user_groups/event/acl-rules/publish-rebuild">>, z_acl:sudo(Context)),
     m_acl_rule:delete_managed(?MODULE, z_acl:sudo(Context)),
-    receive
-        {mqtt_msg, _Msg} -> ok
-    end,
-    z_mqtt:unsubscribe(<<"model/acl_user_groups/event/acl-rules/publish-rebuild">>, z_acl:sudo(Context)).
+    await_rebuild(Context).
+
+%% Publishing queues several asynchronous rebuilds. A single MQTT completion
+%% can describe an older rebuild; an unrelated mailbox message proves nothing.
+%% status/1 is sent after this process's rebuild casts, so it observes all of
+%% them. Wait for both queued and running work, not merely an existing ETS table.
+await_rebuild(Context) ->
+    await_rebuild(erlang:monotonic_time(millisecond) + 5000, Context).
+
+await_rebuild(Deadline, Context) ->
+    {ok, Status} = mod_acl_user_groups:status(Context),
+    IsPending = lists:any(
+        fun(Key) -> proplists:get_value(Key, Status) =:= true end,
+        [is_rebuilding, is_rebuild_publish, is_rebuild_edit]),
+    case IsPending of
+        false ->
+            ok;
+        true ->
+            case erlang:monotonic_time(millisecond) < Deadline of
+                true ->
+                    timer:sleep(10),
+                    await_rebuild(Deadline, Context);
+                false ->
+                    error({acl_rebuild_timeout, Status})
+            end
+    end.
 
 ensure_test_group(Context) ->
     case m_rsc:rid(?UG_TEST, Context) of

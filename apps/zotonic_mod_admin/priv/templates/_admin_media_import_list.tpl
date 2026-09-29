@@ -116,8 +116,8 @@
                                     {% if mi.props.is_authoritative|is_defined and not mi.props.is_authoritative %}
                                         {% block import_options__import %}
                                             <div class="form-group">
+                                                <label class="control-label">{_ Create _}</label>
                                                 <div class="radio form__is_authoritative">
-                                                    <p>{_ Create _}:</p>
                                                     <label>
                                                         <input type="radio" name="is_authoritative" value="0" {% if not is_authoritative %}checked{% endif %}>
                                                         {_ A copy that will remain connected so that a new version can be fetched. _}
@@ -129,9 +129,9 @@
                                                 </div>
                                             </div>
 
-                                            <div class="form-group">
-                                                <div class="radio form__import_edges">
-                                                    <p>{_ Connections _}:</p>
+                                            <div class="form-group form__import_edges">
+                                                <label class="control-label">{_ Connections _}</label>
+                                                <div class="radio">
                                                     <label>
                                                         <input type="radio" name="z_import_edges" value="0">
                                                         {_ Do not import connections. _}
@@ -145,7 +145,44 @@
                                                         {_ Follow connections and import all (deep copy). _}
                                                     </label>
                                                 </div>
+                                                {% include "_rsc_import_deleted_options.tpl" import_edges=1 %}
                                             </div>
+
+                                            {% if m.modules.active.mod_websub %}
+                                                <div class="form-group form__subscribe">
+                                                    <label class="control-label">{_ Subscribe _}</label>
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            <input type="checkbox" name="z_import_subscribe" value="1"
+                                                                {% if not mi.props.is_websub_supported or is_authoritative %}disabled{% endif %}
+                                                                data-websub-supported="{% if mi.props.is_websub_supported %}1{% else %}0{% endif %}">
+                                                            {_ Automatically fetch updates from the original website. _}
+                                                            {% if not mi.props.is_websub_supported %}
+                                                                <a href="#" class="z-btn-help do_dialog"
+                                                                    title="{_ Automatic updates unavailable _}" aria-label="{_ Automatic updates unavailable _}"
+                                                                    data-dialog="{{ %{
+                                                                        title: _"Automatic updates unavailable",
+                                                                        text: _"The original website does not advertise automatic updates.",
+                                                                        level: 10
+                                                                    }|escape }}"></a>
+                                                            {% endif %}
+                                                        </label>
+                                                        <div class="websub-sub-options" hidden>
+                                                            <label>
+                                                                <input type="checkbox" name="z_import_subscribe_connections" value="1">
+                                                                {_ Also subscribe to connected resources. _}
+                                                                <a href="#" class="z-btn-help do_dialog"
+                                                                    title="{_ Subscribing to connected resources _}" aria-label="{_ Subscribing to connected resources _}"
+                                                                    data-dialog="{{ %{
+                                                                        title: _"Subscribing to connected resources",
+                                                                        text: _"Follows the Connections option. Connected resources keep their subscriptions when disconnected from this page.",
+                                                                        level: 10
+                                                                    }|escape }}"></a>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
                                         {% endblock %}
                                     {% endif %}
                                 </div>
@@ -202,8 +239,20 @@
     {% endfor %}
 
     {% javascript %}
+        document.getElementById('media-import-wrapper').addEventListener('change', (event) => {
+            const name = event.target.name;
+            if (name !== 'is_authoritative' && name !== 'z_import_subscribe') return;
+            const checkbox = event.target.form.querySelector('[name="z_import_subscribe"]');
+            if (!checkbox) return;
+            if (name === 'is_authoritative') {
+                checkbox.disabled = event.target.value === '1' || checkbox.dataset.websubSupported !== '1';
+                if (checkbox.disabled) checkbox.checked = false;
+            }
+            event.target.form.querySelector('.websub-sub-options').hidden = !checkbox.checked;
+        });
         $('#media-import-wrapper').on('change', 'input[type=checkbox]', function() {
             var name = $(this).attr('name');
+            if (name === 'z_import_subscribe') return;
             var id = $(this).attr('id');
             var is_checked = $(this).is(':checked');
             $('#media-import-wrapper').find('input[type=checkbox]').each(

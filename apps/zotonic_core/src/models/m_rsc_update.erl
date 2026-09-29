@@ -1425,37 +1425,27 @@ update_transaction_fun_db_1({ok, UpdatePropsN}, Id, RscUpd, Raw, IsABefore, IsCa
         _ ->
             Langs
     end,
-    % Only editable languages
-    Langs2 = lists:filtermap(
-        fun(Lang) ->
-            case z_language:to_language_atom(Lang) of
-                {ok, Iso} ->
-                    case z_language:is_language_editable(Iso, Context) of
-                        false ->
-                            ?LOG_INFO(#{
-                                text => <<"Dropping non editable language from resource">>,
-                                in => zotonic_core,
-                                language => Iso,
-                                rsc_id => Id
-                            }),
-                            false;
-                        true ->
-                            {true, Iso}
-                    end;
-                {error, not_a_language} ->
-                    false
-            end
-        end,
-        Langs1),
-    % Ensure there is always a language
-    Langs3 = case Langs2 of
-        [] -> [ z_context:language(Context ) ];
-        _ -> Langs2
+    % Map to editable languages before pruning, so regional variants and
+    % imports with no shared language retain their text.
+    Supported = z_language:editable_languages(Context),
+    Targets = case Supported of
+        [] -> [z_language:default_language(Context)];
+        _ -> Supported
     end,
-    NewPropsLang = maybe_set_langs(NewProps, Langs3),
-
-    % 4. Prune languages
-    NewPropsLangPruned = z_props:prune_languages(NewPropsLang, maps:get(<<"language">>, NewPropsLang)),
+    Sources = lists:uniq(filter_languages(Langs1)),
+    Mapping = z_language:language_map(Sources, Targets),
+    MappedTargets = [L || L <- Targets, lists:member(L, maps:values(Mapping))],
+    PreferredTargets = case MappedTargets of
+        [] -> Targets;
+        _ -> MappedTargets
+    end,
+    MappedProps = z_props:map_languages(NewProps, Mapping, PreferredTargets),
+    UsedLanguages = lists:usort(MappedTargets ++ z_props:extract_languages(MappedProps)),
+    Langs2 = case UsedLanguages of
+        [] -> [hd(Targets)];
+        _ -> UsedLanguages
+    end,
+    NewPropsLangPruned = maybe_set_langs(MappedProps, Langs2),
 
     % 5. Diff the update
     NewPropsLangPruned1 = set_forced_props(Id, clear_empty(NewPropsLangPruned, Context)),

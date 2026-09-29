@@ -22,12 +22,12 @@
                         <option value=""></option>
                         {% if query_id and not query_id|member:admin_queries %}
                             <option value="{{ query_id }}" selected>
-                                {{ query_id.title }}
+                                {{ query_id.title|default:[ _"Untitled query", " (", query_id|escape, ")" ] }}
                             </option>
                         {% endif %}
                         {% for id in admin_queries %}
                             <option value="{{ id }}" {% if id == query_id %}selected{% endif %}>
-                                {{ id.title }}
+                                {{ id.title|default:[ _"Untitled query", " (", query_id|escape, ")" ] }}
                             </option>
                         {% endfor %}
                     </select>
