@@ -443,6 +443,9 @@ string -> string_literal_long2 : unwrap('$1').
 
 Erlang code.
 
+% Yecc supplies this helper even when no grammar action uses it.
+-ignore_xref([return_error/2]).
+
 unwrap({_Token, _Line, Value}) -> Value;
 unwrap({_Token, Value}) -> Value;
 unwrap(Value) -> Value.
