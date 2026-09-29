@@ -175,7 +175,10 @@ restrict_collab_cats_intersects_cat_list_test() ->
     Result = acl_user_groups_checks:restrict_collab_cats(Lines, [11, 12]),
     ?assertEqual([{0, [11, 12]}, {1, [11]}], Result).
 
-person_can_edit_own_resource_test() ->
+person_can_edit_own_resource_test_() ->
+    {timeout, 30, fun person_can_edit_own_resource/0}.
+
+person_can_edit_own_resource() ->
     ContextAnon = context(),
     ContextSudo = z_acl:sudo(ContextAnon),
     with_test_group(
@@ -232,18 +235,43 @@ person_can_edit_own_resource_test() ->
                                     [{title, <<"Test">>}],
                                     ContextUser3)),
 
-                            {ok, _} = m_rsc:update(
-                                UserId1, [{title, "Test"}], ContextUser1),
-                            {ok, _} = m_rsc:update(
-                                UserId2, [{title, "Test"}], ContextUser1),
-                            {ok, _} = m_rsc:update(
-                                UserId3, [{title, "Test"}], ContextUser3)
+                            ?assertMatch({ok, UserId1}, m_rsc:update(
+                                UserId1, [{title, "Test"}], ContextUser1)),
+                            ?assertMatch({ok, UserId2}, m_rsc:update(
+                                UserId2, [{title, "Test"}], ContextUser1)),
+                            ?assertMatch({ok, UserId3}, m_rsc:update(
+                                UserId3, [{title, "Test"}], ContextUser3))
                         end)
                 end)
         end).
 
 
-person_can_insert_text_in_default_content_group_only_test() ->
+%% Reproduce the old helper's premature wakeup with an already queued message.
+%% Repeat real rule publication and authorization checks to exercise rebuild overlap.
+acl_rebuild_ignores_stale_notifications_test_() ->
+    {timeout, 30, fun() ->
+        lists:foreach(
+            fun(_) ->
+                Stale = {mqtt_msg, #{test_ref => make_ref()}},
+                self() ! Stale,
+                try
+                    person_can_edit_own_resource(),
+                    receive
+                        Stale -> ok
+                    after 0 ->
+                        error(stale_notification_consumed)
+                    end
+                after
+                    receive Stale -> ok after 0 -> ok end
+                end
+            end,
+            lists:seq(1, 3))
+    end}.
+
+person_can_insert_text_in_default_content_group_only_test_() ->
+    {timeout, 30, fun person_can_insert_text_in_default_content_group_only/0}.
+
+person_can_insert_text_in_default_content_group_only() ->
     Context = context(),
     SudoContext = z_acl:sudo(Context),
     with_test_group(
@@ -347,7 +375,10 @@ acl_is_allowed_override_test() ->
             end
         end).
 
-publish_test() ->
+publish_test_() ->
+    {timeout, 30, fun publish/0}.
+
+publish() ->
     Context = context(),
     with_managed_rules(
         [
@@ -431,22 +462,29 @@ with_resource(Props, InsertContext, DeleteContext, Fun) ->
         ok = m_rsc:delete(Id, DeleteContext)
     end.
 
+%% Publishing queues several asynchronous rebuilds. A single MQTT completion
+%% can describe an older rebuild; an unrelated mailbox message proves nothing.
+%% status/1 is sent after this process's rebuild casts, so it observes all of
+%% them. Wait for both queued and running work, not merely an existing ETS table.
 await_acl_rebuild(Context) ->
-    await_acl_rebuild(1000, Context).
+    await_acl_rebuild(erlang:monotonic_time(millisecond) + 5000, Context).
 
-await_acl_rebuild(0, _Context) ->
-    error(acl_rebuild_timeout);
-await_acl_rebuild(N, Context) ->
+await_acl_rebuild(Deadline, Context) ->
     {ok, Status} = mod_acl_user_groups:status(Context),
-    case {
-        proplists:get_value(is_rebuilding, Status),
-        proplists:get_value(is_rebuild_publish, Status)
-    } of
-        {false, false} ->
+    IsPending = lists:any(
+        fun(Key) -> proplists:get_value(Key, Status) =:= true end,
+        [is_rebuilding, is_rebuild_publish, is_rebuild_edit]),
+    case IsPending of
+        false ->
             ok;
-        _ ->
-            timer:sleep(10),
-            await_acl_rebuild(N - 1, Context)
+        true ->
+            case erlang:monotonic_time(millisecond) < Deadline of
+                true ->
+                    timer:sleep(10),
+                    await_acl_rebuild(Deadline, Context);
+                false ->
+                    error({acl_rebuild_timeout, Status})
+            end
     end.
 
 with_test_group(Context, Fun) ->

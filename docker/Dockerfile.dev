@@ -1,4 +1,4 @@
-FROM erlang:27.3.4
+FROM erlang:28.5
 
 # Start this image using ./start-docker.sh
 
@@ -15,7 +15,7 @@ WORKDIR /opt/zotonic
 # Install Zotonic runtime dependencies.
 # Git is necessary because rebar3 compile requires git.
 RUN apt-get update
-RUN apt-get -y install build-essential libcap2-bin libssl-dev automake autoconf \
+RUN apt-get -y install build-essential libcap2-bin libseccomp-dev libssl-dev automake autoconf \
         ncurses-dev zlib1g-dev git postgresql postgresql-client curl gettext \
         inotify-tools libnotify-bin clamav clamav-daemon ghostscript file \
         imagemagick ffmpeg xvfb wkhtmltopdf sass less vim \

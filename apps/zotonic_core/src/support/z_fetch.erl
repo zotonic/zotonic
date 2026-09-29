@@ -36,7 +36,7 @@
 -spec fetch(Url, Options, Context) -> z_url_fetch:fetch_result() when
     Url :: string() | binary(),
     Options :: z_url_fetch:options(),
-    Context :: z:context().
+    Context :: z:context() | undefined.
 fetch(Url, Options, Context) ->
     Url1 = z_convert:to_binary(Url),
     Options1 = add_options(get, Url1, Options, Context),
@@ -47,7 +47,7 @@ fetch(Url, Options, Context) ->
 -spec fetch_json(Url, Options, Context) -> {ok, JSON} | {error, term()} when
     Url :: string() | binary(),
     Options :: z_url_fetch:options(),
-    Context :: z:context(),
+    Context :: z:context() | undefined,
     JSON :: term().
 fetch_json(Url, Options, Context) ->
     Url1 = z_convert:to_binary(Url),
@@ -66,7 +66,7 @@ fetch_json(Url, Options, Context) ->
 -spec fetch_partial(Url, Options, Context) -> z_url_fetch:fetch_result() when
     Url :: string() | binary(),
     Options :: z_url_fetch:options(),
-    Context :: z:context().
+    Context :: z:context() | undefined.
 fetch_partial(Url, Options, Context) ->
     Url1 = z_convert:to_binary(Url),
     Options1 = add_options(get, Url1, Options, Context),
@@ -79,7 +79,7 @@ fetch_partial(Url, Options, Context) ->
     Url :: string() | binary(),
     Payload :: list() | binary() | map(),
     Options :: z_url_fetch:options(),
-    Context :: z:context(),
+    Context :: z:context() | undefined,
     Result :: z_url_fetch:fetch_result().
 fetch(Method, Url, Args, Options, Context) ->
     Url1 = z_convert:to_binary(Url),
@@ -121,7 +121,7 @@ fetch(Method, Url, Args, Options, Context) ->
     Url :: string() | binary(),
     Payload :: list() | binary() | map(),
     Options :: z_url_fetch:options(),
-    Context:: z:context(),
+    Context:: z:context() | undefined,
     Result :: {ok, term()} | {error, term()}.
 fetch_json(Method, Url, Args, Options, Context) ->
     Options1 = [
@@ -227,6 +227,10 @@ error_msg(_, Context) ->
 %% development sites are using self-signed certificates. The #url_fetch_options notification is
 %% used to add an authorization header or other option for a specific site. If no language is
 %% set in the options then the current context language is used for the preferred language.
+%% System tasks have no site for notifications or language defaults; they supply
+%% their TLS policy explicitly in Options.
+add_options(_Method, _Url, Options, undefined) ->
+    cleanup_options(Options);
 add_options(Method, Url, Options, Context) ->
     Options1 = case proplists:is_defined(insecure, Options) of
         false ->

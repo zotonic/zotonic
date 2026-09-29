@@ -194,7 +194,7 @@ full(Id, Context) when is_integer(Id) ->
                 <<"depiction_url">> => DepictionUrl,
                 <<"edges">> => edges(Id, ContextNoLang)
             },
-            {ok, Export}
+            {ok, z_notifier:foldl(#rsc_export_done{id = Id}, Export, ContextNoLang)}
     end;
 full(Id, Context) ->
     full(m_rsc:rid(Id, Context), Context).

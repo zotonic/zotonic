@@ -1558,7 +1558,7 @@ insert(Rsc, Type, Key, Props, Context) ->
         true ->
             RscId = m_rsc:rid(Rsc, Context),
             TypeB = z_convert:to_binary(Type),
-            KeyB = z_convert:to_binary(Key),
+            KeyB = z_convert:to_binary(KeyNorm),
             IsVerified = z_convert:to_bool(proplists:get_value(is_verified, Props, false)),
             F = fun(Ctx) -> insert_1(RscId, TypeB, KeyB, IsVerified, Props, Ctx) end,
             case z_db:transaction(F, Context) of

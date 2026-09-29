@@ -249,8 +249,8 @@ get_stats(ListId, Context) when is_integer(ListId) ->
     Counts = z_mailinglist_recipients:count_recipients(ListId, Context),
     Scheduled = z_db:q("
         select page_id
-        from mailinglist_scheduled
-        where mailinglist_id = $1
+        from mailinglist_run
+        where status='scheduled' and mailinglist_id = $1
         order by due", [ListId], Context),
     Counts#{
         scheduled => Scheduled
@@ -259,7 +259,7 @@ get_stats(ListId, Context) ->
     get_stats(m_rsc:rid(ListId, Context), Context).
 
 %% @doc Get the email status for all mailing lists where a rsc (content_id) has been sent to.
-%% The status is fetched from the email log, which is periodically truncated.
+%% Compatibility summary backed by durable mailing-run recipient counts.
 -spec get_rsc_stats(ContentId, Context) -> ListStatus when
     ContentId :: m_rsc:resource(),
     Context :: z:context(),
@@ -268,43 +268,31 @@ get_stats(ListId, Context) ->
     Statuslist :: list( binary() ).
 get_rsc_stats(undefined, _Context) ->
     [];
-get_rsc_stats(Id, Context) when is_integer(Id) ->
-    F = fun() ->
-        RsLog = z_db:q("
-            select other_id, min(created) as sent_on, count(distinct(envelop_to))
-            from log_email
-            where content_id = $1
-            group by other_id",
-            [Id],
-            Context),
-
-        Stats = lists:map(
-                    fun({ListId, Created, Total}) ->
-                        {ListId, [{created, Created}, {total, Total}]}
-                    end,
-                    RsLog),
-        %% merge in all mailer statuses
-        PerStatus = z_db:q("
-            select other_id, mailer_status, count(envelop_to)
-            from log_email
-            where content_id = $1
-            group by other_id, mailer_status",
-            [Id],
-            Context),
-
-        lists:foldl(
-            fun({ListId, Status, Count}, St) ->
-                z_utils:prop_replace(ListId,
-                                     [{z_convert:to_atom(Status), Count}|proplists:get_value(ListId, St, [])],
-                                     St)
-            end,
-            Stats,
-            PerStatus)
-    end,
-    %% Cache a short time to prevent database DOS while mail is sending
-    z_depcache:memo(F, {mailinglist_stats, Id}, 1, [Id], Context);
 get_rsc_stats(Id, Context) ->
-    get_rsc_stats(m_rsc:rid(Id, Context), Context).
+    Runs = m_mailinglist_run:list({page, m_rsc:rid(Id, Context)}, Context),
+    Latest = lists:foldl(
+        fun(R, Acc) ->
+            ListId = maps:get(<<"mailinglist_id">>, R),
+            case maps:is_key(ListId, Acc) of
+                true ->
+                    Acc;
+                false ->
+                    Stats = maps:get(<<"stats">>, R),
+                    Acc#{
+                        ListId => [
+                            {created, maps:get(<<"created">>, R)},
+                            {total, maps:get(<<"total">>, Stats, 0)},
+                            {sent, maps:get(<<"sent">>, Stats, 0)},
+                            {bounce, maps:get(<<"bounced">>, Stats, 0)},
+                            {error, maps:get(<<"failed">>, Stats, 0)}
+                        ]
+                    }
+            end
+        end,
+        #{},
+        Runs
+    ),
+    maps:to_list(Latest).
 
 
 %% @doc Fetch all enabled recipients from a list.
@@ -941,10 +929,11 @@ insert_scheduled(ListId, PageId, Context) ->
 
 %% @doc Insert a mailing to be send when the page becomes visible
 insert_scheduled(ListId, PageId, Options, Context) ->
-    Due = case m_rsc:p(PageId, <<"publication_start">>, Context) of
-        undefined -> ?ST_JUTTEMIS;
-        PublicationStart -> PublicationStart
-    end,
+    Due =
+        case m_rsc:p(PageId, <<"publication_start">>, Context) of
+            undefined -> ?ST_JUTTEMIS;
+            PublicationStart -> PublicationStart
+        end,
     insert_scheduled(ListId, PageId, <<"publication">>, Due, Options, Context).
 
 %% @doc Insert a mailing to be sent on a specific UTC date.
@@ -955,313 +944,110 @@ insert_scheduled(ListId, PageId, Options, Context) ->
     Due :: calendar:datetime() | undefined,
     Context :: z:context().
 insert_scheduled(ListId, PageId, Options, Due, Context) ->
-    Due1 = case Due of
-        undefined -> calendar:universal_time();
-        _ -> Due
-    end,
+    Due1 =
+        case Due of
+            undefined -> calendar:universal_time();
+            _ -> Due
+        end,
     insert_scheduled(ListId, PageId, <<"date">>, Due1, Options, Context).
 
 insert_scheduled(ListId, PageId, Type, Due, Options, Context) ->
-    case is_allowed_scheduled(ListId, PageId, Context) of
-        true ->
-            Exists = z_db:q1("
-                        select count(*)
-                        from mailinglist_scheduled
-                        where page_id = $1 and mailinglist_id = $2", [PageId,ListId], Context),
-            PickledContext = z_context:pickle(Context),
-            z_db:q("
-                insert into mailinglist_scheduled
-                    (page_id, mailinglist_id, props, type, due)
-                values
-                    ($1, $2, $3, $4, $5)
-                on conflict (page_id, mailinglist_id)
-                do update set
-                    props = $3,
-                    type = $4,
-                    due = $5,
-                    timestamp = now()
-                ",
-                [PageId, ListId, ?DB_PROPS([{options, Options}, {pickled_context, PickledContext}]), Type, Due],
-                Context),
-            Action = case Exists of
-                0 -> <<"insert">>;
-                _ -> <<"update">>
-            end,
-            publish_scheduled_event(ListId, PageId, Action, Context),
-            ok;
-        false ->
-            {error, eacces}
+    case m_mailinglist_run:create(ListId, PageId, Type, Due, Options, Context) of
+        {ok, _} -> ok;
+        {error, _} = Error -> Error
     end.
 
-
-%% @doc Delete a scheduled mailing
+%% Compatibility API: cancels only waiting runs. Active runs use their run id.
 delete_scheduled(ListId, PageId, Context) ->
-    case is_allowed_delete_scheduled(ListId, PageId, Context) of
-        true ->
-            case z_db:q("
-                    delete from mailinglist_scheduled
-                    where page_id = $1
-                      and mailinglist_id = $2",
-                    [PageId,ListId],
-                    Context)
-            of
-                0 ->
-                    0;
-                N when N > 0 ->
-                    publish_scheduled_event(ListId, PageId, <<"delete">>, Context),
-                    N
-            end;
-        false ->
-            {error, eacces}
-    end.
-
-is_allowed_scheduled(ListId, PageId, Context) ->
-    mod_mailinglist:is_allowed_to_send(ListId, PageId, Context).
-
-is_allowed_delete_scheduled(ListId, PageId, Context) ->
-    z_acl:is_sudo(Context)
-    orelse (
-        not z_acl:is_read_only(Context)
-        andalso z_acl:is_allowed(use, mod_mailinglist, Context)
-        andalso is_integer(ListId)
-        andalso m_rsc:is_a(ListId, mailinglist, Context)
-        andalso z_acl:rsc_editable(ListId, Context)
-        andalso is_integer(PageId)
-        andalso z_acl:rsc_visible(PageId, Context)
-    ).
-
-
-%% @doc Get the list of scheduled mailings for a page.
--spec get_scheduled(PageId, Context) -> [ ListId ] when
-    PageId :: m_rsc:resource_id(),
-    Context :: z:context(),
-    ListId :: m_rsc:resource_id().
-get_scheduled(PageId, Context) ->
-    Lists = z_db:q("
-        select mailinglist_id
-        from mailinglist_scheduled
-        where page_id = $1", [PageId], Context),
-    [ ListId || {ListId} <- Lists ].
-
-
-%% @doc Return all pending mailing tasks for a page, grouped by mailing list id.
-%% Publication tasks have type publication; explicitly dated tasks have type
-%% date. Both include their UTC due date.
--spec get_mailing_tasks(PageId, Context) -> Tasks when
-    PageId :: m_rsc:resource_id(),
-    Context :: z:context(),
-    Tasks :: #{ m_rsc:resource_id() => [ map() ] }.
-get_mailing_tasks(PageId, Context) ->
-    WaitingMailings = z_db:assoc_props("
-        select mailinglist_id, type, due, props
-        from mailinglist_scheduled
-        where page_id = $1", [PageId], Context),
-    Tasks = [
-        mailing_task(
-            proplists:get_value(mailinglist_id, Mailing),
-            PageId,
-            proplists:get_value(type, Mailing),
-            proplists:get_value(due, Mailing),
-            proplists:get_value(pickled_context, Mailing))
-        || Mailing <- WaitingMailings
-    ],
-    lists:foldl(
-        fun(#{ <<"mailinglist_id">> := ListId } = Task, Acc) ->
-            case z_acl:rsc_visible(ListId, Context) of
-                true ->
-                    add_mailing_task(ListId, Task, Acc);
-                false ->
-                    Acc
+    Runs = m_mailinglist_run:list({page, PageId}, Context),
+    lists:foreach(
+        fun(R) ->
+            case {maps:get(<<"mailinglist_id">>, R), maps:get(<<"status">>, R)} of
+                {ListId, <<"scheduled">>} ->
+                    m_mailinglist_run:cancel(maps:get(<<"id">>, R), Context);
+                _ ->
+                    ok
             end
         end,
-        #{},
-        Tasks).
+        Runs
+    ),
+    ok.
 
+get_scheduled(PageId, Context) ->
+    [
+        maps:get(<<"mailinglist_id">>, R)
+     || R <- m_mailinglist_run:list({page, PageId}, Context),
+        maps:get(<<"status">>, R) =:= <<"scheduled">>
+    ].
 
-%% @doc Return all pending mailing tasks for resources and mailing lists visible
-%% to the current user.
--spec get_all_mailing_tasks(Context) -> Tasks when
-    Context :: z:context(),
-    Tasks :: [ map() ].
-get_all_mailing_tasks(Context) ->
-    WaitingMailings = z_db:assoc_props("
-        select mailinglist_id, page_id, type, due, props
-        from mailinglist_scheduled
-        order by due, timestamp", Context),
-    Tasks = [
-        mailing_task(
-            proplists:get_value(mailinglist_id, Mailing),
-            proplists:get_value(page_id, Mailing),
-            proplists:get_value(type, Mailing),
-            proplists:get_value(due, Mailing),
-            proplists:get_value(pickled_context, Mailing))
-        || Mailing <- WaitingMailings
-    ],
-    lists:filter(
-        fun(#{ <<"mailinglist_id">> := ListId, <<"page_id">> := PageId }) ->
-            z_acl:rsc_visible(ListId, Context) andalso z_acl:rsc_visible(PageId, Context)
+get_mailing_tasks(PageId, Context) ->
+    lists:foldl(
+        fun(R, Acc) ->
+            List = maps:get(<<"mailinglist_id">>, R),
+            maps:update_with(List, fun(Rs) -> [R | Rs] end, [R], Acc)
         end,
-        Tasks).
+        #{},
+        [
+            R
+         || R <- m_mailinglist_run:list({page, PageId}, Context),
+            maps:get(<<"status">>, R) =:= <<"scheduled">>
+        ]
+    ).
 
-mailing_task(ListId, PageId, Type, Due, PickledContext) ->
-    {SenderId, Language} = mailing_context_metadata(PickledContext),
-    #{
-        <<"type">> => Type,
-        <<"due">> => Due,
-        <<"mailinglist_id">> => ListId,
-        <<"page_id">> => PageId,
-        <<"sender_id">> => SenderId,
-        <<"language">> => Language
-    }.
+get_all_mailing_tasks(Context) ->
+    [R || R <- m_mailinglist_run:list(all, Context), maps:get(<<"status">>, R) =:= <<"scheduled">>].
 
-mailing_context_metadata(PickledContext) ->
-    case depickle_context(PickledContext) of
-        {ok, #context{ user_id = SenderId } = MailingContext} ->
-            {SenderId, z_context:language(MailingContext)};
-        {error, _} ->
-            {undefined, undefined}
-    end.
-
-depickle_context({pickled_context, _, _, _, _} = PickledContext) ->
-    depickle_context_1(PickledContext);
-depickle_context({pickled_context, _, _, _, _, _} = PickledContext) ->
-    depickle_context_1(PickledContext);
-depickle_context({pickled_context, _, 2, State} = PickledContext) when is_map(State) ->
-    depickle_context_1(PickledContext);
-depickle_context(_PickledContext) ->
-    {error, missing_context}.
-
-depickle_context_1(PickledContext) ->
-    try z_context:depickle(PickledContext) of
-        #context{} = MailingContext -> {ok, MailingContext}
-    catch
-        _:_ -> {error, invalid_context}
-    end.
-
-add_mailing_task(ListId, Task, Tasks) ->
-    maps:update_with(ListId, fun(List) -> List ++ [Task] end, [Task], Tasks).
-
-
-%% @doc Update the due date of publication mailings after their page was pivoted.
--spec update_scheduled_publication_due(PageId, Context) -> non_neg_integer() when
-    PageId :: m_rsc:resource_id(),
-    Context :: z:context().
 update_scheduled_publication_due(PageId, Context) ->
-    case z_db:q("
-        update mailinglist_scheduled m
-        set due = coalesce(r.publication_start, $2)
-        from rsc r
-        where m.page_id = $1
-          and m.page_id = r.id
-          and m.type = 'publication'",
+    z_db:q(
+        "update mailinglist_run m set due=coalesce(r.publication_start,$2)
+        from rsc r where m.page_id=$1 and r.id=m.page_id
+        and m.type='publication' and m.status='scheduled'",
         [PageId, ?ST_JUTTEMIS],
-        Context)
-    of
-        0 ->
-            0;
-        N when is_integer(N) ->
-            _ = publish_scheduled_event(undefined, PageId, <<"update">>, Context),
-            N
-    end.
+        Context
+    ).
 
+next_scheduled(Context) -> m_mailinglist_run:next_due(Context).
 
-%% @doc Return when the next actionable mailing should be checked. Publication
-%% mailings for unpublished pages are ignored until the page is pivoted again.
--spec next_scheduled(Context) -> calendar:datetime() | undefined when
-    Context :: z:context().
-next_scheduled(Context) ->
-    z_db:q1("
-        select min(m.due)
-        from mailinglist_scheduled m
-        left join rsc r on r.id = m.page_id
-        where m.type = 'date'
-           or (
-                m.type = 'publication'
-                and r.is_published
-                and r.publication_start <= m.due
-                and r.publication_end >= greatest(current_timestamp, m.due)
-           )",
-        Context).
-
-
-%% @doc Fetch the next dated mailing that is due, or publication mailing whose
-%% page is published and in its publication date range.
--spec check_scheduled(Context) -> undefined | Mailing when
-    Context :: z:context(),
-    Mailing :: { ListId, PageId, Options, PickledContext },
-    ListId :: m_rsc:resource_id(),
-    PageId :: m_rsc:resource_id(),
-    Options :: mod_mailinglist:mailing_options(),
-    PickledContext :: tuple() | undefined.
+%% Retained for callers inspecting the queue; claiming is internal to the worker.
 check_scheduled(Context) ->
-    case z_db:assoc_props_row("
-        select m.*
-        from mailinglist_scheduled m
-        where (m.type = 'date' and m.due <= now())
-           or (
-                m.type = 'publication'
-                and m.due <= now()
-                and (
-                    select r.is_published
-                       and r.publication_start <= now()
-                       and r.publication_end >= now()
-                    from rsc r
-                    where r.id = m.page_id
-                )
-           )
-        order by m.due, m.timestamp
-        limit 1", Context)
+    case
+        z_db:assoc_props_row(
+            "select m.* from mailinglist_run m join rsc r on r.id=m.page_id
+        where m.status='scheduled' and m.due<=now() and (m.type='date' or
+        (r.is_published and r.publication_start<=now() and r.publication_end>=now()))
+        order by m.due limit 1",
+            Context
+        )
     of
         undefined ->
             undefined;
-        Row ->
+        R ->
             {
-                proplists:get_value(mailinglist_id, Row),
-                proplists:get_value(page_id, Row),
-                proplists:get_value(options, Row, []),
-                proplists:get_value(pickled_context, Row)
+                proplists:get_value(mailinglist_id, R),
+                proplists:get_value(page_id, R),
+                proplists:get_value(options, R, []),
+                proplists:get_value(pickled_context, R)
             }
     end.
 
+%% Delivery history is immutable. Callers must create an explicit resend run.
+reset_log_email(_ListId, _PageId, _Context) -> {error, history_preserved}.
 
-%% @doc Reset the email log for given list/page combination, allowing one to send the same page again to the given list.
--spec reset_log_email(ListId, PageId, Context) -> ok | {error, eacces} when
-    ListId :: m_rsc:resource_id(),
-    PageId :: m_rsc:resource_id(),
-    Context :: z:context().
-reset_log_email(ListId, PageId, Context) ->
-    case is_allowed_scheduled(ListId, PageId, Context) of
-        true ->
-            z_db:q("delete from log_email where other_id = $1 and content_id = $2", [ListId, PageId], Context),
-            z_depcache:flush({mailinglist_stats, PageId}, Context),
-            publish_scheduled_event(ListId, PageId, <<"reset">>, Context),
-            ok;
-        false ->
-            {error, eacces}
-    end.
-
-publish_scheduled_event(ListId, PageId, Action, Context) ->
-    z_mqtt:publish(
-        [<<"model">>, <<"mailinglist">>, <<"event">>, PageId, <<"scheduled">>],
-        #{ id => PageId, list_id => ListId, action => Action },
-        Context).
-
-
-%% @doc Get the "from" address used for this mailing list. Looks first in the mailinglist rsc for a ' mailinglist_reply_to' field; falls back to site.email_from config variable.
+%% @doc Get the sender using the mailinglist address, then mod_mailinglist.email_from,
+%% then site.email_from. Preserve the mailinglist's sender name.
 get_email_from(ListId, Context) ->
-    FromEmail = case m_rsc:p(ListId, <<"mailinglist_reply_to">>, Context) of
-                    Empty when Empty =:= undefined; Empty =:= <<>> ->
-                        z_convert:to_binary(m_config:get_value(site, email_from, Context));
-                    RT ->
-                        z_convert:to_binary(RT)
-                end,
-    FromName = case m_rsc:p(ListId, <<"mailinglist_sender_name">>, Context) of
-                  undefined -> <<>>;
-                  <<>> -> <<>>;
-                  SenderName -> z_convert:to_binary(SenderName)
-               end,
+    FromEmail = case z_convert:to_binary(m_rsc:p(ListId, <<"mailinglist_reply_to">>, Context)) of
+        <<>> -> default_email_from(Context);
+        Address -> Address
+    end,
+    FromName = z_convert:to_binary(m_rsc:p(ListId, <<"mailinglist_sender_name">>, Context)),
     z_email:combine_name_email(FromName, FromEmail).
 
+default_email_from(Context) ->
+    case z_convert:to_binary(m_config:get_value(mod_mailinglist, email_from, Context)) of
+        <<>> -> z_convert:to_binary(m_config:get_value(site, email_from, Context));
+        Address -> Address
+    end.
 
 
 %% @doc Get all recipients with this email address.

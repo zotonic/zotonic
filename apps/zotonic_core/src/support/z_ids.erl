@@ -127,13 +127,9 @@ optid(Id) ->
 -spec sign_key(Context::term()) -> binary().
 %% @doc Get the key for signing requests stored in the user agent.
 sign_key(Context) ->
-    case m_config:get_value(site, sign_key, Context) of
-        undefined ->
-            Key = sign_key(),
-            m_config:set_value(site, sign_key, Key, Context),
-            Key;
+    case z_convert:to_binary(m_config:get_value(site, sign_key, Context)) of
         <<>> ->
-            application_key(sign_key);
+            ensure_sign_key(sign_key, fun sign_key/0, Context);
         SignKey ->
             SignKey
     end.
@@ -146,13 +142,9 @@ sign_key() ->
 -spec sign_key_simple(Context::term()) -> binary().
 %% @doc Get the key for less secure signing of data (without nonce).
 sign_key_simple(Context) ->
-    case m_config:get_value(site, sign_key_simple, Context) of
-        undefined ->
-            Key = sign_key_simple(),
-            m_config:set_value(site, sign_key_simple, Key, Context),
-            Key;
+    case z_convert:to_binary(m_config:get_value(site, sign_key_simple, Context)) of
         <<>> ->
-            application_key(sign_key_simple);
+            ensure_sign_key(sign_key_simple, fun sign_key_simple/0, Context);
         SignKey ->
             SignKey
     end.
@@ -161,20 +153,6 @@ sign_key_simple(Context) ->
 %% @doc Generate a key for less secure signing of data (without nonce).
 sign_key_simple() ->
     random_id('azAZ09', ?SIGN_KEY_SIMPLE_LENGTH).
-
--spec application_key(atom()) -> binary().
-%% @doc Set/get a default sign key for the zotonic core functions.
-%% Returns a binary of 50 random numbers and upper and lower case
-%% characters.
-application_key(Name) when is_atom(Name) ->
-    case application:get_env(zotonic_core, Name) of
-        undefined ->
-            Key = random_id('azAZ09', 50),
-            application:set_env(zotonic_core, Name, Key),
-            Key;
-        {ok, Key} ->
-            Key
-    end.
 
 -spec number() -> pos_integer().
 %% @doc Equivalent to `number(1000000000)'.
@@ -191,6 +169,34 @@ number(Max) ->
 %%%--------------------------------------------------------------------------
 %%% Internal functions
 %%%--------------------------------------------------------------------------
+
+%% Serialize initialization across sites, as the fallback key is node-wide.
+-spec ensure_sign_key(Name, Generate, Context) -> Key
+    when
+        Name :: sign_key | sign_key_simple,
+        Generate :: fun(() -> binary()),
+        Context :: z:context(),
+        Key :: binary().
+ensure_sign_key(Name, Generate, Context) ->
+    case application:get_env(zotonic_core, Name) of
+        undefined ->
+            global:trans(
+                {{?MODULE, Name}, self()},
+                fun() ->
+                    case z_convert:to_binary(m_config:get_value(site, Name, Context)) of
+                        <<>> ->
+                            Key = Generate(),
+                            m_config:set_value(site, Name, Key, Context),
+                            Key;
+                        Key ->
+                            Key
+                    end
+                end,
+                [node()]);
+        {ok, Key} ->
+            Key
+    end.
+
 
 -spec make_unique() -> binary().
 %% @doc Create an unique temporary id, safe to use in html and javascript.

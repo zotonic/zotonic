@@ -57,22 +57,12 @@ upload(QueueId, Path, Status, MediaInfo, Context) ->
             {error, running}
     end.
 
-upload_job(QueueId, Path, {ok, Entry}, MediaInfo, Context) ->
-    z_context:logger_md(Context),
-    Name = {?MODULE, Path},
-    case z_proc:register(Name, self(), Context) of
-        ok ->
-            ?LOG_DEBUG(#{
-                text => <<"Started uploader">>,
-                in => zotonic_mod_filestore,
-                src => Path,
-                queue_id => QueueId
-            }),
-            try_upload(Entry, QueueId, Path, MediaInfo, Context);
-        {error, duplicate} ->
-            ok
-    end;
+upload_job(QueueId, Path, {ok, _Entry}, MediaInfo, Context) ->
+    upload_job_1(QueueId, Path, MediaInfo, Context);
 upload_job(QueueId, Path, {error, enoent}, MediaInfo, Context) ->
+    upload_job_1(QueueId, Path, MediaInfo, Context).
+
+upload_job_1(QueueId, Path, MediaInfo, Context) ->
     z_context:logger_md(Context),
     Name = {?MODULE, Path},
     case z_proc:register(Name, self(), Context) of
@@ -83,13 +73,31 @@ upload_job(QueueId, Path, {error, enoent}, MediaInfo, Context) ->
                 src => Path,
                 queue_id => QueueId
             }),
-            try_upload(undefined, QueueId, Path, MediaInfo, Context);
+            % The lookup passed to upload_job/5 can be stale if this sidejob was
+            % waiting to start while another uploader finished the same path.
+            try_upload(lookup(Path, Context), QueueId, Path, MediaInfo, Context);
         {error, duplicate} ->
             ok
     end.
 
 %%% ------ Support routines --------
 
+lookup(Path, Context) ->
+    case m_filestore:lookup(Path, Context) of
+        {ok, Entry} -> Entry;
+        {error, enoent} -> undefined;
+        {error, Reason} -> {error, Reason}
+    end.
+
+try_upload({error, Reason}, _QueueId, Path, _MInfo, _Context) ->
+    ?LOG_ERROR(#{
+        text => <<"Filestore upload error reading file entry">>,
+        in => zotonic_mod_filestore,
+        path => Path,
+        result => error,
+        reason => Reason
+    }),
+    {error, Reason};
 try_upload(MaybeEntry, QueueId, Path, MInfo, Context) ->
     case m_filestore:is_upload_ok(MaybeEntry) of
         true ->
@@ -184,13 +192,11 @@ finish_upload(ok, Path, AbsPath, Size, #filestore_credentials{service=Service, l
         result => ok
     }),
     IsLocalKeep = filestore_config:is_local_keep(Context),
-    case IsLocalKeep of
-        true ->
-            {ok, _} = m_filestore:store(Path, Size, Service, Location, IsLocalKeep, Context),
+    case m_filestore:store(Path, Size, Service, Location, IsLocalKeep, Context) of
+        {ok, _} when IsLocalKeep ->
             ok;
-        false ->
+        {ok, _} ->
             FzCache = start_empty_cache_entry(Location),
-            {ok, _} = m_filestore:store(Path, Size, Service, Location, IsLocalKeep, Context),
             % Make sure that the file entry is not serving the relocated file from the file system.
             pause_file_entry(Path, Context),
             AbsPathTmp = <<AbsPath/binary, "~">>,
@@ -213,7 +219,17 @@ finish_upload(ok, Path, AbsPath, Size, #filestore_credentials{service=Service, l
                     }),
                     file:delete(AbsPathTmp),
                     ok
-            end
+            end;
+        {error, Reason} ->
+            ?LOG_ERROR(#{
+                text => <<"Filestore error storing uploaded file entry, will retry">>,
+                in => zotonic_mod_filestore,
+                result => error,
+                reason => Reason,
+                location => Location,
+                src => Path
+            }),
+            retry
     end;
 finish_upload({error, Reason}, Path, _AbsPath, _Size, #filestore_credentials{service=Service, location=Location}, _Context)
     when Reason =:= enoent; Reason =:= epath ->

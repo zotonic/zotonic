@@ -24,7 +24,8 @@
     recipient_key_decode/2,
 
     count_recipients/2,
-    list_recipients/2
+    list_recipients/2,
+    list_candidates/2
     ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -146,15 +147,21 @@ count_recipients(ListId, Context) ->
 
 %% @doc Fetch all (enabled) recipients of a mailinglist.
 -spec list_recipients( m_rsc:resource(), z:context() ) -> map().
-list_recipients(List, Context) ->
+list_recipients(List, Context) -> list_recipients(List, false, Context).
+
+%% Include suppressed subscriptions for durable mailing-run reporting.
+list_candidates(List, Context) -> list_recipients(List, true, Context).
+
+list_recipients(List, IncludeSkipped, Context) ->
     ListId = m_rsc:rid(List, Context),
     {ok, Recipients} = m_mailinglist:list_recipients(ListId, Context),
     Rs = lists:foldl(
         fun
             (#{ <<"is_enabled">> := true, <<"email">> := Email } = R, Acc) ->
                 Acc#{ Email => R };
-            (_, Acc) ->
-                Acc
+            (#{ <<"email">> := Email } = R, Acc) when IncludeSkipped ->
+                Acc#{ Email => R#{ <<"skip_reason">> => <<"Subscription disabled">> } };
+            (_, Acc) -> Acc
         end,
         #{},
         Recipients),
@@ -180,7 +187,10 @@ list_recipients(List, Context) ->
                         reason => Reason,
                         stack => Stack
                     }),
-                    []
+                    case IncludeSkipped of
+                        true -> error({mailinglist_query_failed,Reason});
+                        false -> []
+                    end
             end
     end,
     AllIds = lists:usort(SubIds ++ QueryIds),
@@ -196,7 +206,14 @@ list_recipients(List, Context) ->
                         Email => Id
                     };
                 false ->
-                    Acc
+                    case IncludeSkipped andalso z_acl:rsc_visible(Id,Context) of
+                        true ->
+                            Email = m_rsc:p_no_acl(Id, <<"email_raw">>, Context),
+                            Acc#{Email => #{<<"rsc_id">> => Id,
+                                <<"pref_language">> => m_rsc:p_no_acl(Id,pref_language,Context),
+                                <<"skip_reason">> => <<"Unpublished or opted out">>}};
+                        false -> Acc
+                    end
             end
         end,
         Rs,

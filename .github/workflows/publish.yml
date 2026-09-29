@@ -43,10 +43,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v7
-      - name: Add user Zotonic
+      - name: Install build dependencies and add user Zotonic
         run: |
           apt-get update
-          apt-get -y install sudo
+          apt-get -y install sudo libseccomp-dev
           adduser --disabled-login zotonic
       - name: Compile
         run: |
@@ -64,7 +64,8 @@ jobs:
         run: |
           ZOTONIC_DBHOST=postgres bin/zotonic connectdb
           chown -R zotonic .
-          sudo -u zotonic bash -c "ZOTONIC_DBHOST=postgres bin/zotonic runtests"
+          # erlexec uses SHELL; the disabled-login account has a non-login shell.
+          sudo -u zotonic env SHELL=/bin/sh ZOTONIC_DBHOST=postgres bin/zotonic runtests
       - name: XRef
         run: make xref
       - name: Publish

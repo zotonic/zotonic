@@ -142,22 +142,23 @@ email address.
 
 ### Sending mailings
 
-The status page lists every mailing list in the system. On each row you see how many recipients the list has, and the
-status, e.g. if the mailing has already been sent to this list or not.
+Each send is stored as a durable mailing run, including single-address tests.
+The Send mailing page selects the list, rendering language, audience, resend
+policy and timing. A review step estimates eligible and skipped recipients.
+Confirmation opens the run's live status page.
 
-By default a mailing is queued for immediate sending. It can also be scheduled for a specific date and time. This
-explicit date is independent of the publication period, just like sending immediately.
+Mailings can run immediately, at a selected date, or when the page becomes
+published. Separate runs can send the same page/list in different languages.
+The queue task claims runs atomically. Its presence and interrupted workers
+are checked every minute. Test mailings run immediately.
 
-For pages that are not yet public, a mailing can instead wait until the page is published and within its publication
-period. Dated and publication-dependent mailings are stored together in the mailinglist_scheduled table. A one-shot
-task checks the queue when the next mailing is due. The module verifies this task on startup and every two hours.
+Delivery notifications update mailinglist_run_recipient and mailinglist_run_message;
+mailinglist_run_stats maintains per-language state counts. Email logs are never
+used for progress or duplicate detection. Sent means accepted by the mail
+server; late bounces update results. Explicit retry/resend runs preserve history.
 
-All mailings to a mailing list are first stored in mailinglist_scheduled, including mailings that should be sent
-immediately. The only exception is a test mailing to a single e-mail address, which is sent directly.
-
-An exception is made for the test mailing list. A resource does not need to be published to be mailed to this list,
-but the sender must be allowed to view the resource. Test-list mailings are always sent immediately and cannot be
-scheduled.
+The Mailings admin page shows runs separately from Mailing lists management.
+Both page and list resource editors include live status panels.
 
 Accepted Events
 ---------------
@@ -183,8 +184,8 @@ Delegate callbacks:
 -mod_title("Mailing list").
 -mod_description("Mailing lists. Send a page to a list of recipients.").
 -mod_prio(600).
--mod_schema(4).
--mod_depends([ admin, mod_wires, mod_logging, mod_email_status ]).
+-mod_schema(7).
+-mod_depends([ admin, mod_wires, mod_email_status ]).
 -mod_provides([ mailinglist ]).
 -mod_config([
         #{
@@ -192,8 +193,8 @@ Delegate callbacks:
             type => string,
             default => "",
             description => "The email address used as the 'From' of mailings, used if the "
-                           "property 'mailinglist_reply_to' is not set on the mailinglist. Defaults to the smtpfrom "
-                           "email address."
+                           "property 'mailinglist_reply_to' is not set on the mailinglist. If empty, falls back to "
+                           "site.email_from and ultimately the default email sender."
         },
         #{
             key => send_confirm,
@@ -223,6 +224,10 @@ Delegate callbacks:
     observe_mailinglist_message/2,
     observe_rsc_pivot_done/2,
     observe_tick_24h/2,
+    observe_tick_1h/2,
+    observe_email_sent/2,
+    observe_email_failed/2,
+    observe_email_bounced/2,
     event/2,
     observe_admin_menu/3,
     queue_mailing/4,
@@ -247,7 +252,15 @@ Delegate callbacks:
 
 -type mailing_options() :: [ mailing_option() ].
 -type mailing_option() :: {is_match_language, boolean()}
-                        | {is_send_all, boolean()}.
+                        | {is_send_all, boolean()}
+                        | {language, binary() | atom()}
+                        | {fallback_language, binary() | atom()}
+                        | {language_policy, binary()}
+                        | {audience, binary()}
+                        | {send_mode, binary()}
+                        | {parent_id, integer()}
+                        | {request_key, binary()}
+                        | {single_test_address, binary()}.
 
 -export_type([
     mailing_options/0,
@@ -255,7 +268,7 @@ Delegate callbacks:
 ]).
 
 %% Periodically verify that the one-shot scheduled-mailing task is present.
--define(MAILING_CHECK_TASK_INTERVAL, 2 * ?HOUR * 1000).
+-define(MAILING_CHECK_TASK_INTERVAL, 60 * 1000).
 -define(MAILING_POLL_TASK_KEY, <<"scheduled-mailings">>).
 -define(MAILING_POLL_OVERLOAD_DELAY, 10).
 -define(MAILING_STARTUP_DELAY, 60).
@@ -337,6 +350,10 @@ observe_mailinglist_message(#mailinglist_message{what=Message, list_id=ListId, r
     z_email:send_render(Email, Template, Vars, z_acl:sudo(Context1)),
     ok.
 
+%% @doc Remove expired mailing details in bounded hourly batches.
+observe_tick_1h(tick_1h, Context) ->
+    m_mailinglist_run:periodic_cleanup(Context).
+
 %% @doc Every 24h cleanup the mailinglists recipients.
 observe_tick_24h(tick_24h, Context) ->
     m_mailinglist:periodic_cleanup(Context).
@@ -351,8 +368,47 @@ observe_rsc_pivot_done(#rsc_pivot_done{ id = Id }, Context) ->
     ok.
 
 
+%% Delivery events carry a stable email message number, not a mailing resource id.
+observe_email_sent(#email_sent{message_nr = Id, is_final = Final}, Context) ->
+    m_mailinglist_run:message(Id, <<"sent">>, Final, 0, undefined, Context).
+observe_email_failed(
+    #email_failed{
+        message_nr = Id,
+        is_final = Final,
+        reason = Reason,
+        retry_ct = Retry,
+        status = Detail
+    },
+    Context
+) ->
+    State =
+        case {Final, Reason} of
+            {_, bounce} -> <<"bounced">>;
+            {false, _} -> <<"retrying">>;
+            {true, _} -> <<"failed">>
+        end,
+    m_mailinglist_run:message(Id, State, Final, Retry, {Reason, Detail}, Context).
+observe_email_bounced(#email_bounced{message_nr = Id}, Context) ->
+    m_mailinglist_run:message(Id, <<"bounced">>, true, 0, <<"Bounced">>, Context).
+
 %% @doc Request confirmation of canceling this mailing.
-event(#postback{message={dialog_mailing_cancel_confirm, Args}}, Context) ->
+event(#postback{message = {mailing_run_resend, Args}}, Context) ->
+    case
+        m_mailinglist_run:resend(
+            proplists:get_value(run_id, Args), proplists:get_value(mode, Args), Context
+        )
+    of
+        {ok, Id} ->
+            ensure_scheduled_task(Context),
+            z_render:wire({redirect, [{dispatch, admin_mailing_run}, {run_id, Id}]}, Context);
+        {error, _} ->
+            z_render:growl_error(?__("Could not create another mailing.", Context), Context)
+    end;
+event(#postback{message = {mailing_run_cancel, Args}}, Context) ->
+    run_action(cancel, proplists:get_value(run_id, Args), Context);
+event(#postback{message = {mailing_run_resume, Args}}, Context) ->
+    run_action(resume, proplists:get_value(run_id, Args), Context);
+event(#postback{message = {dialog_mailing_cancel_confirm, Args}}, Context) ->
     {list_id, MailingId} = proplists:lookup(list_id, Args),
     case is_allowed_mailing(MailingId, Context) of
         true ->
@@ -360,61 +416,63 @@ event(#postback{message={dialog_mailing_cancel_confirm, Args}}, Context) ->
                 ?__("Confirm mailing cancelation.", Context),
                 "_dialog_mailing_cancel_confirm.tpl",
                 Args,
-                Context);
+                Context
+            );
         false ->
-            z_render:growl_error(?__("You are not allowed to cancel this mailing.", Context), Context)
+            z_render:growl_error(
+                ?__("You are not allowed to cancel this mailing.", Context), Context
+            )
     end;
-event(#postback{message={mailing_cancel, Args}}, Context) ->
+event(#postback{message = {mailing_cancel, Args}}, Context) ->
     MailingId = proplists:get_value(list_id, Args),
     PageId = proplists:get_value(page_id, Args),
-    case is_allowed_mailing(MailingId, Context)
-        andalso m_rsc:is_a(MailingId, mailinglist, Context)
-        andalso z_acl:rsc_visible(PageId, Context)
+    case
+        is_allowed_mailing(MailingId, Context) andalso
+            m_rsc:is_a(MailingId, mailinglist, Context) andalso
+            z_acl:rsc_visible(PageId, Context)
     of
         true ->
             _ = m_mailinglist:delete_scheduled(MailingId, PageId, Context),
             ok = ensure_scheduled_task(Context),
             z_render:growl(?__("The mailing has been canceled.", Context), Context);
         false ->
-            z_render:growl_error(?__("You are not allowed to cancel this mailing.", Context), Context)
+            z_render:growl_error(
+                ?__("You are not allowed to cancel this mailing.", Context), Context
+            )
     end;
-event(#postback{message={mailinglist_reset, Args}}, Context) ->
-    MailingId = proplists:get_value(list_id, Args),
-    PageId = proplists:get_value(page_id, Args),
-    case is_allowed_to_send(MailingId, PageId, Context) of
-        true ->
-            m_mailinglist:reset_log_email(MailingId, PageId, Context),
-            z_render:growl(?__("The statistics have been cleared.", Context), Context);
-        false ->
-            z_render:growl_error(?__("You are not allowed to reset this mailing.", Context), Context)
-    end;
-event(#postback{message={mailing_page_redirect, Args}}, Context) ->
+event(#postback{message = {mailing_page_redirect, Args}}, Context) ->
     PageId = m_rsc:rid(proplists:get_value(select_id, Args), Context),
     ListId = m_rsc:rid(proplists:get_value(list_id, Args), Context),
     case PageId of
         Id when is_integer(Id) ->
             case m_rsc:is_a(Id, mailinglist, Context) of
                 true ->
-                    z_render:growl_error(?__("A mailing list cannot be sent as a mailing.", Context), Context);
+                    z_render:growl_error(
+                        ?__("A mailing list cannot be sent as a mailing.", Context), Context
+                    );
                 false ->
                     case is_allowed_to_send(ListId, Id, Context) of
                         true ->
                             z_render:wire(
-                                {redirect, [{dispatch, admin_mailing_status}, {id, Id}, {list_id, ListId}]},
-                                Context);
+                                {redirect, [
+                                    {dispatch, admin_mailing_status}, {id, Id}, {list_id, ListId}
+                                ]},
+                                Context
+                            );
                         false ->
-                            z_render:growl_error(?__("You are not allowed to send this page.", Context), Context)
+                            z_render:growl_error(
+                                ?__("You are not allowed to send this page.", Context), Context
+                            )
                     end
             end;
         undefined ->
             z_render:growl_error(?__("The selected page could not be found.", Context), Context)
     end;
-
 %% @doc Handle upload of a new recipients list
-event(#submit{message={mailinglist_upload,[{id,MailingId}]}}, Context) ->
+event(#submit{message = {mailinglist_upload, [{id, MailingId}]}}, Context) ->
     case is_allowed_mailing(MailingId, Context) of
         true ->
-            #upload{tmpfile=TmpFile} = z_context:get_q_validated(<<"file">>, Context),
+            #upload{tmpfile = TmpFile} = z_context:get_q_validated(<<"file">>, Context),
             IsTruncate = z_convert:to_bool(z_context:get_q(<<"truncate">>, Context)),
             case import_file(TmpFile, IsTruncate, MailingId, Context) of
                 ok ->
@@ -439,26 +497,47 @@ event(#submit{message={mailinglist_upload,[{id,MailingId}]}}, Context) ->
                     z_render:growl(Msg1, <<"error">>, true, Context)
             end;
         false ->
-            z_render:growl_error(?__("You are not allowed to reset this mailing.", Context), Context)
+            z_render:growl_error(
+                ?__("You are not allowed to reset this mailing.", Context), Context
+            )
     end;
-
 %% @doc Handle the test-sending of a page to a single address.
-event(#submit{message={mailing_testaddress, [{id, PageId}]}}, Context) ->
+event(#submit{message = {mailing_testaddress, [{id, PageId}]}}, Context) ->
     case is_allowed_to_send(PageId, Context) of
         true ->
             Email = z_context:get_q_validated(<<"email">>, Context),
-            z_notifier:notify(#mailinglist_mailing{
-                    email = Email,
-                    page_id = PageId
-                }, Context),
-            Context1 = z_render:growl([?__("Sending the page to", Context), " ", Email, "..."], Context),
-            z_render:wire([{dialog_close, []}], Context1);
+            ListId = m_rsc:rid(mailinglist_test, Context),
+            Language = z_context:get_q(<<"mailing_language">>, Context, <<>>),
+            Options = [
+                {single_test_address, Email},
+                {language, Language},
+                {is_send_all, true},
+                {audience, <<"all">>}
+            ],
+            case
+                m_mailinglist_run:create(
+                    ListId, PageId, <<"date">>, calendar:universal_time(), Options, Context
+                )
+            of
+                {ok, RunId} ->
+                    ensure_scheduled_task(Context),
+                    z_render:wire(
+                        [
+                            {dialog_close, []},
+                            {redirect, [{dispatch, admin_mailing_run}, {run_id, RunId}]}
+                        ],
+                        Context
+                    );
+                {error, _} ->
+                    z_render:growl_error(
+                        ?__("Check the test mailing list and language selection.", Context), Context
+                    )
+            end;
         false ->
             z_render:growl_error(?__("You are not allowed to send this page.", Context), Context)
     end;
-
 %% @doc Combine lists
-event(#submit{message={mailinglist_combine,[{id,Id}]}}, Context) ->
+event(#submit{message = {mailinglist_combine, [{id, Id}]}}, Context) ->
     TargetId = z_convert:to_integer(z_context:get_q(<<"list_id">>, Context)),
     Operation = operation(z_context:get_q(<<"operation">>, Context)),
     case m_mailinglist:recipient_set_operation(Operation, Id, TargetId, Context) of
@@ -467,8 +546,7 @@ event(#submit{message={mailinglist_combine,[{id,Id}]}}, Context) ->
         {error, Msg} ->
             z_render:growl(Msg, "error", true, Context)
     end;
-
-event(#postback{ message = {mailinglist_unsubscribe, Args} }, Context) ->
+event(#postback{message = {mailinglist_unsubscribe, Args}}, Context) ->
     {mailinglist_id, MailingId} = proplists:lookup(mailinglist_id, Args),
     OnSuccess = proplists:get_all_values(on_success, Args),
     OnError = proplists:get_all_values(on_error, Args),
@@ -492,7 +570,9 @@ event(#postback{ message = {mailinglist_unsubscribe, Args} }, Context) ->
                             what = send_goodbye,
                             list_id = MailingId,
                             recipient = RecipientProps
-                        }, Context)
+                        },
+                        Context
+                    )
             end,
             case proplists:get_value(recipient_id, Args) of
                 undefined ->
@@ -508,19 +588,24 @@ event(#postback{ message = {mailinglist_unsubscribe, Args} }, Context) ->
         false ->
             z_render:wire(OnError, Context)
     end;
-
-event(#submit{ message = {mailinglist_optout, Args} }, Context) ->
+event(#submit{message = {mailinglist_optout, Args}}, Context) ->
     {id, Id} = proplists:lookup(id, Args),
     case m_rsc:rid(Id, Context) of
         undefined ->
             Context;
         RscId ->
             IsOptOut = z_convert:to_bool(z_context:get_q(<<"is_mailing_opt_out">>, Context)),
-            case m_rsc:update(RscId, #{ <<"is_mailing_opt_out">> => IsOptOut }, [ {is_acl_check, false} ], Context) of
+            case
+                m_rsc:update(
+                    RscId, #{<<"is_mailing_opt_out">> => IsOptOut}, [{is_acl_check, false}], Context
+                )
+            of
                 {ok, _} ->
                     z_render:growl(?__("Saved the opt-out preference.", Context), Context);
                 {error, _} ->
-                    z_render:growl_error(?__("Could not save the opt-out preference.", Context), Context)
+                    z_render:growl_error(
+                        ?__("Could not save the opt-out preference.", Context), Context
+                    )
             end
     end.
 
@@ -651,6 +736,7 @@ handle_cast(Message, State) ->
 handle_info({send_test_mailing, Mailing, SenderContext}, State) ->
     handle_test_mailing(Mailing, SenderContext, State);
 handle_info(ensure_scheduled_task, State) ->
+    ok = m_mailinglist_run:recover(State#state.context),
     ok = ensure_scheduled_task(State#state.context),
     z_utils:flush_message(ensure_scheduled_task),
     {noreply, State};
@@ -792,30 +878,37 @@ poll_scheduled_ready(Context) ->
     end.
 
 send_scheduled(Context) ->
-    case m_mailinglist:check_scheduled(Context) of
-        {ListId, PageId, Options, PickledContext} ->
-            send_scheduled(ListId, PageId, Options, PickledContext, Context);
-        undefined ->
-            ok
-    end.
-
-send_scheduled(ListId, PageId, Options, PickledContext, Context) ->
-    case depickle_context(PickledContext) of
-        {ok, SenderContext} ->
-            case is_allowed_to_send(ListId, PageId, SenderContext) of
-                true ->
-                    case send_mailing(ListId, PageId, Options, SenderContext) of
-                        {ok, _Pid} ->
-                            m_mailinglist:delete_scheduled(ListId, PageId, Context),
-                            send_scheduled(Context);
-                        {error, overload} = Error ->
-                            Error
+    case m_mailinglist_run:claim(Context) of
+        {ok, Run} ->
+            RunId = maps:get(<<"id">>, Run),
+            case depickle_context(maps:get(<<"pickled_context">>, Run, undefined)) of
+                {ok, SenderContext} ->
+                    case
+                        is_allowed_to_send(
+                            maps:get(<<"mailinglist_id">>, Run),
+                            maps:get(<<"page_id">>, Run),
+                            SenderContext
+                        )
+                    of
+                        true ->
+                            case z_sidejob:start(z_mailinglist_run, send, [RunId], SenderContext) of
+                                {ok, _} ->
+                                    m_mailinglist_run:publish(RunId, Context),
+                                    send_scheduled(Context);
+                                {error, overload} = Error ->
+                                    m_mailinglist_run:release(RunId, Context),
+                                    Error
+                            end;
+                        false ->
+                            m_mailinglist_run:fail(RunId, eacces, Context),
+                            send_scheduled(Context)
                     end;
-                false ->
-                    discard_scheduled(ListId, PageId, eacces, Context)
+                {error, Reason} ->
+                    m_mailinglist_run:fail(RunId, Reason, Context),
+                    send_scheduled(Context)
             end;
-        {error, Reason} ->
-            discard_scheduled(ListId, PageId, Reason, Context)
+        {error, enoent} ->
+            ok
     end.
 
 depickle_context({pickled_context, _, _, _, _} = PickledContext) ->
@@ -833,19 +926,6 @@ depickle_context_1(PickledContext) ->
     catch
         _:_ -> {error, invalid_context}
     end.
-
-discard_scheduled(ListId, PageId, Reason, Context) ->
-    ?LOG_WARNING(#{
-        in => zotonic_mod_mailinglist,
-        text => <<"Discarding unauthorized scheduled mailing">>,
-        result => error,
-        reason => Reason,
-        list_id => ListId,
-        page_id => PageId
-    }),
-    m_mailinglist:delete_scheduled(ListId, PageId, Context),
-    send_scheduled(Context).
-
 
 %% @doc Ensure that exactly one pivot task is scheduled for the earliest
 %% actionable mailing. Remove the task when there are no actionable mailings.
@@ -912,30 +992,25 @@ insert_scheduled_task(Due, Context) ->
 queue_mailing(ListId, PageId, Options, SenderContext) ->
     case is_allowed_to_send(ListId, PageId, SenderContext) of
         true ->
-            ok = m_mailinglist:insert_scheduled(
-                ListId,
-                PageId,
-                Options,
-                calendar:universal_time(),
-                SenderContext),
-            case proplists:get_bool(is_send_all, Options) of
-                true ->
-                    % Reset the recipient stats so that the mailing can be
-                    % sent again to all recipients.
-                    ok = m_mailinglist:reset_log_email(ListId, PageId, SenderContext);
-                false ->
-                    ok
-            end,
-            ok = ensure_scheduled_task(SenderContext),
-            ok;
+            case
+                m_mailinglist:insert_scheduled(
+                    ListId,
+                    PageId,
+                    Options,
+                    calendar:universal_time(),
+                    SenderContext
+                )
+            of
+                ok -> ensure_scheduled_task(SenderContext);
+                {error, _} = Error -> Error
+            end;
         false ->
             log_mailing_not_allowed(ListId, PageId, SenderContext),
             {error, eacces}
     end.
 
 
-%% @doc Start sending a mailing that has been taken from the scheduled table,
-%% or a test mailing to a single address.
+%% @doc Queue a legacy notification for a single-address test mailing.
 send_mailing(ListId, PageId, Options, Context) ->
     z_sidejob:start(?MODULE, send_mailing_process, [ ListId, PageId, Options ], Context).
 
@@ -975,143 +1050,21 @@ log_mailing_not_allowed(ListId, PageId, Context) ->
     }).
 
 send_mailing_process({single_test_address, Email}, PageId, Options, Context) ->
-    case is_allowed_to_send(PageId, Context) of
-        true ->
-            Email1 = m_mailinglist:normalize_email(Email),
-            {ok, ListId} = m_rsc:name_to_id(mailinglist_test, Context),
-            Recipients = #{
-                Email1 => #{
-                    <<"is_enabled">> => true,
-                    <<"email">> => Email1
-                }
-            },
-            send_mailing_process(ListId, Recipients, PageId, Options, Context);
-        false ->
-            log_mailing_not_allowed(undefined, PageId, Context),
-            {error, eacces}
-    end;
+    ListId = m_rsc:rid(mailinglist_test, Context),
+    queue_mailing(
+        ListId, PageId, [{single_test_address, Email}, {is_send_all, true} | Options], Context
+    );
 send_mailing_process(ListId, PageId, Options, Context) ->
-    case is_allowed_to_send(ListId, PageId, Context) of
-        true ->
-            Recipients = z_mailinglist_recipients:list_recipients(ListId, Context),
-            send_mailing_process(ListId, Recipients, PageId, Options, Context);
-        false ->
-            log_mailing_not_allowed(ListId, PageId, Context),
-            {error, eacces}
-    end.
-
-send_mailing_process(ListId, Recipients, PageId, Options, Context) when is_map(Recipients) ->
-    From = m_mailinglist:get_email_from(ListId, Context),
-    Options1 = [
-        {id, PageId},
-        {list_id, ListId},
-        {email_from, From}
-        | Options
-    ],
-    maps:fold(
-        fun(Email, Recipient, _Acc) ->
-            send(Email, Recipient, From, Options1, Context)
-        end,
-        ok,
-        Recipients).
-
-send(_Email, RecipientId, From, Options, Context) when is_integer(RecipientId) ->
-    case m_rsc:p_no_acl(RecipientId, <<"email_raw">>, Context) of
-        undefined ->
-            skip;
-        Email ->
-            IsMatchLanguage = proplists:get_bool(is_match_language, Options),
-            PageId = proplists:get_value(id, Options),
-            ListId = proplists:get_value(list_id, Options),
-            PrefLanguage = m_rsc:p_no_acl(RecipientId, <<"pref_language">>, Context),
-            case is_matching_language(IsMatchLanguage, PrefLanguage, PageId, Context) of
-                true ->
-                    Attachments = m_edge:objects(PageId, hasdocument, Context),
-                    {ok, RecipientKey} = z_mailinglist_recipients:recipient_key_encode(RecipientId, ListId, Context),
-                    z_email:send(
-                        #email{
-                            to = Email,
-                            from = From,
-                            html_tpl = {cat, "mailing_page.tpl"},
-                            vars = [
-                                {recipient_id, RecipientId},
-                                {recipient_key, RecipientKey},
-                                {email, Email}
-                                | Options
-                            ],
-                            attachments = Attachments
-                        },
-                        Context);
-                false ->
-                    skip
-            end
-    end;
-send(Email, #{ <<"rsc_id">> := RscId }, From, Options, Context) when is_integer(RscId) ->
-    send(Email, RscId, From, Options, Context);
-send(undefined, _R, _From, _Options, _Context) ->
-    skip;
-send(<<>>, _R, _From, _Options, _Context) ->
-    skip;
-send(Email, Recipient, From, Options, Context) when is_map(Recipient) ->
-    PrefLanguage = maps:get(<<"pref_language">>, Recipient, undefined),
-    IsMatchLanguage = proplists:get_bool(is_match_language, Options),
-    PageId = proplists:get_value(id, Options),
-    ListId = proplists:get_value(list_id, Options),
-    case is_matching_language(IsMatchLanguage, PrefLanguage, PageId, Context) of
-        true ->
-            Context1 = if
-                PrefLanguage =:= undefined ->
-                    Context;
-                true ->
-                    z_context:set_language(PrefLanguage, Context)
-            end,
-            Attachments = m_edge:objects(PageId, hasdocument, Context),
-            {ok, RecipientKey} = z_mailinglist_recipients:recipient_key_encode(Email, ListId, Context),
-            z_email:send(
-                #email{
-                    to = Email,
-                    from = From,
-                    html_tpl = {cat, "mailing_page.tpl"},
-                    vars = [
-                        {recipient_id, undefined},
-                        {recipient_key, RecipientKey},
-                        {email, Email}
-                        | Options
-                    ],
-                    attachments = Attachments
-                },
-                Context1);
-        false ->
-            skip
-    end.
-
-%% @doc Check if the recipient's preferred language matches the languages the page is in.
-%% This is not exact science, as there are also language variations. For now we check also
-%% the "fallback language" of the preferred language against the provided languages. We do not
-%% check the fallback languages of the provided languages against the preferred (fallback) language
-%% as it is up to the writer of the email to decide if they write specific language content or
-%% more generic language content.
-is_matching_language(false, _PrefLanguage, _PageId, _Context) ->
-    true;
-is_matching_language(true, undefined, _PageId, _Context) ->
-    true;
-is_matching_language(true, PrefLanguage, PageId, Context) ->
-    case z_language:to_language_atom(PrefLanguage) of
-        {ok, PrefLang} ->
-            case m_rsc:p_no_acl(PageId, <<"language">>, Context) of
-                undefined ->
-                    true;
-                PageLangs ->
-                    Fallback = z_language:fallback_language(PrefLang),
-                    lists:member(PrefLang, PageLangs) orelse lists:member(Fallback, PageLangs)
-            end;
-        {error, _} ->
-            true
-    end.
+    queue_mailing(ListId, PageId, Options, Context).
 
 
 observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
+        #menu_item{
+            id = admin_mailings, parent = admin_content,
+            label = ?__("Mailings", Context), url = {admin_mailings},
+            visiblecheck = {acl, use, ?MODULE}
+        },
         #menu_item{
             id = admin_mailinglist,
             parent = admin_content,
@@ -1121,3 +1074,15 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
         }
         | Acc
     ].
+
+run_action(Action, Id, Context) when is_integer(Id) ->
+    case apply(m_mailinglist_run, Action, [Id, Context]) of
+        ok ->
+            z_render:growl(?__("Mailing status updated.", Context), Context);
+        {error, _} ->
+            z_render:growl_error(
+                ?__("You are not allowed to change this mailing.", Context), Context
+            )
+    end;
+run_action(_, _, Context) ->
+    Context.

@@ -1,0 +1,140 @@
+.mailing-list-choices > tbody > tr > td {
+    padding-block: 1rem;
+}
+
+.mailing-list-choice-action {
+    margin-top: 0.75rem;
+
+    .btn {
+        white-space: normal;
+    }
+}
+
+.table.mailing-run-timeline,
+.table.mailing-run-languages {
+    width: auto;
+    max-width: min(100%, 56rem);
+}
+
+.mailing-run-actions {
+    margin-block: 1.5rem;
+}
+
+.mailing-run-timeline th[scope="row"] {
+    white-space: nowrap;
+}
+
+.mailing-run-heading h2 {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.mailing-run-section {
+    border: 1px solid var(--bs-border-color, #ddd);
+    margin-bottom: 2rem;
+}
+
+.mailing-run-section > .widget-header h3 {
+    margin: 0;
+    font-size: 1.15em;
+    font-weight: 600;
+}
+
+.mailing-run-section > .widget-content {
+    padding-bottom: 1.5rem;
+}
+
+.mailing-run-overview-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.mailing-run-metrics {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.5rem;
+    border-block: 1px solid var(--bs-border-color, #ddd);
+    padding-block: 1.5rem;
+    margin-block: 1.5rem;
+}
+
+.mailing-run-metrics dt {
+    font-weight: normal;
+}
+
+.mailing-run-metrics dd {
+    margin: 0;
+    font-size: 2em;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.mailing-run-progress {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.mailing-run-progress progress {
+    width: min(100%, 30rem);
+}
+
+.mailing-run-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    gap: 2rem;
+    align-items: start;
+}
+
+.mailing-run-copies {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.mailing-run-copies li + li {
+    margin-top: 1rem;
+}
+
+.mailing-run-copies a {
+    font-weight: 600;
+}
+
+.mailing-run-actions .btn {
+    margin-bottom: 0.5rem;
+    white-space: normal;
+}
+
+.mailing-run-diagnostics {
+    margin-top: 1rem;
+}
+
+.mailing-run-recipient-filter {
+    display: flex;
+    align-items: end;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-block: 1.5rem;
+}
+
+.mailing-run-recipient-filter label {
+    margin-bottom: 0;
+}
+
+@media (max-width: 991px) {
+    .mailing-run-layout {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0;
+    }
+}
+
+@media (max-width: 575px) {
+    .mailing-run-metrics {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}

@@ -24,6 +24,8 @@
     {media_inline, ["media","inline","id",id], controller_file_id, [ {dispatch, media_inline}]},
     {media_inline, ["media","inline",'*'], controller_file, [ {content_disposition, inline}]},
 
+    {media_runner_callback, ["media-runner", "callback"], controller_media_runner_callback, [{anonymous, true}]},
+
     %% API access
     {api, ["api", '*'], controller_api, []},
 

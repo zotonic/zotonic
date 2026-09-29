@@ -1,5 +1,10 @@
 {% extends "admin_base.tpl" %}
 
+{% block head_extra %}
+    {% inherit %}
+    {% lib "css/mailinglist-admin.css" %}
+{% endblock %}
+
 {% block title %}{% trans "Send “{title}” to a mailing list" title=m.rsc[id].title %}{% endblock %}
 
 {% block content %}
@@ -14,12 +19,12 @@
     <p>{_ Select a mailing list below, or preview and test the mailing first. _} <a href="#" class="z-btn-help do_dialog" data-dialog="{{
             %{
                 title: _"Help with sending a page",
-                text: _"Use this overview to send the current page as an email to the recipients of a mailing list. You can preview the mailing or send a test before selecting a mailing list below. Test mailings can be sent while the page is unpublished. The table shows the status and statistics for each mailing list."
+                text: _"Use this overview to send the current page as an email to the recipients of a mailing list. You can preview the mailing or send a test before selecting a mailing list below. Test mailings can be sent while the page is unpublished. Each mailing has its own status and history."
             }|escape
         }}" title="{_ Need more help? _}"></a>
     </p>
     <div class="well">
-        <a class="btn btn-primary" href="{% url admin_edit_rsc id=id %}">{_ Edit page _}</a>
+        <a class="btn btn-default" href="{% url admin_edit_rsc id=id %}">{_ Edit page _}</a>
         <a class="btn btn-default" href="{% url admin_mailing_preview id=id %}" id="mailing-preview-btn">{_ Preview mailing _}</a>
         {% button text=_"Send test mailing now"
                   class="btn btn-default"
@@ -43,13 +48,18 @@
 
 </div>
 
-{# TODO: also reload if there is email activity for this mailinglist -- as stats table should be added #}
+
 <div id="mailing-status">
     {% live topic=["bridge", "origin", "model", "mailinglist", "event", id, "+" ]
+            throttle=3000
             template="_admin_mailing_status_overview.tpl"
             id=id
     %}
 </div>
+
+{% with m.rsc[q.list_id].id as selected_list %}
+    {% if selected_list %}{% wire action={dialog_mailing_page id=id list_id=selected_list} %}{% endif %}
+{% endwith %}
 
 {% javascript %}
     document.getElementById("mailing-preview-btn").addEventListener("click",

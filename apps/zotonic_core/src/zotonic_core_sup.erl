@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2025 Marc Worrell
-%% @doc Supervisor for the zotonic application, started by zotonic_launcher.
+%% @copyright 2009-2026 Marc Worrell
+%% @doc Supervise Zotonic core services, including the media runner callback registry.
 %% @end
 
-%% Copyright 2009-2025 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -56,6 +56,9 @@ init([]) ->
     z_nonce:init_nonce_tables(),
     LogBufferSize = z_config:get(log_http_buffer_size),
     Processes = [
+        {z_media_runner, {z_media_runner, start_link, []},
+            permanent, 5000, worker, [z_media_runner]},
+
         % Ring buffer for http request logs
         {ringbuffer_normal,
             {ringbuffer_process, start_link, [ zotonic_http_metrics_normal, LogBufferSize ]},

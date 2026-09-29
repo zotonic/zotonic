@@ -51,6 +51,11 @@ description: Use when working in Zotonic projects, especially Erlang modules, Zo
 - Put reusable implementation details in `src/support/`. Support modules should own focused domain logic, parsing/recombination, protocol handling, worker `gen_server`s, and helpers that are not themselves template APIs.
 - Prefer the model as the boundary between Zotonic callers and support processes. Keep process startup, batching, timeouts, and result normalization close to the public model API unless the logic is truly generic.
 
+## Documentation Keywords
+
+- Documentation `zotonic_keywords` must use existing `keyword_slug` values from the Zotonic repository's `doc/zotonic_subject_topics.csv`.
+- Check each keyword against that CSV when adding or updating documentation metadata, including observer documentation in `zotonic_observer.erl`. Choose relevant listed topics; do not invent keywords or use labels or aliases as slugs.
+
 ## Logging
 
 - Prefer structured `?LOG_*` maps.

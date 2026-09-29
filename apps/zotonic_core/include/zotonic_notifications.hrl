@@ -803,6 +803,15 @@
     is_signup_confirmed = false :: boolean()
 }).
 
+%% @doc Check the current service policy for creating a username/password at signup.
+%% Return undefined to use the ensure_username_pw flag from auth_validated.
+%% Type: first
+%% Return: boolean() | undefined
+-record(auth_ensure_username_pw, {
+    service :: atom(),
+    service_uid :: binary()
+}).
+
 %% @doc Update the given (accumulator) authentication options with the request options.
 %%      Note that the request options are from the client and are unsafe.
 %% Type: foldl
@@ -992,6 +1001,28 @@
 %% Return: {ok, map()} | {ok, m_rsc:resource_id()} | {ok, {m_rsc:resource_id(), map()}} | {error, term()} | undefined
 -record(rsc_import_fetch, {
     uri :: binary()
+}).
+
+
+%% @doc Enrich a fetched resource export with import metadata. Type: foldl.
+%% The accumulator is the decoded export envelope; headers belong to final_url.
+-record(rsc_import_fetch_result, {
+    uri :: binary() | string(),
+    final_url :: string(),
+    headers = [] :: [{string(), string()}]
+}).
+
+%% @doc A resource import has completed. Type: notify. Options describe this import,
+%% not necessarily the options for recursively imported resources.
+-record(rsc_import_done, {
+    id :: m_rsc:resource_id(),
+    uri :: binary(),
+    options = [] :: m_rsc_import:options()
+}).
+
+%% @doc Extend a resource export envelope (not its resource properties). Type: foldl.
+-record(rsc_export_done, {
+    id :: m_rsc:resource_id()
 }).
 
 

@@ -126,6 +126,79 @@ page_path_test() ->
     ok = m_rsc:delete(Id2, AdminC),
     ok.
 
+%% Exercise both direct imports and reference placeholders across successive
+%% deletions of the same semantic URI. Being dependent alone is not permission
+%% to resurrect a resource: only automatic cleanup records that reason.
+deleted_references_test() ->
+    C = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+    Suffix = integer_to_binary(erlang:unique_integer([positive, monotonic])),
+    ParentUri = <<"https://deleted-import.test/parent/", Suffix/binary>>,
+    ChildUri = <<"https://deleted-import.test/child/", Suffix/binary>>,
+    Child = #{
+        <<"uri">> => ChildUri,
+        <<"is_a">> => [ <<"text">> ],
+        <<"title">> => <<"Deleted reference">>
+    },
+    Data = #{
+        <<"id">> => 42,
+        <<"uri">> => ParentUri,
+        <<"uri_template">> => <<"https://deleted-import.test/id/:id">>,
+        <<"is_a">> => [ <<"text">> ],
+        <<"resource">> => #{ <<"title">> => <<"Deletion lifecycle">> },
+        <<"edges">> => #{ <<"relation">> => #{
+            <<"predicate">> => #{ <<"name">> => <<"relation">> },
+            <<"objects">> => [ #{ <<"object_id">> => Child } ]
+        } }
+    },
+    Options = [{import_edges, 1}, {is_forced_update, true}],
+    try
+        {ok, {ParentId, _}} = m_rsc_import:import(Data, Options, C),
+        [ChildId] = m_edge:objects(ParentId, relation, C),
+        {ok, ChildId} = m_rsc:update(ChildId, #{ <<"is_dependent">> => true }, C),
+        ok = m_rsc:delete(ChildId, C),
+        ?assert(m_rsc_gone:is_import_blocked(ChildUri, C)),
+        {ok, {ParentId, ImportMap}} = m_rsc_import:import(Data, Options, C),
+        ?assertEqual([], m_edge:objects(ParentId, relation, C)),
+        ?assertNot(maps:is_key(ChildUri, ImportMap)),
+        ?assertEqual(undefined, m_rsc:uri_lookup(ChildUri, C)),
+        ChildData = Data#{ <<"uri">> => ChildUri, <<"edges">> => #{} },
+        ?assertEqual({error, deleted}, m_rsc_import:import(ChildData, Options, C)),
+
+        %% Explicit override creates a new resource and saves the preference.
+        AllOptions = [is_import_deleted | Options],
+        {ok, {ParentId, _}} = m_rsc_import:import(Data, AllOptions, C),
+        [RestoredId] = m_edge:objects(ParentId, relation, C),
+        ?assert(RestoredId =/= ChildId),
+        {ok, Status} = m_rsc_import:get_import_status(ParentId, C),
+        ?assert(proplists:get_value(is_import_deleted, maps:get(<<"options">>, Status))),
+
+        %% Automatic removal of an unconnected dependent item allows revival.
+        {ok, RestoredId} = m_rsc:update(RestoredId, #{ <<"is_dependent">> => true }, C),
+        ok = m_edge:set_sequence(ParentId, relation, [], C),
+        ok = z_edge_log_server:delete_if_unconnected(RestoredId, C),
+        ?assertNot(m_rsc:exists(RestoredId, C)),
+        ?assert(m_rsc_gone:is_gone_uri(ChildUri, C)),
+        ?assertNot(m_rsc_gone:is_import_blocked(ChildUri, C)),
+        {ok, {ParentId, _}} = m_rsc_import:import(Data, Options, C),
+        [RecreatedId] = m_edge:objects(ParentId, relation, C),
+        ?assert(RecreatedId =/= RestoredId),
+        ok = m_rsc:delete(RecreatedId, C),
+        ?assert(m_rsc_gone:is_import_blocked(ChildUri, C)),
+        {ok, {ParentId, _}} = m_rsc_import:import(Data, Options, C),
+        ?assertEqual([], m_edge:objects(ParentId, relation, C))
+    after
+        lists:foreach(
+            fun(Uri) ->
+                case m_rsc:uri_lookup(Uri, C) of
+                    undefined -> ok;
+                    Id -> m_rsc:delete(Id, C)
+                end,
+                GoneIds = z_db:q("select id from rsc_gone where uri = $1", [Uri], C),
+                lists:foreach(fun({Id}) -> m_rsc_gone:delete(Id, C) end, GoneIds)
+            end,
+            [ParentUri, ChildUri])
+    end.
+
 export_data() ->
     #{<<"depiction_url">> => <<"https://localhost/lib/images/koe.jpg">>,
       <<"edges">> =>

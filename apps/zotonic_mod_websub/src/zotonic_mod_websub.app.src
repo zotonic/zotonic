@@ -1,0 +1,17 @@
+{application, zotonic_mod_websub, [
+    {description, "Publish and subscribe pages using WebSub"},
+    {vsn, {file, "../../VERSION"}},
+    {registered, []},
+    {applications, [
+        kernel, stdlib,
+        zotonic_core
+    ]},
+    {env, []},
+    {modules, []},
+    {maintainers, []},
+    {licenses, ["Apache-2.0"]},
+    {links, [
+        {"Website", "https://zotonic.com/"},
+        {"GitHub", "https://github.com/zotonic/zotonic"}
+    ]}
+]}.

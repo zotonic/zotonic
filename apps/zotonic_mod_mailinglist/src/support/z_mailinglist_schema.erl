@@ -116,6 +116,7 @@ manage_schema(_Upgrade, Context) ->
             end,
             ensure_scheduled_columns(Context)
     end,
+    ensure_runs(Context),
     datamodel().
 
 ensure_scheduled_columns(Context) ->
@@ -195,4 +196,138 @@ do_install(Context) ->
                 CREATE INDEX mailinglist_scheduled_type_due_key
                 ON mailinglist_scheduled (type, due)", Context),
     z_db:flush(Context),
+    ok.
+
+%% Durable runs replace the disposable page/list schedule. Keep the old table
+%% during migration so upgrades are repeatable and do not discard queued work.
+ensure_runs(Context) ->
+    z_db:q(
+        "create table if not exists mailinglist_run (
+        id bigserial primary key,
+        page_id integer not null references rsc(id) on delete cascade,
+        mailinglist_id integer not null references rsc(id) on delete cascade,
+        sender_id integer references rsc(id) on delete set null,
+        request_key varchar(64) unique,
+        parent_id bigint references mailinglist_run(id) on delete set null,
+        language varchar(32) not null default '',
+        fallback_language varchar(32) not null default 'en',
+        audience varchar(20) not null default 'matching',
+        send_mode varchar(20) not null default 'new',
+        is_test boolean not null default false,
+        type varchar(20) not null default 'date',
+        due timestamptz not null default now(),
+        status varchar(32) not null default 'scheduled',
+        prepared boolean not null default false,
+        created timestamptz not null default now(),
+        started timestamptz,
+        finished timestamptz,
+        modified timestamptz not null default now(),
+        notified timestamptz,
+        error text,
+        props bytea
+    )",
+        Context
+    ),
+    z_db:q(
+        "alter table mailinglist_run add column if not exists details_expired timestamptz", Context
+    ),
+    z_db:q(
+        "alter table mailinglist_run add column if not exists first_submitted timestamptz", Context
+    ),
+    z_db:q(
+        "create index if not exists mailinglist_run_retention_key on mailinglist_run(finished) where details_expired is null",
+        Context
+    ),
+    z_db:q(
+        "create index if not exists mailinglist_run_due_key
+        on mailinglist_run(status, due)",
+        Context
+    ),
+    z_db:q(
+        "create index if not exists mailinglist_run_page_key
+        on mailinglist_run(page_id, mailinglist_id, created)",
+        Context
+    ),
+    z_db:q(
+        "create index if not exists mailinglist_run_list_key
+        on mailinglist_run(mailinglist_id,created)",
+        Context
+    ),
+    z_db:q(
+        "create table if not exists mailinglist_run_content (
+        run_id bigint not null references mailinglist_run(id) on delete cascade,
+        language varchar(32) not null,
+        html text not null,
+        created timestamptz not null default now(),
+        primary key(run_id,language)
+    )",
+        Context
+    ),
+    z_db:q(
+        "create table if not exists mailinglist_run_recipient (
+        id bigserial primary key,
+        run_id bigint not null references mailinglist_run(id) on delete cascade,
+        email varchar(200) not null,
+        recipient_id integer references rsc(id) on delete set null,
+        language varchar(32) not null,
+        status varchar(32) not null default 'pending',
+        reason text,
+        modified timestamptz not null default now(),
+        unique(run_id, email)
+    )",
+        Context
+    ),
+    z_db:q(
+        "create index if not exists mailinglist_run_recipient_status_key
+        on mailinglist_run_recipient(run_id, status)",
+        Context
+    ),
+    z_db:q(
+        "create index if not exists mailinglist_run_recipient_email_key
+        on mailinglist_run_recipient(email, language, run_id)",
+        Context
+    ),
+    z_db:q(
+        "create table if not exists mailinglist_run_message (
+        message_nr varchar(100) primary key,
+        recipient_id bigint not null references mailinglist_run_recipient(id) on delete cascade,
+        status varchar(32) not null default 'submitting',
+        retry_count integer not null default 0,
+        is_final boolean not null default false,
+        detail text,
+        created timestamptz not null default now(),
+        modified timestamptz not null default now()
+    )",
+        Context
+    ),
+    z_db:q(
+        "create index if not exists mailinglist_run_message_recipient_key
+        on mailinglist_run_message(recipient_id)",
+        Context
+    ),
+    z_db:q(
+        "create table if not exists mailinglist_run_stats (
+        run_id bigint not null references mailinglist_run(id) on delete cascade,
+        language varchar(32) not null,
+        status varchar(32) not null,
+        total integer not null default 0 check (total >= 0),
+        primary key(run_id, language, status)
+    )",
+        Context
+    ),
+    z_db:flush(Context),
+    ok = z_db:transaction(
+        fun(Ctx) ->
+            Rows = z_db:assoc_props("select * from mailinglist_scheduled for update", Ctx),
+            lists:foreach(
+                fun(Row) ->
+                    m_mailinglist_run:import_scheduled(Row, Ctx)
+                end,
+                Rows
+            ),
+            z_db:q("delete from mailinglist_scheduled", Ctx),
+            ok
+        end,
+        Context
+    ),
     ok.
