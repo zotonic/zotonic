@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-09-25 14:41\n"
+"PO-Revision-Date: 2026-09-29 14:46\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgstr "ไม่สามารถดึง URL ทรัพยากรระ�
 msgid "Forbidden to access the remote resource URL."
 msgstr "ห้ามมิให้เข้าถึง URL ทรัพยากรระยะไกล"
 
-#: zotonic_core/src/media/z_media_import.erl:328
+#: zotonic_core/src/media/z_media_import.erl:334
 msgid "Page Import"
 msgstr "นำเข้าหน้า"
 
@@ -56,7 +56,7 @@ msgstr "มีคำขอสำหรับเซิร์ฟเวอร์ร
 msgid "Unauthorized to access the remote resource URL."
 msgstr "ไม่ได้รับอนุญาตในการเข้าถึง URL ทรัพยากรระยะไกล"
 
-#: zotonic_core/src/media/z_media_import.erl:385
+#: zotonic_core/src/media/z_media_import.erl:392
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
@@ -198,6 +198,7 @@ msgstr "เพิ่มลิงก์ไปยังกลุ่มการท
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:152
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:184
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:47
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:50
 msgid "All"
 msgstr "ทั้งหมด"
 
@@ -269,6 +270,7 @@ msgstr "คุณแน่ใจหรือไม่ว่าต้องกา
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:17
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:85
 #: zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:28
+#: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:35
 #: zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:38
 #: zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:52
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:7
@@ -1028,8 +1030,8 @@ msgstr "ใช้เบราว์เซอร์อื่น (เช่น Chr
 msgid "view (acl action)"
 msgstr "มุมมอง (การกระทำของ acl)"
 
-#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:182
-#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:184
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:219
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:221
 msgid "&lt; Prev"
 msgstr "&lt; ก่อนหน้า"
 
@@ -1129,7 +1131,7 @@ msgstr "เพิ่มสื่อในร่างกาย"
 msgid "Add note"
 msgstr "เพิ่มหมายเหตุ"
 
-#: zotonic_mod_admin/src/mod_admin.erl:1117
+#: zotonic_mod_admin/src/mod_admin.erl:1128
 msgid "Added the connection to"
 msgstr "เพิ่มการเชื่อมต่อไปยัง"
 
@@ -1180,10 +1182,19 @@ msgstr "ล้างไซต์ทั้งหมดแล้ว"
 msgid "Allocated"
 msgstr "จัดสรรแล้ว"
 
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:173
+#: zotonic_mod_websub/priv/templates/_rsc_import_subscription_options.tpl:13
+msgid "Also subscribe to connected resources."
+msgstr "อย่าลืมสมัครรับข้อมูลจากแหล่งข้อมูลที่เกี่ยวข้องด้วย"
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:28
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:29
 msgid "Alternative telephone"
 msgstr "โทรศัพท์ทางเลือก"
+
+#: zotonic_mod_admin/priv/templates/_rsc_import_deleted_options.tpl:4
+msgid "Always import all resources, including manually deleted resources."
+msgstr "ให้นำเข้าทรัพยากรทั้งหมดเสมอ รวมถึงทรัพยากรที่ถูกลบด้วยมือ"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:115
 msgid "Amount"
@@ -1205,6 +1216,10 @@ msgstr "หมวดหมู่ใดก็ได้"
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:155
 msgid "Anybody’s"
 msgstr "ของใครก็ได้"
+
+#: zotonic_mod_admin/priv/templates/_rsc_import_deleted_options.tpl:10
+msgid "Applies to the selected connection depth, including future updates. By default, manually deleted resources stay deleted; automatically removed dependent resources can be imported again."
+msgstr "ใช้กับความลึกของการเชื่อมต่อที่เลือกไว้ รวมถึงการอัปเดตในอนาคตด้วย โดยค่าเริ่มต้น ทรัพยากรที่ถูกลบด้วยตนเองจะยังคงถูกลบอยู่ ส่วนทรัพยากรที่ขึ้นอยู่กับทรัพยากรอื่นและถูกลบโดยอัตโนมัติสามารถนำเข้าใหม่ได้"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:36
 msgid "Are you sure you want to delete all tasks for this module and function?"
@@ -1248,6 +1263,16 @@ msgstr "Auth"
 msgid "Authoritative"
 msgstr "มีอำนาจ"
 
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:162
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:164
+msgid "Automatic updates unavailable"
+msgstr "ไม่สามารถอัปเดตอัตโนมัติได้"
+
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:159
+#: zotonic_mod_websub/priv/templates/_rsc_import_subscription_options.tpl:7
+msgid "Automatically fetch updates from the original website."
+msgstr "ดาวน์โหลดการอัปเดตจากเว็บไซต์ต้นฉบับโดยอัตโนมัติ"
+
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:47
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:35
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:38
@@ -1255,7 +1280,7 @@ msgid "Available"
 msgstr "มีอยู่"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:8
-#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:170
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:207
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:18
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:41
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:3
@@ -1402,8 +1427,9 @@ msgid "Connection"
 msgstr "การเชื่อมต่อ"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:72
-#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:134
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:133
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:100
+#: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:7
 msgid "Connections"
 msgstr "การเชื่อมต่อ"
 
@@ -1471,7 +1497,7 @@ msgstr "ประเทศ"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:65
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:261
-#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:120
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:119
 msgid "Create"
 msgstr "สร้าง"
 
@@ -1561,7 +1587,7 @@ msgstr "ลบหน้านี้"
 msgid "Delete this page..."
 msgstr "ลบหน้านี้..."
 
-#: zotonic_mod_admin/src/mod_admin.erl:950
+#: zotonic_mod_admin/src/mod_admin.erl:961
 msgid "Deleted tasks."
 msgstr "งานที่ถูกลบ"
 
@@ -1611,6 +1637,7 @@ msgid "Display size"
 msgstr "ขนาดการแสดงผล"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:137
+#: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:11
 msgid "Do not import connections."
 msgstr "อย่านำเข้าการเชื่อมต่อ"
 
@@ -1627,6 +1654,10 @@ msgstr "คุณต้องการลบบล็อคหน้านี้
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:45
 msgid "Download"
 msgstr "ดาวน์โหลด"
+
+#: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:30
+msgid "Download media from the original website."
+msgstr "ดาวน์โหลดสื่อจากเว็บไซต์ต้นฉบับ"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:11
 msgid "Drag to change position"
@@ -1712,7 +1743,7 @@ msgstr "ฝัง"
 msgid "Embed code will be sanitized for allowed sites and html."
 msgstr "โค้ดฝังจะได้รับการฆ่าเชื้อสำหรับไซต์และ html ที่อนุญาต"
 
-#: zotonic_mod_admin/src/mod_admin.erl:564
+#: zotonic_mod_admin/src/mod_admin.erl:575
 msgid "Embed page | a citation, popup, or link to another page"
 msgstr "ฝังหน้า | การอ้างอิง ป๊อปอัป หรือลิงก์ไปยังหน้าอื่น"
 
@@ -1759,7 +1790,8 @@ msgstr "เกิดข้อผิดพลาดในการตรวจส
 msgid "Error creating the page."
 msgstr "เกิดข้อผิดพลาดในการสร้างเพจ"
 
-#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:53
+#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:69
+#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:96
 msgid "Error importing page from the remote server."
 msgstr "เกิดข้อผิดพลาดในการนำเข้าหน้าจากเซิร์ฟเวอร์ระยะไกล"
 
@@ -1817,13 +1849,15 @@ msgstr "แนะนำ"
 msgid "Features"
 msgstr "คุณสมบัติ"
 
-#: zotonic_mod_admin/priv/templates/_admin_authoritative_info.tpl:9
+#: zotonic_mod_admin/priv/templates/_admin_authoritative_info.tpl:8
+#: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:36
+#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:39
 msgid "Fetch new version"
 msgstr "เรียกเวอร์ชันใหม่"
 
-#: zotonic_mod_admin/priv/templates/_admin_authoritative_info.tpl:11
-msgid "Fetching new version..."
-msgstr "กำลังเรียกเวอร์ชันใหม่..."
+#: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:5
+msgid "Fetch the latest version from the original website using these import options."
+msgstr "ดาวน์โหลดเวอร์ชันล่าสุดจากเว็บไซต์ต้นฉบับโดยใช้ตัวเลือกการนำเข้าต่อไปนี้"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_media.tpl:6
 msgid "File / media content"
@@ -1834,7 +1868,7 @@ msgstr "ไฟล์ / เนื้อหาสื่อ"
 msgid "File size"
 msgstr "ขนาดไฟล์"
 
-#: zotonic_mod_admin/src/mod_admin.erl:855
+#: zotonic_mod_admin/src/mod_admin.erl:866
 msgid "File uploaded to the drop folder, will be handled shortly."
 msgstr "ไฟล์ที่อัปโหลดไปยังโฟลเดอร์ดร็อป จะได้รับการจัดการในไม่ช้า"
 
@@ -1851,6 +1885,7 @@ msgstr "ชื่อไฟล์"
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:46
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:41
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:59
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:55
 msgid "Filter"
 msgstr "กรอง"
 
@@ -1907,8 +1942,14 @@ msgid "Flush system caches"
 msgstr "แคชระบบล้าง"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:145
+#: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:23
 msgid "Follow connections and import all (deep copy)."
 msgstr "ติดตามการเชื่อมต่อและนำเข้าทั้งหมด (สำเนาลึก)"
+
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:178
+#: zotonic_mod_websub/priv/templates/_rsc_import_subscription_options.tpl:18
+msgid "Follows the Connections option. Connected resources keep their subscriptions when disconnected from this page."
+msgstr "ตามตัวเลือก \"Connections\" ทรัพยากรที่เชื่อมต่อจะยังคงรักษาการสมัครสมาชิกไว้แม้เมื่อถูกตัดการเชื่อมต่อจากหน้านี้"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:59
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:225
@@ -1947,7 +1988,7 @@ msgstr "มีสื่อแนบ"
 msgid "Header"
 msgstr "หัวข้อ"
 
-#: zotonic_mod_admin/src/mod_admin.erl:562
+#: zotonic_mod_admin/src/mod_admin.erl:573
 msgid "Header | a big header"
 msgstr "ส่วนหัว | ส่วนหัวขนาดใหญ่"
 
@@ -1994,12 +2035,18 @@ msgid "If not checked then a visitor is always redirected to the canonical URL o
 msgstr "หากไม่ได้ตรวจสอบ ผู้เยี่ยมชมจะถูกส่งต่อไปยัง URL ตามหลักเกณฑ์ของหน้านี้เสมอ"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:141
+#: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:17
 msgid "Import only direct connections (shallow copy)."
 msgstr "นำเข้าเฉพาะการเชื่อมต่อโดยตรง (คัดลอกแบบตื้น)"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:249
 msgid "Imported content"
 msgstr "เนื้อหาที่นำเข้า"
+
+#: zotonic_mod_admin/priv/templates/_rsc_import_deleted_options.tpl:7
+#: zotonic_mod_admin/priv/templates/_rsc_import_deleted_options.tpl:9
+msgid "Importing deleted resources"
+msgstr "การนำเข้าทรัพยากรที่ถูกลบ"
 
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:78
 msgid "Indexed by search engines"
@@ -2110,7 +2157,7 @@ msgstr "ที่อยู่ทางไปรษณีย์"
 msgid "Main"
 msgstr "หลัก"
 
-#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:195
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:232
 msgid "Make"
 msgstr "ทำ"
 
@@ -2342,8 +2389,8 @@ msgstr "หน้าใหม่"
 msgid "Newest incoming connections."
 msgstr "การเชื่อมต่อขาเข้าใหม่ล่าสุด"
 
-#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:188
-#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:190
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:225
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:227
 msgid "Next &gt;"
 msgstr "ถัดไป &gt;"
 
@@ -2695,7 +2742,7 @@ msgstr "รายละเอียดเกี่ยวกับการแย
 msgid "Remove"
 msgstr "ลบ"
 
-#: zotonic_mod_admin/src/mod_admin.erl:1121
+#: zotonic_mod_admin/src/mod_admin.erl:1132
 msgid "Removed the connection to"
 msgstr "ลบการเชื่อมต่อกับ"
 
@@ -2705,7 +2752,7 @@ msgstr "ต้นไม้ประเภทเปลี่ยนหมายเ
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:67
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:95
-#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:195
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:232
 msgid "Replace"
 msgstr "แทนที่"
 
@@ -2789,7 +2836,7 @@ msgstr "บันทึกและดูหน้า"
 msgid "Save this page."
 msgstr "บันทึกหน้านี้"
 
-#: zotonic_mod_admin/src/mod_admin.erl:939
+#: zotonic_mod_admin/src/mod_admin.erl:950
 msgid "Scheduled a background task to check all refers connections."
 msgstr "กำหนดเวลาการทำงานพื้นหลังเพื่อตรวจสอบการเชื่อมต่อการอ้างอิงทั้งหมด"
 
@@ -2929,31 +2976,31 @@ msgstr "งานบางอย่างกำลังลองใหม่<br
 msgid "Something went wrong. Sorry."
 msgstr "อะไรบางอย่างผิดปกติ. ขออภัย."
 
-#: zotonic_mod_admin/src/mod_admin.erl:828
+#: zotonic_mod_admin/src/mod_admin.erl:839
 msgid "Sorry, could not handle this filename."
 msgstr "ขออภัย ไม่สามารถจัดการชื่อไฟล์นี้ได้"
 
-#: zotonic_mod_admin/src/mod_admin.erl:867
+#: zotonic_mod_admin/src/mod_admin.erl:878
 msgid "Sorry, could not move the file to the drop folder."
 msgstr "ขออภัย ไม่สามารถย้ายไฟล์ไปยังโฟลเดอร์วาง"
 
-#: zotonic_mod_admin/src/mod_admin.erl:941
 #: zotonic_mod_admin/src/mod_admin.erl:952
+#: zotonic_mod_admin/src/mod_admin.erl:963
 #: zotonic_mod_menu/src/mod_menu.erl:133
 msgid "Sorry, only an admin is allowed to do this"
 msgstr "ขออภัย เฉพาะผู้ดูแลระบบเท่านั้นที่ได้รับอนุญาตให้ทำเช่นนี้"
 
-#: zotonic_mod_admin/src/mod_admin.erl:803
 #: zotonic_mod_admin/src/mod_admin.erl:814
+#: zotonic_mod_admin/src/mod_admin.erl:825
 msgid "Sorry, that page is unknown."
 msgstr "ขออภัย เพจนั้นไม่เป็นที่รู้จัก"
 
-#: zotonic_mod_admin/src/mod_admin.erl:805
 #: zotonic_mod_admin/src/mod_admin.erl:816
+#: zotonic_mod_admin/src/mod_admin.erl:827
 msgid "Sorry, you are not allowed to edit notes."
 msgstr "ขออภัย คุณไม่ได้รับอนุญาตให้แก้ไขบันทึก"
 
-#: zotonic_mod_admin/src/mod_admin.erl:871
+#: zotonic_mod_admin/src/mod_admin.erl:882
 msgid "Sorry, you are not allowed to upload drop folder files."
 msgstr "ขออภัย คุณไม่ได้รับอนุญาตให้อัปโหลดไฟล์โฟลเดอร์วาง"
 
@@ -2961,11 +3008,11 @@ msgstr "ขออภัย คุณไม่ได้รับอนุญา�
 msgid "Sorry, you don't have permission to add the connection."
 msgstr "ขออภัยคุณไม่มีสิทธิ์เพิ่มการเชื่อมต่อ"
 
-#: zotonic_mod_admin/src/mod_admin.erl:1103
+#: zotonic_mod_admin/src/mod_admin.erl:1114
 msgid "Sorry, you have no permission to add the connection."
 msgstr "ขออภัยคุณไม่ได้รับอนุญาตให้เพิ่มการเชื่อมต่อ"
 
-#: zotonic_mod_admin/src/mod_admin.erl:1105
+#: zotonic_mod_admin/src/mod_admin.erl:1116
 msgid "Sorry, you have no permission to delete the connection."
 msgstr "ขออภัยคุณไม่ได้รับอนุญาตให้ลบการเชื่อมต่อ"
 
@@ -2973,7 +3020,7 @@ msgstr "ขออภัยคุณไม่ได้รับอนุญาต
 msgid "Sort by"
 msgstr "เรียงตาม"
 
-#: zotonic_mod_admin/src/mod_admin.erl:561
+#: zotonic_mod_admin/src/mod_admin.erl:572
 msgid "Standard page block types"
 msgstr "ประเภทบล็อกหน้ามาตรฐาน"
 
@@ -3006,6 +3053,8 @@ msgstr "สถานะ"
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_fields.tpl:7
 #: zotonic_mod_survey/src/models/m_survey.erl:1114
 #: zotonic_mod_survey/src/models/m_survey.erl:1120
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:38
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:72
 #: zotonic_site_status/priv/templates/_navbar.tpl:15
 #: zotonic_site_status/priv/templates/_sites.tpl:4
 msgid "Status"
@@ -3037,7 +3086,22 @@ msgstr "สตรีทไลน์ 2"
 msgid "Structure"
 msgstr "โครงสร้าง"
 
-#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:40
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:153
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:33
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:102
+#: zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:18
+#: zotonic_mod_websub/priv/templates/_rsc_import_subscription_options.tpl:4
+msgid "Subscribe"
+msgstr "ติดตาม"
+
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:175
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:177
+#: zotonic_mod_websub/priv/templates/_rsc_import_subscription_options.tpl:15
+#: zotonic_mod_websub/priv/templates/_rsc_import_subscription_options.tpl:17
+msgid "Subscribing to connected resources"
+msgstr "การสมัครรับข้อมูลจากทรัพยากรที่เชื่อมต่อ"
+
+#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:83
 msgid "Succesfully imported page from the remote server."
 msgstr "นำเข้าเพจจากเซิร์ฟเวอร์ระยะไกลเรียบร้อยแล้ว"
 
@@ -3113,7 +3177,7 @@ msgstr "ทดสอบแบบสอบถาม"
 msgid "Text"
 msgstr "ข้อความ"
 
-#: zotonic_mod_admin/src/mod_admin.erl:563
+#: zotonic_mod_admin/src/mod_admin.erl:574
 msgid "Text | a (rich) text block"
 msgstr "ข้อความ | บล็อกข้อความ (ที่อุดมไปด้วย)"
 
@@ -3132,6 +3196,10 @@ msgstr "ต้นไม้หมวดหมู่กำลังสร้าง
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:7
 msgid "The media runner configuration is invalid."
 msgstr "การตั้งค่าสื่อรันเนอร์ไม่ถูกต้อง"
+
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:165
+msgid "The original website does not advertise automatic updates."
+msgstr "เว็บไซต์ต้นฉบับไม่ได้ระบุถึงการอัปเดตอัตโนมัติ"
 
 #: zotonic_mod_admin/priv/templates/_action_unlink_undo.tpl:15
 msgid "The page"
@@ -3360,7 +3428,7 @@ msgstr "ไม่ได้เผยแพร่"
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results_item.tpl:29
 #: zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:2
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:29
-#: zotonic_mod_admin/src/mod_admin.erl:1111
+#: zotonic_mod_admin/src/mod_admin.erl:1122
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:118
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:182
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:9
@@ -3379,8 +3447,16 @@ msgstr "ไม่ได้เผยแพร่"
 #: zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:16
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:10
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:3
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:88
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:90
 msgid "Untitled"
 msgstr "ไม่มีชื่อ"
+
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:25
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:30
+#: zotonic_mod_admin/src/mod_admin.erl:555
+msgid "Untitled query"
+msgstr "คำค้นหาที่ไม่มีชื่อ"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:9
 msgid "Unused"
@@ -3583,6 +3659,8 @@ msgid "You are not allowed to delete this page."
 msgstr "คุณไม่ได้รับอนุญาตให้ลบเพจนี้"
 
 #: zotonic_mod_admin/priv/templates/admin_edit.tpl:16
+#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:33
+#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:45
 #: zotonic_mod_admin_merge/priv/templates/admin_merge.tpl:26
 msgid "You are not allowed to edit this page."
 msgstr "คุณไม่ได้รับอนุญาตให้แก้ไขหน้านี้"
@@ -5071,6 +5149,7 @@ msgstr "คู่ที่มีอันดับ"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:104
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:135
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:56
 msgid "Reset"
 msgstr "รีเซ็ต"
 
@@ -6175,6 +6254,7 @@ msgstr "ป้อนที่อยู่อีเมลของคุณเพ
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:143
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:7
 #: zotonic_mod_survey/priv/templates/_survey_block_name_check.tpl:2
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:105
 msgid "Error"
 msgstr "ข้อผิดพลาด"
 
@@ -7708,6 +7788,7 @@ msgstr "นี่เป็นการทดสอบการสื่อสา
 #: zotonic_mod_base/priv/templates/directory_index.tpl:15
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:38
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:35
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:69
 msgid "Type"
 msgstr "ประเภท"
 
@@ -10323,6 +10404,7 @@ msgid "Resources with email identity"
 msgstr "ทรัพยากรที่มีข้อมูลประจำตัวอีเมล"
 
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:158
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:109
 msgid "Retry"
 msgstr "ลองอีกครั้ง"
 
@@ -10514,6 +10596,7 @@ msgstr "ผู้รับทุกคน ที่ใช้ภาษานั�
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:29
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:24
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:40
 msgid "All statuses"
 msgstr "ทุกสถานะ"
 
@@ -10558,7 +10641,7 @@ msgid "Check to activate the e-mail address."
 msgstr "เลือกเพื่อเปิดใช้งานที่อยู่อีเมล"
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:216
-#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:389
+#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:414
 msgid "Choose recipients and language"
 msgstr "เลือกผู้รับและภาษา"
 
@@ -10642,7 +10725,7 @@ msgstr "ไม่สามารถจัดเรียงการส่งอ
 msgid "Could not save the opt-out preference."
 msgstr "ไม่สามารถบันทึกการตั้งค่าการเลือกไม่ใช้"
 
-#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:397
+#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:422
 msgid "Could not send the test. Check the test mailing list and selected language."
 msgstr "ไม่สามารถส่งการทดสอบได้ โปรดตรวจสอบรายชื่อผู้รับการทดสอบและภาษาที่เลือก"
 
@@ -10766,7 +10849,7 @@ msgstr "ภาษาของอีเมล คือเวอร์ชัน�
 msgid "Enter a valid future mailing date and time."
 msgstr "กรอกวันที่และเวลาส่งจดหมายในอนาคตที่ถูกต้อง"
 
-#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:356
+#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:381
 msgid "Enter a valid test email address."
 msgstr "กรอกที่อยู่อีเมลทดสอบที่ถูกต้อง"
 
@@ -11710,6 +11793,8 @@ msgstr "หยุดส่ง? สามารถหยุดส่งได้�
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:16
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:53
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:81
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:44
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:100
 #: zotonic_site_status/priv/templates/_sites.tpl:18
 msgid "Stopped"
 msgstr "หยุดแล้ว"
@@ -11717,12 +11802,6 @@ msgstr "หยุดแล้ว"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:52
 msgid "Stopped; already queued emails are still being processed"
 msgstr "หยุดแล้ว; อีเมลที่อยู่ในคิวแล้วกำลังถูกประมวลผลอยู่"
-
-#: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:33
-#: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:102
-#: zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:18
-msgid "Subscribe"
-msgstr "ติดตาม"
 
 #: zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:5
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:8
@@ -11748,6 +11827,7 @@ msgid "Target mailing list"
 msgstr "กำหนดเป้าหมายรายชื่ออีเมล"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:185
+#: zotonic_mod_websub/priv/templates/_websub_error.tpl:3
 msgid "Technical details"
 msgstr "รายละเอียดทางเทคนิค"
 
@@ -15928,6 +16008,252 @@ msgstr "วิดีโอ Vimeo"
 #: zotonic_mod_video_embed/src/mod_video_embed.erl:274
 msgid "Youtube Video"
 msgstr "วิดีโอ Youtube"
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:50
+msgid "Access was denied while updating this page. Check the subscriber's source website credentials and permission to update the local page."
+msgstr "ถูกปฏิเสธการเข้าถึงขณะกำลังอัปเดตหน้านี้ โปรดตรวจสอบข้อมูลรับรองและสิทธิ์การอัปเดตหน้าท้องถิ่นจากเว็บไซต์ต้นทางของผู้สมัคร"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:41
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:99
+msgid "Active"
+msgstr "กำลังใช้งาน"
+
+#: zotonic_mod_websub/priv/templates/_admin_edit_sidebar_websub.tpl:11
+msgid "Active subscriptions to this page: {count}"
+msgstr "การสมัครสมาชิกที่ยังใช้งานอยู่สำหรับหน้านี้: {count}"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:24
+msgid "All subscriptions"
+msgstr "ทุกแพ็กเกจ"
+
+#: zotonic_mod_websub/priv/templates/_websub_error.tpl:1
+msgid "Automatic update error:"
+msgstr "ข้อผิดพลาดในการอัปเดตอัตโนมัติ:"
+
+#: zotonic_mod_websub/priv/templates/_admin_rsc_import_status_live.tpl:6
+msgid "Automatic updates are active."
+msgstr "การอัปเดตอัตโนมัติกำลังทำงานอยู่"
+
+#: zotonic_mod_websub/priv/templates/_admin_rsc_import_status_live.tpl:13
+msgid "Automatic updates are stopped."
+msgstr "การอัปเดตอัตโนมัติถูกหยุดแล้ว"
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:72
+msgid "Automatic updates could not be completed. Check the technical details for the reported error."
+msgstr "ไม่สามารถดำเนินการอัปเดตอัตโนมัติได้ โปรดตรวจสอบรายละเอียดทางเทคนิคของข้อผิดพลาดที่รายงาน"
+
+#: zotonic_mod_websub/src/mod_websub.erl:245
+msgid "Could not change the automatic update subscription."
+msgstr "ไม่สามารถเปลี่ยนการสมัครรับการอัปเดตอัตโนมัติได้"
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:52
+msgid "Could not contact the remote website. Check its availability and HTTPS certificate."
+msgstr "ไม่สามารถติดต่อกับเว็บไซต์ระยะไกลได้ โปรดตรวจสอบสถานะการให้บริการและใบรับรอง HTTPS ของเว็บไซต์ดังกล่าว"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:94
+msgid "Deleted page"
+msgstr "หน้าที่ถูกลบ"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:57
+msgid "Enter the exact hostname, without a scheme, port, or path."
+msgstr "ป้อนชื่อโฮสต์ที่ถูกต้อง โดยไม่ต้องระบุโปรโตคอล พอร์ต หรือเส้นทาง"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:48
+msgid "Errors"
+msgstr "ข้อผิดพลาด"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:43
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:101
+msgid "Expired"
+msgstr "หมดอายุแล้ว"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:63
+msgid "Expired and stopped subscriptions are included. Renewals can temporarily have two active subscriptions. Remote hosts are shown without callback URLs or credentials."
+msgstr "รวมถึงการสมัครสมาชิกที่หมดอายุและถูกยกเลิกแล้ว การต่ออายุอาจทำให้มีสมาชิกสองรายที่ยังใช้งานอยู่ชั่วคราว โฮสต์ระยะไกลจะแสดงขึ้นโดยไม่มี URL สำหรับการเรียกกลับหรือข้อมูลรับรอง"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:34
+msgid "External hostname"
+msgstr "ชื่อโฮสต์ภายนอก"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:74
+msgid "Last activity"
+msgstr "กิจกรรมล่าสุด"
+
+#: zotonic_mod_websub/priv/templates/_admin_rsc_import_status_live.tpl:19
+msgid "Last update received:"
+msgstr "ครั้งสุดท้ายที่รับข้อมูลอัปเดต:"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:73
+msgid "Lease expires"
+msgstr "สัญญาเช่าหมดอายุ"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:70
+msgid "Local page"
+msgstr "หน้าท้องถิ่น"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:30
+msgid "Local resource ID"
+msgstr "รหัสทรัพยากรท้องถิ่น"
+
+#: zotonic_mod_websub/priv/templates/_admin_edit_sidebar_websub.tpl:13
+msgid "No active subscriptions to this page."
+msgstr "ไม่มีสมาชิกที่สมัครใช้งานหน้านี้อยู่"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:121
+msgid "No subscriptions found."
+msgstr "ไม่พบการสมัครสมาชิกใดทั้งสิ้น"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:8
+msgid "Our subscriptions to external pages and subscriptions from others to our pages."
+msgstr "การติดตามหน้าเว็บภายนอกของเรา และการติดตามหน้าเว็บของเราจากผู้อื่น"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:25
+msgid "Pages we subscribe to"
+msgstr "หน้าเว็บที่เราติดตาม"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:42
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:102
+msgid "Pending confirmation"
+msgstr "รอการยืนยัน"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:71
+msgid "Remote host"
+msgstr "เครื่องโฮสต์ระยะไกล"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:108
+msgid "Retry subscription"
+msgstr "ลองสมัครใหม่"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:60
+msgid "Select a valid subscription type, resource ID, hostname, status, errors, and page number."
+msgstr "เลือกประเภทการสมัครสมาชิกที่ถูกต้อง, ID ของทรัพยากร, ชื่อโฮสต์, สถานะ, ข้อผิดพลาด และหมายเลขหน้า"
+
+#: zotonic_mod_websub/priv/templates/_admin_rsc_import_status_live.tpl:14
+msgid "Start automatic updates"
+msgstr "เปิดการอัปเดตอัตโนมัติ"
+
+#: zotonic_mod_websub/priv/templates/_admin_rsc_import_status_live.tpl:10
+msgid "Stop automatic updates"
+msgstr "หยุดการอัปเดตอัตโนมัติ"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:26
+msgid "Subscribers to our pages"
+msgstr "ผู้ติดตามหน้าของเรา"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:81
+msgid "Subscribes to us"
+msgstr "สมัครรับข่าวสารจากเรา"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:22
+msgid "Subscription type"
+msgstr "ประเภทการสมัครสมาชิก"
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:56
+msgid "The callback URL must use a hostname instead of an IP address. Check this website's public URL."
+msgstr "URL ของ callback ต้องใช้ชื่อโฮสต์แทนที่อยู่ IP ตรวจสอบ URL สาธารณะของเว็บไซต์นี้"
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:38
+msgid "The destination could not be resolved or its network address is blocked. Local and private addresses are only allowed for .test hostnames in development."
+msgstr "ไม่สามารถระบุตำแหน่งปลายทางได้ หรือที่อยู่เครือข่ายถูกบล็อก ที่อยู่ท้องถิ่นและที่อยู่ส่วนตัวถูกอนุญาตให้ใช้เฉพาะกับชื่อโฮสต์ .test ในขั้นตอนการพัฒนาเท่านั้น"
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:48
+msgid "The original page address has changed. Import the page again to set up automatic updates."
+msgstr "ที่อยู่หน้าเดิมได้เปลี่ยนแล้ว โปรดนำเข้าหน้านี้อีกครั้งเพื่อตั้งค่าการอัปเดตอัตโนมัติ"
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:54
+msgid "The remote website address is invalid. Check the source and WebSub URLs."
+msgstr "ที่อยู่เว็บไซต์ระยะไกลไม่ถูกต้อง โปรดตรวจสอบ URL ของแหล่งที่มาและ WebSub"
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:58
+msgid "The remote website redirects from HTTPS to HTTP. Use a secure HTTPS destination."
+msgstr "เว็บไซต์ระยะไกลนี้เปลี่ยนเส้นทางจาก HTTPS ไปยัง HTTP โปรดใช้ปลายทาง HTTPS ที่ปลอดภัย"
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:60
+msgid "The remote website redirects too many times. Check its redirect configuration."
+msgstr "เว็บไซต์ระยะไกลมีการเปลี่ยนเส้นทางบ่อยเกินไป โปรดตรวจสอบการตั้งค่าการเปลี่ยนเส้นทางของเว็บไซต์นั้น"
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:68
+msgid "The remote website refused access. Check the subscribing user's permissions on that website."
+msgstr "เว็บไซต์ระยะไกลปฏิเสธการเข้าถึง โปรดตรวจสอบสิทธิ์ของผู้ใช้ที่สมัครใช้งานบนเว็บไซต์นั้น"
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:66
+msgid "The remote website requires authentication. Check the subscribing user's configured credentials."
+msgstr "เว็บไซต์ระยะไกลต้องการการยืนยันตัวตน โปรดตรวจสอบข้อมูลการเข้าสู่ระบบที่ผู้ใช้ผู้สมัครได้กำหนดไว้"
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:62
+msgid "The remote website returned a redirect without a destination."
+msgstr "เว็บไซต์ระยะไกลได้ส่งคำสั่งเปลี่ยนเส้นทางมาโดยไม่มีปลายทาง"
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:64
+msgid "The remote website returned an invalid redirect destination."
+msgstr "เว็บไซต์ระยะไกลได้ส่งคืนปลายทางของการเปลี่ยนเส้นทางที่ไม่ถูกต้อง"
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:70
+msgid "The requested page or WebSub endpoint was not found on the remote website."
+msgstr "ไม่สามารถค้นหาหน้าเว็บหรือจุดปลายทาง WebSub ที่ขอไว้บนเว็บไซต์ระยะไกลได้"
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:46
+msgid "The source page advertises invalid WebSub links. Check its hub and topic URLs."
+msgstr "หน้าต้นทางมีลิงก์ WebSub ที่ไม่ถูกต้อง โปรดตรวจสอบ URL ของ hub และ topic"
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:44
+msgid "The source page does not advertise automatic updates via WebSub."
+msgstr "หน้าต้นฉบับไม่ได้แจ้งให้ทราบเกี่ยวกับการอัปเดตอัตโนมัติผ่าน WebSub."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:40
+msgid "The source website did not confirm the subscription in time. Check that it can reach this website's callback URL."
+msgstr "เว็บไซต์ต้นทางไม่ได้ยืนยันการสมัครสมาชิกภายในเวลาที่กำหนด โปรดตรวจสอบว่าเว็บไซต์ต้นทางสามารถเข้าถึง URL callback ของเว็บไซต์นี้ได้หรือไม่"
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:32
+msgid "The source website does not allow this subscriber to use WebSub. On the source website, allow the subscribing user to use WebSub, or allow anonymous visitors for public subscriptions."
+msgstr "เว็บไซต์ต้นทางไม่อนุญาตให้ผู้สมัครรับข่าวนี้ใช้ WebSub บนเว็บไซต์ต้นทาง ให้อนุญาตผู้ใช้ที่สมัครรับข่าวใช้ WebSub หรืออนุญาตให้ผู้เยี่ยมชมแบบไม่ระบุตัวตนสมัครรับข่าวแบบสาธารณะ"
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:36
+msgid "The source website does not recognize this subscription topic. Check that the original page still exists."
+msgstr "เว็บไซต์ต้นทางไม่รู้จักหัวข้อการสมัครสมาชิกนี้ โปรดตรวจสอบว่าหน้าต้นฉบับยังมีอยู่หรือไม่"
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:34
+msgid "The source website refused access to this page. The subscriber must be allowed to view it, and the page must be an original on that website."
+msgstr "เว็บไซต์ต้นทางไม่อนุญาตให้เข้าถึงหน้านี้ ผู้สมัครสมาชิกต้องได้รับสิทธิ์ในการดูหน้านี้ และหน้าดังกล่าวต้องเป็นหน้าต้นฉบับบนเว็บไซต์นั้น"
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:42
+msgid "This page points back to this website. A website cannot subscribe to itself."
+msgstr "หน้านี้ชี้กลับไปยังเว็บไซต์นี้ เว็บไซต์ไม่สามารถสมัครรับข้อมูลจากตัวเองได้"
+
+#: zotonic_mod_websub/priv/templates/_admin_edit_sidebar_websub.tpl:17
+msgid "View subscribers to this page"
+msgstr "ดูผู้ติดตามหน้านี้"
+
+#: zotonic_mod_websub/priv/templates/_admin_edit_sidebar_websub.tpl:19
+msgid "View subscriptions to the external page"
+msgstr "ดูการสมัครรับข้อมูลจากหน้าเว็บภายนอก"
+
+#: zotonic_mod_websub/priv/templates/_admin_rsc_import_status_live.tpl:8
+msgid "Waiting for automatic updates to be confirmed."
+msgstr "กำลังรอการยืนยันการอัปเดตอัตโนมัติ"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:82
+msgid "We subscribe"
+msgstr "เราสมัครรับข่าวสาร"
+
+#: zotonic_mod_websub/priv/templates/_admin_edit_sidebar_websub.tpl:4
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:3
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:7
+#: zotonic_mod_websub/src/mod_websub.erl:217
+msgid "WebSub subscriptions"
+msgstr "การสมัครรับข้อมูล WebSub"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:51
+msgid "With errors"
+msgstr "มีข้อผิดพลาด"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:52
+msgid "Without errors"
+msgstr "ไม่มีข้อผิดพลาด"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:131
+msgid "You are not allowed to view subscriptions."
+msgstr "คุณไม่มีสิทธิ์ดูการสมัครสมาชิก"
 
 #: zotonic_mod_wires/src/actions/action_wires_alert.erl:68
 msgid "Alert"
