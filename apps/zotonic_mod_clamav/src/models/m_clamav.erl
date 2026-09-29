@@ -1,16 +1,27 @@
 %% @doc ClamAV availability for the admin dashboard.
 -module(m_clamav).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "backend_developer", "model", "malware_scanning", "monitor", "security"]
+}).
 -moduledoc("
-The `m.clamav.is_available` model path checks whether ClamAV responds to a ping,
-using the configured Unix socket with TCP fallback. Requires permission to use
-`mod_admin`. The dashboard loads this check asynchronously on each page load.
+Reports whether the ClamAV daemon (`clamd`) is available. The
+`m.clamav.is_available` model path sends a ping and returns `true` when the daemon
+responds with `PONG`, or `false` when the check fails.
+
+The check uses the connection settings documented in `mod_clamav`: a Unix socket
+with TCP fallback by default, or socket-only or TCP-only access when configured.
+It checks connectivity; it does not scan a file or check virus database freshness.
+
+Access requires permission to use `mod_admin`; other callers receive
+`{error, eacces}`. Unknown paths return `{error, unknown_path}`.
+The admin dashboard loads this check asynchronously on each page load.
 
 Available Model API Paths
 -------------------------
 
 | Method | Path pattern | Description |
 | --- | --- | --- |
-| `get` | `/is_available/...` | Return whether the virus scanner responds. |
+| `get` | `/is_available` | Return a boolean indicating whether the virus scanner responds. Requires `use` permission on `mod_admin`. |
 
 ").
 
