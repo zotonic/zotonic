@@ -887,7 +887,11 @@ subscription_live_status() ->
     {ok, Id} = m_rsc:insert(#{<<"category_id">> => text,
         <<"is_authoritative">> => false, <<"uri">> => Uri}, A),
     EventTopic = [<<"model">>, <<"websub">>, <<"event">>, <<"rsc">>, integer_to_binary(Id)],
-    ACL = #acl_is_allowed{action = subscribe, object = #acl_mqtt{topic = EventTopic}},
+    ACL = #acl_is_allowed{action = subscribe, object = #acl_mqtt{
+        topic = EventTopic,
+        is_wildcard = false,
+        packet = #{type => subscribe}
+    }},
     ?assertEqual(true, mod_websub:observe_acl_is_allowed(ACL, A)),
     ?assertEqual(false, mod_websub:observe_acl_is_allowed(ACL, C)),
     ?assertEqual(false, mod_websub:observe_acl_is_allowed(ACL#acl_is_allowed{action = publish}, C)),
