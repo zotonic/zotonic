@@ -22,7 +22,7 @@
 -module(controller_websub).
 -moduledoc(#{
     zotonic_keywords => [
-        "reference", "integrator", "controller", "export_and_syndication", "api_and_integration", "authorization_and_access_control", "websub", "http"
+        "reference", "integrator", "controller", "export_and_syndication", "api_and_integration", "authorization_and_access_control", "http"
     ]
 }).
 -moduledoc(<<"HTTP hub and subscriber callback controller for `mod_websub`.

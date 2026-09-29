@@ -20,7 +20,7 @@
 -module(mod_websub).
 -moduledoc(#{
     zotonic_keywords => [
-        "reference", "integrator", "module", "export_and_syndication", "api_and_integration", "structured_data", "websub"
+        "reference", "integrator", "module", "export_and_syndication", "api_and_integration", "structured_data", "http"
     ]
 }).
 -moduledoc(<<"WebSub resource synchronization, following https://www.w3.org/TR/websub/.

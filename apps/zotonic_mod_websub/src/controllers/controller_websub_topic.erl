@@ -20,7 +20,7 @@
 -module(controller_websub_topic).
 -moduledoc(#{
     zotonic_keywords => [
-        "reference", "integrator", "controller", "export_and_syndication", "structured_data", "websub", "json", "http"
+        "reference", "integrator", "controller", "export_and_syndication", "structured_data", "json", "http"
     ]
 }).
 -moduledoc(<<"Serve the complete JSON representation advertised as a resource's WebSub topic.

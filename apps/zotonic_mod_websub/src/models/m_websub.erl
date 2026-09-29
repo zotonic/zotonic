@@ -20,7 +20,7 @@
 -module(m_websub).
 -moduledoc(#{
     zotonic_keywords => [
-        "reference", "integrator", "model", "export_and_syndication", "api_and_integration", "authorization_and_access_control", "websub"
+        "reference", "integrator", "model", "export_and_syndication", "api_and_integration", "authorization_and_access_control", "http"
     ]
 }).
 -moduledoc(<<"Model for WebSub resource subscriptions, delivery queues, and automatic imports.
