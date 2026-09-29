@@ -86,6 +86,19 @@ reversed_relation_edge_test() ->
 resource_identifier_test() ->
     ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
     Context = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+    % Other tests and site fixtures can also have administrator-authored resources.
+    {ok, OtherId} = m_rsc:insert([
+        {category, article},
+        {title, <<"Unrelated administrator-authored resource">>}
+    ], Context),
+    try
+        {ok, _} = m_edge:insert(OtherId, author, 1, Context),
+        resource_identifier(Context)
+    after
+        ok = m_rsc:delete(OtherId, Context)
+    end.
+
+resource_identifier(Context) ->
     UniqueName = z_string:to_name(<<"sparql_rid_", (z_ids:id(12))/binary>>),
     {ok, RscId} = m_rsc:insert([
         {category, article},
@@ -150,11 +163,13 @@ resource_identifier_test() ->
         >>,
         AdministratorIdSparql = <<
             "SELECT ?subject WHERE {\n"
+            "    ?subject zotonic:name \"", UniqueName/binary, "\" .\n"
             "    ?subject :author :1\n"
             "}"
         >>,
         AdministratorNameSparql = <<
             "SELECT ?subject WHERE {\n"
+            "    ?subject zotonic:name \"", UniqueName/binary, "\" .\n"
             "    ?subject :author :administrator\n"
             "}"
         >>,
