@@ -778,6 +778,15 @@
     is_signup_confirmed = false :: boolean()
 }).
 
+%% @doc Check the current service policy for creating a username/password at signup.
+%% Return undefined to use the ensure_username_pw flag from auth_validated.
+%% Type: first
+%% Return: boolean() | undefined
+-record(auth_ensure_username_pw, {
+    service :: atom(),
+    service_uid :: binary()
+}).
+
 %% @doc Update the given (accumulator) authentication options with the request options.
 %%      Note that the request options are from the client and are unsafe.
 %% Type: foldl

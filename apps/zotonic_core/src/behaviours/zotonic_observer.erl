@@ -2962,6 +2962,44 @@ Return:
 
 -optional_callbacks([ observe_auth_validated/2, pid_observe_auth_validated/3 ]).
 
+%% Check the current service policy before creating a username/password at signup.
+%% Return undefined to retain the flag from the original authentication record.
+%% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "authentication", "signup", "username", "password"]
+}).
+-doc("
+Check the current authentication service policy before creating a username/password
+identity for a newly signed-up user.
+
+This notification is sent after signup, before ensuring the `username_pw` identity.
+It allows services to apply their current configuration when a pending signup is
+confirmed, instead of relying on the flag saved in the original authentication
+record. It is not sent when connecting an external identity to an existing user.
+
+Type:
+
+[first](/id/doc_developerguide_notifications#notification-first)
+
+Return:
+
+*   `true`: ensure that the new user has a username/password identity.
+*   `false`: skip creating a username/password identity; existing identities are not removed.
+*   `undefined`: defer to another observer. If no observer answers, use the
+    `ensure_username_pw` flag from the original `#auth_validated{}` record.
+
+`#auth_ensure_username_pw{}` properties:
+
+*   service: `atom`, the authentication service that validated the user.
+*   service_uid: `binary`, the user's identifier supplied by that service.
+
+Observers should return `undefined` for services they do not handle.
+").
+-callback observe_auth_ensure_username_pw(#auth_ensure_username_pw{}, z:context()) -> boolean() | undefined.
+-callback pid_observe_auth_ensure_username_pw(pid(), #auth_ensure_username_pw{}, z:context()) -> boolean() | undefined.
+
+-optional_callbacks([ observe_auth_ensure_username_pw/2, pid_observe_auth_ensure_username_pw/3 ]).
+
 %% Update the given (accumulator) authentication options with the request options.
 %%      Note that the request options are from the client and are unsafe.
 %% Type: foldl

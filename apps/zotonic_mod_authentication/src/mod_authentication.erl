@@ -738,11 +738,20 @@ maybe_add_email_identities(Auth, UserId, Context) ->
         end,
         Auth#auth_validated.identities).
 
-%% @doc Ensure a username_pw identity when signing up, unless the identity service explicitly asks to not
-%% add the username_pw identity.
-%% @todo Delete the username_pw identity if the service asks not to add it?
-maybe_ensure_username_pw(#auth_validated{ ensure_username_pw = true, is_connect = false }, UserId, Context) ->
-    m_identity:ensure_username_pw(UserId, z_acl:sudo(Context));
+%% @doc Recheck the current service policy before creating a username, as signup
+%% confirmation can resume an authentication record with an outdated policy.
+maybe_ensure_username_pw(#auth_validated{ is_connect = false } = Auth, UserId, Context) ->
+    EnsureUsernamePw = case z_notifier:first(#auth_ensure_username_pw{
+        service = Auth#auth_validated.service,
+        service_uid = Auth#auth_validated.service_uid
+    }, Context) of
+        undefined -> Auth#auth_validated.ensure_username_pw;
+        IsEnsure when is_boolean(IsEnsure) -> IsEnsure
+    end,
+    case EnsureUsernamePw of
+        true -> m_identity:ensure_username_pw(UserId, z_acl:sudo(Context));
+        false -> ok
+    end;
 maybe_ensure_username_pw(#auth_validated{}, _UserId, _Context) ->
     ok.
 

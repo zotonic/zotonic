@@ -40,6 +40,21 @@ insert_identity_test() ->
     ?assertEqual([{1}], z_db:q("select count(*) from identity where rsc_id = 1 and type = 'test_key' and key = '1234'", C)),
     ok.
 
+insert_normalized_email_identity_test() ->
+    C = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+    {ok, UserId} = m_rsc:insert(#{ <<"category_id">> => person }, C),
+    try
+        Email = <<"identity-normalization@example.com">>,
+        {ok, IdnId} = m_identity:insert(UserId, email, <<" Identity-Normalization@EXAMPLE.COM ">>, C),
+        ?assertEqual(Email, z_db:q1("select key from identity where id = $1", [IdnId], C)),
+        ?assertEqual({ok, IdnId}, m_identity:insert(UserId, <<"email">>, Email, [{is_verified, true}], C)),
+        [Identity] = m_identity:lookup_by_type_and_key_multi(email, Email, C),
+        ?assertEqual(IdnId, proplists:get_value(id, Identity)),
+        ?assertEqual(true, proplists:get_value(is_verified, Identity))
+    after
+        m_rsc:delete(UserId, C)
+    end.
+
 parallel_insert_identity_test() ->
     C = z_context:new(zotonic_site_testsandbox),
     InsertFun = fun() ->
