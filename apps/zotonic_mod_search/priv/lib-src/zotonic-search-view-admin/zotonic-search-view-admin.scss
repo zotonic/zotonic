@@ -24,23 +24,24 @@ limitations under the License.
     padding: 0;
     position: absolute;
     right: 1rem;
-    top: 5rem;
+    top: 4rem;
     overflow-y: scroll;
-    background-color: rgba(255,255,255,0.95);
+    background-color: var(--z-search-view-bg, var(--z-admin-surface, rgba(255,255,255,0.95)));
     list-style: none;
-    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-    border-bottom: 1px solid #eee;
+    box-shadow: var(--z-search-view-shadow, rgba(100, 100, 111, 0.2) 0px 7px 29px 0px);
+    border-bottom: 1px solid var(--z-search-view-border-color, var(--z-admin-border, #eee));
     font-size: 1.6rem;
+    color: var(--z-search-view-color, var(--z-admin-text, inherit));
 
     li {
-        border: 1px solid #e8e8e8;
+        border: 1px solid var(--z-search-view-item-border-color, var(--z-admin-border, #e8e8e8));
         border-top: none;
         cursor: pointer;
 
         &.list-header {
             padding: 10px;
             font-weight: bold;
-            color: #ccc;
+            color: var(--z-search-view-muted-color, var(--z-admin-text-light, #ccc));
         }
 
         .list-item {
@@ -64,6 +65,7 @@ limitations under the License.
                 grid-row: 2;
                 grid-column: 2;
                 font-size: 0.8em;
+                color: var(--z-search-view-meta-color, var(--z-admin-text-muted, inherit));
                 text-transform: lowercase;
             }
 
@@ -79,7 +81,7 @@ limitations under the License.
                 margin-top: 6px;
                 height: 32px;
                 width: 32px;
-                border: 1px solid #eee;
+                border: 1px solid var(--z-search-view-border-color, var(--z-admin-border, #eee));
             }
 
             .glyphicon {
@@ -87,14 +89,14 @@ limitations under the License.
                 grid-column: 1;
                 margin-top: 6px;
                 font-size: 16px;
-                color: #ccc;
+                color: var(--z-search-view-muted-color, var(--z-admin-text-light, #ccc));
                 width: 32px;
                 text-align: center;
             }
         }
 
         &.active {
-            background: #eee;
+            background: var(--z-search-view-active-bg, var(--z-admin-surface-hover, #eee));
         }
     }
 }
