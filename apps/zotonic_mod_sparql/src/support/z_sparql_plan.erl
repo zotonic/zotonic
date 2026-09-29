@@ -759,8 +759,6 @@ resolve_iri(Iri, Base) when is_binary(Iri) ->
     try uri_string:parse(Iri) of
         #{ scheme := _ } ->
             Iri;
-        _ when Base =:= undefined ->
-            throw({error, {relative_iri, Iri}});
         _ ->
             unicode:characters_to_binary(uri_string:resolve(Iri, Base))
     catch

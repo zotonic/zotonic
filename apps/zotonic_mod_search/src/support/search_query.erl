@@ -2239,7 +2239,8 @@ json_condition(Path, Op, Value, Q) ->
     case lists:member(Op, [<<"=">>, <<"<>">>, <<">">>, <<">=">>, <<"<">>, <<"<=">>, <<"@>">>, <<"<@">>]) of
         true ->
             {PathArg, Q1} = add_term_arg(Path, Q),
-            {ValueArg, Q2} = add_term_arg(z_json:encode(Value), Q1),
+            % The database codec JSON-encodes the value for the jsonb parameter.
+            {ValueArg, Q2} = add_term_arg(?DB_PROPS_JSON(Value), Q1),
             Ref = [<<"(rsc.props_json #> ">>, PathArg, <<"::text[])">>],
             Param = [ValueArg, <<"::jsonb">>],
             %% Require the same JSON type for ordering; never cast stored values.

@@ -7,7 +7,7 @@
 
 rdf_literal_identity_test() ->
     lists:foreach(fun({Ast, Datatype, Language}) ->
-        {Expression, _} = z_sparql_sql:expression_to_sql(Ast, #sql_state{}, z_sparql_sql:empty_term()),
+        {Expression, _} = z_sparql_sql:expression_to_sql(Ast, sql_state(), z_sparql_sql:empty_term()),
         ?assertEqual(z_sparql_sql_metadata:literal(Datatype, Language), z_sparql_sql:expression_metadata(Expression))
     end, [
         {{literal, <<"42">>, <<"http://www.w3.org/2001/XMLSchema#int">>, undefined},
@@ -24,7 +24,7 @@ rdf_literal_identity_test() ->
 rdf_constructor_identity_test() ->
     Iri = <<"http://www.w3.org/2001/XMLSchema#short">>,
     {Expression, _} = z_sparql_sql:expression_to_sql(
-        {call, {iri, Iri}, [{integer, <<"42">>}]}, #sql_state{}, z_sparql_sql:empty_term()),
+        {call, {iri, Iri}, [{integer, <<"42">>}]}, sql_state(), z_sparql_sql:empty_term()),
     ?assertEqual(z_sparql_sql_metadata:literal(Iri, undefined), z_sparql_sql:expression_metadata(Expression)),
     {resource, Resource} = z_sparql_sql:binding_expression({resource, <<"rsc">>}),
     ?assertEqual(z_sparql_sql_metadata:iri(), z_sparql_sql:expression_metadata(Resource)),
@@ -33,7 +33,7 @@ rdf_constructor_identity_test() ->
 rdf_values_optional_scope_test() ->
     Variable = {var, <<"word">>},
     Rows = [[{literal, <<"hello">>, undefined, <<"en">>}], [{literal, <<"hallo">>, undefined, <<"nl">>}]],
-    {Terms, State} = z_sparql_sql:values_to_sql([Variable], Rows, #sql_state{metadata_variables = #{Variable => [kind, datatype, language]}}),
+    {Terms, State} = z_sparql_sql:values_to_sql([Variable], Rows, (sql_state())#sql_state{metadata_variables = #{Variable => [kind, datatype, language]}}),
     {value, Bound} = maps:get(Variable, State#sql_state.bindings),
     ?assertEqual(z_sparql_sql:metadata_columns(<<"sparql_values_1">>, 1), z_sparql_sql:expression_metadata(Bound)),
     {Projection, Bindings} = z_sparql_sql:optional_projection(#{}, State#sql_state.bindings, <<"opt">>, State#sql_state.metadata_variables),
@@ -51,8 +51,8 @@ rdf_projection_metadata_arguments_test() ->
     Ast = {call, 'if', [true,
         {literal, <<"hello">>, undefined, <<"en">>},
         {literal, <<"hallo">>, undefined, <<"nl">>}]},
-    {Expression, Term} = z_sparql_sql:expression_to_sql(Ast, #sql_state{}, z_sparql_sql:empty_term()),
-    State = z_sparql_sql:bind_projection(Variable, Expression, Term, #sql_state{}),
+    {Expression, Term} = z_sparql_sql:expression_to_sql(Ast, sql_state(), z_sparql_sql:empty_term()),
+    State = z_sparql_sql:bind_projection(Variable, Expression, Term, sql_state()),
     {value, Bound} = maps:get(Variable, State#sql_state.bindings),
     Sql = z_search_terms:combine([#search_sql_term{
         select = [maps:get(language, z_sparql_sql:expression_metadata(Bound))]
@@ -73,7 +73,7 @@ rdf_coalesce_metadata_test() ->
         sql = <<"opt.value">>, type = text, source = column,
         rdf = z_sparql_sql_metadata:literal(undefined, <<"en">>)
     },
-    State = #sql_state{bindings = #{Variable => {value, First}}},
+    State = (sql_state())#sql_state{bindings = #{Variable => {value, First}}},
     {Expression, Term} = z_sparql_sql:expression_to_sql({call, coalesce,
         [Variable, {literal, <<"hallo">>, undefined, <<"nl">>}]}, State, z_sparql_sql:empty_term()),
     Sql = z_search_terms:combine([Term#search_sql_term{
@@ -84,10 +84,14 @@ rdf_coalesce_metadata_test() ->
 
 rdf_numeric_promotion_test() ->
     {Expression, _} = z_sparql_sql:expression_to_sql(
-        {'/', {integer, <<"3">>}, {integer, <<"2">>}}, #sql_state{}, z_sparql_sql:empty_term()),
+        {'/', {integer, <<"3">>}, {integer, <<"2">>}}, sql_state(), z_sparql_sql:empty_term()),
     ?assertEqual(z_sparql_sql_metadata:from_type(number), z_sparql_sql:expression_metadata(Expression)),
     Dynamic = #sql_expression{
         sql = <<"input.value">>, type = integer, source = column,
         rdf = z_sparql_sql:metadata_columns(<<"input">>, 1)
     },
     ?assertEqual(z_sparql_sql_metadata:unknown(), z_sparql_sql:aggregate_metadata(min, Dynamic, integer)).
+
+
+sql_state() ->
+    #sql_state{context = z_context:new(sparql_metadata_fixture)}.

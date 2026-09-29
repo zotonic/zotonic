@@ -258,9 +258,7 @@ query_preview_vars(QueryText, Context) ->
                     query_preview_error(Parsed#{ reason => Reason })
             end;
         {error, {query_parse, Error}} when is_map(Error) ->
-            query_preview_error(Error);
-        {error, Reason} ->
-            query_preview_error(#{ reason => Reason })
+            query_preview_error(Error)
     end.
 
 query_preview_error(#{ reason := Reason } = Error) ->

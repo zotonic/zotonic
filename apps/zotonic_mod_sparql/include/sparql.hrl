@@ -30,7 +30,8 @@
     ns :: binary(),
     ns_prefix :: binary(),
     predicate :: binary(),
-    type :: text
+    type = undefined :: undefined
+          | text
           | fulltext     % fulltext search using pg_trgm
           | fts          % fulltext search using fts
           | integer

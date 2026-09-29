@@ -119,8 +119,6 @@ sample(Distinct, Argument, Context) ->
             aggregate_call(<<"any_value">>, Distinct, Argument);
         {ok, {postgresql, Major, _Minor}} ->
             {error, {unsupported_postgresql_version, sample, Major}};
-        {ok, {Database, _Major, _Minor}} ->
-            {error, {unsupported_database, sample, Database}};
         {error, Reason} ->
             {error, {database_version, Reason}}
     end.

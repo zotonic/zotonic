@@ -89,6 +89,20 @@ anyof_local_joins_use_subqueries_test() ->
     ?assertNot(contains(Query#search_sql.where, <<"z_search_subquery">>)),
     ?assert(contains(Query#search_sql.where, <<" OR ">>)).
 
+scoped_where_fragments_test() ->
+    lists:foreach(
+        fun(Where) ->
+            Term = (edge_term(<<"edge_a">>, <<>>))#search_sql_term{where = Where},
+            Query = z_search_terms:combine([#search_sql_nested{
+                operator = <<"noneof">>,
+                terms = [Term]
+            }]),
+            ?assert(contains(Query#search_sql.where, <<"(edge_a.predicate_id = 10)">>))
+        end,
+        [<<"edge_a.predicate_id = 10">>,
+         [<<"edge_a">>, <<".predicate_id = ">>, <<"10">>]]).
+
+
 noneof_local_joins_use_subqueries_test() ->
     Query = z_search_terms:combine([
         #search_sql_nested{

@@ -53,7 +53,7 @@ run(Query) ->
         (<<"rsc">>, Column, #context{site = sparql_privacy_fixture}) ->
             case lists:member(Column, [<<"id">>, <<"category_id">>, <<"props_json">>,
                     <<"pivot_date_start">>, <<"pivot_city">>]) of
-                true -> {ok, #column_def{}};
+                true -> {ok, #column_def{name = Column, type = <<"text">>}};
                 false -> {error, enoent}
             end;
         (Table, Column, Context) -> meck:passthrough([Table, Column, Context])
@@ -93,7 +93,7 @@ run(Query) ->
         Optional = <<"SELECT ?id ?email WHERE { ?s p:id ?id OPTIONAL { ?s p:email ?email } } ORDER BY ?id">>,
         OptionalRows = execute(Optional, C, Query),
         ?assertEqual(5, length(OptionalRows)),
-        ?assertEqual(null, element(3, lists:nth(3, OptionalRows))),
+        ?assertEqual(undefined, element(3, lists:nth(3, OptionalRows))),
         Exists = <<"SELECT ?id WHERE { ?s p:id ?id FILTER EXISTS { ?s p:email ?email } } ORDER BY ?id">>,
         ?assertEqual([1,5], ids(Exists, C, Query)),
         NotExists = <<"SELECT ?id WHERE { ?s p:id ?id FILTER NOT EXISTS { ?s p:email ?email } } ORDER BY ?id">>,

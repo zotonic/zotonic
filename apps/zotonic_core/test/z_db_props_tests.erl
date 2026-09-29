@@ -58,4 +58,8 @@ run(C) ->
         z_db:q("drop table pg_temp.defaults_props_test", C)
     end.
 
-columns() -> [#column_def{name = N} || N <- [id, privacy, props, props_json]].
+columns() ->
+    [#column_def{name = Name, type = Type} || {Name, Type} <- [
+        {id, <<"integer">>}, {privacy, <<"integer">>},
+        {props, <<"bytea">>}, {props_json, <<"jsonb">>}
+    ]].

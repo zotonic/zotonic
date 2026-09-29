@@ -457,9 +457,15 @@ nested_category_terms_qterm_test() ->
                 terms = [
                     #search_sql_term{ where = WhereCat, args = [CatArgs] },
                     #search_sql_nested{
-                        operator = <<"noneof">>,
+                        operator = <<"allof">>,
                         terms = [
-                            #search_sql_term{ where = WhereExact, args = [ExactArgs] }
+                            #search_sql_term{property_sources = []},
+                            #search_sql_nested{
+                                operator = <<"noneof">>,
+                                terms = [
+                                    #search_sql_term{ where = WhereExact, args = [ExactArgs] }
+                                ]
+                            }
                         ]
                     },
                     #search_sql_term{ where = WhereExclude, args = [ExcludeArgs] }

@@ -218,16 +218,7 @@ merge_terms(
     #search_sql_terms{
         terms = Terms ++ ExtraTerms,
         post_func = PostFunc
-    };
-merge_terms(
-        #search_sql_terms{ terms = Terms, post_func = undefined },
-        #search_sql_terms{ terms = ExtraTerms, post_func = PostFunc }) ->
-    #search_sql_terms{
-        terms = Terms ++ ExtraTerms,
-        post_func = PostFunc
-    };
-merge_terms(#search_sql_terms{}, #search_sql_terms{}) ->
-    {error, multiple_post_processing_functions}.
+    }.
 
 normalize_query_type(undefined) -> undefined;
 normalize_query_type(<<>>) -> undefined;

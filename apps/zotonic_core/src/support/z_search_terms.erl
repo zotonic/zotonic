@@ -34,7 +34,11 @@
 
 %% @doc Compile with trusted Erlang options. Resource visibility checks remain active.
 %% This option must never be decoded from query terms or external model options.
--spec combine(#search_sql_terms{} | list(), z_search:search_options(), z:context()) -> #search_sql{}.
+-spec combine(Terms, Options, Context) -> #search_sql{}
+    when
+        Terms :: #search_sql_terms{} | list(),
+        Options :: map(),
+        Context :: z:context().
 combine(Terms, #{no_privacy_check := true}, Context) ->
     combine(without_property_sources(Terms), Context);
 combine(Terms, _Options, Context) ->
@@ -302,12 +306,20 @@ compile_term(#search_sql_nested{ operator = <<"noneof">>, terms = Terms },
         OutsideAliases, AllAliases, Args1, Context);
 compile_term(#search_sql_term{} = Term, AllAliases, _OutsideAliases, Args, Context) ->
     {Guarded, Args1} = z_search_acl_props:guard(Term, Args, Context),
-    map_sql_expressions(
+    {Compiled, Args2} = map_sql_expressions(
         Guarded,
         fun(Exists, Terms, Args0) ->
             compile_exists_expression(Exists, Terms, AllAliases, Args0, Context)
         end,
-        Args1).
+        Args1),
+    % A term's where is one SQL expression, even when it is an iolist.
+    % Scoped ACL checks consume a list of complete conditions.
+    Where = case Compiled#search_sql_term.where of
+        [] -> [];
+        <<>> -> [];
+        Expression -> [Expression]
+    end,
+    {Compiled#search_sql_term{where = Where}, Args2}.
 
 %% @doc A scalar EXISTS is a scope boundary, including when used in SELECT,
 %% a function argument, or a compound condition. Its joins and checks must
@@ -575,8 +587,6 @@ subquery_where(<<>>, Where) ->
     [<<" where ">>, Where];
 subquery_where(FromWhere, []) ->
     [<<" where ">>, FromWhere];
-subquery_where(FromWhere, <<>>) ->
-    [<<" where ">>, FromWhere];
 subquery_where(FromWhere, Where) ->
     [
         <<" where (">>, FromWhere,
@@ -669,10 +679,8 @@ merge_term(Term, Acc) ->
     }.
 
 op(<<"allof">>) -> <<" AND ">>;
-op(<<"anyof">>) -> <<" OR ">>;
-op(<<"noneof">>) -> <<" OR ">>.
+op(<<"anyof">>) -> <<" OR ">>.
 
-op_prefix(<<"noneof">>) -> <<" NOT(">>;
 op_prefix(_) -> <<"(">>.
 
 op_postfix(_) -> <<")">>.

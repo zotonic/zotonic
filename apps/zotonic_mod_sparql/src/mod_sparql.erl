@@ -380,8 +380,6 @@ maybe_id(Name) when is_binary(Name) ->
         _ -> integer
     end.
 
-type_from_name(Name) when is_atom(Name) ->
-    type_from_name(atom_to_binary(Name, utf8));
 type_from_name(Name) ->
     case z_props:property_name_type_hint(Name) of
         undefined -> text;

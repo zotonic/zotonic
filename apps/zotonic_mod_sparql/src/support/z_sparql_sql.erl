@@ -713,9 +713,7 @@ bind_object(Object, value, Expression, Table, Column, Term0, State) ->
     Value = rdf_value(Object),
     Value1 = column_value(Table, Column, Value, State#sql_state.context),
     {Arg, Term1} = add_arg(Value1, Term0),
-    {add_where([expression_sql(Expression), <<" = ">>, Arg], Term1), State};
-bind_object(Object, resource, _Expression, _Table, _Column, _Term, _State) ->
-    throw({error, {expected_resource, Object}}).
+    {add_where([expression_sql(Expression), <<" = ">>, Arg], Term1), State}.
 
 bind_variable_object(Variable, Kind, Expression, Term,
         #sql_state{ bindings = Bindings } = State) ->

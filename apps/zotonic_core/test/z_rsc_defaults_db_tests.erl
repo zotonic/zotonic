@@ -142,10 +142,20 @@ observe_rsc_get(#rsc_get{}, Map, _) ->
     CG = case maps:get(<<"content_group_id">>,Map,undefined) of undefined -> 9; V1 -> V1 end,
     Map#{<<"privacy">> => P, <<"content_group_id">> => CG, <<"computed">> => true}.
 
-columns() -> [#column_def{name=N} || N <-
-    [id,category_id,content_group_id,privacy,privacy_is_default,props,props_json]].
+columns() ->
+    [#column_def{name = Name, type = Type} || {Name, Type} <- [
+        {id, <<"integer">>}, {category_id, <<"integer">>},
+        {content_group_id, <<"integer">>}, {privacy, <<"integer">>},
+        {privacy_is_default, <<"boolean">>},
+        {props, <<"bytea">>}, {props_json, <<"jsonb">>}
+    ]].
 
-task_columns() -> [#column_def{name=N} || N <- [id,module,function,key,props]].
+task_columns() ->
+    [#column_def{name = Name, type = Type} || {Name, Type} <- [
+        {id, <<"integer">>}, {module, <<"character varying">>},
+        {function, <<"character varying">>}, {key, <<"character varying">>},
+        {props, <<"bytea">>}
+    ]].
 
 observe_migration_status(#migration_status{}, Items, Context) ->
     case z_context:get(other_migration_fixture, Context) of

@@ -728,7 +728,7 @@ query_(Props, Context) ->
 
 %% @doc Handle a return value from a search function.  This can be an intermediate SQL statement that still needs to be
 %% augmented with extra ACL checks.
--spec search_result(Result, search_offset(), Context) -> #search_result{} when
+-spec search_result(Result, search_offset() | undefined, Context) -> #search_result{} when
     Result :: list() | #search_result{} | #search_sql{},
     Context :: z:context().
 search_result(L, _Limit, _Context) when is_list(L) ->
