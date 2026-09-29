@@ -15,7 +15,14 @@
                 {% wire id=#start postback={subscription_start id=id} delegate=`mod_websub` %}
             {% endif %}
             {% if subscription.last_received %}
-                <span>{_ Last update received: _} {{ subscription.last_received|date:"Y-m-d H:i" }}</span>
+                &nbsp; <span title="{{ subscription.last_received|date:"Y-m-d H:i" }}">
+                    {_ Last update received: _}
+                    {% if subscription.last_received >= now|sub_day:7 %}
+                        {{ subscription.last_received|timesince }}
+                    {% else %}
+                        {{ subscription.last_received|date:"Y-m-d H:i" }}
+                    {% endif %}
+                </span>
             {% endif %}
             {% if subscription.last_error or subscription.credential_error %}
                 {% include "_websub_error.tpl" error=subscription.last_error|default:subscription.credential_error %}
