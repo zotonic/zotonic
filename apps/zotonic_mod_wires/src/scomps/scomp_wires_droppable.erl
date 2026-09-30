@@ -28,8 +28,7 @@
 -moduledoc("
 Mark an element as valid drag destination.
 
-The droppable tag is used in conjunction with the [{% draggable
-%}](/id/doc_template_scomp_scomp_draggable#scomp-draggable) tag to implement drag & drop. Elements that are marked as
+Use this tag together with `scomp#draggable` to implement drag & drop. Elements that are marked as
 droppable can receive drops of draggable elements. Drag & drop generates dragdrop events that are sent to the
 [controller](/id/doc_glossary#term-controller) or the [delegate](/id/doc_glossary#term-delegate).
 

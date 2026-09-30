@@ -9,7 +9,7 @@
 }).
 -moduledoc(<<
     "Render a pie chart as inline SVG.\n\n",
-    "This is a convenience wrapper around the [`chart`](scomp-base-chart) scomp.\n",
+    "This is a convenience wrapper around `scomp#chart`.\n",
     "It accepts the same arguments and always uses `type=\"pie\"`.\n\n",
     "```django\n",
     "{% chart_pie data=[[\"Yes\", 42], [\"No\", 8]] %}\n",
