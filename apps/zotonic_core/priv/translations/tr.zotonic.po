@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-09-25 14:40\n"
+"PO-Revision-Date: 2026-09-29 14:46\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgstr "Uzak kaynak URL'si getirilemedi."
 msgid "Forbidden to access the remote resource URL."
 msgstr "Uzak kaynak URL'sine erişim yasaktır."
 
-#: zotonic_core/src/media/z_media_import.erl:328
+#: zotonic_core/src/media/z_media_import.erl:334
 msgid "Page Import"
 msgstr "Sayfa İçe Aktarma"
 
@@ -56,7 +56,7 @@ msgstr "Uzak sunucu için çok fazla istek var, daha sonra tekrar deneyin."
 msgid "Unauthorized to access the remote resource URL."
 msgstr "Uzak kaynak URL'sine erişim yetkisi yok."
 
-#: zotonic_core/src/media/z_media_import.erl:385
+#: zotonic_core/src/media/z_media_import.erl:392
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
@@ -198,6 +198,7 @@ msgstr "İşbirliği grubuna bağlantılar ekleyin"
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:152
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:184
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:47
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:50
 msgid "All"
 msgstr "Tümü"
 
@@ -269,6 +270,7 @@ msgstr "Tüm ACL kurallarını mevcut yayınlanmış sürülerine geri yüklemek
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:17
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:85
 #: zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:28
+#: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:35
 #: zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:38
 #: zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:52
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:7
@@ -1028,8 +1030,8 @@ msgstr "başka bir tarayıcı kullanın (örn. Firefox kullanıyorsunuz Chrome'u
 msgid "view (acl action)"
 msgstr "incele (acl eylemi)"
 
-#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:182
-#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:184
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:219
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:221
 msgid "&lt; Prev"
 msgstr "&lt; Önceki"
 
@@ -1129,7 +1131,7 @@ msgstr "Gövdeye medya ekle"
 msgid "Add note"
 msgstr "Not ekle"
 
-#: zotonic_mod_admin/src/mod_admin.erl:1117
+#: zotonic_mod_admin/src/mod_admin.erl:1128
 msgid "Added the connection to"
 msgstr "Şuraya eklenen bağlantılar"
 
@@ -1180,10 +1182,19 @@ msgstr "Tüm siteler temizlendi."
 msgid "Allocated"
 msgstr "Ayrılan"
 
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:173
+#: zotonic_mod_websub/priv/templates/_rsc_import_subscription_options.tpl:13
+msgid "Also subscribe to connected resources."
+msgstr "Ayrıca ilgili kaynaklara da abone olun."
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:28
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:29
 msgid "Alternative telephone"
 msgstr "Alternatif telefon"
+
+#: zotonic_mod_admin/priv/templates/_rsc_import_deleted_options.tpl:4
+msgid "Always import all resources, including manually deleted resources."
+msgstr "El ile silinmiş kaynaklar da dahil olmak üzere her zaman tüm kaynakları içe aktarın."
 
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:115
 msgid "Amount"
@@ -1205,6 +1216,10 @@ msgstr "Herhangi bir kategori"
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:155
 msgid "Anybody’s"
 msgstr "Kimsenin"
+
+#: zotonic_mod_admin/priv/templates/_rsc_import_deleted_options.tpl:10
+msgid "Applies to the selected connection depth, including future updates. By default, manually deleted resources stay deleted; automatically removed dependent resources can be imported again."
+msgstr "Seçilen bağlantı derinliği için geçerlidir; gelecekteki güncellemeler de buna dahildir. Varsayılan olarak, manuel olarak silinen kaynaklar silinmiş olarak kalır; otomatik olarak kaldırılan bağımlı kaynaklar ise yeniden içe aktarılabilir."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:36
 msgid "Are you sure you want to delete all tasks for this module and function?"
@@ -1248,6 +1263,16 @@ msgstr "Yetki"
 msgid "Authoritative"
 msgstr "Yetkili"
 
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:162
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:164
+msgid "Automatic updates unavailable"
+msgstr "Otomatik güncellemeler kullanılamıyor"
+
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:159
+#: zotonic_mod_websub/priv/templates/_rsc_import_subscription_options.tpl:7
+msgid "Automatically fetch updates from the original website."
+msgstr "Güncellemeleri orijinal web sitesinden otomatik olarak al."
+
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:47
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:35
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:38
@@ -1255,7 +1280,7 @@ msgid "Available"
 msgstr "Mevcut"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:8
-#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:170
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:207
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:18
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:41
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:3
@@ -1402,8 +1427,9 @@ msgid "Connection"
 msgstr "Bağlantı"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:72
-#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:134
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:133
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:100
+#: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:7
 msgid "Connections"
 msgstr "Bağlantılar"
 
@@ -1471,7 +1497,7 @@ msgstr "Ülke"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:65
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:261
-#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:120
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:119
 msgid "Create"
 msgstr "Oluşturmak"
 
@@ -1561,7 +1587,7 @@ msgstr "Bu sayfayı sil."
 msgid "Delete this page..."
 msgstr "Bu sayfayı sil..."
 
-#: zotonic_mod_admin/src/mod_admin.erl:950
+#: zotonic_mod_admin/src/mod_admin.erl:961
 msgid "Deleted tasks."
 msgstr "Silinen görevler."
 
@@ -1611,6 +1637,7 @@ msgid "Display size"
 msgstr "Ekran boyutu"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:137
+#: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:11
 msgid "Do not import connections."
 msgstr "Bağlantıları içe aktarmayın."
 
@@ -1627,6 +1654,10 @@ msgstr "Bu sayfa bloğunu kaldırmak istiyor musunuz?"
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:45
 msgid "Download"
 msgstr "İndir"
+
+#: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:30
+msgid "Download media from the original website."
+msgstr "Medyayı orijinal web sitesinden indirin."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:11
 msgid "Drag to change position"
@@ -1712,7 +1743,7 @@ msgstr "Göm"
 msgid "Embed code will be sanitized for allowed sites and html."
 msgstr "Gömme kodu, izin verilen siteler ve html için sterilize edilecektir."
 
-#: zotonic_mod_admin/src/mod_admin.erl:564
+#: zotonic_mod_admin/src/mod_admin.erl:575
 msgid "Embed page | a citation, popup, or link to another page"
 msgstr "Sayfayı yerleştir | başka bir sayfaya atıf, açılır pencere veya bağlantı"
 
@@ -1759,7 +1790,8 @@ msgstr "Web sitesini kontrol etme hatası."
 msgid "Error creating the page."
 msgstr "Sayfa oluşturulurken hata meydana geldi."
 
-#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:53
+#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:69
+#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:96
 msgid "Error importing page from the remote server."
 msgstr "Uzak sunucudan sayfa içe aktarılırken hata oluştu."
 
@@ -1817,13 +1849,15 @@ msgstr "Özellikli"
 msgid "Features"
 msgstr "Özellikler"
 
-#: zotonic_mod_admin/priv/templates/_admin_authoritative_info.tpl:9
+#: zotonic_mod_admin/priv/templates/_admin_authoritative_info.tpl:8
+#: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:36
+#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:39
 msgid "Fetch new version"
 msgstr "Yeni sürümü getir"
 
-#: zotonic_mod_admin/priv/templates/_admin_authoritative_info.tpl:11
-msgid "Fetching new version..."
-msgstr "Yeni sürüm getiriliyor..."
+#: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:5
+msgid "Fetch the latest version from the original website using these import options."
+msgstr "Bu içe aktarma seçeneklerini kullanarak orijinal web sitesinden en son sürümü indirin."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_media.tpl:6
 msgid "File / media content"
@@ -1834,7 +1868,7 @@ msgstr "Dosya / medya içeriği"
 msgid "File size"
 msgstr "Dosya boyutu"
 
-#: zotonic_mod_admin/src/mod_admin.erl:855
+#: zotonic_mod_admin/src/mod_admin.erl:866
 msgid "File uploaded to the drop folder, will be handled shortly."
 msgstr "Açılan klasöre yüklenen dosya, kısa süre içinde işlenecektir."
 
@@ -1851,6 +1885,7 @@ msgstr "Dosya adı"
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:46
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:41
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:59
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:55
 msgid "Filter"
 msgstr "Filtre"
 
@@ -1907,8 +1942,14 @@ msgid "Flush system caches"
 msgstr "Sistem belleğini sıfırla"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:145
+#: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:23
 msgid "Follow connections and import all (deep copy)."
 msgstr "Bağlantıları takip edin ve tümünü içe aktarın (derin kopya)."
+
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:178
+#: zotonic_mod_websub/priv/templates/_rsc_import_subscription_options.tpl:18
+msgid "Follows the Connections option. Connected resources keep their subscriptions when disconnected from this page."
+msgstr "\"Bağlantılar\" seçeneğinin ardından gelir. Bağlantısı kesilen kaynaklar, bu sayfadan bağlantıları kesildiğinde aboneliklerini korurlar."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:59
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:225
@@ -1947,7 +1988,7 @@ msgstr "Orta ekli"
 msgid "Header"
 msgstr "Başlık"
 
-#: zotonic_mod_admin/src/mod_admin.erl:562
+#: zotonic_mod_admin/src/mod_admin.erl:573
 msgid "Header | a big header"
 msgstr "Başlık | büyük bir başlık"
 
@@ -1994,12 +2035,18 @@ msgid "If not checked then a visitor is always redirected to the canonical URL o
 msgstr "İşaretlenmediği takdirde ziyaretçi her zaman bu sayfanın kanonik URL'sine yönlendirilir."
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:141
+#: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:17
 msgid "Import only direct connections (shallow copy)."
 msgstr "Yalnızca doğrudan bağlantıları içe aktarın (sığ kopya)."
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:249
 msgid "Imported content"
 msgstr "İçe aktarılan içerik"
+
+#: zotonic_mod_admin/priv/templates/_rsc_import_deleted_options.tpl:7
+#: zotonic_mod_admin/priv/templates/_rsc_import_deleted_options.tpl:9
+msgid "Importing deleted resources"
+msgstr "Silinmiş kaynakları içe aktarma"
 
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:78
 msgid "Indexed by search engines"
@@ -2110,7 +2157,7 @@ msgstr "Posta adresi"
 msgid "Main"
 msgstr "Ana"
 
-#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:195
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:232
 msgid "Make"
 msgstr "Oluştur"
 
@@ -2342,8 +2389,8 @@ msgstr "Yeni sayfa"
 msgid "Newest incoming connections."
 msgstr "En yeni gelen bağlantılar."
 
-#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:188
-#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:190
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:225
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:227
 msgid "Next &gt;"
 msgstr "Sıradaki &gt;"
 
@@ -2695,7 +2742,7 @@ msgstr "Uzaktan sanal ortam yalıtımı ve kuyruk ayrıntıları, her bir çalı
 msgid "Remove"
 msgstr "Kaldır"
 
-#: zotonic_mod_admin/src/mod_admin.erl:1121
+#: zotonic_mod_admin/src/mod_admin.erl:1132
 msgid "Removed the connection to"
 msgstr "Şuna olan bağlantıyı kaldır"
 
@@ -2705,7 +2752,7 @@ msgstr "Kategori ağacını tekrar numaralandır"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:67
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:95
-#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:195
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:232
 msgid "Replace"
 msgstr "Değiştir"
 
@@ -2789,7 +2836,7 @@ msgstr "Kaydet ve sayfayı gör"
 msgid "Save this page."
 msgstr "Sayfayı kaydet"
 
-#: zotonic_mod_admin/src/mod_admin.erl:939
+#: zotonic_mod_admin/src/mod_admin.erl:950
 msgid "Scheduled a background task to check all refers connections."
 msgstr "Tüm referans bağlantılarını kontrol etmek için bir arka plan görevi planlandı."
 
@@ -2929,31 +2976,31 @@ msgstr "Bazı görevler yeniden deneniyor.<br>Toplam hata: {total}<br>Tek görev
 msgid "Something went wrong. Sorry."
 msgstr "Bir hata oluştu. Üzgünüz."
 
-#: zotonic_mod_admin/src/mod_admin.erl:828
+#: zotonic_mod_admin/src/mod_admin.erl:839
 msgid "Sorry, could not handle this filename."
 msgstr "Üzgünüz, bu dosya adı işlenemedi."
 
-#: zotonic_mod_admin/src/mod_admin.erl:867
+#: zotonic_mod_admin/src/mod_admin.erl:878
 msgid "Sorry, could not move the file to the drop folder."
 msgstr "Maalesef, dosya açılan klasöre taşınamadı."
 
-#: zotonic_mod_admin/src/mod_admin.erl:941
 #: zotonic_mod_admin/src/mod_admin.erl:952
+#: zotonic_mod_admin/src/mod_admin.erl:963
 #: zotonic_mod_menu/src/mod_menu.erl:133
 msgid "Sorry, only an admin is allowed to do this"
 msgstr "Üzgünüz, yalnızca bir yöneticinin bunu yapmasına izin verilir"
 
-#: zotonic_mod_admin/src/mod_admin.erl:803
 #: zotonic_mod_admin/src/mod_admin.erl:814
+#: zotonic_mod_admin/src/mod_admin.erl:825
 msgid "Sorry, that page is unknown."
 msgstr "Üzgünüm, o sayfa bilinmiyor."
 
-#: zotonic_mod_admin/src/mod_admin.erl:805
 #: zotonic_mod_admin/src/mod_admin.erl:816
+#: zotonic_mod_admin/src/mod_admin.erl:827
 msgid "Sorry, you are not allowed to edit notes."
 msgstr "Üzgünüz, notları düzenlemenize izin verilmiyor."
 
-#: zotonic_mod_admin/src/mod_admin.erl:871
+#: zotonic_mod_admin/src/mod_admin.erl:882
 msgid "Sorry, you are not allowed to upload drop folder files."
 msgstr "Üzgünüz, açılan klasör dosyalarını yüklemenize izin verilmiyor."
 
@@ -2961,11 +3008,11 @@ msgstr "Üzgünüz, açılan klasör dosyalarını yüklemenize izin verilmiyor.
 msgid "Sorry, you don't have permission to add the connection."
 msgstr "Üzgünüz, bağlantı ekleme yetkiniz yok."
 
-#: zotonic_mod_admin/src/mod_admin.erl:1103
+#: zotonic_mod_admin/src/mod_admin.erl:1114
 msgid "Sorry, you have no permission to add the connection."
 msgstr "Üzgünüz"
 
-#: zotonic_mod_admin/src/mod_admin.erl:1105
+#: zotonic_mod_admin/src/mod_admin.erl:1116
 msgid "Sorry, you have no permission to delete the connection."
 msgstr "Üzgünüz, bu bağlantıyı silmek için yetkiniz yok."
 
@@ -2973,7 +3020,7 @@ msgstr "Üzgünüz, bu bağlantıyı silmek için yetkiniz yok."
 msgid "Sort by"
 msgstr "Göre sırala"
 
-#: zotonic_mod_admin/src/mod_admin.erl:561
+#: zotonic_mod_admin/src/mod_admin.erl:572
 msgid "Standard page block types"
 msgstr "Standart sayfa bloğu türleri"
 
@@ -3006,6 +3053,8 @@ msgstr "Eyalet"
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_fields.tpl:7
 #: zotonic_mod_survey/src/models/m_survey.erl:1114
 #: zotonic_mod_survey/src/models/m_survey.erl:1120
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:38
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:72
 #: zotonic_site_status/priv/templates/_navbar.tpl:15
 #: zotonic_site_status/priv/templates/_sites.tpl:4
 msgid "Status"
@@ -3037,7 +3086,22 @@ msgstr "Adres satır 2"
 msgid "Structure"
 msgstr "Yapı"
 
-#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:40
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:153
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:33
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:102
+#: zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:18
+#: zotonic_mod_websub/priv/templates/_rsc_import_subscription_options.tpl:4
+msgid "Subscribe"
+msgstr "Abone ol"
+
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:175
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:177
+#: zotonic_mod_websub/priv/templates/_rsc_import_subscription_options.tpl:15
+#: zotonic_mod_websub/priv/templates/_rsc_import_subscription_options.tpl:17
+msgid "Subscribing to connected resources"
+msgstr "Bağlantılı kaynaklara abone olma"
+
+#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:83
 msgid "Succesfully imported page from the remote server."
 msgstr "Uzak sunucudan sayfa başarıyla içe aktarıldı."
 
@@ -3113,7 +3177,7 @@ msgstr "Test sorgusu"
 msgid "Text"
 msgstr "Metin"
 
-#: zotonic_mod_admin/src/mod_admin.erl:563
+#: zotonic_mod_admin/src/mod_admin.erl:574
 msgid "Text | a (rich) text block"
 msgstr "Metin | (zengin) bir metin bloğu"
 
@@ -3132,6 +3196,10 @@ msgstr "Kategori ağacı yeniden yapılıyor. Bu uzun zaman alabilir."
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:7
 msgid "The media runner configuration is invalid."
 msgstr "Medya koşucusu yapılandırması geçersiz."
+
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:165
+msgid "The original website does not advertise automatic updates."
+msgstr "Orijinal web sitesinde otomatik güncellemelerden bahsedilmemektedir."
 
 #: zotonic_mod_admin/priv/templates/_action_unlink_undo.tpl:15
 msgid "The page"
@@ -3360,7 +3428,7 @@ msgstr "yayınlanmamış"
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results_item.tpl:29
 #: zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:2
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:29
-#: zotonic_mod_admin/src/mod_admin.erl:1111
+#: zotonic_mod_admin/src/mod_admin.erl:1122
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:118
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:182
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:9
@@ -3379,8 +3447,16 @@ msgstr "yayınlanmamış"
 #: zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:16
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:10
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:3
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:88
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:90
 msgid "Untitled"
 msgstr "Başlıksız"
+
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:25
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:30
+#: zotonic_mod_admin/src/mod_admin.erl:555
+msgid "Untitled query"
+msgstr "Başlıksız sorgu"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:9
 msgid "Unused"
@@ -3583,6 +3659,8 @@ msgid "You are not allowed to delete this page."
 msgstr "Bu sayfayı silmeye yetkiniz yok."
 
 #: zotonic_mod_admin/priv/templates/admin_edit.tpl:16
+#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:33
+#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:45
 #: zotonic_mod_admin_merge/priv/templates/admin_merge.tpl:26
 msgid "You are not allowed to edit this page."
 msgstr "Bu sayfayı düzenleme yetkiniz yok."
@@ -5071,6 +5149,7 @@ msgstr "Sıralı çiftler"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:104
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:135
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:56
 msgid "Reset"
 msgstr "Sıfırla"
 
@@ -6175,6 +6254,7 @@ msgstr "Parolanızı nasıl sıfırlayacağınızla ilgili talimatları almak i�
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:143
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:7
 #: zotonic_mod_survey/priv/templates/_survey_block_name_check.tpl:2
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:105
 msgid "Error"
 msgstr "Hata"
 
@@ -7708,6 +7788,7 @@ msgstr "Bu, sunucuyla iletişimi test eder."
 #: zotonic_mod_base/priv/templates/directory_index.tpl:15
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:38
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:35
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:69
 msgid "Type"
 msgstr "Tür"
 
@@ -10323,6 +10404,7 @@ msgid "Resources with email identity"
 msgstr "E-posta kimliğine sahip kaynaklar"
 
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:158
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:109
 msgid "Retry"
 msgstr "Tekrar dene"
 
@@ -10514,6 +10596,7 @@ msgstr "O dili kullanan tüm alıcılar"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:29
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:24
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:40
 msgid "All statuses"
 msgstr "Tüm durumlar"
 
@@ -10558,7 +10641,7 @@ msgid "Check to activate the e-mail address."
 msgstr "E-posta adresini etkinleştirmek için kontrol edin."
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:216
-#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:389
+#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:414
 msgid "Choose recipients and language"
 msgstr "Alıcıları ve dili seçin"
 
@@ -10642,7 +10725,7 @@ msgstr "Bu e-posta gönderimi kuyruğa alınamadı. İzinlerinizi ve dil seçimi
 msgid "Could not save the opt-out preference."
 msgstr "Devre dışı bırakma tercihi kaydedilemedi."
 
-#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:397
+#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:422
 msgid "Could not send the test. Check the test mailing list and selected language."
 msgstr "Test gönderilemedi. Test posta listesini ve seçilen dili kontrol edin."
 
@@ -10766,7 +10849,7 @@ msgstr "E-posta dili, gönderim için seçilen posta listesinin dil sürümüdü
 msgid "Enter a valid future mailing date and time."
 msgstr "Geçerli bir gelecek tarih ve saat girin."
 
-#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:356
+#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:381
 msgid "Enter a valid test email address."
 msgstr "Geçerli bir test e-posta adresi girin."
 
@@ -11710,6 +11793,8 @@ msgstr "Göndermeyi durdurmak mı? Yalnızca henüz kuyruğa alınmamış e-post
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:16
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:53
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:81
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:44
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:100
 #: zotonic_site_status/priv/templates/_sites.tpl:18
 msgid "Stopped"
 msgstr "Durduruldu"
@@ -11717,12 +11802,6 @@ msgstr "Durduruldu"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:52
 msgid "Stopped; already queued emails are still being processed"
 msgstr "Durduruldu; kuyruğa alınmış e-postalar hâlâ işlenmeye devam ediyor"
-
-#: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:33
-#: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:102
-#: zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:18
-msgid "Subscribe"
-msgstr "Abone ol"
 
 #: zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:5
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:8
@@ -11748,6 +11827,7 @@ msgid "Target mailing list"
 msgstr "Hedef posta listesi"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:185
+#: zotonic_mod_websub/priv/templates/_websub_error.tpl:3
 msgid "Technical details"
 msgstr "Teknik ayrıntılar"
 
@@ -15928,6 +16008,252 @@ msgstr "Vimeo Video"
 #: zotonic_mod_video_embed/src/mod_video_embed.erl:274
 msgid "Youtube Video"
 msgstr "Youtube Video"
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:50
+msgid "Access was denied while updating this page. Check the subscriber's source website credentials and permission to update the local page."
+msgstr "Bu sayfa güncellenirken erişim reddedildi. Abonenin kaynak web sitesindeki kimlik bilgilerini ve yerel sayfayı güncelleme iznini kontrol edin."
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:41
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:99
+msgid "Active"
+msgstr "Etkin"
+
+#: zotonic_mod_websub/priv/templates/_admin_edit_sidebar_websub.tpl:11
+msgid "Active subscriptions to this page: {count}"
+msgstr "Bu sayfaya yönelik aktif abonelikler: {count}"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:24
+msgid "All subscriptions"
+msgstr "Tüm abonelikler"
+
+#: zotonic_mod_websub/priv/templates/_websub_error.tpl:1
+msgid "Automatic update error:"
+msgstr "Otomatik güncelleme hatası:"
+
+#: zotonic_mod_websub/priv/templates/_admin_rsc_import_status_live.tpl:6
+msgid "Automatic updates are active."
+msgstr "Otomatik güncellemeler etkin durumdadır."
+
+#: zotonic_mod_websub/priv/templates/_admin_rsc_import_status_live.tpl:13
+msgid "Automatic updates are stopped."
+msgstr "Otomatik güncellemeler durduruldu."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:72
+msgid "Automatic updates could not be completed. Check the technical details for the reported error."
+msgstr "Otomatik güncellemeler tamamlanamadı. Bildirilen hatanın teknik ayrıntılarını kontrol edin."
+
+#: zotonic_mod_websub/src/mod_websub.erl:245
+msgid "Could not change the automatic update subscription."
+msgstr "Otomatik güncelleme aboneliği değiştirilemedi."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:52
+msgid "Could not contact the remote website. Check its availability and HTTPS certificate."
+msgstr "Uzak web sitesine bağlanılamadı. Sitenin erişilebilirliğini ve HTTPS sertifikasını kontrol edin."
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:94
+msgid "Deleted page"
+msgstr "Silinmiş sayfa"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:57
+msgid "Enter the exact hostname, without a scheme, port, or path."
+msgstr "Şema, bağlantı noktası veya yol olmadan tam ana bilgisayar adını girin."
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:48
+msgid "Errors"
+msgstr "Hatalar"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:43
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:101
+msgid "Expired"
+msgstr "Süresi dolmuş"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:63
+msgid "Expired and stopped subscriptions are included. Renewals can temporarily have two active subscriptions. Remote hosts are shown without callback URLs or credentials."
+msgstr "Süresi dolmuş ve durdurulmuş abonelikler de dahil edilmiştir. Yenileme işlemleri sırasında geçici olarak iki aktif abonelik bulunabilir. Uzak sunucular, geri arama URL’leri veya kimlik bilgileri olmadan gösterilir."
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:34
+msgid "External hostname"
+msgstr "Dış ana bilgisayar adı"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:74
+msgid "Last activity"
+msgstr "Son etkinlik"
+
+#: zotonic_mod_websub/priv/templates/_admin_rsc_import_status_live.tpl:19
+msgid "Last update received:"
+msgstr "Alınan son güncelleme:"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:73
+msgid "Lease expires"
+msgstr "Kira sözleşmesi sona eriyor"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:70
+msgid "Local page"
+msgstr "Yerel sayfa"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:30
+msgid "Local resource ID"
+msgstr "Yerel kaynak kimliği"
+
+#: zotonic_mod_websub/priv/templates/_admin_edit_sidebar_websub.tpl:13
+msgid "No active subscriptions to this page."
+msgstr "Bu sayfaya ilişkin aktif abonelik bulunmamaktadır."
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:121
+msgid "No subscriptions found."
+msgstr "Hiçbir abonelik bulunamadı."
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:8
+msgid "Our subscriptions to external pages and subscriptions from others to our pages."
+msgstr "Dış sayfalara yaptığımız abonelikler ve başkalarının sayfalarımıza yaptığı abonelikler."
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:25
+msgid "Pages we subscribe to"
+msgstr "Abone olduğumuz sayfalar"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:42
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:102
+msgid "Pending confirmation"
+msgstr "Onay bekleniyor"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:71
+msgid "Remote host"
+msgstr "Uzak ana bilgisayar"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:108
+msgid "Retry subscription"
+msgstr "Aboneliği yeniden dene"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:60
+msgid "Select a valid subscription type, resource ID, hostname, status, errors, and page number."
+msgstr "Geçerli bir abonelik türü, kaynak kimliği, ana bilgisayar adı, durum, hatalar ve sayfa numarası seçin."
+
+#: zotonic_mod_websub/priv/templates/_admin_rsc_import_status_live.tpl:14
+msgid "Start automatic updates"
+msgstr "Otomatik güncellemeleri başlat"
+
+#: zotonic_mod_websub/priv/templates/_admin_rsc_import_status_live.tpl:10
+msgid "Stop automatic updates"
+msgstr "Otomatik güncellemeleri durdur"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:26
+msgid "Subscribers to our pages"
+msgstr "Sayfalarımızın takipçileri"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:81
+msgid "Subscribes to us"
+msgstr "Bize abone olun"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:22
+msgid "Subscription type"
+msgstr "Abonelik türü"
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:56
+msgid "The callback URL must use a hostname instead of an IP address. Check this website's public URL."
+msgstr "Geri arama URL’sinde IP adresi yerine bir ana bilgisayar adı kullanılmalıdır. Bu web sitesinin genel erişim URL’sini kontrol edin."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:38
+msgid "The destination could not be resolved or its network address is blocked. Local and private addresses are only allowed for .test hostnames in development."
+msgstr "Hedef çözümlenemedi veya ağ adresi engellenmiş. Yerel ve özel adresler, yalnızca geliştirme aşamasındaki .test alan adları için izin verilir."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:48
+msgid "The original page address has changed. Import the page again to set up automatic updates."
+msgstr "Sayfanın orijinal adresi değişmiştir. Otomatik güncellemeleri etkinleştirmek için sayfayı yeniden içe aktarın."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:54
+msgid "The remote website address is invalid. Check the source and WebSub URLs."
+msgstr "Uzak web sitesi adresi geçersiz. Kaynak ve WebSub URL’lerini kontrol edin."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:58
+msgid "The remote website redirects from HTTPS to HTTP. Use a secure HTTPS destination."
+msgstr "Uzak web sitesi HTTPS'den HTTP'ye yönlendiriyor. Güvenli bir HTTPS hedefi kullanın."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:60
+msgid "The remote website redirects too many times. Check its redirect configuration."
+msgstr "Uzak web sitesi çok fazla kez yönlendiriyor. Yönlendirme ayarlarını kontrol edin."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:68
+msgid "The remote website refused access. Check the subscribing user's permissions on that website."
+msgstr "Uzak web sitesi erişimi reddetti. Abone olan kullanıcının o web sitesindeki izinlerini kontrol edin."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:66
+msgid "The remote website requires authentication. Check the subscribing user's configured credentials."
+msgstr "Uzak web sitesi kimlik doğrulaması gerektiriyor. Abone olan kullanıcının yapılandırılmış kimlik bilgilerini kontrol edin."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:62
+msgid "The remote website returned a redirect without a destination."
+msgstr "Uzak web sitesi, hedef belirtilmemiş bir yönlendirme döndürdü."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:64
+msgid "The remote website returned an invalid redirect destination."
+msgstr "Uzak web sitesi geçersiz bir yönlendirme hedefi döndürdü."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:70
+msgid "The requested page or WebSub endpoint was not found on the remote website."
+msgstr "İstenen sayfa veya WebSub uç noktası, uzak web sitesinde bulunamadı."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:46
+msgid "The source page advertises invalid WebSub links. Check its hub and topic URLs."
+msgstr "Kaynak sayfada geçersiz WebSub bağlantıları yer almaktadır. Sayfanın hub ve konu URL’lerini kontrol edin."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:44
+msgid "The source page does not advertise automatic updates via WebSub."
+msgstr "Kaynak sayfada, WebSub aracılığıyla otomatik güncellemelerden bahsedilmemektedir."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:40
+msgid "The source website did not confirm the subscription in time. Check that it can reach this website's callback URL."
+msgstr "Kaynak web sitesi aboneliği zamanında onaylamadı. Bu web sitesinin geri arama URL’sine erişebildiğini kontrol edin."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:32
+msgid "The source website does not allow this subscriber to use WebSub. On the source website, allow the subscribing user to use WebSub, or allow anonymous visitors for public subscriptions."
+msgstr "Kaynak web sitesi, bu abonenin WebSub'ı kullanmasına izin vermiyor. Kaynak web sitesinde, abone olan kullanıcının WebSub'ı kullanmasına izin verin ya da genel abonelikler için anonim ziyaretçilere izin verin."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:36
+msgid "The source website does not recognize this subscription topic. Check that the original page still exists."
+msgstr "Kaynak web sitesi bu abonelik konusunu tanımıyor. Orijinal sayfanın hâlâ mevcut olup olmadığını kontrol edin."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:34
+msgid "The source website refused access to this page. The subscriber must be allowed to view it, and the page must be an original on that website."
+msgstr "Kaynak web sitesi bu sayfaya erişimi reddetti. Abonenin sayfayı görüntüleyebilmesi için izin verilmesi ve sayfanın söz konusu web sitesinde orijinal olması gerekir."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:42
+msgid "This page points back to this website. A website cannot subscribe to itself."
+msgstr "Bu sayfa bu web sitesine yönlendiriyor. Bir web sitesi kendisine abone olamaz."
+
+#: zotonic_mod_websub/priv/templates/_admin_edit_sidebar_websub.tpl:17
+msgid "View subscribers to this page"
+msgstr "Bu sayfanın abone listesini görüntüle"
+
+#: zotonic_mod_websub/priv/templates/_admin_edit_sidebar_websub.tpl:19
+msgid "View subscriptions to the external page"
+msgstr "Harici sayfadaki abonelikleri görüntüle"
+
+#: zotonic_mod_websub/priv/templates/_admin_rsc_import_status_live.tpl:8
+msgid "Waiting for automatic updates to be confirmed."
+msgstr "Otomatik güncellemelerin onaylanmasını bekliyorum."
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:82
+msgid "We subscribe"
+msgstr "Abone oluyoruz"
+
+#: zotonic_mod_websub/priv/templates/_admin_edit_sidebar_websub.tpl:4
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:3
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:7
+#: zotonic_mod_websub/src/mod_websub.erl:217
+msgid "WebSub subscriptions"
+msgstr "WebSub abonelikleri"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:51
+msgid "With errors"
+msgstr "Hatalarla birlikte"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:52
+msgid "Without errors"
+msgstr "Hatasız"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:131
+msgid "You are not allowed to view subscriptions."
+msgstr "Abonelikleri görüntülemeye izniniz yok."
 
 #: zotonic_mod_wires/src/actions/action_wires_alert.erl:68
 msgid "Alert"

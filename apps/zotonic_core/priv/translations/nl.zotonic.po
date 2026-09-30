@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-09-25 14:40\n"
+"PO-Revision-Date: 2026-09-29 14:45\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgstr "Kan de externe bron-URL niet ophalen."
 msgid "Forbidden to access the remote resource URL."
 msgstr "Verboden toegang te krijgen tot de externe bron-URL."
 
-#: zotonic_core/src/media/z_media_import.erl:328
+#: zotonic_core/src/media/z_media_import.erl:334
 msgid "Page Import"
 msgstr "Pagina import"
 
@@ -56,7 +56,7 @@ msgstr "Te veel verzoeken voor de externe server, probeer het later opnieuw."
 msgid "Unauthorized to access the remote resource URL."
 msgstr "Niet geautoriseerd voor toegang tot de externe bron-URL."
 
-#: zotonic_core/src/media/z_media_import.erl:385
+#: zotonic_core/src/media/z_media_import.erl:392
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
@@ -198,6 +198,7 @@ msgstr "Voeg connecties toe aan de samenwerkingsgroep"
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:152
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:184
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:47
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:50
 msgid "All"
 msgstr "Alles"
 
@@ -269,6 +270,7 @@ msgstr "Weet je zeker dat je alle regels wilt terugzetten vanaf de gepubliceerde
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:17
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:85
 #: zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:28
+#: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:35
 #: zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:38
 #: zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:52
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:7
@@ -1028,8 +1030,8 @@ msgstr "openen in een andere browser (bijvoorbeeld Chrome als je nu in Firefox z
 msgid "view (acl action)"
 msgstr "bekijk"
 
-#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:182
-#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:184
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:219
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:221
 msgid "&lt; Prev"
 msgstr "&lt; Vorige"
 
@@ -1132,7 +1134,7 @@ msgstr "Media toevoegen aan pagina"
 msgid "Add note"
 msgstr "Notitie toevoegen"
 
-#: zotonic_mod_admin/src/mod_admin.erl:1117
+#: zotonic_mod_admin/src/mod_admin.erl:1128
 msgid "Added the connection to"
 msgstr "Connectie gemaakt naar"
 
@@ -1183,10 +1185,19 @@ msgstr "Alle site-caches zijn geleegd"
 msgid "Allocated"
 msgstr "Toegewezen"
 
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:173
+#: zotonic_mod_websub/priv/templates/_rsc_import_subscription_options.tpl:13
+msgid "Also subscribe to connected resources."
+msgstr "Abonneer je ook op gerelateerde bronnen."
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:28
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:29
 msgid "Alternative telephone"
 msgstr "Alternatief telefoonnummer"
+
+#: zotonic_mod_admin/priv/templates/_rsc_import_deleted_options.tpl:4
+msgid "Always import all resources, including manually deleted resources."
+msgstr "Importeer altijd alle bronnen, inclusief de bronnen die handmatig zijn verwijderd."
 
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:115
 msgid "Amount"
@@ -1208,6 +1219,10 @@ msgstr "Willekeurige categorie"
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:155
 msgid "Anybody’s"
 msgstr "Iedereen"
+
+#: zotonic_mod_admin/priv/templates/_rsc_import_deleted_options.tpl:10
+msgid "Applies to the selected connection depth, including future updates. By default, manually deleted resources stay deleted; automatically removed dependent resources can be imported again."
+msgstr "Dit geldt voor de geselecteerde koppelingsdiepte, inclusief toekomstige updates. Standaard blijven handmatig verwijderde bronnen verwijderd; automatisch verwijderde afhankelijke bronnen kunnen opnieuw worden geïmporteerd."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:36
 msgid "Are you sure you want to delete all tasks for this module and function?"
@@ -1251,6 +1266,16 @@ msgstr "Authenticatie"
 msgid "Authoritative"
 msgstr "Gezaghebbend"
 
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:162
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:164
+msgid "Automatic updates unavailable"
+msgstr "Automatische updates zijn niet beschikbaar"
+
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:159
+#: zotonic_mod_websub/priv/templates/_rsc_import_subscription_options.tpl:7
+msgid "Automatically fetch updates from the original website."
+msgstr "Haal automatisch updates op van de oorspronkelijke website."
+
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:47
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:35
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:38
@@ -1258,7 +1283,7 @@ msgid "Available"
 msgstr "Beschikbaar"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:8
-#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:170
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:207
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:18
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:41
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:3
@@ -1405,8 +1430,9 @@ msgid "Connection"
 msgstr "Verbinding"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:72
-#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:134
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:133
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:100
+#: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:7
 msgid "Connections"
 msgstr "Verbindingen"
 
@@ -1474,7 +1500,7 @@ msgstr "Land"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:65
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:261
-#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:120
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:119
 msgid "Create"
 msgstr "Maak"
 
@@ -1564,7 +1590,7 @@ msgstr "Verwijder deze pagina."
 msgid "Delete this page..."
 msgstr "Verwijder deze pagina..."
 
-#: zotonic_mod_admin/src/mod_admin.erl:950
+#: zotonic_mod_admin/src/mod_admin.erl:961
 msgid "Deleted tasks."
 msgstr "Verwijderde taken."
 
@@ -1614,6 +1640,7 @@ msgid "Display size"
 msgstr "Schermgrootte"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:137
+#: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:11
 msgid "Do not import connections."
 msgstr "Geen verbindingen importeren."
 
@@ -1630,6 +1657,10 @@ msgstr "Wil je dit paginablok verwijderen?"
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:45
 msgid "Download"
 msgstr "Download"
+
+#: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:30
+msgid "Download media from the original website."
+msgstr "Download de media van de oorspronkelijke website."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:11
 msgid "Drag to change position"
@@ -1715,7 +1746,7 @@ msgstr "Insluiten"
 msgid "Embed code will be sanitized for allowed sites and html."
 msgstr "Insluitcode wordt opgeschoond voor toegestane sites en html."
 
-#: zotonic_mod_admin/src/mod_admin.erl:564
+#: zotonic_mod_admin/src/mod_admin.erl:575
 msgid "Embed page | a citation, popup, or link to another page"
 msgstr "Pagina insluiten | een citaat, pop-up of link naar een andere pagina"
 
@@ -1762,7 +1793,8 @@ msgstr "Fout bij controleren van de website."
 msgid "Error creating the page."
 msgstr "Fout bij het maken van de pagina."
 
-#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:53
+#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:69
+#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:96
 msgid "Error importing page from the remote server."
 msgstr "Fout bij het importeren van de pagina van de externe server."
 
@@ -1820,13 +1852,15 @@ msgstr "Prominent"
 msgid "Features"
 msgstr "Eigenschappen"
 
-#: zotonic_mod_admin/priv/templates/_admin_authoritative_info.tpl:9
+#: zotonic_mod_admin/priv/templates/_admin_authoritative_info.tpl:8
+#: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:36
+#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:39
 msgid "Fetch new version"
 msgstr "Nieuwe versie ophalen"
 
-#: zotonic_mod_admin/priv/templates/_admin_authoritative_info.tpl:11
-msgid "Fetching new version..."
-msgstr "Nieuwe versie ophalen..."
+#: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:5
+msgid "Fetch the latest version from the original website using these import options."
+msgstr "Download de nieuwste versie van de officiële website met behulp van deze importopties."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_media.tpl:6
 msgid "File / media content"
@@ -1837,7 +1871,7 @@ msgstr "Bestand / mediainhoud"
 msgid "File size"
 msgstr "Bestandsgrootte"
 
-#: zotonic_mod_admin/src/mod_admin.erl:855
+#: zotonic_mod_admin/src/mod_admin.erl:866
 msgid "File uploaded to the drop folder, will be handled shortly."
 msgstr "Bestand dat is geüpload naar de drop-map, wordt binnenkort verwerkt."
 
@@ -1854,6 +1888,7 @@ msgstr "Bestandsnaam"
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:46
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:41
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:59
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:55
 msgid "Filter"
 msgstr "Filter"
 
@@ -1910,8 +1945,14 @@ msgid "Flush system caches"
 msgstr "Flush systeemcaches"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:145
+#: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:23
 msgid "Follow connections and import all (deep copy)."
 msgstr "Volg verbindingen en importeer alles (diepe kopie)."
+
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:178
+#: zotonic_mod_websub/priv/templates/_rsc_import_subscription_options.tpl:18
+msgid "Follows the Connections option. Connected resources keep their subscriptions when disconnected from this page."
+msgstr "Volgt de optie Verbindingen. Verbonden bronnen behouden hun abonnementen wanneer de verbinding met deze pagina wordt verbroken."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:59
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:225
@@ -1950,7 +1991,7 @@ msgstr "Heeft medium gekoppeld"
 msgid "Header"
 msgstr "Kopregel"
 
-#: zotonic_mod_admin/src/mod_admin.erl:562
+#: zotonic_mod_admin/src/mod_admin.erl:573
 msgid "Header | a big header"
 msgstr "Koptekst | een grote koptekst"
 
@@ -1997,12 +2038,18 @@ msgid "If not checked then a visitor is always redirected to the canonical URL o
 msgstr "Als deze optie niet is aangevinkt, wordt een bezoeker altijd doorgestuurd naar de canonieke URL van deze pagina."
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:141
+#: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:17
 msgid "Import only direct connections (shallow copy)."
 msgstr "Importeer alleen directe verbindingen (ondiepe kopie)."
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:249
 msgid "Imported content"
 msgstr "Geïmporteerde inhoud"
+
+#: zotonic_mod_admin/priv/templates/_rsc_import_deleted_options.tpl:7
+#: zotonic_mod_admin/priv/templates/_rsc_import_deleted_options.tpl:9
+msgid "Importing deleted resources"
+msgstr "Verwijderde resources importeren"
 
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:78
 msgid "Indexed by search engines"
@@ -2113,7 +2160,7 @@ msgstr "Postadres"
 msgid "Main"
 msgstr "Basis"
 
-#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:195
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:232
 msgid "Make"
 msgstr "Maak"
 
@@ -2345,8 +2392,8 @@ msgstr "Nieuwe pagina"
 msgid "Newest incoming connections."
 msgstr "Nieuwste inkomende verbindingen."
 
-#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:188
-#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:190
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:225
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:227
 msgid "Next &gt;"
 msgstr "Volgende &gt;"
 
@@ -2698,7 +2745,7 @@ msgstr "Op het dashboard van elke runner zijn details over de isolatie in de ext
 msgid "Remove"
 msgstr "Verwijder"
 
-#: zotonic_mod_admin/src/mod_admin.erl:1121
+#: zotonic_mod_admin/src/mod_admin.erl:1132
 msgid "Removed the connection to"
 msgstr "Connectie verwijderd naar"
 
@@ -2708,7 +2755,7 @@ msgstr "Hernummer categorieboom"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:67
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:95
-#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:195
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:232
 msgid "Replace"
 msgstr "Vervang"
 
@@ -2793,7 +2840,7 @@ msgstr "Bewaar de pagina en bekijk aan de voorkant."
 msgid "Save this page."
 msgstr "Bewaar deze pagina."
 
-#: zotonic_mod_admin/src/mod_admin.erl:939
+#: zotonic_mod_admin/src/mod_admin.erl:950
 msgid "Scheduled a background task to check all refers connections."
 msgstr "Een achtergrondtaak is ingepland om alle verwijzingen te controleren."
 
@@ -2933,31 +2980,31 @@ msgstr "Sommige taken worden opnieuw geprobeerd.<br>Totaal aantal fouten: {total
 msgid "Something went wrong. Sorry."
 msgstr "Er ging iets mis, onze excuses."
 
-#: zotonic_mod_admin/src/mod_admin.erl:828
+#: zotonic_mod_admin/src/mod_admin.erl:839
 msgid "Sorry, could not handle this filename."
 msgstr "Deze bestandsnaam kon niet worden verwerkt."
 
-#: zotonic_mod_admin/src/mod_admin.erl:867
+#: zotonic_mod_admin/src/mod_admin.erl:878
 msgid "Sorry, could not move the file to the drop folder."
 msgstr "Sorry, kon het bestand niet verplaatsen naar de drop-map."
 
-#: zotonic_mod_admin/src/mod_admin.erl:941
 #: zotonic_mod_admin/src/mod_admin.erl:952
+#: zotonic_mod_admin/src/mod_admin.erl:963
 #: zotonic_mod_menu/src/mod_menu.erl:133
 msgid "Sorry, only an admin is allowed to do this"
 msgstr "Dit mag alleen worden gedaan door een admin"
 
-#: zotonic_mod_admin/src/mod_admin.erl:803
 #: zotonic_mod_admin/src/mod_admin.erl:814
+#: zotonic_mod_admin/src/mod_admin.erl:825
 msgid "Sorry, that page is unknown."
 msgstr "Deze pagina is onbekend."
 
-#: zotonic_mod_admin/src/mod_admin.erl:805
 #: zotonic_mod_admin/src/mod_admin.erl:816
+#: zotonic_mod_admin/src/mod_admin.erl:827
 msgid "Sorry, you are not allowed to edit notes."
 msgstr "Je mag geen notities bewerken."
 
-#: zotonic_mod_admin/src/mod_admin.erl:871
+#: zotonic_mod_admin/src/mod_admin.erl:882
 msgid "Sorry, you are not allowed to upload drop folder files."
 msgstr "Sorry, het is niet toegestaan om drop-mapbestanden te uploaden."
 
@@ -2965,11 +3012,11 @@ msgstr "Sorry, het is niet toegestaan om drop-mapbestanden te uploaden."
 msgid "Sorry, you don't have permission to add the connection."
 msgstr "Je hebt geen rechten om deze verbinding te maken."
 
-#: zotonic_mod_admin/src/mod_admin.erl:1103
+#: zotonic_mod_admin/src/mod_admin.erl:1114
 msgid "Sorry, you have no permission to add the connection."
 msgstr "Je hebt geen rechten om deze verbinding te maken."
 
-#: zotonic_mod_admin/src/mod_admin.erl:1105
+#: zotonic_mod_admin/src/mod_admin.erl:1116
 msgid "Sorry, you have no permission to delete the connection."
 msgstr "Je hebt geen rechten om deze verbinding te verwijderen."
 
@@ -2977,7 +3024,7 @@ msgstr "Je hebt geen rechten om deze verbinding te verwijderen."
 msgid "Sort by"
 msgstr "Sorteer op"
 
-#: zotonic_mod_admin/src/mod_admin.erl:561
+#: zotonic_mod_admin/src/mod_admin.erl:572
 msgid "Standard page block types"
 msgstr "Standaard typen paginablokken"
 
@@ -3010,6 +3057,8 @@ msgstr "Staat"
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_fields.tpl:7
 #: zotonic_mod_survey/src/models/m_survey.erl:1114
 #: zotonic_mod_survey/src/models/m_survey.erl:1120
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:38
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:72
 #: zotonic_site_status/priv/templates/_navbar.tpl:15
 #: zotonic_site_status/priv/templates/_sites.tpl:4
 msgid "Status"
@@ -3041,7 +3090,22 @@ msgstr "Adresregel 2"
 msgid "Structure"
 msgstr "Structuur"
 
-#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:40
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:153
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:33
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:102
+#: zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:18
+#: zotonic_mod_websub/priv/templates/_rsc_import_subscription_options.tpl:4
+msgid "Subscribe"
+msgstr "Abonneer"
+
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:175
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:177
+#: zotonic_mod_websub/priv/templates/_rsc_import_subscription_options.tpl:15
+#: zotonic_mod_websub/priv/templates/_rsc_import_subscription_options.tpl:17
+msgid "Subscribing to connected resources"
+msgstr "Abonneren op gekoppelde bronnen"
+
+#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:83
 msgid "Succesfully imported page from the remote server."
 msgstr "Pagina succesvol geïmporteerd van de externe server."
 
@@ -3117,7 +3181,7 @@ msgstr "Test zoekvraag"
 msgid "Text"
 msgstr "Tekst"
 
-#: zotonic_mod_admin/src/mod_admin.erl:563
+#: zotonic_mod_admin/src/mod_admin.erl:574
 msgid "Text | a (rich) text block"
 msgstr "Tekst | een (rijk) tekstblok"
 
@@ -3136,6 +3200,10 @@ msgstr "De categorieboom wordt herberekend. Dit kan lang duren."
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:7
 msgid "The media runner configuration is invalid."
 msgstr "De configuratie van de media-runner is ongeldig."
+
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:165
+msgid "The original website does not advertise automatic updates."
+msgstr "De oorspronkelijke website adverteert niet met automatische updates."
 
 #: zotonic_mod_admin/priv/templates/_action_unlink_undo.tpl:15
 msgid "The page"
@@ -3364,7 +3432,7 @@ msgstr "Ongepubliceerd"
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results_item.tpl:29
 #: zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:2
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:29
-#: zotonic_mod_admin/src/mod_admin.erl:1111
+#: zotonic_mod_admin/src/mod_admin.erl:1122
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:118
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:182
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:9
@@ -3383,8 +3451,16 @@ msgstr "Ongepubliceerd"
 #: zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:16
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:10
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:3
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:88
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:90
 msgid "Untitled"
 msgstr "Zonder titel"
+
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:25
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:30
+#: zotonic_mod_admin/src/mod_admin.erl:555
+msgid "Untitled query"
+msgstr "Naamloze zoekopdracht"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:9
 msgid "Unused"
@@ -3587,6 +3663,8 @@ msgid "You are not allowed to delete this page."
 msgstr "Je mag deze pagina niet verwijderen."
 
 #: zotonic_mod_admin/priv/templates/admin_edit.tpl:16
+#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:33
+#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:45
 #: zotonic_mod_admin_merge/priv/templates/admin_merge.tpl:26
 msgid "You are not allowed to edit this page."
 msgstr "Je mag deze pagina niet bewerken."
@@ -5075,6 +5153,7 @@ msgstr "Gerangschikte paren"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:104
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:135
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:56
 msgid "Reset"
 msgstr "Resetten"
 
@@ -6177,6 +6256,7 @@ msgstr "Voer je e-mailadres in om instructies te ontvangen om je wachtwoord opni
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:143
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:7
 #: zotonic_mod_survey/priv/templates/_survey_block_name_check.tpl:2
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:105
 msgid "Error"
 msgstr "Fout"
 
@@ -7710,6 +7790,7 @@ msgstr "Dit test de communicatie met de server."
 #: zotonic_mod_base/priv/templates/directory_index.tpl:15
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:38
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:35
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:69
 msgid "Type"
 msgstr "Type"
 
@@ -10325,6 +10406,7 @@ msgid "Resources with email identity"
 msgstr "Pagina’s met e-mail identiteit"
 
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:158
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:109
 msgid "Retry"
 msgstr "Opnieuw"
 
@@ -10516,6 +10598,7 @@ msgstr "Alle ontvangers die die taal spreken"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:29
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:24
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:40
 msgid "All statuses"
 msgstr "Alle statussen"
 
@@ -10560,7 +10643,7 @@ msgid "Check to activate the e-mail address."
 msgstr "Vink aan om het e-mail adres te activeren"
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:216
-#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:389
+#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:414
 msgid "Choose recipients and language"
 msgstr "Kies de ontvangers en de taal"
 
@@ -10644,7 +10727,7 @@ msgstr "Deze mailing kon niet in de wachtrij worden geplaatst. Controleer uw mac
 msgid "Could not save the opt-out preference."
 msgstr "De afmeldings-voorkeur kon niet worden opgeslagen."
 
-#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:397
+#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:422
 msgid "Could not send the test. Check the test mailing list and selected language."
 msgstr "De test kon niet worden verzonden. Controleer de testmailinglijst en de geselecteerde taal."
 
@@ -10768,7 +10851,7 @@ msgstr "De e-mailtaal is de taalversie van de mailing die voor verzending is ges
 msgid "Enter a valid future mailing date and time."
 msgstr "Voer een geldige toekomstige verzenddatum en -tijd in."
 
-#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:356
+#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:381
 msgid "Enter a valid test email address."
 msgstr "Voer een geldig e-mailadres voor de test in."
 
@@ -11712,6 +11795,8 @@ msgstr "Verzending stoppen? Alleen e-mails die nog niet in de wachtrij staan, ku
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:16
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:53
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:81
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:44
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:100
 #: zotonic_site_status/priv/templates/_sites.tpl:18
 msgid "Stopped"
 msgstr "Gestopt"
@@ -11719,12 +11804,6 @@ msgstr "Gestopt"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:52
 msgid "Stopped; already queued emails are still being processed"
 msgstr "Gestopt; e-mails die al in de wachtrij staan, worden nog steeds verwerkt"
-
-#: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:33
-#: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:102
-#: zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:18
-msgid "Subscribe"
-msgstr "Abonneer"
 
 #: zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:5
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:8
@@ -11750,6 +11829,7 @@ msgid "Target mailing list"
 msgstr "Doel mailinglijst"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:185
+#: zotonic_mod_websub/priv/templates/_websub_error.tpl:3
 msgid "Technical details"
 msgstr "Technische gegevens"
 
@@ -15931,6 +16011,252 @@ msgstr "Vimeo-video"
 #: zotonic_mod_video_embed/src/mod_video_embed.erl:274
 msgid "Youtube Video"
 msgstr "YouTube-video"
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:50
+msgid "Access was denied while updating this page. Check the subscriber's source website credentials and permission to update the local page."
+msgstr "De toegang tot deze pagina is geweigerd. Controleer de inloggegevens van de bronwebsite van de abonnee en de toestemming om de lokale pagina bij te werken."
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:41
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:99
+msgid "Active"
+msgstr "Actief"
+
+#: zotonic_mod_websub/priv/templates/_admin_edit_sidebar_websub.tpl:11
+msgid "Active subscriptions to this page: {count}"
+msgstr "Actieve abonnementen op deze pagina: {count}"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:24
+msgid "All subscriptions"
+msgstr "Alle abonnementen"
+
+#: zotonic_mod_websub/priv/templates/_websub_error.tpl:1
+msgid "Automatic update error:"
+msgstr "Automatische updatefout:"
+
+#: zotonic_mod_websub/priv/templates/_admin_rsc_import_status_live.tpl:6
+msgid "Automatic updates are active."
+msgstr "Automatische updates zijn actief."
+
+#: zotonic_mod_websub/priv/templates/_admin_rsc_import_status_live.tpl:13
+msgid "Automatic updates are stopped."
+msgstr "Automatische updates zijn gestopt."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:72
+msgid "Automatic updates could not be completed. Check the technical details for the reported error."
+msgstr "De automatische updates konden niet worden voltooid. Raadpleeg de technische details voor de gemelde fout."
+
+#: zotonic_mod_websub/src/mod_websub.erl:245
+msgid "Could not change the automatic update subscription."
+msgstr "Het abonnement voor automatische updates kon niet worden gewijzigd."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:52
+msgid "Could not contact the remote website. Check its availability and HTTPS certificate."
+msgstr "Er kon geen verbinding worden gemaakt met de externe website. Controleer de beschikbaarheid en het HTTPS-certificaat."
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:94
+msgid "Deleted page"
+msgstr "Verwijderde pagina"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:57
+msgid "Enter the exact hostname, without a scheme, port, or path."
+msgstr "Voer de exacte hostnaam in, zonder schema, poort of pad."
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:48
+msgid "Errors"
+msgstr "Fouten"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:43
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:101
+msgid "Expired"
+msgstr "Verlopen"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:63
+msgid "Expired and stopped subscriptions are included. Renewals can temporarily have two active subscriptions. Remote hosts are shown without callback URLs or credentials."
+msgstr "Verlopen en stopgezette abonnementen worden weergegeven. Verlengingen kunnen tijdelijk twee actieve abonnementen hebben. Externe hosts worden weergegeven zonder callback-URL's of inloggegevens."
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:34
+msgid "External hostname"
+msgstr "Externe hostnaam"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:74
+msgid "Last activity"
+msgstr "Laatste activiteit"
+
+#: zotonic_mod_websub/priv/templates/_admin_rsc_import_status_live.tpl:19
+msgid "Last update received:"
+msgstr "Laatst ontvangen update:"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:73
+msgid "Lease expires"
+msgstr "Huurcontract loopt af"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:70
+msgid "Local page"
+msgstr "Lokale pagina"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:30
+msgid "Local resource ID"
+msgstr "Lokale resource-ID"
+
+#: zotonic_mod_websub/priv/templates/_admin_edit_sidebar_websub.tpl:13
+msgid "No active subscriptions to this page."
+msgstr "Deze pagina heeft geen actieve abonnementen."
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:121
+msgid "No subscriptions found."
+msgstr "Geen abonnementen gevonden."
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:8
+msgid "Our subscriptions to external pages and subscriptions from others to our pages."
+msgstr "Onze abonnementen op externe pagina's en abonnementen van anderen op onze pagina's."
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:25
+msgid "Pages we subscribe to"
+msgstr "Pagina's waarop we geabonneerd zijn"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:42
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:102
+msgid "Pending confirmation"
+msgstr "Bevestiging in afwachting"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:71
+msgid "Remote host"
+msgstr "Externe host"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:108
+msgid "Retry subscription"
+msgstr "Abonnement opnieuw proberen"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:60
+msgid "Select a valid subscription type, resource ID, hostname, status, errors, and page number."
+msgstr "Selecteer een geldig abonnementstype, resource-ID, hostnaam, status, fouten en paginanummer."
+
+#: zotonic_mod_websub/priv/templates/_admin_rsc_import_status_live.tpl:14
+msgid "Start automatic updates"
+msgstr "Automatische updates starten"
+
+#: zotonic_mod_websub/priv/templates/_admin_rsc_import_status_live.tpl:10
+msgid "Stop automatic updates"
+msgstr "Automatische updates uitschakelen"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:26
+msgid "Subscribers to our pages"
+msgstr "Abonnees op onze pagina's"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:81
+msgid "Subscribes to us"
+msgstr "Abonneer je op ons"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:22
+msgid "Subscription type"
+msgstr "Abonnementstype"
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:56
+msgid "The callback URL must use a hostname instead of an IP address. Check this website's public URL."
+msgstr "De callback-URL moet een hostnaam gebruiken in plaats van een IP-adres. Controleer de openbare URL van deze website."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:38
+msgid "The destination could not be resolved or its network address is blocked. Local and private addresses are only allowed for .test hostnames in development."
+msgstr "De bestemming kon niet worden gevonden of het netwerkadres is geblokkeerd. Alleen lokale en privéadressen zijn toegestaan voor .test-hostnamen in de ontwikkelomgeving."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:48
+msgid "The original page address has changed. Import the page again to set up automatic updates."
+msgstr "Het oorspronkelijke paginaadres is gewijzigd. Importeer de pagina opnieuw om automatische updates in te stellen."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:54
+msgid "The remote website address is invalid. Check the source and WebSub URLs."
+msgstr "Het externe websiteadres is ongeldig. Controleer de bron- en WebSub-URL's."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:58
+msgid "The remote website redirects from HTTPS to HTTP. Use a secure HTTPS destination."
+msgstr "De externe website verwijst door van HTTPS naar HTTP. Gebruik een beveiligde HTTPS-bestemming."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:60
+msgid "The remote website redirects too many times. Check its redirect configuration."
+msgstr "De externe website verwijst te vaak door. Controleer de doorverwijsinstellingen."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:68
+msgid "The remote website refused access. Check the subscribing user's permissions on that website."
+msgstr "De externe website weigerde toegang. Controleer de machtigingen van de gebruiker die zich op die website heeft aangemeld."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:66
+msgid "The remote website requires authentication. Check the subscribing user's configured credentials."
+msgstr "De externe website vereist authenticatie. Controleer de geconfigureerde inloggegevens van de gebruiker."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:62
+msgid "The remote website returned a redirect without a destination."
+msgstr "De externe website gaf een redirect terug zonder bestemming."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:64
+msgid "The remote website returned an invalid redirect destination."
+msgstr "De externe website gaf een ongeldige omleidingsbestemming terug."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:70
+msgid "The requested page or WebSub endpoint was not found on the remote website."
+msgstr "De gevraagde pagina of het WebSub-eindpunt is niet gevonden op de externe website."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:46
+msgid "The source page advertises invalid WebSub links. Check its hub and topic URLs."
+msgstr "De bronpagina geeft ongeldige WebSub-links weer. Controleer de hub- en topic-URL's."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:44
+msgid "The source page does not advertise automatic updates via WebSub."
+msgstr "De bronpagina adverteert niet met automatische updates via WebSub."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:40
+msgid "The source website did not confirm the subscription in time. Check that it can reach this website's callback URL."
+msgstr "De bronwebsite heeft het abonnement niet tijdig bevestigd. Controleer of de callback-URL van deze website bereikbaar is."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:32
+msgid "The source website does not allow this subscriber to use WebSub. On the source website, allow the subscribing user to use WebSub, or allow anonymous visitors for public subscriptions."
+msgstr "De bronwebsite staat deze abonnee niet toe om WebSub te gebruiken. Sta op de bronwebsite de abonnee toe om WebSub te gebruiken, of sta anonieme bezoekers toe om zich publiekelijk te abonneren."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:36
+msgid "The source website does not recognize this subscription topic. Check that the original page still exists."
+msgstr "De bronwebsite herkent dit abonnementsonderwerp niet. Controleer of de oorspronkelijke pagina nog bestaat."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:34
+msgid "The source website refused access to this page. The subscriber must be allowed to view it, and the page must be an original on that website."
+msgstr "De bronwebsite weigerde toegang tot deze pagina. De abonnee moet de pagina kunnen bekijken en de pagina moet een originele publicatie op die website zijn."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:42
+msgid "This page points back to this website. A website cannot subscribe to itself."
+msgstr "Deze pagina verwijst terug naar deze website. Een website kan zich niet abonneren op zichzelf."
+
+#: zotonic_mod_websub/priv/templates/_admin_edit_sidebar_websub.tpl:17
+msgid "View subscribers to this page"
+msgstr "Bekijk de abonnees van deze pagina"
+
+#: zotonic_mod_websub/priv/templates/_admin_edit_sidebar_websub.tpl:19
+msgid "View subscriptions to the external page"
+msgstr "Bekijk abonnementen op de externe pagina"
+
+#: zotonic_mod_websub/priv/templates/_admin_rsc_import_status_live.tpl:8
+msgid "Waiting for automatic updates to be confirmed."
+msgstr "Wachten tot de automatische updates bevestigd zijn."
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:82
+msgid "We subscribe"
+msgstr "Wij abonneren ons"
+
+#: zotonic_mod_websub/priv/templates/_admin_edit_sidebar_websub.tpl:4
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:3
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:7
+#: zotonic_mod_websub/src/mod_websub.erl:217
+msgid "WebSub subscriptions"
+msgstr "WebSub-abonnementen"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:51
+msgid "With errors"
+msgstr "Met fouten"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:52
+msgid "Without errors"
+msgstr "Zonder fouten"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:131
+msgid "You are not allowed to view subscriptions."
+msgstr "Je hebt geen toegang tot abonnementen."
 
 #: zotonic_mod_wires/src/actions/action_wires_alert.erl:68
 msgid "Alert"
