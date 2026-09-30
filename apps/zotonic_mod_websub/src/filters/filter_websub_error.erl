@@ -1,6 +1,10 @@
 %% @copyright 2026 Marc Worrell
 %% @doc Human-readable explanations of persisted WebSub errors.
 -module(filter_websub_error).
+-moduledoc(#{
+    zotonic_keywords => ["reference", "frontend_developer", "template_filter",
+        "export_and_syndication", "localization_and_translation"]
+}).
 -moduledoc("Translate subscription error codes into explanations for editors.
 Accepts atoms, plain binaries and legacy binaries formatted with ~p.
 Unknown errors use a generic message; retain the original code separately for diagnostics.
