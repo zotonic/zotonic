@@ -1,4 +1,5 @@
 ---
+module: mod_base
 keywords:
   - reference
   - frontend_developer

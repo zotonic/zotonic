@@ -1,4 +1,5 @@
 ---
+module: mod_wires
 keywords:
   - reference
   - frontend_developer

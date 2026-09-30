@@ -1,4 +1,5 @@
 ---
+module: mod_authentication
 keywords:
   - reference
   - frontend_developer

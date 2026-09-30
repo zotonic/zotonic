@@ -1,4 +1,5 @@
 ---
+module: mod_oauth2
 keywords:
   - reference
   - frontend_developer

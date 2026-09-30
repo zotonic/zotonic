@@ -1,4 +1,5 @@
 ---
+module: mod_fileuploader
 keywords:
   - reference
   - frontend_developer
