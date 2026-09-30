@@ -738,20 +738,9 @@ maybe_add_email_identities(Auth, UserId, Context) ->
         end,
         Auth#auth_validated.identities).
 
-%% @doc Recheck the current service policy before creating a username, as signup
-%% confirmation can resume an authentication record with an outdated policy.
-maybe_ensure_username_pw(#auth_validated{ is_connect = false } = Auth, UserId, Context) ->
-    EnsureUsernamePw = case z_notifier:first(#auth_ensure_username_pw{
-        service = Auth#auth_validated.service,
-        service_uid = Auth#auth_validated.service_uid
-    }, Context) of
-        undefined -> Auth#auth_validated.ensure_username_pw;
-        IsEnsure when is_boolean(IsEnsure) -> IsEnsure
-    end,
-    case EnsureUsernamePw of
-        true -> m_identity:ensure_username_pw(UserId, z_acl:sudo(Context));
-        false -> ok
-    end;
+%% @doc Ensure a username/password at signup when requested by the authentication service.
+maybe_ensure_username_pw(#auth_validated{ ensure_username_pw = true, is_connect = false }, UserId, Context) ->
+    m_identity:ensure_username_pw(UserId, z_acl:sudo(Context));
 maybe_ensure_username_pw(#auth_validated{}, _UserId, _Context) ->
     ok.
 
