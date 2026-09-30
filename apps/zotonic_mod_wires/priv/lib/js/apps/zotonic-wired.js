@@ -156,7 +156,7 @@ function zotonic_startup() {
   cotonic.broker.subscribe(
     "model/clipboard/post/copy",
     function (msg) {
-      if (msg.payload?.message["data-text"] !== undefined) {
+      if (msg.payload?.message?.["data-text"] !== undefined) {
         navigator.clipboard?.writeText(msg.payload.message["data-text"]);
       } else if (msg.payload?.text) {
         navigator.clipboard?.writeText(msg.payload.text);

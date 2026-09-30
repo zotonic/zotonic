@@ -21,10 +21,14 @@ The payload is an options object:
 
 | Field | Meaning |
 | --- | --- |
-| `text` | Dialog body, inserted as HTML. Escape untrusted text before supplying it. |
-| `title` | Dialog title; defaults to the translated “Alert”. |
-| `ok` | Confirmation button label; defaults to the translated “OK”. |
+| `text` | Dialog body, inserted as HTML. |
+| `title` | Dialog title, inserted as HTML; defaults to the translated “Alert”. |
+| `ok` | Confirmation button label, inserted as HTML; defaults to the translated “OK”. |
 | `width` | Optional dialog width. |
+
+All three fields, `text`, `title`, and `ok`, are rendered as HTML without
+escaping or sanitization by this handler. HTML-escape untrusted plain text before
+supplying it. If markup is intended, sanitize it before sending the command.
 
 ```javascript
 cotonic.broker.publish("model/alert/post", {

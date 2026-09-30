@@ -48,8 +48,9 @@ the supplied failure payload.
 
 When the request has a response topic, it receives the initial queue request
 object. This acknowledgement does not mean that uploading has finished. Use the
-configured completion and failure topics for the result. Empty file arrays do
-not create a request or produce this acknowledgement.
+configured completion and failure topics for the result. An empty file array
+does not create an upload request; a call instead receives the immediate error
+payload `{ status: "error", error: "No files" }` on its response topic.
 
 The worker initializes files through
 `bridge/origin/model/fileuploader/post/new`, then sends blocks to the returned
