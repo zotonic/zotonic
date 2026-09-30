@@ -8,7 +8,7 @@
     zotonic_keywords => ["reference", "frontend_developer", "scomp", "user_interface_and_interaction", "structured_data", "accessibility", "render"]
 }).
 -moduledoc(<<
-    "Deprecated compatibility alias for [`chart_pie`](scomp-base-chart-pie).\n\n",
+    "Deprecated compatibility alias for `scomp#chart_pie`.\n\n",
     "The old external chart service is no longer used and the misleading 3D effect\n",
     "is not reproduced. New templates should use `{% chart type=\"pie\" ... %}` or\n",
     "`{% chart_pie ... %}`.\n"
