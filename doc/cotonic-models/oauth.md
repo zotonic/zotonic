@@ -30,8 +30,8 @@ start `js/zotonic.oauth.worker.js` with server-generated `worker_args`.
 | `oauth_state_id` | Identifier associated with that state. |
 
 Use the standard OAuth service login flow to obtain these arguments. The worker
-depends on `bridge/origin`, `model/auth`, `model/sessionId`, `model/location`,
-`model/sessionStorage`, and `model/localStorage`.
+depends on `bridge/origin`, `cotonic#auth`, `cotonic#sessionId`, `cotonic#location`,
+`cotonic#sessionStorage`, and `cotonic#localStorage`.
 
 ## Flow and messages
 

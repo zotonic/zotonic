@@ -49,7 +49,7 @@ cotonic.broker.publish("model/auth-ui/post/form/reminder", {
 The initial view comes from the location query's `logon_view`, defaulting to
 `logon`. Query arguments `secret`, `u`, and `email` supply reset and login context.
 The worker checks repeated passwords before submitting reset or change commands
-to `model/auth`.
+to `cotonic#auth`.
 
 Authentication errors, user changes, and password-change results are consumed
 from `model/auth/event/auth-error`, `model/auth/event/auth-user-id`, and

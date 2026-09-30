@@ -42,5 +42,5 @@ Client topics start with `model/`. A topic such as
 it is a different API from `model/fileuploader/post/new` in the browser.
 
 Availability depends on the scripts and workers loaded by the page. Cotonic's
-own models, including `model/sessionId`, `model/ui`, and `model/location`, are
+own models, including `cotonic#sessionId`, `cotonic#ui`, and `cotonic#location`, are
 documented in the Cotonic reference maintained in its repository.

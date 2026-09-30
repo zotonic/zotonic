@@ -77,8 +77,8 @@ cotonic.broker.subscribe("model/auth/event/auth", function(msg) {
 The worker listens to `model/ui/event/recent-activity` for keep-alive decisions,
 `model/sessionStorage/event/auth-user-id` for user changes, and
 `model/serviceWorker/event/broadcast/auth-sync` for cross-tab checks. Its
-advertised dependencies are `model/sessionStorage`, `model/localStorage`, and
-`model/sessionId`.
+advertised dependencies are `cotonic#sessionStorage`, `cotonic#localStorage`, and
+`cotonic#sessionId`.
 
 Client state describes the interface's current view of authentication. Server
 models and actions still enforce their own access control.
