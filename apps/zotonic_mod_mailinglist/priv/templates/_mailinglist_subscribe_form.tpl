@@ -77,7 +77,7 @@
 				            <select class="form-control" name="pref_language">
 				                <option></option>
 				                {% for code,lang in m.translation.language_list_enabled %}
-				                    <option {% if rcpt.props.pref_language == code %}selected{% endif %} value="{{ code }}">{{ lang.name }}</a>
+				                    <option {% if rcpt.pref_language == code %}selected{% endif %} value="{{ code }}">{{ lang.name }}</option>
 				                {% endfor %}
 				            </select>
 				        </div>

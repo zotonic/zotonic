@@ -116,8 +116,45 @@ manage_schema(_Upgrade, Context) ->
             end,
             ensure_scheduled_columns(Context)
     end,
+    ensure_recipient_language(Context),
     ensure_runs(Context),
     datamodel().
+
+%% Promote the language property to a column so filtering happens in SQL,
+%% before pagination. Preserve all other subscription properties.
+ensure_recipient_language(Context) ->
+    case z_db:column_exists(mailinglist_recipient, pref_language, Context) of
+        true -> ok;
+        false ->
+            ok = z_db:transaction(fun(Ctx) ->
+                z_db:q("alter table mailinglist_recipient add column pref_language varchar(35)", Ctx),
+                migrate_recipient_languages(0, Ctx)
+            end, Context),
+            z_db:flush(Context)
+    end.
+
+migrate_recipient_languages(LastId, Context) ->
+    case z_db:q("select id, props from mailinglist_recipient
+                where id > $1 order by id limit 1000", [LastId], Context) of
+        [] -> ok;
+        Rows ->
+            lists:foreach(fun({Id, Props}) ->
+                Map = case Props of
+                    undefined -> #{};
+                    M when is_map(M) -> M;
+                    _ -> z_props:from_props(Props)
+                end,
+                Language = case maps:get(<<"pref_language">>, Map, undefined) of
+                    undefined -> undefined;
+                    <<>> -> undefined;
+                    Value -> z_convert:to_binary(Value)
+                end,
+                z_db:q("update mailinglist_recipient set pref_language=$2, props=$3 where id=$1",
+                    [Id, Language, ?DB_PROPS(maps:remove(<<"pref_language">>, Map))], Context)
+            end, Rows),
+            {NextId, _} = lists:last(Rows),
+            migrate_recipient_languages(NextId, Context)
+    end.
 
 ensure_scheduled_columns(Context) ->
     case z_db:column_exists(mailinglist_scheduled, due, Context) of

@@ -72,8 +72,8 @@ event(#submit{message={recipient_add, Props}, form=FormId}, Context) ->
 			ArgSendConfirm = z_convert:to_bool(proplists:get_value(send_confirm, Props)),
 			CfgSendConfirm = m_config:get_boolean(mod_mailinglist, send_confirm, Context),
 			Notification = if
-				QSendConfirm -> send_confirm;
-				QSendWelcome -> send_welcome;
+				QSendConfirm andalso InAdmin  -> send_confirm;
+				QSendWelcome andalso InAdmin -> send_welcome;
 				ArgSendConfirm -> send_confirm;
 				ArgSendWelcome -> send_welcome;
 				InAdmin -> silent;

@@ -184,7 +184,7 @@ Delegate callbacks:
 -mod_title("Mailing list").
 -mod_description("Mailing lists. Send a page to a list of recipients.").
 -mod_prio(600).
--mod_schema(7).
+-mod_schema(8).
 -mod_depends([ admin, mod_wires, mod_email_status ]).
 -mod_provides([ mailinglist ]).
 -mod_config([
@@ -302,15 +302,8 @@ observe_acl_is_allowed(#acl_is_allowed{}, #context{} = _Context) ->
     undefined.
 
 
-observe_search_query(#search_query{ search = {mailinglist_recipients, [{id,Id}] } }, _Context) ->
-    #search_sql{
-        select="id, email, is_enabled",
-        from="mailinglist_recipient",
-        where="mailinglist_id = $1",
-        args=[Id],
-        order="email",
-        tables=[]
-    };
+observe_search_query(#search_query{ search = {mailinglist_recipients, Args} }, Context) ->
+    z_mailinglist_recipients:search(Args, Context);
 observe_search_query(_, _) ->
     undefined.
 

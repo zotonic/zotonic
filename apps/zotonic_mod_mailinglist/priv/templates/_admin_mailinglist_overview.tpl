@@ -25,7 +25,10 @@
                         <td width="40%">
                             {{ m.rsc[id].summary|default:"-" }}
                         </td>
-                        <td width="10%">{{ stats.total|format_number }}</td>
+                        <td width="10%">
+                            <strong>{{ stats.total|format_number }}</strong> {_ enabled _}
+                            <br><small class="text-muted">{{ stats.disabled|format_number }} {_ disabled _}</small>
+                        </td>
                         <td width="30%">
                             <div class="pull-right buttons">
                                 <a class="btn btn-default btn-xs" href="{% url admin_mailinglist_recipients id=id %}">{_ Recipients _}</a>
