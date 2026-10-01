@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-09-25 14:41\n"
+"PO-Revision-Date: 2026-09-29 14:46\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgstr "Kaugressursi URL -i ei õnnestunud tuua."
 msgid "Forbidden to access the remote resource URL."
 msgstr "Kaugressursi URL -ile juurdepääs on keelatud."
 
-#: zotonic_core/src/media/z_media_import.erl:328
+#: zotonic_core/src/media/z_media_import.erl:334
 msgid "Page Import"
 msgstr "Lehe import"
 
@@ -56,7 +56,7 @@ msgstr "Liiga palju taotlusi kaugserveri jaoks, proovige hiljem uuesti."
 msgid "Unauthorized to access the remote resource URL."
 msgstr "Volitamata juurdepääs kaugressursi URL -ile."
 
-#: zotonic_core/src/media/z_media_import.erl:385
+#: zotonic_core/src/media/z_media_import.erl:392
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
@@ -198,6 +198,7 @@ msgstr "Lisage koostöögrupi lingid"
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:152
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:184
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:47
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:50
 msgid "All"
 msgstr "Kõik"
 
@@ -269,6 +270,7 @@ msgstr "Kas olete kindel, et soovite taastada kõik ACL-reeglid nende praegu ava
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:17
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:85
 #: zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:28
+#: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:35
 #: zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:38
 #: zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:52
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:7
@@ -1028,8 +1030,8 @@ msgstr "kasutage mõnda muud brauserit (nt Chrome, kui kasutate nüüd Firefoxi)
 msgid "view (acl action)"
 msgstr "vaade (acl-toiming)"
 
-#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:182
-#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:184
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:219
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:221
 msgid "&lt; Prev"
 msgstr "&lt; Eelmine"
 
@@ -1129,7 +1131,7 @@ msgstr "Lisa meedia sisule"
 msgid "Add note"
 msgstr "Lisada märkus"
 
-#: zotonic_mod_admin/src/mod_admin.erl:1117
+#: zotonic_mod_admin/src/mod_admin.erl:1128
 msgid "Added the connection to"
 msgstr "Lisas ühenduse domeeniga"
 
@@ -1180,10 +1182,19 @@ msgstr "Kõik saidid on loputatud."
 msgid "Allocated"
 msgstr "Eraldatud"
 
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:173
+#: zotonic_mod_websub/priv/templates/_rsc_import_subscription_options.tpl:13
+msgid "Also subscribe to connected resources."
+msgstr "Telli ka seotud materjale."
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:28
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:29
 msgid "Alternative telephone"
 msgstr "Teine telefon"
+
+#: zotonic_mod_admin/priv/templates/_rsc_import_deleted_options.tpl:4
+msgid "Always import all resources, including manually deleted resources."
+msgstr "Impordi alati kõik ressursid, sealhulgas käsitsi kustutatud ressursid."
 
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:115
 msgid "Amount"
@@ -1205,6 +1216,10 @@ msgstr "Mis tahes kategooria"
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:155
 msgid "Anybody’s"
 msgstr "Kellegi oma"
+
+#: zotonic_mod_admin/priv/templates/_rsc_import_deleted_options.tpl:10
+msgid "Applies to the selected connection depth, including future updates. By default, manually deleted resources stay deleted; automatically removed dependent resources can be imported again."
+msgstr "Kehtib valitud ühendussügavuse kohta, sealhulgas tulevaste uuenduste puhul. Vaikimisi jäävad käsitsi kustutatud ressursid kustutatuks; automaatselt eemaldatud sõltuvad ressursid on võimalik uuesti importida."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:36
 msgid "Are you sure you want to delete all tasks for this module and function?"
@@ -1248,6 +1263,16 @@ msgstr "Auth"
 msgid "Authoritative"
 msgstr "Autoriteetne"
 
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:162
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:164
+msgid "Automatic updates unavailable"
+msgstr "Automaatsed uuendused pole saadaval"
+
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:159
+#: zotonic_mod_websub/priv/templates/_rsc_import_subscription_options.tpl:7
+msgid "Automatically fetch updates from the original website."
+msgstr "Lae uuendused automaatselt originaalveebisaidilt alla."
+
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:47
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:35
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:38
@@ -1255,7 +1280,7 @@ msgid "Available"
 msgstr "Saadaval"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:8
-#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:170
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:207
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:18
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:41
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:3
@@ -1402,8 +1427,9 @@ msgid "Connection"
 msgstr "Ühendus"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:72
-#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:134
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:133
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:100
+#: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:7
 msgid "Connections"
 msgstr "Ühendused"
 
@@ -1471,7 +1497,7 @@ msgstr "Riik"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:65
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:261
-#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:120
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:119
 msgid "Create"
 msgstr "Loo"
 
@@ -1561,7 +1587,7 @@ msgstr "Kustute see leht."
 msgid "Delete this page..."
 msgstr "Kustuta see lehekülg..."
 
-#: zotonic_mod_admin/src/mod_admin.erl:950
+#: zotonic_mod_admin/src/mod_admin.erl:961
 msgid "Deleted tasks."
 msgstr "Kustutatud ülesanded."
 
@@ -1611,6 +1637,7 @@ msgid "Display size"
 msgstr "Ekraani suurus"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:137
+#: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:11
 msgid "Do not import connections."
 msgstr "Ärge importige ühendusi."
 
@@ -1627,6 +1654,10 @@ msgstr "Kas soovite selle leheploki eemaldada?"
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:45
 msgid "Download"
 msgstr "Lae alla"
+
+#: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:30
+msgid "Download media from the original website."
+msgstr "Lae meedia alla algselt veebisaidilt."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:11
 msgid "Drag to change position"
@@ -1712,7 +1743,7 @@ msgstr "Embed"
 msgid "Embed code will be sanitized for allowed sites and html."
 msgstr "Manustatud kood desinfitseeritakse lubatud saitide ja HTML-i jaoks."
 
-#: zotonic_mod_admin/src/mod_admin.erl:564
+#: zotonic_mod_admin/src/mod_admin.erl:575
 msgid "Embed page | a citation, popup, or link to another page"
 msgstr "Manusta leht | tsitaat, hüpikaken või link teisele lehele"
 
@@ -1759,7 +1790,8 @@ msgstr "Viga veebisaidi kontrollimisel."
 msgid "Error creating the page."
 msgstr "Viga lehe loomisel."
 
-#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:53
+#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:69
+#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:96
 msgid "Error importing page from the remote server."
 msgstr "Viga lehe kaugserverist importimisel."
 
@@ -1817,13 +1849,15 @@ msgstr "Esile t√µstetud"
 msgid "Features"
 msgstr "Funktsioonid"
 
-#: zotonic_mod_admin/priv/templates/_admin_authoritative_info.tpl:9
+#: zotonic_mod_admin/priv/templates/_admin_authoritative_info.tpl:8
+#: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:36
+#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:39
 msgid "Fetch new version"
 msgstr "Tooge uus versioon"
 
-#: zotonic_mod_admin/priv/templates/_admin_authoritative_info.tpl:11
-msgid "Fetching new version..."
-msgstr "Uue versiooni toomine..."
+#: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:5
+msgid "Fetch the latest version from the original website using these import options."
+msgstr "Lae need importimisvõimalused kasutades originaalveebisaidilt alla uusim versioon."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_media.tpl:6
 msgid "File / media content"
@@ -1834,7 +1868,7 @@ msgstr "File / meedia"
 msgid "File size"
 msgstr "Faili suurus"
 
-#: zotonic_mod_admin/src/mod_admin.erl:855
+#: zotonic_mod_admin/src/mod_admin.erl:866
 msgid "File uploaded to the drop folder, will be handled shortly."
 msgstr "Rippkausta üles laaditud fail käsitletakse peagi."
 
@@ -1851,6 +1885,7 @@ msgstr "Failinimi"
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:46
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:41
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:59
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:55
 msgid "Filter"
 msgstr "Filtreeri"
 
@@ -1907,8 +1942,14 @@ msgid "Flush system caches"
 msgstr "T√ºhjendas√ºsteemne vahem√§lu"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:145
+#: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:23
 msgid "Follow connections and import all (deep copy)."
 msgstr "Järgige ühendusi ja importige kõik (sügav koopia)."
+
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:178
+#: zotonic_mod_websub/priv/templates/_rsc_import_subscription_options.tpl:18
+msgid "Follows the Connections option. Connected resources keep their subscriptions when disconnected from this page."
+msgstr "Järgneb valik „Ühendused”. Ühendatud ressursid säilitavad oma tellimused ka siis, kui need sellelt lehelt lahti ühendatakse."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:59
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:225
@@ -1947,7 +1988,7 @@ msgstr "On keskmise kinnitatud"
 msgid "Header"
 msgstr "Päis"
 
-#: zotonic_mod_admin/src/mod_admin.erl:562
+#: zotonic_mod_admin/src/mod_admin.erl:573
 msgid "Header | a big header"
 msgstr "Päis | suur päis"
 
@@ -1994,12 +2035,18 @@ msgid "If not checked then a visitor is always redirected to the canonical URL o
 msgstr "Kui see pole märgitud, suunatakse külastaja alati selle lehe kanoonilisele URL-ile."
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:141
+#: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:17
 msgid "Import only direct connections (shallow copy)."
 msgstr "Importige ainult otseühendusi (madal koopia)."
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:249
 msgid "Imported content"
 msgstr "Imporditud sisu"
+
+#: zotonic_mod_admin/priv/templates/_rsc_import_deleted_options.tpl:7
+#: zotonic_mod_admin/priv/templates/_rsc_import_deleted_options.tpl:9
+msgid "Importing deleted resources"
+msgstr "Kustutatud ressursside importimine"
 
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:78
 msgid "Indexed by search engines"
@@ -2110,7 +2157,7 @@ msgstr "Postiaadress"
 msgid "Main"
 msgstr "Pea"
 
-#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:195
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:232
 msgid "Make"
 msgstr "Loo"
 
@@ -2342,8 +2389,8 @@ msgstr "Uus leht"
 msgid "Newest incoming connections."
 msgstr "Uusimad sissetulevad ühendused."
 
-#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:188
-#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:190
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:225
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:227
 msgid "Next &gt;"
 msgstr "Järgmine &gt;"
 
@@ -2695,7 +2742,7 @@ msgstr "Iga käivitaja juhtpaneelil on näha kaug-sandboxi eraldamise ja järjek
 msgid "Remove"
 msgstr "Eemalda"
 
-#: zotonic_mod_admin/src/mod_admin.erl:1121
+#: zotonic_mod_admin/src/mod_admin.erl:1132
 msgid "Removed the connection to"
 msgstr "Ühendus saidiga eemaldati"
 
@@ -2705,7 +2752,7 @@ msgstr "Nummerda kategoori puu uuesti"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:67
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:95
-#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:195
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:232
 msgid "Replace"
 msgstr "Asenda"
 
@@ -2789,7 +2836,7 @@ msgstr "Salvesta ja vaata lehte."
 msgid "Save this page."
 msgstr "Salvesta see leht."
 
-#: zotonic_mod_admin/src/mod_admin.erl:939
+#: zotonic_mod_admin/src/mod_admin.erl:950
 msgid "Scheduled a background task to check all refers connections."
 msgstr "Ajastatud taustaülesanne kõigi viitade ühenduste kontrollimiseks."
 
@@ -2929,31 +2976,31 @@ msgstr "Mõned ülesanded proovivad uuesti.<br>Vigu kokku: {total}<br>Suurim üh
 msgid "Something went wrong. Sorry."
 msgstr "Midagi l√§ks valesti. Sorry."
 
-#: zotonic_mod_admin/src/mod_admin.erl:828
+#: zotonic_mod_admin/src/mod_admin.erl:839
 msgid "Sorry, could not handle this filename."
 msgstr "Kahjuks ei saanud selle failinimega hakkama."
 
-#: zotonic_mod_admin/src/mod_admin.erl:867
+#: zotonic_mod_admin/src/mod_admin.erl:878
 msgid "Sorry, could not move the file to the drop folder."
 msgstr "Kahjuks ei saanud faili rippkausta teisaldada."
 
-#: zotonic_mod_admin/src/mod_admin.erl:941
 #: zotonic_mod_admin/src/mod_admin.erl:952
+#: zotonic_mod_admin/src/mod_admin.erl:963
 #: zotonic_mod_menu/src/mod_menu.erl:133
 msgid "Sorry, only an admin is allowed to do this"
 msgstr "Kahjuks võib seda teha ainult administraator"
 
-#: zotonic_mod_admin/src/mod_admin.erl:803
 #: zotonic_mod_admin/src/mod_admin.erl:814
+#: zotonic_mod_admin/src/mod_admin.erl:825
 msgid "Sorry, that page is unknown."
 msgstr "Vabandust, see leht on tundmatu."
 
-#: zotonic_mod_admin/src/mod_admin.erl:805
 #: zotonic_mod_admin/src/mod_admin.erl:816
+#: zotonic_mod_admin/src/mod_admin.erl:827
 msgid "Sorry, you are not allowed to edit notes."
 msgstr "Kahjuks ei ole teil lubatud märkmeid redigeerida."
 
-#: zotonic_mod_admin/src/mod_admin.erl:871
+#: zotonic_mod_admin/src/mod_admin.erl:882
 msgid "Sorry, you are not allowed to upload drop folder files."
 msgstr "Kahjuks ei ole teil lubatud rippkausta faile üles laadida."
 
@@ -2961,11 +3008,11 @@ msgstr "Kahjuks ei ole teil lubatud rippkausta faile üles laadida."
 msgid "Sorry, you don't have permission to add the connection."
 msgstr "Vabandust, teil pole ühenduse lisamiseks luba."
 
-#: zotonic_mod_admin/src/mod_admin.erl:1103
+#: zotonic_mod_admin/src/mod_admin.erl:1114
 msgid "Sorry, you have no permission to add the connection."
 msgstr "Vabandust, teil pole ühenduse lisamiseks luba."
 
-#: zotonic_mod_admin/src/mod_admin.erl:1105
+#: zotonic_mod_admin/src/mod_admin.erl:1116
 msgid "Sorry, you have no permission to delete the connection."
 msgstr "Vabandust, teil pole ühenduse kustutamiseks luba."
 
@@ -2973,7 +3020,7 @@ msgstr "Vabandust, teil pole ühenduse kustutamiseks luba."
 msgid "Sort by"
 msgstr "Sorteerima"
 
-#: zotonic_mod_admin/src/mod_admin.erl:561
+#: zotonic_mod_admin/src/mod_admin.erl:572
 msgid "Standard page block types"
 msgstr "Standardsed leheploki tüübid"
 
@@ -3006,6 +3053,8 @@ msgstr "Seisund"
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_fields.tpl:7
 #: zotonic_mod_survey/src/models/m_survey.erl:1114
 #: zotonic_mod_survey/src/models/m_survey.erl:1120
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:38
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:72
 #: zotonic_site_status/priv/templates/_navbar.tpl:15
 #: zotonic_site_status/priv/templates/_sites.tpl:4
 msgid "Status"
@@ -3037,7 +3086,22 @@ msgstr "T√§nav rida 2"
 msgid "Structure"
 msgstr "Struktuur"
 
-#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:40
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:153
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:33
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:102
+#: zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:18
+#: zotonic_mod_websub/priv/templates/_rsc_import_subscription_options.tpl:4
+msgid "Subscribe"
+msgstr "Telli"
+
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:175
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:177
+#: zotonic_mod_websub/priv/templates/_rsc_import_subscription_options.tpl:15
+#: zotonic_mod_websub/priv/templates/_rsc_import_subscription_options.tpl:17
+msgid "Subscribing to connected resources"
+msgstr "Ühendatud ressursside tellimine"
+
+#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:83
 msgid "Succesfully imported page from the remote server."
 msgstr "Leht imporditi edukalt kaugserverist."
 
@@ -3113,7 +3177,7 @@ msgstr "Testpäring"
 msgid "Text"
 msgstr "Tekst"
 
-#: zotonic_mod_admin/src/mod_admin.erl:563
+#: zotonic_mod_admin/src/mod_admin.erl:574
 msgid "Text | a (rich) text block"
 msgstr "Tekst | (rikas)tekstiplokk"
 
@@ -3132,6 +3196,10 @@ msgstr "Kategooriapuu on uuesti üles ehitamas. See võib võtta kaua aega."
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:7
 msgid "The media runner configuration is invalid."
 msgstr "Meediajuhi konfiguratsioon on kehtetu."
+
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:165
+msgid "The original website does not advertise automatic updates."
+msgstr "Algne veebisait ei reklaami automaatseid uuendusi."
 
 #: zotonic_mod_admin/priv/templates/_action_unlink_undo.tpl:15
 msgid "The page"
@@ -3360,7 +3428,7 @@ msgstr "Avaldamata"
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results_item.tpl:29
 #: zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:2
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:29
-#: zotonic_mod_admin/src/mod_admin.erl:1111
+#: zotonic_mod_admin/src/mod_admin.erl:1122
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:118
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:182
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:9
@@ -3379,8 +3447,16 @@ msgstr "Avaldamata"
 #: zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:16
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:10
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:3
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:88
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:90
 msgid "Untitled"
 msgstr "Pealkirjata"
+
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:25
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:30
+#: zotonic_mod_admin/src/mod_admin.erl:555
+msgid "Untitled query"
+msgstr "Pealkirjata päring"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:9
 msgid "Unused"
@@ -3583,6 +3659,8 @@ msgid "You are not allowed to delete this page."
 msgstr "Teil pole lubatud seda lehte kustutada."
 
 #: zotonic_mod_admin/priv/templates/admin_edit.tpl:16
+#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:33
+#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:45
 #: zotonic_mod_admin_merge/priv/templates/admin_merge.tpl:26
 msgid "You are not allowed to edit this page."
 msgstr "Teil pole lubatud seda lehte muuta."
@@ -5071,6 +5149,7 @@ msgstr "Järjestatud paarid"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:104
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:135
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:56
 msgid "Reset"
 msgstr "Lähtesta"
 
@@ -6175,6 +6254,7 @@ msgstr "Parooli lähtestamise juhiste saamiseks sisestage oma e-posti aadress."
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:143
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:7
 #: zotonic_mod_survey/priv/templates/_survey_block_name_check.tpl:2
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:105
 msgid "Error"
 msgstr "Viga"
 
@@ -7708,6 +7788,7 @@ msgstr "See testib suhtlust serveriga."
 #: zotonic_mod_base/priv/templates/directory_index.tpl:15
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:38
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:35
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:69
 msgid "Type"
 msgstr "T√º√ºp"
 
@@ -10323,6 +10404,7 @@ msgid "Resources with email identity"
 msgstr "E-posti identiteediga ressursid"
 
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:158
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:109
 msgid "Retry"
 msgstr "Proovi uuesti"
 
@@ -10514,6 +10596,7 @@ msgstr "Kõik selle keelt kasutavad adressaadid"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:29
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:24
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:40
 msgid "All statuses"
 msgstr "Kõik staatused"
 
@@ -10558,7 +10641,7 @@ msgid "Check to activate the e-mail address."
 msgstr "E-posti aadressi aktiveerimiseks märkige see."
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:216
-#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:389
+#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:414
 msgid "Choose recipients and language"
 msgstr "Vali adressaadid ja keel"
 
@@ -10642,7 +10725,7 @@ msgstr "Seda kirja ei õnnestunud järjekorda panna. Kontrollige oma õigusi ja 
 msgid "Could not save the opt-out preference."
 msgstr "Loobumise eelistust ei saanud salvestada."
 
-#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:397
+#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:422
 msgid "Could not send the test. Check the test mailing list and selected language."
 msgstr "Testi saatmine ebaõnnestus. Kontrollige testi meililisti ja valitud keelt."
 
@@ -10766,7 +10849,7 @@ msgstr "E-kirja keel on saatmiseks valitud postituse keeleversioon. See võib er
 msgid "Enter a valid future mailing date and time."
 msgstr "Sisestage kehtiv tulevane postitamise kuupäev ja kellaaeg."
 
-#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:356
+#: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:381
 msgid "Enter a valid test email address."
 msgstr "Sisestage kehtiv test-e-posti aadress."
 
@@ -11710,6 +11793,8 @@ msgstr "Saatmise peatamine? Peatada saab ainult neid e-kirju, mis pole veel jär
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:16
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:53
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:81
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:44
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:100
 #: zotonic_site_status/priv/templates/_sites.tpl:18
 msgid "Stopped"
 msgstr "Peatatud"
@@ -11717,12 +11802,6 @@ msgstr "Peatatud"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:52
 msgid "Stopped; already queued emails are still being processed"
 msgstr "Peatatud; järjekorda juba lisatud e-kirju töödeldakse endiselt"
-
-#: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:33
-#: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:102
-#: zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:18
-msgid "Subscribe"
-msgstr "Telli"
 
 #: zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:5
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:8
@@ -11748,6 +11827,7 @@ msgid "Target mailing list"
 msgstr "Sihtpostiloend"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:185
+#: zotonic_mod_websub/priv/templates/_websub_error.tpl:3
 msgid "Technical details"
 msgstr "Tehnilised andmed"
 
@@ -15928,6 +16008,252 @@ msgstr "Vimeo video"
 #: zotonic_mod_video_embed/src/mod_video_embed.erl:274
 msgid "Youtube Video"
 msgstr "Youtube'i video"
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:50
+msgid "Access was denied while updating this page. Check the subscriber's source website credentials and permission to update the local page."
+msgstr "Selle lehe uuendamise ajal keelati juurdepääs. Kontrollige tellija veebisaidi kasutajatunnuseid ja õigusi kohaliku lehe uuendamiseks."
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:41
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:99
+msgid "Active"
+msgstr "Aktiivne"
+
+#: zotonic_mod_websub/priv/templates/_admin_edit_sidebar_websub.tpl:11
+msgid "Active subscriptions to this page: {count}"
+msgstr "Selle lehe aktiivsed tellijad: {count}"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:24
+msgid "All subscriptions"
+msgstr "Kõik tellimused"
+
+#: zotonic_mod_websub/priv/templates/_websub_error.tpl:1
+msgid "Automatic update error:"
+msgstr "Automaatse värskendamise viga:"
+
+#: zotonic_mod_websub/priv/templates/_admin_rsc_import_status_live.tpl:6
+msgid "Automatic updates are active."
+msgstr "Automaatsed uuendused on sisse lülitatud."
+
+#: zotonic_mod_websub/priv/templates/_admin_rsc_import_status_live.tpl:13
+msgid "Automatic updates are stopped."
+msgstr "Automaatsed värskendused on peatatud."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:72
+msgid "Automatic updates could not be completed. Check the technical details for the reported error."
+msgstr "Automaatseid värskendusi ei õnnestunud lõpule viia. Kontrollige teatatud vea tehnilisi üksikasju."
+
+#: zotonic_mod_websub/src/mod_websub.erl:245
+msgid "Could not change the automatic update subscription."
+msgstr "Automaatse värskenduse tellimust ei õnnestunud muuta."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:52
+msgid "Could not contact the remote website. Check its availability and HTTPS certificate."
+msgstr "Kaugveebisaidiga ei õnnestunud ühendust luua. Kontrollige selle kättesaadavust ja HTTPS-sertifikaati."
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:94
+msgid "Deleted page"
+msgstr "Kustutatud lehekülg"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:57
+msgid "Enter the exact hostname, without a scheme, port, or path."
+msgstr "Sisestage täpne hostinimi, jättes välja skeemi, pordi ja tee."
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:48
+msgid "Errors"
+msgstr "Vead"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:43
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:101
+msgid "Expired"
+msgstr "Aegunud"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:63
+msgid "Expired and stopped subscriptions are included. Renewals can temporarily have two active subscriptions. Remote hosts are shown without callback URLs or credentials."
+msgstr "Arvesse on võetud ka aegunud ja peatatud tellimused. Uuendamise korral võib ajutiselt olla kaks aktiivset tellimust. Kaughostid kuvatakse ilma tagasihelistamise URL-ideta ja autentimisandmeteta."
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:34
+msgid "External hostname"
+msgstr "Välise võrguvõrgu nimi"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:74
+msgid "Last activity"
+msgstr "Viimane tegevus"
+
+#: zotonic_mod_websub/priv/templates/_admin_rsc_import_status_live.tpl:19
+msgid "Last update received:"
+msgstr "Viimane saadud uuendus:"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:73
+msgid "Lease expires"
+msgstr "Rendileping lõpeb"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:70
+msgid "Local page"
+msgstr "Kohalik lehekülg"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:30
+msgid "Local resource ID"
+msgstr "Kohaliku ressursi ID"
+
+#: zotonic_mod_websub/priv/templates/_admin_edit_sidebar_websub.tpl:13
+msgid "No active subscriptions to this page."
+msgstr "Sellel lehel pole ühtegi aktiivset tellimust."
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:121
+msgid "No subscriptions found."
+msgstr "Tellimusi ei leitud."
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:8
+msgid "Our subscriptions to external pages and subscriptions from others to our pages."
+msgstr "Meie jälgimised välistel lehtedel ja teiste poolt meie lehtedele tehtud jälgimised."
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:25
+msgid "Pages we subscribe to"
+msgstr "Leheküljed, mida me jälgime"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:42
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:102
+msgid "Pending confirmation"
+msgstr "Ootab kinnitust"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:71
+msgid "Remote host"
+msgstr "Kaughost"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:108
+msgid "Retry subscription"
+msgstr "Proovi tellimust uuesti"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:60
+msgid "Select a valid subscription type, resource ID, hostname, status, errors, and page number."
+msgstr "Valige kehtiv tellimuse tüüp, ressursi ID, hostinimi, staatus, vead ja leheküljenumber."
+
+#: zotonic_mod_websub/priv/templates/_admin_rsc_import_status_live.tpl:14
+msgid "Start automatic updates"
+msgstr "Käivita automaatsed uuendused"
+
+#: zotonic_mod_websub/priv/templates/_admin_rsc_import_status_live.tpl:10
+msgid "Stop automatic updates"
+msgstr "Automaatsete värskenduste peatamine"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:26
+msgid "Subscribers to our pages"
+msgstr "Meie lehtede jälgijad"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:81
+msgid "Subscribes to us"
+msgstr "Jälgi meid"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:22
+msgid "Subscription type"
+msgstr "Tellimuse tüüp"
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:56
+msgid "The callback URL must use a hostname instead of an IP address. Check this website's public URL."
+msgstr "Tagasikõne URL-is tuleb IP-aadressi asemel kasutada hostinime. Kontrollige selle veebisaidi avalikku URL-i."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:38
+msgid "The destination could not be resolved or its network address is blocked. Local and private addresses are only allowed for .test hostnames in development."
+msgstr "Sihtkohta ei õnnestunud tuvastada või selle võrguadresse on blokeeritud. Kohalikke ja privaatseid aadresse lubatakse kasutada ainult arendusetapis olevate .test-domeeninimede puhul."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:48
+msgid "The original page address has changed. Import the page again to set up automatic updates."
+msgstr "Lehe algne aadress on muutunud. Impordi leht uuesti, et seadistada automaatsed uuendused."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:54
+msgid "The remote website address is invalid. Check the source and WebSub URLs."
+msgstr "Kaugveebisaidi aadress on kehtetu. Kontrollige allika- ja WebSub-URL-aadresse."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:58
+msgid "The remote website redirects from HTTPS to HTTP. Use a secure HTTPS destination."
+msgstr "Kaugveebisait suunab HTTPS-ist HTTP-le. Kasutage turvalist HTTPS-sihtkohta."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:60
+msgid "The remote website redirects too many times. Check its redirect configuration."
+msgstr "Kaugveebisait suunab liiga palju kordi edasi. Kontrollige selle suunamisseadeid."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:68
+msgid "The remote website refused access. Check the subscribing user's permissions on that website."
+msgstr "Kaugveebisait keelas juurdepääsu. Kontrollige selle veebisaidi puhul tellija kasutaja õigusi."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:66
+msgid "The remote website requires authentication. Check the subscribing user's configured credentials."
+msgstr "Kaugveebisait nõuab autentimist. Kontrollige tellija konfigureeritud autentimisandmeid."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:62
+msgid "The remote website returned a redirect without a destination."
+msgstr "Kaugveebisait saatis tagasi suunamise, millel puudus sihtkoht."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:64
+msgid "The remote website returned an invalid redirect destination."
+msgstr "Kaugveebisait andis kehtetu ümbersuunamiskoha."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:70
+msgid "The requested page or WebSub endpoint was not found on the remote website."
+msgstr "Kõnealust lehekülge või WebSub-lõpppunkti ei leitud kaugveebisaidilt."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:46
+msgid "The source page advertises invalid WebSub links. Check its hub and topic URLs."
+msgstr "Allikalehel on kehtetud WebSub-lingid. Kontrollige selle keskuse ja teema URL-aadresse."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:44
+msgid "The source page does not advertise automatic updates via WebSub."
+msgstr "Allikaslehel ei mainita automaatseid uuendusi WebSubi kaudu."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:40
+msgid "The source website did not confirm the subscription in time. Check that it can reach this website's callback URL."
+msgstr "Allikasveebisait ei kinnitanud tellimust õigeaegselt. Kontrolli, kas see suudab ühendust saada selle veebisaidi tagasiside-URL-iga."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:32
+msgid "The source website does not allow this subscriber to use WebSub. On the source website, allow the subscribing user to use WebSub, or allow anonymous visitors for public subscriptions."
+msgstr "Allikasveebisait ei luba sellel tellijal WebSubi kasutada. Lubage allikasveebisaidil tellijal WebSubi kasutada või lubage avalikele tellimustele juurdepääs ka anonüümsetele külastajatele."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:36
+msgid "The source website does not recognize this subscription topic. Check that the original page still exists."
+msgstr "Allikasveebisait ei tunne seda tellimusteemat ära. Kontrollige, kas algne lehekülg on endiselt olemas."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:34
+msgid "The source website refused access to this page. The subscriber must be allowed to view it, and the page must be an original on that website."
+msgstr "Allikasveebisait keelas juurdepääsu sellele lehele. Tellijal peab olema lubatud seda vaadata ning leht peab olema selle veebisaidi originaalleht."
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:42
+msgid "This page points back to this website. A website cannot subscribe to itself."
+msgstr "See lehekülg viitab tagasi sellele veebisaidile. Veebisait ei saa endale ise tellimust teha."
+
+#: zotonic_mod_websub/priv/templates/_admin_edit_sidebar_websub.tpl:17
+msgid "View subscribers to this page"
+msgstr "Vaata selle lehe tellijaid"
+
+#: zotonic_mod_websub/priv/templates/_admin_edit_sidebar_websub.tpl:19
+msgid "View subscriptions to the external page"
+msgstr "Vaata välislehe tellimusi"
+
+#: zotonic_mod_websub/priv/templates/_admin_rsc_import_status_live.tpl:8
+msgid "Waiting for automatic updates to be confirmed."
+msgstr "Oodatakse automaatsete värskenduste kinnitamist."
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:82
+msgid "We subscribe"
+msgstr "Me tellime"
+
+#: zotonic_mod_websub/priv/templates/_admin_edit_sidebar_websub.tpl:4
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:3
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:7
+#: zotonic_mod_websub/src/mod_websub.erl:217
+msgid "WebSub subscriptions"
+msgstr "WebSubi tellimused"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:51
+msgid "With errors"
+msgstr "Vigadega"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:52
+msgid "Without errors"
+msgstr "Vigadeta"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:131
+msgid "You are not allowed to view subscriptions."
+msgstr "Teil ei ole lubatud tellimusi vaadata."
 
 #: zotonic_mod_wires/src/actions/action_wires_alert.erl:68
 msgid "Alert"

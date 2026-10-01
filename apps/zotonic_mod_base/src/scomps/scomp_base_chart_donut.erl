@@ -9,7 +9,7 @@
 }).
 -moduledoc(<<
     "Render a donut chart as inline SVG.\n\n",
-    "This is a convenience wrapper around the [`chart`](scomp-base-chart) scomp.\n",
+    "This is a convenience wrapper around `scomp#chart`.\n",
     "It accepts the same arguments and always uses `type=\"donut\"`.\n\n",
     "```django\n",
     "{% chart_donut data=[[\"Yes\", 42], [\"No\", 8]] %}\n",

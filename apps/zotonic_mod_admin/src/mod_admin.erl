@@ -167,8 +167,8 @@ To make it work we are using 3 templates (where category_name is the lowercase n
 
 `_admin_overview_list.category_name.tpl`
 
-Overrides the overview with a `field` variable for our custom sort. If we are using [an existing resource
-property](/id/doc_model_model_rsc) such as `date_start`, we write:
+Overrides the overview with a `field` variable for our custom sort. To sort by an existing resource
+property from `model#rsc`, such as `date_start`, we write:
 
 
 ```django

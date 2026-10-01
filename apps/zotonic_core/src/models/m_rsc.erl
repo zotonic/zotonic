@@ -688,7 +688,7 @@ get_raw(Id, IsLock, Context) when ?is_valid_rsc_id(Id) ->
     end,
     case z_db:qmap_props_row(SQL1, [ Id ], [ {keys, binary} ], Context) of
         {ok, Map} ->
-            {ok, map_language_atoms(Map)};
+            {ok, z_notifier:foldr(#rsc_get_raw{ id = Id, is_props_only = false }, map_language_atoms(Map), Context)};
         {error, _} = Error ->
             Error
     end;

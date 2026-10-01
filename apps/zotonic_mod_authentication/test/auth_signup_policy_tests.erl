@@ -16,17 +16,16 @@ pending_signup_policy_test() ->
             is_signup_confirmed = true
         },
         lists:foreach(
-            fun({Original, Current, ExpectedCalls}) ->
+            fun({EnsureUsernamePw, ExpectedCalls}) ->
                 meck:reset(m_identity),
                 meck:expect(z_notifier, first, fun
-                    (#signup{}, _) -> {ok, 42};
-                    (#auth_ensure_username_pw{service = test_service, service_uid = <<"provider:subject">>}, _) -> Current
+                    (#signup{}, _) -> {ok, 42}
                 end),
                 ?assertEqual({ok, 42}, mod_authentication:observe_auth_validated(
-                    Auth#auth_validated{ensure_username_pw = Original}, #context{})),
+                    Auth#auth_validated{ensure_username_pw = EnsureUsernamePw}, #context{})),
                 ?assertEqual(ExpectedCalls, meck:num_calls(m_identity, ensure_username_pw, '_'))
             end,
-            [{true, false, 0}, {false, true, 1}, {true, undefined, 1}, {false, undefined, 0}]),
+            [{true, 1}, {false, 0}]),
         meck:reset(m_identity),
         ?assertEqual({ok, undefined}, mod_authentication:observe_auth_validated(
             Auth#auth_validated{is_connect = true}, #context{})),

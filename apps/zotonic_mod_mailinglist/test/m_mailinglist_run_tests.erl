@@ -246,7 +246,9 @@ postgres(Db) ->
         editorial_outcomes(Context),
         recent_mailings(Context),
         access(Context),
-        retention(Context)
+        retention(Context),
+        subscription_counts_and_retention(Context),
+        recipient_filters(Context)
     after
         epgsql:squery(C, "rollback"),
         epgsql:close(C),
@@ -1095,3 +1097,74 @@ async_review_test() ->
     after
         lists:foreach(fun(M) -> catch meck:unload(M) end, Modules)
     end.
+
+%% Disabled subscriptions do not inflate counts, and disabling an old entry
+%% starts a fresh three-month retention period. Everything uses the test schema.
+subscription_counts_and_retention(Context) ->
+    meck:expect(m_edge, subjects, fun(_, subscriberof, _) -> [] end),
+    z_db:q("create table email_status (
+        email varchar(200), modified timestamptz, is_valid boolean,
+        is_blocked boolean, bounce timestamptz, error timestamptz)", Context),
+    z_db:q("insert into mailinglist_recipient
+        (mailinglist_id, email, confirm_key, is_enabled, timestamp) values
+        (2, 'enabled@example.com', 'enabled', true, now() - interval '1 year'),
+        (2, 'toggle@example.com', 'toggle', true, now() - interval '1 year'),
+        (2, 'expired@example.com', 'expired', false, now() - interval '4 months'),
+        (2, 'recent@example.com', 'recent', false, now() - interval '1 month'),
+        (2, 'boundary@example.com', 'boundary', false, now() - interval '3 months'),
+        (3, 'other@example.com', 'other', true, now())", Context),
+    ?assertEqual(#{enabled => 2, disabled => 3}, m_mailinglist:recipient_counts(2, Context)),
+    ?assertEqual(2, m_mailinglist:count_recipients(2, Context)),
+    #{total := 2, recipients := 2, disabled := 3} = m_mailinglist:get_stats(2, Context),
+    Id = z_db:q1("select id from mailinglist_recipient where confirm_key='toggle'", Context),
+    ok = m_mailinglist:recipient_is_enabled_toggle(Id, Context),
+    ?assertEqual(#{enabled => 1, disabled => 4}, m_mailinglist:recipient_counts(2, Context)),
+    ok = m_mailinglist:periodic_cleanup(Context),
+    ?assertEqual(#{enabled => 1, disabled => 3}, m_mailinglist:recipient_counts(2, Context)),
+    ?assertEqual(undefined, z_db:q1(
+        "select id from mailinglist_recipient where confirm_key='expired'", Context)),
+    ?assertEqual(false, z_db:q1("select is_enabled from mailinglist_recipient where id=$1", [Id], Context)),
+    ok = m_mailinglist:recipient_is_enabled_toggle(Id, Context),
+    ok = m_mailinglist:periodic_cleanup(Context),
+    ?assertEqual(#{enabled => 2, disabled => 2}, m_mailinglist:recipient_counts(2, Context)),
+    ?assertEqual(#{enabled => 0, disabled => 0}, m_mailinglist:recipient_counts(1, Context)).
+
+recipient_filters(Context) ->
+    z_db:q("delete from mailinglist_recipient", Context),
+    %% Exercise the upgrade from serialized language properties, including
+    %% preserving unrelated fields and running the migration a second time.
+    z_db:q("alter table mailinglist_recipient drop column pref_language", Context),
+    z_db:q("insert into mailinglist_recipient
+        (mailinglist_id,email,confirm_key,is_enabled,props) values
+        (2,'z@example.com','z',true,$1),
+        (2,'a@example.com','a',false,$2),
+        (2,'b@example.com','b',true,null),
+        (3,'other@example.com','other-filter',true,null)",
+        [?DB_PROPS([{pref_language, en}, {name_first, <<"Test">>}]),
+         ?DB_PROPS(#{<<"pref_language">> => <<"nl">>})], Context),
+    _ = z_mailinglist_schema:manage_schema({upgrade, 7}, Context),
+    _ = z_mailinglist_schema:manage_schema({upgrade, 7}, Context),
+    {ok, Migrated} = m_mailinglist:list_recipients(2, Context),
+    [English] = [R || #{<<"email">> := <<"z@example.com">>} = R <- Migrated],
+    ?assertEqual(<<"en">>, maps:get(<<"pref_language">>, English)),
+    ?assertEqual(<<"Test">>, maps:get(<<"name_first">>, English)),
+    Search = fun(Args) ->
+        Sql = z_mailinglist_recipients:search([{id, 2} | Args], Context),
+        z_db:q(iolist_to_binary(["select ", Sql#search_sql.select,
+            " from ", Sql#search_sql.from, " where ", Sql#search_sql.where,
+            " order by ", Sql#search_sql.order]), Sql#search_sql.args, Context)
+    end,
+    Emails = fun(Rows) -> [Email || {_, Email, _, _} <- Rows] end,
+    ?assertEqual([<<"a@example.com">>, <<"b@example.com">>, <<"z@example.com">>], Emails(Search([]))),
+    ?assertEqual([<<"b@example.com">>, <<"a@example.com">>, <<"z@example.com">>],
+        Emails(Search([{qsort, <<"newest">>}]))),
+    ?assertEqual([<<"z@example.com">>, <<"a@example.com">>, <<"b@example.com">>],
+        Emails(Search([{qsort, <<"oldest">>}]))),
+    ?assertEqual([<<"b@example.com">>, <<"z@example.com">>],
+        Emails(Search([{qstatus, <<"enabled">>}]))),
+    ?assertEqual([<<"a@example.com">>], Emails(Search([{qstatus, <<"disabled">>}]))),
+    ?assertEqual([<<"b@example.com">>], Emails(Search([{qlanguage, <<"none">>}]))),
+    ?assertEqual([<<"z@example.com">>],
+        Emails(Search([{qstatus, <<"enabled">>}, {qlanguage, <<"en">>}]))),
+    ?assertEqual([], Search([{qlanguage, <<"en' OR true --">>}])),
+    ?assertEqual(Search([]), Search([{qsort, <<"invalid">>}, {qstatus, <<"invalid">>}, {qlanguage, <<"all">>}])).
