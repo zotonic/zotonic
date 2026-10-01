@@ -335,7 +335,6 @@ delete(Id, TransferId, Context) ->
                                                              Ctx)
                                 end,
 
-                        ok = z_rsc_defaults:invalidate(Ctx),
                         % Move all sub-categories of the deleted category one level "up"
                         case z_db:q("update hierarchy
                                      set parent_id = $1

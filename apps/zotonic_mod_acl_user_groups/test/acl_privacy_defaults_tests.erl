@@ -31,19 +31,19 @@ insert_defaults_test() ->
     try
         Person = mod_acl_user_groups:observe_rsc_insert(#rsc_insert{props = #{}},
             #{<<"category_id">> => 2, <<"content_group_id">> => undefined}, C),
-        ?assertMatch(#{<<"privacy">> := 30, <<"privacy_is_default">> := true,
+        ?assertMatch(#{<<"privacy">> := 30,
             <<"content_group_id">> := 42}, Person),
         Public = mod_acl_user_groups:observe_rsc_insert(#rsc_insert{props = #{}},
             #{<<"category_id">> => 1}, C),
-        ?assertMatch(#{<<"privacy">> := 0, <<"privacy_is_default">> := true}, Public),
+        ?assertMatch(#{<<"privacy">> := 0}, Public),
         Explicit = mod_acl_user_groups:observe_rsc_insert(#rsc_insert{props =
             #{<<"privacy">> => 10, <<"content_group_id">> => 9}},
             #{<<"category_id">> => 2}, C),
-        ?assertMatch(#{<<"privacy">> := 10, <<"privacy_is_default">> := false,
+        ?assertMatch(#{<<"privacy">> := 10,
             <<"content_group_id">> := 9}, Explicit),
         %% Module-provided defaults survive the initial write even during startup.
         Stored = z_rsc_defaults:prepare(123, Person, Person, C),
-        ?assertMatch(#{<<"privacy">> := 30, <<"privacy_is_default">> := true}, Stored)
+        ?assertMatch(#{<<"privacy">> := 30}, Stored)
     after
         meck:unload(m_category),
         meck:unload(acl_user_groups_checks)
@@ -56,8 +56,7 @@ migration_model_test() ->
     try
         lists:foreach(fun(Pending) ->
             meck:expect(z_db, q1, fun
-                ("select exists(select 1 from rsc where privacy_is_default is null "
-                 "or privacy = -1 or props_json is null or content_group_id is null)", Ctx)
+                ("select exists(select 1 from rsc where privacy = -1 or props_json is null or content_group_id is null)", Ctx)
                         when Ctx#context.site =:= acl_migration_status_fixture -> Pending;
                 (Sql,Ctx) -> meck:passthrough([Sql,Ctx])
             end),

@@ -41,6 +41,7 @@
     active/1,
     active/2,
     active_not_running/1,
+    all_running/1,
     active_dir/1,
     lib_dir/1,
     module_to_app/1,
@@ -102,6 +103,7 @@
 %% Module manager state
 -record(state, {
     site :: atom(),
+    active = [] :: [atom()],
     module_exports = [] :: list({atom(), list({atom(),non_neg_integer()})}),
     module_schema = [] :: list({atom(), integer()|undefined}),
     start_wait  = none :: none | {atom(), pid(), erlang:timestamp()},
@@ -425,27 +427,39 @@ active(Module, Context) ->
             lists:member(Module, active(Context))
     end.
 
-%% @doc Check which modules are active and installed but currently not in running state.
-%% The site is hardcoded as it must be part of the running list of modules, if not then
-%% it is added to the list of not running modules irrespective if it is activated or not.
--spec active_not_running(Context) -> [ Module ] when
-    Context :: z:context(),
-    Module :: atom().
+%% @doc Cached readiness of all active modules, including the site and missing modules.
+%% The manager owns the table, so an absent or crashed manager always returns false.
+-spec all_running(z:context()) -> boolean().
+all_running(Context) ->
+    try ets:lookup_element(readiness_table(z_context:site(Context)), all_running, 2)
+    catch error:badarg -> false
+    end.
+
+%% @doc Active modules (including missing modules and the site) that are not running.
+-spec active_not_running(z:context()) -> [atom()].
 active_not_running(Context) ->
     Status = get_modules_status(Context),
-    Active = active_dir(Context),
-    Active1 = case lists:keymember(z_context:site(Context), 1, Active) of
-        true -> Active;
-        false -> [ {z_context:site(Context), undefined} | Active ]
-    end,
-    lists:filtermap(
-        fun({M, _Dir}) ->
-            case proplists:get_value(M, Status) of
-                running -> false;
-                _ -> {true, M}
+    Active = lists:usort([z_context:site(Context) | active(Context)]),
+    [Module || Module <- Active, proplists:get_value(Module, Status) =/= running].
+
+readiness_table(Site) ->
+    z_utils:name_for_site(z_module_manager_readiness, Site).
+
+set_all_running(IsRunning, Site) ->
+    true = ets:insert(readiness_table(Site), {all_running, IsRunning}),
+    ok.
+
+update_all_running(#state{site = Site, active = Active, modules = Modules,
+                         start_queue = Queue, start_wait = Wait}) ->
+    IsRunning = Queue =:= [] andalso Wait =:= none andalso lists:all(
+        fun(Module) ->
+            case maps:find(Module, Modules) of
+                {ok, #module_status{status = running}} -> true;
+                _ -> false
             end
         end,
-        Active1).
+        lists:usort([Site | Active])),
+    set_all_running(IsRunning, Site).
 
 
 %% @doc Return the list of all active modules and their directories. Exclude modules that
@@ -907,6 +921,9 @@ bin(A) when is_binary(A) ->
 
 %% @doc Initiates the server.
 init(Site) ->
+    ets:new(readiness_table(Site), [named_table, protected, set, {read_concurrency, true}]),
+    set_all_running(false, Site),
+    z_rsc_defaults:suspend(z_context:new(Site)),
     timer:send_interval(?GC_INTERVAL, force_gc),
     z_context:logger_md(Site),
     {ok, #state{ site = Site }}.
@@ -1126,6 +1143,8 @@ flush(Context) ->
 % ----------------------------------------------------------------------------
 
 do_module_down(Module, #state{ modules = Modules } = State, Pid, Reason) ->
+    set_all_running(false, State#state.site),
+    z_rsc_defaults:suspend(z_context:new(State#state.site)),
     State1 = State#state{
         module_monitors = maps:remove(Pid, State#state.module_monitors),
         modules = do_module_down_1(Modules, maps:get(Module, Modules), Reason)
@@ -1256,6 +1275,8 @@ do_cleanup_removed_modules(#state{ start_queue = Queue, modules = Ms } = State) 
 handle_restart_module(Module, #state{ site = Site, modules = Modules } = State) ->
     case maps:find(Module, Modules) of
         {ok, #module_status{ status = running } = ModuleStatus} ->
+            set_all_running(false, Site),
+            z_rsc_defaults:suspend(z_context:new(Site)),
             z_proc:spawn_md(
                 fun() ->
                     z_module_sup:stop_module(Module, Site)
@@ -1275,6 +1296,8 @@ handle_restart_module(Module, #state{ site = Site, modules = Modules } = State) 
     end.
 
 handle_upgrade(#state{ site = Site, modules = Modules } = State) ->
+    set_all_running(false, Site),
+    Active = active(z_context:new(Site)),
     Scan = scan(),
     ValidModules = valid_modules(Site, Scan),
     z_depcache:flush(z_modules, z_context:new(Site)),
@@ -1342,7 +1365,7 @@ handle_upgrade(#state{ site = Site, modules = Modules } = State) ->
         Modules1,
         Create),
 
-    State1 = State#state{ modules = Modules2 },
+    State1 = State#state{ modules = Modules2, active = Active },
 
     % 1. Put all to be started modules into a start list (add to State)
     % 2. Let the module manager start them one by one (if startable)
@@ -1350,6 +1373,10 @@ handle_upgrade(#state{ site = Site, modules = Modules } = State) ->
     % 4. Log non startable modules (remaining after all startable modules have started)
     case {StartList, sets:size(Kill)} of
         {[], 0} ->
+            update_all_running(State1#state{start_queue = []}),
+            % Recheck readiness after deactivating a missing or failed module,
+            % even when no process needs starting or stopping.
+            {ok, _} = z_sidejob:start({z_rsc_defaults, start, [z_context:new(Site)]}),
             signal_upgrade_waiters(State1#state{ start_queue = [] });
         _ ->
             gen_server:cast(self(), start_next),
@@ -1377,6 +1404,7 @@ sidejob_finish_start(Site) ->
 
 
 handle_start_next(#state{site=Site, start_queue=[]} = State) ->
+    update_all_running(State),
     % Signal modules are loaded, and load all translations.
     {ok, _} = z_sidejob:start({?MODULE, sidejob_finish_start, [Site]}),
     signal_upgrade_waiters(State);

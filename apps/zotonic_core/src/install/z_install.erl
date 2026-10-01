@@ -168,7 +168,6 @@ model_pgsql() ->
       publication_start timestamp with time zone,
       publication_end timestamp with time zone NOT NULL DEFAULT '9999-06-01 00:00:00'::timestamp with time zone,
       privacy integer NOT NULL DEFAULT -1,
-      privacy_is_default boolean,
       content_group_id int,
       creator_id int,
       modifier_id int,
@@ -232,8 +231,8 @@ model_pgsql() ->
 
      "CREATE INDEX IF NOT EXISTS fki_rsc_content_group_id ON rsc (content_group_id)",
      "CREATE INDEX IF NOT EXISTS rsc_privacy_pending_key ON rsc(id) WHERE privacy = -1",
-     "CREATE INDEX IF NOT EXISTS rsc_defaults_pending_v2_key ON rsc(id) WHERE "
-     "privacy_is_default IS NULL OR privacy = -1 OR props_json IS NULL OR content_group_id IS NULL",
+     "CREATE INDEX IF NOT EXISTS rsc_defaults_pending_v3_key ON rsc(id) WHERE "
+     "privacy = -1 OR props_json IS NULL OR content_group_id IS NULL",
      "CREATE INDEX IF NOT EXISTS fki_rsc_creator_id ON rsc (creator_id)",
      "CREATE INDEX IF NOT EXISTS fki_rsc_modifier_id ON rsc (modifier_id)",
      "CREATE INDEX IF NOT EXISTS fki_rsc_category_id ON rsc (category_id)",

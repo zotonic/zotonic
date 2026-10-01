@@ -29,7 +29,7 @@ run(Context) ->
     z_db:q("create temporary table rsc (id integer primary key, "
         "is_protected boolean, visible_for integer, category_id integer, name text, uri text, "
         "props bytea, props_json jsonb, language text[], publication_start timestamp, "
-        "privacy integer not null default -1, privacy_is_default boolean, "
+        "privacy integer not null default -1, "
         "creator_id integer, modifier_id integer, is_published boolean)", Context),
     z_db:q("create temporary table hierarchy (name text, id integer, parent_id integer, "
         "nr integer, lvl integer, lft integer, rght integer)", Context),
@@ -45,7 +45,7 @@ run(Context) ->
         ?assert(z_db:q1("select count(*) from pg_temp.rsc", Context) > 20),
         ?assertEqual(0, z_db:q1("select count(*) from pg_temp.rsc where "
             "props is not null or props_json is null or jsonb_typeof(props_json) <> 'object' "
-            "or privacy <> -1 or privacy_is_default is distinct from true", Context)),
+            "or privacy <> -1", Context)),
         [Admin] = z_db:q("select props_json from pg_temp.rsc where id=1", Context),
         ?assertEqual({#{<<"title">> => <<"Site Administrator">>}}, Admin),
         [{Category}] = z_db:q("select props_json from pg_temp.rsc where id=116", Context),

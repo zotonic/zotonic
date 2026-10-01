@@ -686,9 +686,10 @@ get_raw(Id, IsLock, Context) when ?is_valid_rsc_id(Id) ->
         true -> z_convert:to_list(SQL) ++ " for update";
         false -> z_convert:to_list(SQL)
     end,
-    case z_db:qmap_props_row(SQL1, [ Id ], [ {keys, binary} ], Context) of
+    case z_db:qmap_row(SQL1, [ Id ], [ {keys, binary} ], Context) of
         {ok, Map} ->
-            {ok, z_notifier:foldr(#rsc_get_raw{ id = Id, is_props_only = false }, map_language_atoms(Map), Context)};
+            Raw = merge_raw_props(Map),
+            {ok, z_notifier:foldr(#rsc_get_raw{ id = Id, is_props_only = false }, map_language_atoms(Raw), Context)};
         {error, _} = Error ->
             Error
     end;
@@ -698,6 +699,23 @@ get_raw(undefined, _IsLock, _Context) ->
     {error, enoent};
 get_raw(Id, IsLock, Context) ->
     get_raw(rid(Id, Context), IsLock, Context).
+
+%% Merge one database snapshot: columns take precedence over JSON and legacy props.
+%% Only the -1 migration marker falls back to stored privacy. SQL guards continue
+%% to use that marker until migration writes the effective value to the column.
+merge_raw_props(Row) ->
+    Props = maps:merge(raw_props_map(maps:get(<<"props">>, Row, undefined)),
+                      raw_props_map(maps:get(<<"props_json">>, Row, undefined))),
+    Columns = maps:without([<<"props">>, <<"props_json">>], Row),
+    Merged = maps:merge(Props, Columns),
+    case maps:get(<<"privacy">>, Columns, undefined) of
+        -1 -> Merged#{<<"privacy">> => maps:get(<<"privacy">>, Props, undefined)};
+        _ -> Merged
+    end.
+
+raw_props_map(Props) when is_map(Props) -> Props;
+raw_props_map(Props) when is_list(Props) -> z_props:from_props(Props);
+raw_props_map(_) -> #{}.
 
 %% The languages are stored as a psql array, map to the internal atom
 %% representation. On update this is mapped to binaries in z_db:update/3.

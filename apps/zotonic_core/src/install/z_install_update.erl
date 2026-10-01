@@ -1112,18 +1112,16 @@ rsc_privacy(C, Database, Schema) ->
         true -> ok;
         false ->
             {ok, [], []} = epgsql:squery(C,
-                "alter table rsc add column privacy integer not null default -1, "
-                "add column privacy_is_default boolean"),
-            {ok, [], []} = epgsql:squery(C,
-                "create index rsc_defaults_pending_key on rsc(id) where "
-                "privacy_is_default is null or privacy = -1 or props_json is null"),
-            ok
+                "alter table rsc add column privacy integer not null default -1")
     end,
+    % Privacy is initialized once, so its former default-provenance flag is obsolete.
     {ok, [], []} = epgsql:squery(C,
-        "create index if not exists rsc_defaults_pending_v2_key on rsc(id) where "
-        "privacy_is_default is null or privacy = -1 or props_json is null or content_group_id is null"),
+        "alter table rsc drop column if exists privacy_is_default"),
+    {ok, [], []} = epgsql:squery(C,
+        "create index if not exists rsc_defaults_pending_v3_key on rsc(id) where "
+        "privacy = -1 or props_json is null or content_group_id is null"),
     {ok, [], []} = epgsql:squery(C, "drop index if exists rsc_defaults_pending_key"),
-    % Keep the admin status check independent of other pending property conversions.
+    {ok, [], []} = epgsql:squery(C, "drop index if exists rsc_defaults_pending_v2_key"),
     {ok, [], []} = epgsql:squery(C,
         "create index if not exists rsc_privacy_pending_key on rsc(id) where privacy = -1"),
     ok.

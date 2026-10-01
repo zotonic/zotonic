@@ -677,11 +677,10 @@ observe_rsc_insert(#rsc_insert{ props = RscProps }, InsertProps, Context) ->
     InsertProps1 = case Privacy of
         undefined ->
             InsertProps#{
-                <<"privacy">> => default_privacy(maps:get(<<"category_id">>, InsertProps), Context),
-                <<"privacy_is_default">> => true
+                <<"privacy">> => default_privacy(maps:get(<<"category_id">>, InsertProps), Context)
             };
         _ ->
-            InsertProps#{<<"privacy">> => Privacy, <<"privacy_is_default">> => false}
+            InsertProps#{<<"privacy">> => Privacy}
     end,
     insert_content_group(RscProps, InsertProps1, Context).
 

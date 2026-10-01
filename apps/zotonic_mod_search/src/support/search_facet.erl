@@ -860,8 +860,8 @@ empty_to_undefined(L)  -> L.
 %% facet definition we need for building the facet table.
 -spec ensure_table(z:context()) -> ok | {error, term()}.
 ensure_table(Context) ->
-    case z_module_manager:active_not_running(Context) of
-        [] ->
+    case z_module_manager:all_running(Context) of
+        true ->
             case is_table_ok(Context) of
                 true ->
                     ok;
@@ -874,13 +874,12 @@ ensure_table(Context) ->
                             Error
                     end
             end;
-        NotRunning ->
+        false ->
             ?LOG_INFO(#{
                 in => zotonic_mod_search,
                 text => <<"Delaying search facet check because not all modules are running.">>,
                 result => warning,
-                reason => not_running,
-                modules => NotRunning
+                reason => not_running
             })
     end.
 

@@ -357,10 +357,6 @@ save_nocheck(Name, NewTree, Context) when is_binary(Name); is_atom(Name) ->
     ok.
 
 save_nocheck_trans(Name, NewFlat, Context) ->
-    case z_convert:to_binary(Name) of
-        <<"$category">> -> z_rsc_defaults:invalidate(Context);
-        _ -> ok
-    end,
     OldFlatNr = z_db:q("
                 select id, parent_id, lvl, nr
                 from hierarchy
@@ -510,10 +506,6 @@ flatten_save_tree([{Id, Cs} | Ts], ParentId, Lvl, Acc) ->
 append(Name0, Missing, Context) ->
     Name = z_convert:to_binary(Name0),
     Result = z_db:transaction(fun(Ctx) ->
-        case {Name, Missing} of
-            {<<"$category">>, [_ | _]} -> z_rsc_defaults:invalidate(Ctx);
-            _ -> ok
-        end,
         append_1(Name, Missing, Ctx)
     end, Context),
     case Result of
@@ -545,10 +537,6 @@ remove(_Name, [], _Context) ->
     {ok, 0};
 remove(Name, Ids, Context) ->
     Result = z_db:transaction(fun(Ctx) ->
-        case z_convert:to_binary(Name) of
-            <<"$category">> -> z_rsc_defaults:invalidate(Ctx);
-            _ -> ok
-        end,
         lists:foreach(fun(Id) ->
             z_db:q("delete from hierarchy where name = $1 and id = $2", [Name, Id], Ctx)
         end, Ids),
