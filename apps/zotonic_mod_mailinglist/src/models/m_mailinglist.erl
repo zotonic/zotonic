@@ -24,12 +24,18 @@
 -moduledoc("
 Model for mailinglist operations and reporting, including recipient counts, delivery stats, subscriptions, and scheduled mailings.
 
+Recipient statistics exclude disabled email subscriptions from `total` and
+`recipients`, and report them separately as `disabled`. Subscriber edges and
+query matches are counted separately and can overlap; totals are not a delivery
+estimate. Disabled email subscriptions are cleaned up daily after three months,
+matching email-log retention. Changing the enabled flag restarts that period.
+
 Available Model API Paths
 -------------------------
 
 | Method | Path pattern | Description |
 | --- | --- | --- |
-| `get` | `/count_recipients/+mailingid/...` | Return count information from `z_acl:is_allowed`. |
+| `get` | `/count_recipients/+mailingid/...` | Count enabled email subscriptions and subscriber edges. |
 | `get` | `/stats/+mailingid/...` | Return stats from `z_acl:rsc_editable`. |
 | `get` | `/rsc_stats/+rscid/...` | Return rsc stats from `z_acl:is_allowed`. |
 | `get` | `/recipient/+recipientid/...` | Return mailinglist recipient record for recipient id `+recipientid`. |
@@ -58,6 +64,7 @@ Available Model API Paths
     get_enabled_recipients/2,
     list_recipients/2,
     count_recipients/2,
+    recipient_counts/2,
 
     recipient_status/3,
 
@@ -114,13 +121,9 @@ Available Model API Paths
 m_get([ <<"count_recipients">>, MailingId | Rest ], _Msg, Context) ->
     case z_acl:is_allowed(view, MailingId, Context) of
         true ->
-            F = fun() ->
-                        Count = count_recipients(MailingId, Context),
-                        SubIdCount = length(m_edge:subjects(MailingId, subscriberof, Context)),
-                        Count + SubIdCount
-                end,
-            %% Cache the value for 10 minutes.
-            Total = z_depcache:memo(F, {mailinglist_count_recipients, MailingId}, 600, [MailingId], Context),
+            Count = count_recipients(MailingId, Context),
+            SubIdCount = length(m_edge:subjects(MailingId, subscriberof, Context)),
+            Total = Count + SubIdCount,
             {ok, {Total, Rest}};
         false ->
             {error, eacces}
@@ -322,21 +325,33 @@ list_recipients(ListId, Context) ->
         where mailinglist_id = $1",
         [ z_convert:to_integer(ListId) ], Context).
 
+%% @doc Count enabled email subscriptions, excluding disabled recipients.
 -spec count_recipients( m_rsc:resource_id(), z:context() ) -> non_neg_integer().
 count_recipients(ListId, Context) ->
-    z_db:q1("
-            select count(*)
-            from mailinglist_recipient
-            where mailinglist_id = $1",
-            [ z_convert:to_integer(ListId) ],
-            Context).
+    #{enabled := Enabled} = recipient_counts(ListId, Context),
+    Enabled.
+
+%% @doc Count enabled and disabled email subscriptions separately.
+-spec recipient_counts(ListId, Context) -> Counts when
+    ListId :: m_rsc:resource_id(),
+    Context :: z:context(),
+    Counts :: #{enabled := non_neg_integer(), disabled := non_neg_integer()}.
+recipient_counts(ListId, Context) ->
+    {Enabled, Disabled} = z_db:q_row("
+        select count(*) filter (where is_enabled),
+               count(*) filter (where not is_enabled)
+        from mailinglist_recipient
+        where mailinglist_id = $1",
+        [ z_convert:to_integer(ListId) ],
+        Context),
+    #{enabled => Enabled, disabled => Disabled}.
 
 
 %% @doc Toggle the enabled flag of a recipient
 recipient_is_enabled_toggle(RecipientId, Context) ->
     case z_db:q("
             update mailinglist_recipient
-            set is_enabled = not is_enabled
+            set is_enabled = not is_enabled, timestamp = now()
             where id = $1", [ z_convert:to_integer(RecipientId) ], Context)
     of
         1 -> ok;
@@ -1092,7 +1107,9 @@ normalize_email(Email) ->
 %% Due to the GDPR and privacy in general we delete unused email addresses.
 -spec periodic_cleanup(z:context()) -> ok.
 periodic_cleanup(Context) ->
-    % Remove disabled entries that were not updated for more than 3 months
+    % Match the three-month retention of m_log_email:periodic_cleanup/1.
+    % Toggling a subscription resets its timestamp, giving newly disabled
+    % recipients the full retention period even when imported long ago.
     z_db:q("
         delete from mailinglist_recipient
         where not is_enabled

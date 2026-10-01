@@ -23,6 +23,7 @@
     recipient_key_encode/3,
     recipient_key_decode/2,
 
+    search/2,
     count_recipients/2,
     list_recipients/2,
     list_candidates/2
@@ -109,7 +110,7 @@ generate_recipient_secret(Context) ->
 
 -spec count_recipients( m_rsc:resource(), z:context() ) -> map().
 count_recipients(ListId, Context) ->
-    Count = m_mailinglist:count_recipients(ListId, Context),
+    #{enabled := Count, disabled := Disabled} = m_mailinglist:recipient_counts(ListId, Context),
     SubIds = m_edge:subjects(ListId, subscriberof, Context),
     QueryTotal = case m_rsc:p(ListId, <<"query">>, Context) of
         undefined -> 0;
@@ -141,6 +142,7 @@ count_recipients(ListId, Context) ->
     #{
         total => Count + length(SubIds) + QueryTotal,
         recipients => Count,
+        disabled => Disabled,
         subscriberof => length(SubIds),
         query_text => QueryTotal
     }.
@@ -219,3 +221,37 @@ list_recipients(List, IncludeSkipped, Context) ->
         Rs,
         AllIds).
 
+
+%% @doc Build the paged admin search. Only fixed SQL fragments are used for
+%% sorting and status; list and language values are bound parameters.
+-spec search(Args, Context) -> #search_sql{} when
+    Args :: proplists:proplist(),
+    Context :: z:context().
+search(Args, Context) ->
+    ListId = m_rsc:rid(proplists:get_value(id, Args), Context),
+    Status = case proplists:get_value(qstatus, Args) of
+        <<"enabled">> -> " and is_enabled";
+        <<"disabled">> -> " and not is_enabled";
+        _ -> ""
+    end,
+    {Language, Params} = case proplists:get_value(qlanguage, Args) of
+        undefined -> {"", [ListId]};
+        <<>> -> {"", [ListId]};
+        <<"all">> -> {"", [ListId]};
+        <<"none">> -> {" and (pref_language is null or pref_language = '')", [ListId]};
+        Code when is_binary(Code) -> {" and pref_language = $2", [ListId, Code]};
+        _ -> {"", [ListId]}
+    end,
+    Order = case proplists:get_value(qsort, Args) of
+        <<"newest">> -> "id desc";
+        <<"oldest">> -> "id asc";
+        _ -> "email, id"
+    end,
+    #search_sql{
+        select = "id, email, is_enabled, pref_language",
+        from = "mailinglist_recipient",
+        where = ["mailinglist_id = $1", Status, Language],
+        args = Params,
+        order = Order,
+        tables = []
+    }.

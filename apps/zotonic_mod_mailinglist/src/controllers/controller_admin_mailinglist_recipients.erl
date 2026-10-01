@@ -68,35 +68,87 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
 	z_context:output(Html, Context).
 
 event(#postback{message={dialog_recipient_add, [{id,Id}]}}, Context) when is_integer(Id) ->
-	Vars = [
-		{id, Id}
-	],
-	z_render:dialog(?__("Add recipient", Context), "_dialog_mailinglist_recipient.tpl", Vars, Context);
-
-event(#postback{message={dialog_recipient_edit, [{id,Id}, {recipient_id, RcptId}]}}, Context) when is_integer(Id) ->
-	Vars = [
-            {id, Id},
-            {recipient_id, RcptId}
-	],
-	z_render:dialog(?__("Edit recipient", Context), "_dialog_mailinglist_recipient.tpl", Vars, Context);
-
-event(#postback{message={recipient_is_enabled_toggle, [{recipient_id, RcptId}]}, target=TargetId}, Context) ->
-	m_mailinglist:recipient_is_enabled_toggle(RcptId, Context),
-	z_render:add_script(
-		["$(\"#", TargetId, "\").parents(\"li:first\").toggleClass(\"unpublished\"); "],
-		Context);
-
+    case is_allowed(Id, Context) of
+        true ->
+        	Vars = [
+        		{id, Id},
+                {in_admin, true}
+        	],
+        	z_render:dialog(?__("Add recipient", Context), "_dialog_mailinglist_recipient.tpl", Vars, Context);
+        false ->
+            z_render:growl(?__("You are not allowed to change recipients", Context), Context)
+    end;
+event(#postback{message={dialog_recipient_edit, Args}}, Context) ->
+    {id, Id} = proplists:lookup(id, Args),
+    {recipient_id, RcptId} = proplists:lookup(recipient_id, Args),
+    case is_allowed(Id, Context) of
+        true ->
+        	Vars = [
+                {id, Id},
+                {recipient_id, RcptId},
+                {in_admin, true}
+        	],
+        	z_render:dialog(?__("Edit recipient", Context), "_dialog_mailinglist_recipient.tpl", Vars, Context);
+        false ->
+            z_render:growl(?__("You are not allowed to change recipients", Context), Context)
+    end;
+event(#postback{message={recipient_is_enabled_toggle, [{recipient_id, RcptId}]}, target=Target}, Context) ->
+    case is_allowed(Context) of
+        true ->
+            Recipient = m_mailinglist:recipient_get(RcptId, Context),
+            ok = m_mailinglist:recipient_is_enabled_toggle(RcptId, Context),
+            Context1 = z_render:wire({toggle_class, [{target, Target}, {class, "unpublished"}]}, Context),
+            update_recipient_counts(Recipient, Context1);
+        false ->
+            z_render:growl(?__("You are not allowed to change recipients", Context), Context)
+    end;
 event(#postback{message={recipient_change_email, [{recipient_id, RcptId}]}}, Context) ->
-    Email = z_context:get_q(<<"triggervalue">>, Context),
-    m_mailinglist:update_recipient(RcptId, [{email, Email}], Context),
-    z_render:growl(?__("E-mail address updated", Context), Context);
-
+    case is_allowed(Context) of
+        true ->
+            Email = z_context:get_q(<<"triggervalue">>, Context),
+            m_mailinglist:update_recipient(RcptId, [{email, Email}], Context),
+            z_render:growl(?__("E-mail address updated", Context), Context);
+        false ->
+            z_render:growl(?__("You are not allowed to change recipients", Context), Context)
+    end;
 event(#postback{message={recipient_delete, [{recipient_id, RcptId}, {target, Target}]}}, Context) ->
-	m_mailinglist:recipient_delete_quiet(RcptId, Context),
-	z_render:wire([ {growl, [{text, ?__("Recipient deleted.", Context)}]},
-					{slide_fade_out, [{target, Target}]}
-				], Context);
-
+    case is_allowed(Context) of
+        true ->
+            Recipient = m_mailinglist:recipient_get(RcptId, Context),
+            m_mailinglist:recipient_delete_quiet(RcptId, Context),
+            Context1 = z_render:wire([
+                {growl, [{text, ?__("Recipient deleted.", Context)}]},
+                {slide_fade_out, [{target, Target}]}
+            ], Context),
+            update_recipient_counts(Recipient, Context1);
+        false ->
+            z_render:growl(?__("You are not allowed to change recipients", Context), Context)
+    end;
 event(#postback{message={recipients_clear, [{id, Id}]}}, Context) when is_integer(Id) ->
-	m_mailinglist:recipients_clear(Id, Context),
-	z_render:wire([{reload, []}], Context).
+    case is_allowed(Id, Context) of
+        true ->
+        	m_mailinglist:recipients_clear(Id, Context),
+        	z_render:wire([{reload, []}], Context);
+        false ->
+            z_render:growl(?__("You are not allowed to change recipients", Context), Context)
+    end.
+
+is_allowed(Context) ->
+    z_acl:is_allowed(use, mod_mailinglist, Context).
+
+is_allowed(Id, Context) when is_integer(Id) ->
+    z_acl:rsc_editable(Id, Context)
+    orelse z_acl:is_allowed(use, mod_mailinglist, Context);
+is_allowed(_Id, _Context) ->
+    false.
+
+%% Refresh the summary without disturbing the recipient list or its scroll position.
+-spec update_recipient_counts(Recipient, Context) -> z:context() when
+    Recipient :: proplists:proplist(),
+    Context :: z:context().
+update_recipient_counts(Recipient, Context) ->
+    ListId = proplists:get_value(mailinglist_id, Recipient),
+    z_render:update("mailinglist-recipient-counts", #render{
+        template = "_admin_mailinglist_recipient_counts.tpl",
+        vars = [{id, ListId}]
+    }, Context).
