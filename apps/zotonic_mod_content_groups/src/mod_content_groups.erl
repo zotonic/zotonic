@@ -33,7 +33,7 @@ This module handles the following notifier callbacks:
 
 - `observe_admin_menu`: Add content-group administration entries to the admin menu.
 - `observe_rsc_delete`: Do not allow a content group to be removed iff there are resources in that content group using `m_content_group:is_used`.
-- `observe_rsc_get`: Ensure resources get a default content group when no explicit content group is set.
+- `observe_rsc_get_raw`: Ensure resources get a default content group when no explicit content group is set.
 - `observe_rsc_update_done`: Rebuild/normalize the content-group hierarchy after relevant resource updates.
 
 Delegate callbacks:
@@ -58,7 +58,7 @@ Delegate callbacks:
 -export([
     event/2,
 
-    observe_rsc_get/3,
+    observe_rsc_get_raw/3,
     observe_rsc_delete/2,
     observe_rsc_update_done/2,
     observe_admin_menu/3,
@@ -191,8 +191,11 @@ maybe_progress(N1, N2, Total, Context) ->
 deletable(Ids, Context) ->
     lists:all(fun(Id) -> z_acl:rsc_deletable(Id, Context) end, Ids).
 
-observe_rsc_get(#rsc_get{}, #{ <<"content_group_id">> := undefined } = Props, Context) ->
-    CatId = maps:get(<<"category_id">>, Props),
+%% @doc Supply a persistable default content group on raw resource reads.
+observe_rsc_get_raw(#rsc_get_raw{is_props_only = false}, #{
+    <<"content_group_id">> := undefined,
+    <<"category_id">> := CatId
+} = Props, Context) ->
     Props#{
         <<"content_group_id">> =>
                 case m_category:is_meta(CatId, Context) of
@@ -200,7 +203,7 @@ observe_rsc_get(#rsc_get{}, #{ <<"content_group_id">> := undefined } = Props, Co
                     false -> m_rsc:rid(default_content_group, Context)
                 end
     };
-observe_rsc_get(#rsc_get{}, Props, _Context) ->
+observe_rsc_get_raw(#rsc_get_raw{}, Props, _Context) ->
     Props.
 
 %% @doc Do not allow a content group to be removed iff there are resources in that content group

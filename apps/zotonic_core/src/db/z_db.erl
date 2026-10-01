@@ -1214,8 +1214,16 @@ get_current_props(DBDriver, Connection, Table, Id, Context) when is_atom(Table) 
     get_current_props(DBDriver, Connection, atom_to_list(Table), Id, Context);
 get_current_props(DBDriver, Connection, Table, Id, Context) ->
     ColNames = column_names(Table, Context),
-    get_current_props(DBDriver, Connection,
-                      lists:member(props_json, ColNames), lists:member(props, ColNames), Table, Id, Context).
+    Result = get_current_props(DBDriver, Connection,
+                      lists:member(props_json, ColNames), lists:member(props, ColNames), Table, Id, Context),
+    case {Table, Result} of
+        {"rsc", {ok, Props}} ->
+            % Convert stored resource values before merging and JSON encoding.
+            % Computed fields from rsc_get must never enter this path.
+            {ok, z_notifier:foldr(#rsc_get_raw{ id = Id, is_props_only = true }, Props, Context)};
+        _ ->
+            Result
+    end.
 
 
 get_current_props(_DBDriver, _Connection, false, false, _Table, _Id, _Context) ->
