@@ -494,6 +494,21 @@
     deleted_ids = [] :: list(integer())
 }).
 
+%% @doc Convert raw stored resource data to its current representation.
+%% Also used for resource migrations, including changes to property structures
+%% and serialization formats (for example, legacy props to JSON-friendly values).
+%% Used in a foldr after decoding stored properties, before caching or computed
+%% fields. Also used when merging stored rsc properties during a database update.
+%% Observers must be idempotent, only convert stored data, and return only values
+%% that may be saved in the rsc record. Never add computed or request-specific data.
+%% is_props_only is true for only stored custom properties (without columns),
+%% and false for the full raw resource record.
+%% Type: foldr
+-record(rsc_get_raw, {
+    id :: m_rsc:resource_id(),
+    is_props_only = false :: boolean()
+}).
+
 %% @doc Resource is read, opportunity to add computed fields
 %% Used in a foldr with the read properties as accumulator.
 %% Type: foldr

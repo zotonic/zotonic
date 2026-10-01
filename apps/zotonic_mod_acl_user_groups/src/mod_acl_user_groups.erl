@@ -328,7 +328,7 @@ This module handles the following notifier callbacks:
 - `observe_edge_insert`: Log additions of `hasusergroup`, `hascollabmember`, and `hascollabmanager` membership edges.
 - `observe_hierarchy_updated`: Rebuild published/edit ACL lookup tables when category, content-group, or acl-user-group hierarchies change.
 - `observe_rsc_delete`: Block deletion of acl user groups that are still referenced by ACL rules or memberships.
-- `observe_rsc_get`: Set a default `privacy` value on resources without one (`collab_member` for persons, otherwise `public`).
+- `observe_rsc_get_raw`: Set a default `privacy` value on resources without one (`collab_member` for persons, otherwise `public`).
 - `observe_rsc_insert`: Assign a default `content_group_id` on insert when none is provided, based on the resource category.
 - `observe_rsc_update`: Validate ACL-related updates and prevent non-ACL-admin users from changing `acl_mime_allowed` and `acl_upload_size`.
 - `observe_rsc_update_done`: Rebuild the `acl_user_group` hierarchy when a resource changes into or out of that category.
@@ -393,7 +393,7 @@ Delegate callbacks:
     observe_rsc_delete/2,
     observe_rsc_insert/3,
     observe_rsc_update/3,
-    observe_rsc_get/3,
+    observe_rsc_get_raw/3,
     observe_edge_insert/2,
     observe_edge_delete/2,
     name/1,
@@ -816,11 +816,11 @@ title_bin(Id, Context) ->
 email_bin(Id, Context) ->
     z_convert:to_binary( m_rsc:p_no_acl(Id, email_raw, Context) ).
 
-%% @doc Ensure that the privacy property is set.
--spec observe_rsc_get(#rsc_get{}, Acc, z:context()) -> Result when
+%% @doc Supply a persistable default privacy value on raw resource reads.
+-spec observe_rsc_get_raw(#rsc_get_raw{}, Acc, z:context()) -> Result when
     Acc :: m_rsc:props(),
     Result :: map().
-observe_rsc_get(#rsc_get{}, #{ <<"category_id">> := CatId } = Map, Context) ->
+observe_rsc_get_raw(#rsc_get_raw{is_props_only = false}, #{ <<"category_id">> := CatId } = Map, Context) ->
     case maps:get(<<"privacy">>, Map, undefined) of
         undefined ->
             Map#{
@@ -832,7 +832,10 @@ observe_rsc_get(#rsc_get{}, #{ <<"category_id">> := CatId } = Map, Context) ->
             };
         _ ->
             Map
-    end.
+    end;
+observe_rsc_get_raw(#rsc_get_raw{}, Map, _Context) ->
+    % Stored custom properties can be read without the resource columns.
+    Map.
 
 
 status(Context) ->

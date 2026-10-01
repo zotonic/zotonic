@@ -1798,6 +1798,43 @@ Return:
 
 -optional_callbacks([ observe_hierarchy_updated/2, pid_observe_hierarchy_updated/3 ]).
 
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "content_management", "resource", "query"]
+}).
+-doc("""
+Convert raw stored resource data to its current representation.
+
+Use this notification for resource migrations, including changes to property
+structures and serialization formats, such as converting legacy `props` values
+to JSON-friendly structures for `props_json`.
+
+Type: [foldr](/id/doc_developerguide_notifications#notification-foldr)
+
+Runs after decoding stored properties, before caching and `rsc_get`. It also
+runs when the database layer reads existing `rsc` properties to merge an update;
+that accumulator contains only custom properties, without database columns
+(`is_props_only = true`). Full raw resource reads set `is_props_only = false`.
+
+Observers must be idempotent and only convert stored data. Every returned value
+must be suitable for saving in the `rsc` record. Do not add computed fields,
+request-specific values, or perform database writes. Use `rsc_get` for computed
+fields. Reads themselves do not persist the conversion.
+
+`#rsc_get_raw{}` properties:
+
+* id: `m_rsc:resource_id()`
+* is_props_only: `boolean()`, defaults to `false`. `true` means only the merged
+  `props`/`props_json` properties; `false` means the full raw resource record.
+""").
+-callback observe_rsc_get_raw(#rsc_get_raw{}, Acc, z:context()) -> Result when
+    Acc :: m_rsc:props(),
+    Result :: m_rsc:props().
+-callback pid_observe_rsc_get_raw(pid(), #rsc_get_raw{}, Acc, z:context()) -> Result when
+    Acc :: m_rsc:props(),
+    Result :: m_rsc:props().
+
+-optional_callbacks([ observe_rsc_get_raw/3, pid_observe_rsc_get_raw/4 ]).
+
 %% Resource is read, opportunity to add computed fields
 %% Used in a foldr with the read properties as accumulator.
 %% Type: foldr
