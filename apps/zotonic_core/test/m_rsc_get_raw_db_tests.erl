@@ -6,9 +6,15 @@
 raw_conversion_test() ->
     ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
     Context = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+    HasPropsJSON = lists:member(props_json, z_db:column_names(rsc, Context)),
     {ok, Id} = m_rsc:insert(#{<<"category_id">> => text}, Context),
     try
-        z_db:q("update rsc set props = $2, props_json = null where id = $1",
+        % The test sandbox can still use the legacy props-only schema.
+        SeedSQL = case HasPropsJSON of
+            true -> "update rsc set props = $2, props_json = null where id = $1";
+            false -> "update rsc set props = $2 where id = $1"
+        end,
+        z_db:q(SeedSQL,
             [Id, ?DB_PROPS(#{<<"raw_conversion_test">> => {legacy, 42}})], Context),
         z_depcache:flush(Id, Context),
         z_notifier:observe(rsc_get_raw, {?MODULE, convert}, Context),
@@ -24,7 +30,13 @@ raw_conversion_test() ->
         {ok, Stored} = z_db:qmap_props_row("select * from rsc where id = $1", [Id], Context),
         ?assertEqual(#{<<"value">> => 42}, maps:get(<<"raw_conversion_test">>, Stored)),
         ?assertNot(maps:is_key(<<"raw_computed_test">>, Stored)),
-        ?assertEqual(undefined, z_db:q1("select props from rsc where id = $1", [Id], Context))
+        case HasPropsJSON of
+            true ->
+                % Only JSON-capable schemas migrate away from the props column.
+                ?assertEqual(undefined, z_db:q1("select props from rsc where id = $1", [Id], Context));
+            false ->
+                ok
+        end
     after
         z_notifier:detach(rsc_get_raw, Context),
         z_notifier:detach(rsc_get, Context),
