@@ -1305,7 +1305,7 @@ uri_dispatch(Id, Context) ->
     end.
 
 %% @doc Return the language-neutral URI prefix for authoritative resources.
-%% This is the absolute base URL of the `id` dispatch rule, up to its `id`
+%% This is the absolute base URL of the <code>id</code> dispatch rule, up to its <code>id</code>
 %% argument. It can be used as an RDF namespace for local resources.
 -spec uri_prefix(z:context()) -> binary().
 uri_prefix(Context) ->
