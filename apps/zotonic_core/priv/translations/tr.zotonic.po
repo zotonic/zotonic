@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-09-29 14:46\n"
+"PO-Revision-Date: 2026-10-01 11:35\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "MIME-Version: 1.0\n"
@@ -198,6 +198,8 @@ msgstr "İşbirliği grubuna bağlantılar ekleyin"
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:152
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:184
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:47
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:59
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:67
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:50
 msgid "All"
 msgstr "Tümü"
@@ -493,7 +495,7 @@ msgstr "İşbirliği grubuna taşınamadı."
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:52
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:75
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:97
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:37
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:40
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:10
 #: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:256
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:19
@@ -1703,7 +1705,7 @@ msgstr "E-posta adresi"
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:23
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:21
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:121
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:33
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:36
 #: zotonic_mod_menu/priv/templates/_admin_menu_menu_view.collection.tpl:40
 #: zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:23
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:131
@@ -1884,6 +1886,7 @@ msgstr "Dosya adı"
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:183
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:46
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:41
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:74
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:59
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:55
 msgid "Filter"
@@ -3017,6 +3020,7 @@ msgid "Sorry, you have no permission to delete the connection."
 msgstr "Üzgünüz, bu bağlantıyı silmek için yetkiniz yok."
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:267
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:49
 msgid "Sort by"
 msgstr "Göre sırala"
 
@@ -3046,6 +3050,7 @@ msgstr "Eyalet"
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:111
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:11
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:7
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:57
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:22
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:17
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:19
@@ -3551,7 +3556,7 @@ msgstr "Geçerli:"
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:31
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:142
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:26
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:35
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:38
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:20
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:38
 msgid "View"
@@ -3749,7 +3754,7 @@ msgstr "d M Y, H:i"
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:167
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:43
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:39
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:88
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:99
 msgid "delete"
 msgstr "sil"
 
@@ -4470,6 +4475,7 @@ msgstr "Dil sekmelerini etkinleştirin veya devre dışı bırakın."
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:10
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:6
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:75
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:65
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:37
 #: zotonic_mod_translation/priv/templates/_dialog_new_rsc_extra.tpl:2
 #: zotonic_mod_translation/priv/templates/_translation_language_status.tpl:46
@@ -4623,7 +4629,8 @@ msgstr "E-posta"
 #: zotonic_mod_authentication/priv/templates/email_password_reset.tpl:23
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:22
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:9
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:78
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:51
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:86
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:19
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:29
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:30
@@ -10538,7 +10545,7 @@ msgstr "<em>Bu listeden hedef listedeki tüm alıcıları</em>"
 msgid "<h3>Recipients</h3><p>To add, remove or view the mailing list recipients, click on the “show all recipients” link.</p><h3>Sender name and e-mail address</h3><p>The sender name and e-mail address can be set per mailing list. This defaults to the config key <tt>site.email_from</tt>.  The <i>From</i> of the sent e-mails will be set to the sender name and address.</p><h3>Automatic upload of recipient lists</h3><p>The drop folder filename is used for the automatic upload of complete recipients list. The filename must match the filename of the uploaded recipient list. The complete list of recipients will be replaced with the recipients in the drop folder file.</p><h3>Access control</h3><p>Everybody who can edit a mailing list is also allowed to send a page to the mailing list. Everybody who can view the mailing list is allowed to add an e-mail address to the mailing list.</p>"
 msgstr "<h3>Alıcılar</h3><p>Posta listesi alıcılarını eklemek, kaldırmak veya görüntülemek için “tüm alıcıları göster” bağlantısını tıklayın.</p><h3>Gönderici adı ve e-posta adresi</h3><p>Gönderici adı ve e-posta adresi, posta listesi başına ayarlanabilir. Bu varsayılan yapılandırma anahtarı <tt>site.email_from</tt>. Gönderilen e-postaların</i> <i>gönderen adı ve adresine ayarlanacaktır.</p><h3>Alıcı listelerinin otomatik yüklenmesi</h3><p>Açılan klasör dosya adı, tam alıcı listesinin otomatik yüklenmesi için kullanılır. Dosya adı, yüklenen alıcı listesinin dosya adıyla eşleşmelidir. Alıcıların tam listesi, açılan klasör dosyasındaki alıcılarla değiştirilecektir.</p><h3>Erişim kontrolü</h3><p>Bir posta listesini düzenleyebilen herkesin, posta listesine bir sayfa göndermesine de izin verilir. Posta listesini görüntüleyebilen herkesin, posta listesine e-posta adresi eklemesine izin verilir.</p>"
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:451
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:444
 msgid "A mailing list cannot be sent as a mailing."
 msgstr "Bir posta listesi, toplu posta olarak gönderilemez."
 
@@ -10546,16 +10553,12 @@ msgstr "Bir posta listesi, toplu posta olarak gönderilemez."
 msgid "A previous delivery failed. Choose retry failed recipients to try again."
 msgstr "Önceki bir teslimat başarısız oldu. Başarısız olan alıcıları seçerek yeniden denemeyi deneyin."
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:77
-msgid "Act"
-msgstr "Davranmak"
-
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:34
 msgid "Add a new recipient."
 msgstr "Yeni bir alıcı ekle."
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:34
-#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:74
+#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:77
 msgid "Add recipient"
 msgstr "Alıcı ekle"
 
@@ -10632,11 +10635,11 @@ msgstr "Postayı iptal et"
 msgid "Change subscriptions connected to your account."
 msgstr "Hesabınıza bağlı abonelikleri değiştirin."
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:533
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:526
 msgid "Check the test mailing list and language selection."
 msgstr "Test posta listesini ve dil seçimini kontrol edin."
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:85
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:94
 msgid "Check to activate the e-mail address."
 msgstr "E-posta adresini etkinleştirmek için kontrol edin."
 
@@ -10677,7 +10680,7 @@ msgstr "Birleştir…"
 msgid "Configure mailing"
 msgstr "Posta ayarlarını yapılandır"
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:416
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:409
 msgid "Confirm mailing cancelation."
 msgstr "Posta iptali işlemini onaylayın."
 
@@ -10705,7 +10708,7 @@ msgstr "Alıcı eklenemedi."
 msgid "Could not count the eligible recipients. The list query may have taken too long. Go back and try again, or ask an administrator to check the mailing list."
 msgstr "Uygun alıcıların sayısı hesaplanamadı. Liste sorgusu çok uzun sürmüş olabilir. Geri dönüp tekrar deneyin ya da bir yöneticiden posta listesini kontrol etmesini isteyin."
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:405
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:398
 msgid "Could not create another mailing."
 msgstr "Başka bir posta listesi oluşturulamadı."
 
@@ -10721,7 +10724,7 @@ msgstr "Deneme postası kuyruğa alınamadı."
 msgid "Could not queue this mailing. Check your permissions and language selection."
 msgstr "Bu e-posta gönderimi kuyruğa alınamadı. İzinlerinizi ve dil seçiminizi kontrol edin."
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:607
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:600
 msgid "Could not save the opt-out preference."
 msgstr "Devre dışı bırakma tercihi kaydedilemedi."
 
@@ -10769,6 +10772,14 @@ msgstr "Teslimat geçmişi korunur. Mesajın yeniden gönderilmesi, alıcıları
 msgid "Details"
 msgstr "Detaylar"
 
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:61
+msgid "Disabled"
+msgstr "Engelli"
+
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:26
+msgid "Disabled email subscriptions are automatically deleted after three months."
+msgstr "Devre dışı bırakılan e-posta abonelikleri üç ay sonra otomatik olarak silinir."
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:24
 #: zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:21
 msgid "Do you want to remove this subscription?"
@@ -10798,7 +10809,7 @@ msgstr "Aktif alıcıların listesi indiriliyor. İndirme ekranınızı kontrol 
 msgid "Drop folder filename (optional)"
 msgstr "Bırakma klasörü dosya adı (isteğe bağlı)"
 
-#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:92
+#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:110
 msgid "E-mail address updated"
 msgstr "E-posta adresi güncellendi"
 
@@ -10823,8 +10834,8 @@ msgstr "Listeyi düzenle"
 msgid "Edit mailinglist"
 msgstr "Posta listesini düzenle"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:86
-#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:81
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:96
+#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:91
 msgid "Edit recipient"
 msgstr "Alıcıyı düzenle"
 
@@ -10844,6 +10855,18 @@ msgstr "E-posta dili"
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:50
 msgid "Email language is the language version of the mailing selected for sending. It can differ from the recipient’s preferred language when a fallback or a fixed Email language is used. Skipped recipients will not receive an email."
 msgstr "E-posta dili, gönderim için seçilen posta listesinin dil sürümüdür. Yedek dil veya sabit bir e-posta dili kullanıldığında, bu dil alıcının tercih ettiği dilden farklı olabilir. Atlanan alıcılar e-posta almayacaktır."
+
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:5
+msgid "Email subscriptions"
+msgstr "E-posta abonelikleri"
+
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:60
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:85
+#: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:15
+#: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:13
+#: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:47
+msgid "Enabled"
+msgstr "Etkin"
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:278
 msgid "Enter a valid future mailing date and time."
@@ -11023,7 +11046,7 @@ msgstr "Postalama listesi"
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:12
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:7
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:7
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:1071
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:1064
 msgid "Mailing lists"
 msgstr "Posta listeleri"
 
@@ -11047,7 +11070,7 @@ msgstr "Postalama durumu"
 msgid "Mailing status and history"
 msgstr "Posta durumu ve geçmişi"
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:1081
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:1074
 msgid "Mailing status updated."
 msgstr "Posta durumu güncellendi."
 
@@ -11063,7 +11086,7 @@ msgstr "Posta listesi abonelikleri"
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:11
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:3
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:7
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:1065
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:1058
 msgid "Mailings"
 msgstr "Posta gönderileri"
 
@@ -11083,7 +11106,7 @@ msgstr "Posta listelerini yönetme"
 msgid "Manage your mailing list subscriptions"
 msgstr "Posta listesi aboneliklerinizi yönetin"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:48
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:7
 msgid "Matched via Query"
 msgstr "Sorgu ile eşleşti"
 
@@ -11099,6 +11122,10 @@ msgstr "Dikkat edilmesi gereken husus"
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:17
 msgid "New mailing list"
 msgstr "Yeni posta listesi"
+
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:52
+msgid "Newest"
+msgstr "En yeni"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:38
 msgid "Next 100 recipients"
@@ -11116,7 +11143,7 @@ msgstr "E-posta adresi bulunmamaktadır."
 msgid "No emails submitted"
 msgstr "Gönderilen e-posta yok"
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:47
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:50
 msgid "No mailing lists found."
 msgstr "Hiçbir posta listesi bulunamadı."
 
@@ -11166,6 +11193,10 @@ msgstr "Gerek yok — alıcı seçilmedi"
 msgid "Not sent — stopped"
 msgstr "Gönderilmedi — durduruldu"
 
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:68
+msgid "Not set"
+msgstr "Ayarlanmadı"
+
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:42
 msgid "Not started"
 msgstr "Henüz başlamadı"
@@ -11182,9 +11213,13 @@ msgstr "Hiçbir şey gönderilmedi"
 msgid "Nothing to send. Go back and change the language or recipient selection, or choose another mailing list."
 msgstr "Gönderilecek bir şey yok. Geri dönüp dili veya alıcı seçimini değiştirin ya da başka bir posta listesi seçin."
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:43
-msgid "Number of recipients on this list:"
-msgstr "Bu listedeki alıcıların sayısı:"
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:2
+msgid "Number of enabled recipients on this list:"
+msgstr "Bu listede etkinleştirilmiş alıcı sayısı:"
+
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:53
+msgid "Oldest"
+msgstr "En eski"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:26
 msgid "Only keep recipients on this list that appear <em>on both lists</em>"
@@ -11345,7 +11380,7 @@ msgstr "Web'de daha fazlasını okuyun"
 msgid "Recent mailings"
 msgstr "Son gönderilen postalar"
 
-#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:96
+#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:120
 msgid "Recipient deleted."
 msgstr "Alıcı silindi."
 
@@ -11381,9 +11416,8 @@ msgstr "Alıcının durumu"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:96
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:8
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:31
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:34
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:57
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:46
 msgid "Recipients"
 msgstr "Alıcılar"
 
@@ -11417,7 +11451,7 @@ msgstr "Hazırlık başladığında alıcılar görünecektir."
 msgid "Regional preferences can use the base language, for example Belgian Dutch can use Dutch."
 msgstr "Bölgesel tercihler temel dili kullanabilir; örneğin, Belçika Felemenkçesi Felemenkçe’yi kullanabilir."
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:88
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:100
 msgid "Remove this recipient. No undo possible."
 msgstr "Bu alıcıyı kaldırın. Telafi etmek mümkün değil."
 
@@ -11491,7 +11525,7 @@ msgstr "Test posta listesinin erişim ayarlarını gözden geçirin"
 msgid "Saved mailing content"
 msgstr "Kaydedilmiş e-posta içeriği"
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:604
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:597
 msgid "Saved the opt-out preference."
 msgstr "Devre dışı bırakma tercihi kaydedildi."
 
@@ -11814,7 +11848,7 @@ msgstr "Abone ol"
 msgid "Subscribed with"
 msgstr "ile abone olunan"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:47
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:6
 msgid "Subscriber Edges"
 msgstr "Abone Kenarları"
 
@@ -11895,7 +11929,7 @@ msgstr "E-posta adresi geçersiz."
 msgid "The key in your link does not match any subscription. Either you already unsubscribed, or the mailing list has been deleted."
 msgstr "Bağlantınız da ki anahtar hiçbir abonelik ile eşleşmiyor. Ya abonelikten çıktınız yada posta listesi silinmiş."
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:437
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:430
 msgid "The mailing has been canceled."
 msgstr "Postalama iptal edildi."
 
@@ -11907,7 +11941,7 @@ msgstr "Sayfanın yayınlanması gerekmez, ancak sayfayı görüntüleyebilmek i
 msgid "The recipients list of the mailing list will be deleted as well."
 msgstr "Posta listesinin alıcı listesi de silinecektir."
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:469
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:462
 msgid "The selected page could not be found."
 msgstr "Seçilen sayfa bulunamadı."
 
@@ -12138,12 +12172,21 @@ msgstr "Neden bazı alıcılar seçilmiyor?"
 msgid "You are not allowed to add or enable recipients."
 msgstr "Alıcıları eklemeye yada etkinleştirmeye izniniz yok."
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:423
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:440
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:416
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:433
 msgid "You are not allowed to cancel this mailing."
 msgstr "Bu postalamayı iptal etmeye izniniz yok."
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:1084
+#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:79
+#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:93
+#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:103
+#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:112
+#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:125
+#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:133
+msgid "You are not allowed to change recipients"
+msgstr "Alıcıları değiştiremezsiniz"
+
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:1077
 msgid "You are not allowed to change this mailing."
 msgstr "Bu posta adresini değiştiremezsiniz."
 
@@ -12155,13 +12198,13 @@ msgstr "Posta listesini silmeye izniniz yok."
 msgid "You are not allowed to edit recipients."
 msgstr "Alıcıları düzenlemeye izniniz yok."
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:501
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:494
 msgid "You are not allowed to reset this mailing."
 msgstr "Bu postayı sıfırlama yetkiniz yok."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_count_error.tpl:7
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:464
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:537
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:457
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:530
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:69
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:102
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:134
@@ -12251,6 +12294,12 @@ msgstr "iptal"
 msgid "could not be sent"
 msgstr "gönderilemedi"
 
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:30
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:12
+#: zotonic_mod_mailinglist/priv/templates/_mailing_subscriber_count.tpl:3
+msgid "disabled"
+msgstr "engelli"
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:149
 msgid "emails are waiting to be sent."
 msgstr "Gönderilmeyi bekleyen e-postalar var."
@@ -12259,6 +12308,12 @@ msgstr "Gönderilmeyi bekleyen e-postalar var."
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_summary.tpl:10
 msgid "emails processed"
 msgstr "işlenen e-postalar"
+
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:29
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:11
+#: zotonic_mod_mailinglist/priv/templates/_mailing_subscriber_count.tpl:2
+msgid "enabled"
+msgstr "etkinleştirildi"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:5
 msgid "excluded"
@@ -12273,18 +12328,14 @@ msgstr "Bu listeden başka posta almak istemiyorsanız."
 msgid "mailing list"
 msgstr "posta listesi"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:56
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:61
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:16
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:21
 msgid "pages"
 msgstr "sayfaları"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:16
 msgid "recipients selected."
 msgstr "alıcılar seçildi."
-
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:52
-msgid "see below"
-msgstr "aşağıya bakınız"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_mailing_runs_panel.tpl:10
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:2
@@ -12311,7 +12362,7 @@ msgstr "bekleme"
 msgid "will not be sent."
 msgstr "gönderilmeyecektir."
 
-#: zotonic_mod_mailinglist/priv/templates/_mailing_subscriber_count.tpl:4
+#: zotonic_mod_mailinglist/priv/templates/_mailing_subscriber_count.tpl:5
 msgid "{count} from the list query"
 msgstr "{count} liste sorgusundan"
 
@@ -12761,12 +12812,6 @@ msgstr "OAuth2 İstemcisini Düzenle"
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:10
 msgid "Edit the description of the App."
 msgstr "Uygulamanın açıklamasını düzenleyin."
-
-#: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:15
-#: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:13
-#: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:47
-msgid "Enabled"
-msgstr "Etkin"
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:65
 #: zotonic_mod_oauth2/src/mod_oauth2.erl:251
@@ -16009,7 +16054,7 @@ msgstr "Vimeo Video"
 msgid "Youtube Video"
 msgstr "Youtube Video"
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:50
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:54
 msgid "Access was denied while updating this page. Check the subscriber's source website credentials and permission to update the local page."
 msgstr "Bu sayfa güncellenirken erişim reddedildi. Abonenin kaynak web sitesindeki kimlik bilgilerini ve yerel sayfayı güncelleme iznini kontrol edin."
 
@@ -16038,7 +16083,7 @@ msgstr "Otomatik güncellemeler etkin durumdadır."
 msgid "Automatic updates are stopped."
 msgstr "Otomatik güncellemeler durduruldu."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:72
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:76
 msgid "Automatic updates could not be completed. Check the technical details for the reported error."
 msgstr "Otomatik güncellemeler tamamlanamadı. Bildirilen hatanın teknik ayrıntılarını kontrol edin."
 
@@ -16046,7 +16091,7 @@ msgstr "Otomatik güncellemeler tamamlanamadı. Bildirilen hatanın teknik ayrı
 msgid "Could not change the automatic update subscription."
 msgstr "Otomatik güncelleme aboneliği değiştirilemedi."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:52
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:56
 msgid "Could not contact the remote website. Check its availability and HTTPS certificate."
 msgstr "Uzak web sitesine bağlanılamadı. Sitenin erişilebilirliğini ve HTTPS sertifikasını kontrol edin."
 
@@ -16148,75 +16193,75 @@ msgstr "Bize abone olun"
 msgid "Subscription type"
 msgstr "Abonelik türü"
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:56
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:60
 msgid "The callback URL must use a hostname instead of an IP address. Check this website's public URL."
 msgstr "Geri arama URL’sinde IP adresi yerine bir ana bilgisayar adı kullanılmalıdır. Bu web sitesinin genel erişim URL’sini kontrol edin."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:38
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:42
 msgid "The destination could not be resolved or its network address is blocked. Local and private addresses are only allowed for .test hostnames in development."
 msgstr "Hedef çözümlenemedi veya ağ adresi engellenmiş. Yerel ve özel adresler, yalnızca geliştirme aşamasındaki .test alan adları için izin verilir."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:48
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:52
 msgid "The original page address has changed. Import the page again to set up automatic updates."
 msgstr "Sayfanın orijinal adresi değişmiştir. Otomatik güncellemeleri etkinleştirmek için sayfayı yeniden içe aktarın."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:54
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:58
 msgid "The remote website address is invalid. Check the source and WebSub URLs."
 msgstr "Uzak web sitesi adresi geçersiz. Kaynak ve WebSub URL’lerini kontrol edin."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:58
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:62
 msgid "The remote website redirects from HTTPS to HTTP. Use a secure HTTPS destination."
 msgstr "Uzak web sitesi HTTPS'den HTTP'ye yönlendiriyor. Güvenli bir HTTPS hedefi kullanın."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:60
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:64
 msgid "The remote website redirects too many times. Check its redirect configuration."
 msgstr "Uzak web sitesi çok fazla kez yönlendiriyor. Yönlendirme ayarlarını kontrol edin."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:68
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:72
 msgid "The remote website refused access. Check the subscribing user's permissions on that website."
 msgstr "Uzak web sitesi erişimi reddetti. Abone olan kullanıcının o web sitesindeki izinlerini kontrol edin."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:66
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:70
 msgid "The remote website requires authentication. Check the subscribing user's configured credentials."
 msgstr "Uzak web sitesi kimlik doğrulaması gerektiriyor. Abone olan kullanıcının yapılandırılmış kimlik bilgilerini kontrol edin."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:62
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:66
 msgid "The remote website returned a redirect without a destination."
 msgstr "Uzak web sitesi, hedef belirtilmemiş bir yönlendirme döndürdü."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:64
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:68
 msgid "The remote website returned an invalid redirect destination."
 msgstr "Uzak web sitesi geçersiz bir yönlendirme hedefi döndürdü."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:70
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:74
 msgid "The requested page or WebSub endpoint was not found on the remote website."
 msgstr "İstenen sayfa veya WebSub uç noktası, uzak web sitesinde bulunamadı."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:46
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:50
 msgid "The source page advertises invalid WebSub links. Check its hub and topic URLs."
 msgstr "Kaynak sayfada geçersiz WebSub bağlantıları yer almaktadır. Sayfanın hub ve konu URL’lerini kontrol edin."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:44
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:48
 msgid "The source page does not advertise automatic updates via WebSub."
 msgstr "Kaynak sayfada, WebSub aracılığıyla otomatik güncellemelerden bahsedilmemektedir."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:40
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:44
 msgid "The source website did not confirm the subscription in time. Check that it can reach this website's callback URL."
 msgstr "Kaynak web sitesi aboneliği zamanında onaylamadı. Bu web sitesinin geri arama URL’sine erişebildiğini kontrol edin."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:32
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:36
 msgid "The source website does not allow this subscriber to use WebSub. On the source website, allow the subscribing user to use WebSub, or allow anonymous visitors for public subscriptions."
 msgstr "Kaynak web sitesi, bu abonenin WebSub'ı kullanmasına izin vermiyor. Kaynak web sitesinde, abone olan kullanıcının WebSub'ı kullanmasına izin verin ya da genel abonelikler için anonim ziyaretçilere izin verin."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:36
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:40
 msgid "The source website does not recognize this subscription topic. Check that the original page still exists."
 msgstr "Kaynak web sitesi bu abonelik konusunu tanımıyor. Orijinal sayfanın hâlâ mevcut olup olmadığını kontrol edin."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:34
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:38
 msgid "The source website refused access to this page. The subscriber must be allowed to view it, and the page must be an original on that website."
 msgstr "Kaynak web sitesi bu sayfaya erişimi reddetti. Abonenin sayfayı görüntüleyebilmesi için izin verilmesi ve sayfanın söz konusu web sitesinde orijinal olması gerekir."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:42
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:46
 msgid "This page points back to this website. A website cannot subscribe to itself."
 msgstr "Bu sayfa bu web sitesine yönlendiriyor. Bir web sitesi kendisine abone olamaz."
 

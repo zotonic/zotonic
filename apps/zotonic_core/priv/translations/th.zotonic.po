@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-09-29 14:46\n"
+"PO-Revision-Date: 2026-10-01 11:35\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -198,6 +198,8 @@ msgstr "เพิ่มลิงก์ไปยังกลุ่มการท
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:152
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:184
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:47
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:59
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:67
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:50
 msgid "All"
 msgstr "ทั้งหมด"
@@ -493,7 +495,7 @@ msgstr "ไม่สามารถย้ายไปที่กลุ่มก
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:52
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:75
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:97
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:37
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:40
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:10
 #: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:256
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:19
@@ -1703,7 +1705,7 @@ msgstr "ที่อยู่อีเมล"
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:23
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:21
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:121
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:33
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:36
 #: zotonic_mod_menu/priv/templates/_admin_menu_menu_view.collection.tpl:40
 #: zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:23
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:131
@@ -1884,6 +1886,7 @@ msgstr "ชื่อไฟล์"
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:183
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:46
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:41
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:74
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:59
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:55
 msgid "Filter"
@@ -3017,6 +3020,7 @@ msgid "Sorry, you have no permission to delete the connection."
 msgstr "ขออภัยคุณไม่ได้รับอนุญาตให้ลบการเชื่อมต่อ"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:267
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:49
 msgid "Sort by"
 msgstr "เรียงตาม"
 
@@ -3046,6 +3050,7 @@ msgstr "สถานะ"
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:111
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:11
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:7
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:57
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:22
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:17
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:19
@@ -3551,7 +3556,7 @@ msgstr "ใช้ได้สำหรับ:"
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:31
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:142
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:26
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:35
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:38
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:20
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:38
 msgid "View"
@@ -3749,7 +3754,7 @@ msgstr "d M Y, H:i"
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:167
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:43
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:39
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:88
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:99
 msgid "delete"
 msgstr "ลบ"
 
@@ -4470,6 +4475,7 @@ msgstr "เปิดหรือปิดใช้งานแท็บภาษ
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:10
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:6
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:75
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:65
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:37
 #: zotonic_mod_translation/priv/templates/_dialog_new_rsc_extra.tpl:2
 #: zotonic_mod_translation/priv/templates/_translation_language_status.tpl:46
@@ -4623,7 +4629,8 @@ msgstr "อีเมล์"
 #: zotonic_mod_authentication/priv/templates/email_password_reset.tpl:23
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:22
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:9
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:78
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:51
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:86
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:19
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:29
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:30
@@ -10538,7 +10545,7 @@ msgstr "<em>ลบ</em> ออกจากรายชื่อที่อย�
 msgid "<h3>Recipients</h3><p>To add, remove or view the mailing list recipients, click on the “show all recipients” link.</p><h3>Sender name and e-mail address</h3><p>The sender name and e-mail address can be set per mailing list. This defaults to the config key <tt>site.email_from</tt>.  The <i>From</i> of the sent e-mails will be set to the sender name and address.</p><h3>Automatic upload of recipient lists</h3><p>The drop folder filename is used for the automatic upload of complete recipients list. The filename must match the filename of the uploaded recipient list. The complete list of recipients will be replaced with the recipients in the drop folder file.</p><h3>Access control</h3><p>Everybody who can edit a mailing list is also allowed to send a page to the mailing list. Everybody who can view the mailing list is allowed to add an e-mail address to the mailing list.</p>"
 msgstr "<h3>ผู้รับ</h3><p>หากต้องการเพิ่ม ลบ หรือดูรายชื่อผู้รับ ให้คลิกลิงก์ \"แสดงผู้รับทั้งหมด\"</p><h3>ชื่อผู้ส่งและที่อยู่อีเมล</h3><p>ชื่อผู้ส่งและที่อยู่อีเมลสามารถตั้งค่าตามรายชื่อผู้รับจดหมาย ค่าเริ่มต้นนี้เป็นคีย์การกำหนดค่า <tt>site.email_from</tt> <i>จาก</i> ของอีเมลที่ส่งจะถูกตั้งค่าเป็นชื่อผู้ส่งและที่อยู่</p><h3>การอัปโหลดรายชื่อผู้รับโดยอัตโนมัติ</h3><p>ชื่อไฟล์ดรอปโฟลเดอร์ใช้สำหรับการอัปโหลดรายชื่อผู้รับทั้งหมดโดยอัตโนมัติ ชื่อไฟล์ต้องตรงกับชื่อไฟล์ของรายชื่อผู้รับที่อัปโหลด รายชื่อผู้รับทั้งหมดจะถูกแทนที่ด้วยผู้รับในไฟล์โฟลเดอร์วาง</p><h3>การควบคุมการเข้าถึง</h3><p>ทุกคนที่สามารถแก้ไขรายชื่อผู้รับจดหมายจะได้รับอนุญาตให้ส่งหน้าไปยังรายชื่อผู้รับจดหมาย ทุกคนที่สามารถดูรายชื่อผู้รับจดหมายจะได้รับอนุญาตให้เพิ่มที่อยู่อีเมลในรายชื่อผู้รับจดหมาย</p>"
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:451
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:444
 msgid "A mailing list cannot be sent as a mailing."
 msgstr "รายชื่อผู้รับจดหมายไม่สามารถส่งเป็นจดหมายได้"
 
@@ -10546,16 +10553,12 @@ msgstr "รายชื่อผู้รับจดหมายไม่สา
 msgid "A previous delivery failed. Choose retry failed recipients to try again."
 msgstr "การส่งครั้งก่อนไม่สำเร็จ โปรดเลือกผู้รับที่การส่งไม่สำเร็จเพื่อลองส่งใหม่"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:77
-msgid "Act"
-msgstr "พระราชบัญญัติ"
-
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:34
 msgid "Add a new recipient."
 msgstr "เพิ่มผู้รับใหม่"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:34
-#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:74
+#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:77
 msgid "Add recipient"
 msgstr "เพิ่มผู้รับ"
 
@@ -10632,11 +10635,11 @@ msgstr "ยกเลิกการส่งจดหมาย"
 msgid "Change subscriptions connected to your account."
 msgstr "เปลี่ยนการสมัครสมาชิกที่เชื่อมต่อกับบัญชีของคุณ"
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:533
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:526
 msgid "Check the test mailing list and language selection."
 msgstr "ตรวจสอบรายชื่อผู้รับจดหมายทดสอบและการเลือกภาษา"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:85
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:94
 msgid "Check to activate the e-mail address."
 msgstr "เลือกเพื่อเปิดใช้งานที่อยู่อีเมล"
 
@@ -10677,7 +10680,7 @@ msgstr "รวม…"
 msgid "Configure mailing"
 msgstr "ตั้งค่าการส่งอีเมล"
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:416
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:409
 msgid "Confirm mailing cancelation."
 msgstr "ยืนยันการยกเลิกการส่งไปรษณีย์"
 
@@ -10705,7 +10708,7 @@ msgstr "ไม่สามารถเพิ่มผู้รับ"
 msgid "Could not count the eligible recipients. The list query may have taken too long. Go back and try again, or ask an administrator to check the mailing list."
 msgstr "ไม่สามารถนับจำนวนผู้รับที่มีสิทธิ์ได้ การค้นหาในรายชื่ออาจใช้เวลานานเกินไป โปรดกลับไปลองอีกครั้ง หรือขอให้ผู้ดูแลระบบตรวจสอบรายชื่อผู้รับอีเมล"
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:405
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:398
 msgid "Could not create another mailing."
 msgstr "ไม่สามารถสร้างรายชื่อผู้รับอีเมลใหม่ได้"
 
@@ -10721,7 +10724,7 @@ msgstr "ไม่สามารถจัดคิวการส่งอีเ
 msgid "Could not queue this mailing. Check your permissions and language selection."
 msgstr "ไม่สามารถจัดเรียงการส่งอีเมลนี้ในคิวได้ โปรดตรวจสอบสิทธิ์การเข้าถึงและการเลือกภาษาของคุณ"
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:607
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:600
 msgid "Could not save the opt-out preference."
 msgstr "ไม่สามารถบันทึกการตั้งค่าการเลือกไม่ใช้"
 
@@ -10769,6 +10772,14 @@ msgstr "ประวัติการส่งจะถูกเก็บรั
 msgid "Details"
 msgstr "รายละเอียด"
 
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:61
+msgid "Disabled"
+msgstr "ไม่สามารถใช้งานได้"
+
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:26
+msgid "Disabled email subscriptions are automatically deleted after three months."
+msgstr "การสมัครรับข่าวทางอีเมลที่ถูกปิดใช้งานจะถูกลบอัตโนมัติหลังจากสามเดือน"
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:24
 #: zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:21
 msgid "Do you want to remove this subscription?"
@@ -10798,7 +10809,7 @@ msgstr "กำลังดาวน์โหลดรายชื่อผู้
 msgid "Drop folder filename (optional)"
 msgstr "วางชื่อไฟล์โฟลเดอร์ (ไม่บังคับ)"
 
-#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:92
+#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:110
 msgid "E-mail address updated"
 msgstr "อัปเดตที่อยู่อีเมลแล้ว"
 
@@ -10823,8 +10834,8 @@ msgstr "แก้ไขรายชื่อ"
 msgid "Edit mailinglist"
 msgstr "แก้ไขรายชื่อผู้รับจดหมาย"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:86
-#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:81
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:96
+#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:91
 msgid "Edit recipient"
 msgstr "แก้ไขผู้รับ"
 
@@ -10844,6 +10855,18 @@ msgstr "ภาษาในอีเมล"
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:50
 msgid "Email language is the language version of the mailing selected for sending. It can differ from the recipient’s preferred language when a fallback or a fixed Email language is used. Skipped recipients will not receive an email."
 msgstr "ภาษาของอีเมล คือเวอร์ชันภาษาของจดหมายที่เลือกไว้เพื่อส่ง ซึ่งอาจแตกต่างจากภาษาที่ผู้รับต้องการใช้ เมื่อใช้ภาษาสำรองหรือภาษาอีเมลที่กำหนดไว้ ผู้รับที่ถูกข้ามจะไม่ได้รับอีเมล"
+
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:5
+msgid "Email subscriptions"
+msgstr "การสมัครรับข่าวสารทางอีเมล"
+
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:60
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:85
+#: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:15
+#: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:13
+#: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:47
+msgid "Enabled"
+msgstr "เปิดใช้งาน"
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:278
 msgid "Enter a valid future mailing date and time."
@@ -11023,7 +11046,7 @@ msgstr "รายชื่อผู้รับจดหมาย"
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:12
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:7
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:7
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:1071
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:1064
 msgid "Mailing lists"
 msgstr "รายชื่ออีเมล"
 
@@ -11047,7 +11070,7 @@ msgstr "สถานะการส่งจดหมาย"
 msgid "Mailing status and history"
 msgstr "สถานะและประวัติการส่งจดหมาย"
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:1081
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:1074
 msgid "Mailing status updated."
 msgstr "สถานะการส่งจดหมายได้รับการอัปเดตแล้ว"
 
@@ -11063,7 +11086,7 @@ msgstr "การสมัคร Mailinglist"
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:11
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:3
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:7
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:1065
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:1058
 msgid "Mailings"
 msgstr "การส่งจดหมาย"
 
@@ -11083,7 +11106,7 @@ msgstr "จัดการรายชื่อผู้รับอีเมล
 msgid "Manage your mailing list subscriptions"
 msgstr "จัดการการสมัครรายชื่ออีเมลของคุณ"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:48
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:7
 msgid "Matched via Query"
 msgstr "จับคู่ผ่านแบบสอบถาม"
 
@@ -11099,6 +11122,10 @@ msgstr "ต้องให้ความสนใจ"
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:17
 msgid "New mailing list"
 msgstr "รายชื่อผู้รับจดหมายใหม่"
+
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:52
+msgid "Newest"
+msgstr "ล่าสุด"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:38
 msgid "Next 100 recipients"
@@ -11116,7 +11143,7 @@ msgstr "ไม่มีที่อยู่อีเมล"
 msgid "No emails submitted"
 msgstr "ยังไม่มีอีเมลที่ส่งมา"
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:47
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:50
 msgid "No mailing lists found."
 msgstr "ไม่พบรายชื่อผู้รับจดหมายใดๆ"
 
@@ -11166,6 +11193,10 @@ msgstr "ไม่จำเป็น — ยังไม่มีการเล�
 msgid "Not sent — stopped"
 msgstr "ยังไม่ส่ง — ถูกระงับ"
 
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:68
+msgid "Not set"
+msgstr "ยังไม่ได้กำหนด"
+
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:42
 msgid "Not started"
 msgstr "ยังไม่ได้เริ่ม"
@@ -11182,9 +11213,13 @@ msgstr "ยังไม่ส่งอะไรเลย"
 msgid "Nothing to send. Go back and change the language or recipient selection, or choose another mailing list."
 msgstr "ไม่มีอะไรที่จะส่งไปครับ โปรดกลับไปปรับภาษาหรือการเลือกผู้รับ หรือเลือกรายชื่อผู้รับอื่น"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:43
-msgid "Number of recipients on this list:"
-msgstr "จำนวนผู้รับในรายการนี้:"
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:2
+msgid "Number of enabled recipients on this list:"
+msgstr "จำนวนผู้รับที่เปิดใช้งานในรายชื่อนี้:"
+
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:53
+msgid "Oldest"
+msgstr "เก่าที่สุด"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:26
 msgid "Only keep recipients on this list that appear <em>on both lists</em>"
@@ -11345,7 +11380,7 @@ msgstr "อ่านเพิ่มเติมได้ที่เว็บ"
 msgid "Recent mailings"
 msgstr "จดหมายที่ส่งไปเมื่อเร็วๆ นี้"
 
-#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:96
+#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:120
 msgid "Recipient deleted."
 msgstr "ลบผู้รับแล้ว"
 
@@ -11381,9 +11416,8 @@ msgstr "สถานะผู้รับ"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:96
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:8
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:31
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:34
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:57
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:46
 msgid "Recipients"
 msgstr "ผู้รับ"
 
@@ -11417,7 +11451,7 @@ msgstr "ผู้รับจะปรากฏขึ้นเมื่อกา
 msgid "Regional preferences can use the base language, for example Belgian Dutch can use Dutch."
 msgstr "การตั้งค่าภาษาตามภูมิภาคสามารถใช้ภาษาพื้นฐานได้ เช่น ภาษาดัตช์แบบเบลเยียมสามารถใช้ภาษาดัตช์ได้"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:88
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:100
 msgid "Remove this recipient. No undo possible."
 msgstr "ลบผู้รับนี้ ไม่สามารถยกเลิกได้"
 
@@ -11491,7 +11525,7 @@ msgstr "ตรวจสอบการตั้งค่าการเข้า
 msgid "Saved mailing content"
 msgstr "เนื้อหาจดหมายที่บันทึกไว้"
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:604
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:597
 msgid "Saved the opt-out preference."
 msgstr "บันทึกการตั้งค่าการเลือกไม่ใช้"
 
@@ -11814,7 +11848,7 @@ msgstr "ติดตาม"
 msgid "Subscribed with"
 msgstr "สมัครสมาชิกกับ"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:47
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:6
 msgid "Subscriber Edges"
 msgstr "ขอบสมาชิก"
 
@@ -11895,7 +11929,7 @@ msgstr "ที่อยู่อีเมลนี้ไม่ถูกต้อ
 msgid "The key in your link does not match any subscription. Either you already unsubscribed, or the mailing list has been deleted."
 msgstr "คีย์ในลิงค์ของคุณไม่ตรงกับการสมัครสมาชิกใด ๆ ไม่ว่าคุณจะยกเลิกการสมัครแล้วหรือรายชื่ออีเมลถูกลบไปแล้ว"
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:437
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:430
 msgid "The mailing has been canceled."
 msgstr "ยกเลิกการส่งไปรษณีย์แล้ว"
 
@@ -11907,7 +11941,7 @@ msgstr "หน้านี้ไม่จำเป็นต้องเผยแ
 msgid "The recipients list of the mailing list will be deleted as well."
 msgstr "รายชื่อผู้รับของรายชื่อผู้รับจดหมายจะถูกลบเช่นกัน"
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:469
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:462
 msgid "The selected page could not be found."
 msgstr "ไม่สามารถหาหน้าดังกล่าวได้"
 
@@ -12138,12 +12172,21 @@ msgstr "ทำไมผู้รับบางรายจึงไม่ได
 msgid "You are not allowed to add or enable recipients."
 msgstr "คุณไม่ได้รับอนุญาตให้เพิ่มหรือเปิดใช้งานผู้รับ"
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:423
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:440
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:416
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:433
 msgid "You are not allowed to cancel this mailing."
 msgstr "คุณไม่ได้รับอนุญาตให้ยกเลิกการส่งจดหมายนี้"
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:1084
+#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:79
+#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:93
+#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:103
+#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:112
+#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:125
+#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:133
+msgid "You are not allowed to change recipients"
+msgstr "คุณไม่สามารถเปลี่ยนผู้รับได้"
+
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:1077
 msgid "You are not allowed to change this mailing."
 msgstr "คุณไม่สามารถเปลี่ยนแปลงที่อยู่นี้ได้"
 
@@ -12155,13 +12198,13 @@ msgstr "คุณไม่ได้รับอนุญาตให้ลบร
 msgid "You are not allowed to edit recipients."
 msgstr "คุณไม่ได้รับอนุญาตให้แก้ไขผู้รับ"
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:501
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:494
 msgid "You are not allowed to reset this mailing."
 msgstr "คุณไม่ได้รับอนุญาตให้รีเซ็ตการส่งจดหมายนี้"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_count_error.tpl:7
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:464
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:537
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:457
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:530
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:69
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:102
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:134
@@ -12251,6 +12294,12 @@ msgstr "ยกเลิก"
 msgid "could not be sent"
 msgstr "ไม่สามารถส่งได้"
 
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:30
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:12
+#: zotonic_mod_mailinglist/priv/templates/_mailing_subscriber_count.tpl:3
+msgid "disabled"
+msgstr "ถูกปิดใช้งาน"
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:149
 msgid "emails are waiting to be sent."
 msgstr "มีอีเมลที่รอส่งอยู่"
@@ -12259,6 +12308,12 @@ msgstr "มีอีเมลที่รอส่งอยู่"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_summary.tpl:10
 msgid "emails processed"
 msgstr "อีเมลที่ได้รับการประมวลผล"
+
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:29
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:11
+#: zotonic_mod_mailinglist/priv/templates/_mailing_subscriber_count.tpl:2
+msgid "enabled"
+msgstr "เปิดใช้งาน"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:5
 msgid "excluded"
@@ -12273,18 +12328,14 @@ msgstr "หากคุณไม่ต้องการรับจดหมา
 msgid "mailing list"
 msgstr "รายชื่อผู้รับจดหมาย"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:56
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:61
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:16
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:21
 msgid "pages"
 msgstr "หน้า"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:16
 msgid "recipients selected."
 msgstr "ผู้รับได้รับการเลือกแล้ว"
-
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:52
-msgid "see below"
-msgstr "ดูด้านล่าง"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_mailing_runs_panel.tpl:10
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:2
@@ -12311,7 +12362,7 @@ msgstr "รอ"
 msgid "will not be sent."
 msgstr "จะไม่ถูกส่งไป"
 
-#: zotonic_mod_mailinglist/priv/templates/_mailing_subscriber_count.tpl:4
+#: zotonic_mod_mailinglist/priv/templates/_mailing_subscriber_count.tpl:5
 msgid "{count} from the list query"
 msgstr "{count} จากคำสั่งค้นหาในรายการ"
 
@@ -12761,12 +12812,6 @@ msgstr "แก้ไขไคลเอนต์ OAuth2"
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:10
 msgid "Edit the description of the App."
 msgstr "แก้ไขคำอธิบายของแอพ"
-
-#: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:15
-#: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:13
-#: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:47
-msgid "Enabled"
-msgstr "เปิดใช้งาน"
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:65
 #: zotonic_mod_oauth2/src/mod_oauth2.erl:251
@@ -16009,7 +16054,7 @@ msgstr "วิดีโอ Vimeo"
 msgid "Youtube Video"
 msgstr "วิดีโอ Youtube"
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:50
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:54
 msgid "Access was denied while updating this page. Check the subscriber's source website credentials and permission to update the local page."
 msgstr "ถูกปฏิเสธการเข้าถึงขณะกำลังอัปเดตหน้านี้ โปรดตรวจสอบข้อมูลรับรองและสิทธิ์การอัปเดตหน้าท้องถิ่นจากเว็บไซต์ต้นทางของผู้สมัคร"
 
@@ -16038,7 +16083,7 @@ msgstr "การอัปเดตอัตโนมัติกำลังท
 msgid "Automatic updates are stopped."
 msgstr "การอัปเดตอัตโนมัติถูกหยุดแล้ว"
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:72
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:76
 msgid "Automatic updates could not be completed. Check the technical details for the reported error."
 msgstr "ไม่สามารถดำเนินการอัปเดตอัตโนมัติได้ โปรดตรวจสอบรายละเอียดทางเทคนิคของข้อผิดพลาดที่รายงาน"
 
@@ -16046,7 +16091,7 @@ msgstr "ไม่สามารถดำเนินการอัปเดต
 msgid "Could not change the automatic update subscription."
 msgstr "ไม่สามารถเปลี่ยนการสมัครรับการอัปเดตอัตโนมัติได้"
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:52
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:56
 msgid "Could not contact the remote website. Check its availability and HTTPS certificate."
 msgstr "ไม่สามารถติดต่อกับเว็บไซต์ระยะไกลได้ โปรดตรวจสอบสถานะการให้บริการและใบรับรอง HTTPS ของเว็บไซต์ดังกล่าว"
 
@@ -16148,75 +16193,75 @@ msgstr "สมัครรับข่าวสารจากเรา"
 msgid "Subscription type"
 msgstr "ประเภทการสมัครสมาชิก"
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:56
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:60
 msgid "The callback URL must use a hostname instead of an IP address. Check this website's public URL."
 msgstr "URL ของ callback ต้องใช้ชื่อโฮสต์แทนที่อยู่ IP ตรวจสอบ URL สาธารณะของเว็บไซต์นี้"
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:38
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:42
 msgid "The destination could not be resolved or its network address is blocked. Local and private addresses are only allowed for .test hostnames in development."
 msgstr "ไม่สามารถระบุตำแหน่งปลายทางได้ หรือที่อยู่เครือข่ายถูกบล็อก ที่อยู่ท้องถิ่นและที่อยู่ส่วนตัวถูกอนุญาตให้ใช้เฉพาะกับชื่อโฮสต์ .test ในขั้นตอนการพัฒนาเท่านั้น"
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:48
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:52
 msgid "The original page address has changed. Import the page again to set up automatic updates."
 msgstr "ที่อยู่หน้าเดิมได้เปลี่ยนแล้ว โปรดนำเข้าหน้านี้อีกครั้งเพื่อตั้งค่าการอัปเดตอัตโนมัติ"
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:54
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:58
 msgid "The remote website address is invalid. Check the source and WebSub URLs."
 msgstr "ที่อยู่เว็บไซต์ระยะไกลไม่ถูกต้อง โปรดตรวจสอบ URL ของแหล่งที่มาและ WebSub"
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:58
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:62
 msgid "The remote website redirects from HTTPS to HTTP. Use a secure HTTPS destination."
 msgstr "เว็บไซต์ระยะไกลนี้เปลี่ยนเส้นทางจาก HTTPS ไปยัง HTTP โปรดใช้ปลายทาง HTTPS ที่ปลอดภัย"
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:60
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:64
 msgid "The remote website redirects too many times. Check its redirect configuration."
 msgstr "เว็บไซต์ระยะไกลมีการเปลี่ยนเส้นทางบ่อยเกินไป โปรดตรวจสอบการตั้งค่าการเปลี่ยนเส้นทางของเว็บไซต์นั้น"
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:68
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:72
 msgid "The remote website refused access. Check the subscribing user's permissions on that website."
 msgstr "เว็บไซต์ระยะไกลปฏิเสธการเข้าถึง โปรดตรวจสอบสิทธิ์ของผู้ใช้ที่สมัครใช้งานบนเว็บไซต์นั้น"
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:66
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:70
 msgid "The remote website requires authentication. Check the subscribing user's configured credentials."
 msgstr "เว็บไซต์ระยะไกลต้องการการยืนยันตัวตน โปรดตรวจสอบข้อมูลการเข้าสู่ระบบที่ผู้ใช้ผู้สมัครได้กำหนดไว้"
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:62
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:66
 msgid "The remote website returned a redirect without a destination."
 msgstr "เว็บไซต์ระยะไกลได้ส่งคำสั่งเปลี่ยนเส้นทางมาโดยไม่มีปลายทาง"
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:64
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:68
 msgid "The remote website returned an invalid redirect destination."
 msgstr "เว็บไซต์ระยะไกลได้ส่งคืนปลายทางของการเปลี่ยนเส้นทางที่ไม่ถูกต้อง"
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:70
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:74
 msgid "The requested page or WebSub endpoint was not found on the remote website."
 msgstr "ไม่สามารถค้นหาหน้าเว็บหรือจุดปลายทาง WebSub ที่ขอไว้บนเว็บไซต์ระยะไกลได้"
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:46
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:50
 msgid "The source page advertises invalid WebSub links. Check its hub and topic URLs."
 msgstr "หน้าต้นทางมีลิงก์ WebSub ที่ไม่ถูกต้อง โปรดตรวจสอบ URL ของ hub และ topic"
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:44
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:48
 msgid "The source page does not advertise automatic updates via WebSub."
 msgstr "หน้าต้นฉบับไม่ได้แจ้งให้ทราบเกี่ยวกับการอัปเดตอัตโนมัติผ่าน WebSub."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:40
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:44
 msgid "The source website did not confirm the subscription in time. Check that it can reach this website's callback URL."
 msgstr "เว็บไซต์ต้นทางไม่ได้ยืนยันการสมัครสมาชิกภายในเวลาที่กำหนด โปรดตรวจสอบว่าเว็บไซต์ต้นทางสามารถเข้าถึง URL callback ของเว็บไซต์นี้ได้หรือไม่"
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:32
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:36
 msgid "The source website does not allow this subscriber to use WebSub. On the source website, allow the subscribing user to use WebSub, or allow anonymous visitors for public subscriptions."
 msgstr "เว็บไซต์ต้นทางไม่อนุญาตให้ผู้สมัครรับข่าวนี้ใช้ WebSub บนเว็บไซต์ต้นทาง ให้อนุญาตผู้ใช้ที่สมัครรับข่าวใช้ WebSub หรืออนุญาตให้ผู้เยี่ยมชมแบบไม่ระบุตัวตนสมัครรับข่าวแบบสาธารณะ"
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:36
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:40
 msgid "The source website does not recognize this subscription topic. Check that the original page still exists."
 msgstr "เว็บไซต์ต้นทางไม่รู้จักหัวข้อการสมัครสมาชิกนี้ โปรดตรวจสอบว่าหน้าต้นฉบับยังมีอยู่หรือไม่"
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:34
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:38
 msgid "The source website refused access to this page. The subscriber must be allowed to view it, and the page must be an original on that website."
 msgstr "เว็บไซต์ต้นทางไม่อนุญาตให้เข้าถึงหน้านี้ ผู้สมัครสมาชิกต้องได้รับสิทธิ์ในการดูหน้านี้ และหน้าดังกล่าวต้องเป็นหน้าต้นฉบับบนเว็บไซต์นั้น"
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:42
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:46
 msgid "This page points back to this website. A website cannot subscribe to itself."
 msgstr "หน้านี้ชี้กลับไปยังเว็บไซต์นี้ เว็บไซต์ไม่สามารถสมัครรับข้อมูลจากตัวเองได้"
 

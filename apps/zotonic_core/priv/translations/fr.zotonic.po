@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-09-29 14:45\n"
+"PO-Revision-Date: 2026-10-01 11:34\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -198,6 +198,8 @@ msgstr "Ajouter des liens au groupe collaboratif"
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:152
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:184
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:47
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:59
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:67
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:50
 msgid "All"
 msgstr "Tous"
@@ -493,7 +495,7 @@ msgstr "Impossible de déplacer vers le groupe collaboratif"
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:52
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:75
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:97
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:37
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:40
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:10
 #: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:256
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:19
@@ -1703,7 +1705,7 @@ msgstr "Adresse E-mail"
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:23
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:21
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:121
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:33
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:36
 #: zotonic_mod_menu/priv/templates/_admin_menu_menu_view.collection.tpl:40
 #: zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:23
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:131
@@ -1884,6 +1886,7 @@ msgstr "Nom du fichier"
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:183
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:46
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:41
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:74
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:59
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:55
 msgid "Filter"
@@ -3017,6 +3020,7 @@ msgid "Sorry, you have no permission to delete the connection."
 msgstr "Désolé, vous n'avez pas de permission de supprimer la connexion."
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:267
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:49
 msgid "Sort by"
 msgstr "Trier par"
 
@@ -3046,6 +3050,7 @@ msgstr "Etat"
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:111
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:11
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:7
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:57
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:22
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:17
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:19
@@ -3551,7 +3556,7 @@ msgstr "Valable:"
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:31
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:142
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:26
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:35
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:38
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:20
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:38
 msgid "View"
@@ -3749,7 +3754,7 @@ msgstr "d M Y, H:i"
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:167
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:43
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:39
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:88
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:99
 msgid "delete"
 msgstr "effacer"
 
@@ -4470,6 +4475,7 @@ msgstr "Activer ou désactiver les onglets de langue."
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:10
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:6
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:75
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:65
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:37
 #: zotonic_mod_translation/priv/templates/_dialog_new_rsc_extra.tpl:2
 #: zotonic_mod_translation/priv/templates/_translation_language_status.tpl:46
@@ -4623,7 +4629,8 @@ msgstr "E-mail"
 #: zotonic_mod_authentication/priv/templates/email_password_reset.tpl:23
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:22
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:9
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:78
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:51
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:86
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:19
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:29
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:30
@@ -10538,7 +10545,7 @@ msgstr "<em>Supprimez</em> tous les destinataires de cette liste qui sont sur la
 msgid "<h3>Recipients</h3><p>To add, remove or view the mailing list recipients, click on the “show all recipients” link.</p><h3>Sender name and e-mail address</h3><p>The sender name and e-mail address can be set per mailing list. This defaults to the config key <tt>site.email_from</tt>.  The <i>From</i> of the sent e-mails will be set to the sender name and address.</p><h3>Automatic upload of recipient lists</h3><p>The drop folder filename is used for the automatic upload of complete recipients list. The filename must match the filename of the uploaded recipient list. The complete list of recipients will be replaced with the recipients in the drop folder file.</p><h3>Access control</h3><p>Everybody who can edit a mailing list is also allowed to send a page to the mailing list. Everybody who can view the mailing list is allowed to add an e-mail address to the mailing list.</p>"
 msgstr "<h3>Destinataires</h3><p>Pour ajouter, supprimer ou afficher les destinataires de la liste de diffusion, cliquez sur le lien « Afficher tous les destinataires ».</p><h3>Nom et adresse e-mail de l'expéditeur</h3><p>Le nom et l'adresse e-mail de l'expéditeur peuvent être définis par liste de diffusion. Il s'agit par défaut de la clé de configuration <tt>site.email_from</tt>. Le <i>De</i> des e-mails envoyés sera défini sur le nom et l'adresse de l'expéditeur.</p><h3>Téléchargement automatique des listes de destinataires</h3><p>Le nom de fichier du dossier de dépôt est utilisé pour le téléchargement automatique de la liste complète des destinataires. Le nom de fichier doit correspondre au nom de fichier de la liste de destinataires téléchargée. La liste complète des destinataires sera remplacée par les destinataires du dossier de dépôt.</p><h3>Contrôle d'accès</h3><p>Toute personne pouvant modifier une liste de diffusion est également autorisée à envoyer une page à la liste de diffusion. Toute personne pouvant consulter la liste de diffusion est autorisée à ajouter une adresse e-mail à la liste de diffusion.</p>"
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:451
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:444
 msgid "A mailing list cannot be sent as a mailing."
 msgstr "Une liste de diffusion ne peut pas être envoyée sous forme de mailing."
 
@@ -10546,16 +10553,12 @@ msgstr "Une liste de diffusion ne peut pas être envoyée sous forme de mailing.
 msgid "A previous delivery failed. Choose retry failed recipients to try again."
 msgstr "Une livraison précédente a échoué. Choisissez les destinataires pour lesquels la livraison a échoué afin de réessayer."
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:77
-msgid "Act"
-msgstr "Agir"
-
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:34
 msgid "Add a new recipient."
 msgstr "Ajouter un nouveau destinataire."
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:34
-#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:74
+#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:77
 msgid "Add recipient"
 msgstr "Ajouter destinataire"
 
@@ -10632,11 +10635,11 @@ msgstr "Annuler mailing"
 msgid "Change subscriptions connected to your account."
 msgstr "Modifier les abonnements connectés à votre compte."
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:533
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:526
 msgid "Check the test mailing list and language selection."
 msgstr "Vérifiez la liste de diffusion de test et la sélection de la langue."
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:85
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:94
 msgid "Check to activate the e-mail address."
 msgstr "Cocher pour activer l'adresse e-mail."
 
@@ -10677,7 +10680,7 @@ msgstr "Jointure…"
 msgid "Configure mailing"
 msgstr "Configurer l'envoi d'e-mails"
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:416
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:409
 msgid "Confirm mailing cancelation."
 msgstr "Confirmer l'annulation de la liste de diffusion"
 
@@ -10705,7 +10708,7 @@ msgstr "Impossible d'ajouter le destinataire."
 msgid "Could not count the eligible recipients. The list query may have taken too long. Go back and try again, or ask an administrator to check the mailing list."
 msgstr "Impossible de compter le nombre de destinataires éligibles. La requête sur la liste a peut-être pris trop de temps. Revenez en arrière et réessayez, ou demandez à un administrateur de vérifier la liste de diffusion."
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:405
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:398
 msgid "Could not create another mailing."
 msgstr "Impossible de créer un autre mailing."
 
@@ -10721,7 +10724,7 @@ msgstr "Impossible de mettre l'envoi test en file d'attente."
 msgid "Could not queue this mailing. Check your permissions and language selection."
 msgstr "Impossible de mettre ce mailing en file d'attente. Vérifiez vos droits d'accès et la langue sélectionnée."
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:607
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:600
 msgid "Could not save the opt-out preference."
 msgstr "Impossible d'enregistrer la préférence de désactivation."
 
@@ -10769,6 +10772,14 @@ msgstr "L'historique des livraisons est conservé. Un nouvel envoi peut entraîn
 msgid "Details"
 msgstr "Détails"
 
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:61
+msgid "Disabled"
+msgstr "Personnes en situation de handicap"
+
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:26
+msgid "Disabled email subscriptions are automatically deleted after three months."
+msgstr "Les abonnements aux e-mails désactivés sont automatiquement supprimés au bout de trois mois."
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:24
 #: zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:21
 msgid "Do you want to remove this subscription?"
@@ -10798,7 +10809,7 @@ msgstr "Téléchargement de la liste des destinataires actifs. Vérifiez la fen�
 msgid "Drop folder filename (optional)"
 msgstr "Déposez le nom du fichier du dossier (facultatif)"
 
-#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:92
+#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:110
 msgid "E-mail address updated"
 msgstr "Adresse e-mail mise à jour"
 
@@ -10823,8 +10834,8 @@ msgstr "Modifier la liste"
 msgid "Edit mailinglist"
 msgstr "Modifier la liste de diffusion"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:86
-#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:81
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:96
+#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:91
 msgid "Edit recipient"
 msgstr "Editer destinataire"
 
@@ -10844,6 +10855,18 @@ msgstr "Langue de l'e-mail"
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:50
 msgid "Email language is the language version of the mailing selected for sending. It can differ from the recipient’s preferred language when a fallback or a fixed Email language is used. Skipped recipients will not receive an email."
 msgstr "La langue de l'e-mail correspond à la version linguistique du mailing sélectionnée pour l'envoi. Elle peut différer de la langue préférée du destinataire lorsqu'une langue de secours ou une langue d'e-mail fixe est utilisée. Les destinataires ignorés ne recevront pas d'e-mail."
+
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:5
+msgid "Email subscriptions"
+msgstr "Abonnements par e-mail"
+
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:60
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:85
+#: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:15
+#: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:13
+#: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:47
+msgid "Enabled"
+msgstr "Activé"
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:278
 msgid "Enter a valid future mailing date and time."
@@ -11023,7 +11046,7 @@ msgstr "Liste de diffusion"
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:12
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:7
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:7
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:1071
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:1064
 msgid "Mailing lists"
 msgstr "Listes de diffusion"
 
@@ -11047,7 +11070,7 @@ msgstr "État de l'envoi"
 msgid "Mailing status and history"
 msgstr "Statut et historique des envois"
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:1081
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:1074
 msgid "Mailing status updated."
 msgstr "Statut de l'envoi mis à jour."
 
@@ -11063,7 +11086,7 @@ msgstr "Abonnements aux listes de diffusion"
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:11
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:3
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:7
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:1065
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:1058
 msgid "Mailings"
 msgstr "Envois postaux"
 
@@ -11083,7 +11106,7 @@ msgstr "Gérer les listes de diffusion"
 msgid "Manage your mailing list subscriptions"
 msgstr "Gérez vos abonnements à la liste de diffusion"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:48
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:7
 msgid "Matched via Query"
 msgstr "Correspondance par requête"
 
@@ -11099,6 +11122,10 @@ msgstr "À surveiller"
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:17
 msgid "New mailing list"
 msgstr "Nouvelle liste de diffusion"
+
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:52
+msgid "Newest"
+msgstr "Les plus récents"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:38
 msgid "Next 100 recipients"
@@ -11116,7 +11143,7 @@ msgstr "Aucune adresse e-mail n'est disponible."
 msgid "No emails submitted"
 msgstr "Aucun e-mail n'a été envoyé"
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:47
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:50
 msgid "No mailing lists found."
 msgstr "Aucune liste de diffusion n'a été trouvée."
 
@@ -11166,6 +11193,10 @@ msgstr "Inutile — aucun destinataire sélectionné"
 msgid "Not sent — stopped"
 msgstr "Non envoyé — bloqué"
 
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:68
+msgid "Not set"
+msgstr "Non défini"
+
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:42
 msgid "Not started"
 msgstr "Pas encore commencé"
@@ -11182,9 +11213,13 @@ msgstr "Rien n'a été envoyé"
 msgid "Nothing to send. Go back and change the language or recipient selection, or choose another mailing list."
 msgstr "Il n'y a rien à envoyer. Revenez en arrière et modifiez la langue ou le choix du destinataire, ou sélectionnez une autre liste de diffusion."
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:43
-msgid "Number of recipients on this list:"
-msgstr "Nombre de destinataires sur cette liste:"
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:2
+msgid "Number of enabled recipients on this list:"
+msgstr "Nombre de destinataires activés sur cette liste :"
+
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:53
+msgid "Oldest"
+msgstr "Le plus ancien"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:26
 msgid "Only keep recipients on this list that appear <em>on both lists</em>"
@@ -11345,7 +11380,7 @@ msgstr "En savoir plus sur le web"
 msgid "Recent mailings"
 msgstr "Envois récents"
 
-#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:96
+#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:120
 msgid "Recipient deleted."
 msgstr "Destinataire supprimé."
 
@@ -11381,9 +11416,8 @@ msgstr "Statut du destinataire"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:96
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:8
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:31
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:34
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:57
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:46
 msgid "Recipients"
 msgstr "Destinataires"
 
@@ -11417,7 +11451,7 @@ msgstr "Les destinataires s'afficheront dès le début de la préparation."
 msgid "Regional preferences can use the base language, for example Belgian Dutch can use Dutch."
 msgstr "Les préférences régionales peuvent utiliser la langue de base ; par exemple, le néerlandais belge peut utiliser le néerlandais."
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:88
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:100
 msgid "Remove this recipient. No undo possible."
 msgstr "Supprimer ce destinataire. C'est irrévocable."
 
@@ -11491,7 +11525,7 @@ msgstr "Vérifiez les paramètres d'accès à la liste de diffusion de test"
 msgid "Saved mailing content"
 msgstr "Contenu des e-mails enregistrés"
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:604
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:597
 msgid "Saved the opt-out preference."
 msgstr "Enregistré la préférence d'opt-out."
 
@@ -11814,7 +11848,7 @@ msgstr "S'abonner à"
 msgid "Subscribed with"
 msgstr "Abonné avec"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:47
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:6
 msgid "Subscriber Edges"
 msgstr "Bords de l'abonné"
 
@@ -11895,7 +11929,7 @@ msgstr "L'adresse e-mail n'est pas valide."
 msgid "The key in your link does not match any subscription. Either you already unsubscribed, or the mailing list has been deleted."
 msgstr "La clé de votre lien ne correspond à aucun abonnement. Vous avez déjà désabonné ou la liste de diffusion a été supprimée."
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:437
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:430
 msgid "The mailing has been canceled."
 msgstr "La diffusion a été annulée."
 
@@ -11907,7 +11941,7 @@ msgstr "Il n'est pas nécessaire que la page soit publiée, mais vous devez disp
 msgid "The recipients list of the mailing list will be deleted as well."
 msgstr "La liste des destinataires de la liste de diffusion sera également supprimée."
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:469
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:462
 msgid "The selected page could not be found."
 msgstr "La page sélectionnée est introuvable."
 
@@ -12138,12 +12172,21 @@ msgstr "Pourquoi certains destinataires ne sont-ils pas sélectionnés ?"
 msgid "You are not allowed to add or enable recipients."
 msgstr "Vous n’êtes pas autorisé à ajouter ou activer des destinataires."
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:423
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:440
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:416
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:433
 msgid "You are not allowed to cancel this mailing."
 msgstr "Vous n'êtes pas autorisé à annuler ce publipostage."
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:1084
+#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:79
+#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:93
+#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:103
+#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:112
+#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:125
+#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:133
+msgid "You are not allowed to change recipients"
+msgstr "Vous n'êtes pas autorisé à modifier les destinataires"
+
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:1077
 msgid "You are not allowed to change this mailing."
 msgstr "Vous n'êtes pas autorisé à modifier cet envoi."
 
@@ -12155,13 +12198,13 @@ msgstr "Vous n'êtes pas autorisé à supprimer la liste de diffusion."
 msgid "You are not allowed to edit recipients."
 msgstr "Vous n’êtes pas autorisé à éditer les destinataires."
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:501
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:494
 msgid "You are not allowed to reset this mailing."
 msgstr "Vous n'êtes pas autorisé à réinitialiser ce publipostage."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_count_error.tpl:7
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:464
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:537
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:457
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:530
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:69
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:102
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:134
@@ -12251,6 +12294,12 @@ msgstr "Annuler"
 msgid "could not be sent"
 msgstr "n'a pas pu être envoyé"
 
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:30
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:12
+#: zotonic_mod_mailinglist/priv/templates/_mailing_subscriber_count.tpl:3
+msgid "disabled"
+msgstr "handicapé"
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:149
 msgid "emails are waiting to be sent."
 msgstr "Des e-mails attendent d'être envoyés."
@@ -12259,6 +12308,12 @@ msgstr "Des e-mails attendent d'être envoyés."
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_summary.tpl:10
 msgid "emails processed"
 msgstr "e-mails traités"
+
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:29
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:11
+#: zotonic_mod_mailinglist/priv/templates/_mailing_subscriber_count.tpl:2
+msgid "enabled"
+msgstr "activé"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:5
 msgid "excluded"
@@ -12273,18 +12328,14 @@ msgstr "si vous ne souhaitez plus recevoir de courrier de cette liste."
 msgid "mailing list"
 msgstr "liste de diffusion"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:56
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:61
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:16
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:21
 msgid "pages"
 msgstr "pages"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:16
 msgid "recipients selected."
 msgstr "bénéficiaires sélectionnés."
-
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:52
-msgid "see below"
-msgstr "voir ci-dessous"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_mailing_runs_panel.tpl:10
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:2
@@ -12311,7 +12362,7 @@ msgstr "en attente"
 msgid "will not be sent."
 msgstr "ne sera pas envoyé."
 
-#: zotonic_mod_mailinglist/priv/templates/_mailing_subscriber_count.tpl:4
+#: zotonic_mod_mailinglist/priv/templates/_mailing_subscriber_count.tpl:5
 msgid "{count} from the list query"
 msgstr "{count} à partir de la requête sur la liste"
 
@@ -12761,12 +12812,6 @@ msgstr "Modifier le client OAuth2"
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:10
 msgid "Edit the description of the App."
 msgstr "Modifiez la description de l'application."
-
-#: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:15
-#: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:13
-#: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:47
-msgid "Enabled"
-msgstr "Activé"
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:65
 #: zotonic_mod_oauth2/src/mod_oauth2.erl:251
@@ -16009,7 +16054,7 @@ msgstr "Vidéo Vimeo"
 msgid "Youtube Video"
 msgstr "Vidéo Youtube"
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:50
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:54
 msgid "Access was denied while updating this page. Check the subscriber's source website credentials and permission to update the local page."
 msgstr "L'accès a été refusé lors de la mise à jour de cette page. Vérifiez les identifiants du site web source de l'abonné ainsi que son autorisation à mettre à jour la page locale."
 
@@ -16038,7 +16083,7 @@ msgstr "Les mises à jour automatiques sont activées."
 msgid "Automatic updates are stopped."
 msgstr "Les mises à jour automatiques sont désactivées."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:72
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:76
 msgid "Automatic updates could not be completed. Check the technical details for the reported error."
 msgstr "Les mises à jour automatiques n'ont pas pu être menées à bien. Consultez les détails techniques relatifs à l'erreur signalée."
 
@@ -16046,7 +16091,7 @@ msgstr "Les mises à jour automatiques n'ont pas pu être menées à bien. Consu
 msgid "Could not change the automatic update subscription."
 msgstr "Impossible de modifier l'abonnement aux mises à jour automatiques."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:52
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:56
 msgid "Could not contact the remote website. Check its availability and HTTPS certificate."
 msgstr "Impossible de contacter le site Web distant. Vérifiez sa disponibilité et son certificat HTTPS."
 
@@ -16148,75 +16193,75 @@ msgstr "Abonnez-vous à notre chaîne"
 msgid "Subscription type"
 msgstr "Type d'abonnement"
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:56
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:60
 msgid "The callback URL must use a hostname instead of an IP address. Check this website's public URL."
 msgstr "L'URL de rappel doit utiliser un nom d'hôte plutôt qu'une adresse IP. Vérifiez l'URL publique de ce site web."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:38
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:42
 msgid "The destination could not be resolved or its network address is blocked. Local and private addresses are only allowed for .test hostnames in development."
 msgstr "La destination n'a pas pu être identifiée ou son adresse réseau est bloquée. Les adresses locales et privées ne sont autorisées que pour les noms d'hôte .test en phase de développement."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:48
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:52
 msgid "The original page address has changed. Import the page again to set up automatic updates."
 msgstr "L'adresse d'origine de la page a changé. Importez à nouveau la page pour activer les mises à jour automatiques."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:54
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:58
 msgid "The remote website address is invalid. Check the source and WebSub URLs."
 msgstr "L'adresse du site Web distant n'est pas valide. Vérifiez les URL source et WebSub."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:58
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:62
 msgid "The remote website redirects from HTTPS to HTTP. Use a secure HTTPS destination."
 msgstr "Le site Web distant effectue une redirection de HTTPS vers HTTP. Utilisez une destination HTTPS sécurisée."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:60
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:64
 msgid "The remote website redirects too many times. Check its redirect configuration."
 msgstr "Le site web distant effectue trop de redirections. Vérifiez sa configuration de redirection."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:68
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:72
 msgid "The remote website refused access. Check the subscribing user's permissions on that website."
 msgstr "Le site Web distant a refusé l'accès. Vérifiez les droits de l'utilisateur abonné sur ce site Web."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:66
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:70
 msgid "The remote website requires authentication. Check the subscribing user's configured credentials."
 msgstr "Le site Web distant nécessite une authentification. Vérifiez les identifiants configurés pour l'utilisateur abonné."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:62
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:66
 msgid "The remote website returned a redirect without a destination."
 msgstr "Le site web distant a renvoyé une redirection sans destination."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:64
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:68
 msgid "The remote website returned an invalid redirect destination."
 msgstr "Le site Web distant a renvoyé une destination de redirection non valide."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:70
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:74
 msgid "The requested page or WebSub endpoint was not found on the remote website."
 msgstr "La page ou le point de terminaison WebSub demandé(e) n'a pas été trouvé(e) sur le site Web distant."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:46
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:50
 msgid "The source page advertises invalid WebSub links. Check its hub and topic URLs."
 msgstr "La page source contient des liens WebSub non valides. Vérifiez les URL de son hub et de son sujet."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:44
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:48
 msgid "The source page does not advertise automatic updates via WebSub."
 msgstr "La page source ne mentionne pas la possibilité de mises à jour automatiques via WebSub."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:40
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:44
 msgid "The source website did not confirm the subscription in time. Check that it can reach this website's callback URL."
 msgstr "Le site web d'origine n'a pas confirmé l'abonnement dans les délais impartis. Vérifiez qu'il peut accéder à l'URL de rappel de ce site web."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:32
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:36
 msgid "The source website does not allow this subscriber to use WebSub. On the source website, allow the subscribing user to use WebSub, or allow anonymous visitors for public subscriptions."
 msgstr "Le site Web source n'autorise pas cet abonné à utiliser WebSub. Sur le site Web source, autorisez l'utilisateur abonné à utiliser WebSub ou autorisez les visiteurs anonymes à s'abonner aux flux publics."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:36
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:40
 msgid "The source website does not recognize this subscription topic. Check that the original page still exists."
 msgstr "Le site web source ne reconnaît pas ce sujet d'abonnement. Vérifiez que la page d'origine existe toujours."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:34
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:38
 msgid "The source website refused access to this page. The subscriber must be allowed to view it, and the page must be an original on that website."
 msgstr "Le site web d'origine a refusé l'accès à cette page. L'abonné doit être autorisé à la consulter, et la page doit être une page originale de ce site web."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:42
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:46
 msgid "This page points back to this website. A website cannot subscribe to itself."
 msgstr "Cette page renvoie vers ce site web. Un site web ne peut pas s'abonner à lui-même."
 
