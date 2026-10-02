@@ -45,39 +45,41 @@ which no audience policy accepts. Do not cache generated guards across ACL conte
 
 ## Stored defaults and conversion
 
-`rsc.privacy` starts at `-1`. Nullable `privacy_is_default` distinguishes legacy
-rows (NULL), derived defaults (true), and explicit privacy (false).
-`z_rsc_defaults` runs after modules are ready and converts 100 rows per batch.
-It merges legacy properties with JSON taking precedence, applies the same
-`rsc_get` fold as normal reads, and stores privacy and a missing content group.
-Only these defaults are persisted; unrelated computed fetch properties are not.
-The normal `z_db` update serializes JSON and clears legacy `props` atomically.
+`rsc.privacy` starts at `-1`. `z_rsc_defaults` runs only when the module manager
+reports all active modules running, and converts 100 rows per batch. It recovers
+explicit legacy privacy from stored properties or initializes a missing value
+through `rsc_get_raw`: persons default to 30, other resources to 0.
+
+Before conversion, resource reads fall back from the column's `-1` marker to
+stored JSON/legacy privacy, using one database snapshot. Missing stored privacy
+is supplied by `rsc_get_raw`. Reads do not write the column: SQL query guards
+continue excluding pending rows until migration or a resource update persists
+privacy. After conversion, the column is authoritative, even if stale props
+contain a different value.
+
+The migration merges legacy properties with JSON taking precedence, saves
+persistable `rsc_get_raw` field fixes, and fills missing content groups. Protected
+and computed properties are excluded. The normal `z_db` update serializes JSON
+and clears legacy `props` atomically; `rsc_get` is not called by the migration.
 
 The persistent task advances by resource ID, retries unresolved rows on subsequent
 sweeps, and flushes changed resource caches after commit. A partial index restricts
 these sweeps to pending rows. Failed or malformed privacy remains closed.
 
-Resource writes resolve defaults inside their transaction. Category-tree and
-module-policy changes queue a gradual rebuild: existing privacy remains in place
-until each resource is processed, including changes to a more restrictive policy.
-There is no bulk reset to -1 and resource writes do not take a shared advisory lock.
-Only never-migrated or unresolved rows remain closed with privacy -1.
+Privacy is initialized once and then treated as an ordinary stored value. Resource
+updates, category-tree changes, and changes to the observer set preserve existing
+privacy. Explicitly clearing privacy requests initialization from the current
+defaults. Existing content-group assignments are also preserved.
 
-Rebuilds page through at most 100 resource IDs per transaction and preserve explicit
-privacy. Their cursor is persisted by the pivot task queue. Replacing a rebuild
-allocates a new task ID so a running old task cannot overwrite the new cursor.
-A brief schema-scoped advisory lock serializes only those queue replacements.
+Startup resumes the conversion task without resetting its cursor. A manually
+requested sweep pages through at most 100 IDs per transaction, converting only
+rows with unresolved privacy, missing JSON, or missing content groups. Replacing
+a sweep allocates a new task ID so an older task cannot overwrite the new cursor.
+A schema-scoped advisory lock serializes those queue replacements and migration
+batches, not ordinary resource writes.
 
-Startup compares stable `rsc_get` observer identities with a stored fingerprint.
-The same observers resume existing tasks without resetting their cursors or
-rebuilding resolved rows. A changed observer set queues a rebuild. Observer process
-IDs are excluded from the fingerprint. Missing content-group defaults are filled;
-existing content-group assignments are never overwritten.
-
-Modules changing defaults through configuration (without changing observers) should
-call `z_rsc_defaults:invalidate/1` to queue a rebuild. Custom direct SQL writes must
-maintain privacy or set it to -1 for recomputation. Default-resolution observers
-must remain independent of the requesting user, as for cached `rsc_get`.
+Custom direct SQL writes must maintain privacy or set it to -1 for initialization.
+Raw-conversion observers must be idempotent and independent of the requesting user.
 
 ## Compiler integration and trusted indexes
 
@@ -161,8 +163,8 @@ literal atom option with value `true` in the explicit Erlang argument is accepte
 
 `mod_acl_user_groups` supplies privacy and the default content group in `rsc_insert`,
 before the initial database insert. Its category privacy policy is shared with
-`rsc_get`, so new resources and migrated resources use the same defaults. Explicit
-values remain explicit; the protected provenance flag preserves module defaults.
+`rsc_get_raw`, so new resources and migrated resources use the same defaults.
+Once stored, both initialized and explicitly supplied privacy values are preserved.
 
 The ACL module contributes the Privacy and content groups item to the shared
 migration panel on the admin dashboard and admin/status. Core reports whether
