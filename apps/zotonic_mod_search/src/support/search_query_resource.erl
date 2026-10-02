@@ -134,7 +134,7 @@ from_resource_1(RscId, Arguments, Context) ->
     end.
 
 %% @doc Compile a stored or unsaved query and any additional mod_search terms.
-%% The `args` map contains named query-language arguments. All remaining keys
+%% The <code>args</code> map contains named query-language arguments. All remaining keys
 %% keep their existing meaning as additional mod_search query terms.
 -spec compile(Args, Context) -> #search_sql_terms{} | #search_result{} | {error, Reason}
     when

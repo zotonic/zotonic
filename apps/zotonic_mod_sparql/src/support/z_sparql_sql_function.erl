@@ -171,7 +171,7 @@ to_sql(Function, _Arguments) ->
 
 %% @doc Return the SPARQL input and output types for a supported builtin.
 %% The SQL generator resolves number and common against the actual argument
-%% types before adding casts. `any` deliberately preserves the storage form.
+%% types before adding casts. <code>any</code> deliberately preserves the storage form.
 -spec type_signature(Function, Arity) ->
     {ok, {[ argument_type() ], result_type()}}
     | {error, {invalid_function_arity, atom(), non_neg_integer()}}
@@ -276,7 +276,7 @@ replace(Value, Pattern, Replacement, Flags) ->
     ]}.
 
 %% @doc XPath uses $0 for the complete match and $1..$9 for captured groups.
-%% PostgreSQL uses \& and \1..\9. chr(92) is used to avoid problems with the
+%% PostgreSQL uses \&amp; and \1..\9. chr(92) is used to avoid problems with the
 %% psql string configs. Note that literal '$' and backslash replacements are
 %% not supported, they would need a full XPath implementation and/or parser.
 replacement_expression(Replacement) ->
