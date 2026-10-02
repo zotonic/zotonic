@@ -420,10 +420,14 @@ get_site_for_url(Url) ->
         #{} ->
             undefined;
         {error, invalid_uri, _Path} ->
-            ?LOG_NOTICE(#{
-                text => <<"Invalid URL, not site matched">>,
-                url => UrlBin
-            }),
+            case z_search:is_query_check() of
+                true -> ok;
+                false ->
+                    ?LOG_NOTICE(#{
+                        text => <<"Invalid URL, no site matched">>,
+                        url => UrlBin
+                    })
+            end,
             undefined
     end.
 

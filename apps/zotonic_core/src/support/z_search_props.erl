@@ -433,6 +433,8 @@ map_term(Term) ->
     }),
     false.
 
+map_value(<<"query_text">>, V) ->
+    V;
 map_value(<<"text">>, V) ->
     z_string:trim(z_convert:to_binary(V));
 map_value(<<"is_", _/binary>>, <<>>) ->
@@ -514,5 +516,4 @@ default_terms_1([ #{ <<"term">> := T } = Term | Defaults ], Terms) ->
 has_term(_T, []) -> false;
 has_term(T, [ #{ <<"term">> := T } | _ ]) -> true;
 has_term(T, [ _ | Rest ]) -> has_term(T, Rest).
-
 

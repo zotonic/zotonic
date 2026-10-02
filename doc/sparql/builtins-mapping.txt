@@ -1,0 +1,196 @@
+SPARQL built-in mapping
+========================
+
+References:
+- https://www.postgresql.org/docs/current/functions.html
+- https://www.w3.org/TR/sparql11-query/
+
+The parser recognizes all SPARQL 1.1 built-in names listed in builtins.txt.
+Recognition by the parser does not imply that SQL generation supports the
+built-in. SQL mappings are implemented by z_sparql_sql_function.erl, with
+special handling in z_sparql_sql.erl for RDF-aware type tests, aggregates,
+datatype constructors and Zotonic full-text functions.
+
+
+Supported graph-pattern filters
+-------------------------------
+
+SPARQL                         PostgreSQL
+------------------------------ ------------------------------------------
+FILTER EXISTS { pattern }      WHERE EXISTS (SELECT 1 ...)
+FILTER NOT EXISTS { pattern }  WHERE NOT EXISTS (SELECT 1 ...)
+
+The subquery is correlated with bindings from the enclosing group. Its graph
+pattern remains conjunctive, its local bindings are discarded, and ACL checks
+for local resource aliases are added inside the subquery. EXISTS used inside a
+larger expression or as a result expression is not yet supported.
+
+
+Supported scalar built-ins
+--------------------------
+
+SPARQL                 PostgreSQL
+---------------------- -----------------------------------------------
+BOUND(E)               E IS NOT NULL
+RAND()                 random()
+ABS(E)                 abs(E)
+CEIL(E)                ceil(E)
+FLOOR(E)               floor(E)
+ROUND(E)               round(E)
+CONCAT(Es)             concat(Es); the empty case returns text ''
+SUBSTR(E,E(,E)?)       substr/2 or substr/3
+STRLEN(E)              char_length(E)
+UCASE(E)               upper(E)
+LCASE(E)               lower(E)
+CONTAINS(E,E)          strpos(E, E) > 0
+STRSTARTS(E,E)         starts_with(E, E)
+STRENDS(E,E)           starts_with(reverse(E), reverse(E))
+STRBEFORE(E,E)         CASE using strpos and left
+STRAFTER(E,E)          CASE using strpos and substr
+YEAR(E)                EXTRACT(YEAR FROM E)
+MONTH(E)               EXTRACT(MONTH FROM E)
+DAY(E)                 EXTRACT(DAY FROM E)
+HOURS(E)               EXTRACT(HOUR FROM E)
+MINUTES(E)             EXTRACT(MINUTE FROM E)
+SECONDS(E)             EXTRACT(SECOND FROM E)
+NOW()                  CURRENT_TIMESTAMP
+UUID()                 concat('urn:uuid:', gen_random_uuid()::text)
+STRUUID()              gen_random_uuid()::text
+MD5(E)                 md5(E)
+COALESCE(Es)           coalesce(Es)
+IF(E,E,E)              CASE WHEN ... THEN ... ELSE ... END
+
+Function arity and input types are checked before SQL is emitted. Expressions
+carry a value type, and JSONB values are extracted or cast only when an
+operator or function needs a concrete PostgreSQL type.
+
+
+Supported with SPARQL/PostgreSQL differences
+---------------------------------------------
+
+REPLACE(E,E,E(,E)?)
+    SPARQL uses XPath regular expressions and PostgreSQL uses POSIX regular
+    expressions. The common syntax and i/m/s/x flags are supported. Replacement
+    references $0..$9 are translated to PostgreSQL references and replacement
+    is always global. Literal '$' and backslash replacement semantics are not
+    fully implemented.
+
+REGEX(E,E(,E)?)
+    Uses PostgreSQL POSIX regular expressions. The i/m/s/x flags and common
+    pattern syntax are supported.
+
+isLITERAL(E), isNUMERIC(E)
+    Known SQL expression types are short-circuited. JSONB values use
+    jsonb_typeof. A resource binding is not a literal. Integer columns whose
+    names imply an id can still be ambiguous: an id can represent an RDF IRI
+    while its PostgreSQL storage type is numeric.
+
+sameTerm(E,E)
+    Known equal types use SQL equality. JSONB scalars are compared after JSONB
+    type checks. Untagged JSONB objects use structural equality, including when
+    they originate at different resources or selectors. This value-based blank
+    node identity is a Zotonic-specific approximation.
+
+isIRI(E), isURI(E), isBLANK(E)
+    Resource bindings and uri-typed expressions are IRIs; isURI is the SPARQL
+    synonym for isIRI. Known literal types are not IRIs. JSONB values declared
+    as uri are IRIs when their stored value is a JSON string. An untagged JSONB
+    object selected from props_json is a blank node. JSON arrays and objects
+    with a _type key, such as translations, are not blank nodes.
+
+IRI(E), URI(E)
+    URI is a SPARQL synonym for IRI. Constant simple and xsd:string literals
+    are resolved against BASE during query planning, and existing IRI-valued
+    expressions pass through unchanged. Dynamic text expressions are treated
+    as IRI text, but relative dynamic values are not resolved against BASE
+    because PostgreSQL does not provide the required RFC 3986 resolution.
+
+
+Supported datatype constructors
+-------------------------------
+
+Calls using these expanded XSD IRIs are mapped to PostgreSQL casts:
+
+XSD constructor          PostgreSQL type
+------------------------ ----------------
+xsd:string               text
+xsd:boolean              boolean
+xsd:integer              bigint
+xsd:long                 bigint
+xsd:int                  integer
+xsd:short                smallint
+xsd:decimal              numeric
+xsd:float                real
+xsd:double               double precision
+xsd:dateTime             timestamptz
+xsd:dateTimeStamp        timestamptz
+
+Date/time construction additionally accepts integer Unix seconds. Unknown
+datatype function IRIs are rejected as unsupported functions.
+
+
+Supported aggregates
+--------------------
+
+SPARQL                         PostgreSQL
+------------------------------ ------------------------------------------
+COUNT(*)                       count(*)
+COUNT(expr)                    count(expr)
+COUNT(DISTINCT expr)           count(DISTINCT expr)
+COUNT(DISTINCT *)              count(DISTINCT ROW(solution bindings...))
+SUM(expr)                      coalesce(sum(expr), 0)
+AVG(expr)                      coalesce(avg(expr), 0)
+MIN(expr)                      min(expr)
+MAX(expr)                      max(expr)
+GROUP_CONCAT(expr)             coalesce(string_agg(expr, ' '), '')
+GROUP_CONCAT(...; SEPARATOR=s) coalesce(string_agg(expr, s), '')
+SAMPLE(expr)                   any_value(expr), PostgreSQL 16 and newer
+
+DISTINCT is supported for aggregate arguments. GROUP BY, HAVING and aggregate
+expressions in SELECT and ORDER BY are mapped to the corresponding SQL terms.
+SAMPLE returns an unsupported_postgresql_version error before PostgreSQL 16.
+
+
+Recognized but not supported by SQL generation
+----------------------------------------------
+
+STR(E)
+    The lexical form of RDF literals and resource IRIs is not retained
+    uniformly. Resource variables are represented by Zotonic resource ids.
+
+LANG(E), LANGMATCHES(E,E), STRLANG(E,E)
+    Language tags and Zotonic #trans{} values are not represented by the SQL
+    expression type system. See builtins-lang-support.txt.
+
+DATATYPE(E)
+    This inspects RDF term metadata. Do not confuse it with the supported XSD
+    datatype constructor calls described above.
+
+BNODE((E) | NIL)
+    Constructed blank nodes are not represented as SQL result values.
+
+ENCODE_FOR_URI(E)
+    PostgreSQL has no directly equivalent built-in used by this module.
+
+TIMEZONE(E), TZ(E)
+    PostgreSQL timestamptz does not retain the original lexical timezone, and
+    TIMEZONE requires an xsd:dayTimeDuration result type that is not modeled.
+
+SHA1(E), SHA256(E), SHA384(E), SHA512(E)
+    PostgreSQL requires an extension such as pgcrypto for these hashes. The
+    SPARQL module does not install or depend on that extension.
+
+STRDT(E,E)
+    Constructs an RDF typed literal, which the SQL expression record cannot
+    currently preserve as an RDF term.
+
+SQL value types
+---------------
+
+The SQL generator tracks text, uri, boolean, integer, float, number, datetime,
+id, ids, list, fts and fulltext values. It also uses any for values whose type
+must be inferred. PostgreSQL arguments stay parameterized; JSONB scalar values
+are converted to text, bigint, numeric, double precision, boolean or
+timestamptz only when required.
+
+See builtins-type-mapping.txt for the detailed coercion rules.

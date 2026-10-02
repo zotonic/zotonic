@@ -69,6 +69,7 @@ Available Model API Paths
 %% interface functions
 -export([
     m_get/3,
+    m_post/3,
 
     otp_version/0,
     zotonic_version/0,
@@ -99,6 +100,8 @@ m_get(Path, Msg, Context) ->
     end.
 
 
+m_get_1([ <<"migrations">> | Rest ], _Msg, Context) ->
+    {ok, {z_migration:status(Context), Rest}};
 m_get_1([ <<"media_processing">> | Rest ], _Msg, _Context) ->
     {ok, {media_processing(), Rest}};
 m_get_1([ <<"database_version">> | Rest ], _Msg, Context) ->
@@ -359,3 +362,9 @@ os_memory_alert() ->
 %% @doc Return a list with os memory statistics.
 os_memory() ->
     memsup:get_system_memory_data().
+
+%% @doc Admin-only manual migration start; coordinator rejects concurrent migrations.
+m_post([<<"migration">>, <<"start">>, Id], _Msg, Context) when is_binary(Id) ->
+    z_migration:start(Id, Context);
+m_post(_Path, _Msg, _Context) ->
+    {error, unknown_path}.

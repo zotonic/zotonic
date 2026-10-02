@@ -1,0 +1,49 @@
+Language support (#trans)
+=========================
+
+Current status: language-aware SPARQL expressions are not supported by SQL
+generation.
+
+The scanner and parser accept RDF literals with language tags, for example:
+
+    "title"@en
+
+The query plan normalizes the language tag to lowercase and keeps it on the
+literal term. When the literal becomes a SQL value, however, only its lexical
+value and general value type are retained. The SQL expression record does not
+carry a language tag.
+
+Zotonic translatable JSONB properties add another mismatch. They can be stored
+as a plain string or as a serialized #trans{} value containing multiple
+translations. The resource "language" property lists available languages, but
+the current SPARQL-to-SQL mapping does not expand a #trans{} value into RDF
+language-tagged literals.
+
+Functions
+---------
+
+These built-ins are recognized but rejected by SQL generation:
+
+LANG(Expr) -> Lang
+
+    Return the language tag of a language-tagged literal. For a literal
+    without a language tag, return the empty string.
+
+LANGMATCHES(Lang, Range) -> Boolean
+
+    Test a language tag against a language range. A range also matches
+    sublanguages; for example, LANGMATCHES("nl-be", "nl") is true.
+
+STRLANG(Expr, Lang) -> LangString
+
+    Construct a language-tagged literal from the lexical value of Expr and
+    the supplied language tag. This needs a result representation that
+    preserves both the lexical value and its language tag.
+
+DATATYPE depends on the same metadata because a language-tagged literal has
+datatype rdf:langString.
+
+A future implementation must first decide whether a Zotonic #trans{} value is
+exposed as one value selected by context language or as multiple RDF bindings.
+Only after that decision can LANG, LANGMATCHES, STRLANG and rdf:langString be
+mapped consistently.

@@ -638,6 +638,16 @@
     hostpath :: binary()
 }).
 
+%% @doc Notifier to map a RDF namespace to a standardized prefix.
+%% Type: first
+%% Returns: {ok, Prefix}, {error, Reason}, or undefined
+%% The prefix does not include the ':' separator.
+%%
+%% If the namespace is unknown the the caller can use the namespace instead
+%% the prefix.
+-record(rdf_ns, {
+    ns :: binary()
+}).
 
 %% @doc Check if a user is the owner of a resource.
 %% ``id`` is the resource id.
@@ -659,6 +669,21 @@
     action :: view | update | delete | insert | use | atom(),
     object :: term()
 }).
+
+%% @doc Declare canonical resource properties used by a derived SQL source.
+%% Type: first
+%% Return: {ok, [binary()]} (empty means explicitly public), deny, or undefined.
+%% Source is {column, Table, Column} or {jsonb, Table, Column, Path}.
+%% Pivot tables, facets and full-text indexes are trusted; opaque JSON containers
+%% and undeclared custom tables are denied.
+-record(acl_query_source, {source :: term()}).
+
+%% @doc Coarse property visibility for SQL queries. Resource visibility is checked separately.
+%% Type: first
+%% Return: z_search_acl_props:policy(). Undefined delegates to the next observer;
+%% no response allows access. Admin queries bypass this notification.
+%% Privacy policies compare the materialized rsc.privacy integer column.
+-record(acl_query_prop, {property :: binary()}).
 
 %% @doc Check if a user is authorizded to perform an action on a property.
 %% Defaults to ``true``.
@@ -892,6 +917,18 @@
         SearchName :: atom(),
         SearchProps :: list()
     } | undefined
+}).
+
+%% @doc Classify and compile query-resource text to search SQL terms.
+%% Type: first
+%% Return: ``{ok, map()}``, ``{error, {query_parse, map()}}`` or ``undefined``.
+%% A successful result contains ``query_type``, ``query_type_label``, ``parsed``,
+%% ``search_terms``, ``is_live`` and ``show_parsed``. An error map contains the
+%% type, label and flags together with ``reason``.
+-record(search_query_parse, {
+    query :: binary(),
+    query_type = undefined :: binary() | undefined,
+    arguments = #{} :: map()
 }).
 
 %% @doc Map a custom search term to a ``#search_sql_term{}`` record.
@@ -1447,3 +1484,12 @@
 % Simple mod_development notifications:
 % development_reload - Reload all template, modules etc
 % development_make - Perform a 'make' on Zotonic, reload all new beam files
+
+%% @doc Collect migration items: id, title, description, is_needed, is_running,
+%% can_start, and optional url. Include queued work in is_running. Type: foldl.
+-record(migration_status, {}).
+
+%% @doc Queue a module migration inside the admin start transaction. Type: first.
+%% Return ok or {error, Reason}. Providers must use z_migration:batch_lock/1 in
+%% their batch transactions and report queued/active work through migration_status.
+-record(migration_start, {id :: binary()}).
