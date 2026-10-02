@@ -49,7 +49,7 @@
                             {% if r.title %}
                                 {{ r.title|escape }}
                             {% else %}
-                                {{ r.id }}
+                                <span class="text-muted">{_ Untitled _} ({{ r.id }})</span>
                             {% endif %}
 
                             {% if r.new_id %}
