@@ -11,9 +11,12 @@ $('#rscform, #translation-tabs').on('shown.bs.tab', '.language-tabs > li > a[dat
 		$(".widget-content-lang-" + showLang).show();
 
 		z_postback_data_set('z_edit_language', showLang);
-
-		setTimeout( () => z_editor.init(), 1 );
 	}
+});
+
+$('#rscform, #translation-tabs').on('shown.bs.tab', '[data-toggle="tab"]', function () {
+	// Language changes can leave uninitialized editors in hidden tabs, including survey tabs.
+	setTimeout( () => z_editor.init(), 1 );
 });
 
 const activeLang = $('#translation-tabs .active');
