@@ -387,9 +387,9 @@ type_from_name(Name) ->
     end.
 
 property_type(id) -> id;
-property_type(int) -> integer;
+property_type(integer) -> integer;
 property_type(float) -> float;
-property_type(bool) -> boolean;
+property_type(boolean) -> boolean;
 property_type(datetime) -> datetime;
 property_type(list) -> list;
 property_type(uri) -> uri;
