@@ -113,11 +113,11 @@ m_post([Id], #{ payload := Options }, Context) when is_map(Options) ->
 m_post(_, _, _) ->
     {error, badarg}.
 
-%% @doc Open the tree translation dialog for a signed `{dialog, Args}` postback.
-%% Args is a proplist with an `id` resource reference for the tree root. Check root
-%% edit access and tree visibility before rendering `_dialog_translation_tree.tpl`
-%% with the resolved `id` and language counts as `tree`. On failure, show an error
-%% growl. `{bulk_dialog, Args}` takes an `ids` list and opens the same dialog for
+%% @doc Open the tree translation dialog for a signed <tt>{dialog, Args}</tt> postback.
+%% Args is a proplist with an <tt>id</tt> resource reference for the tree root. Check root
+%% edit access and tree visibility before rendering <tt>_dialog_translation_tree.tpl</tt>
+%% with the resolved <tt>id</tt> and language counts as <tt>tree</tt>. On failure, show an error
+%% growl. <tt>{bulk_dialog, Args}</tt> takes an <tt>ids</tt> list and opens the same dialog for
 %% exactly those pages, using a user-bound selection token. Return the updated
 %% render context; neither handler starts a job.
 event(#postback{message = {bulk_dialog, Args}}, Context) ->
