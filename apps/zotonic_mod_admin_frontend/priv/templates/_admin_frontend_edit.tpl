@@ -160,9 +160,11 @@
 					// Also switch language dependent parts that are not inside the tab panes.
 					$(".widget-content-lang-" + hideLang).hide()
 					$(".widget-content-lang-" + showLang).show();
-
-					setTimeout( () => z_editor.init(), 1 );
 				}
+			});
+			$('#rscform').on('shown.bs.tab', '[data-toggle="tab"]', function () {
+				// Language changes can leave uninitialized editors in hidden tabs, including survey tabs.
+				setTimeout( () => z_editor.init(), 1 );
 			});
 			{% if tab %}
 				$("li a[href='#{{ tab|escape }}'").tab("show");
