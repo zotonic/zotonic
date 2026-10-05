@@ -19,6 +19,7 @@
 
 -module(z_sparql_protocol_tests).
 -include_lib("eunit/include/eunit.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 request_test() ->
     Query = <<"SELECT ?s WHERE { ?s zotonic:id ?id }">>,
@@ -57,6 +58,7 @@ pagination_test() ->
     end, [0, -1, <<"x">>, [], 1.5]).
 
 results_test() ->
+    Context = #context{},
     Vars = [<<"s">>, <<"label">>, <<"n">>, <<"missing">>],
     Xsd = <<"http://www.w3.org/2001/XMLSchema#integer">>,
     Row = {<<"https://example.org/item">>, <<"iri">>, undefined, undefined,
@@ -68,17 +70,18 @@ results_test() ->
             <<"s">> => #{<<"type">> => <<"uri">>, <<"value">> => <<"https://example.org/item">>},
             <<"label">> => #{<<"type">> => <<"literal">>, <<"value">> => <<"Example">>, <<"xml:lang">> => <<"en">>},
             <<"n">> => #{<<"type">> => <<"literal">>, <<"value">> => <<"42">>, <<"datatype">> => Xsd}
-        }]}}, z_sparql_results:document(Vars, [Row], undefined)),
+        }]}}, z_sparql_results:document(Vars, [Row], Context)),
     ?assertMatch(#{<<"head">> := #{<<"vars">> := Vars}, <<"results">> := #{<<"bindings">> := []}},
-        z_sparql_results:document(Vars, [], undefined)),
-    ?assertEqual(z_sparql_results:binding(#{<<"a">> => 1}, <<"bnode">>, undefined, undefined, undefined),
-        z_sparql_results:binding(#{<<"a">> => 1}, <<"bnode">>, undefined, undefined, undefined)),
-    ?assertThrow({error, unsupported_result_term}, z_sparql_results:binding([], undefined, undefined, undefined, undefined)).
+        z_sparql_results:document(Vars, [], Context)),
+    ?assertEqual(z_sparql_results:binding(#{<<"a">> => 1}, <<"bnode">>, undefined, undefined, Context),
+        z_sparql_results:binding(#{<<"a">> => 1}, <<"bnode">>, undefined, undefined, Context)),
+    ?assertThrow({error, unsupported_result_term}, z_sparql_results:binding([], undefined, undefined, undefined, Context)).
 
 numeric_lexical_test() ->
+    Context = #context{},
     lists:foreach(fun({Value, Type, Expected}) ->
         ?assertMatch(#{<<"value">> := Expected}, z_sparql_results:binding(
-            Value, <<"literal">>, <<"http://www.w3.org/2001/XMLSchema#", Type/binary>>, undefined, undefined))
+            Value, <<"literal">>, <<"http://www.w3.org/2001/XMLSchema#", Type/binary>>, undefined, Context))
     end, [{1.0, <<"integer">>, <<"1">>},
           {1.0e-7, <<"decimal">>, <<"0.00000010">>},
           {-1.5e-7, <<"decimal">>, <<"-0.00000015">>},

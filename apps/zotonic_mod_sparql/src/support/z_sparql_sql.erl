@@ -84,7 +84,10 @@ to_sql_term(ParsedQuery, Arguments, Context) ->
     Context :: z:context(),
     Reason :: term().
 query_plan_to_sql(Plan, Context) ->
-    query_plan_to_sql(Plan, search, Context).
+    case query_plan_to_sql(Plan, search, Context) of
+        {ok, _Variables, Terms} -> {ok, Terms};
+        {error, _} = Error -> Error
+    end.
 
 %% @doc Compile an endpoint projection, preserving variable order and RDF metadata.
 -spec result_plan_to_sql(Plan, Context) -> {ok, [binary()], [sql_term()]} | {error, term()}
@@ -92,6 +95,11 @@ query_plan_to_sql(Plan, Context) ->
 result_plan_to_sql(Plan, Context) ->
     query_plan_to_sql(Plan, results, Context).
 
+%% Keep one internal result shape; the search API drops the variable names.
+-spec query_plan_to_sql(Plan, Mode, Context) -> {ok, [binary()], [sql_term()]} | {error, term()}
+    when Plan :: z_sparql_plan:query_plan(),
+         Mode :: search | results,
+         Context :: z:context().
 query_plan_to_sql(#{
     arguments := Arguments,
     dataset := [],
@@ -122,10 +130,7 @@ query_plan_to_sql(#{
         HavingTerms = having_terms(maps:get(having, Plan), State2),
         OrderTerms = order_terms(maps:get(order_by, Plan), State2),
         SqlTerms = Terms ++ [Projection] ++ GroupTerms ++ HavingTerms ++ OrderTerms,
-        case Mode of
-            search -> {ok, SqlTerms};
-            results -> {ok, Variables, SqlTerms}
-        end
+        {ok, Variables, SqlTerms}
     catch
         throw:{error, Reason} ->
             {error, Reason}
