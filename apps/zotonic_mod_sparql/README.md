@@ -16,6 +16,73 @@ Because a notifier is used to map to the properties, this module can use pivot a
 for the queries.
 
 
+HTTP query endpoint
+-------------------
+
+`/sparql` is a dedicated, read-only endpoint for the supported SPARQL SELECT
+subset. It uses `controller_sparql` and the caller's normal resource and property
+ACLs. Existing `/api/model/sparql/get` endpoints and Erlang/model search results
+are unchanged.
+
+Supported requests:
+
+- GET with a URL-encoded `query` parameter.
+- POST `application/x-www-form-urlencoded` with a `query` field.
+- POST `application/sparql-query` with raw UTF-8 query text. Extension parameters
+  can be supplied in the URL.
+- POST `application/json` with an object containing `query` and optional `args`,
+  `page`, and `pagelen` fields. This is a Zotonic extension to the SPARQL protocol.
+
+The `args` extension uses the same typed, pre-bound variable map as `m_sparql`.
+For GET and form requests, encode that map as JSON in the `args` parameter.
+For JSON requests, pass it as a nested object. Arguments are SQL parameters;
+do not interpolate them into the query text.
+
+```json
+{
+  "query": "SELECT ?article WHERE { ?article :author ?author } ORDER BY ?article LIMIT 20 OFFSET 40",
+  "args": {"author": {"type": "resource", "value": 123}}
+}
+```
+
+If either `page` or `pagelen` is supplied, HTTP paging overrides both query
+`LIMIT` and `OFFSET`. Missing or empty HTTP paging fields (empty strings or JSON
+null) default to page 1 and the site's normal search page length. Otherwise the
+endpoint uses the query's modifiers,
+with offset 0 and the site's page length as defaults. `LIMIT 0` returns an empty
+result. HTTP `page` and `pagelen` must be positive integers.
+
+Responses default to the [SPARQL 1.1 Results JSON format](https://www.w3.org/TR/sparql11-results-json/).
+Use `Accept` to select `application/sparql-results+json` (or `application/json`),
+`application/sparql-results+xml`, `text/csv`, or `text/tab-separated-values`.
+XML and TSV preserve RDF term metadata; CSV returns plain values without datatype
+or language tags and does not distinguish unbound values from empty strings.
+All formats use UTF-8. CSV uses CRLF line endings, and TSV uses LF.
+For JSON, `head.vars` lists the projected variables and
+`results.bindings` contains named RDF terms. Resource bindings are resource IRIs,
+literals retain datatype/language metadata, and unbound variables are omitted.
+Only explicitly selected variables are returned; the internal root resource is
+not added to the projection. SELECT * includes the visible query bindings.
+
+Malformed requests/queries and unsupported query features return HTTP 400 with
+a JSON `error` code. Execution failures return 500 without database details.
+Selected `#trans{}` values use Zotonic's context-language fallback lookup and
+return a literal tagged with the language actually selected. Empty translation
+records and undefined values are unbound; binary values remain plain string
+literals. This conversion happens during result serialization, after SQL
+filtering, ordering, grouping and pagination.
+Values without a supported RDF representation (including lists and unknown
+aggregate metadata) return 422. Responses are not cached.
+Dataset selection, ASK, CONSTRUCT, DESCRIBE, updates, and RDF graph
+output are not implemented. This endpoint exposes the module's SELECT subset,
+not a complete SPARQL 1.1 query engine.
+
+The controller delegates request handling/execution to `z_sparql_protocol` and
+projection to `z_sparql_results`, and output encoding to `z_sparql_results_encode`,
+all in `src/support`. CSV encoding uses the core `z_csv_writer` with exact-value
+output; existing CSV callers retain spreadsheet sanitization.
+
+
 Default BASE and prefixes
 -------------------------
 
@@ -234,8 +301,8 @@ plain strings and `rdf:langString` for language-tagged literals. It works in
 result expressions and filters. Non-literals, unbound values, and unknown
 metadata produce SQL NULL (an unbound result or a filter that does not match).
 This is basic support; heterogeneous aggregate metadata remains unknown.
-LANG, translation selection, RDF-aware equality, and RDF result serialization
-are not yet implemented.
+LANG, translation-aware SQL expressions, and RDF-aware equality are not yet implemented.
+The HTTP endpoint serializes supported results as SPARQL Results JSON.
 
 
 Translations
@@ -286,10 +353,10 @@ TODO
  - [x] Check usage of rsc props_json vs props, migrate to props_json (accept both for now)
  - [x] Ensure the types of z_props, mod_rdf and search_facet are the same (bool -> boolean, int -> integer)
  - [x] Security: do not allow select of fulltext/fts facet and pivot index texts
- - [ ] Import and export of Turtle, JSON-LD, and other formats (TBD)
- - [ ] Support language handling, using the JSON objects: { _type: "trans", tr = { "en":"..." } }, including LANG etc.
- - [ ] Add SPARQL endpoint, with expected results (for use with 3rd parties -- check API standards)
+ - [x] Add SPARQL SELECT endpoint with SPARQL Results JSON and Zotonic args/JSON extensions
 
 After merge:
+ - [ ] Import and export of Turtle, JSON-LD, and other formats (TBD)
+ - [ ] Support language handling, using the JSON objects: { _type: "trans", tr = { "en":"..." } }, including LANG etc.
  - [ ] Endpoint with: Turtle, JSON-LD, and other formats as output
  - [ ] Fulltext query ranking, add options for trigram operator, thresholds and sorting (maybe named combos?)

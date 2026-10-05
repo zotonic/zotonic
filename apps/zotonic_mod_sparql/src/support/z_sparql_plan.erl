@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2025 Marc Worrell
+%% @copyright 2025-2026 Marc Worrell
 %% @doc Normalize a parsed SPARQL SELECT query to a query plan
 %% that can then be used to make SQL fragments for a SQL query.
 %% @end
 
-%% Copyright 2025 Marc Worrell
+%% Copyright 2025-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.

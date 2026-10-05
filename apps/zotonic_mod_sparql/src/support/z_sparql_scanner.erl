@@ -1,4 +1,4 @@
-%% @copyright 2025 Marc Worrell
+%% @copyright 2025-2026 Marc Worrell
 %% @doc Scanner for the SPARQL 1.1 query grammar in z_sparql_parser.yrl
 %% The scanner is based on '19 SPARQL Grammar'. All tokens have a source file, row,
 %% and column for better error reporting.

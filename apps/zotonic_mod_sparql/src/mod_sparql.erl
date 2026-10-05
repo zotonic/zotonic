@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2025 Marc Worrell
+%% @copyright 2025-2026 Marc Worrell
 %% @doc SPARQL support for Zotonic.
 %% @end
 
-%% Copyright 2025 Marc Worrell
+%% Copyright 2025-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -60,16 +60,31 @@ map through `z_rdf_props` to resource columns, nested JSONB properties, or facet
 and pivot columns. Modules can extend the mapping with the `sparql_mapping`
 notification. `rdf:type` and `rdfs:subClassOf` support category queries.
 
-Supported expressions include filters, OPTIONAL, VALUES, aggregates, common
-string and numeric functions, XSD constructors, and basic DATATYPE. EXISTS and
-NOT EXISTS work in filters and compound or result expressions and preserve the
-scope of their inner variables. `zotonic:fullText` and `zotonic:fullTextRank`
-provide full-text and trigram searches using mapped columns.
+`zotonic:fullText` and `zotonic:fullTextRank` provide full-text and trigram
+searches using mapped columns.
 
 RDF term kind, datatype, and language metadata follow expressions independently
 of SQL storage types. Metadata columns are generated only where their components
 are needed. DATATYPE returns NULL for non-literals or unavailable metadata;
 dynamic aggregate metadata and translation-object language handling are limited.
+
+## SPARQL support
+
+Supported:
+
+- SELECT with fixed predicates, projected expressions and DISTINCT.
+- FILTER, OPTIONAL, VALUES, and EXISTS/NOT EXISTS expressions.
+- ORDER BY, GROUP BY, HAVING and aggregates.
+- Common string/numeric functions, XSD constructors and basic DATATYPE.
+- LIMIT/OFFSET on `/sparql`; model/search APIs use search paging instead.
+- Selected translation records on `/sparql` use language fallback.
+
+Unsupported:
+
+- Variable predicates (`?s ?p ?o`), including predicates restricted by VALUES.
+- ASK, CONSTRUCT, DESCRIBE and updates.
+- Dataset clauses (FROM/FROM NAMED), GRAPH and BIND.
+- LANG, LANGMATCHES, STRLANG and expansion of translation records into rows.
 
 ## Stored queries and limits
 
@@ -77,10 +92,11 @@ The admin query editor recognizes SPARQL in query resources. Stored SPARQL
 queries must select exactly the root resource variable so they retain the normal
 resource-ID search contract. They do not register live query watches.
 
-This module implements a subset of SPARQL SELECT. Use search paging parameters
-instead of query LIMIT or OFFSET. Dataset clauses, GRAPH, BIND, LANG, update
-queries, and a standards-based SPARQL protocol endpoint are not implemented.
-The module README describes mappings, full-text search, and further limitations.
+The `/sparql` endpoint serves read-only SELECT queries as SPARQL Results JSON,
+XML, CSV or TSV, selected with the HTTP Accept header.
+See [controller_sparql](controller_sparql.html) for request formats, named
+arguments, paging, translation fallback and errors. The model/search APIs retain
+their existing result format and search paging parameters.
 ").
 
 -mod_title("SPARQL").

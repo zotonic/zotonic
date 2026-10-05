@@ -1,11 +1,11 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2026 Marc Worrell
+%% @copyright 2025-2026 Marc Worrell
 %% @doc RDF term metadata carried beside SQL values. Each component is a SQL
 %% text expression; NULL means unknown or not applicable. It is deliberately
 %% independent of the storage/evaluation type used for SQL coercion.
 %% @end
 
-%% Copyright 2025 Marc Worrell
+%% Copyright 2025-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -21,28 +21,46 @@
 
 -module(z_sparql_sql_metadata).
 
--export([unknown/0, iri/0, literal/2, from_term/1, from_type/1, jsonb/2,
-    choose/3, map/2, is_static/1, numeric/3]).
--export_type([metadata/0]).
+-export([
+    unknown/0, iri/0, literal/2, from_term/1, from_type/1, jsonb/2,
+    choose/3, map/2, is_static/1, numeric/3
+]).
+-export_type([ metadata/0 ]).
 
--type metadata() :: #{kind := term(), datatype := term(), language := term()}.
+-type metadata() :: #{ kind := term(), datatype := term(), language := term() }.
 -define(XSD, "http://www.w3.org/2001/XMLSchema#").
 -define(LANG_STRING, <<"http://www.w3.org/1999/02/22-rdf-syntax-ns#langString">>).
 
 -spec unknown() -> metadata().
-unknown() -> #{kind => <<"NULL">>, datatype => <<"NULL">>, language => <<"NULL">>}.
+unknown() ->
+    #{
+        kind => <<"NULL">>,
+        datatype => <<"NULL">>,
+        language => <<"NULL">>
+    }.
 
 -spec iri() -> metadata().
-iri() -> (unknown())#{kind => quote(<<"iri">>)}.
+iri() ->
+    (unknown())#{
+        kind => quote(<<"iri">>)
+    }.
 
 -spec literal(Datatype, Language) -> metadata() when
     Datatype :: binary() | undefined, Language :: binary() | undefined.
 literal(_Datatype, Language) when is_binary(Language), Language =/= <<>> ->
-    #{kind => quote(<<"literal">>), datatype => quote(?LANG_STRING),
-        language => quote(z_string:to_lower(Language))};
-literal(undefined, _Language) -> literal(<<?XSD, "string">>, undefined);
+    #{
+        kind => quote(<<"literal">>),
+        datatype => quote(?LANG_STRING),
+        language => quote(z_string:to_lower(Language))
+    };
+literal(undefined, _Language) ->
+    literal(<<?XSD, "string">>, undefined);
 literal(Datatype, _Language) ->
-    #{kind => quote(<<"literal">>), datatype => quote(Datatype), language => <<"NULL">>}.
+    #{
+        kind => quote(<<"literal">>),
+        datatype => quote(Datatype),
+        language => <<"NULL">>
+    }.
 
 -spec from_term(Term) -> metadata() when Term :: term().
 from_term({literal, _, Datatype, Language}) -> literal(Datatype, Language);
@@ -74,7 +92,11 @@ from_type(_) -> unknown().
 -spec jsonb(Sql, Type) -> metadata() when Sql :: term(), Type :: atom().
 jsonb(Sql, Type) ->
     Shape = [<<"jsonb_typeof(">>, Sql, $)],
-    String = case Type of uri -> iri(); datetime -> from_type(datetime); _ -> from_type(text) end,
+    String = case Type of
+        uri -> iri();
+        datetime -> from_type(datetime);
+        _ -> from_type(text)
+    end,
     Number = case Type of
         integer -> jsonb_integer(Sql);
         id -> jsonb_integer(Sql);
@@ -96,9 +118,13 @@ jsonb_integer(Sql) ->
 choose(Condition, Left, Right) ->
     maps:map(fun(Key, Value) ->
         case maps:get(Key, Right) of
-            Value -> Value;
-            Other -> [<<"CASE WHEN ">>, Condition, <<" THEN ">>, Value,
-                <<" ELSE ">>, Other, <<" END">>]
+            Value ->
+                Value;
+            Other -> [
+                <<"CASE WHEN ">>, Condition,
+                <<" THEN ">>, Value,
+                <<" ELSE ">>, Other,
+                <<" END">>]
         end
     end, Left).
 
@@ -119,9 +145,12 @@ numeric(Operator, Left, Right) ->
     case {constant_rank(L), constant_rank(R)} of
         {LR, RR} when is_integer(LR), is_integer(RR) ->
             numeric_result(Operator, max(LR, RR));
-        {unknown, _} -> unknown();
-        {_, unknown} -> unknown();
-        _ -> numeric_expression(Operator, L, R)
+        {unknown, _} ->
+            unknown();
+        {_, unknown} ->
+            unknown();
+        _ ->
+            numeric_expression(Operator, L, R)
     end.
 
 numeric_result(_Operator, 4) -> from_type(float);
@@ -141,7 +170,8 @@ constant_rank(Datatype) when is_binary(Datatype) ->
                 false -> unknown
             end
     end;
-constant_rank(_Datatype) -> dynamic.
+constant_rank(_Datatype) ->
+    dynamic.
 
 numeric_expression(Operator, Left, Right) ->
     % Bind operand metadata once. Repeating a nested datatype expression in
@@ -151,29 +181,42 @@ numeric_expression(Operator, Left, Right) ->
     R = <<"rdf_numeric.r">>,
     Rank = [<<"GREATEST(">>, L, <<", ">>, R, $)],
     IntegerType = maps:get(datatype, numeric_result(Operator, 1)),
-    Datatype = [<<"(SELECT CASE WHEN ">>, L, <<" IS NULL OR ">>, R,
+    Datatype = [
+        <<"(SELECT CASE WHEN ">>, L, <<" IS NULL OR ">>, R,
         <<" IS NULL THEN NULL WHEN ">>, Rank, <<" = 4 THEN '", ?XSD,
           "double' WHEN ">>, Rank, <<" = 3 THEN '", ?XSD,
           "float' WHEN ">>, Rank, <<" = 2 THEN '", ?XSD,
           "decimal' ELSE ">>, IntegerType,
         <<" END FROM (VALUES (">>, numeric_rank(Left), <<", ">>, numeric_rank(Right),
         <<")) AS rdf_numeric(l, r))">>],
-    #{kind => [<<"CASE WHEN ">>, Datatype, <<" IS NOT NULL THEN 'literal' ELSE NULL END">>],
-      datatype => Datatype, language => <<"NULL">>}.
+    #{
+        kind => [
+            <<"CASE WHEN ">>, Datatype, <<" IS NOT NULL THEN 'literal' ELSE NULL END">>
+        ],
+        datatype => Datatype,
+        language => <<"NULL">>
+    }.
 
 numeric_rank(Datatype) ->
-    [<<"(SELECT CASE rdf_operand.datatype",
-        " WHEN '", ?XSD, "double' THEN 4 WHEN '", ?XSD, "float' THEN 3 WHEN '",
-        ?XSD, "decimal' THEN 2 ELSE CASE WHEN rdf_operand.datatype IN (">>,
-        lists:join(<<", ">>, integer_datatypes()),
-        <<") THEN 1 ELSE NULL END END FROM (VALUES (">>, Datatype,
-        <<")) AS rdf_operand(datatype))">>].
+    [
+        <<"(SELECT CASE rdf_operand.datatype",
+        " WHEN '",
+            ?XSD, "double' THEN 4 WHEN '",
+            ?XSD, "float' THEN 3 WHEN '",
+            ?XSD, "decimal' THEN 2 ELSE CASE WHEN rdf_operand.datatype IN (">>,
+                lists:join(<<", ">>, integer_datatypes()),
+            <<") THEN 1 ELSE NULL END END FROM (VALUES (">>,
+                Datatype,
+        <<")) AS rdf_operand(datatype))">>
+    ].
 
 integer_datatypes() ->
-    Names = [<<"integer">>, <<"long">>, <<"int">>, <<"short">>, <<"byte">>,
+    Names = [
+        <<"integer">>, <<"long">>, <<"int">>, <<"short">>, <<"byte">>,
         <<"nonPositiveInteger">>, <<"negativeInteger">>, <<"nonNegativeInteger">>,
         <<"positiveInteger">>, <<"unsignedLong">>, <<"unsignedInt">>,
-        <<"unsignedShort">>, <<"unsignedByte">>],
+        <<"unsignedShort">>, <<"unsignedByte">>
+    ],
     [quote(<<?XSD, Name/binary>>) || Name <- Names].
 
 quote(Value) ->

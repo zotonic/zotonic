@@ -22,7 +22,8 @@
 -export([
     to_sql_term/2,
     to_sql_term/3,
-    query_plan_to_sql/2
+    query_plan_to_sql/2,
+    result_plan_to_sql/2
 ]).
 
 %% Expression pipeline helpers, also used by standalone pipeline tests.
@@ -36,6 +37,7 @@
     bind_projection/4,
     coerce_expression/2,
     aggregate_metadata/3,
+    validate_projection/2,
     empty_term/0
 ]).
 
@@ -81,6 +83,15 @@ to_sql_term(ParsedQuery, Arguments, Context) ->
     Plan :: z_sparql_plan:query_plan(),
     Context :: z:context(),
     Reason :: term().
+query_plan_to_sql(Plan, Context) ->
+    query_plan_to_sql(Plan, search, Context).
+
+%% @doc Compile an endpoint projection, preserving variable order and RDF metadata.
+-spec result_plan_to_sql(Plan, Context) -> {ok, [binary()], [sql_term()]} | {error, term()}
+    when Plan :: z_sparql_plan:query_plan(), Context :: z:context().
+result_plan_to_sql(Plan, Context) ->
+    query_plan_to_sql(Plan, results, Context).
+
 query_plan_to_sql(#{
     arguments := Arguments,
     dataset := [],
@@ -88,32 +99,44 @@ query_plan_to_sql(#{
     offset := undefined,
     root := {var, RootName},
     where := Pattern
-} = Plan, Context) ->
+} = Plan, Mode, Context) ->
     State0 = #sql_state{
         arguments = Arguments,
-        metadata_variables = metadata_demand(maps:remove(where, Plan)),
+        metadata_variables = case Mode of
+            search -> metadata_demand(maps:remove(where, Plan));
+            results -> result_metadata_demand(Plan)
+        end,
         bindings = #{{var, RootName} => {resource, <<"rsc">>}},
         context = Context
     },
     try
         {Terms, State1} = pattern_to_sql(Pattern, State0),
         State1a = State1#sql_state{ solution_bindings = State1#sql_state.bindings },
-        {Projection, State2} = projection_term(Plan, State1a),
+        {Projection, State2, Variables} = case Mode of
+            search ->
+                {P, S} = projection_term(Plan, State1a),
+                {P, S, []};
+            results -> z_sparql_results:projection(Plan, State1a)
+        end,
         GroupTerms = group_terms(maps:get(group_by, Plan), State2),
         HavingTerms = having_terms(maps:get(having, Plan), State2),
         OrderTerms = order_terms(maps:get(order_by, Plan), State2),
-        {ok, Terms ++ [Projection] ++ GroupTerms ++ HavingTerms ++ OrderTerms}
+        SqlTerms = Terms ++ [Projection] ++ GroupTerms ++ HavingTerms ++ OrderTerms,
+        case Mode of
+            search -> {ok, SqlTerms};
+            results -> {ok, Variables, SqlTerms}
+        end
     catch
         throw:{error, Reason} ->
             {error, Reason}
     end;
-query_plan_to_sql(#{ dataset := [_ | _] }, _Context) ->
+query_plan_to_sql(#{ dataset := [_ | _] }, _Mode, _Context) ->
     {error, {unsupported, dataset}};
-query_plan_to_sql(#{ limit := Limit }, _Context) when Limit =/= undefined ->
+query_plan_to_sql(#{ limit := Limit }, _Mode, _Context) when Limit =/= undefined ->
     {error, {unsupported, limit}};
-query_plan_to_sql(#{ offset := Offset }, _Context) when Offset =/= undefined ->
+query_plan_to_sql(#{ offset := Offset }, _Mode, _Context) when Offset =/= undefined ->
     {error, {unsupported, offset}};
-query_plan_to_sql(#{ root := undefined }, _Context) ->
+query_plan_to_sql(#{ root := undefined }, _Mode, _Context) ->
     {error, no_root_resource}.
 
 pattern_to_sql(identity, State) ->
@@ -1789,6 +1812,10 @@ metadata_demand(Plan) ->
     Aliases = [{Variable, Expression}
         || {as, Expression, Variable} <- Select],
     expand_metadata_demand(Demand, Aliases).
+
+%% SELECT * also needs metadata for bindings discovered during pattern compilation.
+result_metadata_demand({var, _} = Variable) -> #{Variable => metadata_keys()};
+result_metadata_demand(Term) -> collect_children(fun result_metadata_demand/1, Term).
 
 expand_metadata_demand(Demand, Aliases) ->
     Expanded = lists:foldl(fun({Variable, Expression}, Acc) ->

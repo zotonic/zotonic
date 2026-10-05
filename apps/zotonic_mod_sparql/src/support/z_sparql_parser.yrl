@@ -1,4 +1,4 @@
-%% @copyright 2025 Marc Worrell
+%% @copyright 2025-2026 Marc Worrell
 %% @doc SPARQL parser, based on the W3C 1.1 EBNF grammar.
 %% Lexer emits atoms like 'select', 'where', 'var1', 'iri_ref', 'string_literal1', etc.
 %% With values as `{Token, Line, Value}`.

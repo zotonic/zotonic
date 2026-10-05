@@ -1,12 +1,12 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2025 Marc Worrell
+%% @copyright 2025-2026 Marc Worrell
 %% @doc Map well-known RDF datatype constructor IRIs to PostgreSQL types.
 %%
 %% The complete IRI is used deliberately. Query prefixes are expanded by the
 %% query planner before expressions reach this mapping via the SQL generator.
 %% @end
 
-%% Copyright 2025 Marc Worrell
+%% Copyright 2025-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
