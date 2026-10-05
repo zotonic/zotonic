@@ -143,13 +143,21 @@ integration(Context) ->
         ?assertEqual(BinaryText, maps:get(<<"data">>, TranslatedBlock)),
         ?assertEqual(<<"{}">>, maps:get(<<"data_json">>, TranslatedBlock)),
         z_notifier:detach(translate, self(), Context),
-        %% Compile the core templates, including the dialog and editor hooks.
+        %% Always compile the translation module's templates. The frontend editor
+        %% is optional and is not enabled in the standard test sandbox.
         {ok, Details} = m_translation_tree:details(Root, Context),
         Vars = #{id => Root, tree_id => Root, tree => Details},
+        Templates = ["_dialog_translation_tree.tpl", "_translation_tree_init.tpl", "_translation_tree_button.tpl",
+            "_translation_edit_languages.tpl", "_admin_edit_sidebar.tpl"],
+        FrontendTemplates = case z_module_manager:active(mod_admin_frontend, Context) of
+            true -> ["_admin_frontend_edit.tpl"];
+            false -> []
+        end,
         lists:foreach(fun(Template) ->
-            ?assertMatch({ok, _}, z_template:template_module(list_to_binary(Template), Vars, Context))
-        end, ["_dialog_translation_tree.tpl", "_translation_tree_init.tpl", "_translation_tree_button.tpl",
-            "_translation_edit_languages.tpl", "_admin_edit_sidebar.tpl", "_admin_frontend_edit.tpl"])
+            %% Include the template name in assertion failures for CI diagnostics.
+            ?assertMatch({Template, {ok, _}},
+                {Template, z_template:template_module(list_to_binary(Template), Vars, Context)})
+        end, Templates ++ FrontendTemplates)
     after
         z_notifier:detach(translate, self(), Context),
         case z_proc:whereis({translation_tree, Root}, Context) of
