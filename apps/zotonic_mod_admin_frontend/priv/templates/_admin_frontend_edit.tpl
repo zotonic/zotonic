@@ -106,6 +106,7 @@
 					    	<p class="help-block">{_ Add a translation or copy texts between languages. _}</p>
 							<div class="padding" style="padding-top: 0">
 								{% include "_admin_translation_tabs_extra.tpl" button %}
+								{% optional include "_translation_tree_button.tpl" %}
 							</div>
 						</div>
 					</div>

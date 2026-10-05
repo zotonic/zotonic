@@ -133,6 +133,126 @@ And when you want to force a specific language:
 <div {% include \"_language_attrs.tpl\" language=`en` %} >This is English content</div>
 ```
 
+
+Translating a single resource
+-----------------------------
+
+Use the translation dialog in the admin or frontend editor to manage a page's languages. Select an existing source
+language, a destination language, and one of these methods:
+
+- **Automatic translation** sends the source texts to the configured translation service. This option is available
+  when a module provides a translation service.
+- **Copy texts** fills the destination fields with the source texts for manual translation.
+- **Leave texts empty** enables the destination language so its texts can be entered manually.
+
+Copying and automatic translation fill blank destination fields. Select **Overwrite existing texts with new
+translations** to replace filled fields as well. These actions update the edit form: review the texts and save the
+page to persist them. If automatic translation is incomplete, the editor uses the source text for missing
+translations and asks the user to review the result.
+
+The dialog also lists the page's current translations. Deleting a translation requires confirmation and disables
+that language on the edit form; its translated texts are removed from the database when the page is saved.
+
+### Translating a saved resource from Erlang
+
+Use `m_translation:add_translation/5` to translate and save a resource directly. For example, to translate resource
+`Id` from English to Dutch while preserving existing Dutch texts:
+
+```erlang
+ok = m_translation:add_translation(Id, en, nl, false, Context).
+```
+
+The resource must be editable in `Context`, both languages must be editable languages for the site, and the source
+language must be present on the resource. The call returns `ok` or `{error, Reason}` and waits for the translation
+service and resource update to finish. Successful translations add the destination language and mark it for review
+in `translation_status`. Pass `true` as the fourth argument to overwrite existing destination texts.
+
+The resource translator processes translation records and known binary text properties, including nested blocks,
+using the property rules described below for tree translation. Binary text is assumed to be in the selected source
+language. `translation_translate_rsc:copy_translation/5` copies source texts and saves the resource without calling
+a translation service. `m_translation:remove_translation/3` removes a language from the saved resource.
+
+For an in-memory property map, `m_translation:add_translation_map/5` returns `{ok, TranslatedMap}` or an error without
+saving a resource. `m_translation:remove_translation_map/2` similarly removes languages from a map.
+
+
+Translating a tree
+------------------
+
+The **Translate all pages** button manages translations for an entire menu or collection. It is available in the
+frontend editor and in the translation widget on an admin edit page for a menu or collection. Sites can use the same
+feature for menu-based content such as timelines; the frontend editor's `translate-all` button acts on its `tree_id`.
+
+A tree includes its root resource, nested menu entries, and resources connected through `haspart`. Each resource is
+counted and processed once, even when it occurs more than once or the tree contains a cycle. The dialog shows the
+union of the pages' languages, with the number of pages in each language. Resources without a language list count
+as using the site's default language.
+
+### Translation and language removal
+
+The dialog offers the same translation options as the single-page editor:
+
+- **Automatic translation** uses the configured translation service and marks translated content for review.
+- **Copy texts** copies text from the selected source language to the destination language.
+- **Leave texts empty** enables the destination language without copying or translating text.
+
+Copying and automatic translation fill empty destination fields. Existing text is preserved unless the overwrite
+option is selected. Pages without the selected source language are skipped for these two methods. Before starting,
+the dialog refreshes the page count and asks the user to confirm applying the selected options to that many pages.
+Changes are saved immediately; save or discard any pending editor changes before starting a tree operation.
+
+Plain binary text is also translated, assuming it is in the resource's selected source language. The shared
+resource translator recognizes `title`, `short_title`, `chapeau`, `summary`, `body`, `body_extra`, `date_remarks`,
+`prompt`, `explanation`, `matching`, `narrative`, `feedback`, `seo_title`, `seo_desc`, `seo_keywords`, and properties
+ending in `_html`. This also applies inside nested blocks. These fields become translation records retaining the
+source text alongside the destination text. Other binary properties remain unchanged; existing translation records
+continue to use their explicit language entries.
+
+Deleting a language requires a separate warning and confirmation. It removes that language from every editable
+page in the tree, except pages where it is the last language. Those pages are kept unchanged.
+
+### Permissions, progress, and completion
+
+Opening the dialog or starting a job requires edit access to the root. Traversal requires visibility of every page.
+The worker checks edit permission again immediately before processing each resource and skips resources that are
+no longer editable. Normal resource-update permission checks also apply when saving changes.
+
+Translation and removal run in a sidejob that is unique per tree and site on the current Erlang node. Startup returns
+a running status as soon as the worker registers, before traversing the tree or calling a translation service. The
+request does not wait for completion, and the tree job has no overall translation deadline. A second job for the
+same tree returns `busy` while the first is running.
+
+The editor shows progress in a modal that cannot be dismissed, including when an editor is opened or reloaded during
+a running job. This is a UI-only lock: it does not add ACL restrictions or block unrelated server-side updates.
+Progress includes the total number of pages, pages processed, pages skipped, and pages that failed. If an automatic
+translation service returns incomplete translations for a page, that page's texts are left unchanged and it is counted
+as failed. Changes already saved on other pages are retained. After completion or failure, the dialog offers a reload
+so the editor shows the saved content.
+
+### Model and template integration
+
+The `m_translation_tree` model exposes these paths through templates and the model API:
+
+| Method | Path | Result |
+| --- | --- | --- |
+| `get` | `/<id>` | Page total and language counts for the tree. |
+| `get` | `/status/<id>` | Current or most recently cached job progress for the root. |
+| `post` | `/<id>` | Start a job and return its initial running status. |
+
+A translation payload contains `method` (`translate`, `copy`, or `empty`), `src`, `dst`, optional `overwrite`, and
+`confirmed: true`. A removal payload contains `method: remove`, `language`, and `confirmed: true`.
+
+The worker publishes progress on `model/rsc/event/<root>/translation_tree`. Browser clients subscribe through
+`bridge/origin/model/rsc/event/<root>/translation_tree` and can poll the status path to recover after reconnecting.
+Running status is owned by the worker; completed results are cached for one hour. The initial total is zero until
+tree traversal finishes.
+
+Custom editors can include `_translation_tree_button.tpl` and `_translation_tree_init.tpl`, passing the root as
+`tree_id`. The initialization template also wires an existing button with id `translate-all`. The standard admin
+and frontend editors already include this initialization.
+
+
+
 Accepted Events
 ---------------
 

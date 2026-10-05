@@ -1,3 +1,4 @@
+{% optional include "_translation_tree_init.tpl" %}
 {% javascript %}
 $('#rscform, #translation-tabs').on('shown.bs.tab', '.language-tabs > li > a[data-toggle="tab"]', function (e) {
 	if (e.target != e.relatedTarget) {
