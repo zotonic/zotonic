@@ -66,7 +66,34 @@ searches using mapped columns.
 RDF term kind, datatype, and language metadata follow expressions independently
 of SQL storage types. Metadata columns are generated only where their components
 are needed. DATATYPE returns NULL for non-literals or unavailable metadata;
-dynamic aggregate metadata and translation-object language handling are limited.
+dynamic aggregate metadata is limited.
+
+## Translation functions
+
+`zotonic:translation(value, language)` selects an exact language, without alias
+or parent-language fallback. `zotonic:translationFallback(value, language)` uses
+Zotonic's canonical language and fallback chain, then the site default, English,
+and any available translation. For example, `nl-nl` falls back to `nl`.
+
+```sparql
+SELECT ?s
+       (zotonic:translation(?title, \"en\") AS ?title_en)
+       (zotonic:translationFallback(?title, \"nl-nl\") AS ?title_nl)
+WHERE {
+    ?s zotonic:is_published true .
+    OPTIONAL { ?s zotonic:title ?title }
+}
+```
+
+Both accept translation records, JSONB strings, text/varchar values and nulls.
+Plain strings stay untagged. Missing values are unbound; empty strings remain
+values. Translations carry the language actually selected, which can differ
+from the requested language. Codes are lowercase; language arguments can be
+literals, named arguments or row variables.
+
+These functions execute in SQL, compose with `COALESCE`, `ORDER BY` and
+`DISTINCT`, and do not expand translations into rows. Selecting a translation
+record directly on `/sparql` retains the existing context-language fallback.
 
 ## SPARQL support
 
@@ -78,6 +105,8 @@ Supported:
 - Common string/numeric functions, XSD constructors and basic DATATYPE.
 - LIMIT/OFFSET on `/sparql`; model/search APIs use search paging instead.
 - Selected translation records on `/sparql` use language fallback.
+- `zotonic:translation(value, language)` selects an exact translation.
+- `zotonic:translationFallback(value, language)` selects with fallback.
 
 Unsupported:
 
@@ -102,11 +131,13 @@ their existing result format and search paging parameters.
 -mod_title("SPARQL").
 -mod_description("SPARQL for Zotonic data.").
 -mod_provides([ sparql ]).
+-mod_schema(2).
 -mod_depends([ mod_search, mod_rdf ]).
 
 -author('Marc Worrell <marc@worrell.nl>').
 
 -export([
+    manage_schema/2,
     observe_sparql_mapping/2,
     observe_search_query/2,
     observe_search_query_parse/2
@@ -120,6 +151,12 @@ their existing result format and search paging parameters.
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include("../include/sparql.hrl").
 
+
+%% @doc Install the versioned translation functions in the site database.
+-spec manage_schema(Version, Context) -> ok
+    when Version :: z_module_manager:manage_schema(), Context :: z:context().
+manage_schema(_Version, Context) ->
+    z_sparql_sql_translation:install(Context).
 
 observe_search_query(#search_query{ name = <<"sparql">>, args = Args }, Context) ->
     case sparql_args(Args) of

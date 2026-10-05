@@ -151,6 +151,11 @@ expressions in SELECT and ORDER BY are mapped to the corresponding SQL terms.
 SAMPLE returns an unsupported_postgresql_version error before PostgreSQL 16.
 
 
+DATATYPE(E)
+    Reads RDF term metadata, including rdf:langString for tagged literals and
+    translation-function results. Heterogeneous aggregate metadata is limited.
+
+
 Recognized but not supported by SQL generation
 ----------------------------------------------
 
@@ -159,12 +164,8 @@ STR(E)
     uniformly. Resource variables are represented by Zotonic resource ids.
 
 LANG(E), LANGMATCHES(E,E), STRLANG(E,E)
-    Language tags and Zotonic #trans{} values are not represented by the SQL
-    expression type system. See builtins-lang-support.txt.
-
-DATATYPE(E)
-    This inspects RDF term metadata. Do not confuse it with the supported XSD
-    datatype constructor calls described above.
+    These standard language functions are not implemented. Use the Zotonic
+    translation extensions for language selection; see builtins-lang-support.txt.
 
 BNODE((E) | NIL)
     Constructed blank nodes are not represented as SQL result values.
@@ -194,3 +195,20 @@ are converted to text, bigint, numeric, double precision, boolean or
 timestamptz only when required.
 
 See builtins-type-mapping.txt for the detailed coercion rules.
+
+
+Zotonic translation extensions
+-----------------------------
+
+zotonic:translation(Value, Language)
+    Compiles to z_sparql_translation_v1 for exact language selection.
+
+zotonic:translationFallback(Value, Language)
+    Compiles to z_sparql_translation_v2, using the canonical language and its
+    Zotonic fallback chain, then site default, English and any translation.
+
+The helpers accept JSONB and text (including varchar) and return text plus the
+selected language in a JSONB object. The compiler separates value and metadata
+for normal SQL expression composition. Null or absent translations are unbound;
+plain strings stay untagged. See builtins-lang-support.txt for examples and
+versioned installation details.

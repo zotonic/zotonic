@@ -133,5 +133,16 @@ and the supported SELECT subset.
 
 ## Language values
 
-Language-tagged literals and Zotonic `#trans{}` values are not yet represented
-by the SQL expression layer. See `builtins-lang-support.txt`.
+Language tags travel alongside SQL values as RDF metadata.
+`zotonic:translation(value, language)` performs exact selection;
+`zotonic:translationFallback(value, language)` uses Zotonic's canonical language
+and fallback chain, then site default, English and any available translation.
+Both accept translation records, JSONB strings, text/varchar values and nulls.
+They produce one value with its actual language tag, without expanding rows.
+
+The compiler calls versioned PostgreSQL helpers installed by `mod_sparql` schema
+version 2. It projects the returned text and language separately, so `COALESCE`,
+ordering and `DISTINCT` operate on the selected translation. Directly selected
+`#trans{}` values retain the endpoint's context-language fallback at serialization.
+See [language functions and examples](builtins-lang-support.txt) for semantics
+and the helper upgrade procedure.

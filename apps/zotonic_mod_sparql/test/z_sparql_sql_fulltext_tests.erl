@@ -109,7 +109,9 @@ indexed_text_projection_test() ->
                     z_sparql_sql:to_sql_term(Query, Context))
             end, [<<"?text">>, <<"*">>, <<"(?text AS ?copy)">>,
                 <<"(xsd:string(?text) AS ?copy)">>, <<"(SUBSTR(?text, 1, 3) AS ?copy)">>,
-                <<"(GROUP_CONCAT(?text) AS ?copy)">>]),
+                <<"(GROUP_CONCAT(?text) AS ?copy)">>,
+                <<"(zotonic:translation(?text, \"en\") AS ?copy)">>,
+                <<"(zotonic:translationFallback(?text, \"nl\") AS ?copy)">>]),
             %% The same binding remains available for matching in WHERE.
             {ok, Match} = z_sparql:parse(<<
                 "PREFIX test: <https://example.test/> SELECT ?resource "

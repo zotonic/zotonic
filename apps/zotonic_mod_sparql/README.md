@@ -301,17 +301,58 @@ plain strings and `rdf:langString` for language-tagged literals. It works in
 result expressions and filters. Non-literals, unbound values, and unknown
 metadata produce SQL NULL (an unbound result or a filter that does not match).
 This is basic support; heterogeneous aggregate metadata remains unknown.
-LANG, translation-aware SQL expressions, and RDF-aware equality are not yet implemented.
+LANG and RDF-aware equality are not yet implemented. Use the translation
+extensions below for explicit language selection.
 The HTTP endpoint serializes supported results as SPARQL Results JSON.
 
 
 Translations
 ------------
 
-TBD
+Use `zotonic:translation(value, language)` for an exact language, or
+`zotonic:translationFallback(value, language)` for the canonical requested language
+and its Zotonic fallback chain, then site default → English → any available
+language (ordered by language code). For example, `nl-nl` tries `nl` before the
+site default. Aliases such as `zh-tw` resolve to `zh-hant`; script fallbacks also
+follow `z_language_data`. Exact `translation` lookup does not expand aliases or
+parent languages.
 
-Quite tricky, as the `#trans{}` tuples are not compatible with SPARQL, and we allow a mix of
-binaries and/or `#trans{}` tuples as values.
+```sparql
+SELECT ?s
+       (zotonic:translation(?title, "en") AS ?en)
+       (zotonic:translationFallback(?title, "nl") AS ?nl)
+WHERE {
+    ?s zotonic:is_published true .
+    OPTIONAL { ?s zotonic:title ?title }
+}
+```
+
+Both functions accept stored translation records, JSONB strings, normal text or
+varchar columns, string expressions, and nulls. Plain strings stay untagged;
+translations keep the language actually selected. Missing translations and null
+inputs produce unbound results. Empty strings are values, not missing translations.
+Already language-tagged literals retain their language and are matched accordingly.
+Language arguments can be string literals, pre-bound arguments, or row variables;
+requested codes are normalized to lowercase. Unknown codes have no translation
+fallback; plain strings remain unchanged.
+These functions do not translate text or expand translations into rows.
+
+The functions execute in SQL and compose with `COALESCE`, `ORDER BY`, `DISTINCT`
+and other expressions. Existing model/search result shapes remain unchanged.
+For example, `COALESCE(zotonic:translation(?title, "nl"),
+zotonic:translation(?title, "en"), "Untitled")` supplies an explicit fallback.
+
+Module schema version 2 retains `z_sparql_translation_v1` for exact lookup and
+installs `z_sparql_translation_v2` for fallback, with JSONB and text overloads.
+The versioned `z_sparql_language_chain_v2` helper is generated at installation
+from Zotonic's language registry, so row-dependent language arguments use the
+same aliases and chains. Registry changes require a new helper/schema version.
+The translation helpers return JSONB containing `value`
+and, for a translation, `language`, or SQL NULL. Site defaults are passed as
+arguments; the helper does not read resource or configuration tables.
+When changing the helper's implementation, add a new numbered SQL helper, bump
+`mod_schema`, install the new version and update the compiler call. Retain old
+versions while old code or prepared queries may still reference them.
 
 
 TODO

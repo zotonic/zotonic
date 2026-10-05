@@ -113,13 +113,16 @@ Expanded datatype IRIs are handled as function calls for:
     xsd:dateTimeStamp
 
 
+DATATYPE reads RDF metadata, including rdf:langString for tagged literals and
+translation-function results. Heterogeneous aggregate metadata remains limited.
+
+
 Recognized but unsupported
 --------------------------
 
     STR
     LANG
     LANGMATCHES
-    DATATYPE
     BNODE
     ENCODE_FOR_URI
     TIMEZONE
@@ -133,3 +136,18 @@ Recognized but unsupported
 
 URI is defined by SPARQL as a synonym for IRI; it is not an obsolete grammar
 entry.
+
+
+Zotonic translation extensions
+-----------------------------
+
+    zotonic:translation(Value, Language)
+        Exact language selection; no alias or parent-language fallback.
+
+    zotonic:translationFallback(Value, Language)
+        Zotonic canonical language and fallback chain, then site default,
+        English, and any available translation.
+
+Both accept translation records, JSONB strings, text/varchar values and nulls.
+Results retain the actual selected language; plain strings remain untagged and
+missing values are unbound. See builtins-lang-support.txt for examples.

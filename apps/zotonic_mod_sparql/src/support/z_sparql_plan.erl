@@ -646,6 +646,10 @@ map_iri_constructor(
 map_iri_constructor(Function, Argument, _State) ->
     {call, Function, [Argument]}.
 
+map_extension_call({iri, <<?NAMESPACE_ZOTONIC, "translation">>}, Arguments, State) ->
+    map_translation_call(translation, Arguments, State);
+map_extension_call({iri, <<?NAMESPACE_ZOTONIC, "translationFallback">>}, Arguments, State) ->
+    map_translation_call(translation_fallback, Arguments, State);
 map_extension_call({iri, <<?NAMESPACE_ZOTONIC, "fullText">>}, Arguments, State) ->
     map_fulltext_call(fulltext, Arguments, State);
 map_extension_call({iri, <<?NAMESPACE_ZOTONIC, "fullTextRank">>}, Arguments, State) ->
@@ -653,6 +657,12 @@ map_extension_call({iri, <<?NAMESPACE_ZOTONIC, "fullTextRank">>}, Arguments, Sta
 map_extension_call(Function, Arguments, State0) ->
     {Arguments1, State1} = map_expressions(Arguments, State0),
     {{call, Function, Arguments1}, State1}.
+
+map_translation_call(Function, [Value, Language], State0) ->
+    {Arguments, State1} = map_expressions([Value, Language], State0),
+    {{call, Function, Arguments}, State1};
+map_translation_call(Function, Arguments, _State) ->
+    throw({error, {invalid_function_arity, Function, length(Arguments)}}).
 
 map_fulltext_call(Function, [Resource, Query], State0) ->
     {Resource1, State1} = map_expression(Resource, State0),

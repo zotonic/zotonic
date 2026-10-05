@@ -907,6 +907,11 @@ expression_to_sql_1({call, datatype, [Argument]}, State, Term0) ->
         maps:get(datatype, Metadata), <<" ELSE NULL::text END">>],
     {#sql_expression{sql = Sql, type = uri, source = expression,
         rdf = z_sparql_sql_metadata:iri()}, Term};
+expression_to_sql_1({call, Function, [Value, Language]}, State, Term0)
+    when Function =:= translation; Function =:= translation_fallback ->
+    {Value1, Term1} = expression_to_sql(Value, State, Term0),
+    {Language1, Term2} = expression_to_sql(Language, State, Term1),
+    {z_sparql_sql_translation:expression(Function, Value1, Language1, State#sql_state.context), Term2};
 expression_to_sql_1({call, sameterm, [Left, Right]}, State, Term0) ->
     same_term_to_sql(Left, Right, State, Term0);
 expression_to_sql_1({call, Function, Arguments}, State, Term0)
@@ -1834,6 +1839,10 @@ expand_metadata_demand(Demand, Aliases) ->
         false -> expand_metadata_demand(Expanded, Aliases)
     end.
 
+collect_metadata_demand({call, Function, [Value, Language]})
+    when Function =:= translation; Function =:= translation_fallback ->
+    merge_metadata_demand(metadata_dependencies(Value, [language]),
+        collect_metadata_demand([Value, Language]));
 collect_metadata_demand({call, datatype, [Argument]}) ->
     merge_metadata_demand(metadata_dependencies(Argument, [kind, datatype]),
         collect_metadata_demand(Argument));

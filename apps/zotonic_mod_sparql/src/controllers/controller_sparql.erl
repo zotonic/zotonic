@@ -28,6 +28,13 @@
 Serve read-only SPARQL SELECT queries at `/sparql` using the caller's resource
 and property ACLs. Requires `mod_sparql`; existing Zotonic model APIs are unchanged.
 
+## Translation selection
+
+Use `zotonic:translation(?title, \"en\")` for an exact translation and
+`zotonic:translationFallback(?title, \"nl\")` for the canonical language and its
+Zotonic fallback chain, then site default, English, and any available translation. Plain text stays untagged; missing values
+stay unbound. Returned translations carry their actual language tag.
+
 ## Requests
 
 | Method | Content type | Query location |
@@ -85,8 +92,9 @@ Unbound variables are omitted from their row. Empty results retain `head.vars`.
 
 Selected `#trans{}` records use context-language fallback and return text tagged
 with the language actually selected. Empty records and undefined values are
-unbound; binary strings remain literals. Translation lookup happens after SQL
-filtering, ordering, grouping and paging. Responses are not cached.
+unbound; binary strings remain literals. This implicit lookup happens after SQL
+filtering, ordering, grouping and paging; explicit translation functions run in SQL.
+Responses are not cached.
 
 ## Errors and limits
 

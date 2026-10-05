@@ -1,49 +1,80 @@
 Language support (#trans)
 =========================
 
-Current status: language-aware SPARQL expressions are not supported by SQL
-generation.
+Language-tagged literals carry their lowercase language tag through SQL
+expression metadata. The /sparql endpoint preserves tags in JSON, XML and TSV;
+CSV returns only the text. Translation records are not expanded into rows.
 
-The scanner and parser accept RDF literals with language tags, for example:
+Zotonic translation functions
+-----------------------------
 
-    "title"@en
+zotonic:translation(Value, Language)
 
-The query plan normalizes the language tag to lowercase and keeps it on the
-literal term. When the literal becomes a SQL value, however, only its lexical
-value and general value type are retained. The SQL expression record does not
-carry a language tag.
+    Select the exact language from a #trans{} value. Missing translations are
+    unbound. Normalize the requested code to lowercase, but do not expand
+    aliases or parent languages.
 
-Zotonic translatable JSONB properties add another mismatch. They can be stored
-as a plain string or as a serialized #trans{} value containing multiple
-translations. The resource "language" property lists available languages, but
-the current SPARQL-to-SQL mapping does not expand a #trans{} value into RDF
-language-tagged literals.
+zotonic:translationFallback(Value, Language)
 
-Functions
----------
+    Canonicalize the requested language using Zotonic's aliases, then try its
+    z_language:fallback_language/1 chain, the site default, English, and any
+    available translation. For example, nl-nl tries nl before the site default;
+    zh-tw resolves to zh-hant, whose configured fallback includes zh.
+    This follows z_trans:lookup_fallback/3 given the canonical language and its
+    chain. The final arbitrary choice uses language-code order because JSONB
+    does not preserve the original translation-list order.
 
-These built-ins are recognized but rejected by SQL generation:
+Both functions accept stored #trans{} values, JSONB strings, text/varchar
+columns, string expressions and nulls. Plain strings stay untagged. Null or
+missing values remain unbound; empty strings are existing values. Tagged
+literals retain their language and are matched accordingly. Results carry
+the actual selected language, including when fallback selects another language.
+Unknown codes have no fallback translation; plain strings remain unchanged.
 
-LANG(Expr) -> Lang
+The Language argument may be a literal, a pre-bound args value, or a row
+variable. Both functions execute in SQL and compose with COALESCE, ordering
+and DISTINCT. They do not translate text or multiply result rows.
 
-    Return the language tag of a language-tagged literal. For a literal
-    without a language tag, return the empty string.
+Example
+-------
 
-LANGMATCHES(Lang, Range) -> Boolean
+    SELECT ?s
+           (zotonic:translation(?title, "en") AS ?title_en)
+           (zotonic:translationFallback(?title, "nl-nl") AS ?title_nl)
+    WHERE {
+        ?s zotonic:is_published true .
+        OPTIONAL { ?s zotonic:title ?title }
+    }
 
-    Test a language tag against a language range. A range also matches
-    sublanguages; for example, LANGMATCHES("nl-be", "nl") is true.
+For explicit fallback, use:
 
-STRLANG(Expr, Lang) -> LangString
+    COALESCE(zotonic:translation(?title, "nl"),
+             zotonic:translation(?title, "en"), "Untitled")
 
-    Construct a language-tagged literal from the lexical value of Expr and
-    the supplied language tag. This needs a result representation that
-    preserves both the lexical value and its language tag.
+Selecting ?title directly on /sparql still performs context-language fallback
+after SQL filtering, grouping, ordering and pagination.
 
-DATATYPE depends on the same metadata because a language-tagged literal has
-datatype rdf:langString.
+Versioned SQL helpers
+---------------------
 
-A future implementation must first decide whether a Zotonic #trans{} value is
-exposed as one value selected by context language or as multiple RDF bindings.
-Only after that decision can LANG, LANGMATCHES, STRLANG and rdf:langString be
-mapped consistently.
+Module schema version 2 installs helpers from zotonic_mod_sparql/priv/sql:
+
+- z_sparql_translation_v1: exact lookup.
+- z_sparql_translation_v2: lookup with Zotonic's fallback chain.
+- z_sparql_language_chain_v2: registry generated from z_language_data at install.
+
+Translation helpers have JSONB and text overloads and return a JSONB object
+with value and optional language, or SQL NULL. The compiler projects text and
+RDF metadata separately. Helpers do not fetch resources or site configuration;
+property ACL checks remain in the normal query pipeline.
+
+For helper or registry changes, add a new numbered helper, bump mod_schema,
+install the new version and update the compiler. Retain earlier versions while
+older code or queries may still use them.
+
+Standard language functions
+---------------------------
+
+LANG, LANGMATCHES and STRLANG remain unsupported. DATATYPE supports the existing
+RDF metadata, including rdf:langString for translation-function results;
+heterogeneous aggregate metadata remains limited.
