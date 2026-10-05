@@ -81,6 +81,33 @@
         </div>
     </div>
 
+    {% block connections %}
+        <hr>
+        {% with m.search.all_bytitle::%{ cat: 'predicate', pagelen: 1000 } as predicates %}
+            {% include "_admin_overview_filter_connection.tpl"
+                name="bulk_object_id"
+                predicate_name="bulk_object_predicate"
+                predicate_placeholder=_"Select a predicate"
+                require_predicate
+                label=_"Add connections to"
+                page_label=_"Page to connect to"
+                placeholder=_"Select a page"
+            %}
+            {% include "_admin_overview_filter_connection.tpl"
+                name="bulk_subject_id"
+                predicate_name="bulk_subject_predicate"
+                predicate_placeholder=_"Select a predicate"
+                require_predicate
+                label=_"Add connections from"
+                page_label=_"Page to connect from"
+                placeholder=_"Select a page"
+            %}
+        {% endwith %}
+        <p class="help-block">
+            {_ Add connections from another page to all selected pages, or from all selected pages to another page. Choose a page and predicate together. Existing connections are kept. _}
+        </p>
+    {% endblock %}
+
     <div class="modal-footer">
         {% button class="btn btn-default" action={dialog_close} text=_"Cancel" %}
         {% button class="btn btn-primary" type="submit" text=_"Update" %}
