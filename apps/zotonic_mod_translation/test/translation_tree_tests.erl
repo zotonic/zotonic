@@ -39,6 +39,8 @@ tests(Context) ->
 
 %% @doc Verify tree operations, permissions, progress, and binary text translation with temporary fixtures.
 integration(Context) ->
+    %% Exercise reads with the process-local cache used during rendering.
+    z_depcache:in_process(true),
     Root = insert([en, nl], Context),
     A = insert([en, nl], Context),
     B = insert([nl], Context),
@@ -164,8 +166,10 @@ insert(Langs, Context) ->
     Id.
 
 %% @doc Wait for terminal job progress and registry cleanup, failing when retries are exhausted.
+%% Refresh process-local reads because resource updates happen in the sidejob process.
 await(_, _, 0) -> error(timeout);
 await(Root, Context, N) ->
+    z_depcache:flush_process_dict(),
     case translation_tree:status(Root, Context) of
         #{state := running} -> timer:sleep(20), await(Root, Context, N - 1);
         State -> wait_unlocked(Root, Context, 100), State
