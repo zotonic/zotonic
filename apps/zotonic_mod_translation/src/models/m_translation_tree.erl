@@ -26,6 +26,13 @@ tree traversal requires visibility of every member. Each page must still be edit
 when the worker reaches it; otherwise it is skipped. Trees include their root and
 unique menu/haspart descendants. No caller privileges are elevated.
 
+The `bulk_dialog` postback accepts an `ids` list for bulk-update selections. It checks
+edit access to every selected page, deduplicates the IDs, and stores a selection for
+one day. Its `bulk-` token can be used instead of a resource ID on the same model
+paths. Only the authenticated user who created the selection can access it. Bulk
+jobs process exactly the selected pages, without traversing their descendants, and
+check each page's edit permission again before changing it.
+
 For example, `m.translation_tree[123]` returns the following data for a tree with
 three unique pages, two available in English and all three available in Dutch:
 
@@ -77,7 +84,8 @@ not start a job; the dialog submits a confirmed operation through `post/<id>`.
     m_post/3,
     event/2,
     details/2,
-    ids/2
+    ids/2,
+    selection/2
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -109,7 +117,22 @@ m_post(_, _, _) ->
 %% Args is a proplist with an `id` resource reference for the tree root. Check root
 %% edit access and tree visibility before rendering `_dialog_translation_tree.tpl`
 %% with the resolved `id` and language counts as `tree`. On failure, show an error
-%% growl. Return the updated render context; this handler does not start a job.
+%% growl. `{bulk_dialog, Args}` takes an `ids` list and opens the same dialog for
+%% exactly those pages, using a user-bound selection token. Return the updated
+%% render context; neither handler starts a job.
+event(#postback{message = {bulk_dialog, Args}}, Context) ->
+    case selection(proplists:get_value(ids, Args), Context) of
+        {ok, Token} ->
+            case details(Token, Context) of
+                {ok, Details} ->
+                    z_render:dialog(?__("Manage translations", Context), "_dialog_translation_tree.tpl",
+                        [{id, Token}, {is_bulk, true}, {tree, Details}], Context);
+                {error, _} ->
+                    z_render:growl_error(?__("You are not allowed to edit these pages.", Context), Context)
+            end;
+        {error, _} ->
+            z_render:growl_error(?__("You are not allowed to edit these pages.", Context), Context)
+    end;
 event(#postback{message = {dialog, Args}}, Context) ->
     Id = proplists:get_value(id, Args),
     case details(Id, Context) of
@@ -149,11 +172,21 @@ details(Id, Context) ->
     end, Context).
 
 %% @doc Traverse visible pages, including read-only pages. The worker checks edit access
-%% separately before processing each page.
+%% separately before processing each page. Bulk tokens return exactly the selected
+%% visible pages, without traversing their descendants.
 -spec ids(Id, Context) -> {ok, [m_rsc:resource_id()]} | {error, term()}
     when
-        Id :: m_rsc:resource_id(),
+        Id :: m_rsc:resource_id() | binary(),
         Context :: z:context().
+ids(<<"bulk-", _/binary>> = Token, Context) ->
+    case selection_ids(Token, Context) of
+        {ok, Ids} ->
+            case lists:all(fun(Id) -> z_acl:rsc_visible(Id, Context) end, Ids) of
+                true -> {ok, Ids};
+                false -> {error, eacces}
+            end;
+        Error -> Error
+    end;
 ids(Id, Context) ->
     walk([Id], #{}, Context).
 
@@ -188,7 +221,12 @@ menu_ids([Id | Rest]) when is_integer(Id); is_atom(Id); is_binary(Id) ->
 menu_ids(_) ->
     [].
 
-%% @doc Resolve the root and call the supplied function only when it is editable.
+%% @doc Authorize an editable root or an authenticated owner's bulk selection.
+with_editable(<<"bulk-", _/binary>> = Token, Fun, Context) ->
+    case selection_ids(Token, Context) of
+        {ok, _} -> Fun(Token);
+        Error -> Error
+    end;
 with_editable(Id, Fun, Context) when is_integer(Id); is_binary(Id); is_atom(Id) ->
     case m_rsc:rid(Id, Context) of
         undefined ->
@@ -201,6 +239,36 @@ with_editable(Id, Fun, Context) when is_integer(Id); is_binary(Id); is_atom(Id) 
     end;
 with_editable(_, _, _) ->
     {error, badarg}.
+
+%% @doc Create a user-bound selection of editable pages, without traversing descendants.
+%% Reopening the same selection uses the same job key. Selections expire after one day.
+-spec selection(Ids, Context) -> {ok, binary()} | {error, term()} when
+    Ids :: [m_rsc:resource()], Context :: z:context().
+selection([_ | _] = Refs, Context) ->
+    User = z_acl:user(Context),
+    Ids = lists:usort([case Id of
+        _ when is_integer(Id); is_binary(Id); is_atom(Id) -> m_rsc:rid(Id, Context);
+        _ -> undefined
+    end || Id <- Refs]),
+    case is_integer(User) andalso lists:all(fun(Id) ->
+        is_integer(Id) andalso z_acl:rsc_editable(Id, Context)
+    end, Ids) of
+        true ->
+            Hash = binary:encode_hex(crypto:hash(sha256, term_to_binary({User, Ids}))),
+            Token = <<"bulk-", Hash/binary>>,
+            z_depcache:set({?MODULE, Token}, {User, Ids}, 86400, Context),
+            {ok, Token};
+        false -> {error, eacces}
+    end;
+selection(_, _) -> {error, badarg}.
+
+%% @doc Resolve a cached selection only for its authenticated owner.
+selection_ids(Token, Context) ->
+    User = z_acl:user(Context),
+    case z_depcache:get({?MODULE, Token}, Context) of
+        {ok, {User, Ids}} when is_integer(User) -> {ok, Ids};
+        _ -> {error, eacces}
+    end.
 
 %% @doc Validate confirmed request options and normalize them into a worker operation.
 operation(#{<<"method">> := <<"remove">>, <<"language">> := Lang, <<"confirmed">> := true}, _Context) when is_binary(Lang) ->

@@ -143,12 +143,47 @@ integration(Context) ->
         ?assertEqual(BinaryText, maps:get(<<"data">>, TranslatedBlock)),
         ?assertEqual(<<"{}">>, maps:get(<<"data_json">>, TranslatedBlock)),
         z_notifier:detach(translate, self(), Context),
+        %% A bulk selection deduplicates exactly the selected pages, excluding
+        %% descendants, and only its authenticated owner can inspect or start it.
+        {ok, Selection} = m_translation_tree:selection([Root, A, A], Context),
+        ?assertEqual({ok, Selection}, m_translation_tree:selection([A, Root], Context)),
+        ?assertEqual({ok, lists:sort([Root, A])}, m_translation_tree:ids(Selection, Context)),
+        ?assertMatch({ok, #{total := 2}}, m_translation_tree:details(Selection, Context)),
+        ?assertMatch({error, _}, m_translation_tree:selection([Root], Anonymous)),
+        ?assertMatch({error, _}, m_translation_tree:selection([#{}], Context)),
+        ?assertMatch({error, _}, m_translation_tree:m_get([Selection], undefined, Anonymous)),
+        ?assertMatch({error, _}, m_translation_tree:m_get([<<"status">>, Selection], undefined,
+            Context#context{user_id = B})),
+        RemoveOptions = #{<<"method">> => <<"remove">>, <<"language">> => <<"nl">>},
+        ?assertEqual({error, badarg}, m_translation_tree:m_post([Selection], #{payload => RemoveOptions}, Context)),
+        ?assertMatch({error, _}, m_translation_tree:m_post([Selection],
+            #{payload => RemoveOptions#{<<"confirmed">> => true}}, Anonymous)),
+        {ok, _} = m_translation_tree:m_post([Selection],
+            #{payload => RemoveOptions#{<<"confirmed">> => true}}, Context),
+        ?assertMatch(#{state := complete, total := 2, done := 2, failed := 0}, await(Selection, Context, 500)),
+        ?assertEqual([en], m_rsc:p(A, language, Context)),
+        ?assertEqual([en, nl], m_rsc:p(B, language, Context)),
+        {ok, _} = m_translation_tree:m_post([Selection], #{payload => #{
+            <<"method">> => <<"remove">>, <<"language">> => <<"en">>, <<"confirmed">> => true}}, Context),
+        ?assertMatch(#{state := complete, total := 2, skipped := 2, failed := 0}, await(Selection, Context, 500)),
+        ?assertEqual([en], m_rsc:p(A, language, Context)),
+        {ok, _} = m_translation_tree:m_post([Selection], #{payload => #{
+            <<"method">> => <<"copy">>, <<"src">> => <<"en">>, <<"dst">> => <<"nl">>,
+            <<"confirmed">> => true}}, Context),
+        ?assertMatch(#{state := complete, total := 2, done := 2, failed := 0}, await(Selection, Context, 500)),
+        ?assertEqual([en, nl], m_rsc:p(A, language, Context)),
+        %% Render the bulk dialog as well as compiling its optional admin entry point.
+        {ok, BulkDetails} = m_translation_tree:details(Selection, Context),
+        {BulkHtml, _} = z_template:render_to_iolist("_dialog_translation_tree.tpl",
+            #{id => Selection, is_bulk => true, tree => BulkDetails}, Context),
+        ?assertNotEqual(nomatch, binary:match(iolist_to_binary(BulkHtml), Selection)),
         %% Always compile the translation module's templates. The frontend editor
         %% is optional and is not enabled in the standard test sandbox.
         {ok, Details} = m_translation_tree:details(Root, Context),
         Vars = #{id => Root, tree_id => Root, tree => Details},
         Templates = ["_dialog_translation_tree.tpl", "_translation_tree_init.tpl", "_translation_tree_button.tpl",
-            "_translation_edit_languages.tpl", "_admin_edit_sidebar.tpl"],
+            "_translation_edit_languages.tpl", "_admin_edit_sidebar.tpl",
+            "_admin_bulk_translation.tpl", "_dialog_admin_bulk_update.tpl"],
         FrontendTemplates = case z_module_manager:active(mod_admin_frontend, Context) of
             true -> ["_admin_frontend_edit.tpl"];
             false -> []

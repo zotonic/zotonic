@@ -1,20 +1,24 @@
-{% if id.is_editable %}
+{% if is_bulk or id.is_editable %}
+{% if is_bulk %}
+    {% include "_translation_tree_init.tpl" tree_id=id is_bulk %}
+    <p>{_ Manage translations for the selected pages only. Pages in their menus or collections are not included. _}</p>
+{% endif %}
 <p>{_ Current translations _} ({{ tree.total }} {% if tree.total == 1 %}{_ page _}{% else %}{_ pages _}{% endif %}):</p>
 <ul>
     {% for code, count in tree.languages %}
         <li>
             {{ m.translation.localized_name[code]|escape }} ({{ code|escape }}) — {{ count }} {% if count == 1 %}{_ page _}{% else %}{_ pages _}{% endif %}
-            <button type="button" class="btn btn-link text-danger" data-translation-tree-remove="{{ code|escape }}" data-tree-id="{{ id }}" title="{_ Delete translation _}">
+            <button type="button" class="btn btn-link text-danger" data-translation-tree-remove="{{ code|escape }}" data-tree-id="{{ id|escape }}" title="{_ Delete translation _}">
                 <span class="fa fa-trash" aria-hidden="true"></span> {_ Delete _}
             </button>
         </li>
     {% endfor %}
 </ul>
-<p class="help-block">{_ Removing a language affects all pages in this tree, except pages where it is the only language. _}</p>
+<p class="help-block">{% if is_bulk %}{_ Removing a language affects all selected pages, except pages where it is the only language. _}{% else %}{_ Removing a language affects all pages in this tree, except pages where it is the only language. _}{% endif %}</p>
 
 <hr>
 
-<form data-translation-tree-form="{{ id }}">
+<form data-translation-tree-form="{{ id|escape }}">
 
     <div class="row">
         <div class="col-md-4">

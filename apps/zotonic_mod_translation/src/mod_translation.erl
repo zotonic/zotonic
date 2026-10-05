@@ -176,6 +176,21 @@ For an in-memory property map, `m_translation:add_translation_map/5` returns `{o
 saving a resource. `m_translation:remove_translation_map/2` similarly removes languages from a map.
 
 
+Bulk translation management
+----------------------------
+
+The admin **Bulk update** dialog offers **Manage translations** for the selected pages. It opens the language-count
+and translation dialog with automatic translation, copying, empty languages, and confirmed language removal.
+Only the selected pages are processed, without following menu or collection descendants. Duplicate selections count
+once, and removing a language preserves pages where it is the last language.
+
+Opening the dialog requires edit access to every selected page. The server stores the selection for one day and
+restricts access to the user who created it. A sidejob processes the selection, rechecking edit access before each
+page, while the browser polls progress and displays a blocking modal. Starting a job only waits for startup, not
+completion. Reopening the same selection under the same user reconnects to its running job. Reload after completion
+to refresh the overview. These changes are saved immediately, independently of the bulk property update form.
+
+
 Translating a tree
 ------------------
 

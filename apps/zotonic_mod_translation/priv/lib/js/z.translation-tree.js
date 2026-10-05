@@ -76,8 +76,9 @@
         if (topic) cotonic.broker.unsubscribe(topic);
         clearInterval(timer);
         root = id;
-        topic = "bridge/origin/model/rsc/event/" + id + "/translation_tree";
-        cotonic.broker.subscribe(topic, () => poll());
+        // Bulk selections are private to their owner and use authorized model polling.
+        topic = String(id).startsWith("bulk-") ? null : "bridge/origin/model/rsc/event/" + id + "/translation_tree";
+        if (topic) cotonic.broker.subscribe(topic, () => poll());
         poll();
         timer = setInterval(poll, 2000);
     }

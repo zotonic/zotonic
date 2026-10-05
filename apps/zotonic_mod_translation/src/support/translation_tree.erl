@@ -31,10 +31,11 @@ polled after reconnecting. Completed results are retained for one hour.
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 %% @doc Start a sidejob and wait only for its startup acknowledgement or failure.
-%% The model must validate the operation and check edit access to the root first.
+%% Root is a resource ID or a user-bound bulk selection token. The model must
+%% validate the operation and authorize the tree or selection first.
 -spec start(Root, Operation, Context) -> {ok, map()} | {error, term()}
     when
-        Root :: m_rsc:resource_id(),
+        Root :: m_rsc:resource_id() | binary(),
         Operation :: tuple(),
         Context :: z:context().
 start(Root, Operation, Context) ->
@@ -54,7 +55,7 @@ start(Root, Operation, Context) ->
     when
         Caller :: pid(),
         Ref :: reference(),
-        Root :: m_rsc:resource_id(),
+        Root :: m_rsc:resource_id() | binary(),
         Operation :: tuple(),
         Context :: z:context().
 run(Caller, Ref, Root, Operation, Context) ->
@@ -111,7 +112,7 @@ run(Caller, Ref, Root, Operation, Context) ->
     ok.
 
 %% @doc Return live or cached progress, marking an interrupted worker as failed.
--spec status(Id, Context) -> map() when Id :: m_rsc:resource_id(), Context :: z:context().
+-spec status(Id, Context) -> map() when Id :: m_rsc:resource_id() | binary(), Context :: z:context().
 status(Root, Context) ->
     Live = try gproc:lookup_value(root_key(Root, Context))
         catch error:badarg -> undefined end,
@@ -142,7 +143,10 @@ root_key(Id, Context) -> {n, l, {{?MODULE, Id}, z_context:site(Context)}}.
 report(#{root := Root} = State, Context) ->
     gproc:set_value(root_key(Root, Context), State),
     z_depcache:set({?MODULE, Root}, State, 3600, Context),
-    z_mqtt:publish([<<"model">>, <<"rsc">>, <<"event">>, integer_to_binary(Root), <<"translation_tree">>], State, Context).
+    case Root of
+        <<"bulk-", _/binary>> -> ok; % Bulk selections use owner-authorized status polling.
+        _ -> z_mqtt:publish([<<"model">>, <<"rsc">>, <<"event">>, integer_to_binary(Root), <<"translation_tree">>], State, Context)
+    end.
 
 %% @doc Apply the operation to editable pages and report completed, skipped, and failed counts.
 process([], _Operation, State, _Context) -> State#{state => complete};
