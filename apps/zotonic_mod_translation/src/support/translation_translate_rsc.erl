@@ -26,6 +26,8 @@
     has_language/3,
 
     add_translation/5,
+    add_translation/6,
+    copy_translation/5,
     add_translation_map/5,
 
     remove_translation/3,
@@ -46,6 +48,13 @@
     Context :: z:context(),
     Reason :: term().
 add_translation(Id, FromLanguage, ToLanguage, IsOverwrite, Context) ->
+    add_translation(Id, FromLanguage, ToLanguage, IsOverwrite, false, Context).
+
+%% @doc Optionally require a complete service response before changing a saved resource.
+-spec add_translation(Id, From, To, Overwrite, RequireComplete, Context) -> ok | {error, term()} when
+    Id :: m_rsc:resource(), From :: atom(), To :: atom(), Overwrite :: boolean(),
+    RequireComplete :: boolean(), Context :: z:context().
+add_translation(Id, FromLanguage, ToLanguage, IsOverwrite, RequireComplete, Context) ->
     case z_acl:rsc_editable(Id, Context) of
         true ->
             case {z_language:is_language_editable(FromLanguage, Context),
@@ -58,7 +67,7 @@ add_translation(Id, FromLanguage, ToLanguage, IsOverwrite, Context) ->
                 {true, true} ->
                     case has_language(Id, FromLanguage, Context) of
                         true ->
-                            translate_1(Id, FromLanguage, ToLanguage, IsOverwrite, Context);
+                            translate_1(Id, FromLanguage, ToLanguage, IsOverwrite, RequireComplete, Context);
                         false ->
                             {error, nosrc}
                     end
@@ -67,6 +76,29 @@ add_translation(Id, FromLanguage, ToLanguage, IsOverwrite, Context) ->
             {error, eacces}
     end.
 
+
+%% @doc Copy source texts into a destination language, preserving filled texts unless requested.
+-spec copy_translation(Id, From, To, Overwrite, Context) -> ok | {error, term()} when
+    Id :: m_rsc:resource(), From :: atom(), To :: atom(), Overwrite :: boolean(), Context :: z:context().
+copy_translation(Id, From, To, Overwrite, Context) ->
+    case z_acl:rsc_editable(Id, Context)
+        andalso z_language:is_language_editable(From, Context)
+        andalso z_language:is_language_editable(To, Context)
+    of
+        false -> {error, eacces};
+        true ->
+            Texts = collect_src_texts(Id, From, To, Overwrite, Context),
+            Mapping = maps:from_list([{T, T} || T <- Texts]),
+            Props = insert_dst_texts(Id, From, To, Mapping, Overwrite, Context),
+            Langs = case m_rsc:p(Id, language, Context) of
+                L when is_list(L), L =/= [] -> L;
+                _ -> [z_language:default_language(Context)]
+            end,
+            case m_rsc:update(Id, Props#{<<"language">> => lists:usort([To | Langs])}, Context) of
+                {ok, _} -> ok;
+                Error -> Error
+            end
+    end.
 
 %% @doc Add a translation to a map. The source and destination language must be editable
 %% languages for the site.
@@ -252,9 +284,10 @@ remove_1(V, _Language, _IsCopyAll, _IsTopLevel) ->
     V.
 
 
-translate_1(Id, FromLanguage, ToLanguage, IsOverwrite, Context) ->
+%% @doc Translate collected source texts and save the result, optionally requiring complete translations.
+translate_1(Id, FromLanguage, ToLanguage, IsOverwrite, RequireComplete, Context) ->
     Texts = collect_src_texts(Id, FromLanguage, ToLanguage, IsOverwrite, Context),
-    case m_translation:translate_to_lookup(FromLanguage, ToLanguage, Texts, Context) of
+    case complete_translations(m_translation:translate_to_lookup(FromLanguage, ToLanguage, Texts, Context), RequireComplete) of
         {ok, Translations} ->
             TransMap = lists:foldl(
                 fun(#{ <<"text">> := Txt, <<"translation">> := TxtTr }, Acc) ->
@@ -295,6 +328,14 @@ translate_1(Id, FromLanguage, ToLanguage, IsOverwrite, Context) ->
         {error, _} = Error ->
             Error
     end.
+
+%% @doc Reject missing or empty service translations when a complete response is required.
+complete_translations({ok, Translations} = Result, true) ->
+    case lists:any(fun(#{<<"translation">> := T}) -> T =:= undefined orelse T =:= <<>> end, Translations) of
+        true -> {error, incomplete};
+        false -> Result
+    end;
+complete_translations(Result, _) -> Result.
 
 collect_src_texts(Id, FromLanguage, ToLanguage, IsOverwrite, Context) ->
     Rsc = m_rsc:get(Id, Context),
@@ -359,24 +400,16 @@ collect_trans(K, #trans{ tr = Tr }, FromLanguage, ToLanguage, IsOverwrite, Acc) 
 is_json(K) ->
     binary:longest_common_suffix([K, <<"_json">>]) =:= 5.
 
-% Fields we are sure of that they are text fields
-is_text(<<"title">>) -> true;
-is_text(<<"short_title">>) -> true;
-is_text(<<"chapeau">>) -> true;
-is_text(<<"summary">>) -> true;
-is_text(<<"body">>) -> true;
-is_text(<<"body_extra">>) -> true;
-is_text(<<"date_remarks">>) -> true;
-is_text(<<"prompt">>) -> true;
-is_text(<<"explanation">>) -> true;
-is_text(<<"matching">>) -> true;
-is_text(<<"narrative">>) -> true;
-is_text(<<"feedback">>) -> true;
-is_text(<<"seo_title">>) -> true;
-is_text(<<"seo_desc">>) -> true;
-is_text(<<"seo_keywords">>) -> true;
+%% @doc Identify binary source-language text properties, including in nested
+%% blocks. Other binary properties (names, URLs, identifiers, etc.) are not text.
+%% Keep this allowlist shared by source collection and destination insertion.
 is_text(K) ->
-    binary:longest_common_suffix([ K, <<"_html">> ]) =:= 5.
+    lists:member(K, [
+        <<"title">>, <<"short_title">>, <<"chapeau">>, <<"summary">>,
+        <<"body">>, <<"body_extra">>, <<"date_remarks">>, <<"prompt">>,
+        <<"explanation">>, <<"matching">>, <<"narrative">>, <<"feedback">>,
+        <<"seo_title">>, <<"seo_desc">>, <<"seo_keywords">>
+    ]) orelse binary:longest_common_suffix([K, <<"_html">>]) =:= 5.
 
 %% @doc Add the translation to all translatable texts.
 insert_dst_texts(Id, FromLanguage, ToLanguage, Translations, IsOverwrite, Context) ->
@@ -453,8 +486,8 @@ insert_dst_texts_1(V, _FromLanguage, _ToLanguage, _Translations, _IsOverwrite, _
     V.
 
 dst_trans(K, #trans{ tr = Tr } = V, FromLanguage, ToLanguage, Translations, IsOverwrite) ->
-    case is_json(K) of
-        false ->
+    case {is_json(K), lists:keyfind(FromLanguage, 1, Tr)} of
+        {false, {_, FromText}} when is_binary(FromText), FromText =/= <<>> ->
             ToText = case lists:keyfind(ToLanguage, 1, Tr) of
                 false -> <<>>;
                 {_, <<>>} -> <<>>;
@@ -462,14 +495,9 @@ dst_trans(K, #trans{ tr = Tr } = V, FromLanguage, ToLanguage, Translations, IsOv
             end,
             if
                 ToText =:= <<>> orelse IsOverwrite ->
-                    Translated = case lists:keyfind(FromLanguage, 1, Tr) of
-                        {_, FromText} ->
-                            case maps:get(FromText, Translations, <<>>) of
-                                undefined -> <<>>;
-                                T1 -> T1
-                            end;
-                        false ->
-                            V
+                    Translated = case maps:get(FromText, Translations, <<>>) of
+                        undefined -> <<>>;
+                        T1 -> T1
                     end,
                     Tr1 = lists:keydelete(ToLanguage, 1, Tr),
                     Tr2 = [ {ToLanguage, Translated} | Tr1 ],
@@ -477,7 +505,7 @@ dst_trans(K, #trans{ tr = Tr } = V, FromLanguage, ToLanguage, Translations, IsOv
                 true ->
                     V
             end;
-        true ->
+        _ ->
             V
     end.
 

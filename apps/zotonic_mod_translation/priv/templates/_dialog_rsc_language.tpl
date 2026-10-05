@@ -95,20 +95,21 @@
         </div>
 
         <div class="form-group">
+            <br>
             <label class="checkbox">
-                <input type="checkbox" value="1" name="overwrite">
-                {_ Overwrite existing texts with new translations _}
+                <input type="checkbox" value="1" name="overwrite"> {_ Overwrite existing texts with new translations _}
             </label>
         </div>
+
+        <p class="help-block">
+            {_ Copying and translating texts is used to fill in blank text fields in the destination language. Existing texts will never be overwritten unless the “overwrite existing texts” checkbox is checked. _}
+        </p>
 
         {% if m.translation.has_translation_service %}
             <p class="help-block">
                 {_ If you automatically translate texts then your texts will be sent to a remote translation service. _}
             </p>
         {% endif %}
-        <p class="help-block">
-            {_ Copying and translating texts is used to fill in blank text fields in the destination language. Existing texts will never be overwritten unless the “overwrite existing texts” checkbox is checked. _}
-        </p>
 
         <div class="modal-footer">
             {% button class="btn btn-default"

@@ -1,3 +1,4 @@
+{% include "_translation_tree_init.tpl" %}
 {% block language_options %}
 {% with m.rsc[id].language as r_lang %}
 <div class="form-group">
