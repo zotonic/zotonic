@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-05 18:36\n"
+"PO-Revision-Date: 2026-10-05 20:38\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "MIME-Version: 1.0\n"
@@ -2524,11 +2524,11 @@ msgstr "Blok strony"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:163
 msgid "Page connected from"
-msgstr ""
+msgstr "Strona, do której prowadzi link z"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:154
 msgid "Page connected to"
-msgstr ""
+msgstr "Strona powiązana z"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:6
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:10
@@ -2554,11 +2554,11 @@ msgstr "Ustawienia strony"
 
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:101
 msgid "Page to connect from"
-msgstr ""
+msgstr "Strona, z której należy się połączyć"
 
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:92
 msgid "Page to connect to"
-msgstr ""
+msgstr "Strona, z którą należy się połączyć"
 
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:3
 #: zotonic_mod_admin/src/mod_admin.erl:495
@@ -2928,7 +2928,7 @@ msgstr "Wybierz powiązany obraz"
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:93
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:102
 msgid "Select a page"
-msgstr ""
+msgstr "Wybierz stronę"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_select_predicate.tpl:5
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:89
@@ -2946,7 +2946,7 @@ msgstr "Wybierz predykat, aby znaleźć strony, z którymi ta strona może być 
 
 #: zotonic_mod_admin/src/mod_admin.erl:935
 msgid "Select both a visible page and a valid predicate for each connection."
-msgstr ""
+msgstr "Dla każdego połączenia należy wybrać zarówno widoczną stronę, jak i prawidłowy predykat."
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:80
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:115
@@ -3029,7 +3029,7 @@ msgstr "Niektóre obrazy, pliki PDF, pliki audio i wideo są prezentowane w jedn
 
 #: zotonic_mod_admin/src/mod_admin.erl:933
 msgid "Some pages or connections could not be updated. Check your permissions. Other changes may have been saved."
-msgstr ""
+msgstr "Nie udało się zaktualizować niektórych stron lub połączeń. Sprawdź swoje uprawnienia. Inne zmiany mogły zostać zapisane."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:24
 msgid "Some tasks are retrying.<br>Total errors: {total}<br>Highest for single task: {max}"
@@ -3774,7 +3774,7 @@ msgstr "Wersja Zotonic"
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:30
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:27
 msgid "active filters"
-msgstr ""
+msgstr "filtry aktywne"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:19
 msgid "add media item"
@@ -4534,7 +4534,7 @@ msgstr "Dodaj strony lub kliknij na stronę w menu."
 
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:103
 msgid "Enable or disable language tabs."
-msgstr ""
+msgstr "Włącz lub wyłącz zakładki językowe."
 
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:70
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:100
@@ -15653,7 +15653,7 @@ msgstr "Dodaj tłumaczenie"
 
 #: zotonic_mod_translation/priv/templates/_admin_bulk_translation.tpl:10
 msgid "Add, copy, or remove translations for the selected pages."
-msgstr ""
+msgstr "Dodaj, skopiuj lub usuń tłumaczenia wybranych stron."
 
 #: zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:28
 msgid "Added"
@@ -15669,7 +15669,7 @@ msgstr "Wszystkie przetłumaczone teksty zostaną usunięte."
 
 #: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:18
 msgid "Apply the selected translation options to {count} pages? Editing will be disabled until the operation finishes."
-msgstr ""
+msgstr "Czy chcesz zastosować wybrane opcje tłumaczenia do stron {count} ? Edycja zostanie wyłączona do czasu zakończenia operacji."
 
 #: zotonic_mod_translation/priv/templates/_translation_status.tpl:6
 msgid "Approve translation"
@@ -15712,7 +15712,7 @@ msgstr "Kopiowanie i tłumaczenie tekstów służy do wypełniania pustych pól 
 
 #: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:16
 msgid "Could not start the operation. Check your permissions and language options, or try again later."
-msgstr ""
+msgstr "Nie udało się rozpocząć operacji. Sprawdź uprawnienia i ustawienia językowe lub spróbuj ponownie później."
 
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:3
 #: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:6
@@ -15759,7 +15759,7 @@ msgstr "Edytowalne języki"
 
 #: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:10
 msgid "Editing is disabled until this operation finishes."
-msgstr ""
+msgstr "Edycja jest wyłączona do czasu zakończenia tej operacji."
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:145
 msgid "English"
@@ -15851,11 +15851,11 @@ msgstr "Pozostaw teksty puste"
 #: zotonic_mod_translation/priv/templates/_admin_bulk_translation.tpl:5
 #: zotonic_mod_translation/src/models/m_translation_tree.erl:128
 msgid "Manage translations"
-msgstr ""
+msgstr "Zarządzaj tłumaczeniami"
 
 #: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:4
 msgid "Manage translations for the selected pages only. Pages in their menus or collections are not included."
-msgstr ""
+msgstr "Zarządzaj tłumaczeniami wyłącznie dla wybranych stron. Strony znajdujące się w ich menu lub kolekcjach nie są uwzględniane."
 
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:85
 #: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:42
@@ -15920,7 +15920,7 @@ msgstr "Przeładuj wszystkie tłumaczenia z modułów i strony. Wszystkie szablo
 
 #: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:15
 msgid "Reload page"
-msgstr ""
+msgstr "Odśwież stronę"
 
 #: zotonic_mod_translation/src/mod_translation.erl:843
 msgid "Reloading all .po files in the background."
@@ -15932,11 +15932,11 @@ msgstr "Usuń język"
 
 #: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:17
 msgid "Removing a language affects all pages in this tree, except pages where it is the only language."
-msgstr ""
+msgstr "Usunięcie języka ma wpływ na wszystkie strony w tej strukturze, z wyjątkiem stron, na których jest to jedyny język."
 
 #: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:17
 msgid "Removing a language affects all selected pages, except pages where it is the only language."
-msgstr ""
+msgstr "Usunięcie języka ma wpływ na wszystkie zaznaczone strony, z wyjątkiem tych, na których jest to jedyny język."
 
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:43
 msgid "Removing a language will hide it on the edit form. If the page is saved then the translation will be deleted from the database."
@@ -15944,7 +15944,7 @@ msgstr "Usunięcie języka spowoduje ukrycie go w formularzu edycji. Jeżeli str
 
 #: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:9
 msgid "Removing language"
-msgstr ""
+msgstr "Usuwanie języka"
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:153
 msgid "Romanian"
@@ -15956,7 +15956,7 @@ msgstr "Rosyjski"
 
 #: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:17
 msgid "Save or discard your changes before translating the tree."
-msgstr ""
+msgstr "Przed przetłumaczeniem drzewa zapisz lub odrzuć wprowadzone zmiany."
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:192
 msgid "Scan all templates for translation tags and generate .pot files that can be used for translating the templates. The <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext package must be installed</a>."
@@ -16038,11 +16038,11 @@ msgstr "Złotą zasadą przy wyborze języka jest prostota. Trzymaj się główn
 
 #: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:12
 msgid "The operation could not be completed. Some pages may have been changed."
-msgstr ""
+msgstr "Nie udało się zakończyć operacji. Niektóre strony mogły ulec zmianie."
 
 #: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:11
 msgid "The operation has finished. Reload the page to continue editing."
-msgstr ""
+msgstr "Operacja została zakończona. Odśwież stronę, aby kontynuować edycję."
 
 #: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:40
 msgid "The source language text was used for the missing translations."
@@ -16055,15 +16055,15 @@ msgstr "Podczas tłumaczenia tekstów wystąpił błąd. Spróbuj ponownie póź
 
 #: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:66
 msgid "This changes saved pages immediately. Pages you cannot edit are skipped. Copying and automatic translation skip pages without the source language. Editing is disabled while the operation runs."
-msgstr ""
+msgstr "Zmiany te są natychmiast zapisywane na stronach. Strony, których nie można edytować, są pomijane. Podczas kopiowania i automatycznego tłumaczenia pomijane są strony bez języka źródłowego. Podczas trwania operacji edycja jest wyłączona."
 
 #: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:19
 msgid "This permanently removes the selected language from every page in this tree. Pages with only that language will be kept unchanged. This cannot be undone. Continue?"
-msgstr ""
+msgstr "Spowoduje to trwałe usunięcie wybranego języka ze wszystkich stron w tej strukturze. Strony zawierające wyłącznie ten język pozostaną bez zmian. Czynności tej nie można cofnąć. Czy chcesz kontynuować?"
 
 #: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:19
 msgid "This permanently removes the selected language from every selected page. Pages with only that language will be kept unchanged. This cannot be undone. Continue?"
-msgstr ""
+msgstr "Spowoduje to trwałe usunięcie wybranego języka ze wszystkich zaznaczonych stron. Strony zawierające wyłącznie ten język pozostaną bez zmian. Czynności tej nie można cofnąć. Czy chcesz kontynuować?"
 
 #: zotonic_mod_translation/priv/templates/_translation_status.tpl:4
 msgid "This translation has been automatically generated."
@@ -16087,7 +16087,7 @@ msgstr "Tłumaczyć"
 #: zotonic_mod_translation/priv/templates/_translation_tree_button.tpl:3
 #: zotonic_mod_translation/src/models/m_translation_tree.erl:141
 msgid "Translate all pages"
-msgstr ""
+msgstr "Przetłumacz wszystkie strony"
 
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:41
 msgid "Translated page texts for every editable language that has a translation in the resource."
@@ -16100,7 +16100,7 @@ msgstr "Tłumaczenia"
 
 #: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:7
 msgid "Translation in progress"
-msgstr ""
+msgstr "Tłumaczenie w toku"
 
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:3
 msgid "Translations"
@@ -16129,11 +16129,11 @@ msgstr "Bez języka"
 #: zotonic_mod_translation/src/models/m_translation_tree.erl:131
 #: zotonic_mod_translation/src/models/m_translation_tree.erl:134
 msgid "You are not allowed to edit these pages."
-msgstr ""
+msgstr "Nie wolno edytować tych stron."
 
 #: zotonic_mod_translation/src/models/m_translation_tree.erl:149
 msgid "You are not allowed to edit this tree."
-msgstr ""
+msgstr "Nie masz uprawnień do edycji tego drzewa."
 
 #: zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:60
 #: zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:67
