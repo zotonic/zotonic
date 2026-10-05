@@ -61,7 +61,7 @@
 }
 
 .mod_translation-language-list .mod_translation-added {
-  color: #00ab6b; /* light green */
+  color: var(--bs-success-text-emphasis, #00ab6b);
 }
 
 /* Detail */
@@ -109,7 +109,7 @@
 
 .mod_translation-language-detail .mod_translation-added,
 .mod_translation-language-detail .mod_translation-attention {
-  color: #00ab6b; /* light green */
+  color: var(--bs-success-text-emphasis, #00ab6b);
 }
 
 .mod_translation-language-detail .mod_translation-code {
@@ -154,21 +154,21 @@
 }
 
 .mod_translation-status-perc-0 .mod_translation-status-bar {
-  background-color: #fc5830;
+  background-color: var(--bs-danger, #fc5830);
 }
 
 .mod_translation-status-perc-25 .mod_translation-status-bar {
-  background-color: #fc5830;
+  background-color: var(--bs-danger, #fc5830);
 }
 
 .mod_translation-status-perc-50 .mod_translation-status-bar {
-  background-color: #fd9727;
+  background-color: var(--bs-warning, #fd9727);
 }
 
 .mod_translation-status-perc-75 .mod_translation-status-bar {
-  background-color: #cdda49;
+  background-color: color-mix(in srgb, var(--bs-warning, #fd9727), var(--bs-success, #1ec659));
 }
 
 .mod_translation-status-perc-100 .mod_translation-status-bar {
-  background-color: #1ec659;
+  background-color: var(--bs-success, #1ec659);
 }

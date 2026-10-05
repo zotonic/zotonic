@@ -64,7 +64,7 @@
     margin-left: 0;
 }
 .mod_translation-language-list .mod_translation-added {
-    color: #00ab6b; /* light green */
+    color: var(--bs-success-text-emphasis, #00ab6b);
 }
 
 /* Detail */
@@ -104,7 +104,7 @@
 }
 .mod_translation-language-detail .mod_translation-added,
 .mod_translation-language-detail .mod_translation-attention {
-    color: #00ab6b; /* light green */
+    color: var(--bs-success-text-emphasis, #00ab6b);
 }
 .mod_translation-language-detail .mod_translation-code {
     margin-right: .5rem;
@@ -120,11 +120,11 @@
 
 /* Status */
 
-$color-0: #fc5830; // red
-$color-25: #fc5830; // red
-$color-50: #fd9727; // orange
-$color-75: #cdda49; // lime
-$color-100: #1ec659; // green
+$color-0: var(--bs-danger, #fc5830);
+$color-25: var(--bs-danger, #fc5830);
+$color-50: var(--bs-warning, #fd9727);
+$color-75: color-mix(in srgb, var(--bs-warning, #fd9727), var(--bs-success, #1ec659));
+$color-100: var(--bs-success, #1ec659);
 
 .mod_translation-status-table {}
 

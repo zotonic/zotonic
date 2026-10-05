@@ -49,7 +49,7 @@ $bs3-table-strong-border-width: $border-width * 2 !default;
 }
 
 .text-muted {
-  color: #777 !important;
+  color: var(--bs-secondary-color) !important;
 }
 
 .text-right {
@@ -125,14 +125,14 @@ $bs3-table-strong-border-width: $border-width * 2 !default;
   font-size: ($font-size-base * 1.5);
   font-weight: $badge-font-weight;
   line-height: 1;
-  color: var(--bs3-close-color, #000);
-  text-shadow: var(--bs3-close-text-shadow, 0 1px 0 #fff);
+  color: var(--bs3-close-color, var(--bs-body-color));
+  text-shadow: var(--bs3-close-text-shadow, none);
   opacity: .2;
   text-decoration: none;
 
   &:hover,
   &:focus {
-    color: var(--bs3-close-hover-color, var(--bs3-close-color, #000));
+    color: var(--bs3-close-hover-color, var(--bs3-close-color, var(--bs-body-color)));
     text-decoration: none;
     cursor: pointer;
     opacity: .5;
@@ -221,11 +221,11 @@ button.close {
 }
 
 .panel-default {
-  border-color: $border-color;
+  border-color: var(--bs-border-color);
 
   > .panel-heading {
-    background-color: $gray-100;
-    border-color: $border-color;
+    background-color: var(--bs-tertiary-bg);
+    border-color: var(--bs-border-color);
   }
 }
 
@@ -261,8 +261,8 @@ button.close {
 .well {
   padding: $spacer;
   margin-bottom: $spacer;
-  background-color: $gray-100;
-  border: $border-width solid $border-color;
+  background-color: var(--bs-tertiary-bg);
+  border: $border-width solid var(--bs-border-color);
   border-radius: $border-radius;
 }
 
@@ -318,7 +318,7 @@ button.close {
   font-size: $form-text-font-size;
   margin-top: $spacer * .3125;
   margin-bottom: $spacer * .625;
-  color: var(--z-admin-help-block-color, #737373);
+  color: var(--z-admin-help-block-color, var(--bs-secondary-color));
 }
 
 .form-inline {
@@ -415,7 +415,7 @@ button.close {
 // -----------------------------------------------------------------------------
 // Tables
 .table {
-  --bs-table-border-color: #{$table-border-color};
+  --bs-table-border-color: var(--bs-border-color);
 
   > thead,
   > tbody,
@@ -452,11 +452,11 @@ button.close {
 }
 
 .table-striped > tbody > tr:nth-of-type(odd) {
-  background-color: $table-striped-bg;
+  background-color: var(--bs-table-striped-bg);
 }
 
 .table-hover > tbody > tr:hover {
-  background-color: $table-hover-bg;
+  background-color: var(--bs-table-hover-bg);
 }
 
 .table-condensed {
@@ -483,13 +483,13 @@ button.close {
 }
 
 .navbar-default {
-  background-color: $gray-100;
-  border-color: $border-color;
+  background-color: var(--bs-tertiary-bg);
+  border-color: var(--bs-border-color);
 
   .navbar-brand,
   .navbar-nav .nav-link,
   .navbar-nav > li > a {
-    color: $navbar-light-color;
+    color: var(--bs-navbar-color);
   }
 }
 
@@ -837,7 +837,7 @@ button.close {
       &:hover,
       &:focus {
         text-decoration: none;
-        background-color: var(--bs3-nav-link-hover-bg, #{$gray-200});
+        background-color: var(--bs3-nav-link-hover-bg, var(--bs-tertiary-bg));
       }
     }
   }
@@ -1023,15 +1023,15 @@ button.close {
 .page-header {
   padding-bottom: $spacer * .5;
   margin: 0 0 $spacer;
-  border-bottom: $border-width solid $border-color;
+  border-bottom: $border-width solid var(--bs-border-color);
 }
 
 // -----------------------------------------------------------------------------
 // Progress bar variants
-.progress-bar-success { background-color: $success; }
-.progress-bar-info { background-color: $info; }
-.progress-bar-warning { background-color: $warning; }
-.progress-bar-danger { background-color: $danger; }
+.progress-bar-success { background-color: var(--bs-success); }
+.progress-bar-info { background-color: var(--bs-info); }
+.progress-bar-warning { background-color: var(--bs-warning); }
+.progress-bar-danger { background-color: var(--bs-danger); }
 
 // -----------------------------------------------------------------------------
 // Utility helpers

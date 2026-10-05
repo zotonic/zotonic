@@ -1,8 +1,8 @@
 .survey-result-status {
     padding: 1.25rem;
     margin-bottom: 2rem;
-    background: #f7f7f7;
-    border: 1px solid #ddd;
+    background: var(--bs-tertiary-bg, #f7f7f7);
+    border: 1px solid var(--bs-border-color, #ddd);
     border-radius: 4px;
 }
 
@@ -13,16 +13,16 @@
     gap: 1rem 2rem;
     padding: 1.25rem 1.5rem;
     margin: 0 0 2rem;
-    color: #245c2e;
-    background: #edf8ef;
-    border: 1px solid #78b883;
+    color: var(--bs-success-text-emphasis, #245c2e);
+    background: var(--bs-success-bg-subtle, #edf8ef);
+    border: 1px solid var(--bs-success-border-subtle, #78b883);
     border-left-width: 5px;
     border-radius: 4px;
 
     &.is-failed {
-        color: #7a2525;
-        background: #fff0f0;
-        border-color: #d78585;
+        color: var(--bs-danger-text-emphasis, #7a2525);
+        background: var(--bs-danger-bg-subtle, #fff0f0);
+        border-color: var(--bs-danger-border-subtle, #d78585);
     }
 
     &__outcome {
@@ -89,8 +89,8 @@
     width: 100%;
     padding: 1.5rem 1.25rem 1.25rem;
     margin: 1.5rem 0;
-    background: #fff8dc;
-    border: 1px solid #ead68a;
+    background: var(--bs-warning-bg-subtle, #fff8dc);
+    border: 1px solid var(--bs-warning-border-subtle, #ead68a);
     border-left-width: 4px;
     border-radius: 4px;
 
@@ -107,9 +107,9 @@
     display: inline-block;
     padding: 0.15rem 0.5rem;
     margin: 0;
-    color: #765f00;
-    background: #fff8dc;
-    border: 1px solid #ead68a;
+    color: var(--bs-warning-text-emphasis, #765f00);
+    background: var(--bs-warning-bg-subtle, #fff8dc);
+    border: 1px solid var(--bs-warning-border-subtle, #ead68a);
     border-radius: 999px;
     font-size: 0.75em;
     font-weight: 600;

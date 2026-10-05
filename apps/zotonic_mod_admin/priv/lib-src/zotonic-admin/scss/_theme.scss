@@ -114,7 +114,9 @@
 [data-bs-theme="dark"] {
     color-scheme: dark;
     --bs-body-bg: #1f2225;
+    --bs-body-bg-rgb: 31, 34, 37;
     --bs-body-color: #e5e7eb;
+    --bs-body-color-rgb: 229, 231, 235;
     --bs-secondary-color: rgba(229, 231, 235, 0.75);
     --bs-secondary-bg: #343a40;
     --bs-tertiary-bg: #2b3035;

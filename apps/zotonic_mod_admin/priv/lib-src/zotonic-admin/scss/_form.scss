@@ -55,6 +55,6 @@ fieldset,
     color: inherit;
 
     &:has(input:disabled) {
-        color: $textColorMuted;
+        color: var(--z-admin-text-muted);
     }
 }

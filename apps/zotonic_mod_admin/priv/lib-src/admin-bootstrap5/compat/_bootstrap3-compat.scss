@@ -156,11 +156,11 @@ button.close {
 .panel-title { @extend .card-title; margin-bottom: 0; }
 
 .panel-default {
-  border-color: $border-color;
+  border-color: var(--bs-border-color);
 
   > .panel-heading {
-    background-color: $gray-100;
-    border-color: $border-color;
+    background-color: var(--bs-tertiary-bg);
+    border-color: var(--bs-border-color);
   }
 }
 
@@ -187,8 +187,8 @@ button.close {
 .well {
   padding: $spacer;
   margin-bottom: $spacer;
-  background-color: $gray-100;
-  border: $border-width solid $border-color;
+  background-color: var(--bs-tertiary-bg);
+  border: $border-width solid var(--bs-border-color);
   border-radius: $border-radius;
 }
 
@@ -227,7 +227,7 @@ button.close {
   display: block;
   margin-top: $spacer * .3125;
   margin-bottom: $spacer * .625;
-  color: var(--z-admin-help-block-color, #737373);
+  color: var(--z-admin-help-block-color, var(--bs-secondary-color));
 }
 
 .form-inline {
@@ -311,7 +311,7 @@ button.close {
 // -----------------------------------------------------------------------------
 // Tables
 .table {
-  --bs-table-border-color: #{$table-border-color};
+  --bs-table-border-color: var(--bs-border-color);
 
   > thead,
   > tbody,
@@ -348,11 +348,11 @@ button.close {
 }
 
 .table-striped > tbody > tr:nth-of-type(odd) {
-  background-color: $table-bg-accent;
+  background-color: var(--bs-table-striped-bg);
 }
 
 .table-hover > tbody > tr:hover {
-  background-color: $table-bg-hover;
+  background-color: var(--bs-table-hover-bg);
 }
 
 .table-condensed {
@@ -379,13 +379,13 @@ button.close {
 }
 
 .navbar-default {
-  background-color: $gray-100;
-  border-color: $border-color;
+  background-color: var(--bs-tertiary-bg);
+  border-color: var(--bs-border-color);
 
   .navbar-brand,
   .navbar-nav .nav-link,
   .navbar-nav > li > a {
-    color: $navbar-light-color;
+    color: var(--bs-navbar-color);
   }
 }
 
@@ -733,7 +733,7 @@ button.close {
       &:hover,
       &:focus {
         text-decoration: none;
-        background-color: var(--bs3-nav-link-hover-bg, #{$gray-200});
+        background-color: var(--bs3-nav-link-hover-bg, var(--bs-tertiary-bg));
       }
     }
   }
@@ -919,7 +919,7 @@ button.close {
 .page-header {
   padding-bottom: $spacer * .5;
   margin: 0 0 $spacer;
-  border-bottom: $border-width solid $border-color;
+  border-bottom: $border-width solid var(--bs-border-color);
 }
 
 // -----------------------------------------------------------------------------

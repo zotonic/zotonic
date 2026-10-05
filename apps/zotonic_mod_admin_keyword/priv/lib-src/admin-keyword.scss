@@ -1,7 +1,7 @@
-$keyword-blue: #0fa2db;
-$keyword-ink: #263238;
-$keyword-muted: #6b7780;
-$keyword-grid: #dce3e7;
+$keyword-blue: var(--bs-primary);
+$keyword-ink: var(--z-admin-text, var(--bs-body-color));
+$keyword-muted: var(--z-admin-text-muted, var(--bs-secondary-color));
+$keyword-grid: var(--z-admin-border, var(--bs-border-color));
 
 .keyword-dashboard__filters {
     .panel-body {
@@ -106,13 +106,13 @@ $keyword-grid: #dce3e7;
     overflow: hidden;
     border: 0;
     border-radius: 999px;
-    background: #edf2f5;
+    background: var(--bs-secondary-bg);
     color: $keyword-blue;
 }
 
 .keyword-usage progress::-webkit-progress-bar {
     border-radius: 999px;
-    background: #edf2f5;
+    background: var(--bs-secondary-bg);
 }
 
 .keyword-usage progress::-webkit-progress-value {
@@ -140,7 +140,7 @@ $keyword-grid: #dce3e7;
     border-radius: 4px;
 
     &:focus {
-        outline: 3px solid rgba($keyword-blue, .35);
+        outline: 3px solid rgba(var(--bs-primary-rgb), .35);
         outline-offset: 2px;
     }
 }
@@ -150,7 +150,7 @@ $keyword-grid: #dce3e7;
     margin: 0 auto;
     border-collapse: separate;
     border-spacing: 2px;
-    background: white;
+    background: var(--z-admin-surface, var(--bs-body-bg));
 
     th {
         color: $keyword-ink;
@@ -164,7 +164,7 @@ $keyword-grid: #dce3e7;
         z-index: 2;
         height: 130px;
         padding: 8px 5px;
-        background: white;
+        background: var(--z-admin-surface, var(--bs-body-bg));
         vertical-align: bottom;
     }
 
@@ -175,7 +175,7 @@ $keyword-grid: #dce3e7;
         max-width: 190px;
         padding: 7px 10px;
         overflow: hidden;
-        background: white;
+        background: var(--z-admin-surface, var(--bs-body-bg));
         text-align: right;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -212,29 +212,25 @@ $keyword-grid: #dce3e7;
     text-align: center;
 
     &.is-diagonal {
-        background: #dfe5e8;
+        background: var(--bs-secondary-bg);
         font-weight: 700;
     }
 
-    &.is-level-0 { background: #f4f7f8; color: #65727a; }
-    &.is-level-1 { background: #e8f5fb; }
-    &.is-level-2 { background: #d2ecf7; }
-    &.is-level-3 { background: #b8e2f3; }
-    &.is-level-4 { background: #92d3ec; }
-    &.is-level-5 { background: #65c1e4; }
-    &.is-level-6 { background: #32addd; }
-    &.is-level-7 { background: #0f9acb; color: white; }
-    &.is-level-8 { background: #087eaa; color: white; }
-    &.is-level-9 { background: #066589; color: white; }
-    &.is-level-10 { background: #044b66; color: white; }
+    // Interpolate theme colors so the scale remains readable in both modes.
+    @for $level from 0 through 10 {
+        &.is-level-#{$level} {
+            background: color-mix(in srgb, var(--bs-primary-border-subtle) #{$level * 10%}, var(--bs-primary-bg-subtle));
+            color: $keyword-ink;
+        }
+    }
 }
 
 .keyword-pairs {
     margin-bottom: 0;
 
     .is-active {
-        background-color: #e8f5fb;
-        color: #075d7c;
+        background-color: var(--bs-primary-bg-subtle);
+        color: var(--bs-primary-text-emphasis);
         font-weight: 700;
     }
 

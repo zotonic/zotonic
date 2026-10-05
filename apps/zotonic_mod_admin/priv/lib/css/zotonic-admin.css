@@ -132,7 +132,9 @@ limitations under the License.
 [data-bs-theme=dark] {
   color-scheme: dark;
   --bs-body-bg: #1f2225;
+  --bs-body-bg-rgb: 31, 34, 37;
   --bs-body-color: #e5e7eb;
+  --bs-body-color-rgb: 229, 231, 235;
   --bs-secondary-color: rgba(229, 231, 235, 0.75);
   --bs-secondary-bg: #343a40;
   --bs-tertiary-bg: #2b3035;
@@ -785,19 +787,19 @@ fieldset[disabled] .btn-primary.active {
 
 .checkbox-list--separated {
   margin-bottom: 8px;
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid var(--z-admin-table-border);
 }
 
 .checkbox-list-heading {
   margin: 16px 0 8px;
   padding: 7px 9px;
-  border-left: 3px solid rgba(15, 162, 219, 0.55);
+  border-left: 3px solid rgba(var(--bs-primary-rgb), 0.55);
   border-radius: 4px;
-  background: #eeeeee;
+  background: var(--z-admin-surface-muted);
 }
 .checkbox-list-heading__title {
   margin: 0;
-  color: #555555;
+  color: var(--z-admin-text);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.055em;
@@ -805,7 +807,7 @@ fieldset[disabled] .btn-primary.active {
 }
 .checkbox-list-heading__summary {
   margin: 3px 0 0;
-  color: #555555;
+  color: var(--z-admin-text);
   font-size: 12px;
   font-weight: 400;
   line-height: 1.4;
@@ -820,8 +822,8 @@ fieldset[disabled] .btn-primary.active {
   transition: background-color 0.12s ease, box-shadow 0.12s ease;
 }
 .connection-checkbox:hover, .connection-checkbox:focus-within {
-  background: rgba(0, 0, 0, 0.035);
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+  background: var(--z-admin-surface-hover);
+  box-shadow: inset 0 0 0 1px var(--z-admin-border);
 }
 .connection-checkbox__label {
   display: grid;
@@ -877,9 +879,9 @@ fieldset[disabled] .btn-primary.active {
   place-items: center;
   width: 16px;
   height: 16px;
-  border: 1px solid rgba(15, 162, 219, 0.55);
+  border: 1px solid rgba(var(--bs-primary-rgb), 0.55);
   border-radius: 50%;
-  color: #0fa2db;
+  color: var(--bs-link-color);
   font-size: 10px;
   font-weight: 700;
   font-style: normal;
@@ -910,9 +912,9 @@ fieldset[disabled] .btn-primary.active {
   clip: auto;
   white-space: normal;
   border-radius: 4px;
-  background: #0fa2db;
+  background: var(--bs-primary-bg-subtle);
   box-shadow: 0 5px 14px rgba(0, 0, 0, 0.18);
-  color: #fff;
+  color: var(--bs-primary-text-emphasis);
   font-size: 12px;
   font-weight: 400;
   line-height: 1.4;
@@ -1393,7 +1395,7 @@ fieldset > label.checkbox > input[type=radio],
 .form__import_edges .checkbox label:has(input:disabled),
 .form__import_medium.checkbox label:has(input:disabled),
 .form__subscribe .checkbox label:has(input:disabled) {
-  color: #999;
+  color: var(--z-admin-text-muted);
 }
 
 img.thumb {
@@ -1481,7 +1483,7 @@ div.modal .modal-footer.sticky-bottom {
 }
 
 .modal-dialog .well {
-  border: 1px solid #d4d4d4;
+  border: 1px solid var(--z-admin-border);
 }
 
 #menu-editor .widget-header {
