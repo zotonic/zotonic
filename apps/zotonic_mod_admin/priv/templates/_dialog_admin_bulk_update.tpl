@@ -82,7 +82,6 @@
     </div>
 
     {% block connections %}
-        <hr>
         {% with m.search.all_bytitle::%{ cat: 'predicate', pagelen: 1000 } as predicates %}
             {% include "_admin_overview_filter_connection.tpl"
                 name="bulk_object_id"
