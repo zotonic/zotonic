@@ -142,7 +142,8 @@ migrate_recipient_languages(LastId, Context) ->
                 Map = case Props of
                     undefined -> #{};
                     M when is_map(M) -> M;
-                    _ -> z_props:from_props(Props)
+                    L when is_list(L) -> z_props:from_props(L);
+                    _ -> #{}
                 end,
                 Language = case maps:get(<<"pref_language">>, Map, undefined) of
                     undefined -> undefined;
