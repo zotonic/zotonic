@@ -26,6 +26,43 @@ mappings are supplied through `#sparql_mapping{}`. Unknown namespaces remain
 expanded; an unknown or variable predicate cannot currently be converted to
 SQL.
 
+## Deferred: variable predicates
+
+Variable-predicate support is deferred (2026-10-05). The proposed first step is
+to support predicates restricted to an explicit `VALUES` list, returning one
+property/value pair per row:
+
+```sparql
+PREFIX zotonic: <http://zotonic.net/predicate/>
+SELECT ?property ?value WHERE {
+    VALUES ?property { zotonic:title zotonic:summary }
+    <https://example.org/id/123> ?property ?value .
+}
+```
+
+This query is not currently supported. The parser and planner represent variable
+predicates, but SQL generation rejects them. Returning property/value rows would
+avoid the combinations produced by independently matching several multivalued
+properties into separate columns.
+
+Implementation needs predicate-IRI handling distinct from resource-ID bindings,
+support for a fixed subject, and SQL branches that produce separate rows while
+preserving heterogeneous value types and RDF metadata. The existing `UNION`
+mapping combines search conditions and cannot directly provide these result
+branches. Each branch must retain resource and property ACL checks; filters,
+ordering and pagination need regression coverage.
+
+The initial estimate is 3–5 developer days including tests and documentation.
+Unrestricted discovery (`?subject ?property ?value` without a finite predicate
+list) is a separate, larger scope: define discoverable predicates and canonical
+IRIs across columns, JSON properties, edges, facets and module mappings. The
+current `sparql_mapping` notification resolves supplied predicates rather than
+enumerating them. The rough estimate for that broader scope is 2–4 developer
+weeks total, with lower confidence.
+
+These estimates exclude expanding `#trans{}` records into multiple bindings.
+The endpoint's existing language-fallback serialization would remain in place.
+
 ## Nesting
 
 - A graph group is a conjunction of search terms.
@@ -85,8 +122,14 @@ Queries are executed with:
     z_sparql:search(Sparql, OffsetLimit, Context)
     z_sparql:search(Sparql, Arguments, OffsetLimit, Context)
 
-The result is a Zotonic `#search_result{}`. There is no complete SPARQL Protocol
-endpoint or SPARQL Results JSON/XML serializer in this module.
+These functions return a Zotonic `#search_result{}` and retain their existing
+projection and paging contract. The separate `/sparql` endpoint uses
+`z_sparql_sql:result_plan_to_sql/2` to project the requested variables with RDF
+metadata. `z_sparql_results` builds normalized bindings; `z_sparql_results_encode`
+serializes JSON, XML, CSV or TSV according to HTTP content negotiation. Endpoint
+pagination consumes the outer query LIMIT/OFFSET before SQL compilation unless
+explicit HTTP paging overrides it. See the module README for request formats
+and the supported SELECT subset.
 
 ## Language values
 
