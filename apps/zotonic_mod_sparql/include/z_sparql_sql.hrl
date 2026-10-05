@@ -24,6 +24,8 @@
     sql :: term(),
     type :: value_type(),
     source :: argument | column | expression | jsonb,
+    % Search index text is usable for matching, never for public projection.
+    selectable = true :: boolean(),
     defined = true :: true | false | term(),
     rdf = undefined :: undefined | z_sparql_sql_metadata:metadata()
 }).

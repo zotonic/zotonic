@@ -30,7 +30,10 @@ Run SPARQL SELECT queries through Zotonic's normal search pipeline.
 
 This model delegates to `m_search` using the `sparql` query type provided by
 `mod_sparql`. Paging, search result handling, and resource visibility checks use
-the calling context, just as for other searches.
+the calling context, just as for other searches. Selected properties and derived
+expressions use the source property's SQL ACL guards before aggregation and paging.
+Fulltext/FTS facet values and pivot index texts cannot be selected, including via
+aliases, casts or aggregates. They remain available for matching and scoring.
 
 ## Query payload
 

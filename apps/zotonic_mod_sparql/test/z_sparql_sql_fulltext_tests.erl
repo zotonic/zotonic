@@ -7,6 +7,7 @@
 
 -export([
     observe_rdf_ns/2,
+    observe_url_abs/2,
     observe_sparql_mapping/2
 ]).
 
@@ -96,25 +97,68 @@ facet_trigram_search_column_test() ->
                 binary:match(sql_binary(MatchTerm#search_sql_term.where), <<".ft_summary">>))
         end).
 
-facet_rdf_value_column_test() ->
-    with_observers(
-        fun(Context) ->
+indexed_text_projection_test() ->
+    with_observers(fun(Context) ->
+        lists:foreach(fun(Field) ->
+            lists:foreach(fun(Select) ->
+                Text = <<"PREFIX test: <https://example.test/> "
+                    "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> SELECT ", Select/binary,
+                    " WHERE { ?resource test:", Field/binary, " ?text }">>,
+                {ok, Query} = z_sparql:parse(Text),
+                ?assertEqual({error, {not_selectable, {var, <<"text">>}}},
+                    z_sparql_sql:to_sql_term(Query, Context))
+            end, [<<"?text">>, <<"*">>, <<"(?text AS ?copy)">>,
+                <<"(xsd:string(?text) AS ?copy)">>, <<"(SUBSTR(?text, 1, 3) AS ?copy)">>,
+                <<"(GROUP_CONCAT(?text) AS ?copy)">>]),
+            %% The same binding remains available for matching in WHERE.
+            {ok, Match} = z_sparql:parse(<<
+                "PREFIX test: <https://example.test/> SELECT ?resource "
+                "WHERE { ?resource test:", Field/binary, " ?text }">>),
+            ?assertMatch({ok, _}, z_sparql_sql:to_sql_term(Match, Context)),
+            {ok, Optional} = z_sparql:parse(<<
+                "PREFIX test: <https://example.test/> SELECT ?text "
+                "WHERE { ?resource test:title ?title OPTIONAL { ?resource test:",
+                Field/binary, " ?text } }">>),
+            ?assertEqual({error, {not_selectable, {var, <<"text">>}}},
+                z_sparql_sql:to_sql_term(Optional, Context))
+        end, [<<"summary">>, <<"body">>, <<"pivot">>, <<"custom_pivot">>])
+    end).
+
+indexed_text_binding_provenance_test() ->
+    with_observers(fun(Context) ->
+        lists:foreach(fun(Pattern) ->
             {ok, Query} = z_sparql:parse(<<
-                "PREFIX test: <https://example.test/> "
-                "SELECT ?resource ?summary WHERE { "
-                "?resource test:summary ?summary "
-                "}"
-            >>),
-            {ok, Terms} = z_sparql_sql:to_sql_term(Query, Context),
-            [ValueTerm] = [
-                Term
-                || #search_sql_term{ join_inner = Joins } = Term <- Terms,
-                   map_size(Joins) =:= 1
-            ],
-            Where = sql_binary(ValueTerm#search_sql_term.where),
-            ?assertNotEqual(nomatch, binary:match(Where, <<".f_summary IS NOT NULL">>)),
-            ?assertEqual(nomatch, binary:match(Where, <<".ft_summary">>))
-        end).
+                "PREFIX test: <https://example.test/> SELECT ?text WHERE { ",
+                Pattern/binary, " }">>),
+            ?assertEqual({error, {not_selectable, {var, <<"text">>}}},
+                z_sparql_sql:to_sql_term(Query, Context))
+        end, [
+            <<"?resource test:summary ?text . ?resource test:title ?text">>,
+            <<"?resource test:title ?text . ?resource test:summary ?text">>,
+            <<"?resource test:summary ?text . VALUES ?text { UNDEF }">>,
+            <<"VALUES ?text { UNDEF } { ?resource test:summary ?text }">>,
+            <<"?resource test:title ?title OPTIONAL { ?resource test:summary ?text } "
+              "OPTIONAL { ?resource test:title ?text }">>
+        ])
+    end).
+
+indexed_text_match_projection_test() ->
+    with_observers(fun(Context) ->
+        {ok, Query} = z_sparql:parse(<<
+            "PREFIX test: <https://example.test/> "
+            "SELECT (zotonic:fullTextRank(?resource, test:custom_pivot, \"words\") AS ?rank) "
+            "(EXISTS { ?resource test:summary ?text } AS ?found) "
+            "WHERE { ?resource test:custom_pivot ?indexed }">>),
+        ?assertMatch({ok, _}, z_sparql_sql:to_sql_term(Query, Context))
+    end).
+
+ordinary_text_projection_test() ->
+    with_observers(fun(Context) ->
+        {ok, Query} = z_sparql:parse(<<
+            "PREFIX test: <https://example.test/> SELECT ?text "
+            "WHERE { ?resource test:title ?text }">>),
+        ?assertMatch({ok, _}, z_sparql_sql:to_sql_term(Query, Context))
+    end).
 
 default_fulltext_plan_test() ->
     with_observers(
@@ -140,12 +184,16 @@ default_fulltext_plan_test() ->
 
 with_observers(F) ->
     {ok, _} = application:ensure_all_started(zotonic_notifier),
-    Context = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+    Context = z_acl:sudo(z_context:new(sparql_fulltext_fixture)),
+    Dispatch = ets:new(z_utils:name_for_site(z_dispatcher, Context), [named_table, public]),
+    ok = z_notifier:observe(url_abs, {?MODULE, observe_url_abs}, 100, Context),
     ok = z_notifier:observe(rdf_ns, {?MODULE, observe_rdf_ns}, 100, Context),
     ok = z_notifier:observe(sparql_mapping, {?MODULE, observe_sparql_mapping}, 100, Context),
     try
         F(Context)
     after
+        ets:delete(Dispatch),
+        z_notifier:detach(url_abs, Context),
         z_notifier:detach(rdf_ns, Context),
         z_notifier:detach(sparql_mapping, Context)
     end.
@@ -179,5 +227,16 @@ observe_sparql_mapping(
         _Context) ->
     {ok, {search_column,
         <<"search_facet">>, <<"f_summary">>, <<"ft_summary">>, fulltext}};
+observe_sparql_mapping(
+        #sparql_mapping{ ns_prefix = <<"test">>, predicate = <<"pivot">> },
+        _Context) ->
+    {ok, {column, <<"rsc">>, <<"pivot_tsv">>, fts}};
+observe_sparql_mapping(
+        #sparql_mapping{ ns_prefix = <<"test">>, predicate = <<"custom_pivot">> },
+        _Context) ->
+    {ok, {column, <<"pivot_search">>, <<"text">>, text}};
 observe_sparql_mapping(#sparql_mapping{}, _Context) ->
     undefined.
+
+observe_url_abs(#url_abs{url = Url}, _Context) ->
+    <<"https://example.test", Url/binary>>.

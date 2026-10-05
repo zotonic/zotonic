@@ -7,7 +7,9 @@
 
 -export([
     observe_acl_add_sql_check/2,
+    observe_acl_query_prop/2,
     observe_rdf_ns/2,
+    observe_url_abs/2,
     observe_sparql_mapping/2
 ]).
 
@@ -120,7 +122,7 @@ result_exists_resource_acl_test() ->
         fun(Context) ->
             Query = sparql_sql(<<
                 "PREFIX test: <https://example.test/vocab#> "
-                "SELECT ?subject (EXISTS { ?object test:id 123 } AS ?found) "
+                "SELECT ?subject (EXISTS { ?object test:id ?object_id FILTER (?object_id = 123) } AS ?found) "
                 "WHERE { ?subject test:id ?id }"
             >>, Context),
             [LocalAlias] = acl_aliases(Query#search_sql.args),
@@ -131,6 +133,28 @@ result_exists_resource_acl_test() ->
             ?assert(lists:member(123, Query#search_sql.args))
         end).
 
+selected_property_acl_test() ->
+    with_observers(fun(Context) ->
+        lists:foreach(fun(Select) ->
+            Query = sparql_sql(<<
+                "PREFIX test: <https://example.test/vocab#> SELECT ", Select/binary,
+                " WHERE { ?subject test:secret ?secret }">>, Context),
+            ?assert(contains(Query#search_sql.where, <<"false">>))
+        end, [<<"?secret">>, <<"*">>, <<"(SUBSTR(?secret, 1, 3) AS ?copy)">>,
+            <<"(GROUP_CONCAT(?secret) AS ?copy)">>]),
+        Optional = sparql_sql(<<
+            "PREFIX test: <https://example.test/vocab#> SELECT ?secret "
+            "WHERE { ?subject test:id ?id OPTIONAL { ?subject test:secret ?secret } }"
+        >>, Context),
+        ?assert(contains(Optional#search_sql.from, <<"false">>)),
+        ?assertNot(contains(Optional#search_sql.where, <<"false">>)),
+        Pivot = sparql_sql(<<
+            "PREFIX test: <https://example.test/vocab#> SELECT ?city "
+            "WHERE { ?subject test:city ?city }"
+        >>, Context),
+        ?assert(contains(Pivot#search_sql.where, <<"false">>))
+    end).
+
 sparql_sql(Sparql, Context) ->
     {ok, ParsedQuery} = z_sparql:parse(Sparql),
     {ok, Terms} = z_sparql_sql:to_sql_term(ParsedQuery, Context),
@@ -138,13 +162,19 @@ sparql_sql(Sparql, Context) ->
 
 with_observers(Fun) ->
     {ok, _} = application:ensure_all_started(zotonic_notifier),
-    Context = z_context:new(zotonic_site_testsandbox),
+    Context = z_context:new(sparql_acl_fixture),
+    Dispatch = ets:new(z_utils:name_for_site(z_dispatcher, Context), [named_table, public]),
+    ok = z_notifier:observe(url_abs, {?MODULE, observe_url_abs}, 100, Context),
     ok = z_notifier:observe(rdf_ns, {?MODULE, observe_rdf_ns}, 100, Context),
     ok = z_notifier:observe(sparql_mapping, {?MODULE, observe_sparql_mapping}, 100, Context),
     ok = z_notifier:observe(acl_add_sql_check, {?MODULE, observe_acl_add_sql_check}, 100, Context),
+    ok = z_notifier:observe(acl_query_prop, {?MODULE, observe_acl_query_prop}, 100, Context),
     try
         Fun(Context)
     after
+        ets:delete(Dispatch),
+        z_notifier:detach(url_abs, Context),
+        z_notifier:detach(acl_query_prop, Context),
         z_notifier:detach(rdf_ns, Context),
         z_notifier:detach(sparql_mapping, Context),
         z_notifier:detach(acl_add_sql_check, Context)
@@ -160,6 +190,14 @@ observe_sparql_mapping(#sparql_mapping{
         predicate = <<"id">>
     }, _Context) ->
     {ok, {column, <<"rsc">>, <<"id">>, id}};
+observe_sparql_mapping(#sparql_mapping{
+        ns_prefix = <<"test">>, predicate = <<"secret">>
+    }, _Context) ->
+    {ok, {jsonb, <<"rsc">>, <<"props_json">>, [<<"secret">>], text}};
+observe_sparql_mapping(#sparql_mapping{
+        ns_prefix = <<"test">>, predicate = <<"city">>
+    }, _Context) ->
+    {ok, {column, <<"rsc">>, <<"pivot_city">>, text}};
 observe_sparql_mapping(#sparql_mapping{}, _Context) ->
     undefined.
 
@@ -178,3 +216,12 @@ contains(Text, Part) ->
 
 count(Text, Part) ->
     length(binary:matches(Text, Part)).
+
+observe_acl_query_prop(#acl_query_prop{property = Property}, _Context)
+    when Property =:= <<"secret">>; Property =:= <<"address_city">> ->
+    deny;
+observe_acl_query_prop(#acl_query_prop{}, _Context) ->
+    undefined.
+
+observe_url_abs(#url_abs{url = Url}, _Context) ->
+    <<"https://example.test", Url/binary>>.

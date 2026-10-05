@@ -282,6 +282,7 @@ merge_optional_expressions(Left, Right) ->
         ],
         type = Type,
         source = merged_optional_source(Left1, Right1),
+        selectable = Left#sql_expression.selectable andalso Right#sql_expression.selectable,
         rdf = coalesce_metadata([Left1, Right1]),
         defined = [
             $(, expression_defined_sql(Left1),
@@ -483,7 +484,8 @@ merge_values_expressions(Left, Right) ->
         type = Type,
         source = expression,
         defined = [$(, LeftDefined, <<" OR ">>, RightDefined, $)],
-        rdf = coalesce_metadata([Left1, Right1])
+        rdf = coalesce_metadata([Left1, Right1]),
+        selectable = Left#sql_expression.selectable andalso Right#sql_expression.selectable
     },
     {Where, Merged}.
 
@@ -500,6 +502,7 @@ mapped_triple_to_sql({column, Table, Column, Type}, SubjectAlias, Object, Term0,
     Term1 = z_search_acl_props:add_source(TermBase, SubjectAlias, {column, Table, Column}),
     Expression = #sql_expression{
         sql = column_expression(Alias, Column),
+        selectable = selectable_column(Table, Column, Type),
         type = normalize_type(Type),
         source = column
     },
@@ -512,6 +515,7 @@ mapped_triple_to_sql(
     Term1 = z_search_acl_props:add_source(TermBase, SubjectAlias, {column, Table, ValueColumn}),
     Expression = #sql_expression{
         sql = column_expression(Alias, ValueColumn),
+        selectable = false,
         type = text,
         source = column
     },
@@ -523,6 +527,7 @@ mapped_triple_to_sql({jsonb, Table, Column, Selector, Type}, SubjectAlias, Objec
     Term1 = z_search_acl_props:add_source(TermBase, SubjectAlias, {jsonb, Table, Column, Selector}),
     Expression = #sql_expression{
         sql = jsonb_expression(Alias, Column, Selector),
+        selectable = selectable_column(Table, Column, Type),
         type = normalize_type(Type),
         source = jsonb
     },
@@ -720,7 +725,11 @@ bind_variable_object(Variable, Kind, Expression, Term,
     case maps:find(Variable, Bindings) of
         {ok, {Kind, #sql_expression{} = BoundExpression}} ->
             {Where, MergedExpression} = bind_expressions(BoundExpression, Expression),
-            Bindings1 = Bindings#{ Variable => {Kind, MergedExpression} },
+            SafeExpression = MergedExpression#sql_expression{
+                selectable = BoundExpression#sql_expression.selectable
+                    andalso Expression#sql_expression.selectable
+            },
+            Bindings1 = Bindings#{ Variable => {Kind, SafeExpression} },
             {add_where(Where, Term), State#sql_state{ bindings = Bindings1 }};
         {ok, _OtherKind} ->
             throw({error, {incompatible_variable, Variable}});
@@ -1943,16 +1952,55 @@ projection_term(#{ select := Select, distinct := Distinct, root := Root } = Plan
 projection_expressions([], State, Term, _Nr, Acc) ->
     {lists:reverse(Acc), Term, State};
 projection_expressions([{var, _} = Variable | Rest], State, Term0, Nr, Acc) ->
+    ok = validate_projection(Variable, State),
     {Expression, Term1} = projection_variable(Variable, State, Term0),
     ColumnAlias = <<"sparql_", (integer_to_binary(Nr))/binary>>,
     SelectExpression = [Expression, <<" AS ">>, ColumnAlias],
     projection_expressions(Rest, State, Term1, Nr + 1, [SelectExpression | Acc]);
 projection_expressions([{as, Expression, Variable} | Rest], State0, Term0, Nr, Acc) ->
+    ok = validate_projection(Expression, State0),
     {Expression1, Term1} = expression_to_sql(Expression, State0, Term0),
     State1 = bind_projection(Variable, Expression1, Term1, State0),
     ColumnAlias = <<"sparql_", (integer_to_binary(Nr))/binary>>,
     SelectExpression = [expression_sql(Expression1), <<" AS ">>, ColumnAlias],
     projection_expressions(Rest, State1, Term1, Nr + 1, [SelectExpression | Acc]).
+
+%% Validate before compiling: casts, string functions and aggregates must not
+%% provide a way to return indexed text. EXISTS and fulltext functions expose
+%% only a match/score and retain their normal scoped property ACL checks.
+-spec validate_projection(Expression, State) -> ok when
+    Expression :: term(), State :: #sql_state{}.
+validate_projection({var, _} = Variable, #sql_state{bindings = Bindings}) ->
+    case maps:find(Variable, Bindings) of
+        {ok, {value, #sql_expression{selectable = false}}} ->
+            throw({error, {not_selectable, Variable}});
+        _ -> ok
+    end;
+validate_projection({Exists, _Pattern}, _State)
+    when Exists =:= exists; Exists =:= not_exists ->
+    ok;
+validate_projection({call, Function, _Arguments}, _State)
+    when Function =:= fulltext; Function =:= fulltext_rank ->
+    ok;
+validate_projection(Expression, State) when is_tuple(Expression) ->
+    validate_projection(tuple_to_list(Expression), State);
+validate_projection(Expressions, State) when is_list(Expressions) ->
+    lists:foreach(fun(Expression) -> validate_projection(Expression, State) end, Expressions);
+validate_projection(_Expression, _State) ->
+    ok.
+
+-spec selectable_column(Table, Column, Type) -> boolean() when
+    Table :: binary(), Column :: binary(), Type :: value_type().
+selectable_column(_Table, _Column, Type) when Type =:= fts; Type =:= fulltext ->
+    false;
+%% Custom pivot text columns are also the input to trigram fulltext search.
+selectable_column(<<"pivot_", _/binary>>, _Column, text) ->
+    false;
+selectable_column(<<"rsc">>, Column, _Type)
+    when Column =:= <<"pivot_tsv">>; Column =:= <<"pivot_rtsv">> ->
+    false;
+selectable_column(_Table, _Column, _Type) ->
+    true.
 
 projection_variable(Variable, State, Term) ->
     case maps:find(Variable, State#sql_state.bindings) of

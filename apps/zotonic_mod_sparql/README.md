@@ -94,6 +94,14 @@ For fulltext the GIN trigram index is used and ranking is done by `word_similari
 For efficiency you must ensure that a GIN index is placed on the pivot text column, the facets
 will handle this automatically (block name `..._fulltext`).
 
+Search index text is not publishable resource data. Fulltext/FTS facet values,
+FTS vectors, and custom pivot text columns cannot be returned by `SELECT`,
+including `SELECT *`, aliases, casts, string functions, and aggregates. Such
+projections return a `not_selectable` error. The index values remain usable in
+query patterns and filters, and `fullText`/`fullTextRank` results may be selected.
+Ordinary resource properties retain their property ACL checks, including when
+selected through expressions or OPTIONAL patterns.
+
 In the future, a GiST index might be useful for better ranking.
 
 
@@ -277,6 +285,7 @@ TODO
  - [x] ACL checks for private properties, only allow 'administrator users' to query on private properties
  - [x] Check usage of rsc props_json vs props, migrate to props_json (accept both for now)
  - [x] Ensure the types of z_props, mod_rdf and search_facet are the same (bool -> boolean, int -> integer)
+ - [x] Security: do not allow select of fulltext/fts facet and pivot index texts
  - [ ] Import and export of Turtle, JSON-LD, and other formats (TBD)
  - [ ] Support language handling, using the JSON objects: { _type: "trans", tr = { "en":"..." } }, including LANG etc.
  - [ ] Add SPARQL endpoint, with expected results (for use with 3rd parties -- check API standards)
