@@ -169,6 +169,52 @@ update_translation_unsafe_not_escaped_test() ->
         ok = m_rsc:delete(Id, AdminC)
     end.
 
+%% @doc Removing a language prunes existing and submitted translations recursively.
+update_prunes_removed_languages_test() ->
+    update_prunes_removed_languages(admin_context()).
+
+%% @doc Check pruning without copying removed text into the remaining language.
+update_prunes_removed_languages(C) ->
+    Title = #trans{tr = [{en, <<"Hello">>}, {nl, <<"Hallo">>}]},
+    Removed = #trans{tr = [{nl, <<"Alleen Nederlands">>}]},
+    Profile = #{<<"bio">> => Title, <<"tagline">> => Removed, <<"rating">> => 5},
+    Blocks = [#{<<"type">> => <<"text">>, <<"body">> => Title,
+        <<"items">> => [Removed, #{<<"caption">> => Title}]}],
+    {ok, Id} = m_rsc:insert(#{
+        <<"category_id">> => text,
+        <<"language">> => [en, nl],
+        <<"title">> => Title,
+        <<"summary">> => Removed,
+        <<"profile">> => Profile,
+        <<"blocks">> => Blocks
+    }, C),
+    try
+        {ok, Id} = m_rsc:update(Id, #{<<"language">> => [en]}, C),
+        assert_pruned_languages(Id, C),
+        % A later update with stale form data must not restore removed text.
+        {ok, Id} = m_rsc:update(Id, #{
+            <<"title">> => Title,
+            <<"summary">> => Removed,
+            <<"profile">> => Profile,
+            <<"blocks">> => Blocks
+        }, C),
+        assert_pruned_languages(Id, C)
+    after
+        ok = m_rsc:delete(Id, C)
+    end.
+
+%% @doc Verify top-level, map, block, and list translations after pruning.
+assert_pruned_languages(Id, C) ->
+    Remaining = #trans{tr = [{en, <<"Hello">>}]},
+    ?assertEqual([en], m_rsc:p(Id, <<"language">>, C)),
+    ?assertEqual(Remaining, m_rsc:p(Id, <<"title">>, C)),
+    ?assertEqual(undefined, m_rsc:p(Id, <<"summary">>, C)),
+    ?assertEqual(#{<<"bio">> => Remaining, <<"tagline">> => #trans{tr = []},
+        <<"rating">> => 5}, m_rsc:p(Id, <<"profile">>, C)),
+    ?assertEqual([#{<<"type">> => <<"text">>, <<"body">> => Remaining,
+        <<"items">> => [#trans{tr = []}, #{<<"caption">> => Remaining}]}],
+        m_rsc:p(Id, <<"blocks">>, C)).
+
 admin_context() ->
     ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
     C = z_context:new(zotonic_site_testsandbox),

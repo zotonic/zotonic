@@ -1435,11 +1435,16 @@ update_transaction_fun_db_1({ok, UpdatePropsN}, Id, RscUpd, Raw, IsABefore, IsCa
     Sources = lists:uniq(filter_languages(Langs1)),
     Mapping = z_language:language_map(Sources, Targets),
     MappedTargets = [L || L <- Targets, lists:member(L, maps:values(Mapping))],
-    PreferredTargets = case MappedTargets of
-        [] -> Targets;
-        _ -> MappedTargets
+    {PropsToMap, PreferredTargets} = case MappedTargets of
+        [] ->
+            {NewProps, Targets};
+        _ ->
+            % Remove stale translations before fallback mapping can relabel them.
+            % Keep mapped variants too, as existing properties may already use
+            % the site's language instead of the imported regional variant.
+            {z_props:prune_languages(NewProps, Sources ++ MappedTargets), MappedTargets}
     end,
-    MappedProps = z_props:map_languages(NewProps, Mapping, PreferredTargets),
+    MappedProps = z_props:map_languages(PropsToMap, Mapping, PreferredTargets),
     UsedLanguages = lists:usort(MappedTargets ++ z_props:extract_languages(MappedProps)),
     Langs2 = case UsedLanguages of
         [] -> [hd(Targets)];
