@@ -19,7 +19,29 @@
 
 -module(filter_admin_filter_count).
 -author("Marc Worrell <marc@worrell.nl>").
--moduledoc("Count nonempty overview filters, excluding sorting and pagination. Zero and false are active filter values.").
+-moduledoc(#{
+    zotonic_keywords => [
+        "reference", "frontend_developer", "template_filter",
+        "content_management", "query"
+    ]
+}).
+-moduledoc("
+Count active filters in admin overview query arguments, for example to display
+the number of selected filters on the overview's Filter button.
+
+```django
+{{ q.qargs|admin_filter_count }}
+```
+
+The input is a list of query argument pairs with binary keys. Values of
+`undefined`, an empty binary, or an empty list are not counted. Zero and `false`
+are active filter values. Sorting, pagination, and the query-argument marker
+are excluded: `qsort`, `qzsort`, `qpage`, `qpagelen`, and `qargs`.
+
+An undefined input returns zero. Each remaining nonempty argument counts once;
+repeated keys are not deduplicated, and a list-valued argument counts as one
+filter regardless of how many values it contains.
+").
 
 -export([admin_filter_count/2]).
 

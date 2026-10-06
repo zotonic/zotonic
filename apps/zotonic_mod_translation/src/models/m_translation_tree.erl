@@ -19,6 +19,13 @@
 
 -module(m_translation_tree).
 -author("Marc Worrell <marc@worrell.nl>").
+-moduledoc(#{
+    zotonic_keywords => [
+        "reference", "backend_developer", "model", "localization_and_translation",
+        "translated_text", "language_code", "content_management",
+        "authorization_and_access_control"
+    ]
+}).
 -moduledoc("
 Tree translation API. `get/<id>` returns language counts, `get/status/<id>` returns
 job progress and `post/<id>` starts a job. Reads require edit access to the root;
