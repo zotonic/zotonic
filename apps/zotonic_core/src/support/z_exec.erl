@@ -129,6 +129,7 @@ Build, deployment and integration-test details are in
     run/4,
     run_local/3,
     run_sandbox/3,
+    sandbox_mode/0,
     sandbox_status/0,
     profile/1
 ]).

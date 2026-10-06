@@ -18,13 +18,28 @@
         {% endif %}
 
         <h4>{_ Local sandbox _}</h4>
-        {% if media.sandbox == `available` %}
-            <p class="text-success">{_ Sandbox isolation is available. _}</p>
+        {% if media.sandbox == `available` and media.sandbox_mode == `enabled` %}
+            <p class="text-success">
+            {_ Sandbox isolation is available. Media processing commands run in a restricted environment for additional security. _}
+            </p>
+        {% elif media.sandbox == `available` and media.sandbox_mode == `disabled` %}
+            <p class="alert alert-danger" role="alert">
+            {_ Sandbox isolation is available but disabled. Media processing commands run without sandbox protection, reducing protection against malicious uploads. _}
+            </p>
         {% elseif media.sandbox == `unsupported` %}
-            <p class="alert alert-warning" role="alert">{_ Sandbox isolation is not supported on this system. Local media commands run without isolation. _}</p>
+            <p class="alert alert-warning" role="alert">
+            {_ Sandbox isolation is not supported on this system. Local media commands run without isolation. _}
+            </p>
+        {% elif media.sandbox_mode == `disabled` %}
+            <p class="alert alert-danger" role="alert">
+            {_ Sandbox isolation cannot be used on this system and is disabled. Media processing commands run without isolation, reducing protection against malicious media files. _}
+            </p>
         {% else %}
-            <p class="alert alert-danger" role="alert">{_ Sandbox isolation is unavailable. Local sandboxed media commands cannot run. _}</p>
+            <p class="alert alert-danger" role="alert">
+            {_ Sandbox isolation cannot be used on this system, and media processing commands will not run. _}
+            </p>
         {% endif %}
+
         <p>{_ Local ImageMagick _}:
             {% if media.local_imagemagick.available %}
                 {{ media.local_imagemagick.version|escape }}
