@@ -17,7 +17,11 @@
 #ifdef __linux__
 #include <elf.h>
 #include <limits.h>
+
+#ifdef HAS_LANDLOCK
 #include <linux/landlock.h>
+#endif
+
 #include <seccomp.h>
 #include <sys/prctl.h>
 #include <sys/syscall.h>
@@ -64,25 +68,37 @@ static void limit(int resource, const char *value)
 
 static void init_policy(void)
 {
-#ifdef __linux__
-    int abi = syscall(SYS_landlock_create_ruleset, NULL, 0,
-                      LANDLOCK_CREATE_RULESET_VERSION);
-    if ((abi >= 0 && abi < 3) ||
-        (abi < 0 && (errno == ENOSYS || errno == EOPNOTSUPP))) {
-        fprintf(stderr, "zotonic-sandbox: Landlock ABI 3 or newer is unsupported\n");
+#if defined(__linux__) && defined(HAS_LANDLOCK)
+    int abi = syscall(SYS_landlock_create_ruleset, NULL, 0, LANDLOCK_CREATE_RULESET_VERSION);
+
+    if ((abi >= 0 && abi < 3)
+            || (abi < 0 && (errno == ENOSYS || errno == EOPNOTSUPP))) {
+        fprintf(stderr, "zotonic-sandbox: Landlock ABI 3 or older is unsupported\n");
         exit(78);
     }
-    if (abi < 0) fail("Landlock ABI probe");
+
+    if (abi < 0) {
+        fail("Landlock ABI probe");
+    }
+
     /* Handle ALL filesystem rights through ABI 3, including truncation.
      * Handling only read rights would leave writes unrestricted. */
     handled = (LANDLOCK_ACCESS_FS_TRUNCATE << 1) - 1;
-    if (abi >= 5) handled |= LANDLOCK_ACCESS_FS_IOCTL_DEV;
+    if (abi >= 5) {
+        handled |= LANDLOCK_ACCESS_FS_IOCTL_DEV;
+    }
+
     struct landlock_ruleset_attr attr = { .handled_access_fs = handled };
     ruleset = syscall(SYS_landlock_create_ruleset, &attr, sizeof(attr), 0);
-    if (ruleset < 0) fail("landlock_create_ruleset");
+    if (ruleset < 0) {
+        fail("landlock_create_ruleset");
+    }
 #elif defined(__APPLE__)
     policy = open_memstream(&policy_text, &policy_size);
-    if (!policy) fail("open_memstream");
+    if (!policy) {
+        fail("open_memstream");
+    }
+
     fputs("(version 1)\n(deny default)\n"
           "(allow file-read-metadata)\n"
           /* dyld needs to open the root directory during process startup.
@@ -91,6 +107,9 @@ static void init_policy(void)
           "(allow process-fork)\n"
           "(allow signal (target self))\n"
           "(allow sysctl-read)\n", policy);
+#elif defined(__linux__) && !defined(HAS_LANDLOCK)
+    fprintf(stderr, "zotonic-sandbox: Landlock is unsupported\n");
+    exit(78);
 #else
     errno = ENOTSUP;
     fail("unsupported sandbox platform");
