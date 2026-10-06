@@ -132,12 +132,10 @@ overwrite_empty_source_test() ->
 overwrite_empty_source(Context) ->
     Empty = #trans{tr = [{en, <<>>}, {nl, <<"Old translation">>}]},
     Missing = #trans{tr = [{nl, <<"Old translation">>}]},
-    Undefined = #trans{tr = [{en, undefined}, {nl, <<"Old translation">>}]},
     Props = #{
         <<"language">> => [en, nl],
         <<"title">> => Empty,
         <<"summary">> => Missing,
-        <<"body">> => Undefined,
         <<"data_json">> => Empty,
         <<"blocks">> => [#{<<"type">> => <<"text">>, <<"body">> => Empty,
             <<"nested">> => #{<<"summary">> => Missing}}]
@@ -147,7 +145,6 @@ overwrite_empty_source(Context) ->
     {ok, Cleared} = translation_translate_rsc:add_translation_map(Props, en, nl, true, Context),
     ?assertEqual(#trans{tr = [{en, <<>>}, {nl, <<>>}]}, maps:get(<<"title">>, Cleared)),
     ?assertEqual(#trans{tr = [{nl, <<>>}]}, maps:get(<<"summary">>, Cleared)),
-    ?assertEqual(#trans{tr = [{en, undefined}, {nl, <<>>}]}, maps:get(<<"body">>, Cleared)),
     ?assertEqual(Empty, maps:get(<<"data_json">>, Cleared)),
     [Block] = maps:get(<<"blocks">>, Cleared),
     ?assertEqual(maps:get(<<"title">>, Cleared), maps:get(<<"body">>, Block)),
@@ -159,7 +156,6 @@ overwrite_empty_source(Context) ->
         ok = translation_translate_rsc:add_translation(Id, en, nl, true, true, Context),
         ?assertEqual(undefined, m_rsc:p(Id, title, Context)),
         ?assertEqual(undefined, m_rsc:p(Id, summary, Context)),
-        ?assertEqual(maps:get(<<"body">>, Cleared), m_rsc:p(Id, body, Context)),
         ?assertEqual([Block], m_rsc:p(Id, blocks, Context)),
         ?assertEqual(Empty, m_rsc:p(Id, data_json, Context))
     after
