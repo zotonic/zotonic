@@ -195,7 +195,8 @@ Translating a tree
 ------------------
 
 The **Translate all pages** button manages translations for an entire menu or collection. It is available in the
-frontend editor and in the translation widget on an admin edit page for a menu or collection. Sites can use the same
+frontend editor and at the bottom of the admin **+ Translate** dialog for menus and pages with outgoing `haspart`
+connections. Sites can use the same
 feature for menu-based content such as timelines; the frontend editor's `translate-all` button acts on its `tree_id`.
 
 A tree includes its root resource, nested menu entries, and resources connected through `haspart`. Each resource is

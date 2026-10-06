@@ -129,7 +129,7 @@
         start(form.dataset.translationTreeForm, values);
     });
     document.addEventListener("click", event => {
-        if (event.target.closest("#translate-all")) {
+        if (event.target.closest("#translate-all, [data-translation-tree-dialog]")) {
             event.preventDefault();
             if (isDirty()) window.alert(labels.dirty);
             else if (!activeJob) z_event("translation-tree-dialog");
