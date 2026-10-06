@@ -15,7 +15,7 @@ else ifeq ($(UNAME_S),Linux)
 
 HAS_SECCOMP := $(shell \
 	echo '#include <seccomp.h>' | \
-	$(CC) -E - >/dev/null 2>&1 && echo 1 || echo 0)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -E - >/dev/null 2>&1 && echo 1 || echo 0)
 
 HAS_LANDLOCK := $(shell \
 	echo '#include <linux/landlock.h>' | \
