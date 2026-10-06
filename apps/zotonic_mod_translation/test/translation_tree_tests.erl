@@ -107,10 +107,13 @@ integration(Context) ->
         {ok, _} = translation_tree:start(Root, {<<"empty">>, nl, en, false}, Context),
         ?assertMatch(#{state := complete, failed := 0, skipped := 0}, await(Root, Context, 500)),
         ?assertEqual([en, nl], m_rsc:p(B, language, Context)),
-        %% Fields without source content must remain valid translation records.
+        %% Missing source content preserves the destination unless overwriting.
+        %% Saving an entirely empty translation removes the property.
         {ok, A} = m_rsc:update(A, #{<<"body">> => #trans{tr = [{nl, <<"Only Dutch">>}]}}, Context),
-        ok = translation_translate_rsc:copy_translation(A, en, nl, true, Context),
+        ok = translation_translate_rsc:copy_translation(A, en, nl, false, Context),
         ?assertEqual(<<"Only Dutch">>, proplists:get_value(nl, (m_rsc:p(A, body, Context))#trans.tr)),
+        ok = translation_translate_rsc:copy_translation(A, en, nl, true, Context),
+        ?assertEqual(undefined, m_rsc:p(A, body, Context)),
         %% Translate plain binary fields using the page's source language, even when
         %% the editor context has a different language. Nested block fields follow
         %% the same allowlist; identifiers and arbitrary binary data stay untouched.
