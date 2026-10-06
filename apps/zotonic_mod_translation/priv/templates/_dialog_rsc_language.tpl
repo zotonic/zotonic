@@ -122,6 +122,16 @@
             %}
         </div>
     </form>
+
+    {% if id.is_a.menu or id.o.haspart %}
+        <hr>
+        <div style="display: flex; align-items: center; gap: 15px;">
+            {% include "_translation_tree_button.tpl" tree_id=id %}
+            <span class="text-muted">
+                {_ Add, copy, or remove translations for all pages in this menu or collection. _}
+            </span>
+        </div>
+    {% endif %}
 {% else %}
     <ul>
         {% for code, lang in language_list_editable %}
@@ -134,4 +144,3 @@
     </ul>
 {% endif %}
 {% endwith %}
-
