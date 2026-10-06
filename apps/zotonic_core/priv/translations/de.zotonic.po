@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-05 20:38\n"
+"PO-Revision-Date: 2026-10-06 09:57\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -15645,11 +15645,14 @@ msgstr "Fügen Sie eine neue Übersetzung hinzu"
 msgid "Add language"
 msgstr "Sprache hinzufügen"
 
-#: zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:11
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:121
 #: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:70
 msgid "Add translation"
 msgstr "Übersetzung hinzufügen"
+
+#: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:131
+msgid "Add, copy, or remove translations for all pages in this menu or collection."
+msgstr "Fügen Sie Übersetzungen für alle Seiten in diesem Menü oder dieser Sammlung hinzu, kopieren Sie sie oder entfernen Sie sie."
 
 #: zotonic_mod_translation/priv/templates/_admin_bulk_translation.tpl:10
 msgid "Add, copy, or remove translations for the selected pages."
@@ -15666,10 +15669,6 @@ msgstr "Alle Texte wurden übersetzt."
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:22
 msgid "All translated texts will be removed."
 msgstr "Alle übersetzten Texte werden entfernt."
-
-#: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:18
-msgid "Apply the selected translation options to {count} pages? Editing will be disabled until the operation finishes."
-msgstr "Sollen die ausgewählten Übersetzungsoptionen auf die Seiten unter {count} angewendet werden? Die Bearbeitung wird deaktiviert, bis der Vorgang abgeschlossen ist."
 
 #: zotonic_mod_translation/priv/templates/_translation_status.tpl:6
 msgid "Approve translation"
@@ -15696,7 +15695,7 @@ msgstr "Automatische Übersetzung"
 msgid "Available sub-languages"
 msgstr "Verfügbare Untersprachen"
 
-#: zotonic_mod_translation/src/mod_translation.erl:828
+#: zotonic_mod_translation/src/mod_translation.erl:829
 msgid "Cannot generate translation files because <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext is not installed</a>."
 msgstr "Kann keine Übersetzungsdateien erzeugen, weil <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext nicht installiert ist</a>."
 
@@ -15711,8 +15710,8 @@ msgid "Copying and translating texts is used to fill in blank text fields in the
 msgstr "Beim Kopieren und Übersetzen von Texten werden leere Textfelder in der Zielsprache ausgefüllt. Vorhandene Texte werden niemals überschrieben, es sei denn, die Checkbox „Vorhandene Texte überschreiben“ ist aktiviert."
 
 #: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:16
-msgid "Could not start the operation. Check your permissions and language options, or try again later."
-msgstr "Der Vorgang konnte nicht gestartet werden. Überprüfen Sie Ihre Berechtigungen und Spracheinstellungen oder versuchen Sie es später erneut."
+msgid "Could not start the translation. Check your permissions and language options, or try again later."
+msgstr "Die Übersetzung konnte nicht gestartet werden. Überprüfen Sie Ihre Berechtigungen und Spracheinstellungen oder versuchen Sie es später erneut."
 
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:3
 #: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:6
@@ -15758,8 +15757,8 @@ msgid "Editable languages"
 msgstr "Bearbeitbare Sprachen"
 
 #: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:10
-msgid "Editing is disabled until this operation finishes."
-msgstr "Die Bearbeitung ist deaktiviert, bis dieser Vorgang abgeschlossen ist."
+msgid "Editing is disabled until translation finishes."
+msgstr "Die Bearbeitung ist deaktiviert, bis die Übersetzung abgeschlossen ist."
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:145
 msgid "English"
@@ -15922,7 +15921,7 @@ msgstr "Laden Sie alle Übersetzungen aus den Modulen und der Site neu. Alle Vor
 msgid "Reload page"
 msgstr "Seite neu laden"
 
-#: zotonic_mod_translation/src/mod_translation.erl:843
+#: zotonic_mod_translation/src/mod_translation.erl:844
 msgid "Reloading all .po files in the background."
 msgstr "Alle .po-Dateien im Hintergrund neu laden."
 
@@ -15955,8 +15954,8 @@ msgid "Russian"
 msgstr "Russisch"
 
 #: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:17
-msgid "Save or discard your changes before translating the tree."
-msgstr "Speichern oder verwerfen Sie Ihre Änderungen, bevor Sie den Baum übersetzen."
+msgid "Save or discard your changes before starting the translation."
+msgstr "Speichern oder verwerfen Sie Ihre Änderungen, bevor Sie mit der Übersetzung beginnen."
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:192
 msgid "Scan all templates for translation tags and generate .pot files that can be used for translating the templates. The <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext package must be installed</a>."
@@ -15991,32 +15990,32 @@ msgstr "Anzeigen der Sprache in der URL"
 msgid "Show translations"
 msgstr "Übersetzungen anzeigen"
 
-#: zotonic_mod_translation/src/mod_translation.erl:740
-#: zotonic_mod_translation/src/mod_translation.erl:788
+#: zotonic_mod_translation/src/mod_translation.erl:741
+#: zotonic_mod_translation/src/mod_translation.erl:789
 msgid "Sorry, could not change the language."
 msgstr "Sorry, konnte die Sprache nicht ändern."
 
-#: zotonic_mod_translation/src/mod_translation.erl:918
+#: zotonic_mod_translation/src/mod_translation.erl:919
 msgid "Sorry, that language is unknown or not enabled."
 msgstr "Entschuldigung, diese Sprache ist unbekannt oder nicht aktiviert."
 
-#: zotonic_mod_translation/src/mod_translation.erl:727
-#: zotonic_mod_translation/src/mod_translation.erl:756
-#: zotonic_mod_translation/src/mod_translation.erl:768
-#: zotonic_mod_translation/src/mod_translation.erl:791
+#: zotonic_mod_translation/src/mod_translation.erl:728
+#: zotonic_mod_translation/src/mod_translation.erl:757
+#: zotonic_mod_translation/src/mod_translation.erl:769
+#: zotonic_mod_translation/src/mod_translation.erl:792
 msgid "Sorry, you don't have permission to change the language list."
 msgstr "Tut mir leid, Sie haben keine Berechtigung, die Sprachliste zu ändern."
 
-#: zotonic_mod_translation/src/mod_translation.erl:845
+#: zotonic_mod_translation/src/mod_translation.erl:846
 msgid "Sorry, you don't have permission to reload translations."
 msgstr "Tut mir leid, Sie haben keine Berechtigung zum Nachladen von Übersetzungen."
 
-#: zotonic_mod_translation/src/mod_translation.erl:835
+#: zotonic_mod_translation/src/mod_translation.erl:836
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr "Tut mir leid, Sie haben keine Erlaubnis, nach Übersetzungen zu scannen."
 
-#: zotonic_mod_translation/src/mod_translation.erl:743
-#: zotonic_mod_translation/src/mod_translation.erl:921
+#: zotonic_mod_translation/src/mod_translation.erl:744
+#: zotonic_mod_translation/src/mod_translation.erl:922
 msgid "Sorry, you don't have permission to set the default language."
 msgstr "Sie haben leider nicht die Berechtigung, die Standardsprache einzustellen."
 
@@ -16024,7 +16023,11 @@ msgstr "Sie haben leider nicht die Berechtigung, die Standardsprache einzustelle
 msgid "Spanish"
 msgstr "Spanisch"
 
-#: zotonic_mod_translation/src/mod_translation.erl:815
+#: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:18
+msgid "Start the translation of {count} pages? Editing will be disabled until the translations are ready."
+msgstr "Soll mit der Übersetzung der Seiten unter {count} begonnen werden? Die Bearbeitung wird deaktiviert, bis die Übersetzungen fertig sind."
+
+#: zotonic_mod_translation/src/mod_translation.erl:816
 msgid "Started building the .pot files. This may take a while..."
 msgstr "Ich habe begonnen, die .pot-Dateien zu erstellen. Dies kann eine Weile dauern..."
 
@@ -16035,14 +16038,6 @@ msgstr "Schwedisch"
 #: zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_sublanguage_note.tpl:3
 msgid "The golden rule when choosing a language is simplicity. Stick to the main language if you can; use a sub-language (adding region or script) when it adds useful distinguishing information."
 msgstr "Die goldene Regel bei der Auswahl einer Sprache ist Einfachheit. Bleiben Sie bei der Hauptsprache, wenn Sie können; verwenden Sie eine Untersprache (unter Hinzufügung von Region oder Schrift), wenn sie nützliche Unterscheidungsinformationen hinzufügt."
-
-#: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:12
-msgid "The operation could not be completed. Some pages may have been changed."
-msgstr "Der Vorgang konnte nicht abgeschlossen werden. Möglicherweise wurden einige Seiten geändert."
-
-#: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:11
-msgid "The operation has finished. Reload the page to continue editing."
-msgstr "Der Vorgang ist abgeschlossen. Laden Sie die Seite neu, um mit der Bearbeitung fortzufahren."
 
 #: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:40
 msgid "The source language text was used for the missing translations."
@@ -16078,8 +16073,8 @@ msgstr "Zeitüberschreitung"
 msgid "To new language"
 msgstr "Zur neuen Sprache"
 
-#: zotonic_mod_translation/priv/templates/_admin_edit_sidebar.tpl:9
 #: zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:6
+#: zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:11
 #: zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:32
 msgid "Translate"
 msgstr "Übersetzen"
@@ -16094,9 +16089,17 @@ msgid "Translated page texts for every editable language that has a translation 
 msgstr "Übersetzte Seitentexte für jede editierbare Sprache, für die eine Übersetzung in der Ressource vorhanden ist."
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:3
-#: zotonic_mod_translation/src/mod_translation.erl:1214
+#: zotonic_mod_translation/src/mod_translation.erl:1215
 msgid "Translation"
 msgstr "Übersetzung"
+
+#: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:12
+msgid "Translation could not be completed. Some pages may have been changed."
+msgstr "Die Übersetzung konnte nicht abgeschlossen werden. Möglicherweise wurden einige Seiten geändert."
+
+#: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:11
+msgid "Translation has finished. Reload the page to continue editing."
+msgstr "Die Übersetzung ist abgeschlossen. Laden Sie die Seite neu, um mit der Bearbeitung fortzufahren."
 
 #: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:7
 msgid "Translation in progress"
