@@ -382,7 +382,7 @@ Delegate callbacks:
         #{
             key => connect_created_me,
             type => boolean,
-            default => true,
+            default => false,
             description => "If true, the connect dialog will set per default the 'created by me' filter."
         },
         #{
