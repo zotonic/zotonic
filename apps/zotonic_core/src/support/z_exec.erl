@@ -304,6 +304,11 @@ profile_read(imagemagick_pdf) ->
         "/usr/share/ghostscript",
         "/usr/local/share/ghostscript",
         "/etc/ghostscript",
+        "/var/lib/ghostscript/fonts",
+        %% Debian/Ubuntu Resource/CMap links here, then into poppler's CMap data.
+        "/var/lib/ghostscript/CMap",
+        "/usr/share/poppler/cMap",
+        "/usr/share/cups/fonts",
         "/etc/papersize",
         "/opt/homebrew/share/ghostscript",
         "/usr/share/color/icc/ghostscript"
@@ -319,10 +324,19 @@ profile_read(imagemagick) ->
         "/opt/homebrew/etc/ImageMagick-6",
         "/opt/homebrew/etc/ImageMagick-7",
         "/etc/fonts",
+        %% /etc/fonts/conf.d contains symlinks to these font substitution rules.
+        "/usr/share/fontconfig",
         "/usr/share/fonts",
         "/usr/local/share/fonts",
         "/var/cache/fontconfig",
-        "/opt/homebrew/etc/fonts"
+        "/Library/Fonts",
+        "/usr/local/etc/fonts",
+        "/usr/local/share/fontconfig",
+        "/usr/local/var/cache/fontconfig",
+        "/opt/homebrew/etc/fonts",
+        "/opt/homebrew/share/fontconfig",
+        "/opt/homebrew/share/fonts",
+        "/opt/homebrew/var/cache/fontconfig"
     ];
 profile_read(file) ->
     [

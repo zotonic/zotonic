@@ -90,6 +90,15 @@ sandbox_checks() ->
             [Convert, " ", quote(Input), " ", quote(Output)],
             #{read => [Input], write => [Output]})),
         ?assertMatch({ok, <<137, "PNG", _/binary>>}, file:read_file(Output)),
+        %% Exercise installed symlinks without explicit input grants: granting
+        %% /etc/fonts or /usr/share/ghostscript must also cover their targets.
+        assert_profile_reads(imagemagick, filelib:wildcard("/etc/fonts/conf.d/*.conf")),
+        assert_profile_reads(imagemagick,
+            filelib:wildcard("/opt/homebrew/etc/fonts/conf.d/*.conf")
+            ++ filelib:wildcard("/usr/local/etc/fonts/conf.d/*.conf")
+            ++ filelib:wildcard("/Library/Fonts/*.dfont")),
+        assert_profile_reads(imagemagick_pdf,
+            filelib:wildcard("/usr/share/ghostscript/*/Resource/CMap/Identity-H")),
         %% Test the PDF delegate without changing the root-owned ImageMagick
         %% policy (which may intentionally disable its PDF coder altogether).
         ?assertMatch({ok, _}, z_exec:run(imagemagick_pdf,
@@ -112,5 +121,12 @@ sandbox_checks() ->
         os:unsetenv("ZOTONIC_TEST_SECRET"),
         file:del_dir_r(Dir)
     end.
+
+assert_profile_reads(Profile, Paths) ->
+    lists:foreach(fun(Path) ->
+        ?assertMatch({ok, _}, file:read_file(Path)),
+        ?assertEqual({ok, <<>>}, z_exec:run(Profile,
+            ["while IFS= read -r line; do :; done < ", quote(Path)], #{}))
+    end, Paths).
 
 quote(Path) -> z_filelib:os_filename(Path).
