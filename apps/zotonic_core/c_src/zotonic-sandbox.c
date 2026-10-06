@@ -69,7 +69,7 @@ static void init_policy(void)
 
     if ((abi >= 0 && abi < 3)
             || (abi < 0 && (errno == ENOSYS || errno == EOPNOTSUPP))) {
-        fprintf(stderr, "zotonic-sandbox: Landlock ABI 3 or older is unsupported\n");
+        fprintf(stderr, "zotonic-sandbox: Landlock ABI 3 or newer is required\n");
         exit(78);
     }
 
