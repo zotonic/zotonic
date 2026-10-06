@@ -82,24 +82,31 @@ requests coordinate by destination path; partial outputs are never published.
 
 ## Linux
 
-Build dependencies: a C compiler, Linux headers with Landlock support and
-libseccomp 2.5+ development files (`libseccomp-dev` on Debian/Ubuntu). The rebar compile
-hook builds `apps/zotonic_core/priv/bin/zotonic-sandbox`. The development Docker
-image includes the dependency. Release builds must include the resulting `priv`
-directory and the runtime libseccomp library. The helper is **not setuid**.
-Hex packages exclude the compiled helper and include its C source and Makefile,
-so dependency compilation builds it for the consumer's OS and architecture.
+Build dependencies: a C compiler. On Linux, building the sandbox helper
+additionally requires Linux headers with Landlock support and libseccomp 2.5+
+development files (`libseccomp-dev` on Debian/Ubuntu).
 
-Requires enabled Landlock ABI 3 or newer (upstream Linux 6.2+), detected by syscall
-at execution time. ABI 1/2 are rejected because they cannot restrict truncation.
-The launcher handles all filesystem rights through ABI 3, plus device ioctl
-rights when ABI 5 is available. Unspecified rights in newer ABIs are not claimed
-as protections. Seccomp independently blocks sockets, networking through
-io_uring, process inspection/signalling APIs and process-group/session changes.
-It is a denylist, not a general syscall allowlist or a VM boundary.
-Resource-limit operations through `prlimit64` are permitted only with PID zero
-(the calling process); explicit PID targets are denied, including other
-processes owned by the Zotonic user.
+The rebar compile hook attempts to build
+`apps/zotonic_core/priv/bin/zotonic-sandbox`.
+
+The development Docker image includes the Linux dependencies. Release builds
+that include the helper must also include the resulting `priv` directory and
+the runtime libseccomp library. The helper is **not setuid**.
+
+Hex packages exclude the compiled helper and include its C source and Makefile,
+allowing dependency compilation to build it for the consumer's OS and
+architecture when supported.
+
+The sandbox requires enabled Landlock ABI 3 or newer (upstream Linux 6.2+),
+detected by syscall at execution time. ABI 1/2 are rejected because they cannot
+restrict truncation. The launcher handles all filesystem rights through ABI 3,
+plus device ioctl rights when ABI 5 is available. Unspecified rights in newer
+ABIs are not claimed as protections. Seccomp independently blocks sockets,
+networking through io_uring, process inspection/signalling APIs and
+process-group/session changes. It is a denylist, not a general syscall allowlist
+or a VM boundary. Resource-limit operations through `prlimit64` are permitted
+only with PID zero (the calling process); explicit PID targets are denied,
+including other processes owned by the Zotonic user.
 
 A supervisor keeps the decoder and delegates in a job process group. On normal
 completion, failure, or cancellation, it kills that group with SIGKILL. The
