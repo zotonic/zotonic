@@ -7,23 +7,20 @@ TARGET := ../priv/bin/zotonic-sandbox
 BUILD_SANDBOX := 0
 SKIP_REASON :=
 
+define check_header
+$(shell echo '#include <$(1)>' | $(CC) $(CPPFLAGS) $(CFLAGS) -E - >/dev/null 2>&1 && echo 1 || echo 0)
+endef
+
 ifeq ($(UNAME_S),Darwin)
 
 BUILD_SANDBOX := 1
 
 else ifeq ($(UNAME_S),Linux)
 
-HAS_SECCOMP := $(shell \
-	echo '#include <seccomp.h>' | \
-	$(CC) $(CPPFLAGS) $(CFLAGS) -E - >/dev/null 2>&1 && echo 1 || echo 0)
-
-HAS_LANDLOCK := $(shell \
-	echo '#include <linux/landlock.h>' | \
-	$(CC) $(CPPFLAGS) $(CFLAGS) -E - >/dev/null 2>&1 && echo 1 || echo 0)
-
-ifeq ($(HAS_SECCOMP),0)
+# Check if sandbox header files are available.
+ifeq ($(call check_header,seccomp.h),0)
 SKIP_REASON := seccomp.h not found (install libseccomp-dev)
-else ifeq ($(HAS_LANDLOCK),0)
+else ifeq ($(call check_header,linux/landlock.h),0)
 SKIP_REASON := linux/landlock.h not found (install kernel headers)
 else
 BUILD_SANDBOX := 1
