@@ -386,7 +386,7 @@ collect_trans(K, #trans{ tr = Tr }, FromLanguage, ToLanguage, IsOverwrite, Acc) 
                 {_, T} -> T
             end,
             case lists:keyfind(FromLanguage, 1, Tr) of
-                {_, <<>>} ->
+                {_, Empty} when Empty =:= <<>>; Empty =:= undefined ->
                     Acc;
                 {_, FromText} when ToText =:= <<>> orelse IsOverwrite ->
                     [ FromText | Acc ];
@@ -485,9 +485,13 @@ insert_dst_texts_1(#trans{} = Tr, FromLanguage, ToLanguage, Translations, IsOver
 insert_dst_texts_1(V, _FromLanguage, _ToLanguage, _Translations, _IsOverwrite, _CopyAll) ->
     V.
 
+%% @doc Overwrite destination text with the translation, or clear it for an empty source.
+%% A missing source entry is also empty. JSON properties are never translated.
 dst_trans(K, #trans{ tr = Tr } = V, FromLanguage, ToLanguage, Translations, IsOverwrite) ->
-    case {is_json(K), lists:keyfind(FromLanguage, 1, Tr)} of
-        {false, {_, FromText}} when is_binary(FromText), FromText =/= <<>> ->
+    case {is_json(K), proplists:get_value(FromLanguage, Tr, <<>>)} of
+        {false, Empty} when IsOverwrite, Empty =:= <<>>; IsOverwrite, Empty =:= undefined ->
+            #trans{tr = lists:sort([{ToLanguage, <<>>} | lists:keydelete(ToLanguage, 1, Tr)])};
+        {false, FromText} when is_binary(FromText), FromText =/= <<>> ->
             ToText = case lists:keyfind(ToLanguage, 1, Tr) of
                 false -> <<>>;
                 {_, <<>>} -> <<>>;
