@@ -17,11 +17,7 @@
 #ifdef __linux__
 #include <elf.h>
 #include <limits.h>
-
-#ifdef HAS_LANDLOCK
 #include <linux/landlock.h>
-#endif
-
 #include <seccomp.h>
 #include <sys/prctl.h>
 #include <sys/syscall.h>
@@ -68,7 +64,7 @@ static void limit(int resource, const char *value)
 
 static void init_policy(void)
 {
-#if defined(__linux__) && defined(HAS_LANDLOCK)
+#if defined(__linux__)
     int abi = syscall(SYS_landlock_create_ruleset, NULL, 0, LANDLOCK_CREATE_RULESET_VERSION);
 
     if ((abi >= 0 && abi < 3)
@@ -107,9 +103,6 @@ static void init_policy(void)
           "(allow process-fork)\n"
           "(allow signal (target self))\n"
           "(allow sysctl-read)\n", policy);
-#elif defined(__linux__) && !defined(HAS_LANDLOCK)
-    fprintf(stderr, "zotonic-sandbox: Landlock is unsupported\n");
-    exit(78);
 #else
     errno = ENOTSUP;
     fail("unsupported sandbox platform");
