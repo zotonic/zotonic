@@ -19,7 +19,7 @@ HAS_SECCOMP := $(shell \
 
 HAS_LANDLOCK := $(shell \
 	echo '#include <linux/landlock.h>' | \
-	$(CC) -E - >/dev/null 2>&1 && echo 1 || echo 0)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -E - >/dev/null 2>&1 && echo 1 || echo 0)
 
 ifeq ($(HAS_SECCOMP),0)
 SKIP_REASON := seccomp.h not found (install libseccomp-dev)
