@@ -198,21 +198,16 @@ m_get(_Vs, _Msg, _Context) ->
 %% polled and an uploader will be started for every entry in the queue.
 -spec queue(binary(), z_media_identify:media_info(), z:context()) -> ok | {error, duplicate}.
 queue(Path, MediaProps, Context) ->
-    z_db:transaction(fun(Ctx) ->
-            case z_db:q1("select count(*) from filestore_queue where path = $1", [Path], Ctx) of
-                0 ->
-                    1 = z_db:q("
-                            insert into
-                            filestore_queue (path, props)
-                            values ($1,$2)",
-                            [Path, ?DB_PROPS(MediaProps)],
-                            Ctx),
-                    ok;
-                1 ->
-                    {error, duplicate}
-            end
-        end,
-        Context).
+    % Media notifications and queue scans can enqueue the same path concurrently.
+    case z_db:q("
+            insert into filestore_queue (path, props)
+            values ($1,$2)
+            on conflict (path) do nothing",
+            [Path, ?DB_PROPS(MediaProps)], Context)
+    of
+        1 -> ok;
+        0 -> {error, duplicate}
+    end.
 
 %% @doc Fetch the next batch of queued uploads, at least 1 minute old and max 200.
 -spec fetch_queue( z:context() ) -> {ok, [ queue_entry() ]} | {error, term()}.
