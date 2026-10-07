@@ -63,6 +63,13 @@ upload_job(QueueId, Path, {error, enoent}, MediaInfo, Context) ->
     upload_job_1(QueueId, Path, MediaInfo, Context).
 
 upload_job_1(QueueId, Path, MediaInfo, Context) ->
+    % A queued sidejob can start after pool load has increased. Keep its queue
+    % entry for the next batch if it cannot run now.
+    z_db:run_if_low_load(fun() ->
+        upload_job_2(QueueId, Path, MediaInfo, Context)
+    end, Context).
+
+upload_job_2(QueueId, Path, MediaInfo, Context) ->
     z_context:logger_md(Context),
     Name = {?MODULE, Path},
     case z_proc:register(Name, self(), Context) of

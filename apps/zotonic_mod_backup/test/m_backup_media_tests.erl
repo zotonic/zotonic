@@ -93,7 +93,13 @@ offload_media(Id, Context) ->
     Path = <<"archive/", Filename/binary>>,
     % Synchronize queueing with the test; duplicate queue entries are harmless.
     _ = mod_filestore:observe_media_update_done(
-        #media_update_done{ action = insert, post_props = Medium }, Context),
+        #media_update_done{
+            action = insert,
+            id = Id,
+            pre_is_a = [],
+            post_is_a = m_rsc:is_a(Id, Context),
+            post_props = Medium
+        }, Context),
     QueueId = z_db:q1("select id from filestore_queue where path = $1", [Path], Context),
     {Pid, Ref} = spawn_monitor(fun() ->
         filestore_uploader:upload_job(QueueId, Path, {error, enoent}, Medium, Context)
