@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-06 09:58\n"
+"PO-Revision-Date: 2026-10-07 12:13\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -3513,6 +3513,7 @@ msgstr "ไม่ได้เผยแพร่"
 #: zotonic_mod_seo/src/support/seo_jsonld_webpage.erl:276
 #: zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:16
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:10
+#: zotonic_mod_translation/priv/templates/_translation_tree_skipped.tpl:7
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:3
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:88
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:90
@@ -11313,6 +11314,7 @@ msgstr "เปิดดูตัวอย่างในแท็บใหม่
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:79
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:143
+#: zotonic_mod_translation/priv/templates/_translation_tree_skipped.tpl:9
 msgid "Opens in a new tab"
 msgstr "เปิดในแท็บใหม่"
 
@@ -15695,7 +15697,7 @@ msgstr "การแปลอัตโนมัติ"
 msgid "Available sub-languages"
 msgstr "ภาษาย่อยที่ใช้ได้"
 
-#: zotonic_mod_translation/src/mod_translation.erl:829
+#: zotonic_mod_translation/src/mod_translation.erl:831
 msgid "Cannot generate translation files because <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext is not installed</a>."
 msgstr "ไม่สามารถสร้างไฟล์แปลได้เนื่องจากไม่ได้ติดตั้ง <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext</a>."
 
@@ -15848,7 +15850,7 @@ msgid "Leave texts empty"
 msgstr "ปล่อยให้ข้อความว่างเปล่า"
 
 #: zotonic_mod_translation/priv/templates/_admin_bulk_translation.tpl:5
-#: zotonic_mod_translation/src/models/m_translation_tree.erl:128
+#: zotonic_mod_translation/src/models/m_translation_tree.erl:149
 msgid "Manage translations"
 msgstr "จัดการการแปล"
 
@@ -15921,7 +15923,7 @@ msgstr "โหลดคำแปลทั้งหมดซ้ำจากโม
 msgid "Reload page"
 msgstr "โหลดหน้าใหม่"
 
-#: zotonic_mod_translation/src/mod_translation.erl:844
+#: zotonic_mod_translation/src/mod_translation.erl:846
 msgid "Reloading all .po files in the background."
 msgstr "กำลังโหลดไฟล์. po ทั้งหมดซ้ำในพื้นหลัง"
 
@@ -15990,32 +15992,36 @@ msgstr "แสดงภาษาใน URL"
 msgid "Show translations"
 msgstr "แสดงการแปล"
 
-#: zotonic_mod_translation/src/mod_translation.erl:741
-#: zotonic_mod_translation/src/mod_translation.erl:789
+#: zotonic_mod_translation/priv/templates/_translation_tree_skipped.tpl:1
+msgid "Skipped pages"
+msgstr "หน้าถูกข้าม"
+
+#: zotonic_mod_translation/src/mod_translation.erl:743
+#: zotonic_mod_translation/src/mod_translation.erl:791
 msgid "Sorry, could not change the language."
 msgstr "ขออภัยไม่สามารถเปลี่ยนภาษาได้"
 
-#: zotonic_mod_translation/src/mod_translation.erl:919
+#: zotonic_mod_translation/src/mod_translation.erl:921
 msgid "Sorry, that language is unknown or not enabled."
 msgstr "ขออภัย ไม่รู้จักภาษานั้นหรือไม่ได้เปิดใช้งาน"
 
-#: zotonic_mod_translation/src/mod_translation.erl:728
-#: zotonic_mod_translation/src/mod_translation.erl:757
-#: zotonic_mod_translation/src/mod_translation.erl:769
-#: zotonic_mod_translation/src/mod_translation.erl:792
+#: zotonic_mod_translation/src/mod_translation.erl:730
+#: zotonic_mod_translation/src/mod_translation.erl:759
+#: zotonic_mod_translation/src/mod_translation.erl:771
+#: zotonic_mod_translation/src/mod_translation.erl:794
 msgid "Sorry, you don't have permission to change the language list."
 msgstr "ขออภัยคุณไม่ได้รับอนุญาตให้เปลี่ยนรายการภาษา"
 
-#: zotonic_mod_translation/src/mod_translation.erl:846
+#: zotonic_mod_translation/src/mod_translation.erl:848
 msgid "Sorry, you don't have permission to reload translations."
 msgstr "ขออภัยคุณไม่มีสิทธิ์โหลดคำแปลซ้ำ"
 
-#: zotonic_mod_translation/src/mod_translation.erl:836
+#: zotonic_mod_translation/src/mod_translation.erl:838
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr "ขออภัยคุณไม่มีสิทธิ์สแกนคำแปล"
 
-#: zotonic_mod_translation/src/mod_translation.erl:744
-#: zotonic_mod_translation/src/mod_translation.erl:922
+#: zotonic_mod_translation/src/mod_translation.erl:746
+#: zotonic_mod_translation/src/mod_translation.erl:924
 msgid "Sorry, you don't have permission to set the default language."
 msgstr "ขออภัยคุณไม่ได้รับอนุญาตให้ตั้งค่าภาษาเริ่มต้น"
 
@@ -16027,7 +16033,7 @@ msgstr "ภาษาสเปน"
 msgid "Start the translation of {count} pages? Editing will be disabled until the translations are ready."
 msgstr "จะเริ่มแปลหน้า {count} หรือไม่? การแก้ไขจะถูกปิดจนกว่าการแปลจะเสร็จสิ้น"
 
-#: zotonic_mod_translation/src/mod_translation.erl:816
+#: zotonic_mod_translation/src/mod_translation.erl:818
 msgid "Started building the .pot files. This may take a while..."
 msgstr "เริ่มสร้างไฟล์. pot อาจใช้เวลาสักครู่ ..."
 
@@ -16044,7 +16050,7 @@ msgid "The source language text was used for the missing translations."
 msgstr "ใช้ข้อความภาษาต้นฉบับสำหรับคำแปลที่ขาดหายไป"
 
 #: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:49
-#: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:190
+#: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:191
 msgid "There was an error translating the texts. Please try again later."
 msgstr "เกิดข้อผิดพลาดในการแปลข้อความ กรุณาลองใหม่อีกครั้งในภายหลัง."
 
@@ -16064,7 +16070,7 @@ msgstr "การนี้จะลบภาษาที่เลือกไว
 msgid "This translation has been automatically generated."
 msgstr "การแปลนี้ถูกสร้างขึ้นโดยอัตโนมัติ"
 
-#: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:189
+#: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:190
 msgid "Timeout"
 msgstr "หมดเวลา"
 
@@ -16080,7 +16086,7 @@ msgid "Translate"
 msgstr "แปลภาษา"
 
 #: zotonic_mod_translation/priv/templates/_translation_tree_button.tpl:3
-#: zotonic_mod_translation/src/models/m_translation_tree.erl:141
+#: zotonic_mod_translation/src/models/m_translation_tree.erl:162
 msgid "Translate all pages"
 msgstr "แปลทุกหน้า"
 
@@ -16089,7 +16095,7 @@ msgid "Translated page texts for every editable language that has a translation 
 msgstr "ข้อความหน้าเว็บที่แปลแล้วสำหรับทุกภาษาที่สามารถแก้ไขได้ซึ่งมีการแปลในแหล่งข้อมูล"
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:3
-#: zotonic_mod_translation/src/mod_translation.erl:1215
+#: zotonic_mod_translation/src/mod_translation.erl:1217
 msgid "Translation"
 msgstr "การแปล"
 
@@ -16129,12 +16135,12 @@ msgstr "ด้วยภาษา"
 msgid "Without language"
 msgstr "ไม่มีภาษา"
 
-#: zotonic_mod_translation/src/models/m_translation_tree.erl:131
-#: zotonic_mod_translation/src/models/m_translation_tree.erl:134
+#: zotonic_mod_translation/src/models/m_translation_tree.erl:152
+#: zotonic_mod_translation/src/models/m_translation_tree.erl:155
 msgid "You are not allowed to edit these pages."
 msgstr "คุณไม่สามารถแก้ไขหน้าเหล่านี้ได้"
 
-#: zotonic_mod_translation/src/models/m_translation_tree.erl:149
+#: zotonic_mod_translation/src/models/m_translation_tree.erl:170
 msgid "You are not allowed to edit this tree."
 msgstr "คุณไม่สามารถแก้ไขโครงสร้างนี้ได้"
 
