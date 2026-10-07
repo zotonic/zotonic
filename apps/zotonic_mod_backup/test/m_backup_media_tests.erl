@@ -44,7 +44,8 @@ filestore_redelete_test_() ->
 
 filestore_redelete() ->
     Context = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
-    ok = z_module_manager:activate_await(mod_filestore, Context),
+    ok = z_module_manager:activate_await(mod_backup, Context),
+    ok = z_module_manager:activate_await(mod_filestore, Context)
     Remote = ets:new(remote_media, [public, set]),
     ok = meck:new(filestore_config, [passthrough, no_link]),
     ok = meck:new(s3filez, [passthrough, no_link]),
