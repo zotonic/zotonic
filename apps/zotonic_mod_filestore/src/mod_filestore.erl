@@ -290,6 +290,7 @@ This module handles the following notifier callbacks:
 
     update_backoff/2,
     batch_size/1,
+    next_batch/2,
 
     delete_ready/5,
     download_stream/5,
@@ -771,18 +772,14 @@ handle_call(batch_size, _From, #state{ backoff = Backoff } = State) ->
 
 handle_cast(next_batch, #state{ backoff = Backoff, context = Context } = State) ->
     BatchSize = current_batch_size(Backoff),
-    case filestore_config:is_upload_enabled(Context) of
-        true ->
-            start_uploaders(m_filestore:fetch_queue(BatchSize, Context), Context);
-        false ->
-            ok
-    end,
-    start_downloaders(m_filestore:fetch_move_to_local(BatchSize, Context), Context),
-    case filestore_config:delete_interval(Context) of
-        <<"false">> ->
-            ok;
-        Interval ->
-            start_deleters(m_filestore:fetch_deleted(Interval, BatchSize, Context), Context)
+    % Isolate database/queue failures from the module process. A slow batch
+    % must not overlap with the next tick for this site.
+    case z_sidejob:start_site_unique(mod_filestore_next_batch,
+        ?MODULE, next_batch, [BatchSize], Context)
+    of
+        {ok, _Pid} -> ok;
+        {error, already_running} -> ok;
+        {error, overload} -> ok
     end,
     {noreply, State};
 handle_cast(success, #state{ backoff = Backoff } = State) ->
@@ -796,6 +793,29 @@ handle_cast(fail, #state{ backoff = Backoff } = State) ->
 %%% ------------------------------------------------------------------------------------
 %%% Support routines
 %%% ------------------------------------------------------------------------------------
+
+%% @doc Site-unique sidejob entry point. Leave queued work for the next tick
+%% when foreground requests are using the database connections.
+-spec next_batch(BatchSize, Context) -> ok | {error, busy} when
+    BatchSize :: non_neg_integer(),
+    Context :: z:context().
+next_batch(BatchSize, Context) ->
+    z_db:run_if_low_load(fun() -> next_batch_1(BatchSize, Context) end, Context).
+
+next_batch_1(BatchSize, Context) ->
+    case filestore_config:is_upload_enabled(Context) of
+        true ->
+            start_uploaders(m_filestore:fetch_queue(BatchSize, Context), Context);
+        false ->
+            ok
+    end,
+    start_downloaders(m_filestore:fetch_move_to_local(BatchSize, Context), Context),
+    case filestore_config:delete_interval(Context) of
+        <<"false">> ->
+            ok;
+        Interval ->
+            start_deleters(m_filestore:fetch_deleted(Interval, BatchSize, Context), Context)
+    end.
 
 current_batch_size(Backoff) ->
     case z_sidejob:space() of

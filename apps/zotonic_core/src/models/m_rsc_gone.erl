@@ -229,7 +229,7 @@ gone(Id, NewId, Context) when is_integer(Id), is_integer(NewId) orelse NewId =:=
     case z_db:assoc_row("
             select id, is_authoritative, name, version,
                    pivot_page_path as page_paths, uri,
-                   creator_id, created, category_id, content_group_id, visible_for
+                   creator_id, created, category_id, visible_for
             from rsc
             where id = $1
             ", [Id], Context)
@@ -241,6 +241,9 @@ gone(Id, NewId, Context) when is_integer(Id), is_integer(NewId) orelse NewId =:=
                     fun(Ctx) ->
                         {ok, RscProps} = m_rsc:get_raw(Id, Ctx),
                         Props1 = [
+                            % Include the effective default for resources recovered
+                            % before their content group was persisted on insert.
+                            {content_group_id, maps:get(<<"content_group_id">>, RscProps, undefined)},
                             {props_json, (snapshot(RscProps, Ctx))#{
                                 <<"deleter_id">> => z_acl:user(Ctx),
                                 <<"deletion_reason">> => deletion_reason(Ctx)

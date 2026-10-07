@@ -944,10 +944,17 @@ update_imported_check(#rscupd{is_import = true, id = Id} = RscUpd, PropsOrFun, C
     case m_rsc:exists(Id, Context) of
         false ->
             {ok, CatId} = m_category:name_to_id(other, Context),
-            1 = z_db:q("insert into rsc (id, creator_id, is_published, category_id)
-                        values ($1, $2, false, $3)",
-                [Id, z_acl:user(Context), CatId],
-                Context);
+            % Persist insert defaults before reading the placeholder for the update.
+            % Raw-read defaults (notably content_group_id) otherwise disappear from
+            % the update diff, leaving the database column empty after recovery.
+            InitProps = #{
+                <<"id">> => Id,
+                <<"creator_id">> => z_acl:user(Context),
+                <<"is_published">> => false,
+                <<"category_id">> => CatId
+            },
+            InsertProps = z_notifier:foldr(#rsc_insert{ props = InitProps }, InitProps, Context),
+            {ok, Id} = z_db:insert(rsc, InsertProps, Context);
         true ->
             ok
     end,
