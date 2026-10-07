@@ -3623,6 +3623,7 @@ msgstr ""
 #: zotonic_mod_seo/src/support/seo_jsonld_webpage.erl:276
 #: zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:16
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:10
+#: zotonic_mod_translation/priv/templates/_translation_tree_skipped.tpl:7
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:3
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:88
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:90
@@ -11964,6 +11965,7 @@ msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:79
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:143
+#: zotonic_mod_translation/priv/templates/_translation_tree_skipped.tpl:9
 msgid "Opens in a new tab"
 msgstr ""
 
@@ -16666,7 +16668,7 @@ msgstr ""
 msgid "Available sub-languages"
 msgstr ""
 
-#: zotonic_mod_translation/src/mod_translation.erl:829
+#: zotonic_mod_translation/src/mod_translation.erl:831
 msgid ""
 "Cannot generate translation files because <a href=\"http://docs.zotonic.com/"
 "en/latest/developer-guide/translation.html\">gettext is not installed</a>."
@@ -16838,7 +16840,7 @@ msgid "Leave texts empty"
 msgstr ""
 
 #: zotonic_mod_translation/priv/templates/_admin_bulk_translation.tpl:5
-#: zotonic_mod_translation/src/models/m_translation_tree.erl:128
+#: zotonic_mod_translation/src/models/m_translation_tree.erl:149
 msgid "Manage translations"
 msgstr ""
 
@@ -16917,7 +16919,7 @@ msgstr ""
 msgid "Reload page"
 msgstr ""
 
-#: zotonic_mod_translation/src/mod_translation.erl:844
+#: zotonic_mod_translation/src/mod_translation.erl:846
 msgid "Reloading all .po files in the background."
 msgstr ""
 
@@ -16996,32 +16998,36 @@ msgstr ""
 msgid "Show translations"
 msgstr ""
 
-#: zotonic_mod_translation/src/mod_translation.erl:741
-#: zotonic_mod_translation/src/mod_translation.erl:789
+#: zotonic_mod_translation/priv/templates/_translation_tree_skipped.tpl:1
+msgid "Skipped pages"
+msgstr ""
+
+#: zotonic_mod_translation/src/mod_translation.erl:743
+#: zotonic_mod_translation/src/mod_translation.erl:791
 msgid "Sorry, could not change the language."
 msgstr ""
 
-#: zotonic_mod_translation/src/mod_translation.erl:919
+#: zotonic_mod_translation/src/mod_translation.erl:921
 msgid "Sorry, that language is unknown or not enabled."
 msgstr ""
 
-#: zotonic_mod_translation/src/mod_translation.erl:728
-#: zotonic_mod_translation/src/mod_translation.erl:757
-#: zotonic_mod_translation/src/mod_translation.erl:769
-#: zotonic_mod_translation/src/mod_translation.erl:792
+#: zotonic_mod_translation/src/mod_translation.erl:730
+#: zotonic_mod_translation/src/mod_translation.erl:759
+#: zotonic_mod_translation/src/mod_translation.erl:771
+#: zotonic_mod_translation/src/mod_translation.erl:794
 msgid "Sorry, you don't have permission to change the language list."
 msgstr ""
 
-#: zotonic_mod_translation/src/mod_translation.erl:846
+#: zotonic_mod_translation/src/mod_translation.erl:848
 msgid "Sorry, you don't have permission to reload translations."
 msgstr ""
 
-#: zotonic_mod_translation/src/mod_translation.erl:836
+#: zotonic_mod_translation/src/mod_translation.erl:838
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr ""
 
-#: zotonic_mod_translation/src/mod_translation.erl:744
-#: zotonic_mod_translation/src/mod_translation.erl:922
+#: zotonic_mod_translation/src/mod_translation.erl:746
+#: zotonic_mod_translation/src/mod_translation.erl:924
 msgid "Sorry, you don't have permission to set the default language."
 msgstr ""
 
@@ -17035,7 +17041,7 @@ msgid ""
 "translations are ready."
 msgstr ""
 
-#: zotonic_mod_translation/src/mod_translation.erl:816
+#: zotonic_mod_translation/src/mod_translation.erl:818
 msgid "Started building the .pot files. This may take a while..."
 msgstr ""
 
@@ -17055,7 +17061,7 @@ msgid "The source language text was used for the missing translations."
 msgstr ""
 
 #: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:49
-#: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:190
+#: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:191
 msgid "There was an error translating the texts. Please try again later."
 msgstr ""
 
@@ -17084,7 +17090,7 @@ msgstr ""
 msgid "This translation has been automatically generated."
 msgstr ""
 
-#: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:189
+#: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:190
 msgid "Timeout"
 msgstr ""
 
@@ -17100,7 +17106,7 @@ msgid "Translate"
 msgstr ""
 
 #: zotonic_mod_translation/priv/templates/_translation_tree_button.tpl:3
-#: zotonic_mod_translation/src/models/m_translation_tree.erl:141
+#: zotonic_mod_translation/src/models/m_translation_tree.erl:162
 msgid "Translate all pages"
 msgstr ""
 
@@ -17111,7 +17117,7 @@ msgid ""
 msgstr ""
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:3
-#: zotonic_mod_translation/src/mod_translation.erl:1215
+#: zotonic_mod_translation/src/mod_translation.erl:1217
 msgid "Translation"
 msgstr ""
 
@@ -17153,12 +17159,12 @@ msgstr ""
 msgid "Without language"
 msgstr ""
 
-#: zotonic_mod_translation/src/models/m_translation_tree.erl:131
-#: zotonic_mod_translation/src/models/m_translation_tree.erl:134
+#: zotonic_mod_translation/src/models/m_translation_tree.erl:152
+#: zotonic_mod_translation/src/models/m_translation_tree.erl:155
 msgid "You are not allowed to edit these pages."
 msgstr ""
 
-#: zotonic_mod_translation/src/models/m_translation_tree.erl:149
+#: zotonic_mod_translation/src/models/m_translation_tree.erl:170
 msgid "You are not allowed to edit this tree."
 msgstr ""
 
