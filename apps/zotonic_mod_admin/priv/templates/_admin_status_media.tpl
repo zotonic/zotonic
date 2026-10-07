@@ -26,7 +26,7 @@
             <p class="alert alert-danger" role="alert">
             {_ Sandbox isolation is available but disabled. Media processing commands run without sandbox protection, reducing protection against malicious uploads. _}
             </p>
-        {% elseif media.sandbox == `unsupported` %}
+        {% elseif media.sandbox == `unsupported` and media.sandbox_mode != `invalid` %}
             <p class="alert alert-warning" role="alert">
             {_ Sandbox isolation is not supported on this system. Local media commands run without isolation. _}
             </p>
