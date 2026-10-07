@@ -48,6 +48,10 @@ app_or_module/
 - Let the model mediate support modules when the functionality is exposed to Zotonic. For example, have the model ensure a shared worker is started, pass timeouts/configuration, call the support worker, and normalize `{ok, ...} | {error, ...}` results for callers.
 - Move code out of `mod_*.erl` once it stops being module lifecycle or observer glue. Move code out of `m_*.erl` when it becomes reusable implementation detail rather than a Zotonic-facing API.
 
+## Database Schema Changes
+
+When creating or porting schema installers, follow the [database schema guidelines in zotonic-coding](../zotonic-coding/SKILL.md#database-schema-changes): keep fresh table definitions complete and use alterations only to upgrade existing tables.
+
 ## Porting From Zotonic 0.x
 
 - Replace Webmachine-style controllers with Zotonic 1.x/Cowmachine callbacks.

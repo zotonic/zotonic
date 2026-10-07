@@ -213,7 +213,8 @@ The dialog offers the same translation options as the single-page editor:
 - **Leave texts empty** enables the destination language without copying or translating text.
 
 Copying and automatic translation fill empty destination fields. Existing text is preserved unless the overwrite
-option is selected. Pages without the selected source language are skipped for these two methods. Before starting,
+option is selected. Pages without the selected source language in their language list are skipped for these two
+methods. Empty source text is allowed when the source language is listed. Before starting,
 the dialog refreshes the page count and asks the user to confirm applying the selected options to that many pages.
 Changes are saved immediately; save or discard any pending editor changes before starting a tree operation.
 
@@ -240,7 +241,8 @@ same tree returns `busy` while the first is running.
 
 The editor shows progress in a modal that cannot be dismissed, including when an editor is opened or reloaded during
 a running job. This is a UI-only lock: it does not add ACL restrictions or block unrelated server-side updates.
-Progress includes the total number of pages, pages processed, pages skipped, and pages that failed. If an automatic
+Progress includes the total number of pages, pages processed, pages skipped, and pages that failed. The final
+dialog lists skipped pages with links to open their edit pages in a new tab. If an automatic
 translation service returns incomplete translations for a page, that page's texts are left unchanged and it is counted
 as failed. Changes already saved on other pages are retained. After completion or failure, the dialog offers a reload
 so the editor shows the saved content.

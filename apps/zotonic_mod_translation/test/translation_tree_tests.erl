@@ -35,7 +35,40 @@ tree_test_() -> tests(z_acl:sudo(z_context:new(zotonic_site_testsandbox))).
 
 %% @doc Wrap the integration test with a timeout for background job checks.
 tests(Context) ->
-    {timeout, 60, fun() -> integration(Context) end}.
+    {timeout, 60, fun() -> integration(Context), missing_source(Context) end}.
+
+%% @doc Skip missing source languages, but allow empty text when the language is listed.
+missing_source(Context) ->
+    Id = insert([nl], Context),
+    try
+        {ok, Selection} = m_translation_tree:selection([Id], Context),
+        lists:foreach(fun(Overwrite) ->
+            {ok, _} = translation_tree:start(Selection,
+                {<<"translate">>, en, de, Overwrite}, Context),
+            ?assertMatch(#{state := complete, skipped := 1, skipped_ids := [Id], failed := 0},
+                await(Selection, Context, 500)),
+            ?assertEqual([nl], m_rsc:p(Id, language, Context))
+        end, [false, true]),
+        {ok, {#{skipped_html := Html}, []}} = m_translation_tree:m_get(
+            [<<"status">>, Selection], undefined, Context),
+        Url = z_dispatcher:url_for(admin_edit_rsc, [{id, Id}], Context),
+        ?assertNotEqual(nomatch, binary:match(Html, iolist_to_binary(Url))),
+        ?assertNotEqual(nomatch, binary:match(Html, <<"target=\"_blank\"">>)),
+        ?assertNotEqual(nomatch, binary:match(Html, <<"Tree translation test text 47">>)),
+        lists:foreach(fun({Method, Overwrite}) ->
+            {ok, Id} = m_rsc:update(Id, #{
+                <<"language">> => [en],
+                <<"title">> => #trans{tr = [{en, <<>>}]}
+            }, Context),
+            {ok, _} = translation_tree:start(Selection, {Method, en, nl, Overwrite}, Context),
+            ?assertMatch(#{state := complete, skipped := 0, skipped_ids := [], failed := 0},
+                await(Selection, Context, 500)),
+            ?assertEqual([en, nl], m_rsc:p(Id, language, Context))
+        end, [{Method, Overwrite} || Method <- [<<"translate">>, <<"copy">>],
+            Overwrite <- [false, true]])
+    after
+        m_rsc:delete(Id, Context)
+    end.
 
 %% @doc Verify tree operations, permissions, progress, and binary text translation with temporary fixtures.
 integration(Context) ->
