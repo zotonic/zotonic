@@ -1026,7 +1026,7 @@ add_cat_check_pivot(Alias, Cats, Args, Context) ->
     CatChecks = [ cat_check_pivot1(Alias, Range) || Range <- Ranges ],
     case CatChecks of
         [] ->
-            {[], Args};
+            {[ "false" ], Args};
         _ ->
             {[ "((", lists:join(") or (", CatChecks), "))" ], Args}
     end.
