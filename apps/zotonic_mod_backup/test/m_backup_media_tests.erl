@@ -10,7 +10,8 @@ redelete_media() ->
     Context = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
     ok = z_module_manager:activate_await(mod_backup, Context),
     File = filename:join(code:priv_dir(zotonic_site_testsandbox), "files/archive/koe.jpg"),
-    {ok, Id} = m_media:insert_file(File, Context),
+    {ok, Data} = file:read_file(File),
+    {ok, Id} = m_media:insert_file(#upload{ filename = <<"koe.jpg">>, data = Data }, Context),
     redelete_media(Id, Context),
     % Older recoveries left this column NULL; raw reads supply its default.
     {ok, 1} = z_db:update(rsc, Id, #{ <<"content_group_id">> => undefined }, Context),
@@ -35,3 +36,83 @@ redelete_media(Id, Context) ->
             ?assertNot(m_rsc_gone:is_gone(Id, Context))
         end,
         lists:seq(1, 3)).
+
+%% Keep the real filestore database, uploader, cache and media recovery. Only
+%% the remote S3 transport is replaced, so no external account is needed.
+filestore_redelete_test_() ->
+    {timeout, 60, fun filestore_redelete/0}.
+
+filestore_redelete() ->
+    Context = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+    ok = z_module_manager:activate_await(mod_filestore, Context),
+    Remote = ets:new(remote_media, [public, set]),
+    ok = meck:new(filestore_config, [passthrough, no_link]),
+    ok = meck:new(s3filez, [passthrough, no_link]),
+    try
+        lists:foreach(fun({Key, Value}) ->
+            meck:expect(filestore_config, Key, fun(_) -> Value end)
+        end, [{service, <<"s3">>}, {s3url, <<"https://media.example.test">>},
+              {s3key, <<"test">>}, {s3secret, <<"test">>}, {tls_options, []},
+              {is_local_keep, false}, {is_upload_enabled, false},
+              {delete_interval, <<"false">>}]),
+        ok = meck:expect(s3filez, put, fun(_, Location, {filename, _, Path}, _) ->
+            {ok, Data} = file:read_file(Path),
+            true = ets:insert(Remote, {Location, Data}),
+            ok
+        end),
+        ok = meck:expect(s3filez, stream, fun(_, Location, Callback) ->
+            [{Location, Data}] = ets:lookup(Remote, Location),
+            Callback(stream_start),
+            Callback(Data),
+            Callback(eof),
+            ok
+        end),
+        File = filename:join(code:priv_dir(zotonic_site_testsandbox), "files/archive/koe.jpg"),
+        {ok, Original} = file:read_file(File),
+        {ok, Id} = m_media:insert_file(#upload{ filename = <<"koe.jpg">>, data = Original }, Context),
+        FilestorePid = whereis(z_utils:name_for_site(mod_filestore, Context)),
+        ?assert(is_pid(FilestorePid)),
+        lists:foreach(fun(_) ->
+            offload_media(Id, Context),
+            redelete_media(Id, Context),
+            #{ <<"filename">> := Restored } = m_media:get(Id, Context),
+            ?assertEqual({ok, Original}, file:read_file(z_media_archive:abspath(Restored, Context))),
+            ?assertEqual(FilestorePid, whereis(z_utils:name_for_site(mod_filestore, Context)))
+        end, lists:seq(1, 2)),
+        ?assert(meck:num_calls(s3filez, stream, '_') > 0),
+        ?assert(meck:validate(s3filez))
+    after
+        meck:unload(s3filez),
+        meck:unload(filestore_config),
+        ets:delete(Remote),
+        z_module_manager:deactivate(mod_filestore, Context)
+    end.
+
+offload_media(Id, Context) ->
+    #{ <<"filename">> := Filename } = Medium = m_media:get(Id, Context),
+    Path = <<"archive/", Filename/binary>>,
+    % Synchronize queueing with the test; duplicate queue entries are harmless.
+    _ = mod_filestore:observe_media_update_done(
+        #media_update_done{ action = insert, post_props = Medium }, Context),
+    QueueId = z_db:q1("select id from filestore_queue where path = $1", [Path], Context),
+    {Pid, Ref} = spawn_monitor(fun() ->
+        filestore_uploader:upload_job(QueueId, Path, {error, enoent}, Medium, Context)
+    end),
+    receive
+        {'DOWN', Ref, process, Pid, Reason} -> ?assertEqual(normal, Reason)
+    after 10000 -> error(upload_timeout)
+    end,
+    ?assertNot(filelib:is_regular(z_media_archive:abspath(Filename, Context))),
+    {ok, #{ location := Location }} = m_filestore:lookup(Path, Context),
+    % Evict the uploaded copy, forcing recovery through the download stream.
+    case z_file_entry:where(Filename, Context) of
+        undefined -> ok;
+        FilePid ->
+            FileRef = monitor(process, FilePid),
+            ok = z_file_request:stop(Filename, Context),
+            receive
+                {'DOWN', FileRef, process, FilePid, _} -> ok
+            after 10000 -> error(file_entry_stop_timeout)
+            end
+    end,
+    ok = filezcache:delete(Location).
