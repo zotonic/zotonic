@@ -18,9 +18,9 @@
         {% endif %}
 
         <h4>{_ Local sandbox _}</h4>
-        {% if media.sandbox == `available` and media.sandbox_mode == `enabled` %}
+        {% if media.sandbox == `available` and media.sandbox_mode == `required` %}
             <p class="text-success">
-            {_ Sandbox isolation is available. Media processing commands run in a restricted environment for additional security. _}
+            {_ Sandbox isolation is available and required. Media processing commands run in a restricted environment for additional security. _}
             </p>
         {% elif media.sandbox == `available` and media.sandbox_mode == `disabled` %}
             <p class="alert alert-danger" role="alert">
