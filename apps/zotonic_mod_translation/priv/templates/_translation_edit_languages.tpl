@@ -1,3 +1,4 @@
+{% include "_translation_tree_init.tpl" %}
 {% block language_options %}
 {% with m.rsc[id].language as r_lang %}
 <div class="form-group">
@@ -80,11 +81,12 @@
                     if (!from_name.endsWith("_json")) {
                         const from_val = $form.find('[name="' + from_name + '"]').val().trim();
 
-                        if (from_val !== '') {
+                        // An empty source must also replace existing destination text.
+                        if (from_val !== '' || overwrite) {
                             let to_val = from_val;
                             if (mapping[from_val]) {
                                 to_val = mapping[from_val];
-                            } else {
+                            } else if (from_val !== '') {
                                 is_complete = false;
                             }
                             if ($(this).hasClass('z_editor-installed')) {

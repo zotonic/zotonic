@@ -1796,11 +1796,7 @@ call_manage_schema(Module, Current, Target, _Context)
     ok;
 call_manage_schema(Module, undefined, Target, Context) ->
     % New install
-    SchemaRet = z_db:transaction(
-                    fun(C) ->
-                        Module:manage_schema(install, C)
-                    end,
-                    Context),
+    SchemaRet = schema_transaction(Module, install, Context),
     datamodel_manage(Module, SchemaRet, Context),
     z_db:flush(Context),
     maybe_manage_data(Module, install, Context),
@@ -1809,11 +1805,7 @@ call_manage_schema(Module, undefined, Target, Context) ->
 call_manage_schema(Module, Current, Target, Context)
     when is_integer(Current), is_integer(Target), Target > Current ->
     % Upgrade
-    SchemaRet = z_db:transaction(
-                    fun(C) ->
-                        Module:manage_schema({upgrade, Current+1}, C)
-                    end,
-                    Context),
+    SchemaRet = schema_transaction(Module, {upgrade, Current+1}, Context),
     datamodel_manage(Module, SchemaRet, Context),
     z_db:flush(Context),
     maybe_manage_data(Module, {upgrade, Current+1}, Context),
@@ -1885,14 +1877,25 @@ reinstall(Module, Context) ->
             nop;
         2 ->
             %% has manage_schema/2
-            SchemaRet = z_db:transaction(
-                            fun(C) ->
-                                Module:manage_schema(install, C)
-                            end,
-                            Context),
+            SchemaRet = schema_transaction(Module, install, Context),
             datamodel_manage(Module, SchemaRet, Context),
             z_db:flush(Context),
             maybe_manage_data(Module, install, Context)
+    end.
+
+%% @doc Invalidate column metadata after commit, before applying the datamodel.
+%% A flush inside manage_schema/2 can be repopulated by parallel queries that
+%% still see the old schema. Also discard metadata cached by a rolled-back install.
+-spec schema_transaction(Module, Version, Context) -> Result when
+    Module :: module(),
+    Version :: manage_schema(),
+    Context :: z:context(),
+    Result :: term().
+schema_transaction(Module, Version, Context) ->
+    try
+        z_db:transaction(fun(C) -> Module:manage_schema(Version, C) end, Context)
+    after
+        z_db:flush(Context)
     end.
 
 datamodel_manage(_Module, ok, _Context) ->

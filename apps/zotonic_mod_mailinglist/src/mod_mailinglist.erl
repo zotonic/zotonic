@@ -184,7 +184,7 @@ Delegate callbacks:
 -mod_title("Mailing list").
 -mod_description("Mailing lists. Send a page to a list of recipients.").
 -mod_prio(600).
--mod_schema(8).
+-mod_schema(9).
 -mod_depends([ admin, mod_wires, mod_email_status ]).
 -mod_provides([ mailinglist ]).
 -mod_config([

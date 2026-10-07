@@ -124,6 +124,44 @@ add_language_map_overwrite_test() ->
     {ok, Out} = translation_translate_rsc:add_translation_map(Rsc, en, nl, true, Context),
     ?assertEqual(Rsc1, Out).
 
+%% @doc Empty and missing source values clear destinations only when overwriting.
+overwrite_empty_source_test() ->
+    overwrite_empty_source(z_acl:sudo(z_context:new(zotonic_site_testsandbox))).
+
+%% @doc Check map transformations and saved resource translations with no service texts.
+overwrite_empty_source(Context) ->
+    Empty = #trans{tr = [{en, <<>>}, {nl, <<"Old translation">>}]},
+    Missing = #trans{tr = [{nl, <<"Old translation">>}]},
+    Props = #{
+        <<"language">> => [en, nl],
+        <<"title">> => Empty,
+        <<"summary">> => Missing,
+        <<"data_json">> => Empty,
+        <<"blocks">> => [#{<<"type">> => <<"text">>, <<"body">> => Empty,
+            <<"nested">> => #{<<"summary">> => Missing}}]
+    },
+    {ok, Preserved} = translation_translate_rsc:add_translation_map(Props, en, nl, false, Context),
+    ?assertEqual(Props, Preserved),
+    {ok, Cleared} = translation_translate_rsc:add_translation_map(Props, en, nl, true, Context),
+    ?assertEqual(#trans{tr = [{en, <<>>}, {nl, <<>>}]}, maps:get(<<"title">>, Cleared)),
+    ?assertEqual(#trans{tr = [{nl, <<>>}]}, maps:get(<<"summary">>, Cleared)),
+    ?assertEqual(Empty, maps:get(<<"data_json">>, Cleared)),
+    [Block] = maps:get(<<"blocks">>, Cleared),
+    ?assertEqual(maps:get(<<"title">>, Cleared), maps:get(<<"body">>, Block)),
+    ?assertEqual(#{<<"summary">> => maps:get(<<"summary">>, Cleared)}, maps:get(<<"nested">>, Block)),
+    {ok, Id} = m_rsc:insert(Props#{<<"category_id">> => text}, Context),
+    try
+        ok = translation_translate_rsc:add_translation(Id, en, nl, false, true, Context),
+        ?assertEqual(Empty, m_rsc:p(Id, title, Context)),
+        ok = translation_translate_rsc:add_translation(Id, en, nl, true, true, Context),
+        ?assertEqual(undefined, m_rsc:p(Id, title, Context)),
+        ?assertEqual(undefined, m_rsc:p(Id, summary, Context)),
+        ?assertEqual([Block], m_rsc:p(Id, blocks, Context)),
+        ?assertEqual(Empty, m_rsc:p(Id, data_json, Context))
+    after
+        ok = m_rsc:delete(Id, Context)
+    end.
+
 language_rsc_test() ->
     Context = z_acl:sudo( z_context:new(zotonic_site_testsandbox) ),
     Props = #{

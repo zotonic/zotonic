@@ -29,6 +29,8 @@
 -export([
 
     has_connection/1,
+    is_low_load/1,
+    run_if_low_load/2,
     database_version_string/1,
     database_version/1,
 
@@ -319,6 +321,30 @@ has_connection(Site) when is_atom(Site) ->
     is_pid(erlang:whereis(z_db_pool:db_pool_name(Site)));
 has_connection(Context) ->
     is_pid(erlang:whereis(z_context:db_pool(Context))).
+
+
+%% @doc Check whether fewer than half the database pool worker slots are checked
+%% out. Idle workers still count as available when their SQL connections close.
+%% Returns false for a missing pool or if its status is unavailable within 100 ms.
+%% This is a snapshot, not a reservation or a database health check.
+-spec is_low_load(Context) -> boolean() when
+    Context :: z:context().
+is_low_load(Context) ->
+    z_db_pool:is_low_load(Context).
+
+%% @doc Run optional work synchronously when database pool load is low.
+%% Returns the function's result, or {error, busy} without calling it. No
+%% connection is reserved; load can change while the function runs. Exceptions
+%% from the function propagate normally. Callers must arrange their own retry.
+-spec run_if_low_load(Function, Context) -> Result | {error, busy} when
+    Function :: fun(() -> Result),
+    Context :: z:context(),
+    Result :: term().
+run_if_low_load(Function, Context) when is_function(Function, 0) ->
+    case is_low_load(Context) of
+        true -> Function();
+        false -> {error, busy}
+    end.
 
 
 %% @doc Return the version of the database. This is the long string describing the
@@ -2052,4 +2078,3 @@ equery1(DbDriver, C, Sql, Parameters, Timeout) ->
         {ok, _RowCount, _Columns, [Row|_]} -> {ok, element(1, Row)};
         Other -> Other
     end.
-

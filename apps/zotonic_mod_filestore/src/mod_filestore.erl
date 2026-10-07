@@ -24,183 +24,177 @@
     ]
 }).
 -moduledoc("
-Support for storing uploaded and generated images and documents on external services.
-
-
-
-Overview
---------
-
-This module stores uploaded files and generated preview-images on an external S3-compatible service. It listens for
-medium and file related notifications for any newly uploaded or generated files.
-
-If a file is added then the file is queued in an upload queue. After a delay a separate process polls this queue and
-will upload the file to the external service.
-
-If a file is needed and not locally available then the mod_filestore module will check its file registry to see if the
-file is stored on an external service. If so then then a *filezcache* process is added and a download of the file is started.
-
-The file is served from the filezcache whilst it is being downloaded.
-
-The filezcache will stop the entry after a random amount of time—if the entry was not recently used.
-
-
-
-Configuration
--------------
-
-
-
-### S3 configuration
-
-Configure the following permissions on your S3 service for mod_filestore to work correctly:
-
-| Resource                         | Permissions                                                                      |
-| -------------------------------- | -------------------------------------------------------------------------------- |
-| `/`                              | *   s3:ListBucket                                                                |
-| `/-zotonic-filestore-test-file-` | *   s3:GetObject *   s3:PutObject *   s3:DeleteObject                            |
-| `/preview/*`                     | *   s3:GetObject *   s3:PutObject *   s3:DeleteObject (if file deletion is enabled) |
-| `/archive/*`                     | *   s3:GetObject *   s3:PutObject *   s3:DeleteObject (if file deletion is enabled) |
-
-
-
-### mod_filestore configuration
-
-After the mod_filestore is enabled an extra menu entry ‘Cloud File Store’ is added to the ‘System’ menu in the admin.
-
-Selecting the menu will show the configuration panel for the Could File Store.
-
-
-
-Here you can define where the files should be stored and give the credentials to access the storage.
-
-If you save the url and credentials then the system will try to upload a small file to the remote storage. If it
-succeeds then the configuration is saved. If it does not succeed then an error message will be displayed and the
-configuration will not be changed.
-
-It is possible to (temporarily) disable uploading new files by unchecking the checkbox *Upload new files to the cloud*.
-
-
-
-### File deletion
-
-You can also configure file deletion behaviour, i.e. what should happen when a file is removed from Zotonic. You can
-choose to immediately remove the file from the filestore, not delete it at all (to make your store immutable) or delete
-the file after a certain delay (to be able to restore accidentally deleted files).
-
-
-
-### Statistics
-
-The system shows statistics:
-
-Media
-
-All medium records and a sum of the sizes. A single medium record can have 0, 1 or 2 files attached.
-
-Local Files
-
-These are all files found in the `files` directory, this includes files that won’t ever be uploaded.
-
-Cloud Files
-
-All files registered to be on any cloud service. This is extracted from the database and not by scanning the remote
-cloud service.
-
-Queues
-
-These are the queues being processed by mod_filestore. On a quiet (stable) system they are usually empty.
-
-
-
-### Moving files
-
-It is possible to move (almost) all files from the local file system to the cloud. And vice versa, from the cloud to the
-local file system. This is useful when starting or changing the cloud storage location.
-
-If a file is moved to the cloud then it is first placed in the filezcache. The filezcache will start purging the files
-if the cache is bigger than configurated in the filezcache application (default 10GB for all sites combined).
-
-The system waits 10 minutes before a queued file is uploaded. This period is meant for a *cool down* of the file, as in
-the first moments after an upload some resize and preview operations will take place. The delay makes it less probable
-that a freshly uploaded file vanishes (to the cache) whilst a preview-generation is starting.
-
-
-
-Notifications
--------------
-
-The mod_filestore hooks into the following notifications, whose definitions can be found in `zotonic_file.hrl`:
-
-`#filestore{}`
-
-Hooks into the Zotonic file management notifications to upload, delete or lookup files. This will trigger downloads of
-external files and interfaces to the filezcache.
-
-`#filestore_credentials_lookup{}`
-
-Maps a local path and optional resource id to a service, external location and key/password for that external service.
-This can be used to store different resources on different external services.
-
-`#filestore_credentials_revlookup{}`
-
-Maps a cloud file service and location to a key, password and request location.
-
-`#medium_update_done{}`
-
-Queues newly inserted medium files into the upload queue.
-
-`#admin_menu{}`
-
-To add the Cloud File Store menu to the admin.
-
-
-
-Applications
-------------
-
-The filestore uses the s3filez and filezcache Erlang applications.
-
-
-
-### s3filez
-
-This application is used for uploading, downloading and deleting files on S3 compatible services. It provides
-asynchronous services and is compatible with the filezcache application. It is also able to stream files to and from the
-external S3 service, this makes it possible to have start serving a file before it is downloaded to the filezcache.
-
-
-
-### filezcache
-
-This application manages a cache of downloaded files. The cache is shared between all sites. Every cache entry is
-managed by its own process, which can stream newly received data directly to any requesting processes.
-
-The filezcache keeps a presistent *disk_log* with a description of all files in the cache. This log is read on startup
-to repopulate the cache with already present files. For each file the size and a hash is stored to check cache consistency.
-
-The filezcache has a garbage collector. It keeps a pool of randomly selected cache entries, from which it will elect
-randomly processes to be garbage-collected. The processes themselves will decide if they will stop or not.
-
-After a cache process stops it will keep running for a short period to handle late incoming requests.
-
-Filezcache entries are started by the mod_filestore and filled by either moving a local file to the cache or by
-s3filez download processes.
-External file storage module for media/file offloading and synchronization.
-
-The statistics are generated dynamically, which is not a good idea with many files. This will be changed.
-
-Accepted Events
----------------
-
-This module handles the following notifier callbacks:
-
-- `observe_admin_menu`: Add filestore settings and browser links to the admin menu.
-- `observe_filestore`: Resolve filestore read/write/delete requests for configured remote storage backends.
-- `observe_filestore_credentials_lookup`: Map the local path to the URL of the remotely stored file using `filestore_config:service`.
-- `observe_filestore_credentials_revlookup`: Given the service, find the credentials to do a lookup of the remote file using `filestore_config:service`.
-- `observe_filestore_request`: Handle filestore upload, download and delete requests via the configured backend credentials.
-- `observe_media_update_done`: Push newly uploaded local media files to the configured filestore backend.
+Store uploaded media and generated previews on S3-compatible storage, FTP/FTPS,
+or WebDAV. Zotonic keeps a database registry of remote files and serves them
+through a shared local cache when they are no longer on the site's disk.
+
+## Set up remote storage
+
+1. Enable `mod_filestore` for the site.
+2. Open **System → Cloud File Store** in the admin. Changing settings and starting
+   bulk moves require the `use mod_admin_config` permission.
+3. Enter the base URL and credentials for your storage service using the table below.
+4. Select **Upload new media files to the cloud file store**. Decide whether to
+   **Keep local files after upload** and choose the remote deletion delay.
+5. Save the settings. Zotonic writes, reads back, and deletes a temporary
+   `-zotonic-filestore-test-file-` beneath the base URL. Settings are saved only
+   when this test succeeds.
+6. Upload a test image, allow the upload queue to run, and check both the original
+   and a resized preview. Use the bulk action to upload existing media when ready.
+
+A successful credential test checks these operations at the configured location;
+check normal media delivery as well. The test needs delete permission even when
+remote deletion is set to **Never**.
+
+### Supported services and URLs
+
+| Service | Base URL example | Credentials | `service` value |
+| --- | --- | --- | --- |
+| S3-compatible | `https://mybucket.s3.amazonaws.com/mysite` | Access key and secret key | `s3` |
+| FTP over TLS | `ftps://files.example.com/mysite` | Username and password | `ftp` |
+| WebDAV over HTTPS | `webdavs://files.example.com/remote.php/dav/files/alice/mysite` | Username and password | `webdav` |
+
+The admin derives the service from the URL scheme. `http:` and `https:` select
+S3, not WebDAV. For WebDAV use `webdav:` or `webdavs:`; `dav:` and `davs:` are
+aliases. Use `webdavs:` or `davs:` to protect the WebDAV credentials with HTTPS.
+
+Both `ftp:` and `ftps:` select the FTP backend. The server must support TLS:
+the client uses passive FTP with explicit TLS by default, or implicit TLS when
+port 990 is specified, for example `ftps://files.example.com:990/mysite`.
+Allow the server's passive data connections through the firewall. SFTP (SSH file
+transfer) is not supported by this backend.
+
+FTP and WebDAV create missing directories during upload. Their accounts need
+permission to create directories and write, read, and delete files in the chosen
+location. For S3, the admin can try to create a private bucket if it is missing;
+this requires permission to create a bucket. The checkbox is a setup action, not
+a saved configuration option.
+
+### S3 permissions
+
+Use a bucket or prefix dedicated to the site. Grant bucket listing where required
+by the provider and grant the following object permissions beneath the base URL:
+
+| Path | Permissions |
+| --- | --- |
+| `-zotonic-filestore-test-file-` | `s3:GetObject`, `s3:PutObject`, `s3:DeleteObject` |
+| `archive/*` | `s3:GetObject`, `s3:PutObject`; `s3:DeleteObject` when remote deletion is enabled |
+| `preview/*` | `s3:GetObject`, `s3:PutObject`; `s3:DeleteObject` when remote deletion is enabled |
+
+Other applications using the filestore may write additional paths. Give those
+paths the corresponding permissions. Files do not need public-read access:
+Zotonic retrieves them using the configured credentials.
+
+## Configuration reference
+
+Site settings are stored under `mod_filestore` in `m_config`. The historical
+`s3` prefixes also apply to FTP and WebDAV.
+
+| Key | Meaning |
+| --- | --- |
+| `service` | Backend identifier: `s3`, `ftp`, or `webdav`. Set it explicitly outside the admin; an empty value falls back to `s3`. TLS variants are URL schemes, not backend identifiers. |
+| `s3url` | Base URL, including the bucket or directory and optional site prefix. |
+| `s3key` | S3 access key, or FTP/WebDAV username. |
+| `s3secret` | S3 secret key, or FTP/WebDAV password. |
+| `is_upload_enabled` | Allow background uploads. Set explicitly when configuring storage outside the admin. Disabling this does not disable reads, queued downloads, or remote deletion. |
+| `is_local_keep` | Keep local files after successful upload. When false, uploaded files move into the evictable cache. |
+| `delete_interval` | Extra delay before deleting files marked for remote deletion: `0` (the default, no extra delay), `false` (never), seconds, or a value such as `1 week`, `2 days`, or `3 months`. |
+| `tls_options` | Erlang list of TLS options passed to the selected storage client. Not an admin form field; an empty list uses the client's defaults. |
+
+### System-wide defaults and locked settings
+
+The same keys can be set in the `zotonic_mod_filestore` application environment in
+the system configuration. Nonempty site settings override these defaults unless
+`is_config_locked` is true. This lock is a **system-wide** option: it makes sites
+use the application settings and prevents editing them through the filestore form.
+
+For example, merge this application entry into the system's Erlang configuration
+list, using your own endpoint and credentials:
+
+```erlang
+{zotonic_mod_filestore, [
+    {service, <<\"webdav\">>},
+    {s3url, <<\"webdavs://files.example.com/zotonic/{{site}}\">>},
+    {s3key, <<\"storage-user\">>},
+    {s3secret, <<\"replace-with-password\">>},
+    {is_upload_enabled, true},
+    {is_local_keep, true},
+    {delete_interval, <<\"false\">>},
+    {is_config_locked, true}
+]}
+```
+
+In a **system-configured** base URL, `{{site}}` is replaced with the site name.
+If the placeholder is absent, Zotonic appends the site name as a directory.
+A base URL saved in the site's admin is used as entered, without this expansion.
+Configure `service` alongside the URL: URL-based service detection happens when
+saving the admin form, not when reading application configuration.
+
+## Uploads, local copies, and the cache
+
+New media files and previews are queued for asynchronous upload. Queue entries
+become eligible after one minute. Processing runs on a minute tick, with bounded
+batches, database-load checks, and backoff, so completion can take longer.
+
+With `is_local_keep` enabled, remote storage holds an additional copy of local
+media. Otherwise, successfully uploaded files move from the site's files directory
+into `filezcache`, where they can be evicted. When a remote-only file is requested,
+Zotonic downloads it into the cache and can serve it while the download proceeds.
+
+The `filezcache` application is shared by all sites. Its `max_bytes` application
+setting controls cache capacity (default 10 GiB). Cache files are disposable;
+retain the remote files and database registry. Keeping remote media copies does
+not replace a backup of the site's database, configuration, and application code.
+
+## Deletion and moving existing files
+
+Zotonic normally retains deleted media for five weeks to allow recovery. The
+filestore's `delete_interval` adds a delay after a file is marked for remote
+deletion. `0` means no **extra** delay, not deletion at the instant a page is
+removed. `false` keeps remote files indefinitely; it does not make the remote
+service itself immutable.
+
+Use the admin's bulk actions to queue existing local media for upload or to move
+remote files back to the server's disk. These operations run in the background;
+watch the queues and logs. Moving files to disk requires enough disk space and
+working credentials for their existing locations. Disable uploads when bringing
+files back for a storage migration.
+
+Before switching to a different service or account, bring the files back locally
+and verify that the download queue has completed. Then configure and test the new
+location and queue uploads. Changing the base URL alone does not copy existing
+remote objects: the registry retains their original service and location. The
+default reverse lookup uses credentials for the currently configured service.
+Remote deletion also checks that an object's URL matches the configured base URL.
+
+## Statistics and troubleshooting
+
+The admin shows registered media, estimated local file counts and sizes, remote
+file counts and sizes, and upload, download, and delete queue counts. These figures
+come from the site's database; they are not a scan or integrity check of remote
+storage. Local totals are estimates, not a scan of the files directory.
+
+If uploads do not progress, check that uploads are enabled, the module is active,
+and the URL and credentials pass the settings test. Inspect logs for connection,
+permission, TLS, or storage errors. For FTP, check passive data connections; for
+WebDAV, check the full collection path and the `webdavs:` scheme. Allow for the
+queue delay and backoff before assuming a newly queued file is stuck.
+
+## Integration points
+
+`mod_filestore` handles these notifications:
+
+- `#media_update_done{}` queues inserted or updated media files.
+- `#filestore{}` handles file lookup, upload, and deletion through the file registry and cache.
+- `#filestore_request{}` handles direct storage upload, download, and deletion requests.
+- `#filestore_credentials_lookup{}` maps a local path and optional resource ID to remote credentials and location.
+- `#filestore_credentials_revlookup{}` resolves credentials for an existing remote service and location.
+- `#admin_menu{}` adds the admin menu entry.
+
+Applications can provide credential lookup observers to route files to different
+services. See `zotonic_file.hrl` for the notification records and `model#filestore`
+for the configuration and statistics model. Storage requests use `s3filez`,
+`ftpfilez`, or `webdavfilez`; `filezcache` manages the shared download cache.
 ").
 
 -author("Marc Worrell <marc@worrell.nl>").
@@ -215,13 +209,13 @@ This module handles the following notifier callbacks:
             key => service,
             type => string,
             default => "",
-            description => "The service to use for storing files. One of: s3, ftp, ftps, webdav, webdavs"
+            description => "The service to use for storing files. One of: s3, ftp, webdav. TLS is selected by the URL scheme"
         },
         #{
             key => s3url,
             type => string,
             default => "",
-            description => "The URL of the S3 service, e.g. https://s3.myblockstorage.com"
+            description => "The base URL of the S3, FTP/FTPS, or WebDAV service, including its bucket or directory"
         },
         #{
             key => s3key,
@@ -255,7 +249,7 @@ This module handles the following notifier callbacks:
             description => "The interval at which to delete files marked as deleted. "
                            "Set to 'false' to disable deletion of remote files. Use seconds, 'false', or "
                            "'N days/weeks/months' to specify the interval. "
-                           "The default is '0', which means immediate deletion."
+                           "The default is '0', which means no extra delay after a file is marked for remote deletion."
         }
     ]).
 
@@ -290,6 +284,7 @@ This module handles the following notifier callbacks:
 
     update_backoff/2,
     batch_size/1,
+    next_batch/2,
 
     delete_ready/5,
     download_stream/5,
@@ -771,18 +766,14 @@ handle_call(batch_size, _From, #state{ backoff = Backoff } = State) ->
 
 handle_cast(next_batch, #state{ backoff = Backoff, context = Context } = State) ->
     BatchSize = current_batch_size(Backoff),
-    case filestore_config:is_upload_enabled(Context) of
-        true ->
-            start_uploaders(m_filestore:fetch_queue(BatchSize, Context), Context);
-        false ->
-            ok
-    end,
-    start_downloaders(m_filestore:fetch_move_to_local(BatchSize, Context), Context),
-    case filestore_config:delete_interval(Context) of
-        <<"false">> ->
-            ok;
-        Interval ->
-            start_deleters(m_filestore:fetch_deleted(Interval, BatchSize, Context), Context)
+    % Isolate database/queue failures from the module process. A slow batch
+    % must not overlap with the next tick for this site.
+    case z_sidejob:start_site_unique(mod_filestore_next_batch,
+        ?MODULE, next_batch, [BatchSize], Context)
+    of
+        {ok, _Pid} -> ok;
+        {error, already_running} -> ok;
+        {error, overload} -> ok
     end,
     {noreply, State};
 handle_cast(success, #state{ backoff = Backoff } = State) ->
@@ -796,6 +787,29 @@ handle_cast(fail, #state{ backoff = Backoff } = State) ->
 %%% ------------------------------------------------------------------------------------
 %%% Support routines
 %%% ------------------------------------------------------------------------------------
+
+%% @doc Site-unique sidejob entry point. Leave queued work for the next tick
+%% when foreground requests are using the database connections.
+-spec next_batch(BatchSize, Context) -> ok | {error, busy} when
+    BatchSize :: non_neg_integer(),
+    Context :: z:context().
+next_batch(BatchSize, Context) ->
+    z_db:run_if_low_load(fun() -> next_batch_1(BatchSize, Context) end, Context).
+
+next_batch_1(BatchSize, Context) ->
+    case filestore_config:is_upload_enabled(Context) of
+        true ->
+            start_uploaders(m_filestore:fetch_queue(BatchSize, Context), Context);
+        false ->
+            ok
+    end,
+    start_downloaders(m_filestore:fetch_move_to_local(BatchSize, Context), Context),
+    case filestore_config:delete_interval(Context) of
+        <<"false">> ->
+            ok;
+        Interval ->
+            start_deleters(m_filestore:fetch_deleted(Interval, BatchSize, Context), Context)
+    end.
 
 current_batch_size(Backoff) ->
     case z_sidejob:space() of

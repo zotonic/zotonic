@@ -148,7 +148,8 @@ from_list(Args0) when is_list(Args0) ->
     }.
 
 
-%% @doc Translate the query arguments to a query term map.
+%% @doc Translate the query arguments to a query term map. A scalar subject/object
+%% filter and its predicate filter are combined so they must match the same edge.
 -spec from_qargs(QArgs) -> Query when
     QArgs :: z:context() | list({Key, Value}),
     Key :: binary() | atom(),
@@ -170,7 +171,32 @@ from_qargs(QArgs0) when is_list(QArgs0) ->
                 (_) -> false
             end,
             QArgs),
-    from_list(TermArgs).
+    #{ <<"q">> := Terms } = Query = from_list(TermArgs),
+    Terms1 = combine_connection_terms(<<"hasobject">>, <<"hasobjectpredicate">>, Terms),
+    Query#{ <<"q">> := combine_connection_terms(<<"hassubject">>, <<"hassubjectpredicate">>, Terms1) }.
+
+%% @doc Bind a scalar connection ID and its predicate from a search form to the same edge.
+%% Leave predicate-only, ID-only, and structured edge queries unchanged.
+-spec combine_connection_terms(EdgeTerm, PredicateTerm, Terms) -> [map()] when
+    EdgeTerm :: binary(), PredicateTerm :: binary(), Terms :: [map()].
+combine_connection_terms(EdgeTerm, PredicateTerm, Terms) ->
+    case [V || #{ <<"term">> := T, <<"value">> := V } <- Terms, T =:= PredicateTerm] of
+        [Predicate] ->
+            {Combined, DidCombine} = lists:mapfoldl(
+                fun
+                    (#{ <<"term">> := T, <<"value">> := Id } = Term, _Acc)
+                        when T =:= EdgeTerm, (is_integer(Id) orelse is_binary(Id) orelse is_atom(Id)) ->
+                        {Term#{ <<"value">> := [Id, Predicate] }, true};
+                    (Term, Acc) -> {Term, Acc}
+                end,
+                false,
+                Terms),
+            case DidCombine of
+                true -> [T || T <- Combined, maps:get(<<"term">>, T, undefined) =/= PredicateTerm];
+                false -> Terms
+            end;
+        _ -> Terms
+    end.
 
 %% @doc Translate a map with query term keys to a query term map.
 -spec from_map(TermMap) -> Query when

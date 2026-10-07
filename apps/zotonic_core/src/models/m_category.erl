@@ -163,6 +163,7 @@ Available Model API Paths
     get_path/2,
     get_range/2,
     get_range_by_name/2,
+    exact_ranges/2,
     ranges/2,
     last_modified/2,
     is_a/2,
@@ -551,6 +552,54 @@ get_range_by_name(Name, Context) ->
                 proplists:get_value(right, C)}
     end.
 
+%% @doc Given a list of category ids, return the list of numeric ranges they
+%% cover exactly, aka excluding all of their (other) subcategories.
+%% Priority is given to the number of ranges over their size.
+-spec exact_ranges(category() | [category()], z:context()) ->
+    [{integer(), integer()}].
+exact_ranges([], _Context) ->
+    [];
+exact_ranges(Cat, Context) when not is_list(Cat) ->
+    exact_ranges([Cat], Context);
+exact_ranges(CatList, Context) ->
+    FlatCatList = lists:filtermap(
+        fun (Cat) ->
+            case name_to_id(Cat, Context) of
+                {ok, CatId} -> {true, CatId};
+                _ -> false
+            end
+        end,
+        lists:flatten(CatList)
+    ),
+    FlatCatTree = tree_flat_meta(Context),
+    % turns the flat category tree in a list of elements where categories in the
+    % 'CatList' are turned into their exact range (excluding its subcategories)
+    % and the others are replaced with an 'undefined'
+    SelectedRanges = lists:map(
+        fun (CatProps) ->
+            CatId = proplists:get_value(id, CatProps),
+            RangeStart = proplists:get_value(left, CatProps),
+            case lists:member(CatId, FlatCatList) of
+                true -> {RangeStart, RangeStart};
+                false -> undefined
+            end
+        end,
+        FlatCatTree
+    ),
+    merge_selected_ranges(SelectedRanges).
+
+-spec merge_selected_ranges([undefined | {integer(), integer()}]) ->
+    [{integer(), integer()}].
+merge_selected_ranges([]) ->
+    [];
+merge_selected_ranges([undefined | Tail]) ->
+    merge_selected_ranges(Tail);
+merge_selected_ranges([Range]) ->
+    [Range];
+merge_selected_ranges([Range, undefined | Tail]) ->
+    [Range | merge_selected_ranges(Tail)];
+merge_selected_ranges([{RangeStart, _}, {_, RangeEnd} | Tail]) ->
+    merge_selected_ranges([{RangeStart, RangeEnd} | Tail]).
 
 %% @doc Given a list of category ids, return the list of numeric ranges they cover.
 -spec ranges(category() | [category()], z:context()) ->

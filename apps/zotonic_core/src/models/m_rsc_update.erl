@@ -945,10 +945,17 @@ update_imported_check(#rscupd{is_import = true, id = Id} = RscUpd, PropsOrFun, C
     case m_rsc:exists(Id, Context) of
         false ->
             {ok, CatId} = m_category:name_to_id(other, Context),
-            1 = z_db:q("insert into rsc (id, creator_id, is_published, category_id)
-                        values ($1, $2, false, $3)",
-                [Id, z_acl:user(Context), CatId],
-                Context);
+            % Persist insert defaults before reading the placeholder for the update.
+            % Raw-read defaults (notably content_group_id) otherwise disappear from
+            % the update diff, leaving the database column empty after recovery.
+            InitProps = #{
+                <<"id">> => Id,
+                <<"creator_id">> => z_acl:user(Context),
+                <<"is_published">> => false,
+                <<"category_id">> => CatId
+            },
+            InsertProps = z_notifier:foldr(#rsc_insert{ props = InitProps }, InitProps, Context),
+            {ok, Id} = z_db:insert(rsc, InsertProps, Context);
         true ->
             ok
     end,
@@ -1436,11 +1443,16 @@ update_transaction_fun_db_1({ok, UpdatePropsN}, Id, RscUpd, Raw, IsABefore, IsCa
     Sources = lists:uniq(filter_languages(Langs1)),
     Mapping = z_language:language_map(Sources, Targets),
     MappedTargets = [L || L <- Targets, lists:member(L, maps:values(Mapping))],
-    PreferredTargets = case MappedTargets of
-        [] -> Targets;
-        _ -> MappedTargets
+    {PropsToMap, PreferredTargets} = case MappedTargets of
+        [] ->
+            {NewProps, Targets};
+        _ ->
+            % Remove stale translations before fallback mapping can relabel them.
+            % Keep mapped variants too, as existing properties may already use
+            % the site's language instead of the imported regional variant.
+            {z_props:prune_languages(NewProps, Sources ++ MappedTargets), MappedTargets}
     end,
-    MappedProps = z_props:map_languages(NewProps, Mapping, PreferredTargets),
+    MappedProps = z_props:map_languages(PropsToMap, Mapping, PreferredTargets),
     UsedLanguages = lists:usort(MappedTargets ++ z_props:extract_languages(MappedProps)),
     Langs2 = case UsedLanguages of
         [] -> [hd(Targets)];

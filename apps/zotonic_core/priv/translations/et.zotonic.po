@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-09-29 14:46\n"
+"PO-Revision-Date: 2026-10-07 12:13\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -178,7 +178,7 @@ msgid "ACL user group"
 msgstr "ACL-i kasutajagrupp"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:933
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:936
 msgid "Access control rules"
 msgstr "Juurdepääsu kontrolli reeglid"
 
@@ -198,15 +198,17 @@ msgstr "Lisage koostöögrupi lingid"
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:152
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:184
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:47
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:59
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:67
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:50
 msgid "All"
 msgstr "Kõik"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_collab.tpl:8
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:39
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:56
-#: zotonic_mod_admin/priv/templates/admin_overview.tpl:53
-#: zotonic_mod_admin/priv/templates/admin_overview.tpl:79
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:61
+#: zotonic_mod_admin/priv/templates/admin_overview.tpl:58
+#: zotonic_mod_admin/priv/templates/admin_overview.tpl:84
 msgid "All Categories"
 msgstr "K√µik kategooriad"
 
@@ -266,9 +268,9 @@ msgstr "Kas olete kindel, et soovite taastada kõik ACL-reeglid nende praegu ava
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:35
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:259
 #: zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:40
-#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:303
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:292
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:17
-#: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:85
+#: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:111
 #: zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:28
 #: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:35
 #: zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:38
@@ -334,7 +336,8 @@ msgstr "Kas olete kindel, et soovite taastada kõik ACL-reeglid nende praegu ava
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:185
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
 #: zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
-#: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:115
+#: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:116
+#: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:69
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:218
 msgid "Cancel"
 msgstr "Katkesta"
@@ -417,7 +420,7 @@ msgid "Collaboration group members"
 msgstr "Koostöögrupi liikmed"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:22
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:929
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:932
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:158
 msgid "Collaboration groups"
 msgstr "Koostöögrupid"
@@ -436,7 +439,7 @@ msgstr "Pidage omanikeks ressursside autoreid."
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:19
 #: zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4
-#: zotonic_mod_admin/src/mod_admin.erl:476
+#: zotonic_mod_admin/src/mod_admin.erl:491
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:67
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:133
 msgid "Content"
@@ -455,7 +458,7 @@ msgstr "Sisurühm"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_collab_select.tpl:16
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:166
-#: zotonic_mod_content_groups/src/mod_content_groups.erl:223
+#: zotonic_mod_content_groups/src/mod_content_groups.erl:226
 msgid "Content groups"
 msgstr "Sisurühmad"
 
@@ -481,7 +484,7 @@ msgstr "Koostöögruppi ei saanud liikuda."
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:18
 #: zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:21
 #: zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:25
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:113
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:118
 #: zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:53
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:8
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:65
@@ -493,7 +496,7 @@ msgstr "Koostöögruppi ei saanud liikuda."
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:52
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:75
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:97
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:37
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:40
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:10
 #: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:256
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:19
@@ -508,6 +511,7 @@ msgstr "Koostöögruppi ei saanud liikuda."
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125
 #: zotonic_mod_survey/src/mod_survey.erl:427
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:25
+#: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:12
 msgid "Delete"
 msgstr "Kustuta"
 
@@ -661,7 +665,7 @@ msgid "Module"
 msgstr "Moodul"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:25
-#: zotonic_mod_admin/src/mod_admin.erl:502
+#: zotonic_mod_admin/src/mod_admin.erl:517
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:3
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:7
 #: zotonic_mod_admin_modules/src/mod_admin_modules.erl:133
@@ -772,7 +776,7 @@ msgstr "Tagasireeglid"
 #: zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:29
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:33
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:162
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:137
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:138
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:79
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:26
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:105
@@ -800,6 +804,7 @@ msgstr "Koostöörühma seaded on salvestatud"
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_visible_for.tpl:38
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:263
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:45
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_connection.tpl:22
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:47
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_results.tpl:41
 msgid "Select"
@@ -921,7 +926,7 @@ msgstr "Enne juurdepääsu avaldamist kontrollige enne URL-i avaldamist järgmis
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:924
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:927
 msgid "User groups"
 msgstr "Kasutajagrupid"
 
@@ -1072,8 +1077,8 @@ msgid "About categories"
 msgstr "Kategooriate kohta"
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:24
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:195
-#: zotonic_mod_admin/priv/templates/admin_overview.tpl:135
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:200
+#: zotonic_mod_admin/priv/templates/admin_overview.tpl:140
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:56
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:97
 msgid "About {n} items found."
@@ -1082,10 +1087,15 @@ msgstr "Leiti umbes {n} üksust."
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:18
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:62
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:72
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:118
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:119
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_edit_basics.person.tpl:7
 msgid "Access control"
 msgstr "Ligip√§√§s"
+
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:30
+#: zotonic_mod_admin/priv/templates/admin_overview.tpl:27
+msgid "Active filters"
+msgstr "Aktiivsed filtrid"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:34
 msgid "Add a connection"
@@ -1118,6 +1128,18 @@ msgstr "Sissetuleva ühenduse lisamine"
 msgid "Add connection"
 msgstr "Lisa ühendus"
 
+#: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:100
+msgid "Add connections from"
+msgstr "Lisa ühendused alates"
+
+#: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:106
+msgid "Add connections from another page to all selected pages, or from all selected pages to another page. Choose a page and predicate together. Existing connections are kept."
+msgstr "Lisa ühendused teiselt leheküljelt kõikidele valitud lehekülgedele või kõikidelt valitud lehekülgedelt teisele leheküljele. Vali lehekülg ja predikaat koos. Olemasolevad ühendused säilitatakse."
+
+#: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:91
+msgid "Add connections to"
+msgstr "Lisa ühendused"
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:95
 msgid "Add media content"
 msgstr "Lisage meediumisisu"
@@ -1131,7 +1153,7 @@ msgstr "Lisa meedia sisule"
 msgid "Add note"
 msgstr "Lisada märkus"
 
-#: zotonic_mod_admin/src/mod_admin.erl:1128
+#: zotonic_mod_admin/src/mod_admin.erl:1123
 msgid "Added the connection to"
 msgstr "Lisas ühenduse domeeniga"
 
@@ -1151,8 +1173,8 @@ msgstr "Spetsile"
 msgid "After the duplication you can edit the new page. The new page will be unpublished."
 msgstr "Pärast dubleerimist saate uut lehekülge redigeerida. Uus lehekülg jäetakse avaldamata."
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:39
-#: zotonic_mod_admin/priv/templates/admin_overview.tpl:36
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:44
+#: zotonic_mod_admin/priv/templates/admin_overview.tpl:41
 msgid "All Content"
 msgstr "Kogu sisu"
 
@@ -1161,15 +1183,15 @@ msgid "All day"
 msgstr "Terve päev"
 
 #: zotonic_mod_admin/priv/templates/_admin_dashboard_buttons.tpl:14
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:97
-#: zotonic_mod_admin/priv/templates/admin_overview.tpl:107
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:102
+#: zotonic_mod_admin/priv/templates/admin_overview.tpl:112
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:83
 msgid "All media"
 msgstr "Kogu meedia"
 
 #: zotonic_mod_admin/priv/templates/_admin_dashboard_buttons.tpl:13
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:96
-#: zotonic_mod_admin/priv/templates/admin_overview.tpl:106
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:101
+#: zotonic_mod_admin/priv/templates/admin_overview.tpl:111
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:82
 msgid "All pages"
 msgstr "Kõik lehed"
@@ -1200,7 +1222,7 @@ msgstr "Impordi alati kõik ressursid, sealhulgas käsitsi kustutatud ressursid.
 msgid "Amount"
 msgstr "Summa"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:85
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:90
 msgid "And media can also be viewed on their own page."
 msgstr "Ja meediat saab vaadata ka oma lehel."
 
@@ -1212,6 +1234,15 @@ msgstr "Ja {n} veel."
 #: zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:14
 msgid "Any category"
 msgstr "Mis tahes kategooria"
+
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:155
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:164
+msgid "Any page"
+msgstr "Mis tahes lehekülg"
+
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_connection.tpl:8
+msgid "Any predicate"
+msgstr "Mis tahes predikaat"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:155
 msgid "Anybody’s"
@@ -1254,12 +1285,12 @@ msgstr "Kõrvale"
 msgid "Attached media"
 msgstr "Lisatud meediafail"
 
-#: zotonic_mod_admin/src/mod_admin.erl:507
+#: zotonic_mod_admin/src/mod_admin.erl:522
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:41
 msgid "Auth"
 msgstr "Auth"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:244
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:222
 msgid "Authoritative"
 msgstr "Autoriteetne"
 
@@ -1367,6 +1398,11 @@ msgstr "Vali meediafail siit lehelt teksti sisusse lisamiseks."
 msgid "City"
 msgstr "Linn"
 
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_connection.tpl:34
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:37
+msgid "Clear"
+msgstr "Selge"
+
 #: zotonic_mod_admin/priv/templates/_admin_system_content_warning.tpl:11
 msgid "Click here for more information"
 msgstr "Lisateabe saamiseks klõpsake siin"
@@ -1415,10 +1451,12 @@ msgid "Connect a page"
 msgstr "Ühendage leht"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_sidebar_parts.tpl:27
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:162
 msgid "Connected from"
 msgstr "Ühendatud aadressilt"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_sidebar_parts.tpl:22
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:153
 msgid "Connected to"
 msgstr "Ühendatud:"
 
@@ -1526,17 +1564,17 @@ msgstr "Loodud"
 msgid "Created:"
 msgstr "Loodud:"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:272
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:261
 msgid "Creation date, newest first"
 msgstr "Loomise kuupäev, uusim enne"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:273
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:262
 msgid "Creation date, oldest first"
 msgstr "Loomise kuupäev, vanim enne"
 
 #: zotonic_mod_admin/priv/templates/admin.tpl:4
 #: zotonic_mod_admin/priv/templates/admin.tpl:8
-#: zotonic_mod_admin/src/mod_admin.erl:471
+#: zotonic_mod_admin/src/mod_admin.erl:486
 msgid "Dashboard"
 msgstr "T√∂√∂laud"
 
@@ -1556,7 +1594,7 @@ msgstr "Kuup√§eva vahemik"
 msgid "Date ranges"
 msgstr "Kuupäevavahemikud"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:163
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:121
 msgid "Date start/end"
 msgstr "Alguse/lõpu kuupäev"
 
@@ -1587,11 +1625,11 @@ msgstr "Kustute see leht."
 msgid "Delete this page..."
 msgstr "Kustuta see lehekülg..."
 
-#: zotonic_mod_admin/src/mod_admin.erl:961
+#: zotonic_mod_admin/src/mod_admin.erl:956
 msgid "Deleted tasks."
 msgstr "Kustutatud ülesanded."
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:27
+#: zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:31
 msgid "Deleted."
 msgstr "Kustutatud."
 
@@ -1601,8 +1639,8 @@ msgid "Deletion cannot be undone."
 msgstr "Kustutamist ei saa tagasi võtta."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:25
-#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:233
-#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:237
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:211
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:215
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:63
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:67
 msgid "Dependent"
@@ -1703,7 +1741,7 @@ msgstr "E-posti aadress"
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:23
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:21
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:121
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:33
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:36
 #: zotonic_mod_menu/priv/templates/_admin_menu_menu_view.collection.tpl:40
 #: zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:23
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:131
@@ -1743,7 +1781,7 @@ msgstr "Embed"
 msgid "Embed code will be sanitized for allowed sites and html."
 msgstr "Manustatud kood desinfitseeritakse lubatud saitide ja HTML-i jaoks."
 
-#: zotonic_mod_admin/src/mod_admin.erl:575
+#: zotonic_mod_admin/src/mod_admin.erl:590
 msgid "Embed page | a citation, popup, or link to another page"
 msgstr "Manusta leht | tsitaat, hüpikaken või link teisele lehele"
 
@@ -1839,8 +1877,8 @@ msgid "Failed to download the file."
 msgstr "Faili allalaadimine ebaõnnestus."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:52
-#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:200
-#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:204
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:178
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:182
 msgid "Featured"
 msgstr "Esile t√µstetud"
 
@@ -1868,7 +1906,7 @@ msgstr "File / meedia"
 msgid "File size"
 msgstr "Faili suurus"
 
-#: zotonic_mod_admin/src/mod_admin.erl:866
+#: zotonic_mod_admin/src/mod_admin.erl:881
 msgid "File uploaded to the drop folder, will be handled shortly."
 msgstr "Rippkausta üles laaditud fail käsitletakse peagi."
 
@@ -1884,18 +1922,19 @@ msgstr "Failinimi"
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:183
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:46
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:41
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:74
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:59
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:55
 msgid "Filter"
 msgstr "Filtreeri"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:59
-#: zotonic_mod_admin/priv/templates/admin_overview.tpl:56
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:64
+#: zotonic_mod_admin/priv/templates/admin_overview.tpl:61
 msgid "Filter on category"
 msgstr "Filtreeri kategooria järgi"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:42
-#: zotonic_mod_admin/priv/templates/admin_overview.tpl:39
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:47
+#: zotonic_mod_admin/priv/templates/admin_overview.tpl:44
 msgid "Filter on content group"
 msgstr "Filtreeri sisurühma järgi"
 
@@ -1912,12 +1951,12 @@ msgstr "Leidke leht"
 msgid "Find page"
 msgstr "Leidke leht"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:211
-#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:215
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:189
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:193
 msgid "Findable"
 msgstr "Leitav"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:175
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:133
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_mailing_runs_panel.tpl:23
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_status.tpl:9
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:81
@@ -1970,15 +2009,11 @@ msgstr "Funktsioon"
 msgid "Graph"
 msgstr "Graafik"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:131
-msgid "Has connections with predicate"
-msgstr "Omab seoseid predikaadiga"
-
-#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:185
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:237
 msgid "Has medium"
 msgstr "Omab keskmist"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:181
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:233
 msgid "Has medium attached"
 msgstr "On keskmise kinnitatud"
 
@@ -1988,7 +2023,7 @@ msgstr "On keskmise kinnitatud"
 msgid "Header"
 msgstr "Päis"
 
-#: zotonic_mod_admin/src/mod_admin.erl:573
+#: zotonic_mod_admin/src/mod_admin.erl:588
 msgid "Header | a big header"
 msgstr "Päis | suur päis"
 
@@ -2014,11 +2049,11 @@ msgstr "Kodukataloog"
 msgid "IP Address"
 msgstr "IP-aadress"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:280
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:269
 msgid "Id, newest first"
 msgstr "Id, uusim esimene"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:281
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:270
 msgid "Id, oldest first"
 msgstr "Id, vanim esimene"
 
@@ -2039,7 +2074,7 @@ msgstr "Kui see pole märgitud, suunatakse külastaja alati selle lehe kanoonili
 msgid "Import only direct connections (shallow copy)."
 msgstr "Importige ainult otseühendusi (madal koopia)."
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:249
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:227
 msgid "Imported content"
 msgstr "Imporditud sisu"
 
@@ -2052,7 +2087,7 @@ msgstr "Kustutatud ressursside importimine"
 msgid "Indexed by search engines"
 msgstr "Otsingumootorite indekseeritud"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:128
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:133
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:21
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:145
 msgid "Info"
@@ -2066,12 +2101,8 @@ msgstr "Info link modaalse hüpikaknaga"
 msgid "Inline block"
 msgstr "Sisse blokeeritud"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:147
-msgid "Is connected with predicate"
-msgstr "On seotud predikaadiga"
-
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:72
-#: zotonic_mod_admin/priv/templates/admin_overview.tpl:69
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:77
+#: zotonic_mod_admin/priv/templates/admin_overview.tpl:74
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:41
 msgid "Items per page"
 msgstr "Üksusi lehel"
@@ -2118,7 +2149,7 @@ msgstr "Reaalajas päring, saatke märguandeid, kui vastavaid üksusi värskenda
 msgid "Local ImageMagick"
 msgstr "Kohalik ImageMagick"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:248
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:226
 msgid "Local content"
 msgstr "Kohalik sisu"
 
@@ -2165,7 +2196,7 @@ msgstr "Loo"
 msgid "Make a duplicate of this page."
 msgstr "Tehke selle lehekülje duplikaat."
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:93
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:98
 msgid "Make a new media item"
 msgstr "Loo uus meediafail"
 
@@ -2174,7 +2205,7 @@ msgid "Make a new page"
 msgstr "Loo uus leht"
 
 #: zotonic_mod_admin/priv/templates/_admin_dashboard_buttons.tpl:4
-#: zotonic_mod_admin/priv/templates/admin_overview.tpl:96
+#: zotonic_mod_admin/priv/templates/admin_overview.tpl:101
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:72
 msgid "Make a new page or media"
 msgstr "Tehke uus leht või meedium"
@@ -2190,8 +2221,8 @@ msgid "Matching id, name, page path or redirection"
 msgstr "Vastav ID, nimi, lehe tee või ümbersuunamine"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:3
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:81
-#: zotonic_mod_admin/src/mod_admin.erl:485
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:86
+#: zotonic_mod_admin/src/mod_admin.erl:500
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:100
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:103
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:113
@@ -2219,7 +2250,7 @@ msgstr "Meedia sisu"
 msgid "Media details"
 msgstr "Meediaandmed"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:84
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:89
 msgid "Media encompasses all uploaded images, movies and documents. Media can be attached to pages."
 msgstr "Meedium hõlmab kõiki üleslaaditud pilte, filme ja dokumente. Lehekülgedele saab lisada meediume."
 
@@ -2289,15 +2320,15 @@ msgstr "Vertikaalselt peegelpildis"
 msgid "Mobile"
 msgstr "Mobiilne"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:274
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:263
 msgid "Modification date, newest first"
 msgstr "Muutmise kuupäev, uusim enne"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:275
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:264
 msgid "Modification date, oldest first"
 msgstr "Muutmise kuupäev, vanim enne"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:129
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:134
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:22
 msgid "Modified"
 msgstr "Muudetud"
@@ -2418,11 +2449,11 @@ msgstr "Pole midagi"
 msgid "No media content."
 msgstr "Meedia sisu puudub."
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:187
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:192
 msgid "No media found."
 msgstr "Ei leia meediat."
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:186
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:238
 msgid "No medium"
 msgstr "Ei mingit meediumit"
 
@@ -2452,16 +2483,16 @@ msgstr "Tulemused puuduvad."
 msgid "Normal"
 msgstr "Tavaline"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:238
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:216
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:68
 msgid "Not dependent"
 msgstr "Ei sõltu"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:205
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:183
 msgid "Not featured"
 msgstr "Pole esile tõstetud"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:216
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:194
 msgid "Not findable"
 msgstr "Ei leia"
 
@@ -2469,7 +2500,7 @@ msgstr "Ei leia"
 msgid "Not indexed by search engines"
 msgstr "Otsingumootorid pole indekseerinud"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:227
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:205
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:57
 msgid "Not protected"
 msgstr "Pole kaitstud"
@@ -2478,7 +2509,7 @@ msgstr "Pole kaitstud"
 msgid "OS Memory"
 msgstr "OS-i mälu"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:171
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:129
 msgid "Ongoing"
 msgstr "Jätkuv"
 
@@ -2490,6 +2521,14 @@ msgstr "Sissejuhatus"
 #: zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_text.tpl:4
 msgid "Page block"
 msgstr "Lehekülje plokk"
+
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:163
+msgid "Page connected from"
+msgstr "Lehekülg, millele viitab"
+
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:154
+msgid "Page connected to"
+msgstr "Lehekülg on seotud"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:6
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:10
@@ -2513,8 +2552,16 @@ msgstr "Lehekülgede suunajad"
 msgid "Page settings"
 msgstr "Lehe seaded"
 
+#: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:101
+msgid "Page to connect from"
+msgstr "Leht, millelt ühenduda"
+
+#: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:92
+msgid "Page to connect to"
+msgstr "Leht, millega ühenduda"
+
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:3
-#: zotonic_mod_admin/src/mod_admin.erl:480
+#: zotonic_mod_admin/src/mod_admin.erl:495
 msgid "Pages"
 msgstr "Lehed"
 
@@ -2523,7 +2570,7 @@ msgstr "Lehed"
 msgid "Pages for"
 msgstr "Lehed"
 
-#: zotonic_mod_admin/priv/templates/admin_overview.tpl:79
+#: zotonic_mod_admin/priv/templates/admin_overview.tpl:84
 msgid "Pages overview"
 msgstr "Lehtede √ºlevaade"
 
@@ -2573,13 +2620,14 @@ msgid "Powered by"
 msgstr "Powered by"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_select_predicate.tpl:3
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_connection.tpl:6
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:23
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:13
 msgid "Predicate"
 msgstr "Predikaat"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:28
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:126
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:131
 msgid "Preview"
 msgstr "Eelvaade"
 
@@ -2599,8 +2647,8 @@ msgstr "Kaitse"
 msgid "Protect from deletion"
 msgstr "Kaitse kustutamise eest"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:222
-#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:226
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:200
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:204
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:52
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:56
 msgid "Protected"
@@ -2643,11 +2691,11 @@ msgstr "Avalda see leht"
 msgid "Published"
 msgstr "Avaldatud"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:278
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:267
 msgid "Published ends, newest first"
 msgstr "Avaldamine lõpeb, uusim enne"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:279
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:268
 msgid "Published ends, oldest first"
 msgstr "Avaldatud lõpud, vanim enne"
 
@@ -2655,11 +2703,11 @@ msgstr "Avaldatud lõpud, vanim enne"
 msgid "Published on"
 msgstr "Avaldatud"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:276
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:265
 msgid "Published on, newest first"
 msgstr "Avaldatud, uusimad enne"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:277
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:266
 msgid "Published on, oldest first"
 msgstr "Avaldatud, vanim enne"
 
@@ -2742,7 +2790,7 @@ msgstr "Iga käivitaja juhtpaneelil on näha kaug-sandboxi eraldamise ja järjek
 msgid "Remove"
 msgstr "Eemalda"
 
-#: zotonic_mod_admin/src/mod_admin.erl:1132
+#: zotonic_mod_admin/src/mod_admin.erl:1127
 msgid "Removed the connection to"
 msgstr "Ühendus saidiga eemaldati"
 
@@ -2824,23 +2872,23 @@ msgstr "Salvesta ja vaata"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:6
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:140
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:141
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:83
 msgid "Save and view the page."
 msgstr "Salvesta ja vaata lehte."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:17
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:137
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:138
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:79
 msgid "Save this page."
 msgstr "Salvesta see leht."
 
-#: zotonic_mod_admin/src/mod_admin.erl:950
+#: zotonic_mod_admin/src/mod_admin.erl:945
 msgid "Scheduled a background task to check all refers connections."
 msgstr "Ajastatud taustaülesanne kõigi viitade ühenduste kontrollimiseks."
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:305
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:294
 msgid "Search"
 msgstr "Otsing"
 
@@ -2877,7 +2925,14 @@ msgstr "Vaata ka: <a href=\"https://zotonic.com/en/stable/ref/configuration/zoto
 msgid "Select a connected image"
 msgstr "Valige ühendatud pilt"
 
+#: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:93
+#: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:102
+msgid "Select a page"
+msgstr "Vali lehekülg"
+
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_select_predicate.tpl:5
+#: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:89
+#: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:98
 msgid "Select a predicate"
 msgstr "Vali predikaat"
 
@@ -2889,13 +2944,17 @@ msgstr "Valige predikaat, et leida lehekülgi, mis võivad sellele leheküljele 
 msgid "Select a predicate to find pages this page can connect to."
 msgstr "Vali predikaat, et leida leheküljed, millega see lehekülg võib seotud olla."
 
+#: zotonic_mod_admin/src/mod_admin.erl:935
+msgid "Select both a visible page and a valid predicate for each connection."
+msgstr "Valige iga ühenduse jaoks nii nähtav lehekülg kui ka kehtiv predikaat."
+
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:80
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:110
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:115
 msgid "Selected"
 msgstr "Valitud"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:54
-#: zotonic_mod_admin/priv/templates/admin_overview.tpl:51
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:59
+#: zotonic_mod_admin/priv/templates/admin_overview.tpl:56
 msgid "Selected Categories"
 msgstr "Valitud kategooriad"
 
@@ -2968,6 +3027,10 @@ msgstr "Mõni ketas on peaaegu täis."
 msgid "Some images, PDFs, audio and video are presented in a single language. Here you can select this language."
 msgstr "Mõned pildid, PDF-id, heli ja video on esitatud ühes keeles. Siin saate valida selle keele."
 
+#: zotonic_mod_admin/src/mod_admin.erl:933
+msgid "Some pages or connections could not be updated. Check your permissions. Other changes may have been saved."
+msgstr "Mõnda lehekülge või seost ei õnnestunud uuendada. Kontrollige oma juurdepääsuõigusi. Muud muudatused võivad olla salvestatud."
+
 #: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:24
 msgid "Some tasks are retrying.<br>Total errors: {total}<br>Highest for single task: {max}"
 msgstr "Mõned ülesanded proovivad uuesti.<br>Vigu kokku: {total}<br>Suurim ühe ülesande puhul: {max}"
@@ -2976,31 +3039,31 @@ msgstr "Mõned ülesanded proovivad uuesti.<br>Vigu kokku: {total}<br>Suurim üh
 msgid "Something went wrong. Sorry."
 msgstr "Midagi l√§ks valesti. Sorry."
 
-#: zotonic_mod_admin/src/mod_admin.erl:839
+#: zotonic_mod_admin/src/mod_admin.erl:854
 msgid "Sorry, could not handle this filename."
 msgstr "Kahjuks ei saanud selle failinimega hakkama."
 
-#: zotonic_mod_admin/src/mod_admin.erl:878
+#: zotonic_mod_admin/src/mod_admin.erl:893
 msgid "Sorry, could not move the file to the drop folder."
 msgstr "Kahjuks ei saanud faili rippkausta teisaldada."
 
-#: zotonic_mod_admin/src/mod_admin.erl:952
-#: zotonic_mod_admin/src/mod_admin.erl:963
+#: zotonic_mod_admin/src/mod_admin.erl:947
+#: zotonic_mod_admin/src/mod_admin.erl:958
 #: zotonic_mod_menu/src/mod_menu.erl:133
 msgid "Sorry, only an admin is allowed to do this"
 msgstr "Kahjuks võib seda teha ainult administraator"
 
-#: zotonic_mod_admin/src/mod_admin.erl:814
-#: zotonic_mod_admin/src/mod_admin.erl:825
+#: zotonic_mod_admin/src/mod_admin.erl:829
+#: zotonic_mod_admin/src/mod_admin.erl:840
 msgid "Sorry, that page is unknown."
 msgstr "Vabandust, see leht on tundmatu."
 
-#: zotonic_mod_admin/src/mod_admin.erl:816
-#: zotonic_mod_admin/src/mod_admin.erl:827
+#: zotonic_mod_admin/src/mod_admin.erl:831
+#: zotonic_mod_admin/src/mod_admin.erl:842
 msgid "Sorry, you are not allowed to edit notes."
 msgstr "Kahjuks ei ole teil lubatud märkmeid redigeerida."
 
-#: zotonic_mod_admin/src/mod_admin.erl:882
+#: zotonic_mod_admin/src/mod_admin.erl:897
 msgid "Sorry, you are not allowed to upload drop folder files."
 msgstr "Kahjuks ei ole teil lubatud rippkausta faile üles laadida."
 
@@ -3008,19 +3071,20 @@ msgstr "Kahjuks ei ole teil lubatud rippkausta faile üles laadida."
 msgid "Sorry, you don't have permission to add the connection."
 msgstr "Vabandust, teil pole ühenduse lisamiseks luba."
 
-#: zotonic_mod_admin/src/mod_admin.erl:1114
+#: zotonic_mod_admin/src/mod_admin.erl:1109
 msgid "Sorry, you have no permission to add the connection."
 msgstr "Vabandust, teil pole ühenduse lisamiseks luba."
 
-#: zotonic_mod_admin/src/mod_admin.erl:1116
+#: zotonic_mod_admin/src/mod_admin.erl:1111
 msgid "Sorry, you have no permission to delete the connection."
 msgstr "Vabandust, teil pole ühenduse kustutamiseks luba."
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:267
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:256
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:49
 msgid "Sort by"
 msgstr "Sorteerima"
 
-#: zotonic_mod_admin/src/mod_admin.erl:572
+#: zotonic_mod_admin/src/mod_admin.erl:587
 msgid "Standard page block types"
 msgstr "Standardsed leheploki tüübid"
 
@@ -3039,13 +3103,14 @@ msgstr "Algab"
 msgid "State"
 msgstr "Seisund"
 
-#: zotonic_mod_admin/src/mod_admin.erl:516
+#: zotonic_mod_admin/src/mod_admin.erl:531
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
 #: zotonic_mod_base/priv/templates/_session_info.tpl:12
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:221
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:111
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:11
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:7
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:57
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:22
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:17
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:19
@@ -3082,7 +3147,7 @@ msgstr "T√§na rida 1"
 msgid "Street Line 2"
 msgstr "T√§nav rida 2"
 
-#: zotonic_mod_admin/src/mod_admin.erl:497
+#: zotonic_mod_admin/src/mod_admin.erl:512
 msgid "Structure"
 msgstr "Struktuur"
 
@@ -3133,7 +3198,7 @@ msgstr "Perenimi"
 msgid "Swap"
 msgstr "Vahetada"
 
-#: zotonic_mod_admin/src/mod_admin.erl:511
+#: zotonic_mod_admin/src/mod_admin.erl:526
 msgid "System"
 msgstr "S√ºsteem"
 
@@ -3177,7 +3242,7 @@ msgstr "Testpäring"
 msgid "Text"
 msgstr "Tekst"
 
-#: zotonic_mod_admin/src/mod_admin.erl:574
+#: zotonic_mod_admin/src/mod_admin.erl:589
 msgid "Text | a (rich) text block"
 msgstr "Tekst | (rikas)tekstiplokk"
 
@@ -3320,7 +3385,7 @@ msgstr "See märge on nähtav ainult inimestele, kes saavad lehte muuta."
 msgid "This page can be connected from other pages. For example it could be an author of an article."
 msgstr "Seda lehte saab ühendada teistelt lehtedelt. Näiteks võib see olla artikli autor."
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:27
+#: zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:31
 msgid "This page has been deleted."
 msgstr "See leht on kustutatud."
 
@@ -3359,7 +3424,7 @@ msgstr "Aegumine, kui proovite veebisaidilt andmeid tuua."
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:36
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:20
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:93
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:127
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:132
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:21
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:9
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:11
@@ -3408,7 +3473,7 @@ msgstr "Ei ole saadaval"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:79
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:80
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:83
-#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:258
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:247
 msgid "Unique name"
 msgstr "Unikaalne nimi"
 
@@ -3428,7 +3493,8 @@ msgstr "Avaldamata"
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results_item.tpl:29
 #: zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:2
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:29
-#: zotonic_mod_admin/src/mod_admin.erl:1122
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_connection.tpl:19
+#: zotonic_mod_admin/src/mod_admin.erl:1117
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:118
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:182
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:9
@@ -3436,6 +3502,7 @@ msgstr "Avaldamata"
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:54
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:57
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:60
+#: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:52
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:58
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:39
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:7
@@ -3446,6 +3513,7 @@ msgstr "Avaldamata"
 #: zotonic_mod_seo/src/support/seo_jsonld_webpage.erl:276
 #: zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:16
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:10
+#: zotonic_mod_translation/priv/templates/_translation_tree_skipped.tpl:7
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:3
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:88
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:90
@@ -3454,7 +3522,7 @@ msgstr "Pealkirjata"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:25
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:30
-#: zotonic_mod_admin/src/mod_admin.erl:555
+#: zotonic_mod_admin/src/mod_admin.erl:570
 msgid "Untitled query"
 msgstr "Pealkirjata päring"
 
@@ -3462,7 +3530,7 @@ msgstr "Pealkirjata päring"
 msgid "Unused"
 msgstr "Kasutamata"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:167
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:125
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:37
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:60
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:75
@@ -3470,8 +3538,8 @@ msgid "Upcoming"
 msgstr "Tulemas"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:82
-#: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:86
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:112
+#: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:112
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:117
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:16
 msgid "Update"
 msgstr "Värskenda"
@@ -3509,7 +3577,7 @@ msgstr "Laadige fail üles rippkausta. Seda faili käsitletakse taustal adressaa
 msgid "Upload file"
 msgstr "Lae fail"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:130
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:135
 #: zotonic_mod_fileuploader/src/mod_fileuploader.erl:147
 #: zotonic_mod_fileuploader/src/mod_fileuploader.erl:177
 msgid "Uploaded"
@@ -3549,9 +3617,9 @@ msgstr "Kehtiv:"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish_view.tpl:2
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:10
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:31
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:142
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:143
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:26
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:35
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:38
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:20
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:38
 msgid "View"
@@ -3582,7 +3650,7 @@ msgid "View status"
 msgstr "Kuva olek"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:11
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:142
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:143
 msgid "View this page."
 msgstr "Vaata sedea lehte."
 
@@ -3704,6 +3772,11 @@ msgstr "Teie otsingupäring on kehtetu. Palun parandage see enne salvestamist."
 msgid "Zotonic Version"
 msgstr "Zotonic Version"
 
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:30
+#: zotonic_mod_admin/priv/templates/admin_overview.tpl:27
+msgid "active filters"
+msgstr "aktiivfiltrid"
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:19
 msgid "add media item"
 msgstr "meediaüksuse lisamine"
@@ -3725,8 +3798,8 @@ msgstr "poolt"
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:130
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:131
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:132
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:160
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:163
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:165
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:168
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:35
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:68
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:32
@@ -3746,10 +3819,10 @@ msgstr "poolt"
 msgid "d M Y, H:i"
 msgstr "d M Y, H:i"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:167
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:172
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:43
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:39
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:88
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:99
 msgid "delete"
 msgstr "kustuta"
 
@@ -3759,7 +3832,7 @@ msgstr "nt võivad muutuda"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:58
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:137
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:178
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:183
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:40
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:69
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:77
@@ -3775,7 +3848,7 @@ msgstr "redig."
 msgid "edit this page"
 msgstr "redigeeri lehte"
 
-#: zotonic_mod_admin/priv/templates/admin_overview.tpl:79
+#: zotonic_mod_admin/priv/templates/admin_overview.tpl:84
 msgid "excluding"
 msgstr "välja arvatud"
 
@@ -3787,7 +3860,7 @@ msgstr "on lahti √ºhendatud."
 msgid "id:"
 msgstr "id:"
 
-#: zotonic_mod_admin/priv/templates/admin_overview.tpl:79
+#: zotonic_mod_admin/priv/templates/admin_overview.tpl:84
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:15
 msgid "matching"
 msgstr "klapib"
@@ -3804,6 +3877,8 @@ msgstr "nimi"
 #: zotonic_mod_admin/priv/templates/_admin_view_types.tpl:2
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:104
 #: zotonic_mod_base/src/filters/filter_content_type_label.erl:55
+#: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:6
+#: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:10
 msgid "page"
 msgstr "lehele"
 
@@ -3816,7 +3891,7 @@ msgstr "leheplokk"
 msgid "pixels"
 msgstr "pikslit"
 
-#: zotonic_mod_admin/priv/templates/admin_overview.tpl:82
+#: zotonic_mod_admin/priv/templates/admin_overview.tpl:87
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:20
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:22
 msgid "show all"
@@ -3860,8 +3935,8 @@ msgid "visit site"
 msgstr "k√ºlasta saiti"
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:25
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:196
-#: zotonic_mod_admin/priv/templates/admin_overview.tpl:136
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:201
+#: zotonic_mod_admin/priv/templates/admin_overview.tpl:141
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:57
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:98
 msgid "{n} items found."
@@ -4459,8 +4534,8 @@ msgid "Add pages or click on a page in the menu."
 msgstr "Lisage lehti või klõpsake menüüs lehel."
 
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:103
-msgid "Enabled or disable language tabs."
-msgstr "Keelevahelehtede lubamine või keelamine."
+msgid "Enable or disable language tabs."
+msgstr "Keelevalikute sisselülitamine või väljalülitamine."
 
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:70
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:100
@@ -4470,6 +4545,7 @@ msgstr "Keelevahelehtede lubamine või keelamine."
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:10
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:6
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:75
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:65
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:37
 #: zotonic_mod_translation/priv/templates/_dialog_new_rsc_extra.tpl:2
 #: zotonic_mod_translation/priv/templates/_translation_language_status.tpl:46
@@ -4482,16 +4558,16 @@ msgstr "Keel"
 msgid "Loading ..."
 msgstr "Laadimine ..."
 
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:173
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:176
 msgid "No page"
 msgstr "Lehte pole"
 
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:140
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:141
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:83
 msgid "Save &amp; view"
 msgstr "&amp; vaate salvestamine"
 
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:175
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:178
 msgid "The page might have been deleted."
 msgstr "Lehe võib olla kustutatud."
 
@@ -4623,7 +4699,8 @@ msgstr "E-post"
 #: zotonic_mod_authentication/priv/templates/email_password_reset.tpl:23
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:22
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:9
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:78
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:51
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:86
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:19
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:29
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:30
@@ -10321,6 +10398,7 @@ msgstr "Selgitus e-kirja staatuse kohta"
 #: zotonic_mod_survey/priv/templates/_survey_result_test_score.tpl:14
 #: zotonic_mod_survey/priv/templates/_survey_results_user.tpl:12
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:54
+#: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:14
 #: zotonic_site_status/priv/templates/_sites.tpl:17
 msgid "Failed"
 msgstr "Ebaõnnestunud"
@@ -10538,7 +10616,7 @@ msgstr "<em>Eemaldage</em> kõik adressaadid, kes on sihtloendis"
 msgid "<h3>Recipients</h3><p>To add, remove or view the mailing list recipients, click on the “show all recipients” link.</p><h3>Sender name and e-mail address</h3><p>The sender name and e-mail address can be set per mailing list. This defaults to the config key <tt>site.email_from</tt>.  The <i>From</i> of the sent e-mails will be set to the sender name and address.</p><h3>Automatic upload of recipient lists</h3><p>The drop folder filename is used for the automatic upload of complete recipients list. The filename must match the filename of the uploaded recipient list. The complete list of recipients will be replaced with the recipients in the drop folder file.</p><h3>Access control</h3><p>Everybody who can edit a mailing list is also allowed to send a page to the mailing list. Everybody who can view the mailing list is allowed to add an e-mail address to the mailing list.</p>"
 msgstr "<h3>Saajad</h3><p>Meililisti adressaatide lisamiseks, eemaldamiseks või vaatamiseks klõpsake lingil \"näita kõiki saajaid\".</p><h3>Saatja nimi ja e-posti aadress</h3><p>Saatja nime ja e-posti aadressi saab määrata postiloendi kaupa. Vaikimisi on see konfiguratsioonivõti <tt>site.email_from</tt>. Saadetud e-kirjadest <i>From</i> määratakse saatja nimeks ja aadressiks.</p><h3>Saajate loendite automaatne üleslaadimine</h3><p>Rippkausta failinime kasutatakse täieliku adressaatide loendi automaatseks üleslaadimiseks. Failinimi peab ühtima üleslaaditud adressaatide loendi failinimega. Täielik adressaatide loend asendatakse ripkaustafailis olevate adressaatidega.</p><h3>Juurdepääsu kontroll</h3><p>Kõigil, kes saavad meililisti redigeerida, on lubatud ka lehekülg postiloendisse saata. Kõigil, kes saavad meililistiga tutvuda, on lubatud meililisti lisada e-posti aadress.</p>"
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:451
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:444
 msgid "A mailing list cannot be sent as a mailing."
 msgstr "Meililisti ei saa saata postitusena."
 
@@ -10546,16 +10624,12 @@ msgstr "Meililisti ei saa saata postitusena."
 msgid "A previous delivery failed. Choose retry failed recipients to try again."
 msgstr "Eelmine saatmine ebaõnnestus. Valige „Proovi uuesti ebaõnnestunud saajate puhul”, et uuesti proovida."
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:77
-msgid "Act"
-msgstr "Seadus"
-
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:34
 msgid "Add a new recipient."
 msgstr "Lisage uus saaja."
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:34
-#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:74
+#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:77
 msgid "Add recipient"
 msgstr "Lisa saaja"
 
@@ -10632,11 +10706,11 @@ msgstr "Tühista postitamine"
 msgid "Change subscriptions connected to your account."
 msgstr "Muutke oma kontoga ühendatud tellimusi."
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:533
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:526
 msgid "Check the test mailing list and language selection."
 msgstr "Kontrollige testpostitusnimekirja ja keelevalikut."
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:85
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:94
 msgid "Check to activate the e-mail address."
 msgstr "E-posti aadressi aktiveerimiseks märkige see."
 
@@ -10652,10 +10726,6 @@ msgstr "Valige adressaadid ja keel, vaadake e-kirja eelvaadet ning kontrollige s
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:65
 msgid "Choose the best language for each recipient"
 msgstr "Vali igale adressaadile sobivaim keel"
-
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:37
-msgid "Clear"
-msgstr "Selge"
 
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:10
 msgid "Click <strong>unsubscribe</strong> to remove yourself from the mailing list."
@@ -10677,7 +10747,7 @@ msgstr "Kombineeri…"
 msgid "Configure mailing"
 msgstr "Postituse seadistamine"
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:416
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:409
 msgid "Confirm mailing cancelation."
 msgstr "Kinnitage postituse tühistamine."
 
@@ -10705,7 +10775,7 @@ msgstr "Saajat ei saanud lisada."
 msgid "Could not count the eligible recipients. The list query may have taken too long. Go back and try again, or ask an administrator to check the mailing list."
 msgstr "Sobivaid saajaid ei õnnestunud loendada. Nimekirja päringu täitmine võis võtta liiga kaua aega. Mine tagasi ja proovi uuesti või palu administraatoril meililisti üle vaadata."
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:405
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:398
 msgid "Could not create another mailing."
 msgstr "Uut postitusnimekirja ei õnnestunud luua."
 
@@ -10721,7 +10791,7 @@ msgstr "Testkirja ei õnnestunud järjekorda panna."
 msgid "Could not queue this mailing. Check your permissions and language selection."
 msgstr "Seda kirja ei õnnestunud järjekorda panna. Kontrollige oma õigusi ja keelevalikut."
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:607
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:600
 msgid "Could not save the opt-out preference."
 msgstr "Loobumise eelistust ei saanud salvestada."
 
@@ -10769,6 +10839,14 @@ msgstr "Saadetiste ajalugu säilitatakse. Uuesti saatmine võib kaasa tuua selle
 msgid "Details"
 msgstr "Üksikasjad"
 
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:61
+msgid "Disabled"
+msgstr "Puudega"
+
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:26
+msgid "Disabled email subscriptions are automatically deleted after three months."
+msgstr "Kehtetuks tunnistatud e-posti tellimused kustutatakse automaatselt kolme kuu möödudes."
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:24
 #: zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:21
 msgid "Do you want to remove this subscription?"
@@ -10798,7 +10876,7 @@ msgstr "Aktiivsete saajate loendi allalaadimine. Kontrollige allalaadimisakent."
 msgid "Drop folder filename (optional)"
 msgstr "Loobuge kausta failinimi (valikuline)"
 
-#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:92
+#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:110
 msgid "E-mail address updated"
 msgstr "E-posti aadress on uuendatud"
 
@@ -10823,8 +10901,8 @@ msgstr "Muuda nimekirja"
 msgid "Edit mailinglist"
 msgstr "Muuda meililisti"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:86
-#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:81
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:96
+#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:91
 msgid "Edit recipient"
 msgstr "Redigeeri adressaati"
 
@@ -10844,6 +10922,18 @@ msgstr "E-kirja keel"
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:50
 msgid "Email language is the language version of the mailing selected for sending. It can differ from the recipient’s preferred language when a fallback or a fixed Email language is used. Skipped recipients will not receive an email."
 msgstr "E-kirja keel on saatmiseks valitud postituse keeleversioon. See võib erineda saaja eelistatud keelest, kui kasutatakse varukeelt või kindlaksmääratud e-kirja keelt. Vahele jäetud saajad ei saa e-kirja kätte."
+
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:5
+msgid "Email subscriptions"
+msgstr "E-posti tellimused"
+
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:60
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:85
+#: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:15
+#: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:13
+#: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:47
+msgid "Enabled"
+msgstr "Aktiveeritud"
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:278
 msgid "Enter a valid future mailing date and time."
@@ -11023,7 +11113,7 @@ msgstr "Postiloend"
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:12
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:7
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:7
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:1071
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:1064
 msgid "Mailing lists"
 msgstr "Postiloendid"
 
@@ -11047,7 +11137,7 @@ msgstr "Saadetise staatus"
 msgid "Mailing status and history"
 msgstr "Saadetise staatus ja ajalugu"
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:1081
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:1074
 msgid "Mailing status updated."
 msgstr "Saadetise staatus on uuendatud."
 
@@ -11063,7 +11153,7 @@ msgstr "Meililistide tellimused"
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:11
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:3
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:7
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:1065
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:1058
 msgid "Mailings"
 msgstr "Postitused"
 
@@ -11083,7 +11173,7 @@ msgstr "Meililistide haldamine"
 msgid "Manage your mailing list subscriptions"
 msgstr "Hallake oma meililistide tellimusi"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:48
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:7
 msgid "Matched via Query"
 msgstr "Sobitatud päringu kaudu"
 
@@ -11099,6 +11189,10 @@ msgstr "Vajab tähelepanu"
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:17
 msgid "New mailing list"
 msgstr "Uus meililist"
+
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:52
+msgid "Newest"
+msgstr "Uusimad"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:38
 msgid "Next 100 recipients"
@@ -11116,7 +11210,7 @@ msgstr "E-posti aadressi pole olemas."
 msgid "No emails submitted"
 msgstr "E-kirju ei ole saadetud"
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:47
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:50
 msgid "No mailing lists found."
 msgstr "Postiloendeid ei leitud."
 
@@ -11166,6 +11260,10 @@ msgstr "Pole vaja — saajaid pole valitud"
 msgid "Not sent — stopped"
 msgstr "Ei saadetud — peatati"
 
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:68
+msgid "Not set"
+msgstr "Ei ole määratud"
+
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:42
 msgid "Not started"
 msgstr "Ei ole alustatud"
@@ -11182,9 +11280,13 @@ msgstr "Midagi ei saadetud"
 msgid "Nothing to send. Go back and change the language or recipient selection, or choose another mailing list."
 msgstr "Saata pole midagi. Mine tagasi ja muuda keelt või adressaadi valikut või vali mõni teine meililist."
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:43
-msgid "Number of recipients on this list:"
-msgstr "Selles loendis olevate saajate arv:"
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:2
+msgid "Number of enabled recipients on this list:"
+msgstr "Selles nimekirjas olevate aktiveeritud adressaatide arv:"
+
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:53
+msgid "Oldest"
+msgstr "Vanim"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:26
 msgid "Only keep recipients on this list that appear <em>on both lists</em>"
@@ -11212,6 +11314,7 @@ msgstr "Enne jätkamist ava eelvaade uues vahekaardis:"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:79
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:143
+#: zotonic_mod_translation/priv/templates/_translation_tree_skipped.tpl:9
 msgid "Opens in a new tab"
 msgstr "Avatakse uues vahekaardis"
 
@@ -11345,7 +11448,7 @@ msgstr "Lisateave veebis"
 msgid "Recent mailings"
 msgstr "Viimased postitused"
 
-#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:96
+#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:120
 msgid "Recipient deleted."
 msgstr "Saaja kustutatud."
 
@@ -11381,9 +11484,8 @@ msgstr "Saaja staatus"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:96
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:8
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:31
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:34
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:57
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:46
 msgid "Recipients"
 msgstr "Saajad"
 
@@ -11417,7 +11519,7 @@ msgstr "Saajad kuvatakse, kui ettevalmistused algavad."
 msgid "Regional preferences can use the base language, for example Belgian Dutch can use Dutch."
 msgstr "Piirkondlikes eelistustes võib kasutada põhikeelt, näiteks Belgia hollandi keele puhul võib kasutada hollandi keelt."
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:88
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:100
 msgid "Remove this recipient. No undo possible."
 msgstr "Eemaldage see saaja. Tagasivõtmine pole võimalik."
 
@@ -11491,7 +11593,7 @@ msgstr "Vaata läbi testpostitusnimekirja juurdepääsu seaded"
 msgid "Saved mailing content"
 msgstr "Salvestatud postituse sisu"
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:604
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:597
 msgid "Saved the opt-out preference."
 msgstr "Loobumise eelistus salvestati."
 
@@ -11729,6 +11831,7 @@ msgstr "Jäta välja need adressaadid, kelle eelistatud keel pole saadaval või 
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:66
 #: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:8
+#: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:13
 msgid "Skipped"
 msgstr "Vahelejäänud"
 
@@ -11814,7 +11917,7 @@ msgstr "Tellima"
 msgid "Subscribed with"
 msgstr "Tellitud teenusega"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:47
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:6
 msgid "Subscriber Edges"
 msgstr "Tellija servad"
 
@@ -11895,7 +11998,7 @@ msgstr "E-posti aadress on kehtetu."
 msgid "The key in your link does not match any subscription. Either you already unsubscribed, or the mailing list has been deleted."
 msgstr "Teie lingi võti ei ühti ühegi tellimusega. Kas olete juba tellimuse tühistanud või meililisti on kustutatud."
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:437
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:430
 msgid "The mailing has been canceled."
 msgstr "Postitamine on tühistatud."
 
@@ -11907,7 +12010,7 @@ msgstr "Lehte ei pea avaldama, kuid selle vaatamiseks peab sul olema vastav õig
 msgid "The recipients list of the mailing list will be deleted as well."
 msgstr "Kustutatakse ka meililistide saajate nimekiri."
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:469
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:462
 msgid "The selected page could not be found."
 msgstr "Valitud lehekülge ei leitud."
 
@@ -12138,12 +12241,21 @@ msgstr "Miks mõned adressaadid ei ole valitud"
 msgid "You are not allowed to add or enable recipients."
 msgstr "Teil pole lubatud adressaate lisada ega lubada."
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:423
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:440
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:416
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:433
 msgid "You are not allowed to cancel this mailing."
 msgstr "Teil pole lubatud seda postitust tühistada."
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:1084
+#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:79
+#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:93
+#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:103
+#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:112
+#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:125
+#: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist_recipients.erl:133
+msgid "You are not allowed to change recipients"
+msgstr "Sa ei tohi saajaid muuta"
+
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:1077
 msgid "You are not allowed to change this mailing."
 msgstr "Seda postitust ei tohi muuta."
 
@@ -12155,13 +12267,13 @@ msgstr "Teil pole lubatud postiloendit kustutada."
 msgid "You are not allowed to edit recipients."
 msgstr "Teil pole lubatud adressaate muuta."
 
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:501
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:494
 msgid "You are not allowed to reset this mailing."
 msgstr "Teil pole lubatud seda postitust lähtestada."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_count_error.tpl:7
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:464
-#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:537
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:457
+#: zotonic_mod_mailinglist/src/mod_mailinglist.erl:530
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:69
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:102
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:134
@@ -12251,6 +12363,12 @@ msgstr "tühista"
 msgid "could not be sent"
 msgstr "ei saanud saata"
 
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:30
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:12
+#: zotonic_mod_mailinglist/priv/templates/_mailing_subscriber_count.tpl:3
+msgid "disabled"
+msgstr "puudega"
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:149
 msgid "emails are waiting to be sent."
 msgstr "saatmiseks ootavad e-kirjad."
@@ -12259,6 +12377,12 @@ msgstr "saatmiseks ootavad e-kirjad."
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_summary.tpl:10
 msgid "emails processed"
 msgstr "töödeldud e-kirjad"
+
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:29
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:11
+#: zotonic_mod_mailinglist/priv/templates/_mailing_subscriber_count.tpl:2
+msgid "enabled"
+msgstr "lubatud"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:5
 msgid "excluded"
@@ -12273,18 +12397,16 @@ msgstr "kui te ei soovi sellest loendist enam ühtegi kirja saada."
 msgid "mailing list"
 msgstr "meililist"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:56
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:61
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:16
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:21
+#: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:6
+#: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:10
 msgid "pages"
 msgstr "lehekülgi"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:16
 msgid "recipients selected."
 msgstr "valitud abisaajad."
-
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:52
-msgid "see below"
-msgstr "vaata allpool"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_mailing_runs_panel.tpl:10
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:2
@@ -12311,7 +12433,7 @@ msgstr "ootamine"
 msgid "will not be sent."
 msgstr "ei saadeta."
 
-#: zotonic_mod_mailinglist/priv/templates/_mailing_subscriber_count.tpl:4
+#: zotonic_mod_mailinglist/priv/templates/_mailing_subscriber_count.tpl:5
 msgid "{count} from the list query"
 msgstr "{count} nimekirja päringust"
 
@@ -12761,12 +12883,6 @@ msgstr "Redigeeri OAuth2 klienti"
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:10
 msgid "Edit the description of the App."
 msgstr "Muutke rakenduse kirjeldust."
-
-#: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:15
-#: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:13
-#: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:47
-msgid "Enabled"
-msgstr "Aktiveeritud"
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:65
 #: zotonic_mod_oauth2/src/mod_oauth2.erl:251
@@ -15531,16 +15647,24 @@ msgstr "Lisage uus tõlge"
 msgid "Add language"
 msgstr "Lisa keel"
 
-#: zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:11
-#: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:120
+#: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:121
+#: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:70
 msgid "Add translation"
 msgstr "Lisa tõlge"
+
+#: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:131
+msgid "Add, copy, or remove translations for all pages in this menu or collection."
+msgstr "Lisa, kopeeri või eemalda tõlked kõigilt selle menüü või kogumiku lehekülgedelt."
+
+#: zotonic_mod_translation/priv/templates/_admin_bulk_translation.tpl:10
+msgid "Add, copy, or remove translations for the selected pages."
+msgstr "Valitud lehtede tõlkeid saab lisada, kopeerida või eemaldada."
 
 #: zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:28
 msgid "Added"
 msgstr "Lisatud"
 
-#: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:27
+#: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:28
 msgid "All texts were translated."
 msgstr "Kõik tekstid tõlgiti."
 
@@ -15565,6 +15689,7 @@ msgid "Automatic from title"
 msgstr "Automaatne pealkirjast"
 
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:88
+#: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:45
 msgid "Automatic translation"
 msgstr "Automaattõlge"
 
@@ -15572,19 +15697,26 @@ msgstr "Automaattõlge"
 msgid "Available sub-languages"
 msgstr "Saadaval alamkeeled"
 
-#: zotonic_mod_translation/src/mod_translation.erl:693
+#: zotonic_mod_translation/src/mod_translation.erl:831
 msgid "Cannot generate translation files because <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext is not installed</a>."
 msgstr "Tõlkefaile ei saa genereerida, kuna <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext pole installitud</a>."
 
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:90
+#: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:47
 msgid "Copy texts"
 msgstr "Kopeeri tekste"
 
-#: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:110
+#: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:105
+#: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:60
 msgid "Copying and translating texts is used to fill in blank text fields in the destination language. Existing texts will never be overwritten unless the “overwrite existing texts” checkbox is checked."
 msgstr "Sihtkeeles tühjade tekstiväljade täitmiseks kasutatakse tekstide kopeerimist ja tõlkimist. Olemasolevaid tekste ei kirjutata kunagi üle, kui pole märgitud ruut \"olemasolevad tekstid üle\"."
 
+#: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:16
+msgid "Could not start the translation. Check your permissions and language options, or try again later."
+msgstr "Tõlkimist ei õnnestunud alustada. Kontrollige oma juurdepääsuõigusi ja keelevalikuid või proovige hiljem uuesti."
+
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:3
+#: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:6
 msgid "Current translations"
 msgstr "Praegused tõlked"
 
@@ -15598,6 +15730,7 @@ msgstr "Põhikeele või alakeele otsustamine"
 
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:10
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:16
+#: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:11
 msgid "Delete translation"
 msgstr "Kustuta tõlge"
 
@@ -15625,6 +15758,10 @@ msgstr "Redigeeritav"
 msgid "Editable languages"
 msgstr "Redigeeritavad keeled"
 
+#: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:10
+msgid "Editing is disabled until translation finishes."
+msgstr "Redigeerimine on keelatud, kuni tõlkimine on lõppenud."
+
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:145
 msgid "English"
 msgstr "Inglise"
@@ -15650,6 +15787,7 @@ msgid "French"
 msgstr "Prantsuse keel"
 
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:58
+#: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:25
 msgid "From existing language"
 msgstr "Olemasolevast keelest"
 
@@ -15677,7 +15815,8 @@ msgstr "Kui keel on välja lülitatud, kaotatakse redigeeritud tekstide tõlge s
 msgid "If a language is set to 'view' or 'editable' then texts for that language are editable in the admin."
 msgstr "Kui keele väärtuseks on seatud „vaade” või „muudetav”, saab selle keele tekste administraatoris muuta."
 
-#: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:106
+#: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:110
+#: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:63
 msgid "If you automatically translate texts then your texts will be sent to a remote translation service."
 msgstr "Kui tõlgite tekste automaatselt, saadetakse teie tekstid kaugtõlketeenusele."
 
@@ -15685,7 +15824,7 @@ msgstr "Kui tõlgite tekste automaatselt, saadetakse teie tekstid kaugtõlketeen
 msgid "If you change the stemmer language then you will need to reindex all data."
 msgstr "Kui vahetate alguskeelt, peate kõik andmed uuesti indeksima."
 
-#: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:36
+#: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:37
 msgid "Incomplete translation"
 msgstr "Mittetäielik tõlge"
 
@@ -15706,10 +15845,21 @@ msgid "Languages overview"
 msgstr "Keelte ülevaade"
 
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:91
+#: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:48
 msgid "Leave texts empty"
 msgstr "Jätke tekstid tühjaks"
 
+#: zotonic_mod_translation/priv/templates/_admin_bulk_translation.tpl:5
+#: zotonic_mod_translation/src/models/m_translation_tree.erl:149
+msgid "Manage translations"
+msgstr "Tõlgete haldamine"
+
+#: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:4
+msgid "Manage translations for the selected pages only. Pages in their menus or collections are not included."
+msgstr "Haldage tõlkeid ainult valitud lehtede puhul. Menüüdes või kogudes olevad lehed ei kuulu sinna hulka."
+
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:85
+#: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:42
 msgid "Method"
 msgstr "meetod"
 
@@ -15725,7 +15875,7 @@ msgstr "Keeli ei ole konfigureeritud"
 msgid "Norwegian"
 msgstr "Norra keel"
 
-#: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:38
+#: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:39
 msgid "Not all texts could be translated."
 msgstr "Kõiki tekste ei õnnestunud tõlkida."
 
@@ -15739,6 +15889,7 @@ msgid "Open language menu"
 msgstr "Ava keelemenüü"
 
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:100
+#: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:56
 msgid "Overwrite existing texts with new translations"
 msgstr "Kirjutage olemasolevad tekstid uute tõlgetega üle"
 
@@ -15746,8 +15897,8 @@ msgstr "Kirjutage olemasolevad tekstid uute tõlgetega üle"
 msgid "Part of"
 msgstr "Osa"
 
-#: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:29
-#: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:41
+#: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:30
+#: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:42
 msgid "Please check the translations and save the page when you are ready."
 msgstr "Kontrollige tõlkeid ja salvestage leht, kui olete valmis."
 
@@ -15755,7 +15906,8 @@ msgstr "Kontrollige tõlkeid ja salvestage leht, kui olete valmis."
 msgid "Please review all texts and correct any mistakes. Approve the translation if it is correct. This message will then disappear."
 msgstr "Palun vaadake kõik tekstid üle ja parandage vead. Kinnitage tõlge, kui see on õige. Seejärel see teade kaob."
 
-#: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:25
+#: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:26
+#: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:8
 msgid "Ready"
 msgstr "Valmis"
 
@@ -15767,7 +15919,11 @@ msgstr "Uuenda tõlked"
 msgid "Reload all translations from the modules and site. All templates will be recompiled."
 msgstr "Laadige kõik tõlked moodulitest ja saidilt uuesti. Kõik mallid kompileeritakse uuesti."
 
-#: zotonic_mod_translation/src/mod_translation.erl:708
+#: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:15
+msgid "Reload page"
+msgstr "Laadi leht uuesti"
+
+#: zotonic_mod_translation/src/mod_translation.erl:846
 msgid "Reloading all .po files in the background."
 msgstr "Kõigi taustal olevate .po-failide uuesti laadimine."
 
@@ -15775,9 +15931,21 @@ msgstr "Kõigi taustal olevate .po-failide uuesti laadimine."
 msgid "Remove language"
 msgstr "Eemalda keel"
 
+#: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:17
+msgid "Removing a language affects all pages in this tree, except pages where it is the only language."
+msgstr "Keele eemaldamine mõjutab kõiki selle puu lehekülgi, välja arvatud need, kus see on ainus keel."
+
+#: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:17
+msgid "Removing a language affects all selected pages, except pages where it is the only language."
+msgstr "Keele eemaldamine mõjutab kõiki valitud lehekülgi, välja arvatud need, kus see on ainus keel."
+
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:43
 msgid "Removing a language will hide it on the edit form. If the page is saved then the translation will be deleted from the database."
 msgstr "Keele eemaldamisel peidetakse see redigeerimisvormil. Kui leht on salvestatud, kustutatakse tõlge andmebaasist."
+
+#: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:9
+msgid "Removing language"
+msgstr "Keele eemaldamine"
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:153
 msgid "Romanian"
@@ -15786,6 +15954,10 @@ msgstr "Rumeenia keel"
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:154
 msgid "Russian"
 msgstr "Vene keel"
+
+#: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:17
+msgid "Save or discard your changes before starting the translation."
+msgstr "Salvesta või tühista muudatused enne tõlkimise alustamist."
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:192
 msgid "Scan all templates for translation tags and generate .pot files that can be used for translating the templates. The <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext package must be installed</a>."
@@ -15820,32 +15992,36 @@ msgstr "Kuva URL-is keel"
 msgid "Show translations"
 msgstr "Näita tõlkeid"
 
-#: zotonic_mod_translation/src/mod_translation.erl:605
-#: zotonic_mod_translation/src/mod_translation.erl:653
+#: zotonic_mod_translation/priv/templates/_translation_tree_skipped.tpl:1
+msgid "Skipped pages"
+msgstr "Vahelejäänud leheküljed"
+
+#: zotonic_mod_translation/src/mod_translation.erl:743
+#: zotonic_mod_translation/src/mod_translation.erl:791
 msgid "Sorry, could not change the language."
 msgstr "Vabandust, keelt ei õnnestunud muuta."
 
-#: zotonic_mod_translation/src/mod_translation.erl:783
+#: zotonic_mod_translation/src/mod_translation.erl:921
 msgid "Sorry, that language is unknown or not enabled."
 msgstr "Vabandust, see keel on tundmatu või pole lubatud."
 
-#: zotonic_mod_translation/src/mod_translation.erl:592
-#: zotonic_mod_translation/src/mod_translation.erl:621
-#: zotonic_mod_translation/src/mod_translation.erl:633
-#: zotonic_mod_translation/src/mod_translation.erl:656
+#: zotonic_mod_translation/src/mod_translation.erl:730
+#: zotonic_mod_translation/src/mod_translation.erl:759
+#: zotonic_mod_translation/src/mod_translation.erl:771
+#: zotonic_mod_translation/src/mod_translation.erl:794
 msgid "Sorry, you don't have permission to change the language list."
 msgstr "Vabandust, teil pole keeleloendi muutmiseks luba."
 
-#: zotonic_mod_translation/src/mod_translation.erl:710
+#: zotonic_mod_translation/src/mod_translation.erl:848
 msgid "Sorry, you don't have permission to reload translations."
 msgstr "Vabandust, teil pole tõlkete uuesti laadimiseks luba."
 
-#: zotonic_mod_translation/src/mod_translation.erl:700
+#: zotonic_mod_translation/src/mod_translation.erl:838
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr "Vabandust, teil pole tõlkete otsimiseks luba."
 
-#: zotonic_mod_translation/src/mod_translation.erl:608
-#: zotonic_mod_translation/src/mod_translation.erl:786
+#: zotonic_mod_translation/src/mod_translation.erl:746
+#: zotonic_mod_translation/src/mod_translation.erl:924
 msgid "Sorry, you don't have permission to set the default language."
 msgstr "Vabandust, teil pole luba vaikekeele seadmiseks."
 
@@ -15853,7 +16029,11 @@ msgstr "Vabandust, teil pole luba vaikekeele seadmiseks."
 msgid "Spanish"
 msgstr "Hispaania keel"
 
-#: zotonic_mod_translation/src/mod_translation.erl:680
+#: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:18
+msgid "Start the translation of {count} pages? Editing will be disabled until the translations are ready."
+msgstr "Kas alustada veebilehe {count} tõlkimist? Redigeerimine on blokeeritud, kuni tõlked on valmis."
+
+#: zotonic_mod_translation/src/mod_translation.erl:818
 msgid "Started building the .pot files. This may take a while..."
 msgstr "Alustati .pot-failide ehitamist. See võib võtta mõnda aega ..."
 
@@ -15865,40 +16045,71 @@ msgstr "Rootsi keel"
 msgid "The golden rule when choosing a language is simplicity. Stick to the main language if you can; use a sub-language (adding region or script) when it adds useful distinguishing information."
 msgstr "Keele valimisel on kuldreegel lihtsus. Pange põhikeele juurde, kui saate; kasutage alakeelt (lisades piirkonda või skripti), kui see lisab kasulikku eristavat teavet."
 
-#: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:39
+#: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:40
 msgid "The source language text was used for the missing translations."
 msgstr "Puuduvate tõlgete puhul kasutati lähtekeelset teksti."
 
-#: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:48
-#: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:189
+#: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:49
+#: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:191
 msgid "There was an error translating the texts. Please try again later."
 msgstr "Tekstide tõlkimisel ilmnes viga. Palun proovi hiljem uuesti."
+
+#: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:66
+msgid "This changes saved pages immediately. Pages you cannot edit are skipped. Copying and automatic translation skip pages without the source language. Editing is disabled while the operation runs."
+msgstr "Need muudatused salvestatakse lehtedele kohe. Lehti, mida ei saa muuta, jäetakse vahele. Kopeerimisel ja automaatsel tõlkimisel jäetakse vahele lehed, millel puudub allikakeel. Muutmine on operatsiooni käigus keelatud."
+
+#: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:19
+msgid "This permanently removes the selected language from every page in this tree. Pages with only that language will be kept unchanged. This cannot be undone. Continue?"
+msgstr "See eemaldab valitud keele lõplikult kõigilt selle puu lehekülgedelt. Leheküljed, millel on ainult see keel, jäävad muutmata. Seda toimingut ei saa tagasi võtta. Kas soovid jätkata?"
+
+#: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:19
+msgid "This permanently removes the selected language from every selected page. Pages with only that language will be kept unchanged. This cannot be undone. Continue?"
+msgstr "See eemaldab valitud keele lõplikult kõigilt valitud lehekülgedelt. Leheküljed, millel on ainult see keel, jäävad muutmata. Seda toimingut ei saa tagasi võtta. Kas soovid jätkata?"
 
 #: zotonic_mod_translation/priv/templates/_translation_status.tpl:4
 msgid "This translation has been automatically generated."
 msgstr "See tõlge on loodud automaatselt."
 
-#: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:188
+#: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:190
 msgid "Timeout"
 msgstr "Ajalõpp"
 
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:72
+#: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:33
 msgid "To new language"
 msgstr "Uue keele juurde"
 
 #: zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:6
+#: zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:11
 #: zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:32
 msgid "Translate"
 msgstr "Tõlgi"
+
+#: zotonic_mod_translation/priv/templates/_translation_tree_button.tpl:3
+#: zotonic_mod_translation/src/models/m_translation_tree.erl:162
+msgid "Translate all pages"
+msgstr "Tõlgi kõik leheküljed"
 
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:41
 msgid "Translated page texts for every editable language that has a translation in the resource."
 msgstr "Tõlgitud lehekülje tekstid iga redigeeritava keele jaoks, mille tõlge on ressursis olemas."
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:3
-#: zotonic_mod_translation/src/mod_translation.erl:1079
+#: zotonic_mod_translation/src/mod_translation.erl:1217
 msgid "Translation"
 msgstr "Tõlge"
+
+#: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:12
+msgid "Translation could not be completed. Some pages may have been changed."
+msgstr "Tõlkimist ei õnnestunud lõpule viia. Mõned leheküljed võivad olla muutunud."
+
+#: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:11
+msgid "Translation has finished. Reload the page to continue editing."
+msgstr "Tõlkimine on lõppenud. Laadi leht uuesti, et jätkata redigeerimist."
+
+#: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:7
+msgid "Translation in progress"
+msgstr "Tõlkimine käib"
 
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:3
 msgid "Translations"
@@ -15923,6 +16134,15 @@ msgstr "Keelega"
 #: zotonic_mod_translation/priv/templates/_admin_overview_filter_panel.tpl:19
 msgid "Without language"
 msgstr "Ilma keeleta"
+
+#: zotonic_mod_translation/src/models/m_translation_tree.erl:152
+#: zotonic_mod_translation/src/models/m_translation_tree.erl:155
+msgid "You are not allowed to edit these pages."
+msgstr "Neid lehekülgi ei tohi muuta."
+
+#: zotonic_mod_translation/src/models/m_translation_tree.erl:170
+msgid "You are not allowed to edit this tree."
+msgstr "Seda puud ei tohi muuta."
 
 #: zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:60
 #: zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:67
@@ -16009,7 +16229,7 @@ msgstr "Vimeo video"
 msgid "Youtube Video"
 msgstr "Youtube'i video"
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:50
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:54
 msgid "Access was denied while updating this page. Check the subscriber's source website credentials and permission to update the local page."
 msgstr "Selle lehe uuendamise ajal keelati juurdepääs. Kontrollige tellija veebisaidi kasutajatunnuseid ja õigusi kohaliku lehe uuendamiseks."
 
@@ -16038,7 +16258,7 @@ msgstr "Automaatsed uuendused on sisse lülitatud."
 msgid "Automatic updates are stopped."
 msgstr "Automaatsed värskendused on peatatud."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:72
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:76
 msgid "Automatic updates could not be completed. Check the technical details for the reported error."
 msgstr "Automaatseid värskendusi ei õnnestunud lõpule viia. Kontrollige teatatud vea tehnilisi üksikasju."
 
@@ -16046,7 +16266,7 @@ msgstr "Automaatseid värskendusi ei õnnestunud lõpule viia. Kontrollige teata
 msgid "Could not change the automatic update subscription."
 msgstr "Automaatse värskenduse tellimust ei õnnestunud muuta."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:52
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:56
 msgid "Could not contact the remote website. Check its availability and HTTPS certificate."
 msgstr "Kaugveebisaidiga ei õnnestunud ühendust luua. Kontrollige selle kättesaadavust ja HTTPS-sertifikaati."
 
@@ -16148,75 +16368,75 @@ msgstr "Jälgi meid"
 msgid "Subscription type"
 msgstr "Tellimuse tüüp"
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:56
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:60
 msgid "The callback URL must use a hostname instead of an IP address. Check this website's public URL."
 msgstr "Tagasikõne URL-is tuleb IP-aadressi asemel kasutada hostinime. Kontrollige selle veebisaidi avalikku URL-i."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:38
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:42
 msgid "The destination could not be resolved or its network address is blocked. Local and private addresses are only allowed for .test hostnames in development."
 msgstr "Sihtkohta ei õnnestunud tuvastada või selle võrguadresse on blokeeritud. Kohalikke ja privaatseid aadresse lubatakse kasutada ainult arendusetapis olevate .test-domeeninimede puhul."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:48
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:52
 msgid "The original page address has changed. Import the page again to set up automatic updates."
 msgstr "Lehe algne aadress on muutunud. Impordi leht uuesti, et seadistada automaatsed uuendused."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:54
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:58
 msgid "The remote website address is invalid. Check the source and WebSub URLs."
 msgstr "Kaugveebisaidi aadress on kehtetu. Kontrollige allika- ja WebSub-URL-aadresse."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:58
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:62
 msgid "The remote website redirects from HTTPS to HTTP. Use a secure HTTPS destination."
 msgstr "Kaugveebisait suunab HTTPS-ist HTTP-le. Kasutage turvalist HTTPS-sihtkohta."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:60
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:64
 msgid "The remote website redirects too many times. Check its redirect configuration."
 msgstr "Kaugveebisait suunab liiga palju kordi edasi. Kontrollige selle suunamisseadeid."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:68
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:72
 msgid "The remote website refused access. Check the subscribing user's permissions on that website."
 msgstr "Kaugveebisait keelas juurdepääsu. Kontrollige selle veebisaidi puhul tellija kasutaja õigusi."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:66
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:70
 msgid "The remote website requires authentication. Check the subscribing user's configured credentials."
 msgstr "Kaugveebisait nõuab autentimist. Kontrollige tellija konfigureeritud autentimisandmeid."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:62
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:66
 msgid "The remote website returned a redirect without a destination."
 msgstr "Kaugveebisait saatis tagasi suunamise, millel puudus sihtkoht."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:64
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:68
 msgid "The remote website returned an invalid redirect destination."
 msgstr "Kaugveebisait andis kehtetu ümbersuunamiskoha."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:70
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:74
 msgid "The requested page or WebSub endpoint was not found on the remote website."
 msgstr "Kõnealust lehekülge või WebSub-lõpppunkti ei leitud kaugveebisaidilt."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:46
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:50
 msgid "The source page advertises invalid WebSub links. Check its hub and topic URLs."
 msgstr "Allikalehel on kehtetud WebSub-lingid. Kontrollige selle keskuse ja teema URL-aadresse."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:44
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:48
 msgid "The source page does not advertise automatic updates via WebSub."
 msgstr "Allikaslehel ei mainita automaatseid uuendusi WebSubi kaudu."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:40
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:44
 msgid "The source website did not confirm the subscription in time. Check that it can reach this website's callback URL."
 msgstr "Allikasveebisait ei kinnitanud tellimust õigeaegselt. Kontrolli, kas see suudab ühendust saada selle veebisaidi tagasiside-URL-iga."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:32
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:36
 msgid "The source website does not allow this subscriber to use WebSub. On the source website, allow the subscribing user to use WebSub, or allow anonymous visitors for public subscriptions."
 msgstr "Allikasveebisait ei luba sellel tellijal WebSubi kasutada. Lubage allikasveebisaidil tellijal WebSubi kasutada või lubage avalikele tellimustele juurdepääs ka anonüümsetele külastajatele."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:36
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:40
 msgid "The source website does not recognize this subscription topic. Check that the original page still exists."
 msgstr "Allikasveebisait ei tunne seda tellimusteemat ära. Kontrollige, kas algne lehekülg on endiselt olemas."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:34
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:38
 msgid "The source website refused access to this page. The subscriber must be allowed to view it, and the page must be an original on that website."
 msgstr "Allikasveebisait keelas juurdepääsu sellele lehele. Tellijal peab olema lubatud seda vaadata ning leht peab olema selle veebisaidi originaalleht."
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:42
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:46
 msgid "This page points back to this website. A website cannot subscribe to itself."
 msgstr "See lehekülg viitab tagasi sellele veebisaidile. Veebisait ei saa endale ise tellimust teha."
 

@@ -197,6 +197,7 @@ m_get_1(_Path, _Msg, _Context) ->
 %% Remote probes share the bounded, configuration-aware ImageMagick cache.
 -spec media_processing() -> map().
 media_processing() ->
+    SandboxMode = z_exec:sandbox_mode(),
     Sandbox = case z_exec:sandbox_status() of
         {ok, _} -> available;
         {error, {sandbox_unsupported, _}} -> unsupported;
@@ -206,6 +207,7 @@ media_processing() ->
         remote => z_media_runner_pool:configured(),
         local_fallback => z_config:get(media_runner_local_fallback, false) =:= true,
         sandbox => Sandbox,
+        sandbox_mode => SandboxMode,
         local_imagemagick => maps:with([available, version], z_media_imagemagick:local())
     },
     case z_media_imagemagick:installations() of
@@ -266,7 +268,7 @@ group_sockets() ->
     Dict = group_sockets(recon:tcp(), dict:new()),
     [[{count, length(Ports)}, {ip, inet:ntoa(IP)}, {ports, Ports}] || {IP, Ports} <- dict:to_list(Dict)].
 
-% Return a dict with as key the ip-address. 
+% Return a dict with as key the ip-address.
 group_sockets([], Dict) ->
     Dict;
 group_sockets([Port|Rest], Dict) ->
@@ -281,7 +283,7 @@ group_sockets([Port|Rest], Dict) ->
 close_sockets(Max, _Context) ->
     socket_reaper(Max).
 
-% Close sockets of ip-addresses which have 
+% Close sockets of ip-addresses which have
 socket_reaper(Max) ->
     Dict = group_sockets(recon:tcp(), dict:new()),
     socket_reaper(dict:to_list(Dict), Max, 0).

@@ -88,6 +88,8 @@ datamodel() ->
 
 
 %% @doc Install or upgrade the SQL tables used for recipients and waiting mailings.
+%% Version 9 reruns these idempotent checks for sites recorded at version 8
+%% without the run tables. Keep legacy schedules until their import succeeds.
 manage_schema(_Upgrade, Context) ->
     case z_db:table_exists(mailinglist_recipient, Context) of
         false ->
@@ -142,7 +144,8 @@ migrate_recipient_languages(LastId, Context) ->
                 Map = case Props of
                     undefined -> #{};
                     M when is_map(M) -> M;
-                    _ -> z_props:from_props(Props)
+                    L when is_list(L) -> z_props:from_props(L);
+                    _ -> #{}
                 end,
                 Language = case maps:get(<<"pref_language">>, Map, undefined) of
                     undefined -> undefined;
@@ -198,6 +201,7 @@ do_install(Context) ->
 					id serial NOT NULL,
 					mailinglist_id INT NOT NULL,
 					email character varying (200) NOT NULL,
+                    pref_language varchar(35),
 					is_enabled boolean NOT NULL default true,
 					props bytea,
 					confirm_key character varying (32) NOT NULL,
@@ -238,39 +242,45 @@ do_install(Context) ->
 %% Durable runs replace the disposable page/list schedule. Keep the old table
 %% during migration so upgrades are repeatable and do not discard queued work.
 ensure_runs(Context) ->
-    z_db:q(
-        "create table if not exists mailinglist_run (
-        id bigserial primary key,
-        page_id integer not null references rsc(id) on delete cascade,
-        mailinglist_id integer not null references rsc(id) on delete cascade,
-        sender_id integer references rsc(id) on delete set null,
-        request_key varchar(64) unique,
-        parent_id bigint references mailinglist_run(id) on delete set null,
-        language varchar(32) not null default '',
-        fallback_language varchar(32) not null default 'en',
-        audience varchar(20) not null default 'matching',
-        send_mode varchar(20) not null default 'new',
-        is_test boolean not null default false,
-        type varchar(20) not null default 'date',
-        due timestamptz not null default now(),
-        status varchar(32) not null default 'scheduled',
-        prepared boolean not null default false,
-        created timestamptz not null default now(),
-        started timestamptz,
-        finished timestamptz,
-        modified timestamptz not null default now(),
-        notified timestamptz,
-        error text,
-        props bytea
-    )",
-        Context
-    ),
-    z_db:q(
-        "alter table mailinglist_run add column if not exists details_expired timestamptz", Context
-    ),
-    z_db:q(
-        "alter table mailinglist_run add column if not exists first_submitted timestamptz", Context
-    ),
+    case z_db:table_exists(mailinglist_run, Context) of
+        false ->
+            z_db:q(
+                "create table if not exists mailinglist_run (
+                id bigserial primary key,
+                page_id integer not null references rsc(id) on delete cascade,
+                mailinglist_id integer not null references rsc(id) on delete cascade,
+                sender_id integer references rsc(id) on delete set null,
+                request_key varchar(64) unique,
+                parent_id bigint references mailinglist_run(id) on delete set null,
+                language varchar(32) not null default '',
+                fallback_language varchar(32) not null default 'en',
+                audience varchar(20) not null default 'matching',
+                send_mode varchar(20) not null default 'new',
+                is_test boolean not null default false,
+                type varchar(20) not null default 'date',
+                due timestamptz not null default now(),
+                status varchar(32) not null default 'scheduled',
+                prepared boolean not null default false,
+                created timestamptz not null default now(),
+                started timestamptz,
+                finished timestamptz,
+                details_expired timestamptz,
+                first_submitted timestamptz,
+                modified timestamptz not null default now(),
+                notified timestamptz,
+                error text,
+                props bytea
+            )",
+                Context
+            );
+        true ->
+            z_db:q(
+                "alter table mailinglist_run add column if not exists details_expired timestamptz", Context
+            ),
+            z_db:q(
+                "alter table mailinglist_run add column if not exists first_submitted timestamptz", Context
+            )
+    end,
     z_db:q(
         "create index if not exists mailinglist_run_retention_key on mailinglist_run(finished) where details_expired is null",
         Context

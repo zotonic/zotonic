@@ -149,3 +149,18 @@ filters_to_nested_terms_nested_test() ->
     },
     ?assertEqual(Expected, search_query:filters_to_nested_terms(Filters)),
     ok.
+
+%% @doc Overview connection IDs and predicates must constrain the same edge.
+connection_qargs_test() ->
+    lists:foreach(fun({Edge, Predicate}) ->
+        QEdge = <<"q", Edge/binary>>,
+        QPredicate = <<"q", Predicate/binary>>,
+        ?assertEqual(z_search_props:from_list([{Edge, [<<"42">>, <<"relation">>]}]),
+            z_search_props:from_qargs([{QEdge, <<"42">>}, {QPredicate, <<"relation">>}])),
+        ?assertEqual(z_search_props:from_list([{Edge, <<"42">>}]),
+            z_search_props:from_qargs([{QEdge, <<"42">>}, {QPredicate, <<>>}])),
+        ?assertEqual(z_search_props:from_list([{Predicate, <<"relation">>}]),
+            z_search_props:from_qargs([{QEdge, <<>>}, {QPredicate, <<"relation">>}])),
+        ?assertEqual(z_search_props:from_list([{Edge, [42, <<"author">>]}, {Predicate, <<"relation">>}]),
+            z_search_props:from_qargs([{QEdge, [42, <<"author">>]}, {QPredicate, <<"relation">>}]))
+    end, [{<<"hasobject">>, <<"hasobjectpredicate">>}, {<<"hassubject">>, <<"hassubjectpredicate">>}]).

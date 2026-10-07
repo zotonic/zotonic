@@ -51,6 +51,12 @@ description: Use when working in Zotonic projects, especially Erlang modules, Zo
 - Put reusable implementation details in `src/support/`. Support modules should own focused domain logic, parsing/recombination, protocol handling, worker `gen_server`s, and helpers that are not themselves template APIs.
 - Prefer the model as the boundary between Zotonic callers and support processes. Keep process startup, batching, timeouts, and result normalization close to the public model API unless the logic is truly generic.
 
+## Database Schema Changes
+
+- Keep fresh-install `CREATE TABLE` definitions complete: include every current column, type, default, nullability rule, and table constraint. When adding a column in an upgrade, update the fresh-install definition in the same change.
+- Reserve `ALTER TABLE` for existing tables that need upgrading. Do not create an outdated table and immediately alter it to reach the current schema; branch between creation and upgrade, then ensure any shared indexes.
+- When verifying schema changes, cover both a fresh install and an upgrade from an older schema. Check that their final columns and constraints agree and that rerunning the upgrade preserves existing data.
+
 ## Documentation Keywords
 
 - Documentation `zotonic_keywords` must use existing `keyword_slug` values from the Zotonic repository's `doc/zotonic_subject_topics.csv`.

@@ -46,6 +46,30 @@ resource paths are readable. Executable permissions cover the shell, dynamic
 loader and selected tools. The PDF profile adds Ghostscript. Paths are resolved
 by the native launcher; missing explicit paths fail setup.
 
+On Debian 12/13 and Ubuntu 24.04, allowing `/etc/fonts` alone is insufficient: its `conf.d`
+entries link to rules in `/usr/share/fontconfig/conf.avail`. Both locations are
+readable by the ImageMagick profiles, alongside `/usr/share/fonts`,
+`/usr/local/share/fonts` and `/var/cache/fontconfig`. The PDF profile also allows
+Ghostscript's `/var/lib/ghostscript/fonts` and `/usr/share/cups/fonts`, plus
+`/var/lib/ghostscript/CMap` and `/usr/share/poppler/cMap`: the packaged
+`Resource/CMap` directory and its entries use symlinks to these locations.
+Directory read grants do not grant access to symlink targets outside that tree.
+Verified with the native sandbox in Debian 12 (Ghostscript 10.00.0), Debian 13
+(Ghostscript 10.05.1), and Ubuntu 24.04 (Ghostscript 10.02.1): without these
+additional grants, font-rule and CMap reads fail and Helvetica matches DejaVu
+Sans; with them, both reads succeed and Helvetica matches Nimbus Sans, as it
+does outside the sandbox on the tested Debian installations.
+User-installed fonts under the service account's home are not inherited; install
+them system-wide or grant their directory explicitly with `exec_sandbox_profiles`.
+
+On macOS, `/System/Library` already covers system fonts and downloaded Apple
+font assets. The ImageMagick profiles also allow `/Library/Fonts` for fonts
+installed for all users, plus Homebrew font configuration, shared font resources,
+and read-only font caches under `/opt/homebrew` and `/usr/local`. Fontconfig can
+write new caches in the job's private `XDG_CACHE_HOME`. The Apple Silicon runtime
+already allows `/opt/homebrew/Cellar`, including Ghostscript's bundled fonts.
+Fonts in `~/Library/Fonts` still require an explicit administrator read grant.
+
 On Linux the helper reads each executable's ELF `PT_INTERP` entry and grants
 execution to that exact loader. Library directories remain read-only, without
 recursive execute grants. Custom scripts need an explicit execute grant for
@@ -58,24 +82,31 @@ requests coordinate by destination path; partial outputs are never published.
 
 ## Linux
 
-Build dependencies: a C compiler, Linux headers with Landlock support and
-libseccomp 2.5+ development files (`libseccomp-dev` on Debian/Ubuntu). The rebar compile
-hook builds `apps/zotonic_core/priv/bin/zotonic-sandbox`. The development Docker
-image includes the dependency. Release builds must include the resulting `priv`
-directory and the runtime libseccomp library. The helper is **not setuid**.
-Hex packages exclude the compiled helper and include its C source and Makefile,
-so dependency compilation builds it for the consumer's OS and architecture.
+Build dependencies: a C compiler. On Linux, building the sandbox helper
+additionally requires Linux headers with Landlock support and libseccomp 2.5+
+development files (`libseccomp-dev` on Debian/Ubuntu).
 
-Requires enabled Landlock ABI 3 or newer (upstream Linux 6.2+), detected by syscall
-at execution time. ABI 1/2 are rejected because they cannot restrict truncation.
-The launcher handles all filesystem rights through ABI 3, plus device ioctl
-rights when ABI 5 is available. Unspecified rights in newer ABIs are not claimed
-as protections. Seccomp independently blocks sockets, networking through
-io_uring, process inspection/signalling APIs and process-group/session changes.
-It is a denylist, not a general syscall allowlist or a VM boundary.
-Resource-limit operations through `prlimit64` are permitted only with PID zero
-(the calling process); explicit PID targets are denied, including other
-processes owned by the Zotonic user.
+The rebar compile hook attempts to build
+`apps/zotonic_core/priv/bin/zotonic-sandbox`.
+
+The development Docker image includes the Linux dependencies. Release builds
+that include the helper must also include the resulting `priv` directory and
+the runtime libseccomp library. The helper is **not setuid**.
+
+Hex packages exclude the compiled helper and include its C source and Makefile,
+allowing dependency compilation to build it for the consumer's OS and
+architecture when supported.
+
+The sandbox requires enabled Landlock ABI 3 or newer (upstream Linux 6.2+),
+detected by syscall at execution time. ABI 1/2 are rejected because they cannot
+restrict truncation. The launcher handles all filesystem rights through ABI 3,
+plus device ioctl rights when ABI 5 is available. Unspecified rights in newer
+ABIs are not claimed as protections. Seccomp independently blocks sockets,
+networking through io_uring, process inspection/signalling APIs and
+process-group/session changes. It is a denylist, not a general syscall allowlist
+or a VM boundary. Resource-limit operations through `prlimit64` are permitted
+only with PID zero (the calling process); explicit PID targets are denied,
+including other processes owned by the Zotonic user.
 
 A supervisor keeps the decoder and delegates in a job process group. On normal
 completion, failure, or cancellation, it kills that group with SIGKILL. The

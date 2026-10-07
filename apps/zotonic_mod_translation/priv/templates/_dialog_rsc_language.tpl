@@ -95,20 +95,21 @@
         </div>
 
         <div class="form-group">
+            <br>
             <label class="checkbox">
-                <input type="checkbox" value="1" name="overwrite">
-                {_ Overwrite existing texts with new translations _}
+                <input type="checkbox" value="1" name="overwrite"> {_ Overwrite existing texts with new translations _}
             </label>
         </div>
+
+        <p class="help-block">
+            {_ Copying and translating texts is used to fill in blank text fields in the destination language. Existing texts will never be overwritten unless the “overwrite existing texts” checkbox is checked. _}
+        </p>
 
         {% if m.translation.has_translation_service %}
             <p class="help-block">
                 {_ If you automatically translate texts then your texts will be sent to a remote translation service. _}
             </p>
         {% endif %}
-        <p class="help-block">
-            {_ Copying and translating texts is used to fill in blank text fields in the destination language. Existing texts will never be overwritten unless the “overwrite existing texts” checkbox is checked. _}
-        </p>
 
         <div class="modal-footer">
             {% button class="btn btn-default"
@@ -121,6 +122,16 @@
             %}
         </div>
     </form>
+
+    {% if id.is_a.menu or id.o.haspart %}
+        <hr>
+        <div style="display: flex; align-items: center; gap: 15px;">
+            {% include "_translation_tree_button.tpl" tree_id=id %}
+            <span class="text-muted">
+                {_ Add, copy, or remove translations for all pages in this menu or collection. _}
+            </span>
+        </div>
+    {% endif %}
 {% else %}
     <ul>
         {% for code, lang in language_list_editable %}
@@ -133,4 +144,3 @@
     </ul>
 {% endif %}
 {% endwith %}
-

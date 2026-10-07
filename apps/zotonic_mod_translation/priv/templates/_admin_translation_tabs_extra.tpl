@@ -8,7 +8,7 @@
         </li>
     {% else %}
         <a class="btn btn-primary" href="#" role="button" id="language-add" title="{_ Add a new language or change languages. _}">
-            {_ Add translation _}
+            {_ Translate _}
         </a>
     {% endif %}
 
