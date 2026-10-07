@@ -22,55 +22,25 @@
     zotonic_keywords => ["reference", "operator", "model", "file_storage", "file_store", "reliability"]
 }).
 -moduledoc("
-The filestore uses two tables for its administration.
+Read filestore configuration and statistics through `m.filestore`, for example
+`{{ m.filestore.service }}` or `{{ m.filestore.stats.cloud }}` in an admin template.
+All model paths below require an administrator context; unauthorized calls return
+`{error, eacces}`. The secret is also unavailable when system configuration is locked.
+See `module#mod_filestore` for setup, protocols, configuration precedence and migration.
 
+## File registry and upload queue
 
+The `filestore` table records each relative local path, its backend (`s3`, `ftp`,
+or `webdav`), full remote URL and size. It also tracks local copies, errors, deletion
+and moves back to local disk. Use the filestore APIs rather than editing the table.
 
-Main administration table
--------------------------
+Paths are relative to the site's files directory, for example
+`archive/2026/10/07/image.jpg`. Remote locations retain the URL used for upload;
+changing configuration does not rewrite them or move the remote files.
 
-The `filestore` table administrates which file is stored at what service. It also contains flags for flagging files that
-need to be deleted or moved from the remote service to the local file system.
-
-The definition is as follows:
-
-
-```sql
-create table filestore (
-    id serial not null,
-    is_deleted boolean not null default false,
-    is_move_to_local boolean not null default false,
-    error character varying(32),
-    path character varying(255) not null,
-    service character varying(16) not null,
-    location character varying(400) not null,
-    size int not null default 0,
-    modified timestamp with time zone not null default now(),
-    created timestamp with time zone not null default now(),
-
-    constraint filestore_pkey primary key (id),
-    constraint filestore_path_key unique (path),
-    constraint filestore_location_key unique (location)
-)
-```
-
-The path is the local path, relative to the site's `files` directory. For example: `archive/2008/12/10/tycho.jpg`
-
-The service describes what kind of service or protocol is used for the remote storage. Currently the service is always
-set to `s3`.
-
-The location is the full url describing the location of the file on the remote service. For example: `https://s.greenqloud.com/mworrell-zotonic-test/archive/2008/12/10/tycho.jpg`
-
-
-
-Upload queue
-------------
-
-The upload queue holds file paths of newly added files that need to be uploaded. These file paths are relative to the
-`files` directory.
-
-Periodically the system polls this table to see if any files need uploading. Any entry older than 10 minutes will be
-handled and an upload process will be started.
+The `filestore_queue` table holds pending uploads. Entries become eligible after
+one minute; bounded background batches and backoff determine when they complete.
+Statistics are database-derived counts and estimates, not remote or local disk scans.
 
 Available Model API Paths
 -------------------------
@@ -79,13 +49,13 @@ Available Model API Paths
 | --- | --- | --- |
 | `get` | `/stats/...` | Return admin-only filestore totals: archived media count/size, queued upload count, queued move/delete counts, cloud-stored count/size, and estimated local count/size. |
 | `get` | `/service/...` | Return the configured filestore backend service identifier from `filestore_config:service/1` (admin-only). |
-| `get` | `/s3url/...` | Return the configured S3 endpoint/base URL used for remote object location resolution (admin-only). |
-| `get` | `/s3key/...` | Return the configured S3 access key id for filestore credentials (admin-only). |
-| `get` | `/s3secret/...` | Return the configured S3 secret key only when caller is admin and filestore config is not locked. |
+| `get` | `/s3url/...` | Return the configured S3, FTP/FTPS or WebDAV base URL used for remote object location resolution (admin-only). |
+| `get` | `/s3key/...` | Return the configured S3 access key or FTP/WebDAV username for filestore credentials (admin-only). |
+| `get` | `/s3secret/...` | Return the configured S3 secret key or FTP/WebDAV password only when caller is admin and filestore config is not locked. |
 | `get` | `/is_config_locked/...` | Return whether filestore credential/config values are locked (non-editable/hidden) in this site instance (admin-only). |
 | `get` | `/is_upload_enabled/...` | Return whether background upload/offload from local `files` storage to remote filestore is enabled (admin-only). |
 | `get` | `/is_local_keep/...` | Return whether local files are retained after successful remote storage, instead of being scheduled for deletion (admin-only). |
-| `get` | `/delete_interval/...` | Return the configured delay interval used before deleting local files after offload to remote storage (admin-only). |
+| `get` | `/delete_interval/...` | Return the configured extra delay before deleting files marked for remote deletion (admin-only). |
 
 `/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
