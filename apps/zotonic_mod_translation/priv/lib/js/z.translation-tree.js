@@ -53,6 +53,12 @@
         } else {
             clearInterval(timer);
             modal.append(text("p", state.state === "failed" || state.failed ? labels.failed : labels.done));
+            if (state.skipped_html) {
+                const skipped = document.createElement("div");
+                // HTML rendered by the authorized status model using resource titles and dispatch URLs.
+                skipped.innerHTML = state.skipped_html;
+                modal.append(skipped);
+            }
             const button = text("button", labels.reload);
             button.type = "button";
             button.className = "btn btn-primary";

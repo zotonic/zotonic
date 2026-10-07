@@ -68,6 +68,7 @@ run(Caller, Ref, Root, Operation, Context) ->
                 total => 0,
                 done => 0,
                 skipped => 0,
+                skipped_ids => [],
                 failed => 0,
                 operation => operation_name(Operation)
             },
@@ -170,7 +171,10 @@ process([Id | Rest], Operation, #{done := Done} = State, Context) ->
         end,
     State1 = case Result of
         ok -> State;
-        skipped -> State#{skipped := maps:get(skipped, State) + 1};
+        skipped -> State#{
+            skipped := maps:get(skipped, State) + 1,
+            skipped_ids := [Id | maps:get(skipped_ids, State)]
+        };
         {error, Error} ->
             ?LOG_WARNING(#{
                 in => zotonic_mod_translation,
@@ -199,7 +203,8 @@ apply_operation(Id, {remove, Lang}, Context) ->
 apply_operation(Id, {<<"empty">>, _From, To, _Overwrite}, Context) ->
     ensure_language(Id, To, Context);
 apply_operation(Id, {Method, From, To, Overwrite}, Context) ->
-    case lists:member(From, languages(Id, Context)) of
+    SourceLanguages = m_rsc:p(Id, language, Context),
+    case is_list(SourceLanguages) andalso lists:member(From, SourceLanguages) of
         false -> skipped;
         true ->
             case Method of
@@ -236,4 +241,3 @@ languages(Id, Context) ->
 %% @doc Extract the operation name used in progress messages.
 operation_name({remove, _}) -> remove;
 operation_name({Method, _, _, _}) -> Method.
-

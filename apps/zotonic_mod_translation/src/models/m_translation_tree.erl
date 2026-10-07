@@ -61,9 +61,12 @@ where `Rest` is the unused model path.
   total => 3,
   done => 2,
   skipped => 1,
+  skipped_ids => [123],
   failed => 0}
 ```
 
+`skipped_ids` identifies skipped pages. Completed status responses also include
+`skipped_html`, a rendered list with links to edit these pages in a new tab.
 `done` counts all processed pages, including skipped and failed pages. `total` is
 zero until traversal finishes. The state becomes `complete` when every page has
 been processed, even if individual pages failed; `failed` as a state indicates a
@@ -100,7 +103,18 @@ not start a job; the dialog submits a confirmed operation through `post/<id>`.
 %% @doc Read tree language counts or job progress after checking edit access to the root.
 m_get([<<"status">>, Id | Rest], _Msg, Context) ->
     with_editable(Id, fun(Root) ->
-        {ok, {translation_tree:status(Root, Context), Rest}}
+        State = translation_tree:status(Root, Context),
+        Result = case State of
+            #{ state := Status, skipped_ids := [_ | _] = Ids } when Status =/= running ->
+                {Html, _Context} = z_template:render_to_iolist(
+                        "_translation_tree_skipped.tpl",
+                        #{ ids => lists:reverse(Ids) },
+                        Context),
+                State#{ skipped_html => iolist_to_binary(Html) };
+            _ ->
+                State
+        end,
+        {ok, {Result, Rest}}
     end, Context);
 m_get([Id | Rest], _Msg, Context) ->
     case details(Id, Context) of
