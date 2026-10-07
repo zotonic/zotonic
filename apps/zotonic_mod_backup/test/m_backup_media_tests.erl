@@ -112,14 +112,14 @@ offload_media(Id, Context) ->
     ?assertNot(filelib:is_regular(z_media_archive:abspath(Filename, Context))),
     {ok, #{ location := Location }} = m_filestore:lookup(Path, Context),
     % Evict the uploaded copy, forcing recovery through the download stream.
+    % Terminate the temporary file entry synchronously: its graceful stop uses
+    % an inactivity timeout that refreshes and cache events can interrupt.
     case z_file_entry:where(Filename, Context) of
         undefined -> ok;
         FilePid ->
-            FileRef = monitor(process, FilePid),
-            ok = z_file_request:stop(Filename, Context),
-            receive
-                {'DOWN', FileRef, process, FilePid, _} -> ok
-            after 10000 -> error(file_entry_stop_timeout)
+            case supervisor:terminate_child(z_file_sup, FilePid) of
+                ok -> ok;
+                {error, not_found} -> ok
             end
     end,
     ok = filezcache:delete(Location).
