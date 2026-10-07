@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-06 09:58\n"
+"PO-Revision-Date: 2026-10-07 12:12\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -3513,6 +3513,7 @@ msgstr "Неопублікований"
 #: zotonic_mod_seo/src/support/seo_jsonld_webpage.erl:276
 #: zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:16
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:10
+#: zotonic_mod_translation/priv/templates/_translation_tree_skipped.tpl:7
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:3
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:88
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:90
@@ -11313,6 +11314,7 @@ msgstr "Перш ніж продовжувати, відкрийте попер�
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:79
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:143
+#: zotonic_mod_translation/priv/templates/_translation_tree_skipped.tpl:9
 msgid "Opens in a new tab"
 msgstr "Відкриється в новій вкладці"
 
@@ -15695,7 +15697,7 @@ msgstr "Автоматичний переклад"
 msgid "Available sub-languages"
 msgstr "Доступні підмови"
 
-#: zotonic_mod_translation/src/mod_translation.erl:829
+#: zotonic_mod_translation/src/mod_translation.erl:831
 msgid "Cannot generate translation files because <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext is not installed</a>."
 msgstr "Не вдається створити файли перекладу, оскільки <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext не встановлено</a>."
 
@@ -15848,7 +15850,7 @@ msgid "Leave texts empty"
 msgstr "Залиште тексти порожніми"
 
 #: zotonic_mod_translation/priv/templates/_admin_bulk_translation.tpl:5
-#: zotonic_mod_translation/src/models/m_translation_tree.erl:128
+#: zotonic_mod_translation/src/models/m_translation_tree.erl:149
 msgid "Manage translations"
 msgstr "Керування перекладами"
 
@@ -15921,7 +15923,7 @@ msgstr "Перезавантажте всі переклади з модулів
 msgid "Reload page"
 msgstr "Оновити сторінку"
 
-#: zotonic_mod_translation/src/mod_translation.erl:844
+#: zotonic_mod_translation/src/mod_translation.erl:846
 msgid "Reloading all .po files in the background."
 msgstr "Перезавантаження всіх файлів .po у фоновому режимі."
 
@@ -15990,32 +15992,36 @@ msgstr "Показати мову в URL-адресі"
 msgid "Show translations"
 msgstr "Показати переклади"
 
-#: zotonic_mod_translation/src/mod_translation.erl:741
-#: zotonic_mod_translation/src/mod_translation.erl:789
+#: zotonic_mod_translation/priv/templates/_translation_tree_skipped.tpl:1
+msgid "Skipped pages"
+msgstr "Пропущені сторінки"
+
+#: zotonic_mod_translation/src/mod_translation.erl:743
+#: zotonic_mod_translation/src/mod_translation.erl:791
 msgid "Sorry, could not change the language."
 msgstr "На жаль, не вдалося змінити мову."
 
-#: zotonic_mod_translation/src/mod_translation.erl:919
+#: zotonic_mod_translation/src/mod_translation.erl:921
 msgid "Sorry, that language is unknown or not enabled."
 msgstr "На жаль, ця мова невідома або не ввімкнена."
 
-#: zotonic_mod_translation/src/mod_translation.erl:728
-#: zotonic_mod_translation/src/mod_translation.erl:757
-#: zotonic_mod_translation/src/mod_translation.erl:769
-#: zotonic_mod_translation/src/mod_translation.erl:792
+#: zotonic_mod_translation/src/mod_translation.erl:730
+#: zotonic_mod_translation/src/mod_translation.erl:759
+#: zotonic_mod_translation/src/mod_translation.erl:771
+#: zotonic_mod_translation/src/mod_translation.erl:794
 msgid "Sorry, you don't have permission to change the language list."
 msgstr "На жаль, у Вас немає дозволу змінювати список мов."
 
-#: zotonic_mod_translation/src/mod_translation.erl:846
+#: zotonic_mod_translation/src/mod_translation.erl:848
 msgid "Sorry, you don't have permission to reload translations."
 msgstr "На жаль, у Вас немає дозволу перезавантажувати переклади."
 
-#: zotonic_mod_translation/src/mod_translation.erl:836
+#: zotonic_mod_translation/src/mod_translation.erl:838
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr "На жаль, у Вас немає дозволу на пошук перекладів."
 
-#: zotonic_mod_translation/src/mod_translation.erl:744
-#: zotonic_mod_translation/src/mod_translation.erl:922
+#: zotonic_mod_translation/src/mod_translation.erl:746
+#: zotonic_mod_translation/src/mod_translation.erl:924
 msgid "Sorry, you don't have permission to set the default language."
 msgstr "На жаль, у Вас немає дозволу на встановлення мови за замовчуванням."
 
@@ -16027,7 +16033,7 @@ msgstr "Іспанська"
 msgid "Start the translation of {count} pages? Editing will be disabled until the translations are ready."
 msgstr "Почати переклад сторінок {count} ? Редагування буде недоступним, доки переклади не будуть готові."
 
-#: zotonic_mod_translation/src/mod_translation.erl:816
+#: zotonic_mod_translation/src/mod_translation.erl:818
 msgid "Started building the .pot files. This may take a while..."
 msgstr "Почали створювати файли .pot. Це може зайняти деякий час..."
 
@@ -16044,7 +16050,7 @@ msgid "The source language text was used for the missing translations."
 msgstr "Для відсутніх перекладів використано вихідний текст."
 
 #: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:49
-#: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:190
+#: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:191
 msgid "There was an error translating the texts. Please try again later."
 msgstr "Під час перекладу текстів сталася помилка. Будь-ласка спробуйте пізніше."
 
@@ -16064,7 +16070,7 @@ msgstr "Це назавжди видалить вибрану мову з усі
 msgid "This translation has been automatically generated."
 msgstr "Цей переклад було згенеровано автоматично."
 
-#: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:189
+#: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:190
 msgid "Timeout"
 msgstr "Тайм-аут"
 
@@ -16080,7 +16086,7 @@ msgid "Translate"
 msgstr "Перекласти"
 
 #: zotonic_mod_translation/priv/templates/_translation_tree_button.tpl:3
-#: zotonic_mod_translation/src/models/m_translation_tree.erl:141
+#: zotonic_mod_translation/src/models/m_translation_tree.erl:162
 msgid "Translate all pages"
 msgstr "Перекласти всі сторінки"
 
@@ -16089,7 +16095,7 @@ msgid "Translated page texts for every editable language that has a translation 
 msgstr "Перекладені тексти сторінок для всіх редагованих мов, які мають переклад на ресурсі."
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:3
-#: zotonic_mod_translation/src/mod_translation.erl:1215
+#: zotonic_mod_translation/src/mod_translation.erl:1217
 msgid "Translation"
 msgstr "Переклад"
 
@@ -16129,12 +16135,12 @@ msgstr "З мовою"
 msgid "Without language"
 msgstr "Без мови"
 
-#: zotonic_mod_translation/src/models/m_translation_tree.erl:131
-#: zotonic_mod_translation/src/models/m_translation_tree.erl:134
+#: zotonic_mod_translation/src/models/m_translation_tree.erl:152
+#: zotonic_mod_translation/src/models/m_translation_tree.erl:155
 msgid "You are not allowed to edit these pages."
 msgstr "Ви не маєте права редагувати ці сторінки."
 
-#: zotonic_mod_translation/src/models/m_translation_tree.erl:149
+#: zotonic_mod_translation/src/models/m_translation_tree.erl:170
 msgid "You are not allowed to edit this tree."
 msgstr "Вам заборонено редагувати це дерево."
 
