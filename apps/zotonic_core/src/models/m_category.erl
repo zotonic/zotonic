@@ -562,7 +562,15 @@ exact_ranges([], _Context) ->
 exact_ranges(Cat, Context) when not is_list(Cat) ->
     exact_ranges([Cat], Context);
 exact_ranges(CatList, Context) ->
-    FlatCatList = lists:flatten(CatList),
+    FlatCatList = lists:filtermap(
+        fun (Cat) ->
+            case name_to_id(Cat, Context) of
+                {ok, CatId} -> {true, CatId};
+                _ -> false
+            end
+        end,
+        lists:flatten(CatList)
+    ),
     FlatCatTree = tree_flat_meta(Context),
     % turns the flat category tree in a list of elements where categories in the
     % 'CatList' are turned into their exact range (excluding its subcategories)
