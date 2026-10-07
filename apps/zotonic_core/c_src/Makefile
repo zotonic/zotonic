@@ -18,10 +18,10 @@ BUILD_SANDBOX := 1
 else ifeq ($(UNAME_S),Linux)
 
 # Check if sandbox header files are available.
-ifeq ($(call check_header,seccomp.h),0)
-SKIP_REASON := seccomp.h not found (install libseccomp-dev)
-else ifeq ($(call check_header,linux/landlock.h),0)
+ifeq ($(call check_header,linux/landlock.h),0)
 SKIP_REASON := linux/landlock.h not found (install kernel headers)
+else ifeq ($(call check_header,seccomp.h),0)
+SKIP_REASON := seccomp.h not found (install libseccomp-dev)
 else
 BUILD_SANDBOX := 1
 LDLIBS += -lseccomp
