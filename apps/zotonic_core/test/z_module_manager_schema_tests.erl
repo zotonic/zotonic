@@ -24,7 +24,7 @@ schema_cache_test() ->
         end),
         lists:foreach(fun(Outcome) ->
             meck:expect(z_db, transaction, fun(Fun, Ctx) ->
-                Result = Fun(Ctx#context{dbc = schema_transaction}),
+                Result = Fun(Ctx#context{dbc = self()}),
                 ?assertEqual({ok, old_columns}, z_depcache:get(?COLUMNS_KEY, Ctx)),
                 case Outcome of
                     commit -> Result;
@@ -44,7 +44,8 @@ schema_cache_test() ->
     end.
 
 %% @doc Simulate a parallel reader caching the old schema before commit.
-manage_schema(install, #context{dbc = schema_transaction} = Context) ->
+manage_schema(install, #context{dbc = Connection} = Context) when is_pid(Connection) ->
+    ?assertEqual(self(), Connection),
     ok = z_db:flush(Context),
     {Pid, Ref} = spawn_monitor(fun() ->
         ok = z_depcache:set(?COLUMNS_KEY, old_columns, 3600,
