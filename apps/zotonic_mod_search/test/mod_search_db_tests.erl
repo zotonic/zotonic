@@ -748,3 +748,34 @@ connection_qargs(Context) ->
     after
         [m_rsc:delete(Id, Context) || Id <- [A, B, C]]
     end.
+
+%% @doc Test that cat_exact correctly excludes subcategories of the selected categories.
+%% When searching with cat_exact=text, resources in the 'article' subcategory
+%% must not be returned.
+cat_exact_subcategory_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    C = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+
+    {ok, TextId} = m_rsc:insert([
+        {category, text},
+        {title, <<"Cat exact text item">>}
+    ], C),
+    {ok, ArticleId} = m_rsc:insert([
+        {category, article},
+        {title, <<"Cat exact article item">>}
+    ], C),
+
+    Query = #{
+        <<"q">> => [
+            #{ <<"term">> => <<"cat_exact">>, <<"value">> => text },
+            #{ <<"term">> => <<"id">>, <<"value">> => [TextId, ArticleId] }
+        ]
+    },
+    #search_result{ result = Result } = z_search:search(<<"query">>, Query, 1, 100, C),
+
+    ?assert(lists:member(TextId, Result)),
+    ?assertNot(lists:member(ArticleId, Result)),
+
+    m_rsc:delete(TextId, C),
+    m_rsc:delete(ArticleId, C),
+    ok.
