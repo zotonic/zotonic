@@ -147,6 +147,6 @@ code {
 
 .badge-primary,
 .btn .badge.badge-primary {
-    background-color: $brand-primary;
-    color: #fff;
+    background-color: var(--bs-primary);
+    color: var(--bs-badge-color);
 }
