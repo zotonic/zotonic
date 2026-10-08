@@ -5,9 +5,11 @@
         <button id="trans-review-btn-{{ lang_code }}" class="btn btn-xs btn-primary" type="button">
             {_ Approve translation _}
         </button>
+        <a href="{% url admin_translation_texts id=id close=1 %}" target="_showtexts" title="{_ Show all translated texts in a new tab. _}">
+            {_ Show translations _} <span class="fa fa-external-link"></span>
+        </a>
         <br>
         {_ Please review all texts and correct any mistakes. Approve the translation if it is correct. This message will then disappear. _}
-
         <input type="hidden" id="trans-status-{{ lang_code }}" name="translation_status.{{ lang_code }}" value="{{ status }}">
         <hr>
     </div>
