@@ -20,6 +20,18 @@ $font-family-sans-serif: $font-family-sans-serif;
 $font-family-monospace: $font-family-monospace;
 $font-size-root: 14px;
 $font-size-base: 1rem;
+$font-size-sm: calc($font-size-small / $font-size-root) * 1rem;
+$font-size-lg: calc($font-size-large / $font-size-root) * 1rem;
+$h1-font-size: calc($font-size-h1 / $font-size-root) * 1rem;
+$h2-font-size: calc($font-size-h2 / $font-size-root) * 1rem;
+$h3-font-size: calc($font-size-h3 / $font-size-root) * 1rem;
+$h4-font-size: calc($font-size-h4 / $font-size-root) * 1rem;
+$h5-font-size: calc($font-size-h5 / $font-size-root) * 1rem;
+$h6-font-size: calc($font-size-h6 / $font-size-root) * 1rem;
+// Retain Bootstrap 5 responsive heading scaling with the legacy type sizes.
+$small-font-size: 85%;
+$badge-font-size: $font-size-sm;
+$popover-font-size: $font-size-base;
 $line-height-base: $line-height-base;
 
 $border-radius: $border-radius-base;

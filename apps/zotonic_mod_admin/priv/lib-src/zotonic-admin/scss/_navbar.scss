@@ -175,7 +175,10 @@ body.navbar-menu-open {
         }
 
         .navbar-brand {
-            display: flex;
+            // Keep the brand hidden at tablet widths, as defined above.
+            @media (min-width: $screen-small-desktop + 1px) {
+                display: flex;
+            }
             align-items: center;
             height: $navbar-height;
             padding-top: 0;

@@ -1032,6 +1032,29 @@ fieldset[disabled] .btn-primary.active {
   margin-top: 10px;
 }
 
+@media (max-width: 767px) {
+  #dialog-new-rsc-tab .new-find-cols {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+  #dialog-new-rsc-tab .new-find-cols > .form-panel,
+  #dialog-new-rsc-tab .new-find-cols > .rsc-preview-panel-wrapper,
+  #dialog-new-rsc-tab .new-find-cols > .new-find-results {
+    max-height: none;
+    overflow-y: visible;
+  }
+  #dialog-new-rsc-tab .new-find-cols > .new-find-results {
+    grid-column: 1;
+    grid-row: 2;
+    border-left: 0;
+    border-top: 1px solid rgba(215, 215, 215, 0.3);
+  }
+  #dialog-new-rsc-tab .new-find-cols > .new-find-results > #dialog-rsc-new-found {
+    overflow-y: visible;
+  }
+}
 .panel-footer .inline-div {
   display: inline-block;
   margin-left: 20px;
@@ -1136,7 +1159,7 @@ body.cg-system_content_group .system-content-warning, body.cat-meta .system-cont
   display: block;
 }
 body.cg-system_content_group .navbar > div, body.cat-meta .navbar > div, body.name-administrator .navbar > div, body.system-content .navbar > div {
-  border-bottom: 4px solid #f0ad4e;
+  box-shadow: 0 4px 0 #f0ad4e;
 }
 body.cg-system_content_group #sidebar-publish-page .widget-content, body.cat-meta #sidebar-publish-page .widget-content, body.name-administrator #sidebar-publish-page .widget-content, body.system-content #sidebar-publish-page .widget-content {
   border-top: 1px solid #f0ad4e;
@@ -1655,12 +1678,18 @@ body.navbar-menu-open {
     height: 50px !important;
   }
   .navbar.navbar-branded .navbar-brand {
-    display: flex;
     align-items: center;
     height: 50px;
     padding-top: 0;
     padding-bottom: 0;
   }
+}
+@media (min-width: 768px) and (min-width: 1051px) {
+  .navbar.navbar-branded .navbar-brand {
+    display: flex;
+  }
+}
+@media (min-width: 768px) {
   .navbar.navbar-branded .navbar-nav > li > a {
     display: flex;
     align-items: center;

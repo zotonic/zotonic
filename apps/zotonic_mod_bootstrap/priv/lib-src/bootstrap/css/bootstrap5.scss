@@ -24,4 +24,6 @@ $link-decoration: none;
 $link-hover-decoration: underline;
 $input-placeholder-color: #999;
 
+@import "typography";
+
 @import "../scss/bootstrap";

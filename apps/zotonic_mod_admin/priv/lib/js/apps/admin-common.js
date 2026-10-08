@@ -64,6 +64,11 @@ limitations under the License.
         themeApply(theme);
     };
 
+    // Initialize the menu after its items exist, including the default automatic theme.
+    $(function() {
+        themeApply(document.documentElement.getAttribute("data-zotonic-theme") || themePreference());
+    });
+
     if (themeMedia && themeMedia.addEventListener) {
         themeMedia.addEventListener("change", function() {
             if (themePreference() === "auto") {

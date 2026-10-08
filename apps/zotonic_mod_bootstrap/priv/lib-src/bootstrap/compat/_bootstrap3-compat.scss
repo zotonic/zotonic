@@ -83,13 +83,11 @@ $bs3-table-strong-border-width: $border-width * 2 !default;
   --bs-btn-disabled-border-color: var(--bs3-btn-default-disabled-border-color, var(--bs-border-color));
 }
 
-.btn-primary {
-  --bs-btn-color: #fff;
-  --bs-btn-hover-color: #fff;
-  --bs-btn-active-color: #fff;
-  --bs-btn-disabled-color: #fff;
-}
-
+// Bootstrap 3 uses white text for every contextual button state.
+.btn-primary,
+.btn-success,
+.btn-info,
+.btn-warning,
 .btn-danger {
   --bs-btn-color: #fff;
   --bs-btn-hover-color: #fff;
@@ -116,6 +114,12 @@ $bs3-table-strong-border-width: $border-width * 2 !default;
   font-size: $bs3-font-size-small;
   line-height: 1.5;
   border-radius: $border-radius-sm;
+}
+
+// Legacy floated toolbars must be able to wrap their nested button groups.
+.btn-group.pull-right {
+  max-width: 100%;
+  flex-wrap: wrap;
 }
 
 // -----------------------------------------------------------------------------
@@ -152,14 +156,21 @@ button.close {
 .label {
   display: inline-block;
   padding: $badge-padding-y $badge-padding-x;
-  font-size: $badge-font-size;
+  font-size: 75%;
   font-weight: $badge-font-weight;
   line-height: 1;
-  color: $badge-color;
+  color: #fff;
   text-align: center;
   white-space: nowrap;
   vertical-align: baseline;
   border-radius: $border-radius;
+}
+
+// Preserve Bootstrap 3 label text, including linked labels on hover/focus.
+a.label:hover,
+a.label:focus {
+  color: #fff;
+  text-decoration: none;
 }
 
 .label-default { background-color: var(--bs-secondary); }
@@ -216,6 +227,7 @@ button.close {
 }
 
 .panel-title {
+  font-size: 16px;
   margin-top: 0;
   margin-bottom: 0;
 }
@@ -351,14 +363,32 @@ button.close {
   margin-bottom: $bs3-form-group-margin-bottom;
 }
 
+// Keep the base column rules less specific than .col-sm-* / .col-md-*.
+// Bootstrap 3 form groups act as rows without requiring a .row class.
+:where(.form-horizontal .form-group) > * {
+  @include make-col-ready();
+}
+
 .form-horizontal {
   .form-group {
-    display: flex;
-    flex-wrap: wrap;
+    @include make-row();
   }
 
-  .control-label {
-    padding-top: calc(#{$input-padding-y} + #{$input-border-width});
+  @media (min-width: $bs3-screen-sm) {
+    .control-label {
+      padding-top: calc(#{$input-padding-y} + #{$input-border-width});
+    }
+  }
+
+  // Align labels only once their own responsive column becomes active.
+  @each $breakpoint, $width in $grid-breakpoints {
+    @if $width > 0 {
+      @media (min-width: $width) {
+        .control-label[class*="col-#{$breakpoint}-"] {
+          text-align: right;
+        }
+      }
+    }
   }
 }
 
@@ -396,6 +426,15 @@ button.close {
   align-items: stretch;
 }
 
+// Legacy input size names are still used by Bootstrap 3 templates.
+.input-sm {
+  font-size: $font-size-sm;
+}
+
+.input-lg {
+  font-size: $font-size-lg;
+}
+
 .input-mini { width: $spacer * 3.75; }
 .input-small { width: $spacer * 5.625; }
 .input-medium { width: $spacer * 9.375; }
@@ -425,7 +464,6 @@ button.close {
       > td {
         border-top: $table-border-width solid var(--bs-table-border-color);
         border-bottom-width: 0;
-        box-shadow: none;
       }
     }
   }
@@ -451,14 +489,7 @@ button.close {
   }
 }
 
-.table-striped > tbody > tr:nth-of-type(odd) {
-  background-color: var(--bs-table-striped-bg);
-}
-
-.table-hover > tbody > tr:hover {
-  background-color: var(--bs-table-hover-bg);
-}
-
+// Keep Bootstrap 5 cell shading for striped, hover and contextual states.
 .table-condensed {
   > thead,
   > tbody,
@@ -797,7 +828,9 @@ button.close {
     }
   }
 
-  .navbar-right .dropdown-menu {
+  // Override the default left anchor, including its navbar selector specificity.
+  .navbar-right .navbar-nav > li > .dropdown-menu,
+  .navbar-nav.navbar-right > li > .dropdown-menu {
     right: 0;
     left: auto;
   }

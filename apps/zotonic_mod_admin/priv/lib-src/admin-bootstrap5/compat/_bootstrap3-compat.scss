@@ -53,6 +53,14 @@ $bs3-table-strong-border-width: $border-width * 2 !default;
   text-align: right !important;
 }
 
+// Bootstrap 3 lead text grows only at the tablet breakpoint.
+.lead {
+  font-size: 16px;
+  @media (min-width: $bs3-screen-sm) {
+    font-size: 21px;
+  }
+}
+
 // -----------------------------------------------------------------------------
 // Alerts
 .alert-error { @extend .alert-danger; }
@@ -75,13 +83,11 @@ $bs3-table-strong-border-width: $border-width * 2 !default;
   --bs-btn-disabled-border-color: var(--bs3-btn-default-disabled-border-color, #ddd);
 }
 
-.btn-primary {
-  --bs-btn-color: #fff;
-  --bs-btn-hover-color: #fff;
-  --bs-btn-active-color: #fff;
-  --bs-btn-disabled-color: #fff;
-}
-
+// Bootstrap 3 uses white text for every contextual button state.
+.btn-primary,
+.btn-success,
+.btn-info,
+.btn-warning,
 .btn-danger {
   --bs-btn-color: #fff;
   --bs-btn-hover-color: #fff;
@@ -99,6 +105,12 @@ $bs3-table-strong-border-width: $border-width * 2 !default;
 }
 
 .btn-group-xs > .btn { @extend .btn-xs; }
+
+// Legacy floated toolbars must be able to wrap their nested button groups.
+.btn-group.pull-right {
+  max-width: 100%;
+  flex-wrap: wrap;
+}
 
 // -----------------------------------------------------------------------------
 // Close buttons
@@ -133,15 +145,24 @@ button.close {
 // Labels (map to badges)
 .label {
   @extend .badge;
+  font-size: 75%;
+  color: #fff;
   border-radius: $border-radius;
 }
 
-.label-default { @extend .text-bg-secondary; }
-.label-primary { @extend .text-bg-primary; }
-.label-success { @extend .text-bg-success; }
-.label-info { @extend .text-bg-info; }
-.label-warning { @extend .text-bg-warning; }
-.label-danger { @extend .text-bg-danger; }
+// Preserve Bootstrap 3 label text, including linked labels on hover/focus.
+a.label:hover,
+a.label:focus {
+  color: #fff;
+  text-decoration: none;
+}
+
+.label-default { background-color: var(--bs-secondary); }
+.label-primary { background-color: var(--bs-primary); }
+.label-success { background-color: var(--bs-success); }
+.label-info { background-color: var(--bs-info); }
+.label-warning { background-color: var(--bs-warning); }
+.label-danger { background-color: var(--bs-danger); }
 
 // -----------------------------------------------------------------------------
 // Panels (map to cards)
@@ -153,7 +174,7 @@ button.close {
 .panel-heading { @extend .card-header; }
 .panel-body { @extend .card-body; }
 .panel-footer { @extend .card-footer; }
-.panel-title { @extend .card-title; margin-bottom: 0; }
+.panel-title { @extend .card-title; font-size: 16px; margin-bottom: 0; }
 
 .panel-default {
   border-color: var(--bs-border-color);
@@ -260,14 +281,32 @@ button.close {
   margin-bottom: $bs3-form-group-margin-bottom;
 }
 
+// Keep the base column rules less specific than .col-sm-* / .col-md-*.
+// Bootstrap 3 form groups act as rows without requiring a .row class.
+:where(.form-horizontal .form-group) > * {
+  @include make-col-ready();
+}
+
 .form-horizontal {
   .form-group {
-    display: flex;
-    flex-wrap: wrap;
+    @include make-row();
   }
 
-  .control-label {
-    padding-top: calc(#{$input-padding-y} + #{$input-border-width});
+  @media (min-width: $bs3-screen-sm) {
+    .control-label {
+      padding-top: calc(#{$input-padding-y} + #{$input-border-width});
+    }
+  }
+
+  // Align labels only once their own responsive column becomes active.
+  @each $breakpoint, $width in $grid-breakpoints {
+    @if $width > 0 {
+      @media (min-width: $width) {
+        .control-label[class*="col-#{$breakpoint}-"] {
+          text-align: right;
+        }
+      }
+    }
   }
 }
 
@@ -290,6 +329,15 @@ button.close {
 .input-group-btn {
   display: flex;
   align-items: stretch;
+}
+
+// Legacy input size names are still used by Bootstrap 3 templates.
+.input-sm {
+  font-size: $font-size-sm;
+}
+
+.input-lg {
+  font-size: $font-size-lg;
 }
 
 .input-mini { width: $spacer * 3.75; }
@@ -321,7 +369,6 @@ button.close {
       > td {
         border-top: $table-border-width solid var(--bs-table-border-color);
         border-bottom-width: 0;
-        box-shadow: none;
       }
     }
   }
@@ -347,14 +394,7 @@ button.close {
   }
 }
 
-.table-striped > tbody > tr:nth-of-type(odd) {
-  background-color: var(--bs-table-striped-bg);
-}
-
-.table-hover > tbody > tr:hover {
-  background-color: var(--bs-table-hover-bg);
-}
-
+// Keep Bootstrap 5 cell shading for striped, hover and contextual states.
 .table-condensed {
   > thead,
   > tbody,
@@ -693,7 +733,9 @@ button.close {
     }
   }
 
-  .navbar-right .dropdown-menu {
+  // Override the default left anchor, including its navbar selector specificity.
+  .navbar-right .navbar-nav > li > .dropdown-menu,
+  .navbar-nav.navbar-right > li > .dropdown-menu {
     right: 0;
     left: auto;
   }

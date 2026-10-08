@@ -32,7 +32,8 @@ body {
         }
 
         .navbar > div {
-            border-bottom: 4px solid $brand-warning;
+            // Keep the warning stripe outside the fixed-height navbar content.
+            box-shadow: 0 4px 0 $brand-warning;
         }
 
         #sidebar-publish-page {
