@@ -58,3 +58,19 @@ fieldset,
         color: var(--z-admin-text-muted);
     }
 }
+
+// Keep each connection's predicate and endpoint together in the overview filters.
+.admin-filter-connection {
+    margin: 0 0 15px;
+
+    legend {
+        margin-bottom: 6px;
+        border: 0;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .input-group {
+        margin-top: 6px;
+    }
+}

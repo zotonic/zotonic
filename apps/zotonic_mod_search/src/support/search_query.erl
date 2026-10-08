@@ -1990,6 +1990,8 @@ sanitize_op(<<"&">>) -> <<"&">>;
 sanitize_op(<<"&&">>) -> <<"&&">>;
 sanitize_op(<<"<@">>) -> <<"<@">>;
 sanitize_op(<<"@>">>) -> <<"@>">>;
+sanitize_op(<<"like">>) -> <<"like">>;
+sanitize_op(<<"ilike">>) -> <<"ilike">>;
 sanitize_op(Op) when not is_binary(Op) -> sanitize_op(map_filter_operator(Op));
 sanitize_op(_) -> <<"=">>.
 
@@ -2010,6 +2012,8 @@ map_filter_operator('&&') -> <<"&&">>;
 map_filter_operator(overlaps) -> <<"&&">>;
 map_filter_operator('@>') -> <<"@>">>;
 map_filter_operator(contains) -> <<"@>">>;
+map_filter_operator(like) -> <<"like">>;
+map_filter_operator(ilike) -> <<"ilike">>;
 map_filter_operator("=") -> <<"=">>;
 map_filter_operator("<>") -> <<"<>">>;
 map_filter_operator(">") -> <<">">>;
@@ -2033,6 +2037,8 @@ map_filter_operator(<<"&&">>) -> <<"&&">>;
 map_filter_operator(<<"overlaps">>) -> <<"&&">>;
 map_filter_operator(<<"@>">>) -> <<"@>">>;
 map_filter_operator(<<"contains">>) -> <<"@>">>;
+map_filter_operator(<<"like">>) -> <<"like">>;
+map_filter_operator(<<"ilike">>) -> <<"ilike">>;
 map_filter_operator(Op) ->
     ?LOG_WARNING(#{
         in => zotonic_mod_search,

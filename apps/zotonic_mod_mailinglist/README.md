@@ -20,6 +20,14 @@ runs from email logs. Older history cannot be used for duplicate detection;
 the send dialog explicitly warns about this. Deleting a page or list cascades
 its run records. Delivery history otherwise remains intact, including retries.
 
+Schema version 9 reruns the idempotent schema setup to repair sites recorded at
+version 8 that are missing the run tables. It creates missing tables and indexes,
+adds missing run columns, and imports any remaining legacy schedules in the
+schema-upgrade transaction. Existing runs are preserved. Deploy this version
+and restart the module/site to trigger the upgrade before its worker starts.
+A stored version of 8 alone is not proof that the run tables exist; when it
+matches the code version, the module manager does not call the schema setup.
+
 The scheduler atomically claims a run. Recipient preparation freezes the
 current eligible/omitted audience; submission proceeds in batches of 100.
 Preview counts are estimates because membership and translations can change

@@ -236,7 +236,9 @@ postgres(Db) ->
         ),
         z_db:q("insert into rsc(id) values (1),(2),(3)", Context),
         _ = z_mailinglist_schema:manage_schema(install, Context),
+        FreshColumns = schema_columns(Context),
         schema_migration(Context),
+        ?assertEqual(FreshColumns, schema_columns(Context)),
         language_policies(Context),
         recovery_regressions(Context),
         history_pagination(Context),
@@ -255,7 +257,22 @@ postgres(Db) ->
         lists:foreach(fun(M) -> catch meck:unload(M) end, Modules)
     end.
 
+%% Fresh installs and repaired/upgraded tables must have identical column definitions.
+schema_columns(Context) ->
+    z_db:q("select table_name, column_name, data_type, character_maximum_length,
+                   is_nullable, column_default
+            from information_schema.columns
+            where table_schema=current_schema() and table_name like 'mailinglist_%'
+            order by table_name, column_name", Context).
+
 schema_migration(Context) ->
+    %% Reproduce a site recorded at version 8 with only the legacy tables.
+    %% These tables belong to this test's transaction-local schema.
+    RunTables = [mailinglist_run, mailinglist_run_content, mailinglist_run_recipient,
+        mailinglist_run_message, mailinglist_run_stats],
+    z_db:q("drop table mailinglist_run_stats, mailinglist_run_message,
+        mailinglist_run_recipient, mailinglist_run_content, mailinglist_run", Context),
+    ?assertNot(z_db:table_exists(mailinglist_run, Context)),
     z_db:q(
         "insert into mailinglist_scheduled(page_id,mailinglist_id,props) values (1,2,$1)",
         [
@@ -265,12 +282,16 @@ schema_migration(Context) ->
         ],
         Context
     ),
-    _ = z_mailinglist_schema:manage_schema({upgrade, 5}, Context),
+    _ = z_mailinglist_schema:manage_schema({upgrade, 9}, Context),
+    lists:foreach(fun(Table) -> ?assert(z_db:table_exists(Table, Context)) end, RunTables),
+    ?assertEqual(ok, m_mailinglist_run:recover(Context)),
     ?assertEqual(0, z_db:q1("select count(*) from mailinglist_scheduled", Context)),
     ?assertEqual(1, z_db:q1("select count(*) from mailinglist_run", Context)),
     ?assertEqual(<<"all">>, z_db:q1("select send_mode from mailinglist_run", Context)),
-    _ = z_mailinglist_schema:manage_schema({upgrade, 5}, Context),
+    Runs = z_db:q("select * from mailinglist_run", Context),
+    _ = z_mailinglist_schema:manage_schema({upgrade, 9}, Context),
     ?assertEqual(1, z_db:q1("select count(*) from mailinglist_run", Context)),
+    ?assertEqual(Runs, z_db:q("select * from mailinglist_run", Context)),
     z_db:q(
         "alter table mailinglist_run drop column details_expired, drop column first_submitted",
         Context

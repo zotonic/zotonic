@@ -719,3 +719,63 @@ cat_exclude_subcategory_test() ->
     m_rsc:delete(TextId, C),
     m_rsc:delete(ArticleId, C),
     ok.
+
+%% @doc Connection filters must match the resource and predicate on the same edge.
+connection_qargs_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    connection_qargs(z_acl:sudo(z_context:new(zotonic_site_testsandbox))).
+
+%% @doc Check both edge directions, with and without a predicate, using temporary resources.
+connection_qargs(Context) ->
+    Props = #{<<"category_id">> => text, <<"title">> => <<"Connection filter test">>},
+    {ok, A} = m_rsc:insert(Props, Context),
+    {ok, B} = m_rsc:insert(Props, Context),
+    {ok, C} = m_rsc:insert(Props, Context),
+    try
+        {ok, _} = m_edge:insert(A, author, B, Context),
+        {ok, _} = m_edge:insert(A, relation, C, Context),
+        {ok, _} = m_edge:insert(C, relation, B, Context),
+        lists:foreach(fun({Args, Expected}) ->
+            Query = z_search_props:from_qargs(Args),
+            #search_result{result = Ids} = z_search:search(<<"query">>, Query, 1, 100, Context),
+            ?assertEqual(lists:sort(Expected), lists:sort(Ids))
+        end, [
+            {[{<<"qhasobject">>, B}, {<<"qhasobjectpredicate">>, <<"relation">>}], [C]},
+            {[{<<"qhasobject">>, B}, {<<"qhasobjectpredicate">>, <<>>}], [A, C]},
+            {[{<<"qhassubject">>, A}, {<<"qhassubjectpredicate">>, <<"relation">>}], [C]},
+            {[{<<"qhassubject">>, A}, {<<"qhassubjectpredicate">>, <<>>}], [B, C]}
+        ])
+    after
+        [m_rsc:delete(Id, Context) || Id <- [A, B, C]]
+    end.
+
+%% @doc Test that cat_exact correctly excludes subcategories of the selected categories.
+%% When searching with cat_exact=text, resources in the 'article' subcategory
+%% must not be returned.
+cat_exact_subcategory_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    C = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+
+    {ok, TextId} = m_rsc:insert([
+        {category, text},
+        {title, <<"Cat exact text item">>}
+    ], C),
+    {ok, ArticleId} = m_rsc:insert([
+        {category, article},
+        {title, <<"Cat exact article item">>}
+    ], C),
+
+    Query = #{
+        <<"q">> => [
+            #{ <<"term">> => <<"cat_exact">>, <<"value">> => text },
+            #{ <<"term">> => <<"id">>, <<"value">> => [TextId, ArticleId] }
+        ]
+    },
+    #search_result{ result = Result } = z_search:search(<<"query">>, Query, 1, 100, C),
+
+    ?assert(lists:member(TextId, Result)),
+    ?assertNot(lists:member(ArticleId, Result)),
+
+    m_rsc:delete(TextId, C),
+    m_rsc:delete(ArticleId, C),
+    ok.

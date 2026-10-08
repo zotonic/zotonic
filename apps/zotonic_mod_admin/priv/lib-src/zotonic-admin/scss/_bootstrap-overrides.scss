@@ -144,3 +144,9 @@
 code {
 	padding: 0;
 }
+
+.badge-primary,
+.btn .badge.badge-primary {
+    background-color: $brand-primary;
+    color: #fff;
+}

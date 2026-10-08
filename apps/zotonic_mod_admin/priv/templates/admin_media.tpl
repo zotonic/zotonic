@@ -25,6 +25,11 @@
                     <div class="btn-group pull-right">
                         <button class="btn btn-default" id="btn-filter">
                             <i class="glyphicon glyphicon-filter"></i> {_ Filter _}...
+                            {% with q.qargs|admin_filter_count as active_filter_count %}
+                                {% if active_filter_count %}
+                                    <span class="badge badge-primary" title="{_ Active filters _}">{{ active_filter_count }}<span class="sr-only"> {_ active filters _}</span></span>
+                                {% endif %}
+                            {% endwith %}
                         </button>
                         {% wire id="btn-filter"action={slide_toggle target="filter-panel"} %}
 

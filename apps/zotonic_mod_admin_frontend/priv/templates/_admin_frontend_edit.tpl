@@ -100,12 +100,13 @@
 					        {_ Language _}
 					    </div>
 					    <div class="widget-content">
-					    	<p class="help-block">{_ Enabled or disable language tabs. _}</p>
+					    	<p class="help-block">{_ Enable or disable language tabs. _}</p>
 							{% optional include "_translation_edit_languages.tpl" %}
 
 					    	<p class="help-block">{_ Add a translation or copy texts between languages. _}</p>
 							<div class="padding" style="padding-top: 0">
 								{% include "_admin_translation_tabs_extra.tpl" button %}
+								{% optional include "_translation_tree_button.tpl" %}
 							</div>
 						</div>
 					</div>
@@ -160,9 +161,11 @@
 					// Also switch language dependent parts that are not inside the tab panes.
 					$(".widget-content-lang-" + hideLang).hide()
 					$(".widget-content-lang-" + showLang).show();
-
-					setTimeout( () => z_editor.init(), 1 );
 				}
+			});
+			$('#rscform').on('shown.bs.tab', '[data-toggle="tab"]', function () {
+				// Language changes can leave uninitialized editors in hidden tabs, including survey tabs.
+				setTimeout( () => z_editor.init(), 1 );
 			});
 			{% if tab %}
 				$("li a[href='#{{ tab|escape }}'").tab("show");

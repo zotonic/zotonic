@@ -27,6 +27,7 @@
 -export([
     status/0,
     status/1,
+    is_low_load/1,
     close_connections/0,
     close_connections/1,
     pause_connections/1,
@@ -63,6 +64,22 @@ status(Context) ->
                     {z_context:site(Context), {0,0}}
             end
     end.
+
+%% @doc Admission check for optional work: fewer than half the connections
+%% are checked out. Counts worker slots, including workers whose idle SQL
+%% connections have closed. An unavailable or unresponsive pool is not low load.
+-spec is_low_load(Context) -> boolean() when
+    Context :: z:context().
+is_low_load(#context{db = {Pool, _}}) ->
+    % Use a short status timeout; optional work must not wait for the pool.
+    try gen_server:call(Pool, status, 100) of
+        {ready, Available, 0, Busy} when Available > Busy -> true;
+        _ -> false
+    catch
+        exit:_ -> false
+    end;
+is_low_load(_Context) ->
+    false.
 
 close_connections() ->
     Ctxs = z_sites_manager:get_site_contexts(),

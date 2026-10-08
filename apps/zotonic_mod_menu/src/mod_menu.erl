@@ -54,7 +54,7 @@ This module handles the following notifier callbacks:
 - `observe_admin_menu`: Add menu management entries to the admin menu.
 - `observe_menu_get_rsc_ids`: Notifier handler to get all menu ids for the default menu using `m_rsc:name_to_id`.
 - `observe_menu_save`: Validate and persist edited menu trees after converting names to resource ids.
-- `observe_rsc_get`: Normalize stored menu values by converting old tuple formats to `#rsc_tree` structures.
+- `observe_rsc_get_raw`: Normalize stored menu values by converting old tuple formats to `#rsc_tree` structures.
 - `observe_rsc_update`: Validate and normalize submitted menu structures during resource updates.
 - `observe_rsc_update_done`: Rebuild `hasmenupart` edges after menu changes so referenced resources are tracked correctly.
 
@@ -80,7 +80,7 @@ Delegate callbacks:
 
     observe_menu_get_rsc_ids/2,
     observe_menu_save/2,
-    observe_rsc_get/3,
+    observe_rsc_get_raw/3,
     observe_admin_menu/3,
     observe_rsc_update/3,
     observe_rsc_update_done/2,
@@ -158,15 +158,15 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
     end.
 
 %% @doc Ensure that menus in the old tuple format are translated to #rsc_tree
-observe_rsc_get(#rsc_get{}, #{ <<"menu">> := [] } = R, _Context) ->
+observe_rsc_get_raw(#rsc_get_raw{}, #{ <<"menu">> := [] } = R, _Context) ->
     R;
-observe_rsc_get(#rsc_get{}, #{ <<"menu">> := [ #rsc_tree{} | _ ] } = R, _Context) ->
+observe_rsc_get_raw(#rsc_get_raw{}, #{ <<"menu">> := [ #rsc_tree{} | _ ] } = R, _Context) ->
     R;
-observe_rsc_get(#rsc_get{}, #{ <<"menu">> := Menu } = R, _Context) ->
+observe_rsc_get_raw(#rsc_get_raw{}, #{ <<"menu">> := Menu } = R, _Context) ->
     R#{
         <<"menu">> => validate(Menu, [])
     };
-observe_rsc_get(#rsc_get{}, R, _Context) ->
+observe_rsc_get_raw(#rsc_get_raw{}, R, _Context) ->
     R.
 
 

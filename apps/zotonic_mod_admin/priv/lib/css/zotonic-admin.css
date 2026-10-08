@@ -685,6 +685,12 @@ code {
   padding: 0;
 }
 
+.badge-primary,
+.btn .badge.badge-primary {
+  background-color: #0fa2db;
+  color: #fff;
+}
+
 .z-btn-remove {
   color: var(--z-admin-btn-remove-color);
 }
@@ -1396,6 +1402,19 @@ fieldset > label.checkbox > input[type=radio],
 .form__import_medium.checkbox label:has(input:disabled),
 .form__subscribe .checkbox label:has(input:disabled) {
   color: var(--z-admin-text-muted);
+}
+
+.admin-filter-connection {
+  margin: 0 0 15px;
+}
+.admin-filter-connection legend {
+  margin-bottom: 6px;
+  border: 0;
+  font-size: 14px;
+  font-weight: bold;
+}
+.admin-filter-connection .input-group {
+  margin-top: 6px;
 }
 
 img.thumb {

@@ -2,7 +2,7 @@
 
 <div class="row">
 
-    <div class="col-sm-4">
+    <div class="col-md-6 col-lg-4">
         {% with m.rsc[qargs.qquery_id].id as query_id %}
         {% with m.search.query::%{
                             cat: 'admin_content_query'
@@ -16,8 +16,8 @@
         %}
         {% if admin_queries or query_id %}
             <div class="form-group">
-                <label class="col-sm-3 control-label">{_ Query _}</label>
-                <div class="col-sm-9">
+                <label class="col-md-3 control-label">{_ Query _}</label>
+                <div class="col-md-9">
                     <select name="qquery_id" class="form-control">
                         <option value=""></option>
                         {% if query_id and not query_id|member:admin_queries %}
@@ -38,15 +38,15 @@
         {% endwith %}
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">{_ Text _}</label>
-            <div class="col-sm-9">
+            <label class="col-md-3 control-label">{_ Text _}</label>
+            <div class="col-md-9">
                 <input type="text" name="qs" class="form-control" value="{{ qargs.qs|escape }}">
             </div>
         </div>
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">{_ Published _}</label>
-            <div class="col-sm-4">
+            <label class="col-md-3 control-label">{_ Published _}</label>
+            <div class="col-md-4">
                 <select name="qis_published" class="form-control col-md-8">
                     <option value=""></option>
                     <option value="1" {% if q.qis_published %}selected{% endif %}>{_ Published _}</option>
@@ -61,8 +61,8 @@
         {% block category %}
             {% with m.rsc[qargs.qcat].id as cat_id %}
                 <div class="form-group">
-                    <label class="col-sm-3 control-label">{_ Category _}</label>
-                    <div class="col-sm-9">
+                    <label class="col-md-3 control-label">{_ Category _}</label>
+                    <div class="col-md-9">
                         <select name="qcat" class="form-control">
                             <option value=""></option>
                             {% for c in m.category.tree_flat %}
@@ -79,8 +79,8 @@
 
             {% with m.rsc[qargs.qcat_exact].id as cat_id %}
                 <div class="form-group">
-                    <label class="col-sm-3 control-label">{_ Exact category _}</label>
-                    <div class="col-sm-9">
+                    <label class="col-md-3 control-label">{_ Exact category _}</label>
+                    <div class="col-md-9">
                         <select name="qcat_exact" class="form-control">
                             <option value=""></option>
                             {% for c in m.category.tree_flat %}
@@ -97,8 +97,8 @@
 
             {% with m.rsc[qargs.qcat_exclude].id as cat_id %}
                 <div class="form-group">
-                    <label class="col-sm-3 control-label">{_ Exclude category _}</label>
-                    <div class="col-sm-9">
+                    <label class="col-md-3 control-label">{_ Exclude category _}</label>
+                    <div class="col-md-9">
                         <select name="qcat_exclude" class="form-control">
                             <option value=""></option>
                             {% for c in m.category.tree_flat %}
@@ -117,51 +117,9 @@
         {% block content_group %}
         {% endblock %}
 
-        {% block meta_after %}
-        {% endblock %}
-    </div>
-
-    <div class="col-sm-4">
-        {% block properties %}
-        {% endblock %}
-
-        {% with m.search.all_bytitle::%{ cat: 'predicate', pagelen: 1000 } as predicates %}
-            {% with qargs.qhasobjectpredicate as qpred %}
-            <div class="form-group">
-                <label class="col-sm-3 control-label">{_ Has connections with predicate _}</label>
-                <div class="col-sm-9">
-                    <select name="qhasobjectpredicate" class="form-control col-md-8">
-                        <option value=""></option>
-                        {% for title, id in predicates %}
-                            <option value="{{ id }}" {% if id == qpred %}selected{% endif %}>
-                                {{ title }}
-                            </option>
-                        {% endfor %}
-                    </select>
-                </div>
-            </div>
-            {% endwith %}
-
-            {% with qargs.qhassubjectpredicate as qpred %}
-            <div class="form-group">
-                <label class="col-sm-3 control-label">{_ Is connected with predicate _}</label>
-                <div class="col-sm-9">
-                    <select name="qhassubjectpredicate" class="form-control">
-                        <option value=""></option>
-                        {% for title, id in predicates %}
-                            <option value="{{ id }}" {% if id == qpred %}selected{% endif %}>
-                                {{ title }}
-                            </option>
-                        {% endfor %}
-                    </select>
-                </div>
-            </div>
-            {% endwith %}
-        {% endwith %}
-
         <div class="form-group">
-            <label class="col-sm-3 control-label">{_ Date start/end _}</label>
-            <div class="col-sm-9">
+            <label class="col-md-3 control-label">{_ Date start/end _}</label>
+            <div class="col-md-9">
                 <label class="checkbox">
                     <input type="checkbox" name="qupcoming" value="1" {% if q.qupcoming %}checked{% endif %}>
                     {_ Upcoming _}
@@ -177,28 +135,48 @@
             </div>
         </div>
 
-        <div class="form-group">
-            <label class="col-sm-3 control-label">{_ Has medium attached _}</label>
-            <div class="col-sm-4">
-                <select name="qhasmedium" class="form-control">
-                    <option value=""></option>
-                    <option value="1"{% if qargs.qhasmedium %}selected{% endif %}>{_ Has medium _}</option>
-                    <option value="0" {% if qargs.qhasmedium == '0' %}selected{% endif %}>{_ No medium _}</option>
-                </select>
-            </div>
-        </div>
+        {% block meta_after %}
+        {% endblock %}
+    </div>
+
+    <div class="col-md-6 col-lg-4">
+        {% block properties %}
+        {% endblock %}
+
+        {% block connections %}
+            {% with m.search.all_bytitle::%{ cat: 'predicate', pagelen: 1000 } as predicates %}
+                {% include "_admin_overview_filter_connection.tpl"
+                    name="qhasobject"
+                    value=qargs.qhasobject
+                    predicate_name="qhasobjectpredicate"
+                    predicate_value=qargs.qhasobjectpredicate
+                    label=_"Connected to"
+                    page_label=_"Page connected to"
+                    placeholder=_"Any page"
+                %}
+                {% include "_admin_overview_filter_connection.tpl"
+                    name="qhassubject"
+                    value=qargs.qhassubject
+                    predicate_name="qhassubjectpredicate"
+                    predicate_value=qargs.qhassubjectpredicate
+                    label=_"Connected from"
+                    page_label=_"Page connected from"
+                    placeholder=_"Any page"
+                %}
+            {% endwith %}
+        {% endblock %}
 
         {% block properties_after %}
         {% endblock %}
     </div>
 
-    <div class="col-sm-4">
+    <div class="col-md-6 col-lg-4">
         {% block flags %}
         {% endblock %}
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">{_ Featured _}</label>
-            <div class="col-sm-4">
+            <label class="col-md-3 control-label">{_ Featured _}</label>
+            <div class="col-md-4">
                 <select name="qis_featured" class="form-control">
                     <option value=""></option>
                     <option value="1"{% if qargs.qis_featured %}selected{% endif %}>{_ Featured _}</option>
@@ -208,8 +186,8 @@
         </div>
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">{_ Findable _}</label>
-            <div class="col-sm-4">
+            <label class="col-md-3 control-label">{_ Findable _}</label>
+            <div class="col-md-4">
                 <select name="qis_findable" class="form-control">
                     <option value=""></option>
                     <option value="1"{% if qargs.qis_findable %}selected{% endif %}>{_ Findable _}</option>
@@ -219,8 +197,8 @@
         </div>
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">{_ Protected _}</label>
-            <div class="col-sm-4">
+            <label class="col-md-3 control-label">{_ Protected _}</label>
+            <div class="col-md-4">
                 <select name="qis_protected" class="form-control">
                     <option value=""></option>
                     <option value="1"{% if qargs.qis_protected %}selected{% endif %}>{_ Protected _}</option>
@@ -230,8 +208,8 @@
         </div>
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">{_ Dependent _}</label>
-            <div class="col-sm-4">
+            <label class="col-md-3 control-label">{_ Dependent _}</label>
+            <div class="col-md-4">
                 <select name="qis_dependent" class="form-control">
                     <option value=""></option>
                     <option value="1" {% if qargs.qis_dependent %}selected{% endif %}>{_ Dependent _}</option>
@@ -241,8 +219,8 @@
         </div>
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">{_ Authoritative _}</label>
-            <div class="col-sm-4">
+            <label class="col-md-3 control-label">{_ Authoritative _}</label>
+            <div class="col-md-4">
                 <select name="qis_authoritative" class="form-control">
                     <option value=""></option>
                     <option value="1" {% if qargs.qis_authoritative %}selected{% endif %}>{_ Local content _}</option>
@@ -251,12 +229,23 @@
             </div>
         </div>
 
+        <div class="form-group">
+            <label class="col-md-3 control-label">{_ Has medium attached _}</label>
+            <div class="col-md-4">
+                <select name="qhasmedium" class="form-control">
+                    <option value=""></option>
+                    <option value="1"{% if qargs.qhasmedium %}selected{% endif %}>{_ Has medium _}</option>
+                    <option value="0" {% if qargs.qhasmedium == '0' %}selected{% endif %}>{_ No medium _}</option>
+                </select>
+            </div>
+        </div>
+
         {% block flags_after %}
         {% endblock %}
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">{_ Unique name _}</label>
-            <div class="col-sm-9">
+            <label class="col-md-3 control-label">{_ Unique name _}</label>
+            <div class="col-md-9">
                 <input type="text" name="qname" class="form-control" value="{{ qargs.qname|escape }}">
             </div>
         </div>
@@ -264,8 +253,8 @@
         {% block sort %}
             {% with qargs.qsort as qsort %}
                 <div class="form-group">
-                    <label class="col-sm-3 control-label">{_ Sort by _}</label>
-                    <div class="col-sm-9">
+                    <label class="col-md-3 control-label">{_ Sort by _}</label>
+                    <div class="col-md-9">
                         <select name="qsort" class="form-control">
                             <option value=""></option>
                             {% for name, title in [

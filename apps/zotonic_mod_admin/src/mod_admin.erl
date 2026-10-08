@@ -330,6 +330,21 @@ With the configuration `mod_admin.rsc_dialog_hide_dependent` the *dependent* che
 If the `mod_admin.connect_created_me` is set then the connect dialogs will per default filter for content made by the
 current user. The current setting is stored in the sessionStorage with the key `dialog_connect_created_me`.
 
+Bulk updates and connections
+----------------------------
+
+The bulk-update dialog can update properties and add connections to all selected pages. **Add connections from** adds
+an edge from the chosen page to each selected page. **Add connections to** adds an edge from each selected page to
+the chosen page. Each direction has its own searchable page picker and predicate selector. A page and predicate
+must be selected together; leaving both empty makes no connection changes. Existing connections remain, and adding
+an existing edge does not create a duplicate.
+
+The `update_all` submit handler delegates to `z_admin_bulk_update:update/3`. It consumes `bulk_subject_id`,
+`bulk_subject_predicate`, `bulk_object_id`, and `bulk_object_predicate` as connection controls, without storing them
+as resource properties. Both selections are validated before any updates. Every selected page must be editable,
+and normal edge-insertion permissions apply. Failed operations are logged and reported to the user; successful
+changes are retained, so a failure can leave a partially applied bulk update.
+
 Accepted Events
 ---------------
 
@@ -367,7 +382,7 @@ Delegate callbacks:
         #{
             key => connect_created_me,
             type => boolean,
-            default => true,
+            default => false,
             description => "If true, the connect dialog will set per default the 'created by me' filter."
         },
         #{
@@ -909,36 +924,16 @@ event(#submit{ message = {delete_all, Args}}, Context) ->
 event(#submit{ message = {update_all, Args}}, Context) ->
     case proplists:get_value(ids, Args) of
         Ids when is_list(Ids) ->
-            Props = z_context:get_q_all_noz(Context),
-            Update = lists:foldl(
-                fun
-                    ({_P, <<>>}, Acc) ->
-                        Acc;
-                    ({P, V}, Acc) ->
-                        Acc#{
-                            P => V
-                        }
-                end,
-                #{},
-                Props),
-            lists:foreach(
-                fun(Id) ->
-                    case m_rsc:update(Id, Update, Context) of
-                        {ok, _} ->
-                            ok;
-                        {error, Reason} ->
-                            ?LOG_WARNING(#{
-                                in => zotonic_mod_admin,
-                                text => <<"Error during bulk update of resources">>,
-                                id => Id,
-                                update => Update,
-                                result => error,
-                                reason => Reason
-                            })
-                    end
-                end,
-                Ids),
-            z_render:wire(proplists:get_all_values(on_success, Args), Context);
+            Fields = maps:from_list(z_context:get_q_all_noz(Context)),
+            case z_admin_bulk_update:update(Ids, Fields, Context) of
+                {ok, 0} ->
+                    z_render:wire(proplists:get_all_values(on_success, Args), Context);
+                {ok, _Failed} ->
+                    Context1 = z_render:wire(proplists:get_all_values(on_success, Args), Context),
+                    z_render:growl_error(?__("Some pages or connections could not be updated. Check your permissions. Other changes may have been saved.", Context), Context1);
+                {error, connections} ->
+                    z_render:growl_error(?__("Select both a visible page and a valid predicate for each connection.", Context), Context)
+            end;
         _ ->
             Context
     end;
