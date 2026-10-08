@@ -49,12 +49,12 @@
                      | binary
                      | text
                      | html
-                     | int
+                     | integer
                      | datetime
                      | list
                      | language
                      | float
-                     | bool
+                     | boolean
                      | uri
                      | email
                      | unsafe.
@@ -219,7 +219,7 @@ property_name_type_hint(Key)
     when Key =:= <<"version">>;
          Key =:= <<"visible_for">>;
          Key =:= <<"privacy">> ->
-    int;
+    integer;
 property_name_type_hint(Key)
     when Key =:= <<"created">>;
          Key =:= <<"modified">>;
@@ -244,14 +244,14 @@ property_name_type_hint(Key)
     float;
 property_name_type_hint(Key)
   when Key =:= <<"location_zoom_level">> ->
-    int;
+    integer;
 property_name_type_hint(<<"is_", _/binary>>) ->
-    bool;
+    boolean;
 property_name_type_hint(<<"date_is_", _/binary>>) ->
-    bool;
+    boolean;
 property_name_type_hint(Key)
     when Key =:= <<"seo_noindex">> ->
-    bool;
+    boolean;
 property_name_type_hint(Key)
     when Key =:= <<"@id">>;
          Key =:= <<"website">> ->
@@ -273,7 +273,7 @@ property_name_type_hint(Key)
     text;
 property_name_type_hint(Key) ->
     case extract_type(Key, <<>>) of
-        <<"int">> -> int;
+        <<"int">> -> integer;
         <<"url">> -> uri;
         <<"uri">> -> uri;
         <<"email">> -> email;

@@ -1,0 +1,92 @@
+Parameterized SPARQL queries
+============================
+
+`z_sparql:search/3`, `z_sparql:search/4`, `m.sparql` and
+`m.search.sparql` accept a map of pre-bound query variables. The model/search
+forms place that map in the `args` key next to the SPARQL `query`. Values remain
+PostgreSQL parameters throughout SQL generation, which prevents potential injection
+attacks against the SPARQL queries.
+
+The argument map is semantically similar to adding `VALUES` bindings to the
+query, but it is applied by the query planner rather than by rewriting SPARQL
+source text.
+
+Example query:
+
+    SELECT ?r ?title
+    WHERE {
+        ?r zotonic:is_published ?published .
+        ?r zotonic:date_start ?date_start .
+        ?r zotonic:relation ?related .
+        ?r zotonic:title ?title .
+
+        FILTER (?date_start >= ?since)
+    }
+
+Arguments:
+
+    #{
+        <<"published">> => false,
+        <<"since">> => {{2008, 12, 10}, {0, 0, 0}},
+        <<"related">> => {rsc, RelatedId}
+    }
+
+Execute with the default page length:
+
+    z_sparql:search(Sparql, Arguments, Context)
+
+Or with explicit Zotonic search pagination:
+
+    z_sparql:search(Sparql, Arguments, {1, 20}, Context)
+
+This is equivalent in intent to bindings such as:
+
+    PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+    VALUES ?published { false }
+    VALUES ?since { "2008-12-10T00:00:00Z"^^xsd:dateTime }
+    VALUES ?related { <https://example.test/id/123> }
+
+
+Accepted argument names
+-----------------------
+
+Names can be non-empty binaries or atoms. Atoms are converted to UTF-8 binary
+variable names. Supplying the same name once as an atom and once as a binary is
+rejected as a duplicate argument.
+
+
+Accepted argument values
+------------------------
+
+    undefined                 Unbound variable (SPARQL UNDEF semantics)
+    true, false               boolean
+    integer()                 integer
+    float()                   float
+    binary()                  text
+    atom()                    UTF-8 text, except true/false/undefined
+    unicode character list    text
+    {Y, M, D}                 datetime at 00:00:00
+    {{Y, M, D}, {H, I, S}}    datetime
+    {iri, BinaryIri}          IRI
+    {rsc, Reference}          Zotonic resource reference resolved by m_rsc
+
+For JSON model clients, values with an RDF type use an object with `type` and
+`value` members:
+
+    { "type": "resource", "value": 123 }
+    { "type": "rsc",      "value": "page_name" }
+    { "type": "iri",      "value": "https://example.test/id/123" }
+    { "type": "date",     "value": "2008-12-10" }
+    { "type": "datetime", "value": "2008-12-10T11:12:13Z" }
+
+Invalid dates, invalid Unicode lists, empty/invalid argument names and other
+structured Erlang values return an error.
+
+A pre-bound resource variable accepts `{rsc, Reference}` or `{iri, Iri}`. For a
+resource position, integer and text arguments are also resolved through
+`m_rsc:rid/2`. Scalar expression arguments retain their normalized type so that
+the SQL expression mapper can infer or validate casts.
+
+The query-level SPARQL `LIMIT` and `OFFSET` syntax is parsed but rejected by SQL
+generation. Use Zotonic's `page` and `pagelen` search arguments, or the explicit
+`OffsetLimit` argument shown above.

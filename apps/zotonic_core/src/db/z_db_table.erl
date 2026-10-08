@@ -29,6 +29,7 @@
     column/3,
     column/4,
     assert_table_name/1,
+    assert_column_name/1,
     assert_database_name/1,
     assert_schema_name/1,
     quoted_table_name/1,
@@ -234,6 +235,35 @@ assert_table_name1b(<<H, T/binary>>) when (H >= $a andalso H =< $z) ->
     assert_table_name1b(T);
 assert_table_name1b(<<H, T/binary>>) when (H >= $0 andalso H =< $9) ->
     assert_table_name1b(T).
+
+%% @doc Check if a name is a valid SQL table name. Crashes when invalid
+-spec assert_column_name( z_db:column_name() ) -> true.
+assert_column_name(A) when is_atom(A) ->
+    assert_column_name1(atom_to_list(A));
+assert_column_name([ C | _ ] = Table) when C =/= $. ->
+    assert_column_name1(Table);
+assert_column_name(<< C,  _/binary>> = Table) when C =/= $. ->
+    assert_column_name1b(Table).
+
+assert_column_name1([]) -> true;
+assert_column_name1([$_|T]) -> assert_column_name1(T);
+assert_column_name1([$.|T]) -> assert_column_name1(T);
+assert_column_name1([H|T]) when (H >= $a andalso H =< $z) ->
+    assert_column_name1(T);
+assert_column_name1([H|T]) when (H >= $A andalso H =< $Z) ->
+    assert_column_name1(T);
+assert_column_name1([H|T]) when (H >= $0 andalso H =< $9) ->
+    assert_column_name1(T).
+
+assert_column_name1b(<<>>) -> true;
+assert_column_name1b(<<$_, T/binary>>) -> assert_column_name1b(T);
+assert_column_name1b(<<$., T/binary>>) -> assert_column_name1b(T);
+assert_column_name1b(<<H, T/binary>>) when (H >= $a andalso H =< $z) ->
+    assert_column_name1b(T);
+assert_column_name1b(<<H, T/binary>>) when (H >= $A andalso H =< $Z) ->
+    assert_column_name1b(T);
+assert_column_name1b(<<H, T/binary>>) when (H >= $0 andalso H =< $9) ->
+    assert_column_name1b(T).
 
 %% @doc Check if a name is a valid SQL database name. Crashes when invalid
 -spec assert_database_name( string() ) -> true.

@@ -51,6 +51,7 @@ It is not exposed as a standalone model path endpoint.
     delete_nocheck/3,
 
     to_slug/1,
+    is_protected/2,
     normalize_page_path/1
 ]).
 
@@ -1509,9 +1510,11 @@ update_transaction_fun_db_1({ok, UpdatePropsN}, Id, RscUpd, Raw, IsABefore, IsCa
         orelse is_update_allowed(IsInsert, Id, NewPropsLangPruned, Context)
     of
         true ->
-            case (IsInsert orelse is_changed(Raw, NewPropsDiffPub)) of
+            case (IsInsert orelse maps:is_key(<<"privacy">>, UpdatePropsN) orelse is_changed(Raw, NewPropsDiffPub)) of
                 true ->
-                    UpdatePropsPrePivoted = z_pivot_rsc:pivot_resource_update(Id, NewPropsDiffPub, Raw, Context),
+                    PrivacyChanges = maps:merge(NewPropsDiffPub, maps:with([<<"privacy">>], UpdatePropsN)),
+                    StoredDefaults = z_rsc_defaults:prepare(Id, PrivacyChanges, Raw, Context),
+                    UpdatePropsPrePivoted = z_pivot_rsc:pivot_resource_update(Id, StoredDefaults, Raw, Context),
                     case z_db:update(rsc, Id, UpdatePropsPrePivoted, Context) of
                         {ok, 1} ->
                             ok = update_page_path_log(Id, Raw, NewPropsDiffPub, Context),
@@ -1749,23 +1752,32 @@ preflight_check_uri(Id, #{ <<"uri">> := Uri }, Context) when Uri =/= undefined -
 preflight_check_uri(_Id, _Props, _Context) ->
     ok.
 
-preflight_check_query(Id, #{ <<"query">> := Query }, Context) when Query =/= undefined ->
-    try
-        SearchContext = z_context:new( Context ),
-        search_query:search(z_search_props:from_text(z_html:unescape(Query)), SearchContext),
-        ok
-    catch
-        _:Reason:Stack ->
-            ?LOG_WARNING(#{
-                in => zotonic_core,
-                text => <<"Error in preflight test of query text">>,
-                rsc_id => Id,
-                result => error,
-                reason => Reason,
-                stack => Stack,
-                query => Query
-            }),
-            {error, invalid_query}
+preflight_check_query(Id, #{ <<"query">> := Query } = Props, Context) when Query =/= undefined ->
+    case z_utils:is_empty(z_string:trim(z_convert:to_binary(Query))) of
+        true ->
+            ok;
+        false ->
+            SearchContext = z_context:new(Context),
+            QueryType = maps:get(<<"query_type">>, Props, undefined),
+            case search_query_resource:parse(
+                z_html:unescape(Query),
+                QueryType,
+                #{},
+                SearchContext)
+            of
+                {ok, _Parsed} ->
+                    ok;
+                {error, Reason} ->
+                    ?LOG_WARNING(#{
+                        in => zotonic_core,
+                        text => <<"Error in preflight test of query text">>,
+                        rsc_id => Id,
+                        query_type => QueryType,
+                        result => error,
+                        reason => Reason
+                    }),
+                    {error, invalid_query}
+            end
     end;
 preflight_check_query(_Id, _Props, _Context) ->
     ok.
@@ -2178,12 +2190,19 @@ is_slugchar(C) -> z_url:url_unreserved_char(C).
 
 
 %% @doc Properties that can't be updated with m_rsc_update:update/3 or m_rsc_update:insert/2
+%% Normal updates also protect authorship and timestamps; imports/no-touch updates do not.
+-spec is_protected(Property, IsNormal) -> boolean() when
+    Property :: binary(),
+    IsNormal :: boolean().
 is_protected(<<"id">>, _IsNormal) -> true;
 is_protected(<<"created">>, true) -> true;
 is_protected(<<"creator_id">>, true) -> true;
 is_protected(<<"modified">>, true) -> true;
 is_protected(<<"modifier_id">>, true) -> true;
 is_protected(<<"props">>, _IsNormal) -> true;
+is_protected(<<"props_json">>, _IsNormal) -> true;
+%% Do not let the removed legacy provenance field reappear in props_json.
+is_protected(<<"privacy_is_default">>, _IsNormal) -> true;
 is_protected(<<"version">>, _IsNormal) -> true;
 is_protected(<<"short_url">>, _IsNormal) -> true;
 is_protected(<<"page_url">>, _IsNormal) -> true;
@@ -2192,7 +2211,7 @@ is_protected(<<"alternate_page_url">>, _IsNormal) -> true;
 is_protected(<<"alternate_page_url_abs">>, _IsNormal) -> true;
 is_protected(<<"email_raw">>, _IsNormal) -> true;
 is_protected(<<"medium">>, _IsNormal) -> true;
-is_protected(<<"pivot_", _binary>>, _IsNormal) -> true;
+is_protected(<<"pivot_", _/binary>>, _IsNormal) -> true;
 is_protected(<<"computed_", _/binary>>, _IsNormal) -> true;
 is_protected(<<"*", _/binary>>, _IsNormal) -> true;
 is_protected(_, _IsNormal) -> false.

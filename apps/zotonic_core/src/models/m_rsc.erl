@@ -193,6 +193,8 @@ Available Model API Paths
 
 -behaviour(zotonic_model).
 
+-export([resolve_defaults/3]).
+
 -export([
     m_get/3,
     m_post/3,
@@ -247,6 +249,7 @@ Available Model API Paths
 
     name_lookup/2,
     uri/2,
+    uri_prefix/1,
     uri_lookup/2,
     remember_uri/3,
     uri_alias/2,
@@ -604,8 +607,7 @@ get_cached_unsafe(Id, Context) when is_integer(Id) ->
             % be cached in the depcache.
             case get_raw(Id, false, Context) of
                 {ok, Map} ->
-                    MapDT = ensure_utc_dates(Map, Context),
-                    z_notifier:foldr(#rsc_get{ id = Id }, MapDT, Context);
+                    resolve_defaults(Id, Map, Context);
                 {error, nodb} ->
                     undefined;
                 {error, enoent} ->
@@ -615,6 +617,12 @@ get_cached_unsafe(Id, Context) when is_integer(Id) ->
         Id,
         ?WEEK,
         Context).
+
+%% @doc Apply the same normalization and module defaults for reads and stored defaults.
+-spec resolve_defaults(resource_id(), map(), z:context()) -> map().
+resolve_defaults(Id, Props, Context) ->
+    Map = ensure_utc_dates(Props, Context),
+    z_notifier:foldr(#rsc_get{id = Id}, Map, Context).
 
 -spec filter_props_acl(resource(), map() | undefined, z:context()) -> map() | undefined.
 filter_props_acl(_Id, undefined, _Context) ->
@@ -678,9 +686,10 @@ get_raw(Id, IsLock, Context) when ?is_valid_rsc_id(Id) ->
         true -> z_convert:to_list(SQL) ++ " for update";
         false -> z_convert:to_list(SQL)
     end,
-    case z_db:qmap_props_row(SQL1, [ Id ], [ {keys, binary} ], Context) of
+    case z_db:qmap_row(SQL1, [ Id ], [ {keys, binary} ], Context) of
         {ok, Map} ->
-            {ok, z_notifier:foldr(#rsc_get_raw{ id = Id, is_props_only = false }, map_language_atoms(Map), Context)};
+            Raw = merge_raw_props(Map),
+            {ok, z_notifier:foldr(#rsc_get_raw{ id = Id, is_props_only = false }, map_language_atoms(Raw), Context)};
         {error, _} = Error ->
             Error
     end;
@@ -690,6 +699,23 @@ get_raw(undefined, _IsLock, _Context) ->
     {error, enoent};
 get_raw(Id, IsLock, Context) ->
     get_raw(rid(Id, Context), IsLock, Context).
+
+%% Merge one database snapshot: columns take precedence over JSON and legacy props.
+%% Only the -1 migration marker falls back to stored privacy. SQL guards continue
+%% to use that marker until migration writes the effective value to the column.
+merge_raw_props(Row) ->
+    Props = maps:merge(raw_props_map(maps:get(<<"props">>, Row, undefined)),
+                      raw_props_map(maps:get(<<"props_json">>, Row, undefined))),
+    Columns = maps:without([<<"props">>, <<"props_json">>], Row),
+    Merged = maps:merge(Props, Columns),
+    case maps:get(<<"privacy">>, Columns, undefined) of
+        -1 -> Merged#{<<"privacy">> => maps:get(<<"privacy">>, Props, undefined)};
+        _ -> Merged
+    end.
+
+raw_props_map(Props) when is_map(Props) -> Props;
+raw_props_map(Props) when is_list(Props) -> z_props:from_props(Props);
+raw_props_map(_) -> #{}.
 
 %% The languages are stored as a psql array, map to the internal atom
 %% representation. On update this is mapped to binaries in z_db:update/3.
@@ -1278,6 +1304,32 @@ uri_dispatch(Id, Context) ->
             iolist_to_binary(z_context:abs_url(Url, Context))
     end.
 
+%% @doc Return the language-neutral URI prefix for authoritative resources.
+%% This is the absolute base URL of the <code>id</code> dispatch rule, up to its <code>id</code>
+%% argument. It can be used as an RDF namespace for local resources.
+-spec uri_prefix(z:context()) -> binary().
+uri_prefix(Context) ->
+    MemoKey = {?MODULE, uri_prefix, z_context:site(Context)},
+    case z_memo:get(MemoKey) of
+        undefined ->
+            z_memo:set(MemoKey, uri_prefix_1(Context));
+        Prefix ->
+            Prefix
+    end.
+
+uri_prefix_1(Context) ->
+    ContextNoLang = z_context:set_language('x-default', Context),
+    Placeholder = integer_to_binary(?MAX_RSC_ID),
+    Url = case z_dispatcher:url_for(id, [{id, Placeholder}], ContextNoLang) of
+        undefined -> <<"/id/", Placeholder/binary>>;
+        DispatchUrl -> DispatchUrl
+    end,
+    AbsoluteUrl = iolist_to_binary(z_context:abs_url(Url, ContextNoLang)),
+    case binary:split(AbsoluteUrl, Placeholder) of
+        [Prefix, _Suffix] -> Prefix;
+        [_] -> iolist_to_binary(z_context:abs_url(<<"/id/">>, ContextNoLang))
+    end.
+
 is_named_meta(Id, Context) ->
     case p_cached(Id, <<"name">>, Context) of
         Empty when Empty =:= <<>>; Empty =:= undefined ->
@@ -1562,11 +1614,42 @@ uri_lookup_1(Uri, Context) ->
     case z_db:q1("select id from rsc where uri = $1", [Uri], Context) of
         undefined ->
             case m_rsc_gone:get_uri(Uri, Context) of
-                undefined -> uri_alias(Uri, Context);
-                Gone -> proplists:get_value(new_id, Gone)
+                undefined ->
+                    case zotonic_uri_lookup(Uri, Context) of
+                        undefined ->
+                            % Check for mappings known for common Zotonic categories.
+                            case z_rdf_props:category_mapping(Uri) of
+                                undefined -> uri_alias(Uri, Context);
+                                Category -> name_lookup(Category, Context)
+                            end;
+                        Id ->
+                            Id
+                    end;
+                Gone ->
+                  proplists:get_value(new_id, Gone)
             end;
         Id ->
             Id
+    end.
+
+%% @doc Resolve compact and full Zotonic IRIs against the current site.
+zotonic_uri_lookup(<<"zotonic:", NameOrId/binary>>, Context) ->
+    zotonic_name_or_id_lookup(NameOrId, Context);
+zotonic_uri_lookup(<<"http://zotonic.net/predicate/", NameOrId/binary>>, Context) ->
+    zotonic_name_or_id_lookup(NameOrId, Context);
+zotonic_uri_lookup(_Uri, _Context) ->
+    undefined.
+
+zotonic_name_or_id_lookup(NameOrId, Context) ->
+    case z_utils:only_digits(NameOrId) of
+        true ->
+            Id = binary_to_integer(NameOrId),
+            case exists(Id, Context) of
+                true -> Id;
+                false -> undefined
+            end;
+        false ->
+            name_lookup(NameOrId, Context)
     end.
 
 
@@ -1636,6 +1719,16 @@ local_uri_to_id(<<"/">> = Path, Context) ->
 local_uri_to_id(<<"/", C, _/binary>> = Path, Context) when C =/= $/ ->
     local_uri_to_id_1(Path, Context);
 local_uri_to_id(Uri, Context) ->
+    Prefix = uri_prefix(Context),
+    PrefixSize = byte_size(Prefix),
+    case Uri of
+        <<Prefix:PrefixSize/binary, NameOrId/binary>> ->
+            zotonic_name_or_id_lookup(NameOrId, Context);
+        _ ->
+            local_uri_to_id_dispatch(Uri, Context)
+    end.
+
+local_uri_to_id_dispatch(Uri, Context) ->
     Site = z_context:site(Context),
     case z_sites_dispatcher:dispatch_url(Uri) of
         {ok, #{
