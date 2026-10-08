@@ -1873,7 +1873,7 @@ table.do_adminLinkedTable .admin-list-thumb > img {
   margin: 0 10px 0 0;
 }
 .table > thead > tr > th {
-  border-width: 1px;
+  border-bottom-width: 1px;
 }
 
 .table tbody tr.clickable td,

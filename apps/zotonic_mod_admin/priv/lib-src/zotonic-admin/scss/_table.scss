@@ -87,7 +87,8 @@ table.do_adminLinkedTable {
 }
 
 .table > thead > tr > th {
-    border-width: 1px;
+    // Bootstrap 5 gives every side a solid border style; only resize the divider.
+    border-bottom-width: 1px;
 }
 .table tbody tr.clickable td,
 .table tbody tr.clickable th,
