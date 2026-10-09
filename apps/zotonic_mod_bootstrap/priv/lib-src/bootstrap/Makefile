@@ -1,0 +1,41 @@
+BOOTSTRAP_SCSS_DIR = scss
+OUT_DIR = ../../lib/bootstrap/css
+
+SASS ?= sass
+SASS_FLAGS ?= --no-source-map
+
+SOURCES = $(shell find scss compat css -name "*.scss")
+
+all: $(OUT_DIR)/bootstrap.css $(OUT_DIR)/bootstrap.min.css $(OUT_DIR)/bootstrap5.css $(OUT_DIR)/bootstrap5.min.css $(OUT_DIR)/bootstrap-theme.css $(OUT_DIR)/bootstrap-theme.min.css $(OUT_DIR)/bootstrap3-compat.css $(OUT_DIR)/bootstrap3-compat.min.css
+
+$(OUT_DIR)/bootstrap.css: css/bootstrap.scss $(BOOTSTRAP_SCSS_DIR)/bootstrap.scss compat/_bootstrap3-compat.scss $(SOURCES)
+	mkdir -p $(OUT_DIR)
+	$(SASS) $(SASS_FLAGS) $< $@
+
+$(OUT_DIR)/bootstrap.min.css: css/bootstrap.scss $(BOOTSTRAP_SCSS_DIR)/bootstrap.scss compat/_bootstrap3-compat.scss $(SOURCES)
+	mkdir -p $(OUT_DIR)
+	$(SASS) $(SASS_FLAGS) --style=compressed $< $@
+
+$(OUT_DIR)/bootstrap5.css: css/bootstrap5.scss $(BOOTSTRAP_SCSS_DIR)/bootstrap.scss $(SOURCES)
+	mkdir -p $(OUT_DIR)
+	$(SASS) $(SASS_FLAGS) $< $@
+
+$(OUT_DIR)/bootstrap5.min.css: css/bootstrap5.scss $(BOOTSTRAP_SCSS_DIR)/bootstrap.scss $(SOURCES)
+	mkdir -p $(OUT_DIR)
+	$(SASS) $(SASS_FLAGS) --style=compressed $< $@
+
+$(OUT_DIR)/bootstrap-theme.css: css/bootstrap-theme.scss $(BOOTSTRAP_SCSS_DIR)/bootstrap.scss compat/_bootstrap3-compat.scss $(SOURCES)
+	mkdir -p $(OUT_DIR)
+	$(SASS) $(SASS_FLAGS) $< $@
+
+$(OUT_DIR)/bootstrap-theme.min.css: css/bootstrap-theme.scss $(BOOTSTRAP_SCSS_DIR)/bootstrap.scss compat/_bootstrap3-compat.scss $(SOURCES)
+	mkdir -p $(OUT_DIR)
+	$(SASS) $(SASS_FLAGS) --style=compressed $< $@
+
+$(OUT_DIR)/bootstrap3-compat.css: css/bootstrap3-compat.scss compat/_bootstrap3-compat.scss $(SOURCES)
+	mkdir -p $(OUT_DIR)
+	$(SASS) $(SASS_FLAGS) $< $@
+
+$(OUT_DIR)/bootstrap3-compat.min.css: css/bootstrap3-compat.scss compat/_bootstrap3-compat.scss $(SOURCES)
+	mkdir -p $(OUT_DIR)
+	$(SASS) $(SASS_FLAGS) --style=compressed $< $@

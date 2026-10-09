@@ -10,7 +10,7 @@
 }
 
 .keyword-dashboard__resource-count {
-  color: #6b7780;
+  color: var(--z-admin-text-muted, var(--bs-secondary-color));
   font-variant-numeric: tabular-nums;
   text-align: right;
 }
@@ -74,7 +74,7 @@
 .keyword-usage__label > span {
   display: block;
   overflow: hidden;
-  color: #263238;
+  color: var(--z-admin-text, var(--bs-body-color));
   font-weight: 600;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -82,7 +82,7 @@
 .keyword-usage__label small {
   display: block;
   overflow: hidden;
-  color: #6b7780;
+  color: var(--z-admin-text-muted, var(--bs-secondary-color));
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -93,28 +93,28 @@
   overflow: hidden;
   border: 0;
   border-radius: 999px;
-  background: #edf2f5;
-  color: #0fa2db;
+  background: var(--bs-secondary-bg);
+  color: var(--bs-primary);
 }
 
 .keyword-usage progress::-webkit-progress-bar {
   border-radius: 999px;
-  background: #edf2f5;
+  background: var(--bs-secondary-bg);
 }
 
 .keyword-usage progress::-webkit-progress-value {
   border-radius: 999px;
-  background: #0fa2db;
+  background: var(--bs-primary);
 }
 
 .keyword-usage progress::-moz-progress-bar {
   border-radius: 999px;
-  background: #0fa2db;
+  background: var(--bs-primary);
 }
 
 .keyword-usage__count {
   min-width: 3ch;
-  color: #263238;
+  color: var(--z-admin-text, var(--bs-body-color));
   font-variant-numeric: tabular-nums;
   font-weight: 700;
   text-align: right;
@@ -123,11 +123,11 @@
 .keyword-overlap-matrix {
   max-height: 72vh;
   overflow: auto;
-  border: 1px solid #dce3e7;
+  border: 1px solid var(--z-admin-border, var(--bs-border-color));
   border-radius: 4px;
 }
 .keyword-overlap-matrix:focus {
-  outline: 3px solid rgba(15, 162, 219, 0.35);
+  outline: 3px solid rgba(var(--bs-primary-rgb), 0.35);
   outline-offset: 2px;
 }
 
@@ -136,10 +136,10 @@
   margin: 0 auto;
   border-collapse: separate;
   border-spacing: 2px;
-  background: white;
+  background: var(--z-admin-surface, var(--bs-body-bg));
 }
 .keyword-overlap-matrix__table th {
-  color: #263238;
+  color: var(--z-admin-text, var(--bs-body-color));
   font-size: 12px;
   font-weight: 600;
 }
@@ -149,7 +149,7 @@
   z-index: 2;
   height: 130px;
   padding: 8px 5px;
-  background: white;
+  background: var(--z-admin-surface, var(--bs-body-bg));
   vertical-align: bottom;
 }
 .keyword-overlap-matrix__table tbody th {
@@ -159,7 +159,7 @@
   max-width: 190px;
   padding: 7px 10px;
   overflow: hidden;
-  background: white;
+  background: var(--z-admin-surface, var(--bs-body-bg));
   text-align: right;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -189,60 +189,66 @@
   height: 38px;
   padding: 3px;
   border-radius: 3px;
-  color: #263238;
+  color: var(--z-admin-text, var(--bs-body-color));
   font-size: 11px;
   font-variant-numeric: tabular-nums;
   text-align: center;
 }
 .keyword-overlap-matrix__cell.is-diagonal {
-  background: #dfe5e8;
+  background: var(--bs-secondary-bg);
   font-weight: 700;
 }
 .keyword-overlap-matrix__cell.is-level-0 {
-  background: #f4f7f8;
-  color: #65727a;
+  background: color-mix(in srgb, var(--bs-primary-border-subtle) 0%, var(--bs-primary-bg-subtle));
+  color: var(--z-admin-text, var(--bs-body-color));
 }
 .keyword-overlap-matrix__cell.is-level-1 {
-  background: #e8f5fb;
+  background: color-mix(in srgb, var(--bs-primary-border-subtle) 10%, var(--bs-primary-bg-subtle));
+  color: var(--z-admin-text, var(--bs-body-color));
 }
 .keyword-overlap-matrix__cell.is-level-2 {
-  background: #d2ecf7;
+  background: color-mix(in srgb, var(--bs-primary-border-subtle) 20%, var(--bs-primary-bg-subtle));
+  color: var(--z-admin-text, var(--bs-body-color));
 }
 .keyword-overlap-matrix__cell.is-level-3 {
-  background: #b8e2f3;
+  background: color-mix(in srgb, var(--bs-primary-border-subtle) 30%, var(--bs-primary-bg-subtle));
+  color: var(--z-admin-text, var(--bs-body-color));
 }
 .keyword-overlap-matrix__cell.is-level-4 {
-  background: #92d3ec;
+  background: color-mix(in srgb, var(--bs-primary-border-subtle) 40%, var(--bs-primary-bg-subtle));
+  color: var(--z-admin-text, var(--bs-body-color));
 }
 .keyword-overlap-matrix__cell.is-level-5 {
-  background: #65c1e4;
+  background: color-mix(in srgb, var(--bs-primary-border-subtle) 50%, var(--bs-primary-bg-subtle));
+  color: var(--z-admin-text, var(--bs-body-color));
 }
 .keyword-overlap-matrix__cell.is-level-6 {
-  background: #32addd;
+  background: color-mix(in srgb, var(--bs-primary-border-subtle) 60%, var(--bs-primary-bg-subtle));
+  color: var(--z-admin-text, var(--bs-body-color));
 }
 .keyword-overlap-matrix__cell.is-level-7 {
-  background: #0f9acb;
-  color: white;
+  background: color-mix(in srgb, var(--bs-primary-border-subtle) 70%, var(--bs-primary-bg-subtle));
+  color: var(--z-admin-text, var(--bs-body-color));
 }
 .keyword-overlap-matrix__cell.is-level-8 {
-  background: #087eaa;
-  color: white;
+  background: color-mix(in srgb, var(--bs-primary-border-subtle) 80%, var(--bs-primary-bg-subtle));
+  color: var(--z-admin-text, var(--bs-body-color));
 }
 .keyword-overlap-matrix__cell.is-level-9 {
-  background: #066589;
-  color: white;
+  background: color-mix(in srgb, var(--bs-primary-border-subtle) 90%, var(--bs-primary-bg-subtle));
+  color: var(--z-admin-text, var(--bs-body-color));
 }
 .keyword-overlap-matrix__cell.is-level-10 {
-  background: #044b66;
-  color: white;
+  background: color-mix(in srgb, var(--bs-primary-border-subtle) 100%, var(--bs-primary-bg-subtle));
+  color: var(--z-admin-text, var(--bs-body-color));
 }
 
 .keyword-pairs {
   margin-bottom: 0;
 }
 .keyword-pairs .is-active {
-  background-color: #e8f5fb;
-  color: #075d7c;
+  background-color: var(--bs-primary-bg-subtle);
+  color: var(--bs-primary-text-emphasis);
   font-weight: 700;
 }
 .keyword-pairs td small {

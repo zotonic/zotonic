@@ -506,6 +506,57 @@ function z_growl_close() {
   $.noticeRemove($(".notice-item-wrapper"), 400);
 }
 
+/**
+ * Apply and remember a UI theme: "light", "dark", or "auto".
+ * Automatic mode resolves to the current system color scheme.
+ * Returns false for invalid names without changing the theme or storage.
+ * Storage failures do not prevent applying a valid theme to the current page.
+ *
+ * @param {string} theme The selected theme, for example z_ui_theme_set("dark").
+ * @returns {boolean} Whether the theme name is valid and was applied.
+ */
+function z_ui_theme_set(theme) {
+  if (theme !== "light" && theme !== "dark" && theme !== "auto") {
+    return false;
+  }
+
+  const resolved = theme === "auto"
+    ? (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+    : theme;
+
+  document.documentElement.setAttribute("data-bs-theme", resolved);
+  document.documentElement.setAttribute("data-zotonic-theme", theme);
+  try {
+    localStorage.setItem("zotonic-theme", JSON.stringify(theme));
+  } catch (e) {
+    // The current page can still use the theme when storage is unavailable.
+  }
+  return true;
+}
+
+/**
+ * Get the selected UI theme, preserving "auto" instead of resolving it.
+ * Prefer the applied page preference, then localStorage, and default to "light".
+ *
+ * @returns {string} "light", "dark", or "auto".
+ */
+function z_ui_theme_get() {
+  const theme = document.documentElement.getAttribute("data-zotonic-theme");
+  if (theme === "light" || theme === "dark" || theme === "auto") {
+    return theme;
+  }
+
+  try {
+    const stored = JSON.parse(localStorage.getItem("zotonic-theme"));
+    if (stored === "light" || stored === "dark" || stored === "auto") {
+      return stored;
+    }
+  } catch (e) {
+    // Missing or unreadable preferences use the default theme.
+  }
+  return "light";
+}
+
 /* Registered events for javascript triggered actions/postbacks
 ---------------------------------------------------------- */
 
