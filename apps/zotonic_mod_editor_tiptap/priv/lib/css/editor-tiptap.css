@@ -1,0 +1,196 @@
+/* Copyright 2026 Zotonic. Apache-2.0. Editor controls and required layout. */
+textarea[data-tiptap-installed] {
+  display: none !important;
+}
+
+.z-tiptap-error {
+  padding: 8px 12px;
+  color: #a32020;
+}
+
+.z-tiptap {
+  --editor-border: #c5c9ce;
+  --editor-focus: #087a9d;
+  --editor-surface: #fff;
+  --editor-controls: #f3f4f5;
+  color: #262a2e;
+  background: var(--editor-surface);
+  border: 1px solid var(--editor-border);
+  border-radius: 4px;
+  max-width: 100%;
+  min-width: 0;
+  margin-bottom: 1rem;
+  letter-spacing: 0;
+}
+.z-tiptap:focus-within {
+  border-color: var(--editor-focus);
+}
+
+.z-tiptap-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 3px;
+  padding: 5px;
+  border-bottom: 1px solid var(--editor-border);
+  background: var(--editor-controls);
+  border-radius: 4px 4px 0 0;
+}
+
+.z-tiptap-toolbar button,
+.z-tiptap-toolbar select,
+.z-tiptap-link-panel button {
+  font: inherit;
+  font-size: 13px;
+  color: inherit;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  height: 32px;
+  margin: 0;
+  padding: 4px 6px;
+  cursor: pointer;
+  box-shadow: none;
+  line-height: 1;
+}
+
+.z-tiptap-toolbar button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+}
+.z-tiptap-toolbar button svg {
+  flex: none;
+}
+.z-tiptap-toolbar select {
+  max-width: 145px;
+  border-color: var(--editor-border);
+}
+.z-tiptap-toolbar button:hover:not(:disabled), .z-tiptap-toolbar button[aria-pressed=true] {
+  background: #deedf1;
+  border-color: #b4cdd5;
+}
+.z-tiptap-toolbar button:focus-visible,
+.z-tiptap-toolbar select:focus-visible {
+  outline: 2px solid var(--editor-focus);
+  outline-offset: 1px;
+}
+.z-tiptap-toolbar button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.z-tiptap-separator {
+  height: 20px;
+  border-left: 1px solid var(--editor-border);
+  margin: 0 3px;
+}
+
+.z-tiptap-link-panel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px;
+  border-bottom: 1px solid var(--editor-border);
+}
+.z-tiptap-link-panel input {
+  flex: 1;
+  min-width: 120px;
+  max-width: 100%;
+  padding: 5px;
+  border: 1px solid var(--editor-border);
+}
+.z-tiptap-link-panel button {
+  border-color: var(--editor-border);
+}
+
+.z-tiptap-content {
+  min-width: 0;
+  overflow-x: auto;
+}
+
+.z-tiptap .ProseMirror {
+  position: relative;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  outline: none;
+}
+.z-tiptap .ProseMirror pre {
+  white-space: pre-wrap;
+}
+.z-tiptap .ProseMirror li {
+  position: relative;
+}
+.z-tiptap .ProseMirror-hideselection *::selection {
+  background: transparent;
+}
+.z-tiptap .ProseMirror-hideselection {
+  caret-color: transparent;
+}
+.z-tiptap .ProseMirror-selectednode {
+  outline: 2px solid var(--editor-focus);
+}
+.z-tiptap .ProseMirror-gapcursor {
+  display: none;
+  pointer-events: none;
+  position: absolute;
+  margin: 0;
+}
+.z-tiptap .ProseMirror-gapcursor::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: -2px;
+  width: 20px;
+  border-top: 1px solid currentColor;
+}
+.z-tiptap .ProseMirror-focused .ProseMirror-gapcursor {
+  display: block;
+}
+.z-tiptap .selectedCell {
+  background-color: #e1eef5;
+}
+
+.z-tiptap-fullscreen {
+  overflow: hidden;
+}
+
+.z-tiptap.is-fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 1040;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  border-radius: 0;
+}
+.z-tiptap.is-fullscreen .z-tiptap-content {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+.z-tiptap.is-fullscreen .z-tiptap-body {
+  max-width: 900px;
+  margin-inline: auto;
+  min-height: 100%;
+}
+
+.z-tiptap-media-preview {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 480px) {
+  .z-tiptap-toolbar {
+    gap: 2px;
+  }
+  .z-tiptap-toolbar button {
+    min-width: 34px;
+    height: 34px;
+  }
+  .z-tiptap-separator {
+    margin: 0 1px;
+  }
+}
