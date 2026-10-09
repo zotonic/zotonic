@@ -35,6 +35,11 @@ Core base module providing fundamental dispatch rules, actions, and template com
 Theme initialization
 --------------------
 
+The selected UI theme depends on the site.ui_theme configuration. If the config is set
+to 'user' then the user can select a theme, and if they did not select one then the
+theme defaults to 'auto'.  Any other ui_theme ('auto', 'dark', or 'light') fixes that
+theme and disables the theme selector in the admin interface.
+
 The common HTML head includes `_html_head_theme_init.tpl`. This template runs a
 small inline script before the main CSS is applied, so pages start with the right
 theme and avoid a light/dark flash during rendering.
@@ -94,8 +99,8 @@ This module handles the following notifier callbacks:
             module => site,
             key => ui_theme,
             type => string,
-            default => "",
-            description => "Set to the 'auto', 'light' or 'dark' to fix the UI theme and remove the admin theme selector."
+            default => <<"light">>,
+            description => "Set to 'auto', 'light' or 'dark' to fix the UI theme. Set to 'user' to let the user select their theme."
         },
         #{
             module => site,

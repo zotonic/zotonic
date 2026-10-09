@@ -118,7 +118,7 @@ Available Model API Paths
 | `get` | `/is_ssl/...` | Return whether the site is currently considered SSL-enabled. |
 | `get` | `/title/...` | Return the configured site title as binary text. |
 | `get` | `/subtitle/...` | Return the configured site subtitle as binary text (empty binary when unset). |
-| `get` | `/ui_theme/...` | Return the configured fixed UI theme (`light`, `dark`, or `auto`) (undefined when unset). |
+| `get` | `/ui_theme/...` | Return the configured fixed UI theme (`light`, `dark`, `auto` or `user`) ('light' when unset). |
 | `get` | `/email_from/...` | Return the effective sender address used for outgoing email. |
 | `get` | `/pagelen/...` | Return default search page length (configured value or fallback default). |
 | `get` | `/language/...` | Return the current request language. |
@@ -177,7 +177,14 @@ m_get([ <<"subtitle">> | Rest ], _Msg, Context) ->
     end,
     {ok, {SubTitle, Rest}};
 m_get([ <<"ui_theme">> | Rest ], _Msg, Context) ->
-    {ok, {m_config:get_value(site, ui_theme, Context), Rest}};
+    Theme = case m_config:get_value(site, ui_theme, Context) of
+        <<"dark">> -> <<"dark">>;
+        <<"light">> -> <<"light">>;
+        <<"auto">> -> <<"auto">>;
+        <<"user">> -> <<"user">>;
+        _ -> <<"light">>
+    end,
+    {ok, {Theme, Rest}};
 m_get([ <<"email_from">> | Rest ], _Msg, Context) ->
     EmailFrom = z_email:get_email_from(Context),
     {ok, {EmailFrom, Rest}};
