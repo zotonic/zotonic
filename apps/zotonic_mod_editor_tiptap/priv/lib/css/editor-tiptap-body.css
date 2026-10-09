@@ -1,0 +1,157 @@
+/* Copyright 2026 Zotonic. Apache-2.0.
+ * Generic body typography. Sites can override this asset or add scoped rules
+ * through _editor_tiptap_head.tpl without changing the editor controls.
+ */
+.z-tiptap-body {
+  box-sizing: border-box;
+  display: flow-root;
+  min-height: 240px;
+  padding: 20px 24px;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #24282c;
+  background: #fff;
+  text-align: start;
+  letter-spacing: 0;
+}
+.z-tiptap-body > :first-child {
+  margin-top: 0;
+}
+.z-tiptap-body > :last-child {
+  margin-bottom: 0;
+}
+.z-tiptap-body p {
+  margin: 0 0 1em;
+}
+.z-tiptap-body h1,
+.z-tiptap-body h2,
+.z-tiptap-body h3,
+.z-tiptap-body h4,
+.z-tiptap-body h5,
+.z-tiptap-body h6 {
+  font-family: inherit;
+  font-weight: 600;
+  line-height: 1.25;
+  color: inherit;
+  margin: 1.5em 0 0.6em;
+}
+.z-tiptap-body h1 {
+  font-size: 30px;
+}
+.z-tiptap-body h2 {
+  font-size: 25px;
+}
+.z-tiptap-body h3 {
+  font-size: 21px;
+}
+.z-tiptap-body h4 {
+  font-size: 18px;
+}
+.z-tiptap-body h5,
+.z-tiptap-body h6 {
+  font-size: 16px;
+}
+.z-tiptap-body a {
+  color: #076b91;
+  text-decoration: underline;
+  cursor: text;
+}
+.z-tiptap-body ul,
+.z-tiptap-body ol {
+  margin: 0 0 1em;
+  padding-inline-start: 1.75em;
+}
+.z-tiptap-body ul {
+  list-style: disc;
+}
+.z-tiptap-body ol {
+  list-style: decimal;
+}
+.z-tiptap-body li > p {
+  margin: 0.2em 0;
+}
+.z-tiptap-body li > ul,
+.z-tiptap-body li > ol {
+  margin-bottom: 0.3em;
+}
+.z-tiptap-body blockquote {
+  border-inline-start: 3px solid #92a3a8;
+  margin: 1em 0;
+  padding: 0.3em 1em;
+  color: #4b555a;
+  font-size: inherit;
+}
+.z-tiptap-body pre {
+  padding: 12px;
+  border-radius: 3px;
+  background: #f0f2f3;
+  font-size: 14px;
+}
+.z-tiptap-body code {
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  background: #f0f2f3;
+  color: inherit;
+}
+.z-tiptap-body hr {
+  border: 0;
+  border-top: 1px solid #c5c9ce;
+  margin: 1.5em 0;
+}
+.z-tiptap-body table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+  margin: 1em 0;
+}
+.z-tiptap-body td,
+.z-tiptap-body th {
+  border: 1px solid #b9c1c6;
+  min-width: 40px;
+  padding: 6px 9px;
+  vertical-align: top;
+  position: relative;
+}
+.z-tiptap-body th {
+  font-weight: 600;
+  background: #f0f2f3;
+}
+.z-tiptap-body td > p,
+.z-tiptap-body th > p {
+  margin-bottom: 0.3em;
+}
+.z-tiptap-body img {
+  max-width: 100%;
+  height: auto;
+}
+.z-tiptap-body .z-tiptap-media {
+  border: 1px solid #b9c1c6;
+  cursor: pointer;
+}
+.z-tiptap-body .z-tiptap-media-block {
+  display: block;
+  clear: both;
+  margin: 1em auto;
+}
+.z-tiptap-body .z-tiptap-media-left {
+  float: left;
+  margin: 0.4em 1em 0.5em 0;
+}
+.z-tiptap-body .z-tiptap-media-right {
+  float: right;
+  margin: 0.4em 0 0.5em 1em;
+}
+.z-tiptap-body .z-tiptap-media-small {
+  width: 25%;
+}
+.z-tiptap-body .z-tiptap-media-middle {
+  width: 50%;
+}
+.z-tiptap-body .z-tiptap-media-large {
+  width: 90%;
+}
+@media (max-width: 480px) {
+  .z-tiptap-body {
+    padding: 14px;
+  }
+}
