@@ -1054,6 +1054,30 @@ option {
   color: black;
 }
 
+legend {
+  width: 100%;
+  padding: 15px 0 0;
+  margin-bottom: 15px;
+  border: 0;
+  color: inherit;
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1.1;
+}
+legend::before {
+  content: "";
+  display: block;
+  height: 1px;
+  margin-bottom: 15px;
+  background-color: #ddd;
+}
+
+.widget-content legend::before {
+  margin-left: -15px;
+  margin-right: -15px;
+}
+
 fieldset > label > input[type=checkbox],
 fieldset > label > input[type=radio],
 fieldset > label.radio > input[type=checkbox],
@@ -1085,10 +1109,14 @@ fieldset > label.checkbox > input[type=radio],
   margin: 0 0 15px;
 }
 .admin-filter-connection legend {
+  padding: 0;
   margin-bottom: 6px;
   border: 0;
   font-size: 14px;
   font-weight: bold;
+}
+.admin-filter-connection legend::before {
+  display: none;
 }
 .admin-filter-connection .input-group {
   margin-top: 6px;

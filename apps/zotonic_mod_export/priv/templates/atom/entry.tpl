@@ -2,6 +2,7 @@
     {% with id.medium as medium %}
         <entry xmlns="http://www.w3.org/2005/Atom" xmlns:gd="http://schemas.google.com/g/2005" xml:lang="{{ z_language }}">
             <id>{{ id.uri|escapexml }}</id>
+            <link rel="https://zotonic.com/rel/resource" type="application/json" href="{% url api_rsc_export id=id absolute_url %}" />
             <updated>{{ id.modified|date:"c" }}</updated>
             <published>{{ id.publication_start|date:"c" }}</published>
             <author>{% with id.o.author[1]|default:id.creator_id as author_id %}
