@@ -21,10 +21,10 @@
         {% if m.import_feed.can_select_user %}
             {% if user_id %}
                 {% button class="btn btn-default btn-sm" text=_"Change user"
-                    postback=`select_user` delegate=`mod_import_feed` %}
+                          postback={select_user} delegate=`mod_import_feed` %}
             {% else %}
                 {% button class="btn btn-default btn-sm" text=_"Select user"
-                    postback=`select_user` delegate=`mod_import_feed` %}
+                          postback={select_user} delegate=`mod_import_feed` %}
             {% endif %}
         {% endif %}
     </div>

@@ -1,11 +1,12 @@
 {% if m.import_feed.can_select_user %}
+
     {% with m.search[{users text=search_text users_only=true pagelen=50}] as users %}
         <ul class="list-unstyled">
             {% for id in users %}
                 <li>
-                    {% button class="btn btn-default" text=id.title|default:id
-                        postback={choose_user id=id} delegate=`mod_import_feed` %}
-                    <small>{{ m.identity[id].username|escape }}</small>
+                    {% wire id=#select.id postback={choose_user id=id} delegate="mod_import_feed" %}
+                    <button id="{{ #select.id }}" class="btn btn-default">{{ id.title | default:m.identity[id].username | default:id }}</button>
+                    <small>{{ m.identity[id].username | escape }}</small>
                 </li>
             {% empty %}
                 <li>{_ No users found. _}</li>

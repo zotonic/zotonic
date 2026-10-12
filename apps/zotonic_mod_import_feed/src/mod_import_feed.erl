@@ -209,10 +209,13 @@ handle(#postback{message = {admin_connect_select, Args}}, C) ->
             z_render:wire({dialog_close, []}, C1);
         {error, Reason} -> failure(Reason, C)
     end;
-handle(#postback{message = select_user}, C) ->
-    case m_import_feed:can_select_user(C) andalso not z_acl:is_read_only(C) of
-        true -> z_render:dialog(?__("Select import user", C), "_admin_import_feed_user_dialog.tpl", [], C);
-        false -> failure(eacces, C)
+handle(#postback{message={select_user, _Args}}, Context) ->
+    case m_import_feed:can_select_user(Context) andalso not z_acl:is_read_only(Context) of
+        true ->
+            z_render:dialog(?__("Select import user", Context),
+                            "_admin_import_feed_user_dialog.tpl", [], Context);
+        false ->
+            failure(eacces, Context)
     end;
 handle(#submit{message = search_users}, C) ->
     case m_import_feed:can_select_user(C) of
