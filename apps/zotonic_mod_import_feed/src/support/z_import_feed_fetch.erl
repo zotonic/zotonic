@@ -22,10 +22,10 @@
     when FeedId :: integer(), Id :: integer(), Uri :: binary(), Context :: z:context().
 run(FeedId, Id, Uri, Context) ->
     %% Lock the configuration against deletion or changes during the refresh.
-    Result = try z_db:transaction(fun(TransactionContext) ->
+    Result = try z_db:transaction(fun(Ctx) ->
         case z_db:qmap("select * from import_feed where id=$1 for update",
-                [FeedId], [{keys, atom}], TransactionContext) of
-            {ok, [Row]} -> refresh(m_import_feed:decode(Row), Id, Uri, TransactionContext);
+                [FeedId], [{keys, atom}], Ctx) of
+            {ok, [Row]} -> refresh(m_import_feed:decode(Row), Id, Uri, Ctx);
             {ok, []} -> {error, enoent};
             Error -> Error
         end

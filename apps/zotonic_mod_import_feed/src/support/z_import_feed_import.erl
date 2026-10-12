@@ -76,29 +76,29 @@ run(Entry, FeedSettings, Force, Context) ->
     Uri = maps:get(uri, Item),
     Hash = crypto:hash(sha256, term_to_binary({Item, Dependents})),
     FeedId = maps:get(id, FeedSettings),
-    Result = z_db:transaction(fun(TransactionContext) ->
+    Result = z_db:transaction(fun(Ctx) ->
         %% A site-wide transaction lock also orders article/dependent locks.
         %% It prevents deadlocks for two feeds importing shared media in reverse order.
-        z_db:q("select pg_advisory_xact_lock(hashtext(current_schema()), 194815)", TransactionContext),
+        z_db:q("select pg_advisory_xact_lock(hashtext(current_schema()), 194815)", Ctx),
         case z_db:q1("select checksum from import_feed_item where feed_id=$1 and uri=$2 and status='ok'",
-                [FeedId, Uri], TransactionContext) of
+                [FeedId, Uri], Ctx) of
             Hash when not Force -> skipped;
             _ ->
-                case deleted(Uri, TransactionContext) of
-                    true -> record(FeedId, Uri, <<"article">>, <<"deleted">>, Hash, undefined, TransactionContext), skipped;
+                case deleted(Uri, Ctx) of
+                    true -> record(FeedId, Uri, <<"article">>, <<"deleted">>, Hash, undefined, Ctx), skipped;
                     false ->
                         Notice = #import_feed_item{item = Item, dependents = Dependents,
                             feed = maps:without([user_groups, lease_token], FeedSettings), raw = maps:get(raw, Entry)},
-                        Existing = lookup(Uri, TransactionContext),
-                        case z_notifier:first(Notice, TransactionContext) of
+                        Existing = lookup(Uri, Ctx),
+                        case z_notifier:first(Notice, Ctx) of
                             undefined ->
-                                {Id, Imported} = import(Item, Dependents, TransactionContext),
-                                finish(Id, Imported, Existing, Uri, FeedId, Hash, TransactionContext);
-                            {ok, Id} -> finish(Id, #{}, Existing, Uri, FeedId, Hash, TransactionContext);
+                                {Id, Imported} = import(Item, Dependents, Ctx),
+                                finish(Id, Imported, Existing, Uri, FeedId, Hash, Ctx);
+                            {ok, Id} -> finish(Id, #{}, Existing, Uri, FeedId, Hash, Ctx);
                             {ok, Id, Imported} when is_map(Imported) ->
-                                finish(Id, Imported, Existing, Uri, FeedId, Hash, TransactionContext);
+                                finish(Id, Imported, Existing, Uri, FeedId, Hash, Ctx);
                             {skip, Reason} ->
-                                record(FeedId, Uri, <<"article">>, <<"skipped">>, Hash, Reason, TransactionContext), skipped;
+                                record(FeedId, Uri, <<"article">>, <<"skipped">>, Hash, Reason, Ctx), skipped;
                             {error, Reason} -> throw({import_error, Reason});
                             _ -> throw({import_error, invalid_observer_result})
                         end

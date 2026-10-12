@@ -587,7 +587,7 @@ delete_content(Id, Context) ->
     case writable(Context) of
         false -> {error, eacces};
         true ->
-            case z_db:transaction(fun(TransactionContext) -> delete_content_locked(integer(Id), TransactionContext) end, Context) of
+            case z_db:transaction(fun(Ctx) -> delete_content_locked(integer(Id), Ctx) end, Context) of
                 {rollback, Reason} -> {error, Reason};
                 Result -> Result
             end
@@ -630,18 +630,18 @@ delete_feed(Id, DeleteContent, Context) when is_boolean(DeleteContent) ->
     case writable(Context) of
         false -> {error, eacces};
         true ->
-            Result = z_db:transaction(fun(TransactionContext) ->
+            Result = z_db:transaction(fun(Ctx) ->
                 FeedId = integer(Id),
-                case z_db:q_row("select lease_token from import_feed where id=$1 for update", [FeedId], TransactionContext) of
+                case z_db:q_row("select lease_token from import_feed where id=$1 for update", [FeedId], Ctx) of
                     undefined -> {error, enoent};
                     {undefined} ->
                         ContentResult = case DeleteContent of
-                            true -> delete_content_locked(FeedId, TransactionContext);
+                            true -> delete_content_locked(FeedId, Ctx);
                             false -> {ok, #{deleted => 0, skipped => 0, failed => 0}}
                         end,
                         case ContentResult of
                             {ok, Counts} ->
-                                {ok, 1} = z_db:delete(import_feed, FeedId, TransactionContext),
+                                {ok, 1} = z_db:delete(import_feed, FeedId, Ctx),
                                 {ok, Counts};
                             Error -> Error
                         end;

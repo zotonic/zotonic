@@ -172,18 +172,18 @@ native_depth() ->
     Context = z_acl:logon(1, z_context:new(zotonic_site_testsandbox)),
     ok = z_module_manager:activate_await(mod_import_feed, Context),
     lists:foreach(fun(Depth) ->
-        Result = z_db:transaction(fun(TransactionContext) ->
+        Result = z_db:transaction(fun(Ctx) ->
             Base = <<"https://example.org/feed-native-depth/", (integer_to_binary(Depth))/binary, "/">>,
             RootUri = <<Base/binary, "a">>, ChildUri = <<Base/binary, "b">>, GrandchildUri = <<Base/binary, "c">>,
             Cache = #{RootUri => native_export(RootUri, native_edge(ChildUri)),
                 ChildUri => native_export(ChildUri, native_edge(GrandchildUri)), GrandchildUri => native_export(GrandchildUri, #{})},
-            NativeContext = z_context:set(import_feed_native, Cache, TransactionContext),
+            NativeContext = z_context:set(import_feed_native, Cache, Ctx),
             Options = z_import_feed_native:options(#{media_mode => <<"none">>, import_depth => Depth}, #{}),
             {ok, {Id, Imported}} = m_rsc_import:import_uri_recursive(RootUri, Options, NativeContext),
             ?assertEqual(Depth + 1, maps:size(Imported)),
-            ?assertEqual(min(Depth, 1), length(m_edge:objects(Id, about, TransactionContext))),
-            ?assertEqual(Depth =:= 2, is_integer(m_rsc:rid(GrandchildUri, TransactionContext))),
-            {ok, Status} = m_rsc_import:get_import_status(Id, TransactionContext),
+            ?assertEqual(min(Depth, 1), length(m_edge:objects(Id, about, Ctx))),
+            ?assertEqual(Depth =:= 2, is_integer(m_rsc:rid(GrandchildUri, Ctx))),
+            {ok, Status} = m_rsc_import:get_import_status(Id, Ctx),
             ?assertEqual(Depth, proplists:get_value(import_edges, maps:get(<<"options">>, Status))),
             {rollback, native_depth_ok}
         end, Context),
