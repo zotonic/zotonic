@@ -80,8 +80,11 @@ endpoint(Guid) ->
                             %% dirname('/') is '/', dirname('/blog/') is '/blog'.
                             ApiPath = iolist_to_binary([string:trim(Root, trailing, "/"),
                                 "/wp-json/wp/v2/posts/", Id]),
-                            uri_string:recompose((maps:without([fragment, userinfo], P))#{
-                                path => ApiPath, query => <<"_embed=1">>});
+                            case uri_string:recompose((maps:without([fragment, userinfo], P))#{
+                                path => ApiPath, query => <<"_embed=1">>}) of
+                                Url when is_binary(Url) -> Url;
+                                _ -> undefined
+                            end;
                         _ -> undefined
                     end;
                 _ -> undefined
