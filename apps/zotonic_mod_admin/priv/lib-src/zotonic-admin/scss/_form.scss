@@ -35,6 +35,32 @@ option {
     color: black;
 }
 
+// Form sections use the same divider and heading rhythm as hr followed by h4.
+legend {
+    width: 100%;
+    padding: $baseMargin 0 0;
+    margin-bottom: $baseMargin;
+    border: 0;
+    color: $headings-color;
+    font-family: $headings-font-family;
+    font-size: $font-size-h4;
+    font-weight: $headings-font-weight;
+    line-height: $headings-line-height;
+
+    &::before {
+        content: "";
+        display: block;
+        height: 1px;
+        margin-bottom: $baseMargin;
+        background-color: #ddd;
+    }
+}
+
+.widget-content legend::before {
+    margin-left: -$widgetSidePadding;
+    margin-right: -$widgetSidePadding;
+}
+
 fieldset,
 .form-group {
     > label,
@@ -64,10 +90,15 @@ fieldset,
     margin: 0 0 15px;
 
     legend {
+        padding: 0;
         margin-bottom: 6px;
         border: 0;
         font-size: 14px;
         font-weight: bold;
+
+        &::before {
+            display: none;
+        }
     }
 
     .input-group {
