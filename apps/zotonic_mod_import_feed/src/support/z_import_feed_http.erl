@@ -76,19 +76,20 @@ url(_) -> false.
 -spec resolve(Value, Base) -> binary() when Value :: term(), Base :: binary().
 resolve(B, Base) when is_binary(B), B =/= <<>> ->
     try uri_string:resolve(B, Base) of
-        U -> case url(U) of true -> U; false -> <<>> end
+        U when is_binary(U) -> case url(U) of true -> U; false -> <<>> end;
+        _ -> <<>>
     catch _:_ -> <<>> end;
 resolve(_, _) -> <<>>.
 
 -spec get(Url, Context) -> {ok, tuple()} | {error, term()} when
-    Url :: binary(), Context :: z:context().
+    Url :: binary(), Context :: z:context() | undefined.
 get(Url, Context) -> get(Url, ?MAX_RESPONSE_BYTES, Context).
 
 -spec get(Url, Limit, Context) -> {ok, tuple()} | {error, term()} when
-    Url :: binary(), Limit :: pos_integer(), Context :: z:context().
+    Url :: binary(), Limit :: pos_integer(), Context :: z:context() | undefined.
 get(Url, Limit, Context) -> get(Url, Limit, 0, [], Context).
 
--spec get_json(binary(), z:context()) -> {ok, tuple()} | {error, term()}.
+-spec get_json(binary(), z:context() | undefined) -> {ok, tuple()} | {error, term()}.
 get_json(Url, Context) -> get(Url, ?MAX_RESPONSE_BYTES, 0, [{accept, "application/json"}], Context).
 
 get(_, _, ?MAX_REDIRECTS, _, _) -> {error, too_many_redirects};
