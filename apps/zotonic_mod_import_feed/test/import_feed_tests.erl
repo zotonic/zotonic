@@ -294,16 +294,16 @@ copyright_defaults_test() ->
         Feed = #{category_id => 100, content_group_id => undefined,
             is_authoritative => false, media_mode => <<"dependent">>, connections => [],
             rights => <<"CR">>, rights_attribution => <<"Publisher">>, rights_year => <<"2026">>},
-        {Item, [Media]} = z_import_feed_import:prepare(Entry, Feed, #context{}),
+        {Item, [Media]} = z_import_feed_import:prepare(Entry, Feed, #context{db = {test, test}}),
         lists:foreach(fun(#{props := Props}) ->
             ?assertEqual(<<"CR">>, maps:get(<<"rights">>, Props)),
             ?assertEqual(<<"Publisher">>, maps:get(<<"rights_attribution">>, Props)),
             ?assertEqual(<<"2026">>, maps:get(<<"rights_year">>, Props))
         end, [Item, Media]),
-        {Empty, _} = z_import_feed_import:prepare(Entry, maps:without([rights, rights_attribution, rights_year], Feed), #context{}),
+        {Empty, _} = z_import_feed_import:prepare(Entry, maps:without([rights, rights_attribution, rights_year], Feed), #context{db = {test, test}}),
         ?assertNot(maps:is_key(<<"rights">>, maps:get(props, Empty))),
         meck:expect(z_module_manager, active, fun(_, _) -> false end),
-        {Disabled, [DisabledMedia]} = z_import_feed_import:prepare(Entry, Feed, #context{}),
+        {Disabled, [DisabledMedia]} = z_import_feed_import:prepare(Entry, Feed, #context{db = {test, test}}),
         ?assertNot(maps:is_key(<<"rights">>, maps:get(props, Disabled))),
         ?assertNot(maps:is_key(<<"rights">>, maps:get(props, DisabledMedia)))
     after meck:unload([z_module_manager, m_rsc]) end.
@@ -331,7 +331,7 @@ category_guess_excludes_meta_test() ->
             is_authoritative => false, media_mode => <<"none">>, connections => []},
         Guess = fun(Tags, Default) ->
             {#{props := Props}, []} = z_import_feed_import:prepare(
-                Entry#{tags => Tags}, Feed#{category_id => Default}, #context{}),
+                Entry#{tags => Tags}, Feed#{category_id => Default}, #context{db = {test, test}}),
             maps:get(<<"category_id">>, Props)
         end,
         ?assertEqual(12, Guess([<<"Meta">>, <<"Predicate">>, <<"NEWS">>], 100)),
@@ -372,7 +372,7 @@ summary_entities_test() ->
         [Entry] = maps:get(entries, Parsed),
         Feed = #{category_id => 100, content_group_id => undefined,
             is_authoritative => false, media_mode => <<"none">>, connections => []},
-        {#{props := Props}, []} = z_import_feed_import:prepare(Entry, Feed, #context{}),
+        {#{props := Props}, []} = z_import_feed_import:prepare(Entry, Feed, #context{db = {test, test}}),
         ?assertEqual(<<"News & views […] — <example>"/utf8>>,
             z_string:trim(maps:get(<<"summary">>, Props)))
     after meck:unload(z_module_manager) end.
