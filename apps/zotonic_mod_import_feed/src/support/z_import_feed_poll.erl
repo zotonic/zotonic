@@ -36,11 +36,13 @@ run(N, C) ->
         [] -> ok;
         [Row] ->
             F = m_import_feed:decode(Row),
-            Result = try poll(F, C) catch
-                Class:Reason:Stack ->
-                    ?LOG_ERROR(#{in => zotonic_mod_import_feed, text => <<"Feed poll failed">>,
-                        feed_id => maps:get(id, F), result => error, reason => {Class, Reason}, stack => Stack}),
-                    {error, poll_failed}
+            Result = try
+                         poll(F, C)
+                     catch
+                         Class:Reason:Stack ->
+                             ?LOG_ERROR(#{in => zotonic_mod_import_feed, text => <<"Feed poll failed">>,
+                                          feed_id => maps:get(id, F), result => error, reason => {Class, Reason}, stack => Stack}),
+                             {error, poll_failed}
             end,
             finish(F, Result, C),
             run(N - 1, C)
@@ -48,20 +50,35 @@ run(N, C) ->
 
 poll(#{user_id := User} = F, C) when is_integer(User) ->
     case m_import_feed:is_admin_user(User, C) of
-        true -> {error, admin_import_user};
-        false -> poll_user(F, C)
-    end;
-poll(_, _) -> {error, missing_editor}.
-
-poll_user(#{user_id := User} = F, C) ->
-    case z_auth:is_enabled(User, C) of
-        false -> {error, editor_disabled};
         true ->
-            Editor = z_acl:logon(User, #{user_groups => maps:get(user_groups, F)}, z_context:new(C)),
-            case m_import_feed:allowed(Editor) andalso not z_acl:is_read_only(Editor) of
-                true -> fetch(F, z_import_feed_http:context(F, Editor));
-                false -> {error, eacces}
-            end
+            {error, admin_import_user};
+        false ->
+            poll_user(F, C)
+    end;
+poll(_, _) ->
+    {error, missing_editor}.
+
+poll_user(#{user_id := User} = F, Context) ->
+    case z_auth:is_enabled(User, Context) of
+        true ->
+            Editor = z_acl:logon(User, #{user_groups => maps:get(user_groups, F)}, z_context:new(Context)),
+            IsImportFeedAllowed = m_import_feed:allowed(Editor),
+            IsReadOnly = z_acl:is_read_only(Editor),
+            case IsImportFeedAllowed andalso not IsReadOnly of
+                true ->
+                    fetch(F, z_import_feed_http:context(F, Editor));
+                false ->
+                    ?LOG_WARNING( #{ text => <<"Could not import feed">>,
+                                     user => User,
+                                     is_import_allowed => IsImportFeedAllowed,
+                                     is_read_only => IsReadOnly,
+                                     feed_url => maps:get(url, F, <<"-">>),
+                                     feed_id => maps:get(id, F, undefined)
+                                   }),
+                    {error, eacces}
+            end;
+        false ->
+            {error, editor_disabled}
     end.
 
 fetch(F, C) ->

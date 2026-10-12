@@ -129,6 +129,7 @@ import(#{zotonic_export := _} = Item, _, C) ->
     lists:foreach(fun({P, O}) -> edge(Id, P, O, C) end, maps:get(default_connections, Item)),
     {Id, Imported};
 import(Item, Ds, C) ->
+    ?DEBUG(Item,
     %% Reuse media by source URI. Do not steal media from existing local resources.
     Imported = lists:foldl(fun(D, Acc) ->
         U = maps:get(uri, D),
@@ -300,32 +301,40 @@ edge(Id, P, O, C) ->
         {error, R} -> throw({import_error, {edge, R}})
     end.
 
-upsert(#{uri := Uri, props := P}, C) ->
+upsert(#{uri := Uri, props := P}, Context) ->
     Authority = maps:get(<<"is_authoritative">>, P, false),
-    Props = P#{<<"uri">> => case Authority of true -> undefined; false -> Uri end,
-        <<"feed_source_uri">> => Uri},
-    Result = case lookup(Uri, C) of
-        undefined -> m_rsc:insert(Props, [is_import, {tz, <<"UTC">>}], C);
-        Id ->
-            %% Only a resource already mapped by this importer may be authoritative.
-            Owned = z_db:q1("select rsc_id from import_feed_resource where uri=$1", [Uri], C) =:= Id,
-            case Owned orelse not m_rsc:p(Id, is_authoritative, C) of
-                true ->
-                    UpdateProps = case maps:get(<<"is_dependent">>, P, false) of
-                        true ->
-                            case m_rsc:is_a(Id, media, C) of
-                                true -> maps:remove(<<"category_id">>, Props);
-                                false -> throw({import_error, media_identity_conflict})
-                            end;
-                        false -> Props
-                    end,
-                    m_rsc:update(Id, UpdateProps, [is_import, {tz, <<"UTC">>}], C);
-                false -> {error, authoritative_resource}
-            end
-    end,
+    Props = P#{<<"uri">> => case Authority of
+                                true -> undefined;
+                                false -> Uri
+                            end,
+               <<"feed_source_uri">> => Uri},
+    Result = case lookup(Uri, Context) of
+                 undefined ->
+                     ?DEBUG(Props),
+                     m_rsc:insert(Props, [is_import, {tz, <<"UTC">>}], Context);
+                 Id ->
+                     %% Only a resource already mapped by this importer may be authoritative.
+                     Owned = z_db:q1("select rsc_id from import_feed_resource where uri=$1", [Uri], Context) =:= Id,
+                     case Owned orelse not m_rsc:p(Id, is_authoritative, Context) of
+                         true ->
+                             UpdateProps = case maps:get(<<"is_dependent">>, P, false) of
+                                               true ->
+                                                   case m_rsc:is_a(Id, media, Context) of
+                                                       true -> maps:remove(<<"category_id">>, Props);
+                                                       false -> throw({import_error, media_identity_conflict})
+                                                   end;
+                                               false -> Props
+                                           end,
+                             m_rsc:update(Id, UpdateProps, [is_import, {tz, <<"UTC">>}], Context);
+                         false ->
+                             {error, authoritative_resource}
+                     end
+             end,
     case Result of
-        {ok, Id1} -> remember(Uri, Id1, C), Id1;
-        {error, R} -> throw({import_error, R})
+        {ok, Id1} ->
+            remember(Uri, Id1, Context), Id1;
+        {error, R} ->
+            throw({import_error, R})
     end.
 
 medium(_, undefined, _) -> ok;
