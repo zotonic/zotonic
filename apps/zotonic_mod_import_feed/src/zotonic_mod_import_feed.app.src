@@ -1,0 +1,9 @@
+{application, zotonic_mod_import_feed, [
+    {description, "Discover and continuously import RSS and Atom feeds."},
+    {vsn, {file, "../../VERSION"}},
+    {registered, []},
+    {applications, [kernel, stdlib, zotonic_core]},
+    {env, []},
+    {modules, []},
+    {licenses, ["Apache-2.0"]}
+]}.
