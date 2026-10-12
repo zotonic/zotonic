@@ -1,4 +1,4 @@
-// Copyright 2026 Zotonic. Apache-2.0.
+// Copyright 2026 Marc Worrell. Apache-2.0.
 import { Extension, Node, mergeAttributes } from '@tiptap/core';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';

@@ -1,4 +1,4 @@
-// Copyright 2026 Zotonic. Apache-2.0.
+// Copyright 2026 Marc Worrell. Apache-2.0.
 import {
     createElement, Undo2, Redo2, Bold, Italic, Underline, Strikethrough,
     List, ListOrdered, IndentIncrease, IndentDecrease, Quote, Code, Link,

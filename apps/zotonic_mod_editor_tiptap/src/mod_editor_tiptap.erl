@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2026 Zotonic
+%% @copyright 2026 Marc Worrell
 %% @doc Tiptap rich-text editor integration with Zotonic links and media.
 %% @end
 
-%% Copyright 2026 Zotonic
+%% Copyright 2026 Marc Worrelll
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -75,13 +75,6 @@ Full-window editing preserves the instance; Escape returns to the normal view.
 
 ## Profiles and extensions
 
-Asides and Markdown admonitions are supported in every profile. Add `aside` and
-`note` to a profile's toolbar to expose the wrap/unwrap controls. Notes are emitted
-as `<div class=\"admonition note\" role=\"note\">` with an editable, translated title
-paragraph (`first admonition-title`). Existing aside-based admonitions retain their
-tag and classes. Both containers support regular block content, including media,
-lists and code. Their generic body styling can be overridden by site CSS.
-
 The three built-in profiles are `simple` (basic text and links), `normal`
 (formatting, lists, media and full-window editing), and `advanced` (all controls,
 including tables, alignment and text direction). Admin pages select `advanced`
@@ -134,6 +127,13 @@ A smaller toolbar does not remove content types from the document schema, so
 reduced frontend forms can preserve content created in the full admin editor.
 The extension constructors are also exposed on `z_editor_tiptap`. Build custom
 extensions against the bundled Tiptap/ProseMirror versions.
+
+Asides and Markdown admonitions are supported in every profile. Add `aside` and
+`note` to a profile's toolbar to expose the wrap/unwrap controls. Notes are emitted
+as `<div class=\"admonition note\" role=\"note\">` with an editable, translated title
+paragraph (`first admonition-title`). Existing aside-based admonitions retain their
+tag and classes. Both containers support regular block content, including media,
+lists and code. Their generic body styling can be overridden by site CSS.
 
 ## Template options
 

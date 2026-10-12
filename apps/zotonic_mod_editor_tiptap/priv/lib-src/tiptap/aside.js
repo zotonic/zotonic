@@ -1,4 +1,4 @@
-// Copyright 2026 Zotonic. Apache-2.0.
+// Copyright 2026 Marc Worrell. Apache-2.0.
 import { Node } from '@tiptap/core';
 
 export const Aside = Node.create({

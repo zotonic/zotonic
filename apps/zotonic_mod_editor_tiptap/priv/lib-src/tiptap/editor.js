@@ -1,4 +1,4 @@
-// Copyright 2026 Zotonic. Apache-2.0.
+// Copyright 2026 Marc Worrell. Apache-2.0.
 import { Editor, Extension, Node, Mark } from '@tiptap/core';
 import { NodeSelection } from '@tiptap/pm/state';
 import { importHTML, exportHTML, cleanPaste, safeUrl } from './content.js';

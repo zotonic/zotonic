@@ -65,25 +65,6 @@ site fixtures for the Word/Google Docs documents your editors actually use.
 
 ## Profiles and extensions
 
-The schema preserves `<aside>` and `<div class="admonition note" role="note">`
-blocks, including editable `<p class="first admonition-title">` titles emitted by
-Markdown. Legacy `<aside class="admonition ...">` blocks retain their tag and classes.
-Add `aside` and `note` to a profile's toolbar to enable the wrap/unwrap controls.
-New notes include a translated, editable title. Both containers accept normal block
-content, including lists, code and Zotonic media. These schema nodes remain enabled
-in every profile to avoid losing existing content; their toolbar controls are opt-in.
-Generic styling is scoped to `.z-tiptap-body` and can be overridden by site CSS.
-
-Code blocks have a language dropdown with Plain text as the default. The dropdown
-is editor-only; saved HTML uses `<pre><code class="language-erlang">...</code></pre>`.
-Language changes support undo/redo. Unknown existing language identifiers remain
-selectable and are preserved. This does not add syntax highlighting.
-
-Override the `code_languages` block in `_editor_tiptap_profiles.tpl` to change the
-shared language choices, or set `codeLanguages: { erlang: 'Erlang', json: 'JSON' }`
-in an individual profile. Plain text is always available. Dropdowns are hidden
-in read-only editors.
-
 The three built-in profiles are `simple` (basic text and links), `normal`
 (formatting, lists, media and full-window editing), and `advanced` (all controls,
 including tables, alignment and text direction). Admin pages select `advanced`
@@ -132,6 +113,27 @@ can preserve content created in the full editor. Available toolbar names are in
   `icon` data, and `run(editor)`. Include each key in the toolbar array.
 - `transformPastedHTML(html)`: replaces the default paste normalizer.
 - `onCreate(editor, textarea)`: additional integration after mounting.
+
+Code blocks have a language dropdown with Plain text as the default. The dropdown
+is editor-only; saved HTML uses `<pre><code class="language-erlang">...</code></pre>`.
+Language changes support undo/redo. Unknown existing language identifiers remain
+selectable and are preserved. This does not add syntax highlighting.
+
+Override the `code_languages` block in `_editor_tiptap_profiles.tpl` to change the
+shared language choices, or set `codeLanguages: { erlang: 'Erlang', json: 'JSON' }`
+in an individual profile. Plain text is always available. Dropdowns are hidden
+in read-only editors.
+
+The schema preserves `<aside>` and `<div class="admonition note" role="note">`
+blocks, including editable `<p class="first admonition-title">` titles emitted by
+Markdown. Legacy `<aside class="admonition ...">` blocks retain their tag and classes.
+Add `aside` and `note` to a profile's toolbar to enable the wrap/unwrap controls.
+New notes include a translated, editable title. Both containers accept normal block
+content, including lists, code and Zotonic media. These schema nodes remain enabled
+in every profile to avoid losing existing content; their toolbar controls are opt-in.
+Generic styling is scoped to `.z-tiptap-body` and can be overridden by site CSS.
+
+## Mounting an editor
 
 `z_editor_tiptap.get(textareaId)` returns a mounted Tiptap editor. The constructors
 are also exposed on `z_editor_tiptap`. Keep additional extensions built against
