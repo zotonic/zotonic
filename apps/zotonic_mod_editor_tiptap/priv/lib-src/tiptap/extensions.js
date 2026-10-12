@@ -10,6 +10,7 @@ import { Plugin, PluginKey, NodeSelection } from '@tiptap/pm/state';
 import { createElement, Settings2 } from 'lucide';
 import { mediaOptions, safeUrl } from './content.js';
 import { codeBlock } from './code-block.js';
+import { Aside, Admonition } from './aside.js';
 
 const bookmarkKey = new PluginKey('zotonicDialogSelection');
 
@@ -46,7 +47,8 @@ const ZotonicAttributes = Extension.create({
     addGlobalAttributes() {
         return [{
             types: ['paragraph', 'heading', 'blockquote', 'bulletList', 'orderedList',
-                'listItem', 'table', 'tableRow', 'tableCell', 'tableHeader', 'image', 'codeBlock', 'link'],
+                'listItem', 'table', 'tableRow', 'tableCell', 'tableHeader', 'image', 'codeBlock', 'link',
+                'aside', 'admonition'],
             attributes: {
                 class: { default: null },
                 title: { default: null },
@@ -183,6 +185,7 @@ export function extensions({ previewUrl, openProperties, mediaLabel, codeLanguag
             link: { openOnClick: false, autolink: false, HTMLAttributes: { target: null, rel: null } }
         }),
         codeBlock(codeLanguages, label),
+        Aside, Admonition,
         SafeImage,
         TableKit.configure({ table: { resizable: false } }),
         TextAlign.configure({ types: ['heading', 'paragraph'] }),

@@ -4,7 +4,7 @@ import {
     List, ListOrdered, IndentIncrease, IndentDecrease, Quote, Code, Link,
     Unlink, ImagePlus, Maximize, RemoveFormatting, AlignLeft, AlignCenter,
     AlignRight, Subscript, Superscript, WrapText, Minus, FileSymlink,
-    ArrowLeftToLine, ArrowRightToLine
+    ArrowLeftToLine, ArrowRightToLine, PanelRight, StickyNote
 } from 'lucide';
 
 const commands = {
@@ -21,6 +21,8 @@ const commands = {
     indent: [IndentIncrease, chain => chain.sinkListItem('listItem')],
     outdent: [IndentDecrease, chain => chain.liftListItem('listItem')],
     blockquote: [Quote, chain => chain.toggleBlockquote(), 'blockquote'],
+    aside: [PanelRight, chain => chain.toggleAside(), 'aside'],
+    note: [StickyNote, (chain, label) => chain.toggleAdmonition(label('note')), 'admonition'],
     codeBlock: [Code, chain => chain.toggleCodeBlock(), 'codeBlock'],
     alignLeft: [AlignLeft, chain => chain.setTextAlign('left')],
     alignCenter: [AlignCenter, chain => chain.setTextAlign('center')],
@@ -114,7 +116,7 @@ export function toolbar(record, actions, label) {
             else button.textContent = custom.label;
             button.addEventListener('mousedown', event => event.preventDefault());
             button.addEventListener('click', () => {
-                if (command) command[1](editor.chain().focus()).run();
+                if (command) command[1](editor.chain().focus(), label).run();
                 else if (custom) custom.run(editor);
                 else actions[name]();
                 update();
@@ -124,7 +126,7 @@ export function toolbar(record, actions, label) {
                 button.title = custom?.label || label(name);
                 button.setAttribute('aria-label', button.title);
                 button.disabled = name !== 'fullscreen' && (!editor.isEditable
-                    || (command ? !command[1](editor.can().chain()).run() : false));
+                    || (command ? !command[1](editor.can().chain(), label).run() : false));
                 const active = command?.[2] ? editor.isActive(command[2])
                     : name === 'fullscreen' && record.shell.classList.contains('is-fullscreen');
                 if (command?.[2] || name === 'fullscreen') button.setAttribute('aria-pressed', String(active));
@@ -133,6 +135,7 @@ export function toolbar(record, actions, label) {
     }
     function update() { updates.forEach(fn => fn()); }
     editor.on('transaction', update);
+    editor.on('update', update);
     update();
     return bar;
 }

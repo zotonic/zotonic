@@ -1,6 +1,24 @@
+%% @author Marc Worrell <marc@worrell.nl>
+%% @copyright 2026 Zotonic
+%% @doc Tiptap rich-text editor integration with Zotonic links and media.
+%% @end
+
 %% Copyright 2026 Zotonic
-%% Licensed under the Apache License, Version 2.0.
+%%
+%% Licensed under the Apache License, Version 2.0 (the "License");
+%% you may not use this file except in compliance with the License.
+%% You may obtain a copy of the License at
+%%
+%%     http://www.apache.org/licenses/LICENSE-2.0
+%%
+%% Unless required by applicable law or agreed to in writing, software
+%% distributed under the License is distributed on an "AS IS" BASIS,
+%% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%% See the License for the specific language governing permissions and
+%% limitations under the License.
+
 -module(mod_editor_tiptap).
+-author("Marc Worrell <marc@worrell.nl>").
 -mod_title("Tiptap Editor").
 -mod_description("Rich text editor with Zotonic links and media, using Tiptap.").
 -mod_prio(400).
@@ -57,6 +75,13 @@ Full-window editing preserves the instance; Escape returns to the normal view.
 
 ## Profiles and extensions
 
+Asides and Markdown admonitions are supported in every profile. Add `aside` and
+`note` to a profile's toolbar to expose the wrap/unwrap controls. Notes are emitted
+as `<div class=\"admonition note\" role=\"note\">` with an editable, translated title
+paragraph (`first admonition-title`). Existing aside-based admonitions retain their
+tag and classes. Both containers support regular block content, including media,
+lists and code. Their generic body styling can be overridden by site CSS.
+
 The three built-in profiles are `simple` (basic text and links), `normal`
 (formatting, lists, media and full-window editing), and `advanced` (all controls,
 including tables, alignment and text direction). Admin pages select `advanced`
@@ -78,7 +103,7 @@ bundle. Override that template in your site using its `simple`, `normal`, and
 `advanced` blocks. Each block contains JavaScript object properties:
 
 ```django
-{% extends overrules %}
+{% overrules %}
 {% block simple %}
 toolbar: ['bold', 'italic', 'link', 'unlink']
 {% endblock %}

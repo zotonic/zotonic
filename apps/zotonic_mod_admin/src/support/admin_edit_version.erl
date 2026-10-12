@@ -1,5 +1,24 @@
-%% Copyright 2026 Zotonic. Apache-2.0.
+%% @author Marc Worrell <marc@worrell.nl>
+%% @copyright 2026 Zotonic
+%% @doc Version-checked admin saves and media-update acknowledgements.
+%% @end
+
+%% Copyright 2026 Zotonic
+%%
+%% Licensed under the Apache License, Version 2.0 (the "License");
+%% you may not use this file except in compliance with the License.
+%% You may obtain a copy of the License at
+%%
+%%     http://www.apache.org/licenses/LICENSE-2.0
+%%
+%% Unless required by applicable law or agreed to in writing, software
+%% distributed under the License is distributed on an "AS IS" BASIS,
+%% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%% See the License for the specific language governing permissions and
+%% limitations under the License.
+
 -module(admin_edit_version).
+-author("Marc Worrell <marc@worrell.nl>").
 -moduledoc("Version-checked admin saves. Locks the resource while checking the
 browser's version and returns the exact saved version, including changes made
 by update observers. Callers must not advance a form's version on notifications.").

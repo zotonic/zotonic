@@ -365,6 +365,11 @@ function install() {
             for (const textarea of fields(root)) { observer?.unobserve(textarea); pending.delete(textarea); }
         },
         get: id => [...records.values()].find(record => record.textarea.id === id)?.editor,
+        setContent(id, html) {
+            const editor = api.get(id);
+            if (!editor || !editor.isEditable) return false;
+            return editor.commands.setContent(importHTML(html));
+        },
         configure(options) {
             settings = { ...settings, ...options, labels: { ...settings.labels, ...options.labels } };
             // Admin widgets can initialize before the template's translated configuration.

@@ -49,6 +49,82 @@ test('media comments survive import/export, including Unicode and comment delimi
     assert.match(exportHTML({ getHTML: () => hostile }), /\\u002d\\u002d/);
 });
 
+test('asides and admonitions preserve Markdown and legacy site markup in every profile', () => {
+    const html = '<aside lang="en"><p>Aside</p><ul><li><p>Item</p></li></ul></aside>'
+        + '<div class="admonition note" role="note"><p class="first admonition-title">Custom title</p><p>Note body</p></div>'
+        + '<aside class="admonition external-module"><p class="admonition-title">Module</p><p>Details</p></aside>';
+    const p = page(html, {}, 'simple');
+    try {
+        const editor = p.api.get('body-en');
+        assert.deepEqual(Array.from(editor.getJSON().content, node => node.type), ['aside', 'admonition', 'admonition']);
+        const output = editor.getHTML();
+        assert.match(output, /<aside lang="en">/);
+        assert.match(output, /<div class="admonition note" role="note">/);
+        assert.match(output, /class="first admonition-title">Custom title/);
+        assert.match(output, /<aside class="admonition external-module"/);
+        editor.commands.setContent(output);
+        assert.equal(editor.getHTML(), output);
+        assert.equal(p.window.document.querySelector('[data-command="aside"]'), null);
+    } finally { p.close(); }
+});
+
+test('aside and note toolbar toggles wrap selections, support undo and respect readonly', () => {
+    const p = page('<p>First</p><p>Second</p>', { advanced: { toolbar: ['aside', 'note'] } });
+    try {
+        const editor = p.api.get('body-en');
+        editor.commands.setTextSelection({ from: 1, to: 13 });
+        const aside = p.window.document.querySelector('[data-command="aside"]');
+        const note = p.window.document.querySelector('[data-command="note"]');
+        assert.equal(aside.disabled, false);
+        aside.click();
+        assert.match(editor.getHTML(), /^<aside><p>First<\/p><p>Second<\/p><\/aside>$/);
+        assert.equal(aside.getAttribute('aria-pressed'), 'true');
+        aside.click();
+        assert.equal(editor.getHTML(), '<p>First</p><p>Second</p>');
+        p.api.configure({ labels: { note: 'Note' } });
+        assert.equal(note.disabled, false);
+        const before = editor.getHTML();
+        note.click();
+        assert.match(editor.getHTML(), /class="admonition note" role="note"><p class="first admonition-title">Note<\/p><p>First/);
+        assert.equal(note.getAttribute('aria-pressed'), 'true');
+        editor.commands.undo();
+        assert.equal(editor.getHTML(), before);
+        editor.commands.redo();
+        editor.commands.setTextSelection({ from: 2, to: editor.state.doc.content.size - 2 });
+        note.click();
+        assert.doesNotMatch(editor.getHTML(), /<div/);
+        assert.match(editor.getHTML(), /First/);
+        editor.setEditable(false);
+        assert.equal(aside.disabled, true);
+        assert.equal(note.disabled, true);
+    } finally { p.close(); }
+});
+
+test('paste retains admonition semantics without Office classes', () => {
+    const html = cleanPaste('<div class="admonition note MsoNormal" role="note"><p class="first admonition-title MsoNormal">Title</p><p>Body</p></div><aside><p>Aside</p></aside>');
+    assert.doesNotMatch(html, /MsoNormal/);
+    const p = page(html);
+    try {
+        const editor = p.api.get('body-en');
+        assert.equal(editor.getJSON().content[0].type, 'admonition');
+        assert.equal(editor.getJSON().content[1].type, 'aside');
+        assert.match(editor.getHTML(), /class="admonition-title">Title/);
+    } finally { p.close(); }
+});
+
+test('setContent imports translated media markers and saves the edited value', () => {
+    const p = page();
+    try {
+        const html = '<p>Translated</p><!-- z-media 123 {"caption":"Caption"} -->';
+        assert.equal(p.api.setContent('body-en', html), true);
+        assert.equal(p.api.get('body-en').getJSON().content[1].type, 'zotonicMedia');
+        p.api.save();
+        assert.match(p.window.document.getElementById('body-en').value, /<!-- z-media 123/);
+        p.api.get('body-en').setEditable(false);
+        assert.equal(p.api.setContent('body-en', '<p>Rejected</p>'), false);
+    } finally { p.close(); }
+});
+
 test('unsafe URL protocols are rejected', () => {
     for (const url of ['javascript:alert(1)', 'java\nscript:alert(1)', 'data:text/html,evil', 'vbscript:evil']) assert.equal(safeUrl(url), '');
     for (const url of ['/page/1', '#anchor', 'https://example.test', 'mailto:test@example.test', 'relative-page']) assert.equal(safeUrl(url), url);

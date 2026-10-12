@@ -21,6 +21,10 @@ submissions flush the editors to their original textareas. A plain form also
 flushes on its submit event; code that serializes a form directly must first call
 `z_editor.save(form)`.
 
+`z_editor_tiptap.setContent(id, html)` replaces an editable instance's content,
+imports Zotonic media markers and marks the draft changed. It returns false for
+missing or read-only instances. Call `save` to synchronize the textarea immediately.
+
 ## Editing
 
 Includes headings, emphasis, lists, indentation, quotes, links, Zotonic internal
@@ -61,6 +65,15 @@ site fixtures for the Word/Google Docs documents your editors actually use.
 
 ## Profiles and extensions
 
+The schema preserves `<aside>` and `<div class="admonition note" role="note">`
+blocks, including editable `<p class="first admonition-title">` titles emitted by
+Markdown. Legacy `<aside class="admonition ...">` blocks retain their tag and classes.
+Add `aside` and `note` to a profile's toolbar to enable the wrap/unwrap controls.
+New notes include a translated, editable title. Both containers accept normal block
+content, including lists, code and Zotonic media. These schema nodes remain enabled
+in every profile to avoid losing existing content; their toolbar controls are opt-in.
+Generic styling is scoped to `.z-tiptap-body` and can be overridden by site CSS.
+
 Code blocks have a language dropdown with Plain text as the default. The dropdown
 is editor-only; saved HTML uses `<pre><code class="language-erlang">...</code></pre>`.
 Language changes support undo/redo. Unknown existing language identifiers remain
@@ -95,7 +108,7 @@ bundle. Override that template in your site using its `simple`, `normal`, and
 `advanced` blocks. Each block contains JavaScript object properties:
 
 ```django
-{% extends overrules %}
+{% overrules %}
 {% block simple %}
 toolbar: ['bold', 'italic', 'link', 'unlink']
 {% endblock %}

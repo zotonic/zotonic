@@ -87,9 +87,15 @@ export function cleanPaste(html) {
         if (language) code.setAttribute('class', language);
     }
     for (const el of template.content.querySelectorAll('[class], [style], [id]')) {
+        const semanticClasses = ['div', 'aside'].includes(el.localName) && el.classList.contains('admonition')
+            ? [...el.classList].filter(value => ['admonition', 'note', 'warning', 'tip', 'important',
+                'caution', 'danger', 'error', 'hint', 'attention', 'external-module'].includes(value))
+            : el.localName === 'p' && el.classList.contains('admonition-title') && el.closest('.admonition')
+                ? ['admonition-title'] : [];
         const language = el.localName === 'code'
             ? [...el.classList].find(value => value.startsWith('language-') && value.length > 9) : null;
         el.removeAttribute('class');
+        if (semanticClasses.length) el.setAttribute('class', semanticClasses.join(' '));
         if (language) el.setAttribute('class', language);
         el.removeAttribute('id');
         // Keep semantic emphasis/alignment for the schema, discard Office typography.

@@ -39,6 +39,7 @@
             bulletList: "{{ _"Bullet list"|escapejs }}", orderedList: "{{ _"Numbered list"|escapejs }}",
             indent: "{{ _"Indent"|escapejs }}", outdent: "{{ _"Outdent"|escapejs }}",
             blockquote: "{{ _"Quote"|escapejs }}", codeBlock: "{{ _"Code block"|escapejs }}",
+            aside: "{{ _"Aside"|escapejs }}", note: "{{ _"Note"|escapejs }}",
             codeLanguage: "{{ _"Code language"|escapejs }}", plainText: "{{ _"Plain text"|escapejs }}",
             alignLeft: "{{ _"Align left"|escapejs }}", alignCenter: "{{ _"Align center"|escapejs }}",
             alignRight: "{{ _"Align right"|escapejs }}",

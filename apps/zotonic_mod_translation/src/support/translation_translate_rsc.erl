@@ -23,6 +23,9 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 -export([
+    is_text/1,
+    text_properties/0,
+    short_text_properties/0,
     has_language/3,
 
     add_translation/5,
@@ -52,7 +55,7 @@ add_translation(Id, FromLanguage, ToLanguage, IsOverwrite, Context) ->
 
 %% @doc Optionally require a complete service response before changing a saved resource.
 -spec add_translation(Id, From, To, Overwrite, RequireComplete, Context) -> ok | {error, term()} when
-    Id :: m_rsc:resource(), From :: atom(), To :: atom(), Overwrite :: boolean(),
+    Id :: m_rsc:resource(), From :: z_language:language_code(), To :: z_language:language_code(), Overwrite :: boolean(),
     RequireComplete :: boolean(), Context :: z:context().
 add_translation(Id, FromLanguage, ToLanguage, IsOverwrite, RequireComplete, Context) ->
     case z_acl:rsc_editable(Id, Context) of
@@ -79,7 +82,8 @@ add_translation(Id, FromLanguage, ToLanguage, IsOverwrite, RequireComplete, Cont
 
 %% @doc Copy source texts into a destination language, preserving filled texts unless requested.
 -spec copy_translation(Id, From, To, Overwrite, Context) -> ok | {error, term()} when
-    Id :: m_rsc:resource(), From :: atom(), To :: atom(), Overwrite :: boolean(), Context :: z:context().
+    Id :: m_rsc:resource(), From :: z_language:language_code(), To :: z_language:language_code(),
+    Overwrite :: boolean(), Context :: z:context().
 copy_translation(Id, From, To, Overwrite, Context) ->
     case z_acl:rsc_editable(Id, Context)
         andalso z_language:is_language_editable(From, Context)
@@ -402,14 +406,30 @@ is_json(K) ->
 
 %% @doc Identify binary source-language text properties, including in nested
 %% blocks. Other binary properties (names, URLs, identifiers, etc.) are not text.
-%% Keep this allowlist shared by source collection and destination insertion.
+%% Shared by source collection, destination insertion and the single-field editor.
+-spec is_text(Property) -> boolean() when
+    Property :: binary().
 is_text(K) ->
-    lists:member(K, [
-        <<"title">>, <<"short_title">>, <<"chapeau">>, <<"summary">>,
-        <<"body">>, <<"body_extra">>, <<"date_remarks">>, <<"prompt">>,
-        <<"explanation">>, <<"matching">>, <<"narrative">>, <<"feedback">>,
-        <<"seo_title">>, <<"seo_desc">>, <<"seo_keywords">>
-    ]) orelse binary:longest_common_suffix([K, <<"_html">>]) =:= 5.
+    lists:member(K, text_properties())
+        orelse binary:longest_common_suffix([K, <<"_html">>]) =:= 5.
+
+%% @doc Known text properties, excluding custom slugs and the generic *_html suffix.
+-spec text_properties() -> [binary()].
+text_properties() ->
+    short_text_properties() ++ [
+        <<"summary">>, <<"body">>, <<"body_extra">>, <<"date_remarks">>,
+        <<"explanation">>, <<"matching">>, <<"narrative">>, <<"choices">>, <<"feedback">>,
+        <<"seo_desc">>
+    ].
+
+%% @doc Known single-line text properties, also included in text_properties/0.
+-spec short_text_properties() -> [binary()].
+short_text_properties() ->
+    [
+        <<"title">>, <<"short_title">>, <<"chapeau">>, <<"subtitle">>, <<"header">>, <<"prompt">>,
+        <<"agree">>, <<"disagree">>, <<"yes">>, <<"no">>,
+        <<"seo_title">>, <<"seo_keywords">>
+    ].
 
 %% @doc Add the translation to all translatable texts.
 insert_dst_texts(Id, FromLanguage, ToLanguage, Translations, IsOverwrite, Context) ->

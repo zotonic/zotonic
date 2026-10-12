@@ -37,6 +37,6 @@
 }
 
 [data-translation-edit-form] .z-tiptap:not(.is-fullscreen) .z-tiptap-content {
-    max-height: 45vh;
+    max-height: 60vh;
     overflow-y: auto;
 }

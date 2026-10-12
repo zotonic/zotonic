@@ -82,6 +82,16 @@ Missed notifications conservatively require reloading; polling alone cannot prov
 that a skipped version contained no text changes. Failed conversion and preview-only
 medium updates do not themselves increment the resource version.
 
+The single-field edit dialog offers **Translate from** when a translation service
+and another nonempty source language are available. It translates the saved source
+property (including named-block fields) using the configured services, with HTML
+mode for rich text and text mode otherwise. The result replaces only the dialog's
+draft, after confirmation; Save still performs the normal version-checked update.
+Source languages use exact translations, not fallback. Failed requests and results
+arriving after further edits or closing the dialog do not overwrite the draft.
+Resource permissions, field eligibility and source/target languages are rechecked
+on the server. Automatic translation may send the source text to a remote service.
+
 Custom admin form templates must include `_admin_edit_version.tpl` inside the form
 (pass `version_form` for a form id other than `rscform`). The `z_edit_version`
 hidden input is required for version-checked saves.

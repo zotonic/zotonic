@@ -1,4 +1,4 @@
-{# JavaScript only. Override individual blocks using extends overrules. #}
+{# JavaScript only. Override individual blocks using the overrules tag. #}
 window.z_editor_tiptap_config = {
     ...window.z_editor_tiptap_config,
     default: {
