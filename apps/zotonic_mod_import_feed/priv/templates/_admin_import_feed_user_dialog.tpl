@@ -1,6 +1,7 @@
 {% if m.import_feed.can_select_user %}
     <p class="alert alert-warning">{_ Administrator accounts cannot run feed imports. Use a non-administrator account with limited permissions. _}</p>
     <p>{_ Select the account whose permissions will be used to import articles and media. Save the feed to apply your selection. _}</p>
+
     {% wire id="feed-user-search" type="submit" postback=`search_users` delegate=`mod_import_feed` %}
     <form id="feed-user-search" method="post" action="postback" class="form-inline">
         <label for="feed-user-search-text">{_ Search users _}</label>
