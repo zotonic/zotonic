@@ -26,8 +26,19 @@ flushes on its submit event; code that serializes a form directly must first cal
 Includes headings, emphasis, lists, indentation, quotes, links, Zotonic internal
 links and media, tables, undo/redo, and full-window editing. Additional toolbar
 commands include alignment, text direction, subscript, superscript, code blocks,
-horizontal rules, and line breaks. Select a media item and use the media button,
-or double-click it, to edit its caption, alignment, size, cropping, and link.
+horizontal rules, and line breaks. Click the properties icon at the top-right
+of a media image to edit its caption, alignment, size, cropping, and link.
+The icon also supports keyboard activation and is hidden in read-only editors.
+Media previews are figures with the explicitly configured caption underneath.
+Empty captions and `-` omit the preview caption; the resource-summary fallback
+is resolved only when Zotonic renders the saved body.
+Selecting a media item and using the toolbar media button, or double-clicking
+the image, opens the same dialog.
+
+In full-window mode, Save and Save and View controls delegate to the
+original admin submit buttons in the editor's form, retaining validation and
+redirect behavior. Only existing submit actions are shown, with their disabled
+state respected. This also works with the frontend admin's hidden save buttons.
 
 Editors are initialized near the viewport, including when language tabs become
 visible. Visited editors remain alive to retain undo history. Explicit removal
@@ -50,31 +61,52 @@ site fixtures for the Word/Google Docs documents your editors actually use.
 
 ## Profiles and extensions
 
-Add JavaScript to your site's `_editor_tiptap_overrides_js.tpl`. This template is
-already included inside a `{% javascript %}` block. The default profile is merged
-with the profile named by the textarea's `data-zeditor` configuration, or its name
-without a language suffix (`body$nl` selects `body`).
-The merge is shallow: arrays such as `toolbar` and `extensions` replace the
-default profile's arrays. Profiles are read when an editor is created, so changing
-a profile does not reconfigure already-mounted editors. There are no `m.config`
-settings for this module.
+Code blocks have a language dropdown with Plain text as the default. The dropdown
+is editor-only; saved HTML uses `<pre><code class="language-erlang">...</code></pre>`.
+Language changes support undo/redo. Unknown existing language identifiers remain
+selectable and are preserved. This does not add syntax highlighting.
 
-```javascript
-window.z_editor_tiptap_config = {
-    default: {
-        toolbar: ['undo', 'redo', '|', 'format', 'bold', 'italic', '|',
-                  'bulletList', 'orderedList', '|', 'link', 'zlink', 'zmedia',
-                  'table', '|', 'fullscreen']
-    },
-    summary: { toolbar: ['bold', 'italic', 'link', 'unlink'] },
-    admin_frontend: { toolbar: ['format', 'bold', 'italic', 'zlink', 'zmedia', 'fullscreen'] }
-};
-```
+Override the `code_languages` block in `_editor_tiptap_profiles.tpl` to change the
+shared language choices, or set `codeLanguages: { erlang: 'Erlang', json: 'JSON' }`
+in an individual profile. Plain text is always available. Dropdowns are hidden
+in read-only editors.
+
+The three built-in profiles are `simple` (basic text and links), `normal`
+(formatting, lists, media and full-window editing), and `advanced` (all controls,
+including tables, alignment and text direction). Admin pages select `advanced`
+on the body element.
+Frontend editing also defaults to `advanced`; set
+`mod_admin_frontend.editor_profile` to `simple`, `normal`, or `advanced`
+to change the default on its resource edit forms.
+
+Select a profile with `data-editor-profile` on the textarea or any ancestor.
+The nearest attribute wins; missing, empty or unknown names use `normal`.
+Field names and the old `data-zeditor.config` no longer select profiles.
 
 ```html
-<textarea name="body$en" class="z_editor-init"
-          data-zeditor='{"config":"admin_frontend"}'></textarea>
+<section data-editor-profile="normal">
+    <textarea name="body$en" class="z_editor-init"></textarea>
+    <textarea name="summary$en" class="z_editor-init" data-editor-profile="simple"></textarea>
+</section>
 ```
+
+Profiles are defined in `_editor_tiptap_profiles.tpl`, loaded before the editor
+bundle. Override that template in your site using its `simple`, `normal`, and
+`advanced` blocks. Each block contains JavaScript object properties:
+
+```django
+{% extends overrules %}
+{% block simple %}
+toolbar: ['bold', 'italic', 'link', 'unlink']
+{% endblock %}
+```
+
+A profile can also define extensions, paste handlers and custom buttons in the
+same block. The optional `window.z_editor_tiptap_config.default` supplies shared
+options; the selected profile is shallow-merged over it. Arrays are replaced,
+not concatenated. Profiles are read at editor creation; changing attributes or
+definitions does not rebuild mounted editors. There are no `m.config` settings.
+The admin `editor_profile` template block can override the body-level default.
 
 Changing the toolbar does not narrow the document schema, so reduced interfaces
 can preserve content created in the full editor. Available toolbar names are in

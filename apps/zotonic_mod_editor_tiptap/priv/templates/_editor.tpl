@@ -2,6 +2,10 @@
 {% block _editor %}
 {% lib "css/editor-tiptap.css" "css/editor-tiptap-body.css" %}
 {% all include "_editor_tiptap_head.tpl" %}
+{# Profiles must be available before widgets can initialize the bundled editor. #}
+<script nonce="{{ m.req.csp_nonce }}">
+    {% include "_editor_tiptap_profiles.tpl" %}
+</script>
 {% lib "js/zotonic-editor-tiptap.js" %}
 
 {% wire name="zmedia" action={dialog_open
@@ -35,6 +39,7 @@
             bulletList: "{{ _"Bullet list"|escapejs }}", orderedList: "{{ _"Numbered list"|escapejs }}",
             indent: "{{ _"Indent"|escapejs }}", outdent: "{{ _"Outdent"|escapejs }}",
             blockquote: "{{ _"Quote"|escapejs }}", codeBlock: "{{ _"Code block"|escapejs }}",
+            codeLanguage: "{{ _"Code language"|escapejs }}", plainText: "{{ _"Plain text"|escapejs }}",
             alignLeft: "{{ _"Align left"|escapejs }}", alignCenter: "{{ _"Align center"|escapejs }}",
             alignRight: "{{ _"Align right"|escapejs }}",
             ltr: "{{ _"Left to right"|escapejs }}", rtl: "{{ _"Right to left"|escapejs }}",
@@ -50,7 +55,9 @@
             splitCell: "{{ _"Split cell"|escapejs }}", deleteTable: "{{ _"Delete table"|escapejs }}",
             url: "{{ _"URL"|escapejs }}", invalidUrl: "{{ _"Enter a valid link."|escapejs }}",
             apply: "{{ _"Apply"|escapejs }}", cancel: "{{ _"Cancel"|escapejs }}",
-            required: "{{ _"This field is required."|escapejs }}"
+            required: "{{ _"This field is required."|escapejs }}",
+            save: "{{ _"Save"|escapejs }}",
+            saveAndView: "{{ _"Save and View"|escapejs }}"
         }
     });
     {% all include tiptap_overrides_tpl|default:"_editor_tiptap_overrides_js.tpl" id=id %}

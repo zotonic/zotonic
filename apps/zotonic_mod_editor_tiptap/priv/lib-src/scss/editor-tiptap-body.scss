@@ -156,6 +156,17 @@
         border: 1px solid #b9c1c6;
         cursor: pointer;
 
+        > figcaption {
+            padding: 8px 10px;
+            border-top: 1px solid #b9c1c6;
+            background: #f0f2f3;
+            color: #4b555a;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-wrap: anywhere;
+            white-space: pre-wrap;
+        }
+
         &-block {
             display: block;
             clear: both;

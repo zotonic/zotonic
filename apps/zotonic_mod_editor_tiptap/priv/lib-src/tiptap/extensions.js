@@ -7,7 +7,9 @@ import TextAlign from '@tiptap/extension-text-align';
 import Subscript from '@tiptap/extension-subscript';
 import Superscript from '@tiptap/extension-superscript';
 import { Plugin, PluginKey, NodeSelection } from '@tiptap/pm/state';
+import { createElement, Settings2 } from 'lucide';
 import { mediaOptions, safeUrl } from './content.js';
+import { codeBlock } from './code-block.js';
 
 const bookmarkKey = new PluginKey('zotonicDialogSelection');
 
@@ -103,50 +105,84 @@ function zotonicMedia(previewUrl, openProperties, label) {
         },
         addNodeView() {
             return ({ node, editor, getPos }) => {
-                const dom = document.createElement('img');
+                const dom = document.createElement('figure');
+                dom.contentEditable = 'false';
+                const image = document.createElement('img');
+                const caption = document.createElement('figcaption');
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'z-tiptap-media-properties';
+                button.append(createElement(Settings2, { width: 18, height: 18, 'aria-hidden': 'true' }));
+                dom.append(image, button);
+                const editable = () => {
+                    button.title = label();
+                    button.setAttribute('aria-label', button.title);
+                    image.title = button.title;
+                    image.alt = node.attrs.options.caption && node.attrs.options.caption !== '-'
+                        ? node.attrs.options.caption : button.title;
+                    button.disabled = !editor.isEditable;
+                    button.hidden = !editor.isEditable;
+                };
                 function render(current) {
                     const { id, options } = current.attrs;
                     const align = ['left', 'right'].includes(options.align) ? options.align : 'block';
                     const size = ['small', 'middle'].includes(options.size) ? options.size : 'large';
                     dom.className = `z-tiptap-media z-tiptap-media-${align} z-tiptap-media-${size}`;
-                    dom.src = previewUrl.replace('__ID__', encodeURIComponent(id));
-                    dom.alt = options.caption && options.caption !== '-' ? options.caption : label;
-                    dom.title = label;
+                    image.src = previewUrl.replace('__ID__', encodeURIComponent(id));
+                    const text = typeof options.caption === 'string' ? options.caption.trim() : '';
+                    caption.textContent = text;
+                    if (text && text !== '-') {
+                        dom.append(caption);
+                    } else {
+                        caption.remove();
+                    }
                     dom.draggable = true;
                     dom.dataset.zmediaId = id;
+                    editable();
                 }
                 const edit = event => {
                     if (!editor.isEditable) return;
                     event.preventDefault();
+                    event.stopPropagation();
                     const pos = getPos();
                     if (pos === undefined) return;
                     editor.view.dispatch(editor.state.tr.setSelection(NodeSelection.create(editor.state.doc, pos)));
                     openProperties(editor);
                 };
-                dom.addEventListener('dblclick', edit);
+                image.addEventListener('dblclick', edit);
+                button.addEventListener('click', edit);
+                editor.on('transaction', editable);
                 render(node);
                 return {
                     dom,
+                    stopEvent: event => button.contains(event.target),
+                    ignoreMutation: () => true,
                     update(updated) {
                         if (updated.type !== node.type) return false;
                         node = updated;
                         render(node);
                         return true;
                     },
-                    destroy() { dom.removeEventListener('dblclick', edit); }
+                    destroy() {
+                        image.removeEventListener('dblclick', edit);
+                        button.removeEventListener('click', edit);
+                        editor.off('transaction', editable);
+                    }
                 };
             };
         }
     });
 }
 
-export function extensions({ previewUrl, openProperties, mediaLabel }) {
+export function extensions({ previewUrl, openProperties, mediaLabel, codeLanguages, label }) {
     return [
         StarterKit.configure({
             trailingNode: false,
+            codeBlock: false,
             heading: { levels: [1, 2, 3, 4, 5, 6] },
             link: { openOnClick: false, autolink: false, HTMLAttributes: { target: null, rel: null } }
         }),
+        codeBlock(codeLanguages, label),
         SafeImage,
         TableKit.configure({ table: { resizable: false } }),
         TextAlign.configure({ types: ['heading', 'paragraph'] }),

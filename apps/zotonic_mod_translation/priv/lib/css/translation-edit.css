@@ -1,0 +1,42 @@
+.translation-texts-table > thead {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: #fff;
+}
+
+.translation-texts-table > thead > tr > th:first-child,
+.translation-texts-table > tbody > tr > th {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    background: #fff;
+    box-shadow: 1px 0 0 #ddd;
+}
+
+.translation-texts-table > tbody > tr:nth-of-type(odd) > th {
+    background: #f9f9f9;
+}
+
+.translation-texts-table > thead > tr > th:not(:first-child),
+.translation-texts-table > tbody > tr > td {
+    min-width: 30ch;
+}
+
+.translation-edit-text {
+    min-height: 2em;
+    padding: 4px;
+    cursor: text;
+    overflow-wrap: anywhere;
+}
+.translation-edit-text:hover,
+.translation-edit-text:focus-visible {
+    outline: 2px solid #087a9d;
+    outline-offset: 2px;
+    background: #edf6f8;
+}
+
+[data-translation-edit-form] .z-tiptap:not(.is-fullscreen) .z-tiptap-content {
+    max-height: 45vh;
+    overflow-y: auto;
+}

@@ -70,6 +70,20 @@ resource-column with the main editing form is rendered using `{% catinclude \"_a
 This column is loaded lazily via a postback.
 
 
+### Editor profile
+
+With `mod_editor_tiptap`, frontend editing defaults to the `advanced` profile.
+Set `mod_admin_frontend.editor_profile` to `simple`, `normal`, or `advanced` in
+the site configuration to choose another profile. An unset or empty value uses
+`advanced`; unrecognized profile names fall back to Tiptap's `normal` profile.
+
+The setting is applied as `data-editor-profile` on the resource edit form,
+including forms loaded via postbacks. A nearer attribute on a field container
+or textarea overrides it. Profile definitions and site overrides are provided
+by `_editor_tiptap_profiles.tpl` in `mod_editor_tiptap`.
+This setting does not change TinyMCE configuration.
+
+
 ### Customizing the menu column
 
 Extra content can be added above or below the menu view by overruling the blocks `above_menu` and `below_menu`.
@@ -127,6 +141,15 @@ Delegate callbacks:
 -mod_description("Edit pages on a web site; subset of admin module for Bootstrap based web sites.").
 -mod_depends([mod_admin, mod_mqtt]).
 -mod_prio(500).
+
+-mod_config([
+    #{
+        key => editor_profile,
+        type => string,
+        default => <<"advanced">>,
+        description => "Tiptap profile for frontend editing: simple, normal, or advanced."
+    }
+]).
 
 -export([
     event/2

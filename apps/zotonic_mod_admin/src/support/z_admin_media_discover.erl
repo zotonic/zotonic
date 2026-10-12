@@ -62,8 +62,9 @@ event(#submit{message={media_url_import, Args}}, Context) ->
     Result = case Intent of
         <<"update">> when is_integer(Id) ->
             RscProps = media_update_rsc_props(Context),
-            m_rsc:update(Id, RscProps, Context),
-            z_media_import:update(Id, MediaImport, Context);
+            MediaContext = z_context:set(admin_media_update_id, Id, Context),
+            m_rsc:update(Id, RscProps, MediaContext),
+            z_media_import:update(Id, MediaImport, MediaContext);
         _ ->
             RscProps = media_insert_rsc_props(ArgsEmbed, Context),
             z_media_import:insert(MediaImport, RscProps, Context)
@@ -285,4 +286,3 @@ url_from_embed(Embed) ->
         nomatch ->
             {error, notfound}
     end.
-

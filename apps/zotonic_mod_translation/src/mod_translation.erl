@@ -41,6 +41,52 @@ How content and static strings are translated is explained in full in [Translati
 
 
 
+Editing texts in the admin
+--------------------------
+
+The resource translation overview opens a single-field dialog when an editable
+text is clicked. Body properties and properties ending in `_html` use `z_editor`;
+short plain texts use an input and other plain texts use a textarea. Sites can
+override the blocks in `_translation_edit_field.tpl`. The rich-text dialog inherits
+the page's editor profile (advanced in the admin) and works with any enabled editor module.
+
+Saving changes only the selected property and language, preserving other languages
+and block structure. Named block fields are supported; structured survey answer
+lists, unnamed blocks and unsafe properties remain read-only. Missing translations
+open empty, without falling back to a different language.
+The page slug is editable only when the resource has Customize page slug enabled
+(`custom_slug`). This condition is checked when opening and saving the dialog.
+
+The translation overview, admin and frontend-admin edit forms warn when a newer
+resource version is observed. A successful translation dialog save acknowledges
+its new version in the overview only if the overview was current when the dialog
+opened. Saves never clear warnings about intervening external updates.
+Resource update notifications include `version`, including updates through
+`m_rsc:touch/2`. Media notifications also trigger a version check. Reconnects,
+window focus and periodic checks recover missed notifications. Notifications never
+advance the version of an unsaved form, and stale saves are rejected under a database
+row lock. Reloading asks for confirmation when the form has unsaved edits.
+
+Media replacements initiated in the edit page send a private version acknowledgement
+to that browser. The form advances only from the exact pre-update version and keeps
+its unsaved edits; other tabs and already-stale forms still show the warning.
+
+Video conversion marks resource updates with the update option
+`{update_reason, media_processing}`. Resource update notifications include
+`previous_version` and `reason`. The `media_processing` reason is emitted only when
+the resource properties are unchanged except for version, modification date and
+modifier. Otherwise the reason is `update`, including when upload observers change
+text or category. Editors and translation overviews acknowledge only the next
+consecutive processing version, preserving unsaved edits and existing conflicts.
+Missed notifications conservatively require reloading; polling alone cannot prove
+that a skipped version contained no text changes. Failed conversion and preview-only
+medium updates do not themselves increment the resource version.
+
+Custom admin form templates must include `_admin_edit_version.tpl` inside the form
+(pass `version_form` for a form id other than `rscform`). The `z_edit_version`
+hidden input is required for version-checked saves.
+
+
 Language as part of the URL
 ---------------------------
 
@@ -691,6 +737,10 @@ observe_scomp_script_render(#scomp_script_render{}, Context) ->
 
 %% @doc Set the current session (and user) language, reload the user agent's page. Called from
 %% language switch. Reloads the page to reflect the new setting.
+event(#postback{message={translation_edit, _}} = Event, Context) ->
+    translation_edit:event(Event, Context);
+event(#submit{message={translation_save, _}} = Event, Context) ->
+    translation_edit:event(Event, Context);
 event(#postback{message={set_language, Args}}, Context) ->
     LanguageCode = case proplists:get_value(code, Args) of
                undefined -> z_context:get_q(<<"triggervalue">>, Context);

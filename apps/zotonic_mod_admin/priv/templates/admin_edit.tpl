@@ -37,6 +37,7 @@
     %}
     <form id="rscform" method="post" action="postback" class="form">
     	<input type="hidden" name="id" value="{{ id }}" />
+        {% include "_admin_edit_version.tpl" id=id %}
 
     	<div class="rscform-columns">
     		<div id="poststuff">
@@ -64,4 +65,3 @@
 {% block editor %}
 	{% include "_editor.tpl" %}
 {% endblock %}
-

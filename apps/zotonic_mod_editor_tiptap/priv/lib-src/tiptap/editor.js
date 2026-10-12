@@ -39,12 +39,9 @@ function install() {
     }
 
     function profile(textarea) {
-        let data = {};
-        if (textarea.dataset.zeditor) data = JSON.parse(textarea.dataset.zeditor);
-        else if (window.jQuery?.fn.metadata) data = window.jQuery(textarea).metadata('zeditor') || {};
-        const key = (data.config || textarea.name || 'default').split('$')[0];
+        const key = textarea.closest('[data-editor-profile]')?.dataset.editorProfile || 'normal';
         const profiles = window.z_editor_tiptap_config || {};
-        return { ...profiles.default, ...profiles[key] };
+        return { ...profiles.default, ...(Object.hasOwn(profiles, key) ? profiles[key] : profiles.normal) };
     }
 
     function live(record) {
@@ -201,9 +198,46 @@ function install() {
         input.focus();
     }
 
+    function fullscreenSaveActions(record) {
+        const form = record.textarea.form;
+        if (!form) return () => {};
+        const actions = document.createElement('div');
+        actions.className = 'z-tiptap-save-actions';
+        const observers = [];
+        for (const [id, key] of [['save_stay', 'save'], ['save_view', 'saveAndView']]) {
+            const target = Array.from(form.elements).find(el => el.id === id && el.type === 'submit');
+            if (!target) continue;
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.dataset.saveAction = id;
+            button.textContent = label(key);
+            button.title = label(key);
+            const update = () => { button.disabled = target.matches(':disabled') || !record.editor.isEditable; };
+            button.addEventListener('click', () => {
+                update();
+                if (!button.disabled && target.isConnected && target.form === form) {
+                    selected(form).forEach(save);
+                    target.click();
+                }
+            });
+            const observer = new MutationObserver(update);
+            observer.observe(target, { attributes: true, attributeFilter: ['disabled'] });
+            record.editor.on('transaction', update);
+            observers.push(() => { observer.disconnect(); record.editor.off('transaction', update); });
+            update();
+            actions.append(button);
+        }
+        if (actions.childElementCount) record.toolbar.append(actions);
+        return () => {
+            observers.forEach(dispose => dispose());
+            actions.remove();
+        };
+    }
+
     function toggleFullscreen(record) {
         if (fullscreen) {
             const previous = fullscreen;
+            previous.fullscreenCleanup?.();
             previous.shell.classList.remove('is-fullscreen');
             previous.toolbar.querySelector('[data-command="fullscreen"]')?.setAttribute('aria-pressed', 'false');
             document.body.classList.remove('z-tiptap-fullscreen');
@@ -215,6 +249,7 @@ function install() {
         record.scrollX = window.scrollX;
         record.scrollY = window.scrollY;
         fullscreen = record;
+        record.fullscreenCleanup = fullscreenSaveActions(record);
         record.shell.classList.add('is-fullscreen');
         record.toolbar.querySelector('[data-command="fullscreen"]')?.setAttribute('aria-pressed', 'true');
         document.body.classList.add('z-tiptap-fullscreen');
@@ -240,7 +275,8 @@ function install() {
             editor = new Editor({
                 element: content,
                 injectCSS: false,
-                extensions: [...extensions({ previewUrl: settings.mediaPreviewUrl, openProperties: mediaProperties, mediaLabel: label('mediaProperties') }), ...extra],
+                extensions: [...extensions({ previewUrl: settings.mediaPreviewUrl, openProperties: mediaProperties,
+                    mediaLabel: () => label('mediaProperties'), codeLanguages: config.codeLanguages, label }), ...extra],
                 content: importHTML(textarea.value),
                 editable: !textarea.disabled && !textarea.readOnly,
                 editorProps: {
@@ -329,7 +365,11 @@ function install() {
             for (const textarea of fields(root)) { observer?.unobserve(textarea); pending.delete(textarea); }
         },
         get: id => [...records.values()].find(record => record.textarea.id === id)?.editor,
-        configure: options => { settings = { ...settings, ...options, labels: { ...settings.labels, ...options.labels } }; },
+        configure(options) {
+            settings = { ...settings, ...options, labels: { ...settings.labels, ...options.labels } };
+            // Admin widgets can initialize before the template's translated configuration.
+            for (const { editor } of records.values()) editor.view.dispatch(editor.state.tr);
+        },
         linkDone, mediaDone,
         Editor, Extension, Node, Mark
     };

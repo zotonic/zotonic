@@ -79,8 +79,18 @@ export function cleanPaste(html) {
         previous = stack[0];
         paragraph.remove();
     }
+    // Tiptap reads the language from <code>, while some highlighters put it on <pre>.
+    for (const code of template.content.querySelectorAll('code')) {
+        const classes = [...code.classList,
+            ...(code.parentElement?.localName === 'pre' ? code.parentElement.classList : [])];
+        const language = classes.find(value => value.startsWith('language-') && value.length > 9);
+        if (language) code.setAttribute('class', language);
+    }
     for (const el of template.content.querySelectorAll('[class], [style], [id]')) {
+        const language = el.localName === 'code'
+            ? [...el.classList].find(value => value.startsWith('language-') && value.length > 9) : null;
         el.removeAttribute('class');
+        if (language) el.setAttribute('class', language);
         el.removeAttribute('id');
         // Keep semantic emphasis/alignment for the schema, discard Office typography.
         const style = el.style;

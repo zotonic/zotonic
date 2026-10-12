@@ -128,6 +128,16 @@
   border: 1px solid #b9c1c6;
   cursor: pointer;
 }
+.z-tiptap-body .z-tiptap-media > figcaption {
+  padding: 8px 10px;
+  border-top: 1px solid #b9c1c6;
+  background: #f0f2f3;
+  color: #4b555a;
+  font-size: 14px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
 .z-tiptap-body .z-tiptap-media-block {
   display: block;
   clear: both;

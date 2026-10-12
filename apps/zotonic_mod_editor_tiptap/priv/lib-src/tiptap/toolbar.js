@@ -3,15 +3,9 @@ import {
     createElement, Undo2, Redo2, Bold, Italic, Underline, Strikethrough,
     List, ListOrdered, IndentIncrease, IndentDecrease, Quote, Code, Link,
     Unlink, ImagePlus, Maximize, RemoveFormatting, AlignLeft, AlignCenter,
-    AlignRight, Subscript, Superscript, WrapText, Minus, ExternalLink,
+    AlignRight, Subscript, Superscript, WrapText, Minus, FileSymlink,
     ArrowLeftToLine, ArrowRightToLine
 } from 'lucide';
-
-export const defaultToolbar = [
-    'undo', 'redo', '|', 'format', 'bold', 'italic', 'underline', '|',
-    'bulletList', 'orderedList', 'outdent', 'indent', 'blockquote', '|',
-    'link', 'unlink', 'zlink', 'zmedia', 'table', '|', 'removeFormat', 'fullscreen'
-];
 
 const commands = {
     undo: [Undo2, chain => chain.undo()],
@@ -38,7 +32,7 @@ const commands = {
     unlink: [Unlink, chain => chain.extendMarkRange('link').unsetLink()],
     removeFormat: [RemoveFormatting, chain => chain.unsetAllMarks().clearNodes()]
 };
-const icons = { link: Link, zlink: ExternalLink, zmedia: ImagePlus, fullscreen: Maximize };
+const icons = { link: Link, zlink: FileSymlink, zmedia: ImagePlus, fullscreen: Maximize };
 
 export function toolbar(record, actions, label) {
     const { editor, config } = record;
@@ -46,8 +40,8 @@ export function toolbar(record, actions, label) {
     bar.className = 'z-tiptap-toolbar';
     bar.setAttribute('role', 'group');
     bar.setAttribute('aria-label', label('toolbar'));
-    const updates = [];
-    const controls = config.toolbar || defaultToolbar;
+    const updates = [() => bar.setAttribute('aria-label', label('toolbar'))];
+    const controls = config.toolbar || [];
     for (const name of controls) {
         if (name === '|') {
             const separator = document.createElement('span');
@@ -69,6 +63,9 @@ export function toolbar(record, actions, label) {
             });
             bar.append(select);
             updates.push(() => {
+                select.title = label('format');
+                select.setAttribute('aria-label', select.title);
+                for (const option of select.options) option.textContent = label(option.value);
                 select.disabled = !editor.isEditable;
                 select.value = editor.isActive('heading') ? `h${editor.getAttributes('heading').level}`
                     : editor.isActive('codeBlock') ? 'codeBlock' : 'paragraph';
@@ -95,6 +92,9 @@ export function toolbar(record, actions, label) {
             });
             bar.append(select);
             updates.push(() => {
+                select.title = label('table');
+                select.setAttribute('aria-label', select.title);
+                for (const option of select.options) option.textContent = label(option.value || 'table');
                 select.disabled = !editor.isEditable;
                 for (const option of [...select.options].slice(1)) {
                     option.disabled = !tableCommands[option.value](editor.can().chain()).run();
@@ -121,6 +121,8 @@ export function toolbar(record, actions, label) {
             });
             bar.append(button);
             updates.push(() => {
+                button.title = custom?.label || label(name);
+                button.setAttribute('aria-label', button.title);
                 button.disabled = name !== 'fullscreen' && (!editor.isEditable
                     || (command ? !command[1](editor.can().chain()).run() : false));
                 const active = command?.[2] ? editor.isActive(command[2])

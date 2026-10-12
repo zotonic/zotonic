@@ -57,30 +57,39 @@ Full-window editing preserves the instance; Escape returns to the normal view.
 
 ## Profiles and extensions
 
-This module has no `m.config` settings. Configure browser-side profiles in the
-site's `_editor_tiptap_overrides_js.tpl`. That template contains JavaScript only:
-it is already included inside a `{% javascript %}` block.
+The three built-in profiles are `simple` (basic text and links), `normal`
+(formatting, lists, media and full-window editing), and `advanced` (all controls,
+including tables, alignment and text direction). Admin pages select `advanced`
+on the body element.
 
-```javascript
-window.z_editor_tiptap_config = {
-    default: {
-        toolbar: ['undo', 'redo', '|', 'format', 'bold', 'italic', '|',
-                  'bulletList', 'orderedList', '|', 'link', 'zlink', 'zmedia',
-                  'table', '|', 'fullscreen']
-    },
-    summary: { toolbar: ['bold', 'italic', 'link', 'unlink'] }
-};
-```
-
-Profile selection uses `data-zeditor`'s `config` value, falling back to the field
-name without its language suffix: `body$nl` selects `body`. The selected profile
-is shallow-merged over `default`; arrays such as `toolbar` and `extensions` are
-replaced, not concatenated. Profiles apply when an editor is created.
+Select a profile with `data-editor-profile` on the textarea or any ancestor.
+The nearest attribute wins; missing, empty or unknown names use `normal`.
+Field names and the old `data-zeditor.config` no longer select profiles.
 
 ```html
-<textarea name=\"summary$en\" class=\"z_editor-init\"
-          data-zeditor='{\"config\":\"summary\"}'></textarea>
+<section data-editor-profile=\"normal\">
+    <textarea name=\"body$en\" class=\"z_editor-init\"></textarea>
+    <textarea name=\"summary$en\" class=\"z_editor-init\" data-editor-profile=\"simple\"></textarea>
+</section>
 ```
+
+Profiles are defined in `_editor_tiptap_profiles.tpl`, loaded before the editor
+bundle. Override that template in your site using its `simple`, `normal`, and
+`advanced` blocks. Each block contains JavaScript object properties:
+
+```django
+{% extends overrules %}
+{% block simple %}
+toolbar: ['bold', 'italic', 'link', 'unlink']
+{% endblock %}
+```
+
+A profile can also define extensions, paste handlers and custom buttons in the
+same block. The optional `window.z_editor_tiptap_config.default` supplies shared
+options; the selected profile is shallow-merged over it. Arrays are replaced,
+not concatenated. Profiles are read at editor creation; changing attributes or
+definitions does not rebuild mounted editors. There are no `m.config` settings.
+The admin `editor_profile` template block can override the body-level default.
 
 | Profile option | Purpose |
 | --- | --- |
