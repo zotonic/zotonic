@@ -192,8 +192,11 @@ model([<<"items">>, Id | Rest], C) -> {ok, {items(Id, 0, C), Rest}};
 model(_, _) -> {error, unknown_path}.
 
 -spec allowed(z:context()) -> boolean().
-allowed(C) -> z_acl:is_allowed(use, mod_import_feed, C).
-writable(C) -> allowed(C) andalso not z_acl:is_read_only(C).
+allowed(C) ->
+    z_acl:is_allowed(use, mod_import_feed, C).
+
+writable(C) ->
+    allowed(C) andalso not z_acl:is_read_only(C).
 
 -spec list(z:context()) -> [map()].
 list(C) ->
