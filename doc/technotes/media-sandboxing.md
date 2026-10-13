@@ -112,8 +112,8 @@ Seccomp also denies `clone()` with `CLONE_NEWUSER`, preventing creation of a
 user namespace with new capabilities while preserving ordinary fork/thread
 creation. `clone3()` returns `ENOSYS` so libc can fall back to `clone()`.
 The new mount APIs (`fsopen`, `fsconfig`, `fsmount`, `move_mount`, `open_tree`,
-`mount_setattr`, and `fspick`) are denied as defense in depth alongside
-Landlock's filesystem topology restrictions.
+`mount_setattr`, and `fspick`) are denied because Landlock does not mediate
+filesystem topology changes.
 
 A supervisor keeps the decoder and delegates in a job process group. On normal
 completion, failure, or cancellation, it kills that group with SIGKILL. The
