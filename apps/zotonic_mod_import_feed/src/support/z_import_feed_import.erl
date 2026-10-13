@@ -124,40 +124,52 @@ finish(Id, Imported, Existing, Uri, FeedId, Hash, C) ->
     record(FeedId, Uri, <<"article">>, <<"ok">>, Hash, undefined, C),
     case Existing of undefined -> imported; _ -> updated end.
 
-import(#{zotonic_export := _} = Item, _, C) ->
-    {Id, Imported} = z_import_feed_native:run(Item, lookup(maps:get(uri, Item), C), C),
-    lists:foreach(fun({P, O}) -> edge(Id, P, O, C) end, maps:get(default_connections, Item)),
+import(#{zotonic_export := _} = Item, _, Context) ->
+    {Id, Imported} = z_import_feed_native:run(Item, lookup(maps:get(uri, Item), Context), Context),
+    lists:foreach(fun({P, O}) ->
+                          edge(Id, P, O, Context)
+                  end,
+                  maps:get(default_connections, Item)),
     {Id, Imported};
-import(Item, Ds, C) ->
-    ?DEBUG(Item,
+import(Item, Ds, Context) ->
     %% Reuse media by source URI. Do not steal media from existing local resources.
     Imported = lists:foldl(fun(D, Acc) ->
-        U = maps:get(uri, D),
-        case deleted(U, C) of
-            true -> Acc;
-            false ->
-                Id = upsert(D, C),
-                ok = medium(Id, maps:get(medium, D), C),
-                remember(U, Id, C),
-                Acc#{U => Id}
-        end
-    end, #{}, Ds),
-    Item1 = Item#{props := local_body(maps:get(props, Item), media_aliases(Item, Imported), C)},
-    Id = upsert(Item1, C),
-    ok = medium(Id, maps:get(medium, Item), C),
+                                   Uri = maps:get(uri, D),
+                                   case deleted(Uri, Context) of
+                                       true -> Acc;
+                                       false ->
+                                           Id = upsert(D, Context),
+                                           ok = medium(Id, maps:get(medium, D), Context),
+                                           remember(Uri, Id, Context),
+                                           Acc#{Uri => Id}
+                                   end
+                           end,
+                           #{},
+                           Ds),
+    Item1 = Item#{props := local_body(maps:get(props, Item), media_aliases(Item, Imported), Context)},
+    Id = upsert(Item1, Context),
+    ok = medium(Id, maps:get(medium, Item), Context),
     case maps:get(medium, Item) of
-        undefined -> ok;
+        undefined ->
+            ok;
         Attached ->
-            LocalProps = local_body(maps:get(props, Item), media_aliases(Item, #{Attached => Id}), C),
-            case m_rsc:update(Id, maps:with([<<"body">>], LocalProps), C) of
+            LocalProps = local_body(maps:get(props, Item), media_aliases(Item, #{Attached => Id}), Context),
+            case m_rsc:update(Id, maps:with([<<"body">>], LocalProps), Context) of
                 {ok, _} -> ok;
                 {error, Reason} -> throw({import_error, Reason})
             end
     end,
-    lists:foreach(fun
-        ({P, O}) when is_integer(O) -> edge(Id, P, O, C);
-        ({P, U}) -> case maps:find(U, Imported) of {ok, O} -> edge(Id, P, O, C); error -> ok end
-    end, maps:get(edges, Item)),
+    lists:foreach(fun ({P, O}) when is_integer(O) ->
+                          edge(Id, P, O, Context);
+                      ({P, U}) ->
+                          case maps:find(U, Imported) of
+                              {ok, O} ->
+                                  edge(Id, P, O, Context);
+                              error ->
+                                  ok
+                          end
+                  end,
+                  maps:get(edges, Item)),
     {Id, Imported}.
 
 media_aliases(Item, Imported) ->
@@ -172,9 +184,9 @@ media_aliases(Item, Imported) ->
 %% The map includes source variant aliases, each pointing to a local resource.
 -spec local_body(Props, Imported, Context) -> map() when
     Props :: map(), Imported :: #{binary() => integer()}, Context :: z:context().
-local_body(#{<<"body">> := Body} = Props, Imported, C) ->
+local_body(#{<<"body">> := Body} = Props, Imported, Context) ->
     Urls = maps:fold(fun(U, Id, Acc) ->
-        case z_media_tag:url(Id, [], C) of
+        case z_media_tag:url(Id, [], Context) of
             {ok, Local} when Local =/= <<>> -> Acc#{U => Local};
             _ -> Acc
         end
@@ -182,7 +194,7 @@ local_body(#{<<"body">> := Body} = Props, Imported, C) ->
     case z_html_parse:parse(<<"<div>", Body/binary, "</div>">>, #{mode => html, escape => false}) of
         {ok, {_, _, Children}} ->
             Html = iolist_to_binary([body_html(local_node(N, Imported, Urls, maps:get(<<"website">>, Props, <<>>))) || N <- Children]),
-            Props#{<<"body">> := normalize_links(Html, maps:get(<<"website">>, Props, <<>>), C)};
+            Props#{<<"body">> := normalize_links(Html, maps:get(<<"website">>, Props, <<>>), Context)};
         _ -> Props
     end;
 local_body(Props, _, _) -> Props.
@@ -223,29 +235,29 @@ local_element({Tag, Attrs, Children}, Imported, Urls, Base) ->
 %% Only resources recorded as imported articles can become local destinations.
 -spec normalize_links(Body, Base, Context) -> binary() when
     Body :: binary(), Base :: binary(), Context :: z:context().
-normalize_links(Body, Base, C) ->
+normalize_links(Body, Base, Context) ->
     case z_html_parse:parse(<<"<div>", Body/binary, "</div>">>, #{mode => html, escape => false}) of
         {ok, {_, _, Children}} ->
-            iolist_to_binary([body_html(N) || N <- link_nodes(Children, Base, C)]);
+            iolist_to_binary([body_html(N) || N <- link_nodes(Children, Base, Context)]);
         _ -> Body
     end.
 
-link_nodes(Nodes, Base, C) ->
+link_nodes(Nodes, Base, Context) ->
     lists:flatmap(fun
         ({<<"a">>, Attrs, Children}) ->
             Href = proplists:get_value(<<"href">>, Attrs, <<>>),
             Resolved = z_import_feed_http:resolve(Href, Base),
-            Content = link_nodes(Children, Base, C),
+            Content = link_nodes(Children, Base, Context),
             case image_link(Resolved) of
                 true -> Content;
                 false ->
                     Link = case Resolved of
                         <<>> -> Href;
-                        _ -> article_link(Resolved, C)
+                        _ -> article_link(Resolved, Context)
                     end,
                     [{<<"a">>, lists:keystore(<<"href">>, 1, Attrs, {<<"href">>, Link}), Content}]
             end;
-        ({Tag, Attrs, Children}) -> [{Tag, Attrs, link_nodes(Children, Base, C)}];
+        ({Tag, Attrs, Children}) -> [{Tag, Attrs, link_nodes(Children, Base, Context)}];
         (Node) -> [Node]
     end, Nodes).
 
@@ -255,13 +267,13 @@ image_link(Url) ->
     re:run(Path, <<"\\.(?:jpe?g|png|gif|webp|avif|svg|tiff?|bmp|ico)$">>,
         [caseless, {capture, none}]) =:= match.
 
-article_link(Url, C) ->
+article_link(Url, Context) ->
     Parts = uri_string:parse(Url),
     Source = uri_string:recompose(maps:remove(fragment, Parts)),
-    Id = imported_article(Source, C),
-    case is_integer(Id) andalso z_acl:rsc_visible(Id, C) of
+    Id = imported_article(Source, Context),
+    case is_integer(Id) andalso z_acl:rsc_visible(Id, Context) of
         true ->
-            case m_rsc:p(Id, page_url, C) of
+            case m_rsc:p(Id, page_url, Context) of
                 undefined -> Url;
                 Page ->
                     Fragment = case maps:get(fragment, Parts, undefined) of
@@ -273,30 +285,30 @@ article_link(Url, C) ->
         false -> Url
     end.
 
-imported_article(Source, C) ->
+imported_article(Source, Context) ->
     case z_db:q1("select f.rsc_id from import_feed_resource f
             join import_feed_item i on i.uri=f.uri
             where f.uri=$1 and i.kind='article' and f.rsc_id is not null
-            limit 1", [Source], C) of
+            limit 1", [Source], Context) of
         undefined ->
             %% Resource properties can be stored as either term or JSON data.
             %% Read website via the model rather than depending on that storage.
             Ids = z_db:q("select distinct f.rsc_id from import_feed_resource f
                 join import_feed_item i on i.uri=f.uri
-                where i.kind='article' and f.rsc_id is not null", C),
-            find_article_website(Source, Ids, C);
+                where i.kind='article' and f.rsc_id is not null", Context),
+            find_article_website(Source, Ids, Context);
         Id -> Id
     end.
 
 find_article_website(_, [], _) -> undefined;
-find_article_website(Source, [{Id} | Rest], C) ->
-    case z_html:unescape(m_rsc:p(Id, website, C)) of
+find_article_website(Source, [{Id} | Rest], Context) ->
+    case z_html:unescape(m_rsc:p(Id, website, Context)) of
         Source -> Id;
-        _ -> find_article_website(Source, Rest, C)
+        _ -> find_article_website(Source, Rest, Context)
     end.
 
-edge(Id, P, O, C) ->
-    case m_edge:insert(Id, P, O, C) of
+edge(Id, P, O, Context) ->
+    case m_edge:insert(Id, P, O, Context) of
         {ok, _} -> ok;
         {error, R} -> throw({import_error, {edge, R}})
     end.
