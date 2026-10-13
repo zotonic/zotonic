@@ -108,6 +108,13 @@ or a VM boundary. Resource-limit operations through `prlimit64` are permitted
 only with PID zero (the calling process); explicit PID targets are denied,
 including other processes owned by the Zotonic user.
 
+Seccomp also denies `clone()` with `CLONE_NEWUSER`, preventing creation of a
+user namespace with new capabilities while preserving ordinary fork/thread
+creation. `clone3()` returns `ENOSYS` so libc can fall back to `clone()`.
+The new mount APIs (`fsopen`, `fsconfig`, `fsmount`, `move_mount`, `open_tree`,
+`mount_setattr`, and `fspick`) are denied because Landlock does not mediate
+filesystem topology changes.
+
 A supervisor keeps the decoder and delegates in a job process group. On normal
 completion, failure, or cancellation, it kills that group with SIGKILL. The
 Linux filter prevents delegates from moving into another group. If the Erlang
@@ -177,12 +184,29 @@ override that policy. Error tuples preserve bounded stdout and stderr separately
 
 ## Verification
 
+On Linux, test the launcher's seccomp rules independently of outer container
+filters and kernel capability checks (requires libseccomp development headers):
+
+```sh
+cc -std=c11 -Wall -Wextra -Werror -o /tmp/zotonic-sandbox-seccomp-test \
+    apps/zotonic_core/test/sandbox_seccomp_test.c -lseccomp
+/tmp/zotonic-sandbox-seccomp-test
+```
+
+This test includes the actual launcher policy and first installs a baseline
+filter returning `EUCLEAN` for the tested calls. After verifying that baseline,
+it installs the production filter and requires `EPERM` for user namespace and
+mount calls, `ENOSYS` for `clone3`, and unchanged `EUCLEAN` for ordinary `clone`.
+The newest matching `ERRNO` action supplies the error, so outer denials cannot
+hide a missing production rule. No namespaces or mounts are created. CI runs
+this test as an unprivileged user under its normal container policy.
+
 Build with `./rebar3 compile`. For integration tests, install ImageMagick,
 Ghostscript, FFmpeg and `file`, then run from the repository root as a non-root
 user on a host that permits sandbox initialization:
 
 ```sh
-cc -Wall -Wextra -Werror -o /tmp/zotonic-sandbox-probe \
+cc -Wall -Wextra -Werror -pthread -o /tmp/zotonic-sandbox-probe \
     apps/zotonic_core/test/sandbox_probe.c
 # Linux only: install a deliberately ungranted executable in a readable tree.
 if [ "$(uname -s)" = Linux ]; then
@@ -205,4 +229,5 @@ filenames, output limits, cancellation, output cleanup, symlink rejection,
 image conversion, FFmpeg conversion/probing and Ghostscript rendering. The PDF
 delegate is tested directly so that tests need not modify or bypass the
 administrator's ImageMagick policy. Linux additionally tests descendant
-process-group escape denial.
+process-group escape denial, user namespace and mount API denials, and ordinary
+fork/thread creation, including in descendants.

@@ -308,6 +308,7 @@ Available Model API Paths
                        | {is_import, boolean()}
                        | {tz, string()|binary()}
                        | {default_tz, string()|binary()}
+                       | {update_reason, update | media_processing}
                        | {expected, list({binary()|atom(), term()})}.
 
 % Range of resource id values in PostgreSQL.
@@ -936,12 +937,12 @@ duplicate(Id, Props, Options, Context) ->
 %% and does not check the ACL.  After "touching" the resource will be re-pivoted.
 -spec touch(resource(), z:context()) -> {ok, resource_id()} | {error, enoent}.
 touch(Id, Context) ->
-    case z_db:q(
-        "update rsc set version = version + 1, modifier_id = $1, modified = now() where id = $2",
+    case z_db:q1(
+        "update rsc set version = version + 1, modifier_id = $1, modified = now() where id = $2 returning version",
         [z_acl:user(Context), rid(Id, Context)],
         Context
     ) of
-        1 ->
+        Version when is_integer(Version) ->
             z_depcache:flush(Id, Context),
             IsA = m_rsc:is_a(Id, Context),
             Topic = [ <<"model">>, <<"rsc">>, <<"event">>, Id, <<"update">> ],
@@ -949,12 +950,13 @@ touch(Id, Context) ->
                 Topic,
                 #{
                     id => Id,
+                    version => Version,
                     pre_is_a => IsA,
                     post_is_a => IsA
                 },
                 Context),
             {ok, Id};
-        0 ->
+        undefined ->
             {error, enoent}
     end.
 

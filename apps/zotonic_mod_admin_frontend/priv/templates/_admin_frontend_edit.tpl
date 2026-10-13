@@ -15,6 +15,7 @@
 
 {% block rscform %}
 {% if id.exists %}
+    {% include "_admin_edit_preview_context.tpl" %}
 	{% with id.is_editable as is_editable %}
 	{% with id.is_a|default:(m.category[cat].is_a) as cats %}
 	{% wire id="rscform"
@@ -26,8 +27,10 @@
 			}
 			delegate=`controller_admin_edit`
 	%}
-	<form id="rscform" method="post" action="postback" class="form do_formdirty">
+	<form id="rscform" method="post" action="postback" class="form do_formdirty"
+        data-editor-profile="{{ m.config.mod_admin_frontend.editor_profile.value|default:"advanced"|escape }}">
 		<input type="hidden" name="id" value="{{ id }}">
+        {% include "_admin_edit_version.tpl" id=id %}
 
 		<div class="meta-data row">
 			<div class="col-lg-10 col-md-10">
@@ -155,6 +158,7 @@
 	 	    $('#rscform').on('shown.bs.tab', '.language-tabs > li > a[data-toggle="tab"]', function (e) {
 				if (e.target != e.relatedTarget) {
 			        const showLang = e.target.closest('li').getAttribute('lang');
+                    z_postback_data_set('z_edit_language', showLang);
 			        const hideLang = e.relatedTarget.closest('li').getAttribute('lang');
 					$("li[lang='"+showLang+"']:visible > a").tab('show');
 
@@ -180,4 +184,3 @@
 {% endif %}
 
 {% endblock %}
-

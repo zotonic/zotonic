@@ -5,6 +5,15 @@
 {% block navigation %}
 {% endblock %}
 
+{% block head_extra %}
+    {% lib "css/translation-edit.css" %}
+{% endblock %}
+
+{% block editor %}
+    {% include "_editor.tpl" id=id is_editor_include %}
+    {% lib "js/z.translation-edit.js" %}
+{% endblock %}
+
 {% block container %}
 
 {% fragment line %}
@@ -23,7 +32,7 @@
         <h1>
             {{ id.title|default:id.short_title|default:_"<em>Untitled</em>" }}
 
-            <a id="link-edit" href="{% url admin_edit_rsc id=id %}" class="btn btn-primary">
+            <a id="link-edit" href="{% url admin_edit_rsc id=id %}" class="btn btn-primary{% if q.close %} pull-right{% endif %}">
                 {% if q.close %}
                     {_ Close _}
                     {% javascript %}
@@ -39,11 +48,15 @@
 
         <p class="help-block">
             {_ Translated page texts for every editable language that has a translation in the resource. _}
+            {_ Click to edit. _}
         </p>
+        <div id="{{ #version }}" class="translation-version-warning" data-edit-version-overview>
+            {% include "_admin_edit_version.tpl" id=id version_form=#version is_overview %}
+        </div>
     </div>
 
-    <table class="table table-striped">
-        <thead style="position: sticky; top: 0; background-color: white">
+    <table class="table table-striped translation-texts-table">
+        <thead>
             <tr>
                 <th width="5%">{_ Property _}</th>
                 {% for code, lang in m.translation.language_list_editable %}
@@ -74,7 +87,7 @@
                         <th>{{ p|escape }}</th>
                         {% for code, lang in m.translation.language_list_editable %}
                             {% if code|member:r_lang %}
-                                <td>{{ trs[p] with z_language=code }}</td>
+                                <td>{% include "_translation_edit_text.tpl" id=id p=p code=code text=trs[p] %}</td>
                             {% endif %}
                         {% endfor %}
                     </tr>
@@ -87,7 +100,7 @@
                         <th>{{ p|escape }}</th>
                         {% for code, lang in m.translation.language_list_editable %}
                             {% if code|member:r_lang %}
-                                <td>{{ trs[p] with z_language=code }}</td>
+                                <td>{% include "_translation_edit_text.tpl" id=id p=p code=code text=trs[p] %}</td>
                             {% endif %}
                         {% endfor %}
                     </tr>
@@ -117,14 +130,14 @@
                         </th>
                         {% for code, lang in m.translation.language_list_editable %}
                             {% if code|member:r_lang %}
-                                <td>{{ b.prompt with z_language=code }}</td>
+<td>{% include "_translation_edit_text.tpl" id=id is_block block_name=b.name p="prompt" code=code text=b.prompt %}</td>
                             {% endif %}
                         {% endfor %}
                     </tr>
                     <tr>
                         {% for code, lang in m.translation.language_list_editable %}
                             {% if code|member:r_lang %}
-                                <td>{{ b.explanation with z_language=code }}</td>
+                                <td>{% include "_translation_edit_text.tpl" id=id is_block block_name=b.name p="explanation" code=code text=b.explanation %}</td>
                             {% endif %}
                         {% endfor %}
                     </tr>
@@ -154,11 +167,11 @@
                                         <li>{{ b.no|default:_"False" with z_language=code }}</li>
                                     </ol>
                                 {% elseif b.type == 'survey_matching' %}
-                                    {{ b.matching with z_language=code }}
+                                    {% include "_translation_edit_text.tpl" id=id is_block block_name=b.name p="matching" code=code text=b.matching %}
                                 {% elseif b.type == 'survey_multiple_choice' %}
-                                    {{ b.choices with z_language=code }}
+                                    {% include "_translation_edit_text.tpl" id=id is_block block_name=b.name p="choices" code=code text=b.choices %}
                                 {% elseif b.type == 'survey_narrative' %}
-                                    {{ b.narrative with z_language=code }}
+                                    {% include "_translation_edit_text.tpl" id=id is_block block_name=b.name p="narrative" code=code text=b.narrative %}
                                 {% endif %}
                             </td>
                             {% endif %}
@@ -175,9 +188,9 @@
                                 <td>
                                     {% for p, tr in b|translated_texts %}
                                         {% if p == 'header' %}
-                                            <h3>{{ tr with z_language=code }}</h3>
+                                            <h3>{% include "_translation_edit_text.tpl" id=id is_block block_name=b.name p=p code=code text=tr %}</h3>
                                         {% else %}
-                                            <div class="body">{{ tr with z_language=code }}</div>
+                                            <div class="body">{% include "_translation_edit_text.tpl" id=id is_block block_name=b.name p=p code=code text=tr %}</div>
                                         {% endif %}
                                     {% endfor %}
 
@@ -202,7 +215,7 @@
                         <th>{{ p|escape }}</th>
                         {% for code, lang in m.translation.language_list_editable %}
                             {% if code|member:r_lang %}
-                                <td>{{ trs[p] with z_language=code }}</td>
+                                <td>{% include "_translation_edit_text.tpl" id=id p=p code=code text=trs[p] %}</td>
                             {% endif %}
                         {% endfor %}
                     </tr>

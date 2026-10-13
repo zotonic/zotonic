@@ -40,6 +40,7 @@
 #include <elf.h>
 #include <limits.h>
 #include <linux/landlock.h>
+#include <sched.h>
 #include <seccomp.h>
 #include <sys/prctl.h>
 #include <sys/syscall.h>
@@ -452,6 +453,8 @@ static const char *const denied_syscalls[] = {
 
     /* Namespaces, mounts, privileged kernel interfaces, and module loading. */
     "unshare", "setns", "mount", "umount2", "pivot_root", "chroot", "bpf",
+    "fsopen", "fsconfig", "fsmount", "move_mount", "open_tree",
+    "mount_setattr", "fspick",
     "perf_event_open", "userfaultfd", "keyctl", "add_key", "request_key",
     "open_by_handle_at", "name_to_handle_at", "reboot",
     "kexec_load", "kexec_file_load", "init_module", "finit_module",
@@ -508,6 +511,18 @@ install_seccomp_denylist(void) {
 
     /* clone3 has opaque arguments: force libc's legacy clone fallback. */
     seccomp_deny(ctx, "clone3", SCMP_ACT_ERRNO(ENOSYS));
+
+    /* Keep fork and thread creation, but prevent gaining capabilities in a
+     * new user namespace. Raw clone reverses stack/flags on s390 and cris. */
+#if defined(__s390__) || defined(__s390x__) || defined(__cris__)
+    const unsigned int clone_flags_arg = 1;
+#else
+    const unsigned int clone_flags_arg = 0;
+#endif
+    seccomp_check(seccomp_rule_add(ctx, SCMP_ACT_ERRNO(EPERM), SCMP_SYS(clone),
+                                   1, SCMP_CMP(clone_flags_arg, SCMP_CMP_MASKED_EQ,
+                                               CLONE_NEWUSER, CLONE_NEWUSER)),
+                  "seccomp clone flags");
 
     seccomp_check(seccomp_load(ctx), "seccomp_load");
     seccomp_release(ctx);

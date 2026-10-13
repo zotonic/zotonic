@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-07 12:13\n"
+"PO-Revision-Date: 2026-10-13 17:01\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -16,11 +16,11 @@ msgstr ""
 "X-Crowdin-File-ID: 8692\n"
 "Language: th_TH\n"
 
-#: zotonic_core/src/support/z_fetch.erl:222
+#: zotonic_core/src/support/z_fetch.erl:230
 msgid "Could not fetch the remote resource URL."
 msgstr "ไม่สามารถดึง URL ทรัพยากรระยะไกล"
 
-#: zotonic_core/src/support/z_fetch.erl:208
+#: zotonic_core/src/support/z_fetch.erl:216
 msgid "Forbidden to access the remote resource URL."
 msgstr "ห้ามมิให้เข้าถึง URL ทรัพยากรระยะไกล"
 
@@ -28,31 +28,31 @@ msgstr "ห้ามมิให้เข้าถึง URL ทรัพยา�
 msgid "Page Import"
 msgstr "นำเข้าหน้า"
 
-#: zotonic_core/src/support/z_fetch.erl:216
+#: zotonic_core/src/support/z_fetch.erl:224
 msgid "The remote server can not handle this URL."
 msgstr "เซิร์ฟเวอร์ระยะไกลไม่สามารถจัดการ URL นี้ได้"
 
-#: zotonic_core/src/support/z_fetch.erl:220
+#: zotonic_core/src/support/z_fetch.erl:228
 msgid "The remote server for the URL is having problems."
 msgstr "เซิร์ฟเวอร์ระยะไกลสำหรับ URL มีปัญหา"
 
-#: zotonic_core/src/support/z_fetch.erl:218
+#: zotonic_core/src/support/z_fetch.erl:226
 msgid "The remote server for the URL is having temporary problems."
 msgstr "เซิร์ฟเวอร์ระยะไกลสำหรับ URL มีปัญหาชั่วคราว"
 
-#: zotonic_core/src/support/z_fetch.erl:210
+#: zotonic_core/src/support/z_fetch.erl:218
 msgid "The resource at the URL can not be found."
 msgstr "ไม่พบทรัพยากรที่ URL"
 
-#: zotonic_core/src/support/z_fetch.erl:212
+#: zotonic_core/src/support/z_fetch.erl:220
 msgid "The resource at the URL is gone."
 msgstr "ทรัพยากรที่ URL หายไป"
 
-#: zotonic_core/src/support/z_fetch.erl:214
+#: zotonic_core/src/support/z_fetch.erl:222
 msgid "Too many requests for the remote server, try again later."
 msgstr "มีคำขอสำหรับเซิร์ฟเวอร์ระยะไกลมากเกินไป โปรดลองอีกครั้งในภายหลัง"
 
-#: zotonic_core/src/support/z_fetch.erl:206
+#: zotonic_core/src/support/z_fetch.erl:214
 msgid "Unauthorized to access the remote resource URL."
 msgstr "ไม่ได้รับอนุญาตในการเข้าถึง URL ทรัพยากรระยะไกล"
 
@@ -60,6 +60,7 @@ msgstr "ไม่ได้รับอนุญาตในการเข้า
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:42
 msgid "Website"
 msgstr "เว็บไซต์"
 
@@ -278,9 +279,9 @@ msgstr "คุณแน่ใจหรือไม่ว่าต้องกา
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:7
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:32
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_panel.tpl:28
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:88
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:90
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:92
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:91
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:93
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:95
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_delete_username.tpl:7
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:25
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:69
@@ -306,7 +307,12 @@ msgstr "คุณแน่ใจหรือไม่ว่าต้องกา
 #: zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:50
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:104
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:125
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:58
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:54
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:134
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_connection_dialog.tpl:17
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_dialog.tpl:22
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user_dialog.tpl:17
 #: zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:50
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:19
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:215
@@ -337,6 +343,7 @@ msgstr "คุณแน่ใจหรือไม่ว่าต้องกา
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
 #: zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:116
+#: zotonic_mod_translation/priv/templates/_dialog_translation_edit.tpl:43
 #: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:69
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:218
 msgid "Cancel"
@@ -379,8 +386,9 @@ msgstr "เปลี่ยนการกำหนดค่า"
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_select_predicate_find.tpl:27
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:76
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:209
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:67
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:69
+#: zotonic_mod_admin/priv/templates/_admin_edit_version.tpl:5
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:68
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:70
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_filter_predicates.tpl:20
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:79
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:43
@@ -407,7 +415,7 @@ msgstr "เปลี่ยนการกำหนดค่า"
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:12
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:17
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:22
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:28
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:37
 msgid "Close"
 msgstr "ปิด"
 
@@ -440,7 +448,7 @@ msgstr "ถือว่าผู้เขียนทรัพยากรเป
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:19
 #: zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4
 #: zotonic_mod_admin/src/mod_admin.erl:491
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:67
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:70
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:133
 msgid "Content"
 msgstr "เนื้อหา"
@@ -453,6 +461,7 @@ msgstr "เนื้อหา"
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:32
 #: zotonic_mod_content_groups/priv/templates/_admin_overview_filter_panel.tpl:6
 #: zotonic_mod_content_groups/priv/templates/_dialog_admin_bulk_update.tpl:5
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:62
 msgid "Content group"
 msgstr "กลุ่มเนื้อหา"
 
@@ -776,11 +785,13 @@ msgstr "กฎที่เปลี่ยนกลับ"
 #: zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:29
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:33
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:162
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:138
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:79
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:141
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:80
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:26
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:105
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:126
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:60
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:55
 #: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:42
 #: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:67
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:136
@@ -789,6 +800,7 @@ msgstr "กฎที่เปลี่ยนกลับ"
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:75
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:198
 #: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:95
+#: zotonic_mod_translation/priv/templates/_dialog_translation_edit.tpl:44
 msgid "Save"
 msgstr "บันทึก"
 
@@ -1056,7 +1068,7 @@ msgstr "<b>คำเตือน:</b> เว็บไซต์จะหยุด
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:32
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:55
 #: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:250
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:24
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:33
 msgid "<em>Untitled</em>"
 msgstr "<em>ไม่มีชื่อ</em>"
 
@@ -1086,8 +1098,8 @@ msgstr "พบสินค้าประมาณ {n} รายการ"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:18
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:62
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:72
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:119
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:75
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:122
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_edit_basics.person.tpl:7
 msgid "Access control"
 msgstr "การควบคุมการเข้าถึง"
@@ -1125,6 +1137,7 @@ msgstr "เพิ่มการเชื่อมต่อเข้า"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:29
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:26
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:85
 msgid "Add connection"
 msgstr "เพิ่มการเชื่อมต่อ"
 
@@ -1153,7 +1166,7 @@ msgstr "เพิ่มสื่อในร่างกาย"
 msgid "Add note"
 msgstr "เพิ่มหมายเหตุ"
 
-#: zotonic_mod_admin/src/mod_admin.erl:1123
+#: zotonic_mod_admin/src/mod_admin.erl:1124
 msgid "Added the connection to"
 msgstr "เพิ่มการเชื่อมต่อไปยัง"
 
@@ -1277,6 +1290,7 @@ msgid "Are you sure you want to exit the admin interface?"
 msgstr "แน่ใจไหมว่าต้องการออกจากอินเทอร์เฟซผู้ดูแลระบบ"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_show_as.tpl:11
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:42
 msgid "Aside"
 msgstr "นอกจากนี้"
 
@@ -1304,7 +1318,7 @@ msgstr "ไม่สามารถอัปเดตอัตโนมัติ
 msgid "Automatically fetch updates from the original website."
 msgstr "ดาวน์โหลดการอัปเดตจากเว็บไซต์ต้นฉบับโดยอัตโนมัติ"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:47
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:62
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:35
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:38
 msgid "Available"
@@ -1420,6 +1434,7 @@ msgid "Close all sockets from ip addresses which have over &gt; 250 open sockets
 msgstr "ปิดซ็อกเก็ตทั้งหมดจากที่อยู่ IP ซึ่งมีมากกว่า &gt; 250 ซ็อกเก็ตเปิด"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:33
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:11
 msgid "Close preview"
 msgstr "ปิดการแสดงตัวอย่าง"
 
@@ -1460,7 +1475,7 @@ msgstr "เชื่อมต่อจาก"
 msgid "Connected to"
 msgstr "เชื่อมต่อกับ"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:41
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:56
 msgid "Connection"
 msgstr "การเชื่อมต่อ"
 
@@ -1505,7 +1520,7 @@ msgstr "คัดลอกลิงค์ดาวน์โหลด"
 msgid "Copy the SHA-256 checksum to the clipboard."
 msgstr "คัดลอกค่า SHA-256 checksum ไปยังคลิปบอร์ด"
 
-#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:161
+#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:162
 msgid "Could not connect to the website."
 msgstr "ไม่สามารถเชื่อมต่อกับเว็บไซต์"
 
@@ -1617,15 +1632,15 @@ msgid "Delete selected pages"
 msgstr "ลบหน้าที่เลือก"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:51
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:73
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:74
 msgid "Delete this page."
 msgstr "ลบหน้านี้"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:74
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:75
 msgid "Delete this page..."
 msgstr "ลบหน้านี้..."
 
-#: zotonic_mod_admin/src/mod_admin.erl:956
+#: zotonic_mod_admin/src/mod_admin.erl:957
 msgid "Deleted tasks."
 msgstr "งานที่ถูกลบ"
 
@@ -1716,7 +1731,7 @@ msgstr "หน้าซ้ำ"
 msgid "Duplicate this page."
 msgstr "ทำซ้ำหน้านี้"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:65
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:66
 msgid "Duplicate this page..."
 msgstr "ทำซ้ำหน้านี้..."
 
@@ -1741,13 +1756,14 @@ msgstr "ที่อยู่อีเมล"
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:23
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:21
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:121
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:51
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:36
 #: zotonic_mod_menu/priv/templates/_admin_menu_menu_view.collection.tpl:40
 #: zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:23
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:131
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:117
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:119
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:35
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:44
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:14
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:16
 msgid "Edit"
@@ -1761,6 +1777,10 @@ msgstr "แก้ไขบันทึก"
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:122
 msgid "Edit:"
 msgstr "แก้ไข:"
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:8
+msgid "Editing language"
+msgstr "ภาษาการแก้ไข"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:209
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:211
@@ -1785,7 +1805,7 @@ msgstr "โค้ดฝังจะได้รับการฆ่าเชื
 msgid "Embed page | a citation, popup, or link to another page"
 msgstr "ฝังหน้า | การอ้างอิง ป๊อปอัป หรือลิงก์ไปยังหน้าอื่น"
 
-#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:225
+#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:226
 #: zotonic_mod_oembed/src/mod_oembed.erl:356
 msgid "Embedded Content"
 msgstr "เนื้อหาที่ฝัง"
@@ -1795,7 +1815,7 @@ msgstr "เนื้อหาที่ฝัง"
 msgid "Emergency telephone"
 msgstr "โทรศัพท์ฉุกเฉิน"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:41
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:56
 msgid "Endpoint"
 msgstr "จุดปลาย"
 
@@ -1819,7 +1839,7 @@ msgstr "รากการติดตั้ง Erlang"
 msgid "Erlang Version"
 msgstr "เวอร์ชั่น Erlang"
 
-#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:194
+#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:195
 msgid "Error checking the website."
 msgstr "เกิดข้อผิดพลาดในการตรวจสอบเว็บไซต์"
 
@@ -1833,19 +1853,19 @@ msgstr "เกิดข้อผิดพลาดในการสร้าง
 msgid "Error importing page from the remote server."
 msgstr "เกิดข้อผิดพลาดในการนำเข้าหน้าจากเซิร์ฟเวอร์ระยะไกล"
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:235
+#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:236
 msgid "Error uploading the file."
 msgstr "เกิดข้อผิดพลาดในการอัปโหลดไฟล์"
 
-#: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:178
+#: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:184
 msgid "Error, duplicate name. Please change the name."
 msgstr "เกิดข้อผิดพลาด ชื่อซ้ำ กรุณาเปลี่ยนชื่อ"
 
-#: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:176
+#: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:182
 msgid "Error, duplicate page path. Please change the uri."
 msgstr "เกิดข้อผิดพลาด เส้นทางของหน้าที่ซ้ำกัน กรุณาเปลี่ยน uri"
 
-#: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:174
+#: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:180
 msgid "Error, duplicate uri. Please change the uri."
 msgstr "เกิดข้อผิดพลาด ซ้ำ uri กรุณาเปลี่ยน uri"
 
@@ -1869,14 +1889,14 @@ msgstr "ยกเว้นหมวดหมู่"
 msgid "Existing pages"
 msgstr "หน้าที่มีอยู่"
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:221
+#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:222
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:210
-#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:169
+#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:170
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:118
 msgid "Failed to download the file."
 msgstr "ดาวน์โหลดไฟล์ไม่สำเร็จ"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:52
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:53
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:178
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:182
 msgid "Featured"
@@ -1906,7 +1926,7 @@ msgstr "ไฟล์ / เนื้อหาสื่อ"
 msgid "File size"
 msgstr "ขนาดไฟล์"
 
-#: zotonic_mod_admin/src/mod_admin.erl:881
+#: zotonic_mod_admin/src/mod_admin.erl:882
 msgid "File uploaded to the drop folder, will be handled shortly."
 msgstr "ไฟล์ที่อัปโหลดไปยังโฟลเดอร์ดร็อป จะได้รับการจัดการในไม่ช้า"
 
@@ -2039,6 +2059,10 @@ msgstr "คุณสามารถแก้ไขอาร์กิวเมน
 msgid "Hide page from searches (depends on the search query)"
 msgstr "ซ่อนหน้าจากการค้นหา (ขึ้นอยู่กับคำค้นหา)"
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:5
+msgid "Hide preview"
+msgstr "ซ่อนตัวอย่าง"
+
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:59
 msgid "Home Directory"
 msgstr "โฮมไดเร็กทอรี"
@@ -2138,14 +2162,22 @@ msgstr "ข้อความที่แก้ไขล่าสุด"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:43
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:95
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:48
 msgid "Link"
 msgstr "ลิงค์"
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:2
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:7
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:14
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:11
+msgid "Live preview"
+msgstr "ดูตัวอย่างแบบสด"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:38
 msgid "Live query, send notifications when matching items are updated or inserted."
 msgstr "แบบสอบถามสดส่งการแจ้งเตือนเมื่อมีการอัปเดตหรือแทรกรายการที่ตรงกัน"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:28
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:43
 msgid "Local ImageMagick"
 msgstr "ImageMagick ในเครื่อง"
 
@@ -2192,7 +2224,7 @@ msgstr "หลัก"
 msgid "Make"
 msgstr "ทำ"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:64
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:65
 msgid "Make a duplicate of this page."
 msgstr "สร้างสำเนาของหน้านี้"
 
@@ -2226,6 +2258,7 @@ msgstr "การจับคู่ ID, ชื่อ, เส้นทางห�
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:100
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:103
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:113
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:91
 msgid "Media"
 msgstr "สื่อ"
 
@@ -2260,7 +2293,7 @@ msgstr "สื่อครอบคลุมรูปภาพภาพยนต
 msgid "Media file"
 msgstr "ไฟล์สื่อ"
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:192
+#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:193
 msgid "Media item created."
 msgstr "สร้างรายการสื่อแล้ว"
 
@@ -2272,7 +2305,7 @@ msgstr "สื่อในหน้านี้"
 msgid "Media processing"
 msgstr "การประมวลผลสื่อ"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:37
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:52
 msgid "Media runners"
 msgstr "ผู้ส่งข่าว"
 
@@ -2281,7 +2314,7 @@ msgstr "ผู้ส่งข่าว"
 msgid "Media title"
 msgstr "ชื่อสื่อ"
 
-#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:150
+#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:151
 msgid "Media updated."
 msgstr "อัพเดตสื่อแล้ว"
 
@@ -2354,11 +2387,11 @@ msgstr "แก้ไขเมื่อ"
 msgid "Modified:"
 msgstr "แก้ไข:"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:58
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:59
 msgid "More"
 msgstr "เพิ่มเติม"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:57
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:58
 msgid "More actions: duplicate or delete page"
 msgstr "การดำเนินการเพิ่มเติม: ทำซ้ำหรือลบหน้า"
 
@@ -2429,7 +2462,7 @@ msgstr "ถัดไป &gt;"
 msgid "Next due"
 msgstr "วันครบกำหนดถัดไป"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:34
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:35
 msgid "Next in category:"
 msgstr "ถัดไปในหมวดหมู่:"
 
@@ -2512,6 +2545,10 @@ msgstr "หน่วยความจำระบบปฏิบัติกา
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:129
 msgid "Ongoing"
 msgstr "กำลังดำเนินการ"
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:10
+msgid "Open in new tab"
+msgstr "เปิดในแท็บใหม่"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:15
 msgid "Orientation"
@@ -2623,6 +2660,7 @@ msgstr "ขับเคลื่อนโดย"
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_connection.tpl:6
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:23
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:13
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_connection_dialog.tpl:5
 msgid "Predicate"
 msgstr "เพรดิเคต"
 
@@ -2631,7 +2669,7 @@ msgstr "เพรดิเคต"
 msgid "Preview"
 msgstr "ดูตัวอย่าง"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:30
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:31
 msgid "Previous in category:"
 msgstr "ก่อนหน้าในหมวดหมู่:"
 
@@ -2678,14 +2716,15 @@ msgstr "เผยแพร่หน้านี้"
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:50
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:63
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:248
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:47
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:48
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:102
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:48
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:52
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:17
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:21
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:49
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:52
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:69
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:33
 #: zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:44
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:31
 msgid "Published"
@@ -2754,6 +2793,11 @@ msgstr "ผู้แนะนำ"
 msgid "Referrers to"
 msgstr "ผู้อ้างอิงถึง"
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:9
+#: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:18
+msgid "Refresh"
+msgstr "รีเฟรช"
+
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:94
 msgid "Refreshed every 30 minutes."
 msgstr "รีเฟรชทุกๆ 30 นาที"
@@ -2766,6 +2810,11 @@ msgstr "ติดตั้งโมเดลข้อมูล Zotonic อีก
 msgid "Reinstall site datamodel"
 msgstr "ติดตั้งโมเดลข้อมูลของไซต์อีกครั้ง"
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_version.tpl:10
+#: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:15
+msgid "Reload page"
+msgstr "โหลดหน้าใหม่"
+
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:107
 msgid "Reload site configuration"
 msgstr "โหลดการกำหนดค่าไซต์ใหม่"
@@ -2774,23 +2823,28 @@ msgstr "โหลดการกำหนดค่าไซต์ใหม่"
 msgid "Reload the configuration of a site. Note that not all site configurations can be done whilst the site is running."
 msgstr "โหลดการกำหนดค่าไซต์ใหม่ โปรดทราบว่าไม่สามารถกำหนดค่าไซต์ทั้งหมดได้ในขณะที่ไซต์กำลังทำงาน"
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_version.tpl:10
+msgid "Reloading discards any unsaved changes in this form. Continue?"
+msgstr "การบันทึกใหม่จะลบการเปลี่ยนแปลงที่ยังไม่ถูกบันทึกในแบบฟอร์มนี้ทั้งหมด ต้องการดำเนินการต่อหรือไม่?"
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:27
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:29
 msgid "Remarks"
 msgstr "หมายเหตุ"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:55
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:70
 msgid "Remote sandbox isolation and queue details are available on each runner’s dashboard."
 msgstr "รายละเอียดเกี่ยวกับการแยกแซนด์บ็อกซ์แบบระยะไกลและคิวสามารถดูได้บนแดชบอร์ดของแต่ละรันเนอร์"
 
 #: zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_page.tpl:16
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_connection.tpl:4
 #: zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:35
 #: zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:7
 #: zotonic_mod_translation/priv/templates/_translation_language_status.tpl:34
 msgid "Remove"
 msgstr "ลบ"
 
-#: zotonic_mod_admin/src/mod_admin.erl:1127
+#: zotonic_mod_admin/src/mod_admin.erl:1128
 msgid "Removed the connection to"
 msgstr "ลบการเชื่อมต่อกับ"
 
@@ -2807,6 +2861,10 @@ msgstr "แทนที่"
 #: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:92
 msgid "Replace current medium"
 msgstr "แทนที่สื่อปัจจุบัน"
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:4
+msgid "Resize preview"
+msgstr "ปรับขนาดภาพตัวอย่าง"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_meta_features.tpl:9
 msgid "Resources in the <i>meta</i> category can have 'features': certain resource properties that decide what to show or hide on certain pages in the admin. If this box is empty, no features are enabled for this meta-resource."
@@ -2828,7 +2886,7 @@ msgstr "หมุน 270 องศา"
 msgid "Rotated 90 degrees"
 msgstr "หมุน 90 องศา"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:54
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:69
 msgid "Runner availability and ImageMagick versions are cached for up to one minute. Failed probes are retried after five seconds. Refresh this page to check again."
 msgstr "ข้อมูลเกี่ยวกับความพร้อมใช้งานของ Runner และเวอร์ชันของ ImageMagick จะถูกเก็บไว้ในแคชเป็นเวลาสูงสุดหนึ่งนาที การตรวจสอบที่ล้มเหลวจะได้รับการลองใหม่หลังจากผ่านไปห้าวินาที โปรดรีเฟรชหน้านี้เพื่อตรวจสอบอีกครั้ง"
 
@@ -2853,42 +2911,52 @@ msgstr "ค่าตรวจสอบ SHA-256"
 msgid "SSL Application uses Erlang defaults, it is recommended to change this configuration in your <tt>erlang.config</tt>."
 msgstr "แอปพลิเคชัน SSL ใช้ค่าเริ่มต้นของ Erlang ขอแนะนำให้เปลี่ยนการกำหนดค่านี้ใน <tt>erlang.config</tt>คุณ"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:22
-msgid "Sandbox isolation is available."
-msgstr "มีฟังก์ชันการแยกสภาพแวดล้อมแบบ Sandbox"
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:35
+msgid "Sandbox isolation cannot be used on this system and is disabled. Media processing commands run without isolation, reducing protection against malicious media files."
+msgstr "การแยกระบบ Sandbox ไม่สามารถใช้ได้ในระบบนี้ และถูกปิดใช้งานแล้ว คำสั่งการประมวลผลสื่อทำงานโดยไม่มีการแยกระบบ ซึ่งทำให้การป้องกันต่อไฟล์สื่อที่เป็นอันตรายลดลง"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:24
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:39
+msgid "Sandbox isolation cannot be used on this system, and media processing commands will not run."
+msgstr "ไม่สามารถใช้การแยก Sandbox ในระบบนี้ได้ และคำสั่งการประมวลผลสื่อจะไม่ทำงาน"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:23
+msgid "Sandbox isolation is available and required. Media processing commands that run locally use a restricted environment for additional security."
+msgstr "มีระบบแยก Sandbox และจำเป็นต้องใช้ระบบนี้ คำสั่งการประมวลผลสื่อที่ทำงานในเครื่องท้องถิ่นจะใช้สภาพแวดล้อมที่ถูกจำกัดเพื่อเพิ่มความปลอดภัย"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:27
+msgid "Sandbox isolation is available but disabled. Media processing commands run without sandbox protection, reducing protection against malicious uploads."
+msgstr "มีฟังก์ชันการแยกสภาพแวดล้อมแบบแซนด์บ็อกซ์ แต่ถูกปิดใช้งานไว้ คำสั่งการประมวลผลสื่อทำงานโดยไม่มีการป้องกันจากแซนด์บ็อกซ์ ซึ่งทำให้การป้องกันต่อการอัปโหลดเนื้อหาที่เป็นอันตรายลดลง"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:31
 msgid "Sandbox isolation is not supported on this system. Local media commands run without isolation."
 msgstr "ระบบนี้ไม่สนับสนุนการแยก Sandbox คำสั่งสื่อท้องถิ่นจะทำงานโดยไม่มีการแยก"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:26
-msgid "Sandbox isolation is unavailable. Local sandboxed media commands cannot run."
-msgstr "ไม่สามารถใช้การแยกสภาพแวดล้อมแบบแซนด์บ็อกซ์ได้ คำสั่งสื่อในแซนด์บ็อกซ์แบบท้องถิ่นไม่สามารถทำงานได้"
-
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20
-#: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:6
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:21
+#: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:7
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:61
 msgid "Save and View"
 msgstr "บันทึกและดู"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20
-#: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:6
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:141
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:83
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:21
+#: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:7
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:144
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:84
 msgid "Save and view the page."
 msgstr "บันทึกและดูหน้า"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:17
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:138
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:79
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:141
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:80
 msgid "Save this page."
 msgstr "บันทึกหน้านี้"
 
-#: zotonic_mod_admin/src/mod_admin.erl:945
+#: zotonic_mod_admin/src/mod_admin.erl:946
 msgid "Scheduled a background task to check all refers connections."
 msgstr "กำหนดเวลาการทำงานพื้นหลังเพื่อตรวจสอบการเชื่อมต่อการอ้างอิงทั้งหมด"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:294
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user_dialog.tpl:9
 msgid "Search"
 msgstr "ค้นหา"
 
@@ -2933,6 +3001,7 @@ msgstr "เลือกหน้า"
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_select_predicate.tpl:5
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:89
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:98
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_connection_dialog.tpl:7
 msgid "Select a predicate"
 msgstr "เลือกคำนิยาม"
 
@@ -2944,7 +3013,7 @@ msgstr "เลือกคำนิยามเพื่อค้นหาหน
 msgid "Select a predicate to find pages this page can connect to."
 msgstr "เลือกคำนิยามเพื่อค้นหาหน้าต่าง ๆ ที่หน้านี้สามารถเชื่อมโยงไปได้"
 
-#: zotonic_mod_admin/src/mod_admin.erl:935
+#: zotonic_mod_admin/src/mod_admin.erl:936
 msgid "Select both a visible page and a valid predicate for each connection."
 msgstr "เลือกทั้งหน้าที่แสดงอยู่และคำนิยามที่ถูกต้องสำหรับแต่ละการเชื่อมต่อ"
 
@@ -2992,6 +3061,11 @@ msgstr "แสดงคำอธิบายคำค้นหา"
 msgid "Show page on multiple paths"
 msgstr "แสดงเพจในหลายเส้นทาง"
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:3
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:4
+msgid "Show preview on the right"
+msgstr "แสดงตัวอย่างทางด้านขวา"
+
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:55
 msgid "Show query as JSON"
 msgstr "แสดงคิวรีเป็น JSON"
@@ -3016,6 +3090,7 @@ msgstr "ไดเรกทอรีไฟล์ไซต์"
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:76
 #: zotonic_mod_base/priv/templates/directory_index.tpl:17
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:67
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:26
 msgid "Size"
 msgstr "ขนาด"
 
@@ -3027,7 +3102,7 @@ msgstr "ดิสก์บางแผ่นใกล้เต็มแล้ว
 msgid "Some images, PDFs, audio and video are presented in a single language. Here you can select this language."
 msgstr "รูปภาพ, PDF, เสียงและวิดีโอบางรายการจะถูกนำเสนอในภาษาเดียว ที่นี่คุณสามารถเลือกภาษานี้ได้"
 
-#: zotonic_mod_admin/src/mod_admin.erl:933
+#: zotonic_mod_admin/src/mod_admin.erl:934
 msgid "Some pages or connections could not be updated. Check your permissions. Other changes may have been saved."
 msgstr "ไม่สามารถอัปเดตหน้าหรือการเชื่อมต่อบางรายการได้ โปรดตรวจสอบสิทธิ์การเข้าถึงของคุณ การเปลี่ยนแปลงอื่น ๆ อาจถูกบันทึกไว้แล้ว"
 
@@ -3039,31 +3114,31 @@ msgstr "งานบางอย่างกำลังลองใหม่<br
 msgid "Something went wrong. Sorry."
 msgstr "อะไรบางอย่างผิดปกติ. ขออภัย."
 
-#: zotonic_mod_admin/src/mod_admin.erl:854
+#: zotonic_mod_admin/src/mod_admin.erl:855
 msgid "Sorry, could not handle this filename."
 msgstr "ขออภัย ไม่สามารถจัดการชื่อไฟล์นี้ได้"
 
-#: zotonic_mod_admin/src/mod_admin.erl:893
+#: zotonic_mod_admin/src/mod_admin.erl:894
 msgid "Sorry, could not move the file to the drop folder."
 msgstr "ขออภัย ไม่สามารถย้ายไฟล์ไปยังโฟลเดอร์วาง"
 
-#: zotonic_mod_admin/src/mod_admin.erl:947
-#: zotonic_mod_admin/src/mod_admin.erl:958
+#: zotonic_mod_admin/src/mod_admin.erl:948
+#: zotonic_mod_admin/src/mod_admin.erl:959
 #: zotonic_mod_menu/src/mod_menu.erl:133
 msgid "Sorry, only an admin is allowed to do this"
 msgstr "ขออภัย เฉพาะผู้ดูแลระบบเท่านั้นที่ได้รับอนุญาตให้ทำเช่นนี้"
 
-#: zotonic_mod_admin/src/mod_admin.erl:829
-#: zotonic_mod_admin/src/mod_admin.erl:840
+#: zotonic_mod_admin/src/mod_admin.erl:830
+#: zotonic_mod_admin/src/mod_admin.erl:841
 msgid "Sorry, that page is unknown."
 msgstr "ขออภัย เพจนั้นไม่เป็นที่รู้จัก"
 
-#: zotonic_mod_admin/src/mod_admin.erl:831
-#: zotonic_mod_admin/src/mod_admin.erl:842
+#: zotonic_mod_admin/src/mod_admin.erl:832
+#: zotonic_mod_admin/src/mod_admin.erl:843
 msgid "Sorry, you are not allowed to edit notes."
 msgstr "ขออภัย คุณไม่ได้รับอนุญาตให้แก้ไขบันทึก"
 
-#: zotonic_mod_admin/src/mod_admin.erl:897
+#: zotonic_mod_admin/src/mod_admin.erl:898
 msgid "Sorry, you are not allowed to upload drop folder files."
 msgstr "ขออภัย คุณไม่ได้รับอนุญาตให้อัปโหลดไฟล์โฟลเดอร์วาง"
 
@@ -3071,11 +3146,11 @@ msgstr "ขออภัย คุณไม่ได้รับอนุญา�
 msgid "Sorry, you don't have permission to add the connection."
 msgstr "ขออภัยคุณไม่มีสิทธิ์เพิ่มการเชื่อมต่อ"
 
-#: zotonic_mod_admin/src/mod_admin.erl:1109
+#: zotonic_mod_admin/src/mod_admin.erl:1110
 msgid "Sorry, you have no permission to add the connection."
 msgstr "ขออภัยคุณไม่ได้รับอนุญาตให้เพิ่มการเชื่อมต่อ"
 
-#: zotonic_mod_admin/src/mod_admin.erl:1111
+#: zotonic_mod_admin/src/mod_admin.erl:1112
 msgid "Sorry, you have no permission to delete the connection."
 msgstr "ขออภัยคุณไม่ได้รับอนุญาตให้ลบการเชื่อมต่อ"
 
@@ -3107,6 +3182,8 @@ msgstr "สถานะ"
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
 #: zotonic_mod_base/priv/templates/_session_info.tpl:12
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:221
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:34
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:49
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:111
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:11
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:7
@@ -3270,6 +3347,10 @@ msgstr "เว็บไซต์ต้นฉบับไม่ได้ระบ
 msgid "The page"
 msgstr "หน้า"
 
+#: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:192
+msgid "The page could not be saved. Your changes are still in the form."
+msgstr "ไม่สามารถบันทึกหน้าได้ การเปลี่ยนแปลงของคุณยังคงอยู่ในแบบฟอร์ม"
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:55
 msgid "The page will stay, but without the media item."
 msgstr "เพจจะยังคงอยู่ แต่ไม่มีรายการสื่อ"
@@ -3335,9 +3416,9 @@ msgstr "การดำเนินการนี้ไม่สามารถ
 msgid "This connection already exists."
 msgstr "มีการเชื่อมต่อนี้อยู่แล้ว"
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:225
+#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:226
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:214
-#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:173
+#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:174
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:122
 msgid "This file contains links to other files or locations."
 msgstr "ไฟล์นี้มีลิงก์ไปยังไฟล์หรือตำแหน่งอื่น ๆ"
@@ -3354,16 +3435,16 @@ msgstr "ไฟล์นี้ไม่ได้รับการสแกนห
 msgid "This file has not been scanned for viruses."
 msgstr "ไฟล์นี้ไม่ได้รับการสแกนหาไวรัส"
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:223
+#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:224
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:212
-#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:171
+#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:172
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:120
 msgid "This file is infected with a virus."
 msgstr "ไฟล์นี้ติดไวรัส"
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:227
+#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:228
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:216
-#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:175
+#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:176
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:124
 msgid "This file is too large."
 msgstr "ไฟล์นี้มีขนาดใหญ่เกินไป"
@@ -3385,9 +3466,25 @@ msgstr "บันทึกนี้จะมองเห็นได้เฉพ
 msgid "This page can be connected from other pages. For example it could be an author of an article."
 msgstr "เพจนี้สามารถเชื่อมต่อจากเพจอื่น ๆ ตัวอย่างเช่นอาจเป็นผู้เขียนบทความ"
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:13
+msgid "This page cannot be previewed here. Use “Open in new tab” if available."
+msgstr "ไม่สามารถดูตัวอย่างหน้านี้ที่นี่ได้ โปรดใช้ตัวเลือก “เปิดในแท็บใหม่” หากมี"
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:31
 msgid "This page has been deleted."
 msgstr "เพจนี้ถูกลบแล้ว"
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_version.tpl:8
+msgid "This page has changed elsewhere. Reload to get the latest version before saving."
+msgstr "หน้านี้มีการเปลี่ยนแปลงในส่วนอื่นแล้ว โปรดรีเฟรชหน้าเพื่อรับเวอร์ชันล่าสุดก่อนที่จะบันทึก"
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_version.tpl:8
+msgid "This page has changed. Reload to see the latest translations."
+msgstr "หน้านี้ได้มีการเปลี่ยนแปลงแล้ว โปรดรีเฟรชหน้าเพื่อดูการแปลล่าสุด"
+
+#: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:178
+msgid "This page has changed. Your changes were not saved. Reload the page before trying again."
+msgstr "หน้านี้ได้เปลี่ยนแปลงแล้ว การเปลี่ยนแปลงของคุณยังไม่ถูกบันทึก โปรดโหลดหน้าใหม่ก่อนที่จะลองอีกครั้ง"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:9
 msgid "This page holds a collection of administrative options to perform certain tasks on this Zotonic installation."
@@ -3413,7 +3510,7 @@ msgstr "ทรัพยากรนี้สร้างขึ้นโดยโ
 msgid "Till"
 msgstr "จนถึง"
 
-#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:163
+#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:164
 msgid "Timeout while trying to fetch data from the website."
 msgstr "หมดเวลาขณะพยายามดึงข้อมูลจากเว็บไซต์"
 
@@ -3430,6 +3527,7 @@ msgstr "หมดเวลาขณะพยายามดึงข้อมู
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:11
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:27
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:25
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:39
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:6
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:44
 msgid "Title"
@@ -3462,9 +3560,9 @@ msgstr "พิมพ์ข้อความเพื่อค้นหา"
 msgid "Type to filter the list below."
 msgstr "พิมพ์เพื่อกรองรายการด้านล่าง"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:32
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:47
-#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:48
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:62
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:63
 msgid "Unavailable"
 msgstr "ไม่มีให้บริการ"
 
@@ -3494,7 +3592,7 @@ msgstr "ไม่ได้เผยแพร่"
 #: zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:2
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:29
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_connection.tpl:19
-#: zotonic_mod_admin/src/mod_admin.erl:1117
+#: zotonic_mod_admin/src/mod_admin.erl:1118
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:118
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:182
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:9
@@ -3615,9 +3713,9 @@ msgid "Valid for:"
 msgstr "ใช้ได้สำหรับ:"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish_view.tpl:2
-#: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:10
+#: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:11
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:31
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:143
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:146
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:26
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:38
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:20
@@ -3649,8 +3747,8 @@ msgstr "ดูแผนภาพการเชื่อมต่อ"
 msgid "View status"
 msgstr "ดูสถานะ"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:11
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:143
+#: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:12
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:146
 msgid "View this page."
 msgstr "ดูหน้านี้"
 
@@ -3733,8 +3831,8 @@ msgstr "คุณไม่ได้รับอนุญาตให้ลบเ
 msgid "You are not allowed to edit this page."
 msgstr "คุณไม่ได้รับอนุญาตให้แก้ไขหน้านี้"
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:217
-#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:165
+#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:218
+#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:166
 msgid "You don't have permission to change this media item."
 msgstr "คุณไม่ได้รับอนุญาตให้เปลี่ยนรายการสื่อนี้"
 
@@ -3743,14 +3841,14 @@ msgstr "คุณไม่ได้รับอนุญาตให้เปล
 msgid "You don't have permission to create this page."
 msgstr "คุณไม่มีสิทธิ์สร้างเพจนี้"
 
-#: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:180
+#: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:186
 #: zotonic_mod_image_edit/src/mod_image_edit.erl:94
 msgid "You don't have permission to edit this page."
 msgstr "คุณไม่ได้รับอนุญาตให้แก้ไขหน้านี้"
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:219
+#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:220
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:208
-#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:167
+#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:168
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:116
 msgid "You don't have the proper permissions to upload this type of file."
 msgstr "คุณไม่มีสิทธิ์ที่เหมาะสมในการอัปโหลดไฟล์ประเภทนี้"
@@ -3764,7 +3862,7 @@ msgstr "คุณไม่มีสิทธิ์ดำเนินการน
 msgid "You have to specify a description of the file to make it easier to find and share."
 msgstr "คุณต้องระบุคำอธิบายของไฟล์เพื่อให้ค้นหาและแชร์ได้ง่ายขึ้น"
 
-#: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:182
+#: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:188
 msgid "Your search query is invalid. Please correct it before saving."
 msgstr "คำค้นหาของคุณไม่ถูกต้อง โปรดแก้ไขก่อนบันทึก"
 
@@ -4090,6 +4188,7 @@ msgstr "Debian และ Ubuntu"
 
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:26
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:44
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_copyright.tpl:6
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:38
 msgid "Default"
 msgstr "ค่าเริ่มต้น"
@@ -4525,7 +4624,7 @@ msgstr "macOS"
 msgid "test@example.com"
 msgstr "test@example.com"
 
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:106
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:109
 msgid "Add a translation or copy texts between languages."
 msgstr "เพิ่มการแปลหรือคัดลอกข้อความระหว่างภาษา"
 
@@ -4533,12 +4632,16 @@ msgstr "เพิ่มการแปลหรือคัดลอกข้อ
 msgid "Add pages or click on a page in the menu."
 msgstr "เพิ่มเพจหรือคลิกที่เพจในเมนู"
 
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:103
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:106
 msgid "Enable or disable language tabs."
 msgstr "เปิดหรือปิดแท็บภาษา"
 
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:70
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:100
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_menu.tpl:7
+msgid "Hide menu"
+msgstr "ซ่อนเมนู"
+
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:73
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:103
 #: zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:24
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:96
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:21
@@ -4553,37 +4656,41 @@ msgstr "เปิดหรือปิดแท็บภาษา"
 msgid "Language"
 msgstr "ภาษา"
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:32
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:40
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:33
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:41
 msgid "Loading ..."
 msgstr "กำลังโหลด ..."
 
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:176
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:180
 msgid "No page"
 msgstr "ไม่มีหน้า"
 
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:141
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:83
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:144
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:84
 msgid "Save &amp; view"
 msgstr "บันทึก &amp; มุมมอง"
 
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:178
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_menu.tpl:6
+msgid "Show menu"
+msgstr "แสดงเมนู"
+
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:182
 msgid "The page might have been deleted."
 msgstr "เพจอาจถูกลบไปแล้ว"
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:133
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:137
 msgid "There are unsaved changes. Are you sure you want to leave without saving?"
 msgstr "มีการเปลี่ยนแปลงที่ไม่ได้บันทึก แน่ใจไหมว่าต้องการออกโดยไม่บันทึก"
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:77
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:78
 msgid "This page"
 msgstr "หน้านี้"
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:131
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:135
 msgid "Yes, discard changes"
 msgstr "ใช่ยกเลิกการเปลี่ยนแปลง"
 
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:54
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:57
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:11
 msgid "till"
 msgstr "จนถึง"
@@ -4792,6 +4899,7 @@ msgid "New password"
 msgstr "รหัสผ่านใหม่"
 
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:96
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user_results.tpl:12
 msgid "No users found."
 msgstr "ไม่พบผู้ใช้."
 
@@ -4836,6 +4944,7 @@ msgid "Random secure password:"
 msgstr "รหัสผ่านที่ปลอดภัยแบบสุ่ม:"
 
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:7
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user_dialog.tpl:7
 msgid "Search users"
 msgstr "ค้นหาผู้ใช้"
 
@@ -6513,6 +6622,7 @@ msgid "Multiple accounts"
 msgstr "หลายบัญชี"
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:199
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:87
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:26
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:55
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:198
@@ -7112,6 +7222,7 @@ msgid "Please make sure you store the backup encryption password in a safe <u>ex
 msgstr "โปรดตรวจสอบให้แน่ใจว่าคุณเก็บรหัสผ่านการเข้ารหัสสำรองไว้ในตำแหน่ง <u>ภายนอก</u> ที่ปลอดภัย"
 
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:75
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:84
 msgid "Previous"
 msgstr "ก่อนหน้า"
 
@@ -7643,7 +7754,7 @@ msgstr "การเปลี่ยนแปลงสุทธิ"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:28
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:35
 #: zotonic_mod_survey/src/questions/survey_q_yesno.erl:70
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:149
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:162
 msgid "No"
 msgstr "ไม่"
 
@@ -7908,8 +8019,8 @@ msgstr "รายการงาน"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:25
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:32
 #: zotonic_mod_survey/src/questions/survey_q_yesno.erl:72
-#: zotonic_mod_translation/priv/templates/_translation_status.tpl:19
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:148
+#: zotonic_mod_translation/priv/templates/_translation_status.tpl:26
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:161
 msgid "Yes"
 msgstr "ใช่"
 
@@ -8006,7 +8117,7 @@ msgstr "หมายเหตุ: ความคิดเห็นจะถู�
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:20
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:29
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:4
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:186
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:199
 msgid "Page"
 msgstr "หน้า"
 
@@ -8205,15 +8316,18 @@ msgid "<b>NB</b> connected pages and images have their own rights."
 msgstr "<b>NB</b> หน้าที่เชื่อมต่อและรูปภาพมีสิทธิ์ของตนเอง"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:24
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_copyright.tpl:7
 msgid "All Rights Reserved"
 msgstr "สงวนลิขสิทธิ์"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:44
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:45
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_copyright.tpl:23
 msgid "Attribution"
 msgstr "การแสดงที่มา"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:21
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_copyright.tpl:4
 msgid "License"
 msgstr "ใบอนุญาต"
 
@@ -8226,6 +8340,7 @@ msgid "More about licenses:"
 msgstr "ข้อมูลเพิ่มเติมเกี่ยวกับใบอนุญาต:"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:25
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_copyright.tpl:8
 msgid "Public Domain"
 msgstr "โดเมนสาธารณะ"
 
@@ -8235,6 +8350,7 @@ msgstr "ใบอนุญาตและที่มาของหน้าน
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:50
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:51
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_copyright.tpl:28
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:109
 msgid "Year"
 msgstr "ปี"
@@ -8746,10 +8862,6 @@ msgstr "คอมไพล์เทมเพลตอีกครั้ง"
 msgid "Redirect"
 msgstr "เปลี่ยนเส้นทาง"
 
-#: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:18
-msgid "Refresh"
-msgstr "รีเฟรช"
-
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:33
 msgid "Reload the page"
 msgstr "โหลดหน้าเว็บใหม่"
@@ -9045,26 +9157,32 @@ msgid "redirects"
 msgstr "เปลี่ยนเส้นทาง"
 
 #: zotonic_mod_editor_tinymce/priv/templates/_editor.tpl:39
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:20
 msgid "Add link"
 msgstr "เพิ่มลิงค์"
 
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:38
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:19
 msgid "Aligned left"
 msgstr "จัดชิดซ้าย"
 
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:44
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:20
 msgid "Aligned right"
 msgstr "จัดชิดขวา"
 
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:27
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:16
 msgid "Alignment"
 msgstr "การจัดตำแหน่ง"
 
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:32
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:18
 msgid "Between text"
 msgstr "ระหว่างข้อความ"
 
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:11
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:6
 msgid "Caption"
 msgstr "คำบรรยาย"
 
@@ -9073,11 +9191,13 @@ msgid "Crop"
 msgstr "ครอบตัด"
 
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:57
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:35
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:61
 msgid "Crop image"
 msgstr "ครอบตัดรูปภาพ"
 
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:16
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:9
 msgid "Defaults to the summary of the media. Enter a single “-” to not display a caption."
 msgstr "ค่าเริ่มต้นของข้อมูลสรุปของสื่อ ป้อน“ -” เพียงตัวเดียวเพื่อไม่ให้แสดงคำอธิบายภาพ"
 
@@ -9086,34 +9206,43 @@ msgid "Editor version"
 msgstr "เวอร์ชันบรรณาธิการ"
 
 #: zotonic_mod_editor_tinymce/priv/templates/_editor.tpl:19
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:13
 msgid "Insert media"
 msgstr "ใส่สื่อ"
 
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:83
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:30
 msgid "Large"
 msgstr "ใหญ่"
 
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:99
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:39
 msgid "Link to media or url below"
 msgstr "ลิงก์ไปยังสื่อหรือ url ด้านล่าง"
 
 #: zotonic_mod_editor_tinymce/src/mod_editor_tinymce.erl:154
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:50
+#: zotonic_mod_editor_tiptap/src/mod_editor_tiptap.erl:238
 msgid "Media Properties"
 msgstr "คุณสมบัติสื่อ"
 
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:77
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:29
 msgid "Medium"
 msgstr "ปานกลาง"
 
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:105
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:40
 msgid "Open link in new window"
 msgstr "เปิดลิงก์ในหน้าต่างใหม่"
 
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:118
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:49
 msgid "Remove from text"
 msgstr "ลบออกจากข้อความ"
 
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:72
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:28
 msgid "Small"
 msgstr "เล็ก"
 
@@ -9124,6 +9253,223 @@ msgstr "เว็บไซต์. เว้นว่างไว้สำหร�
 #: zotonic_mod_editor_tinymce/priv/templates/_admin_configure_module.tpl:6
 msgid "always use newest available"
 msgstr "ใช้ใหม่ล่าสุดที่มีให้เสมอ"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:53
+msgid "Add column"
+msgstr "เพิ่มคอลัมน์"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:53
+msgid "Add row"
+msgstr "เพิ่มแถว"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:44
+msgid "Align center"
+msgstr "จัดให้อยู่ตรงกลาง"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:44
+msgid "Align left"
+msgstr "จัดให้อยู่ด้านซ้าย"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:45
+msgid "Align right"
+msgstr "จัดให้อยู่ด้านขวา"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:58
+msgid "Apply"
+msgstr "สมัคร"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:36
+msgid "Bold"
+msgstr "ตัวหนา"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:39
+msgid "Bullet list"
+msgstr "รายการแบบลูกกระสุน"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:41
+msgid "Code block"
+msgstr "บล็อกโค้ด"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:43
+msgid "Code language"
+msgstr "ภาษาโค้ด"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:54
+msgid "Delete column"
+msgstr "ลบคอลัมน์"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:54
+msgid "Delete row"
+msgstr "ลบแถว"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:56
+msgid "Delete table"
+msgstr "ลบตาราง"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:57
+msgid "Enter a valid link."
+msgstr "กรุณาใส่ลิงก์ที่ถูกต้อง"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:32
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:7
+msgid "Format"
+msgstr "รูปแบบ"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:51
+msgid "Full window"
+msgstr "หน้าต่างเต็มหน้าจอ"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:33
+msgid "Heading 1"
+msgstr "หัวข้อ 1"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:33
+msgid "Heading 2"
+msgstr "หัวข้อ 2"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:34
+msgid "Heading 3"
+msgstr "หัวข้อ 3"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:34
+msgid "Heading 4"
+msgstr "หัวข้อ 4"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:35
+msgid "Heading 5"
+msgstr "หัวข้อ 5"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:35
+msgid "Heading 6"
+msgstr "หัวข้อ 6"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:47
+msgid "Horizontal line"
+msgstr "เส้นแนวนอน"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:40
+msgid "Indent"
+msgstr "ย่อหน้า"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:49
+msgid "Insert internal link"
+msgstr "ใส่ลิงก์ภายใน"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:49
+msgid "Insert or edit media"
+msgstr "เพิ่มหรือแก้ไขสื่อ"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:52
+msgid "Insert table"
+msgstr "แทรกตาราง"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:36
+msgid "Italic"
+msgstr "ตัวเอียง"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:46
+msgid "Left to right"
+msgstr "จากซ้ายไปขวา"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:47
+msgid "Line break"
+msgstr "เปลี่ยนบรรทัด"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:55
+msgid "Merge cells"
+msgstr "รวมเซลล์"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:42
+#: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:43
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:51
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_fields.tpl:37
+msgid "Note"
+msgstr "บันทึก"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:39
+msgid "Numbered list"
+msgstr "รายการที่มีหมายเลข"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:40
+msgid "Outdent"
+msgstr "Outdent"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:32
+msgid "Paragraph"
+msgstr "ย่อหน้า"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:43
+msgid "Plain text"
+msgstr "ข้อความธรรมดา"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:41
+msgid "Quote"
+msgstr "คำอ้างอิง"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:31
+msgid "Redo"
+msgstr "ทำใหม่"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:51
+msgid "Remove formatting"
+msgstr "ลบการจัดรูปแบบ"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:48
+msgid "Remove link"
+msgstr "ลบลิงก์"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:46
+msgid "Right to left"
+msgstr "จากขวาไปซ้าย"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:56
+msgid "Split cell"
+msgstr "เซลล์แยก"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:37
+msgid "Strikethrough"
+msgstr "ขีดทับ"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:38
+msgid "Subscript"
+msgstr "ตัวชี้ล่าง"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:38
+msgid "Superscript"
+msgstr "ตัวอักษรยกกำลัง"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:52
+msgid "Table"
+msgstr "ตาราง"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:30
+msgid "Text formatting"
+msgstr "การจัดรูปแบบข้อความ"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:59
+msgid "This field is required."
+msgstr "ช่องนี้ต้องกรอกข้อมูล"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:55
+msgid "Toggle header row"
+msgstr "สลับแถวหัวตาราง"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:57
+#: zotonic_site_status/priv/templates/_sites.tpl:5
+msgid "URL"
+msgstr "URL"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:37
+msgid "Underline"
+msgstr "ขีดเส้นใต้"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:31
+msgid "Undo"
+msgstr "ยกเลิก"
+
+#: zotonic_mod_editor_tiptap/src/mod_editor_tiptap.erl:248
+msgid "You are not allowed to view this media."
+msgstr "คุณไม่สามารถดูสื่อนี้ได้"
 
 #: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:6
 msgid "DKIM e-mail signing setup"
@@ -9599,7 +9945,7 @@ msgstr "URL ฐาน"
 msgid "Before the settings are saved they will be checked by uploading (and removing) a small file."
 msgstr "ก่อนบันทึกการตั้งค่าระบบจะตรวจสอบโดยการอัปโหลด (และลบ) ไฟล์ขนาดเล็ก"
 
-#: zotonic_mod_filestore/src/mod_filestore.erl:435
+#: zotonic_mod_filestore/src/mod_filestore.erl:430
 msgid "Cloud File Store"
 msgstr "Cloud File Store"
 
@@ -10023,7 +10369,7 @@ msgstr "ความคืบหน้าจะถูกบันทึก<a hre
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:27
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:43
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:48
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:61
 msgid "Property"
 msgstr "ทรัพย์สิน"
 
@@ -10093,6 +10439,503 @@ msgstr "คุณสมบัติที่เป็นที่รู้จั
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:85
 msgid "You do not have permission to use the CSV/XLSX import module."
 msgstr "คุณไม่มีสิทธิ์ในการใช้โมดูลนำเข้า CSV/XLSX"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:58
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:41
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:99
+msgid "Active"
+msgstr "กำลังใช้งาน"
+
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:207
+msgid "Add default connection"
+msgstr "เพิ่มการเชื่อมต่อตามค่าเริ่มต้น"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user.tpl:32
+#: zotonic_mod_import_feed/src/models/m_import_feed.erl:413
+msgid "Administrator accounts cannot run feed imports. Importing external content with full administrator permissions is dangerous. Select a non-administrator account with only the permissions needed for importing."
+msgstr "บัญชีผู้ดูแลระบบไม่สามารถดำเนินการนำเข้าฟีดได้ การนำเข้าเนื้อหาจากภายนอกด้วยสิทธิ์ผู้ดูแลระบบเต็มรูปแบบนั้นมีความเสี่ยงสูง ให้เลือกบัญชีที่ไม่ใช่ผู้ดูแลระบบ ซึ่งมีสิทธิ์เพียงเท่าที่จำเป็นสำหรับการนำเข้าเท่านั้น"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user_dialog.tpl:2
+msgid "Administrator accounts cannot run feed imports. Use a non-administrator account with limited permissions."
+msgstr "บัญชีผู้ดูแลระบบไม่สามารถดำเนินการนำเข้าฟีดได้ โปรดใช้บัญชีที่ไม่ใช่ผู้ดูแลระบบที่มีสิทธิ์จำกัด"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:13
+msgid "All feeds"
+msgstr "ทุกฟีด"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_result.tpl:14
+msgid "All imported content has been kept."
+msgstr "เนื้อหาที่นำเข้าทั้งหมดได้ถูกเก็บรักษาไว้แล้ว"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_dialog.tpl:17
+msgid "Also delete imported articles and media"
+msgstr "นอกจากนี้ ให้ลบบทความและสื่อที่นำเข้าด้วย"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:120
+msgid "Also subscribe imported connections for updates"
+msgstr "นอกจากนี้ ให้สมัครรับการอัปเดตจากแหล่งข้อมูลที่นำเข้าด้วย"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:29
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:20
+msgid "Anonymous requests"
+msgstr "คำขอแบบไม่เปิดเผยชื่อ"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:35
+msgid "Articles"
+msgstr "บทความ"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:41
+msgid "Articles and dependent media, 100 entries per page."
+msgstr "บทความและสื่อที่เกี่ยวข้อง, 100 รายการต่อหน้า"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:94
+msgid "Attach the most important medium directly"
+msgstr "เชื่อมต่อสื่อสำคัญที่สุดโดยตรง"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:29
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:50
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:25
+msgid "Author"
+msgstr "ผู้แต่ง"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:58
+msgid "By default imported content is non-authoritative. Both modes keep source identities and allow updates from this feed."
+msgstr "ตามค่าเริ่มต้น เนื้อหาที่นำเข้าจะไม่มีสถานะเป็นข้อมูลอ้างอิง ทั้งสองโหมดจะรักษาข้อมูลระบุแหล่งที่มาไว้ และอนุญาตให้มีการอัปเดตจากฟีดนี้"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user.tpl:23
+msgid "Change user"
+msgstr "เปลี่ยนผู้ใช้"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:105
+msgid "Connection import depth"
+msgstr "ความลึกของการนำเข้าการเชื่อมต่อ"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:44
+msgid "Default category"
+msgstr "หมวดหมู่เริ่มต้น"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:79
+msgid "Default connections"
+msgstr "การเชื่อมต่อตามค่าเริ่มต้น"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:64
+msgid "Default content group"
+msgstr "กลุ่มเนื้อหาเริ่มต้น"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_copyright.tpl:2
+msgid "Default copyright"
+msgstr "ลิขสิทธิ์ตามค่าเริ่มต้น"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:108
+msgid "Default is 1: import directly connected resources. Use 0 to skip connections."
+msgstr "ค่าเริ่มต้นคือ 1: นำเข้าทรัพยากรที่เชื่อมต่อโดยตรง ใช้ค่า 0 เพื่อข้ามการเชื่อมต่อ"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_dialog.tpl:23
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:183
+msgid "Delete feed"
+msgstr "ลบฟีด"
+
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:378
+msgid "Delete feed?"
+msgstr "ลบฟีด?"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:174
+msgid "Delete imported articles and media that you are allowed to delete. Protected resources are kept. The feed will be paused; its settings and import history are retained."
+msgstr "ลบบทความและสื่อที่นำเข้าซึ่งคุณมีสิทธิ์ลบได้ ทรัพยากรที่ได้รับการคุ้มครองจะยังคงอยู่ ฟีดจะถูกหยุดชั่วคราว ส่วนการตั้งค่าและประวัติการนำเข้าจะยังคงอยู่"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:171
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:176
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:180
+msgid "Delete imported content"
+msgstr "ลบเนื้อหาที่นำเข้า"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:178
+msgid "Delete imported content?"
+msgstr "จะลบเนื้อหาที่นำเข้าหรือไม่?"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_dialog.tpl:11
+msgid "Delete only the feed; keep all imported content"
+msgstr "ลบเฉพาะฟีดเท่านั้น; เก็บเนื้อหาที่นำเข้าไว้ทั้งหมด"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_dialog.tpl:3
+msgid "Delete this feed and its import history?"
+msgstr "จะลบฟีดนี้และประวัติการนำเข้าของมันหรือไม่?"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_result.tpl:8
+msgid "Deleted:"
+msgstr "ถูกลบ:"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:50
+msgid "Dependent media"
+msgstr "สื่อที่ขึ้นอยู่กับ"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:34
+msgid "Development environment: local destinations and self-signed certificates are allowed."
+msgstr "สภาพแวดล้อมการพัฒนา: อนุญาตให้ใช้ปลายทางในเครื่องและใบรับรองที่ลงนามเอง"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:12
+msgid "Discover RSS or Atom feeds and import their articles automatically."
+msgstr "ค้นพบฟีด RSS หรือ Atom และนำเข้าบทความจากฟีดเหล่านั้นโดยอัตโนมัติ"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:23
+msgid "Discover feeds"
+msgstr "ค้นพบฟีด"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:95
+msgid "Do not import media"
+msgstr "อย่านำเข้าสื่อ"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_result.tpl:18
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_result.tpl:20
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:9
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:16
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:33
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:57
+msgid "Done"
+msgstr "เสร็จแล้ว"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:127
+msgid "Enable mod_websub to subscribe imported resources for updates."
+msgstr "เปิดใช้งาน mod_websub เพื่อติดตามการอัปเดตของทรัพยากรที่นำเข้า"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:149
+msgid "Enrich WordPress entries using the public REST API"
+msgstr "ปรับปรุงเนื้อหาใน WordPress โดยใช้ REST API สาธารณะ"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:103
+msgid "Entries advertising a Zotonic resource export use the native importer, preserving structured content and resource connections."
+msgstr "รายการที่โฆษณาการส่งออกทรัพยากร Zotonic จะใช้ตัวนำเข้าแบบดั้งเดิม เพื่อรักษาเนื้อหาที่มีโครงสร้างและการเชื่อมต่อระหว่างทรัพยากร"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:38
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:48
+msgid "Errors"
+msgstr "ข้อผิดพลาด"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:2
+msgid "Example entries"
+msgstr "ตัวอย่างข้อมูล"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:136
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:27
+msgid "Example:"
+msgstr "ตัวอย่าง:"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_result.tpl:10
+msgid "Failed:"
+msgstr "ไม่สำเร็จ:"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:33
+msgid "Feed"
+msgstr "ฟีด"
+
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:390
+msgid "Feed deleted"
+msgstr "โพสต์ถูกลบแล้ว"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:92
+msgid "Feed not found or access denied."
+msgstr "ไม่พบฟีด หรือถูกปฏิเสธการเข้าถึง"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:4
+msgid "Feed settings"
+msgstr "การตั้งค่าการให้อาหาร"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:27
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:18
+msgid "Fetch using"
+msgstr "เรียกข้อมูลโดยใช้"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:74
+msgid "Guess category from tags"
+msgstr "เดาหมวดหมู่จากแท็ก"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:25
+msgid "Identity"
+msgstr "อัตลักษณ์"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:55
+msgid "Import as authoritative local content"
+msgstr "นำเข้าเป็นเนื้อหาท้องถิ่นที่ได้รับการยอมรับอย่างเป็นทางการ"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:93
+msgid "Import as dependent resources with depiction connections"
+msgstr "นำเข้าเป็นทรัพยากรที่ขึ้นอยู่กับ โดยมีการเชื่อมต่อแบบแสดงผล"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:49
+msgid "Import category"
+msgstr "นำเข้าหมวดหมู่"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:4
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:11
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:174
+msgid "Import feeds"
+msgstr "นำเข้าฟีด"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:40
+msgid "Import history"
+msgstr "ประวัติการนำเข้า"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:82
+msgid "Import history pages"
+msgstr "หน้าประวัติการนำเข้า"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:7
+msgid "Import settings"
+msgstr "นำเข้าการตั้งค่า"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:15
+msgid "Import user"
+msgstr "นำเข้าผู้ใช้"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:37
+msgid "Imported / updated / skipped"
+msgstr "นำเข้า / อัปเดต / ข้าม"
+
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:367
+msgid "Imported content deleted"
+msgstr "เนื้อหาที่นำเข้าถูกลบแล้ว"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:56
+msgid "Importing"
+msgstr "การนำเข้า"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:23
+msgid "Imports run with this account's permissions. Only administrators and users with full access to accounts can change it."
+msgstr "การนำเข้าจะดำเนินการตามสิทธิ์ของบัญชีนี้ ผู้บริหารและผู้ใช้ที่มีสิทธิ์เข้าถึงบัญชีอย่างเต็มตัวเท่านั้นที่สามารถเปลี่ยนแปลงได้"
+
+#: zotonic_mod_import_feed/src/models/m_import_feed.erl:409
+msgid "Invalid removal regexp on line"
+msgstr "นิพจน์ปกติสำหรับการลบไม่ถูกต้องในบรรทัด"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_result.tpl:9
+msgid "Kept:"
+msgstr "เก็บไว้:"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:48
+msgid "Kind"
+msgstr "ประเภท"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:39
+msgid "Last poll"
+msgstr "การสำรวจความคิดเห็นครั้งล่าสุด"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:50
+msgid "Last processed"
+msgstr "ครั้งสุดท้ายที่ประมวลผล"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:5
+msgid "Loading example entries…"
+msgstr "กำลังโหลดตัวอย่างข้อมูล…"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:78
+msgid "Manage"
+msgstr "จัดการ"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:77
+msgid "Match existing category names or titles, otherwise use the default category."
+msgstr "ให้ตรงกับชื่อหรือหัวข้อของหมวดหมู่ที่มีอยู่ หากไม่มี ให้ใช้หมวดหมู่ตามค่าเริ่มต้น"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:41
+msgid "Media found"
+msgstr "พบสื่อ"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:52
+msgid "Medium attached directly"
+msgstr "ขนาดกลาง ติดโดยตรง"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:40
+msgid "Next poll"
+msgstr "การสำรวจความคิดเห็นครั้งต่อไป"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:83
+msgid "No feeds configured yet."
+msgstr "ยังไม่มีฟีดที่ตั้งค่าไว้"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user.tpl:18
+msgid "No import user selected"
+msgstr "ไม่มีการเลือกผู้ใช้การนำเข้า"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:76
+msgid "Nothing imported yet."
+msgstr "ยังไม่มีสินค้านำเข้าเลย"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:134
+msgid "One regexp per line. Matching text is removed from summaries and body text, including text across links. HTML formatting is preserved. Patterns are case-sensitive."
+msgstr "ใช้ regexp หนึ่งชุดต่อบรรทัด ข้อความที่ตรงกับ regexp จะถูกลบออกจากส่วนสรุปและเนื้อหาหลัก รวมถึงข้อความที่อยู่บนลิงก์ด้วย รูปแบบ HTML จะถูกรักษาไว้ รูปแบบ regexp จะแยกแยะตัวพิมพ์ใหญ่-เล็ก"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:13
+msgid "Original article"
+msgstr "บทความต้นฉบับ"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:21
+msgid "Pause"
+msgstr "หยุดชั่วคราว"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:156
+msgid "Pause automatic imports"
+msgstr "หยุดการนำเข้าอัตโนมัติ"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:54
+msgid "Paused"
+msgstr "หยุดชั่วคราว"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:31
+msgid "Poll now"
+msgstr "ลงคะแนนทันที"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:142
+msgid "Polling interval (minutes)"
+msgstr "ช่วงเวลาการสำรวจ (นาที)"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:36
+msgid "Polls"
+msgstr "ผลสำรวจความคิดเห็น"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:8
+msgid "Preview only: no resources have been imported."
+msgstr "แสดงตัวอย่างเท่านั้น: ยังไม่มีการนำเข้าทรัพยากรใดๆ"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_result.tpl:12
+msgid "Protected resources and resources you cannot delete are kept. A resource is also kept if deleting it could cause automatic deletion of dependent content you cannot delete."
+msgstr "ทรัพยากรที่ได้รับการคุ้มครองและทรัพยากรที่คุณไม่สามารถลบได้จะถูกรักษาไว้ นอกจากนี้ ทรัพยากรจะถูกรักษาไว้ด้วย หากการลบมันอาจทำให้เนื้อหาที่ขึ้นอยู่กับมันและคุณไม่สามารถลบได้ถูกลบไปโดยอัตโนมัติ"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_dialog.tpl:20
+msgid "Protected resources and resources you cannot delete will be kept. Content shared with other feeds is included."
+msgstr "ทรัพยากรที่ได้รับการคุ้มครองและทรัพยากรที่คุณไม่สามารถลบได้จะยังคงอยู่ รวมถึงเนื้อหาที่แชร์ไปยังฟีดอื่นด้วย"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:30
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:21
+msgid "Registered OAuth2 credentials"
+msgstr "ข้อมูลรับรอง OAuth2 ที่ลงทะเบียนแล้ว"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:33
+msgid "Reimport current entries"
+msgstr "นำเข้าข้อมูลปัจจุบันอีกครั้ง"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:46
+msgid "Resource"
+msgstr "ทรัพยากร"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:19
+msgid "Resume"
+msgstr "ประวัติการทำงาน"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:161
+msgid "Save feed"
+msgstr "บันทึกฟีด"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_discovery.tpl:2
+msgid "Select a feed"
+msgstr "เลือกฟีด"
+
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:214
+msgid "Select connected page"
+msgstr "เลือกหน้าที่เชื่อมโยง"
+
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:246
+msgid "Select import user"
+msgstr "เลือกผู้ใช้ที่จะนำเข้า"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_connection_dialog.tpl:18
+msgid "Select page"
+msgstr "เลือกหน้า"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user_dialog.tpl:3
+msgid "Select the account whose permissions will be used to import articles and media. Save the feed to apply your selection."
+msgstr "เลือกบัญชีที่มีสิทธิ์ที่จะใช้ในการนำเข้าบทความและสื่อ แล้วบันทึกฟีดเพื่อใช้การเลือกของคุณ"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user.tpl:26
+msgid "Select user"
+msgstr "เลือกผู้ใช้"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:47
+msgid "Source identity"
+msgstr "แหล่งที่มาของข้อมูล"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:114
+msgid "Subscribe imported articles for updates"
+msgstr "สมัครรับข่าวสารจากบทความที่นำเข้าเพื่อรับข้อมูลล่าสุด"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:123
+msgid "Subscriptions require a source that supports updates and non-authoritative imports."
+msgstr "การสมัครสมาชิกจำเป็นต้องมีแหล่งข้อมูลที่สนับสนุนการอัปเดตและการนำเข้าข้อมูลแบบไม่เป็นทางการ"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:37
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:101
+msgid "Tags"
+msgstr "แท็ก"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:28
+msgid "Test / preview"
+msgstr "ทดสอบ / ดูตัวอย่าง"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:35
+msgid "Testing fetches example entries without importing them. Reimport processes the entries currently available in the feed. Deleted resources stay deleted."
+msgstr "การทดสอบจะดึงข้อมูลตัวอย่างมาโดยไม่ทำการนำเข้า ส่วนการนำเข้าใหม่จะประมวลผลข้อมูลที่มีอยู่ในฟีดในขณะนั้น ทรัพยากรที่ถูกลบจะยังคงถูกลบอยู่"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:132
+msgid "Text to remove (regular expressions)"
+msgstr "ข้อความที่จะลบ (นิพจน์ปกติ)"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_result.tpl:2
+msgid "The feed and its import history have been deleted."
+msgstr "ฟีดและประวัติการนำเข้าได้ถูกลบไปแล้ว"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:63
+msgid "The feed has no entries."
+msgstr "ฟีดนี้ไม่มีรายการใดเลย"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_result.tpl:4
+msgid "The feed is paused."
+msgstr "การส่งข้อมูลถูกหยุดชั่วคราว"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:87
+msgid "These connections are added to every imported article. Save the feed to apply changes."
+msgstr "การเชื่อมต่อเหล่านี้จะถูกเพิ่มเข้าไปในทุกบทความที่นำเข้า ให้บันทึกฟีดเพื่อนำการเปลี่ยนแปลงไปใช้"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_copyright.tpl:31
+msgid "These defaults apply to imported articles and their dependent media. Leave empty to use the standard copyright defaults."
+msgstr "ค่าเริ่มต้นเหล่านี้ใช้กับบทความที่นำเข้าและสื่อที่เกี่ยวข้องกับบทความดังกล่าว หากไม่กรอกค่าใด ๆ จะใช้ค่าเริ่มต้นด้านลิขสิทธิ์ตามมาตรฐาน"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:179
+msgid "This deletes all deletable articles and media imported by this feed, including resources shared with other feeds. Protected resources and resources you cannot delete are kept. The feed will be paused."
+msgstr "การนี้จะลบบทความและสื่อทั้งหมดที่สามารถลบได้ ซึ่งถูกนำเข้าโดยฟีดนี้ รวมถึงทรัพยากรที่แชร์กับฟีดอื่น ๆ ทรัพยากรที่ได้รับการป้องกันและทรัพยากรที่คุณไม่สามารถลบได้จะยังคงอยู่ ฟีดนี้จะถูกหยุดชั่วคราว"
+
+#: zotonic_mod_import_feed/src/models/m_import_feed.erl:411
+msgid "This feed is still importing. Pause it and wait for the current import to finish before deleting its content."
+msgstr "ฟีดนี้กำลังนำเข้าข้อมูลอยู่ โปรดหยุดชั่วคราวและรอจนการนำเข้าปัจจุบันเสร็จสิ้นก่อนที่จะลบเนื้อหาของมัน"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user_results.tpl:15
+msgid "Up to 50 users are shown. Search by name to narrow the results. Disabled accounts cannot be selected."
+msgstr "แสดงผู้ใช้สูงสุด 50 คน ค้นหาตามชื่อเพื่อจำกัดผลการค้นหา บัญชีที่ถูกปิดใช้งานไม่สามารถเลือกได้"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:66
+msgid "Use Test / preview to fetch example entries."
+msgstr "ใช้ \"Test / preview\" เพื่อดึงข้อมูลตัวอย่าง"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:32
+msgid "Uses credentials registered for the import user and destination host. Credentials are only sent over HTTPS."
+msgstr "ใช้ข้อมูลการรับรองที่ลงทะเบียนไว้สำหรับผู้ใช้ที่นำเข้าและโฮสต์ปลายทาง ข้อมูลการรับรองจะถูกส่งผ่าน HTTPS เท่านั้น"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:16
+msgid "Website or feed URL"
+msgstr "URL ของเว็บไซต์หรือฟีด"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:57
+msgid "WordPress enrichment unavailable; the feed data will be used."
+msgstr "ไม่สามารถใช้การเสริมข้อมูลจาก WordPress ได้; จะใช้ข้อมูลจากฟีดแทน"
+
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:203
+msgid "You are not allowed to manage feeds."
+msgstr "คุณไม่มีสิทธิ์ในการจัดการฟีด"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:102
+msgid "Zotonic resource feeds"
+msgstr "แหล่งข้อมูลของ Zotonic"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:17
+msgid "Zotonic resource: uses the native resource importer."
+msgstr "ทรัพยากร Zotonic: ใช้ตัวนำเข้าทรัพยากรแบบดั้งเดิม"
 
 #: zotonic_mod_import_wordpress/priv/templates/_admin_status.tpl:4
 msgid "Import WXR file"
@@ -10851,13 +11694,6 @@ msgstr "การสมัครรับข่าวทางอีเมลท
 #: zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:21
 msgid "Do you want to remove this subscription?"
 msgstr "คุณต้องการนำการสมัครรับข้อมูลนี้ออกหรือไม่"
-
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:9
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:16
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:33
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:57
-msgid "Done"
-msgstr "เสร็จแล้ว"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:35
 msgid "Download all"
@@ -13002,12 +13838,6 @@ msgstr "โทเค็นการเข้าถึงใหม่"
 msgid "No user selected."
 msgstr "ยังไม่ได้เลือกผู้ใช้"
 
-#: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:43
-#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:51
-#: zotonic_mod_survey/priv/templates/_survey_answer_status_fields.tpl:37
-msgid "Note"
-msgstr "บันทึก"
-
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:3
 msgid "OAuth2 Application"
 msgstr "แอปพลิเคชัน OAuth2"
@@ -13238,11 +14068,6 @@ msgstr "พยายามแก้ไขวิดีโอแบบฝังท
 #: zotonic_mod_oembed/src/mod_oembed.erl:461
 msgid "Attempting to fix ~p videos."
 msgstr "กำลังพยายามแก้ไขวิดีโอ ~ p"
-
-#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:50
-#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:25
-msgid "Author"
-msgstr "ผู้แต่ง"
 
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:27
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:59
@@ -14516,10 +15341,6 @@ msgstr "สิ้นสุดคำถาม"
 msgid "Every question needs a question label"
 msgstr "ทุกคำถามต้องมีป้ายกำกับคำถาม"
 
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:27
-msgid "Example:"
-msgstr "ตัวอย่าง:"
-
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:37
 msgid "Excel (XLSX)"
 msgstr "Excel (XLSX)"
@@ -14545,7 +15366,7 @@ msgstr "คำอธิบาย"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:35
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:11
 #: zotonic_mod_survey/src/questions/survey_q_truefalse.erl:61
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:154
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:167
 msgid "False"
 msgstr "เท็จ"
 
@@ -15214,7 +16035,7 @@ msgstr "มูลค่าที่เก็บไว้"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:21
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:43
 #: zotonic_mod_survey/src/questions/survey_q_likert.erl:56
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:143
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:156
 msgid "Strongly Agree"
 msgstr "เห็นด้วยอย่างยิ่ง"
 
@@ -15222,7 +16043,7 @@ msgstr "เห็นด้วยอย่างยิ่ง"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:11
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:35
 #: zotonic_mod_survey/src/questions/survey_q_likert.erl:60
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:144
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:157
 msgid "Strongly Disagree"
 msgstr "ไม่เห็นด้วยอย่างยิ่ง"
 
@@ -15420,7 +16241,7 @@ msgstr "ผลรวม"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:32
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:10
 #: zotonic_mod_survey/src/questions/survey_q_truefalse.erl:63
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:153
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:166
 msgid "True"
 msgstr "จริง"
 
@@ -15633,6 +16454,10 @@ msgstr "ปี. ฉันชอบ"
 msgid "{points} of {max} points"
 msgstr "{points} {max} คะแนน"
 
+#: zotonic_mod_translation/priv/templates/_translation_edit_text.tpl:9
+msgid "(empty)"
+msgstr "(ว่าง)"
+
 #: zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:5
 #: zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:10
 msgid "Add a new language or change languages."
@@ -15672,7 +16497,7 @@ msgstr "ข้อความทั้งหมดถูกแปล"
 msgid "All translated texts will be removed."
 msgstr "ข้อความที่แปลทั้งหมดจะถูกลบออก"
 
-#: zotonic_mod_translation/priv/templates/_translation_status.tpl:6
+#: zotonic_mod_translation/priv/templates/_translation_status.tpl:9
 msgid "Approve translation"
 msgstr "อนุมัติการแปล"
 
@@ -15697,9 +16522,13 @@ msgstr "การแปลอัตโนมัติ"
 msgid "Available sub-languages"
 msgstr "ภาษาย่อยที่ใช้ได้"
 
-#: zotonic_mod_translation/src/mod_translation.erl:831
+#: zotonic_mod_translation/src/mod_translation.erl:1009
 msgid "Cannot generate translation files because <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext is not installed</a>."
 msgstr "ไม่สามารถสร้างไฟล์แปลได้เนื่องจากไม่ได้ติดตั้ง <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext</a>."
+
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:51
+msgid "Click to edit."
+msgstr "คลิกเพื่อแก้ไข"
 
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:90
 #: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:47
@@ -15738,7 +16567,7 @@ msgstr "ลบคำแปล"
 msgid "Developer Documentation"
 msgstr "เอกสารสำหรับนักพัฒนา"
 
-#: zotonic_mod_translation/priv/templates/_translation_status.tpl:18
+#: zotonic_mod_translation/priv/templates/_translation_status.tpl:25
 msgid "Did you review all texts and correct any mistakes?"
 msgstr "คุณได้ตรวจสอบข้อความทั้งหมดและแก้ไขข้อผิดพลาดหรือไม่"
 
@@ -15749,6 +16578,11 @@ msgstr "ลากภาษาเพื่อกำหนดลำดับที
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:146
 msgid "Dutch"
 msgstr "ดัตช์"
+
+#: zotonic_mod_translation/priv/templates/_translation_edit_text.tpl:5
+#: zotonic_mod_translation/src/support/translation_edit.erl:55
+msgid "Edit translation"
+msgstr "แก้ไขการแปล"
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:39
 msgid "Editable"
@@ -15816,6 +16650,7 @@ msgid "If a language is set to 'view' or 'editable' then texts for that language
 msgstr "หากตั้งค่าภาษาเป็น \"ดู\" หรือ \"แก้ไขได้\" ข้อความสำหรับภาษานั้นจะสามารถแก้ไขได้ในผู้ดูแลระบบ"
 
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:110
+#: zotonic_mod_translation/priv/templates/_dialog_translation_edit.tpl:34
 #: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:63
 msgid "If you automatically translate texts then your texts will be sent to a remote translation service."
 msgstr "หากคุณแปลข้อความโดยอัตโนมัติ ข้อความของคุณจะถูกส่งไปยังบริการแปลระยะไกล"
@@ -15902,7 +16737,7 @@ msgstr "เป็นส่วนหนึ่งของ"
 msgid "Please check the translations and save the page when you are ready."
 msgstr "โปรดตรวจสอบคำแปลและบันทึกหน้าเมื่อคุณพร้อม"
 
-#: zotonic_mod_translation/priv/templates/_translation_status.tpl:9
+#: zotonic_mod_translation/priv/templates/_translation_status.tpl:16
 msgid "Please review all texts and correct any mistakes. Approve the translation if it is correct. This message will then disappear."
 msgstr "โปรดตรวจสอบข้อความทั้งหมดและแก้ไขข้อผิดพลาด อนุมัติการแปลหากถูกต้อง จากนั้นข้อความนี้จะหายไป"
 
@@ -15919,11 +16754,7 @@ msgstr "โหลดการแปลซ้ำ"
 msgid "Reload all translations from the modules and site. All templates will be recompiled."
 msgstr "โหลดคำแปลทั้งหมดซ้ำจากโมดูลและไซต์ เทมเพลตทั้งหมดจะถูกคอมไพล์ใหม่"
 
-#: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:15
-msgid "Reload page"
-msgstr "โหลดหน้าใหม่"
-
-#: zotonic_mod_translation/src/mod_translation.erl:846
+#: zotonic_mod_translation/src/mod_translation.erl:1024
 msgid "Reloading all .po files in the background."
 msgstr "กำลังโหลดไฟล์. po ทั้งหมดซ้ำในพื้นหลัง"
 
@@ -15946,6 +16777,10 @@ msgstr "การนำภาษาออกจะซ่อนภาษาไว
 #: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:9
 msgid "Removing language"
 msgstr "การลบภาษา"
+
+#: zotonic_mod_translation/priv/templates/_dialog_translation_edit.tpl:18
+msgid "Replace the edited text with an automatic translation?"
+msgstr "จะแทนที่ข้อความที่แก้ไขด้วยข้อความแปลอัตโนมัติหรือไม่?"
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:153
 msgid "Romanian"
@@ -15981,6 +16816,7 @@ msgid "Select your preferred language."
 msgstr "เลือกภาษาที่คุณต้องการ"
 
 #: zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:41
+#: zotonic_mod_translation/priv/templates/_translation_status.tpl:11
 msgid "Show all translated texts in a new tab."
 msgstr "แสดงข้อความที่แปลแล้วทั้งหมดในแท็บใหม่"
 
@@ -15989,6 +16825,7 @@ msgid "Show the language in the URL"
 msgstr "แสดงภาษาใน URL"
 
 #: zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:42
+#: zotonic_mod_translation/priv/templates/_translation_status.tpl:12
 msgid "Show translations"
 msgstr "แสดงการแปล"
 
@@ -15996,34 +16833,38 @@ msgstr "แสดงการแปล"
 msgid "Skipped pages"
 msgstr "หน้าถูกข้าม"
 
-#: zotonic_mod_translation/src/mod_translation.erl:743
-#: zotonic_mod_translation/src/mod_translation.erl:791
+#: zotonic_mod_translation/src/mod_translation.erl:921
+#: zotonic_mod_translation/src/mod_translation.erl:969
 msgid "Sorry, could not change the language."
 msgstr "ขออภัยไม่สามารถเปลี่ยนภาษาได้"
 
-#: zotonic_mod_translation/src/mod_translation.erl:921
+#: zotonic_mod_translation/src/mod_translation.erl:1103
 msgid "Sorry, that language is unknown or not enabled."
 msgstr "ขออภัย ไม่รู้จักภาษานั้นหรือไม่ได้เปิดใช้งาน"
 
-#: zotonic_mod_translation/src/mod_translation.erl:730
-#: zotonic_mod_translation/src/mod_translation.erl:759
-#: zotonic_mod_translation/src/mod_translation.erl:771
-#: zotonic_mod_translation/src/mod_translation.erl:794
+#: zotonic_mod_translation/src/mod_translation.erl:908
+#: zotonic_mod_translation/src/mod_translation.erl:937
+#: zotonic_mod_translation/src/mod_translation.erl:949
+#: zotonic_mod_translation/src/mod_translation.erl:972
 msgid "Sorry, you don't have permission to change the language list."
 msgstr "ขออภัยคุณไม่ได้รับอนุญาตให้เปลี่ยนรายการภาษา"
 
-#: zotonic_mod_translation/src/mod_translation.erl:848
+#: zotonic_mod_translation/src/mod_translation.erl:1026
 msgid "Sorry, you don't have permission to reload translations."
 msgstr "ขออภัยคุณไม่มีสิทธิ์โหลดคำแปลซ้ำ"
 
-#: zotonic_mod_translation/src/mod_translation.erl:838
+#: zotonic_mod_translation/src/mod_translation.erl:1016
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr "ขออภัยคุณไม่มีสิทธิ์สแกนคำแปล"
 
-#: zotonic_mod_translation/src/mod_translation.erl:746
 #: zotonic_mod_translation/src/mod_translation.erl:924
+#: zotonic_mod_translation/src/mod_translation.erl:1106
 msgid "Sorry, you don't have permission to set the default language."
 msgstr "ขออภัยคุณไม่ได้รับอนุญาตให้ตั้งค่าภาษาเริ่มต้น"
+
+#: zotonic_mod_translation/priv/templates/_dialog_translation_edit.tpl:23
+msgid "Source language"
+msgstr "ภาษาต้น"
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:155
 msgid "Spanish"
@@ -16033,7 +16874,7 @@ msgstr "ภาษาสเปน"
 msgid "Start the translation of {count} pages? Editing will be disabled until the translations are ready."
 msgstr "จะเริ่มแปลหน้า {count} หรือไม่? การแก้ไขจะถูกปิดจนกว่าการแปลจะเสร็จสิ้น"
 
-#: zotonic_mod_translation/src/mod_translation.erl:818
+#: zotonic_mod_translation/src/mod_translation.erl:996
 msgid "Started building the .pot files. This may take a while..."
 msgstr "เริ่มสร้างไฟล์. pot อาจใช้เวลาสักครู่ ..."
 
@@ -16049,6 +16890,10 @@ msgstr "กฎทองในการเลือกภาษาคือคว
 msgid "The source language text was used for the missing translations."
 msgstr "ใช้ข้อความภาษาต้นฉบับสำหรับคำแปลที่ขาดหายไป"
 
+#: zotonic_mod_translation/priv/templates/_dialog_translation_edit.tpl:21
+msgid "The text changed while translating. Please try again."
+msgstr "ข้อความได้เปลี่ยนแปลงระหว่างการแปล โปรดลองอีกครั้ง"
+
 #: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:49
 #: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:191
 msgid "There was an error translating the texts. Please try again later."
@@ -16058,6 +16903,10 @@ msgstr "เกิดข้อผิดพลาดในการแปลข้
 msgid "This changes saved pages immediately. Pages you cannot edit are skipped. Copying and automatic translation skip pages without the source language. Editing is disabled while the operation runs."
 msgstr "การเปลี่ยนแปลงนี้จะบันทึกหน้าทันที หน้าที่คุณไม่สามารถแก้ไขได้จะถูกข้ามไป การคัดลอกและการแปลอัตโนมัติจะข้ามหน้าที่มีภาษาต้นฉบับไม่ครบถ้วน การแก้ไขจะถูกปิดใช้งานระหว่างที่กระบวนการกำลังทำงาน"
 
+#: zotonic_mod_translation/src/support/translation_edit.erl:100
+msgid "This page has changed. Your translation was not saved. Copy your changes before reloading."
+msgstr "หน้านี้ได้เปลี่ยนแปลงแล้ว การแปลของคุณยังไม่ถูกบันทึก โปรดคัดลอกการเปลี่ยนแปลงของคุณก่อนที่จะโหลดหน้าใหม่"
+
 #: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:19
 msgid "This permanently removes the selected language from every page in this tree. Pages with only that language will be kept unchanged. This cannot be undone. Continue?"
 msgstr "การนี้จะลบภาษาที่เลือกไว้อย่างถาวรจากทุกหน้าในโครงสร้างนี้ หน้าที่มีเพียงภาษานั้นเท่านั้นจะยังคงไม่เปลี่ยนแปลง การนี้ไม่สามารถย้อนกลับได้ ต้องการดำเนินการต่อหรือไม่?"
@@ -16066,7 +16915,11 @@ msgstr "การนี้จะลบภาษาที่เลือกไว
 msgid "This permanently removes the selected language from every selected page. Pages with only that language will be kept unchanged. This cannot be undone. Continue?"
 msgstr "การนี้จะลบภาษาที่เลือกไว้จากทุกหน้าที่เลือกไว้อย่างถาวร หน้าที่มีเพียงภาษาดังกล่าวจะยังคงไม่เปลี่ยนแปลง การนี้ไม่สามารถยกเลิกได้ ต้องการดำเนินการต่อหรือไม่?"
 
-#: zotonic_mod_translation/priv/templates/_translation_status.tpl:4
+#: zotonic_mod_translation/src/support/translation_edit.erl:183
+msgid "This text cannot be edited, or you no longer have permission to edit it."
+msgstr "ข้อความนี้ไม่สามารถแก้ไขได้ หรือคุณไม่มีสิทธิ์ในการแก้ไขข้อความนี้แล้ว"
+
+#: zotonic_mod_translation/priv/templates/_translation_status.tpl:5
 msgid "This translation has been automatically generated."
 msgstr "การแปลนี้ถูกสร้างขึ้นโดยอัตโนมัติ"
 
@@ -16082,6 +16935,7 @@ msgstr "สู่ภาษาใหม่"
 #: zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:6
 #: zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:11
 #: zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:32
+#: zotonic_mod_translation/priv/templates/_dialog_translation_edit.tpl:31
 msgid "Translate"
 msgstr "แปลภาษา"
 
@@ -16090,18 +16944,30 @@ msgstr "แปลภาษา"
 msgid "Translate all pages"
 msgstr "แปลทุกหน้า"
 
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:41
+#: zotonic_mod_translation/priv/templates/_dialog_translation_edit.tpl:22
+msgid "Translate from"
+msgstr "แปลจาก"
+
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:50
 msgid "Translated page texts for every editable language that has a translation in the resource."
 msgstr "ข้อความหน้าเว็บที่แปลแล้วสำหรับทุกภาษาที่สามารถแก้ไขได้ซึ่งมีการแปลในแหล่งข้อมูล"
 
+#: zotonic_mod_translation/priv/templates/_dialog_translation_edit.tpl:19
+msgid "Translating..."
+msgstr "กำลังแปล..."
+
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:3
-#: zotonic_mod_translation/src/mod_translation.erl:1217
+#: zotonic_mod_translation/src/mod_translation.erl:1399
 msgid "Translation"
 msgstr "การแปล"
 
 #: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:12
 msgid "Translation could not be completed. Some pages may have been changed."
 msgstr "ไม่สามารถแปลเสร็จสิ้นได้ บางหน้าอาจมีการเปลี่ยนแปลง"
+
+#: zotonic_mod_translation/priv/templates/_dialog_translation_edit.tpl:20
+msgid "Translation failed. Your text has not been changed."
+msgstr "การแปลไม่สำเร็จ ข้อความของคุณยังไม่ถูกเปลี่ยนแปลง"
 
 #: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:11
 msgid "Translation has finished. Reload the page to continue editing."
@@ -16149,7 +17015,7 @@ msgstr "คุณไม่สามารถแก้ไขโครงสร้
 msgid "not enabled"
 msgstr "ไม่ได้เปิดใช้งาน"
 
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:104
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:117
 msgid "page break"
 msgstr "การแบ่งหน้า"
 
@@ -16168,10 +17034,6 @@ msgstr "อัตราตัวอย่างเสียง"
 #: zotonic_mod_video/priv/templates/_video_viewer.tpl:11
 msgid "Converting"
 msgstr "กำลังแปลง"
-
-#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:7
-msgid "Format"
-msgstr "รูปแบบ"
 
 #: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:35
 msgid "Frame rate"
@@ -16213,10 +17075,6 @@ msgstr "นำเข้าจาก"
 msgid "Site"
 msgstr "ไซต์"
 
-#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:101
-msgid "Tags"
-msgstr "แท็ก"
-
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:3
 msgid "Video embed"
 msgstr "ฝังวิดีโอ"
@@ -16232,11 +17090,6 @@ msgstr "วิดีโอ Youtube"
 #: zotonic_mod_websub/src/filters/filter_websub_error.erl:54
 msgid "Access was denied while updating this page. Check the subscriber's source website credentials and permission to update the local page."
 msgstr "ถูกปฏิเสธการเข้าถึงขณะกำลังอัปเดตหน้านี้ โปรดตรวจสอบข้อมูลรับรองและสิทธิ์การอัปเดตหน้าท้องถิ่นจากเว็บไซต์ต้นทางของผู้สมัคร"
-
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:41
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:99
-msgid "Active"
-msgstr "กำลังใช้งาน"
 
 #: zotonic_mod_websub/priv/templates/_admin_edit_sidebar_websub.tpl:11
 msgid "Active subscriptions to this page: {count}"
@@ -16277,10 +17130,6 @@ msgstr "หน้าที่ถูกลบ"
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:57
 msgid "Enter the exact hostname, without a scheme, port, or path."
 msgstr "ป้อนชื่อโฮสต์ที่ถูกต้อง โดยไม่ต้องระบุโปรโตคอล พอร์ต หรือเส้นทาง"
-
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:48
-msgid "Errors"
-msgstr "ข้อผิดพลาด"
 
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:43
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:101
@@ -16819,10 +17668,6 @@ msgstr "ไซต์ที่คุณพยายามเยี่ยมชม
 #: zotonic_site_status/priv/templates/logon.tpl:33
 msgid "This password is not correct."
 msgstr "รหัสผ่านนี้ไม่ถูกต้อง"
-
-#: zotonic_site_status/priv/templates/_sites.tpl:5
-msgid "URL"
-msgstr "URL"
 
 #: zotonic_site_status/priv/templates/_sites.tpl:73
 msgid "Visit the admin page for this site."

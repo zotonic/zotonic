@@ -131,7 +131,7 @@ insert_movie(TmpFile, State) ->
                 State#state.id,
                 #{},
                 PropsMedia,
-                [no_touch],
+                [no_touch, {update_reason, media_processing}],
                 Context);
         false ->
             ?LOG_INFO(#{

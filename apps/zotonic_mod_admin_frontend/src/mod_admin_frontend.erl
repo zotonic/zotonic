@@ -70,6 +70,29 @@ resource-column with the main editing form is rendered using `{% catinclude \"_a
 This column is loaded lazily via a postback.
 
 
+### Editor profile
+
+With `mod_editor_tiptap`, frontend editing defaults to the `advanced` profile.
+Set `mod_admin_frontend.editor_profile` to `simple`, `normal`, or `advanced` in
+the site configuration to choose another profile. An unset or empty value uses
+`advanced`; unrecognized profile names fall back to Tiptap's `normal` profile.
+
+The setting is applied as `data-editor-profile` on the resource edit form,
+including forms loaded via postbacks. A nearer attribute on a field container
+or textarea overrides it. Profile definitions and site overrides are provided
+by `_editor_tiptap_profiles.tpl` in `mod_editor_tiptap`.
+This setting does not change TinyMCE configuration.
+
+
+### Responsive menu column
+
+When less than 1100 CSS pixels remain for the editor, the menu column collapses.
+A Menu button in the editor toolbar temporarily shows the menu in place of the
+form. The form remains mounted, preserving unsaved edits. Selecting a resource
+closes the menu. The available width is observed, so resizing the live preview
+also updates the layout. Site toolbar overrides using `save-buttons` inherit this
+behavior through the core frontend script and styles.
+
 ### Customizing the menu column
 
 Extra content can be added above or below the menu view by overruling the blocks `above_menu` and `below_menu`.
@@ -110,6 +133,31 @@ If you click on the cog icon on the right, then a meta data panel is shown (for 
 settings). This panel can be extended with extra tabs using the blocks `meta_tabs` and `meta_panels`.
 
 
+Live preview
+------------
+
+The Live preview button saves the current form and opens a right-hand iframe
+showing saved content. Restoring an open panel on page load does not save. Resource,
+media and incoming/outgoing edge events for both the edited resource and `tree_id`
+refresh the preview. Switching resources replaces the subscriptions; closing the
+panel releases them. Unsaved form changes are not rendered.
+
+The preview uses the form's `view_location` override, falling back to `page_url` in
+the editing language. Keep `_admin_edit_preview_context.tpl` inside the `rscform`
+block so site overrides of `view_location` apply. Sites replacing the outer editor
+layout or navbar must include `_admin_edit_preview.tpl` once and
+`_admin_edit_preview_button.tpl` in their toolbar. The iframe is same-origin and
+uses the editor's existing permissions. External destinations can be opened in a
+new tab. Opening an admin or admin_frontend editor inside the preview navigates
+the top window to that editor. Open state and width are remembered for the browser session.
+
+Preview languages are document-local. Embedded navigation and background requests
+do not update the shared `z.lang` cookie, and embedded language switches do not
+change the user's saved language preference. Authentication refresh uses the
+document's language for its MQTT session, keeping lazy templates and postbacks in
+the preview language. Custom HTTP loaders must likewise include their document's
+language in their URL or `z_language` argument instead of relying on the cookie.
+
 Accepted Events
 ---------------
 
@@ -127,6 +175,15 @@ Delegate callbacks:
 -mod_description("Edit pages on a web site; subset of admin module for Bootstrap based web sites.").
 -mod_depends([mod_admin, mod_mqtt]).
 -mod_prio(500).
+
+-mod_config([
+    #{
+        key => editor_profile,
+        type => string,
+        default => <<"advanced">>,
+        description => "Tiptap profile for frontend editing: simple, normal, or advanced."
+    }
+]).
 
 -export([
     event/2

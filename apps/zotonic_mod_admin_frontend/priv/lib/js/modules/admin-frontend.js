@@ -1,5 +1,36 @@
 
 $(function() {
+    const menu = document.getElementById("menu-editor");
+    const menuTemplate = document.getElementById("admin-frontend-menu-button");
+    const toolbar = document.getElementById("save-buttons");
+    if (menu && menuTemplate && toolbar) {
+        const layout = menu.parentElement;
+        const button = menuTemplate.content.firstElementChild.cloneNode(true);
+        toolbar.prepend(button);
+        document.body.classList.add("admin-frontend-editor");
+        layout.classList.add("admin-frontend-layout");
+
+        function showMenu(show) {
+            document.body.classList.toggle("admin-frontend-menu-open", show);
+            button.setAttribute("aria-expanded", String(show));
+            button.classList.toggle("btn-primary", show);
+            button.classList.toggle("btn-default", !show);
+        }
+        button.addEventListener("click", function() {
+            showMenu(button.getAttribute("aria-expanded") !== "true");
+        });
+        // Observe the editor's available width, including changes from the preview
+        // divider. Viewport breakpoints alone miss a narrow editor on a wide screen.
+        new ResizeObserver(function(entries) {
+            const compact = entries[0].contentRect.width < 1100;
+            if (compact !== document.body.classList.contains("admin-frontend-compact")) {
+                showMenu(false);
+                document.body.classList.toggle("admin-frontend-compact", compact);
+            }
+        }).observe(layout);
+        window.addEventListener("hashchange", function() { showMenu(false); });
+    }
+
 	function confirm_unsaved( hash ) {
 		z_editor_save($('#rscform'));
 		if ($('#rscform').attr('data-formdirty')) {
