@@ -1,10 +1,11 @@
 {# Include once in the outer editor; keep the iframe outside dynamically replaced forms. #}
-<aside id="admin-edit-preview" class="admin-edit-preview" hidden aria-label="{_ Live preview _}">
+<aside id="admin-edit-preview" class="admin-edit-preview" hidden aria-label="{_ Live preview _}" data-preview-language="{{ z_language|escape }}">
     <div class="admin-edit-preview-resizer" data-admin-preview-resizer role="separator"
          tabindex="0" aria-label="{_ Resize preview _}" aria-orientation="vertical"
          aria-controls="admin-edit-preview" aria-valuemin="30" aria-valuemax="60" aria-valuenow="40"></div>
     <div class="admin-edit-preview-toolbar">
-        <strong>{_ Live preview _}</strong>
+        <strong>{_ Live preview _} <span class="admin-edit-preview-language" data-admin-preview-language
+            title="{_ Editing language _}" aria-live="polite"></span></strong>
         <button type="button" class="btn btn-default btn-sm" data-admin-preview="refresh">{_ Refresh _}</button>
         <a class="btn btn-default btn-sm" data-admin-preview-link target="_blank" rel="noopener">{_ Open in new tab _}</a>
         <button type="button" class="btn btn-default btn-sm" data-admin-preview="close" aria-label="{_ Close preview _}">&times;</button>

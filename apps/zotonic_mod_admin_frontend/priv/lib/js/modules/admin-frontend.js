@@ -13,6 +13,8 @@ $(function() {
         function showMenu(show) {
             document.body.classList.toggle("admin-frontend-menu-open", show);
             button.setAttribute("aria-expanded", String(show));
+            button.classList.toggle("btn-primary", show);
+            button.classList.toggle("btn-default", !show);
         }
         button.addEventListener("click", function() {
             showMenu(button.getAttribute("aria-expanded") !== "true");

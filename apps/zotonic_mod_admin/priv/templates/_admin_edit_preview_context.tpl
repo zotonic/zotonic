@@ -7,7 +7,8 @@
 cotonic.ready.then(function() {
     cotonic.broker.publish("admin/preview/context", {
         id: {{ id|default:"undefined" }},
-        tree_id: {{ tree_id|default:"undefined" }}
+        tree_id: {{ tree_id|default:"undefined" }},
+        language: "{{ z_language|escapejs }}"
     }, { retain: true });
 });
 {% endjavascript %}

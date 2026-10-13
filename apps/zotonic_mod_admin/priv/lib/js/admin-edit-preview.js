@@ -9,6 +9,7 @@
 
         const broker = cotonic.broker;
         const frame = panel.querySelector("iframe");
+        const languageTag = panel.querySelector("[data-admin-preview-language]");
         const unavailable = panel.querySelector("[data-admin-preview-unavailable]");
         const link = panel.querySelector("[data-admin-preview-link]");
         const options = { wid: "admin-edit-preview" };
@@ -19,8 +20,22 @@
         let open = false;
         let interacted = false;
 
+        function updateLanguage() {
+            const tab = document.querySelector(
+                '#translation-tabs .language-tabs li.active[lang], #rscform .language-tabs li.active[lang]'
+            );
+            const language = tab?.getAttribute("lang") || context.language || panel.dataset.previewLanguage;
+            languageTag.textContent = (language || "").toUpperCase();
+            if (tab) {
+                languageTag.title = tab.textContent.trim();
+                // Frontend forms can initially select a different language than the UI.
+                z_postback_data_set("z_edit_language", language);
+            }
+        }
+
         function refresh() {
             clearTimeout(timer);
+            updateLanguage();
             if (open && context.id) {
                 // Coalesce resource, medium and edge events from a single edit.
                 timer = setTimeout(() => z_event("admin-preview-resolve"), 250);
@@ -45,6 +60,8 @@
             document.body.classList.toggle("admin-preview-open", open);
             document.querySelectorAll('[data-admin-preview="toggle"]').forEach(button => {
                 button.setAttribute("aria-expanded", String(open));
+                button.classList.toggle("btn-primary", open);
+                button.classList.toggle("btn-default", !open);
                 button.title = open ? button.dataset.previewHideTitle : button.dataset.previewShowTitle;
             });
             subscribe();
