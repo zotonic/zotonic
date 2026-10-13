@@ -26,6 +26,12 @@ Import model for resources exported by `m_rsc_export`.
 
 This model handles import-preview and import operations for external resource exports. It keeps import status metadata and supports fetching raw export payloads for authenticated users.
 
+Imports emit `#import_resource{}` before creating resources or resolving remote
+references. Observers can handle or skip an import; successful imports retain
+normal import bookkeeping and emit `#rsc_import_done{}`. See
+`zotonic_observer:observe_import_resource/2` for the contract. Include
+`zotonic_core/include/zotonic.hrl` to use the notification records.
+
 Available Model API Paths
 -------------------------
 
@@ -1039,47 +1045,7 @@ import(OptLocalId, #{
         false ->
             case find_allowed_category(RemoteRId, Rsc, Options, Context) of
                 {ok, Category} ->
-                    UriTemplate = maps:get(<<"uri_template">>, JSON, proplists:get_value(uri_template, Options)),
-                    {Rsc1, ImportedAcc1} = cleanup_map_ids(RemoteRId, Rsc, UriTemplate, ImportedAcc, Options, Context),
-                    Rsc2 = Rsc1#{
-                        <<"category_id">> => Category
-                    },
-                    case update_rsc(OptLocalId, RemoteRId, Rsc2, ImportedAcc1, Options, Context) of
-                        {ok, LocalId} ->
-                            save_import_options(LocalId, Uri, ok, Options, Context),
-                            ImportedAcc2 = ImportedAcc1#{
-                                Uri => LocalId
-                            },
-                            _ = maybe_import_medium(LocalId, JSON, Options, Context),
-                            ImportedAcc3 = case proplists:get_value(import_edges, Options, 0) of
-                                N when is_integer(N), N > 0 ->
-                                    PropsForced = proplists:get_value(props_forced, Options, #{}),
-                                    EdgeOptions = [
-                                        {import_edges, N - 1},
-                                        {props_forced, maps:remove(<<"category_id">>, PropsForced)}
-                                        | proplists:delete(import_edges,
-                                            proplists:delete(props_forced,
-                                                proplists:delete(is_subscribe, Options)))
-                                    ],
-                                    import_edges(LocalId, JSON, ImportedAcc2, EdgeOptions, Context);
-                                _ ->
-                                    ImportedAcc2
-                            end,
-                            z_notifier:notify(#rsc_import_done{
-                                id = LocalId, uri = Uri, options = Options
-                            }, Context),
-                            {ok, {LocalId, ImportedAcc3}};
-                        {error, Reason} = Error ->
-                            ?LOG_INFO(#{
-                                text => <<"Importing resource returned error">>,
-                                in => zotonic_core,
-                                result => error,
-                                reason => Reason,
-                                uri => Uri,
-                                rsc_id => OptLocalId
-                            }),
-                            Error
-                    end;
+                    import_resource(OptLocalId, JSON, RemoteRId, Category, ImportedAcc, Options, Context);
                 {error, _} = Error ->
                     Error
             end
@@ -1094,6 +1060,75 @@ import(_OptLocalId, JSON, _ImportedAcc, _Options, _Context) ->
         json => JSON
     }),
     {error, status}.
+
+
+%% Intercept before mapping remote IDs, which can create placeholder resources.
+import_resource(OptLocalId, JSON, RemoteRId, Category, ImportedAcc, Options, Context) ->
+    #{<<"uri">> := Uri, <<"resource">> := Rsc} = JSON,
+    Edges = [{Predicate, Object} || {Predicate, #{<<"objects">> := Objects}} <-
+        maps:to_list(maps:get(<<"edges">>, JSON, #{})),
+        #{<<"object_id">> := Object} <- Objects],
+    Related = [#{uri => RelatedUri, props => #{}, is_reference => true} || RelatedUri <-
+        lists:usort([ObjectUri || {_, #{<<"uri">> := ObjectUri}} <- Edges])],
+    Notice = #import_resource{
+        item = #{uri => Uri, id => OptLocalId, props => Rsc#{<<"category_id">> => Category},
+            edges => Edges, medium => maps:get(<<"medium_url">>, JSON, undefined)},
+        related = Related,
+        source = #{importer => m_rsc_import, uri => Uri},
+        options = Options,
+        raw = JSON
+    },
+    Default = fun(ImportContext) ->
+        import_resource_default(OptLocalId, JSON, RemoteRId, Category, ImportedAcc, Options, ImportContext)
+    end,
+    case z_import_resource:import(Notice, Default, Context) of
+        {ok, LocalId, Imported} ->
+            save_import_options(LocalId, Uri, ok, Options, Context),
+            z_notifier:notify(#rsc_import_done{id = LocalId, uri = Uri, options = Options}, Context),
+            {ok, {LocalId, (maps:merge(ImportedAcc, Imported))#{Uri => LocalId}}};
+        {skip, Reason} -> {error, {skipped, Reason}};
+        {error, _} = Error -> Error
+    end.
+
+import_resource_default(OptLocalId, JSON, RemoteRId, Category, ImportedAcc, Options, Context) ->
+    #{<<"uri">> := Uri, <<"resource">> := Rsc} = JSON,
+    UriTemplate = maps:get(<<"uri_template">>, JSON, proplists:get_value(uri_template, Options)),
+    {Rsc1, ImportedAcc1} = cleanup_map_ids(RemoteRId, Rsc, UriTemplate, ImportedAcc, Options, Context),
+    Rsc2 = Rsc1#{
+        <<"category_id">> => Category
+    },
+    case update_rsc(OptLocalId, RemoteRId, Rsc2, ImportedAcc1, Options, Context) of
+        {ok, LocalId} ->
+            ImportedAcc2 = ImportedAcc1#{
+                Uri => LocalId
+            },
+            _ = maybe_import_medium(LocalId, JSON, Options, Context),
+            ImportedAcc3 = case proplists:get_value(import_edges, Options, 0) of
+                N when is_integer(N), N > 0 ->
+                    PropsForced = proplists:get_value(props_forced, Options, #{}),
+                    EdgeOptions = [
+                        {import_edges, N - 1},
+                        {props_forced, maps:remove(<<"category_id">>, PropsForced)}
+                        | proplists:delete(import_edges,
+                            proplists:delete(props_forced,
+                                proplists:delete(is_subscribe, Options)))
+                    ],
+                    import_edges(LocalId, JSON, ImportedAcc2, EdgeOptions, Context);
+                _ ->
+                    ImportedAcc2
+            end,
+            {ok, LocalId, ImportedAcc3};
+        {error, Reason} = Error ->
+            ?LOG_INFO(#{
+                text => <<"Importing resource returned error">>,
+                in => zotonic_core,
+                result => error,
+                reason => Reason,
+                uri => Uri,
+                rsc_id => OptLocalId
+            }),
+            Error
+    end.
 
 
 %% @doc Mark a resource as imported, set the import result and save the

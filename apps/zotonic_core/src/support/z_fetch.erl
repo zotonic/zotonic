@@ -32,28 +32,39 @@
 
 -include("../../include/zotonic.hrl").
 
+-export_type([options/0, option/0]).
+
+-type option() :: z_url_fetch:option().
+-type options() :: [option()].
+
 %% @doc Fetch data from an URL. Let modules change the fetch options.
+%% Observer options are resolved again for each redirect destination. Cross-origin
+%% redirects default to {authorization_redirect, none}: credentials are removed
+%% and callbacks receive {authorization, none}, which they may replace with
+%% destination-specific credentials. Use {authorization_redirect, error} to reject
+%% cross-origin redirects with explicit authorization. A caller's explicit
+%% {authorization, none} always remains anonymous. Same-origin redirects with
+%% explicit authorization require HTTPS. Set {autoredirect, false} to return
+%% redirects as-is.
 -spec fetch(Url, Options, Context) -> z_url_fetch:fetch_result() when
     Url :: string() | binary(),
-    Options :: z_url_fetch:options(),
+    Options :: options(),
     Context :: z:context() | undefined.
 fetch(Url, Options, Context) ->
     Url1 = z_convert:to_binary(Url),
-    Options1 = add_options(get, Url1, Options, Context),
-    z_url_fetch:fetch(Url1, Options1).
+    z_url_fetch:fetch(Url1, fetch_options(Options, Context)).
 
 %% @doc Fetch JSON data from an URL. Let modules change the fetch options. On success, the returned
 %% body is parsed with z_json and returned.
 -spec fetch_json(Url, Options, Context) -> {ok, JSON} | {error, term()} when
     Url :: string() | binary(),
-    Options :: z_url_fetch:options(),
+    Options :: options(),
     Context :: z:context() | undefined,
     JSON :: term().
 fetch_json(Url, Options, Context) ->
     Url1 = z_convert:to_binary(Url),
     Options1 = [ {accept, "application/json"} | proplists:delete(accept, Options) ],
-    Options2 = add_options(get, Url1, Options1, Context),
-    case z_url_fetch:fetch(Url1, Options2) of
+    case z_url_fetch:fetch(Url1, fetch_options(Options1, Context)) of
         {ok, {_Final, _Hs, _Length, <<>>}} ->
             {ok, #{}};
         {ok, {_Final, _Hs, _Length, Body}} ->
@@ -65,12 +76,11 @@ fetch_json(Url, Options, Context) ->
 %% @doc Fetch data from an URL. Let modules change the fetch options.
 -spec fetch_partial(Url, Options, Context) -> z_url_fetch:fetch_result() when
     Url :: string() | binary(),
-    Options :: z_url_fetch:options(),
+    Options :: options(),
     Context :: z:context() | undefined.
 fetch_partial(Url, Options, Context) ->
     Url1 = z_convert:to_binary(Url),
-    Options1 = add_options(get, Url1, Options, Context),
-    z_url_fetch:fetch_partial(Url1, Options1).
+    z_url_fetch:fetch_partial(Url1, fetch_options(Options, Context)).
 
 
 %% @doc Perform a request and data from an URL. Let modules change the fetch options.
@@ -78,7 +88,7 @@ fetch_partial(Url, Options, Context) ->
     Method :: get | post | delete | put | patch,
     Url :: string() | binary(),
     Payload :: list() | binary() | map(),
-    Options :: z_url_fetch:options(),
+    Options :: options(),
     Context :: z:context() | undefined,
     Result :: z_url_fetch:fetch_result().
 fetch(Method, Url, Args, Options, Context) ->
@@ -111,8 +121,7 @@ fetch(Method, Url, Args, Options, Context) ->
         true ->
             Url1
     end,
-    Options2 = add_options(Method, Url2, Options1, Context),
-    z_url_fetch:fetch(Method, Url2, Payload, Options2).
+    z_url_fetch:fetch(Method, Url2, Payload, fetch_options(Options1, Context)).
 
 %% @doc Perform a request and fetch JSON data from an URL. Let modules change the fetch options. On success, the
 %% returned body is parsed with z_json and returned.
@@ -120,7 +129,7 @@ fetch(Method, Url, Args, Options, Context) ->
     Method :: get | post | delete | put | patch,
     Url :: string() | binary(),
     Payload :: list() | binary() | map(),
-    Options :: z_url_fetch:options(),
+    Options :: options(),
     Context:: z:context() | undefined,
     Result :: {ok, term()} | {error, term()}.
 fetch_json(Method, Url, Args, Options, Context) ->
@@ -166,14 +175,13 @@ ensure_qlist(L) ->
         L).
 
 %% @doc Fetch the metadata from an URL. Let modules change the fetch options.
--spec metadata( string() | binary(), z_url_fetch:options(), z:context() ) -> {ok, z_url_metadata:metadata()} | {error, term()}.
+-spec metadata( string() | binary(), options(), z:context() ) -> {ok, z_url_metadata:metadata()} | {error, term()}.
 metadata(Url, Options, Context) ->
-    Options1 = add_options(get, Url, Options, Context),
-    z_url_metadata:fetch(Url, Options1).
+    z_url_metadata:fetch(Url, fetch_options(Options, Context)).
 
 
 %% @doc Fetch data from an URL. Return the data as a data url.
--spec as_data_url( string() | binary() | undefined, z_url_fetch:options(), z:context()) -> {ok, binary()} | {error, term()}.
+-spec as_data_url( string() | binary() | undefined, options(), z:context()) -> {ok, binary()} | {error, term()}.
 as_data_url(Url, Options, Context) ->
     case fetch(Url, Options, Context) of
         {ok, {_Final, Hs, _Size, Data}} ->
@@ -223,6 +231,20 @@ error_msg(_, Context) ->
 
 
 
+%% The stdlib owns redirects and authorization policy. Resolve Zotonic options
+%% for each destination through its callback, without carrying observer credentials.
+fetch_options(Options, undefined) -> Options;
+fetch_options(Options, Context) ->
+    CallerOptionsFun = proplists:get_value(options_fun, Options),
+    OptionsFun = fun(Method, Url, RequestOptions) ->
+        CallerOptions = case CallerOptionsFun of
+            undefined -> RequestOptions;
+            _ -> CallerOptionsFun(Method, Url, RequestOptions)
+        end,
+        add_options(Method, Url, CallerOptions, Context)
+    end,
+    [{options_fun, OptionsFun} | proplists:delete(options_fun, Options)].
+
 %% @doc Add or modify fetch options. For development sites the 'insecure' options is added, as
 %% development sites are using self-signed certificates. The #url_fetch_options notification is
 %% used to add an authorization header or other option for a specific site. If no language is
@@ -230,7 +252,7 @@ error_msg(_, Context) ->
 %% System tasks have no site for notifications or language defaults; they supply
 %% their TLS policy explicitly in Options.
 add_options(_Method, _Url, Options, undefined) ->
-    cleanup_options(Options);
+    Options;
 add_options(Method, Url, Options, Context) ->
     Options1 = case proplists:is_defined(insecure, Options) of
         false ->
@@ -266,19 +288,4 @@ add_options(Method, Url, Options, Context) ->
         _ ->
             Options2
     end,
-    cleanup_options(Options3).
-
-cleanup_options(Options) ->
-    lists:filter(
-        fun
-            ({authorization, None}) when
-                None =:= undefined;
-                None =:= none;
-                None =:= <<>>;
-                None =:= "" -> false;
-            (_) ->
-                true
-        end,
-        Options).
-
-
+    Options3.
