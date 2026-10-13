@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-13 14:58\n"
+"PO-Revision-Date: 2026-10-13 17:00\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "MIME-Version: 1.0\n"
@@ -16,11 +16,11 @@ msgstr ""
 "X-Crowdin-File-ID: 8692\n"
 "Language: pt_PT\n"
 
-#: zotonic_core/src/support/z_fetch.erl:222
+#: zotonic_core/src/support/z_fetch.erl:230
 msgid "Could not fetch the remote resource URL."
 msgstr "Não foi possível buscar o URL do recurso remoto."
 
-#: zotonic_core/src/support/z_fetch.erl:208
+#: zotonic_core/src/support/z_fetch.erl:216
 msgid "Forbidden to access the remote resource URL."
 msgstr "Proibido acessar o URL do recurso remoto."
 
@@ -28,31 +28,31 @@ msgstr "Proibido acessar o URL do recurso remoto."
 msgid "Page Import"
 msgstr "Importação de página"
 
-#: zotonic_core/src/support/z_fetch.erl:216
+#: zotonic_core/src/support/z_fetch.erl:224
 msgid "The remote server can not handle this URL."
 msgstr "O servidor remoto não pode lidar com este URL."
 
-#: zotonic_core/src/support/z_fetch.erl:220
+#: zotonic_core/src/support/z_fetch.erl:228
 msgid "The remote server for the URL is having problems."
 msgstr "O servidor remoto da URL está com problemas."
 
-#: zotonic_core/src/support/z_fetch.erl:218
+#: zotonic_core/src/support/z_fetch.erl:226
 msgid "The remote server for the URL is having temporary problems."
 msgstr "O servidor remoto da URL está com problemas temporários."
 
-#: zotonic_core/src/support/z_fetch.erl:210
+#: zotonic_core/src/support/z_fetch.erl:218
 msgid "The resource at the URL can not be found."
 msgstr "O recurso no URL não pode ser encontrado."
 
-#: zotonic_core/src/support/z_fetch.erl:212
+#: zotonic_core/src/support/z_fetch.erl:220
 msgid "The resource at the URL is gone."
 msgstr "O recurso no URL se foi."
 
-#: zotonic_core/src/support/z_fetch.erl:214
+#: zotonic_core/src/support/z_fetch.erl:222
 msgid "Too many requests for the remote server, try again later."
 msgstr "Muitos pedidos para o servidor remoto, tente novamente mais tarde."
 
-#: zotonic_core/src/support/z_fetch.erl:206
+#: zotonic_core/src/support/z_fetch.erl:214
 msgid "Unauthorized to access the remote resource URL."
 msgstr "Não autorizado a acessar a URL do recurso remoto."
 
@@ -60,6 +60,7 @@ msgstr "Não autorizado a acessar a URL do recurso remoto."
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:42
 msgid "Website"
 msgstr "Website"
 
@@ -306,7 +307,12 @@ msgstr "Você tem certeza de que quer restaurar todas as regras do LCA à sua ve
 #: zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:50
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:104
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:125
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:58
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:54
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:134
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_connection_dialog.tpl:17
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_dialog.tpl:22
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user_dialog.tpl:17
 #: zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:50
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:19
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:215
@@ -337,6 +343,7 @@ msgstr "Você tem certeza de que quer restaurar todas as regras do LCA à sua ve
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
 #: zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:116
+#: zotonic_mod_translation/priv/templates/_dialog_translation_edit.tpl:43
 #: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:69
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:218
 msgid "Cancel"
@@ -379,6 +386,7 @@ msgstr "Configuração alterada."
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_select_predicate_find.tpl:27
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:76
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:209
+#: zotonic_mod_admin/priv/templates/_admin_edit_version.tpl:5
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:68
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:70
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_filter_predicates.tpl:20
@@ -407,7 +415,7 @@ msgstr "Configuração alterada."
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:12
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:17
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:22
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:28
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:37
 msgid "Close"
 msgstr "Fechar"
 
@@ -440,7 +448,7 @@ msgstr "Considere os autores dos recursos como proprietários."
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:19
 #: zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4
 #: zotonic_mod_admin/src/mod_admin.erl:491
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:68
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:70
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:133
 msgid "Content"
 msgstr "Conteúdo"
@@ -453,6 +461,7 @@ msgstr "Conteúdo"
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:32
 #: zotonic_mod_content_groups/priv/templates/_admin_overview_filter_panel.tpl:6
 #: zotonic_mod_content_groups/priv/templates/_dialog_admin_bulk_update.tpl:5
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:62
 msgid "Content group"
 msgstr "Grupo de conteúdo"
 
@@ -776,11 +785,13 @@ msgstr "Regras revertidas"
 #: zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:29
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:33
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:162
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:139
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:141
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:80
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:26
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:105
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:126
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:60
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:55
 #: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:42
 #: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:67
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:136
@@ -789,6 +800,7 @@ msgstr "Regras revertidas"
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:75
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:198
 #: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:95
+#: zotonic_mod_translation/priv/templates/_dialog_translation_edit.tpl:44
 msgid "Save"
 msgstr "Salvar"
 
@@ -1056,7 +1068,7 @@ msgstr "<b>Aviso:</b> o site irá parar e reiniciar."
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:32
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:55
 #: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:250
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:24
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:33
 msgid "<em>Untitled</em>"
 msgstr "<em>Sem título</em>"
 
@@ -1086,8 +1098,8 @@ msgstr "Cerca de {n} itens encontrados."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:18
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:62
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:73
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:120
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:75
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:122
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_edit_basics.person.tpl:7
 msgid "Access control"
 msgstr "Controle de acesso"
@@ -1125,6 +1137,7 @@ msgstr "Adicionar uma ligação de entrada"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:29
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:26
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:85
 msgid "Add connection"
 msgstr "Adicionar ligação"
 
@@ -1153,7 +1166,7 @@ msgstr "Adicionar mídia ao corpo"
 msgid "Add note"
 msgstr "Adicionar nota"
 
-#: zotonic_mod_admin/src/mod_admin.erl:1123
+#: zotonic_mod_admin/src/mod_admin.erl:1124
 msgid "Added the connection to"
 msgstr "Acrescente a ligação a"
 
@@ -1277,6 +1290,7 @@ msgid "Are you sure you want to exit the admin interface?"
 msgstr "Tem certeza de que deseja sair da interface de administração?"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_show_as.tpl:11
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:42
 msgid "Aside"
 msgstr "Ao lado"
 
@@ -1420,7 +1434,7 @@ msgid "Close all sockets from ip addresses which have over &gt; 250 open sockets
 msgstr "Feche todos os sockets de endereços IP que tenham mais de &gt; 250 sockets abertos."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:33
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:10
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:11
 msgid "Close preview"
 msgstr "Fechar pré-visualização"
 
@@ -1506,7 +1520,7 @@ msgstr "Copiar link para download"
 msgid "Copy the SHA-256 checksum to the clipboard."
 msgstr "Copie a soma de verificação SHA-256 para a área de transferência."
 
-#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:161
+#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:162
 msgid "Could not connect to the website."
 msgstr "Não foi possível conectar-se ao site."
 
@@ -1626,7 +1640,7 @@ msgstr "Apagar esta página."
 msgid "Delete this page..."
 msgstr "Eliminar esta página..."
 
-#: zotonic_mod_admin/src/mod_admin.erl:956
+#: zotonic_mod_admin/src/mod_admin.erl:957
 msgid "Deleted tasks."
 msgstr "Tarefas excluídas."
 
@@ -1742,13 +1756,14 @@ msgstr "Endereço de e-mail"
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:23
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:21
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:121
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:51
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:36
 #: zotonic_mod_menu/priv/templates/_admin_menu_menu_view.collection.tpl:40
 #: zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:23
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:131
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:117
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:119
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:35
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:44
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:14
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:16
 msgid "Edit"
@@ -1762,6 +1777,10 @@ msgstr "Editar nota"
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:122
 msgid "Edit:"
 msgstr "Editar:"
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:8
+msgid "Editing language"
+msgstr "Idioma de edição"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:209
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:211
@@ -1786,7 +1805,7 @@ msgstr "O código de incorporação será higienizado para sites permitidos e ht
 msgid "Embed page | a citation, popup, or link to another page"
 msgstr "Incorporar página | uma citação, pop-up ou link para outra página"
 
-#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:225
+#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:226
 #: zotonic_mod_oembed/src/mod_oembed.erl:356
 msgid "Embedded Content"
 msgstr "Conteúdo Embutido"
@@ -1820,7 +1839,7 @@ msgstr "Raiz de Instalação Erlang"
 msgid "Erlang Version"
 msgstr "Versão Erlang"
 
-#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:194
+#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:195
 msgid "Error checking the website."
 msgstr "Erro ao verificar o site."
 
@@ -1834,19 +1853,19 @@ msgstr "Erro ao criar a página."
 msgid "Error importing page from the remote server."
 msgstr "Erro ao importar página do servidor remoto."
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:235
+#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:236
 msgid "Error uploading the file."
 msgstr "Erro ao fazer o upload do arquivo."
 
-#: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:179
+#: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:184
 msgid "Error, duplicate name. Please change the name."
 msgstr "Erro, nome duplicado. Por favor, mude o nome."
 
-#: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:177
+#: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:182
 msgid "Error, duplicate page path. Please change the uri."
 msgstr "Erro, caminho de página duplicado. Por favor, altere o uri."
 
-#: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:175
+#: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:180
 msgid "Error, duplicate uri. Please change the uri."
 msgstr "Erro, uri duplicado. Por favor, altere o uri."
 
@@ -1870,9 +1889,9 @@ msgstr "Excluir categoria"
 msgid "Existing pages"
 msgstr "Páginas existentes"
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:221
+#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:222
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:210
-#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:169
+#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:170
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:118
 msgid "Failed to download the file."
 msgstr "Falha no download do arquivo."
@@ -1907,7 +1926,7 @@ msgstr "Arquivo / conteúdo de mídia"
 msgid "File size"
 msgstr "Tamanho do arquivo"
 
-#: zotonic_mod_admin/src/mod_admin.erl:881
+#: zotonic_mod_admin/src/mod_admin.erl:882
 msgid "File uploaded to the drop folder, will be handled shortly."
 msgstr "O arquivo enviado para a pasta suspensa será tratado em breve."
 
@@ -2143,12 +2162,13 @@ msgstr "Últimos textos modificados"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:43
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:95
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:48
 msgid "Link"
 msgstr "Link"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:2
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:7
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:13
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:14
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:11
 msgid "Live preview"
 msgstr "Pré-visualização em tempo real"
@@ -2238,6 +2258,7 @@ msgstr "Correspondência de id, nome, caminho da página ou redireccionamento"
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:100
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:103
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:113
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:91
 msgid "Media"
 msgstr "Mídia"
 
@@ -2272,7 +2293,7 @@ msgstr "A mídia engloba todas as imagens, filmes e documentos carregados. As m�
 msgid "Media file"
 msgstr "Arquivo de mídia"
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:192
+#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:193
 msgid "Media item created."
 msgstr "Item de mídia criado."
 
@@ -2293,7 +2314,7 @@ msgstr "Corredores de comunicação social"
 msgid "Media title"
 msgstr "Título da mídia"
 
-#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:150
+#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:151
 msgid "Media updated."
 msgstr "Mídia atualizada."
 
@@ -2525,7 +2546,7 @@ msgstr "Memória do SO"
 msgid "Ongoing"
 msgstr "Em andamento"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:9
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:10
 msgid "Open in new tab"
 msgstr "Abrir numa nova aba"
 
@@ -2639,6 +2660,7 @@ msgstr "Movido por"
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_connection.tpl:6
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:23
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:13
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_connection_dialog.tpl:5
 msgid "Predicate"
 msgstr "Predicado"
 
@@ -2700,8 +2722,9 @@ msgstr "Publicar esta página"
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:52
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:17
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:21
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:50
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:52
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:69
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:33
 #: zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:44
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:31
 msgid "Published"
@@ -2770,7 +2793,7 @@ msgstr "Referenciadores"
 msgid "Referrers to"
 msgstr "Referências a"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:8
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:9
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:18
 msgid "Refresh"
 msgstr "Atualizar"
@@ -2787,6 +2810,11 @@ msgstr "Reinstale o modelo de dados Zotonic"
 msgid "Reinstall site datamodel"
 msgstr "Reinstalar o modelo de dados do site"
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_version.tpl:10
+#: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:15
+msgid "Reload page"
+msgstr "Atualizar a página"
+
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:107
 msgid "Reload site configuration"
 msgstr "Recarregar configuração do site"
@@ -2794,6 +2822,10 @@ msgstr "Recarregar configuração do site"
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:108
 msgid "Reload the configuration of a site. Note that not all site configurations can be done whilst the site is running."
 msgstr "Recarregue a configuração de um site. Note que nem todas as configurações do site podem ser feitas enquanto o site estiver em execução."
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_version.tpl:10
+msgid "Reloading discards any unsaved changes in this form. Continue?"
+msgstr "Ao atualizar a página, quaisquer alterações não guardadas neste formulário serão perdidas. Deseja continuar?"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:27
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:29
@@ -2805,13 +2837,14 @@ msgid "Remote sandbox isolation and queue details are available on each runner�
 msgstr "Os detalhes relativos ao isolamento da sandbox remota e à fila estão disponíveis no painel de controlo de cada executor."
 
 #: zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_page.tpl:16
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_connection.tpl:4
 #: zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:35
 #: zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:7
 #: zotonic_mod_translation/priv/templates/_translation_language_status.tpl:34
 msgid "Remove"
 msgstr "Remover"
 
-#: zotonic_mod_admin/src/mod_admin.erl:1127
+#: zotonic_mod_admin/src/mod_admin.erl:1128
 msgid "Removed the connection to"
 msgstr "Removido a conexão com"
 
@@ -2900,28 +2933,30 @@ msgstr "O isolamento em sandbox não é suportado neste sistema. Os comandos de 
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:21
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:7
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:61
 msgid "Save and View"
 msgstr "Salvar e Ver"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:21
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:7
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:142
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:144
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:84
 msgid "Save and view the page."
 msgstr "Guardar e ver a página."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:17
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:139
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:141
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:80
 msgid "Save this page."
 msgstr "Guardar esta página."
 
-#: zotonic_mod_admin/src/mod_admin.erl:945
+#: zotonic_mod_admin/src/mod_admin.erl:946
 msgid "Scheduled a background task to check all refers connections."
 msgstr "Foi agendada uma tarefa em segundo plano para verificar todas as conexões de referência."
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:294
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user_dialog.tpl:9
 msgid "Search"
 msgstr "Procurar"
 
@@ -2966,6 +3001,7 @@ msgstr "Selecione uma página"
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_select_predicate.tpl:5
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:89
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:98
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_connection_dialog.tpl:7
 msgid "Select a predicate"
 msgstr "Selecione um predicado"
 
@@ -2977,7 +3013,7 @@ msgstr "Selecione um predicado para encontrar páginas que possam remeter para e
 msgid "Select a predicate to find pages this page can connect to."
 msgstr "Selecione um predicado para encontrar as páginas às quais esta página se pode ligar."
 
-#: zotonic_mod_admin/src/mod_admin.erl:935
+#: zotonic_mod_admin/src/mod_admin.erl:936
 msgid "Select both a visible page and a valid predicate for each connection."
 msgstr "Selecione uma página visível e um predicado válido para cada ligação."
 
@@ -3054,6 +3090,7 @@ msgstr "Diretório de arquivos do site"
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:76
 #: zotonic_mod_base/priv/templates/directory_index.tpl:17
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:67
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:26
 msgid "Size"
 msgstr "Tamanho"
 
@@ -3065,7 +3102,7 @@ msgstr "Alguns discos estão quase cheios."
 msgid "Some images, PDFs, audio and video are presented in a single language. Here you can select this language."
 msgstr "Algumas imagens, PDFs, áudio e vídeo são apresentados em um único idioma. Aqui você pode selecionar este idioma."
 
-#: zotonic_mod_admin/src/mod_admin.erl:933
+#: zotonic_mod_admin/src/mod_admin.erl:934
 msgid "Some pages or connections could not be updated. Check your permissions. Other changes may have been saved."
 msgstr "Não foi possível atualizar algumas páginas ou ligações. Verifique as suas permissões. Outras alterações podem ter sido guardadas."
 
@@ -3077,31 +3114,31 @@ msgstr "Algumas tarefas estão tentando novamente.<br>Total de erros: {total}<br
 msgid "Something went wrong. Sorry."
 msgstr "Alguma coisa correu mal. Desculpe."
 
-#: zotonic_mod_admin/src/mod_admin.erl:854
+#: zotonic_mod_admin/src/mod_admin.erl:855
 msgid "Sorry, could not handle this filename."
 msgstr "Desculpe, não foi possível lidar com este nome de arquivo."
 
-#: zotonic_mod_admin/src/mod_admin.erl:893
+#: zotonic_mod_admin/src/mod_admin.erl:894
 msgid "Sorry, could not move the file to the drop folder."
 msgstr "Desculpe, não foi possível mover o arquivo para a pasta suspensa."
 
-#: zotonic_mod_admin/src/mod_admin.erl:947
-#: zotonic_mod_admin/src/mod_admin.erl:958
+#: zotonic_mod_admin/src/mod_admin.erl:948
+#: zotonic_mod_admin/src/mod_admin.erl:959
 #: zotonic_mod_menu/src/mod_menu.erl:133
 msgid "Sorry, only an admin is allowed to do this"
 msgstr "Desculpe, apenas um administrador tem permissão para fazer isso"
 
-#: zotonic_mod_admin/src/mod_admin.erl:829
-#: zotonic_mod_admin/src/mod_admin.erl:840
+#: zotonic_mod_admin/src/mod_admin.erl:830
+#: zotonic_mod_admin/src/mod_admin.erl:841
 msgid "Sorry, that page is unknown."
 msgstr "Desculpe, essa página é desconhecida."
 
-#: zotonic_mod_admin/src/mod_admin.erl:831
-#: zotonic_mod_admin/src/mod_admin.erl:842
+#: zotonic_mod_admin/src/mod_admin.erl:832
+#: zotonic_mod_admin/src/mod_admin.erl:843
 msgid "Sorry, you are not allowed to edit notes."
 msgstr "Desculpe, você não tem permissão para editar notas."
 
-#: zotonic_mod_admin/src/mod_admin.erl:897
+#: zotonic_mod_admin/src/mod_admin.erl:898
 msgid "Sorry, you are not allowed to upload drop folder files."
 msgstr "Desculpe, você não tem permissão para fazer upload de arquivos de pastas suspensas."
 
@@ -3109,11 +3146,11 @@ msgstr "Desculpe, você não tem permissão para fazer upload de arquivos de pas
 msgid "Sorry, you don't have permission to add the connection."
 msgstr "Desculpe, não tem permissão para adicionar a ligação."
 
-#: zotonic_mod_admin/src/mod_admin.erl:1109
+#: zotonic_mod_admin/src/mod_admin.erl:1110
 msgid "Sorry, you have no permission to add the connection."
 msgstr "Desculpe, não tem permissão para adicionar a ligação."
 
-#: zotonic_mod_admin/src/mod_admin.erl:1111
+#: zotonic_mod_admin/src/mod_admin.erl:1112
 msgid "Sorry, you have no permission to delete the connection."
 msgstr "Desculpe, não tem permissão para apagar a ligação."
 
@@ -3145,6 +3182,8 @@ msgstr "Estado"
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
 #: zotonic_mod_base/priv/templates/_session_info.tpl:12
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:221
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:34
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:49
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:111
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:11
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:7
@@ -3308,6 +3347,10 @@ msgstr "O site original não menciona atualizações automáticas."
 msgid "The page"
 msgstr "A página"
 
+#: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:192
+msgid "The page could not be saved. Your changes are still in the form."
+msgstr "Não foi possível guardar a página. As suas alterações ainda se encontram no formulário."
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:55
 msgid "The page will stay, but without the media item."
 msgstr "A página permanecerá, mas sem o item de mídia."
@@ -3373,9 +3416,9 @@ msgstr "Isto não pode ser desfeito. A tua página ficará perdida para sempre."
 msgid "This connection already exists."
 msgstr "Esta ligação já existe."
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:225
+#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:226
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:214
-#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:173
+#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:174
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:122
 msgid "This file contains links to other files or locations."
 msgstr "Este arquivo contém links para outros arquivos ou locais."
@@ -3392,16 +3435,16 @@ msgstr "Este ficheiro não foi verificado por vírus porque é demasiado grande.
 msgid "This file has not been scanned for viruses."
 msgstr "Este ficheiro não foi verificado à procura de vírus."
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:223
+#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:224
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:212
-#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:171
+#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:172
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:120
 msgid "This file is infected with a virus."
 msgstr "Este ficheiro está infectado com um vírus."
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:227
+#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:228
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:216
-#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:175
+#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:176
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:124
 msgid "This file is too large."
 msgstr "Este arquivo é muito grande."
@@ -3423,13 +3466,25 @@ msgstr "Esta nota é visível apenas para pessoas que podem editar a página."
 msgid "This page can be connected from other pages. For example it could be an author of an article."
 msgstr "Esta página pode ser conectada a partir de outras páginas. Por exemplo, pode ser o autor de um artigo."
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:12
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:13
 msgid "This page cannot be previewed here. Use “Open in new tab” if available."
 msgstr "Esta página não pode ser pré-visualizada aqui. Utilize a opção «Abrir num novo separador», se disponível."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:31
 msgid "This page has been deleted."
 msgstr "Esta página foi apagada."
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_version.tpl:8
+msgid "This page has changed elsewhere. Reload to get the latest version before saving."
+msgstr "Esta página foi alterada noutro local. Atualize a página para obter a versão mais recente antes de guardar."
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_version.tpl:8
+msgid "This page has changed. Reload to see the latest translations."
+msgstr "Esta página foi alterada. Atualize a página para ver as traduções mais recentes."
+
+#: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:178
+msgid "This page has changed. Your changes were not saved. Reload the page before trying again."
+msgstr "Esta página foi alterada. As suas alterações não foram guardadas. Atualize a página antes de tentar novamente."
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:9
 msgid "This page holds a collection of administrative options to perform certain tasks on this Zotonic installation."
@@ -3455,7 +3510,7 @@ msgstr "Este recurso foi criado pelo módulo"
 msgid "Till"
 msgstr "Até"
 
-#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:163
+#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:164
 msgid "Timeout while trying to fetch data from the website."
 msgstr "Tempo esgotado enquanto se tenta ir buscar dados ao site."
 
@@ -3472,6 +3527,7 @@ msgstr "Tempo esgotado enquanto se tenta ir buscar dados ao site."
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:11
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:27
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:25
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:39
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:6
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:44
 msgid "Title"
@@ -3536,7 +3592,7 @@ msgstr "não publicado"
 #: zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:2
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:29
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_connection.tpl:19
-#: zotonic_mod_admin/src/mod_admin.erl:1117
+#: zotonic_mod_admin/src/mod_admin.erl:1118
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:118
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:182
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:9
@@ -3659,7 +3715,7 @@ msgstr "Válido para:"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish_view.tpl:2
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:11
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:31
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:144
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:146
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:26
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:38
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:20
@@ -3692,7 +3748,7 @@ msgid "View status"
 msgstr "Ver status"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:12
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:144
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:146
 msgid "View this page."
 msgstr "Veja esta página."
 
@@ -3775,8 +3831,8 @@ msgstr "Você não está autorizado a apagar esta página."
 msgid "You are not allowed to edit this page."
 msgstr "Você não está autorizado a editar esta página."
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:217
-#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:165
+#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:218
+#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:166
 msgid "You don't have permission to change this media item."
 msgstr "Você não tem permissão para mudar este item de mídia."
 
@@ -3785,14 +3841,14 @@ msgstr "Você não tem permissão para mudar este item de mídia."
 msgid "You don't have permission to create this page."
 msgstr "Você não tem permissão para criar esta página."
 
-#: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:181
+#: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:186
 #: zotonic_mod_image_edit/src/mod_image_edit.erl:94
 msgid "You don't have permission to edit this page."
 msgstr "Você não tem permissão para editar esta página."
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:219
+#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:220
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:208
-#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:167
+#: zotonic_mod_admin/src/support/z_admin_media_discover.erl:168
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:116
 msgid "You don't have the proper permissions to upload this type of file."
 msgstr "Você não tem as permissões adequadas para carregar este tipo de arquivo."
@@ -3806,7 +3862,7 @@ msgstr "Você não tem permissão para realizar esta acção."
 msgid "You have to specify a description of the file to make it easier to find and share."
 msgstr "Tem de especificar uma descrição do ficheiro para facilitar a sua localização e partilha."
 
-#: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:183
+#: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:188
 msgid "Your search query is invalid. Please correct it before saving."
 msgstr "Sua consulta de pesquisa é inválida. Corrija-o antes de salvar."
 
@@ -4132,6 +4188,7 @@ msgstr "Debian e Ubuntu"
 
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:26
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:44
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_copyright.tpl:6
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:38
 msgid "Default"
 msgstr "Predefinição"
@@ -4567,7 +4624,7 @@ msgstr "macOS"
 msgid "test@example.com"
 msgstr "test@example.com"
 
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:107
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:109
 msgid "Add a translation or copy texts between languages."
 msgstr "Adicione uma tradução ou copie textos entre idiomas."
 
@@ -4575,7 +4632,7 @@ msgstr "Adicione uma tradução ou copie textos entre idiomas."
 msgid "Add pages or click on a page in the menu."
 msgstr "Adicione páginas ou clique em uma página do menu."
 
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:104
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:106
 msgid "Enable or disable language tabs."
 msgstr "Ativar ou desativar os separadores de idioma."
 
@@ -4583,8 +4640,8 @@ msgstr "Ativar ou desativar os separadores de idioma."
 msgid "Hide menu"
 msgstr "Ocultar menu"
 
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:71
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:101
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:73
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:103
 #: zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:24
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:96
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:21
@@ -4604,11 +4661,11 @@ msgstr "Idioma"
 msgid "Loading ..."
 msgstr "Carregamento ..."
 
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:178
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:180
 msgid "No page"
 msgstr "Sem página"
 
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:142
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:144
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:84
 msgid "Save &amp; view"
 msgstr "Save &amp; view"
@@ -4617,7 +4674,7 @@ msgstr "Save &amp; view"
 msgid "Show menu"
 msgstr "Mostrar menu"
 
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:180
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:182
 msgid "The page might have been deleted."
 msgstr "A página pode ter sido excluída."
 
@@ -4633,7 +4690,7 @@ msgstr "Esta página"
 msgid "Yes, discard changes"
 msgstr "Sim, descarte as mudanças"
 
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:55
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:57
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:11
 msgid "till"
 msgstr "até"
@@ -4842,6 +4899,7 @@ msgid "New password"
 msgstr "Nova senha"
 
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:96
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user_results.tpl:12
 msgid "No users found."
 msgstr "Nenhum usuário encontrado."
 
@@ -4886,6 +4944,7 @@ msgid "Random secure password:"
 msgstr "Senha segura aleatória:"
 
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:7
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user_dialog.tpl:7
 msgid "Search users"
 msgstr "Pesquisar usuários"
 
@@ -6563,6 +6622,7 @@ msgid "Multiple accounts"
 msgstr "Várias contas"
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:199
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:87
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:26
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:55
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:198
@@ -7162,6 +7222,7 @@ msgid "Please make sure you store the backup encryption password in a safe <u>ex
 msgstr "Certifique-se de armazenar a senha de criptografia de backup em um local <u>externo</u> seguro."
 
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:75
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:84
 msgid "Previous"
 msgstr "Anterior"
 
@@ -7693,7 +7754,7 @@ msgstr "Variação líquida"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:28
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:35
 #: zotonic_mod_survey/src/questions/survey_q_yesno.erl:70
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:149
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:162
 msgid "No"
 msgstr "Não"
 
@@ -7959,7 +8020,7 @@ msgstr "Tarefas"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:32
 #: zotonic_mod_survey/src/questions/survey_q_yesno.erl:72
 #: zotonic_mod_translation/priv/templates/_translation_status.tpl:26
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:148
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:161
 msgid "Yes"
 msgstr "Sim"
 
@@ -8056,7 +8117,7 @@ msgstr "Nota: Os comentários são moderados"
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:20
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:29
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:4
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:186
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:199
 msgid "Page"
 msgstr "Página"
 
@@ -8255,15 +8316,18 @@ msgid "<b>NB</b> connected pages and images have their own rights."
 msgstr "<b>NB</b> páginas e imagens conectadas têm seus próprios direitos."
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:24
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_copyright.tpl:7
 msgid "All Rights Reserved"
 msgstr "Todos os direitos reservados"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:44
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:45
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_copyright.tpl:23
 msgid "Attribution"
 msgstr "Atribuição"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:21
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_copyright.tpl:4
 msgid "License"
 msgstr "Licença"
 
@@ -8276,6 +8340,7 @@ msgid "More about licenses:"
 msgstr "Mais sobre licenças:"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:25
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_copyright.tpl:8
 msgid "Public Domain"
 msgstr "Domínio público"
 
@@ -8285,6 +8350,7 @@ msgstr "A licença e a atribuição desta página."
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:50
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:51
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_copyright.tpl:28
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:109
 msgid "Year"
 msgstr "Ano"
@@ -9091,26 +9157,32 @@ msgid "redirects"
 msgstr "redirecciona"
 
 #: zotonic_mod_editor_tinymce/priv/templates/_editor.tpl:39
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:20
 msgid "Add link"
 msgstr "Adicionar link"
 
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:38
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:19
 msgid "Aligned left"
 msgstr "Alinhado à esquerda"
 
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:44
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:20
 msgid "Aligned right"
 msgstr "Direito alinhado"
 
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:27
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:16
 msgid "Alignment"
 msgstr "Alinhamento"
 
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:32
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:18
 msgid "Between text"
 msgstr "Entre o texto"
 
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:11
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:6
 msgid "Caption"
 msgstr "Legenda"
 
@@ -9119,11 +9191,13 @@ msgid "Crop"
 msgstr "Cultura"
 
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:57
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:35
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:61
 msgid "Crop image"
 msgstr "Cortar imagem"
 
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:16
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:9
 msgid "Defaults to the summary of the media. Enter a single “-” to not display a caption."
 msgstr "O resumo dos meios de comunicação social é o padrão. Insira um único \"-\" para não exibir uma legenda."
 
@@ -9132,34 +9206,43 @@ msgid "Editor version"
 msgstr "Versão do editor"
 
 #: zotonic_mod_editor_tinymce/priv/templates/_editor.tpl:19
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:13
 msgid "Insert media"
 msgstr "Inserir mídia"
 
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:83
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:30
 msgid "Large"
 msgstr "Grande"
 
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:99
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:39
 msgid "Link to media or url below"
 msgstr "Link para a mídia ou url abaixo"
 
 #: zotonic_mod_editor_tinymce/src/mod_editor_tinymce.erl:154
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:50
+#: zotonic_mod_editor_tiptap/src/mod_editor_tiptap.erl:238
 msgid "Media Properties"
 msgstr "Propriedades de mídia"
 
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:77
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:29
 msgid "Medium"
 msgstr "Médio"
 
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:105
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:40
 msgid "Open link in new window"
 msgstr "Abrir link em nova janela"
 
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:118
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:49
 msgid "Remove from text"
 msgstr "Remover do texto"
 
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:72
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:28
 msgid "Small"
 msgstr "Pequeno"
 
@@ -9170,6 +9253,223 @@ msgstr "Website. Deixar em branco para link de mídia"
 #: zotonic_mod_editor_tinymce/priv/templates/_admin_configure_module.tpl:6
 msgid "always use newest available"
 msgstr "sempre use o mais recente disponível"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:53
+msgid "Add column"
+msgstr "Adicionar coluna"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:53
+msgid "Add row"
+msgstr "Adicionar linha"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:44
+msgid "Align center"
+msgstr "Alinhar ao centro"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:44
+msgid "Align left"
+msgstr "Alinhar à esquerda"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:45
+msgid "Align right"
+msgstr "Alinhar à direita"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:58
+msgid "Apply"
+msgstr "Candidatar-se"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:36
+msgid "Bold"
+msgstr "Negrito"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:39
+msgid "Bullet list"
+msgstr "Lista com marcadores"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:41
+msgid "Code block"
+msgstr "Bloco de código"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:43
+msgid "Code language"
+msgstr "Linguagem de programação"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:54
+msgid "Delete column"
+msgstr "Eliminar coluna"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:54
+msgid "Delete row"
+msgstr "Apagar linha"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:56
+msgid "Delete table"
+msgstr "Apagar tabela"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:57
+msgid "Enter a valid link."
+msgstr "Introduza um link válido."
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:32
+#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:7
+msgid "Format"
+msgstr "Formato"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:51
+msgid "Full window"
+msgstr "Janela completa"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:33
+msgid "Heading 1"
+msgstr "Título 1"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:33
+msgid "Heading 2"
+msgstr "Título 2"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:34
+msgid "Heading 3"
+msgstr "Título 3"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:34
+msgid "Heading 4"
+msgstr "Título 4"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:35
+msgid "Heading 5"
+msgstr "Título 5"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:35
+msgid "Heading 6"
+msgstr "Título 6"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:47
+msgid "Horizontal line"
+msgstr "Linha horizontal"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:40
+msgid "Indent"
+msgstr "Recuo"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:49
+msgid "Insert internal link"
+msgstr "Inserir ligação interna"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:49
+msgid "Insert or edit media"
+msgstr "Inserir ou editar ficheiros multimédia"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:52
+msgid "Insert table"
+msgstr "Inserir tabela"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:36
+msgid "Italic"
+msgstr "Itálico"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:46
+msgid "Left to right"
+msgstr "Da esquerda para a direita"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:47
+msgid "Line break"
+msgstr "Quebra de linha"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:55
+msgid "Merge cells"
+msgstr "Unir células"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:42
+#: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:43
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:51
+#: zotonic_mod_survey/priv/templates/_survey_answer_status_fields.tpl:37
+msgid "Note"
+msgstr "Observação"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:39
+msgid "Numbered list"
+msgstr "Lista numerada"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:40
+msgid "Outdent"
+msgstr "Outdent"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:32
+msgid "Paragraph"
+msgstr "Parágrafo"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:43
+msgid "Plain text"
+msgstr "Texto simples"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:41
+msgid "Quote"
+msgstr "Citação"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:31
+msgid "Redo"
+msgstr "Refazer"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:51
+msgid "Remove formatting"
+msgstr "Remover formatação"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:48
+msgid "Remove link"
+msgstr "Remover o link"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:46
+msgid "Right to left"
+msgstr "Da direita para a esquerda"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:56
+msgid "Split cell"
+msgstr "Célula dividida"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:37
+msgid "Strikethrough"
+msgstr "Riscado"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:38
+msgid "Subscript"
+msgstr "Índice"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:38
+msgid "Superscript"
+msgstr "Exposto"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:52
+msgid "Table"
+msgstr "Tabela"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:30
+msgid "Text formatting"
+msgstr "Formatação do texto"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:59
+msgid "This field is required."
+msgstr "Este campo é obrigatório."
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:55
+msgid "Toggle header row"
+msgstr "Alternar a linha do cabeçalho"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:57
+#: zotonic_site_status/priv/templates/_sites.tpl:5
+msgid "URL"
+msgstr "URL"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:37
+msgid "Underline"
+msgstr "Sublinhar"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:31
+msgid "Undo"
+msgstr "Desfazer"
+
+#: zotonic_mod_editor_tiptap/src/mod_editor_tiptap.erl:248
+msgid "You are not allowed to view this media."
+msgstr "Não está autorizado a visualizar este ficheiro multimédia."
 
 #: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:6
 msgid "DKIM e-mail signing setup"
@@ -10069,7 +10369,7 @@ msgstr "Os progressos serão comunicados no <a href=\"{url}\">registo administra
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:27
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:43
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:48
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:61
 msgid "Property"
 msgstr "Imóveis"
 
@@ -10139,6 +10439,503 @@ msgstr "As propriedades mais conhecidas são:"
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:85
 msgid "You do not have permission to use the CSV/XLSX import module."
 msgstr "Não tem autorização para utilizar o módulo de importação CSV/XLSX."
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:58
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:41
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:99
+msgid "Active"
+msgstr "Ativo"
+
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:207
+msgid "Add default connection"
+msgstr "Adicionar ligação predefinida"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user.tpl:32
+#: zotonic_mod_import_feed/src/models/m_import_feed.erl:413
+msgid "Administrator accounts cannot run feed imports. Importing external content with full administrator permissions is dangerous. Select a non-administrator account with only the permissions needed for importing."
+msgstr "As contas de administrador não podem executar importações de feeds. Importar conteúdo externo com permissões de administrador totais é perigoso. Selecione uma conta que não seja de administrador e que tenha apenas as permissões necessárias para a importação."
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user_dialog.tpl:2
+msgid "Administrator accounts cannot run feed imports. Use a non-administrator account with limited permissions."
+msgstr "As contas de administrador não podem executar importações de feeds. Utilize uma conta que não seja de administrador, com permissões limitadas."
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:13
+msgid "All feeds"
+msgstr "Todos os feeds"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_result.tpl:14
+msgid "All imported content has been kept."
+msgstr "Todo o conteúdo importado foi mantido."
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_dialog.tpl:17
+msgid "Also delete imported articles and media"
+msgstr "Apague também os artigos e os ficheiros multimédia importados"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:120
+msgid "Also subscribe imported connections for updates"
+msgstr "Inscreva também as ligações importadas para receber atualizações"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:29
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:20
+msgid "Anonymous requests"
+msgstr "Pedidos anónimos"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:35
+msgid "Articles"
+msgstr "Artigos"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:41
+msgid "Articles and dependent media, 100 entries per page."
+msgstr "Artigos e ficheiros associados, 100 entradas por página."
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:94
+msgid "Attach the most important medium directly"
+msgstr "Anexe diretamente o ficheiro mais importante"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:29
+#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:50
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:25
+msgid "Author"
+msgstr "Autor"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:58
+msgid "By default imported content is non-authoritative. Both modes keep source identities and allow updates from this feed."
+msgstr "Por predefinição, o conteúdo importado não é considerado oficial. Ambos os modos mantêm as identidades das fontes e permitem atualizações a partir deste feed."
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user.tpl:23
+msgid "Change user"
+msgstr "Mudar de utilizador"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:105
+msgid "Connection import depth"
+msgstr "Profundidade de importação da ligação"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:44
+msgid "Default category"
+msgstr "Categoria predefinida"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:79
+msgid "Default connections"
+msgstr "Ligações predefinidas"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:64
+msgid "Default content group"
+msgstr "Grupo de conteúdos predefinido"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_copyright.tpl:2
+msgid "Default copyright"
+msgstr "Direitos de autor por defeito"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:108
+msgid "Default is 1: import directly connected resources. Use 0 to skip connections."
+msgstr "O valor predefinido é 1: importar recursos diretamente ligados. Utilize 0 para ignorar as ligações."
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_dialog.tpl:23
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:183
+msgid "Delete feed"
+msgstr "Eliminar feed"
+
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:378
+msgid "Delete feed?"
+msgstr "Apagar feed?"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:174
+msgid "Delete imported articles and media that you are allowed to delete. Protected resources are kept. The feed will be paused; its settings and import history are retained."
+msgstr "Elimine os artigos e os ficheiros multimédia importados que tem permissão para eliminar. Os recursos protegidos são mantidos. O feed será suspenso; as suas definições e o histórico de importação são mantidos."
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:171
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:176
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:180
+msgid "Delete imported content"
+msgstr "Eliminar conteúdo importado"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:178
+msgid "Delete imported content?"
+msgstr "Apagar o conteúdo importado?"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_dialog.tpl:11
+msgid "Delete only the feed; keep all imported content"
+msgstr "Apagar apenas o feed; manter todo o conteúdo importado"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_dialog.tpl:3
+msgid "Delete this feed and its import history?"
+msgstr "Deseja eliminar este feed e o seu histórico de importações?"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_result.tpl:8
+msgid "Deleted:"
+msgstr "Eliminado:"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:50
+msgid "Dependent media"
+msgstr "Meios de comunicação dependentes"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:34
+msgid "Development environment: local destinations and self-signed certificates are allowed."
+msgstr "Ambiente de desenvolvimento: são permitidos destinos locais e certificados autoassinados."
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:12
+msgid "Discover RSS or Atom feeds and import their articles automatically."
+msgstr "Descubra feeds RSS ou Atom e importe os respetivos artigos automaticamente."
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:23
+msgid "Discover feeds"
+msgstr "Descubra os feeds"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:95
+msgid "Do not import media"
+msgstr "Não importar ficheiros multimédia"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_result.tpl:18
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_result.tpl:20
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:9
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:16
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:33
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:57
+msgid "Done"
+msgstr "Concluído"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:127
+msgid "Enable mod_websub to subscribe imported resources for updates."
+msgstr "Ative o mod_websub para subscrever atualizações dos recursos importados."
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:149
+msgid "Enrich WordPress entries using the public REST API"
+msgstr "Enriquecer as entradas do WordPress utilizando a API REST pública"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:103
+msgid "Entries advertising a Zotonic resource export use the native importer, preserving structured content and resource connections."
+msgstr "As entradas que anunciam uma exportação de recursos do Zotonic utilizam o importador nativo, preservando o conteúdo estruturado e as ligações entre recursos."
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:38
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:48
+msgid "Errors"
+msgstr "Erros"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:2
+msgid "Example entries"
+msgstr "Exemplos de entradas"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:136
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:27
+msgid "Example:"
+msgstr "Exemplo:"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_result.tpl:10
+msgid "Failed:"
+msgstr "Falha:"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:33
+msgid "Feed"
+msgstr "Feed"
+
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:390
+msgid "Feed deleted"
+msgstr "Feed eliminado"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:92
+msgid "Feed not found or access denied."
+msgstr "Feed não encontrado ou acesso recusado."
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:4
+msgid "Feed settings"
+msgstr "Definições do feed"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:27
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:18
+msgid "Fetch using"
+msgstr "Recuperar utilizando"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:74
+msgid "Guess category from tags"
+msgstr "Adivinhar a categoria a partir das etiquetas"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:25
+msgid "Identity"
+msgstr "Identidade"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:55
+msgid "Import as authoritative local content"
+msgstr "Importar como conteúdo local de referência"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:93
+msgid "Import as dependent resources with depiction connections"
+msgstr "Importar como recursos dependentes com ligações de representação"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:49
+msgid "Import category"
+msgstr "Categoria de importação"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:4
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:11
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:174
+msgid "Import feeds"
+msgstr "Importar feeds"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:40
+msgid "Import history"
+msgstr "Histórico de importações"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:82
+msgid "Import history pages"
+msgstr "Páginas do histórico de importações"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:7
+msgid "Import settings"
+msgstr "Importar definições"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:15
+msgid "Import user"
+msgstr "Importar utilizador"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:37
+msgid "Imported / updated / skipped"
+msgstr "Importado / atualizado / ignorado"
+
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:367
+msgid "Imported content deleted"
+msgstr "Conteúdo importado eliminado"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:56
+msgid "Importing"
+msgstr "Importação"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:23
+msgid "Imports run with this account's permissions. Only administrators and users with full access to accounts can change it."
+msgstr "As importações são executadas com as permissões desta conta. Apenas os administradores e os utilizadores com acesso total às contas podem alterá-la."
+
+#: zotonic_mod_import_feed/src/models/m_import_feed.erl:409
+msgid "Invalid removal regexp on line"
+msgstr "Expressão regular de remoção inválida na linha"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_result.tpl:9
+msgid "Kept:"
+msgstr "Mantido:"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:48
+msgid "Kind"
+msgstr "Tipo"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:39
+msgid "Last poll"
+msgstr "Última sondagem"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:50
+msgid "Last processed"
+msgstr "Última atualização"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:5
+msgid "Loading example entries…"
+msgstr "A carregar exemplos de entradas…"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:78
+msgid "Manage"
+msgstr "Gerir"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:77
+msgid "Match existing category names or titles, otherwise use the default category."
+msgstr "Corresponder aos nomes ou títulos das categorias existentes; caso contrário, utilizar a categoria predefinida."
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:41
+msgid "Media found"
+msgstr "Ficheiros multimédia encontrados"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:52
+msgid "Medium attached directly"
+msgstr "Médio fixado diretamente"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:40
+msgid "Next poll"
+msgstr "Próxima sondagem"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:83
+msgid "No feeds configured yet."
+msgstr "Ainda não foram configurados quaisquer feeds."
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user.tpl:18
+msgid "No import user selected"
+msgstr "Não foi selecionado nenhum utilizador de importação"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:76
+msgid "Nothing imported yet."
+msgstr "Ainda não foi importado nada."
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:134
+msgid "One regexp per line. Matching text is removed from summaries and body text, including text across links. HTML formatting is preserved. Patterns are case-sensitive."
+msgstr "Uma expressão regular por linha. O texto correspondente é removido dos resumos e do corpo do texto, incluindo o texto presente nos links. A formatação HTML é preservada. Os padrões distinguem maiúsculas de minúsculas."
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:13
+msgid "Original article"
+msgstr "Artigo original"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:21
+msgid "Pause"
+msgstr "Pausa"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:156
+msgid "Pause automatic imports"
+msgstr "Suspender as importações automáticas"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:54
+msgid "Paused"
+msgstr "Em pausa"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:31
+msgid "Poll now"
+msgstr "Votar agora"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:142
+msgid "Polling interval (minutes)"
+msgstr "Intervalo de sondagem (minutos)"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:36
+msgid "Polls"
+msgstr "Sondagens"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:8
+msgid "Preview only: no resources have been imported."
+msgstr "Apenas pré-visualização: não foram importados recursos."
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_result.tpl:12
+msgid "Protected resources and resources you cannot delete are kept. A resource is also kept if deleting it could cause automatic deletion of dependent content you cannot delete."
+msgstr "Os recursos protegidos e os recursos que não é possível eliminar são mantidos. Um recurso também é mantido se a sua eliminação puder provocar a eliminação automática de conteúdo dependente que não é possível eliminar."
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_dialog.tpl:20
+msgid "Protected resources and resources you cannot delete will be kept. Content shared with other feeds is included."
+msgstr "Os recursos protegidos e os recursos que não é possível eliminar serão mantidos. O conteúdo partilhado com outros feeds está incluído."
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:30
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:21
+msgid "Registered OAuth2 credentials"
+msgstr "Credenciais OAuth2 registadas"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:33
+msgid "Reimport current entries"
+msgstr "Reimportar registos atuais"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:46
+msgid "Resource"
+msgstr "Recurso"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:19
+msgid "Resume"
+msgstr "Currículo"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:161
+msgid "Save feed"
+msgstr "Guardar feed"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_discovery.tpl:2
+msgid "Select a feed"
+msgstr "Selecione um feed"
+
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:214
+msgid "Select connected page"
+msgstr "Selecionar a página associada"
+
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:246
+msgid "Select import user"
+msgstr "Selecionar utilizador para importar"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_connection_dialog.tpl:18
+msgid "Select page"
+msgstr "Selecionar página"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user_dialog.tpl:3
+msgid "Select the account whose permissions will be used to import articles and media. Save the feed to apply your selection."
+msgstr "Selecione a conta cujas permissões serão utilizadas para importar artigos e ficheiros multimédia. Guarde o feed para aplicar a sua seleção."
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user.tpl:26
+msgid "Select user"
+msgstr "Selecionar utilizador"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:47
+msgid "Source identity"
+msgstr "Identidade da fonte"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:114
+msgid "Subscribe imported articles for updates"
+msgstr "Subscreva os artigos importados para receber atualizações"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:123
+msgid "Subscriptions require a source that supports updates and non-authoritative imports."
+msgstr "As subscrições requerem uma fonte que suporte atualizações e importações não autoritárias."
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:37
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:101
+msgid "Tags"
+msgstr "Etiquetas"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:28
+msgid "Test / preview"
+msgstr "Teste / pré-visualização"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:35
+msgid "Testing fetches example entries without importing them. Reimport processes the entries currently available in the feed. Deleted resources stay deleted."
+msgstr "A função «Testing» recupera entradas de exemplo sem as importar. A função «Reimport» processa as entradas atualmente disponíveis no feed. Os recursos eliminados permanecem eliminados."
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:132
+msgid "Text to remove (regular expressions)"
+msgstr "Texto a remover (expressões regulares)"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_result.tpl:2
+msgid "The feed and its import history have been deleted."
+msgstr "O feed e o seu histórico de importações foram eliminados."
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:63
+msgid "The feed has no entries."
+msgstr "O feed não tem entradas."
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_result.tpl:4
+msgid "The feed is paused."
+msgstr "A transmissão está em pausa."
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:87
+msgid "These connections are added to every imported article. Save the feed to apply changes."
+msgstr "Estas ligações são adicionadas a todos os artigos importados. Guarde o feed para aplicar as alterações."
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_copyright.tpl:31
+msgid "These defaults apply to imported articles and their dependent media. Leave empty to use the standard copyright defaults."
+msgstr "Estas predefinições aplicam-se aos artigos importados e aos seus ficheiros multimédia associados. Deixe em branco para utilizar as predefinições padrão de direitos de autor."
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:179
+msgid "This deletes all deletable articles and media imported by this feed, including resources shared with other feeds. Protected resources and resources you cannot delete are kept. The feed will be paused."
+msgstr "Esta ação elimina todos os artigos e ficheiros multimédia que possam ser eliminados e que tenham sido importados por este feed, incluindo os recursos partilhados com outros feeds. Os recursos protegidos e aqueles que não podem ser eliminados são mantidos. O feed será suspenso."
+
+#: zotonic_mod_import_feed/src/models/m_import_feed.erl:411
+msgid "This feed is still importing. Pause it and wait for the current import to finish before deleting its content."
+msgstr "Este feed ainda está a ser importado. Pausa-o e aguarda que a importação atual termine antes de eliminar o seu conteúdo."
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user_results.tpl:15
+msgid "Up to 50 users are shown. Search by name to narrow the results. Disabled accounts cannot be selected."
+msgstr "São apresentados até 50 utilizadores. Pesquise por nome para filtrar os resultados. As contas desativadas não podem ser selecionadas."
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:66
+msgid "Use Test / preview to fetch example entries."
+msgstr "Utilize a opção «Teste / pré-visualização» para obter entradas de exemplo."
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:32
+msgid "Uses credentials registered for the import user and destination host. Credentials are only sent over HTTPS."
+msgstr "Utiliza as credenciais registadas para o utilizador de importação e o anfitrião de destino. As credenciais são enviadas apenas através de HTTPS."
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:16
+msgid "Website or feed URL"
+msgstr "URL do site ou do feed"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:57
+msgid "WordPress enrichment unavailable; the feed data will be used."
+msgstr "O enriquecimento do WordPress não está disponível; serão utilizados os dados do feed."
+
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:203
+msgid "You are not allowed to manage feeds."
+msgstr "Não tem permissão para gerir feeds."
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:102
+msgid "Zotonic resource feeds"
+msgstr "Feeds de recursos do Zotonic"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:17
+msgid "Zotonic resource: uses the native resource importer."
+msgstr "Recurso Zotonic: utiliza o importador de recursos nativo."
 
 #: zotonic_mod_import_wordpress/priv/templates/_admin_status.tpl:4
 msgid "Import WXR file"
@@ -10897,13 +11694,6 @@ msgstr "As subscrições de e-mail desativadas são automaticamente eliminadas a
 #: zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:21
 msgid "Do you want to remove this subscription?"
 msgstr "Deseja remover esta assinatura?"
-
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:9
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:16
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:33
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:57
-msgid "Done"
-msgstr "Concluído"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:35
 msgid "Download all"
@@ -13048,12 +13838,6 @@ msgstr "Novo token de acesso"
 msgid "No user selected."
 msgstr "Nenhum usuário selecionado."
 
-#: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:43
-#: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:51
-#: zotonic_mod_survey/priv/templates/_survey_answer_status_fields.tpl:37
-msgid "Note"
-msgstr "Observação"
-
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:3
 msgid "OAuth2 Application"
 msgstr "Aplicativo OAuth2"
@@ -13284,11 +14068,6 @@ msgstr "Tentativa de corrigir vídeos embutidos para os quais o OEmbed embedding
 #: zotonic_mod_oembed/src/mod_oembed.erl:461
 msgid "Attempting to fix ~p videos."
 msgstr "Tentativa de consertar vídeos ~p."
-
-#: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:50
-#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:25
-msgid "Author"
-msgstr "Autor"
 
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:27
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:59
@@ -14562,10 +15341,6 @@ msgstr "Fim das perguntas"
 msgid "Every question needs a question label"
 msgstr "Toda pergunta precisa de um rótulo de pergunta"
 
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:27
-msgid "Example:"
-msgstr "Exemplo:"
-
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:37
 msgid "Excel (XLSX)"
 msgstr "Excel (XLSX)"
@@ -14591,7 +15366,7 @@ msgstr "Explicação"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:35
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:11
 #: zotonic_mod_survey/src/questions/survey_q_truefalse.erl:61
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:154
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:167
 msgid "False"
 msgstr "Falso"
 
@@ -15260,7 +16035,7 @@ msgstr "Valor armazenado"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:21
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:43
 #: zotonic_mod_survey/src/questions/survey_q_likert.erl:56
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:143
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:156
 msgid "Strongly Agree"
 msgstr "Concordam fortemente"
 
@@ -15268,7 +16043,7 @@ msgstr "Concordam fortemente"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:11
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:35
 #: zotonic_mod_survey/src/questions/survey_q_likert.erl:60
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:144
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:157
 msgid "Strongly Disagree"
 msgstr "Discorda fortemente"
 
@@ -15466,7 +16241,7 @@ msgstr "Totais"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:32
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:10
 #: zotonic_mod_survey/src/questions/survey_q_truefalse.erl:63
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:153
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:166
 msgid "True"
 msgstr "Verdadeiro"
 
@@ -15679,6 +16454,10 @@ msgstr "...anos de idade. Eu gosto..."
 msgid "{points} of {max} points"
 msgstr "{points} de {max} pontos"
 
+#: zotonic_mod_translation/priv/templates/_translation_edit_text.tpl:9
+msgid "(empty)"
+msgstr "(vazio)"
+
 #: zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:5
 #: zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:10
 msgid "Add a new language or change languages."
@@ -15743,9 +16522,13 @@ msgstr "Tradução automática"
 msgid "Available sub-languages"
 msgstr "Sub-línguas disponíveis"
 
-#: zotonic_mod_translation/src/mod_translation.erl:831
+#: zotonic_mod_translation/src/mod_translation.erl:1009
 msgid "Cannot generate translation files because <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext is not installed</a>."
 msgstr "Não é possível gerar arquivos de tradução porque <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext não está instalado</a>."
+
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:51
+msgid "Click to edit."
+msgstr "Clique para editar."
 
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:90
 #: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:47
@@ -15795,6 +16578,11 @@ msgstr "Arraste os idiomas para definir a ordem preferida, o primeiro idioma de 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:146
 msgid "Dutch"
 msgstr "Holandês"
+
+#: zotonic_mod_translation/priv/templates/_translation_edit_text.tpl:5
+#: zotonic_mod_translation/src/support/translation_edit.erl:55
+msgid "Edit translation"
+msgstr "Editar tradução"
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:39
 msgid "Editable"
@@ -15862,6 +16650,7 @@ msgid "If a language is set to 'view' or 'editable' then texts for that language
 msgstr "Se uma língua estiver definida para 'ver' ou 'editável', os textos para essa língua são editáveis no administrador."
 
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:110
+#: zotonic_mod_translation/priv/templates/_dialog_translation_edit.tpl:34
 #: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:63
 msgid "If you automatically translate texts then your texts will be sent to a remote translation service."
 msgstr "Se você traduzir textos automaticamente, seus textos serão enviados para um serviço de tradução remoto."
@@ -15965,11 +16754,7 @@ msgstr "Recarregar Traduções"
 msgid "Reload all translations from the modules and site. All templates will be recompiled."
 msgstr "Recarregar todas as traduções dos módulos e do site. Todos os templates serão recompilados."
 
-#: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:15
-msgid "Reload page"
-msgstr "Atualizar a página"
-
-#: zotonic_mod_translation/src/mod_translation.erl:846
+#: zotonic_mod_translation/src/mod_translation.erl:1024
 msgid "Reloading all .po files in the background."
 msgstr "Recarregando todos os arquivos .po em segundo plano."
 
@@ -15992,6 +16777,10 @@ msgstr "A remoção de um idioma irá ocultá-lo no formulário de edição. Se 
 #: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:9
 msgid "Removing language"
 msgstr "Remoção da língua"
+
+#: zotonic_mod_translation/priv/templates/_dialog_translation_edit.tpl:18
+msgid "Replace the edited text with an automatic translation?"
+msgstr "Substituir o texto editado por uma tradução automática?"
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:153
 msgid "Romanian"
@@ -16044,34 +16833,38 @@ msgstr "Mostrar traduções"
 msgid "Skipped pages"
 msgstr "Páginas omitidas"
 
-#: zotonic_mod_translation/src/mod_translation.erl:743
-#: zotonic_mod_translation/src/mod_translation.erl:791
+#: zotonic_mod_translation/src/mod_translation.erl:921
+#: zotonic_mod_translation/src/mod_translation.erl:969
 msgid "Sorry, could not change the language."
 msgstr "Desculpa, não consegui mudar a língua."
 
-#: zotonic_mod_translation/src/mod_translation.erl:921
+#: zotonic_mod_translation/src/mod_translation.erl:1103
 msgid "Sorry, that language is unknown or not enabled."
 msgstr "Desculpe, esse idioma é desconhecido ou não está habilitado."
 
-#: zotonic_mod_translation/src/mod_translation.erl:730
-#: zotonic_mod_translation/src/mod_translation.erl:759
-#: zotonic_mod_translation/src/mod_translation.erl:771
-#: zotonic_mod_translation/src/mod_translation.erl:794
+#: zotonic_mod_translation/src/mod_translation.erl:908
+#: zotonic_mod_translation/src/mod_translation.erl:937
+#: zotonic_mod_translation/src/mod_translation.erl:949
+#: zotonic_mod_translation/src/mod_translation.erl:972
 msgid "Sorry, you don't have permission to change the language list."
 msgstr "Desculpe, você não tem permissão para mudar a lista de idiomas."
 
-#: zotonic_mod_translation/src/mod_translation.erl:848
+#: zotonic_mod_translation/src/mod_translation.erl:1026
 msgid "Sorry, you don't have permission to reload translations."
 msgstr "Desculpe, não tem permissão para recarregar traduções."
 
-#: zotonic_mod_translation/src/mod_translation.erl:838
+#: zotonic_mod_translation/src/mod_translation.erl:1016
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr "Desculpe, não tem permissão para procurar traduções."
 
-#: zotonic_mod_translation/src/mod_translation.erl:746
 #: zotonic_mod_translation/src/mod_translation.erl:924
+#: zotonic_mod_translation/src/mod_translation.erl:1106
 msgid "Sorry, you don't have permission to set the default language."
 msgstr "Desculpe, você não tem permissão para definir a língua padrão."
+
+#: zotonic_mod_translation/priv/templates/_dialog_translation_edit.tpl:23
+msgid "Source language"
+msgstr "Língua de origem"
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:155
 msgid "Spanish"
@@ -16081,7 +16874,7 @@ msgstr "Espanhol"
 msgid "Start the translation of {count} pages? Editing will be disabled until the translations are ready."
 msgstr "Iniciar a tradução das páginas de {count} ? A edição ficará desativada até que as traduções estejam prontas."
 
-#: zotonic_mod_translation/src/mod_translation.erl:818
+#: zotonic_mod_translation/src/mod_translation.erl:996
 msgid "Started building the .pot files. This may take a while..."
 msgstr "Comecei a construir os arquivos .pot. Isto pode demorar um pouco..."
 
@@ -16097,6 +16890,10 @@ msgstr "A regra de ouro na escolha de uma língua é a simplicidade. Se você pu
 msgid "The source language text was used for the missing translations."
 msgstr "O texto do idioma de origem foi usado para as traduções faltantes."
 
+#: zotonic_mod_translation/priv/templates/_dialog_translation_edit.tpl:21
+msgid "The text changed while translating. Please try again."
+msgstr "O texto sofreu alterações durante a tradução. Por favor, tente novamente."
+
 #: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:49
 #: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:191
 msgid "There was an error translating the texts. Please try again later."
@@ -16106,6 +16903,10 @@ msgstr "Ocorreu um erro na tradução dos textos. Por favor, tente novamente mai
 msgid "This changes saved pages immediately. Pages you cannot edit are skipped. Copying and automatic translation skip pages without the source language. Editing is disabled while the operation runs."
 msgstr "Estas alterações são guardadas nas páginas imediatamente. As páginas que não podem ser editadas são ignoradas. A cópia e a tradução automática ignoram as páginas sem o idioma de origem. A edição fica desativada enquanto a operação está a decorrer."
 
+#: zotonic_mod_translation/src/support/translation_edit.erl:100
+msgid "This page has changed. Your translation was not saved. Copy your changes before reloading."
+msgstr "Esta página foi alterada. A sua tradução não foi guardada. Copie as suas alterações antes de atualizar a página."
+
 #: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:19
 msgid "This permanently removes the selected language from every page in this tree. Pages with only that language will be kept unchanged. This cannot be undone. Continue?"
 msgstr "Isto remove definitivamente o idioma selecionado de todas as páginas desta árvore. As páginas que contenham apenas esse idioma permanecerão inalteradas. Esta ação não pode ser desfeita. Deseja continuar?"
@@ -16113,6 +16914,10 @@ msgstr "Isto remove definitivamente o idioma selecionado de todas as páginas de
 #: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:19
 msgid "This permanently removes the selected language from every selected page. Pages with only that language will be kept unchanged. This cannot be undone. Continue?"
 msgstr "Isto remove definitivamente o idioma selecionado de todas as páginas selecionadas. As páginas que contenham apenas esse idioma permanecerão inalteradas. Esta ação não pode ser desfeita. Deseja continuar?"
+
+#: zotonic_mod_translation/src/support/translation_edit.erl:183
+msgid "This text cannot be edited, or you no longer have permission to edit it."
+msgstr "Este texto não pode ser editado, ou já não tem permissão para o editar."
 
 #: zotonic_mod_translation/priv/templates/_translation_status.tpl:5
 msgid "This translation has been automatically generated."
@@ -16130,6 +16935,7 @@ msgstr "Para novo idioma"
 #: zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:6
 #: zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:11
 #: zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:32
+#: zotonic_mod_translation/priv/templates/_dialog_translation_edit.tpl:31
 msgid "Translate"
 msgstr "Traduzir"
 
@@ -16138,18 +16944,30 @@ msgstr "Traduzir"
 msgid "Translate all pages"
 msgstr "Traduzir todas as páginas"
 
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:41
+#: zotonic_mod_translation/priv/templates/_dialog_translation_edit.tpl:22
+msgid "Translate from"
+msgstr "Traduzir de"
+
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:50
 msgid "Translated page texts for every editable language that has a translation in the resource."
 msgstr "Textos de página traduzidos para cada língua editável que tenha uma tradução no recurso."
 
+#: zotonic_mod_translation/priv/templates/_dialog_translation_edit.tpl:19
+msgid "Translating..."
+msgstr "A traduzir..."
+
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:3
-#: zotonic_mod_translation/src/mod_translation.erl:1217
+#: zotonic_mod_translation/src/mod_translation.erl:1399
 msgid "Translation"
 msgstr "Tradução"
 
 #: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:12
 msgid "Translation could not be completed. Some pages may have been changed."
 msgstr "A tradução não pôde ser concluída. Algumas páginas podem ter sofrido alterações."
+
+#: zotonic_mod_translation/priv/templates/_dialog_translation_edit.tpl:20
+msgid "Translation failed. Your text has not been changed."
+msgstr "A tradução falhou. O seu texto não foi alterado."
 
 #: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:11
 msgid "Translation has finished. Reload the page to continue editing."
@@ -16197,7 +17015,7 @@ msgstr "Não está autorizado a editar esta árvore."
 msgid "not enabled"
 msgstr "não ativadas"
 
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:104
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:117
 msgid "page break"
 msgstr "quebra de página"
 
@@ -16216,10 +17034,6 @@ msgstr "Taxa de amostragem de áudio"
 #: zotonic_mod_video/priv/templates/_video_viewer.tpl:11
 msgid "Converting"
 msgstr "Conversão"
-
-#: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:7
-msgid "Format"
-msgstr "Formato"
 
 #: zotonic_mod_video/priv/templates/_admin_edit_media_metadata_extra.tpl:35
 msgid "Frame rate"
@@ -16261,10 +17075,6 @@ msgstr "Importado de"
 msgid "Site"
 msgstr "Site"
 
-#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:101
-msgid "Tags"
-msgstr "Etiquetas"
-
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:3
 msgid "Video embed"
 msgstr "Inserção de vídeo"
@@ -16280,11 +17090,6 @@ msgstr "Vídeo do Youtube"
 #: zotonic_mod_websub/src/filters/filter_websub_error.erl:54
 msgid "Access was denied while updating this page. Check the subscriber's source website credentials and permission to update the local page."
 msgstr "O acesso foi recusado durante a atualização desta página. Verifique as credenciais do site de origem do subscritor e a autorização para atualizar a página local."
-
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:41
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:99
-msgid "Active"
-msgstr "Ativo"
 
 #: zotonic_mod_websub/priv/templates/_admin_edit_sidebar_websub.tpl:11
 msgid "Active subscriptions to this page: {count}"
@@ -16325,10 +17130,6 @@ msgstr "Página eliminada"
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:57
 msgid "Enter the exact hostname, without a scheme, port, or path."
 msgstr "Introduza o nome de anfitrião exato, sem esquema, porta ou caminho."
-
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:48
-msgid "Errors"
-msgstr "Erros"
 
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:43
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:101
@@ -16867,10 +17668,6 @@ msgstr "O site que você está tentando visitar está passando por alguns proble
 #: zotonic_site_status/priv/templates/logon.tpl:33
 msgid "This password is not correct."
 msgstr "Esta senha não está correta."
-
-#: zotonic_site_status/priv/templates/_sites.tpl:5
-msgid "URL"
-msgstr "URL"
 
 #: zotonic_site_status/priv/templates/_sites.tpl:73
 msgid "Visit the admin page for this site."
