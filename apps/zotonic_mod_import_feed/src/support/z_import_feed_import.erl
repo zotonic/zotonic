@@ -352,10 +352,13 @@ upsert(#{uri := Uri, props := P}, Context) ->
                              UpdateProps = case maps:get(<<"is_dependent">>, P, false) of
                                                true ->
                                                    case m_rsc:is_a(Id, media, Context) of
-                                                       true -> maps:remove(<<"category_id">>, Props);
-                                                       false -> throw({import_error, media_identity_conflict})
+                                                       true ->
+                                                           maps:remove(<<"category_id">>, Props);
+                                                       false ->
+                                                           throw({import_error, media_identity_conflict})
                                                    end;
-                                               false -> Props
+                                               false ->
+                                                   Props
                                            end,
                              m_rsc:update(Id, UpdateProps, [is_import, {tz, <<"UTC">>}], Context);
                          false ->
