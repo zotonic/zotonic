@@ -48,6 +48,7 @@
 
         <p class="help-block">
             {_ Translated page texts for every editable language that has a translation in the resource. _}
+            {_ Click to edit. _}
         </p>
         <div id="{{ #version }}" class="translation-version-warning" data-edit-version-overview>
             {% include "_admin_edit_version.tpl" id=id version_form=#version is_overview %}
