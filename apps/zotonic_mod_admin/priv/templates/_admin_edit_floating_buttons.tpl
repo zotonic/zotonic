@@ -1,5 +1,6 @@
 <div class="navbar admin-navbar-fixed-save">
 	{% button type="submit" id="save_stay_float" class="btn btn-primary" text=_"Save" title=_"Save this page." disabled=not id.is_editable %}
+    {% include "_admin_edit_preview_button.tpl" %}
 
 	{% if id.page_url %}
 		{% if id.is_editable %}

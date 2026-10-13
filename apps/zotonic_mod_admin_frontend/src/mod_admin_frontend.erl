@@ -110,6 +110,23 @@ If you click on the cog icon on the right, then a meta data panel is shown (for 
 settings). This panel can be extended with extra tabs using the blocks `meta_tabs` and `meta_panels`.
 
 
+Live preview
+------------
+
+The Live preview button saves the current form and opens a right-hand iframe
+showing saved content. Restoring an open panel on page load does not save. Resource,
+media and incoming/outgoing edge events for both the edited resource and `tree_id`
+refresh the preview. Switching resources replaces the subscriptions; closing the
+panel releases them. Unsaved form changes are not rendered.
+
+The preview uses the form's `view_location` override, falling back to `page_url` in
+the editing language. Keep `_admin_edit_preview_context.tpl` inside the `rscform`
+block so site overrides of `view_location` apply. Sites replacing the outer editor
+layout or navbar must include `_admin_edit_preview.tpl` once and
+`_admin_edit_preview_button.tpl` in their toolbar. The iframe is same-origin and
+uses the editor's existing permissions. External destinations can be opened in a
+new tab. Open state and width are remembered for the browser session.
+
 Accepted Events
 ---------------
 

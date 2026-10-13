@@ -16,6 +16,7 @@
 {% endblock %}
 
 {% block content_area %}
+    {% include "_admin_edit_preview.tpl" %}
 	{% with tree_id|default:(id|menu_rsc) as tree_id %}
 	{% with `none` as admin_menu_edit_action %}
 	<div class="row">
@@ -83,6 +84,8 @@
 				{% button class="btn btn-default" text=_"Save &amp; view" title=_"Save and view the page."
 						  action={script script="$('#save_view').click();"}
 				 %}
+
+                {% include "_admin_edit_preview_button.tpl" %}
 
 				{% if id.is_temporary %}
 					<a href="{% url mx_resource_cleanup id=id %}" class="btn">{_ Cancel _}</a>

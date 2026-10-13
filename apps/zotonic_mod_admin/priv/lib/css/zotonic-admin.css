@@ -2283,3 +2283,89 @@ li h3.widget-header {
 .environment-backup.zotonic-admin .navbar.navbar-branded .dropdown-menu > li > a:hover {
   background-color: #222c31;
 }
+
+.admin-edit-preview[hidden] {
+  display: none;
+}
+
+.admin-edit-preview {
+  box-sizing: border-box;
+  position: fixed;
+  inset: 0 0 0 auto;
+  z-index: 1031;
+  width: var(--admin-preview-width, 40vw);
+  display: flex;
+  flex-direction: column;
+  background: var(--bs-body-bg, #fff);
+  color: var(--bs-body-color, #333);
+  border-left: 1px solid var(--bs-border-color, #ccc);
+}
+.admin-edit-preview .admin-edit-preview-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 10px;
+  flex-shrink: 0;
+  background: var(--bs-tertiary-bg, #e9ecef);
+  border-bottom: 1px solid var(--bs-border-color, #bbb);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+}
+.admin-edit-preview .admin-edit-preview-toolbar strong {
+  margin-right: auto;
+}
+.admin-edit-preview .admin-edit-preview-resizer {
+  position: absolute;
+  inset: 0 auto 0 -5px;
+  width: 10px;
+  cursor: col-resize;
+  touch-action: none;
+  z-index: 2;
+}
+.admin-edit-preview .admin-edit-preview-resizer:hover, .admin-edit-preview .admin-edit-preview-resizer:focus-visible {
+  background: var(--bs-primary, #337ab7);
+  outline: none;
+}
+.admin-edit-preview .admin-edit-preview-status {
+  padding: 0 10px;
+}
+.admin-edit-preview iframe {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  border: 0;
+  background: #fff;
+}
+
+html body.admin-preview-open {
+  padding-right: var(--admin-preview-width, 40vw);
+}
+html body.admin-preview-open .navbar-fixed-top, html body.admin-preview-open .admin-navbar-fixed-save {
+  right: var(--admin-preview-width, 40vw);
+}
+html body.admin-preview-open .container {
+  max-width: 100%;
+}
+
+@media (max-width: 900px) {
+  html body.admin-preview-open {
+    padding-right: 0;
+  }
+  .admin-edit-preview {
+    width: 100%;
+  }
+  .admin-edit-preview-resizer {
+    display: none;
+  }
+}
+body.admin-preview-resizing {
+  cursor: col-resize;
+  user-select: none;
+}
+body.admin-preview-resizing iframe {
+  pointer-events: none;
+}
+body.admin-preview-resizing .admin-edit-preview-resizer {
+  background: var(--bs-primary, #337ab7);
+}
