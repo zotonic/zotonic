@@ -24,32 +24,38 @@
 -export([prepare/3, run/3, run/4, local_body/3, normalize_links/3]).
 
 -spec prepare(map(), map(), z:context()) -> {map(), [map()]}.
-prepare(E, F, C) ->
+prepare(E, F, Context) ->
     {ok, Patterns} = z_import_feed_cleanup:compile(maps:get(remove_patterns, F, <<>>)),
-    Cat = category(E, F, C),
-    Common = (copyright_props(F, C))#{<<"is_published">> => true,
-        <<"is_authoritative">> => maps:get(is_authoritative, F),
-        <<"content_group_id">> => maps:get(content_group_id, F)},
-    Props = maps:filter(fun(_, V) -> V =/= undefined end, Common#{
-        <<"category_id">> => Cat, <<"title">> => z_html:unescape(maps:get(title, E)),
-        <<"body">> => z_html:abs_links(z_import_feed_cleanup:html(maps:get(body, E), Patterns), maps:get(url, E)),
-        <<"summary">> => z_import_feed_cleanup:text(z_html:unescape(z_html:strip(maps:get(summary, E))), Patterns),
-        <<"website">> => maps:get(url, E), <<"author">> => maps:get(author, E),
-        <<"publication_start">> => maps:get(published, E),
-        <<"feed_modified">> => maps:get(modified, E)}),
+    Cat = category(E, F, Context),
+    Common = (copyright_props(F, Context))#{<<"is_published">> => true,
+                                            <<"is_authoritative">> => maps:get(is_authoritative, F),
+                                            <<"content_group_id">> => maps:get(content_group_id, F)},
+    Props = maps:filter(fun(_, V) ->
+                                V =/= undefined
+                        end,
+                        Common#{
+                          <<"category_id">> => Cat, <<"title">> => z_html:unescape(maps:get(title, E)),
+                          <<"body">> => z_html:abs_links(z_import_feed_cleanup:html(maps:get(body, E), Patterns), maps:get(url, E)),
+                          <<"summary">> => z_import_feed_cleanup:text(z_html:unescape(z_html:strip(maps:get(summary, E))), Patterns),
+                          <<"website">> => maps:get(url, E), <<"author">> => maps:get(author, E),
+                          <<"publication_start">> => maps:get(published, E),
+                          <<"feed_modified">> => maps:get(modified, E)}),
     Media = lists:sublist([U || U <- maps:get(media, E), U =/= maps:get(uri, E)], ?MAX_MEDIA_ITEMS),
     {Medium, Dependents} = case {maps:get(media_mode, F), Media} of
-        {<<"attached">>, [U | _]} -> {U, []};
-        {<<"dependent">>, _} -> {undefined, [#{uri => U, medium => U,
-            props => Common#{<<"category_id">> => m_rsc:rid(media, C),
-                <<"title">> => z_html:unescape(maps:get(title, E)), <<"is_dependent">> => true}}
-            || U <- Media]};
-        _ -> {undefined, []}
-    end,
-    Edges = maps:get(connections, F) ++ [{m_rsc:rid(depiction, C), maps:get(uri, D)} || D <- Dependents],
+                               {<<"attached">>, [U | _]} ->
+                                   {U, []};
+                               {<<"dependent">>, _} ->
+                                   {undefined, [#{uri => U, medium => U,
+                                                  props => Common#{<<"category_id">> => m_rsc:rid(media, Context),
+                                                                   <<"title">> => z_html:unescape(maps:get(title, E)), <<"is_dependent">> => true}}
+                                                || U <- Media]};
+                               _ ->
+                                   {undefined, []}
+                           end,
+    Edges = maps:get(connections, F) ++ [{m_rsc:rid(depiction, Context), maps:get(uri, D)} || D <- Dependents],
     Item = #{uri => maps:get(uri, E), props => Props, edges => Edges, medium => Medium,
         media_aliases => maps:get(media_aliases, E, #{})},
-    z_import_feed_native:prepare(E, Item, Dependents, F, C).
+    z_import_feed_native:prepare(E, Item, Dependents, F, Context).
 
 %% Defaults apply to the article and its dependent media before observers run.
 %% Empty defaults leave resource-level fallback behavior to mod_copyright.
