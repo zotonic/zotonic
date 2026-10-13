@@ -84,7 +84,8 @@ static int namespaces_and_mounts_confined(void)
     if (!user_namespace_denied(CLONE_NEWUSER | CLONE_NEWNS)) return 0;
 
     /* Invalid arguments avoid mounting anything if a filter rule regresses.
-     * Require EPERM, not EINVAL/EFAULT/EBADF/ENOSYS from syscall validation. */
+     * Outer filters or capabilities can also cause EPERM; sandbox_seccomp_test.c
+     * separately verifies that the launcher's own rules cause these denials. */
     static const int mount_syscalls[] = {
         SYS_fsopen, SYS_fsconfig, SYS_fsmount, SYS_move_mount,
         SYS_open_tree, SYS_mount_setattr, SYS_fspick

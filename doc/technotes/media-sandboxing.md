@@ -184,6 +184,23 @@ override that policy. Error tuples preserve bounded stdout and stderr separately
 
 ## Verification
 
+On Linux, test the launcher's seccomp rules independently of outer container
+filters and kernel capability checks (requires libseccomp development headers):
+
+```sh
+cc -std=c11 -Wall -Wextra -Werror -o /tmp/zotonic-sandbox-seccomp-test \
+    apps/zotonic_core/test/sandbox_seccomp_test.c -lseccomp
+/tmp/zotonic-sandbox-seccomp-test
+```
+
+This test includes the actual launcher policy and first installs a baseline
+filter returning `EUCLEAN` for the tested calls. After verifying that baseline,
+it installs the production filter and requires `EPERM` for user namespace and
+mount calls, `ENOSYS` for `clone3`, and unchanged `EUCLEAN` for ordinary `clone`.
+The newest matching `ERRNO` action supplies the error, so outer denials cannot
+hide a missing production rule. No namespaces or mounts are created. CI runs
+this test as an unprivileged user under its normal container policy.
+
 Build with `./rebar3 compile`. For integration tests, install ImageMagick,
 Ghostscript, FFmpeg and `file`, then run from the repository root as a non-root
 user on a host that permits sandbox initialization:

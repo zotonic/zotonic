@@ -62,6 +62,8 @@ jobs:
         run: make xref
       - name: Sandbox integration tests
         run: |
+          cc -std=c11 -Wall -Wextra -Werror -o /tmp/zotonic-sandbox-seccomp-test apps/zotonic_core/test/sandbox_seccomp_test.c -lseccomp
+          sudo -u zotonic /tmp/zotonic-sandbox-seccomp-test
           cc -Wall -Wextra -Werror -pthread -o /tmp/zotonic-sandbox-probe apps/zotonic_core/test/sandbox_probe.c
           cp /tmp/zotonic-sandbox-probe /usr/lib/zotonic-sandbox-denied-probe
           erlc -o /tmp apps/zotonic_core/test/z_exec_tests.erl apps/zotonic_core/test/z_media_preview_sandbox_tests.erl
