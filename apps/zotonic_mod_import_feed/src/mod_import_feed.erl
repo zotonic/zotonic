@@ -119,7 +119,8 @@ when selected, their connections within the import depth. Both options default
 to false and require non-authoritative imports and a supporting source. Existing
 subscriptions are managed separately through WebSub administration. Native
 resources use the core Fetch new version flow and saved import options, without
-requiring the entry to remain in the feed or repeating the feed notification.
+requiring the entry to remain in the feed. These refreshes use the core import
+notification with native resource source metadata.
 
 ## Fetch new version
 
@@ -132,30 +133,17 @@ URIs fall through to the standard resource importer.
 
 ## Import notification
 
-Before writing an entry or its media, the importer calls `z_notifier:first/2` with
-`#import_feed_item{item, dependents, feed, raw}`. Include the record from
-`zotonic_mod_import_feed/include/mod_import_feed.hrl` and implement
-`observe_import_feed_item/2` to customize importing. Declare the
-`zotonic_mod_import_feed_observer` behaviour for type checking and the full callback
-contract. Both its normal and PID-aware callbacks are optional. The behaviour does
-not import the record; the header include is required:
+Before writing an entry or its media, the importer dispatches the core
+`#import_resource{item, related, source, options, raw}` notification. The source
+is `#{importer => mod_import_feed, feed => Settings}`. Include
+`zotonic_core/include/zotonic.hrl`, declare `zotonic_observer`, and implement
+`observe_import_resource/2` or its optional PID-aware variant. See the core
+observer documentation for the payload, permissions and result contract.
 
-```erlang
--behaviour(zotonic_mod_import_feed_observer).
--include_lib(\"zotonic_mod_import_feed/include/mod_import_feed.hrl\").
-```
+Unchanged and deleted entries are skipped before notifying. Native feed entries
+notify once; their delegation to `m_rsc_import` preserves this scope, while
+recursively imported resources may generate separate notifications.
 
-- `item` contains `uri`, resource `props`, `edges` and an optional `medium` URL.
-  Edges are `{PredicateId, ObjectIdOrUri}` pairs.
-- `dependents` contains media import descriptions with `uri`, `props` and `medium`.
-- `feed` contains settings and feed metadata.
-- `raw` retains the parsed feed entry and, when available, WordPress response data.
-
-Return `undefined` to use the default importer, `{ok, Id}` after importing the article,
-or `{ok, Id, UriToIdMap}` to also register dependent resources. Return `{skip, Reason}`
-to ignore the entry or `{error, Reason}` to record a failure for retry on a later poll.
-Notification properties are still untrusted; custom observers must enforce appropriate
-ACLs and sanitization. See `m_import_feed` for the administration API.
 ").
 
 -define(DEFAULT_POLL_MINUTES, 60).

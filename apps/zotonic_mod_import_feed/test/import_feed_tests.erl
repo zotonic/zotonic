@@ -437,7 +437,7 @@ dependent_media_import_check() ->
         meck:expect(m_rsc, p, fun(201, feed_medium_url, _) -> Url end),
         meck:expect(z_import_feed_http, get, fun(U, _, C) ->
             ?assertEqual(Url, U),
-            ?assertEqual(Context, C),
+            ?assertEqual(Context, C#context{props = maps:remove(import_resource_active_uris, C#context.props)}),
             {ok, {Url, [], 4, <<"data">>}}
         end),
         meck:expect(m_media, insert_file, fun(Upload, Props, Options, C) ->
@@ -448,7 +448,7 @@ dependent_media_import_check() ->
             ?assertEqual(Url, maps:get(<<"feed_medium_url">>, Props)),
             ?assertEqual(true, maps:get(<<"is_dependent">>, Props)),
             ?assertEqual([is_import, {tz, <<"UTC">>}], Options),
-            ?assertEqual(Context, C),
+            ?assertEqual(Context, C#context{props = maps:remove(import_resource_active_uris, C#context.props)}),
             {ok, 201}
         end),
         meck:expect(m_rsc, insert, fun(Props, _, _) ->

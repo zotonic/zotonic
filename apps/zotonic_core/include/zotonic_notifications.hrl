@@ -1308,20 +1308,15 @@
     extension :: binary()
 }).
 
-%% @doc An external feed delivered a resource. First handler can import it.
-%% Type: first
-%% Return:: ``{ok, m_rsc:resource_id()}``, ``{error, Reason}``, or ``undefined``
+%% @doc A prepared external resource is ready for import. Type: first.
+%% See zotonic_observer:observe_import_resource/2 for timing and result contracts.
+%% Include zotonic_core/include/zotonic.hrl to use this record.
 -record(import_resource, {
-    source :: atom() | binary(),
-    source_id :: integer() | binary(),
-    source_url :: binary(),
-    source_user_id :: binary() | integer(),
-    user_id :: integer(),
-    name :: binary(),
-    props :: m_rsc:props_all(),
-    urls :: list(),
-    media_urls :: list(),
-    data :: any()
+    item :: z_import_resource:item(),
+    related = [] :: [z_import_resource:item()],
+    source = #{} :: map(),
+    options = [] :: list(),
+    raw :: term()
 }).
 
 %% @doc mod_export - return the {ok, Disposition} for the content disposition.

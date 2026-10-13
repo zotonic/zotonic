@@ -18,7 +18,6 @@
 -module(import_feed_db_tests).
 -include_lib("eunit/include/eunit.hrl").
 -include_lib("zotonic_core/include/zotonic.hrl").
--include("../include/mod_import_feed.hrl").
 -export([observe/2]).
 
 import_test_() -> {timeout, 120, fun import_lifecycle/0}.
@@ -59,23 +58,23 @@ import_lifecycle() ->
             [{feeds, [#{title => <<"Example feed">>, url => <<"https://example.org/feed">>}]}], C),
         ?assertNotEqual(nomatch, binary:match(iolist_to_binary(Discovery), <<"Example feed">>)),
         %% Observer suppresses default importing and sees raw data/edges/dependents.
-        z_notifier:observe(import_feed_item, {?MODULE, observe}, 1, C),
+        z_notifier:observe(import_resource, {?MODULE, observe}, 1, C),
         E2 = Entry#{uri => <<"https://example.org/feed-test/2">>},
         ?assertEqual(skipped, z_import_feed_import:run(E2, F, C)),
         ?assertEqual(undefined, m_rsc:rid(maps:get(uri, E2), C)),
-        z_notifier:detach(import_feed_item, C),
+        z_notifier:detach(import_resource, C),
         ok = m_rsc:delete(Id, C),
         ?assertEqual(skipped, z_import_feed_import:run(Entry#{title => <<"Do not resurrect">>}, F, C)),
         ?assertEqual(undefined, m_rsc:rid(maps:get(uri, Entry), C))
     after
         m_rsc:delete(ImportUser, C),
         m_acl_rule:delete_managed(?MODULE, C),
-        z_notifier:detach(import_feed_item, C),
+        z_notifier:detach(import_resource, C),
         z_db:q("delete from import_feed where id=$1", [FeedId], C),
         z_db:q("delete from import_feed_resource where uri like 'https://example.org/feed-test/%'", C)
     end.
 
-observe(#import_feed_item{item = #{edges := []}, dependents = [], feed = #{id := _},
+observe(#import_resource{item = #{edges := []}, related = [], source = #{importer := mod_import_feed, feed := #{id := _}},
         raw = {<<"item">>, [], []}}, _) ->
     {skip, observer_test}.
 

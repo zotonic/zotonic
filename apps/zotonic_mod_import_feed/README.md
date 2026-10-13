@@ -115,23 +115,26 @@ Disable enrichment to avoid extra per-article requests on non-WordPress sources.
 
 ## Observer contract
 
-Include the module's public record:
+Use the core observer behaviour and include the core notification records:
 
 ```erlang
--include_lib("zotonic_mod_import_feed/include/mod_import_feed.hrl").
--export([observe_import_feed_item/2]).
+-behaviour(zotonic_observer).
+-include_lib("zotonic_core/include/zotonic.hrl").
+-export([observe_import_resource/2]).
 
-observe_import_feed_item(#import_feed_item{
+observe_import_resource(#import_resource{
     item = Item,
-    dependents = Dependents,
-    feed = Feed,
+    related = Related,
+    source = #{importer := mod_import_feed, feed := Feed},
     raw = Raw
 }, Context) ->
     %% Return undefined to use the default importer.
+    undefined;
+observe_import_resource(_, _) ->
     undefined.
 ```
 
-The `first` notification runs **before any resource or medium writes**, within the
+The core `first` notification runs **before any resource or medium writes**, within the
 entry's database transaction and with the saved editor's current permissions.
 It is sent only for entries that need importing, not unchanged or deleted ones.
 
@@ -139,8 +142,8 @@ It is sent only for entries that need importing, not unchanged or deleted ones.
   image variant URLs to the selected largest/original URL. Properties use binary keys. `edges` is a
   list of `{PredicateId, ObjectId | SourceURI}` pairs; `medium` is a URL or
   `undefined`. Default connections and proposed depiction edges are included.
-* `dependents`: a list of `#{uri, props, medium}` maps for proposed media resources.
-* `feed`: saved configuration and identifiers, plus parsed feed metadata under
+* `related`: a list of `#{uri, props, medium}` maps for proposed media resources.
+* `source`: `#{importer => mod_import_feed, feed => Settings}`; the settings contain saved configuration and identifiers, plus parsed feed metadata under
   `feed`. The worker's lease token and saved ACL group list are omitted.
 * `raw`: the original parsed XML node. After successful WordPress enrichment it
   is `#{feed => XMLNode, wordpress => DecodedJSON}`.
@@ -158,6 +161,10 @@ Return values:
 | `{ok, ResourceId, ImportedMap}` | Also track dependent resources, where `ImportedMap` maps source URI binaries to local IDs. |
 | `{skip, Reason}` | Record a deliberate skip; the observer can reconsider on the next poll. |
 | `{error, Reason}` | Roll back this entry, record the error and retry on a later poll. |
+
+Native feed entries notify once. Recursive native resources use the same notification
+with `source.importer = m_rsc_import`. Native refreshes also notify without needing
+the original feed entry. The shared dispatcher preserves the importing user's ACLs.
 
 Do not start asynchronous resource writes and return `{ok, Id}` prematurely.
 Avoid external side effects inside the notification: the transaction can roll back.
@@ -295,7 +302,7 @@ or failed content remains on the site, with counts shown in the result dialog.
 For ordinary feed articles, the standard **Fetch new version** action is handled
 by `rsc_import_fetch`. It refreshes that article from the current feed using
 its saved settings, WordPress enrichment and import account, including media,
-cleanup and the `import_feed_item` notification. An unchanged checksum does not
+cleanup and the `import_resource` notification. An unchanged checksum does not
 prevent this explicit refresh. Paused feeds remain paused. With overlapping
 feeds, the most recently recorded article history selects the configuration.
 

@@ -21,7 +21,6 @@
 -define(MAX_MEDIA_ITEMS, 20).
 -define(MAX_MEDIA_BYTES, 20 * 1024 * 1024).
 -include_lib("zotonic_core/include/zotonic.hrl").
--include("../../include/mod_import_feed.hrl").
 -export([prepare/3, run/3, run/4, local_body/3, normalize_links/3]).
 
 -spec prepare(map(), map(), z:context()) -> {map(), [map()]}.
@@ -104,20 +103,22 @@ run(Entry, FeedSettings, Force, Context) ->
                 case deleted(Uri, TransactionContext) of
                     true -> record(FeedId, Uri, <<"article">>, <<"deleted">>, Hash, undefined, TransactionContext), skipped;
                     false ->
-                        Notice = #import_feed_item{item = Item, dependents = Dependents,
-                            feed = maps:without([user_groups, lease_token], FeedSettings), raw = maps:get(raw, Entry)},
+                        Notice = #import_resource{item = Item, related = Dependents,
+                            source = #{importer => mod_import_feed,
+                                feed => maps:without([user_groups, lease_token], FeedSettings)},
+                            options = maps:get(native_options, Item, []),
+                            raw = maps:get(raw, Entry)},
                         Existing = lookup(Uri, TransactionContext),
-                        case z_notifier:first(Notice, TransactionContext) of
-                            undefined ->
-                                {Id, Imported} = import(Item, Dependents, TransactionContext),
-                                finish(Id, Imported, Existing, Uri, FeedId, Hash, TransactionContext);
-                            {ok, Id} -> finish(Id, #{}, Existing, Uri, FeedId, Hash, TransactionContext);
-                            {ok, Id, Imported} when is_map(Imported) ->
+                        Default = fun(ImportContext) ->
+                            {Id, Imported} = import(Item, Dependents, ImportContext),
+                            {ok, Id, Imported}
+                        end,
+                        case z_import_resource:import(Notice, Default, TransactionContext) of
+                            {ok, Id, Imported} ->
                                 finish(Id, Imported, Existing, Uri, FeedId, Hash, TransactionContext);
                             {skip, Reason} ->
                                 record(FeedId, Uri, <<"article">>, <<"skipped">>, Hash, Reason, TransactionContext), skipped;
-                            {error, Reason} -> throw({import_error, Reason});
-                            _ -> throw({import_error, invalid_observer_result})
+                            {error, Reason} -> throw({import_error, Reason})
                         end
                 end
         end
