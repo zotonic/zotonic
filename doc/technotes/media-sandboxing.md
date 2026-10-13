@@ -108,6 +108,13 @@ or a VM boundary. Resource-limit operations through `prlimit64` are permitted
 only with PID zero (the calling process); explicit PID targets are denied,
 including other processes owned by the Zotonic user.
 
+Seccomp also denies `clone()` with `CLONE_NEWUSER`, preventing creation of a
+user namespace with new capabilities while preserving ordinary fork/thread
+creation. `clone3()` returns `ENOSYS` so libc can fall back to `clone()`.
+The new mount APIs (`fsopen`, `fsconfig`, `fsmount`, `move_mount`, `open_tree`,
+`mount_setattr`, and `fspick`) are denied as defense in depth alongside
+Landlock's filesystem topology restrictions.
+
 A supervisor keeps the decoder and delegates in a job process group. On normal
 completion, failure, or cancellation, it kills that group with SIGKILL. The
 Linux filter prevents delegates from moving into another group. If the Erlang
@@ -182,7 +189,7 @@ Ghostscript, FFmpeg and `file`, then run from the repository root as a non-root
 user on a host that permits sandbox initialization:
 
 ```sh
-cc -Wall -Wextra -Werror -o /tmp/zotonic-sandbox-probe \
+cc -Wall -Wextra -Werror -pthread -o /tmp/zotonic-sandbox-probe \
     apps/zotonic_core/test/sandbox_probe.c
 # Linux only: install a deliberately ungranted executable in a readable tree.
 if [ "$(uname -s)" = Linux ]; then
@@ -205,4 +212,5 @@ filenames, output limits, cancellation, output cleanup, symlink rejection,
 image conversion, FFmpeg conversion/probing and Ghostscript rendering. The PDF
 delegate is tested directly so that tests need not modify or bypass the
 administrator's ImageMagick policy. Linux additionally tests descendant
-process-group escape denial.
+process-group escape denial, user namespace and mount API denials, and ordinary
+fork/thread creation, including in descendants.

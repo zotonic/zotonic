@@ -13,6 +13,12 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+#ifdef __linux__
+#include <pthread.h>
+#include <sched.h>
+#include <sys/syscall.h>
+#endif
+
 static int denied(void) { return errno == EPERM || errno == EACCES; }
 
 static int network_denied(int family, int type)
@@ -49,6 +55,55 @@ static int network_denied(int family, int type)
 }
 
 #ifdef __linux__
+static int clone_child(void *arg)
+{
+    (void)arg;
+    return 0;
+}
+
+static int user_namespace_denied(int flags)
+{
+    const size_t stack_size = 1024 * 1024;
+    char *stack = malloc(stack_size);
+    if (!stack) return 0;
+    pid_t pid = clone(clone_child, stack + stack_size, flags | SIGCHLD, NULL);
+    int blocked = pid < 0 && errno == EPERM;
+    if (pid > 0) waitpid(pid, NULL, 0);
+    free(stack);
+    return blocked;
+}
+
+static void *thread_child(void *arg)
+{
+    return arg;
+}
+
+static int namespaces_and_mounts_confined(void)
+{
+    if (!user_namespace_denied(CLONE_NEWUSER)) return 0;
+    if (!user_namespace_denied(CLONE_NEWUSER | CLONE_NEWNS)) return 0;
+
+    /* Invalid arguments avoid mounting anything if a filter rule regresses.
+     * Require EPERM, not EINVAL/EFAULT/EBADF/ENOSYS from syscall validation. */
+    static const int mount_syscalls[] = {
+        SYS_fsopen, SYS_fsconfig, SYS_fsmount, SYS_move_mount,
+        SYS_open_tree, SYS_mount_setattr, SYS_fspick
+    };
+    for (size_t i = 0; i < sizeof(mount_syscalls) / sizeof(mount_syscalls[0]); i++) {
+        if (syscall(mount_syscalls[i], -1L, 0L, -1L, 0L, -1L, 0L) != -1 ||
+            errno != EPERM) return 0;
+    }
+
+    /* clone3 must still trigger libc's fallback, and ordinary threads work. */
+    if (syscall(SYS_clone3, NULL, 0) != -1 || errno != ENOSYS) return 0;
+    pthread_t thread;
+    int token;
+    void *result;
+    if (pthread_create(&thread, NULL, thread_child, &token)) return 0;
+    if (pthread_join(thread, &result)) return 0;
+    return result == &token;
+}
+
 static int resource_limits_confined(void)
 {
     struct rlimit own, other;
@@ -70,11 +125,13 @@ int main(void)
     if (!network_denied(AF_INET, SOCK_DGRAM)) return 13;
 #ifdef __linux__
     if (!resource_limits_confined()) return 25;
+    if (!namespaces_and_mounts_confined()) return 27;
     /* Seatbelt does not mediate setsid/setpgid; only Linux promises this. */
     pid_t pid = fork();
     if (pid < 0) return 20;
     if (pid == 0) {
         if (!resource_limits_confined()) _exit(26);
+        if (!namespaces_and_mounts_confined()) _exit(28);
         if (setsid() >= 0) _exit(21);
         if (setpgid(0, 0) == 0) _exit(22);
         _exit(0);
