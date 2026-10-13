@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-07 12:12\n"
+"PO-Revision-Date: 2026-10-13 14:58\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -278,9 +278,9 @@ msgstr "Sind Sie sicher, dass Sie alle ACL-Regeln in ihrer aktuell veröffentlic
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:7
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:32
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_panel.tpl:28
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:88
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:90
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:92
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:91
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:93
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:95
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_delete_username.tpl:7
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:25
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:69
@@ -379,8 +379,8 @@ msgstr "Konfiguration geändert."
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_select_predicate_find.tpl:27
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:76
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:209
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:67
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:69
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:68
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:70
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_filter_predicates.tpl:20
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:79
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:43
@@ -440,7 +440,7 @@ msgstr "Betrachten Sie Ressourcenautoren als Eigentümer."
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:19
 #: zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4
 #: zotonic_mod_admin/src/mod_admin.erl:491
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:67
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:68
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:133
 msgid "Content"
 msgstr "Inhalt"
@@ -776,8 +776,8 @@ msgstr "Umgekehrte Regeln"
 #: zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:29
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:33
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:162
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:138
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:79
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:139
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:80
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:26
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:105
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:126
@@ -1086,8 +1086,8 @@ msgstr "Ungefähr {n} Artikel gefunden."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:18
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:62
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:72
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:119
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:73
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:120
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_edit_basics.person.tpl:7
 msgid "Access control"
 msgstr "Zugriffskontrolle"
@@ -1304,7 +1304,7 @@ msgstr "Automatische Updates sind nicht verfügbar"
 msgid "Automatically fetch updates from the original website."
 msgstr "Aktualisierungen automatisch von der Original-Website abrufen."
 
-#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:47
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:62
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:35
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:38
 msgid "Available"
@@ -1420,6 +1420,7 @@ msgid "Close all sockets from ip addresses which have over &gt; 250 open sockets
 msgstr "Schließen Sie alle Sockets von IP-Adressen, die über &gt; 250 offene Sockets haben."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:33
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:10
 msgid "Close preview"
 msgstr "Vorschau schließen"
 
@@ -1460,7 +1461,7 @@ msgstr "Verbunden von"
 msgid "Connected to"
 msgstr "Angeschlossen"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:41
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:56
 msgid "Connection"
 msgstr "Verbindung"
 
@@ -1617,11 +1618,11 @@ msgid "Delete selected pages"
 msgstr "Ausgewählte Seiten löschen"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:51
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:73
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:74
 msgid "Delete this page."
 msgstr "Diese Seite löschen."
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:74
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:75
 msgid "Delete this page..."
 msgstr "Diese Seite löschen..."
 
@@ -1716,7 +1717,7 @@ msgstr "Seite duplizieren"
 msgid "Duplicate this page."
 msgstr "Diese Seite duplizieren."
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:65
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:66
 msgid "Duplicate this page..."
 msgstr "Diese Seite duplizieren..."
 
@@ -1795,7 +1796,7 @@ msgstr "Eingebettete Inhalte"
 msgid "Emergency telephone"
 msgstr "Notrufnummer"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:41
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:56
 msgid "Endpoint"
 msgstr "Endpunkt"
 
@@ -1837,15 +1838,15 @@ msgstr "Fehler beim Importieren der Seite vom Remote-Server."
 msgid "Error uploading the file."
 msgstr "Fehler beim Hochladen der Datei."
 
-#: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:178
+#: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:179
 msgid "Error, duplicate name. Please change the name."
 msgstr "Fehler, doppelter Name. Bitte ändern Sie den Namen."
 
-#: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:176
+#: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:177
 msgid "Error, duplicate page path. Please change the uri."
 msgstr "Fehler, doppelter Seitenpfad. Bitte ändern Sie die uri."
 
-#: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:174
+#: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:175
 msgid "Error, duplicate uri. Please change the uri."
 msgstr "Fehler, doppelte uri. Bitte ändern Sie die uri."
 
@@ -1876,7 +1877,7 @@ msgstr "Vorhandene Seiten"
 msgid "Failed to download the file."
 msgstr "Fehler beim Herunterladen der Datei."
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:52
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:53
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:178
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:182
 msgid "Featured"
@@ -2039,6 +2040,10 @@ msgstr "Hier können Sie die Argumente der Suchanfrage bearbeiten. Jedes Argumen
 msgid "Hide page from searches (depends on the search query)"
 msgstr "Seite aus Suchen ausblenden (abhängig von der Suchanfrage)"
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:5
+msgid "Hide preview"
+msgstr "Vorschau ausblenden"
+
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:59
 msgid "Home Directory"
 msgstr "Home-Verzeichnis"
@@ -2141,11 +2146,18 @@ msgstr "Zuletzt bearbeitete Texte"
 msgid "Link"
 msgstr "Verbinden"
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:2
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:7
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:13
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:11
+msgid "Live preview"
+msgstr "Live-Vorschau"
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:38
 msgid "Live query, send notifications when matching items are updated or inserted."
 msgstr "Live-Abfrage, Senden von Benachrichtigungen, wenn übereinstimmende Elemente aktualisiert oder eingefügt werden."
 
-#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:28
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:43
 msgid "Local ImageMagick"
 msgstr "ImageMagick lokal"
 
@@ -2192,7 +2204,7 @@ msgstr "Haupt"
 msgid "Make"
 msgstr "Anlegen: "
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:64
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:65
 msgid "Make a duplicate of this page."
 msgstr "Erstellen Sie ein Duplikat dieser Seite."
 
@@ -2272,7 +2284,7 @@ msgstr "Auf dieser Seite benutzte Mediendateien"
 msgid "Media processing"
 msgstr "Medienverarbeitung"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:37
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:52
 msgid "Media runners"
 msgstr "Medienläufer"
 
@@ -2354,11 +2366,11 @@ msgstr "Geändert am"
 msgid "Modified:"
 msgstr "Geändert:"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:58
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:59
 msgid "More"
 msgstr "Mehr"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:57
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:58
 msgid "More actions: duplicate or delete page"
 msgstr "Weitere Aktionen: Seite duplizieren oder löschen"
 
@@ -2429,7 +2441,7 @@ msgstr "Nächste &gt;"
 msgid "Next due"
 msgstr "Als nächstes fällig"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:34
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:35
 msgid "Next in category:"
 msgstr "Nächster in der Kategorie:"
 
@@ -2512,6 +2524,10 @@ msgstr "Betriebssystemspeicher"
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:129
 msgid "Ongoing"
 msgstr "Laufend"
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:9
+msgid "Open in new tab"
+msgstr "In einem neuen Tab öffnen"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:15
 msgid "Orientation"
@@ -2631,7 +2647,7 @@ msgstr "Prädikat"
 msgid "Preview"
 msgstr "Vorschau"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:30
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:31
 msgid "Previous in category:"
 msgstr "Vorherige in Kategorie:"
 
@@ -2678,13 +2694,13 @@ msgstr "Diese Seite veröffentlichen"
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:50
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:63
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:248
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:47
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:48
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:102
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:48
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:52
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:17
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:21
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:49
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:50
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:69
 #: zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:44
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:31
@@ -2754,6 +2770,11 @@ msgstr "Referenten"
 msgid "Referrers to"
 msgstr "Querverweise auf"
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:8
+#: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:18
+msgid "Refresh"
+msgstr "Aktualisierung"
+
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:94
 msgid "Refreshed every 30 minutes."
 msgstr "Alle 30 Minuten aktualisiert."
@@ -2779,7 +2800,7 @@ msgstr "Lädt die Konfiguration einer Site neu. Beachten Sie, dass nicht alle Si
 msgid "Remarks"
 msgstr "Anmerkungen"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:55
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:70
 msgid "Remote sandbox isolation and queue details are available on each runner’s dashboard."
 msgstr "Informationen zur Remote-Sandbox-Isolierung und zu den Warteschlangen sind auf dem Dashboard jedes Runners verfügbar."
 
@@ -2808,6 +2829,10 @@ msgstr "Ersetzen"
 msgid "Replace current medium"
 msgstr "Aktuelles Medium austauschen"
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:4
+msgid "Resize preview"
+msgstr "Vorschau anpassen"
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_meta_features.tpl:9
 msgid "Resources in the <i>meta</i> category can have 'features': certain resource properties that decide what to show or hide on certain pages in the admin. If this box is empty, no features are enabled for this meta-resource."
 msgstr "Ressourcen der Kategorie <i>meta</i> können 'Features' haben: bestimmte Ressourceneigenschaften, die entscheiden, was auf bestimmten Seiten im Admin angezeigt oder ausgeblendet werden soll. Wenn dieses Feld leer ist, sind für diese Meta-Ressource keine Features aktiviert."
@@ -2828,7 +2853,7 @@ msgstr "Um 270 Grad gedreht"
 msgid "Rotated 90 degrees"
 msgstr "Um 90 Grad gedreht"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:54
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:69
 msgid "Runner availability and ImageMagick versions are cached for up to one minute. Failed probes are retried after five seconds. Refresh this page to check again."
 msgstr "Die Verfügbarkeit der Runner und die ImageMagick-Versionen werden bis zu einer Minute lang zwischengespeichert. Fehlgeschlagene Abfragen werden nach fünf Sekunden erneut versucht. Aktualisieren Sie diese Seite, um es erneut zu versuchen."
 
@@ -2853,34 +2878,42 @@ msgstr "SHA-256-Prüfsumme"
 msgid "SSL Application uses Erlang defaults, it is recommended to change this configuration in your <tt>erlang.config</tt>."
 msgstr "SSL-Anwendung verwendet Erlang-Standardwerte, es wird empfohlen, diese Konfiguration in Ihrer <tt>erlang.config</tt>zu ändern."
 
-#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:22
-msgid "Sandbox isolation is available."
-msgstr "Eine Sandbox-Isolation ist verfügbar."
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:35
+msgid "Sandbox isolation cannot be used on this system and is disabled. Media processing commands run without isolation, reducing protection against malicious media files."
+msgstr "Die Sandbox-Isolation kann auf diesem System nicht verwendet werden und ist deaktiviert. Befehle zur Medienverarbeitung werden ohne Isolation ausgeführt, wodurch der Schutz vor schädlichen Mediendateien eingeschränkt ist."
 
-#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:24
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:39
+msgid "Sandbox isolation cannot be used on this system, and media processing commands will not run."
+msgstr "Die Sandbox-Isolierung kann auf diesem System nicht verwendet werden, und Befehle zur Medienverarbeitung werden nicht ausgeführt."
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:23
+msgid "Sandbox isolation is available and required. Media processing commands that run locally use a restricted environment for additional security."
+msgstr "Eine Sandbox-Isolierung ist verfügbar und erforderlich. Lokal ausgeführte Befehle zur Medienverarbeitung nutzen aus Sicherheitsgründen eine eingeschränkte Umgebung."
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:27
+msgid "Sandbox isolation is available but disabled. Media processing commands run without sandbox protection, reducing protection against malicious uploads."
+msgstr "Die Sandbox-Isolierung ist verfügbar, jedoch deaktiviert. Befehle zur Medienverarbeitung werden ohne Sandbox-Schutz ausgeführt, wodurch der Schutz vor böswilligen Uploads verringert wird."
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:31
 msgid "Sandbox isolation is not supported on this system. Local media commands run without isolation."
 msgstr "Die Sandbox-Isolierung wird auf diesem System nicht unterstützt. Lokale Medienbefehle werden ohne Isolierung ausgeführt."
 
-#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:26
-msgid "Sandbox isolation is unavailable. Local sandboxed media commands cannot run."
-msgstr "Die Sandbox-Isolierung ist nicht verfügbar. Lokale Befehle für Medien in der Sandbox können nicht ausgeführt werden."
-
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20
-#: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:6
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:21
+#: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:7
 msgid "Save and View"
 msgstr "Speichern und Anzeigen"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20
-#: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:6
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:141
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:83
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:21
+#: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:7
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:142
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:84
 msgid "Save and view the page."
 msgstr "Seite Speichern und anzeigen."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:17
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:138
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:79
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:139
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:80
 msgid "Save this page."
 msgstr "Seite speichern."
 
@@ -2991,6 +3024,11 @@ msgstr "Beschreibung des Stichworts anzeigen"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:59
 msgid "Show page on multiple paths"
 msgstr "Seite auf mehreren Pfaden anzeigen"
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:3
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:4
+msgid "Show preview on the right"
+msgstr "Vorschau rechts anzeigen"
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:55
 msgid "Show query as JSON"
@@ -3385,6 +3423,10 @@ msgstr "Dieser Hinweis ist nur für Personen sichtbar, die die Seite bearbeiten 
 msgid "This page can be connected from other pages. For example it could be an author of an article."
 msgstr "Diese Seite kann von anderen Seiten verbunden werden. Zum Beispiel könnte es ein Autor eines Artikels sein."
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:12
+msgid "This page cannot be previewed here. Use “Open in new tab” if available."
+msgstr "Diese Seite kann hier nicht in der Vorschau angezeigt werden. Verwenden Sie die Option „In neuem Tab öffnen“, sofern verfügbar."
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:31
 msgid "This page has been deleted."
 msgstr "Diese Seite wurde gelöscht."
@@ -3462,9 +3504,9 @@ msgstr "Text für die Suche eingeben"
 msgid "Type to filter the list below."
 msgstr "Geben Sie Folgendes ein, um die Liste unten zu filtern."
 
-#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:32
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:47
-#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:48
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:62
+#: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:63
 msgid "Unavailable"
 msgstr "Nicht verfügbar"
 
@@ -3615,9 +3657,9 @@ msgid "Valid for:"
 msgstr "Gültig für:"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish_view.tpl:2
-#: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:10
+#: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:11
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:31
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:143
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:144
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:26
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:38
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:20
@@ -3649,8 +3691,8 @@ msgstr "Verbindungsdiagramm anzeigen"
 msgid "View status"
 msgstr "Status anzeigen"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:11
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:143
+#: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:12
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:144
 msgid "View this page."
 msgstr "Diese Seite anzeigen."
 
@@ -3743,7 +3785,7 @@ msgstr "Sie haben nicht die Berechtigung, dieses Medienelement zu ändern."
 msgid "You don't have permission to create this page."
 msgstr "Sie haben nicht die Berechtigung, diese Seite zu erstellen."
 
-#: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:180
+#: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:181
 #: zotonic_mod_image_edit/src/mod_image_edit.erl:94
 msgid "You don't have permission to edit this page."
 msgstr "Sie sind nicht berechtigt, diese Seite zu bearbeiten."
@@ -3764,7 +3806,7 @@ msgstr "Sie haben nicht die Berechtigung, diese Aktion auszuführen."
 msgid "You have to specify a description of the file to make it easier to find and share."
 msgstr "Sie müssen eine Beschreibung der Datei angeben, damit sie leichter gefunden und freigegeben werden kann."
 
-#: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:182
+#: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:183
 msgid "Your search query is invalid. Please correct it before saving."
 msgstr "Ihre Suchanfrage ist ungültig. Bitte korrigieren Sie diese vor dem Speichern."
 
@@ -4525,7 +4567,7 @@ msgstr "macOS"
 msgid "test@example.com"
 msgstr "test@example.com"
 
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:106
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:107
 msgid "Add a translation or copy texts between languages."
 msgstr "Fügen Sie eine Übersetzung hinzu oder kopieren Sie Texte zwischen Sprachen."
 
@@ -4533,12 +4575,16 @@ msgstr "Fügen Sie eine Übersetzung hinzu oder kopieren Sie Texte zwischen Spra
 msgid "Add pages or click on a page in the menu."
 msgstr "Seiten hinzufügen oder klicken Sie auf eine Seite im Menü."
 
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:103
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:104
 msgid "Enable or disable language tabs."
 msgstr "Sprachregisterkarten aktivieren oder deaktivieren."
 
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:70
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:100
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_menu.tpl:7
+msgid "Hide menu"
+msgstr "Menü ausblenden"
+
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:71
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:101
 #: zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:24
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:96
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:21
@@ -4553,37 +4599,41 @@ msgstr "Sprachregisterkarten aktivieren oder deaktivieren."
 msgid "Language"
 msgstr "Sprache"
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:32
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:40
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:33
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:41
 msgid "Loading ..."
 msgstr "Laden ..."
 
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:176
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:178
 msgid "No page"
 msgstr "Keine Seite"
 
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:141
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:83
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:142
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:84
 msgid "Save &amp; view"
 msgstr "Ansicht &amp; speichern"
 
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:178
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_menu.tpl:6
+msgid "Show menu"
+msgstr "Menü anzeigen"
+
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:180
 msgid "The page might have been deleted."
 msgstr "Die Seite wurde möglicherweise gelöscht."
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:133
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:137
 msgid "There are unsaved changes. Are you sure you want to leave without saving?"
 msgstr "Es gibt nicht gespeicherte Änderungen. Sind Sie sicher, dass Sie gehen möchten, ohne zu sparen?"
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:77
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:78
 msgid "This page"
 msgstr "Diese Seite"
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:131
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:135
 msgid "Yes, discard changes"
 msgstr "Ja, Änderungen verwerfen"
 
-#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:54
+#: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:55
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:11
 msgid "till"
 msgstr "bis"
@@ -7908,7 +7958,7 @@ msgstr "Arbeitsposten"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:25
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:32
 #: zotonic_mod_survey/src/questions/survey_q_yesno.erl:72
-#: zotonic_mod_translation/priv/templates/_translation_status.tpl:19
+#: zotonic_mod_translation/priv/templates/_translation_status.tpl:26
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:148
 msgid "Yes"
 msgstr "Ja"
@@ -8745,10 +8795,6 @@ msgstr "Kompilieren Sie die Vorlagen neu"
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:78
 msgid "Redirect"
 msgstr "Umleiten"
-
-#: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:18
-msgid "Refresh"
-msgstr "Aktualisierung"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:33
 msgid "Reload the page"
@@ -9599,7 +9645,7 @@ msgstr "Basis-URL"
 msgid "Before the settings are saved they will be checked by uploading (and removing) a small file."
 msgstr "Bevor die Einstellungen gespeichert werden, werden sie durch Hochladen (und Entfernen) einer kleinen Datei überprüft."
 
-#: zotonic_mod_filestore/src/mod_filestore.erl:435
+#: zotonic_mod_filestore/src/mod_filestore.erl:430
 msgid "Cloud File Store"
 msgstr "Cloud-Dateispeicher"
 
@@ -15672,7 +15718,7 @@ msgstr "Alle Texte wurden übersetzt."
 msgid "All translated texts will be removed."
 msgstr "Alle übersetzten Texte werden entfernt."
 
-#: zotonic_mod_translation/priv/templates/_translation_status.tpl:6
+#: zotonic_mod_translation/priv/templates/_translation_status.tpl:9
 msgid "Approve translation"
 msgstr "Übersetzung genehmigen"
 
@@ -15738,7 +15784,7 @@ msgstr "Übersetzung löschen"
 msgid "Developer Documentation"
 msgstr "Dokumentation für Entwickler"
 
-#: zotonic_mod_translation/priv/templates/_translation_status.tpl:18
+#: zotonic_mod_translation/priv/templates/_translation_status.tpl:25
 msgid "Did you review all texts and correct any mistakes?"
 msgstr "Haben Sie alle Texte überprüft und etwaige Fehler korrigiert?"
 
@@ -15902,7 +15948,7 @@ msgstr "Teil von"
 msgid "Please check the translations and save the page when you are ready."
 msgstr "Bitte überprüfen Sie die Übersetzungen und speichern Sie die Seite, wenn Sie fertig sind."
 
-#: zotonic_mod_translation/priv/templates/_translation_status.tpl:9
+#: zotonic_mod_translation/priv/templates/_translation_status.tpl:16
 msgid "Please review all texts and correct any mistakes. Approve the translation if it is correct. This message will then disappear."
 msgstr "Bitte überprüfen Sie alle Texte und korrigieren Sie etwaige Fehler. Genehmigen Sie die Übersetzung, wenn sie korrekt ist. Diese Meldung verschwindet dann."
 
@@ -15981,6 +16027,7 @@ msgid "Select your preferred language."
 msgstr "Wählen Sie Ihre bevorzugte Sprache."
 
 #: zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:41
+#: zotonic_mod_translation/priv/templates/_translation_status.tpl:11
 msgid "Show all translated texts in a new tab."
 msgstr "Alle übersetzten Texte in einer neuen Registerkarte anzeigen."
 
@@ -15989,6 +16036,7 @@ msgid "Show the language in the URL"
 msgstr "Anzeigen der Sprache in der URL"
 
 #: zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:42
+#: zotonic_mod_translation/priv/templates/_translation_status.tpl:12
 msgid "Show translations"
 msgstr "Übersetzungen anzeigen"
 
@@ -16066,7 +16114,7 @@ msgstr "Dadurch wird die ausgewählte Sprache dauerhaft von allen Seiten in dies
 msgid "This permanently removes the selected language from every selected page. Pages with only that language will be kept unchanged. This cannot be undone. Continue?"
 msgstr "Dadurch wird die ausgewählte Sprache dauerhaft von allen ausgewählten Seiten entfernt. Seiten, die ausschließlich in dieser Sprache verfasst sind, bleiben unverändert. Dieser Vorgang kann nicht rückgängig gemacht werden. Möchten Sie fortfahren?"
 
-#: zotonic_mod_translation/priv/templates/_translation_status.tpl:4
+#: zotonic_mod_translation/priv/templates/_translation_status.tpl:5
 msgid "This translation has been automatically generated."
 msgstr "Diese Übersetzung wurde automatisch generiert."
 
