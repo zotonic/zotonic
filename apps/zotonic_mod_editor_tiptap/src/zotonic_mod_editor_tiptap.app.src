@@ -1,0 +1,10 @@
+{application, zotonic_mod_editor_tiptap, [
+    {description, "Rich text editor using Tiptap."},
+    {vsn, {file, "../../VERSION"}},
+    {registered, []},
+    {applications, [kernel, stdlib, zotonic_core]},
+    {env, []},
+    {modules, []},
+    {licenses, ["Apache-2.0"]},
+    {links, [{"Website", "https://zotonic.com/"}]}
+]}.

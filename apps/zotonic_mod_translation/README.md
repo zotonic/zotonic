@@ -1,82 +1,53 @@
-Zotonic Translation module
-==========================
+# Zotonic Translation
 
-Manages language selection, and recognition.
-Used to serve pages in multiple languages, and add language codes to the URLs.
+`mod_translation` manages multilingual content, language selection and recognition,
+language-prefixed URLs, and translation administration. See the
+[module reference](src/mod_translation.erl) for configuration, APIs, templates,
+permissions and the full language-recognition profile list.
 
+## Languages and rendering
 
-Language recognition
---------------------
+Configure languages under **Structure > Translation**. URL language prefixes are
+enabled by default; disable them with `mod_translation.rewrite_url = false`.
+The site default language is the first fallback unless
+`i18n.default_language_is_fallback = false`.
 
-If a resource is added without giving a language, then this module will try to guess the language using n-grams.
-This is done by extracting n-grams from a text and then comparing with the statistics of n-grams in the
-various language specific corpuses.
+Use the `set_language` postback to switch languages and `_language_attrs.tpl` to
+render language and text-direction attributes, including right-to-left content.
+Resources without a language can use local n-gram recognition. Training texts
+and profiles live in `priv/data/texts` and `priv/data/profiles`; the module reference
+explains how to generate and install profiles. Recognition does not translate text.
 
-The module currently has profiles for the following languages:
+## Editing and translation
 
-| Code | Language |
-| ---- | -------- |
-| `af` | Afrikaans|
-| `ar` | Arabic   |
-| `be` | Belarusian |
-| `bg` | Bulgarian|
-| `bs` | Bosnian  |
-| `cs` | Czech    |
-| `da` | Danish   |
-| `de` | German   |
-| `el` | Greek    |
-| `en` | English  |
-| `es` | Spanish  |
-| `et` | Estonian |
-| `fa` | Persian  |
-| `fi` | Finnish  |
-| `fr` | French   |
-| `fy` | Frisian  |
-| `ga` | Irish    |
-| `he` | Hebrew   |
-| `hi` | Hindi    |
-| `hr` | Croatian |
-| `hu` | Hungarian|
-| `id` | Indonesian |
-| `is` | Icelandic|
-| `it` | Italian  |
-| `ja` | Japanese |
-| `ko` | Korean   |
-| `lt` | Lithuanian |
-| `ms` | Malay    |
-| `nl` | Dutch    |
-| `no` | Norwegian|
-| `pl` | Polish   |
-| `pt` | Portuguese |
-| `ro` | Romanian |
-| `ru` | Russian  |
-| `si` | Sinhalese |
-| `sk` | Slovak   |
-| `sl` | Slovenian|
-| `sv` | Swedish  |
-| `sr` | Serbian  |
-| `sq` | Albanian |
-| `ta` | Tamil    |
-| `th` | Thai     |
-| `tl` | Tagalog  |
-| `tr` | Turkish  |
-| `uk` | Ukranian |
-| `vi` | Vietnamese |
-| `xh` | Xhosa    |
-| `zh-hant` | Cantonese |
-| `zh` | Chinese |
+- The page translation dialog can automatically translate, copy source texts,
+  enable an empty language, or remove a translation. Review and save the edit form
+  to persist these changes. Automatic translation requires a service module and
+  may send text to a remote service.
+- The translations overview offers click-to-edit dialogs for individual properties
+  and named block fields. Rich text uses the enabled editor; plain text uses inputs
+  or textareas. **Translate from** fills the draft from another saved language.
+  Save updates only that property and language, with version checks protecting
+  against concurrent changes. Open edit pages warn when they become stale.
+- **Bulk update > Manage translations** processes selected pages without following
+  descendants. **Translate all pages** processes a menu or collection tree,
+  including nested menu entries and `haspart` connections. These background jobs
+  save immediately, report progress and failures, and recheck edit permissions.
+  Save or discard pending edits before starting them.
 
-The n-gram data is copied from Wikipedia. Typically texts about the country or the language is used.
-Using texts about the country has as an advantage that typical names for the language are also
-included in the statistics.
+Copying and translation preserve existing destination text unless overwrite is
+selected. Bulk and tree removal keep a page's last language. Structured survey
+answer lists and unsafe fields are not editable in the single-field dialog;
+slugs require **Customize page slug**.
 
+## Integration
 
-Adding a new language
----------------------
+`m_translation:add_translation/5` translates and saves a resource;
+`add_translation_map/5` works on an in-memory map. The shared resource translator
+handles known text properties and nested blocks. `m_translation_tree` exposes
+tree counts, job startup and progress; custom editors can use
+`_translation_tree_button.tpl` and `_translation_tree_init.tpl`.
 
-If you want to add a new language then:
-
- 1. Add a text file with the correct language code to `priv/data/texts`
- 2. Run from the Erlang command line: `translation_detect:generate_profile_data().`
- 3. A new file is generated in `priv/data/profiles`, check this new file in into git.
- 4. The new profiles can be loaded with: `translation_detect:load_profile_data().`
+Normal ACL checks and HTML sanitization remain in force. Custom admin forms must
+include `_admin_edit_version.tpl` for version-checked saves. Consult the module
+reference before implementing custom translation workflows or progress listeners.

@@ -186,7 +186,8 @@ handle_media_upload(<<"update">>, EventProps, Context, _InsertFun, ReplaceFun) -
     % Note: the 'stay' event argument is ignored here because we never redirect
     Actions = proplists:get_value(actions, EventProps, []),
     Id = proplists:get_value(id, EventProps),
-    case ReplaceFun(Id, Context) of
+    MediaContext = z_context:set(admin_media_update_id, Id, Context),
+    case ReplaceFun(Id, MediaContext) of
         {ok, _} ->
             z_render:wire([
                     {growl, [{text, ?__("Media item created.", Context)}]},

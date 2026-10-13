@@ -28,7 +28,7 @@
 
 %% @doc Encode an Erlang term to JSON. Ensure all '/' characters in the JSON
 %% are escaped for save embedding the generated JSON in HTML text.
--spec encode(binary() | map() | list() | undefined) -> binary().
+-spec encode(binary() | map() | list() | number() | boolean() | null | undefined) -> binary().
 encode(Erlang) ->
     binary:replace(jsxrecord:encode(Erlang), <<"/">>, <<"\\/">>, [ global ]).
 
@@ -75,4 +75,3 @@ json_escape_b(<<$\n,T/binary>>, Acc) -> json_escape_b(T, <<Acc/binary, $\\, $n>>
 json_escape_b(<<$\r,T/binary>>, Acc) -> json_escape_b(T, <<Acc/binary, $\\, $r>>);
 json_escape_b(<<$\t,T/binary>>, Acc) -> json_escape_b(T, <<Acc/binary, $\\, $t>>);
 json_escape_b(<<C/utf8,T/binary>>, Acc) -> json_escape_b(T, <<Acc/binary, C/utf8>>).
-

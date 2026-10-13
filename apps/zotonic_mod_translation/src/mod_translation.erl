@@ -40,7 +40,6 @@ This module provides support for dealing with multiple languages.
 How content and static strings are translated is explained in full in [Translation](/id/doc_developerguide_translation#guide-translation).
 
 
-
 Language as part of the URL
 ---------------------------
 
@@ -66,6 +65,91 @@ language and the previous context language fallbacks.
 This can be changed in the admin by going to Structure, Translation. There is a checkbox labelled “Use the default
 language for untranslated texts”.
 
+
+
+Language recognition
+---------------------
+
+When a resource is saved without a language, Zotonic can infer one from its text.
+It extracts plain text from `title`, `chapeau`, `subtitle`, `summary`, and `body`,
+then compares its n-gram statistics with trained language profiles. Short input
+(at most 10 bytes after stripping HTML and trimming) or an unsuccessful detection
+falls back to the current context language. Detection is a heuristic; review the
+selected language when importing short or multilingual content.
+
+`translation_detect:detect(Text, Context)` restricts matches to the site's editable
+languages; `translation_detect:detect(Text)` considers all installed profiles.
+Both return `{ok, LanguageCode}` or `{error, nomatch}`. Recognition identifies the
+language of existing text; it does not call an automatic translation service.
+
+The bundled profiles in `priv/data/profiles` cover:
+
+| Code | Language |
+| ---- | -------- |
+| `af` | Afrikaans|
+| `ar` | Arabic   |
+| `be` | Belarusian |
+| `bg` | Bulgarian|
+| `bs` | Bosnian  |
+| `cs` | Czech    |
+| `da` | Danish   |
+| `de` | German   |
+| `el` | Greek    |
+| `en` | English  |
+| `es` | Spanish  |
+| `et` | Estonian |
+| `fa` | Persian  |
+| `fi` | Finnish  |
+| `fr` | French   |
+| `fy` | Frisian  |
+| `ga` | Irish    |
+| `he` | Hebrew   |
+| `hi` | Hindi    |
+| `hr` | Croatian |
+| `hu` | Hungarian|
+| `id` | Indonesian |
+| `is` | Icelandic|
+| `it` | Italian  |
+| `ja` | Japanese |
+| `ko` | Korean   |
+| `lt` | Lithuanian |
+| `ms` | Malay    |
+| `nl` | Dutch    |
+| `no` | Norwegian|
+| `pl` | Polish   |
+| `pt` | Portuguese |
+| `ro` | Romanian |
+| `ru` | Russian  |
+| `si` | Sinhalese |
+| `sk` | Slovak   |
+| `sl` | Slovenian|
+| `sv` | Swedish  |
+| `sr` | Serbian  |
+| `sq` | Albanian |
+| `ta` | Tamil    |
+| `th` | Thai     |
+| `tl` | Tagalog  |
+| `tr` | Turkish  |
+| `uk` | Ukrainian |
+| `vi` | Vietnamese |
+| `xh` | Xhosa    |
+| `zh-hant` | Traditional Chinese (Cantonese training text) |
+| `zh` | Chinese |
+
+Training texts come from Wikipedia, typically articles about a country or language.
+Country articles also include names characteristic of the language.
+
+### Adding a recognition profile
+
+1. Add a UTF-8 training file named `<language-code>.txt` to `priv/data/texts`.
+   The code must be recognized by `z_language`.
+2. In the Erlang shell, run `translation_detect:generate_profile_data().` This
+   generates profiles from the training files and loads the profile data.
+3. Check the training text and generated `priv/data/profiles/<language-code>.dat`
+   into version control. Review other generated files before committing them.
+4. To load newly installed profiles without regenerating them, run
+   `translation_detect:load_profile_data().` Use `translation_detect:profiles()`
+   to list the installed profile codes.
 
 
 Programmatically switching languages
@@ -176,6 +260,63 @@ For an in-memory property map, `m_translation:add_translation_map/5` returns `{o
 saving a resource. `m_translation:remove_translation_map/2` similarly removes languages from a map.
 
 
+
+Editing texts in the admin
+--------------------------
+
+The resource translation overview opens a single-field dialog when an editable
+text is clicked. Body properties and properties ending in `_html` use `z_editor`;
+short plain texts use an input and other plain texts use a textarea. Sites can
+override the blocks in `_translation_edit_field.tpl`. The rich-text dialog inherits
+the page's editor profile (advanced in the admin) and works with any enabled editor module.
+
+Saving changes only the selected property and language, preserving other languages
+and block structure. Named block fields are supported; structured survey answer
+lists, unnamed blocks and unsafe properties remain read-only. Missing translations
+open empty, without falling back to a different language.
+The page slug is editable only when the resource has Customize page slug enabled
+(`custom_slug`). This condition is checked when opening and saving the dialog.
+
+The translation overview, admin and frontend-admin edit forms warn when a newer
+resource version is observed. A successful translation dialog save acknowledges
+its new version in the overview only if the overview was current when the dialog
+opened. Saves never clear warnings about intervening external updates.
+Resource update notifications include `version`, including updates through
+`m_rsc:touch/2`. Media notifications also trigger a version check. Reconnects,
+window focus and periodic checks recover missed notifications. Notifications never
+advance the version of an unsaved form, and stale saves are rejected under a database
+row lock. Reloading asks for confirmation when the form has unsaved edits.
+
+Media replacements initiated in the edit page send a private version acknowledgement
+to that browser. The form advances only from the exact pre-update version and keeps
+its unsaved edits; other tabs and already-stale forms still show the warning.
+
+Video conversion marks resource updates with the update option
+`{update_reason, media_processing}`. Resource update notifications include
+`previous_version` and `reason`. The `media_processing` reason is emitted only when
+the resource properties are unchanged except for version, modification date and
+modifier. Otherwise the reason is `update`, including when upload observers change
+text or category. Editors and translation overviews acknowledge only the next
+consecutive processing version, preserving unsaved edits and existing conflicts.
+Missed notifications conservatively require reloading; polling alone cannot prove
+that a skipped version contained no text changes. Failed conversion and preview-only
+medium updates do not themselves increment the resource version.
+
+The single-field edit dialog offers **Translate from** when a translation service
+and another nonempty source language are available. It translates the saved source
+property (including named-block fields) using the configured services, with HTML
+mode for rich text and text mode otherwise. The result replaces only the dialog's
+draft, after confirmation; Save still performs the normal version-checked update.
+Source languages use exact translations, not fallback. Failed requests and results
+arriving after further edits or closing the dialog do not overwrite the draft.
+Resource permissions, field eligibility and source/target languages are rechecked
+on the server. Automatic translation may send the source text to a remote service.
+
+Custom admin form templates must include `_admin_edit_version.tpl` inside the form
+(pass `version_form` for a form id other than `rscform`). The `z_edit_version`
+hidden input is required for version-checked saves.
+
+
 Bulk translation management
 ----------------------------
 
@@ -278,7 +419,7 @@ This module handles the following notifier callbacks:
 
 - `observe_admin_menu`: Add translation and language administration entries to the admin menu.
 - `observe_dispatch_rewrite`: Removes the language from the path parts and sets it as the page language.
-- `observe_language_detect`: Detect the preferred request language from URL, user context, and request headers.
+- `observe_language_detect`: Recognize the language of supplied text using n-gram profiles, optionally restricted to editable languages.
 - `observe_request_context`: Check if the user has a preferred language (in the user's config) using `z_context:get_cookie`.
 - `observe_scomp_script_render`: Add translation runtime variables to rendered client-side script blocks.
 - `observe_set_user_language`: Persist a user language change to the authenticated user profile when allowed.
@@ -724,6 +865,10 @@ observe_scomp_script_render(#scomp_script_render{}, Context) ->
 
 %% @doc Set the current session (and user) language, reload the user agent's page. Called from
 %% language switch. Reloads the page to reflect the new setting.
+event(#postback{message={translation_edit, _}} = Event, Context) ->
+    translation_edit:event(Event, Context);
+event(#submit{message={translation_save, _}} = Event, Context) ->
+    translation_edit:event(Event, Context);
 event(#postback{message={set_language, Args}}, Context) ->
     LanguageCode = case proplists:get_value(code, Args) of
                undefined -> z_context:get_q(<<"triggervalue">>, Context);

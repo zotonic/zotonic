@@ -124,24 +124,27 @@ edit_language(Context) ->
 %% @doc Handle the submit of the resource edit form
 event(#submit{message=rscform} = Msg, Context) ->
     event(Msg#submit{message={rscform, []}}, Context);
-event(#submit{message={rscform, Args}}, Context) ->
-    Post = z_context:get_q_all_noz(Context),
+event(#submit{message={rscform, Args}}, Context0) ->
+    Post = z_context:get_q_all_noz(Context0),
     Props = filter_props(Post),
     Id = z_convert:to_integer(proplists:get_value(<<"id">>, Props)),
     Props1 = proplists:delete(<<"id">>, Props),
-    CatBefore = m_rsc:p(Id, <<"category_id">>, Context),
+    CatBefore = m_rsc:p(Id, <<"category_id">>, Context0),
     Props2 = z_notifier:foldl(
         #admin_rscform{
             id = Id,
-            is_a = m_rsc:is_a(Id, Context)
+            is_a = m_rsc:is_a(Id, Context0)
         },
         Props1,
-        Context),
+        Context0),
     UpdateOptions = case proplists:get_value(default_tz, Args) of
         undefined -> [];
         Tz -> [ {default_tz, Tz} ]
     end,
-    case m_rsc:update(Id, Props2, UpdateOptions, Context) of
+    Result = admin_edit_version:save(Id, z_context:get_q(<<"z_edit_version">>, Context0),
+        fun(Ctx) -> m_rsc:update(Id, Props2, UpdateOptions, Ctx) end, Context0),
+    Context = admin_edit_version:reply(<<"rscform">>, Id, Result, Context0),
+    case Result of
         {ok, _} ->
             case z_context:get_q(<<"z_submitter">>, Context) of
                 SaveView when SaveView =:= <<"save_view">>;
@@ -171,6 +174,8 @@ event(#submit{message={rscform, Args}}, Context) ->
                             z_render:wire({reload, []}, Context)
                     end
             end;
+        {error, stale} ->
+            z_render:growl_error(?__("This page has changed. Your changes were not saved. Reload the page before trying again.", Context), Context);
         {error, duplicate_uri} ->
             z_render:growl_error(?__("Error, duplicate uri. Please change the uri.", Context), Context);
         {error, duplicate_page_path} ->
@@ -182,7 +187,9 @@ event(#submit{message={rscform, Args}}, Context) ->
         {error, invalid_query} ->
             z_render:growl_error(?__("Your search query is invalid. Please correct it before saving.", Context), Context);
         {error, Message} when is_list(Message); is_binary(Message) ->
-            z_render:growl_error(Message, Context)
+            z_render:growl_error(Message, Context);
+        {error, _} ->
+            z_render:growl_error(?__("The page could not be saved. Your changes are still in the form.", Context), Context)
     end;
 %% Resolve the default URL again after saves (the slug or language may have changed).
 %% view_location comes from the signed form wire, including site template overrides.

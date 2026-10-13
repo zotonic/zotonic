@@ -28,6 +28,13 @@ Resource update helper module used by `m_rsc`.
 
 This module contains insert/update/delete/merge routines for resources and is logically part of the `m_rsc` model implementation.
 It is not exposed as a standalone model path endpoint.
+
+Resource insert/update MQTT events include `version`, `previous_version` and
+`reason`. Background media workers can pass the update option
+`{update_reason, media_processing}`. The reason is `media_processing`
+only if that resource's properties are unchanged apart from `version`, `modified`
+and `modifier_id`; otherwise it is `update`. Clients must still check consecutive
+versions before acknowledging processing updates on an unsaved form.
 ").
 -author("Marc Worrell <marc@worrell.nl").
 
@@ -62,6 +69,7 @@ It is not exposed as a standalone model path endpoint.
     is_acl_check = true,
     is_import = false,
     is_no_touch = false,
+    update_reason = update,
     tz = <<"UTC">>,
     expected = []
 }).
@@ -928,6 +936,7 @@ update_1(Id, PropsOrFun, Options, Context) when is_integer(Id); Id =:= insert_rs
         is_acl_check = proplists:get_value(is_acl_check, Options,
                                 proplists:get_value(acl_check, Options, true)),
         is_import = IsImport,
+        update_reason = proplists:get_value(update_reason, Options, update),
         is_no_touch = proplists:get_bool(no_touch, Options)
                       andalso z_acl:is_admin(Context),
         tz = Tz,
@@ -1023,7 +1032,8 @@ update_transaction(RscUpd, Func, Context) ->
 update_result({ok, NewId, notchanged}, _RscUpd, _Context) ->
     z_acl:flush(NewId),
     {ok, NewId};
-update_result({ok, NewId, {OldProps, NewProps, OldCatList, IsCatInsert}}, #rscupd{id = Id}, Context) ->
+update_result({ok, NewId, {OldProps, NewProps, OldCatList, IsCatInsert}},
+        #rscupd{id = Id, update_reason = Reason}, Context) ->
     % Flush some low level caches
     case maps:get(<<"name">>, NewProps, undefined) of
         undefined -> nop;
@@ -1068,6 +1078,9 @@ update_result({ok, NewId, {OldProps, NewProps, OldCatList, IsCatInsert}}, #rscup
         Topic,
         #{
             id => NewId,
+            version => maps:get(<<"version">>, NewProps),
+            previous_version => maps:get(<<"version">>, OldProps, undefined),
+            reason => update_reason(Reason, OldProps, NewProps),
             pre_is_a => OldCatList,
             post_is_a => NewCatList
         },
@@ -1372,6 +1385,34 @@ check_expected(Raw, [{Key, Value} | Es], Context) ->
         Other -> {error, {expected, Key, Other}}
     end.
 
+
+%% Background media processing may be acknowledged by editors only if no editable
+%% resource properties changed. The reason belongs to this update's options,
+%% not to the context shared with observers.
+update_reason(media_processing, Before, After) ->
+    Metadata = [<<"version">>, <<"modified">>, <<"modifier_id">>],
+    case maps:without(Metadata, Before) =:= maps:without(Metadata, After) of
+        true -> media_processing;
+        false -> update
+    end;
+update_reason(_Reason, _Before, _After) ->
+    update.
+
+-ifdef(TEST).
+-include_lib("eunit/include/eunit.hrl").
+
+update_reason_test() ->
+    Before = #{<<"version">> => 4, <<"title">> => <<"Title">>, <<"category_id">> => 10},
+    After = Before#{<<"version">> => 5, <<"modified">> => {{2026, 10, 12}, {12, 0, 0}},
+        <<"modifier_id">> => 1},
+    ?assertEqual(media_processing, update_reason(media_processing, Before, After)),
+    ?assertEqual(update, update_reason(update, Before, After)),
+    ?assertEqual(update, update_reason(undefined, Before, After)),
+    ?assertEqual(update, update_reason(media_processing, Before, After#{<<"title">> => <<"Changed">>})),
+    ?assertEqual(update, update_reason(media_processing, Before, After#{<<"category_id">> => 11})),
+    ?assertEqual(update, update_reason(media_processing, Before, maps:remove(<<"title">>, After))).
+
+-endif.
 
 update_transaction_fun_db(RscUpd, Id, Props, Raw, IsABefore, IsCatInsert, Context) ->
     {ok, Version} = maps:find(<<"version">>, Raw),

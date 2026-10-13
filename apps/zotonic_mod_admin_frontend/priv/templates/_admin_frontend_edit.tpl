@@ -27,8 +27,10 @@
 			}
 			delegate=`controller_admin_edit`
 	%}
-	<form id="rscform" method="post" action="postback" class="form do_formdirty">
+	<form id="rscform" method="post" action="postback" class="form do_formdirty"
+        data-editor-profile="{{ m.config.mod_admin_frontend.editor_profile.value|default:"advanced"|escape }}">
 		<input type="hidden" name="id" value="{{ id }}">
+        {% include "_admin_edit_version.tpl" id=id %}
 
 		<div class="meta-data row">
 			<div class="col-lg-10 col-md-10">
@@ -182,4 +184,3 @@
 {% endif %}
 
 {% endblock %}
-
