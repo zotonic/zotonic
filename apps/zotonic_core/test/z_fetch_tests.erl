@@ -18,7 +18,48 @@
 -include_lib("eunit/include/eunit.hrl").
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-destination_options_test() ->
+%% These tests mock shared core modules. Run in a separate VM so that loading
+%% and unloading mocks cannot crash the site used by the integration suite.
+-export([
+    start_dependencies/0,
+    destination_options_check/0,
+    anonymous_options_check/0,
+    caller_callback_check/0,
+    fetch_entry_points_check/0,
+    cross_origin_options_check/0,
+    contextless_fetch_check/0
+]).
+
+isolated_test_() ->
+    {setup,
+        fun() ->
+            {ok, Peer, _} = peer:start_link(#{
+                connection => standard_io,
+                args => ["-pa" | code:get_path()]
+            }),
+            ok = peer:call(Peer, ?MODULE, start_dependencies, []),
+            Peer
+        end,
+        fun peer:stop/1,
+        fun(Peer) ->
+            [{atom_to_list(Test), {timeout, 30, fun() ->
+                peer:call(Peer, ?MODULE, Test, [], 30000)
+            end}} || Test <- [
+        destination_options_check,
+        anonymous_options_check,
+        caller_callback_check,
+        fetch_entry_points_check,
+        cross_origin_options_check,
+        contextless_fetch_check
+            ]]
+        end}.
+
+start_dependencies() ->
+    {ok, _} = application:ensure_all_started(mimetypes),
+    ok.
+
+
+destination_options_check() ->
     with_fetch(fun(Context) ->
         meck:expect(z_notifier, first, fun(#url_fetch_options{host = Host, options = Options}, FetchContext) ->
             ?assertEqual(42, FetchContext#context.user_id),
@@ -37,7 +78,7 @@ destination_options_test() ->
         ?assertMatch({ok, _}, z_fetch:fetch(<<"https://one.test/start">>, [], Context))
     end).
 
-anonymous_options_test() ->
+anonymous_options_check() ->
     with_fetch(fun(Context) ->
         meck:expect(z_notifier, first, fun(#url_fetch_options{options = Options}, _) ->
             ?assertEqual(none, proplists:get_value(authorization, Options)),
@@ -54,7 +95,7 @@ anonymous_options_test() ->
         ?assertMatch({ok, _}, z_fetch:fetch(<<"https://one.test/start">>, [{authorization, none}], Context))
     end).
 
-caller_callback_test() ->
+caller_callback_check() ->
     with_fetch(fun(Context) ->
         CallerOptionsFun = fun(get, Url, Options) -> [{accept, Url} | Options] end,
         meck:expect(z_url_fetch, fetch, fun(Url, Options) ->
@@ -66,7 +107,7 @@ caller_callback_test() ->
         ?assertMatch({ok, _}, z_fetch:fetch(<<"https://one.test/start">>, [{options_fun, CallerOptionsFun}], Context))
     end).
 
-fetch_entry_points_test() ->
+fetch_entry_points_check() ->
     with_fetch(fun(Context) ->
         Reply = fun(Method, Url, Options) ->
             Resolved = resolve_options(Method, Url, Options),
@@ -87,7 +128,7 @@ fetch_entry_points_test() ->
     end).
 
 %% Exercise the installed stdlib's redirect callback with real HTTP requests.
-cross_origin_options_test() ->
+cross_origin_options_check() ->
     {ok, _} = application:ensure_all_started(inets),
     {ok, _} = application:ensure_all_started(tls_certificate_check),
     Modules = [z_notifier, m_site, z_context],
@@ -142,7 +183,7 @@ request_authorization(Socket, Authorization) ->
         {ok, _} -> request_authorization(Socket, Authorization)
     end.
 
-contextless_fetch_test() ->
+contextless_fetch_check() ->
     meck:new(z_url_fetch, [no_link]),
     try
         meck:expect(z_url_fetch, fetch, fun(Url, Options) ->

@@ -18,7 +18,106 @@
 -include_lib("eunit/include/eunit.hrl").
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-oldest_first_test() ->
+%% These tests mock shared core modules. Run in a separate VM so that loading
+%% and unloading mocks cannot crash the site used by the integration suite.
+-export([
+    start_dependencies/0,
+    oldest_first_check/0,
+    rss_full_content_check/0,
+    atom_base_and_xhtml_check/0,
+    rdf_check/0,
+    discovery_relative_check/0,
+    identity_check/0,
+    xml_safety_check/0,
+    url_check/0,
+    wordpress_endpoint_check/0,
+    rss_timezone_check/0,
+    header_discovery_check/0,
+    fetch_policy_check/0,
+    largest_srcset_check/0,
+    srcset_density_and_fallback_check/0,
+    repeated_image_variants_check/0,
+    wordpress_original_media_check/0,
+    import_user_permissions_check/0,
+    admin_poll_is_blocked_check/0,
+    copyright_defaults_check/0,
+    dependent_media_import_check/0,
+    category_guess_excludes_meta_check/0,
+    lazy_images_and_embeds_check/0,
+    summary_entities_check/0,
+    article_links_check/0,
+    removal_patterns_check/0,
+    delete_feed_content_permissions_check/0,
+    fetch_resource_permissions_check/0,
+    fetch_resource_pipeline_check/0,
+    zotonic_atom_detection_check/0,
+    zotonic_import_options_check/0,
+    zotonic_native_import_check/0,
+    zotonic_native_cleanup_check/0,
+    fetch_credentials_and_development_check/0,
+    configured_fetch_user_check/0,
+    feed_type_detection_check/0
+]).
+
+isolated_test_() ->
+    {setup,
+        fun() ->
+            {ok, Peer, _} = peer:start_link(#{
+                connection => standard_io,
+                args => ["-pa" | code:get_path()]
+            }),
+            ok = peer:call(Peer, ?MODULE, start_dependencies, []),
+            Peer
+        end,
+        fun peer:stop/1,
+        fun(Peer) ->
+            [{atom_to_list(Test), {timeout, 30, fun() ->
+                peer:call(Peer, ?MODULE, Test, [], 30000)
+            end}} || Test <- [
+        oldest_first_check,
+        rss_full_content_check,
+        atom_base_and_xhtml_check,
+        rdf_check,
+        discovery_relative_check,
+        identity_check,
+        xml_safety_check,
+        url_check,
+        wordpress_endpoint_check,
+        rss_timezone_check,
+        header_discovery_check,
+        fetch_policy_check,
+        largest_srcset_check,
+        srcset_density_and_fallback_check,
+        repeated_image_variants_check,
+        wordpress_original_media_check,
+        import_user_permissions_check,
+        admin_poll_is_blocked_check,
+        copyright_defaults_check,
+        dependent_media_import_check,
+        category_guess_excludes_meta_check,
+        lazy_images_and_embeds_check,
+        summary_entities_check,
+        article_links_check,
+        removal_patterns_check,
+        delete_feed_content_permissions_check,
+        fetch_resource_permissions_check,
+        fetch_resource_pipeline_check,
+        zotonic_atom_detection_check,
+        zotonic_import_options_check,
+        zotonic_native_import_check,
+        zotonic_native_cleanup_check,
+        fetch_credentials_and_development_check,
+        configured_fetch_user_check,
+        feed_type_detection_check
+            ]]
+        end}.
+
+start_dependencies() ->
+    {ok, _} = application:ensure_all_started(mimetypes),
+    ok.
+
+
+oldest_first_check() ->
     Old = #{id => old, published => {{2026,10,10},{8,0,0}}, modified => {{2026,10,14},{8,0,0}}},
     Middle = #{id => middle, published => undefined, modified => {{2026,10,11},{8,0,0}}},
     New = #{id => new, published => {{2026,10,12},{8,0,0}}},
@@ -33,7 +132,7 @@ oldest_first_test() ->
         z_import_feed_poll:sort_entries([Undated, New, Old, Missing, Equal])),
     ?assertEqual([], z_import_feed_poll:sort_entries([])).
 
-rss_full_content_test() ->
+rss_full_content_check() ->
     {ok, F} = parse(<<"<rss xmlns:c='http://purl.org/rss/1.0/modules/content/'><channel><title>News</title><item><title>A &amp; B</title><link>https://example.com/a</link><guid isPermaLink='false'>https://example.com/?p=1</guid><description>Short</description><c:encoded><![CDATA[<p>Full <img src='/photo.jpg'></p>]]></c:encoded><pubDate>Mon, 12 Oct 2026 08:11:31 +0000</pubDate><category>News</category></item></channel></rss>">>),
     [E] = maps:get(entries, F),
     ?assertEqual(<<"A & B">>, maps:get(title, E)),
@@ -42,7 +141,7 @@ rss_full_content_test() ->
     ?assertEqual([<<"https://example.com/photo.jpg">>], maps:get(media, E)),
     ?assertEqual({{2026,10,12},{8,11,31}}, maps:get(published, E)).
 
-atom_base_and_xhtml_test() ->
+atom_base_and_xhtml_check() ->
     {ok, F} = parse(<<"<feed xmlns='http://www.w3.org/2005/Atom' xml:base='https://example.com/blog/'><title>News</title><link rel='hub' href='/hub'/><entry xml:base='posts/'><id>urn:uuid:123</id><title>Entry</title><link href='one'/><author><name>Ada</name></author><published>2026-10-12T10:00:00+02:00</published><content type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'><p>Hello</p></div></content><category term='Culture'/><link rel='enclosure' href='one.jpg'/></entry></feed>">>),
     [E] = maps:get(entries, F),
     ?assertEqual(<<"https://example.com/blog/posts/one">>, maps:get(url, E)),
@@ -52,34 +151,34 @@ atom_base_and_xhtml_test() ->
     ?assertNotEqual(nomatch, binary:match(maps:get(body, E), <<"<p>Hello</p>">>)),
     ?assertEqual([<<"https://example.com/hub">>], maps:get(hubs, F)).
 
-rdf_test() ->
+rdf_check() ->
     {ok, F} = parse(<<"<rdf:RDF xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'><channel><title>RDF</title></channel><item rdf:about='https://example.com/1'><title>One</title><description>Body</description></item></rdf:RDF>">>),
     [E] = maps:get(entries, F),
     ?assertEqual(<<"https://example.com/1">>, maps:get(uri, E)).
 
-discovery_relative_test() ->
+discovery_relative_check() ->
     {ok, [#{url := U, title := <<"Articles">>}]} = z_import_feed_parse:discover(
         <<"<!doctype html><html><head><base href='/blog/'><link rel='alternate' type='application/rss+xml' title='Articles' href='feed/'></head><body></body></html>">>,
         <<"https://example.com/">>),
     ?assertEqual(<<"https://example.com/blog/feed/">>, U).
 
-identity_test() ->
+identity_check() ->
     A = z_import_feed_parse:identity(<<"opaque-id">>, <<"https://example.com/a">>, <<"https://example.com/feed/">>),
     ?assertEqual(A, z_import_feed_parse:identity(<<"opaque-id">>, <<"https://example.com/renamed">>, <<"https://example.com/category/feed/">>)),
     ?assertNotEqual(A, z_import_feed_parse:identity(<<"opaque-id">>, <<>>, <<"https://other.example/feed/">>)),
     ?assertEqual(undefined, z_import_feed_parse:identity(<<>>, <<>>, <<"https://example.com/feed/">>)).
 
-xml_safety_test() ->
+xml_safety_check() ->
     ?assertEqual({error, forbidden_xml_declaration}, parse(<<"<!DOCTYPE rss [<!ENTITY x SYSTEM 'file:///etc/passwd'>]><rss/>">>)),
     ?assertMatch({error, _}, parse(<<"<html><body>Not a feed</body></html>">>)).
 
-url_test() ->
+url_check() ->
     ?assertNot(z_import_feed_http:url(<<"file:///tmp/file">>)),
     ?assertNot(z_import_feed_http:url(<<"https://user:secret@example.com/feed">>)),
     ?assertEqual(<<>>, z_import_feed_http:resolve(<<"javascript:alert(1)">>, <<"https://example.com/">>)),
     ?assert(z_import_feed_http:url(<<"https://example.com/feed/">>)).
 
-wordpress_endpoint_test() ->
+wordpress_endpoint_check() ->
     ?assertEqual(<<"https://example.com/wp-json/wp/v2/posts/12?_embed=1">>,
         z_import_feed_wordpress:endpoint(<<"https://example.com/?p=12">>)),
     ?assertEqual(<<"https://example.com/blog/wp-json/wp/v2/posts/12?_embed=1">>,
@@ -88,15 +187,15 @@ wordpress_endpoint_test() ->
 
 parse(B) -> z_import_feed_parse:parse(B, <<"https://example.com/feed/">>).
 
-rss_timezone_test() ->
+rss_timezone_check() ->
     ?assertEqual({{2026,10,12},{8,0,0}}, z_import_feed_parse:date(<<"Mon, 12 Oct 2026 10:00:00 +0200">>)).
 
-header_discovery_test() ->
+header_discovery_check() ->
     {ok, [#{url := <<"https://example.com/news.xml">>}]} = z_import_feed_parse:discover(
         <<"<html><head></head><body></body></html>">>, <<"https://example.com/">>,
         [{"content-type", "text/html"}, {"link", "</news.xml>; rel=\"alternate\"; type=\"application/rss+xml\""}]).
 
-fetch_policy_test() ->
+fetch_policy_check() ->
     ?assertEqual({error, unsafe_destination}, z_import_feed_http:get(<<"file:///feed">>, undefined)),
     meck:new(z_fetch, [no_link]),
     try
@@ -114,14 +213,14 @@ fetch_policy_test() ->
         ?assertEqual({error, response_too_large}, z_import_feed_http:get(<<"https://example.com/feed">>, 4, undefined))
     after meck:unload(z_fetch) end.
 
-largest_srcset_test() ->
+largest_srcset_check() ->
     Html = <<"<img src='/small.jpg' srcset='/large.jpg 1600w, /small.jpg 320w, /medium.jpg 800w'>">>,
     {Urls, Aliases} = z_import_feed_parse:image_variants(Html, <<"https://example.com/">>),
     ?assertEqual([<<"https://example.com/large.jpg">>], Urls),
     ?assertEqual(<<"https://example.com/large.jpg">>, maps:get(<<"https://example.com/small.jpg">>, Aliases)),
     ?assertEqual(3, map_size(Aliases)).
 
-srcset_density_and_fallback_test() ->
+srcset_density_and_fallback_check() ->
     ?assertEqual([<<"https://example.com/3x.jpg">>], z_import_feed_parse:images(
         <<"<img src='/1x.jpg' srcset='/2x.jpg 2x, /3x.jpg 3x, /1x.jpg 1x'>">>, <<"https://example.com/">>)),
     ?assertEqual([<<"https://example.com/fallback.jpg">>], z_import_feed_parse:images(
@@ -129,13 +228,13 @@ srcset_density_and_fallback_test() ->
     ?assertEqual([<<"https://example.com/only.jpg">>], z_import_feed_parse:images(
         <<"<img srcset='/only.jpg 2x'>">>, <<"https://example.com/">>)).
 
-repeated_image_variants_test() ->
+repeated_image_variants_check() ->
     Html = <<"<img src='/small.jpg' srcset='/small.jpg 320w, /medium.jpg 800w'><img src='/small.jpg' srcset='/small.jpg 320w, /large.jpg 1600w'>">>,
     {Urls, Aliases} = z_import_feed_parse:image_variants(Html, <<"https://example.com/">>),
     ?assertEqual([<<"https://example.com/large.jpg">>], Urls),
     ?assertEqual(<<"https://example.com/large.jpg">>, maps:get(<<"https://example.com/medium.jpg">>, Aliases)).
 
-wordpress_original_media_test() ->
+wordpress_original_media_check() ->
     {ok, F} = parse(<<"<rss><channel><item><guid>https://example.com/?p=123</guid><link>https://example.com/article</link><title>Article</title><description>Summary</description></item></channel></rss>">>),
     [E] = maps:get(entries, F),
     Original = <<"https://example.com/original.jpg">>,
@@ -158,7 +257,7 @@ wordpress_original_media_test() ->
         ?assertMatch(#{feed := _, wordpress := _}, maps:get(raw, Result))
     after meck:unload(z_import_feed_http) end.
 
-import_user_permissions_test() ->
+import_user_permissions_check() ->
     %% Exercise the save boundary, including forged form fields and ordinary edits.
     Modules = [z_acl, z_context, z_db, m_rsc, m_identity, m_category, z_auth, z_module_manager],
     lists:foreach(fun(M) -> meck:new(M, [no_link]) end, Modules),
@@ -263,7 +362,7 @@ import_user_permissions_test() ->
         lists:foreach(fun meck:unload/1, Modules)
     end.
 
-admin_poll_is_blocked_test() ->
+admin_poll_is_blocked_check() ->
     %% Existing persisted feeds must be blocked before any external request or import.
     meck:new(z_db, [no_link]),
     meck:new(z_import_feed_http, [no_link]),
@@ -287,7 +386,7 @@ admin_poll_is_blocked_test() ->
         meck:unload(z_db)
     end.
 
-copyright_defaults_test() ->
+copyright_defaults_check() ->
     meck:new(m_category, [no_link]),
     meck:expect(m_category, is_a, fun(image, media, _) -> true end),
     meck:new(z_module_manager, [no_link]),
@@ -315,7 +414,7 @@ copyright_defaults_test() ->
         ?assertNot(maps:is_key(<<"rights">>, maps:get(props, DisabledMedia)))
     after meck:unload([z_module_manager, m_rsc, m_category]) end.
 
-dependent_media_import_test() ->
+dependent_media_import_check() ->
     Modules = [z_module_manager, m_rsc, m_media, m_category, m_edge, z_db, z_notifier, z_acl,
         z_media_tag, z_import_feed_http],
     lists:foreach(fun(M) -> meck:new(M, [no_link]) end, Modules),
@@ -368,7 +467,7 @@ dependent_media_import_test() ->
         ?assertEqual(1, meck:num_calls(m_rsc, insert, '_'))
     after meck:unload(Modules) end.
 
-category_guess_excludes_meta_test() ->
+category_guess_excludes_meta_check() ->
     Modules = [m_category, m_rsc, z_module_manager, z_context],
     lists:foreach(fun(M) -> meck:new(M, [no_link]) end, Modules),
     try
@@ -400,7 +499,7 @@ category_guess_excludes_meta_test() ->
         ?assertEqual(100, Guess([], 10))
     after lists:foreach(fun meck:unload/1, Modules) end.
 
-lazy_images_and_embeds_test() ->
+lazy_images_and_embeds_check() ->
     Html = <<"Leading &amp; text<figure><img class='lazyload' src='data:image/svg+xml;base64,AAAA' data-src='/small.jpg' data-srcset='/small.jpg 300w, /large.jpg 1200w'><figcaption>Caption</figcaption></figure>Trailing text">>,
     Base = <<"https://example.org/article">>,
     Large = <<"https://example.org/large.jpg">>,
@@ -424,7 +523,7 @@ lazy_images_and_embeds_test() ->
             maps:get(<<"body">>, Wrapped))
     after meck:unload(z_media_tag) end.
 
-summary_entities_test() ->
+summary_entities_check() ->
     meck:new(z_module_manager, [no_link]),
     try
         meck:expect(z_module_manager, active, fun(_, _) -> false end),
@@ -437,7 +536,7 @@ summary_entities_test() ->
             z_string:trim(maps:get(<<"summary">>, Props)))
     after meck:unload(z_module_manager) end.
 
-article_links_test() ->
+article_links_check() ->
     Modules = [z_db, z_acl, m_rsc],
     lists:foreach(fun(M) -> meck:new(M, [no_link]) end, Modules),
     try
@@ -466,7 +565,7 @@ article_links_test() ->
         ?assertNotEqual(nomatch, binary:match(Body, <<"href=\"mailto:editor@example.org\"">>))
     after lists:foreach(fun meck:unload/1, Modules) end.
 
-removal_patterns_test() ->
+removal_patterns_check() ->
     {ok, Patterns} = z_import_feed_cleanup:compile(<<"\nHet bericht .*? verscheen eerst op De Westkrant\\.\r\n">>),
     Footer = <<"Het bericht West tegen de ratten: “Als ze binnenkomen is het oorlog” verscheen eerst op De Westkrant."/utf8>>,
     ?assertEqual(<<"Intro […] "/utf8>>, z_import_feed_cleanup:text(<<"Intro […] "/utf8, Footer/binary>>, Patterns)),
@@ -480,7 +579,7 @@ removal_patterns_test() ->
     {ok, Multiple} = z_import_feed_cleanup:compile(<<"one\ntwo">>),
     ?assertEqual(<<"  three">>, z_import_feed_cleanup:text(<<"one two three">>, Multiple)).
 
-delete_feed_content_permissions_test() ->
+delete_feed_content_permissions_check() ->
     Modules = [z_db, z_acl, m_rsc, m_edge],
     lists:foreach(fun(M) -> meck:new(M, [no_link]) end, Modules),
     try
@@ -529,7 +628,7 @@ delete_feed_content_permissions_test() ->
         ?assertEqual({error, enoent}, m_import_feed:delete_content(7, #context{}))
     after lists:foreach(fun meck:unload/1, Modules) end.
 
-fetch_resource_permissions_test() ->
+fetch_resource_permissions_check() ->
     Modules = [z_db, z_acl, m_rsc, z_import_feed_fetch],
     lists:foreach(fun(M) -> meck:new(M, [no_link]) end, Modules),
     try
@@ -552,7 +651,7 @@ fetch_resource_permissions_test() ->
         ?assertEqual(1, meck:num_calls(z_import_feed_fetch, run, '_'))
     after lists:foreach(fun meck:unload/1, Modules) end.
 
-fetch_resource_pipeline_test() ->
+fetch_resource_pipeline_check() ->
     Modules = [z_db, z_acl, z_auth, z_memo, m_import_feed,
         z_import_feed_http, z_import_feed_wordpress, z_import_feed_import],
     lists:foreach(fun(M) -> meck:new(M, [no_link, passthrough]) end, Modules),
@@ -596,14 +695,14 @@ fetch_resource_pipeline_test() ->
         ?assertEqual(5, meck:num_calls(z_memo, set_userid, '_'))
     after lists:foreach(fun meck:unload/1, Modules) end.
 
-zotonic_atom_detection_test() ->
+zotonic_atom_detection_check() ->
     {ok, Feed} = parse(<<"<feed xmlns='http://www.w3.org/2005/Atom'><entry><id>https://example.com/id/42</id><title>Native</title><link rel='alternate' type='text/html' href='/article'/><link rel='https://zotonic.com/rel/resource' type='application/json' href='/api/model/rsc_export/get/42'/></entry><entry><id>https://example.com/id/43</id><link rel='alternate' type='application/json' href='/wordpress'/></entry></feed>">>),
     [Native, Ordinary] = maps:get(entries, Feed),
     ?assertEqual(<<"https://example.com/api/model/rsc_export/get/42">>, maps:get(zotonic_export, Native)),
     ?assertEqual(undefined, maps:get(zotonic_export, Ordinary)),
     ?assertEqual(Native, z_import_feed_wordpress:enrich(Native, #context{})).
 
-zotonic_import_options_test() ->
+zotonic_import_options_check() ->
     Defaults = z_import_feed_native:options(#{media_mode => <<"dependent">>}, #{}),
     ?assertEqual(1, proplists:get_value(import_edges, Defaults)),
     ?assertEqual([{authorization, none}], proplists:get_value(fetch_options, Defaults)),
@@ -618,7 +717,7 @@ zotonic_import_options_test() ->
     ?assertEqual(true, proplists:get_value(is_no_medium_download, Options)),
     ?assertEqual(42, maps:get(<<"content_group_id">>, proplists:get_value(props_forced, Options))).
 
-zotonic_native_import_test() ->
+zotonic_native_import_check() ->
     Modules = [z_import_feed_http, m_rsc_import, z_context, z_db, m_rsc],
     lists:foreach(fun(M) -> meck:new(M, [no_link]) end, Modules),
     try
@@ -655,7 +754,7 @@ zotonic_native_import_test() ->
         ?assertEqual({error, deleted}, z_import_feed_native:fetch(Uri, #{Uri => JSON}, #context{}))
     after lists:foreach(fun meck:unload/1, Modules) end.
 
-zotonic_native_cleanup_test() ->
+zotonic_native_cleanup_check() ->
     Body = <<"<p>Keep</p><!-- z-media 42 {} --><p>Remove me</p>">>,
     {true, Clean} = z_import_feed_native:filter_resource(<<"Remove me">>,
         #{<<"body">> => #trans{tr = [{en, Body}]}, <<"summary">> => <<"Keep Remove me">>}, [], #context{}),
@@ -664,7 +763,7 @@ zotonic_native_cleanup_test() ->
     ?assertNotEqual(nomatch, binary:match(CleanBody, <<"<!-- z-media 42 {} -->">>)),
     ?assertEqual(nomatch, binary:match(CleanBody, <<"Remove me">>)).
 
-fetch_credentials_and_development_test() ->
+fetch_credentials_and_development_check() ->
     Modules = [z_fetch, z_acl],
     lists:foreach(fun(M) -> meck:new(M, [no_link]) end, Modules),
     try
@@ -690,7 +789,7 @@ fetch_credentials_and_development_test() ->
         ?assertEqual({error, unsafe_destination}, z_import_feed_http:get(<<"https://user:pass@localhost/feed">>, #context{}))
     after meck:unload(Modules) end.
 
-configured_fetch_user_test() ->
+configured_fetch_user_check() ->
     Modules = [z_fetch, z_acl],
     lists:foreach(fun(M) -> meck:new(M, [no_link]) end, Modules),
     try
@@ -723,7 +822,7 @@ configured_fetch_user_test() ->
         ?assertEqual(1, z_context:get(import_feed_fetch_user, Discovery))
     after meck:unload(Modules) end.
 
-feed_type_detection_test() ->
+feed_type_detection_check() ->
     {ok, Rss} = parse(<<"<rss><channel><title>Empty RSS</title></channel></rss>">>),
     ?assertEqual(false, maps:get(is_zotonic_feed, Rss)),
     {ok, EmptyAtom} = parse(<<"<feed xmlns='http://www.w3.org/2005/Atom'><title>Empty</title></feed>">>),
