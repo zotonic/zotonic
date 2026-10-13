@@ -146,7 +146,8 @@ import(Item, Ds, Context) ->
                            end,
                            #{},
                            Ds),
-    Item1 = Item#{props := local_body(maps:get(props, Item), media_aliases(Item, Imported), Context)},
+    Props = local_body(maps:get(props, Item), media_aliases(Item, Imported), Context),
+    Item1 = Item#{props := Props},
     Id = upsert(Item1, Context),
     ok = medium(Id, maps:get(medium, Item), Context),
     case maps:get(medium, Item) of
@@ -186,18 +187,22 @@ media_aliases(Item, Imported) ->
     Props :: map(), Imported :: #{binary() => integer()}, Context :: z:context().
 local_body(#{<<"body">> := Body} = Props, Imported, Context) ->
     Urls = maps:fold(fun(U, Id, Acc) ->
-        case z_media_tag:url(Id, [], Context) of
-            {ok, Local} when Local =/= <<>> -> Acc#{U => Local};
-            _ -> Acc
-        end
-    end, #{}, Imported),
+                             case z_media_tag:url(Id, [], Context) of
+                                 {ok, Local} when Local =/= <<>> ->
+                                     Acc#{U => Local};
+                                 _ ->
+                                     Acc
+                             end
+                     end, #{}, Imported),
     case z_html_parse:parse(<<"<div>", Body/binary, "</div>">>, #{mode => html, escape => false}) of
         {ok, {_, _, Children}} ->
             Html = iolist_to_binary([body_html(local_node(N, Imported, Urls, maps:get(<<"website">>, Props, <<>>))) || N <- Children]),
             Props#{<<"body">> := normalize_links(Html, maps:get(<<"website">>, Props, <<>>), Context)};
-        _ -> Props
+        _ ->
+            Props
     end;
-local_body(Props, _, _) -> Props.
+local_body(Props, _, _) ->
+    Props.
 
 %% Fragment children can be plain text, including whitespace between paragraphs.
 body_html(Text) when is_binary(Text) -> z_html_parse:escape(Text);
@@ -322,7 +327,6 @@ upsert(#{uri := Uri, props := P}, Context) ->
                <<"feed_source_uri">> => Uri},
     Result = case lookup(Uri, Context) of
                  undefined ->
-                     ?DEBUG(Props),
                      m_rsc:insert(Props, [is_import, {tz, <<"UTC">>}], Context);
                  Id ->
                      %% Only a resource already mapped by this importer may be authoritative.
@@ -350,19 +354,23 @@ upsert(#{uri := Uri, props := P}, Context) ->
     end.
 
 medium(_, undefined, _) -> ok;
-medium(Id, Url, C) ->
-    case m_rsc:p(Id, feed_medium_url, C) of
-        Url -> ok;
+medium(Id, Url, Context) ->
+    case m_rsc:p(Id, feed_medium_url, Context) of
+        Url ->
+            ok;
         _ ->
-            case z_import_feed_http:get(Url, ?MAX_MEDIA_BYTES, C) of
+            case z_import_feed_http:get(Url, ?MAX_MEDIA_BYTES, Context) of
                 {ok, {Final, _, _, Data}} ->
                     #{path := Path} = uri_string:parse(z_convert:to_binary(Final)),
                     Upload = #upload{filename = filename:basename(Path), data = Data},
-                    case m_media:replace_file(Upload, Id, #{<<"feed_medium_url">> => Url}, C) of
-                        {ok, _} -> ok;
-                        {error, R} -> throw({import_error, {media, R}})
+                    case m_media:replace_file(Upload, Id, #{<<"feed_medium_url">> => Url}, Context) of
+                        {ok, _} ->
+                            ok;
+                        {error, R} ->
+                            throw({import_error, {media, R}})
                     end;
-                {error, R} -> throw({import_error, {media_fetch, R}})
+                {error, R} ->
+                    throw({import_error, {media_fetch, R}})
             end
     end.
 
