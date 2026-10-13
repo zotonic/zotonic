@@ -578,8 +578,8 @@ insert_file(File, RscProps, Options, Context) ->
     insert_file(File, RscProps, MediaProps1, Options, Context).
 
 %% Internal helper used by the public insert_file entry points.
-insert_file(File, RscProps, MediaProps, Options, Context) ->
-    Mime = maps:get(<<"mime">>, MediaProps, undefined),
+insert_file(File, RscProps, #{<<"mime">> := Mime} = MediaProps, Options, Context)
+    when is_binary(Mime) ->
     MimeCat = mime_to_category(Mime, Options, Context),
     case z_acl:is_allowed(insert, #acl_rsc{category = MimeCat, props = RscProps}, Context) andalso
         z_acl:is_allowed(insert, #acl_media{mime = Mime, size = filelib:file_size(File)}, Context) of
@@ -587,7 +587,10 @@ insert_file(File, RscProps, MediaProps, Options, Context) ->
             insert_file_mime_ok(File, RscProps, MediaProps, Options, Context);
         false ->
             {error, file_not_allowed}
-    end.
+    end;
+insert_file(_File, _RscProps, _MediaProps, _Options, _Context) ->
+    %% Identification failed: do not pass an undefined MIME type to ACL observers.
+    {error, identify}.
 
 %% @doc Insert a medium, together with rsc props and an optional preview_url. This is used for importing media.
 insert_medium(Medium, RscProps, Options, Context) ->
@@ -787,14 +790,16 @@ replace_file(File, RscId, RscProps, MInfo, Opts, Context) ->
     MediaProps = add_medium_info(File, OriginalFilename, MInfo1, Context),
     replace_file_mime_check(File, RscId, RscProps, MediaProps, Opts, Context).
 
-replace_file_mime_check(File, RscId, RscProps, MediaProps, Opts, Context) ->
-    Mime = maps:get(<<"mime">>, MediaProps, undefined),
+replace_file_mime_check(File, RscId, RscProps, #{<<"mime">> := Mime} = MediaProps, Opts, Context)
+    when is_binary(Mime) ->
     case z_acl:is_allowed(insert, #acl_media{ mime = Mime, size = filelib:file_size(File) }, Context) of
         true ->
             replace_file_mime_ok(File, RscId, RscProps, MediaProps, Opts, Context);
         false ->
             {error, file_not_allowed}
-    end.
+    end;
+replace_file_mime_check(_File, _RscId, _RscProps, _MediaProps, _Opts, _Context) ->
+    {error, identify}.
 
 %% @doc Check the ACL for the category/content-group combination.
 replace_file_mime_ok(File, insert_rsc, RscProps, MediaProps, Opts, Context) ->

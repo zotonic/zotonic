@@ -91,7 +91,7 @@ poll_and_media() ->
         <<"connections">> => <<"about=administrator">>}, C),
     MediaUrl = <<"https://example.org/import-feed-test.png">>,
     Xml = <<"<rss><channel><title>Poll</title><item><guid>https://example.org/poll-test/1</guid><title>Poll item</title><link>https://example.org/poll-test/1</link><description><![CDATA[Leading &amp; text<p>Body<img src='https://example.org/import-feed-test-small.png' srcset='https://example.org/import-feed-test-small.png 1x, https://example.org/import-feed-test.png 2x'></p>Trailing text]]></description><enclosure url='https://example.org/import-feed-test.png' type='image/png'/></item></channel></rss>">>,
-    Png = base64:decode(<<"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jwWQAAAAASUVORK5CYII=">>),
+    Png = base64:decode(<<"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII=">>),
     ok = meck:new(z_import_feed_http, [passthrough]),
     meck:expect(z_import_feed_http, get, fun(Url, _) -> {ok, {Url, [], byte_size(Xml), Xml}} end),
     meck:expect(z_import_feed_http, get, fun(Url, _, _) -> {ok, {Url, [], byte_size(Png), Png}} end),
