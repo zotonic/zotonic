@@ -1,6 +1,6 @@
 %% @copyright 2026 Marc Worrell
-%% @doc Bounded fetches with optional host-matched OAuth2 credentials.
-%% Development sites allow local destinations and self-signed certificates.
+%% @doc Bounded feed fetches using z_fetch and the configured import account.
+%% @end
 
 %% Copyright 2026 Marc Worrell
 %%
@@ -21,62 +21,50 @@
 
 -define(MAX_URL_LENGTH, 2048).
 -define(MAX_RESPONSE_BYTES, 4 * 1024 * 1024).
--define(MAX_REDIRECTS, 5).
 -define(FETCH_TIMEOUT, 15000).
 
 %% Saved feeds always fetch with their configured account, including previews.
 %% Only discovery (before a feed/account is configured) uses the current user.
 %% Keep the caller's resource ACLs separate from credential selection.
 -spec context(map(), z:context()) -> z:context().
-context(Settings, C) ->
+context(Settings, Context) ->
     User = case Settings of
         #{user_id := ConfiguredUser} -> ConfiguredUser;
         #{id := _} -> undefined;
-        _ -> z_acl:user(C)
+        _ -> z_acl:user(Context)
     end,
     z_context:set(import_feed_use_credentials, maps:get(use_credentials, Settings, false),
-        z_context:set(import_feed_fetch_user, User, C)).
+        z_context:set(import_feed_fetch_user, User, Context)).
 
-development(undefined) -> false;
-development(C) -> m_site:environment(C) =:= development.
+%% Only the fetch gets this context; preview authorization keeps the caller's ACLs.
+fetch_context(undefined) -> undefined;
+fetch_context(Context) ->
+    case z_context:get(import_feed_fetch_user, Context) of
+        User when is_integer(User) -> z_acl:logon(User, Context);
+        _ -> z_acl:anondo(Context)
+    end.
 
-credentials(_, undefined) -> [];
-credentials(<<"https:", _/binary>> = Url, C) ->
-    case z_context:get(import_feed_use_credentials, C) =:= true
-        andalso z_module_manager:active(mod_oauth2, C)
-    of
-        true ->
-            #{host := Host} = Parts = uri_string:parse(Url),
-            HostPort = case maps:find(port, Parts) of
-                {ok, Port} -> <<Host/binary, $:, (integer_to_binary(Port))/binary>>;
-                error -> Host
-            end,
-            case z_context:get(import_feed_fetch_user, C) of
-                User when is_integer(User) ->
-                    case m_oauth2_consumer:find_token(User, HostPort, C) of
-                        {ok, Token} -> [{authorization, <<"Bearer ", Token/binary>>}];
-                        _ -> []
-                    end;
-                _ -> []
-            end;
-        false -> []
-    end;
-credentials(_, _) -> [].
+fetch_options(undefined) -> [{authorization, none}];
+fetch_options(Context) ->
+    case z_context:get(import_feed_use_credentials, Context) of
+        true -> [];
+        _ -> [{authorization, none}]
+    end.
 
 -spec url(Value) -> boolean() when Value :: term().
-url(B) when is_binary(B), byte_size(B) > 0, byte_size(B) =< ?MAX_URL_LENGTH ->
-    try uri_string:parse(B) of
-        #{scheme := S, host := H} = P ->
-            (S =:= <<"http">> orelse S =:= <<"https">>) andalso H =/= <<>>
-                andalso not maps:is_key(userinfo, P);
+url(Value) when is_binary(Value), byte_size(Value) > 0, byte_size(Value) =< ?MAX_URL_LENGTH ->
+    try uri_string:parse(Value) of
+        #{scheme := Scheme, host := Host} = UrlParts ->
+            (Scheme =:= <<"http">> orelse Scheme =:= <<"https">>) andalso Host =/= <<>>
+                andalso not maps:is_key(userinfo, UrlParts);
         _ -> false
     catch _:_ -> false end;
 url(_) -> false.
 
 -spec resolve(Value, Base) -> binary() when Value :: term(), Base :: binary().
-resolve(B, Base) when is_binary(B), B =/= <<>> ->
-    try uri_string:resolve(B, Base) of
-        U when is_binary(U) -> case url(U) of true -> U; false -> <<>> end;
+resolve(Value, Base) when is_binary(Value), Value =/= <<>> ->
+    try uri_string:resolve(Value, Base) of
+        ResolvedUrl when is_binary(ResolvedUrl) -> case url(ResolvedUrl) of true -> ResolvedUrl; false -> <<>> end;
         _ -> <<>>
     catch _:_ -> <<>> end;
 resolve(_, _) -> <<>>.
@@ -87,51 +75,32 @@ get(Url, Context) -> get(Url, ?MAX_RESPONSE_BYTES, Context).
 
 -spec get(Url, Limit, Context) -> {ok, tuple()} | {error, term()} when
     Url :: binary(), Limit :: pos_integer(), Context :: z:context() | undefined.
-get(Url, Limit, Context) -> get(Url, Limit, 0, [], Context).
+get(Url, Limit, Context) -> get(Url, Limit, [], Context).
 
 -spec get_json(binary(), z:context() | undefined) -> {ok, tuple()} | {error, term()}.
-get_json(Url, Context) -> get(Url, ?MAX_RESPONSE_BYTES, 0, [{accept, "application/json"}], Context).
+get_json(Url, Context) -> get(Url, ?MAX_RESPONSE_BYTES, [{accept, "application/json"}], Context).
 
-get(_, _, ?MAX_REDIRECTS, _, _) -> {error, too_many_redirects};
-get(Url, Limit, N, Extra, Context) ->
-    IsDevelopment = development(Context),
-    case url(Url) andalso (IsDevelopment orelse public_destination(Url)) of
+get(Url, Limit, Extra, Context) ->
+    case url(Url) of
         true ->
-            Options = [{autoredirect, false}, {insecure, IsDevelopment},
-                {timeout, ?FETCH_TIMEOUT}, {max_length, Limit} | credentials(Url, Context) ++ Extra],
-            %% Resolve credentials afresh for every redirect; never forward a token.
-            %% No context prevents unrelated fetch observers from adding credentials.
-            case z_fetch:fetch(Url, Options, undefined) of
+            Options = [
+                {timeout, ?FETCH_TIMEOUT},
+                {max_length, Limit}
+                | fetch_options(Context) ++ Extra
+            ],
+            try z_fetch:fetch(Url, Options, fetch_context(Context)) of
                 {ok, {_, _, Length, Body}} when Length >= Limit; byte_size(Body) >= Limit ->
                     {error, response_too_large};
                 {ok, _} = Ok -> Ok;
-                {error, {Code, _, Hs, _, _}} when Code =:= 301; Code =:= 302;
-                        Code =:= 303; Code =:= 307; Code =:= 308 ->
-                    Next = resolve(z_convert:to_binary(proplists:get_value("location", Hs)), Url),
-                    case {Url, Next} of
-                        {<<"https:", _/binary>>, <<"http:", _/binary>>} when not IsDevelopment -> {error, insecure_redirect};
-                        _ -> get(Next, Limit, N + 1, Extra, Context)
-                    end;
                 {error, {Code, _, _, _, _}} -> {error, {http_status, Code}};
-                {error, _} -> {error, fetch_failed}
+                {error, _} = Error -> Error
+            after
+                %% z_acl:logon/2 also updates the process-local memo identity.
+                case Context of
+                    undefined -> ok;
+                    _ -> z_memo:set_userid(Context)
+                end
             end;
-        false -> {error, unsafe_destination}
+        false ->
+            {error, unsafe_destination}
     end.
-
-%% As with other outbound Zotonic clients, DNS preflight cannot prevent DNS
-%% rebinding between validation and connection. Address pinning belongs in z_fetch.
-public_destination(Url) ->
-    case url(Url) of
-        false -> false;
-        true ->
-            #{host := Host} = uri_string:parse(Url),
-            Name = string:trim(binary_to_list(Host), both, "[]"),
-            IPs = case inet:parse_address(Name) of
-                {ok, IP} -> [IP];
-                _ -> lists:append([addresses(Name, Family) || Family <- [inet, inet6]])
-            end,
-            IPs =/= [] andalso lists:all(fun z_ip_address:is_public/1, IPs)
-    end.
-
-addresses(Name, Family) ->
-    case inet:getaddrs(Name, Family) of {ok, IPs} -> IPs; _ -> [] end.

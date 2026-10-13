@@ -154,18 +154,18 @@ fetch and parse errors. See `mod_import_feed` for import semantics and notificat
 %% permission and edit permission on the article before using the saved account.
 -spec fetch_resource(Uri, Context) -> undefined | {ok, integer()} | {error, term()}
     when Uri :: binary(), Context :: z:context().
-fetch_resource(Uri, C) ->
+fetch_resource(Uri, Context) ->
     case z_db:q_row("select i.feed_id, r.rsc_id from import_feed_item i
             join import_feed_resource r on r.uri=i.uri
-            where i.uri=$1 and i.kind='article' order by i.modified desc, i.feed_id limit 1", [Uri], C) of
+            where i.uri=$1 and i.kind='article' order by i.modified desc, i.feed_id limit 1", [Uri], Context) of
         undefined -> undefined;
         {_, undefined} -> {error, enoent};
         {FeedId, Id} ->
-            case m_rsc:p_no_acl(Id, feed_is_zotonic, C) of
+            case m_rsc:p_no_acl(Id, feed_is_zotonic, Context) of
                 true -> undefined;
                 _ ->
-                    case writable(C) andalso z_acl:rsc_editable(Id, C) of
-                        true -> z_import_feed_fetch:run(FeedId, Id, Uri, C);
+                    case writable(Context) andalso z_acl:rsc_editable(Id, Context) of
+                        true -> z_import_feed_fetch:run(FeedId, Id, Uri, Context);
                         false -> {error, eacces}
                     end
             end
@@ -177,114 +177,114 @@ m_get(Path, _Msg, Context) ->
         true -> model(Path, Context);
         false -> {error, eacces}
     end.
-model([<<"user_is_admin">>, User | Rest], C) ->
-    {ok, {is_admin_user(m_rsc:rid(User, C), C), Rest}};
-model([<<"can_select_user">> | Rest], C) -> {ok, {can_select_user(C), Rest}};
-model([<<"list">> | Rest], C) -> {ok, {list(C), Rest}};
-model([<<"get">>, Id | Rest], C) ->
-    case get(Id, C) of {ok, F} -> {ok, {F, Rest}}; E -> E end;
-model([<<"history">>, Id, Offset | Rest], C) ->
-    N = case integer(Offset) of undefined -> 0; I -> I end,
-    Rows = items(Id, N, C),
-    {ok, {#{items => Rows, offset => N, previous => max(0, N - 100),
-        next => N + 100, has_next => length(Rows) =:= 100}, Rest}};
-model([<<"items">>, Id | Rest], C) -> {ok, {items(Id, 0, C), Rest}};
+model([<<"user_is_admin">>, User | Rest], Context) ->
+    {ok, {is_admin_user(m_rsc:rid(User, Context), Context), Rest}};
+model([<<"can_select_user">> | Rest], Context) -> {ok, {can_select_user(Context), Rest}};
+model([<<"list">> | Rest], Context) -> {ok, {list(Context), Rest}};
+model([<<"get">>, Id | Rest], Context) ->
+    case get(Id, Context) of {ok, Feed} -> {ok, {Feed, Rest}}; Error -> Error end;
+model([<<"history">>, Id, Offset | Rest], Context) ->
+    PageOffset = case integer(Offset) of undefined -> 0; Integer -> Integer end,
+    Rows = items(Id, PageOffset, Context),
+    {ok, {#{items => Rows, offset => PageOffset, previous => max(0, PageOffset - 100),
+        next => PageOffset + 100, has_next => length(Rows) =:= 100}, Rest}};
+model([<<"items">>, Id | Rest], Context) -> {ok, {items(Id, 0, Context), Rest}};
 model(_, _) -> {error, unknown_path}.
 
 -spec allowed(z:context()) -> boolean().
-allowed(C) ->
-    z_acl:is_allowed(use, mod_import_feed, C).
+allowed(Context) ->
+    z_acl:is_allowed(use, mod_import_feed, Context).
 
-writable(C) ->
-    allowed(C) andalso not z_acl:is_read_only(C).
+writable(Context) ->
+    allowed(Context) andalso not z_acl:is_read_only(Context).
 
 -spec list(z:context()) -> [map()].
-list(C) ->
-    case allowed(C) of
+list(Context) ->
+    case allowed(Context) of
         true ->
             {ok, Rows} = z_db:qmap("select f.*,
                 (select count(*) from import_feed_item i join import_feed_resource r on r.uri=i.uri
                     where i.feed_id=f.id and i.kind='article' and r.rsc_id is not null) as article_count
-                from import_feed f order by f.id desc", [], [{keys, atom}], C),
-            [public(decode(R)) || R <- Rows];
+                from import_feed f order by f.id desc", [], [{keys, atom}], Context),
+            [public(decode(Row)) || Row <- Rows];
         false -> []
     end.
 
 -spec get(term(), z:context()) -> {ok, map()} | {error, term()}.
-get(Id, C) ->
-    case allowed(C) of
+get(Id, Context) ->
+    case allowed(Context) of
         false -> {error, eacces};
         true ->
-            case z_db:qmap("select * from import_feed where id=$1", [integer(Id)], [{keys, atom}], C) of
-                {ok, [R]} -> {ok, public(decode(R))};
+            case z_db:qmap("select * from import_feed where id=$1", [integer(Id)], [{keys, atom}], Context) of
+                {ok, [Row]} -> {ok, public(decode(Row))};
                 {ok, []} -> {error, enoent};
-                E -> E
+                Error -> Error
             end
     end.
 
 -spec items(term(), non_neg_integer(), z:context()) -> [map()].
-items(Id, Offset, C) when is_integer(Offset), Offset >= 0 ->
-    case allowed(C) of
+items(Id, Offset, Context) when is_integer(Offset), Offset >= 0 ->
+    case allowed(Context) of
         false -> [];
         true ->
             {ok, Rows} = z_db:qmap("select i.*, r.rsc_id from import_feed_item i
                 left join import_feed_resource r on r.uri=i.uri
                 where i.feed_id=$1 order by i.modified desc, i.uri limit 100 offset $2",
-                [integer(Id), Offset], [{keys, atom}], C),
-            [R || R <- Rows, maps:get(rsc_id, R) =:= undefined orelse
-                z_acl:rsc_visible(maps:get(rsc_id, R), C)]
+                [integer(Id), Offset], [{keys, atom}], Context),
+            [Row || Row <- Rows, maps:get(rsc_id, Row) =:= undefined orelse
+                z_acl:rsc_visible(maps:get(rsc_id, Row), Context)]
     end.
 
 %% Persist observed format without changing settings or interrupting an import lease.
 %% Internal helper: callers have already authorized preview, save or polling.
 -spec record_feed_type(map(), map(), z:context()) -> ok.
-record_feed_type(#{id := Id, url := Url}, #{is_zotonic_feed := IsZotonic}, C)
+record_feed_type(#{id := Id, url := Url}, #{is_zotonic_feed := IsZotonic}, Context)
     when is_integer(Id), is_boolean(IsZotonic) ->
     z_db:q("update import_feed set is_zotonic_feed=$3 where id=$1 and url=$2",
-        [Id, Url, IsZotonic], C),
+        [Id, Url, IsZotonic], Context),
     ok;
 record_feed_type(_, _, _) -> ok.
 
 -spec discover(binary(), z:context()) -> {ok, [map()]} | {error, term()}.
-discover(Url, C) ->
-    case allowed(C) of
+discover(Url, Context) ->
+    case allowed(Context) of
         false -> {error, eacces};
         true ->
-            case z_import_feed_http:get(Url, C) of
+            case z_import_feed_http:get(Url, Context) of
                 {ok, {Final, Headers, _, Data}} -> z_import_feed_parse:discover(Data, z_convert:to_binary(Final), Headers);
-                E -> E
+                Error -> Error
             end
     end.
 
 -spec preview(binary(), z:context()) -> {ok, map()} | {error, term()}.
-preview(Url, C) -> preview(#{url => Url, use_wordpress => true}, ?PREVIEW_ENTRIES, C).
+preview(Url, Context) -> preview(#{url => Url, use_wordpress => true}, ?PREVIEW_ENTRIES, Context).
 
 -spec preview(map(), pos_integer(), z:context()) -> {ok, map()} | {error, term()}.
-preview(Settings, Count, C0) ->
-    C = z_import_feed_http:context(Settings, C0),
+preview(Settings, Count, Context) ->
+    FetchContext = z_import_feed_http:context(Settings, Context),
     Url = maps:get(url, Settings),
-    case allowed(C) of
+    case allowed(FetchContext) of
         false -> {error, eacces};
         true ->
-            case z_import_feed_http:get(Url, C) of
+            case z_import_feed_http:get(Url, FetchContext) of
                 {ok, {Final, _, _, Data}} ->
                     case z_import_feed_parse:parse(Data, z_convert:to_binary(Final)) of
-                        {ok, F} -> {ok, F#{entries => [preview_entry(E, Settings, C)
-                            || E <- lists:sublist(maps:get(entries, F), min(Count, ?PREVIEW_ENTRIES))]}};
-                        E -> E
+                        {ok, ParsedFeed} -> {ok, ParsedFeed#{entries => [preview_entry(Entry, Settings, FetchContext)
+                            || Entry <- lists:sublist(maps:get(entries, ParsedFeed), min(Count, ?PREVIEW_ENTRIES))]}};
+                        Error -> Error
                     end;
-                E -> E
+                Error -> Error
             end
     end.
 
-preview_entry(E, Settings, C) ->
+preview_entry(SourceEntry, Settings, Context) ->
     Entry = case maps:get(use_wordpress, Settings, true) of
-        true -> z_import_feed_wordpress:enrich(E, C);
-        false -> E
+        true -> z_import_feed_wordpress:enrich(SourceEntry, Context);
+        false -> SourceEntry
     end,
     case maps:is_key(category_id, Settings) of
         true ->
-            try z_import_feed_import:prepare(Entry, Settings, C) of
+            try z_import_feed_import:prepare(Entry, Settings, Context) of
                 {Item, Dependents} ->
                     TargetCategory = case maps:is_key(zotonic_export, Item) of
                         true -> undefined;
@@ -292,61 +292,61 @@ preview_entry(E, Settings, C) ->
                     end,
                     Entry#{target_category => TargetCategory,
                         dependent_count => length(Dependents), attached_medium => maps:get(medium, Item)}
-            catch throw:{import_error, Reason} -> Entry#{preview_error => error_message(Reason, C)} end;
+            catch throw:{import_error, Reason} -> Entry#{preview_error => error_message(Reason, Context)} end;
         false -> Entry
     end.
 
 -spec save(term(), map(), z:context()) -> {ok, integer()} | {error, term()}.
-save(Id, Input, C) ->
-    case writable(C) of
+save(Id, Input, Context) ->
+    case writable(Context) of
         false -> {error, eacces};
         true ->
-            case save_settings(integer(Id), Input, C) of
+            case save_settings(integer(Id), Input, Context) of
                 {ok, Props} ->
-                    P = Props#{next_poll => calendar:universal_time(), last_error => undefined},
+                    SavedProps = Props#{next_poll => calendar:universal_time(), last_error => undefined},
                     case integer(Id) of
                         undefined ->
-                            case z_db:insert(import_feed, P, C) of
+                            case z_db:insert(import_feed, SavedProps, Context) of
                                 {ok, _} = Ok -> Ok;
                                 {error, _} -> {error, save_failed_or_duplicate_url}
                             end;
                         FeedId ->
-                            case get(FeedId, C) of
+                            case get(FeedId, Context) of
                                 {ok, Existing} ->
                                     %% A changed URL is a different feed, not an edit of history.
-                                    case maps:get(url, Existing) =:= maps:get(url, P) of
+                                    case maps:get(url, Existing) =:= maps:get(url, SavedProps) of
                                         true ->
-                                            case z_db:update(import_feed, FeedId, P#{modified => calendar:universal_time()}, C) of
+                                            case z_db:update(import_feed, FeedId, SavedProps#{modified => calendar:universal_time()}, Context) of
                                                 {ok, 1} -> {ok, FeedId};
                                                 _ -> {error, save_failed}
                                             end;
                                         false -> {error, feed_url_is_immutable}
                                     end;
-                                E -> E
+                                Error -> Error
                             end
                     end;
-                E -> E
+                Error -> Error
             end
     end.
 
 %% Choosing an execution identity is distinct from ordinary feed editing.
 -spec can_select_user(Context) -> boolean() when Context :: z:context().
-can_select_user(C) ->
-    allowed(C) andalso (z_acl:is_admin(C) orelse z_acl:is_allowed(use, mod_admin_identity, C)).
+can_select_user(Context) ->
+    allowed(Context) andalso (z_acl:is_admin(Context) orelse z_acl:is_allowed(use, mod_admin_identity, Context)).
 
 -spec validate_user(User, Context) -> {ok, integer()} | {error, term()}
     when User :: term(), Context :: z:context().
-validate_user(User, C) ->
-    case can_select_user(C) andalso not z_acl:is_read_only(C) of
+validate_user(User, Context) ->
+    case can_select_user(Context) andalso not z_acl:is_read_only(Context) of
         false -> {error, eacces};
         true ->
-            Id = m_rsc:rid(User, C),
-            case is_integer(Id) andalso m_rsc:exists(Id, C)
-                andalso (Id =:= 1 orelse m_identity:is_user(Id, C))
-                andalso z_auth:is_enabled(Id, C)
+            Id = m_rsc:rid(User, Context),
+            case is_integer(Id) andalso m_rsc:exists(Id, Context)
+                andalso (Id =:= 1 orelse m_identity:is_user(Id, Context))
+                andalso z_auth:is_enabled(Id, Context)
             of
                 true ->
-                    case is_admin_user(Id, C) of
+                    case is_admin_user(Id, Context) of
                         true -> {error, admin_import_user};
                         false -> {ok, Id}
                     end;
@@ -354,43 +354,43 @@ validate_user(User, C) ->
             end
     end.
 
-save_settings(Id, Input, C) ->
-    case import_user(Id, Input, C) of
+save_settings(Id, Input, Context) ->
+    case import_user(Id, Input, Context) of
         {ok, UserProps} ->
-            case validate_settings(Input, C) of
+            case validate_settings(Input, Context) of
                 {ok, Props} -> {ok, maps:merge(Props, UserProps)};
                 Error -> Error
             end;
         Error -> Error
     end.
 
-import_user(undefined, Input, C) ->
-    Current = z_acl:user(C),
+import_user(undefined, Input, Context) ->
+    Current = z_acl:user(Context),
     Requested = maps:get(<<"user_id">>, Input, Current),
     case integer(Requested) =:= Current andalso is_integer(Current) of
         true ->
-            case is_admin_user(Current, C) of
+            case is_admin_user(Current, Context) of
                 true -> {error, admin_import_user};
-                false -> {ok, user_props(Current, C)}
+                false -> {ok, user_props(Current, Context)}
             end;
-        false -> select_user(Requested, C)
+        false -> select_user(Requested, Context)
     end;
-import_user(Id, Input, C) ->
-    case get(Id, C) of
+import_user(Id, Input, Context) ->
+    case get(Id, Context) of
         {ok, #{user_id := Current}} ->
             case maps:find(<<"user_id">>, Input) of
-                error -> preserve_user(Current, C);
+                error -> preserve_user(Current, Context);
                 {ok, Requested} ->
                     case integer(Requested) =:= Current of
-                        true -> preserve_user(Current, C);
-                        false -> select_user(Requested, C)
+                        true -> preserve_user(Current, Context);
+                        false -> select_user(Requested, Context)
                     end
             end;
         Error -> Error
     end.
 
-preserve_user(User, C) ->
-    case is_admin_user(User, C) of
+preserve_user(User, Context) ->
+    case is_admin_user(User, Context) of
         true -> {error, admin_import_user};
         false -> {ok, #{}}
     end.
@@ -400,160 +400,160 @@ preserve_user(User, C) ->
     when User :: integer() | undefined, Context :: z:context().
 is_admin_user(1, _) -> true;
 is_admin_user(undefined, _) -> false;
-is_admin_user(User, C) ->
-    z_acl:is_admin(z_acl:logon(User, z_context:new(C))).
+is_admin_user(User, Context) ->
+    z_acl:is_admin(z_acl:logon(User, z_context:new(Context))).
 
 -spec error_message(Reason, Context) -> binary()
     when Reason :: term(), Context :: z:context().
-error_message({invalid_regexp, Line, Reason}, C) ->
-    iolist_to_binary([?__("Invalid removal regexp on line", C), " ", integer_to_binary(Line), ": ", Reason]);
-error_message(feed_is_running, C) ->
-    ?__("This feed is still importing. Pause it and wait for the current import to finish before deleting its content.", C);
-error_message(admin_import_user, C) ->
-    ?__("Administrator accounts cannot run feed imports. Importing external content with full administrator permissions is dangerous. Select a non-administrator account with only the permissions needed for importing.", C);
+error_message({invalid_regexp, Line, Reason}, Context) ->
+    iolist_to_binary([?__("Invalid removal regexp on line", Context), " ", integer_to_binary(Line), ": ", Reason]);
+error_message(feed_is_running, Context) ->
+    ?__("This feed is still importing. Pause it and wait for the current import to finish before deleting its content.", Context);
+error_message(admin_import_user, Context) ->
+    ?__("Administrator accounts cannot run feed imports. Importing external content with full administrator permissions is dangerous. Select a non-administrator account with only the permissions needed for importing.", Context);
 error_message(Reason, _) ->
     iolist_to_binary(io_lib:format("~0P", [Reason, 8])).
 
-select_user(Requested, C) ->
-    case validate_user(Requested, C) of
+select_user(Requested, Context) ->
+    case validate_user(Requested, Context) of
         {ok, User} ->
             %% Derive groups from the selected account, never from browser input.
-            UserContext = z_acl:logon(User, z_context:new(C)),
+            UserContext = z_acl:logon(User, z_context:new(Context)),
             {ok, user_props(User, UserContext)};
         Error -> Error
     end.
 
-user_props(User, C) ->
-    #{user_id => User, user_groups => term_to_binary(z_acl:user_groups(C))}.
+user_props(User, Context) ->
+    #{user_id => User, user_groups => term_to_binary(z_acl:user_groups(Context))}.
 
-validate_settings(P, C) ->
-    try settings(P, C) catch
+validate_settings(Input, Context) ->
+    try settings(Input, Context) catch
         throw:{removal_patterns, Reason} -> {error, Reason};
         _:_ -> {error, invalid_settings}
     end.
 
-settings(P, C) ->
-    Patterns = z_convert:to_binary(maps:get(<<"remove_patterns">>, P, <<>>)),
+settings(Input, Context) ->
+    Patterns = z_convert:to_binary(maps:get(<<"remove_patterns">>, Input, <<>>)),
     case z_import_feed_cleanup:compile(Patterns) of
         {ok, _} -> ok;
         {error, PatternError} -> throw({removal_patterns, PatternError})
     end,
-    Url = maps:get(<<"url">>, P, <<>>),
-    Cat = m_rsc:rid(maps:get(<<"category_id">>, P, <<"article">>), C),
-    CG = m_rsc:rid(maps:get(<<"content_group_id">>, P, undefined), C),
-    Minutes = integer(maps:get(<<"poll_minutes">>, P, ?DEFAULT_POLL_MINUTES)),
-    Depth = integer(maps:get(<<"import_depth">>, P, ?DEFAULT_IMPORT_DEPTH)),
-    Mode = maps:get(<<"media_mode">>, P, <<"dependent">>),
-    Connections = parse_connections(maps:get(<<"connections">>, P, <<>>), C),
+    Url = maps:get(<<"url">>, Input, <<>>),
+    CategoryId = m_rsc:rid(maps:get(<<"category_id">>, Input, <<"article">>), Context),
+    ContentGroupId = m_rsc:rid(maps:get(<<"content_group_id">>, Input, undefined), Context),
+    Minutes = integer(maps:get(<<"poll_minutes">>, Input, ?DEFAULT_POLL_MINUTES)),
+    Depth = integer(maps:get(<<"import_depth">>, Input, ?DEFAULT_IMPORT_DEPTH)),
+    Mode = maps:get(<<"media_mode">>, Input, <<"dependent">>),
+    Connections = parse_connections(maps:get(<<"connections">>, Input, <<>>), Context),
     case z_import_feed_http:url(Url)
         andalso is_integer(Minutes) andalso Minutes >= ?MIN_POLL_MINUTES andalso Minutes =< ?MAX_POLL_MINUTES
         andalso is_integer(Depth) andalso Depth >= 0 andalso Depth =< ?MAX_IMPORT_DEPTH
-        andalso m_rsc:is_a(Cat, category, C) andalso not m_category:is_a(Cat, meta, C)
-        andalso (CG =:= undefined orelse (z_module_manager:active(mod_content_groups, C)
-            andalso m_rsc:is_a(CG, content_group, C)))
+        andalso m_rsc:is_a(CategoryId, category, Context) andalso not m_category:is_a(CategoryId, meta, Context)
+        andalso (ContentGroupId =:= undefined orelse (z_module_manager:active(mod_content_groups, Context)
+            andalso m_rsc:is_a(ContentGroupId, content_group, Context)))
         andalso lists:member(Mode, [<<"dependent">>, <<"attached">>, <<"none">>])
         andalso is_list(Connections)
     of
         false -> {error, invalid_settings};
         true ->
-            Props = #{<<"category_id">> => Cat, <<"content_group_id">> => CG},
-            case z_acl:is_allowed(insert, #acl_rsc{category = m_category:id_to_name(Cat, C), props = Props}, C) of
+            Props = #{<<"category_id">> => CategoryId, <<"content_group_id">> => ContentGroupId},
+            case z_acl:is_allowed(insert, #acl_rsc{category = m_category:id_to_name(CategoryId, Context), props = Props}, Context) of
                 false -> {error, eacces};
-                true -> {ok, maps:merge(copyright_settings(P, C), #{url => Url, title => z_convert:to_binary(maps:get(<<"title">>, P, Url)),
-                    category_id => Cat, content_group_id => CG, remove_patterns => Patterns,
-                    guess_category => bool(<<"guess_category">>, P),
+                true -> {ok, maps:merge(copyright_settings(Input, Context), #{url => Url, title => z_convert:to_binary(maps:get(<<"title">>, Input, Url)),
+                    category_id => CategoryId, content_group_id => ContentGroupId, remove_patterns => Patterns,
+                    guess_category => bool(<<"guess_category">>, Input),
                     connections => term_to_binary(Connections), media_mode => Mode,
-                    poll_minutes => Minutes, is_authoritative => bool(<<"is_authoritative">>, P),
-                    import_depth => Depth, use_credentials => bool(<<"use_credentials">>, P),
-                    is_subscribe => bool(<<"is_subscribe">>, P),
-                    is_subscribe_connections => bool(<<"is_subscribe_connections">>, P),
-                    use_wordpress => bool(<<"use_wordpress">>, P), is_paused => bool(<<"is_paused">>, P)})}
+                    poll_minutes => Minutes, is_authoritative => bool(<<"is_authoritative">>, Input),
+                    import_depth => Depth, use_credentials => bool(<<"use_credentials">>, Input),
+                    is_subscribe => bool(<<"is_subscribe">>, Input),
+                    is_subscribe_connections => bool(<<"is_subscribe_connections">>, Input),
+                    use_wordpress => bool(<<"use_wordpress">>, Input), is_paused => bool(<<"is_paused">>, Input)})}
             end
     end.
 
 %% Preserve stored defaults while the optional copyright module is disabled.
-copyright_settings(P, C) ->
-    case z_module_manager:active(mod_copyright, C) of
+copyright_settings(Input, Context) ->
+    case z_module_manager:active(mod_copyright, Context) of
         false -> #{};
         true ->
-            Rights = copyright_text(<<"rights">>, P, 100),
+            Rights = copyright_text(<<"rights">>, Input, 100),
             Licenses = m_copyright:list_other() ++ m_copyright:list_creative_commons()
                 ++ m_copyright:list_rights_statements(),
             true = Rights =:= <<>> orelse lists:any(
                 fun(#{<<"name">> := Name}) -> Name =:= Rights end, Licenses),
             #{rights => Rights,
-                rights_attribution => copyright_text(<<"rights_attribution">>, P, 1000),
-                rights_year => copyright_text(<<"rights_year">>, P, 100)}
+                rights_attribution => copyright_text(<<"rights_attribution">>, Input, 1000),
+                rights_year => copyright_text(<<"rights_year">>, Input, 100)}
     end.
 
-copyright_text(Key, P, Max) ->
-    Value = z_string:trim(z_convert:to_binary(maps:get(Key, P, <<>>))),
+copyright_text(Key, Input, Max) ->
+    Value = z_string:trim(z_convert:to_binary(maps:get(Key, Input, <<>>))),
     true = byte_size(Value) =< Max,
     Value.
 
 %% The picker only stages configuration; no resource edge is created here.
 -spec validate_connection(Predicate, Object, Context) -> {ok, {integer(), integer()}} | {error, term()}
     when Predicate :: term(), Object :: term(), Context :: z:context().
-validate_connection(Predicate, Object, C) ->
-    case writable(C) of
+validate_connection(Predicate, Object, Context) ->
+    case writable(Context) of
         false -> {error, eacces};
         true ->
-            P = m_rsc:rid(Predicate, C),
-            O = m_rsc:rid(Object, C),
-            case m_rsc:is_a(P, predicate, C) andalso is_integer(O)
-                andalso z_acl:rsc_visible(P, C) andalso z_acl:rsc_visible(O, C)
+            PredicateId = m_rsc:rid(Predicate, Context),
+            ObjectId = m_rsc:rid(Object, Context),
+            case m_rsc:is_a(PredicateId, predicate, Context) andalso is_integer(ObjectId)
+                andalso z_acl:rsc_visible(PredicateId, Context) andalso z_acl:rsc_visible(ObjectId, Context)
             of
-                true -> {ok, {P, O}};
+                true -> {ok, {PredicateId, ObjectId}};
                 false -> {error, invalid_connections}
             end
     end.
 
 %% One predicate=resource per line; IDs, names and resource URIs are accepted.
-parse_connections(Values, C) when is_list(Values), length(Values) =< 50 ->
+parse_connections(Values, Context) when is_list(Values), length(Values) =< 50 ->
     case lists:all(fun is_binary/1, Values) of
-        true -> parse_connections(iolist_to_binary(lists:join(<<"\n">>, Values)), C);
+        true -> parse_connections(iolist_to_binary(lists:join(<<"\n">>, Values)), Context);
         false -> {error, invalid_connections}
     end;
-parse_connections(B, C) when is_binary(B), byte_size(B) =< 16384 ->
+parse_connections(Text, Context) when is_binary(Text), byte_size(Text) =< 16384 ->
     try
-        Lines = [string:trim(L) || L <- binary:split(B, <<"\n">>, [global]), string:trim(L) =/= <<>>],
+        Lines = [string:trim(Line) || Line <- binary:split(Text, <<"\n">>, [global]), string:trim(Line) =/= <<>>],
         true = length(Lines) =< 50,
         lists:usort([begin
-            [Pred, Object] = binary:split(L, <<"=">>),
-            P = m_rsc:rid(string:trim(Pred), C), O = m_rsc:rid(string:trim(Object), C),
-            true = m_rsc:is_a(P, predicate, C), true = is_integer(O),
-            true = z_acl:rsc_visible(O, C),
-            {P, O}
-        end || L <- Lines])
+            [PredicateName, Object] = binary:split(Line, <<"=">>),
+            PredicateId = m_rsc:rid(string:trim(PredicateName), Context), ObjectId = m_rsc:rid(string:trim(Object), Context),
+            true = m_rsc:is_a(PredicateId, predicate, Context), true = is_integer(ObjectId),
+            true = z_acl:rsc_visible(ObjectId, Context),
+            {PredicateId, ObjectId}
+        end || Line <- Lines])
     catch _:_ -> {error, invalid_connections} end;
 parse_connections(_, _) -> {error, invalid_connections}.
 
 -spec pause(term(), boolean(), z:context()) -> ok | {error, term()}.
-pause(Id, IsPaused, C) when is_boolean(IsPaused) ->
-    case writable(C) of
+pause(Id, IsPaused, Context) when is_boolean(IsPaused) ->
+    case writable(Context) of
         false -> {error, eacces};
         true ->
             case IsPaused of
-                true -> pause_update(Id, true, C);
+                true -> pause_update(Id, true, Context);
                 false ->
-                    case runnable_feed(Id, C) of
-                        {ok, _} -> pause_update(Id, false, C);
+                    case runnable_feed(Id, Context) of
+                        {ok, _} -> pause_update(Id, false, Context);
                         Error -> Error
                     end
             end
     end.
 
-pause_update(Id, IsPaused, C) ->
+pause_update(Id, IsPaused, Context) ->
     case z_db:update(import_feed, integer(Id), #{is_paused => IsPaused,
-            next_poll => calendar:universal_time(), modified => calendar:universal_time()}, C) of
+            next_poll => calendar:universal_time(), modified => calendar:universal_time()}, Context) of
         {ok, 1} -> ok;
         _ -> {error, enoent}
     end.
 
-runnable_feed(Id, C) ->
-    case get(Id, C) of
+runnable_feed(Id, Context) ->
+    case get(Id, Context) of
         {ok, #{user_id := User}} = Result ->
-            case is_admin_user(User, C) of
+            case is_admin_user(User, Context) of
                 true -> {error, admin_import_user};
                 false -> Result
             end;
@@ -562,20 +562,20 @@ runnable_feed(Id, C) ->
 
 %% Manual reimport clears successful hashes, not identities or deletion tombstones.
 -spec queue(term(), boolean(), z:context()) -> ok | {error, term()}.
-queue(Id, Reimport, C) ->
-    case writable(C) of
+queue(Id, Reimport, Context) ->
+    case writable(Context) of
         false -> {error, eacces};
         true ->
-            case runnable_feed(Id, C) of
+            case runnable_feed(Id, Context) of
                 {ok, _} ->
                     case Reimport of
-                        true -> z_db:q("update import_feed_item set checksum=null where feed_id=$1", [integer(Id)], C);
+                        true -> z_db:q("update import_feed_item set checksum=null where feed_id=$1", [integer(Id)], Context);
                         false -> ok
                     end,
-                    {ok, 1} = z_db:update(import_feed, integer(Id), #{next_poll => calendar:universal_time(), modified => calendar:universal_time()}, C),
-                    mod_import_feed:observe_tick_1m(tick_1m, C),
+                    {ok, 1} = z_db:update(import_feed, integer(Id), #{next_poll => calendar:universal_time(), modified => calendar:universal_time()}, Context),
+                    mod_import_feed:observe_tick_1m(tick_1m, Context),
                     ok;
-                E -> E
+                Error -> Error
             end
     end.
 
@@ -583,30 +583,30 @@ queue(Id, Reimport, C) ->
 %% Pause atomically with the running-worker check so no new poll can claim it.
 -spec delete_content(Id, Context) -> {ok, map()} | {error, term()} when
     Id :: term(), Context :: z:context().
-delete_content(Id, C) ->
-    case writable(C) of
+delete_content(Id, Context) ->
+    case writable(Context) of
         false -> {error, eacces};
         true ->
-            case z_db:transaction(fun(Tx) -> delete_content_locked(integer(Id), Tx) end, C) of
+            case z_db:transaction(fun(TransactionContext) -> delete_content_locked(integer(Id), TransactionContext) end, Context) of
                 {rollback, Reason} -> {error, Reason};
                 Result -> Result
             end
     end.
 
-delete_content_locked(Id, C) ->
-    case z_db:q_row("select lease_token from import_feed where id=$1 for update", [Id], C) of
+delete_content_locked(Id, Context) ->
+    case z_db:q_row("select lease_token from import_feed where id=$1 for update", [Id], Context) of
         undefined -> {error, enoent};
         {undefined} ->
             {ok, 1} = z_db:update(import_feed, Id,
-                #{is_paused => true, modified => calendar:universal_time()}, C),
-            z_db:q("select pg_advisory_xact_lock(hashtext(current_schema()), 194815)", C),
+                #{is_paused => true, modified => calendar:universal_time()}, Context),
+            z_db:q("select pg_advisory_xact_lock(hashtext(current_schema()), 194815)", Context),
             Rows = z_db:q("select distinct r.rsc_id from import_feed_resource r
                 join import_feed_item i on i.uri=r.uri
-                where i.feed_id=$1 and r.rsc_id is not null order by r.rsc_id", [Id], C),
+                where i.feed_id=$1 and r.rsc_id is not null order by r.rsc_id", [Id], Context),
             Counts = lists:foldl(fun({RscId}, Acc) ->
-                Result = case deletable_tree(RscId, #{}, C) of
+                Result = case deletable_tree(RscId, #{}, Context) of
                     false -> skipped;
-                    true -> case m_rsc:delete(RscId, C) of
+                    true -> case m_rsc:delete(RscId, Context) of
                         ok -> deleted;
                         {error, enoent} -> skipped;
                         {error, eacces} -> skipped;
@@ -617,7 +617,7 @@ delete_content_locked(Id, C) ->
             end, #{deleted => 0, skipped => 0, failed => 0}, Rows),
             z_db:q("update import_feed_item i set status='deleted', checksum=null, modified=now()
                 where feed_id=$1 and exists (select 1 from import_feed_resource r
-                    where r.uri=i.uri and r.rsc_id is null)", [Id], C),
+                    where r.uri=i.uri and r.rsc_id is null)", [Id], Context),
             {ok, Counts};
         {_Token} -> {error, feed_is_running}
     end.
@@ -626,28 +626,28 @@ delete_content_locked(Id, C) ->
 %% Global resource identities remain available for deduplication and tombstones.
 -spec delete_feed(Id, DeleteContent, Context) -> {ok, map()} | {error, term()} when
     Id :: term(), DeleteContent :: boolean(), Context :: z:context().
-delete_feed(Id, DeleteContent, C) when is_boolean(DeleteContent) ->
-    case writable(C) of
+delete_feed(Id, DeleteContent, Context) when is_boolean(DeleteContent) ->
+    case writable(Context) of
         false -> {error, eacces};
         true ->
-            Result = z_db:transaction(fun(Tx) ->
+            Result = z_db:transaction(fun(TransactionContext) ->
                 FeedId = integer(Id),
-                case z_db:q_row("select lease_token from import_feed where id=$1 for update", [FeedId], Tx) of
+                case z_db:q_row("select lease_token from import_feed where id=$1 for update", [FeedId], TransactionContext) of
                     undefined -> {error, enoent};
                     {undefined} ->
                         ContentResult = case DeleteContent of
-                            true -> delete_content_locked(FeedId, Tx);
+                            true -> delete_content_locked(FeedId, TransactionContext);
                             false -> {ok, #{deleted => 0, skipped => 0, failed => 0}}
                         end,
                         case ContentResult of
                             {ok, Counts} ->
-                                {ok, 1} = z_db:delete(import_feed, FeedId, Tx),
+                                {ok, 1} = z_db:delete(import_feed, FeedId, TransactionContext),
                                 {ok, Counts};
                             Error -> Error
                         end;
                     {_Token} -> {error, feed_is_running}
                 end
-            end, C),
+            end, Context),
             case Result of
                 {rollback, Reason} -> {error, Reason};
                 _ -> Result
@@ -656,31 +656,31 @@ delete_feed(Id, DeleteContent, C) when is_boolean(DeleteContent) ->
 
 %% Deleting edges can schedule sudo deletion of orphaned dependent resources.
 %% Preserve the parent too if that could indirectly delete a forbidden resource.
-deletable_tree(Id, Seen, C) ->
+deletable_tree(Id, Seen, Context) ->
     case maps:is_key(Id, Seen) of
         true -> true;
         false ->
-            m_rsc:p_no_acl(Id, is_protected, C) =/= true
-                andalso m_rsc:is_deletable(Id, C)
+            m_rsc:p_no_acl(Id, is_protected, Context) =/= true
+                andalso m_rsc:is_deletable(Id, Context)
                 andalso lists:all(fun(Object) ->
-                    m_rsc:p_no_acl(Object, is_dependent, C) =/= true
-                        orelse m_rsc:p_no_acl(Object, is_protected, C) =:= true
-                        orelse deletable_tree(Object, Seen#{Id => true}, C)
-                end, m_edge:objects(Id, C))
+                    m_rsc:p_no_acl(Object, is_dependent, Context) =/= true
+                        orelse m_rsc:p_no_acl(Object, is_protected, Context) =:= true
+                        orelse deletable_tree(Object, Seen#{Id => true}, Context)
+                end, m_edge:objects(Id, Context))
     end.
 
 -spec decode(map()) -> map().
-decode(R) -> R#{connections => binary_to_term(maps:get(connections, R), [safe]),
-    user_groups => binary_to_term(maps:get(user_groups, R), [safe])}.
-public(R) -> (maps:without([user_groups, lease_token], R))#{is_running => maps:get(lease_token, R, undefined) =/= undefined}.
-integer(I) when is_integer(I), I > 0 -> I;
-integer(B) when is_binary(B) -> try integer(binary_to_integer(B)) catch _:_ -> undefined end;
+decode(Row) -> Row#{connections => binary_to_term(maps:get(connections, Row), [safe]),
+    user_groups => binary_to_term(maps:get(user_groups, Row), [safe])}.
+public(Row) -> (maps:without([user_groups, lease_token], Row))#{is_running => maps:get(lease_token, Row, undefined) =/= undefined}.
+integer(Integer) when is_integer(Integer), Integer > 0 -> Integer;
+integer(Value) when is_binary(Value) -> try integer(binary_to_integer(Value)) catch _:_ -> undefined end;
 integer(_) -> undefined.
-bool(K, P) -> z_convert:to_bool(maps:get(K, P, false)).
+bool(Key, Input) -> z_convert:to_bool(maps:get(Key, Input, false)).
 
 -spec install(z:context()) -> ok.
-install(C) ->
-    case z_db:table_exists(import_feed, C) of
+install(Context) ->
+    case z_db:table_exists(import_feed, Context) of
         false -> z_db:q("create table import_feed (
         id serial primary key, url varchar(2048) not null unique, title text not null,
         category_id integer references rsc(id) on delete set null,
@@ -704,7 +704,7 @@ install(C) ->
         updated bigint not null default 0, skipped bigint not null default 0,
         errors bigint not null default 0, last_error text,
         created timestamptz not null default now(), modified timestamptz not null default now()
-    )", C);
+    )", Context);
         true ->
             z_db:q("alter table import_feed
                 add column if not exists rights text,
@@ -715,21 +715,21 @@ install(C) ->
                 add column if not exists is_zotonic_feed boolean,
                 add column if not exists use_credentials boolean not null default false,
                 add column if not exists is_subscribe boolean not null default false,
-                add column if not exists is_subscribe_connections boolean not null default false", C)
+                add column if not exists is_subscribe_connections boolean not null default false", Context)
     end,
-    z_db:q("create index if not exists import_feed_due_key on import_feed(next_poll) where not is_paused", C),
+    z_db:q("create index if not exists import_feed_due_key on import_feed(next_poll) where not is_paused", Context),
     z_db:q("create table if not exists import_feed_resource (
         uri varchar(2048) primary key,
         rsc_id integer references rsc(id) on delete set null,
         created timestamptz not null default now()
-    )", C),
-    z_db:q("create index if not exists import_feed_resource_rsc_key on import_feed_resource(rsc_id)", C),
+    )", Context),
+    z_db:q("create index if not exists import_feed_resource_rsc_key on import_feed_resource(rsc_id)", Context),
     z_db:q("create table if not exists import_feed_item (
         feed_id integer not null references import_feed(id) on delete cascade,
         uri varchar(2048) not null, kind varchar(16) not null default 'article',
         checksum bytea, status varchar(16) not null, last_error text,
         created timestamptz not null default now(), modified timestamptz not null default now(),
         primary key(feed_id, uri)
-    )", C),
-    z_db:flush(C),
+    )", Context),
+    z_db:flush(Context),
     ok.

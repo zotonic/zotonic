@@ -18,9 +18,15 @@
 %% limitations under the License.
 
 -module(mod_import_feed).
--define(DEFAULT_POLL_MINUTES, 60).
--define(DEFAULT_IMPORT_DEPTH, 1).
--define(PREVIEW_ENTRIES, 3).
+
+-author("Marc Worrell <marc@worrell.nl>").
+
+-mod_title("Import feeds").
+-mod_description("Discover RSS and Atom feeds and automatically import articles and media.").
+-mod_depends([admin, cron]).
+-mod_schema(6).
+-mod_config([]).
+
 -moduledoc(#{
     zotonic_keywords => [
         "reference", "integrator", "module", "import_and_migration", "import", "schedule", "url"
@@ -65,7 +71,9 @@ Settings are stored in the feed table. There are no `m_config` options.
 | WordPress enrichment | Enabled initially in the admin form; use the anonymous public REST API for content, author, dates and featured media. Failures fall back to feed data. |
 | Pause | Suspend automatic imports. New feeds are active unless saved paused. |
 
-Imports create published resources. For each inline image, the importer selects one
+Imports create published resources. Dependent media are created through `m_media`,
+which detects the MIME type and selects the appropriate media category.
+For each inline image, the importer selects one
 variant, preferring the largest declared `srcset` width or density, with `src` as
 fallback. Imported variants share one local medium and inline references are rewritten
 to its URL. WordPress featured-image variants reuse the original image. In attached
@@ -80,8 +88,9 @@ stored in feed settings. Missing credentials leave a request anonymous. Native
 imports save their fetch preference for core reimports and medium downloads.
 
 Development sites allow local destinations and self-signed TLS certificates.
-Production keeps destination and certificate checks; browser input cannot change
-the server's environment. OAuth2 credentials are never sent over HTTP.
+Transport, redirects and certificate checks use the shared `z_fetch` routines;
+browser input cannot change the server's environment. OAuth2 credentials are never
+sent over HTTP. Anonymous fetching remains anonymous across redirects.
 
 ## Polling and identity
 
@@ -126,7 +135,15 @@ URIs fall through to the standard resource importer.
 Before writing an entry or its media, the importer calls `z_notifier:first/2` with
 `#import_feed_item{item, dependents, feed, raw}`. Include the record from
 `zotonic_mod_import_feed/include/mod_import_feed.hrl` and implement
-`observe_import_feed_item/2` to customize importing.
+`observe_import_feed_item/2` to customize importing. Declare the
+`zotonic_mod_import_feed_observer` behaviour for type checking and the full callback
+contract. Both its normal and PID-aware callbacks are optional. The behaviour does
+not import the record; the header include is required:
+
+```erlang
+-behaviour(zotonic_mod_import_feed_observer).
+-include_lib(\"zotonic_mod_import_feed/include/mod_import_feed.hrl\").
+```
 
 - `item` contains `uri`, resource `props`, `edges` and an optional `medium` URL.
   Edges are `{PredicateId, ObjectIdOrUri}` pairs.
@@ -140,180 +157,265 @@ to ignore the entry or `{error, Reason}` to record a failure for retry on a late
 Notification properties are still untrusted; custom observers must enforce appropriate
 ACLs and sanitization. See `m_import_feed` for the administration API.
 ").
--author("Marc Worrell <marc@worrell.nl>").
--mod_title("Import feeds").
--mod_description("Discover RSS and Atom feeds and automatically import articles and media.").
--mod_depends([admin, cron]).
--mod_schema(6).
--mod_config([]).
+
+-define(DEFAULT_POLL_MINUTES, 60).
+-define(DEFAULT_IMPORT_DEPTH, 1).
+-define(PREVIEW_ENTRIES, 3).
+
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_mod_wires/include/mod_wires.hrl").
 -include_lib("zotonic_mod_admin/include/admin_menu.hrl").
+
 -export([observe_admin_menu/3, observe_tick_1m/2, observe_rsc_import_fetch/2, manage_schema/2, event/2]).
 
 %% @doc Refresh known feed articles through the feed's settings and import account.
 -spec observe_rsc_import_fetch(#rsc_import_fetch{}, z:context()) ->
     undefined | {ok, integer()} | {error, term()}.
-observe_rsc_import_fetch(#rsc_import_fetch{uri = Uri}, C) ->
-    case z_context:get(import_feed_native, C) of
-        undefined -> m_import_feed:fetch_resource(Uri, C);
-        Native -> z_import_feed_native:fetch(Uri, Native, C)
+observe_rsc_import_fetch(#rsc_import_fetch{uri = Uri}, Context) ->
+    case z_context:get(import_feed_native, Context) of
+        undefined -> m_import_feed:fetch_resource(Uri, Context);
+        Native -> z_import_feed_native:fetch(Uri, Native, Context)
     end.
 
 -spec observe_admin_menu(#admin_menu{}, list(), z:context()) -> list().
-observe_admin_menu(#admin_menu{}, Acc, C) ->
-    [#menu_item{id = admin_import_feed, parent = admin_content,
-        label = ?__("Import feeds", C), url = {admin_import_feed, []},
-        visiblecheck = {acl, use, mod_import_feed}} | Acc].
+observe_admin_menu(#admin_menu{}, Acc, Context) ->
+    [
+        #menu_item{
+            id = admin_import_feed,
+            parent = admin_content,
+            label = ?__("Import feeds", Context),
+            url = {admin_import_feed, []},
+            visiblecheck = {acl, use, mod_import_feed}
+        }
+        | Acc
+    ].
 
 -spec observe_tick_1m(tick_1m, z:context()) -> ok.
-observe_tick_1m(tick_1m, C) ->
-    _ = z_sidejob:start_site_unique(mod_import_feed, z_import_feed_poll, run, [], C), ok.
+observe_tick_1m(tick_1m, Context) ->
+    _ = z_sidejob:start_site_unique(mod_import_feed, z_import_feed_poll, run, [], Context), ok.
 
 -spec manage_schema(install | {upgrade, integer()}, z:context()) -> ok.
-manage_schema(_, C) -> m_import_feed:install(C).
+manage_schema(_, Context) ->
+    m_import_feed:install(Context).
 
 -spec event(#submit{} | #postback{}, z:context()) -> z:context().
 event(Event, Context) ->
     %% These actions run when the response arrives, including permission errors.
-    C = case Event of
-        #postback{message = {test, _}} -> z_render:wire([
-            {remove_class, [{target, "feed-preview"}, {class, "is-loading"}]},
-            {enable, [{target, "feed-test"}]}
-        ], Context);
-        _ -> Context
+    RenderContext = case Event of
+        #postback{message = {test, _}} ->
+            z_render:wire([
+                {remove_class, [{target, "feed-preview"}, {class, "is-loading"}]},
+                {enable, [{target, "feed-test"}]}
+            ], Context);
+        _ ->
+            Context
     end,
-    case m_import_feed:allowed(C) of
-        true -> handle(Event, C);
-        false -> z_render:growl_error(?__("You are not allowed to manage feeds.", C), C)
+    case m_import_feed:allowed(RenderContext) of
+        true -> handle(Event, RenderContext);
+        false -> z_render:growl_error(?__("You are not allowed to manage feeds.", RenderContext), RenderContext)
     end.
 
-handle(#postback{message = add_connection}, C) ->
-    z_render:dialog(?__("Add default connection", C),
-        "_admin_import_feed_connection_dialog.tpl", [], C);
-handle(#submit{message = select_connection_predicate}, C) ->
-    Predicate = m_rsc:rid(z_context:get_q(<<"predicate">>, C), C),
-    case m_rsc:is_a(Predicate, predicate, C) andalso z_acl:rsc_visible(Predicate, C) of
-        true -> z_render:dialog(?__("Select connected page", C), "_action_dialog_connect.tpl",
-            [{intent, <<"select">>}, {id, Predicate}, {tabs_enabled, [<<"find">>]},
-             {delegate, mod_import_feed}, {width, <<"large">>}], C);
-        false -> failure(invalid_connections, C)
+handle(#postback{message = add_connection}, Context) ->
+    z_render:dialog(?__("Add default connection", Context),
+        "_admin_import_feed_connection_dialog.tpl", [], Context);
+handle(#submit{message = select_connection_predicate}, Context) ->
+    Predicate = m_rsc:rid(z_context:get_q(<<"predicate">>, Context), Context),
+    case m_rsc:is_a(Predicate, predicate, Context) andalso z_acl:rsc_visible(Predicate, Context) of
+        true ->
+            z_render:dialog(
+                ?__("Select connected page", Context),
+                "_action_dialog_connect.tpl",
+                [
+                    {intent, <<"select">>},
+                    {id, Predicate},
+                    {tabs_enabled, [<<"find">>]},
+                    {delegate, mod_import_feed},
+                    {width, <<"large">>}
+                ],
+                Context);
+        false ->
+            failure(invalid_connections, Context)
     end;
-handle(#postback{message = {admin_connect_select, Args}}, C) ->
+handle(#postback{message = {admin_connect_select, Args}}, Context) ->
     case m_import_feed:validate_connection(proplists:get_value(id, Args),
-            z_context:get_q(<<"select_id">>, C), C) of
+            z_context:get_q(<<"select_id">>, Context), Context) of
         {ok, {Predicate, Object}} ->
-            C1 = z_render:insert_bottom("feed-connections", #render{
-                template = "_admin_import_feed_connection.tpl",
-                vars = [{predicate, Predicate}, {object, Object}]}, C),
-            z_render:wire({dialog_close, []}, C1);
-        {error, Reason} -> failure(Reason, C)
+            UpdatedContext = z_render:insert_bottom(
+                "feed-connections",
+                #render{
+                    template = "_admin_import_feed_connection.tpl",
+                    vars = [{predicate, Predicate}, {object, Object}]
+                },
+                Context),
+            z_render:wire({dialog_close, []}, UpdatedContext);
+        {error, Reason} ->
+            failure(Reason, Context)
     end;
 handle(#postback{message={select_user, _Args}}, Context) ->
     case m_import_feed:can_select_user(Context) andalso not z_acl:is_read_only(Context) of
         true ->
-            z_render:dialog(?__("Select import user", Context),
-                            "_admin_import_feed_user_dialog.tpl", [], Context);
+            z_render:dialog(
+                ?__("Select import user", Context),
+                "_admin_import_feed_user_dialog.tpl",
+                [], Context);
         false ->
             failure(eacces, Context)
     end;
-handle(#submit{message = search_users}, C) ->
-    case m_import_feed:can_select_user(C) of
-        true -> z_render:update("feed-user-results", #render{
-            template = "_admin_import_feed_user_results.tpl",
-            vars = [{search_text, z_context:get_q(<<"search_text">>, C)}]}, C);
-        false -> failure(eacces, C)
+handle(#submit{message = search_users}, Context) ->
+    case m_import_feed:can_select_user(Context) of
+        true -> z_render:update(
+            "feed-user-results",
+            #render{
+                template = "_admin_import_feed_user_results.tpl",
+                vars = [{search_text, z_context:get_q(<<"search_text">>, Context)}]
+            },
+            Context);
+        false ->
+            failure(eacces, Context)
     end;
-handle(#postback{message = {choose_user, Args}}, C) ->
-    case m_import_feed:validate_user(proplists:get_value(id, Args), C) of
+handle(#postback{message = {choose_user, Args}}, Context) ->
+    case m_import_feed:validate_user(proplists:get_value(id, Args), Context) of
         {ok, User} ->
-            C1 = z_render:update("feed-import-user", #render{
-                template = "_admin_import_feed_user.tpl", vars = [{user_id, User}]}, C),
-            z_render:wire({dialog_close, []}, C1);
-        {error, Reason} -> failure(Reason, C)
+            UpdatedContext = z_render:update("feed-import-user", #render{
+                template = "_admin_import_feed_user.tpl", vars = [{user_id, User}]}, Context),
+            z_render:wire({dialog_close, []}, UpdatedContext);
+        {error, Reason} ->
+            failure(Reason, Context)
     end;
-handle(#submit{message = discover}, C) ->
-    UseCredentials = z_convert:to_bool(z_context:get_q(<<"use_credentials">>, C)),
-    FetchC = z_import_feed_http:context(#{use_credentials => UseCredentials}, C),
-    case m_import_feed:discover(z_context:get_q(<<"url">>, C), FetchC) of
-        {ok, Feeds} -> z_render:update("feed-discovery", #render{template = "_admin_import_feed_discovery.tpl", vars = [{feeds, Feeds}, {use_credentials, UseCredentials}]}, C);
-        {error, Reason} -> failure(Reason, C)
+handle(#submit{message = discover}, Context) ->
+    UseCredentials = z_convert:to_bool(z_context:get_q(<<"use_credentials">>, Context)),
+    FetchContext = z_import_feed_http:context(#{use_credentials => UseCredentials}, Context),
+    case m_import_feed:discover(z_context:get_q(<<"url">>, Context), FetchContext) of
+        {ok, Feeds} ->
+            z_render:update(
+                "feed-discovery",
+                #render{
+                    template = "_admin_import_feed_discovery.tpl",
+                    vars = [
+                        {feeds, Feeds},
+                        {use_credentials, UseCredentials}
+                    ]
+                },
+                Context);
+        {error, Reason} ->
+            failure(Reason, Context)
     end;
-handle(#postback{message = {select, Args}}, C) ->
+handle(#postback{message = {select, Args}}, Context) ->
     Url = proplists:get_value(url, Args),
     UseCredentials = z_convert:to_bool(proplists:get_value(use_credentials, Args)),
-    case m_import_feed:preview(#{url => Url, use_credentials => UseCredentials}, ?PREVIEW_ENTRIES, C) of
+    case m_import_feed:preview(#{url => Url, use_credentials => UseCredentials}, ?PREVIEW_ENTRIES, Context) of
         {ok, Preview} ->
-            Feed = #{is_zotonic_feed => maps:get(is_zotonic_feed, Preview), use_credentials => UseCredentials, url => maps:get(url, Preview), title => maps:get(title, Preview),
-                category_id => m_rsc:rid(article, C), poll_minutes => ?DEFAULT_POLL_MINUTES, import_depth => ?DEFAULT_IMPORT_DEPTH,
-                media_mode => <<"dependent">>, use_wordpress => true, connections => []},
-            z_render:update("feed-discovery", #render{template = "_admin_import_feed_edit.tpl", vars = [{feed, Feed}, {preview, Preview}]}, C);
-        {error, Reason} -> failure(Reason, C)
+            Feed = #{
+                is_zotonic_feed => maps:get(is_zotonic_feed, Preview),
+                use_credentials => UseCredentials,
+                url => maps:get(url, Preview),
+                title => maps:get(title, Preview),
+                category_id => m_rsc:rid(article, Context),
+                poll_minutes => ?DEFAULT_POLL_MINUTES,
+                import_depth => ?DEFAULT_IMPORT_DEPTH,
+                media_mode => <<"dependent">>,
+                use_wordpress => true,
+                connections => []
+            },
+            z_render:update(
+                "feed-discovery",
+                #render{
+                    template = "_admin_import_feed_edit.tpl",
+                    vars = [
+                        {feed, Feed},
+                        {preview, Preview}
+                    ]
+                },
+                Context);
+        {error, Reason} ->
+            failure(Reason, Context)
     end;
-handle(#submit{message = {save, Args}}, C) ->
-    Input = (z_context:get_q_map_noz(C))#{<<"connections">> => z_context:get_q_all(<<"connection">>, C)},
-    case m_import_feed:save(proplists:get_value(id, Args), Input, C) of
+handle(#submit{message = {save, Args}}, Context) ->
+    Input = (z_context:get_q_map_noz(Context))#{<<"connections">> => z_context:get_q_all(<<"connection">>, Context)},
+    case m_import_feed:save(proplists:get_value(id, Args), Input, Context) of
         {ok, Id} ->
             case proplists:get_value(id, Args) of
                 undefined -> m_import_feed:record_feed_type(
                     #{id => Id, url => maps:get(<<"url">>, Input)},
-                    #{is_zotonic_feed => proplists:get_value(is_zotonic_feed, Args)}, C);
+                    #{is_zotonic_feed => proplists:get_value(is_zotonic_feed, Args)}, Context);
                 _ -> ok
             end,
-            z_render:wire({redirect, [{dispatch, admin_import_feed_edit}, {id, Id}]}, C);
-        {error, Reason} -> failure(Reason, C)
+            z_render:wire({redirect, [{dispatch, admin_import_feed_edit}, {id, Id}]}, Context);
+        {error, Reason} ->
+            failure(Reason, Context)
     end;
-handle(#postback{message = {test, Args}}, C) ->
-    case m_import_feed:get(proplists:get_value(id, Args), C) of
+handle(#postback{message = {test, Args}}, Context) ->
+    case m_import_feed:get(proplists:get_value(id, Args), Context) of
         {ok, Feed} ->
-            case m_import_feed:preview(Feed, ?PREVIEW_ENTRIES, C) of
+            case m_import_feed:preview(Feed, ?PREVIEW_ENTRIES, Context) of
                 {ok, Preview} ->
-                    m_import_feed:record_feed_type(Feed, Preview, C),
-                    C1 = z_render:update("feed-preview", #render{template = "_admin_import_feed_preview.tpl",
-                        vars = [{preview, Preview}, {feed, Feed}]}, C),
+                    m_import_feed:record_feed_type(Feed, Preview, Context),
+                    UpdatedContext = z_render:update("feed-preview", #render{template = "_admin_import_feed_preview.tpl",
+                        vars = [{preview, Preview}, {feed, Feed}]}, Context),
                     case maps:get(is_zotonic_feed, Preview) of
-                        undefined -> C1;
+                        undefined -> UpdatedContext;
                         IsZotonic ->
                             Action = case IsZotonic of true -> remove_class; false -> add_class end,
                             WordpressAction = case IsZotonic of true -> disable; false -> enable end,
                             z_render:wire([
                                 {Action, [{target, "feed-zotonic-options"}, {class, "hidden"}]},
                                 {WordpressAction, [{target, "feed-use-wordpress"}]}
-                            ], C1)
+                            ], UpdatedContext)
                     end;
-                {error, Reason} -> failure(Reason, C)
+                {error, Reason} ->
+                    failure(Reason, Context)
             end;
-        {error, Reason} -> failure(Reason, C)
+        {error, Reason} ->
+            failure(Reason, Context)
     end;
-handle(#postback{message = {pause, Args}}, C) ->
-    result(m_import_feed:pause(proplists:get_value(id, Args), proplists:get_value(paused, Args), C), C);
-handle(#postback{message = {poll, Args}}, C) ->
-    result(m_import_feed:queue(proplists:get_value(id, Args), proplists:get_value(reimport, Args, false), C), C);
-handle(#postback{message = {delete_content, Args}}, C) ->
-    case m_import_feed:delete_content(proplists:get_value(id, Args), C) of
+handle(#postback{message = {pause, Args}}, Context) ->
+    result(m_import_feed:pause(proplists:get_value(id, Args), proplists:get_value(paused, Args), Context), Context);
+handle(#postback{message = {poll, Args}}, Context) ->
+    result(m_import_feed:queue(proplists:get_value(id, Args), proplists:get_value(reimport, Args, false), Context), Context);
+handle(#postback{message = {delete_content, Args}}, Context) ->
+    case m_import_feed:delete_content(proplists:get_value(id, Args), Context) of
         {ok, Counts} ->
-            z_render:dialog(?__("Imported content deleted", C),
-                "_admin_import_feed_delete_result.tpl", [{counts, Counts}], C);
-        {error, Reason} -> failure(Reason, C)
+            z_render:dialog(
+                ?__("Imported content deleted", Context),
+                "_admin_import_feed_delete_result.tpl",
+                [{counts, Counts}],
+                Context);
+        {error, Reason} ->
+            failure(Reason, Context)
     end;
-handle(#postback{message = {delete_feed_dialog, Args}}, C) ->
-    case m_import_feed:get(proplists:get_value(id, Args), C) of
-        {ok, Feed} -> z_render:dialog(?__("Delete feed?", C),
-            "_admin_import_feed_delete_dialog.tpl", [{feed, Feed}], C);
-        {error, Reason} -> failure(Reason, C)
+handle(#postback{message = {delete_feed_dialog, Args}}, Context) ->
+    case m_import_feed:get(proplists:get_value(id, Args), Context) of
+        {ok, Feed} ->
+            z_render:dialog(
+                ?__("Delete feed?", Context),
+                "_admin_import_feed_delete_dialog.tpl",
+                [{feed, Feed}],
+                Context);
+        {error, Reason} ->
+            failure(Reason, Context)
     end;
-handle(#submit{message = {delete_feed, Args}}, C) ->
-    DeleteContent = z_context:get_q(<<"delete_content">>, C) =:= <<"1">>,
-    case m_import_feed:delete_feed(proplists:get_value(id, Args), DeleteContent, C) of
+handle(#submit{message = {delete_feed, Args}}, Context) ->
+    DeleteContent = z_context:get_q(<<"delete_content">>, Context) =:= <<"1">>,
+    case m_import_feed:delete_feed(proplists:get_value(id, Args), DeleteContent, Context) of
         {ok, Counts} ->
-            z_render:dialog(?__("Feed deleted", C), "_admin_import_feed_delete_result.tpl",
-                [{counts, Counts}, {feed_deleted, true}, {delete_content, DeleteContent}], C);
-        {error, Reason} -> failure(Reason, C)
+            z_render:dialog(
+                ?__("Feed deleted", Context),
+                "_admin_import_feed_delete_result.tpl",
+                [
+                    {counts, Counts},
+                    {feed_deleted, true},
+                    {delete_content, DeleteContent}
+                ],
+                Context);
+        {error, Reason} ->
+            failure(Reason, Context)
     end;
-handle(_, C) -> C.
+handle(_, Context) -> Context.
 
-result(ok, C) -> z_render:wire({reload, []}, C);
-result({error, Reason}, C) -> failure(Reason, C).
-failure(Reason, C) ->
-    Msg = m_import_feed:error_message(Reason, C),
-    z_render:growl_error(z_html:escape(Msg), C).
+result(ok, Context) ->
+    z_render:wire({reload, []}, Context);
+result({error, Reason}, Context) ->
+    failure(Reason, Context).
+failure(Reason, Context) ->
+    Msg = m_import_feed:error_message(Reason, Context),
+    z_render:growl_error(z_html:escape(Msg), Context).

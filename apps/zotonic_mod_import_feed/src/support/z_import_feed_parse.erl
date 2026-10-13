@@ -1,5 +1,6 @@
 %% @copyright 2026 Marc Worrell
 %% @doc RSS 2, RDF/RSS 1 and Atom normalization without creating XML-name atoms.
+%% @end
 
 %% Copyright 2026 Marc Worrell
 %%
@@ -16,10 +17,12 @@
 %% limitations under the License.
 
 -module(z_import_feed_parse).
+
 -define(MAX_FEED_BYTES, 4 * 1024 * 1024).
 -define(MAX_ENTRIES, 100).
 -define(MAX_IDENTITY_LENGTH, 2048).
 -define(ZOTONIC_RESOURCE_REL, <<"https://zotonic.com/rel/resource">>).
+
 -export([parse/2, discover/2, discover/3, html_links/2, identity/3, date/1, images/2, image_variants/2]).
 
 -spec parse(Data, Url) -> {ok, map()} | {error, term()} when
@@ -53,12 +56,12 @@ parse_root(_, _, _) -> {error, not_feed}.
 feed(Channel, Nodes, Kind, Url) ->
     Base = base(Channel, Url),
     Links = links(Channel, Base),
-    Entries = [entry(N, Kind, Base, Url) || N <- lists:sublist(Nodes, ?MAX_ENTRIES)],
+    Entries = [entry(ChildNode, Kind, Base, Url) || ChildNode <- lists:sublist(Nodes, ?MAX_ENTRIES)],
     IsZotonic = case {Kind, Entries} of
         {rss, _} -> false;
         {atom, []} -> undefined;
         {atom, _} ->
-            case lists:any(fun(E) -> is_binary(maps:get(zotonic_export, E)) end, Entries) of
+            case lists:any(fun(Entry) -> is_binary(maps:get(zotonic_export, Entry)) end, Entries) of
                 true -> true;
                 false when length(Nodes) > ?MAX_ENTRIES -> undefined;
                 false -> false
@@ -66,7 +69,7 @@ feed(Channel, Nodes, Kind, Url) ->
     end,
     {ok, #{url => Url, title => value(<<"title">>, Channel),
         website => case Kind of atom -> alternate(Links); rss -> absolute(value(<<"link">>, Channel), Base) end,
-        hubs => [U || {<<"hub">>, U} <- Links],
+        hubs => [LinkUrl || {<<"hub">>, LinkUrl} <- Links],
         entries => Entries, is_zotonic_feed => IsZotonic,
         truncated => length(Nodes) > ?MAX_ENTRIES}}.
 
@@ -78,12 +81,12 @@ entry(Node, Kind, ParentBase, FeedUrl) ->
     end,
     Guid = first([value(<<"id">>, Node), value(<<"guid">>, Node), attr(<<"rdf:about">>, Node)]),
     Body = first([value(<<"encoded">>, Node), content(Node), value(<<"description">>, Node)]),
-    Tags = [first([attr(<<"term">>, N), text(N)]) || N <- children(<<"category">>, Node)],
-    Enclosures = [absolute(first([attr(<<"url">>, N), attr(<<"href">>, N)]), Base)
-        || N = {Name, _, _} <- descendants(Node),
+    Tags = [first([attr(<<"term">>, ChildNode), text(ChildNode)]) || ChildNode <- children(<<"category">>, Node)],
+    Enclosures = [absolute(first([attr(<<"url">>, ChildNode), attr(<<"href">>, ChildNode)]), Base)
+        || ChildNode = {Name, _, _} <- descendants(Node),
            local(Name) =:= <<"enclosure">> orelse local(Name) =:= <<"thumbnail">>
-           orelse (local(Name) =:= <<"content">> andalso attr(<<"url">>, N) =/= <<>>)
-           orelse (local(Name) =:= <<"link">> andalso attr(<<"rel">>, N) =:= <<"enclosure">>)],
+           orelse (local(Name) =:= <<"content">> andalso attr(<<"url">>, ChildNode) =/= <<>>)
+           orelse (local(Name) =:= <<"link">> andalso attr(<<"rel">>, ChildNode) =:= <<"enclosure">>)],
     {Images, Aliases} = image_variants(Body, Base),
     #{uri => identity(Guid, Link, FeedUrl), guid => Guid, url => Link,
         title => value(<<"title">>, Node), body => Body,
@@ -91,8 +94,8 @@ entry(Node, Kind, ParentBase, FeedUrl) ->
         author => first([value(<<"creator">>, Node), author(Node)]),
         published => date(first([value(<<"published">>, Node), value(<<"pubdate">>, Node), value(<<"date">>, Node)])),
         modified => date(value(<<"updated">>, Node)),
-        tags => lists:usort([T || T <- Tags, T =/= <<>>]),
-        media => unique([maps:get(U, Aliases, U) || U <- Enclosures ++ Images, U =/= <<>>]),
+        tags => lists:usort([Tag || Tag <- Tags, Tag =/= <<>>]),
+        media => unique([maps:get(LinkUrl, Aliases, LinkUrl) || LinkUrl <- Enclosures ++ Images, LinkUrl =/= <<>>]),
         media_aliases => Aliases,
         zotonic_export => zotonic_export(Kind, Node, Base),
         raw => Node}.
@@ -100,10 +103,10 @@ entry(Node, Kind, ParentBase, FeedUrl) ->
 %% An explicit relation identifies a resource export; a generator name or JSON
 %% alternate alone is not sufficient (WordPress also advertises JSON).
 zotonic_export(atom, Node, Base) ->
-    case [U || N <- children(<<"link">>, Node),
-            attr(<<"rel">>, N) =:= ?ZOTONIC_RESOURCE_REL,
-            attr(<<"type">>, N) =:= <<"application/json">>,
-            U <- [absolute(attr(<<"href">>, N), Base)], U =/= <<>>] of
+    case [LinkUrl || ChildNode <- children(<<"link">>, Node),
+            attr(<<"rel">>, ChildNode) =:= ?ZOTONIC_RESOURCE_REL,
+            attr(<<"type">>, ChildNode) =:= <<"application/json">>,
+            LinkUrl <- [absolute(attr(<<"href">>, ChildNode), Base)], LinkUrl =/= <<>>] of
         [Url | _] -> Url;
         [] -> undefined
     end;
@@ -121,8 +124,8 @@ identity(Guid, _, FeedUrl) ->
     case uri_string:parse(Guid) of
         #{scheme := _} -> Guid;
         _ ->
-            #{scheme := S, host := H} = P = uri_string:parse(FeedUrl),
-            Origin = uri_string:recompose((maps:with([port], P))#{scheme => S, host => H, path => <<>>}),
+            #{scheme := Scheme, host := Host} = UrlParts = uri_string:parse(FeedUrl),
+            Origin = uri_string:recompose((maps:with([port], UrlParts))#{scheme => Scheme, host => Host, path => <<>>}),
             Hash = binary:encode_hex(crypto:hash(sha256, <<Origin/binary, 0, Guid/binary>>), lowercase),
             <<"urn:zotonic:feed:", Hash/binary>>
     end.
@@ -138,16 +141,16 @@ discover(Data, Url, Headers) ->
         {ok, Feed} -> {ok, [maps:with([url, title], Feed)]};
         _ ->
             {ok, Metadata} = z_url_metadata:fetch_data(Url, Headers, <<>>),
-            HeaderLinks = [A#{<<"href">> => absolute(maps:get(<<"href">>, A, <<>>), Url)}
-                || A <- maps:get(<<"alternate">>, z_url_metadata:p(links, Metadata), [])],
-            HtmlLinks = [(maps:from_list(A))#{<<"href">> => U}
-                || {A, U} <- html_links(Data, Url),
+            HeaderLinks = [Attributes#{<<"href">> => absolute(maps:get(<<"href">>, Attributes, <<>>), Url)}
+                || Attributes <- maps:get(<<"alternate">>, z_url_metadata:p(links, Metadata), [])],
+            HtmlLinks = [(maps:from_list(Attributes))#{<<"href">> => LinkUrl}
+                || {Attributes, LinkUrl} <- html_links(Data, Url),
                    lists:member(<<"alternate">>, binary:split(
-                       proplists:get_value(<<"rel">>, A, <<>>), <<" ">>, [global]))],
-            Found = [#{url => U, title => maps:get(<<"title">>, A, U)}
-                || #{<<"href">> := U} = A <- HeaderLinks ++ HtmlLinks,
-                   z_import_feed_http:url(U),
-                   lists:member(maps:get(<<"type">>, A, <<>>),
+                       proplists:get_value(<<"rel">>, Attributes, <<>>), <<" ">>, [global]))],
+            Found = [#{url => LinkUrl, title => maps:get(<<"title">>, Attributes, LinkUrl)}
+                || #{<<"href">> := LinkUrl} = Attributes <- HeaderLinks ++ HtmlLinks,
+                   z_import_feed_http:url(LinkUrl),
+                   lists:member(maps:get(<<"type">>, Attributes, <<>>),
                        [<<"application/rss+xml">>, <<"application/atom+xml">>, <<"application/rdf+xml">>])],
             case Found of [] -> {error, no_feeds}; _ -> {ok, lists:usort(Found)} end
     end.
@@ -157,9 +160,9 @@ html_links(Data, Url) ->
     case z_html_parse:parse(Data, #{mode => html, escape => false}) of
         {ok, Tree} ->
             Nodes = descendants(Tree),
-            Base = first([absolute(attr(<<"href">>, N), Url) || N = {<<"base">>, _, _} <- Nodes] ++ [Url]),
-            [{A, U} || {<<"link">>, A, _} <- Nodes,
-                U <- [absolute(proplists:get_value(<<"href">>, A, <<>>), Base)], U =/= <<>>];
+            Base = first([absolute(attr(<<"href">>, ChildNode), Url) || ChildNode = {<<"base">>, _, _} <- Nodes] ++ [Url]),
+            [{Attributes, LinkUrl} || {<<"link">>, Attributes, _} <- Nodes,
+                LinkUrl <- [absolute(proplists:get_value(<<"href">>, Attributes, <<>>), Base)], LinkUrl =/= <<>>];
         _ -> []
     end.
 
@@ -173,15 +176,15 @@ images(Html, Base) -> element(1, image_variants(Html, Base)).
 image_variants(Html, Base) ->
     case z_html_parse:parse(<<"<div>", Html/binary, "</div>">>, #{mode => html, escape => false}) of
         {ok, Tree} ->
-            Groups = lists:foldl(fun(N, Acc) ->
-                case image_candidates(N, Base) of
+            Groups = lists:foldl(fun(ChildNode, Acc) ->
+                case image_candidates(ChildNode, Base) of
                     [] -> Acc;
                     Candidates -> merge_image_group(Candidates, Acc)
                 end
-            end, [], [N || N = {<<"img">>, _, _} <- descendants(Tree)]),
-            {Urls, Aliases} = lists:foldl(fun(Candidates, {Us, As}) ->
+            end, [], [ChildNode || ChildNode = {<<"img">>, _, _} <- descendants(Tree)]),
+            {Urls, Aliases} = lists:foldl(fun(Candidates, {SelectedUrls, ImageAliases}) ->
                 {_, Largest} = lists:max(Candidates),
-                {[Largest | Us], lists:foldl(fun({_, U}, A) -> A#{U => Largest} end, As, Candidates)}
+                {[Largest | SelectedUrls], lists:foldl(fun({_, LinkUrl}, AliasMap) -> AliasMap#{LinkUrl => Largest} end, ImageAliases, Candidates)}
             end, {[], #{}}, Groups),
             {lists:reverse(Urls), Aliases};
         _ -> {[], #{}}
@@ -194,14 +197,14 @@ image_candidates(Node, Base) ->
     Default ++ lists:filtermap(fun(Candidate) ->
         Parts = re:split(string:trim(Candidate), <<"\\s+">>, [{return, binary}]),
         case Parts of
-            [U, Descriptor] -> srcset_candidate(U, Descriptor, Base);
-            [U] -> srcset_candidate(U, <<"1x">>, Base);
+            [LinkUrl, Descriptor] -> srcset_candidate(LinkUrl, Descriptor, Base);
+            [LinkUrl] -> srcset_candidate(LinkUrl, <<"1x">>, Base);
             _ -> false
         end
     end, binary:split(Set, <<",">>, [global])).
 
-srcset_candidate(U, Descriptor, Base) ->
-    case {absolute(U, Base), re:run(Descriptor, <<"^([0-9]+(?:\\.[0-9]+)?)(w|x)$">>,
+srcset_candidate(LinkUrl, Descriptor, Base) ->
+    case {absolute(LinkUrl, Base), re:run(Descriptor, <<"^([0-9]+(?:\\.[0-9]+)?)(w|x)$">>,
             [{capture, all_but_first, binary}])} of
         {<<>>, _} -> false;
         {Url, {match, [Number, Unit]}} ->
@@ -219,9 +222,9 @@ srcset_candidate(U, Descriptor, Base) ->
 %% Repeated images sometimes expose different subsets of the same srcset.
 %% Merge overlapping candidate sets before choosing, avoiding duplicate downloads.
 merge_image_group(Candidates, Groups) ->
-    URLs = [U || {_, U} <- Candidates],
-    {Overlap, Other} = lists:partition(fun(G) ->
-        lists:any(fun({_, U}) -> lists:member(U, URLs) end, G)
+    URLs = [LinkUrl || {_, LinkUrl} <- Candidates],
+    {Overlap, Other} = lists:partition(fun(Group) ->
+        lists:any(fun({_, LinkUrl}) -> lists:member(LinkUrl, URLs) end, Group)
     end, Groups),
     case Overlap of
         [] -> Groups ++ [Candidates];
@@ -238,53 +241,53 @@ date(Value) ->
             nomatch -> rss_date(Value)
         end
     of
-        {{_, _, _}, {_, _, _}} = DT -> DT;
+        {{_, _, _}, {_, _, _}} = DateTime -> DateTime;
         _ -> undefined
     catch _:_ -> undefined end.
 
 rss_date(Value) ->
-    DT = httpd_util:convert_request_date(binary_to_list(Value)),
+    DateTime = httpd_util:convert_request_date(binary_to_list(Value)),
     case re:run(Value, <<"([+-])([0-9]{2})([0-9]{2})$">>, [{capture, all_but_first, binary}]) of
-        {match, [Sign, H, M]} ->
-            Offset = (binary_to_integer(H) * 60 + binary_to_integer(M)) * 60,
+        {match, [Sign, Hours, Minutes]} ->
+            Offset = (binary_to_integer(Hours) * 60 + binary_to_integer(Minutes)) * 60,
             Delta = case Sign of <<"+">> -> -Offset; _ -> Offset end,
-            calendar:gregorian_seconds_to_datetime(calendar:datetime_to_gregorian_seconds(DT) + Delta);
-        nomatch -> DT
+            calendar:gregorian_seconds_to_datetime(calendar:datetime_to_gregorian_seconds(DateTime) + Delta);
+        nomatch -> DateTime
     end.
 
 content(Node) ->
     case children(<<"content">>, Node) of
-        [{_, A, C} = N | _] ->
-            case proplists:get_value(<<"type">>, A) of
-                <<"xhtml">> -> iolist_to_binary([z_html_parse:to_html(X) || X <- C]);
-                _ -> text(N)
+        [{_, Attributes, Children} = ChildNode | _] ->
+            case proplists:get_value(<<"type">>, Attributes) of
+                <<"xhtml">> -> iolist_to_binary([z_html_parse:to_html(Child) || Child <- Children]);
+                _ -> text(ChildNode)
             end;
         _ -> <<>>
     end.
 
 author(Node) ->
     case children(<<"author">>, Node) of
-        [N | _] -> first([value(<<"name">>, N), text(N)]);
+        [ChildNode | _] -> first([value(<<"name">>, ChildNode), text(ChildNode)]);
         _ -> <<>>
     end.
 base(Node, Parent) -> first([absolute(attr(<<"xml:base">>, Node), Parent), Parent]).
-absolute(U, B) -> z_import_feed_http:resolve(U, B).
+absolute(LinkUrl, BaseUrl) -> z_import_feed_http:resolve(LinkUrl, BaseUrl).
 local(Name) -> lists:last(binary:split(Name, <<":">>, [global])).
-children(Name, {_, _, Cs}) -> [N || N = {Tag, _, _} <- Cs, local(Tag) =:= Name].
-value(Name, Node) -> first([text(N) || N <- children(Name, Node)]).
-attr(Name, {_, A, _}) -> proplists:get_value(Name, A, <<>>).
-text({_, _, C}) -> iolist_to_binary([text(X) || X <- C]);
-text(B) when is_binary(B) -> B;
+children(Name, {_, _, Children}) -> [ChildNode || ChildNode = {Tag, _, _} <- Children, local(Tag) =:= Name].
+value(Name, Node) -> first([text(ChildNode) || ChildNode <- children(Name, Node)]).
+attr(Name, {_, Attributes, _}) -> proplists:get_value(Name, Attributes, <<>>).
+text({_, _, Children}) -> iolist_to_binary([text(Child) || Child <- Children]);
+text(Text) when is_binary(Text) -> Text;
 text(_) -> <<>>.
 first([]) -> <<>>;
 first([<<>> | Rest]) -> first(Rest);
 first([undefined | Rest]) -> first(Rest);
-first([V | _]) -> V.
-descendants({_, _, C} = N) -> [N | lists:append([descendants(X) || X <- C])];
+first([Value | _]) -> Value.
+descendants({_, _, Children} = ChildNode) -> [ChildNode | lists:append([descendants(Child) || Child <- Children])];
 descendants(_) -> [].
-links(N, B) -> [{first([attr(<<"rel">>, L), <<"alternate">>]), absolute(attr(<<"href">>, L), B)}
-    || L <- children(<<"link">>, N)].
-alternate(Ls) -> first([U || {<<"alternate">>, U} <- Ls]).
-unique(L) -> lists:reverse(element(2, lists:foldl(fun(U, {Seen, Acc}) ->
-    case maps:is_key(U, Seen) of true -> {Seen, Acc}; false -> {Seen#{U => true}, [U | Acc]} end
-end, {#{}, []}, L))).
+links(Node, BaseUrl) -> [{first([attr(<<"rel">>, LinkNode), <<"alternate">>]), absolute(attr(<<"href">>, LinkNode), BaseUrl)}
+    || LinkNode <- children(<<"link">>, Node)].
+alternate(Links) -> first([LinkUrl || {<<"alternate">>, LinkUrl} <- Links]).
+unique(Urls) -> lists:reverse(element(2, lists:foldl(fun(Url, {Seen, Acc}) ->
+    case maps:is_key(Url, Seen) of true -> {Seen, Acc}; false -> {Seen#{Url => true}, [Url | Acc]} end
+end, {#{}, []}, Urls))).

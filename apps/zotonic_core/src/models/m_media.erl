@@ -44,7 +44,7 @@ A medium record has minimally the following properties, other properties can be 
 | id | Id of the medium record, equal to the page id. | `512` |
 | filename | Filename and path of the uploaded file, relative to the archive directory. | `<<\"2009/10/20/zotonic-datamodel.jpg\">>` |
 | rootname | Root name of the filename. | `<<\"zotonic-datamodel\">>` |
-| original_filename | Filename as suggested by the user agent when uploading the file. Can contain illegal characters. | `<<\"Zotonic-datamodel.jpg\">>` |
+| original_filename | Filename as suggested by the user agent when uploading the file. Directory paths are removed and unsafe characters replaced with underscores. The root name is limited to 80 Unicode characters; the extension is preserved. | `<<\"Zotonic-datamodel.jpg\">>` |
 | mime | Mime type of the medium. | `<<\"image/jpeg\">>` |
 | width | Width in pixels. | `536` |
 | height | Height in pixels. | `737` |
@@ -448,7 +448,7 @@ maybe_duplicate_file(#{ <<"filename">> := Filename, <<"is_deletable_file">> := t
         {ok, NewFile} ->
             RootName = z_string:truncatechars(
                 filename:rootname(filename:basename(NewFile)),
-                ?MEDIA_MAX_ROOTNAME_LENGTH),
+                ?MEDIA_MAX_ROOTNAME_LENGTH, <<>>),
             Ms2 = Ms#{
                 <<"filename">> => NewFile,
                 <<"rootname">> => RootName,
@@ -1552,6 +1552,17 @@ check_medium_props(Ps) ->
         #{},
         Ps).
 
+%% Sanitize and bound the stored original filename at the database boundary.
+%% Strip Unix and Windows paths; preserve Unicode letters, marks and numbers.
+check_medium_prop(<<"original_filename">>, Filename) when is_binary(Filename); is_list(Filename) ->
+    Utf8Filename = z_string:sanitize_utf8(z_convert:to_binary(Filename)),
+    Basename = filename:basename(binary:replace(Utf8Filename, <<"\\">>, <<"/">>, [global])),
+    OriginalFilename = re:replace(Basename, <<"[^\\p{L}\\p{M}\\p{N} ._()-]">>, <<"_">>,
+        [unicode, global, {return, binary}]),
+    RootName = filename:rootname(OriginalFilename),
+    Extension = filename:extension(OriginalFilename),
+    TruncatedRoot = string:slice(RootName, 0, ?MEDIA_MAX_ROOTNAME_LENGTH),
+    <<TruncatedRoot/binary, Extension/binary>>;
 check_medium_prop(<<"width">>, N) when not is_integer(N) -> 0;
 check_medium_prop(<<"height">>, N) when not is_integer(N) -> 0;
 check_medium_prop(B, P) when is_binary(B) -> P.

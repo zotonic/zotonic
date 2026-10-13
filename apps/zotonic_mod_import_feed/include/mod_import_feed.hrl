@@ -1,3 +1,5 @@
+%% Observer contracts: zotonic_mod_import_feed_observer.
+%% Include with -include_lib("zotonic_mod_import_feed/include/mod_import_feed.hrl").
 %% First notification, before any resource or medium is written.
 %% Return undefined for the default importer, {ok, Id} after importing the item,
 %% {ok, Id, #{SourceURI => DependentId}} to also track dependent resources,

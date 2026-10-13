@@ -1,5 +1,6 @@
 %% @copyright 2026 Marc Worrell
 %% @doc Optional WordPress REST enrichment; RSS remains usable if REST is disabled.
+%% @end
 
 %% Copyright 2026 Marc Worrell
 %%
@@ -36,27 +37,27 @@ enrich(Entry, Context) ->
             end
     end.
 
-find_endpoint(Entry, C) ->
+find_endpoint(Entry, Context) ->
     case endpoint(maps:get(guid, Entry, <<>>)) of
         undefined ->
             case maps:get(url, Entry, <<>>) of
                 <<>> -> undefined;
-                Url -> discover_endpoint(Url, C)
+                Url -> discover_endpoint(Url, Context)
             end;
         Url -> Url
     end.
 
-discover_endpoint(Url, C) ->
-    case z_import_feed_http:get(Url, C) of
-        {ok, {Final, Headers, _, Html}} ->
-            {ok, Metadata} = z_url_metadata:fetch_data(Final, Headers, Html),
+discover_endpoint(Url, Context) ->
+    case z_import_feed_http:get(Url, Context) of
+        {ok, {FinalUrl, Headers, _, Html}} ->
+            {ok, Metadata} = z_url_metadata:fetch_data(FinalUrl, Headers, Html),
             Links = maps:get(<<"alternate">>, z_url_metadata:p(links, Metadata), []),
-            Posts = [U || #{<<"type">> := <<"application/json">>, <<"href">> := Href} <- Links,
-                U <- [z_import_feed_http:resolve(Href, z_convert:to_binary(Final))],
-                binary:match(U, <<"wp/v2/posts/">>) =/= nomatch, z_import_feed_http:url(U)],
+            Posts = [PostUrl || #{<<"type">> := <<"application/json">>, <<"href">> := Href} <- Links,
+                PostUrl <- [z_import_feed_http:resolve(Href, z_convert:to_binary(FinalUrl))],
+                binary:match(PostUrl, <<"wp/v2/posts/">>) =/= nomatch, z_import_feed_http:url(PostUrl)],
             case Posts of
-                [Api | _] ->
-                    Parts = uri_string:parse(Api),
+                [ApiUrl | _] ->
+                    Parts = uri_string:parse(ApiUrl),
                     Query = uri_string:dissect_query(maps:get(query, Parts, <<>>)),
                     uri_string:recompose(Parts#{query => uri_string:compose_query(
                         [{<<"_embed">>, <<"1">>} | proplists:delete(<<"_embed">>, Query)])});
@@ -70,17 +71,17 @@ discover_endpoint(Url, C) ->
 -spec endpoint(Guid) -> binary() | undefined when Guid :: binary().
 endpoint(Guid) ->
     try uri_string:parse(Guid) of
-        #{scheme := _, host := _, query := Query} = P ->
+        #{scheme := _, host := _, query := Query} = UrlParts ->
             case proplists:get_value(<<"p">>, uri_string:dissect_query(Query)) of
                 Id when is_binary(Id), byte_size(Id) > 0 ->
                     case re:run(Id, <<"^[0-9]+$">>, [{capture, none}]) of
                         match ->
-                            Path = maps:get(path, P, <<"/">>),
+                            Path = maps:get(path, UrlParts, <<"/">>),
                             Root = filename:dirname(binary_to_list(Path)),
                             %% dirname('/') is '/', dirname('/blog/') is '/blog'.
                             ApiPath = iolist_to_binary([string:trim(Root, trailing, "/"),
                                 "/wp-json/wp/v2/posts/", Id]),
-                            case uri_string:recompose((maps:without([fragment, userinfo], P))#{
+                            case uri_string:recompose((maps:without([fragment, userinfo], UrlParts))#{
                                 path => ApiPath, query => <<"_embed=1">>}) of
                                 Url when is_binary(Url) -> Url;
                                 _ -> undefined
@@ -97,20 +98,20 @@ merge(Entry, Post, Content) ->
     Authors = maps:get(<<"author">>, Embedded, []),
     Media = maps:get(<<"wp:featuredmedia">>, Embedded, []),
     Author = case Authors of [#{<<"name">> := Name} | _] -> Name; _ -> maps:get(author, Entry) end,
-    Featured = [U || #{<<"source_url">> := U} <- Media, z_import_feed_http:url(U)],
+    Featured = [MediaUrl || #{<<"source_url">> := MediaUrl} <- Media, z_import_feed_http:url(MediaUrl)],
     {Images, BodyAliases} = z_import_feed_parse:image_variants(
         <<(maps:get(body, Entry))/binary, Content/binary>>, maps:get(url, Entry)),
     FeaturedAliases = lists:foldl(fun featured_aliases/2, #{}, Media),
     Aliases = maps:merge(maps:map(fun(_, Selected) ->
         maps:get(Selected, FeaturedAliases, Selected)
     end, BodyAliases), FeaturedAliases),
-    OtherMedia = lists:usort([maps:get(U, Aliases, U) || U <- maps:get(media, Entry) ++ Images, U =/= <<>>]),
+    OtherMedia = lists:usort([maps:get(MediaUrl, Aliases, MediaUrl) || MediaUrl <- maps:get(media, Entry) ++ Images, MediaUrl =/= <<>>]),
     Published = utc(maps:get(<<"date_gmt">>, Post, <<>>)),
     Modified = utc(maps:get(<<"modified_gmt">>, Post, <<>>)),
     Entry#{body => Content, author => Author,
         published => fallback(Published, maps:get(published, Entry)),
         modified => fallback(Modified, maps:get(modified, Entry)),
-        media => lists:sublist(Featured ++ [U || U <- OtherMedia, not lists:member(U, Featured)], ?MAX_MEDIA_ITEMS),
+        media => lists:sublist(Featured ++ [MediaUrl || MediaUrl <- OtherMedia, not lists:member(MediaUrl, Featured)], ?MAX_MEDIA_ITEMS),
         media_aliases => Aliases,
         raw => #{feed => maps:get(raw, Entry), wordpress => Post}}.
 
@@ -118,12 +119,12 @@ featured_aliases(#{<<"source_url">> := Original} = Media, Acc) ->
     Details = maps:get(<<"media_details">>, Media, #{}),
     Sizes = maps:values(maps:get(<<"sizes">>, Details, #{})),
     lists:foldl(fun
-        (#{<<"source_url">> := U}, A) -> A#{U => Original};
-        (_, A) -> A
+        (#{<<"source_url">> := MediaUrl}, Aliases) -> Aliases#{MediaUrl => Original};
+        (_, Aliases) -> Aliases
     end, Acc#{Original => Original}, Sizes);
 featured_aliases(_, Acc) -> Acc.
 
 utc(<<>>) -> undefined;
-utc(B) -> z_import_feed_parse:date(<<B/binary, "Z">>).
-fallback(undefined, B) -> B;
-fallback(A, _) -> A.
+utc(DateTime) -> z_import_feed_parse:date(<<DateTime/binary, "Z">>).
+fallback(undefined, Default) -> Default;
+fallback(Value, _) -> Value.

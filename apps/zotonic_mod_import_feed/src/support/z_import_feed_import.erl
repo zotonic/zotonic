@@ -1,6 +1,7 @@
 %% @copyright 2026 Marc Worrell
 %% @doc Normalize, notify and import one entry. Identity locks and mapping writes
 %% share the resource transaction, so retrying an interrupted import is safe.
+%% @end
 
 %% Copyright 2026 Marc Worrell
 %%
@@ -24,144 +25,144 @@
 -export([prepare/3, run/3, run/4, local_body/3, normalize_links/3]).
 
 -spec prepare(map(), map(), z:context()) -> {map(), [map()]}.
-prepare(E, F, Context) ->
-    {ok, Patterns} = z_import_feed_cleanup:compile(maps:get(remove_patterns, F, <<>>)),
-    Cat = category(E, F, Context),
-    Common = (copyright_props(F, Context))#{<<"is_published">> => true,
-                                            <<"is_authoritative">> => maps:get(is_authoritative, F),
-                                            <<"content_group_id">> => maps:get(content_group_id, F)},
-    Props = maps:filter(fun(_, V) -> V =/= undefined end,
+prepare(Entry, FeedSettings, Context) ->
+    {ok, Patterns} = z_import_feed_cleanup:compile(maps:get(remove_patterns, FeedSettings, <<>>)),
+    CategoryId = category(Entry, FeedSettings, Context),
+    Common = (copyright_props(FeedSettings, Context))#{<<"is_published">> => true,
+                                            <<"is_authoritative">> => maps:get(is_authoritative, FeedSettings),
+                                            <<"content_group_id">> => maps:get(content_group_id, FeedSettings)},
+    Props = maps:filter(fun(_, Value) -> Value =/= undefined end,
                         Common#{
-                          <<"category_id">> => Cat, <<"title">> => z_html:unescape(maps:get(title, E)),
-                          <<"body">> => z_html:abs_links(z_import_feed_cleanup:html(maps:get(body, E), Patterns), maps:get(url, E)),
-                          <<"summary">> => z_import_feed_cleanup:text(z_html:unescape(z_html:strip(maps:get(summary, E))), Patterns),
-                          <<"website">> => maps:get(url, E), <<"author">> => maps:get(author, E),
-                          <<"publication_start">> => maps:get(published, E),
-                          <<"feed_modified">> => maps:get(modified, E)}),
-    Media = lists:sublist([U || U <- maps:get(media, E), U =/= maps:get(uri, E)], ?MAX_MEDIA_ITEMS),
-    {Medium, Dependents} = case {maps:get(media_mode, F), Media} of
-                               {<<"attached">>, [U | _]} ->
-                                   {U, []};
+                          <<"category_id">> => CategoryId, <<"title">> => z_html:unescape(maps:get(title, Entry)),
+                          <<"body">> => z_html:abs_links(z_import_feed_cleanup:html(maps:get(body, Entry), Patterns), maps:get(url, Entry)),
+                          <<"summary">> => z_import_feed_cleanup:text(z_html:unescape(z_html:strip(maps:get(summary, Entry))), Patterns),
+                          <<"website">> => maps:get(url, Entry), <<"author">> => maps:get(author, Entry),
+                          <<"publication_start">> => maps:get(published, Entry),
+                          <<"feed_modified">> => maps:get(modified, Entry)}),
+    Media = lists:sublist([MediaUri || MediaUri <- maps:get(media, Entry), MediaUri =/= maps:get(uri, Entry)], ?MAX_MEDIA_ITEMS),
+    {Medium, Dependents} = case {maps:get(media_mode, FeedSettings), Media} of
+                               {<<"attached">>, [MediaUri | _]} ->
+                                   {MediaUri, []};
                                {<<"dependent">>, _} ->
-                                   MediaItemsProps = [prepare_media_props(U, E, Common, Context) || U <- Media],
+                                   MediaItemsProps = [prepare_media_props(MediaUri, Entry, Common, Context) || MediaUri <- Media],
                                    {undefined, MediaItemsProps};
                                _ ->
                                    {undefined, []}
                            end,
-    Edges = maps:get(connections, F) ++ [{m_rsc:rid(depiction, Context), maps:get(uri, D)} || D <- Dependents],
-    Item = #{uri => maps:get(uri, E), props => Props, edges => Edges, medium => Medium,
-        media_aliases => maps:get(media_aliases, E, #{})},
-    z_import_feed_native:prepare(E, Item, Dependents, F, Context).
+    Edges = maps:get(connections, FeedSettings) ++ [{m_rsc:rid(depiction, Context), maps:get(uri, Dependent)} || Dependent <- Dependents],
+    Item = #{uri => maps:get(uri, Entry), props => Props, edges => Edges, medium => Medium,
+        media_aliases => maps:get(media_aliases, Entry, #{})},
+    z_import_feed_native:prepare(Entry, Item, Dependents, FeedSettings, Context).
 
-prepare_media_props(Uri, E, Common, Context) ->
+prepare_media_props(Uri, Entry, Common, Context) ->
     GuessedMime = z_media_identify:guess_mime(Uri),
-    GuessedCat = m_media:mime_to_category(GuessedMime),
-    GuessedCat1 = case m_category:is_a(GuessedCat, media, Context) of
-                      true -> GuessedCat;
+    GuessedCategory = m_media:mime_to_category(GuessedMime),
+    MediaCategory = case m_category:is_a(GuessedCategory, media, Context) of
+                      true -> GuessedCategory;
                       false -> media
                   end,
     #{uri => Uri,
       medium => Uri,
-      props => Common#{<<"category_id">> => m_rsc:rid(GuessedCat1, Context),
-                       <<"title">> => z_html:unescape(maps:get(title, E)),
+      props => Common#{<<"category_id">> => m_rsc:rid(MediaCategory, Context),
+                       <<"title">> => z_html:unescape(maps:get(title, Entry)),
                        <<"is_dependent">> => true}
      }.
 
 %% Defaults apply to the article and its dependent media before observers run.
 %% Empty defaults leave resource-level fallback behavior to mod_copyright.
-copyright_props(F, C) ->
-    case z_module_manager:active(mod_copyright, C) of
+copyright_props(FeedSettings, Context) ->
+    case z_module_manager:active(mod_copyright, Context) of
         false -> #{};
         true -> maps:from_list([
             {atom_to_binary(Key, utf8), Value}
             || Key <- [rights, rights_attribution, rights_year],
-               Value <- [maps:get(Key, F, undefined)],
+               Value <- [maps:get(Key, FeedSettings, undefined)],
                is_binary(Value), Value =/= <<>>
         ])
     end.
 
 -spec run(map(), map(), z:context()) -> imported | updated | skipped | {error, term()}.
-run(E, F, C) ->
-    run(E, F, false, C).
+run(Entry, FeedSettings, Context) ->
+    run(Entry, FeedSettings, false, Context).
 
 %% @doc Explicit refresh bypasses the checksum, while retaining deletion tombstones.
 -spec run(map(), map(), boolean(), z:context()) -> imported | updated | skipped | {error, term()}.
 run(#{uri := undefined}, _, _, _) -> {error, missing_identity};
-run(E, F, Force, C) ->
-    {Item, Ds} = prepare(E, F, C),
+run(Entry, FeedSettings, Force, Context) ->
+    {Item, Dependents} = prepare(Entry, FeedSettings, Context),
     Uri = maps:get(uri, Item),
-    Hash = crypto:hash(sha256, term_to_binary({Item, Ds})),
-    FeedId = maps:get(id, F),
-    Result = z_db:transaction(fun(Tx) ->
+    Hash = crypto:hash(sha256, term_to_binary({Item, Dependents})),
+    FeedId = maps:get(id, FeedSettings),
+    Result = z_db:transaction(fun(TransactionContext) ->
         %% A site-wide transaction lock also orders article/dependent locks.
         %% It prevents deadlocks for two feeds importing shared media in reverse order.
-        z_db:q("select pg_advisory_xact_lock(hashtext(current_schema()), 194815)", Tx),
+        z_db:q("select pg_advisory_xact_lock(hashtext(current_schema()), 194815)", TransactionContext),
         case z_db:q1("select checksum from import_feed_item where feed_id=$1 and uri=$2 and status='ok'",
-                [FeedId, Uri], Tx) of
+                [FeedId, Uri], TransactionContext) of
             Hash when not Force -> skipped;
             _ ->
-                case deleted(Uri, Tx) of
-                    true -> record(FeedId, Uri, <<"article">>, <<"deleted">>, Hash, undefined, Tx), skipped;
+                case deleted(Uri, TransactionContext) of
+                    true -> record(FeedId, Uri, <<"article">>, <<"deleted">>, Hash, undefined, TransactionContext), skipped;
                     false ->
-                        Notice = #import_feed_item{item = Item, dependents = Ds,
-                            feed = maps:without([user_groups, lease_token], F), raw = maps:get(raw, E)},
-                        Existing = lookup(Uri, Tx),
-                        case z_notifier:first(Notice, Tx) of
+                        Notice = #import_feed_item{item = Item, dependents = Dependents,
+                            feed = maps:without([user_groups, lease_token], FeedSettings), raw = maps:get(raw, Entry)},
+                        Existing = lookup(Uri, TransactionContext),
+                        case z_notifier:first(Notice, TransactionContext) of
                             undefined ->
-                                {Id, Imported} = import(Item, Ds, Tx),
-                                finish(Id, Imported, Existing, Uri, FeedId, Hash, Tx);
-                            {ok, Id} -> finish(Id, #{}, Existing, Uri, FeedId, Hash, Tx);
+                                {Id, Imported} = import(Item, Dependents, TransactionContext),
+                                finish(Id, Imported, Existing, Uri, FeedId, Hash, TransactionContext);
+                            {ok, Id} -> finish(Id, #{}, Existing, Uri, FeedId, Hash, TransactionContext);
                             {ok, Id, Imported} when is_map(Imported) ->
-                                finish(Id, Imported, Existing, Uri, FeedId, Hash, Tx);
+                                finish(Id, Imported, Existing, Uri, FeedId, Hash, TransactionContext);
                             {skip, Reason} ->
-                                record(FeedId, Uri, <<"article">>, <<"skipped">>, Hash, Reason, Tx), skipped;
+                                record(FeedId, Uri, <<"article">>, <<"skipped">>, Hash, Reason, TransactionContext), skipped;
                             {error, Reason} -> throw({import_error, Reason});
                             _ -> throw({import_error, invalid_observer_result})
                         end
                 end
         end
-    end, C),
+    end, Context),
     case Result of
         {rollback, Reason} ->
-            record(FeedId, Uri, <<"article">>, <<"error">>, undefined, Reason, C),
+            record(FeedId, Uri, <<"article">>, <<"error">>, undefined, Reason, Context),
             {error, Reason};
         Other -> Other
     end.
 
-finish(Id, Imported, Existing, Uri, FeedId, Hash, C) ->
-    true = is_integer(Id) andalso z_acl:rsc_editable(Id, C),
-    remember(Uri, Id, C),
-    maps:foreach(fun(U, RId) ->
-        true = is_integer(RId) andalso z_acl:rsc_visible(RId, C),
-        remember(U, RId, C),
-        Kind = case m_rsc:is_a(RId, media, C) of true -> <<"media">>; false -> <<"resource">> end,
-        record(FeedId, U, Kind, <<"ok">>, undefined, undefined, C)
+finish(Id, Imported, Existing, Uri, FeedId, Hash, Context) ->
+    true = is_integer(Id) andalso z_acl:rsc_editable(Id, Context),
+    remember(Uri, Id, Context),
+    maps:foreach(fun(MediaUri, ResourceId) ->
+        true = is_integer(ResourceId) andalso z_acl:rsc_visible(ResourceId, Context),
+        remember(MediaUri, ResourceId, Context),
+        Kind = case m_rsc:is_a(ResourceId, media, Context) of true -> <<"media">>; false -> <<"resource">> end,
+        record(FeedId, MediaUri, Kind, <<"ok">>, undefined, undefined, Context)
     end, Imported),
-    record(FeedId, Uri, <<"article">>, <<"ok">>, Hash, undefined, C),
+    record(FeedId, Uri, <<"article">>, <<"ok">>, Hash, undefined, Context),
     case Existing of undefined -> imported; _ -> updated end.
 
 import(#{zotonic_export := _} = Item, _, Context) ->
     {Id, Imported} = z_import_feed_native:run(Item, lookup(maps:get(uri, Item), Context), Context),
-    lists:foreach(fun({P, O}) ->
-                          edge(Id, P, O, Context)
+    lists:foreach(fun({Predicate, Object}) ->
+                          edge(Id, Predicate, Object, Context)
                   end,
                   maps:get(default_connections, Item)),
     {Id, Imported};
-import(Item, Ds, Context) ->
+import(Item, Dependents, Context) ->
     %% Reuse media by source URI. Do not steal media from existing local resources.
-    Imported = lists:foldl(fun(D, Acc) ->
-                                   Uri = maps:get(uri, D),
+    Imported = lists:foldl(fun(Dependent, Acc) ->
+                                   Uri = maps:get(uri, Dependent),
                                    case deleted(Uri, Context) of
                                        true -> Acc;
                                        false ->
-                                           Id = upsert(D, Context),
-                                           ok = medium(Id, maps:get(medium, D), Context),
+                                           Id = upsert(Dependent, Context),
+                                           ok = medium(Id, maps:get(medium, Dependent), Context),
                                            remember(Uri, Id, Context),
                                            Acc#{Uri => Id}
                                    end
                            end,
                            #{},
-                           Ds),
+                           Dependents),
     Props = local_body(maps:get(props, Item), media_aliases(Item, Imported), Context),
     Item1 = Item#{props := Props},
     Id = upsert(Item1, Context),
@@ -176,12 +177,12 @@ import(Item, Ds, Context) ->
                 {error, Reason} -> throw({import_error, Reason})
             end
     end,
-    lists:foreach(fun ({P, O}) when is_integer(O) ->
-                          edge(Id, P, O, Context);
-                      ({P, U}) ->
-                          case maps:find(U, Imported) of
-                              {ok, O} ->
-                                  edge(Id, P, O, Context);
+    lists:foreach(fun ({Predicate, Object}) when is_integer(Object) ->
+                          edge(Id, Predicate, Object, Context);
+                      ({Predicate, MediaUri}) ->
+                          case maps:find(MediaUri, Imported) of
+                              {ok, Object} ->
+                                  edge(Id, Predicate, Object, Context);
                               error ->
                                   ok
                           end
@@ -202,17 +203,17 @@ media_aliases(Item, Imported) ->
 -spec local_body(Props, Imported, Context) -> map() when
     Props :: map(), Imported :: #{binary() => integer()}, Context :: z:context().
 local_body(#{<<"body">> := Body} = Props, Imported, Context) ->
-    Urls = maps:fold(fun(U, Id, Acc) ->
+    Urls = maps:fold(fun(MediaUri, Id, Acc) ->
                              case z_media_tag:url(Id, [], Context) of
                                  {ok, Local} when Local =/= <<>> ->
-                                     Acc#{U => Local};
+                                     Acc#{MediaUri => Local};
                                  _ ->
                                      Acc
                              end
                      end, #{}, Imported),
     case z_html_parse:parse(<<"<div>", Body/binary, "</div>">>, #{mode => html, escape => false}) of
         {ok, {_, _, Children}} ->
-            Html = iolist_to_binary([body_html(local_node(N, Imported, Urls, maps:get(<<"website">>, Props, <<>>))) || N <- Children]),
+            Html = iolist_to_binary([body_html(local_node(Node, Imported, Urls, maps:get(<<"website">>, Props, <<>>))) || Node <- Children]),
             Props#{<<"body">> := normalize_links(Html, maps:get(<<"website">>, Props, <<>>), Context)};
         _ ->
             Props
@@ -226,8 +227,8 @@ body_html(Node) -> z_html_parse:to_html(Node).
 
 %% WordPress wraps images in links to the original medium. Use a single embed
 %% for these wrappers, also allowing repair of previously stored placeholders.
-local_node({<<"a">>, Attrs, [{<<"img">>, _, _}]} = Node, Imported, Urls, Base) ->
-    case maps:get(proplists:get_value(<<"href">>, Attrs), Imported, undefined) of
+local_node({<<"a">>, Attributes, [{<<"img">>, _, _}]} = Node, Imported, Urls, Base) ->
+    case maps:get(proplists:get_value(<<"href">>, Attributes), Imported, undefined) of
         Id when is_integer(Id) -> media_embed(Id);
         undefined -> local_element(Node, Imported, Urls, Base)
     end;
@@ -246,11 +247,11 @@ media_embed(Id) ->
     {comment, iolist_to_binary([" z-media ", integer_to_binary(Id),
         " {\"size\":\"large\",\"align\":\"block\"} "])}.
 
-local_element({Tag, Attrs, Children}, Imported, Urls, Base) ->
-    Attrs1 = [{K, case lists:member(K, [<<"src">>, <<"href">>, <<"poster">>]) of
-                    true -> maps:get(V, Urls, V); false -> V end}
-        || {K, V} <- Attrs],
-    {Tag, Attrs1, [local_node(N, Imported, Urls, Base) || N <- Children]}.
+local_element({Tag, Attributes, Children}, Imported, Urls, Base) ->
+    Attrs1 = [{Attribute, case lists:member(Attribute, [<<"src">>, <<"href">>, <<"poster">>]) of
+                    true -> maps:get(Value, Urls, Value); false -> Value end}
+        || {Attribute, Value} <- Attributes],
+    {Tag, Attrs1, [local_node(Node, Imported, Urls, Base) || Node <- Children]}.
 
 %% @doc Remove image hyperlinks and resolve article links against the source.
 %% Only resources recorded as imported articles can become local destinations.
@@ -259,14 +260,14 @@ local_element({Tag, Attrs, Children}, Imported, Urls, Base) ->
 normalize_links(Body, Base, Context) ->
     case z_html_parse:parse(<<"<div>", Body/binary, "</div>">>, #{mode => html, escape => false}) of
         {ok, {_, _, Children}} ->
-            iolist_to_binary([body_html(N) || N <- link_nodes(Children, Base, Context)]);
+            iolist_to_binary([body_html(Node) || Node <- link_nodes(Children, Base, Context)]);
         _ -> Body
     end.
 
 link_nodes(Nodes, Base, Context) ->
     lists:flatmap(fun
-        ({<<"a">>, Attrs, Children}) ->
-            Href = proplists:get_value(<<"href">>, Attrs, <<>>),
+        ({<<"a">>, Attributes, Children}) ->
+            Href = proplists:get_value(<<"href">>, Attributes, <<>>),
             Resolved = z_import_feed_http:resolve(Href, Base),
             Content = link_nodes(Children, Base, Context),
             case image_link(Resolved) of
@@ -276,9 +277,9 @@ link_nodes(Nodes, Base, Context) ->
                         <<>> -> Href;
                         _ -> article_link(Resolved, Context)
                     end,
-                    [{<<"a">>, lists:keystore(<<"href">>, 1, Attrs, {<<"href">>, Link}), Content}]
+                    [{<<"a">>, lists:keystore(<<"href">>, 1, Attributes, {<<"href">>, Link}), Content}]
             end;
-        ({Tag, Attrs, Children}) -> [{Tag, Attrs, link_nodes(Children, Base, Context)}];
+        ({Tag, Attributes, Children}) -> [{Tag, Attributes, link_nodes(Children, Base, Context)}];
         (Node) -> [Node]
     end, Nodes).
 
@@ -299,7 +300,7 @@ article_link(Url, Context) ->
                 Page ->
                     Fragment = case maps:get(fragment, Parts, undefined) of
                         undefined -> <<>>;
-                        F -> <<"#", F/binary>>
+                        FragmentValue -> <<"#", FragmentValue/binary>>
                     end,
                     iolist_to_binary([Page, Fragment])
             end;
@@ -328,28 +329,28 @@ find_article_website(Source, [{Id} | Rest], Context) ->
         _ -> find_article_website(Source, Rest, Context)
     end.
 
-edge(Id, P, O, Context) ->
-    case m_edge:insert(Id, P, O, Context) of
+edge(Id, Predicate, Object, Context) ->
+    case m_edge:insert(Id, Predicate, Object, Context) of
         {ok, _} -> ok;
-        {error, R} -> throw({import_error, {edge, R}})
+        {error, Reason} -> throw({import_error, {edge, Reason}})
     end.
 
-upsert(#{uri := Uri, props := P}, Context) ->
-    Authority = maps:get(<<"is_authoritative">>, P, false),
-    Props = P#{<<"uri">> => case Authority of
+upsert(#{uri := Uri, props := ItemProps} = Item, Context) ->
+    Authority = maps:get(<<"is_authoritative">>, ItemProps, false),
+    Props = ItemProps#{<<"uri">> => case Authority of
                                 true -> undefined;
                                 false -> Uri
                             end,
                <<"feed_source_uri">> => Uri},
     Result = case lookup(Uri, Context) of
                  undefined ->
-                     m_rsc:insert(Props, [is_import, {tz, <<"UTC">>}], Context);
+                     insert_item(Item, Props, Context);
                  Id ->
                      %% Only a resource already mapped by this importer may be authoritative.
                      Owned = z_db:q1("select rsc_id from import_feed_resource where uri=$1", [Uri], Context) =:= Id,
                      case Owned orelse not m_rsc:p(Id, is_authoritative, Context) of
                          true ->
-                             UpdateProps = case maps:get(<<"is_dependent">>, P, false) of
+                             UpdateProps = case maps:get(<<"is_dependent">>, ItemProps, false) of
                                                true ->
                                                    case m_rsc:is_a(Id, media, Context) of
                                                        true ->
@@ -366,65 +367,79 @@ upsert(#{uri := Uri, props := P}, Context) ->
                      end
              end,
     case Result of
-        {ok, Id1} ->
-            remember(Uri, Id1, Context), Id1;
-        {error, R} ->
-            throw({import_error, R})
+        {ok, ImportedId} ->
+            remember(Uri, ImportedId, Context), ImportedId;
+        {error, Reason} ->
+            throw({import_error, Reason})
     end.
+
+%% Let m_media identify new dependent media before inserting their resources.
+%% Keep the feed fetcher for its credential, redirect and download-size checks.
+insert_item(#{props := #{<<"is_dependent">> := true}, medium := Url}, Props, Context)
+    when is_binary(Url) ->
+    Upload = fetch_medium(Url, Context),
+    %% The URI category is a preview hint; identify the downloaded file itself.
+    MediaProps = maps:remove(<<"category_id">>, Props),
+    case m_media:insert_file(Upload, MediaProps#{<<"feed_medium_url">> => Url},
+            [is_import, {tz, <<"UTC">>}], Context) of
+        {ok, _} = Ok -> Ok;
+        {error, Reason} -> {error, {media, Reason}}
+    end;
+insert_item(_, Props, Context) ->
+    m_rsc:insert(Props, [is_import, {tz, <<"UTC">>}], Context).
 
 medium(_, undefined, _) -> ok;
 medium(Id, Url, Context) ->
     case m_rsc:p(Id, feed_medium_url, Context) of
-        Url ->
-            ok;
+        Url -> ok;
         _ ->
-            case z_import_feed_http:get(Url, ?MAX_MEDIA_BYTES, Context) of
-                {ok, {Final, _, _, Data}} ->
-                    #{path := Path} = uri_string:parse(z_convert:to_binary(Final)),
-                    Upload = #upload{filename = filename:basename(Path), data = Data},
-                    case m_media:replace_file(Upload, Id, #{<<"feed_medium_url">> => Url}, Context) of
-                        {ok, _} ->
-                            ok;
-                        {error, R} ->
-                            throw({import_error, {media, R}})
-                    end;
-                {error, R} ->
-                    throw({import_error, {media_fetch, R}})
+            Upload = fetch_medium(Url, Context),
+            case m_media:replace_file(Upload, Id, #{<<"feed_medium_url">> => Url}, Context) of
+                {ok, _} -> ok;
+                {error, Reason} -> throw({import_error, {media, Reason}})
             end
     end.
 
-lookup(Uri, C) ->
-    case z_db:q1("select rsc_id from import_feed_resource where uri=$1", [Uri], C) of
-        undefined -> m_rsc:rid(Uri, C);
+fetch_medium(Url, Context) ->
+    case z_import_feed_http:get(Url, ?MAX_MEDIA_BYTES, Context) of
+        {ok, {Final, _, _, Data}} ->
+            #{path := Path} = uri_string:parse(z_convert:to_binary(Final)),
+            #upload{filename = filename:basename(Path), data = Data};
+        {error, Reason} -> throw({import_error, {media_fetch, Reason}})
+    end.
+
+lookup(Uri, Context) ->
+    case z_db:q1("select rsc_id from import_feed_resource where uri=$1", [Uri], Context) of
+        undefined -> m_rsc:rid(Uri, Context);
         Id -> Id
     end.
-deleted(Uri, C) ->
-    z_db:q1("select count(*) from import_feed_resource where uri=$1 and rsc_id is null", [Uri], C) =:= 1.
-remember(Uri, Id, C) ->
+deleted(Uri, Context) ->
+    z_db:q1("select count(*) from import_feed_resource where uri=$1 and rsc_id is null", [Uri], Context) =:= 1.
+remember(Uri, Id, Context) ->
     z_db:q("insert into import_feed_resource(uri,rsc_id) values($1,$2)
-        on conflict(uri) do update set rsc_id=excluded.rsc_id", [Uri, Id], C), ok.
-record(FeedId, Uri, Kind, Status, Hash, Error, C) ->
-    Msg = case Error of undefined -> undefined; _ -> iolist_to_binary(io_lib:format("~0P", [Error, 8])) end,
+        on conflict(uri) do update set rsc_id=excluded.rsc_id", [Uri, Id], Context), ok.
+record(FeedId, Uri, Kind, Status, Hash, Error, Context) ->
+    Message = case Error of undefined -> undefined; _ -> iolist_to_binary(io_lib:format("~0P", [Error, 8])) end,
     z_db:q("insert into import_feed_item(feed_id,uri,kind,status,checksum,last_error)
         values($1,$2,$3,$4,$5,$6) on conflict(feed_id,uri) do update
         set status=excluded.status, checksum=excluded.checksum, last_error=excluded.last_error, modified=now()",
-        [FeedId, Uri, Kind, Status, Hash, Msg], C), ok.
+        [FeedId, Uri, Kind, Status, Hash, Message], Context), ok.
 
-category(E, #{guess_category := true, category_id := Default}, C) ->
-    Tags = [z_string:to_lower(T) || T <- maps:get(tags, E)],
-    Candidates = [Id || Cat <- m_category:tree_flat(C),
-        Id <- [proplists:get_value(id, Cat)], is_integer(Id),
-        not m_category:is_a(Id, meta, C),
-        lists:any(fun(T) -> lists:member(T, Tags) end,
-            [z_string:to_lower(z_convert:to_binary(m_rsc:p(Id, name, C))),
-             z_string:to_lower(z_trans:lookup_fallback(m_rsc:p(Id, title, C), C))])],
+category(Entry, #{guess_category := true, category_id := Default}, Context) ->
+    Tags = [z_string:to_lower(Tag) || Tag <- maps:get(tags, Entry)],
+    Candidates = [Id || Category <- m_category:tree_flat(Context),
+        Id <- [proplists:get_value(id, Category)], is_integer(Id),
+        not m_category:is_a(Id, meta, Context),
+        lists:any(fun(Tag) -> lists:member(Tag, Tags) end,
+            [z_string:to_lower(z_convert:to_binary(m_rsc:p(Id, name, Context))),
+             z_string:to_lower(z_trans:lookup_fallback(m_rsc:p(Id, title, Context), Context))])],
     case Candidates of
         [Id | _] -> Id;
         [] ->
             %% The configured category might have moved under meta since saving.
-            case m_category:is_a(Default, meta, C) of
-                true -> m_rsc:rid(article, C);
+            case m_category:is_a(Default, meta, Context) of
+                true -> m_rsc:rid(article, Context);
                 false -> Default
             end
     end;
-category(_, F, _) -> maps:get(category_id, F).
+category(_, FeedSettings, _) -> maps:get(category_id, FeedSettings).
