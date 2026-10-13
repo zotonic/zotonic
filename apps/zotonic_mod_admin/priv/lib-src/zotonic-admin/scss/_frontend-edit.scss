@@ -1,0 +1,68 @@
+// Frontend editors can use Bootstrap columns or a site-specific grid layout.
+// Let either shrink to the space remaining alongside the live preview.
+html body.admin-frontend-editor {
+    grid-template-columns: minmax(0, 1fr);
+
+    .admin-frontend-layout {
+        min-width: 0;
+        grid-template-columns: 10px minmax(200px, .6fr) 10px minmax(0, 1fr) 10px;
+    }
+    #menu-editor, #editcol-wrapper, #editcol { min-width: 0; }
+}
+
+html body.admin-frontend-editor .admin-frontend-menu-toggle { display: none; }
+
+html body.admin-frontend-compact {
+    .admin-frontend-menu-toggle {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-right: 8px;
+
+        .admin-frontend-menu-hide { display: none; }
+        .admin-frontend-menu-caret { display: inline-block; }
+
+        &[aria-expanded="true"] {
+            background: var(--bs-primary, #337ab7);
+            border-color: var(--bs-primary, #337ab7);
+            color: #fff;
+            box-shadow: inset 0 2px 4px rgb(0 0 0 / 20%);
+
+            .admin-frontend-menu-show { display: none; }
+            .admin-frontend-menu-hide { display: inline; }
+            .admin-frontend-menu-caret { transform: rotate(180deg); }
+        }
+    }
+
+    .admin-frontend-layout {
+        grid-template-columns: 10px minmax(0, 1fr) 10px;
+        grid-template-rows: minmax(0, 1fr);
+    }
+    .admin-frontend-layout #menu-editor { display: none; }
+    .admin-frontend-layout #editcol-wrapper, .admin-frontend-layout #editcol {
+        grid-column: 2;
+        grid-row: 1;
+        width: 100%;
+        float: none;
+    }
+    #save-buttons {
+        width: 100%;
+        .navbar-brand { display: none !important; }
+    }
+    .navbar-fixed-top .row > .col-md-4 { display: none; }
+
+    // Temporarily show the menu in the editor space, without discarding the form.
+    &.admin-frontend-menu-open {
+        .admin-frontend-layout #menu-editor {
+            display: block;
+            grid-column: 2;
+            grid-row: 1;
+            float: none;
+            width: 100%;
+            height: auto;
+            max-height: calc(100vh - 80px);
+            overflow-y: auto;
+        }
+        .admin-frontend-layout #editcol-wrapper, .admin-frontend-layout #editcol { display: none; }
+    }
+}

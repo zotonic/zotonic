@@ -34,6 +34,7 @@ Handled events
 * `{delete_media, Opts}` removes the resource's attached medium.
 * `#sort{drop = {dragdrop, {object_sorter, Props}, ...}}` stores a reordered
   list of connected resources.
+* `{preview, Args}` resolves the saved-content preview URL using `id` and optional `view_location`.
 * `{query_preview, Opts}` renders a preview for a query resource.
 ").
 -author("Marc Worrell <marc@worrell.nl>").
@@ -183,6 +184,24 @@ event(#submit{message={rscform, Args}}, Context) ->
         {error, Message} when is_list(Message); is_binary(Message) ->
             z_render:growl_error(Message, Context)
     end;
+%% Resolve the default URL again after saves (the slug or language may have changed).
+%% view_location comes from the signed form wire, including site template overrides.
+event(#postback{message={preview, Args}}, Context) ->
+    Id = m_rsc:rid(proplists:get_value(id, Args), Context),
+    PreviewContext = z_context:set_language(edit_language(Context), Context),
+    Location = case z_acl:rsc_visible(Id, PreviewContext) of
+        true ->
+            case proplists:get_value(view_location, Args) of
+                undefined -> m_rsc:p(Id, <<"page_url">>, PreviewContext);
+                Override -> Override
+            end;
+        false -> undefined
+    end,
+    z_render:wire({publish, [
+        {topic, <<"admin/preview/location">>},
+        {id, Id},
+        {url, z_sanitize:uri(z_convert:to_binary(Location))}
+    ]}, Context);
 event(#postback{message={view, Args}}, Context) ->
     {id, Id} = proplists:lookup(id, Args),
     ContextRedirect = z_context:set_language(edit_language(Context), Context),
