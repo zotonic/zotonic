@@ -49,6 +49,11 @@ For each image, only the largest declared `srcset` width or density is downloade
 `src` is the fallback. All variants are aliases of that one medium, including
 repeated images with overlapping candidate sets. WordPress featured-image size
 variants reuse its original `source_url`. Media files pass through the regular media identification/sanitization pipeline.
+Failed media downloads or insertions (including access denied) do not prevent
+ordinary article imports. The importer removes references to the skipped medium
+and omits its connections, while keeping the article and successfully imported media.
+Use a forced refresh to retry skipped media.
+
 The importance order is WordPress featured image, feed media/enclosures, then
 inline images. Attaching one medium leaves other inline images at their source.
 

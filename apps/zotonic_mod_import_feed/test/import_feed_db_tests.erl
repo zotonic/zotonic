@@ -128,6 +128,26 @@ poll_and_media() ->
         ?assertEqual(updated, z_import_feed_import:run(Entry, F#{media_mode => <<"attached">>}, C)),
         ?assertMatch(#{<<"mime">> := <<"image/png">>}, m_media:get(Id, C)),
         ?assert(m_rsc:is_a(Id, article, C)),
+        %% Media download failure leaves a valid article in either import mode.
+        MissingUrl = <<"https://example.org/missing-feed-medium.png">>,
+        meck:expect(z_import_feed_http, get, fun(_, _, _) -> {error, eacces} end),
+        lists:foreach(fun(Mode) ->
+            ArticleUri = <<"https://example.org/poll-test/missing-", Mode/binary>>,
+            MissingEntry = Entry#{uri => ArticleUri, media => [MissingUrl],
+                body => <<"<p>Article without media<img src='", MissingUrl/binary, "'></p>">>},
+            ?assertEqual(imported, z_import_feed_import:run(MissingEntry, F#{media_mode => Mode}, C)),
+            ArticleId = m_rsc:rid(ArticleUri, C),
+            try
+                ?assert(is_integer(ArticleId)),
+                ?assertEqual(undefined, m_rsc:rid(MissingUrl, C)),
+                ?assertEqual(undefined, m_media:get(ArticleId, C)),
+                ?assertEqual([], m_edge:objects(ArticleId, depiction, C)),
+                ?assertEqual(nomatch, binary:match(m_rsc:p(ArticleId, body, C), MissingUrl))
+            after
+                m_rsc:delete(ArticleId, C),
+                z_db:q("delete from import_feed_resource where uri=$1", [ArticleUri], C)
+            end
+        end, [<<"dependent">>, <<"attached">>]),
         ok = m_rsc:delete(Id, C),
         case m_rsc:exists(Mid, C) of true -> m_rsc:delete(Mid, C); false -> ok end
     after

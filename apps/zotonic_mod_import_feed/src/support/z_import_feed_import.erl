@@ -150,28 +150,36 @@ import(#{zotonic_export := _} = Item, _, Context) ->
     {Id, Imported};
 import(Item, Dependents, Context) ->
     %% Reuse media by source URI. Do not steal media from existing local resources.
-    Imported = lists:foldl(fun(Dependent, Acc) ->
+    MediaResults = lists:foldl(fun(Dependent, Acc) ->
                                    Uri = maps:get(uri, Dependent),
                                    case deleted(Uri, Context) of
-                                       true -> Acc;
+                                       true -> Acc#{Uri => undefined};
                                        false ->
-                                           Id = upsert(Dependent, Context),
-                                           ok = medium(Id, maps:get(medium, Dependent), Context),
-                                           remember(Uri, Id, Context),
+                                           Id = optional_medium(Uri, fun() ->
+                                               MediaId = upsert(Dependent, Context),
+                                               ok = medium(MediaId, maps:get(medium, Dependent), Context),
+                                               remember(Uri, MediaId, Context),
+                                               MediaId
+                                           end, Context),
                                            Acc#{Uri => Id}
                                    end
                            end,
                            #{},
                            Dependents),
-    Props = local_body(maps:get(props, Item), media_aliases(Item, Imported), Context),
+    Imported = maps:filter(fun(_, MediaId) -> is_integer(MediaId) end, MediaResults),
+    Props = local_body(maps:get(props, Item), media_aliases(Item, MediaResults), Context),
     Item1 = Item#{props := Props},
     Id = upsert(Item1, Context),
-    ok = medium(Id, maps:get(medium, Item), Context),
     case maps:get(medium, Item) of
         undefined ->
             ok;
         Attached ->
-            LocalProps = local_body(maps:get(props, Item), media_aliases(Item, #{Attached => Id}), Context),
+            AttachedId = optional_medium(Attached, fun() ->
+                ok = medium(Id, Attached, Context),
+                Id
+            end, Context),
+            LocalProps = local_body(maps:get(props, Item),
+                media_aliases(Item, MediaResults#{Attached => AttachedId}), Context),
             case m_rsc:update(Id, maps:with([<<"body">>], LocalProps), Context) of
                 {ok, _} -> ok;
                 {error, Reason} -> throw({import_error, Reason})
@@ -190,6 +198,27 @@ import(Item, Dependents, Context) ->
                   maps:get(edges, Item)),
     {Id, Imported}.
 
+%% Media are optional. A savepoint prevents partial media writes from leaking
+%% into the article transaction. Unexpected errors still abort the import.
+optional_medium(Uri, Import, Context) ->
+    z_db:q("savepoint import_feed_medium", Context),
+    Result = try Import()
+    catch
+        throw:{import_error, Reason} when Reason =:= eacces;
+                element(1, Reason) =:= media; element(1, Reason) =:= media_fetch ->
+            z_db:q("rollback to savepoint import_feed_medium", Context),
+            ?LOG_WARNING(#{
+                in => zotonic_mod_import_feed,
+                text => <<"Skipping unavailable feed medium">>,
+                uri => Uri,
+                result => error,
+                reason => Reason
+            }),
+            undefined
+    end,
+    z_db:q("release savepoint import_feed_medium", Context),
+    Result.
+
 media_aliases(Item, Imported) ->
     maps:fold(fun(Alias, Selected, Acc) ->
         case maps:find(Selected, Imported) of
@@ -199,11 +228,13 @@ media_aliases(Item, Imported) ->
     end, Imported, maps:get(media_aliases, Item, #{})).
 
 %% @doc Replace imported inline images with editable Zotonic media embeds.
-%% The map includes source variant aliases, each pointing to a local resource.
+%% The map includes source variant aliases. An undefined ID removes references
+%% to a medium that was skipped or could not be imported.
 -spec local_body(Props, Imported, Context) -> map() when
-    Props :: map(), Imported :: #{binary() => integer()}, Context :: z:context().
+    Props :: map(), Imported :: #{binary() => integer() | undefined}, Context :: z:context().
 local_body(#{<<"body">> := Body} = Props, Imported, Context) ->
-    Urls = maps:fold(fun(MediaUri, Id, Acc) ->
+    Urls = maps:fold(fun(_, undefined, Acc) -> Acc;
+                       (MediaUri, Id, Acc) ->
                              case z_media_tag:url(Id, [], Context) of
                                  {ok, Local} when Local =/= <<>> ->
                                      Acc#{MediaUri => Local};
@@ -228,16 +259,18 @@ body_html(Node) -> z_html_parse:to_html(Node).
 %% WordPress wraps images in links to the original medium. Use a single embed
 %% for these wrappers, also allowing repair of previously stored placeholders.
 local_node({<<"a">>, Attributes, [{<<"img">>, _, _}]} = Node, Imported, Urls, Base) ->
-    case maps:get(proplists:get_value(<<"href">>, Attributes), Imported, undefined) of
-        Id when is_integer(Id) -> media_embed(Id);
-        undefined -> local_element(Node, Imported, Urls, Base)
+    case maps:find(proplists:get_value(<<"href">>, Attributes), Imported) of
+        {ok, Id} when is_integer(Id) -> media_embed(Id);
+        {ok, undefined} -> <<>>;
+        error -> local_element(Node, Imported, Urls, Base)
     end;
 local_node({<<"img">>, _, _} = Node, Imported, Urls, Base) ->
     [Selected | _] = z_import_feed_parse:images(
         iolist_to_binary(z_html_parse:to_html(Node)), Base) ++ [undefined],
-    case maps:get(Selected, Imported, undefined) of
-        Id when is_integer(Id) -> media_embed(Id);
-        undefined -> local_element(Node, Imported, Urls, Base)
+    case maps:find(Selected, Imported) of
+        {ok, Id} when is_integer(Id) -> media_embed(Id);
+        {ok, undefined} -> <<>>;
+        error -> local_element(Node, Imported, Urls, Base)
     end;
 local_node({_, _, _} = Node, Imported, Urls, Base) ->
     local_element(Node, Imported, Urls, Base);
@@ -248,10 +281,19 @@ media_embed(Id) ->
         " {\"size\":\"large\",\"align\":\"block\"} "])}.
 
 local_element({Tag, Attributes, Children}, Imported, Urls, Base) ->
-    Attrs1 = [{Attribute, case lists:member(Attribute, [<<"src">>, <<"href">>, <<"poster">>]) of
-                    true -> maps:get(Value, Urls, Value); false -> Value end}
-        || {Attribute, Value} <- Attributes],
-    {Tag, Attrs1, [local_node(Node, Imported, Urls, Base) || Node <- Children]}.
+    IsFailed = fun(<<>>) -> false;
+                  (Value) ->
+        maps:find(z_import_feed_http:resolve(Value, Base), Imported) =:= {ok, undefined}
+    end,
+    case IsFailed(proplists:get_value(<<"src">>, Attributes, <<>>)) of
+        true -> <<>>;
+        false ->
+            Attrs1 = [{Attribute, case lists:member(Attribute, [<<"src">>, <<"href">>, <<"poster">>]) of
+                            true -> maps:get(Value, Urls, Value); false -> Value end}
+                || {Attribute, Value} <- Attributes,
+                   not (lists:member(Attribute, [<<"href">>, <<"poster">>]) andalso IsFailed(Value))],
+            {Tag, Attrs1, [local_node(Node, Imported, Urls, Base) || Node <- Children]}
+    end.
 
 %% @doc Remove image hyperlinks and resolve article links against the source.
 %% Only resources recorded as imported articles can become local destinations.

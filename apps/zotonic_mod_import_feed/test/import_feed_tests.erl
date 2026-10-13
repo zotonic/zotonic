@@ -417,7 +417,7 @@ copyright_defaults_check() ->
 dependent_media_import_check() ->
     Modules = [z_module_manager, m_rsc, m_media, m_category, m_edge, z_db, z_notifier, z_acl,
         z_media_tag, z_import_feed_http],
-    lists:foreach(fun(M) -> meck:new(M, [no_link]) end, Modules),
+    lists:foreach(fun(M) -> meck:new(M, [passthrough, no_link]) end, Modules),
     try
         Context = #context{db = {test, test}},
         Url = <<"https://example.com/photo.jpg">>,
@@ -464,7 +464,33 @@ dependent_media_import_check() ->
         ?assertEqual(imported, z_import_feed_import:run(Entry, Feed, Context)),
         ?assertEqual(1, meck:num_calls(m_media, insert_file, '_')),
         ?assertEqual(1, meck:num_calls(z_import_feed_http, get, '_')),
-        ?assertEqual(1, meck:num_calls(m_rsc, insert, '_'))
+        ?assertEqual(1, meck:num_calls(m_rsc, insert, '_')),
+        %% A failed medium must not roll back or leave broken references in an article.
+        FailedEntry = Entry#{body => <<"<p>Keep this text</p><a href='https://example.com/photo.jpg'><img src='https://example.com/small.jpg' srcset='https://example.com/small.jpg 1x, https://example.com/photo.jpg 2x'></a>">>,
+            media_aliases => #{<<"https://example.com/small.jpg">> => Url}},
+        CheckBody = fun(Props) ->
+            Body = maps:get(<<"body">>, Props),
+            ?assertNotEqual(nomatch, binary:match(Body, <<"Keep this text">>)),
+            ?assertEqual(nomatch, binary:match(Body, <<"photo.jpg">>)),
+            ?assertEqual(nomatch, binary:match(Body, <<"small.jpg">>)),
+            ?assertEqual(nomatch, binary:match(Body, <<"z-media">>))
+        end,
+        meck:expect(m_rsc, p, fun(_, feed_medium_url, _) -> undefined end),
+        meck:expect(m_rsc, update, fun(202, Props, _) -> CheckBody(Props), {ok, 202} end),
+        meck:expect(m_media, insert_file, fun(_, _, _, _) -> {error, eacces} end),
+        meck:expect(m_media, replace_file, fun(_, 202, _, _) -> {error, eacces} end),
+        lists:foreach(fun(Mode) ->
+            meck:expect(m_rsc, insert, fun(Props, _, _) ->
+                case Mode of <<"dependent">> -> CheckBody(Props); _ -> ok end,
+                {ok, 202}
+            end),
+            ?assertEqual(imported, z_import_feed_import:run(FailedEntry, Feed#{media_mode => Mode}, Context)),
+            meck:expect(z_import_feed_http, get, fun(_, _, _) -> {error, timeout} end),
+            ?assertEqual(imported, z_import_feed_import:run(FailedEntry, Feed#{media_mode => Mode}, Context)),
+            meck:expect(z_import_feed_http, get, fun(_, _, _) -> {ok, {Url, [], 4, <<"data">>}} end)
+        end, [<<"dependent">>, <<"attached">>]),
+        ?assertEqual(1, meck:num_calls(m_edge, insert, '_')),
+        ?assertEqual(4, meck:num_calls(z_db, q, ["rollback to savepoint import_feed_medium", '_']))
     after meck:unload(Modules) end.
 
 category_guess_excludes_meta_check() ->
