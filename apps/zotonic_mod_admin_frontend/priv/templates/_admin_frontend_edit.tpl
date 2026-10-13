@@ -15,6 +15,7 @@
 
 {% block rscform %}
 {% if id.exists %}
+    {% include "_admin_edit_preview_context.tpl" %}
 	{% with id.is_editable as is_editable %}
 	{% with id.is_a|default:(m.category[cat].is_a) as cats %}
 	{% wire id="rscform"
@@ -157,6 +158,7 @@
 	 	    $('#rscform').on('shown.bs.tab', '.language-tabs > li > a[data-toggle="tab"]', function (e) {
 				if (e.target != e.relatedTarget) {
 			        const showLang = e.target.closest('li').getAttribute('lang');
+                    z_postback_data_set('z_edit_language', showLang);
 			        const hideLang = e.relatedTarget.closest('li').getAttribute('lang');
 					$("li[lang='"+showLang+"']:visible > a").tab('show');
 

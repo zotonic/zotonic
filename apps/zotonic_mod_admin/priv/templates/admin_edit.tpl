@@ -28,7 +28,7 @@
     {% wire
         id="rscform"
         type="submit"
-        postback="rscform"
+        postback={rscform view_location=view_location}
         action={update
             target="edit_admin_header"
             template="_admin_edit_header.tpl"
@@ -59,6 +59,8 @@
 
     </div>
 
+    {% include "_admin_edit_preview.tpl" %}
+    {% include "_admin_edit_preview_context.tpl" %}
     {% include "_admin_edit_js.tpl" %}
 {% endblock %}
 

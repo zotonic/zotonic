@@ -84,6 +84,15 @@ by `_editor_tiptap_profiles.tpl` in `mod_editor_tiptap`.
 This setting does not change TinyMCE configuration.
 
 
+### Responsive menu column
+
+When less than 1100 CSS pixels remain for the editor, the menu column collapses.
+A Menu button in the editor toolbar temporarily shows the menu in place of the
+form. The form remains mounted, preserving unsaved edits. Selecting a resource
+closes the menu. The available width is observed, so resizing the live preview
+also updates the layout. Site toolbar overrides using `save-buttons` inherit this
+behavior through the core frontend script and styles.
+
 ### Customizing the menu column
 
 Extra content can be added above or below the menu view by overruling the blocks `above_menu` and `below_menu`.
@@ -123,6 +132,24 @@ overrule the block `meta_data_after`.
 If you click on the cog icon on the right, then a meta data panel is shown (for access-control options and language
 settings). This panel can be extended with extra tabs using the blocks `meta_tabs` and `meta_panels`.
 
+
+Live preview
+------------
+
+The Live preview button saves the current form and opens a right-hand iframe
+showing saved content. Restoring an open panel on page load does not save. Resource,
+media and incoming/outgoing edge events for both the edited resource and `tree_id`
+refresh the preview. Switching resources replaces the subscriptions; closing the
+panel releases them. Unsaved form changes are not rendered.
+
+The preview uses the form's `view_location` override, falling back to `page_url` in
+the editing language. Keep `_admin_edit_preview_context.tpl` inside the `rscform`
+block so site overrides of `view_location` apply. Sites replacing the outer editor
+layout or navbar must include `_admin_edit_preview.tpl` once and
+`_admin_edit_preview_button.tpl` in their toolbar. The iframe is same-origin and
+uses the editor's existing permissions. External destinations can be opened in a
+new tab. Opening an admin or admin_frontend editor inside the preview navigates
+the top window to that editor. Open state and width are remembered for the browser session.
 
 Accepted Events
 ---------------
