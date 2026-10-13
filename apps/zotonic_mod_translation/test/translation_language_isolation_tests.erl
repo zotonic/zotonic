@@ -46,7 +46,8 @@ language_isolation(Context) ->
     Top = init(request(<<"document">>, Default, undefined, Context)),
     ?assert(maps:is_key(<<"z.lang">>, maps:get(resp_cookies, Top#context.cowreq))),
     Socket = request(undefined, Default, undefined, Context),
-    SocketResult = init(Socket#context{cowreq = #{headers => #{<<"upgrade">> => <<"websocket">>}}}),
+    SocketReq = (Socket#context.cowreq)#{headers := #{<<"upgrade">> => <<"websocket">>}},
+    SocketResult = init(Socket#context{cowreq = SocketReq}),
     ?assertEqual(#{}, maps:get(resp_cookies, SocketResult#context.cowreq, #{})).
 
 request(Destination, Language, CookieLanguage, Context) ->
@@ -58,8 +59,27 @@ request(Destination, Language, CookieLanguage, Context) ->
         undefined -> [];
         _ -> [{<<"z.lang">>, atom_to_binary(CookieLanguage)}]
     end,
+    % Include all required cowboy_req:req() fields, even when unused by the observer.
+    Req = #{
+        method => <<"GET">>,
+        version => 'HTTP/1.1',
+        scheme => <<"https">>,
+        host => <<"localhost">>,
+        port => 443,
+        path => <<"/">>,
+        qs => <<>>,
+        headers => Headers,
+        peer => {{127, 0, 0, 1}, 12345},
+        sock => {{127, 0, 0, 1}, 443},
+        pid => self(),
+        ref => translation_test_listener,
+        streamid => 1,
+        cert => undefined,
+        has_body => false,
+        body_length => 0
+    },
     z_context:set_q(<<"z_language">>, atom_to_binary(Language), Context#context{
-        cowreq = #{headers => Headers},
+        cowreq = Req,
         cowenv = #{cowmachine_cookies => Cookies}
     }).
 

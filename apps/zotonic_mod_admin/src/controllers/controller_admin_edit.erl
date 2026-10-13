@@ -298,7 +298,7 @@ set_value_slug(Slug, Context) ->
 
 %% @doc Timeline/menu overrides are captured when rendering the form. Rewrite
 %% their language on every preview request, retaining query arguments and anchors.
--spec preview_location(Location, Context) -> binary() when
+-spec preview_location(Location, Context) -> binary() | undefined when
     Location :: binary() | string(),
     Context :: z:context().
 preview_location(Location, Context) ->
