@@ -137,6 +137,13 @@ uses the editor's existing permissions. External destinations can be opened in a
 new tab. Opening an admin or admin_frontend editor inside the preview navigates
 the top window to that editor. Open state and width are remembered for the browser session.
 
+Preview languages are document-local. Embedded navigation and background requests
+do not update the shared `z.lang` cookie, and embedded language switches do not
+change the user's saved language preference. Authentication refresh uses the
+document's language for its MQTT session, keeping lazy templates and postbacks in
+the preview language. Custom HTTP loaders must likewise include their document's
+language in their URL or `z_language` argument instead of relying on the cookie.
+
 Accepted Events
 ---------------
 

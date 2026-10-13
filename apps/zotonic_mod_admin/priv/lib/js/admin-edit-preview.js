@@ -122,6 +122,9 @@
                 } catch (_) { /* Cross-origin navigation is not an embedded editor. */ }
             };
             lastUrl = url.href;
+            // Also suppress persistence when Fetch Metadata headers are absent.
+            // Keep the toolbar's normal "Open in new tab" URL unchanged.
+            url.searchParams.set("z_language_persist", "false");
             frame.src = url.href;
         }, options);
 

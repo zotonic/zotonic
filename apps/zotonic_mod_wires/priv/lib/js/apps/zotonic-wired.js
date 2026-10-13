@@ -101,6 +101,10 @@ function zotonic_eval(script) {
 }
 
 function zotonic_startup() {
+  // Language switches inside an iframe must not change the user's preference.
+  if (window.self !== window.top) {
+    z_postback_data_set("z_language_persist", false);
+  }
   // Initialize the wires if the bridge is starting up
   // cotonic.broker.subscribe("$bridge/origin/status", function() {
   //     cotonic.broker.unsubscribe("$bridge/origin/status", { wid: 'zotonicjs' });
@@ -931,7 +935,7 @@ function z_reload(args) {
     // Change the language cookie when it is set.
     for (const cookie of document.cookie.split(";")) {
       const kv = cookie.trim().split("=");
-      if (kv[0] === "z.lang" && kv[1] !== newLanguage) {
+      if (window.self === window.top && kv[0] === "z.lang" && kv[1] !== newLanguage) {
         const expirationDate = new Date();
         expirationDate.setTime(
           expirationDate.getTime() + 365 * 24 * 60 * 60 * 1000,
@@ -971,27 +975,17 @@ function z_reload(args) {
     href = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
   }
 
-  if (window.location.search == "") {
-    window.location.href = href;
-    return;
+  // Preserve other parameters, including z_language_persist. Without a path
+  // prefix the document needs an explicit language; the cookie can belong to
+  // another window (for example the editor hosting this preview).
+  const url = new URL(href);
+  url.search = window.location.search;
+  url.searchParams.delete("z_language");
+  url.searchParams.delete("z_rewrite_url");
+  if (typeof newLanguage === "string" && !rewriteUrl) {
+    url.searchParams.set("z_language", newLanguage);
   }
-
-  // remove z_language and z_rewrite_url, keep other query params
-  let kvs = window.location.search
-    .substring(1)
-    .split(/[&;]/)
-    .map(function (kv) {
-      return kv.match("^z_language") || kv.match("^z_rewrite_url") ? "" : kv;
-    })
-    .filter(function (kv) {
-      return kv !== "";
-    });
-
-  if (kvs === "") {
-    window.location.href = href;
-  } else {
-    window.location.href = `${href}?${kvs.join("&")}`;
-  }
+  window.location.href = url.href;
 }
 
 /* translations

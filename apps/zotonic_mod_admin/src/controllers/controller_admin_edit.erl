@@ -193,7 +193,7 @@ event(#postback{message={preview, Args}}, Context) ->
         true ->
             case proplists:get_value(view_location, Args) of
                 undefined -> m_rsc:p(Id, <<"page_url">>, PreviewContext);
-                Override -> Override
+                Override -> preview_location(Override, PreviewContext)
             end;
         false -> undefined
     end,
@@ -288,6 +288,26 @@ set_value_slug(#trans{ tr = Tr }, Context) ->
         Tr);
 set_value_slug(Slug, Context) ->
     z_render:set_value("title_slug", Slug, Context).
+
+%% @doc Timeline/menu overrides are captured when rendering the form. Rewrite
+%% their language on every preview request, retaining query arguments and anchors.
+-spec preview_location(Location, Context) -> binary() when
+    Location :: binary() | string(),
+    Context :: z:context().
+preview_location(Location, Context) ->
+    Url = z_convert:to_binary(Location),
+    case z_context:is_site_url(Url, Context)
+        andalso z_module_manager:active(mod_translation, Context)
+    of
+        true ->
+            %% Pass a relative URL: stripping an absolute URL's language also
+            %% strips its query, including the timeline's cid and bid parameters.
+            Parts = uri_string:parse(Url),
+            Relative = uri_string:recompose(maps:without([scheme, userinfo, host, port], Parts)),
+            filter_set_url_language:set_url_language(Relative, Context);
+        false ->
+            Url
+    end.
 
 %% @doc Remove the submit buttons from the resource properties.
 filter_props(Fs) ->

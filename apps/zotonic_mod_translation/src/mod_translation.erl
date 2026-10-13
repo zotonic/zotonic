@@ -440,15 +440,20 @@ observe_request_context(#request_context{ phase = init }, Context, _Context) ->
                 Context1 = z_context:set_language(CookieLangs, Context),
                 set_language(QsLang, Context1)
         end);
-observe_request_context(#request_context{ phase = auth_status, document = #{ <<"language">> := _LangData } }, Context, _Context) ->
-    Context;
+observe_request_context(#request_context{ phase = auth_status, document = #{
+    <<"language">> := #{ <<"document">> := Language }
+} }, Context, _Context) when is_binary(Language), Language =/= <<>> ->
+    %% Each document has its own MQTT session. Keep lazy renders and postbacks
+    %% in that document's language, independently of the shared language cookie.
+    set_language(Language, Context);
 observe_request_context(#request_context{}, Context, _Context) ->
     Context.
 
 maybe_set_cookie(CookieLangs, Context) ->
     ContextLangs = z_context:languages(Context),
+    Persist = is_language_persistent(Context) andalso is_document_request(Context),
     if
-        CookieLangs =:= ContextLangs ->
+        CookieLangs =:= ContextLangs; not Persist ->
             Context;
         true ->
             Langs1 = [ z_convert:to_binary(Lang) || Lang <- ContextLangs ],
@@ -464,6 +469,34 @@ maybe_set_cookie(CookieLangs, Context) ->
                 ],
                 Context)
     end.
+
+%% Only top-level navigation automatically changes the browser's language.
+%% Retain legacy behavior for clients that do not send Fetch Metadata headers.
+is_document_request(Context) ->
+    case {fetch_destination(Context), request_header(<<"upgrade">>, Context)} of
+        {_, <<"websocket">>} -> false;
+        {undefined, _} -> true;
+        {<<"document">>, _} -> true;
+        _ -> false
+    end.
+
+%% An embedded language switch changes the document, not the user's preference.
+is_language_persistent(Context) ->
+    PostbackData = z_context:get_q(<<"z_postback_data">>, Context),
+    case {z_context:get_q(<<"z_language_persist">>, Context), PostbackData,
+        fetch_destination(Context)}
+    of
+        {<<"false">>, _, _} -> false;
+        {_, #{ <<"z_language_persist">> := false }, _} -> false;
+        {_, _, <<"iframe">>} -> false;
+        {_, _, <<"frame">>} -> false;
+        _ -> true
+    end.
+
+fetch_destination(Context) -> request_header(<<"sec-fetch-dest">>, Context).
+
+request_header(_Header, #context{cowreq = undefined}) -> undefined;
+request_header(Header, Context) -> z_context:get_req_header(Header, Context).
 
 maybe_user(Context) ->
     case z_acl:user(Context) of
@@ -883,10 +916,14 @@ url_path(Url) ->
 -spec set_user_language(atom(), z:context()) -> z:context().
 set_user_language(Code, Context) ->
     Context1 = set_language(Code, Context),
-    case z_acl:user(Context1) of
+    UserId = case is_language_persistent(Context) of
+        true -> z_acl:user(Context1);
+        false -> undefined
+    end,
+    case UserId of
         undefined ->
             nop;
-        UserId ->
+        _ ->
             NewCode = z_context:language(Context1),
             case m_rsc:p_no_acl(UserId, pref_language, Context1) of
                 NewCode ->
