@@ -2370,6 +2370,34 @@ body.admin-preview-resizing .admin-edit-preview-resizer {
   background: var(--bs-primary, #337ab7);
 }
 
+html body .btn.admin-edit-preview-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+html body .btn.admin-edit-preview-toggle .admin-edit-preview-toggle-icon {
+  flex-shrink: 0;
+}
+html body .btn.admin-edit-preview-toggle .admin-edit-preview-toggle-pane {
+  opacity: 0.3;
+}
+html body .btn.admin-edit-preview-toggle .admin-edit-preview-toggle-caret {
+  display: block;
+  flex-shrink: 0;
+}
+html body .btn.admin-edit-preview-toggle[aria-expanded=true] {
+  background: var(--bs-primary, #337ab7);
+  border-color: var(--bs-primary, #337ab7);
+  color: #fff;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+html body .btn.admin-edit-preview-toggle[aria-expanded=true] .admin-edit-preview-toggle-pane {
+  opacity: 1;
+}
+html body .btn.admin-edit-preview-toggle[aria-expanded=true] .admin-edit-preview-toggle-caret {
+  transform: rotate(180deg);
+}
+
 html body.admin-frontend-editor {
   grid-template-columns: minmax(0, 1fr);
 }

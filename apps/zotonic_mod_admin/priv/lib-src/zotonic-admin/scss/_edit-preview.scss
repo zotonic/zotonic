@@ -65,3 +65,24 @@ body.admin-preview-resizing {
     iframe { pointer-events: none; }
     .admin-edit-preview-resizer { background: var(--bs-primary, #337ab7); }
 }
+
+// Show the destination panel and make the open/closed state visible in both editors.
+html body .btn.admin-edit-preview-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    .admin-edit-preview-toggle-icon { flex-shrink: 0; }
+    .admin-edit-preview-toggle-pane { opacity: .3; }
+    .admin-edit-preview-toggle-caret { display: block; flex-shrink: 0; }
+
+    &[aria-expanded="true"] {
+        background: var(--bs-primary, #337ab7);
+        border-color: var(--bs-primary, #337ab7);
+        color: #fff;
+        box-shadow: inset 0 2px 4px rgb(0 0 0 / 20%);
+
+        .admin-edit-preview-toggle-pane { opacity: 1; }
+        .admin-edit-preview-toggle-caret { transform: rotate(180deg); }
+    }
+}

@@ -45,6 +45,7 @@
             document.body.classList.toggle("admin-preview-open", open);
             document.querySelectorAll('[data-admin-preview="toggle"]').forEach(button => {
                 button.setAttribute("aria-expanded", String(open));
+                button.title = open ? button.dataset.previewHideTitle : button.dataset.previewShowTitle;
             });
             subscribe();
             if (open) {
