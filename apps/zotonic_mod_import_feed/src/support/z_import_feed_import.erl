@@ -44,7 +44,6 @@ prepare(E, F, Context) ->
                                    {U, []};
                                {<<"dependent">>, _} ->
                                    MediaItemsProps = [prepare_media_props(U, E, Common, Context) || U <- Media],
-                                   ?DEBUG(MediaItemsProps),
                                    {undefined, MediaItemsProps};
                                _ ->
                                    {undefined, []}
