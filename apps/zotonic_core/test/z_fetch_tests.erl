@@ -86,6 +86,62 @@ fetch_entry_points_test() ->
         ?assertMatch({ok, _}, z_fetch:metadata(Url, [], Context))
     end).
 
+%% Exercise the installed stdlib's redirect callback with real HTTP requests.
+cross_origin_options_test() ->
+    {ok, _} = application:ensure_all_started(inets),
+    {ok, _} = application:ensure_all_started(tls_certificate_check),
+    Modules = [z_notifier, m_site, z_context],
+    lists:foreach(fun(Module) -> meck:new(Module, [no_link]) end, Modules),
+    try
+        meck:expect(m_site, environment, fun(_) -> production end),
+        meck:expect(z_context, language, fun(_) -> en end),
+        lists:foreach(fun(Override) ->
+            meck:expect(z_notifier, first,
+                fun(#url_fetch_options{host = Host, options = Options}, _) ->
+                    case binary:split(Host, <<":">>) of
+                        [<<"localhost">>, _] ->
+                            [{authorization, <<"Bearer first">>} | Options];
+                        [<<"127.0.0.1">>, _] ->
+                            ?assertEqual(none, proplists:get_value(authorization, Options)),
+                            case Override of
+                                true -> [{authorization, <<"Bearer second">>} | Options];
+                                false -> Options
+                            end
+                    end
+                end),
+            {ok, Listen} = gen_tcp:listen(0, [binary, {active, false}, {packet, http_bin}]),
+            {ok, {_, Port}} = inet:sockname(Listen),
+            {Server, Monitor} = spawn_monitor(fun() ->
+                {ok, First} = gen_tcp:accept(Listen, 2000),
+                ?assertEqual(<<"Bearer first">>, request_authorization(First, undefined)),
+                ok = gen_tcp:send(First, ["HTTP/1.1 302 Found\r\nLocation: http://127.0.0.1:",
+                    integer_to_list(Port), "/end\r\nContent-Length: 0\r\nConnection: close\r\n\r\n"]),
+                gen_tcp:close(First),
+                {ok, Second} = gen_tcp:accept(Listen, 2000),
+                Expected = case Override of true -> <<"Bearer second">>; false -> undefined end,
+                ?assertEqual(Expected, request_authorization(Second, undefined)),
+                ok = gen_tcp:send(Second, "HTTP/1.1 200 OK\r\nContent-Length: 2\r\nConnection: close\r\n\r\nok"),
+                gen_tcp:close(Second)
+            end),
+            try
+                Url = "http://localhost:" ++ integer_to_list(Port) ++ "/start",
+                ?assertMatch({ok, {_, _, 2, <<"ok">>}}, z_fetch:fetch(Url,
+                    [{authorization_redirect, none}, {use_range, false}], #context{})),
+                receive
+                    {'DOWN', Monitor, process, Server, Reason} -> ?assertEqual(normal, Reason)
+                after 3000 -> error(server_timeout)
+                end
+            after gen_tcp:close(Listen) end
+        end, [false, true])
+    after meck:unload(Modules) end.
+
+request_authorization(Socket, Authorization) ->
+    case gen_tcp:recv(Socket, 0, 2000) of
+        {ok, http_eoh} -> Authorization;
+        {ok, {http_header, _, 'Authorization', _, Value}} -> request_authorization(Socket, Value);
+        {ok, _} -> request_authorization(Socket, Authorization)
+    end.
+
 contextless_fetch_test() ->
     meck:new(z_url_fetch, [no_link]),
     try

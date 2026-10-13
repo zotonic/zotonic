@@ -104,6 +104,7 @@ fetch_policy_test() ->
             ?assertEqual(none, proplists:get_value(authorization, Options)),
             ?assertEqual(undefined, proplists:get_value(autoredirect, Options)),
             ?assertEqual(undefined, proplists:get_value(insecure, Options)),
+            ?assertEqual(none, proplists:get_value(authorization_redirect, Options)),
             ?assertEqual(15000, proplists:get_value(timeout, Options)),
             {error, timeout}
         end),
@@ -674,6 +675,7 @@ fetch_credentials_and_development_test() ->
             ?assertEqual(42, C#context.user_id),
             ?assertEqual(undefined, proplists:get_value(authorization, Options)),
             ?assertEqual(undefined, proplists:get_value(insecure, Options)),
+            ?assertEqual(none, proplists:get_value(authorization_redirect, Options)),
             {ok, {Url, [], 2, <<"ok">>}}
         end),
         ?assertMatch({ok, _}, z_import_feed_http:get(<<"https://example.com/feed">>, Auth)),
@@ -681,6 +683,7 @@ fetch_credentials_and_development_test() ->
             ?assertEqual(undefined, C#context.user_id),
             ?assertEqual(none, proplists:get_value(authorization, Options)),
             ?assertEqual(undefined, proplists:get_value(insecure, Options)),
+            ?assertEqual(none, proplists:get_value(authorization_redirect, Options)),
             {ok, {Url, [], 2, <<"ok">>}}
         end),
         ?assertMatch({ok, _}, z_import_feed_http:get(<<"https://127.0.0.1/feed">>, #context{})),

@@ -85,7 +85,10 @@ get(Url, Limit, Extra, Context) ->
         true ->
             Options = [
                 {timeout, ?FETCH_TIMEOUT},
-                {max_length, Limit}
+                {max_length, Limit},
+                %% Let stdlib strip credentials when a feed changes origin.
+                %% Destination callbacks can explicitly supply new credentials.
+                {authorization_redirect, none}
                 | fetch_options(Context) ++ Extra
             ],
             try z_fetch:fetch(Url, Options, fetch_context(Context)) of

@@ -38,10 +38,14 @@
 -type options() :: [option()].
 
 %% @doc Fetch data from an URL. Let modules change the fetch options.
-%% Observer options are resolved again for each redirect destination. Explicit
-%% authorization is restricted to HTTPS redirects within the same origin;
-%% otherwise return {error, authorization_redirect}. Authorization 'none' remains
-%% anonymous across redirects. Set {autoredirect, false} to return redirects as-is.
+%% Observer options are resolved again for each redirect destination. Cross-origin
+%% redirects default to {authorization_redirect, none}: credentials are removed
+%% and callbacks receive {authorization, none}, which they may replace with
+%% destination-specific credentials. Use {authorization_redirect, error} to reject
+%% cross-origin redirects with explicit authorization. A caller's explicit
+%% {authorization, none} always remains anonymous. Same-origin redirects with
+%% explicit authorization require HTTPS. Set {autoredirect, false} to return
+%% redirects as-is.
 -spec fetch(Url, Options, Context) -> z_url_fetch:fetch_result() when
     Url :: string() | binary(),
     Options :: options(),
