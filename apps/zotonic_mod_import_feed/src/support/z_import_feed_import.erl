@@ -30,9 +30,7 @@ prepare(E, F, Context) ->
     Common = (copyright_props(F, Context))#{<<"is_published">> => true,
                                             <<"is_authoritative">> => maps:get(is_authoritative, F),
                                             <<"content_group_id">> => maps:get(content_group_id, F)},
-    Props = maps:filter(fun(_, V) ->
-                                V =/= undefined
-                        end,
+    Props = maps:filter(fun(_, V) -> V =/= undefined end,
                         Common#{
                           <<"category_id">> => Cat, <<"title">> => z_html:unescape(maps:get(title, E)),
                           <<"body">> => z_html:abs_links(z_import_feed_cleanup:html(maps:get(body, E), Patterns), maps:get(url, E)),
@@ -45,10 +43,9 @@ prepare(E, F, Context) ->
                                {<<"attached">>, [U | _]} ->
                                    {U, []};
                                {<<"dependent">>, _} ->
-                                   {undefined, [#{uri => U, medium => U,
-                                                  props => Common#{<<"category_id">> => m_rsc:rid(media, Context),
-                                                                   <<"title">> => z_html:unescape(maps:get(title, E)), <<"is_dependent">> => true}}
-                                                || U <- Media]};
+                                   MediaItemsProps = [prepare_media_props(U, E, Common, Context) || U <- Media],
+                                   ?DEBUG(MediaItemsProps),
+                                   {undefined, MediaItemsProps};
                                _ ->
                                    {undefined, []}
                            end,
@@ -56,6 +53,20 @@ prepare(E, F, Context) ->
     Item = #{uri => maps:get(uri, E), props => Props, edges => Edges, medium => Medium,
         media_aliases => maps:get(media_aliases, E, #{})},
     z_import_feed_native:prepare(E, Item, Dependents, F, Context).
+
+prepare_media_props(Uri, E, Common, Context) ->
+    GuessedMime = z_media_identify:guess_mime(Uri),
+    GuessedCat = m_media:mime_to_category(GuessedMime),
+    GuessedCat1 = case m_category:is_a(GuessedCat, media, Context) of
+                      true -> GuessedCat;
+                      false -> media
+                  end,
+    #{uri => Uri,
+      medium => Uri,
+      props => Common#{<<"category_id">> => m_rsc:rid(GuessedCat1, Context),
+                       <<"title">> => z_html:unescape(maps:get(title, E)),
+                       <<"is_dependent">> => true}
+     }.
 
 %% Defaults apply to the article and its dependent media before observers run.
 %% Empty defaults leave resource-level fallback behavior to mod_copyright.
