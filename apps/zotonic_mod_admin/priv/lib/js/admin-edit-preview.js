@@ -93,9 +93,15 @@
                 }
             } catch (_) { /* The visitor may have followed an external link. */ }
             frame.onload = function() {
-                if (scroll) {
-                    try { frame.contentWindow.scrollTo(...scroll); } catch (_) { /* Cross-origin navigation. */ }
-                }
+                try {
+                    // Both editors include this panel, including site overrides. Navigate
+                    // from the parent so the iframe can keep blocking top navigation.
+                    if (frame.contentDocument?.getElementById("admin-edit-preview")) {
+                        window.top.location.assign(frame.contentWindow.location.href);
+                        return;
+                    }
+                    if (scroll) frame.contentWindow.scrollTo(...scroll);
+                } catch (_) { /* Cross-origin navigation is not an embedded editor. */ }
             };
             lastUrl = url.href;
             frame.src = url.href;

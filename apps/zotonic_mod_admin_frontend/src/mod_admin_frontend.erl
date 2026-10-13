@@ -70,6 +70,15 @@ resource-column with the main editing form is rendered using `{% catinclude \"_a
 This column is loaded lazily via a postback.
 
 
+### Responsive menu column
+
+When less than 1100 CSS pixels remain for the editor, the menu column collapses.
+A Menu button in the editor toolbar temporarily shows the menu in place of the
+form. The form remains mounted, preserving unsaved edits. Selecting a resource
+closes the menu. The available width is observed, so resizing the live preview
+also updates the layout. Site toolbar overrides using `save-buttons` inherit this
+behavior through the core frontend script and styles.
+
 ### Customizing the menu column
 
 Extra content can be added above or below the menu view by overruling the blocks `above_menu` and `below_menu`.
@@ -125,7 +134,8 @@ block so site overrides of `view_location` apply. Sites replacing the outer edit
 layout or navbar must include `_admin_edit_preview.tpl` once and
 `_admin_edit_preview_button.tpl` in their toolbar. The iframe is same-origin and
 uses the editor's existing permissions. External destinations can be opened in a
-new tab. Open state and width are remembered for the browser session.
+new tab. Opening an admin or admin_frontend editor inside the preview navigates
+the top window to that editor. Open state and width are remembered for the browser session.
 
 Accepted Events
 ---------------

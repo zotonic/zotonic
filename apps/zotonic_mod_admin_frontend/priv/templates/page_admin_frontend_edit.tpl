@@ -102,6 +102,7 @@
 {% endblock %}
 
 {% block _js_include_extra %}
+    {% include "_admin_frontend_menu.tpl" %}
 	{% lib
     	"js/modules/jquery.hotkeys.js"
 	    "js/modules/z.adminwidget.js"
