@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-13 17:01\n"
+"PO-Revision-Date: 2026-10-14 11:27\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -1425,6 +1425,10 @@ msgstr "点击这里获取更多信息"
 msgid "Click to preview."
 msgstr "点击预览。"
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:11
+msgid "Close Live view"
+msgstr "關閉即時預覽"
+
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:133
 msgid "Close Sockets"
 msgstr "关闭插座"
@@ -1434,7 +1438,6 @@ msgid "Close all sockets from ip addresses which have over &gt; 250 open sockets
 msgstr "关闭所有来自超过 &gt; 250个开放套接字的ip地址的套接字。"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:33
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:11
 msgid "Close preview"
 msgstr "關閉預覽"
 
@@ -2059,10 +2062,6 @@ msgstr "您可以在此處編輯搜尋查詢的參數。每個論點都有自己
 msgid "Hide page from searches (depends on the search query)"
 msgstr "從搜索中隱藏頁面（取決於搜索查詢）"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:5
-msgid "Hide preview"
-msgstr "隱藏預覽"
-
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:59
 msgid "Home Directory"
 msgstr "主页目录"
@@ -2166,16 +2165,16 @@ msgstr "最近修改文本"
 msgid "Link"
 msgstr "鏈接"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:2
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:7
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:14
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:11
-msgid "Live preview"
-msgstr "即時預覽"
-
 #: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:38
 msgid "Live query, send notifications when matching items are updated or inserted."
 msgstr "实时查询，当匹配条目被上传或是插入时候发出通知。"
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:2
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:7
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:14
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:9
+msgid "Live view"
+msgstr "即時預覽"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:43
 msgid "Local ImageMagick"
@@ -2863,8 +2862,8 @@ msgid "Replace current medium"
 msgstr "替换这个媒体項目"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:4
-msgid "Resize preview"
-msgstr "調整預覽大小"
+msgid "Resize Live view"
+msgstr "調整「即時預覽」的尺寸"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_meta_features.tpl:9
 msgid "Resources in the <i>meta</i> category can have 'features': certain resource properties that decide what to show or hide on certain pages in the admin. If this box is empty, no features are enabled for this meta-resource."
@@ -2936,6 +2935,10 @@ msgstr "此系統不支援沙盒隔離。本機媒體指令將在未隔離的狀
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:61
 msgid "Save and View"
 msgstr "保存并查看"
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:3
+msgid "Save and open the Live view"
+msgstr "儲存並開啟「即時預覽」"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:21
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:7
@@ -3060,11 +3063,6 @@ msgstr "顯示關鍵字說明"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:59
 msgid "Show page on multiple paths"
 msgstr "在多个路径上显示页面"
-
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:3
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:4
-msgid "Show preview on the right"
-msgstr "在右側顯示預覽"
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:55
 msgid "Show query as JSON"
