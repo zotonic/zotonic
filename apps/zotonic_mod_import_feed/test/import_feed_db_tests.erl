@@ -471,3 +471,53 @@ native_edge(Uri) ->
 native_export(Uri, Edges) ->
     #{<<"uri">> => Uri, <<"is_a">> => [<<"article">>],
         <<"resource">> => #{<<"title">> => Uri}, <<"edges">> => Edges}.
+
+%% Embedded media follow the same placeholder/task path, without HTTP requests.
+data_media_test_() -> {timeout, 120, fun data_media/0}.
+data_media() ->
+    Context = z_acl:logon(1, z_context:new(zotonic_site_testsandbox)),
+    ok = z_module_manager:activate_await(mod_import_feed, Context),
+    ok = m_import_feed:install(Context),
+    User = import_user(Context),
+    {ok, FeedId} = m_import_feed:save(undefined, #{
+        <<"user_id">> => User, <<"url">> => <<"https://example.org/data-feed.xml">>,
+        <<"category_id">> => m_rsc:rid(article, Context),
+        <<"media_mode">> => <<"dependent">>, <<"is_paused">> => true}, Context),
+    DataUrl = <<"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII=">>,
+    MediaUri = z_import_feed_media:identity(DataUrl),
+    Uri = <<"https://example.org/data-feed/article">>,
+    Xml = <<"<rss><channel><item><guid>", Uri/binary, "</guid><link>", Uri/binary,
+        "</link><title>Embedded image</title><description><![CDATA[<img src='", DataUrl/binary,
+        "'>]]></description></item></channel></rss>">>,
+    Parent = self(),
+    meck:new(z_pivot_rsc, [passthrough]),
+    meck:expect(z_pivot_rsc, insert_task, fun
+        (z_import_feed_media, download_task, _Key, Args, _) ->
+            Parent ! {media_task, Args}, {ok, 1};
+        (Module, Function, Key, Args, TaskContext) ->
+            meck:passthrough([Module, Function, Key, Args, TaskContext])
+    end),
+    try
+        {ok, Parsed} = z_import_feed_parse:parse(Xml, <<"https://example.org/data-feed.xml">>),
+        [Entry] = maps:get(entries, Parsed),
+        {ok, Feed} = m_import_feed:get(FeedId, Context),
+        ?assertEqual(imported, z_import_feed_import:run(Entry, Feed, Context)),
+        Id = m_rsc:rid(Uri, Context),
+        [MediaId] = m_edge:objects(Id, depiction, Context),
+        ?assertEqual(MediaUri, m_rsc:p(MediaId, uri, Context)),
+        ?assertEqual(undefined, m_media:get(MediaId, Context)),
+        ?assertNotEqual(nomatch, binary:match(m_rsc:p(Id, body, Context), <<"<!-- z-media ">>)),
+        ?assertEqual(ok, run_media_task(Context)),
+        ?assertMatch(#{<<"mime">> := <<"image/png">>}, m_media:get(MediaId, Context)),
+        ?assert(m_rsc:is_a(MediaId, image, Context)),
+        ?assertEqual(skipped, z_import_feed_import:run(Entry, Feed, Context)),
+        ?assertEqual([MediaId], m_edge:objects(Id, depiction, Context)),
+        ok = m_rsc:delete(Id, Context),
+        case m_rsc:exists(MediaId, Context) of true -> m_rsc:delete(MediaId, Context); false -> ok end
+    after
+        meck:unload(z_pivot_rsc),
+        m_rsc:delete(User, Context),
+        m_acl_rule:delete_managed(?MODULE, Context),
+        z_db:q("delete from import_feed where id=$1", [FeedId], Context),
+        z_db:q("delete from import_feed_resource where uri in ($1,$2)", [Uri, MediaUri], Context)
+    end.

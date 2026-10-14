@@ -49,7 +49,8 @@ prepare(Entry, FeedSettings, Context) ->
                            end,
     Edges = maps:get(connections, FeedSettings) ++ [{m_rsc:rid(depiction, Context), maps:get(uri, Dependent)} || Dependent <- Dependents],
     Item = #{uri => maps:get(uri, Entry), props => Props, edges => Edges, medium => Medium,
-        media_aliases => maps:get(media_aliases, Entry, #{})},
+        media_aliases => maps:map(fun(_, Selected) -> z_import_feed_media:identity(Selected) end,
+            maps:merge(maps:from_list([{Url, Url} || Url <- Media]), maps:get(media_aliases, Entry, #{})))},
     z_import_feed_native:prepare(Entry, Item, Dependents, FeedSettings, Context).
 
 prepare_media_props(Uri, Entry, Common, Context) ->
@@ -59,7 +60,7 @@ prepare_media_props(Uri, Entry, Common, Context) ->
                       true -> GuessedCategory;
                       false -> media
                   end,
-    #{uri => Uri,
+    #{uri => z_import_feed_media:identity(Uri),
       medium => Uri,
       props => Common#{<<"category_id">> => m_rsc:rid(MediaCategory, Context),
                        <<"title">> => z_html:unescape(maps:get(title, Entry)),
@@ -207,7 +208,7 @@ import(Item, Dependents, Context) ->
         Attached ->
             AttachedId = Id,
             LocalProps = local_body(maps:get(props, Item),
-                media_aliases(Item, MediaResults#{Attached => AttachedId}), Context),
+                media_aliases(Item, MediaResults#{z_import_feed_media:identity(Attached) => AttachedId}), Context),
             case m_rsc:update(Id, maps:with([<<"body">>], LocalProps), Context) of
                 {ok, _} -> ok;
                 {error, Reason} -> throw({import_error, Reason})
@@ -225,9 +226,12 @@ import(Item, Dependents, Context) ->
                   end,
                   maps:get(edges, Item)),
     %% All body embeds and connections exist before a download can start.
-    maps:foreach(fun(MediaUri, MediaId) ->
-        queue_medium(MediaId, MediaUri, Context)
-    end, Imported),
+    lists:foreach(fun(Dependent) ->
+        case maps:find(maps:get(uri, Dependent), Imported) of
+            {ok, MediaId} -> queue_medium(MediaId, maps:get(medium, Dependent), Context);
+            error -> ok
+        end
+    end, Dependents),
     queue_medium(Id, maps:get(medium, Item), Context),
     {Id, Imported}.
 
@@ -351,7 +355,7 @@ link_nodes(Nodes, Base, Context) ->
             Href = proplists:get_value(<<"href">>, Attributes, <<>>),
             Resolved = z_import_feed_http:resolve(Href, Base),
             Content = link_nodes(Children, Base, Context),
-            case image_link(Resolved) of
+            case image_link(z_import_feed_media:resolve(Href, Base)) of
                 true -> Content;
                 false ->
                     Link = case Resolved of
@@ -364,6 +368,7 @@ link_nodes(Nodes, Base, Context) ->
         (Node) -> [Node]
     end, Nodes).
 
+image_link(<<"data:image/", _/binary>>) -> true;
 image_link(<<>>) -> false;
 image_link(Url) ->
     Path = maps:get(path, uri_string:parse(Url), <<>>),

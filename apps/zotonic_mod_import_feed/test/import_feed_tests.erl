@@ -34,6 +34,7 @@
     rss_timezone_check/0,
     header_discovery_check/0,
     fetch_policy_check/0,
+    data_urls_check/0,
     largest_srcset_check/0,
     srcset_density_and_fallback_check/0,
     repeated_image_variants_check/0,
@@ -86,6 +87,7 @@ isolated_test_() ->
         rss_timezone_check,
         header_discovery_check,
         fetch_policy_check,
+        data_urls_check,
         largest_srcset_check,
         srcset_density_and_fallback_check,
         repeated_image_variants_check,
@@ -861,3 +863,33 @@ feed_type_detection_check() ->
 -spec with_props(map(), z:context()) -> z:context().
 with_props(Props, #context{props = Existing} = Context) ->
     Context#context{props = maps:merge(Existing, Props)}.
+
+%% Embedded URLs use the stdlib decoder and remain media-only destinations.
+data_urls_check() ->
+    DataUrl = <<"data:image/png;base64,aGVsbG8=">>,
+    PercentUrl = <<"data:image/png,hello%20world">>,
+    Base = <<"https://example.org/post">>,
+    ?assertNot(z_import_feed_http:url(DataUrl)),
+    ?assertEqual(<<>>, z_import_feed_http:resolve(DataUrl, Base)),
+    ?assertMatch({ok, {_, _, 5, <<"hello">>}}, z_import_feed_media:fetch(DataUrl, undefined)),
+    ?assertMatch({ok, {_, _, 11, <<"hello world">>}}, z_import_feed_media:fetch(PercentUrl, undefined)),
+    ?assertMatch({error, _}, z_import_feed_media:fetch(<<"data:image/png;base64,!">>, undefined)),
+    Identity = z_import_feed_media:identity(DataUrl),
+    ?assertMatch(<<"urn:sha256:", _/binary>>, Identity),
+    ?assertEqual(75, byte_size(Identity)),
+    ?assertEqual(Identity, z_import_feed_media:identity(DataUrl)),
+    Html = <<"<img src='", DataUrl/binary, "' srcset='", DataUrl/binary, " 1x, ", PercentUrl/binary, " 2x'>">>,
+    ?assertEqual([PercentUrl], z_import_feed_parse:images(Html, Base)),
+    ?assertEqual([<<"https://example.org/full.png">>], z_import_feed_parse:images(
+        <<"<img srcset='", DataUrl/binary, ", /full.png 2x'>">>, Base)),
+    ?assertEqual([DataUrl], z_import_feed_parse:images(<<"<img src='", DataUrl/binary, "'>">>, Base)),
+    ?assertEqual([<<"https://example.org/full.png">>], z_import_feed_parse:images(
+        <<"<img src='", DataUrl/binary, "' data-src='/full.png'>">>, Base)),
+    meck:new(z_media_tag, [no_link]),
+    try
+        meck:expect(z_media_tag, url, fun(123, [], _) -> {error, enoent} end),
+        #{<<"body">> := Body} = z_import_feed_import:local_body(
+            #{<<"body">> => Html, <<"website">> => Base}, #{PercentUrl => 123}, #context{}),
+        ?assertNotEqual(nomatch, binary:match(Body, <<"<!-- z-media 123 ">>)),
+        ?assertEqual(nomatch, binary:match(Body, <<"data:">>))
+    after meck:unload(z_media_tag) end.

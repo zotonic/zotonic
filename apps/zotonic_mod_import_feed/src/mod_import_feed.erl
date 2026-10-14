@@ -84,6 +84,12 @@ media are not overwritten. Download failures retry up to five times with increas
 delays, starting at one minute. Permission failures stop immediately. The feed activity
 log shows queued, started, retry, success and error events. A terminal failure leaves
 an empty placeholder so the article remains imported and a later reimport can retry.
+Inline images can use `data:` URLs, including base64 and percent-encoded data.
+They follow the same deferred media import path and become `z-media` embeds.
+A SHA-256 identity of the source URL keeps payloads out of resource URI indexes
+and activity logs, and lets repeated imports reuse the same resource. Embedded
+media have the same 20 MiB size limit as downloaded media.
+
 Native Zotonic resource feeds already use the core importer's persistent media tasks.
 
 For each inline image, the importer selects one variant, preferring the largest
