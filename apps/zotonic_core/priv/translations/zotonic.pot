@@ -1466,6 +1466,10 @@ msgstr ""
 msgid "Click to preview."
 msgstr ""
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:11
+msgid "Close Live view"
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:133
 msgid "Close Sockets"
 msgstr ""
@@ -1476,7 +1480,6 @@ msgid ""
 msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:33
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:11
 msgid "Close preview"
 msgstr ""
 
@@ -2119,10 +2122,6 @@ msgstr ""
 msgid "Hide page from searches (depends on the search query)"
 msgstr ""
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:5
-msgid "Hide preview"
-msgstr ""
-
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:59
 msgid "Home Directory"
 msgstr ""
@@ -2232,16 +2231,16 @@ msgstr ""
 msgid "Link"
 msgstr ""
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:2
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:7
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:14
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:11
-msgid "Live preview"
-msgstr ""
-
 #: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:38
 msgid ""
 "Live query, send notifications when matching items are updated or inserted."
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:2
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:7
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:14
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:9
+msgid "Live view"
 msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:43
@@ -2939,7 +2938,7 @@ msgid "Replace current medium"
 msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:4
-msgid "Resize preview"
+msgid "Resize Live view"
 msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_meta_features.tpl:9
@@ -3030,6 +3029,10 @@ msgstr ""
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:7
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:61
 msgid "Save and View"
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:3
+msgid "Save and open the Live view"
 msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:21
@@ -3156,11 +3159,6 @@ msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:59
 msgid "Show page on multiple paths"
-msgstr ""
-
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:3
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:4
-msgid "Show preview on the right"
 msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:55
