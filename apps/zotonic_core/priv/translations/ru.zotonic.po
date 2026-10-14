@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-13 17:01\n"
+"PO-Revision-Date: 2026-10-14 11:26\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -1425,6 +1425,10 @@ msgstr "Нажмите здесь для получения дополнител
 msgid "Click to preview."
 msgstr "Нажмите для предварительного просмотра."
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:11
+msgid "Close Live view"
+msgstr "Закрыть режим просмотра в реальном времени"
+
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:133
 msgid "Close Sockets"
 msgstr "Закрыть розетки"
@@ -1434,7 +1438,6 @@ msgid "Close all sockets from ip addresses which have over &gt; 250 open sockets
 msgstr "Закрыть сокеты ко всем ip-адресам, имеющим свыше &gt; 250 открытых сокетов."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:33
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:11
 msgid "Close preview"
 msgstr "Закрыть предварительный просмотр"
 
@@ -2059,10 +2062,6 @@ msgstr "Здесь вы можете редактировать аргумент
 msgid "Hide page from searches (depends on the search query)"
 msgstr "Скрыть страницу от поиска (зависит от поискового запроса)"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:5
-msgid "Hide preview"
-msgstr "Скрыть предварительный просмотр"
-
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:59
 msgid "Home Directory"
 msgstr "Главный каталог"
@@ -2166,16 +2165,16 @@ msgstr "Недавно измененные тексты"
 msgid "Link"
 msgstr "Ссылка"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:2
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:7
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:14
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:11
-msgid "Live preview"
-msgstr "Предварительный просмотр в реальном времени"
-
 #: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:38
 msgid "Live query, send notifications when matching items are updated or inserted."
 msgstr "Запрос в реальном времени, отправка уведомлений при обновлении или вставке соответствующих элементов."
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:2
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:7
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:14
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:9
+msgid "Live view"
+msgstr "Просмотр в реальном времени"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:43
 msgid "Local ImageMagick"
@@ -2863,8 +2862,8 @@ msgid "Replace current medium"
 msgstr "Заменить текущий материал"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:4
-msgid "Resize preview"
-msgstr "Изменить размер предварительного просмотра"
+msgid "Resize Live view"
+msgstr "Изменить размер окна предварительного просмотра"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_meta_features.tpl:9
 msgid "Resources in the <i>meta</i> category can have 'features': certain resource properties that decide what to show or hide on certain pages in the admin. If this box is empty, no features are enabled for this meta-resource."
@@ -2936,6 +2935,10 @@ msgstr "Изоляция «песочницы» в этой системе не 
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:61
 msgid "Save and View"
 msgstr "Сохранить и Просмотреть"
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:3
+msgid "Save and open the Live view"
+msgstr "Сохраните и откройте окно «Live view»"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:21
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:7
@@ -3060,11 +3063,6 @@ msgstr "Показать описание ключевого слова"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:59
 msgid "Show page on multiple paths"
 msgstr "Показать страницу на нескольких путях"
-
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:3
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:4
-msgid "Show preview on the right"
-msgstr "Показать предварительный просмотр справа"
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:55
 msgid "Show query as JSON"
