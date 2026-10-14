@@ -619,14 +619,14 @@ delete_feed_content_permissions_check() ->
         meck:expect(z_db, update, fun(import_feed, 7, #{is_paused := true}, _) -> {ok, 1} end),
         meck:expect(z_db, q, fun(_, _) -> [] end),
         meck:expect(z_db, q, fun(Sql, [7], _) ->
-            case lists:prefix("select distinct", Sql) of
+            case lists:prefix("select distinct", string:trim(Sql)) of
                 true -> [{10}, {11}, {12}, {13}, {14}];
                 false -> []
             end
         end),
         meck:expect(m_rsc, p_no_acl, fun
-            (11, is_protected, _) -> true;
-            (15, is_dependent, _) -> true;
+            (11, <<"is_protected">>, _) -> true;
+            (15, <<"is_dependent">>, _) -> true;
             (_, _, _) -> false
         end),
         meck:expect(m_rsc, is_deletable, fun(Id, _) -> not lists:member(Id, [12, 15]) end),

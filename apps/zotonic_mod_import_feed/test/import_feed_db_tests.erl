@@ -148,7 +148,7 @@ poll_and_media() ->
         ?assertEqual({error, invalid_filter}, m_import_feed_log:list(<<"invalid">>, 0, C)),
         ?assertEqual({error, invalid_filter}, m_import_feed_log:list(FeedId, -1, C)),
         ?assertEqual(false, mod_import_feed:observe_acl_is_allowed(
-            #acl_is_allowed{action = subscribe, object = #acl_mqtt{
+            #acl_is_allowed{action = subscribe, object = #acl_mqtt{is_wildcard = false, packet = #{},
                 topic = [<<"model">>, <<"import_feed">>, <<"event">>, <<"log">>]}}, z_acl:anondo(C))),
         {LogOutput, _} = z_template:render_to_iolist("_admin_import_feed_log.tpl",
             [{qfeed, FeedId}, {qoffset, 0}], C),

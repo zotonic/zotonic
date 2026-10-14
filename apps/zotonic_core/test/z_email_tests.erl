@@ -56,5 +56,7 @@ set_relay_config(Context) ->
     application:set_env(zotonic, email_override, ""),
     m_config:set_value(site, smtp_relay, <<"1">>, Context),
     m_config:set_value(site, smtp_relay_host, <<"127.0.0.1">>, Context),
-    m_config:set_value(site, smtp_relay_port, <<"2525">>, Context),
+    %% Use this test node's listener, including when it binds an ephemeral port.
+    Port = ranch:get_port(zotonic_listen_smtp),
+    m_config:set_value(site, smtp_relay_port, integer_to_binary(Port), Context),
     m_config:set_value(site, smtp_relay_ssl, <<>>, Context).
