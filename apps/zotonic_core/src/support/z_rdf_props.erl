@@ -22,6 +22,7 @@
 
 -export([
     mapping/1,
+    category_mapping/1,
 
     extract_resource/2,
     extract_props/1,
@@ -38,6 +39,8 @@
 %% @doc Check if a property can be mapped to a standard property.
 %% This is used in m_rsc:p/3 for fetching namespaced properties.
 -spec mapping( binary() ) -> binary() | undefined.
+mapping(<<"zotonic:id">>) ->
+    <<"id">>;
 mapping(<<"zotonic:", Prop/binary>>) ->
     Prop;
 mapping(Prop) ->
@@ -47,6 +50,13 @@ mapping(Prop) ->
         Mapped ->
             Mapped
     end.
+
+
+%% @doc Map a well-known compact or full RDF category IRI to a common Zotonic category name.
+-spec category_mapping(binary()) -> binary() | undefined.
+category_mapping(Iri) when is_binary(Iri) ->
+    CompactIri = zotonic_rdf:ns_compact(Iri),
+    maps:get(CompactIri, category_mapping(), undefined).
 
 
 %% @doc Extract standard Zotonic src import from an RDF document. The document
@@ -472,3 +482,27 @@ mapping() ->
         <<"geo:long">> => <<"location_lng">>
     }.
 
+category_mapping() ->
+    #{
+        <<"dctype:Text">> => <<"text">>,
+        <<"dctype:Event">> => <<"event">>,
+        <<"dctype:PhysicalObject">> => <<"artifact">>,
+        <<"dctype:Image">> => <<"media">>,
+        <<"dctype:StillImage">> => <<"image">>,
+        <<"dctype:MovingImage">> => <<"video">>,
+        <<"dctype:Sound">> => <<"audio">>,
+        <<"dctype:Collection">> => <<"collection">>,
+        <<"dctype:Dataset">> => <<"query">>,
+
+        <<"schema:Person">> => <<"person">>,
+        <<"schema:Article">> => <<"article">>,
+        <<"schema:NewsArticle">> => <<"news">>,
+        <<"schema:Place">> => <<"location">>,
+        <<"schema:WebSite">> => <<"website">>,
+        <<"schema:Event">> => <<"event">>,
+        <<"schema:MediaObject">> => <<"media">>,
+        <<"schema:ImageObject">> => <<"image">>,
+        <<"schema:VideoObject">> => <<"video">>,
+        <<"schema:AudioObject">> => <<"audio">>,
+        <<"schema:DigitalDocument">> => <<"document">>
+    }.

@@ -1,0 +1,153 @@
+SPARQL built-in status
+=======================
+
+The scanner and parser recognize the SPARQL 1.1 built-in names below. The SQL
+generator supports only the functions marked supported or partial. See
+builtins-mapping.txt for the PostgreSQL expressions and compatibility notes.
+
+
+Supported scalar functions
+--------------------------
+
+    BOUND
+    RAND
+    ABS
+    CEIL
+    FLOOR
+    ROUND
+    CONCAT
+    SUBSTR
+    STRLEN
+    UCASE
+    LCASE
+    CONTAINS
+    STRSTARTS
+    STRENDS
+    STRBEFORE
+    STRAFTER
+    YEAR
+    MONTH
+    DAY
+    HOURS
+    MINUTES
+    SECONDS
+    NOW
+    UUID
+    STRUUID
+    MD5
+    COALESCE
+    IF
+
+Supported with differences from complete SPARQL RDF semantics:
+
+    REPLACE
+    REGEX
+    isLITERAL
+    isNUMERIC
+    isIRI
+    isURI
+    isBLANK
+    sameTerm
+    IRI
+    URI
+
+The regex functions use the common subset of XPath and PostgreSQL POSIX regular
+expressions. The RDF term tests use the available SQL and JSONB types as an
+approximation because complete RDF term metadata is not stored in expressions.
+`isURI` is an alias of `isIRI`. Untagged JSON objects selected from props_json
+are treated as blank nodes. JSON arrays and tagged Zotonic values such as
+translation objects are not blank nodes.
+
+For these JSON blank nodes, sameTerm uses structural JSONB equality. Identical
+objects from different resources or selectors are consequently considered the
+same term. This is a documented Zotonic-specific difference from RDF blank-node
+identity.
+
+IRI and URI constructors resolve constant strings against the query BASE and
+leave existing IRI expressions unchanged. Dynamic text expressions pass
+through as IRI text; dynamic relative values are not resolved against BASE.
+
+
+Supported graph-pattern filters
+-------------------------------
+
+    FILTER EXISTS { ... }
+    FILTER NOT EXISTS { ... }
+
+The graph pattern is correlated with bindings from the enclosing group. Any
+variables introduced inside the graph pattern remain local and are not added to
+the result bindings. Combining EXISTS with other expressions, or using it as a
+projected value, is not yet supported.
+
+
+Supported aggregates
+--------------------
+
+    COUNT, including COUNT(DISTINCT *)
+    SUM
+    MIN
+    MAX
+    AVG
+    GROUP_CONCAT, including SEPARATOR
+    SAMPLE on PostgreSQL 16 and newer
+
+GROUP BY, HAVING and aggregate expressions in SELECT and ORDER BY are supported.
+SAMPLE uses PostgreSQL any_value() and returns an error on older versions.
+
+
+Supported XSD constructor functions
+-----------------------------------
+
+Expanded datatype IRIs are handled as function calls for:
+
+    xsd:string
+    xsd:boolean
+    xsd:integer
+    xsd:long
+    xsd:int
+    xsd:short
+    xsd:decimal
+    xsd:float
+    xsd:double
+    xsd:dateTime
+    xsd:dateTimeStamp
+
+
+DATATYPE reads RDF metadata, including rdf:langString for tagged literals and
+translation-function results. Heterogeneous aggregate metadata remains limited.
+
+
+Recognized but unsupported
+--------------------------
+
+    STR
+    LANG
+    LANGMATCHES
+    BNODE
+    ENCODE_FOR_URI
+    TIMEZONE
+    TZ
+    SHA1
+    SHA256
+    SHA384
+    SHA512
+    STRLANG
+    STRDT
+
+URI is defined by SPARQL as a synonym for IRI; it is not an obsolete grammar
+entry.
+
+
+Zotonic translation extensions
+-----------------------------
+
+    zotonic:translation(Value, Language)
+        Exact language selection; no alias or parent-language fallback.
+
+    zotonic:translationFallback(Value, Language)
+        Zotonic canonical language and fallback chain, then site default,
+        English, and any available translation.
+
+Both accept translation records, JSONB strings, text/varchar values and nulls.
+Results retain the actual selected language; plain strings remain untagged and
+missing values are unbound. See builtins-lang-support.txt for examples.

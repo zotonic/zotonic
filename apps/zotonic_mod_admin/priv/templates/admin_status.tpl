@@ -12,6 +12,7 @@
     <div class="row">
         <div class="col-md-12">
             {% include "_admin_status_alert.tpl" %}
+            {% include "_admin_migrations.tpl" %}
 
             <div class="widget">
                 <div class="widget-content">

@@ -25,7 +25,8 @@
     write_file/2,
     write_file/3,
 
-    encode_line/2
+    encode_line/2,
+    encode_line/3
     ]).
 
 -spec sanitize( file:filename_all(), file:filename_all() ) -> ok.
@@ -66,6 +67,25 @@ encode_line([V|Xs], Sep) ->
         <<"\r\n">>
         ]).
 
+%% @doc Encode a CSV row. Disable spreadsheet sanitization only for formats
+%% requiring exact values, such as SPARQL Results CSV. Existing defaults retain
+%% formula protection and control-character filtering.
+-spec encode_line(Values, Separator, Options) -> binary() when
+    Values :: [term()],
+    Separator :: z_csv_parser:sep(),
+    Options :: #{sanitize => boolean()}.
+encode_line(Values, Separator, #{sanitize := false}) ->
+    iolist_to_binary([
+        lists:join(Separator, [encode_exact_value(V) || V <- Values]),
+        <<"\r\n">>
+    ]);
+encode_line(Values, Separator, _Options) ->
+    encode_line(Values, Separator).
+
+encode_exact_value(<<>>) -> <<>>;
+encode_exact_value(Value) ->
+    quote(binary:replace(z_convert:to_binary(Value), <<"\"">>, <<"\"\"">>, [global])).
+
 encode_value(<<>>) ->
     <<>>;
 encode_value(B) when is_binary(B) ->
@@ -104,4 +124,3 @@ field(D) -> D.
 
 is_valid_number(D) ->
     re:run(D, <<"^[\\+\\-]?[0-9]+(\\.[0-9]+)?([eE][\\+\\-]?[0-9]+)?$">>) =/= nomatch.
-

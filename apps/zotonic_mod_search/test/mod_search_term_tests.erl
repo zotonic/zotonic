@@ -4,6 +4,22 @@ EUnit tests for search term/query map normalization.
 ").
 
 -include_lib("eunit/include/eunit.hrl").
+
+query_text_is_opaque_test() ->
+    QueryText = <<
+        "[\n"
+        "  {\n"
+        "    \"term\": \"cat\",\n"
+        "    \"value\": \"text\"\n"
+        "  }\n"
+        "]"
+    >>,
+    Query = z_search_props:from_map(#{
+        <<"query_text">> => QueryText,
+        <<"query_type">> => <<"search_json">>
+    }),
+    ?assertEqual(QueryText, z_search:lookup_qarg_value(<<"query_text">>, Query)).
+
 props_map1_test() ->
     T = #{
         <<"page">> => 1,

@@ -117,6 +117,7 @@
     flush/1,
 
     assert_table_name/1,
+    assert_column_name/1,
     quoted_table_name/1,
     prepare_cols/2,
     merge_props/1,
@@ -660,8 +661,15 @@ qmap_props(Sql, Args, Options, Context) ->
 %% @doc Make associative maps from all the rows in the result set.
 cols_map(_Cols, [], _IsMergeProps, _Keys) -> [];
 cols_map(Cols, Rows, IsMergeProps, Keys) ->
-    ColProps = build_col_props(Cols, Keys, IsMergeProps),
+    %% Physical columns win, then JSON, then legacy props, regardless of SELECT order.
+    %% map_merge_props/2 preserves keys already present in the accumulator.
+    ColProps = lists:sort(fun(A, B) -> props_priority(A) =< props_priority(B) end,
+        build_col_props(Cols, Keys, IsMergeProps)),
     [ map_row(ColProps, Row) || Row <- Rows ].
+
+props_priority({_, Col, true}) when Col =:= props; Col =:= <<"props">> -> 2;
+props_priority({_, _, true}) -> 1;
+props_priority(_) -> 0.
 
 map_row(ColProps, Row) ->
     lists:foldl(
@@ -1996,6 +2004,11 @@ drop_table(Table, Context) ->
 -spec assert_table_name(table_name()) -> true.
 assert_table_name(Table) ->
     z_db_table:assert_table_name(Table).
+
+%% @doc Assert that the column name is safe to use. Crashes if the column name is not safe.
+-spec assert_column_name(column_name()) -> true.
+assert_column_name(Table) ->
+    z_db_table:assert_column_name(Table).
 
 %% @doc Quote a table name so that it is safe to use in SQL queries.
 -spec quoted_table_name(table_name()) -> {default | string(), string(), string()}.

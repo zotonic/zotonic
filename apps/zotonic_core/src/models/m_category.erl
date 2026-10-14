@@ -682,25 +682,29 @@ is_meta(CatId, Context) when is_integer(CatId) ->
 %%      routines that are not able to use the rsc caching (due to recursion).
 -spec is_a_prim(m_rsc:resource_id(), binary()|string()|atom(), z:context()) -> boolean().
 is_a_prim(CatId, Name, Context) ->
-    z_depcache:memo(
-        fun() ->
-             1 =:= z_db:q1("
-                    select count(*)
-                    from hierarchy a,
-                         hierarchy b
-                    where a.name = '$category'
-                      and b.name = '$category'
-                      and a.id = (select id from rsc where name = $2)
-                      and b.id = $1
-                      and b.lft >= a.lft
-                      and b.rght <= a.rght",
-                    [CatId, Name],
-                    Context)
-        end,
-        {is_category_prim, Name, CatId},
-        ?WEEK,
-        [{hierarchy, <<"$category">>}],
-        Context).
+    Lookup = fun() ->
+        1 =:= z_db:q1("
+            select count(*)
+            from hierarchy a, hierarchy b
+            where a.name = '$category'
+              and b.name = '$category'
+              and a.id = (select id from rsc where name = $2)
+              and b.id = $1
+              and b.lft >= a.lft
+              and b.rght <= a.rght",
+            [CatId, Name], Context)
+    end,
+    case z_context:get(rsc_defaults, Context) of
+        true ->
+            %% Stored defaults must see the transaction's current category tree.
+            Lookup();
+        _ ->
+            z_depcache:memo(Lookup,
+                {is_category_prim, Name, CatId},
+                ?WEEK,
+                [{hierarchy, <<"$category">>}],
+                Context)
+    end.
 
 
 %% @doc Return the category ids that are contained within the category, including

@@ -308,9 +308,9 @@ property_name_type_hint_test() ->
     binary   = z_props:property_name_type_hint(<<"name">>),
     binary   = z_props:property_name_type_hint(<<"type">>),
     binary   = z_props:property_name_type_hint(<<"tz">>),
-    int      = z_props:property_name_type_hint(<<"version">>),
-    int      = z_props:property_name_type_hint(<<"visible_for">>),
-    int      = z_props:property_name_type_hint(<<"privacy">>),
+    integer  = z_props:property_name_type_hint(<<"version">>),
+    integer  = z_props:property_name_type_hint(<<"visible_for">>),
+    integer  = z_props:property_name_type_hint(<<"privacy">>),
     datetime = z_props:property_name_type_hint(<<"created">>),
     datetime = z_props:property_name_type_hint(<<"modified">>),
     datetime = z_props:property_name_type_hint(<<"date_start">>),
@@ -333,14 +333,14 @@ property_name_type_hint_test() ->
     text     = z_props:property_name_type_hint(<<"summary">>),
     text     = z_props:property_name_type_hint(<<"chapeau">>),
     text     = z_props:property_name_type_hint(<<"subtitle">>),
-    %% is_/date_is_ prefix patterns -> bool
-    bool     = z_props:property_name_type_hint(<<"is_published">>),
-    bool     = z_props:property_name_type_hint(<<"is_featured">>),
-    bool     = z_props:property_name_type_hint(<<"is_anything">>),
-    bool     = z_props:property_name_type_hint(<<"date_is_all_day">>),
-    bool     = z_props:property_name_type_hint(<<"seo_noindex">>),
+    %% is_/date_is_ prefix patterns -> boolean
+    boolean  = z_props:property_name_type_hint(<<"is_published">>),
+    boolean  = z_props:property_name_type_hint(<<"is_featured">>),
+    boolean  = z_props:property_name_type_hint(<<"is_anything">>),
+    boolean  = z_props:property_name_type_hint(<<"date_is_all_day">>),
+    boolean  = z_props:property_name_type_hint(<<"seo_noindex">>),
     %% Suffix extraction fallback (last segment after final underscore)
-    int      = z_props:property_name_type_hint(<<"foo_int">>),
+    integer  = z_props:property_name_type_hint(<<"foo_int">>),
     uri      = z_props:property_name_type_hint(<<"link_url">>),
     uri      = z_props:property_name_type_hint(<<"ref_uri">>),
     email    = z_props:property_name_type_hint(<<"contact_email">>),
@@ -356,7 +356,7 @@ property_name_type_hint_test() ->
     binary   = z_props:property_name_type_hint(<<"mail_street_1">>),
     binary   = z_props:property_name_type_hint(<<"billing_country">>),
     %% location specific keys
-    int      = z_props:property_name_type_hint(<<"location_zoom_level">>),
+    integer  = z_props:property_name_type_hint(<<"location_zoom_level">>),
     float    = z_props:property_name_type_hint(<<"location_lat">>),
     float    = z_props:property_name_type_hint(<<"location_lng">>),
     %% Unknown key -> undefined

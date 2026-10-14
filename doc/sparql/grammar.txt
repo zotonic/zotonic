@@ -1,0 +1,35 @@
+SPARQL grammar
+==============
+
+W3C SPARQL 1.1 query specification:
+
+https://www.w3.org/TR/sparql11-query/
+
+EBNF grammar:
+
+https://www.w3.org/TR/sparql11-query/#grammar
+
+The W3C EBNF has been adapted to a Yecc-compatible LALR grammar in:
+
+    apps/zotonic_mod_sparql/src/support/z_sparql_parser.yrl
+
+Lexical scanning is implemented in:
+
+    apps/zotonic_mod_sparql/src/support/z_sparql_scanner.erl
+
+The parser intentionally recognizes more syntax than the query planner and SQL
+generator execute. In particular, it parses SELECT, CONSTRUCT, DESCRIBE and ASK,
+while the planner currently accepts only SELECT. It also parses dataset clauses,
+BIND, GRAPH, LIMIT and OFFSET, which SQL generation currently rejects.
+
+The executable subset includes basic triple patterns, nested groups, UNION,
+OPTIONAL, FILTER, VALUES, projection expressions, DISTINCT, GROUP BY, HAVING,
+ORDER BY, aggregates and a single inverse predicate path. See query-plan.md and
+builtins.txt for the exact implementation status.
+
+REDUCED is accepted and currently behaves like the default projection; no
+additional duplicate elimination is requested from PostgreSQL.
+
+There is no canonical W3C LALR grammar. Other LALR/Bison-based SPARQL parsers
+include Rasqal and older RDFLib parsers. The Elixir `sparql` project is another
+reference but does not cover the complete W3C EBNF.
