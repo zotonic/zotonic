@@ -1022,6 +1022,8 @@ is_all_day(_Id, _Props, _Context) ->
     false.
 
 
+%% @doc Perform the update or insert transaction. On error: rollback the transaction
+%% and nullify any pending notifications.
 update_transaction(RscUpd, Func, Context) ->
     Result = z_db:transaction(
         fun(Ctx) ->

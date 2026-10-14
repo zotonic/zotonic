@@ -145,3 +145,58 @@ disconnect_test() ->
         end, Context),
 
     ok.
+
+%% Notifications belong to the outer transaction and must not escape a rollback.
+transaction_notifications_test() ->
+    Context = z_context:new(zotonic_site_testsandbox),
+    Event = z_db_test_notification,
+    ok = z_notifier:observe(Event, self(), Context),
+    try
+        lists:foreach(fun(Outcome) ->
+            Ref = make_ref(),
+            Result = z_db:transaction(fun(Tx) ->
+                z_notifier:notify({Event, Ref, notify}, Tx),
+                ok = z_db:transaction(fun(NestedTx) ->
+                    z_notifier:notify1({Event, Ref, notify1}, NestedTx),
+                    ok
+                end, Tx),
+                ?assertMatch([_, _], erlang:get(notify_queue)),
+                receive
+                    {'$gen_cast', {{Event, Ref, _}, _}} -> error(premature_notification)
+                after 0 -> ok
+                end,
+                case Outcome of
+                    commit -> committed;
+                    rollback -> {rollback, cancelled};
+                    thrown_rollback -> throw({rollback, cancelled});
+                    nested_rollback ->
+                        z_db:transaction(fun(_) -> {rollback, cancelled} end, Tx),
+                        error(continued_after_nested_rollback);
+                    exception -> error(cancelled)
+                end
+            end, Context),
+            ?assertEqual(undefined, erlang:get(notify_queue)),
+            case Outcome of
+                commit ->
+                    ?assertEqual(committed, Result),
+                    lists:foreach(fun(Kind) ->
+                        receive
+                            {'$gen_cast', {{Event, Ref, Kind}, _}} -> ok
+                        after 1000 -> error({missing_notification, Kind})
+                        end
+                    end, [notify, notify1]);
+                _ ->
+                    case Outcome of
+                        exception -> ?assertMatch({rollback, {cancelled, _}}, Result);
+                        _ -> ?assertEqual({rollback, cancelled}, Result)
+                    end,
+                    receive
+                        {'$gen_cast', {{Event, Ref, _}, _}} -> error(rollback_notification)
+                    after 100 -> ok
+                    end
+            end
+        end, [commit, rollback, thrown_rollback, nested_rollback, exception])
+    after
+        z_notifier:detach(Event, Context),
+        z_notifier:notify_queue_flush(Context)
+    end.
