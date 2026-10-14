@@ -260,7 +260,7 @@ poll_and_media() ->
             ?assertNotEqual(nomatch, binary:match(iolist_to_binary(Loader), <<"z-lazy">>)),
             {rollback, cursor_checked}
         end, C),
-        ?assertEqual(cursor_checked, CursorTest),
+        ?assertEqual({rollback, cursor_checked}, CursorTest),
         ?assertEqual([Mid], m_edge:objects(Id, depiction, C)),
         ?assertEqual([1], m_edge:objects(Id, about, C)),
         ?assertEqual(true, m_rsc:p(Mid, is_dependent, C)),
@@ -461,7 +461,7 @@ native_depth() ->
             ?assertEqual(Depth, proplists:get_value(import_edges, maps:get(<<"options">>, Status))),
             {rollback, native_depth_ok}
         end, C),
-        ?assertEqual(native_depth_ok, Result)
+        ?assertEqual({rollback, native_depth_ok}, Result)
     end, [0, 1, 2]).
 
 native_edge(Uri) ->
