@@ -1,4 +1,7 @@
 %% @copyright 2026 Marc Worrell
+%% @doc Logging of import feed activity. Accessible for users that are allowed
+%% to configure import feeds.
+%% @end
 
 %% Copyright 2026 Marc Worrell
 %%
@@ -15,18 +18,31 @@
 %% limitations under the License.
 
 -module(m_import_feed_log).
--moduledoc(#{zotonic_keywords => ["reference", "operator", "model", "logging_and_monitoring", "import"]}).
--moduledoc("""
+
+-moduledoc(#{ zotonic_keywords => ["reference", "operator", "model", "logging_and_monitoring", "import"] }).
+-moduledoc(<<"
 Persistent feed activity, accessible to users allowed to use `mod_import_feed`.
 `m.import_feed_log.list[FeedId][BeforeId]` returns up to 100 events older than the cursor (0 starts at the newest); use
 `all` for all feeds. Invalid filters return an error, never an unfiltered log.
 Events retain user, category and content-group IDs as snapshots. History is
 removed with its feed or after 30 days. The MQTT topic
 `model/import_feed/event/log` carries committed log IDs. Clients fetch and prepend only the new row.
-""").
+">>).
+
 -behaviour(zotonic_model).
+
 -include_lib("zotonic_core/include/zotonic.hrl").
--export([m_get/3, list/3, get/2, write/3, changed/2, install/1, cleanup/1]).
+
+-export([
+    m_get/3,
+    list/3,
+    get/2,
+    write/3,
+    changed/2,
+    install/1,
+    cleanup/1
+]).
+
 -define(PAGE_SIZE, 100).
 -define(RETENTION_DAYS, 30).
 -define(MAX_MESSAGE_LENGTH, 2000).
