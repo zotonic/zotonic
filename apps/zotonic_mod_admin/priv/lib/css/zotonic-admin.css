@@ -2411,26 +2411,13 @@ body.admin-preview-resizing .admin-edit-preview-resizer {
   background: var(--bs-primary, #337ab7);
 }
 
-html body .btn.admin-edit-preview-toggle {
+html body .btn.admin-edit-preview-open {
   display: inline-flex;
   align-items: center;
   gap: 6px;
 }
-html body .btn.admin-edit-preview-toggle .admin-edit-preview-toggle-icon {
+html body .btn.admin-edit-preview-open svg {
   flex-shrink: 0;
-}
-html body .btn.admin-edit-preview-toggle .admin-edit-preview-toggle-pane {
-  opacity: 0.3;
-}
-html body .btn.admin-edit-preview-toggle .admin-edit-preview-toggle-caret {
-  display: block;
-  flex-shrink: 0;
-}
-html body .btn.admin-edit-preview-toggle[aria-expanded=true] .admin-edit-preview-toggle-pane {
-  opacity: 1;
-}
-html body .btn.admin-edit-preview-toggle[aria-expanded=true] .admin-edit-preview-toggle-caret {
-  transform: rotate(180deg);
 }
 
 html body.admin-frontend-editor {

@@ -54,22 +54,21 @@
             if (topics.length) broker.subscribe(topics, refresh, options);
         }
 
+        function clearFrame() {
+            frame.onload = null;
+            frame.contentWindow.location.replace("about:blank");
+        }
+
         function setOpen(value) {
             open = value;
             panel.hidden = !open;
             document.body.classList.toggle("admin-preview-open", open);
-            document.querySelectorAll('[data-admin-preview="toggle"]').forEach(button => {
-                button.setAttribute("aria-expanded", String(open));
-                button.classList.toggle("btn-primary", open);
-                button.classList.toggle("btn-default", !open);
-                button.title = open ? button.dataset.previewHideTitle : button.dataset.previewShowTitle;
-            });
             subscribe();
             if (open) {
                 refresh();
             } else {
                 clearTimeout(timer);
-                frame.removeAttribute("src");
+                clearFrame();
                 lastUrl = undefined;
             }
         }
@@ -77,7 +76,7 @@
         broker.subscribe("admin/preview/context", function(msg) {
             context = msg.payload;
             clearTimeout(timer);
-            frame.removeAttribute("src");
+            clearFrame();
             link.removeAttribute("href");
             lastUrl = undefined;
             subscribe();
@@ -92,7 +91,7 @@
                 url = msg.payload.url && new URL(msg.payload.url, window.location.href);
             } catch (_) { /* Missing or invalid page URL. */ }
             if (!url || !["http:", "https:"].includes(url.protocol)) {
-                frame.removeAttribute("src");
+                clearFrame();
                 link.removeAttribute("href");
                 unavailable.hidden = false;
                 return;
@@ -101,7 +100,7 @@
             // The iframe uses the existing session and same-origin frame policy.
             if (url.origin !== window.location.origin) {
                 unavailable.hidden = false;
-                frame.removeAttribute("src");
+                clearFrame();
                 return;
             }
             let scroll;
@@ -125,7 +124,9 @@
             // Also suppress persistence when Fetch Metadata headers are absent.
             // Keep the toolbar's normal "Open in new tab" URL unchanged.
             url.searchParams.set("z_language_persist", "false");
-            frame.src = url.href;
+            // Iframe navigations share the editor's session history. Replace
+            // automatic loads so Cancel/Back does not step through preview URLs.
+            frame.contentWindow.location.replace(url.href);
         }, options);
 
         document.addEventListener("click", function(event) {
@@ -133,15 +134,13 @@
             if (!button) return;
             interacted = true;
             switch (button.dataset.adminPreview) {
-                case "toggle":
-                    setOpen(!open);
-                    if (open) {
-                        // Use the existing save button for editor sync and form validation.
-                        // Restoring the panel on page load must not submit the form.
-                        document.querySelector(
-                            '#rscform #save_stay:not(:disabled), #rscform #save_stay_float:not(:disabled)'
-                        )?.click();
-                    }
+                case "open":
+                    setOpen(true);
+                    // Every click saves, including when the view is already open.
+                    // Use the existing save button for editor sync and form validation.
+                    document.querySelector(
+                        '#rscform #save_stay:not(:disabled), #rscform #save_stay_float:not(:disabled)'
+                    )?.click();
                     break;
                 case "close": setOpen(false); break;
                 case "refresh": refresh(); break;

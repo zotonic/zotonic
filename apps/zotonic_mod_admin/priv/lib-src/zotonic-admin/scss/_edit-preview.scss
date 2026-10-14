@@ -78,19 +78,11 @@ body.admin-preview-resizing {
     .admin-edit-preview-resizer { background: var(--bs-primary, #337ab7); }
 }
 
-// Show the destination panel and make the open/closed state visible in both editors.
-html body .btn.admin-edit-preview-toggle {
+// Show the destination panel beside the save-and-open action.
+html body .btn.admin-edit-preview-open {
     display: inline-flex;
     align-items: center;
     gap: 6px;
 
-    .admin-edit-preview-toggle-icon { flex-shrink: 0; }
-    .admin-edit-preview-toggle-pane { opacity: .3; }
-    .admin-edit-preview-toggle-caret { display: block; flex-shrink: 0; }
-
-    &[aria-expanded="true"] {
-
-        .admin-edit-preview-toggle-pane { opacity: 1; }
-        .admin-edit-preview-toggle-caret { transform: rotate(180deg); }
-    }
+    svg { flex-shrink: 0; }
 }
