@@ -24,7 +24,7 @@
 -mod_title("Import feeds").
 -mod_description("Discover RSS and Atom feeds and automatically import articles and media.").
 -mod_depends([admin, cron]).
--mod_schema(6).
+-mod_schema(7).
 -mod_config([]).
 
 -moduledoc(#{
@@ -154,7 +154,7 @@ recursively imported resources may generate separate notifications.
 -include_lib("zotonic_mod_wires/include/mod_wires.hrl").
 -include_lib("zotonic_mod_admin/include/admin_menu.hrl").
 
--export([observe_admin_menu/3, observe_tick_1m/2, observe_rsc_import_fetch/2, manage_schema/2, event/2]).
+-export([observe_import_feed_log/2, observe_acl_is_allowed/2, observe_tick_24h/2, observe_admin_menu/3, observe_tick_1m/2, observe_rsc_import_fetch/2, manage_schema/2, event/2]).
 
 %% @doc Refresh known feed articles through the feed's settings and import account.
 -spec observe_rsc_import_fetch(#rsc_import_fetch{}, z:context()) ->
@@ -182,6 +182,27 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
 observe_tick_1m(tick_1m, Context) ->
     _ = z_sidejob:start_site_unique(mod_import_feed, z_import_feed_poll, run, [], Context), ok.
 
+%% Internal notification, delayed by z_notifier until the transaction commits.
+-spec observe_import_feed_log({import_feed_log, integer(), integer()}, z:context()) -> ok.
+observe_import_feed_log({import_feed_log, FeedId, LogId}, Context) ->
+    %% A savepoint rollback can discard a queued row without clearing the queue.
+    case z_db:q1("select id from import_feed_log where id=$1 and feed_id=$2", [LogId, FeedId], Context) of
+        LogId ->
+            _ = z_mqtt:publish(<<"model/import_feed/event/log">>,
+                #{feed_id => FeedId, log_id => LogId}, Context),
+            ok;
+        undefined -> ok
+    end.
+
+%% Live activity notices are restricted to feed managers, like the log model.
+observe_acl_is_allowed(#acl_is_allowed{action = subscribe,
+        object = #acl_mqtt{topic = [<<"model">>, <<"import_feed">>, <<"event">>, <<"log">>]}}, Context) ->
+    m_import_feed:allowed(Context);
+observe_acl_is_allowed(_, _) -> undefined.
+
+observe_tick_24h(tick_24h, Context) ->
+    m_import_feed_log:cleanup(Context).
+
 -spec manage_schema(install | {upgrade, integer()}, z:context()) -> ok.
 manage_schema(_, Context) ->
     m_import_feed:install(Context).
@@ -190,6 +211,10 @@ manage_schema(_, Context) ->
 event(Event, Context) ->
     %% These actions run when the response arrives, including permission errors.
     RenderContext = case Event of
+        #submit{message = discover} ->
+            fetch_complete("feed-discover-form", Context);
+        #postback{message = {select, _}} ->
+            fetch_complete("feed-discovery", Context);
         #postback{message = {test, _}} ->
             z_render:wire([
                 {remove_class, [{target, "feed-preview"}, {class, "is-loading"}]},
@@ -202,6 +227,13 @@ event(Event, Context) ->
         true -> handle(Event, RenderContext);
         false -> z_render:growl_error(?__("You are not allowed to manage feeds.", RenderContext), RenderContext)
     end.
+
+%% Restore controls on success, fetch errors and permission-denied responses.
+fetch_complete(Target, Context) ->
+    z_render:wire([
+        {remove_class, [{target, Target}, {class, "is-loading"}]},
+        {enable, [{selector, ".import-feed-fetch-button"}]}
+    ], Context).
 
 handle(#postback{message = add_connection}, Context) ->
     z_render:dialog(?__("Add default connection", Context),
@@ -358,6 +390,17 @@ handle(#postback{message = {test, Args}}, Context) ->
     end;
 handle(#postback{message = {pause, Args}}, Context) ->
     result(m_import_feed:pause(proplists:get_value(id, Args), proplists:get_value(paused, Args), Context), Context);
+handle(#postback{message = {log_fetch, Args}}, Context) ->
+    case m_import_feed:get(proplists:get_value(id, Args), Context) of
+        {ok, #{is_paused := true}} -> failure(feed_paused, Context);
+        {ok, #{is_running := true}} -> failure(feed_is_running, Context);
+        {ok, Feed} ->
+            case m_import_feed:queue(maps:get(id, Feed), false, Context) of
+                ok -> z_render:growl(?__("Feed queued for fetching. Watch the activity log for results.", Context), Context);
+                {error, Reason} -> failure(Reason, Context)
+            end;
+        {error, Reason} -> failure(Reason, Context)
+    end;
 handle(#postback{message = {poll, Args}}, Context) ->
     result(m_import_feed:queue(proplists:get_value(id, Args), proplists:get_value(reimport, Args, false), Context), Context);
 handle(#postback{message = {delete_content, Args}}, Context) ->

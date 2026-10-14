@@ -62,6 +62,14 @@ import_lifecycle() ->
         E2 = Entry#{uri => <<"https://example.org/feed-test/2">>},
         ?assertEqual(skipped, z_import_feed_import:run(E2, F, C)),
         ?assertEqual(undefined, m_rsc:rid(maps:get(uri, E2), C)),
+        ErrorUri = <<"https://example.org/feed-test/error">>,
+        ?assertMatch({error, _}, z_import_feed_import:run(Entry#{uri => ErrorUri}, F, C)),
+        ?assertEqual(undefined, m_rsc:rid(ErrorUri, C)),
+        {ok, ErrorLog} = m_import_feed_log:list(FeedId, 0, C),
+        ?assert(lists:any(fun
+            (#{uri := LogUri, event := <<"entry">>, status := <<"error">>}) -> LogUri =:= ErrorUri;
+            (_) -> false
+        end, maps:get(items, ErrorLog))),
         z_notifier:detach(import_resource, C),
         ok = m_rsc:delete(Id, C),
         ?assertEqual(skipped, z_import_feed_import:run(Entry#{title => <<"Do not resurrect">>}, F, C)),
@@ -74,6 +82,8 @@ import_lifecycle() ->
         z_db:q("delete from import_feed_resource where uri like 'https://example.org/feed-test/%'", C)
     end.
 
+observe(#import_resource{item = #{uri := <<"https://example.org/feed-test/error">>}}, _) ->
+    {error, observer_test_error};
 observe(#import_resource{item = #{edges := []}, related = [], source = #{importer := mod_import_feed, feed := #{id := _}},
         raw = {<<"item">>, [], []}}, _) ->
     {skip, observer_test}.
@@ -99,8 +109,16 @@ poll_and_media() ->
         ok = z_import_feed_poll:run(C),
         {ok, Before} = m_import_feed:get(FeedId, C),
         ?assertEqual(0, maps:get(polls, Before)),
+        ok = z_mqtt:subscribe(<<"model/import_feed/event/log">>, C),
         ok = m_import_feed:pause(FeedId, false, C),
         ok = z_import_feed_poll:run(C),
+        receive
+            {mqtt_msg, #{message := #{payload := #{feed_id := FeedId, log_id := LiveId}}}} ->
+                ?assertMatch({ok, #{feed_id := FeedId}}, m_import_feed_log:get(LiveId, C)),
+                ?assertEqual({error, eacces}, m_import_feed_log:get(LiveId, z_acl:anondo(C)))
+        after 1000 -> error(no_live_log_notification)
+        end,
+        z_mqtt:unsubscribe(<<"model/import_feed/event/log">>, C),
         {ok, After} = m_import_feed:get(FeedId, C),
         ?assertEqual(undefined, maps:get(last_error, After)),
         ?assertEqual(1, maps:get(polls, After)),
@@ -108,6 +126,60 @@ poll_and_media() ->
         Id = m_rsc:rid(<<"https://example.org/poll-test/1">>, C),
         Mid = m_rsc:rid(MediaUrl, C),
         ?assert(is_integer(Id)), ?assert(is_integer(Mid)),
+        {ok, Activity} = m_import_feed_log:list(FeedId, 0, C),
+        LogRows = maps:get(items, Activity),
+        ?assert(lists:all(fun(#{feed_id := LogFeed}) -> LogFeed =:= FeedId end, LogRows)),
+        ?assert(lists:any(fun
+            (#{event := <<"poll">>, status := <<"ok">>}) -> true;
+            (_) -> false
+        end, LogRows)),
+        ?assert(lists:any(fun
+            (#{event := <<"article">>, rsc_id := LogId, user_id := LogUser,
+                    category_id := CategoryId}) ->
+                LogId =:= Id andalso LogUser =:= ImportUser
+                    andalso CategoryId =:= m_rsc:rid(article, C);
+            (_) -> false
+        end, LogRows)),
+        ?assert(lists:any(fun
+            (#{event := <<"media">>, rsc_id := LogId}) -> LogId =:= Mid;
+            (_) -> false
+        end, LogRows)),
+        ?assertEqual({error, eacces}, m_import_feed_log:list(FeedId, 0, z_acl:anondo(C))),
+        ?assertEqual({error, invalid_filter}, m_import_feed_log:list(<<"invalid">>, 0, C)),
+        ?assertEqual({error, invalid_filter}, m_import_feed_log:list(FeedId, -1, C)),
+        ?assertEqual(false, mod_import_feed:observe_acl_is_allowed(
+            #acl_is_allowed{action = subscribe, object = #acl_mqtt{
+                topic = [<<"model">>, <<"import_feed">>, <<"event">>, <<"log">>]}}, z_acl:anondo(C))),
+        {LogOutput, _} = z_template:render_to_iolist("_admin_import_feed_log.tpl",
+            [{qfeed, FeedId}, {qoffset, 0}], C),
+        LogHtml = iolist_to_binary(LogOutput),
+        ?assertNotEqual(nomatch, binary:match(LogHtml, <<"Fetch now">>)),
+        ?assertNotEqual(nomatch, binary:match(LogHtml, <<"poll-test/1">>)),
+        PageContext = z_context:set_q(<<"feed">>, integer_to_binary(FeedId), C),
+        PageContent = z_template:render_block(content, "admin_import_feed_log.tpl", [], PageContext),
+        {PageOutput, _} = z_render:render_to_iolist(PageContent, PageContext),
+        ?assertNotEqual(nomatch, binary:match(iolist_to_binary(PageOutput), <<"feed-log-entries">>)),
+        %% Scrolling uses IDs rather than offsets, even if a newer event arrives.
+        CursorTest = z_db:transaction(fun(Tx) ->
+            z_db:q("insert into import_feed_log(feed_id,event,status)
+                select $1,'test','ok' from generate_series(1,105)", [FeedId], Tx),
+            {ok, FirstPage} = m_import_feed_log:list(FeedId, 0, Tx),
+            ?assertEqual(100, length(maps:get(items, FirstPage))),
+            ?assertEqual(true, maps:get(has_next, FirstPage)),
+            NewId = z_db:q1("insert into import_feed_log(feed_id,event,status)
+                values($1,'new','ok') returning id", [FeedId], Tx),
+            {ok, OlderPage} = m_import_feed_log:list(FeedId, maps:get(next, FirstPage), Tx),
+            LoadedIds = [maps:get(id, Row) || Row <- maps:get(items, FirstPage) ++ maps:get(items, OlderPage)],
+            ?assertEqual(length(LoadedIds), length(lists:usort(LoadedIds))),
+            ?assertNot(lists:member(NewId, LoadedIds)),
+            Expected = z_db:q1("select count(*) from import_feed_log where feed_id=$1 and id<>$2", [FeedId, NewId], Tx),
+            ?assertEqual(Expected, length(LoadedIds)),
+            {Loader, _} = z_template:render_to_iolist("_admin_import_feed_log_loader.tpl",
+                [{qfeed, FeedId}, {qbefore, 0}], Tx),
+            ?assertNotEqual(nomatch, binary:match(iolist_to_binary(Loader), <<"z-lazy">>)),
+            {rollback, cursor_checked}
+        end, C),
+        ?assertEqual(cursor_checked, CursorTest),
         ?assertEqual([Mid], m_edge:objects(Id, depiction, C)),
         ?assertEqual([1], m_edge:objects(Id, about, C)),
         ?assertEqual(true, m_rsc:p(Mid, is_dependent, C)),
@@ -147,6 +219,11 @@ poll_and_media() ->
                 z_db:q("delete from import_feed_resource where uri=$1", [ArticleUri], C)
             end
         end, [<<"dependent">>, <<"attached">>]),
+        {ok, MediaLog} = m_import_feed_log:list(FeedId, 0, C),
+        ?assert(lists:any(fun
+            (#{event := <<"media">>, status := <<"error">>, uri := LogUri}) -> LogUri =:= MissingUrl;
+            (_) -> false
+        end, maps:get(items, MediaLog))),
         ok = m_rsc:delete(Id, C),
         case m_rsc:exists(Mid, C) of true -> m_rsc:delete(Mid, C); false -> ok end
     after

@@ -407,6 +407,8 @@ is_admin_user(User, Context) ->
     when Reason :: term(), Context :: z:context().
 error_message({invalid_regexp, Line, Reason}, Context) ->
     iolist_to_binary([?__("Invalid removal regexp on line", Context), " ", integer_to_binary(Line), ": ", Reason]);
+error_message(feed_paused, Context) ->
+    ?__("This feed is paused. Resume it before fetching.", Context);
 error_message(feed_is_running, Context) ->
     ?__("This feed is still importing. Pause it and wait for the current import to finish before deleting its content.", Context);
 error_message(admin_import_user, Context) ->
@@ -731,5 +733,6 @@ install(Context) ->
         created timestamptz not null default now(), modified timestamptz not null default now(),
         primary key(feed_id, uri)
     )", Context),
+    ok = m_import_feed_log:install(Context),
     z_db:flush(Context),
     ok.

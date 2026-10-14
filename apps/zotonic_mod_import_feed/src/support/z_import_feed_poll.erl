@@ -37,6 +37,7 @@ run(FeedsRemaining, Context) ->
         [] -> ok;
         [Row] ->
             FeedSettings = m_import_feed:decode(Row),
+            poll_log(FeedSettings, <<"started">>, <<"Fetching feed">>, Context),
             Result = try
                          poll(FeedSettings, Context)
                      catch
@@ -89,6 +90,8 @@ fetch(FeedSettings, Context) ->
                 {ok, #{truncated := true}} -> {error, too_many_entries};
                 {ok, ParsedFeed} ->
                     m_import_feed:record_feed_type(FeedSettings, ParsedFeed, Context),
+                    poll_log(FeedSettings, <<"parsed">>,
+                        iolist_to_binary(io_lib:format("Parsed ~B entries", [length(maps:get(entries, ParsedFeed))])), Context),
                     Counts = #{imported => 0, updated => 0, skipped => 0, errors => 0, last_error => undefined},
                     {ok, entries(sort_entries(maps:get(entries, ParsedFeed)), FeedSettings#{feed => maps:without([entries], ParsedFeed)}, Counts, Context)};
                 Error -> Error
@@ -137,6 +140,10 @@ import_entry(SourceEntry, Rest, FeedSettings, Counts, Context) ->
 finish(FeedSettings, {error, Reason}, Context) ->
     finish(FeedSettings, {ok, #{imported => 0, updated => 0, skipped => 0, errors => 1, last_error => Reason}}, Context);
 finish(FeedSettings, {ok, Counts}, Context) ->
+    Status = case maps:get(errors, Counts) of 0 -> <<"ok">>; _ -> <<"error">> end,
+    Summary = iolist_to_binary(io_lib:format("Imported: ~B; updated: ~B; skipped: ~B; errors: ~B. ~ts", [
+        maps:get(imported, Counts), maps:get(updated, Counts), maps:get(skipped, Counts), maps:get(errors, Counts),
+        case maps:get(last_error, Counts) of undefined -> <<>>; LastError -> m_import_feed:error_message(LastError, Context) end])),
     Error = case maps:get(last_error, Counts) of
         undefined -> undefined;
         Reason -> m_import_feed:error_message(Reason, Context)
@@ -149,4 +156,12 @@ finish(FeedSettings, {ok, Counts}, Context) ->
         [maps:get(id, FeedSettings), maps:get(imported, Counts), maps:get(updated, Counts),
          maps:get(skipped, Counts), maps:get(errors, Counts), Error,
          maps:get(lease_token, FeedSettings), maps:get(modified, FeedSettings)], Context),
-    ok.
+    poll_log(FeedSettings, Status, Summary, Context).
+
+poll_log(Feed, Status, Message, Context) ->
+    FeedId = maps:get(id, Feed),
+    ok = m_import_feed_log:write(FeedId, #{event => <<"poll">>, status => Status,
+        uri => maps:get(url, Feed, undefined), user_id => maps:get(user_id, Feed, undefined),
+        category_id => maps:get(category_id, Feed, undefined),
+        content_group_id => maps:get(content_group_id, Feed, undefined), message => Message}, Context),
+    m_import_feed_log:changed(FeedId, Context).

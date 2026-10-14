@@ -113,6 +113,9 @@ isolated_test_() ->
         end}.
 
 start_dependencies() ->
+    ok = meck:new(m_import_feed_log, [no_link]),
+    meck:expect(m_import_feed_log, write, fun(_, _, _) -> ok end),
+    meck:expect(m_import_feed_log, changed, fun(_, _) -> ok end),
     {ok, _} = application:ensure_all_started(mimetypes),
     ok.
 
@@ -434,10 +437,10 @@ dependent_media_import_check() ->
         meck:expect(m_rsc, rid, fun(depiction, _) -> 102; (_, _) -> undefined end),
         meck:expect(m_rsc, is_a, fun(201, media, _) -> true end),
         meck:expect(z_media_tag, url, fun(201, [], _) -> {ok, <<"/image/photo.jpg">>} end),
-        meck:expect(m_rsc, p, fun(201, feed_medium_url, _) -> Url end),
+        meck:expect(m_rsc, p, fun(201, feed_medium_url, _) -> Url; (_, _, _) -> undefined end),
         meck:expect(z_import_feed_http, get, fun(U, _, C) ->
             ?assertEqual(Url, U),
-            ?assertEqual(Context, C#context{props = maps:remove(import_resource_active_uris, C#context.props)}),
+            ?assertEqual(Context, C#context{props = maps:without([import_resource_active_uris, import_feed_log_id], C#context.props)}),
             {ok, {Url, [], 4, <<"data">>}}
         end),
         meck:expect(m_media, insert_file, fun(Upload, Props, Options, C) ->
@@ -448,7 +451,7 @@ dependent_media_import_check() ->
             ?assertEqual(Url, maps:get(<<"feed_medium_url">>, Props)),
             ?assertEqual(true, maps:get(<<"is_dependent">>, Props)),
             ?assertEqual([is_import, {tz, <<"UTC">>}], Options),
-            ?assertEqual(Context, C#context{props = maps:remove(import_resource_active_uris, C#context.props)}),
+            ?assertEqual(Context, C#context{props = maps:without([import_resource_active_uris, import_feed_log_id], C#context.props)}),
             {ok, 201}
         end),
         meck:expect(m_rsc, insert, fun(Props, _, _) ->
@@ -475,7 +478,7 @@ dependent_media_import_check() ->
             ?assertEqual(nomatch, binary:match(Body, <<"small.jpg">>)),
             ?assertEqual(nomatch, binary:match(Body, <<"z-media">>))
         end,
-        meck:expect(m_rsc, p, fun(_, feed_medium_url, _) -> undefined end),
+        meck:expect(m_rsc, p, fun(_, _, _) -> undefined end),
         meck:expect(m_rsc, update, fun(202, Props, _) -> CheckBody(Props), {ok, 202} end),
         meck:expect(m_media, insert_file, fun(_, _, _, _) -> {error, eacces} end),
         meck:expect(m_media, replace_file, fun(_, 202, _, _) -> {error, eacces} end),

@@ -86,8 +86,27 @@ run(Entry, FeedSettings, Context) ->
 
 %% @doc Explicit refresh bypasses the checksum, while retaining deletion tombstones.
 -spec run(map(), map(), boolean(), z:context()) -> imported | updated | skipped | {error, term()}.
-run(#{uri := undefined}, _, _, _) -> {error, missing_identity};
 run(Entry, FeedSettings, Force, Context) ->
+    FeedId = maps:get(id, FeedSettings),
+    ImportContext = z_context:set(import_feed_log_id, FeedId, Context),
+    Event = #{event => <<"entry">>, status => <<"started">>,
+        uri => maps:get(uri, Entry, undefined), user_id => z_acl:user(Context),
+        category_id => maps:get(category_id, FeedSettings, undefined),
+        content_group_id => maps:get(content_group_id, FeedSettings, undefined)},
+    ok = m_import_feed_log:write(FeedId, Event, Context),
+    m_import_feed_log:changed(FeedId, Context),
+    Result = try run_entry(Entry, FeedSettings, Force, ImportContext)
+        catch Class:Reason -> {error, {Class, Reason}} end,
+    {Status, Message} = case Result of
+        {error, Error} -> {<<"error">>, m_import_feed:error_message(Error, Context)};
+        Success -> {atom_to_binary(Success), undefined}
+    end,
+    ok = m_import_feed_log:write(FeedId, Event#{status := Status, message => Message}, Context),
+    m_import_feed_log:changed(FeedId, Context),
+    Result.
+
+run_entry(#{uri := undefined}, _, _, _) -> {error, missing_identity};
+run_entry(Entry, FeedSettings, Force, Context) ->
     {Item, Dependents} = prepare(Entry, FeedSettings, Context),
     Uri = maps:get(uri, Item),
     Hash = crypto:hash(sha256, term_to_binary({Item, Dependents})),
@@ -215,6 +234,9 @@ optional_medium(Uri, Import, Context) ->
                 result => error,
                 reason => Reason
             }),
+            ok = m_import_feed_log:write(z_context:get(import_feed_log_id, Context),
+                #{event => <<"media">>, status => <<"error">>, uri => Uri,
+                    user_id => z_acl:user(Context), message => m_import_feed:error_message(Reason, Context)}, Context),
             undefined
     end,
     z_db:q("release savepoint import_feed_medium", Context),
@@ -466,7 +488,12 @@ record(FeedId, Uri, Kind, Status, Hash, Error, Context) ->
     z_db:q("insert into import_feed_item(feed_id,uri,kind,status,checksum,last_error)
         values($1,$2,$3,$4,$5,$6) on conflict(feed_id,uri) do update
         set status=excluded.status, checksum=excluded.checksum, last_error=excluded.last_error, modified=now()",
-        [FeedId, Uri, Kind, Status, Hash, Message], Context), ok.
+        [FeedId, Uri, Kind, Status, Hash, Message], Context),
+    Id = lookup(Uri, Context),
+    m_import_feed_log:write(FeedId, #{event => Kind, status => Status, uri => Uri,
+        user_id => z_acl:user(Context), rsc_id => Id,
+        category_id => m_rsc:p(Id, category_id, Context),
+        content_group_id => m_rsc:p(Id, content_group_id, Context), message => Message}, Context).
 
 category(Entry, #{guess_category := true, category_id := Default}, Context) ->
     Tags = [z_string:to_lower(Tag) || Tag <- maps:get(tags, Entry)],
