@@ -197,6 +197,10 @@ delete_nocheck(Id, OptFollowUpId, Context) when is_integer(Id) ->
                  Context),
             z_edge_log_server:check(Context),
             ok;
+        {rollback, {error, _} = Error} ->
+            Error;
+        {rollback, Reason} ->
+            {error, Reason};
         {error, _} = Error ->
             Error
     end.
@@ -1108,10 +1112,10 @@ update_result({ok, NewId, {OldProps, NewProps, OldCatList, IsCatInsert}},
     end,
     % Return the updated or inserted id
     {ok, NewId};
-update_result({rollback, {error, _} = Er}, _RscUpd, _Context) ->
-    Er;
-update_result({rollback, {_Why, _} = Er}, _RscUpd, _Context) ->
-    {error, Er};
+update_result({rollback, {error, _} = Error}, RscUpd, Context) ->
+    update_result(Error, RscUpd, Context);
+update_result({rollback, Reason}, _RscUpd, _Context) ->
+    {error, Reason};
 update_result({error, {expected, _, _}} = Error, #rscupd{ id = Id }, Context) ->
     % We might have an out-of-date cached value, flush caches to force
     % an update from the database.

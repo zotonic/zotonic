@@ -949,7 +949,7 @@ make_authoritative(RscId, Context)  ->
                 false ->
                     case z_acl:rsc_editable(Id, Context) of
                         true ->
-                            z_db:transaction(fun(Ctx) ->
+                            case z_db:transaction(fun(Ctx) ->
                                 Uri = m_rsc:p_no_acl(Id, <<"uri">>, Ctx),
                                 NewProps = #{
                                     <<"is_authoritative">> => true,
@@ -961,7 +961,11 @@ make_authoritative(RscId, Context)  ->
                                         Ok;
                                     Error -> {rollback, Error}
                                 end
-                            end, Context);
+                            end, Context) of
+                                {rollback, {error, _} = Error} -> Error;
+                                {rollback, Reason} -> {error, Reason};
+                                Result -> Result
+                            end;
                         false ->
                             {error, eacces}
                     end

@@ -697,6 +697,7 @@ delete_content(Id, Context) ->
                     delete_content_locked(integer(Id), TransactionContext)
                 end, Context)
             of
+                {rollback, {error, _} = Error} -> Error;
                 {rollback, Reason} -> {error, Reason};
                 Result -> Result
             end
@@ -779,6 +780,8 @@ delete_feed(Id, DeleteContent, Context) when is_boolean(DeleteContent) ->
                 end
             end, Context),
             case Result of
+                {rollback, {error, _} = Error} ->
+                    Error;
                 {rollback, Reason} ->
                     {error, Reason};
                 _ ->

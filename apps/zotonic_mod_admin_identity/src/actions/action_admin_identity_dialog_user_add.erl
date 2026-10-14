@@ -91,14 +91,19 @@ event(#submit{message={user_add, Args}}, Context) ->
                     {ok, PersonId} ->
                         case m_identity:set_username_pw(PersonId, Username, Password, Ctx) of
                             ok -> {ok, PersonId};
-                            {error, _} = Error -> Error
+                            {error, _} = Error -> {rollback, Error}
                         end;
                     {error, _} = Error ->
-                        Error
+                        {rollback, Error}
                 end
             end,
 
-            case z_db:transaction(F, Context) of
+            Result = case z_db:transaction(F, Context) of
+                {rollback, {error, _} = Error} -> Error;
+                {rollback, Reason} -> {error, Reason};
+                Other -> Other
+            end,
+            case Result of
                 {ok, NewPersonId} ->
                     case z_convert:to_bool(z_context:get_q(<<"send_welcome">>, Context)) of
                         true ->
