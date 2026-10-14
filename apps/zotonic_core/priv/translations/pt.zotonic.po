@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-13 17:00\n"
+"PO-Revision-Date: 2026-10-14 11:26\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "MIME-Version: 1.0\n"
@@ -1425,6 +1425,10 @@ msgstr "Clique aqui para obter mais informações"
 msgid "Click to preview."
 msgstr "Clique para pré-visualizar."
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:11
+msgid "Close Live view"
+msgstr "Fechar visualização ao vivo"
+
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:133
 msgid "Close Sockets"
 msgstr "Fechar Sockets"
@@ -1434,7 +1438,6 @@ msgid "Close all sockets from ip addresses which have over &gt; 250 open sockets
 msgstr "Feche todos os sockets de endereços IP que tenham mais de &gt; 250 sockets abertos."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:33
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:11
 msgid "Close preview"
 msgstr "Fechar pré-visualização"
 
@@ -2059,10 +2062,6 @@ msgstr "Aqui você pode editar os argumentos da consulta de pesquisa. Cada argum
 msgid "Hide page from searches (depends on the search query)"
 msgstr "Ocultar página das pesquisas (depende da consulta de pesquisa)"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:5
-msgid "Hide preview"
-msgstr "Ocultar pré-visualização"
-
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:59
 msgid "Home Directory"
 msgstr "Directório Principal"
@@ -2166,16 +2165,16 @@ msgstr "Últimos textos modificados"
 msgid "Link"
 msgstr "Link"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:2
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:7
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:14
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:11
-msgid "Live preview"
-msgstr "Pré-visualização em tempo real"
-
 #: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:38
 msgid "Live query, send notifications when matching items are updated or inserted."
 msgstr "Consulta ao vivo, enviar notificações quando os itens correspondentes são atualizados ou inseridos."
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:2
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:7
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:14
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:9
+msgid "Live view"
+msgstr "Visualização em tempo real"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:43
 msgid "Local ImageMagick"
@@ -2863,8 +2862,8 @@ msgid "Replace current medium"
 msgstr "Substituir o meio corrente"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:4
-msgid "Resize preview"
-msgstr "Redimensionar pré-visualização"
+msgid "Resize Live view"
+msgstr "Redimensionar a visualização em tempo real"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_meta_features.tpl:9
 msgid "Resources in the <i>meta</i> category can have 'features': certain resource properties that decide what to show or hide on certain pages in the admin. If this box is empty, no features are enabled for this meta-resource."
@@ -2936,6 +2935,10 @@ msgstr "O isolamento em sandbox não é suportado neste sistema. Os comandos de 
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:61
 msgid "Save and View"
 msgstr "Salvar e Ver"
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:3
+msgid "Save and open the Live view"
+msgstr "Guardar e abrir a visualização em tempo real"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:21
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:7
@@ -3060,11 +3063,6 @@ msgstr "Mostrar descrição da palavra-chave"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:59
 msgid "Show page on multiple paths"
 msgstr "Mostrar página em vários caminhos"
-
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:3
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:4
-msgid "Show preview on the right"
-msgstr "Mostrar pré-visualização à direita"
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:55
 msgid "Show query as JSON"
