@@ -68,6 +68,7 @@ save(Id, Version, Save, Context) when is_integer(Version), Version > 0 ->
                 end
             end, Context),
             case Result of
+                {rollback, {error, Reason}} -> {error, Reason};
                 {rollback, Reason} -> {error, Reason};
                 _ -> Result
             end
