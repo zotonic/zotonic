@@ -63,16 +63,12 @@ poll_user(#{user_id := User} = FeedSettings, Context) ->
     case z_auth:is_enabled(User, Context) of
         true ->
             ImportContext = z_acl:logon(User, #{user_groups => maps:get(user_groups, FeedSettings)}, z_context:new(Context)),
-            IsImportFeedAllowed = m_import_feed:allowed(ImportContext),
-            IsReadOnly = z_acl:is_read_only(ImportContext),
-            case IsImportFeedAllowed andalso not IsReadOnly of
-                true ->
-                    fetch(FeedSettings, z_import_feed_http:context(FeedSettings, ImportContext));
+            case z_acl:is_read_only(ImportContext) of
                 false ->
-                    ?LOG_WARNING( #{ text => <<"Could not import feed">>,
+                    fetch(FeedSettings, z_import_feed_http:context(FeedSettings, ImportContext));
+                true ->
+                    ?LOG_WARNING( #{ text => <<"Could not import feed, access permissions of user are set to read only.">>,
                                      user => User,
-                                     is_import_allowed => IsImportFeedAllowed,
-                                     is_read_only => IsReadOnly,
                                      feed_url => maps:get(url, FeedSettings, <<"-">>),
                                      feed_id => maps:get(id, FeedSettings, undefined)
                                    }),
