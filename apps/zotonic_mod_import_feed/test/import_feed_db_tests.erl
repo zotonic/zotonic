@@ -18,7 +18,7 @@
 -module(import_feed_db_tests).
 -include_lib("eunit/include/eunit.hrl").
 -include_lib("zotonic_core/include/zotonic.hrl").
--export([observe/2]).
+-export([observe/2, observe_tracking/3]).
 
 import_test_() -> {timeout, 120, fun import_lifecycle/0}.
 import_lifecycle() ->
@@ -38,6 +38,7 @@ import_lifecycle() ->
         tags => [], media => [], raw => {<<"item">>, [], []}},
     try
         ?assertEqual({error, eacces}, m_import_feed:get(FeedId, z_acl:anondo(C))),
+        atomic_tracking(FeedId, Entry, F, C),
         ?assertEqual(imported, z_import_feed_import:run(Entry, F, C)),
         Id = m_rsc:rid(maps:get(uri, Entry), C),
         ?assert(is_integer(Id)),
@@ -54,6 +55,7 @@ import_lifecycle() ->
         {Rendered, _} = z_template:render_to_iolist("_admin_import_feed_edit.tpl", [{feed, F}], C),
         Html = iolist_to_binary(Rendered),
         ?assertNotEqual(nomatch, binary:match(Html, <<"feed-settings">>)),
+        ?assertNotEqual(nomatch, binary:match(Html, <<"name=\"refetch_deleted\"">>)),
         {Discovery, _} = z_template:render_to_iolist("_admin_import_feed_discovery.tpl",
             [{feeds, [#{title => <<"Example feed">>, url => <<"https://example.org/feed">>}]}], C),
         ?assertNotEqual(nomatch, binary:match(iolist_to_binary(Discovery), <<"Example feed">>)),
@@ -82,6 +84,54 @@ import_lifecycle() ->
         z_db:q("delete from import_feed_resource where uri like 'https://example.org/feed-test/%'", C)
     end.
 
+%% Verify that bookkeeping is visible inside the resource transaction and that
+%% an interrupted authoritative import can reuse its ID without a final checksum.
+atomic_tracking(FeedId, Entry, Feed, Context) ->
+    Uri = <<"https://example.org/feed-test/atomic">>,
+    RejectedUri = <<"https://example.org/feed-test/rejected">>,
+    Props = #{<<"category_id">> => article, <<"is_authoritative">> => true,
+        <<"feed_source_uri">> => Uri, <<"title">> => <<"Atomic import">>},
+    WriteContext = z_context:set(import_feed_identity, {FeedId, Uri, <<"article">>}, Context),
+    z_notifier:observe(rsc_update, {?MODULE, observe_tracking}, 0, Context),
+    try
+        {ok, Id} = m_rsc:insert(Props, [is_import], WriteContext),
+        ?assertEqual(<<"importing">>, z_db:q1("select status from import_feed_item where feed_id=$1 and uri=$2", [FeedId, Uri], Context)),
+        ?assertEqual(updated, z_import_feed_import:run(Entry#{uri => Uri}, Feed#{is_authoritative => true}, Context)),
+        ?assertEqual(Id, z_db:q1("select rsc_id from import_feed_resource where uri=$1", [Uri], Context)),
+        ok = m_rsc:delete(Id, Context),
+        RejectedContext = z_context:set(feed_tracking_reject, true,
+            z_context:set(import_feed_identity, {FeedId, RejectedUri, <<"article">>}, Context)),
+        ?assertEqual({error, tracking_rejected},
+            m_rsc:insert(Props#{<<"feed_source_uri">> => RejectedUri}, [is_import], RejectedContext)),
+        receive
+            {tracking_rejected_id, RejectedId} -> ?assertNot(m_rsc:exists(RejectedId, Context))
+        after 1000 -> error(no_transaction_observation)
+        end,
+        ?assertEqual(0, z_db:q1("select count(*) from import_feed_resource where uri=$1", [RejectedUri], Context)),
+        ?assertEqual(0, z_db:q1("select count(*) from import_feed_item where feed_id=$1 and uri=$2", [FeedId, RejectedUri], Context))
+    after
+        z_notifier:detach(rsc_update, Context),
+        %% Clean up even when demonstrating the rollback regression.
+        Ids = z_db:q("select rsc_id from import_feed_resource where uri in ($1,$2) and rsc_id is not null", [Uri, RejectedUri], Context),
+        lists:foreach(fun({ResourceId}) -> m_rsc:delete(ResourceId, Context) end, Ids),
+        z_db:q("delete from import_feed_item where feed_id=$1 and uri in ($2,$3)", [FeedId, Uri, RejectedUri], Context),
+        z_db:q("delete from import_feed_resource where uri in ($1,$2)", [Uri, RejectedUri], Context)
+    end.
+
+observe_tracking(#rsc_update{id = Id}, {ok, _} = Acc, Context) ->
+    case z_context:get(import_feed_identity, Context) of
+        {FeedId, Uri, _Kind} ->
+            ?assert(is_pid(Context#context.dbc)),
+            ?assertEqual(Id, z_db:q1("select rsc_id from import_feed_resource where uri=$1", [Uri], Context)),
+            ?assertEqual(<<"importing">>, z_db:q1("select status from import_feed_item where feed_id=$1 and uri=$2", [FeedId, Uri], Context)),
+            case z_context:get(feed_tracking_reject, Context) of
+                true -> self() ! {tracking_rejected_id, Id}, {error, tracking_rejected};
+                _ -> Acc
+            end;
+        _ -> Acc
+    end;
+observe_tracking(_, Acc, _) -> Acc.
+
 observe(#import_resource{item = #{uri := <<"https://example.org/feed-test/error">>}}, _) ->
     {error, observer_test_error};
 observe(#import_resource{item = #{edges := []}, related = [], source = #{importer := mod_import_feed, feed := #{id := _}},
@@ -103,8 +153,27 @@ poll_and_media() ->
     Xml = <<"<rss><channel><title>Poll</title><item><guid>https://example.org/poll-test/1</guid><title>Poll item</title><link>https://example.org/poll-test/1</link><description><![CDATA[Leading &amp; text<p>Body<img src='https://example.org/import-feed-test-small.png' srcset='https://example.org/import-feed-test-small.png 1x, https://example.org/import-feed-test.png 2x'></p>Trailing text]]></description><enclosure url='https://example.org/import-feed-test.png' type='image/png'/></item></channel></rss>">>,
     Png = base64:decode(<<"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII=">>),
     ok = meck:new(z_import_feed_http, [passthrough]),
-    meck:expect(z_import_feed_http, get, fun(Url, _) -> {ok, {Url, [], byte_size(Xml), Xml}} end),
-    meck:expect(z_import_feed_http, get, fun(Url, _, _) -> {ok, {Url, [], byte_size(Png), Png}} end),
+    %% Downloads must not retain a transaction connection, including attached
+    %% media on an existing article and dependent media on a new article.
+    meck:expect(z_import_feed_http, get, fun(Url, FetchContext) ->
+        ?assertEqual(undefined, FetchContext#context.dbc),
+        {ok, {Url, [], byte_size(Xml), Xml}}
+    end),
+    MediaFetch = fun(Url, _, FetchContext) ->
+        ?assertEqual(undefined, FetchContext#context.dbc),
+        ?assertEqual(ImportUser, z_acl:user(FetchContext)),
+        {ok, {Url, [], byte_size(Png), Png}}
+    end,
+    meck:expect(z_import_feed_http, get, MediaFetch),
+    %% Run queued downloads explicitly so the article-before-media boundary is deterministic.
+    Parent = self(),
+    ok = meck:new(z_pivot_rsc, [passthrough]),
+    meck:expect(z_pivot_rsc, insert_task, fun
+        (z_import_feed_media, download_task, _Key, Args, _) ->
+            Parent ! {media_task, Args}, {ok, 1};
+        (Module, Function, Key, Args, TaskContext) ->
+            meck:passthrough([Module, Function, Key, Args, TaskContext])
+    end),
     try
         ok = z_import_feed_poll:run(C),
         {ok, Before} = m_import_feed:get(FeedId, C),
@@ -126,6 +195,18 @@ poll_and_media() ->
         Id = m_rsc:rid(<<"https://example.org/poll-test/1">>, C),
         Mid = m_rsc:rid(MediaUrl, C),
         ?assert(is_integer(Id)), ?assert(is_integer(Mid)),
+        ?assertEqual(undefined, m_media:get(Mid, C)),
+        ?assertNotEqual(nomatch, binary:match(m_rsc:p(Id, body, C), <<"<!-- z-media ">>)),
+        ?assertEqual(0, meck:num_calls(z_import_feed_http, get, ['_', '_', '_'])),
+        meck:expect(z_import_feed_http, get, fun(_, _, _) -> {error, timeout} end),
+        {delay, 60, RetryArgs} = run_media_task(C),
+        ?assertEqual(undefined, m_media:get(Mid, C)),
+        meck:expect(z_import_feed_http, get, MediaFetch),
+        ?assertEqual(ok, apply(z_import_feed_media, download_task, RetryArgs ++ [C])),
+        %% An already completed/stale task must not download again.
+        Downloads = meck:num_calls(z_import_feed_http, get, ['_', '_', '_']),
+        ?assertEqual(ok, apply(z_import_feed_media, download_task, RetryArgs ++ [C])),
+        ?assertEqual(Downloads, meck:num_calls(z_import_feed_http, get, ['_', '_', '_'])),
         {ok, Activity} = m_import_feed_log:list(FeedId, 0, C),
         LogRows = maps:get(items, Activity),
         ?assert(lists:all(fun(#{feed_id := LogFeed}) -> LogFeed =:= FeedId end, LogRows)),
@@ -197,9 +278,11 @@ poll_and_media() ->
         ?assertEqual(updated, z_import_feed_import:run(Entry#{title => <<"Changed">>}, F, C)),
         ?assert(m_rsc:is_a(Mid, image, C)),
         ?assertEqual(updated, z_import_feed_import:run(Entry, F#{media_mode => <<"attached">>}, C)),
+        ?assertEqual(undefined, m_media:get(Id, C)),
+        ?assertEqual(ok, run_media_task(C)),
         ?assertMatch(#{<<"mime">> := <<"image/png">>}, m_media:get(Id, C)),
         ?assert(m_rsc:is_a(Id, article, C)),
-        %% Media download failure leaves a valid article in either import mode.
+        %% Media download failure leaves the imported article and placeholder intact.
         MissingUrl = <<"https://example.org/missing-feed-medium.png">>,
         meck:expect(z_import_feed_http, get, fun(_, _, _) -> {error, eacces} end),
         lists:foreach(fun(Mode) ->
@@ -208,15 +291,17 @@ poll_and_media() ->
                 body => <<"<p>Article without media<img src='", MissingUrl/binary, "'></p>">>},
             ?assertEqual(imported, z_import_feed_import:run(MissingEntry, F#{media_mode => Mode}, C)),
             ArticleId = m_rsc:rid(ArticleUri, C),
+            PlaceholderId = m_rsc:rid(MissingUrl, C),
+            ?assertEqual(ok, run_media_task(C)),
             try
                 ?assert(is_integer(ArticleId)),
-                ?assertEqual(undefined, m_rsc:rid(MissingUrl, C)),
                 ?assertEqual(undefined, m_media:get(ArticleId, C)),
-                ?assertEqual([], m_edge:objects(ArticleId, depiction, C)),
-                ?assertEqual(nomatch, binary:match(m_rsc:p(ArticleId, body, C), MissingUrl))
+                ?assertEqual(nomatch, binary:match(m_rsc:p(ArticleId, body, C), MissingUrl)),
+                ?assertNotEqual(nomatch, binary:match(m_rsc:p(ArticleId, body, C), <<"<!-- z-media ">>))
             after
                 m_rsc:delete(ArticleId, C),
-                z_db:q("delete from import_feed_resource where uri=$1", [ArticleUri], C)
+                case PlaceholderId of undefined -> ok; _ -> m_rsc:delete(PlaceholderId, C) end,
+                z_db:q("delete from import_feed_resource where uri in ($1,$2)", [ArticleUri, MissingUrl], C)
             end
         end, [<<"dependent">>, <<"attached">>]),
         {ok, MediaLog} = m_import_feed_log:list(FeedId, 0, C),
@@ -230,10 +315,103 @@ poll_and_media() ->
         m_rsc:delete(ImportUser, C),
         m_acl_rule:delete_managed(?MODULE, C),
         meck:unload(z_import_feed_http),
+        meck:unload(z_pivot_rsc),
         z_db:q("delete from import_feed where id=$1", [FeedId], C),
         z_db:q("delete from import_feed_resource where uri in ($1,$2)",
             [<<"https://example.org/poll-test/1">>, MediaUrl], C)
     end.
+
+run_media_task(Context) ->
+    receive
+        {media_task, Args} -> apply(z_import_feed_media, download_task, Args ++ [Context])
+    after 1000 -> error(no_media_task)
+    end.
+
+refetch_deleted_test_() -> {timeout, 120, fun refetch_deleted/0}.
+refetch_deleted() ->
+    Context = z_acl:logon(1, z_context:new(zotonic_site_testsandbox)),
+    ok = m_import_feed:install(Context),
+    %% Exercise the upgrade and its idempotency as well as the fresh schema.
+    z_db:q("alter table import_feed drop column refetch_deleted", Context),
+    ok = m_import_feed:install(Context),
+    ok = m_import_feed:install(Context),
+    User = import_user(Context),
+    Present = <<"https://example.org/restore/present">>,
+    Absent = <<"https://example.org/restore/absent">>,
+    Shared = <<"https://example.org/restore/shared">>,
+    Media = <<"https://example.org/restore/photo.png">>,
+    Input = #{<<"user_id">> => User, <<"url">> => <<"https://example.org/restore/feed">>,
+        <<"title">> => <<"Restore once">>, <<"category_id">> => m_rsc:rid(article, Context),
+        <<"poll_minutes">> => 60, <<"media_mode">> => <<"dependent">>, <<"is_paused">> => true},
+    {ok, FeedId} = m_import_feed:save(undefined, Input, Context),
+    Xml = <<"<rss><channel><item><link>https://example.org/restore/present</link><title>Present</title><description><![CDATA[<img src='https://example.org/restore/photo.png'>]]></description></item><item><link>https://example.org/restore/shared</link><title>Shared</title><description><![CDATA[<img src='https://example.org/restore/photo.png'>]]></description></item></channel></rss>">>,
+    {ok, Parsed} = z_import_feed_parse:parse(Xml, <<"https://example.org/restore/feed">>),
+    [Entry, SharedEntry] = maps:get(entries, Parsed),
+    meck:new(z_import_feed_http, [passthrough]),
+    Fetch = fun(Url, _) -> {ok, {Url, [], byte_size(Xml), Xml}} end,
+    meck:expect(z_import_feed_http, get, Fetch),
+    meck:new(z_import_feed_media, [passthrough]),
+    meck:expect(z_import_feed_media, queue, fun(_, _, _, _) -> ok end),
+    try
+        {ok, Feed} = m_import_feed:get(FeedId, Context),
+        ?assertEqual(imported, z_import_feed_import:run(Entry, Feed, Context)),
+        ?assertEqual(imported, z_import_feed_import:run(Entry#{uri => Absent, media => [], body => <<>>}, Feed, Context)),
+        ?assertEqual(imported, z_import_feed_import:run(SharedEntry, Feed, Context)),
+        delete_restore_resources([Present, Absent, Media], Context),
+        {ok, FeedId} = m_import_feed:save(FeedId, Input#{<<"refetch_deleted">> => true}, Context),
+        %% An ordinary save must preserve an explicit request not yet claimed.
+        {ok, FeedId} = m_import_feed:save(FeedId, Input, Context),
+        ok = z_import_feed_poll:run(Context),
+        {ok, After} = m_import_feed:get(FeedId, Context),
+        ?assertEqual(undefined, maps:get(last_error, After)),
+        ?assertEqual(false, maps:get(refetch_deleted, After)),
+        ?assertEqual(true, maps:get(is_paused, After)),
+        ?assertEqual(1, maps:get(polls, After)),
+        ?assert(is_integer(m_rsc:rid(Present, Context))),
+        ?assert(is_integer(m_rsc:rid(Media, Context))),
+        ?assertEqual(undefined, m_rsc:rid(Absent, Context)),
+        SharedId = m_rsc:rid(Shared, Context),
+        RestoredMediaId = m_rsc:rid(Media, Context),
+        ?assertNotEqual(nomatch, binary:match(m_rsc:p(SharedId, body, Context),
+            iolist_to_binary(["<!-- z-media ", integer_to_binary(RestoredMediaId), " "]))),
+        ?assertEqual(skipped, z_import_feed_import:run(Entry, After#{refetch_deleted_once => true}, Context)),
+        %% A deleted dependent must be restored even if its article is unchanged.
+        delete_restore_resources([Media], Context),
+        ?assertEqual(updated, z_import_feed_import:run(Entry, After#{refetch_deleted_once => true}, Context)),
+        ?assert(is_integer(m_rsc:rid(Media, Context))),
+        delete_restore_resources([Present, Media], Context),
+        %% A subsequent regular poll must preserve the new deletion.
+        ok = m_import_feed:pause(FeedId, false, Context),
+        ok = z_import_feed_poll:run(Context),
+        ?assertEqual(undefined, m_rsc:rid(Present, Context)),
+        ?assertEqual(undefined, m_rsc:rid(Media, Context)),
+        %% Even a failed fetch consumes the one-fetch request without erasing tombstones.
+        {ok, FeedId} = m_import_feed:save(FeedId, Input#{<<"refetch_deleted">> => true}, Context),
+        meck:expect(z_import_feed_http, get, fun(_, _) -> {error, timeout} end),
+        ok = z_import_feed_poll:run(Context),
+        {ok, Failed} = m_import_feed:get(FeedId, Context),
+        ?assertEqual(false, maps:get(refetch_deleted, Failed)),
+        ?assertEqual(1, z_db:q1("select count(*) from import_feed_resource where uri=$1 and rsc_id is null", [Present], Context)),
+        meck:expect(z_import_feed_http, get, Fetch),
+        ok = m_import_feed:pause(FeedId, false, Context),
+        ok = z_import_feed_poll:run(Context),
+        ?assertEqual(undefined, m_rsc:rid(Present, Context))
+    after
+        meck:unload([z_import_feed_http, z_import_feed_media]),
+        delete_restore_resources([Present, Absent, Shared, Media], Context),
+        z_db:q("delete from import_feed where id=$1", [FeedId], Context),
+        z_db:q("delete from import_feed_resource where uri in ($1,$2,$3,$4)", [Present, Absent, Shared, Media], Context),
+        m_rsc:delete(User, Context),
+        m_acl_rule:delete_managed(?MODULE, Context)
+    end.
+
+delete_restore_resources(Uris, Context) ->
+    lists:foreach(fun(Uri) ->
+        case m_rsc:rid(Uri, Context) of
+            undefined -> ok;
+            Id -> m_rsc:delete(Id, Context)
+        end
+    end, Uris).
 
 %% Real restricted account: editor resource permissions plus feed-module access.
 import_user(C) ->

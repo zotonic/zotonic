@@ -24,7 +24,7 @@
 -mod_title("Import feeds").
 -mod_description("Discover RSS and Atom feeds and automatically import articles and media.").
 -mod_depends([admin, cron]).
--mod_schema(7).
+-mod_schema(8).
 -mod_config([]).
 
 -moduledoc(#{
@@ -71,13 +71,24 @@ Settings are stored in the feed table. There are no `m_config` options.
 | WordPress enrichment | Enabled initially in the admin form; use the anonymous public REST API for content, author, dates and featured media. Failures fall back to feed data. |
 | Pause | Suspend automatic imports. New feeds are active unless saved paused. |
 
-Imports create published resources. Dependent media are created through `m_media`,
-which detects the MIME type and selects the appropriate media category.
-For each inline image, the importer selects one
-variant, preferring the largest declared `srcset` width or density, with `src` as
-fallback. Imported variants share one local medium and inline references are rewritten
-to its URL. WordPress featured-image variants reuse the original image. In attached
-mode, other inline images retain their source URLs.
+Imports create published resources and media placeholder resources. Inline images
+become `z-media` embeds referring to these stable resource IDs. After saving the
+article and its connections, the importer queues persistent `z_pivot_rsc` tasks
+for the downloads. Attached media use the article itself as their placeholder.
+The tasks use `m_media` to identify each downloaded file and select its media
+category; downloads do not hold a database transaction.
+
+Each task rechecks the feed's current import account and fetch credentials, resource
+permissions, pending URL and existing medium. Deleted resources and locally replaced
+media are not overwritten. Download failures retry up to five times with increasing
+delays, starting at one minute. Permission failures stop immediately. The feed activity
+log shows queued, started, retry, success and error events. A terminal failure leaves
+an empty placeholder so the article remains imported and a later reimport can retry.
+Native Zotonic resource feeds already use the core importer's persistent media tasks.
+
+For each inline image, the importer selects one variant, preferring the largest
+`srcset` width or density, with `src` as fallback. WordPress featured-image variants
+reuse the original image. In attached mode, other inline images retain their source URLs.
 
 ## Fetch authentication and development
 
@@ -94,8 +105,9 @@ sent over HTTP. Anonymous fetching remains anonymous across redirects.
 
 ## Polling and identity
 
-The minute tick starts a bounded background job for due feeds. Database leases prevent
-concurrent claims. The overview shows article counts, cumulative import/update/skip/error
+The minute tick starts up to five background workers per site and Erlang node.
+Each worker polls up to five due feeds in sequence. Database leases prevent two
+workers from polling the same feed concurrently. The overview shows article counts, cumulative import/update/skip/error
 statistics and poll times. Each feed has settings, pause/resume, test/preview, poll-now,
 reimport and paginated history for articles and dependent media.
 
@@ -104,6 +116,25 @@ processes only entries currently present in the feed, preserving resource IDs. D
 resources remain deleted. Media already imported from the same URL is reused. Feeds
 with more than 100 entries are rejected, rather than silently importing a partial feed.
 WebSub hub links are recognized in feed data; feed fetching uses polling.
+
+**Save & refetch deleted** saves the settings and requests one fetch that can
+restore deleted articles and their media when present in the current feed. It
+also fetches a paused feed once, without resuming its regular polling. The request
+is consumed when a worker claims the feed, including if fetching fails; subsequent
+polls preserve deleted resources as usual. Missing entries are never restored.
+
+Imports lock their source URIs across connected Erlang nodes, so independent feeds
+can progress concurrently while shared articles and media are serialized. Network
+requests and the complete article import do not hold a database transaction;
+resource and media APIs manage their own write transactions. The `rsc_update`
+observer writes ordinary feed resources' source mappings and feed membership in
+that same transaction, including authoritative copies and media placeholders.
+Completion checksums are recorded only after the entry finishes. A failed import can
+leave successfully imported resources in place for reuse on retry.
+
+Deleting imported content checks each resource's delete permission and protection.
+Dependent cleanup follows the normal resource deletion rules; a dependent does
+not prevent deletion of its parent.
 
 ## Zotonic resource feeds
 
@@ -154,7 +185,23 @@ recursively imported resources may generate separate notifications.
 -include_lib("zotonic_mod_wires/include/mod_wires.hrl").
 -include_lib("zotonic_mod_admin/include/admin_menu.hrl").
 
--export([observe_import_feed_log/2, observe_acl_is_allowed/2, observe_tick_24h/2, observe_admin_menu/3, observe_tick_1m/2, observe_rsc_import_fetch/2, manage_schema/2, event/2]).
+-export([observe_rsc_update/3, observe_import_feed_log/2, observe_acl_is_allowed/2, observe_tick_24h/2, observe_admin_menu/3, observe_tick_1m/2, observe_rsc_import_fetch/2, manage_schema/2, event/2]).
+
+%% @doc Persist feed identity and membership in the resource's own transaction.
+%% Only the importer can set this scoped context marker. Ordinary editor updates
+%% and unrelated resources created by other observers must not acquire membership.
+-spec observe_rsc_update(#rsc_update{}, {ok, m_rsc:props()} | {error, term()}, z:context()) ->
+    {ok, m_rsc:props()} | {error, term()}.
+observe_rsc_update(#rsc_update{id = Id}, {ok, #{<<"feed_source_uri">> := Uri}} = Acc, Context) ->
+    case z_context:get(import_feed_identity, Context) of
+        {FeedId, Uri, Kind} ->
+            case z_import_feed_import:track_resource(FeedId, Uri, Kind, Id, Context) of
+                ok -> Acc;
+                {error, _} = Error -> Error
+            end;
+        _ -> Acc
+    end;
+observe_rsc_update(_, Acc, _) -> Acc.
 
 %% @doc Refresh known feed articles through the feed's settings and import account.
 -spec observe_rsc_import_fetch(#rsc_import_fetch{}, z:context()) ->
@@ -180,7 +227,11 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
 
 -spec observe_tick_1m(tick_1m, z:context()) -> ok.
 observe_tick_1m(tick_1m, Context) ->
-    _ = z_sidejob:start_site_unique(mod_import_feed, z_import_feed_poll, run, [], Context), ok.
+    lists:foreach(fun(Name) ->
+        _ = z_sidejob:start_site_unique(Name, z_import_feed_poll, run, [], Context)
+    end, [mod_import_feed, mod_import_feed_2, mod_import_feed_3,
+          mod_import_feed_4, mod_import_feed_5]),
+    ok.
 
 %% Internal notification, delayed by z_notifier until the transaction commits.
 -spec observe_import_feed_log({import_feed_log, integer(), integer()}, z:context()) -> ok.
@@ -359,6 +410,10 @@ handle(#submit{message = {save, Args}}, Context) ->
                     #{id => Id, url => maps:get(<<"url">>, Input)},
                     #{is_zotonic_feed => proplists:get_value(is_zotonic_feed, Args)}, Context);
                 _ -> ok
+            end,
+            case z_convert:to_bool(maps:get(<<"refetch_deleted">>, Input, false)) of
+                true -> observe_tick_1m(tick_1m, Context);
+                false -> ok
             end,
             z_render:wire({redirect, [{dispatch, admin_import_feed_edit}, {id, Id}]}, Context);
         {error, Reason} ->

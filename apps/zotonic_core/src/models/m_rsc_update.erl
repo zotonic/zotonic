@@ -58,7 +58,8 @@ versions before acknowledging processing updates on an unsaved form.
     delete_nocheck/3,
 
     to_slug/1,
-    normalize_page_path/1
+    normalize_page_path/1,
+    update_reason/3
 ]).
 
 -include_lib("zotonic.hrl").
@@ -1024,7 +1025,14 @@ is_all_day(_Id, _Props, _Context) ->
 update_transaction(RscUpd, Func, Context) ->
     Result = z_db:transaction(
         fun(Ctx) ->
-            update_transaction_fun_props(RscUpd, Func, Ctx)
+            case update_transaction_fun_props(RscUpd, Func, Ctx) of
+                {ok, _, _} = Ok ->
+                    Ok;
+                {error, _} = Error ->
+                    {rollback, Error};
+                {rollback, _} = Rollback ->
+                    Rollback
+            end
         end,
         Context),
     update_result(Result, RscUpd, Context).
@@ -1085,7 +1093,6 @@ update_result({ok, NewId, {OldProps, NewProps, OldCatList, IsCatInsert}},
             post_is_a => NewCatList
         },
         Context),
-
     % If a new or updated resource becomes dependent, then schedule a check
     % if it is connected. If not then it should be deleted.
     case maps:get(<<"is_dependent">>, NewProps, false) of
@@ -1097,7 +1104,6 @@ update_result({ok, NewId, {OldProps, NewProps, OldCatList, IsCatInsert}},
         false ->
             ok
     end,
-
     % Return the updated or inserted id
     {ok, NewId};
 update_result({rollback, {error, _} = Er}, _RscUpd, _Context) ->
@@ -1201,11 +1207,13 @@ insert_edges({ok, Id, _Res} = Result, Edges, Context) ->
             Result;
         false ->
             lists:foreach(fun({Direction, Predicate, Things}) ->
-                                  insert_edge(Id, Direction, Predicate, Things, Context)
+                              insert_edge(Id, Direction, Predicate, Things, Context)
                           end,
                           Edges),
             Result
     end;
+insert_edges({rollback, _} = Rollback , _, _Context) ->
+    Rollback;
 insert_edges({error, _} = Error , _, _Context) ->
     Error.
 
@@ -1320,7 +1328,6 @@ update_transaction_fun_insert(#rscupd{id = insert_rsc} = RscUpd, Props, _Raw, Up
                             Context),
                        InsId
                end,
-
     % Insert a category record for categories. Categories are so low level that we want
     % to make sure that all categories always have a category record attached.
     IsA = m_category:is_a(CategoryId, Context),
@@ -1362,13 +1369,12 @@ update_transaction_fun_insert(#rscupd{id = Id} = RscUpd, Props, Raw, UpdateProps
     IsA = m_rsc:is_a(Id, Context),
     update_transaction_fun_expected(RscUpd, Id, Props2, Raw, IsA, false, Context).
 
-update_transaction_fun_expected(#rscupd{expected = Expected} = RscUpd, Id, Props1, Raw, IsA, false,
-    Context) ->
+update_transaction_fun_expected(#rscupd{expected = Expected} = RscUpd, Id, Props1, Raw, IsA, false, Context) ->
     case check_expected(Raw, Expected, Context) of
         ok ->
             update_transaction_fun_db(RscUpd, Id, Props1, Raw, IsA, false, Context);
         {error, _} = Error ->
-            Error
+            {rollback, Error}
     end.
 
 
@@ -1386,9 +1392,13 @@ check_expected(Raw, [{Key, Value} | Es], Context) ->
     end.
 
 
-%% Background media processing may be acknowledged by editors only if no editable
+%% @doc Background media processing may be acknowledged by editors only if no editable
 %% resource properties changed. The reason belongs to this update's options,
 %% not to the context shared with observers.
+-spec update_reason(Reason, Before, After) -> update | media_processing when
+    Reason :: term(),
+    Before :: map(),
+    After :: map().
 update_reason(media_processing, Before, After) ->
     Metadata = [<<"version">>, <<"modified">>, <<"modifier_id">>],
     case maps:without(Metadata, Before) =:= maps:without(Metadata, After) of
@@ -1398,21 +1408,6 @@ update_reason(media_processing, Before, After) ->
 update_reason(_Reason, _Before, _After) ->
     update.
 
--ifdef(TEST).
--include_lib("eunit/include/eunit.hrl").
-
-update_reason_test() ->
-    Before = #{<<"version">> => 4, <<"title">> => <<"Title">>, <<"category_id">> => 10},
-    After = Before#{<<"version">> => 5, <<"modified">> => {{2026, 10, 12}, {12, 0, 0}},
-        <<"modifier_id">> => 1},
-    ?assertEqual(media_processing, update_reason(media_processing, Before, After)),
-    ?assertEqual(update, update_reason(update, Before, After)),
-    ?assertEqual(update, update_reason(undefined, Before, After)),
-    ?assertEqual(update, update_reason(media_processing, Before, After#{<<"title">> => <<"Changed">>})),
-    ?assertEqual(update, update_reason(media_processing, Before, After#{<<"category_id">> => 11})),
-    ?assertEqual(update, update_reason(media_processing, Before, maps:remove(<<"title">>, After))).
-
--endif.
 
 update_transaction_fun_db(RscUpd, Id, Props, Raw, IsABefore, IsCatInsert, Context) ->
     {ok, Version} = maps:find(<<"version">>, Raw),
@@ -1436,7 +1431,8 @@ update_transaction_fun_db(RscUpd, Id, Props, Raw, IsABefore, IsCatInsert, Contex
     update_transaction_fun_db_1(UpdResult, Id, RscUpd, Raw, IsABefore, IsCatInsert, Context).
 
 update_transaction_fun_db_1({error, _} = Error, _Id, _RscUpd, _Raw, _IsABefore, _IsCatInsert, _Context) ->
-    Error;
+    %% Roll back the provisional insert and any transactional observer writes.
+    {rollback, Error};
 update_transaction_fun_db_1({ok, UpdatePropsN}, Id, RscUpd, Raw, IsABefore, IsCatInsert, Context) ->
     % Pre-pivot of the category-id to the category sequence nr.
     UpdatePropsN1 = case maps:get(<<"category_id">>, UpdatePropsN, undefined) of

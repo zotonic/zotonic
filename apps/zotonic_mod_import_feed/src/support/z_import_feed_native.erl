@@ -56,7 +56,7 @@ options(Feed, Props) ->
         {is_subscribe_connections, maps:get(is_subscribe_connections, Feed, false)},
         {is_authoritative, maps:get(is_authoritative, Feed, false)},
         {is_no_medium_download, maps:get(media_mode, Feed) =:= <<"none">>},
-        {is_import_deleted, false},
+        {is_import_deleted, maps:get(refetch_deleted_once, Feed, false)},
         {props_forced, Forced},
         {filtermap_rsc, {?MODULE, filter_resource, [maps:get(remove_patterns, Feed, <<>>)]}}
     ].
@@ -91,9 +91,11 @@ run(#{uri := Uri, zotonic_export := JSON, native_options := Options}, Existing, 
 %% the feed's authentication preference. The cached root avoids a second fetch and recursive observer calls.
 -spec fetch(binary(), map(), z:context()) -> {ok, map()} | {error, term()}.
 fetch(Uri, Cached, Context) ->
-    case z_db:q1("select count(*) from import_feed_resource where uri=$1 and rsc_id is null", [Uri], Context) of
-        1 -> {error, deleted};
-        _ ->
+    IsDeleted = z_context:get(import_feed_refetch_deleted, Context) =/= true
+        andalso z_db:q1("select count(*) from import_feed_resource where uri=$1 and rsc_id is null", [Uri], Context) =:= 1,
+    case IsDeleted of
+        true -> {error, deleted};
+        false ->
             case maps:find(Uri, Cached) of
                 {ok, JSON} -> envelope({ok, JSON});
                 error -> envelope(read_export(Uri, Uri, Context))

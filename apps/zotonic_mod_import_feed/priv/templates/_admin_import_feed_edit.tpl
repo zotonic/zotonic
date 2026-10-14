@@ -159,6 +159,7 @@
 
                         <div class="modal-footer">
                             <button class="btn btn-primary" type="submit">{_ Save feed _}</button>
+                            <button class="btn btn-default" type="submit" name="refetch_deleted" value="1">{_ Save & refetch deleted _}</button>
                         </div>
                     </form>
 

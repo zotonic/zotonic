@@ -1,6 +1,6 @@
 %% @copyright 2026 Marc Worrell
-%% @doc Normalize, notify and import one entry. Identity locks and mapping writes
-%% share the resource transaction, so retrying an interrupted import is safe.
+%% @doc Normalize, notify and import one entry. Source identity locks serialize
+%% overlapping imports without holding a database transaction during downloads.
 %% @end
 
 %% Copyright 2026 Marc Worrell
@@ -19,9 +19,8 @@
 
 -module(z_import_feed_import).
 -define(MAX_MEDIA_ITEMS, 20).
--define(MAX_MEDIA_BYTES, 20 * 1024 * 1024).
 -include_lib("zotonic_core/include/zotonic.hrl").
--export([prepare/3, run/3, run/4, local_body/3, normalize_links/3]).
+-export([prepare/3, run/3, run/4, local_body/3, normalize_links/3, track_resource/5]).
 
 -spec prepare(map(), map(), z:context()) -> {map(), [map()]}.
 prepare(Entry, FeedSettings, Context) ->
@@ -88,7 +87,9 @@ run(Entry, FeedSettings, Context) ->
 -spec run(map(), map(), boolean(), z:context()) -> imported | updated | skipped | {error, term()}.
 run(Entry, FeedSettings, Force, Context) ->
     FeedId = maps:get(id, FeedSettings),
-    ImportContext = z_context:set(import_feed_log_id, FeedId, Context),
+    Restore = maps:get(refetch_deleted_once, FeedSettings, false),
+    ImportContext = z_context:set(import_feed_refetch_deleted, Restore,
+        z_context:set(import_feed_log_id, FeedId, Context)),
     Event = #{event => <<"entry">>, status => <<"started">>,
         uri => maps:get(uri, Entry, undefined), user_id => z_acl:user(Context),
         category_id => maps:get(category_id, FeedSettings, undefined),
@@ -111,43 +112,55 @@ run_entry(Entry, FeedSettings, Force, Context) ->
     Uri = maps:get(uri, Item),
     Hash = crypto:hash(sha256, term_to_binary({Item, Dependents})),
     FeedId = maps:get(id, FeedSettings),
-    Result = z_db:transaction(fun(TransactionContext) ->
-        %% A site-wide transaction lock also orders article/dependent locks.
-        %% It prevents deadlocks for two feeds importing shared media in reverse order.
-        z_db:q("select pg_advisory_xact_lock(hashtext(current_schema()), 194815)", TransactionContext),
+    %% Acquire all known identities in a stable order, including shared media.
+    %% Resource/media APIs manage their own short write transactions.
+    Uris = lists:usort([Uri | [maps:get(uri, Dependent) || Dependent <- Dependents]]),
+    try with_identities(Uris, fun() ->
+        RestoreDeleted = z_context:get(import_feed_refetch_deleted, Context) =:= true
+            andalso lists:any(fun(SourceUri) ->
+                maps:is_key(SourceUri, maps:get(refetch_deleted_uris, FeedSettings, #{}))
+                    orelse is_tombstone(SourceUri, Context)
+            end, Uris),
         case z_db:q1("select checksum from import_feed_item where feed_id=$1 and uri=$2 and status='ok'",
-                [FeedId, Uri], TransactionContext) of
-            Hash when not Force -> skipped;
+                [FeedId, Uri], Context) of
+            Hash when not Force, not RestoreDeleted -> skipped;
             _ ->
-                case deleted(Uri, TransactionContext) of
-                    true -> record(FeedId, Uri, <<"article">>, <<"deleted">>, Hash, undefined, TransactionContext), skipped;
+                case deleted(Uri, Context) of
+                    true -> record(FeedId, Uri, <<"article">>, <<"deleted">>, Hash, undefined, Context), skipped;
                     false ->
                         Notice = #import_resource{item = Item, related = Dependents,
                             source = #{importer => mod_import_feed,
-                                feed => maps:without([user_groups, lease_token], FeedSettings)},
+                                feed => maps:without([user_groups, lease_token, refetch_deleted_uris], FeedSettings)},
                             options = maps:get(native_options, Item, []),
                             raw = maps:get(raw, Entry)},
-                        Existing = lookup(Uri, TransactionContext),
+                        Existing = lookup(Uri, Context),
                         Default = fun(ImportContext) ->
                             {Id, Imported} = import(Item, Dependents, ImportContext),
                             {ok, Id, Imported}
                         end,
-                        case z_import_resource:import(Notice, Default, TransactionContext) of
+                        case z_import_resource:import(Notice, Default, Context) of
                             {ok, Id, Imported} ->
-                                finish(Id, Imported, Existing, Uri, FeedId, Hash, TransactionContext);
+                                finish(Id, Imported, Existing, Uri, FeedId, Hash, Context);
                             {skip, Reason} ->
-                                record(FeedId, Uri, <<"article">>, <<"skipped">>, Hash, Reason, TransactionContext), skipped;
+                                record(FeedId, Uri, <<"article">>, <<"skipped">>, Hash, Reason, Context), skipped;
                             {error, Reason} -> throw({import_error, Reason})
                         end
                 end
         end
-    end, Context),
-    case Result of
-        {rollback, Reason} ->
+    end, Context)
+    catch
+        throw:{import_error, Reason} ->
             record(FeedId, Uri, <<"article">>, <<"error">>, undefined, Reason, Context),
-            {error, Reason};
-        Other -> Other
+            {error, Reason}
     end.
+
+%% Locks are shared by connected Erlang nodes and released if a worker exits.
+%% Sorted acquisition prevents deadlocks for feeds sharing media in reverse order.
+with_identities([], Import, _Context) ->
+    Import();
+with_identities([Uri | Rest], Import, Context) ->
+    Lock = {{?MODULE, z_context:site(Context), Uri}, self()},
+    global:trans(Lock, fun() -> with_identities(Rest, Import, Context) end).
 
 finish(Id, Imported, Existing, Uri, FeedId, Hash, Context) ->
     true = is_integer(Id) andalso z_acl:rsc_editable(Id, Context),
@@ -177,8 +190,6 @@ import(Item, Dependents, Context) ->
                                        false ->
                                            Id = optional_medium(Uri, fun() ->
                                                MediaId = upsert(Dependent, Context),
-                                               ok = medium(MediaId, maps:get(medium, Dependent), Context),
-                                               remember(Uri, MediaId, Context),
                                                MediaId
                                            end, Context),
                                            Acc#{Uri => Id}
@@ -194,10 +205,7 @@ import(Item, Dependents, Context) ->
         undefined ->
             ok;
         Attached ->
-            AttachedId = optional_medium(Attached, fun() ->
-                ok = medium(Id, Attached, Context),
-                Id
-            end, Context),
+            AttachedId = Id,
             LocalProps = local_body(maps:get(props, Item),
                 media_aliases(Item, MediaResults#{Attached => AttachedId}), Context),
             case m_rsc:update(Id, maps:with([<<"body">>], LocalProps), Context) of
@@ -216,17 +224,27 @@ import(Item, Dependents, Context) ->
                           end
                   end,
                   maps:get(edges, Item)),
+    %% All body embeds and connections exist before a download can start.
+    maps:foreach(fun(MediaUri, MediaId) ->
+        queue_medium(MediaId, MediaUri, Context)
+    end, Imported),
+    queue_medium(Id, maps:get(medium, Item), Context),
     {Id, Imported}.
 
-%% Media are optional. A savepoint prevents partial media writes from leaking
-%% into the article transaction. Unexpected errors still abort the import.
+queue_medium(_, undefined, _) -> ok;
+queue_medium(Id, Url, Context) ->
+    case z_import_feed_media:queue(z_context:get(import_feed_log_id, Context), Id, Url, Context) of
+        ok -> ok;
+        {error, Reason} -> throw({import_error, Reason})
+    end.
+
+%% Media are optional. Their own APIs handle write transactions; a failed
+%% download or insertion must not discard the rest of the article.
 optional_medium(Uri, Import, Context) ->
-    z_db:q("savepoint import_feed_medium", Context),
-    Result = try Import()
+    try Import()
     catch
         throw:{import_error, Reason} when Reason =:= eacces;
                 element(1, Reason) =:= media; element(1, Reason) =:= media_fetch ->
-            z_db:q("rollback to savepoint import_feed_medium", Context),
             ?LOG_WARNING(#{
                 in => zotonic_mod_import_feed,
                 text => <<"Skipping unavailable feed medium">>,
@@ -238,9 +256,7 @@ optional_medium(Uri, Import, Context) ->
                 #{event => <<"media">>, status => <<"error">>, uri => Uri,
                     user_id => z_acl:user(Context), message => m_import_feed:error_message(Reason, Context)}, Context),
             undefined
-    end,
-    z_db:q("release savepoint import_feed_medium", Context),
-    Result.
+    end.
 
 media_aliases(Item, Imported) ->
     maps:fold(fun(Alias, Selected, Acc) ->
@@ -407,9 +423,15 @@ upsert(#{uri := Uri, props := ItemProps} = Item, Context) ->
                                 false -> Uri
                             end,
                <<"feed_source_uri">> => Uri},
+    Kind = case maps:get(<<"is_dependent">>, ItemProps, false) of
+        true -> <<"media">>;
+        false -> <<"article">>
+    end,
+    FeedId = z_context:get(import_feed_log_id, Context),
+    WriteContext = z_context:set(import_feed_identity, {FeedId, Uri, Kind}, Context),
     Result = case lookup(Uri, Context) of
                  undefined ->
-                     insert_item(Item, Props, Context);
+                     insert_item(Item, Props, WriteContext);
                  Id ->
                      %% Only a resource already mapped by this importer may be authoritative.
                      Owned = z_db:q1("select rsc_id from import_feed_resource where uri=$1", [Uri], Context) =:= Id,
@@ -426,51 +448,42 @@ upsert(#{uri := Uri, props := ItemProps} = Item, Context) ->
                                                false ->
                                                    Props
                                            end,
-                             m_rsc:update(Id, UpdateProps, [is_import, {tz, <<"UTC">>}], Context);
+                             m_rsc:update(Id, UpdateProps, [is_import, {tz, <<"UTC">>}], WriteContext);
                          false ->
                              {error, authoritative_resource}
                      end
              end,
     case Result of
-        {ok, ImportedId} ->
-            remember(Uri, ImportedId, Context), ImportedId;
+        {ok, ImportedId} -> ImportedId;
         {error, Reason} ->
             throw({import_error, Reason})
     end.
 
-%% Let m_media identify new dependent media before inserting their resources.
-%% Keep the feed fetcher for its credential, redirect and download-size checks.
-insert_item(#{props := #{<<"is_dependent">> := true}, medium := Url}, Props, Context)
-    when is_binary(Url) ->
-    Upload = fetch_medium(Url, Context),
-    %% The URI category is a preview hint; identify the downloaded file itself.
-    MediaProps = maps:remove(<<"category_id">>, Props),
-    case m_media:insert_file(Upload, MediaProps#{<<"feed_medium_url">> => Url},
-            [is_import, {tz, <<"UTC">>}], Context) of
-        {ok, _} = Ok -> Ok;
-        {error, Reason} -> {error, {media, Reason}}
-    end;
+%% A resource is enough for body embeds and edges while its medium is pending.
+%% The task's m_media:replace_file call identifies the file and sets its category.
 insert_item(_, Props, Context) ->
     m_rsc:insert(Props, [is_import, {tz, <<"UTC">>}], Context).
 
-medium(_, undefined, _) -> ok;
-medium(Id, Url, Context) ->
-    case m_rsc:p(Id, feed_medium_url, Context) of
-        Url -> ok;
-        _ ->
-            Upload = fetch_medium(Url, Context),
-            case m_media:replace_file(Upload, Id, #{<<"feed_medium_url">> => Url}, Context) of
-                {ok, _} -> ok;
-                {error, Reason} -> throw({import_error, {media, Reason}})
-            end
-    end.
-
-fetch_medium(Url, Context) ->
-    case z_import_feed_http:get(Url, ?MAX_MEDIA_BYTES, Context) of
-        {ok, {Final, _, _, Data}} ->
-            #{path := Path} = uri_string:parse(z_convert:to_binary(Final)),
-            #upload{filename = filename:basename(Path), data = Data};
-        {error, Reason} -> throw({import_error, {media_fetch, Reason}})
+%% @doc Called by rsc_update inside the resource write transaction. Insertion
+%% already allocated the resource ID, so the foreign key is valid. A later
+%% observer or database failure rolls back both resource and administration.
+%% Never mark the entry complete here: its edges and media tasks are not ready.
+-spec track_resource(FeedId, Uri, Kind, Id, Context) -> ok | {error, term()} when
+    FeedId :: integer(), Uri :: binary(), Kind :: binary(), Id :: integer(), Context :: z:context().
+track_resource(FeedId, Uri, Kind, Id, Context) ->
+    case z_db:q1("insert into import_feed_resource(uri,rsc_id) values($1,$2)
+            on conflict(uri) do update set rsc_id=excluded.rsc_id
+            where import_feed_resource.rsc_id=excluded.rsc_id
+                or (import_feed_resource.rsc_id is null and $3)
+            returning rsc_id", [Uri, Id, z_context:get(import_feed_refetch_deleted, Context) =:= true], Context) of
+        Id ->
+            z_db:q("insert into import_feed_item(feed_id,uri,kind,status)
+                values($1,$2,$3,'importing') on conflict(feed_id,uri) do update
+                set kind=excluded.kind, status='importing', checksum=null,
+                    last_error=null, modified=now()", [FeedId, Uri, Kind], Context),
+            ok;
+        undefined ->
+            {error, import_identity_conflict}
     end.
 
 lookup(Uri, Context) ->
@@ -479,6 +492,9 @@ lookup(Uri, Context) ->
         Id -> Id
     end.
 deleted(Uri, Context) ->
+    z_context:get(import_feed_refetch_deleted, Context) =/= true
+    andalso is_tombstone(Uri, Context).
+is_tombstone(Uri, Context) ->
     z_db:q1("select count(*) from import_feed_resource where uri=$1 and rsc_id is null", [Uri], Context) =:= 1.
 remember(Uri, Id, Context) ->
     z_db:q("insert into import_feed_resource(uri,rsc_id) values($1,$2)

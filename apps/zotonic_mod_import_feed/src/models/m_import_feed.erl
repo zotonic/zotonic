@@ -359,10 +359,15 @@ save(Id, Input, Context) ->
         true ->
             case save_settings(integer(Id), Input, Context) of
                 {ok, Props} ->
-                    SavedProps = Props#{
+                    DueProps = Props#{
                         next_poll => calendar:universal_time(),
                         last_error => undefined
                     },
+                    %% Ordinary saves must not erase a pending explicit request.
+                    SavedProps = case bool(<<"refetch_deleted">>, Input) of
+                        true -> DueProps#{refetch_deleted => true};
+                        false -> DueProps
+                    end,
                     case integer(Id) of
                         undefined ->
                             case z_db:insert(import_feed, SavedProps, Context) of
@@ -703,7 +708,6 @@ delete_content_locked(Id, Context) ->
         {undefined} ->
             {ok, 1} = z_db:update(import_feed, Id,
                 #{is_paused => true, modified => calendar:universal_time()}, Context),
-            z_db:q("select pg_advisory_xact_lock(hashtext(current_schema()), 194815)", Context),
             Rows = z_db:q("
                 select distinct r.rsc_id
                 from import_feed_resource r
@@ -713,7 +717,7 @@ delete_content_locked(Id, Context) ->
                 order by r.rsc_id
                 ", [Id], Context),
             Counts = lists:foldl(fun({RscId}, Acc) ->
-                Result = case deletable_tree(RscId, #{}, Context) of
+                Result = case m_rsc:is_deletable(RscId, Context) of
                     false -> skipped;
                     true -> case m_rsc:delete(RscId, Context) of
                         ok -> deleted;
@@ -782,25 +786,6 @@ delete_feed(Id, DeleteContent, Context) when is_boolean(DeleteContent) ->
             end
     end.
 
-%% Deleting edges can schedule sudo deletion of orphaned dependent resources.
-%% Preserve the parent too if that could indirectly delete a forbidden resource.
-deletable_tree(Id, Seen, Context) ->
-    case maps:is_key(Id, Seen) of
-        true ->
-            true;
-        false ->
-            m_rsc:p_no_acl(Id, <<"is_protected">>, Context) =/= true
-            andalso m_rsc:is_deletable(Id, Context)
-            andalso
-                lists:all(
-                    fun(Object) ->
-                               m_rsc:p_no_acl(Object, <<"is_dependent">>, Context) =/= true
-                        orelse m_rsc:p_no_acl(Object, <<"is_protected">>, Context) =:= true
-                        orelse deletable_tree(Object, Seen#{ Id => true }, Context)
-                    end,
-                    m_edge:objects(Id, Context))
-    end.
-
 -spec decode(map()) -> map().
 decode(Row) ->
     Row#{
@@ -841,6 +826,7 @@ install(Context) ->
                     is_subscribe boolean not null default false,
                     is_subscribe_connections boolean not null default false,
                     is_paused boolean not null default false,
+                    refetch_deleted boolean not null default false,
                     user_id integer references rsc(id) on delete set null, user_groups bytea not null,
                     next_poll timestamptz not null default now(), lease_until timestamptz,
                     lease_token varchar(64), last_poll timestamptz, last_success timestamptz,
@@ -860,7 +846,8 @@ install(Context) ->
                 add column if not exists is_zotonic_feed boolean,
                 add column if not exists use_credentials boolean not null default false,
                 add column if not exists is_subscribe boolean not null default false,
-                add column if not exists is_subscribe_connections boolean not null default false
+                add column if not exists is_subscribe_connections boolean not null default false,
+                add column if not exists refetch_deleted boolean not null default false
             ", Context)
     end,
     z_db:q("create index if not exists import_feed_due_key on import_feed(next_poll) where not is_paused", Context),

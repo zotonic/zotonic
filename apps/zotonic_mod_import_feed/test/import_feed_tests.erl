@@ -419,81 +419,69 @@ copyright_defaults_check() ->
 
 dependent_media_import_check() ->
     Modules = [z_module_manager, m_rsc, m_media, m_category, m_edge, z_db, z_notifier, z_acl,
-        z_media_tag, z_import_feed_http],
-    lists:foreach(fun(M) -> meck:new(M, [passthrough, no_link]) end, Modules),
+        z_media_tag, z_import_feed_http, z_import_feed_media],
+    lists:foreach(fun(Module) -> meck:new(Module, [passthrough, no_link]) end, Modules),
     try
         Context = #context{db = {test, test}},
         Url = <<"https://example.com/photo.jpg">>,
         meck:expect(m_media, mime_to_category, fun(<<"image/jpeg">>) -> image end),
         meck:expect(m_category, is_a, fun(image, media, _) -> true end),
         meck:expect(z_module_manager, active, fun(_, _) -> false end),
-        meck:expect(z_db, transaction, fun(Fun, C) -> Fun(C) end),
         meck:expect(z_db, q, fun(_, _) -> [] end),
         meck:expect(z_db, q, fun(_, _, _) -> [] end),
         meck:expect(z_db, q1, fun(_, _, _) -> undefined end),
         meck:expect(z_notifier, first, fun(_, _) -> undefined end),
         meck:expect(z_acl, rsc_editable, fun(202, _) -> true end),
         meck:expect(z_acl, rsc_visible, fun(201, _) -> true end),
-        meck:expect(m_rsc, rid, fun(depiction, _) -> 102; (_, _) -> undefined end),
+        meck:expect(m_rsc, rid, fun(depiction, _) -> 102; (image, _) -> 103; (_, _) -> undefined end),
         meck:expect(m_rsc, is_a, fun(201, media, _) -> true end),
-        meck:expect(z_media_tag, url, fun(201, [], _) -> {ok, <<"/image/photo.jpg">>} end),
-        meck:expect(m_rsc, p, fun(201, feed_medium_url, _) -> Url; (_, _, _) -> undefined end),
-        meck:expect(z_import_feed_http, get, fun(U, _, C) ->
-            ?assertEqual(Url, U),
-            ?assertEqual(Context, C#context{props = maps:without([import_resource_active_uris, import_feed_log_id], C#context.props)}),
-            {ok, {Url, [], 4, <<"data">>}}
-        end),
-        meck:expect(m_media, insert_file, fun(Upload, Props, Options, C) ->
-            ?assertMatch(#upload{filename = <<"photo.jpg">>, data = <<"data">>}, Upload),
-            ?assertNot(maps:is_key(<<"category_id">>, Props)),
-            ?assertNot(maps:is_key(<<"category">>, Props)),
-            ?assertEqual(Url, maps:get(<<"uri">>, Props)),
-            ?assertEqual(Url, maps:get(<<"feed_medium_url">>, Props)),
-            ?assertEqual(true, maps:get(<<"is_dependent">>, Props)),
-            ?assertEqual([is_import, {tz, <<"UTC">>}], Options),
-            ?assertEqual(Context, C#context{props = maps:without([import_resource_active_uris, import_feed_log_id], C#context.props)}),
-            {ok, 201}
-        end),
-        meck:expect(m_rsc, insert, fun(Props, _, _) ->
-            ?assertEqual(100, maps:get(<<"category_id">>, Props)),
-            {ok, 202}
+        meck:expect(z_media_tag, url, fun(201, [], _) -> {error, enoent} end),
+        meck:expect(m_rsc, p, fun(_, _, _) -> undefined end),
+        meck:expect(m_rsc, insert, fun
+            (#{<<"is_dependent">> := true, <<"category_id">> := 103}, _, _) -> {ok, 201};
+            (#{<<"category_id">> := 100, <<"body">> := Body}, _, _) ->
+                ?assertNotEqual(nomatch, binary:match(Body, <<"<!-- z-media 201 ">>)),
+                {ok, 202}
         end),
         meck:expect(m_edge, insert, fun(202, 102, 201, _) -> {ok, 1} end),
+        meck:expect(z_import_feed_media, queue, fun(1, 201, MediaUrl, _) when MediaUrl =:= Url ->
+            %% Queue only after the article and connection have been written.
+            ?assertEqual(1, meck:num_calls(m_edge, insert, '_')),
+            ok
+        end),
         Entry = #{uri => <<"https://example.com/article">>, url => <<"https://example.com/article">>,
-            title => <<"Article">>, body => <<>>, summary => <<>>, author => <<>>,
-            published => undefined, modified => undefined, media => [Url], raw => #{}},
+            title => <<"Article">>, body => <<"<p>Text<img src='https://example.com/photo.jpg'></p>">>,
+            summary => <<>>, author => <<>>, published => undefined, modified => undefined,
+            media => [Url], raw => #{}},
         Feed = #{id => 1, category_id => 100, content_group_id => undefined,
             is_authoritative => false, media_mode => <<"dependent">>, connections => []},
         ?assertEqual(imported, z_import_feed_import:run(Entry, Feed, Context)),
-        ?assertEqual(1, meck:num_calls(m_media, insert_file, '_')),
-        ?assertEqual(1, meck:num_calls(z_import_feed_http, get, '_')),
-        ?assertEqual(1, meck:num_calls(m_rsc, insert, '_')),
-        %% A failed medium must not roll back or leave broken references in an article.
-        FailedEntry = Entry#{body => <<"<p>Keep this text</p><a href='https://example.com/photo.jpg'><img src='https://example.com/small.jpg' srcset='https://example.com/small.jpg 1x, https://example.com/photo.jpg 2x'></a>">>,
-            media_aliases => #{<<"https://example.com/small.jpg">> => Url}},
-        CheckBody = fun(Props) ->
-            Body = maps:get(<<"body">>, Props),
-            ?assertNotEqual(nomatch, binary:match(Body, <<"Keep this text">>)),
-            ?assertEqual(nomatch, binary:match(Body, <<"photo.jpg">>)),
-            ?assertEqual(nomatch, binary:match(Body, <<"small.jpg">>)),
-            ?assertEqual(nomatch, binary:match(Body, <<"z-media">>))
-        end,
-        meck:expect(m_rsc, p, fun(_, _, _) -> undefined end),
-        meck:expect(m_rsc, update, fun(202, Props, _) -> CheckBody(Props), {ok, 202} end),
-        meck:expect(m_media, insert_file, fun(_, _, _, _) -> {error, eacces} end),
-        meck:expect(m_media, replace_file, fun(_, 202, _, _) -> {error, eacces} end),
-        lists:foreach(fun(Mode) ->
-            meck:expect(m_rsc, insert, fun(Props, _, _) ->
-                case Mode of <<"dependent">> -> CheckBody(Props); _ -> ok end,
-                {ok, 202}
-            end),
-            ?assertEqual(imported, z_import_feed_import:run(FailedEntry, Feed#{media_mode => Mode}, Context)),
-            meck:expect(z_import_feed_http, get, fun(_, _, _) -> {error, timeout} end),
-            ?assertEqual(imported, z_import_feed_import:run(FailedEntry, Feed#{media_mode => Mode}, Context)),
-            meck:expect(z_import_feed_http, get, fun(_, _, _) -> {ok, {Url, [], 4, <<"data">>}} end)
-        end, [<<"dependent">>, <<"attached">>]),
-        ?assertEqual(1, meck:num_calls(m_edge, insert, '_')),
-        ?assertEqual(4, meck:num_calls(z_db, q, ["rollback to savepoint import_feed_medium", '_']))
+        ?assertEqual(1, meck:num_calls(z_import_feed_media, queue, '_')),
+        ?assertEqual(0, meck:num_calls(z_import_feed_http, get, '_')),
+        ?assertEqual(0, meck:num_calls(m_media, insert_file, '_')),
+        ?assertEqual(0, meck:num_calls(z_db, transaction, '_')),
+        %% Independent articles must both reach insertion before either finishes.
+        Parent = self(),
+        meck:expect(m_rsc, insert, fun(_, _, _) ->
+            Parent ! {inserting, self()},
+            receive continue -> {ok, 202} after 5000 -> error(import_blocked) end
+        end),
+        Workers = [spawn_monitor(fun() ->
+            Result = z_import_feed_import:run(Entry#{uri => Uri, media => []}, Feed, Context),
+            Parent ! {imported, self(), Result}
+        end) || Uri <- [<<"https://example.com/concurrent-a">>, <<"https://example.com/concurrent-b">>]],
+        try
+            lists:foreach(fun(_) ->
+                receive {inserting, _} -> ok after 2000 -> error(imports_serialized) end
+            end, Workers),
+            lists:foreach(fun({Pid, _}) -> Pid ! continue end, Workers),
+            lists:foreach(fun({Pid, Ref}) ->
+                receive {imported, Pid, imported} -> ok after 2000 -> error(import_failed) end,
+                receive {'DOWN', Ref, process, Pid, normal} -> ok after 2000 -> error(worker_failed) end
+            end, Workers)
+        after
+            lists:foreach(fun({Pid, Ref}) -> exit(Pid, kill), demonitor(Ref, [flush]) end, Workers)
+        end
     after meck:unload(Modules) end.
 
 category_guess_excludes_meta_check() ->
@@ -629,14 +617,14 @@ delete_feed_content_permissions_check() ->
             (15, <<"is_dependent">>, _) -> true;
             (_, _, _) -> false
         end),
-        meck:expect(m_rsc, is_deletable, fun(Id, _) -> not lists:member(Id, [12, 15]) end),
+        meck:expect(m_rsc, is_deletable, fun(Id, _) -> not lists:member(Id, [11, 12, 15]) end),
         meck:expect(m_edge, objects, fun(13, _) -> [15]; (_, _) -> [] end),
-        meck:expect(m_rsc, delete, fun(10, _) -> ok; (14, _) -> {error, failed} end),
-        ?assertEqual({ok, #{deleted => 1, skipped => 3, failed => 1}},
+        meck:expect(m_rsc, delete, fun(10, _) -> ok; (13, _) -> ok; (14, _) -> {error, failed} end),
+        ?assertEqual({ok, #{deleted => 2, skipped => 2, failed => 1}},
             m_import_feed:delete_content(7, #context{})),
         ?assertEqual(0, meck:num_calls(m_rsc, delete, [11, '_'])),
         ?assertEqual(0, meck:num_calls(m_rsc, delete, [12, '_'])),
-        ?assertEqual(0, meck:num_calls(m_rsc, delete, [13, '_'])),
+        ?assertEqual(1, meck:num_calls(m_rsc, delete, [13, '_'])),
         ?assertEqual({error, eacces}, m_import_feed:delete_content(7, #context{props = #{readonly => true}})),
         ?assertEqual({error, eacces}, m_import_feed:delete_content(7, #context{props = #{allowed => false}})),
         meck:expect(z_db, delete, fun(import_feed, 7, _) -> {ok, 1} end),
@@ -644,7 +632,7 @@ delete_feed_content_permissions_check() ->
         ?assertEqual({ok, #{deleted => 0, skipped => 0, failed => 0}},
             m_import_feed:delete_feed(7, false, #context{})),
         ?assertEqual(DeletesBefore, meck:num_calls(m_rsc, delete, '_')),
-        ?assertEqual({ok, #{deleted => 1, skipped => 3, failed => 1}},
+        ?assertEqual({ok, #{deleted => 2, skipped => 2, failed => 1}},
             m_import_feed:delete_feed(7, true, #context{})),
         ?assertEqual(2, meck:num_calls(z_db, delete, [import_feed, 7, '_'])),
         ?assertEqual({error, eacces}, m_import_feed:delete_feed(7, true, #context{props = #{readonly => true}})),
@@ -689,17 +677,18 @@ fetch_resource_pipeline_check() ->
         F = #{id => 1, url => <<"https://example.com/feed">>, user_id => 2,
             user_groups => [3], use_wordpress => true, is_paused => true},
         meck:expect(z_db, transaction, fun(Fun, C) -> Fun(C) end),
-        meck:expect(z_db, qmap, fun(_, [1], _, _) -> {ok, [F]} end),
+        meck:expect(z_db, qmap, fun(_, [1, _Token], _, _) -> {ok, [F]} end),
+        meck:expect(z_db, q, fun(_, [1, _Token], _) -> [] end),
         meck:expect(z_db, q1, fun(_, [U], _) when U =:= Uri -> 42 end),
         meck:expect(m_import_feed, decode, fun(Row) -> Row end),
         meck:expect(m_import_feed, record_feed_type, fun(_, _, _) -> ok end),
         meck:expect(m_import_feed, is_admin_user, fun(2, _) -> false end),
         meck:expect(m_import_feed, allowed, fun(#context{site = editor}) -> true end),
         meck:expect(z_auth, is_enabled, fun(2, _) -> true end),
-        meck:expect(z_acl, logon, fun(2, #{user_groups := [3]}, #context{site = caller}) -> #context{site = editor} end),
+        meck:expect(z_acl, logon, fun(2, #{user_groups := [3]}, #context{site = caller, db = {test, test}}) -> #context{site = editor} end),
         meck:expect(z_acl, is_read_only, fun(#context{site = editor}) -> false end),
         meck:expect(z_acl, rsc_editable, fun(42, #context{site = editor}) -> true end),
-        meck:expect(z_memo, set_userid, fun(#context{site = caller}) -> ok end),
+        meck:expect(z_memo, set_userid, fun(#context{site = caller, db = {test, test}}) -> ok end),
         meck:expect(z_import_feed_http, context, fun(_, #context{site = editor}) -> #context{site = editor} end),
         meck:expect(z_import_feed_http, get, fun(_, #context{site = editor}) ->
             {ok, {"https://example.com/feed", [], 0,
@@ -710,15 +699,15 @@ fetch_resource_pipeline_check() ->
             (#{uri := U, title := <<"Enriched">>}, #{is_paused := true, feed := _}, true, #context{site = editor})
                 when U =:= Uri -> updated
         end),
-        ?assertEqual({ok, 42}, z_import_feed_fetch:run(1, 42, Uri, #context{site = caller})),
+        ?assertEqual({ok, 42}, z_import_feed_fetch:run(1, 42, Uri, #context{site = caller, db = {test, test}})),
         ?assertEqual({error, feed_entry_not_found},
-            z_import_feed_fetch:run(1, 42, <<"https://example.com/missing">>, #context{site = caller})),
+            z_import_feed_fetch:run(1, 42, <<"https://example.com/missing">>, #context{site = caller, db = {test, test}})),
         meck:expect(z_acl, rsc_editable, fun(42, #context{site = editor}) -> false end),
-        ?assertEqual({error, eacces}, z_import_feed_fetch:run(1, 42, Uri, #context{site = caller})),
+        ?assertEqual({error, eacces}, z_import_feed_fetch:run(1, 42, Uri, #context{site = caller, db = {test, test}})),
         meck:expect(z_auth, is_enabled, fun(2, _) -> false end),
-        ?assertEqual({error, editor_disabled}, z_import_feed_fetch:run(1, 42, Uri, #context{site = caller})),
+        ?assertEqual({error, editor_disabled}, z_import_feed_fetch:run(1, 42, Uri, #context{site = caller, db = {test, test}})),
         meck:expect(m_import_feed, is_admin_user, fun(2, _) -> true end),
-        ?assertEqual({error, admin_import_user}, z_import_feed_fetch:run(1, 42, Uri, #context{site = caller})),
+        ?assertEqual({error, admin_import_user}, z_import_feed_fetch:run(1, 42, Uri, #context{site = caller, db = {test, test}})),
         ?assertEqual(2, meck:num_calls(z_import_feed_http, get, '_')),
         ?assertEqual(1, meck:num_calls(z_import_feed_import, run, '_')),
         ?assertEqual(5, meck:num_calls(z_memo, set_userid, '_'))
@@ -734,6 +723,9 @@ zotonic_atom_detection_check() ->
 zotonic_import_options_check() ->
     Defaults = z_import_feed_native:options(#{media_mode => <<"dependent">>}, #{}),
     ?assertEqual(1, proplists:get_value(import_edges, Defaults)),
+    ?assertEqual(false, proplists:get_value(is_import_deleted, Defaults)),
+    RestoreOptions = z_import_feed_native:options(#{media_mode => <<"dependent">>, refetch_deleted_once => true}, #{}),
+    ?assertEqual(true, proplists:get_value(is_import_deleted, RestoreOptions)),
     ?assertEqual([{authorization, none}], proplists:get_value(fetch_options, Defaults)),
     ?assertEqual(false, proplists:get_value(is_subscribe, Defaults)),
     ?assertEqual(false, proplists:get_value(is_subscribe_connections, Defaults)),
@@ -758,6 +750,7 @@ zotonic_native_import_check() ->
         end),
         meck:expect(z_db, q1, fun(_, _, _) -> 0 end),
         meck:expect(z_context, set, fun(import_feed_native, Cached, #context{}) -> #context{props = #{native => Cached}} end),
+        meck:expect(z_context, get, fun(Key, #context{props = Props}) -> maps:get(Key, Props, undefined) end),
         meck:expect(m_rsc, is_a, fun(Id, meta, _) -> Id =:= 99 end),
         meck:expect(m_rsc_import, import_uri_recursive, fun(U, Opts, #context{props = #{native := Cache}}) ->
             ?assertEqual(Uri, U),
@@ -780,7 +773,9 @@ zotonic_native_import_check() ->
             z_import_feed_native:prepare(#{uri => <<"wrong-uri">>, zotonic_export => <<"https://example.com/export">>},
                 #{}, [], Feed, #context{})),
         meck:expect(z_db, q1, fun(_, _, _) -> 1 end),
-        ?assertEqual({error, deleted}, z_import_feed_native:fetch(Uri, #{Uri => JSON}, #context{}))
+        ?assertEqual({error, deleted}, z_import_feed_native:fetch(Uri, #{Uri => JSON}, #context{})),
+        ?assertEqual({ok, #{<<"status">> => <<"ok">>, <<"result">> => JSON}},
+            z_import_feed_native:fetch(Uri, #{Uri => JSON}, #context{props = #{import_feed_refetch_deleted => true}}))
     after lists:foreach(fun meck:unload/1, Modules) end.
 
 zotonic_native_cleanup_check() ->
