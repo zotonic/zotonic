@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-15 13:39\n"
+"PO-Revision-Date: 2026-10-15 15:53\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -8650,7 +8650,7 @@ msgstr "将CSS和JavaScript文件作为单独的文件下载。不要将它们�
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
 msgid "Edit action"
-msgstr ""
+msgstr "编辑操作"
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:33
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:42
@@ -8668,15 +8668,15 @@ msgstr "编辑调度文件"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
 msgid "Edit event handler"
-msgstr ""
+msgstr "编辑事件处理程序"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
 msgid "Edit filter"
-msgstr ""
+msgstr "编辑筛选条件"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
 msgid "Edit model"
-msgstr ""
+msgstr "编辑模型"
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_id_option.tpl:2
 msgid "Edit resource in admin"
@@ -8684,7 +8684,7 @@ msgstr "在管理后台编辑资源"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
 msgid "Edit scomp"
-msgstr ""
+msgstr "编辑 scomp"
 
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:30
 msgid "Edit subscriber function"
@@ -8836,7 +8836,7 @@ msgstr "自省"
 
 #: zotonic_mod_development/src/support/z_development_template.erl:41
 msgid "Invalid template name."
-msgstr ""
+msgstr "模板名称无效。"
 
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:53
 msgid "Leave both roots empty when the paths are identical. Files outside the mapped root will not be opened."
