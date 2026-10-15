@@ -87,6 +87,47 @@ argument list, for example `{\"code\", [\"--reuse-window\", \"--goto\", \"{file}
 Set `development_editor_browser_only` to true to force browser launches on a
 remote host or a container that cannot be detected automatically.
 
+#### Node configuration
+
+These settings belong to the `zotonic` application in the node configuration,
+not to a site's configuration or the module configuration database:
+
+| Setting | Default | Purpose |
+| --- | --- | --- |
+| `development_editor` | `undefined` | Trusted `{Executable, Args}` command. When set, takes precedence over editor environment variables during automatic detection. |
+| `development_editor_id` | `<<\"auto\">>` | Saved candidate ID. An explicit ID overrides automatic selection; an unavailable choice is reported instead of silently falling back. |
+| `development_editor_browser_only` | `false` | Disables local discovery and launching, including shell helpers. Containers enforce this behavior regardless of the setting. |
+
+For example, a node configuration fragment can contain:
+
+```erlang
+[{zotonic, [
+    {development_editor, {\"code\", [\"--reuse-window\", \"--goto\", \"{file}:{line}:{column}\"]}}
+]}].
+```
+
+The executable can be a name on PATH or an absolute path. Executable paths and
+arguments accept strings or UTF-8 binaries. Each list element is one argument;
+paths with spaces do not need embedded shell quotes. `{file}`, `{line}` and
+`{column}` are replaced within arguments, with positions starting at 1. When no
+argument contains `{file}`, the filename is appended. Commands are executed
+without a shell: shell variables, pipelines and command substitutions are not
+expanded. Terminal editors need a supported remote client or session.
+
+Choose the local editor in Admin > Development to save `development_editor_id`
+in `config.d/zotonic-editor.config`. The choice applies immediately and is loaded
+again on restart. Automatic detection saves `<<\"auto\">>`; it does not remove a
+custom `development_editor` command. Avoid defining the saved ID in multiple
+configuration files. Use `z_config_files:config_dir()` in the Erlang shell to
+find the node configuration directory; deployments can override it with
+`ZOTONIC_CONFIG_DIR`. The generated file stores only the candidate ID.
+
+Browser URL presets, custom URLs and source-root mappings are stored separately
+in the browser for the site. They are not node configuration settings. In Docker,
+map the source path inside the container to the corresponding checkout on the
+host and install any required URL handler on that host. Shell helpers cannot
+open the browser on the user's machine and return `{error, browser_only}`.
+
 ### Template debugging
 
 The template selection mechanism is quite complicated. It takes into account all modules, their priority, the user-agent
