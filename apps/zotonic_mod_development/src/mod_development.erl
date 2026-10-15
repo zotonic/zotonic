@@ -601,7 +601,8 @@ highlight_template_source(Filepath) ->
             end
     end.
 
-find_indexed_template(TemplatePath, Context) ->
+find_indexed_template(TemplatePath, Context)
+        when is_binary(TemplatePath), byte_size(TemplatePath) > 0, byte_size(TemplatePath) < 4096 ->
     case lists:reverse(binary:split(TemplatePath, <<"/priv/templates/">>, [ global ])) of
         [TplPath | _] ->
             Found = z_module_indexer:find_all(template, TplPath, Context),
@@ -614,7 +615,9 @@ find_indexed_template(TemplatePath, Context) ->
             end;
         [] ->
             {error, enoent}
-    end.
+    end;
+find_indexed_template(_, _Context) ->
+    {error, enoent}.
 
 %% @doc Recompile the template with only the given trace points enabled.
 %% Start receiving the debug info from the template compiler runtime.

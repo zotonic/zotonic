@@ -38,7 +38,7 @@ Available Model API Paths
 | `get` | `/flush/...` | Return config flag controlling whether cache flush action is enabled. |
 | `get` | `/reindex/...` | Return config flag controlling whether reindex action is enabled. |
 | `get` | `/dispatch_info/...` | Return dispatch rule info/inspection data for development diagnostics. |
-| `get` | `/editor` | Detect editors; requires use of mod_development. |
+| `get` | `/editor` | Detect editors on development sites; requires use of mod_development. Other environments use browser launches without local probes. |
 | `post` | `/editor/preference` | Save the machine editor choice; development environment and module ACL required; disabled in containers. |
 | `post` | `/editor/open` | Open an indexed template or signed source location; development environment and module ACL required; disabled in containers. |
 | `get` | `/show_trace_button/...` | Check if the trace button for debugging templates can be shown. |
@@ -70,14 +70,18 @@ m_get([ <<"editor">> | Rest ], _Msg, Context) ->
     case z_acl:is_allowed(use, mod_development, Context) of
         true ->
             {ok, #module_index{filepath = File}} = z_module_indexer:find(template, <<"admin_development.tpl">>, Context),
-            Detection = z_development_editor:detect(File),
+            LocalAllowed = m_site:environment(Context) =:= development,
+            Detection = case LocalAllowed of
+                true -> z_development_editor:detect(File);
+                false -> #{browser_only => true, candidates => [], selected => undefined}
+            end,
             %% Executables and arguments are server-owned, never accepted back from the browser.
             Public = fun(C) -> maps:with([id, label, reason, available], C) end,
             Selected = case maps:get(selected, Detection) of undefined -> undefined; C -> Public(C) end,
             Info = Detection#{candidates => [Public(C) || C <- maps:get(candidates, Detection)],
                               selected => Selected, test_file => File,
                               editor_id => z_config:get(development_editor_id, <<"auto">>),
-                              local_allowed => m_site:environment(Context) =:= development},
+                              local_allowed => LocalAllowed},
             {ok, {Info, Rest}};
         false -> {error, eacces}
     end;
@@ -198,7 +202,7 @@ m_get(_Vs, _Msg, _Context) ->
 %% Shell callers use z:edit/1,2 with the OS user's existing privileges.
 -spec m_post(list(binary()), zotonic_model:opt_msg(), z:context()) -> zotonic_model:post_return().
 m_post([<<"editor">>, <<"preference">>], #{payload := #{<<"editor">> := Editor}}, Context)
-        when is_binary(Editor), byte_size(Editor) < 128 ->
+        when is_binary(Editor), byte_size(Editor) > 0, byte_size(Editor) < 128 ->
     case z_acl:is_allowed(use, mod_development, Context)
          andalso m_site:environment(Context) =:= development of
         true ->
@@ -218,16 +222,21 @@ m_post(_, _, _) -> {error, unknown_path}.
 %% @doc Validate a signed source token or exact indexed template path before launching an editor.
 editor_open(#{<<"source">> := Token, <<"editor">> := Editor}, Context)
         when is_binary(Token), byte_size(Token) > 0, byte_size(Token) < 16384,
-             is_binary(Editor) ->
+             is_binary(Editor), byte_size(Editor) > 0, byte_size(Editor) < 128 ->
     Location = try z_crypto:depickle(Token, Context) catch error:_ -> invalid end,
     case Location of
-        {development_editor_source, File, Line} ->
+        {development_editor_source, File, Line}
+                when is_binary(File), byte_size(File) > 0, byte_size(File) < 4096,
+                     is_integer(Line), Line > 0, Line < 10000000 ->
             z_development_editor:open(File, Line, 1, Editor);
         _ -> {error, eacces}
     end;
+editor_open(#{<<"source">> := _}, _Context) ->
+    {error, badarg};
 editor_open(#{<<"file">> := File, <<"editor">> := Editor,
               <<"line">> := Line, <<"column">> := Column}, Context)
-    when is_binary(File), byte_size(File) < 4096, is_binary(Editor),
+    when is_binary(File), byte_size(File) > 0, byte_size(File) < 4096,
+         is_binary(Editor), byte_size(Editor) > 0, byte_size(Editor) < 128,
          is_integer(Line), Line > 0, Line < 10000000,
          is_integer(Column), Column > 0, Column < 10000000 ->
     case binary:split(File, <<"/priv/templates/">>, [global]) of
