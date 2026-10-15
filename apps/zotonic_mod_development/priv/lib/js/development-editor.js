@@ -9,9 +9,10 @@
         vscodium: 'vscodium://file{path}:{line}:{column}',
         sublime: 'subl://open?url=file://{path}&line={line}&column={column}'
     };
-    const normalize = path => path.replaceAll('\\', '/').replace(/\/+$/, '');
+    const separators = path => /^(?:[a-z]:\\|\\\\)/i.test(path) ? path.replaceAll('\\', '/') : path;
+    const normalize = path => separators(path).replace(/\/+$/, '');
     function mapPath(file, from, to) {
-        const path = file.replaceAll('\\', '/');
+        const path = separators(file);
         if (path.split('/').some(part => part === '..' || part === '.')) throw new Error('path_mapping');
         if (!from && !to) return path;
         const source = normalize(from);
@@ -33,6 +34,12 @@
             line: String(Math.max(1, Math.trunc(Number(line) || 1))),
             column: String(Math.max(1, Math.trunc(Number(column) || 1)))
         };
+        if (settings.preset === 'sublime') {
+            // The helper first decodes the query, then parses the nested file URL.
+            // Preserve URI escapes through both steps, especially #, % and spaces.
+            return 'subl://open?url=' + encodeURIComponent('file://' + values.path) +
+                '&line=' + values.line + '&column=' + values.column;
+        }
         return pattern.replace(/\{(file|path|line|column)\}/g, (_, name) => values[name]);
     }
     function read() {

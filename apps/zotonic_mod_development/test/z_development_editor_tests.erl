@@ -67,9 +67,9 @@ launch_test_() ->
 launch_fixture() ->
     Dir = "/tmp/zotonic-editor-" ++ integer_to_list(erlang:unique_integer([positive])),
     ok = file:make_dir(Dir),
-    Script = filename:join(Dir, "launcher"),
+    Script = filename:join(Dir, "launcher with spaces"),
     Output = filename:join(Dir, "arguments"),
-    Source = filename:join(Dir, "a {line} $(never); 'quote'.tpl"),
+    Source = filename:join(Dir, "a héllo {line} $(never); `never` & 'quote'.tpl"),
     Saved = application:get_env(zotonic, development_editor),
     try
         ok = file:write_file(Source, <<"test">>),

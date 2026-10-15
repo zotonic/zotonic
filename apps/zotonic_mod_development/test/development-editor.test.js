@@ -13,7 +13,7 @@ test('maps a directory boundary and encodes Unicode, spaces, and URL delimiters'
 test('Sublime query cannot acquire injected parameters', () => {
     const url = editorUrl({...settings, preset: 'sublime'}, '/app/zotonic/a&line=9.tpl', 42, 3);
     assert.equal(new URL(url).searchParams.get('line'), '42');
-    assert.equal(new URL(url).searchParams.get('url'), 'file:///Users/me/My Project/a&line=9.tpl');
+    assert.equal(new URL(url).searchParams.get('url'), 'file:///Users/me/My%20Project/a%26line%3D9.tpl');
 });
 test('custom helpers receive encoded filenames and Windows drive paths', () => {
     assert.equal(editorUrl({...settings, preset: 'custom', url: 'vim://open?file={file}&line={line}'}, '/app/zotonic/{line}.tpl', 8),
@@ -29,4 +29,20 @@ test('unsafe URLs, missing editor, and partial mappings cannot be saved', () => 
     assert.throws(() => validate({...settings, host_root: ''}));
     assert.throws(() => validate({mode: 'local', local: ''}));
     assert.doesNotThrow(() => validate(settings));
+});
+
+test('Sublime nested file URLs round-trip reserved characters and spaces', () => {
+    const filename = "/app/zotonic/héllo # ? %20 & + ' \\ {line}.tpl";
+    const url = new URL(editorUrl({...settings, preset: 'sublime'}, filename, 17, 4));
+    assert.deepEqual([...url.searchParams.keys()], ['url', 'line', 'column']);
+    const fileUrl = new URL(url.searchParams.get('url'));
+    assert.equal(fileUrl.hash, '');
+    assert.equal(fileUrl.search, '');
+    assert.equal(decodeURIComponent(fileUrl.pathname), filename.replace('/app/zotonic', '/Users/me/My Project'));
+    assert.equal(url.searchParams.get('line'), '17');
+});
+test('Unix backslashes remain literal while Windows separators are normalized', () => {
+    assert.equal(editorUrl(settings, '/app/zotonic/a\\b.tpl'),
+        'vscode://file/Users/me/My%20Project/a%5Cb.tpl:1:1');
+    assert.equal(mapPath('C:\\Code\\a b.tpl', 'C:\\Code', 'D:\\Working Tree'), 'D:/Working Tree/a b.tpl');
 });
