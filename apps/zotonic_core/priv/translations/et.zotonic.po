@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-15 11:59\n"
+"PO-Revision-Date: 2026-10-15 13:39\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -8483,7 +8483,7 @@ msgid "Calculate and visualize a dependency graph of all templates."
 msgstr "Arvutage ja visualiseerige kõigi mallide sõltuvusgraafik."
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:44
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:907
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:909
 msgid "Check debug points in the template source to see debug data here."
 msgstr "Kontrollige silituspunkte malli allikas, et näha silitusandmeid siin."
 
@@ -8508,8 +8508,8 @@ msgstr "Kustutage andmed ja alustage"
 msgid "Clear data and trace all"
 msgstr "Kustutage andmed ja jälgige kõike"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:534
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:543
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:536
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:545
 msgid "Click to load templates"
 msgstr "Klõpsake mallide laadimiseks"
 
@@ -8551,8 +8551,8 @@ msgstr "Jälgija väljundit ei õnnestunud tuua, proovige uuesti."
 msgid "Could not load or save editor settings."
 msgstr "Redaktori seadeid ei õnnestunud laadida ega salvestada."
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:441
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:472
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:443
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:474
 msgid "Could not load templates"
 msgstr "Ei saanud laadida malle"
 
@@ -8561,6 +8561,7 @@ msgid "Could not open the editor. Check the editor and path mapping."
 msgstr "Redaktorit ei õnnestunud avada. Kontrollige redaktorit ja teepõhiseid seoseid."
 
 #: zotonic_mod_development/priv/templates/_development_editor_button.tpl:10
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
 msgid "Could not open the editor. Check the editor settings on the Development page."
 msgstr "Redaktorit ei õnnestunud avada. Kontrollige redaktori seadeid lehel „Arendus”."
 
@@ -8615,7 +8616,7 @@ msgid "Detecting editors…"
 msgstr "Toimetajate tuvastamine…"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:7
-#: zotonic_mod_development/src/mod_development.erl:1229
+#: zotonic_mod_development/src/mod_development.erl:1233
 msgid "Development"
 msgstr "Areng"
 
@@ -8647,6 +8648,10 @@ msgstr "Lähetusreegli silumine"
 msgid "Download CSS and JavaScript files as separate files. Don’t combine them in one URL."
 msgstr "CSS- ja JavaScripti failide allalaadimine eraldi failidena. Ärge ühendage neid ühes URL-is."
 
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
+msgid "Edit action"
+msgstr ""
+
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:33
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:42
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:73
@@ -8661,9 +8666,25 @@ msgstr "Kontrolleri muutmine"
 msgid "Edit dispatch file"
 msgstr "Saadetisfaili muutmine"
 
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
+msgid "Edit event handler"
+msgstr ""
+
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
+msgid "Edit filter"
+msgstr ""
+
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
+msgid "Edit model"
+msgstr ""
+
 #: zotonic_mod_development/priv/templates/_development_dispatch_id_option.tpl:2
 msgid "Edit resource in admin"
 msgstr "Ressursi muutmine haldusliideses"
+
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
+msgid "Edit scomp"
+msgstr ""
 
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:30
 msgid "Edit subscriber function"
@@ -8723,7 +8744,7 @@ msgstr "Sisestage moodul ja funktsioon, mida soovite jälgida. Kui funktsiooni e
 msgid "Error changing the console logs."
 msgstr "Konsooli logide muutmisel tekkis viga."
 
-#: zotonic_mod_development/src/mod_development.erl:627
+#: zotonic_mod_development/src/mod_development.erl:631
 msgid "Error parsing template."
 msgstr "Viga malli analüüsimisel."
 
@@ -8739,7 +8760,7 @@ msgstr "Iga saidil juurdepääsetav URL on määratletud väljasaatmisreeglitega
 msgid "Explain"
 msgstr "Seletama"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:412
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:414
 msgid "Extended / overridden by"
 msgstr "Laiendatud/ülesulatatud"
 
@@ -8797,7 +8818,7 @@ msgstr "Kõigi mallide sõltuvuste graafik"
 msgid "Hostalias"
 msgstr "Hostalias"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:416
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:418
 msgid "Included by"
 msgstr "Kaasa arvatud"
 
@@ -8812,6 +8833,10 @@ msgstr "Sisaldab põhimalli, kategooriavariantide ja ressursinime variante. Vali
 #: zotonic_mod_development/priv/templates/admin_development.tpl:266
 msgid "Introspection"
 msgstr "Enesevaatlus"
+
+#: zotonic_mod_development/src/support/z_development_template.erl:41
+msgid "Invalid template name."
+msgstr ""
 
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:53
 msgid "Leave both roots empty when the paths are identical. Files outside the mapped root will not be opened."
@@ -8848,8 +8873,8 @@ msgstr "Funktsioonikutsete jälgimine serveris."
 msgid "Loading and displaying the trace for:"
 msgstr "Jälje laadimine ja kuvamine:"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:434
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:460
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:436
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:462
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:76
 msgid "Loading..."
 msgstr "Laadimine..."
@@ -8879,7 +8904,7 @@ msgstr "Sobitage päringu URL, kuvage sobitatud saatmisreegel."
 msgid "Matches with the same name are listed in module priority order."
 msgstr "Sama nimega vasteid on loetletud moodulite prioriteetsuse järjekorras."
 
-#: zotonic_mod_development/src/support/z_development_template.erl:35
+#: zotonic_mod_development/src/support/z_development_template.erl:48
 msgid "Matching templates"
 msgstr "Sobivad mallid"
 
@@ -8950,11 +8975,11 @@ msgstr "Viiteid ei leitud."
 msgid "No template found in the context."
 msgstr "Kontekstis ei leitud malli."
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:420
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:422
 msgid "No traced parent templates"
 msgstr "Jälgitud vanemamalle ei ole"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:470
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:472
 msgid "No traced templates on this point"
 msgstr "Selles punktis ei ole jälgitavaid malle"
 
@@ -8985,7 +9010,7 @@ msgstr "Ava failid, kasutades"
 msgid "Open in editor"
 msgstr "Ava redaktoris"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:529
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:531
 msgid "Open included template"
 msgstr "Avage lisatud mall"
 
@@ -9055,6 +9080,7 @@ msgid "Show internals of Zotonic and the modules."
 msgstr "Näita Zotonici ja moodulite sisemust."
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_template_option.tpl:3
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
 msgid "Show matching templates"
 msgstr "Näita sobivaid malle"
 
@@ -9169,7 +9195,7 @@ msgstr "Mall"
 msgid "Template debugging"
 msgstr "Mallide silumine"
 
-#: zotonic_mod_development/src/mod_development.erl:630
+#: zotonic_mod_development/src/mod_development.erl:634
 msgid "Template file not found."
 msgstr "Mallifaili ei leitud."
 
@@ -9229,7 +9255,7 @@ msgstr "See ressurss on tundmatu või sellel pole URI-d"
 msgid "This server uses browser launches only. Configure your host editor and path mapping below."
 msgstr "See server kasutab ainult brauseri käivitamist. Seadistage allpool oma host-redaktor ja teepõhine kaardistamine."
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:541
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:543
 msgid "This template is used by"
 msgstr "Seda malli kasutavad"
 
@@ -9303,7 +9329,7 @@ msgstr "Vaadake kõiki saidil kasutatavaid saatmisreegleid ja hostinimesid."
 msgid "View all dispatch rules available in the site"
 msgstr "Vaadake kõiki saidil saadaolevaid saatmisreegleid"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:909
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:911
 msgid "Waiting for debug data..."
 msgstr "Ootame silumisandmeid..."
 
@@ -9311,8 +9337,8 @@ msgstr "Ootame silumisandmeid..."
 msgid "You are not allowed to use the dispatch debugging."
 msgstr "Teil pole lubatud kasutada saatmise silumist."
 
-#: zotonic_mod_development/src/support/z_development_template.erl:40
-#: zotonic_mod_development/src/support/z_development_template.erl:57
+#: zotonic_mod_development/src/support/z_development_template.erl:53
+#: zotonic_mod_development/src/support/z_development_template.erl:70
 msgid "You are not allowed to use the template debugging."
 msgstr "Teil pole lubatud malli silumist kasutada."
 
