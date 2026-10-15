@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-15 11:58\n"
+"PO-Revision-Date: 2026-10-15 13:38\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -8483,7 +8483,7 @@ msgid "Calculate and visualize a dependency graph of all templates."
 msgstr "حساب وتصور الرسم البياني التبعية لجميع القوالب."
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:44
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:907
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:909
 msgid "Check debug points in the template source to see debug data here."
 msgstr "تحقق من نقاط التصحيح في مصدر القالب لرؤية بيانات التصحيح هنا."
 
@@ -8508,8 +8508,8 @@ msgstr "امسح البيانات وابدأ"
 msgid "Clear data and trace all"
 msgstr "مسح البيانات وتتبع الكل"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:534
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:543
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:536
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:545
 msgid "Click to load templates"
 msgstr "انقر لتحميل القوالب"
 
@@ -8551,8 +8551,8 @@ msgstr "تعذر جلب إخراج التتبع ، يرجى المحاولة م�
 msgid "Could not load or save editor settings."
 msgstr "تعذر تحميل إعدادات المحرر أو حفظها."
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:441
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:472
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:443
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:474
 msgid "Could not load templates"
 msgstr "تعذر تحميل القوالب"
 
@@ -8561,6 +8561,7 @@ msgid "Could not open the editor. Check the editor and path mapping."
 msgstr "تعذر فتح المحرر. يرجى التحقق من المحرر وتعيين المسار."
 
 #: zotonic_mod_development/priv/templates/_development_editor_button.tpl:10
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
 msgid "Could not open the editor. Check the editor settings on the Development page."
 msgstr "تعذر فتح المحرر. يرجى التحقق من إعدادات المحرر في صفحة «التطوير»."
 
@@ -8615,7 +8616,7 @@ msgid "Detecting editors…"
 msgstr "الكشف عن المحررين…"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:7
-#: zotonic_mod_development/src/mod_development.erl:1229
+#: zotonic_mod_development/src/mod_development.erl:1233
 msgid "Development"
 msgstr "تطوير"
 
@@ -8647,6 +8648,10 @@ msgstr "تصحيح أخطاء قاعدة الإرسال"
 msgid "Download CSS and JavaScript files as separate files. Don’t combine them in one URL."
 msgstr "قم بتنزيل ملفات CSS و JavaScript كملفات منفصلة. لا تجمعهم في عنوان URL واحد."
 
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
+msgid "Edit action"
+msgstr ""
+
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:33
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:42
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:73
@@ -8661,9 +8666,25 @@ msgstr "تحرير وحدة التحكم"
 msgid "Edit dispatch file"
 msgstr "تحرير ملف الإرسال"
 
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
+msgid "Edit event handler"
+msgstr ""
+
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
+msgid "Edit filter"
+msgstr ""
+
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
+msgid "Edit model"
+msgstr ""
+
 #: zotonic_mod_development/priv/templates/_development_dispatch_id_option.tpl:2
 msgid "Edit resource in admin"
 msgstr "تحرير المورد في لوحة الإدارة"
+
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
+msgid "Edit scomp"
+msgstr ""
 
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:30
 msgid "Edit subscriber function"
@@ -8723,7 +8744,7 @@ msgstr "أدخل الوحدة النمطية والدالة التي تريد ت
 msgid "Error changing the console logs."
 msgstr "خطأ في تغيير سجلات وحدة التحكم."
 
-#: zotonic_mod_development/src/mod_development.erl:627
+#: zotonic_mod_development/src/mod_development.erl:631
 msgid "Error parsing template."
 msgstr "خطأ في تحليل القالب."
 
@@ -8739,7 +8760,7 @@ msgstr "يتم تعريف كل عنوان URL يمكن الوصول إليه ف�
 msgid "Explain"
 msgstr "يشرح"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:412
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:414
 msgid "Extended / overridden by"
 msgstr "تم التمديد/التجاوز من قبل"
 
@@ -8797,7 +8818,7 @@ msgstr "رسم بياني لجميع تبعيات القالب"
 msgid "Hostalias"
 msgstr "هوستاليس"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:416
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:418
 msgid "Included by"
 msgstr "متضمنة من قبل"
 
@@ -8812,6 +8833,10 @@ msgstr "يتضمن القالب الأساسي، ومتغيرات الفئات،
 #: zotonic_mod_development/priv/templates/admin_development.tpl:266
 msgid "Introspection"
 msgstr "استبطان - سبر غور"
+
+#: zotonic_mod_development/src/support/z_development_template.erl:41
+msgid "Invalid template name."
+msgstr ""
 
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:53
 msgid "Leave both roots empty when the paths are identical. Files outside the mapped root will not be opened."
@@ -8848,8 +8873,8 @@ msgstr "تتبع مباشر لاستدعاءات الدالة على الخاد�
 msgid "Loading and displaying the trace for:"
 msgstr "تحميل وعرض التتبع لـ"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:434
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:460
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:436
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:462
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:76
 msgid "Loading..."
 msgstr "تحميل..."
@@ -8879,7 +8904,7 @@ msgstr "تطابق عنوان URL للطلب ، اعرض قاعدة الإرسا
 msgid "Matches with the same name are listed in module priority order."
 msgstr "يتم سرد المطابقات التي تحمل الاسم نفسه وفقًا لترتيب أولوية الوحدات النمطية."
 
-#: zotonic_mod_development/src/support/z_development_template.erl:35
+#: zotonic_mod_development/src/support/z_development_template.erl:48
 msgid "Matching templates"
 msgstr "القوالب المطابقة"
 
@@ -8950,11 +8975,11 @@ msgstr "لم يتم العثور على أي مراجع."
 msgid "No template found in the context."
 msgstr "لم يتم العثور على قالب في السياق."
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:420
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:422
 msgid "No traced parent templates"
 msgstr "لا توجد قوالب أصلية متتبعة"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:470
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:472
 msgid "No traced templates on this point"
 msgstr "لا توجد قوالب متتبعة في هذه النقطة"
 
@@ -8985,7 +9010,7 @@ msgstr "افتح الملفات باستخدام"
 msgid "Open in editor"
 msgstr "فتح في المحرر"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:529
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:531
 msgid "Open included template"
 msgstr "فتح القالب المضمن"
 
@@ -9055,6 +9080,7 @@ msgid "Show internals of Zotonic and the modules."
 msgstr "عرض الأجزاء الداخلية من Zotonic والوحدات النمطية."
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_template_option.tpl:3
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
 msgid "Show matching templates"
 msgstr "عرض القوالب المطابقة"
 
@@ -9169,7 +9195,7 @@ msgstr "قالب"
 msgid "Template debugging"
 msgstr "تصحيح النموذج"
 
-#: zotonic_mod_development/src/mod_development.erl:630
+#: zotonic_mod_development/src/mod_development.erl:634
 msgid "Template file not found."
 msgstr "ملف القالب غير موجود."
 
@@ -9229,7 +9255,7 @@ msgstr "هذا المورد غير معروف أو لا يحتوي على URI"
 msgid "This server uses browser launches only. Configure your host editor and path mapping below."
 msgstr "يستخدم هذا الخادم تشغيل المتصفح فقط. قم بتكوين محرر المضيف وتعيين المسار أدناه."
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:541
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:543
 msgid "This template is used by"
 msgstr "يتم استخدام هذا القالب بواسطة"
 
@@ -9303,7 +9329,7 @@ msgstr "عرض جميع قواعد الإرسال وأسماء المضيفين 
 msgid "View all dispatch rules available in the site"
 msgstr "عرض كافة قواعد الإرسال المتوفرة في الموقع"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:909
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:911
 msgid "Waiting for debug data..."
 msgstr "في انتظار بيانات التصحيح..."
 
@@ -9311,8 +9337,8 @@ msgstr "في انتظار بيانات التصحيح..."
 msgid "You are not allowed to use the dispatch debugging."
 msgstr "غير مسموح لك باستخدام تصحيح أخطاء الإرسال."
 
-#: zotonic_mod_development/src/support/z_development_template.erl:40
-#: zotonic_mod_development/src/support/z_development_template.erl:57
+#: zotonic_mod_development/src/support/z_development_template.erl:53
+#: zotonic_mod_development/src/support/z_development_template.erl:70
 msgid "You are not allowed to use the template debugging."
 msgstr "غير مسموح لك باستخدام نموذج التصحيح."
 
