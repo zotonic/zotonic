@@ -29,7 +29,7 @@ development_filename(undefined, _Context) ->
 development_filename(Filename, _Context) ->
     Path = resolve(z_convert:to_binary(Filename)),
     Root = filename:split(resolve(z_convert:to_binary(filename:absname(z_path:get_path())))),
-    relative(filename:split(Path), Root, Path).
+    z_convert:to_binary(relative(filename:split(Path), Root, Path)).
 
 %% @doc Resolve an absolute path, preserving the input if resolution fails.
 %% Walk each component: a regular file can still be reached through a linked

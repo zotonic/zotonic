@@ -212,7 +212,7 @@ module_source(Module) ->
                 undefined -> {error, no_source};
                 File -> {ok, File}
             end;
-        Error -> Error
+        {error, _} = Error -> Error
     end.
 
 %% @doc Resolve a module's source without launching an editor.
