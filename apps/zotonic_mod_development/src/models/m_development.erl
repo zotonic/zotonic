@@ -201,23 +201,26 @@ m_get(_Vs, _Msg, _Context) ->
 %% Browser launches accept indexed templates or signed source locations.
 %% Shell callers use z:edit/1,2 with the OS user's existing privileges.
 -spec m_post(list(binary()), zotonic_model:opt_msg(), z:context()) -> zotonic_model:post_return().
-m_post([<<"editor">>, <<"preference">>], #{payload := #{<<"editor">> := Editor}}, Context)
+m_post([<<"editor">>, <<"preference">>], #{ payload := #{<<"editor">> := Editor} }, Context)
         when is_binary(Editor), byte_size(Editor) > 0, byte_size(Editor) < 128 ->
-    case z_acl:is_allowed(use, mod_development, Context)
-         andalso m_site:environment(Context) =:= development of
+    case is_developer(Context) of
         true ->
-            {ok, #module_index{filepath = File}} = z_module_indexer:find(
-                template, <<"admin_development.tpl">>, Context),
+            {ok, #module_index{filepath = File}} = z_module_indexer:find(template, <<"admin_development.tpl">>, Context),
             z_development_editor:save_preference(Editor, File);
-        false -> {error, eacces}
+        false ->
+            {error, eacces}
     end;
 m_post([<<"editor">>, <<"open">>], #{payload := Payload}, Context) when is_map(Payload) ->
-    case z_acl:is_allowed(use, mod_development, Context)
-         andalso m_site:environment(Context) =:= development of
+    case is_developer(Context) of
         true -> editor_open(Payload, Context);
         false -> {error, eacces}
     end;
-m_post(_, _, _) -> {error, unknown_path}.
+m_post(_, _, _) ->
+    {error, unknown_path}.
+
+is_developer(Context) ->
+    z_acl:is_allowed(use, mod_development, Context)
+    andalso m_site:environment(Context) =:= development.
 
 %% @doc Validate a signed source token or exact indexed template path before launching an editor.
 editor_open(#{<<"source">> := Token, <<"editor">> := Editor}, Context)
@@ -229,7 +232,8 @@ editor_open(#{<<"source">> := Token, <<"editor">> := Editor}, Context)
                 when is_binary(File), byte_size(File) > 0, byte_size(File) < 4096,
                      is_integer(Line), Line > 0, Line < 10000000 ->
             z_development_editor:open(File, Line, 1, Editor);
-        _ -> {error, eacces}
+        _ ->
+            {error, eacces}
     end;
 editor_open(#{<<"source">> := _}, _Context) ->
     {error, badarg};
@@ -248,7 +252,8 @@ editor_open(#{<<"file">> := File, <<"editor">> := Editor,
             end;
         _ -> {error, enoent}
     end;
-editor_open(_, _) -> {error, badarg}.
+editor_open(_, _) ->
+    {error, badarg}.
 
 template_trace_relations(Direction, Rest, Msg, Context) ->
     case z_acl:is_allowed(use, mod_development, Context) of
