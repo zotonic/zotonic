@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-15 13:39\n"
+"PO-Revision-Date: 2026-10-15 15:54\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -8649,7 +8649,7 @@ msgstr "Download file CSS dan JavaScript sebagai file terpisah. Jangan menggabun
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
 msgid "Edit action"
-msgstr ""
+msgstr "Tindakan edit"
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:33
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:42
@@ -8667,15 +8667,15 @@ msgstr "Edit berkas pengiriman"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
 msgid "Edit event handler"
-msgstr ""
+msgstr "Edit penangan peristiwa"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
 msgid "Edit filter"
-msgstr ""
+msgstr "Edit filter"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
 msgid "Edit model"
-msgstr ""
+msgstr "Edit model"
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_id_option.tpl:2
 msgid "Edit resource in admin"
@@ -8683,7 +8683,7 @@ msgstr "Mengedit sumber daya di panel admin"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
 msgid "Edit scomp"
-msgstr ""
+msgstr "Edit scomp"
 
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:30
 msgid "Edit subscriber function"
@@ -8835,7 +8835,7 @@ msgstr "Introspeksi"
 
 #: zotonic_mod_development/src/support/z_development_template.erl:41
 msgid "Invalid template name."
-msgstr ""
+msgstr "Nama templat tidak valid."
 
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:53
 msgid "Leave both roots empty when the paths are identical. Files outside the mapped root will not be opened."
