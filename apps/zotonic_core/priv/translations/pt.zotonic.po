@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-15 11:58\n"
+"PO-Revision-Date: 2026-10-15 13:38\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "MIME-Version: 1.0\n"
@@ -8483,7 +8483,7 @@ msgid "Calculate and visualize a dependency graph of all templates."
 msgstr "Calcule e visualize um gráfico de dependência de todos os modelos."
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:44
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:907
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:909
 msgid "Check debug points in the template source to see debug data here."
 msgstr "Verifique os pontos de depuração na fonte do modelo para ver os dados de depuração aqui."
 
@@ -8508,8 +8508,8 @@ msgstr "Limpe os dados e comece"
 msgid "Clear data and trace all"
 msgstr "Limpe os dados e rastreie tudo"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:534
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:543
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:536
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:545
 msgid "Click to load templates"
 msgstr "Clique para carregar modelos"
 
@@ -8551,8 +8551,8 @@ msgstr "Não foi possível buscar a saída do rastreador, tente novamente."
 msgid "Could not load or save editor settings."
 msgstr "Não foi possível carregar nem guardar as definições do editor."
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:441
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:472
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:443
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:474
 msgid "Could not load templates"
 msgstr "Não foi possível carregar os modelos"
 
@@ -8561,6 +8561,7 @@ msgid "Could not open the editor. Check the editor and path mapping."
 msgstr "Não foi possível abrir o editor. Verifique o editor e o mapeamento de caminhos."
 
 #: zotonic_mod_development/priv/templates/_development_editor_button.tpl:10
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
 msgid "Could not open the editor. Check the editor settings on the Development page."
 msgstr "Não foi possível abrir o editor. Verifique as definições do editor na página «Desenvolvimento»."
 
@@ -8615,7 +8616,7 @@ msgid "Detecting editors…"
 msgstr "Detecção de editores…"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:7
-#: zotonic_mod_development/src/mod_development.erl:1229
+#: zotonic_mod_development/src/mod_development.erl:1233
 msgid "Development"
 msgstr "Desenvolvimento"
 
@@ -8647,6 +8648,10 @@ msgstr "Depuração de regras de expedição"
 msgid "Download CSS and JavaScript files as separate files. Don’t combine them in one URL."
 msgstr "Baixe arquivos CSS e JavaScript como arquivos separados. Não os funde em um URL."
 
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
+msgid "Edit action"
+msgstr ""
+
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:33
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:42
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:73
@@ -8661,9 +8666,25 @@ msgstr "Editar controlador"
 msgid "Edit dispatch file"
 msgstr "Editar ficheiro de expedição"
 
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
+msgid "Edit event handler"
+msgstr ""
+
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
+msgid "Edit filter"
+msgstr ""
+
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
+msgid "Edit model"
+msgstr ""
+
 #: zotonic_mod_development/priv/templates/_development_dispatch_id_option.tpl:2
 msgid "Edit resource in admin"
 msgstr "Editar recurso na área de administração"
+
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
+msgid "Edit scomp"
+msgstr ""
 
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:30
 msgid "Edit subscriber function"
@@ -8723,7 +8744,7 @@ msgstr "Introduza o módulo e a função que pretende rastrear. Se não for indi
 msgid "Error changing the console logs."
 msgstr "Erro ao alterar os logs do console."
 
-#: zotonic_mod_development/src/mod_development.erl:627
+#: zotonic_mod_development/src/mod_development.erl:631
 msgid "Error parsing template."
 msgstr "Erro ao analisar o modelo."
 
@@ -8739,7 +8760,7 @@ msgstr "Cada URL acessível no site é definida com regras de envio. Esta págin
 msgid "Explain"
 msgstr "Explique"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:412
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:414
 msgid "Extended / overridden by"
 msgstr "Alargado / substituído por"
 
@@ -8797,7 +8818,7 @@ msgstr "Gráfico de todas as dependências do modelo"
 msgid "Hostalias"
 msgstr "Hostálias"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:416
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:418
 msgid "Included by"
 msgstr "Incluído por"
 
@@ -8812,6 +8833,10 @@ msgstr "Inclui o modelo base, as variantes de categoria e as variantes de nome d
 #: zotonic_mod_development/priv/templates/admin_development.tpl:266
 msgid "Introspection"
 msgstr "Introspecção"
+
+#: zotonic_mod_development/src/support/z_development_template.erl:41
+msgid "Invalid template name."
+msgstr ""
 
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:53
 msgid "Leave both roots empty when the paths are identical. Files outside the mapped root will not be opened."
@@ -8848,8 +8873,8 @@ msgstr "Rastreio em tempo real das chamadas de função no servidor."
 msgid "Loading and displaying the trace for:"
 msgstr "Carregamento e visualização do traço para:"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:434
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:460
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:436
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:462
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:76
 msgid "Loading..."
 msgstr "Carregando..."
@@ -8879,7 +8904,7 @@ msgstr "Combinar um URL de solicitação, exibir a regra de envio correspondente
 msgid "Matches with the same name are listed in module priority order."
 msgstr "Os resultados com o mesmo nome são apresentados por ordem de prioridade dos módulos."
 
-#: zotonic_mod_development/src/support/z_development_template.erl:35
+#: zotonic_mod_development/src/support/z_development_template.erl:48
 msgid "Matching templates"
 msgstr "Modelos correspondentes"
 
@@ -8950,11 +8975,11 @@ msgstr "Não foram encontradas referências."
 msgid "No template found in the context."
 msgstr "Não foi encontrado nenhum modelo no contexto."
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:420
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:422
 msgid "No traced parent templates"
 msgstr "Não há modelos parentais rastreados"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:470
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:472
 msgid "No traced templates on this point"
 msgstr "Não há modelos traçados sobre este ponto"
 
@@ -8985,7 +9010,7 @@ msgstr "Abrir ficheiros utilizando"
 msgid "Open in editor"
 msgstr "Abrir no editor"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:529
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:531
 msgid "Open included template"
 msgstr "Abrir o modelo incluído"
 
@@ -9055,6 +9080,7 @@ msgid "Show internals of Zotonic and the modules."
 msgstr "Mostrar os aspectos internos do Zotonic e os módulos."
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_template_option.tpl:3
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
 msgid "Show matching templates"
 msgstr "Mostrar modelos correspondentes"
 
@@ -9169,7 +9195,7 @@ msgstr "Modelo"
 msgid "Template debugging"
 msgstr "Depuração de modelos"
 
-#: zotonic_mod_development/src/mod_development.erl:630
+#: zotonic_mod_development/src/mod_development.erl:634
 msgid "Template file not found."
 msgstr "Ficheiro de modelo não encontrado."
 
@@ -9229,7 +9255,7 @@ msgstr "Este recurso não é conhecido ou não tem URI"
 msgid "This server uses browser launches only. Configure your host editor and path mapping below."
 msgstr "Este servidor utiliza apenas o arranque do navegador. Configure o seu editor de anfitriões e o mapeamento de caminhos abaixo."
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:541
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:543
 msgid "This template is used by"
 msgstr "Este modelo é utilizado por"
 
@@ -9303,7 +9329,7 @@ msgstr "Veja todas as regras de despacho e nomes de host utilizáveis no site."
 msgid "View all dispatch rules available in the site"
 msgstr "Veja todas as regras de despacho disponíveis no site"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:909
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:911
 msgid "Waiting for debug data..."
 msgstr "À espera de dados de depuração..."
 
@@ -9311,8 +9337,8 @@ msgstr "À espera de dados de depuração..."
 msgid "You are not allowed to use the dispatch debugging."
 msgstr "Você não está autorizado a usar a depuração de despacho."
 
-#: zotonic_mod_development/src/support/z_development_template.erl:40
-#: zotonic_mod_development/src/support/z_development_template.erl:57
+#: zotonic_mod_development/src/support/z_development_template.erl:53
+#: zotonic_mod_development/src/support/z_development_template.erl:70
 msgid "You are not allowed to use the template debugging."
 msgstr "Não é permitido utilizar a depuração do modelo."
 
