@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-15 11:59\n"
+"PO-Revision-Date: 2026-10-15 13:39\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -8482,7 +8482,7 @@ msgid "Calculate and visualize a dependency graph of all templates."
 msgstr "Hitung dan visualisasikan grafik ketergantungan semua templat."
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:44
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:907
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:909
 msgid "Check debug points in the template source to see debug data here."
 msgstr "Periksa titik debug di sumber template untuk melihat data debug di sini."
 
@@ -8507,8 +8507,8 @@ msgstr "Hapus data dan mulai"
 msgid "Clear data and trace all"
 msgstr "Hapus data dan lacak semuanya"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:534
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:543
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:536
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:545
 msgid "Click to load templates"
 msgstr "Klik untuk memuat templat"
 
@@ -8550,8 +8550,8 @@ msgstr "Tidak dapat mengambil keluaran pelacak, harap coba lagi."
 msgid "Could not load or save editor settings."
 msgstr "Tidak dapat memuat atau menyimpan pengaturan editor."
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:441
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:472
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:443
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:474
 msgid "Could not load templates"
 msgstr "Tidak dapat memuat templat"
 
@@ -8560,6 +8560,7 @@ msgid "Could not open the editor. Check the editor and path mapping."
 msgstr "Tidak dapat membuka editor. Periksa editor dan pemetaan jalur."
 
 #: zotonic_mod_development/priv/templates/_development_editor_button.tpl:10
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
 msgid "Could not open the editor. Check the editor settings on the Development page."
 msgstr "Tidak dapat membuka editor. Periksa pengaturan editor di halaman Pengembangan."
 
@@ -8614,7 +8615,7 @@ msgid "Detecting editors…"
 msgstr "Mendeteksi editor…"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:7
-#: zotonic_mod_development/src/mod_development.erl:1229
+#: zotonic_mod_development/src/mod_development.erl:1233
 msgid "Development"
 msgstr "Pengembangan"
 
@@ -8646,6 +8647,10 @@ msgstr "Pengiriman aturan debugging"
 msgid "Download CSS and JavaScript files as separate files. Don’t combine them in one URL."
 msgstr "Download file CSS dan JavaScript sebagai file terpisah. Jangan menggabungkan mereka dalam satu URL."
 
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
+msgid "Edit action"
+msgstr ""
+
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:33
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:42
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:73
@@ -8660,9 +8665,25 @@ msgstr "Edit pengontrol"
 msgid "Edit dispatch file"
 msgstr "Edit berkas pengiriman"
 
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
+msgid "Edit event handler"
+msgstr ""
+
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
+msgid "Edit filter"
+msgstr ""
+
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
+msgid "Edit model"
+msgstr ""
+
 #: zotonic_mod_development/priv/templates/_development_dispatch_id_option.tpl:2
 msgid "Edit resource in admin"
 msgstr "Mengedit sumber daya di panel admin"
+
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
+msgid "Edit scomp"
+msgstr ""
 
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:30
 msgid "Edit subscriber function"
@@ -8722,7 +8743,7 @@ msgstr "Masukkan modul dan fungsi yang ingin Anda lacak. Jika tidak ada fungsi y
 msgid "Error changing the console logs."
 msgstr "Terjadi kesalahan saat mengubah log konsol."
 
-#: zotonic_mod_development/src/mod_development.erl:627
+#: zotonic_mod_development/src/mod_development.erl:631
 msgid "Error parsing template."
 msgstr "Templat penguraian kesalahan."
 
@@ -8738,7 +8759,7 @@ msgstr "Setiap URL yang dapat dijangkau di situs ditentukan dengan aturan pengir
 msgid "Explain"
 msgstr "Menjelaskan"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:412
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:414
 msgid "Extended / overridden by"
 msgstr "Diperpanjang / ditimpa oleh"
 
@@ -8796,7 +8817,7 @@ msgstr "Grafik semua dependensi template"
 msgid "Hostalias"
 msgstr "Hostali"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:416
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:418
 msgid "Included by"
 msgstr "Termasuk oleh"
 
@@ -8811,6 +8832,10 @@ msgstr "Termasuk templat dasar, varian kategori, dan varian nama sumber daya. Te
 #: zotonic_mod_development/priv/templates/admin_development.tpl:266
 msgid "Introspection"
 msgstr "Introspeksi"
+
+#: zotonic_mod_development/src/support/z_development_template.erl:41
+msgid "Invalid template name."
+msgstr ""
 
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:53
 msgid "Leave both roots empty when the paths are identical. Files outside the mapped root will not be opened."
@@ -8847,8 +8872,8 @@ msgstr "Penelusuran langsung panggilan fungsi pada server."
 msgid "Loading and displaying the trace for:"
 msgstr "Memuat dan menampilkan jejak untuk:"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:434
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:460
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:436
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:462
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:76
 msgid "Loading..."
 msgstr "Memuat..."
@@ -8878,7 +8903,7 @@ msgstr "Sesuai permintaan URL, tampilan sesuai aturan pengiriman."
 msgid "Matches with the same name are listed in module priority order."
 msgstr "Pertandingan dengan nama yang sama dicantumkan berdasarkan urutan prioritas modul."
 
-#: zotonic_mod_development/src/support/z_development_template.erl:35
+#: zotonic_mod_development/src/support/z_development_template.erl:48
 msgid "Matching templates"
 msgstr "Template yang sesuai"
 
@@ -8949,11 +8974,11 @@ msgstr "Tidak ditemukan referensi."
 msgid "No template found in the context."
 msgstr "Tidak ada templat yang ditemukan dalam konteks."
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:420
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:422
 msgid "No traced parent templates"
 msgstr "Tidak ada templat induk yang dilacak"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:470
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:472
 msgid "No traced templates on this point"
 msgstr "Tidak ada templat yang dilacak pada titik ini"
 
@@ -8984,7 +9009,7 @@ msgstr "Buka berkas menggunakan"
 msgid "Open in editor"
 msgstr "Buka di editor"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:529
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:531
 msgid "Open included template"
 msgstr "Buka templat yang disertakan"
 
@@ -9054,6 +9079,7 @@ msgid "Show internals of Zotonic and the modules."
 msgstr "Menunjukkan bagian dalam Zotonic dan modul."
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_template_option.tpl:3
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
 msgid "Show matching templates"
 msgstr "Tampilkan templat yang sesuai"
 
@@ -9168,7 +9194,7 @@ msgstr "Template"
 msgid "Template debugging"
 msgstr "Template debugging"
 
-#: zotonic_mod_development/src/mod_development.erl:630
+#: zotonic_mod_development/src/mod_development.erl:634
 msgid "Template file not found."
 msgstr "File template tidak ditemukan."
 
@@ -9228,7 +9254,7 @@ msgstr "Sumber ini tidak diketahui atau tidak memiliki URI"
 msgid "This server uses browser launches only. Configure your host editor and path mapping below."
 msgstr "Server ini hanya menggunakan peluncuran melalui browser. Konfigurasikan editor host dan pemetaan jalur Anda di bawah ini."
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:541
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:543
 msgid "This template is used by"
 msgstr "Templat ini digunakan oleh"
 
@@ -9302,7 +9328,7 @@ msgstr "Lihat semua aturan pengiriman dan nama host yang dapat digunakan di situ
 msgid "View all dispatch rules available in the site"
 msgstr "Lihat semua aturan pengiriman yang tersedia di situs"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:909
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:911
 msgid "Waiting for debug data..."
 msgstr "Menunggu data debug..."
 
@@ -9310,8 +9336,8 @@ msgstr "Menunggu data debug..."
 msgid "You are not allowed to use the dispatch debugging."
 msgstr "Anda tidak diizinkan untuk menggunakan pengiriman debugging."
 
-#: zotonic_mod_development/src/support/z_development_template.erl:40
-#: zotonic_mod_development/src/support/z_development_template.erl:57
+#: zotonic_mod_development/src/support/z_development_template.erl:53
+#: zotonic_mod_development/src/support/z_development_template.erl:70
 msgid "You are not allowed to use the template debugging."
 msgstr "Anda tidak diizinkan untuk menggunakan template debugging."
 
