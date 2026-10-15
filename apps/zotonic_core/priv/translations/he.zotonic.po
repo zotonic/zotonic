@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-14 11:26\n"
+"PO-Revision-Date: 2026-10-15 11:58\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -392,6 +392,7 @@ msgstr "תצורה שונתה."
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_filter_predicates.tpl:20
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:79
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:43
+#: zotonic_mod_development/priv/templates/_development_template_matches.tpl:27
 #: zotonic_mod_editor_tinymce/priv/templates/_admin_configure_module.tpl:30
 #: zotonic_mod_email_status/priv/templates/_dialog_email_status.tpl:4
 #: zotonic_mod_l10n/priv/templates/_admin_configure_module.tpl:8
@@ -664,11 +665,11 @@ msgstr "חברים מאותה קבוצת משתמשים"
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:49
 #: zotonic_mod_base/priv/templates/error.tpl:78
 #: zotonic_mod_development/priv/templates/_development_template.tpl:3
+#: zotonic_mod_development/priv/templates/_development_template_matches.tpl:8
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:10
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:60
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:122
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:189
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:50
+#: zotonic_mod_development/priv/templates/_development_template_xref_includes.tpl:4
+#: zotonic_mod_development/priv/templates/_development_template_xref_inheritance.tpl:4
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:54
 #: zotonic_mod_logging/priv/templates/admin_log.tpl:25
 msgid "Module"
 msgstr "מודול"
@@ -713,10 +714,10 @@ msgstr "לא מורשה."
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:31
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:60
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:32
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:39
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:66
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:48
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:36
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:45
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:76
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:52
 msgid "Options"
 msgstr "אפשרויות"
 
@@ -789,6 +790,7 @@ msgstr "חוקים שהוחזרו"
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:80
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:26
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:105
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:56
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:126
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:60
 #: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:55
@@ -1758,6 +1760,12 @@ msgstr "כתובת דוא\"ל"
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:3
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:23
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:21
+#: zotonic_mod_development/priv/templates/_development_template.tpl:17
+#: zotonic_mod_development/priv/templates/_development_template.tpl:22
+#: zotonic_mod_development/priv/templates/_development_template_matches.tpl:17
+#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:27
+#: zotonic_mod_development/priv/templates/_development_template_xref_includes.tpl:22
+#: zotonic_mod_development/priv/templates/_development_template_xref_inheritance.tpl:20
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:121
 #: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:51
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:36
@@ -3715,6 +3723,11 @@ msgstr "תקף ל:"
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:31
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:146
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:26
+#: zotonic_mod_development/priv/templates/_development_template.tpl:12
+#: zotonic_mod_development/priv/templates/_development_template_matches.tpl:15
+#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:26
+#: zotonic_mod_development/priv/templates/_development_template_xref_includes.tpl:21
+#: zotonic_mod_development/priv/templates/_development_template_xref_inheritance.tpl:19
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:38
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:20
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:38
@@ -4277,7 +4290,7 @@ msgid "Here you can see all the email configurations and send test emails."
 msgstr "כאן תוכלו לראות את כל תצורות הדוא\"ל ולשלוח דוא\"ל בדיקה."
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:4
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:32
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:36
 #: zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:27
 msgid "Hostname"
 msgstr "שם מארח"
@@ -4584,6 +4597,7 @@ msgstr "בתוקף עד"
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:21
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:21
 #: zotonic_mod_base/src/support/z_chart_svg.erl:1352
+#: zotonic_mod_development/priv/templates/_development_dispatch_options.tpl:2
 msgid "Value"
 msgstr "ערך"
 
@@ -5586,7 +5600,7 @@ msgid "Reinstalled the data model."
 msgstr "התקן מחדש את מודל הנתונים."
 
 #: zotonic_mod_admin_modules/priv/templates/_admin_status.tpl:3
-#: zotonic_mod_development/priv/templates/admin_development.tpl:211
+#: zotonic_mod_development/priv/templates/admin_development.tpl:219
 msgid "Rescan modules"
 msgstr "סרוק מחדש את המודולים"
 
@@ -7745,7 +7759,7 @@ msgstr "שינוי נטו"
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:145
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:187
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:267
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:40
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:44
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:44
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:48
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:35
@@ -8010,7 +8024,8 @@ msgstr "משימות עבודה"
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:187
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:251
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:274
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:40
+#: zotonic_mod_development/priv/templates/_development_dispatch_options.tpl:14
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:44
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:44
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:47
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:30
@@ -8141,7 +8156,7 @@ msgstr "שמור הגדרות טופס תגובה"
 
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:13
 #: zotonic_mod_comment/priv/templates/admin_comments_settings.tpl:12
-#: zotonic_mod_development/priv/templates/admin_development.tpl:19
+#: zotonic_mod_development/priv/templates/admin_development.tpl:21
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:4
 #: zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:7
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:7
@@ -8354,6 +8369,7 @@ msgid "Year"
 msgstr "שָׁנָה"
 
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:27
+#: zotonic_mod_development/priv/templates/_development_template_matches.tpl:8
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:234
 #: zotonic_site_status/priv/templates/_sites.tpl:6
 msgid "Actions"
@@ -8396,11 +8412,11 @@ msgstr "המיקום החדש יכול להיות נתיב מקומי או כת�
 msgid "You are not allowed to change this."
 msgstr "אינך רשאי לשנות זאת."
 
-#: zotonic_mod_development/src/mod_development.erl:496
+#: zotonic_mod_development/src/mod_development.erl:565
 msgid "<i>Function name does not exist.</i>"
 msgstr "<i>שם הפונקציה אינו קיים.</i>"
 
-#: zotonic_mod_development/src/mod_development.erl:499
+#: zotonic_mod_development/src/mod_development.erl:568
 msgid "<i>Module not found.</i>"
 msgstr "<i>לא נמצא מודול.</i>"
 
@@ -8417,38 +8433,38 @@ msgstr "גרף של כל התבניות, ועל ידי מי הן נכללות, �
 msgid "Action"
 msgstr "פעולה"
 
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:213
-msgid "All <tt>{extends}</tt> and <tt>{overrules}</tt> statements are referring to existing templates."
-msgstr "כל ההצהרות <tt>{extends}</tt> ו <tt>{overrules}</tt> מתייחסות לתבניות קיימות."
+#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:91
+msgid "All extended and overruled templates"
+msgstr "כל התבניות המורחבות והבוטלות"
 
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:163
-msgid "All <tt>{optional}</tt> statements are referring to existing templates."
-msgstr "כל ההצהרות <tt>{optional}</tt> מתייחסות לתבניות קיימות."
+#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:87
+msgid "All included templates"
+msgstr "כל התבניות הכלולות"
 
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:101
-msgid "All non-optional <tt>{include}</tt> statements are referring to existing templates."
-msgstr "כל ההצהרות הלא אופציונליות <tt>{include}</tt> מתייחסות לתבניות קיימות."
-
-#: zotonic_mod_development/priv/templates/admin_development.tpl:184
+#: zotonic_mod_development/priv/templates/admin_development.tpl:192
 msgid "All templates are checked for missing includes or missing <tt>{ext}</tt> template references."
 msgstr "כל התבניות נבדקות אם חסרות כוללות או חסרות <tt>{ext}</tt> הפניות לתבניות."
 
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:42
+#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:44
 msgid "All templates are compiling."
 msgstr "כל התבניות מתבצעות קומפילציה."
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:187
-#: zotonic_mod_development/priv/templates/admin_development.tpl:203
+#: zotonic_mod_development/priv/templates/admin_development.tpl:195
+#: zotonic_mod_development/priv/templates/admin_development.tpl:211
 msgid "All templates will be compiled."
 msgstr "כל התבניות יקומפלו."
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:54
+#: zotonic_mod_development/priv/templates/admin_development.tpl:56
 msgid "Allow to show the floating template trace button on production and acceptance sites."
 msgstr "אפשר להציג את כפתור המעקב אחר התבנית הצפה באתרי הייצור והקבלת."
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:46
+#: zotonic_mod_development/priv/templates/admin_development.tpl:48
 msgid "Always hide the floating template trace button."
 msgstr "הסתר תמיד את כפתור המעקב אחר התבנית הצפה."
+
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:18
+msgid "Automatic detection on the Zotonic machine"
+msgstr "זיהוי אוטומטי במחשב Zotonic"
 
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:13
 msgid "Below is the list of all notifications and the installed observers."
@@ -8458,19 +8474,31 @@ msgstr "להלן רשימת ההתראות והמשקיפים המותקנים."
 msgid "Bindings"
 msgstr "כריכות"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:202
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:20
+msgid "Browser URL to an editor on this computer"
+msgstr "כתובת ה-URL בדפדפן לעורך במחשב זה"
+
+#: zotonic_mod_development/priv/templates/admin_development.tpl:210
 msgid "Calculate and visualize a dependency graph of all templates."
 msgstr "חשב ודמיין גרף תלות של כל התבניות."
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:43
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:906
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:44
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:907
 msgid "Check debug points in the template source to see debug data here."
 msgstr "בדוק את נקודות האיתור באג בקוד המקור של התבנית כדי לראות כאן את נתוני האיתור באג."
 
-#: zotonic_mod_development/src/mod_development.erl:304
-#: zotonic_mod_development/src/mod_development.erl:319
+#: zotonic_mod_development/src/mod_development.erl:373
+#: zotonic_mod_development/src/mod_development.erl:388
 msgid "Checking all templates..."
 msgstr "בודק את כל התבניות..."
+
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:32
+msgid "Choose an editor"
+msgstr "בחר עורך"
+
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:11
+msgid "Choose an editor; no unambiguous default was found."
+msgstr "בחר עורך; לא נמצאה ברירת מחדל חד-משמעית."
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:23
 msgid "Clear data and start"
@@ -8480,12 +8508,12 @@ msgstr "נקה נתונים והתחל"
 msgid "Clear data and trace all"
 msgstr "נקה נתונים ועקוב אחר הכל"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:533
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:542
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:534
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:543
 msgid "Click to load templates"
 msgstr "לחץ כאן כדי לטעון תבניות"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:17
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:18
 msgid "Click to restart"
 msgstr "לחץ כדי להפעיל מחדש"
 
@@ -8493,10 +8521,10 @@ msgstr "לחץ כדי להפעיל מחדש"
 msgid "Column"
 msgstr "טור"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:30
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:37
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:64
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:51
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:32
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:41
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:72
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:55
 msgid "Controller"
 msgstr "בקר"
 
@@ -8519,17 +8547,29 @@ msgstr "לא ניתן היה להעתיק את קובץ הנקודות ללוח.
 msgid "Could not fetch tracer output, please try again."
 msgstr "לא ניתן היה להשיג פלט מעקב, נסה שוב."
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:440
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:471
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:10
+msgid "Could not load or save editor settings."
+msgstr "לא ניתן היה לטעון או לשמור את הגדרות העורך."
+
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:441
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:472
 msgid "Could not load templates"
 msgstr "לא ניתן לטעון את התבניות"
+
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:9
+msgid "Could not open the editor. Check the editor and path mapping."
+msgstr "לא ניתן לפתוח את העורך. בדוק את העורך ואת מיפוי הנתיבים."
+
+#: zotonic_mod_development/priv/templates/_development_editor_button.tpl:10
+msgid "Could not open the editor. Check the editor settings on the Development page."
+msgstr "לא ניתן לפתוח את העורך. בדוק את הגדרות העורך בדף \"פיתוח\"."
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:8
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:12
 msgid "Cross-reference check of all templates"
 msgstr "בדיקת הצלבה של כל התבניות"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:181
+#: zotonic_mod_development/priv/templates/admin_development.tpl:189
 msgid "Cross-reference check of templates"
 msgstr "בדיקת הצלבה של תבניות"
 
@@ -8537,11 +8577,15 @@ msgstr "בדיקת הצלבה של תבניות"
 msgid "Cross-reference check results"
 msgstr "תוצאות בדיקת הפניות מוצלבות"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:23
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:36
+msgid "Custom URL / Vim helper"
+msgstr "כתובת URL מותאמת אישית / כלי עזר ל-Vim"
+
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:24
 msgid "Debug all sessions"
 msgstr "לבצע ניפוי באגים בכל ההפעלות"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:28
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:29
 msgid "Debugging all sessions can result in a large amount of debug data."
 msgstr "איתור באגים בכל ההפעלות עלול להוביל לכמות גדולה של נתוני איתור באגים."
 
@@ -8549,7 +8593,7 @@ msgstr "איתור באגים בכל ההפעלות עלול להוביל לכמ
 msgid "Dependency graph"
 msgstr "גרף תלות"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:200
+#: zotonic_mod_development/priv/templates/admin_development.tpl:208
 msgid "Dependency graph of all available templates"
 msgstr "גרף תלות של כל התבניות הזמינות"
 
@@ -8566,8 +8610,12 @@ msgstr "גרף התלות של כל התבניות. מוצגות רק תבניו
 msgid "Dependency graph of all traced templates. All includes are shown."
 msgstr "גרף התלות של כל התבניות המעקבות. הכל כולל מוצגים."
 
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:5
+msgid "Detecting editors…"
+msgstr "זיהוי עורכים…"
+
 #: zotonic_mod_development/priv/templates/admin_development.tpl:7
-#: zotonic_mod_development/src/mod_development.erl:1138
+#: zotonic_mod_development/src/mod_development.erl:1229
 msgid "Development"
 msgstr "התפתחות"
 
@@ -8579,7 +8627,7 @@ msgstr "פיתוח - מעקב אחר קריאות פונקציות"
 msgid "Development - Observers"
 msgstr "פיתוח - צופים"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:82
+#: zotonic_mod_development/priv/templates/admin_development.tpl:84
 msgid "Disable caching by the <tt>{% cache %}</tt> tag."
 msgstr "השבת מטמון באמצעות התג <tt>{% cache %}</tt>."
 
@@ -8587,23 +8635,75 @@ msgstr "השבת מטמון באמצעות התג <tt>{% cache %}</tt>."
 msgid "Disabled database query tracing"
 msgstr "מעקב אחר שאילתת מסד נתונים מושבת"
 
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:49
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:53
 msgid "Dispatch Name"
 msgstr "שם המשלוח"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:222
+#: zotonic_mod_development/priv/templates/admin_development.tpl:230
 msgid "Dispatch rule debugging"
 msgstr "ניפוי ניפוי כלל"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:62
+#: zotonic_mod_development/priv/templates/admin_development.tpl:64
 msgid "Download CSS and JavaScript files as separate files. Don’t combine them in one URL."
 msgstr "הורד קבצי CSS ו- JavaScript כקבצים נפרדים. אל תשלב אותם בכתובת אתר אחת."
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:97
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:33
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:42
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:73
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:95
+msgid "Edit controller"
+msgstr "ערוך בקר"
+
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:28
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:70
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:106
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:89
+msgid "Edit dispatch file"
+msgstr "ערוך קובץ השיגור"
+
+#: zotonic_mod_development/priv/templates/_development_dispatch_id_option.tpl:2
+msgid "Edit resource in admin"
+msgstr "עריכת משאב בממשק הניהול"
+
+#: zotonic_mod_development/priv/templates/admin_development_observers.tpl:30
+msgid "Edit subscriber function"
+msgstr "פונקציית עריכת מנוי"
+
+#: zotonic_mod_development/priv/templates/_development_template.tpl:17
+#: zotonic_mod_development/priv/templates/_development_template.tpl:22
+#: zotonic_mod_development/priv/templates/_development_template_matches.tpl:17
+#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:27
+#: zotonic_mod_development/priv/templates/_development_template_xref_includes.tpl:22
+#: zotonic_mod_development/priv/templates/_development_template_xref_inheritance.tpl:20
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:8
+msgid "Edit template"
+msgstr "ערוך תבנית"
+
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:30
+msgid "Editor"
+msgstr "עורך"
+
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:41
+msgid "Editor URL pattern"
+msgstr "תבנית כתובת URL של העורך"
+
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:8
+msgid "Editor launch requested."
+msgstr "מתבקשת הפעלת העורך."
+
+#: zotonic_mod_development/priv/templates/_development_editor_button.tpl:14
+msgid "Editor settings"
+msgstr "הגדרות העורך"
+
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:7
+msgid "Editor settings saved."
+msgstr "הגדרות העורך נשמרו."
+
+#: zotonic_mod_development/priv/templates/admin_development.tpl:99
 msgid "Enable <tt>mod_server_storage</tt> to use database query tracing."
 msgstr "אפשר <tt>mod_server_storage</tt> כדי להשתמש במעקב אחר שאילתות מסד נתונים."
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:106
+#: zotonic_mod_development/priv/templates/admin_development.tpl:108
 msgid "Enable API to recompile and build Zotonic"
 msgstr "אפשר ממשק API להרכיב מחדש ולבנות את Zotonic"
 
@@ -8619,11 +8719,11 @@ msgstr "מעקב אחר שאילתת מסד נתונים מופעל"
 msgid "Enter the module and function you want to trace. If no function is given, all functions in the module will be traced. Enter how many calls to trace before stopping."
 msgstr "הזן את המודול והפונקציה שברצונך לעקוב אחריהם. אם לא צוינה פונקציה, כל הפונקציות במודול יעקבו. הזן את מספר הקריאות שברצונך לעקוב אחריהן לפני העצירה."
 
-#: zotonic_mod_development/src/mod_development.erl:468
+#: zotonic_mod_development/src/mod_development.erl:537
 msgid "Error changing the console logs."
 msgstr "שגיאה בשינוי יומני המסוף."
 
-#: zotonic_mod_development/src/mod_development.erl:551
+#: zotonic_mod_development/src/mod_development.erl:627
 msgid "Error parsing template."
 msgstr "שגיאה בניתוח התבנית."
 
@@ -8631,43 +8731,43 @@ msgstr "שגיאה בניתוח התבנית."
 msgid "Event"
 msgstr "מִקרֶה"
 
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:14
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:18
 msgid "Every URL which is reachable in the site is defined with dispatch rules. This page shows all available dispatch rules in this site."
 msgstr "כל כתובת אתר שניתן להגיע אליה באתר מוגדרת עם כללי שיגור. דף זה מציג את כל כללי השילוח הזמינים באתר זה."
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:248
+#: zotonic_mod_development/priv/templates/admin_development.tpl:256
 msgid "Explain"
 msgstr "להסביר"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:411
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:412
 msgid "Extended / overridden by"
 msgstr "הורחב / הוחלף על ידי"
 
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:191
+#: zotonic_mod_development/priv/templates/_development_template_xref_inheritance.tpl:7
 msgid "Extends"
 msgstr "מאריך"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:36
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:40
 msgid "Final dispatch"
 msgstr "משלוח סופי"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:173
+#: zotonic_mod_development/priv/templates/admin_development.tpl:181
 msgid "Find"
 msgstr "למצוא"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:154
+#: zotonic_mod_development/priv/templates/admin_development.tpl:162
 msgid "Find a template, check which template will be selected"
 msgstr "מצא תבנית, בדוק איזו תבנית תיבחר"
 
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:15
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:19
 msgid "For more information see: { url }"
 msgstr "למידע נוסף ראה: { url }"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:215
+#: zotonic_mod_development/priv/templates/admin_development.tpl:223
 msgid "Force a recompilation of all templates. This fixes any issues where the compiled templates might be out of sync with the template index."
 msgstr "כפה הידור מחדש של כל התבניות. זה פותר את כל הבעיות שבהן התבניות הקומפילציה לא מסונכרנות עם אינדקס התבניות."
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:46
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:52
 msgid "Forced switch of protocol to"
 msgstr "מעבר פרוטוקול מאולץ ל"
 
@@ -8675,7 +8775,7 @@ msgstr "מעבר פרוטוקול מאולץ ל"
 msgid "Found matching dispatch rule"
 msgstr "נמצא כלל משלוח תואם"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:271
+#: zotonic_mod_development/priv/templates/admin_development.tpl:279
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:8
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:12
 msgid "Function Call Tracing"
@@ -8685,7 +8785,7 @@ msgstr "מעקב אחר קריאות פונקציות"
 msgid "Function call tracing has been disabled. Use the following to enable function call tracing:"
 msgstr "מעקב אחר קריאות פונקציות הושבת. השתמש בפקודה הבאה כדי להפעיל את מעקב אחר קריאות פונקציות:"
 
-#: zotonic_mod_development/src/mod_development.erl:502
+#: zotonic_mod_development/src/mod_development.erl:571
 msgid "Function tracing has been disabled in the Zotonic config."
 msgstr "מעקב אחר פונקציות הושבת בתצורת Zotonic."
 
@@ -8693,38 +8793,45 @@ msgstr "מעקב אחר פונקציות הושבת בתצורת Zotonic."
 msgid "Graph of all template dependencies"
 msgstr "גרף של כל התלות בתבנית"
 
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:36
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:40
 msgid "Hostalias"
 msgstr "Hostalias"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:415
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:416
 msgid "Included by"
 msgstr "נכלל על ידי"
 
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:63
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:125
+#: zotonic_mod_development/priv/templates/_development_template_xref_includes.tpl:7
 msgid "Included template"
 msgstr "תבנית כלולה"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:258
+#: zotonic_mod_development/priv/templates/_development_template_matches.tpl:3
+msgid "Includes the base template, category variants and resource-name variants. The selected template depends on the resource being rendered."
+msgstr "כולל את התבנית הבסיסית, וריאציות של קטגוריות ווריאציות של שמות משאבים. התבנית הנבחרת תלויה במשאב שמוצג."
+
+#: zotonic_mod_development/priv/templates/admin_development.tpl:266
 msgid "Introspection"
 msgstr "הִסתַכְּלוּת פְּנִימִית"
 
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:53
+msgid "Leave both roots empty when the paths are identical. Files outside the mapped root will not be opened."
+msgstr "השאר את שני השורשים ריקים כאשר הנתיבים זהים. קבצים הנמצאים מחוץ לשורש הממופה לא ייפתחו."
+
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:12
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:62
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:124
+#: zotonic_mod_development/priv/templates/_development_template_xref_includes.tpl:6
+#: zotonic_mod_development/priv/templates/_development_template_xref_inheritance.tpl:6
 msgid "Line"
 msgstr "קַו"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:193
+#: zotonic_mod_development/priv/templates/admin_development.tpl:201
 msgid "Live dependency graph of templates"
 msgstr "גרף תלות חי של תבניות"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:74
+#: zotonic_mod_development/priv/templates/admin_development.tpl:76
 msgid "Live reload of changed CSS files. Reload page on change of templates or JavaScript."
 msgstr "טעינה מחדש של קבצי CSS שהשתנו. טען מחדש דף בשינוי תבניות או JavaScript."
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:274
+#: zotonic_mod_development/priv/templates/admin_development.tpl:282
 msgid "Live trace of function calls on the server (only for the admin user)."
 msgstr "מעקב חי אחר קריאות פונקציות בשרת (רק עבור משתמש מנהל)."
 
@@ -8741,48 +8848,69 @@ msgstr "מעקב חי אחר קריאות פונקציות בשרת."
 msgid "Loading and displaying the trace for:"
 msgstr "טעינה והצגה של העקבות עבור:"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:433
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:459
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:434
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:460
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:76
 msgid "Loading..."
 msgstr "טוען..."
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:73
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:79
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:24
+msgid "Local editor"
+msgstr "עורך מקומי"
+
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:26
+msgid "Local launches use the OS account and environment of the running Zotonic node."
+msgstr "בהפעלות מקומיות נעשה שימוש בחשבון מערכת ההפעלה ובסביבת העבודה של הצומת של Zotonic הפועל."
+
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:83
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:89
 msgid "Location"
 msgstr "מקום"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:142
+#: zotonic_mod_development/priv/templates/admin_development.tpl:144
 msgid "Log in as the admin to enable logging to the javascript console."
 msgstr "היכנס כמנהל כדי לאפשר כניסה למסוף ה-javascript."
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:232
+#: zotonic_mod_development/priv/templates/admin_development.tpl:240
 msgid "Match a request URL, display matched dispatch rule."
 msgstr "התאם כתובת URL של בקשה, כלל כלל שיגור תואם."
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:15
+#: zotonic_mod_development/priv/templates/_development_template_matches.tpl:5
+msgid "Matches with the same name are listed in module priority order."
+msgstr "התוצאות בעלות אותו שם מופיעות לפי סדר העדיפות של המודולים."
+
+#: zotonic_mod_development/src/support/z_development_template.erl:35
+msgid "Matching templates"
+msgstr "תבניות תואמות"
+
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:16
 msgid "Maximum tracing time reached, debugging stopped."
 msgstr "הזמן המרבי למעקב הושג, איתור הבאגים הופסק."
 
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:50
+#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:52
 msgid "Missing included templates"
 msgstr "חסרות תבניות כלולות"
 
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:112
+#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:62
 msgid "Missing optional included templates"
 msgstr "חסרות תבניות כלולות אופציונליות"
 
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:174
+#: zotonic_mod_development/priv/templates/_development_template_xref_includes.tpl:32
+#: zotonic_mod_development/priv/templates/_development_template_xref_inheritance.tpl:26
+msgid "Missing template"
+msgstr "תבנית חסרה"
+
+#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:72
 msgid "Missing {extends} or {overrules}"
 msgstr "חסר {extends} או {overrules}"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:44
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:47
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:50
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:53
 msgid "New host"
 msgstr "מארח חדש"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:52
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:58
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:64
 msgid "New path"
 msgstr "דרך חדשה"
 
@@ -8790,38 +8918,47 @@ msgstr "דרך חדשה"
 msgid "No data."
 msgstr "אין מידע."
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:49
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:55
 msgid "No matching dispatch rule found"
 msgstr "לא נמצא כלל שיגור תואם"
 
-#: zotonic_mod_development/src/mod_development.erl:466
+#: zotonic_mod_development/priv/templates/_development_template_matches.tpl:21
+msgid "No matching templates found."
+msgstr "לא נמצאו תבניות תואמות."
+
+#: zotonic_mod_development/src/mod_development.erl:535
 msgid "No permission to access the console logs."
 msgstr "אין הרשאה לגשת ליומני המסוף."
 
-#: zotonic_mod_development/src/mod_development.erl:309
-#: zotonic_mod_development/src/mod_development.erl:324
-#: zotonic_mod_development/src/mod_development.erl:339
-#: zotonic_mod_development/src/mod_development.erl:347
-#: zotonic_mod_development/src/mod_development.erl:374
+#: zotonic_mod_development/src/mod_development.erl:378
+#: zotonic_mod_development/src/mod_development.erl:393
+#: zotonic_mod_development/src/mod_development.erl:408
 #: zotonic_mod_development/src/mod_development.erl:416
-#: zotonic_mod_development/src/mod_development.erl:433
-#: zotonic_mod_development/src/mod_development.erl:450
+#: zotonic_mod_development/src/mod_development.erl:443
+#: zotonic_mod_development/src/mod_development.erl:485
+#: zotonic_mod_development/src/mod_development.erl:502
+#: zotonic_mod_development/src/mod_development.erl:519
 msgid "No permission to use mod_development."
 msgstr "אין הרשאה להשתמש ב-mod_development."
 
-#: zotonic_mod_development/src/mod_development.erl:428
+#: zotonic_mod_development/priv/templates/_development_template_xref_includes.tpl:53
+#: zotonic_mod_development/priv/templates/_development_template_xref_inheritance.tpl:36
+msgid "No references found."
+msgstr "לא נמצאו הפניות."
+
+#: zotonic_mod_development/src/mod_development.erl:497
 msgid "No template found in the context."
 msgstr "לא נמצא תבנית בהקשר זה."
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:419
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:420
 msgid "No traced parent templates"
 msgstr "אין תבניות-אב שעברו העתקה"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:469
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:470
 msgid "No traced templates on this point"
 msgstr "אין תבניות מעוצבות בנקודה זו"
 
-#: zotonic_mod_development/priv/templates/_development_template.tpl:20
+#: zotonic_mod_development/priv/templates/_development_template.tpl:21
 msgid "Not found"
 msgstr "לא נמצא"
 
@@ -8830,41 +8967,58 @@ msgstr "לא נמצא"
 msgid "Observers"
 msgstr "משקיפים"
 
-#: zotonic_mod_development/src/mod_development.erl:505
+#: zotonic_mod_development/src/mod_development.erl:574
 msgid "Only the admin user can set traces."
 msgstr "רק המשתמש המנהל יכול להגדיר עקבות."
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:282
+#: zotonic_mod_development/priv/templates/admin_development.tpl:290
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:51
 msgid "Only the admin user can use function call tracing."
 msgstr "רק המשתמש המנהל יכול להשתמש במעקב אחר קריאות פונקציות."
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:528
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:16
+msgid "Open files using"
+msgstr "לפתוח קבצים באמצעות"
+
+#: zotonic_mod_development/priv/templates/_development_editor_button.tpl:5
+#: zotonic_mod_development/priv/templates/_development_editor_button.tpl:11
+msgid "Open in editor"
+msgstr "פתח בעורך"
+
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:529
 msgid "Open included template"
 msgstr "פתח את התבנית המצורפת"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:163
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:4
+msgid "Open templates in your working editor. The local editor is saved on the Zotonic machine and shared by its development sites. Browser URLs and host paths are saved in this browser for this site."
+msgstr "פתח תבניות בעורך העבודה שלך. העורך המקומי נשמר במחשב של Zotonic ומשותף לכל אתרי הפיתוח שלו. כתובות ה-URL של הדפדפן ונתיבי המארח נשמרים בדפדפן זה עבור אתר זה."
+
+#: zotonic_mod_development/priv/templates/_development_dispatch_options.tpl:2
+msgid "Option"
+msgstr "אפשרות"
+
+#: zotonic_mod_development/priv/templates/admin_development.tpl:171
 msgid "Optional category for catinclude"
 msgstr "קטגוריה אופציונלית עבור כלול בקטגוריה"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:75
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:81
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:85
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:91
 msgid "Permanent redirect"
 msgstr "הפניה קבועה מחדש"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:208
+#: zotonic_mod_development/priv/templates/admin_development.tpl:216
 msgid "Recompile templates"
 msgstr "הידור מחדש של תבניות"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:78
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:88
 msgid "Redirect"
 msgstr "הפניה מחדש"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:33
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:34
 msgid "Reload the page"
 msgstr "רענן את הדף"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:36
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:37
 msgid "Reload the page that we are tracing to see the debug data."
 msgstr "טען מחדש את הדף שאנו עוקבים אחריו כדי לראות את נתוני האיתור והתיקון."
 
@@ -8876,32 +9030,44 @@ msgstr "הצג דף זה ועקוב אחר התבניות"
 msgid "Rerun graph"
 msgstr "הפעל מחדש גרף"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:112
+#: zotonic_mod_development/priv/templates/_development_dispatch_id_option.tpl:4
+msgid "Resource does not exist"
+msgstr "המשאב אינו קיים"
+
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:19
+msgid "Selected editor on the Zotonic machine"
+msgstr "עורך נבחר במנוע Zotonic"
+
+#: zotonic_mod_development/priv/templates/admin_development.tpl:114
 msgid "Set the class <tt>environment-development</tt> on the <tt>&lt;html&gt;</tt> element of your pages to see the server log in the browser console.<br>In development, admin pages always show the server log in the javascript console."
 msgstr "הגדר את המחלקה <tt>סביבה-פיתוח</tt> ברכיב <tt>&lt;html&gt;</tt> של הדפים שלך כדי לראות את יומן השרת במסוף הדפדפן.<br>בפיתוח, דפי ניהול תמיד מציגים את יומן השרת במסוף ה-javascript."
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:264
+#: zotonic_mod_development/priv/templates/admin_development.tpl:272
 msgid "Show an overview of all observers"
 msgstr "הצג סקירה כללית של כל הצופים"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:38
+#: zotonic_mod_development/priv/templates/admin_development.tpl:40
 msgid "Show defined blocks in generated templates"
 msgstr "הצג בלוקים מוגדרים בתבניות שנוצרו"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:261
+#: zotonic_mod_development/priv/templates/admin_development.tpl:269
 msgid "Show internals of Zotonic and the modules."
 msgstr "הצג את החלקים הפנימיים של Zotonic והמודולים."
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:29
+#: zotonic_mod_development/priv/templates/_development_dispatch_template_option.tpl:3
+msgid "Show matching templates"
+msgstr "הצג תבניות תואמות"
+
+#: zotonic_mod_development/priv/templates/admin_development.tpl:31
 msgid "Show paths to included template files in generated templates"
 msgstr "הצג נתיבים לקבצי תבנית כלולים בתבניות שנוצרו"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:117
+#: zotonic_mod_development/priv/templates/admin_development.tpl:119
 msgid "Show server log in the browser console"
 msgstr "הצג את יומן השרת במסוף הדפדפן"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:11
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:7
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:11
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:7
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:7
 #: zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:11
@@ -8910,13 +9076,25 @@ msgstr "הצג את יומן השרת במסוף הדפדפן"
 msgid "Site Development"
 msgstr "פיתוח אתר"
 
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:24
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:28
 msgid "Site Dispatch Rules"
 msgstr "כללי שיגור אתר"
 
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:29
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:33
 msgid "Site Name"
 msgstr "שם אתר"
+
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:2
+msgid "Source editor"
+msgstr "עורך מקור"
+
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:47
+msgid "Source root on the server or in the container"
+msgstr "תיקיית המקור בשרת או במכולה"
+
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:51
+msgid "Source root on this computer"
+msgstr "הרשאות שורש במחשב זה"
 
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:34
 msgid "Start Tracing"
@@ -8926,19 +9104,19 @@ msgstr "התחל מעקב"
 msgid "Start matching dispatch rules"
 msgstr "התחל להתאים לכללי משלוח"
 
-#: zotonic_mod_development/src/mod_development.erl:462
+#: zotonic_mod_development/src/mod_development.erl:531
 msgid "Started logging to the console of your browser tab."
 msgstr "התחלת להיכנס למסוף של כרטיסיית הדפדפן שלך."
 
-#: zotonic_mod_development/src/mod_development.erl:336
+#: zotonic_mod_development/src/mod_development.erl:405
 msgid "Started tracing all template inclusions."
 msgstr "התחיל להתחקות אחר כל הכללות התבניות."
 
-#: zotonic_mod_development/src/mod_development.erl:411
+#: zotonic_mod_development/src/mod_development.erl:480
 msgid "Started tracing template inclusions by rendering the page."
 msgstr "התחלתי לעקוב אחר שילוב התבניות באמצעות טעינת הדף."
 
-#: zotonic_mod_development/src/mod_development.erl:333
+#: zotonic_mod_development/src/mod_development.erl:402
 msgid "Started tracing template inclusions for your session."
 msgstr "התחלת להתחקות אחר הכללות תבניות עבור הפגישה שלך."
 
@@ -8948,11 +9126,11 @@ msgstr "התחלת להתחקות אחר הכללות תבניות עבור הפ
 msgid "Stop"
 msgstr "תפסיק"
 
-#: zotonic_mod_development/src/mod_development.erl:464
+#: zotonic_mod_development/src/mod_development.erl:533
 msgid "Stopped logging to the console of all browser tabs."
 msgstr "הפסיק להיכנס למסוף של כל כרטיסיות הדפדפן."
 
-#: zotonic_mod_development/src/mod_development.erl:345
+#: zotonic_mod_development/src/mod_development.erl:414
 msgid "Stopped tracing template inclusions for all sessions."
 msgstr "הפסיק לעקוב אחר הכללות תבניות עבור כל ההפעלות."
 
@@ -8960,12 +9138,16 @@ msgstr "הפסיק לעקוב אחר הכללות תבניות עבור כל ה�
 msgid "Stopped."
 msgstr "עצר."
 
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:38
+msgid "Sublime and Vim require a URL handler installed on this computer."
+msgstr "התוכנות Sublime ו-Vim דורשות מתקן כתובות URL המותקן במחשב זה."
+
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:20
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:18
 msgid "Subscribers"
 msgstr "מנויים"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:43
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:49
 msgid "Switch protocol to"
 msgstr "החלף פרוטוקול ל-"
 
@@ -8973,20 +9155,21 @@ msgstr "החלף פרוטוקול ל-"
 msgid "Syntax errors"
 msgstr "שגיאות תחביר"
 
+#: zotonic_mod_development/priv/templates/_development_template_matches.tpl:8
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:11
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:61
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:123
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:190
+#: zotonic_mod_development/priv/templates/_development_template_xref_includes.tpl:5
+#: zotonic_mod_development/priv/templates/_development_template_xref_inheritance.tpl:5
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:76
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:223
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:135
 msgid "Template"
 msgstr "תבנית"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:151
+#: zotonic_mod_development/priv/templates/admin_development.tpl:159
 msgid "Template debugging"
 msgstr "ניפוי באגים בתבניות"
 
-#: zotonic_mod_development/src/mod_development.erl:554
+#: zotonic_mod_development/src/mod_development.erl:630
 msgid "Template file not found."
 msgstr "לא נמצא קובץ התבנית."
 
@@ -8994,23 +9177,35 @@ msgstr "לא נמצא קובץ התבנית."
 msgid "Template includes using variable names or expressions for the template name are not shown."
 msgstr "תבניות הכוללות שימוש בשמות משתנים או בביטויים בשם התבנית אינן מוצגות."
 
+#: zotonic_mod_development/priv/templates/_development_template_matches.tpl:1
+msgid "Template option"
+msgstr "אפשרות תבנית"
+
 #: zotonic_mod_development/priv/templates/_development_template.tpl:4
 msgid "Template path"
 msgstr "נתיב תבנית"
 
-#: zotonic_mod_development/src/mod_development.erl:413
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:57
+msgid "Test with this template"
+msgstr "בדוק באמצעות תבנית זו"
+
+#: zotonic_mod_development/src/mod_development.erl:482
 msgid "The path must be a local URL."
 msgstr "הנתיב חייב להיות כתובת URL מקומית."
 
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:180
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:13
+msgid "The preferred editor is unavailable or needs an existing editor server."
+msgstr "העורך המועדף אינו זמין או דורש שרת עורך קיים."
+
+#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:78
 msgid "These templates have <tt>{extends}</tt> or <tt>{overrules}</tt> statements that are referring to a missing template."
 msgstr "לתבניות אלה יש <tt>{extends}</tt> או <tt>{overrules}</tt> הצהרות המתייחסות לתבנית חסרה."
 
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:114
+#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:64
 msgid "These templates have <tt>{optional}</tt> statements that are referring to missing templates."
 msgstr "לתבניות אלו יש <tt>{optional}</tt> הצהרות המתייחסות לתבניות חסרות."
 
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:52
+#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:54
 msgid "These templates have non optional <tt>{include}</tt> statements that are referring to missing templates."
 msgstr "לתבניות אלה יש הצהרות לא אופציונליות <tt>{include}</tt> המתייחסות לתבניות חסרות."
 
@@ -9026,11 +9221,15 @@ msgstr "זה מחשב ומדמיין את גרף התלות של כל התבני
 msgid "This checks all templates to see if included or extended templates are available."
 msgstr "זה בודק את כל התבניות כדי לראות אם תבניות כלולות או מורחבות זמינות."
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:60
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:66
 msgid "This resource is unknown or does not have a URI"
 msgstr "משאב זה אינו ידוע או שאין לו URI"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:540
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:12
+msgid "This server uses browser launches only. Configure your host editor and path mapping below."
+msgstr "שרת זה פועל אך ורק באמצעות הפעלת הדפדפן. הגדר את עורך המארח ואת מיפוי הנתיבים שלהלן."
+
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:541
 msgid "This template is used by"
 msgstr "תבנית זו משמשת את"
 
@@ -9038,20 +9237,20 @@ msgstr "תבנית זו משמשת את"
 msgid "Tools and settings that are useful for site development."
 msgstr "כלים והגדרות שימושיים לפיתוח אתרים."
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:92
+#: zotonic_mod_development/priv/templates/admin_development.tpl:94
 msgid "Trace all database queries for the current session"
 msgstr "עקוב אחר כל שאילתות מסד הנתונים של ההפעלה הנוכחית"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:278
+#: zotonic_mod_development/priv/templates/admin_development.tpl:286
 msgid "Trace function calls"
 msgstr "מעקב אחר קריאות פונקציות"
 
-#: zotonic_mod_development/priv/templates/_html_head_development.tpl:35
-#: zotonic_mod_development/priv/templates/_html_head_development.tpl:36
+#: zotonic_mod_development/priv/templates/_html_head_development.tpl:38
+#: zotonic_mod_development/priv/templates/_html_head_development.tpl:39
 msgid "Trace templates"
 msgstr "תבניות מעקב"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:195
+#: zotonic_mod_development/priv/templates/admin_development.tpl:203
 msgid "Traces all templates for the current session-id, or all sessions, and renders them as a graph."
 msgstr "עוקב אחר כל התבניות עבור מזהה ההפעלה הנוכחי, או כל ההפעלות, ומעבד אותן כתרשים."
 
@@ -9071,44 +9270,40 @@ msgstr "עוקב אחר סשן אחר..."
 msgid "Tracing this session..."
 msgstr "עוקב אחר הפגישה הזו..."
 
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:126
-msgid "Type of include"
-msgstr "סוג כולל"
-
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:64
+#: zotonic_mod_development/priv/templates/_development_template_xref_includes.tpl:8
 msgid "Type of {include}"
 msgstr "סוג של {include}"
 
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:47
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:51
 msgid "URI Pattern"
 msgstr "דפוס URI"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:27
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:28
 msgid "Uncheck to debug only your current session."
 msgstr "בטל את הסימון כדי לבצע ניפוי באגים רק בפגישה הנוכחית."
 
-#: zotonic_mod_development/src/mod_development.erl:447
+#: zotonic_mod_development/src/mod_development.erl:516
 msgid "Updated template debug points."
 msgstr "עודכנו נקודות האיתור באגים בתבנית."
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:226
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:8
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:44
+msgid "Use {file} for a URL-encoded filename, {path} for an encoded path preserving slashes, and {line} and {column} for the position."
+msgstr "השתמש ב- {file} עבור שם קובץ המקודד ב-URL, ב- {path} עבור נתיב מקודד השומר על קווים נטויים, וב- {line} וב- {column} עבור המיקום."
+
+#: zotonic_mod_development/priv/templates/admin_development.tpl:234
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:12
 msgid "View all dispatch rules"
 msgstr "הצג את כל כללי השילוח"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:228
+#: zotonic_mod_development/priv/templates/admin_development.tpl:236
 msgid "View all dispatch rules and hostnames usable in the site."
 msgstr "הצג את כל כללי השיגור ושמות המארחים הניתנים לשימוש באתר."
 
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:12
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:16
 msgid "View all dispatch rules available in the site"
 msgstr "צפה בכל כללי השילוח הזמינים באתר"
 
-#: zotonic_mod_development/priv/templates/_development_template.tpl:12
-msgid "View template"
-msgstr "הצג תבנית"
-
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:908
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:909
 msgid "Waiting for debug data..."
 msgstr "ממתין לנתוני האיתור והתיקון..."
 
@@ -9116,41 +9311,42 @@ msgstr "ממתין לנתוני האיתור והתיקון..."
 msgid "You are not allowed to use the dispatch debugging."
 msgstr "אינך רשאי להשתמש באיתור באגים."
 
-#: zotonic_mod_development/src/support/z_development_template.erl:44
+#: zotonic_mod_development/src/support/z_development_template.erl:40
+#: zotonic_mod_development/src/support/z_development_template.erl:57
 msgid "You are not allowed to use the template debugging."
 msgstr "אינך מורשה להשתמש באגים בתבנית."
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:290
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:88
+#: zotonic_mod_development/priv/templates/admin_development.tpl:298
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:109
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:64
-#: zotonic_mod_development/priv/templates/admin_development_observers.tpl:53
+#: zotonic_mod_development/priv/templates/admin_development_observers.tpl:55
 #: zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:51
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:172
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:42
 msgid "You do not have permission to access development tools."
 msgstr "אין לך הרשאה לגשת לכלי פיתוח."
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:63
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:69
 msgid "found dispatch rule"
 msgstr "מצא כלל משלוח"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:70
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:80
 msgid "found no match"
 msgstr "לא מצא התאמה"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:56
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:62
 msgid "found resource id"
 msgstr "מזהה משאב נמצא"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:51
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:57
 msgid "notification"
 msgstr "הוֹדָעָה"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:54
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:60
 msgid "notification, checking first return"
 msgstr "הודעה, בדיקת חזרה ראשונה"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:72
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:82
 msgid "redirects"
 msgstr "הפניות מחדש"
 
