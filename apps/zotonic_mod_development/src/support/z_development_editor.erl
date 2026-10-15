@@ -640,7 +640,7 @@ nvr_sessions() ->
                     end
             end,
             case Addresses of
-                [Server] ->
+                [Server|_] ->
                     Prefix = ["--nostart", "--servername", Server],
                     case run(Exe, Prefix ++ ["--remote-expr", "1"], 800) of
                         {ok, <<"1">>} ->
@@ -657,7 +657,7 @@ nvr_sessions() ->
                         _ ->
                             []
                     end;
-                _ ->
+                [] ->
                     []
             end
     end.
