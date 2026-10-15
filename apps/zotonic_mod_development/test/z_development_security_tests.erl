@@ -68,15 +68,15 @@ tests(Context) ->
         end},
         {"template viewer handles malformed paths without reading files", fun() ->
             lists:foreach(fun(Path) ->
-                ?assertMatch(#context{}, mod_development:event(
-                    #postback{message = {template_view, [{template, Path}]}}, Admin))
+                #context{} = mod_development:event(
+                    #postback{message = {template_view, [{template, Path}]}}, Admin)
             end, [[], #{}, 42, binary:copy(<<"x">>, 4096), <<"/etc/passwd">>])
         end},
         {"callbacks reject anonymous callers before processing input", fun() ->
-            ?assertMatch(#context{}, mod_development:event(
-                #postback{message = {template_view, [{template, #{}}]}}, Anonymous)),
-            ?assertMatch(#context{}, z_development_template:event(
-                #postback{message = {template_matches, [{template, #{}}]}}, Anonymous))
+            #context{} = mod_development:event(
+                #postback{message = {template_view, [{template, #{}}]}}, Anonymous),
+            #context{} = z_development_template:event(
+                #postback{message = {template_matches, [{template, #{}}]}}, Anonymous)
         end}
     ].
 

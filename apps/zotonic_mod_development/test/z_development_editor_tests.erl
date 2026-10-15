@@ -67,15 +67,20 @@ launch_test_() ->
 launch_fixture() ->
     Dir = "/tmp/zotonic-editor-" ++ integer_to_list(erlang:unique_integer([positive])),
     ok = file:make_dir(Dir),
-    Script = filename:join(Dir, "launcher with spaces"),
-    Output = filename:join(Dir, "arguments"),
+    Script = filename:join(Dir, "launcher with spaces héllo 日本語"),
+    Output = filename:join(Dir, "arguments héllo 日本語"),
     Source = filename:join(Dir, "a héllo {line} $(never); `never` & 'quote'.tpl"),
     Saved = application:get_env(zotonic, development_editor),
     try
         ok = file:write_file(Source, <<"test">>),
         ok = file:write_file(Script, <<"#!/bin/sh\nout=$1\nshift\nprintf '%s\\n' \"$@\" > \"$out\"\n">>),
         ok = file:change_mode(Script, 8#700),
-        application:set_env(zotonic, development_editor, {Script, [Output, "{file}", "{line}", "{column}"]}),
+        %% UTF-8 binaries must be decoded before passing executable paths and
+        %% arguments to the OS; byte lists would encode these characters twice.
+        application:set_env(zotonic, development_editor, {
+            unicode:characters_to_binary(Script),
+            [unicode:characters_to_binary(Output), <<"{file}">>, <<"{line}">>, <<"{column}">>]
+        }),
         ?assertEqual(ok, z_development_editor:open(Source, 42, 3, <<"auto">>)),
         ?assertEqual({ok, unicode:characters_to_binary(Source ++ "\n42\n3\n")}, file:read_file(Output)),
         ?assertEqual({error, choose_editor}, z_development_editor:open(Source, 1, 1, <<"not-a-candidate">>)),
@@ -127,7 +132,20 @@ nvr_fixture() ->
         ?assertMatch(#{id := <<"nvr">>, reason := inherited_session}, Selected),
         ?assertEqual(["--nostart", "--servername", "/tmp/test-nvim.sock", "--remote", "+call cursor(42,3)", "/tmp/test.tpl"],
             z_development_editor:arguments(Selected, "/tmp/test.tpl", 42, 3)),
+        %% Server-list output is UTF-8, including non-ASCII socket paths.
+        os:unsetenv("NVIM"),
+        Socket = "/tmp/néovim 日本語.sock",
+        ok = file:write_file(Nvr, unicode:characters_to_binary([
+            "#!/bin/sh\nif [ \"$1\" = '--serverlist' ]; then\nprintf '%s\\n' '",
+            Socket, "'\nexit 0\nfi\n[ \"$3\" = '", Socket,
+            "' ] || exit 97\nprintf '1\\n'\n"
+        ])),
+        #{candidates := Discovered} = z_development_editor:detect("/tmp/test.tpl"),
+        [NvrCandidate] = [C || C <- Discovered, maps:get(id, C) =:= <<"nvr">>],
+        ?assertEqual(["--nostart", "--servername", Socket, "--remote", "+call cursor(42,3)", "/tmp/test.tpl"],
+            z_development_editor:arguments(NvrCandidate, "/tmp/test.tpl", 42, 3)),
         %% A stale server must not be selected just because the socket env is set.
+        os:putenv("NVIM", Socket),
         ok = file:write_file(Nvr, <<"#!/bin/sh\nexit 1\n">>),
         #{candidates := Candidates} = z_development_editor:detect("/tmp/test.tpl"),
         ?assertNot(lists:any(fun(C) -> maps:get(id, C) =:= <<"nvr">> end, Candidates))
