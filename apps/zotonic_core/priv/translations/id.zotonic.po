@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-14 11:27\n"
+"PO-Revision-Date: 2026-10-15 15:54\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -392,6 +392,7 @@ msgstr "Konfigurasi berubah."
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_filter_predicates.tpl:20
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:79
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:43
+#: zotonic_mod_development/priv/templates/_development_template_matches.tpl:27
 #: zotonic_mod_editor_tinymce/priv/templates/_admin_configure_module.tpl:30
 #: zotonic_mod_email_status/priv/templates/_dialog_email_status.tpl:4
 #: zotonic_mod_l10n/priv/templates/_admin_configure_module.tpl:8
@@ -664,11 +665,11 @@ msgstr "Anggota dari kelompok pengguna yang sama"
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:49
 #: zotonic_mod_base/priv/templates/error.tpl:78
 #: zotonic_mod_development/priv/templates/_development_template.tpl:3
+#: zotonic_mod_development/priv/templates/_development_template_matches.tpl:8
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:10
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:60
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:122
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:189
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:50
+#: zotonic_mod_development/priv/templates/_development_template_xref_includes.tpl:4
+#: zotonic_mod_development/priv/templates/_development_template_xref_inheritance.tpl:4
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:54
 #: zotonic_mod_logging/priv/templates/admin_log.tpl:25
 msgid "Module"
 msgstr "Modul"
@@ -713,10 +714,10 @@ msgstr "Tidak diijinkan."
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:31
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:60
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:32
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:39
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:66
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:48
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:36
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:45
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:76
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:52
 msgid "Options"
 msgstr "Pilihan"
 
@@ -789,6 +790,7 @@ msgstr "Aturan yang dikembalikan"
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:80
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:26
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:105
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:56
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:126
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:60
 #: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:55
@@ -1758,6 +1760,12 @@ msgstr "Alamat surel"
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:3
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:23
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:21
+#: zotonic_mod_development/priv/templates/_development_template.tpl:17
+#: zotonic_mod_development/priv/templates/_development_template.tpl:22
+#: zotonic_mod_development/priv/templates/_development_template_matches.tpl:17
+#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:27
+#: zotonic_mod_development/priv/templates/_development_template_xref_includes.tpl:22
+#: zotonic_mod_development/priv/templates/_development_template_xref_inheritance.tpl:20
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:121
 #: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:51
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:36
@@ -3715,6 +3723,11 @@ msgstr "Berlaku untuk:"
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:31
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:146
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:26
+#: zotonic_mod_development/priv/templates/_development_template.tpl:12
+#: zotonic_mod_development/priv/templates/_development_template_matches.tpl:15
+#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:26
+#: zotonic_mod_development/priv/templates/_development_template_xref_includes.tpl:21
+#: zotonic_mod_development/priv/templates/_development_template_xref_inheritance.tpl:19
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:38
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:20
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:38
@@ -4277,7 +4290,7 @@ msgid "Here you can see all the email configurations and send test emails."
 msgstr "Di sini Anda dapat melihat semua konfigurasi email dan mengirim email uji."
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:4
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:32
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:36
 #: zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:27
 msgid "Hostname"
 msgstr "Nama host"
@@ -4584,6 +4597,7 @@ msgstr "Berlaku sampai"
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:21
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:21
 #: zotonic_mod_base/src/support/z_chart_svg.erl:1352
+#: zotonic_mod_development/priv/templates/_development_dispatch_options.tpl:2
 msgid "Value"
 msgstr "Nilai"
 
@@ -5586,7 +5600,7 @@ msgid "Reinstalled the data model."
 msgstr "Menginstal ulang model data."
 
 #: zotonic_mod_admin_modules/priv/templates/_admin_status.tpl:3
-#: zotonic_mod_development/priv/templates/admin_development.tpl:211
+#: zotonic_mod_development/priv/templates/admin_development.tpl:219
 msgid "Rescan modules"
 msgstr "Pemindaian ulang modul"
 
@@ -7744,7 +7758,7 @@ msgstr "Perubahan bersih"
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:145
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:187
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:267
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:40
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:44
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:44
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:48
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:35
@@ -8009,7 +8023,8 @@ msgstr "Item pekerjaan"
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:187
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:251
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:274
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:40
+#: zotonic_mod_development/priv/templates/_development_dispatch_options.tpl:14
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:44
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:44
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:47
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:30
@@ -8140,7 +8155,7 @@ msgstr "Simpan Form Komentar pengaturan"
 
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:13
 #: zotonic_mod_comment/priv/templates/admin_comments_settings.tpl:12
-#: zotonic_mod_development/priv/templates/admin_development.tpl:19
+#: zotonic_mod_development/priv/templates/admin_development.tpl:21
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:4
 #: zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:7
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:7
@@ -8353,6 +8368,7 @@ msgid "Year"
 msgstr "Tahun"
 
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:27
+#: zotonic_mod_development/priv/templates/_development_template_matches.tpl:8
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:234
 #: zotonic_site_status/priv/templates/_sites.tpl:6
 msgid "Actions"
@@ -8395,11 +8411,11 @@ msgstr "Lokasi baru bisa menjadi sebuah jalan lokal atau sebuah URL lengkap. Men
 msgid "You are not allowed to change this."
 msgstr "Anda tidak diizinkan untuk mengubah ini."
 
-#: zotonic_mod_development/src/mod_development.erl:496
+#: zotonic_mod_development/src/mod_development.erl:565
 msgid "<i>Function name does not exist.</i>"
 msgstr "<i>Nama fungsi tidak ada.</i>"
 
-#: zotonic_mod_development/src/mod_development.erl:499
+#: zotonic_mod_development/src/mod_development.erl:568
 msgid "<i>Module not found.</i>"
 msgstr "<i>Modul tidak ditemukan.</i>"
 
@@ -8416,38 +8432,38 @@ msgstr "Grafik semua templat, dan siapa yang menyertakannya, dibuat dan diperbar
 msgid "Action"
 msgstr "Aksi"
 
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:213
-msgid "All <tt>{extends}</tt> and <tt>{overrules}</tt> statements are referring to existing templates."
-msgstr "Semua pernyataan <tt>{extends}</tt> dan <tt>{overrules}</tt> mengacu pada template yang ada."
+#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:91
+msgid "All extended and overruled templates"
+msgstr "Semua templat yang diperluas dan yang dibatalkan"
 
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:163
-msgid "All <tt>{optional}</tt> statements are referring to existing templates."
-msgstr "Semua pernyataan <tt>{optional}</tt> mengacu pada templat yang ada."
+#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:87
+msgid "All included templates"
+msgstr "Semua templat yang disertakan"
 
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:101
-msgid "All non-optional <tt>{include}</tt> statements are referring to existing templates."
-msgstr "Semua pernyataan <tt>{include}</tt> non-opsional mengacu pada templat yang ada."
-
-#: zotonic_mod_development/priv/templates/admin_development.tpl:184
+#: zotonic_mod_development/priv/templates/admin_development.tpl:192
 msgid "All templates are checked for missing includes or missing <tt>{ext}</tt> template references."
 msgstr "Semua templat diperiksa apakah ada yang hilang, termasuk, atau tidak ada <tt>{ext}</tt> referensi templat."
 
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:42
+#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:44
 msgid "All templates are compiling."
 msgstr "Semua templat sedang dikompilasi."
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:187
-#: zotonic_mod_development/priv/templates/admin_development.tpl:203
+#: zotonic_mod_development/priv/templates/admin_development.tpl:195
+#: zotonic_mod_development/priv/templates/admin_development.tpl:211
 msgid "All templates will be compiled."
 msgstr "Semua template akan dikompilasi."
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:54
+#: zotonic_mod_development/priv/templates/admin_development.tpl:56
 msgid "Allow to show the floating template trace button on production and acceptance sites."
 msgstr "Izinkan untuk menampilkan tombol jejak templat mengambang di lokasi produksi dan penerimaan."
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:46
+#: zotonic_mod_development/priv/templates/admin_development.tpl:48
 msgid "Always hide the floating template trace button."
 msgstr "Selalu sembunyikan tombol jiplakan template mengambang."
+
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:18
+msgid "Automatic detection on the Zotonic machine"
+msgstr "Deteksi otomatis pada mesin Zotonic"
 
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:13
 msgid "Below is the list of all notifications and the installed observers."
@@ -8457,19 +8473,31 @@ msgstr "Di bawah ini adalah daftar semua notifikasi dan pengamat yang diinstal."
 msgid "Bindings"
 msgstr "Binding"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:202
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:20
+msgid "Browser URL to an editor on this computer"
+msgstr "URL browser ke editor di komputer ini"
+
+#: zotonic_mod_development/priv/templates/admin_development.tpl:210
 msgid "Calculate and visualize a dependency graph of all templates."
 msgstr "Hitung dan visualisasikan grafik ketergantungan semua templat."
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:43
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:906
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:44
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:909
 msgid "Check debug points in the template source to see debug data here."
 msgstr "Periksa titik debug di sumber template untuk melihat data debug di sini."
 
-#: zotonic_mod_development/src/mod_development.erl:304
-#: zotonic_mod_development/src/mod_development.erl:319
+#: zotonic_mod_development/src/mod_development.erl:373
+#: zotonic_mod_development/src/mod_development.erl:388
 msgid "Checking all templates..."
 msgstr "Memeriksa semua templat..."
+
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:32
+msgid "Choose an editor"
+msgstr "Pilih editor"
+
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:11
+msgid "Choose an editor; no unambiguous default was found."
+msgstr "Pilih editor; tidak ditemukan pengaturan default yang jelas."
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:23
 msgid "Clear data and start"
@@ -8479,12 +8507,12 @@ msgstr "Hapus data dan mulai"
 msgid "Clear data and trace all"
 msgstr "Hapus data dan lacak semuanya"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:533
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:542
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:536
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:545
 msgid "Click to load templates"
 msgstr "Klik untuk memuat templat"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:17
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:18
 msgid "Click to restart"
 msgstr "Klik untuk memulai ulang"
 
@@ -8492,10 +8520,10 @@ msgstr "Klik untuk memulai ulang"
 msgid "Column"
 msgstr "Kolom"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:30
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:37
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:64
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:51
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:32
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:41
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:72
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:55
 msgid "Controller"
 msgstr "Pengontrol"
 
@@ -8518,17 +8546,30 @@ msgstr "Tidak dapat menyalin file titik ke papan klip."
 msgid "Could not fetch tracer output, please try again."
 msgstr "Tidak dapat mengambil keluaran pelacak, harap coba lagi."
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:440
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:471
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:10
+msgid "Could not load or save editor settings."
+msgstr "Tidak dapat memuat atau menyimpan pengaturan editor."
+
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:443
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:474
 msgid "Could not load templates"
 msgstr "Tidak dapat memuat templat"
+
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:9
+msgid "Could not open the editor. Check the editor and path mapping."
+msgstr "Tidak dapat membuka editor. Periksa editor dan pemetaan jalur."
+
+#: zotonic_mod_development/priv/templates/_development_editor_button.tpl:10
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
+msgid "Could not open the editor. Check the editor settings on the Development page."
+msgstr "Tidak dapat membuka editor. Periksa pengaturan editor di halaman Pengembangan."
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:8
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:12
 msgid "Cross-reference check of all templates"
 msgstr "Pemeriksaan referensi silang semua templat"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:181
+#: zotonic_mod_development/priv/templates/admin_development.tpl:189
 msgid "Cross-reference check of templates"
 msgstr "Pemeriksaan referensi silang terhadap templat"
 
@@ -8536,11 +8577,15 @@ msgstr "Pemeriksaan referensi silang terhadap templat"
 msgid "Cross-reference check results"
 msgstr "Hasil pemeriksaan referensi silang"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:23
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:36
+msgid "Custom URL / Vim helper"
+msgstr "URL Kustom / Pembantu Vim"
+
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:24
 msgid "Debug all sessions"
 msgstr "Debug semua sesi"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:28
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:29
 msgid "Debugging all sessions can result in a large amount of debug data."
 msgstr "Debugging semua sesi dapat menghasilkan data debug dalam jumlah besar."
 
@@ -8548,7 +8593,7 @@ msgstr "Debugging semua sesi dapat menghasilkan data debug dalam jumlah besar."
 msgid "Dependency graph"
 msgstr "Grafik ketergantungan"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:200
+#: zotonic_mod_development/priv/templates/admin_development.tpl:208
 msgid "Dependency graph of all available templates"
 msgstr "Grafik ketergantungan semua templat yang tersedia"
 
@@ -8565,8 +8610,12 @@ msgstr "Diagram ketergantungan semua templat. Hanya templat yang menggunakan nil
 msgid "Dependency graph of all traced templates. All includes are shown."
 msgstr "Grafik ketergantungan semua templat yang dilacak. Semua termasuk ditampilkan."
 
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:5
+msgid "Detecting editors…"
+msgstr "Mendeteksi editor…"
+
 #: zotonic_mod_development/priv/templates/admin_development.tpl:7
-#: zotonic_mod_development/src/mod_development.erl:1138
+#: zotonic_mod_development/src/mod_development.erl:1233
 msgid "Development"
 msgstr "Pengembangan"
 
@@ -8578,7 +8627,7 @@ msgstr "Pengembangan - Penelusuran Panggilan Fungsi"
 msgid "Development - Observers"
 msgstr "Pengembangan - Pengamat"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:82
+#: zotonic_mod_development/priv/templates/admin_development.tpl:84
 msgid "Disable caching by the <tt>{% cache %}</tt> tag."
 msgstr "Nonaktifkan caching dengan tag <tt>{% cache %}</tt>."
 
@@ -8586,23 +8635,95 @@ msgstr "Nonaktifkan caching dengan tag <tt>{% cache %}</tt>."
 msgid "Disabled database query tracing"
 msgstr "Pelacakan kueri database dinonaktifkan"
 
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:49
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:53
 msgid "Dispatch Name"
 msgstr "Nama Pengiriman"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:222
+#: zotonic_mod_development/priv/templates/admin_development.tpl:230
 msgid "Dispatch rule debugging"
 msgstr "Pengiriman aturan debugging"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:62
+#: zotonic_mod_development/priv/templates/admin_development.tpl:64
 msgid "Download CSS and JavaScript files as separate files. Don’t combine them in one URL."
 msgstr "Download file CSS dan JavaScript sebagai file terpisah. Jangan menggabungkan mereka dalam satu URL."
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:97
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
+msgid "Edit action"
+msgstr "Tindakan edit"
+
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:33
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:42
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:73
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:95
+msgid "Edit controller"
+msgstr "Edit pengontrol"
+
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:28
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:70
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:106
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:89
+msgid "Edit dispatch file"
+msgstr "Edit berkas pengiriman"
+
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
+msgid "Edit event handler"
+msgstr "Edit penangan peristiwa"
+
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
+msgid "Edit filter"
+msgstr "Edit filter"
+
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
+msgid "Edit model"
+msgstr "Edit model"
+
+#: zotonic_mod_development/priv/templates/_development_dispatch_id_option.tpl:2
+msgid "Edit resource in admin"
+msgstr "Mengedit sumber daya di panel admin"
+
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
+msgid "Edit scomp"
+msgstr "Edit scomp"
+
+#: zotonic_mod_development/priv/templates/admin_development_observers.tpl:30
+msgid "Edit subscriber function"
+msgstr "Fungsi edit pelanggan"
+
+#: zotonic_mod_development/priv/templates/_development_template.tpl:17
+#: zotonic_mod_development/priv/templates/_development_template.tpl:22
+#: zotonic_mod_development/priv/templates/_development_template_matches.tpl:17
+#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:27
+#: zotonic_mod_development/priv/templates/_development_template_xref_includes.tpl:22
+#: zotonic_mod_development/priv/templates/_development_template_xref_inheritance.tpl:20
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:8
+msgid "Edit template"
+msgstr "Edit templat"
+
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:30
+msgid "Editor"
+msgstr "Editor"
+
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:41
+msgid "Editor URL pattern"
+msgstr "Pola URL editor"
+
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:8
+msgid "Editor launch requested."
+msgstr "Diminta agar editor diluncurkan."
+
+#: zotonic_mod_development/priv/templates/_development_editor_button.tpl:14
+msgid "Editor settings"
+msgstr "Pengaturan editor"
+
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:7
+msgid "Editor settings saved."
+msgstr "Pengaturan editor telah disimpan."
+
+#: zotonic_mod_development/priv/templates/admin_development.tpl:99
 msgid "Enable <tt>mod_server_storage</tt> to use database query tracing."
 msgstr "Aktifkan <tt>mod_server_storage</tt> untuk menggunakan pelacakan kueri database."
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:106
+#: zotonic_mod_development/priv/templates/admin_development.tpl:108
 msgid "Enable API to recompile and build Zotonic"
 msgstr "Aktifkan API untuk mengkompilasi ulang dan membangun Zotonic"
 
@@ -8618,11 +8739,11 @@ msgstr "Pelacakan kueri database yang diaktifkan"
 msgid "Enter the module and function you want to trace. If no function is given, all functions in the module will be traced. Enter how many calls to trace before stopping."
 msgstr "Masukkan modul dan fungsi yang ingin Anda lacak. Jika tidak ada fungsi yang diberikan, semua fungsi dalam modul akan dilacak. Masukkan jumlah panggilan yang akan dilacak sebelum berhenti."
 
-#: zotonic_mod_development/src/mod_development.erl:468
+#: zotonic_mod_development/src/mod_development.erl:537
 msgid "Error changing the console logs."
 msgstr "Terjadi kesalahan saat mengubah log konsol."
 
-#: zotonic_mod_development/src/mod_development.erl:551
+#: zotonic_mod_development/src/mod_development.erl:631
 msgid "Error parsing template."
 msgstr "Templat penguraian kesalahan."
 
@@ -8630,43 +8751,43 @@ msgstr "Templat penguraian kesalahan."
 msgid "Event"
 msgstr "Peristiwa"
 
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:14
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:18
 msgid "Every URL which is reachable in the site is defined with dispatch rules. This page shows all available dispatch rules in this site."
 msgstr "Setiap URL yang dapat dijangkau di situs ditentukan dengan aturan pengiriman. Halaman ini menunjukkan semua aturan pengiriman yang tersedia di situs ini."
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:248
+#: zotonic_mod_development/priv/templates/admin_development.tpl:256
 msgid "Explain"
 msgstr "Menjelaskan"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:411
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:414
 msgid "Extended / overridden by"
 msgstr "Diperpanjang / ditimpa oleh"
 
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:191
+#: zotonic_mod_development/priv/templates/_development_template_xref_inheritance.tpl:7
 msgid "Extends"
 msgstr "Memperluas"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:36
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:40
 msgid "Final dispatch"
 msgstr "Akhir pengiriman"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:173
+#: zotonic_mod_development/priv/templates/admin_development.tpl:181
 msgid "Find"
 msgstr "Menemukan"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:154
+#: zotonic_mod_development/priv/templates/admin_development.tpl:162
 msgid "Find a template, check which template will be selected"
 msgstr "Menemukan template, cek template yang bisa dipilih"
 
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:15
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:19
 msgid "For more information see: { url }"
 msgstr "Untuk informasi lebih lanjut lihat: { url }"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:215
+#: zotonic_mod_development/priv/templates/admin_development.tpl:223
 msgid "Force a recompilation of all templates. This fixes any issues where the compiled templates might be out of sync with the template index."
 msgstr "Paksa kompilasi ulang semua templat. Ini memperbaiki masalah apa pun yang menyebabkan templat yang dikompilasi mungkin tidak sinkron dengan indeks templat."
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:46
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:52
 msgid "Forced switch of protocol to"
 msgstr "Dipaksa beralih dari protokol untuk"
 
@@ -8674,7 +8795,7 @@ msgstr "Dipaksa beralih dari protokol untuk"
 msgid "Found matching dispatch rule"
 msgstr "Menemukan aturan pengiriman yang cocok"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:271
+#: zotonic_mod_development/priv/templates/admin_development.tpl:279
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:8
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:12
 msgid "Function Call Tracing"
@@ -8684,7 +8805,7 @@ msgstr "Penelusuran Panggilan Fungsi"
 msgid "Function call tracing has been disabled. Use the following to enable function call tracing:"
 msgstr "Penelusuran panggilan fungsi telah dinonaktifkan. Gunakan langkah berikut ini untuk mengaktifkan penelusuran panggilan fungsi:"
 
-#: zotonic_mod_development/src/mod_development.erl:502
+#: zotonic_mod_development/src/mod_development.erl:571
 msgid "Function tracing has been disabled in the Zotonic config."
 msgstr "Pelacakan fungsi telah dinonaktifkan dalam konfigurasi Zotonic."
 
@@ -8692,38 +8813,49 @@ msgstr "Pelacakan fungsi telah dinonaktifkan dalam konfigurasi Zotonic."
 msgid "Graph of all template dependencies"
 msgstr "Grafik semua dependensi template"
 
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:36
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:40
 msgid "Hostalias"
 msgstr "Hostali"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:415
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:418
 msgid "Included by"
 msgstr "Termasuk oleh"
 
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:63
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:125
+#: zotonic_mod_development/priv/templates/_development_template_xref_includes.tpl:7
 msgid "Included template"
 msgstr "Templat disertakan"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:258
+#: zotonic_mod_development/priv/templates/_development_template_matches.tpl:3
+msgid "Includes the base template, category variants and resource-name variants. The selected template depends on the resource being rendered."
+msgstr "Termasuk templat dasar, varian kategori, dan varian nama sumber daya. Templat yang dipilih bergantung pada sumber daya yang ditampilkan."
+
+#: zotonic_mod_development/priv/templates/admin_development.tpl:266
 msgid "Introspection"
 msgstr "Introspeksi"
 
+#: zotonic_mod_development/src/support/z_development_template.erl:41
+msgid "Invalid template name."
+msgstr "Nama templat tidak valid."
+
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:53
+msgid "Leave both roots empty when the paths are identical. Files outside the mapped root will not be opened."
+msgstr "Biarkan kedua akar tersebut kosong jika jalurnya sama. Berkas yang berada di luar akar yang dipetakan tidak akan dibuka."
+
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:12
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:62
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:124
+#: zotonic_mod_development/priv/templates/_development_template_xref_includes.tpl:6
+#: zotonic_mod_development/priv/templates/_development_template_xref_inheritance.tpl:6
 msgid "Line"
 msgstr "Garis"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:193
+#: zotonic_mod_development/priv/templates/admin_development.tpl:201
 msgid "Live dependency graph of templates"
 msgstr "Grafik ketergantungan langsung dari templat"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:74
+#: zotonic_mod_development/priv/templates/admin_development.tpl:76
 msgid "Live reload of changed CSS files. Reload page on change of templates or JavaScript."
 msgstr "Reload langsung dari file CSS yang diubah. Muat ulang halaman saat mengganti template atau JavaScript."
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:274
+#: zotonic_mod_development/priv/templates/admin_development.tpl:282
 msgid "Live trace of function calls on the server (only for the admin user)."
 msgstr "Penelusuran langsung panggilan fungsi pada server (hanya untuk pengguna admin)."
 
@@ -8740,48 +8872,69 @@ msgstr "Penelusuran langsung panggilan fungsi pada server."
 msgid "Loading and displaying the trace for:"
 msgstr "Memuat dan menampilkan jejak untuk:"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:433
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:459
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:436
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:462
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:76
 msgid "Loading..."
 msgstr "Memuat..."
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:73
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:79
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:24
+msgid "Local editor"
+msgstr "Editor lokal"
+
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:26
+msgid "Local launches use the OS account and environment of the running Zotonic node."
+msgstr "Peluncuran lokal menggunakan akun dan lingkungan sistem operasi dari node Zotonic yang sedang berjalan."
+
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:83
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:89
 msgid "Location"
 msgstr "Lokasi"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:142
+#: zotonic_mod_development/priv/templates/admin_development.tpl:144
 msgid "Log in as the admin to enable logging to the javascript console."
 msgstr "Masuk sebagai admin untuk mengaktifkan masuk ke konsol javascript."
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:232
+#: zotonic_mod_development/priv/templates/admin_development.tpl:240
 msgid "Match a request URL, display matched dispatch rule."
 msgstr "Sesuai permintaan URL, tampilan sesuai aturan pengiriman."
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:15
+#: zotonic_mod_development/priv/templates/_development_template_matches.tpl:5
+msgid "Matches with the same name are listed in module priority order."
+msgstr "Pertandingan dengan nama yang sama dicantumkan berdasarkan urutan prioritas modul."
+
+#: zotonic_mod_development/src/support/z_development_template.erl:48
+msgid "Matching templates"
+msgstr "Template yang sesuai"
+
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:16
 msgid "Maximum tracing time reached, debugging stopped."
 msgstr "Waktu penelusuran maksimum tercapai, debugging dihentikan."
 
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:50
+#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:52
 msgid "Missing included templates"
 msgstr "Templat yang disertakan tidak ada"
 
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:112
+#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:62
 msgid "Missing optional included templates"
 msgstr "Templat opsional yang disertakan tidak ada"
 
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:174
+#: zotonic_mod_development/priv/templates/_development_template_xref_includes.tpl:32
+#: zotonic_mod_development/priv/templates/_development_template_xref_inheritance.tpl:26
+msgid "Missing template"
+msgstr "Template tidak ditemukan"
+
+#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:72
 msgid "Missing {extends} or {overrules}"
 msgstr "Hilang {extends} atau {overrules}"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:44
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:47
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:50
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:53
 msgid "New host"
 msgstr "Host baru"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:52
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:58
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:64
 msgid "New path"
 msgstr "Jalur baru"
 
@@ -8789,38 +8942,47 @@ msgstr "Jalur baru"
 msgid "No data."
 msgstr "Tidak ada data."
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:49
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:55
 msgid "No matching dispatch rule found"
 msgstr "Tidak ada aturan pengiriman yang sesuai"
 
-#: zotonic_mod_development/src/mod_development.erl:466
+#: zotonic_mod_development/priv/templates/_development_template_matches.tpl:21
+msgid "No matching templates found."
+msgstr "Tidak ditemukan templat yang sesuai."
+
+#: zotonic_mod_development/src/mod_development.erl:535
 msgid "No permission to access the console logs."
 msgstr "Tidak ada izin untuk mengakses log konsol."
 
-#: zotonic_mod_development/src/mod_development.erl:309
-#: zotonic_mod_development/src/mod_development.erl:324
-#: zotonic_mod_development/src/mod_development.erl:339
-#: zotonic_mod_development/src/mod_development.erl:347
-#: zotonic_mod_development/src/mod_development.erl:374
+#: zotonic_mod_development/src/mod_development.erl:378
+#: zotonic_mod_development/src/mod_development.erl:393
+#: zotonic_mod_development/src/mod_development.erl:408
 #: zotonic_mod_development/src/mod_development.erl:416
-#: zotonic_mod_development/src/mod_development.erl:433
-#: zotonic_mod_development/src/mod_development.erl:450
+#: zotonic_mod_development/src/mod_development.erl:443
+#: zotonic_mod_development/src/mod_development.erl:485
+#: zotonic_mod_development/src/mod_development.erl:502
+#: zotonic_mod_development/src/mod_development.erl:519
 msgid "No permission to use mod_development."
 msgstr "Tidak ada izin untuk menggunakan mod_development."
 
-#: zotonic_mod_development/src/mod_development.erl:428
+#: zotonic_mod_development/priv/templates/_development_template_xref_includes.tpl:53
+#: zotonic_mod_development/priv/templates/_development_template_xref_inheritance.tpl:36
+msgid "No references found."
+msgstr "Tidak ditemukan referensi."
+
+#: zotonic_mod_development/src/mod_development.erl:497
 msgid "No template found in the context."
 msgstr "Tidak ada templat yang ditemukan dalam konteks."
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:419
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:422
 msgid "No traced parent templates"
 msgstr "Tidak ada templat induk yang dilacak"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:469
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:472
 msgid "No traced templates on this point"
 msgstr "Tidak ada templat yang dilacak pada titik ini"
 
-#: zotonic_mod_development/priv/templates/_development_template.tpl:20
+#: zotonic_mod_development/priv/templates/_development_template.tpl:21
 msgid "Not found"
 msgstr "Tidak ditemukan"
 
@@ -8829,41 +8991,58 @@ msgstr "Tidak ditemukan"
 msgid "Observers"
 msgstr "Pengamat"
 
-#: zotonic_mod_development/src/mod_development.erl:505
+#: zotonic_mod_development/src/mod_development.erl:574
 msgid "Only the admin user can set traces."
 msgstr "Hanya pengguna admin yang dapat mengatur jejak."
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:282
+#: zotonic_mod_development/priv/templates/admin_development.tpl:290
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:51
 msgid "Only the admin user can use function call tracing."
 msgstr "Hanya pengguna admin yang dapat menggunakan penelusuran panggilan fungsi."
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:528
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:16
+msgid "Open files using"
+msgstr "Buka berkas menggunakan"
+
+#: zotonic_mod_development/priv/templates/_development_editor_button.tpl:5
+#: zotonic_mod_development/priv/templates/_development_editor_button.tpl:11
+msgid "Open in editor"
+msgstr "Buka di editor"
+
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:531
 msgid "Open included template"
 msgstr "Buka templat yang disertakan"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:163
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:4
+msgid "Open templates in your working editor. The local editor is saved on the Zotonic machine and shared by its development sites. Browser URLs and host paths are saved in this browser for this site."
+msgstr "Buka templat di editor tempat Anda bekerja. Editor lokal disimpan di server Zotonic dan digunakan bersama oleh situs-situs pengembangannya. URL browser dan jalur host disimpan di browser ini untuk situs ini."
+
+#: zotonic_mod_development/priv/templates/_development_dispatch_options.tpl:2
+msgid "Option"
+msgstr "Opsi"
+
+#: zotonic_mod_development/priv/templates/admin_development.tpl:171
 msgid "Optional category for catinclude"
 msgstr "Kategori opsional untuk catinclude"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:75
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:81
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:85
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:91
 msgid "Permanent redirect"
 msgstr "Pengalihan permanen"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:208
+#: zotonic_mod_development/priv/templates/admin_development.tpl:216
 msgid "Recompile templates"
 msgstr "Kompilasi ulang templat"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:78
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:88
 msgid "Redirect"
 msgstr "Pengalihan"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:33
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:34
 msgid "Reload the page"
 msgstr "Muat ulang halaman"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:36
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:37
 msgid "Reload the page that we are tracing to see the debug data."
 msgstr "Muat ulang halaman yang sedang kita telusuri untuk melihat data debug."
 
@@ -8875,32 +9054,45 @@ msgstr "Render halaman ini dan telusuri templatnya"
 msgid "Rerun graph"
 msgstr "Jalankan kembali grafik"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:112
+#: zotonic_mod_development/priv/templates/_development_dispatch_id_option.tpl:4
+msgid "Resource does not exist"
+msgstr "Sumber daya tidak ditemukan"
+
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:19
+msgid "Selected editor on the Zotonic machine"
+msgstr "Editor yang dipilih pada mesin Zotonic"
+
+#: zotonic_mod_development/priv/templates/admin_development.tpl:114
 msgid "Set the class <tt>environment-development</tt> on the <tt>&lt;html&gt;</tt> element of your pages to see the server log in the browser console.<br>In development, admin pages always show the server log in the javascript console."
 msgstr "Tetapkan kelas <tt>pengembangan lingkungan</tt> pada elemen <tt>&lt;html&gt;</tt> halaman Anda untuk melihat log server di konsol browser.<br>Dalam pengembangan, halaman admin selalu menampilkan log server di konsol javascript."
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:264
+#: zotonic_mod_development/priv/templates/admin_development.tpl:272
 msgid "Show an overview of all observers"
 msgstr "Tampilkan ikhtisar semua pengamat"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:38
+#: zotonic_mod_development/priv/templates/admin_development.tpl:40
 msgid "Show defined blocks in generated templates"
 msgstr "Tampilkan didefinisikan blok dihasilkan template"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:261
+#: zotonic_mod_development/priv/templates/admin_development.tpl:269
 msgid "Show internals of Zotonic and the modules."
 msgstr "Menunjukkan bagian dalam Zotonic dan modul."
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:29
+#: zotonic_mod_development/priv/templates/_development_dispatch_template_option.tpl:3
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
+msgid "Show matching templates"
+msgstr "Tampilkan templat yang sesuai"
+
+#: zotonic_mod_development/priv/templates/admin_development.tpl:31
 msgid "Show paths to included template files in generated templates"
 msgstr "Menunjukkan jalan untuk menyertakan file template pada template yang dihasilkan"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:117
+#: zotonic_mod_development/priv/templates/admin_development.tpl:119
 msgid "Show server log in the browser console"
 msgstr "Tampilkan log server di konsol browser"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:11
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:7
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:11
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:7
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:7
 #: zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:11
@@ -8909,13 +9101,25 @@ msgstr "Tampilkan log server di konsol browser"
 msgid "Site Development"
 msgstr "Pengembangan situs"
 
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:24
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:28
 msgid "Site Dispatch Rules"
 msgstr "Aturan Pengiriman Situs"
 
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:29
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:33
 msgid "Site Name"
 msgstr "Nama situs"
+
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:2
+msgid "Source editor"
+msgstr "Editor sumber"
+
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:47
+msgid "Source root on the server or in the container"
+msgstr "Direktori sumber di server atau di dalam kontainer"
+
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:51
+msgid "Source root on this computer"
+msgstr "Akses root pada komputer ini"
 
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:34
 msgid "Start Tracing"
@@ -8925,19 +9129,19 @@ msgstr "Mulai Melacak"
 msgid "Start matching dispatch rules"
 msgstr "Mulai mencocokkan aturan pengiriman"
 
-#: zotonic_mod_development/src/mod_development.erl:462
+#: zotonic_mod_development/src/mod_development.erl:531
 msgid "Started logging to the console of your browser tab."
 msgstr "Mulai masuk ke konsol tab browser Anda."
 
-#: zotonic_mod_development/src/mod_development.erl:336
+#: zotonic_mod_development/src/mod_development.erl:405
 msgid "Started tracing all template inclusions."
 msgstr "Mulai menelusuri semua penyertaan template."
 
-#: zotonic_mod_development/src/mod_development.erl:411
+#: zotonic_mod_development/src/mod_development.erl:480
 msgid "Started tracing template inclusions by rendering the page."
 msgstr "Mulai menelusuri penyertaan templat dengan merender halaman."
 
-#: zotonic_mod_development/src/mod_development.erl:333
+#: zotonic_mod_development/src/mod_development.erl:402
 msgid "Started tracing template inclusions for your session."
 msgstr "Mulai menelusuri penyertaan templat untuk sesi Anda."
 
@@ -8947,11 +9151,11 @@ msgstr "Mulai menelusuri penyertaan templat untuk sesi Anda."
 msgid "Stop"
 msgstr "Berhenti"
 
-#: zotonic_mod_development/src/mod_development.erl:464
+#: zotonic_mod_development/src/mod_development.erl:533
 msgid "Stopped logging to the console of all browser tabs."
 msgstr "Berhenti masuk ke konsol semua tab browser."
 
-#: zotonic_mod_development/src/mod_development.erl:345
+#: zotonic_mod_development/src/mod_development.erl:414
 msgid "Stopped tracing template inclusions for all sessions."
 msgstr "Menghentikan pelacakan penyertaan template untuk semua sesi."
 
@@ -8959,12 +9163,16 @@ msgstr "Menghentikan pelacakan penyertaan template untuk semua sesi."
 msgid "Stopped."
 msgstr "Berhenti."
 
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:38
+msgid "Sublime and Vim require a URL handler installed on this computer."
+msgstr "Sublime dan Vim memerlukan handler URL yang terpasang di komputer ini."
+
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:20
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:18
 msgid "Subscribers"
 msgstr "Subscriber"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:43
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:49
 msgid "Switch protocol to"
 msgstr "Aktifkan protokol ke"
 
@@ -8972,20 +9180,21 @@ msgstr "Aktifkan protokol ke"
 msgid "Syntax errors"
 msgstr "Kesalahan sintaksis"
 
+#: zotonic_mod_development/priv/templates/_development_template_matches.tpl:8
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:11
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:61
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:123
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:190
+#: zotonic_mod_development/priv/templates/_development_template_xref_includes.tpl:5
+#: zotonic_mod_development/priv/templates/_development_template_xref_inheritance.tpl:5
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:76
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:223
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:135
 msgid "Template"
 msgstr "Template"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:151
+#: zotonic_mod_development/priv/templates/admin_development.tpl:159
 msgid "Template debugging"
 msgstr "Template debugging"
 
-#: zotonic_mod_development/src/mod_development.erl:554
+#: zotonic_mod_development/src/mod_development.erl:634
 msgid "Template file not found."
 msgstr "File template tidak ditemukan."
 
@@ -8993,23 +9202,35 @@ msgstr "File template tidak ditemukan."
 msgid "Template includes using variable names or expressions for the template name are not shown."
 msgstr "Templat yang menggunakan nama variabel atau ekspresi untuk nama templat tidak ditampilkan."
 
+#: zotonic_mod_development/priv/templates/_development_template_matches.tpl:1
+msgid "Template option"
+msgstr "Opsi templat"
+
 #: zotonic_mod_development/priv/templates/_development_template.tpl:4
 msgid "Template path"
 msgstr "Template path"
 
-#: zotonic_mod_development/src/mod_development.erl:413
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:57
+msgid "Test with this template"
+msgstr "Coba gunakan templat ini"
+
+#: zotonic_mod_development/src/mod_development.erl:482
 msgid "The path must be a local URL."
 msgstr "Jalur harus berupa URL lokal."
 
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:180
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:13
+msgid "The preferred editor is unavailable or needs an existing editor server."
+msgstr "Editor yang dipilih tidak tersedia atau memerlukan server editor yang sudah ada."
+
+#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:78
 msgid "These templates have <tt>{extends}</tt> or <tt>{overrules}</tt> statements that are referring to a missing template."
 msgstr "Templat ini memiliki pernyataan <tt>{extends}</tt> atau <tt>{overrules}</tt> yang mengacu pada templat yang hilang."
 
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:114
+#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:64
 msgid "These templates have <tt>{optional}</tt> statements that are referring to missing templates."
 msgstr "Templat ini memiliki <tt>{optional}</tt> pernyataan yang mengacu pada templat yang hilang."
 
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:52
+#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:54
 msgid "These templates have non optional <tt>{include}</tt> statements that are referring to missing templates."
 msgstr "Templat ini memiliki pernyataan non-opsional <tt>{include}</tt> yang mengacu pada templat yang hilang."
 
@@ -9025,11 +9246,15 @@ msgstr "Ini menghitung dan memvisualisasikan grafik ketergantungan semua templat
 msgid "This checks all templates to see if included or extended templates are available."
 msgstr "Ini memeriksa semua templat untuk melihat apakah templat yang disertakan atau diperluas tersedia."
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:60
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:66
 msgid "This resource is unknown or does not have a URI"
 msgstr "Sumber ini tidak diketahui atau tidak memiliki URI"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:540
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:12
+msgid "This server uses browser launches only. Configure your host editor and path mapping below."
+msgstr "Server ini hanya menggunakan peluncuran melalui browser. Konfigurasikan editor host dan pemetaan jalur Anda di bawah ini."
+
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:543
 msgid "This template is used by"
 msgstr "Templat ini digunakan oleh"
 
@@ -9037,20 +9262,20 @@ msgstr "Templat ini digunakan oleh"
 msgid "Tools and settings that are useful for site development."
 msgstr "Alat dan pengaturan yang berguna untuk pengembangan situs."
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:92
+#: zotonic_mod_development/priv/templates/admin_development.tpl:94
 msgid "Trace all database queries for the current session"
 msgstr "Lacak semua kueri database untuk sesi saat ini"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:278
+#: zotonic_mod_development/priv/templates/admin_development.tpl:286
 msgid "Trace function calls"
 msgstr "Melacak panggilan fungsi"
 
-#: zotonic_mod_development/priv/templates/_html_head_development.tpl:35
-#: zotonic_mod_development/priv/templates/_html_head_development.tpl:36
+#: zotonic_mod_development/priv/templates/_html_head_development.tpl:38
+#: zotonic_mod_development/priv/templates/_html_head_development.tpl:39
 msgid "Trace templates"
 msgstr "Templat jejak"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:195
+#: zotonic_mod_development/priv/templates/admin_development.tpl:203
 msgid "Traces all templates for the current session-id, or all sessions, and renders them as a graph."
 msgstr "Melacak semua templat untuk id sesi saat ini, atau semua sesi, dan merendernya sebagai grafik."
 
@@ -9070,44 +9295,40 @@ msgstr "Menelusuri sesi lainnya..."
 msgid "Tracing this session..."
 msgstr "Menelusuri sesi ini..."
 
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:126
-msgid "Type of include"
-msgstr "Jenis penyertaan"
-
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:64
+#: zotonic_mod_development/priv/templates/_development_template_xref_includes.tpl:8
 msgid "Type of {include}"
 msgstr "Tipe {include}"
 
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:47
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:51
 msgid "URI Pattern"
 msgstr "Pola URI"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:27
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:28
 msgid "Uncheck to debug only your current session."
 msgstr "Hapus centang untuk men-debug hanya sesi Anda saat ini."
 
-#: zotonic_mod_development/src/mod_development.erl:447
+#: zotonic_mod_development/src/mod_development.erl:516
 msgid "Updated template debug points."
 msgstr "Poin debug templat yang diperbarui."
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:226
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:8
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:44
+msgid "Use {file} for a URL-encoded filename, {path} for an encoded path preserving slashes, and {line} and {column} for the position."
+msgstr "Gunakan {file} untuk nama file yang dikodekan dalam format URL, {path} untuk jalur yang dikodekan dengan tetap mempertahankan tanda garis miring, serta {line} dan {column} untuk posisinya."
+
+#: zotonic_mod_development/priv/templates/admin_development.tpl:234
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:12
 msgid "View all dispatch rules"
 msgstr "Lihat semua aturan pengiriman"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:228
+#: zotonic_mod_development/priv/templates/admin_development.tpl:236
 msgid "View all dispatch rules and hostnames usable in the site."
 msgstr "Lihat semua aturan pengiriman dan nama host yang dapat digunakan di situs."
 
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:12
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:16
 msgid "View all dispatch rules available in the site"
 msgstr "Lihat semua aturan pengiriman yang tersedia di situs"
 
-#: zotonic_mod_development/priv/templates/_development_template.tpl:12
-msgid "View template"
-msgstr "Lihat templat"
-
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:908
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:911
 msgid "Waiting for debug data..."
 msgstr "Menunggu data debug..."
 
@@ -9115,41 +9336,42 @@ msgstr "Menunggu data debug..."
 msgid "You are not allowed to use the dispatch debugging."
 msgstr "Anda tidak diizinkan untuk menggunakan pengiriman debugging."
 
-#: zotonic_mod_development/src/support/z_development_template.erl:44
+#: zotonic_mod_development/src/support/z_development_template.erl:53
+#: zotonic_mod_development/src/support/z_development_template.erl:70
 msgid "You are not allowed to use the template debugging."
 msgstr "Anda tidak diizinkan untuk menggunakan template debugging."
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:290
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:88
+#: zotonic_mod_development/priv/templates/admin_development.tpl:298
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:109
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:64
-#: zotonic_mod_development/priv/templates/admin_development_observers.tpl:53
+#: zotonic_mod_development/priv/templates/admin_development_observers.tpl:55
 #: zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:51
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:172
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:42
 msgid "You do not have permission to access development tools."
 msgstr "Anda tidak memiliki izin untuk mengakses alat bantu pengembangan."
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:63
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:69
 msgid "found dispatch rule"
 msgstr "menemukan aturan pengiriman"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:70
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:80
 msgid "found no match"
 msgstr "tidak menemukan kecocokan"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:56
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:62
 msgid "found resource id"
 msgstr "menemukan resource id"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:51
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:57
 msgid "notification"
 msgstr "pemberitahuan"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:54
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:60
 msgid "notification, checking first return"
 msgstr "pemberitahuan, memeriksa kembali pertama"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:72
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:82
 msgid "redirects"
 msgstr "pengalihan"
 

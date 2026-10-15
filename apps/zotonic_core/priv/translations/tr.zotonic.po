@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-14 11:27\n"
+"PO-Revision-Date: 2026-10-15 15:53\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "MIME-Version: 1.0\n"
@@ -392,6 +392,7 @@ msgstr "Değiştirilmiş yapılandırma."
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_filter_predicates.tpl:20
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:79
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:43
+#: zotonic_mod_development/priv/templates/_development_template_matches.tpl:27
 #: zotonic_mod_editor_tinymce/priv/templates/_admin_configure_module.tpl:30
 #: zotonic_mod_email_status/priv/templates/_dialog_email_status.tpl:4
 #: zotonic_mod_l10n/priv/templates/_admin_configure_module.tpl:8
@@ -664,11 +665,11 @@ msgstr "Aynı kullanıcı grubunun üyeleri"
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:49
 #: zotonic_mod_base/priv/templates/error.tpl:78
 #: zotonic_mod_development/priv/templates/_development_template.tpl:3
+#: zotonic_mod_development/priv/templates/_development_template_matches.tpl:8
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:10
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:60
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:122
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:189
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:50
+#: zotonic_mod_development/priv/templates/_development_template_xref_includes.tpl:4
+#: zotonic_mod_development/priv/templates/_development_template_xref_inheritance.tpl:4
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:54
 #: zotonic_mod_logging/priv/templates/admin_log.tpl:25
 msgid "Module"
 msgstr "Modül"
@@ -713,10 +714,10 @@ msgstr "İzin verilmiyor."
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:31
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:60
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:32
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:39
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:66
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:48
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:36
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:45
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:76
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:52
 msgid "Options"
 msgstr "Seçenekler"
 
@@ -789,6 +790,7 @@ msgstr "Geri alının kurallar"
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:80
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:26
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:105
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:56
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:126
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:60
 #: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:55
@@ -1758,6 +1760,12 @@ msgstr "E-posta adresi"
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:3
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:23
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:21
+#: zotonic_mod_development/priv/templates/_development_template.tpl:17
+#: zotonic_mod_development/priv/templates/_development_template.tpl:22
+#: zotonic_mod_development/priv/templates/_development_template_matches.tpl:17
+#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:27
+#: zotonic_mod_development/priv/templates/_development_template_xref_includes.tpl:22
+#: zotonic_mod_development/priv/templates/_development_template_xref_inheritance.tpl:20
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:121
 #: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:51
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:36
@@ -3715,6 +3723,11 @@ msgstr "Geçerli:"
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:31
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:146
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:26
+#: zotonic_mod_development/priv/templates/_development_template.tpl:12
+#: zotonic_mod_development/priv/templates/_development_template_matches.tpl:15
+#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:26
+#: zotonic_mod_development/priv/templates/_development_template_xref_includes.tpl:21
+#: zotonic_mod_development/priv/templates/_development_template_xref_inheritance.tpl:19
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:38
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:20
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:38
@@ -4277,7 +4290,7 @@ msgid "Here you can see all the email configurations and send test emails."
 msgstr "Burada tüm e-posta yapılandırmalarını görebilir ve test e-postaları gönderebilirsiniz."
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:4
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:32
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:36
 #: zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:27
 msgid "Hostname"
 msgstr "Ana Bilgisayar Adı"
@@ -4584,6 +4597,7 @@ msgstr "Tarihine kadar geçerli"
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:21
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:21
 #: zotonic_mod_base/src/support/z_chart_svg.erl:1352
+#: zotonic_mod_development/priv/templates/_development_dispatch_options.tpl:2
 msgid "Value"
 msgstr "Değer"
 
@@ -5586,7 +5600,7 @@ msgid "Reinstalled the data model."
 msgstr "Veri modelini yeniden yükledim."
 
 #: zotonic_mod_admin_modules/priv/templates/_admin_status.tpl:3
-#: zotonic_mod_development/priv/templates/admin_development.tpl:211
+#: zotonic_mod_development/priv/templates/admin_development.tpl:219
 msgid "Rescan modules"
 msgstr "Modülleri tekrar tara"
 
@@ -7745,7 +7759,7 @@ msgstr "Net değişim"
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:145
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:187
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:267
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:40
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:44
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:44
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:48
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:35
@@ -8010,7 +8024,8 @@ msgstr "Çalışma öğeleri"
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:187
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:251
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:274
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:40
+#: zotonic_mod_development/priv/templates/_development_dispatch_options.tpl:14
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:44
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:44
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:47
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:30
@@ -8141,7 +8156,7 @@ msgstr "Yorum formu ayarlarını kaydet"
 
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:13
 #: zotonic_mod_comment/priv/templates/admin_comments_settings.tpl:12
-#: zotonic_mod_development/priv/templates/admin_development.tpl:19
+#: zotonic_mod_development/priv/templates/admin_development.tpl:21
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:4
 #: zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:7
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:7
@@ -8354,6 +8369,7 @@ msgid "Year"
 msgstr "Yıl"
 
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:27
+#: zotonic_mod_development/priv/templates/_development_template_matches.tpl:8
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:234
 #: zotonic_site_status/priv/templates/_sites.tpl:6
 msgid "Actions"
@@ -8396,11 +8412,11 @@ msgstr "Yeni konum yerel bir yol ya da tamamen bir URL olabilir. Bu site içinde
 msgid "You are not allowed to change this."
 msgstr "Bunu değiştirmenize izin yok."
 
-#: zotonic_mod_development/src/mod_development.erl:496
+#: zotonic_mod_development/src/mod_development.erl:565
 msgid "<i>Function name does not exist.</i>"
 msgstr "<i>İşlev adı mevcut değil.</i>"
 
-#: zotonic_mod_development/src/mod_development.erl:499
+#: zotonic_mod_development/src/mod_development.erl:568
 msgid "<i>Module not found.</i>"
 msgstr "<i>Modül bulunamadı.</i>"
 
@@ -8417,38 +8433,38 @@ msgstr "Tüm şablonların ve bunların kimler tarafından dahil edildiğinin bi
 msgid "Action"
 msgstr "Eylem"
 
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:213
-msgid "All <tt>{extends}</tt> and <tt>{overrules}</tt> statements are referring to existing templates."
-msgstr "<tt>{extends}</tt> ve <tt>{overrules}</tt> ifadelerinin tümü mevcut şablonlara atıfta bulunmaktadır."
+#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:91
+msgid "All extended and overruled templates"
+msgstr "Genişletilmiş ve geçersiz kılınan tüm şablonlar"
 
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:163
-msgid "All <tt>{optional}</tt> statements are referring to existing templates."
-msgstr "Tüm <tt>{optional}</tt> ifadeleri mevcut şablonlara atıfta bulunmaktadır."
+#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:87
+msgid "All included templates"
+msgstr "Tüm şablonlar dahildir"
 
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:101
-msgid "All non-optional <tt>{include}</tt> statements are referring to existing templates."
-msgstr "İsteğe bağlı olmayan tüm <tt>{include}</tt> ifadeleri mevcut şablonlara atıfta bulunmaktadır."
-
-#: zotonic_mod_development/priv/templates/admin_development.tpl:184
+#: zotonic_mod_development/priv/templates/admin_development.tpl:192
 msgid "All templates are checked for missing includes or missing <tt>{ext}</tt> template references."
 msgstr "Tüm şablonlar eksik içerik veya eksik <tt>{ext}</tt> şablon referanslarına karşı kontrol edilir."
 
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:42
+#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:44
 msgid "All templates are compiling."
 msgstr "Tüm şablonlar derleniyor."
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:187
-#: zotonic_mod_development/priv/templates/admin_development.tpl:203
+#: zotonic_mod_development/priv/templates/admin_development.tpl:195
+#: zotonic_mod_development/priv/templates/admin_development.tpl:211
 msgid "All templates will be compiled."
 msgstr "Tüm şablonlar derlenecektir."
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:54
+#: zotonic_mod_development/priv/templates/admin_development.tpl:56
 msgid "Allow to show the floating template trace button on production and acceptance sites."
 msgstr "Üretim ve kabul sitelerinde yüzen şablon izleme düğmesinin gösterilmesine izin verin."
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:46
+#: zotonic_mod_development/priv/templates/admin_development.tpl:48
 msgid "Always hide the floating template trace button."
 msgstr "Yüzen şablon izleme düğmesini her zaman gizleyin."
+
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:18
+msgid "Automatic detection on the Zotonic machine"
+msgstr "Zotonic makinesinde otomatik algılama"
 
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:13
 msgid "Below is the list of all notifications and the installed observers."
@@ -8458,19 +8474,31 @@ msgstr "Aşağıda tüm bildirimlerin ve yüklü gözlemcilerin listesi bulunmak
 msgid "Bindings"
 msgstr "Bağlar"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:202
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:20
+msgid "Browser URL to an editor on this computer"
+msgstr "Bu bilgisayardaki bir düzenleyicinin tarayıcı URL’si"
+
+#: zotonic_mod_development/priv/templates/admin_development.tpl:210
 msgid "Calculate and visualize a dependency graph of all templates."
 msgstr "Tüm şablonların bağımlılık grafiğini hesaplayın ve görselleştirin."
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:43
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:906
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:44
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:909
 msgid "Check debug points in the template source to see debug data here."
 msgstr "Burada hata ayıklama verilerini görmek için şablon kaynağındaki hata ayıklama noktalarını kontrol edin."
 
-#: zotonic_mod_development/src/mod_development.erl:304
-#: zotonic_mod_development/src/mod_development.erl:319
+#: zotonic_mod_development/src/mod_development.erl:373
+#: zotonic_mod_development/src/mod_development.erl:388
 msgid "Checking all templates..."
 msgstr "Tüm şablonlar kontrol ediliyor..."
+
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:32
+msgid "Choose an editor"
+msgstr "Bir düzenleyici seçin"
+
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:11
+msgid "Choose an editor; no unambiguous default was found."
+msgstr "Bir düzenleyici seçin; kesin bir varsayılan değer bulunamadı."
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:23
 msgid "Clear data and start"
@@ -8480,12 +8508,12 @@ msgstr "Verileri temizle ve başla"
 msgid "Clear data and trace all"
 msgstr "Verileri temizle ve hepsini izle"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:533
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:542
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:536
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:545
 msgid "Click to load templates"
 msgstr "Şablonları yüklemek için tıklayın"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:17
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:18
 msgid "Click to restart"
 msgstr "Yeniden başlatmak için tıklayın"
 
@@ -8493,10 +8521,10 @@ msgstr "Yeniden başlatmak için tıklayın"
 msgid "Column"
 msgstr "Kolon"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:30
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:37
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:64
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:51
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:32
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:41
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:72
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:55
 msgid "Controller"
 msgstr "Kontrolcü"
 
@@ -8519,17 +8547,30 @@ msgstr "Nokta dosyası panoya kopyalanamadı."
 msgid "Could not fetch tracer output, please try again."
 msgstr "İzleme çıktısı alınamadı, lütfen tekrar deneyin."
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:440
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:471
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:10
+msgid "Could not load or save editor settings."
+msgstr "Düzenleyici ayarları yüklenemedi veya kaydedilemedi."
+
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:443
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:474
 msgid "Could not load templates"
 msgstr "Şablonlar yüklenemedi"
+
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:9
+msgid "Could not open the editor. Check the editor and path mapping."
+msgstr "Düzenleyici açılamadı. Düzenleyiciyi ve yol eşlemesini kontrol edin."
+
+#: zotonic_mod_development/priv/templates/_development_editor_button.tpl:10
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
+msgid "Could not open the editor. Check the editor settings on the Development page."
+msgstr "Düzenleyici açılamadı. “Geliştirme” sayfasındaki düzenleyici ayarlarını kontrol edin."
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:8
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:12
 msgid "Cross-reference check of all templates"
 msgstr "Tüm şablonların çapraz referans kontrolü"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:181
+#: zotonic_mod_development/priv/templates/admin_development.tpl:189
 msgid "Cross-reference check of templates"
 msgstr "Şablonların çapraz referans kontrolü"
 
@@ -8537,11 +8578,15 @@ msgstr "Şablonların çapraz referans kontrolü"
 msgid "Cross-reference check results"
 msgstr "Çapraz referans kontrolü sonuçları"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:23
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:36
+msgid "Custom URL / Vim helper"
+msgstr "Özel URL / Vim yardımcı programı"
+
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:24
 msgid "Debug all sessions"
 msgstr "Tüm oturumlarda hata ayıklama"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:28
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:29
 msgid "Debugging all sessions can result in a large amount of debug data."
 msgstr "Tüm oturumların hata ayıklaması büyük miktarda hata ayıklama verisine neden olabilir."
 
@@ -8549,7 +8594,7 @@ msgstr "Tüm oturumların hata ayıklaması büyük miktarda hata ayıklama veri
 msgid "Dependency graph"
 msgstr "Bağımlılık grafiği"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:200
+#: zotonic_mod_development/priv/templates/admin_development.tpl:208
 msgid "Dependency graph of all available templates"
 msgstr "Mevcut tüm şablonların bağımlılık grafiği"
 
@@ -8566,8 +8611,12 @@ msgstr "Tüm şablonların bağımlılık grafiği. Yalnızca şablon adı olara
 msgid "Dependency graph of all traced templates. All includes are shown."
 msgstr "İzlenen tüm şablonların bağımlılık grafiği. Tüm içerikler gösterilmektedir."
 
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:5
+msgid "Detecting editors…"
+msgstr "Editörlerin tespit edilmesi…"
+
 #: zotonic_mod_development/priv/templates/admin_development.tpl:7
-#: zotonic_mod_development/src/mod_development.erl:1138
+#: zotonic_mod_development/src/mod_development.erl:1233
 msgid "Development"
 msgstr "Geliştirme"
 
@@ -8579,7 +8628,7 @@ msgstr "Geliştirme - Fonksiyon Çağrısı İzleme"
 msgid "Development - Observers"
 msgstr "Geliştirme - Gözlemciler"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:82
+#: zotonic_mod_development/priv/templates/admin_development.tpl:84
 msgid "Disable caching by the <tt>{% cache %}</tt> tag."
 msgstr "<tt>{% cache %}</tt> etiketiyle önbelleğe almayı devre dışı bırakın."
 
@@ -8587,23 +8636,95 @@ msgstr "<tt>{% cache %}</tt> etiketiyle önbelleğe almayı devre dışı bırak
 msgid "Disabled database query tracing"
 msgstr "Devre dışı bırakılan veritabanı sorgu izleme"
 
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:49
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:53
 msgid "Dispatch Name"
 msgstr "Gönderi Adı"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:222
+#: zotonic_mod_development/priv/templates/admin_development.tpl:230
 msgid "Dispatch rule debugging"
 msgstr "Gönderim kuralları hata ayıklama"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:62
+#: zotonic_mod_development/priv/templates/admin_development.tpl:64
 msgid "Download CSS and JavaScript files as separate files. Don’t combine them in one URL."
 msgstr "CSS ve JavaScript dosyalarını ayrı dosyalar olarak indir. Onları bir URL'de birleştirme."
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:97
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
+msgid "Edit action"
+msgstr "Düzenleme işlemi"
+
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:33
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:42
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:73
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:95
+msgid "Edit controller"
+msgstr "Denetleyiciyi düzenle"
+
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:28
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:70
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:106
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:89
+msgid "Edit dispatch file"
+msgstr "Gönderim dosyasını düzenle"
+
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
+msgid "Edit event handler"
+msgstr "Olay işleyicisini düzenle"
+
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
+msgid "Edit filter"
+msgstr "Filtreyi düzenle"
+
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
+msgid "Edit model"
+msgstr "Modeli düzenle"
+
+#: zotonic_mod_development/priv/templates/_development_dispatch_id_option.tpl:2
+msgid "Edit resource in admin"
+msgstr "Yönetici panelinde kaynağı düzenle"
+
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
+msgid "Edit scomp"
+msgstr "scomp'u düzenle"
+
+#: zotonic_mod_development/priv/templates/admin_development_observers.tpl:30
+msgid "Edit subscriber function"
+msgstr "Abone düzenleme işlevi"
+
+#: zotonic_mod_development/priv/templates/_development_template.tpl:17
+#: zotonic_mod_development/priv/templates/_development_template.tpl:22
+#: zotonic_mod_development/priv/templates/_development_template_matches.tpl:17
+#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:27
+#: zotonic_mod_development/priv/templates/_development_template_xref_includes.tpl:22
+#: zotonic_mod_development/priv/templates/_development_template_xref_inheritance.tpl:20
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:8
+msgid "Edit template"
+msgstr "Şablonu düzenle"
+
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:30
+msgid "Editor"
+msgstr "Editör"
+
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:41
+msgid "Editor URL pattern"
+msgstr "Düzenleyici URL şablonu"
+
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:8
+msgid "Editor launch requested."
+msgstr "Editörün göreve başlaması talep edildi."
+
+#: zotonic_mod_development/priv/templates/_development_editor_button.tpl:14
+msgid "Editor settings"
+msgstr "Düzenleyici ayarları"
+
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:7
+msgid "Editor settings saved."
+msgstr "Düzenleyici ayarları kaydedildi."
+
+#: zotonic_mod_development/priv/templates/admin_development.tpl:99
 msgid "Enable <tt>mod_server_storage</tt> to use database query tracing."
 msgstr "Veritabanı sorgu izlemesini kullanmak için <tt>mod_server_storage</tt> etkinleştirin."
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:106
+#: zotonic_mod_development/priv/templates/admin_development.tpl:108
 msgid "Enable API to recompile and build Zotonic"
 msgstr "Zotonic'i yeniden derlemek ve oluşturmak için API'yı etkinleştirin"
 
@@ -8619,11 +8740,11 @@ msgstr "Etkin veritabanı sorgu izleme"
 msgid "Enter the module and function you want to trace. If no function is given, all functions in the module will be traced. Enter how many calls to trace before stopping."
 msgstr "İzlemek istediğiniz modülü ve fonksiyonu girin. Herhangi bir fonksiyon belirtilmezse, modüldeki tüm fonksiyonlar izlenecektir. Durdurmadan önce kaç çağrının izleneceğini girin."
 
-#: zotonic_mod_development/src/mod_development.erl:468
+#: zotonic_mod_development/src/mod_development.erl:537
 msgid "Error changing the console logs."
 msgstr "Konsol günlükleri değiştirilirken hata oluştu."
 
-#: zotonic_mod_development/src/mod_development.erl:551
+#: zotonic_mod_development/src/mod_development.erl:631
 msgid "Error parsing template."
 msgstr "Şablon ayrıştırılırken hata oluştu."
 
@@ -8631,43 +8752,43 @@ msgstr "Şablon ayrıştırılırken hata oluştu."
 msgid "Event"
 msgstr "Etkinlik"
 
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:14
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:18
 msgid "Every URL which is reachable in the site is defined with dispatch rules. This page shows all available dispatch rules in this site."
 msgstr "Sitede ulaşılabilen her URL gönderim kuralları ile tanımlanır. Bu sayfa, bu sitedeki mevcut tüm gönderim kurallarını gösterir."
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:248
+#: zotonic_mod_development/priv/templates/admin_development.tpl:256
 msgid "Explain"
 msgstr "Açıkla"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:411
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:414
 msgid "Extended / overridden by"
 msgstr "Tarafından genişletildi / geçersiz kılındı"
 
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:191
+#: zotonic_mod_development/priv/templates/_development_template_xref_inheritance.tpl:7
 msgid "Extends"
 msgstr "Uzatır"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:36
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:40
 msgid "Final dispatch"
 msgstr "Nihai gönderme"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:173
+#: zotonic_mod_development/priv/templates/admin_development.tpl:181
 msgid "Find"
 msgstr "Bul"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:154
+#: zotonic_mod_development/priv/templates/admin_development.tpl:162
 msgid "Find a template, check which template will be selected"
 msgstr "Bir şablon bulun, hangi şablonun seçileceğini kontrol edin"
 
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:15
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:19
 msgid "For more information see: { url }"
 msgstr "Daha fazla bilgi için bkz.: { url }"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:215
+#: zotonic_mod_development/priv/templates/admin_development.tpl:223
 msgid "Force a recompilation of all templates. This fixes any issues where the compiled templates might be out of sync with the template index."
 msgstr "Tüm şablonların yeniden derlenmesini zorlayın. Bu, derlenen şablonların şablon dizini ile senkronizasyonunun bozulabileceği sorunları giderir."
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:46
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:52
 msgid "Forced switch of protocol to"
 msgstr "Protokolü şuna zorla"
 
@@ -8675,7 +8796,7 @@ msgstr "Protokolü şuna zorla"
 msgid "Found matching dispatch rule"
 msgstr "Eşleşen gönderim kuralı bulundu"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:271
+#: zotonic_mod_development/priv/templates/admin_development.tpl:279
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:8
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:12
 msgid "Function Call Tracing"
@@ -8685,7 +8806,7 @@ msgstr "İşlev Çağrısı İzleme"
 msgid "Function call tracing has been disabled. Use the following to enable function call tracing:"
 msgstr "İşlev çağrısı izleme devre dışı bırakıldı. İşlev çağrısı izlemeyi etkinleştirmek için aşağıdakileri kullanın:"
 
-#: zotonic_mod_development/src/mod_development.erl:502
+#: zotonic_mod_development/src/mod_development.erl:571
 msgid "Function tracing has been disabled in the Zotonic config."
 msgstr "Zotonic yapılandırmasında işlev izleme devre dışı bırakıldı."
 
@@ -8693,38 +8814,49 @@ msgstr "Zotonic yapılandırmasında işlev izleme devre dışı bırakıldı."
 msgid "Graph of all template dependencies"
 msgstr "Tüm şablon bağımlılıklarının grafiği"
 
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:36
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:40
 msgid "Hostalias"
 msgstr "Hostalias"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:415
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:418
 msgid "Included by"
 msgstr "Tarafından dahil"
 
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:63
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:125
+#: zotonic_mod_development/priv/templates/_development_template_xref_includes.tpl:7
 msgid "Included template"
 msgstr "Dahil edilen şablon"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:258
+#: zotonic_mod_development/priv/templates/_development_template_matches.tpl:3
+msgid "Includes the base template, category variants and resource-name variants. The selected template depends on the resource being rendered."
+msgstr "Temel şablonu, kategori varyantlarını ve kaynak adı varyantlarını içerir. Seçilen şablon, görüntülenecek kaynağa bağlıdır."
+
+#: zotonic_mod_development/priv/templates/admin_development.tpl:266
 msgid "Introspection"
 msgstr "İçgözlem"
 
+#: zotonic_mod_development/src/support/z_development_template.erl:41
+msgid "Invalid template name."
+msgstr "Geçersiz şablon adı."
+
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:53
+msgid "Leave both roots empty when the paths are identical. Files outside the mapped root will not be opened."
+msgstr "Yollar aynı olduğunda her iki kök dizinini de boş bırakın. Eşlenen kök dizininin dışındaki dosyalar açılmayacaktır."
+
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:12
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:62
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:124
+#: zotonic_mod_development/priv/templates/_development_template_xref_includes.tpl:6
+#: zotonic_mod_development/priv/templates/_development_template_xref_inheritance.tpl:6
 msgid "Line"
 msgstr "Astar"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:193
+#: zotonic_mod_development/priv/templates/admin_development.tpl:201
 msgid "Live dependency graph of templates"
 msgstr "Şablonların canlı bağımlılık grafiği"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:74
+#: zotonic_mod_development/priv/templates/admin_development.tpl:76
 msgid "Live reload of changed CSS files. Reload page on change of templates or JavaScript."
 msgstr "Değiştirilen CSS dosyalarının canlı olarak yeniden yüklenmesi. Şablon veya JavaScript değişikliğinde sayfayı yeniden yükleyin."
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:274
+#: zotonic_mod_development/priv/templates/admin_development.tpl:282
 msgid "Live trace of function calls on the server (only for the admin user)."
 msgstr "Sunucudaki işlev çağrılarının canlı izi (yalnızca yönetici kullanıcı için)."
 
@@ -8741,48 +8873,69 @@ msgstr "Sunucudaki işlev çağrılarının canlı izlenmesi."
 msgid "Loading and displaying the trace for:"
 msgstr "İzlemenin yüklenmesi ve görüntülenmesi:"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:433
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:459
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:436
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:462
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:76
 msgid "Loading..."
 msgstr "Yükleniyor..."
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:73
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:79
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:24
+msgid "Local editor"
+msgstr "Yerel editör"
+
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:26
+msgid "Local launches use the OS account and environment of the running Zotonic node."
+msgstr "Yerel başlatmalar, çalışmakta olan Zotonic düğümünün işletim sistemi hesabını ve ortamını kullanır."
+
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:83
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:89
 msgid "Location"
 msgstr "Konum"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:142
+#: zotonic_mod_development/priv/templates/admin_development.tpl:144
 msgid "Log in as the admin to enable logging to the javascript console."
 msgstr "Javascript konsolunda oturum açmayı etkinleştirmek için yönetici olarak oturum açın."
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:232
+#: zotonic_mod_development/priv/templates/admin_development.tpl:240
 msgid "Match a request URL, display matched dispatch rule."
 msgstr "Bir istek URL'sini eşleştirin, eşleşen gönderim kuralı görüntüleyin."
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:15
+#: zotonic_mod_development/priv/templates/_development_template_matches.tpl:5
+msgid "Matches with the same name are listed in module priority order."
+msgstr "Aynı ada sahip eşleşmeler, modül öncelik sırasına göre listelenir."
+
+#: zotonic_mod_development/src/support/z_development_template.erl:48
+msgid "Matching templates"
+msgstr "Eşleşen şablonlar"
+
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:16
 msgid "Maximum tracing time reached, debugging stopped."
 msgstr "Maksimum izleme süresine ulaşıldı, hata ayıklama durduruldu."
 
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:50
+#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:52
 msgid "Missing included templates"
 msgstr "Dahil edilen şablonlar eksik"
 
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:112
+#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:62
 msgid "Missing optional included templates"
 msgstr "İsteğe bağlı olarak eklenen şablonlar eksik"
 
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:174
+#: zotonic_mod_development/priv/templates/_development_template_xref_includes.tpl:32
+#: zotonic_mod_development/priv/templates/_development_template_xref_inheritance.tpl:26
+msgid "Missing template"
+msgstr "Şablon eksik"
+
+#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:72
 msgid "Missing {extends} or {overrules}"
 msgstr "{extends} veya {overrules}eksik"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:44
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:47
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:50
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:53
 msgid "New host"
 msgstr "Yeni ana bilgisayar"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:52
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:58
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:64
 msgid "New path"
 msgstr "Yeni yol"
 
@@ -8790,38 +8943,47 @@ msgstr "Yeni yol"
 msgid "No data."
 msgstr "Veri yok."
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:49
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:55
 msgid "No matching dispatch rule found"
 msgstr "Eşleşen gönderme kuralı bulunamadı"
 
-#: zotonic_mod_development/src/mod_development.erl:466
+#: zotonic_mod_development/priv/templates/_development_template_matches.tpl:21
+msgid "No matching templates found."
+msgstr "Eşleşen şablon bulunamadı."
+
+#: zotonic_mod_development/src/mod_development.erl:535
 msgid "No permission to access the console logs."
 msgstr "Konsol günlüklerine erişim izni yok."
 
-#: zotonic_mod_development/src/mod_development.erl:309
-#: zotonic_mod_development/src/mod_development.erl:324
-#: zotonic_mod_development/src/mod_development.erl:339
-#: zotonic_mod_development/src/mod_development.erl:347
-#: zotonic_mod_development/src/mod_development.erl:374
+#: zotonic_mod_development/src/mod_development.erl:378
+#: zotonic_mod_development/src/mod_development.erl:393
+#: zotonic_mod_development/src/mod_development.erl:408
 #: zotonic_mod_development/src/mod_development.erl:416
-#: zotonic_mod_development/src/mod_development.erl:433
-#: zotonic_mod_development/src/mod_development.erl:450
+#: zotonic_mod_development/src/mod_development.erl:443
+#: zotonic_mod_development/src/mod_development.erl:485
+#: zotonic_mod_development/src/mod_development.erl:502
+#: zotonic_mod_development/src/mod_development.erl:519
 msgid "No permission to use mod_development."
 msgstr "mod_development'ı kullanma izniniz yok."
 
-#: zotonic_mod_development/src/mod_development.erl:428
+#: zotonic_mod_development/priv/templates/_development_template_xref_includes.tpl:53
+#: zotonic_mod_development/priv/templates/_development_template_xref_inheritance.tpl:36
+msgid "No references found."
+msgstr "Hiçbir kaynak bulunamadı."
+
+#: zotonic_mod_development/src/mod_development.erl:497
 msgid "No template found in the context."
 msgstr "Bağlamda şablon bulunamadı."
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:419
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:422
 msgid "No traced parent templates"
 msgstr "İzlenen ana şablon yok"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:469
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:472
 msgid "No traced templates on this point"
 msgstr "Bu noktada izlenen şablon yok"
 
-#: zotonic_mod_development/priv/templates/_development_template.tpl:20
+#: zotonic_mod_development/priv/templates/_development_template.tpl:21
 msgid "Not found"
 msgstr "Bulunamadı"
 
@@ -8830,41 +8992,58 @@ msgstr "Bulunamadı"
 msgid "Observers"
 msgstr "Gözlemciler"
 
-#: zotonic_mod_development/src/mod_development.erl:505
+#: zotonic_mod_development/src/mod_development.erl:574
 msgid "Only the admin user can set traces."
 msgstr "Yalnızca yönetici kullanıcı izleri ayarlayabilir."
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:282
+#: zotonic_mod_development/priv/templates/admin_development.tpl:290
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:51
 msgid "Only the admin user can use function call tracing."
 msgstr "İşlev çağrısı izlemeyi yalnızca yönetici kullanıcı kullanabilir."
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:528
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:16
+msgid "Open files using"
+msgstr "Dosyaları şu şekilde açın:"
+
+#: zotonic_mod_development/priv/templates/_development_editor_button.tpl:5
+#: zotonic_mod_development/priv/templates/_development_editor_button.tpl:11
+msgid "Open in editor"
+msgstr "Düzenleyicide aç"
+
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:531
 msgid "Open included template"
 msgstr "Birlikte verilen şablonu açın"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:163
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:4
+msgid "Open templates in your working editor. The local editor is saved on the Zotonic machine and shared by its development sites. Browser URLs and host paths are saved in this browser for this site."
+msgstr "Şablonları çalışma düzenleyicinizde açın. Yerel düzenleyici, Zotonic sunucusunda kaydedilir ve geliştirme siteleri arasında paylaşılır. Bu siteye ait tarayıcı URL’leri ve ana bilgisayar yolları bu tarayıcıda kaydedilir."
+
+#: zotonic_mod_development/priv/templates/_development_dispatch_options.tpl:2
+msgid "Option"
+msgstr "Seçenek"
+
+#: zotonic_mod_development/priv/templates/admin_development.tpl:171
 msgid "Optional category for catinclude"
 msgstr "Catinclude için isteğe bağlı kategori"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:75
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:81
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:85
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:91
 msgid "Permanent redirect"
 msgstr "Kalıcı yönlendirme"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:208
+#: zotonic_mod_development/priv/templates/admin_development.tpl:216
 msgid "Recompile templates"
 msgstr "Şablonları yeniden derleyin"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:78
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:88
 msgid "Redirect"
 msgstr "Yönlendir"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:33
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:34
 msgid "Reload the page"
 msgstr "Sayfayı yeniden yükle"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:36
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:37
 msgid "Reload the page that we are tracing to see the debug data."
 msgstr "Hata ayıklama verilerini görmek için izlediğimiz sayfayı yeniden yükleyin."
 
@@ -8876,32 +9055,45 @@ msgstr "Bu sayfayı oluşturun ve şablonları izleyin"
 msgid "Rerun graph"
 msgstr "Grafiği yeniden çalıştır"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:112
+#: zotonic_mod_development/priv/templates/_development_dispatch_id_option.tpl:4
+msgid "Resource does not exist"
+msgstr "Kaynak bulunamadı"
+
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:19
+msgid "Selected editor on the Zotonic machine"
+msgstr "Zotonic sisteminde seçilmiş editör"
+
+#: zotonic_mod_development/priv/templates/admin_development.tpl:114
 msgid "Set the class <tt>environment-development</tt> on the <tt>&lt;html&gt;</tt> element of your pages to see the server log in the browser console.<br>In development, admin pages always show the server log in the javascript console."
 msgstr "Tarayıcı konsolunda sunucu günlüğünü görmek için sayfalarınızın <tt>&lt;html&gt;</tt> öğesinde <tt>ambient-development</tt> sınıfını ayarlayın.<br>Geliştirme aşamasında, yönetici sayfaları her zaman javascript konsolundaki sunucu günlüğünü gösterir."
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:264
+#: zotonic_mod_development/priv/templates/admin_development.tpl:272
 msgid "Show an overview of all observers"
 msgstr "Tüm gözlemcilerin genel görünümünü göster"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:38
+#: zotonic_mod_development/priv/templates/admin_development.tpl:40
 msgid "Show defined blocks in generated templates"
 msgstr "Tanımlanmış blokları oluşturulan şablon üzerinde göster"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:261
+#: zotonic_mod_development/priv/templates/admin_development.tpl:269
 msgid "Show internals of Zotonic and the modules."
 msgstr "Zotonic'in ve modüllerin iç kısımlarını gösterin."
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:29
+#: zotonic_mod_development/priv/templates/_development_dispatch_template_option.tpl:3
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
+msgid "Show matching templates"
+msgstr "Eşleşen şablonları göster"
+
+#: zotonic_mod_development/priv/templates/admin_development.tpl:31
 msgid "Show paths to included template files in generated templates"
 msgstr "Oluşturulan şablon içinde dahili şablonlara olan yolları göster"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:117
+#: zotonic_mod_development/priv/templates/admin_development.tpl:119
 msgid "Show server log in the browser console"
 msgstr "Sunucu günlüğünü tarayıcı konsolunda göster"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:11
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:7
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:11
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:7
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:7
 #: zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:11
@@ -8910,13 +9102,25 @@ msgstr "Sunucu günlüğünü tarayıcı konsolunda göster"
 msgid "Site Development"
 msgstr "Site Geliştirme"
 
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:24
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:28
 msgid "Site Dispatch Rules"
 msgstr "Site Gönderim Kuralları"
 
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:29
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:33
 msgid "Site Name"
 msgstr "Site adı"
+
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:2
+msgid "Source editor"
+msgstr "Kaynak düzenleyici"
+
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:47
+msgid "Source root on the server or in the container"
+msgstr "Sunucuda veya kapsayıcıdaki kaynak kök dizini"
+
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:51
+msgid "Source root on this computer"
+msgstr "Bu bilgisayardaki kaynak kök dizini"
 
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:34
 msgid "Start Tracing"
@@ -8926,19 +9130,19 @@ msgstr "İzlemeyi Başlat"
 msgid "Start matching dispatch rules"
 msgstr "Gönderme kurallarını eşleştirmeye başla"
 
-#: zotonic_mod_development/src/mod_development.erl:462
+#: zotonic_mod_development/src/mod_development.erl:531
 msgid "Started logging to the console of your browser tab."
 msgstr "Tarayıcı sekmenizin konsolunda oturum açmaya başladınız."
 
-#: zotonic_mod_development/src/mod_development.erl:336
+#: zotonic_mod_development/src/mod_development.erl:405
 msgid "Started tracing all template inclusions."
 msgstr "Tüm şablon içeriklerini izlemeye başladım."
 
-#: zotonic_mod_development/src/mod_development.erl:411
+#: zotonic_mod_development/src/mod_development.erl:480
 msgid "Started tracing template inclusions by rendering the page."
 msgstr "Sayfayı oluşturarak şablon eklemelerini izlemeye başladı."
 
-#: zotonic_mod_development/src/mod_development.erl:333
+#: zotonic_mod_development/src/mod_development.erl:402
 msgid "Started tracing template inclusions for your session."
 msgstr "Oturumunuz için şablon eklemelerini izlemeye başladım."
 
@@ -8948,11 +9152,11 @@ msgstr "Oturumunuz için şablon eklemelerini izlemeye başladım."
 msgid "Stop"
 msgstr "Bitir"
 
-#: zotonic_mod_development/src/mod_development.erl:464
+#: zotonic_mod_development/src/mod_development.erl:533
 msgid "Stopped logging to the console of all browser tabs."
 msgstr "Tüm tarayıcı sekmelerinin konsolunda oturum açma işlemi durduruldu."
 
-#: zotonic_mod_development/src/mod_development.erl:345
+#: zotonic_mod_development/src/mod_development.erl:414
 msgid "Stopped tracing template inclusions for all sessions."
 msgstr "Tüm oturumlar için şablon eklemelerinin izlenmesi durduruldu."
 
@@ -8960,12 +9164,16 @@ msgstr "Tüm oturumlar için şablon eklemelerinin izlenmesi durduruldu."
 msgid "Stopped."
 msgstr "Durdu."
 
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:38
+msgid "Sublime and Vim require a URL handler installed on this computer."
+msgstr "Sublime ve Vim için bu bilgisayarda bir URL işleyicisinin kurulu olması gerekir."
+
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:20
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:18
 msgid "Subscribers"
 msgstr "Aboneler"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:43
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:49
 msgid "Switch protocol to"
 msgstr "Protokolü şuna değiştir"
 
@@ -8973,20 +9181,21 @@ msgstr "Protokolü şuna değiştir"
 msgid "Syntax errors"
 msgstr "Sözdizimi hataları"
 
+#: zotonic_mod_development/priv/templates/_development_template_matches.tpl:8
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:11
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:61
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:123
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:190
+#: zotonic_mod_development/priv/templates/_development_template_xref_includes.tpl:5
+#: zotonic_mod_development/priv/templates/_development_template_xref_inheritance.tpl:5
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:76
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:223
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:135
 msgid "Template"
 msgstr "Şablon"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:151
+#: zotonic_mod_development/priv/templates/admin_development.tpl:159
 msgid "Template debugging"
 msgstr "Şablon hata ayıklama"
 
-#: zotonic_mod_development/src/mod_development.erl:554
+#: zotonic_mod_development/src/mod_development.erl:634
 msgid "Template file not found."
 msgstr "Şablon dosyası bulunamadı."
 
@@ -8994,23 +9203,35 @@ msgstr "Şablon dosyası bulunamadı."
 msgid "Template includes using variable names or expressions for the template name are not shown."
 msgstr "Şablon adı için değişken adları veya ifadeler kullanan şablon içerikleri gösterilmez."
 
+#: zotonic_mod_development/priv/templates/_development_template_matches.tpl:1
+msgid "Template option"
+msgstr "Şablon seçeneği"
+
 #: zotonic_mod_development/priv/templates/_development_template.tpl:4
 msgid "Template path"
 msgstr "Şablon yolu"
 
-#: zotonic_mod_development/src/mod_development.erl:413
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:57
+msgid "Test with this template"
+msgstr "Bu şablonla test yapın"
+
+#: zotonic_mod_development/src/mod_development.erl:482
 msgid "The path must be a local URL."
 msgstr "Yol yerel bir URL olmalıdır."
 
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:180
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:13
+msgid "The preferred editor is unavailable or needs an existing editor server."
+msgstr "Tercih edilen düzenleyici kullanılamıyor veya mevcut bir düzenleyici sunucusuna ihtiyaç duyuyor."
+
+#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:78
 msgid "These templates have <tt>{extends}</tt> or <tt>{overrules}</tt> statements that are referring to a missing template."
 msgstr "Bu şablonlarda eksik bir şablona atıfta bulunan <tt>{extends}</tt> veya <tt>{overrules}</tt> ifade bulunur."
 
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:114
+#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:64
 msgid "These templates have <tt>{optional}</tt> statements that are referring to missing templates."
 msgstr "Bu şablonlarda eksik şablonlara atıfta bulunan <tt>{optional}</tt> ifade bulunur."
 
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:52
+#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:54
 msgid "These templates have non optional <tt>{include}</tt> statements that are referring to missing templates."
 msgstr "Bu şablonlarda, eksik şablonlara atıfta bulunan, isteğe bağlı olmayan <tt>{include}</tt> ifadeler bulunur."
 
@@ -9026,11 +9247,15 @@ msgstr "Bu, tüm şablonların bağımlılık grafiğini hesaplar ve görselleş
 msgid "This checks all templates to see if included or extended templates are available."
 msgstr "Bu, dahil edilen veya genişletilmiş şablonların mevcut olup olmadığını görmek için tüm şablonları kontrol eder."
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:60
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:66
 msgid "This resource is unknown or does not have a URI"
 msgstr "Bu kaynak bilinmiyor yada URI'a sahip değil"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:540
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:12
+msgid "This server uses browser launches only. Configure your host editor and path mapping below."
+msgstr "Bu sunucu yalnızca tarayıcı üzerinden çalıştırılmaktadır. Aşağıda ana bilgisayar düzenleyicinizi ve yol eşlemenizi yapılandırın."
+
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:543
 msgid "This template is used by"
 msgstr "Bu şablon şu kişiler tarafından kullanılır"
 
@@ -9038,20 +9263,20 @@ msgstr "Bu şablon şu kişiler tarafından kullanılır"
 msgid "Tools and settings that are useful for site development."
 msgstr "Site geliştirmede kullanışlı araçlar ve ayarlar."
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:92
+#: zotonic_mod_development/priv/templates/admin_development.tpl:94
 msgid "Trace all database queries for the current session"
 msgstr "Geçerli oturum için tüm veritabanı sorgularını izleyin"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:278
+#: zotonic_mod_development/priv/templates/admin_development.tpl:286
 msgid "Trace function calls"
 msgstr "Fonksiyon çağrılarını izleme"
 
-#: zotonic_mod_development/priv/templates/_html_head_development.tpl:35
-#: zotonic_mod_development/priv/templates/_html_head_development.tpl:36
+#: zotonic_mod_development/priv/templates/_html_head_development.tpl:38
+#: zotonic_mod_development/priv/templates/_html_head_development.tpl:39
 msgid "Trace templates"
 msgstr "İzleme şablonları"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:195
+#: zotonic_mod_development/priv/templates/admin_development.tpl:203
 msgid "Traces all templates for the current session-id, or all sessions, and renders them as a graph."
 msgstr "Geçerli oturum kimliğine veya tüm oturumlara ilişkin tüm şablonları izler ve bunları bir grafik olarak görüntüler."
 
@@ -9071,44 +9296,40 @@ msgstr "Diğer oturum izleniyor..."
 msgid "Tracing this session..."
 msgstr "Bu oturumu takip ediyorum..."
 
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:126
-msgid "Type of include"
-msgstr "Dahil etme türü"
-
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:64
+#: zotonic_mod_development/priv/templates/_development_template_xref_includes.tpl:8
 msgid "Type of {include}"
 msgstr "{include}türü"
 
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:47
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:51
 msgid "URI Pattern"
 msgstr "URI Modeli"
 
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:27
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:28
 msgid "Uncheck to debug only your current session."
 msgstr "Yalnızca geçerli oturumunuzda hata ayıklamak için işareti kaldırın."
 
-#: zotonic_mod_development/src/mod_development.erl:447
+#: zotonic_mod_development/src/mod_development.erl:516
 msgid "Updated template debug points."
 msgstr "Şablon hata ayıklama noktaları güncellendi."
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:226
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:8
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:44
+msgid "Use {file} for a URL-encoded filename, {path} for an encoded path preserving slashes, and {line} and {column} for the position."
+msgstr "URL kodlamalı bir dosya adı için {file} , eğik çizgileri koruyan kodlanmış bir yol için {path} , konum için ise {line} ve {column} adreslerini kullanın."
+
+#: zotonic_mod_development/priv/templates/admin_development.tpl:234
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:12
 msgid "View all dispatch rules"
 msgstr "Tüm gönderim kurallarını görüntüle"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:228
+#: zotonic_mod_development/priv/templates/admin_development.tpl:236
 msgid "View all dispatch rules and hostnames usable in the site."
 msgstr "Sitede kullanılabilen tüm dağıtım kurallarını ve ana bilgisayar adlarını görüntüleyin."
 
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:12
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:16
 msgid "View all dispatch rules available in the site"
 msgstr "Sitede bulunan tüm gönderim kurallarını görüntüleyin"
 
-#: zotonic_mod_development/priv/templates/_development_template.tpl:12
-msgid "View template"
-msgstr "Şablonu görüntüle"
-
-#: zotonic_mod_development/priv/templates/_overlay_template.tpl:908
+#: zotonic_mod_development/priv/templates/_overlay_template.tpl:911
 msgid "Waiting for debug data..."
 msgstr "Hata ayıklama verileri bekleniyor..."
 
@@ -9116,41 +9337,42 @@ msgstr "Hata ayıklama verileri bekleniyor..."
 msgid "You are not allowed to use the dispatch debugging."
 msgstr "Gönderme hata ayıklamayı kullanma yetkiniz yok."
 
-#: zotonic_mod_development/src/support/z_development_template.erl:44
+#: zotonic_mod_development/src/support/z_development_template.erl:53
+#: zotonic_mod_development/src/support/z_development_template.erl:70
 msgid "You are not allowed to use the template debugging."
 msgstr "Şablon hata ayıklamayı kullanmanıza izinli değilsiniz."
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:290
-#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:88
+#: zotonic_mod_development/priv/templates/admin_development.tpl:298
+#: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:109
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:64
-#: zotonic_mod_development/priv/templates/admin_development_observers.tpl:53
+#: zotonic_mod_development/priv/templates/admin_development_observers.tpl:55
 #: zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:51
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:172
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:42
 msgid "You do not have permission to access development tools."
 msgstr "Geliştirme araçlarına erişim izniniz yok."
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:63
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:69
 msgid "found dispatch rule"
 msgstr "bulunan gönderme kuralı"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:70
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:80
 msgid "found no match"
 msgstr "eşleşme bulunamadı"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:56
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:62
 msgid "found resource id"
 msgstr "bulunan kaynak kimliği"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:51
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:57
 msgid "notification"
 msgstr "bildirim"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:54
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:60
 msgid "notification, checking first return"
 msgstr "bildirim, ilk iadeyi kontrol etme"
 
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:72
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:82
 msgid "redirects"
 msgstr "yönlendirmeler"
 
