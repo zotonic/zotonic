@@ -26,9 +26,12 @@
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
+%% @doc Collect template errors and reference inventories with source positions and target choices.
 -spec check(Context) -> {ok, XRef} when
     Context :: z:context(),
     XRef :: #{
+        includes := map(),
+        inheritance := map(),
         missing := map(),
         optional := map(),
         errors := map(),
@@ -72,30 +75,23 @@ check(Context) ->
         end,
         {#{}, #{}},
         Includes),
-    ExtendErrors = lists:foldl(
+    Inheritance = lists:foldl(
         fun(Template, Acc) ->
             #module_index{ filepath = Filename } = Template,
             case z_template:extends(Template, #{}, Context) of
                 {ok, undefined} ->
                     Acc;
-                {ok, Extends} when is_binary(Extends) ->
-                    case z_module_indexer:find(template, Extends, Context) of
-                        {ok, _} ->
-                            Acc;
-                        {error, enoent} ->
-                            Acc#{
-                                Filename => Extends
-                            }
-                    end;
-                {ok, overrules} ->
-                    case find_overrules(Template, Context) of
-                        ok ->
-                            Acc;
-                        error ->
-                            Acc#{
-                                Filename => overrules
-                            }
-                    end;
+                {ok, Extends} ->
+                    #module_index{key = #module_index_key{name = Name}} = Template,
+                    Option = case Extends of
+                        overrules -> {overrules, Name, Filename};
+                        _ -> Extends
+                    end,
+                    Matches = z_development_template:matching_templates(Option, Context),
+                    Info = (extends_info(Filename, Extends))#{
+                        option => Option, is_missing => Matches =:= []
+                    },
+                    Acc#{Filename => Info};
                 {error, _} ->
                     Acc
             end
@@ -103,10 +99,12 @@ check(Context) ->
         #{},
         All),
     {ok, #{
-        missing => drop_empty(Miss),
-        optional => drop_empty(Opts),
+        includes => maps:map(fun(_File, Refs) -> [include_info(R, Context) || R <- Refs] end, drop_empty(Includes)),
+        inheritance => Inheritance,
+        missing => maps:map(fun(_File, Refs) -> [include_info(R, Context) || R <- Refs] end, drop_empty(Miss)),
+        optional => maps:map(fun(_File, Refs) -> [include_info(R, Context) || R <- Refs] end, drop_empty(Opts)),
         errors => drop_empty(Errors),
-        extend_errors => drop_empty(ExtendErrors)
+        extend_errors => maps:filter(fun(_, Info) -> maps:get(is_missing, Info) end, Inheritance)
     }}.
 
 reason(Reason) when is_map(Reason) ->
@@ -129,31 +127,35 @@ reason(Reason) ->
         text => unicode:characters_to_binary(S, utf8)
     }.
 
-find_overrules(#module_index{ key = Key, filepath = Filename }, Context) ->
-    #module_index_key{ name = TplName } = Key,
-    Tpl = {overrules, TplName, Filename},
-    case z_template_compiler_runtime:map_template(Tpl, #{}, Context) of
-        {ok, _File} ->
-            ok;
-        {error, _} ->
-            error
-    end.
+%% @doc Preserve category-aware lookup semantics for include choice dialogs.
+include_info(#{template := Name} = Info, Context) ->
+    Option = case maps:get(is_catinclude, Info, false) of
+        true -> {cat, Name};
+        false -> Name
+    end,
+    Info#{option => Option, has_matches => z_development_template:matching_templates(Option, Context) =/= []}.
 
+%% @doc Preserve indexed source paths for editor launches while dropping empty results.
 drop_empty(Errs) ->
-    BuildDir = <<(build_dir())/binary, "/">>,
-    maps:fold(
-        fun
-            (_K, [], Acc) ->
-                Acc;
-            (K, Vs, Acc) ->
-                K1 = binary:replace(K, BuildDir, <<>>),
-                Acc#{ K1 => Vs }
-        end,
-        #{},
-        Errs).
+    maps:filter(fun(_File, Entries) -> Entries =/= [] end, Errs).
 
-build_dir() ->
-    unicode:characters_to_binary(z_path:build_lib_dir()).
+%% @doc Locate an inheritance reference using scanner positions, including leading comments.
+extends_info(Filename, Template) ->
+    Position = case file:read_file(Filename) of
+        {ok, Data} ->
+            case template_compiler_scanner:scan(Filename, Data) of
+                {ok, Tokens} ->
+                    case [{Line, Column} || {Tag, {_, Line, Column}, _} <- Tokens,
+                            Tag =:= extends_keyword orelse Tag =:= overrules_keyword] of
+                        [First | _] -> First;
+                        [] -> {1, 1}
+                    end;
+                _ -> {1, 1}
+            end;
+        _ -> {1, 1}
+    end,
+    {Line, Column} = Position,
+    #{template => Template, line => Line, column => Column}.
 
 missing_includes(Includes, Context) ->
     Errs = lists:filter(

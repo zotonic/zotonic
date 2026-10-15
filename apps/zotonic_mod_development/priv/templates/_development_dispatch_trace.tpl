@@ -24,20 +24,26 @@
 			{% if t.step == `try_match` %}
 				{_ Start matching dispatch rules _}
 			{% elseif t.step == `match` %}
-				{_ Found matching dispatch rule _}: <b>{{ t.args.dispatch }}</b>
-					&nbsp; <span class="text-muted">{{ t.args.controller_options.zotonic_dispatch_module }} &rarr; {{ t.args.controller_options.zotonic_dispatch_file }}</span>
+				{_ Found matching dispatch rule _}: <b>{% if t.dispatch_source as source %}
+                    {% include "_development_editor_button.tpl" editor_file=source.file editor_line=source.line editor_token=source.token editor_label=t.args.dispatch|escape editor_inline editor_compact editor_title=_"Edit dispatch file" %}
+                {% else %}{{ t.args.dispatch|escape }}{% endif %}</b>
+					&nbsp; <span class="text-muted">{{ t.args.controller_options.zotonic_dispatch_module|escape }} &rarr; {{ t.args.controller_options.zotonic_dispatch_file|escape }}</span>
 				<br/>
-				{_ Controller _}: <tt>{{ t.args.controller }}</tt>
+				{_ Controller _}: <tt>{% if t.controller_source as source %}
+                    {% include "_development_editor_button.tpl" editor_file=source.file editor_line=source.line editor_token=source.token editor_label=t.args.controller|escape editor_inline editor_compact editor_title=_"Edit controller" %}
+                {% else %}{{ t.args.controller|escape }}{% endif %}</tt>
 				{% if t.args.controller_options %}
 					<br/>{_ Options _}:
-					{% print t.args.controller_options %}
+					{% include "_development_dispatch_options.tpl" options=t.args.controller_options %}
 				{% endif %}
 			{% elseif t.step == `dispatch` %}
 				{_ Final dispatch_}<br/>
-				{_ Controller _}: <tt>{{ t.args.controller }}</tt>
+				{_ Controller _}: <tt>{% if t.controller_source as source %}
+                    {% include "_development_editor_button.tpl" editor_file=source.file editor_line=source.line editor_token=source.token editor_label=t.args.controller|escape editor_inline editor_compact editor_title=_"Edit controller" %}
+                {% else %}{{ t.args.controller|escape }}{% endif %}</tt>
 				{% if t.args.controller_options %}
 					<br/>{_ Options _}:
-					{% print t.args.controller_options %}
+					{% include "_development_dispatch_options.tpl" options=t.args.controller_options %}
 				{% endif %}
 			{% elseif t.step == `protocol_switch` %}
 				{_ Switch protocol to _}: {{ t.args.protocol }}<br/>
@@ -60,11 +66,15 @@
 					{_ This resource is unknown or does not have a URI _}
 				{% endif %}
 			{% elseif t.step == `rewrite_match` %}
-				<tt>#dispatch{}</tt> {_ found dispatch rule _}: <tt>{{ t.args.dispatch }}</tt><br/>
-				{_ Controller _}: <tt>{{ t.args.controller }}</tt>
+				<tt>#dispatch{}</tt> {_ found dispatch rule _}: <tt>{% if t.dispatch_source as source %}
+                    {% include "_development_editor_button.tpl" editor_file=source.file editor_line=source.line editor_token=source.token editor_label=t.args.dispatch|escape editor_inline editor_compact editor_title=_"Edit dispatch file" %}
+                {% else %}{{ t.args.dispatch|escape }}{% endif %}</tt><br/>
+				{_ Controller _}: <tt>{% if t.controller_source as source %}
+                    {% include "_development_editor_button.tpl" editor_file=source.file editor_line=source.line editor_token=source.token editor_label=t.args.controller|escape editor_inline editor_compact editor_title=_"Edit controller" %}
+                {% else %}{{ t.args.controller|escape }}{% endif %}</tt>
 				{% if t.args.controller_options %}
 					<br/>{_ Options _}:
-					{% print t.args.controller_options %}
+					{% include "_development_dispatch_options.tpl" options=t.args.controller_options %}
 				{% endif %}
 			{% elseif t.step == `rewrite_nomatch` %}
 				<tt>#dispatch{}</tt> {_ found no match _}
@@ -91,6 +101,10 @@
 				<dd style="margin-left: 175px">
 					{% if k == `zotonic_dispatch_path` or k == `zotonic_dispatch_path_rewrite` %}
 						{% print v %}
+                    {% elseif k == `zotonic_dispatch` and t.dispatch_source %}
+                        {% with t.dispatch_source as source %}
+                            {% include "_development_editor_button.tpl" editor_file=source.file editor_line=source.line editor_token=source.token editor_label=v|escape editor_inline editor_compact editor_title=_"Edit dispatch file" %}
+                        {% endwith %}
 					{% else %}
 						{{ v|escape }}
 					{% endif %}

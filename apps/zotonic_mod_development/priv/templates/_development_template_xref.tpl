@@ -17,12 +17,14 @@
     <tbody>
         {% for tpl, error in xref.errors %}
             <tr>
-                {% with tpl|split:"/priv/templates/" as ref %}
+                {% with tpl|development_filename|split:"/priv/templates/" as ref %}
                     <td>
                         {{ ref[1]|escape_check }}
                     </td>
                     <td>
                         {{ ref[2]|escape_check }}
+                        {% button text=_"View" class="btn btn-primary btn-xs" postback={template_view template=tpl} delegate=`mod_development` %}
+                        {% include "_development_editor_button.tpl" editor_file=tpl editor_line=error.line editor_column=error.column editor_label=_"Edit" editor_compact editor_title=_"Edit template" %}
                     </td>
                 {% endwith %}
                 <td>
@@ -54,59 +56,7 @@
     %}
 </p>
 
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>{_ Module _}</th>
-            <th>{_ Template _}</th>
-            <th>{_ Line _}</th>
-            <th>{_ Included template _}</th>
-            <th>{% trans "Type of {include}" include="include" %}</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for tpl, info in xref.missing %}
-            <tr>
-                {% with tpl|split:"/priv/templates/" as ref %}
-                    <td>
-                        {{ ref[1]|escape_check }}
-                    </td>
-                    <td>
-                        {{ ref[2]|escape_check }}
-                    </td>
-                {% endwith %}
-                <td>
-                    {{ info.line }}
-                </td>
-                <td>
-                    {{ info.template|escape_check }}
-                </td>
-                <td>
-                    {% if info.method == `optional` %}
-                        optional
-                    {% elseif info.method == `all` %}
-                        all
-                    {% endif %}
-                    {% if info.is_catinclude %}
-                        catinclude
-                    {% else %}
-                        include
-                    {% endif %}
-                </td>
-            </tr>
-        {% empty %}
-            <tr>
-                <td colspan="5">
-                    <span class="text-muted">
-                        {% trans "All non-optional <tt>{include}</tt> statements are referring to existing templates."
-                            include="include"
-                        %}
-                    </span>
-                </td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
+{% include "_development_template_xref_includes.tpl" references_by_file=xref.missing %}
 
 
 <h3>{_ Missing optional included templates _}</h3>
@@ -116,59 +66,7 @@
     %}
 </p>
 
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>{_ Module _}</th>
-            <th>{_ Template _}</th>
-            <th>{_ Line _}</th>
-            <th>{_ Included template _}</th>
-            <th>{_ Type of include _}</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for tpl, info in xref.optional %}
-            <tr>
-                {% with tpl|split:"/priv/templates/" as ref %}
-                    <td>
-                        {{ ref[1]|escape_check }}
-                    </td>
-                    <td>
-                        {{ ref[2]|escape_check }}
-                    </td>
-                {% endwith %}
-                <td>
-                    {{ info.line }}
-                </td>
-                <td>
-                    {{ info.template|escape_check }}
-                </td>
-                <td>
-                    {% if info.method == `optional` %}
-                        optional
-                    {% elseif info.method == `all` %}
-                        all
-                    {% endif %}
-                    {% if info.is_catinclude %}
-                        catinclude
-                    {% else %}
-                        include
-                    {% endif %}
-                </td>
-            </tr>
-        {% empty %}
-            <tr>
-                <td colspan="5">
-                    <span class="text-muted">
-                        {% trans "All <tt>{optional}</tt> statements are referring to existing templates."
-                            optional="optional include"
-                        %}
-                    </span>
-                </td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
+{% include "_development_template_xref_includes.tpl" references_by_file=xref.optional %}
 
 <h3>
     {% trans "Missing {extends} or {overrules}"
@@ -183,40 +81,14 @@
     %}
 </p>
 
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>{_ Module _}</th>
-            <th>{_ Template _}</th>
-            <th>{_ Extends _}</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for tpl, extends in xref.extend_errors %}
-            <tr>
-                {% with tpl|split:"/priv/templates/" as ref %}
-                    <td>
-                        {{ ref[1]|escape_check }}
-                    </td>
-                    <td>
-                        {{ ref[2]|escape_check }}
-                    </td>
-                {% endwith %}
-                <td>
-                    {{ extends|escape_check }}
-                </td>
-            </tr>
-        {% empty %}
-            <tr>
-                <td colspan="3">
-                    <span class="text-muted">
-                        {% trans "All <tt>{extends}</tt> and <tt>{overrules}</tt> statements are referring to existing templates."
-                             extends="extends"
-                             overrules="overrules"
-                        %}
-                    </span>
-                </td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
+{% include "_development_template_xref_inheritance.tpl" inheritance_by_file=xref.extend_errors %}
+
+<details>
+    <summary>{_ All included templates _}</summary>
+{% include "_development_template_xref_includes.tpl" references_by_file=xref.includes %}
+</details>
+<details>
+    <summary>{_ All extended and overruled templates _}</summary>
+{% include "_development_template_xref_inheritance.tpl" inheritance_by_file=xref.inheritance %}
+
+</details>

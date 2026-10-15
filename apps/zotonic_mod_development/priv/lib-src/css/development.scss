@@ -1,3 +1,13 @@
+.development-dispatch-rules {
+    .list-inline {
+        margin-bottom: 0;
+    }
+
+    .development-dispatch-name .development-editor-launch {
+        display: block;
+    }
+}
+
 #trace-status span {
     display: none;
 }

@@ -301,6 +301,29 @@
 %%% Show a growl message on the terminal if a file is compiled or handled.
    %% {filewatcher_terminal_notifier, true},
 
+%%% Source editor for mod_development and z:edit/1,2 (node-wide, not per-site).
+%%% A trusted executable name or absolute path with separate arguments. Strings
+%%% and UTF-8 binaries are supported. Placeholders: {file}, {line}, {column}.
+%%% No shell expansion is performed; keep a path containing spaces in one argument.
+%%% With no configuration, discovery checks ZOTONIC_EDITOR, VISUAL and EDITOR,
+%%% editor sessions, file associations, running editors and installed launchers.
+   %% {development_editor, undefined},
+%%% Example custom command (instead of undefined):
+   %% {development_editor, {"code", ["--reuse-window", "--goto", "{file}:{line}:{column}"]}},
+
+%%% Candidate ID chosen in Admin > Development. Prefer choosing it in the UI:
+%%% it writes config.d/zotonic-editor.config under the node configuration directory.
+%%% "auto" uses detection, including development_editor above; a saved ID overrides
+%%% automatic selection. An unavailable choice is not silently replaced.
+   %% {development_editor_id, <<"auto">>},
+
+%%% Force browser URL launching for remote hosts. Containers always use browser
+%%% URLs, regardless of this setting. Local editor discovery and launching are
+%%% disabled in browser-only mode, including z:edit/1,2.
+%%% Configure the URL and container-to-host path mapping in Admin > Development;
+%%% these preferences are stored in the browser, not in this file.
+   %% {development_editor_browser_only, false},
+
 %%% Allow the development module to set traces on functions. Default only enabled on
 %%% a Zotonic server with default environment 'development' or 'test'
 %%% Enabling this will will allow the admin user to trace almost all functions in the

@@ -61,6 +61,73 @@ Zotonic. This checkbox must be checked to enable this api.
 
 
 
+### Source editor
+
+The second settings column configures opening templates in a source editor.
+The local editor choice is stored in `config.d/zotonic-editor.config` under the
+node configuration directory and shared by development sites and shell helpers.
+Browser URL preferences and host-path mappings remain browser/site-specific.
+Choosing automatic detection clears the explicit machine choice. Detection
+uses trusted node configuration, ZOTONIC_EDITOR/VISUAL/EDITOR, inherited editor
+sessions, file associations, running editors and installed launchers, in that
+order. Ambiguous detection requires a choice. Local browser-triggered launches
+require the development environment and the mod_development permission.
+
+Containers only launch through browser URLs. Configure a browser editor preset
+or custom URL and map the container source root to the host checkout root.
+Sublime and Vim URLs need an installed host-side protocol handler.
+
+In the Erlang shell use `z:edit(mod_foobar)`, `z:edit(mod_foobar, function_name)`,
+`z:edit(StackTrace)` or `z:edit(<<\"path/to/template.tpl\">>, 42)`. Library and
+template names are resolved across running sites; ambiguous names require a
+full path. The node inherits the environment at
+startup, not the environment of a subsequently attached shell. A trusted
+zotonic application setting `development_editor` can contain an executable and
+argument list, for example `{\"code\", [\"--reuse-window\", \"--goto\", \"{file}:{line}:{column}\"]}`.
+Set `development_editor_browser_only` to true to force browser launches on a
+remote host or a container that cannot be detected automatically.
+
+#### Node configuration
+
+These settings belong to the `zotonic` application in the node configuration,
+not to a site's configuration or the module configuration database:
+
+| Setting | Default | Purpose |
+| --- | --- | --- |
+| `development_editor` | `undefined` | Trusted `{Executable, Args}` command. When set, takes precedence over editor environment variables during automatic detection. |
+| `development_editor_id` | `<<\"auto\">>` | Saved candidate ID. An explicit ID overrides automatic selection; an unavailable choice is reported instead of silently falling back. |
+| `development_editor_browser_only` | `false` | Disables local discovery and launching, including shell helpers. Containers enforce this behavior regardless of the setting. |
+
+For example, a node configuration fragment can contain:
+
+```erlang
+[{zotonic, [
+    {development_editor, {\"code\", [\"--reuse-window\", \"--goto\", \"{file}:{line}:{column}\"]}}
+]}].
+```
+
+The executable can be a name on PATH or an absolute path. Executable paths and
+arguments accept strings or UTF-8 binaries. Each list element is one argument;
+paths with spaces do not need embedded shell quotes. `{file}`, `{line}` and
+`{column}` are replaced within arguments, with positions starting at 1. When no
+argument contains `{file}`, the filename is appended. Commands are executed
+without a shell: shell variables, pipelines and command substitutions are not
+expanded. Terminal editors need a supported remote client or session.
+
+Choose the local editor in Admin > Development to save `development_editor_id`
+in `config.d/zotonic-editor.config`. The choice applies immediately and is loaded
+again on restart. Automatic detection saves `<<\"auto\">>`; it does not remove a
+custom `development_editor` command. Avoid defining the saved ID in multiple
+configuration files. Use `z_config_files:config_dir()` in the Erlang shell to
+find the node configuration directory; deployments can override it with
+`ZOTONIC_CONFIG_DIR`. The generated file stores only the candidate ID.
+
+Browser URL presets, custom URLs and source-root mappings are stored separately
+in the browser for the site. They are not node configuration settings. In Docker,
+map the source path inside the container to the corresponding checkout on the
+host and install any required URL handler on that host. Shell helpers cannot
+open the browser on the user's machine and return `{error, browser_only}`.
+
 ### Template debugging
 
 The template selection mechanism is quite complicated. It takes into account all modules, their priority, the user-agent
@@ -236,6 +303,8 @@ Delegate callbacks:
 %% interface functions
 -export([
     event/2,
+    edit/1,
+    edit/2,
     task_xref_check/2,
     task_graph/2,
     reload/1,
@@ -522,6 +591,13 @@ function_trace_start(Mod, Fun, Count, Context) ->
             Funs
     end.
 
+%% @doc Open a module source in the detected editor. Containers use browser launches only.
+-spec edit(Module) -> ok | {error, term()} when Module :: atom().
+edit(Module) -> z_development_editor:edit(Module).
+
+-spec edit(Module, Line) -> ok | {error, term()} when Module :: atom(), Line :: pos_integer().
+edit(Module, Line) -> z_development_editor:edit(Module, Line).
+
 %% @doc Open an overlay with the template.
 open_template_overlay(TemplatePath, Context) ->
     case find_indexed_template(TemplatePath, Context) of
@@ -530,7 +606,7 @@ open_template_overlay(TemplatePath, Context) ->
                 {ok, Module} ->
                     template_compiler:highlight_module(Module);
                 {error, _} ->
-                    template_compiler:highlight_file(Filepath)
+                    highlight_template_source(Filepath)
             end,
             case Result of
                 {ok, HTML} ->
@@ -554,7 +630,20 @@ open_template_overlay(TemplatePath, Context) ->
             z_render:growl_error(?__("Template file not found.", Context), Context)
     end.
 
-find_indexed_template(TemplatePath, Context) ->
+%% @doc Show readable source even when a lexer error prevents syntax highlighting.
+highlight_template_source(Filepath) ->
+    case template_compiler:highlight_file(Filepath) of
+        {ok, _} = Highlighted -> Highlighted;
+        {error, _} ->
+            case file:read_file(Filepath) of
+                {ok, Source} ->
+                    {ok, iolist_to_binary(["<pre>", z_html:escape(Source), "</pre>"])};
+                {error, _} = Error -> Error
+            end
+    end.
+
+find_indexed_template(TemplatePath, Context)
+        when is_binary(TemplatePath), byte_size(TemplatePath) > 0, byte_size(TemplatePath) < 4096 ->
     case lists:reverse(binary:split(TemplatePath, <<"/priv/templates/">>, [ global ])) of
         [TplPath | _] ->
             Found = z_module_indexer:find_all(template, TplPath, Context),
@@ -567,7 +656,9 @@ find_indexed_template(TemplatePath, Context) ->
             end;
         [] ->
             {error, enoent}
-    end.
+    end;
+find_indexed_template(_, _Context) ->
+    {error, enoent}.
 
 %% @doc Recompile the template with only the given trace points enabled.
 %% Start receiving the debug info from the template compiler runtime.

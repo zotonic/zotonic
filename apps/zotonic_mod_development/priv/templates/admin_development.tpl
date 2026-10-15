@@ -14,6 +14,8 @@
 </div>
 
 {% if m.acl.is_allowed.use.mod_development %}
+    <div class="row">
+    <div class="col-md-6">
     <div class="widget">
         <div class="widget-header">
             {_ Settings _}
@@ -144,6 +146,12 @@
                 {% endif %}
             {% endif %}
         </div>
+    </div>
+
+    </div>
+    <div class="col-md-6">
+        {% include "_development_editor_settings.tpl" %}
+    </div>
     </div>
 
     <div class="widget">
