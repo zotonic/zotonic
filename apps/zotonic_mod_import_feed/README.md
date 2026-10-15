@@ -312,3 +312,19 @@ article. Unknown URIs fall through to the usual resource importer. Missing feed
 entries return `feed_entry_not_found`; this does not crawl historical articles.
 The feed settings determine media and connections; generic resource-import dialog
 options do not override them. Deleted resources are never resurrected.
+
+## Activity log
+
+The feed overview and each feed's settings link to an activity log, optionally
+filtered by feed. It records poll starts, parsing and totals, entry processing,
+resource IDs and actual categories/content groups, import users, skips and errors,
+including optional media failures. New rows are prepended through MQTT after commit, without replacing the table;
+duplicates are removed, and older events load in batches of 100 when scrolling.
+An ID cursor keeps scrolling stable while new events arrive. Access requires permission to use `mod_import_feed`.
+
+On a filtered log, **Fetch now** queues the feed using its saved import account.
+Paused feeds must first be resumed; active leases prevent duplicate processing.
+Unchanged entries are skipped as usual. Log history is retained for 30 days and
+is deleted when its feed is deleted. Resource events commit with their import;
+entry errors are recorded after rollback. Credentials and raw feed bodies are
+not included in the log payload.

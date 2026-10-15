@@ -191,7 +191,7 @@ image_variants(Html, Base) ->
     end.
 
 image_candidates(Node, Base) ->
-    Src = absolute(first([attr(<<"data-src">>, Node), attr(<<"src">>, Node)]), Base),
+    Src = z_import_feed_media:resolve(first([attr(<<"data-src">>, Node), attr(<<"src">>, Node)]), Base),
     Default = case Src of <<>> -> []; _ -> [{{1, 1.0}, Src}] end,
     Set = first([attr(<<"data-srcset">>, Node), attr(<<"srcset">>, Node)]),
     Default ++ lists:filtermap(fun(Candidate) ->
@@ -201,10 +201,30 @@ image_candidates(Node, Base) ->
             [LinkUrl] -> srcset_candidate(LinkUrl, <<"1x">>, Base);
             _ -> false
         end
-    end, binary:split(Set, <<",">>, [global])).
+    end, srcset_entries(Set)).
+
+%% A data URL contains a comma itself. Split on candidate separators after
+%% descriptors, or on trailing commas after a descriptorless URL token.
+srcset_entries(Set) ->
+    srcset_entries(string:trim(Set, leading, " \t\r\n,"), []).
+
+srcset_entries(<<>>, Acc) -> lists:reverse(Acc);
+srcset_entries(Set, Acc) ->
+    Pattern = case Set of <<"data:", _/binary>> -> <<"^\\S+">>; _ -> <<"^[^\\s,]+">> end,
+    {match, [Url]} = re:run(Set, Pattern, [{capture, first, binary}]),
+    Rest = binary:part(Set, byte_size(Url), byte_size(Set) - byte_size(Url)),
+    {Candidate, Tail} = case binary:last(Url) of
+        $, -> {string:trim(Url, trailing, ","), Rest};
+        _ ->
+            case binary:split(Rest, <<",">>) of
+                [Descriptor, More] -> {<<Url/binary, Descriptor/binary>>, More};
+                [Descriptor] -> {<<Url/binary, Descriptor/binary>>, <<>>}
+            end
+    end,
+    srcset_entries(string:trim(Tail, leading, " \t\r\n,"), [Candidate | Acc]).
 
 srcset_candidate(LinkUrl, Descriptor, Base) ->
-    case {absolute(LinkUrl, Base), re:run(Descriptor, <<"^([0-9]+(?:\\.[0-9]+)?)(w|x)$">>,
+    case {z_import_feed_media:resolve(LinkUrl, Base), re:run(Descriptor, <<"^([0-9]+(?:\\.[0-9]+)?)(w|x)$">>,
             [{capture, all_but_first, binary}])} of
         {<<>>, _} -> false;
         {Url, {match, [Number, Unit]}} ->
