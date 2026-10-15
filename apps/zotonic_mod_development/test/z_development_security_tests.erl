@@ -165,6 +165,22 @@ tests(Context) ->
                 #postback{message = template_matches_source},
                 z_context:set_q([{<<"template">>, <<"base.tpl">>}, {<<"is_category">>, <<"true">>}], Anonymous))
         end},
+        {"unhandled tpl strings use template navigation without duplicate links", fun() ->
+            Source = <<"{% wire foo=\"a.tpl\" other='folder/b.tpl' ignored=\"a.tpl.bak\" %} "
+                "{{ \"standalone.tpl\" }} {% catinclude \"category.tpl\" id %} "
+                "{% include \"included.tpl\" %} {% wire template=\"explicit.tpl\" %} "
+                "{# foo=\"comment.tpl\" #} <div foo=\"text.tpl\"></div>">>,
+            ?assertEqual([], z_development_template:source_links(Source, Anonymous)),
+            Links = [L || #{kind := template} = L <- z_development_template:source_links(Source, Admin)],
+            ?assertEqual([
+                {<<"a.tpl">>, false}, {<<"folder/b.tpl">>, false},
+                {<<"standalone.tpl">>, false}, {<<"category.tpl">>, true},
+                {<<"included.tpl">>, false}, {<<"explicit.tpl">>, false}
+            ], [{maps:get(name, L), maps:get(is_category, L, false)} || L <- Links]),
+            lists:foreach(fun(#{name := Name, column := Column}) ->
+                ?assertEqual(Name, binary:part(Source, Column - 1, byte_size(Name)))
+            end, Links)
+        end},
         {"template viewer handles malformed paths without reading files", fun() ->
             lists:foreach(fun(Path) ->
                 #context{} = mod_development:event(

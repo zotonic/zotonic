@@ -170,6 +170,13 @@ source_links_tokens([{open_tag, _, _}, {identifier, _, _} = Token | Rest], Conte
 source_links_tokens([{Kind, _, _}, {identifier, _, _} = Token | Rest], Context)
     when Kind =:= pipe; Kind =:= filter_keyword ->
     source_link(filter, Token, Context) ++ source_links_tokens([Token | Rest], Context);
+source_links_tokens([{string_literal, {_, Row, Column}, Name} | Rest], Context) ->
+    %% Explicit references above take precedence over this filename heuristic.
+    Links = case filename:extension(Name) of
+        <<".tpl">> -> [#{kind => template, name => Name, row => Row, column => Column + 1}];
+        _ -> []
+    end,
+    Links ++ source_links_tokens(Rest, Context);
 source_links_tokens([_ | Rest], Context) ->
     source_links_tokens(Rest, Context);
 source_links_tokens([], _Context) ->
