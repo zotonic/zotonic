@@ -613,7 +613,11 @@ open_template_overlay(TemplatePath, Context) ->
                     Vars = [
                         {class, "development-template-overlay"},
                         {template_file, Filepath},
-                        {template_html, HTML}
+                        {template_html, HTML},
+                        {source_links, case file:read_file(Filepath) of
+                            {ok, Source} -> z_development_template:source_links(Source, Context);
+                            {error, _} -> []
+                        end}
                     ],
                     z_render:overlay("_overlay_template.tpl", Vars, Context);
                 {error, Reason} ->
