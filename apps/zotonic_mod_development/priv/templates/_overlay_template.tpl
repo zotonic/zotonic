@@ -3,8 +3,9 @@
         <button id="template-debug-back" type="button" class="template-debug-back" title="{_ Back _}" aria-label="{_ Back _}">←</button>
         <div id="template-debug-parents" class="template-debug-dropdown template-debug-nav"></div>
         <div class="template-debug-filename-path">
-            <tt>{{ template_file|escape }}</tt>
+            <tt>{{ template_file|development_filename|escape }}</tt>
         </div>
+        {% include "_development_editor_button.tpl" editor_file=template_file editor_title=_"Edit template" %}
     </div>
     <div class="template-debug-source">
         {{ template_html }}

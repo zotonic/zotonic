@@ -20,12 +20,25 @@
 -module(z_development_template).
 
 -export([
+    matching_templates/2,
     event/2
     ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("template_compiler/include/template_compiler.hrl").
 
+event(#postback{message = {template_matches, Args}}, Context) ->
+    case z_acl:is_allowed(use, mod_development, Context) of
+        true ->
+            Template = proplists:get_value(template, Args),
+            Matches = matching_templates(Template, Context),
+            z_render:dialog(?__("Matching templates", Context),
+                "_development_template_matches.tpl",
+                [{templates, Matches}, {template_option, Template},
+                 {is_category, is_category_template(Template)}, {width, <<"large">>}], Context);
+        false ->
+            z_render:growl_error(?__("You are not allowed to use the template debugging.", Context), Context)
+    end;
 event(#submit{message=explain_tpl}, Context) ->
     case z_acl:is_allowed(use, mod_development, Context) of
         true ->
@@ -62,3 +75,46 @@ index_props({ok, #module_index{filepath=Path, module=Module}}) ->
         {module, Module},
         {path, Path}
     ].
+
+%% @doc List all module overrides; category options also include category and
+%% resource-name variants. This lists candidates, not a selected resource's winner.
+-spec matching_templates(Template, Context) -> Templates when
+    Template :: term(), Context :: z:context(), Templates :: [map()].
+matching_templates({overrules, Name, File}, Context) ->
+    %% find_all/3 uses the same priority order as runtime overrules resolution.
+    case lists:dropwhile(fun(#{path := Path}) -> Path =/= File end,
+            template_matches(Name, Context)) of
+        [_, Next | _] -> [Next];
+        _ -> []
+    end;
+matching_templates({cat, Name}, Context) -> category_templates(Name, Context);
+matching_templates({cat, Name, _}, Context) -> category_templates(Name, Context);
+matching_templates(Name, Context) when is_binary(Name); is_list(Name) ->
+    template_matches(z_convert:to_binary(Name), Context);
+matching_templates(_, _) -> [].
+
+%% @doc Recognize category-dependent template options for the matching-template dialog.
+is_category_template({cat, _}) -> true;
+is_category_template({cat, _, _}) -> true;
+is_category_template(_) -> false.
+
+%% @doc Collect base, category and resource-name variants, including all module overrides.
+category_templates(Name, Context) when is_binary(Name); is_list(Name) ->
+    NameB = z_convert:to_binary(Name),
+    Root = filename:rootname(NameB),
+    Ext = filename:extension(NameB),
+    Prefix = <<Root/binary, ".">>,
+    Names = lists:usort([
+        N || #module_index{key = #module_index_key{name = N}} <- z_module_indexer:all(template, Context),
+             N =:= NameB orelse (
+                 filename:dirname(N) =:= filename:dirname(NameB)
+                 andalso filename:extension(N) =:= Ext
+                 andalso binary:match(N, Prefix) =:= {0, byte_size(Prefix)})
+    ]),
+    lists:append([template_matches(N, Context) || N <- Names]);
+category_templates(_, _) -> [].
+
+%% @doc Return indexed files for an exact template name in module priority order.
+template_matches(Name, Context) ->
+    [#{name => Name, module => Module, path => Path}
+     || #module_index{module = Module, filepath = Path} <- z_module_indexer:find_all(template, Name, Context)].

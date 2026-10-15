@@ -74,3 +74,12 @@ fieldset[disabled] .btn-primary.active {
     border-radius: 50%;
     background: $brand-danger;
 }
+
+/* Pair with btn-link for actions embedded in text or table cells. */
+.btn.btn-inline {
+    padding: 0;
+    border: 0;
+    font: inherit;
+    vertical-align: baseline;
+    white-space: normal;
+}

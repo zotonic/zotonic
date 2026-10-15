@@ -25,8 +25,10 @@
             <tr>
                 <th><tt>{{ event|escape }}</tt></th>
                 <td>
-                    {% for prio, handler in observers %}
-                        <tt>{{ handler }}</tt> &nbsp; <span class="text-muted">{{ prio }}</span><br>
+                    {% for prio, handler, source in observers %}
+                        <tt>{% if source %}
+                            {% include "_development_editor_button.tpl" editor_file=source.file editor_line=source.line editor_token=source.token editor_label=handler editor_inline editor_compact editor_title=_"Edit subscriber function" %}
+                        {% else %}{{ handler }}{% endif %}</tt> &nbsp; <span class="text-muted">{{ prio }}</span><br>
                     {% endfor %}
                 </td>
                 <td>

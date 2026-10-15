@@ -61,6 +61,32 @@ Zotonic. This checkbox must be checked to enable this api.
 
 
 
+### Source editor
+
+The second settings column configures opening templates in a source editor.
+The local editor choice is stored in `config.d/zotonic-editor.config` under the
+node configuration directory and shared by development sites and shell helpers.
+Browser URL preferences and host-path mappings remain browser/site-specific.
+Choosing automatic detection clears the explicit machine choice. Detection
+uses trusted node configuration, ZOTONIC_EDITOR/VISUAL/EDITOR, inherited editor
+sessions, file associations, running editors and installed launchers, in that
+order. Ambiguous detection requires a choice. Local browser-triggered launches
+require the development environment and the mod_development permission.
+
+Containers only launch through browser URLs. Configure a browser editor preset
+or custom URL and map the container source root to the host checkout root.
+Sublime and Vim URLs need an installed host-side protocol handler.
+
+In the Erlang shell use `z:edit(mod_foobar)`, `z:edit(mod_foobar, function_name)`,
+`z:edit(StackTrace)` or `z:edit(<<\"path/to/template.tpl\">>, 42)`. Library and
+template names are resolved across running sites; ambiguous names require a
+full path. The node inherits the environment at
+startup, not the environment of a subsequently attached shell. A trusted
+zotonic application setting `development_editor` can contain an executable and
+argument list, for example `{\"code\", [\"--reuse-window\", \"--goto\", \"{file}:{line}:{column}\"]}`.
+Set `development_editor_browser_only` to true to force browser launches on a
+remote host or a container that cannot be detected automatically.
+
 ### Template debugging
 
 The template selection mechanism is quite complicated. It takes into account all modules, their priority, the user-agent
@@ -236,6 +262,8 @@ Delegate callbacks:
 %% interface functions
 -export([
     event/2,
+    edit/1,
+    edit/2,
     task_xref_check/2,
     task_graph/2,
     reload/1,
@@ -522,6 +550,13 @@ function_trace_start(Mod, Fun, Count, Context) ->
             Funs
     end.
 
+%% @doc Open a module source in the detected editor. Containers use browser launches only.
+-spec edit(Module) -> ok | {error, term()} when Module :: atom().
+edit(Module) -> z_development_editor:edit(Module).
+
+-spec edit(Module, Line) -> ok | {error, term()} when Module :: atom(), Line :: pos_integer().
+edit(Module, Line) -> z_development_editor:edit(Module, Line).
+
 %% @doc Open an overlay with the template.
 open_template_overlay(TemplatePath, Context) ->
     case find_indexed_template(TemplatePath, Context) of
@@ -530,7 +565,7 @@ open_template_overlay(TemplatePath, Context) ->
                 {ok, Module} ->
                     template_compiler:highlight_module(Module);
                 {error, _} ->
-                    template_compiler:highlight_file(Filepath)
+                    highlight_template_source(Filepath)
             end,
             case Result of
                 {ok, HTML} ->
@@ -552,6 +587,18 @@ open_template_overlay(TemplatePath, Context) ->
             end;
         {error, enoent} ->
             z_render:growl_error(?__("Template file not found.", Context), Context)
+    end.
+
+%% @doc Show readable source even when a lexer error prevents syntax highlighting.
+highlight_template_source(Filepath) ->
+    case template_compiler:highlight_file(Filepath) of
+        {ok, _} = Highlighted -> Highlighted;
+        {error, _} ->
+            case file:read_file(Filepath) of
+                {ok, Source} ->
+                    {ok, iolist_to_binary(["<pre>", z_html:escape(Source), "</pre>"])};
+                {error, _} = Error -> Error
+            end
     end.
 
 find_indexed_template(TemplatePath, Context) ->

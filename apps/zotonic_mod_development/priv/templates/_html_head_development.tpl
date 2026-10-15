@@ -1,3 +1,6 @@
+{% if m.acl.is_allowed.use.mod_development %}
+    {% lib "js/development-editor.js" %}
+{% endif %}
 {% if m.development.livereload %}
     {% lib "js/livereload.js" %}
 

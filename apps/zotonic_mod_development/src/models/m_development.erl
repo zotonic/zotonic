@@ -38,6 +38,9 @@ Available Model API Paths
 | `get` | `/flush/...` | Return config flag controlling whether cache flush action is enabled. |
 | `get` | `/reindex/...` | Return config flag controlling whether reindex action is enabled. |
 | `get` | `/dispatch_info/...` | Return dispatch rule info/inspection data for development diagnostics. |
+| `get` | `/editor` | Detect editors; requires use of mod_development. |
+| `post` | `/editor/preference` | Save the machine editor choice; development environment and module ACL required; disabled in containers. |
+| `post` | `/editor/open` | Open an indexed template or signed source location; development environment and module ACL required; disabled in containers. |
 | `get` | `/show_trace_button/...` | Check if the trace button for debugging templates can be shown. |
 | `get` | `/template_trace_parents/...` | Return traced parent relations for a template source location. |
 | `get` | `/template_trace_children/...` | Return traced templates included from a template source location. |
@@ -50,6 +53,8 @@ Available Model API Paths
 
 -export([
     m_get/3,
+    m_post/3,
+    dispatch_trace_sources/2,
 
     lookup_record/1,
     refresh_records/0,
@@ -61,6 +66,21 @@ Available Model API Paths
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ <<"editor">> | Rest ], _Msg, Context) ->
+    case z_acl:is_allowed(use, mod_development, Context) of
+        true ->
+            {ok, #module_index{filepath = File}} = z_module_indexer:find(template, <<"admin_development.tpl">>, Context),
+            Detection = z_development_editor:detect(File),
+            %% Executables and arguments are server-owned, never accepted back from the browser.
+            Public = fun(C) -> maps:with([id, label, reason, available], C) end,
+            Selected = case maps:get(selected, Detection) of undefined -> undefined; C -> Public(C) end,
+            Info = Detection#{candidates => [Public(C) || C <- maps:get(candidates, Detection)],
+                              selected => Selected, test_file => File,
+                              editor_id => z_config:get(development_editor_id, <<"auto">>),
+                              local_allowed => m_site:environment(Context) =:= development},
+            {ok, {Info, Rest}};
+        false -> {error, eacces}
+    end;
 m_get([ <<"is_dbtrace">> | Rest ], _Msg, Context) ->
     {ok, {z_development_dbtrace:is_tracing(Context), Rest}};
 m_get([ Cfg | Rest ], _Msg, Context)
@@ -106,7 +126,7 @@ m_get([ <<"list_observers">> | Rest ], _Msg, Context) ->
     case z_acl:is_allowed(use, mod_development, Context) of
         true ->
             Observers = z_notifier:get_observers(Context),
-            List = [ {atom_to_binary(Event, utf8), readable(Os)} || {Event, Os} <- Observers ],
+            List = [ {atom_to_binary(Event, utf8), readable(Os, Context)} || {Event, Os} <- Observers ],
             {ok, {List, Rest}};
         false ->
             {error, eacces}
@@ -158,7 +178,9 @@ m_get([ <<"dispatch_info">> | Rest ], _Msg, Context) ->
     case z_acl:is_allowed(use, mod_development, Context) of
         true ->
             {ok, DispatchInfo} = z:dispatch_list(z_context:site(Context)),
-            {ok, {DispatchInfo, Rest}};
+            Files = dispatch_files(Context),
+            Rules = [dispatch_sources(Rule, Files, Context) || Rule <- maps:get(dispatch_list, DispatchInfo)],
+            {ok, {DispatchInfo#{dispatch_list => Rules}, Rest}};
         false ->
             {error, eacces}
     end;
@@ -170,6 +192,54 @@ m_get([ <<"template_trace_filename_menu">> | Rest ], Msg, Context) ->
     template_trace_filename_menu(Rest, Msg, Context);
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
+
+%% @doc Handle authorized development editor launches and machine preference updates.
+%% Browser launches accept indexed templates or signed source locations.
+%% Shell callers use z:edit/1,2 with the OS user's existing privileges.
+-spec m_post(list(binary()), zotonic_model:opt_msg(), z:context()) -> zotonic_model:post_return().
+m_post([<<"editor">>, <<"preference">>], #{payload := #{<<"editor">> := Editor}}, Context)
+        when is_binary(Editor), byte_size(Editor) < 128 ->
+    case z_acl:is_allowed(use, mod_development, Context)
+         andalso m_site:environment(Context) =:= development of
+        true ->
+            {ok, #module_index{filepath = File}} = z_module_indexer:find(
+                template, <<"admin_development.tpl">>, Context),
+            z_development_editor:save_preference(Editor, File);
+        false -> {error, eacces}
+    end;
+m_post([<<"editor">>, <<"open">>], #{payload := Payload}, Context) when is_map(Payload) ->
+    case z_acl:is_allowed(use, mod_development, Context)
+         andalso m_site:environment(Context) =:= development of
+        true -> editor_open(Payload, Context);
+        false -> {error, eacces}
+    end;
+m_post(_, _, _) -> {error, unknown_path}.
+
+%% @doc Validate a signed source token or exact indexed template path before launching an editor.
+editor_open(#{<<"source">> := Token, <<"editor">> := Editor}, Context)
+        when is_binary(Token), byte_size(Token) > 0, byte_size(Token) < 16384,
+             is_binary(Editor) ->
+    Location = try z_crypto:depickle(Token, Context) catch error:_ -> invalid end,
+    case Location of
+        {development_editor_source, File, Line} ->
+            z_development_editor:open(File, Line, 1, Editor);
+        _ -> {error, eacces}
+    end;
+editor_open(#{<<"file">> := File, <<"editor">> := Editor,
+              <<"line">> := Line, <<"column">> := Column}, Context)
+    when is_binary(File), byte_size(File) < 4096, is_binary(Editor),
+         is_integer(Line), Line > 0, Line < 10000000,
+         is_integer(Column), Column > 0, Column < 10000000 ->
+    case binary:split(File, <<"/priv/templates/">>, [global]) of
+        [_ | [_ | _]] = Parts ->
+            Indexed = z_module_indexer:find_all(template, lists:last(Parts), Context),
+            case lists:any(fun(#module_index{filepath = P}) -> P =:= File end, Indexed) of
+                true -> z_development_editor:open(File, Line, Column, Editor);
+                false -> {error, enoent}
+            end;
+        _ -> {error, enoent}
+    end;
+editor_open(_, _) -> {error, badarg}.
 
 template_trace_relations(Direction, Rest, Msg, Context) ->
     case z_acl:is_allowed(use, mod_development, Context) of
@@ -379,12 +449,76 @@ to_atom(Rec) when is_binary(Rec) ->
         _:_ -> {error, unknown_atom}
     end.
 
-readable(Os) ->
+%% @doc Format observer priorities and escaped handler labels with signed editor locations.
+readable(Os, Context) ->
     lists:map(
         fun({Prio, Obs, _Pid}) ->
-            {Prio, iolist_to_binary(readable_1(Obs))}
+            {Prio, iolist_to_binary(readable_1(Obs)), observer_source(Obs, Context)}
         end,
         Os).
+
+%% @doc Resolve a registered subscriber to a signed source location when source is available.
+observer_source({M, F, _Args}, Context) -> observer_source({M, F}, Context);
+observer_source({M, F}, Context) when is_atom(M), is_atom(F) ->
+    signed_source(z_development_editor:source_location(M, F), Context);
+observer_source(Fun, Context) when is_function(Fun) ->
+    {module, M} = erlang:fun_info(Fun, module),
+    {name, F} = erlang:fun_info(Fun, name),
+    observer_source({M, F}, Context);
+observer_source(_, _) -> undefined.
+
+%% @doc Add editor locations to the controller-bearing steps of a dispatch trace.
+-spec dispatch_trace_sources(Trace, Context) -> Trace1 when
+    Trace :: [map()], Context :: z:context(), Trace1 :: [map()].
+dispatch_trace_sources(Trace, Context) ->
+    case z_acl:is_allowed(use, mod_development, Context) of
+        true ->
+            Files = dispatch_files(Context),
+            lists:map(
+                fun(#{args := Args} = Step) ->
+                    case maps:from_list(Args) of
+                        #{controller := _, controller_options := _} = Rule ->
+                            Sources = maps:with([controller_source, dispatch_source],
+                                dispatch_sources(Rule, Files, Context)),
+                            maps:merge(Step, Sources);
+                        _ -> Step
+                    end
+                end,
+                Trace);
+        false -> Trace
+    end.
+
+%% @doc Index dispatch source paths by module and basename for matching active rule metadata.
+dispatch_files(Context) ->
+    maps:from_list([
+        {{Module, z_convert:to_binary(filename:basename(File))}, File}
+        || {Module, ModuleFiles} <- z_module_indexer:dispatch(Context), File <- ModuleFiles
+    ]).
+
+%% @doc Attach signed controller and dispatch-file locations to an active dispatch rule.
+%% Source paths come from the site's active dispatch rules, never browser input.
+dispatch_sources(#{controller := Controller, controller_options := Options} = Rule, Files, Context) ->
+    Key = {proplists:get_value(zotonic_dispatch_module, Options),
+           proplists:get_value(zotonic_dispatch_file, Options)},
+    DispatchSource = case maps:get(Key, Files, undefined) of
+        undefined -> undefined;
+        File -> signed_source({ok, File, 1}, Context)
+    end,
+    Rule#{
+        controller_source => signed_source(z_development_editor:source_location(Controller), Context),
+        dispatch_source => DispatchSource
+    }.
+
+%% @doc Sign an existing source file and line for browser editor requests; omit unavailable files.
+signed_source({ok, File, Line}, Context) ->
+    case filelib:is_regular(File) of
+        true ->
+            FileB = z_convert:to_binary(filename:absname(File)),
+            #{file => FileB, line => Line,
+              token => z_crypto:pickle({development_editor_source, FileB, Line}, Context)};
+        false -> undefined
+    end;
+signed_source({error, _}, _Context) -> undefined.
 
 readable_1(Pid) when is_pid(Pid) ->
     z_html:escape( iolist_to_binary( io_lib:format("~p", [Pid]) ) );
@@ -392,8 +526,8 @@ readable_1(F) when is_function(F) ->
     <<"<i>function</i>">>;
 readable_1({M, F}) ->
     [
-        "<b>", atom_to_binary(M, utf8), "</b>",
-        ":", atom_to_binary(F, utf8)
+        "<b>", z_html:escape(atom_to_binary(M, utf8)), "</b>",
+        ":", z_html:escape(atom_to_binary(F, utf8))
     ];
 readable_1({M, F, Args}) ->
     As = [ io_lib:format("~p", [A]) || A <- Args ],

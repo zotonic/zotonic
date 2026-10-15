@@ -2,6 +2,10 @@
 
 {% block title %} Development {% endblock %}
 
+{% block head_extra %}
+    {% lib "css/development.css" %}
+{% endblock %}
+
 {% block content %}
 <ul class="breadcrumb">
     <li><a href="{% url admin_development %}">{_ Site Development _}</a></li>
@@ -41,7 +45,7 @@
                 {% endif %}
             </dl>
 
-            <table class="table table-condensed">
+            <table class="table table-condensed development-dispatch-rules">
                 <thead>
                     <tr>
                         <th style="width: 30%">{_ URI Pattern _}</th>
@@ -68,14 +72,31 @@
                                 <ul class="list-inline">
                                     {% for o in d.controller_options  %}
                                         {% if o | format_dispatch_controller_option:d.controller as formatted %}
-                                            <li>{{ formatted }}</li>
+                                            <li>{% if o[1] == `template` %}
+                                                <span class="text-info">{_ Template _}:</span>
+                                                {% include "_development_dispatch_template_option.tpl" template_option=o[2] %}
+                                            {% elseif o[1] == `id` %}
+                                                <span class="text-info">id:</span>
+                                                {% include "_development_dispatch_id_option.tpl" resource_option=o[2] %}
+                                            {% else %}{{ formatted }}{% endif %}</li>
                                         {% endif %}
                                     {% endfor %}
                                 </ul>
                             </td>
-                            <td>{{ d.dispatch | escape }} </td>
+                            <td class="development-dispatch-name">
+                                {{ d.dispatch|escape }}
+                                {% if d.dispatch_source as source %}
+                                    {% include "_development_editor_button.tpl" editor_file=source.file editor_line=source.line editor_token=source.token editor_label=_"Edit dispatch file" editor_compact editor_title=_"Edit dispatch file" %}
+                                {% endif %}
+                            </td>
                             <td>{{ d.controller_options.zotonic_dispatch_module | escape }} </td>
-                            <td>{{ d.controller | escape }} </td>
+                            <td>
+                                {% if d.controller_source as source %}
+                                    {% include "_development_editor_button.tpl" editor_file=source.file editor_line=source.line editor_token=source.token editor_label=d.controller|escape editor_inline editor_compact editor_title=_"Edit controller" %}
+                                {% else %}
+                                    {{ d.controller|escape }}
+                                {% endif %}
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>
