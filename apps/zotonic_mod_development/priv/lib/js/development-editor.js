@@ -145,6 +145,60 @@
             update();
         } catch (error) { summary.textContent = form.dataset.failed + ' (' + error.message + ')'; }
     }
+    // Scanner columns count Unicode code points; DOM text offsets use UTF-16.
+    // Ignore highlighter controls and line numbers when locating source tokens.
+    function sourceLinks(source, links, titles, error, openTemplate) {
+        for (const link of [...links].reverse()) {
+            const line = source.querySelector(`.template-compiler-line[data-line="${link.row}"]`);
+            if (!line) continue;
+            const walker = document.createTreeWalker(line, NodeFilter.SHOW_TEXT, {
+                acceptNode: node => node.parentElement.closest(
+                    '.template-compiler-line-number, .template-compiler-debug-point, .template-compiler-nav-anchor, .development-editor-launch'
+                ) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT
+            });
+            let column = 1;
+            let node;
+            while ((node = walker.nextNode())) {
+                const chars = Array.from(node.data);
+                const offset = link.column - column;
+                if (offset >= 0 && offset < chars.length
+                    && chars.slice(offset, offset + Array.from(link.name).length).join('') === link.name) {
+                    const token = node.splitText(chars.slice(0, offset).join('').length);
+                    token.splitText(link.name.length);
+                    const wrapper = document.createElement('span');
+                    wrapper.className = 'development-editor-launch development-source-link';
+                    const fallback = document.createElement('span');
+                    fallback.dataset.editorFallback = '';
+                    fallback.textContent = link.name;
+                    const button = document.createElement('button');
+                    button.type = 'button';
+                    button.className = 'btn btn-link btn-inline';
+                    button.hidden = true;
+                    button.title = titles[link.kind];
+                    button.textContent = link.name;
+                    if (link.kind === 'template') {
+                        fallback.hidden = true;
+                        button.hidden = false;
+                        button.addEventListener('click', () => openTemplate(link.name, Boolean(link.isCategory)));
+                    } else {
+                        Object.assign(button.dataset, {
+                            editorFile: link.file, editorLine: link.line,
+                            editorSource: link.token, editorError: error
+                        });
+                    }
+                    const status = document.createElement('span');
+                    status.setAttribute('role', 'status');
+                    status.className = 'text-danger';
+                    status.hidden = true;
+                    wrapper.append(fallback, button, status);
+                    token.replaceWith(wrapper);
+                    if (link.kind !== 'template') prepare(button);
+                    break;
+                }
+                column += chars.length;
+            }
+        }
+    }
     let info;
     function prepare(button) {
         const show = allowed => {
@@ -180,6 +234,6 @@
             } catch (error) { fail(error); }
         });
     }
-    root.zotonicDevelopmentEditor = {settings, prepare, editorUrl, mapPath};
+    root.zotonicDevelopmentEditor = {settings, prepare, sourceLinks, editorUrl, mapPath};
     if (typeof module !== 'undefined') module.exports = {editorUrl, mapPath, validate};
 })(typeof window === 'undefined' ? globalThis : window);

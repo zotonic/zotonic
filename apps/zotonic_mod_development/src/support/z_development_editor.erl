@@ -268,11 +268,17 @@ source_location(Module) ->
             Error
     end.
 
-%% @doc Resolve a source function without launching an editor (also in containers).
+%% @doc Resolve a source function, optionally by arity, without launching an editor (also in containers).
 -spec source_location(Module, Function) -> {ok, file:filename_all(), pos_integer()} | {error, term()} when
-    Module :: atom(), Function :: atom().
+    Module :: atom(), Function :: atom() | {atom(), non_neg_integer()}.
 source_location(Module, Function) ->
-    case function_location(Module, Function, any) of
+    Location = case Function of
+        {Name, Arity} when is_atom(Name), is_integer(Arity), Arity >= 0 ->
+            function_location(Module, Name, Arity);
+        Name when is_atom(Name) ->
+            function_location(Module, Name, any)
+    end,
+    case Location of
         {ok, File, Line} ->
             case filelib:is_regular(File) of
                 true -> {ok, filename:absname(File), Line};

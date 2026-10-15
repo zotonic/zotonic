@@ -56,6 +56,8 @@
         delegate=`mod_development`
 %}
 
+{% wire name="source_template_matches" postback=`template_matches_source` delegate=`z_development_template` %}
+
 {% javascript %}
     let is_debug_trace_enabled = false;
     const templateDebug = document.querySelector('.template-debug');
@@ -953,6 +955,13 @@
 
     ensureDevelopmentCss();
     initSplitter();
+    zotonicDevelopmentEditor.sourceLinks(document.querySelector('.template-debug-source'), [
+        {% for link in source_links %}
+        {isCategory: {% if link.is_category %}true{% else %}false{% endif %}, kind: '{{ link.kind|escapejs }}', name: '{{ link.name|escapejs }}', row: {{ link.row }}, column: {{ link.column }},
+         file: '{{ link.file|escapejs }}', line: {{ link.line|default:1 }}, token: '{{ link.token|escapejs }}'},
+        {% endfor %}
+    ], {filter: '{_ Edit filter _}', scomp: '{_ Edit scomp _}', model: '{_ Edit model _}', delegate: '{_ Edit event handler _}', action: '{_ Edit action _}', template: '{_ Show matching templates _}'}, '{_ Could not open the editor. Check the editor settings on the Development page. _}',
+        (name, isCategory) => z_event('source_template_matches', {template: name, is_category: isCategory ? 'true' : 'false'}));
     injectTemplateNavigation();
 
     cotonic.broker.subscribe(
