@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-15 13:38\n"
+"PO-Revision-Date: 2026-10-15 15:53\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -8650,7 +8650,7 @@ msgstr "הורד קבצי CSS ו- JavaScript כקבצים נפרדים. אל ת�
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
 msgid "Edit action"
-msgstr ""
+msgstr "פעולת עריכה"
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:33
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:42
@@ -8668,15 +8668,15 @@ msgstr "ערוך קובץ השיגור"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
 msgid "Edit event handler"
-msgstr ""
+msgstr "ערוך מטפל אירועים"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
 msgid "Edit filter"
-msgstr ""
+msgstr "ערוך מסנן"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
 msgid "Edit model"
-msgstr ""
+msgstr "ערוך מודל"
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_id_option.tpl:2
 msgid "Edit resource in admin"
@@ -8684,7 +8684,7 @@ msgstr "עריכת משאב בממשק הניהול"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
 msgid "Edit scomp"
-msgstr ""
+msgstr "ערוך את scomp"
 
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:30
 msgid "Edit subscriber function"
@@ -8836,7 +8836,7 @@ msgstr "הִסתַכְּלוּת פְּנִימִית"
 
 #: zotonic_mod_development/src/support/z_development_template.erl:41
 msgid "Invalid template name."
-msgstr ""
+msgstr "שם תבנית לא חוקי."
 
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:53
 msgid "Leave both roots empty when the paths are identical. Files outside the mapped root will not be opened."
