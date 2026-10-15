@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-15 13:38\n"
+"PO-Revision-Date: 2026-10-15 15:53\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "MIME-Version: 1.0\n"
@@ -8650,7 +8650,7 @@ msgstr "Pobierz pliki CSS i JavaScript jako osobne pliki. Nie łącz ich w jedny
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
 msgid "Edit action"
-msgstr ""
+msgstr "Edytuj działanie"
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:33
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:42
@@ -8668,15 +8668,15 @@ msgstr "Edytuj plik wysyłkowy"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
 msgid "Edit event handler"
-msgstr ""
+msgstr "Edytuj procedurę obsługi zdarzenia"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
 msgid "Edit filter"
-msgstr ""
+msgstr "Edytuj filtr"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
 msgid "Edit model"
-msgstr ""
+msgstr "Edytuj model"
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_id_option.tpl:2
 msgid "Edit resource in admin"
@@ -8684,7 +8684,7 @@ msgstr "Edytuj zasób w panelu administracyjnym"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
 msgid "Edit scomp"
-msgstr ""
+msgstr "Edytuj scomp"
 
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:30
 msgid "Edit subscriber function"
@@ -8836,7 +8836,7 @@ msgstr "Introspekcja"
 
 #: zotonic_mod_development/src/support/z_development_template.erl:41
 msgid "Invalid template name."
-msgstr ""
+msgstr "Nieprawidłowa nazwa szablonu."
 
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:53
 msgid "Leave both roots empty when the paths are identical. Files outside the mapped root will not be opened."
