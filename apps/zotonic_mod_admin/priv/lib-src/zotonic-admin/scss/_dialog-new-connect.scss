@@ -15,14 +15,14 @@
         .modal-footer {
             position: sticky;
             bottom: 0;
-            background-color: rgba(255,255,255,0.8);
+            background-color: var(--z-admin-modal-footer-panel-bg);
         }
 
         > .form-panel {
             grid-column: 1;
             grid-row: 1;
 
-            background-color: white;
+            background-color: var(--z-admin-form-panel-bg);
             padding: 10px 15px 0 15px;
             max-height: 100%;
             overflow-y: auto;
@@ -33,7 +33,7 @@
             grid-row: 1;
 
             position: relative;
-            background-color: white;
+            background-color: var(--z-admin-preview-panel-bg);
             z-index: 1051;
 
             padding: 10px 15px 0 15px;
@@ -72,7 +72,7 @@
             padding: 10px 0 0 14px;
             margin-left: 0;
             border-left: 1px solid $borderColorMediumTransparent;
-            background: linear-gradient(to right, #f8f8f8, white, white);
+            background: var(--z-admin-find-results-bg);
 
             > .new-find-results-header {
                 grid-column: 1;
@@ -108,4 +108,32 @@
 
     // use smaller grid gutter
     $_item_gutter: 6px;
+}
+
+// Stack the form and results on phones instead of squeezing both columns.
+@media (max-width: $screen-xs-max) {
+    #dialog-new-rsc-tab .new-find-cols {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+        max-height: 70vh;
+        overflow-y: auto;
+
+        > .form-panel,
+        > .rsc-preview-panel-wrapper,
+        > .new-find-results {
+            max-height: none;
+            overflow-y: visible;
+        }
+
+        > .new-find-results {
+            grid-column: 1;
+            grid-row: 2;
+            border-left: 0;
+            border-top: 1px solid $borderColorMediumTransparent;
+
+            > #dialog-rsc-new-found {
+                overflow-y: visible;
+            }
+        }
+    }
 }

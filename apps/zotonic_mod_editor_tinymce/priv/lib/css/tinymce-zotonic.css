@@ -11,14 +11,14 @@ p {
 
 img.z-tinymce-media {
     position: relative;
-    border: 1px solid #667;
+    border: 1px solid var(--z-tinymce-media-border-color, var(--z-admin-border, #667));
     height: auto;
     cursor: pointer;
     width: 270px;
 }
 
 img.z-tinymce-media.z-active:hover {
-    border: 1px solid #039ed4;
+    border: 1px solid var(--z-tinymce-media-active-border-color, var(--bs-primary, #039ed4));
 }
 
 img.z-tinymce-media-align-block {
@@ -54,7 +54,7 @@ aside {
     width: 33%;
     float: right;
     clear: both;
-    border: 1px dashed #666;
+    border: 1px dashed var(--z-tinymce-aside-border-color, var(--z-admin-text-muted, #666));
     margin: 1rem 0 1rem 1rem;
     padding:  1rem;
 }
@@ -63,8 +63,8 @@ aside::before {
     content:  "aside";
     font-size: 10px;
     padding: 2px 4px;
-    color: white;
-    background-color: #666;
+    color: var(--z-tinymce-aside-label-color, var(--bs-white, white));
+    background-color: var(--z-tinymce-aside-label-bg, var(--z-admin-text-muted, #666));
     position: absolute;
     right: 0;
     top: 0;

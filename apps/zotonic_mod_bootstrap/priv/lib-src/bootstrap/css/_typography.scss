@@ -1,0 +1,19 @@
+// Bootstrap 3 type sizes, expressed in rem for Bootstrap 5's sizing mixins.
+// Sites can override these defaults before importing either theme entrypoint.
+$font-size-root: 14px !default;
+$font-size-base: 1rem !default;
+$font-size-sm: $font-size-base * calc(12 / 14) !default;
+$font-size-lg: $font-size-base * calc(18 / 14) !default;
+$h1-font-size: $font-size-base * calc(36 / 14) !default;
+$h2-font-size: $font-size-base * calc(30 / 14) !default;
+$h3-font-size: $font-size-base * calc(24 / 14) !default;
+$h4-font-size: $font-size-base * calc(18 / 14) !default;
+$h5-font-size: $font-size-base !default;
+$h6-font-size: $font-size-sm !default;
+$small-font-size: 85% !default;
+$lead-font-size: $font-size-base * 1.5 !default;
+$badge-font-size: $font-size-sm !default;
+$popover-font-size: $font-size-base !default;
+$line-height-base: calc(20 / 14) !default;
+$headings-line-height: 1.1 !default;
+// Leave Bootstrap 5's responsive font sizing enabled.
