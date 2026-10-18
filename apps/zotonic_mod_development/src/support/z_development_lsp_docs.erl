@@ -76,4 +76,4 @@ main_tag(Name) -> Name.
 -spec clean(binary()) -> binary().
 clean(Text) ->
     Body = re:replace(Text, <<"\\A---\\r?\\n.*?\\r?\\n---\\r?\\n">>, <<>>, [dotall, {return, binary}]),
-    re:replace(Body, <<"^:::[^\\r\\n]*$">>, <<>>, [multiline, global, {return, binary}]).
+    iolist_to_binary(re:replace(Body, <<"^:::[^\\r\\n]*$">>, <<>>, [multiline, global, {return, binary}])).

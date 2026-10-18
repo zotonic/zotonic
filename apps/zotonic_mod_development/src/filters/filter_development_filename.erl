@@ -76,7 +76,7 @@ resolve(Path) ->
     case filename:pathtype(Path) of
         absolute ->
             case resolve_parts(filename:split(Path), <<>>, 40) of
-                {ok, Resolved} -> Resolved;
+                {ok, Resolved} -> z_convert:to_binary(Resolved);
                 {error, _} -> Path
             end;
         _ -> Path
