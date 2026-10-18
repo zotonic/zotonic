@@ -8865,11 +8865,11 @@ msgstr ""
 msgid "You are not allowed to change this."
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:565
+#: zotonic_mod_development/src/mod_development.erl:667
 msgid "<i>Function name does not exist.</i>"
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:568
+#: zotonic_mod_development/src/mod_development.erl:670
 msgid "<i>Module not found.</i>"
 msgstr ""
 
@@ -8948,8 +8948,8 @@ msgstr ""
 msgid "Check debug points in the template source to see debug data here."
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:373
-#: zotonic_mod_development/src/mod_development.erl:388
+#: zotonic_mod_development/src/mod_development.erl:475
+#: zotonic_mod_development/src/mod_development.erl:490
 msgid "Checking all templates..."
 msgstr ""
 
@@ -9080,7 +9080,7 @@ msgid "Detecting editors…"
 msgstr ""
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:7
-#: zotonic_mod_development/src/mod_development.erl:1233
+#: zotonic_mod_development/src/mod_development.erl:1335
 msgid "Development"
 msgstr ""
 
@@ -9209,11 +9209,11 @@ msgid ""
 "before stopping."
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:537
+#: zotonic_mod_development/src/mod_development.erl:639
 msgid "Error changing the console logs."
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:631
+#: zotonic_mod_development/src/mod_development.erl:733
 msgid "Error parsing template."
 msgstr ""
 
@@ -9281,7 +9281,7 @@ msgid ""
 "function call tracing:"
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:571
+#: zotonic_mod_development/src/mod_development.erl:673
 msgid "Function tracing has been disabled in the Zotonic config."
 msgstr ""
 
@@ -9311,7 +9311,7 @@ msgstr ""
 msgid "Introspection"
 msgstr ""
 
-#: zotonic_mod_development/src/support/z_development_template.erl:41
+#: zotonic_mod_development/src/support/z_development_template.erl:59
 msgid "Invalid template name."
 msgstr ""
 
@@ -9387,7 +9387,7 @@ msgstr ""
 msgid "Matches with the same name are listed in module priority order."
 msgstr ""
 
-#: zotonic_mod_development/src/support/z_development_template.erl:48
+#: zotonic_mod_development/src/support/z_development_template.erl:66
 msgid "Matching templates"
 msgstr ""
 
@@ -9434,18 +9434,18 @@ msgstr ""
 msgid "No matching templates found."
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:535
+#: zotonic_mod_development/src/mod_development.erl:637
 msgid "No permission to access the console logs."
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:378
-#: zotonic_mod_development/src/mod_development.erl:393
-#: zotonic_mod_development/src/mod_development.erl:408
-#: zotonic_mod_development/src/mod_development.erl:416
-#: zotonic_mod_development/src/mod_development.erl:443
-#: zotonic_mod_development/src/mod_development.erl:485
-#: zotonic_mod_development/src/mod_development.erl:502
-#: zotonic_mod_development/src/mod_development.erl:519
+#: zotonic_mod_development/src/mod_development.erl:480
+#: zotonic_mod_development/src/mod_development.erl:495
+#: zotonic_mod_development/src/mod_development.erl:510
+#: zotonic_mod_development/src/mod_development.erl:518
+#: zotonic_mod_development/src/mod_development.erl:545
+#: zotonic_mod_development/src/mod_development.erl:587
+#: zotonic_mod_development/src/mod_development.erl:604
+#: zotonic_mod_development/src/mod_development.erl:621
 msgid "No permission to use mod_development."
 msgstr ""
 
@@ -9454,7 +9454,7 @@ msgstr ""
 msgid "No references found."
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:497
+#: zotonic_mod_development/src/mod_development.erl:599
 msgid "No template found in the context."
 msgstr ""
 
@@ -9475,7 +9475,7 @@ msgstr ""
 msgid "Observers"
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:574
+#: zotonic_mod_development/src/mod_development.erl:676
 msgid "Only the admin user can set traces."
 msgstr ""
 
@@ -9620,19 +9620,19 @@ msgstr ""
 msgid "Start matching dispatch rules"
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:531
+#: zotonic_mod_development/src/mod_development.erl:633
 msgid "Started logging to the console of your browser tab."
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:405
+#: zotonic_mod_development/src/mod_development.erl:507
 msgid "Started tracing all template inclusions."
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:480
+#: zotonic_mod_development/src/mod_development.erl:582
 msgid "Started tracing template inclusions by rendering the page."
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:402
+#: zotonic_mod_development/src/mod_development.erl:504
 msgid "Started tracing template inclusions for your session."
 msgstr ""
 
@@ -9642,11 +9642,11 @@ msgstr ""
 msgid "Stop"
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:533
+#: zotonic_mod_development/src/mod_development.erl:635
 msgid "Stopped logging to the console of all browser tabs."
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:414
+#: zotonic_mod_development/src/mod_development.erl:516
 msgid "Stopped tracing template inclusions for all sessions."
 msgstr ""
 
@@ -9685,7 +9685,7 @@ msgstr ""
 msgid "Template debugging"
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:634
+#: zotonic_mod_development/src/mod_development.erl:736
 msgid "Template file not found."
 msgstr ""
 
@@ -9707,7 +9707,7 @@ msgstr ""
 msgid "Test with this template"
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:482
+#: zotonic_mod_development/src/mod_development.erl:584
 msgid "The path must be a local URL."
 msgstr ""
 
@@ -9816,7 +9816,7 @@ msgstr ""
 msgid "Uncheck to debug only your current session."
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:516
+#: zotonic_mod_development/src/mod_development.erl:618
 msgid "Updated template debug points."
 msgstr ""
 
@@ -9847,8 +9847,9 @@ msgstr ""
 msgid "You are not allowed to use the dispatch debugging."
 msgstr ""
 
-#: zotonic_mod_development/src/support/z_development_template.erl:53
-#: zotonic_mod_development/src/support/z_development_template.erl:70
+#: zotonic_mod_development/src/support/z_development_template.erl:48
+#: zotonic_mod_development/src/support/z_development_template.erl:71
+#: zotonic_mod_development/src/support/z_development_template.erl:88
 msgid "You are not allowed to use the template debugging."
 msgstr ""
 
