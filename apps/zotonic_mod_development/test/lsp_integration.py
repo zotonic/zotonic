@@ -128,6 +128,24 @@ try:
     assert {'rsc', 'acl', 'search', 'req'} <= {item['label'] for item in query('completion', 5, 9)['result']}
     buffer('{% ')
     assert any(item['label'] == 'include' for item in query('completion', 3, 10)['result'])
+    for offset, (source, expected) in enumerate([
+        ('{{ m.acl.is_', 'is_admin'),
+        ('{{ m.rsc[id].ti', 'title'),
+        ('{{ m.req.ho', 'host'),
+        ('{{ m.config.mod_development.debug_', 'debug_includes'),
+        ('{{ m.config.zotonic.time', 'timezone'),
+        ('{{ m.sysconfig.time', 'timezone'),
+        ('{{ m.authentication.is_supported.rem', 'rememberme'),
+    ]):
+        buffer(source)
+        items = query('completion', len(source), 100 + offset)['result']
+        item = next(item for item in items if item['label'] == expected)
+        edit = item['textEdit']
+        assert edit['newText'] == expected
+        assert edit['range']['end']['character'] == len(source)
+    buffer('{{ m.rsc[id].title }}')
+    title = next(item for item in query('completion', 15, 110)['result'] if item['label'] == 'title')
+    assert title['textEdit']['range'] == {'start': {'line': 0, 'character': 13}, 'end': {'line': 0, 'character': 18}}
     send('workspace/didChangeConfiguration', {'settings': {'zotonic': {'site': ''}}})
     buffer('{% include "base.tpl" %}')
     automatic = query('definition', 15, 11)

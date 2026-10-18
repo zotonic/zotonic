@@ -215,9 +215,13 @@ diagnostic(Source, Row, Column, Message) ->
         message => unicode:characters_to_binary(Message)
     }.
 
-query(completion, #{source := Source, position := Position}, Context) ->
+query(completion, #{source := Source, position := Position} = Args, Context) ->
     Prefix = z_development_lsp_text:prefix(Source, Position),
-    completion(Source, Prefix, Context);
+    case z_development_lsp_model_path:parse(Prefix) of
+        undefined -> completion(Source, Prefix, Context);
+        Match -> z_development_lsp_model:complete(Source, Prefix, Match,
+            maps:get(site, Args, <<>>) =/= <<>>, Context)
+    end;
 query(Kind, #{source := Source, file := File, position := Position} = Args, Context)
     when Kind =:= definition; Kind =:= hover ->
     Refs = references(Source, File, maps:get(lines, Args), Context),

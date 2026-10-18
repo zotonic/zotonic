@@ -146,6 +146,32 @@ Category includes list candidate templates: selecting the effective template
 requires a resource/category context. Formatting, rename and workspace
 references are not currently supported.
 
+#### Model path completion
+
+Completion after a model name follows literal `m_get/3` path patterns and simple
+literal alternatives in guards. Bracket expressions such as `m.rsc[id].title`
+are treated as arguments without evaluating them. Suggestions also include common
+and computed resource properties, request keys from `m_req`, declared module
+configuration keys, and system keys from `z_config`. Configuration values are
+never fetched. Predicate names are suggested only with an explicitly selected site.
+
+Static descriptions are cached by the loaded module checksum and refreshed after
+code reload. Models with dynamic paths or returned maps can supplement inferred
+paths with a `model_paths` attribute. Use binary keys and `any` for an argument:
+
+```erlang
+-model_paths([
+    #{path => [<<\"result\">>, any, <<\"title\">>],
+      description => <<\"Title of the selected result.\">>}
+]).
+```
+
+This describes `m.example.result[id].title`. Metadata describes names and optional
+plain-text documentation only; the language server never calls `m_get/3` to
+probe a path. Arbitrary helper calls, runtime map fields and resource-specific
+custom properties are not inferred. Missing debug information falls back to the
+available source file; paths without either source are omitted.
+
 #### Start and select a site
 
 Compile and start Zotonic, and enable `mod_development` on the desired site.
