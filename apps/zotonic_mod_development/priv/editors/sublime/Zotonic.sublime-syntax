@@ -1,0 +1,34 @@
+%YAML 1.2
+---
+name: Zotonic Template
+file_extensions: [tpl]
+scope: text.html.zotonic
+version: 2
+extends: Packages/HTML/HTML.sublime-syntax
+contexts:
+  prototype:
+    - meta_prepend: true
+    - match: '\{#'
+      push:
+        - meta_scope: comment.block.zotonic
+        - match: '#\}'
+          pop: true
+    - match: '\{[%{_]'
+      push:
+        - meta_scope: meta.tag.zotonic
+        - match: '[%}_]\}'
+          pop: true
+        - match: '"'
+          push:
+            - meta_scope: string.quoted.double.zotonic
+            - match: '\\.'
+              scope: constant.character.escape.zotonic
+            - match: '"'
+              pop: true
+        - match: "'"
+          push:
+            - meta_scope: string.quoted.single.zotonic
+            - match: '\\.'
+              scope: constant.character.escape.zotonic
+            - match: "'"
+              pop: true

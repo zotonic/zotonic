@@ -38,27 +38,23 @@ On the development page it is possible to set debugging options, trace template 
 
 ### Options
 
-This can toggle various development options:
+The settings column contains development options, including:
 
-Show paths to included template files in generated templates
+- **Show paths to included template files.** Add comments to generated templates
+  showing the exact file included at each point.
 
-Checking this will add comments in the compiled templates. The comments will list the exact file included at that point.
+- **Show defined blocks.** Add comments marking the start and end of each
+  `{% block %} ... {% endblock %}` in generated templates.
 
-Show defined blocks in generated templates
+- **Download CSS and JavaScript as separate files.** Generate separate `<link>`
+  and `<script>` tags for the files in a `{% lib %}` tag. This makes debugging
+  easier, but increases the number of requests needed to load a page.
 
-Checking this will add comments in the compiled templates. The comments will show the start and end of any template `{%
-block %} ... {% endblock %}`.
-
-Download css and javascript files as separate files (ie. don’t combine them in one url).
-
-Checking this will generate separate `<link>` and `<script>` tags for all files mentioned in a single `{% lib %}`
-tag. This makes debugging those files easier but makes loading pages slower as more requests will be done per page.
-
-Enable API to recompile &amp;amp; build Zotonic
-
-The api on `/api/model/development/get/recompile` can be accessed to trigger a full compilation and cache flush of
-Zotonic. This checkbox must be checked to enable this api.
-
+- **Enable API to recompile and build Zotonic.** Enable the development APIs,
+  including `/api/model/development/get/recompile` for compilation and
+  `/api/model/development/get/flush` for flushing caches. These APIs do not
+  require authentication when enabled; use this option only on trusted
+  development installations. It is not required for the language server.
 
 
 ### Source editor
@@ -89,8 +85,8 @@ remote host or a container that cannot be detected automatically.
 
 #### Node configuration
 
-These settings belong to the `zotonic` application in the node configuration,
-not to a site's configuration or the module configuration database:
+These settings belong to the global `zotonic` application configuration,
+not to a site's configuration or the module configuration:
 
 | Setting | Default | Purpose |
 | --- | --- | --- |
@@ -127,6 +123,90 @@ in the browser for the site. They are not node configuration settings. In Docker
 map the source path inside the container to the corresponding checkout on the
 host and install any required URL handler on that host. Shell helpers cannot
 open the browser on the user's machine and return `{error, browser_only}`.
+
+### Language server (LSP)
+
+The template language server provides editor support for `.tpl` files using a
+running site's module and template indexes. It complements an Erlang language
+server; it does not provide language services for `.erl` files.
+
+Supported features include:
+
+- Syntax diagnostics for unsaved templates, without compiling or rendering them.
+- Go to definition for literal template references, `extends` and `overrules`,
+  including the next template in module priority order and symlinked sources.
+- Definitions for filters, models, scomps, actions and literal delegates at
+  their `event/2` handler.
+- Hover information showing the reference type, site and matching source files,
+  with symlinks resolved. Markdown formatting is used when the editor requests
+  it; plain text remains available.
+- Completion of template names, filters, models and built-in and custom tags.
+
+Category includes list candidate templates: selecting the effective template
+requires a resource/category context. Formatting, rename and workspace
+references are not currently supported.
+
+#### Start and select a site
+
+Compile and start Zotonic, and enable `mod_development` on the desired site.
+Configure the editor to start this stdio command:
+
+```sh
+/absolute/path/to/zotonic/bin/zotonic-lsp
+```
+
+This launcher requires Python 3 on the editor host. It probes the local node
+first, then checks running Docker containers and infers source path mappings
+from bind mounts. Multiple matching containers require an explicit
+`--container NAME`. Discovery runs only at startup; the launcher replaces
+itself with the selected process and adds no ongoing proxy. Use
+`bin/zotonic lsp` directly to skip discovery and connect to the local node.
+
+Semantic lookups use the selected site when one is configured. Otherwise,
+filters, models and delegates are resolved across running development sites.
+Template references first use sites containing the current file; if no target
+is found, other running development sites are tried. Matching source locations
+and template priority orders are accepted without selecting a site. Conflicting
+targets still require an explicit choice. Completion combines suggestions from
+candidate sites, and syntax diagnostics do not require a site selection.
+
+#### Editor setup
+
+The VS Code client is in
+`apps/zotonic_mod_development/priv/editors/vscode`. Run `npm ci` there and load
+it with VS Code's `--extensionDevelopmentPath` option, or package and install
+it as a VSIX. Configure automatic runtime selection with:
+
+```json
+{
+    \"zotonic.command\": \"/absolute/path/to/zotonic/bin/zotonic-lsp\",
+    \"zotonic.args\": [],
+    \"zotonic.site\": \"mysite\"
+}
+```
+
+Use **Zotonic: Select Site** or the status-bar item to save a site choice in the
+workspace. **Zotonic: Restart Language Server** reconnects after a node restart.
+The extension runs only in trusted workspaces.
+
+For Sublime Text, install the **LSP** package and copy the supplied
+`apps/zotonic_mod_development/priv/editors/sublime/Zotonic.sublime-syntax` into `Packages/User`. Configure the
+server with `command` set to `[\"/absolute/path/to/zotonic/bin/zotonic-lsp\"]`,
+`selector` set to `text.html.zotonic`, and the desired site in
+`initialization_options.site` and `settings.zotonic.site`. An example server
+configuration is included beside the syntax file.
+
+The transport connects through the existing Erlang cookie and node environment;
+it is a trusted developer tool, not an HTTP API. For containers, the editor
+continues editing host files while the language server runs inside the
+container. Explicit `pathMappings` can handle source mounts that cannot be
+inferred automatically. LSP settings belong to the editor workspace, separately
+from the source-editor launch settings on the admin page.
+
+See the [language-server setup guide](https://github.com/zotonic/zotonic/blob/master/doc/technotes/language-server.md)
+for complete editor configurations, Docker commands, path mappings, protocol
+limits and verification instructions.
+
 
 ### Template debugging
 
@@ -192,7 +272,6 @@ If a changed file is detected then Zotonic will:
 *   If the .yrl definition of the template parser changes, then the .erl version of the parser is regenerated. (This will trigger a compile, which triggers a beam load).
 
 
-
 ### Linux installation
 
 On Linux this feature depends on the inotifywait tool, which is part of the `inotify-tools` package. For displaying
@@ -203,18 +282,15 @@ notifications, it uses `notify-send`:
 sudo apt-get install inotify-tools libnotify-bin
 ```
 
+### macOS installation
 
-
-### Mac OS X installation
-
-On Mac OS X (version 10.8 and higher), we use the external programs `fswatch` and `terminal-notifier`:
+On macOS we use the external programs `fswatch` and `terminal-notifier`:
 
 
 ```erlang
 sudo brew install fswatch
 sudo brew install terminal-notifier
 ```
-
 
 Configuration options
 ---------------------
@@ -615,7 +691,7 @@ open_template_overlay(TemplatePath, Context) ->
                         {template_file, Filepath},
                         {template_html, HTML},
                         {source_links, case file:read_file(Filepath) of
-                            {ok, Source} -> z_development_template:source_links(Source, Context);
+                            {ok, Source} -> z_development_template:source_links(Source, Filepath, Context);
                             {error, _} -> []
                         end}
                     ],

@@ -1,0 +1,137 @@
+#!/usr/bin/env python3
+# Copyright 2026 Marc Worrell. Licensed under the Apache License, Version 2.0.
+"""Select a local or Docker Zotonic LSP once, then exec its stdio command."""
+import argparse
+import concurrent.futures
+import json
+import os
+from pathlib import Path, PurePosixPath
+import subprocess
+import sys
+
+
+class DiscoveryError(Exception):
+    pass
+
+
+def output(command, timeout=5):
+    """Keep discovery output off the LSP stream and bound each probe."""
+    try:
+        result = subprocess.run(command, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE, timeout=timeout, check=False)
+        return result.stdout if result.returncode == 0 else None
+    except (OSError, subprocess.TimeoutExpired):
+        return None
+
+
+def probe(command):
+    return output(command + ['--probe'], timeout=4) is not None
+
+
+def beneath(path, root):
+    try:
+        return Path(path).relative_to(root)
+    except ValueError:
+        return None
+
+
+def container_command(info, checkout, docker, explicit=False):
+    """Use checkout bind mounts or an opt-in label, not image-name guesses."""
+    config = info.get('Config', {})
+    labels = config.get('Labels') or {}
+    mounts = [m for m in info.get('Mounts', []) if m.get('Type') == 'bind']
+    roots = []
+    for mount in mounts:
+        relative = beneath(checkout, Path(mount['Source']).resolve())
+        if relative is not None:
+            roots.append((len(Path(mount['Source']).parts),
+                          str(PurePosixPath(mount['Destination']) / relative.as_posix())))
+    remote_root = max(roots)[1] if roots else labels.get('org.zotonic.lsp.root')
+    if not remote_root:
+        if not explicit:
+            return None
+        raise DiscoveryError('Selected container has no checkout mount or org.zotonic.lsp.root label.')
+    if not remote_root.startswith('/') or '..' in PurePosixPath(remote_root).parts:
+        raise DiscoveryError('Invalid Zotonic root in container configuration.')
+    user = labels.get('org.zotonic.lsp.user') or config.get('User') or 'zotonic'
+    # Match the repository's development entrypoint without running its setup again.
+    environment = {
+        'HOME': remote_root,
+        'ZOTONIC_CONFIG_DIR': remote_root + '/docker-data/config',
+        'ZOTONIC_SECURITY_DIR': remote_root + '/docker-data/security',
+        'ZOTONIC_DATA_DIR': remote_root + '/docker-data/data',
+        'ZOTONIC_LOG_DIR': remote_root + '/docker-data/logs',
+    }
+    # Explicit container environment wins over the development-image defaults.
+    for value in config.get('Env') or []:
+        key, _, text = value.partition('=')
+        if key in environment:
+            environment[key] = text
+    mappings = [{'localRoot': str(Path(m['Source']).resolve()), 'remoteRoot': m['Destination']}
+                for m in mounts if m.get('Source') and m.get('Destination')]
+    # Include only directory mounts: single-file mounts cannot serve a source tree.
+    mappings = [m for m in mappings if Path(m['localRoot']).is_dir()]
+    if not mappings:
+        raise DiscoveryError('Container has no host source bind mounts; configure a direct command and path mappings.')
+    environment['ZOTONIC_LSP_PATH_MAPPINGS'] = json.dumps(mappings, ensure_ascii=False)
+    command = [docker, 'exec', '-i', '--user', user]
+    for key, value in environment.items():
+        command.extend(['-e', key + '=' + value])
+    command.extend([info['Id'], remote_root.rstrip('/') + '/bin/zotonic', 'lsp'])
+    return command
+
+
+def discover(checkout, mode='auto', container=None, docker='docker'):
+    """Prefer local; never contact Docker after a successful local probe."""
+    local = [str(checkout / 'bin/zotonic'), 'lsp']
+    if mode != 'docker' and not container:
+        if probe(local):
+            return local
+        if mode == 'local':
+            raise DiscoveryError('No working local Zotonic language server.')
+    ids = [container] if container else (output([docker, 'ps', '-q']) or b'').decode().split()
+    if not ids:
+        raise DiscoveryError('No local Zotonic language server or running Docker containers found.')
+    if len(ids) > 32:
+        raise DiscoveryError('Too many containers to inspect; select one with --container NAME.')
+    raw = output([docker, 'inspect', '--type', 'container', *ids])
+    if raw is None:
+        raise DiscoveryError('Cannot inspect Docker containers; check Docker access and --container.')
+    candidates = []
+    for info in json.loads(raw):
+        if not info.get('State', {}).get('Running'):
+            continue
+        command = container_command(info, checkout, docker, explicit=bool(container))
+        if command:
+            candidates.append((info.get('Name', info['Id']).lstrip('/'), command))
+    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
+        working = [candidate for candidate, ok in zip(candidates, pool.map(probe, [c[1] for c in candidates])) if ok]
+    if len(working) == 1:
+        return working[0][1]
+    if len(working) > 1:
+        raise DiscoveryError('Multiple Zotonic containers: ' + ', '.join(name for name, _ in working)
+                             + '. Select one with --container NAME.')
+    raise DiscoveryError('No working Zotonic LSP in candidate containers. Check compilation, user/cookie and node environment.')
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--root', type=Path, default=Path(__file__).resolve().parent.parent,
+                        help='Host Zotonic checkout (default: this command\'s checkout)')
+    parser.add_argument('--mode', choices=['auto', 'local', 'docker'], default='auto')
+    parser.add_argument('--container', help='Explicit Docker container name or ID')
+    parser.add_argument('--docker', default='docker', help='Docker executable path')
+    args = parser.parse_args()
+    try:
+        if args.mode == 'local' and args.container:
+            raise DiscoveryError('--container cannot be combined with --mode local.')
+        command = discover(args.root.resolve(), args.mode, args.container, args.docker)
+        # Replace the discovery process: no forwarding, JSON parsing or proxy per request.
+        os.execvp(command[0], command)
+    except (DiscoveryError, OSError, ValueError, KeyError, TypeError) as error:
+        print('Zotonic LSP: ' + str(error), file=sys.stderr)
+        return 1
+
+
+if __name__ == '__main__':
+    sys.exit(main())

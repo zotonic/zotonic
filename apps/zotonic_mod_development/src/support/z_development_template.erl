@@ -22,6 +22,8 @@
 -export([
     matching_templates/2,
     source_links/2,
+    source_links/3,
+    source_references/2,
     event/2
     ]).
 
@@ -29,6 +31,20 @@
 -include_lib("template_compiler/include/template_compiler.hrl").
 
 %% @doc Accept a literal template name from the source viewer; resolution remains index-only.
+event(#postback{message = {template_matches_source, Args}}, Context) ->
+    case z_acl:is_allowed(use, mod_development, Context) of
+        true ->
+            case z_convert:to_bool(z_context:get_q(<<"is_overrules">>, Context)) of
+                true ->
+                    %% File comes from the signed wire, never from a browser query field.
+                    Option = overrules_option(proplists:get_value(file, Args), Context),
+                    event(#postback{message = {template_matches, [{template, Option}]}}, Context);
+                false ->
+                    event(#postback{message = template_matches_source}, Context)
+            end;
+        false ->
+            z_render:growl_error(?__("You are not allowed to use the template debugging.", Context), Context)
+    end;
 event(#postback{message = template_matches_source}, Context) ->
     case z_context:get_q(<<"template">>, Context) of
         Name when is_binary(Name), byte_size(Name) > 0, byte_size(Name) < 4096 ->
@@ -137,19 +153,73 @@ template_matches(Name, Context) ->
 -spec source_links(binary(), z:context()) -> [map()].
 source_links(Source, Context) ->
     case z_acl:is_allowed(use, mod_development, Context) of
-        true ->
-            case template_compiler_scanner:scan(<<"source">>, Source) of
-                {ok, Tokens} -> source_links_tokens(Tokens, Context);
-                {error, _} -> []
-            end;
+        true -> [sign_reference(Ref, Context) || Ref <- source_references(Source, Context)];
         false -> []
     end.
 
+%% @doc Add inheritance keyword navigation for the indexed file shown in the viewer.
+-spec source_links(binary(), file:filename_all(), z:context()) -> [map()].
+source_links(Source, File, Context) ->
+    case z_acl:is_allowed(use, mod_development, Context) of
+        false -> [];
+        true ->
+            Inheritance = case template_compiler_scanner:scan(<<"source">>, Source) of
+                {ok, Tokens} -> inheritance_links(Tokens, File, Context);
+                {error, _} -> []
+            end,
+            lists:sort(fun(A, B) ->
+                {maps:get(row, A), maps:get(column, A)} < {maps:get(row, B), maps:get(column, B)}
+            end, source_links(Source, Context) ++ Inheritance)
+    end.
+
+%% @doc Link the inheritance keyword only when its target exists.
+inheritance_links([{extends_keyword, {_, Row, Column}, Name},
+                   {string_literal, _, Template} | Rest], File, Context) ->
+    Links = case matching_templates(Template, Context) of
+        [] -> [];
+        _ -> [#{kind => template, name => Name, template => Template, row => Row, column => Column}]
+    end,
+    Links ++ inheritance_links(Rest, File, Context);
+inheritance_links([{overrules_keyword, {_, Row, Column}, Name} | Rest], File, Context) ->
+    Links = case matching_templates(overrules_option(File, Context), Context) of
+        [] -> [];
+        _ -> [#{kind => template, name => Name, is_overrules => true, row => Row, column => Column}]
+    end,
+    Links ++ inheritance_links(Rest, File, Context);
+inheritance_links([_ | Rest], File, Context) -> inheritance_links(Rest, File, Context);
+inheritance_links([], _, _) -> [].
+
+%% @doc Identify the current template through the site index, including source-directory symlinks.
+overrules_option(File, Context) when is_binary(File); is_list(File) ->
+    Canonical = filter_development_filename:resolve(unicode:characters_to_binary(File)),
+    case [{overrules, Name, Path}
+          || #module_index{key = #module_index_key{name = Name}, filepath = Path}
+                <- z_module_indexer:all(template, Context),
+             filter_development_filename:resolve(unicode:characters_to_binary(Path)) =:= Canonical] of
+        [Option | _] -> Option;
+        [] -> undefined
+    end;
+overrules_option(_, _) -> undefined.
+
+%% @doc Resolve source references for trusted development tools without browser tokens.
+-spec source_references(binary(), z:context()) -> [map()].
+source_references(Source, Context) ->
+    case template_compiler_scanner:scan(<<"source">>, Source) of
+        {ok, Tokens} -> source_links_tokens(Tokens, Context);
+        {error, _} -> []
+    end.
+
+%% @doc Authorize a resolved source location for the browser editor callback.
+sign_reference(#{file := File, line := Line} = Ref, Context) ->
+    Ref#{token => z_crypto:pickle({development_editor_source, File, Line}, Context)};
+sign_reference(Ref, _Context) -> Ref.
+
 %% @doc Recognize source references without treating strings or comments as code.
 source_links_tokens([{Kind, _, _}, {string_literal, {_, Row, Column}, Name} | Rest], Context)
-    when Kind =:= include_keyword; Kind =:= catinclude_keyword ->
+    when Kind =:= include_keyword; Kind =:= catinclude_keyword; Kind =:= extends_keyword;
+         Kind =:= compose_keyword; Kind =:= catcompose_keyword ->
     [#{kind => template, name => Name, row => Row, column => Column + 1,
-       is_category => Kind =:= catinclude_keyword} | source_links_tokens(Rest, Context)];
+       is_category => Kind =:= catinclude_keyword orelse Kind =:= catcompose_keyword} | source_links_tokens(Rest, Context)];
 source_links_tokens([{identifier, _, <<"template">>}, {equal, _, _},
                      {string_literal, {_, Row, Column}, Name} | Rest], Context) ->
     [#{kind => template, name => Name, row => Row, column => Column + 1}
@@ -190,13 +260,13 @@ source_link(Kind, {identifier, {_, Row, Column}, Name}, Context) ->
     end.
 
 %% @doc Resolve references through the same site-aware lookup as rendering.
-reference_source(delegate, Name, Context) ->
+reference_source(delegate, Name, _Context) ->
     try binary_to_existing_atom(Name, utf8) of
         Module ->
             case code:ensure_loaded(Module) of
                 {module, Module} ->
                     case erlang:function_exported(Module, event, 2) of
-                        true -> signed_source(z_development_editor:source_location(Module, {event, 2}), Context);
+                        true -> existing_source(z_development_editor:source_location(Module, {event, 2}), Module);
                         false -> undefined
                     end;
                 {error, _} -> undefined
@@ -228,33 +298,32 @@ reference_source(Kind, Name, Context) when Kind =:= scomp; Kind =:= action ->
     end.
 
 %% @doc Prefer the rendering/read callback, falling back to the module's source.
-callback_source(Module, Function, Context) ->
+callback_source(Module, Function, _Context) ->
     Location = case z_development_editor:source_location(Module, Function) of
         {ok, _, _} = Found -> Found;
         {error, _} -> z_development_editor:source_location(Module)
     end,
-    signed_source(Location, Context).
+    existing_source(Location, Module).
 
-%% @doc Find a filter function's source and sign the file and line for editor launch.
-filter_source(Name, Context) ->
+%% @doc Find an existing filter function's source file and line.
+filter_source(Name, _Context) ->
     try
         Module = binary_to_existing_atom(<<"filter_", Name/binary>>, utf8),
         {module, Module} = code:ensure_loaded(Module),
         Function = binary_to_existing_atom(Name, utf8),
-        signed_source(z_development_editor:source_location(Module, Function), Context)
+        existing_source(z_development_editor:source_location(Module, Function), Module)
     catch
         error:badarg -> undefined;
         error:{badmatch, {error, _}} -> undefined
     end.
 
-%% @doc Sign only existing source files for the permission-checked editor endpoint.
-signed_source({ok, File, Line}, Context) ->
+%% @doc Return only existing source files; browser authorization is added by source_links/2.
+existing_source({ok, File, Line}, Module) ->
     case filelib:is_regular(File) of
         true ->
             FileB = unicode:characters_to_binary(filename:absname(File)),
-            #{file => FileB, line => Line,
-              token => z_crypto:pickle({development_editor_source, FileB, Line}, Context)};
+            #{file => FileB, line => Line, erlang_module => Module};
         false -> undefined
     end;
-signed_source({error, _}, _Context) ->
+existing_source({error, _}, _Module) ->
     undefined.

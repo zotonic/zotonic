@@ -179,7 +179,7 @@
                     if (link.kind === 'template') {
                         fallback.hidden = true;
                         button.hidden = false;
-                        button.addEventListener('click', () => openTemplate(link.name, Boolean(link.isCategory)));
+                        button.addEventListener('click', () => openTemplate(link.template || link.name, Boolean(link.isCategory), Boolean(link.isOverrules)));
                     } else {
                         Object.assign(button.dataset, {
                             editorFile: link.file, editorLine: link.line,
