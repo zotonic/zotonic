@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-15 15:53\n"
+"PO-Revision-Date: 2026-10-18 15:51\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "MIME-Version: 1.0\n"
@@ -365,6 +365,7 @@ msgstr "Cancelar"
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:11
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:22
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:28
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log.tpl:12
 #: zotonic_mod_survey/src/mod_survey.erl:656
 msgid "Category"
 msgstr "Categoria"
@@ -463,6 +464,7 @@ msgstr "Conteúdo"
 #: zotonic_mod_content_groups/priv/templates/_admin_overview_filter_panel.tpl:6
 #: zotonic_mod_content_groups/priv/templates/_dialog_admin_bulk_update.tpl:5
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:62
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log.tpl:13
 msgid "Content group"
 msgstr "Grupo de conteúdo"
 
@@ -1949,6 +1951,7 @@ msgstr "Nome do ficheiro"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:27
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:24
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_log.tpl:18
 #: zotonic_mod_logging/priv/templates/admin_log.tpl:46
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:183
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:46
@@ -3188,8 +3191,8 @@ msgstr "Estado"
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
 #: zotonic_mod_base/priv/templates/_session_info.tpl:12
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:221
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:34
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:49
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:42
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:50
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:111
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:11
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:7
@@ -4774,7 +4777,7 @@ msgstr "Clique em \"apagar\" para remover qualquer nome de usuário/senha existe
 msgid "Confirm user deletion"
 msgstr "Confirmar eliminação do utilizador"
 
-#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:123
+#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:128
 msgid "Could not create the user. Sorry."
 msgstr "Não foi possível criar o utilizador. Desculpe."
 
@@ -4796,7 +4799,7 @@ msgstr "Excluir nome de usuário"
 msgid "Deleted the user account."
 msgstr "Eliminou a conta de usuário."
 
-#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:119
+#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:124
 msgid "Duplicate username, please choose another username."
 msgstr "Duplique o nome de usuário, por favor escolha outro nome de usuário."
 
@@ -4929,7 +4932,7 @@ msgid "One moment, please..."
 msgstr "Um momento, por favor..."
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:65
-#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:126
+#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:131
 msgid "Only administrators can add users."
 msgstr "Apenas administradores podem adicionar usuários."
 
@@ -5133,7 +5136,7 @@ msgstr "A verificar..."
 msgid "When you add credentials to a person then the person becomes a user. A person or machine can log on with those credentials and perform actions on your Zotonic system.<br/><br/>What a user can do depends on the groups the user is member of."
 msgstr "Quando você adiciona credenciais a uma pessoa, a pessoa se torna um usuário. Uma pessoa ou máquina pode fazer logon com essas credenciais e executar ações em seu sistema Zotonic.<br/><br/>O que um usuário pode fazer depende dos grupos dos quais o usuário é membro."
 
-#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:121
+#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:126
 msgid "You are not allowed to create the person page."
 msgstr "Você não está autorizado a criar a página da pessoa."
 
@@ -6634,7 +6637,7 @@ msgid "Multiple accounts"
 msgstr "Várias contas"
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:199
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:87
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:88
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:26
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:55
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:198
@@ -7234,7 +7237,7 @@ msgid "Please make sure you store the backup encryption password in a safe <u>ex
 msgstr "Certifique-se de armazenar a senha de criptografia de backup em um local <u>externo</u> seguro."
 
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:75
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:84
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:85
 msgid "Previous"
 msgstr "Anterior"
 
@@ -8412,11 +8415,11 @@ msgstr "A nova localização pode ser um caminho local ou um URL completo. Deixe
 msgid "You are not allowed to change this."
 msgstr "Não estás autorizado a mudar isto."
 
-#: zotonic_mod_development/src/mod_development.erl:565
+#: zotonic_mod_development/src/mod_development.erl:667
 msgid "<i>Function name does not exist.</i>"
 msgstr "<i>O nome da função não existe.</i>"
 
-#: zotonic_mod_development/src/mod_development.erl:568
+#: zotonic_mod_development/src/mod_development.erl:670
 msgid "<i>Module not found.</i>"
 msgstr "<i>Módulo não encontrado.</i>"
 
@@ -8487,8 +8490,8 @@ msgstr "Calcule e visualize um gráfico de dependência de todos os modelos."
 msgid "Check debug points in the template source to see debug data here."
 msgstr "Verifique os pontos de depuração na fonte do modelo para ver os dados de depuração aqui."
 
-#: zotonic_mod_development/src/mod_development.erl:373
-#: zotonic_mod_development/src/mod_development.erl:388
+#: zotonic_mod_development/src/mod_development.erl:475
+#: zotonic_mod_development/src/mod_development.erl:490
 msgid "Checking all templates..."
 msgstr "Verificando todos os modelos..."
 
@@ -8616,7 +8619,7 @@ msgid "Detecting editors…"
 msgstr "Detecção de editores…"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:7
-#: zotonic_mod_development/src/mod_development.erl:1233
+#: zotonic_mod_development/src/mod_development.erl:1335
 msgid "Development"
 msgstr "Desenvolvimento"
 
@@ -8740,11 +8743,11 @@ msgstr "Rastreamento de consulta de banco de dados habilitado"
 msgid "Enter the module and function you want to trace. If no function is given, all functions in the module will be traced. Enter how many calls to trace before stopping."
 msgstr "Introduza o módulo e a função que pretende rastrear. Se não for indicada nenhuma função, todas as funções do módulo serão rastreadas. Introduza o número de chamadas a rastrear antes de parar."
 
-#: zotonic_mod_development/src/mod_development.erl:537
+#: zotonic_mod_development/src/mod_development.erl:639
 msgid "Error changing the console logs."
 msgstr "Erro ao alterar os logs do console."
 
-#: zotonic_mod_development/src/mod_development.erl:631
+#: zotonic_mod_development/src/mod_development.erl:733
 msgid "Error parsing template."
 msgstr "Erro ao analisar o modelo."
 
@@ -8806,7 +8809,7 @@ msgstr "Rastreio de chamadas de função"
 msgid "Function call tracing has been disabled. Use the following to enable function call tracing:"
 msgstr "O rastreio de chamadas de função foi desativado. Utilize o seguinte para ativar o rastreio de chamadas de função:"
 
-#: zotonic_mod_development/src/mod_development.erl:571
+#: zotonic_mod_development/src/mod_development.erl:673
 msgid "Function tracing has been disabled in the Zotonic config."
 msgstr "O rastreio de funções foi desativado na configuração do Zotonic."
 
@@ -8834,7 +8837,7 @@ msgstr "Inclui o modelo base, as variantes de categoria e as variantes de nome d
 msgid "Introspection"
 msgstr "Introspecção"
 
-#: zotonic_mod_development/src/support/z_development_template.erl:41
+#: zotonic_mod_development/src/support/z_development_template.erl:59
 msgid "Invalid template name."
 msgstr "Nome do modelo inválido."
 
@@ -8904,7 +8907,7 @@ msgstr "Combinar um URL de solicitação, exibir a regra de envio correspondente
 msgid "Matches with the same name are listed in module priority order."
 msgstr "Os resultados com o mesmo nome são apresentados por ordem de prioridade dos módulos."
 
-#: zotonic_mod_development/src/support/z_development_template.erl:48
+#: zotonic_mod_development/src/support/z_development_template.erl:66
 msgid "Matching templates"
 msgstr "Modelos correspondentes"
 
@@ -8951,18 +8954,18 @@ msgstr "Não foi encontrada nenhuma regra de expedição correspondente."
 msgid "No matching templates found."
 msgstr "Não foram encontrados modelos correspondentes."
 
-#: zotonic_mod_development/src/mod_development.erl:535
+#: zotonic_mod_development/src/mod_development.erl:637
 msgid "No permission to access the console logs."
 msgstr "Sem permissão para acessar os logs do console."
 
-#: zotonic_mod_development/src/mod_development.erl:378
-#: zotonic_mod_development/src/mod_development.erl:393
-#: zotonic_mod_development/src/mod_development.erl:408
-#: zotonic_mod_development/src/mod_development.erl:416
-#: zotonic_mod_development/src/mod_development.erl:443
-#: zotonic_mod_development/src/mod_development.erl:485
-#: zotonic_mod_development/src/mod_development.erl:502
-#: zotonic_mod_development/src/mod_development.erl:519
+#: zotonic_mod_development/src/mod_development.erl:480
+#: zotonic_mod_development/src/mod_development.erl:495
+#: zotonic_mod_development/src/mod_development.erl:510
+#: zotonic_mod_development/src/mod_development.erl:518
+#: zotonic_mod_development/src/mod_development.erl:545
+#: zotonic_mod_development/src/mod_development.erl:587
+#: zotonic_mod_development/src/mod_development.erl:604
+#: zotonic_mod_development/src/mod_development.erl:621
 msgid "No permission to use mod_development."
 msgstr "Sem permissão para usar mod_development."
 
@@ -8971,7 +8974,7 @@ msgstr "Sem permissão para usar mod_development."
 msgid "No references found."
 msgstr "Não foram encontradas referências."
 
-#: zotonic_mod_development/src/mod_development.erl:497
+#: zotonic_mod_development/src/mod_development.erl:599
 msgid "No template found in the context."
 msgstr "Não foi encontrado nenhum modelo no contexto."
 
@@ -8992,7 +8995,7 @@ msgstr "Não encontrado"
 msgid "Observers"
 msgstr "Observadores"
 
-#: zotonic_mod_development/src/mod_development.erl:574
+#: zotonic_mod_development/src/mod_development.erl:676
 msgid "Only the admin user can set traces."
 msgstr "Apenas o utilizador administrador pode definir os traços."
 
@@ -9130,19 +9133,19 @@ msgstr "Iniciar rastreio"
 msgid "Start matching dispatch rules"
 msgstr "Comece a combinar as regras de envio"
 
-#: zotonic_mod_development/src/mod_development.erl:531
+#: zotonic_mod_development/src/mod_development.erl:633
 msgid "Started logging to the console of your browser tab."
 msgstr "Começou a fazer login no console da guia do seu navegador."
 
-#: zotonic_mod_development/src/mod_development.erl:405
+#: zotonic_mod_development/src/mod_development.erl:507
 msgid "Started tracing all template inclusions."
 msgstr "Começou a rastrear todas as inclusões de modelos."
 
-#: zotonic_mod_development/src/mod_development.erl:480
+#: zotonic_mod_development/src/mod_development.erl:582
 msgid "Started tracing template inclusions by rendering the page."
 msgstr "Começou a rastrear as inclusões de modelos renderizando a página."
 
-#: zotonic_mod_development/src/mod_development.erl:402
+#: zotonic_mod_development/src/mod_development.erl:504
 msgid "Started tracing template inclusions for your session."
 msgstr "Começou a rastrear inclusões de modelos para sua sessão."
 
@@ -9152,11 +9155,11 @@ msgstr "Começou a rastrear inclusões de modelos para sua sessão."
 msgid "Stop"
 msgstr "Pare"
 
-#: zotonic_mod_development/src/mod_development.erl:533
+#: zotonic_mod_development/src/mod_development.erl:635
 msgid "Stopped logging to the console of all browser tabs."
 msgstr "Parou de fazer login no console de todas as guias do navegador."
 
-#: zotonic_mod_development/src/mod_development.erl:414
+#: zotonic_mod_development/src/mod_development.erl:516
 msgid "Stopped tracing template inclusions for all sessions."
 msgstr "Interrompido o rastreamento de inclusões de modelos para todas as sessões."
 
@@ -9195,7 +9198,7 @@ msgstr "Modelo"
 msgid "Template debugging"
 msgstr "Depuração de modelos"
 
-#: zotonic_mod_development/src/mod_development.erl:634
+#: zotonic_mod_development/src/mod_development.erl:736
 msgid "Template file not found."
 msgstr "Ficheiro de modelo não encontrado."
 
@@ -9215,7 +9218,7 @@ msgstr "Caminho modelo"
 msgid "Test with this template"
 msgstr "Teste com este modelo"
 
-#: zotonic_mod_development/src/mod_development.erl:482
+#: zotonic_mod_development/src/mod_development.erl:584
 msgid "The path must be a local URL."
 msgstr "O caminho deve ser um URL local."
 
@@ -9308,7 +9311,7 @@ msgstr "Padrão URI"
 msgid "Uncheck to debug only your current session."
 msgstr "Desmarque para depurar apenas a sua sessão atual."
 
-#: zotonic_mod_development/src/mod_development.erl:516
+#: zotonic_mod_development/src/mod_development.erl:618
 msgid "Updated template debug points."
 msgstr "Pontos de depuração de modelos actualizados."
 
@@ -9337,8 +9340,9 @@ msgstr "À espera de dados de depuração..."
 msgid "You are not allowed to use the dispatch debugging."
 msgstr "Você não está autorizado a usar a depuração de despacho."
 
-#: zotonic_mod_development/src/support/z_development_template.erl:53
-#: zotonic_mod_development/src/support/z_development_template.erl:70
+#: zotonic_mod_development/src/support/z_development_template.erl:48
+#: zotonic_mod_development/src/support/z_development_template.erl:71
+#: zotonic_mod_development/src/support/z_development_template.erl:88
 msgid "You are not allowed to use the template debugging."
 msgstr "Não é permitido utilizar a depuração do modelo."
 
@@ -10660,18 +10664,23 @@ msgstr "As propriedades mais conhecidas são:"
 msgid "You do not have permission to use the CSV/XLSX import module."
 msgstr "Não tem autorização para utilizar o módulo de importação CSV/XLSX."
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:58
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:66
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:41
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:99
 msgid "Active"
 msgstr "Ativo"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:207
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:14
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:16
+msgid "Activity log"
+msgstr "Registo de atividades"
+
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:296
 msgid "Add default connection"
 msgstr "Adicionar ligação predefinida"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user.tpl:32
-#: zotonic_mod_import_feed/src/models/m_import_feed.erl:413
+#: zotonic_mod_import_feed/src/models/m_import_feed.erl:479
 msgid "Administrator accounts cannot run feed imports. Importing external content with full administrator permissions is dangerous. Select a non-administrator account with only the permissions needed for importing."
 msgstr "As contas de administrador não podem executar importações de feeds. Importar conteúdo externo com permissões de administrador totais é perigoso. Selecione uma conta que não seja de administrador e que tenha apenas as permissões necessárias para a importação."
 
@@ -10680,6 +10689,8 @@ msgid "Administrator accounts cannot run feed imports. Use a non-administrator a
 msgstr "As contas de administrador não podem executar importações de feeds. Utilize uma conta que não seja de administrador, com permissões limitadas."
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:13
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_log.tpl:8
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_log.tpl:13
 msgid "All feeds"
 msgstr "Todos os feeds"
 
@@ -10696,15 +10707,15 @@ msgid "Also subscribe imported connections for updates"
 msgstr "Inscreva também as ligações importadas para receber atualizações"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:29
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:20
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:24
 msgid "Anonymous requests"
 msgstr "Pedidos anónimos"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:35
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:43
 msgid "Articles"
 msgstr "Artigos"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:41
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:42
 msgid "Articles and dependent media, 100 entries per page."
 msgstr "Artigos e ficheiros associados, 100 entradas por página."
 
@@ -10725,6 +10736,10 @@ msgstr "Por predefinição, o conteúdo importado não é considerado oficial. A
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user.tpl:23
 msgid "Change user"
 msgstr "Mudar de utilizador"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:30
+msgid "Checking website for feeds…"
+msgstr "Verificar se o site tem feeds…"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:105
 msgid "Connection import depth"
@@ -10751,25 +10766,25 @@ msgid "Default is 1: import directly connected resources. Use 0 to skip connecti
 msgstr "O valor predefinido é 1: importar recursos diretamente ligados. Utilize 0 para ignorar as ligações."
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_dialog.tpl:23
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:183
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:184
 msgid "Delete feed"
 msgstr "Eliminar feed"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:378
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:482
 msgid "Delete feed?"
 msgstr "Apagar feed?"
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:174
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:175
 msgid "Delete imported articles and media that you are allowed to delete. Protected resources are kept. The feed will be paused; its settings and import history are retained."
 msgstr "Elimine os artigos e os ficheiros multimédia importados que tem permissão para eliminar. Os recursos protegidos são mantidos. O feed será suspenso; as suas definições e o histórico de importação são mantidos."
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:171
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:176
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:180
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:172
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:177
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:181
 msgid "Delete imported content"
 msgstr "Eliminar conteúdo importado"
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:178
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:179
 msgid "Delete imported content?"
 msgstr "Apagar o conteúdo importado?"
 
@@ -10789,6 +10804,12 @@ msgstr "Eliminado:"
 msgid "Dependent media"
 msgstr "Meios de comunicação dependentes"
 
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log.tpl:14
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:12
+#: zotonic_mod_translation/priv/templates/_translation_language_status.tpl:43
+msgid "Details"
+msgstr "Detalhes"
+
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:34
 msgid "Development environment: local destinations and self-signed certificates are allowed."
 msgstr "Ambiente de desenvolvimento: são permitidos destinos locais e certificados autoassinados."
@@ -10797,7 +10818,7 @@ msgstr "Ambiente de desenvolvimento: são permitidos destinos locais e certifica
 msgid "Discover RSS or Atom feeds and import their articles automatically."
 msgstr "Descubra feeds RSS ou Atom e importe os respetivos artigos automaticamente."
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:23
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:27
 msgid "Discover feeds"
 msgstr "Descubra os feeds"
 
@@ -10826,10 +10847,14 @@ msgstr "Enriquecer as entradas do WordPress utilizando a API REST pública"
 msgid "Entries advertising a Zotonic resource export use the native importer, preserving structured content and resource connections."
 msgstr "As entradas que anunciam uma exportação de recursos do Zotonic utilizam o importador nativo, preservando o conteúdo estruturado e as ligações entre recursos."
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:38
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:46
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:48
 msgid "Errors"
 msgstr "Erros"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log.tpl:9
+msgid "Event / result"
+msgstr "Evento / resultado"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:2
 msgid "Example entries"
@@ -10844,26 +10869,45 @@ msgstr "Exemplo:"
 msgid "Failed:"
 msgstr "Falha:"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:33
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log.tpl:8
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:41
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_log.tpl:11
 msgid "Feed"
 msgstr "Feed"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:390
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_log.tpl:3
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_log.tpl:7
+msgid "Feed activity log"
+msgstr "Registo de atividades do feed"
+
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:494
 msgid "Feed deleted"
 msgstr "Feed eliminado"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:92
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:93
 msgid "Feed not found or access denied."
 msgstr "Feed não encontrado ou acesso recusado."
+
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:460
+msgid "Feed queued for fetching. Watch the activity log for results."
+msgstr "Feed colocado na fila para ser obtido. Consulte o registo de atividades para ver os resultados."
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:4
 msgid "Feed settings"
 msgstr "Definições do feed"
 
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log_controls.tpl:8
+msgid "Fetch now"
+msgstr "Ir buscar agora"
+
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:27
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:18
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:22
 msgid "Fetch using"
 msgstr "Recuperar utilizando"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log_controls.tpl:12
+msgid "Fetches and imports new or changed entries using the configured import user."
+msgstr "Recupera e importa entradas novas ou alteradas utilizando o utilizador de importação configurado."
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:74
 msgid "Guess category from tags"
@@ -10887,15 +10931,15 @@ msgstr "Categoria de importação"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:4
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:11
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:174
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:227
 msgid "Import feeds"
 msgstr "Importar feeds"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:40
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:41
 msgid "Import history"
 msgstr "Histórico de importações"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:82
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:83
 msgid "Import history pages"
 msgstr "Páginas do histórico de importações"
 
@@ -10907,15 +10951,15 @@ msgstr "Importar definições"
 msgid "Import user"
 msgstr "Importar utilizador"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:37
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:45
 msgid "Imported / updated / skipped"
 msgstr "Importado / atualizado / ignorado"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:367
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:471
 msgid "Imported content deleted"
 msgstr "Conteúdo importado eliminado"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:56
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:64
 msgid "Importing"
 msgstr "Importação"
 
@@ -10923,7 +10967,7 @@ msgstr "Importação"
 msgid "Imports run with this account's permissions. Only administrators and users with full access to accounts can change it."
 msgstr "As importações são executadas com as permissões desta conta. Apenas os administradores e os utilizadores com acesso total às contas podem alterá-la."
 
-#: zotonic_mod_import_feed/src/models/m_import_feed.erl:409
+#: zotonic_mod_import_feed/src/models/m_import_feed.erl:473
 msgid "Invalid removal regexp on line"
 msgstr "Expressão regular de remoção inválida na linha"
 
@@ -10931,15 +10975,15 @@ msgstr "Expressão regular de remoção inválida na linha"
 msgid "Kept:"
 msgstr "Mantido:"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:48
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:49
 msgid "Kind"
 msgstr "Tipo"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:39
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:47
 msgid "Last poll"
 msgstr "Última sondagem"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:50
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:51
 msgid "Last processed"
 msgstr "Última atualização"
 
@@ -10947,7 +10991,17 @@ msgstr "Última atualização"
 msgid "Loading example entries…"
 msgstr "A carregar exemplos de entradas…"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:78
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_discovery.tpl:5
+msgid "Loading feed and example entries…"
+msgstr "A carregar o feed e os exemplos de entradas…"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:86
+#: zotonic_mod_logging/priv/templates/admin_log_base.tpl:3
+#: zotonic_mod_logging/src/mod_logging.erl:349
+msgid "Log"
+msgstr "Diário de Bordo"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:87
 msgid "Manage"
 msgstr "Gerir"
 
@@ -10963,11 +11017,19 @@ msgstr "Ficheiros multimédia encontrados"
 msgid "Medium attached directly"
 msgstr "Médio fixado diretamente"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:40
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_log.tpl:20
+msgid "New events appear live at the top. Scroll down to load older events. Logs are kept for 30 days."
+msgstr "Os eventos mais recentes aparecem em tempo real na parte superior. Deslize para baixo para carregar eventos mais antigos. Os registos são mantidos durante 30 dias."
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:48
 msgid "Next poll"
 msgstr "Próxima sondagem"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:83
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log.tpl:21
+msgid "No activity for this feed, or access denied."
+msgstr "Não há atividade neste feed ou o acesso foi recusado."
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:92
 msgid "No feeds configured yet."
 msgstr "Ainda não foram configurados quaisquer feeds."
 
@@ -10975,7 +11037,7 @@ msgstr "Ainda não foram configurados quaisquer feeds."
 msgid "No import user selected"
 msgstr "Não foi selecionado nenhum utilizador de importação"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:76
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:77
 msgid "Nothing imported yet."
 msgstr "Ainda não foi importado nada."
 
@@ -10987,7 +11049,7 @@ msgstr "Uma expressão regular por linha. O texto correspondente é removido dos
 msgid "Original article"
 msgstr "Artigo original"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:21
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:22
 msgid "Pause"
 msgstr "Pausa"
 
@@ -10995,11 +11057,11 @@ msgstr "Pausa"
 msgid "Pause automatic imports"
 msgstr "Suspender as importações automáticas"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:54
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:62
 msgid "Paused"
 msgstr "Em pausa"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:31
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:32
 msgid "Poll now"
 msgstr "Votar agora"
 
@@ -11007,7 +11069,7 @@ msgstr "Votar agora"
 msgid "Polling interval (minutes)"
 msgstr "Intervalo de sondagem (minutos)"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:36
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:44
 msgid "Polls"
 msgstr "Sondagens"
 
@@ -11024,21 +11086,26 @@ msgid "Protected resources and resources you cannot delete will be kept. Content
 msgstr "Os recursos protegidos e os recursos que não é possível eliminar serão mantidos. O conteúdo partilhado com outros feeds está incluído."
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:30
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:21
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:25
 msgid "Registered OAuth2 credentials"
 msgstr "Credenciais OAuth2 registadas"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:33
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:34
 msgid "Reimport current entries"
 msgstr "Reimportar registos atuais"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:46
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log.tpl:10
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:47
 msgid "Resource"
 msgstr "Recurso"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:19
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:20
 msgid "Resume"
 msgstr "Currículo"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:162
+msgid "Save & refetch deleted"
+msgstr "Guardar e recuperar os itens eliminados"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:161
 msgid "Save feed"
@@ -11048,11 +11115,11 @@ msgstr "Guardar feed"
 msgid "Select a feed"
 msgstr "Selecione um feed"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:214
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:303
 msgid "Select connected page"
 msgstr "Selecionar a página associada"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:246
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:335
 msgid "Select import user"
 msgstr "Selecionar utilizador para importar"
 
@@ -11068,7 +11135,7 @@ msgstr "Selecione a conta cujas permissões serão utilizadas para importar arti
 msgid "Select user"
 msgstr "Selecionar utilizador"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:47
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:48
 msgid "Source identity"
 msgstr "Identidade da fonte"
 
@@ -11085,11 +11152,11 @@ msgstr "As subscrições requerem uma fonte que suporte atualizações e importa
 msgid "Tags"
 msgstr "Etiquetas"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:28
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:29
 msgid "Test / preview"
 msgstr "Teste / pré-visualização"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:35
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:36
 msgid "Testing fetches example entries without importing them. Reimport processes the entries currently available in the feed. Deleted resources stay deleted."
 msgstr "A função «Testing» recupera entradas de exemplo sem as importar. A função «Reimport» processa as entradas atualmente disponíveis no feed. Os recursos eliminados permanecem eliminados."
 
@@ -11117,13 +11184,26 @@ msgstr "Estas ligações são adicionadas a todos os artigos importados. Guarde 
 msgid "These defaults apply to imported articles and their dependent media. Leave empty to use the standard copyright defaults."
 msgstr "Estas predefinições aplicam-se aos artigos importados e aos seus ficheiros multimédia associados. Deixe em branco para utilizar as predefinições padrão de direitos de autor."
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:179
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:180
 msgid "This deletes all deletable articles and media imported by this feed, including resources shared with other feeds. Protected resources and resources you cannot delete are kept. The feed will be paused."
 msgstr "Esta ação elimina todos os artigos e ficheiros multimédia que possam ser eliminados e que tenham sido importados por este feed, incluindo os recursos partilhados com outros feeds. Os recursos protegidos e aqueles que não podem ser eliminados são mantidos. O feed será suspenso."
 
-#: zotonic_mod_import_feed/src/models/m_import_feed.erl:411
+#: zotonic_mod_import_feed/src/models/m_import_feed.erl:475
+msgid "This feed is paused. Resume it before fetching."
+msgstr "Este feed está em pausa. Retome-o antes de o obter."
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log_controls.tpl:10
+msgid "This feed is paused. Resume it in its settings before fetching."
+msgstr "Este feed está em pausa. Reanime-o nas definições antes de o carregar."
+
+#: zotonic_mod_import_feed/src/models/m_import_feed.erl:477
 msgid "This feed is still importing. Pause it and wait for the current import to finish before deleting its content."
 msgstr "Este feed ainda está a ser importado. Pausa-o e aguarda que a importação atual termine antes de eliminar o seu conteúdo."
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log.tpl:7
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:5
+msgid "Time"
+msgstr "Hora"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user_results.tpl:15
 msgid "Up to 50 users are shown. Search by name to narrow the results. Disabled accounts cannot be selected."
@@ -11133,11 +11213,21 @@ msgstr "São apresentados até 50 utilizadores. Pesquise por nome para filtrar o
 msgid "Use Test / preview to fetch example entries."
 msgstr "Utilize a opção «Teste / pré-visualização» para obter entradas de exemplo."
 
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log.tpl:11
+#: zotonic_mod_logging/priv/templates/admin_log.tpl:24
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:25
+#: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:49
+#: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:40
+#: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:39
+#: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:191
+msgid "User"
+msgstr "Utilizador"
+
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:32
 msgid "Uses credentials registered for the import user and destination host. Credentials are only sent over HTTPS."
 msgstr "Utiliza as credenciais registadas para o utilizador de importação e o anfitrião de destino. As credenciais são enviadas apenas através de HTTPS."
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:16
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:20
 msgid "Website or feed URL"
 msgstr "URL do site ou do feed"
 
@@ -11145,7 +11235,7 @@ msgstr "URL do site ou do feed"
 msgid "WordPress enrichment unavailable; the feed data will be used."
 msgstr "O enriquecimento do WordPress não está disponível; serão utilizados os dados do feed."
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:203
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:285
 msgid "You are not allowed to manage feeds."
 msgstr "Não tem permissão para gerir feeds."
 
@@ -11483,11 +11573,6 @@ msgstr "Registo de correio eletrónico de entrada/saída"
 msgid "Latest reported security policy:"
 msgstr "Última política de segurança comunicada:"
 
-#: zotonic_mod_logging/priv/templates/admin_log_base.tpl:3
-#: zotonic_mod_logging/src/mod_logging.erl:349
-msgid "Log"
-msgstr "Diário de Bordo"
-
 #: zotonic_mod_logging/priv/templates/admin_log.tpl:3
 #: zotonic_mod_logging/priv/templates/admin_log.tpl:10
 msgid "Log messages"
@@ -11618,15 +11703,6 @@ msgstr "Para"
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:70
 msgid "Toggle non people"
 msgstr "Alternar não pessoas"
-
-#: zotonic_mod_logging/priv/templates/admin_log.tpl:24
-#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:25
-#: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:49
-#: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:40
-#: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:39
-#: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:191
-msgid "User"
-msgstr "Utilizador"
 
 #: zotonic_mod_logging/priv/templates/admin_log.tpl:43
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:43
@@ -11896,11 +11972,6 @@ msgstr "Eliminada a lista de correio."
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:131
 msgid "Delivery history is preserved. Sending again may result in recipients receiving the same content twice. Older mailings from before run tracking are not used for duplicate detection."
 msgstr "O histórico de entregas é mantido. O reenvio pode fazer com que os destinatários recebam o mesmo conteúdo duas vezes. As remessas mais antigas, anteriores à implementação do sistema de rastreio, não são utilizadas para a deteção de duplicados."
-
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:12
-#: zotonic_mod_translation/priv/templates/_translation_language_status.tpl:43
-msgid "Details"
-msgstr "Detalhes"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:61
 msgid "Disabled"
@@ -13157,10 +13228,6 @@ msgstr "Este e-mail de teste será enviado imediatamente."
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipient.tpl:6
 msgid "Tick the checkbox if you want the recipient to receive a welcome e-mail message."
 msgstr "Marque a caixa de seleção se você quiser que o destinatário receba uma mensagem de boas-vindas por e-mail."
-
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:5
-msgid "Time"
-msgstr "Hora"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:2
 msgid "Times shown in"

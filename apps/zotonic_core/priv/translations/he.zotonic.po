@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-15 15:53\n"
+"PO-Revision-Date: 2026-10-18 15:51\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -365,6 +365,7 @@ msgstr "לְבַטֵל"
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:11
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:22
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:28
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log.tpl:12
 #: zotonic_mod_survey/src/mod_survey.erl:656
 msgid "Category"
 msgstr "קטגוריה"
@@ -463,6 +464,7 @@ msgstr "תוֹכֶן"
 #: zotonic_mod_content_groups/priv/templates/_admin_overview_filter_panel.tpl:6
 #: zotonic_mod_content_groups/priv/templates/_dialog_admin_bulk_update.tpl:5
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:62
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log.tpl:13
 msgid "Content group"
 msgstr "קבוצת תוכן"
 
@@ -1949,6 +1951,7 @@ msgstr "שם קובץ"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:27
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:24
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_log.tpl:18
 #: zotonic_mod_logging/priv/templates/admin_log.tpl:46
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:183
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:46
@@ -3188,8 +3191,8 @@ msgstr "מדינה"
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
 #: zotonic_mod_base/priv/templates/_session_info.tpl:12
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:221
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:34
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:49
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:42
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:50
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:111
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:11
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:7
@@ -4774,7 +4777,7 @@ msgstr "לחץ על \"מחק\" כדי להסיר כל שם משתמש / סיסמ
 msgid "Confirm user deletion"
 msgstr "אשר את מחיקת המשתמש"
 
-#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:123
+#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:128
 msgid "Could not create the user. Sorry."
 msgstr "לא ניתן היה ליצור את המשתמש. מצטער."
 
@@ -4796,7 +4799,7 @@ msgstr "מחק את שם המשתמש"
 msgid "Deleted the user account."
 msgstr "מחק את חשבון המשתמש."
 
-#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:119
+#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:124
 msgid "Duplicate username, please choose another username."
 msgstr "שכפול שם משתמש, בחר שם משתמש אחר."
 
@@ -4929,7 +4932,7 @@ msgid "One moment, please..."
 msgstr "רגע אחד בבקשה..."
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:65
-#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:126
+#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:131
 msgid "Only administrators can add users."
 msgstr "רק מנהלי מערכת יכולים להוסיף משתמשים."
 
@@ -5133,7 +5136,7 @@ msgstr "מאמת ..."
 msgid "When you add credentials to a person then the person becomes a user. A person or machine can log on with those credentials and perform actions on your Zotonic system.<br/><br/>What a user can do depends on the groups the user is member of."
 msgstr "כאשר אתה מוסיף אישורים לאדם אז האדם הופך למשתמש. אדם או מכונה יכולים להיכנס עם האישורים הללו ולבצע פעולות במערכת Zotonic שלך.<br/><br/>מה שמשתמש יכול לעשות תלוי בקבוצות בהן הוא חבר."
 
-#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:121
+#: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:126
 msgid "You are not allowed to create the person page."
 msgstr "אינך רשאי ליצור את דף האדם."
 
@@ -6634,7 +6637,7 @@ msgid "Multiple accounts"
 msgstr "מספר חשבונות"
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:199
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:87
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:88
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:26
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:55
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:198
@@ -7234,7 +7237,7 @@ msgid "Please make sure you store the backup encryption password in a safe <u>ex
 msgstr "אנא ודא שאתה מאחסן את סיסמת ההצפנה לגיבוי במיקום בטוח <u></u> חיצוני."
 
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:75
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:84
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:85
 msgid "Previous"
 msgstr "קודם"
 
@@ -8412,11 +8415,11 @@ msgstr "המיקום החדש יכול להיות נתיב מקומי או כת�
 msgid "You are not allowed to change this."
 msgstr "אינך רשאי לשנות זאת."
 
-#: zotonic_mod_development/src/mod_development.erl:565
+#: zotonic_mod_development/src/mod_development.erl:667
 msgid "<i>Function name does not exist.</i>"
 msgstr "<i>שם הפונקציה אינו קיים.</i>"
 
-#: zotonic_mod_development/src/mod_development.erl:568
+#: zotonic_mod_development/src/mod_development.erl:670
 msgid "<i>Module not found.</i>"
 msgstr "<i>לא נמצא מודול.</i>"
 
@@ -8487,8 +8490,8 @@ msgstr "חשב ודמיין גרף תלות של כל התבניות."
 msgid "Check debug points in the template source to see debug data here."
 msgstr "בדוק את נקודות האיתור באג בקוד המקור של התבנית כדי לראות כאן את נתוני האיתור באג."
 
-#: zotonic_mod_development/src/mod_development.erl:373
-#: zotonic_mod_development/src/mod_development.erl:388
+#: zotonic_mod_development/src/mod_development.erl:475
+#: zotonic_mod_development/src/mod_development.erl:490
 msgid "Checking all templates..."
 msgstr "בודק את כל התבניות..."
 
@@ -8616,7 +8619,7 @@ msgid "Detecting editors…"
 msgstr "זיהוי עורכים…"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:7
-#: zotonic_mod_development/src/mod_development.erl:1233
+#: zotonic_mod_development/src/mod_development.erl:1335
 msgid "Development"
 msgstr "התפתחות"
 
@@ -8740,11 +8743,11 @@ msgstr "מעקב אחר שאילתת מסד נתונים מופעל"
 msgid "Enter the module and function you want to trace. If no function is given, all functions in the module will be traced. Enter how many calls to trace before stopping."
 msgstr "הזן את המודול והפונקציה שברצונך לעקוב אחריהם. אם לא צוינה פונקציה, כל הפונקציות במודול יעקבו. הזן את מספר הקריאות שברצונך לעקוב אחריהן לפני העצירה."
 
-#: zotonic_mod_development/src/mod_development.erl:537
+#: zotonic_mod_development/src/mod_development.erl:639
 msgid "Error changing the console logs."
 msgstr "שגיאה בשינוי יומני המסוף."
 
-#: zotonic_mod_development/src/mod_development.erl:631
+#: zotonic_mod_development/src/mod_development.erl:733
 msgid "Error parsing template."
 msgstr "שגיאה בניתוח התבנית."
 
@@ -8806,7 +8809,7 @@ msgstr "מעקב אחר קריאות פונקציות"
 msgid "Function call tracing has been disabled. Use the following to enable function call tracing:"
 msgstr "מעקב אחר קריאות פונקציות הושבת. השתמש בפקודה הבאה כדי להפעיל את מעקב אחר קריאות פונקציות:"
 
-#: zotonic_mod_development/src/mod_development.erl:571
+#: zotonic_mod_development/src/mod_development.erl:673
 msgid "Function tracing has been disabled in the Zotonic config."
 msgstr "מעקב אחר פונקציות הושבת בתצורת Zotonic."
 
@@ -8834,7 +8837,7 @@ msgstr "כולל את התבנית הבסיסית, וריאציות של קטג�
 msgid "Introspection"
 msgstr "הִסתַכְּלוּת פְּנִימִית"
 
-#: zotonic_mod_development/src/support/z_development_template.erl:41
+#: zotonic_mod_development/src/support/z_development_template.erl:59
 msgid "Invalid template name."
 msgstr "שם תבנית לא חוקי."
 
@@ -8904,7 +8907,7 @@ msgstr "התאם כתובת URL של בקשה, כלל כלל שיגור תואם
 msgid "Matches with the same name are listed in module priority order."
 msgstr "התוצאות בעלות אותו שם מופיעות לפי סדר העדיפות של המודולים."
 
-#: zotonic_mod_development/src/support/z_development_template.erl:48
+#: zotonic_mod_development/src/support/z_development_template.erl:66
 msgid "Matching templates"
 msgstr "תבניות תואמות"
 
@@ -8951,18 +8954,18 @@ msgstr "לא נמצא כלל שיגור תואם"
 msgid "No matching templates found."
 msgstr "לא נמצאו תבניות תואמות."
 
-#: zotonic_mod_development/src/mod_development.erl:535
+#: zotonic_mod_development/src/mod_development.erl:637
 msgid "No permission to access the console logs."
 msgstr "אין הרשאה לגשת ליומני המסוף."
 
-#: zotonic_mod_development/src/mod_development.erl:378
-#: zotonic_mod_development/src/mod_development.erl:393
-#: zotonic_mod_development/src/mod_development.erl:408
-#: zotonic_mod_development/src/mod_development.erl:416
-#: zotonic_mod_development/src/mod_development.erl:443
-#: zotonic_mod_development/src/mod_development.erl:485
-#: zotonic_mod_development/src/mod_development.erl:502
-#: zotonic_mod_development/src/mod_development.erl:519
+#: zotonic_mod_development/src/mod_development.erl:480
+#: zotonic_mod_development/src/mod_development.erl:495
+#: zotonic_mod_development/src/mod_development.erl:510
+#: zotonic_mod_development/src/mod_development.erl:518
+#: zotonic_mod_development/src/mod_development.erl:545
+#: zotonic_mod_development/src/mod_development.erl:587
+#: zotonic_mod_development/src/mod_development.erl:604
+#: zotonic_mod_development/src/mod_development.erl:621
 msgid "No permission to use mod_development."
 msgstr "אין הרשאה להשתמש ב-mod_development."
 
@@ -8971,7 +8974,7 @@ msgstr "אין הרשאה להשתמש ב-mod_development."
 msgid "No references found."
 msgstr "לא נמצאו הפניות."
 
-#: zotonic_mod_development/src/mod_development.erl:497
+#: zotonic_mod_development/src/mod_development.erl:599
 msgid "No template found in the context."
 msgstr "לא נמצא תבנית בהקשר זה."
 
@@ -8992,7 +8995,7 @@ msgstr "לא נמצא"
 msgid "Observers"
 msgstr "משקיפים"
 
-#: zotonic_mod_development/src/mod_development.erl:574
+#: zotonic_mod_development/src/mod_development.erl:676
 msgid "Only the admin user can set traces."
 msgstr "רק המשתמש המנהל יכול להגדיר עקבות."
 
@@ -9130,19 +9133,19 @@ msgstr "התחל מעקב"
 msgid "Start matching dispatch rules"
 msgstr "התחל להתאים לכללי משלוח"
 
-#: zotonic_mod_development/src/mod_development.erl:531
+#: zotonic_mod_development/src/mod_development.erl:633
 msgid "Started logging to the console of your browser tab."
 msgstr "התחלת להיכנס למסוף של כרטיסיית הדפדפן שלך."
 
-#: zotonic_mod_development/src/mod_development.erl:405
+#: zotonic_mod_development/src/mod_development.erl:507
 msgid "Started tracing all template inclusions."
 msgstr "התחיל להתחקות אחר כל הכללות התבניות."
 
-#: zotonic_mod_development/src/mod_development.erl:480
+#: zotonic_mod_development/src/mod_development.erl:582
 msgid "Started tracing template inclusions by rendering the page."
 msgstr "התחלתי לעקוב אחר שילוב התבניות באמצעות טעינת הדף."
 
-#: zotonic_mod_development/src/mod_development.erl:402
+#: zotonic_mod_development/src/mod_development.erl:504
 msgid "Started tracing template inclusions for your session."
 msgstr "התחלת להתחקות אחר הכללות תבניות עבור הפגישה שלך."
 
@@ -9152,11 +9155,11 @@ msgstr "התחלת להתחקות אחר הכללות תבניות עבור הפ
 msgid "Stop"
 msgstr "תפסיק"
 
-#: zotonic_mod_development/src/mod_development.erl:533
+#: zotonic_mod_development/src/mod_development.erl:635
 msgid "Stopped logging to the console of all browser tabs."
 msgstr "הפסיק להיכנס למסוף של כל כרטיסיות הדפדפן."
 
-#: zotonic_mod_development/src/mod_development.erl:414
+#: zotonic_mod_development/src/mod_development.erl:516
 msgid "Stopped tracing template inclusions for all sessions."
 msgstr "הפסיק לעקוב אחר הכללות תבניות עבור כל ההפעלות."
 
@@ -9195,7 +9198,7 @@ msgstr "תבנית"
 msgid "Template debugging"
 msgstr "ניפוי באגים בתבניות"
 
-#: zotonic_mod_development/src/mod_development.erl:634
+#: zotonic_mod_development/src/mod_development.erl:736
 msgid "Template file not found."
 msgstr "לא נמצא קובץ התבנית."
 
@@ -9215,7 +9218,7 @@ msgstr "נתיב תבנית"
 msgid "Test with this template"
 msgstr "בדוק באמצעות תבנית זו"
 
-#: zotonic_mod_development/src/mod_development.erl:482
+#: zotonic_mod_development/src/mod_development.erl:584
 msgid "The path must be a local URL."
 msgstr "הנתיב חייב להיות כתובת URL מקומית."
 
@@ -9308,7 +9311,7 @@ msgstr "דפוס URI"
 msgid "Uncheck to debug only your current session."
 msgstr "בטל את הסימון כדי לבצע ניפוי באגים רק בפגישה הנוכחית."
 
-#: zotonic_mod_development/src/mod_development.erl:516
+#: zotonic_mod_development/src/mod_development.erl:618
 msgid "Updated template debug points."
 msgstr "עודכנו נקודות האיתור באגים בתבנית."
 
@@ -9337,8 +9340,9 @@ msgstr "ממתין לנתוני האיתור והתיקון..."
 msgid "You are not allowed to use the dispatch debugging."
 msgstr "אינך רשאי להשתמש באיתור באגים."
 
-#: zotonic_mod_development/src/support/z_development_template.erl:53
-#: zotonic_mod_development/src/support/z_development_template.erl:70
+#: zotonic_mod_development/src/support/z_development_template.erl:48
+#: zotonic_mod_development/src/support/z_development_template.erl:71
+#: zotonic_mod_development/src/support/z_development_template.erl:88
 msgid "You are not allowed to use the template debugging."
 msgstr "אינך מורשה להשתמש באגים בתבנית."
 
@@ -10660,18 +10664,23 @@ msgstr "תכונות ידועות הן:"
 msgid "You do not have permission to use the CSV/XLSX import module."
 msgstr "אין לך הרשאה להשתמש במודול הייבוא CSV/XLSX."
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:58
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:66
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:41
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:99
 msgid "Active"
 msgstr "פעיל"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:207
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:14
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:16
+msgid "Activity log"
+msgstr "יומן פעילות"
+
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:296
 msgid "Add default connection"
 msgstr "הוסף חיבור ברירת מחדל"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user.tpl:32
-#: zotonic_mod_import_feed/src/models/m_import_feed.erl:413
+#: zotonic_mod_import_feed/src/models/m_import_feed.erl:479
 msgid "Administrator accounts cannot run feed imports. Importing external content with full administrator permissions is dangerous. Select a non-administrator account with only the permissions needed for importing."
 msgstr "חשבונות מנהל אינם יכולים לבצע ייבוא פידים. ייבוא תוכן חיצוני עם הרשאות מנהל מלאות הוא מסוכן. בחר חשבון שאינו של מנהל, בעל ההרשאות הדרושות לייבוא בלבד."
 
@@ -10680,6 +10689,8 @@ msgid "Administrator accounts cannot run feed imports. Use a non-administrator a
 msgstr "חשבונות מנהל אינם יכולים לבצע ייבוא פידים. יש להשתמש בחשבון שאינו של מנהל, בעל הרשאות מוגבלות."
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:13
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_log.tpl:8
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_log.tpl:13
 msgid "All feeds"
 msgstr "כל העדכונים"
 
@@ -10696,15 +10707,15 @@ msgid "Also subscribe imported connections for updates"
 msgstr "הירשם גם לקבלת עדכונים על חיבורים מיובאים"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:29
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:20
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:24
 msgid "Anonymous requests"
 msgstr "בקשות אנונימיות"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:35
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:43
 msgid "Articles"
 msgstr "מאמרים"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:41
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:42
 msgid "Articles and dependent media, 100 entries per page."
 msgstr "מאמרים ותכנים נלווים, 100 רשומות בכל עמוד."
 
@@ -10725,6 +10736,10 @@ msgstr "כברירת מחדל, תוכן מיובא אינו נחשב למקור 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user.tpl:23
 msgid "Change user"
 msgstr "החלף משתמש"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:30
+msgid "Checking website for feeds…"
+msgstr "בדיקת אתרים למציאת עדכונים…"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:105
 msgid "Connection import depth"
@@ -10751,25 +10766,25 @@ msgid "Default is 1: import directly connected resources. Use 0 to skip connecti
 msgstr "הערך המוגדר כברירת מחדל הוא 1: ייבוא משאבים המחוברים ישירות. השתמש בערך 0 כדי לדלג על חיבורים."
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_dialog.tpl:23
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:183
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:184
 msgid "Delete feed"
 msgstr "מחק עדכון"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:378
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:482
 msgid "Delete feed?"
 msgstr "למחוק את העדכון?"
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:174
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:175
 msgid "Delete imported articles and media that you are allowed to delete. Protected resources are kept. The feed will be paused; its settings and import history are retained."
 msgstr "מחק מאמרים ומדיה שיובאו, אשר מותר לך למחוק. משאבים מוגנים יישמרו. העדכון יושעה; הגדרותיו והיסטוריית הייבוא שלו יישמרו."
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:171
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:176
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:180
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:172
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:177
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:181
 msgid "Delete imported content"
 msgstr "מחיקת תוכן מיובא"
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:178
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:179
 msgid "Delete imported content?"
 msgstr "האם למחוק את התוכן שיובא?"
 
@@ -10789,6 +10804,12 @@ msgstr "נמחק:"
 msgid "Dependent media"
 msgstr "מדיה תלויה"
 
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log.tpl:14
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:12
+#: zotonic_mod_translation/priv/templates/_translation_language_status.tpl:43
+msgid "Details"
+msgstr "פרטים"
+
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:34
 msgid "Development environment: local destinations and self-signed certificates are allowed."
 msgstr "סביבת פיתוח: יעדים מקומיים ותעודות חתומות עצמית מותרים."
@@ -10797,7 +10818,7 @@ msgstr "סביבת פיתוח: יעדים מקומיים ותעודות חתומ
 msgid "Discover RSS or Atom feeds and import their articles automatically."
 msgstr "גלה עדכוני RSS או Atom וייבא את המאמרים שלהם באופן אוטומטי."
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:23
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:27
 msgid "Discover feeds"
 msgstr "גלה עדכונים"
 
@@ -10826,10 +10847,14 @@ msgstr "העשרת רשומות וורדפרס באמצעות ממשק ה-REST �
 msgid "Entries advertising a Zotonic resource export use the native importer, preserving structured content and resource connections."
 msgstr "רשומות המפרסמות ייצוא של משאב Zotonic משתמשות ביבואן המובנה, תוך שמירה על תוכן מובנה ועל קישורי המשאבים."
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:38
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:46
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:48
 msgid "Errors"
 msgstr "שגיאות"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log.tpl:9
+msgid "Event / result"
+msgstr "אירוע / תוצאה"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:2
 msgid "Example entries"
@@ -10844,26 +10869,45 @@ msgstr "דוגמא:"
 msgid "Failed:"
 msgstr "נכשל:"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:33
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log.tpl:8
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:41
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_log.tpl:11
 msgid "Feed"
 msgstr "עדכון"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:390
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_log.tpl:3
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_log.tpl:7
+msgid "Feed activity log"
+msgstr "יומן פעילות הזנה"
+
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:494
 msgid "Feed deleted"
 msgstr "העדכון נמחק"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:92
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:93
 msgid "Feed not found or access denied."
 msgstr "לא נמצא פיד או שהגישה נדחתה."
+
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:460
+msgid "Feed queued for fetching. Watch the activity log for results."
+msgstr "הפיד נמצא בתור להורדה. עקבו אחר יומן הפעילות כדי לראות את התוצאות."
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:4
 msgid "Feed settings"
 msgstr "הגדרות הזנה"
 
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log_controls.tpl:8
+msgid "Fetch now"
+msgstr "הורד עכשיו"
+
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:27
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:18
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:22
 msgid "Fetch using"
 msgstr "להביא באמצעות"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log_controls.tpl:12
+msgid "Fetches and imports new or changed entries using the configured import user."
+msgstr "מביא ומייבא רשומות חדשות או שעברו שינוי באמצעות משתמש הייבוא שהוגדר."
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:74
 msgid "Guess category from tags"
@@ -10887,15 +10931,15 @@ msgstr "קטגוריית ייבוא"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:4
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:11
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:174
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:227
 msgid "Import feeds"
 msgstr "ייבוא עדכונים"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:40
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:41
 msgid "Import history"
 msgstr "היסטוריית יבוא"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:82
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:83
 msgid "Import history pages"
 msgstr "דפי היסטוריית הייבוא"
 
@@ -10907,15 +10951,15 @@ msgstr "ייבוא הגדרות"
 msgid "Import user"
 msgstr "ייבוא משתמש"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:37
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:45
 msgid "Imported / updated / skipped"
 msgstr "יובא / עודכן / הושמט"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:367
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:471
 msgid "Imported content deleted"
 msgstr "תוכן מיובא נמחק"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:56
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:64
 msgid "Importing"
 msgstr "ייבוא"
 
@@ -10923,7 +10967,7 @@ msgstr "ייבוא"
 msgid "Imports run with this account's permissions. Only administrators and users with full access to accounts can change it."
 msgstr "הייבוא מתבצע בהרשאות של חשבון זה. רק מנהלים ומשתמשים בעלי גישה מלאה לחשבונות יכולים לשנות זאת."
 
-#: zotonic_mod_import_feed/src/models/m_import_feed.erl:409
+#: zotonic_mod_import_feed/src/models/m_import_feed.erl:473
 msgid "Invalid removal regexp on line"
 msgstr "ביטוי רגולרי לא חוקי להסרה בשורה"
 
@@ -10931,15 +10975,15 @@ msgstr "ביטוי רגולרי לא חוקי להסרה בשורה"
 msgid "Kept:"
 msgstr "נשמר:"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:48
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:49
 msgid "Kind"
 msgstr "סוג"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:39
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:47
 msgid "Last poll"
 msgstr "הסקר האחרון"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:50
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:51
 msgid "Last processed"
 msgstr "תאריך העיבוד האחרון"
 
@@ -10947,7 +10991,17 @@ msgstr "תאריך העיבוד האחרון"
 msgid "Loading example entries…"
 msgstr "טעינת רשומות לדוגמה…"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:78
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_discovery.tpl:5
+msgid "Loading feed and example entries…"
+msgstr "טעינת עדכונים ודוגמאות לרישומים…"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:86
+#: zotonic_mod_logging/priv/templates/admin_log_base.tpl:3
+#: zotonic_mod_logging/src/mod_logging.erl:349
+msgid "Log"
+msgstr "עֵץ"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:87
 msgid "Manage"
 msgstr "ניהול"
 
@@ -10963,11 +11017,19 @@ msgstr "נמצאו קבצי מדיה"
 msgid "Medium attached directly"
 msgstr "בינוני מחובר ישירות"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:40
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_log.tpl:20
+msgid "New events appear live at the top. Scroll down to load older events. Logs are kept for 30 days."
+msgstr "אירועים חדשים מופיעים בזמן אמת בחלק העליון. גלול מטה כדי לטעון אירועים ישנים יותר. הרישומים נשמרים למשך 30 ימים."
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:48
 msgid "Next poll"
 msgstr "הסקר הבא"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:83
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log.tpl:21
+msgid "No activity for this feed, or access denied."
+msgstr "אין פעילות בעדכון זה, או שהגישה נדחתה."
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:92
 msgid "No feeds configured yet."
 msgstr "עדיין לא הוגדרו עדכונים."
 
@@ -10975,7 +11037,7 @@ msgstr "עדיין לא הוגדרו עדכונים."
 msgid "No import user selected"
 msgstr "לא נבחר משתמש יבוא"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:76
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:77
 msgid "Nothing imported yet."
 msgstr "עדיין לא יובא דבר."
 
@@ -10987,7 +11049,7 @@ msgstr "ביטוי רגולרי אחד בכל שורה. הטקסט התואם מ
 msgid "Original article"
 msgstr "המאמר המקורי"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:21
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:22
 msgid "Pause"
 msgstr "השהיה"
 
@@ -10995,11 +11057,11 @@ msgstr "השהיה"
 msgid "Pause automatic imports"
 msgstr "השהיית ייבוא אוטומטי"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:54
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:62
 msgid "Paused"
 msgstr "בהשהיה"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:31
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:32
 msgid "Poll now"
 msgstr "הצביעו עכשיו"
 
@@ -11007,7 +11069,7 @@ msgstr "הצביעו עכשיו"
 msgid "Polling interval (minutes)"
 msgstr "מרווח הסקירה (בדקות)"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:36
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:44
 msgid "Polls"
 msgstr "סקרים"
 
@@ -11024,21 +11086,26 @@ msgid "Protected resources and resources you cannot delete will be kept. Content
 msgstr "משאבים מוגנים ומשאבים שאינך יכול למחוק יישמרו. התוכן המשותף עם עדכונים אחרים נכלל בכך."
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:30
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:21
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:25
 msgid "Registered OAuth2 credentials"
 msgstr "פרטי הזדהות OAuth2 רשומים"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:33
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:34
 msgid "Reimport current entries"
 msgstr "ייבוא מחדש של הערכים הנוכחיים"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:46
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log.tpl:10
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:47
 msgid "Resource"
 msgstr "משאב"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:19
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:20
 msgid "Resume"
 msgstr "קורות חיים"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:162
+msgid "Save & refetch deleted"
+msgstr "שמור וטען מחדש את מה שנמחק"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:161
 msgid "Save feed"
@@ -11048,11 +11115,11 @@ msgstr "שמור עדכון"
 msgid "Select a feed"
 msgstr "בחר עדכון"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:214
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:303
 msgid "Select connected page"
 msgstr "בחר דף מקושר"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:246
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:335
 msgid "Select import user"
 msgstr "בחר משתמש לייבוא"
 
@@ -11068,7 +11135,7 @@ msgstr "בחר את החשבון שההרשאות שלו ישמשו לייבוא
 msgid "Select user"
 msgstr "בחר משתמש"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:47
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:48
 msgid "Source identity"
 msgstr "זהות המקור"
 
@@ -11085,11 +11152,11 @@ msgstr "מנוי מחייב מקור התומך בעדכונים ובייבוא 
 msgid "Tags"
 msgstr "תגיות"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:28
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:29
 msgid "Test / preview"
 msgstr "בדיקה / תצוגה מקדימה"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:35
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:36
 msgid "Testing fetches example entries without importing them. Reimport processes the entries currently available in the feed. Deleted resources stay deleted."
 msgstr "הבדיקה משיגה רשומות לדוגמה מבלי לייבא אותן. ייבוא מחדש מעבד את הרשומות הזמינות כרגע בפיד. משאבים שנמחקו נשארים מחוקים."
 
@@ -11117,13 +11184,26 @@ msgstr "קישורים אלה מתווספים לכל מאמר שיובא. שמ�
 msgid "These defaults apply to imported articles and their dependent media. Leave empty to use the standard copyright defaults."
 msgstr "הגדרות ברירת המחדל הללו חלות על מאמרים מיובאים ועל המדיה התלויה בהם. השאר את השדה ריק כדי להשתמש בהגדרות ברירת המחדל הסטנדרטיות בנוגע לזכויות יוצרים."
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:179
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:180
 msgid "This deletes all deletable articles and media imported by this feed, including resources shared with other feeds. Protected resources and resources you cannot delete are kept. The feed will be paused."
 msgstr "פעולה זו מוחקת את כל המאמרים והקובצי מדיה הניתנים למחיקה שיובאו באמצעות עדכון זה, כולל משאבים ששותפו עם עדכונים אחרים. משאבים מוגנים ומשאבים שאינך יכול למחוק יישמרו. העדכון יושעה."
 
-#: zotonic_mod_import_feed/src/models/m_import_feed.erl:411
+#: zotonic_mod_import_feed/src/models/m_import_feed.erl:475
+msgid "This feed is paused. Resume it before fetching."
+msgstr "העדכון הזה הושעה. יש לחדש אותו לפני ההורדה."
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log_controls.tpl:10
+msgid "This feed is paused. Resume it in its settings before fetching."
+msgstr "עדכון זה הושעה. יש לחדש אותו בהגדרות לפני הטעינה."
+
+#: zotonic_mod_import_feed/src/models/m_import_feed.erl:477
 msgid "This feed is still importing. Pause it and wait for the current import to finish before deleting its content."
 msgstr "העדכון הזה עדיין נמצא בתהליך ייבוא. יש להשהות אותו ולהמתין עד לסיום הייבוא הנוכחי לפני מחיקת תוכנו."
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log.tpl:7
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:5
+msgid "Time"
+msgstr "זמן"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user_results.tpl:15
 msgid "Up to 50 users are shown. Search by name to narrow the results. Disabled accounts cannot be selected."
@@ -11133,11 +11213,21 @@ msgstr "מוצגים עד 50 משתמשים. חפשו לפי שם כדי לצמ�
 msgid "Use Test / preview to fetch example entries."
 msgstr "השתמש באפשרות \"בדיקה/תצוגה מקדימה\" כדי לאחזר רשומות לדוגמה."
 
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log.tpl:11
+#: zotonic_mod_logging/priv/templates/admin_log.tpl:24
+#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:25
+#: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:49
+#: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:40
+#: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:39
+#: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:191
+msgid "User"
+msgstr "מִשׁתַמֵשׁ"
+
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:32
 msgid "Uses credentials registered for the import user and destination host. Credentials are only sent over HTTPS."
 msgstr "משתמש בפרטי הזדהות שנרשמו עבור משתמש הייבוא ומארח היעד. פרטי הזדהות נשלחים אך ורק באמצעות HTTPS."
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:16
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:20
 msgid "Website or feed URL"
 msgstr "כתובת אתר או כתובת פיד"
 
@@ -11145,7 +11235,7 @@ msgstr "כתובת אתר או כתובת פיד"
 msgid "WordPress enrichment unavailable; the feed data will be used."
 msgstr "השבחת WordPress אינה זמינה; ייעשה שימוש בנתוני העדכון."
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:203
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:285
 msgid "You are not allowed to manage feeds."
 msgstr "אינך רשאי לנהל עדכונים."
 
@@ -11483,11 +11573,6 @@ msgstr "יומן דואר אלקטרוני נכנס/יוצא"
 msgid "Latest reported security policy:"
 msgstr "מדיניות האבטחה המעודכנת ביותר שדווחה:"
 
-#: zotonic_mod_logging/priv/templates/admin_log_base.tpl:3
-#: zotonic_mod_logging/src/mod_logging.erl:349
-msgid "Log"
-msgstr "עֵץ"
-
 #: zotonic_mod_logging/priv/templates/admin_log.tpl:3
 #: zotonic_mod_logging/priv/templates/admin_log.tpl:10
 msgid "Log messages"
@@ -11618,15 +11703,6 @@ msgstr "ל"
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:70
 msgid "Toggle non people"
 msgstr "החלף אנשים שאינם"
-
-#: zotonic_mod_logging/priv/templates/admin_log.tpl:24
-#: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:25
-#: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:49
-#: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:40
-#: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:39
-#: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:191
-msgid "User"
-msgstr "מִשׁתַמֵשׁ"
 
 #: zotonic_mod_logging/priv/templates/admin_log.tpl:43
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:43
@@ -11896,11 +11972,6 @@ msgstr "נמחקה מרשימת התפוצה."
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:131
 msgid "Delivery history is preserved. Sending again may result in recipients receiving the same content twice. Older mailings from before run tracking are not used for duplicate detection."
 msgstr "היסטוריית המשלוחים נשמרת. שליחה חוזרת עלולה לגרום לכך שהנמענים יקבלו את אותו התוכן פעמיים. דיוורים ישנים יותר, מלפני תחילת המעקב אחר המשלוחים, אינם משמשים לזיהוי כפילויות."
-
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:12
-#: zotonic_mod_translation/priv/templates/_translation_language_status.tpl:43
-msgid "Details"
-msgstr "פרטים"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:61
 msgid "Disabled"
@@ -13157,10 +13228,6 @@ msgstr "הודעת הדואר האלקטרוני הזו, שנועדה למטרו
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipient.tpl:6
 msgid "Tick the checkbox if you want the recipient to receive a welcome e-mail message."
 msgstr "סמן את תיבת הסימון אם ברצונך שהנמען יקבל הודעת דואר אלקטרוני בברכה."
-
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:5
-msgid "Time"
-msgstr "זמן"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:2
 msgid "Times shown in"
