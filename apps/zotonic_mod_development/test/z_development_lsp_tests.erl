@@ -79,6 +79,76 @@ buffers_test() ->
         z_development_lsp:handle(notify(<<"textDocument/didClose">>, #{<<"textDocument">> => Doc}), S2, Remote),
     ?assertEqual(#{}, Docs).
 
+multiple_changes_test() ->
+    Remote = fun(diagnostics, _) -> [] end,
+    {_, S} = z_development_lsp:handle(request(1, <<"initialize">>, #{}), z_development_lsp:new(), Remote),
+    Uri = <<"file:///tmp/multiple.tpl">>,
+    Doc = #{<<"uri">> => Uri, <<"version">> => 1, <<"text">> => <<"old">>},
+    {_, S1} = z_development_lsp:handle(notify(<<"textDocument/didOpen">>, #{<<"textDocument">> => Doc}), S, Remote),
+    Change = #{<<"textDocument">> => Doc#{<<"version">> => 2},
+        <<"contentChanges">> => [#{<<"text">> => <<"first">>}, #{<<"text">> => <<"last">>}]},
+    {[#{params := #{version := 2}}], S2} = z_development_lsp:handle(notify(<<"textDocument/didChange">>, Change), S1, Remote),
+    ?assertMatch(#{source := <<"last">>, version := 2}, maps:get(Uri, maps:get(documents, S2))),
+    {[], S2} = z_development_lsp:handle(notify(<<"textDocument/didChange">>, Change), S2, Remote),
+    Bad = Change#{<<"contentChanges">> => [#{<<"text">> => <<255>>}, #{<<"text">> => <<"last">>}]},
+    {_, Rejected} = z_development_lsp:handle(notify(<<"textDocument/didChange">>, Bad), S1, Remote),
+    ?assertEqual(#{}, maps:get(documents, Rejected)).
+
+automatic_conflicting_sites_test() ->
+    Modules = [z_sites_manager, z_module_manager, z_module_indexer, z_development_template],
+    lists:foreach(fun(M) -> meck:new(M, [non_strict]) end, Modules),
+    try
+        meck:expect(z_sites_manager, get_sites, fun() -> #{lsp_site_a => running, lsp_site_b => running} end),
+        meck:expect(z_module_manager, active, fun(_) -> [mod_development] end),
+        meck:expect(z_module_indexer, all, fun(template, _) -> [] end),
+        meck:expect(z_development_template, source_references, fun(_, Context) ->
+            Site = atom_to_binary(z_context:site(Context)),
+            [#{kind => template, name => <<"base.tpl">>, row => 1, column => 13,
+                matches => [#{path => <<"/tmp/", Site/binary, "/base.tpl">>, module => zotonic_mod_base}]}]
+        end),
+        Args = #{source => <<"{% include \"base.tpl\" %}">>, file => <<"/tmp/unowned.tpl">>,
+            position => #{<<"line">> => 0, <<"character">> => 15}},
+        ?assertMatch({error, _}, z_development_lsp_backend:request(definition, Args)),
+        ?assertMatch([#{uri := _}], z_development_lsp_backend:request(definition, Args#{site => <<"lsp_site_a">>})),
+        meck:expect(z_development_template, source_references, fun(_, _) ->
+            [#{kind => template, name => <<"base.tpl">>, row => 1, column => 13,
+                matches => [#{path => <<"/tmp/shared/base.tpl">>, module => zotonic_mod_base}]}]
+        end),
+        ?assertMatch([#{uri := _}], z_development_lsp_backend:request(definition, Args)),
+        meck:expect(z_module_indexer, all_files, fun(model, zotonic_core) ->
+            [#module_index{key = #module_index_key{name = rsc}}];
+            (template, zotonic_core) -> []
+        end),
+        meck:expect(z_module_indexer, all, fun(model, _) -> [];
+            (template, _) -> [#module_index{key = #module_index_key{name = <<"cards/card.tpl">>}}]
+        end),
+        Base = Args#{site => <<"lsp_site_a">>},
+        Result = z_development_lsp_backend:request(completion,
+            Base#{source => <<"{{ m.">>, position => #{<<"line">> => 0, <<"character">> => 5}}),
+        ?assertMatch([#{label := <<"rsc">>}], Result),
+        [#{textEdit := Edit}] = z_development_lsp_backend:request(completion,
+            Base#{source => <<"{% include \"cards/card.tpl\" %}">>,
+                position => #{<<"line">> => 0, <<"character">> => 20}}),
+        ?assertEqual(#{newText => <<"cards/card.tpl">>, range => #{
+            start => #{line => 0, character => 12}, 'end' => #{line => 0, character => 26}}}, Edit)
+    after
+        lists:foreach(fun meck:unload/1, Modules)
+    end.
+
+indexed_ranges_test() ->
+    Source = unicode:characters_to_binary("first\n😀é {{ a|escape }}\nlast"),
+    Lines = z_development_lsp_text:lines(Source),
+    ?assertEqual(#{start => #{line => 1, character => 9}, 'end' => #{line => 1, character => 15}},
+        z_development_lsp_text:range(Lines, 2, 9, <<"escape">>)).
+
+completion_ranges_test() ->
+    Prefix = unicode:characters_to_binary("😀 {% include \"cards/ca"),
+    Source = <<Prefix/binary, "rd.tpl\" %}">>,
+    ?assertEqual(#{start => #{line => 0, character => 15}, 'end' => #{line => 0, character => 29}},
+        z_development_lsp_text:completion_range(Source, Prefix, <<"cards/ca">>)),
+    ?assertEqual(#{start => #{line => 0, character => 15}, 'end' => #{line => 0, character => 23}},
+        z_development_lsp_text:completion_range(Prefix, Prefix, <<"cards/ca">>)).
+
 invalid_input_test() ->
     Remote = fun(_, _) -> [] end,
     S0 = z_development_lsp:new(),

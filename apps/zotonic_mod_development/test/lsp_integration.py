@@ -125,12 +125,16 @@ try:
     buffer('{{ value|esc')
     assert any(item['label'] == 'escape' for item in query('completion', 12, 8)['result'])
     buffer('{{ m.')
-    assert query('completion', 5, 9)['result']
+    assert {'rsc', 'acl', 'search', 'req'} <= {item['label'] for item in query('completion', 5, 9)['result']}
     buffer('{% ')
     assert any(item['label'] == 'include' for item in query('completion', 3, 10)['result'])
     send('workspace/didChangeConfiguration', {'settings': {'zotonic': {'site': ''}}})
     buffer('{% include "base.tpl" %}')
-    assert 'select' in query('definition', 15, 11)['error']['message'].lower()
+    automatic = query('definition', 15, 11)
+    if 'error' in automatic:
+        assert 'select' in automatic['error']['message'].lower()
+    else:
+        assert automatic['result']
     buffer('{{ value|escape }}')
     assert any('filter_escape.erl' in item['uri'] for item in query('definition', 11, 14)['result'])
     assert 'Module:' in query('hover', 11, 15)['result']['contents']['value']

@@ -46,7 +46,8 @@ request(sites, _) ->
     sites();
 request(diagnostics, #{source := Source}) ->
     diagnostics(Source);
-request(Kind, #{source := Source, file := File} = Args) when byte_size(Source) =< ?MAX_SOURCE_BYTES ->
+request(Kind, #{source := Source, file := File} = Args0) when byte_size(Source) =< ?MAX_SOURCE_BYTES ->
+    Args = Args0#{lines => z_development_lsp_text:lines(Source)},
     Available = sites(),
     case maps:get(site, Args, <<>>) of
         <<>> ->
@@ -75,7 +76,7 @@ request(Kind, #{source := Source, file := File} = Args) when byte_size(Source) =
 %% @doc Tag manuals are independent of site resolution and do not imply a definition target.
 tag_hover(hover, #{source := Source, position := Position} = Args) ->
     case template_compiler_scanner:scan(<<"buffer">>, Source) of
-        {ok, Tokens} -> tag_hover_tokens(Tokens, Source, Position, Args);
+        {ok, Tokens} -> tag_hover_tokens(Tokens, maps:get(lines, Args), Position, Args);
         _ -> undefined
     end;
 tag_hover(_, _) -> undefined.
@@ -141,7 +142,7 @@ site_context(Site) ->
 %% @doc Erlang module references do not require ownership of the current template.
 server_reference(#{source := Source, file := File, position := Position} = Args, [Context | Rest]) ->
     case [
-        maps:get(kind, R) || R <- references(Source, File, Context),
+        maps:get(kind, R) || R <- references(Source, File, maps:get(lines, Args), Context),
                              at_position(maps:get(range, R), Position)
     ]
     of
@@ -216,10 +217,10 @@ diagnostic(Source, Row, Column, Message) ->
 
 query(completion, #{source := Source, position := Position}, Context) ->
     Prefix = z_development_lsp_text:prefix(Source, Position),
-    completion(Prefix, Context);
+    completion(Source, Prefix, Context);
 query(Kind, #{source := Source, file := File, position := Position} = Args, Context)
     when Kind =:= definition; Kind =:= hover ->
-    Refs = references(Source, File, Context),
+    Refs = references(Source, File, maps:get(lines, Args), Context),
     case [R || R <- Refs, at_position(maps:get(range, R), Position)] of
         [Ref | _] ->
             reference_result(Kind, Ref, Context,
@@ -232,7 +233,7 @@ query(Kind, #{source := Source, file := File, position := Position} = Args, Cont
     end.
 
 %% @doc Share browser source lookup, adding the implicit overrules target.
-references(Source, File, Context) ->
+references(Source, File, Lines, Context) ->
     Refs = z_development_template:source_references(Source, Context),
     Inheritance = case template_compiler_scanner:scan(<<"buffer">>, Source) of
         {ok, Tokens} ->
@@ -249,7 +250,7 @@ references(Source, File, Context) ->
         _ ->
             []
     end,
-    [R#{range => z_development_lsp_text:range(Source, maps:get(row, R), maps:get(column, R), maps:get(name, R))}
+    [R#{range => z_development_lsp_text:range(Lines, maps:get(row, R), maps:get(column, R), maps:get(name, R))}
         || R <- Refs ++ Inheritance].
 
 overrules(File, Context) ->
@@ -331,9 +332,9 @@ line_range(Line) ->
     #{start => P, 'end' => P}.
 
 %% @doc Complete indexed template names, filters, models and tags in their syntactic context.
-completion(Prefix, Context) ->
+completion(Source, Prefix, Context) ->
     Types = [
-        {template, <<"(?:include|catinclude|extends|compose|catcompose|template\\s*=)\\s*[\"']([^\"']*)$">>},
+        {template, <<"(?:include|catinclude|extends|compose|catcompose|template\\s*=)\\s*[\"']([^\"'\\r\\n]*)$">>},
         {filter, <<"\\|\\s*([a-zA-Z0-9_]*)$">>},
         {model, <<"\\bm\\.([a-zA-Z0-9_]*)$">>},
         {scomp, <<"\\{%\\s*([a-zA-Z0-9_]*)$">>}
@@ -343,22 +344,33 @@ completion(Prefix, Context) ->
         [{Type, Part} | _] ->
             Names = [
                 z_convert:to_binary(Name)
-                || #module_index{key = #module_index_key{name = Name}} <- z_module_indexer:all(Type, Context)
+                || #module_index{key = #module_index_key{name = Name}} <-
+                    z_module_indexer:all_files(Type, zotonic_core) ++ z_module_indexer:all(Type, Context)
             ],
             All = case Type of
                 scomp -> tags() ++ Names;
                 _ -> Names
             end,
+            EditRange = case Type of
+                template -> z_development_lsp_text:completion_range(Source, Prefix, Part);
+                _ -> undefined
+            end,
             [
-                #{
+                maps:merge(completion_edit(EditRange, N), #{
                     label => N,
                     kind => completion_kind(Type),
                     detail => <<"Zotonic ", (atom_to_binary(Type))/binary>>
-                }
+                })
                 || N <- lists:usort(All), Part =:= <<>> orelse binary:match(N, Part) =:= {0, byte_size(Part)}];
         [] ->
             []
     end.
+
+%% @doc Filename edits must replace directory prefixes and any existing suffix.
+completion_edit(undefined, _) ->
+    #{};
+completion_edit(Range, Name) ->
+    #{textEdit => #{range => Range, newText => Name}}.
 
 completion_kind(template) -> 17;
 completion_kind(_) -> 3.

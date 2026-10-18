@@ -72,7 +72,7 @@ development_filename(Filename) ->
 %% Walk each component: a regular file can still be reached through a linked
 %% priv directory. Bound link traversal so cycles fall back to the input path.
 -spec resolve(binary()) -> binary().
-resolve(Path) ->
+resolve(Path) when is_binary(Path) ->
     case filename:pathtype(Path) of
         absolute ->
             case resolve_parts(filename:split(Path), <<>>, 40) of

@@ -234,8 +234,8 @@ dispatch(<<"textDocument/didOpen">>, #{<<"textDocument">> := Doc}, _, State, Rem
     #{<<"uri">> := Uri, <<"text">> := Text, <<"version">> := Version} = Doc,
     put_document(Uri, Text, Version, State, Remote);
 dispatch(<<"textDocument/didChange">>, #{<<"textDocument">> := Doc,
-        <<"contentChanges">> := [#{<<"text">> := Text} = Change]}, _, State, Remote) ->
-    false = maps:is_key(<<"range">>, Change),
+        <<"contentChanges">> := [_ | _] = Changes}, _, State, Remote) ->
+    Text = lists:foldl(fun full_change/2, <<>>, Changes),
     #{<<"uri">> := Uri, <<"version">> := Version} = Doc,
     #{version := Previous} = maps:get(Uri, maps:get(documents, State)),
     case Version > Previous of
@@ -299,6 +299,13 @@ site_setting(Settings) ->
     Site = maps:get(<<"site">>, Settings, <<>>),
     true = is_binary(Site) andalso byte_size(Site) < 256,
     Site.
+
+%% @doc Validate successive full snapshots and retain the last one.
+full_change(#{<<"text">> := Text} = Change, _) ->
+    false = maps:is_key(<<"range">>, Change),
+    true = is_binary(Text) andalso byte_size(Text) =< ?MAX_SOURCE,
+    Text = unicode:characters_to_binary(Text),
+    Text.
 
 %% @doc Store full buffers with monotonic versions and bounded aggregate memory.
 put_document(Uri, Text, Version, #{documents := Documents} = State, Remote) ->

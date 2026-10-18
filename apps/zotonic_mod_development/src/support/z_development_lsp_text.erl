@@ -18,7 +18,7 @@
 %% limitations under the License.
 
 -module(z_development_lsp_text).
--export([uri/1, path/1, range/4, prefix/2, units/1]).
+-export([uri/1, path/1, range/4, lines/1, completion_range/3, prefix/2, units/1]).
 
 %% @doc Encode a local source path as a file URI, including spaces and Unicode.
 -spec uri(file:filename_all()) -> binary().
@@ -39,13 +39,29 @@ path(Uri) when is_binary(Uri) ->
     Path.
 
 %% @doc Convert scanner codepoint positions (one-based) to LSP UTF-16 ranges.
--spec range(binary(), pos_integer(), pos_integer(), binary()) -> map().
-range(Source, Row, Column, Name) ->
-    Lines = binary:split(Source, <<"\n">>, [global]),
-    Line = case length(Lines) >= Row of true -> lists:nth(Row, Lines); false -> <<>> end,
+-spec range(binary() | tuple(), pos_integer(), pos_integer(), binary()) -> map().
+range(Source, Row, Column, Name) when is_binary(Source) ->
+    range(lines(Source), Row, Column, Name);
+range(Lines, Row, Column, Name) when is_tuple(Lines) ->
+    Line = case tuple_size(Lines) >= Row of true -> element(Row, Lines); false -> <<>> end,
     Before = lists:sublist(unicode:characters_to_list(Line), Column - 1),
     Start = #{line => Row - 1, character => units(Before)},
     #{start => Start, 'end' => Start#{character => units(Before) + units(Name)}}.
+
+%% @doc Index source lines once for constant-time lookup by scanner row.
+-spec lines(binary()) -> tuple().
+lines(Source) ->
+    list_to_tuple(binary:split(Source, <<"\n">>, [global])).
+
+%% @doc Replace a quoted filename, including its suffix beyond the cursor.
+-spec completion_range(binary(), binary(), binary()) -> map().
+completion_range(Source, Prefix, Part) ->
+    Before = binary:part(Prefix, 0, byte_size(Prefix) - byte_size(Part)),
+    BeforeLines = binary:split(Before, <<"\n">>, [global]),
+    Start = #{line => length(BeforeLines) - 1, character => units(lists:last(BeforeLines))},
+    Tail = binary:part(Source, byte_size(Prefix), byte_size(Source) - byte_size(Prefix)),
+    {match, [Suffix]} = re:run(Tail, <<"^[^\"'\r\n]*">>, [{capture, first, binary}]),
+    #{start => Start, 'end' => Start#{character => maps:get(character, Start) + units(Part) + units(Suffix)}}.
 
 %% @doc Return text before a UTF-16 position, rejecting positions inside surrogate pairs.
 -spec prefix(binary(), map()) -> binary().
