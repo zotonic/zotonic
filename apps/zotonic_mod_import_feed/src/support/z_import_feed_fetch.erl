@@ -19,23 +19,33 @@
 -module(z_import_feed_fetch).
 -export([run/4]).
 
+-define(LEASE_TOKEN_BYTES, 24).
+
 -spec run(FeedId, Id, Uri, Context) -> {ok, integer()} | {error, term()}
     when FeedId :: integer(), Id :: integer(), Uri :: binary(), Context :: z:context().
 run(FeedId, Id, Uri, Context) ->
-    %% Lock the configuration against deletion or changes during the refresh.
-    Result = try z_db:transaction(fun(TransactionContext) ->
-        case z_db:qmap("select * from import_feed where id=$1 for update",
-                [FeedId], [{keys, atom}], TransactionContext) of
-            {ok, [Row]} -> refresh(m_import_feed:decode(Row), Id, Uri, TransactionContext);
-            {ok, []} -> {error, enoent};
+    %% Claim a lease in one statement; never keep a transaction open while
+    %% fetching the feed or importing its resources. Deletion checks this lease.
+    Token = binary:encode_hex(crypto:strong_rand_bytes(?LEASE_TOKEN_BYTES)),
+    try
+        case z_db:qmap("update import_feed set lease_token=$2,
+                lease_until=now()+interval '15 minutes'
+                where id=$1 and (lease_until is null or lease_until<now())
+                returning *", [FeedId, Token], [{keys, atom}], Context) of
+            {ok, [Row]} ->
+                try refresh(m_import_feed:decode(Row), Id, Uri, Context)
+                after
+                    z_db:q("update import_feed set lease_token=null, lease_until=null
+                        where id=$1 and lease_token=$2", [FeedId, Token], Context)
+                end;
+            {ok, []} ->
+                case z_db:q1("select id from import_feed where id=$1", [FeedId], Context) of
+                    undefined -> {error, enoent};
+                    _ -> {error, feed_is_running}
+                end;
             Error -> Error
         end
-    end, Context)
-    after z_memo:set_userid(Context) end,
-    case Result of
-        {rollback, Reason} -> {error, Reason};
-        Other -> Other
-    end.
+    after z_memo:set_userid(Context) end.
 
 refresh(#{user_id := User} = FeedSettings, Id, Uri, Context) when is_integer(User) ->
     case {m_import_feed:is_admin_user(User, Context), z_auth:is_enabled(User, Context)} of
@@ -64,7 +74,7 @@ fetch(FeedSettings, Id, Uri, Context) ->
                     end;
                 Error -> Error
             end;
-        Error -> Error
+        {error, _} = Error -> Error
     end.
 
 enrich(Entry, #{use_wordpress := true}, Context) -> z_import_feed_wordpress:enrich(Entry, Context);
@@ -78,5 +88,5 @@ import(Entry, FeedSettings, _Id, Context) ->
                 _ -> {error, enoent}
             end;
         skipped -> {error, feed_import_skipped};
-        Error -> Error
+        {error, _} = Error -> Error
     end.

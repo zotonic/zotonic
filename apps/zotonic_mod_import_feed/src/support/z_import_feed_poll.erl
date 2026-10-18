@@ -28,15 +28,28 @@ run(0, _) -> ok;
 run(FeedsRemaining, Context) ->
     Token = binary:encode_hex(crypto:strong_rand_bytes(?LEASE_TOKEN_BYTES)),
     %% SKIP LOCKED permits multiple Zotonic nodes without duplicate claims.
-    {ok, Rows} = z_db:qmap("update import_feed set lease_token=$1,
-        lease_until=now()+interval '15 minutes', last_poll=now(), polls=polls+1
-        where id=(select id from import_feed where not is_paused and next_poll<=now()
-            and (lease_until is null or lease_until<now()) order by next_poll
-            for update skip locked limit 1) returning *", [Token], [{keys, atom}], Context),
+    %% Capture and consume the restore request atomically with the lease. It
+    %% belongs to this fetch only, even if the worker or network subsequently fails.
+    {ok, Rows} = z_db:qmap("with due as (
+            select id, refetch_deleted from import_feed
+            where (not is_paused or refetch_deleted) and next_poll<=now()
+                and (lease_until is null or lease_until<now())
+            order by next_poll for update skip locked limit 1
+        ) update import_feed f set lease_token=$1,
+            lease_until=now()+interval '15 minutes', last_poll=now(), polls=polls+1,
+            refetch_deleted=false
+        from due where f.id=due.id
+        returning f.*, due.refetch_deleted as refetch_deleted_once",
+        [Token], [{keys, atom}], Context),
     case Rows of
         [] -> ok;
         [Row] ->
             FeedSettings = m_import_feed:decode(Row),
+            Message = case maps:get(refetch_deleted_once, FeedSettings, false) of
+                true -> <<"Fetching feed, including deleted resources">>;
+                false -> <<"Fetching feed">>
+            end,
+            poll_log(FeedSettings, <<"started">>, Message, Context),
             Result = try
                          poll(FeedSettings, Context)
                      catch
@@ -85,12 +98,24 @@ fetch(FeedSettings, Context) ->
                 {ok, #{truncated := true}} -> {error, too_many_entries};
                 {ok, ParsedFeed} ->
                     m_import_feed:record_feed_type(FeedSettings, ParsedFeed, Context),
+                    poll_log(FeedSettings, <<"parsed">>,
+                        iolist_to_binary(io_lib:format("Parsed ~B entries", [length(maps:get(entries, ParsedFeed))])), Context),
                     Counts = #{imported => 0, updated => 0, skipped => 0, errors => 0, last_error => undefined},
-                    {ok, entries(sort_entries(maps:get(entries, ParsedFeed)), FeedSettings#{feed => maps:without([entries], ParsedFeed)}, Counts, Context)};
+                    ImportSettings = restore_settings(FeedSettings#{feed => maps:without([entries], ParsedFeed)}, Context),
+                    {ok, entries(sort_entries(maps:get(entries, ParsedFeed)), ImportSettings, Counts, Context)};
                 Error -> Error
             end;
         Error -> Error
     end.
+
+%% Keep the initial deletion set for this fetch. Several articles can embed the
+%% same deleted medium; all must update their embeds after the first restores it.
+restore_settings(#{refetch_deleted_once := true, id := FeedId} = Feed, Context) ->
+    Rows = z_db:q("select r.uri from import_feed_resource r
+        join import_feed_item i on i.uri=r.uri
+        where i.feed_id=$1 and r.rsc_id is null", [FeedId], Context),
+    Feed#{refetch_deleted_uris => maps:from_list([{Uri, true} || {Uri} <- Rows])};
+restore_settings(Feed, _) -> Feed.
 
 %% @doc Oldest first, with undated entries last. Preserve feed order for equal dates.
 -spec sort_entries(Entries) -> [map()] when Entries :: [map()].
@@ -105,8 +130,9 @@ entries([], _, Counts, _) -> Counts;
 entries([Entry | Rest], FeedSettings, Counts, Context) ->
     %% Refresh the lease and check pause/configuration changes before every entry.
     Active = z_db:q1("update import_feed set lease_until=now()+interval '15 minutes'
-        where id=$1 and lease_token=$2 and not is_paused and modified=$3 returning id",
-        [maps:get(id, FeedSettings), maps:get(lease_token, FeedSettings), maps:get(modified, FeedSettings)], Context),
+        where id=$1 and lease_token=$2 and (not is_paused or $4) and modified=$3 returning id",
+        [maps:get(id, FeedSettings), maps:get(lease_token, FeedSettings), maps:get(modified, FeedSettings),
+         maps:get(refetch_deleted_once, FeedSettings, false)], Context),
     case Active of
         undefined -> Counts;
         _ ->
@@ -133,16 +159,29 @@ import_entry(SourceEntry, Rest, FeedSettings, Counts, Context) ->
 finish(FeedSettings, {error, Reason}, Context) ->
     finish(FeedSettings, {ok, #{imported => 0, updated => 0, skipped => 0, errors => 1, last_error => Reason}}, Context);
 finish(FeedSettings, {ok, Counts}, Context) ->
+    Status = case maps:get(errors, Counts) of 0 -> <<"ok">>; _ -> <<"error">> end,
+    Summary = iolist_to_binary(io_lib:format("Imported: ~B; updated: ~B; skipped: ~B; errors: ~B. ~ts", [
+        maps:get(imported, Counts), maps:get(updated, Counts), maps:get(skipped, Counts), maps:get(errors, Counts),
+        case maps:get(last_error, Counts) of undefined -> <<>>; LastError -> m_import_feed:error_message(LastError, Context) end])),
     Error = case maps:get(last_error, Counts) of
         undefined -> undefined;
         Reason -> m_import_feed:error_message(Reason, Context)
     end,
     z_db:q("update import_feed set lease_token=null, lease_until=null,
-        next_poll=case when modified=$8 then now()+poll_minutes*interval '1 minute' else next_poll end,
+        next_poll=case when modified=$8 and not refetch_deleted
+            then now()+poll_minutes*interval '1 minute' else next_poll end,
         imported=imported+$2, updated=updated+$3, skipped=skipped+$4, errors=errors+$5,
         last_error=$6, last_success=case when $5=0 then now() else last_success end
         where id=$1 and lease_token=$7",
         [maps:get(id, FeedSettings), maps:get(imported, Counts), maps:get(updated, Counts),
          maps:get(skipped, Counts), maps:get(errors, Counts), Error,
          maps:get(lease_token, FeedSettings), maps:get(modified, FeedSettings)], Context),
-    ok.
+    poll_log(FeedSettings, Status, Summary, Context).
+
+poll_log(Feed, Status, Message, Context) ->
+    FeedId = maps:get(id, Feed),
+    ok = m_import_feed_log:write(FeedId, #{event => <<"poll">>, status => Status,
+        uri => maps:get(url, Feed, undefined), user_id => maps:get(user_id, Feed, undefined),
+        category_id => maps:get(category_id, Feed, undefined),
+        content_group_id => maps:get(content_group_id, Feed, undefined), message => Message}, Context),
+    m_import_feed_log:changed(FeedId, Context).

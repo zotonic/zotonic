@@ -29,7 +29,7 @@ import_notification() ->
     z_notifier:observe(import_resource, {?MODULE, observe}, 1, Context),
     try
         Result = z_db:transaction(fun check_imports/1, Context),
-        ?assertEqual(checked, Result)
+        ?assertEqual({rollback, checked}, Result)
     after
         z_notifier:detach(import_resource, Context)
     end.
