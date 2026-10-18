@@ -21,6 +21,12 @@ command = [str(root / 'bin/zotonic-lsp')] if '--auto' in sys.argv[2:] else [str(
 environment = os.environ.copy()
 if inferred:
     environment['ZOTONIC_LSP_PATH_MAPPINGS'] = json.dumps([{'localRoot': str(client_root), 'remoteRoot': str(root)}])
+if '--invalid-inferred' in sys.argv[2:]:
+    assert mapped and not inferred, 'Use --mapped to supply a valid explicit override'
+    environment['ZOTONIC_LSP_PATH_MAPPINGS'] = json.dumps([
+        {'localRoot': str(client_root), 'remoteRoot': '/container/one'},
+        {'localRoot': str(client_root), 'remoteRoot': '/container/two'},
+    ])
 process = subprocess.Popen(command, cwd=root, env=environment,
                            stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 messages = queue.Queue()

@@ -47,18 +47,26 @@ request(sites, _) ->
 request(diagnostics, #{source := Source}) ->
     diagnostics(Source);
 request(Kind, #{source := Source, file := File} = Args0) when byte_size(Source) =< ?MAX_SOURCE_BYTES ->
-    Args = Args0#{lines => z_development_lsp_text:lines(Source)},
+    Lines = z_development_lsp_text:lines(Source),
+    Ref = case Kind of
+        completion -> undefined;
+        _ -> reference_at_cursor(Source, Lines, maps:get(position, Args0))
+    end,
+    Args = Args0#{lines => Lines, reference => Ref},
     Available = sites(),
     case maps:get(site, Args, <<>>) of
         <<>> ->
-            Contexts = [site_context(S) || S <- Available],
-            Owners = case Kind =/= completion andalso server_reference(Args, Contexts) of
-                true -> Contexts;
-                false -> [C || C <- Contexts, contains_file(File, C)]
-            end,
-            Candidates = case Owners of [] -> Contexts; _ -> Owners end,
             case tag_hover(Kind, Args) of
-                undefined -> automatic_query(Kind, Args, Candidates, Contexts);
+                undefined when Ref =:= undefined, Kind =:= definition -> [];
+                undefined when Ref =:= undefined, Kind =:= hover -> null;
+                undefined ->
+                    Contexts = [site_context(S) || S <- Available],
+                    Owners = case Kind =/= completion andalso server_reference(Args) of
+                        true -> Contexts;
+                        false -> [C || C <- Contexts, contains_file(File, C)]
+                    end,
+                    Candidates = case Owners of [] -> Contexts; _ -> Owners end,
+                    automatic_query(Kind, Args, Candidates, Contexts);
                 Hover -> Hover
             end;
         Selected ->
@@ -116,21 +124,21 @@ automatic_query(completion, Args, Candidates, _) ->
     %% Suggestions do not select a rendering context, so their union is safe.
     lists:usort(lists:append([query(completion, Args, C) || C <- Candidates]));
 automatic_query(Kind, Args, Candidates, All) when Kind =:= definition; Kind =:= hover ->
-    Matches = [{C, Result} || C <- Candidates,
-        Result <- [query(definition, Args, C)], Result =/= []],
+    Matches = [
+        {C, Ref, Targets, reference_result(definition, Ref, Targets, <<>>, <<>>)}
+        || C <- Candidates, {Ref, Targets} <- [resolve_selection(Args, C)], Targets =/= []
+    ],
     case Matches of
         [] when Candidates =/= All -> automatic_query(Kind, Args, All, All);
         [] when Kind =:= definition -> [];
         [] -> null;
-        [{Context, Result} | _] ->
-            %% URIs already resolve symlinks. Keep order: a different effective
-            %% template or overrules chain must not silently select a site.
-            case lists:usort([R || {_, R} <- Matches]) of
-                [_] when Kind =:= definition ->
-                    Result;
+        [{_Context, Ref, Targets, Result} | _] ->
+            %% Compare ordered canonical targets, preserving template priority.
+            case lists:usort([R || {_, _, _, R} <- Matches]) of
+                [_] when Kind =:= definition -> Result;
                 [_] ->
-                    Names = [atom_to_binary(z_context:site(C)) || {C, _} <- Matches],
-                    query(hover, Args#{site_label => Names}, Context);
+                    Names = [atom_to_binary(z_context:site(C)) || {C, _, _, _} <- Matches],
+                    reference_result(hover, Ref, Targets, Names, maps:get(hover_format, Args, <<"plaintext">>));
                 _ ->
                     {error, <<"This reference resolves differently across sites; select a Zotonic site in the editor.">>}
             end
@@ -139,17 +147,10 @@ automatic_query(Kind, Args, Candidates, All) when Kind =:= definition; Kind =:= 
 site_context(Site) ->
     z_context:new(binary_to_existing_atom(Site, utf8)).
 
-%% @doc Erlang module references do not require ownership of the current template.
-server_reference(#{source := Source, file := File, position := Position} = Args, [Context | Rest]) ->
-    case [
-        maps:get(kind, R) || R <- references(Source, File, maps:get(lines, Args), Context),
-                             at_position(maps:get(range, R), Position)
-    ]
-    of
-        [Kind | _] -> lists:member(Kind, [filter, model, delegate]);
-        [] -> server_reference(Args, Rest)
-    end;
-server_reference(_, _) -> false.
+%% @doc Classify the selected token without resolving it in any site.
+server_reference(#{reference := #{kind := Kind}}) ->
+    lists:member(Kind, [filter, model, delegate]);
+server_reference(_) -> false.
 
 %% @doc Check each distinct template root once, avoiding symlink walks for every file.
 contains_file(File, Context) ->
@@ -222,40 +223,45 @@ query(completion, #{source := Source, position := Position} = Args, Context) ->
         Match -> z_development_lsp_model:complete(Source, Prefix, Match,
             maps:get(site, Args, <<>>) =/= <<>>, Context)
     end;
-query(Kind, #{source := Source, file := File, position := Position} = Args, Context)
-    when Kind =:= definition; Kind =:= hover ->
-    Refs = references(Source, File, maps:get(lines, Args), Context),
-    case [R || R <- Refs, at_position(maps:get(range, R), Position)] of
-        [Ref | _] ->
-            reference_result(Kind, Ref, Context,
+query(Kind, Args, Context) when Kind =:= definition; Kind =:= hover ->
+    case resolve_selection(Args, Context) of
+        {Ref, Targets} ->
+            reference_result(Kind, Ref, Targets,
                 maps:get(site_label, Args, atom_to_binary(z_context:site(Context))),
                 maps:get(hover_format, Args, <<"plaintext">>));
-        [] when Kind =:= definition ->
-            [];
-        [] ->
-            null
+        undefined when Kind =:= definition -> [];
+        undefined -> null
     end.
 
-%% @doc Share browser source lookup, adding the implicit overrules target.
-references(Source, File, Lines, Context) ->
-    Refs = z_development_template:source_references(Source, Context),
+%% @doc Select a reference by position before resolving modules, templates or overrules.
+reference_at_cursor(Source, Lines, Position) ->
+    Refs = z_development_template:source_references(Source),
     Inheritance = case template_compiler_scanner:scan(<<"buffer">>, Source) of
         {ok, Tokens} ->
-            [
-                #{
-                    kind => template,
-                    name => <<"overrules">>,
-                    row => Row,
-                    column => Column,
-                    matches => overrules(File, Context)
-                }
-                || {overrules_keyword, {_, Row, Column}, _} <- Tokens
-            ];
-        _ ->
-            []
+            [#{kind => template, name => <<"overrules">>, row => Row, column => Column,
+               is_overrules => true} || {overrules_keyword, {_, Row, Column}, _} <- Tokens];
+        _ -> []
     end,
-    [R#{range => z_development_lsp_text:range(Lines, maps:get(row, R), maps:get(column, R), maps:get(name, R))}
-        || R <- Refs ++ Inheritance].
+    reference_at_position(Refs ++ Inheritance, Lines, Position).
+
+reference_at_position([Ref | Rest], Lines, Position) ->
+    Range = z_development_lsp_text:range(Lines, maps:get(row, Ref), maps:get(column, Ref), maps:get(name, Ref)),
+    case at_position(Range, Position) of
+        true -> Ref#{range => Range};
+        false -> reference_at_position(Rest, Lines, Position)
+    end;
+reference_at_position([], _, _) -> undefined.
+
+%% @doc Resolve only the cursor's reference; keep the result for hover formatting.
+resolve_selection(#{reference := undefined}, _) -> undefined;
+resolve_selection(#{reference := #{is_overrules := true} = Ref, file := File}, Context) ->
+    Resolved = Ref#{matches => overrules(File, Context)},
+    {Resolved, targets(Resolved, Context)};
+resolve_selection(#{reference := Ref}, Context) ->
+    case z_development_template:resolve_reference(Ref, Context) of
+        undefined -> undefined;
+        Resolved -> {Resolved, targets(Resolved, Context)}
+    end.
 
 overrules(File, Context) ->
     Path = filter_development_filename:resolve(File),
@@ -272,17 +278,17 @@ at_position(#{start := #{line := Row, character := Start}, 'end' := #{character 
 at_position(_, _) ->
     false.
 
-reference_result(definition, Ref, Context, _Label, _Format) ->
+reference_result(definition, _Ref, Targets, _Label, _Format) ->
     [
         #{
             uri => z_development_lsp_text:uri(File),
             range => line_range(Line)
         }
-        || #{file := File, line := Line} <- targets(Ref, Context)
+        || #{file := File, line := Line} <- Targets
     ];
-reference_result(hover, Ref, Context, Label, Format) ->
+reference_result(hover, Ref, Targets, Label, Format) ->
     #{
-        contents => z_development_lsp_hover:format(Ref, targets(Ref, Context), Label, Format),
+        contents => z_development_lsp_hover:format(Ref, Targets, Label, Format),
         range => maps:get(range, Ref)
     }.
 

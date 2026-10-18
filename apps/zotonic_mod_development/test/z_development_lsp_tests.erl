@@ -101,18 +101,19 @@ automatic_conflicting_sites_test() ->
         meck:expect(z_sites_manager, get_sites, fun() -> #{lsp_site_a => running, lsp_site_b => running} end),
         meck:expect(z_module_manager, active, fun(_) -> [mod_development] end),
         meck:expect(z_module_indexer, all, fun(template, _) -> [] end),
-        meck:expect(z_development_template, source_references, fun(_, Context) ->
+        meck:expect(z_development_template, source_references, fun(_) ->
+            [#{kind => template, name => <<"base.tpl">>, row => 1, column => 13}]
+        end),
+        meck:expect(z_development_template, resolve_reference, fun(Ref, Context) ->
             Site = atom_to_binary(z_context:site(Context)),
-            [#{kind => template, name => <<"base.tpl">>, row => 1, column => 13,
-                matches => [#{path => <<"/tmp/", Site/binary, "/base.tpl">>, module => zotonic_mod_base}]}]
+            Ref#{matches => [#{path => <<"/tmp/", Site/binary, "/base.tpl">>, module => zotonic_mod_base}]}
         end),
         Args = #{source => <<"{% include \"base.tpl\" %}">>, file => <<"/tmp/unowned.tpl">>,
             position => #{<<"line">> => 0, <<"character">> => 15}},
         ?assertMatch({error, _}, z_development_lsp_backend:request(definition, Args)),
         ?assertMatch([#{uri := _}], z_development_lsp_backend:request(definition, Args#{site => <<"lsp_site_a">>})),
-        meck:expect(z_development_template, source_references, fun(_, _) ->
-            [#{kind => template, name => <<"base.tpl">>, row => 1, column => 13,
-                matches => [#{path => <<"/tmp/shared/base.tpl">>, module => zotonic_mod_base}]}]
+        meck:expect(z_development_template, resolve_reference, fun(Ref, _) ->
+            Ref#{matches => [#{path => <<"/tmp/shared/base.tpl">>, module => zotonic_mod_base}]}
         end),
         ?assertMatch([#{uri := _}], z_development_lsp_backend:request(definition, Args)),
         meck:expect(z_module_indexer, all_files, fun(model, zotonic_core) ->
@@ -131,6 +132,35 @@ automatic_conflicting_sites_test() ->
                 position => #{<<"line">> => 0, <<"character">> => 20}}),
         ?assertEqual(#{newText => <<"cards/card.tpl">>, range => #{
             start => #{line => 0, character => 12}, 'end' => #{line => 0, character => 26}}}, Edit)
+    after
+        lists:foreach(fun meck:unload/1, Modules)
+    end.
+
+cursor_only_resolution_test() ->
+    Modules = [z_sites_manager, z_module_manager, z_module_indexer, z_development_editor, z_development_lsp_docs],
+    lists:foreach(fun(M) -> meck:new(M, [non_strict]) end, Modules),
+    try
+        meck:expect(z_sites_manager, get_sites, fun() -> #{lsp_site_a => running, lsp_site_b => running} end),
+        meck:expect(z_module_manager, active, fun(_) -> [mod_development] end),
+        meck:expect(z_module_indexer, all, fun(_, _) -> error(unrelated_template_index_walk) end),
+        meck:expect(z_development_lsp_docs, module, fun(_) -> <<>> end),
+        File = unicode:characters_to_binary(filename:absname(?FILE)),
+        meck:expect(z_development_editor, source_location, fun(filter_escape, escape) -> {ok, File, 1};
+            (_, _) -> error(unrelated_source_lookup) end),
+        Source = <<"{{ a|escape }} {{ b|striptags }} {{ m.rsc[1] }} {% overrules %} {{ a|escape }}">>,
+        Args = #{source => Source, file => <<"/tmp/unowned.tpl">>,
+            position => #{<<"line">> => 0, <<"character">> => 7}},
+        ?assertMatch(#{contents := _}, z_development_lsp_backend:request(hover, Args)),
+        %% One lookup per candidate site; hover formatting must reuse those results.
+        ?assertEqual(2, meck:num_calls(z_development_editor, source_location, [filter_escape, escape])),
+        meck:reset(z_development_editor),
+        ?assertMatch([#{uri := _}], z_development_lsp_backend:request(definition, Args)),
+        ?assertEqual(2, meck:num_calls(z_development_editor, source_location, [filter_escape, escape])),
+        meck:reset(z_development_editor),
+        ?assertEqual(null, z_development_lsp_backend:request(hover,
+            Args#{position => #{<<"line">> => 0, <<"character">> => 0}})),
+        ?assertEqual([], meck:history(z_development_editor)),
+        ?assertEqual([], meck:history(z_module_indexer))
     after
         lists:foreach(fun meck:unload/1, Modules)
     end.
@@ -209,9 +239,9 @@ mapped_session_test() ->
         z_development_lsp:handle(request(2, <<"textDocument/definition">>, Params), S2, Remote).
 
 automatic_mappings_test() ->
-    Defaults = z_development_lsp_paths:prepare([
-        #{<<"localRoot">> => <<"/host/project">>, <<"remoteRoot">> => <<"/container/project">>}]),
-    Initial = (z_development_lsp:new())#{path_mappings => Defaults},
+    Raw = [#{<<"localRoot">> => <<"/host/project">>, <<"remoteRoot">> => <<"/container/project">>}],
+    Defaults = z_development_lsp_paths:prepare(Raw),
+    Initial = (z_development_lsp:new())#{inferred_mappings => z_json:encode(Raw)},
     Remote = fun(_, _) -> [] end,
     {_, State} = z_development_lsp:handle(request(1, <<"initialize">>,
         #{<<"initializationOptions">> => #{<<"pathMappings">> => []}}), Initial, Remote),
@@ -219,7 +249,14 @@ automatic_mappings_test() ->
     Explicit = [#{<<"localRoot">> => <<"/explicit/host">>, <<"remoteRoot">> => <<"/explicit/server">>}],
     {_, Other} = z_development_lsp:handle(request(1, <<"initialize">>,
         #{<<"initializationOptions">> => #{<<"pathMappings">> => Explicit}}), Initial, Remote),
-    ?assertEqual(z_development_lsp_paths:prepare(Explicit), maps:get(path_mappings, Other)).
+    ?assertEqual(z_development_lsp_paths:prepare(Explicit), maps:get(path_mappings, Other)),
+    lists:foreach(fun(Inferred) ->
+        Invalid = Initial#{inferred_mappings => Inferred},
+        {[#{result := _}], Override} = z_development_lsp:handle(request(1, <<"initialize">>,
+            #{<<"initializationOptions">> => #{<<"pathMappings">> => Explicit}}), Invalid, Remote),
+        ?assertEqual(z_development_lsp_paths:prepare(Explicit), maps:get(path_mappings, Override)),
+        {[#{error := _}], Invalid} = z_development_lsp:handle(request(1, <<"initialize">>, #{}), Invalid, Remote)
+    end, [z_json:encode(Raw ++ Raw), <<"invalid JSON">>]).
 
 hover_format_test() ->
     lists:foreach(fun({Formats, Expected}) ->

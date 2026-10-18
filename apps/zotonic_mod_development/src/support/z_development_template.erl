@@ -23,7 +23,9 @@
     matching_templates/2,
     source_links/2,
     source_links/3,
+    source_references/1,
     source_references/2,
+    resolve_reference/2,
     event/2
     ]).
 
@@ -204,9 +206,27 @@ overrules_option(_, _) -> undefined.
 %% @doc Resolve source references for trusted development tools without browser tokens.
 -spec source_references(binary(), z:context()) -> [map()].
 source_references(Source, Context) ->
+    scan_references(Source, Context).
+
+scan_references(Source, Context) ->
     case template_compiler_scanner:scan(<<"source">>, Source) of
         {ok, Tokens} -> source_links_tokens(Tokens, Context);
         {error, _} -> []
+    end.
+
+%% @doc Recognize reference names and positions without resolving modules or reading source files.
+-spec source_references(binary()) -> [map()].
+source_references(Source) ->
+    scan_references(Source, unresolved).
+
+%% @doc Resolve one previously recognized reference in the selected site's context.
+-spec resolve_reference(map(), z:context()) -> map() | undefined.
+resolve_reference(#{kind := template} = Ref, _Context) ->
+    Ref;
+resolve_reference(#{kind := Kind, name := Name} = Ref, Context) ->
+    case reference_source(Kind, Name, Context) of
+        undefined -> undefined;
+        Location -> maps:merge(Ref, Location)
     end.
 
 %% @doc Authorize a resolved source location for the browser editor callback.
@@ -253,6 +273,8 @@ source_links_tokens([], _Context) ->
     [].
 
 %% @doc Attach the token position and kind to an existing source location.
+source_link(Kind, {identifier, {_, Row, Column}, Name}, unresolved) ->
+    [#{kind => Kind, name => Name, row => Row, column => Column}];
 source_link(Kind, {identifier, {_, Row, Column}, Name}, Context) ->
     case reference_source(Kind, Name, Context) of
         undefined -> [];

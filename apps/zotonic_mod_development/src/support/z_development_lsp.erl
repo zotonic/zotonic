@@ -39,16 +39,12 @@ run(Node) ->
             Result -> Result
         end
     end,
-    Defaults = try
-        case os:getenv("ZOTONIC_LSP_PATH_MAPPINGS") of
-            false -> [];
-            Encoded -> z_development_lsp_paths:prepare(z_json:decode(unicode:characters_to_binary(Encoded)))
-        end
-    catch _:_ ->
-        io:format(standard_error, "Zotonic LSP: invalid automatic path mappings; configure explicit source mounts.~n", []),
-        halt(1)
+    Defaults = case os:getenv("ZOTONIC_LSP_PATH_MAPPINGS") of
+        false -> [];
+        Encoded -> unicode:characters_to_binary(Encoded)
     end,
-    loop((new())#{ path_mappings => Defaults }, Remote).
+    loop((new())#{inferred_mappings => Defaults}, Remote).
+
 
 %% @doc Create an isolated document and lifecycle state for one editor.
 -spec new() -> map().
@@ -58,6 +54,7 @@ new() ->
         site => <<>>,
         documents => #{},
         path_mappings => [],
+        inferred_mappings => [],
         hover_format => <<"plaintext">>
     }.
 
@@ -191,7 +188,7 @@ dispatch(<<"initialize">>, Params, Message, #{phase := new} = State, _) ->
     Options = case maps:get(<<"initializationOptions">>, Params, #{}) of null -> #{}; O -> O end,
     Site = site_setting(Options),
     Mappings = case maps:get(<<"pathMappings">>, Options, []) of
-        [] -> maps:get(path_mappings, State);
+        [] -> prepare_inferred_mappings(maps:get(inferred_mappings, State));
         ExplicitMappings -> z_development_lsp_paths:prepare(ExplicitMappings)
     end,
     Result = #{
@@ -294,6 +291,12 @@ hover_format(Params) ->
         [Format | _] -> Format;
         [] -> <<"plaintext">>
     end.
+
+%% @doc Decode and validate inference only when explicit editor mappings are absent.
+prepare_inferred_mappings(Encoded) when is_binary(Encoded) ->
+    z_development_lsp_paths:prepare(z_json:decode(Encoded));
+prepare_inferred_mappings(Mappings) ->
+    z_development_lsp_paths:prepare(Mappings).
 
 site_setting(Settings) ->
     Site = maps:get(<<"site">>, Settings, <<>>),
