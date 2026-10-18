@@ -1,0 +1,11 @@
+{
+  "scopeName": "text.html.zotonic",
+  "patterns": [
+    { "name": "comment.block.zotonic", "begin": "\\{#", "end": "#\\}" },
+    { "name": "meta.tag.zotonic", "begin": "\\{[%{_]", "end": "[%}_]\\}", "patterns": [
+      { "name": "string.quoted.double.zotonic", "begin": "\"", "end": "\"", "patterns": [{"match": "\\\\.", "name": "constant.character.escape.zotonic"}] },
+      { "name": "string.quoted.single.zotonic", "begin": "'", "end": "'", "patterns": [{"match": "\\\\.", "name": "constant.character.escape.zotonic"}] }
+    ] },
+    { "include": "text.html.basic" }
+  ]
+}

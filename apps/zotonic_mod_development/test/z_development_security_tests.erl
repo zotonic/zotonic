@@ -31,6 +31,30 @@ tests(Context) ->
         template, <<"admin_development.tpl">>, Admin),
     Base = #{<<"file">> => File, <<"editor">> => <<"auto">>, <<"line">> => 1, <<"column">> => 1},
     [
+        {"inheritance keywords link only existing priority targets", fun() ->
+            Source = <<"{% extends \"admin_development.tpl\" %}">>,
+            ?assertEqual([], z_development_template:source_links(Source, File, Anonymous)),
+            [Extends] = [L || #{name := <<"extends">>} = L <- z_development_template:source_links(Source, File, Admin)],
+            ?assertEqual(<<"admin_development.tpl">>, maps:get(template, Extends)),
+            ?assertEqual(4, maps:get(column, Extends)),
+            ?assertEqual([], [L || #{name := <<"extends">>} = L <- z_development_template:source_links(
+                <<"{% extends \"nonexistent-inheritance-test.tpl\" %}">>, File, Admin)]),
+            All = z_module_indexer:all(template, Admin),
+            [Matches | _] = [Ms || #module_index{key = #module_index_key{name = N}} <- All,
+                Ms <- [z_module_indexer:find_all(template, N, Admin)], length(Ms) >= 2],
+            [#module_index{filepath = First} | _] = Matches,
+            #module_index{filepath = Last} = lists:last(Matches),
+            ?assertMatch([#{name := <<"overrules">>, is_overrules := true, column := 4}],
+                z_development_template:source_links(<<"{% overrules %}">>,
+                    filter_development_filename:resolve(First), Admin)),
+            ?assertEqual([], z_development_template:source_links(<<"{% overrules %}">>, Last, Admin)),
+            ?assertEqual([], z_development_template:source_links(<<"{% overrules %}">>, <<"/etc/passwd">>, Admin))
+        end},
+        {"inheritance callback checks permission before resolving the signed file", fun() ->
+            #context{} = z_development_template:event(
+                #postback{message = {template_matches_source, [{file, File}]}},
+                z_context:set_q(<<"is_overrules">>, <<"true">>, Anonymous))
+        end},
         {"model reads require development permission", fun() ->
             lists:foreach(fun(Path) ->
                 ?assertEqual({error, eacces}, m_development:m_get([Path], undefined, Anonymous))

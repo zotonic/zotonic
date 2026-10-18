@@ -36,6 +36,9 @@ export ERL_EPMD_ADDRESS
 cd -- "${ZOTONIC}" || \exit 1
 
 case "$1" in
+    lsp)
+        exec "${ZOTONIC_BIN}/zotonic.escript" "$@"
+        ;;
     completion)
         case "${machine}" in
             Linux*)     BASH_FILE=~/.bashrc;;
