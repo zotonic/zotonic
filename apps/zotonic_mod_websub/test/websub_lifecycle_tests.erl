@@ -332,8 +332,7 @@ oauth_transport_test() ->
         meck:unload(z_url_fetch), meck:unload(z_websub_http), meck:unload(m_oauth2_consumer)
     end.
 
-%% Exhausting retries for an old notification must not delete a newer update
-%% queued while the HTTP request was in flight.
+%% A newer notification queued in flight retains the failure window and backoff.
 queue_race_test() ->
     without_scheduler(fun queue_race/0).
 
@@ -359,7 +358,7 @@ queue_race() ->
         %% Delivery tests explicitly make the batch due; batching is tested separately.
         z_db:q("update websub_push_queue set due=now() where local_rsc_id=$1", [Id], C),
         ok = m_websub:process_push_queue(C),
-        ?assertEqual({100, 0}, z_db:q_row("select version, retry_count from websub_push_queue where local_rsc_id=$1", [Id], C)),
+        ?assertEqual({100, 9}, z_db:q_row("select version, retry_count from websub_push_queue where local_rsc_id=$1", [Id], C)),
         ?assert(meck:called(z_websub_http, fetch, [post, Callback, '_', '_', '_']))
     after
         meck:unload(z_websub_http), m_rsc:delete(Id, C)
@@ -927,4 +926,222 @@ subscription_live_status() ->
         meck:unload(z_mqtt),
         z_db:q("delete from websub_import where local_rsc_id=$1", [Id], A),
         m_rsc:delete(Id, A)
+    end.
+
+subscription_retry_deadline_test_() ->
+    {timeout, 60, fun() -> without_scheduler(fun subscription_retry_deadline/0) end}.
+
+subscription_retry_deadline() ->
+    C = z_acl:logon(1, z_context:new(zotonic_site_testsandbox)),
+    Saved = m_config:get_value(mod_websub, subscription_retry_timeout, C),
+    ok = meck:new(z_websub_discovery, [passthrough]),
+    ok = meck:expect(z_websub_discovery, discover, fun(Url, _) ->
+        {ok, #{topic => Url, hubs => [<<"https://hub.test/">>]}}
+    end),
+    ok = meck:new(z_websub_http, [passthrough]),
+    ok = meck:expect(z_websub_http, post_form, fun(_, _, _) -> {ok, accepted} end),
+    try
+        m_config:set_value(mod_websub, subscription_retry_timeout, <<"300">>, C),
+        lists:foreach(fun(Mode) -> retry_deadline(Mode, C) end,
+            [<<"subscribe">>, <<"unsubscribe">>])
+    after
+        meck:unload(z_websub_http),
+        meck:unload(z_websub_discovery),
+        case Saved of
+            undefined -> m_config:delete(mod_websub, subscription_retry_timeout, C);
+            _ -> m_config:set_value(mod_websub, subscription_retry_timeout, Saved, C)
+        end
+    end.
+
+retry_deadline(Mode, C) ->
+    Uri = <<"https://external.test/id/retry-", Mode/binary>>,
+    {ok, Id} = m_rsc:insert(#{<<"category_id">> => text,
+        <<"is_authoritative">> => false, <<"uri">> => Uri}, C),
+    try
+        ok = m_websub:subscribe(Id, C),
+        ok = z_websub_subscription:process(C),
+        {ImportId, Token} = z_db:q_row("select id, callback_token from websub_import
+            where local_rsc_id=$1", [Id], C),
+        case Mode of
+            <<"subscribe">> -> ok;
+            <<"unsubscribe">> ->
+                ok = z_websub_subscription:verify(Token, Uri, <<"subscribe">>, 3600, C),
+                ?assertEqual(undefined, z_db:q1("select retry_started from websub_import where id=$1", [ImportId], C)),
+                ok = m_websub:unsubscribe(Id, C),
+                ok = z_websub_subscription:process(C)
+        end,
+        Started = z_db:q1("select retry_started from websub_import where id=$1", [ImportId], C),
+        ?assertNotEqual(undefined, Started),
+        lists:foreach(fun({Count, MinDelay}) ->
+            Calls = meck:num_calls(z_websub_http, post_form, '_'),
+            z_db:q("update websub_import set next_check=now(),
+                pending_until=now()-interval '1 second' where id=$1", [ImportId], C),
+            ok = z_websub_subscription:process(C),
+            ?assertEqual(Calls, meck:num_calls(z_websub_http, post_form, '_')),
+            ?assertEqual({Count, <<"verification_timeout">>, true},
+                z_db:q_row("select retry_count, last_error,
+                    next_check > now()+($2 * interval '1 second') from websub_import where id=$1",
+                    [ImportId, MinDelay], C)),
+            ?assertEqual(Started, z_db:q1("select retry_started from websub_import where id=$1", [ImportId], C)),
+            z_db:q("update websub_import set next_check=now() where id=$1", [ImportId], C),
+            ok = z_websub_subscription:process(C),
+            ?assertEqual(Calls + 1, meck:num_calls(z_websub_http, post_form, '_'))
+        end, [{1, 9}, {2, 19}]),
+        % The overall budget caps the pending verification window too.
+        z_db:q("update websub_import set retry_started=now()-interval '295 seconds',
+            next_check=now(), pending_until=null where id=$1", [ImportId], C),
+        ok = z_websub_subscription:process(C),
+        ?assertEqual(true, z_db:q1("select pending_until <= retry_started+interval '300 seconds'
+            and next_check <= retry_started+interval '300 seconds' from websub_import where id=$1", [ImportId], C)),
+        Calls = meck:num_calls(z_websub_http, post_form, '_'),
+        z_db:q("update websub_import set retry_started=now()-interval '301 seconds',
+            next_check=now() where id=$1", [ImportId], C),
+        ok = z_websub_subscription:process(C),
+        ?assertEqual({undefined, undefined, undefined, <<"retry_timeout">>},
+            z_db:q_row("select next_check, pending_mode, pending_until, last_error
+                from websub_import where id=$1", [ImportId], C)),
+        ok = z_websub_subscription:process(C),
+        ?assertEqual(Calls, meck:num_calls(z_websub_http, post_form, '_')),
+        ?assertEqual({error, no_intent}, z_websub_subscription:verify(Token, Uri, Mode, 3600, C)),
+        % An explicit retry creates a fresh budget, rather than reusing the expired one.
+        ok = m_websub:subscribe(Id, C),
+        ?assertEqual(undefined, z_db:q1("select retry_started from websub_import
+            where local_rsc_id=$1 order by id desc limit 1", [Id], C))
+    after
+        z_db:q("delete from websub_import where local_rsc_id=$1", [Id], C),
+        m_rsc:delete(Id, C)
+    end.
+
+subscription_retry_upgrade_test_() ->
+    {timeout, 30, fun() -> without_scheduler(fun subscription_retry_upgrade/0) end}.
+
+subscription_retry_upgrade() ->
+    C = z_acl:logon(1, z_context:new(zotonic_site_testsandbox)),
+    {ok, Id} = m_rsc:insert(#{<<"category_id">> => text, <<"is_authoritative">> => false,
+        <<"uri">> => <<"https://external.test/id/retry-upgrade">>}, C),
+    Saved = m_config:get_value(mod_websub, subscription_retry_timeout, C),
+    ok = meck:new(z_websub_discovery, [passthrough]),
+    ok = meck:expect(z_websub_discovery, discover, fun(_, _) -> {error, fetch_failed} end),
+    try
+        ok = m_websub:subscribe(Id, C),
+        ImportId = z_db:q1("select id from websub_import where local_rsc_id=$1", [Id], C),
+        % Reconstruct the previous schema and check an idempotent upgrade preserves intent.
+        ok = z_db:transaction(fun(Ctx) ->
+            z_db:q("alter table websub_import drop column retry_started", Ctx),
+            z_db:flush(Ctx),
+            ok = z_websub_subscription:install(Ctx),
+            ok = z_websub_subscription:install(Ctx),
+            ?assertEqual({true, 0, undefined}, z_db:q_row("select is_enabled, retry_count,
+                retry_started from websub_import where id=$1", [ImportId], Ctx)),
+            ok
+        end, C),
+        % Missing and invalid settings both give a one-week budget.
+        lists:foreach(fun(Value) ->
+            case Value of
+                undefined -> m_config:delete(mod_websub, subscription_retry_timeout, C);
+                _ -> m_config:set_value(mod_websub, subscription_retry_timeout, Value, C)
+            end,
+            z_db:q("update websub_import set next_check=now(), retry_count=100,
+                retry_started=now()-interval '155 hours' where id=$1", [ImportId], C),
+            ok = z_websub_subscription:process(C),
+            ?assertEqual({<<"fetch_failed">>, true}, z_db:q_row("select last_error,
+                next_check > now()+interval '43199 seconds' and next_check <= now()+interval '43200 seconds'
+                from websub_import where id=$1", [ImportId], C))
+        end, [undefined, <<"invalid">>, <<"0">>]),
+        z_db:q("update websub_import set next_check=now(),
+            retry_started=now()-interval '169 hours' where id=$1", [ImportId], C),
+        ok = z_websub_subscription:process(C),
+        ?assertEqual({<<"retry_timeout">>, undefined}, z_db:q_row("select last_error,
+            next_check from websub_import where id=$1", [ImportId], C))
+    after
+        meck:unload(z_websub_discovery),
+        case Saved of
+            undefined -> m_config:delete(mod_websub, subscription_retry_timeout, C);
+            _ -> m_config:set_value(mod_websub, subscription_retry_timeout, Saved, C)
+        end,
+        z_db:q("delete from websub_import where local_rsc_id=$1", [Id], C),
+        m_rsc:delete(Id, C)
+    end.
+
+push_retry_window_test_() ->
+    {timeout, 60, fun() -> without_scheduler(fun push_retry_window/0) end}.
+
+push_retry_window() ->
+    C = z_acl:logon(1, z_context:new(zotonic_site_testsandbox)),
+    {ok, Id} = m_rsc:insert(#{<<"category_id">> => text, <<"is_published">> => true}, C),
+    Callback = <<"https://callback.test/retry-window">>,
+    Topic = m_websub:topic_url(Id, C),
+    Due = fun() -> z_db:q("update websub_push_queue set due=now() where local_rsc_id=$1", [Id], C) end,
+    Calls = fun() -> meck:num_calls(z_websub_http, fetch, [post, Callback, '_', '_', '_']) end,
+    ok = meck:new(z_websub_http, [passthrough]),
+    meck:expect(z_websub_http, fetch, fun(_, _, _, _, _) -> {error, timeout} end),
+    try
+        ok = m_websub:update_export(Callback, Topic, Id, 10*86400, undefined, C),
+        ok = m_websub:queue_push(Id, 1, C),
+        % Upgrade preserves a queued notification and starts its window on first attempt.
+        ok = z_db:transaction(fun(Ctx) ->
+            z_db:q("alter table websub_push_queue drop column retry_started", Ctx),
+            z_db:flush(Ctx),
+            ok = m_websub:install(Ctx),
+            ok = m_websub:install(Ctx),
+            ?assertEqual({1, undefined}, z_db:q_row("select version, retry_started
+                from websub_push_queue where local_rsc_id=$1", [Id], Ctx)),
+            ok
+        end, C),
+        z_db:q("update websub_push_queue set created=now()-interval '8 days' where local_rsc_id=$1", [Id], C),
+        Due(),
+        ok = m_websub:process_push_queue(C),
+        ?assertEqual(1, Calls()),
+        ?assertEqual({1, true}, z_db:q_row("select retry_count,
+            retry_started > now()-interval '5 seconds' and due > now()+interval '299 seconds'
+            from websub_push_queue where local_rsc_id=$1", [Id], C)),
+        % More than eight attempts are allowed; backoff caps at twelve hours.
+        z_db:q("update websub_push_queue set retry_count=12 where local_rsc_id=$1", [Id], C),
+        Due(),
+        ok = m_websub:process_push_queue(C),
+        ?assertEqual({13, true}, z_db:q_row("select retry_count,
+            due > now()+interval '43199 seconds' and due <= now()+interval '43200 seconds'
+            from websub_push_queue where local_rsc_id=$1", [Id], C)),
+        Window = z_db:q_row("select retry_started, due, retry_count from websub_push_queue where local_rsc_id=$1", [Id], C),
+        ok = m_websub:queue_push(Id, 2, C),
+        ?assertEqual(Window, z_db:q_row("select retry_started, due, retry_count from websub_push_queue where local_rsc_id=$1", [Id], C)),
+        z_db:q("update websub_push_queue set retry_started=now()-interval '7 days'+interval '1 hour'
+            where local_rsc_id=$1", [Id], C),
+        Due(),
+        ok = m_websub:process_push_queue(C),
+        ?assertEqual(true, z_db:q1("select due=retry_started+interval '7 days' from websub_push_queue where local_rsc_id=$1", [Id], C)),
+        BeforeExpiry = Calls(),
+        z_db:q("update websub_push_queue set retry_started=now()-interval '7 days' where local_rsc_id=$1", [Id], C),
+        Due(),
+        ok = m_websub:process_push_queue(C),
+        ?assertEqual(BeforeExpiry, Calls()),
+        ?assertEqual(0, z_db:q1("select count(*) from websub_push_queue where local_rsc_id=$1", [Id], C)),
+        ?assertEqual({true, <<"retry_timeout">>}, z_db:q_row("select is_error, error_reason from websub_export where local_rsc_id=$1", [Id], C)),
+        % A shorter lease wins and its expiry never causes another HTTP request.
+        ok = m_websub:update_export(Callback, Topic, Id, 30, undefined, C),
+        ok = m_websub:queue_push(Id, 3, C),
+        Due(),
+        ok = m_websub:process_push_queue(C),
+        ?assertEqual(true, z_db:q1("select q.due=e.lease from websub_push_queue q
+            join websub_export e on e.id=q.export_id where q.local_rsc_id=$1", [Id], C)),
+        BeforeLease = Calls(),
+        z_db:q("update websub_export set lease=now()-interval '1 second' where local_rsc_id=$1", [Id], C),
+        Due(),
+        ok = m_websub:process_push_queue(C),
+        ?assertEqual(BeforeLease, Calls()),
+        ?assertEqual(0, z_db:q1("select count(*) from websub_push_queue where local_rsc_id=$1", [Id], C)),
+        % Success clears the window even if a new version arrived during delivery.
+        ok = m_websub:update_export(Callback, Topic, Id, 600, undefined, C),
+        ok = m_websub:queue_push(Id, 4, C),
+        meck:expect(z_websub_http, fetch, fun(_, Url, _, _, _) ->
+            ok = m_websub:queue_push(Id, 5, C),
+            {ok, {Url, [], 0, <<>>}}
+        end),
+        Due(),
+        ok = m_websub:process_push_queue(C),
+        ?assertEqual({5, 0, undefined}, z_db:q_row("select version, retry_count, retry_started
+            from websub_push_queue where local_rsc_id=$1", [Id], C))
+    after
+        meck:unload(z_websub_http),
+        m_rsc:delete(Id, C)
     end.

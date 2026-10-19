@@ -54,6 +54,14 @@ ordinary article imports. The importer removes references to the skipped medium
 and omits its connections, while keeping the article and successfully imported media.
 Use a forced refresh to retry skipped media.
 
+Queued media downloads get sixteen retries after the initial attempt. Delays are
+1, 2, 4, 8, 16, 32, 64, 128, 256 and 512 minutes, followed by six twelve-hour
+waits: 89 hours 3 minutes total, excluding execution and scheduling delays.
+A longer HTTP 429/503 `Retry-After` extends the wait. Permission failures stop
+immediately; exhaustion records an error and retains the article and placeholder.
+An explicit reimport can start a fresh retry sequence. The retry count and twelve-hour
+backoff cap are fixed constants, not new configuration settings.
+
 The importance order is WordPress featured image, feed media/enclosures, then
 inline images. Attaching one medium leaves other inline images at their source.
 
@@ -201,9 +209,34 @@ The lease is renewed before each entry. Pause and configuration changes
 are checked between entries; an entry already being imported can finish.
 Resource and identity writes share a transaction, serialized per site to prevent
 races between overlapping feeds and shared media. A failed entry is rolled back
-and does not stop the remaining entries. Feed failures wait for the configured
-polling interval. Resource/media I/O occurs inside that transaction; slow publishers
+and does not stop the remaining entries. Resource/media I/O occurs inside that transaction; slow publishers
 can therefore delay other feed imports for the same site.
+
+## Poll scheduling and retries
+
+Polling uses `poll_minutes` as a minimum interval (default 60 minutes; range
+5–10080). RSS `ttl` and namespace-qualified syndication `updatePeriod` /
+`updateFrequency` hints can lengthen it. When both are present, the longer hint
+wins. Missing syndication frequency defaults to 1; a frequency without a period
+uses daily. Monthly/yearly periods conservatively use 31/366 days, and division
+rounds up to whole seconds. Invalid hints are ignored. Schedule alignment via
+`updateBase`, RSS `skipHours`/`skipDays`, and HTTP cache freshness are not used.
+
+Consecutive feed-fetch or parse failures double the configured interval on each
+failure, with a fixed 12-hour backoff cap. Neither that cap nor backoff can shorten
+`poll_minutes` or the last valid publisher interval. A successful fetch and parse
+resets the failure counter and replaces the stored publisher hint, restoring the
+normal frequency even if individual entries fail to import. Counters, publisher
+hints, and next-poll times survive restarts. There is no automatic give-up deadline.
+
+HTTP 429/503 responses honor `Retry-After` as seconds or an HTTP date. The next
+poll waits for the longest of the normal interval, failure backoff, and that delay.
+Past dates mean no additional delay; malformed, duplicate or out-of-range values
+are ignored. Parsed delays must fit 0–2147483647 seconds. Entry-fetch errors can
+also extend the next poll; media download retries honor the same header while
+retaining their sixteen-retry limit. Headers and response bodies are not
+saved in error messages. Explicit **Poll now** remains an immediate override.
+No new module configuration is required; `poll_minutes` remains the per-feed control.
 
 ## Bounds and outbound requests
 
