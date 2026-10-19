@@ -776,18 +776,37 @@ mod_info(Module) ->
     }.
 
 %% @doc Read documentation keywords from the compiled module, also in releases.
-%% Modules without documentation metadata simply have no keywords.
+%% Missing or unreadable documentation yields no keywords. Invalid individual
+%% keywords are ignored without discarding the remaining valid entries.
 -spec mod_keywords(Module) -> Keywords when
     Module :: atom(),
     Keywords :: [binary()].
 mod_keywords(Module) ->
-    case code:get_doc(Module) of
+    try code:get_doc(Module) of
         {ok, {docs_v1, _, _, _, _, #{zotonic_keywords := Keywords}, _}} when is_list(Keywords) ->
-            lists:usort([ z_convert:to_binary(K) || K <- Keywords,
-                is_binary(K) orelse is_list(K) orelse is_atom(K) ]);
+            lists:usort([ B || K <- Keywords, B <- [normalize_keyword(K)], B =/= <<>> ]);
         _ ->
             []
+    catch
+        _:_ -> []
     end.
+
+-spec normalize_keyword(Keyword) -> Binary when
+    Keyword :: term(),
+    Binary :: binary().
+normalize_keyword(undefined) ->
+    <<>>;
+normalize_keyword(Keyword) when is_atom(Keyword) ->
+    atom_to_binary(Keyword, utf8);
+normalize_keyword(Keyword) when is_binary(Keyword); is_list(Keyword) ->
+    try unicode:characters_to_binary(Keyword) of
+        Binary when is_binary(Binary) -> Binary;
+        _ -> <<>>
+    catch
+        error:badarg -> <<>>
+    end;
+normalize_keyword(_) ->
+    <<>>.
 
 -spec mod_version(Module) -> Version when
     Module :: atom() | binary() | string(),
