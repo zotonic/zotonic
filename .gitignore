@@ -3,6 +3,7 @@ zotonic.pid
 zotonic.tmproj
 erl_crash.dump
 rebar
+rebar3
 
 *~
 
@@ -39,3 +40,4 @@ deps/
 /user/*
 
 .rebar
+_build/
