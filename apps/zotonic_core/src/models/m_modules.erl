@@ -49,7 +49,7 @@ Available Model API Paths
 | `get` | `/enabled/...` | Return names of currently enabled modules for the site. |
 | `get` | `/disabled/...` | Return names of currently disabled modules for the site. |
 | `get` | `/active/+module/...` | Return whether module `+module` is active/enabled on the current site. |
-| `get` | `/info/+module/...` | Return module metadata/info map for module `+module`. |
+| `get` | `/info/+module/...` | Return module metadata/info map for module `+module`, including `keywords` from its documentation metadata (an empty list when unavailable). |
 | `get` | `/uninstalled` | Return uninstalled module names available on disk but not enabled for the site (`z_module_manager:get_uninstalled`). No further lookups. |
 | `get` | `/provided/+service/...` | Return whether service `+service` is provided by an active module. |
 | `get` | `/provided` | Return services currently provided by enabled modules (`z_module_manager:get_provided`). No further lookups. |
