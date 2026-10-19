@@ -33,7 +33,7 @@ For example:
 {{ value|striptags }}
 ```
 
-When value is “&lt;b>Hello</b>world” then the output will be “Helloworld”.
+When value is `<b>Hello</b>world` then the output will be `Helloworld`.
 
 Striptags optionally allows a maximum length of characters to be returned:
 

@@ -1,0 +1,8 @@
+.admin-edit-version-warning-fixed {
+    position: fixed;
+    bottom: 1rem;
+    left: 1rem;
+    right: 1rem;
+    z-index: 1041;
+    margin: 0;
+}

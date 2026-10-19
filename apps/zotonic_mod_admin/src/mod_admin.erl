@@ -601,9 +601,10 @@ observe_module_ready(module_ready, Context) ->
 %% @doc After a resource is saved, ensure that all embedded resource references are
 %% reflected in refers connections.
 -spec observe_rsc_update_done(#rsc_update_done{}, z:context()) -> any().
-observe_rsc_update_done(#rsc_update_done{ action = Action, id = Id }, Context) when
+observe_rsc_update_done(#rsc_update_done{ action = Action, id = Id } = Update, Context) when
     Action =:= insert;
     Action =:= update ->
+    admin_edit_version:notify_media_update(Update, Context),
     case m_config:get_boolean(?MODULE, is_notrack_refers, Context) of
         true ->
             ok;

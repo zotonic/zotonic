@@ -3,8 +3,9 @@
         <button id="template-debug-back" type="button" class="template-debug-back" title="{_ Back _}" aria-label="{_ Back _}">←</button>
         <div id="template-debug-parents" class="template-debug-dropdown template-debug-nav"></div>
         <div class="template-debug-filename-path">
-            <tt>{{ template_file|escape }}</tt>
+            <tt>{{ template_file|development_filename|escape }}</tt>
         </div>
+        {% include "_development_editor_button.tpl" editor_file=template_file editor_title=_"Edit template" %}
     </div>
     <div class="template-debug-source">
         {{ template_html }}
@@ -54,6 +55,8 @@
         postback={template_view}
         delegate=`mod_development`
 %}
+
+{% wire name="source_template_matches" postback={template_matches_source file=template_file} delegate=`z_development_template` %}
 
 {% javascript %}
     let is_debug_trace_enabled = false;
@@ -952,6 +955,13 @@
 
     ensureDevelopmentCss();
     initSplitter();
+    zotonicDevelopmentEditor.sourceLinks(document.querySelector('.template-debug-source'), [
+        {% for link in source_links %}
+        {template: '{{ link.template|escapejs }}', isOverrules: {% if link.is_overrules %}true{% else %}false{% endif %}, isCategory: {% if link.is_category %}true{% else %}false{% endif %}, kind: '{{ link.kind|escapejs }}', name: '{{ link.name|escapejs }}', row: {{ link.row }}, column: {{ link.column }},
+         file: '{{ link.file|escapejs }}', line: {{ link.line|default:1 }}, token: '{{ link.token|escapejs }}'},
+        {% endfor %}
+    ], {filter: '{_ Edit filter _}', scomp: '{_ Edit scomp _}', model: '{_ Edit model _}', delegate: '{_ Edit event handler _}', action: '{_ Edit action _}', template: '{_ Show matching templates _}'}, '{_ Could not open the editor. Check the editor settings on the Development page. _}',
+        (name, isCategory, isOverrules) => z_event('source_template_matches', {template: name, is_category: isCategory ? 'true' : 'false', is_overrules: isOverrules ? 'true' : 'false'}));
     injectTemplateNavigation();
 
     cotonic.broker.subscribe(

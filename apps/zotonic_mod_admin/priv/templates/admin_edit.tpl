@@ -28,7 +28,7 @@
     {% wire
         id="rscform"
         type="submit"
-        postback="rscform"
+        postback={rscform view_location=view_location}
         action={update
             target="edit_admin_header"
             template="_admin_edit_header.tpl"
@@ -37,6 +37,7 @@
     %}
     <form id="rscform" method="post" action="postback" class="form">
     	<input type="hidden" name="id" value="{{ id }}" />
+        {% include "_admin_edit_version.tpl" id=id %}
 
     	<div class="rscform-columns">
     		<div id="poststuff">
@@ -58,10 +59,11 @@
 
     </div>
 
+    {% include "_admin_edit_preview.tpl" %}
+    {% include "_admin_edit_preview_context.tpl" %}
     {% include "_admin_edit_js.tpl" %}
 {% endblock %}
 
 {% block editor %}
 	{% include "_editor.tpl" %}
 {% endblock %}
-

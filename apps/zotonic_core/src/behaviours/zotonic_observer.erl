@@ -4756,42 +4756,97 @@ return value is ignored
 
 -optional_callbacks([ observe_filewatcher/2, pid_observe_filewatcher/3 ]).
 
-%% An external feed delivered a resource. First handler can import it.
-%% Type: first
+%% A prepared external resource is ready for import. Type: first.
 -doc(#{
     zotonic_keywords => ["reference", "backend_developer", "notification", "import_and_migration", "import"]
 }).
--doc("
-An external feed delivered a resource. First handler can import it. Return:: `{ok, m_rsc:resource_id()}`, `{error,
-Reason}`, or `undefined`
+-doc("""
+Import a prepared external resource instead of its default importer.
 
-Type:
+Type: [first](/id/doc_developerguide_notifications#notification-first). The first
+observer returning anything other than `undefined` handles the item. This is a
+replacement hook, not a property transformation fold.
 
-[first](/id/doc_developerguide_notifications#notification-first)
+Declare `-behaviour(zotonic_observer)` and export `observe_import_resource/2` or
+`pid_observe_import_resource/3`. Both callbacks are optional. The behaviour does
+not define records: **include `zotonic_core/include/zotonic.hrl`** in every module
+using `#import_resource{}`.
 
-Return:
+```erlang
+-behaviour(zotonic_observer).
+-include_lib("zotonic_core/include/zotonic.hrl").
+-export([observe_import_resource/2]).
 
-`#import_resource{}` properties:
+observe_import_resource(#import_resource{
+    source = #{importer := mod_import_feed, feed := Feed},
+    item = Item
+}, Context) ->
+    my_importer:import(Item, Feed, Context);
+observe_import_resource(_, _) ->
+    undefined.
+```
 
-*   source: `atom|binary`
-*   source_id: `integer|binary`
-*   source_url: `binary`
-*   source_user_id: `binary|integer`
-*   user_id: `integer`
-*   name: `binary`
-*   props: `m_rsc:props_all()`
-*   urls: `list`
-*   media_urls: `list`
-*   data: `any`
-").
--callback observe_import_resource(#import_resource{}, z:context()) -> Result when
-    Result :: {ok, m_rsc:resource_id()}
-            | {error, term()}
-            | undefined.
--callback pid_observe_import_resource(pid(), #import_resource{}, z:context()) -> Result when
-    Result :: {ok, m_rsc:resource_id()}
-            | {error, term()}
-            | undefined.
+## Payload
+
+* `item`: a map with binary source `uri` and binary-keyed resource `props`.
+  Optional `edges` contains `{Predicate, Object}` pairs; references can be local
+  IDs, names, source URIs or remote resource-reference maps. `medium` is a source
+  URL, a media description map, or `undefined`. Importers may add fields, such as
+  `id`, `media_aliases`, or the native feed's `zotonic_export` and `native_options`.
+* `related`: known related item maps, not a fully fetched recursive graph. Entries
+  marked `is_reference => true` have only identity information. Their presence
+  does not imply ownership or `is_dependent` on the imported resource.
+* `source`: importer metadata. `importer` identifies the producer. Feeds use
+  `#{importer => mod_import_feed, feed => Settings}`; native imports use
+  `#{importer => m_rsc_import, uri => Uri}`. Feed settings omit lease tokens and
+  saved ACL groups.
+* `options`: native import options when applicable, otherwise an empty list.
+  Feed-specific policy is in the source's `feed` settings.
+* `raw`: original parsed input. For feeds this is XML, optionally accompanied by
+  WordPress JSON; for native imports it is the decoded resource export.
+
+## Timing and permissions
+
+Feed entries notify after preparation and unchanged/deleted checks, inside their
+entry transaction. Native resource imports notify after category eligibility is
+checked but before reference mapping can create resources. Local-URI lookups do
+not notify. Resource properties and raw input remain untrusted; handlers must use
+normal resource/media APIs, sanitize input and enforce import policies.
+
+The supplied context retains the importing user's permissions. No automatic
+`sudo` or transaction is introduced by `z_import_resource:import/3`. Reuse the
+supplied context for delegation and writes. Delegating the same URI to another
+participating importer does not notify again; different URIs do. Thus native feed
+roots notify once and recursively imported resources can notify separately.
+
+## Results
+
+* `undefined`: continue to other observers, then the default importer.
+* `{ok, Id}`: the observer has completed the import. The resource must be editable
+  by the importing user.
+* `{ok, Id, UriToIdMap}`: additionally return imported related resources. Keys must
+  be binary source URIs and values integer IDs visible to the importing user.
+* `{skip, Reason}`: deliberately skip. Feeds record the skip; `m_rsc_import`
+  returns `{error, {skipped, Reason}}` to preserve its public result contract.
+* `{error, Reason}`: fail. Feeds roll back their entry transaction; other importers
+  retain their own transaction policy. External effects cannot be rolled back.
+
+Malformed results return `{error, invalid_observer_result}` and inaccessible IDs
+return `{error, eacces}`. Do not return success before asynchronous writes finish.
+The caller retains import history and completion handling: native imports save
+import options and emit `#rsc_import_done{}` even when an observer handles them.
+
+This notification is emitted by the feed and native resource importers. CSV/XLSX,
+WordPress WXR/datamodel imports and ordinary media uploads do not yet emit it.
+""").
+-callback observe_import_resource(#import_resource{}, z:context()) -> z_import_resource:observer_result().
+
+-doc("""
+PID-aware variant of `observe_import_resource/2` with the same contract. `Pid` is
+the observing module's process ID. Include `zotonic_core/include/zotonic.hrl` to
+use the notification record; the behaviour declaration alone does not define it.
+""").
+-callback pid_observe_import_resource(pid(), #import_resource{}, z:context()) -> z_import_resource:observer_result().
 
 -optional_callbacks([ observe_import_resource/2, pid_observe_import_resource/3 ]).
 

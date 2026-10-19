@@ -34,6 +34,7 @@ Handled events
 * `{delete_media, Opts}` removes the resource's attached medium.
 * `#sort{drop = {dragdrop, {object_sorter, Props}, ...}}` stores a reordered
   list of connected resources.
+* `{preview, Args}` resolves the saved-content preview URL using `id` and optional `view_location`.
 * `{query_preview, Opts}` renders a preview for a query resource.
 ").
 -author("Marc Worrell <marc@worrell.nl>").
@@ -123,24 +124,27 @@ edit_language(Context) ->
 %% @doc Handle the submit of the resource edit form
 event(#submit{message=rscform} = Msg, Context) ->
     event(Msg#submit{message={rscform, []}}, Context);
-event(#submit{message={rscform, Args}}, Context) ->
-    Post = z_context:get_q_all_noz(Context),
+event(#submit{message={rscform, Args}}, Context0) ->
+    Post = z_context:get_q_all_noz(Context0),
     Props = filter_props(Post),
     Id = z_convert:to_integer(proplists:get_value(<<"id">>, Props)),
     Props1 = proplists:delete(<<"id">>, Props),
-    CatBefore = m_rsc:p(Id, <<"category_id">>, Context),
+    CatBefore = m_rsc:p(Id, <<"category_id">>, Context0),
     Props2 = z_notifier:foldl(
         #admin_rscform{
             id = Id,
-            is_a = m_rsc:is_a(Id, Context)
+            is_a = m_rsc:is_a(Id, Context0)
         },
         Props1,
-        Context),
+        Context0),
     UpdateOptions = case proplists:get_value(default_tz, Args) of
         undefined -> [];
         Tz -> [ {default_tz, Tz} ]
     end,
-    case m_rsc:update(Id, Props2, UpdateOptions, Context) of
+    Result = admin_edit_version:save(Id, z_context:get_q(<<"z_edit_version">>, Context0),
+        fun(Ctx) -> m_rsc:update(Id, Props2, UpdateOptions, Ctx) end, Context0),
+    Context = admin_edit_version:reply(<<"rscform">>, Id, Result, Context0),
+    case Result of
         {ok, _} ->
             case z_context:get_q(<<"z_submitter">>, Context) of
                 SaveView when SaveView =:= <<"save_view">>;
@@ -170,6 +174,8 @@ event(#submit{message={rscform, Args}}, Context) ->
                             z_render:wire({reload, []}, Context)
                     end
             end;
+        {error, stale} ->
+            z_render:growl_error(?__("This page has changed. Your changes were not saved. Reload the page before trying again.", Context), Context);
         {error, duplicate_uri} ->
             z_render:growl_error(?__("Error, duplicate uri. Please change the uri.", Context), Context);
         {error, duplicate_page_path} ->
@@ -181,8 +187,28 @@ event(#submit{message={rscform, Args}}, Context) ->
         {error, invalid_query} ->
             z_render:growl_error(?__("Your search query is invalid. Please correct it before saving.", Context), Context);
         {error, Message} when is_list(Message); is_binary(Message) ->
-            z_render:growl_error(Message, Context)
+            z_render:growl_error(Message, Context);
+        {error, _} ->
+            z_render:growl_error(?__("The page could not be saved. Your changes are still in the form.", Context), Context)
     end;
+%% Resolve the default URL again after saves (the slug or language may have changed).
+%% view_location comes from the signed form wire, including site template overrides.
+event(#postback{message={preview, Args}}, Context) ->
+    Id = m_rsc:rid(proplists:get_value(id, Args), Context),
+    PreviewContext = z_context:set_language(edit_language(Context), Context),
+    Location = case z_acl:rsc_visible(Id, PreviewContext) of
+        true ->
+            case proplists:get_value(view_location, Args) of
+                undefined -> m_rsc:p(Id, <<"page_url">>, PreviewContext);
+                Override -> preview_location(Override, PreviewContext)
+            end;
+        false -> undefined
+    end,
+    z_render:wire({publish, [
+        {topic, <<"admin/preview/location">>},
+        {id, Id},
+        {url, z_sanitize:uri(z_convert:to_binary(Location))}
+    ]}, Context);
 event(#postback{message={view, Args}}, Context) ->
     {id, Id} = proplists:lookup(id, Args),
     ContextRedirect = z_context:set_language(edit_language(Context), Context),
@@ -269,6 +295,26 @@ set_value_slug(#trans{ tr = Tr }, Context) ->
         Tr);
 set_value_slug(Slug, Context) ->
     z_render:set_value("title_slug", Slug, Context).
+
+%% @doc Timeline/menu overrides are captured when rendering the form. Rewrite
+%% their language on every preview request, retaining query arguments and anchors.
+-spec preview_location(Location, Context) -> binary() | undefined when
+    Location :: binary() | string(),
+    Context :: z:context().
+preview_location(Location, Context) ->
+    Url = z_convert:to_binary(Location),
+    case z_context:is_site_url(Url, Context)
+        andalso z_module_manager:active(mod_translation, Context)
+    of
+        true ->
+            %% Pass a relative URL: stripping an absolute URL's language also
+            %% strips its query, including the timeline's cid and bid parameters.
+            Parts = uri_string:parse(Url),
+            Relative = uri_string:recompose(maps:without([scheme, userinfo, host, port], Parts)),
+            filter_set_url_language:set_url_language(Relative, Context);
+        false ->
+            Url
+    end.
 
 %% @doc Remove the submit buttons from the resource properties.
 filter_props(Fs) ->

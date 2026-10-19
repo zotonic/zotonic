@@ -28,6 +28,13 @@ Resource update helper module used by `m_rsc`.
 
 This module contains insert/update/delete/merge routines for resources and is logically part of the `m_rsc` model implementation.
 It is not exposed as a standalone model path endpoint.
+
+Resource insert/update MQTT events include `version`, `previous_version` and
+`reason`. Background media workers can pass the update option
+`{update_reason, media_processing}`. The reason is `media_processing`
+only if that resource's properties are unchanged apart from `version`, `modified`
+and `modifier_id`; otherwise it is `update`. Clients must still check consecutive
+versions before acknowledging processing updates on an unsaved form.
 ").
 -author("Marc Worrell <marc@worrell.nl").
 
@@ -51,7 +58,8 @@ It is not exposed as a standalone model path endpoint.
     delete_nocheck/3,
 
     to_slug/1,
-    normalize_page_path/1
+    normalize_page_path/1,
+    update_reason/3
 ]).
 
 -include_lib("zotonic.hrl").
@@ -62,6 +70,7 @@ It is not exposed as a standalone model path endpoint.
     is_acl_check = true,
     is_import = false,
     is_no_touch = false,
+    update_reason = update,
     tz = <<"UTC">>,
     expected = []
 }).
@@ -188,6 +197,10 @@ delete_nocheck(Id, OptFollowUpId, Context) when is_integer(Id) ->
                  Context),
             z_edge_log_server:check(Context),
             ok;
+        {rollback, {error, _} = Error} ->
+            Error;
+        {rollback, Reason} ->
+            {error, Reason};
         {error, _} = Error ->
             Error
     end.
@@ -928,6 +941,7 @@ update_1(Id, PropsOrFun, Options, Context) when is_integer(Id); Id =:= insert_rs
         is_acl_check = proplists:get_value(is_acl_check, Options,
                                 proplists:get_value(acl_check, Options, true)),
         is_import = IsImport,
+        update_reason = proplists:get_value(update_reason, Options, update),
         is_no_touch = proplists:get_bool(no_touch, Options)
                       andalso z_acl:is_admin(Context),
         tz = Tz,
@@ -1012,10 +1026,19 @@ is_all_day(_Id, _Props, _Context) ->
     false.
 
 
+%% @doc Perform the update or insert transaction. On error: rollback the transaction
+%% and nullify any pending notifications.
 update_transaction(RscUpd, Func, Context) ->
     Result = z_db:transaction(
         fun(Ctx) ->
-            update_transaction_fun_props(RscUpd, Func, Ctx)
+            case update_transaction_fun_props(RscUpd, Func, Ctx) of
+                {ok, _, _} = Ok ->
+                    Ok;
+                {error, _} = Error ->
+                    {rollback, Error};
+                {rollback, _} = Rollback ->
+                    Rollback
+            end
         end,
         Context),
     update_result(Result, RscUpd, Context).
@@ -1023,7 +1046,8 @@ update_transaction(RscUpd, Func, Context) ->
 update_result({ok, NewId, notchanged}, _RscUpd, _Context) ->
     z_acl:flush(NewId),
     {ok, NewId};
-update_result({ok, NewId, {OldProps, NewProps, OldCatList, IsCatInsert}}, #rscupd{id = Id}, Context) ->
+update_result({ok, NewId, {OldProps, NewProps, OldCatList, IsCatInsert}},
+        #rscupd{id = Id, update_reason = Reason}, Context) ->
     % Flush some low level caches
     case maps:get(<<"name">>, NewProps, undefined) of
         undefined -> nop;
@@ -1068,11 +1092,13 @@ update_result({ok, NewId, {OldProps, NewProps, OldCatList, IsCatInsert}}, #rscup
         Topic,
         #{
             id => NewId,
+            version => maps:get(<<"version">>, NewProps),
+            previous_version => maps:get(<<"version">>, OldProps, undefined),
+            reason => update_reason(Reason, OldProps, NewProps),
             pre_is_a => OldCatList,
             post_is_a => NewCatList
         },
         Context),
-
     % If a new or updated resource becomes dependent, then schedule a check
     % if it is connected. If not then it should be deleted.
     case maps:get(<<"is_dependent">>, NewProps, false) of
@@ -1084,13 +1110,12 @@ update_result({ok, NewId, {OldProps, NewProps, OldCatList, IsCatInsert}}, #rscup
         false ->
             ok
     end,
-
     % Return the updated or inserted id
     {ok, NewId};
-update_result({rollback, {error, _} = Er}, _RscUpd, _Context) ->
-    Er;
-update_result({rollback, {_Why, _} = Er}, _RscUpd, _Context) ->
-    {error, Er};
+update_result({rollback, {error, _} = Error}, RscUpd, Context) ->
+    update_result(Error, RscUpd, Context);
+update_result({rollback, Reason}, _RscUpd, _Context) ->
+    {error, Reason};
 update_result({error, {expected, _, _}} = Error, #rscupd{ id = Id }, Context) ->
     % We might have an out-of-date cached value, flush caches to force
     % an update from the database.
@@ -1188,11 +1213,13 @@ insert_edges({ok, Id, _Res} = Result, Edges, Context) ->
             Result;
         false ->
             lists:foreach(fun({Direction, Predicate, Things}) ->
-                                  insert_edge(Id, Direction, Predicate, Things, Context)
+                              insert_edge(Id, Direction, Predicate, Things, Context)
                           end,
                           Edges),
             Result
     end;
+insert_edges({rollback, _} = Rollback , _, _Context) ->
+    Rollback;
 insert_edges({error, _} = Error , _, _Context) ->
     Error.
 
@@ -1307,7 +1334,6 @@ update_transaction_fun_insert(#rscupd{id = insert_rsc} = RscUpd, Props, _Raw, Up
                             Context),
                        InsId
                end,
-
     % Insert a category record for categories. Categories are so low level that we want
     % to make sure that all categories always have a category record attached.
     IsA = m_category:is_a(CategoryId, Context),
@@ -1349,13 +1375,12 @@ update_transaction_fun_insert(#rscupd{id = Id} = RscUpd, Props, Raw, UpdateProps
     IsA = m_rsc:is_a(Id, Context),
     update_transaction_fun_expected(RscUpd, Id, Props2, Raw, IsA, false, Context).
 
-update_transaction_fun_expected(#rscupd{expected = Expected} = RscUpd, Id, Props1, Raw, IsA, false,
-    Context) ->
+update_transaction_fun_expected(#rscupd{expected = Expected} = RscUpd, Id, Props1, Raw, IsA, false, Context) ->
     case check_expected(Raw, Expected, Context) of
         ok ->
             update_transaction_fun_db(RscUpd, Id, Props1, Raw, IsA, false, Context);
         {error, _} = Error ->
-            Error
+            {rollback, Error}
     end.
 
 
@@ -1371,6 +1396,23 @@ check_expected(Raw, [{Key, Value} | Es], Context) ->
         Value -> check_expected(Raw, Es, Context);
         Other -> {error, {expected, Key, Other}}
     end.
+
+
+%% @doc Background media processing may be acknowledged by editors only if no editable
+%% resource properties changed. The reason belongs to this update's options,
+%% not to the context shared with observers.
+-spec update_reason(Reason, Before, After) -> update | media_processing when
+    Reason :: term(),
+    Before :: map(),
+    After :: map().
+update_reason(media_processing, Before, After) ->
+    Metadata = [<<"version">>, <<"modified">>, <<"modifier_id">>],
+    case maps:without(Metadata, Before) =:= maps:without(Metadata, After) of
+        true -> media_processing;
+        false -> update
+    end;
+update_reason(_Reason, _Before, _After) ->
+    update.
 
 
 update_transaction_fun_db(RscUpd, Id, Props, Raw, IsABefore, IsCatInsert, Context) ->
@@ -1395,7 +1437,8 @@ update_transaction_fun_db(RscUpd, Id, Props, Raw, IsABefore, IsCatInsert, Contex
     update_transaction_fun_db_1(UpdResult, Id, RscUpd, Raw, IsABefore, IsCatInsert, Context).
 
 update_transaction_fun_db_1({error, _} = Error, _Id, _RscUpd, _Raw, _IsABefore, _IsCatInsert, _Context) ->
-    Error;
+    %% Roll back the provisional insert and any transactional observer writes.
+    {rollback, Error};
 update_transaction_fun_db_1({ok, UpdatePropsN}, Id, RscUpd, Raw, IsABefore, IsCatInsert, Context) ->
     % Pre-pivot of the category-id to the category sequence nr.
     UpdatePropsN1 = case maps:get(<<"category_id">>, UpdatePropsN, undefined) of

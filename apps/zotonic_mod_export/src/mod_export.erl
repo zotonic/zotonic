@@ -38,6 +38,16 @@ Most encoders can emit rows immediately. XLSX and BERT collect their rows and
 create the final document in the footer phase.
 
 
+Atom resource identity
+----------------------
+
+Each visible resource entry includes its canonical URI as the Atom ID and a JSON
+resource link with relation `https://zotonic.com/rel/resource`. The link points to
+the `rsc_export` model API, allowing importers to recognize Zotonic resources and
+use the native importer for properties, media and connections. Normal resource
+visibility checks apply to the export endpoint.
+
+
 Admin interface
 ---------------
 

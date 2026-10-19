@@ -758,6 +758,15 @@ fieldset[disabled] .btn-primary.active {
   background: #d9534f;
 }
 
+/* Pair with btn-link for actions embedded in text or table cells. */
+.btn.btn-inline {
+  padding: 0;
+  border: 0;
+  font: inherit;
+  vertical-align: baseline;
+  white-space: normal;
+}
+
 #unlink-undo-message div.alert {
   padding-right: 14px; /* right-aligned undo button in page connections */
 }
@@ -1400,6 +1409,30 @@ option {
   color: var(--z-admin-text);
 }
 
+legend {
+  width: 100%;
+  padding: 15px 0 0;
+  margin-bottom: 15px;
+  border: 0;
+  color: inherit;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.1;
+}
+legend::before {
+  content: "";
+  display: block;
+  height: 1px;
+  margin-bottom: 15px;
+  background-color: var(--z-admin-border);
+}
+
+.widget-content legend::before {
+  margin-left: -15px;
+  margin-right: -15px;
+}
+
 fieldset > label > input[type=checkbox],
 fieldset > label > input[type=radio],
 fieldset > label.radio > input[type=checkbox],
@@ -1431,10 +1464,14 @@ fieldset > label.checkbox > input[type=radio],
   margin: 0 0 15px;
 }
 .admin-filter-connection legend {
+  padding: 0;
   margin-bottom: 6px;
   border: 0;
   font-size: 14px;
   font-weight: bold;
+}
+.admin-filter-connection legend::before {
+  display: none;
 }
 .admin-filter-connection .input-group {
   margin-top: 6px;
@@ -2671,4 +2708,184 @@ li h3.widget-header {
 .environment-backup.zotonic-admin .navbar.navbar-branded .dropdown-menu > li.active > a:hover,
 .environment-backup.zotonic-admin .navbar.navbar-branded .dropdown-menu > li > a:hover {
   background-color: #222c31;
+}
+
+.admin-edit-preview[hidden] {
+  display: none;
+}
+
+.admin-edit-preview {
+  box-sizing: border-box;
+  position: fixed;
+  inset: 0 0 0 auto;
+  z-index: 1031;
+  width: var(--admin-preview-width, 40vw);
+  display: flex;
+  flex-direction: column;
+  background: var(--bs-body-bg, #fff);
+  color: var(--bs-body-color, #333);
+  border-left: 1px solid var(--bs-border-color, #ccc);
+}
+.admin-edit-preview .admin-edit-preview-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 10px;
+  flex-shrink: 0;
+  background: var(--bs-tertiary-bg, #e9ecef);
+  border-bottom: 1px solid var(--bs-border-color, #bbb);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+}
+.admin-edit-preview .admin-edit-preview-toolbar strong {
+  margin-right: auto;
+}
+.admin-edit-preview .admin-edit-preview-resizer {
+  position: absolute;
+  inset: 0 auto 0 -5px;
+  width: 10px;
+  cursor: col-resize;
+  touch-action: none;
+  z-index: 2;
+}
+.admin-edit-preview .admin-edit-preview-resizer:hover, .admin-edit-preview .admin-edit-preview-resizer:focus-visible {
+  background: var(--bs-primary, #337ab7);
+  outline: none;
+}
+.admin-edit-preview .admin-edit-preview-language {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 2px 5px;
+  border: 1px solid currentColor;
+  border-radius: 3px;
+  font-size: 0.75em;
+  line-height: 1.2;
+  vertical-align: middle;
+}
+.admin-edit-preview .admin-edit-preview-language:empty {
+  display: none;
+}
+.admin-edit-preview .admin-edit-preview-status {
+  padding: 0 10px;
+}
+.admin-edit-preview iframe {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  border: 0;
+  background: #fff;
+}
+
+html body.admin-preview-open {
+  padding-right: var(--admin-preview-width, 40vw);
+}
+html body.admin-preview-open .navbar-fixed-top, html body.admin-preview-open .admin-navbar-fixed-save {
+  right: var(--admin-preview-width, 40vw);
+}
+html body.admin-preview-open .container {
+  max-width: 100%;
+}
+
+@media (max-width: 900px) {
+  html body.admin-preview-open {
+    padding-right: 0;
+  }
+  .admin-edit-preview {
+    width: 100%;
+  }
+  .admin-edit-preview-resizer {
+    display: none;
+  }
+}
+body.admin-preview-resizing {
+  cursor: col-resize;
+  user-select: none;
+}
+body.admin-preview-resizing iframe {
+  pointer-events: none;
+}
+body.admin-preview-resizing .admin-edit-preview-resizer {
+  background: var(--bs-primary, #337ab7);
+}
+
+html body .btn.admin-edit-preview-open {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+html body .btn.admin-edit-preview-open svg {
+  flex-shrink: 0;
+}
+
+html body.admin-frontend-editor {
+  grid-template-columns: minmax(0, 1fr);
+}
+html body.admin-frontend-editor .admin-frontend-layout {
+  min-width: 0;
+  grid-template-columns: 10px minmax(200px, 0.6fr) 10px minmax(0, 1fr) 10px;
+}
+html body.admin-frontend-editor #menu-editor, html body.admin-frontend-editor #editcol-wrapper, html body.admin-frontend-editor #editcol {
+  min-width: 0;
+}
+
+html body.admin-frontend-editor .admin-frontend-menu-toggle {
+  display: none;
+}
+
+html body.admin-frontend-compact .admin-frontend-menu-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: 8px;
+}
+html body.admin-frontend-compact .admin-frontend-menu-toggle .admin-frontend-menu-hide {
+  display: none;
+}
+html body.admin-frontend-compact .admin-frontend-menu-toggle .admin-frontend-menu-caret {
+  display: inline-block;
+}
+html body.admin-frontend-compact .admin-frontend-menu-toggle[aria-expanded=true] .admin-frontend-menu-show {
+  display: none;
+}
+html body.admin-frontend-compact .admin-frontend-menu-toggle[aria-expanded=true] .admin-frontend-menu-hide {
+  display: inline;
+}
+html body.admin-frontend-compact .admin-frontend-menu-toggle[aria-expanded=true] .admin-frontend-menu-caret {
+  transform: rotate(180deg);
+}
+html body.admin-frontend-compact .admin-frontend-layout {
+  grid-template-columns: 10px minmax(0, 1fr) 10px;
+  grid-template-rows: minmax(0, 1fr);
+}
+html body.admin-frontend-compact .admin-frontend-layout #menu-editor {
+  display: none;
+}
+html body.admin-frontend-compact .admin-frontend-layout #editcol-wrapper, html body.admin-frontend-compact .admin-frontend-layout #editcol {
+  grid-column: 2;
+  grid-row: 1;
+  width: 100%;
+  float: none;
+}
+html body.admin-frontend-compact #save-buttons {
+  width: 100%;
+}
+html body.admin-frontend-compact #save-buttons .navbar-brand {
+  display: none !important;
+}
+html body.admin-frontend-compact .navbar-fixed-top .row > .col-md-4 {
+  display: none;
+}
+html body.admin-frontend-compact.admin-frontend-menu-open .admin-frontend-layout #menu-editor {
+  display: block;
+  grid-column: 2;
+  grid-row: 1;
+  float: none;
+  width: 100%;
+  height: auto;
+  max-height: calc(100vh - 80px);
+  overflow-y: auto;
+}
+html body.admin-frontend-compact.admin-frontend-menu-open .admin-frontend-layout #editcol-wrapper, html body.admin-frontend-compact.admin-frontend-menu-open .admin-frontend-layout #editcol {
+  display: none;
 }

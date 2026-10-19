@@ -44,7 +44,7 @@ A medium record has minimally the following properties, other properties can be 
 | id | Id of the medium record, equal to the page id. | `512` |
 | filename | Filename and path of the uploaded file, relative to the archive directory. | `<<\"2009/10/20/zotonic-datamodel.jpg\">>` |
 | rootname | Root name of the filename. | `<<\"zotonic-datamodel\">>` |
-| original_filename | Filename as suggested by the user agent when uploading the file. Can contain illegal characters. | `<<\"Zotonic-datamodel.jpg\">>` |
+| original_filename | Filename as suggested by the user agent when uploading the file. Directory paths are removed and unsafe characters replaced with underscores. The root name is limited to 80 Unicode characters; the extension is preserved. | `<<\"Zotonic-datamodel.jpg\">>` |
 | mime | Mime type of the medium. | `<<\"image/jpeg\">>` |
 | width | Width in pixels. | `536` |
 | height | Height in pixels. | `737` |
@@ -381,8 +381,12 @@ replace(Id, MediaProps, Context) ->
                         mqtt_event_info(Medium),
                         Context),
                     ok;
-                {rollback, {Error, _Trace}} ->
-                    {error, Error}
+                {rollback, {error, _} = Error} ->
+                    Error;
+                {rollback, {{error, _} = Error, _Trace}} ->
+                    Error;
+                {rollback, Reason} ->
+                    {error, Reason}
             end;
         false ->
             {error, eacces}
@@ -448,7 +452,7 @@ maybe_duplicate_file(#{ <<"filename">> := Filename, <<"is_deletable_file">> := t
         {ok, NewFile} ->
             RootName = z_string:truncatechars(
                 filename:rootname(filename:basename(NewFile)),
-                ?MEDIA_MAX_ROOTNAME_LENGTH),
+                ?MEDIA_MAX_ROOTNAME_LENGTH, <<>>),
             Ms2 = Ms#{
                 <<"filename">> => NewFile,
                 <<"rootname">> => RootName,
@@ -578,8 +582,8 @@ insert_file(File, RscProps, Options, Context) ->
     insert_file(File, RscProps, MediaProps1, Options, Context).
 
 %% Internal helper used by the public insert_file entry points.
-insert_file(File, RscProps, MediaProps, Options, Context) ->
-    Mime = maps:get(<<"mime">>, MediaProps, undefined),
+insert_file(File, RscProps, #{<<"mime">> := Mime} = MediaProps, Options, Context)
+    when is_binary(Mime) ->
     MimeCat = mime_to_category(Mime, Options, Context),
     case z_acl:is_allowed(insert, #acl_rsc{category = MimeCat, props = RscProps}, Context) andalso
         z_acl:is_allowed(insert, #acl_media{mime = Mime, size = filelib:file_size(File)}, Context) of
@@ -587,7 +591,10 @@ insert_file(File, RscProps, MediaProps, Options, Context) ->
             insert_file_mime_ok(File, RscProps, MediaProps, Options, Context);
         false ->
             {error, file_not_allowed}
-    end.
+    end;
+insert_file(_File, _RscProps, _MediaProps, _Options, _Context) ->
+    %% Identification failed: do not pass an undefined MIME type to ACL observers.
+    {error, identify}.
 
 %% @doc Insert a medium, together with rsc props and an optional preview_url. This is used for importing media.
 insert_medium(Medium, RscProps, Options, Context) ->
@@ -787,14 +794,16 @@ replace_file(File, RscId, RscProps, MInfo, Opts, Context) ->
     MediaProps = add_medium_info(File, OriginalFilename, MInfo1, Context),
     replace_file_mime_check(File, RscId, RscProps, MediaProps, Opts, Context).
 
-replace_file_mime_check(File, RscId, RscProps, MediaProps, Opts, Context) ->
-    Mime = maps:get(<<"mime">>, MediaProps, undefined),
+replace_file_mime_check(File, RscId, RscProps, #{<<"mime">> := Mime} = MediaProps, Opts, Context)
+    when is_binary(Mime) ->
     case z_acl:is_allowed(insert, #acl_media{ mime = Mime, size = filelib:file_size(File) }, Context) of
         true ->
             replace_file_mime_ok(File, RscId, RscProps, MediaProps, Opts, Context);
         false ->
             {error, file_not_allowed}
-    end.
+    end;
+replace_file_mime_check(_File, _RscId, _RscProps, _MediaProps, _Opts, _Context) ->
+    {error, identify}.
 
 %% @doc Check the ACL for the category/content-group combination.
 replace_file_mime_ok(File, insert_rsc, RscProps, MediaProps, Opts, Context) ->
@@ -1025,8 +1034,14 @@ replace_file_db(RscId, PreProc, Props, Opts, Context) ->
                 mqtt_event_info(NewMedium),
                 Context),
             {ok, Id};
-        {rollback, {{error, Reason}, _StackTrace}} ->
-            {error, Reason}
+        {rollback, {error, _} = Error} ->
+            Error;
+        {rollback, {{error, _} = Error, _StackTrace}} ->
+            Error;
+        {rollback, Reason} ->
+            {error, Reason};
+        {error, _} = Error ->
+            Error
     end.
 
 is_deletable_file(undefined, _Context) ->
@@ -1552,6 +1567,17 @@ check_medium_props(Ps) ->
         #{},
         Ps).
 
+%% Sanitize and bound the stored original filename at the database boundary.
+%% Strip Unix and Windows paths; preserve Unicode letters, marks and numbers.
+check_medium_prop(<<"original_filename">>, Filename) when is_binary(Filename); is_list(Filename) ->
+    Utf8Filename = z_string:sanitize_utf8(z_convert:to_binary(Filename)),
+    Basename = filename:basename(binary:replace(Utf8Filename, <<"\\">>, <<"/">>, [global])),
+    OriginalFilename = re:replace(Basename, <<"[^\\p{L}\\p{M}\\p{N} ._()-]">>, <<"_">>,
+        [unicode, global, {return, binary}]),
+    RootName = filename:rootname(OriginalFilename),
+    Extension = filename:extension(OriginalFilename),
+    TruncatedRoot = string:slice(RootName, 0, ?MEDIA_MAX_ROOTNAME_LENGTH),
+    <<TruncatedRoot/binary, Extension/binary>>;
 check_medium_prop(<<"width">>, N) when not is_integer(N) -> 0;
 check_medium_prop(<<"height">>, N) when not is_integer(N) -> 0;
 check_medium_prop(B, P) when is_binary(B) -> P.

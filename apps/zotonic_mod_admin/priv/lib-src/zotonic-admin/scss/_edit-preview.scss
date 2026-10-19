@@ -1,0 +1,88 @@
+// The preview is outside rscform so replacing an editor preserves the panel.
+.admin-edit-preview[hidden] { display: none; }
+
+.admin-edit-preview {
+    box-sizing: border-box;
+    position: fixed;
+    inset: 0 0 0 auto;
+    z-index: 1031;
+    width: var(--admin-preview-width, 40vw);
+    display: flex;
+    flex-direction: column;
+    background: var(--bs-body-bg, #fff);
+    color: var(--bs-body-color, #333);
+    border-left: 1px solid var(--bs-border-color, #ccc);
+
+    .admin-edit-preview-toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 6px;
+        padding: 10px;
+        flex-shrink: 0;
+        background: var(--bs-tertiary-bg, #e9ecef);
+        border-bottom: 1px solid var(--bs-border-color, #bbb);
+        box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+        z-index: 1;
+
+        strong { margin-right: auto; }
+    }
+    .admin-edit-preview-resizer {
+        position: absolute;
+        inset: 0 auto 0 -5px;
+        width: 10px;
+        cursor: col-resize;
+        touch-action: none;
+        z-index: 2;
+
+        &:hover, &:focus-visible {
+            background: var(--bs-primary, #337ab7);
+            outline: none;
+        }
+    }
+    .admin-edit-preview-language {
+        display: inline-block;
+        margin-left: 6px;
+        padding: 2px 5px;
+        border: 1px solid currentColor;
+        border-radius: 3px;
+        font-size: .75em;
+        line-height: 1.2;
+        vertical-align: middle;
+
+        &:empty { display: none; }
+    }
+    .admin-edit-preview-status { padding: 0 10px; }
+    iframe { flex: 1; width: 100%; min-height: 0; border: 0; background: #fff; }
+}
+
+html body.admin-preview-open {
+    padding-right: var(--admin-preview-width, 40vw);
+
+    .navbar-fixed-top, .admin-navbar-fixed-save { right: var(--admin-preview-width, 40vw); }
+    .container { max-width: 100%; }
+}
+
+@media (max-width: 900px) {
+    html body.admin-preview-open { padding-right: 0; }
+    .admin-edit-preview { width: 100%; }
+    .admin-edit-preview-resizer { display: none; }
+}
+
+// Keep the drag in the parent document when crossing the embedded page.
+body.admin-preview-resizing {
+    cursor: col-resize;
+    user-select: none;
+
+    iframe { pointer-events: none; }
+    .admin-edit-preview-resizer { background: var(--bs-primary, #337ab7); }
+}
+
+// Show the destination panel beside the save-and-open action.
+html body .btn.admin-edit-preview-open {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    svg { flex-shrink: 0; }
+}

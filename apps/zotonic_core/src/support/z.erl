@@ -39,6 +39,9 @@
     restart/1,
     stop/1,
 
+    edit/1,
+    edit/2,
+
     open/1,
     open_secure/1,
 
@@ -186,6 +189,23 @@ restart(Site) ->
 %% @doc Stop a site
 stop(Site) ->
     z_sites_manager:stop(Site).
+
+%% @doc Open a module, the first frame of a stack trace, or a library/template
+%% file in the development editor. Relative names are resolved across running
+%% sites; ambiguous names return {error, {ambiguous, Files}}. Containers require
+%% a browser launch and return {error, browser_only}.
+-spec edit(Target) -> ok | {error, term()} when
+    Target :: module() | list() | binary().
+edit(Target) ->
+    z_development_editor:edit(Target).
+
+%% @doc Open a module at a function (or {Function, Arity}), or a module/file at
+%% a line. A function name with multiple arities opens its first definition.
+-spec edit(Target, Position) -> ok | {error, term()} when
+    Target :: module() | file:filename_all(),
+    Position :: atom() | {atom(), non_neg_integer()} | pos_integer().
+edit(Target, Position) ->
+    z_development_editor:edit(Target, Position).
 
 %% @doc Open a site in Chrome or the default browser(macOS)
 open(Site) ->

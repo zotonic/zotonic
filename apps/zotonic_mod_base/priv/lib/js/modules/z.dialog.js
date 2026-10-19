@@ -24,6 +24,43 @@
 
 (function($) {
 
+    const placementObservers = new WeakMap();
+
+    function observePlacement($dialog, $modalDialog) {
+        const dialog = $dialog[0];
+        const modalDialog = $modalDialog[0];
+        let frame;
+        const fit = () => {
+            frame = undefined;
+            if (!dialog.isConnected || !modalDialog.getClientRects().length) return;
+            const bounds = modalDialog.getBoundingClientRect();
+            const viewport = window.visualViewport;
+            const top = (viewport?.offsetTop || 0) + 30;
+            const bottom = (viewport?.offsetTop || 0) + (viewport?.height || window.innerHeight) - 30;
+            const shift = Math.min(bounds.bottom - bottom, bounds.top - top);
+            // Only reclaim unused space above an overflowing dialog. Never recenter on shrink.
+            if (shift > 1) {
+                const margin = parseFloat(window.getComputedStyle(modalDialog).marginTop) || 0;
+                $modalDialog.css('margin-top', Math.max(30, margin - shift));
+            }
+        };
+        const schedule = () => {
+            if (frame === undefined) frame = window.requestAnimationFrame(fit);
+        };
+        const observer = window.ResizeObserver ? new ResizeObserver(schedule) : null;
+        observer?.observe(modalDialog);
+        window.addEventListener('resize', schedule);
+        window.visualViewport?.addEventListener('resize', schedule);
+        placementObservers.set(dialog, () => {
+            observer?.disconnect();
+            window.cancelAnimationFrame(frame);
+            window.removeEventListener('resize', schedule);
+            window.visualViewport?.removeEventListener('resize', schedule);
+            placementObservers.delete(dialog);
+        });
+        schedule();
+    }
+
     function dialogLevel($dialog) {
         const level = $dialog.attr('data-modal-level');
         if (typeof level !== 'undefined') {
@@ -177,8 +214,10 @@
             if (options.center) {
                 $modalDialog.hide();
                 setTimeout(function() {
+                    if (!$dialog[0].isConnected) return;
                     $.dialogCenter($modalDialog);
                     $modalDialog.show();
+                    observePlacement($dialog, $modalDialog);
                 }, 0);
             }
 
@@ -228,6 +267,7 @@
         // Called after the dialog is hidden.
         dialogRemove: function(obj) {
             if (obj) {
+                placementObservers.get(obj[0])?.();
                 z_editor_remove(obj);
                 obj.remove();
             }
@@ -248,12 +288,6 @@
                 $dialog[0].scrollTop = position;
             }
         }
-    });
-
-    $(window).on('resize', function() {
-        $(".dialog:visible .modal-dialog").each(function() {
-            $.dialogCenter($(this));
-        })
     });
 
     $.widget('ui.show_dialog', {

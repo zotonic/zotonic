@@ -80,6 +80,7 @@ Available Model API Paths
 | `get` | `/localized_name/+code/...` | Return language name for `+code` localized to the current request language. |
 | `get` | `/properties/+code/...` | Return language properties map for code `+code`. |
 | `get` | `/translate/...` | Translate text payload using configured translation services and optional `type`. |
+| `get` | `/translate_field` | Translate a resource or named-block field without saving. Requires edit permission; payload: `id`, `property`, optional `block`, `from`, `to`. |
 | `get` | `/has_translation_service/...` | Return whether any translation service is configured and available. |
 | `get` | `/detect/...` | Detect language of supplied text payload. |
 | `get` | `/detect_enabled/...` | Detect language only when detection is enabled for the site. |
@@ -182,6 +183,11 @@ m_get([ <<"localized_name">>, Code | Rest ], _Msg, Context) ->
     {ok, {z_language:localized_name(Code, Context), Rest}};
 m_get([ <<"properties">>, Code | Rest ], _Msg, _Context) ->
     {ok, {z_language:properties(Code), Rest}};
+m_get([ <<"translate_field">> | Rest ], #{ payload := Payload }, Context) ->
+    case translation_edit:translate(Payload, Context) of
+        {ok, Text} -> {ok, {Text, Rest}};
+        {error, _} = Error -> Error
+    end;
 m_get([ <<"translate">> | Rest ], #{ payload := Payload }, Context) ->
     case Payload of
         #{

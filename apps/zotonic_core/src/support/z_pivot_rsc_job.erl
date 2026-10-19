@@ -37,6 +37,9 @@
     pg_lang_extra/1
     ]).
 
+% For testing
+-export([tsv_plain_text/1]).
+
 -include_lib("zotonic.hrl").
 
 %% Minimum day, inserted for date start search ranges
@@ -396,7 +399,7 @@ check_datetime(_) ->
 
 %% Make the setweight(to_tsvector()) parts of the update statement
 to_tsv(Text, Level, Args, StemmingLanguage, Context) when is_binary(Text) ->
-    case cleanup_tsv_text(z_html:unescape(z_html:strip(Text))) of
+    case tsv_plain_text(Text) of
         <<>> ->
             {"tsvector('')", Args};
         TsvText ->
@@ -406,6 +409,13 @@ to_tsv(Text, Level, Args, StemmingLanguage, Context) when is_binary(Text) ->
             Args1 = Args ++ [Truncated],
             {["setweight(to_tsvector('pg_catalog.",StemmingLanguage,"', $",integer_to_list(N),"), '",Level,"')"], Args1}
     end.
+
+tsv_plain_text(Text) ->
+    %% PostgreSQL parses HTML too. Decoded code examples such as &lt;script&gt;
+    %% must not become markup again, hiding the remaining document from its parser.
+    PlainText = binary:replace(z_html:unescape(z_html:strip(Text)),
+                               [<<"<">>, <<">">>], <<" ">>, [global]),
+    cleanup_tsv_text(PlainText).
 
 -spec to_float(binary()) -> float() | undefined.
 to_float(Text) ->

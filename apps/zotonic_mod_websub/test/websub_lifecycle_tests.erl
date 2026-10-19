@@ -297,7 +297,10 @@ oauth_transport_test() ->
         meck:expect(z_websub_http, destination, fun(Url, _) ->
             {ok, uri_string:parse(Url), {93,184,215,14}}
         end),
-        meck:expect(z_url_fetch, fetch, fun(Method, Url, _, Options) ->
+        meck:expect(z_url_fetch, fetch, fun(Method, Url, _, FetchOptions) ->
+            %% Resolve options per request, as z_url_fetch does before sending.
+            OptionsFun = proplists:get_value(options_fun, FetchOptions),
+            Options = OptionsFun(Method, Url, proplists:delete(options_fun, FetchOptions)),
             ?assertEqual(false, proplists:get_value(autoredirect, Options)),
             ?assertEqual(m_site:environment(C) =:= development, proplists:get_value(insecure, Options)),
             case {Method, Url} of

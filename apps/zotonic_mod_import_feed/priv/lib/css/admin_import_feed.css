@@ -1,0 +1,52 @@
+#feed-discover-form #feed-url {
+    width: 32em;
+    max-width: 100%;
+}
+
+.well.import-feed-user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+    padding: 12px;
+    border: 1px solid var(--z-admin-border, #ccc);
+    border-radius: 4px;
+}
+
+.import-feed-user-details {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.import-feed-user-username {
+    display: block;
+    margin-top: 2px;
+}
+
+.import-feed-user > .btn {
+    flex-shrink: 0;
+    margin: 0;
+}
+
+.import-feed-preview-loading {
+    display: none;
+}
+
+#feed-preview.is-loading .import-feed-preview-loading {
+    display: block;
+}
+
+.import-feed-discover-loading,
+.import-feed-select-loading {
+    display: none;
+}
+
+#feed-discover-form.is-loading .import-feed-discover-loading {
+    display: inline-block;
+    margin-left: 8px;
+}
+
+#feed-discovery.is-loading .import-feed-select-loading {
+    display: block;
+}

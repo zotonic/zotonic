@@ -1,9 +1,9 @@
 %% @author Tim Benniks <tim@timbenniks.com>
-%% @copyright 2009 Tim Benniks.
+%% @copyright 2009-2026 Tim Benniks
 %% @doc Admin webmachine_controller.
 %% @end
 
-%% Copyright 2009 Tim Benniks
+%% Copyright 2009-2026 Tim Benniks
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.

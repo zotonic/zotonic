@@ -16,6 +16,7 @@
 {% endblock %}
 
 {% block content_area %}
+    {% include "_admin_edit_preview.tpl" %}
 	{% with tree_id|default:(id|menu_rsc) as tree_id %}
 	{% with `none` as admin_menu_edit_action %}
 	<div class="row">
@@ -84,6 +85,8 @@
 						  action={script script="$('#save_view').click();"}
 				 %}
 
+                {% include "_admin_edit_preview_button.tpl" %}
+
 				{% if id.is_temporary %}
 					<a href="{% url mx_resource_cleanup id=id %}" class="btn">{_ Cancel _}</a>
 				{% elseif not tree_id %}
@@ -99,6 +102,7 @@
 {% endblock %}
 
 {% block _js_include_extra %}
+    {% include "_admin_frontend_menu.tpl" %}
 	{% lib
     	"js/modules/jquery.hotkeys.js"
 	    "js/modules/z.adminwidget.js"

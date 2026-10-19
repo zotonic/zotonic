@@ -687,8 +687,12 @@ set_username(Id, Username, Context) when is_integer(Id) ->
                                 Context),
                             notify(Id, update, <<"username_pw">>, Username1, true, Context),
                             ok;
-                        {rollback, {error, _} = Error, _Trace} ->
+                        {rollback, {error, _} = Error} ->
                             Error;
+                        {rollback, {{error, _} = Error, _Trace}} ->
+                            Error;
+                        {rollback, Reason} ->
+                            {error, Reason};
                         {error, _} = Error ->
                             Error
                     end
@@ -786,6 +790,8 @@ set_username_pw_2(Id, Username, Password, Context) when is_integer(Id) ->
             reset_auth_tokens(Id, Context),
             notify(Id, Action, <<"username_pw">>, Username, true, Context),
             ok;
+        {rollback, {error, _} = Error} ->
+            Error;
         {rollback, {{error, Reason} = Error, Trace}} ->
             ?LOG_ERROR(#{
                 text => <<"Error setting username/password">>,
@@ -798,6 +804,8 @@ set_username_pw_2(Id, Username, Password, Context) when is_integer(Id) ->
                 stack => Trace
             }),
             Error;
+        {rollback, Reason} ->
+            {error, Reason};
         {error, Reason} = Error ->
             ?LOG_ERROR(#{
                 text => <<"Error setting username/password">>,
