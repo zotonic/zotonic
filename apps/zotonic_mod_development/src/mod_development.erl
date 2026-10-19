@@ -25,20 +25,15 @@
 -moduledoc("
 Presents various tools for development.
 
-
-
-Admin page
-----------
-
-After the development module is enabled a menu item Development is added to the System menu in the admin.
+After the development module is enabled a menu item System &gt; Development is added in the admin.
 
 On the development page it is possible to set debugging options, trace template compilation, and test dispatch rules.
 
+![The Development page with settings, source editor, template and dispatch debugging, introspection, and function call tracing.](../priv/doc/admin-development.jpg)
 
+## Debug Options
 
-### Options
-
-The settings column contains development options, including:
+The settings column contains these development options:
 
 - **Show paths to included template files.** Add comments to generated templates
   showing the exact file included at each point.
@@ -46,20 +41,54 @@ The settings column contains development options, including:
 - **Show defined blocks.** Add comments marking the start and end of each
   `{% block %} ... {% endblock %}` in generated templates.
 
+- **Always hide the floating template trace button.** Hide the button in every
+  environment. This takes precedence over the option to show it on production
+  and acceptance sites.
+
+- **Allow to show the floating template trace button on production and acceptance
+  sites.** Make the button available outside development and test environments.
+  It is still shown only to users with permission to use `mod_development`, and
+  not on the development tools' own pages. In development and test it is
+  available by default unless explicitly hidden.
+
 - **Download CSS and JavaScript as separate files.** Generate separate `<link>`
   and `<script>` tags for the files in a `{% lib %}` tag. This makes debugging
   easier, but increases the number of requests needed to load a page.
+
+- **Live reload of changed CSS files. Reload page on change of templates or
+  JavaScript.** Update styles in the browser when CSS changes, and reload the
+  page when a template or JavaScript file changes. Enabling this checkbox also
+  enables downloading CSS and JavaScript as separate files. The development
+  tools' own pages do not automatically reload on template or JavaScript changes.
+
+- **Disable caching by the `{% cache %}` tag.** Bypass template cache blocks
+  while checking changes. This does not disable other caches, such as browser
+  caching or application data caches.
+
+- **Trace all database queries for the current session.** Enable database query
+  tracing for requests in your session. This checkbox requires
+  `mod_server_storage`. Turn it off after investigating.
 
 - **Enable API to recompile and build Zotonic.** Enable the development APIs,
   including `/api/model/development/get/recompile` for compilation and
   `/api/model/development/get/flush` for flushing caches. These APIs do not
   require authentication when enabled; use this option only on trusted
-  development installations. It is not required for the language server.
+  development installations.
+
+- **Show server log in the browser console.** Start forwarding server logs to
+  the current browser tab's developer console. Stopping it stops console logging
+  for all connected logging tabs on the site. This option requires `mod_logging` and permission
+  to receive client logs. In development, the checkbox is replaced by a notice:
+  admin pages show these logs automatically, and site pages can opt in with the
+  `environment-development` class on their `<html>` element.
 
 
-### Source editor
+## Open source file in editor
 
 The second settings column configures opening templates in a source editor.
+This is either done by running a command to open a file, or by opening a
+browser URL. The editor can be chosen explicitly or detected automatically.
+
 The local editor choice is stored in `config.d/zotonic-editor.config` under the
 node configuration directory and shared by development sites and shell helpers.
 Browser URL preferences and host-path mappings remain browser/site-specific.
@@ -76,17 +105,23 @@ Sublime and Vim URLs need an installed host-side protocol handler.
 In the Erlang shell use `z:edit(mod_foobar)`, `z:edit(mod_foobar, function_name)`,
 `z:edit(StackTrace)` or `z:edit(<<\"path/to/template.tpl\">>, 42)`. Library and
 template names are resolved across running sites; ambiguous names require a
-full path. The node inherits the environment at
-startup, not the environment of a subsequently attached shell. A trusted
-zotonic application setting `development_editor` can contain an executable and
-argument list, for example `{\"code\", [\"--reuse-window\", \"--goto\", \"{file}:{line}:{column}\"]}`.
-Set `development_editor_browser_only` to true to force browser launches on a
-remote host or a container that cannot be detected automatically.
+full path.
 
-#### Node configuration
+A trusted zotonic configuration `development_editor` can contain an executable and
+argument list, for example:
 
-These settings belong to the global `zotonic` application configuration,
-not to a site's configuration or the module configuration:
+```erlang
+{\"code\", [\"--reuse-window\", \"--goto\", \"{file}:{line}:{column}\"]}
+```
+
+Set the zotonic configuration `development_editor_browser_only` to true to
+force browser launches on a remote host or a container that cannot be detected
+automatically.
+
+### Node configuration
+
+These settings belong to the global `zotonic` configuration,
+(so not to a site's configuration or the module configuration):
 
 | Setting | Default | Purpose |
 | --- | --- | --- |
@@ -124,7 +159,8 @@ map the source path inside the container to the corresponding checkout on the
 host and install any required URL handler on that host. Shell helpers cannot
 open the browser on the user's machine and return `{error, browser_only}`.
 
-### Language server (LSP)
+
+## Language server (LSP) integration
 
 The template language server provides editor support for `.tpl` files using a
 running site's module and template indexes. It complements an Erlang language
@@ -146,7 +182,7 @@ Category includes list candidate templates: selecting the effective template
 requires a resource/category context. Formatting, rename and workspace
 references are not currently supported.
 
-#### Model path completion
+### Model path completion
 
 Completion after a model name follows literal `m_get/3` path patterns and simple
 literal alternatives in guards. Bracket expressions such as `m.rsc[id].title`
@@ -172,7 +208,7 @@ probe a path. Arbitrary helper calls, runtime map fields and resource-specific
 custom properties are not inferred. Missing debug information falls back to the
 available source file; paths without either source are omitted.
 
-#### Start and select a site
+### Start and select a site
 
 Compile and start Zotonic, and enable `mod_development` on the desired site.
 Configure the editor to start this stdio command:
@@ -196,7 +232,7 @@ and template priority orders are accepted without selecting a site. Conflicting
 targets still require an explicit choice. Completion combines suggestions from
 candidate sites, and syntax diagnostics do not require a site selection.
 
-#### Editor setup
+### Editor setup
 
 The VS Code client is in
 `apps/zotonic_mod_development/priv/editors/vscode`. Run `npm ci` there and load
@@ -234,7 +270,7 @@ for complete editor configurations, Docker commands, path mappings, protocol
 limits and verification instructions.
 
 
-### Template debugging
+## Template debugging
 
 The template selection mechanism is quite complicated. It takes into account all modules, their priority, the user-agent
 class (desktop, tablet, phone or text) and optionally the category of a resource.
@@ -249,12 +285,12 @@ greater insight in the template selection and compilation.
 
 
 
-### Dispatch rule debugging
+## Dispatch rule debugging
 
 With this it is possible to see for a request path which dispatch rules are matched and/or how it is rewritten.
 
 
-### Function call tracing
+## Function call tracing
 
 The function tracing tool allows you to trace calls to a specific function in a module. You can specify the module name,
 function name and the number of calls to trace. The output will be sent to the page that started the trace, via MQTT.
@@ -273,8 +309,7 @@ dispatch rule option `sensitive`. This option is set for the authentication requ
 environments this dispatch option is ignored.
 
 
-Automatic recompilation
------------------------
+## Automatic recompilation
 
 ::: note
 The system can only scan for changed files if either `inotify-tools` or `fswatch` is installed.
@@ -318,16 +353,7 @@ sudo brew install fswatch
 sudo brew install terminal-notifier
 ```
 
-Configuration options
----------------------
-
-`mod_development.libsep`
-
-Boolean value. If true, files requested with `tag#lib` will be included separately instead
-of in one big concatenated file.
-
-Accepted Events
----------------
+## Accepted Events
 
 This module handles the following notifier callbacks:
 
