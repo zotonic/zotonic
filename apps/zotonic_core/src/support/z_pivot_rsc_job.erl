@@ -37,9 +37,8 @@
     pg_lang_extra/1
     ]).
 
--ifdef(TEST).
+% For testing
 -export([tsv_plain_text/1]).
--endif.
 
 -include_lib("zotonic.hrl").
 
