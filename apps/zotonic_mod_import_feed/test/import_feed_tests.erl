@@ -510,8 +510,8 @@ category_guess_excludes_meta_check() ->
         meck:expect(m_rsc, p, fun
             (10, _, _) -> <<"Meta">>;
             (11, _, _) -> <<"Predicate">>;
-            (12, name, _) -> <<"news">>;
-            (12, title, _) -> <<"News">>
+            (12, <<"name">>, _) -> <<"news">>;
+            (12, <<"title">>, _) -> <<"News">>
         end),
         meck:expect(m_rsc, rid, fun(article, _) -> 100 end),
         meck:expect(z_module_manager, active, fun(_, _) -> false end),
@@ -582,7 +582,7 @@ article_links_check() ->
         meck:expect(z_acl, rsc_visible, fun(Id, _) -> Id =:= 123 end),
         meck:expect(m_rsc, p, fun
             (123, page_url, _) -> <<"/page/123">>;
-            (123, website, _) -> <<"https://example.org/canonical">>
+            (123, <<"website">>, _) -> <<"https://example.org/canonical">>
         end),
         Body = z_import_feed_import:normalize_links(
             <<"<a href='/photo.JPG?size=large'><img src='/photo.JPG'></a><a href='/imported#section'>Local</a><a href='/canonical'>Canonical</a><a href='other'>Original</a><a href='/private'>Private</a><a href='mailto:editor@example.org'>Email</a>">>,
