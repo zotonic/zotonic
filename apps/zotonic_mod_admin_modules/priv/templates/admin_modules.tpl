@@ -104,7 +104,7 @@
                             <strong>{{ info.title|default:props.title|escape }}</strong>
                             <small class="text-muted">&nbsp; {{ info.version|escape }}</small>
                             <br>{{ info.description|escape }}
-                            <span class="hidden" data-module-keywords>{% for keyword in info.keywords %}<span data-topic="{{ keyword|escape }}">{{ keyword|module_topic|escape }}</span> {% endfor %}</span>
+                            <span class="hidden" data-module-keywords>{% for keyword in info.keywords %}<span data-topic="{{ keyword|escape }}">{{ keyword|humanize_identifier|escape }}</span> {% endfor %}</span>
                         </td>
                         <td>
                             {% for d in props.mod_depends %}
