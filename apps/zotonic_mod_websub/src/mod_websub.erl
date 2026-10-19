@@ -120,8 +120,42 @@ claim that those document formats can be imported as Zotonic resources.
 
 Standard subscription verification, signatures, leases, 307/308 hub redirects,
 and unsubscription apply to all peers. A 202 alone never activates a subscription.
-Delivery retry exhaustion drops only that notification, preserving the lease for
-future updates. Semantic resource identity is independent of WebSub topic migration.
+Delivery retry exhaustion drops the notification and marks the subscription as
+errored with `retry_timeout`; the lease itself is preserved. Later resource updates
+can start a new delivery window. Semantic resource identity is independent of WebSub topic migration.
+
+## Configuration
+
+Settings are per site and available in module configuration:
+
+| Key (`mod_websub`) | Default | Valid range (seconds) | Purpose |
+| --- | --- | --- | --- |
+| `subscription_retry_timeout` | 604800 (one week) | 1–2147483647 | Overall subscription/unsubscription retry budget from the first attempt, including discovery. |
+| `push_quiet_seconds` | 10 | 0–86400 | Quiet period before publishing a changed resource. |
+| `push_deadline_seconds` | 300 | 1–86400 | Maximum batching delay from the first queued update. |
+
+Missing or invalid settings use their defaults. For example:
+
+```erlang
+m_config:set_value(mod_websub, subscription_retry_timeout, 604800, Context).
+```
+
+Subscription failures, including unanswered verification, back off from 10 seconds
+up to 12 hours; these backoff limits are fixed. The persisted retry budget survives
+restarts. Renewals, unsubscriptions and explicit subscription retries each start a
+fresh budget. At expiry, attempts stop with `retry_timeout`; existing confirmed
+leases remain valid until expiry. Existing pending attempts start their budget on
+first processing after upgrade. Settings are read when work runs; changing the
+budget does not immediately wake sleeping retries or restart exhausted attempts.
+
+This budget does not control notification delivery, import queues or feed polling.
+The two push settings control batching only; they do not limit transport retries.
+Delivery retries use fixed quadratic delays (5, 20, 45 minutes, and so on), capped
+at 12 hours, for at most one week from the first delivery attempt. The persisted
+window and backoff survive newer queued versions and restarts; successful delivery
+clears them. Retry times are capped at the window deadline and lease expiry, and
+no new attempt starts after either deadline. Existing queues start their window
+on first processing after upgrade.
 
 ## Security and operation
 
@@ -166,8 +200,14 @@ See README.md for deployment details and the regression suite."/utf8>>).
 -mod_title("WebSub resource synchronization").
 -mod_description("Publish and subscribe to resources between sites using WebSub.").
 -mod_depends([ cron, mod_mqtt ]).
--mod_schema(4).
+-mod_schema(6).
 -mod_config([
+    #{
+        key => subscription_retry_timeout,
+        type => integer,
+        default => 604800,
+        description => "Overall subscription and unsubscription retry time from the first attempt, in seconds (1-2147483647; default one week)."
+    },
     #{
         key => push_quiet_seconds,
         type => integer,

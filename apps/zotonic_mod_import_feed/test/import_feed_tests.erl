@@ -215,7 +215,19 @@ fetch_policy_check() ->
         %% Destination and TLS policy are delegated to the shared fetcher.
         ?assertEqual({error, timeout}, z_import_feed_http:get(<<"http://127.0.0.1/feed">>, undefined)),
         meck:expect(z_fetch, fetch, fun(Url, _, _) -> {ok, {Url, [], 4, <<"data">>}} end),
-        ?assertEqual({error, response_too_large}, z_import_feed_http:get(<<"https://example.com/feed">>, 4, undefined))
+        ?assertEqual({error, response_too_large}, z_import_feed_http:get(<<"https://example.com/feed">>, 4, undefined)),
+        lists:foreach(fun(Code) ->
+            meck:expect(z_fetch, fetch, fun(Url, _, _) ->
+                {error, {Code, Url, [{"retry-after", "7200"}], 0, <<>>}}
+            end),
+            ?assertEqual({error, {http_status, Code, {retry_after, 7200}}},
+                z_import_feed_http:get(<<"https://example.com/feed">>, undefined))
+        end, [429, 503]),
+        meck:expect(z_fetch, fetch, fun(Url, _, _) ->
+            {error, {500, Url, [{"retry-after", "7200"}], 0, <<>>}}
+        end),
+        ?assertEqual({error, {http_status, 500}},
+            z_import_feed_http:get(<<"https://example.com/feed">>, undefined))
     after meck:unload(z_fetch) end.
 
 largest_srcset_check() ->
@@ -370,18 +382,18 @@ import_user_permissions_check() ->
 admin_poll_is_blocked_check() ->
     %% Existing persisted feeds must be blocked before any external request or import.
     meck:new(z_db, [no_link]),
-    meck:new(z_import_feed_http, [no_link]),
+    meck:new(z_import_feed_http, [passthrough, no_link]),
     meck:new(m_import_feed, [passthrough, no_link]),
     try
-        F = #{id => 1, user_id => 1, connections => term_to_binary([]),
+        F = #{id => 1, user_id => 1, poll_minutes => 60, connections => term_to_binary([]),
             user_groups => term_to_binary([]), lease_token => <<"test">>,
-            modified => {{2026,10,12},{0,0,0}}},
+            modified => {{2026,10,12},{0,0,0}}, settings_version => <<"2026-10-12 00:00:00+00">>},
         meck:expect(z_db, qmap, 4, meck:seq([{ok,[F]}, {ok,[]}])),
         Self = self(),
         meck:expect(z_db, q, fun(_, Args, _) -> Self ! {poll_finished, Args}, [] end),
         meck:expect(m_import_feed, error_message, fun(admin_import_user, _) -> <<"Administrator imports blocked">> end),
         ?assertEqual(ok, z_import_feed_poll:run(#context{})),
-        receive {poll_finished, [1,0,0,0,1,Message,_,_]} ->
+        receive {poll_finished, [1,0,0,0,1,Message,_,_,7200,true,0]} ->
             ?assertEqual(<<"Administrator imports blocked">>, Message)
         after 1000 -> error(no_poll_result) end,
         ?assertEqual(0, meck:num_calls(z_import_feed_http, get, '_'))

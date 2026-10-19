@@ -95,7 +95,7 @@ stop(Id, Context) ->
 stop_import(Id, Context) ->
     z_db:q("update websub_import set is_enabled = false, is_unsubscribed = true,
         pending_mode = 'unsubscribe', pending_until = null, next_check = now(),
-        retry_count = 0, modified = now() where id = $1", [Id], Context),
+        retry_count = 0, retry_started = null, modified = now() where id = $1", [Id], Context),
     z_db:q("delete from websub_import_queue where import_id = $1", [Id], Context),
     mod_websub:queue_changed(Context).
 
@@ -125,18 +125,55 @@ process(Context) ->
     % No remote cleanup is needed once the confirmed remote lease has expired.
     z_db:q("update websub_import set next_check = null, pending_mode = null,
         pending_until = null where not is_enabled and lease <= now() and next_check is not null", Context),
-    % Record an unanswered verification instead of silently retrying forever.
-    z_db:q("update websub_import set last_error = 'verification_timeout',
-        retry_count = retry_count + 1, pending_until = null
-        where next_check <= now() and pending_until <= now()", Context),
     Rows = z_db:assoc("select * from websub_import where next_check <= now()
         order by next_check, id limit 100", Context),
     lists:foreach(fun(Row) ->
         Import = maps:from_list(Row),
-        process_row(Import, Context),
+        process_due(Import, Context),
         publish_status(maps:get(id, Import), Context)
     end, Rows),
     ok.
+
+%% A confirmed lease starts a fresh retry window in its replacement row.
+process_due(#{is_enabled := true, is_unsubscribed := false,
+              pending_mode := undefined, retry_started := undefined} = Row, Context) ->
+    process_row(Row, Context);
+process_due(#{id := Id, is_enabled := Enabled} = Row, Context) ->
+    Timeout = retry_timeout(Context),
+    % A POST failure already scheduled backoff; only unanswered requests time out.
+    % Claim only still-due work: a callback may have confirmed it since selection.
+    case z_db:q_row("update websub_import
+        set retry_started = coalesce(retry_started, now())
+        where id = $1 and is_enabled = $2 and next_check <= now()
+        returning retry_started + ($3 * interval '1 second') <= now(),
+            pending_until <= now() and last_error is null", [Id, Enabled, Timeout], Context) of
+        {true, _} ->
+            give_up(Id, Enabled, Timeout, Context);
+        {false, true} ->
+            retry(Row, verification_timeout, Context);
+        {false, _} ->
+            process_row(Row, Context);
+        undefined ->
+            ok
+    end.
+
+give_up(Id, Enabled, Timeout, Context) ->
+    % Keep confirmed leases intact, but reject any late verification.
+    z_db:q("update websub_import set next_check = null, pending_mode = null,
+        pending_until = null, last_error = 'retry_timeout', modified = now()
+        where id = $1 and is_enabled = $2 and next_check <= now()
+            and retry_started + ($3 * interval '1 second') <= now()",
+        [Id, Enabled, Timeout], Context),
+    ok.
+
+retry_timeout(Context) ->
+    Value = m_config:get_value(mod_websub, subscription_retry_timeout, Context),
+    try z_convert:to_integer(Value) of
+        N when is_integer(N), N > 0, N =< 2147483647 -> N;
+        _ -> 604800
+    catch
+        error:_ -> 604800
+    end.
 
 process_row(#{is_enabled := true} = Row, Context) ->
     case is_own_resource(maps:get(source_uri, Row), Context)
@@ -168,7 +205,10 @@ process_enabled_row(#{id := Id, local_rsc_id := RscId, user_id := UserId} = Row,
                 _ ->
                     case Row of
                         #{is_unsubscribed := false, pending_mode := undefined} ->
-                            discover(replacement(Row, Context), UserContext, Context);
+                            case replacement(Row, Context) of
+                                #{id := Id} -> ok;
+                                Replacement -> process_due(Replacement, Context)
+                            end;
                         _ ->
                             request(<<"subscribe">>, Row, Context)
                     end
@@ -256,9 +296,14 @@ request_1(Mode, #{id := Id} = Row0, Context) ->
     end,
     % Persist intent before POST: the hub can verify before the POST returns.
     Enabled = Mode =:= <<"subscribe">>,
-    Changed = z_db:q("update websub_import set pending_mode = $2,
-        pending_until = now() + interval '2 minutes', next_check = now() + interval '2 minutes'
-        where id = $1 and is_enabled = $3", [Id, Mode, Enabled], Context),
+    Changed = z_db:q("update websub_import set pending_mode = $2, last_error = null,
+        pending_until = least(now() + interval '2 minutes',
+            retry_started + ($4 * interval '1 second')),
+        next_check = least(now() + interval '2 minutes',
+            retry_started + ($4 * interval '1 second'))
+        where id = $1 and is_enabled = $3
+            and retry_started + ($4 * interval '1 second') > now()",
+        [Id, Mode, Enabled, retry_timeout(Context)], Context),
     case Changed of
         1 ->
             Form0 = [{<<"hub.mode">>, Mode}, {<<"hub.topic">>, maps:get(topic_url, Row)},
@@ -306,14 +351,16 @@ ensure_callback(Row, _) ->
     Row.
 
 retry(#{id := Id, retry_count := Count} = Row, Reason, Context) ->
-    Delay = erlang:min(3600, 10 * (1 bsl erlang:min(Count, 8))),
+    Delay = erlang:min(12 * 60 * 60, 10 * (1 bsl erlang:min(Count, 13))),
     % Do not overwrite a verification which completed while POST was in flight.
     z_db:q("update websub_import set last_error = $2, retry_count = retry_count + 1,
-        next_check = now() + (case when lease > now() then
-            least($3, greatest(1, extract(epoch from (lease - now())) / 2))
-            else $3 end * interval '1 second') where id = $1
+        pending_until = case when pending_until <= now() then null else pending_until end,
+        next_check = least(retry_started + ($5 * interval '1 second'),
+            now() + (case when lease > now() then
+                least($3, greatest(1, extract(epoch from (lease - now())) / 2))
+                else $3 end * interval '1 second')) where id = $1
         and is_enabled = $4 and (pending_mode is not null or hub_url is null)",
-        [Id, error_text(Reason), Delay, maps:get(is_enabled, Row)], Context),
+        [Id, error_text(Reason), Delay, maps:get(is_enabled, Row), retry_timeout(Context)], Context),
     ok.
 
 -spec verify(Token, Topic, Mode, Lease, Context) -> ok | {error, term()} when
@@ -324,7 +371,7 @@ verify(Token, Topic, <<"subscribe">>, Lease, Context) when is_integer(Lease), Le
     case z_db:q1("update websub_import set is_unsubscribed = false,
         lease = now() + ($3 * interval '1 second'),
         next_check = now() + ($4 * interval '1 second'), pending_mode = null,
-        pending_until = null, retry_count = 0, last_error = null, modified = now()
+        pending_until = null, retry_count = 0, retry_started = null, last_error = null, modified = now()
         where callback_token = $1 and topic_url = $2 and is_enabled
         and pending_mode = 'subscribe' and pending_until > now() returning id",
         [Token, Topic, Lease, Renew], Context) of
@@ -345,7 +392,7 @@ verify(Token, Topic, <<"subscribe">>, Lease, Context) when is_integer(Lease), Le
 verify(Token, Topic, <<"unsubscribe">>, _Lease, Context) ->
     case z_db:q1("update websub_import set is_unsubscribed = true,
         lease = null, next_check = null, pending_mode = null, pending_until = null,
-        last_error = null, modified = now()
+        last_error = null, retry_started = null, modified = now()
         where callback_token is not distinct from $1 and topic_url = $2 and not is_enabled
         and pending_mode = 'unsubscribe' and pending_until > now() returning id", [Token, Topic], Context) of
         Id when is_integer(Id) ->
@@ -480,6 +527,7 @@ install(Context) ->
         add column if not exists pending_until timestamptz,
         add column if not exists next_check timestamptz default now(),
         add column if not exists retry_count integer not null default 0,
+        add column if not exists retry_started timestamptz,
         add column if not exists last_error varchar(200)", Context),
     z_db:q("create unique index if not exists websub_import_token_key on websub_import(callback_token)", Context),
     z_db:q("create index if not exists websub_import_due_key on websub_import(next_check)", Context),

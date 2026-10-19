@@ -139,8 +139,9 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="feed-frequency">{_ Polling interval (minutes) _}</label>
+                            <label for="feed-frequency">{_ Minimum polling interval (minutes) _}</label>
                             <input id="feed-frequency" class="form-control" name="poll_minutes" type="number" min="5" max="10080" value="{{ feed.poll_minutes }}" required>
+                            <p class="help-block">{_ Publisher refresh hints and retries after failures can extend this interval. Successful fetches reset failure backoff. _}</p>
                         </div>
 
                         <div class="checkbox">

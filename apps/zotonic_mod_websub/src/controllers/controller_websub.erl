@@ -326,14 +326,18 @@ subscribe(HubCallback, HubTopic, OptHubSecret, RscId, Context) ->
                 topic => HubTopic
             }),
             {error, denied};
-        _Other ->
+        {ok, {Status, _Body}} ->
             ?LOG_WARNING(#{
                 in => zotonic_mod_websub,
                 text => <<"WebSub subscribe callback returned non-2xx">>,
                 result => error,
                 reason => denied,
+                status => Status,
                 topic => HubTopic
             }),
+            {error, denied};
+        {error, _Reason} ->
+            % The transport failure is logged by get_callback/4.
             {error, denied}
     end.
 
@@ -358,14 +362,18 @@ unsubscribe(HubCallback, HubTopic, OptHubSecret, Context) ->
                 topic => HubTopic
             }),
             {error, denied};
-        _Other ->
+        {ok, {Status, _Body}} ->
             ?LOG_WARNING(#{
                 in => zotonic_mod_websub,
                 text => <<"WebSub unsubscribe callback returned non-2xx">>,
                 result => error,
                 reason => denied,
+                status => Status,
                 topic => HubTopic
             }),
+            {error, denied};
+        {error, _Reason} ->
+            % The transport failure is logged by get_callback/4.
             {error, denied}
     end.
 

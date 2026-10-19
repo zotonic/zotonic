@@ -22,8 +22,9 @@
 -export([queue/4, download_task/6, resolve/2, identity/1, fetch/2]).
 
 -define(MAX_MEDIA_BYTES, 20 * 1024 * 1024).
--define(MAX_RETRIES, 5).
+-define(MAX_RETRIES, 16).
 -define(RETRY_SECONDS, 60).
+-define(MAX_RETRY_SECONDS, 12 * 60 * 60).
 
 %% @doc Media may be embedded data; feed and article URLs remain HTTP-only.
 -spec resolve(binary(), binary()) -> binary().
@@ -149,7 +150,9 @@ result(ok, FeedId, Id, Url, _Medium, _Retry, Context) ->
 result({error, Reason}, FeedId, Id, Url, Medium, Retry, Context)
     when Retry < ?MAX_RETRIES, Reason =/= eacces ->
     log(FeedId, Id, Url, <<"retry">>, Reason, Context),
-    {delay, ?RETRY_SECONDS * (1 bsl Retry), [FeedId, Id, Url, Medium, Retry + 1]};
+    {delay, max(min(?MAX_RETRY_SECONDS, ?RETRY_SECONDS * (1 bsl Retry)),
+        z_import_feed_http:error_delay(Reason)),
+        [FeedId, Id, Url, Medium, Retry + 1]};
 result({error, Reason}, FeedId, Id, Url, _Medium, _Retry, Context) ->
     log(FeedId, Id, Url, <<"error">>, Reason, Context).
 

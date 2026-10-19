@@ -42,12 +42,12 @@ parse(_, _) -> {error, response_too_large}.
 
 parse_root(<<"rss">>, Root, Url) ->
     case children(<<"channel">>, Root) of
-        [Channel | _] -> feed(Channel, children(<<"item">>, Channel), rss, Url);
+        [Channel | _] -> feed(inherit_namespaces(Channel, Root), children(<<"item">>, Channel), rss, Url);
         _ -> {error, invalid_feed}
     end;
 parse_root(<<"rdf">>, Root, Url) ->
     case children(<<"channel">>, Root) of
-        [Channel | _] -> feed(Channel, children(<<"item">>, Root), rss, Url);
+        [Channel | _] -> feed(inherit_namespaces(Channel, Root), children(<<"item">>, Root), rss, Url);
         _ -> {error, invalid_feed}
     end;
 parse_root(<<"feed">>, Root, Url) -> feed(Root, children(<<"entry">>, Root), atom, Url);
@@ -71,7 +71,56 @@ feed(Channel, Nodes, Kind, Url) ->
         website => case Kind of atom -> alternate(Links); rss -> absolute(value(<<"link">>, Channel), Base) end,
         hubs => [LinkUrl || {<<"hub">>, LinkUrl} <- Links],
         entries => Entries, is_zotonic_feed => IsZotonic,
+        refresh_seconds => refresh_seconds(Channel, Kind),
         truncated => length(Nodes) > ?MAX_ENTRIES}}.
+
+%% Namespace declarations on rss/rdf are in scope on channel and its children.
+inherit_namespaces({Name, Attrs, Nodes}, {_, ParentAttrs, _}) ->
+    {Name, Attrs ++ [{K, V} || {<<"xmlns", _/binary>> = K, V} <- ParentAttrs,
+                              not proplists:is_defined(K, Attrs)], Nodes}.
+
+refresh_seconds({_, _, Nodes} = Channel, Kind) ->
+    Ttl = case Kind of
+        rss -> positive_seconds(first([text(Node) || {<<"ttl">>, _, _} = Node <- Nodes]), 60);
+        atom -> 0
+    end,
+    FrequencyValue = syndication_value(<<"updatefrequency">>, Channel),
+    Period = case syndication_value(<<"updateperiod">>, Channel) of
+        <<>> when FrequencyValue =/= <<>> -> 86400;
+        <<"hourly">> -> 3600;
+        <<"daily">> -> 86400;
+        <<"weekly">> -> 7 * 86400;
+        <<"monthly">> -> 31 * 86400;
+        <<"yearly">> -> 366 * 86400;
+        _ -> 0
+    end,
+    Frequency = case FrequencyValue of
+        <<>> -> 1;
+        Value -> positive_seconds(Value, 1)
+    end,
+    Syndication = case Frequency of
+        0 -> 0;
+        _ -> (Period + Frequency - 1) div Frequency
+    end,
+    max(Ttl, Syndication).
+
+syndication_value(Name, {_, Attrs, Nodes}) ->
+    first([string:trim(text(Node)) || {Tag, ChildAttrs, _} = Node <- Nodes,
+        [Prefix, Local] <- [binary:split(Tag, <<":">>)], Local =:= Name,
+        proplists:get_value(<<"xmlns:", Prefix/binary>>, ChildAttrs ++ Attrs)
+            =:= <<"http://purl.org/rss/1.0/modules/syndication/">>]).
+
+positive_seconds(Value, Multiplier) when is_binary(Value) ->
+    Trimmed = string:trim(Value),
+    case re:run(Trimmed, <<"^[0-9]{1,10}$">>, [{capture, none}]) of
+        match ->
+            Seconds = binary_to_integer(Trimmed) * Multiplier,
+            case Seconds > 0 andalso Seconds =< 2147483647 of
+                true -> Seconds;
+                false -> 0
+            end;
+        nomatch -> 0
+    end.
 
 entry(Node, Kind, ParentBase, FeedUrl) ->
     Base = base(Node, ParentBase),

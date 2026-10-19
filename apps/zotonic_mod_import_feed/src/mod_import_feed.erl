@@ -24,7 +24,7 @@
 -mod_title("Import feeds").
 -mod_description("Discover RSS and Atom feeds and automatically import articles and media.").
 -mod_depends([admin, cron]).
--mod_schema(8).
+-mod_schema(9).
 -mod_config([]).
 
 -moduledoc(#{
@@ -80,8 +80,11 @@ category; downloads do not hold a database transaction.
 
 Each task rechecks the feed's current import account and fetch credentials, resource
 permissions, pending URL and existing medium. Deleted resources and locally replaced
-media are not overwritten. Download failures retry up to five times with increasing
-delays, starting at one minute. Permission failures stop immediately. The feed activity
+media are not overwritten. Download failures retry up to sixteen times after the initial attempt. Delays
+double from one minute up to a fixed twelve-hour cap: 1, 2, 4, 8, 16, 32, 64,
+128, 256 and 512 minutes, followed by six twelve-hour waits (89 hours 3 minutes
+total, excluding request execution and scheduling delays). A longer `Retry-After`
+takes precedence. These limits are fixed, not module configuration. Permission failures stop immediately. The feed activity
 log shows queued, started, retry, success and error events. A terminal failure leaves
 an empty placeholder so the article remains imported and a later reimport can retry.
 Inline images can use `data:` URLs, including base64 and percent-encoded data.
@@ -110,6 +113,31 @@ browser input cannot change the server's environment. OAuth2 credentials are nev
 sent over HTTP. Anonymous fetching remains anonymous across redirects.
 
 ## Polling and identity
+
+Polling uses `poll_minutes` as a minimum interval (default 60 minutes; range
+5–10080). RSS `ttl` and namespace-qualified syndication `updatePeriod` /
+`updateFrequency` hints can lengthen it. When both are present, the longer hint
+wins. Missing syndication frequency defaults to 1; a frequency without a period
+uses daily. Monthly/yearly periods conservatively use 31/366 days, and division
+rounds up to whole seconds. Invalid hints are ignored. Schedule alignment via
+`updateBase`, RSS `skipHours`/`skipDays`, and HTTP cache freshness are not used.
+
+Consecutive feed-fetch or parse failures double the configured interval on each
+failure, with a fixed 12-hour backoff cap. Neither that cap nor backoff can shorten
+`poll_minutes` or the last valid publisher interval. A successful fetch and parse
+resets the failure counter and replaces the stored publisher hint, restoring the
+normal frequency even if individual entries fail to import. Counters, publisher
+hints, and next-poll times survive restarts. There is no automatic give-up deadline.
+
+HTTP 429/503 responses honor `Retry-After` as seconds or an HTTP date. The next
+poll waits for the longest of the normal interval, failure backoff, and that delay.
+Past dates mean no additional delay; malformed, duplicate or out-of-range values
+are ignored. Parsed delays must fit 0–2147483647 seconds. Entry-fetch errors can
+also extend the next poll; media download retries honor the same header while
+retaining their sixteen-retry limit. Headers and response bodies are not
+saved in error messages. Explicit **Poll now** remains an immediate override.
+No new module configuration is required; `poll_minutes` remains the per-feed control.
+
 
 The minute tick starts up to five background workers per site and Erlang node.
 Each worker polls up to five due feeds in sequence. Database leases prevent two
