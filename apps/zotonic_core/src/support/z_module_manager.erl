@@ -754,6 +754,7 @@ module_exists(M) ->
         schema := integer() | undefined,
         title := binary() | undefined,
         description := binary() | undefined,
+        keywords := [binary()],
         app_dir := file:filename_all() | undefined
     }.
 mod_info(Module) ->
@@ -770,8 +771,23 @@ mod_info(Module) ->
         schema => mod_schema(App),
         title => mod_title(App),
         description => mod_description(App),
+        keywords => mod_keywords(Mod),
         app_dir => LibDir
     }.
+
+%% @doc Read documentation keywords from the compiled module, also in releases.
+%% Modules without documentation metadata simply have no keywords.
+-spec mod_keywords(Module) -> Keywords when
+    Module :: atom(),
+    Keywords :: [binary()].
+mod_keywords(Module) ->
+    case code:get_doc(Module) of
+        {ok, {docs_v1, _, _, _, _, #{zotonic_keywords := Keywords}, _}} when is_list(Keywords) ->
+            lists:usort([ z_convert:to_binary(K) || K <- Keywords,
+                is_binary(K) orelse is_list(K) orelse is_atom(K) ]);
+        _ ->
+            []
+    end.
 
 -spec mod_version(Module) -> Version when
     Module :: atom() | binary() | string(),

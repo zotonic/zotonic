@@ -42,7 +42,40 @@
         </div>
     {% endif %}
 
-    <table class="table table-striped do_adminLinkedTable">
+    <div id="module-filters" class="row" hidden>
+        <div class="col-md-4 form-group">
+            <label for="module-search">{_ Search modules _}</label>
+            <input id="module-search" name="module_search" type="search" class="form-control" placeholder="{_ Search modules… _}">
+        </div>
+        <div class="col-md-2 form-group">
+            <label for="module-activation">{_ Activation _}</label>
+            <select id="module-activation" name="module_activation" class="form-control">
+                <option value="">{_ All _}</option>
+                <option value="activated">{_ Activated _}</option>
+                <option value="deactivated">{_ Deactivated _}</option>
+            </select>
+        </div>
+        <div class="col-md-3 form-group">
+            <label for="module-runtime">{_ Runtime _}</label>
+            <select id="module-runtime" name="module_runtime" class="form-control">
+                <option value="">{_ All _}</option>
+                <option value="running">{_ Running _}</option>
+                <option value="not-running">{_ Activated but not running _}</option>
+            </select>
+        </div>
+        <div class="col-md-3 form-group">
+            <label for="module-topic">{_ Topic _}</label>
+            <select id="module-topic" name="module_topic" class="form-control">
+                <option value="">{_ All topics _}</option>
+            </select>
+        </div>
+        <div class="col-md-12 form-group">
+            <button type="button" class="btn btn-default" id="module-filters-clear">{_ Clear filters _}</button>
+            <span role="status" aria-live="polite"><span id="module-filter-count"></span> {_ modules shown _}</span>
+        </div>
+    </div>
+
+    <table id="module-list" class="table table-striped do_adminLinkedTable">
         <thead>
             <tr>
                 <th width="20"></th>
@@ -63,7 +96,7 @@
                     {% if config_template %}
                         {% wire name="dialog-"|append:module action={dialog_open template=config_template title=info.title|default:props.title|escape module=module props=props} %}
                     {% endif %}
-                    <tr class="{% if not props.is_active %}unpublished{% endif %} clickable" {% if config_template %}data-event="dialog-{{ module }}"{% endif %}>
+                    <tr data-module-row data-active="{% if props.is_active %}true{% else %}false{% endif %}" data-status="{{ status[module]|escape }}" data-module="{{ module|escape }}" class="{% if not props.is_active %}unpublished{% endif %} clickable" {% if config_template %}data-event="dialog-{{ module }}"{% endif %}>
                         <td>
                             {% include "_icon_status.tpl" status_title=status[module] status=status[module] status_id=#status.module %}
                         </td>
@@ -71,6 +104,7 @@
                             <strong>{{ info.title|default:props.title|escape }}</strong>
                             <small class="text-muted">&nbsp; {{ info.version|escape }}</small>
                             <br>{{ info.description|escape }}
+                            <span class="hidden" data-module-keywords>{% for keyword in info.keywords %}<span data-topic="{{ keyword|escape }}">{{ keyword|module_topic|escape }}</span> {% endfor %}</span>
                         </td>
                         <td>
                             {% for d in props.mod_depends %}
@@ -133,7 +167,7 @@
                 {% endwith %}
             {% empty %}
                 <tr>
-                    <td colspan="4">
+                    <td colspan="5">
                         {_ No modules found _}
                     </td>
                 </tr>
@@ -141,6 +175,14 @@
         {% endwith %}
         {% endwith %}
         {% endwith %}
+            <tr id="module-filter-empty" hidden>
+                <td colspan="5">{_ No modules match these filters. _}</td>
+            </tr>
         </tbody>
     </table>
+{% endblock %}
+
+{% block js_extra %}
+    {% lib "js/admin-module-filter.js" %}
+    {% javascript %}z_admin_module_filter();{% endjavascript %}
 {% endblock %}
