@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-20 12:25\n"
+"PO-Revision-Date: 2026-10-20 14:38\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -5649,15 +5649,15 @@ msgstr "Berjalan"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:59
 msgid "Runtime"
-msgstr ""
+msgstr "Waktu eksekusi"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:47
 msgid "Search modules"
-msgstr ""
+msgstr "Modul pencarian"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:48
 msgid "Search modules…"
-msgstr ""
+msgstr "Modul pencarian…"
 
 #: zotonic_mod_admin_modules/src/controllers/controller_admin_module_manager.erl:82
 #: zotonic_mod_search/src/mod_search.erl:201
@@ -5686,7 +5686,7 @@ msgstr "Modul ini tidak memiliki fungsi <tt>manage_schema/2</tt>."
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:67
 msgid "Topic"
-msgstr ""
+msgstr "Topik"
 
 #: zotonic_mod_admin_modules/src/actions/action_admin_modules_module_toggle.erl:71
 msgid "You are not allowed to activate or deactivate modules."
@@ -5699,7 +5699,7 @@ msgstr "Zotonic adalah framework pengembangan web modular. Sebagian besar fungsi
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:74
 msgid "modules shown"
-msgstr ""
+msgstr "modul yang ditampilkan"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:14
 msgid "A predicate denotes traits or aspects of a page and expresses a relationship between two pages.\n"
@@ -8399,7 +8399,7 @@ msgstr "Atribusi"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:18
 msgid "Describe the source, collection or archive reference. Keep names and identifiers unchanged when translating."
-msgstr ""
+msgstr "Jelaskan sumber, koleksi, atau referensi arsip tersebut. Pertahankan nama dan pengenal apa adanya saat menerjemahkan."
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:35
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_copyright.tpl:4
@@ -8408,7 +8408,7 @@ msgstr "Lisensi"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:81
 msgid "Link to the original source record. This link is shared by all languages."
-msgstr ""
+msgstr "Tautan ke catatan sumber asli. Tautan ini digunakan bersama oleh semua bahasa."
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:69
 msgid "More about licenses:"
@@ -8416,11 +8416,11 @@ msgstr "Lebih lanjut tentang lisensi:"
 
 #: zotonic_mod_copyright/priv/templates/_provenance.tpl:6
 msgid "Original source"
-msgstr ""
+msgstr "Sumber asli"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:16
 msgid "Provenance"
-msgstr ""
+msgstr "Asal-usul"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:39
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_copyright.tpl:8
@@ -8429,12 +8429,12 @@ msgstr "Area publik"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:8
 msgid "Rights, attribution and provenance"
-msgstr ""
+msgstr "Hak, atribusi, dan asal-usul"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:78
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:80
 msgid "Source URL"
-msgstr ""
+msgstr "URL Sumber"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:30
 msgid "The license and the attribution of this page."
@@ -11095,7 +11095,7 @@ msgstr "Ukuran sedang, terpasang langsung"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:142
 msgid "Minimum polling interval (minutes)"
-msgstr ""
+msgstr "Interval polling minimum (menit)"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_log.tpl:20
 msgid "New events appear live at the top. Scroll down to load older events. Logs are kept for 30 days."
@@ -11163,7 +11163,7 @@ msgstr "Sumber daya yang dilindungi dan sumber daya yang tidak dapat Anda hapus 
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:144
 msgid "Publisher refresh hints and retries after failures can extend this interval. Successful fetches reset failure backoff."
-msgstr ""
+msgstr "Petunjuk penyegaran penerbit dan upaya ulang setelah kegagalan dapat memperpanjang interval ini. Pengambilan data yang berhasil akan mereset periode penundaan akibat kegagalan."
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:30
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:25
@@ -17481,7 +17481,7 @@ msgstr "Pembaruan otomatis tidak dapat diselesaikan. Silakan periksa detail tekn
 
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:62
 msgid "Choose a known failed hostname or enter an exact hostname, without a scheme, port, or path."
-msgstr ""
+msgstr "Pilih nama host yang diketahui tidak berfungsi atau masukkan nama host yang tepat, tanpa skema, port, atau jalur."
 
 #: zotonic_mod_websub/src/mod_websub.erl:285
 msgid "Could not change the automatic update subscription."
@@ -17579,7 +17579,7 @@ msgstr "Ikuti kami"
 
 #: zotonic_mod_websub/src/filters/filter_websub_error.erl:44
 msgid "Subscription or unsubscription attempts stopped because the retry time limit was reached. Check the remote website and retry the subscription if needed."
-msgstr ""
+msgstr "Upaya berlangganan atau berhenti berlangganan terhenti karena batas waktu percobaan ulang telah tercapai. Silakan periksa situs web jarak jauh tersebut dan coba lagi untuk berlangganan jika diperlukan."
 
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:22
 msgid "Subscription type"
