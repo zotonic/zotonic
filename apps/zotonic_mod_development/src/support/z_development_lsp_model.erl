@@ -200,14 +200,24 @@ extra(m_config, _, _, Context) ->
     config_paths(Context);
 extra(m_predicate, Path, true, Context) ->
     case predicate_position(Path) of
-        true -> entries(Path, [atom_to_binary(Name, utf8) || {Name, _} <- m_predicate:all(Context),
-            is_atom(Name), Name =/= undefined]);
+        true -> predicate_entries(Path, Context);
+        false -> []
+    end;
+extra(m_edge, [Operation, _Id] = Path, true, Context) ->
+    case lists:member(Operation, [<<"o">>, <<"s">>, <<"o_props">>, <<"s_props">>, <<"id">>, <<"edges">>]) of
+        true -> predicate_entries(Path, Context);
         false -> []
     end;
 extra(_, _, _, _) ->
     [].
 
 entries(Prefix, Names) -> [#{path => Prefix ++ [Name]} || Name <- Names].
+
+%% @doc Suggest the site's predicate names without evaluating resource arguments or fetching edges.
+predicate_entries(Path, Context) ->
+    Names = [atom_to_binary(Name, utf8) || {Name, _} <- m_predicate:all(Context),
+        is_atom(Name), Name =/= undefined],
+    entries(Path, Names).
 
 predicate_position([]) -> true;
 predicate_position([Name]) -> lists:member(Name, [<<"predicate">>, <<"is_used">>,
