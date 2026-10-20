@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-18 15:52\n"
+"PO-Revision-Date: 2026-10-20 12:25\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -195,13 +195,15 @@ msgstr "增加对合作团队的链接"
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:91
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:141
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:110
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:53
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:61
 #: zotonic_mod_logging/priv/templates/admin_log.tpl:47
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:152
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:184
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:47
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:59
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:67
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:50
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:55
 msgid "All"
 msgstr "所有"
 
@@ -664,7 +666,7 @@ msgstr "同一用户组的成员"
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:19
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:8
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:26
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:49
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:82
 #: zotonic_mod_base/priv/templates/error.tpl:78
 #: zotonic_mod_development/priv/templates/_development_template.tpl:3
 #: zotonic_mod_development/priv/templates/_development_template_matches.tpl:8
@@ -1958,7 +1960,7 @@ msgstr "文件"
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:41
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:74
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:59
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:55
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:60
 msgid "Filter"
 msgstr "过滤"
 
@@ -3204,8 +3206,8 @@ msgstr "省/直辖市/自治区"
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_fields.tpl:7
 #: zotonic_mod_survey/src/models/m_survey.erl:1114
 #: zotonic_mod_survey/src/models/m_survey.erl:1120
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:38
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:72
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:43
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:77
 #: zotonic_site_status/priv/templates/_navbar.tpl:15
 #: zotonic_site_status/priv/templates/_sites.tpl:4
 msgid "Status"
@@ -3622,8 +3624,8 @@ msgstr "未发表"
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:10
 #: zotonic_mod_translation/priv/templates/_translation_tree_skipped.tpl:7
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:3
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:88
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:90
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:93
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:95
 msgid "Untitled"
 msgstr "未命名"
 
@@ -5350,7 +5352,7 @@ msgstr "有序对"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:104
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:135
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:56
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:61
 msgid "Reset"
 msgstr "重启"
 
@@ -5523,11 +5525,31 @@ msgid "not implemented yet"
 msgstr "未实施"
 
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:34
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:124
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:158
 msgid "Activate"
 msgstr "启用"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:115
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:54
+msgid "Activated"
+msgstr "已激活"
+
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:63
+msgid "Activated but not running"
+msgstr "已激活但未运行"
+
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:51
+msgid "Activation"
+msgstr "激活"
+
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:69
+msgid "All topics"
+msgstr "所有主题"
+
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:73
+msgid "Clear filters"
+msgstr "清除筛选条件"
+
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:149
 msgid "Configure"
 msgstr "配置"
 
@@ -5541,13 +5563,18 @@ msgstr "循环依赖性"
 
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:17
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:34
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:119
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:153
 msgid "Deactivate"
 msgstr "停用"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:19
 msgid "Deactivate these modules if you are not using them, or check the installation of the system."
 msgstr "如果您不使用这些模块，请停用它们，或者检查系统的安装。"
+
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:55
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:41
+msgid "Deactivated"
+msgstr "停用"
 
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:3
 msgid "Deactivating this module will stop the following modules:"
@@ -5557,7 +5584,7 @@ msgstr "停用该模块将停止以下模块。"
 msgid "Dependencies"
 msgstr "依赖性"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:50
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:83
 msgid "Depends"
 msgstr "取决于"
 
@@ -5573,7 +5600,7 @@ msgstr "你还想停用该模块吗？"
 msgid "Either they are not installed, or they are not compiled."
 msgstr "它们要么没有安装，要么没有编译。"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:106
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:140
 msgid "Install the module’s model and data."
 msgstr "安装模块的型号和数据。"
 
@@ -5586,15 +5613,19 @@ msgstr "模块依赖性"
 msgid "Modules are missing dependencies"
 msgstr "模块缺少依赖性"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:137
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:171
 msgid "No modules found"
 msgstr "没有找到模块"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:51
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:179
+msgid "No modules match these filters."
+msgstr "没有模块符合这些筛选条件。"
+
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:84
 msgid "Provides"
 msgstr "提供"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:105
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:139
 msgid "Reinstall"
 msgstr "重新安装"
 
@@ -5610,6 +5641,23 @@ msgstr "重新扫描模块"
 #: zotonic_mod_admin_modules/priv/templates/_admin_status.tpl:4
 msgid "Rescanning will rebuild the index of all modules, actions, templates etc. It will also reload all dispatch rules."
 msgstr "重新扫描将重建所有模块、动作、模板等的索引。它还会重新加载所有的调度规则。"
+
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:62
+#: zotonic_site_status/priv/templates/_sites.tpl:15
+msgid "Running"
+msgstr "跑步"
+
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:59
+msgid "Runtime"
+msgstr ""
+
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:47
+msgid "Search modules"
+msgstr ""
+
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:48
+msgid "Search modules…"
+msgstr ""
 
 #: zotonic_mod_admin_modules/src/controllers/controller_admin_module_manager.erl:82
 #: zotonic_mod_search/src/mod_search.erl:201
@@ -5636,6 +5684,10 @@ msgstr "有的模块取决于"
 msgid "This module does not have a <tt>manage_schema/2</tt> function."
 msgstr "该模块没有 <tt>manage_schema/2</tt> 函数。"
 
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:67
+msgid "Topic"
+msgstr ""
+
 #: zotonic_mod_admin_modules/src/actions/action_admin_modules_module_toggle.erl:71
 msgid "You are not allowed to activate or deactivate modules."
 msgstr "您不允许激活或停用模块。"
@@ -5645,6 +5697,10 @@ msgid "Zotonic is a modular web development framework. Most functionality is enc
 "            while others are externally developed. This page shows an overview of all modules which are currently known to this Zotonic installation."
 msgstr "Zotonic是一个模块化的网络开发框架。大部分功能都封装在模块中。一组基本模块随Zotonic发行版一起发布，\n"
 "            而其他模块则是由外部开发的。本页显示了目前已知的Zotonic安装的所有模块的概述。"
+
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:74
+msgid "modules shown"
+msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:14
 msgid "A predicate denotes traits or aspects of a page and expresses a relationship between two pages.\n"
@@ -6455,7 +6511,7 @@ msgstr "输入您的电子邮件地址，以接收有关如何重设密码的说
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:143
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:7
 #: zotonic_mod_survey/priv/templates/_survey_block_name_check.tpl:2
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:105
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:110
 msgid "Error"
 msgstr "错误"
 
@@ -7991,7 +8047,7 @@ msgstr "这将测试与服务器的通信。"
 #: zotonic_mod_base/priv/templates/directory_index.tpl:15
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:38
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:35
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:69
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:74
 msgid "Type"
 msgstr "类型"
 
@@ -8327,45 +8383,66 @@ msgstr "本网站使用 cookie"
 msgid "To add more information about the use of cookies, either use the content field below or add a 'relation' in the page connections."
 msgstr "要添加有关 cookie 使用的更多信息，请使用下面的内容字段或在页面连接中添加“关系”。"
 
-#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:17
+#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:31
 msgid "<b>NB</b> connected pages and images have their own rights."
 msgstr "<b>NB</b> 连接的页面和图像有自己的权利。"
 
-#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:24
+#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:38
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_copyright.tpl:7
 msgid "All Rights Reserved"
 msgstr "版权所有"
 
-#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:44
-#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:45
+#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:58
+#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:59
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_copyright.tpl:23
 msgid "Attribution"
 msgstr "归因"
 
-#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:21
+#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:18
+msgid "Describe the source, collection or archive reference. Keep names and identifiers unchanged when translating."
+msgstr ""
+
+#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:35
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_copyright.tpl:4
 msgid "License"
 msgstr "执照"
 
-#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:8
-msgid "License and attribution"
-msgstr "许可和归属"
+#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:81
+msgid "Link to the original source record. This link is shared by all languages."
+msgstr ""
 
-#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:55
+#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:69
 msgid "More about licenses:"
 msgstr "有关许可证的更多信息："
 
-#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:25
+#: zotonic_mod_copyright/priv/templates/_provenance.tpl:6
+msgid "Original source"
+msgstr ""
+
+#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:16
+msgid "Provenance"
+msgstr ""
+
+#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:39
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_copyright.tpl:8
 msgid "Public Domain"
 msgstr "公共区域"
 
-#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:16
+#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:8
+msgid "Rights, attribution and provenance"
+msgstr ""
+
+#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:78
+#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:80
+msgid "Source URL"
+msgstr ""
+
+#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:30
 msgid "The license and the attribution of this page."
 msgstr "本页的许可和归属。"
 
-#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:50
-#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:51
+#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:64
+#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:65
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_copyright.tpl:28
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:109
 msgid "Year"
@@ -8415,11 +8492,11 @@ msgstr "新的位置可以是一个本地路径或一个完整的URL。对于本
 msgid "You are not allowed to change this."
 msgstr "你不允许改变这个。"
 
-#: zotonic_mod_development/src/mod_development.erl:667
+#: zotonic_mod_development/src/mod_development.erl:693
 msgid "<i>Function name does not exist.</i>"
 msgstr "<i>函数名不存在。</i>"
 
-#: zotonic_mod_development/src/mod_development.erl:670
+#: zotonic_mod_development/src/mod_development.erl:696
 msgid "<i>Module not found.</i>"
 msgstr "<i>未找到模块。</i>"
 
@@ -8490,8 +8567,8 @@ msgstr "计算并可视化所有模板的依赖图。"
 msgid "Check debug points in the template source to see debug data here."
 msgstr "检查模板源代码中的调试点，在此处查看调试数据。"
 
-#: zotonic_mod_development/src/mod_development.erl:475
-#: zotonic_mod_development/src/mod_development.erl:490
+#: zotonic_mod_development/src/mod_development.erl:501
+#: zotonic_mod_development/src/mod_development.erl:516
 msgid "Checking all templates..."
 msgstr "检查所有模板..."
 
@@ -8619,7 +8696,7 @@ msgid "Detecting editors…"
 msgstr "检测编辑者…"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:7
-#: zotonic_mod_development/src/mod_development.erl:1335
+#: zotonic_mod_development/src/mod_development.erl:1361
 msgid "Development"
 msgstr "开发"
 
@@ -8743,11 +8820,11 @@ msgstr "启用数据库查询跟踪"
 msgid "Enter the module and function you want to trace. If no function is given, all functions in the module will be traced. Enter how many calls to trace before stopping."
 msgstr "输入要跟踪的模块和函数。如果没有给出函数，则将跟踪模块中的所有函数。输入要跟踪多少次调用才会停止。"
 
-#: zotonic_mod_development/src/mod_development.erl:639
+#: zotonic_mod_development/src/mod_development.erl:665
 msgid "Error changing the console logs."
 msgstr "更改控制台日志时出错。"
 
-#: zotonic_mod_development/src/mod_development.erl:733
+#: zotonic_mod_development/src/mod_development.erl:759
 msgid "Error parsing template."
 msgstr "解析模板出错。"
 
@@ -8809,7 +8886,7 @@ msgstr "函数调用跟踪"
 msgid "Function call tracing has been disabled. Use the following to enable function call tracing:"
 msgstr "函数调用跟踪已禁用。使用以下命令启用函数调用跟踪："
 
-#: zotonic_mod_development/src/mod_development.erl:673
+#: zotonic_mod_development/src/mod_development.erl:699
 msgid "Function tracing has been disabled in the Zotonic config."
 msgstr "在 Zotonic 配置中已禁用功能跟踪。"
 
@@ -8954,18 +9031,18 @@ msgstr "没有找到匹配的调度规则"
 msgid "No matching templates found."
 msgstr "未找到匹配的模板。"
 
-#: zotonic_mod_development/src/mod_development.erl:637
+#: zotonic_mod_development/src/mod_development.erl:663
 msgid "No permission to access the console logs."
 msgstr "没有权限访问控制台日志。"
 
-#: zotonic_mod_development/src/mod_development.erl:480
-#: zotonic_mod_development/src/mod_development.erl:495
-#: zotonic_mod_development/src/mod_development.erl:510
-#: zotonic_mod_development/src/mod_development.erl:518
-#: zotonic_mod_development/src/mod_development.erl:545
-#: zotonic_mod_development/src/mod_development.erl:587
-#: zotonic_mod_development/src/mod_development.erl:604
-#: zotonic_mod_development/src/mod_development.erl:621
+#: zotonic_mod_development/src/mod_development.erl:506
+#: zotonic_mod_development/src/mod_development.erl:521
+#: zotonic_mod_development/src/mod_development.erl:536
+#: zotonic_mod_development/src/mod_development.erl:544
+#: zotonic_mod_development/src/mod_development.erl:571
+#: zotonic_mod_development/src/mod_development.erl:613
+#: zotonic_mod_development/src/mod_development.erl:630
+#: zotonic_mod_development/src/mod_development.erl:647
 msgid "No permission to use mod_development."
 msgstr "无权使用 mod_development。"
 
@@ -8974,7 +9051,7 @@ msgstr "无权使用 mod_development。"
 msgid "No references found."
 msgstr "未找到相关参考文献。"
 
-#: zotonic_mod_development/src/mod_development.erl:599
+#: zotonic_mod_development/src/mod_development.erl:625
 msgid "No template found in the context."
 msgstr "上下文中未发现模板。"
 
@@ -8995,7 +9072,7 @@ msgstr "未找到"
 msgid "Observers"
 msgstr "观察员"
 
-#: zotonic_mod_development/src/mod_development.erl:676
+#: zotonic_mod_development/src/mod_development.erl:702
 msgid "Only the admin user can set traces."
 msgstr "只有管理员用户才能设置跟踪。"
 
@@ -9133,19 +9210,19 @@ msgstr "开始追踪"
 msgid "Start matching dispatch rules"
 msgstr "开始匹配调度规则"
 
-#: zotonic_mod_development/src/mod_development.erl:633
+#: zotonic_mod_development/src/mod_development.erl:659
 msgid "Started logging to the console of your browser tab."
 msgstr "开始记录到浏览器选项卡的控制台。"
 
-#: zotonic_mod_development/src/mod_development.erl:507
+#: zotonic_mod_development/src/mod_development.erl:533
 msgid "Started tracing all template inclusions."
 msgstr "开始追踪所有模板包含物。"
 
-#: zotonic_mod_development/src/mod_development.erl:582
+#: zotonic_mod_development/src/mod_development.erl:608
 msgid "Started tracing template inclusions by rendering the page."
 msgstr "通过渲染页面开始追踪模板夹杂物。"
 
-#: zotonic_mod_development/src/mod_development.erl:504
+#: zotonic_mod_development/src/mod_development.erl:530
 msgid "Started tracing template inclusions for your session."
 msgstr "开始跟踪您的会话的模板包含内容。"
 
@@ -9155,11 +9232,11 @@ msgstr "开始跟踪您的会话的模板包含内容。"
 msgid "Stop"
 msgstr "中止"
 
-#: zotonic_mod_development/src/mod_development.erl:635
+#: zotonic_mod_development/src/mod_development.erl:661
 msgid "Stopped logging to the console of all browser tabs."
 msgstr "停止记录所有浏览器选项卡的控制台。"
 
-#: zotonic_mod_development/src/mod_development.erl:516
+#: zotonic_mod_development/src/mod_development.erl:542
 msgid "Stopped tracing template inclusions for all sessions."
 msgstr "停止跟踪所有会话的模板包含内容。"
 
@@ -9198,7 +9275,7 @@ msgstr "模版"
 msgid "Template debugging"
 msgstr "模板调试"
 
-#: zotonic_mod_development/src/mod_development.erl:736
+#: zotonic_mod_development/src/mod_development.erl:762
 msgid "Template file not found."
 msgstr "未找到模板文件。"
 
@@ -9218,7 +9295,7 @@ msgstr "模板路径"
 msgid "Test with this template"
 msgstr "使用此模板进行测试"
 
-#: zotonic_mod_development/src/mod_development.erl:584
+#: zotonic_mod_development/src/mod_development.erl:610
 msgid "The path must be a local URL."
 msgstr "路径必须是本地 URL。"
 
@@ -9311,7 +9388,7 @@ msgstr "URI模式"
 msgid "Uncheck to debug only your current session."
 msgstr "取消选中则只调试当前会话。"
 
-#: zotonic_mod_development/src/mod_development.erl:618
+#: zotonic_mod_development/src/mod_development.erl:644
 msgid "Updated template debug points."
 msgstr "更新了模板调试点。"
 
@@ -10665,8 +10742,8 @@ msgid "You do not have permission to use the CSV/XLSX import module."
 msgstr "您没有使用 CSV/XLSX 导入模块的权限。"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:66
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:41
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:99
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:46
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:104
 msgid "Active"
 msgstr "有效"
 
@@ -10675,12 +10752,12 @@ msgstr "有效"
 msgid "Activity log"
 msgstr "活动日志"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:296
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:324
 msgid "Add default connection"
 msgstr "添加默认连接"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user.tpl:32
-#: zotonic_mod_import_feed/src/models/m_import_feed.erl:479
+#: zotonic_mod_import_feed/src/models/m_import_feed.erl:481
 msgid "Administrator accounts cannot run feed imports. Importing external content with full administrator permissions is dangerous. Select a non-administrator account with only the permissions needed for importing."
 msgstr "管理员账户无法执行内容源导入操作。使用具有完全管理员权限的账户导入外部内容存在风险。请选择一个非管理员账户，该账户仅具备导入所需的权限。"
 
@@ -10766,25 +10843,25 @@ msgid "Default is 1: import directly connected resources. Use 0 to skip connecti
 msgstr "默认值为 1：导入直接关联的资源。使用 0 跳过关联。"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_dialog.tpl:23
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:184
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:185
 msgid "Delete feed"
 msgstr "删除订阅源"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:482
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:510
 msgid "Delete feed?"
 msgstr "删除订阅源？"
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:175
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:176
 msgid "Delete imported articles and media that you are allowed to delete. Protected resources are kept. The feed will be paused; its settings and import history are retained."
 msgstr "删除您有权删除的已导入文章和媒体。受保护的资源将被保留。该订阅源将被暂停；其设置和导入记录将予以保留。"
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:172
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:177
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:181
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:173
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:178
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:182
 msgid "Delete imported content"
 msgstr "删除导入的内容"
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:179
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:180
 msgid "Delete imported content?"
 msgstr "删除已导入的内容？"
 
@@ -10839,7 +10916,7 @@ msgstr "完成"
 msgid "Enable mod_websub to subscribe imported resources for updates."
 msgstr "启用 mod_websub 以订阅导入资源的更新。"
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:149
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:150
 msgid "Enrich WordPress entries using the public REST API"
 msgstr "使用公共 REST API 丰富 WordPress 文章内容"
 
@@ -10848,7 +10925,7 @@ msgid "Entries advertising a Zotonic resource export use the native importer, pr
 msgstr "宣传 Zotonic 资源导出的条目会使用原生导入工具，从而保留结构化内容和资源关联。"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:46
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:48
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:53
 msgid "Errors"
 msgstr "错误"
 
@@ -10880,7 +10957,7 @@ msgstr "源"
 msgid "Feed activity log"
 msgstr "动态日志"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:494
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:522
 msgid "Feed deleted"
 msgstr "该帖子已被删除"
 
@@ -10888,7 +10965,7 @@ msgstr "该帖子已被删除"
 msgid "Feed not found or access denied."
 msgstr "未找到该源，或访问被拒绝。"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:460
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:488
 msgid "Feed queued for fetching. Watch the activity log for results."
 msgstr "该数据流已排入队列，等待提取。请查看活动日志以获取结果。"
 
@@ -10931,7 +11008,7 @@ msgstr "导入类别"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:4
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:11
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:227
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:255
 msgid "Import feeds"
 msgstr "导入源"
 
@@ -10955,7 +11032,7 @@ msgstr "导入用户"
 msgid "Imported / updated / skipped"
 msgstr "已导入 / 已更新 / 已跳过"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:471
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:499
 msgid "Imported content deleted"
 msgstr "已删除导入的内容"
 
@@ -10967,7 +11044,7 @@ msgstr "导入"
 msgid "Imports run with this account's permissions. Only administrators and users with full access to accounts can change it."
 msgstr "导入操作将使用该账户的权限进行。只有管理员以及对账户拥有完全访问权限的用户才能更改此设置。"
 
-#: zotonic_mod_import_feed/src/models/m_import_feed.erl:473
+#: zotonic_mod_import_feed/src/models/m_import_feed.erl:475
 msgid "Invalid removal regexp on line"
 msgstr "第 行中的删除正则表达式无效"
 
@@ -11017,6 +11094,10 @@ msgstr "已找到媒体文件"
 msgid "Medium attached directly"
 msgstr "直接附上正文"
 
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:142
+msgid "Minimum polling interval (minutes)"
+msgstr ""
+
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_log.tpl:20
 msgid "New events appear live at the top. Scroll down to load older events. Logs are kept for 30 days."
 msgstr "新事件会实时显示在顶部。向下滚动可加载较早的事件。日志保留30天。"
@@ -11053,7 +11134,7 @@ msgstr "原文"
 msgid "Pause"
 msgstr "暂停"
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:156
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:157
 msgid "Pause automatic imports"
 msgstr "暂停自动导入"
 
@@ -11064,10 +11145,6 @@ msgstr "已暂停"
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:32
 msgid "Poll now"
 msgstr "立即投票"
-
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:142
-msgid "Polling interval (minutes)"
-msgstr "轮询间隔（分钟）"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:44
 msgid "Polls"
@@ -11084,6 +11161,10 @@ msgstr "受保护的资源以及无法删除的资源将被保留。如果删除
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_dialog.tpl:20
 msgid "Protected resources and resources you cannot delete will be kept. Content shared with other feeds is included."
 msgstr "受保护的资源以及无法删除的资源将被保留。这包括与其他动态共享的内容。"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:144
+msgid "Publisher refresh hints and retries after failures can extend this interval. Successful fetches reset failure backoff."
+msgstr ""
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:30
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:25
@@ -11103,11 +11184,11 @@ msgstr "资源"
 msgid "Resume"
 msgstr "简历"
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:162
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:163
 msgid "Save & refetch deleted"
 msgstr "保存并重新获取已删除的项目"
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:161
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:162
 msgid "Save feed"
 msgstr "保存订阅源"
 
@@ -11115,11 +11196,11 @@ msgstr "保存订阅源"
 msgid "Select a feed"
 msgstr "选择一个订阅源"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:303
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:331
 msgid "Select connected page"
 msgstr "选择关联页面"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:335
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:363
 msgid "Select import user"
 msgstr "选择要导入的用户"
 
@@ -11184,11 +11265,11 @@ msgstr "这些链接会添加到每篇导入的文章中。保存源以应用更
 msgid "These defaults apply to imported articles and their dependent media. Leave empty to use the standard copyright defaults."
 msgstr "这些默认设置适用于导入的文章及其关联的媒体文件。若留空，则使用标准的版权默认设置。"
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:180
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:181
 msgid "This deletes all deletable articles and media imported by this feed, including resources shared with other feeds. Protected resources and resources you cannot delete are kept. The feed will be paused."
 msgstr "此操作将删除该订阅源导入的所有可删除的文章和媒体，包括与其他订阅源共享的资源。受保护的资源以及您无法删除的资源将被保留。该订阅源将被暂停。"
 
-#: zotonic_mod_import_feed/src/models/m_import_feed.erl:475
+#: zotonic_mod_import_feed/src/models/m_import_feed.erl:477
 msgid "This feed is paused. Resume it before fetching."
 msgstr "该源已暂停。请在获取数据前将其恢复。"
 
@@ -11196,7 +11277,7 @@ msgstr "该源已暂停。请在获取数据前将其恢复。"
 msgid "This feed is paused. Resume it in its settings before fetching."
 msgstr "该订阅源已暂停。在获取内容前，请先在设置中将其恢复。"
 
-#: zotonic_mod_import_feed/src/models/m_import_feed.erl:477
+#: zotonic_mod_import_feed/src/models/m_import_feed.erl:479
 msgid "This feed is still importing. Pause it and wait for the current import to finish before deleting its content."
 msgstr "该信息流仍在导入中。请先暂停操作，待当前导入完成后，再删除其内容。"
 
@@ -11235,7 +11316,7 @@ msgstr "网站或订阅源网址"
 msgid "WordPress enrichment unavailable; the feed data will be used."
 msgstr "无法使用 WordPress 增强功能；将使用订阅源数据。"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:285
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:313
 msgid "You are not allowed to manage feeds."
 msgstr "您无权管理订阅源。"
 
@@ -11630,7 +11711,7 @@ msgid "Resources with email identity"
 msgstr "具有电子邮件身份的资源"
 
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:158
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:109
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:114
 msgid "Retry"
 msgstr "重试"
 
@@ -11809,7 +11890,7 @@ msgstr "所有使用该语言的收件人"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:29
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:24
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:40
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:45
 msgid "All statuses"
 msgstr "所有状态"
 
@@ -13023,8 +13104,8 @@ msgstr "停止发送？只有尚未排入队列的邮件才能停止发送。已
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:16
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:53
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:81
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:44
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:100
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:49
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:105
 #: zotonic_site_status/priv/templates/_sites.tpl:18
 msgid "Stopped"
 msgstr "停止了"
@@ -15554,10 +15635,6 @@ msgstr "创建"
 msgid "Danger"
 msgstr "危险"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:41
-msgid "Deactivated"
-msgstr "停用"
-
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_page.tpl:12
 msgid "Delete page"
 msgstr "删除页面"
@@ -17374,7 +17451,7 @@ msgstr "Vimeo视频"
 msgid "Youtube Video"
 msgstr "Youtube视频"
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:54
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:56
 msgid "Access was denied while updating this page. Check the subscriber's source website credentials and permission to update the local page."
 msgstr "更新此页面时访问被拒绝。请检查订阅者的源网站凭据以及更新本地页面的权限。"
 
@@ -17398,32 +17475,32 @@ msgstr "自动更新功能已启用。"
 msgid "Automatic updates are stopped."
 msgstr "自动更新已停止。"
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:76
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:78
 msgid "Automatic updates could not be completed. Check the technical details for the reported error."
 msgstr "无法完成自动更新。请查看所报告错误的技术详情。"
 
-#: zotonic_mod_websub/src/mod_websub.erl:245
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:62
+msgid "Choose a known failed hostname or enter an exact hostname, without a scheme, port, or path."
+msgstr ""
+
+#: zotonic_mod_websub/src/mod_websub.erl:285
 msgid "Could not change the automatic update subscription."
 msgstr "无法更改自动更新订阅。"
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:56
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:58
 msgid "Could not contact the remote website. Check its availability and HTTPS certificate."
 msgstr "无法连接到远程网站。请检查该网站的可用性及HTTPS证书。"
 
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:94
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:99
 msgid "Deleted page"
 msgstr "已删除的页面"
 
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:57
-msgid "Enter the exact hostname, without a scheme, port, or path."
-msgstr "请输入精确的主机名，不要包含协议、端口或路径。"
-
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:43
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:101
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:48
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:106
 msgid "Expired"
 msgstr "已过期"
 
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:63
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:68
 msgid "Expired and stopped subscriptions are included. Renewals can temporarily have two active subscriptions. Remote hosts are shown without callback URLs or credentials."
 msgstr "已过期和已停止的订阅均包含在内。续订期间，系统可能会暂时存在两个有效的订阅。远程主机的显示不包含回调 URL 或凭据。"
 
@@ -17431,7 +17508,7 @@ msgstr "已过期和已停止的订阅均包含在内。续订期间，系统可
 msgid "External hostname"
 msgstr "外部主机名"
 
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:74
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:79
 msgid "Last activity"
 msgstr "最近活动"
 
@@ -17439,11 +17516,11 @@ msgstr "最近活动"
 msgid "Last update received:"
 msgstr "收到的最新更新："
 
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:73
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:78
 msgid "Lease expires"
 msgstr "租赁期满"
 
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:70
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:75
 msgid "Local page"
 msgstr "本地页面"
 
@@ -17455,7 +17532,7 @@ msgstr "本地资源 ID"
 msgid "No active subscriptions to this page."
 msgstr "该页面目前没有有效的订阅。"
 
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:121
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:126
 msgid "No subscriptions found."
 msgstr "未找到任何订阅。"
 
@@ -17467,20 +17544,20 @@ msgstr "我们对外部页面的订阅，以及他人对我们页面的订阅。
 msgid "Pages we subscribe to"
 msgstr "我们订阅的页面"
 
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:42
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:102
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:47
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:107
 msgid "Pending confirmation"
 msgstr "待确认"
 
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:71
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:76
 msgid "Remote host"
 msgstr "远程主机"
 
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:108
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:113
 msgid "Retry subscription"
 msgstr "重新订阅"
 
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:60
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:65
 msgid "Select a valid subscription type, resource ID, hostname, status, errors, and page number."
 msgstr "请选择有效的订阅类型、资源 ID、主机名、状态、错误和页码。"
 
@@ -17496,15 +17573,19 @@ msgstr "停止自动更新"
 msgid "Subscribers to our pages"
 msgstr "我们页面的订阅者"
 
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:81
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:86
 msgid "Subscribes to us"
 msgstr "订阅我们的内容"
+
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:44
+msgid "Subscription or unsubscription attempts stopped because the retry time limit was reached. Check the remote website and retry the subscription if needed."
+msgstr ""
 
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:22
 msgid "Subscription type"
 msgstr "订阅类型"
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:60
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:62
 msgid "The callback URL must use a hostname instead of an IP address. Check this website's public URL."
 msgstr "回调 URL 必须使用主机名，而非 IP 地址。请查看该网站的公开 URL。"
 
@@ -17512,51 +17593,51 @@ msgstr "回调 URL 必须使用主机名，而非 IP 地址。请查看该网站
 msgid "The destination could not be resolved or its network address is blocked. Local and private addresses are only allowed for .test hostnames in development."
 msgstr "无法解析该目标，或者其网络地址被屏蔽。仅允许在开发阶段为 .test 域名使用本地和私有地址。"
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:52
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:54
 msgid "The original page address has changed. Import the page again to set up automatic updates."
 msgstr "原始页面地址已更改。请重新导入该页面以设置自动更新。"
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:58
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:60
 msgid "The remote website address is invalid. Check the source and WebSub URLs."
 msgstr "远程网站地址无效。请检查源地址和 WebSub URL。"
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:62
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:64
 msgid "The remote website redirects from HTTPS to HTTP. Use a secure HTTPS destination."
 msgstr "该远程网站会从 HTTPS 重定向到 HTTP。请使用安全的 HTTPS 目标地址。"
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:64
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:66
 msgid "The remote website redirects too many times. Check its redirect configuration."
 msgstr "远程网站重定向次数过多。请检查其重定向配置。"
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:72
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:74
 msgid "The remote website refused access. Check the subscribing user's permissions on that website."
 msgstr "远程网站拒绝了访问请求。请检查该网站上订阅用户的权限。"
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:70
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:72
 msgid "The remote website requires authentication. Check the subscribing user's configured credentials."
 msgstr "远程网站需要身份验证。请检查订阅用户的配置凭据。"
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:66
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:68
 msgid "The remote website returned a redirect without a destination."
 msgstr "远程网站返回了一个没有目标地址的重定向。"
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:68
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:70
 msgid "The remote website returned an invalid redirect destination."
 msgstr "远程网站返回了一个无效的重定向目标。"
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:74
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:76
 msgid "The requested page or WebSub endpoint was not found on the remote website."
 msgstr "在远程网站上未找到所请求的页面或 WebSub 端点。"
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:50
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:52
 msgid "The source page advertises invalid WebSub links. Check its hub and topic URLs."
 msgstr "源页面中包含无效的 WebSub 链接。请检查其集线器和主题的 URL。"
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:48
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:50
 msgid "The source page does not advertise automatic updates via WebSub."
 msgstr "源页面并未宣传通过 WebSub 进行自动更新。"
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:44
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:46
 msgid "The source website did not confirm the subscription in time. Check that it can reach this website's callback URL."
 msgstr "源网站未及时确认订阅。请检查其能否访问本网站的回调网址。"
 
@@ -17572,7 +17653,7 @@ msgstr "源网站不识别此订阅主题。请检查原始页面是否仍然存
 msgid "The source website refused access to this page. The subscriber must be allowed to view it, and the page must be an original on that website."
 msgstr "源网站拒绝访问此页面。必须允许订阅者查看该页面，且该页面必须是该网站上的原创内容。"
 
-#: zotonic_mod_websub/src/filters/filter_websub_error.erl:46
+#: zotonic_mod_websub/src/filters/filter_websub_error.erl:48
 msgid "This page points back to this website. A website cannot subscribe to itself."
 msgstr "该页面指向本网站。一个网站无法订阅自己。"
 
@@ -17588,26 +17669,26 @@ msgstr "查看对该外部页面的订阅"
 msgid "Waiting for automatic updates to be confirmed."
 msgstr "正在等待自动更新的确认。"
 
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:82
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:87
 msgid "We subscribe"
 msgstr "我们订阅"
 
 #: zotonic_mod_websub/priv/templates/_admin_edit_sidebar_websub.tpl:4
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:3
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:7
-#: zotonic_mod_websub/src/mod_websub.erl:217
+#: zotonic_mod_websub/src/mod_websub.erl:257
 msgid "WebSub subscriptions"
 msgstr "WebSub 订阅"
 
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:51
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:56
 msgid "With errors"
 msgstr "含错误"
 
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:52
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:57
 msgid "Without errors"
 msgstr "没有错误"
 
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:131
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:136
 msgid "You are not allowed to view subscriptions."
 msgstr "您无权查看订阅信息。"
 
@@ -17926,10 +18007,6 @@ msgstr "管理此服务器"
 #: zotonic_site_status/priv/templates/_sites.tpl:52
 msgid "Restart the site, all users will be logged off."
 msgstr "重启网站，所有用户将被注销。"
-
-#: zotonic_site_status/priv/templates/_sites.tpl:15
-msgid "Running"
-msgstr "跑步"
 
 #: zotonic_site_status/priv/templates/_menu.tpl:3
 #: zotonic_site_status/priv/templates/status.tpl:3
