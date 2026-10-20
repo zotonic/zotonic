@@ -194,11 +194,15 @@ compile_options() ->
     application:load(zotonic),
     {ok, Sites} = application:get_env(zotonic, user_sites_dir),
     {ok, Modules} = application:get_env(zotonic, user_modules_dir),
+    Outdir = case code:lib_dir(zotonic, ebin) of
+                 {error, _} -> "_build/default/lib/zotonic/ebin";
+                 Dir -> Dir
+             end,
     [{i, "include"},
      {i, "deps/webzmachine/include"},
      {i, Modules},
      {i, Sites},
-     {outdir, "ebin"},
+     {outdir, Outdir},
      {parse_transform, lager_transform},
      nowarn_deprecated_type,
      debug_info] ++ platform_defines().
@@ -255,8 +259,10 @@ opt_fun_stacktrace(Defines) -> Defines.
 
 compile_user_options() ->
     application:load(zotonic),
-    Outdir = application:get_env(zotonic, user_ebin_dir, "ebin"),
-    [ {outdir, Outdir} | compile_options()].
+    case application:get_env(zotonic, user_ebin_dir) of
+        {ok, Dir} -> [ {outdir, Dir} | compile_options() ];
+        undefined -> compile_options()
+    end.
 
 %% @doc For a list of glob patterns, split all patterns which contain
 %% /*/* up in more patterns, so that we can parallelize it even more.
