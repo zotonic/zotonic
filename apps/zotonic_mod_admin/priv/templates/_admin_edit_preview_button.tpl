@@ -1,5 +1,6 @@
 <button type="button" class="btn btn-default admin-edit-preview-open" data-admin-preview="toggle"
         aria-controls="admin-edit-preview" aria-expanded="false"
+        title="{_ Show or hide a live preview beside the editor. _}"
         data-panel-open-label="{_ Open panel _}" data-panel-close-label="{_ Close panel _}">
     <svg width="20" height="16" viewBox="0 0 20 16" aria-hidden="true" focusable="false">
         <rect x="1" y="1" width="18" height="14" rx="2" fill="none" stroke="currentColor"/>

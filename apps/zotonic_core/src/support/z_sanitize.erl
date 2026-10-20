@@ -268,6 +268,7 @@ sanitize_z_media(Data) ->
 sanitize_z_media_arg(<<"id">>, Id) when is_binary(Id) -> #{<<"id">> => z_string:to_name(Id)};
 sanitize_z_media_arg(<<"id">>, Id) when is_integer(Id) -> #{<<"id">> => Id};
 sanitize_z_media_arg(<<"size">>, <<"large">>) -> #{<<"size">> => <<"large">>};
+sanitize_z_media_arg(<<"size">>, <<"xsmall">>) -> #{<<"size">> => <<"xsmall">>};
 sanitize_z_media_arg(<<"size">>, <<"small">>) -> #{<<"size">> => <<"small">>};
 sanitize_z_media_arg(<<"size">>, <<"middle">>) -> #{<<"size">> => <<"middle">>};
 sanitize_z_media_arg(<<"size">>, _) -> #{<<"size">> => <<"medium">>};
@@ -464,4 +465,3 @@ allowlist_res() ->
         <<"^[a-z0-9\\-]+\\.tumblr.com/post/[0-9]+/audio_player_iframe/.*">>,
         <<"cdn.embedly.com/widgets/media.html\\?src=http%3A%2F%2F[a-z0-9-]+\\.ak\\.instagram.com%2F">>
     ].
-

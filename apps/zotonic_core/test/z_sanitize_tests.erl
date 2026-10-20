@@ -57,6 +57,19 @@ zmedia_test() ->
         <<"align">> := <<"block">>
     } = jsxrecord:decode(<<"{", JSON/binary, "}">>).
 
+zmedia_size_roundtrip_test() ->
+    lists:foreach(
+        fun(Size) ->
+            In = <<"<!-- z-media 123 ", (z_json:encode(#{<<"size">> => Size}))/binary, " -->">>,
+            Sanitized = z_sanitize:html(In),
+            <<"<!-- z-media 123 ", Rest/binary>> = Sanitized,
+            [JSON, <<>>] = binary:split(Rest, <<" -->">>),
+            ?assertEqual(#{<<"size">> => Size}, z_json:decode(JSON)),
+            ?assertEqual(Sanitized, z_sanitize:html(Sanitized))
+        end,
+        [<<"xsmall">>, <<"small">>, <<"middle">>, <<"medium">>, <<"large">>]
+    ).
+
 zmedia_class_roundtrip_test() ->
     lists:foreach(
         fun(Options) ->
