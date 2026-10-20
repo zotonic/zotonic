@@ -2349,7 +2349,10 @@ li h3.widget-header {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   z-index: 1;
 }
-.admin-edit-preview .admin-edit-preview-toolbar strong {
+.admin-edit-preview .admin-edit-preview-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   margin-right: auto;
 }
 .admin-edit-preview .admin-edit-preview-resizer {
@@ -2381,7 +2384,12 @@ li h3.widget-header {
   padding: 0 10px;
 }
 .admin-edit-preview .admin-edit-preview-dirty {
-  flex-basis: 100%;
+  padding: 4px 8px;
+  border: 1px solid var(--bs-warning-border-subtle, #e6c76a);
+  border-radius: 3px;
+  background: var(--bs-warning-bg-subtle, #fff3cd);
+  color: var(--bs-warning-text-emphasis, #664d03);
+  font-weight: 600;
 }
 .admin-edit-preview .admin-edit-preview-dirty[hidden] {
   display: none;
