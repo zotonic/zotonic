@@ -38,7 +38,7 @@ Either `block`, `left` or `right`. Default is `block`.
 
 `size`
 
-Choose between `small`, `medium`, `large`. These are used for selecting the mediaclass of the image. Which will be like
+Choose between `xsmall`, `small`, `medium`, `large`. These are used for selecting the mediaclass of the image. Which will be like
 `body-media-large`. The default size is `large`, displayed as a block (see align above).
 
 `crop`
@@ -210,6 +210,7 @@ filter_args([], Acc) ->
 filter_args([{size, Size}|Args], Acc) ->
     SizeName = case Size of
         <<"large">> -> <<"large">>;
+        <<"xsmall">> -> <<"xsmall">>;
         <<"small">> -> <<"small">>;
         <<"medium">> -> <<"medium">>;
         <<"middle">> -> <<"medium">>;
