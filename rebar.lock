@@ -56,7 +56,7 @@
   0},
  {<<"erlware_commons">>,
   {git,"https://github.com/erlware/erlware_commons.git",
-       {ref,"a8b46e077034938fd82f57876103270311e6835b"}},
+       {ref,"182c30a9502b6513ccd61c03c838360ec960aa4a"}},
   0},
  {<<"exif">>,
   {git,"https://github.com/nlfiedler/erlang-exif.git",
