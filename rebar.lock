@@ -96,7 +96,7 @@
   0},
  {<<"jiffy">>,
   {git,"https://github.com/davisp/jiffy.git",
-       {ref,"c942525130ff0271bd318715406f234c0dc9bc5a"}},
+       {ref,"60043d5604564d86244d6fd28c90050b09ee0807"}},
   0},
  {<<"jobs">>,
   {git,"https://github.com/uwiger/jobs.git",
