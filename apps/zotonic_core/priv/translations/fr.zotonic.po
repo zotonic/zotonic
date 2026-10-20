@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-20 12:25\n"
+"PO-Revision-Date: 2026-10-20 14:37\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -5649,15 +5649,15 @@ msgstr "En fonction"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:59
 msgid "Runtime"
-msgstr ""
+msgstr "Durée d'exécution"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:47
 msgid "Search modules"
-msgstr ""
+msgstr "Modules de recherche"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:48
 msgid "Search modules…"
-msgstr ""
+msgstr "Rechercher des modules…"
 
 #: zotonic_mod_admin_modules/src/controllers/controller_admin_module_manager.erl:82
 #: zotonic_mod_search/src/mod_search.erl:201
@@ -5686,7 +5686,7 @@ msgstr "Ce module n'a pas de fonction <tt>manage_schema/2</tt>."
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:67
 msgid "Topic"
-msgstr ""
+msgstr "Sujet"
 
 #: zotonic_mod_admin_modules/src/actions/action_admin_modules_module_toggle.erl:71
 msgid "You are not allowed to activate or deactivate modules."
@@ -5700,7 +5700,7 @@ msgstr "Zotonic est un atelier de développement web modulaire. La plupart des f
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:74
 msgid "modules shown"
-msgstr ""
+msgstr "modules affichés"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:14
 msgid "A predicate denotes traits or aspects of a page and expresses a relationship between two pages.\n"
@@ -8400,7 +8400,7 @@ msgstr "Attribution"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:18
 msgid "Describe the source, collection or archive reference. Keep names and identifiers unchanged when translating."
-msgstr ""
+msgstr "Décrivez la source, la collection ou la référence d'archives. Ne modifiez pas les noms ni les identifiants lors de la traduction."
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:35
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_copyright.tpl:4
@@ -8409,7 +8409,7 @@ msgstr "Licence"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:81
 msgid "Link to the original source record. This link is shared by all languages."
-msgstr ""
+msgstr "Lien vers la fiche source d'origine. Ce lien est commun à toutes les versions linguistiques."
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:69
 msgid "More about licenses:"
@@ -8417,11 +8417,11 @@ msgstr "En savoir plus sur les licences :"
 
 #: zotonic_mod_copyright/priv/templates/_provenance.tpl:6
 msgid "Original source"
-msgstr ""
+msgstr "Source originale"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:16
 msgid "Provenance"
-msgstr ""
+msgstr "Provenance"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:39
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_copyright.tpl:8
@@ -8430,12 +8430,12 @@ msgstr "Domaine public"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:8
 msgid "Rights, attribution and provenance"
-msgstr ""
+msgstr "Droits, mention des sources et provenance"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:78
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:80
 msgid "Source URL"
-msgstr ""
+msgstr "URL source"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:30
 msgid "The license and the attribution of this page."
@@ -11096,7 +11096,7 @@ msgstr "Support de taille moyenne fixé directement"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:142
 msgid "Minimum polling interval (minutes)"
-msgstr ""
+msgstr "Intervalle minimal entre les interrogations (en minutes)"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_log.tpl:20
 msgid "New events appear live at the top. Scroll down to load older events. Logs are kept for 30 days."
@@ -11164,7 +11164,7 @@ msgstr "Les ressources protégées et celles que vous ne pouvez pas supprimer se
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:144
 msgid "Publisher refresh hints and retries after failures can extend this interval. Successful fetches reset failure backoff."
-msgstr ""
+msgstr "Les suggestions de rafraîchissement de l'éditeur et les nouvelles tentatives après des échecs peuvent prolonger cet intervalle. Les récupérations réussies réinitialisent le délai de repli en cas d'échec."
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:30
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:25
@@ -17481,7 +17481,7 @@ msgstr "Les mises à jour automatiques n'ont pas pu être menées à bien. Consu
 
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:62
 msgid "Choose a known failed hostname or enter an exact hostname, without a scheme, port, or path."
-msgstr ""
+msgstr "Choisissez un nom d'hôte connu pour être hors service ou saisissez un nom d'hôte exact, sans schéma, port ni chemin d'accès."
 
 #: zotonic_mod_websub/src/mod_websub.erl:285
 msgid "Could not change the automatic update subscription."
@@ -17579,7 +17579,7 @@ msgstr "Abonnez-vous à notre chaîne"
 
 #: zotonic_mod_websub/src/filters/filter_websub_error.erl:44
 msgid "Subscription or unsubscription attempts stopped because the retry time limit was reached. Check the remote website and retry the subscription if needed."
-msgstr ""
+msgstr "Les tentatives d'abonnement ou de désabonnement ont été interrompues car le délai de réessai a été atteint. Vérifiez le site Web distant et réessayez de vous abonner si nécessaire."
 
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:22
 msgid "Subscription type"
