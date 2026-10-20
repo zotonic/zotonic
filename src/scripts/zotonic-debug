@@ -20,13 +20,22 @@
 
 . $ZOTONIC_SCRIPTS/helpers/zotonic_setup
 
+echo "Starting zotonic in debug mode"
+echo $ZOTONIC
+
 # Make sure Zotonic is built
-if [ ! -e "$ZOTONIC/ebin/zotonic.app" ]; then
+if [ ! -e "$ZOTONIC/_build/default/lib/zotonic/ebin/zotonic.app" ]; then
     echo "Building Zotonic for the first time."
     $MAKE
 fi
 
+echo "Compiled"
+
+echo $ZOTONIC_CALL
+
 require_zotonic_not_running
+
+echo "Good, zotonic is not running"
 
 cd $ZOTONIC
 
