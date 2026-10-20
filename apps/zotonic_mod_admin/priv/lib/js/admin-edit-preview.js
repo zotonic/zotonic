@@ -20,6 +20,15 @@
         let open = false;
         let interacted = false;
 
+        function updateDirty() {
+            panel.querySelector("[data-admin-preview-dirty]").hidden =
+                !document.querySelector('#rscform[data-formdirty]');
+        }
+
+        new MutationObserver(updateDirty).observe(document.body, {
+            subtree: true, attributes: true, attributeFilter: ["data-formdirty"]
+        });
+
         function updateLanguage() {
             const tab = document.querySelector(
                 '#translation-tabs .language-tabs li.active[lang], #rscform .language-tabs li.active[lang]'
@@ -36,6 +45,7 @@
         function refresh() {
             clearTimeout(timer);
             updateLanguage();
+            updateDirty();
             if (open && context.id) {
                 // Coalesce resource, medium and edge events from a single edit.
                 timer = setTimeout(() => z_event("admin-preview-resolve"), 250);
@@ -63,6 +73,11 @@
             open = value;
             panel.hidden = !open;
             document.body.classList.toggle("admin-preview-open", open);
+            document.querySelectorAll('[data-admin-preview="toggle"]').forEach(button => {
+                button.setAttribute("aria-expanded", String(open));
+                button.querySelector("[data-admin-preview-label]").textContent =
+                    open ? button.dataset.panelCloseLabel : button.dataset.panelOpenLabel;
+            });
             subscribe();
             if (open) {
                 refresh();
@@ -134,13 +149,8 @@
             if (!button) return;
             interacted = true;
             switch (button.dataset.adminPreview) {
-                case "open":
-                    setOpen(true);
-                    // Every click saves, including when the view is already open.
-                    // Use the existing save button for editor sync and form validation.
-                    document.querySelector(
-                        '#rscform #save_stay:not(:disabled), #rscform #save_stay_float:not(:disabled)'
-                    )?.click();
+                case "toggle":
+                    setOpen(!open);
                     break;
                 case "close": setOpen(false); break;
                 case "refresh": refresh(); break;
