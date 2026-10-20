@@ -53,6 +53,8 @@
         &:empty { display: none; }
     }
     .admin-edit-preview-status { padding: 0 10px; }
+    .admin-edit-preview-dirty { flex-basis: 100%; }
+    .admin-edit-preview-dirty[hidden] { display: none; }
     iframe { flex: 1; width: 100%; min-height: 0; border: 0; background: #fff; }
 }
 
@@ -78,7 +80,7 @@ body.admin-preview-resizing {
     .admin-edit-preview-resizer { background: var(--bs-primary, #337ab7); }
 }
 
-// Show the destination panel beside the save-and-open action.
+// Show the destination panel beside the open/close action.
 html body .btn.admin-edit-preview-open {
     display: inline-flex;
     align-items: center;
@@ -86,3 +88,8 @@ html body .btn.admin-edit-preview-open {
 
     svg { flex-shrink: 0; }
 }
+
+// Separate the panel toggle from the save actions in the full admin only.
+.admin-navbar-fixed-save .admin-edit-preview-open { margin-left: 20px; }
+
+#sidebar-publish-page .admin-edit-preview-open { margin-right: 6px; }

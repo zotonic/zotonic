@@ -86,14 +86,6 @@
 				 %}
 
                 {% include "_admin_edit_preview_button.tpl" %}
-
-				{% if id.is_temporary %}
-					<a href="{% url mx_resource_cleanup id=id %}" class="btn">{_ Cancel _}</a>
-				{% elseif not tree_id %}
-					<a href="{{ id.page_url }}" class="btn">{_ Cancel _}</a>
-				{% else %}
-					{% button class="btn pull-right" text=_"Cancel" action={redirect back} tag="a" %}
-				{% endif %}
 	    	</div>
 		</div>
 	</div>

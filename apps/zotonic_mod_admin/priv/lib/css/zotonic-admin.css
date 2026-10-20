@@ -2380,6 +2380,12 @@ li h3.widget-header {
 .admin-edit-preview .admin-edit-preview-status {
   padding: 0 10px;
 }
+.admin-edit-preview .admin-edit-preview-dirty {
+  flex-basis: 100%;
+}
+.admin-edit-preview .admin-edit-preview-dirty[hidden] {
+  display: none;
+}
 .admin-edit-preview iframe {
   flex: 1;
   width: 100%;
@@ -2427,6 +2433,14 @@ html body .btn.admin-edit-preview-open {
 }
 html body .btn.admin-edit-preview-open svg {
   flex-shrink: 0;
+}
+
+.admin-navbar-fixed-save .admin-edit-preview-open {
+  margin-left: 20px;
+}
+
+#sidebar-publish-page .admin-edit-preview-open {
+  margin-right: 6px;
 }
 
 html body.admin-frontend-editor {

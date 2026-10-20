@@ -35,7 +35,7 @@
             id=id
         }
     %}
-    <form id="rscform" method="post" action="postback" class="form">
+    <form id="rscform" method="post" action="postback" class="form do_formdirty">
     	<input type="hidden" name="id" value="{{ id }}" />
         {% include "_admin_edit_version.tpl" id=id %}
 
