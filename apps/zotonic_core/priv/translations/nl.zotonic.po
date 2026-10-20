@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-20 16:43\n"
+"PO-Revision-Date: 2026-10-20 17:50\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -3764,7 +3764,7 @@ msgstr "Bekijk verwijzende pagina's"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:81
 msgid "View as (new tab)"
-msgstr ""
+msgstr "Weergeven als (nieuw tabblad)"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:77
 msgid "View connection graph"
@@ -5655,7 +5655,7 @@ msgstr "Actief"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:59
 msgid "Runtime"
-msgstr "Looptijd"
+msgstr "Runtime"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:47
 msgid "Search modules"
@@ -9309,11 +9309,11 @@ msgstr "De voorkeurseditor is niet beschikbaar of vereist een bestaande editorse
 
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:78
 msgid "These templates have <tt>{extends}</tt> or <tt>{overrules}</tt> statements that are referring to a missing template."
-msgstr "Deze sjablonen hebben <tt>{extends}</tt> of <tt>{overrules}</tt> uitspraken die verwijzen naar een ontbrekend sjabloon."
+msgstr "Deze sjablonen hebben <tt>{extends}</tt> of <tt>{overrules}</tt> statements die verwijzen naar een ontbrekend sjabloon."
 
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:64
 msgid "These templates have <tt>{optional}</tt> statements that are referring to missing templates."
-msgstr "Deze sjablonen bevatten <tt>{optional}</tt> uitspraken die verwijzen naar ontbrekende sjablonen."
+msgstr "Deze sjablonen bevatten <tt>{optional}</tt> statements die verwijzen naar ontbrekende sjablonen."
 
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:54
 msgid "These templates have non optional <tt>{include}</tt> statements that are referring to missing templates."
@@ -9513,7 +9513,7 @@ msgstr "Editor versie"
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:72
 #: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:28
 msgid "Extra small"
-msgstr ""
+msgstr "Extra klein"
 
 #: zotonic_mod_editor_tinymce/priv/templates/_editor.tpl:19
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:13
@@ -14662,7 +14662,7 @@ msgstr "Google Tag Manager-ID"
 
 #: zotonic_mod_seo/priv/templates/admin_seo.tpl:9
 msgid "Here you find settings to optimize the indexing of your site by search engines."
-msgstr "Hier vind je instellingen voor het optimaliseren van het indexeren van je site door zoekmachines."
+msgstr "Instellingen om de indexering van een site door zoekmachines te optimaliseren."
 
 #: zotonic_mod_seo/priv/templates/admin_seo.tpl:101
 msgid "I accept the security risk of adding custom code in Google Tag Manager"
