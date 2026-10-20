@@ -87,7 +87,7 @@
 -export([json_encode/1, json_decode/1]).
 
 -include_lib("zotonic.hrl").
--include_lib("deps/epgsql/include/epgsql.hrl").
+-include_lib("epgsql/include/epgsql.hrl").
 
 -compile([{parse_transform, lager_transform}]).
 
