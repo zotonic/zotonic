@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-20 12:25\n"
+"PO-Revision-Date: 2026-10-20 14:38\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -5649,15 +5649,15 @@ msgstr "跑步"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:59
 msgid "Runtime"
-msgstr ""
+msgstr "執行時間"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:47
 msgid "Search modules"
-msgstr ""
+msgstr "搜尋模組"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:48
 msgid "Search modules…"
-msgstr ""
+msgstr "搜尋模組…"
 
 #: zotonic_mod_admin_modules/src/controllers/controller_admin_module_manager.erl:82
 #: zotonic_mod_search/src/mod_search.erl:201
@@ -5686,7 +5686,7 @@ msgstr "該模組沒有 <tt>manage_schema/2</tt> 函數。"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:67
 msgid "Topic"
-msgstr ""
+msgstr "主題"
 
 #: zotonic_mod_admin_modules/src/actions/action_admin_modules_module_toggle.erl:71
 msgid "You are not allowed to activate or deactivate modules."
@@ -5700,7 +5700,7 @@ msgstr "Zotonic是一个模块化的网络开发框架。大部分功能都封�
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:74
 msgid "modules shown"
-msgstr ""
+msgstr "顯示的模組"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:14
 msgid "A predicate denotes traits or aspects of a page and expresses a relationship between two pages.\n"
@@ -8400,7 +8400,7 @@ msgstr "歸因"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:18
 msgid "Describe the source, collection or archive reference. Keep names and identifiers unchanged when translating."
-msgstr ""
+msgstr "請說明來源、收藏或檔案館的參考資料。翻譯時請保留名稱及識別碼不變。"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:35
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_copyright.tpl:4
@@ -8409,7 +8409,7 @@ msgstr "執照"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:81
 msgid "Link to the original source record. This link is shared by all languages."
-msgstr ""
+msgstr "原始來源記錄的連結。此連結適用於所有語言版本。"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:69
 msgid "More about licenses:"
@@ -8417,11 +8417,11 @@ msgstr "有關許可證的更多資訊："
 
 #: zotonic_mod_copyright/priv/templates/_provenance.tpl:6
 msgid "Original source"
-msgstr ""
+msgstr "原始來源"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:16
 msgid "Provenance"
-msgstr ""
+msgstr "來源"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:39
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_copyright.tpl:8
@@ -8430,12 +8430,12 @@ msgstr "公共區域"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:8
 msgid "Rights, attribution and provenance"
-msgstr ""
+msgstr "權利、署名與來源"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:78
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:80
 msgid "Source URL"
-msgstr ""
+msgstr "來源網址"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:30
 msgid "The license and the attribution of this page."
@@ -11096,7 +11096,7 @@ msgstr "直接附上 Medium 連結"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:142
 msgid "Minimum polling interval (minutes)"
-msgstr ""
+msgstr "最小輪詢間隔（分鐘）"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_log.tpl:20
 msgid "New events appear live at the top. Scroll down to load older events. Logs are kept for 30 days."
@@ -11164,7 +11164,7 @@ msgstr "受保護的資源以及您無法刪除的資源將會保留。這包括
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:144
 msgid "Publisher refresh hints and retries after failures can extend this interval. Successful fetches reset failure backoff."
-msgstr ""
+msgstr "發佈者的刷新提示以及失敗後的重試可能會延長此間隔。成功擷取資料會重置失敗回退時間。"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:30
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:25
@@ -17481,7 +17481,7 @@ msgstr "無法完成自動更新。請查看所報告錯誤的技術詳細資訊
 
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:62
 msgid "Choose a known failed hostname or enter an exact hostname, without a scheme, port, or path."
-msgstr ""
+msgstr "請選擇一個已知無法連線的主機名稱，或直接輸入精確的主機名稱（請勿包含方案、埠號或路徑）。"
 
 #: zotonic_mod_websub/src/mod_websub.erl:285
 msgid "Could not change the automatic update subscription."
@@ -17579,7 +17579,7 @@ msgstr "訂閱我們的頻道"
 
 #: zotonic_mod_websub/src/filters/filter_websub_error.erl:44
 msgid "Subscription or unsubscription attempts stopped because the retry time limit was reached. Check the remote website and retry the subscription if needed."
-msgstr ""
+msgstr "由於已達到重試時間限制，訂閱或取消訂閱的嘗試已停止。請檢查遠端網站，並在必要時重新嘗試訂閱。"
 
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:22
 msgid "Subscription type"
