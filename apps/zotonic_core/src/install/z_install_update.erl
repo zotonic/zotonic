@@ -280,6 +280,17 @@ get_column_type(C, Table, Column, Database, Schema) ->
               and column_name = $4", [Database, Schema, Table, Column]),
     ColumnType.
 
+get_character_maximum_length(C, Table, Column, Database, Schema) ->
+    {ok, _, [{Length}]} = epgsql:equery(C, "
+        select character_maximum_length
+        from information_schema.columns
+        where table_catalog = $1
+        and table_schema = $2
+        and table_name = $3
+        and column_name = $4",
+        [Database, Schema, Table, Column]),
+    Length.
+
 is_column_nullable(C, Table, Column, Database, Schema) ->
     {ok, _, [{IsNullable}]} = epgsql:equery(C, "
             select is_nullable
@@ -330,6 +341,9 @@ upgrade(C, Database, Schema) ->
 
     % 0.22.0
     ok = add_edge_log_details(C, Database, Schema),
+
+    % 0.27.0
+    ok = extend_pivot_task_queue_sizes(C, Database, Schema),
 
     % 0.82
     ok = check_category_id_key(C, Database, Schema),
@@ -447,17 +461,10 @@ drop_visitor(C, Database, Schema) ->
 
 
 extent_mime(C, Database, Schema) ->
-    {ok, _, [{Length}]} = epgsql:equery(C, "
-            select character_maximum_length
-                                       from information_schema.columns
-                                       where table_catalog = $1
-                                       and table_schema = $2
-                                       and table_name = $3
-                                       and column_name = $4", [Database, Schema, "medium", "mime"]),
-    case Length < 128 of
-        true ->
+    case get_character_maximum_length(C, "medium", "mime", Database, Schema) of
+        Length when Length < 128 ->
             {ok, [], []} = epgsql:squery(C, "alter table medium alter column mime type character varying(128)");
-        false ->
+        _ ->
             nop
     end,
     ok.
@@ -694,6 +701,27 @@ add_edge_log_details(C, Database, Schema) ->
             {ok, [], []} = epgsql:squery(C, z_install:edge_log_table()),
             ok
     end.
+
+extend_pivot_task_queue_sizes(C, Database, Schema) ->
+    case get_character_maximum_length(C, "pivot_task_queue", "module", Database, Schema) of
+        LengthMod when LengthMod < 80 ->
+            {ok, [], []} = epgsql:squery(
+                C,
+                "ALTER TABLE pivot_task_queue ALTER COLUMN module TYPE character varying(80)"
+            );
+        _ ->
+            nop
+    end,
+    case get_character_maximum_length(C, "pivot_task_queue", "function", Database, Schema) of
+        LengthFun when LengthFun < 64 ->
+            {ok, [], []} = epgsql:squery(
+                C,
+                "ALTER TABLE pivot_task_queue ALTER COLUMN function TYPE character varying(64)"
+            );
+        _ ->
+            nop
+    end,
+    ok.
 
 set_default_visible_for(C, Database, Schema) ->
     {ok, _, [{Default}]} = epgsql:equery(C, "
