@@ -2,7 +2,13 @@
 (function() {
     "use strict";
 
-    cotonic.ready.then(function() {
+    // This library is included with the panel, before the admin's footer scripts.
+    // Cotonic can already be ready while zotonic-wired and jQuery are still loading.
+    const domReady = document.readyState === "loading"
+        ? new Promise(resolve => document.addEventListener("DOMContentLoaded", resolve, { once: true }))
+        : Promise.resolve();
+
+    Promise.all([cotonic.ready, domReady]).then(function() {
         const panel = document.getElementById("admin-edit-preview");
         if (!panel || panel.dataset.initialized) return;
         panel.dataset.initialized = "true";
