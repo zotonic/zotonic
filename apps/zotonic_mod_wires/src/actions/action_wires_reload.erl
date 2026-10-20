@@ -1,10 +1,9 @@
-
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Refresh the current page.
 %% @end
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -33,8 +32,19 @@ Example:
 ```
 
 Clicking on the button will reload the page.
+The page is reloaded by calling the Javascript function `z_reload()`.
+You can also pass optional arguments to the function.
+
+Optional arguments:
+
+z_language: The language to reload the page in. If omitted or empty, the current language is preserved. An existing `z.lang` cookie is updated only in the top-level window.
+z_rewrite_url: When changing language, set this to true to put the language in the URL path. Otherwise the language is added as a `z_language` query parameter.
+
+Other arguments are added as query variables, replacing existing values with the same name.
+For example, passing `foo=bar` on `/current/path` reloads `/current/path?foo=bar`.
+Unrelated existing query parameters are preserved.
 ").
--include_lib("zotonic_core/include/zotonic.hrl").
+
 -export([render_action/4]).
 
 render_action(_TriggerId, _TargetId, Args, Context) ->

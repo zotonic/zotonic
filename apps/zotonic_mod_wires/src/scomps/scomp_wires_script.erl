@@ -25,14 +25,12 @@
 This tag is the placeholder where all generated JavaScript scripts will be output on the page.
 
 Zotonic generates JavaScript for the actions and other template logic. This script needs to be added to the page. The
-`{% script
-%}` scomp designates the place where the `<script>` element with all the generated javascript can be placed.
+`{% script %}` scomp designates the place where the `<script>` element with all the generated javascript can be placed.
 
 Normally the `{% script %}` scomp is placed at the end of the page, just above the `</body>`.
 
 Note that all JavaScripts generated after the `{% script %}` scomp will not be included in the generated page. Only a
-single `{% script
-%}` scomp is allowed on any page.
+single `{% script %}` scomp is allowed on any page.
 
 Example:
 
@@ -48,16 +46,23 @@ This will generate something similar to:
 
 
 ```django
-<script type='text/javascript'>
-$(function() {
-z_pageid=\"MouKz4PgrcROM5efU8iL\";
-z_postback_loop();
+    <script type='text/javascript' nonce='u7gCg9uBGney0dE9aIVj'>
+        z_script_nonce = 'u7gCg9uBGney0dE9aIVj';
+        window.zotonicPageInit = function() {
+            $(\"#uHHK6ZOTWZUI-l-en\").on('click', function(event) {
+                z_queue_postback('uHHK6ZOTWZUI-l-en', 'MYbEYIfXkdu8RbVjQf...', typeof (zEvtArgs) != 'undefined' ? zEvtArgs : undefined);
+                return z_opt_cancel(this);
+            });
 
-$('#vtretq').bind('click', function(event) { window.location = \"/admin/edit/647\"; return z_opt_cancel(this); } );
-z_init_postback_forms();
-z_default_form_postback = \"bVcYISt9JOG/AQZkP9SOZmc//GqDaAVrAAZzdWJtaXRkAAl1bmRlZmluZWRkAAl1bmRlZmluZWRqZAANcmVzb3VyY2VfcGFnZQ==\";
-});
-</script>
+            z_language = \"nl\";
+            z_languages = [\"nl\", \"en\"];
+            z_init_postback_forms();
+            z_default_form_postback = \"ipk2kRZLB9eXvhLjMApFp...\";
+            if (typeof zotonic.wiresReadyResolve == 'function') {
+                zotonic.wiresReadyResolve();
+            }
+        }
+    </script>
   </body>
 </html>
 ```

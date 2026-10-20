@@ -912,10 +912,8 @@ function z_progress(id, value) {
 function z_reload(args) {
   let page = $('#logon_form input[name="page"]'),
       qs = ensure_name_value(args),
-      rewriteUrl,
       newLanguage,
       href,
-      re,
       pathname,
       parts;
 
@@ -930,47 +928,46 @@ function z_reload(args) {
   }
 
   newLanguage = args.z_language;
+  const isLanguageChange = typeof newLanguage === "string" && newLanguage !== "";
+  const isRewriteUrl = Boolean(args.z_rewrite_url);
 
-  if (typeof newLanguage === "string") {
-    // Change the language cookie when it is set.
-    for (const cookie of document.cookie.split(";")) {
-      const kv = cookie.trim().split("=");
-      if (window.self === window.top && kv[0] === "z.lang" && kv[1] !== newLanguage) {
-        const expirationDate = new Date();
-        expirationDate.setTime(
-          expirationDate.getTime() + 365 * 24 * 60 * 60 * 1000,
-        );
-        const expires = "expires=" + expirationDate.toUTCString();
-        document.cookie = `z.lang=${newLanguage};${expires};path=/`;
+  if (isLanguageChange) {
+    if (window.self === window.top) {
+      // For the top window, change the language cookie when it is set.
+      for (const cookie of document.cookie.split(";")) {
+        const kv = cookie.trim().split("=");
+        if (kv[0] === "z.lang" && kv[1] !== newLanguage) {
+          const expirationDate = new Date();
+          expirationDate.setTime(
+            expirationDate.getTime() + 365 * 24 * 60 * 60 * 1000,
+          );
+          const expires = "expires=" + expirationDate.toUTCString();
+          document.cookie = `z.lang=${newLanguage};${expires};path=/`;
+        }
       }
     }
 
     // Add or remove language from URL:
     pathname = window.location.pathname.substring(1);
-    if (z_language) {
-      // Remove current language
-      re = new RegExp("^" + z_language);
-      pathname = pathname.replace(re, "");
-    }
 
     // Get path parts
     parts = pathname.split("/").filter(function (p) {
       return p !== "";
     });
 
-    rewriteUrl = Boolean(args["z_rewrite_url"]);
-    if (rewriteUrl) {
+    if (z_language && parts[0] == z_language) {
+      // Remove current language
+      parts.shift();
+    }
+    const isHome = parts.length === 0;
+    if (isRewriteUrl) {
       // Add language to start
       parts.unshift(newLanguage);
     }
 
     href =
-      window.location.protocol +
-      "//" +
-      window.location.host +
-      "/" +
-      parts.join("/") +
-      (rewriteUrl && (pathname === "" || pathname === "/") ? "/" : "");
+      window.location.protocol + "//" + window.location.host + "/" +
+      parts.join("/") + (isRewriteUrl && isHome ? "/" : "");
   } else {
     href = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
   }
@@ -980,10 +977,17 @@ function z_reload(args) {
   // another window (for example the editor hosting this preview).
   const url = new URL(href);
   url.search = window.location.search;
-  url.searchParams.delete("z_language");
   url.searchParams.delete("z_rewrite_url");
-  if (typeof newLanguage === "string" && !rewriteUrl) {
-    url.searchParams.set("z_language", newLanguage);
+  for (const { name, value } of qs) {
+    if (name !== "z_language" && name !== "z_rewrite_url") {
+      url.searchParams.set(name, value);
+    }
+  }
+  if (isLanguageChange) {
+    url.searchParams.delete("z_language");
+    if (!isRewriteUrl) {
+      url.searchParams.set("z_language", newLanguage);
+    }
   }
   window.location.href = url.href;
 }
