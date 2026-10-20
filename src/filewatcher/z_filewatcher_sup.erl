@@ -83,7 +83,7 @@ watch_dirs() ->
     ZotonicDirs = [
         filename:join(os:getenv("ZOTONIC"), "src"),
         filename:join(os:getenv("ZOTONIC"), "modules"),
-        filename:join(os:getenv("ZOTONIC"), "ebin"),
+        filename:join([os:getenv("ZOTONIC"), "_build", "default", "lib", "zotonic", "ebin"]),
 
         filename:join(os:getenv("ZOTONIC"), "priv/sites"),
         filename:join(os:getenv("ZOTONIC"), "priv/modules"),
