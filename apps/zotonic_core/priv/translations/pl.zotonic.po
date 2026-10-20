@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-20 16:43\n"
+"PO-Revision-Date: 2026-10-20 17:50\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "MIME-Version: 1.0\n"
@@ -3760,7 +3760,7 @@ msgstr "Wyświetl wszystkie strony odsyłające"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:81
 msgid "View as (new tab)"
-msgstr ""
+msgstr "Wyświetl jako (nowa karta)"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:77
 msgid "View connection graph"
@@ -9511,7 +9511,7 @@ msgstr "Wersja edytora"
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:72
 #: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:28
 msgid "Extra small"
-msgstr ""
+msgstr "Bardzo mały"
 
 #: zotonic_mod_editor_tinymce/priv/templates/_editor.tpl:19
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:13
