@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-20 12:25\n"
+"PO-Revision-Date: 2026-10-20 14:38\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -5653,15 +5653,15 @@ msgstr "Actief"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:59
 msgid "Runtime"
-msgstr ""
+msgstr "Looptijd"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:47
 msgid "Search modules"
-msgstr ""
+msgstr "Zoekmodules"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:48
 msgid "Search modules…"
-msgstr ""
+msgstr "Zoekmodules…"
 
 #: zotonic_mod_admin_modules/src/controllers/controller_admin_module_manager.erl:82
 #: zotonic_mod_search/src/mod_search.erl:201
@@ -5690,7 +5690,7 @@ msgstr "Deze module heeft geen <tt>manage_schema/2</tt> functie."
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:67
 msgid "Topic"
-msgstr ""
+msgstr "Onderwerp"
 
 #: zotonic_mod_admin_modules/src/actions/action_admin_modules_module_toggle.erl:71
 msgid "You are not allowed to activate or deactivate modules."
@@ -5703,7 +5703,7 @@ msgstr "Zotonic is een modulair web development framework. De meeste functionali
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:74
 msgid "modules shown"
-msgstr ""
+msgstr "weergegeven modules"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:14
 msgid "A predicate denotes traits or aspects of a page and expresses a relationship between two pages.\n"
@@ -8402,7 +8402,7 @@ msgstr "Naamsvermelding"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:18
 msgid "Describe the source, collection or archive reference. Keep names and identifiers unchanged when translating."
-msgstr ""
+msgstr "Geef de bron, collectie of archiefverwijzing aan. Laat namen en identificatiegegevens bij het vertalen ongewijzigd."
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:35
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_copyright.tpl:4
@@ -8411,7 +8411,7 @@ msgstr "Licentie"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:81
 msgid "Link to the original source record. This link is shared by all languages."
-msgstr ""
+msgstr "Link naar het oorspronkelijke bronrecord. Deze link geldt voor alle talen."
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:69
 msgid "More about licenses:"
@@ -8419,11 +8419,11 @@ msgstr "Meer over licenties:"
 
 #: zotonic_mod_copyright/priv/templates/_provenance.tpl:6
 msgid "Original source"
-msgstr ""
+msgstr "Oorspronkelijke bron"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:16
 msgid "Provenance"
-msgstr ""
+msgstr "Herkomst"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:39
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_copyright.tpl:8
@@ -8432,12 +8432,12 @@ msgstr "Publiek Domein"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:8
 msgid "Rights, attribution and provenance"
-msgstr ""
+msgstr "Rechten, bronvermelding en herkomst"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:78
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:80
 msgid "Source URL"
-msgstr ""
+msgstr "Bron-URL"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:30
 msgid "The license and the attribution of this page."
@@ -11098,7 +11098,7 @@ msgstr "Medium direct bevestigd"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:142
 msgid "Minimum polling interval (minutes)"
-msgstr ""
+msgstr "Minimale peilinginterval (minuten)"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_log.tpl:20
 msgid "New events appear live at the top. Scroll down to load older events. Logs are kept for 30 days."
@@ -11166,7 +11166,7 @@ msgstr "Beveiligde bronnen en bronnen die je niet kunt verwijderen, blijven beho
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:144
 msgid "Publisher refresh hints and retries after failures can extend this interval. Successful fetches reset failure backoff."
-msgstr ""
+msgstr "Tips voor het vernieuwen van de uitgever en herhalingspogingen na mislukkingen kunnen dit interval verlengen. Bij succesvolle opvragingen wordt de wachttijd na een mislukking gereset."
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:30
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:25
@@ -17484,7 +17484,7 @@ msgstr "De automatische updates konden niet worden voltooid. Raadpleeg de techni
 
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:62
 msgid "Choose a known failed hostname or enter an exact hostname, without a scheme, port, or path."
-msgstr ""
+msgstr "Kies een hostnaam waarvan bekend is dat deze niet werkt, of voer een exacte hostnaam in, zonder schema, poort of pad."
 
 #: zotonic_mod_websub/src/mod_websub.erl:285
 msgid "Could not change the automatic update subscription."
@@ -17582,7 +17582,7 @@ msgstr "Abonneer je op ons"
 
 #: zotonic_mod_websub/src/filters/filter_websub_error.erl:44
 msgid "Subscription or unsubscription attempts stopped because the retry time limit was reached. Check the remote website and retry the subscription if needed."
-msgstr ""
+msgstr "Pogingen om je aan te melden of af te melden zijn gestopt omdat de tijdslimiet voor herhalingspogingen is bereikt. Controleer de externe website en probeer je indien nodig opnieuw aan te melden."
 
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:22
 msgid "Subscription type"
