@@ -68,6 +68,12 @@
                               <div class="controls">
                                    <div class="radio">
                                         <label>
+                                             <input type="radio" name="size" {% if options.size == 'xsmall' %}checked{% endif %} value="xsmall" id="a-xsmall">
+                                             {_ Extra small _}
+                                        </label>
+                                   </div>
+                                   <div class="radio">
+                                        <label>
                                              <input type="radio" name="size" {% if options.size == 'small' %}checked{% endif %} value="small" id="a-small">
                                              {_ Small _}
                                         </label>
