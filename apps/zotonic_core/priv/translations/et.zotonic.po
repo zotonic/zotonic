@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-20 12:26\n"
+"PO-Revision-Date: 2026-10-20 14:38\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -5649,15 +5649,15 @@ msgstr "Jooksmine"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:59
 msgid "Runtime"
-msgstr ""
+msgstr "Kestus"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:47
 msgid "Search modules"
-msgstr ""
+msgstr "Otsingumoodulid"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:48
 msgid "Search modules…"
-msgstr ""
+msgstr "Otsingumoodulid…"
 
 #: zotonic_mod_admin_modules/src/controllers/controller_admin_module_manager.erl:82
 #: zotonic_mod_search/src/mod_search.erl:201
@@ -5686,7 +5686,7 @@ msgstr "Sellel moodulil ei ole funktsiooni <tt>manage_schema/2</tt>."
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:67
 msgid "Topic"
-msgstr ""
+msgstr "Teema"
 
 #: zotonic_mod_admin_modules/src/actions/action_admin_modules_module_toggle.erl:71
 msgid "You are not allowed to activate or deactivate modules."
@@ -5700,7 +5700,7 @@ msgstr "Zotonic on modulaarne veebiarenduse raamistik. Enamik funktsioone on kap
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:74
 msgid "modules shown"
-msgstr ""
+msgstr "näidatud moodulid"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:14
 msgid "A predicate denotes traits or aspects of a page and expresses a relationship between two pages.\n"
@@ -8400,7 +8400,7 @@ msgstr "Omistamine"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:18
 msgid "Describe the source, collection or archive reference. Keep names and identifiers unchanged when translating."
-msgstr ""
+msgstr "Kirjeldage allikat, kogumit või arhiivi viidet. Jätke nimed ja identifikaatorid tõlkimisel muutmata."
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:35
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_copyright.tpl:4
@@ -8409,7 +8409,7 @@ msgstr "Litsents"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:81
 msgid "Link to the original source record. This link is shared by all languages."
-msgstr ""
+msgstr "Link algse allika kirje juurde. See link on ühine kõigile keeltele."
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:69
 msgid "More about licenses:"
@@ -8417,11 +8417,11 @@ msgstr "Lisateavet litsentside kohta:"
 
 #: zotonic_mod_copyright/priv/templates/_provenance.tpl:6
 msgid "Original source"
-msgstr ""
+msgstr "Algne allikas"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:16
 msgid "Provenance"
-msgstr ""
+msgstr "Päritolu"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:39
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_copyright.tpl:8
@@ -8430,12 +8430,12 @@ msgstr "Avalik domeen"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:8
 msgid "Rights, attribution and provenance"
-msgstr ""
+msgstr "Õigused, autori märkimine ja päritolu"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:78
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:80
 msgid "Source URL"
-msgstr ""
+msgstr "Allika URL"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:30
 msgid "The license and the attribution of this page."
@@ -11096,7 +11096,7 @@ msgstr "Keskmine on kinnitatud otse"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:142
 msgid "Minimum polling interval (minutes)"
-msgstr ""
+msgstr "Minimaalne küsitlusintervall (minutites)"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_log.tpl:20
 msgid "New events appear live at the top. Scroll down to load older events. Logs are kept for 30 days."
@@ -11164,7 +11164,7 @@ msgstr "Kaitstud ressursid ja ressursid, mida ei saa kustutada, jäävad alles. 
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:144
 msgid "Publisher refresh hints and retries after failures can extend this interval. Successful fetches reset failure backoff."
-msgstr ""
+msgstr "Väljaandja värskendamissoovitused ja uuesti proovimine pärast ebaõnnestumisi võivad seda ajavahemikku pikendada. Edukad andmete hankimised nullivad ebaõnnestumiste tagasilükkamise ajavahemiku."
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:30
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:25
@@ -17481,7 +17481,7 @@ msgstr "Automaatseid värskendusi ei õnnestunud lõpule viia. Kontrollige teata
 
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:62
 msgid "Choose a known failed hostname or enter an exact hostname, without a scheme, port, or path."
-msgstr ""
+msgstr "Vali teadaolevalt mittetöötav hostinimi või sisesta täpne hostinimi, jättes välja skeemi, pordi ja tee."
 
 #: zotonic_mod_websub/src/mod_websub.erl:285
 msgid "Could not change the automatic update subscription."
@@ -17579,7 +17579,7 @@ msgstr "Jälgi meid"
 
 #: zotonic_mod_websub/src/filters/filter_websub_error.erl:44
 msgid "Subscription or unsubscription attempts stopped because the retry time limit was reached. Check the remote website and retry the subscription if needed."
-msgstr ""
+msgstr "Tellimuse lisamise või tühistamise katsed peatati, kuna korduskatse ajapiirang oli täis. Kontrollige välist veebisaiti ja proovige vajaduse korral tellimust uuesti lisada."
 
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:22
 msgid "Subscription type"
