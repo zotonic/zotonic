@@ -182,7 +182,8 @@ if [ ! -d "$MODULES" ]; then
 fi
 
 # The include path for the erlang vm, add when needed for your application.
-export PA=${PA:="$ZOTONIC/_build/default/lib/*/ebin $MODULES/*/_build/default/lib/*/ebin $SITES/*/_build/default/lib/*/ebin $SITES/*/modules/*/_build/default/lib/*/ebin"}
+export USER_EBIN_DIR=$(get_user_ebin_dir)
+export PA=${PA:="$ZOTONIC/_build/default/lib/*/ebin $USER_EBIN_DIR $MODULES/*/_build/default/lib/*/ebin $SITES/*/_build/default/lib/*/ebin $SITES/*/modules/*/_build/default/lib/*/ebin"}
 
 # The name of the Erlang node, this must be unique on your host. ($SNAME is for b.c.)
 export NODENAME=${NODENAME:=${SNAME:=zotonic001}}
