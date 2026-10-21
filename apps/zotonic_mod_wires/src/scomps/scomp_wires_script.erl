@@ -22,74 +22,89 @@
     zotonic_keywords => ["reference", "frontend_developer", "scomp", "javascript", "render"]
 }).
 -moduledoc("
-This tag is the placeholder where all generated JavaScript scripts will be output on the page.
+Emit the JavaScript collected from template actions, wires, validators and `javascript` blocks.
 
-Zotonic generates JavaScript for the actions and other template logic. This script needs to be added to the page. The
-`{% script %}` scomp designates the place where the `<script>` element with all the generated javascript can be placed.
-
-Normally the `{% script %}` scomp is placed at the end of the page, just above the `</body>`.
-
-Note that all JavaScripts generated after the `{% script %}` scomp will not be included in the generated page. Only a
-single `{% script %}` scomp is allowed on any page.
-
-Example:
-
+Place one `script` tag near the end of the page, after all content that generates JavaScript and normally just before `</body>`:
 
 ```django
-    {# at the bottom of the template ... #}
-    {% script %}
-  </body>
+{% javascript %}
+    initializePage();
+{% endjavascript %}
+
+{% script %}
+</body>
 </html>
 ```
 
-This will generate something similar to:
+In its default HTML format, the tag emits a `<script>` element with the page's CSP nonce and defines `window.zotonicPageInit`. Zotonic's wired JavaScript calls this function during page initialization. Use the standard Cotonic head and wired JavaScript includes.
 
+Browser-server communication uses MQTT over WebSocket connections, managed by
+Cotonic. The standard Cotonic head and wired JavaScript includes set up this
+connection; the `script` tag supplies the collected page initialization code.
 
-```django
-    <script type='text/javascript' nonce='u7gCg9uBGney0dE9aIVj'>
-        z_script_nonce = 'u7gCg9uBGney0dE9aIVj';
-        window.zotonicPageInit = function() {
-            $(\"#uHHK6ZOTWZUI-l-en\").on('click', function(event) {
-                z_queue_postback('uHHK6ZOTWZUI-l-en', 'MYbEYIfXkdu8RbVjQf...', typeof (zEvtArgs) != 'undefined' ? zEvtArgs : undefined);
-                return z_opt_cancel(this);
-            });
+JavaScript collected after this tag is not included in that initialization script. Use a single `script` tag per page and put all declarations that it must process before it.
 
-            z_language = \"nl\";
-            z_languages = [\"nl\", \"en\"];
-            z_init_postback_forms();
-            z_default_form_postback = \"ipk2kRZLB9eXvhLjMApFp...\";
-            if (typeof zotonic.wiresReadyResolve == 'function') {
-                zotonic.wiresReadyResolve();
-            }
-        }
-    </script>
-  </body>
-</html>
+For example, the generated HTML has this structure (the nonce and function
+contents depend on the page):
+
+```html
+<script type=\"text/javascript\" nonce=\"...\">
+    z_script_nonce = '...';
+    window.zotonicPageInit = function() {
+        initializePage();
+        // Collected actions and standard page startup code.
+    };
+</script>
 ```
 
-Note that the contents of this block will be completely different per page.
+## Options
 
-The script scomp can have the following arguments:
+| Option | Default | Description |
+| --- | --- | --- |
+| `nostartup` | `false` | Omit the standard page startup code supplied by script-render observers, retaining collected actions and template JavaScript. Library flushing still occurs. |
+| `format` | `\"html\"` | Choose `\"html\"` for a script element, `\"js\"` for JavaScript without the element, or `\"escapejs\"` for an escaped JavaScript string. |
 
-| Argument  | Description                                                                      | Example       |
-| --------- | -------------------------------------------------------------------------------- | ------------- |
-| `nostartup` | Exclude the page initialization code from the script, only includes the scripts from actions etc. Default is to include the page initialization code. | `nostartup`   |
-| `nostream`  | Do not start the bi-directional communication layer (over WebSockets or comet).  | `nostream`    |
-| `format`    | Select a different format than the `<script>` tag. For now this accepts `\"html\"` (for the `<script/>` tag), `\"escapejs\"` for an escaped javascript string, and `\"js\"` for a normal javascript string. Default is `\"html\"`. | `format=\"html\"` |
+With `format=\"js\"` or `format=\"escapejs\"`, pending libraries become browser-loader dependencies instead of HTML include elements. The generated JavaScript waits for them before running the collected initialization code. These formats require Zotonic's wired asset loader to be available in the receiving page.
 
+## Flushing collected libraries
 
+Before emitting the HTML initialization script, `script` flushes all pending CSS and JavaScript declared with `lib collect`:
 
-WebSockets / Comet communication
---------------------------------
+```django
+{% lib \"css/component.css\" \"js/component.js\" collect %}
 
-Unless `nostream` is added as a parameter, this tag also causes the WebSockets or Comet communication layer to be initiated.
+<div id=\"component\">...</div>
 
-When available, a WebSocket connections is opened, otherwise a long polling Comet connection is started. The WebSockets
-connection will also be used for sending Ajax requests to the server.
+{% javascript %}
+    initializeComponent();
+{% endjavascript %}
 
-See also [Transport](/id/doc_developerguide_server_browser_interaction#guide-transport) for details on the
-bi-directional communication.
+{% script %}
+```
+
+The collected library include elements appear before the initialization script. Their original options and order are preserved; only compatible adjacent groups combine. Duplicate tracking remains intact after the flush.
+
+For earlier or type-specific placement, use explicit lib flush tags:
+
+```django
+{% lib flush=\"css\" %}
+{% lib flush=\"javascript\" %}
+{% lib flush %}
+```
+
+`\"js\"` is an alias for `\"javascript\"`. Unlike an ordinary CSS-only or JavaScript-only lib tag, `script` flushes both types. See `tag#lib` for collection rules and option restrictions.
+
+## Dynamic updates
+
+Dynamic fragments normally do not need their own `script` tag. Wired updates collect the fragment's libraries and JavaScript automatically. Missing libraries load before DOM insertion and widget initialization; collected template JavaScript runs after the DOM update.
+
+For template-model requests, use `model/template/get/render_with_assets/<template>` to obtain `html`, `libs` and `javascript`, then pass the result to `z_assets.apply(result, insertHtml)`. The insertion callback may return a promise; initialization waits for it to finish. The HTML-only `render` endpoint does not return the separate initialization information.
+
+The lower-level `z_template:render_to_iolist/3` materializes HTML and returns collected script state in its updated context; it does not expand a `script` placeholder into the page initialization element. Use the normal final page-output path to render that placeholder, or the asset-aware update API for dynamic fragments.
+
+See also `tag#lib` and `tag#javascript`.
 ").
+
 -behaviour(zotonic_scomp).
 
 -export([vary/2, render/3]).
