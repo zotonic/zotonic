@@ -21,7 +21,7 @@
 %% limitations under the License.
 
 -module(z_lib_include).
--moduledoc("""
+-moduledoc("
 Library tags and dependency metadata for page and fragment rendering.
 
 The template runtime defers lib tags to z_render, which deduplicates files in
@@ -34,13 +34,13 @@ updates use individual asset URLs so they can load only the missing members of
 a bundle. CSS identity includes media, rel and title; JavaScript identity is
 the normalized library filename. Files are executed once per browser page.
 
-Use `{% lib "js/component.js" collect %}` to queue a declaration until the
+Use `{% lib \"js/component.js\" collect %}` to queue a declaration until the
 next ordinary lib tag of the same type, or the next script tag. The options
 stay with the declaration; only adjacent compatible groups are combined.
 `collect` cannot be combined with enabled async or defer options.
 
-`{% lib flush %}` flushes both types; `flush="css"` and `flush="javascript"`
-(or `flush="js"`) flush one type. Flush accepts no filenames or other options.
+`{% lib flush %}` flushes both types; `flush=\"css\"` and `flush=\"javascript\"`
+(or `flush=\"js\"`) flush one type. Flush accepts no filenames or other options.
 A normal async/defer tag flushes pending synchronous files before its own tag.
 Includes, caches and spaceless blocks do not flush their surrounding queue.
 Materializing an iolist flushes remaining files at its end. Final page output
@@ -48,7 +48,7 @@ also flushes leftovers and logs a warning: use an explicit flush or script tag
 to place assets inside the intended HTML element. Dynamic updates always return
 all dependencies for loading before initialization, irrespective of collect.
 
-""").
+").
 
 -author("Marc Worrell <marc@worrell.nl>").
 

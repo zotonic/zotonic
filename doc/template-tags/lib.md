@@ -11,7 +11,7 @@ keywords:
 ::: aside
 See also
 
-[script](script.md), [javascript](javascript.md) and `module#mod_development`.
+`scomp#script`, [javascript](javascript.md) and `module#mod_development`.
 :::
 
 Include CSS and JavaScript libraries, combining files of each type into a single request.
@@ -77,7 +77,7 @@ Flush queued libraries explicitly without adding filenames:
 
 Flush accepts no filenames or other options. Unknown flush values are rejected. An empty queue produces no output, and flushing does not reset duplicate tracking.
 
-The [script](script.md) tag automatically flushes both types before emitting the page's initialization script. Use an explicit CSS flush in the head when styles should load earlier:
+The `scomp#script` scomp automatically flushes both types before emitting the page's initialization script. Use an explicit CSS flush in the head when styles should load earlier:
 
 ```django
 <head>
