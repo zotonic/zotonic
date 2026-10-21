@@ -34,6 +34,7 @@
 
 -export ([
     render_html/2,
+    render_with_assets/2,
     output/2,
 
     render/2,
@@ -135,6 +136,9 @@
 %% The state below is the render state, can be cached and/or merged
 %% State of the current rendered template/scomp/page
 -record(render_state, {
+        lib_seen = #{}       :: map(),
+        lib_pending = []     :: list(),
+        libs = []            :: list(),
         updates = []         :: list(),
         actions = []         :: list(),
         content_scripts = [] :: list(),
@@ -164,8 +168,14 @@
 -spec output( term(), z:context() ) -> { iolist(), z:context() }.
 output(MixedHtml, Context) ->
     RS = get_render_state(Context),
-    {Html, _RS1, Context1} = output(MixedHtml, RS, Context),
-    {Html, reset_render_state(Context1)}.
+    {Html, RS1, Context1} = output(MixedHtml, RS, Context),
+    case RS1#render_state.lib_pending of
+        [] -> ok;
+        _ -> ?LOG_WARNING(#{text => <<"Unflushed collected lib tags at end of output">>,
+                           in => zotonic_core})
+    end,
+    {Tail, _RS2} = flush_libs(all, RS1, Context1),
+    {[Html, Tail], reset_render_state(Context1)}.
 
 
 %% @doc Replace the #render_state's in the output with their rendered content and collect all scripts
@@ -196,9 +206,21 @@ output1([#context{} = C|Rest], RenderState, Context, Acc) ->
 output1([#render_state{}=RS0|Rest], RenderState, Context, Acc) ->
     {Rendered, RS1, Context1} = output1(RS0#render_state.render, RenderState, Context, []),
     output1(Rest, merge_scripts(RS0, RS1), Context1, [Rendered|Acc]);
+output1([{lib, Files, Args}|Rest], RenderState, Context, Acc) ->
+    {Html, RS1} = render_lib(Files, Args, RenderState, Context),
+    output1(Rest, RS1, Context, [Html|Acc]);
+output1([{spaceless, Value, []}|Rest], RenderState, Context, Acc) ->
+    {Html, RS1, Context1} = output(Value, RenderState, Context),
+    output1(Rest, RS1, Context1, [spaceless(Html)|Acc]);
 output1([{script, Args}|Rest], RenderState, Context, Acc) ->
-    Context1 = set_render_state(RenderState, Context),
-    output1(Rest, #render_state{}, Context, [render_script(Args, Context1)|Acc]);
+    FlushContext = case proplists:get_value(format, Args, <<"html">>) of
+        <<"html">> -> Context;
+        _ -> z_context:set(lib_render_mode, update, Context)
+    end,
+    {LibHtml, Flushed} = flush_libs(all, RenderState, FlushContext),
+    Context1 = set_render_state(Flushed, Context),
+    RS1 = #render_state{lib_seen = Flushed#render_state.lib_seen},
+    output1(Rest, RS1, Context, [[LibHtml, render_script(Args, Context1)]|Acc]);
 output1([ [ {_, _} | _ ] = List | Rest ], RenderState, Context, Acc) ->
     JSON = z_json:encode(List),
     output1(Rest, RenderState, Context, [JSON|Acc]);
@@ -244,7 +266,11 @@ render_script(Args, Context) ->
             }, Context),
         S =/= undefined
     ],
-    Script = [ get_script(Context), Extra ],
+    {Collected, Libs} = collect_script(Context),
+    Script = case Libs of
+        [] -> [Collected, Extra];
+        _ -> asset_script([Collected, Extra], Libs)
+    end,
     case z_utils:get_value(format, Args, <<"html">>) of
         <<"html">> ->
             CspNonce = z_context:csp_nonce(Context),
@@ -267,6 +293,91 @@ combine1(X,Y) -> [X,Y].
 
 
 
+%% @doc Materialize a fragment and collect its dependencies and initialization.
+%% The result is suitable for the browser's z_assets.apply helper.
+-spec render_with_assets(Html, Context) -> Result when
+    Html :: term(),
+    Context :: z:context(),
+    Result :: #{html := binary(), libs := list(map()), javascript := binary()}.
+render_with_assets(Html, Context) ->
+    {IoData, C1} = render_update(Html, clean(Context)),
+    {Script, Libs} = collect_script(C1),
+    #{html => iolist_to_binary(IoData), libs => Libs,
+      javascript => iolist_to_binary(Script)}.
+
+render_update(Html, Context) ->
+    Mode = z_context:get(lib_render_mode, Context),
+    {IoData, C1} = render_to_iolist(Html, z_context:set(lib_render_mode, update, Context)),
+    {IoData, z_context:set(lib_render_mode, Mode, C1)}.
+
+render_lib(Files, Args, RS, Context) ->
+    case z_lib_include:operation(Files, Args) of
+        {flush, Type} -> flush_libs(Type, RS, Context);
+        {include, Collect, AssetArgs} ->
+            {Css, Js} = z_lib_include:split_css_js(Files),
+            {CssHtml, RS1} = render_lib_type(css, Css, AssetArgs, Collect, RS, Context),
+            {JsHtml, RS2} = render_lib_type(js, Js, AssetArgs, Collect, RS1, Context),
+            {[CssHtml, JsHtml], RS2}
+    end.
+
+render_lib_type(_Type, [], _Args, _Collect, RS, _Context) ->
+    {[], RS};
+render_lib_type(Type, Files, Args, Collect, RS, Context) ->
+    %% Reserve queued files immediately, but emit them without filtering again.
+    {Keep, Seen} = z_lib_include:filter(Files, Args, RS#render_state.lib_seen, Context),
+    RS1 = RS#render_state{lib_seen = Seen},
+    case z_context:get(lib_render_mode, Context) of
+        update ->
+            {_, RS2} = flush_libs(Type, RS1, Context),
+            emit_libs(Keep, Args, RS2, Context);
+        _ ->
+            Pending = case Keep of
+                [] -> RS1#render_state.lib_pending;
+                _ -> RS1#render_state.lib_pending ++ [{Type, Keep, Args}]
+            end,
+            RS2 = RS1#render_state{lib_pending = Pending},
+            case Collect of
+                true -> {[], RS2};
+                false -> flush_libs(Type, RS2, Context)
+            end
+    end.
+
+flush_libs(Type, RS, Context) ->
+    {Flush, Pending} = lists:partition(
+        fun({T, _, _}) -> Type =:= all orelse Type =:= T end,
+        RS#render_state.lib_pending),
+    emit_lib_groups(Flush, RS#render_state{lib_pending = Pending}, Context).
+
+emit_lib_groups([], RS, _Context) ->
+    {[], RS};
+emit_lib_groups([{Type, Files, Args}|Rest], RS, Context) ->
+    {Combined, Remaining} = combine_lib_groups(Type, Files, Args, Rest, Context),
+    {Html, RS1} = emit_libs(Combined, Args, RS, Context),
+    {Tail, RS2} = emit_lib_groups(Remaining, RS1, Context),
+    {[Html, Tail], RS2}.
+
+combine_lib_groups(Type, Files, Args, [{Type, Next, NextArgs}|Rest] = Groups, Context) ->
+    case z_lib_include:options_key(Type, Args, Context)
+            =:= z_lib_include:options_key(Type, NextArgs, Context) of
+        true -> combine_lib_groups(Type, Files ++ Next, Args, Rest, Context);
+        false -> {Files, Groups}
+    end;
+combine_lib_groups(_Type, Files, _Args, Rest, _Context) ->
+    {Files, Rest}.
+
+emit_libs([], _Args, RS, _Context) ->
+    {[], RS};
+emit_libs(Files, Args, RS, Context) ->
+    case z_context:get(lib_render_mode, Context) of
+        update ->
+            Assets = z_lib_include:assets(Files, Args, Context),
+            {[], RS#render_state{libs = RS#render_state.libs ++ Assets}};
+        _ -> {z_lib_include:tag(Files, Args, Context), RS}
+    end.
+
+spaceless(Html) ->
+    template_compiler_runtime:spaceless_tag(Html, #{}, undefined).
+
 %% @doc Render adds output to the render-state of the context. Makes sure that the added output is an iolist
 %%      The stored render state is later used in output/2
 -spec render( term(), z:context() ) -> z:context().
@@ -281,13 +392,21 @@ append_render_state(<<>>, RenderState, _Context) ->
     RenderState;
 append_render_state([], RenderState, _Context) ->
     RenderState;
-append_render_state({script, _Args}, RenderState, _Context) ->
+append_render_state({lib, Files, Args}, RenderState, Context) ->
+    {Html, RS1} = render_lib(Files, Args, RenderState, Context),
+    append_render_state(Html, RS1, Context);
+append_render_state({spaceless, Value, []}, RenderState, Context) ->
+    RS1 = append_render_state(Value, RenderState#render_state{render = []}, Context),
+    RS1#render_state{render = [RenderState#render_state.render, spaceless(RS1#render_state.render)]};
+append_render_state({script, _Args}, RenderState, Context) ->
     %% Renders the script tag - this won't be correct as it adds everything collected in Context and not what was collected
     %% in the added iolist().  So it is better to ignore the {script} tag here.
     %% If the script tag should be rendered then it is better to call output/2 instead of render/2.
-    RenderState;
-append_render_state(#render_state{} = RS, RenderState, _Context) ->
-    merge_scripts(RS, RenderState);
+    {LibHtml, RS1} = flush_libs(all, RenderState, Context),
+    append_render_state(LibHtml, RS1, Context);
+append_render_state(#render_state{} = RS, RenderState, Context) ->
+    RS1 = append_render_state(RS#render_state.render, RenderState, Context),
+    merge_scripts(RS#render_state{render = []}, RS1);
 append_render_state({javascript, Script}, RenderState, _Context) ->
     add_content_script(Script, RenderState);
 append_render_state(B, RenderState, _Context) when is_binary(B) ->
@@ -325,9 +444,10 @@ append_render_state([H|T], RenderState, Context) ->
 render_to_iolist(MixedHtml, #context{} = Context) ->
     RS = get_render_state(Context),
     RS1 = append_render_state(MixedHtml, RS#render_state{ render = [] }, Context),
+    {Tail, RS2} = flush_libs(all, RS1, Context),
     {
-        RS1#render_state.render,
-        set_render_state(RS1#render_state{ render = RS#render_state.render }, Context)
+        [RS2#render_state.render, Tail],
+        set_render_state(RS2#render_state{ render = RS#render_state.render }, Context)
     }.
 
 -spec render_to_iolist( Template::term(), list(), z:context() ) -> { iolist(), z:context() }.
@@ -622,13 +742,13 @@ render_html(undefined, Context) ->
 render_html(Html, Context) when is_binary(Html) ->
     {Html, Context};
 render_html(Html, Context) ->
-    {Html1, Context1} = render_to_iolist(Html, Context),
+    {Html1, Context1} = render_update(Html, Context),
     {sanitize_utf8(iolist_to_binary(Html1)), Context1}.
 
 
 render_html_opt_all(false, Template, Vars, Context) ->
     MixedHtml = z_template:render(Template, Vars, Context),
-    {Html, Context1} = render_to_iolist(MixedHtml, Context),
+    {Html, Context1} = render_update(MixedHtml, Context),
     {sanitize_utf8(iolist_to_binary(Html)), Context1};
 render_html_opt_all(true, Template, Vars, Context) ->
     Templates = z_module_indexer:find_all(template, Template, Context),
@@ -664,7 +784,7 @@ dialog(Title, Template, Vars, #context{} = Context) ->
         _ -> Template
     end,
     MixedHtml = z_template:render(Template1, Vars, Context),
-    {Html, Context1} = render_to_iolist(MixedHtml, Context),
+    {Html, Context1} = render_update(MixedHtml, Context),
     Args = [
         {title, z_trans:lookup_fallback(Title, Context1)},
         {text, Html}
@@ -717,7 +837,7 @@ dialog_close(Level, #context{} = Context) ->
     Context1 :: z:context().
 overlay(Template, Vars, #context{} = Context) ->
     MixedHtml = z_template:render(Template, Vars, Context),
-    {Html, Context1} = render_to_iolist(MixedHtml, Context),
+    {Html, Context1} = render_update(MixedHtml, Context),
     OverlayArgs = [
         {html, Html},
         {class, proplists:get_value(class, Vars, <<>>)},
@@ -930,6 +1050,9 @@ reset_render_state(Context)  ->
 -spec merge_scripts(#render_state{}, #render_state{}) -> #render_state{}.
 merge_scripts(RS, Acc) ->
     Acc#render_state{
+        lib_pending = Acc#render_state.lib_pending ++ RS#render_state.lib_pending,
+        lib_seen = maps:merge(Acc#render_state.lib_seen, RS#render_state.lib_seen),
+        libs = Acc#render_state.libs ++ RS#render_state.libs,
         updates = combine1(Acc#render_state.updates, RS#render_state.updates),
         actions = combine1(Acc#render_state.actions, RS#render_state.actions),
         content_scripts = combine1(Acc#render_state.content_scripts, RS#render_state.content_scripts),
@@ -975,7 +1098,19 @@ clean(Context) ->
 %% @doc Collect all scripts in the context, returns an iolist with javascript.
 -spec get_script( z:context() ) -> iolist().
 get_script(#context{} = Context) ->
-    RenderState = get_render_state(Context),
+    {Script, Libs} = collect_script(Context),
+    asset_script(Script, Libs).
+
+asset_script(Script, Libs) ->
+    case {iolist_size(Script), Libs} of
+        {0, []} -> [];
+        _ -> [<<"z_assets.run(">>, z_json:encode(Libs),
+              <<", function() {\n">>, Script, <<"\n});">>]
+    end.
+
+collect_script(Context0) ->
+    Context = z_context:set(lib_render_mode, update, Context0),
+    {_, RenderState} = flush_libs(all, get_render_state(Context), Context),
     RS1 = RenderState#render_state{
         scripts = [],
         content_scripts = []
@@ -1031,17 +1166,17 @@ get_script(#context{} = Context) ->
     case {RS4#render_state.updates, RS4#render_state.actions, RS4#render_state.validators} of
         {[],[],[]} ->
             % Final, we have rendered all content
-            [
+            {[
                 lists:reverse(RenderState#render_state.content_scripts),
                 lists:reverse(RenderState#render_state.scripts),
                 lists:reverse(RS4#render_state.content_scripts),
                 lists:reverse(RS4#render_state.scripts)
-            ];
+            ], RS4#render_state.libs};
         _NonEmpty ->
             % Recurse, as the rendering delivered new scripts and/or content
-            [
+            {More, Libs} = collect_script(set_render_state(RS4, Context)),
+            {[
                 lists:reverse(RenderState#render_state.content_scripts),
-                lists:reverse(RenderState#render_state.scripts),
-                get_script(set_render_state(RS4, Context))
-            ]
+                lists:reverse(RenderState#render_state.scripts), More
+            ], Libs}
     end.

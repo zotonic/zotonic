@@ -11,63 +11,111 @@ keywords:
 ::: aside
 See also
 
-`module#mod_development`.
+[script](script.md), [javascript](javascript.md) and `module#mod_development`.
 :::
 
-Combine css and javascript includes in a single request.
+Include CSS and JavaScript libraries, combining files of each type into a single request.
 
-Generates a `<link /\>` or `<script /\>` element for including the given libraries. This combines all css and javascript files in one request, saving multiple roundtrips to the server.
+The `lib` tag generates `<link>` elements for CSS and `<script>` elements for JavaScript. Filenames refer to files in module or site `priv/lib` directories. CSS and JavaScript use separate requests; files of the same type retain their declaration order.
 
-Example:
-
-
-```erlang
-{% lib
-      "css/zp-compressed.css"
-      "css/zp-admin.css"
-      "css/zp-wysiwyg.css"
-      "css/zp-dialog.css"
-      "css/zp-formreplace.css"
-      "css/zp-finder.css"
-      "css/zp-growl.css"
-  %}
+```django
+{% lib "css/site.css" "css/components.css" "js/site.js" %}
 ```
 
-Will output:
+The generated URLs include a checksum of the files' modification times, so changing a file changes its URL. Development settings can disable bundling or minification.
 
+## Duplicate inclusions
 
-```erlang
-<link href="/lib/css/zp-compressed~zp-admin~zp-wysiwyg~zp-dialog~zp-formreplace~zp-finder~zp-growl~63417066183.css" type="text/css" media="all" rel="stylesheet" />
+During a render, libraries already included or queued by an earlier `lib` tag are filtered out. For example:
+
+```django
+{% lib "js/a.js" "js/b.js" %}
+{% lib "js/b.js" "js/c.js" %}
 ```
 
-The number at the end is the Unix modification time of the most recently changed file.
+The second tag includes only `js/c.js`. For JavaScript, the first declaration's options take precedence. CSS declarations with different `media`, `rel` or `title` values are distinct inclusions.
 
-The lib tag supports optional arguments to control the resulting html tag. The arguments are supplied after the list of files:
+This tracking covers `lib` tags, not manually written `<script>` or `<link>` elements. Generating a URL with `lib_url` does not include or reserve a library and does not flush collected files.
 
+## Collecting libraries
 
-```erlang
-{% lib
-  "css/not-so-important-styles.css"
-  minify
-  async
-%}
+Use `collect` to queue files without emitting their include elements at that position:
+
+```django
+{% lib "js/component.js" collect %}
+
+<div class="component">...</div>
+
+{% lib "js/page.js" %}
 ```
 
-Accepted arguments are:
+The last tag emits `component.js` before `page.js`, combining them when their options are compatible.
 
-| Option         | Default      | Description                                                                      |
-| -------------- | ------------ | -------------------------------------------------------------------------------- |
-| absolute\\_url | false        | If true, prefix the generated URL with “<https:/>/\\{hostname\\}/”.              |
-| title          | &lt;empty>   | Specify a value for the title attribute of the link tag.                         |
-| media          | “all”        | Specify value for the media attribute of the link tag.                           |
-| rel            | “stylesheet” | Specify value for the rel attribute of the link tag.                             |
-| minify         |              | Force minification use as `{% lib ... minify %}`                                 |
-| nocache        |              | Let the browser cacte the URL at most 1 second  `{% lib ... nocache %}`          |
-| async          |              | Load css or javascript asynchronously, use as  `{% lib ... async %}`             |
-| defer          |              | Load javascript in parallel and executes it after the page has finished parsing, use as `{% lib ... defer %}` |
+An ordinary, non-collecting lib tag flushes only the types present in its filename list:
 
-The `` `minify` `` argument can be enabled for all lib tags by setting the config `` `site.minification_enabled` `` to a true-ish value (like `` `1` ``).
+- A CSS-only tag flushes pending CSS and leaves pending JavaScript queued.
+- A JavaScript-only tag flushes pending JavaScript and leaves pending CSS queued.
+- A mixed tag flushes both types.
 
-::: note
-The `defer` argument is set even if the `async` attribute is specified to cause legacy Web browsers that only support defer (and not async) to fall back to the defer behavior instead of the synchronous blocking behavior that is the default. See more in [W3](https://www.w3.org/TR/2011/WD-html5-20110525/scripting-1.html#attr-script-async) documentation.
-:::
+This also applies when the ordinary tag's files are all duplicates. Another `collect` tag only queues files. Includes, cached render trees and `spaceless` blocks do not themselves flush the surrounding queue.
+
+Collected files retain their original options. Only adjacent compatible groups combine; declarations are not regrouped across incompatible options. CSS groups must agree on `media`, `rel` and `title`. Both types must have compatible loading options, effective minification, cache behavior and absolute-URL settings.
+
+`collect` cannot be combined with enabled `async` or `defer`. A later ordinary tag with `async` or `defer` flushes pending files of its type first, then emits its own include separately; it does not apply those loading options to the queued files.
+
+Collection delays when the browser discovers the files. Intervening inline JavaScript must not depend on queued libraries, and delaying CSS can cause a flash of unstyled content.
+
+## Flushing libraries
+
+Flush queued libraries explicitly without adding filenames:
+
+```django
+{% lib flush %}               {# CSS and JavaScript #}
+{% lib flush="css" %}         {# CSS only #}
+{% lib flush="javascript" %}  {# JavaScript only; "js" also works #}
+```
+
+Flush accepts no filenames or other options. Unknown flush values are rejected. An empty queue produces no output, and flushing does not reset duplicate tracking.
+
+The [script](script.md) tag automatically flushes both types before emitting the page's initialization script. Use an explicit CSS flush in the head when styles should load earlier:
+
+```django
+<head>
+    {% lib "css/site.css" collect %}
+    {% lib flush="css" %}
+</head>
+<body>
+    {% lib "js/component.js" collect %}
+    ...
+    {% script %}
+</body>
+```
+
+At the end of final page output, remaining collected files are emitted and a warning is logged. Use explicit flush points or `script` to place the include elements correctly, rather than relying on this fallback.
+
+## Options
+
+Supply options after the filenames. Flush is an alternative form with no filenames.
+
+| Option | Default | Description |
+| --- | --- | --- |
+| `collect` | `false` | Queue files until a matching flush point. Incompatible with enabled `async` or `defer`. |
+| `flush` | — | Flush both types with `flush`, or select `"css"`, `"javascript"` or `"js"`. Accepts no filenames or other options. |
+| `absolute_url` | `false` | Generate an absolute library URL. |
+| `title` | Unset | Set the CSS link's `title` attribute. |
+| `media` | `"all"` | Set the CSS link's `media` attribute. |
+| `rel` | `"stylesheet"` | Set the CSS link's `rel` attribute. |
+| `minify` | Site setting | Request minification. Live reload disables minification. |
+| `nocache` | `false` | Use the library route with a browser cache lifetime of at most one second. |
+| `async` | `false` | Load CSS or JavaScript asynchronously. JavaScript tags also carry `defer` as a fallback. |
+| `defer` | `false` | Load JavaScript in parallel and execute it after HTML parsing. |
+
+Set `site.minification_enabled` to a true value to enable minification for all lib tags. An individual `minify=false` does not override that site setting.
+
+## Dynamic updates and materialized fragments
+
+Wired updates collect library dependencies separately from the HTML. The browser loads missing files before inserting the update and running its initialization JavaScript. Already loaded or loading files are shared, including individual files originally loaded in bundles. `collect` does not delay dependencies beyond the update, and updates wait for their libraries even when a declaration specifies `async` or `defer`.
+
+The template-model path `model/template/get/render_with_assets/<template>` returns `html`, `libs` and `javascript`. Apply this result with `z_assets.apply(result, insertHtml)` so the dependencies load before the insertion callback, followed by the collected JavaScript. The existing `render` path returns HTML only.
+
+`z_template:render_to_iolist/3` resolves collected files at the materialization boundary. Once converted to HTML, a fragment cannot be deduplicated against later fragments. Retain the render tree from `z_template:render/3` when composing or caching fragments that need to share collection and duplicate tracking.

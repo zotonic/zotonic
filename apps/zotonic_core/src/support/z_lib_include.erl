@@ -21,6 +21,34 @@
 %% limitations under the License.
 
 -module(z_lib_include).
+-moduledoc("""
+Library tags and dependency metadata for page and fragment rendering.
+
+The template runtime defers lib tags to z_render, which deduplicates files in
+output order. lib_url remains a URL-only operation. Materializing fragments as
+iodata resolves their tags immediately; retain the render tree when composing
+or caching fragments that need page-wide deduplication.
+
+Page tags carry data-z-assets metadata for the browser registry. Dynamic
+updates use individual asset URLs so they can load only the missing members of
+a bundle. CSS identity includes media, rel and title; JavaScript identity is
+the normalized library filename. Files are executed once per browser page.
+
+Use `{% lib "js/component.js" collect %}` to queue a declaration until the
+next ordinary lib tag of the same type, or the next script tag. The options
+stay with the declaration; only adjacent compatible groups are combined.
+`collect` cannot be combined with enabled async or defer options.
+
+`{% lib flush %}` flushes both types; `flush="css"` and `flush="javascript"`
+(or `flush="js"`) flush one type. Flush accepts no filenames or other options.
+A normal async/defer tag flushes pending synchronous files before its own tag.
+Includes, caches and spaceless blocks do not flush their surrounding queue.
+Materializing an iolist flushes remaining files at its end. Final page output
+also flushes leftovers and logs a warning: use an explicit flush or script tag
+to place assets inside the intended HTML element. Dynamic updates always return
+all dependencies for loading before initialization, irrespective of collect.
+
+""").
 
 -author("Marc Worrell <marc@worrell.nl>").
 
@@ -29,13 +57,24 @@
 -export([
     tag/2, tag/3,
     url/2, url/3,
-    uncollapse/1
+    uncollapse/1,
+    filter/4,
+    assets/3,
+    operation/2,
+    split_css_js/1,
+    options_key/3
 ]).
 
 -define(SEP, $~).
 -define(TAG_CACHE_TIME, 60). % Cache generated link and script tags for 1 minute.
 
--type option() :: minify
+-type option() :: collect
+                | {collect, boolean()}
+                | flush
+                | {flush, true | binary()}
+                | nocache
+                | {nocache, boolean()}
+                | minify
                 | {minify, boolean()}
                 | async
                 | {async, boolean()}
@@ -51,6 +90,110 @@
 
 -export_type([option/0, options/0]).
 
+
+%% @doc Validate the rendering controls separately from asset options.
+-spec operation(Files, Args) -> Operation when
+    Files :: list(),
+    Args :: list(),
+    Operation :: {flush, all | css | js} | {include, boolean(), list()}.
+operation(Files, Args) ->
+    case proplists:is_defined(flush, Args) of
+        true ->
+            case {Files, proplists:delete(flush, Args)} of
+                {[], []} -> {flush, flush_type(proplists:get_value(flush, Args))};
+                _ -> error({invalid_lib_options, flush_with_files_or_options})
+            end;
+        false ->
+            Collect = z_convert:to_bool(proplists:get_value(collect, Args, false)),
+            Async = z_convert:to_bool(proplists:get_value(async, Args, false)),
+            Defer = z_convert:to_bool(proplists:get_value(defer, Args, false)),
+            case {Files, Collect andalso (Async orelse Defer)} of
+                {[], _} -> error({invalid_lib_options, missing_files});
+                {_, true} -> error({invalid_lib_options, collect_with_async_or_defer});
+                _ -> {include, Collect, proplists:delete(collect, Args)}
+            end
+    end.
+
+flush_type(true) -> all;
+flush_type(<<"css">>) -> css;
+flush_type(<<"js">>) -> js;
+flush_type(<<"javascript">>) -> js;
+flush_type(Value) -> error({invalid_lib_options, {flush, Value}}).
+
+%% @doc Compare effective options when combining adjacent pending groups.
+%% Unknown options remain part of the key so extensions cannot merge silently.
+-spec options_key(Type, Args, Context) -> term() when
+    Type :: css | js,
+    Args :: options(),
+    Context :: z:context().
+options_key(Type, Args, Context) ->
+    Known = [minify, nocache, absolute_url, async, defer, media, rel, title],
+    Extra = lists:sort([A || A <- Args, not lists:member(option_name(A), Known)]),
+    Common = {lib(Args, Context),
+        z_convert:to_bool(proplists:get_value(absolute_url, Args, false)),
+        z_convert:to_bool(proplists:get_value(async, Args, false)),
+        z_convert:to_bool(proplists:get_value(defer, Args, false)), Extra},
+    case Type of
+        js -> Common;
+        css -> {Common,
+            proplists:get_value(media, Args, <<"all">>),
+            proplists:get_value(rel, Args, <<"stylesheet">>),
+            proplists:get_value(title, Args)}
+    end.
+
+option_name({Name, _}) -> Name;
+option_name(Name) -> Name.
+
+%% @doc Remove previously included assets, preserving declaration order. CSS
+%% variants have separate identities; the first JavaScript loading options win.
+-spec filter(list(), options(), map(), z:context()) -> {list(binary()), map()}.
+filter(Files, Args, Seen, Context) ->
+    {Css, Js} = split_css_js(Files),
+    {Keep, Seen1} = lists:foldl(
+        fun(File0, {Acc, S}) ->
+            File = canonical_file(File0, Context),
+            Key = asset_key(File, Args),
+            case maps:is_key(Key, S) of
+                true -> {Acc, S};
+                false -> {[File | Acc], S#{ Key => true }}
+            end
+        end,
+        {[], Seen},
+        Css ++ Js),
+    {lists:reverse(Keep), Seen1}.
+
+canonical_file(<<"lib/", File/binary>> = Original, Context) ->
+    case z_module_indexer:find(lib, Original, Context) of
+        {ok, _} -> Original;
+        {error, enoent} -> File
+    end;
+canonical_file(File, _Context) -> File.
+
+asset_key(File, Args) ->
+    case filename:extension(File) of
+        <<".css">> ->
+            z_json:encode([File,
+                proplists:get_value(media, Args, <<"all">>),
+                proplists:get_value(rel, Args, <<"stylesheet">>),
+                proplists:get_value(title, Args, <<>>)]);
+        <<".js">> -> File
+    end.
+
+%% @doc Browser dependencies use individual URLs so partially loaded bundles
+%% never cause an already executed JavaScript file to execute again.
+-spec assets(list(binary()), options(), z:context()) -> list(map()).
+assets(Files, Args, Context) ->
+    [#{ key => asset_key(File, Args),
+        url => url_for([File], filename:extension(File), Args, Context),
+        type => case filename:extension(File) of <<".css">> -> css; _ -> js end,
+        media => proplists:get_value(media, Args, <<"all">>),
+        rel => proplists:get_value(rel, Args, <<"stylesheet">>),
+        title => proplists:get_value(title, Args, <<>>)
+    } || File <- Files].
+
+asset_attribute(Files, Args) ->
+    [<<" data-z-assets=\"">>,
+     z_html:escape(z_json:encode([asset_key(F, Args) || F <- Files])), $"].
 
 %% @doc Generate the link and/or script tags for the given files.
 -spec tag( [ binary() ], z:context() ) -> [ [ binary() ] ].
@@ -126,7 +269,7 @@ tag1(Files, Args, Context) ->
     end,
     case z_module_manager:active(mod_development, Context) of
         false ->
-            z_depcache:memo(F, {tag, Files, Args}, ?TAG_CACHE_TIME, Context);
+            z_depcache:memo(F, {tag, Files, Args, z_context:csp_nonce(Context)}, ?TAG_CACHE_TIME, Context);
         true ->
             F()
     end.
@@ -149,14 +292,14 @@ link_element(CssFiles, Args, Context) ->
         true ->
             iolist_to_binary([
                 <<"<link href=\"">>, CssUrl, <<"\" type=\"text/css\"">>,
-                   TitleAttr,
+                   TitleAttr, asset_attribute(CssFiles, Args),
                    <<" media=\"none\"">>,
                    <<" media-onload=\"">>, Media ,<<"\"">>,
                    <<" rel=\"">>, Rel, $",
                 <<">">>,
                 <<"<noscript>">>,
                     <<"<link href=\"">>, CssUrl, <<"\" type=\"text/css\"">>,
-                       TitleAttr,
+                       TitleAttr, asset_attribute(CssFiles, Args),
                        <<" media=\"">>, Media, $",
                        <<" rel=\"">>, Rel, $",
                     <<">">>,
@@ -166,7 +309,7 @@ link_element(CssFiles, Args, Context) ->
         false ->
             iolist_to_binary([
                 <<"<link href=\"">>, CssUrl, <<"\" type=\"text/css\"">>,
-                   TitleAttr,
+                   TitleAttr, asset_attribute(CssFiles, Args),
                    <<" media=\"">>, Media, $",
                    <<" rel=\"">>, Rel, $",
                 <<">">>
@@ -190,7 +333,7 @@ script_element(JsFiles, Args, Context) ->
     end,
     iolist_to_binary([
             <<"<script src=\"">>, JsUrl, <<"\"">>,
-                AsyncDeferAttr,
+                AsyncDeferAttr, asset_attribute(JsFiles, Args),
                 <<" type=\"text/javascript\"">>,
                 <<" nonce=\"">>, z_context:csp_nonce(Context), "\"",
             <<">">>,
