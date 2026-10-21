@@ -30,7 +30,9 @@ setup() ->
         [#{key => F, url => F, type => js} || F <- Files]
     end),
     meck:new(m_config, [no_link]),
-    meck:expect(m_config, get_boolean, fun(M, K, C) -> z_context:get({M, K}, C, false) end),
+    meck:expect(m_config, get_boolean, fun(M, K, C) ->
+        maps:get({M, K}, z_context:get(test_config, C, #{}), false)
+    end),
     meck:new(z_notifier, [no_link]),
     meck:expect(z_notifier, map, fun(_, _) -> [] end),
     meck:expect(z_notifier, notify, fun(_, _) -> ok end),
@@ -181,7 +183,7 @@ collection_options() ->
     ?assert(meck:called(z_lib_include, tag, [[<<"a.js">>], [], '_'])),
     ?assert(meck:called(z_lib_include, tag, [[<<"b.js">>], [async], '_'])),
     %% Effective minification, not just the explicit boolean, determines compatibility.
-    C = z_context:set({site, minification_enabled}, true, #context{}),
+    C = z_context:set(test_config, #{{site, minification_enabled} => true}, #context{}),
     ?assertEqual(z_lib_include:options_key(js, [], C), z_lib_include:options_key(js, [minify], C)),
     ?assertNotEqual(z_lib_include:options_key(js, [], C), z_lib_include:options_key(js, [nocache], C)),
     ?assertNotEqual(z_lib_include:options_key(js, [], C), z_lib_include:options_key(js, [absolute_url], C)),
