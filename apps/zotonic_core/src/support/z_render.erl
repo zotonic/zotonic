@@ -120,6 +120,7 @@
 
     % From script
     add_script/2,
+    script_with_libs/3,
     get_script/1,
     clean/1
 
@@ -1094,6 +1095,29 @@ add_script(Script, Context) ->
         scripts = [ Script, "\n" | RS#render_state.scripts
     ]},
     set_render_state(RS1, Context).
+
+%% @doc Wrap JavaScript to execute after the given library files have loaded.
+%% Files are paths relative to priv/lib, as with the lib template tag. The
+%% browser shares loaded and pending dependencies with lib tags and updates.
+%% Uses timestamped library URLs. A failed load skips the script and is logged.
+%% This returns JavaScript; add it to the context or a {javascript, Script} node.
+%% It deliberately uses ensure instead of the update queue, so it can run from
+%% inside an update without waiting on that same update's completion.
+-spec script_with_libs(Files, Script, Context) -> JavaScript when
+    Files :: [binary()],
+    Script :: iodata(),
+    Context :: z:context(),
+    JavaScript :: binary().
+script_with_libs([], Script, _Context) ->
+    iolist_to_binary(Script);
+script_with_libs(Files, Script, Context) ->
+    {Keep, _Seen} = z_lib_include:filter(Files, [], #{}, Context),
+    Assets = z_lib_include:assets(Keep, [], Context),
+    iolist_to_binary([
+        <<"z_assets.ensure(">>, z_json:encode(Assets),
+        <<").then(function() {\n">>, Script,
+        <<"\n}).catch(function(error) { console.error(\"Library initialization failed\", error); });">>
+    ]).
 
 %% @doc Remove all scripts from the context, resetting it back to a clean sheet.
 -spec clean( z:context() ) -> z:context().

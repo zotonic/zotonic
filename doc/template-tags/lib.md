@@ -119,3 +119,20 @@ Wired updates collect library dependencies separately from the HTML. The browser
 The template-model path `model/template/get/render_with_assets/<template>` returns `html`, `libs` and `javascript`. Apply this result with `z_assets.apply(result, insertHtml)` so the dependencies load before the insertion callback, followed by the collected JavaScript. The existing `render` path returns HTML only.
 
 `z_template:render_to_iolist/3` resolves collected files at the materialization boundary. Once converted to HTML, a fragment cannot be deduplicated against later fragments. Retain the render tree from `z_template:render/3` when composing or caching fragments that need to share collection and duplicate tracking.
+
+Erlang components can guard JavaScript with library dependencies:
+
+```erlang
+Script = z_render:script_with_libs(
+    [<<"js/modules/z.live.js">>],
+    <<"z_live.subscribe(/* ... */);">>,
+    Context),
+z_render:add_script(Script, Context).
+```
+
+The API returns JavaScript and also works in a `{javascript, Script}` render node.
+Use paths relative to `priv/lib`, without the URL's `/lib/` prefix. Dependencies
+use timestamped URLs and share the browser's loaded/loading registry. The wrapped
+script runs asynchronously after loading; put all dependent code inside it. A
+failed load skips the script and logs the error. The `{% live %}` tag and MQTT
+wires use this API automatically.

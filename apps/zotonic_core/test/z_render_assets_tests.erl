@@ -11,6 +11,8 @@ assets_test_() ->
         fun spaceless_structures/0,
         fun identities/0,
         fun empty_script/0,
+        fun script_with_libs/0,
+        fun live_dependencies/0,
         fun model_response/0,
         fun compiled_template/0,
         fun collection_order/0,
@@ -228,3 +230,41 @@ compiled_collect() ->
     {ok, Module} = template_compiler:compile_binary(Template,
         <<"z_render_collect_tests.tpl">>, [{runtime, z_template_compiler_runtime}], #context{}),
     ?assertEqual(<<"before<asset>a.js</asset>after">>, materialize(Module:render(#{}, #{}, #context{}))).
+
+script_with_libs() ->
+    Script = z_render:script_with_libs([<<"/a.js">>, <<"a.js">>], <<"init();">>, #context{}),
+    ?assertMatch(<<"z_assets.ensure(", _/binary>>, Script),
+    ?assertNotEqual(nomatch, binary:match(Script, <<").then(function() {\ninit();">>)),
+    ?assert(meck:called(z_lib_include, assets, [[<<"a.js">>], [], '_'])),
+    ?assertEqual(<<"init();">>, z_render:script_with_libs([], [<<"init();">>], #context{})).
+
+%% All live entry points must guard their first use of the z_live global.
+live_dependencies() ->
+    meck:new(z_crypto, [no_link]),
+    meck:expect(z_crypto, pickle, fun(_, _) -> <<"signed">> end),
+    meck:new(z_template, [no_link]),
+    meck:expect(z_template, render, fun(_, _, _) -> <<"content">> end),
+    try
+        lists:foreach(fun(Params) ->
+            {ok, Tree} = scomp_mqtt_live:render(Params, [], #context{}),
+            Result = z_render:render_with_assets(Tree, #context{}),
+            assert_live_dependency(maps:get(javascript, Result))
+        end, [
+            [{template, <<"test.tpl">>}, {target, <<"target">>}],
+            [{template, <<"test.tpl">>}, {target, <<"target">>}, {method, <<"updateonly">>}],
+            [{postback, refresh}, {delegate, test}, {target, <<"target">>}]
+        ]),
+        {ok, Wire, _} = scomp_mqtt_live:event_type_mqtt(
+            #action_event_type{event = {mqtt, []}, postback_js = <<>>, action_js = <<>>},
+            #context{}),
+        assert_live_dependency(Wire)
+    after
+        meck:unload([z_crypto, z_template])
+    end.
+
+assert_live_dependency(Script) ->
+    {Guard, _} = binary:match(Script, <<"z_assets.ensure(">>),
+    {Use, _} = binary:match(Script, <<"z_live.">>),
+    ?assert(Guard < Use),
+    ?assertNotEqual(nomatch, binary:match(Script, <<"z.live.js">>)),
+    ?assert(meck:called(z_lib_include, assets, [[<<"js/modules/z.live.js">>], [], '_'])).

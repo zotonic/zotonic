@@ -129,3 +129,22 @@ test('apply waits for CSS, then asynchronous insertion, then initialization', as
     await result;
     assert.deepEqual(s.scripts, ['init();']);
 });
+
+test('a component can await a library inside an update before using its global', async () => {
+    const s = setup();
+    let live;
+    let subscribed = 0;
+    const update = s.assets.run([], () =>
+        s.assets.ensure([js('js/modules/z.live.js')]).then(() => live.subscribe())
+    );
+    await tick();
+    assert.equal(subscribed, 0);
+    assert.equal(s.elements.length, 1);
+    live = { subscribe: () => subscribed++ };
+    s.elements[0].emit('load');
+    await update;
+    assert.equal(subscribed, 1);
+    await s.assets.ensure([js('js/modules/z.live.js')]).then(() => live.subscribe());
+    assert.equal(subscribed, 2);
+    assert.equal(s.elements.length, 1);
+});

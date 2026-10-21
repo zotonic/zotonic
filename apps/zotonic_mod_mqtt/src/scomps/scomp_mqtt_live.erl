@@ -29,6 +29,7 @@ This scomp is provided by `module#mod_mqtt`, which must be enabled.
 :::
 
 This tag renders templates that are automatically re-rendered after a publication to an MQTT topic.
+The tag automatically loads `js/modules/z.live.js` before subscribing, including in dynamic updates.
 
 
 
@@ -229,7 +230,7 @@ event_type_mqtt(#action_event_type{event={mqtt, Args}, postback_js = PostbackJS,
             "},", integer_to_binary(throttle(Args)), ")",
         ");"
     ]),
-    {ok, <<"cotonic.ready.then( function() { ", Script/binary, " });">>, Context}.
+    {ok, live_script(<<"cotonic.ready.then( function() { ", Script/binary, " });">>, Context), Context}.
 
 %% ---------------------------------------------------------------------
 %% Scomp API
@@ -322,7 +323,7 @@ render_as_postback(Params, Context) ->
             integer_to_binary(throttle(Params)),
         $), $;
     ]),
-    {ok, {javascript, Script}}.
+    {ok, {javascript, live_script(Script, Context)}}.
 
 event(#postback{message={live, Method, Template, TplVars}, target=Target}, Context) ->
     Context1 = maybe_add_q(z_context:get_q(<<"message">>, Context), Context),
@@ -379,7 +380,7 @@ script(Target, Method, LiveVars, TplVars, Context) ->
     Tag = {live, Method, proplists:get_value(template, LiveVars), TplVars},
     Postback = z_render:make_postback_info(Tag, undefined, undefined, Target, ?MODULE, Context),
     Topics = map_topics( proplists:get_all_values(topic, LiveVars), Context ),
-    iolist_to_binary([
+    live_script([
         <<"z_live.subscribe(">>,
             z_utils:js_array(Topics),$,,
             $',z_utils:js_escape(Target), $',$,,
@@ -390,7 +391,10 @@ script(Target, Method, LiveVars, TplVars, Context) ->
             $',Postback,$',$,,
             integer_to_binary(throttle(LiveVars)),
         $), $;
-    ]).
+    ], Context).
+
+live_script(Script, Context) ->
+    z_render:script_with_libs([<<"js/modules/z.live.js">>], Script, Context).
 
 %% Minimum interval between live refreshes, in milliseconds. Disabled by default.
 throttle(Params) ->
