@@ -88,7 +88,7 @@ process_post(ReqData, Context0) ->
     {true, RD1, Context1}.
 
 hmac_sha(Key, Data) ->
-    crypto:hmac(sha, Key, Data).
+    crypto:mac(hmac, sha, Key, Data).
 
 
 handle_push(Data, Context) ->
