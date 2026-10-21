@@ -93,10 +93,17 @@ Direct Erlang calls to `m_get/3` return `{ok, {Assets, []}}` on success or
     Msg :: zotonic_model:opt_msg(),
     Context :: z:context(),
     Result :: zotonic_model:return().
-m_get([<<"widget">>, Name], _Msg, Context) when is_binary(Name) ->
+m_get([<<"widget">>, Name | Rest], _Msg, Context) when is_binary(Name) ->
     case m_config:get_boolean(mod_wires, widget_autoload, true, Context) of
-        true -> widget(Name, Context);
-        false -> {error, disabled}
+        true ->
+            case widget(Name, Context) of
+                {ok, Assets} ->
+                    {ok, Assets, Rest};
+                {error, _} = Error ->
+                    Error
+            end;
+        false ->
+            {error, disabled}
     end;
 m_get(_Path, _Msg, _Context) ->
     {error, unknown_path}.
@@ -108,7 +115,7 @@ widget(Name, Context) ->
         match ->
             File = <<"js/modules/z.", Name/binary, ".js">>,
             case z_module_indexer:find(lib, File, Context) of
-                {ok, _} -> {ok, {z_lib_include:assets([File], [], Context), []}};
+                {ok, _} -> {ok, {z_lib_include:assets([File], [], Context)}};
                 {error, _} -> {error, enoent}
             end;
         nomatch ->
