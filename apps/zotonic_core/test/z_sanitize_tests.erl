@@ -67,7 +67,19 @@ zmedia_size_roundtrip_test() ->
             ?assertEqual(#{<<"size">> => Size}, z_json:decode(JSON)),
             ?assertEqual(Sanitized, z_sanitize:html(Sanitized))
         end,
-        [<<"xsmall">>, <<"small">>, <<"middle">>, <<"medium">>, <<"large">>]
+        [<<"xxsmall">>, <<"xsmall">>, <<"small">>, <<"middle">>, <<"medium">>,
+         <<"large">>, <<"xlarge">>, <<"xxlarge">>]
+    ).
+
+zmedia_unknown_size_test() ->
+    lists:foreach(
+        fun(Size) ->
+            In = <<"<!-- z-media 123 ", (z_json:encode(#{<<"size">> => Size}))/binary, " -->">>,
+            <<"<!-- z-media 123 ", Rest/binary>> = z_sanitize:html(In),
+            [JSON, <<>>] = binary:split(Rest, <<" -->">>),
+            ?assertEqual(#{<<"size">> => <<"medium">>}, z_json:decode(JSON))
+        end,
+        [<<"custom-size">>, <<"xlarge\" onclick=\"alert(1)">>, 123, null]
     ).
 
 zmedia_class_roundtrip_test() ->

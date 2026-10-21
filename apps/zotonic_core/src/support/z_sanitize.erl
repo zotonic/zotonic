@@ -267,6 +267,9 @@ sanitize_z_media(Data) ->
 
 sanitize_z_media_arg(<<"id">>, Id) when is_binary(Id) -> #{<<"id">> => z_string:to_name(Id)};
 sanitize_z_media_arg(<<"id">>, Id) when is_integer(Id) -> #{<<"id">> => Id};
+sanitize_z_media_arg(<<"size">>, <<"xxsmall">>) -> #{<<"size">> => <<"xxsmall">>};
+sanitize_z_media_arg(<<"size">>, <<"xlarge">>) -> #{<<"size">> => <<"xlarge">>};
+sanitize_z_media_arg(<<"size">>, <<"xxlarge">>) -> #{<<"size">> => <<"xxlarge">>};
 sanitize_z_media_arg(<<"size">>, <<"large">>) -> #{<<"size">> => <<"large">>};
 sanitize_z_media_arg(<<"size">>, <<"xsmall">>) -> #{<<"size">> => <<"xsmall">>};
 sanitize_z_media_arg(<<"size">>, <<"small">>) -> #{<<"size">> => <<"small">>};
