@@ -38,6 +38,8 @@ widget_test_() ->
     end, fun(_) -> meck:unload([m_config, z_module_indexer, z_lib_include]) end, [
         ?_assertEqual({ok, {[#{file => <<"js/modules/z.example.js">>}], []}},
             m_wires:m_get([<<"widget">>, <<"example">>], undefined, #context{})),
+        ?_assertEqual({ok, {[#{file => <<"js/modules/z.example.js">>}], [<<"url">>]}},
+            m_wires:m_get([<<"widget">>, <<"example">>, <<"url">>], undefined, #context{})),
         ?_assertEqual({error, disabled}, m_wires:m_get([<<"widget">>, <<"example">>],
             undefined, z_context:set(enabled, false, #context{}))),
         ?_assertEqual({error, badarg}, m_wires:m_get([<<"widget">>, <<"../example">>], undefined, #context{})),

@@ -77,8 +77,8 @@ included widgets continue to work.
 This read-only model has no additional ACL restriction: it exposes descriptors
 for public library files. It does not accept arbitrary paths or URLs.
 
-Direct Erlang calls to `m_get/3` return `{ok, {Assets, []}}` on success or
-`{error, Reason}` on failure.
+Direct Erlang calls to `m_get/3` return `{ok, {Assets, Rest}}` on success or
+`{error, Reason}` on failure. `Rest` contains any remaining model path segments.
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 
@@ -98,7 +98,7 @@ m_get([<<"widget">>, Name | Rest], _Msg, Context) when is_binary(Name) ->
         true ->
             case widget(Name, Context) of
                 {ok, Assets} ->
-                    {ok, Assets, Rest};
+                    {ok, {Assets, Rest}};
                 {error, _} = Error ->
                     Error
             end;
@@ -115,7 +115,7 @@ widget(Name, Context) ->
         match ->
             File = <<"js/modules/z.", Name/binary, ".js">>,
             case z_module_indexer:find(lib, File, Context) of
-                {ok, _} -> {ok, {z_lib_include:assets([File], [], Context)}};
+                {ok, _} -> {ok, z_lib_include:assets([File], [], Context)};
                 {error, _} -> {error, enoent}
             end;
         nomatch ->

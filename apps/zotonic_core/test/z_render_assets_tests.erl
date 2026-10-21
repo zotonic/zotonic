@@ -274,7 +274,14 @@ live_dependencies() ->
             [{postback, refresh}, {delegate, test}, {target, <<"target">>}]
         ]),
         {ok, Wire, _} = scomp_mqtt_live:event_type_mqtt(
-            #action_event_type{event = {mqtt, []}, postback_js = <<>>, action_js = <<>>},
+            #action_event_type{
+                event = {mqtt, []},
+                trigger_id = "target",
+                trigger = "target",
+                postback_js = [],
+                postback_pickled = <<>>,
+                action_js = []
+            },
             #context{}),
         assert_live_dependency(Wire)
     after
