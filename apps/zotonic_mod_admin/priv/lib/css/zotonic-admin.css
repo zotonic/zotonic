@@ -2453,13 +2453,44 @@ html body .btn.admin-edit-preview-open svg {
 
 html body.admin-frontend-editor {
   grid-template-columns: minmax(0, 1fr);
+  overflow: hidden;
 }
 html body.admin-frontend-editor .admin-frontend-layout {
+  display: grid;
   min-width: 0;
+  min-height: 0;
+  height: calc(100vh - var(--admin-frontend-top, 60px));
+  height: calc(100dvh - var(--admin-frontend-top, 60px));
+  grid-template-rows: minmax(0, 1fr);
+  overflow: hidden;
   grid-template-columns: 10px minmax(200px, 0.6fr) 10px minmax(0, 1fr) 10px;
 }
 html body.admin-frontend-editor #menu-editor, html body.admin-frontend-editor #editcol-wrapper, html body.admin-frontend-editor #editcol {
   min-width: 0;
+  min-height: 0;
+}
+html body.admin-frontend-editor .admin-frontend-layout > #menu-editor,
+html body.admin-frontend-editor .admin-frontend-layout > #editcol-wrapper,
+html body.admin-frontend-editor .admin-frontend-layout > #editcol {
+  grid-row: 1;
+  width: auto;
+  height: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+}
+html body.admin-frontend-editor .admin-frontend-layout > #menu-editor {
+  grid-column: 2;
+}
+html body.admin-frontend-editor .admin-frontend-layout > #editcol-wrapper,
+html body.admin-frontend-editor .admin-frontend-layout > #editcol {
+  grid-column: 4;
+}
+html body.admin-frontend-editor .admin-frontend-layout.admin-frontend-without-menu {
+  grid-template-columns: 10px minmax(0, 1fr) 10px;
+}
+html body.admin-frontend-editor .admin-frontend-layout.admin-frontend-without-menu > #editcol-wrapper, html body.admin-frontend-editor .admin-frontend-layout.admin-frontend-without-menu > #editcol {
+  grid-column: 2;
 }
 
 html body.admin-frontend-editor .admin-frontend-menu-toggle {
@@ -2515,8 +2546,8 @@ html body.admin-frontend-compact.admin-frontend-menu-open .admin-frontend-layout
   grid-row: 1;
   float: none;
   width: 100%;
-  height: auto;
-  max-height: calc(100vh - 80px);
+  height: 100%;
+  max-height: 100%;
   overflow-y: auto;
 }
 html body.admin-frontend-compact.admin-frontend-menu-open .admin-frontend-layout #editcol-wrapper, html body.admin-frontend-compact.admin-frontend-menu-open .admin-frontend-layout #editcol {
