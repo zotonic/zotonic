@@ -27,7 +27,8 @@
 			        {% catinclude "_admin_menu_menu_view.tpl" tree_id connect_tab="new" cat_id=m.rsc.text.id admin_menu_edit_action=admin_menu_edit_action %}
 					{% block below_menu %}{% endblock%}
 				</div>
-				<div class="col-lg-8 col-md-8" id="editcol">
+				<div class="col-lg-8 col-md-8" id="editcol-wrapper">
+                    <div id="editcol">
 				{% block editcol %}
 					{% if id %}
 						<p><img src="/lib/images/spinner.gif" width="16" /> {_ Loading ... _}</p>
@@ -35,10 +36,13 @@
 						{% include "_admin_frontend_nopage.tpl" tree_id=tree_id %}
 					{% endif %}
 				{% endblock %}
+                    </div>
 				</div>
 			{% elseif id %}
-				<div class="col-lg-12 col-md-12" id="editcol">
+				<div class="col-lg-12 col-md-12" id="editcol-wrapper">
+                    <div id="editcol">
 					<p><img src="/lib/images/spinner.gif" width="16" /> {_ Loading ... _}</p>
+                    </div>
 				</div>
 			{% endif %}
 
