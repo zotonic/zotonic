@@ -51,6 +51,93 @@ var z_script_eval_id = "";
 
 var z_startup_time = Date.now();
 
+/** Page-local asset registry. Promise entries also deduplicate concurrent loads. */
+var z_assets = (() => {
+  const loaded = new Map();
+  let queue = Promise.resolve();
+
+  const observe = (element) => {
+    if (element.dataset.zAssetState === "loaded" ||
+        (element.tagName === "LINK" && element.sheet)) {
+      return Promise.resolve();
+    }
+    if (element.dataset.zAssetState === "error") {
+      return Promise.reject(new Error("Asset failed: " + (element.src || element.href)));
+    }
+    return new Promise((resolve, reject) => {
+      element.addEventListener("load", () => resolve(), { once: true });
+      element.addEventListener("error", () => reject(
+        new Error("Asset failed: " + (element.src || element.href))
+      ), { once: true });
+    });
+  };
+
+  const register = (keys, promise) => {
+    keys.forEach(key => loaded.set(key, promise));
+    // Failed requests may be retried by a later update.
+    promise.catch(() => keys.forEach(key => {
+      if (loaded.get(key) === promise) loaded.delete(key);
+    }));
+    return promise;
+  };
+
+  const discover = () => {
+    document.querySelectorAll("[data-z-assets]").forEach(element => {
+      if (element.dataset.zAssetRegistered) return;
+      element.dataset.zAssetRegistered = "true";
+      const keys = JSON.parse(element.dataset.zAssets);
+      const missing = keys.filter(key => !loaded.has(key));
+      if (missing.length) register(missing, observe(element));
+    });
+  };
+
+  const load = (asset) => {
+    if (loaded.has(asset.key)) return loaded.get(asset.key);
+    const element = document.createElement(asset.type === "css" ? "link" : "script");
+    if (asset.type === "css") {
+      element.rel = asset.rel;
+      element.media = asset.media;
+      if (asset.title) element.title = asset.title;
+      element.href = asset.url;
+    } else {
+      element.async = false;
+      element.src = asset.url;
+      if (z_script_nonce) element.nonce = z_script_nonce;
+    }
+    element.dataset.zAssets = JSON.stringify([asset.key]);
+    element.dataset.zAssetRegistered = "true";
+    const promise = register([asset.key], observe(element));
+    promise.catch(() => element.remove());
+    document.head.appendChild(element);
+    return promise;
+  };
+
+  const ensure = async (assets) => {
+    discover();
+    // Sequential loading preserves declaration order and CSS cascade order.
+    for (const asset of assets) await load(asset);
+  };
+
+  const run = (assets, update) => {
+    const result = queue.then(() => ensure(assets)).then(update).then(value => {
+      // Transport receipt can precede an asynchronous update by several seconds.
+      // Initialize forms after the actual DOM insertion as well.
+      if (typeof z_init_postback_forms === "function") z_init_postback_forms();
+      return value;
+    });
+    queue = result.catch(error => console.error("Template update failed", error));
+    return result;
+  };
+
+  // insertHtml must return a promise if its DOM update is asynchronous.
+  const apply = (result, insertHtml) => run(result.libs, async () => {
+    await insertHtml(result.html);
+    zotonic_eval(result.javascript);
+  });
+
+  return { ensure, run, apply };
+})();
+
 /* Startup
 ---------------------------------------------------------- */
 

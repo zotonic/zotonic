@@ -3,6 +3,16 @@
 <script type="text/javascript" nonce="{{ m.req.csp_nonce }}">
 var cotonic = cotonic || {};
 
+// Capture asset completion before the wired bundle is loaded. Presence in the
+// DOM does not mean an async/deferred script has finished executing.
+["load", "error"].forEach(function(type) {
+    document.addEventListener(type, function(event) {
+        if (event.target.hasAttribute && event.target.hasAttribute("data-z-assets")) {
+            event.target.dataset.zAssetState = type === "load" ? "loaded" : "error";
+        }
+    }, true);
+});
+
 {# Pre-connect to the websocket, this connection is used by
  # cotonic.mqtt_transport.ws.js for the origin mqtt bridge.
  #}

@@ -498,8 +498,8 @@ builtin_tag(Tag, Expr, Args, Vars, Context) ->
 
 builtin_tag_1(url, Dispatch, Args, _Vars, Context) ->
     z_dispatcher:url_for(z_convert:to_atom(Dispatch), Args, Context);
-builtin_tag_1(lib, Libs, Args, _Vars, Context) ->
-    z_lib_include:tag(Libs, Args, Context);
+builtin_tag_1(lib, Libs, Args, _Vars, _Context) ->
+    {lib, Libs, Args};
 builtin_tag_1(lib_url, Libs, Args, _Vars, Context) ->
     z_lib_include:url(Libs, Args, Context);
 builtin_tag_1(image, Expr, Args, _Vars, Context) ->
@@ -578,8 +578,8 @@ javascript_tag(Block, _TplVars, Context) ->
 
 %% @doc Remove spaces between HTML tags
 -spec spaceless_tag(template_compiler:render_result(), map(), term()) -> template_compiler:render_result().
-spaceless_tag(Value, TplVars, Context) ->
-    template_compiler_runtime:spaceless_tag(Value, TplVars, Context).
+spaceless_tag(Value, _TplVars, _Context) ->
+    {spaceless, Value, []}.
 
 
 %% @doc Convert a value to a boolean.
