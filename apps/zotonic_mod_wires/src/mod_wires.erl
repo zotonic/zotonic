@@ -31,6 +31,31 @@ Used by `module#mod_admin` and the other administrative modules.
 Wires are actions that are directly coupled to user interface elements. These couplings are defined in the templates
 using the `scomp#wire` tag.
 
+Automatic widget loading
+------------------------
+
+The widget manager initializes elements with a `do_<name>` class using the
+corresponding jQuery widget. If that widget is not registered yet, it tries to
+load `js/modules/z.<name>.js` from the enabled modules and site. For example,
+`do_autofocus` loads `js/modules/z.autofocus.js`. The `do_dialog` alias loads
+`z.dialog.js` and calls `show_dialog`.
+
+Libraries use the normal timestamped lib URLs and share the browser asset
+registry with lib tags. Concurrent discoveries share a load. Initialization is
+asynchronous for missing widgets; existing widgets initialize as before. Widget
+defaults and `data-<name>` options are read after loading. Removed elements are
+not initialized. Missing files or libraries that do not register the expected
+jQuery function produce a browser console warning.
+
+Set configuration module `mod_wires`, key `widget_autoload`, to `false` to disable
+this automatic loading (default: `true`). Already included widgets still work.
+Widgets with a different file layout, or additional dependencies, should be
+included explicitly with the lib tag. Configuration is checked by the server
+when resolving a missing widget; reload open pages after changing it.
+
+The model path `model/wires/get/widget/<name>` returns the asset descriptors
+used by the loader. Names may contain letters, digits, underscores and hyphens.
+
 Accepted Events
 ---------------
 
@@ -52,6 +77,13 @@ Delegate callbacks:
 -mod_description("Build interactive user interfaces with template wires, actions, validators and more.").
 -mod_depends([ mod_mqtt ]).
 -mod_prio(1000).
+-mod_config([
+    #{module => mod_wires,
+      key => widget_autoload,
+      type => boolean,
+      default => true,
+      description => "Automatically load missing do_ widgets from js/modules/z.<name>.js."}
+]).
 
 -export([
     event/2,
