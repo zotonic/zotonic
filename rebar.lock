@@ -193,7 +193,7 @@
   0},
  {<<"termit">>,
   {git,"https://github.com/erlangpack/termit",
-       {ref,"c1d0dde3b184a48f8253f0f3fd4b73a2eba4905e"}},
+       {ref,"d940e30e4ba4aedda798a3af830e096fd8f63836"}},
   0},
  {<<"tls_certificate_check">>,{pkg,<<"tls_certificate_check">>,<<"1.7.0">>},1},
  {<<"ua_classifier">>,
