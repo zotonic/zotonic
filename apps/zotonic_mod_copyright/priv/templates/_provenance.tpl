@@ -4,7 +4,7 @@
 <div class="provenance">
     {{ provenance_html }}
     {% if id.provenance_url %}
-        <p><a href="{{ id.provenance_url|sanitize_url }}" target="_blank" rel="noopener noreferrer">{_ Original source _}</a></p>
+        <p><a href="{{ id.provenance_url }}" target="_blank" rel="noopener noreferrer">{_ Original source _}</a></p>
     {% endif %}
 </div>
 {% endif %}
