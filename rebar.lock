@@ -1,3 +1,4 @@
+{"1.2.0",
 [{<<"bcrypt">>,
   {git,"https://github.com/erlangpack/bcrypt",
        {ref,"deabd510d737bbd9a053fa160e7d642fb939ee7e"}},
@@ -116,7 +117,7 @@
   0},
  {<<"locus">>,
   {git,"https://github.com/g-andrade/locus.git",
-       {ref,"e78adf49dfa7b40e057c160d68928d031ba6f292"}},
+       {ref,"036dbe9fc456eaa2814a3e1e7a3dfb92f0a62490"}},
   0},
  {<<"meck">>,
   {git,"https://github.com/eproxus/meck",
@@ -194,6 +195,7 @@
   {git,"https://github.com/erlangpack/termit",
        {ref,"c1d0dde3b184a48f8253f0f3fd4b73a2eba4905e"}},
   0},
+ {<<"tls_certificate_check">>,{pkg,<<"tls_certificate_check">>,<<"1.7.0">>},1},
  {<<"ua_classifier">>,
   {git,"https://github.com/zotonic/ua_classifier.git",
        {ref,"37ba6bb25576c225bf414d1517de908635612413"}},
@@ -213,4 +215,10 @@
  {<<"z_stdlib">>,
   {git,"https://github.com/zotonic/z_stdlib.git",
        {ref,"26369cbec03173d7e01db6e3303e87965dbac229"}},
-  0}].
+  0}]}.
+[
+{pkg_hash,[
+ {<<"tls_certificate_check">>, <<"A707839AAFB31C1888F86EB5484617DE3B3909A508521AD4F52641375DDC2231">>}]},
+{pkg_hash_ext,[
+ {<<"tls_certificate_check">>, <<"B5014C39239DEA00197C6C315E5178C0B112DF34E75C2BDD5939B95564E369CA">>}]}
+].
