@@ -111,8 +111,8 @@ websocket_message(Data, SenderPid, Context) ->
         websocket_send_data(SenderPid, ReplyData),
         websocket_message(RestData, SenderPid, ContextWs)
     catch
-        Error:X ->
-            lager:warning("~p:~p~n~p", [Error, X, erlang:get_stacktrace()]),
+        Error:X:Stacktrace ->
+            lager:warning("~p:~p~n~p", [Error, X, Stacktrace]),
             {ok, Context}
     end.
 

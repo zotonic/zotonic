@@ -228,10 +228,9 @@ websocket_handler_handle_event(#req_adapter{req=Req}, Handler, Name, EventArgs, 
     try
         Handler:websocket_handle_event(Name, [Req|EventArgs], HandlerOpts)
     catch
-        EvClass:EvError ->
+        EvClass:EvError:EvStack ->
             error_logger:error_msg("~p:handle_event/3 crashed ~p:~p~n~p",
-                                   [Handler, EvClass, EvError,
-                                    erlang:get_stacktrace()])
+                                   [Handler, EvClass, EvError, EvStack])
     end.
 
 % @doc Atoms used to identify messages in {active, once | true} mode.

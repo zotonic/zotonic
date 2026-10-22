@@ -162,8 +162,7 @@ event(#submit{message={rscform, Args}}, Context) ->
             z_render:growl_error("Your search query is invalid. Please correct it before saving.", Context);
         throw:{error, Message} when is_list(Message); is_binary(Message) ->
             z_render:growl_error(Message, Context);
-        X:Y ->
-            Stacktrace = erlang:get_stacktrace(),
+        X:Y:Stacktrace ->
             lager:error("Rsc update error: ~p:~p stacktrace: ~p", [X, Y, Stacktrace]),
             z_render:growl_error("Something went wrong. Sorry.", Context)
     end;

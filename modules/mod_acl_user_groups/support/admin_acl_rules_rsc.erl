@@ -98,8 +98,7 @@ update(Id, CatId, CGId, Context, ErrorContext) ->
             z_render:growl_error("You don't have permission to edit this page.", ErrorContext);
         throw:{error, Message} when is_list(Message); is_binary(Message) ->
             z_render:growl_error(Message, ErrorContext);
-        X:Y ->
-            Stacktrace = erlang:get_stacktrace(),
+        X:Y:Stacktrace ->
             lager:error("Rsc update error: ~p:~p stacktrace: ~p", [X, Y, Stacktrace]),
             z_render:growl_error("Something went wrong. Sorry.", ErrorContext)
     end.
