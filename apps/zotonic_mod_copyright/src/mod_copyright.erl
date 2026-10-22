@@ -31,6 +31,11 @@ The admin panel manages `rights`, `rights_attribution`, `rights_year`,
 credit line; provenance describes where the material came from, such as a
 collection, archive reference, or publication.
 
+In the resource editor, open **Settings & more** and expand **Rights, attribution
+and provenance** to edit these fields.
+
+![The expanded copyright admin panel with license, attribution, year, provenance editor, and source URL fields.](../priv/doc/admin-copyright.jpg)
+
 `provenance_html` is optional rich text and supports the resource's languages.
 Templates use the normal resource language fallback when a translation is missing.
 `provenance_url` is an optional, language-independent link to the original source
