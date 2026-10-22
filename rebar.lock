@@ -164,7 +164,7 @@
   0},
  {<<"recon">>,
   {git,"https://github.com/ferd/recon.git",
-       {ref,"d19f241c414ef1681a27ac9ed019a984acbe6863"}},
+       {ref,"c2a76855be3a226a3148c0dfc21ce000b6186ef8"}},
   0},
  {<<"router">>,
   {git,"https://github.com/zotonic/router.git",
