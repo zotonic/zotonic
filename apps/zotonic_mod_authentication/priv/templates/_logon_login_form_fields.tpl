@@ -20,12 +20,15 @@
     {% block field_password %}
         <div class="form-group">
             <label for="password" class="control-label">{_ Password _}</label>
-            <input class="form-control" type="password" id="password" name="password" value=""
-                   required
-                   placeholder="{_ Password _}"
-                   autocomplete="current-password"
-                   autocapitalize="off"
-                   autocorrect="off">
+            <div class="input-group">
+                <input class="form-control" type="password" id="password" name="password" value=""
+                       required
+                       placeholder="{_ Password _}"
+                       autocomplete="current-password"
+                       autocapitalize="off"
+                       autocorrect="off">
+                {% include "_password_visibility.tpl" target_id="password" %}
+            </div>
         </div>
     {% endblock %}
 
@@ -113,14 +116,19 @@
         <div class="form-group {% if is_show_passcode or is_set_passcode %}x-hidden{% endif %}" id="form-password"
             {% if is_show_passcode or is_set_passcode %}style="padding:0; height:0; margin:0; overflow:hidden;" aria-hidden="true"{% endif %}>
             <label for="password" class="control-label">{_ Password _}</label>
-            <input class="form-control" type="password" id="password" name="password" value="{{ q.password|escape }}"
-                   required
-                   {% if not is_show_passcode %}autofocus{% endif %}
-                   autocomplete="current-password"
-                   autocapitalize="off"
-                   autocorrect="off"
-                   placeholder="{_ Password _}"
-                   {% if is_show_passcode or is_set_passcode %}tabindex="-1"{% endif %}>
+            <div class="input-group">
+                <input class="form-control" type="password" id="password" name="password" value="{{ q.password|escape }}"
+                       required
+                       {% if not is_show_passcode %}autofocus{% endif %}
+                       autocomplete="current-password"
+                       autocapitalize="off"
+                       autocorrect="off"
+                       placeholder="{_ Password _}"
+                       {% if is_show_passcode or is_set_passcode %}tabindex="-1"{% endif %}>
+                {% if not is_show_passcode and not is_set_passcode %}
+                    {% include "_password_visibility.tpl" target_id="password" %}
+                {% endif %}
+            </div>
         </div>
 
         {% if is_show_passcode %}
@@ -141,12 +149,15 @@
     {% elseif not q.options.is_username_checked %}
         <div class="form-group x-hidden" id="form-password" style="padding:0; height:0; margin:0; overflow:hidden;" aria-hidden="true">
             <label for="password" class="control-label">{_ Password _}</label>
-            <input class="form-control" type="password" id="password" name="password" value=""
-                   placeholder="{_ Password _}"
-                   autocomplete="current-password"
-                   autocapitalize="off"
-                   autocorrect="off"
-                   tabindex="-1">
+            {# Keep the input in place when Cotonic reveals the password step. #}
+            <div class="input-group">
+                <input class="form-control" type="password" id="password" name="password" value=""
+                       placeholder="{_ Password _}"
+                       autocomplete="current-password"
+                       autocapitalize="off"
+                       autocorrect="off"
+                       tabindex="-1">
+            </div>
         </div>
         <div class="form-group passcode x-hidden" id="form-passcode" style="padding:0; height:0; margin:0; overflow:hidden;" aria-hidden="true">
             <label for="passcode" class="control-label">{_ Passcode _}</label>
