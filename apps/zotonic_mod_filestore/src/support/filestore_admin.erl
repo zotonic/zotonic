@@ -30,6 +30,15 @@
 
 -define(BATCH_MOVE, 100).
 
+event(#postback{message={filestore_unrecoverable, Args}}, Context) ->
+    case m_filestore:mark_unrecoverable(proplists:get_value(id, Args), Context) of
+        ok ->
+            z_render:wire({reload, []}, Context);
+        {error, eacces} ->
+            z_render:growl_error(?__("Only the admin account (user 1) can mark files unrecoverable.", Context), Context);
+        {error, _} ->
+            z_render:growl_error(?__("This file no longer has an eligible error older than 24 hours. Reload the page.", Context), Context)
+    end;
 event(#submit{message=admin_filestore}, Context) ->
     case z_acl:is_allowed(use, mod_admin_config, Context) of
         true ->

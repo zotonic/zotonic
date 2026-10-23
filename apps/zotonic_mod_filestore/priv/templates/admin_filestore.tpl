@@ -3,6 +3,8 @@
 {% block title %}{_ Cloud File Store Configuration _}{% endblock %}
 
 {% block content %}
+    {% include "_filestore_health.tpl" %}
+    {% include "_filestore_prolonged_errors.tpl" %}
     <div class="admin-header">
         <h2>{_ Cloud File Store Configuration _}</h2>
 

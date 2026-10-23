@@ -230,7 +230,7 @@ for the configuration and statistics model. Storage requests use `s3filez`,
 -mod_title("File Storage").
 -mod_description("Store files on cloud storage services using FTP, S3 and WebDAV").
 -mod_prio(500).
--mod_schema(12).
+-mod_schema(14).
 -mod_provides([filestore]).
 -mod_depends([cron]).
 -mod_config([
@@ -605,10 +605,20 @@ lookup_1(Path, Context) ->
                 {ok, {pid, Pid}} ->
                     {ok, {filezcache, Pid, StoreEntry}};
                 {error, enoent} ->
-                    load_cache(StoreEntry, Context)
+                    load_cache_if_due(StoreEntry, Context)
             end;
         {error, _} ->
             undefined
+    end.
+
+%% Cached copies remain usable during a remote outage. Only a cache miss needs
+%% the cooldown check; the atomic claim below arbitrates concurrent retries.
+load_cache_if_due(#{is_unrecoverable := true}, _Context) ->
+    undefined;
+load_cache_if_due(#{retry_after := RetryAfter} = Entry, Context) ->
+    case RetryAfter =:= undefined orelse RetryAfter =< calendar:universal_time() of
+        true -> load_cache(Entry, Context);
+        false -> undefined
     end.
 
 load_cache(#{
@@ -632,8 +642,12 @@ load_cache(#{
             }),
             Ctx = z_context:prune_for_async(Context),
             StreamFun = fun(CachePid) ->
+                Claim = case m_filestore:claim_download(Id, Ctx) of
+                    {ok, C} -> C;
+                    {error, _} -> exit(normal)
+                end,
                 Mod = filestore_request:filezmod(CredService),
-                Mod:stream(
+                try Mod:stream(
                     Cred,
                     Location1,
                     fun
@@ -649,7 +663,7 @@ load_cache(#{
                             }),
                             % Do not signal a backoff, as s3 has the strange behaviour
                             % of returning 'forbidden' on missing entries...
-                            ok = m_filestore:mark_error(Id, FinalError, Ctx),
+                            ok = m_filestore:complete_download(Id, Claim, {error, FinalError}, Ctx),
                             exit(normal);
                         ({error, Reason} = Error) ->
                             % Abnormal exit when receiving an error.
@@ -663,6 +677,7 @@ load_cache(#{
                                 remote => Location,
                                 id => Id
                             }),
+                            ok = m_filestore:complete_download(Id, Claim, Error, Ctx),
                             update_backoff(fail, Ctx),
                             exit(Error);
                         (stream_start) ->
@@ -672,9 +687,22 @@ load_cache(#{
                         (B) when is_binary(B) ->
                             filezcache:append_stream(CachePid, B);
                          (eof) ->
+                            ok = m_filestore:complete_download(Id, Claim, ok, Ctx),
                             update_backoff(success, Ctx),
                             filezcache:finish_stream(CachePid)
                     end)
+                of
+                    {error, _} = StreamError ->
+                        ok = m_filestore:complete_download(Id, Claim, StreamError, Ctx),
+                        exit(StreamError);
+                    ok -> ok
+                catch
+                    Class:Reason:Stack ->
+                        % Also cover transport exceptions and failures before the
+                        % first callback. A completed token makes this idempotent.
+                        _ = m_filestore:complete_download(Id, Claim, {error, Reason}, Ctx),
+                        erlang:raise(Class, Reason, Stack)
+                end
             end,
             case filezcache:insert_stream(Location, Size, StreamFun, [monitor]) of
                 {ok, Pid} ->
