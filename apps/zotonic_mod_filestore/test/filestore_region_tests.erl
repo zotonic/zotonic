@@ -15,19 +15,20 @@ credentials_test() ->
     end, [<<"ftp">>, <<"webdav">>]).
 
 region_configuration_test() ->
+    Context = #context{site = zotonic_site_testsandbox},
     Saved = [{K, application:get_env(zotonic_mod_filestore, K)} || K <- [s3region, is_config_locked]],
     meck:new(m_config, [passthrough, no_link]),
     try
         application:set_env(zotonic_mod_filestore, is_config_locked, false),
         application:set_env(zotonic_mod_filestore, s3region, <<" eu-central-1 ">>),
         meck:expect(m_config, get_value, fun(mod_filestore, s3region, _) -> undefined end),
-        ?assertEqual(<<"eu-central-1">>, filestore_config:s3region(undefined)),
+        ?assertEqual(<<"eu-central-1">>, filestore_config:s3region(Context)),
         meck:expect(m_config, get_value, fun(mod_filestore, s3region, _) -> <<>> end),
-        ?assertEqual(<<>>, filestore_config:s3region(undefined)),
+        ?assertEqual(<<>>, filestore_config:s3region(Context)),
         meck:expect(m_config, get_value, fun(mod_filestore, s3region, _) -> <<" eu-west-1 ">> end),
-        ?assertEqual(<<"eu-west-1">>, filestore_config:s3region(undefined)),
+        ?assertEqual(<<"eu-west-1">>, filestore_config:s3region(Context)),
         application:set_env(zotonic_mod_filestore, is_config_locked, true),
-        ?assertEqual(<<"eu-central-1">>, filestore_config:s3region(undefined))
+        ?assertEqual(<<"eu-central-1">>, filestore_config:s3region(Context))
     after
         meck:unload(m_config),
         lists:foreach(fun
