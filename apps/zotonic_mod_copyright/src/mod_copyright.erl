@@ -1,6 +1,6 @@
 %% @copyright 2024-2026 Driebit BV
 %% @doc Add a panel to the admin to manage the copyright and
-%% attribution of resources.
+%% attribution and provenance of resources.
 %% @end
 
 %% Copyright 2024-2026 Driebit BV
@@ -24,12 +24,30 @@
     ]
 }).
 -moduledoc("
-Module for copyright metadata, rights statements, and attribution helpers.
+Module for copyright metadata, rights statements, attribution, and source provenance.
+
+The admin panel manages `rights`, `rights_attribution`, `rights_year`,
+`provenance_html`, and `provenance_url` on each resource. Attribution is the
+credit line; provenance describes where the material came from, such as a
+collection, archive reference, or publication.
+
+In the resource editor, open **Settings & more** and expand **Rights, attribution
+and provenance** to edit these fields.
+
+![The expanded copyright admin panel with license, attribution, year, provenance editor, and source URL fields.](../priv/doc/admin-copyright.jpg)
+
+`provenance_html` is optional rich text and supports the resource's languages.
+Templates use the normal resource language fallback when a translation is missing.
+`provenance_url` is an optional, language-independent link to the original source
+record. The standard resource property handling sanitizes HTML and URLs.
+
+Include `{% include \"_provenance.tpl\" id=id %}` to display source provenance.
+It is separate from `_copyright.tpl` and has no site-wide default values.
 
 ").
 
 -mod_title("Copyright").
--mod_description("Add copyrights and attribution to resources").
+-mod_description("Add copyrights, attribution and provenance to resources").
 -mod_prio(500).
 -mod_config([
         #{

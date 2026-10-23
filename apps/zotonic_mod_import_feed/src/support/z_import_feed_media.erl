@@ -22,8 +22,9 @@
 -export([queue/4, download_task/6, resolve/2, identity/1, fetch/2]).
 
 -define(MAX_MEDIA_BYTES, 20 * 1024 * 1024).
--define(MAX_RETRIES, 5).
+-define(MAX_RETRIES, 16).
 -define(RETRY_SECONDS, 60).
+-define(MAX_RETRY_SECONDS, 12 * 60 * 60).
 
 %% @doc Media may be embedded data; feed and article URLs remain HTTP-only.
 -spec resolve(binary(), binary()) -> binary().
@@ -63,8 +64,7 @@ queue(FeedId, Id, Url, Context) ->
             case m_rsc:update(Id, #{<<"feed_medium_pending_url">> => identity(Url)}, [no_touch], Context) of
                 {ok, _} ->
                     Medium = m_media:get(Id, Context),
-                    case z_pivot_rsc:insert_task(?MODULE, download_task, Id,
-                            [FeedId, Id, Url, Medium, 0], Context) of
+                    case z_pivot_rsc:insert_task(?MODULE, download_task, Id, [FeedId, Id, Url, Medium, 0], Context) of
                         {ok, _} -> log(FeedId, Id, Url, <<"queued">>, undefined, Context);
                         {error, _} = Error -> Error
                     end;
@@ -100,8 +100,10 @@ download_task(FeedId, Id, Url, Medium, Retry, Context) ->
 
 import_context(#{user_id := User} = Feed, Context) when is_integer(User) ->
     case {m_import_feed:is_admin_user(User, Context), z_auth:is_enabled(User, Context)} of
-        {true, _} -> {error, admin_import_user};
-        {_, false} -> {error, editor_disabled};
+        {true, _} ->
+            {error, admin_import_user};
+        {_, false} ->
+            {error, editor_disabled};
         {false, true} ->
             ImportContext = z_acl:logon(User, #{user_groups => maps:get(user_groups, Feed)}, z_context:new(Context)),
             case z_acl:is_read_only(ImportContext) of
@@ -126,8 +128,14 @@ download(Id, Url, Medium, Context) ->
                     case pending(Id, Url, Medium, Context) of
                         false -> ok;
                         true ->
-                            Upload = #upload{filename = media_filename(Url, FinalUrl, Headers), data = Data},
-                            Props = #{<<"feed_medium_url">> => identity(Url), <<"feed_medium_pending_url">> => undefined},
+                            Upload = #upload{
+                                filename = media_filename(Url, FinalUrl, Headers),
+                                data = Data
+                            },
+                            Props = #{
+                                <<"feed_medium_url">> => identity(Url),
+                                <<"feed_medium_pending_url">> => undefined
+                            },
                             case m_media:replace_file(Upload, Id, Props, [is_import, no_touch], Context) of
                                 {ok, _} -> ok;
                                 {error, _} = Error -> Error
@@ -147,9 +155,14 @@ media_filename(_, FinalUrl, _) ->
 result(ok, FeedId, Id, Url, _Medium, _Retry, Context) ->
     log(FeedId, Id, Url, <<"ok">>, undefined, Context);
 result({error, Reason}, FeedId, Id, Url, Medium, Retry, Context)
-    when Retry < ?MAX_RETRIES, Reason =/= eacces ->
+    when
+        Retry < ?MAX_RETRIES,
+        Reason =/= eacces ->
     log(FeedId, Id, Url, <<"retry">>, Reason, Context),
-    {delay, ?RETRY_SECONDS * (1 bsl Retry), [FeedId, Id, Url, Medium, Retry + 1]};
+    {delay,
+        max(min(?MAX_RETRY_SECONDS, ?RETRY_SECONDS * (1 bsl Retry)),
+            z_import_feed_http:error_delay(Reason)),
+        [FeedId, Id, Url, Medium, Retry + 1]};
 result({error, Reason}, FeedId, Id, Url, _Medium, _Retry, Context) ->
     log(FeedId, Id, Url, <<"error">>, Reason, Context).
 
@@ -158,7 +171,15 @@ log(FeedId, Id, Url, Status, Reason, Context) ->
         undefined -> undefined;
         _ -> m_import_feed:error_message(Reason, Context)
     end,
-    m_import_feed_log:write(FeedId, #{event => <<"media">>, status => Status,
-        uri => identity(Url), rsc_id => Id, user_id => z_acl:user(Context),
-        category_id => m_rsc:p(Id, category_id, Context),
-        content_group_id => m_rsc:p(Id, content_group_id, Context), message => Message}, Context).
+    m_import_feed_log:write(
+        FeedId,
+        #{
+            event => <<"media">>,
+            status => Status,
+            uri => identity(Url),
+            rsc_id => Id,
+            user_id => z_acl:user(Context),
+            category_id => m_rsc:p(Id, category_id, Context),
+            content_group_id => m_rsc:p(Id, content_group_id, Context), message => Message
+        },
+        Context).

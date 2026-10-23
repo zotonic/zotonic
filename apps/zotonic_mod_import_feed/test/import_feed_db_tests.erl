@@ -200,6 +200,23 @@ poll_and_media() ->
         ?assertEqual(0, meck:num_calls(z_import_feed_http, get, ['_', '_', '_'])),
         meck:expect(z_import_feed_http, get, fun(_, _, _) -> {error, timeout} end),
         {delay, 60, RetryArgs} = run_media_task(C),
+        [TaskFeed, TaskId, TaskUrl, TaskMedium, 1] = RetryArgs,
+        Task = fun(Retry) ->
+            z_import_feed_media:download_task(TaskFeed, TaskId, TaskUrl, TaskMedium, Retry, C)
+        end,
+        Delays = [120, 240, 480, 960, 1920, 3840, 7680, 15360, 30720,
+            43200, 43200, 43200, 43200, 43200, 43200],
+        lists:foreach(fun({Retry, Delay}) ->
+            ?assertEqual({delay, Delay, [TaskFeed, TaskId, TaskUrl, TaskMedium, Retry + 1]}, Task(Retry))
+        end, lists:zip(lists:seq(1, 15), Delays)),
+        ?assertEqual(ok, Task(16)),
+        meck:expect(z_import_feed_http, get, fun(_, _, _) ->
+            {error, {http_status, 503, {retry_after, 86400}}}
+        end),
+        ?assertMatch({delay, 86400, _}, Task(15)),
+        ?assertEqual(ok, Task(16)),
+        meck:expect(z_import_feed_http, get, fun(_, _, _) -> {error, eacces} end),
+        ?assertEqual(ok, Task(1)),
         ?assertEqual(undefined, m_media:get(Mid, C)),
         meck:expect(z_import_feed_http, get, MediaFetch),
         ?assertEqual(ok, apply(z_import_feed_media, download_task, RetryArgs ++ [C])),
@@ -520,4 +537,53 @@ data_media() ->
         m_acl_rule:delete_managed(?MODULE, Context),
         z_db:q("delete from import_feed where id=$1", [FeedId], Context),
         z_db:q("delete from import_feed_resource where uri in ($1,$2)", [Uri, MediaUri], Context)
+    end.
+
+poll_schedule_test_() -> {timeout, 60, fun poll_schedule/0}.
+
+poll_schedule() ->
+    C = z_acl:logon(1, z_context:new(zotonic_site_testsandbox)),
+    ok = m_import_feed:install(C),
+    User = import_user(C),
+    {ok, FeedId} = m_import_feed:save(undefined, #{
+        <<"user_id">> => User, <<"url">> => <<"https://example.org/schedule.xml">>,
+        <<"title">> => <<"Schedule">>, <<"category_id">> => m_rsc:rid(article, C),
+        <<"poll_minutes">> => 60, <<"is_paused">> => true}, C),
+    ok = meck:new(z_import_feed_http, [passthrough]),
+    Run = fun(Result, Failures, Seconds) ->
+        meck:expect(z_import_feed_http, get, fun(_, _) -> Result end),
+        z_db:q("update import_feed set refetch_deleted=true, next_poll='2000-01-01' where id=$1", [FeedId], C),
+        ok = z_import_feed_poll:run(C),
+        ?assertEqual({Failures, true}, z_db:q_row("select failure_count,
+            next_poll > now() + ($2-2)*interval '1 second'
+            and next_poll <= now() + $2*interval '1 second'
+            from import_feed where id=$1", [FeedId, Seconds], C))
+    end,
+    Success = fun(Hint) ->
+        Xml = <<"<rss><channel>", Hint/binary, "</channel></rss>">>,
+        {ok, {<<"https://example.org/schedule.xml">>, [], byte_size(Xml), Xml}}
+    end,
+    try
+        Run(Success(<<"<ttl>180</ttl>">>), 0, 10800),
+        Run({error, timeout}, 1, 10800),
+        Run({error, timeout}, 2, 14400),
+        Run({error, {http_status, 429, {retry_after, 86400}}}, 3, 86400),
+        Run({error, {http_status, 503}}, 4, 43200),
+        Run(Success(<<"<ttl>5</ttl>">>), 0, 3600),
+        Run({error, timeout}, 1, 7200),
+        Run(Success(<<>>), 0, 3600),
+        ?assertEqual(0, z_db:q1("select poll_hint_seconds from import_feed where id=$1", [FeedId], C)),
+        % Upgrade old rows without losing their settings; rerunning is harmless.
+        ok = z_db:transaction(fun(Ctx) ->
+            z_db:q("alter table import_feed drop column failure_count, drop column poll_hint_seconds", Ctx),
+            z_db:flush(Ctx),
+            ok = m_import_feed:install(Ctx),
+            ok = m_import_feed:install(Ctx),
+            ?assertEqual({60, 0, 0}, z_db:q_row("select poll_minutes, failure_count, poll_hint_seconds
+                from import_feed where id=$1", [FeedId], Ctx)),
+            ok
+        end, C)
+    after
+        meck:unload(z_import_feed_http),
+        z_db:q("delete from import_feed where id=$1", [FeedId], C)
     end.

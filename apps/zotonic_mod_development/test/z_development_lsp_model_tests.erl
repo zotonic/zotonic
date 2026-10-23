@@ -134,5 +134,30 @@ site_data_test() ->
         meck:unload(m_predicate), meck:unload(z_module_manager)
     end.
 
+edge_predicates_test() ->
+    meck:new(m_predicate, [non_strict]),
+    try
+        Context = z_context:new(lsp_model_test),
+        meck:expect(m_predicate, all, fun(_) -> [{depiction, []}, {author, []}] end),
+        lists:foreach(fun(Operation) ->
+            Prefix = <<"{{ m.edge.", Operation/binary, "[someid].dep">>,
+            ?assertEqual([], complete(Prefix, false, Context)),
+            ?assertMatch([#{label := <<"depiction">>}], complete(Prefix, true, Context)),
+            Quoted = <<"{{ m.edge.", Operation/binary, "[someid][\"dep">>,
+            [#{textEdit := #{range := Range, newText := <<"depiction">>}}] = complete(Quoted, true, Context),
+            ?assertEqual(#{start => #{line => 0, character => byte_size(Quoted) - 3},
+                'end' => #{line => 0, character => byte_size(Quoted)}}, Range)
+        end, [<<"o">>, <<"s">>, <<"o_props">>, <<"s_props">>, <<"id">>, <<"edges">>]),
+        meck:reset(m_predicate),
+        lists:foreach(fun(Source) ->
+            ?assertEqual([], complete(Source, true, Context))
+        end, [<<"{{ m.edge.o.dep">>, <<"{{ m.edge.o[id].depiction.dep">>,
+              <<"{{ m.edge.graph[id].dep">>, <<"{{ m.edge[id].dep">>]),
+        ?assertEqual([], complete(<<"{{ m.edge.o[id].dep">>, false, Context)),
+        ?assertNot(meck:called(m_predicate, all, ['_']))
+    after
+        meck:unload(m_predicate)
+    end.
+
 complete(Text, Known, Context) ->
     z_development_lsp_model:complete(Text, Text, z_development_lsp_model_path:parse(Text), Known, Context).

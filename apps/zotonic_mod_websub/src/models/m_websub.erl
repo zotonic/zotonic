@@ -29,6 +29,7 @@
 
 | Method | Path | Result |
 | --- | --- | --- |
+| `get` | `/failed_hostnames` | Sorted, distinct failed remote hostnames; requires `use mod_websub`. Payload: `type` (`all`, `export`, `import`). |
 | `get` | `/subscriptions` | Paginated overview; requires `use mod_websub`. Payload: `type` (`all`, `export`, `import`), numeric local `rsc_id`, `hostname`, `status`, `errors` (`yes`/`no`/`all`), and `page`. |
 | `get` | `/subscriber_count/+id` | Number of unexpired incoming subscriptions; requires resource edit permission. |
 | `get` | `/status/+id` | Latest import subscription status for an editable resource, or `undefined` when none exists. |
@@ -81,8 +82,12 @@ callers must not use them to bypass authorization or callback verification.
 Publisher queues coalesce resource versions, enforce lease expiry, and recheck
 current access within the original authentication's group restrictions. Delivery
 contains the complete JSON topic representation and a signature when a secret was
-supplied. Exhausted retries discard that notification, allowing later updates to
-retry delivery for the remaining lease.
+supplied. Exhausted retries discard the notification and mark the subscription
+as errored with `retry_timeout`. The confirmed lease is retained; later resource
+updates can start a new delivery window. Retries back off quadratically from five
+minutes to twelve hours, ending one week after the first attempt or at lease expiry,
+whichever comes first. Newer queued versions preserve the window and backoff;
+successful delivery clears them.
 
 Subscriber callbacks identify the subscription by capability token and validate
 the signed resource URI. Public imports consume the pushed JSON; credentialed
@@ -129,12 +134,19 @@ renewal, pending intent, callback rotation, and subscriber state persistence."/u
 
 -define(PUSH_BATCH_SIZE, 100).
 -define(IMPORT_BATCH_SIZE, 100).
--define(MAX_PUSH_RETRIES, 8).
+-define(PUSH_RETRY_SECONDS, 7 * 24 * 60 * 60).
 -define(MAX_FETCH_RETRIES, 8).
 -define(ERROR_RETENTION_DAYS, 30).
 -define(ERROR_TEXT_MAX, 200).
 
 
+m_get([<<"failed_hostnames">> | Rest], #{payload := Filters}, Context) ->
+    case z_acl:is_allowed(use, mod_websub, Context) of
+        true ->
+            {ok, {failed_hostnames(Filters, Context), Rest}};
+        false ->
+            {error, eacces}
+    end;
 m_get([<<"subscriptions">> | Rest], #{payload := Filters}, Context) ->
     case z_acl:is_allowed(use, mod_websub, Context) of
         true ->
@@ -165,6 +177,28 @@ m_get([<<"status">>, Rsc | Rest], _Msg, Context) ->
     end;
 m_get(_, _, _) ->
     {error, unknown_path}.
+
+%% Suggestions cover all failed rows of the selected type, independent of paging
+%% and other filters. Return only normalized hostnames, never callback capabilities.
+failed_hostnames(Filters, Context) when is_map(Filters) ->
+    Type = maps:get(<<"type">>, Filters, undefined),
+    case valid_subscription_type(Type) of
+        true ->
+            Query = [
+                "select distinct hostname from (select ", subscription_hostname_sql("callback_url"),
+                " as hostname from websub_export where is_error and ($1::text is null or $1 <> 'import')
+                union all select ", subscription_hostname_sql("source_uri"),
+                " as hostname from websub_import
+                where (last_error is not null or credential_error is not null)
+                    and ($1::text is null or $1 <> 'export')) hosts
+                where hostname is not null and hostname <> '' order by hostname"
+            ],
+            [Host || {Host} <- z_db:q(iolist_to_binary(Query), [Type], Context)];
+        false ->
+            []
+    end;
+failed_hostnames(_, _Context) ->
+    [].
 
 %% Only called after the admin ACL check. Select an explicit safe projection;
 %% peer URLs are used internally to extract the hostname and are then discarded.
@@ -727,7 +761,7 @@ process_push_queue(Context) ->
         Context),
     lists:foreach(fun(Row) ->
         case is_push_ready(Row, Context) of
-            true -> process_push_row(Row, Context);
+            true -> prepare_push(Row, Context);
             false -> ok
         end
     end, Rows),
@@ -781,7 +815,7 @@ cleanup(Context) ->
 %% Recheck the selected version and due time: an edit may have reset the quiet
 %% period since the batch was selected. Never postpone transport retries for presence.
 is_push_ready({QueueId, _ExportId, RscId, Version, _RetryCount, _Callback,
-        _Topic, _Secret, _UserId, _LastVersion, _IsError, _AuthGroups}, Context) ->
+        _Topic, _Secret, _UserId, _LastVersion, _IsExpired, _AuthGroups}, Context) ->
     {Quiet, Deadline} = push_delays(Context),
     case z_db:q_row("
         select retry_count, created + ($3 * interval '1 second') <= now()
@@ -809,10 +843,26 @@ is_push_ready({QueueId, _ExportId, RscId, Version, _RetryCount, _Callback,
         {_Retries, _DeadlinePassed} -> true
     end.
 
-process_push_row({QueueId, ExportId, RscId, Version, RetryCount, Callback, Topic, Secret, UserId, LastPushVersion, IsError, AuthGroups}, Context) ->
+%% Start the persisted failure window only when the first delivery is attempted.
+%% Later versions share that window and cannot bypass its backoff or deadline.
+prepare_push({QueueId, ExportId, _RscId, Version, _RetryCount, _Callback,
+        _Topic, _Secret, _UserId, _LastVersion, _Expired, _Groups} = Row, Context) ->
+    case z_db:q_row("update websub_push_queue q
+        set retry_started = coalesce(q.retry_started, now())
+        from websub_export e
+        where q.id=$1 and e.id=q.export_id
+        returning e.lease > now(), q.retry_started + ($2 * interval '1 second') > now()",
+        [QueueId, ?PUSH_RETRY_SECONDS], Context) of
+        {true, true} -> process_push_row(Row, Context);
+        {true, false} -> flag_push_error(QueueId, ExportId, Version, retry_timeout, Context);
+        {_, _} -> delete_push_queue(QueueId, Version, Context);
+        undefined -> ok
+    end.
+
+process_push_row({QueueId, ExportId, RscId, Version, RetryCount, Callback, Topic, Secret, UserId, LastPushVersion, IsExpired, AuthGroups}, Context) ->
     % Re-checking visibility and current version here keeps the queue conservative:
     % work is dropped if access disappeared; an older notification sends current content.
-    case IsError orelse LastPushVersion >= Version orelse
+    case IsExpired orelse LastPushVersion >= Version orelse
         z_db:q1("select lease > now() from websub_export where id = $1", [ExportId], Context) =/= true of
         true ->
             delete_push_queue(QueueId, Version, Context);
@@ -859,6 +909,9 @@ deliver_push(Callback, Secret, Payload, Topic, QueueId, ExportId, Version, Retry
                 ",
                 [ ExportId, Version ],
                 Context),
+            z_db:q("update websub_push_queue set retry_started=null, retry_count=0,
+                last_error=null, last_error_at=null, due=now()
+                where id=$1 and version>$2", [QueueId, Version], Context),
             delete_push_queue(QueueId, Version, Context);
         {ok, Status} ->
             retry_or_flag_push(QueueId, ExportId, Version, RetryCount, {http_status, Status}, Context);
@@ -977,23 +1030,21 @@ import_payload_locked(ImportId, QueueId, QueuedVersion, Payload0, Context) ->
     end.
 
 
-retry_or_flag_push(QueueId, _ExportId, Version, RetryCount, Reason, Context) when RetryCount < ?MAX_PUSH_RETRIES ->
-    % Push failures stay on the queue until the retry budget is exhausted.
-    Delay = retry_delay_seconds(RetryCount),
-    _ = z_db:q("
-        update websub_push_queue
-        set retry_count = retry_count + 1,
-            due = now() + ($2 * interval '1 second'),
-            last_error = $3,
-            last_error_at = now(),
-            modified = now()
-        where id = $1
-          and version <= $4
-        ",
-        [ QueueId, Delay, error_text(Reason), Version ],
-        Context),
-    ok;
-retry_or_flag_push(QueueId, ExportId, Version, _RetryCount, Reason, Context) ->
+retry_or_flag_push(QueueId, _ExportId, _Version, RetryCount, Reason, Context) ->
+    % Keep the existing quadratic backoff, extending it up to twelve hours.
+    Step = min(RetryCount + 1, 12),
+    Delay = min(12 * 60 * 60, Step * Step * 300),
+    _ = z_db:q("update websub_push_queue q
+        set retry_count = q.retry_count + 1,
+            due = least(now() + ($2 * interval '1 second'),
+                q.retry_started + ($4 * interval '1 second'), e.lease),
+            last_error = $3, last_error_at = now(), modified = now()
+        from websub_export e
+        where q.id = $1 and e.id = q.export_id",
+        [QueueId, Delay, error_text(Reason), ?PUSH_RETRY_SECONDS], Context),
+    ok.
+
+flag_push_error(QueueId, ExportId, Version, Reason, Context) ->
     _ = z_db:q("
         update websub_export
         set is_error = true,
@@ -1153,14 +1204,11 @@ queue_push_subscription(ExportId, RscId, Version, Context) ->
            set local_rsc_id = excluded.local_rsc_id,
                version = greatest(websub_push_queue.version, excluded.version),
                due = case
+                    when websub_push_queue.retry_started is not null then websub_push_queue.due
                     when excluded.version > websub_push_queue.version then
                         least(now() + ($4 * interval '1 second'),
                               websub_push_queue.created + ($5 * interval '1 second'))
                     else websub_push_queue.due
-               end,
-               retry_count = case
-                    when excluded.version > websub_push_queue.version then 0
-                    else websub_push_queue.retry_count
                end,
                modified = case
                     when excluded.version > websub_push_queue.version then now()
@@ -1366,6 +1414,16 @@ install_import(Context) ->
                     last_received timestamp with time zone,
                     credential_error character varying(200),
                     credential_error_at timestamp with time zone,
+                    source_uri varchar(500),
+                    is_enabled boolean not null default true,
+                    callback_token varchar(64),
+                    replaces_id integer references websub_import(id) on delete set null,
+                    pending_mode varchar(16),
+                    pending_until timestamptz,
+                    next_check timestamptz default now(),
+                    retry_count integer not null default 0,
+                    retry_started timestamptz,
+                    last_error varchar(200),
                     created timestamp with time zone not null default now(),
                     modified timestamp with time zone not null default now(),
 
@@ -1398,6 +1456,7 @@ install_push_queue(Context) ->
                     local_rsc_id int not null,
                     version int not null,
                     retry_count int not null default 0,
+                    retry_started timestamp with time zone,
                     last_error character varying(200),
                     last_error_at timestamp with time zone,
                     due timestamp with time zone not null default now(),
@@ -1419,6 +1478,9 @@ install_push_queue(Context) ->
             z_db:flush(Context),
             ok;
         true ->
+            z_db:q("alter table websub_push_queue
+                add column if not exists retry_started timestamp with time zone", Context),
+            z_db:flush(Context),
             ok
     end.
 

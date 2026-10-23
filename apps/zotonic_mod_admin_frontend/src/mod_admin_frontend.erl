@@ -136,8 +136,9 @@ settings). This panel can be extended with extra tabs using the blocks `meta_tab
 Live view
 ------------
 
-The Live view button saves the current form on every click and opens a right-hand iframe
-showing saved content. Restoring an open panel on page load does not save. Resource,
+The Open panel / Close panel button toggles a right-hand iframe showing saved
+content without saving the form. A hint in the panel header reminds the user to
+save when the form has unsaved changes. Resource,
 media and incoming/outgoing edge events for both the edited resource and `tree_id`
 refresh the preview. Switching resources replaces the subscriptions; closing the
 panel releases them. Unsaved form changes are not rendered.

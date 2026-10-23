@@ -4,8 +4,11 @@
          tabindex="0" aria-label="{_ Resize Live view _}" aria-orientation="vertical"
          aria-controls="admin-edit-preview" aria-valuemin="30" aria-valuemax="60" aria-valuenow="40"></div>
     <div class="admin-edit-preview-toolbar">
-        <strong>{_ Live view _} <span class="admin-edit-preview-language" data-admin-preview-language
-            title="{_ Editing language _}" aria-live="polite"></span></strong>
+        <div class="admin-edit-preview-info">
+            <strong><span class="admin-edit-preview-language" data-admin-preview-language
+                title="{_ Editing language _}" aria-live="polite"></span></strong>
+            <span class="admin-edit-preview-dirty" data-admin-preview-dirty hidden aria-live="polite">{_ Click "Save" to see your changes. _}</span>
+        </div>
         <button type="button" class="btn btn-default btn-sm" data-admin-preview="refresh">{_ Refresh _}</button>
         <a class="btn btn-default btn-sm" data-admin-preview-link target="_blank" rel="noopener">{_ Open in new tab _}</a>
         <button type="button" class="btn btn-default btn-sm" data-admin-preview="close" aria-label="{_ Close Live view _}">&times;</button>

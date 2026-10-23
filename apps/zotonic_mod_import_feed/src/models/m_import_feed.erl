@@ -123,7 +123,9 @@ and groups. Submitted group memberships are never accepted.
 Category and content-group values can be resource IDs or names. Connections are a
 binary with one `predicate=resource` per line, or a list of such binaries from the
 connection picker. At most 50 connections are accepted and duplicates are removed. Media mode is `dependent`, `attached`
-or `none`, as a binary. Polling accepts 5 to 10080 minutes.
+or `none`, as a binary. `poll_minutes` is the minimum automatic polling interval,
+accepting 5 to 10080 minutes. Publisher refresh hints, failure backoff and HTTP
+429/503 `Retry-After` can extend it. A successful fetch and parse resets backoff.
 
 Omitted booleans are false in this API, including `use_wordpress`; the admin form
 explicitly enables WordPress enrichment. The defaults for category, media mode and
@@ -836,6 +838,8 @@ install(Context) ->
                     polls bigint not null default 0, imported bigint not null default 0,
                     updated bigint not null default 0, skipped bigint not null default 0,
                     errors bigint not null default 0, last_error text,
+                    failure_count integer not null default 0,
+                    poll_hint_seconds bigint not null default 0,
                     created timestamptz not null default now(), modified timestamptz not null default now()
                 )", Context);
         true ->
@@ -850,7 +854,9 @@ install(Context) ->
                 add column if not exists use_credentials boolean not null default false,
                 add column if not exists is_subscribe boolean not null default false,
                 add column if not exists is_subscribe_connections boolean not null default false,
-                add column if not exists refetch_deleted boolean not null default false
+                add column if not exists refetch_deleted boolean not null default false,
+                add column if not exists failure_count integer not null default 0,
+                add column if not exists poll_hint_seconds bigint not null default 0
             ", Context)
     end,
     z_db:q("create index if not exists import_feed_due_key on import_feed(next_poll) where not is_paused", Context),

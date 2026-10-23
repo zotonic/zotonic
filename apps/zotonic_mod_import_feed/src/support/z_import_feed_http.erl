@@ -17,7 +17,7 @@
 %% limitations under the License.
 
 -module(z_import_feed_http).
--export([get/2, get/3, get_json/2, url/1, resolve/2, context/2]).
+-export([get/2, get/3, get_json/2, url/1, resolve/2, context/2, retry_after/2, error_delay/1]).
 
 -define(MAX_URL_LENGTH, 2048).
 -define(MAX_RESPONSE_BYTES, 4 * 1024 * 1024).
@@ -95,6 +95,11 @@ get(Url, Limit, Extra, Context) ->
                 {ok, {_, _, Length, Body}} when Length >= Limit; byte_size(Body) >= Limit ->
                     {error, response_too_large};
                 {ok, _} = Ok -> Ok;
+                {error, {Code, _, Headers, _, _}} when Code =:= 429; Code =:= 503 ->
+                    case retry_after(Headers, calendar:universal_time()) of
+                        undefined -> {error, {http_status, Code}};
+                        Seconds -> {error, {http_status, Code, {retry_after, Seconds}}}
+                    end;
                 {error, {Code, _, _, _, _}} -> {error, {http_status, Code}};
                 {error, _} = Error -> Error
             after
@@ -107,3 +112,29 @@ get(Url, Limit, Extra, Context) ->
         false ->
             {error, unsafe_destination}
     end.
+
+%% @doc Parse Retry-After delta-seconds or HTTP-date without retaining headers.
+-spec retry_after(Headers, Now) -> non_neg_integer() | undefined when
+    Headers :: list(), Now :: calendar:datetime().
+retry_after(Headers, Now) ->
+    Values = [V || {K, V} <- Headers,
+        string:lowercase(z_convert:to_binary(K)) =:= <<"retry-after">>],
+    case Values of
+        [Value] ->
+            try
+                Bin = string:trim(z_convert:to_binary(Value)),
+                Seconds = case re:run(Bin, <<"^[0-9]{1,10}$">>, [{capture, none}]) of
+                    match -> binary_to_integer(Bin);
+                    nomatch -> max(0, calendar:datetime_to_gregorian_seconds(cow_date:parse_date(Bin))
+                        - calendar:datetime_to_gregorian_seconds(Now))
+                end,
+                case Seconds =< 2147483647 of true -> Seconds; false -> undefined end
+            catch _:_ -> undefined end;
+        _ -> undefined
+    end.
+
+%% @doc Additional delay requested by a throttled/unavailable HTTP endpoint.
+-spec error_delay(Reason) -> non_neg_integer() when Reason :: term().
+error_delay({http_status, Code, {retry_after, Seconds}})
+    when (Code =:= 429 orelse Code =:= 503), is_integer(Seconds), Seconds >= 0 -> Seconds;
+error_delay(_) -> 0.

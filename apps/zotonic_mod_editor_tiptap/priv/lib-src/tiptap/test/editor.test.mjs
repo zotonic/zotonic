@@ -310,7 +310,7 @@ test('media insertion and properties preserve markers and unknown media options'
         assert.equal(request.args.id, '12');
         const form = p.window.document.createElement('form');
         form.dataset.tiptapMediaRequest = request.args.request_id;
-        form.innerHTML = '<textarea name="caption">New caption</textarea><select name="align"><option value="right">Right</option></select>';
+        form.innerHTML = '<textarea name="caption">New caption</textarea><select name="align"><option value="right">Right</option></select><select name="size"><option value="xsmall">Extra small</option></select>';
         p.window.document.body.append(form);
         form.dispatchEvent(new p.window.Event('submit', { bubbles: true, cancelable: true }));
         p.api.save();
@@ -318,6 +318,8 @@ test('media insertion and properties preserve markers and unknown media options'
         assert.match(html, /<!-- z-media 12/);
         assert.match(html, /New caption/);
         assert.match(html, /"custom":"keep"/);
+        assert.match(html, /"size":"xsmall"/);
+        assert.ok(p.window.document.querySelector(".z-tiptap-media-xsmall"));
         editor.commands.undo();
         assert.equal(editor.getAttributes('zotonicMedia').options.caption, 'Caption');
     } finally { p.close(); }

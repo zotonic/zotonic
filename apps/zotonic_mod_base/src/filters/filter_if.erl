@@ -40,6 +40,26 @@ This is a shortcut for using the `tag#if` tag. The same can be expressed as foll
 
 Note that falsy values (0, `false`, `undefined` or empty string) evaluate to false.
 
+In templates, the compiler evaluates the condition once and only evaluates the
+selected argument. The other argument is not evaluated, so a model lookup in
+that branch does not run. Both arguments are required; use `undefined` when the
+false branch should produce no value.
+
+Combine the filter with `as` to reuse the selected value:
+
+```django
+{% if show_image|if:m.media[id]:undefined as medium %}
+    {{ medium.mime|escape }}
+{% endif %}
+```
+
+The media model is only queried when `show_image` is true. The block is rendered
+when the selected value is truthy, and `medium` contains that value.
+
+This lazy evaluation applies to compiled templates. Direct Erlang calls to
+`filter_if:'if'/4` follow normal Erlang evaluation: all arguments are evaluated
+before the function is called.
+
 
 
 Elaborate examples

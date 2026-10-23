@@ -51,6 +51,93 @@ var z_script_eval_id = "";
 
 var z_startup_time = Date.now();
 
+/** Page-local asset registry. Promise entries also deduplicate concurrent loads. */
+var z_assets = (() => {
+  const loaded = new Map();
+  let queue = Promise.resolve();
+
+  const observe = (element) => {
+    if (element.dataset.zAssetState === "loaded" ||
+        (element.tagName === "LINK" && element.sheet)) {
+      return Promise.resolve();
+    }
+    if (element.dataset.zAssetState === "error") {
+      return Promise.reject(new Error("Asset failed: " + (element.src || element.href)));
+    }
+    return new Promise((resolve, reject) => {
+      element.addEventListener("load", () => resolve(), { once: true });
+      element.addEventListener("error", () => reject(
+        new Error("Asset failed: " + (element.src || element.href))
+      ), { once: true });
+    });
+  };
+
+  const register = (keys, promise) => {
+    keys.forEach(key => loaded.set(key, promise));
+    // Failed requests may be retried by a later update.
+    promise.catch(() => keys.forEach(key => {
+      if (loaded.get(key) === promise) loaded.delete(key);
+    }));
+    return promise;
+  };
+
+  const discover = () => {
+    document.querySelectorAll("[data-z-assets]").forEach(element => {
+      if (element.dataset.zAssetRegistered) return;
+      element.dataset.zAssetRegistered = "true";
+      const keys = JSON.parse(element.dataset.zAssets);
+      const missing = keys.filter(key => !loaded.has(key));
+      if (missing.length) register(missing, observe(element));
+    });
+  };
+
+  const load = (asset) => {
+    if (loaded.has(asset.key)) return loaded.get(asset.key);
+    const element = document.createElement(asset.type === "css" ? "link" : "script");
+    if (asset.type === "css") {
+      element.rel = asset.rel;
+      element.media = asset.media;
+      if (asset.title) element.title = asset.title;
+      element.href = asset.url;
+    } else {
+      element.async = false;
+      element.src = asset.url;
+      if (z_script_nonce) element.nonce = z_script_nonce;
+    }
+    element.dataset.zAssets = JSON.stringify([asset.key]);
+    element.dataset.zAssetRegistered = "true";
+    const promise = register([asset.key], observe(element));
+    promise.catch(() => element.remove());
+    document.head.appendChild(element);
+    return promise;
+  };
+
+  const ensure = async (assets) => {
+    discover();
+    // Sequential loading preserves declaration order and CSS cascade order.
+    for (const asset of assets) await load(asset);
+  };
+
+  const run = (assets, update) => {
+    const result = queue.then(() => ensure(assets)).then(update).then(value => {
+      // Transport receipt can precede an asynchronous update by several seconds.
+      // Initialize forms after the actual DOM insertion as well.
+      if (typeof z_init_postback_forms === "function") z_init_postback_forms();
+      return value;
+    });
+    queue = result.catch(error => console.error("Template update failed", error));
+    return result;
+  };
+
+  // insertHtml must return a promise if its DOM update is asynchronous.
+  const apply = (result, insertHtml) => run(result.libs, async () => {
+    await insertHtml(result.html);
+    zotonic_eval(result.javascript);
+  });
+
+  return { ensure, run, apply };
+})();
+
 /* Startup
 ---------------------------------------------------------- */
 
@@ -963,10 +1050,8 @@ function z_progress(id, value) {
 function z_reload(args) {
   let page = $('#logon_form input[name="page"]'),
       qs = ensure_name_value(args),
-      rewriteUrl,
       newLanguage,
       href,
-      re,
       pathname,
       parts;
 
@@ -981,47 +1066,46 @@ function z_reload(args) {
   }
 
   newLanguage = args.z_language;
+  const isLanguageChange = typeof newLanguage === "string" && newLanguage !== "";
+  const isRewriteUrl = Boolean(args.z_rewrite_url);
 
-  if (typeof newLanguage === "string") {
-    // Change the language cookie when it is set.
-    for (const cookie of document.cookie.split(";")) {
-      const kv = cookie.trim().split("=");
-      if (window.self === window.top && kv[0] === "z.lang" && kv[1] !== newLanguage) {
-        const expirationDate = new Date();
-        expirationDate.setTime(
-          expirationDate.getTime() + 365 * 24 * 60 * 60 * 1000,
-        );
-        const expires = "expires=" + expirationDate.toUTCString();
-        document.cookie = `z.lang=${newLanguage};${expires};path=/`;
+  if (isLanguageChange) {
+    if (window.self === window.top) {
+      // For the top window, change the language cookie when it is set.
+      for (const cookie of document.cookie.split(";")) {
+        const kv = cookie.trim().split("=");
+        if (kv[0] === "z.lang" && kv[1] !== newLanguage) {
+          const expirationDate = new Date();
+          expirationDate.setTime(
+            expirationDate.getTime() + 365 * 24 * 60 * 60 * 1000,
+          );
+          const expires = "expires=" + expirationDate.toUTCString();
+          document.cookie = `z.lang=${newLanguage};${expires};path=/`;
+        }
       }
     }
 
     // Add or remove language from URL:
     pathname = window.location.pathname.substring(1);
-    if (z_language) {
-      // Remove current language
-      re = new RegExp("^" + z_language);
-      pathname = pathname.replace(re, "");
-    }
 
     // Get path parts
     parts = pathname.split("/").filter(function (p) {
       return p !== "";
     });
 
-    rewriteUrl = Boolean(args["z_rewrite_url"]);
-    if (rewriteUrl) {
+    if (z_language && parts[0] == z_language) {
+      // Remove current language
+      parts.shift();
+    }
+    const isHome = parts.length === 0;
+    if (isRewriteUrl) {
       // Add language to start
       parts.unshift(newLanguage);
     }
 
     href =
-      window.location.protocol +
-      "//" +
-      window.location.host +
-      "/" +
-      parts.join("/") +
-      (rewriteUrl && (pathname === "" || pathname === "/") ? "/" : "");
+      window.location.protocol + "//" + window.location.host + "/" +
+      parts.join("/") + (isRewriteUrl && isHome ? "/" : "");
   } else {
     href = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
   }
@@ -1031,10 +1115,17 @@ function z_reload(args) {
   // another window (for example the editor hosting this preview).
   const url = new URL(href);
   url.search = window.location.search;
-  url.searchParams.delete("z_language");
   url.searchParams.delete("z_rewrite_url");
-  if (typeof newLanguage === "string" && !rewriteUrl) {
-    url.searchParams.set("z_language", newLanguage);
+  for (const { name, value } of qs) {
+    if (name !== "z_language" && name !== "z_rewrite_url") {
+      url.searchParams.set(name, value);
+    }
+  }
+  if (isLanguageChange) {
+    url.searchParams.delete("z_language");
+    if (!isRewriteUrl) {
+      url.searchParams.set("z_language", newLanguage);
+    }
   }
   window.location.href = url.href;
 }

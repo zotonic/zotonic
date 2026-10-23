@@ -128,7 +128,7 @@ function zotonicMedia(previewUrl, openProperties, label) {
                 function render(current) {
                     const { id, options } = current.attrs;
                     const align = ['left', 'right'].includes(options.align) ? options.align : 'block';
-                    const size = ['small', 'middle'].includes(options.size) ? options.size : 'large';
+                    const size = ['xsmall', 'small', 'middle'].includes(options.size) ? options.size : 'large';
                     dom.className = `z-tiptap-media z-tiptap-media-${align} z-tiptap-media-${size}`;
                     image.src = previewUrl.replace('__ID__', encodeURIComponent(id));
                     const text = typeof options.caption === 'string' ? options.caption.trim() : '';

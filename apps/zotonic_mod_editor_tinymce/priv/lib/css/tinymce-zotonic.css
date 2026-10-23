@@ -45,6 +45,10 @@ img.z-tinymce-media-size-middle {
     width: 50%;
 }
 
+img.z-tinymce-media-size-xsmall {
+    width: 12.5%;
+}
+
 img.z-tinymce-media-size-small {
     width: 25%;
 }
