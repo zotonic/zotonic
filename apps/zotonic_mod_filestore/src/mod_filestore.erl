@@ -34,6 +34,8 @@ through a shared local cache when they are no longer on the site's disk.
 2. Open **System → Cloud File Store** in the admin. Changing settings and starting
    bulk moves require the `use mod_admin_config` permission.
 3. Enter the base URL and credentials for your storage service using the table below.
+   For S3, enter the provider's region to enable Signature V4, or leave it empty
+   to use legacy Signature V2.
 4. Select **Upload new media files to the cloud file store**. Decide whether to
    **Keep local files after upload** and choose the remote deletion delay.
 5. Save the settings. Zotonic writes, reads back, and deletes a temporary
@@ -69,6 +71,29 @@ permission to create directories and write, read, and delete files in the chosen
 location. For S3, the admin can try to create a private bucket if it is missing;
 this requires permission to create a bucket. The checkbox is a setup action, not
 a saved configuration option.
+
+### S3 signature version and region
+
+The **S3 region** field (`s3region`) selects the signature version automatically:
+
+| Effective region | Signature version |
+| --- | --- |
+| Empty, including whitespace-only values | Signature V2 (legacy) |
+| Nonempty, for example `eu-west-1` | Signature V4, signed for that region |
+
+Leading and trailing whitespace is removed. Use the region supplied by your
+storage provider; Zotonic does not infer it from the endpoint URL. There is no
+separate signature-version setting and no automatic fallback to V2 if a V4
+request fails. Providers requiring V4 need a nonempty, correct region.
+
+This selection applies to settings tests and all S3 file operations, including
+uploads, downloads, streaming, deletion, and bucket-creation requests. FTP and
+WebDAV ignore the region.
+
+An unset site region inherits the system-wide `s3region` default. An explicitly
+empty site region overrides that default and selects V2. When configuration is
+locked, the system-wide region determines the signature version. Existing
+installations without a region continue to use V2.
 
 ### S3 permissions
 
