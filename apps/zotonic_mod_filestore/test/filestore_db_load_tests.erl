@@ -6,6 +6,7 @@
 busy_pool_test() ->
     Modules = [z_db_pool, z_sidejob, m_filestore, filestore_config],
     lists:foreach(fun(M) -> meck:new(M, [passthrough, no_link]) end, Modules),
+    meck:expect(filestore_config, is_read_only, fun(_) -> false end),
     try
         meck:expect(z_db_pool, is_low_load, fun(_) -> false end),
         meck:expect(z_sidejob, space, fun() -> 100 end),
@@ -44,6 +45,7 @@ batch_sidejob() ->
     end,
     Modules = [z_db_pool, m_filestore, filestore_config],
     lists:foreach(fun(M) -> meck:new(M, [passthrough, no_link]) end, Modules),
+    meck:expect(filestore_config, is_read_only, fun(_) -> false end),
     Parent = self(),
     Context1 = #context{site = filestore_batch_test},
     Context2 = #context{site = filestore_batch_other_test},

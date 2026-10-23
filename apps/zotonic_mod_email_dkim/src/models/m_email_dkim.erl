@@ -71,6 +71,7 @@ admin_info(Context) ->
     #{
         <<"privkey_filepath">> => z_convert:to_binary(Priv),
         <<"pubkey_filepath">> => z_convert:to_binary(Pub),
+        <<"selector">> => z_convert:to_binary(z_email_dkim:dkim_selector(Context)),
         <<"dns_entry_domain">> => z_convert:to_binary(z_email_dkim:dns_entry_domain(Context)),
         <<"dns_entry">> => z_convert:to_binary(z_email_dkim:dns_entry(Context))
     }.

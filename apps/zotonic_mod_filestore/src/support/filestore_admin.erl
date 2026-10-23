@@ -30,6 +30,15 @@
 
 -define(BATCH_MOVE, 100).
 
+event(#postback{message={filestore_unrecoverable, Args}}, Context) ->
+    case m_filestore:mark_unrecoverable(proplists:get_value(id, Args), Context) of
+        ok ->
+            z_render:wire({reload, []}, Context);
+        {error, eacces} ->
+            z_render:growl_error(?__("Only the admin account (user 1) can mark files unrecoverable.", Context), Context);
+        {error, _} ->
+            z_render:growl_error(?__("This file no longer has an eligible error older than 24 hours. Reload the page.", Context), Context)
+    end;
 event(#submit{message=admin_filestore}, Context) ->
     case z_acl:is_allowed(use, mod_admin_config, Context) of
         true ->
@@ -46,7 +55,12 @@ event(#submit{message=admin_filestore}, Context) ->
                     DeleteInterval = z_context:get_q(<<"delete_interval">>, Context),
                     TLS = filestore_config:tls_options(Context),
                     Cred = filestore_config:credentials(Service, S3Key, S3Secret, S3Region, TLS),
-                    case testcred(Service, S3Url, Cred, IsCreateBucket) of
+                    % Read-only settings can be saved without a write-based test.
+                    TestResult = case filestore_config:is_read_only(Context) of
+                        true -> ok;
+                        false -> testcred(Service, S3Url, Cred, IsCreateBucket)
+                    end,
+                    case TestResult of
                         ok ->
                             m_config:set_value(mod_filestore, service, Service, Context),
                             m_config:set_value(mod_filestore, s3url, S3Url, Context),
@@ -135,6 +149,12 @@ service2mod(<<"webdav">>) -> webdavfilez.
     Context :: z:context(),
     Reason :: term().
 testcred(Context) ->
+    case filestore_config:is_read_only(Context) of
+        true -> {error, read_only};
+        false -> testcred_writable(Context)
+    end.
+
+testcred_writable(Context) ->
     Service = filestore_config:service(Context),
     S3Url = filestore_config:s3url(Context),
     Cred = filestore_config:credentials(Context),
@@ -231,6 +251,12 @@ noslash(B) ->
 
 
 queue_upload_all(Context) ->
+    case filestore_config:is_read_only(Context) of
+        true -> z_render:growl_error(?__("The cloud file store is read-only.", Context), Context);
+        false -> queue_upload_all_writable(Context)
+    end.
+
+queue_upload_all_writable(Context) ->
     Service = filestore_config:service(Context),
     S3Url = filestore_config:s3url(Context),
     Cred = filestore_config:credentials(Context),

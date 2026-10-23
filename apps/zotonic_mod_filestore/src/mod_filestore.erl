@@ -124,6 +124,7 @@ An unset site region inherits the global setting; locked configuration always us
 | `s3region` | S3 signing region, for example `eu-west-1`. A nonempty region enables Signature V4; empty uses legacy Signature V2. |
 | `s3key` | S3 access key, or FTP/WebDAV username. |
 | `s3secret` | S3 secret key, or FTP/WebDAV password. |
+| `is_read_only` | Download-only mode. Blocks uploads, remote deletion and write-based credential tests for every backend. Default `false`. A global or site-file `true` cannot be overridden by other settings. |
 | `is_upload_enabled` | Allow background uploads. Set explicitly when configuring storage outside the admin. Disabling this does not disable reads, queued downloads, or remote deletion. |
 | `is_local_keep` | Keep local files after successful upload. When false, uploaded files move into the evictable cache. |
 | `delete_interval` | Extra delay before deleting files marked for remote deletion: `0` (the default, no extra delay), `false` (never), seconds, or a value such as `1 week`, `2 days`, or `3 months`. |
@@ -137,6 +138,13 @@ the system configuration. Nonempty site settings override these defaults unless
 overrides the default, selecting Signature V2. This lock is a **system-wide** option: it makes sites
 use the application settings and prevents editing them through the filestore form.
 
+`is_read_only` is an exception to this override rule: setting it to `true` in the
+**global `zotonic_mod_filestore` configuration makes storage read-only for every
+site**, including sites with their own endpoints or credentials. A site cannot
+turn it off with `false`. This restriction works independently of
+`is_config_locked`; locking configuration is not required to enforce read-only
+storage. A site can also enable read-only mode when the global value is false.
+
 For example, merge this application entry into the system's Erlang configuration
 list, using your own endpoint and credentials:
 
@@ -146,6 +154,7 @@ list, using your own endpoint and credentials:
     {s3url, <<\"webdavs://files.example.com/zotonic/{{site}}\">>},
     {s3key, <<\"storage-user\">>},
     {s3secret, <<\"replace-with-password\">>},
+    {is_read_only, false},
     {is_upload_enabled, true},
     {is_local_keep, true},
     {delete_interval, <<\"false\">>},
@@ -153,11 +162,57 @@ list, using your own endpoint and credentials:
 ]}
 ```
 
+The example permits uploads. Set `{is_read_only, true}` in the same application
+entry to make all sites download-only. It takes precedence over
+`{is_upload_enabled, true}` and any `delete_interval`: uploads and remote deletes
+are blocked without changing those saved settings. This is useful when a staging
+or recovery installation needs to read existing storage without modifying it.
+
 In a **system-configured** base URL, `{{site}}` is replaced with the site name.
 If the placeholder is absent, Zotonic appends the site name as a directory.
 A base URL saved in the site's admin is used as entered, without this expansion.
 Configure `service` alongside the URL: URL-based service detection happens when
 saving the admin form, not when reading application configuration.
+
+### Read-only storage
+
+To allow downloads while preventing remote writes for **all sites**, merge this
+entry into the Zotonic global Erlang configuration list (or add the key to its
+existing `zotonic_mod_filestore` entry):
+
+```erlang
+{zotonic_mod_filestore, [
+    {is_read_only, true}
+]}
+```
+
+For one site, add this to its site configuration:
+
+```erlang
+{mod_filestore, [
+    {is_read_only, true}
+]}
+```
+
+These examples show the entry to merge into the existing configuration list.
+The setting can also be stored as `mod_filestore.is_read_only` in `m_config`.
+Restrictions are additive: a global or site-file `true` remains effective even
+if another source says `false`, or the service configuration is locked. The
+default is `false`. To restore writes, remove or disable every active read-only
+restriction; changing only a site setting cannot lift a global restriction.
+
+Read-only mode blocks background uploads, remote deletion, direct filestore
+upload/delete requests and the admin's write-based credential test. Direct writes
+return `{error, read_only}`. Existing upload and deletion queues are retained and
+can resume when read-only mode is disabled. Local registry deletion marks can still
+be recorded. Already dispatched remote operations cannot be revoked by changing
+configuration; enable read-only mode before starting the site when that matters.
+
+Normal downloads, cached reads and copying remote files to local disk remain
+available. The admin shows the effective mode and disables upload/test buttons.
+Settings can be saved without a write test; verify credentials by downloading an
+existing file. Read-only accounts need only the provider's read permissions for
+those objects. No test object or bucket is created in this mode.
 
 ## Uploads, local copies, and the cache
 
@@ -174,6 +229,28 @@ The `filezcache` application is shared by all sites. Its `max_bytes` application
 setting controls cache capacity (default 10 GiB). Cache files are disposable;
 retain the remote files and database registry. Keeping remote media copies does
 not replace a backup of the site's database, configuration, and application code.
+
+## Read failures and retries
+
+A failed remote cache read remains in the file registry and is retried when the
+file is requested again. This includes `forbidden` and `enoent`: a permission or
+account problem can be temporary, and S3 can return `forbidden` for missing files.
+
+Each file has its own exponential retry delay: nominally 5, 10, 20, 40 seconds,
+and so on, capped at ten minutes. Jitter varies each delay between 80% and 100%
+of that value. During the cooldown, requests do not start another remote read;
+an existing local or cached copy remains usable. A successful remote read clears
+the error and resets the delay. There is no automatic permanent cutoff, and files
+that are not requested generate no read retries.
+
+Retry eligibility is not a scheduled download time. Zotonic's file-serving
+negative cache can add up to 60 seconds before another lookup occurs. Retry state
+survives restarts. An expiring database claim limits concurrent attempts across
+nodes; abandoned claims expire after ten minutes.
+
+This policy applies to remote reads into `filezcache`. Background queue processing
+has separate batch-size backoff. Direct `#filestore_request{}` calls do not use
+this persistent read-retry policy.
 
 ## Deletion and moving existing files
 
@@ -209,6 +286,41 @@ permission, TLS, or storage errors. For FTP, check passive data connections; for
 WebDAV, check the full collection path and the `webdavs:` scheme. Allow for the
 queue delay and backoff before assuming a newly queued file is stuck.
 
+### Health warnings and error details
+
+The admin dashboard and filestore configuration page warn administrators when:
+
+- At least five remote cache reads failed and failures account for at least 20%
+  of completed reads in the current and preceding fourteen minute buckets.
+- At least one active, unresolved read error is older than 24 hours.
+
+The read-error rate is shared across nodes. It counts completed remote attempts,
+not cache hits or requests suppressed by the cooldown. The 24-hour age runs from
+the first failure in the current unresolved sequence; repeated failures do not
+restart that clock.
+
+Follow **View errors** to the filestore page for details. The list shows **50 files
+per page**, oldest first, with Previous/Next navigation. Each row shows the relative
+file path, storage service, latest recorded error, consecutive failure count,
+failing-since time, and retry eligibility. Only errors older than 24 hours are
+listed, including entries explicitly marked unrecoverable. Remote URLs and
+credentials are not included in the list.
+
+### Marking a file unrecoverable
+
+Only the administrator account, **user 1**, sees the **Mark unrecoverable** action.
+After confirmation, the server rechecks both the user ID and that the entry still
+has an unresolved error older than 24 hours. Other administrators cannot perform
+this action, and a recovered or recently failed entry is not eligible.
+
+Marking an entry unrecoverable stops automatic remote cache-read retries and
+removes it from active unresolved-error counts. Its row remains in the error list
+with an **Unrecoverable** label. The file registry record and error details are
+retained; no local or remote files are deleted. Historical read-rate statistics
+are unchanged, so a high-error-rate warning can remain until those attempts leave
+the reporting window. Late callbacks from an attempt already in flight cannot
+clear the unrecoverable state. A new successful upload of the path resets it.
+
 ## Integration points
 
 `mod_filestore` handles these notifications:
@@ -230,7 +342,7 @@ for the configuration and statistics model. Storage requests use `s3filez`,
 -mod_title("File Storage").
 -mod_description("Store files on cloud storage services using FTP, S3 and WebDAV").
 -mod_prio(500).
--mod_schema(12).
+-mod_schema(14).
 -mod_provides([filestore]).
 -mod_depends([cron]).
 -mod_config([
@@ -270,6 +382,12 @@ for the configuration and statistics model. Storage requests use `s3filez`,
             default => false,
             description => "Keep a local copy of the files that are uploaded to the remote server. "
                            "If set, the storage server is used as a backup for the locally uploaded files."
+        },
+        #{
+            key => is_read_only,
+            type => boolean,
+            default => false,
+            description => "Allow downloads only. Block uploads, remote deletion and write-based credential tests."
         },
         #{
             key => is_upload_enabled,
@@ -355,13 +473,22 @@ observe_filestore(#filestore{action=lookup, path=Path, local_path=OptLocalPath},
 observe_filestore(#filestore{action=upload, path=Path, mime=undefined} = Upload, Context) ->
     Mime = z_media_identify:guess_mime(Path),
     observe_filestore(Upload#filestore{mime=Mime}, Context);
-observe_filestore(#filestore{action=upload, path=Path, mime=Mime}, Context) ->
+observe_filestore(#filestore{action=upload} = Request, Context) ->
+    case filestore_config:is_read_only(Context) of
+        true -> {error, read_only};
+        false -> queue_filestore_upload(Request, Context)
+    end;
+observe_filestore(#filestore{action=delete, path=PathOrPrefix}, Context) ->
+    mark_filestore_deleted(PathOrPrefix, Context).
+
+queue_filestore_upload(#filestore{path=Path, mime=Mime}, Context) ->
     MediaProps = #{
         <<"mime">> => Mime
     },
     maybe_queue_file(<<>>, Path, true, MediaProps, Context),
-    ok;
-observe_filestore(#filestore{action=delete, path=PathOrPrefix}, Context) ->
+    ok.
+
+mark_filestore_deleted(PathOrPrefix, Context) ->
     case m_filestore:mark_deleted(PathOrPrefix, Context) of
         {ok, Count} ->
             ?LOG_INFO(#{
@@ -605,10 +732,20 @@ lookup_1(Path, Context) ->
                 {ok, {pid, Pid}} ->
                     {ok, {filezcache, Pid, StoreEntry}};
                 {error, enoent} ->
-                    load_cache(StoreEntry, Context)
+                    load_cache_if_due(StoreEntry, Context)
             end;
         {error, _} ->
             undefined
+    end.
+
+%% Cached copies remain usable during a remote outage. Only a cache miss needs
+%% the cooldown check; the atomic claim below arbitrates concurrent retries.
+load_cache_if_due(#{is_unrecoverable := true}, _Context) ->
+    undefined;
+load_cache_if_due(#{retry_after := RetryAfter} = Entry, Context) ->
+    case RetryAfter =:= undefined orelse RetryAfter =< calendar:universal_time() of
+        true -> load_cache(Entry, Context);
+        false -> undefined
     end.
 
 load_cache(#{
@@ -632,12 +769,15 @@ load_cache(#{
             }),
             Ctx = z_context:prune_for_async(Context),
             StreamFun = fun(CachePid) ->
+                Claim = case m_filestore:claim_download(Id, Ctx) of
+                    {ok, C} -> C;
+                    {error, _} -> exit(normal)
+                end,
                 Mod = filestore_request:filezmod(CredService),
-                Mod:stream(
+                try Mod:stream(
                     Cred,
                     Location1,
-                    fun
-                        ({error, FinalError}) when FinalError =:= enoent; FinalError =:= forbidden ->
+                    fun StreamCallback({error, FinalError}) when FinalError =:= enoent; FinalError =:= forbidden ->
                             ?LOG_ERROR(#{
                                 text => <<"File store remote file has problems.">>,
                                 in => zotonic_mod_filestore,
@@ -649,9 +789,9 @@ load_cache(#{
                             }),
                             % Do not signal a backoff, as s3 has the strange behaviour
                             % of returning 'forbidden' on missing entries...
-                            ok = m_filestore:mark_error(Id, FinalError, Ctx),
+                            ok = m_filestore:complete_download(Id, Claim, {error, FinalError}, Ctx),
                             exit(normal);
-                        ({error, Reason} = Error) ->
+                        StreamCallback({error, Reason} = Error) ->
                             % Abnormal exit when receiving an error.
                             % This takes down the cache entry.
                             ?LOG_ERROR(#{
@@ -663,18 +803,36 @@ load_cache(#{
                                 remote => Location,
                                 id => Id
                             }),
+                            ok = m_filestore:complete_download(Id, Claim, Error, Ctx),
                             update_backoff(fail, Ctx),
                             exit(Error);
-                        (stream_start) ->
+                        StreamCallback(stream_start) ->
                             nop;
-                        (T) when is_tuple(T) ->
+                        StreamCallback(T) when is_tuple(T) ->
                             nop;
-                        (B) when is_binary(B) ->
+                        StreamCallback(B) when is_binary(B) ->
                             filezcache:append_stream(CachePid, B);
-                         (eof) ->
+                        StreamCallback(eof) ->
+                            ok = m_filestore:complete_download(Id, Claim, ok, Ctx),
                             update_backoff(success, Ctx),
-                            filezcache:finish_stream(CachePid)
+                            filezcache:finish_stream(CachePid);
+                        StreamCallback(Reason) when is_atom(Reason); is_integer(Reason) ->
+                            % WebDAV delivers bare reasons/status codes; FTP and
+                            % S3 deliver {error, Reason}. Use the same retry path.
+                            StreamCallback({error, Reason})
                     end)
+                of
+                    {error, _} = StreamError ->
+                        ok = m_filestore:complete_download(Id, Claim, StreamError, Ctx),
+                        exit(StreamError);
+                    ok -> ok
+                catch
+                    Class:Reason:Stack ->
+                        % Also cover transport exceptions and failures before the
+                        % first callback. A completed token makes this idempotent.
+                        _ = m_filestore:complete_download(Id, Claim, {error, Reason}, Ctx),
+                        erlang:raise(Class, Reason, Stack)
+                end
             end,
             case filezcache:insert_stream(Location, Size, StreamFun, [monitor]) of
                 {ok, Pid} ->
@@ -873,7 +1031,13 @@ start_deleters({error, _}, _Context) ->
     % Ignore errors, will be fixed on a later retry
     ok.
 
-start_deleter(#{
+start_deleter(Entry, Context) ->
+    case filestore_config:is_read_only(Context) of
+        true -> ok;
+        false -> start_deleter_writable(Entry, Context)
+    end.
+
+start_deleter_writable(#{
             id := Id,
             path := Path,
             service := Service,

@@ -61,7 +61,7 @@ check_consumers(Region) ->
         tls_options => [{verify, verify_peer}],
         s3region => Region
     },
-    meck:expect(m_config, get_value, fun(mod_filestore, Key, _) -> maps:get(Key, Settings) end),
+    meck:expect(m_config, get_value, fun(mod_filestore, Key, _) -> maps:get(Key, Settings, undefined) end),
     Context = #context{site = zotonic_site_testsandbox},
     Expected = filestore_config:credentials(Context),
     {ok, #filestore_credentials{credentials = Forward}} =

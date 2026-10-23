@@ -42,11 +42,45 @@ The `filestore_queue` table holds pending uploads. Entries become eligible after
 one minute; bounded background batches and backoff determine when they complete.
 Statistics are database-derived counts and estimates, not remote or local disk scans.
 
+Remote cache reads retain failed entries and retry on demand with exponential
+backoff (nominally 5 seconds initially, 80–100% jitter, capped at 10 minutes).
+There is no automatic permanent cutoff. Successful reads reset the error history. Cached copies remain
+available during a cooldown. A ten-minute database claim limits simultaneous
+probes across nodes and expires if the worker dies. Only its current token can
+record a result. Existing file-serving negative caches can delay the next lookup.
+
+`health` reports completed remote cache reads in the current and preceding fourteen
+minute buckets, shared across nodes. A warning requires at least five failures
+and a failure rate of at least 20%. Unresolved errors older than 24 hours also warn.
+User 1 can mark an error older than 24 hours as unrecoverable. This stops read
+retries and excludes the entry from active error counts, while retaining its
+record and details. A new successful upload resets this flag. This action never
+deletes local or remote files. Historical request-rate statistics remain unchanged.
+Cache hits and suppressed retries are excluded. Buckets are retained for one day
+and pruned when the first result of a new minute is recorded.
+
+### Inspecting prolonged errors
+
+Templates can read `m.filestore.prolonged_errors[1]`. The result is a map with
+`entries`, `page`, `previous`, and `next`. Pages contain at most 50 entries, ordered
+by first failure time and then entry ID. `previous` and `next` are page numbers or
+`undefined`. Invalid or non-positive page numbers select page 1. Deleted entries
+are excluded; unrecoverable entries remain visible. Both this endpoint and
+`m.filestore.health` enforce administrator access and return `{error, eacces}`
+for unauthorized callers.
+
+The direct Erlang API `m_filestore:mark_unrecoverable(Id, Context)` is used by the
+admin postback. It requires user 1 and a writable context, and atomically checks
+that the error is older than 24 hours. It returns `ok`, `{error, eacces}`,
+`{error, badarg}`, or `{error, not_eligible}`. It is not a public model POST path.
+
 Available Model API Paths
 -------------------------
 
 | Method | Path pattern | Description |
 | --- | --- | --- |
+| `get` | `/prolonged_errors/+page/...` | Return admin-only pages of 50 unresolved read errors older than 24 hours, oldest first. Includes entry IDs, relative file paths, service, last error, consecutive failure count, first failure time, retry eligibility and unrecoverable status. Marked unrecoverable entries remain listed. |
+| `get` | `/health/...` | Return admin-only remote read attempts, failures, high-error-rate flag, and unresolved/prolonged error counts. |
 | `get` | `/stats/...` | Return admin-only filestore totals: archived media count/size, queued upload count, queued move/delete counts, cloud-stored count/size, and estimated local count/size. |
 | `get` | `/service/...` | Return the configured filestore backend service identifier from `filestore_config:service/1` (admin-only). |
 | `get` | `/s3url/...` | Return the configured S3, FTP/FTPS or WebDAV base URL used for remote object location resolution (admin-only). |
@@ -54,6 +88,7 @@ Available Model API Paths
 | `get` | `/s3key/...` | Return the configured S3 access key or FTP/WebDAV username for filestore credentials (admin-only). |
 | `get` | `/s3secret/...` | Return the configured S3 secret key or FTP/WebDAV password only when caller is admin and filestore config is not locked. |
 | `get` | `/is_config_locked/...` | Return whether filestore credential/config values are locked (non-editable/hidden) in this site instance (admin-only). |
+| `get` | `/is_read_only/...` | Return the effective download-only restriction (admin-only). Global and site-file restrictions cannot be overridden by database settings. |
 | `get` | `/is_upload_enabled/...` | Return whether background upload/offload from local `files` storage to remote filestore is enabled (admin-only). |
 | `get` | `/is_local_keep/...` | Return whether local files are retained after successful remote storage, instead of being scheduled for deletion (admin-only). |
 | `get` | `/delete_interval/...` | Return the configured extra delay before deleting files marked for remote deletion (admin-only). |
@@ -69,6 +104,11 @@ Available Model API Paths
     fetch_queue/2,
     dequeue/2,
     mark_error/3,
+    mark_unrecoverable/2,
+    claim_download/2,
+    complete_download/4,
+    retry_delay/1,
+    health/1,
     mark_deleted/2,
     fetch_deleted/2,
     fetch_deleted/3,
@@ -108,12 +148,20 @@ Available Model API Paths
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-% It is ok to retry transient errors every 10 minutes
--define(RETRY_TRANSIENT_ERRORS, 600).
 -define(BATCH_SIZE, 200).
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ <<"prolonged_errors">>, Page | Rest ], _Msg, Context) ->
+    case z_acl:is_admin(Context) of
+        true -> {ok, {prolonged_errors(Page, Context), Rest}};
+        false -> {error, eacces}
+    end;
+m_get([ <<"health">> | Rest ], _Msg, Context) ->
+    case z_acl:is_admin(Context) of
+        true -> {ok, {health(Context), Rest}};
+        false -> {error, eacces}
+    end;
 m_get([ <<"stats">> | Rest ], _Msg, Context) ->
     case z_acl:is_admin(Context) of
         true -> {ok, {stats(Context), Rest}};
@@ -149,6 +197,11 @@ m_get([ <<"s3secret">> | Rest ], _Msg, Context) ->
 m_get([ <<"is_config_locked">> | Rest ], _Msg, Context) ->
     case z_acl:is_admin(Context) of
         true -> {ok, {filestore_config:is_config_locked(), Rest}};
+        false -> {error, eacces}
+    end;
+m_get([ <<"is_read_only">> | Rest ], _Msg, Context) ->
+    case z_acl:is_admin(Context) of
+        true -> {ok, {filestore_config:is_read_only(Context), Rest}};
         false -> {error, eacces}
     end;
 m_get([ <<"is_upload_enabled">> | Rest ], _Msg, Context) ->
@@ -257,7 +310,12 @@ store(Path, Size, Service, Location, IsLocal, Context)
                 is_deleted = false,
                 is_local = excluded.is_local,
                 is_move_to_local = false,
+                is_unrecoverable = false,
                 error = null,
+                error_count = 0,
+                error_since = null,
+                retry_after = null,
+                download_token = null,
                 modified = now()
             returning id",
             [ Path, Service, Location, Size, IsLocal ],
@@ -274,7 +332,6 @@ lookup(Path, Context) ->
         select *
         from filestore
         where path = $1
-          and error is null
           and is_deleted = false",
         [Path],
         [ {keys, atom} ],
@@ -294,22 +351,10 @@ is_upload_ok(#{ error := _ }) ->
 -spec is_download_ok( undefined | filestore_entry() ) -> boolean().
 is_download_ok(undefined) ->
     true;
-is_download_ok(#{ error := Error, modified := Modified }) ->
-    is_download_ok(Error, Modified).
-
-is_download_ok(undefined, _Modified) ->
+is_download_ok(#{ error := undefined }) ->
     true;
-is_download_ok(_Error, Modified) ->
-    % Typical error when S3 can't find anything
-    % or when the credentials were wrong for some time
-    MTimestamp = z_datetime:datetime_to_timestamp(Modified),
-    Now = z_datetime:timestamp(),
-    case Now - MTimestamp of
-        Delta when Delta > ?RETRY_TRANSIENT_ERRORS ->
-            true;
-        _ ->
-            false
-    end.
+is_download_ok(#{ error := _ }) ->
+    false.
 
 %% @doc Mark a filestore entry as being erronous, happens when the
 %% remote server can't be reached or gives an error on access.
@@ -317,15 +362,145 @@ is_download_ok(_Error, Modified) ->
 %% current time for a later retry.
 -spec mark_error( integer(), binary()|atom(), z:context() ) -> ok | {error, enoent}.
 mark_error(Id, Error, Context) ->
-    case z_db:q("update filestore
-            set error = $1,
-                modified = now()
-            where id = $2",
-          [Error, Id], Context)
-    of
-        1 -> ok;
-        0 -> {error, enoent}
+    case claim_download(Id, Context) of
+        {ok, Claim} -> complete_download(Id, Claim, {error, Error}, Context);
+        {error, _} = Result -> Result
     end.
+
+%% @doc Reserve a remote read across nodes. An abandoned claim expires after ten
+%% minutes. The token prevents a late callback from overwriting a newer result.
+-spec claim_download(integer(), z:context()) -> {ok, map()} | {error, term()}.
+claim_download(Id, Context) ->
+    z_db:qmap_row("update filestore
+        set download_token = $2, retry_after = now() + interval '10 minutes'
+        where id = $1 and not is_deleted and not is_unrecoverable
+          and (retry_after is null or retry_after <= now())
+        returning download_token, error_count",
+        [Id, z_ids:id()], [{keys, atom}], Context).
+
+%% @doc Exponential delay in seconds, with 80-100% jitter and a hard ten-minute cap.
+-spec retry_delay(non_neg_integer()) -> pos_integer().
+retry_delay(Count) ->
+    Max = min(600, 5 bsl min(Count, 7)),
+    Min = max(1, Max * 4 div 5),
+    Min + rand:uniform(Max - Min + 1) - 1.
+
+%% @doc Only completed remote attempts contribute to the error rate, not cache
+%% hits or requests suppressed by the cooldown. Updates and metrics are atomic.
+-spec complete_download(integer(), map(), ok | {error, term()}, z:context()) -> ok | {error, term()}.
+complete_download(Id, #{download_token := Token, error_count := Count}, Result, Context) ->
+    z_db:transaction(fun(Ctx) ->
+        {Sql, Args, Failures} = case Result of
+            ok ->
+                {"error = null, error_count = 0, error_since = null, retry_after = null",
+                 [Id, Token], 0};
+            {error, Reason} ->
+                {"error = $3, error_count = least(error_count + 1, 1000000),
+                  error_since = coalesce(error_since, now()),
+                  retry_after = now() + $4 * interval '1 second'",
+                 [Id, Token, error_name(Reason), retry_delay(Count)], 1}
+        end,
+        case z_db:q("update filestore set download_token = null, " ++ Sql ++
+                    " where id = $1 and download_token = $2 and not is_deleted and not is_unrecoverable", Args, Ctx) of
+            1 ->
+                Attempts = z_db:q1("insert into filestore_read_stats (minute, attempts, failures)
+                    values (date_trunc('minute', now()), 1, $1)
+                    on conflict (minute) do update set
+                        attempts = filestore_read_stats.attempts + 1,
+                        failures = filestore_read_stats.failures + excluded.failures
+                    returning attempts",
+                    [Failures], Ctx),
+                case Attempts of
+                    1 -> z_db:q("delete from filestore_read_stats
+                            where minute < now() - interval '1 day'", Ctx);
+                    _ -> ok
+                end,
+                ok;
+            0 -> ok
+        end
+    end, Context).
+
+error_name(Status) when is_integer(Status), Status >= 100, Status =< 599 ->
+    <<"http_", (integer_to_binary(Status))/binary>>;
+error_name(Reason) when is_atom(Reason) -> error_name(atom_to_binary(Reason));
+error_name(Reason) when is_binary(Reason), byte_size(Reason) =< 32 -> Reason;
+error_name(_) -> <<"remote_error">>.
+
+%% @doc Admin-only model endpoint; minute buckets give a bounded, cluster-wide
+%% fifteen-minute window. Persistent error age survives restarts and inactivity.
+-spec health(z:context()) -> map().
+health(Context) ->
+    {ok, Rates} = z_db:qmap_row("select coalesce(sum(attempts), 0)::bigint as attempts,
+            coalesce(sum(failures), 0)::bigint as failures
+        from filestore_read_stats
+        where minute >= date_trunc('minute', now()) - interval '14 minutes'",
+        [], [{keys, atom}], Context),
+    {ok, Errors} = z_db:qmap_row("select count(*) as unresolved,
+            count(*) filter (where error_since < now() - interval '24 hours') as prolonged
+        from filestore where error is not null and not is_deleted and not is_unrecoverable",
+        [], [{keys, atom}], Context),
+    #{attempts := Attempts, failures := Failures} = Rates,
+    maps:merge(Errors, Rates#{
+        high_error_rate => Failures >= 5 andalso Failures * 5 >= Attempts
+    }).
+
+
+%% @doc Stop read retries without deleting the entry or remote file. Only the
+%% administrator account (user 1) can do this. Recheck age and state atomically
+%% so a stale admin page cannot mark a recovered or recently failed file.
+-spec mark_unrecoverable(Id, Context) -> Result when
+    Id :: term(),
+    Context :: z:context(),
+    Result :: ok | {error, eacces | badarg | not_eligible}.
+mark_unrecoverable(Id, Context) ->
+    case z_acl:user(Context) =:= 1 andalso not z_acl:is_read_only(Context) of
+        false -> {error, eacces};
+        true when is_integer(Id), Id > 0 ->
+            case z_db:q("update filestore
+                    set is_unrecoverable = true, download_token = null, retry_after = null,
+                        is_move_to_local = false
+                    where id = $1 and not is_deleted and not is_unrecoverable
+                      and error is not null
+                      and error_since < now() - interval '24 hours'", [Id], Context) of
+                1 ->
+                    ?LOG_NOTICE(#{
+                        text => <<"Filestore entry marked unrecoverable">>,
+                        in => zotonic_mod_filestore,
+                        id => Id,
+                        user_id => 1
+                    }),
+                    ok;
+                0 -> {error, not_eligible}
+            end;
+        true -> {error, badarg}
+    end.
+
+
+%% @doc Paginate unresolved read failures, oldest first. Expose relative paths,
+%% not remote URLs, which can contain credentials or signed query parameters.
+-spec prolonged_errors(Page, Context) -> map() when
+    Page :: term(),
+    Context :: z:context().
+prolonged_errors(Page0, Context) ->
+    Page = try z_convert:to_integer(Page0) of
+        N when is_integer(N), N > 0 -> min(N, 1000000);
+        _ -> 1
+    catch
+        _:_ -> 1
+    end,
+    {ok, Rows} = z_db:qmap("select id, path, service, error, error_count, error_since, retry_after, is_unrecoverable
+        from filestore
+        where error is not null and not is_deleted
+          and error_since < now() - interval '24 hours'
+        order by error_since, id
+        limit 51 offset $1", [(Page - 1) * 50], [{keys, atom}], Context),
+    #{
+        entries => lists:sublist(Rows, 50),
+        page => Page,
+        previous => case Page of 1 -> undefined; _ -> Page - 1 end,
+        next => case length(Rows) of 51 -> Page + 1; _ -> undefined end
+    }.
+
 
 %% @doc Mark the file entries as deleted for the path or having the path as a prefix.
 -spec mark_deleted(Path, Context) -> {ok, Count} | {error, enoent} when
@@ -646,7 +821,9 @@ install(_Version, Context) ->
     ok = ensure_column_deleted(Context),
     ok = ensure_column_is_local(Context),
     ok = install_filequeue(Context),
-    ok = ensure_size_bigint(Context).
+    ok = ensure_size_bigint(Context),
+    ok = install_retries(Context),
+    ok = install_unrecoverable(Context).
 
 install_filestore(Context) ->
     case z_db:table_exists(filestore, Context) of
@@ -657,7 +834,12 @@ install_filestore(Context) ->
                     is_deleted boolean not null default false,
                     is_local boolean not null default false,
                     is_move_to_local boolean not null default false,
+                    is_unrecoverable boolean not null default false,
                     error character varying(32),
+                    error_count integer not null default 0,
+                    error_since timestamp with time zone,
+                    retry_after timestamp with time zone,
+                    download_token character varying(32),
                     path character varying(500) not null,
                     service character varying(16) not null,
                     location character varying(400) not null,
@@ -755,4 +937,34 @@ ensure_size_bigint(Context) ->
             z_db:flush(Context);
         {ok, _} ->
             ok
+    end.
+
+%% Existing errors become immediately eligible; preserve their original age.
+install_retries(Context) ->
+    case lists:member(error_count, z_db:column_names(filestore, Context)) of
+        true -> ok;
+        false ->
+            [] = z_db:q("alter table filestore
+                add column error_count integer not null default 0,
+                add column error_since timestamp with time zone,
+                add column retry_after timestamp with time zone,
+                add column download_token character varying(32)", Context),
+            z_db:q("update filestore set error_since = modified where error is not null", Context),
+            z_db:flush(Context)
+    end,
+    [] = z_db:q("create table if not exists filestore_read_stats (
+        minute timestamp with time zone primary key,
+        attempts bigint not null default 0,
+        failures bigint not null default 0)", Context),
+    [] = z_db:q("create index if not exists filestore_error_since
+        on filestore(error_since) where error is not null and not is_deleted", Context),
+    ok.
+
+install_unrecoverable(Context) ->
+    case lists:member(is_unrecoverable, z_db:column_names(filestore, Context)) of
+        true -> ok;
+        false ->
+            [] = z_db:q("alter table filestore
+                add column is_unrecoverable boolean not null default false", Context),
+            z_db:flush(Context)
     end.
