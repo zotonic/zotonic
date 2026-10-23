@@ -9,8 +9,8 @@ conditional_response_test() ->
     meck:new(m_rsc, [no_link]),
     meck:expect(m_rsc, is_visible, fun(_, _) -> true end),
     meck:expect(m_rsc, p, fun
-        (_, modified, _) -> {{2020,1,1},{0,0,0}};
-        (Id, version, _) -> maps:get(Id, get(versions), 1)
+        (_, <<"modified">>, _) -> {{2020,1,1},{0,0,0}};
+        (Id, <<"version">>, _) -> maps:get(Id, get(versions), 1)
     end),
     meck:new(export_feed_query, [no_link]),
     meck:expect(export_feed_query, export_resource_data, fun(_, _) -> {ok, get(rows)} end),
@@ -26,7 +26,7 @@ conditional_response_test() ->
     try
         put(rows, [1,2]), put(versions, #{}),
         C = z_context:set([{export_module, export_feed_query}, {feed_query, #{<<"pagelen">> => 20}}],
-            #context{cowreq=#{path => <<"/feed/rss">>, qs => <<>>, headers => #{}}}),
+            #context{cowreq=export_test_support:request(#{path => <<"/feed/rss">>})}),
         Mime = {<<"application">>, <<"rss+xml">>, []},
         {{stream, _}, First} = export_feed_http:response(undefined, Mime, C),
         ETag = z_context:get_resp_header(<<"etag">>, First),
@@ -67,7 +67,7 @@ export_controllers_remain_lazy_test() ->
     try
         lists:foreach(fun({Controller, Dispatch, Id}) ->
             C = z_context:set([{zotonic_dispatch, Dispatch}, {id, {ok, Id}}, {is_query, true}],
-                #context{cowreq=#{headers => #{<<"if-none-match">> => <<"W/\"old\"">>}}}),
+                #context{cowreq=export_test_support:request(#{headers => #{<<"if-none-match">> => <<"W/\"old\"">>}})}),
             {{stream, _}, Result} = Controller:process(<<"GET">>, undefined,
                 {<<"application">>, <<"feed+json">>, []}, C),
             ?assertEqual(undefined, z_context:get_resp_header(<<"etag">>, Result)),

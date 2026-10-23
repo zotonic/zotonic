@@ -58,7 +58,7 @@ context(Args) ->
 
 search(C) ->
     {ok, [3]} = export_feed_query:export_resource_data(
-        #export_resource_data{id=z_context:get(feed_id, C)}, C),
+        #export_resource_data{id=z_context:get(feed_id, C), content_type=z_context:get(feed_content_type, C)}, C),
     receive
         {search, Query, Page, PageLen, Options, UserId} -> {Query, Page, PageLen, Options, UserId}
     after 1000 -> error(no_search)
@@ -186,7 +186,7 @@ dispatch() ->
 
 response_and_identity() ->
     Base = context([{<<"cat">>, <<"article">>}]),
-    C = Base#context{cowreq=#{path => <<"/feed/rss">>, qs => <<"cat=article&pagelen=10">>}},
+    C = Base#context{cowreq=export_test_support:request(#{path => <<"/feed/rss">>, qs => <<"cat=article&pagelen=10">>})},
     ?assertEqual(<<"https://example.test/feed/rss?cat=article&pagelen=10">>,
         export_feed:url(feed, undefined, rss, C)),
     lists:foreach(fun({Mime, Filename}) ->

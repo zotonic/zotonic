@@ -26,7 +26,7 @@
 -spec response(Id, ContentType, Context) -> {term(), z:context()} when
     Id :: term(), ContentType :: term(), Context :: z:context().
 response(Id, ContentType, Context) ->
-    {ok, Rows} = export_feed_query:export_resource_data(#export_resource_data{id=Id}, Context),
+    {ok, Rows} = export_feed_query:export_resource_data(#export_resource_data{id=Id, content_type=ContentType}, Context),
     Ids = [R || R <- Rows, m_rsc:is_visible(R, Context)],
     Metadata = [revision(R, Context) || R <- Ids],
     Root = case Id of

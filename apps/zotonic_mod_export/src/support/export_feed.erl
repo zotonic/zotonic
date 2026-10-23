@@ -26,8 +26,11 @@ page_url(Page, Url) ->
     Parts = uri_string:parse(Url),
     Args = uri_string:dissect_query(maps:get(query, Parts, <<>>)),
     Keep = [{K,V} || {K,V} <- Args, K =/= <<"page">>, K =/= <<"qpage">>],
-    uri_string:recompose(Parts#{query => uri_string:compose_query(
-        Keep ++ [{<<"page">>, integer_to_binary(Page)}])}).
+    case uri_string:recompose(Parts#{query => uri_string:compose_query(
+            Keep ++ [{<<"page">>, integer_to_binary(Page)}])}) of
+        NextUrl when is_binary(NextUrl) -> NextUrl;
+        Error -> error({invalid_feed_url, Error})
+    end.
 
 -spec page(Context) -> pos_integer() when Context :: z:context().
 page(Context) ->
@@ -46,7 +49,7 @@ next_page(Rows, PageLen, Context) when length(Rows) >= PageLen ->
 next_page(_, _, Context) -> Context.
 
 
--spec url(Dispatch, Id, Format, Context) -> binary() when
+-spec url(Dispatch, Id, Format, Context) -> binary() | undefined when
     Dispatch :: atom(), Id :: term(), Format :: atom(), Context :: z:context().
 url(Dispatch, Id, Format, Context) when Dispatch =:= export_rsc; Dispatch =:= export_rsc_query ->
     z_dispatcher:url_for(Dispatch, [{id, Id}, {type, Format}, {absolute_url, true}], none, Context);

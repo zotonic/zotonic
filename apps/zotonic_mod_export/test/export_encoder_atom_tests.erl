@@ -268,8 +268,8 @@ query_next_page() ->
     end),
     try
         C = z_context:set_q_all([{<<"page">>, <<"3">>}, {<<"pagelen">>, <<"1">>}],
-            #context{language=[en], tz= <<"UTC">>, cowreq=#{
-                path => <<"/export/query/jsonfeed/news">>, qs => <<"page=3&pagelen=1">>}}),
+            #context{language=[en], tz= <<"UTC">>, cowreq=export_test_support:request(#{
+                path => <<"/export/query/jsonfeed/news">>, qs => <<"page=3&pagelen=1">>})}),
         {stream, Stream} = export_encoder:stream(1, {<<"application">>, <<"feed+json">>, []},
             [{dispatch, export_rsc_query}, {is_query, true}], C),
         %% The search still starts only when consuming the stream.

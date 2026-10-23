@@ -75,7 +75,7 @@ get(Url, Context) -> get(Url, ?MAX_RESPONSE_BYTES, Context).
 
 -spec get(Url, Limit, Context) -> {ok, tuple()} | {error, term()} when
     Url :: binary(), Limit :: pos_integer(), Context :: z:context() | undefined.
-get(Url, Limit, Context) -> get(Url, Limit, [], Context).
+get(Url, Limit, Context) -> unconditional(get(Url, Limit, [], Context)).
 
 %% Conditional requests are only used for a successfully imported settings version.
 -spec get_feed(map(), z:context() | undefined) -> {ok, tuple()} | {not_modified, tuple()} | {error, term()}.
@@ -118,7 +118,12 @@ safe_header(Value) ->
     end.
 
 -spec get_json(binary(), z:context() | undefined) -> {ok, tuple()} | {error, term()}.
-get_json(Url, Context) -> get(Url, ?MAX_RESPONSE_BYTES, [{accept, "application/json"}], Context).
+get_json(Url, Context) ->
+    unconditional(get(Url, ?MAX_RESPONSE_BYTES, [{accept, "application/json"}], Context)).
+
+%% Only get_feed/2 accepts a conditional response, after validating its URL.
+unconditional({not_modified, _}) -> {error, {http_status, 304}};
+unconditional(Result) -> Result.
 
 get(Url, Limit, Extra, Context) ->
     case url(Url) of
@@ -136,10 +141,7 @@ get(Url, Limit, Extra, Context) ->
                     {error, response_too_large};
                 {ok, _} = Ok -> Ok;
                 {error, {304, FinalUrl, Headers, _, _}} ->
-                    case lists:keymember(headers, 1, Extra) of
-                        true -> {not_modified, {FinalUrl, Headers}};
-                        false -> {error, {http_status, 304}}
-                    end;
+                    {not_modified, {FinalUrl, Headers}};
                 {error, {Code, _, Headers, _, _}} when Code =:= 429; Code =:= 503 ->
                     case retry_after(Headers, calendar:universal_time()) of
                         undefined -> {error, {http_status, Code}};
