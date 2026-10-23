@@ -33,6 +33,7 @@
     credentials/5,
     tls_options/1,
     is_upload_enabled/1,
+    is_read_only/1,
     is_local_keep/1,
     delete_interval/1
 ]).
@@ -91,8 +92,12 @@ s3region(Context) ->
     Context :: z:context(),
     Credentials :: map().
 credentials(Context) ->
-    credentials(service(Context), s3key(Context), s3secret(Context),
-                s3region(Context), tls_options(Context)).
+    Cred = credentials(service(Context), s3key(Context), s3secret(Context),
+                       s3region(Context), tls_options(Context)),
+    case is_read_only(Context) of
+        true -> Cred#{is_read_only => true};
+        false -> Cred
+    end.
 
 %% @doc Build credentials for saved settings or a settings test before saving.
 %% Only S3 uses the region; an empty region preserves the default V2 signing.
@@ -128,7 +133,15 @@ tls_options(Context) ->
 %% remote filestore.
 -spec is_upload_enabled(z:context()) -> boolean().
 is_upload_enabled(Context) ->
-    get_boolean(is_upload_enabled, Context).
+    not is_read_only(Context) andalso get_boolean(is_upload_enabled, Context).
+
+%% @doc Read-only restrictions are additive: neither site settings nor database
+%% settings can override a global or site-file restriction, even when locked.
+-spec is_read_only(Context) -> boolean() when Context :: z:context().
+is_read_only(Context) ->
+    z_convert:to_bool(get_app_config(is_read_only))
+        orelse z_convert:to_bool(m_site:get(mod_filestore, is_read_only, Context))
+        orelse z_convert:to_bool(m_config:get_value(mod_filestore, is_read_only, Context)).
 
 %% @doc Check if after upload a local file should be kept or deleted.
 %% If set to "true" then the remote filestore is acting as a backup
@@ -151,6 +164,12 @@ is_local_keep(Context) ->
 -spec delete_interval(Context) -> binary() when
     Context :: z:context().
 delete_interval(Context) ->
+    case is_read_only(Context) of
+        true -> <<"false">>;
+        false -> configured_delete_interval(Context)
+    end.
+
+configured_delete_interval(Context) ->
     case z_convert:to_binary(get_value(delete_interval, Context)) of
         <<>> -> ?DEFAULT_DELETE_INTERVAL;
         Interval -> Interval

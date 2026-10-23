@@ -3,6 +3,9 @@
 {% block title %}{_ Cloud File Store Configuration _}{% endblock %}
 
 {% block content %}
+    {% if m.filestore.is_read_only %}
+        <p class="alert alert-info" role="status">{_ The cloud file store is read-only. Downloads are available; uploads, remote deletion and write-based settings tests are disabled. _}</p>
+    {% endif %}
     {% include "_filestore_health.tpl" %}
     {% include "_filestore_prolonged_errors.tpl" %}
     <div class="admin-header">
@@ -82,7 +85,7 @@
                         <p id="s3error" class="alert alert-danger" style="display:none">{_ Could not access the service, double check your settings and try again. Make sure that API key has access rights to create and remove a (temporary) <code>-zotonic-filestore-test-file-</code> file. _}</p>
 
                         <p>
-                            <button type="button" id="s3testcred" class="btn btn-primary">{_ Test Cloud File Store Settings _}</button>
+                            <button type="button" id="s3testcred" class="btn btn-primary" {% if m.filestore.is_read_only %}disabled{% endif %}>{_ Test Cloud File Store Settings _}</button>
                             {% wire id="s3testcred"
                                     postback={admin_filestore_test_credentials}
                                     delegate=`filestore_admin`
@@ -192,9 +195,9 @@
                                 </div>
                             </div>
 
-                            <p class="help-block">{_ Before the settings are saved they will be checked by uploading (and removing) a small file. _}</p>
+                            <p class="help-block">{% if m.filestore.is_read_only %}{_ Settings are saved without a write test while the file store is read-only. Verify access by downloading an existing file. _}{% else %}{_ Before the settings are saved they will be checked by uploading (and removing) a small file. _}{% endif %}</p>
 
-                            <p id="s3ok" class="alert alert-success" style="display:none">{_ Settings are working fine and are saved. _}</p>
+                            <p id="s3ok" class="alert alert-success" style="display:none">{% if m.filestore.is_read_only %}{_ Settings saved without a write test. _}{% else %}{_ Settings are working fine and are saved. _}{% endif %}</p>
                             <p id="s3error" class="alert alert-danger" style="display:none">{_ Could not access the service, double check your settings and try again. Make sure that API key has access rights to create and remove a (temporary) <code>-zotonic-filestore-test-file-</code> file. _}</p>
 
                             <div class="form-group">
@@ -274,7 +277,7 @@
 
                         <div class="form-group">
                             <div>
-                                <button id="queue-all" name="queue-all" type="submit" class="btn btn-danger">
+                                <button id="queue-all" name="queue-all" type="submit" class="btn btn-danger" {% if m.filestore.is_read_only %}disabled{% endif %}>
                                     {% if m.filestore.is_local_keep %}
                                         {_ Copy all local files to the remote storage _}
                                         {% wire id="queue-all"

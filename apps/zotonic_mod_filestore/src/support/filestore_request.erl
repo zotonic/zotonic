@@ -42,6 +42,12 @@ upload(LocalFile, RemoteFile, undefined, Context) ->
     Mime = z_media_identify:guess_mime(LocalFile),
     upload(LocalFile, RemoteFile, Mime, Context);
 upload(LocalFile, RemoteFile, Mime, Context) ->
+    case filestore_config:is_read_only(Context) of
+        true -> {error, read_only};
+        false -> upload_writable(LocalFile, RemoteFile, Mime, Context)
+    end.
+
+upload_writable(LocalFile, RemoteFile, Mime, Context) ->
     case z_notifier:first(#filestore_credentials_lookup{path=RemoteFile}, Context) of
         {ok, #filestore_credentials{} = Cred} ->
             handle_upload(Cred, LocalFile, Mime);
@@ -58,6 +64,12 @@ download(LocalFile, RemoteFile, Context) ->
     end.
 
 delete(RemoteFile, Context) ->
+    case filestore_config:is_read_only(Context) of
+        true -> {error, read_only};
+        false -> delete_writable(RemoteFile, Context)
+    end.
+
+delete_writable(RemoteFile, Context) ->
     case z_notifier:first(#filestore_credentials_lookup{path=RemoteFile}, Context) of
         {ok, #filestore_credentials{} = Cred} ->
             do_delete(Cred);
@@ -103,6 +115,8 @@ handle_upload(Cred, LocalFile, Mime) ->
     Data :: ftpfilez:put_data(),
     Mime :: binary(),
     Result :: ftpfilez:sync_reply().
+do_upload(#filestore_credentials{credentials=#{is_read_only := true}}, _Data, _Mime) ->
+    {error, read_only};
 do_upload(#filestore_credentials{service=Service, location=Location, credentials=Cred}, Data, undefined) ->
     Mod = filezmod(Service),
     Mod:put(Cred, Location, Data, []);
@@ -121,6 +135,8 @@ do_download(#filestore_credentials{service=Service, location=Location, credentia
 -spec do_delete(CredLoc) -> Result when
     CredLoc :: #filestore_credentials{},
     Result :: ftpfilez:sync_reply().
+do_delete(#filestore_credentials{credentials=#{is_read_only := true}}) ->
+    {error, read_only};
 do_delete(
     #filestore_credentials{
         service = Service,

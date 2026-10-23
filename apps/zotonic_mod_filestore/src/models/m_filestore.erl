@@ -88,6 +88,7 @@ Available Model API Paths
 | `get` | `/s3key/...` | Return the configured S3 access key or FTP/WebDAV username for filestore credentials (admin-only). |
 | `get` | `/s3secret/...` | Return the configured S3 secret key or FTP/WebDAV password only when caller is admin and filestore config is not locked. |
 | `get` | `/is_config_locked/...` | Return whether filestore credential/config values are locked (non-editable/hidden) in this site instance (admin-only). |
+| `get` | `/is_read_only/...` | Return the effective download-only restriction (admin-only). Global and site-file restrictions cannot be overridden by database settings. |
 | `get` | `/is_upload_enabled/...` | Return whether background upload/offload from local `files` storage to remote filestore is enabled (admin-only). |
 | `get` | `/is_local_keep/...` | Return whether local files are retained after successful remote storage, instead of being scheduled for deletion (admin-only). |
 | `get` | `/delete_interval/...` | Return the configured extra delay before deleting files marked for remote deletion (admin-only). |
@@ -196,6 +197,11 @@ m_get([ <<"s3secret">> | Rest ], _Msg, Context) ->
 m_get([ <<"is_config_locked">> | Rest ], _Msg, Context) ->
     case z_acl:is_admin(Context) of
         true -> {ok, {filestore_config:is_config_locked(), Rest}};
+        false -> {error, eacces}
+    end;
+m_get([ <<"is_read_only">> | Rest ], _Msg, Context) ->
+    case z_acl:is_admin(Context) of
+        true -> {ok, {filestore_config:is_read_only(Context), Rest}};
         false -> {error, eacces}
     end;
 m_get([ <<"is_upload_enabled">> | Rest ], _Msg, Context) ->
@@ -414,6 +420,8 @@ complete_download(Id, #{download_token := Token, error_count := Count}, Result, 
         end
     end, Context).
 
+error_name(Status) when is_integer(Status), Status >= 100, Status =< 599 ->
+    <<"http_", (integer_to_binary(Status))/binary>>;
 error_name(Reason) when is_atom(Reason) -> error_name(atom_to_binary(Reason));
 error_name(Reason) when is_binary(Reason), byte_size(Reason) =< 32 -> Reason;
 error_name(_) -> <<"remote_error">>.
@@ -441,7 +449,7 @@ health(Context) ->
 %% administrator account (user 1) can do this. Recheck age and state atomically
 %% so a stale admin page cannot mark a recovered or recently failed file.
 -spec mark_unrecoverable(Id, Context) -> Result when
-    Id :: integer(),
+    Id :: term(),
     Context :: z:context(),
     Result :: ok | {error, eacces | badarg | not_eligible}.
 mark_unrecoverable(Id, Context) ->

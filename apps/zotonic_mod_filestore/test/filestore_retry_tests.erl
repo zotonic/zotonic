@@ -114,16 +114,33 @@ templates_compile_test() ->
             [{runtime, z_template_compiler_runtime}], Context))
     end, ["_filestore_health.tpl", "_filestore_prolonged_errors.tpl", "_admin_status_alert.tpl", "admin_filestore.tpl"]).
 
-cache_read_recovery_test() ->
+cache_read_recovery_test_() ->
+    [{atom_to_list(Mod) ++ " " ++ atom_to_list(Mode) ++ " " ++ binary_to_list(Expected),
+      fun() -> cache_read_recovery(Service, Mod, Reason, Mode, Expected) end}
+     || {Service, Mod, Reason, Mode, Expected} <- [
+        {<<"s3">>, s3filez, forbidden, wrapped, <<"forbidden">>},
+        {<<"webdav">>, webdavfilez, forbidden, bare, <<"forbidden">>},
+        {<<"webdav">>, webdavfilez, 401, bare, <<"http_401">>},
+        {<<"webdav">>, webdavfilez, timeout, returned, <<"timeout">>},
+        {<<"ftp">>, ftpfilez, epath, wrapped, <<"epath">>},
+        {<<"ftp">>, ftpfilez, elogin, wrapped, <<"elogin">>}
+     ]].
+
+cache_read_recovery(Service, Mod, Reason, Mode, Expected) ->
     Context = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
     Path = <<"archive/cache-retry-", (z_ids:id())/binary>>,
     Location = <<"https://example.test/", Path/binary>>,
-    {ok, Id} = m_filestore:store(Path, 3, <<"s3">>, Location, false, Context),
-    Modules = [filezcache, z_notifier, s3filez],
+    {ok, Id} = m_filestore:store(Path, 3, Service, Location, false, Context),
+    Modules = [filezcache, z_notifier, Mod],
     lists:foreach(fun(M) -> meck:new(M, [passthrough, no_link]) end, Modules),
     try
         meck:expect(z_notifier, first, fun(#filestore_credentials_revlookup{}, _) ->
-            {ok, #filestore_credentials{service = <<"s3">>, location = Location, credentials = #{}}}
+            {ok, #filestore_credentials{
+                service = Service,
+                service_url = <<"https://example.test/">>,
+                location = Location,
+                credentials = #{}
+            }}
         end),
         meck:expect(filezcache, locate_monitor, fun(_) -> {error, enoent} end),
         meck:expect(filezcache, insert_stream, fun(_, _, Fun, _) ->
@@ -131,12 +148,21 @@ cache_read_recovery_test() ->
             try Fun(self()) catch exit:_ -> ok end,
             {ok, self()}
         end),
-        meck:expect(s3filez, stream, fun(_, _, Fun) -> Fun({error, forbidden}) end),
+        meck:expect(Mod, stream, fun(_, _, Fun) ->
+            case Mode of
+                wrapped -> Fun({error, Reason});
+                bare -> Fun(Reason);
+                returned -> {error, Reason}
+            end
+        end),
         ?assertMatch({ok, _}, mod_filestore:lookup(Path, Context)),
         ?assertEqual(undefined, mod_filestore:lookup(Path, Context)),
-        ?assertEqual(1, meck:num_calls(s3filez, stream, '_')),
+        {ok, FailedEntry} = m_filestore:lookup(Path, Context),
+        ?assertEqual(Expected, maps:get(error, FailedEntry)),
+        ?assertEqual(1, maps:get(error_count, FailedEntry)),
+        ?assertEqual(1, meck:num_calls(Mod, stream, '_')),
         1 = z_db:q("update filestore set retry_after = now() - interval '1 second' where id = $1", [Id], Context),
-        meck:expect(s3filez, stream, fun(_, _, Fun) ->
+        meck:expect(Mod, stream, fun(_, _, Fun) ->
             Fun(stream_start), Fun(<<"abc">>), Fun(eof), ok
         end),
         meck:expect(filezcache, append_stream, fun(_, _) -> ok end),
@@ -144,7 +170,12 @@ cache_read_recovery_test() ->
         ?assertMatch({ok, _}, mod_filestore:lookup(Path, Context)),
         {ok, Entry} = m_filestore:lookup(Path, Context),
         ?assertEqual(undefined, maps:get(error, Entry)),
-        ?assertEqual(2, meck:num_calls(s3filez, stream, '_'))
+        ?assertEqual(2, meck:num_calls(Mod, stream, '_')),
+        1 = z_db:q("update filestore set error = 'timeout',
+            error_since = now() - interval '25 hours' where id = $1", [Id], Context),
+        ok = m_filestore:mark_unrecoverable(Id, Context),
+        ?assertEqual(undefined, mod_filestore:lookup(Path, Context)),
+        ?assertEqual(2, meck:num_calls(Mod, stream, '_'))
     after
         lists:foreach(fun meck:unload/1, Modules),
         z_db:q("delete from filestore where id = $1", [Id], Context)
