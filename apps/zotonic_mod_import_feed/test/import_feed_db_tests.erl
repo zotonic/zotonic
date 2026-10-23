@@ -153,6 +153,9 @@ poll_and_media() ->
     Xml = <<"<rss><channel><title>Poll</title><item><guid>https://example.org/poll-test/1</guid><title>Poll item</title><link>https://example.org/poll-test/1</link><description><![CDATA[Leading &amp; text<p>Body<img src='https://example.org/import-feed-test-small.png' srcset='https://example.org/import-feed-test-small.png 1x, https://example.org/import-feed-test.png 2x'></p>Trailing text]]></description><enclosure url='https://example.org/import-feed-test.png' type='image/png'/></item></channel></rss>">>,
     Png = base64:decode(<<"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII=">>),
     ok = meck:new(z_import_feed_http, [passthrough]),
+    meck:expect(z_import_feed_http, get_feed, fun(Settings, FetchContext) ->
+        z_import_feed_http:get(maps:get(url, Settings), FetchContext)
+    end),
     %% Downloads must not retain a transaction connection, including attached
     %% media on an existing article and dependent media on a new article.
     meck:expect(z_import_feed_http, get, fun(Url, FetchContext) ->
@@ -365,6 +368,9 @@ refetch_deleted() ->
     {ok, Parsed} = z_import_feed_parse:parse(Xml, <<"https://example.org/restore/feed">>),
     [Entry, SharedEntry] = maps:get(entries, Parsed),
     meck:new(z_import_feed_http, [passthrough]),
+    meck:expect(z_import_feed_http, get_feed, fun(Settings, FetchContext) ->
+        z_import_feed_http:get(maps:get(url, Settings), FetchContext)
+    end),
     Fetch = fun(Url, _) -> {ok, {Url, [], byte_size(Xml), Xml}} end,
     meck:expect(z_import_feed_http, get, Fetch),
     meck:new(z_import_feed_media, [passthrough]),
@@ -550,6 +556,9 @@ poll_schedule() ->
         <<"title">> => <<"Schedule">>, <<"category_id">> => m_rsc:rid(article, C),
         <<"poll_minutes">> => 60, <<"is_paused">> => true}, C),
     ok = meck:new(z_import_feed_http, [passthrough]),
+    meck:expect(z_import_feed_http, get_feed, fun(Settings, FetchContext) ->
+        z_import_feed_http:get(maps:get(url, Settings), FetchContext)
+    end),
     Run = fun(Result, Failures, Seconds) ->
         meck:expect(z_import_feed_http, get, fun(_, _) -> Result end),
         z_db:q("update import_feed set refetch_deleted=true, next_poll='2000-01-01' where id=$1", [FeedId], C),
@@ -586,4 +595,156 @@ poll_schedule() ->
     after
         meck:unload(z_import_feed_http),
         z_db:q("delete from import_feed where id=$1", [FeedId], C)
+    end.
+
+conditional_poll_test_() -> {timeout, 60, fun conditional_poll/0}.
+conditional_poll() ->
+    C = z_acl:logon(1, z_context:new(zotonic_site_testsandbox)),
+    ok = m_import_feed:install(C),
+    User = import_user(C),
+    Url = <<"https://example.org/conditional.xml">>,
+    {ok, FeedId} = m_import_feed:save(undefined, #{
+        <<"user_id">> => User, <<"url">> => Url, <<"title">> => <<"Conditional">>,
+        <<"category_id">> => m_rsc:rid(article, C), <<"is_paused">> => true}, C),
+    meck:new(z_fetch, [passthrough]),
+    Run = fun(Result, ExpectedHeaders) ->
+        meck:expect(z_fetch, fetch, fun(U, Options, _) when U =:= Url ->
+            ?assertEqual(ExpectedHeaders, proplists:get_value(headers, Options)),
+            Result
+        end),
+        z_db:q("update import_feed set is_paused=false, next_poll='2000-01-01' where id=$1", [FeedId], C),
+        ok = z_import_feed_poll:run(C)
+    end,
+    ETag = <<"\"version-1\"">>,
+    Modified = <<"Wed, 01 Jan 2020 00:00:00 GMT">>,
+    Conditional = [{<<"if-none-match">>, ETag}, {<<"if-modified-since">>, Modified}],
+    Xml = <<"<rss><channel><ttl>180</ttl></channel></rss>">>,
+    Response = {ok, {Url, [{"etag", ETag}, {"last-modified", Modified}], byte_size(Xml), Xml}},
+    try
+        Run(Response, []),
+        ?assertEqual({ETag, Modified, Url, true}, z_db:q_row("select http_etag,
+            http_last_modified, http_url, http_settings_version=modified::text
+            from import_feed where id=$1", [FeedId], C)),
+        z_db:q("update import_feed set imported=42 where id=$1", [FeedId], C),
+        Run({error, {304, Url, [], 0, <<>>}}, Conditional),
+        ?assertEqual({42, 0, 0, 10800, ETag}, z_db:q_row("select imported, errors,
+            failure_count, poll_hint_seconds, http_etag from import_feed where id=$1", [FeedId], C)),
+        Run({error, timeout}, Conditional),
+        ?assertEqual(undefined, z_db:q1("select http_etag from import_feed where id=$1", [FeedId], C)),
+        Run(Response, []),
+        z_db:q("update import_feed set modified=modified+interval '1 second' where id=$1", [FeedId], C),
+        Run(Response, []),
+        z_db:q("update import_feed set refetch_deleted=true where id=$1", [FeedId], C),
+        Run(Response, []),
+        % Upgrade an old schema and repeat the upgrade in the same transaction.
+        ok = z_db:transaction(fun(Ctx) ->
+            z_db:q("alter table import_feed drop column http_etag, drop column http_last_modified,
+                drop column http_url, drop column http_settings_version", Ctx),
+            z_db:flush(Ctx),
+            ok = m_import_feed:install(Ctx),
+            ok = m_import_feed:install(Ctx),
+            ?assertEqual({undefined, undefined, undefined, undefined}, z_db:q_row(
+                "select http_etag,http_last_modified,http_url,http_settings_version
+                from import_feed where id=$1", [FeedId], Ctx)),
+            ok
+        end, C)
+    after
+        meck:unload(z_fetch),
+        z_db:q("delete from import_feed where id=$1", [FeedId], C),
+        m_rsc:delete(User, C)
+    end.
+
+pagination_poll_test_() -> {timeout, 90, fun pagination_poll/0}.
+pagination_poll() ->
+    C = z_acl:logon(1, z_context:new(zotonic_site_testsandbox)),
+    ok = m_import_feed:install(C),
+    User = import_user(C),
+    Url = <<"https://example.org/pagination">>,
+    Next = <<Url/binary, "?page=2">>,
+    Third = <<Url/binary, "?page=3">>,
+    {ok, FeedId} = m_import_feed:save(undefined, #{
+        <<"user_id">> => User, <<"url">> => Url,
+        <<"category_id">> => m_rsc:rid(article, C), <<"is_paused">> => true}, C),
+    meck:new(z_fetch, [passthrough]),
+    meck:new(z_import_feed_import, [passthrough]),
+    meck:expect(z_import_feed_import, run, fun(#{uri := Uri}, _, Context) ->
+        z_db:q("insert into import_feed_item(feed_id,uri,status) values($1,$2,'ok')
+            on conflict(feed_id,uri) do update set modified=now(),status='ok'",
+            [FeedId, Uri], Context),
+        imported
+    end),
+    Body = fun(Ids, NextUrl) -> z_json:encode(#{
+        <<"version">> => <<"https://jsonfeed.org/version/1.1">>,
+        <<"title">> => <<"Pagination">>, <<"next_url">> => NextUrl,
+        <<"items">> => [#{<<"id">> => I, <<"content_text">> => I} || I <- Ids]}) end,
+    Response = fun(U, Ids, N) ->
+        B = Body(Ids, N), {ok, {U, [{"etag", "first-page"}], byte_size(B), B}}
+    end,
+    Run = fun() ->
+        z_db:q("update import_feed set is_paused=false,next_poll='2000-01-01' where id=$1", [FeedId], C),
+        ok = z_import_feed_poll:run(C)
+    end,
+    Reset = fun(All) ->
+        z_db:q("delete from import_feed_item where feed_id=$1", [FeedId], C),
+        z_db:q("update import_feed set last_success=null,next_url=null,pagination_started=null,
+            http_etag=null,http_last_modified=null,http_settings_version=null,
+            imported=0,errors=0,import_all_pages=$2 where id=$1", [FeedId, All], C)
+    end,
+    try
+        %% Default initial import does not request the advertised second page.
+        meck:expect(z_fetch, fetch, fun(U, _, _) when U =:= Url -> Response(U, [<<"a">>], Next) end),
+        Run(),
+        ?assertEqual(1, z_db:q1("select imported from import_feed where id=$1", [FeedId], C)),
+        ?assertEqual(undefined, z_db:q1("select next_url from import_feed where id=$1", [FeedId], C)),
+        %% Deleted entries remain seen; process the whole page, then stop.
+        z_db:q("update import_feed_item set status='deleted' where feed_id=$1", [FeedId], C),
+        meck:expect(z_fetch, fetch, fun(U, _, _) when U =:= Url -> Response(U, [<<"new">>, <<"a">>], Next) end),
+        Run(),
+        ?assertEqual(3, z_db:q1("select imported from import_feed where id=$1", [FeedId], C)),
+        %% Initial opt-in follows all pages. A failed continuation is durable.
+        Reset(true),
+        meck:expect(z_fetch, fetch, fun
+            (U, _, _) when U =:= Url -> Response(U, [<<"a">>], Next);
+            (U, Options, _) when U =:= Next ->
+                ?assertEqual(undefined, proplists:get_value(headers, Options)),
+                {error, timeout}
+        end),
+        Run(),
+        ?assertEqual({Next, undefined, undefined}, z_db:q_row(
+            "select next_url,last_success,http_etag from import_feed where id=$1", [FeedId], C)),
+        %% Retry starts at page two, never at the conditionally cached first page.
+        meck:expect(z_fetch, fetch, fun
+            (U, _, _) when U =:= Next -> Response(U, [<<"b">>], Third);
+            (U, _, _) when U =:= Third -> Response(U, [<<"c">>], <<>>)
+        end),
+        Run(),
+        ?assertEqual({3, undefined, true, undefined}, z_db:q_row(
+            "select imported,next_url,last_success is not null,http_etag from import_feed where id=$1", [FeedId], C)),
+        %% Catch-up traverses unseen pages, then processes the complete seen page.
+        meck:expect(z_fetch, fetch, fun
+            (U, _, _) when U =:= Url -> Response(U, [<<"d">>], Next);
+            (U, _, _) when U =:= Next -> Response(U, [<<"a">>, <<"e">>], Third)
+        end),
+        Run(),
+        ?assertEqual(6, z_db:q1("select imported from import_feed where id=$1", [FeedId], C)),
+        %% A cyclic next link fails without spinning or committing validators.
+        Reset(true),
+        meck:expect(z_fetch, fetch, fun(U, _, _) when U =:= Url -> Response(U, [<<"a">>], Url) end),
+        Run(),
+        ?assertEqual({1, undefined}, z_db:q_row("select errors,http_etag from import_feed where id=$1", [FeedId], C)),
+        %% Fresh installation already includes these fields; upgrades are repeatable.
+        ok = z_db:transaction(fun(Ctx) ->
+            z_db:q("alter table import_feed drop column import_all_pages, drop column next_url,
+                drop column pagination_started", Ctx),
+            z_db:flush(Ctx),
+            ok = m_import_feed:install(Ctx),
+            ok = m_import_feed:install(Ctx),
+            ?assertEqual({false, undefined, undefined}, z_db:q_row(
+                "select import_all_pages,next_url,pagination_started from import_feed where id=$1", [FeedId], Ctx)),
+            ok
+        end, C)
+    after
+        meck:unload([z_fetch, z_import_feed_import]),
+        z_db:q("delete from import_feed where id=$1", [FeedId], C),
+        m_rsc:delete(User, C)
     end.

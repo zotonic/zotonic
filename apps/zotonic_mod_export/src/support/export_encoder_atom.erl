@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2017 Marc Worrell <marc@worrell.nl>
+%% @copyright 2017-2026 Marc Worrell <marc@worrell.nl>
 %% @doc Format exports for atom format
 %% @end
 
-%% Copyright 2017 Marc Worrell
+%% Copyright 2017-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -18,60 +18,23 @@
 %% limitations under the License.
 
 -module(export_encoder_atom).
--author("Marc Worrell <marc@worrell.nl>").
 
--record(state, {
-    id
-}).
-
--export([
-    extension/0,
-    mime/0,
-    init/2,
-    header/3,
-    row/3,
-    footer/3
-]).
-
--include_lib("zotonic_core/include/zotonic.hrl").
+-export([extension/0, mime/0, init/2, header/3, row/3, footer/3]).
 
 extension() ->
-    [ <<"atom">> ].
+    [<<"atom">>].
 
 mime() ->
-    [ {<<"application">>, <<"atom+xml">>, []} ].
+    [{<<"application">>, <<"atom+xml">>, []}].
 
-init(Options, _Context) ->
-    {ok, #state{
-        id = proplists:get_value(id, Options)
-    }}.
+init(Options, Context) ->
+    export_encoder_xml:init([{feed_format, atom} | Options], Context).
 
-header(Header, #state{id=Id} = State, Context) ->
-    Vars = [
-        {id, Id},
-        {title, Header}
-    ],
-    {Bin, _Context} = z_template:render_to_iolist("atom/feed_start.tpl", Vars, Context),
-    {ok, iolist_to_binary(Bin), State}.
+header(Header, State, Context) ->
+    export_encoder_xml:header(Header, State, Context).
 
-row(Row, #state{} = State, Context) when is_integer(Row) ->
-    case m_rsc:is_visible(Row, Context) of
-        true ->
-            Vars = [
-                {id, Row}
-            ],
-            {Bin, _Context} = z_template:render_to_iolist({cat, "atom/entry.tpl"}, Vars, Context),
-            {ok, iolist_to_binary(Bin), State};
-        false ->
-            {ok, <<>>, State}
-    end;
-row(Row, #state{} = State, Context) ->
-    Vars = [
-        {id, Row}
-    ],
-    {Bin, _Context} = z_template:render_to_iolist("atom/entry.tpl", Vars, Context),
-    {ok, iolist_to_binary(Bin), State}.
+row(Row, State, Context) ->
+    export_encoder_xml:row(Row, State, Context).
 
-footer(_Data, #state{}, Context) ->
-    {Bin, _Context} = z_template:render_to_iolist("atom/feed_end.tpl", [], Context),
-    {ok, iolist_to_binary(Bin)}.
+footer(Data, State, Context) ->
+    export_encoder_xml:footer(Data, State, Context).

@@ -393,7 +393,7 @@ admin_poll_is_blocked_check() ->
         meck:expect(z_db, q, fun(_, Args, _) -> Self ! {poll_finished, Args}, [] end),
         meck:expect(m_import_feed, error_message, fun(admin_import_user, _) -> <<"Administrator imports blocked">> end),
         ?assertEqual(ok, z_import_feed_poll:run(#context{})),
-        receive {poll_finished, [1,0,0,0,1,Message,_,_,7200,true,0]} ->
+        receive {poll_finished, [1,0,0,0,1,Message,_,_,7200,true,0,undefined,undefined,undefined,false,false]} ->
             ?assertEqual(<<"Administrator imports blocked">>, Message)
         after 1000 -> error(no_poll_result) end,
         ?assertEqual(0, meck:num_calls(z_import_feed_http, get, '_'))
@@ -862,7 +862,7 @@ configured_fetch_user_check() ->
 
 feed_type_detection_check() ->
     {ok, Rss} = parse(<<"<rss><channel><title>Empty RSS</title></channel></rss>">>),
-    ?assertEqual(false, maps:get(is_zotonic_feed, Rss)),
+    ?assertEqual(undefined, maps:get(is_zotonic_feed, Rss)),
     {ok, EmptyAtom} = parse(<<"<feed xmlns='http://www.w3.org/2005/Atom'><title>Empty</title></feed>">>),
     ?assertEqual(undefined, maps:get(is_zotonic_feed, EmptyAtom)),
     {ok, Ordinary} = parse(<<"<feed xmlns='http://www.w3.org/2005/Atom'><entry><id>https://example.org/1</id></entry></feed>">>),
@@ -905,3 +905,16 @@ data_urls_check() ->
         ?assertNotEqual(nomatch, binary:match(Body, <<"<!-- z-media 123 ">>)),
         ?assertEqual(nomatch, binary:match(Body, <<"data:">>))
     after meck:unload(z_media_tag) end.
+
+next_url_test() ->
+    Base = <<"https://example.org/feed?page=1">>,
+    Next = <<"https://example.org/feed?page=2&cat=news">>,
+    lists:foreach(fun(Xml) ->
+        ?assertMatch({ok, #{next_url := Next}}, z_import_feed_parse:parse(Xml, Base))
+    end, [
+        <<"<feed xmlns='http://www.w3.org/2005/Atom'><link rel='next' href='?page=2&amp;cat=news'/></feed>">>,
+        <<"<rss xmlns:atom='http://www.w3.org/2005/Atom'><channel><atom:link rel='next' href='?page=2&amp;cat=news'/></channel></rss>">>
+    ]),
+    Json = z_json:encode(#{<<"version">> => <<"https://jsonfeed.org/version/1.1">>,
+        <<"title">> => <<"Test">>, <<"items">> => [], <<"next_url">> => <<"?page=2&cat=news">>}),
+    ?assertMatch({ok, #{next_url := Next}}, z_import_feed_parse:parse(Json, Base)).
