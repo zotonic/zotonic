@@ -88,12 +88,15 @@ Zotonic retrieves them using the configured credentials.
 ## Configuration reference
 
 Site settings are stored under `mod_filestore` in `m_config`. The historical
-`s3` prefixes also apply to FTP and WebDAV.
+`s3` prefixes also apply to FTP and WebDAV, except `s3region`, which only applies to S3.
+An explicitly empty site region selects V2 instead of inheriting a global region.
+An unset site region inherits the global setting; locked configuration always uses the global setting.
 
 | Key | Meaning |
 | --- | --- |
 | `service` | Backend identifier: `s3`, `ftp`, or `webdav`. Set it explicitly outside the admin; an empty value falls back to `s3`. TLS variants are URL schemes, not backend identifiers. |
 | `s3url` | Base URL, including the bucket or directory and optional site prefix. |
+| `s3region` | S3 signing region, for example `eu-west-1`. A nonempty region enables Signature V4; empty uses legacy Signature V2. |
 | `s3key` | S3 access key, or FTP/WebDAV username. |
 | `s3secret` | S3 secret key, or FTP/WebDAV password. |
 | `is_upload_enabled` | Allow background uploads. Set explicitly when configuring storage outside the admin. Disabling this does not disable reads, queued downloads, or remote deletion. |
@@ -105,7 +108,8 @@ Site settings are stored under `mod_filestore` in `m_config`. The historical
 
 The same keys can be set in the `zotonic_mod_filestore` application environment in
 the system configuration. Nonempty site settings override these defaults unless
-`is_config_locked` is true. This lock is a **system-wide** option: it makes sites
+`is_config_locked` is true. For `s3region`, an explicitly empty site setting also
+overrides the default, selecting Signature V2. This lock is a **system-wide** option: it makes sites
 use the application settings and prevents editing them through the filestore form.
 
 For example, merge this application entry into the system's Erlang configuration
@@ -216,6 +220,12 @@ for the configuration and statistics model. Storage requests use `s3filez`,
             type => string,
             default => "",
             description => "The base URL of the S3, FTP/FTPS, or WebDAV service, including its bucket or directory"
+        },
+        #{
+            key => s3region,
+            type => string,
+            default => "",
+            description => "S3 signing region. A nonempty region enables Signature V4; empty uses Signature V2"
         },
         #{
             key => s3key,
@@ -382,11 +392,7 @@ observe_filestore_credentials_lookup(#filestore_credentials_lookup{ path = Path 
                     service = Service,
                     service_url = S3Url,
                     location = Url,
-                    credentials = #{
-                        username => S3Key,
-                        password => S3Secret,
-                        tls_options => filestore_config:tls_options(Context)
-                    }
+                    credentials = filestore_config:credentials(Context)
             }};
         false ->
             undefined
@@ -410,11 +416,7 @@ observe_filestore_credentials_revlookup(
                             service = Service,
                             service_url = S3Url,
                             location = Location,
-                            credentials = #{
-                                username => S3Key,
-                                password => S3Secret,
-                                tls_options => filestore_config:tls_options(Context)
-                            }
+                            credentials = filestore_config:credentials(Context)
                     }};
                 false ->
                     undefined

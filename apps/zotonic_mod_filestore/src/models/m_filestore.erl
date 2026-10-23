@@ -50,6 +50,7 @@ Available Model API Paths
 | `get` | `/stats/...` | Return admin-only filestore totals: archived media count/size, queued upload count, queued move/delete counts, cloud-stored count/size, and estimated local count/size. |
 | `get` | `/service/...` | Return the configured filestore backend service identifier from `filestore_config:service/1` (admin-only). |
 | `get` | `/s3url/...` | Return the configured S3, FTP/FTPS or WebDAV base URL used for remote object location resolution (admin-only). |
+| `get` | `/s3region/...` | Return the S3 signing region; empty selects Signature V2 (admin-only). |
 | `get` | `/s3key/...` | Return the configured S3 access key or FTP/WebDAV username for filestore credentials (admin-only). |
 | `get` | `/s3secret/...` | Return the configured S3 secret key or FTP/WebDAV password only when caller is admin and filestore config is not locked. |
 | `get` | `/is_config_locked/...` | Return whether filestore credential/config values are locked (non-editable/hidden) in this site instance (admin-only). |
@@ -126,6 +127,11 @@ m_get([ <<"service">> | Rest ], _Msg, Context) ->
 m_get([ <<"s3url">> | Rest ], _Msg, Context) ->
     case z_acl:is_admin(Context) of
         true -> {ok, {filestore_config:s3url(Context), Rest}};
+        false -> {error, eacces}
+    end;
+m_get([ <<"s3region">> | Rest ], _Msg, Context) ->
+    case z_acl:is_admin(Context) of
+        true -> {ok, {filestore_config:s3region(Context), Rest}};
         false -> {error, eacces}
     end;
 m_get([ <<"s3key">> | Rest ], _Msg, Context) ->
