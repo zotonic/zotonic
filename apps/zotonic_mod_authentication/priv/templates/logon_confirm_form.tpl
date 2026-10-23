@@ -11,10 +11,13 @@
 	<input type="hidden" name="handler" value="username" />
 
 	<div id="logon_password">
-		<p class="do_inputoverlay">
+		<div class="do_inputoverlay">
 			<span>{_ Password _}</span>
-			<input class="form-control" type="password" id="password" name="password" value="" autocomplete="off" />
-		</p>
+			<div class="input-group">
+			    <input class="form-control" type="password" id="password" name="password" value="" autocomplete="off" />
+			    {% include "_password_visibility.tpl" target_id="password" %}
+			</div>
+		</div>
 	</div>
 
 	<p class="error" id="logon_confirm_error" style="display:none"> {_ Confirmation failure _} </p>
