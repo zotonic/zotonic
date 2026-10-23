@@ -835,6 +835,10 @@ a URL or `undefined`
 `#signup_confirm_redirect{}` properties:
 
 *   id: `m_rsc:resource()`
+*   request_page: `undefined | binary()`, the requested same-site destination.
+
+The observer can override the requested destination. With no observer result,
+signup uses the requested destination, the user's page, or the home page.
 ").
 -callback observe_signup_confirm_redirect(#signup_confirm_redirect{}, z:context()) -> Result when
     Result :: URL

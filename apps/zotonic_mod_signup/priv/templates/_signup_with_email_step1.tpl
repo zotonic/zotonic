@@ -4,6 +4,13 @@
         delegate=`controller_signup`
 %}
 <form id="signup_form" method="post" action="postback">
+    {% if page == '#reload' %}
+        <input type="hidden" name="signup_page" value="">
+        {% javascript %}
+            document.querySelector('#signup_form input[name="signup_page"]').value =
+                window.location.pathname + window.location.search;
+        {% endjavascript %}
+    {% endif %}
     <div class="form-group">
         {% if props.email %}
             <p>

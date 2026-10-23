@@ -218,9 +218,17 @@ Fired when a signup procedure is done and a user has been created.
 Fired when a users have signed up and confirmed their identity (e.g. via e-mail).
 
 
-### `#signup_confirm_redirect{ id = UserId }`
+### `#signup_confirm_redirect{ id = UserId, request_page = RequestPage }`
 
-Decide to which page a user gets redirected to after signup.
+Decide to which page a user gets redirected to after signup. The first observer
+result overrides `request_page`. Without an override, signup uses the requested
+page, the user's page, or the home page. All destinations are same-site URLs.
+
+For signup requiring confirmation, `ready_page` is stored in the unverified
+email identities' `propb` under `signup_ready_page` before `#signup_done{}` is
+emitted. This survives resending verification mail and opening its link in
+another browser, without requiring `mod_tkvstore`. Successful confirmation
+consumes the destination together with the verification key.
 User signup module handling registration, activation, and signup-related policies.
 
 
@@ -575,6 +583,12 @@ do_signup(UserId, Props, SignupProps, RequestConfirm, Context) ->
                 _ -> ContextLogon
             end,
             ensure_identities(NewUserId, SignupProps, ContextUser),
+            case IsVerified of
+                false ->
+                    ok = m_signup:store_confirm_redirect(NewUserId,
+                        proplists:get_value(ready_page, SignupProps), ContextUser);
+                true -> ok
+            end,
             z_notifier:notify_sync(#signup_done{id=NewUserId, is_verified=IsVerified, props=Props, signup_props=SignupProps}, ContextUser),
             case IsVerified of
                 true -> z_notifier:map(#signup_confirm{id=NewUserId}, ContextUser);

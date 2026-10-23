@@ -2135,7 +2135,7 @@ set_verify_key(IdnId, Context) ->
 set_propb(IdnId, undefined, Context) ->
     set_propb_1(IdnId, undefined, Context);
 set_propb(IdnId, PropB, Context) ->
-    set_propb_1(IdnId, ?DB_PROPS(PropB), Context).
+    set_propb_1(IdnId, PropB, Context).
 
 set_propb_1(IdnId, PropB, Context) ->
     case z_db:q1("
