@@ -1,16 +1,20 @@
 .modal-dialog {
   /* for dialog offset, set margin here */
 }
+
 div.modal-backdrop {
   opacity: 0.5;
 }
+
 div.modal form {
   margin-bottom: 0;
 }
+
 /* do not use scrolling inside modal body */
 div.modal-body {
   max-height: none;
 }
+
 /* make it possible to use the nice modal footer inside the body, e.g. for tabs */
 div.modal-body div.modal-footer {
   margin: -15px;
@@ -21,8 +25,9 @@ div.modal-body div.modal-footer.modal-footer-sticky {
   position: sticky;
   bottom: 0;
   z-index: 1;
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: var(--z-admin-modal-footer-sticky-bg, rgba(var(--bs-body-bg-rgb, 255, 255, 255), 0.5));
 }
+
 /* modal overlay - full screen dialog - below normal dialog */
 .modal-overlay {
   position: fixed;

@@ -5,16 +5,19 @@ textarea[data-tiptap-installed] {
 
 .z-tiptap-error {
   padding: 8px 12px;
-  color: #a32020;
+  color: var(--bs-danger-text-emphasis, #a32020);
 }
 
 .z-tiptap {
-  --editor-border: #c5c9ce;
-  --editor-focus: #087a9d;
-  --editor-surface: #fff;
-  --editor-margin: #e9ecef;
-  --editor-controls: #f3f4f5;
-  color: #262a2e;
+  --editor-border: var(--bs-border-color, #c5c9ce);
+  --editor-focus: var(--bs-link-color, #087a9d);
+  --editor-surface: var(--bs-body-bg, #fff);
+  --editor-margin: var(--bs-secondary-bg, #e9ecef);
+  --editor-controls: var(--bs-tertiary-bg, #f3f4f5);
+  --editor-text: var(--bs-body-color, #262a2e);
+  --editor-active-bg: var(--bs-primary-bg-subtle, #deedf1);
+  --editor-active-border: var(--bs-primary-border-subtle, #b4cdd5);
+  color: var(--editor-text);
   background: var(--editor-surface);
   border: 1px solid var(--editor-border);
   border-radius: 4px;
@@ -67,10 +70,11 @@ textarea[data-tiptap-installed] {
 .z-tiptap-toolbar select {
   max-width: 145px;
   border-color: var(--editor-border);
+  background: var(--editor-controls);
 }
 .z-tiptap-toolbar button:hover:not(:disabled), .z-tiptap-toolbar button[aria-pressed=true] {
-  background: #deedf1;
-  border-color: #b4cdd5;
+  background: var(--editor-active-bg);
+  border-color: var(--editor-active-border);
 }
 .z-tiptap-toolbar button:focus-visible,
 .z-tiptap-toolbar select:focus-visible {
@@ -113,6 +117,8 @@ textarea[data-tiptap-installed] {
   min-width: 120px;
   max-width: 100%;
   padding: 5px;
+  color: var(--editor-text);
+  background: var(--editor-surface);
   border: 1px solid var(--editor-border);
 }
 .z-tiptap-link-panel button {
@@ -164,7 +170,7 @@ textarea[data-tiptap-installed] {
   display: block;
 }
 .z-tiptap .selectedCell {
-  background-color: #e1eef5;
+  background-color: var(--bs-primary-bg-subtle, #e1eef5);
 }
 
 .z-tiptap-fullscreen {
@@ -220,14 +226,14 @@ textarea[data-tiptap-installed] {
   border: 1px solid var(--editor-border);
   border-radius: 3px;
   background: var(--editor-surface);
-  color: #262a2e;
+  color: var(--editor-text);
   cursor: pointer;
 }
 .z-tiptap .z-tiptap-media > .z-tiptap-media-properties[hidden] {
   display: none;
 }
 .z-tiptap .z-tiptap-media > .z-tiptap-media-properties:hover {
-  background: #deedf1;
+  background: var(--editor-active-bg);
 }
 .z-tiptap .z-tiptap-media > .z-tiptap-media-properties:focus-visible {
   outline: 2px solid var(--editor-focus);
