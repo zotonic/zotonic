@@ -1,0 +1,6 @@
+# Used by start-podman.sh. Map the calling user to the selected container IDs.
+services:
+    zotonic:
+        userns_mode: "keep-id:uid=${ZOTONIC_UID:?Set ZOTONIC_UID},gid=${ZOTONIC_GID:?Set ZOTONIC_GID}"
+        # Initialization needs container root; the entrypoint drops to zotonic.
+        user: "0:0"
