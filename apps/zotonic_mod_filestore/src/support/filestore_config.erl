@@ -28,6 +28,9 @@
     s3url/1,
     s3key/1,
     s3secret/1,
+    s3region/1,
+    credentials/1,
+    credentials/5,
     tls_options/1,
     is_upload_enabled/1,
     is_local_keep/1,
@@ -75,6 +78,39 @@ s3key(Context) ->
 -spec s3secret(z:context()) -> binary().
 s3secret(Context) ->
     get_binary(s3secret, Context).
+
+%% @doc Get the S3 signing region. An empty region selects Signature V2.
+-spec s3region(Context) -> Region when
+    Context :: z:context(),
+    Region :: binary().
+s3region(Context) ->
+    z_string:trim(get_binary(s3region, Context)).
+
+%% @doc Build the credentials used by all remote filestore operations.
+-spec credentials(Context) -> Credentials when
+    Context :: z:context(),
+    Credentials :: map().
+credentials(Context) ->
+    credentials(service(Context), s3key(Context), s3secret(Context),
+                s3region(Context), tls_options(Context)).
+
+%% @doc Build credentials for saved settings or a settings test before saving.
+%% Only S3 uses the region; an empty region preserves the default V2 signing.
+-spec credentials(Service, Key, Secret, Region, TLSOptions) -> Credentials when
+    Service :: binary(),
+    Key :: binary(),
+    Secret :: binary(),
+    Region :: binary(),
+    TLSOptions :: list(),
+    Credentials :: map().
+credentials(Service, Key, Secret, Region, TLSOptions) ->
+    Credentials = #{username => Key, password => Secret, tls_options => TLSOptions},
+    case {Service, z_string:trim(Region)} of
+        {<<"s3">>, <<>>} -> Credentials;
+        {<<"s3">>, SigningRegion} ->
+            Credentials#{signature_version => v4, region => SigningRegion};
+        {_, _} -> Credentials
+    end.
 
 %% @doc Get the TLS options for the connection to the remote filestore.
 %% The default will be set by one of the filestore application. These options
@@ -134,7 +170,8 @@ get_value(Key, Context) ->
         false ->
             case m_config:get_value(mod_filestore, Key, Context) of
                 undefined -> get_app_config(Key, Context);
-                <<>> -> get_app_config(Key, Context);
+                % An explicitly empty region selects V2, even with a global region.
+                <<>> when Key =/= s3region -> get_app_config(Key, Context);
                 Config -> Config
             end
     end.

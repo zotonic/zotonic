@@ -39,6 +39,12 @@
                                 <td>{_ S3 Cloud Location _}</td>
                                 <td><b>{{ m.filestore.s3url|escape }}</b></td>
                             </tr>
+                            {% if m.filestore.service == "s3" %}
+                                <tr>
+                                    <td>{_ S3 region _}</td>
+                                    <td><b>{{ m.filestore.s3region|default:_"Not set (Signature V2)"|escape }}</b></td>
+                                </tr>
+                            {% endif %}
                             <tr>
                                 <td>{_ Is upload enabled? _}</td>
                                 <td><b>{{ m.filestore.is_upload_enabled|if:_"Yes":_"No" }}</b></td>
@@ -108,6 +114,24 @@
                                     {_ For WebDAV the URL must start with <b><tt>webdavs:</tt></b> or <b><tt>webdav:</tt></b> _}
                                 </p>
                             </div>
+
+                            <div class="form-group" id="s3region-group">
+                                <label class="control-label" for="s3region">{_ S3 region _}</label>
+                                <input type="text" id="s3region" name="s3region" value="{{ m.filestore.s3region|escape }}"
+                                    class="form-control" placeholder="eu-west-1" aria-describedby="s3region-help" />
+                                <p class="help-block" id="s3region-help">
+                                    {_ Enter the region supplied by your storage provider to use Signature V4. Leave empty to use legacy Signature V2. _}
+                                </p>
+                            </div>
+                            {% javascript %}
+                                const filestoreUrl = document.getElementById("s3url");
+                                const regionGroup = document.getElementById("s3region-group");
+                                const updateRegionVisibility = () => {
+                                    regionGroup.hidden = !/^https?:\/\//.test(filestoreUrl.value.trim());
+                                };
+                                filestoreUrl.addEventListener("input", updateRegionVisibility);
+                                updateRegionVisibility();
+                            {% endjavascript %}
 
                             <div class="form-group">
                                 <label class="control-label" for="s3key">{_ S3 API Key or FTP/WebDAV username_}</label>
