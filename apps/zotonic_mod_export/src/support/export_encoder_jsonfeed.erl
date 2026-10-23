@@ -43,4 +43,8 @@ row(Row, #state{is_first=IsFirst} = State, Context) ->
             {ok, [Separator, z_json:encode(Item)], State#state{is_first=false}}
     end.
 
-footer(_Data, _State, _Context) -> {ok, <<"]}">>}.
+footer(_Data, _State, Context) ->
+    case z_context:get(feed_next_url, Context) of
+        undefined -> {ok, <<"]}">>};
+        Url -> {ok, [<<"],\"next_url\":">>, z_json:encode(Url), <<"}">>]}
+    end.

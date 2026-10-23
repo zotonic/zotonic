@@ -3,7 +3,7 @@
 %% @doc Helper functions for exports.
 %% @end
 
-%% Copyright 2024-2025 Marc Worrell
+%% Copyright 2024-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,12 +20,33 @@
 -module(export_helper).
 
 -export([
+    stream/3,
+    stream/4,
     call/2,
     get_content_type/3,
     set_filename/4
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
+
+%% @doc Stream an export using the standard controller query/raw options.
+-spec stream(Id, ContentType, Context) -> {term(), z:context()} when
+    Id :: term(), ContentType :: term(), Context :: z:context().
+stream(Id, ContentType, Context) ->
+    Options = [
+        {is_query, z_convert:to_bool(z_context:get(is_query, Context))},
+        {is_raw, z_convert:to_bool(z_context:get_q(<<"raw">>, Context))}
+    ],
+    stream(Id, ContentType, Options, Context).
+
+%% @doc Stream with explicit encoder options and set the download headers.
+-spec stream(Id, ContentType, Options, Context) -> {term(), z:context()} when
+    Id :: term(), ContentType :: term(), Options :: list(), Context :: z:context().
+stream(Id, ContentType, Options, Context) ->
+    Dispatch = z_context:get(zotonic_dispatch, Context),
+    StreamOptions = [{dispatch, Dispatch} | Options],
+    Context1 = set_filename(Id, ContentType, Dispatch, Context),
+    {export_encoder:stream(Id, ContentType, StreamOptions, Context1), Context1}.
 
 %% @doc Call the export observer or module.
 -spec call(Notification, Context) -> Result | undefined when

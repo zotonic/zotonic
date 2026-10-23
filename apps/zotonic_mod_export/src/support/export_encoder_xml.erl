@@ -69,6 +69,7 @@ row(Row, #state{format=Format} = State, Context) ->
 footer(_Data, #state{updated=Updated, format=Format}, Context) ->
     % Atom permits feed metadata after the entries. This keeps the export streaming.
     Vars = [
+        {next_url, z_context:get(feed_next_url, Context)},
         {updated, Updated},
         {updated_rfc822, rss_date(Updated)}
     ],

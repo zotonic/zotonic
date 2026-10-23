@@ -115,7 +115,7 @@ are internal schema/worker helpers and do not form an ACL-protected administrati
 
 `save/3` accepts a complete map with binary keys, matching the admin form. Keys are
 `url`, `title`, `category_id`, `content_group_id`, `guess_category`, `connections`,
-`media_mode`, `poll_minutes`, `is_authoritative`, `use_wordpress`, `is_paused` and
+`media_mode`, `poll_minutes`, `is_authoritative`, `use_wordpress`, `import_all_pages`, `is_paused` and
 `user_id`. The optional `user_id` selects an enabled account; selecting another account
 requires administrator status or `use` permission for `mod_admin_identity`. Omission
 on creation uses the current user; omission on update preserves the saved identity
@@ -363,7 +363,8 @@ save(Id, Input, Context) ->
                 {ok, Props} ->
                     DueProps = Props#{
                         next_poll => calendar:universal_time(),
-                        last_error => undefined
+                        last_error => undefined,
+                        next_url => undefined, pagination_started => undefined
                     },
                     %% Ordinary saves must not erase a pending explicit request.
                     SavedProps = case bool(<<"refetch_deleted">>, Input) of
@@ -556,6 +557,7 @@ settings(Input, Context) ->
                         is_subscribe => bool(<<"is_subscribe">>, Input),
                         is_subscribe_connections => bool(<<"is_subscribe_connections">>, Input),
                         use_wordpress => bool(<<"use_wordpress">>, Input),
+                        import_all_pages => bool(<<"import_all_pages">>, Input),
                         is_paused => bool(<<"is_paused">>, Input)
                     },
                     {ok, maps:merge(Copyrights, Settings)}
@@ -840,6 +842,10 @@ install(Context) ->
                     errors bigint not null default 0, last_error text,
                     failure_count integer not null default 0,
                     poll_hint_seconds bigint not null default 0,
+                    http_etag text, http_last_modified text, http_url text,
+                    http_settings_version text,
+                    import_all_pages boolean not null default false,
+                    next_url text, pagination_started timestamptz,
                     created timestamptz not null default now(), modified timestamptz not null default now()
                 )", Context);
         true ->
@@ -856,7 +862,14 @@ install(Context) ->
                 add column if not exists is_subscribe_connections boolean not null default false,
                 add column if not exists refetch_deleted boolean not null default false,
                 add column if not exists failure_count integer not null default 0,
-                add column if not exists poll_hint_seconds bigint not null default 0
+                add column if not exists poll_hint_seconds bigint not null default 0,
+                add column if not exists http_etag text,
+                add column if not exists http_last_modified text,
+                add column if not exists http_url text,
+                add column if not exists http_settings_version text,
+                add column if not exists import_all_pages boolean not null default false,
+                add column if not exists next_url text,
+                add column if not exists pagination_started timestamptz
             ", Context)
     end,
     z_db:q("create index if not exists import_feed_due_key on import_feed(next_poll) where not is_paused", Context),

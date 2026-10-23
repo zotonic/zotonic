@@ -1,4 +1,5 @@
 [
+    {feed, ["feed"], controller_feed, [{type, <<"atom">>}, {is_default_feed, true}]},
     {feed, ["feed", type], controller_feed, []},
     {feed, ["feed", type, id], controller_feed, []},
 

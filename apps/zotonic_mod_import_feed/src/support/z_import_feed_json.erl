@@ -48,6 +48,7 @@ normalize(Feed, Items, Url, Limit) ->
     {ok, #{
         url => Url,
         title => string_value(<<"title">>, Feed),
+        next_url => resolve(string_value(<<"next_url">>, Feed), Url),
         website => resolve(string_value(<<"home_page_url">>, Feed), Url),
         hubs => [HubUrl || #{<<"type">> := <<"WebSub">>, <<"url">> := Href} <- list_value(<<"hubs">>, Feed),
                           HubUrl <- [resolve(Href, Url)], HubUrl =/= <<>>],

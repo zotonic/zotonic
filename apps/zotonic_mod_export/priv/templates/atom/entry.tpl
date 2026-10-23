@@ -4,7 +4,7 @@
             <id>{{ id.uri|escapexml }}</id>
             <link rel="https://zotonic.com/rel/resource" type="application/json" href="{% url api_rsc_export id=id absolute_url %}" />
             <updated>{{ id.modified|date:"c" }}</updated>
-            <published>{{ id.publication_start|date:"c" }}</published>
+            {% if id.publication_start %}<published>{{ id.publication_start|date:"c" }}</published>{% endif %}
             <author>{% with id.o.author[1]|default:id.creator_id as author_id %}
                 <name>{% filter escapexml %}{% include "_name.tpl" id=author_id %}{% endfilter %}</name>
                 <uri>{{ author_id.uri|escapexml }}</uri>

@@ -90,6 +90,7 @@ feed(Channel, Nodes, Kind, Url) ->
                         atom -> alternate(Links);
                         rss -> absolute(value(<<"link">>, Channel), Base)
                    end,
+        next_url => first([LinkUrl || {<<"next">>, LinkUrl} <- Links]),
         hubs => [LinkUrl || {<<"hub">>, LinkUrl} <- Links],
         entries => Entries,
         is_zotonic_feed => IsZotonic,

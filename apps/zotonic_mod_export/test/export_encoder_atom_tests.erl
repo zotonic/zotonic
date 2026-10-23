@@ -11,10 +11,14 @@ atom_test_() ->
         fun feed_metadata/0,
         fun visible_timestamps/0,
         fun empty_feed/0,
+        fun unpublished_without_publication_date/0,
         fun rss_roundtrip/0,
         fun jsonfeed_roundtrip/0,
         fun feed_formats/0,
-        fun stream_formats/0
+        fun stream_formats/0,
+        fun query_export_limit/0,
+        fun pagination_roundtrip/0,
+        fun query_next_page/0
     ]}.
 
 %% Mock site services, but compile and render the real Atom templates.
@@ -75,7 +79,11 @@ resource(Id) ->
         <<"uri">> => <<"https://example.test/id/", (integer_to_binary(Id))/binary>>,
         <<"title">> => <<"Resource ", (integer_to_binary(Id))/binary>>,
         <<"modified">> => {{2026, 10, Id}, {12, 0, 0}},
-        <<"publication_start">> => {{2026, 1, 1}, {12, 0, 0}},
+        <<"is_published">> => Id =/= 5,
+        <<"publication_start">> => case Id of
+            5 -> undefined;
+            _ -> {{2026, 1, 1}, {12, 0, 0}}
+        end,
         <<"creator_id">> => #{<<"title">> => <<"An author">>, <<"uri">> => <<"https://example.test/author">>},
         <<"page_url_abs">> => <<"https://example.test/page?a=1&b=2">>,
         <<"summary">> => <<"A summary">>,
@@ -197,5 +205,98 @@ stream_formats() ->
         ?assertEqual(<<"https://example.test/id/2">>, maps:get(uri, Entry))
     end, [{<<"application">>, <<"rss+xml">>, []}, {<<"application">>, <<"feed+json">>, []}]).
 
+query_export_limit() ->
+    meck:new(m_config, [no_link]),
+    meck:new(z_search, [no_link]),
+    meck:expect(m_config, get_value, fun(mod_export, query_max_rows, C) ->
+        z_context:get(test_limit, C)
+    end),
+    meck:expect(z_search, search, fun(<<"query">>, #{<<"query_id">> := 2},
+            3, Limit, #{is_count_rows := false, is_single_page := true}, _) ->
+        self() ! {export_limit, Limit},
+        #search_result{result=[]}
+    end),
+    try
+        lists:foreach(fun({Value, Expected}) ->
+            C = z_context:set(test_limit, Value, z_context:set_q_all(
+                [{<<"pagelen">>, <<"999999">>}, {<<"page">>, <<"3">>}],
+                #context{language=[en], tz= <<"UTC">>})),
+            {stream, Stream} = export_encoder:stream(2,
+                {<<"application">>, <<"rss+xml">>, []},
+                [{dispatch, export_rsc_query}, {is_query, true}], C),
+            _ = collect_stream(Stream),
+            receive
+                {export_limit, Limit} -> ?assertEqual(Expected, Limit)
+            after 1000 -> error(no_query_export)
+            end
+        end, [{undefined, 50000}, {<<"2500">>, 2500}, {100, 100},
+            {<<"invalid">>, 50000}, {<<"0">>, 50000}, {-1, 50000}])
+    after
+        meck:unload([m_config, z_search])
+    end.
+
 collect_stream({Data, done}) -> Data;
 collect_stream({Data, Next}) -> [Data | collect_stream(Next())].
+
+page_url_test() ->
+    ?assertEqual(<<"https://example.org/feed/rss?cat=article&cat=news&pagelen=10&page=3">>,
+        export_feed:page_url(3, <<"https://example.org/feed/rss?cat=article&qpage=2&cat=news&pagelen=10&page=2">>)).
+
+
+pagination_roundtrip() ->
+    Next = <<"https://example.test/feed?page=2&cat=article">>,
+    C = z_context:set(feed_next_url, Next, #context{language=[en], tz= <<"UTC">>}),
+    lists:foreach(fun(Encoder) ->
+        {ok, S0} = Encoder:init([{id, 1}, {dispatch, export_rsc_query}], C),
+        {ok, Start, S1} = Encoder:header(undefined, S0, C),
+        {ok, Item, S2} = Encoder:row(2, S1, C),
+        {ok, End} = Encoder:footer(undefined, S2, C),
+        Body = iolist_to_binary([Start, Item, End]),
+        ?assertMatch({ok, #{next_url := Next, entries := [_]}},
+            z_import_feed_parse:parse(Body, <<"https://example.test/feed">>))
+    end, [export_encoder_atom, export_encoder_rss, export_encoder_jsonfeed]).
+
+
+query_next_page() ->
+    meck:new(m_config, [no_link]),
+    meck:new(z_search, [no_link]),
+    meck:expect(m_config, get_value, fun(mod_export, query_max_rows, _) -> 10 end),
+    meck:expect(z_search, search, fun(<<"query">>, _, 3, 1, _, _) -> #search_result{result=[2]} end),
+    meck:expect(z_notifier, first, fun
+        (#url_abs{url=Url}, _) -> <<"https://example.test", Url/binary>>;
+        (_, _) -> undefined
+    end),
+    try
+        C = z_context:set_q_all([{<<"page">>, <<"3">>}, {<<"pagelen">>, <<"1">>}],
+            #context{language=[en], tz= <<"UTC">>, cowreq=#{
+                path => <<"/export/query/jsonfeed/news">>, qs => <<"page=3&pagelen=1">>}}),
+        {stream, Stream} = export_encoder:stream(1, {<<"application">>, <<"feed+json">>, []},
+            [{dispatch, export_rsc_query}, {is_query, true}], C),
+        %% The search still starts only when consuming the stream.
+        ?assertEqual(0, meck:num_calls(z_search, search, '_')),
+        Json = z_json:decode(iolist_to_binary(collect_stream(Stream))),
+        ?assertEqual(<<"https://example.test/export/query/jsonfeed/news?pagelen=1&page=4">>,
+            maps:get(<<"next_url">>, Json))
+    after
+        meck:unload([m_config, z_search])
+    end.
+
+
+%% A requester with permission to view a draft can export it without a date.
+%% SQL NULL publication_start is represented as undefined by the resource model.
+unpublished_without_publication_date() ->
+    lists:foreach(fun(Encoder) ->
+        Body = encode(Encoder, 1, export_rsc_query, [5], undefined),
+        case Encoder of
+            export_encoder_jsonfeed ->
+                #{<<"items">> := [Item]} = z_json:decode(Body),
+                ?assertNot(maps:is_key(<<"date_published">>, Item));
+            _ ->
+                {Doc, []} = xmerl_scan:string(binary_to_list(Body)),
+                ?assertEqual([], xmerl_xpath:string("//published | //pubDate", Doc))
+        end,
+        {ok, #{entries := [Entry]}} = z_import_feed_parse:parse(Body, <<"https://example.test/feed">>),
+        ?assertEqual(<<"https://example.test/id/5">>, maps:get(uri, Entry)),
+        ?assertEqual(undefined, maps:get(published, Entry)),
+        ?assertEqual({{2026, 10, 5}, {12, 0, 0}}, maps:get(modified, Entry))
+    end, [export_encoder_atom, export_encoder_rss, export_encoder_jsonfeed]).

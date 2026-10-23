@@ -18,7 +18,33 @@
 
 -module(export_feed).
 
--export([url/4, json_header/4, json_item/2]).
+-export([url/4, json_header/4, json_item/2, page/1, next_page/3, page_url/2]).
+
+%% Preserve filters and repeated arguments, replacing either page spelling.
+-spec page_url(Page, Url) -> binary() when Page :: pos_integer(), Url :: binary().
+page_url(Page, Url) ->
+    Parts = uri_string:parse(Url),
+    Args = uri_string:dissect_query(maps:get(query, Parts, <<>>)),
+    Keep = [{K,V} || {K,V} <- Args, K =/= <<"page">>, K =/= <<"qpage">>],
+    uri_string:recompose(Parts#{query => uri_string:compose_query(
+        Keep ++ [{<<"page">>, integer_to_binary(Page)}])}).
+
+-spec page(Context) -> pos_integer() when Context :: z:context().
+page(Context) ->
+    try z_convert:to_integer(z_context:get_q(<<"page">>, Context,
+            z_context:get_q(<<"qpage">>, Context, <<"1">>))) of
+        N when is_integer(N), N > 0 -> N;
+        _ -> 1
+    catch _:_ -> 1 end.
+
+%% A full page advertises another page; the final page may therefore be empty.
+-spec next_page(Rows, PageLen, Context) -> z:context() when
+    Rows :: list(), PageLen :: pos_integer(), Context :: z:context().
+next_page(Rows, PageLen, Context) when length(Rows) >= PageLen ->
+    Url = z_context:abs_url(z_context:get_req_path(Context), Context),
+    z_context:set(feed_next_url, page_url(page(Context) + 1, Url), Context);
+next_page(_, _, Context) -> Context.
+
 
 -spec url(Dispatch, Id, Format, Context) -> binary() when
     Dispatch :: atom(), Id :: term(), Format :: atom(), Context :: z:context().

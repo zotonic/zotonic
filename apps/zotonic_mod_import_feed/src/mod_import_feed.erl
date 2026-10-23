@@ -24,7 +24,7 @@
 -mod_title("Import feeds").
 -mod_description("Import articles and media from RSS, Atom and JSON Feed sources.").
 -mod_depends([admin, cron]).
--mod_schema(9).
+-mod_schema(11).
 -mod_config([]).
 
 -moduledoc(#{
@@ -113,6 +113,31 @@ browser input cannot change the server's environment. OAuth2 credentials are nev
 sent over HTTP. Anonymous fetching remains anonymous across redirects.
 
 ## Polling and identity
+
+Polling stores the source's `ETag` and `Last-Modified` after a successful
+import and sends both validators on subsequent requests. HTTP 304 is a
+successful unchanged poll: it does not parse a body, import entries, or remove
+existing content, and preserves the publisher's polling interval. Validator
+updates are protected by the poll lease and settings version. Failed imports,
+settings changes, manual reimport and restoring deleted resources require a
+fresh response. Previews and individual-resource fetches remain unconditional.
+
+Atom and RSS `rel=next` links and JSON Feed `next_url` are followed. The initial
+import reads only the first page unless **Import all pages on the initial import**
+is enabled (`import_all_pages`, default false). This option can import large
+amounts of articles and media.
+
+Later polls process each complete page and stop following links when that page
+contains a previously successfully imported entry. Deleted tracked entries also
+count as seen. This fetches new published entries, but is not a history or change
+synchronization mechanism: older edits and backdated articles may be missed.
+
+Continuation requests use the same URL, credential and response-size checks,
+without first-page HTTP validators. Failed pages resume from their saved URL.
+Each worker processes at most 100 pages, then schedules a continuation. Loops are
+rejected within a traversal batch. Settings saves restart from the first page.
+Validators are saved only for completed single-page polls; pending or failed
+traversals cannot be hidden by a first-page HTTP 304.
 
 Polling uses `poll_minutes` as a minimum interval (default 60 minutes; range
 5–10080). RSS `ttl` and namespace-qualified syndication `updatePeriod` /
