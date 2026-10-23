@@ -107,17 +107,26 @@ only new entries, follow subsequent pages, or bypass the limits below.
 Export limits
 -------------
 
-The site configuration `mod_export.query_max_rows` sets the maximum number of
-results returned by `export_rsc_query` (and other exports using `is_query`).
-It defaults to 50,000. Set it to a positive integer in Admin's configuration
-editor, for example `mod_export` / `query_max_rows` / `5000`. Missing, invalid,
-zero or negative values use the default. Request `page` selects a page and `pagelen` can lower its size, but cannot
-exceed this setting.
+Query exports (`export_rsc_query` and other exports using `is_query`) have
+separate site settings according to how the encoder uses memory:
+
+| Configuration | Default | Formats |
+| --- | --- | --- |
+| `mod_export.query_max_rows_streaming` | 50,000 | CSV, JSON, Atom, RSS, JSON Feed, ICS and UBF; emit rows incrementally. |
+| `mod_export.query_max_rows_non_streaming` | 1,000 anonymous / 20,000 logged in | XLSX and BERT; buffer the complete export before producing the final file. |
+
+Set positive integers in Admin's configuration editor. Missing, invalid, zero
+or negative values use the corresponding default. Request `page` selects a page and `pagelen` can
+lower its size, but cannot exceed the selected format's limit.
+
+The lower non-streaming default limits workbook/resource accumulation. Row sizes
+and concurrent exports still affect memory use; a row cap is not a byte limit.
+Custom export callbacks remain responsible for bounding the rows they supply.
 
 The `feed` routes have a separate fixed cap of 100 items per page and default
 to 20. Larger `pagelen` values are clamped to 100, including `qpagelen` and
-requests using the default stored query. Changing `query_max_rows` does not
-change this feed cap.
+requests using the default stored query. Neither query export setting changes
+this feed cap.
 
 
 Atom, RSS and JSON Feed responses advertise the next page using Atom `rel=next`,
@@ -139,8 +148,9 @@ When [enabled](/id/doc_developerguide_modules#activating-modules), this module
 adds export content types to the View menu on admin edit pages and adds an Export
 block. Both a single resource and a
 [query resource](/id/doc_developerguide_search#guide-query-resources) can be
-exported. A query export contains at most `mod_export.query_max_rows` matching resource
-ids (50,000 by default).
+exported. Query export pages default to at most 50,000 resources for streaming
+formats; XLSX/BERT default to 1,000 for anonymous users and 20,000 for logged-in
+users. An explicit configuration overrides either default.
 
 
 Built-in dispatch rules
@@ -201,7 +211,7 @@ They share the same encoders, but select and limit their results differently.
 | Resource selection | Requires an id; reads that resource's stored `query` property. Intended for saved queries. | Optional id: saved-query results, collection members, or one ordinary resource. |
 | No id or search terms | No default selection; an id must be supplied in the path or query string. | Uses the visible saved query `query_feed`, falling back to published `article` resources when unavailable. |
 | Request filters | Does not automatically merge request search arguments into the stored query. | Typed routes accept bare or q-prefixed search terms, combined with any id selection. |
-| Pagination | Page 1 by default, up to `query_max_rows` results (default 50,000); `page` and a smaller `pagelen` are accepted. | Default page 1, 20 items; `page` and `pagelen` are accepted, with at most 100 items per page. |
+| Pagination | Page 1 by default, up to the format-specific limit (default 50,000 streaming / 1,000 anonymous or 20,000 logged-in non-streaming); `page` and a smaller `pagelen` are accepted. | Default page 1, 20 items; `page` and `pagelen` are accepted, with at most 100 items per page. |
 | Sorting | Uses the stored query's sort terms. | Retains saved-query sorting; otherwise defaults to descending publication start unless an explicit sort is supplied. |
 | Formats | All registered export formats, including CSV, XLSX, Atom, RSS, JSON Feed and generic JSON. | Atom, RSS and JSON Feed only. |
 | Meaning of `json` | Generic JSON array (`application/json`); use `jsonfeed` for JSON Feed. | Alias for `jsonfeed` (`application/feed+json`). |
@@ -406,11 +416,19 @@ This module handles the following notifier callbacks:
 -mod_depends([mod_base]).
 -mod_config([
     #{
-        key => query_max_rows,
+        key => query_max_rows_streaming,
         type => integer,
         default => 50000,
-        description => "Maximum number of rows in query exports. Must be positive; "
-                       "invalid values use 50000. Does not affect the feed page cap of 100."
+        description => "Maximum rows per query export page for streaming formats. Must be positive; "
+                       "missing or invalid values use 50000."
+    },
+    #{
+        key => query_max_rows_non_streaming,
+        type => integer,
+        default => 1000,
+        description => "Maximum rows per query export page for XLSX and BERT, which buffer the complete export. "
+                       "Must be positive; missing or invalid values use 1000 for anonymous users and 20000 for logged-in users. "
+                       "An explicit value applies to both. Does not affect the feed page cap of 100."
     }
 ]).
 

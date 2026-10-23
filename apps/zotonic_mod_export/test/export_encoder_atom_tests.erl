@@ -208,8 +208,8 @@ stream_formats() ->
 query_export_limit() ->
     meck:new(m_config, [no_link]),
     meck:new(z_search, [no_link]),
-    meck:expect(m_config, get_value, fun(mod_export, query_max_rows, C) ->
-        z_context:get(test_limit, C)
+    meck:expect(m_config, get_value, fun
+        (mod_export, query_max_rows_streaming, C) -> z_context:get(test_limit, C)
     end),
     meck:expect(z_search, search, fun(<<"query">>, #{<<"query_id">> := 2},
             3, Limit, #{is_count_rows := false, is_single_page := true}, _) ->
@@ -260,7 +260,7 @@ pagination_roundtrip() ->
 query_next_page() ->
     meck:new(m_config, [no_link]),
     meck:new(z_search, [no_link]),
-    meck:expect(m_config, get_value, fun(mod_export, query_max_rows, _) -> 10 end),
+    meck:expect(m_config, get_value, fun(mod_export, query_max_rows_streaming, _) -> 10 end),
     meck:expect(z_search, search, fun(<<"query">>, _, 3, 1, _, _) -> #search_result{result=[2]} end),
     meck:expect(z_notifier, first, fun
         (#url_abs{url=Url}, _) -> <<"https://example.test", Url/binary>>;
