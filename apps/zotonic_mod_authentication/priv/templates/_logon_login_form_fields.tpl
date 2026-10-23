@@ -149,12 +149,15 @@
     {% elseif not q.options.is_username_checked %}
         <div class="form-group x-hidden" id="form-password" style="padding:0; height:0; margin:0; overflow:hidden;" aria-hidden="true">
             <label for="password" class="control-label">{_ Password _}</label>
-            <input class="form-control" type="password" id="password" name="password" value=""
-                   placeholder="{_ Password _}"
-                   autocomplete="current-password"
-                   autocapitalize="off"
-                   autocorrect="off"
-                   tabindex="-1">
+            {# Keep the input in place when Cotonic reveals the password step. #}
+            <div class="input-group">
+                <input class="form-control" type="password" id="password" name="password" value=""
+                       placeholder="{_ Password _}"
+                       autocomplete="current-password"
+                       autocapitalize="off"
+                       autocorrect="off"
+                       tabindex="-1">
+            </div>
         </div>
         <div class="form-group passcode x-hidden" id="form-passcode" style="padding:0; height:0; margin:0; overflow:hidden;" aria-hidden="true">
             <label for="passcode" class="control-label">{_ Passcode _}</label>
