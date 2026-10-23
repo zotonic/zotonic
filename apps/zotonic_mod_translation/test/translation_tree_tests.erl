@@ -35,7 +35,33 @@ tree_test_() -> tests(z_acl:sudo(z_context:new(zotonic_site_testsandbox))).
 
 %% @doc Wrap the integration test with a timeout for background job checks.
 tests(Context) ->
-    {timeout, 60, fun() -> integration(Context), missing_source(Context) end}.
+    {timeout, 60, fun() -> status_cache(Context), integration(Context), missing_source(Context) end}.
+
+%% @doc Completed worker results must supersede process-local running snapshots.
+status_cache(Context) ->
+    Root = <<"bulk-status-test-", (z_ids:id())/binary>>,
+    Key = {translation_tree, Root},
+    Running = #{root => Root, state => running, total => 0},
+    Complete = Running#{state => complete, total => 2, skipped => 2},
+    z_depcache:in_process(true),
+    try
+        ok = z_depcache:set(Key, Running, Context),
+        ?assertEqual({ok, Running}, z_depcache:get(Key, Context)),
+        {Pid, Monitor} = spawn_monitor(fun() ->
+            ok = z_depcache:set(Key, Complete, Context)
+        end),
+        receive
+            {'DOWN', Monitor, process, Pid, Reason} -> ?assertEqual(normal, Reason)
+        after 2000 -> error(cache_update_timeout)
+        end,
+        ?assertEqual(Complete, translation_tree:status(Root, Context)),
+        %% A worker that exited without a terminal result is still a failure.
+        ok = z_depcache:set(Key, Running, Context),
+        ?assertEqual(Running#{state => failed}, translation_tree:status(Root, Context))
+    after
+        z_depcache:flush(Key, Context),
+        z_depcache:flush_process_dict()
+    end.
 
 %% @doc Skip missing source languages, but allow empty text when the language is listed.
 missing_source(Context) ->
@@ -199,9 +225,13 @@ integration(Context) ->
         ?assertMatch(#{state := complete, total := 2, done := 2, failed := 0}, await(Selection, Context, 500)),
         ?assertEqual([en], m_rsc:p(A, language, Context)),
         ?assertEqual([en, nl], m_rsc:p(B, language, Context)),
-        {ok, _} = m_translation_tree:m_post([Selection], #{payload => #{
-            <<"method">> => <<"remove">>, <<"language">> => <<"en">>, <<"confirmed">> => true}}, Context),
-        ?assertMatch(#{state := complete, total := 2, skipped := 2, failed := 0}, await(Selection, Context, 500)),
+        %% Fast, skipped-only jobs can finish between progress and liveness reads.
+        lists:foreach(fun(_) ->
+            {ok, #{job := Job}} = m_translation_tree:m_post([Selection], #{payload => #{
+                <<"method">> => <<"remove">>, <<"language">> => <<"en">>, <<"confirmed">> => true}}, Context),
+            ?assertMatch(#{job := Job, state := complete, total := 2, skipped := 2, failed := 0},
+                await(Selection, Context, 500))
+        end, lists:seq(1, 25)),
         ?assertEqual([en], m_rsc:p(A, language, Context)),
         {ok, _} = m_translation_tree:m_post([Selection], #{payload => #{
             <<"method">> => <<"copy">>, <<"src">> => <<"en">>, <<"dst">> => <<"nl">>,
