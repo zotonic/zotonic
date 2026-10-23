@@ -9,7 +9,7 @@
         {% lib "css/admin_import_feed.css" %}
         <div class="admin-header">
             <h2>{_ Import feeds _}</h2>
-            <p>{_ Discover RSS or Atom feeds and import their articles automatically. _}</p>
+            <p>{_ Discover RSS, Atom or JSON feeds and import their articles automatically. _}</p>
         </div>
         <p><a class="btn btn-default" href="{% url admin_import_feed_log %}">{_ Activity log _}</a></p>
         {% wire id="feed-discover-form" type="submit" postback=`discover` delegate=`mod_import_feed`

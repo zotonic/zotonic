@@ -111,6 +111,8 @@ encoders() ->
         export_encoder_xlsx,
         export_encoder_ics,
         export_encoder_atom,
+        export_encoder_rss,
+        export_encoder_jsonfeed,
         export_encoder_bert,
         export_encoder_ubf
     ].

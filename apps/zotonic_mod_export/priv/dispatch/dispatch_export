@@ -1,4 +1,7 @@
 [
+    {feed, ["feed", type], controller_feed, []},
+    {feed, ["feed", type, id], controller_feed, []},
+
     {export_rsc,  ["export", "rsc"], controller_export_resource, []},
     {export_rsc,  ["export", "rsc", id], controller_export_resource, []},
     {export_rsc,  ["export", "rsc", type, id], controller_export_resource, []},

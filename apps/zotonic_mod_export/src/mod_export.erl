@@ -30,7 +30,7 @@ data. An export consists of a data provider and an encoder:
 
 * The data provider supplies a header and rows. It can be a module named in the
   dispatch rule, or a set of observers for the export notifications.
-* The encoder turns those values into CSV, XLSX, JSON, Atom, iCalendar, BERT, or
+* The encoder turns those values into CSV, XLSX, JSON, Atom, RSS, JSON Feed, iCalendar, BERT, or
   UBF output.
 
 The response is streamed by `controller_export_resource` or `controller_export`.
@@ -38,14 +38,40 @@ Most encoders can emit rows immediately. XLSX and BERT collect their rows and
 create the final document in the footer phase.
 
 
-Atom resource identity
-----------------------
+Syndication feeds
+-----------------
 
-Each visible resource entry includes its canonical URI as the Atom ID and a JSON
-resource link with relation `https://zotonic.com/rel/resource`. The link points to
+Atom and RSS entries include their canonical resource URI as the ID or GUID and
+a JSON resource link with relation `https://zotonic.com/rel/resource`. The link points to
 the `rsc_export` model API, allowing importers to recognize Zotonic resources and
 use the native importer for properties, media and connections. Normal resource
 visibility checks apply to the export endpoint.
+
+JSON Feed 1.1 items use the same canonical URI as `id` and advertise the native
+resource endpoint in `_zotonic.resource_url`. `mod_import_feed` consumes all three
+formats and uses these explicit links for native resource imports.
+
+Use `/export/query/rss/<id>` or `/export/query/jsonfeed/<id>` for a saved query,
+and `/export/rsc/rss/<id>` or `/export/rsc/jsonfeed/<id>` for one resource.
+Query feeds are served inline. JSON Feed uses `application/feed+json`; the existing
+`json` export remains the generic `application/json` array format.
+
+RSS supports category-specific `rss/entry.tpl` templates, full HTML content,
+UTC publication dates and file enclosures with their MIME type and byte size.
+JSON Feed streams its items and includes content, authors, dates and attachments.
+Its textual fields are plain text, while `content_html` retains HTML markup.
+
+Built-in Atom feeds use their canonical export URL as the feed ID and self link.
+The title defaults to the site title followed by the exported resource's title;
+an export header overrides the resource title. File attachments are enclosures,
+with a single text or HTML content element for each entry.
+
+The feed update time is the latest modification time of the exported resource
+and its visible entries. It is emitted by `atom/feed_end.tpl`, after the entries,
+so the response can still be streamed. An empty query uses the query resource's
+modification time. Exports without any modification time use the Unix epoch.
+This timestamp does not track removals from query results. Sites overriding the
+Atom templates should keep the feed update element in the footer.
 
 
 Admin interface
@@ -71,6 +97,28 @@ The built-in rules are defined in `priv/dispatch/dispatch_export`:
         controller_export_resource, [{is_query, true}]}
 ].
 ```
+
+Short feed URLs are also available:
+
+* `/feed/rss?cat=article` - visible articles, newest publication first.
+* `/feed/atom/news` - results from the visible saved query named `news`.
+* `/feed/jsonfeed/news?text=Erlang` - the saved query with an extra text filter.
+* `/feed/json?id=news&qcat=article` - JSON Feed, using query-string selection.
+
+The `feed` dispatch accepts `type` and an optional `id`. Supported types are
+`atom`, `rss`, `jsonfeed`, and `json` (a JSON Feed alias on this route only).
+An id selects saved-query results, collection members, or a single ordinary
+resource. Additional search terms are combined with that selection. Missing ids
+return not found and invisible resources are denied; neither becomes an
+unrestricted search. Without an id or filters, the feed searches visible resources.
+
+Feed searches use `mod_search` and accept its normal bare or q-prefixed query
+arguments, including repeated terms. `page` defaults to 1 and `pagelen` to 20,
+with at most 100 items per page. Without a saved query or explicit sort, results
+sort by descending publication start. Saved queries retain their own sort terms.
+The feed URL/self link includes the query string, and all shorthand feeds are
+served inline. For template links, use `{% url feed type='rss' id=id %}` and add
+search arguments as needed.
 
 The shorter variants without `type` and/or `id` are also present. The `type`
 path argument is a filename extension such as `csv`, `xlsx`, or `json`. Without
@@ -212,6 +260,8 @@ Export formats
 | `xlsx` | `application/vnd.openxmlformats-officedocument.spreadsheetml.sheet` | Tabular workbook preserving numbers and dates. Cells can have a background color. |
 | `json` | `application/json` | JSON array. List rows are combined with header names; map rows remain objects. Duplicate or empty header names are made unique. Dates are rendered in ISO form. |
 | `atom` | `application/atom+xml` | Atom feed. Integer rows are resource ids rendered with category-specific `atom/entry.tpl` templates. |
+| `rss` | `application/rss+xml` | RSS 2.0, using category-specific `rss/entry.tpl` templates. |
+| `jsonfeed` | `application/feed+json` | JSON Feed 1.1, with visible resource ids as rows. Downloads use `.json`. |
 | `ics` | `text/calendar` | iCalendar stream rendered with `_vcalendar_header.tpl` and `_vevent.tpl`. |
 | `bert` | `application/x-bert` | Erlang external term containing full resource maps for integer resource-id rows. |
 | `ubf` | `text/x-ubf` | UBF stream containing resource maps for integer resource-id rows. |
@@ -233,7 +283,7 @@ This module handles the following notifier callbacks:
 
 * `observe_content_types_dispatch/3` adds encoder content types to the `id`
   controller as fallbacks.
-* `observe_export_resource_content_disposition/2` returns `inline` for Atom
+* `observe_export_resource_content_disposition/2` returns `inline` for Atom, RSS and JSON Feed
   query feeds and `attachment` for other generated exports.
 ">>).
 -author("Marc Worrell <marc@worrell.nl>").
@@ -260,9 +310,11 @@ observe_content_types_dispatch(#content_types_dispatch{id=Id}, Acc, Context) ->
 observe_export_resource_content_disposition(
         #export_resource_content_disposition{
             dispatch = export_rsc_query,
-            content_type = <<"application/atom+xml", _/binary>>
+            content_type = ContentType
         },
-        _Context) ->
+        _Context) when ContentType =:= <<"application/atom+xml">>;
+                      ContentType =:= <<"application/rss+xml">>;
+                      ContentType =:= <<"application/feed+json">> ->
     {ok, <<"inline">>};
 observe_export_resource_content_disposition(#export_resource_content_disposition{}, _Context) ->
     {ok, <<"attachment">>}.

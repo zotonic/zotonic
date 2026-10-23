@@ -1,5 +1,5 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2024-2025 Marc Worrell <marc@worrell.nl>
+%% @copyright 2024-2026 Marc Worrell <marc@worrell.nl>
 %% @doc Helper functions for exports.
 %% @end
 
@@ -77,6 +77,10 @@ get_content_type_observer(Id, Dispatch, Context) ->
 
 get_content_type_extension(undefined, _Context) ->
     {error, no_content_type};
+get_content_type_extension(<<"jsonfeed">>, _Context) ->
+    {ok, {<<"application">>, <<"feed+json">>, []}};
+get_content_type_extension(<<"rss">>, _Context) ->
+    {ok, {<<"application">>, <<"rss+xml">>, []}};
 get_content_type_extension(<<"bert">>, _Context) ->
     {ok, {<<"application">>, <<"x-bert">>, []}};
 get_content_type_extension(<<"ubf">>, _Context) ->
@@ -99,7 +103,11 @@ get_content_type_extension(Type, Context) ->
 %% @doc Determine the filename for the export and set the content-disposition header.
 set_filename(Id, ProvidedCT, Dispatch, Context) ->
     Mime = cowmachine_util:format_content_type(ProvidedCT),
-    Extension = maybe_add_dot(z_media_identify:extension(Mime)),
+    Extension = case Mime of
+        <<"application/feed+json">> -> <<".json">>;
+        <<"application/rss+xml">> -> <<".rss">>;
+        _ -> maybe_add_dot(z_media_identify:extension(Mime))
+    end,
     Disposition = case call(
             #export_resource_content_disposition{
                 id = Id,

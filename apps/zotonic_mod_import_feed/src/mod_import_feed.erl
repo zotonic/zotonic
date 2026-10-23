@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2026 Marc Worrell
-%% @doc Discover, preview and continuously import RSS and Atom articles.
+%% @doc Discover, preview and continuously import RSS, Atom and JSON Feed articles.
 %% @end
 
 %% Copyright 2026 Marc Worrell
@@ -22,7 +22,7 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Import feeds").
--mod_description("Discover RSS and Atom feeds and automatically import articles and media.").
+-mod_description("Import articles and media from RSS, Atom and JSON Feed sources.").
 -mod_depends([admin, cron]).
 -mod_schema(9).
 -mod_config([]).
@@ -33,7 +33,7 @@
     ]
 }).
 -moduledoc("
-Discover RSS 2.0, RSS 1.0/RDF and Atom feeds and automatically import articles and media.
+Discover RSS 2.0, RSS 1.0/RDF, Atom and JSON Feed 1/1.1 feeds and automatically import articles and media.
 
 Administrator accounts cannot run imports. Select an enabled non-administrator account
 with only the required import permissions. This is checked when saving settings and
@@ -172,8 +172,9 @@ not prevent deletion of its parent.
 
 ## Zotonic resource feeds
 
-Atom entries from `mod_export` advertise a JSON resource link with relation
-`https://zotonic.com/rel/resource`. These use `m_rsc_import`, preserving native
+Atom and RSS entries from `mod_export` advertise a JSON resource link with
+relation `https://zotonic.com/rel/resource`. JSON Feed items advertise the same
+endpoint in `_zotonic.resource_url`. These use `m_rsc_import`, preserving native
 properties, categories, media embeds and connections. Connection import depth
 defaults to 1 and accepts 0–10. Content-group/copyright defaults and cleanup
 patterns apply; category guessing and media-layout choices do not reshape native

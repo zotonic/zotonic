@@ -9,9 +9,9 @@
                 <name>{% filter escapexml %}{% include "_name.tpl" id=author_id %}{% endfilter %}</name>
                 <uri>{{ author_id.uri|escapexml }}</uri>
             {% endwith %}</author>
-            <link rel="alternate" type="text/html" href="{{ id.page_url_abs }}"/>
+            <link rel="alternate" type="text/html" href="{{ id.page_url_abs|escapexml }}"/>
             {% if medium.filename %}
-                <link rel="enclosure" type="{{ medium.mime }}" href="{% url media_attachment star=medium.filename use_abolute_url %}" />
+                <link rel="enclosure" type="{{ medium.mime|escapexml }}" href="{% url media_attachment star=medium.filename absolute_url %}" />
             {% elseif medium %}
                 <link rel="enclosure" type="image/jpeg" href="{% image_url id width=400 height=400 absolute_url %}" />
             {% endif %}
@@ -24,9 +24,6 @@
                 <content type="html">{{ id.body|escapexml }}</content>
             {% else %}
                 <content type="text">{{ id.summary|escapexml }}</content>
-            {% endif %}
-            {% if medium.filename %}
-                <content type="{{ medium.mime }}" src="{% url media_attachment star=medium.filename absolute_url %}" />
             {% endif %}
             {% if id.is_a.event and id.date_start %}
                 {# http://code.google.com/apis/gdata/docs/2.0/elements.html#gdEventKind #}

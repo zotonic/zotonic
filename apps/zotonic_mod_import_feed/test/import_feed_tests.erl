@@ -862,7 +862,7 @@ configured_fetch_user_check() ->
 
 feed_type_detection_check() ->
     {ok, Rss} = parse(<<"<rss><channel><title>Empty RSS</title></channel></rss>">>),
-    ?assertEqual(false, maps:get(is_zotonic_feed, Rss)),
+    ?assertEqual(undefined, maps:get(is_zotonic_feed, Rss)),
     {ok, EmptyAtom} = parse(<<"<feed xmlns='http://www.w3.org/2005/Atom'><title>Empty</title></feed>">>),
     ?assertEqual(undefined, maps:get(is_zotonic_feed, EmptyAtom)),
     {ok, Ordinary} = parse(<<"<feed xmlns='http://www.w3.org/2005/Atom'><entry><id>https://example.org/1</id></entry></feed>">>),

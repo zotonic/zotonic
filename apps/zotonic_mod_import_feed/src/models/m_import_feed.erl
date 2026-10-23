@@ -52,7 +52,7 @@ The model exposes read-only GET paths. All paths require `use` permission for
 
 Feed maps use atom keys and include settings, counters, poll times and `is_running`.
 `is_zotonic_feed` records detected native resource entries: true for native or mixed
-feeds, false for ordinary feeds, and undefined until known. Empty Atom feeds do
+feeds, false for ordinary feeds, and undefined until known. Empty feeds do
 not overwrite an earlier detection.
 `use_credentials` defaults to false. When true, fetches use host-matched OAuth2
 consumer tokens registered for the selected import account. Tokens are not stored

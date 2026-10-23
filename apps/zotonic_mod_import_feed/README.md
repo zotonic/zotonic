@@ -1,6 +1,6 @@
 # mod_import_feed
 
-Discover RSS 2.0, RSS 1.0/RDF and Atom feeds and continuously import their articles.
+Discover RSS 2.0, RSS 1.0/RDF, Atom and JSON Feed 1/1.1 feeds and continuously import their articles.
 Enable **Import feeds** in Modules, then open **Content → Import feeds**. The module
 requires `mod_admin` and `mod_cron`; it does not require `mod_websub`.
 
@@ -65,16 +65,23 @@ backoff cap are fixed constants, not new configuration settings.
 The importance order is WordPress featured image, feed media/enclosures, then
 inline images. Attaching one medium leaves other inline images at their source.
 
-## Zotonic Atom feeds
+## Zotonic resource feeds
 
-Atom entries exported by `mod_export` advertise their structured resource with a
+Atom and RSS entries exported by `mod_export` advertise their structured resource with a
 `link` whose `rel` is `https://zotonic.com/rel/resource` and type is
 `application/json`. Its URL is the `rsc_export` model API. The importer checks
-that the exported resource URI matches the Atom ID before using `m_rsc_import`.
+that the exported resource URI matches the entry ID/GUID before using `m_rsc_import`.
+JSON Feed items carry the same endpoint in the `_zotonic.resource_url` extension.
 An ordinary JSON alternate link does not activate native importing.
 
+JSON Feed discovery supports `application/feed+json` HTML and HTTP alternate
+links, as well as direct feed URLs. Content, authors (including version 1’s
+`author`), dates, tags, images and attachments enter the normal import pipeline.
+Plain-text content is escaped before HTML cleanup. The usual 4 MiB response
+limit and 100-entry polling limit apply.
+
 The Zotonic-specific settings are hidden for feeds detected as non-Zotonic.
-Detection is remembered after previews and polling. Empty Atom feeds remain
+Detection is remembered after previews and polling. Empty feeds remain
 unknown; mixed feeds keep these options available. Hidden settings retain their
 saved values.
 
@@ -185,7 +192,7 @@ Avoid external side effects inside the notification: the transaction can roll ba
 This allows overlapping feeds to reuse resources and authoritative copies to be
 updated without relying on the local resource's `uri` property.
 
-The source identity is an absolute RSS GUID/Atom ID when available, otherwise the
+The source identity is an absolute RSS GUID, Atom ID or JSON Feed item ID when available, otherwise the
 article URL. Opaque GUIDs become a SHA-256 URN scoped to the publisher origin;
 missing both ID and URL is an error. Opaque identifiers must be unique within that
 origin. Publishers with separate applications that reuse opaque IDs should emit
