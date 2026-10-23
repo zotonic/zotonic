@@ -65,7 +65,15 @@ start_link() ->
     start_link([Args3]).
 
 start_link(Args) when is_list(Args) ->
-    gen_smtp_server:start_link({local, ?MODULE}, ?MODULE, Args).
+    %% start_link was removed. Use start and link.
+    case gen_smtp_server:start({local, ?MODULE}, ?MODULE, Args) of
+        {ok, Pid} = Result ->
+            link(Pid),
+            Result;
+        Error ->
+            Error
+    end.
+
 
 -spec init(Hostname :: binary(), SessionCount :: non_neg_integer(), PeerName :: tuple(), Options :: list()) -> {'ok', string(), #state{}} | {'stop', any(), string()}.
 init(Hostname, SessionCount, PeerName, Options) ->

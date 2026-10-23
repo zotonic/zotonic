@@ -1,5 +1,0 @@
-%% -*- mode: erlang -*-
-[
- {twitter_authorize, ["twitter", "authorize"], controller_twitter_authorize, [ssl, seo_noindex]},
- {twitter_redirect,  ["twitter", "redirect"],  controller_twitter_redirect,  [ssl, seo_noindex]}
-].

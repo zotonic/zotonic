@@ -83,8 +83,7 @@ embed_image([Path, LibImg, SubPath], {Parts, Html, Context} = Acc) ->
                 Html1 = re:replace(Html, Path, NewPath, [global, {return, binary}]),
                 {[Part|Parts], Html1, Context}
             catch
-                error:Error ->
-                    Stacktrace = erlang:get_stacktrace(),
+                error:Error:Stacktrace ->
                     lager:error("email embed_image error ~p on embedding ~p~n~p", [Error, Info, Stacktrace]),
                     Acc
             end;

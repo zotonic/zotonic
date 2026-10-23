@@ -197,7 +197,6 @@ incoming_msgs(#z_msg_v1{page_id=PageId, session_id=SessionId, data=Data, ua_clas
             lager:error("Stack: ~p", [Stacktrace]),
             {ok, maybe_ack({error, Reason}, Msg, Context2), Context2};
         ?WITH_STACKTRACE(error, Reason, Stacktrace)
-            Stacktrace = erlang:get_stacktrace(),
             lager:error("Error '~p' for transport message ~p", [Reason, Msg]),
             lager:error("Stack: ~p", [Stacktrace]),
             {ok, maybe_ack({error, error}, Msg, Context2), Context2}
