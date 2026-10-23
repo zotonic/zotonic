@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-23 15:58\n"
+"PO-Revision-Date: 2026-10-23 20:28\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "MIME-Version: 1.0\n"
@@ -804,8 +804,8 @@ msgstr "Regras revertidas"
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:126
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:60
 #: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:55
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:42
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:67
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:54
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:86
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:136
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:100
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:60
@@ -1493,6 +1493,9 @@ msgstr "Link para download copiado para a área de transferência"
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:21
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:17
 #: zotonic_mod_auth2fa/priv/templates/_logon_login_set_passcode.tpl:20
+#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:29
+#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:42
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:100
 #: zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:33
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_view.tpl:18
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:28
@@ -4802,7 +4805,7 @@ msgstr "Duplique o nome de usuário, por favor escolha outro nome de usuário."
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:16
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:17
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:39
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:20
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:27
 msgid "E-mail"
 msgstr "E-mail"
 
@@ -6387,7 +6390,7 @@ msgstr "Informações do navegador"
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:87
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:84
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:12
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:19
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:9
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:7
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:48
@@ -6680,8 +6683,9 @@ msgid "Multiple accounts"
 msgstr "Várias contas"
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:210
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:55
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:88
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:26
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:33
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:55
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:198
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:206
@@ -6785,7 +6789,7 @@ msgid "Redirecting to"
 msgstr "Redireccionando para"
 
 #: zotonic_mod_authentication/priv/templates/logon_service.tpl:15
-#: zotonic_mod_signup/src/controllers/controller_signup_confirm.erl:69
+#: zotonic_mod_signup/src/controllers/controller_signup_confirm.erl:71
 msgid "Redirecting..."
 msgstr "Redireccionando..."
 
@@ -7284,6 +7288,7 @@ msgid "Please make sure you store the backup encryption password in a safe <u>ex
 msgstr "Certifique-se de armazenar a senha de criptografia de backup em um local <u>externo</u> seguro."
 
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:75
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:54
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:85
 msgid "Previous"
 msgstr "Anterior"
@@ -7687,6 +7692,7 @@ msgid "February"
 msgstr "Fevereiro"
 
 #: zotonic_mod_base/priv/templates/error.tpl:81
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:12
 msgid "File"
 msgstr "Arquivo"
 
@@ -7810,7 +7816,7 @@ msgstr "Variação líquida"
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:187
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:267
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:44
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:50
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:55
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:48
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:35
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:28
@@ -8076,7 +8082,7 @@ msgstr "Tarefas"
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:274
 #: zotonic_mod_development/priv/templates/_development_dispatch_options.tpl:14
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:44
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:50
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:55
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:47
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:30
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:25
@@ -8441,7 +8447,7 @@ msgstr "Ano"
 
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:27
 #: zotonic_mod_development/priv/templates/_development_template_matches.tpl:8
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:258
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:266
 #: zotonic_site_status/priv/templates/_sites.tpl:6
 msgid "Actions"
 msgstr "Ações"
@@ -9767,84 +9773,97 @@ msgstr "Desfazer"
 msgid "You are not allowed to view this media."
 msgstr "Não está autorizado a visualizar este ficheiro multimédia."
 
-#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:6
+#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:12
+msgid "An RSA key pair has been generated to sign outgoing email."
+msgstr "Foi gerado um par de chaves RSA para assinar os e-mails enviados."
+
+#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:40
+msgid "Copy the DNS TXT record value to the clipboard."
+msgstr "Copie o valor do registo TXT do DNS para a área de transferência."
+
+#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:27
+msgid "Copy the DNS name to the clipboard."
+msgstr "Copie o nome DNS para a área de transferência."
+
+#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:7
 msgid "DKIM e-mail signing setup"
 msgstr "DKIM configuração de assinatura de e-mail"
 
-#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:20
-msgid "The DNS entry should contain the following information:"
-msgstr "A entrada DNS deve conter as seguintes informações:"
+#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:16
+msgid "To complete the DKIM setup, add a TXT record to your domain’s DNS settings using the name and value below."
+msgstr "Para concluir a configuração do DKIM, adicione um registo TXT às definições de DNS do seu domínio, utilizando o nome e o valor abaixo."
 
-#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:13
-msgid "The location of these key files are the following:"
-msgstr "A localização destes ficheiros-chave é a seguinte:"
+#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:58
+msgid "When all is setup, you can use the <a target=\"_blank\" rel=\"noreferrer noopener\" href=\"https://dkimcore.org/c/keycheck\">DKIM keycheck</a> website to verify your domain’s DKIM record."
+msgstr "Quando tudo estiver configurado, pode utilizar o site <a target=\"_blank\" rel=\"noreferrer noopener\" href=\"https://dkimcore.org/c/keycheck\">DKIM Keycheck</a> para verificar o registo DKIM do seu domínio."
 
-#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:12
-msgid "The module has generated an RSA keypair for you which will be used when signing outgoing emails."
-msgstr "O módulo gerou um par de chaves RSA para você, que será usado ao assinar e-mails enviados."
-
-#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:19
-msgid "To finalize the DKIM configuration, you need to add an DNS entry TXT record to the following domain:"
-msgstr "Para completar a configuração DKIM, você precisa adicionar registros TXT de entradas DNS aos seguintes domínios:"
-
-#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:25
-msgid "When all is setup, you can use the <a href=\"http://dkimcore.org/c/keycheck\">DKIM keycheck</a> website to verify your domain's DKIM record."
-msgstr "Quando tudo estiver configurado, você pode usar o keycheck <a href=\"http://dkimcore.org/c/keycheck\">DKIM</a> website para verificar o registo do seu domínio DKIM."
-
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:32
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:35
 msgid "Complete URL of the API on the relaying Zotonic server."
 msgstr "URL completa da API no servidor de retransmissão Zotonic."
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:62
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:98
+msgid "Copy relay API URL to clipboard"
+msgstr "Copiar o URL da API do relé para a área de transferência"
+
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:44
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:75
+msgid "Copy secret to clipboard"
+msgstr "Copiar o segredo para a área de transferência"
+
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:81
 msgid "Example secret:"
 msgstr "Exemplo de segredo:"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:26
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:29
 msgid "Relay email via another Zotonic server"
 msgstr "Retransmitir e-mail por meio de outro servidor Zotonic"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:55
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:65
 msgid "Relay emails for another Zotonic server"
 msgstr "Retransmitir e-mails para outro servidor Zotonic"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:11
-msgid "Relay emails via another Zotonic server."
-msgstr "Retransmitir e-mails por meio de outro servidor Zotonic."
-
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:59
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:60
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:69
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:71
 msgid "Secret for receiving relayed emails"
 msgstr "Segredo para receber e-mails retransmitidos"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:35
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:36
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:38
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:40
 msgid "Secret for sending relayed emails"
 msgstr "Segredo para enviar e-mails retransmitidos"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:21
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:24
 msgid "Send emails via another Zotonic server"
 msgstr "Enviar e-mails por meio de outro servidor Zotonic"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:56
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:66
 msgid "Settings for accepting emails and then relaying them to the intended recipients."
 msgstr "Configurações para aceitar e-mails e retransmiti-los aos destinatários pretendidos."
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:61
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:80
 msgid "Shared secret between this server and the Zotonic server wanting to send emails. Leave empty to not relay email."
 msgstr "Segredo compartilhado entre este servidor e o servidor Zotonic querendo enviar e-mails. Deixe em branco para não retransmitir e-mail."
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:37
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:49
 msgid "Shared secret between this server and the relaying Zotonic server."
 msgstr "Segredo compartilhado entre este servidor e o servidor Zotonic de retransmissão."
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:74
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:93
 msgid "The URL for the email relay API on this server is:"
 msgstr "A URL para a API de retransmissão de e-mail neste servidor é:"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:30
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:31
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:14
+msgid "To send through another server, enter its relay API URL and a shared secret below. The secret must match the receiving secret configured on that server. To accept email from other servers, set a receiving secret here and configure those servers to use this server’s relay API URL and the same secret."
+msgstr "Para enviar através de outro servidor, introduza abaixo o URL da API de retransmissão desse servidor e um segredo partilhado. O segredo deve corresponder ao segredo de receção configurado nesse servidor. Para aceitar e-mails de outros servidores, defina aqui um segredo de receção e configure esses servidores para utilizarem o URL da API de retransmissão deste servidor e o mesmo segredo."
+
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:33
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:34
 msgid "URL for the email relay API"
 msgstr "URL para a API de retransmissão de e-mail"
+
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:11
+msgid "Use another Zotonic server to deliver outgoing email, or let this server deliver email on behalf of other Zotonic servers. This allows multiple sites or installations to share one server configured for email delivery."
+msgstr "Utilize outro servidor Zotonic para enviar e-mails, ou permita que este servidor envie e-mails em nome de outros servidores Zotonic. Isto permite que vários sites ou instalações partilhem um único servidor configurado para o envio de e-mails."
 
 #: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:6
 msgid "Zotonic Relay"
@@ -10189,334 +10208,440 @@ msgstr "Você acoplou a sua conta <strong>Facebook</strong> ."
 msgid "Your Facebook Developer Dashboard"
 msgstr "O seu Painel de Desenvolvimento do Facebook"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:182
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:190
 msgid "After 1 month"
 msgstr "Após 1 mês"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:181
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:189
 msgid "After 1 week"
 msgstr "Após 1 semana"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:183
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:191
 msgid "After 3 months"
 msgstr "Após 3 meses"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:306
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:314
 msgid "All cloud files can be moved back to the file system on the server."
 msgstr "Todos os arquivos em nuvem podem ser movidos de volta para o sistema de arquivos no servidor."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:314
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:322
 msgid "All cloud files will be queued for download."
 msgstr "Todos os arquivos da nuvem serão enfileirados para download."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:271
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:279
 msgid "All files will be queued, uploads will start in the background within 10 minutes."
 msgstr "Todos os arquivos serão enfileirados, os uploads serão iniciados em segundo plano em 10 minutos."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:261
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:269
 msgid "All local uploaded and preview files can be moved to the cloud."
 msgstr "Todos os ficheiros locais carregados e pré-visualizados podem ser movidos para a nuvem."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:280
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:288
 msgid "Are you sure you want to copy all files to the cloud?"
 msgstr "Tem certeza de que deseja copiar todos os arquivos para a nuvem?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:323
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:331
 msgid "Are you sure you want to copy all files to the disk of the server?"
 msgstr "Tem certeza de que deseja copiar todos os arquivos para o disco do servidor?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:291
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:299
 msgid "Are you sure you want to move all files to the cloud?"
 msgstr "Tens a certeza que queres mover todos os ficheiros para a nuvem?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:334
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:342
 msgid "Are you sure you want to move all files to the disk of the server?"
 msgstr "Tem certeza de que deseja mover todos os arquivos para o disco do servidor?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:104
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:109
 msgid "Base URL"
 msgstr "URL base"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:193
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:201
 msgid "Before the settings are saved they will be checked by uploading (and removing) a small file."
 msgstr "Antes das configurações serem salvas, elas serão verificadas carregando (e removendo) um pequeno arquivo."
 
-#: zotonic_mod_filestore/src/mod_filestore.erl:457
+#: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:14
+msgid "Check the storage service and its access permissions. Failed reads are retried when requested, with a delay of up to ten minutes."
+msgstr "Verifique o serviço de armazenamento e as respetivas permissões de acesso. As leituras que falharam são repetidas quando solicitadas, com um atraso de até dez minutos."
+
+#: zotonic_mod_filestore/src/mod_filestore.erl:584
 msgid "Cloud File Store"
 msgstr "Loja de arquivos em nuvem"
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:3
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:7
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:12
 msgid "Cloud File Store Configuration"
 msgstr "Configuração da Loja de Arquivos em Nuvem"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:211
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:219
 msgid "Cloud File Store Utilities and Statistics"
 msgstr "Utilitários e estatísticas do armazenamento de arquivos na nuvem"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:220
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:228
 msgid "Cloud Files"
 msgstr "Arquivos em Nuvem"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:277
+#: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:15
+msgid "Cloud file store configuration"
+msgstr "Configuração do armazenamento de ficheiros na nuvem"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:5
+msgid "Cloud file store needs attention"
+msgstr "O armazenamento de ficheiros na nuvem requer atenção"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:15
+msgid "Consecutive failures"
+msgstr "Falhas consecutivas"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:285
 msgid "Copy all local files to the remote storage"
 msgstr "Copie todos os arquivos locais para o armazenamento remoto"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:320
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:328
 msgid "Copy all remote files to local"
 msgstr "Copie todos os arquivos remotos para o local"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:281
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:289
 msgid "Copy files to cloud"
 msgstr "Copiar arquivos para a nuvem"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:324
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:332
 msgid "Copy files to server disk"
 msgstr "Copiar arquivos para o disco do servidor"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:270
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:278
 msgid "Could not access the service, double check your settings and try again."
 msgstr "Não foi possível aceder ao serviço, verifique duas vezes as suas definições e tente novamente."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:80
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:196
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:85
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:204
 msgid "Could not access the service, double check your settings and try again. Make sure that API key has access rights to create and remove a (temporary) <code>-zotonic-filestore-test-file-</code> file."
 msgstr "Não foi possível aceder ao serviço, verifique duas vezes as suas definições e tente novamente. Verifique se a chave API tem direitos de acesso para criar e remover um arquivo (temporário) <code>-zotonic-filestore-test-file-</code> ."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:11
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:16
 msgid "Currently Zotonic supports FTP, WebDAV and services that are compatible with the S3 file services API. These include:"
 msgstr "Atualmente, o Zotonic oferece suporte a FTP, WebDAV e serviços compatíveis com a API de serviços de arquivo do S3. Entre eles estão:"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:243
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:251
 msgid "Delete Queue"
 msgstr "Eliminar Fila"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:177
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:185
 msgid "Delete files from the cloud file store"
 msgstr "Eliminar ficheiros da loja de ficheiros na nuvem"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:65
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:70
 msgid "Delete interval"
 msgstr "Excluir intervalo"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:242
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:250
 msgid "Download Queue"
 msgstr "Fila de Download"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:162
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:170
 msgid "Enable this to let the filestore act as a backup of  your local media files."
 msgstr "Habilite isso para permitir que o armazenamento de arquivos atue como um backup de seus arquivos de mídia local."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:307
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:315
 msgid "Ensure yourself there is enough disk space before starting this process."
 msgstr "Certifique-se de que há espaço suficiente em disco antes de iniciar este processo."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:123
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:128
 msgid "Enter the region supplied by your storage provider to use Signature V4. Leave empty to use legacy Signature V2."
 msgstr "Introduza a região fornecida pelo seu fornecedor de armazenamento para utilizar o Signature V4. Deixe em branco para utilizar o Signature V2 (versão antiga)."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:225
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:248
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:53
+msgid "Error list pages"
+msgstr "Páginas com listas de erros"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:8
+msgid "Failed reads in the last 15 minutes:"
+msgstr "Leituras falhadas nos últimos 15 minutos:"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:16
+msgid "Failing since"
+msgstr "Em falência desde"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:233
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:256
 msgid "Files"
 msgstr "Arquivos"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:113
+#: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:11
+msgid "Files with unresolved read errors older than 24 hours:"
+msgstr "Ficheiros com erros de leitura não resolvidos com mais de 24 horas:"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:118
 msgid "For FTP the URL must start with <b><tt>ftps:</tt></b> or <b><tt>ftp:</tt></b>"
 msgstr "Para FTP, a URL deve começar com <b><tt>ftps:</tt></b> ou <b><tt>ftp:</tt></b>"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:112
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:117
 msgid "For S3 the URL must start with <b><tt>https:</tt></b> or <b><tt>http:</tt></b>"
 msgstr "Para S3, o URL deve começar com <b><tt>https:</tt></b> ou <b><tt>http:</tt></b>"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:114
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:119
 msgid "For WebDAV the URL must start with <b><tt>webdavs:</tt></b> or <b><tt>webdav:</tt></b>"
 msgstr "Para WebDAV, a URL deve começar com <b><tt>webdavs:</tt></b> ou <b><tt>webdav:</tt></b>"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:267
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:275
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the local files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "Se você selecionou \"Manter arquivos locais após o upload para o armazenamento de arquivos na nuvem\", os arquivos locais não são excluídos, pois os arquivos remotos são considerados um backup dos arquivos locais."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:311
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:319
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the remote files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "Se você selecionou \"Manter arquivos locais após o upload para o armazenamento de arquivos na nuvem\", os arquivos remotos não são excluídos, pois os arquivos remotos são considerados um backup dos arquivos locais."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:17
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:22
 msgid "If you use an FTP server then that server MUST support FTPS (secure ftp)"
 msgstr "Se você usa um servidor FTP, esse servidor DEVE suportar FTPS (ftp seguro)"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:69
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:74
 msgid "Immediately"
 msgstr "Imediatamente"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:49
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:54
 msgid "Is upload enabled?"
 msgstr "O upload está habilitado?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:160
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:168
 msgid "Keep local files after upload to the cloud file store"
 msgstr "Mantenha os arquivos locais após o upload para o armazenamento de arquivos na nuvem"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:53
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:58
 msgid "Keep local files?"
 msgstr "Manter arquivos locais?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:219
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:14
+msgid "Last error"
+msgstr "Último erro"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:227
 msgid "Local Files"
 msgstr "Arquivos Locais"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:218
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:34
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:37
+msgid "Mark unrecoverable"
+msgstr "Marcar como irrecuperável"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:226
 msgid "Media Resources"
 msgstr "Recursos de mídia"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:288
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:296
 msgid "Move all local files to the remote storage"
 msgstr "Mova todos os arquivos locais para o armazenamento remoto"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:331
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:339
 msgid "Move all remote files to local"
 msgstr "Mova todos os arquivos remotos para local"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:292
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:300
 msgid "Move files to cloud"
 msgstr "Mover arquivos para a nuvem"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:335
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:343
 msgid "Move files to server disk"
 msgstr "Mover arquivos para o disco do servidor"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:71
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:184
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:76
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:192
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:62
 msgid "Never"
 msgstr "Nunca"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:180
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:47
+msgid "No errors on this page."
+msgstr "Não há erros nesta página."
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:188
 msgid "No extra delay"
 msgstr "Sem atraso extra"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:59
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:64
 msgid "No, local files are deleted after upload"
 msgstr "Não, os arquivos locais são excluídos após o upload"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:45
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:50
 msgid "Not set (Signature V2)"
 msgstr "Não definido (Signature V2)"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:137
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:31
+msgid "Now"
+msgstr "Agora"
+
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:38
+msgid "Only the admin account (user 1) can mark files unrecoverable."
+msgstr "Apenas a conta de administrador (utilizador 1) pode marcar ficheiros como irrecuperáveis."
+
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:5
+msgid "Read errors older than 24 hours"
+msgstr "Erros de leitura com mais de 24 horas"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:7
+msgid "Remote file reads are failing frequently."
+msgstr "As leituras de ficheiros remotos estão a falhar com frequência."
+
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:52
+msgid "Retries happen when a file is requested, not at a scheduled time."
+msgstr "As novas tentativas ocorrem quando um ficheiro é solicitado, e não a uma hora programada."
+
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:17
+msgid "Retry status"
+msgstr "Estado da nova tentativa"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:142
 msgid "S3 API Key or FTP/WebDAV username"
 msgstr "Chave de API do S3 ou nome de usuário FTP/WebDAV"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:142
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:147
 msgid "S3 API Secret or FTP/WebDAV password"
 msgstr "Segredo da API S3 ou senha FTP/WebDAV"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:39
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:44
 msgid "S3 Cloud Location"
 msgstr "Localização da nuvem S3"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:28
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:101
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:33
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:106
 msgid "S3 Cloud Location and Credentials"
 msgstr "S3 Localização e Credenciais da Nuvem"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:44
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:119
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:49
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:124
 msgid "S3 region"
 msgstr "Região S3"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:200
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:208
 msgid "Save Settings"
 msgstr "Salvar configurações"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:35
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:13
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:40
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:7
 msgid "Service"
 msgstr "Serviço"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:195
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:201
+msgid "Settings are saved without a write test while the file store is read-only. Verify access by downloading an existing file."
+msgstr "As definições são guardadas sem um teste de gravação enquanto o repositório de ficheiros estiver em modo de leitura apenas. Verifique o acesso descarregando um ficheiro existente."
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:203
 msgid "Settings are working fine and are saved."
 msgstr "As configurações estão funcionando bem e são salvas."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:79
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:84
 msgid "Settings are working fine."
 msgstr "As definições estão a funcionar bem."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:231
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:203
+msgid "Settings saved without a write test."
+msgstr "As definições foram guardadas sem um teste de gravação."
+
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:36
+msgid "Stop retrying this file and mark it unrecoverable? Its record and error details will be kept. No files will be deleted."
+msgstr "Deixar de tentar novamente este ficheiro e marcá-lo como irrecuperável? O seu registo e os detalhes do erro serão mantidos. Nenhum ficheiro será eliminado."
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:239
 msgid "Storage"
 msgstr "Armazenamento"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:83
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:88
 msgid "Test Cloud File Store Settings"
 msgstr "Testar as definições do armazenamento de ficheiros na nuvem"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:30
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:255
+msgid "The cloud file store is read-only."
+msgstr "O armazenamento de ficheiros na nuvem é de leitura apenas."
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:7
+msgid "The cloud file store is read-only. Downloads are available; uploads, remote deletion and write-based settings tests are disabled."
+msgstr "O armazenamento de ficheiros na nuvem é de leitura apenas. É possível efetuar transferências; as transferências para o servidor, a eliminação remota e os testes de configurações de gravação estão desativados."
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:35
 msgid "The cloud file store uses a global Zotonic configuration. The configuration cannot be changed here."
 msgstr "O armazenamento de arquivos em nuvem usa uma configuração global do Zotonic. A configuração não pode ser alterada aqui."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:31
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:36
 msgid "The configuration is:"
 msgstr "A configuração é:"
 
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:71
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:85
 msgid "The settings are locked by the system configuration."
 msgstr "As configurações são bloqueadas pela configuração do sistema."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:89
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:94
 msgid "The settings are tested by uploading (and removing) a small file."
 msgstr "As definições são testadas através do carregamento (e remoção) de um pequeno ficheiro."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:263
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:271
 msgid "There is a 1 minute wait before files are uploaded."
 msgstr "Há uma espera de 1 minuto antes que os arquivos sejam carregados."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:188
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:196
 msgid "This extra deletion delay extends the period files can be recovered."
 msgstr "Esse atraso extra de exclusão estende o período em que os arquivos podem ser recuperados."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:262
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:40
+msgid "This file no longer has an eligible error older than 24 hours. Reload the page."
+msgstr "Este ficheiro já não apresenta nenhum erro elegível com mais de 24 horas. Atualize a página."
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:270
 msgid "This will queue the files for later asynchronous upload."
 msgstr "Isto irá enfileirar os ficheiros para carregamento assíncrono posterior."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:188
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:196
 msgid "To allow recovery of deleted pages, Zotonic keeps files for 5 weeks."
 msgstr "Para permitir a recuperação de páginas excluídas, a Zotonic mantém os arquivos por 5 semanas."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:169
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:177
 msgid "Try to create a private S3 bucket if the S3 bucket does not exist"
 msgstr "Tente criar um bucket S3 privado se o bucket S3 não existir"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:241
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:29
+msgid "Unrecoverable"
+msgstr "Irrecuperável"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:7
+msgid "Unresolved files are listed oldest first. The error shown is the most recent recorded error for each file."
+msgstr "Os ficheiros pendentes são apresentados por ordem cronológica, começando pelo mais antigo. O erro apresentado é o erro mais recente registado para cada ficheiro."
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:249
 msgid "Upload Queue"
 msgstr "Fila de Upload"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:151
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:159
 msgid "Upload new media files to the cloud file store"
 msgstr "Carregar novos arquivos de mídia para a loja de arquivos na nuvem"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:171
+#: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:12
+msgid "View errors"
+msgstr "Ver erros"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:179
 msgid "With FTP and WebDAV the directories are always created automatically."
 msgstr "Com FTP e WebDAV os diretórios são sempre criados automaticamente."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:19
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:24
 msgid "With WebDAV the username and password are transfered in the clear, so ensure that you use <tt>webdavs:</tt> URLs (which makes use of https)."
 msgstr "Com o WebDAV, o nome de usuário e a senha são transferidos claramente, portanto, certifique-se de usar <tt>webdavs:</tt> URLs (que faz uso de https)."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:57
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:62
 msgid "Yes, keep local files after upload"
 msgstr "Sim, mantenha os arquivos locais após o upload"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:352
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:74
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:81
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:360
 #: zotonic_mod_filestore/src/support/filestore_admin.erl:88
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:95
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:102
 msgid "You are not allowed to change these settings."
 msgstr "Você não está autorizado a alterar essas configurações."
 
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:112
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:126
 msgid "You are not allowed to use this."
 msgstr "Não é permitido utilizar isto."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:9
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:14
 msgid "Zotonic can store uploaded and resized files in the cloud. Here you can configure the location and access keys for the cloud service."
 msgstr "Zotonic pode armazenar arquivos carregados e redimensionados na nuvem. Aqui você pode configurar a localização e as chaves de acesso para o serviço na nuvem."
 
@@ -14940,7 +15065,7 @@ msgstr "Não foi você que iniciou este registo?"
 msgid "Didn’t receive the email?"
 msgstr "Não recebeu o e-mail?"
 
-#: zotonic_mod_signup/src/controllers/controller_signup.erl:658
+#: zotonic_mod_signup/src/controllers/controller_signup.erl:664
 msgid "Email address mismatch"
 msgstr "Discrepância no endereço de e-mail"
 
@@ -15047,7 +15172,7 @@ msgstr "Obrigado por se registar. Por favor, confirme o seu endereço de e-mail 
 msgid "The code you entered is incorrect. Please try again."
 msgstr "O código que introduziu está incorreto. Por favor, tente novamente."
 
-#: zotonic_mod_signup/src/controllers/controller_signup.erl:659
+#: zotonic_mod_signup/src/controllers/controller_signup.erl:665
 msgid "The email address you entered does not match the email address you provided in the previous step. Please check your input and try again."
 msgstr "O endereço de e-mail que introduziu não corresponde ao endereço de e-mail que forneceu no passo anterior. Verifique o que introduziu e tente novamente."
 
@@ -15084,7 +15209,7 @@ msgstr "Enviámos um código para <strong>{email}</strong> para confirmar o teu 
 msgid "We will be very careful with all the information given to us and will never give your name or address away without your permission. We do have some rules that we need you to agree with."
 msgstr "Teremos muito cuidado com toda a informação que nos for dada e nunca daremos o seu nome ou endereço sem a sua permissão. Nós temos algumas regras que precisamos que você concorde."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:30
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:37
 msgid "We will mail you a code to confirm your email address."
 msgstr "Vamos enviar-lhe por e-mail um código para confirmar o seu endereço de e-mail."
 
