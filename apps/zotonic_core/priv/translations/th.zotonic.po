@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-23 15:58\n"
+"PO-Revision-Date: 2026-10-23 20:29\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -804,8 +804,8 @@ msgstr "กฎที่เปลี่ยนกลับ"
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:126
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:60
 #: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:55
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:42
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:67
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:54
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:86
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:136
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:100
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:60
@@ -1493,6 +1493,9 @@ msgstr "คัดลอกลิงค์ดาวน์โหลดไปยั
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:21
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:17
 #: zotonic_mod_auth2fa/priv/templates/_logon_login_set_passcode.tpl:20
+#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:29
+#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:42
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:100
 #: zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:33
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_view.tpl:18
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:28
@@ -4802,7 +4805,7 @@ msgstr "ชื่อผู้ใช้ซ้ำกันโปรดเลือ
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:16
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:17
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:39
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:20
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:27
 msgid "E-mail"
 msgstr "อีเมล์"
 
@@ -6387,7 +6390,7 @@ msgstr "ข้อมูลเบราว์เซอร์"
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:87
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:84
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:12
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:19
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:9
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:7
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:48
@@ -6680,8 +6683,9 @@ msgid "Multiple accounts"
 msgstr "หลายบัญชี"
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:210
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:55
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:88
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:26
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:33
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:55
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:198
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:206
@@ -6785,7 +6789,7 @@ msgid "Redirecting to"
 msgstr "กำลังเปลี่ยนเส้นทางไปที่"
 
 #: zotonic_mod_authentication/priv/templates/logon_service.tpl:15
-#: zotonic_mod_signup/src/controllers/controller_signup_confirm.erl:69
+#: zotonic_mod_signup/src/controllers/controller_signup_confirm.erl:71
 msgid "Redirecting..."
 msgstr "กำลังเปลี่ยนเส้นทาง ..."
 
@@ -7284,6 +7288,7 @@ msgid "Please make sure you store the backup encryption password in a safe <u>ex
 msgstr "โปรดตรวจสอบให้แน่ใจว่าคุณเก็บรหัสผ่านการเข้ารหัสสำรองไว้ในตำแหน่ง <u>ภายนอก</u> ที่ปลอดภัย"
 
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:75
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:54
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:85
 msgid "Previous"
 msgstr "ก่อนหน้า"
@@ -7687,6 +7692,7 @@ msgid "February"
 msgstr "กุมภาพันธ์"
 
 #: zotonic_mod_base/priv/templates/error.tpl:81
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:12
 msgid "File"
 msgstr "ไฟล์"
 
@@ -7810,7 +7816,7 @@ msgstr "การเปลี่ยนแปลงสุทธิ"
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:187
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:267
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:44
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:50
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:55
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:48
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:35
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:28
@@ -8076,7 +8082,7 @@ msgstr "รายการงาน"
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:274
 #: zotonic_mod_development/priv/templates/_development_dispatch_options.tpl:14
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:44
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:50
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:55
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:47
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:30
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:25
@@ -8441,7 +8447,7 @@ msgstr "ปี"
 
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:27
 #: zotonic_mod_development/priv/templates/_development_template_matches.tpl:8
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:258
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:266
 #: zotonic_site_status/priv/templates/_sites.tpl:6
 msgid "Actions"
 msgstr "การดำเนินการ"
@@ -9767,84 +9773,97 @@ msgstr "ยกเลิก"
 msgid "You are not allowed to view this media."
 msgstr "คุณไม่สามารถดูสื่อนี้ได้"
 
-#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:6
+#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:12
+msgid "An RSA key pair has been generated to sign outgoing email."
+msgstr "ได้สร้างคู่กุญแจ RSA เพื่อลงนามในอีเมลที่ส่งออกไปแล้ว"
+
+#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:40
+msgid "Copy the DNS TXT record value to the clipboard."
+msgstr "คัดลอกค่าของบันทึก DNS TXT ไปยังคลิปบอร์ด"
+
+#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:27
+msgid "Copy the DNS name to the clipboard."
+msgstr "คัดลอกชื่อ DNS ไปยังคลิปบอร์ด"
+
+#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:7
 msgid "DKIM e-mail signing setup"
 msgstr "การตั้งค่าการลงนามอีเมล DKIM"
 
-#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:20
-msgid "The DNS entry should contain the following information:"
-msgstr "รายการ DNS ควรมีข้อมูลต่อไปนี้:"
+#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:16
+msgid "To complete the DKIM setup, add a TXT record to your domain’s DNS settings using the name and value below."
+msgstr "เพื่อเสร็จสิ้นการตั้งค่า DKIM ให้เพิ่มบันทึก TXT ลงในตั้งค่า DNS ของโดเมนของคุณ โดยใช้ชื่อและค่าดังต่อไปนี้"
 
-#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:13
-msgid "The location of these key files are the following:"
-msgstr "ตำแหน่งของไฟล์สำคัญเหล่านี้มีดังต่อไปนี้:"
+#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:58
+msgid "When all is setup, you can use the <a target=\"_blank\" rel=\"noreferrer noopener\" href=\"https://dkimcore.org/c/keycheck\">DKIM keycheck</a> website to verify your domain’s DKIM record."
+msgstr "เมื่อการตั้งค่าเสร็จสิ้นแล้ว คุณสามารถใช้เว็บไซต์<a target=\"_blank\" rel=\"noreferrer noopener\" href=\"https://dkimcore.org/c/keycheck\">DKIM keycheck</a>เพื่อตรวจสอบบันทึก DKIM ของโดเมนของคุณได้"
 
-#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:12
-msgid "The module has generated an RSA keypair for you which will be used when signing outgoing emails."
-msgstr "โมดูลได้สร้างคู่คีย์ RSA สำหรับคุณซึ่งจะใช้เมื่อลงชื่อเข้าใช้อีเมลขาออก"
-
-#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:19
-msgid "To finalize the DKIM configuration, you need to add an DNS entry TXT record to the following domain:"
-msgstr "ในการสิ้นสุดการกำหนดค่า DKIM คุณต้องเพิ่มระเบียน TXT รายการ DNS ในโดเมนต่อไปนี้:"
-
-#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:25
-msgid "When all is setup, you can use the <a href=\"http://dkimcore.org/c/keycheck\">DKIM keycheck</a> website to verify your domain's DKIM record."
-msgstr "เมื่อตั้งค่าทั้งหมดแล้วคุณสามารถใช้เว็บไซต์ <a href=\"http://dkimcore.org/c/keycheck\">DKIM keycheck</a> เพื่อยืนยันระเบียน DKIM ของโดเมนของคุณ"
-
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:32
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:35
 msgid "Complete URL of the API on the relaying Zotonic server."
 msgstr "URL ที่สมบูรณ์ของ API บนเซิร์ฟเวอร์ Zotonic ที่ถ่ายทอดข้อมูล"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:62
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:98
+msgid "Copy relay API URL to clipboard"
+msgstr "คัดลอก URL ของ API relay ไปยังคลิปบอร์ด"
+
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:44
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:75
+msgid "Copy secret to clipboard"
+msgstr "คัดลอกรหัสลับไปยังคลิปบอร์ด"
+
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:81
 msgid "Example secret:"
 msgstr "ตัวอย่างความลับ:"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:26
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:29
 msgid "Relay email via another Zotonic server"
 msgstr "ส่งต่ออีเมลผ่านเซิร์ฟเวอร์ Zotonic อื่น"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:55
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:65
 msgid "Relay emails for another Zotonic server"
 msgstr "ส่งต่ออีเมลไปยังเซิร์ฟเวอร์ Zotonic อื่น"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:11
-msgid "Relay emails via another Zotonic server."
-msgstr "ส่งต่ออีเมลผ่านเซิร์ฟเวอร์ Zotonic อื่น"
-
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:59
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:60
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:69
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:71
 msgid "Secret for receiving relayed emails"
 msgstr "ความลับในการรับอีเมล์ที่ส่งต่อ"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:35
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:36
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:38
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:40
 msgid "Secret for sending relayed emails"
 msgstr "ความลับในการส่งอีเมล์แบบส่งต่อ"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:21
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:24
 msgid "Send emails via another Zotonic server"
 msgstr "ส่งอีเมลผ่านเซิร์ฟเวอร์ Zotonic อื่น"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:56
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:66
 msgid "Settings for accepting emails and then relaying them to the intended recipients."
 msgstr "การตั้งค่าสำหรับรับอีเมล์และส่งต่อไปยังผู้รับที่ตั้งใจไว้"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:61
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:80
 msgid "Shared secret between this server and the Zotonic server wanting to send emails. Leave empty to not relay email."
 msgstr "ความลับร่วมกันระหว่างเซิร์ฟเวอร์นี้และเซิร์ฟเวอร์ Zotonic ที่ต้องการส่งอีเมล ปล่อยว่างไว้เพื่อไม่ให้ส่งต่ออีเมล"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:37
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:49
 msgid "Shared secret between this server and the relaying Zotonic server."
 msgstr "ความลับร่วมกันระหว่างเซิร์ฟเวอร์นี้และเซิร์ฟเวอร์ Zotonic ที่ถ่ายทอดสัญญาณ"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:74
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:93
 msgid "The URL for the email relay API on this server is:"
 msgstr "URL สำหรับ API การส่งต่ออีเมลบนเซิร์ฟเวอร์นี้คือ:"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:30
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:31
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:14
+msgid "To send through another server, enter its relay API URL and a shared secret below. The secret must match the receiving secret configured on that server. To accept email from other servers, set a receiving secret here and configure those servers to use this server’s relay API URL and the same secret."
+msgstr "เพื่อส่งผ่านเซิร์ฟเวอร์อื่น ให้ป้อน URL API relay ของเซิร์ฟเวอร์นั้นและรหัสลับที่ใช้ร่วมกันด้านล่าง รหัสลับนี้ต้องตรงกับรหัสลับการรับที่ตั้งค่าไว้บนเซิร์ฟเวอร์นั้น เพื่อรับอีเมลจากเซิร์ฟเวอร์อื่น ให้ตั้งค่ารหัสลับการรับที่นี่ และตั้งค่าเซิร์ฟเวอร์เหล่านั้นให้ใช้ URL API relay ของเซิร์ฟเวอร์นี้และรหัสลับเดียวกัน"
+
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:33
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:34
 msgid "URL for the email relay API"
 msgstr "URL สำหรับ API รีเลย์อีเมล"
+
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:11
+msgid "Use another Zotonic server to deliver outgoing email, or let this server deliver email on behalf of other Zotonic servers. This allows multiple sites or installations to share one server configured for email delivery."
+msgstr "ใช้เซิร์ฟเวอร์ Zotonic อื่นเพื่อส่งอีเมลขาออก หรือให้เซิร์ฟเวอร์นี้ส่งอีเมลแทนเซิร์ฟเวอร์ Zotonic อื่น ๆ สิ่งนี้ช่วยให้เว็บไซต์หรือการติดตั้งหลายแห่งสามารถใช้เซิร์ฟเวอร์เดียวที่ได้รับการตั้งค่าไว้สำหรับการส่งอีเมลร่วมกันได้"
 
 #: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:6
 msgid "Zotonic Relay"
@@ -10189,334 +10208,440 @@ msgstr "คุณได้เชื่อมต่อกับบัญชี <s
 msgid "Your Facebook Developer Dashboard"
 msgstr "แดชบอร์ดนักพัฒนา Facebook ของคุณ"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:182
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:190
 msgid "After 1 month"
 msgstr "หลังจาก 1 เดือน"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:181
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:189
 msgid "After 1 week"
 msgstr "หลังจาก 1 สัปดาห์"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:183
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:191
 msgid "After 3 months"
 msgstr "หลังจาก 3 เดือน"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:306
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:314
 msgid "All cloud files can be moved back to the file system on the server."
 msgstr "ไฟล์คลาวด์ทั้งหมดสามารถย้ายกลับไปที่ระบบไฟล์บนเซิร์ฟเวอร์ได้"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:314
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:322
 msgid "All cloud files will be queued for download."
 msgstr "ไฟล์คลาวด์ทั้งหมดจะเข้าคิวดาวน์โหลด"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:271
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:279
 msgid "All files will be queued, uploads will start in the background within 10 minutes."
 msgstr "ไฟล์ทั้งหมดจะเข้าคิวการอัปโหลดจะเริ่มต้นในพื้นหลังภายใน 10 นาที"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:261
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:269
 msgid "All local uploaded and preview files can be moved to the cloud."
 msgstr "ไฟล์ที่อัปโหลดและดูตัวอย่างในเครื่องทั้งหมดสามารถย้ายไปยังระบบคลาวด์ได้"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:280
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:288
 msgid "Are you sure you want to copy all files to the cloud?"
 msgstr "คุณแน่ใจหรือไม่ว่าต้องการคัดลอกไฟล์ทั้งหมดไปยังคลาวด์?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:323
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:331
 msgid "Are you sure you want to copy all files to the disk of the server?"
 msgstr "คุณแน่ใจหรือไม่ว่าต้องการคัดลอกไฟล์ทั้งหมดไปยังดิสก์ของเซิร์ฟเวอร์?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:291
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:299
 msgid "Are you sure you want to move all files to the cloud?"
 msgstr "แน่ใจไหมว่าต้องการย้ายไฟล์ทั้งหมดไปที่คลาวด์"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:334
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:342
 msgid "Are you sure you want to move all files to the disk of the server?"
 msgstr "คุณแน่ใจหรือไม่ว่าต้องการย้ายไฟล์ทั้งหมดไปยังดิสก์ของเซิร์ฟเวอร์"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:104
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:109
 msgid "Base URL"
 msgstr "URL ฐาน"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:193
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:201
 msgid "Before the settings are saved they will be checked by uploading (and removing) a small file."
 msgstr "ก่อนบันทึกการตั้งค่าระบบจะตรวจสอบโดยการอัปโหลด (และลบ) ไฟล์ขนาดเล็ก"
 
-#: zotonic_mod_filestore/src/mod_filestore.erl:457
+#: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:14
+msgid "Check the storage service and its access permissions. Failed reads are retried when requested, with a delay of up to ten minutes."
+msgstr "ตรวจสอบบริการจัดเก็บข้อมูลและสิทธิ์การเข้าถึงของบริการดังกล่าว การอ่านข้อมูลที่ล้มเหลวจะได้รับการลองใหม่เมื่อมีคำขอ โดยมีความล่าช้าสูงสุด 10 นาที"
+
+#: zotonic_mod_filestore/src/mod_filestore.erl:584
 msgid "Cloud File Store"
 msgstr "Cloud File Store"
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:3
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:7
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:12
 msgid "Cloud File Store Configuration"
 msgstr "การกำหนดค่า Cloud File Store"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:211
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:219
 msgid "Cloud File Store Utilities and Statistics"
 msgstr "ยูทิลิตี้และสถิติการจัดเก็บไฟล์บนคลาวด์"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:220
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:228
 msgid "Cloud Files"
 msgstr "ไฟล์คลาวด์"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:277
+#: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:15
+msgid "Cloud file store configuration"
+msgstr "การตั้งค่าพื้นที่เก็บไฟล์บนคลาวด์"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:5
+msgid "Cloud file store needs attention"
+msgstr "ระบบจัดเก็บไฟล์บนคลาวด์ต้องการการดูแล"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:15
+msgid "Consecutive failures"
+msgstr "ความล้มเหลวที่เกิดขึ้นติดต่อกัน"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:285
 msgid "Copy all local files to the remote storage"
 msgstr "คัดลอกไฟล์ทั้งหมดในเครื่องไปยังที่เก็บข้อมูลระยะไกล"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:320
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:328
 msgid "Copy all remote files to local"
 msgstr "คัดลอกไฟล์ระยะไกลทั้งหมดไปยังเครื่องท้องถิ่น"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:281
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:289
 msgid "Copy files to cloud"
 msgstr "คัดลอกไฟล์ไปยังคลาวด์"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:324
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:332
 msgid "Copy files to server disk"
 msgstr "คัดลอกไฟล์ไปยังดิสก์เซิร์ฟเวอร์"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:270
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:278
 msgid "Could not access the service, double check your settings and try again."
 msgstr "ไม่สามารถเข้าถึงบริการได้โปรดตรวจสอบการตั้งค่าของคุณอีกครั้งแล้วลองอีกครั้ง"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:80
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:196
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:85
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:204
 msgid "Could not access the service, double check your settings and try again. Make sure that API key has access rights to create and remove a (temporary) <code>-zotonic-filestore-test-file-</code> file."
 msgstr "ไม่สามารถเข้าถึงบริการได้โปรดตรวจสอบการตั้งค่าของคุณอีกครั้งแล้วลองอีกครั้ง ตรวจสอบให้แน่ใจว่าคีย์ API มีสิทธิ์เข้าถึงเพื่อสร้างและลบไฟล์ (ชั่วคราว) <code>-zotonic-filestore-test-file-</code>"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:11
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:16
 msgid "Currently Zotonic supports FTP, WebDAV and services that are compatible with the S3 file services API. These include:"
 msgstr "ปัจจุบัน Zotonic รองรับ FTP, WebDAV และบริการที่เข้ากันได้กับ API บริการไฟล์ S3 ซึ่งรวมถึง:"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:243
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:251
 msgid "Delete Queue"
 msgstr "ลบคิว"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:177
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:185
 msgid "Delete files from the cloud file store"
 msgstr "ลบไฟล์จากที่เก็บไฟล์บนคลาวด์"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:65
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:70
 msgid "Delete interval"
 msgstr "ช่วงเวลาการลบ"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:242
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:250
 msgid "Download Queue"
 msgstr "ดาวน์โหลดคิว"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:162
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:170
 msgid "Enable this to let the filestore act as a backup of  your local media files."
 msgstr "เปิดใช้งานสิ่งนี้เพื่อให้ filestore ทำหน้าที่เป็นตัวสำรองของไฟล์มีเดียในเครื่องของคุณ"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:307
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:315
 msgid "Ensure yourself there is enough disk space before starting this process."
 msgstr "ตรวจสอบให้แน่ใจว่าตัวเองมีเนื้อที่ว่างบนดิสก์เพียงพอก่อนเริ่มกระบวนการนี้"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:123
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:128
 msgid "Enter the region supplied by your storage provider to use Signature V4. Leave empty to use legacy Signature V2."
 msgstr "ป้อนภูมิภาคที่ผู้ให้บริการพื้นที่จัดเก็บข้อมูลของคุณกำหนดไว้ เพื่อใช้ Signature V4 หากไม่ป้อนอะไรเลย จะใช้ Signature V2 แบบเดิม"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:225
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:248
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:53
+msgid "Error list pages"
+msgstr "หน้ารายการข้อผิดพลาด"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:8
+msgid "Failed reads in the last 15 minutes:"
+msgstr "การอ่านข้อมูลที่ล้มเหลวใน 15 นาทีที่ผ่านมา:"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:16
+msgid "Failing since"
+msgstr "ล้มเหลวมาตั้งแต่"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:233
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:256
 msgid "Files"
 msgstr "ไฟล์"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:113
+#: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:11
+msgid "Files with unresolved read errors older than 24 hours:"
+msgstr "ไฟล์ที่มีข้อผิดพลาดในการอ่านที่ยังไม่ได้รับการแก้ไข และมีอายุมากกว่า 24 ชั่วโมง:"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:118
 msgid "For FTP the URL must start with <b><tt>ftps:</tt></b> or <b><tt>ftp:</tt></b>"
 msgstr "สำหรับ FTP URL ต้องขึ้นต้นด้วย <b><tt>ftps:</tt></b> หรือ <b><tt>ftp:</tt></b>"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:112
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:117
 msgid "For S3 the URL must start with <b><tt>https:</tt></b> or <b><tt>http:</tt></b>"
 msgstr "สำหรับ S3 URL ต้องขึ้นต้นด้วย <b><tt>https:</tt></b> หรือ <b><tt>http:</tt></b>"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:114
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:119
 msgid "For WebDAV the URL must start with <b><tt>webdavs:</tt></b> or <b><tt>webdav:</tt></b>"
 msgstr "สำหรับ WebDAV URL ต้องขึ้นต้นด้วย <b><tt>webdavs:</tt></b> หรือ <b><tt>webdav:</tt></b>"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:267
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:275
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the local files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "หากคุณเลือก \"เก็บไฟล์ในเครื่องไว้หลังจากอัปโหลดไปยังที่เก็บไฟล์บนคลาวด์\" ไฟล์ในเครื่องจะไม่ถูกลบ เนื่องจากไฟล์ระยะไกลถือเป็นข้อมูลสำรองของไฟล์ในเครื่อง"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:311
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:319
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the remote files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "หากคุณเลือก \"เก็บไฟล์ในเครื่องไว้หลังจากอัปโหลดไปยังที่เก็บไฟล์บนคลาวด์\" ไฟล์ระยะไกลจะไม่ถูกลบ เนื่องจากไฟล์ระยะไกลถือเป็นข้อมูลสำรองของไฟล์ในเครื่อง"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:17
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:22
 msgid "If you use an FTP server then that server MUST support FTPS (secure ftp)"
 msgstr "หากคุณใช้เซิร์ฟเวอร์ FTP แสดงว่าเซิร์ฟเวอร์นั้นต้องรองรับ FTPS (ftp ที่ปลอดภัย)"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:69
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:74
 msgid "Immediately"
 msgstr "ทันที"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:49
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:54
 msgid "Is upload enabled?"
 msgstr "มีการเปิดใช้งานการอัพโหลดแล้วหรือยัง?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:160
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:168
 msgid "Keep local files after upload to the cloud file store"
 msgstr "เก็บไฟล์ในเครื่องไว้หลังจากอัปโหลดไปยังที่เก็บไฟล์บนคลาวด์"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:53
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:58
 msgid "Keep local files?"
 msgstr "เก็บไฟล์ไว้ในเครื่องใช่ไหม?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:219
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:14
+msgid "Last error"
+msgstr "ข้อผิดพลาดล่าสุด"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:227
 msgid "Local Files"
 msgstr "ไฟล์ในเครื่อง"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:218
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:34
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:37
+msgid "Mark unrecoverable"
+msgstr "ทำเครื่องหมายว่าไม่สามารถกู้คืนได้"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:226
 msgid "Media Resources"
 msgstr "แหล่งข้อมูลสื่อ"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:288
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:296
 msgid "Move all local files to the remote storage"
 msgstr "ย้ายไฟล์ในเครื่องทั้งหมดไปยังที่เก็บข้อมูลระยะไกล"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:331
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:339
 msgid "Move all remote files to local"
 msgstr "ย้ายไฟล์ระยะไกลทั้งหมดไปที่ local"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:292
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:300
 msgid "Move files to cloud"
 msgstr "ย้ายไฟล์ไปยังคลาวด์"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:335
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:343
 msgid "Move files to server disk"
 msgstr "ย้ายไฟล์ไปยังดิสก์เซิร์ฟเวอร์"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:71
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:184
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:76
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:192
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:62
 msgid "Never"
 msgstr "ไม่เลย"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:180
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:47
+msgid "No errors on this page."
+msgstr "ไม่มีข้อผิดพลาดบนหน้านี้"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:188
 msgid "No extra delay"
 msgstr "ไม่มีการล่าช้าเพิ่ม"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:59
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:64
 msgid "No, local files are deleted after upload"
 msgstr "ไม่ ไฟล์ในเครื่องจะถูกลบออกหลังจากการอัพโหลด"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:45
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:50
 msgid "Not set (Signature V2)"
 msgstr "ยังไม่ได้กำหนด (Signature V2)"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:137
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:31
+msgid "Now"
+msgstr "ตอนนี้"
+
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:38
+msgid "Only the admin account (user 1) can mark files unrecoverable."
+msgstr "มีเพียงบัญชีผู้ดูแลระบบ (ผู้ใช้ 1) เท่านั้นที่สามารถทำเครื่องหมายไฟล์ว่าไม่สามารถกู้คืนได้"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:5
+msgid "Read errors older than 24 hours"
+msgstr "ข้อผิดพลาดในการอ่านที่เกิดขึ้นเมื่อกว่า 24 ชั่วโมงแล้ว"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:7
+msgid "Remote file reads are failing frequently."
+msgstr "การอ่านไฟล์จากระยะไกลเกิดข้อผิดพลาดบ่อยครั้ง"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:52
+msgid "Retries happen when a file is requested, not at a scheduled time."
+msgstr "การลองใหม่จะเกิดขึ้นเมื่อมีการขอไฟล์ ไม่ใช่ตามเวลาที่กำหนดไว้"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:17
+msgid "Retry status"
+msgstr "สถานะการลองใหม่"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:142
 msgid "S3 API Key or FTP/WebDAV username"
 msgstr "คีย์ S3 API หรือชื่อผู้ใช้ FTP/WebDAV"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:142
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:147
 msgid "S3 API Secret or FTP/WebDAV password"
 msgstr "S3 API Secret หรือรหัสผ่าน FTP/WebDAV"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:39
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:44
 msgid "S3 Cloud Location"
 msgstr "ตำแหน่งคลาวด์ S3"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:28
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:101
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:33
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:106
 msgid "S3 Cloud Location and Credentials"
 msgstr "ตำแหน่งและข้อมูลประจำตัวของ S3 Cloud"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:44
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:119
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:49
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:124
 msgid "S3 region"
 msgstr "พื้นที่ S3"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:200
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:208
 msgid "Save Settings"
 msgstr "บันทึกการตั้งค่า"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:35
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:13
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:40
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:7
 msgid "Service"
 msgstr "บริการ"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:195
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:201
+msgid "Settings are saved without a write test while the file store is read-only. Verify access by downloading an existing file."
+msgstr "การตั้งค่าจะถูกบันทึกโดยไม่มีการทดสอบการเขียน เนื่องจากพื้นที่จัดเก็บไฟล์อยู่ในโหมดอ่านเท่านั้น โปรดตรวจสอบสิทธิ์การเข้าถึงโดยดาวน์โหลดไฟล์ที่มีอยู่"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:203
 msgid "Settings are working fine and are saved."
 msgstr "การตั้งค่าทำงานได้ดีและได้รับการบันทึก"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:79
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:84
 msgid "Settings are working fine."
 msgstr "การตั้งค่าทำงานได้ดี"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:231
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:203
+msgid "Settings saved without a write test."
+msgstr "การตั้งค่าถูกบันทึกไว้โดยไม่ผ่านการทดสอบการเขียน"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:36
+msgid "Stop retrying this file and mark it unrecoverable? Its record and error details will be kept. No files will be deleted."
+msgstr "หยุดการลองกู้คืนไฟล์นี้อีกครั้งและทำเครื่องหมายว่ากู้คืนไม่ได้หรือไม่? ข้อมูลบันทึกและรายละเอียดข้อผิดพลาดของไฟล์นี้จะถูกเก็บไว้ทั้งหมด ไม่มีไฟล์ใดที่จะถูกลบ"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:239
 msgid "Storage"
 msgstr "การจัดเก็บ"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:83
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:88
 msgid "Test Cloud File Store Settings"
 msgstr "ทดสอบการตั้งค่าที่เก็บข้อมูลไฟล์บนคลาวด์"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:30
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:255
+msgid "The cloud file store is read-only."
+msgstr "พื้นที่เก็บไฟล์บนคลาวด์เป็นแบบอ่านเท่านั้น"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:7
+msgid "The cloud file store is read-only. Downloads are available; uploads, remote deletion and write-based settings tests are disabled."
+msgstr "พื้นที่จัดเก็บไฟล์บนคลาวด์เป็นแบบอ่านเท่านั้น สามารถดาวน์โหลดไฟล์ได้ แต่การอัปโหลด การลบไฟล์จากระยะไกล และการทดสอบการตั้งค่าที่อิงจากการเขียนถูกปิดใช้งาน"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:35
 msgid "The cloud file store uses a global Zotonic configuration. The configuration cannot be changed here."
 msgstr "ที่เก็บไฟล์บนคลาวด์ใช้การกำหนดค่า Zotonic ทั่วโลก ไม่สามารถเปลี่ยนการกำหนดค่าได้ที่นี่"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:31
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:36
 msgid "The configuration is:"
 msgstr "การกำหนดค่าคือ:"
 
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:71
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:85
 msgid "The settings are locked by the system configuration."
 msgstr "การตั้งค่าถูกล็อคโดยการกำหนดค่าระบบ"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:89
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:94
 msgid "The settings are tested by uploading (and removing) a small file."
 msgstr "การตั้งค่าถูกทดสอบโดยการอัปโหลด (และลบ) ไฟล์ขนาดเล็ก"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:263
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:271
 msgid "There is a 1 minute wait before files are uploaded."
 msgstr "ต้องรอ 1 นาทีก่อนอัพโหลดไฟล์"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:188
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:196
 msgid "This extra deletion delay extends the period files can be recovered."
 msgstr "ความล่าช้าในการลบเพิ่มเติมนี้จะทำให้ระยะเวลาในการกู้คืนไฟล์ขยายออกไป"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:262
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:40
+msgid "This file no longer has an eligible error older than 24 hours. Reload the page."
+msgstr "ไฟล์นี้ไม่มีข้อผิดพลาดที่ตรงตามเงื่อนไขและเกิดขึ้นเมื่อเกิน 24 ชั่วโมงแล้ว โปรดโหลดหน้าใหม่"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:270
 msgid "This will queue the files for later asynchronous upload."
 msgstr "การดำเนินการนี้จะจัดคิวไฟล์สำหรับการอัปโหลดแบบอะซิงโครนัสในภายหลัง"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:188
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:196
 msgid "To allow recovery of deleted pages, Zotonic keeps files for 5 weeks."
 msgstr "เพื่อให้สามารถกู้คืนหน้าที่ถูกลบได้ Zotonic จะเก็บไฟล์ไว้เป็นเวลา 5 สัปดาห์"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:169
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:177
 msgid "Try to create a private S3 bucket if the S3 bucket does not exist"
 msgstr "ลองสร้างบัคเก็ต S3 ส่วนตัวถ้าไม่มีบัคเก็ต S3"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:241
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:29
+msgid "Unrecoverable"
+msgstr "ไม่สามารถกู้คืนได้"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:7
+msgid "Unresolved files are listed oldest first. The error shown is the most recent recorded error for each file."
+msgstr "ไฟล์ที่ยังไม่ได้รับการแก้ไขจะแสดงตามลำดับจากเก่าที่สุดก่อน ข้อผิดพลาดที่แสดงคือข้อผิดพลาดล่าสุดที่บันทึกไว้สำหรับแต่ละไฟล์"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:249
 msgid "Upload Queue"
 msgstr "คิวการอัปโหลด"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:151
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:159
 msgid "Upload new media files to the cloud file store"
 msgstr "อัปโหลดไฟล์สื่อใหม่ไปยังที่เก็บไฟล์บนคลาวด์"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:171
+#: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:12
+msgid "View errors"
+msgstr "ดูข้อผิดพลาด"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:179
 msgid "With FTP and WebDAV the directories are always created automatically."
 msgstr "ด้วย FTP และ WebDAV ไดเร็กทอรีจะถูกสร้างขึ้นโดยอัตโนมัติเสมอ"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:19
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:24
 msgid "With WebDAV the username and password are transfered in the clear, so ensure that you use <tt>webdavs:</tt> URLs (which makes use of https)."
 msgstr "ด้วย WebDAV ชื่อผู้ใช้และรหัสผ่านจะถูกโอนอย่างชัดเจน ดังนั้นให้แน่ใจว่าคุณใช้ <tt>webdavs:</tt> URL (ซึ่งใช้ https)"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:57
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:62
 msgid "Yes, keep local files after upload"
 msgstr "ใช่ เก็บไฟล์ในเครื่องไว้หลังจากการอัพโหลด"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:352
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:74
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:81
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:360
 #: zotonic_mod_filestore/src/support/filestore_admin.erl:88
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:95
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:102
 msgid "You are not allowed to change these settings."
 msgstr "คุณไม่ได้รับอนุญาตให้เปลี่ยนการตั้งค่าเหล่านี้"
 
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:112
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:126
 msgid "You are not allowed to use this."
 msgstr "คุณไม่ได้รับอนุญาตให้ใช้สิ่งนี้"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:9
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:14
 msgid "Zotonic can store uploaded and resized files in the cloud. Here you can configure the location and access keys for the cloud service."
 msgstr "Zotonic สามารถจัดเก็บไฟล์ที่อัปโหลดและปรับขนาดในระบบคลาวด์ คุณสามารถกำหนดค่าตำแหน่งและคีย์การเข้าถึงสำหรับบริการคลาวด์ได้ที่นี่"
 
@@ -14940,7 +15065,7 @@ msgstr "คุณไม่ได้เป็นผู้เริ่มการ
 msgid "Didn’t receive the email?"
 msgstr "ไม่ได้รับอีเมลใช่ไหม?"
 
-#: zotonic_mod_signup/src/controllers/controller_signup.erl:658
+#: zotonic_mod_signup/src/controllers/controller_signup.erl:664
 msgid "Email address mismatch"
 msgstr "อีเมลไม่ตรงกัน"
 
@@ -15047,7 +15172,7 @@ msgstr "ขอบคุณที่สมัครแล้ว โปรดย�
 msgid "The code you entered is incorrect. Please try again."
 msgstr "รหัสที่คุณป้อนไม่ถูกต้อง กรุณาลองอีกครั้ง"
 
-#: zotonic_mod_signup/src/controllers/controller_signup.erl:659
+#: zotonic_mod_signup/src/controllers/controller_signup.erl:665
 msgid "The email address you entered does not match the email address you provided in the previous step. Please check your input and try again."
 msgstr "ที่อยู่อีเมลที่คุณป้อนไม่ตรงกับที่อยู่อีเมลที่คุณให้ไว้ในขั้นตอนก่อนหน้า กรุณาตรวจสอบข้อมูลของคุณและลองอีกครั้ง"
 
@@ -15084,7 +15209,7 @@ msgstr "เราได้ส่งรหัสไปยัง <strong>{email}</
 msgid "We will be very careful with all the information given to us and will never give your name or address away without your permission. We do have some rules that we need you to agree with."
 msgstr "เราจะระมัดระวังอย่างยิ่งกับข้อมูลทั้งหมดที่ให้กับเราและจะไม่แจ้งชื่อหรือที่อยู่ของคุณโดยไม่ได้รับอนุญาต เรามีกฎบางอย่างที่ต้องให้คุณเห็นด้วย"
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:30
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:37
 msgid "We will mail you a code to confirm your email address."
 msgstr "เราจะส่งรหัสไปให้คุณทางไปรษณีย์เพื่อยืนยันที่อยู่อีเมลของคุณ"
 
