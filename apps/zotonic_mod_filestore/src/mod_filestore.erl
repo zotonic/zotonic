@@ -175,6 +175,28 @@ setting controls cache capacity (default 10 GiB). Cache files are disposable;
 retain the remote files and database registry. Keeping remote media copies does
 not replace a backup of the site's database, configuration, and application code.
 
+## Read failures and retries
+
+A failed remote cache read remains in the file registry and is retried when the
+file is requested again. This includes `forbidden` and `enoent`: a permission or
+account problem can be temporary, and S3 can return `forbidden` for missing files.
+
+Each file has its own exponential retry delay: nominally 5, 10, 20, 40 seconds,
+and so on, capped at ten minutes. Jitter varies each delay between 80% and 100%
+of that value. During the cooldown, requests do not start another remote read;
+an existing local or cached copy remains usable. A successful remote read clears
+the error and resets the delay. There is no automatic permanent cutoff, and files
+that are not requested generate no read retries.
+
+Retry eligibility is not a scheduled download time. Zotonic's file-serving
+negative cache can add up to 60 seconds before another lookup occurs. Retry state
+survives restarts. An expiring database claim limits concurrent attempts across
+nodes; abandoned claims expire after ten minutes.
+
+This policy applies to remote reads into `filezcache`. Background queue processing
+has separate batch-size backoff. Direct `#filestore_request{}` calls do not use
+this persistent read-retry policy.
+
 ## Deletion and moving existing files
 
 Zotonic normally retains deleted media for five weeks to allow recovery. The
@@ -208,6 +230,41 @@ and the URL and credentials pass the settings test. Inspect logs for connection,
 permission, TLS, or storage errors. For FTP, check passive data connections; for
 WebDAV, check the full collection path and the `webdavs:` scheme. Allow for the
 queue delay and backoff before assuming a newly queued file is stuck.
+
+### Health warnings and error details
+
+The admin dashboard and filestore configuration page warn administrators when:
+
+- At least five remote cache reads failed and failures account for at least 20%
+  of completed reads in the current and preceding fourteen minute buckets.
+- At least one active, unresolved read error is older than 24 hours.
+
+The read-error rate is shared across nodes. It counts completed remote attempts,
+not cache hits or requests suppressed by the cooldown. The 24-hour age runs from
+the first failure in the current unresolved sequence; repeated failures do not
+restart that clock.
+
+Follow **View errors** to the filestore page for details. The list shows **50 files
+per page**, oldest first, with Previous/Next navigation. Each row shows the relative
+file path, storage service, latest recorded error, consecutive failure count,
+failing-since time, and retry eligibility. Only errors older than 24 hours are
+listed, including entries explicitly marked unrecoverable. Remote URLs and
+credentials are not included in the list.
+
+### Marking a file unrecoverable
+
+Only the administrator account, **user 1**, sees the **Mark unrecoverable** action.
+After confirmation, the server rechecks both the user ID and that the entry still
+has an unresolved error older than 24 hours. Other administrators cannot perform
+this action, and a recovered or recently failed entry is not eligible.
+
+Marking an entry unrecoverable stops automatic remote cache-read retries and
+removes it from active unresolved-error counts. Its row remains in the error list
+with an **Unrecoverable** label. The file registry record and error details are
+retained; no local or remote files are deleted. Historical read-rate statistics
+are unchanged, so a high-error-rate warning can remain until those attempts leave
+the reporting window. Late callbacks from an attempt already in flight cannot
+clear the unrecoverable state. A new successful upload of the path resets it.
 
 ## Integration points
 

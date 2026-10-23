@@ -43,9 +43,9 @@ one minute; bounded background batches and backoff determine when they complete.
 Statistics are database-derived counts and estimates, not remote or local disk scans.
 
 Remote cache reads retain failed entries and retry on demand with exponential
-backoff (5 seconds initially, 80–100% jitter, capped at 10 minutes). There is no
-permanent cutoff. Successful reads reset the error history. Cached copies remain
-available during a cooldown. A ten-minute database claim prevents simultaneous
+backoff (nominally 5 seconds initially, 80–100% jitter, capped at 10 minutes).
+There is no automatic permanent cutoff. Successful reads reset the error history. Cached copies remain
+available during a cooldown. A ten-minute database claim limits simultaneous
 probes across nodes and expires if the worker dies. Only its current token can
 record a result. Existing file-serving negative caches can delay the next lookup.
 
@@ -59,12 +59,27 @@ deletes local or remote files. Historical request-rate statistics remain unchang
 Cache hits and suppressed retries are excluded. Buckets are retained for one day
 and pruned when the first result of a new minute is recorded.
 
+### Inspecting prolonged errors
+
+Templates can read `m.filestore.prolonged_errors[1]`. The result is a map with
+`entries`, `page`, `previous`, and `next`. Pages contain at most 50 entries, ordered
+by first failure time and then entry ID. `previous` and `next` are page numbers or
+`undefined`. Invalid or non-positive page numbers select page 1. Deleted entries
+are excluded; unrecoverable entries remain visible. Both this endpoint and
+`m.filestore.health` enforce administrator access and return `{error, eacces}`
+for unauthorized callers.
+
+The direct Erlang API `m_filestore:mark_unrecoverable(Id, Context)` is used by the
+admin postback. It requires user 1 and a writable context, and atomically checks
+that the error is older than 24 hours. It returns `ok`, `{error, eacces}`,
+`{error, badarg}`, or `{error, not_eligible}`. It is not a public model POST path.
+
 Available Model API Paths
 -------------------------
 
 | Method | Path pattern | Description |
 | --- | --- | --- |
-| `get` | `/prolonged_errors/+page/...` | Return admin-only pages of 50 unresolved read errors older than 24 hours, oldest first. Includes relative file paths, service, last error, consecutive failure count, first failure time and retry eligibility. |
+| `get` | `/prolonged_errors/+page/...` | Return admin-only pages of 50 unresolved read errors older than 24 hours, oldest first. Includes entry IDs, relative file paths, service, last error, consecutive failure count, first failure time, retry eligibility and unrecoverable status. Marked unrecoverable entries remain listed. |
 | `get` | `/health/...` | Return admin-only remote read attempts, failures, high-error-rate flag, and unresolved/prolonged error counts. |
 | `get` | `/stats/...` | Return admin-only filestore totals: archived media count/size, queued upload count, queued move/delete counts, cloud-stored count/size, and estimated local count/size. |
 | `get` | `/service/...` | Return the configured filestore backend service identifier from `filestore_config:service/1` (admin-only). |
