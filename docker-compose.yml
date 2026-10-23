@@ -32,6 +32,8 @@ services:
             ZOTONIC_PORT: 8000
             ZOTONIC_SSL_PORT: 8443
             ZOTONIC_APPS: /opt/zotonic/apps_user
+            ZOTONIC_UID: "${ZOTONIC_UID:-}"
+            ZOTONIC_GID: "${ZOTONIC_GID:-}"
         depends_on:
             - postgres
         volumes:

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -x
+set -ex
 
 HOME=/opt/zotonic
 SHELL=/bin/sh
@@ -17,34 +17,70 @@ ZOTONIC_LOG_DIR=$ZOTONIC_DIR/docker-data/logs
 export HOME ZOTONIC_PIDFILE SHELL
 export ZOTONIC_CONFIG_DIR ZOTONIC_SECURITY_DIR ZOTONIC_DATA_DIR ZOTONIC_LOG_DIR
 
-# On macOS the container sees 'root' (uid 0), but the owner on the file
-# system is the current user. In that case we can assign the zotonic
-# user in the container to any UID.
-# On Linux the UID and GID are equal inside and outside the container.
+# Launchers pass the host IDs explicitly. Direct container runs can still infer
+# ownership, with UID/GID 1000 as the fallback for root-owned Desktop mounts.
+USER_ID=${ZOTONIC_UID:-$(stat -c '%u' "$ZOTONIC_DIR/rebar.config")}
+GROUP_ID=${ZOTONIC_GID:-$(stat -c '%g' "$ZOTONIC_DIR/rebar.config")}
+if [ -z "${ZOTONIC_UID:-}" ] && [ "$USER_ID" = 0 ]; then USER_ID=1000; fi
+if [ -z "${ZOTONIC_GID:-}" ] && [ "$GROUP_ID" = 0 ]; then GROUP_ID=1000; fi
 
-USER_ID=`stat -c '%u' /opt/zotonic/rebar.config`
-GROUP_ID=`stat -c '%g' /opt/zotonic/rebar.config`
-USER_ID=$([ "$USER_ID" = "0" ] && echo -n "1000" || echo -n "$USER_ID")
-GROUP_ID=$([ "$GROUP_ID" = "0" ] && echo -n "1000" || echo -n "$GROUP_ID")
+validate_id() {
+    if [[ ! "$2" =~ ^[1-9][0-9]{0,9}$ ]] || [ "$2" -gt 4294967294 ]; then
+        printf '%s must be a non-zero decimal UID/GID (1..4294967294).\n' "$1" >&2
+        exit 1
+    fi
+}
+validate_id ZOTONIC_UID "$USER_ID"
+validate_id ZOTONIC_GID "$GROUP_ID"
 
-# If this is the initial run, create the Zotonic user.
-# Set the user's uid to the same UID as the host user.
-if id "zotonic" &>/dev/null
-then
-    echo "Found user zotonic"
-else
-    echo "Create user zotonic"
-    addgroup --gid $GROUP_ID zotonic
-    adduser --comment "Zotonic user" --disabled-password \
-            --uid $USER_ID --gid $GROUP_ID \
-            --shell /bin/bash \
-            zotonic
-    if [ -f /run/.containerenv ]; then # Running in Podman?
-        # Zotonic needs root privileges. Unlike Docker, Podman doesn't grant
-        # them by default.
-        usermod --append --groups root zotonic
+# Reuse groups already present in the image (e.g. macOS users often have GID 20).
+if ! getent group "$GROUP_ID" >/dev/null; then
+    if getent group zotonic >/dev/null; then
+        groupmod --gid "$GROUP_ID" zotonic
+    else
+        addgroup --gid "$GROUP_ID" zotonic
     fi
 fi
+
+# Do not silently run as another image account when an override collides.
+existing_user=$(getent passwd "$USER_ID" | cut -d: -f1)
+if [ -n "$existing_user" ] && [ "$existing_user" != zotonic ]; then
+    printf 'ZOTONIC_UID %s is already used by %s in the image. Choose another UID.\n' \
+        "$USER_ID" "$existing_user" >&2
+    exit 1
+fi
+if id zotonic &>/dev/null; then
+    if [ "$(id -u zotonic)" != "$USER_ID" ] || [ "$(id -g zotonic)" != "$GROUP_ID" ]; then
+        usermod --uid "$USER_ID" --gid "$GROUP_ID" zotonic
+    fi
+    # Remove the old Podman root-group workaround from reused containers.
+    usermod --groups '' zotonic
+else
+    adduser --comment "Zotonic user" --disabled-password \
+        --uid "$USER_ID" --gid "$GROUP_ID" --shell /bin/bash zotonic
+fi
+
+# Check access as the build user, before creating files in the mounted checkout.
+# A real write also detects read-only mounts and filesystem mapping restrictions.
+check_build_directory() {
+    local directory="$1"
+    if ! /usr/sbin/gosu zotonic /bin/sh -c '
+        probe=$(mktemp -d "$1/.zotonic-write-test.XXXXXX") && rmdir "$probe"
+    ' sh "$directory"; then
+        printf 'Zotonic cannot write to %s as %s.\n' \
+            "$directory" "$(id zotonic)" >&2
+        printf 'Check the host checkout ownership, permissions and Docker UID/GID mapping.\n' >&2
+        printf 'The checkout and existing _build directories must be writable by the container user.\n' >&2
+        exit 1
+    fi
+}
+
+check_build_directory "$ZOTONIC_DIR"
+for directory in "$ZOTONIC_DIR/_build" "$ZOTONIC_DIR/_build/default" "$ZOTONIC_DIR/_build/default/lib"; do
+    if [ -d "$directory" ]; then
+        check_build_directory "$directory"
+    fi
+done
 
 # Ensure the config, data and log directories are present and owned by the zotonic user
 mkdir -p $ZOTONIC_CONFIG_DIR && chown -R zotonic $ZOTONIC_CONFIG_DIR
@@ -65,7 +101,7 @@ if [ ! -f "/home/zotonic/.config/rebar3/rebar.config" ]
 then
     mkdir -p /home/zotonic/.config/rebar3
     cp ./docker/rebar.config /home/zotonic/.config/rebar3/rebar.config
-    chown -R zotonic:zotonic /home/zotonic/.config
+    chown -R "zotonic:$GROUP_ID" /home/zotonic/.config
 fi
 
 if [ ! -f "$ZOTONIC_CONFIG_DIR/config.d/docker.config" ]
