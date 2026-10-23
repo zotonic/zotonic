@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-20 17:50\n"
+"PO-Revision-Date: 2026-10-23 15:58\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -60,7 +60,7 @@ msgstr "Неавторизований доступ до URL-адреси від
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:43
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:42
 msgid "Website"
 msgstr "вебсайт"
 
@@ -179,6 +179,7 @@ msgid "ACL user group"
 msgstr "Група користувачів ACL"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7
+#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:18
 #: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:936
 msgid "Access control rules"
 msgstr "Правила контролю доступу"
@@ -297,7 +298,7 @@ msgstr "Ви впевнені, що хочете відновити всі пр�
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:52
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:90
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:161
-#: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
+#: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:31
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:68
 #: zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:13
 #: zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:7
@@ -305,9 +306,9 @@ msgstr "Ви впевнені, що хочете відновити всі пр�
 #: zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:36
 #: zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:50
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:104
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:131
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:125
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:58
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:55
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:54
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:134
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_connection_dialog.tpl:17
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_dialog.tpl:22
@@ -387,8 +388,8 @@ msgstr "Змінена конфігурація."
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:76
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:209
 #: zotonic_mod_admin/priv/templates/_admin_edit_version.tpl:5
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:68
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:70
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:72
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:74
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_filter_predicates.tpl:20
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:79
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:43
@@ -763,6 +764,14 @@ msgstr "Опублікувати"
 msgid "Publish successful"
 msgstr "Публікація успішна"
 
+#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:14
+msgid "Published access control rules are active."
+msgstr "Опубліковані правила контролю доступу діють."
+
+#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:21
+msgid "Published rules"
+msgstr "Опубліковані правила"
+
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:41
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:69
 msgid "Revert"
@@ -788,13 +797,13 @@ msgstr "Повернені правила"
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:33
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:162
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:141
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:80
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:84
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:26
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:105
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:56
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:132
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:126
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:60
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:56
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:55
 #: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:42
 #: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:67
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:136
@@ -862,22 +871,18 @@ msgstr "На жаль, Вам заборонено вставляти сторі
 msgid "System content groups"
 msgstr "Системні контентні групи"
 
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:26
-msgid "Test ACL rules"
-msgstr "Перевірте правила ACL"
-
 #: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:3
 #: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:6
 msgid "Test Access Control Rules"
 msgstr "Перевірте правила контролю доступу"
 
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:44
-msgid "The URL is only valid for one day."
-msgstr "URL-адреса дійсна лише один день."
+#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:12
+msgid "Test access control rules are active. Select Published rules to stop testing."
+msgstr "Правила контролю доступу в режимі тестування активні. Щоб припинити тестування, виберіть пункт «Опубліковані правила»."
 
-#: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:12
-msgid "The URL is valid for one day."
-msgstr "URL-адреса дійсна протягом одного дня."
+#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:25
+msgid "Test rules"
+msgstr "Правила тестування"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:7
 msgid "The default upload size is:"
@@ -910,6 +915,15 @@ msgstr "Ця сторінка є"
 msgid "This rule is managed by module"
 msgstr "Це правило керується модулем"
 
+#: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:12
+#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:48
+msgid "This test link is valid for 24 hours after it is generated."
+msgstr "Це тестове посилання дійсне протягом 24 годин після його створення."
+
+#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:45
+msgid "To start testing, use a valid test link provided by an editor or administrator."
+msgstr "Щоб розпочати тестування, скористайтеся дійсним тестовим посиланням, наданим редактором або адміністратором."
+
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:17
 msgid "Try ACL rules"
 msgstr "Спробуйте правила ACL"
@@ -930,11 +944,6 @@ msgstr "Налаштування завантаження збережено"
 msgid "Upload the ACL rules file that you previously exported. Note: all current rules will be <b>replaced</b> by the rule definition file that is uploaded."
 msgstr "Завантажте файл правил ACL, який ви раніше експортували. Примітка: усі поточні правила буде <b>замінено на</b> завантаженим файлом визначення правила."
 
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:27
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:50
-msgid "Use published rules"
-msgstr "Використовуйте опубліковані правила"
-
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:2
 msgid "Use the following URL to test the access control rules before publishing them."
 msgstr "Використовуйте наступну URL-адресу, щоб перевірити правила контролю доступу перед їх публікацією."
@@ -951,10 +960,6 @@ msgstr "Групи користувачів"
 msgid "Visibility"
 msgstr "Видимість"
 
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:24
-msgid "Which version of the ACL rules do you want to use?"
-msgstr "Яку версію правил ACL ви хочете використовувати?"
-
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:41
 msgid "You are not allowed to move to this collaboration group."
 msgstr "Вам заборонено переходити до цієї групи для співпраці."
@@ -967,38 +972,14 @@ msgstr "Вам заборонено виконувати цю дію"
 msgid "You are not allowed to view this page."
 msgstr "Вам заборонено переглядати цю сторінку."
 
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:12
-msgid "You are using the <b>published</b> version of the access control rules."
-msgstr "Ви використовуєте <b>опубліковану</b> версію правил контролю доступу."
-
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:10
-msgid "You are using the <b>test</b> version of the access control rules."
-msgstr "Ви використовуєте <b>тестову версію</b> правил контролю доступу."
-
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:17
-msgid "You can switch back to the published access control rules by:"
-msgstr "Ви можете повернутися до опублікованих правил контролю доступу:"
-
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:4
 msgid "You can:"
 msgstr "Ви можете:"
-
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:43
-msgid "You have to use a special URL, as provided by the an editor or administrator."
-msgstr "Ви повинні використовувати спеціальну URL-адресу, яку надає редактор або адміністратор."
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:88
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
 msgid "all"
 msgstr "всі"
-
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:20
-msgid "clicking on <b>Use published rules</b> below"
-msgstr "натиснувши <b>Використовуйте опубліковані правила</b> нижче"
-
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:21
-msgid "closing this browser tab"
-msgstr "закриття цієї вкладки браузера"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
 #: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:297
@@ -1420,7 +1401,7 @@ msgstr "Місто"
 msgid "Clear"
 msgstr "Чистий"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:12
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:10
 msgid "Click \"Save\" to see your changes."
 msgstr "Натисніть «Зберегти», щоб переглянути внесені зміни."
 
@@ -1432,7 +1413,7 @@ msgstr "Натисніть тут для отримання додаткової
 msgid "Click to preview."
 msgstr "Натисніть для попереднього перегляду."
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:11
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:14
 msgid "Close Live view"
 msgstr "Закрити режим реального часу"
 
@@ -1444,7 +1425,7 @@ msgstr "Закрийте сокети"
 msgid "Close all sockets from ip addresses which have over &gt; 250 open sockets."
 msgstr "Закрийте всі сокети з IP-адрес, які мають понад &gt; 250 відкритих сокетів."
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:3
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:4
 msgid "Close panel"
 msgstr "Закрити панель"
 
@@ -1518,7 +1499,7 @@ msgstr "Посилання на завантаження скопійовано 
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:60
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:91
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:119
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:117
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:120
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:46
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:62
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:78
@@ -1775,8 +1756,8 @@ msgstr "Адреса електронної пошти"
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:27
 #: zotonic_mod_development/priv/templates/_development_template_xref_includes.tpl:22
 #: zotonic_mod_development/priv/templates/_development_template_xref_inheritance.tpl:20
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:127
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:52
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:121
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:51
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:36
 #: zotonic_mod_menu/priv/templates/_admin_menu_menu_view.collection.tpl:40
 #: zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:23
@@ -1798,7 +1779,7 @@ msgstr "Редагувати примітку"
 msgid "Edit:"
 msgstr "Редагувати:"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:8
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:9
 msgid "Editing language"
 msgstr "Мова редагування"
 
@@ -2178,7 +2159,7 @@ msgid "Latest modified texts"
 msgstr "Останні модифіковані тексти"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:43
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:101
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:95
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:48
 msgid "Link"
 msgstr "Посилання"
@@ -2188,7 +2169,7 @@ msgid "Live query, send notifications when matching items are updated or inserte
 msgstr "Живий запит, надсилання сповіщень, коли відповідні елементи оновлюються або вставляються."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:2
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:15
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:17
 msgid "Live view"
 msgstr "Перегляд у реальному часі"
 
@@ -2561,12 +2542,12 @@ msgstr "Пам'ять ОС"
 msgid "Ongoing"
 msgstr "Триває"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:10
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:13
 msgid "Open in new tab"
 msgstr "Відкрити в новій вкладці"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:3
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:9
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:4
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:10
 msgid "Open panel"
 msgstr "Відкрита панель"
 
@@ -2813,7 +2794,7 @@ msgstr "Реферали"
 msgid "Referrers to"
 msgstr "Відсилає до"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:9
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:12
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:18
 msgid "Refresh"
 msgstr "Оновити"
@@ -2954,21 +2935,21 @@ msgstr "Ізоляція «Sandbox» у цій системі не підтри�
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:4
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:144
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:84
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:88
 msgid "Save &amp; view"
 msgstr "Зберегти &amp; переглядів"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:4
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:144
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:84
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:88
 msgid "Save and view the page."
 msgstr "Збережіть і перегляньте сторінку."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:17
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:141
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:80
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:84
 msgid "Save this page."
 msgstr "Збережіть цю сторінку."
 
@@ -3077,6 +3058,10 @@ msgstr "Показати як"
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:54
 msgid "Show keyword description"
 msgstr "Показати опис ключового слова"
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:3
+msgid "Show or hide a live preview beside the editor."
+msgstr "Показати або приховати попередній перегляд у реальному часі поруч із редактором."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:59
 msgid "Show page on multiple paths"
@@ -3482,7 +3467,7 @@ msgstr "Цю примітку бачать лише люди, які можут�
 msgid "This page can be connected from other pages. For example it could be an author of an article."
 msgstr "Цю сторінку можна приєднати з інших сторінок. Наприклад, це може бути автор статті."
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:14
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:16
 msgid "This page cannot be previewed here. Use “Open in new tab” if available."
 msgstr "Цю сторінку неможливо переглянути тут. Скористайтеся функцією «Відкрити в новій вкладці», якщо вона доступна."
 
@@ -4394,11 +4379,11 @@ msgstr "Відкрийте імпортований сертифікат, роз
 #: zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:10
 #: zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:11
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:22
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:25
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:115
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:122
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:143
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:145
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:26
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:118
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:126
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:151
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:155
 #: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:15
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:97
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:202
@@ -4676,8 +4661,8 @@ msgstr "Сховати меню"
 msgid "Language"
 msgstr "Мова"
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:33
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:41
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:34
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:44
 msgid "Loading ..."
 msgstr "Завантаження..."
 
@@ -4693,11 +4678,11 @@ msgstr "Показати меню"
 msgid "The page might have been deleted."
 msgstr "Можливо, сторінка була видалена."
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:129
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:133
 msgid "There are unsaved changes. Are you sure you want to leave without saving?"
 msgstr "Є незбережені зміни. Ви впевнені, що хочете вийти, не зберігаючи?"
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:78
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:82
 msgid "This page"
 msgstr "Ця сторінка"
 
@@ -4705,7 +4690,7 @@ msgstr "Ця сторінка"
 msgid "View this page."
 msgstr "Переглянути цю сторінку."
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:127
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:131
 msgid "Yes, discard changes"
 msgstr "Так, відхилити зміни"
 
@@ -4912,7 +4897,7 @@ msgstr "Ім'я та адреса електронної пошти"
 
 #: zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:26
 #: zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:27
-#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:14
+#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:17
 #: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:3
 msgid "New password"
 msgstr "Новий пароль"
@@ -5198,7 +5183,7 @@ msgstr "Ваші дані для входу для"
 #: zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:19
 #: zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:42
 #: zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:1
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:105
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:108
 msgid "Your new password is too short or not strong enough. Use a: uppercase letter, lowercase letter, number, and symbol."
 msgstr "Ваш новий пароль занадто короткий або недостатньо надійний. Використовуйте: велику літеру, малу літеру, цифру та символ."
 
@@ -6305,11 +6290,11 @@ msgid "Two-factor authentication is not enabled for this account."
 msgstr "Для цього облікового запису не ввімкнено двофакторну автентифікацію."
 
 #: zotonic_mod_auth2fa/priv/templates/_logon_login_set_passcode.tpl:30
-#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:37
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:38
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:131
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:155
-#: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:23
+#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:46
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:41
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:139
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:166
+#: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:29
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:83
 msgid "Two-factor passcode"
 msgstr "Двофакторний пароль"
@@ -6400,7 +6385,7 @@ msgstr "Нижче наведено останні відомі входи до 
 msgid "Browser info"
 msgstr "Інформація про браузер"
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:84
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:87
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:84
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:12
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:9
@@ -6409,7 +6394,7 @@ msgstr "Інформація про браузер"
 msgid "Change"
 msgstr "Зміна"
 
-#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:44
+#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:53
 msgid "Change password"
 msgstr "Змінити пароль"
 
@@ -6439,7 +6424,7 @@ msgstr "Натисніть на посилання, щоб ввести нови
 msgid "Close this window and log on if you are already a user of {site}."
 msgstr "Закрийте це вікно та увійдіть, якщо ви вже є користувачем {site}."
 
-#: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:25
+#: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
 #: zotonic_mod_authentication/priv/templates/logon_service_error.tpl:8
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:72
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:18
@@ -6451,7 +6436,7 @@ msgstr "Підтвердьте"
 msgid "Confirm to connect"
 msgstr "Підтвердьте підключення"
 
-#: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:20
+#: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:23
 msgid "Confirmation failure"
 msgstr "Помилка підтвердження"
 
@@ -6479,8 +6464,8 @@ msgstr "Або електронна адреса, або пароль, який 
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:7
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:13
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:69
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:88
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:72
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:91
 msgid "Email or username"
 msgstr "Електронна адреса або ім’я користувача"
 
@@ -6543,10 +6528,10 @@ msgstr "З міркувань безпеки коди скидання паро�
 msgid "Force-close all active sessions"
 msgstr "Примусово закрити всі активні сеанси"
 
-#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:9
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:63
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:192
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:204
+#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:12
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:66
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:203
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:215
 #: zotonic_mod_authentication/priv/templates/logon_error/message.passcode.tpl:8
 #: zotonic_mod_authentication/priv/templates/logon_error/message.pw.tpl:2
 msgid "Forgot your password?"
@@ -6598,7 +6583,7 @@ msgid "However this email address does not belong to one of our users or you hav
 msgstr "Однак ця адреса електронної пошти не належить жодному з наших користувачів або ви ще не встановили пароль, тому ви не зможете змінити її."
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:33
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:152
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:155
 msgid "I agree to the Terms of Service and the Privacy policies."
 msgstr "Я погоджуюся з Умовами надання послуг та Політикою конфіденційності."
 
@@ -6640,9 +6625,9 @@ msgstr "Перервати всі активні сесії"
 msgid "Interrupted sessions might still be visible in the sessions overview, but will not be updated anymore."
 msgstr "Перервані сеанси можуть усе ще відображатися в огляді сеансів, але більше не оновлюватимуться."
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:51
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:171
-#: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:37
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:54
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:182
+#: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:43
 msgid "Keep me logged in"
 msgstr "Залишати мене в системі"
 
@@ -6654,12 +6639,12 @@ msgstr "Останні відомі входи"
 msgid "Last seen"
 msgstr "Востаннє бачили"
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:58
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:186
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:61
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:197
 #: zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:22
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:196
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:205
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:199
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:208
 msgid "Log in"
 msgstr "авторизуватися"
 
@@ -6672,7 +6657,7 @@ msgstr "Увійти в"
 msgid "Log in with your existing {site} account to connect the accounts. You only have to do this once."
 msgstr "Увійдіть за допомогою наявного облікового запису {site} , щоб підключити облікові записи. Ви повинні зробити це лише один раз."
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:228
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:239
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:100
 msgid "Log on with"
 msgstr "Увійдіть за допомогою"
@@ -6694,7 +6679,7 @@ msgstr "Переконайтеся, що ви підтвердили свою е
 msgid "Multiple accounts"
 msgstr "Кілька облікових записів"
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:199
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:210
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:88
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:26
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:55
@@ -6736,11 +6721,11 @@ msgstr "На цій сторінці ви можете побачити оста
 msgid "One moment please"
 msgstr "Будь ласка, хвилиночку"
 
-#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:34
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:35
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:128
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:152
-#: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:20
+#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:43
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:38
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:136
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:163
+#: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:26
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:79
 msgid "Passcode"
 msgstr "Код доступу"
@@ -6791,7 +6776,7 @@ msgid "Please use a different method to sign in. You can’t sign in using a use
 msgstr "Будь ласка, використовуйте інший метод для входу. Ви не можете ввійти за допомогою імені користувача та пароля."
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:44
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:164
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:167
 msgid "Privacy policies"
 msgstr "Політика конфіденційності"
 
@@ -6804,12 +6789,12 @@ msgstr "Переспрямування до"
 msgid "Redirecting..."
 msgstr "Переспрямування..."
 
-#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:23
-#: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:11
+#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:29
+#: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:14
 msgid "Repeat password"
 msgstr "Повторіть пароль"
 
-#: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:45
+#: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:51
 msgid "Reset password and log in"
 msgstr "Скинути пароль і увійти"
 
@@ -6831,6 +6816,10 @@ msgstr "Огляд сесій"
 #: zotonic_mod_authentication/priv/templates/sessions.tpl:39
 msgid "Sessions that have been used by a browser in the last hour."
 msgstr "Сеанси, які були використані браузером за останню годину."
+
+#: zotonic_mod_authentication/priv/templates/_password_visibility.tpl:5
+msgid "Show password"
+msgstr "Показати пароль"
 
 #: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:27
 msgid "Simply try again:"
@@ -6857,12 +6846,12 @@ msgstr "Вибачте, забагато повторних спроб"
 msgid "Sorry, your password reset code is unknown or expired"
 msgstr "На жаль, Ваш код скидання пароля невідомий або прострочений"
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:168
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:179
 msgid "Stay logged on unless I log off."
 msgstr "Залишатися в системі, якщо я не вийду."
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:41
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:161
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:164
 msgid "Terms of Service"
 msgstr "Умови обслуговування"
 
@@ -6974,7 +6963,7 @@ msgstr "Ви увійшли в систему."
 msgid "You can connect the account on {site} with your account on {service} if both accounts have a verified email address but this is not the case. Check both sites and then try again."
 msgstr "Ви можете зв’язати обліковий запис на {site} зі своїм обліковим записом на {service} , якщо обидва облікові записи мають підтверджену адресу електронної пошти, але це не так. Перевірте обидва сайти та повторіть спробу."
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:110
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:113
 msgid "You can enter the password that you have for"
 msgstr "Ви можете ввести свій пароль для"
 
@@ -6982,12 +6971,12 @@ msgstr "Ви можете ввести свій пароль для"
 msgid "You can find the code in your authentication App."
 msgstr "Ви можете знайти код у своєму додатку для аутентифікації."
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:215
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:226
 msgid "You can log in using the following external service"
 msgstr "Ви можете увійти за допомогою наступного зовнішнього сервісу"
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:39
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:159
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:162
 msgid "You can read them here:"
 msgstr "Ви можете прочитати їх тут:"
 
@@ -7053,13 +7042,13 @@ msgstr "Ваше ім'я користувача"
 msgid "an hour"
 msgstr "годину"
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:228
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:239
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:100
 msgid "external service"
 msgstr "зовнішній сервіс"
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_extra.tpl:6
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:211
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:222
 #: zotonic_mod_signup/priv/templates/_signup_box.tpl:30
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:83
 msgid "or"
@@ -7821,7 +7810,7 @@ msgstr "Чиста зміна"
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:187
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:267
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:44
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:44
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:50
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:48
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:35
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:28
@@ -8087,7 +8076,7 @@ msgstr "Робочі завдання"
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:274
 #: zotonic_mod_development/priv/templates/_development_dispatch_options.tpl:14
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:44
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:44
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:50
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:47
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:30
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:25
@@ -8417,7 +8406,7 @@ msgstr "Посилання на оригінальний запис. Це пос
 msgid "More about licenses:"
 msgstr "Детальніше про ліцензії:"
 
-#: zotonic_mod_copyright/priv/templates/_provenance.tpl:6
+#: zotonic_mod_copyright/priv/templates/_provenance.tpl:7
 msgid "Original source"
 msgstr "Оригінальне джерело"
 
@@ -8452,7 +8441,7 @@ msgstr "рік"
 
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:27
 #: zotonic_mod_development/priv/templates/_development_template_matches.tpl:8
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:234
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:258
 #: zotonic_site_status/priv/templates/_sites.tpl:6
 msgid "Actions"
 msgstr "Дії"
@@ -9494,7 +9483,7 @@ msgid "Crop"
 msgstr "Урожай"
 
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:57
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:36
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:35
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:61
 msgid "Crop image"
 msgstr "Обрізати зображення"
@@ -9508,23 +9497,18 @@ msgstr "За замовчуванням використовується рез�
 msgid "Editor version"
 msgstr "Версія редактора"
 
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:72
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:28
-msgid "Extra small"
-msgstr "Дуже малий"
-
 #: zotonic_mod_editor_tinymce/priv/templates/_editor.tpl:19
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:13
 msgid "Insert media"
 msgstr "Вставте носій"
 
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:89
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:31
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:83
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:30
 msgid "Large"
 msgstr "Великий"
 
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:105
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:40
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:99
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:39
 msgid "Link to media or url below"
 msgstr "Посилання на медіа або URL-адреса нижче"
 
@@ -9534,27 +9518,27 @@ msgstr "Посилання на медіа або URL-адреса нижче"
 msgid "Media Properties"
 msgstr "Властивості медіа"
 
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:83
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:30
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:77
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:29
 msgid "Medium"
 msgstr "Середній"
 
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:111
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:41
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:105
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:40
 msgid "Open link in new window"
 msgstr "Відкрити посилання в новому вікні"
 
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:124
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:50
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:118
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:49
 msgid "Remove from text"
 msgstr "Видалити з тексту"
 
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:78
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:29
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:72
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:28
 msgid "Small"
 msgstr "Маленький"
 
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:115
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:109
 msgid "Website. Leave empty for media link"
 msgstr "Вебсайт. Залиште порожнім для посилання на медіа"
 
@@ -10205,59 +10189,59 @@ msgstr "Ви підключили свій <strong>обліковий запис
 msgid "Your Facebook Developer Dashboard"
 msgstr "Ваша інформаційна панель розробника Facebook"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:158
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:182
 msgid "After 1 month"
 msgstr "Через 1 місяць"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:157
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:181
 msgid "After 1 week"
 msgstr "Через 1 тиждень"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:159
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:183
 msgid "After 3 months"
 msgstr "Через 3 місяці"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:282
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:306
 msgid "All cloud files can be moved back to the file system on the server."
 msgstr "Всі хмарні файли можна перемістити назад у файлову систему на сервері."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:290
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:314
 msgid "All cloud files will be queued for download."
 msgstr "Всі хмарні файли будуть поставлені в чергу для завантаження."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:247
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:271
 msgid "All files will be queued, uploads will start in the background within 10 minutes."
 msgstr "Всі файли будуть поставлені в чергу, завантаження почнеться у фоновому режимі протягом 10 хвилин."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:237
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:261
 msgid "All local uploaded and preview files can be moved to the cloud."
 msgstr "Всі локально завантажені файли та файли попереднього перегляду можна перемістити в хмару."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:256
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:280
 msgid "Are you sure you want to copy all files to the cloud?"
 msgstr "Ви впевнені, що бажаєте скопіювати всі файли в хмару?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:299
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:323
 msgid "Are you sure you want to copy all files to the disk of the server?"
 msgstr "Ви впевнені, що бажаєте скопіювати всі файли на диск сервера?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:267
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:291
 msgid "Are you sure you want to move all files to the cloud?"
 msgstr "Ви впевнені, що хочете перемістити всі файли в хмару?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:310
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:334
 msgid "Are you sure you want to move all files to the disk of the server?"
 msgstr "Ви впевнені, що бажаєте перемістити всі файли на диск сервера?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:98
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:104
 msgid "Base URL"
 msgstr "Базовий URL"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:169
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:193
 msgid "Before the settings are saved they will be checked by uploading (and removing) a small file."
 msgstr "Перед збереженням налаштувань вони будуть перевірені шляхом завантаження (і видалення) невеликого файлу."
 
-#: zotonic_mod_filestore/src/mod_filestore.erl:430
+#: zotonic_mod_filestore/src/mod_filestore.erl:457
 msgid "Cloud File Store"
 msgstr "Хмарне сховище файлів"
 
@@ -10266,36 +10250,36 @@ msgstr "Хмарне сховище файлів"
 msgid "Cloud File Store Configuration"
 msgstr "Конфігурація Cloud File Store"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:187
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:211
 msgid "Cloud File Store Utilities and Statistics"
 msgstr "Утиліти та статистика Cloud File Store"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:196
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:220
 msgid "Cloud Files"
 msgstr "Хмарні файли"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:253
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:277
 msgid "Copy all local files to the remote storage"
 msgstr "Скопіюйте всі локальні файли у віддалене сховище"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:296
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:320
 msgid "Copy all remote files to local"
 msgstr "Скопіюйте всі віддалені файли на локальні"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:257
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:281
 msgid "Copy files to cloud"
 msgstr "Скопіюйте файли в хмару"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:300
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:324
 msgid "Copy files to server disk"
 msgstr "Скопіюйте файли на диск сервера"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:246
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:270
 msgid "Could not access the service, double check your settings and try again."
 msgstr "Не вдалося отримати доступ до служби, перевірте налаштування та повторіть спробу."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:74
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:172
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:80
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:196
 msgid "Could not access the service, double check your settings and try again. Make sure that API key has access rights to create and remove a (temporary) <code>-zotonic-filestore-test-file-</code> file."
 msgstr "Не вдалося отримати доступ до служби, перевірте налаштування та повторіть спробу. Переконайтеся, що ключ API має права доступу для створення та видалення (тимчасового) файлу <code>-zotonic-filestore-test-file-</code>."
 
@@ -10303,52 +10287,56 @@ msgstr "Не вдалося отримати доступ до служби, п�
 msgid "Currently Zotonic supports FTP, WebDAV and services that are compatible with the S3 file services API. These include:"
 msgstr "Наразі Zotonic підтримує FTP, WebDAV і служби, сумісні з API файлових служб S3. До них належать:"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:219
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:243
 msgid "Delete Queue"
 msgstr "Видалити чергу"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:153
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:177
 msgid "Delete files from the cloud file store"
 msgstr "Видаліть файли з хмарного сховища файлів"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:59
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:65
 msgid "Delete interval"
 msgstr "Видалити інтервал"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:218
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:242
 msgid "Download Queue"
 msgstr "Черга завантаження"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:138
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:162
 msgid "Enable this to let the filestore act as a backup of  your local media files."
 msgstr "Увімкніть це, щоб сховище файлів використовувало резервну копію ваших локальних медіафайлів."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:283
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:307
 msgid "Ensure yourself there is enough disk space before starting this process."
 msgstr "Перш ніж почати цей процес, переконайтеся, що на диску достатньо місця."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:201
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:224
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:123
+msgid "Enter the region supplied by your storage provider to use Signature V4. Leave empty to use legacy Signature V2."
+msgstr "Введіть регіон, який надає ваш постачальник послуг зберігання даних, щоб використовувати Signature V4. Залиште поле порожнім, щоб використовувати попередню версію Signature V2."
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:225
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:248
 msgid "Files"
 msgstr "Файли"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:107
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:113
 msgid "For FTP the URL must start with <b><tt>ftps:</tt></b> or <b><tt>ftp:</tt></b>"
 msgstr "Для FTP URL-адреса має починатися з <b><tt>ftps:</tt></b> або <b><tt>ftp:</tt></b>"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:106
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:112
 msgid "For S3 the URL must start with <b><tt>https:</tt></b> or <b><tt>http:</tt></b>"
 msgstr "Для S3 URL має починатися з <b><tt>https:</tt></b> або <b><tt>http:</tt></b>"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:108
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:114
 msgid "For WebDAV the URL must start with <b><tt>webdavs:</tt></b> or <b><tt>webdav:</tt></b>"
 msgstr "Для WebDAV URL має починатися з <b><tt>webdavs:</tt></b> або <b><tt>webdav:</tt></b>"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:243
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:267
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the local files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "Якщо ви вибрали «Зберігати локальні файли після завантаження в хмарне сховище файлів», тоді локальні файли не видаляються, оскільки віддалені файли вважаються резервними копіями локальних файлів."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:287
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:311
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the remote files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "Якщо ви вибрали «Зберігати локальні файли після завантаження в хмарне сховище файлів», тоді віддалені файли не видаляються, оскільки віддалені файли вважаються резервними копіями локальних файлів."
 
@@ -10356,65 +10344,69 @@ msgstr "Якщо ви вибрали «Зберігати локальні фа�
 msgid "If you use an FTP server then that server MUST support FTPS (secure ftp)"
 msgstr "Якщо ви використовуєте FTP-сервер, то цей сервер ПОВИНЕН підтримувати FTPS (захищений ftp)"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:63
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:69
 msgid "Immediately"
 msgstr "Негайно"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:43
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:49
 msgid "Is upload enabled?"
 msgstr "Чи ввімкнено завантаження?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:136
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:160
 msgid "Keep local files after upload to the cloud file store"
 msgstr "Зберігайте локальні файли після завантаження в хмарне сховище файлів"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:47
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:53
 msgid "Keep local files?"
 msgstr "Зберігати локальні файли?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:195
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:219
 msgid "Local Files"
 msgstr "Локальні файли"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:194
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:218
 msgid "Media Resources"
 msgstr "Медіаресурси"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:264
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:288
 msgid "Move all local files to the remote storage"
 msgstr "Перемістіть усі локальні файли у віддалене сховище"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:307
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:331
 msgid "Move all remote files to local"
 msgstr "Перемістіть усі віддалені файли на локальні"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:268
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:292
 msgid "Move files to cloud"
 msgstr "Перемістити файли в хмару"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:311
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:335
 msgid "Move files to server disk"
 msgstr "Перемістити файли на диск сервера"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:65
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:160
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:71
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:184
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:62
 msgid "Never"
 msgstr "Ніколи"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:156
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:180
 msgid "No extra delay"
 msgstr "Без додаткової затримки"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:53
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:59
 msgid "No, local files are deleted after upload"
 msgstr "Ні, локальні файли видаляються після завантаження"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:113
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:45
+msgid "Not set (Signature V2)"
+msgstr "Не встановлено (Signature V2)"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:137
 msgid "S3 API Key or FTP/WebDAV username"
 msgstr "Ключ S3 API або ім’я користувача FTP/WebDAV"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:118
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:142
 msgid "S3 API Secret or FTP/WebDAV password"
 msgstr "S3 API Secret або пароль FTP/WebDAV"
 
@@ -10423,11 +10415,16 @@ msgid "S3 Cloud Location"
 msgstr "S3 Cloud Location"
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:28
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:95
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:101
 msgid "S3 Cloud Location and Credentials"
 msgstr "Розташування та облікові дані S3 Cloud"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:176
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:44
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:119
+msgid "S3 region"
+msgstr "Регіон S3"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:200
 msgid "Save Settings"
 msgstr "Зберегти налаштування"
 
@@ -10436,19 +10433,19 @@ msgstr "Зберегти налаштування"
 msgid "Service"
 msgstr "Сервіс"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:171
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:195
 msgid "Settings are working fine and are saved."
 msgstr "Налаштування працюють нормально і збережені."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:73
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:79
 msgid "Settings are working fine."
 msgstr "Налаштування працюють нормально."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:207
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:231
 msgid "Storage"
 msgstr "Зберігання"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:77
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:83
 msgid "Test Cloud File Store Settings"
 msgstr "Налаштування сховища файлів хмари тестів"
 
@@ -10460,43 +10457,43 @@ msgstr "Хмарне сховище файлів використовує гло
 msgid "The configuration is:"
 msgstr "Конфігурація:"
 
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:68
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:71
 msgid "The settings are locked by the system configuration."
 msgstr "Параметри заблоковано конфігурацією системи."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:83
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:89
 msgid "The settings are tested by uploading (and removing) a small file."
 msgstr "Налаштування тестуються шляхом завантаження (і видалення) невеликого файлу."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:239
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:263
 msgid "There is a 1 minute wait before files are uploaded."
 msgstr "Завантаження файлів триває 1 хвилину."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:164
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:188
 msgid "This extra deletion delay extends the period files can be recovered."
 msgstr "Ця додаткова затримка видалення подовжує період відновлення файлів."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:238
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:262
 msgid "This will queue the files for later asynchronous upload."
 msgstr "Це поставить файли в чергу для подальшого асинхронного завантаження."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:164
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:188
 msgid "To allow recovery of deleted pages, Zotonic keeps files for 5 weeks."
 msgstr "Щоб дозволити відновлення видалених сторінок, Zotonic зберігає файли протягом 5 тижнів."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:145
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:169
 msgid "Try to create a private S3 bucket if the S3 bucket does not exist"
 msgstr "Спробуйте створити приватне відро S3, якщо відро S3 не існує"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:217
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:241
 msgid "Upload Queue"
 msgstr "Черга завантаження"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:127
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:151
 msgid "Upload new media files to the cloud file store"
 msgstr "Завантажте нові медіафайли в хмарне сховище файлів"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:147
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:171
 msgid "With FTP and WebDAV the directories are always created automatically."
 msgstr "За допомогою FTP і WebDAV каталоги завжди створюються автоматично."
 
@@ -10504,18 +10501,18 @@ msgstr "За допомогою FTP і WebDAV каталоги завжди ст
 msgid "With WebDAV the username and password are transfered in the clear, so ensure that you use <tt>webdavs:</tt> URLs (which makes use of https)."
 msgstr "За допомогою WebDAV ім’я користувача та пароль передаються у відкритому вигляді, тому переконайтеся, що ви використовуєте <tt>webdavs:</tt> URL-адреси (які використовують https)."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:51
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:57
 msgid "Yes, keep local files after upload"
 msgstr "Так, зберігати локальні файли після завантаження"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:328
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:71
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:78
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:85
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:352
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:74
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:81
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:88
 msgid "You are not allowed to change these settings."
 msgstr "Вам не дозволено змінювати ці налаштування."
 
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:109
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:112
 msgid "You are not allowed to use this."
 msgstr "Ви не маєте права використовувати це."
 
@@ -10763,12 +10760,12 @@ msgstr "Активний"
 msgid "Activity log"
 msgstr "Журнал дій"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:324
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:350
 msgid "Add default connection"
 msgstr "Додати з'єднання за замовчуванням"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user.tpl:32
-#: zotonic_mod_import_feed/src/models/m_import_feed.erl:481
+#: zotonic_mod_import_feed/src/models/m_import_feed.erl:482
 msgid "Administrator accounts cannot run feed imports. Importing external content with full administrator permissions is dangerous. Select a non-administrator account with only the permissions needed for importing."
 msgstr "Облікові записи адміністраторів не можуть виконувати імпорт каналів. Імпорт зовнішнього контенту з повними правами адміністратора є небезпечним. Оберіть обліковий запис, що не належить адміністратору, з правами, необхідними виключно для імпорту."
 
@@ -10854,25 +10851,25 @@ msgid "Default is 1: import directly connected resources. Use 0 to skip connecti
 msgstr "За замовчуванням встановлено значення 1: імпортувати безпосередньо підключені ресурси. Вкажіть значення 0, щоб пропустити підключення."
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_dialog.tpl:23
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:185
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:189
 msgid "Delete feed"
 msgstr "Видалити стрічку новин"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:510
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:536
 msgid "Delete feed?"
 msgstr "Видалити канал?"
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:176
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:180
 msgid "Delete imported articles and media that you are allowed to delete. Protected resources are kept. The feed will be paused; its settings and import history are retained."
 msgstr "Видаліть імпортовані статті та медіафайли, які ви маєте право видаляти. Захищені ресурси залишаються. Робота каналу буде призупинена; його налаштування та історія імпорту зберігаються."
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:173
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:178
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:177
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:182
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:186
 msgid "Delete imported content"
 msgstr "Видалити імпортований вміст"
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:180
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:184
 msgid "Delete imported content?"
 msgstr "Видалити імпортований вміст?"
 
@@ -10903,8 +10900,8 @@ msgid "Development environment: local destinations and self-signed certificates 
 msgstr "Середовище розробки: дозволено використання локальних адрес призначення та самопідписаних сертифікатів."
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:12
-msgid "Discover RSS or Atom feeds and import their articles automatically."
-msgstr "Знайдіть канали RSS або Atom та автоматично імпортуйте статті з них."
+msgid "Discover RSS, Atom or JSON feeds and import their articles automatically."
+msgstr "Знайдіть канали RSS, Atom або JSON та автоматично імпортуйте статті з них."
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:27
 msgid "Discover feeds"
@@ -10927,7 +10924,7 @@ msgstr "Готово"
 msgid "Enable mod_websub to subscribe imported resources for updates."
 msgstr "Увімкніть модуль mod_websub, щоб підписатися на оновлення імпортованих ресурсів."
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:150
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:154
 msgid "Enrich WordPress entries using the public REST API"
 msgstr "Розширюйте записи WordPress за допомогою загальнодоступного REST API"
 
@@ -10968,7 +10965,7 @@ msgstr "Канал"
 msgid "Feed activity log"
 msgstr "Журнал активності каналу"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:522
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:548
 msgid "Feed deleted"
 msgstr "Публікація видалена"
 
@@ -10976,7 +10973,7 @@ msgstr "Публікація видалена"
 msgid "Feed not found or access denied."
 msgstr "Канал не знайдено або доступ заборонено."
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:488
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:514
 msgid "Feed queued for fetching. Watch the activity log for results."
 msgstr "Потік поставлений у чергу на завантаження. Результати можна переглянути в журналі активності."
 
@@ -11005,6 +11002,10 @@ msgstr "Вгадати категорію за тегами"
 msgid "Identity"
 msgstr "Ідентичність"
 
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:148
+msgid "Import all pages on the initial import"
+msgstr "Імпортувати всі сторінки під час першого імпорту"
+
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:55
 msgid "Import as authoritative local content"
 msgstr "Імпортувати як авторитетний локальний контент"
@@ -11019,7 +11020,7 @@ msgstr "Імпортувати категорію"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:4
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:11
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:255
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:281
 msgid "Import feeds"
 msgstr "Імпортувати канали"
 
@@ -11043,7 +11044,7 @@ msgstr "Імпортувати користувача"
 msgid "Imported / updated / skipped"
 msgstr "Імпортовано / оновлено / пропущено"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:499
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:525
 msgid "Imported content deleted"
 msgstr "Імпортований вміст видалено"
 
@@ -11055,7 +11056,7 @@ msgstr "Імпорт"
 msgid "Imports run with this account's permissions. Only administrators and users with full access to accounts can change it."
 msgstr "Імпорт виконується з правами доступу цього облікового запису. Змінити його можуть лише адміністратори та користувачі з повним доступом до облікових записів."
 
-#: zotonic_mod_import_feed/src/models/m_import_feed.erl:475
+#: zotonic_mod_import_feed/src/models/m_import_feed.erl:476
 msgid "Invalid removal regexp on line"
 msgstr "Неправильний регулярний вираз для видалення у рядку"
 
@@ -11145,7 +11146,7 @@ msgstr "Оригінальна стаття"
 msgid "Pause"
 msgstr "Пауза"
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:157
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:161
 msgid "Pause automatic imports"
 msgstr "Призупинити автоматичне імпортування"
 
@@ -11195,11 +11196,11 @@ msgstr "Ресурс"
 msgid "Resume"
 msgstr "Резюме"
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:163
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:167
 msgid "Save & refetch deleted"
 msgstr "Зберегти та повторно завантажити видалені дані"
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:162
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:166
 msgid "Save feed"
 msgstr "Зберегти канал"
 
@@ -11207,11 +11208,11 @@ msgstr "Зберегти канал"
 msgid "Select a feed"
 msgstr "Виберіть канал"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:331
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:357
 msgid "Select connected page"
 msgstr "Вибрати пов’язану сторінку"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:363
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:389
 msgid "Select import user"
 msgstr "Вибрати користувача для імпорту"
 
@@ -11276,11 +11277,11 @@ msgstr "Ці зв’язки додаються до кожної імпорто
 msgid "These defaults apply to imported articles and their dependent media. Leave empty to use the standard copyright defaults."
 msgstr "Ці налаштування за замовчуванням застосовуються до імпортованих статей та пов’язаних з ними медіафайлів. Залиште поле порожнім, щоб використовувати стандартні налаштування за замовчуванням щодо авторських прав."
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:181
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:185
 msgid "This deletes all deletable articles and media imported by this feed, including resources shared with other feeds. Protected resources and resources you cannot delete are kept. The feed will be paused."
 msgstr "Це призведе до видалення всіх статей та медіафайлів, які можна видалити, імпортованих цим каналом, включаючи ресурси, якими ділиться з іншими каналами. Захищені ресурси та ресурси, які неможливо видалити, залишаться збереженими. Робота каналу буде призупинена."
 
-#: zotonic_mod_import_feed/src/models/m_import_feed.erl:477
+#: zotonic_mod_import_feed/src/models/m_import_feed.erl:478
 msgid "This feed is paused. Resume it before fetching."
 msgstr "Цей канал призупинено. Перед завантаженням слід відновити його роботу."
 
@@ -11288,7 +11289,7 @@ msgstr "Цей канал призупинено. Перед завантаже�
 msgid "This feed is paused. Resume it in its settings before fetching."
 msgstr "Цей канал призупинено. Перед завантаженням відновите його в налаштуваннях."
 
-#: zotonic_mod_import_feed/src/models/m_import_feed.erl:479
+#: zotonic_mod_import_feed/src/models/m_import_feed.erl:480
 msgid "This feed is still importing. Pause it and wait for the current import to finish before deleting its content."
 msgstr "Цей канал ще імпортується. Призупиніть його та дочекайтеся завершення поточного імпорту, перш ніж видаляти його вміст."
 
@@ -11319,6 +11320,10 @@ msgstr "Користувач"
 msgid "Uses credentials registered for the import user and destination host. Credentials are only sent over HTTPS."
 msgstr "Використовує облікові дані, зареєстровані для користувача-імпортера та хосту призначення. Облікові дані надсилаються виключно через HTTPS."
 
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:149
+msgid "Warning: this can import large amounts of articles and media. By default, only the first page is imported initially."
+msgstr "Увага: ця операція може призвести до імпорту великої кількості статей та медіафайлів. За замовчуванням спочатку імпортується лише перша сторінка."
+
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:20
 msgid "Website or feed URL"
 msgstr "URL-адреса веб-сайту або каналу"
@@ -11327,7 +11332,7 @@ msgstr "URL-адреса веб-сайту або каналу"
 msgid "WordPress enrichment unavailable; the feed data will be used."
 msgstr "Розширення WordPress недоступне; будуть використовуватися дані з каналу."
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:313
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:339
 msgid "You are not allowed to manage feeds."
 msgstr "Вам заборонено керувати каналами."
 
@@ -14915,7 +14920,7 @@ msgstr "Підтвердьте мій обліковий запис."
 msgid "Confirming..."
 msgstr "Підтвердження..."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:116
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:119
 msgid "Copy the password to the clipboard."
 msgstr "Скопіюйте пароль у буфер обміну."
 
@@ -14939,7 +14944,7 @@ msgstr "Не отримали електронного листа?"
 msgid "Email address mismatch"
 msgstr "Адреса електронної пошти не збігається"
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:103
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:106
 msgid "Enter a password"
 msgstr "Введіть пароль"
 
@@ -14963,11 +14968,11 @@ msgstr "Введіть прізвище"
 msgid "Enter the code only on the signup page. Do not share it with anyone."
 msgstr "Введіть код лише на сторінці реєстрації. Нікому його не повідомляйте."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:112
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:115
 msgid "Generate a new and secure password."
 msgstr "Створіть новий надійний пароль."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:113
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:116
 msgid "Generate a secure password"
 msgstr "Створити надійний пароль"
 
@@ -15009,7 +15014,7 @@ msgid "Resend code"
 msgstr "Надіслати код ще раз"
 
 #: zotonic_mod_signup/priv/templates/_signup_box.tpl:13
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:186
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:189
 #: zotonic_mod_signup/priv/templates/signup.tpl:3
 msgid "Sign Up"
 msgstr "Зареєструватися"
@@ -15022,11 +15027,11 @@ msgstr "Зареєструватися"
 msgid "Something went wrong, please retry again later."
 msgstr "Сталася помилка. Будь ласка, спробуйте ще раз пізніше."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:210
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:213
 msgid "Something went wrong. Please try again later."
 msgstr "Сталася помилка. Спробуйте ще раз пізніше."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:216
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:219
 msgid "Sorry, you already have an account. Maybe your account here was suspended."
 msgstr "Вибачте, у вас уже є обліковий запис. Можливо, ваш обліковий запис тут було заблоковано."
 
@@ -15046,8 +15051,8 @@ msgstr "Введений вами код неправильний. Спробу�
 msgid "The email address you entered does not match the email address you provided in the previous step. Please check your input and try again."
 msgstr "Введена вами адреса електронної пошти не збігається з адресою, яку ви вказали на попередньому кроці. Будь ласка, перевірте введені дані та спробуйте ще раз."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:193
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:202
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:196
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:205
 msgid "There is already an account connected to your email address."
 msgstr "З вашою електронною адресою вже пов’язано обліковий запис."
 
@@ -15063,7 +15068,7 @@ msgstr "Цей код втратить чинність через 10 хвили
 msgid "To continue, enter this code on the signup page:"
 msgstr "Щоб продовжити, введіть цей код на сторінці реєстрації:"
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:179
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:182
 msgid "To sign up you must agree with the Terms of Service and Privacy policies."
 msgstr "Щоб зареєструватися, ви повинні погодитися з Умовами обслуговування та політикою конфіденційності."
 
@@ -15075,7 +15080,7 @@ msgstr "Ви здійснили занадто багато спроб. Спро
 msgid "We have sent a code to <strong>{email}</strong> to confirm your email address."
 msgstr "Ми надіслали код на <strong>{email}</strong> для підтвердження вашої електронної адреси."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:145
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:148
 msgid "We will be very careful with all the information given to us and will never give your name or address away without your permission. We do have some rules that we need you to agree with."
 msgstr "Ми будемо дуже обережні з усією наданою нам інформацією і ніколи не надамо ваше ім’я чи адресу без вашого дозволу. У нас є деякі правила, з якими потрібно погодитися."
 
@@ -15111,7 +15116,7 @@ msgstr "Ви можете зареєструватися за допомогою
 msgid "You might have confirmed your account twice so that the account is already confirmed. If so, try logging in.<br>If that doesn’t work, make sure you copied the link correctly and try again."
 msgstr "Можливо, Ви двічі підтвердили свій обліковий запис, тому обліковий запис уже підтверджено. Якщо так, спробуйте увійти.<br>Якщо це не спрацює, переконайтеся, що Ви скопіювали посилання правильно, і повторіть спробу."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:172
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:175
 msgid "You must agree to the Terms in order to sign up."
 msgstr "Ви повинні погодитися з Умовами, щоб зареєструватися."
 
