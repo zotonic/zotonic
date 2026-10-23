@@ -37,7 +37,9 @@ services:
         depends_on:
             - postgres
         volumes:
-            - ./:/opt/zotonic:delegated
+            # Keep mount options identical in test overrides: podman-compose
+            # 1.0.6 includes the options when matching mount destinations.
+            - ./:/opt/zotonic:Z
         ports:
             - 8000:8000
             - 8443:8443

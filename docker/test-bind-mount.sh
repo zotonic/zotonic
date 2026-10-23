@@ -2,6 +2,7 @@
 
 # Run from the repository root after building zotonic-docker-test.
 # Uses a temporary checkout fixture; no application build or database is needed.
+# Requires Python 3 with PyYAML to validate and isolate the merged configuration.
 set -euo pipefail
 
 runtime=${1:-docker}
@@ -41,13 +42,45 @@ services:
             - "$fixture:/opt/zotonic:Z"
 EOF
 
+# Validate the actual runtime's merge before isolating the Zotonic service.
+# podman-compose 1.0.6 retains --requires even with run --no-deps, so remove
+# dependencies from the rendered test config instead of relying on that flag.
+"${compose[@]}" -f "$fixture/compose.yml" -p "$project" config > "$fixture/merged.yml"
+"${PYTHON:-python3}" - "$fixture" <<'PY'
+import os
+import sys
+import yaml
+
+fixture = sys.argv[1]
+with open(os.path.join(fixture, "merged.yml")) as source:
+    service = yaml.safe_load(source)["services"]["zotonic"]
+mounts = service["volumes"]
+assert len(mounts) == 1, f"Expected one checkout mount, got: {mounts}"
+mount = mounts[0]
+if isinstance(mount, str):
+    assert mount == f"{fixture}:/opt/zotonic:Z", mount
+else:
+    assert mount["source"] == fixture and mount["target"] == "/opt/zotonic", mount
+    assert mount["bind"]["selinux"] == "Z", mount
+for key in ("depends_on", "build", "ports", "networks"):
+    service.pop(key, None)
+with open(os.path.join(fixture, "isolated.yml"), "w") as target:
+    yaml.safe_dump({"services": {"zotonic": service}}, target)
+PY
+
+# The isolated file already contains the runtime-specific settings.
+case "$runtime" in
+    docker) compose=(docker compose) ;;
+    podman) compose=(podman-compose) ;;
+esac
+
 cleanup() {
-    "${compose[@]}" -f "$fixture/compose.yml" -p "$project" down --volumes >/dev/null 2>&1 || true
+    "${compose[@]}" -f "$fixture/isolated.yml" -p "$project" down --volumes >/dev/null 2>&1 || true
     rm -rf "$fixture"
 }
 trap cleanup EXIT
 
-"${compose[@]}" -f "$fixture/compose.yml" -p "$project" \
+"${compose[@]}" -f "$fixture/isolated.yml" -p "$project" \
     run --rm -T --no-deps zotonic verify
 test -O "$fixture/host-write-test"
 file_gid=$(stat -c '%g' "$fixture/host-write-test" 2>/dev/null || stat -f '%g' "$fixture/host-write-test")

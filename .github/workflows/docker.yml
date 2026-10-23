@@ -15,8 +15,14 @@ jobs:
     name: Build image and test entrypoint
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    env:
+      PYTHON: /usr/bin/python3
     steps:
       - uses: actions/checkout@v7
+      - name: Install Compose test dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-yaml
       - name: Test launcher UID/GID defaults
         run: bash docker/test-launchers.sh
       - name: Build development image
