@@ -145,7 +145,10 @@
 
                             <div class="form-group">
                                 <label class="control-label" for="s3secret">{_ S3 API Secret or FTP/WebDAV password _}</label>
-                                <input type="password" id="s3secret" name="s3secret" value="{{ m.filestore.s3secret|escape }}" class="form-control" />
+                                <div class="input-group">
+                                    <input type="password" id="s3secret" name="s3secret" value="{{ m.filestore.s3secret|escape }}" class="form-control" />
+                                    {% include "_password_visibility.tpl" target_id="s3secret" %}
+                                </div>
                             </div>
 
                             <div class="form-group">
