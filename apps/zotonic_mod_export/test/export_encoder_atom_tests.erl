@@ -6,7 +6,7 @@
 -include_lib("xmerl/include/xmerl.hrl").
 
 atom_test_() ->
-    {setup, fun setup/0, fun cleanup/1, [
+    export_test_support:isolated({setup, fun setup/0, fun cleanup/1, [
         fun media_entries/0,
         fun feed_metadata/0,
         fun visible_timestamps/0,
@@ -19,7 +19,7 @@ atom_test_() ->
         fun query_export_limit/0,
         fun pagination_roundtrip/0,
         fun query_next_page/0
-    ]}.
+    ]}).
 
 %% Mock site services, but compile and render the real Atom templates.
 setup() ->

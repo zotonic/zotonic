@@ -2,7 +2,14 @@
 -include_lib("eunit/include/eunit.hrl").
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-conditional_response_test() ->
+http_test_() ->
+    export_test_support:isolated([
+        fun conditional_response_check/0,
+        fun conditional_headers_check/0,
+        fun export_controllers_remain_lazy_check/0
+    ]).
+
+conditional_response_check() ->
     meck:new(z_depcache, [no_link]),
     meck:expect(z_depcache, get, fun(Key, _) -> get(Key) end),
     meck:expect(z_depcache, set, fun(Key, Value, _, _) -> put(Key, {ok, Value}), ok end),
@@ -46,7 +53,7 @@ conditional_response_test() ->
         ?assertMatch({{stream, _}, _}, export_feed_http:response(undefined, Mime, DateOnly))
     after meck:unload([z_depcache, m_rsc, export_feed_query, export_encoder, export_helper]) end.
 
-conditional_headers_test() ->
+conditional_headers_check() ->
     Date = {{2020,1,1},{0,0,0}},
     Header = cow_date:rfc1123(Date),
     ?assert(export_feed_http:not_modified(undefined, Header, <<"abc">>, Date, true)),
@@ -56,7 +63,7 @@ conditional_headers_test() ->
     ?assert(export_feed_http:not_modified(<<"\"other\", W/\"abc\"">>, undefined, <<"abc">>, Date, false)),
     ?assert(export_feed_http:not_modified(<<"*">>, undefined, <<"abc">>, Date, false)).
 
-export_controllers_remain_lazy_test() ->
+export_controllers_remain_lazy_check() ->
     meck:new(z_notifier, [no_link]),
     meck:expect(z_notifier, first, fun
         (#export_resource_filename{}, _) -> {ok, <<"export">>};

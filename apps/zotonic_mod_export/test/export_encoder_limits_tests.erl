@@ -4,7 +4,7 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 limits_test_() ->
-    {setup, fun setup/0, fun cleanup/1, fun(_) -> [
+    export_test_support:isolated({setup, fun setup/0, fun cleanup/1, fun(_) -> [
         ?_test(check(Encoder, User, Config, Requested, Expected))
         || {Encoder, Key, Default} <- formats(),
            User <- [undefined, 42],
@@ -12,7 +12,7 @@ limits_test_() ->
                {query_max_rows_non_streaming, 42} -> 20000;
                _ -> Default
            end)
-    ] end}.
+    ] end}).
 
 formats() ->
     [{Encoder, query_max_rows_streaming, 50000} || Encoder <- [

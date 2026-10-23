@@ -4,7 +4,7 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 feed_test_() ->
-    {setup, fun setup/0, fun cleanup/1, [
+    export_test_support:isolated({setup, fun setup/0, fun cleanup/1, [
         fun formats/0,
         fun default_feed/0,
         fun typed_default_feed/0,
@@ -14,7 +14,7 @@ feed_test_() ->
         fun paging_and_options/0,
         fun dispatch/0,
         fun response_and_identity/0
-    ]}.
+    ]}).
 
 setup() ->
     meck:new(export_feed_http, [no_link]),

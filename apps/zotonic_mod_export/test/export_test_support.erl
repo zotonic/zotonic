@@ -1,6 +1,25 @@
-%% @doc Complete Cowboy request fixtures shared by the feed controller tests.
+%% @doc Isolated mock tests and Cowboy request fixtures for export tests.
 -module(export_test_support).
--export([request/1]).
+-export([isolated/1, request/1]).
+-include_lib("eunit/include/eunit.hrl").
+
+%% Meck mocks affect every process in a VM, including live testsandbox workers.
+%% Run the complete fixture in a peer so setup and cleanup are isolated too.
+isolated(Tests) ->
+    {setup,
+        fun() ->
+            {ok, Peer, _} = peer:start_link(#{
+                connection => standard_io,
+                args => ["-pa" | code:get_path()]
+            }),
+            Peer
+        end,
+        fun peer:stop/1,
+        fun(Peer) ->
+            {timeout, 60, fun() ->
+                ?assertEqual(ok, peer:call(Peer, eunit, test, [Tests, [verbose]], 60000))
+            end}
+        end}.
 
 -spec request(Overrides) -> cowboy_req:req() when
     Overrides :: map().

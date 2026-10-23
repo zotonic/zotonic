@@ -21,8 +21,48 @@
 -include_lib("eunit/include/eunit.hrl").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([equery/4, squery/3]).
+-export([
+    sender_address_check/0,
+    language_check/0,
+    back_preserves_draft_check/0,
+    immediate_publication_check/0,
+    async_review_check/0,
+    postgres/1,
+    queue_ack/0
+]).
 
-sender_address_test() ->
+%% Meck replaces modules for the entire VM. Keep these mocks away from the
+%% running testsandbox site's pivot workers and other background services.
+isolated_test_() ->
+    {setup,
+        fun() ->
+            {ok, Peer, _} = peer:start_link(#{
+                connection => standard_io,
+                args => ["-pa" | code:get_path()]
+            }),
+            Peer
+        end,
+        fun peer:stop/1,
+        fun(Peer) ->
+            Tests = [{atom_to_list(Test), {timeout, 30, fun() ->
+                peer:call(Peer, ?MODULE, Test, [], 30000)
+            end}} || Test <- [sender_address_check, language_check, back_preserves_draft_check,
+                             immediate_publication_check, async_review_check]],
+            Tests ++ case os:getenv("MAILINGLIST_TEST_DB") of
+                false -> [];
+                Db -> [
+                    {"postgres", {timeout, 60, fun() ->
+                        peer:call(Peer, ?MODULE, postgres, [Db], 60000)
+                    end}},
+                    {"queue_ack", {timeout, 20, fun() ->
+                        peer:call(Peer, ?MODULE, queue_ack, [], 20000)
+                    end}}
+                ]
+            end
+        end}.
+
+
+sender_address_check() ->
     Modules = [m_rsc, m_config],
     Context = #context{},
     try
@@ -76,7 +116,7 @@ completion_test() ->
     ?assertEqual(<<"completed">>, S(<<"sending">>, true, #{<<"sent">> => 10, <<"skipped">> => 2})),
     ?assertEqual(<<"cancelled">>, S(<<"cancelled">>, true, #{<<"sent">> => 3})).
 
-back_preserves_draft_test() ->
+back_preserves_draft_check() ->
     Draft = [
         {language, <<"nl">>},
         {fallback_language, <<"en">>},
@@ -109,10 +149,9 @@ back_preserves_draft_test() ->
         lists:foreach(fun(M) -> catch meck:unload(M) end, Modules)
     end.
 
-language_test() ->
+language_check() ->
     {ok, _} = application:ensure_all_started(jobs),
-    %% CI already starts this queue through zotonic_core_sup. Only create it
-    %% when running these tests in a standalone Erlang VM.
+    %% The isolated VM also needs this queue for the optional database checks.
     case jobs:queue_info(zotonic_singular_job) of
         undefined ->
             jobs:add_queue(zotonic_singular_job, [{regulators, [{counter, [{limit, 1}]}]}]);
@@ -129,11 +168,6 @@ language_test() ->
 
 %% Opt-in integration suite. Uses only a transaction-local schema in the named
 %% database, rolled back even on failure. No emails or existing site data touched.
-postgres_test_() ->
-    case os:getenv("MAILINGLIST_TEST_DB") of
-        false -> [];
-        Db -> {timeout, 60, fun() -> postgres(Db) end}
-    end.
 
 equery(C, Sql, Args, _) -> epgsql:equery(C, Sql, Args).
 squery(C, Sql, _) -> epgsql:squery(C, Sql).
@@ -656,11 +690,6 @@ retention(Ctx) ->
     ),
     ?assertEqual(10001, maps:get(<<"sent">>, m_mailinglist_run:stats(Bulk, Ctx))).
 
-queue_ack_test_() ->
-    case os:getenv("MAILINGLIST_TEST_DB") of
-        false -> [];
-        _ -> {timeout, 20, fun queue_ack/0}
-    end.
 
 queue_ack() ->
     %% This opt-in standalone suite must not run in a live Zotonic node.
@@ -936,7 +965,7 @@ language_policies(Ctx) ->
         end)
     end.
 
-immediate_publication_test() ->
+immediate_publication_check() ->
     Modules = [m_mailinglist_run, z_mailinglist_run, m_rsc, z_render, z_sidejob],
     Context = #context{language = [en]},
     Future = {{2099, 1, 1}, {10, 0, 0}},
@@ -988,7 +1017,7 @@ immediate_publication_test() ->
     end.
 
 %% A blocked count must not block its postback or offer a send button early.
-async_review_test() ->
+async_review_check() ->
     Modules = [z_mailinglist_run, mod_mailinglist, m_rsc, z_render, z_transport],
     Context = #context{language = [en]},
     Parent = self(),
