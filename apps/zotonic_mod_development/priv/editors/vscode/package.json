@@ -1,0 +1,119 @@
+{
+  "name": "zotonic-templates",
+  "displayName": "Zotonic Templates",
+  "description": "Site-aware template diagnostics and navigation from a running Zotonic node.",
+  "version": "0.1.0",
+  "publisher": "zotonic",
+  "license": "Apache-2.0",
+  "engines": {
+    "vscode": "^1.82.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "main": "./extension.js",
+  "activationEvents": [
+    "onLanguage:zotonic",
+    "onCommand:zotonic.selectSite"
+  ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": false
+    },
+    "virtualWorkspaces": false
+  },
+  "contributes": {
+    "languages": [
+      {
+        "id": "zotonic",
+        "aliases": [
+          "Zotonic Template"
+        ],
+        "extensions": [
+          ".tpl"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "zotonic",
+        "scopeName": "text.html.zotonic",
+        "path": "./zotonic.tmLanguage.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "zotonic.selectSite",
+        "title": "Zotonic: Select Site"
+      },
+      {
+        "command": "zotonic.restart",
+        "title": "Zotonic: Restart Language Server"
+      }
+    ],
+    "configuration": {
+      "title": "Zotonic",
+      "properties": {
+        "zotonic.command": {
+          "type": "string",
+          "default": "",
+          "scope": "machine-overridable",
+          "description": "Executable for the language server, such as bin/zotonic or docker. Empty uses bin/zotonic in the first workspace folder."
+        },
+        "zotonic.site": {
+          "type": "string",
+          "default": "",
+          "description": "Running development site. Empty resolves references across running sites when their source targets agree."
+        },
+        "zotonic.args": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "lsp"
+          ],
+          "scope": "machine-overridable",
+          "description": "Arguments for the executable, without shell quoting. Docker example: [\"exec\", \"-i\", \"--user\", \"zotonic\", \"my-container\", \"/opt/zotonic/bin/zotonic\", \"lsp\"]."
+        },
+        "zotonic.pathMappings": {
+          "type": "array",
+          "default": [],
+          "maxItems": 32,
+          "items": {
+            "type": "object",
+            "required": [
+              "localRoot",
+              "remoteRoot"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "localRoot": {
+                "type": "string",
+                "description": "Absolute source directory on the editor host."
+              },
+              "remoteRoot": {
+                "type": "string",
+                "description": "Corresponding absolute directory inside the container."
+              }
+            }
+          },
+          "description": "Host/container source roots. Most specific root wins. Empty leaves local file paths unchanged."
+        }
+      }
+    }
+  },
+  "dependencies": {
+    "vscode-languageclient": "^9.0.1"
+  },
+  "scripts": {
+    "check": "node --check extension.js",
+    "package": "npm run check && npm exec --yes --package=@vscode/vsce@4.0.0 -- vsce package --out zotonic-templates.vsix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zotonic/zotonic.git",
+    "directory": "apps/zotonic_mod_development/priv/editors/vscode"
+  }
+}

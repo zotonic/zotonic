@@ -381,8 +381,12 @@ replace(Id, MediaProps, Context) ->
                         mqtt_event_info(Medium),
                         Context),
                     ok;
-                {rollback, {Error, _Trace}} ->
-                    {error, Error}
+                {rollback, {error, _} = Error} ->
+                    Error;
+                {rollback, {{error, _} = Error, _Trace}} ->
+                    Error;
+                {rollback, Reason} ->
+                    {error, Reason}
             end;
         false ->
             {error, eacces}
@@ -1030,8 +1034,14 @@ replace_file_db(RscId, PreProc, Props, Opts, Context) ->
                 mqtt_event_info(NewMedium),
                 Context),
             {ok, Id};
-        {rollback, {{error, Reason}, _StackTrace}} ->
-            {error, Reason}
+        {rollback, {error, _} = Error} ->
+            Error;
+        {rollback, {{error, _} = Error, _StackTrace}} ->
+            Error;
+        {rollback, Reason} ->
+            {error, Reason};
+        {error, _} = Error ->
+            Error
     end.
 
 is_deletable_file(undefined, _Context) ->

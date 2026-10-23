@@ -33,7 +33,7 @@ event(#submit{message=explain_dispatch}, Context) ->
             case z_sites_dispatcher:dispatch_trace(Protocol, ReqPath, Context) of
                 {ok, Trace} ->
                     Vars = [
-                        {trace, Trace},
+                        {trace, m_development:dispatch_trace_sources(Trace, Context)},
                         {path, ReqPath},
                         {protocol, Protocol}
                     ],

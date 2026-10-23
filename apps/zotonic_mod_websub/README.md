@@ -171,6 +171,44 @@ jobs. Database serialization enforces limits across nodes. Excess requests recei
 503 and have not been accepted; callers may retry later. These limits bound the
 WebSub contribution to the shared pivot task queue.
 
+The hub attempts callback verification once per accepted request. Non-2xx responses
+are logged with their HTTP status; transport failures are logged separately. Failed
+verification does not create or renew an export subscription.
+
+The Zotonic subscriber backs off after discovery/request failures and unanswered
+verification. Backoff starts at 10 seconds, doubles after each failure, and caps
+at 43200 seconds (12 hours). An unanswered request first waits up to
+two minutes for verification, then waits the backoff delay before trying again.
+An active lease can shorten the backoff.
+
+Set `mod_websub.subscription_retry_timeout` to the overall retry budget in seconds
+(default: `604800`, or one week; valid range: `1`–`2147483647`). Configure it
+per site in module configuration, or from an Erlang shell with that site’s context:
+
+```erlang
+m_config:set_value(mod_websub, subscription_retry_timeout, 604800, Context).
+```
+
+Missing, zero, negative, out-of-range, or non-integer values use the default.
+The 10-second initial backoff and 12-hour cap are fixed, not configuration settings.
+This budget applies to subscription discovery, verification and unsubscription;
+it does not affect notification delivery, import queues, or `mod_import_feed` polling.
+
+The persisted budget starts at
+the first attempt, including discovery, and survives restarts. Each renewal,
+unsubscription, and explicit subscription restart gets a fresh budget. Retry and
+verification waits are capped at the deadline. Once it expires, work stops with
+`retry_timeout` in the admin overview; late verification is rejected. Any previous
+confirmed lease remains valid until expiry. Existing pending attempts receive a
+fresh budget when first processed after upgrade. The current setting is read when
+work runs and schedules its next attempt; changing it does not immediately wake
+sleeping retries or restart attempts that already gave up.
+
+A valid `hub.mode=denied` callback disables the pending subscription and stops
+retries immediately. Stopping a subscription disables local imports immediately;
+remote unsubscription attempts stop after successful verification, expiry of the
+confirmed lease, or the retry deadline, whichever comes first.
+
 Status/start/stop require resource edit permission. Verification matches callback,
 topic, action, and pending deadline. Responses are plain text with `nosniff`. Import
 identity and permissions are checked again in the transaction that updates the resource.
@@ -185,7 +223,9 @@ Filter by subscription type (incoming subscribers / outgoing subscriptions) and
 numeric **local resource ID**, **external hostname**, **status** (active, pending,
 expired, stopped), and **errors** (all, with errors, without errors). Filters combine
 and apply before pagination. Hostnames match exactly, case-insensitively, ignoring
-ports and a trailing DNS dot. Enter a hostname without a scheme or path; IPv6
+ports and a trailing DNS dot. The hostname field suggests known failed hosts for
+the selected subscription type, sorted and deduplicated across all pages. Submit
+the type filter to refresh its suggestions; manual hostname entry remains available. Enter a hostname without a scheme or path; IPv6
 literals are accepted with or without brackets. Incoming subscriptions match the
 callback host; outgoing subscriptions match the source resource host, not the hub.
 Normalized hostname expression indexes on callback/source URLs support both the
@@ -242,8 +282,9 @@ revoke a confirmed lease. Private hub requests authenticate their OAuth2 header
 from an anonymous context; an existing browser login cannot supply the authority
 for an invalid token.
 
-Queue retries and exhausted-retry deletion are conditional on the version that
-failed, preserving newer work arriving during HTTP requests. An older notification
+Import queue retries and queue deletion are conditional on the version that
+was processed, preserving newer work arriving during HTTP requests. Delivery
+failures preserve the retry window and backoff across newer queued versions. An older notification
 still publishes current content, and an older pushed payload cannot replace a
 newer pending refetch. Incoming version values are bounded positive integers. The hub only registers and
 publishes authoritative local resources, matching the JSON topic controller.
@@ -356,3 +397,23 @@ The edit-page automatic-update status is a live template. Subscription confirmat
 denial, and worker attempts publish an empty invalidation event on
 `model/websub/event/rsc/<id>`. Only editors of that resource can subscribe;
 the refreshed template and status model also enforce resource edit permissions.
+
+### Notification delivery retries
+
+Failed deliveries retry after 5, 20, 45 minutes, and so on (five minutes times the
+squared attempt number), capped at 12 hours. The overall retry window is one week
+from the first delivery attempt, never beyond the subscription lease expiry. Both
+limits are fixed; `subscription_retry_timeout` controls subscription verification
+only. The next due time is capped at both deadlines, and the worker checks them
+before starting another attempt.
+
+The first-attempt timestamp and retry count are persisted, survive restarts, and
+are preserved when newer resource versions replace the queued notification. A
+successful delivery clears the failure window, including for newer work queued
+during that delivery. Existing queues start their window on first processing
+after upgrade.
+
+When the week expires, the notification is discarded and the subscription is
+marked with `retry_timeout`. The subscription lease is retained, so later resource
+updates can start a new delivery window. Lease expiry discards pending delivery
+without making another callback request.

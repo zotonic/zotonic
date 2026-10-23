@@ -259,21 +259,28 @@ transaction1(Function, #context{dbc=undefined} = Context) ->
                             {error, _} = ErrorBegin -> throw(ErrorBegin)
                         end,
                         case Function(Context1) of
-                            {rollback, R} ->
+                            {rollback, _} = R->
                                 DbDriver:squery(C, "ROLLBACK", ?TIMEOUT),
                                 R;
-                            R ->
+                            Result ->
                                 case DbDriver:squery(C, "COMMIT", ?TIMEOUT) of
                                     {ok, [], []} ->
-                                        R;
+                                        Result;
                                     {error, connection_down} ->
                                         {rollback, {error, connection_down}};
                                     {error, _} = ErrorCommit ->
-                                        z_notifier:notify_queue_flush(Context),
                                         throw(ErrorCommit)
                                 end
                         end
                     catch
+                        throw:{rollback, ThrowR} ->
+                            case DbDriver:is_connection_alive(C) of
+                                true ->
+                                    DbDriver:squery(C, "ROLLBACK", ?TIMEOUT);
+                                false ->
+                                    ok
+                            end,
+                            {rollback, ThrowR};
                         E:Why:S ->
                             ?LOG_ERROR(#{
                                 text => <<"Error on database transaction">>,
@@ -305,7 +312,12 @@ transaction1(Function, #context{dbc=undefined} = Context) ->
     end;
 transaction1(Function, Context) ->
     % Nested transaction, only keep the outermost transaction
-    Function(Context).
+    case Function(Context) of
+        {rollback, _} = R ->
+            throw(R);
+        Other ->
+            Other
+    end.
 
 
 %% @doc Clear any transaction in the context, useful when starting a thread with this context.

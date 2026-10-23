@@ -88,8 +88,8 @@ Available Model API Paths
 | Method | Path pattern | Description |
 | --- | --- | --- |
 | `get` | `/user/...` | Return the current ACL user id from the request context. |
-| `get` | `/auth_service  | Service used to authenticate the user. |
-| `get` | `/auth_service_uid | Service user identification used to authenticate the user. |
+| `get` | `/auth_service` | Service used to authenticate the user. |
+| `get` | `/auth_service_uid` | Service user identification used to authenticate the user. |
 | `get` | `/sudo_user/...` | Return the current sudo user id from the request context. |
 | `get` | `/is_admin/...` | Return whether the current user has admin rights. |
 | `get` | `/is_admin_editable/...` | Return whether admin users are editable in the current ACL setup. |

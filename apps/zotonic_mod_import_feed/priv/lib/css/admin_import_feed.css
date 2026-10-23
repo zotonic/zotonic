@@ -36,3 +36,17 @@
 #feed-preview.is-loading .import-feed-preview-loading {
     display: block;
 }
+
+.import-feed-discover-loading,
+.import-feed-select-loading {
+    display: none;
+}
+
+#feed-discover-form.is-loading .import-feed-discover-loading {
+    display: inline-block;
+    margin-left: 8px;
+}
+
+#feed-discovery.is-loading .import-feed-select-loading {
+    display: block;
+}

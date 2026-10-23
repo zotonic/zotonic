@@ -25,7 +25,12 @@
         box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
         z-index: 1;
 
-        strong { margin-right: auto; }
+    }
+    .admin-edit-preview-info {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-right: auto;
     }
     .admin-edit-preview-resizer {
         position: absolute;
@@ -53,6 +58,15 @@
         &:empty { display: none; }
     }
     .admin-edit-preview-status { padding: 0 10px; }
+    .admin-edit-preview-dirty {
+        padding: 4px 8px;
+        border: 1px solid var(--bs-warning-border-subtle, #e6c76a);
+        border-radius: 3px;
+        background: var(--bs-warning-bg-subtle, #fff3cd);
+        color: var(--bs-warning-text-emphasis, #664d03);
+        font-weight: 600;
+    }
+    .admin-edit-preview-dirty[hidden] { display: none; }
     iframe { flex: 1; width: 100%; min-height: 0; border: 0; background: #fff; }
 }
 
@@ -78,19 +92,16 @@ body.admin-preview-resizing {
     .admin-edit-preview-resizer { background: var(--bs-primary, #337ab7); }
 }
 
-// Show the destination panel and make the open/closed state visible in both editors.
-html body .btn.admin-edit-preview-toggle {
+// Show the destination panel beside the open/close action.
+html body .btn.admin-edit-preview-open {
     display: inline-flex;
     align-items: center;
     gap: 6px;
 
-    .admin-edit-preview-toggle-icon { flex-shrink: 0; }
-    .admin-edit-preview-toggle-pane { opacity: .3; }
-    .admin-edit-preview-toggle-caret { display: block; flex-shrink: 0; }
-
-    &[aria-expanded="true"] {
-
-        .admin-edit-preview-toggle-pane { opacity: 1; }
-        .admin-edit-preview-toggle-caret { transform: rotate(180deg); }
-    }
+    svg { flex-shrink: 0; }
 }
+
+// Separate the panel toggle from the save actions in the full admin only.
+.admin-navbar-fixed-save .admin-edit-preview-open { margin-left: 20px; }
+
+#sidebar-publish-page .admin-edit-preview-open { margin-right: 6px; }

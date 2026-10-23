@@ -1,6 +1,8 @@
 [
     {admin_import_feed, ["admin", "import-feed"], controller_admin,
         [{template, "admin_import_feed.tpl"}, {acl_module, mod_import_feed}, {selected, admin_import_feed}]},
+    {admin_import_feed_log, ["admin", "import-feed", "log"], controller_admin,
+        [{template, "admin_import_feed_log.tpl"}, {acl_module, mod_import_feed}, {selected, admin_import_feed}]},
     {admin_import_feed_edit, ["admin", "import-feed", id], controller_admin,
         [{template, "admin_import_feed_edit.tpl"}, {acl_module, mod_import_feed}, {selected, admin_import_feed}]}
 ].

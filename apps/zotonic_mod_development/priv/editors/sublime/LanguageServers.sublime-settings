@@ -1,0 +1,9 @@
+{
+    "zotonic": {
+        "enabled": true,
+        "command": ["/absolute/path/to/zotonic/bin/zotonic", "lsp"],
+        "selector": "text.html.zotonic",
+        "initialization_options": { "site": "" },
+        "settings": { "zotonic": { "site": "" } }
+    }
+}

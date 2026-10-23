@@ -65,6 +65,7 @@ _checkouts
 .DS_Store
 zotonic.tmproj
 .sass-cache
+__pycache__
 
 doc/ref/models/model_.rst
 

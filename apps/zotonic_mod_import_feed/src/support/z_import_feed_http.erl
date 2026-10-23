@@ -17,7 +17,7 @@
 %% limitations under the License.
 
 -module(z_import_feed_http).
--export([get/2, get/3, get_json/2, url/1, resolve/2, context/2]).
+-export([get_feed/2, validators/1, get/2, get/3, get_json/2, url/1, resolve/2, context/2, retry_after/2, error_delay/1]).
 
 -define(MAX_URL_LENGTH, 2048).
 -define(MAX_RESPONSE_BYTES, 4 * 1024 * 1024).
@@ -75,10 +75,55 @@ get(Url, Context) -> get(Url, ?MAX_RESPONSE_BYTES, Context).
 
 -spec get(Url, Limit, Context) -> {ok, tuple()} | {error, term()} when
     Url :: binary(), Limit :: pos_integer(), Context :: z:context() | undefined.
-get(Url, Limit, Context) -> get(Url, Limit, [], Context).
+get(Url, Limit, Context) -> unconditional(get(Url, Limit, [], Context)).
+
+%% Conditional requests are only used for a successfully imported settings version.
+-spec get_feed(map(), z:context() | undefined) -> {ok, tuple()} | {not_modified, tuple()} | {error, term()}.
+get_feed(Settings, Context) ->
+    Url = maps:get(url, Settings),
+    Version = maps:get(settings_version, Settings, undefined),
+    CanValidate = Version =/= undefined
+        andalso Version =:= maps:get(http_settings_version, Settings, undefined)
+        andalso not maps:get(refetch_deleted_once, Settings, false),
+    Headers = case CanValidate of
+        true -> [{Name, Value} || {Name, Key} <- [
+                {<<"if-none-match">>, http_etag}, {<<"if-modified-since">>, http_last_modified}],
+            Value <- [safe_header(maps:get(Key, Settings, undefined))], Value =/= undefined];
+        false -> []
+    end,
+    case get(Url, ?MAX_RESPONSE_BYTES, [{headers, Headers}], Context) of
+        {not_modified, {FinalUrl, _}} = Result when Headers =/= [] ->
+            case z_convert:to_binary(FinalUrl) =:= maps:get(http_url, Settings, undefined) of
+                true -> Result;
+                false -> {error, unexpected_not_modified}
+            end;
+        {not_modified, _} -> {error, unexpected_not_modified};
+        Result -> Result
+    end.
+
+%% Persist only bounded validator values, never arbitrary response headers.
+-spec validators(list()) -> map().
+validators(Headers) ->
+    maps:from_list([{Key, safe_header(Value)} || {Name, Value} <- Headers,
+        {Header, Key} <- [{<<"etag">>, http_etag}, {<<"last-modified">>, http_last_modified}],
+        string:lowercase(z_convert:to_binary(Name)) =:= Header]).
+
+safe_header(undefined) -> undefined;
+safe_header(Value) ->
+    Bin = z_convert:to_binary(Value),
+    case byte_size(Bin) > 0 andalso byte_size(Bin) =< 4096
+        andalso binary:match(Bin, [<<"\r">>, <<"\n">>]) =:= nomatch of
+        true -> Bin;
+        false -> undefined
+    end.
 
 -spec get_json(binary(), z:context() | undefined) -> {ok, tuple()} | {error, term()}.
-get_json(Url, Context) -> get(Url, ?MAX_RESPONSE_BYTES, [{accept, "application/json"}], Context).
+get_json(Url, Context) ->
+    unconditional(get(Url, ?MAX_RESPONSE_BYTES, [{accept, "application/json"}], Context)).
+
+%% Only get_feed/2 accepts a conditional response, after validating its URL.
+unconditional({not_modified, _}) -> {error, {http_status, 304}};
+unconditional(Result) -> Result.
 
 get(Url, Limit, Extra, Context) ->
     case url(Url) of
@@ -95,6 +140,13 @@ get(Url, Limit, Extra, Context) ->
                 {ok, {_, _, Length, Body}} when Length >= Limit; byte_size(Body) >= Limit ->
                     {error, response_too_large};
                 {ok, _} = Ok -> Ok;
+                {error, {304, FinalUrl, Headers, _, _}} ->
+                    {not_modified, {FinalUrl, Headers}};
+                {error, {Code, _, Headers, _, _}} when Code =:= 429; Code =:= 503 ->
+                    case retry_after(Headers, calendar:universal_time()) of
+                        undefined -> {error, {http_status, Code}};
+                        Seconds -> {error, {http_status, Code, {retry_after, Seconds}}}
+                    end;
                 {error, {Code, _, _, _, _}} -> {error, {http_status, Code}};
                 {error, _} = Error -> Error
             after
@@ -107,3 +159,29 @@ get(Url, Limit, Extra, Context) ->
         false ->
             {error, unsafe_destination}
     end.
+
+%% @doc Parse Retry-After delta-seconds or HTTP-date without retaining headers.
+-spec retry_after(Headers, Now) -> non_neg_integer() | undefined when
+    Headers :: list(), Now :: calendar:datetime().
+retry_after(Headers, Now) ->
+    Values = [V || {K, V} <- Headers,
+        string:lowercase(z_convert:to_binary(K)) =:= <<"retry-after">>],
+    case Values of
+        [Value] ->
+            try
+                Bin = string:trim(z_convert:to_binary(Value)),
+                Seconds = case re:run(Bin, <<"^[0-9]{1,10}$">>, [{capture, none}]) of
+                    match -> binary_to_integer(Bin);
+                    nomatch -> max(0, calendar:datetime_to_gregorian_seconds(cow_date:parse_date(Bin))
+                        - calendar:datetime_to_gregorian_seconds(Now))
+                end,
+                case Seconds =< 2147483647 of true -> Seconds; false -> undefined end
+            catch _:_ -> undefined end;
+        _ -> undefined
+    end.
+
+%% @doc Additional delay requested by a throttled/unavailable HTTP endpoint.
+-spec error_delay(Reason) -> non_neg_integer() when Reason :: term().
+error_delay({http_status, Code, {retry_after, Seconds}})
+    when (Code =:= 429 orelse Code =:= 503), is_integer(Seconds), Seconds >= 0 -> Seconds;
+error_delay(_) -> 0.

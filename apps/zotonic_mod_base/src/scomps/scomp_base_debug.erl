@@ -43,7 +43,7 @@ Optionally, variable names can be provided to be debugged:
 By default, all key nodes are collapsed. Expanded, each node contains the value associated and highlighted as Erlang code:
 
 
-![Debug output with expanded variable nodes](/lib/images/scomp_base_debug_expanded.png)
+![Debug output with expanded variable nodes](../../priv/doc/scomp-base-debug-expanded.png)
 
 The debug scomp contains three buttons at the top right:
 

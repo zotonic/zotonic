@@ -111,10 +111,13 @@ There are some extra arguments added to every form post:
 | Post argument    | Description                                                                      | Example                |
 | ---------------- | -------------------------------------------------------------------------------- | ---------------------- |
 | `z_trigger_id` | Id of the HTML element that triggered the submit.                                | `<<\"mybutton\">>`      |
-| `z_pageid`     | Id of the page in the browser, used to connect comet and other communication between the browser and the server. | `<<\"1uTsbzIsWqmPpF32\">>` |
 | `postback`     | Signed postback set by the wire tag. Handled internally.                         |                        |
 
 
+
+Browser-server communication uses MQTT over WebSocket connections managed by
+Cotonic. The browser MQTT bridge handles connection identity; a `z_pageid` form
+argument is not required.
 
 Wire to the page load or unload
 -------------------------------

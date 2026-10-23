@@ -32,7 +32,12 @@
             </div>
             <div class="form-group">
                 <label for="websub-hostname">{_ External hostname _}</label>
-                <input type="text" name="qhostname" id="websub-hostname" value="{{ q.qhostname|escape }}" maxlength="255" placeholder="example.com" class="form-control" aria-describedby="websub-hostname-help">
+                <input type="text" name="qhostname" id="websub-hostname" list="websub-failed-hostnames" value="{{ q.qhostname|escape }}" maxlength="255" placeholder="example.com" class="form-control" aria-describedby="websub-hostname-help">
+                <datalist id="websub-failed-hostnames">
+                    {% for hostname in m.websub.failed_hostnames::%{type: q.qtype} %}
+                        <option value="{{ hostname|escape }}"></option>
+                    {% endfor %}
+                </datalist>
             </div>
             <div class="form-group">
                 <label for="websub-status">{_ Status _}</label>
@@ -54,7 +59,7 @@
             </div>
             <button type="submit" class="btn btn-primary">{_ Filter _}</button>
             <a href="{% url admin_websub %}" class="btn btn-default">{_ Reset _}</a>
-            <p class="help-block" id="websub-hostname-help">{_ Enter the exact hostname, without a scheme, port, or path. _}</p>
+            <p class="help-block" id="websub-hostname-help">{_ Choose a known failed hostname or enter an exact hostname, without a scheme, port, or path. _}</p>
         </form>
         {% if result.is_invalid %}
             <p class="alert alert-warning">{_ Select a valid subscription type, resource ID, hostname, status, errors, and page number. _}</p>

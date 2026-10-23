@@ -29,7 +29,29 @@ Available Model API Paths
 
 | Method | Path pattern | Description |
 | --- | --- | --- |
+| `get` | `/render_with_assets/...` | Return a map with `html`, `libs` and `javascript`. Pass it to `z_assets.apply(result, insertHtml)` in the browser; the insertion callback runs after libraries load and before initialization. |
 | `get` | `/render/...` | Treat segments after `/render/` as the template path, render that template with the payload query args, and return the rendered template output. |
+
+Both paths expose payload values as `q`, with the caller's normal ACL context.
+The asset-aware path requires the standard Cotonic head and wired JavaScript
+includes and `{% script %}`. For example:
+
+```javascript
+cotonic.broker.call(
+    'bridge/origin/model/template/get/render_with_assets/_panel.tpl',
+    { id: 123 }
+).then(response => z_assets.apply(response.payload.result, html => {
+    document.getElementById('panel').innerHTML = html;
+}));
+```
+
+The insertion callback may return a promise. Libraries finish loading before it
+runs; collected template JavaScript runs after it completes. Failed library
+loads skip the update. CSS variants are distinguished by media, rel and title;
+JavaScript executes once per page, in declaration order. Dynamic updates wait
+for their dependencies even when the original lib tag specifies async/defer.
+The HTML-only path remains available, but materialized HTML cannot subsequently
+be deduplicated against other fragments. Prefer the asset-aware path for updates.
 
 `/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
@@ -45,7 +67,9 @@ Available Model API Paths
 -include_lib("zotonic.hrl").
 
 -spec m_get( list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:return().
-m_get([ <<"render">> | TemplatePath ], Msg, Context) when is_map(Msg) ->
+m_get([ Method | TemplatePath ], Msg, Context)
+    when is_map(Msg), Method =:= <<"render">>;
+         is_map(Msg), Method =:= <<"render_with_assets">> ->
     Template = to_template(TemplatePath),
     Payload = case maps:get(payload, Msg, #{}) of
         undefined -> #{};
@@ -54,8 +78,15 @@ m_get([ <<"render">> | TemplatePath ], Msg, Context) when is_map(Msg) ->
         V -> #{ <<"payload">> => V }
     end,
     Context1 = z_context:add_q(Payload, Context),
-    {Tpl, _} = z_template:render_to_iolist(Template, [], Context1),
-    {ok, {iolist_to_binary(Tpl), []}};
+    Result = case Method of
+        <<"render">> ->
+            {Tpl, _} = z_template:render_to_iolist(Template, [], Context1),
+            iolist_to_binary(Tpl);
+        <<"render_with_assets">> ->
+            Html = z_template:render(Template, [], Context1),
+            z_render:render_with_assets(Html, Context1)
+    end,
+    {ok, {Result, []}};
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 

@@ -9,9 +9,13 @@
         {% lib "css/admin_import_feed.css" %}
         <div class="admin-header">
             <h2>{_ Import feeds _}</h2>
-            <p>{_ Discover RSS or Atom feeds and import their articles automatically. _}</p>
+            <p>{_ Discover RSS, Atom or JSON feeds and import their articles automatically. _}</p>
         </div>
-        {% wire id="feed-discover-form" type="submit" postback=`discover` delegate=`mod_import_feed` %}
+        <p><a class="btn btn-default" href="{% url admin_import_feed_log %}">{_ Activity log _}</a></p>
+        {% wire id="feed-discover-form" type="submit" postback=`discover` delegate=`mod_import_feed`
+            action={add_class target="feed-discover-form" class="is-loading"}
+            action={disable selector=".import-feed-fetch-button"}
+        %}
         <form id="feed-discover-form" method="post" action="postback" class="form-inline">
             <label for="feed-url">{_ Website or feed URL _}</label>
             <input id="feed-url" name="url" type="url" required class="form-control" placeholder="https://example.com/">
@@ -20,7 +24,11 @@
                 <option value="0">{_ Anonymous requests _}</option>
                 <option value="1">{_ Registered OAuth2 credentials _}</option>
             </select>
-            <button type="submit" class="btn btn-primary">{_ Discover feeds _}</button>
+            <button type="submit" class="btn btn-primary import-feed-fetch-button">{_ Discover feeds _}</button>
+            <span class="import-feed-discover-loading" role="status" aria-live="polite">
+                <img src="/lib/images/spinner.gif" width="16" height="16" alt="">
+                {_ Checking website for feeds… _}
+            </span>
         </form>
 
         <div id="feed-discovery">
@@ -75,6 +83,7 @@
                                 {% endif %}
                             </td>
                             <td>
+                                <a class="btn btn-default btn-xs" href="{% url admin_import_feed_log feed=f.id %}">{_ Log _}</a>
                                 <a class="btn btn-default btn-xs" href="{% url admin_import_feed_edit id=f.id %}">{_ Manage _}</a>
                             </td>
                         </tr>

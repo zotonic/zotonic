@@ -13,6 +13,7 @@
                     <a href="{% url admin_import_feed %}">{_ All feeds _}</a>
                 </p>
             </div>
+            <a class="btn btn-default" href="{% url admin_import_feed_log feed=feed.id %}">{_ Activity log _}</a>
             {% wire id="feed-pause" postback={pause id=feed.id paused=not feed.is_paused} delegate=`mod_import_feed` %}
             <button id="feed-pause" class="btn btn-default">
                 {% if feed.is_paused %}

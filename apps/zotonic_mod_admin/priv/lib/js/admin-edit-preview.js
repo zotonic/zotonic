@@ -2,7 +2,13 @@
 (function() {
     "use strict";
 
-    cotonic.ready.then(function() {
+    // This library is included with the panel, before the admin's footer scripts.
+    // Cotonic can already be ready while zotonic-wired and jQuery are still loading.
+    const domReady = document.readyState === "loading"
+        ? new Promise(resolve => document.addEventListener("DOMContentLoaded", resolve, { once: true }))
+        : Promise.resolve();
+
+    Promise.all([cotonic.ready, domReady]).then(function() {
         const panel = document.getElementById("admin-edit-preview");
         if (!panel || panel.dataset.initialized) return;
         panel.dataset.initialized = "true";
@@ -20,6 +26,15 @@
         let open = false;
         let interacted = false;
 
+        function updateDirty() {
+            panel.querySelector("[data-admin-preview-dirty]").hidden =
+                !document.querySelector('#rscform[data-formdirty]');
+        }
+
+        new MutationObserver(updateDirty).observe(document.body, {
+            subtree: true, attributes: true, attributeFilter: ["data-formdirty"]
+        });
+
         function updateLanguage() {
             const tab = document.querySelector(
                 '#translation-tabs .language-tabs li.active[lang], #rscform .language-tabs li.active[lang]'
@@ -36,6 +51,7 @@
         function refresh() {
             clearTimeout(timer);
             updateLanguage();
+            updateDirty();
             if (open && context.id) {
                 // Coalesce resource, medium and edge events from a single edit.
                 timer = setTimeout(() => z_event("admin-preview-resolve"), 250);
@@ -54,22 +70,26 @@
             if (topics.length) broker.subscribe(topics, refresh, options);
         }
 
+        function clearFrame() {
+            frame.onload = null;
+            frame.contentWindow.location.replace("about:blank");
+        }
+
         function setOpen(value) {
             open = value;
             panel.hidden = !open;
             document.body.classList.toggle("admin-preview-open", open);
             document.querySelectorAll('[data-admin-preview="toggle"]').forEach(button => {
                 button.setAttribute("aria-expanded", String(open));
-                button.classList.toggle("btn-primary", open);
-                button.classList.toggle("btn-default", !open);
-                button.title = open ? button.dataset.previewHideTitle : button.dataset.previewShowTitle;
+                button.querySelector("[data-admin-preview-label]").textContent =
+                    open ? button.dataset.panelCloseLabel : button.dataset.panelOpenLabel;
             });
             subscribe();
             if (open) {
                 refresh();
             } else {
                 clearTimeout(timer);
-                frame.removeAttribute("src");
+                clearFrame();
                 lastUrl = undefined;
             }
         }
@@ -77,7 +97,7 @@
         broker.subscribe("admin/preview/context", function(msg) {
             context = msg.payload;
             clearTimeout(timer);
-            frame.removeAttribute("src");
+            clearFrame();
             link.removeAttribute("href");
             lastUrl = undefined;
             subscribe();
@@ -92,7 +112,7 @@
                 url = msg.payload.url && new URL(msg.payload.url, window.location.href);
             } catch (_) { /* Missing or invalid page URL. */ }
             if (!url || !["http:", "https:"].includes(url.protocol)) {
-                frame.removeAttribute("src");
+                clearFrame();
                 link.removeAttribute("href");
                 unavailable.hidden = false;
                 return;
@@ -101,7 +121,7 @@
             // The iframe uses the existing session and same-origin frame policy.
             if (url.origin !== window.location.origin) {
                 unavailable.hidden = false;
-                frame.removeAttribute("src");
+                clearFrame();
                 return;
             }
             let scroll;
@@ -125,7 +145,9 @@
             // Also suppress persistence when Fetch Metadata headers are absent.
             // Keep the toolbar's normal "Open in new tab" URL unchanged.
             url.searchParams.set("z_language_persist", "false");
-            frame.src = url.href;
+            // Iframe navigations share the editor's session history. Replace
+            // automatic loads so Cancel/Back does not step through preview URLs.
+            frame.contentWindow.location.replace(url.href);
         }, options);
 
         document.addEventListener("click", function(event) {
@@ -135,13 +157,6 @@
             switch (button.dataset.adminPreview) {
                 case "toggle":
                     setOpen(!open);
-                    if (open) {
-                        // Use the existing save button for editor sync and form validation.
-                        // Restoring the panel on page load must not submit the form.
-                        document.querySelector(
-                            '#rscform #save_stay:not(:disabled), #rscform #save_stay_float:not(:disabled)'
-                        )?.click();
-                    }
                     break;
                 case "close": setOpen(false); break;
                 case "refresh": refresh(); break;

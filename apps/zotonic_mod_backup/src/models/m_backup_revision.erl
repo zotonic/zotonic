@@ -170,6 +170,11 @@ revert_resource(RscId, RevId, Options, Context) ->
                     revert_medium(RscId, Created, Context),
                     z_depcache:flush(RscId, Context),
                     ok;
+                {rollback, {error, _} = Error} ->
+                    % The transaction has rolled back; preserve the restore API's error result.
+                    Error;
+                {rollback, Reason} ->
+                    {error, Reason};
                 {error, _} = Error ->
                     Error
             end;

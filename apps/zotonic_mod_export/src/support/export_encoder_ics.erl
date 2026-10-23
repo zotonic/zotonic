@@ -35,8 +35,6 @@
     footer/3
 ]).
 
--include_lib("zotonic_core/include/zotonic.hrl").
-
 extension() ->
     [ <<"ics">> ].
 

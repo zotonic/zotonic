@@ -925,10 +925,8 @@ without_zotonic_args(Map) ->
 % - z_message
 % - z_transport
 % - z_sid
-% - z_pageid
 % - z_v
 % - z_msg
-% - z_comet
 % - z_postback_data
 % - "*"
 

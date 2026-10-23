@@ -82,16 +82,8 @@ content_types_provided(Context) ->
     end.
 
 process(_Method, _AcceptedCT, ProvidedCT, Context) ->
-    {Id, _} = get_id(Context),
-    Dispatch = z_context:get(zotonic_dispatch, Context),
-    StreamOpts = [
-        {dispatch, Dispatch},
-        {is_query, z_convert:to_bool(z_context:get(is_query, Context))},
-        {is_raw, z_convert:to_bool(z_context:get_q(raw, Context))}
-    ],
-    Stream = export_encoder:stream(Id, ProvidedCT, StreamOpts, Context),
-    Context1 = export_helper:set_filename(Id, ProvidedCT, Dispatch, Context),
-    {Stream, Context1}.
+    {Id, Context1} = get_id(Context),
+    export_helper:stream(Id, ProvidedCT, Context1).
 
 get_id(Context) ->
     case z_context:get(id, Context) of

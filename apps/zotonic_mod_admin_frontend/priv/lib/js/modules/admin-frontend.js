@@ -3,8 +3,37 @@ $(function() {
     const menu = document.getElementById("menu-editor");
     const menuTemplate = document.getElementById("admin-frontend-menu-button");
     const toolbar = document.getElementById("save-buttons");
-    if (menu && menuTemplate && toolbar) {
-        const layout = menu.parentElement;
+    const editor = document.getElementById("editcol");
+    const editorPane = document.getElementById("editcol-wrapper") || editor;
+    const layout = editorPane && editorPane.parentElement;
+    if (layout) {
+        document.body.classList.add("admin-frontend-editor");
+        layout.classList.add("admin-frontend-layout");
+        layout.classList.toggle("admin-frontend-without-menu", !menu);
+
+        // Site templates have different headers. Reserve their actual space,
+        // including toolbar wrapping when the preview reduces the editor width.
+        const navbar = document.querySelector("nav.navbar-fixed-top");
+        const updateHeight = function() {
+            const top = Math.max(layout.getBoundingClientRect().top,
+                navbar ? navbar.getBoundingClientRect().bottom : 0);
+            layout.style.setProperty("--admin-frontend-top", Math.max(0, top) + "px");
+        };
+        updateHeight();
+        if (navbar) new ResizeObserver(updateHeight).observe(navbar);
+        window.addEventListener("resize", updateHeight);
+
+        // Form updates stay inside the stable scroll pane. Only a new resource
+        // resets its position; saves and language changes retain it.
+        let resourceId;
+        cotonic.ready.then(function() {
+            cotonic.broker.subscribe("admin/preview/context", function(msg) {
+                if (resourceId !== msg.payload.id) editorPane.scrollTop = 0;
+                resourceId = msg.payload.id;
+            });
+        });
+    }
+    if (menu && menuTemplate && toolbar && layout) {
         const button = menuTemplate.content.firstElementChild.cloneNode(true);
         toolbar.prepend(button);
         document.body.classList.add("admin-frontend-editor");
@@ -19,15 +48,22 @@ $(function() {
         button.addEventListener("click", function() {
             showMenu(button.getAttribute("aria-expanded") !== "true");
         });
-        // Observe the editor's available width, including changes from the preview
-        // divider. Viewport breakpoints alone miss a narrow editor on a wide screen.
-        new ResizeObserver(function(entries) {
-            const compact = entries[0].contentRect.width < 1100;
+        // Use the window space left beside the preview, independent of a site's
+        // editor container widths. Observe the panel for opening and resizing.
+        const preview = document.getElementById("admin-edit-preview");
+        function updateCompact() {
+            const previewWidth = preview && !preview.hidden
+                ? preview.getBoundingClientRect().width
+                : 0;
+            const compact = window.innerWidth - previewWidth < 1100;
             if (compact !== document.body.classList.contains("admin-frontend-compact")) {
                 showMenu(false);
                 document.body.classList.toggle("admin-frontend-compact", compact);
             }
-        }).observe(layout);
+        }
+        if (preview) new ResizeObserver(updateCompact).observe(preview);
+        window.addEventListener("resize", updateCompact);
+        updateCompact();
         window.addEventListener("hashchange", function() { showMenu(false); });
     }
 

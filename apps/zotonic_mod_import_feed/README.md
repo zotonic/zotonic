@@ -1,6 +1,6 @@
 # mod_import_feed
 
-Discover RSS 2.0, RSS 1.0/RDF and Atom feeds and continuously import their articles.
+Discover RSS 2.0, RSS 1.0/RDF, Atom and JSON Feed 1/1.1 feeds and continuously import their articles.
 Enable **Import feeds** in Modules, then open **Content → Import feeds**. The module
 requires `mod_admin` and `mod_cron`; it does not require `mod_websub`.
 
@@ -54,19 +54,34 @@ ordinary article imports. The importer removes references to the skipped medium
 and omits its connections, while keeping the article and successfully imported media.
 Use a forced refresh to retry skipped media.
 
+Queued media downloads get sixteen retries after the initial attempt. Delays are
+1, 2, 4, 8, 16, 32, 64, 128, 256 and 512 minutes, followed by six twelve-hour
+waits: 89 hours 3 minutes total, excluding execution and scheduling delays.
+A longer HTTP 429/503 `Retry-After` extends the wait. Permission failures stop
+immediately; exhaustion records an error and retains the article and placeholder.
+An explicit reimport can start a fresh retry sequence. The retry count and twelve-hour
+backoff cap are fixed constants, not new configuration settings.
+
 The importance order is WordPress featured image, feed media/enclosures, then
 inline images. Attaching one medium leaves other inline images at their source.
 
-## Zotonic Atom feeds
+## Zotonic resource feeds
 
-Atom entries exported by `mod_export` advertise their structured resource with a
+Atom and RSS entries exported by `mod_export` advertise their structured resource with a
 `link` whose `rel` is `https://zotonic.com/rel/resource` and type is
 `application/json`. Its URL is the `rsc_export` model API. The importer checks
-that the exported resource URI matches the Atom ID before using `m_rsc_import`.
+that the exported resource URI matches the entry ID/GUID before using `m_rsc_import`.
+JSON Feed items carry the same endpoint in the `_zotonic.resource_url` extension.
 An ordinary JSON alternate link does not activate native importing.
 
+JSON Feed discovery supports `application/feed+json` HTML and HTTP alternate
+links, as well as direct feed URLs. Content, authors (including version 1’s
+`author`), dates, tags, images and attachments enter the normal import pipeline.
+Plain-text content is escaped before HTML cleanup. The usual 4 MiB response
+limit and 100-entry polling limit apply.
+
 The Zotonic-specific settings are hidden for feeds detected as non-Zotonic.
-Detection is remembered after previews and polling. Empty Atom feeds remain
+Detection is remembered after previews and polling. Empty feeds remain
 unknown; mixed feeds keep these options available. Hidden settings retain their
 saved values.
 
@@ -177,7 +192,7 @@ Avoid external side effects inside the notification: the transaction can roll ba
 This allows overlapping feeds to reuse resources and authoritative copies to be
 updated without relying on the local resource's `uri` property.
 
-The source identity is an absolute RSS GUID/Atom ID when available, otherwise the
+The source identity is an absolute RSS GUID, Atom ID or JSON Feed item ID when available, otherwise the
 article URL. Opaque GUIDs become a SHA-256 URN scoped to the publisher origin;
 missing both ID and URL is an error. Opaque identifiers must be unique within that
 origin. Publishers with separate applications that reuse opaque IDs should emit
@@ -201,9 +216,34 @@ The lease is renewed before each entry. Pause and configuration changes
 are checked between entries; an entry already being imported can finish.
 Resource and identity writes share a transaction, serialized per site to prevent
 races between overlapping feeds and shared media. A failed entry is rolled back
-and does not stop the remaining entries. Feed failures wait for the configured
-polling interval. Resource/media I/O occurs inside that transaction; slow publishers
+and does not stop the remaining entries. Resource/media I/O occurs inside that transaction; slow publishers
 can therefore delay other feed imports for the same site.
+
+## Poll scheduling and retries
+
+Polling uses `poll_minutes` as a minimum interval (default 60 minutes; range
+5–10080). RSS `ttl` and namespace-qualified syndication `updatePeriod` /
+`updateFrequency` hints can lengthen it. When both are present, the longer hint
+wins. Missing syndication frequency defaults to 1; a frequency without a period
+uses daily. Monthly/yearly periods conservatively use 31/366 days, and division
+rounds up to whole seconds. Invalid hints are ignored. Schedule alignment via
+`updateBase`, RSS `skipHours`/`skipDays`, and HTTP cache freshness are not used.
+
+Consecutive feed-fetch or parse failures double the configured interval on each
+failure, with a fixed 12-hour backoff cap. Neither that cap nor backoff can shorten
+`poll_minutes` or the last valid publisher interval. A successful fetch and parse
+resets the failure counter and replaces the stored publisher hint, restoring the
+normal frequency even if individual entries fail to import. Counters, publisher
+hints, and next-poll times survive restarts. There is no automatic give-up deadline.
+
+HTTP 429/503 responses honor `Retry-After` as seconds or an HTTP date. The next
+poll waits for the longest of the normal interval, failure backoff, and that delay.
+Past dates mean no additional delay; malformed, duplicate or out-of-range values
+are ignored. Parsed delays must fit 0–2147483647 seconds. Entry-fetch errors can
+also extend the next poll; media download retries honor the same header while
+retaining their sixteen-retry limit. Headers and response bodies are not
+saved in error messages. Explicit **Poll now** remains an immediate override.
+No new module configuration is required; `poll_minutes` remains the per-feed control.
 
 ## Bounds and outbound requests
 
@@ -312,3 +352,19 @@ article. Unknown URIs fall through to the usual resource importer. Missing feed
 entries return `feed_entry_not_found`; this does not crawl historical articles.
 The feed settings determine media and connections; generic resource-import dialog
 options do not override them. Deleted resources are never resurrected.
+
+## Activity log
+
+The feed overview and each feed's settings link to an activity log, optionally
+filtered by feed. It records poll starts, parsing and totals, entry processing,
+resource IDs and actual categories/content groups, import users, skips and errors,
+including optional media failures. New rows are prepended through MQTT after commit, without replacing the table;
+duplicates are removed, and older events load in batches of 100 when scrolling.
+An ID cursor keeps scrolling stable while new events arrive. Access requires permission to use `mod_import_feed`.
+
+On a filtered log, **Fetch now** queues the feed using its saved import account.
+Paused feeds must first be resumed; active leases prevent duplicate processing.
+Unchanged entries are skipped as usual. Log history is retained for 30 days and
+is deleted when its feed is deleted. Resource events commit with their import;
+entry errors are recorded after rollback. Credentials and raw feed bodies are
+not included in the log payload.

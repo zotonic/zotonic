@@ -1,5 +1,5 @@
 {application, zotonic_mod_copyright, [
-    {description, "Add copyrights and attribution to resources."},
+    {description, "Add copyrights, attribution and provenance to resources."},
     {vsn, {file, "../../VERSION"}},
     {registered, []},
     {applications, [kernel, stdlib, zotonic_core]},

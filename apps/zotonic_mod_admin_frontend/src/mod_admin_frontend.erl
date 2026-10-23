@@ -133,11 +133,12 @@ If you click on the cog icon on the right, then a meta data panel is shown (for 
 settings). This panel can be extended with extra tabs using the blocks `meta_tabs` and `meta_panels`.
 
 
-Live preview
+Live view
 ------------
 
-The Live preview button saves the current form and opens a right-hand iframe
-showing saved content. Restoring an open panel on page load does not save. Resource,
+The Open panel / Close panel button toggles a right-hand iframe showing saved
+content without saving the form. A hint in the panel header reminds the user to
+save when the form has unsaved changes. Resource,
 media and incoming/outgoing edge events for both the edited resource and `tree_id`
 refresh the preview. Switching resources replaces the subscriptions; closing the
 panel releases them. Unsaved form changes are not rendered.

@@ -40,6 +40,8 @@ message(<<"invalid-topic">>, Context) ->
     ?__("The source website does not recognize this subscription topic. Check that the original page still exists.", Context);
 message(<<"unsafe_destination">>, Context) ->
     ?__("The destination could not be resolved or its network address is blocked. Local and private addresses are only allowed for .test hostnames in development.", Context);
+message(<<"retry_timeout">>, Context) ->
+    ?__("Subscription or unsubscription attempts stopped because the retry time limit was reached. Check the remote website and retry the subscription if needed.", Context);
 message(<<"verification_timeout">>, Context) ->
     ?__("The source website did not confirm the subscription in time. Check that it can reach this website's callback URL.", Context);
 message(<<"self_subscription">>, Context) ->

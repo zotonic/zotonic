@@ -15,16 +15,15 @@
 {% block widget_content %}
 <div class="form-group buttons">
     {% button type="submit" id="save_stay" class="btn btn-primary" text=_"Save" title=_"Save this page." disabled=not id.is_editable %}
-    {% include "_admin_edit_preview_button.tpl" %}
     {% if id.page_url as page_url %}
         {% if id.is_editable %}
-            {% button type="submit" id="save_view" class="btn btn-default" text=_"Save and View" title=_"Save and view the page." %}
+            {% button type="submit" id="save_view" class="btn btn-default" text=_"Save &amp; view" title=_"Save and view the page." %}
         {% endif %}
 
-        {% include "_admin_edit_content_publish_view.tpl" %}
     {% endif %}
 
     <div class="pull-right">
+        {% include "_admin_edit_preview_button.tpl" %}
         <div class="btn-group">
             {% with m.rsc[q.qcat].id|default:id.category_id as cat_id %}
                 <a id="rsc-prev-incat" href="#previous" class="btn btn-default btn-sm"
@@ -55,7 +54,7 @@
 
     <div class="pull-right">
         <div class="btn-group">
-            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-label="{_ More actions: duplicate or delete page _}">
+            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-label="{_ More actions _}">
                 {_ More _} <span class="caret"></span>
             </button>
             <ul class="dropdown-menu dropdown-menu-right">
@@ -78,6 +77,11 @@
                         {% wire id="delete-rsc-action" action={dialog_delete_rsc id=id on_success={redirect back}} %}
                     {% endif %}
                 {% endblock %}
+                <li role="separator" class="divider"></li>
+                <li class="dropdown-header">{_ View as (new tab) _}</li>
+                {% with id.page_url as page_url %}
+                    {% catinclude "_admin_view_types.tpl" id %}
+                {% endwith %}
             </ul>
         </div>
     </div>

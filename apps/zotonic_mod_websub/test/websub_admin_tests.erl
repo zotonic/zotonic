@@ -52,6 +52,7 @@ admin() ->
         ?assertEqual({ok, {0, []}}, m_websub:m_get([<<"subscriber_count">>, Id], #{}, A)),
         ?assertMatch(#search_result{result = [#{status := <<"expired">>} | _]}, overview(Filters, A)),
         filters(Id, Filters, A),
+        failed_hostnames(A, C),
         render(Id, A, C),
         retry_button(Id, A)
     after
@@ -89,6 +90,20 @@ filters(Id, Filters, C) ->
         Filters#{<<"errors">> => <<"bad">>}
     ]).
 
+failed_hostnames(Admin, Anon) ->
+    ?assertEqual({error, eacces},
+        m_websub:m_get([<<"failed_hostnames">>], #{payload => #{}}, Anon)),
+    Get = fun(Type) ->
+        {ok, {Hosts, []}} = m_websub:m_get([<<"failed_hostnames">>],
+            #{payload => #{<<"type">> => Type}}, Admin),
+        Hosts
+    end,
+    ?assertEqual([<<"mixed.test">>], Get(<<"export">>)),
+    ?assertEqual([<<"2001:db8::1">>], Get(<<"import">>)),
+    ?assertEqual([<<"2001:db8::1">>, <<"mixed.test">>], Get(<<"all">>)),
+    ?assertEqual(Get(<<"all">>), Get(undefined)),
+    ?assertEqual([], Get(<<"invalid">>)).
+
 overview(Filters, Context) ->
     {ok, {Result, []}} = m_websub:m_get([<<"subscriptions">>], #{payload => Filters}, Context),
     Result.
@@ -101,6 +116,10 @@ render(Id, Admin, Anon) ->
     ?assertEqual(nomatch, binary:match(Html, <<"capability-secret">>)),
     ?assertEqual(nomatch, binary:match(Html, <<"hmac-secret">>)),
     ?assertNotEqual(nomatch, binary:match(Html, <<"pagination">>)),
+    ?assertNotEqual(nomatch, binary:match(Html, <<"list=\"websub-failed-hostnames\"">>)),
+    ?assertNotEqual(nomatch, binary:match(Html, <<"<option value=\"mixed.test\"></option>">>)),
+    ?assertEqual(nomatch, binary:match(Html, <<"<option value=\"subscriber.test\"></option>">>)),
+    ?assertEqual(nomatch, binary:match(Html, <<"<option value=\"2001:db8::1\"></option>">>)),
     {match, [PageUrl]} = re:run(Html, <<"href=\"([^\"]*page=2[^\"]*)\"">>,
         [{capture, [1], binary}]),
     ?assertNotEqual(nomatch, binary:match(PageUrl, <<"qtype=export">>)),
