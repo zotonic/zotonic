@@ -31,7 +31,9 @@ The key is created for an email identity by `mod_signup` when an account needs
 identity verification. On a valid key this controller publishes the user
 resource, marks the account and identity as verified, emits
 `#signup_confirm{id=UserId}`, logs the user on, and redirects to the first
-`#signup_confirm_redirect{}` result or to the user's page.
+`#signup_confirm_redirect{}` result, the destination saved at signup, or the
+user's page (falling back to home). The destination and verification key are
+consumed together; resending a verification email preserves the destination.
 
 Handled events
 --------------
@@ -57,10 +59,10 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
 
 %% @doc Handle the submit of the signup form.
 event(#postback{ message={confirm, [ {key, Key} ]}}, Context) ->
-    case confirm(Key, Context) of
-        {ok, {UserId, IdnType, IdnKey}} ->
+    case m_signup:confirm(Key, Context) of
+        {ok, {UserId, IdnType, IdnKey, RequestPage}} ->
             {ok, ContextUser} = z_auth:logon(UserId, Context),
-            Url = z_convert:to_binary( confirm_location(UserId, ContextUser) ),
+            Url = m_signup:confirm_redirect(RequestPage, ContextUser),
             AuthOptions = #{
                 auth_service => z_convert:to_binary(IdnType),
                 auth_service_uid => IdnKey
@@ -72,32 +74,4 @@ event(#postback{ message={confirm, [ {key, Key} ]}}, Context) ->
                     {hide, [{target,"confirm_wait"}]},
                     {show, [{target,"confirm_error"}]}
                 ], Context)
-    end.
-
-
-confirm(Key, Context) ->
-    case m_identity:lookup_by_verify_key(Key, Context) of
-        undefined ->
-            {error, unknown_key};
-        Row ->
-            {id, IdnId} = proplists:lookup(id, Row),
-            {type, IdnType} = proplists:lookup(type, Row),
-            {key, IdnKey} = proplists:lookup(key, Row),
-            {rsc_id, UserId} = proplists:lookup(rsc_id, Row),
-            {ok, UserId} = m_rsc:update(
-                UserId,
-                #{
-                    <<"is_published">> => true,
-                    <<"is_verified_account">> => true
-                },
-                z_acl:sudo(Context)),
-            m_identity:set_verified(IdnId, Context),
-            z_notifier:map(#signup_confirm{ id = UserId }, Context),
-            {ok, {UserId, IdnType, IdnKey}}
-    end.
-
-confirm_location(UserId, ContextUser) ->
-    case z_convert:to_binary( z_notifier:first(#signup_confirm_redirect{ id = UserId }, ContextUser) ) of
-        <<>> -> m_rsc:p_no_acl(UserId, <<"page_url">>, ContextUser);
-        Loc -> Loc
     end.
