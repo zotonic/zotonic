@@ -8,10 +8,10 @@ REBAR_SHA256 := f1d87d78decfc56b87d971c75ee6355698ec0c49fadd57f2c056043b7ca291b5
 REBAR_STAMP := ./.rebar3-$(REBAR_SHA256)
 REBAR_OPTS ?=
 
-ifneq (${https_proxy},)
-PROXY_HOSTNAME=$(shell echo ${https_proxy} | awk -F ":" '{print $$2}' | cut -c 3-)
-PROXY_PORT=$(shell echo ${https_proxy} | awk -F ":" '{print $$3}')
-SET_HTTPS_PROXY=ok = httpc:set_options([{https_proxy, {{"${PROXY_HOSTNAME}", ${PROXY_PORT}}, []}}]),
+ifdef https_proxy
+PROXY_HOSTNAME := $(shell echo ${https_proxy} | awk -F ":" '{print $$2}' | cut -c 3-)
+PROXY_PORT := $(shell echo ${https_proxy} | awk -F ":" '{print $$3}')
+PROXY_ARGS := --proxy "$(PROXY_HOSTNAME)" "$(PROXY_PORT)"
 endif
 
 .PHONY: all upgrade-deps compile-core compile dev test update-cotonic update
@@ -21,24 +21,28 @@ all: compile-core compile
 	@echo "Zotonic" `bin/zotonic -v` "was successfully compiled"
 
 $(REBAR_STAMP):
-	escript tools/download.escript  "$(REBAR_URL)" "$(REBAR)" --sha256 "$(REBAR_SHA256)"  --executable
+	rm -f ./.rebar-*
 	touch $@
+	rm -f $(REBAR)
+
+$(REBAR): $(REBAR_STAMP)
+	./tools/download.escript "$(REBAR_URL)" "$(REBAR)" --sha256 "$(REBAR_SHA256)" --executable $(PROXY_ARGS)
 
 # Use Rebar to get, update and compile dependencies
 .PHONY: upgrade-deps compile-zotonic compile test
 
-upgrade-deps: $(REBAR_STAMP)
+upgrade-deps: $(REBAR)
 	$(REBAR) $(REBAR_OPTS) upgrade --all
 
-compile-core: $(REBAR_STAMP) _build/default/lib/zotonic_core/include/zotonic.hrl
+compile-core: $(REBAR) _build/default/lib/zotonic_core/include/zotonic.hrl
 
-_build/default/lib/zotonic_core/include/zotonic.hrl: $(REBAR_STAMP)
+_build/default/lib/zotonic_core/include/zotonic.hrl: $(REBAR)
 	@echo ============================================================================
 	@echo ======================= Compiling Zotonic core apps =========================
 	@echo ============================================================================
 	ZOTONIC_APPS=none $(REBAR) $(REBAR_OPTS) compile
 
-compile: $(REBAR_STAMP)
+compile: $(REBAR)
 	@echo ============================================================================
 	@echo =========================== Compiling user apps ============================
 	@echo ============================================================================
@@ -60,16 +64,16 @@ update-cotonic:
 
 .PHONY: xref dialyzer
 
-xref: $(REBAR_STAMP)
-	./rebar3 xref
+xref: $(REBAR)
+	$(REBAR) xref
 
-dialyzer: $(REBAR_STAMP)
-	./rebar3 dialyzer
+dialyzer: $(REBAR)
+	$(REBAR) dialyzer
 
 # Generate documentation
 .PHONY: edocs
 
-edocs: $(REBAR_STAMP)
+edocs: $(REBAR)
 	@echo Building reference edoc documentation...
 	@ZOTONIC=`pwd` bin/generate_edoc.escript
 
@@ -81,7 +85,7 @@ clean_logs:
 	rm -rf priv/log/*
 
 .PHONY: clean
-clean: clean_logs $(REBAR_STAMP)
+clean: clean_logs $(REBAR)
 	@echo "cleaning ebin:"
 	# There could be an ebin directory left by a previous 0.x branch compilation
 	rm -rf ebin
@@ -91,4 +95,4 @@ clean: clean_logs $(REBAR_STAMP)
 dist-clean: clean
 	$(REBAR) $(REBAR_OPTS) clean -a
 	rm -f ./.rebar-*
-	rm -f ./rebar3
+	rm -f $(REBAR)
