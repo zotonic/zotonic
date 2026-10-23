@@ -9,7 +9,7 @@
 		<li>{_ send this URL to somebody else for testing _}</li>
 	</ul>
 
-	<p>{_ The URL is valid for one day. _}</p>
+	<p>{_ This test link is valid for 24 hours after it is generated. _}</p>
 
 	<input id="{{ #url }}" class="form-control" value="{% url acl_rule_test code=m.acl_rule.generate_code absolute_url %}" readonly>
 </div>
