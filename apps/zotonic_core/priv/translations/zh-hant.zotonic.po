@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-20 16:44\n"
+"PO-Revision-Date: 2026-10-23 20:29\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -60,7 +60,7 @@ msgstr "未經授權訪問遠程資源 URL。"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:43
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:42
 msgid "Website"
 msgstr "網站"
 
@@ -179,6 +179,7 @@ msgid "ACL user group"
 msgstr "控制允許流覽的用戶組"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7
+#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:18
 #: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:936
 msgid "Access control rules"
 msgstr "允許流覽的控制規則"
@@ -297,7 +298,7 @@ msgstr "您確定要將所有ACL規則還原到其當前發布的版本嗎？"
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:52
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:90
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:161
-#: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
+#: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:31
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:68
 #: zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:13
 #: zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:7
@@ -305,9 +306,9 @@ msgstr "您確定要將所有ACL規則還原到其當前發布的版本嗎？"
 #: zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:36
 #: zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:50
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:104
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:131
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:125
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:58
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:55
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:54
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:134
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_connection_dialog.tpl:17
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_dialog.tpl:22
@@ -387,8 +388,8 @@ msgstr "改变了配置。"
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:76
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:209
 #: zotonic_mod_admin/priv/templates/_admin_edit_version.tpl:5
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:68
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:70
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:72
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:74
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_filter_predicates.tpl:20
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:79
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:43
@@ -763,6 +764,14 @@ msgstr "發布"
 msgid "Publish successful"
 msgstr "發布成功"
 
+#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:14
+msgid "Published access control rules are active."
+msgstr "已發佈的存取控制規則目前處於啟用狀態。"
+
+#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:21
+msgid "Published rules"
+msgstr "已公布的規則"
+
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:41
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:69
 msgid "Revert"
@@ -788,15 +797,15 @@ msgstr "還原規則"
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:33
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:162
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:141
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:80
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:84
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:26
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:105
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:56
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:132
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:126
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:60
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:56
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:42
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:67
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:55
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:54
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:86
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:136
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:100
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:60
@@ -862,22 +871,18 @@ msgstr "抱歉，您不允許将该分類的页面插入到所选内容组中。
 msgid "System content groups"
 msgstr "系统内容组"
 
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:26
-msgid "Test ACL rules"
-msgstr "測試 ACL 規則"
-
 #: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:3
 #: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:6
 msgid "Test Access Control Rules"
 msgstr "测试流覽的控制規則"
 
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:44
-msgid "The URL is only valid for one day."
-msgstr "该网址的有效期只有一天。"
+#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:12
+msgid "Test access control rules are active. Select Published rules to stop testing."
+msgstr "測試存取控制規則目前處於啟用狀態。請選取「已發佈的規則」以停止測試。"
 
-#: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:12
-msgid "The URL is valid for one day."
-msgstr "该网址的有效期为一天。"
+#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:25
+msgid "Test rules"
+msgstr "測試規則"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:7
 msgid "The default upload size is:"
@@ -910,6 +915,15 @@ msgstr "這個頁面是一個"
 msgid "This rule is managed by module"
 msgstr "该规则由組件管理"
 
+#: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:12
+#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:48
+msgid "This test link is valid for 24 hours after it is generated."
+msgstr "此測試連結自產生之日起 24 小時內有效。"
+
+#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:45
+msgid "To start testing, use a valid test link provided by an editor or administrator."
+msgstr "要開始測試，請使用編輯者或管理員提供的有效測試連結。"
+
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:17
 msgid "Try ACL rules"
 msgstr "嘗試ACL规则"
@@ -930,11 +944,6 @@ msgstr "上傳存檔的設定"
 msgid "Upload the ACL rules file that you previously exported. Note: all current rules will be <b>replaced</b> by the rule definition file that is uploaded."
 msgstr "上傳這個你原先輸出的 ACL 規則的文件。注意: 所有現行規則將被 上傳的規則定義文件<b>取代</b>。"
 
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:27
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:50
-msgid "Use published rules"
-msgstr "沿用已發布的規則"
-
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:2
 msgid "Use the following URL to test the access control rules before publishing them."
 msgstr "發布規則前，請用以下的聯結 (URL) 來測試允許進入流覽的用戶的控制規則"
@@ -951,10 +960,6 @@ msgstr "用户组"
 msgid "Visibility"
 msgstr "能見度"
 
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:24
-msgid "Which version of the ACL rules do you want to use?"
-msgstr "那個版本的 ACL 規則你要使用?"
-
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:41
 msgid "You are not allowed to move to this collaboration group."
 msgstr "您無權移至該協作組。"
@@ -967,38 +972,14 @@ msgstr "你不允许执行这个动作"
 msgid "You are not allowed to view this page."
 msgstr "您不允許浏览此页面。"
 
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:12
-msgid "You are using the <b>published</b> version of the access control rules."
-msgstr "您正在使用 <b>已發行</b> 版本的訪問流覽控制規則。"
-
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:10
-msgid "You are using the <b>test</b> version of the access control rules."
-msgstr "您正在使用 <b>测试</b> 版本的访问控制规则。"
-
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:17
-msgid "You can switch back to the published access control rules by:"
-msgstr "您可以通過以下方法切換回已發布的訪問控制規則："
-
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:4
 msgid "You can:"
 msgstr "你可以:"
-
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:43
-msgid "You have to use a special URL, as provided by the an editor or administrator."
-msgstr "你必須用編輯或行政管理者供應的特別的 URL。 "
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:88
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
 msgid "all"
 msgstr "全部都"
-
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:20
-msgid "clicking on <b>Use published rules</b> below"
-msgstr "點擊以下 <b>使用已發布規則</b>"
-
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:21
-msgid "closing this browser tab"
-msgstr "關閉這個流覽器空間 (tab)"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
 #: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:297
@@ -1420,7 +1401,7 @@ msgstr "城市"
 msgid "Clear"
 msgstr "清除"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:12
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:10
 msgid "Click \"Save\" to see your changes."
 msgstr "點擊「儲存」以檢視您的變更。"
 
@@ -1432,7 +1413,7 @@ msgstr "点击这里获取更多信息"
 msgid "Click to preview."
 msgstr "点击预览。"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:11
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:14
 msgid "Close Live view"
 msgstr "關閉即時預覽"
 
@@ -1444,7 +1425,7 @@ msgstr "关闭插座"
 msgid "Close all sockets from ip addresses which have over &gt; 250 open sockets."
 msgstr "关闭所有来自超过 &gt; 250个开放套接字的ip地址的套接字。"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:3
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:4
 msgid "Close panel"
 msgstr "關閉面板"
 
@@ -1512,13 +1493,16 @@ msgstr "将下载链接复制到剪贴板"
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:21
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:17
 #: zotonic_mod_auth2fa/priv/templates/_logon_login_set_passcode.tpl:20
+#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:29
+#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:42
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:100
 #: zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:33
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_view.tpl:18
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:28
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:60
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:91
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:119
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:117
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:120
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:46
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:62
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:78
@@ -1775,8 +1759,8 @@ msgstr "电子邮件地址"
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:27
 #: zotonic_mod_development/priv/templates/_development_template_xref_includes.tpl:22
 #: zotonic_mod_development/priv/templates/_development_template_xref_inheritance.tpl:20
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:127
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:52
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:121
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:51
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:36
 #: zotonic_mod_menu/priv/templates/_admin_menu_menu_view.collection.tpl:40
 #: zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:23
@@ -1798,7 +1782,7 @@ msgstr "編輯筆記"
 msgid "Edit:"
 msgstr "编辑："
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:8
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:9
 msgid "Editing language"
 msgstr "編輯語言"
 
@@ -2178,7 +2162,7 @@ msgid "Latest modified texts"
 msgstr "最近修改文本"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:43
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:101
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:95
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:48
 msgid "Link"
 msgstr "鏈接"
@@ -2188,7 +2172,7 @@ msgid "Live query, send notifications when matching items are updated or inserte
 msgstr "实时查询，当匹配条目被上传或是插入时候发出通知。"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:2
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:15
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:17
 msgid "Live view"
 msgstr "即時預覽"
 
@@ -2561,12 +2545,12 @@ msgstr "作業系統記憶體"
 msgid "Ongoing"
 msgstr "進行中"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:10
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:13
 msgid "Open in new tab"
 msgstr "在新分頁中開啟"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:3
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:9
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:4
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:10
 msgid "Open panel"
 msgstr "開放式面板"
 
@@ -2813,7 +2797,7 @@ msgstr "推薦人"
 msgid "Referrers to"
 msgstr "转介人"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:9
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:12
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:18
 msgid "Refresh"
 msgstr "重新整理"
@@ -2954,21 +2938,21 @@ msgstr "此系統不支援沙盒隔離。本機媒體指令將在未隔離的狀
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:4
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:144
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:84
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:88
 msgid "Save &amp; view"
 msgstr "保存 &amp; 视图"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:4
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:144
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:84
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:88
 msgid "Save and view the page."
 msgstr "保存并查看本页面。"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:17
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:141
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:80
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:84
 msgid "Save this page."
 msgstr "保存本页面。"
 
@@ -3077,6 +3061,10 @@ msgstr "显示为"
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:54
 msgid "Show keyword description"
 msgstr "顯示關鍵字說明"
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:3
+msgid "Show or hide a live preview beside the editor."
+msgstr "顯示或隱藏編輯器旁邊的即時預覽。"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:59
 msgid "Show page on multiple paths"
@@ -3482,7 +3470,7 @@ msgstr "此註釋僅對可以編輯頁面的人可見。"
 msgid "This page can be connected from other pages. For example it could be an author of an article."
 msgstr "該頁面可以與其他頁面連接。例如，它可能是文章的作者。"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:14
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:16
 msgid "This page cannot be previewed here. Use “Open in new tab” if available."
 msgstr "此頁面無法在此處預覽。若可用的話，請使用「在新分頁中開啟」。"
 
@@ -4394,11 +4382,11 @@ msgstr "開啟已匯入的憑證，展開「信任」層級，然後選取「永
 #: zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:10
 #: zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:11
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:22
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:25
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:115
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:122
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:143
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:145
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:26
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:118
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:126
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:151
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:155
 #: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:15
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:97
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:202
@@ -4676,8 +4664,8 @@ msgstr "隱藏選單"
 msgid "Language"
 msgstr "语言"
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:33
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:41
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:34
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:44
 msgid "Loading ..."
 msgstr "正在加载..."
 
@@ -4693,11 +4681,11 @@ msgstr "顯示選單"
 msgid "The page might have been deleted."
 msgstr "該頁面可能已被刪除。"
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:129
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:133
 msgid "There are unsaved changes. Are you sure you want to leave without saving?"
 msgstr "有未保存的更改。你確定未保存就退出嗎？"
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:78
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:82
 msgid "This page"
 msgstr "本页"
 
@@ -4705,7 +4693,7 @@ msgstr "本页"
 msgid "View this page."
 msgstr "查看该页面。"
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:127
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:131
 msgid "Yes, discard changes"
 msgstr "是，丢弃更改"
 
@@ -4817,7 +4805,7 @@ msgstr "用户名重复，请选择其他用户名。"
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:16
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:17
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:39
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:20
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:27
 msgid "E-mail"
 msgstr "电子邮件"
 
@@ -4912,7 +4900,7 @@ msgstr "名字和 e-mail 地址"
 
 #: zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:26
 #: zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:27
-#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:14
+#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:17
 #: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:3
 msgid "New password"
 msgstr "新密码"
@@ -5198,7 +5186,7 @@ msgstr "您的登录信息"
 #: zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:19
 #: zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:42
 #: zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:1
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:105
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:108
 msgid "Your new password is too short or not strong enough. Use a: uppercase letter, lowercase letter, number, and symbol."
 msgstr "您的新密碼太短或強度不夠。使用：大寫字母、小寫字母、數字和符號。"
 
@@ -6305,11 +6293,11 @@ msgid "Two-factor authentication is not enabled for this account."
 msgstr "此帳戶未啟用雙重身份驗證。"
 
 #: zotonic_mod_auth2fa/priv/templates/_logon_login_set_passcode.tpl:30
-#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:37
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:38
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:131
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:155
-#: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:23
+#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:46
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:41
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:139
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:166
+#: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:29
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:83
 msgid "Two-factor passcode"
 msgstr "双因素密码"
@@ -6400,16 +6388,16 @@ msgstr "以下是您帳戶的最後已知登入資訊。"
 msgid "Browser info"
 msgstr "瀏覽器資訊"
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:84
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:87
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:84
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:12
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:19
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:9
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:7
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:48
 msgid "Change"
 msgstr "改變"
 
-#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:44
+#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:53
 msgid "Change password"
 msgstr "更改密碼"
 
@@ -6439,7 +6427,7 @@ msgstr "點擊連結輸入新密碼或複製並貼上整個連結。"
 msgid "Close this window and log on if you are already a user of {site}."
 msgstr "如果您已經是 {site}的用戶，請關閉此窗口並登錄。"
 
-#: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:25
+#: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
 #: zotonic_mod_authentication/priv/templates/logon_service_error.tpl:8
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:72
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:18
@@ -6451,7 +6439,7 @@ msgstr "确认"
 msgid "Confirm to connect"
 msgstr "確認連線"
 
-#: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:20
+#: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:23
 msgid "Confirmation failure"
 msgstr "验证失败"
 
@@ -6479,8 +6467,8 @@ msgstr "您输入的电子邮件或密码不正确。请再试一遍。"
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:7
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:13
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:69
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:88
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:72
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:91
 msgid "Email or username"
 msgstr "電子郵件或用戶名"
 
@@ -6543,10 +6531,10 @@ msgstr "为了确保安全，密码重设码只在有限时间内可用，而且
 msgid "Force-close all active sessions"
 msgstr "強制關閉所有活動會話"
 
-#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:9
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:63
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:192
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:204
+#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:12
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:66
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:203
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:215
 #: zotonic_mod_authentication/priv/templates/logon_error/message.passcode.tpl:8
 #: zotonic_mod_authentication/priv/templates/logon_error/message.pw.tpl:2
 msgid "Forgot your password?"
@@ -6598,7 +6586,7 @@ msgid "However this email address does not belong to one of our users or you hav
 msgstr "但是此電子郵件地址不屬於我們的使用者，或是您尚未新增密碼，因此無法變更密碼。"
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:33
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:152
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:155
 msgid "I agree to the Terms of Service and the Privacy policies."
 msgstr "我同意《服務條款》及《隱私權政策》。"
 
@@ -6640,9 +6628,9 @@ msgstr "中斷所有活動會話"
 msgid "Interrupted sessions might still be visible in the sessions overview, but will not be updated anymore."
 msgstr "中斷的會話可能仍會在會話概述中可見，但不會再更新。"
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:51
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:171
-#: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:37
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:54
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:182
+#: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:43
 msgid "Keep me logged in"
 msgstr "保持登入狀態"
 
@@ -6654,12 +6642,12 @@ msgstr "最後已知的登入資訊"
 msgid "Last seen"
 msgstr "最後一次見到"
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:58
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:186
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:61
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:197
 #: zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:22
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:196
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:205
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:199
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:208
 msgid "Log in"
 msgstr "登入"
 
@@ -6672,7 +6660,7 @@ msgstr "登入"
 msgid "Log in with your existing {site} account to connect the accounts. You only have to do this once."
 msgstr "使用您現有的 {site} 帳戶登入以連結帳戶。您只需執行一次此操作。"
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:228
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:239
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:100
 msgid "Log on with"
 msgstr "使用登录"
@@ -6694,9 +6682,10 @@ msgstr "確保您已驗證您的電子郵件地址。"
 msgid "Multiple accounts"
 msgstr "多個帳戶"
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:199
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:210
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:55
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:88
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:26
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:33
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:55
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:198
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:206
@@ -6736,11 +6725,11 @@ msgstr "在此頁面上，您可以查看您帳戶的最近登入和活動會話
 msgid "One moment please"
 msgstr "请等一下"
 
-#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:34
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:35
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:128
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:152
-#: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:20
+#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:43
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:38
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:136
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:163
+#: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:26
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:79
 msgid "Passcode"
 msgstr "密码"
@@ -6791,7 +6780,7 @@ msgid "Please use a different method to sign in. You can’t sign in using a use
 msgstr "請使用其他方法登入。"
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:44
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:164
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:167
 msgid "Privacy policies"
 msgstr "隐私条款"
 
@@ -6800,16 +6789,16 @@ msgid "Redirecting to"
 msgstr "转向"
 
 #: zotonic_mod_authentication/priv/templates/logon_service.tpl:15
-#: zotonic_mod_signup/src/controllers/controller_signup_confirm.erl:69
+#: zotonic_mod_signup/src/controllers/controller_signup_confirm.erl:71
 msgid "Redirecting..."
 msgstr "重定向..."
 
-#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:23
-#: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:11
+#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:29
+#: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:14
 msgid "Repeat password"
 msgstr "重复密码"
 
-#: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:45
+#: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:51
 msgid "Reset password and log in"
 msgstr "重設密碼並登入"
 
@@ -6831,6 +6820,10 @@ msgstr "會議概述"
 #: zotonic_mod_authentication/priv/templates/sessions.tpl:39
 msgid "Sessions that have been used by a browser in the last hour."
 msgstr "過去一小時內瀏覽器使用過的會話。"
+
+#: zotonic_mod_authentication/priv/templates/_password_visibility.tpl:5
+msgid "Show password"
+msgstr "顯示密碼"
 
 #: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:27
 msgid "Simply try again:"
@@ -6857,12 +6850,12 @@ msgstr "对不起，重试太多"
 msgid "Sorry, your password reset code is unknown or expired"
 msgstr "对不起，你的密码重设码未知或過期。"
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:168
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:179
 msgid "Stay logged on unless I log off."
 msgstr "除非我注销，否则请保持登录状态。"
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:41
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:161
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:164
 msgid "Terms of Service"
 msgstr "服务条款"
 
@@ -6974,7 +6967,7 @@ msgstr "您現在已登入。"
 msgid "You can connect the account on {site} with your account on {service} if both accounts have a verified email address but this is not the case. Check both sites and then try again."
 msgstr "如果兩個帳戶都有經過驗證的電子郵件地址，您可以將 {site} 上的帳戶與您的 {service} 上的帳戶連接起來，但事實並非如此。檢查兩個站點，然後重試。"
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:110
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:113
 msgid "You can enter the password that you have for"
 msgstr "您可以輸入您所擁有的密碼來"
 
@@ -6982,12 +6975,12 @@ msgstr "您可以輸入您所擁有的密碼來"
 msgid "You can find the code in your authentication App."
 msgstr "您可以在您的身份驗證應用程序中找到該代碼。"
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:215
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:226
 msgid "You can log in using the following external service"
 msgstr "您可以使用以下外部服务登录"
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:39
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:159
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:162
 msgid "You can read them here:"
 msgstr "您可以在這裡閱讀這些內容："
 
@@ -7053,13 +7046,13 @@ msgstr "您的用戶名是"
 msgid "an hour"
 msgstr "一小时"
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:228
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:239
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:100
 msgid "external service"
 msgstr "外部服务"
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_extra.tpl:6
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:211
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:222
 #: zotonic_mod_signup/priv/templates/_signup_box.tpl:30
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:83
 msgid "or"
@@ -7295,6 +7288,7 @@ msgid "Please make sure you store the backup encryption password in a safe <u>ex
 msgstr "請確保將備份加密密碼儲存在安全的 <u>外部</u> 位置。"
 
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:75
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:54
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:85
 msgid "Previous"
 msgstr "前一页"
@@ -7698,6 +7692,7 @@ msgid "February"
 msgstr "二月"
 
 #: zotonic_mod_base/priv/templates/error.tpl:81
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:12
 msgid "File"
 msgstr "文件"
 
@@ -7821,7 +7816,7 @@ msgstr "淨變動"
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:187
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:267
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:44
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:44
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:55
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:48
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:35
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:28
@@ -8087,7 +8082,7 @@ msgstr "工作項目"
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:274
 #: zotonic_mod_development/priv/templates/_development_dispatch_options.tpl:14
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:44
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:44
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:55
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:47
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:30
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:25
@@ -8417,7 +8412,7 @@ msgstr "原始來源記錄的連結。此連結適用於所有語言版本。"
 msgid "More about licenses:"
 msgstr "有關許可證的更多資訊："
 
-#: zotonic_mod_copyright/priv/templates/_provenance.tpl:6
+#: zotonic_mod_copyright/priv/templates/_provenance.tpl:7
 msgid "Original source"
 msgstr "原始來源"
 
@@ -8452,7 +8447,7 @@ msgstr "年"
 
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:27
 #: zotonic_mod_development/priv/templates/_development_template_matches.tpl:8
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:234
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:266
 #: zotonic_site_status/priv/templates/_sites.tpl:6
 msgid "Actions"
 msgstr "动作"
@@ -9494,7 +9489,7 @@ msgid "Crop"
 msgstr "农作物"
 
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:57
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:36
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:35
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:61
 msgid "Crop image"
 msgstr "裁剪图像"
@@ -9508,23 +9503,18 @@ msgstr "默认为媒体的摘要。输入一个\"-\"就不显示标题。"
 msgid "Editor version"
 msgstr "编辑版本"
 
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:72
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:28
-msgid "Extra small"
-msgstr "超小號"
-
 #: zotonic_mod_editor_tinymce/priv/templates/_editor.tpl:19
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:13
 msgid "Insert media"
 msgstr "插入媒體"
 
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:89
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:31
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:83
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:30
 msgid "Large"
 msgstr "大号"
 
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:105
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:40
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:99
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:39
 msgid "Link to media or url below"
 msgstr "链接到媒体或下面的网址"
 
@@ -9534,27 +9524,27 @@ msgstr "链接到媒体或下面的网址"
 msgid "Media Properties"
 msgstr "媒体属性"
 
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:83
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:30
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:77
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:29
 msgid "Medium"
 msgstr "中型"
 
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:111
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:41
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:105
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:40
 msgid "Open link in new window"
 msgstr "在新視窗中開啟鏈接"
 
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:124
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:50
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:118
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:49
 msgid "Remove from text"
 msgstr "從文本中刪除"
 
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:78
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:29
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:72
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:28
 msgid "Small"
 msgstr "规模小"
 
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:115
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:109
 msgid "Website. Leave empty for media link"
 msgstr "网站。媒体链接请留空"
 
@@ -9783,84 +9773,97 @@ msgstr "撤銷"
 msgid "You are not allowed to view this media."
 msgstr "您無權檢視此媒體檔案。"
 
-#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:6
+#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:12
+msgid "An RSA key pair has been generated to sign outgoing email."
+msgstr "已產生一組 RSA 金鑰對，用於簽署外寄電子郵件。"
+
+#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:40
+msgid "Copy the DNS TXT record value to the clipboard."
+msgstr "將 DNS TXT 記錄的值複製到剪貼簿。"
+
+#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:27
+msgid "Copy the DNS name to the clipboard."
+msgstr "將 DNS 名稱複製到剪貼簿。"
+
+#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:7
 msgid "DKIM e-mail signing setup"
 msgstr "DKIM电子邮件签名设置"
 
-#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:20
-msgid "The DNS entry should contain the following information:"
-msgstr "DNS条目应包含以下信息："
+#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:16
+msgid "To complete the DKIM setup, add a TXT record to your domain’s DNS settings using the name and value below."
+msgstr "要完成 DKIM 的設定，請使用以下名稱和值，在您的網域 DNS 設定中新增一個 TXT 記錄。"
 
-#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:13
-msgid "The location of these key files are the following:"
-msgstr "这些关键文件的位置如下："
+#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:58
+msgid "When all is setup, you can use the <a target=\"_blank\" rel=\"noreferrer noopener\" href=\"https://dkimcore.org/c/keycheck\">DKIM keycheck</a> website to verify your domain’s DKIM record."
+msgstr "完成所有設定後，您可以使用<a target=\"_blank\" rel=\"noreferrer noopener\" href=\"https://dkimcore.org/c/keycheck\">DKIM keycheck</a>網站來驗證您網域的 DKIM 記錄。"
 
-#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:12
-msgid "The module has generated an RSA keypair for you which will be used when signing outgoing emails."
-msgstr "该模块已经为您生成了一个RSA密钥对，将在签署外发邮件时使用。"
-
-#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:19
-msgid "To finalize the DKIM configuration, you need to add an DNS entry TXT record to the following domain:"
-msgstr "为了最终完成DKIM配置，你需要向以下域添加一个DNS条目TXT记录。"
-
-#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:25
-msgid "When all is setup, you can use the <a href=\"http://dkimcore.org/c/keycheck\">DKIM keycheck</a> website to verify your domain's DKIM record."
-msgstr "当所有的设置完成后，你可以使用 <a href=\"http://dkimcore.org/c/keycheck\">DKIM keycheck</a> 网站来验证你的域名的DKIM记录。"
-
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:32
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:35
 msgid "Complete URL of the API on the relaying Zotonic server."
 msgstr "中繼 Zotonic 伺服器上 API 的完整 URL。"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:62
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:98
+msgid "Copy relay API URL to clipboard"
+msgstr "將中繼 API 網址複製到剪貼簿"
+
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:44
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:75
+msgid "Copy secret to clipboard"
+msgstr "將密鑰複製到剪貼簿"
+
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:81
 msgid "Example secret:"
 msgstr "秘密範例："
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:26
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:29
 msgid "Relay email via another Zotonic server"
 msgstr "透過另一個 Zotonic 伺服器中繼電子郵件"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:55
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:65
 msgid "Relay emails for another Zotonic server"
 msgstr "為另一個 Zotonic 伺服器中繼電子郵件"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:11
-msgid "Relay emails via another Zotonic server."
-msgstr "透過另一個 Zotonic 伺服器中繼電子郵件。"
-
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:59
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:60
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:69
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:71
 msgid "Secret for receiving relayed emails"
 msgstr "接收轉發電子郵件的秘密"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:35
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:36
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:38
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:40
 msgid "Secret for sending relayed emails"
 msgstr "發送中繼電子郵件的秘密"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:21
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:24
 msgid "Send emails via another Zotonic server"
 msgstr "透過另一個 Zotonic 伺服器發送電子郵件"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:56
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:66
 msgid "Settings for accepting emails and then relaying them to the intended recipients."
 msgstr "用於接受電子郵件然後將其轉發給預期收件人的設定。"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:61
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:80
 msgid "Shared secret between this server and the Zotonic server wanting to send emails. Leave empty to not relay email."
 msgstr "該伺服器和想要發送電子郵件的 Zotonic 伺服器之間的共用金鑰。留空不轉發電子郵件。"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:37
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:49
 msgid "Shared secret between this server and the relaying Zotonic server."
 msgstr "該伺服器和中繼 Zotonic 伺服器之間的共用金鑰。"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:74
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:93
 msgid "The URL for the email relay API on this server is:"
 msgstr "該伺服器上電子郵件中繼 API 的 URL 為："
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:30
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:31
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:14
+msgid "To send through another server, enter its relay API URL and a shared secret below. The secret must match the receiving secret configured on that server. To accept email from other servers, set a receiving secret here and configure those servers to use this server’s relay API URL and the same secret."
+msgstr "若要透過其他伺服器傳送郵件，請在下方輸入該伺服器的中繼 API 網址及共用密鑰。此密鑰必須與該伺服器上設定的接收密鑰相符。若要接收來自其他伺服器的電子郵件，請在此處設定接收密鑰，並將那些伺服器設定為使用本伺服器的中繼 API 網址及相同的密鑰。"
+
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:33
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:34
 msgid "URL for the email relay API"
 msgstr "電子郵件中繼 API 的 URL"
+
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:11
+msgid "Use another Zotonic server to deliver outgoing email, or let this server deliver email on behalf of other Zotonic servers. This allows multiple sites or installations to share one server configured for email delivery."
+msgstr "使用另一台 Zotonic 伺服器來傳送外寄電子郵件，或讓這台伺服器代表其他 Zotonic 伺服器傳送電子郵件。這樣一來，多個網站或安裝環境便能共用一台已設定好電子郵件傳送功能的伺服器。"
 
 #: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:6
 msgid "Zotonic Relay"
@@ -10205,321 +10208,440 @@ msgstr "您已将您的 <strong>Facebook</strong> 账户绑定。"
 msgid "Your Facebook Developer Dashboard"
 msgstr "您的Facebook开发者仪表板"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:158
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:190
 msgid "After 1 month"
 msgstr "1个月后"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:157
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:189
 msgid "After 1 week"
 msgstr "1周后"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:159
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:191
 msgid "After 3 months"
 msgstr "3个月后"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:282
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:314
 msgid "All cloud files can be moved back to the file system on the server."
 msgstr "所有的云文件都可以移回服务器上的文件系统。"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:290
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:322
 msgid "All cloud files will be queued for download."
 msgstr "所有的云文件都会排队下载。"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:247
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:279
 msgid "All files will be queued, uploads will start in the background within 10 minutes."
 msgstr "所有的文件将被排队，上传将在10分钟内开始在后台。"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:237
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:269
 msgid "All local uploaded and preview files can be moved to the cloud."
 msgstr "所有本地上传和预览的文件都可以移动到云端。"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:256
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:288
 msgid "Are you sure you want to copy all files to the cloud?"
 msgstr "您確定要將所有檔案複製到雲端嗎？"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:299
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:331
 msgid "Are you sure you want to copy all files to the disk of the server?"
 msgstr "您確定要將所有檔案複製到伺服器磁碟嗎？"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:267
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:299
 msgid "Are you sure you want to move all files to the cloud?"
 msgstr "你确定要把所有文件都移到云端吗？"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:310
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:342
 msgid "Are you sure you want to move all files to the disk of the server?"
 msgstr "您確定要將所有文件移動到服務器的磁盤嗎？"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:98
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:109
 msgid "Base URL"
 msgstr "基础URL"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:169
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:201
 msgid "Before the settings are saved they will be checked by uploading (and removing) a small file."
 msgstr "在保存设置之前，将通过上传（和删除）一个小文件进行检查。"
 
-#: zotonic_mod_filestore/src/mod_filestore.erl:430
+#: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:14
+msgid "Check the storage service and its access permissions. Failed reads are retried when requested, with a delay of up to ten minutes."
+msgstr "請檢查儲存服務及其存取權限。讀取失敗時，系統會在收到請求後重新嘗試，延遲時間最長為十分鐘。"
+
+#: zotonic_mod_filestore/src/mod_filestore.erl:584
 msgid "Cloud File Store"
 msgstr "云端文件存储"
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:3
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:7
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:12
 msgid "Cloud File Store Configuration"
 msgstr "云文件存储配置"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:187
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:219
 msgid "Cloud File Store Utilities and Statistics"
 msgstr "雲文件存儲實用程序和統計信息"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:196
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:228
 msgid "Cloud Files"
 msgstr "云文件"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:253
+#: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:15
+msgid "Cloud file store configuration"
+msgstr "雲端檔案儲存空間的設定"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:5
+msgid "Cloud file store needs attention"
+msgstr "雲端檔案儲存需要多加留意"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:15
+msgid "Consecutive failures"
+msgstr "接連的失敗"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:285
 msgid "Copy all local files to the remote storage"
 msgstr "將所有本機檔案複製到遠端存儲"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:296
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:328
 msgid "Copy all remote files to local"
 msgstr "將所有遠端檔案複製到本機"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:257
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:289
 msgid "Copy files to cloud"
 msgstr "將檔案複製到雲端"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:300
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:332
 msgid "Copy files to server disk"
 msgstr "將文件複製到伺服器磁碟"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:246
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:278
 msgid "Could not access the service, double check your settings and try again."
 msgstr "无法访问服务，请仔细检查您的设置并再次尝试。"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:74
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:172
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:85
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:204
 msgid "Could not access the service, double check your settings and try again. Make sure that API key has access rights to create and remove a (temporary) <code>-zotonic-filestore-test-file-</code> file."
 msgstr "无法访问服务，请仔细检查您的设置并再次尝试。确保API密钥具有创建和删除（临时） <code>-zotonic-filetore-test-file-</code> 文件的访问权限。"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:11
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:16
 msgid "Currently Zotonic supports FTP, WebDAV and services that are compatible with the S3 file services API. These include:"
 msgstr "目前 Zotonic 支援 FTP、WebDAV 和與 S3 檔案服務 API 相容的服務。這些包括："
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:219
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:251
 msgid "Delete Queue"
 msgstr "删除队列"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:153
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:185
 msgid "Delete files from the cloud file store"
 msgstr "从云文件存储中删除文件"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:59
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:70
 msgid "Delete interval"
 msgstr "刪除間隔"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:218
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:250
 msgid "Download Queue"
 msgstr "下载队列"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:138
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:170
 msgid "Enable this to let the filestore act as a backup of  your local media files."
 msgstr "啟用此選項可讓文件存儲充當本地媒體文件的備份。"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:283
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:315
 msgid "Ensure yourself there is enough disk space before starting this process."
 msgstr "确保自己有足够的磁盘空间才开始这个过程。"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:201
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:224
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:128
+msgid "Enter the region supplied by your storage provider to use Signature V4. Leave empty to use legacy Signature V2."
+msgstr "請輸入您的儲存服務供應商提供的區域，以使用 Signature V4。若留空，則將使用舊版 Signature V2。"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:53
+msgid "Error list pages"
+msgstr "錯誤清單頁面"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:8
+msgid "Failed reads in the last 15 minutes:"
+msgstr "過去 15 分鐘內的讀取失敗次數："
+
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:16
+msgid "Failing since"
+msgstr "自……以來一直失敗"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:233
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:256
 msgid "Files"
 msgstr "文件"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:107
+#: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:11
+msgid "Files with unresolved read errors older than 24 hours:"
+msgstr "超過 24 小時仍未解決讀取錯誤的檔案："
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:118
 msgid "For FTP the URL must start with <b><tt>ftps:</tt></b> or <b><tt>ftp:</tt></b>"
 msgstr "對於 FTP，URL 必須以 <b><tt>ftps:</tt></b> 或 <b><tt>ftp:</tt></b>開頭"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:106
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:117
 msgid "For S3 the URL must start with <b><tt>https:</tt></b> or <b><tt>http:</tt></b>"
 msgstr "對於 S3，URL 必須以 <b><tt>https:</tt></b> 或 <b><tt>http:</tt></b>開頭"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:108
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:119
 msgid "For WebDAV the URL must start with <b><tt>webdavs:</tt></b> or <b><tt>webdav:</tt></b>"
 msgstr "對於 WebDAV，URL 必須以 <b><tt>webdavs:</tt></b> or <b><tt>webdav:</tt></b>開頭"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:243
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:275
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the local files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "如果您選擇了“上傳到雲文件存儲後保留本地文件”，則不會刪除本地文件，因為遠程文件被視為本地文件的備份。"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:287
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:319
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the remote files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "如果您選擇了“上傳到雲文件存儲後保留本地文件”，則不會刪除遠程文件，因為遠程文件被視為本地文件的備份。"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:17
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:22
 msgid "If you use an FTP server then that server MUST support FTPS (secure ftp)"
 msgstr "如果您使用 FTP 服務器，那麼該服務器必須支持 FTPS（安全 ftp）"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:63
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:74
 msgid "Immediately"
 msgstr "立即"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:43
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:54
 msgid "Is upload enabled?"
 msgstr "是否啟用上傳？"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:136
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:168
 msgid "Keep local files after upload to the cloud file store"
 msgstr "上傳到雲文件存儲後保留本地文件"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:47
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:58
 msgid "Keep local files?"
 msgstr "保留本地文件？"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:195
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:14
+msgid "Last error"
+msgstr "最後一個錯誤"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:227
 msgid "Local Files"
 msgstr "本地文件"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:194
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:34
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:37
+msgid "Mark unrecoverable"
+msgstr "標記為無法恢復"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:226
 msgid "Media Resources"
 msgstr "媒体资源"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:264
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:296
 msgid "Move all local files to the remote storage"
 msgstr "將所有本地文件移動到遠程存儲"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:307
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:339
 msgid "Move all remote files to local"
 msgstr "將所有遠程文件移動到本地"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:268
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:300
 msgid "Move files to cloud"
 msgstr "移动文件到云端"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:311
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:343
 msgid "Move files to server disk"
 msgstr "將文件移動到服務器磁盤"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:65
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:160
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:76
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:192
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:62
 msgid "Never"
 msgstr "絶不"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:156
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:47
+msgid "No errors on this page."
+msgstr "此頁面沒有錯誤。"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:188
 msgid "No extra delay"
 msgstr "無額外延遲"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:53
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:64
 msgid "No, local files are deleted after upload"
 msgstr "否，本地檔案上傳後會被刪除"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:113
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:50
+msgid "Not set (Signature V2)"
+msgstr "未設定（Signature V2）"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:31
+msgid "Now"
+msgstr "現在"
+
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:38
+msgid "Only the admin account (user 1) can mark files unrecoverable."
+msgstr "只有管理員帳戶（使用者 1）才能將檔案標記為無法恢復。"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:5
+msgid "Read errors older than 24 hours"
+msgstr "超過 24 小時的讀取錯誤"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:7
+msgid "Remote file reads are failing frequently."
+msgstr "遠端檔案讀取經常失敗。"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:52
+msgid "Retries happen when a file is requested, not at a scheduled time."
+msgstr "重試是在請求檔案時觸發的，而非在預定時間進行。"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:17
+msgid "Retry status"
+msgstr "重試狀態"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:142
 msgid "S3 API Key or FTP/WebDAV username"
 msgstr "S3 API 密鑰或 FTP/WebDAV 用戶名"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:118
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:147
 msgid "S3 API Secret or FTP/WebDAV password"
 msgstr "S3 API 密碼或 FTP/WebDAV 密碼"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:39
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:44
 msgid "S3 Cloud Location"
 msgstr "S3 雲位置"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:28
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:95
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:33
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:106
 msgid "S3 Cloud Location and Credentials"
 msgstr "S3云的位置和证书"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:176
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:49
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:124
+msgid "S3 region"
+msgstr "S3 區域"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:208
 msgid "Save Settings"
 msgstr "保存设置"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:35
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:13
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:40
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:7
 msgid "Service"
 msgstr "服務"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:171
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:201
+msgid "Settings are saved without a write test while the file store is read-only. Verify access by downloading an existing file."
+msgstr "當檔案儲存空間處於唯讀狀態時，設定會不經寫入測試即被儲存。請透過下載現有檔案來驗證存取權限。"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:203
 msgid "Settings are working fine and are saved."
 msgstr "设置工作正常并保存。"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:73
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:84
 msgid "Settings are working fine."
 msgstr "設定運作正常。"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:207
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:203
+msgid "Settings saved without a write test."
+msgstr "設定已儲存，但未進行寫入測試。"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:36
+msgid "Stop retrying this file and mark it unrecoverable? Its record and error details will be kept. No files will be deleted."
+msgstr "停止重新嘗試處理此檔案，並將其標記為無法復原？其記錄與錯誤詳細資訊將予以保留。不會刪除任何檔案。"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:239
 msgid "Storage"
 msgstr "存储"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:77
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:88
 msgid "Test Cloud File Store Settings"
 msgstr "測試雲端檔案儲存設定"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:30
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:255
+msgid "The cloud file store is read-only."
+msgstr "雲端檔案儲存空間為唯讀模式。"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:7
+msgid "The cloud file store is read-only. Downloads are available; uploads, remote deletion and write-based settings tests are disabled."
+msgstr "此雲端檔案儲存空間為唯讀模式。可進行下載；上傳、遠端刪除及基於寫入的設定測試功能均已停用。"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:35
 msgid "The cloud file store uses a global Zotonic configuration. The configuration cannot be changed here."
 msgstr "雲端檔案儲存使用全域 Zotonic 配置。此處無法變更配置。"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:31
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:36
 msgid "The configuration is:"
 msgstr "配置如下："
 
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:68
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:85
 msgid "The settings are locked by the system configuration."
 msgstr "該設定已被系統配置鎖定。"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:83
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:94
 msgid "The settings are tested by uploading (and removing) a small file."
 msgstr "透過上傳（和移除）一個小檔案來測試設定。"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:239
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:271
 msgid "There is a 1 minute wait before files are uploaded."
 msgstr "上傳文件前需要等待 1 分鐘。"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:164
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:196
 msgid "This extra deletion delay extends the period files can be recovered."
 msgstr "這種額外的刪除延遲延長了檔案恢復的時間。"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:238
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:40
+msgid "This file no longer has an eligible error older than 24 hours. Reload the page."
+msgstr "此檔案已無任何超過 24 小時的符合資格錯誤。請重新載入頁面。"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:270
 msgid "This will queue the files for later asynchronous upload."
 msgstr "这将为以后的异步上传文件排队。"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:164
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:196
 msgid "To allow recovery of deleted pages, Zotonic keeps files for 5 weeks."
 msgstr "為了恢復已刪除的頁面，Zotonic 會將檔案保留 5 週。"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:145
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:177
 msgid "Try to create a private S3 bucket if the S3 bucket does not exist"
 msgstr "如果 S3 存儲桶不存在，請嘗試創建私有 S3 存儲桶"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:217
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:29
+msgid "Unrecoverable"
+msgstr "無法恢復"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:7
+msgid "Unresolved files are listed oldest first. The error shown is the most recent recorded error for each file."
+msgstr "未解決的檔案會按時間由舊至新排列。顯示的錯誤是每個檔案最近一次記錄的錯誤。"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:249
 msgid "Upload Queue"
 msgstr "上传队列"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:127
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:159
 msgid "Upload new media files to the cloud file store"
 msgstr "将新媒体文件上传到云文件存储中"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:147
+#: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:12
+msgid "View errors"
+msgstr "檢視錯誤"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:179
 msgid "With FTP and WebDAV the directories are always created automatically."
 msgstr "使用 FTP 和 WebDAV，目錄總是自動創建的。"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:19
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:24
 msgid "With WebDAV the username and password are transfered in the clear, so ensure that you use <tt>webdavs:</tt> URLs (which makes use of https)."
 msgstr "使用 WebDAV，用戶名和密碼以明文形式傳輸，因此請確保您使用 <tt>個 webdav：</tt> URL（使用 https）。"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:51
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:62
 msgid "Yes, keep local files after upload"
 msgstr "是的，上傳後保留本機文件"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:328
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:71
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:78
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:85
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:360
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:88
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:95
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:102
 msgid "You are not allowed to change these settings."
 msgstr "您不允许更改这些设置。"
 
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:109
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:126
 msgid "You are not allowed to use this."
 msgstr "您不得使用此功能。"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:9
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:14
 msgid "Zotonic can store uploaded and resized files in the cloud. Here you can configure the location and access keys for the cloud service."
 msgstr "Zotonic可以在云端存储上传和调整大小的文件。在这里您可以配置云服务的位置和访问密钥。"
 
@@ -10763,12 +10885,12 @@ msgstr "有效"
 msgid "Activity log"
 msgstr "活動記錄"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:324
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:350
 msgid "Add default connection"
 msgstr "新增預設連線"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user.tpl:32
-#: zotonic_mod_import_feed/src/models/m_import_feed.erl:481
+#: zotonic_mod_import_feed/src/models/m_import_feed.erl:482
 msgid "Administrator accounts cannot run feed imports. Importing external content with full administrator permissions is dangerous. Select a non-administrator account with only the permissions needed for importing."
 msgstr "管理員帳戶無法執行內容匯入。使用具備完整管理員權限的帳戶匯入外部內容是危險的。請選擇一個非管理員帳戶，且該帳戶僅具備匯入所需的權限。"
 
@@ -10854,25 +10976,25 @@ msgid "Default is 1: import directly connected resources. Use 0 to skip connecti
 msgstr "預設值為 1：直接匯入已建立連線的資源。若要跳過連線，請設定為 0。"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_dialog.tpl:23
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:185
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:189
 msgid "Delete feed"
 msgstr "刪除動態"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:510
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:536
 msgid "Delete feed?"
 msgstr "刪除動態？"
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:176
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:180
 msgid "Delete imported articles and media that you are allowed to delete. Protected resources are kept. The feed will be paused; its settings and import history are retained."
 msgstr "刪除您有權刪除的已匯入文章和媒體。受保護的資源將予以保留。該資訊源將暫停運作；其設定和匯入記錄將予以保留。"
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:173
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:178
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:177
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:182
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:186
 msgid "Delete imported content"
 msgstr "刪除已匯入的內容"
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:180
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:184
 msgid "Delete imported content?"
 msgstr "要刪除已匯入的內容嗎？"
 
@@ -10903,8 +11025,8 @@ msgid "Development environment: local destinations and self-signed certificates 
 msgstr "開發環境：允許使用本機目標位置及自簽名憑證。"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:12
-msgid "Discover RSS or Atom feeds and import their articles automatically."
-msgstr "探索 RSS 或 Atom 訂閱源，並自動匯入其中的文章。"
+msgid "Discover RSS, Atom or JSON feeds and import their articles automatically."
+msgstr "探索 RSS、Atom 或 JSON 資訊源，並自動匯入其中的文章。"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:27
 msgid "Discover feeds"
@@ -10927,7 +11049,7 @@ msgstr "完成"
 msgid "Enable mod_websub to subscribe imported resources for updates."
 msgstr "啟用 mod_websub 以訂閱已匯入資源的更新。"
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:150
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:154
 msgid "Enrich WordPress entries using the public REST API"
 msgstr "利用公開的 REST API 豐富 WordPress 文章內容"
 
@@ -10968,7 +11090,7 @@ msgstr "動態"
 msgid "Feed activity log"
 msgstr "動態日誌"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:522
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:548
 msgid "Feed deleted"
 msgstr "貼文已刪除"
 
@@ -10976,7 +11098,7 @@ msgstr "貼文已刪除"
 msgid "Feed not found or access denied."
 msgstr "找不到該資訊源，或存取遭拒絕。"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:488
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:514
 msgid "Feed queued for fetching. Watch the activity log for results."
 msgstr "該資料串流已排入佇列，等待擷取。請查看活動日誌以查看結果。"
 
@@ -11005,6 +11127,10 @@ msgstr "根據標籤猜測類別"
 msgid "Identity"
 msgstr "身分"
 
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:148
+msgid "Import all pages on the initial import"
+msgstr "在首次匯入時匯入所有頁面"
+
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:55
 msgid "Import as authoritative local content"
 msgstr "匯入為權威性本地內容"
@@ -11019,7 +11145,7 @@ msgstr "匯入類別"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:4
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:11
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:255
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:281
 msgid "Import feeds"
 msgstr "匯入資訊源"
 
@@ -11043,7 +11169,7 @@ msgstr "匯入使用者"
 msgid "Imported / updated / skipped"
 msgstr "已匯入／已更新／已跳過"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:499
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:525
 msgid "Imported content deleted"
 msgstr "已刪除匯入的內容"
 
@@ -11055,7 +11181,7 @@ msgstr "匯入"
 msgid "Imports run with this account's permissions. Only administrators and users with full access to accounts can change it."
 msgstr "匯入作業將以該帳戶的權限執行。僅有管理員及擁有帳戶完整存取權限的使用者才能進行變更。"
 
-#: zotonic_mod_import_feed/src/models/m_import_feed.erl:475
+#: zotonic_mod_import_feed/src/models/m_import_feed.erl:476
 msgid "Invalid removal regexp on line"
 msgstr "該行中的移除正規表達式無效"
 
@@ -11145,7 +11271,7 @@ msgstr "原文"
 msgid "Pause"
 msgstr "暫停"
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:157
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:161
 msgid "Pause automatic imports"
 msgstr "暫停自動匯入"
 
@@ -11195,11 +11321,11 @@ msgstr "資源"
 msgid "Resume"
 msgstr "履歷表"
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:163
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:167
 msgid "Save & refetch deleted"
 msgstr "儲存並重新擷取已刪除的項目"
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:162
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:166
 msgid "Save feed"
 msgstr "儲存訂閱"
 
@@ -11207,11 +11333,11 @@ msgstr "儲存訂閱"
 msgid "Select a feed"
 msgstr "選擇一個資訊源"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:331
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:357
 msgid "Select connected page"
 msgstr "選擇相關頁面"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:363
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:389
 msgid "Select import user"
 msgstr "選擇要匯入的使用者"
 
@@ -11276,11 +11402,11 @@ msgstr "這些連結會新增至每篇匯入的文章中。請儲存該資訊源
 msgid "These defaults apply to imported articles and their dependent media. Leave empty to use the standard copyright defaults."
 msgstr "這些預設值適用於匯入的文章及其相關媒體。若留空，則採用標準的版權預設值。"
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:181
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:185
 msgid "This deletes all deletable articles and media imported by this feed, including resources shared with other feeds. Protected resources and resources you cannot delete are kept. The feed will be paused."
 msgstr "此操作將刪除此資訊源所匯入的所有可刪除文章及媒體檔案，包括與其他資訊源共享的資源。受保護的資源以及您無法刪除的資源將予以保留。該資訊源將被暫停。"
 
-#: zotonic_mod_import_feed/src/models/m_import_feed.erl:477
+#: zotonic_mod_import_feed/src/models/m_import_feed.erl:478
 msgid "This feed is paused. Resume it before fetching."
 msgstr "此資料串流已暫停。請在擷取前先恢復播放。"
 
@@ -11288,7 +11414,7 @@ msgstr "此資料串流已暫停。請在擷取前先恢復播放。"
 msgid "This feed is paused. Resume it in its settings before fetching."
 msgstr "此資訊源已暫停。請在擷取前於其設定中恢復運作。"
 
-#: zotonic_mod_import_feed/src/models/m_import_feed.erl:479
+#: zotonic_mod_import_feed/src/models/m_import_feed.erl:480
 msgid "This feed is still importing. Pause it and wait for the current import to finish before deleting its content."
 msgstr "此資訊源仍在匯入中。請先暫停該資訊源，並等待當前匯入作業完成後，再刪除其內容。"
 
@@ -11319,6 +11445,10 @@ msgstr "用户"
 msgid "Uses credentials registered for the import user and destination host. Credentials are only sent over HTTPS."
 msgstr "使用為匯入使用者和目標主機所註冊的憑證。憑證僅透過 HTTPS 傳送。"
 
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:149
+msgid "Warning: this can import large amounts of articles and media. By default, only the first page is imported initially."
+msgstr "警告：此操作可能會匯入大量文章和媒體檔案。預設情況下，最初僅會匯入第一頁的內容。"
+
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:20
 msgid "Website or feed URL"
 msgstr "網站或資訊源網址"
@@ -11327,7 +11457,7 @@ msgstr "網站或資訊源網址"
 msgid "WordPress enrichment unavailable; the feed data will be used."
 msgstr "無法使用 WordPress 增強功能；將使用 RSS 源資料。"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:313
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:339
 msgid "You are not allowed to manage feeds."
 msgstr "您無權管理資訊源。"
 
@@ -14915,7 +15045,7 @@ msgstr "确认我的账户。"
 msgid "Confirming..."
 msgstr "確認中..."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:116
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:119
 msgid "Copy the password to the clipboard."
 msgstr "將密碼複製到剪貼簿。"
 
@@ -14935,11 +15065,11 @@ msgstr "這不是您發起的註冊嗎？"
 msgid "Didn’t receive the email?"
 msgstr "沒有收到電子郵件嗎？"
 
-#: zotonic_mod_signup/src/controllers/controller_signup.erl:658
+#: zotonic_mod_signup/src/controllers/controller_signup.erl:664
 msgid "Email address mismatch"
 msgstr "電子郵件地址不符"
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:103
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:106
 msgid "Enter a password"
 msgstr "输入密码"
 
@@ -14963,11 +15093,11 @@ msgstr "請輸入姓氏"
 msgid "Enter the code only on the signup page. Do not share it with anyone."
 msgstr "請僅在註冊頁面輸入此代碼。請勿將其透露給任何人。"
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:112
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:115
 msgid "Generate a new and secure password."
 msgstr "建立一個新的、安全的密碼。"
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:113
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:116
 msgid "Generate a secure password"
 msgstr "產生一個安全的密碼"
 
@@ -15009,7 +15139,7 @@ msgid "Resend code"
 msgstr "重新發送驗證碼"
 
 #: zotonic_mod_signup/priv/templates/_signup_box.tpl:13
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:186
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:189
 #: zotonic_mod_signup/priv/templates/signup.tpl:3
 msgid "Sign Up"
 msgstr "注册 "
@@ -15022,11 +15152,11 @@ msgstr "报名"
 msgid "Something went wrong, please retry again later."
 msgstr "發生了錯誤，請稍後再試一次。"
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:210
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:213
 msgid "Something went wrong. Please try again later."
 msgstr "發生了錯誤。請稍後再試。"
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:216
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:219
 msgid "Sorry, you already have an account. Maybe your account here was suspended."
 msgstr "抱歉，您已經有帳號了。可能是您的帳號已被暫停使用。"
 
@@ -15042,12 +15172,12 @@ msgstr "感謝您註冊。請確認您的電子郵件地址以啟用您的帳戶
 msgid "The code you entered is incorrect. Please try again."
 msgstr "您輸入的代碼不正確。請重新嘗試。"
 
-#: zotonic_mod_signup/src/controllers/controller_signup.erl:659
+#: zotonic_mod_signup/src/controllers/controller_signup.erl:665
 msgid "The email address you entered does not match the email address you provided in the previous step. Please check your input and try again."
 msgstr "您輸入的電子郵件地址與上一步驟中提供的電子郵件地址不符。請檢查您的輸入內容，然後重試。"
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:193
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:202
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:196
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:205
 msgid "There is already an account connected to your email address."
 msgstr "您的電子郵件地址已綁定了一個帳號。"
 
@@ -15063,7 +15193,7 @@ msgstr "此代碼將於 10 分鐘後失效。"
 msgid "To continue, enter this code on the signup page:"
 msgstr "若要繼續，請在註冊頁面上輸入此代碼："
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:179
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:182
 msgid "To sign up you must agree with the Terms of Service and Privacy policies."
 msgstr "要註冊，您必須同意服務條款和隱私政策。"
 
@@ -15075,11 +15205,11 @@ msgstr "嘗試次數過多，請一小時後再試著註冊。"
 msgid "We have sent a code to <strong>{email}</strong> to confirm your email address."
 msgstr "我們已將驗證碼發送至 <strong>{email}</strong> 以確認您的電子郵件地址。"
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:145
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:148
 msgid "We will be very careful with all the information given to us and will never give your name or address away without your permission. We do have some rules that we need you to agree with."
 msgstr "我们会非常谨慎地处理所有提供给我们的信息，未经您的许可，我们绝不会泄露您的姓名或地址。我们确实有一些规则，需要您同意。"
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:30
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:37
 msgid "We will mail you a code to confirm your email address."
 msgstr "我們將寄送一組驗證碼至您的電子信箱，以確認您的電子郵件地址。"
 
@@ -15111,7 +15241,7 @@ msgstr "您可以透過以下外部服務進行註冊。"
 msgid "You might have confirmed your account twice so that the account is already confirmed. If so, try logging in.<br>If that doesn’t work, make sure you copied the link correctly and try again."
 msgstr "您可能已經兩次確認了您的帳戶，以便該帳戶已經被確認。如果是這樣，請嘗試登錄<br>如果不起作用，請確保您正確複製了鏈接，然後重試。"
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:172
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:175
 msgid "You must agree to the Terms in order to sign up."
 msgstr "您必须同意这些条款才能注册。"
 

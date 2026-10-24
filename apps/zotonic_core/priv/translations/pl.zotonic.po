@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-20 17:50\n"
+"PO-Revision-Date: 2026-10-23 20:28\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "MIME-Version: 1.0\n"
@@ -60,7 +60,7 @@ msgstr "Brak autoryzacji dostępu do adresu URL zdalnego zasobu."
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:43
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:42
 msgid "Website"
 msgstr "Strona internetowa"
 
@@ -179,6 +179,7 @@ msgid "ACL user group"
 msgstr "Grupa użytkownika ACL"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7
+#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:18
 #: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:936
 msgid "Access control rules"
 msgstr "Zasady kontroli dostępu"
@@ -297,7 +298,7 @@ msgstr "Czy na pewno chcesz przywrócić wszystkie reguły ACL do ich obecnie op
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:52
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:90
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:161
-#: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
+#: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:31
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:68
 #: zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:13
 #: zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:7
@@ -305,9 +306,9 @@ msgstr "Czy na pewno chcesz przywrócić wszystkie reguły ACL do ich obecnie op
 #: zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:36
 #: zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:50
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:104
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:131
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:125
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:58
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:55
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:54
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:134
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_connection_dialog.tpl:17
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_dialog.tpl:22
@@ -387,8 +388,8 @@ msgstr "Zmieniona konfiguracja."
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:76
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:209
 #: zotonic_mod_admin/priv/templates/_admin_edit_version.tpl:5
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:68
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:70
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:72
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:74
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_filter_predicates.tpl:20
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:79
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:43
@@ -763,6 +764,14 @@ msgstr "Opublikuj"
 msgid "Publish successful"
 msgstr "Opublikowanie powiodło się"
 
+#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:14
+msgid "Published access control rules are active."
+msgstr "Opublikowane reguły kontroli dostępu są aktywne."
+
+#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:21
+msgid "Published rules"
+msgstr "Opublikowane przepisy"
+
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:41
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:69
 msgid "Revert"
@@ -788,15 +797,15 @@ msgstr "Przywrócone reguły"
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:33
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:162
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:141
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:80
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:84
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:26
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:105
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:56
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:132
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:126
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:60
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:56
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:42
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:67
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:55
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:54
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:86
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:136
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:100
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:60
@@ -862,22 +871,18 @@ msgstr "Przepraszamy, nie można wstawiać stron z tej kategorii do wybranej gru
 msgid "System content groups"
 msgstr "Grupy zawartości systemu"
 
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:26
-msgid "Test ACL rules"
-msgstr "Zasady testowania ACL"
-
 #: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:3
 #: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:6
 msgid "Test Access Control Rules"
 msgstr "Przetestuj reguły kontroli dostępu"
 
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:44
-msgid "The URL is only valid for one day."
-msgstr "Adres URL jest ważny tylko przez jeden dzień."
+#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:12
+msgid "Test access control rules are active. Select Published rules to stop testing."
+msgstr "Zasady kontroli dostępu w trybie testowym są aktywne. Wybierz opcję „Opublikowane zasady”, aby zakończyć testowanie."
 
-#: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:12
-msgid "The URL is valid for one day."
-msgstr "Adres URL jest ważny przez jeden dzień."
+#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:25
+msgid "Test rules"
+msgstr "Zasady przeprowadzania testów"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:7
 msgid "The default upload size is:"
@@ -910,6 +915,15 @@ msgstr "Ta strona jest"
 msgid "This rule is managed by module"
 msgstr "Reguła ta jest zarządzana przez moduł"
 
+#: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:12
+#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:48
+msgid "This test link is valid for 24 hours after it is generated."
+msgstr "Ten link testowy jest ważny przez 24 godziny od momentu jego wygenerowania."
+
+#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:45
+msgid "To start testing, use a valid test link provided by an editor or administrator."
+msgstr "Aby rozpocząć testowanie, skorzystaj z prawidłowego linku testowego udostępnionego przez redaktora lub administratora."
+
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:17
 msgid "Try ACL rules"
 msgstr "Wypróbuj zasady ACL"
@@ -930,11 +944,6 @@ msgstr "Ustawienia przesyłania zostały zapisane"
 msgid "Upload the ACL rules file that you previously exported. Note: all current rules will be <b>replaced</b> by the rule definition file that is uploaded."
 msgstr "Prześlij plik reguł ACL, który wcześniej wyeksportowałeś. Uwaga: wszystkie obecne reguły zostaną zastąpione <b></b> przez przesłany plik definicji reguł."
 
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:27
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:50
-msgid "Use published rules"
-msgstr "Użyj opublikowanych reguł"
-
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:2
 msgid "Use the following URL to test the access control rules before publishing them."
 msgstr "Użyj poniższego adresu URL, aby przetestować zasady kontroli dostępu przed ich opublikowaniem."
@@ -951,10 +960,6 @@ msgstr "Grupy użytkowników"
 msgid "Visibility"
 msgstr "Widoczność"
 
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:24
-msgid "Which version of the ACL rules do you want to use?"
-msgstr "Jakiej wersji zasad ACL chcesz używać?"
-
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:41
 msgid "You are not allowed to move to this collaboration group."
 msgstr "Nie możesz przenieść się do tej grupy współpracy."
@@ -967,38 +972,14 @@ msgstr "Nie masz uprawnień aby wykonywać tą czynność"
 msgid "You are not allowed to view this page."
 msgstr "Nie masz uprawnień do przeglądania tej strony."
 
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:12
-msgid "You are using the <b>published</b> version of the access control rules."
-msgstr "Używasz <b>opublikowanej</b> wersji zasad kontroli dostępu."
-
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:10
-msgid "You are using the <b>test</b> version of the access control rules."
-msgstr "Używasz <b>testu</b> wersji reguł kontroli dostępu."
-
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:17
-msgid "You can switch back to the published access control rules by:"
-msgstr "Możesz powrócić do opublikowanych zasad kontroli dostępu przez:"
-
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:4
 msgid "You can:"
 msgstr "Możesz:"
-
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:43
-msgid "You have to use a special URL, as provided by the an editor or administrator."
-msgstr "Musisz użyć specjalnego adresu URL, podanego przez edytora lub administratora."
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:88
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
 msgid "all"
 msgstr "wszystko"
-
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:20
-msgid "clicking on <b>Use published rules</b> below"
-msgstr "klikając na <b>Użyj opublikowanych reguł</b> poniżej"
-
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:21
-msgid "closing this browser tab"
-msgstr "zamknij zakładkę przeglądarki"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
 #: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:297
@@ -1420,7 +1401,7 @@ msgstr "Miasto"
 msgid "Clear"
 msgstr "Wyczyść"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:12
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:10
 msgid "Click \"Save\" to see your changes."
 msgstr "Kliknij „Zapisz”, aby wyświetlić wprowadzone zmiany."
 
@@ -1432,7 +1413,7 @@ msgstr "Kliknij tutaj po więcej informacji"
 msgid "Click to preview."
 msgstr "Kliknij, aby wyświetlić podgląd."
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:11
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:14
 msgid "Close Live view"
 msgstr "Zamknij widok na żywo"
 
@@ -1444,7 +1425,7 @@ msgstr "Zamknij gniazda"
 msgid "Close all sockets from ip addresses which have over &gt; 250 open sockets."
 msgstr "Zamknij wszystkie gniazda z adresów ip, które mają ponad &gt; 250 otwartych gniazd."
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:3
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:4
 msgid "Close panel"
 msgstr "Zamknij panel"
 
@@ -1512,13 +1493,16 @@ msgstr "Skopiowany link do pobrania do schowka"
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:21
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:17
 #: zotonic_mod_auth2fa/priv/templates/_logon_login_set_passcode.tpl:20
+#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:29
+#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:42
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:100
 #: zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:33
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_view.tpl:18
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:28
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:60
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:91
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:119
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:117
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:120
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:46
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:62
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:78
@@ -1775,8 +1759,8 @@ msgstr "Adres e-mail"
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:27
 #: zotonic_mod_development/priv/templates/_development_template_xref_includes.tpl:22
 #: zotonic_mod_development/priv/templates/_development_template_xref_inheritance.tpl:20
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:127
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:52
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:121
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:51
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:36
 #: zotonic_mod_menu/priv/templates/_admin_menu_menu_view.collection.tpl:40
 #: zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:23
@@ -1798,7 +1782,7 @@ msgstr "Edytuj notatkę"
 msgid "Edit:"
 msgstr "Edytuj:"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:8
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:9
 msgid "Editing language"
 msgstr "Język edycji"
 
@@ -2178,7 +2162,7 @@ msgid "Latest modified texts"
 msgstr "Najnowsze zmodyfikowane teksty"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:43
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:101
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:95
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:48
 msgid "Link"
 msgstr "Link"
@@ -2188,7 +2172,7 @@ msgid "Live query, send notifications when matching items are updated or inserte
 msgstr "Zapytanie na żywo, wysyłanie powiadomień w przypadku aktualizacji lub wstawienia pasujących elementów."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:2
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:15
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:17
 msgid "Live view"
 msgstr "Podgląd na żywo"
 
@@ -2561,12 +2545,12 @@ msgstr "Pamięć systemu operacyjnego"
 msgid "Ongoing"
 msgstr "Bieżący"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:10
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:13
 msgid "Open in new tab"
 msgstr "Otwórz w nowej karcie"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:3
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:9
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:4
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:10
 msgid "Open panel"
 msgstr "Panel otwarty"
 
@@ -2813,7 +2797,7 @@ msgstr "Polecający"
 msgid "Referrers to"
 msgstr "Odnosi się do"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:9
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:12
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:18
 msgid "Refresh"
 msgstr "Odśwież"
@@ -2954,21 +2938,21 @@ msgstr "W tym systemie izolacja typu „sandbox” nie jest obsługiwana. Polece
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:4
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:144
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:84
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:88
 msgid "Save &amp; view"
 msgstr "Zapisz i wyświetl"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:4
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:144
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:84
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:88
 msgid "Save and view the page."
 msgstr "Zapisz i wyświetl stronę."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:17
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:141
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:80
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:84
 msgid "Save this page."
 msgstr "Zapisz tę stronę."
 
@@ -3077,6 +3061,10 @@ msgstr "Pokaż jako"
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:54
 msgid "Show keyword description"
 msgstr "Pokaż opis słowa kluczowego"
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:3
+msgid "Show or hide a live preview beside the editor."
+msgstr "Pokaż lub ukryj podgląd na żywo obok edytora."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:59
 msgid "Show page on multiple paths"
@@ -3482,7 +3470,7 @@ msgstr "Ta notatka jest widoczna tylko dla osób, które mogą edytować stronę
 msgid "This page can be connected from other pages. For example it could be an author of an article."
 msgstr "Ta strona może być połączona z innymi stronami. Na przykład może to być autor artykułu."
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:14
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:16
 msgid "This page cannot be previewed here. Use “Open in new tab” if available."
 msgstr "Na tej stronie nie można wyświetlić podglądu. Jeśli to możliwe, skorzystaj z opcji „Otwórz w nowej karcie”."
 
@@ -4394,11 +4382,11 @@ msgstr "Otwórz zaimportowany certyfikat, rozwiń sekcję „Zaufanie” i wybie
 #: zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:10
 #: zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:11
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:22
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:25
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:115
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:122
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:143
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:145
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:26
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:118
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:126
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:151
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:155
 #: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:15
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:97
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:202
@@ -4676,8 +4664,8 @@ msgstr "Ukryj menu"
 msgid "Language"
 msgstr "Język"
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:33
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:41
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:34
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:44
 msgid "Loading ..."
 msgstr "Ładowanie ..."
 
@@ -4693,11 +4681,11 @@ msgstr "Pokaż menu"
 msgid "The page might have been deleted."
 msgstr "Strona mogła zostać usunięta."
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:129
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:133
 msgid "There are unsaved changes. Are you sure you want to leave without saving?"
 msgstr "Istnieją niezapisane zmiany. Jesteś pewny, że chcesz wyjść bez zapisywania?"
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:78
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:82
 msgid "This page"
 msgstr "Ta strona"
 
@@ -4705,7 +4693,7 @@ msgstr "Ta strona"
 msgid "View this page."
 msgstr "Wyświetl tę stronę."
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:127
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:131
 msgid "Yes, discard changes"
 msgstr "Tak, odrzuć zmiany"
 
@@ -4817,7 +4805,7 @@ msgstr "Wybrana nazwa użytkownika już istnieje, wybierz inną."
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:16
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:17
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:39
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:20
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:27
 msgid "E-mail"
 msgstr "E-mail"
 
@@ -4912,7 +4900,7 @@ msgstr "Imię i adres e-mail"
 
 #: zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:26
 #: zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:27
-#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:14
+#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:17
 #: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:3
 msgid "New password"
 msgstr "Nowe hasło"
@@ -5198,7 +5186,7 @@ msgstr "Twoje dane logowania do"
 #: zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:19
 #: zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:42
 #: zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:1
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:105
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:108
 msgid "Your new password is too short or not strong enough. Use a: uppercase letter, lowercase letter, number, and symbol."
 msgstr "Nowe hasło jest zbyt krótkie lub niewystarczająco silne. Użyj: wielkiej litery, małej litery, cyfry i symbolu."
 
@@ -6305,11 +6293,11 @@ msgid "Two-factor authentication is not enabled for this account."
 msgstr "Uwierzytelnianie dwuskładnikowe nie jest włączone na tym koncie."
 
 #: zotonic_mod_auth2fa/priv/templates/_logon_login_set_passcode.tpl:30
-#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:37
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:38
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:131
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:155
-#: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:23
+#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:46
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:41
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:139
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:166
+#: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:29
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:83
 msgid "Two-factor passcode"
 msgstr "Hasło dwuskładnikowe"
@@ -6400,16 +6388,16 @@ msgstr "Poniżej znajdują się ostatnie znane logowania do Twojego konta."
 msgid "Browser info"
 msgstr "Informacje o przeglądarce"
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:84
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:87
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:84
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:12
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:19
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:9
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:7
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:48
 msgid "Change"
 msgstr "Zmiana"
 
-#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:44
+#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:53
 msgid "Change password"
 msgstr "Zmień hasło"
 
@@ -6439,7 +6427,7 @@ msgstr "Kliknij link, aby wprowadzić nowe hasło lub skopiuj i wklej cały link
 msgid "Close this window and log on if you are already a user of {site}."
 msgstr "Zamknij to okno i zaloguj się, jeśli jesteś już użytkownikiem {site}."
 
-#: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:25
+#: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
 #: zotonic_mod_authentication/priv/templates/logon_service_error.tpl:8
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:72
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:18
@@ -6451,7 +6439,7 @@ msgstr "Potwierdź"
 msgid "Confirm to connect"
 msgstr "Potwierdź połączenie"
 
-#: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:20
+#: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:23
 msgid "Confirmation failure"
 msgstr "Potwierdzenie nie powiodło się"
 
@@ -6479,8 +6467,8 @@ msgstr "Wprowadzony adres e-mail lub hasło są nieprawidłowe. Spróbuj ponowni
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:7
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:13
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:69
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:88
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:72
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:91
 msgid "Email or username"
 msgstr "Email lub nazwa użytkownika"
 
@@ -6543,10 +6531,10 @@ msgstr "Ze względów bezpieczeństwa kody resetowania hasła są przechowywane 
 msgid "Force-close all active sessions"
 msgstr "Wymuś zamknięcie wszystkich aktywnych sesji"
 
-#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:9
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:63
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:192
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:204
+#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:12
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:66
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:203
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:215
 #: zotonic_mod_authentication/priv/templates/logon_error/message.passcode.tpl:8
 #: zotonic_mod_authentication/priv/templates/logon_error/message.pw.tpl:2
 msgid "Forgot your password?"
@@ -6598,7 +6586,7 @@ msgid "However this email address does not belong to one of our users or you hav
 msgstr "Jednak ten adres e-mail nie należy do żadnego z naszych użytkowników lub po prostu nie dodałeś jeszcze hasła, więc nie będziesz mógł go zmienić."
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:33
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:152
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:155
 msgid "I agree to the Terms of Service and the Privacy policies."
 msgstr "Wyrażam zgodę na Warunki korzystania z serwisu oraz Politykę prywatności."
 
@@ -6640,9 +6628,9 @@ msgstr "Przerwij wszystkie aktywne sesje"
 msgid "Interrupted sessions might still be visible in the sessions overview, but will not be updated anymore."
 msgstr "Przerwane sesje mogą być nadal widoczne w przeglądzie sesji, ale nie będą już aktualizowane."
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:51
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:171
-#: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:37
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:54
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:182
+#: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:43
 msgid "Keep me logged in"
 msgstr "Pozostaw mnie zalogowanym"
 
@@ -6654,12 +6642,12 @@ msgstr "Ostatnie znane logowania"
 msgid "Last seen"
 msgstr "Ostatnio widziany"
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:58
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:186
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:61
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:197
 #: zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:22
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:196
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:205
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:199
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:208
 msgid "Log in"
 msgstr "Zaloguj się"
 
@@ -6672,7 +6660,7 @@ msgstr "Zaloguj się do"
 msgid "Log in with your existing {site} account to connect the accounts. You only have to do this once."
 msgstr "Zaloguj się za pomocą istniejącego konta {site} , aby połączyć konta. Wystarczy zrobić to tylko raz."
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:228
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:239
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:100
 msgid "Log on with"
 msgstr "Zaloguj się za pomocą"
@@ -6694,9 +6682,10 @@ msgstr "Upewnij się, że zweryfikowałeś swój adres e-mail."
 msgid "Multiple accounts"
 msgstr "Wiele kont"
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:199
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:210
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:55
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:88
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:26
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:33
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:55
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:198
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:206
@@ -6736,11 +6725,11 @@ msgstr "Na tej stronie możesz zobaczyć ostatnie logowania i aktywne sesje dla 
 msgid "One moment please"
 msgstr "Proszę czekać"
 
-#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:34
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:35
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:128
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:152
-#: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:20
+#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:43
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:38
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:136
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:163
+#: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:26
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:79
 msgid "Passcode"
 msgstr "Kod dostępu"
@@ -6791,7 +6780,7 @@ msgid "Please use a different method to sign in. You can’t sign in using a use
 msgstr "Aby się zalogować, użyj innej metody. Nie możesz zalogować się przy użyciu nazwy użytkownika i hasła."
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:44
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:164
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:167
 msgid "Privacy policies"
 msgstr "Polityka prywatności"
 
@@ -6800,16 +6789,16 @@ msgid "Redirecting to"
 msgstr "Przekierowuję do"
 
 #: zotonic_mod_authentication/priv/templates/logon_service.tpl:15
-#: zotonic_mod_signup/src/controllers/controller_signup_confirm.erl:69
+#: zotonic_mod_signup/src/controllers/controller_signup_confirm.erl:71
 msgid "Redirecting..."
 msgstr "Przekierowuję ..."
 
-#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:23
-#: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:11
+#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:29
+#: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:14
 msgid "Repeat password"
 msgstr "Powtórz hasło"
 
-#: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:45
+#: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:51
 msgid "Reset password and log in"
 msgstr "Zresetuj hasło i zaloguj się"
 
@@ -6831,6 +6820,10 @@ msgstr "Przegląd sesji"
 #: zotonic_mod_authentication/priv/templates/sessions.tpl:39
 msgid "Sessions that have been used by a browser in the last hour."
 msgstr "Sesje używane przez przeglądarkę w ciągu ostatniej godziny."
+
+#: zotonic_mod_authentication/priv/templates/_password_visibility.tpl:5
+msgid "Show password"
+msgstr "Pokaż hasło"
 
 #: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:27
 msgid "Simply try again:"
@@ -6857,12 +6850,12 @@ msgstr "Przepraszamy, zbyt wiele ponownych prób"
 msgid "Sorry, your password reset code is unknown or expired"
 msgstr "Przepraszamy, Twój kod resetowania hasła jest nieznany lub wygasł"
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:168
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:179
 msgid "Stay logged on unless I log off."
 msgstr "Pozostaje zalogowany, dopóki się nie wyloguję."
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:41
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:161
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:164
 msgid "Terms of Service"
 msgstr "Warunki świadczenia usług"
 
@@ -6974,7 +6967,7 @@ msgstr "Jesteś teraz zalogowany."
 msgid "You can connect the account on {site} with your account on {service} if both accounts have a verified email address but this is not the case. Check both sites and then try again."
 msgstr "Możesz połączyć konto na {site} z kontem na {service} , jeśli oba konta mają zweryfikowany adres e-mail, ale tak nie jest. Sprawdź obie witryny i spróbuj ponownie."
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:110
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:113
 msgid "You can enter the password that you have for"
 msgstr "Możesz wprowadzić hasło, które posiadasz do"
 
@@ -6982,12 +6975,12 @@ msgstr "Możesz wprowadzić hasło, które posiadasz do"
 msgid "You can find the code in your authentication App."
 msgstr "Kod znajdziesz w swojej aplikacji uwierzytelniającej."
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:215
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:226
 msgid "You can log in using the following external service"
 msgstr "Możesz zalogować się za pomocą następującej usługi zewnętrznej"
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:39
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:159
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:162
 msgid "You can read them here:"
 msgstr "Można je przeczytać tutaj:"
 
@@ -7053,13 +7046,13 @@ msgstr "Twoja nazwa użytkownika to"
 msgid "an hour"
 msgstr "godzina"
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:228
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:239
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:100
 msgid "external service"
 msgstr "usługa zewnętrzna"
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_extra.tpl:6
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:211
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:222
 #: zotonic_mod_signup/priv/templates/_signup_box.tpl:30
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:83
 msgid "or"
@@ -7295,6 +7288,7 @@ msgid "Please make sure you store the backup encryption password in a safe <u>ex
 msgstr "Upewnij się, że przechowujesz zapasowe hasło szyfrowania w bezpiecznej lokalizacji <u>zewnętrznej</u> ."
 
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:75
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:54
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:85
 msgid "Previous"
 msgstr "Poprzedni"
@@ -7698,6 +7692,7 @@ msgid "February"
 msgstr "Luty"
 
 #: zotonic_mod_base/priv/templates/error.tpl:81
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:12
 msgid "File"
 msgstr "Plik"
 
@@ -7821,7 +7816,7 @@ msgstr "Zmiana netto"
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:187
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:267
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:44
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:44
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:55
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:48
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:35
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:28
@@ -8087,7 +8082,7 @@ msgstr "Zadania robocze"
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:274
 #: zotonic_mod_development/priv/templates/_development_dispatch_options.tpl:14
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:44
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:44
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:55
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:47
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:30
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:25
@@ -8417,7 +8412,7 @@ msgstr "Link do oryginalnego rekordu źródłowego. Ten link jest wspólny dla w
 msgid "More about licenses:"
 msgstr "Więcej o licencjach:"
 
-#: zotonic_mod_copyright/priv/templates/_provenance.tpl:6
+#: zotonic_mod_copyright/priv/templates/_provenance.tpl:7
 msgid "Original source"
 msgstr "Źródło oryginalne"
 
@@ -8452,7 +8447,7 @@ msgstr "Rok"
 
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:27
 #: zotonic_mod_development/priv/templates/_development_template_matches.tpl:8
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:234
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:266
 #: zotonic_site_status/priv/templates/_sites.tpl:6
 msgid "Actions"
 msgstr "Działania"
@@ -9494,7 +9489,7 @@ msgid "Crop"
 msgstr "Przytnij"
 
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:57
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:36
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:35
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:61
 msgid "Crop image"
 msgstr "Przytnij zdjęcie"
@@ -9508,23 +9503,18 @@ msgstr "Domyślnie podsumowanie mediów. Wpisz pojedynczy „-”, aby nie wyśw
 msgid "Editor version"
 msgstr "Wersja edytora"
 
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:72
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:28
-msgid "Extra small"
-msgstr "Bardzo mały"
-
 #: zotonic_mod_editor_tinymce/priv/templates/_editor.tpl:19
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:13
 msgid "Insert media"
 msgstr "Wstaw multimedia"
 
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:89
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:31
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:83
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:30
 msgid "Large"
 msgstr "Duży"
 
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:105
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:40
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:99
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:39
 msgid "Link to media or url below"
 msgstr "Link do mediów lub adres url poniżej"
 
@@ -9534,27 +9524,27 @@ msgstr "Link do mediów lub adres url poniżej"
 msgid "Media Properties"
 msgstr "Właściwości mediów"
 
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:83
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:30
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:77
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:29
 msgid "Medium"
 msgstr "Średni"
 
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:111
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:41
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:105
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:40
 msgid "Open link in new window"
 msgstr "Otwórz link w nowym oknie"
 
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:124
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:50
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:118
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:49
 msgid "Remove from text"
 msgstr "Usuń z tekstu"
 
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:78
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:29
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:72
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:28
 msgid "Small"
 msgstr "Mały"
 
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:115
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:109
 msgid "Website. Leave empty for media link"
 msgstr "Strona internetowa. Zostaw puste dla linku do multimediów"
 
@@ -9783,84 +9773,97 @@ msgstr "Cofnij"
 msgid "You are not allowed to view this media."
 msgstr "Nie masz uprawnień do wyświetlenia tego pliku multimedialnego."
 
-#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:6
+#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:12
+msgid "An RSA key pair has been generated to sign outgoing email."
+msgstr "Wygenerowano parę kluczy RSA w celu podpisywania wychodzących wiadomości e-mail."
+
+#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:40
+msgid "Copy the DNS TXT record value to the clipboard."
+msgstr "Skopiuj wartość rekordu TXT DNS do schowka."
+
+#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:27
+msgid "Copy the DNS name to the clipboard."
+msgstr "Skopiuj nazwę DNS do schowka."
+
+#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:7
 msgid "DKIM e-mail signing setup"
 msgstr "Konfiguracja podpisywania e-maili DKIM"
 
-#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:20
-msgid "The DNS entry should contain the following information:"
-msgstr "Wpis DNS powinien zawierać następujące informacje:"
+#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:16
+msgid "To complete the DKIM setup, add a TXT record to your domain’s DNS settings using the name and value below."
+msgstr "Aby zakończyć konfigurację DKIM, dodaj rekord TXT do ustawień DNS swojej domeny, używając poniższej nazwy i wartości."
 
-#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:13
-msgid "The location of these key files are the following:"
-msgstr "Lokalizacje plików kluczy są:"
+#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:58
+msgid "When all is setup, you can use the <a target=\"_blank\" rel=\"noreferrer noopener\" href=\"https://dkimcore.org/c/keycheck\">DKIM keycheck</a> website to verify your domain’s DKIM record."
+msgstr "Gdy wszystko będzie już skonfigurowane, możesz skorzystać ze strony internetowej <a target=\"_blank\" rel=\"noreferrer noopener\" href=\"https://dkimcore.org/c/keycheck\">DKIM Keycheck</a>, aby zweryfikować rekord DKIM swojej domeny."
 
-#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:12
-msgid "The module has generated an RSA keypair for you which will be used when signing outgoing emails."
-msgstr "Moduł wygenerował dla Ciebie parę kluczy RSA, która będzie używana przy podpisywaniu wychodzących wiadomości e-mail."
-
-#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:19
-msgid "To finalize the DKIM configuration, you need to add an DNS entry TXT record to the following domain:"
-msgstr "Aby zakończyć konfigurację DKIM, musisz dodać rekord TXT wpisu DNS do następującej domeny:"
-
-#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:25
-msgid "When all is setup, you can use the <a href=\"http://dkimcore.org/c/keycheck\">DKIM keycheck</a> website to verify your domain's DKIM record."
-msgstr "Gdy wszystko jest skonfigurowane, możesz skorzystać z strony <a href=\"http://dkimcore.org/c/keycheck\">DKIM keycheck</a> aby zweryfikować rekord DKIM swojej domeny."
-
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:32
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:35
 msgid "Complete URL of the API on the relaying Zotonic server."
 msgstr "Pełny adres URL interfejsu API na serwerze pośredniczącym Zotonic."
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:62
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:98
+msgid "Copy relay API URL to clipboard"
+msgstr "Skopiuj adres URL interfejsu API przekaźnika do schowka"
+
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:44
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:75
+msgid "Copy secret to clipboard"
+msgstr "Skopiuj hasło do schowka"
+
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:81
 msgid "Example secret:"
 msgstr "Przykładowy sekret:"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:26
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:29
 msgid "Relay email via another Zotonic server"
 msgstr "Przekaż pocztę elektroniczną za pośrednictwem innego serwera Zotonic"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:55
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:65
 msgid "Relay emails for another Zotonic server"
 msgstr "Przekazywanie wiadomości e-mail dla innego serwera Zotonic"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:11
-msgid "Relay emails via another Zotonic server."
-msgstr "Przekazuj wiadomości e-mail za pośrednictwem innego serwera Zotonic."
-
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:59
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:60
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:69
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:71
 msgid "Secret for receiving relayed emails"
 msgstr "Sekret odbioru przekazywanych wiadomości e-mail"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:35
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:36
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:38
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:40
 msgid "Secret for sending relayed emails"
 msgstr "Sekret wysyłania przekazywanych wiadomości e-mail"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:21
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:24
 msgid "Send emails via another Zotonic server"
 msgstr "Wysyłaj wiadomości e-mail za pośrednictwem innego serwera Zotonic"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:56
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:66
 msgid "Settings for accepting emails and then relaying them to the intended recipients."
 msgstr "Ustawienia umożliwiające akceptację wiadomości e-mail i ich przekazywanie do docelowych odbiorców."
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:61
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:80
 msgid "Shared secret between this server and the Zotonic server wanting to send emails. Leave empty to not relay email."
 msgstr "Współdzielony sekret między tym serwerem a serwerem Zotonic, który chce wysyłać wiadomości e-mail. Pozostaw puste, aby nie przekazywać wiadomości e-mail."
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:37
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:49
 msgid "Shared secret between this server and the relaying Zotonic server."
 msgstr "Współdzielony sekret między tym serwerem a przekazującym serwerem Zotonic."
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:74
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:93
 msgid "The URL for the email relay API on this server is:"
 msgstr "Adres URL interfejsu API przekaźnika poczty e-mail na tym serwerze to:"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:30
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:31
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:14
+msgid "To send through another server, enter its relay API URL and a shared secret below. The secret must match the receiving secret configured on that server. To accept email from other servers, set a receiving secret here and configure those servers to use this server’s relay API URL and the same secret."
+msgstr "Aby wysyłać wiadomości przez inny serwer, wprowadź poniżej adres URL jego interfejsu API przekazywania oraz wspólny klucz tajny. Klucz ten musi być zgodny z kluczem odbiorczym skonfigurowanym na tym serwerze. Aby przyjmować wiadomości e-mail z innych serwerów, ustaw tutaj klucz odbiorczy i skonfiguruj te serwery tak, aby korzystały z adresu URL interfejsu API przekazywania tego serwera oraz tego samego klucza."
+
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:33
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:34
 msgid "URL for the email relay API"
 msgstr "Adres URL interfejsu API przekaźnika poczty e-mail"
+
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:11
+msgid "Use another Zotonic server to deliver outgoing email, or let this server deliver email on behalf of other Zotonic servers. This allows multiple sites or installations to share one server configured for email delivery."
+msgstr "Można skorzystać z innego serwera Zotonic do wysyłania wiadomości e-mail lub pozwolić temu serwerowi na wysyłanie wiadomości w imieniu innych serwerów Zotonic. Dzięki temu wiele witryn lub instalacji może wspólnie korzystać z jednego serwera skonfigurowanego do wysyłania wiadomości e-mail."
 
 #: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:6
 msgid "Zotonic Relay"
@@ -10205,321 +10208,440 @@ msgstr "Połączyłeś swoje konto <strong>Facebook</strong>."
 msgid "Your Facebook Developer Dashboard"
 msgstr "Twój pulpit programisty Facebook"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:158
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:190
 msgid "After 1 month"
 msgstr "Po 1 miesiącu"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:157
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:189
 msgid "After 1 week"
 msgstr "Po 1 tygodniu"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:159
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:191
 msgid "After 3 months"
 msgstr "Po 3 miesiącach"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:282
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:314
 msgid "All cloud files can be moved back to the file system on the server."
 msgstr "Wszystkie pliki w chmurze mogą być przenoszone z powrotem do systemu plików na serwerze."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:290
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:322
 msgid "All cloud files will be queued for download."
 msgstr "Wszystkie pliki w chmurze zostaną umieszczone w kolejce do pobrania."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:247
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:279
 msgid "All files will be queued, uploads will start in the background within 10 minutes."
 msgstr "Wszystkie pliki będą umieszczone w kolejce, wysyłanie rozpocznie się w tle w ciągu 10 minut."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:237
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:269
 msgid "All local uploaded and preview files can be moved to the cloud."
 msgstr "Wszystkie pliki przesłane lokalnie i pliki podglądu można przenieść do chmury."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:256
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:288
 msgid "Are you sure you want to copy all files to the cloud?"
 msgstr "Czy na pewno chcesz skopiować wszystkie pliki do chmury?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:299
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:331
 msgid "Are you sure you want to copy all files to the disk of the server?"
 msgstr "Czy na pewno chcesz skopiować wszystkie pliki na dysk serwera?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:267
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:299
 msgid "Are you sure you want to move all files to the cloud?"
 msgstr "Czy na pewno chcesz przenieść wszystkie pliki do chmury?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:310
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:342
 msgid "Are you sure you want to move all files to the disk of the server?"
 msgstr "Czy na pewno chcesz przenieść wszystkie pliki na dysk serwera?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:98
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:109
 msgid "Base URL"
 msgstr "Podstawowy adres URL"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:169
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:201
 msgid "Before the settings are saved they will be checked by uploading (and removing) a small file."
 msgstr "Zanim ustawienia zostaną zapisane, zostaną one sprawdzone poprzez przesłanie (i usunięcie) małego pliku."
 
-#: zotonic_mod_filestore/src/mod_filestore.erl:430
+#: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:14
+msgid "Check the storage service and its access permissions. Failed reads are retried when requested, with a delay of up to ten minutes."
+msgstr "Sprawdź usługę przechowywania danych i związane z nią uprawnienia dostępu. W przypadku niepowodzenia odczytu następuje ponowna próba na żądanie, z opóźnieniem wynoszącym maksymalnie dziesięć minut."
+
+#: zotonic_mod_filestore/src/mod_filestore.erl:584
 msgid "Cloud File Store"
 msgstr "Magazyn plików w chmurze"
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:3
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:7
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:12
 msgid "Cloud File Store Configuration"
 msgstr "Konfiguracja magazynu plików w chmurze"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:187
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:219
 msgid "Cloud File Store Utilities and Statistics"
 msgstr "Narzędzia i statystyki magazynu plików w chmurze"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:196
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:228
 msgid "Cloud Files"
 msgstr "Pliki w chmurze"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:253
+#: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:15
+msgid "Cloud file store configuration"
+msgstr "Konfiguracja chmurowej pamięci plików"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:5
+msgid "Cloud file store needs attention"
+msgstr "Należy zwrócić uwagę na przechowywanie plików w chmurze"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:15
+msgid "Consecutive failures"
+msgstr "Kolejne niepowodzenia"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:285
 msgid "Copy all local files to the remote storage"
 msgstr "Skopiuj wszystkie pliki lokalne do pamięci zdalnej"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:296
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:328
 msgid "Copy all remote files to local"
 msgstr "Kopiuj wszystkie pliki zdalne do lokalnych"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:257
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:289
 msgid "Copy files to cloud"
 msgstr "Kopiuj pliki do chmury"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:300
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:332
 msgid "Copy files to server disk"
 msgstr "Kopiuj pliki na dysk serwera"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:246
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:278
 msgid "Could not access the service, double check your settings and try again."
 msgstr "Nie można uzyskać dostępu do usługi, sprawdź dokładnie ustawienia i spróbuj ponownie."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:74
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:172
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:85
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:204
 msgid "Could not access the service, double check your settings and try again. Make sure that API key has access rights to create and remove a (temporary) <code>-zotonic-filestore-test-file-</code> file."
 msgstr "Nie można uzyskać dostępu do usługi, sprawdź dokładnie ustawienia i spróbuj ponownie. Upewnij się, że klucz API ma prawa dostępu do tworzenia i usuwania (tymczasowego) pliku <code>-zotonic-filestore-test-file-</code>."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:11
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:16
 msgid "Currently Zotonic supports FTP, WebDAV and services that are compatible with the S3 file services API. These include:"
 msgstr "Obecnie Zotonic obsługuje FTP, WebDAV i usługi zgodne z API usług plików S3. Należą do nich:"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:219
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:251
 msgid "Delete Queue"
 msgstr "Usuń kolejkę"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:153
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:185
 msgid "Delete files from the cloud file store"
 msgstr "Usuń pliki z magazynu plików w chmurze"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:59
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:70
 msgid "Delete interval"
 msgstr "Usuń interwał"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:218
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:250
 msgid "Download Queue"
 msgstr "Pobierz kolejkę"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:138
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:170
 msgid "Enable this to let the filestore act as a backup of  your local media files."
 msgstr "Włącz tę opcję, aby magazyn plików działał jako kopia zapasowa lokalnych plików multimedialnych."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:283
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:315
 msgid "Ensure yourself there is enough disk space before starting this process."
 msgstr "Przed rozpoczęciem tego procesu upewnij się, że jest wystarczająco dużo miejsca na dysku."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:201
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:224
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:128
+msgid "Enter the region supplied by your storage provider to use Signature V4. Leave empty to use legacy Signature V2."
+msgstr "Wprowadź region wskazany przez dostawcę usług przechowywania danych, aby korzystać z Signature V4. Pozostaw to pole puste, aby korzystać ze starszej wersji Signature V2."
+
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:53
+msgid "Error list pages"
+msgstr "Strony z listą błędów"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:8
+msgid "Failed reads in the last 15 minutes:"
+msgstr "Nieudane odczyty w ciągu ostatnich 15 minut:"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:16
+msgid "Failing since"
+msgstr "Nie działa od"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:233
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:256
 msgid "Files"
 msgstr "Pliki"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:107
+#: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:11
+msgid "Files with unresolved read errors older than 24 hours:"
+msgstr "Pliki z nierozwiązanymi błędami odczytu, które powstały ponad 24 godziny temu:"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:118
 msgid "For FTP the URL must start with <b><tt>ftps:</tt></b> or <b><tt>ftp:</tt></b>"
 msgstr "W przypadku FTP adres URL musi zaczynać się od <b><tt>ftps:</tt></b> lub <b><tt>ftp:</tt></b>"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:106
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:117
 msgid "For S3 the URL must start with <b><tt>https:</tt></b> or <b><tt>http:</tt></b>"
 msgstr "W przypadku S3 adres URL musi zaczynać się od <b><tt>https:</tt></b> lub <b><tt>http:</tt></b>"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:108
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:119
 msgid "For WebDAV the URL must start with <b><tt>webdavs:</tt></b> or <b><tt>webdav:</tt></b>"
 msgstr "W przypadku WebDAV adres URL musi zaczynać się od <b><tt>webdav:</tt></b> lub <b><tt>webdav:</tt></b>"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:243
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:275
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the local files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "W przypadku wybrania opcji „Zachowaj pliki lokalne po przesłaniu do magazynu plików w chmurze” pliki lokalne nie zostaną usunięte, ponieważ pliki zdalne są uważane za kopię zapasową plików lokalnych."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:287
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:319
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the remote files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "W przypadku wybrania opcji „Zachowaj pliki lokalne po przesłaniu do magazynu plików w chmurze” pliki zdalne nie zostaną usunięte, ponieważ pliki zdalne są uważane za kopię zapasową plików lokalnych."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:17
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:22
 msgid "If you use an FTP server then that server MUST support FTPS (secure ftp)"
 msgstr "Jeśli używasz serwera FTP, to ten serwer MUSI obsługiwać FTPS (bezpieczne ftp)"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:63
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:74
 msgid "Immediately"
 msgstr "Natychmiast"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:43
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:54
 msgid "Is upload enabled?"
 msgstr "Czy przesyłanie jest włączone?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:136
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:168
 msgid "Keep local files after upload to the cloud file store"
 msgstr "Zachowaj pliki lokalne po przesłaniu do magazynu plików w chmurze"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:47
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:58
 msgid "Keep local files?"
 msgstr "Zachować pliki lokalne?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:195
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:14
+msgid "Last error"
+msgstr "Ostatni błąd"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:227
 msgid "Local Files"
 msgstr "Pliki lokalne"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:194
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:34
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:37
+msgid "Mark unrecoverable"
+msgstr "Oznacz jako nieodwracalne"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:226
 msgid "Media Resources"
 msgstr "Zasoby medialne"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:264
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:296
 msgid "Move all local files to the remote storage"
 msgstr "Przenieś wszystkie lokalne pliki do pamięci zdalnej"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:307
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:339
 msgid "Move all remote files to local"
 msgstr "Przenieś wszystkie zdalne pliki do lokalnego"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:268
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:300
 msgid "Move files to cloud"
 msgstr "Przenieś pliki do chmury"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:311
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:343
 msgid "Move files to server disk"
 msgstr "Przenieś pliki na dysk serwera"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:65
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:160
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:76
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:192
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:62
 msgid "Never"
 msgstr "Nigdy"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:156
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:47
+msgid "No errors on this page."
+msgstr "Na tej stronie nie ma żadnych błędów."
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:188
 msgid "No extra delay"
 msgstr "Bez dodatkowych opóźnień"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:53
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:64
 msgid "No, local files are deleted after upload"
 msgstr "Nie, pliki lokalne są usuwane po przesłaniu"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:113
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:50
+msgid "Not set (Signature V2)"
+msgstr "Nie ustawiono (Signature V2)"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:31
+msgid "Now"
+msgstr "Teraz"
+
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:38
+msgid "Only the admin account (user 1) can mark files unrecoverable."
+msgstr "Tylko konto administratora (użytkownik 1) może oznaczyć pliki jako niemożliwe do odzyskania."
+
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:5
+msgid "Read errors older than 24 hours"
+msgstr "Błędy odczytu starsze niż 24 godziny"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:7
+msgid "Remote file reads are failing frequently."
+msgstr "Odczytywanie plików zdalnych często kończy się niepowodzeniem."
+
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:52
+msgid "Retries happen when a file is requested, not at a scheduled time."
+msgstr "Ponowne próby mają miejsce w momencie wysłania żądania dotyczącego pliku, a nie o zaplanowanej porze."
+
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:17
+msgid "Retry status"
+msgstr "Status ponownej próby"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:142
 msgid "S3 API Key or FTP/WebDAV username"
 msgstr "Klucz API S3 lub nazwa użytkownika FTP/WebDAV"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:118
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:147
 msgid "S3 API Secret or FTP/WebDAV password"
 msgstr "Sekret API S3 lub hasło FTP/WebDAV"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:39
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:44
 msgid "S3 Cloud Location"
 msgstr "Lokalizacja chmury S3"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:28
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:95
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:33
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:106
 msgid "S3 Cloud Location and Credentials"
 msgstr "S3 Lokalizacja i dane uwierzytelniające w chmurze (Cloud Location and Credentials)"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:176
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:49
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:124
+msgid "S3 region"
+msgstr "Region S3"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:208
 msgid "Save Settings"
 msgstr "Zapisz ustawienia"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:35
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:13
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:40
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:7
 msgid "Service"
 msgstr "Usługa"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:171
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:201
+msgid "Settings are saved without a write test while the file store is read-only. Verify access by downloading an existing file."
+msgstr "Ustawienia są zapisywane bez testu zapisu, gdy magazyn plików jest tylko do odczytu. Sprawdź dostęp, pobierając istniejący plik."
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:203
 msgid "Settings are working fine and are saved."
 msgstr "Ustawienia działają prawidłowo i są zapisywane."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:73
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:84
 msgid "Settings are working fine."
 msgstr "Ustawienia działają prawidłowo."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:207
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:203
+msgid "Settings saved without a write test."
+msgstr "Ustawienia zostały zapisane bez przeprowadzenia testu zapisu."
+
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:36
+msgid "Stop retrying this file and mark it unrecoverable? Its record and error details will be kept. No files will be deleted."
+msgstr "Czy chcesz zaprzestać ponownych prób odzyskania tego pliku i oznaczyć go jako niemożliwy do odzyskania? Jego dane oraz szczegóły błędu zostaną zachowane. Żadne pliki nie zostaną usunięte."
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:239
 msgid "Storage"
 msgstr "Przechowywanie"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:77
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:88
 msgid "Test Cloud File Store Settings"
 msgstr "Testowanie ustawień magazynu plików w chmurze"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:30
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:255
+msgid "The cloud file store is read-only."
+msgstr "Chmurowe repozytorium plików jest dostępne wyłącznie do odczytu."
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:7
+msgid "The cloud file store is read-only. Downloads are available; uploads, remote deletion and write-based settings tests are disabled."
+msgstr "Magazyn plików w chmurze jest dostępny wyłącznie do odczytu. Możliwe jest pobieranie plików; funkcje przesyłania plików, zdalnego usuwania oraz testów ustawień związanych z zapisem są wyłączone."
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:35
 msgid "The cloud file store uses a global Zotonic configuration. The configuration cannot be changed here."
 msgstr "Magazyn plików w chmurze używa globalnej konfiguracji Zotonic. Konfiguracji nie można tutaj zmienić."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:31
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:36
 msgid "The configuration is:"
 msgstr "Konfiguracja jest następująca:"
 
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:68
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:85
 msgid "The settings are locked by the system configuration."
 msgstr "Ustawienia są zablokowane przez konfigurację systemu."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:83
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:94
 msgid "The settings are tested by uploading (and removing) a small file."
 msgstr "Ustawienia są testowane poprzez przesyłanie (i usuwanie) małego pliku."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:239
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:271
 msgid "There is a 1 minute wait before files are uploaded."
 msgstr "Czas oczekiwania na przesłanie plików wynosi 1 minutę."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:164
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:196
 msgid "This extra deletion delay extends the period files can be recovered."
 msgstr "To dodatkowe opóźnienie w usuwaniu wydłuża okres, w którym można odzyskać pliki."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:238
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:40
+msgid "This file no longer has an eligible error older than 24 hours. Reload the page."
+msgstr "W tym pliku nie ma już żadnego błędu spełniającego kryteria, który miałby więcej niż 24 godziny. Odśwież stronę."
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:270
 msgid "This will queue the files for later asynchronous upload."
 msgstr "Spowoduje to umieszczenie plików w kolejce do późniejszego asynchronicznego przesyłania."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:164
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:196
 msgid "To allow recovery of deleted pages, Zotonic keeps files for 5 weeks."
 msgstr "Aby umożliwić odzyskanie usuniętych stron, Zotonic przechowuje pliki przez 5 tygodni."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:145
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:177
 msgid "Try to create a private S3 bucket if the S3 bucket does not exist"
 msgstr "Spróbuj utworzyć prywatny wiadro S3, jeśli wiadro S3 nie istnieje"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:217
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:29
+msgid "Unrecoverable"
+msgstr "Nieodwracalne"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:7
+msgid "Unresolved files are listed oldest first. The error shown is the most recent recorded error for each file."
+msgstr "Pliki z nierozwiązanymi problemami są wyświetlane w kolejności od najstarszych. Wyświetlany błąd to najnowszy błąd zarejestrowany dla danego pliku."
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:249
 msgid "Upload Queue"
 msgstr "Kolejka przesyłania"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:127
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:159
 msgid "Upload new media files to the cloud file store"
 msgstr "Prześlij nowe pliki multimedialne do magazynu plików w chmurze"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:147
+#: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:12
+msgid "View errors"
+msgstr "Wyświetl błędy"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:179
 msgid "With FTP and WebDAV the directories are always created automatically."
 msgstr "W przypadku FTP i WebDAV katalogi są zawsze tworzone automatycznie."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:19
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:24
 msgid "With WebDAV the username and password are transfered in the clear, so ensure that you use <tt>webdavs:</tt> URLs (which makes use of https)."
 msgstr "W przypadku WebDAV nazwa użytkownika i hasło są przesyłane jawnie, więc upewnij się, że używasz <tt>webdavs:</tt> adresów URL (które wykorzystują https)."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:51
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:62
 msgid "Yes, keep local files after upload"
 msgstr "Tak, zachowaj pliki lokalne po przesłaniu"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:328
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:71
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:78
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:85
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:360
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:88
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:95
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:102
 msgid "You are not allowed to change these settings."
 msgstr "Nie masz uprawnień do zmiany tych ustawień."
 
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:109
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:126
 msgid "You are not allowed to use this."
 msgstr "Nie możesz tego zmienić."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:9
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:14
 msgid "Zotonic can store uploaded and resized files in the cloud. Here you can configure the location and access keys for the cloud service."
 msgstr "Zotonic może przechowywać przesłane pliki i pliki o zmienionym rozmiarze w chmurze. Tutaj możesz skonfigurować lokalizację i klucze dostępu do usługi w chmurze."
 
@@ -10763,12 +10885,12 @@ msgstr "Aktywne"
 msgid "Activity log"
 msgstr "Dziennik działań"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:324
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:350
 msgid "Add default connection"
 msgstr "Dodaj domyślne połączenie"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user.tpl:32
-#: zotonic_mod_import_feed/src/models/m_import_feed.erl:481
+#: zotonic_mod_import_feed/src/models/m_import_feed.erl:482
 msgid "Administrator accounts cannot run feed imports. Importing external content with full administrator permissions is dangerous. Select a non-administrator account with only the permissions needed for importing."
 msgstr "Konta administratorów nie mogą uruchamiać importu treści. Importowanie treści zewnętrznych przy użyciu pełnych uprawnień administratora jest niebezpieczne. Wybierz konto niebędące kontem administratora, posiadające wyłącznie uprawnienia niezbędne do importu."
 
@@ -10854,25 +10976,25 @@ msgid "Default is 1: import directly connected resources. Use 0 to skip connecti
 msgstr "Wartość domyślna to 1: importuj zasoby bezpośrednio połączone. Użyj wartości 0, aby pominąć połączenia."
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_dialog.tpl:23
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:185
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:189
 msgid "Delete feed"
 msgstr "Usuń kanał"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:510
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:536
 msgid "Delete feed?"
 msgstr "Usunąć kanał?"
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:176
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:180
 msgid "Delete imported articles and media that you are allowed to delete. Protected resources are kept. The feed will be paused; its settings and import history are retained."
 msgstr "Usuń zaimportowane artykuły i multimedia, do których masz uprawnienia. Zasoby chronione zostaną zachowane. Kanał zostanie wstrzymany; jego ustawienia i historia importu zostaną zachowane."
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:173
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:178
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:177
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:182
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:186
 msgid "Delete imported content"
 msgstr "Usuń zaimportowaną treść"
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:180
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:184
 msgid "Delete imported content?"
 msgstr "Czy chcesz usunąć zaimportowaną treść?"
 
@@ -10903,8 +11025,8 @@ msgid "Development environment: local destinations and self-signed certificates 
 msgstr "Środowisko programistyczne: dozwolone są lokalne lokalizacje docelowe i certyfikaty z podpisem własnym."
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:12
-msgid "Discover RSS or Atom feeds and import their articles automatically."
-msgstr "Odkryj kanały RSS lub Atom i automatycznie importuj zawarte w nich artykuły."
+msgid "Discover RSS, Atom or JSON feeds and import their articles automatically."
+msgstr "Odkryj kanały RSS, Atom lub JSON i automatycznie importuj zawarte w nich artykuły."
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:27
 msgid "Discover feeds"
@@ -10927,7 +11049,7 @@ msgstr "Gotowe"
 msgid "Enable mod_websub to subscribe imported resources for updates."
 msgstr "Włącz moduł mod_websub, aby subskrybować aktualizacje zaimportowanych zasobów."
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:150
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:154
 msgid "Enrich WordPress entries using the public REST API"
 msgstr "Wzbogacaj wpisy w WordPressie za pomocą publicznego interfejsu API REST"
 
@@ -10968,7 +11090,7 @@ msgstr "Kanał"
 msgid "Feed activity log"
 msgstr "Dziennik aktywności kanału"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:522
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:548
 msgid "Feed deleted"
 msgstr "Wpis usunięto"
 
@@ -10976,7 +11098,7 @@ msgstr "Wpis usunięto"
 msgid "Feed not found or access denied."
 msgstr "Nie znaleziono źródła danych lub odmówiono dostępu."
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:488
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:514
 msgid "Feed queued for fetching. Watch the activity log for results."
 msgstr "Dane w kolejce do pobrania. Wyniki można sprawdzić w dzienniku aktywności."
 
@@ -11005,6 +11127,10 @@ msgstr "Odgadnij kategorię na podstawie tagów"
 msgid "Identity"
 msgstr "Tożsamość"
 
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:148
+msgid "Import all pages on the initial import"
+msgstr "Zaimportuj wszystkie strony podczas pierwszego importu"
+
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:55
 msgid "Import as authoritative local content"
 msgstr "Zaimportuj jako wiarygodną treść lokalną"
@@ -11019,7 +11145,7 @@ msgstr "Kategoria importu"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:4
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:11
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:255
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:281
 msgid "Import feeds"
 msgstr "Importuj kanały"
 
@@ -11043,7 +11169,7 @@ msgstr "Importuj użytkownika"
 msgid "Imported / updated / skipped"
 msgstr "Zaimportowano / zaktualizowano / pominięto"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:499
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:525
 msgid "Imported content deleted"
 msgstr "Usunięto treści pochodzące z innych źródeł"
 
@@ -11055,7 +11181,7 @@ msgstr "Importowanie"
 msgid "Imports run with this account's permissions. Only administrators and users with full access to accounts can change it."
 msgstr "Importy są wykonywane z uprawnieniami tego konta. Zmieniać je mogą wyłącznie administratorzy oraz użytkownicy posiadający pełny dostęp do kont."
 
-#: zotonic_mod_import_feed/src/models/m_import_feed.erl:475
+#: zotonic_mod_import_feed/src/models/m_import_feed.erl:476
 msgid "Invalid removal regexp on line"
 msgstr "Nieprawidłowy wyrażenie regularne usuwania w wierszu"
 
@@ -11145,7 +11271,7 @@ msgstr "Artykuł oryginalny"
 msgid "Pause"
 msgstr "Pauza"
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:157
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:161
 msgid "Pause automatic imports"
 msgstr "Wstrzymaj automatyczne importowanie"
 
@@ -11195,11 +11321,11 @@ msgstr "Zasoby"
 msgid "Resume"
 msgstr "CV"
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:163
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:167
 msgid "Save & refetch deleted"
 msgstr "Zapisz i ponownie pobierz usunięte elementy"
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:162
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:166
 msgid "Save feed"
 msgstr "Zapisz kanał"
 
@@ -11207,11 +11333,11 @@ msgstr "Zapisz kanał"
 msgid "Select a feed"
 msgstr "Wybierz kanał"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:331
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:357
 msgid "Select connected page"
 msgstr "Wybierz powiązaną stronę"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:363
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:389
 msgid "Select import user"
 msgstr "Wybierz użytkownika do zaimportowania"
 
@@ -11276,11 +11402,11 @@ msgstr "Te powiązania są dodawane do każdego zaimportowanego artykułu. Zapis
 msgid "These defaults apply to imported articles and their dependent media. Leave empty to use the standard copyright defaults."
 msgstr "Te ustawienia domyślne dotyczą zaimportowanych artykułów i powiązanych z nimi plików multimedialnych. Pozostaw to pole puste, aby zastosować standardowe domyślne ustawienia dotyczące praw autorskich."
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:181
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:185
 msgid "This deletes all deletable articles and media imported by this feed, including resources shared with other feeds. Protected resources and resources you cannot delete are kept. The feed will be paused."
 msgstr "Spowoduje to usunięcie wszystkich artykułów i plików multimedialnych, które można usunąć, zaimportowanych przez ten kanał, w tym zasobów udostępnionych innym kanałom. Zasoby chronione oraz te, których nie można usunąć, zostaną zachowane. Kanał zostanie wstrzymany."
 
-#: zotonic_mod_import_feed/src/models/m_import_feed.erl:477
+#: zotonic_mod_import_feed/src/models/m_import_feed.erl:478
 msgid "This feed is paused. Resume it before fetching."
 msgstr "Ten strumień jest wstrzymany. Przed pobraniem danych należy go wznowić."
 
@@ -11288,7 +11414,7 @@ msgstr "Ten strumień jest wstrzymany. Przed pobraniem danych należy go wznowi�
 msgid "This feed is paused. Resume it in its settings before fetching."
 msgstr "Ten kanał jest wstrzymany. Przed pobraniem treści należy wznowić jego działanie w ustawieniach."
 
-#: zotonic_mod_import_feed/src/models/m_import_feed.erl:479
+#: zotonic_mod_import_feed/src/models/m_import_feed.erl:480
 msgid "This feed is still importing. Pause it and wait for the current import to finish before deleting its content."
 msgstr "Ten kanał jest nadal importowany. Zatrzymaj go i poczekaj, aż bieżący import się zakończy, zanim usuniesz jego zawartość."
 
@@ -11319,6 +11445,10 @@ msgstr "Użytkownik"
 msgid "Uses credentials registered for the import user and destination host. Credentials are only sent over HTTPS."
 msgstr "Wykorzystuje dane uwierzytelniające zarejestrowane dla użytkownika importującego i hosta docelowego. Dane uwierzytelniające są przesyłane wyłącznie za pośrednictwem protokołu HTTPS."
 
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:149
+msgid "Warning: this can import large amounts of articles and media. By default, only the first page is imported initially."
+msgstr "Ostrzeżenie: ta operacja może spowodować zaimportowanie dużej liczby artykułów i plików multimedialnych. Domyślnie na początku importowana jest tylko pierwsza strona."
+
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:20
 msgid "Website or feed URL"
 msgstr "Adres URL strony internetowej lub kanału"
@@ -11327,7 +11457,7 @@ msgstr "Adres URL strony internetowej lub kanału"
 msgid "WordPress enrichment unavailable; the feed data will be used."
 msgstr "Funkcja wzbogacania treści WordPressa jest niedostępna; wykorzystane zostaną dane z kanału."
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:313
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:339
 msgid "You are not allowed to manage feeds."
 msgstr "Nie masz uprawnień do zarządzania kanałami."
 
@@ -14915,7 +15045,7 @@ msgstr "Potwierdzić moje konto."
 msgid "Confirming..."
 msgstr "Potwierdzam ..."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:116
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:119
 msgid "Copy the password to the clipboard."
 msgstr "Skopiuj hasło do schowka."
 
@@ -14935,11 +15065,11 @@ msgstr "To nie ty rozpocząłeś tę rejestrację?"
 msgid "Didn’t receive the email?"
 msgstr "Nie otrzymałeś wiadomości e-mail?"
 
-#: zotonic_mod_signup/src/controllers/controller_signup.erl:658
+#: zotonic_mod_signup/src/controllers/controller_signup.erl:664
 msgid "Email address mismatch"
 msgstr "Niezgodność adresów e-mail"
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:103
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:106
 msgid "Enter a password"
 msgstr "Wprowadź hasło"
 
@@ -14963,11 +15093,11 @@ msgstr "Wpisz nazwisko"
 msgid "Enter the code only on the signup page. Do not share it with anyone."
 msgstr "Wprowadź kod wyłącznie na stronie rejestracji. Nie udostępniaj go nikomu."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:112
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:115
 msgid "Generate a new and secure password."
 msgstr "Utwórz nowe, bezpieczne hasło."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:113
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:116
 msgid "Generate a secure password"
 msgstr "Wygeneruj bezpieczne hasło"
 
@@ -15009,7 +15139,7 @@ msgid "Resend code"
 msgstr "Wyślij kod ponownie"
 
 #: zotonic_mod_signup/priv/templates/_signup_box.tpl:13
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:186
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:189
 #: zotonic_mod_signup/priv/templates/signup.tpl:3
 msgid "Sign Up"
 msgstr "Zarejestruj się"
@@ -15022,11 +15152,11 @@ msgstr "Zarejestruj się"
 msgid "Something went wrong, please retry again later."
 msgstr "Wystąpił błąd. Spróbuj ponownie później."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:210
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:213
 msgid "Something went wrong. Please try again later."
 msgstr "Wystąpił błąd. Spróbuj ponownie później."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:216
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:219
 msgid "Sorry, you already have an account. Maybe your account here was suspended."
 msgstr "Przepraszamy, masz już konto. Być może Twoje konto zostało zablokowane."
 
@@ -15042,12 +15172,12 @@ msgstr "Dziękujemy za rejestrację. Prosimy o potwierdzenie adresu e-mail w cel
 msgid "The code you entered is incorrect. Please try again."
 msgstr "Wprowadzony kod jest nieprawidłowy. Spróbuj ponownie."
 
-#: zotonic_mod_signup/src/controllers/controller_signup.erl:659
+#: zotonic_mod_signup/src/controllers/controller_signup.erl:665
 msgid "The email address you entered does not match the email address you provided in the previous step. Please check your input and try again."
 msgstr "Podany adres e-mail nie zgadza się z adresem e-mail podanym w poprzednim kroku. Sprawdź wprowadzone dane i spróbuj ponownie."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:193
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:202
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:196
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:205
 msgid "There is already an account connected to your email address."
 msgstr "Z Twoim adresem e-mail powiązane jest już konto."
 
@@ -15063,7 +15193,7 @@ msgstr "Ten kod straci ważność za 10 minut."
 msgid "To continue, enter this code on the signup page:"
 msgstr "Aby kontynuować, wprowadź ten kod na stronie rejestracji:"
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:179
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:182
 msgid "To sign up you must agree with the Terms of Service and Privacy policies."
 msgstr "Aby się zarejestrować, musisz zaakceptować Warunki korzystania z usługi i Politykę prywatności."
 
@@ -15075,11 +15205,11 @@ msgstr "Przekroczono limit prób. Możesz spróbować zarejestrować się ponown
 msgid "We have sent a code to <strong>{email}</strong> to confirm your email address."
 msgstr "Wysłaliśmy kod na adres <strong>{email}</strong> w celu potwierdzenia Twojego adresu e-mail."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:145
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:148
 msgid "We will be very careful with all the information given to us and will never give your name or address away without your permission. We do have some rules that we need you to agree with."
 msgstr "Będziemy bardzo ostrożni ze wszystkimi przekazanymi nam informacjami i nigdy nie podamy Twojego nazwiska ani adresu bez Twojej zgody. Mamy pewne zasady, z którymi musimy się zgodzić."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:30
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:37
 msgid "We will mail you a code to confirm your email address."
 msgstr "Wyślemy Ci pocztą kod służący do potwierdzenia Twojego adresu e-mail."
 
@@ -15111,7 +15241,7 @@ msgstr "Możesz zarejestrować się za pomocą poniższej usługi zewnętrznej."
 msgid "You might have confirmed your account twice so that the account is already confirmed. If so, try logging in.<br>If that doesn’t work, make sure you copied the link correctly and try again."
 msgstr "Możliwe, że potwierdziłeś swoje konto dwukrotnie, aby zostało już potwierdzone. Jeśli tak, spróbuj się zalogować.<br>Jeśli to nie zadziała, upewnij się, że łącze zostało skopiowane poprawnie i spróbuj ponownie."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:172
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:175
 msgid "You must agree to the Terms in order to sign up."
 msgstr "Aby się zarejestrować, musisz wyrazić zgodę na Warunki."
 

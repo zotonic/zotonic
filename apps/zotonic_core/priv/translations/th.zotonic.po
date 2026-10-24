@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-20 16:44\n"
+"PO-Revision-Date: 2026-10-23 20:29\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -60,7 +60,7 @@ msgstr "ไม่ได้รับอนุญาตในการเข้า
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:43
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:42
 msgid "Website"
 msgstr "เว็บไซต์"
 
@@ -179,6 +179,7 @@ msgid "ACL user group"
 msgstr "กลุ่มผู้ใช้ ACL"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7
+#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:18
 #: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:936
 msgid "Access control rules"
 msgstr "กฎการควบคุมการเข้าถึง"
@@ -297,7 +298,7 @@ msgstr "คุณแน่ใจหรือไม่ว่าต้องกา
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:52
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:90
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:161
-#: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
+#: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:31
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:68
 #: zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:13
 #: zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:7
@@ -305,9 +306,9 @@ msgstr "คุณแน่ใจหรือไม่ว่าต้องกา
 #: zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:36
 #: zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:50
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:104
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:131
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:125
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:58
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:55
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:54
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:134
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_connection_dialog.tpl:17
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_dialog.tpl:22
@@ -387,8 +388,8 @@ msgstr "เปลี่ยนการกำหนดค่า"
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:76
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:209
 #: zotonic_mod_admin/priv/templates/_admin_edit_version.tpl:5
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:68
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:70
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:72
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:74
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_filter_predicates.tpl:20
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:79
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:43
@@ -763,6 +764,14 @@ msgstr "เผยแพร่"
 msgid "Publish successful"
 msgstr "เผยแพร่สำเร็จ"
 
+#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:14
+msgid "Published access control rules are active."
+msgstr "กฎการควบคุมการเข้าถึงที่เผยแพร่แล้วมีผลบังคับใช้แล้ว"
+
+#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:21
+msgid "Published rules"
+msgstr "กฎที่ประกาศแล้ว"
+
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:41
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:69
 msgid "Revert"
@@ -788,15 +797,15 @@ msgstr "กฎที่เปลี่ยนกลับ"
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:33
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:162
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:141
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:80
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:84
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:26
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:105
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:56
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:132
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:126
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:60
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:56
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:42
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:67
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:55
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:54
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:86
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:136
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:100
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:60
@@ -862,22 +871,18 @@ msgstr "ขออภัยคุณไม่ได้รับอนุญาต
 msgid "System content groups"
 msgstr "กลุ่มเนื้อหาของระบบ"
 
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:26
-msgid "Test ACL rules"
-msgstr "ทดสอบกฎ ACL"
-
 #: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:3
 #: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:6
 msgid "Test Access Control Rules"
 msgstr "ทดสอบกฎการควบคุมการเข้าถึง"
 
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:44
-msgid "The URL is only valid for one day."
-msgstr "URL นี้ใช้ได้เพียงวันเดียว"
+#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:12
+msgid "Test access control rules are active. Select Published rules to stop testing."
+msgstr "กฎการควบคุมการเข้าถึงสำหรับการทดสอบกำลังทำงานอยู่ โปรดเลือก \"กฎที่เผยแพร่แล้ว\" เพื่อหยุดการทดสอบ"
 
-#: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:12
-msgid "The URL is valid for one day."
-msgstr "URL ใช้ได้ 1 วัน"
+#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:25
+msgid "Test rules"
+msgstr "กฎการทดสอบ"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:7
 msgid "The default upload size is:"
@@ -910,6 +915,15 @@ msgstr "หน้านี้คือไฟล์"
 msgid "This rule is managed by module"
 msgstr "กฎนี้จัดการโดยโมดูล"
 
+#: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:12
+#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:48
+msgid "This test link is valid for 24 hours after it is generated."
+msgstr "ลิงก์ทดสอบนี้จะมีผลใช้ได้เป็นเวลา 24 ชั่วโมงนับจากเวลาที่สร้างขึ้น"
+
+#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:45
+msgid "To start testing, use a valid test link provided by an editor or administrator."
+msgstr "เพื่อเริ่มการทดสอบ ให้ใช้ลิงก์ทดสอบที่ถูกต้อง ซึ่งได้รับจากผู้บรรณาธิการหรือผู้ดูแลระบบ"
+
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:17
 msgid "Try ACL rules"
 msgstr "ลองใช้กฎ ACL"
@@ -930,11 +944,6 @@ msgstr "บันทึกการตั้งค่าการอัปโห
 msgid "Upload the ACL rules file that you previously exported. Note: all current rules will be <b>replaced</b> by the rule definition file that is uploaded."
 msgstr "อัปโหลดไฟล์กฎ ACL ที่คุณส่งออกก่อนหน้านี้ หมายเหตุ: กฎปัจจุบันทั้งหมดจะถูกแทนที่ด้วย <b></b> ด้วยไฟล์ข้อกำหนดของกฎที่อัปโหลด"
 
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:27
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:50
-msgid "Use published rules"
-msgstr "ใช้กฎที่เผยแพร่"
-
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:2
 msgid "Use the following URL to test the access control rules before publishing them."
 msgstr "ใช้ URL ต่อไปนี้เพื่อทดสอบกฎการควบคุมการเข้าถึงก่อนเผยแพร่"
@@ -951,10 +960,6 @@ msgstr "กลุ่มผู้ใช้"
 msgid "Visibility"
 msgstr "การมองเห็น"
 
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:24
-msgid "Which version of the ACL rules do you want to use?"
-msgstr "คุณต้องการใช้กฎ ACL เวอร์ชันใด"
-
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:41
 msgid "You are not allowed to move to this collaboration group."
 msgstr "คุณไม่ได้รับอนุญาตให้ย้ายไปยังกลุ่มการทำงานร่วมกันนี้"
@@ -967,38 +972,14 @@ msgstr "คุณไม่ได้รับอนุญาตให้ดำเ
 msgid "You are not allowed to view this page."
 msgstr "คุณไม่ได้รับอนุญาตให้ดูหน้านี้"
 
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:12
-msgid "You are using the <b>published</b> version of the access control rules."
-msgstr "คุณกำลังใช้กฎการควบคุมการเข้าถึงเวอร์ชัน <b>เผยแพร่</b>"
-
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:10
-msgid "You are using the <b>test</b> version of the access control rules."
-msgstr "คุณกำลังใช้กฎการควบคุมการเข้าถึงเวอร์ชัน <b>test</b>"
-
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:17
-msgid "You can switch back to the published access control rules by:"
-msgstr "คุณสามารถเปลี่ยนกลับไปใช้กฎการควบคุมการเข้าถึงที่เผยแพร่โดย:"
-
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:4
 msgid "You can:"
 msgstr "คุณสามารถ:"
-
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:43
-msgid "You have to use a special URL, as provided by the an editor or administrator."
-msgstr "คุณต้องใช้ URL พิเศษตามที่บรรณาธิการหรือผู้ดูแลระบบให้มา"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:88
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
 msgid "all"
 msgstr "ทั้งหมด"
-
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:20
-msgid "clicking on <b>Use published rules</b> below"
-msgstr "คลิกที่ <b>ใช้กฎที่เผยแพร่</b> ด้านล่าง"
-
-#: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:21
-msgid "closing this browser tab"
-msgstr "ปิดแท็บเบราว์เซอร์นี้"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
 #: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:297
@@ -1420,7 +1401,7 @@ msgstr "เมือง"
 msgid "Clear"
 msgstr "ชัดเจน"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:12
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:10
 msgid "Click \"Save\" to see your changes."
 msgstr "คลิก \"บันทึก\" เพื่อดูการเปลี่ยนแปลงของคุณ"
 
@@ -1432,7 +1413,7 @@ msgstr "คลิกที่นี่เพื่อดูข้อมูลเ
 msgid "Click to preview."
 msgstr "คลิกเพื่อดูตัวอย่าง"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:11
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:14
 msgid "Close Live view"
 msgstr "ปิดโหมด Live View"
 
@@ -1444,7 +1425,7 @@ msgstr "ปิดซ็อกเก็ต"
 msgid "Close all sockets from ip addresses which have over &gt; 250 open sockets."
 msgstr "ปิดซ็อกเก็ตทั้งหมดจากที่อยู่ IP ซึ่งมีมากกว่า &gt; 250 ซ็อกเก็ตเปิด"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:3
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:4
 msgid "Close panel"
 msgstr "ปิดหน้าต่าง"
 
@@ -1512,13 +1493,16 @@ msgstr "คัดลอกลิงค์ดาวน์โหลดไปยั
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:21
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:17
 #: zotonic_mod_auth2fa/priv/templates/_logon_login_set_passcode.tpl:20
+#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:29
+#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:42
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:100
 #: zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:33
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_view.tpl:18
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:28
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:60
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:91
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:119
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:117
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:120
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:46
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:62
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:78
@@ -1775,8 +1759,8 @@ msgstr "ที่อยู่อีเมล"
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:27
 #: zotonic_mod_development/priv/templates/_development_template_xref_includes.tpl:22
 #: zotonic_mod_development/priv/templates/_development_template_xref_inheritance.tpl:20
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:127
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:52
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:121
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:51
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:36
 #: zotonic_mod_menu/priv/templates/_admin_menu_menu_view.collection.tpl:40
 #: zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:23
@@ -1798,7 +1782,7 @@ msgstr "แก้ไขบันทึก"
 msgid "Edit:"
 msgstr "แก้ไข:"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:8
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:9
 msgid "Editing language"
 msgstr "ภาษาการแก้ไข"
 
@@ -2178,7 +2162,7 @@ msgid "Latest modified texts"
 msgstr "ข้อความที่แก้ไขล่าสุด"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:43
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:101
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:95
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:48
 msgid "Link"
 msgstr "ลิงค์"
@@ -2188,7 +2172,7 @@ msgid "Live query, send notifications when matching items are updated or inserte
 msgstr "แบบสอบถามสดส่งการแจ้งเตือนเมื่อมีการอัปเดตหรือแทรกรายการที่ตรงกัน"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:2
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:15
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:17
 msgid "Live view"
 msgstr "โหมดดูสด"
 
@@ -2561,12 +2545,12 @@ msgstr "หน่วยความจำระบบปฏิบัติกา
 msgid "Ongoing"
 msgstr "กำลังดำเนินการ"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:10
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:13
 msgid "Open in new tab"
 msgstr "เปิดในแท็บใหม่"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:3
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:9
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:4
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:10
 msgid "Open panel"
 msgstr "แผงเปิด"
 
@@ -2813,7 +2797,7 @@ msgstr "ผู้แนะนำ"
 msgid "Referrers to"
 msgstr "ผู้อ้างอิงถึง"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:9
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:12
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:18
 msgid "Refresh"
 msgstr "รีเฟรช"
@@ -2954,21 +2938,21 @@ msgstr "ระบบนี้ไม่สนับสนุนการแยก
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:4
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:144
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:84
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:88
 msgid "Save &amp; view"
 msgstr "บันทึก &amp; มุมมอง"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:4
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:144
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:84
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:88
 msgid "Save and view the page."
 msgstr "บันทึกและดูหน้า"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:17
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:141
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:80
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:84
 msgid "Save this page."
 msgstr "บันทึกหน้านี้"
 
@@ -3077,6 +3061,10 @@ msgstr "แสดงเป็น"
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:54
 msgid "Show keyword description"
 msgstr "แสดงคำอธิบายคำค้นหา"
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:3
+msgid "Show or hide a live preview beside the editor."
+msgstr "แสดงหรือซ่อนตัวอย่างแบบเรียลไทม์ข้างตัวแก้ไข"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:59
 msgid "Show page on multiple paths"
@@ -3482,7 +3470,7 @@ msgstr "บันทึกนี้จะมองเห็นได้เฉพ
 msgid "This page can be connected from other pages. For example it could be an author of an article."
 msgstr "เพจนี้สามารถเชื่อมต่อจากเพจอื่น ๆ ตัวอย่างเช่นอาจเป็นผู้เขียนบทความ"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:14
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:16
 msgid "This page cannot be previewed here. Use “Open in new tab” if available."
 msgstr "ไม่สามารถดูตัวอย่างหน้านี้ที่นี่ได้ โปรดใช้ตัวเลือก “เปิดในแท็บใหม่” หากมี"
 
@@ -4394,11 +4382,11 @@ msgstr "เปิดใบรับรองที่นำเข้า ขย�
 #: zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:10
 #: zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:11
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:22
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:25
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:115
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:122
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:143
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:145
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:26
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:118
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:126
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:151
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:155
 #: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:15
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:97
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:202
@@ -4676,8 +4664,8 @@ msgstr "ซ่อนเมนู"
 msgid "Language"
 msgstr "ภาษา"
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:33
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:41
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:34
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:44
 msgid "Loading ..."
 msgstr "กำลังโหลด ..."
 
@@ -4693,11 +4681,11 @@ msgstr "แสดงเมนู"
 msgid "The page might have been deleted."
 msgstr "เพจอาจถูกลบไปแล้ว"
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:129
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:133
 msgid "There are unsaved changes. Are you sure you want to leave without saving?"
 msgstr "มีการเปลี่ยนแปลงที่ไม่ได้บันทึก แน่ใจไหมว่าต้องการออกโดยไม่บันทึก"
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:78
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:82
 msgid "This page"
 msgstr "หน้านี้"
 
@@ -4705,7 +4693,7 @@ msgstr "หน้านี้"
 msgid "View this page."
 msgstr "ดูหน้านี้"
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:127
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:131
 msgid "Yes, discard changes"
 msgstr "ใช่ยกเลิกการเปลี่ยนแปลง"
 
@@ -4817,7 +4805,7 @@ msgstr "ชื่อผู้ใช้ซ้ำกันโปรดเลือ
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:16
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:17
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:39
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:20
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:27
 msgid "E-mail"
 msgstr "อีเมล์"
 
@@ -4912,7 +4900,7 @@ msgstr "ชื่อและที่อยู่อีเมล"
 
 #: zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:26
 #: zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:27
-#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:14
+#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:17
 #: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:3
 msgid "New password"
 msgstr "รหัสผ่านใหม่"
@@ -5198,7 +5186,7 @@ msgstr "รายละเอียดการเข้าสู่ระบบ
 #: zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:19
 #: zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:42
 #: zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:1
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:105
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:108
 msgid "Your new password is too short or not strong enough. Use a: uppercase letter, lowercase letter, number, and symbol."
 msgstr "รหัสผ่านใหม่ของคุณสั้นเกินไปหรือไม่รัดกุมเพียงพอ ใช้ a: ตัวอักษรพิมพ์ใหญ่ ตัวอักษรพิมพ์เล็ก ตัวเลข และสัญลักษณ์"
 
@@ -6305,11 +6293,11 @@ msgid "Two-factor authentication is not enabled for this account."
 msgstr "ไม่ได้เปิดใช้งานการตรวจสอบสิทธิ์สองปัจจัยสำหรับบัญชีนี้"
 
 #: zotonic_mod_auth2fa/priv/templates/_logon_login_set_passcode.tpl:30
-#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:37
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:38
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:131
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:155
-#: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:23
+#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:46
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:41
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:139
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:166
+#: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:29
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:83
 msgid "Two-factor passcode"
 msgstr "รหัสผ่านสองปัจจัย"
@@ -6400,16 +6388,16 @@ msgstr "ด้านล่างนี้คือข้อมูลเข้า
 msgid "Browser info"
 msgstr "ข้อมูลเบราว์เซอร์"
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:84
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:87
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:84
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:12
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:19
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:9
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:7
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:48
 msgid "Change"
 msgstr "เปลี่ยน"
 
-#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:44
+#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:53
 msgid "Change password"
 msgstr "เปลี่ยนรหัสผ่าน"
 
@@ -6439,7 +6427,7 @@ msgstr "คลิกที่ลิงค์เพื่อป้อนรหั
 msgid "Close this window and log on if you are already a user of {site}."
 msgstr "ปิดหน้าต่างนี้และเข้าสู่ระบบหากคุณเป็นผู้ใช้ {site}อยู่แล้ว"
 
-#: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:25
+#: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
 #: zotonic_mod_authentication/priv/templates/logon_service_error.tpl:8
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:72
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:18
@@ -6451,7 +6439,7 @@ msgstr "ยืนยัน"
 msgid "Confirm to connect"
 msgstr "ยืนยันการเชื่อมต่อ"
 
-#: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:20
+#: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:23
 msgid "Confirmation failure"
 msgstr "การยืนยันล้มเหลว"
 
@@ -6479,8 +6467,8 @@ msgstr "อีเมลหรือรหัสผ่านที่คุณป
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:7
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:13
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:69
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:88
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:72
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:91
 msgid "Email or username"
 msgstr "อีเมล์หรือชื่อผู้ใช้"
 
@@ -6543,10 +6531,10 @@ msgstr "ด้วยเหตุผลด้านความปลอดภั
 msgid "Force-close all active sessions"
 msgstr "บังคับปิดเซสชันที่ใช้งานอยู่ทั้งหมด"
 
-#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:9
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:63
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:192
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:204
+#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:12
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:66
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:203
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:215
 #: zotonic_mod_authentication/priv/templates/logon_error/message.passcode.tpl:8
 #: zotonic_mod_authentication/priv/templates/logon_error/message.pw.tpl:2
 msgid "Forgot your password?"
@@ -6598,7 +6586,7 @@ msgid "However this email address does not belong to one of our users or you hav
 msgstr "อย่างไรก็ตาม ที่อยู่อีเมลนี้ไม่ได้เป็นของผู้ใช้ของเรา หรือคุณยังไม่ได้เพิ่มรหัสผ่าน ดังนั้นคุณจึงไม่สามารถเปลี่ยนแปลงได้"
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:33
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:152
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:155
 msgid "I agree to the Terms of Service and the Privacy policies."
 msgstr "ฉันยอมรับข้อกำหนดในการให้บริการและนโยบายความเป็นส่วนตัว"
 
@@ -6640,9 +6628,9 @@ msgstr "ขัดจังหวะเซสชันที่ใช้งาน
 msgid "Interrupted sessions might still be visible in the sessions overview, but will not be updated anymore."
 msgstr "เซสชันที่ถูกขัดจังหวะอาจจะยังมองเห็นได้ในภาพรวมเซสชัน แต่จะไม่ได้รับการอัปเดตอีกต่อไป"
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:51
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:171
-#: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:37
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:54
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:182
+#: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:43
 msgid "Keep me logged in"
 msgstr "ให้ฉันอยู่ในระบบต่อไป"
 
@@ -6654,12 +6642,12 @@ msgstr "การเข้าสู่ระบบครั้งล่าสุ
 msgid "Last seen"
 msgstr "เห็นครั้งสุดท้าย"
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:58
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:186
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:61
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:197
 #: zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:22
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:196
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:205
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:199
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:208
 msgid "Log in"
 msgstr "เข้าสู่ระบบ"
 
@@ -6672,7 +6660,7 @@ msgstr "เข้าสู่ระบบไปที่"
 msgid "Log in with your existing {site} account to connect the accounts. You only have to do this once."
 msgstr "เข้าสู่ระบบด้วยบัญชี {site} ที่มีอยู่ของคุณเพื่อเชื่อมต่อบัญชี คุณต้องทำสิ่งนี้เพียงครั้งเดียว"
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:228
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:239
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:100
 msgid "Log on with"
 msgstr "เข้าสู่ระบบด้วย"
@@ -6694,9 +6682,10 @@ msgstr "ตรวจสอบให้แน่ใจว่าคุณได้
 msgid "Multiple accounts"
 msgstr "หลายบัญชี"
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:199
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:210
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:55
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:88
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:26
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:33
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:55
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:198
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:206
@@ -6736,11 +6725,11 @@ msgstr "ในหน้านี้คุณสามารถดูการเ
 msgid "One moment please"
 msgstr "กรุณารอซักครู่"
 
-#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:34
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:35
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:128
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:152
-#: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:20
+#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:43
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:38
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:136
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:163
+#: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:26
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:79
 msgid "Passcode"
 msgstr "รหัสผ่าน"
@@ -6791,7 +6780,7 @@ msgid "Please use a different method to sign in. You can’t sign in using a use
 msgstr "โปรดใช้วิธีอื่นในการลงชื่อเข้าใช้ คุณไม่สามารถลงชื่อเข้าใช้ด้วยชื่อผู้ใช้และรหัสผ่านได้"
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:44
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:164
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:167
 msgid "Privacy policies"
 msgstr "นโยบายความเป็นส่วนตัว"
 
@@ -6800,16 +6789,16 @@ msgid "Redirecting to"
 msgstr "กำลังเปลี่ยนเส้นทางไปที่"
 
 #: zotonic_mod_authentication/priv/templates/logon_service.tpl:15
-#: zotonic_mod_signup/src/controllers/controller_signup_confirm.erl:69
+#: zotonic_mod_signup/src/controllers/controller_signup_confirm.erl:71
 msgid "Redirecting..."
 msgstr "กำลังเปลี่ยนเส้นทาง ..."
 
-#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:23
-#: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:11
+#: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:29
+#: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:14
 msgid "Repeat password"
 msgstr "ใส่รหัสผ่านซ้ำ"
 
-#: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:45
+#: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:51
 msgid "Reset password and log in"
 msgstr "รีเซ็ตรหัสผ่านและเข้าสู่ระบบ"
 
@@ -6831,6 +6820,10 @@ msgstr "ภาพรวมเซสชัน"
 #: zotonic_mod_authentication/priv/templates/sessions.tpl:39
 msgid "Sessions that have been used by a browser in the last hour."
 msgstr "เซสชันที่ถูกใช้งานโดยเบราว์เซอร์ในชั่วโมงที่ผ่านมา"
+
+#: zotonic_mod_authentication/priv/templates/_password_visibility.tpl:5
+msgid "Show password"
+msgstr "แสดงรหัสผ่าน"
 
 #: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:27
 msgid "Simply try again:"
@@ -6857,12 +6850,12 @@ msgstr "ขออภัยมีการลองซ้ำมากเกิน
 msgid "Sorry, your password reset code is unknown or expired"
 msgstr "ขออภัยรหัสรีเซ็ตรหัสผ่านของคุณไม่เป็นที่รู้จักหรือหมดอายุ"
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:168
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:179
 msgid "Stay logged on unless I log off."
 msgstr "อยู่ในระบบต่อไปจนกว่าฉันจะออกจากระบบ"
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:41
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:161
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:164
 msgid "Terms of Service"
 msgstr "เงื่อนไขการให้บริการ"
 
@@ -6974,7 +6967,7 @@ msgstr "ขณะนี้คุณเข้าสู่ระบบแล้ว
 msgid "You can connect the account on {site} with your account on {service} if both accounts have a verified email address but this is not the case. Check both sites and then try again."
 msgstr "คุณสามารถเชื่อมต่อบัญชีที่ {site} กับบัญชีของคุณในวันที่ {service} หากทั้งสองบัญชีมีที่อยู่อีเมลที่ยืนยันแล้ว แต่ไม่ใช่กรณีนี้ ตรวจสอบทั้งสองไซต์แล้วลองอีกครั้ง"
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:110
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:113
 msgid "You can enter the password that you have for"
 msgstr "คุณสามารถป้อนรหัสผ่านที่คุณมีสำหรับ"
 
@@ -6982,12 +6975,12 @@ msgstr "คุณสามารถป้อนรหัสผ่านที่
 msgid "You can find the code in your authentication App."
 msgstr "คุณสามารถค้นหารหัสได้ในแอปรับรองความถูกต้องของคุณ"
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:215
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:226
 msgid "You can log in using the following external service"
 msgstr "คุณสามารถเข้าสู่ระบบโดยใช้บริการภายนอกต่อไปนี้"
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:39
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:159
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:162
 msgid "You can read them here:"
 msgstr "คุณสามารถอ่านได้ที่นี่:"
 
@@ -7053,13 +7046,13 @@ msgstr "ชื่อผู้ใช้ของคุณคือ"
 msgid "an hour"
 msgstr "หนึ่งชั่วโมง"
 
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:228
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:239
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:100
 msgid "external service"
 msgstr "บริการภายนอก"
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_extra.tpl:6
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:211
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:222
 #: zotonic_mod_signup/priv/templates/_signup_box.tpl:30
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:83
 msgid "or"
@@ -7295,6 +7288,7 @@ msgid "Please make sure you store the backup encryption password in a safe <u>ex
 msgstr "โปรดตรวจสอบให้แน่ใจว่าคุณเก็บรหัสผ่านการเข้ารหัสสำรองไว้ในตำแหน่ง <u>ภายนอก</u> ที่ปลอดภัย"
 
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:75
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:54
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:85
 msgid "Previous"
 msgstr "ก่อนหน้า"
@@ -7698,6 +7692,7 @@ msgid "February"
 msgstr "กุมภาพันธ์"
 
 #: zotonic_mod_base/priv/templates/error.tpl:81
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:12
 msgid "File"
 msgstr "ไฟล์"
 
@@ -7821,7 +7816,7 @@ msgstr "การเปลี่ยนแปลงสุทธิ"
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:187
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:267
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:44
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:44
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:55
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:48
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:35
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:28
@@ -8087,7 +8082,7 @@ msgstr "รายการงาน"
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:274
 #: zotonic_mod_development/priv/templates/_development_dispatch_options.tpl:14
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:44
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:44
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:55
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:47
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:30
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:25
@@ -8417,7 +8412,7 @@ msgstr "ลิงก์ไปยังบันทึกต้นฉบับ �
 msgid "More about licenses:"
 msgstr "ข้อมูลเพิ่มเติมเกี่ยวกับใบอนุญาต:"
 
-#: zotonic_mod_copyright/priv/templates/_provenance.tpl:6
+#: zotonic_mod_copyright/priv/templates/_provenance.tpl:7
 msgid "Original source"
 msgstr "แหล่งต้นฉบับ"
 
@@ -8452,7 +8447,7 @@ msgstr "ปี"
 
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:27
 #: zotonic_mod_development/priv/templates/_development_template_matches.tpl:8
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:234
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:266
 #: zotonic_site_status/priv/templates/_sites.tpl:6
 msgid "Actions"
 msgstr "การดำเนินการ"
@@ -9494,7 +9489,7 @@ msgid "Crop"
 msgstr "ครอบตัด"
 
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:57
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:36
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:35
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:61
 msgid "Crop image"
 msgstr "ครอบตัดรูปภาพ"
@@ -9508,23 +9503,18 @@ msgstr "ค่าเริ่มต้นของข้อมูลสรุป
 msgid "Editor version"
 msgstr "เวอร์ชันบรรณาธิการ"
 
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:72
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:28
-msgid "Extra small"
-msgstr "ขนาดเล็กที่สุด"
-
 #: zotonic_mod_editor_tinymce/priv/templates/_editor.tpl:19
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:13
 msgid "Insert media"
 msgstr "ใส่สื่อ"
 
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:89
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:31
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:83
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:30
 msgid "Large"
 msgstr "ใหญ่"
 
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:105
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:40
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:99
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:39
 msgid "Link to media or url below"
 msgstr "ลิงก์ไปยังสื่อหรือ url ด้านล่าง"
 
@@ -9534,27 +9524,27 @@ msgstr "ลิงก์ไปยังสื่อหรือ url ด้าน�
 msgid "Media Properties"
 msgstr "คุณสมบัติสื่อ"
 
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:83
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:30
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:77
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:29
 msgid "Medium"
 msgstr "ปานกลาง"
 
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:111
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:41
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:105
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:40
 msgid "Open link in new window"
 msgstr "เปิดลิงก์ในหน้าต่างใหม่"
 
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:124
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:50
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:118
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:49
 msgid "Remove from text"
 msgstr "ลบออกจากข้อความ"
 
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:78
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:29
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:72
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:28
 msgid "Small"
 msgstr "เล็ก"
 
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:115
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:109
 msgid "Website. Leave empty for media link"
 msgstr "เว็บไซต์. เว้นว่างไว้สำหรับลิงก์สื่อ"
 
@@ -9783,84 +9773,97 @@ msgstr "ยกเลิก"
 msgid "You are not allowed to view this media."
 msgstr "คุณไม่สามารถดูสื่อนี้ได้"
 
-#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:6
+#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:12
+msgid "An RSA key pair has been generated to sign outgoing email."
+msgstr "ได้สร้างคู่กุญแจ RSA เพื่อลงนามในอีเมลที่ส่งออกไปแล้ว"
+
+#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:40
+msgid "Copy the DNS TXT record value to the clipboard."
+msgstr "คัดลอกค่าของบันทึก DNS TXT ไปยังคลิปบอร์ด"
+
+#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:27
+msgid "Copy the DNS name to the clipboard."
+msgstr "คัดลอกชื่อ DNS ไปยังคลิปบอร์ด"
+
+#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:7
 msgid "DKIM e-mail signing setup"
 msgstr "การตั้งค่าการลงนามอีเมล DKIM"
 
-#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:20
-msgid "The DNS entry should contain the following information:"
-msgstr "รายการ DNS ควรมีข้อมูลต่อไปนี้:"
+#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:16
+msgid "To complete the DKIM setup, add a TXT record to your domain’s DNS settings using the name and value below."
+msgstr "เพื่อเสร็จสิ้นการตั้งค่า DKIM ให้เพิ่มบันทึก TXT ลงในตั้งค่า DNS ของโดเมนของคุณ โดยใช้ชื่อและค่าดังต่อไปนี้"
 
-#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:13
-msgid "The location of these key files are the following:"
-msgstr "ตำแหน่งของไฟล์สำคัญเหล่านี้มีดังต่อไปนี้:"
+#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:58
+msgid "When all is setup, you can use the <a target=\"_blank\" rel=\"noreferrer noopener\" href=\"https://dkimcore.org/c/keycheck\">DKIM keycheck</a> website to verify your domain’s DKIM record."
+msgstr "เมื่อการตั้งค่าเสร็จสิ้นแล้ว คุณสามารถใช้เว็บไซต์<a target=\"_blank\" rel=\"noreferrer noopener\" href=\"https://dkimcore.org/c/keycheck\">DKIM keycheck</a>เพื่อตรวจสอบบันทึก DKIM ของโดเมนของคุณได้"
 
-#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:12
-msgid "The module has generated an RSA keypair for you which will be used when signing outgoing emails."
-msgstr "โมดูลได้สร้างคู่คีย์ RSA สำหรับคุณซึ่งจะใช้เมื่อลงชื่อเข้าใช้อีเมลขาออก"
-
-#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:19
-msgid "To finalize the DKIM configuration, you need to add an DNS entry TXT record to the following domain:"
-msgstr "ในการสิ้นสุดการกำหนดค่า DKIM คุณต้องเพิ่มระเบียน TXT รายการ DNS ในโดเมนต่อไปนี้:"
-
-#: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:25
-msgid "When all is setup, you can use the <a href=\"http://dkimcore.org/c/keycheck\">DKIM keycheck</a> website to verify your domain's DKIM record."
-msgstr "เมื่อตั้งค่าทั้งหมดแล้วคุณสามารถใช้เว็บไซต์ <a href=\"http://dkimcore.org/c/keycheck\">DKIM keycheck</a> เพื่อยืนยันระเบียน DKIM ของโดเมนของคุณ"
-
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:32
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:35
 msgid "Complete URL of the API on the relaying Zotonic server."
 msgstr "URL ที่สมบูรณ์ของ API บนเซิร์ฟเวอร์ Zotonic ที่ถ่ายทอดข้อมูล"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:62
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:98
+msgid "Copy relay API URL to clipboard"
+msgstr "คัดลอก URL ของ API relay ไปยังคลิปบอร์ด"
+
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:44
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:75
+msgid "Copy secret to clipboard"
+msgstr "คัดลอกรหัสลับไปยังคลิปบอร์ด"
+
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:81
 msgid "Example secret:"
 msgstr "ตัวอย่างความลับ:"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:26
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:29
 msgid "Relay email via another Zotonic server"
 msgstr "ส่งต่ออีเมลผ่านเซิร์ฟเวอร์ Zotonic อื่น"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:55
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:65
 msgid "Relay emails for another Zotonic server"
 msgstr "ส่งต่ออีเมลไปยังเซิร์ฟเวอร์ Zotonic อื่น"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:11
-msgid "Relay emails via another Zotonic server."
-msgstr "ส่งต่ออีเมลผ่านเซิร์ฟเวอร์ Zotonic อื่น"
-
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:59
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:60
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:69
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:71
 msgid "Secret for receiving relayed emails"
 msgstr "ความลับในการรับอีเมล์ที่ส่งต่อ"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:35
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:36
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:38
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:40
 msgid "Secret for sending relayed emails"
 msgstr "ความลับในการส่งอีเมล์แบบส่งต่อ"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:21
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:24
 msgid "Send emails via another Zotonic server"
 msgstr "ส่งอีเมลผ่านเซิร์ฟเวอร์ Zotonic อื่น"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:56
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:66
 msgid "Settings for accepting emails and then relaying them to the intended recipients."
 msgstr "การตั้งค่าสำหรับรับอีเมล์และส่งต่อไปยังผู้รับที่ตั้งใจไว้"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:61
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:80
 msgid "Shared secret between this server and the Zotonic server wanting to send emails. Leave empty to not relay email."
 msgstr "ความลับร่วมกันระหว่างเซิร์ฟเวอร์นี้และเซิร์ฟเวอร์ Zotonic ที่ต้องการส่งอีเมล ปล่อยว่างไว้เพื่อไม่ให้ส่งต่ออีเมล"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:37
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:49
 msgid "Shared secret between this server and the relaying Zotonic server."
 msgstr "ความลับร่วมกันระหว่างเซิร์ฟเวอร์นี้และเซิร์ฟเวอร์ Zotonic ที่ถ่ายทอดสัญญาณ"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:74
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:93
 msgid "The URL for the email relay API on this server is:"
 msgstr "URL สำหรับ API การส่งต่ออีเมลบนเซิร์ฟเวอร์นี้คือ:"
 
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:30
-#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:31
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:14
+msgid "To send through another server, enter its relay API URL and a shared secret below. The secret must match the receiving secret configured on that server. To accept email from other servers, set a receiving secret here and configure those servers to use this server’s relay API URL and the same secret."
+msgstr "เพื่อส่งผ่านเซิร์ฟเวอร์อื่น ให้ป้อน URL API relay ของเซิร์ฟเวอร์นั้นและรหัสลับที่ใช้ร่วมกันด้านล่าง รหัสลับนี้ต้องตรงกับรหัสลับการรับที่ตั้งค่าไว้บนเซิร์ฟเวอร์นั้น เพื่อรับอีเมลจากเซิร์ฟเวอร์อื่น ให้ตั้งค่ารหัสลับการรับที่นี่ และตั้งค่าเซิร์ฟเวอร์เหล่านั้นให้ใช้ URL API relay ของเซิร์ฟเวอร์นี้และรหัสลับเดียวกัน"
+
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:33
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:34
 msgid "URL for the email relay API"
 msgstr "URL สำหรับ API รีเลย์อีเมล"
+
+#: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:11
+msgid "Use another Zotonic server to deliver outgoing email, or let this server deliver email on behalf of other Zotonic servers. This allows multiple sites or installations to share one server configured for email delivery."
+msgstr "ใช้เซิร์ฟเวอร์ Zotonic อื่นเพื่อส่งอีเมลขาออก หรือให้เซิร์ฟเวอร์นี้ส่งอีเมลแทนเซิร์ฟเวอร์ Zotonic อื่น ๆ สิ่งนี้ช่วยให้เว็บไซต์หรือการติดตั้งหลายแห่งสามารถใช้เซิร์ฟเวอร์เดียวที่ได้รับการตั้งค่าไว้สำหรับการส่งอีเมลร่วมกันได้"
 
 #: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:6
 msgid "Zotonic Relay"
@@ -10205,321 +10208,440 @@ msgstr "คุณได้เชื่อมต่อกับบัญชี <s
 msgid "Your Facebook Developer Dashboard"
 msgstr "แดชบอร์ดนักพัฒนา Facebook ของคุณ"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:158
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:190
 msgid "After 1 month"
 msgstr "หลังจาก 1 เดือน"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:157
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:189
 msgid "After 1 week"
 msgstr "หลังจาก 1 สัปดาห์"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:159
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:191
 msgid "After 3 months"
 msgstr "หลังจาก 3 เดือน"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:282
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:314
 msgid "All cloud files can be moved back to the file system on the server."
 msgstr "ไฟล์คลาวด์ทั้งหมดสามารถย้ายกลับไปที่ระบบไฟล์บนเซิร์ฟเวอร์ได้"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:290
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:322
 msgid "All cloud files will be queued for download."
 msgstr "ไฟล์คลาวด์ทั้งหมดจะเข้าคิวดาวน์โหลด"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:247
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:279
 msgid "All files will be queued, uploads will start in the background within 10 minutes."
 msgstr "ไฟล์ทั้งหมดจะเข้าคิวการอัปโหลดจะเริ่มต้นในพื้นหลังภายใน 10 นาที"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:237
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:269
 msgid "All local uploaded and preview files can be moved to the cloud."
 msgstr "ไฟล์ที่อัปโหลดและดูตัวอย่างในเครื่องทั้งหมดสามารถย้ายไปยังระบบคลาวด์ได้"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:256
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:288
 msgid "Are you sure you want to copy all files to the cloud?"
 msgstr "คุณแน่ใจหรือไม่ว่าต้องการคัดลอกไฟล์ทั้งหมดไปยังคลาวด์?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:299
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:331
 msgid "Are you sure you want to copy all files to the disk of the server?"
 msgstr "คุณแน่ใจหรือไม่ว่าต้องการคัดลอกไฟล์ทั้งหมดไปยังดิสก์ของเซิร์ฟเวอร์?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:267
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:299
 msgid "Are you sure you want to move all files to the cloud?"
 msgstr "แน่ใจไหมว่าต้องการย้ายไฟล์ทั้งหมดไปที่คลาวด์"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:310
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:342
 msgid "Are you sure you want to move all files to the disk of the server?"
 msgstr "คุณแน่ใจหรือไม่ว่าต้องการย้ายไฟล์ทั้งหมดไปยังดิสก์ของเซิร์ฟเวอร์"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:98
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:109
 msgid "Base URL"
 msgstr "URL ฐาน"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:169
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:201
 msgid "Before the settings are saved they will be checked by uploading (and removing) a small file."
 msgstr "ก่อนบันทึกการตั้งค่าระบบจะตรวจสอบโดยการอัปโหลด (และลบ) ไฟล์ขนาดเล็ก"
 
-#: zotonic_mod_filestore/src/mod_filestore.erl:430
+#: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:14
+msgid "Check the storage service and its access permissions. Failed reads are retried when requested, with a delay of up to ten minutes."
+msgstr "ตรวจสอบบริการจัดเก็บข้อมูลและสิทธิ์การเข้าถึงของบริการดังกล่าว การอ่านข้อมูลที่ล้มเหลวจะได้รับการลองใหม่เมื่อมีคำขอ โดยมีความล่าช้าสูงสุด 10 นาที"
+
+#: zotonic_mod_filestore/src/mod_filestore.erl:584
 msgid "Cloud File Store"
 msgstr "Cloud File Store"
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:3
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:7
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:12
 msgid "Cloud File Store Configuration"
 msgstr "การกำหนดค่า Cloud File Store"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:187
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:219
 msgid "Cloud File Store Utilities and Statistics"
 msgstr "ยูทิลิตี้และสถิติการจัดเก็บไฟล์บนคลาวด์"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:196
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:228
 msgid "Cloud Files"
 msgstr "ไฟล์คลาวด์"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:253
+#: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:15
+msgid "Cloud file store configuration"
+msgstr "การตั้งค่าพื้นที่เก็บไฟล์บนคลาวด์"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:5
+msgid "Cloud file store needs attention"
+msgstr "ระบบจัดเก็บไฟล์บนคลาวด์ต้องการการดูแล"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:15
+msgid "Consecutive failures"
+msgstr "ความล้มเหลวที่เกิดขึ้นติดต่อกัน"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:285
 msgid "Copy all local files to the remote storage"
 msgstr "คัดลอกไฟล์ทั้งหมดในเครื่องไปยังที่เก็บข้อมูลระยะไกล"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:296
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:328
 msgid "Copy all remote files to local"
 msgstr "คัดลอกไฟล์ระยะไกลทั้งหมดไปยังเครื่องท้องถิ่น"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:257
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:289
 msgid "Copy files to cloud"
 msgstr "คัดลอกไฟล์ไปยังคลาวด์"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:300
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:332
 msgid "Copy files to server disk"
 msgstr "คัดลอกไฟล์ไปยังดิสก์เซิร์ฟเวอร์"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:246
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:278
 msgid "Could not access the service, double check your settings and try again."
 msgstr "ไม่สามารถเข้าถึงบริการได้โปรดตรวจสอบการตั้งค่าของคุณอีกครั้งแล้วลองอีกครั้ง"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:74
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:172
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:85
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:204
 msgid "Could not access the service, double check your settings and try again. Make sure that API key has access rights to create and remove a (temporary) <code>-zotonic-filestore-test-file-</code> file."
 msgstr "ไม่สามารถเข้าถึงบริการได้โปรดตรวจสอบการตั้งค่าของคุณอีกครั้งแล้วลองอีกครั้ง ตรวจสอบให้แน่ใจว่าคีย์ API มีสิทธิ์เข้าถึงเพื่อสร้างและลบไฟล์ (ชั่วคราว) <code>-zotonic-filestore-test-file-</code>"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:11
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:16
 msgid "Currently Zotonic supports FTP, WebDAV and services that are compatible with the S3 file services API. These include:"
 msgstr "ปัจจุบัน Zotonic รองรับ FTP, WebDAV และบริการที่เข้ากันได้กับ API บริการไฟล์ S3 ซึ่งรวมถึง:"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:219
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:251
 msgid "Delete Queue"
 msgstr "ลบคิว"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:153
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:185
 msgid "Delete files from the cloud file store"
 msgstr "ลบไฟล์จากที่เก็บไฟล์บนคลาวด์"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:59
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:70
 msgid "Delete interval"
 msgstr "ช่วงเวลาการลบ"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:218
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:250
 msgid "Download Queue"
 msgstr "ดาวน์โหลดคิว"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:138
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:170
 msgid "Enable this to let the filestore act as a backup of  your local media files."
 msgstr "เปิดใช้งานสิ่งนี้เพื่อให้ filestore ทำหน้าที่เป็นตัวสำรองของไฟล์มีเดียในเครื่องของคุณ"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:283
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:315
 msgid "Ensure yourself there is enough disk space before starting this process."
 msgstr "ตรวจสอบให้แน่ใจว่าตัวเองมีเนื้อที่ว่างบนดิสก์เพียงพอก่อนเริ่มกระบวนการนี้"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:201
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:224
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:128
+msgid "Enter the region supplied by your storage provider to use Signature V4. Leave empty to use legacy Signature V2."
+msgstr "ป้อนภูมิภาคที่ผู้ให้บริการพื้นที่จัดเก็บข้อมูลของคุณกำหนดไว้ เพื่อใช้ Signature V4 หากไม่ป้อนอะไรเลย จะใช้ Signature V2 แบบเดิม"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:53
+msgid "Error list pages"
+msgstr "หน้ารายการข้อผิดพลาด"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:8
+msgid "Failed reads in the last 15 minutes:"
+msgstr "การอ่านข้อมูลที่ล้มเหลวใน 15 นาทีที่ผ่านมา:"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:16
+msgid "Failing since"
+msgstr "ล้มเหลวมาตั้งแต่"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:233
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:256
 msgid "Files"
 msgstr "ไฟล์"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:107
+#: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:11
+msgid "Files with unresolved read errors older than 24 hours:"
+msgstr "ไฟล์ที่มีข้อผิดพลาดในการอ่านที่ยังไม่ได้รับการแก้ไข และมีอายุมากกว่า 24 ชั่วโมง:"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:118
 msgid "For FTP the URL must start with <b><tt>ftps:</tt></b> or <b><tt>ftp:</tt></b>"
 msgstr "สำหรับ FTP URL ต้องขึ้นต้นด้วย <b><tt>ftps:</tt></b> หรือ <b><tt>ftp:</tt></b>"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:106
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:117
 msgid "For S3 the URL must start with <b><tt>https:</tt></b> or <b><tt>http:</tt></b>"
 msgstr "สำหรับ S3 URL ต้องขึ้นต้นด้วย <b><tt>https:</tt></b> หรือ <b><tt>http:</tt></b>"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:108
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:119
 msgid "For WebDAV the URL must start with <b><tt>webdavs:</tt></b> or <b><tt>webdav:</tt></b>"
 msgstr "สำหรับ WebDAV URL ต้องขึ้นต้นด้วย <b><tt>webdavs:</tt></b> หรือ <b><tt>webdav:</tt></b>"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:243
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:275
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the local files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "หากคุณเลือก \"เก็บไฟล์ในเครื่องไว้หลังจากอัปโหลดไปยังที่เก็บไฟล์บนคลาวด์\" ไฟล์ในเครื่องจะไม่ถูกลบ เนื่องจากไฟล์ระยะไกลถือเป็นข้อมูลสำรองของไฟล์ในเครื่อง"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:287
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:319
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the remote files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "หากคุณเลือก \"เก็บไฟล์ในเครื่องไว้หลังจากอัปโหลดไปยังที่เก็บไฟล์บนคลาวด์\" ไฟล์ระยะไกลจะไม่ถูกลบ เนื่องจากไฟล์ระยะไกลถือเป็นข้อมูลสำรองของไฟล์ในเครื่อง"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:17
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:22
 msgid "If you use an FTP server then that server MUST support FTPS (secure ftp)"
 msgstr "หากคุณใช้เซิร์ฟเวอร์ FTP แสดงว่าเซิร์ฟเวอร์นั้นต้องรองรับ FTPS (ftp ที่ปลอดภัย)"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:63
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:74
 msgid "Immediately"
 msgstr "ทันที"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:43
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:54
 msgid "Is upload enabled?"
 msgstr "มีการเปิดใช้งานการอัพโหลดแล้วหรือยัง?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:136
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:168
 msgid "Keep local files after upload to the cloud file store"
 msgstr "เก็บไฟล์ในเครื่องไว้หลังจากอัปโหลดไปยังที่เก็บไฟล์บนคลาวด์"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:47
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:58
 msgid "Keep local files?"
 msgstr "เก็บไฟล์ไว้ในเครื่องใช่ไหม?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:195
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:14
+msgid "Last error"
+msgstr "ข้อผิดพลาดล่าสุด"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:227
 msgid "Local Files"
 msgstr "ไฟล์ในเครื่อง"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:194
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:34
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:37
+msgid "Mark unrecoverable"
+msgstr "ทำเครื่องหมายว่าไม่สามารถกู้คืนได้"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:226
 msgid "Media Resources"
 msgstr "แหล่งข้อมูลสื่อ"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:264
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:296
 msgid "Move all local files to the remote storage"
 msgstr "ย้ายไฟล์ในเครื่องทั้งหมดไปยังที่เก็บข้อมูลระยะไกล"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:307
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:339
 msgid "Move all remote files to local"
 msgstr "ย้ายไฟล์ระยะไกลทั้งหมดไปที่ local"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:268
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:300
 msgid "Move files to cloud"
 msgstr "ย้ายไฟล์ไปยังคลาวด์"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:311
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:343
 msgid "Move files to server disk"
 msgstr "ย้ายไฟล์ไปยังดิสก์เซิร์ฟเวอร์"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:65
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:160
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:76
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:192
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:62
 msgid "Never"
 msgstr "ไม่เลย"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:156
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:47
+msgid "No errors on this page."
+msgstr "ไม่มีข้อผิดพลาดบนหน้านี้"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:188
 msgid "No extra delay"
 msgstr "ไม่มีการล่าช้าเพิ่ม"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:53
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:64
 msgid "No, local files are deleted after upload"
 msgstr "ไม่ ไฟล์ในเครื่องจะถูกลบออกหลังจากการอัพโหลด"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:113
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:50
+msgid "Not set (Signature V2)"
+msgstr "ยังไม่ได้กำหนด (Signature V2)"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:31
+msgid "Now"
+msgstr "ตอนนี้"
+
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:38
+msgid "Only the admin account (user 1) can mark files unrecoverable."
+msgstr "มีเพียงบัญชีผู้ดูแลระบบ (ผู้ใช้ 1) เท่านั้นที่สามารถทำเครื่องหมายไฟล์ว่าไม่สามารถกู้คืนได้"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:5
+msgid "Read errors older than 24 hours"
+msgstr "ข้อผิดพลาดในการอ่านที่เกิดขึ้นเมื่อกว่า 24 ชั่วโมงแล้ว"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:7
+msgid "Remote file reads are failing frequently."
+msgstr "การอ่านไฟล์จากระยะไกลเกิดข้อผิดพลาดบ่อยครั้ง"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:52
+msgid "Retries happen when a file is requested, not at a scheduled time."
+msgstr "การลองใหม่จะเกิดขึ้นเมื่อมีการขอไฟล์ ไม่ใช่ตามเวลาที่กำหนดไว้"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:17
+msgid "Retry status"
+msgstr "สถานะการลองใหม่"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:142
 msgid "S3 API Key or FTP/WebDAV username"
 msgstr "คีย์ S3 API หรือชื่อผู้ใช้ FTP/WebDAV"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:118
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:147
 msgid "S3 API Secret or FTP/WebDAV password"
 msgstr "S3 API Secret หรือรหัสผ่าน FTP/WebDAV"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:39
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:44
 msgid "S3 Cloud Location"
 msgstr "ตำแหน่งคลาวด์ S3"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:28
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:95
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:33
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:106
 msgid "S3 Cloud Location and Credentials"
 msgstr "ตำแหน่งและข้อมูลประจำตัวของ S3 Cloud"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:176
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:49
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:124
+msgid "S3 region"
+msgstr "พื้นที่ S3"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:208
 msgid "Save Settings"
 msgstr "บันทึกการตั้งค่า"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:35
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:13
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:40
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:7
 msgid "Service"
 msgstr "บริการ"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:171
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:201
+msgid "Settings are saved without a write test while the file store is read-only. Verify access by downloading an existing file."
+msgstr "การตั้งค่าจะถูกบันทึกโดยไม่มีการทดสอบการเขียน เนื่องจากพื้นที่จัดเก็บไฟล์อยู่ในโหมดอ่านเท่านั้น โปรดตรวจสอบสิทธิ์การเข้าถึงโดยดาวน์โหลดไฟล์ที่มีอยู่"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:203
 msgid "Settings are working fine and are saved."
 msgstr "การตั้งค่าทำงานได้ดีและได้รับการบันทึก"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:73
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:84
 msgid "Settings are working fine."
 msgstr "การตั้งค่าทำงานได้ดี"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:207
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:203
+msgid "Settings saved without a write test."
+msgstr "การตั้งค่าถูกบันทึกไว้โดยไม่ผ่านการทดสอบการเขียน"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:36
+msgid "Stop retrying this file and mark it unrecoverable? Its record and error details will be kept. No files will be deleted."
+msgstr "หยุดการลองกู้คืนไฟล์นี้อีกครั้งและทำเครื่องหมายว่ากู้คืนไม่ได้หรือไม่? ข้อมูลบันทึกและรายละเอียดข้อผิดพลาดของไฟล์นี้จะถูกเก็บไว้ทั้งหมด ไม่มีไฟล์ใดที่จะถูกลบ"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:239
 msgid "Storage"
 msgstr "การจัดเก็บ"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:77
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:88
 msgid "Test Cloud File Store Settings"
 msgstr "ทดสอบการตั้งค่าที่เก็บข้อมูลไฟล์บนคลาวด์"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:30
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:255
+msgid "The cloud file store is read-only."
+msgstr "พื้นที่เก็บไฟล์บนคลาวด์เป็นแบบอ่านเท่านั้น"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:7
+msgid "The cloud file store is read-only. Downloads are available; uploads, remote deletion and write-based settings tests are disabled."
+msgstr "พื้นที่จัดเก็บไฟล์บนคลาวด์เป็นแบบอ่านเท่านั้น สามารถดาวน์โหลดไฟล์ได้ แต่การอัปโหลด การลบไฟล์จากระยะไกล และการทดสอบการตั้งค่าที่อิงจากการเขียนถูกปิดใช้งาน"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:35
 msgid "The cloud file store uses a global Zotonic configuration. The configuration cannot be changed here."
 msgstr "ที่เก็บไฟล์บนคลาวด์ใช้การกำหนดค่า Zotonic ทั่วโลก ไม่สามารถเปลี่ยนการกำหนดค่าได้ที่นี่"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:31
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:36
 msgid "The configuration is:"
 msgstr "การกำหนดค่าคือ:"
 
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:68
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:85
 msgid "The settings are locked by the system configuration."
 msgstr "การตั้งค่าถูกล็อคโดยการกำหนดค่าระบบ"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:83
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:94
 msgid "The settings are tested by uploading (and removing) a small file."
 msgstr "การตั้งค่าถูกทดสอบโดยการอัปโหลด (และลบ) ไฟล์ขนาดเล็ก"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:239
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:271
 msgid "There is a 1 minute wait before files are uploaded."
 msgstr "ต้องรอ 1 นาทีก่อนอัพโหลดไฟล์"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:164
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:196
 msgid "This extra deletion delay extends the period files can be recovered."
 msgstr "ความล่าช้าในการลบเพิ่มเติมนี้จะทำให้ระยะเวลาในการกู้คืนไฟล์ขยายออกไป"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:238
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:40
+msgid "This file no longer has an eligible error older than 24 hours. Reload the page."
+msgstr "ไฟล์นี้ไม่มีข้อผิดพลาดที่ตรงตามเงื่อนไขและเกิดขึ้นเมื่อเกิน 24 ชั่วโมงแล้ว โปรดโหลดหน้าใหม่"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:270
 msgid "This will queue the files for later asynchronous upload."
 msgstr "การดำเนินการนี้จะจัดคิวไฟล์สำหรับการอัปโหลดแบบอะซิงโครนัสในภายหลัง"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:164
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:196
 msgid "To allow recovery of deleted pages, Zotonic keeps files for 5 weeks."
 msgstr "เพื่อให้สามารถกู้คืนหน้าที่ถูกลบได้ Zotonic จะเก็บไฟล์ไว้เป็นเวลา 5 สัปดาห์"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:145
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:177
 msgid "Try to create a private S3 bucket if the S3 bucket does not exist"
 msgstr "ลองสร้างบัคเก็ต S3 ส่วนตัวถ้าไม่มีบัคเก็ต S3"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:217
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:29
+msgid "Unrecoverable"
+msgstr "ไม่สามารถกู้คืนได้"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:7
+msgid "Unresolved files are listed oldest first. The error shown is the most recent recorded error for each file."
+msgstr "ไฟล์ที่ยังไม่ได้รับการแก้ไขจะแสดงตามลำดับจากเก่าที่สุดก่อน ข้อผิดพลาดที่แสดงคือข้อผิดพลาดล่าสุดที่บันทึกไว้สำหรับแต่ละไฟล์"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:249
 msgid "Upload Queue"
 msgstr "คิวการอัปโหลด"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:127
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:159
 msgid "Upload new media files to the cloud file store"
 msgstr "อัปโหลดไฟล์สื่อใหม่ไปยังที่เก็บไฟล์บนคลาวด์"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:147
+#: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:12
+msgid "View errors"
+msgstr "ดูข้อผิดพลาด"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:179
 msgid "With FTP and WebDAV the directories are always created automatically."
 msgstr "ด้วย FTP และ WebDAV ไดเร็กทอรีจะถูกสร้างขึ้นโดยอัตโนมัติเสมอ"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:19
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:24
 msgid "With WebDAV the username and password are transfered in the clear, so ensure that you use <tt>webdavs:</tt> URLs (which makes use of https)."
 msgstr "ด้วย WebDAV ชื่อผู้ใช้และรหัสผ่านจะถูกโอนอย่างชัดเจน ดังนั้นให้แน่ใจว่าคุณใช้ <tt>webdavs:</tt> URL (ซึ่งใช้ https)"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:51
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:62
 msgid "Yes, keep local files after upload"
 msgstr "ใช่ เก็บไฟล์ในเครื่องไว้หลังจากการอัพโหลด"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:328
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:71
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:78
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:85
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:360
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:88
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:95
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:102
 msgid "You are not allowed to change these settings."
 msgstr "คุณไม่ได้รับอนุญาตให้เปลี่ยนการตั้งค่าเหล่านี้"
 
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:109
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:126
 msgid "You are not allowed to use this."
 msgstr "คุณไม่ได้รับอนุญาตให้ใช้สิ่งนี้"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:9
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:14
 msgid "Zotonic can store uploaded and resized files in the cloud. Here you can configure the location and access keys for the cloud service."
 msgstr "Zotonic สามารถจัดเก็บไฟล์ที่อัปโหลดและปรับขนาดในระบบคลาวด์ คุณสามารถกำหนดค่าตำแหน่งและคีย์การเข้าถึงสำหรับบริการคลาวด์ได้ที่นี่"
 
@@ -10763,12 +10885,12 @@ msgstr "กำลังใช้งาน"
 msgid "Activity log"
 msgstr "บันทึกกิจกรรม"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:324
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:350
 msgid "Add default connection"
 msgstr "เพิ่มการเชื่อมต่อตามค่าเริ่มต้น"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user.tpl:32
-#: zotonic_mod_import_feed/src/models/m_import_feed.erl:481
+#: zotonic_mod_import_feed/src/models/m_import_feed.erl:482
 msgid "Administrator accounts cannot run feed imports. Importing external content with full administrator permissions is dangerous. Select a non-administrator account with only the permissions needed for importing."
 msgstr "บัญชีผู้ดูแลระบบไม่สามารถดำเนินการนำเข้าฟีดได้ การนำเข้าเนื้อหาจากภายนอกด้วยสิทธิ์ผู้ดูแลระบบเต็มรูปแบบนั้นมีความเสี่ยงสูง ให้เลือกบัญชีที่ไม่ใช่ผู้ดูแลระบบ ซึ่งมีสิทธิ์เพียงเท่าที่จำเป็นสำหรับการนำเข้าเท่านั้น"
 
@@ -10854,25 +10976,25 @@ msgid "Default is 1: import directly connected resources. Use 0 to skip connecti
 msgstr "ค่าเริ่มต้นคือ 1: นำเข้าทรัพยากรที่เชื่อมต่อโดยตรง ใช้ค่า 0 เพื่อข้ามการเชื่อมต่อ"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_dialog.tpl:23
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:185
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:189
 msgid "Delete feed"
 msgstr "ลบฟีด"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:510
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:536
 msgid "Delete feed?"
 msgstr "ลบฟีด?"
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:176
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:180
 msgid "Delete imported articles and media that you are allowed to delete. Protected resources are kept. The feed will be paused; its settings and import history are retained."
 msgstr "ลบบทความและสื่อที่นำเข้าซึ่งคุณมีสิทธิ์ลบได้ ทรัพยากรที่ได้รับการคุ้มครองจะยังคงอยู่ ฟีดจะถูกหยุดชั่วคราว ส่วนการตั้งค่าและประวัติการนำเข้าจะยังคงอยู่"
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:173
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:178
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:177
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:182
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:186
 msgid "Delete imported content"
 msgstr "ลบเนื้อหาที่นำเข้า"
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:180
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:184
 msgid "Delete imported content?"
 msgstr "จะลบเนื้อหาที่นำเข้าหรือไม่?"
 
@@ -10903,8 +11025,8 @@ msgid "Development environment: local destinations and self-signed certificates 
 msgstr "สภาพแวดล้อมการพัฒนา: อนุญาตให้ใช้ปลายทางในเครื่องและใบรับรองที่ลงนามเอง"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:12
-msgid "Discover RSS or Atom feeds and import their articles automatically."
-msgstr "ค้นพบฟีด RSS หรือ Atom และนำเข้าบทความจากฟีดเหล่านั้นโดยอัตโนมัติ"
+msgid "Discover RSS, Atom or JSON feeds and import their articles automatically."
+msgstr "ค้นพบฟีด RSS, Atom หรือ JSON และนำเข้าบทความจากฟีดเหล่านั้นโดยอัตโนมัติ"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:27
 msgid "Discover feeds"
@@ -10927,7 +11049,7 @@ msgstr "เสร็จแล้ว"
 msgid "Enable mod_websub to subscribe imported resources for updates."
 msgstr "เปิดใช้งาน mod_websub เพื่อติดตามการอัปเดตของทรัพยากรที่นำเข้า"
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:150
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:154
 msgid "Enrich WordPress entries using the public REST API"
 msgstr "ปรับปรุงเนื้อหาใน WordPress โดยใช้ REST API สาธารณะ"
 
@@ -10968,7 +11090,7 @@ msgstr "ฟีด"
 msgid "Feed activity log"
 msgstr "บันทึกกิจกรรมฟีด"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:522
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:548
 msgid "Feed deleted"
 msgstr "โพสต์ถูกลบแล้ว"
 
@@ -10976,7 +11098,7 @@ msgstr "โพสต์ถูกลบแล้ว"
 msgid "Feed not found or access denied."
 msgstr "ไม่พบฟีด หรือถูกปฏิเสธการเข้าถึง"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:488
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:514
 msgid "Feed queued for fetching. Watch the activity log for results."
 msgstr "ข้อมูลได้ถูกจัดเข้าคิวเพื่อดึงข้อมูลแล้ว โปรดติดตามบันทึกกิจกรรมเพื่อดูผลลัพธ์"
 
@@ -11005,6 +11127,10 @@ msgstr "เดาหมวดหมู่จากแท็ก"
 msgid "Identity"
 msgstr "อัตลักษณ์"
 
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:148
+msgid "Import all pages on the initial import"
+msgstr "นำเข้าทุกหน้าในการนำเข้าครั้งแรก"
+
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:55
 msgid "Import as authoritative local content"
 msgstr "นำเข้าเป็นเนื้อหาท้องถิ่นที่ได้รับการยอมรับอย่างเป็นทางการ"
@@ -11019,7 +11145,7 @@ msgstr "นำเข้าหมวดหมู่"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:4
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:11
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:255
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:281
 msgid "Import feeds"
 msgstr "นำเข้าฟีด"
 
@@ -11043,7 +11169,7 @@ msgstr "นำเข้าผู้ใช้"
 msgid "Imported / updated / skipped"
 msgstr "นำเข้า / อัปเดต / ข้าม"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:499
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:525
 msgid "Imported content deleted"
 msgstr "เนื้อหาที่นำเข้าถูกลบแล้ว"
 
@@ -11055,7 +11181,7 @@ msgstr "การนำเข้า"
 msgid "Imports run with this account's permissions. Only administrators and users with full access to accounts can change it."
 msgstr "การนำเข้าจะดำเนินการตามสิทธิ์ของบัญชีนี้ ผู้บริหารและผู้ใช้ที่มีสิทธิ์เข้าถึงบัญชีอย่างเต็มตัวเท่านั้นที่สามารถเปลี่ยนแปลงได้"
 
-#: zotonic_mod_import_feed/src/models/m_import_feed.erl:475
+#: zotonic_mod_import_feed/src/models/m_import_feed.erl:476
 msgid "Invalid removal regexp on line"
 msgstr "นิพจน์ปกติสำหรับการลบไม่ถูกต้องในบรรทัด"
 
@@ -11145,7 +11271,7 @@ msgstr "บทความต้นฉบับ"
 msgid "Pause"
 msgstr "หยุดชั่วคราว"
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:157
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:161
 msgid "Pause automatic imports"
 msgstr "หยุดการนำเข้าอัตโนมัติ"
 
@@ -11195,11 +11321,11 @@ msgstr "ทรัพยากร"
 msgid "Resume"
 msgstr "ประวัติการทำงาน"
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:163
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:167
 msgid "Save & refetch deleted"
 msgstr "บันทึกและเรียกข้อมูลที่ถูกลบมาใหม่"
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:162
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:166
 msgid "Save feed"
 msgstr "บันทึกฟีด"
 
@@ -11207,11 +11333,11 @@ msgstr "บันทึกฟีด"
 msgid "Select a feed"
 msgstr "เลือกฟีด"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:331
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:357
 msgid "Select connected page"
 msgstr "เลือกหน้าที่เชื่อมโยง"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:363
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:389
 msgid "Select import user"
 msgstr "เลือกผู้ใช้ที่จะนำเข้า"
 
@@ -11276,11 +11402,11 @@ msgstr "การเชื่อมต่อเหล่านี้จะถู
 msgid "These defaults apply to imported articles and their dependent media. Leave empty to use the standard copyright defaults."
 msgstr "ค่าเริ่มต้นเหล่านี้ใช้กับบทความที่นำเข้าและสื่อที่เกี่ยวข้องกับบทความดังกล่าว หากไม่กรอกค่าใด ๆ จะใช้ค่าเริ่มต้นด้านลิขสิทธิ์ตามมาตรฐาน"
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:181
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:185
 msgid "This deletes all deletable articles and media imported by this feed, including resources shared with other feeds. Protected resources and resources you cannot delete are kept. The feed will be paused."
 msgstr "การนี้จะลบบทความและสื่อทั้งหมดที่สามารถลบได้ ซึ่งถูกนำเข้าโดยฟีดนี้ รวมถึงทรัพยากรที่แชร์กับฟีดอื่น ๆ ทรัพยากรที่ได้รับการป้องกันและทรัพยากรที่คุณไม่สามารถลบได้จะยังคงอยู่ ฟีดนี้จะถูกหยุดชั่วคราว"
 
-#: zotonic_mod_import_feed/src/models/m_import_feed.erl:477
+#: zotonic_mod_import_feed/src/models/m_import_feed.erl:478
 msgid "This feed is paused. Resume it before fetching."
 msgstr "ฟีดนี้ถูกหยุดชั่วคราว โปรดเปิดใช้งานอีกครั้งก่อนที่จะดึงข้อมูล"
 
@@ -11288,7 +11414,7 @@ msgstr "ฟีดนี้ถูกหยุดชั่วคราว โป�
 msgid "This feed is paused. Resume it in its settings before fetching."
 msgstr "ฟีดนี้ถูกหยุดชั่วคราว โปรดเปิดใช้งานอีกครั้งในส่วนตั้งค่าก่อนที่จะดึงข้อมูล"
 
-#: zotonic_mod_import_feed/src/models/m_import_feed.erl:479
+#: zotonic_mod_import_feed/src/models/m_import_feed.erl:480
 msgid "This feed is still importing. Pause it and wait for the current import to finish before deleting its content."
 msgstr "ฟีดนี้กำลังนำเข้าข้อมูลอยู่ โปรดหยุดชั่วคราวและรอจนการนำเข้าปัจจุบันเสร็จสิ้นก่อนที่จะลบเนื้อหาของมัน"
 
@@ -11319,6 +11445,10 @@ msgstr "ผู้ใช้"
 msgid "Uses credentials registered for the import user and destination host. Credentials are only sent over HTTPS."
 msgstr "ใช้ข้อมูลการรับรองที่ลงทะเบียนไว้สำหรับผู้ใช้ที่นำเข้าและโฮสต์ปลายทาง ข้อมูลการรับรองจะถูกส่งผ่าน HTTPS เท่านั้น"
 
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:149
+msgid "Warning: this can import large amounts of articles and media. By default, only the first page is imported initially."
+msgstr "คำเตือน: การดำเนินการนี้อาจนำบทความและสื่อมาในปริมาณมาก โดยค่าเริ่มต้น จะนำเพียงหน้าแรกมาเท่านั้น"
+
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:20
 msgid "Website or feed URL"
 msgstr "URL ของเว็บไซต์หรือฟีด"
@@ -11327,7 +11457,7 @@ msgstr "URL ของเว็บไซต์หรือฟีด"
 msgid "WordPress enrichment unavailable; the feed data will be used."
 msgstr "ไม่สามารถใช้การเสริมข้อมูลจาก WordPress ได้; จะใช้ข้อมูลจากฟีดแทน"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:313
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:339
 msgid "You are not allowed to manage feeds."
 msgstr "คุณไม่มีสิทธิ์ในการจัดการฟีด"
 
@@ -14915,7 +15045,7 @@ msgstr "ยืนยันบัญชีของฉัน"
 msgid "Confirming..."
 msgstr "กำลังยืนยัน ..."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:116
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:119
 msgid "Copy the password to the clipboard."
 msgstr "คัดลอกรหัสผ่านไปยังคลิปบอร์ด"
 
@@ -14935,11 +15065,11 @@ msgstr "คุณไม่ได้เป็นผู้เริ่มการ
 msgid "Didn’t receive the email?"
 msgstr "ไม่ได้รับอีเมลใช่ไหม?"
 
-#: zotonic_mod_signup/src/controllers/controller_signup.erl:658
+#: zotonic_mod_signup/src/controllers/controller_signup.erl:664
 msgid "Email address mismatch"
 msgstr "อีเมลไม่ตรงกัน"
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:103
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:106
 msgid "Enter a password"
 msgstr "ป้อนรหัสผ่าน"
 
@@ -14963,11 +15093,11 @@ msgstr "กรุณาใส่ชื่อสกุล"
 msgid "Enter the code only on the signup page. Do not share it with anyone."
 msgstr "กรอกรหัสนี้เฉพาะบนหน้าสมัครเท่านั้น อย่าเปิดเผยรหัสนี้ให้ใครทราบ"
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:112
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:115
 msgid "Generate a new and secure password."
 msgstr "สร้างรหัสผ่านใหม่ที่ปลอดภัย"
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:113
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:116
 msgid "Generate a secure password"
 msgstr "สร้างรหัสผ่านที่ปลอดภัย"
 
@@ -15009,7 +15139,7 @@ msgid "Resend code"
 msgstr "ส่งรหัสใหม่"
 
 #: zotonic_mod_signup/priv/templates/_signup_box.tpl:13
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:186
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:189
 #: zotonic_mod_signup/priv/templates/signup.tpl:3
 msgid "Sign Up"
 msgstr "ลงชื่อ"
@@ -15022,11 +15152,11 @@ msgstr "ลงชื่อ"
 msgid "Something went wrong, please retry again later."
 msgstr "เกิดข้อผิดพลาดขึ้น กรุณาลองใหม่อีกครั้งในภายหลัง"
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:210
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:213
 msgid "Something went wrong. Please try again later."
 msgstr "เกิดข้อผิดพลาดขึ้น กรุณาลองใหม่อีกครั้งในภายหลัง"
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:216
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:219
 msgid "Sorry, you already have an account. Maybe your account here was suspended."
 msgstr "ขออภัย คุณมีบัญชีอยู่แล้ว อาจเป็นไปได้ว่าบัญชีของคุณที่นี่ถูกระงับ"
 
@@ -15042,12 +15172,12 @@ msgstr "ขอบคุณที่สมัครแล้ว โปรดย�
 msgid "The code you entered is incorrect. Please try again."
 msgstr "รหัสที่คุณป้อนไม่ถูกต้อง กรุณาลองอีกครั้ง"
 
-#: zotonic_mod_signup/src/controllers/controller_signup.erl:659
+#: zotonic_mod_signup/src/controllers/controller_signup.erl:665
 msgid "The email address you entered does not match the email address you provided in the previous step. Please check your input and try again."
 msgstr "ที่อยู่อีเมลที่คุณป้อนไม่ตรงกับที่อยู่อีเมลที่คุณให้ไว้ในขั้นตอนก่อนหน้า กรุณาตรวจสอบข้อมูลของคุณและลองอีกครั้ง"
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:193
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:202
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:196
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:205
 msgid "There is already an account connected to your email address."
 msgstr "มีบัญชีที่เชื่อมต่ออยู่กับที่อยู่อีเมลของคุณอยู่แล้ว"
 
@@ -15063,7 +15193,7 @@ msgstr "รหัสนี้จะหมดอายุใน 10 นาที"
 msgid "To continue, enter this code on the signup page:"
 msgstr "เพื่อดำเนินการต่อ โปรดป้อนรหัสนี้ในหน้าสมัครสมาชิก:"
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:179
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:182
 msgid "To sign up you must agree with the Terms of Service and Privacy policies."
 msgstr "ในการลงทะเบียนคุณต้องยอมรับข้อกำหนดในการให้บริการและนโยบายความเป็นส่วนตัว"
 
@@ -15075,11 +15205,11 @@ msgstr "พยายามมากเกินไป คุณสามาร�
 msgid "We have sent a code to <strong>{email}</strong> to confirm your email address."
 msgstr "เราได้ส่งรหัสไปยัง <strong>{email}</strong> เพื่อยืนยันที่อยู่อีเมลของคุณ"
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:145
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:148
 msgid "We will be very careful with all the information given to us and will never give your name or address away without your permission. We do have some rules that we need you to agree with."
 msgstr "เราจะระมัดระวังอย่างยิ่งกับข้อมูลทั้งหมดที่ให้กับเราและจะไม่แจ้งชื่อหรือที่อยู่ของคุณโดยไม่ได้รับอนุญาต เรามีกฎบางอย่างที่ต้องให้คุณเห็นด้วย"
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:30
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:37
 msgid "We will mail you a code to confirm your email address."
 msgstr "เราจะส่งรหัสไปให้คุณทางไปรษณีย์เพื่อยืนยันที่อยู่อีเมลของคุณ"
 
@@ -15111,7 +15241,7 @@ msgstr "คุณสามารถลงทะเบียนได้โดย
 msgid "You might have confirmed your account twice so that the account is already confirmed. If so, try logging in.<br>If that doesn’t work, make sure you copied the link correctly and try again."
 msgstr "คุณอาจยืนยันบัญชีของคุณสองครั้งเพื่อให้บัญชีได้รับการยืนยันแล้ว ในกรณีนี้ให้ลองเข้าสู่ระบบ<br>หากไม่ได้ผลตรวจสอบให้แน่ใจว่าคุณได้คัดลอกลิงก์อย่างถูกต้องแล้วลองอีกครั้ง"
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:172
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:175
 msgid "You must agree to the Terms in order to sign up."
 msgstr "คุณต้องยอมรับข้อกำหนดจึงจะลงทะเบียนได้"
 
