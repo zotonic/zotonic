@@ -22,7 +22,7 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Import feeds").
--mod_description("Import articles and media from RSS, Atom and JSON Feed sources.").
+-mod_description("Import articles, events and media from RSS, Atom, JSON Feed and iCalendar sources.").
 -mod_depends([admin, cron]).
 -mod_schema(11).
 -mod_config([]).
@@ -33,7 +33,7 @@
     ]
 }).
 -moduledoc("
-Discover RSS 2.0, RSS 1.0/RDF, Atom and JSON Feed 1/1.1 feeds and automatically import articles and media.
+Discover RSS 2.0, RSS 1.0/RDF, Atom, JSON Feed 1/1.1 and iCalendar feeds and automatically import articles and media.
 
 Administrator accounts cannot run imports. Select an enabled non-administrator account
 with only the required import permissions. This is checked when saving settings and
@@ -194,6 +194,27 @@ leave successfully imported resources in place for reuse on retry.
 Deleting imported content checks each resource's delete permission and protection.
 Dependent cleanup follows the normal resource deletion rules; a dependent does
 not prevent deletion of its parent.
+
+## iCalendar feeds
+
+Discover `text/calendar` links or enter an `.ics` feed URL directly. VEVENTs
+must have a UID, UTC DTSTAMP and valid DTSTART. Invalid events are skipped;
+malformed calendar structure is rejected. Dates, durations and exclusive all-day
+end dates are normalized to Zotonic event properties. UTC and known IANA TZIDs
+are supported; floating times are interpreted as UTC. Custom VTIMEZONE rules
+are not evaluated, and events with unknown TZIDs are skipped. Cancelled events
+are unpublished. With category guessing enabled, calendar entries use `event`;
+otherwise the configured category applies.
+
+Recurrence rules and recurrence IDs are retained as `ical_rrule` and
+`ical_recurrence_id`; occurrences are not expanded. Exceptions have separate
+identities derived from UID and RECURRENCE-ID. Alarms are ignored.
+
+Zotonic calendar exports advertise `X-ZOTONIC-RESOURCE`, using the same native
+resource import and optional per-resource WebSub subscriptions as Atom/RSS/JSON
+Feed. Generic calendar feeds continue to use polling; feed-level WebSub push
+subscriptions are not provided. `X-ZOTONIC-NEXT` is followed using the existing
+first-page/initial-import-all-pages and stop-at-seen-entry policies.
 
 ## Zotonic resource feeds
 

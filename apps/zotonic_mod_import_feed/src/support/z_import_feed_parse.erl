@@ -33,6 +33,7 @@ parse(Data, Url) when is_binary(Data), byte_size(Data) =< ?MAX_FEED_BYTES ->
     case trim_start(Data) of
         <<239, 187, 191, Rest/binary>> -> parse(Rest, Url);
         <<"{", _/binary>> = Json -> z_import_feed_json:parse(Json, Url, ?MAX_ENTRIES);
+        <<"BEGIN:VCALENDAR", _/binary>> = Calendar -> z_import_feed_ical:parse(Calendar, Url, ?MAX_ENTRIES);
         _ -> parse_xml(Data, Url)
     end;
 parse(_, _) ->
@@ -236,7 +237,7 @@ discover(Data, Url, Headers) ->
                 || #{<<"href">> := LinkUrl} = Attributes <- HeaderLinks ++ HtmlLinks,
                    z_import_feed_http:url(LinkUrl),
                    lists:member(maps:get(<<"type">>, Attributes, <<>>),
-                       [<<"application/rss+xml">>, <<"application/atom+xml">>, <<"application/rdf+xml">>, <<"application/feed+json">>])],
+                       [<<"application/rss+xml">>, <<"application/atom+xml">>, <<"application/rdf+xml">>, <<"application/feed+json">>, <<"text/calendar">>])],
             case Found of [] -> {error, no_feeds}; _ -> {ok, lists:usort(Found)} end
     end.
 

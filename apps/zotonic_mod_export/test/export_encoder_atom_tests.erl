@@ -8,6 +8,7 @@
 atom_test_() ->
     export_test_support:isolated({setup, fun setup/0, fun cleanup/1, [
         fun media_entries/0,
+        fun calendar_roundtrip/0,
         fun feed_metadata/0,
         fun visible_timestamps/0,
         fun empty_feed/0,
@@ -79,6 +80,7 @@ resource(Id) ->
         <<"uri">> => <<"https://example.test/id/", (integer_to_binary(Id))/binary>>,
         <<"title">> => <<"Resource ", (integer_to_binary(Id))/binary>>,
         <<"modified">> => {{2026, 10, Id}, {12, 0, 0}},
+        <<"date_start">> => {{2026, 11, 1}, {10, 0, 0}},
         <<"is_published">> => Id =/= 5,
         <<"publication_start">> => case Id of
             5 -> undefined;
@@ -300,3 +302,39 @@ unpublished_without_publication_date() ->
         ?assertEqual(undefined, maps:get(published, Entry)),
         ?assertEqual({{2026, 10, 5}, {12, 0, 0}}, maps:get(modified, Entry))
     end, [export_encoder_atom, export_encoder_rss, export_encoder_jsonfeed]).
+
+calendar_roundtrip() ->
+    C = z_context:set(feed_next_url, <<"https://example.test/feed/ics?page=2">>,
+        #context{language=[en], tz= <<"UTC">>}),
+    {ok, S0} = export_encoder_ics:init([], C),
+    {ok, H, S1} = export_encoder_ics:header(undefined, S0, C),
+    {ok, F} = export_encoder_ics:footer(undefined, S1, C),
+    {ok, #{next_url := Next}} = z_import_feed_parse:parse(iolist_to_binary([H,F]), <<"https://example.test/feed/ics">>),
+    ?assertEqual(<<"https://example.test/feed/ics?page=2">>, Next),
+    {ok, #{entries := [Native], is_zotonic_feed := true}} = z_import_feed_parse:parse(
+        encode(export_encoder_ics, undefined, feed, [1], undefined), <<"https://example.test/feed/ics">>),
+    ?assertEqual(<<"https://example.test/api_rsc_export/1">>, maps:get(zotonic_export, Native)),
+    Date = {{2026,11,1},{10,0,0}},
+    Row = (resource(1))#{<<"date_start">> => Date, <<"date_end">> => Date,
+        <<"created">> => Date, <<"title">> => binary:copy(unicode:characters_to_binary("é,;:"), 40)},
+    Data = encode(export_encoder_ics, undefined, feed, [Row], <<"Calendar">>),
+    ?assertEqual(nomatch, binary:match(Data, <<"DTEND:">>)),
+    ?assertEqual(nomatch, binary:match(Data, <<"UID:https\\:">>)),
+    lists:foreach(fun(Line) -> ?assert(byte_size(Line) =< 75) end,
+        binary:split(Data, <<"\r\n">>, [global])),
+    {ok, #{entries := [E]}} = z_import_feed_parse:parse(Data, <<"https://example.test/feed/ics">>),
+    ?assertEqual(Date, maps:get(date_start,E)),
+    ?assertEqual(maps:get(<<"title">>, Row), maps:get(title,E)),
+    AllDay = Row#{<<"date_is_all_day">> => true},
+    {ok, #{entries := [D]}} = z_import_feed_parse:parse(
+        encode(export_encoder_ics, undefined, feed, [AllDay], undefined), <<"https://example.test/feed/ics">>),
+    ?assertEqual({{2026,11,1},{0,0,0}},maps:get(date_end,D)),
+    {ok, #{entries := []}} = z_import_feed_parse:parse(
+        encode(export_encoder_ics, undefined, feed, [Row#{<<"date_start">> => undefined}, Row#{<<"is_visible">> => false}], undefined),
+        <<"https://example.test/feed/ics">>).
+
+calendar_translation_test() ->
+    Trans = #trans{tr=[{en, <<"Coffee, tea">>}, {nl, <<"Koffie; thee">>}]},
+    ?assertEqual(<<"Koffie\\; thee">>, filter_escape_ical_text:escape_ical_text(Trans, #context{language=[nl,en]})),
+    ?assertEqual(<<"Coffee\\, tea">>, filter_escape_ical_text:escape_ical_text(Trans, #context{language=[fr,en]})),
+    ?assertEqual(<<>>, filter_escape_ical_text:escape_ical_text(undefined, #context{})).
