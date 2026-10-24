@@ -36,7 +36,7 @@
 ]).
 
 extension() ->
-    [ <<"ics">> ].
+    [ <<"ics">>, <<"ical">> ].
 
 mime() ->
     [ {<<"text">>, <<"calendar">>, []} ].
@@ -44,30 +44,70 @@ mime() ->
 init(Options, Context) ->
     {ok, #state{
         id = proplists:get_value(id, Options),
-        header_template = z_context:get(header_template, Context, "_vcalendar_header.tpl"),
-        row_template = z_context:get(row_template, Context, "_vevent.tpl")
+        header_template = z_context:get(header_template, Context, "ical/feed_start.tpl"),
+        row_template = z_context:get(row_template, Context, "ical/entry.tpl")
     }}.
 
 header(Header, #state{id=Id, header_template=Template} = State, Context) ->
     Vars = [
         {id, Id},
-        {title, Header}
+        {title, Header},
+        {next_url, z_context:get(feed_next_url, Context)}
     ],
     {Bin, _Context} = z_template:render_to_iolist(Template, Vars, Context),
-    {ok, iolist_to_binary(Bin), State}.
+    {ok, content_lines(Bin), State}.
 
-row(Row, #state{row_template=Template} = State, Context) when is_integer(Row) ->
-    Vars = [
-        {id, Row}
-    ],
-    {Bin, _Context} = z_template:render_to_iolist({cat, Template}, Vars, Context),
-    {ok, iolist_to_binary(Bin), State};
 row(Row, #state{row_template=Template} = State, Context) ->
-    Vars = [
-        {id, Row}
-    ],
-    {Bin, _Context} = z_template:render_to_iolist(Template, Vars, Context),
-    {ok, iolist_to_binary(Bin), State}.
+    Visible = case Row of
+        Id when is_integer(Id) -> m_rsc:is_visible(Id, Context);
+        Props when is_map(Props) -> maps:get(<<"is_visible">>, Props, false);
+        _ -> false
+    end,
+    Start = prop(Row, date_start, Context),
+    Uri = prop(Row, uri, Context),
+    Modified = prop(Row, modified, Context),
+    case Visible andalso valid_date(Start) andalso valid_date(Modified)
+            andalso is_binary(Uri) andalso Uri =/= <<>> of
+        true ->
+            End = prop(Row, date_end, Context),
+            End1 = case valid_date(End) andalso End >= Start of true -> End; false -> Start end,
+            Created = prop(Row, created, Context),
+            Created1 = case valid_date(Created) of true -> Created; false -> undefined end,
+            Vars = [{created, Created1}, {id, Row}, {dtstart, Start}, {dtend, End1}, {dtstamp, Modified},
+                {resource_url, resource_url(Row, Context)}],
+            Tpl = case is_integer(Row) of true -> {cat, Template}; false -> Template end,
+            {Bin, _} = z_template:render_to_iolist(Tpl, Vars, Context),
+            {ok, content_lines(Bin), State};
+        false ->
+            {ok, <<>>, State}
+    end.
+
+prop(Id, Key, Context) when is_integer(Id) -> m_rsc:p(Id, Key, Context);
+prop(Props, Key, _) when is_map(Props) -> maps:get(atom_to_binary(Key), Props, undefined);
+prop(_, _, _) -> undefined.
+
+resource_url(Id, Context) when is_integer(Id) ->
+    z_dispatcher:url_for(api_rsc_export, [{id, Id}, {absolute_url, true}], none, Context);
+resource_url(_, _) -> undefined.
+
+valid_date({{Y, M, D}, {H, I, S}}) when is_integer(Y), Y > 0, Y < 9999,
+        is_integer(H), H >= 0, H < 24, is_integer(I), I >= 0, I < 60,
+        is_integer(S), S >= 0, S < 60 -> calendar:valid_date({Y, M, D});
+valid_date(_) -> false.
+
+%% Fold complete content lines to 75 octets without splitting UTF-8 characters.
+%% Unfold first to support older site templates which use escape_ical.
+content_lines(Data) ->
+    Bin = re:replace(iolist_to_binary(Data), <<"\\r?\\n[ \\t]">>, <<>>, [global, {return, binary}]),
+    Lines = binary:split(binary:replace(Bin, <<"\r\n">>, <<"\n">>, [global]), <<"\n">>, [global]),
+    iolist_to_binary([[fold(Line, 0), <<"\r\n">>] || Line <- Lines, Line =/= <<>>]).
+fold(<<>>, _) -> [];
+fold(<<C/utf8, Rest/binary>>, N) ->
+    Char = <<C/utf8>>,
+    case N + byte_size(Char) > 75 of
+        true -> [<<"\r\n ">>, Char | fold(Rest, 1 + byte_size(Char))];
+        false -> [Char | fold(Rest, N + byte_size(Char))]
+    end.
 
 footer(_Data, #state{}, _Context) ->
-    {ok, <<"END:VCALENDAR\n">>}.
+    {ok, <<"END:VCALENDAR\r\n">>}.

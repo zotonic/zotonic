@@ -1,6 +1,6 @@
 # mod_import_feed
 
-Discover RSS 2.0, RSS 1.0/RDF, Atom and JSON Feed 1/1.1 feeds and continuously import their articles.
+Discover RSS 2.0, RSS 1.0/RDF, Atom, JSON Feed 1/1.1 and iCalendar feeds and continuously import their articles.
 Enable **Import feeds** in Modules, then open **Content → Import feeds**. The module
 requires `mod_admin` and `mod_cron`; it does not require `mod_websub`.
 
@@ -64,6 +64,27 @@ backoff cap are fixed constants, not new configuration settings.
 
 The importance order is WordPress featured image, feed media/enclosures, then
 inline images. Attaching one medium leaves other inline images at their source.
+
+## iCalendar feeds
+
+Discover `text/calendar` links or enter an `.ics` feed URL directly. VEVENTs
+must have a UID, UTC DTSTAMP and valid DTSTART. Invalid events are skipped;
+malformed calendar structure is rejected. Dates, durations and exclusive all-day
+end dates are normalized to Zotonic event properties. UTC and known IANA TZIDs
+are supported; floating times are interpreted as UTC. Custom VTIMEZONE rules
+are not evaluated, and events with unknown TZIDs are skipped. Cancelled events
+are unpublished. With category guessing enabled, calendar entries use `event`;
+otherwise the configured category applies.
+
+Recurrence rules and recurrence IDs are retained as `ical_rrule` and
+`ical_recurrence_id`; occurrences are not expanded. Exceptions have separate
+identities derived from UID and RECURRENCE-ID. Alarms are ignored.
+
+Zotonic calendar exports advertise `X-ZOTONIC-RESOURCE`, using the same native
+resource import and optional per-resource WebSub subscriptions as Atom/RSS/JSON
+Feed. Generic calendar feeds continue to use polling; feed-level WebSub push
+subscriptions are not provided. `X-ZOTONIC-NEXT` is followed using the existing
+first-page/initial-import-all-pages and stop-at-seen-entry policies.
 
 ## Zotonic resource feeds
 

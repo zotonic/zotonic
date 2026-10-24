@@ -23,6 +23,7 @@
 -export([
     start_dependencies/0,
     oldest_first_check/0,
+    calendar_prepare_check/0,
     rss_full_content_check/0,
     atom_base_and_xhtml_check/0,
     rdf_check/0,
@@ -76,6 +77,7 @@ isolated_test_() ->
                 peer:call(Peer, ?MODULE, Test, [], 30000)
             end}} || Test <- [
         oldest_first_check,
+        calendar_prepare_check,
         rss_full_content_check,
         atom_base_and_xhtml_check,
         rdf_check,
@@ -918,3 +920,26 @@ next_url_test() ->
     Json = z_json:encode(#{<<"version">> => <<"https://jsonfeed.org/version/1.1">>,
         <<"title">> => <<"Test">>, <<"items">> => [], <<"next_url">> => <<"?page=2&cat=news">>}),
     ?assertMatch({ok, #{next_url := Next}}, z_import_feed_parse:parse(Json, Base)).
+
+calendar_prepare_check() ->
+    meck:new(m_rsc, [no_link]),
+    meck:new(z_module_manager, [no_link]),
+    try
+        meck:expect(m_rsc, rid, fun(event, _) -> 101 end),
+        meck:expect(z_module_manager, active, fun(mod_copyright, _) -> false end),
+        {ok, #{entries := [Entry]}} = z_import_feed_parse:parse(
+            <<"BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Test//EN\r\nBEGIN:VEVENT\r\n",
+              "UID:prepare\r\nDTSTAMP:20261024T120000Z\r\nDTSTART;VALUE=DATE:20261101\r\n",
+              "DTEND;VALUE=DATE:20261103\r\nSTATUS:CANCELLED\r\nLOCATION:Room 1\r\nEND:VEVENT\r\nEND:VCALENDAR\r\n">>,
+            <<"https://example.org/events.ics">>),
+        Feed = #{category_id => 100, content_group_id => undefined, guess_category => true,
+            is_authoritative => false, media_mode => <<"none">>, connections => []},
+        {#{props := Props}, []} = z_import_feed_import:prepare(Entry, Feed, #context{}),
+        ?assertEqual(101, maps:get(<<"category_id">>, Props)),
+        ?assertEqual(false, maps:get(<<"is_published">>, Props)),
+        ?assertEqual(true, maps:get(<<"date_is_all_day">>, Props)),
+        ?assertEqual({{2026,11,2},{0,0,0}}, maps:get(<<"date_end">>, Props)),
+        ?assertEqual(<<"Room 1">>, maps:get(<<"location">>, Props))
+    after
+        meck:unload([m_rsc, z_module_manager])
+    end.

@@ -77,7 +77,7 @@ Atom templates should keep the feed update element in the footer.
 Conditional feed requests
 -------------------------
 
-Atom, RSS and JSON Feed responses on the `feed` dispatch include
+Atom, RSS, JSON Feed and iCalendar responses on the `feed` dispatch include
 `ETag` and `Last-Modified`. Clients should save both values and send them back as
 `If-None-Match` and `If-Modified-Since`. An unchanged representation returns
 HTTP 304 with no body. `If-None-Match` takes precedence over the date condition.
@@ -170,6 +170,7 @@ The built-in rules are defined in `priv/dispatch/dispatch_export`:
 Short feed URLs are also available:
 
 * `/feed` - the default Atom feed (saved query `query_feed`, or published articles).
+* `/feed/ics` (or `/feed/ical`) - published, unfinished events, earliest start first.
 * `/feed/rss?cat=article` - visible articles, newest publication first.
 * `/feed/atom/news` - results from the visible saved query named `news`.
 * `/feed/jsonfeed/news?text=Erlang` - the saved query with an extra text filter.
@@ -179,12 +180,12 @@ The bare `/feed` route uses the visible saved-query resource named `query_feed`.
 If it is missing, is not a query, or is not visible, it searches the `article`
 category with `is_published=true` instead (including publication start/end checks). Only pagination arguments are accepted on this fixed feed;
 `id`, `type`, and search filters cannot replace its selection. Link to it with
-`{% url feed %}`. The typed routes use the same default selection when no id or search terms
+`{% url feed %}`. The Atom, RSS and JSON Feed typed routes use the same default selection when no id or search terms
 are supplied, including requests with only pagination arguments. Explicit ids
 and search terms keep their request-defined selection.
 
 The `feed` dispatch accepts `type` and an optional `id`. Supported types are
-`atom`, `rss`, `jsonfeed`, and `json` (a JSON Feed alias on this route only).
+`atom`, `rss`, `jsonfeed`, `json` (a JSON Feed alias on this route only), `ics` and `ical`.
 An id selects saved-query results, collection members, or a single ordinary
 resource. Additional search terms are combined with that selection. Missing ids
 return not found and invisible resources are denied; neither becomes an
@@ -193,10 +194,27 @@ unrestricted search. Without an id or search terms, the feed uses `query_feed` o
 Feed searches use `mod_search` and accept its normal bare or q-prefixed query
 arguments, including repeated terms. `page` defaults to 1 and `pagelen` to 20,
 with at most 100 items per page. Without a saved query or explicit sort, results
-sort by descending publication start. Saved queries retain their own sort terms.
+sort by descending publication start. Calendar feeds instead default to ascending
+`date_start` with ascending `id` as a tie-breaker. Saved queries retain their own sort terms.
 The feed URL/self link includes the query string, and all shorthand feeds are
 served inline. For template links, use `{% url feed type='rss' id=id %}` and add
 search arguments as needed.
+
+iCalendar feeds
+---------------
+
+`/feed/ics` and `/feed/ical` use `text/calendar`. With no id or search terms,
+they select `cat=event`, `is_published=true` and `unfinished=true`; they do not
+use the article query `query_feed`. Pagination alone retains this selection.
+Explicit ids and filters work as for other feed types.
+
+The encoder omits invisible resources and resources without a valid start date,
+modification timestamp or UID. VEVENTs include DTSTAMP, use exclusive all-day
+end dates, and omit DTEND for instantaneous events. Output uses CRLF and folds
+complete lines at 75 octets without splitting UTF-8 characters.
+`X-ZOTONIC-RESOURCE` advertises the native JSON resource endpoint for import
+and optional WebSub subscriptions. `X-ZOTONIC-NEXT` advertises the next page
+for `mod_import_feed`; it is a Zotonic extension, not standard calendar pagination.
 
 Choosing between `export_rsc_query` and `feed`
 --------------------------------------------
@@ -209,11 +227,11 @@ They share the same encoders, but select and limit their results differently.
 | --- | --- | --- |
 | URL | `/export/query/<type>/<id>` | `/feed`, `/feed/<type>`, `/feed/<type>/<id>` |
 | Resource selection | Requires an id; reads that resource's stored `query` property. Intended for saved queries. | Optional id: saved-query results, collection members, or one ordinary resource. |
-| No id or search terms | No default selection; an id must be supplied in the path or query string. | Uses the visible saved query `query_feed`, falling back to published `article` resources when unavailable. |
+| No id or search terms | No default selection; an id must be supplied in the path or query string. | Uses the visible saved query `query_feed`, falling back to published `article` resources when unavailable. Calendar types use published, unfinished events. |
 | Request filters | Does not automatically merge request search arguments into the stored query. | Typed routes accept bare or q-prefixed search terms, combined with any id selection. |
 | Pagination | Page 1 by default, up to the format-specific limit (default 50,000 streaming / 1,000 anonymous or 20,000 logged-in non-streaming); `page` and a smaller `pagelen` are accepted. | Default page 1, 20 items; `page` and `pagelen` are accepted, with at most 100 items per page. |
-| Sorting | Uses the stored query's sort terms. | Retains saved-query sorting; otherwise defaults to descending publication start unless an explicit sort is supplied. |
-| Formats | All registered export formats, including CSV, XLSX, Atom, RSS, JSON Feed and generic JSON. | Atom, RSS and JSON Feed only. |
+| Sorting | Uses the stored query's sort terms. | Retains saved-query sorting; otherwise defaults to descending publication start (ascending start date for calendars) unless an explicit sort is supplied. |
+| Formats | All registered export formats, including CSV, XLSX, Atom, RSS, JSON Feed and generic JSON. | Atom, RSS, JSON Feed and iCalendar. |
 | Meaning of `json` | Generic JSON array (`application/json`); use `jsonfeed` for JSON Feed. | Alias for `jsonfeed` (`application/feed+json`). |
 | Omitted type | HTTP content negotiation. | Bare `/feed` is Atom. Typed routes use their path type. |
 | Conditional HTTP requests | No feed validator precomputation; results are streamed normally. | Supports `ETag`, `Last-Modified` and HTTP 304 on the bounded page. |
@@ -275,7 +293,7 @@ Useful dispatch options are:
 * `rsc_props` - resource properties or expressions used as columns by the
   tabular encoders.
 * `header_template` and `row_template` - templates for the iCalendar header and
-  event rows. Their defaults are `_vcalendar_header.tpl` and `_vevent.tpl`.
+  event rows. Their defaults are `ical/feed_start.tpl` and `ical/entry.tpl`.
 
 CSV and XLSX requests also accept `?raw=1`. Without it, textual values are
 converted from HTML to plain text. Raw mode retains the original text while
@@ -384,7 +402,7 @@ Export formats
 | `atom` | `application/atom+xml` | Atom feed. Integer rows are resource ids rendered with category-specific `atom/entry.tpl` templates. |
 | `rss` | `application/rss+xml` | RSS 2.0, using category-specific `rss/entry.tpl` templates. |
 | `jsonfeed` | `application/feed+json` | JSON Feed 1.1, with visible resource ids as rows. Downloads use `.json`. |
-| `ics` | `text/calendar` | iCalendar stream rendered with `_vcalendar_header.tpl` and `_vevent.tpl`. |
+| `ics` | `text/calendar` | iCalendar stream rendered with `ical/feed_start.tpl` and `ical/entry.tpl`. |
 | `bert` | `application/x-bert` | Erlang external term containing full resource maps for integer resource-id rows. |
 | `ubf` | `text/x-ubf` | UBF stream containing resource maps for integer resource-id rows. |
 

@@ -17,17 +17,38 @@
 %% limitations under the License.
 
 -module(controller_feed).
+-moduledoc(#{
+    zotonic_keywords => [
+        "reference", "backend_developer", "controller",
+        "export_and_syndication", "export", "url"
+    ]
+}).
 -moduledoc("
 Serve `/feed`, `/feed/:type` and `/feed/:type/:id` with optional search arguments.
-Types are atom, rss, jsonfeed and json (an alias for JSON Feed).
+Types are atom, rss, jsonfeed, json (an alias for JSON Feed), and ics/ical.
+Calendar feeds default to published, unfinished events ordered by start date.
 
 An id selects a visible saved query, a collection's members, or one resource.
 The bare `/feed` uses `query_feed`, falling back to articles, and accepts only
 pagination. On typed routes without an id, request arguments define a normal
-mod_search query. Without search terms or an id, typed routes use the same
-default selection as `/feed`; pagination alone does not change that selection. Both
+mod_search query. Without search terms or an id, Atom, RSS and JSON Feed routes
+use the same default selection as `/feed`. Calendar routes instead select
+`cat=event`, `is_published=true` and `unfinished=true`, sorted by `date_start`
+ascending with ascending `id` as the tie-breaker. They do not use `query_feed`.
+Pagination alone does not change the default selection. Both
 bare search keys and q-prefixed keys are supported. Page length defaults to 20
 and is capped at 100. Client search options are not passed to the search engine.
+Explicit sorting and saved-query sorting are retained; normal search ACLs apply.
+
+For example, `/feed/ics?page=2` returns the second page of upcoming or ongoing
+published events. Link to it from a template with `{% url feed type='ics' %}`.
+Calendar responses use `text/calendar` and the templates `ical/feed_start.tpl`
+and `ical/entry.tpl`. Their resource links allow `mod_import_feed` to use native
+resource import and optional resource WebSub subscriptions.
+
+A selected resource must exist and be visible to the visitor. Responses are
+served inline and support ETag and Last-Modified conditional requests on the
+bounded page. See `mod_export` for bulk exports and format-specific behavior.
 ").
 
 -export([
@@ -103,12 +124,18 @@ feed_request(Context) ->
     end.
 
 default_request(Query, Context) ->
-    Id = export_feed_query:default_id(Context),
+    Id = case request_arg(type, Context) of
+        <<"ics">> -> undefined;
+        <<"ical">> -> undefined;
+        _ -> export_feed_query:default_id(Context)
+    end,
     {Id, Id =/= undefined, Query, true}.
 
 request_arg(Key, Context) ->
     z_context:get(Key, Context, z_context:get_q(atom_to_binary(Key), Context)).
 
+content_type(<<"ics">>) -> {<<"text">>, <<"calendar">>, []};
+content_type(<<"ical">>) -> {<<"text">>, <<"calendar">>, []};
 content_type(<<"atom">>) -> {<<"application">>, <<"atom+xml">>, []};
 content_type(<<"rss">>) -> {<<"application">>, <<"rss+xml">>, []};
 content_type(<<"jsonfeed">>) -> {<<"application">>, <<"feed+json">>, []};
