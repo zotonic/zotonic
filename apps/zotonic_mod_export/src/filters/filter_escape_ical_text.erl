@@ -29,7 +29,9 @@ Escape a value for an iCalendar TEXT property, such as SUMMARY, DESCRIPTION or
 LOCATION. Backslashes, commas and semicolons are escaped with a backslash.
 CRLF and carriage-return line endings are normalized to newlines, then escaped
 as the iCalendar newline sequence. Colons and double quotes remain unchanged.
-An undefined value produces an empty binary; other values use `z_convert:to_binary/1`.
+An undefined value produces an empty binary. Translation records use the request
+language and normal translation fallback. Values are converted with
+`z_convert:to_binary/2` before escaping.
 
 For example, in an iCalendar template:
 
@@ -49,8 +51,8 @@ This is TEXT-value escaping, not HTML escaping or URI/parameter encoding.
 -spec escape_ical_text(term(), z:context()) -> binary().
 
 escape_ical_text(undefined, _) -> <<>>;
-escape_ical_text(Value, _) ->
+escape_ical_text(Value, Context) ->
     lists:foldl(fun({From, To}, B) -> binary:replace(B, From, To, [global]) end,
-        z_convert:to_binary(Value),
+        z_convert:to_binary(Value, Context),
         [{<<"\\">>, <<"\\\\">>}, {<<"\r\n">>, <<"\n">>}, {<<"\r">>, <<"\n">>},
          {<<"\n">>, <<"\\n">>}, {<<";">>, <<"\\;">>}, {<<",">>, <<"\\,">>}]).

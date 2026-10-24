@@ -332,3 +332,9 @@ calendar_roundtrip() ->
     {ok, #{entries := []}} = z_import_feed_parse:parse(
         encode(export_encoder_ics, undefined, feed, [Row#{<<"date_start">> => undefined}, Row#{<<"is_visible">> => false}], undefined),
         <<"https://example.test/feed/ics">>).
+
+calendar_translation_test() ->
+    Trans = #trans{tr=[{en, <<"Coffee, tea">>}, {nl, <<"Koffie; thee">>}]},
+    ?assertEqual(<<"Koffie\\; thee">>, filter_escape_ical_text:escape_ical_text(Trans, #context{language=[nl,en]})),
+    ?assertEqual(<<"Coffee\\, tea">>, filter_escape_ical_text:escape_ical_text(Trans, #context{language=[fr,en]})),
+    ?assertEqual(<<>>, filter_escape_ical_text:escape_ical_text(undefined, #context{})).
