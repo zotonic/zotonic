@@ -52,6 +52,14 @@ Available Model API Paths
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ <<"privacy_migration">> | Rest ], _Msg, Context) ->
+    case z_acl:is_admin(Context) of
+        false -> {error, eacces};
+        true ->
+            % Retain the boolean endpoint, now covering the combined migration.
+            Status = z_rsc_defaults:needed(Context),
+            {ok, {Status, Rest}}
+    end;
 m_get([ <<"has_collaboration_groups">> | Rest ], _Msg, Context) ->
     {ok, {acl_user_groups_checks:has_collab_groups(Context), Rest}};
 m_get([ <<"is_used">>, Cat | Rest ], _Msg, Context) ->

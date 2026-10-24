@@ -236,9 +236,10 @@ code_paths_test() ->
 
 code_paths() ->
     [
-        filename:join( [ get_zotonic_dir(), "_checkouts", "*", "ebin" ]),
+        % erl -pa prepends paths, so put checkout overrides last.
+        filename:join( [ get_zotonic_dir(), "_build", "default", "lib", "*", "ebin" ]),
         filename:join( [ get_zotonic_dir(), "_build", "default", "checkouts", "*", "ebin" ]),
-        filename:join( [ get_zotonic_dir(), "_build", "default", "lib", "*", "ebin" ])
+        filename:join( [ get_zotonic_dir(), "_checkouts", "*", "ebin" ])
     ].
 
 strip_nl(S) ->

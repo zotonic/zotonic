@@ -167,6 +167,7 @@
     where = "" :: iodata(),
     order = "" :: iodata(),
     group_by = "" :: iodata(),
+    having = "" :: iodata(),
     limit,
     tables = [] :: list(),
     args = [] :: list(),
@@ -180,13 +181,21 @@
     search_sql_terms = undefined :: list() | undefined % Optional, if search was built using #search_sql_term{} records
 }).
 
+% SQL fragments in a search term can include {search_sql_exists, Operator, Terms},
+% with Operator = exists | not_exists and a private list of search terms.
+% Captured parameters use {search_sql_arg, Value}, independent of term numbering.
+% z_search_terms:combine/2 maps their arguments and renders the scalar subquery.
 -record(search_sql_term, {
+    % {ResourceAlias, Source}; source provenance is resolved by z_search_acl_props.
+    property_sources = [],
     label = undefined,
     select = [ <<"rsc.id">> ],
     tables = #{ <<"rsc">> => <<"rsc">> },
     join_inner = #{},
     join_left = #{},
     where = [],
+    group_by = [],
+    having = [],
     sort = [],
     asort = [],
     zsort = [],
@@ -199,7 +208,7 @@
 
 -record(search_sql_nested, {
     terms = [] :: [ #search_sql_term{} | #search_sql_nested{} ],
-    operator = <<"allof">> :: binary()
+    operator = <<"allof">> :: binary() | {left_join, binary()}
 }).
 
 -record(search_sql_terms, {
@@ -392,4 +401,3 @@
 -include("zotonic_log.hrl").
 -include("zotonic_wired.hrl").
 -include("zotonic_deprecated.hrl").
-
