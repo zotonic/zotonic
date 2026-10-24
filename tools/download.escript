@@ -1,7 +1,6 @@
 #!/usr/bin/env escript
 %%! -noshell
 
-%%--------------------------------------------------------------------
 %% download.escript
 %%
 %% Small self-contained downloader implemented entirely in Erlang.
@@ -29,9 +28,13 @@
 %%   download.escript URL OUTPUT --sha256 HASH --executable
 %%   download.escript URL OUTPUT --proxy HOST PORT
 %%
-%%--------------------------------------------------------------------
+
+-define(MAX_HEADER_SIZE, 64 * 1024).
+-define(MAX_BODY_SIZE, 64 * 1024 * 1024).
+-define(HTTP_TIMEOUT, 120000).
 
 main(Args) ->
+    logger:set_primary_config(level, warning),
     case parse_args(Args) of
         {ok, #{url := Url,
                output := Output,
@@ -57,7 +60,8 @@ maybe_set_proxy({Host, Port}) ->
     ok = httpc:set_options([ {https_proxy, {{Host, Port}, []}} ]).
 
 download(Url) ->
-    case httpc:request( get, {Url, []}, ssl_opts(), [{body_format, binary}]) of
+    %% github.com uses an enourmously large content-security-policy
+    case httpc:request(get, {Url, []}, http_opts(), opts()) of
         {ok, {{_, 200, _}, _Headers, Bin}} ->
             Bin;
         {ok, {{_, Status, Reason}, _Headers, _Body}} ->
@@ -66,14 +70,21 @@ download(Url) ->
             halt_with("Download failed: ~p~n", [Error])
     end.
 
+http_opts() ->
+    [ {timeout, ?HTTP_TIMEOUT},
+      {ssl, ssl_opts()},
+      {relaxed, true} ].
+
 ssl_opts() ->
     MatchFun = public_key:pkix_verify_hostname_match_fun(https),
-    [{ssl, [ {verify, verify_peer},
-             {cacerts, public_key:cacerts_get()},
-             {customize_hostname_check, [{match_fun, MatchFun}]}
-           ]
-     }
-    ].
+    [ {verify, verify_peer},
+      {cacerts, public_key:cacerts_get()},
+      {customize_hostname_check, [{match_fun, MatchFun}]} ].
+
+opts() ->
+    [ {max_header_size, ?MAX_HEADER_SIZE},
+      {max_body_size, ?MAX_BODY_SIZE},
+      {body_format, binary} ].
 
 maybe_verify_sha256(Bin, undefined) ->
     io:fwrite(standard_error, "Note: no SHA256 configured, downloaded file has: ~s~n",
@@ -85,7 +96,7 @@ maybe_verify_sha256(Bin, ExpectedHex) ->
                 Expected -> ok;
                 _ ->
                     halt_with("SHA256 mismatch: the downloaded file does not match the configured checksum.~n"
-                              "Verify the source before updating the checksum.~n", [])
+                              "Warning! Verify the source before updating the checksum.~n", [])
             end;
         _ ->
             halt_with("Invalid SHA256 value: ~s~n", [ExpectedHex])
