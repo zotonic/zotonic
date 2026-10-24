@@ -73,7 +73,7 @@ folding_and_limit_test() ->
     ?assertEqual(100,length(Entries)),
     ?assertEqual(<<"Long title">>,maps:get(title,E)),
     {ok, Links} = z_import_feed_parse:discover(<<"<html><link rel='alternate' type='text/calendar' href='/events.ics'></html>">>, <<"https://example.org/">>),
-    ?assertMatch([_ | _], Links).
+    ?assertEqual([<<"https://example.org/events.ics">>], [maps:get(url, Link) || Link <- Links]).
 
 timezones_and_recurrence_test() ->
     {ok, _} = application:ensure_all_started(qdate),

@@ -934,7 +934,7 @@ calendar_prepare_check() ->
             <<"https://example.org/events.ics">>),
         Feed = #{category_id => 100, content_group_id => undefined, guess_category => true,
             is_authoritative => false, media_mode => <<"none">>, connections => []},
-        {#{props := Props}, []} = z_import_feed_import:prepare(Entry, Feed, #context{}),
+        {#{props := Props}, []} = z_import_feed_import:prepare(Entry, Feed, #context{db = {test, test}}),
         ?assertEqual(101, maps:get(<<"category_id">>, Props)),
         ?assertEqual(false, maps:get(<<"is_published">>, Props)),
         ?assertEqual(true, maps:get(<<"date_is_all_day">>, Props)),
