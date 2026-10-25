@@ -44,12 +44,16 @@ default_id(Context) ->
 %% each encoder retain the current user's ACL context.
 export_resource_data(#export_resource_data{id=Id}, Context) ->
     #{<<"q">> := Terms, <<"page">> := Page, <<"pagelen">> := PageLen} = z_context:get(feed_query, Context),
+    Sort = case is_calendar(Context) of
+        true -> [<<"date_start">>, <<"id">>];
+        false -> [<<"-publication_start">>, <<"-id">>]
+    end,
     AllTerms = feed_selection(Id, Context) ++ Terms,
     Query0 = #{
         <<"q">> => AllTerms ++ [
                         #{
                             <<"term">> => <<"zsort">>,
-                            <<"value">> => [<<"-publication_start">>, <<"-id">>]
+                            <<"value">> => Sort
                         }
                     ]
     },
@@ -63,7 +67,7 @@ export_resource_data(#export_resource_data{id=Id}, Context) ->
                 [
                     #{
                         <<"term">> => <<"sort">>,
-                        <<"value">> => <<"-publication_start">>
+                        <<"value">> => hd(Sort)
                     }
                 ])
     end,
@@ -118,8 +122,14 @@ has_term(Name, Terms) ->
         Terms).
 
 feed_selection(undefined, Context) ->
-    case z_context:get(is_default_feed, Context, false) of
-        true ->
+    case {z_context:get(is_default_feed, Context, false), is_calendar(Context)} of
+        {true, true} ->
+            [#{<<"term">> => K, <<"value">> => V} || {K, V} <- [
+                {<<"cat">>, <<"event">>},
+                {<<"is_published">>, true},
+                {<<"unfinished">>, true}
+            ]];
+        {true, false} ->
             [
                 #{
                     <<"term">> => <<"cat">>,
@@ -130,7 +140,7 @@ feed_selection(undefined, Context) ->
                     <<"value">> => true
                 }
             ];
-        false ->
+        {false, _} ->
             []
     end;
 feed_selection(Id, Context) ->
@@ -160,3 +170,6 @@ selection(Id, Context) ->
                 }
             ]
     end.
+
+is_calendar(Context) ->
+    z_context:get(feed_content_type, Context) =:= {<<"text">>, <<"calendar">>, []}.

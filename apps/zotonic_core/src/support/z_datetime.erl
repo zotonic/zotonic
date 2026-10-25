@@ -420,15 +420,10 @@ prev_month(DT, N) -> next_month(DT, -N).
 
 %% @doc Return the date one week earlier.
 prev_week(DT) ->
-    prev_week_1(DT, 7).
+    prev_day(DT, 7).
 
-prev_week_1(DT, 0) -> DT;
-prev_week_1(DT, N) ->
-    DT1 = prev_day(DT),
-    prev_week_1(DT1, N-1).
-
-prev_week(Date, N) ->
-    nth(Date, -N, fun next_week/1, fun prev_week/1).
+prev_week(Date, N) when is_integer(N) ->
+    shift_days(Date, -N * 7).
 
 %% @doc Return the date one day earlier.
 prev_day({{_,_,1},_} = Date) ->
@@ -439,8 +434,8 @@ prev_day({{Y,M,D},T}) ->
 prev_day({_,_,_} = Date) ->
     prev_day({Date, {0,0,0}}).
 
-prev_day(Date, N) ->
-    nth(Date, -N, fun next_day/1, fun prev_day/1).
+prev_day(Date, N) when is_integer(N) ->
+    shift_days(Date, -N).
 
 %% @doc Return the date one hour earlier.
 prev_hour({_,{0,_,_}} = Date) ->
@@ -449,8 +444,8 @@ prev_hour({_,{0,_,_}} = Date) ->
 prev_hour({YMD,{H,I,S}}) ->
     {YMD, {H-1,I,S}}.
 
-prev_hour(Date, N) ->
-    nth(Date, -N, fun next_hour/1, fun prev_hour/1).
+prev_hour(Date, N) when is_integer(N) ->
+    shift_seconds(Date, -N * 3600).
 
 %% @doc Return the date one minute earlier.
 prev_minute({_,{_,0,_}} = Date) ->
@@ -459,8 +454,8 @@ prev_minute({_,{_,0,_}} = Date) ->
 prev_minute({YMD,{H,I,S}}) ->
     {YMD, {H,I-1,S}}.
 
-prev_minute(Date, N) ->
-    nth(Date, -N, fun next_minute/1, fun prev_minute/1).
+prev_minute(Date, N) when is_integer(N) ->
+    shift_seconds(Date, -N * 60).
 
 %% @doc Return the date one second earlier.
 prev_second({_,{_,_,0}} = Date) ->
@@ -469,8 +464,8 @@ prev_second({_,{_,_,0}} = Date) ->
 prev_second({YMD,{H,I,S}}) ->
     {YMD, {H,I,S-1}}.
 
-prev_second(Date, N) ->
-    nth(Date, -N, fun next_second/1, fun prev_second/1).
+prev_second(Date, N) when is_integer(N) ->
+    shift_seconds(Date, -N).
 
 %% @doc Return the date one year later.
 next_year({{Y,M,D},T}) ->
@@ -496,26 +491,19 @@ next_month({_,_,_} = Date, N) ->
     next_month({Date, {0,0,0}}, N).
 
 %% @doc Move the date so that the month/day number is valid.
-norm_month({{Y, M, D}, T}) when M =< 0 ->
-    norm_month({{Y-1, M+12, D}, T});
-norm_month({{Y, M, D}, T}) when M > 12 ->
-    norm_month({{Y+1, M-12, D}, T});
 norm_month({{Y, M, D}, T}) ->
-    D1 = erlang:min(last_day_of_the_month(Y,M), D),
-    {{Y, M, D1}, T}.
+    Years = floor_div(M - 1, 12),
+    Y1 = Y + Years,
+    M1 = M - Years * 12,
+    D1 = erlang:min(last_day_of_the_month(Y1, M1), D),
+    {{Y1, M1, D1}, T}.
 
 %% @doc Return the date one week later.
 next_week(DT) ->
-    next_week_1(DT, 7).
+    next_day(DT, 7).
 
-next_week_1(DT, 0) ->
-    DT;
-next_week_1(DT, N) ->
-    DT1 = next_day(DT),
-    next_week_1(DT1, N-1).
-
-next_week(Date, N) ->
-    nth(Date, N, fun next_week/1, fun prev_week/1).
+next_week(Date, N) when is_integer(N) ->
+    shift_days(Date, N * 7).
 
 %% @doc Return the date one day later.
 next_day({{Y,M,D},T} = Date) ->
@@ -529,8 +517,8 @@ next_day({{Y,M,D},T} = Date) ->
 next_day({_,_,_} = Date) ->
     next_day({Date, {0,0,0}}).
 
-next_day(Date, N) ->
-    nth(Date, N, fun next_day/1, fun prev_day/1).
+next_day(Date, N) when is_integer(N) ->
+    shift_days(Date, N).
 
 %% @doc Return the date one hour later.
 next_hour({_,{23,_,_}} = Date) ->
@@ -539,8 +527,8 @@ next_hour({_,{23,_,_}} = Date) ->
 next_hour({YMD,{H,I,S}}) ->
     {YMD, {H+1,I,S}}.
 
-next_hour(Date, N) ->
-    nth(Date, N, fun next_hour/1, fun prev_hour/1).
+next_hour(Date, N) when is_integer(N) ->
+    shift_seconds(Date, N * 3600).
 
 %% @doc Return the date one minute later.
 next_minute({_,{_,59,_}} = Date) ->
@@ -549,8 +537,8 @@ next_minute({_,{_,59,_}} = Date) ->
 next_minute({YMD,{H,I,S}}) ->
     {YMD, {H,I+1,S}}.
 
-next_minute(Date, N) ->
-    nth(Date, N, fun next_minute/1, fun prev_minute/1).
+next_minute(Date, N) when is_integer(N) ->
+    shift_seconds(Date, N * 60).
 
 %% @doc Return the date one second later.
 next_second({_,{_,_,59}} = Date) ->
@@ -559,15 +547,35 @@ next_second({_,{_,_,59}} = Date) ->
 next_second({YMD,{H,I,S}}) ->
     {YMD, {H,I,S+1}}.
 
-next_second(Date, N) ->
-    nth(Date, N, fun next_second/1, fun prev_second/1).
+next_second(Date, N) when is_integer(N) ->
+    shift_seconds(Date, N).
 
-nth(Date, 0, _Next, _Prev) ->
+%% Bulk shifts do not iterate over N. Preserve the zero-offset result (including
+%% date-only inputs), and promote date-only day/week shifts to midnight otherwise.
+shift_days(Date, 0) ->
     Date;
-nth(Date, N, Next, Prev) when is_integer(N), N > 0 ->
-    nth(Next(Date), N-1, Next, Prev);
-nth(Date, N, Next, Prev) when is_integer(N), N < 0 ->
-    nth(Prev(Date), N+1, Next, Prev).
+shift_days({{Y, M, D}, T}, N) ->
+    %% Gregorian leap years repeat every 400 years (146097 days). Reduce to a
+    %% nonnegative cycle before calling calendar, which does not support BCE.
+    Cycle = floor_div(Y, 400),
+    Days = calendar:date_to_gregorian_days({Y - Cycle * 400, M, D}) + N,
+    Shift = floor_div(Days, 146097),
+    {Y1, M1, D1} = calendar:gregorian_days_to_date(Days - Shift * 146097),
+    {{Y1 + (Cycle + Shift) * 400, M1, D1}, T};
+shift_days({_, _, _} = Date, N) ->
+    shift_days({Date, {0, 0, 0}}, N).
+
+shift_seconds(Date, 0) ->
+    Date;
+shift_seconds({Date, {H, I, S}}, N) ->
+    Seconds = H * 3600 + I * 60 + S + N,
+    Days = floor_div(Seconds, 86400),
+    Time = calendar:seconds_to_time(Seconds - Days * 86400),
+    shift_days({Date, Time}, Days).
+
+%% Erlang div truncates towards zero; date arithmetic needs floor division.
+floor_div(N, D) when N < 0 -> (N - D + 1) div D;
+floor_div(N, D) -> N div D.
 
 %% @doc Return the number of days in a certain year.
 days_in_year(Y) ->
@@ -629,13 +637,8 @@ weeknorm(D) when D > 6 ->
 weeknorm(D) ->
     D.
 
-day_add(Date, 0) ->
-    Date;
-day_add(Date, Num) when Num < 0 ->
-    day_add(prev_day(Date), Num + 1);
-day_add(Date, Num) when Num > 0 ->
-    day_add(next_day(Date), Num - 1).
-
+day_add(Date, Num) ->
+    next_day(Date, Num).
 
 %% @doc Return the millisec value of the current clock.
 -spec msec() -> integer().

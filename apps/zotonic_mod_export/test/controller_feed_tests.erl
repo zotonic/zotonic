@@ -6,6 +6,7 @@
 feed_test_() ->
     export_test_support:isolated({setup, fun setup/0, fun cleanup/1, [
         fun formats/0,
+        fun calendar_defaults/0,
         fun default_feed/0,
         fun typed_default_feed/0,
         fun optional_resource/0,
@@ -196,3 +197,16 @@ response_and_identity() ->
             z_context:get_resp_header(<<"content-disposition">>, Result))
     end, [{{<<"application">>, <<"rss+xml">>, []}, <<"feed.rss">>},
           {{<<"application">>, <<"feed+json">>, []}, <<"feed.json">>}]).
+
+calendar_defaults() ->
+    lists:foreach(fun(Type) ->
+        C0 = z_context:set(test_default_query, 1, request(Type, [{<<"page">>, <<"2">>}])),
+        {false, C} = controller_feed:malformed_request(C0),
+        ?assertEqual(undefined, z_context:get(feed_id, C)),
+        ?assertEqual({[{<<"text">>, <<"calendar">>, []}], C}, controller_feed:content_types_provided(C)),
+        {#{<<"q">> := Terms}, 2, 20, _, 7} = search(C),
+        lists:foreach(fun({K,V}) ->
+            ?assert(lists:member(#{<<"term">> => K, <<"value">> => V}, Terms))
+        end, [{<<"cat">>, <<"event">>}, {<<"is_published">>, true}, {<<"unfinished">>, true},
+              {<<"sort">>, <<"date_start">>}, {<<"zsort">>, [<<"date_start">>, <<"id">>]}])
+    end, [<<"ics">>, <<"ical">>]).

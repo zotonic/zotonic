@@ -27,7 +27,7 @@ prepare(Entry, FeedSettings, Context) ->
     {ok, Patterns} = z_import_feed_cleanup:compile(maps:get(remove_patterns, FeedSettings, <<>>)),
     CategoryId = category(Entry, FeedSettings, Context),
     Common = (copyright_props(FeedSettings, Context))#{
-            <<"is_published">> => true,
+            <<"is_published">> => not maps:get(is_cancelled, Entry, false),
             <<"is_authoritative">> => maps:get(is_authoritative, FeedSettings),
             <<"content_group_id">> => maps:get(content_group_id, FeedSettings)
         },
@@ -41,7 +41,13 @@ prepare(Entry, FeedSettings, Context) ->
             <<"website">> => maps:get(url, Entry),
             <<"author">> => maps:get(author, Entry),
             <<"publication_start">> => maps:get(published, Entry),
-            <<"feed_modified">> => maps:get(modified, Entry)
+            <<"feed_modified">> => maps:get(modified, Entry),
+            <<"date_start">> => maps:get(date_start, Entry, undefined),
+            <<"date_end">> => maps:get(date_end, Entry, undefined),
+            <<"date_is_all_day">> => maps:get(date_is_all_day, Entry, undefined),
+            <<"location">> => maps:get(location, Entry, undefined),
+            <<"ical_rrule">> => maps:get(rrule, Entry, undefined),
+            <<"ical_recurrence_id">> => maps:get(recurrence_id, Entry, undefined)
         }),
     Media = lists:sublist([MediaUri || MediaUri <- maps:get(media, Entry), MediaUri =/= maps:get(uri, Entry)], ?MAX_MEDIA_ITEMS),
     {Medium, Dependents} = case {maps:get(media_mode, FeedSettings), Media} of
@@ -645,6 +651,8 @@ record(FeedId, Uri, Kind, Status, Hash, Error, Context) ->
             message => Message
         }, Context).
 
+category(#{date_start := _}, #{guess_category := true}, Context) ->
+    m_rsc:rid(event, Context);
 category(Entry, #{guess_category := true, category_id := Default}, Context) ->
     Tags = [z_string:to_lower(Tag) || Tag <- maps:get(tags, Entry)],
     Candidates = [Id || Category <- m_category:tree_flat(Context),
