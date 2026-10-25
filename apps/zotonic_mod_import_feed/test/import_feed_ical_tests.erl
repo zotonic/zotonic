@@ -89,3 +89,12 @@ unsafe_links_test() ->
         "DTSTART:20261101T100000Z\r\nURL:javascript:alert(1)\r\nX-ZOTONIC-RESOURCE:file:///etc/passwd\r\n")),
     ?assertEqual(<<>>, maps:get(url,E)),
     ?assertEqual(undefined, maps:get(zotonic_export,E)).
+
+calendar_boundaries_test() ->
+    {ok, #{entries := [Leap, Year, Duration]}} = parse([
+        event("DTSTART;VALUE=DATE:20240229\r\n"),
+        event("DTSTART;VALUE=DATE:20261231\r\nDTEND;VALUE=DATE:20270102\r\n"),
+        event("DTSTART:20261231T233000Z\r\nDURATION:PT1H\r\n")]),
+    ?assertEqual({{2024,2,29},{0,0,0}}, maps:get(date_end, Leap)),
+    ?assertEqual({{2027,1,1},{0,0,0}}, maps:get(date_end, Year)),
+    ?assertEqual({{2027,1,1},{0,30,0}}, maps:get(date_end, Duration)).

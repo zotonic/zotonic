@@ -172,8 +172,8 @@ retry_after(Headers, Now) ->
                 Bin = string:trim(z_convert:to_binary(Value)),
                 Seconds = case re:run(Bin, <<"^[0-9]{1,10}$">>, [{capture, none}]) of
                     match -> binary_to_integer(Bin);
-                    nomatch -> max(0, calendar:datetime_to_gregorian_seconds(cow_date:parse_date(Bin))
-                        - calendar:datetime_to_gregorian_seconds(Now))
+                    nomatch -> max(0, z_datetime:datetime_to_timestamp(cow_date:parse_date(Bin))
+                        - z_datetime:datetime_to_timestamp(Now))
                 end,
                 case Seconds =< 2147483647 of true -> Seconds; false -> undefined end
             catch _:_ -> undefined end;

@@ -365,9 +365,8 @@ date(Value) ->
     try
         case re:run(Value, <<"^\\d{4}-\\d\\d-\\d\\dT">>, [{capture, none}]) of
             match ->
-                calendar:system_time_to_universal_time(
-                    calendar:rfc3339_to_system_time(binary_to_list(Value), [{unit, second}]),
-                    second);
+                z_datetime:timestamp_to_datetime(
+                    calendar:rfc3339_to_system_time(binary_to_list(Value), [{unit, second}]));
             nomatch ->
                 rss_date(Value)
         end
@@ -387,7 +386,7 @@ rss_date(Value) ->
                 <<"+">> -> -Offset;
                 _ -> Offset
             end,
-            calendar:gregorian_seconds_to_datetime(calendar:datetime_to_gregorian_seconds(DateTime) + Delta);
+            z_datetime:next_second(DateTime, Delta);
         nomatch ->
             DateTime
     end.

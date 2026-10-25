@@ -45,12 +45,20 @@ parse(Data, Url, Limit) ->
         <<"2.0">> = value(<<"VERSION">>, Calendar),
         true = value(<<"PRODID">>, Calendar) =/= <<>>,
         Entries = lists:filtermap(fun(E) -> entry(E, Url) end, lists:sublist(Events, Limit)),
-        {ok, #{url => Url, title => text(value(<<"X-WR-CALNAME">>, Calendar)),
-            website => Url, next_url => resolve(value(<<"X-ZOTONIC-NEXT">>, Calendar), Url),
-            hubs => [], refresh_seconds => 0, entries => Entries,
+        {ok, #{
+            url => Url,
+            title => text(value(<<"X-WR-CALNAME">>, Calendar)),
+            website => Url,
+            next_url => resolve(value(<<"X-ZOTONIC-NEXT">>, Calendar), Url),
+            hubs => [],
+            refresh_seconds => 0,
+            entries => Entries,
             is_zotonic_feed => lists:any(fun(E) -> is_binary(maps:get(zotonic_export, E)) end, Entries),
-            truncated => length(Events) > Limit}}
-    catch _:_ -> {error, invalid_feed} end.
+            truncated => length(Events) > Limit
+        }}
+    catch
+        _:_ -> {error, invalid_feed}
+    end.
 
 %% Only properties directly inside VEVENT belong to the event. Ignore nested
 %% VALARM/VTIMEZONE contents, while requiring balanced component boundaries.
@@ -117,20 +125,32 @@ entry(Props, Url) ->
         Guid = case Recurrence of <<>> -> UID; _ -> <<UID/binary, "#", Recurrence/binary>> end,
         Link = resolve(value(<<"URL">>, Props), Url),
         Native = resolve(value(<<"X-ZOTONIC-RESOURCE">>, Props), Url),
-        {true, #{uri => z_import_feed_parse:identity(Guid, Link, Url), guid => Guid,
-            url => Link, title => z_html:escape(text(value(<<"SUMMARY">>, Props))),
-            summary => <<>>, body => z_html:escape(text(value(<<"DESCRIPTION">>, Props))),
+        {true, #{
+            uri => z_import_feed_parse:identity(Guid, Link, Url),
+            guid => Guid,
+            url => Link,
+            title => z_html:escape(text(value(<<"SUMMARY">>, Props))),
+            summary => <<>>,
+            body => z_html:escape(text(value(<<"DESCRIPTION">>, Props))),
             author => text(value(<<"ORGANIZER">>, Props)),
             published => optional_utc(<<"CREATED">>, Props, undefined),
             modified => optional_utc(<<"LAST-MODIFIED">>, Props, Stamp),
-            date_start => Start, date_end => End, date_is_all_day => AllDay,
+            date_start => Start,
+            date_end => End,
+            date_is_all_day => AllDay,
             is_cancelled => value(<<"STATUS">>, Props) =:= <<"CANCELLED">>,
             location => text(value(<<"LOCATION">>, Props)),
-            rrule => value(<<"RRULE">>, Props), recurrence_id => Recurrence,
-            tags => [], media => [], media_aliases => #{},
+            rrule => value(<<"RRULE">>, Props),
+            recurrence_id => Recurrence,
+            tags => [],
+            media => [],
+            media_aliases => #{},
             zotonic_export => case Native of <<>> -> undefined; _ -> Native end,
-            raw => Props}}
-    catch _:_ -> false end.
+            raw => Props
+        }}
+    catch
+        _:_ -> false
+    end.
 
 optional_utc(Name, Props, Default) ->
     case lists:keyfind(Name, 1, Props) of false -> Default; P -> utc(P) end.
@@ -153,28 +173,34 @@ datetime({_, Params, <<Y:4/binary, M:2/binary, D:2/binary, "T", H:2/binary, I:2/
     {UTC, false}.
 valid_date(Y, M, D, H, I, S) ->
     [YY, MM, DD, HH, II, SS] = [binary_to_integer(V) || V <- [Y, M, D, H, I, S]],
-    true = YY > 0 andalso calendar:valid_date({YY, MM, DD}),
-    true = HH >= 0 andalso HH < 24 andalso II >= 0 andalso II < 60 andalso SS >= 0 andalso SS < 60,
-    {{YY, MM, DD}, {HH, II, SS}}.
+    true = YY > 0,
+    DT = {{YY, MM, DD}, {HH, II, SS}},
+    DT = z_datetime:undefined_if_invalid_date(DT).
 
 event_end(Start, AllDay, Props) ->
     End = case {lists:keyfind(<<"DTEND">>, 1, Props), value(<<"DURATION">>, Props)} of
-        {false, <<>>} when AllDay -> add_seconds(Start, 86400);
+        {false, <<>>} when AllDay -> z_datetime:next_day(Start);
         {false, <<>>} -> Start;
         {false, Duration} ->
             Seconds = duration(Duration),
             true = not AllDay orelse Seconds rem 86400 =:= 0,
-            add_seconds(Start, Seconds);
+            z_datetime:next_second(Start, Seconds);
         {P, <<>>} ->
             {DT, AllDay} = datetime(P),
             true = DT > Start,
             DT
     end,
     %% Zotonic uses an inclusive end date for all-day events.
-    case AllDay of true -> add_seconds(End, -86400); false -> End end.
-add_seconds(DT, N) -> calendar:gregorian_seconds_to_datetime(calendar:datetime_to_gregorian_seconds(DT) + N).
+    case AllDay of
+        true -> z_datetime:prev_day(End);
+        false -> End
+    end.
+
 duration(Value) ->
-    {match, Parts} = re:run(Value, <<"^\\+?P(?:(\\d+)W|(\\d+)D(?:T(?:(\\d+)H)?(?:(\\d+)M)?(?:(\\d+)S)?)?|T(?:(\\d+)H)?(?:(\\d+)M)?(?:(\\d+)S)?)$">>, [{capture, all_but_first, binary}]),
+    {match, Parts} = re:run(
+        Value,
+        <<"^\\+?P(?:(\\d+)W|(\\d+)D(?:T(?:(\\d+)H)?(?:(\\d+)M)?(?:(\\d+)S)?)?|T(?:(\\d+)H)?(?:(\\d+)M)?(?:(\\d+)S)?)$">>,
+        [{capture, all_but_first, binary}]),
     N = lists:sum([case V of <<>> -> 0; _ -> binary_to_integer(V) * Factor end
         || {V, Factor} <- lists:zip(Parts ++ lists:duplicate(8 - length(Parts), <<>>), [604800,86400,3600,60,1,3600,60,1])]),
     true = N > 0, N.

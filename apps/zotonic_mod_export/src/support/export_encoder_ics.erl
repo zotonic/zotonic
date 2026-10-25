@@ -70,11 +70,23 @@ row(Row, #state{row_template=Template} = State, Context) ->
             andalso is_binary(Uri) andalso Uri =/= <<>> of
         true ->
             End = prop(Row, date_end, Context),
-            End1 = case valid_date(End) andalso End >= Start of true -> End; false -> Start end,
+            End1 = case valid_date(End) andalso End >= Start of
+                true -> End;
+                false -> Start
+            end,
             Created = prop(Row, created, Context),
-            Created1 = case valid_date(Created) of true -> Created; false -> undefined end,
-            Vars = [{created, Created1}, {id, Row}, {dtstart, Start}, {dtend, End1}, {dtstamp, Modified},
-                {resource_url, resource_url(Row, Context)}],
+            Created1 = case valid_date(Created) of
+                true -> Created;
+                false -> undefined
+            end,
+            Vars = [
+                {created, Created1},
+                {id, Row},
+                {dtstart, Start},
+                {dtend, End1},
+                {dtstamp, Modified},
+                {resource_url, resource_url(Row, Context)}
+            ],
             Tpl = case is_integer(Row) of true -> {cat, Template}; false -> Template end,
             {Bin, _} = z_template:render_to_iolist(Tpl, Vars, Context),
             {ok, content_lines(Bin), State};
@@ -90,9 +102,8 @@ resource_url(Id, Context) when is_integer(Id) ->
     z_dispatcher:url_for(api_rsc_export, [{id, Id}, {absolute_url, true}], none, Context);
 resource_url(_, _) -> undefined.
 
-valid_date({{Y, M, D}, {H, I, S}}) when is_integer(Y), Y > 0, Y < 9999,
-        is_integer(H), H >= 0, H < 24, is_integer(I), I >= 0, I < 60,
-        is_integer(S), S >= 0, S < 60 -> calendar:valid_date({Y, M, D});
+valid_date({{Y, _, _}, _} = DT) when is_integer(Y), Y > 0, Y < 9999 ->
+    z_datetime:undefined_if_invalid_date(DT) =/= undefined;
 valid_date(_) -> false.
 
 %% Fold complete content lines to 75 octets without splitting UTF-8 characters.
