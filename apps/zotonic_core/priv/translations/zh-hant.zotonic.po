@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-23 20:29\n"
+"PO-Revision-Date: 2026-10-25 21:18\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -10064,7 +10064,7 @@ msgstr "我们停止了邮件发送。"
 msgid "Will try again"
 msgstr "稍後再試"
 
-#: zotonic_mod_export/priv/templates/_vcalendar_header.tpl:7
+#: zotonic_mod_export/priv/templates/ical/feed_start.tpl:7
 msgid "Calendar"
 msgstr "日历"
 
@@ -10885,7 +10885,7 @@ msgstr "有效"
 msgid "Activity log"
 msgstr "活動記錄"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:350
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:371
 msgid "Add default connection"
 msgstr "新增預設連線"
 
@@ -10980,7 +10980,7 @@ msgstr "預設值為 1：直接匯入已建立連線的資源。若要跳過連�
 msgid "Delete feed"
 msgstr "刪除動態"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:536
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:557
 msgid "Delete feed?"
 msgstr "刪除動態？"
 
@@ -11025,8 +11025,8 @@ msgid "Development environment: local destinations and self-signed certificates 
 msgstr "開發環境：允許使用本機目標位置及自簽名憑證。"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:12
-msgid "Discover RSS, Atom or JSON feeds and import their articles automatically."
-msgstr "探索 RSS、Atom 或 JSON 資訊源，並自動匯入其中的文章。"
+msgid "Discover RSS, Atom, JSON or iCalendar feeds and import their content automatically."
+msgstr "探索 RSS、Atom、JSON 或 iCalendar 資訊源，並自動匯入其內容。"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:27
 msgid "Discover feeds"
@@ -11090,7 +11090,7 @@ msgstr "動態"
 msgid "Feed activity log"
 msgstr "動態日誌"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:548
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:569
 msgid "Feed deleted"
 msgstr "貼文已刪除"
 
@@ -11098,7 +11098,7 @@ msgstr "貼文已刪除"
 msgid "Feed not found or access denied."
 msgstr "找不到該資訊源，或存取遭拒絕。"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:514
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:535
 msgid "Feed queued for fetching. Watch the activity log for results."
 msgstr "該資料串流已排入佇列，等待擷取。請查看活動日誌以查看結果。"
 
@@ -11145,7 +11145,7 @@ msgstr "匯入類別"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:4
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:11
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:281
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:302
 msgid "Import feeds"
 msgstr "匯入資訊源"
 
@@ -11169,7 +11169,7 @@ msgstr "匯入使用者"
 msgid "Imported / updated / skipped"
 msgstr "已匯入／已更新／已跳過"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:525
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:546
 msgid "Imported content deleted"
 msgstr "已刪除匯入的內容"
 
@@ -11333,11 +11333,11 @@ msgstr "儲存訂閱"
 msgid "Select a feed"
 msgstr "選擇一個資訊源"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:357
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:378
 msgid "Select connected page"
 msgstr "選擇相關頁面"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:389
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:410
 msgid "Select import user"
 msgstr "選擇要匯入的使用者"
 
@@ -11457,7 +11457,7 @@ msgstr "網站或資訊源網址"
 msgid "WordPress enrichment unavailable; the feed data will be used."
 msgstr "無法使用 WordPress 增強功能；將使用 RSS 源資料。"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:339
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:360
 msgid "You are not allowed to manage feeds."
 msgstr "您無權管理資訊源。"
 
