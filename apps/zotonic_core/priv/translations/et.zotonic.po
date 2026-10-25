@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-23 20:29\n"
+"PO-Revision-Date: 2026-10-25 21:18\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -10064,7 +10064,7 @@ msgstr "Peatasime e-posti kohaletoimetamise."
 msgid "Will try again"
 msgstr "Proovin uuesti"
 
-#: zotonic_mod_export/priv/templates/_vcalendar_header.tpl:7
+#: zotonic_mod_export/priv/templates/ical/feed_start.tpl:7
 msgid "Calendar"
 msgstr "Kalender"
 
@@ -10885,7 +10885,7 @@ msgstr "Aktiivne"
 msgid "Activity log"
 msgstr "Tegevuslogi"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:350
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:371
 msgid "Add default connection"
 msgstr "Lisa vaikimisi ühendus"
 
@@ -10980,7 +10980,7 @@ msgstr "Vaikimisi on väärtuseks 1: impordi otse ühendatud ressursid. Kasuta v
 msgid "Delete feed"
 msgstr "Kustuta uudisvoog"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:536
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:557
 msgid "Delete feed?"
 msgstr "Kas soovid uudisvoogu kustutada?"
 
@@ -11025,8 +11025,8 @@ msgid "Development environment: local destinations and self-signed certificates 
 msgstr "Arenduskeskkond: lubatud on kohalikud sihtkohad ja iseallkirjastatud sertifikaadid."
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:12
-msgid "Discover RSS, Atom or JSON feeds and import their articles automatically."
-msgstr "Leia RSS-, Atom- või JSON-vood ja impordi nende artiklid automaatselt."
+msgid "Discover RSS, Atom, JSON or iCalendar feeds and import their content automatically."
+msgstr "Leia RSS-, Atom-, JSON- või iCalendar-vood ja impordi nende sisu automaatselt."
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:27
 msgid "Discover feeds"
@@ -11090,7 +11090,7 @@ msgstr "Uudisvoog"
 msgid "Feed activity log"
 msgstr "Söötmise tegevuslogi"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:548
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:569
 msgid "Feed deleted"
 msgstr "Sööt kustutatud"
 
@@ -11098,7 +11098,7 @@ msgstr "Sööt kustutatud"
 msgid "Feed not found or access denied."
 msgstr "Sisu ei leitud või juurdepääs keelatud."
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:514
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:535
 msgid "Feed queued for fetching. Watch the activity log for results."
 msgstr "Andmevoog on järjekorda pandud allalaadimiseks. Tulemuste saamiseks jälgi tegevuslogi."
 
@@ -11145,7 +11145,7 @@ msgstr "Importkategooria"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:4
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:11
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:281
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:302
 msgid "Import feeds"
 msgstr "Sisestada vooge"
 
@@ -11169,7 +11169,7 @@ msgstr "Kasutaja importimine"
 msgid "Imported / updated / skipped"
 msgstr "Imporditud / uuendatud / vahele jäetud"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:525
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:546
 msgid "Imported content deleted"
 msgstr "Imporditud sisu on kustutatud"
 
@@ -11333,11 +11333,11 @@ msgstr "Salvesta uudisvoog"
 msgid "Select a feed"
 msgstr "Vali uudisvoog"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:357
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:378
 msgid "Select connected page"
 msgstr "Vali seotud lehekülg"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:389
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:410
 msgid "Select import user"
 msgstr "Vali kasutaja importimiseks"
 
@@ -11457,7 +11457,7 @@ msgstr "Veebisaidi või uudisvoo URL"
 msgid "WordPress enrichment unavailable; the feed data will be used."
 msgstr "WordPressi täiendamine pole saadaval; kasutatakse voo andmeid."
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:339
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:360
 msgid "You are not allowed to manage feeds."
 msgstr "Teil ei ole õigust uudisvooge hallata."
 
