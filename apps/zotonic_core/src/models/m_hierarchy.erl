@@ -64,13 +64,15 @@ Available Model API Paths
     ensure/3,
     append/3,
     save/3,
+    save_partial_tree/4,
     save_nocheck/3,
     flush/2
 ]).
 
 % For testing
 -export([
-    assign_nrs/2
+    assign_nrs/2,
+    merge_partial_tree/2
 ]).
 
 -behaviour(zotonic_model).
@@ -315,6 +317,150 @@ ensure(Name, Category, Context) when not is_integer(Category) ->
     ensure(Name, CatId, Context);
 ensure(Name, CatId, Context) when not is_binary(Name) ->
     ensure(z_convert:to_binary(Name), CatId, Context).
+
+
+
+%% @doc Merge declared parent-child relationships into a named hierarchy. Requires
+%% administrator access. Root entries keep their current parents; empty child
+%% lists preserve existing children. Resource names and ids are accepted. Unknown
+%% resources, duplicate ids, wrong categories and cycles are rejected.
+-spec save_partial_tree(Name, Category, PartialTree, Context) -> ok | {error, term()}
+    when
+        Name :: atom() | binary(),
+        Category :: m_rsc:resource(),
+        PartialTree :: list(),
+        Context :: z:context().
+save_partial_tree(Name, Category, PartialTree, Context) ->
+    case z_acl:is_admin(Context) of
+        false ->
+            {error, eacces};
+        true ->
+            case m_category:name_to_id(Category, Context) of
+                {ok, CatId} ->
+                    try normalize_partial_tree(PartialTree, CatId, Context) of
+                        Normalized ->
+                            save_partial_tree_1(z_convert:to_binary(Name), Normalized, Context)
+                    catch
+                        throw:{invalid_hierarchy, Reason} -> {error, Reason}
+                    end;
+                {error, _} = Error ->
+                    Error
+            end
+    end.
+
+normalize_partial_tree([], _Category, _Context) ->
+    [];
+normalize_partial_tree([{Resource, Children} | Rest], Category, Context) ->
+    Id = m_rsc:rid(Resource, Context),
+    case Id of
+        undefined -> throw({invalid_hierarchy, {unknown_resource, Resource}});
+        _ -> ok
+    end,
+    case m_rsc:is_a(Id, Category, Context) of
+        true ->
+            [{Id, normalize_partial_tree(Children, Category, Context)}
+                | normalize_partial_tree(Rest, Category, Context)];
+        false ->
+            throw({invalid_hierarchy, {invalid_category, Resource}})
+    end;
+normalize_partial_tree(_, _Category, _Context) ->
+    throw({invalid_hierarchy, invalid_tree}).
+
+save_partial_tree_1(Name, PartialTree, Context) ->
+    Result = z_db:transaction(
+        fun(Ctx) ->
+            % Also protects an empty hierarchy, and blocks writes from existing
+            % hierarchy APIs which do not take a per-hierarchy advisory lock.
+            z_db:q("lock table hierarchy in share row exclusive mode", Ctx),
+            Rows = z_db:q("select id, parent_id, lvl, lft, rght
+                          from hierarchy where name = $1 order by nr", [Name], Ctx),
+            CurrentTree = tree_to_menu(build_tree(Rows, [], []), []),
+            case merge_partial_tree(CurrentTree, PartialTree) of
+                {ok, CurrentTree} -> unchanged;
+                {ok, NewTree} -> save_nocheck_trans(Name, flatten_save_tree(NewTree), Ctx);
+                {error, _} = Error -> Error
+            end
+        end,
+        Context),
+    case Result of
+        unchanged -> ok;
+        {ok, New, Del} ->
+            flush(Name, Context),
+            z_notifier:notify(#hierarchy_updated{
+                root_id = Name,
+                predicate = undefined,
+                inserted_ids = New,
+                deleted_ids = Del
+            }, Context),
+            ok;
+        {rollback, Reason} -> {error, Reason};
+        {error, _} = Error -> Error
+    end.
+
+%% @doc Pure partial merge of trees containing resource ids. Existing sibling
+%% order is retained; moved and new children are appended in declaration order.
+-spec merge_partial_tree(CurrentTree, PartialTree) -> {ok, list()} | {error, term()}
+    when
+        CurrentTree :: list(),
+        PartialTree :: list().
+merge_partial_tree(CurrentTree, PartialTree) ->
+    try
+        {Current, CurrentOrder} = index_partial_tree(CurrentTree),
+        {Declared, DeclaredOrder} = index_partial_tree(PartialTree),
+        Parents = maps:fold(
+            fun(Id, undefined, Acc) ->
+                    case maps:is_key(Id, Acc) of
+                        true -> Acc;
+                        false -> Acc#{Id => undefined}
+                    end;
+               (Id, Parent, Acc) -> Acc#{Id => Parent}
+            end,
+            Current,
+            Declared),
+        maps:foreach(fun(Id, _) -> check_partial_cycle(Id, Parents, #{}) end, Parents),
+        Unmoved = [Id || Id <- CurrentOrder,
+            maps:get(Id, Current) =:= maps:get(Id, Parents)],
+        Moved = [Id || Id <- DeclaredOrder,
+            not maps:is_key(Id, Current) orelse
+                maps:get(Id, Current) =/= maps:get(Id, Parents)],
+        Children = lists:foldr(
+            fun(Id, Acc) ->
+                Parent = maps:get(Id, Parents),
+                Acc#{Parent => [Id | maps:get(Parent, Acc, [])]}
+            end,
+            #{},
+            Unmoved ++ Moved),
+        {ok, partial_children(undefined, Children)}
+    catch
+        throw:{invalid_hierarchy, Reason} -> {error, Reason}
+    end.
+
+index_partial_tree(Tree) ->
+    {Parents, Order} = index_partial_tree(Tree, undefined, #{}, []),
+    {Parents, lists:reverse(Order)}.
+
+index_partial_tree([], _Parent, Parents, Order) ->
+    {Parents, Order};
+index_partial_tree([{Id, Children} | Rest], Parent, Parents, Order) when is_integer(Id) ->
+    case maps:is_key(Id, Parents) of
+        true -> throw({invalid_hierarchy, {duplicate_id, Id}});
+        false ->
+            {Parents1, Order1} = index_partial_tree(Children, Id, Parents#{Id => Parent}, [Id | Order]),
+            index_partial_tree(Rest, Parent, Parents1, Order1)
+    end;
+index_partial_tree(_, _Parent, _Parents, _Order) ->
+    throw({invalid_hierarchy, invalid_tree}).
+
+check_partial_cycle(undefined, _Parents, _Seen) ->
+    ok;
+check_partial_cycle(Id, Parents, Seen) ->
+    case maps:is_key(Id, Seen) of
+        true -> throw({invalid_hierarchy, {cycle, Id}});
+        false -> check_partial_cycle(maps:get(Id, Parents), Parents, Seen#{Id => true})
+    end.
+
+partial_children(Parent, Children) ->
+    [{Id, partial_children(Id, Children)} || Id <- maps:get(Parent, Children, [])].
 
 
 %% @doc Save a new hierarchy, replacing a previous one.

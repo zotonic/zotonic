@@ -300,6 +300,59 @@ propagate to the site’s rules. To protect the set’s completeness, managed ru
 
 
 
+Managing the user-group hierarchy
+---------------------------------
+
+Use `m_hierarchy:save_partial_tree/4` from the existing `manage_data/2` callback to
+make a group inherit another group's rules. This callback runs after the resources
+returned by `manage_schema/2` have been installed. Define `vipmember` as a resource
+of category `acl_user_group` in that datamodel, then apply its hierarchy. A minimal
+module using both callbacks is:
+
+```erlang
+-module(mod_vip_members).
+-mod_title(\"VIP members\").
+-mod_depends([mod_acl_user_groups]).
+-mod_schema(1).
+
+-include_lib(\"zotonic_core/include/zotonic.hrl\").
+
+-export([manage_schema/2, manage_data/2]).
+
+%% Apply the datamodel on installation and each schema upgrade.
+manage_schema(_Version, _Context) ->
+    #datamodel{
+        resources = [
+            {vipmember, acl_user_group, #{
+                <<\"title\">> => <<\"VIP members\">>
+            }}
+        ]
+    }.
+
+manage_data(_Version, Context) ->
+    ok = m_hierarchy:save_partial_tree(
+        acl_user_group,
+        acl_user_group,
+        [{acl_user_group_members, [{vipmember, []}]}],
+        Context).
+```
+
+The example makes `vipmember` a child of the existing members group, inheriting
+its rules. The API requires administrator access and accepts resource names or ids.
+If the callback also installs ACL rules, apply the hierarchy before those rules.
+Bump the module's schema version to apply a changed declaration on an existing site.
+
+This is a partial merge: root entries keep their current parents, and unspecified
+children and descendants are preserved. An empty child list does not remove existing
+children. Existing siblings retain their order; moved or new children are appended
+in declaration order. Reapplying the declaration is a no-op when it already matches.
+Unknown resources, resources outside the category, duplicate ids and cycles return
+an error without changing the hierarchy. Removing a declaration does not undo an
+earlier move, and relationships are not owned or protected by a managing module.
+
+Successful changes invalidate the hierarchy cache and trigger an ACL rebuild.
+
+
 Exporting and importing rules
 -----------------------------
 
