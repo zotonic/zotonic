@@ -2,7 +2,7 @@
     {% with id.depiction as dep %}
     {% if dep and not dep.id.is_a.document %}
     <div class="thumbnail depiction landscape">
-        <img src="{% image_url dep mediaclass="base-page-main" %}" alt="{{ dep.id.title }}" />
+        <img src="{% image_url dep mediaclass='body-media-large' %}" alt="{{ dep.id.title }}" />
         {% if dep.id.summary %}
         <p class="caption"><span class="icon glyphicon glyphicon-camera"></span> <a href="{{ dep.id.page_url }}">{{ dep.id.summary }}</a></p>
         {% endif %}
