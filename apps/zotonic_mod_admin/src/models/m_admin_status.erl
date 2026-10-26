@@ -42,6 +42,7 @@ Available Model API Paths
 | `get` | `/files_dir/...` | Return the site files base directory derived from `z_path:files_subdir/2`. |
 | `get` | `/tcp_connection_count/...` | Return the current number of open TCP sockets (`recon:tcp/0`). |
 | `get` | `/group_sockets/...` | Return open TCP sockets grouped by peer IP with counts and ports. |
+| `get` | `/listeners/...` | Return network listener bindings, status and connection counts (admin-only). Missing listeners include explicitly marked configured bindings. |
 | `get` | `/memory/used/...` | Return memory usage grouped by allocator (`recon_alloc:memory(used)`). |
 | `get` | `/memory/allocated/...` | Return allocated memory grouped by allocator (`recon_alloc:memory(allocated)`). |
 | `get` | `/memory/unused/...` | Return unused memory grouped by allocator (`recon_alloc:memory(unused)`). |
@@ -101,6 +102,8 @@ m_get(Path, Msg, Context) ->
 
 m_get_1([ <<"media_processing">> | Rest ], _Msg, _Context) ->
     {ok, {media_processing(), Rest}};
+m_get_1([ <<"listeners">> | Rest ], _Msg, _Context) ->
+    {ok, {listeners(), Rest}};
 m_get_1([ <<"database_version">> | Rest ], _Msg, Context) ->
     case z_acl:is_admin(Context) of
         true -> {ok, {database_version(Context), Rest}};
@@ -189,6 +192,67 @@ m_get_1(_Path, _Msg, _Context) ->
 %%
 %% Helpers
 %%
+
+%% @doc Include absent listeners so disabled or missing IPv6 sockets remain visible.
+%% The definitions mirror the HTTP, MQTT and SMTP listener startup configuration.
+-spec listeners() -> [map()].
+listeners() ->
+    Definitions = [
+        {zotonic_http_listener_ipv4, <<"HTTP">>, inet, listen_ip, listen_port},
+        {zotonic_http_listener_ipv6, <<"HTTP">>, inet6, listen_ip6, listen_port},
+        {zotonic_https_listener_ipv4, <<"HTTPS">>, inet, listen_ip, ssl_listen_port},
+        {zotonic_https_listener_ipv6, <<"HTTPS">>, inet6, listen_ip6, ssl_listen_port},
+        {zotonic_mqtt_listener_ipv4, <<"MQTT">>, inet, mqtt_listen_ip, mqtt_listen_port},
+        {zotonic_mqtt_listener_ipv6, <<"MQTT">>, inet6, mqtt_listen_ip6, mqtt_listen_port},
+        {zotonic_mqtts_listener_ipv4, <<"MQTT TLS">>, inet, mqtt_listen_ip, mqtt_listen_ssl_port},
+        {zotonic_mqtts_listener_ipv6, <<"MQTT TLS">>, inet6, mqtt_listen_ip6, mqtt_listen_ssl_port},
+        {zotonic_listen_smtp, <<"SMTP">>, inet, smtp_listen_ip, smtp_listen_port}
+    ],
+    [listener_status(Definition) || Definition <- Definitions].
+
+listener_status({Ref, Service, Family, IpKey, PortKey}) ->
+    IP = z_config:get(IpKey),
+    Port = z_config:get(PortKey),
+    Base = #{service => Service, family => Family},
+    try ranch:info(Ref) of
+        Info ->
+            %% Only expose the summary, never raw transport/protocol options.
+            Summary = maps:with(
+                [status, port, active_connections, all_connections, max_connections],
+                maps:from_list(Info)),
+            maps:merge(Base, Summary#{
+                ip => listener_address(proplists:get_value(ip, Info), Family),
+                configured => false
+            })
+    catch
+        error:badarg ->
+            %% Ranch raises badarg when the listener is not registered.
+            Status = case IP =:= none orelse Port =:= none of
+                true -> disabled;
+                false -> not_running
+            end,
+            Base#{
+                status => Status,
+                ip => listener_address(IP, Family),
+                port => listener_port(Port),
+                configured => true
+            };
+        _:_ ->
+            %% A listener can restart while its counters are being collected.
+            Base#{status => unavailable}
+    end.
+
+listener_address(any, inet) -> <<"0.0.0.0">>;
+listener_address(any, inet6) -> <<"::">>;
+listener_address(none, _Family) -> undefined;
+listener_address(undefined, _Family) -> undefined;
+listener_address(IP, _Family) when is_tuple(IP) ->
+    z_convert:to_binary(inet:ntoa(IP));
+listener_address(IP, _Family) ->
+    z_convert:to_binary(IP).
+
+listener_port(none) -> undefined;
+listener_port(Port) -> Port.
 
 %% @doc Summarize media execution without exposing runner credentials or raw errors.
 %% Remote probes share the bounded, configuration-aware ImageMagick cache.
