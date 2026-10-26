@@ -40,7 +40,24 @@ get_response_topic_test() ->
 is_malformed(Method, Topic, Query) ->
     % malformed_request runs before the middleware populates the context's query arguments.
     Context = #context{
-        cowreq = #{ method => Method, qs => Query },
+        cowreq = #{
+            method => Method,
+            version => 'HTTP/1.1',
+            scheme => <<"http">>,
+            host => <<"localhost">>,
+            port => 80,
+            path => <<"/api/", Topic/binary>>,
+            qs => Query,
+            headers => #{},
+            peer => {{127, 0, 0, 1}, 12345},
+            sock => {{127, 0, 0, 1}, 80},
+            cert => undefined,
+            ref => controller_api_tests,
+            pid => self(),
+            streamid => 1,
+            has_body => false,
+            body_length => 0
+        },
         cowenv = #{ cowmachine_disp_path => Topic }
     },
     {IsMalformed, _} = controller_api:malformed_request(Context),
