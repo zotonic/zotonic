@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-26 13:21\n"
+"PO-Revision-Date: 2026-10-26 15:19\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -1087,6 +1087,13 @@ msgstr "Cerca de {n} artículos encontrados."
 msgid "Access control"
 msgstr "Control de acceso"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:12
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:66
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:46
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:104
+msgid "Active"
+msgstr "Activo"
+
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:30
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:27
 msgid "Active filters"
@@ -1331,6 +1338,10 @@ msgstr "Básico"
 msgid "Billing address"
 msgstr "Dirección de Envio"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:9
+msgid "Bind address"
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:19
 msgid "Block name"
 msgstr "Nombre de bloque"
@@ -1368,7 +1379,7 @@ msgstr "Cambiar categoria"
 msgid "Change the category of this page"
 msgstr "Cambiar la categoría de esta pagina"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:140
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:139
 msgid "Check all pages for embedded page references and add a <i>refers</i> connection for all of those references."
 msgstr "Verifique todas las páginas para ver las referencias de páginas integradas y agregue una conexión <i>refiere</i> para todas esas referencias."
 
@@ -1435,6 +1446,10 @@ msgstr "Cerrar la vista previa"
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:50
 msgid "Config Directory"
 msgstr "Directorio de configuración"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:24
+msgid "Configured"
+msgstr ""
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_delete_rsc.erl:66
 #: zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_delete.erl:62
@@ -1662,6 +1677,11 @@ msgstr "Dependiente"
 msgid "Dimensions"
 msgstr "Dimensiones"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:33
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:61
+msgid "Disabled"
+msgstr "Discapacitado"
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:26
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers_list.tpl:15
 #: zotonic_mod_admin/priv/templates/_rsc_edge.tpl:22
@@ -1822,7 +1842,7 @@ msgstr "Teléfono de emergencias"
 msgid "Endpoint"
 msgstr "Punto final"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:136
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:135
 msgid "Ensure <i>refers</i> connections"
 msgstr "Asegúrese de que <i>se refiera a</i> conexiones"
 
@@ -1898,6 +1918,10 @@ msgstr "Páginas existentes"
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:118
 msgid "Failed to download the file."
 msgstr "Error al descargar el archivo."
+
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:8
+msgid "Family"
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:52
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:178
@@ -2442,6 +2466,10 @@ msgstr "¿Necesita más ayuda?"
 msgid "Network Connections"
 msgstr "Conexiones de la red"
 
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:189
+msgid "Network listeners"
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:84
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:12
 msgid "New Page"
@@ -2535,6 +2563,10 @@ msgstr "No indexado por los motores de búsqueda"
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:57
 msgid "Not protected"
 msgstr "Sin protección"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:35
+msgid "Not running"
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:26
 msgid "OS Memory"
@@ -2639,6 +2671,11 @@ msgstr "Número de teléfono para facturas"
 #: zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:8
 msgid "Pivot queue count size:"
 msgstr "Tamaño de la cola de pivote:"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:10
+#: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:169
+msgid "Port"
+msgstr "Puerto"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:113
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:114
@@ -2762,6 +2799,10 @@ msgstr "Consulta"
 msgid "Query results"
 msgstr "Resultados de la consulta"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:14
+msgid "Ranch limit"
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:94
 msgid "Rebuild all search-indices by putting all pages and data from the database in the indexer queue. This can take a long time!"
 msgstr "Volver a generar los índices de búsqueda poniendo todas las páginas y los datos de la base de datos en la cola del indizador. ¡Esto puede tomar mucho tiempo!"
@@ -2797,6 +2838,7 @@ msgid "Referrers to"
 msgstr "Referentes a"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:12
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:51
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:18
 msgid "Refresh"
 msgstr "Actualizar"
@@ -2893,6 +2935,12 @@ msgstr "Girado 90 grados"
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:69
 msgid "Runner availability and ImageMagick versions are cached for up to one minute. Failed probes are retried after five seconds. Refresh this page to check again."
 msgstr "La disponibilidad de los runners y las versiones de ImageMagick se almacenan en caché durante un máximo de un minuto. Las comprobaciones fallidas se vuelven a intentar tras cinco segundos. Actualiza esta página para volver a comprobarlo."
+
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:29
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:62
+#: zotonic_site_status/priv/templates/_sites.tpl:15
+msgid "Running"
+msgstr "Funcionamiento"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:113
 msgid "Runs the schema install command from the site's module again."
@@ -3035,6 +3083,13 @@ msgstr "Categorías seleccionadas"
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:51
 msgid "Selecting a file will make the page a media item."
 msgstr "Al seleccionar un archivo, la página se convertirá en un elemento multimedia."
+
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:7
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:13
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:40
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:7
+msgid "Service"
+msgstr "Servicio"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_sidebar_parts.tpl:32
 msgid "Settings &amp; more"
@@ -3182,6 +3237,7 @@ msgstr "Inicia"
 msgid "State"
 msgstr "Estado"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:11
 #: zotonic_mod_admin/src/mod_admin.erl:531
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
 #: zotonic_mod_base/priv/templates/_session_info.tpl:12
@@ -3275,6 +3331,10 @@ msgstr "Prefijo de apellido"
 msgid "Surname"
 msgstr "Apellido"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:31
+msgid "Suspended"
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:53
 msgid "Swap"
 msgstr "Intercambio"
@@ -3291,15 +3351,15 @@ msgstr "Estado del Sistema"
 msgid "System administration"
 msgstr "Administración de sistema"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:170
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:169
 msgid "Task queue"
 msgstr "cola de tareas"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:177
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:176
 msgid "Tasks are functions scheduled to run at a certain time."
 msgstr "Las tareas son funciones programadas para ejecutarse en un momento determinado."
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:178
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:177
 msgid "Tasks with errors will retry 10 times before being dropped."
 msgstr "Las tareas con errores se volverán a intentar 10 veces antes de descartarse."
 
@@ -3330,6 +3390,10 @@ msgstr "Texto | un bloque de texto (enriquecido)"
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:71
 msgid "The Zotonic datamodel is being reinstalled. Watch the console for messages"
 msgstr "Se está reinstalando el modelo de datos de Zotonic. Mire la consola para ver los mensajes."
+
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:58
+msgid "The addresses 0.0.0.0 and :: mean all local IPv4 and IPv6 interfaces respectively. Configured bindings are shown when a listener is absent."
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:201
 msgid "The billing address is only visible for people who can edit this page."
@@ -3411,6 +3475,10 @@ msgstr "Ya hay una página con este nombre."
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:4
 msgid "There is an error in the query:"
 msgstr "Hay un error en la consulta:"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:57
+msgid "These listeners are shared by all sites on this Zotonic node. Running means the local listener is active; it does not confirm external reachability."
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:45
 msgid "This block contains content in another language. Removing it will delete the block in all languages."
@@ -3555,9 +3623,14 @@ msgstr "Activar navegación"
 msgid "Too many connections, only the first and last are shown."
 msgstr "Demasiadas conexiones, solo se muestran la primera y la última."
 
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:13
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:33
 msgid "Total"
 msgstr "Total"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:59
+msgid "Total connections counts currently tracked connections, not connections over time. The Ranch limit is the listener connection limit; SMTP also applies a separate session check."
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:119
 #: zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:9
@@ -3568,6 +3641,7 @@ msgstr "Tipo de texto que se va a buscar"
 msgid "Type to filter the list below."
 msgstr "Escriba para filtrar la lista a continuación."
 
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:37
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:47
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:62
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:63
@@ -3588,6 +3662,10 @@ msgstr "Nombre único"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:101
 msgid "Unique uri"
 msgstr "URI única"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:43
+msgid "Unlimited"
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:53
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:22
@@ -3658,9 +3736,13 @@ msgstr "Actualizar páginas seleccionadas"
 msgid "Update {n} pages with the following properties:"
 msgstr "Actualizar {n} páginas con las siguientes propiedades:"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:54
+msgid "Updated"
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:89
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:17
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:162
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:161
 msgid "Upload"
 msgstr "Subir"
 
@@ -3672,12 +3754,12 @@ msgstr "Subir archivo"
 msgid "Upload a file from your computer."
 msgstr "Subir un archivo de su computadora."
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:152
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:151
 msgid "Upload a file to the drop folder. This file will be handled in the background by the mailinglists for recipient import and other modules."
 msgstr "Cargue un archivo en la carpeta desplegable. Este archivo será manejado en segundo plano por las listas de correo para la importación de destinatarios y otros módulos."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:74
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:149
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:148
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:31
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:36
 msgid "Upload file"
@@ -5635,11 +5717,6 @@ msgstr "Reexaminar módulos"
 #: zotonic_mod_admin_modules/priv/templates/_admin_status.tpl:4
 msgid "Rescanning will rebuild the index of all modules, actions, templates etc. It will also reload all dispatch rules."
 msgstr "Analizar de nuevo generará una vez más el índice de todos los módulos, acciones, plantillas, etc. También volverá a cargar todas las reglas de envío."
-
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:62
-#: zotonic_site_status/priv/templates/_sites.tpl:15
-msgid "Running"
-msgstr "Funcionamiento"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:59
 msgid "Runtime"
@@ -10519,12 +10596,6 @@ msgstr "Región S3"
 msgid "Save Settings"
 msgstr "Guardar configuración"
 
-#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:13
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:40
-#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:7
-msgid "Service"
-msgstr "Servicio"
-
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:201
 msgid "Settings are saved without a write test while the file store is read-only. Verify access by downloading an existing file."
 msgstr "Los ajustes se guardan sin realizar una prueba de escritura mientras el almacén de archivos sea de solo lectura. Comprueba el acceso descargando un archivo existente."
@@ -10876,12 +10947,6 @@ msgstr "Las propiedades más conocidas son:"
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:85
 msgid "You do not have permission to use the CSV/XLSX import module."
 msgstr "No tiene permiso para utilizar el módulo de importación CSV/XLSX."
-
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:66
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:46
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:104
-msgid "Active"
-msgstr "Activo"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:14
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:16
@@ -12197,10 +12262,6 @@ msgstr "Eliminar la lista envió."
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:131
 msgid "Delivery history is preserved. Sending again may result in recipients receiving the same content twice. Older mailings from before run tracking are not used for duplicate detection."
 msgstr "Se conserva el historial de entregas. Si se vuelve a enviar, es posible que los destinatarios reciban el mismo contenido dos veces. Los envíos más antiguos, anteriores a la implantación del seguimiento, no se tienen en cuenta para detectar duplicados."
-
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:61
-msgid "Disabled"
-msgstr "Discapacitado"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:26
 msgid "Disabled email subscriptions are automatically deleted after three months."
@@ -18026,10 +18087,6 @@ msgstr "Por favor use solo caracteres a... z y 0... 9."
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:31
 msgid "Please use only lowercase a…z and 0…9 characters."
 msgstr "Por favor utilizar solo minúscula de la a…z y los caracteres desde 0…9."
-
-#: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:169
-msgid "Port"
-msgstr "Puerto"
 
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:118
 msgid "PostgreSQL database connection"
