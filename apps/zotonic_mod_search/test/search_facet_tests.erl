@@ -8,7 +8,7 @@ deduplicate_facet_values_test_() ->
     {setup, fun setup_templates/0, fun(_) -> meck:unload(z_template) end,
         fun() ->
             lists:foreach(fun({Field, Input, Expected}) ->
-                {ok, Term} = search_facet:qterm(Field, <<"@>">>, Input, undefined),
+                {ok, Term} = search_facet:qterm(Field, <<"@>">>, Input, #context{}),
                 ?assertEqual([Expected], Term#search_sql_term.args)
             end, [
                 {<<"tags">>, <<" red ||red||blue|| blue ||">>, [<<"red">>, <<"blue">>]},
@@ -31,20 +31,20 @@ array_facet_operators_test_() ->
             {binary_to_list(Field), fun() ->
                 Ref = <<"facet.f_", Field/binary>>,
                 lists:foreach(fun(Op) ->
-                    {ok, Term} = search_facet:qterm(Field, Op, [A, B], undefined),
+                    {ok, Term} = search_facet:qterm(Field, Op, [A, B], #context{}),
                     Query = z_search_terms:combine([Term]),
                     ?assertEqual(<<Ref/binary, " ", Op/binary, " $1">>, Query#search_sql.where),
                     ?assertEqual([[A, B]], Query#search_sql.args),
-                    {ok, Empty} = search_facet:qterm(Field, Op, [], undefined),
+                    {ok, Empty} = search_facet:qterm(Field, Op, [], #context{}),
                     ?assertEqual([[]], Empty#search_sql_term.args)
                 end, [<<"@>">>, <<"<@">>, <<"&&">>]),
-                {ok, Include} = search_facet:qterm(Field, <<"=">>, [A, B], undefined),
+                {ok, Include} = search_facet:qterm(Field, <<"=">>, [A, B], #context{}),
                 IncludeQuery = z_search_terms:combine([Include]),
                 ?assertEqual(<<"(", Ref/binary, " @> $1 OR ", Ref/binary, " @> $2)">>,
                     IncludeQuery#search_sql.where),
                 ?assertEqual([[A], [B]], IncludeQuery#search_sql.args),
                 lists:foreach(fun(Op) ->
-                    {ok, Exclude} = search_facet:qterm(Field, Op, [A, B], undefined),
+                    {ok, Exclude} = search_facet:qterm(Field, Op, [A, B], #context{}),
                     ExcludeQuery = z_search_terms:combine([Exclude]),
                     ?assertEqual(<<"(NOT (", Ref/binary, " @> $1) AND NOT (", Ref/binary, " @> $2))">>,
                         ExcludeQuery#search_sql.where),
@@ -53,13 +53,13 @@ array_facet_operators_test_() ->
                 {ok, Prefixed} = search_facet:qterm(Field, undefined, [
                     <<"<>", (z_convert:to_binary(A))/binary>>,
                     <<"!=", (z_convert:to_binary(B))/binary>>
-                ], undefined),
+                ], #context{}),
                 PrefixedQuery = z_search_terms:combine([Prefixed]),
                 ?assertEqual(<<"(NOT (", Ref/binary, " @> $1) AND NOT (", Ref/binary, " @> $2))">>,
                     PrefixedQuery#search_sql.where),
                 ?assertEqual([[A], [B]], PrefixedQuery#search_sql.args),
                 ?assertEqual({error, {unsupported_facet_operator, <<"~">>}},
-                    search_facet:qterm(Field, <<"~">>, [A, B], undefined))
+                    search_facet:qterm(Field, <<"~">>, [A, B], #context{}))
             end}
             || {Field, A, B} <- [{<<"tags">>, <<"red">>, <<"blue">>}, {<<"refs">>, 42, 43}]
         ]}.
@@ -72,7 +72,7 @@ empty_fulltext_facet_test_() ->
             meck:expect(z_module_manager, active_not_running, fun(_) -> [] end),
             meck:new(z_db, [no_link]),
             meck:expect(z_db, columns, fun(search_facet, _) ->
-                {ok, {Columns, _}} = search_facet:facet_table(undefined),
+                {ok, {Columns, _}} = search_facet:facet_table(#context{}),
                 Columns
             end),
             meck:expect(z_db, q1, fun(_, [42], _) -> 42 end)
@@ -83,14 +83,14 @@ empty_fulltext_facet_test_() ->
                 meck:reset(z_db),
                 meck:expect(z_template, blocks, fun(_, _, _) -> {ok, [Block]} end),
                 meck:expect(z_template, render_block_to_iolist,
-                    fun(_, _, _, _) -> {Output, undefined} end),
+                    fun(_, _, _, Context) -> {Output, Context} end),
                 meck:expect(z_db, update, fun(search_facet, 42, Update, _) ->
                     % Both columns must be explicitly cleared in the DB update.
                     ?assertEqual(#{<<"f_body">> => undefined, SearchColumn => undefined}, Update),
                     {ok, 1}
                 end),
-                ?assertEqual(ok, search_facet:pivot_rsc(42, undefined)),
-                ?assert(meck:called(z_db, update, [search_facet, 42, '_', undefined]))
+                ?assertEqual(ok, search_facet:pivot_rsc(42, #context{})),
+                ?assert(meck:called(z_db, update, [search_facet, 42, '_', #context{}]))
             end}
             || {Block, SearchColumn} <- [{body_ft, <<"ft_body">>}, {body_fts, <<"fts_body">>}],
                {Kind, Output} <- [{empty, <<>>}, {whitespace, <<" \n\t ">>}]
@@ -127,7 +127,8 @@ nested_facet_query_test_() ->
                 Query
             end),
             Result = search_facet:search_query_facets(#search_result{},
-                #search_sql{search_sql_terms = [Facet, Nested]}, undefined),
+                #search_sql{select = <<"rsc.id">>, from = <<"rsc rsc">>,
+                    search_sql_terms = [Facet, Nested]}, #context{db = {test, z_db_pgsql}}),
             ?assert(is_map(Result#search_result.facets))
         end}
         || {Op, ExpectedWhere} <- [
@@ -201,7 +202,8 @@ selected_facet_result(Name, Value, Fs) ->
         search_args = #{<<"q">> => [#{
             <<"term">> => <<"facet:", Name/binary>>, <<"value">> => Value
         }]}
-    }, #search_sql{search_sql_terms = []}, undefined),
+    }, #search_sql{select = <<"rsc.id">>, from = <<"rsc rsc">>, search_sql_terms = []},
+        #context{db = {test, z_db_pgsql}}),
     Result#search_result.facets.
 
 setup_templates() ->
