@@ -33,10 +33,20 @@ $('#edit-blocks').sortable({
 })
 .on('click', '.block-remove', function(event) {
     event.stopPropagation();
-    var $block = $(this).closest('li');
+    const $block = $(this).closest('li');
+    // Include unsaved editor changes before checking the other language tabs.
+    z_editor_save($block);
+    const hasOtherLanguageContent = Array.from(
+        $block[0].querySelectorAll(
+            '.tab-pane:not(.active) :is(textarea.body, input[type="text"], input:not([type]))'
+        )
+    ).some(field => field.value.trim() !== '');
+    const warning = hasOtherLanguageContent
+        ? '<p>{_ This block contains content in another language. Removing it will delete the block in all languages. _}</p>'
+        : '';
     z_dialog_confirm({
         title: '{_ Confirm removal _}',
-        text: '<p>{_ Do you want to remove this page block? _}</p>',
+        text: warning + '<p>{_ Do you want to remove this page block? _}</p>',
         cancel: '{_ Cancel _}',
         ok: '{_ Delete _}',
         is_danger: true,
@@ -146,4 +156,3 @@ $('#edit-blocks-wrapper').on('click', '.rsc-item h5 a', function(event) {
 %}
 
 {% wire name="admin-edit-basics" action={dialog_edit_basics template="_rsc_item.tpl"} %}
-
