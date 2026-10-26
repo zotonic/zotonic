@@ -253,8 +253,7 @@
     predicates = [] :: list(),
     resources = [] :: list(),
     media = [] :: list(),
-    edges = [] :: list(),
-    data = [] :: list()
+    edges = [] :: list()
 }).
 
 %% Record could be returned by #dispatch notification
