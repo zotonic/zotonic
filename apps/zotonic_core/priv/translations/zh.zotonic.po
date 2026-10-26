@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-26 13:22\n"
+"PO-Revision-Date: 2026-10-26 15:20\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -1087,6 +1087,13 @@ msgstr "找到大约 {n} 项目。"
 msgid "Access control"
 msgstr "访问控制"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:12
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:66
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:46
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:104
+msgid "Active"
+msgstr "有效"
+
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:30
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:27
 msgid "Active filters"
@@ -1331,6 +1338,10 @@ msgstr "基本"
 msgid "Billing address"
 msgstr "帐单地址"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:9
+msgid "Bind address"
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:19
 msgid "Block name"
 msgstr "块名称"
@@ -1368,7 +1379,7 @@ msgstr "修改分类"
 msgid "Change the category of this page"
 msgstr "更改本页面的类别"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:140
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:139
 msgid "Check all pages for embedded page references and add a <i>refers</i> connection for all of those references."
 msgstr "检查所有页面是否有嵌入页面引用，并为所有这些引用添加 <i>引用</i> 连接。"
 
@@ -1435,6 +1446,10 @@ msgstr "關閉預覽"
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:50
 msgid "Config Directory"
 msgstr "配置目录"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:24
+msgid "Configured"
+msgstr ""
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_delete_rsc.erl:66
 #: zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_delete.erl:62
@@ -1662,6 +1677,11 @@ msgstr "依赖性"
 msgid "Dimensions"
 msgstr "维度"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:33
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:61
+msgid "Disabled"
+msgstr "已禁用"
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:26
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers_list.tpl:15
 #: zotonic_mod_admin/priv/templates/_rsc_edge.tpl:22
@@ -1822,7 +1842,7 @@ msgstr "紧急联系电话"
 msgid "Endpoint"
 msgstr "端点"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:136
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:135
 msgid "Ensure <i>refers</i> connections"
 msgstr "确保 <i>引用</i> 连接"
 
@@ -1898,6 +1918,10 @@ msgstr "现有网页"
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:118
 msgid "Failed to download the file."
 msgstr "下载文件出错。"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:8
+msgid "Family"
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:52
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:178
@@ -2442,6 +2466,10 @@ msgstr "更多帮助？"
 msgid "Network Connections"
 msgstr "网络连接"
 
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:189
+msgid "Network listeners"
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:84
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:12
 msgid "New Page"
@@ -2535,6 +2563,10 @@ msgstr "不被搜索引擎索引"
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:57
 msgid "Not protected"
 msgstr "不受保护"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:35
+msgid "Not running"
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:26
 msgid "OS Memory"
@@ -2639,6 +2671,11 @@ msgstr "发票电话号码"
 #: zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:8
 msgid "Pivot queue count size:"
 msgstr "枢轴队列计数大小。"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:10
+#: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:169
+msgid "Port"
+msgstr "港口"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:113
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:114
@@ -2762,6 +2799,10 @@ msgstr "查询"
 msgid "Query results"
 msgstr "查询结果"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:14
+msgid "Ranch limit"
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:94
 msgid "Rebuild all search-indices by putting all pages and data from the database in the indexer queue. This can take a long time!"
 msgstr "将所有数据库中的页面和数据重新放入索引队列中，重建所有检索索引。这可能会耗费相当长的时间。"
@@ -2797,6 +2838,7 @@ msgid "Referrers to"
 msgstr "转介人"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:12
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:51
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:18
 msgid "Refresh"
 msgstr "刷新"
@@ -2893,6 +2935,12 @@ msgstr "旋转了90度"
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:69
 msgid "Runner availability and ImageMagick versions are cached for up to one minute. Failed probes are retried after five seconds. Refresh this page to check again."
 msgstr "运行程序的可用性和 ImageMagick 版本信息最多会缓存一分钟。检测失败后，系统将在五秒后重试。请刷新此页面以再次检查。"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:29
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:62
+#: zotonic_site_status/priv/templates/_sites.tpl:15
+msgid "Running"
+msgstr "跑步"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:113
 msgid "Runs the schema install command from the site's module again."
@@ -3035,6 +3083,13 @@ msgstr "选定类别"
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:51
 msgid "Selecting a file will make the page a media item."
 msgstr "选择一个文件将使该页面成为一个媒体项目。"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:7
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:13
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:40
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:7
+msgid "Service"
+msgstr "服务"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_sidebar_parts.tpl:32
 msgid "Settings &amp; more"
@@ -3182,6 +3237,7 @@ msgstr "开始"
 msgid "State"
 msgstr "省/直辖市/自治区"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:11
 #: zotonic_mod_admin/src/mod_admin.erl:531
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
 #: zotonic_mod_base/priv/templates/_session_info.tpl:12
@@ -3275,6 +3331,10 @@ msgstr "姓前缀"
 msgid "Surname"
 msgstr "姓"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:31
+msgid "Suspended"
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:53
 msgid "Swap"
 msgstr "交换"
@@ -3291,15 +3351,15 @@ msgstr "系统状态"
 msgid "System administration"
 msgstr "系统管理"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:170
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:169
 msgid "Task queue"
 msgstr "任务队列"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:177
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:176
 msgid "Tasks are functions scheduled to run at a certain time."
 msgstr "任务是计划在特定时间运行的功能。"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:178
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:177
 msgid "Tasks with errors will retry 10 times before being dropped."
 msgstr "出现错误的任务将重试 10 次，然后才会被丢弃。"
 
@@ -3330,6 +3390,10 @@ msgstr "文本 | （富）文本块"
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:71
 msgid "The Zotonic datamodel is being reinstalled. Watch the console for messages"
 msgstr "Zotonic 数据模型正在重新安装。查看控制台中的消息"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:58
+msgid "The addresses 0.0.0.0 and :: mean all local IPv4 and IPv6 interfaces respectively. Configured bindings are shown when a listener is absent."
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:201
 msgid "The billing address is only visible for people who can edit this page."
@@ -3411,6 +3475,10 @@ msgstr "已经有一个页面用这个名字。"
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:4
 msgid "There is an error in the query:"
 msgstr "查询有误："
+
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:57
+msgid "These listeners are shared by all sites on this Zotonic node. Running means the local listener is active; it does not confirm external reachability."
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:45
 msgid "This block contains content in another language. Removing it will delete the block in all languages."
@@ -3555,9 +3623,14 @@ msgstr "切换导航"
 msgid "Too many connections, only the first and last are shown."
 msgstr "连接太多，仅显示第一个和最后一个。"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:13
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:33
 msgid "Total"
 msgstr "全部的"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:59
+msgid "Total connections counts currently tracked connections, not connections over time. The Ranch limit is the listener connection limit; SMTP also applies a separate session check."
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:119
 #: zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:9
@@ -3568,6 +3641,7 @@ msgstr "输入文本进行检索"
 msgid "Type to filter the list below."
 msgstr "键入以过滤下面的列表。"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:37
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:47
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:62
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:63
@@ -3588,6 +3662,10 @@ msgstr "唯一标识"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:101
 msgid "Unique uri"
 msgstr "唯一 URL"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:43
+msgid "Unlimited"
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:53
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:22
@@ -3658,9 +3736,13 @@ msgstr "更新选定的页面"
 msgid "Update {n} pages with the following properties:"
 msgstr "使用以下属性更新 {n} 页面："
 
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:54
+msgid "Updated"
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:89
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:17
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:162
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:161
 msgid "Upload"
 msgstr "上载"
 
@@ -3672,12 +3754,12 @@ msgstr "上传文件"
 msgid "Upload a file from your computer."
 msgstr "从电脑上传一个文件。"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:152
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:151
 msgid "Upload a file to the drop folder. This file will be handled in the background by the mailinglists for recipient import and other modules."
 msgstr "将文件上传到拖放文件夹。该文件将由收件人导入和其他模块的邮件列表在后台处理。"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:74
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:149
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:148
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:31
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:36
 msgid "Upload file"
@@ -5635,11 +5717,6 @@ msgstr "重新扫描模块"
 #: zotonic_mod_admin_modules/priv/templates/_admin_status.tpl:4
 msgid "Rescanning will rebuild the index of all modules, actions, templates etc. It will also reload all dispatch rules."
 msgstr "重新扫描将重建所有模块、动作、模板等的索引。它还会重新加载所有的调度规则。"
-
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:62
-#: zotonic_site_status/priv/templates/_sites.tpl:15
-msgid "Running"
-msgstr "跑步"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:59
 msgid "Runtime"
@@ -10519,12 +10596,6 @@ msgstr "S3 区域"
 msgid "Save Settings"
 msgstr "保存设置"
 
-#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:13
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:40
-#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:7
-msgid "Service"
-msgstr "服务"
-
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:201
 msgid "Settings are saved without a write test while the file store is read-only. Verify access by downloading an existing file."
 msgstr "当文件存储处于只读状态时，设置会在不进行写入测试的情况下被保存。请通过下载现有文件来验证访问权限。"
@@ -10876,12 +10947,6 @@ msgstr "众所周知的特性有"
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:85
 msgid "You do not have permission to use the CSV/XLSX import module."
 msgstr "您没有使用 CSV/XLSX 导入模块的权限。"
-
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:66
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:46
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:104
-msgid "Active"
-msgstr "有效"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:14
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:16
@@ -12197,10 +12262,6 @@ msgstr "删除了邮件列表。"
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:131
 msgid "Delivery history is preserved. Sending again may result in recipients receiving the same content twice. Older mailings from before run tracking are not used for duplicate detection."
 msgstr "投递记录会被保留。再次发送可能会导致收件人收到相同的内容两次。在启用投递跟踪功能之前发送的旧邮件不会用于重复检测。"
-
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:61
-msgid "Disabled"
-msgstr "已禁用"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:26
 msgid "Disabled email subscriptions are automatically deleted after three months."
@@ -18025,10 +18086,6 @@ msgstr "请只使用…z和0…9个字符。"
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:31
 msgid "Please use only lowercase a…z and 0…9 characters."
 msgstr "请只使用小写的a…z和0…9个字符。"
-
-#: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:169
-msgid "Port"
-msgstr "港口"
 
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:118
 msgid "PostgreSQL database connection"
