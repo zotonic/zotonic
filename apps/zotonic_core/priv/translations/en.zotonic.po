@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-26 11:08\n"
+"PO-Revision-Date: 2026-10-26 13:22\n"
 "Last-Translator: \n"
 "Language-Team: English\n"
 "MIME-Version: 1.0\n"
@@ -180,7 +180,7 @@ msgstr "ACL user group"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7
 #: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:18
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:936
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:989
 msgid "Access control rules"
 msgstr "Access control rules"
 
@@ -378,7 +378,7 @@ msgstr "Category &amp; Content group"
 msgid "Change category and/or content group..."
 msgstr "Change category and/or content group..."
 
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:490
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:543
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:147
 msgid "Changed configuration."
 msgstr "Changed configuration."
@@ -430,7 +430,7 @@ msgid "Collaboration group members"
 msgstr "Collaboration group members"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:22
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:932
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:985
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:158
 msgid "Collaboration groups"
 msgstr "Collaboration groups"
@@ -510,7 +510,6 @@ msgstr "Could not move to collaboration group."
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:97
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:40
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:10
-#: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:256
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:19
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:34
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:84
@@ -527,7 +526,7 @@ msgstr "Could not move to collaboration group."
 msgid "Delete"
 msgstr "Delete"
 
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:478
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:531
 msgid "Delete is canceled, there are users in the user groups."
 msgstr "Delete is canceled, there are users in the user groups."
 
@@ -535,7 +534,7 @@ msgstr "Delete is canceled, there are users in the user groups."
 msgid "Delete user group and move users"
 msgstr "Delete user group and move users"
 
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:523
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:576
 #: zotonic_mod_admin_category/src/mod_admin_category.erl:116
 #: zotonic_mod_admin_category/src/mod_admin_category.erl:134
 #: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:124
@@ -697,11 +696,11 @@ msgstr "Move to {title}…"
 msgid "No ACL rules"
 msgstr "No ACL rules"
 
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:516
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:569
 msgid "Not all user groups could be deleted."
 msgstr "Not all user groups could be deleted."
 
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:496
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:549
 msgid "Not allowed to change ACL options."
 msgstr "Not allowed to change ACL options."
 
@@ -851,8 +850,8 @@ msgstr "Show private properties to"
 msgid "Show this ACL user group first:"
 msgstr "Show this ACL user group first:"
 
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:457
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:473
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:510
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:526
 #: zotonic_mod_admin_category/src/mod_admin_category.erl:93
 #: zotonic_mod_admin_category/src/mod_admin_category.erl:109
 #: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:99
@@ -950,7 +949,7 @@ msgstr "Use the following URL to test the access control rules before publishing
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:927
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:980
 msgid "User groups"
 msgstr "User groups"
 
@@ -1051,7 +1050,7 @@ msgstr "<b>Warning:</b> the site will stop and restart."
 #: zotonic_mod_admin/priv/templates/_admin_overview_list_title.tpl:2
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:32
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:55
-#: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:250
+#: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:252
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:33
 msgid "<em>Untitled</em>"
 msgstr "<em>Untitled</em>"
@@ -2843,6 +2842,7 @@ msgstr "Remote sandbox isolation and queue details are available on each runner�
 #: zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_page.tpl:16
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_connection.tpl:4
 #: zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:35
+#: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:278
 #: zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:7
 #: zotonic_mod_translation/priv/templates/_translation_language_status.tpl:34
 msgid "Remove"
@@ -5712,7 +5712,6 @@ msgstr "All page connections"
 
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:7
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:41
-#: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:253
 msgid "Are you sure you want to delete"
 msgstr "Are you sure you want to delete"
 
@@ -13821,6 +13820,10 @@ msgstr "Add menu item"
 msgid "Add top"
 msgstr "Add top"
 
+#: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:274
+msgid "Are you sure you want to remove"
+msgstr "Are you sure you want to remove"
+
 #: zotonic_mod_menu/priv/templates/_admin_status.tpl:7
 msgid "Check all menu pages and add <i>hasmenupart</i> connections for all of the \n"
 "    pages in the menu."
@@ -13839,9 +13842,22 @@ msgstr "Click on <strong>Add menu item</strong> or <strong>Menu item</strong> to
 msgid "Copy of:"
 msgstr "Copy of:"
 
+#: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:289
+msgid "Could not check the selected items. Please try again."
+msgstr "Could not check the selected items. Please try again."
+
 #: zotonic_mod_menu/priv/templates/admin_menu_hierarchy.tpl:48
 msgid "Create an (optionally) nested navigation menu for this site."
 msgstr "Create an (optionally) nested navigation menu for this site."
+
+#: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:263
+msgid "Deleted dependent pages can be recovered from the deleted pages overview."
+msgstr "Deleted dependent pages can be recovered from the deleted pages overview."
+
+#: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:262
+#: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:263
+msgid "Dependent pages may also be deleted."
+msgstr "Dependent pages may also be deleted."
 
 #: zotonic_mod_menu/priv/templates/_menu_trash.tpl:1
 msgid "Drag elements here to remove them"
@@ -13880,7 +13896,7 @@ msgstr "Menu"
 msgid "Sorry, can’t copy that page."
 msgstr "Sorry, can’t copy that page."
 
-#: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:255
+#: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:262
 msgid "THIS CAN NOT BE UNDONE!"
 msgstr "THIS CAN NOT BE UNDONE!"
 
@@ -13892,7 +13908,12 @@ msgstr "This item is already in the hierarchy. Every item can only occur once."
 msgid "Unknown category"
 msgstr "Unknown category"
 
-#: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:255
+#: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:261
+#: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:263
+msgid "You can undo this change by restoring a previous revision."
+msgstr "You can undo this change by restoring a previous revision."
+
+#: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:276
 msgid "and all indented items below it?"
 msgstr "and all indented items below it?"
 
