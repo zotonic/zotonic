@@ -251,29 +251,42 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
             if (!title) {
                 title = '{_ <em>Untitled</em> _}';
             }
-            z_dialog_confirm({
-                text: "{_ Are you sure you want to delete _}: "
-                    + "<b>" + title + "</b><br>"
-                    + "{_ and all indented items below it from the menu? _}"
-                    + "<b id=\"menu-delete-undo-text\" style=\"display:none\"><br><br>{_ THIS CAN NOT BE UNDONE! _}</b>",
-                ok: "{_ Delete _}",
-                on_confirm: function() {
-                    $(self).closest('li.menu-item').fadeOut(500, function() {
-                        $(this).remove();
-                        $sorter.trigger('sortupdate')
-                    });
-                },
-                is_danger: true
-            });
+            const page_ids = [...new Set(
+                $menu_item.find('[data-page-id]').map(function() {
+                    return $(this).data('page-id');
+                }).get()
+            )];
+            const removal_text = {
+                remove_only: "",
+                recover_menu: "<br><br>{_ You can restore a previous revision of the menu. _}",
+                delete_dependent: "<br><br>{_ Dependent pages may also be deleted. _} <b>{_ THIS CAN NOT BE UNDONE! _}</b>",
+                recover_dependent: "<br><br>{_ Dependent pages may also be deleted. _} {_ You can restore a previous revision of the menu. _} {_ Deleted dependent pages can be recovered from the deleted pages overview. _}"
+            };
 
             cotonic.broker
-                .call("bridge/origin/model/menu/get/is_menu_item_delete_safe/" ++ page_id)
+                .call("bridge/origin/model/menu/get/removal_status", page_ids)
                 .then((m) => {
-                    if (m.payload.result) {
-                        $('#menu-delete-undo-text').hide();
-                    } else {
-                        $('#menu-delete-undo-text').show();
+                    const status = m.payload.result;
+                    if (!Object.prototype.hasOwnProperty.call(removal_text, status)) {
+                        throw new Error("Could not determine menu removal status");
                     }
+                    z_dialog_confirm({
+                        text: "{_ Are you sure you want to delete _}: "
+                            + "<b>" + title + "</b><br>"
+                            + "{_ and all indented items below it from the menu? _}"
+                            + removal_text[status],
+                        ok: "{_ Delete _}",
+                        on_confirm: function() {
+                            $(self).closest('li.menu-item').fadeOut(500, function() {
+                                $(this).remove();
+                                $sorter.trigger('sortupdate');
+                            });
+                        },
+                        is_danger: true
+                    });
+                })
+                .catch(() => {
+                    z_growl_add("{_ Could not check the menu items. Please try again. _}", false, "error");
                 });
 		{% endif %}
 	} else if (where == 'copy') {
