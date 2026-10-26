@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-26 15:20\n"
+"PO-Revision-Date: 2026-10-26 16:57\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -1340,7 +1340,7 @@ msgstr "Indirizzo di fatturazione"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:9
 msgid "Bind address"
-msgstr ""
+msgstr "Indirizzo di associazione"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:19
 msgid "Block name"
@@ -1449,7 +1449,7 @@ msgstr "Elenco delle configurazioni"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:24
 msgid "Configured"
-msgstr ""
+msgstr "Configurato"
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_delete_rsc.erl:66
 #: zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_delete.erl:62
@@ -1921,7 +1921,7 @@ msgstr "Impossibile scaricare il file."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:8
 msgid "Family"
-msgstr ""
+msgstr "Famiglia"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:52
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:178
@@ -2468,7 +2468,7 @@ msgstr "Connessioni di rete"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:189
 msgid "Network listeners"
-msgstr ""
+msgstr "Ascoltatori della rete"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:84
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:12
@@ -2566,7 +2566,7 @@ msgstr "Non protetto"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:35
 msgid "Not running"
-msgstr ""
+msgstr "Non funziona"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:26
 msgid "OS Memory"
@@ -2801,7 +2801,7 @@ msgstr "Risultati della ricerca"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:14
 msgid "Ranch limit"
-msgstr ""
+msgstr "Limite del ranch"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:94
 msgid "Rebuild all search-indices by putting all pages and data from the database in the indexer queue. This can take a long time!"
@@ -3333,7 +3333,7 @@ msgstr "Cognome"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:31
 msgid "Suspended"
-msgstr ""
+msgstr "Sospeso"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:53
 msgid "Swap"
@@ -3393,7 +3393,7 @@ msgstr "Il modello dati Zotonic è in fase di reinstallazione. Controlla la cons
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:58
 msgid "The addresses 0.0.0.0 and :: mean all local IPv4 and IPv6 interfaces respectively. Configured bindings are shown when a listener is absent."
-msgstr ""
+msgstr "Gli indirizzi 0.0.0.0 e :: indicano rispettivamente tutte le interfacce IPv4 e IPv6 locali. I collegamenti configurati vengono visualizzati in assenza di un listener."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:201
 msgid "The billing address is only visible for people who can edit this page."
@@ -3478,7 +3478,7 @@ msgstr "C'è un errore nella query:"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:57
 msgid "These listeners are shared by all sites on this Zotonic node. Running means the local listener is active; it does not confirm external reachability."
-msgstr ""
+msgstr "Questi listener sono condivisi da tutti i siti presenti su questo nodo Zotonic. Lo stato \"in esecuzione\" indica che il listener locale è attivo; ciò non garantisce la raggiungibilità dall'esterno."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:45
 msgid "This block contains content in another language. Removing it will delete the block in all languages."
@@ -3630,7 +3630,7 @@ msgstr "Totale"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:59
 msgid "Total connections counts currently tracked connections, not connections over time. The Ranch limit is the listener connection limit; SMTP also applies a separate session check."
-msgstr ""
+msgstr "Il numero totale di connessioni si riferisce alle connessioni attualmente monitorate, non alle connessioni nel corso del tempo. Il limite \"Ranch\" è il limite massimo di connessioni dei listener; SMTP applica inoltre un controllo separato per le sessioni."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:119
 #: zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:9
@@ -3665,7 +3665,7 @@ msgstr "Uri univoco"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:43
 msgid "Unlimited"
-msgstr ""
+msgstr "Illimitato"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:53
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:22
@@ -3738,7 +3738,7 @@ msgstr "Aggiorna {n} pagine con le seguenti proprietà:"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:54
 msgid "Updated"
-msgstr ""
+msgstr "Aggiornato"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:89
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:17
