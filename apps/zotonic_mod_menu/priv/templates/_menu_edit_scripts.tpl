@@ -258,9 +258,9 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
             )];
             const removal_text = {
                 remove_only: "",
-                recover_menu: "<br><br>{_ You can restore a previous revision of the menu. _}",
+                recover_menu: "<br><br>{_ You can undo this change by restoring a previous revision. _}",
                 delete_dependent: "<br><br>{_ Dependent pages may also be deleted. _} <b>{_ THIS CAN NOT BE UNDONE! _}</b>",
-                recover_dependent: "<br><br>{_ Dependent pages may also be deleted. _} {_ You can restore a previous revision of the menu. _} {_ Deleted dependent pages can be recovered from the deleted pages overview. _}"
+                recover_dependent: "<br><br>{_ Dependent pages may also be deleted. _} {_ You can undo this change by restoring a previous revision. _} {_ Deleted dependent pages can be recovered from the deleted pages overview. _}"
             };
 
             cotonic.broker
@@ -271,11 +271,11 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
                         throw new Error("Could not determine menu removal status");
                     }
                     z_dialog_confirm({
-                        text: "{_ Are you sure you want to delete _}: "
+                        text: "{_ Are you sure you want to remove _}: "
                             + "<b>" + title + "</b><br>"
-                            + "{_ and all indented items below it from the menu? _}"
+                            + "{_ and all indented items below it? _}"
                             + removal_text[status],
-                        ok: "{_ Delete _}",
+                        ok: "{_ Remove _}",
                         on_confirm: function() {
                             $(self).closest('li.menu-item').fadeOut(500, function() {
                                 $(this).remove();
@@ -286,7 +286,7 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
                     });
                 })
                 .catch(() => {
-                    z_growl_add("{_ Could not check the menu items. Please try again. _}", false, "error");
+                    z_growl_add("{_ Could not check the selected items. Please try again. _}", false, "error");
                 });
 		{% endif %}
 	} else if (where == 'copy') {
