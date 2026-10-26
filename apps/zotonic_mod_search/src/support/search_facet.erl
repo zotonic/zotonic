@@ -221,7 +221,11 @@ search_query_facets(Result, #search_sql{ search_sql_terms = Terms }, Context) ->
     }.
 
 is_facet_term(#search_sql_term{ label = {facet, _} }) -> true;
-is_facet_term(#search_sql_term{}) -> false.
+is_facet_term(#search_sql_term{}) -> false;
+is_facet_term(#search_sql_nested{}) ->
+    % Keep grouped filters in the base query, including any nested facet terms.
+    % Extracting individual terms could change the meaning of OR/NOT groups.
+    false.
 
 %% @doc Check the found facets, ensure that on facet filtering query terms
 %% are present in the returned facet values. This ensures that select boxes
@@ -250,6 +254,12 @@ expand_qargs(Args, Context) ->
             end,
             Args)).
 
+ensure_facet_value(Facet, Values, Fs, Context) when is_list(Values) ->
+    % Query lists are alternative selections, each with its own facet entry.
+    lists:foldl(
+        fun(Value, Acc) -> ensure_facet_value(Facet, Value, Acc, Context) end,
+        Fs,
+        Values);
 ensure_facet_value(Facet, Value, Fs, Context) ->
     case maps:get(Facet, Fs, undefined) of
         #{
@@ -496,11 +506,13 @@ facet_union(#facet_def{ type = Type, name = Name }) when
         Type =:= list;
         Type =:= ids ->
     Col = <<"f_", Name/binary>>,
+    % A resource contributes once per value, even with duplicate array elements
+    % in an existing pivot or duplicate result rows introduced by joins.
     [
         "select '", Name, "' as facet,
             unnest(", Col, ")::character varying as value,
             min(facet_id)::integer as facet_id,
-            count(*)::character varying as count
+            count(distinct facet_id)::character varying as count
          from result
          where ", Col, " is not null
          group by value"
@@ -529,44 +541,55 @@ facet_union(#facet_def{ name = Name }) ->
 
 
 %% @doc Add an extra search argument to the given query. Called by the query
-%% builder in search_query.erl
+%% builder in search_query.erl. For list/ids facets, `=' tests containment and
+%% `<>'/`!=' negates containment. Selection lists use OR, or AND when all
+%% selections are exclusions. Explicit `@>', `<@', and `&&' operators take
+%% the complete list operand (contains all, contained by, and overlaps).
+%% For example:
+%% ```#{<<"term">> => <<"facet:tags">>, <<"operator">> => <<"@>">>,
+%%      <<"value">> => [<<"red">>, <<"blue">>]}'''
+%% NULL facets do not match these operators, including exclusions.
 -spec qterm(Field, Op, Value, Context) -> {ok, Term} | {error, term()}
     when Field :: binary(),
          Op :: binary() | undefined,
          Value :: term(),
          Term :: #search_sql_term{},
          Context :: z:context().
+qterm(Field, Op, Values, Context) when is_list(Values),
+        (Op =:= <<"@>">> orelse Op =:= <<"<@">> orelse Op =:= <<"&&">>) ->
+    % Explicit array operators take one array operand, not OR alternatives.
+    qterm(Field, Op, #{ <<"value">> => Values }, Context);
 qterm(_Field, _Op, [], _Context) ->
     {ok, []};
 qterm(Field, Op, [Value], Context) ->
     qterm(Field, Op, Value, Context);
 qterm(Field, Op, Vs, Context) when is_list(Vs) ->
-    % 'OR' query for all values
+    % Alternatives use OR; excluding every selected value requires AND.
     Q = #search_sql_term{
         label = {facet, Field},
         join_inner = #{
             <<"facet">> => {<<"search_facet">>, <<"facet.id = rsc.id">>}
         }
     },
-    Q2 = lists:foldl(
-        fun(V, QAcc) ->
-            case qterm_1(Field, Op, V, QAcc, Context) of
-                {ok, QAcc1} ->
-                    QAcc1;
-                {error, _} ->
-                    QAcc
-            end
+    Result = lists:foldl(
+        fun
+            (V, {ok, QAcc}) -> qterm_1(Field, Op, V, QAcc, Context);
+            (_, {error, _} = Error) -> Error
         end,
-        Q,
+        {ok, Q},
         Vs),
-    Q3 = Q2#search_sql_term{
-        where = [
-            <<"(">>,
-            lists:join(<<" OR ">>, Q2#search_sql_term.where),
-            <<")">>
-        ]
-    },
-    {ok, Q3};
+    case Result of
+        {ok, Q2} ->
+            {ok, Q2#search_sql_term{
+                where = [
+                    <<"(">>,
+                    lists:join(selection_operator(Op, Vs), Q2#search_sql_term.where),
+                    <<")">>
+                ]
+            }};
+        {error, _} = Error ->
+            Error
+    end;
 qterm(Field, Op, Value, Context) ->
     Q = #search_sql_term{
         join_inner = #{
@@ -622,14 +645,19 @@ qterm_1(Field, OpTerm, Value, Query, Context) ->
                         where = Query2#search_sql_term.where ++ [ W ]
                     };
                 Array when Array =:= ids; Array =:= list ->
-                    {ArgN, Query2} = add_term_arg(Value2, Query),
-                    W = [
-                        <<"facet.f_">>, Field, "@>", ArgN
-                    ],
-                    Query2#search_sql_term{
-                        label = {facet, Field},
-                        where = Query2#search_sql_term.where ++ [ W ]
-                    };
+                    ArrayValue = case Value1 of
+                        [] when Op =:= <<"@>">>; Op =:= <<"<@">>; Op =:= <<"&&">> -> [];
+                        _ -> Value2
+                    end,
+                    {ArgN, Query2} = add_term_arg(ArrayValue, Query),
+                    case array_op_expr([<<"facet.f_">>, Field], Op, ArgN) of
+                        {error, _} = OpError -> OpError;
+                        W ->
+                            Query2#search_sql_term{
+                                label = {facet, Field},
+                                where = Query2#search_sql_term.where ++ [ W ]
+                            }
+                    end;
                 _ ->
                     {ArgN, Query2} = add_term_arg(Value2, Query),
                     W = search_query:term_op_expr([<<"facet.f_">>, Field], Op, ArgN, text),
@@ -638,7 +666,10 @@ qterm_1(Field, OpTerm, Value, Query, Context) ->
                         where = Query2#search_sql_term.where ++ [ W ]
                     }
             end,
-            {ok, Final};
+            case Final of
+                {error, _} = FinalError -> FinalError;
+                _ -> {ok, Final}
+            end;
         {error, _} = Error ->
             ?LOG_NOTICE(#{
                 text => <<"Unknown facet, dropping query term.">>,
@@ -646,6 +677,33 @@ qterm_1(Field, OpTerm, Value, Query, Context) ->
                 facet => Field
             }),
             Error
+    end.
+
+%% @doc Keep the historical membership meaning of equality for array facets.
+%% Explicit array operators compare the complete operand. Reject unsupported
+%% operators instead of silently treating them as membership queries.
+array_op_expr(Ref, <<"=">>, Arg) ->
+    array_op_expr(Ref, <<"@>">>, Arg);
+array_op_expr(Ref, Op, Arg) when Op =:= <<"<>">>; Op =:= <<"!=">> ->
+    [<<"NOT (">>, Ref, <<" @> ">>, Arg, <<")">>];
+array_op_expr(Ref, Op, Arg) when Op =:= <<"@>">>; Op =:= <<"<@">>; Op =:= <<"&&">> ->
+    [Ref, <<" ">>, Op, <<" ">>, Arg];
+array_op_expr(_Ref, Op, _Arg) ->
+    {error, {unsupported_facet_operator, Op}}.
+
+selection_operator(Op, Values) ->
+    case lists:all(
+        fun(Value) ->
+            case search_query:extract_value_op(Value, Op) of
+                {<<"<>">>, _} -> true;
+                {<<"!=">>, _} -> true;
+                _ -> false
+            end
+        end,
+        Values)
+    of
+        true -> <<" AND ">>;
+        false -> <<" OR ">>
     end.
 
 words(Text) ->
@@ -724,7 +782,11 @@ pivot_rsc(Id, Context) ->
 render_facet(Id, #facet_def{ name = Name, type = fulltext } = F, Context) ->
     case render_block(F#facet_def.block, {cat, <<"pivot/facet.tpl">>}, #{ id => Id }, Context) of
         <<>> ->
-            [];
+            % Explicitly clear both columns when updating an existing pivot.
+            [
+                {<<"f_", Name/binary>>, undefined},
+                {<<"ft_", Name/binary>>, undefined}
+            ];
         V ->
             V1 = z_pivot_rsc:cleanup_tsv_text(V),
             V2 = z_string:trim(z_search:normalize_value(Name, text, V1, Context)),
@@ -736,7 +798,10 @@ render_facet(Id, #facet_def{ name = Name, type = fulltext } = F, Context) ->
 render_facet(Id, #facet_def{ name = Name, type = fts } = F, Context) ->
     case render_block(F#facet_def.block, {cat, <<"pivot/facet.tpl">>}, #{ id => Id }, Context) of
         <<>> ->
-            [];
+            [
+                {<<"f_", Name/binary>>, undefined},
+                {<<"fts_", Name/binary>>, undefined}
+            ];
         V ->
             V1 = z_pivot_rsc:cleanup_tsv_text(V),
             V2 = z_string:trim(z_search:normalize_value(Name, text, V1, Context)),
@@ -802,7 +867,8 @@ convert_type_1(ListType, V, Context) when (ListType =:= list orelse ListType =:=
 
 %% list and ids types, filter undefined values
 convert_type_1(list, L, _Context) when is_list(L) ->
-    empty_to_undefined([B || V <- L, (B = z_string:trim(z_convert:to_binary(V))) =/= <<>>]);
+    Values = [B || V <- L, (B = z_string:trim(z_convert:to_binary(V))) =/= <<>>],
+    empty_to_undefined(lists:uniq(Values));
 convert_type_1(ids, L, Context) when is_list(L) ->
     L1 = [convert_type_1(id, V, Context) || V <- L],
     empty_to_undefined(lists:uniq([V || V <- L1, V =/= undefined]));
@@ -894,7 +960,12 @@ is_type([ _ | Cols ], Name, Type, IsArray) ->
     is_type(Cols, Name, Type, IsArray).
 
 
-%% @doc Return a label values to a specific facet
+%% @doc Return a fallback label for a selected facet value absent from the counts.
+%% TODO: Unlike value_via_block/3, this path has no representative resource id
+%% (facet_id). Passing Value as id can mislabel values when the label block
+%% expects the resource that produced the facet. Even an id-valued facet can
+%% reference a different resource. Retained for now; a future fix needs a
+%% representative-resource lookup or a label contract that accepts value alone.
 label(FacetField, Value, Context) when is_binary(FacetField) ->
     case facet_def(FacetField, Context) of
         {ok, FacetDef} ->
