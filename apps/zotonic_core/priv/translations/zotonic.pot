@@ -277,7 +277,7 @@ msgstr ""
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:73
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:35
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:259
-#: zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:40
+#: zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:50
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:292
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:17
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:111
@@ -493,7 +493,7 @@ msgstr ""
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:51
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:190
 #: zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:10
-#: zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:41
+#: zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:51
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:49
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:48
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:57
@@ -1490,7 +1490,7 @@ msgstr ""
 msgid "Confirm logoff"
 msgstr ""
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:38
+#: zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:48
 msgid "Confirm removal"
 msgstr ""
 
@@ -1740,7 +1740,7 @@ msgstr ""
 msgid "Do not send mailings (opt out)"
 msgstr ""
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:39
+#: zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:49
 msgid "Do you want to remove this page block?"
 msgstr ""
 
@@ -2025,7 +2025,7 @@ msgstr ""
 msgid "Find Page"
 msgstr ""
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:139
+#: zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:149
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:217
 msgid "Find page"
 msgstr ""
@@ -3524,6 +3524,12 @@ msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:4
 msgid "There is an error in the query:"
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:45
+msgid ""
+"This block contains content in another language. Removing it will delete the "
+"block in all languages."
 msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:5
