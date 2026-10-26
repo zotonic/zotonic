@@ -235,10 +235,12 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
 	}
 
 	if (where == 'remove') {
+        let page_id = $menu_item.find('[data-page-id]').data('page-id');
+
 		{% if is_hierarchy or in_sorter == 'category' %}
 			z_transport('mod_menu', 'ubf', {
 				cmd: "delete",
-				id: $menu_item.find('[data-page-id]').data('page-id')
+				id: page_id
 			});
 		{% else %}
             const self = this;
@@ -249,19 +251,43 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
             if (!title) {
                 title = '{_ <em>Untitled</em> _}';
             }
-            z_dialog_confirm({
-                text: "{_ Are you sure you want to delete _}: "
-                    + "<b>" + title + "</b><br>"
-                    + "{_ and all indented items below it? _}<br><br><b>{_ THIS CAN NOT BE UNDONE! _}</b>",
-                ok: "{_ Delete _}",
-                on_confirm: function() {
-                    $(self).closest('li.menu-item').fadeOut(500, function() {
-                        $(this).remove();
-                        $sorter.trigger('sortupdate')
+            const page_ids = [...new Set(
+                $menu_item.find('[data-page-id]').map(function() {
+                    return $(this).data('page-id');
+                }).get()
+            )];
+            const removal_text = {
+                remove_only: "",
+                recover_menu: "<br><br>{_ You can undo this change by restoring a previous revision. _}",
+                delete_dependent: "<br><br>{_ Dependent pages may also be deleted. _} <b>{_ THIS CAN NOT BE UNDONE! _}</b>",
+                recover_dependent: "<br><br>{_ Dependent pages may also be deleted. _} {_ You can undo this change by restoring a previous revision. _} {_ Deleted dependent pages can be recovered from the deleted pages overview. _}"
+            };
+
+            cotonic.broker
+                .call("bridge/origin/model/menu/get/removal_status", page_ids)
+                .then((m) => {
+                    const status = m.payload.result;
+                    if (!Object.prototype.hasOwnProperty.call(removal_text, status)) {
+                        throw new Error("Could not determine menu removal status");
+                    }
+                    z_dialog_confirm({
+                        text: "{_ Are you sure you want to remove _}: "
+                            + "<b>" + title + "</b><br>"
+                            + "{_ and all indented items below it? _}"
+                            + removal_text[status],
+                        ok: "{_ Remove _}",
+                        on_confirm: function() {
+                            $(self).closest('li.menu-item').fadeOut(500, function() {
+                                $(this).remove();
+                                $sorter.trigger('sortupdate');
+                            });
+                        },
+                        is_danger: true
                     });
-                },
-                is_danger: true
-            })
+                })
+                .catch(() => {
+                    z_growl_add("{_ Could not check the selected items. Please try again. _}", false, "error");
+                });
 		{% endif %}
 	} else if (where == 'copy') {
 		z_transport("mod_menu", "ubf", {
