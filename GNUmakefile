@@ -4,18 +4,23 @@ APP       := zotonic
 PARSER    := src/erlydtl_parser
 
 REBAR ?= ./rebar3
-REBAR_URL := https://github.com/erlang/rebar3/releases/download/3.14.4/rebar3
+REBAR_URL := https://github.com/erlang/rebar3/releases/download/3.27.3/rebar3
+REBAR_SHA256 := f1d87d78decfc56b87d971c75ee6355698ec0c49fadd57f2c056043b7ca291b5
+REBAR_STAMP := ./.rebar3-$(REBAR_SHA256)
 REBAR_ENV = EXOMETER_PACKAGES="-afunix -netlink -exo +setup"
 
 # Default target - compile dependencies and zotonic
 .PHONY: all
+
 all: compile
 
-./rebar3:
-	$(ERL) -noshell -s inets -s ssl \
-	  -eval '{ok, saved_to_file} = httpc:request(get, {"$(REBAR_URL)", []}, [], [{stream, "./rebar3"}])' \
-	  -s init stop
-	chmod +x ./rebar3
+$(REBAR_STAMP):
+	rm -f ./.rebar-*
+	touch $@
+	rm -f $(REBAR)
+
+$(REBAR): $(REBAR_STAMP)
+	./tools/download.escript "$(REBAR_URL)" "$(REBAR)" --sha256 "$(REBAR_SHA256)" --executable
 
 # Use Rebar3 to manage and compile dependencies
 .PHONY: compile-zotonic compile upgrade-deps
