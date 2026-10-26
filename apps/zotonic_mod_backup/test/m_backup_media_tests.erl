@@ -3,6 +3,8 @@
 -include_lib("eunit/include/eunit.hrl").
 -include_lib("zotonic_core/include/zotonic.hrl").
 
+-export([cache_eviction_race/0]).
+
 redelete_media_test_() ->
     {timeout, 60, fun redelete_media/0}.
 
@@ -122,4 +124,55 @@ offload_media(Id, Context) ->
                 {error, not_found} -> ok
             end
     end,
-    ok = filezcache:delete(Location).
+    ok = delete_cached_media(Location, 3).
+
+%% A cache entry can stop normally after being logged, between lookup and the
+%% delete call. Retry the public API so it also removes the persisted entry.
+delete_cached_media(Location, Retries) ->
+    try filezcache:delete(Location)
+    catch
+        exit:{normal, {gen_statem, call, [_Pid, delete, infinity]}} when Retries > 0 ->
+            delete_cached_media(Location, Retries - 1)
+    end.
+
+%% Keep the cache mock out of the integration test site's VM.
+cache_eviction_race_test_() ->
+    {timeout, 30, fun() ->
+        {ok, Peer, _} = peer:start_link(#{connection => standard_io,
+            args => ["-pa" | code:get_path()]}),
+        try
+            ok = peer:call(Peer, ?MODULE, cache_eviction_race, [], 30000)
+        after
+            peer:stop(Peer)
+        end
+    end}.
+
+cache_eviction_race() ->
+    ok = meck:new(filezcache, [no_link]),
+    Calls = atomics:new(1, []),
+    Location = <<"https://media.example.test/cache-eviction-race">>,
+    NormalExit = {normal, {gen_statem, call, [self(), delete, infinity]}},
+    try
+        meck:expect(filezcache, delete, fun(_) ->
+            case atomics:add_get(Calls, 1, 1) of
+                1 -> exit(NormalExit);
+                2 -> ok
+            end
+        end),
+        ?assertEqual(ok, delete_cached_media(Location, 3)),
+        ?assertEqual(2, atomics:get(Calls, 1)),
+        meck:expect(filezcache, delete, fun(_) -> {error, locked} end),
+        ?assertEqual({error, locked}, delete_cached_media(Location, 3)),
+        meck:expect(filezcache, delete, fun(_) -> exit(unexpected_failure) end),
+        ?assertExit(unexpected_failure, delete_cached_media(Location, 3)),
+        atomics:put(Calls, 1, 0),
+        meck:expect(filezcache, delete, fun(_) ->
+            atomics:add(Calls, 1, 1),
+            exit(NormalExit)
+        end),
+        ?assertExit(NormalExit, delete_cached_media(Location, 3)),
+        ?assertEqual(4, atomics:get(Calls, 1))
+    after
+        meck:unload(filezcache)
+    end,
+    ok.
