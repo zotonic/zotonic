@@ -306,9 +306,29 @@ Managing the user-group hierarchy
 Use `m_hierarchy:save_partial_tree/4` from the existing `manage_data/2` callback to
 make a group inherit another group's rules. This callback runs after the resources
 returned by `manage_schema/2` have been installed. Define `vipmember` as a resource
-of category `acl_user_group` in that datamodel, then apply its hierarchy:
+of category `acl_user_group` in that datamodel, then apply its hierarchy. A minimal
+module using both callbacks is:
 
 ```erlang
+-module(mod_vip_members).
+-mod_title(\"VIP members\").
+-mod_depends([mod_acl_user_groups]).
+-mod_schema(1).
+
+-include_lib(\"zotonic_core/include/zotonic.hrl\").
+
+-export([manage_schema/2, manage_data/2]).
+
+%% Apply the datamodel on installation and each schema upgrade.
+manage_schema(_Version, _Context) ->
+    #datamodel{
+        resources = [
+            {vipmember, acl_user_group, #{
+                <<\"title\">> => <<\"VIP members\">>
+            }}
+        ]
+    }.
+
 manage_data(_Version, Context) ->
     ok = m_hierarchy:save_partial_tree(
         acl_user_group,
