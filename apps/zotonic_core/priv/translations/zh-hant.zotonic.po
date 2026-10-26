@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-26 15:20\n"
+"PO-Revision-Date: 2026-10-26 16:58\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -1340,7 +1340,7 @@ msgstr "帳單地址"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:9
 msgid "Bind address"
-msgstr ""
+msgstr "綁定位址"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:19
 msgid "Block name"
@@ -1449,7 +1449,7 @@ msgstr "配置目录"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:24
 msgid "Configured"
-msgstr ""
+msgstr "已設定"
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_delete_rsc.erl:66
 #: zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_delete.erl:62
@@ -1921,7 +1921,7 @@ msgstr "下载文件失敗。"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:8
 msgid "Family"
-msgstr ""
+msgstr "家庭"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:52
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:178
@@ -2468,7 +2468,7 @@ msgstr "网络连接"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:189
 msgid "Network listeners"
-msgstr ""
+msgstr "網路監聽器"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:84
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:12
@@ -2566,7 +2566,7 @@ msgstr "不受保護"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:35
 msgid "Not running"
-msgstr ""
+msgstr "未運行"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:26
 msgid "OS Memory"
@@ -2801,7 +2801,7 @@ msgstr "查詢結果"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:14
 msgid "Ranch limit"
-msgstr ""
+msgstr "牧場限額"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:94
 msgid "Rebuild all search-indices by putting all pages and data from the database in the indexer queue. This can take a long time!"
@@ -3333,7 +3333,7 @@ msgstr "姓"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:31
 msgid "Suspended"
-msgstr ""
+msgstr "暫停"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:53
 msgid "Swap"
@@ -3393,7 +3393,7 @@ msgstr "正在重新安裝 Zotonic 資料模型。觀察控制台的訊息"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:58
 msgid "The addresses 0.0.0.0 and :: mean all local IPv4 and IPv6 interfaces respectively. Configured bindings are shown when a listener is absent."
-msgstr ""
+msgstr "位址 0.0.0.0 和 :: 分別代表所有本機 IPv4 和 IPv6 介面。當沒有監聽器時，會顯示已設定的綁定。"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:201
 msgid "The billing address is only visible for people who can edit this page."
@@ -3478,7 +3478,7 @@ msgstr "查詢有錯誤："
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:57
 msgid "These listeners are shared by all sites on this Zotonic node. Running means the local listener is active; it does not confirm external reachability."
-msgstr ""
+msgstr "這些監聽器由此 Zotonic 節點上的所有網站共用。狀態為「執行中」表示本地監聽器處於活躍狀態；這並不代表能確認外部可達性。"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:45
 msgid "This block contains content in another language. Removing it will delete the block in all languages."
@@ -3630,7 +3630,7 @@ msgstr "全部的"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:59
 msgid "Total connections counts currently tracked connections, not connections over time. The Ranch limit is the listener connection limit; SMTP also applies a separate session check."
-msgstr ""
+msgstr "「總連線數」指目前追蹤到的連線數，而非歷時累積的連線數。「Ranch 限制」是指聽取端連線數的上限；SMTP 還會另行進行連線會話檢查。"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:119
 #: zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:9
@@ -3665,7 +3665,7 @@ msgstr "唯一 URL"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:43
 msgid "Unlimited"
-msgstr ""
+msgstr "無限制"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:53
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:22
@@ -3738,7 +3738,7 @@ msgstr "使用以下屬性更新 {n} 頁面："
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:54
 msgid "Updated"
-msgstr ""
+msgstr "已更新"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:89
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:17
