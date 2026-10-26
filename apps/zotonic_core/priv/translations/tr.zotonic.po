@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-23 20:29\n"
+"PO-Revision-Date: 2026-10-25 21:18\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "MIME-Version: 1.0\n"
@@ -10064,7 +10064,7 @@ msgstr "E-posta teslimini durdurduk."
 msgid "Will try again"
 msgstr "Tekrar deneyeceğim"
 
-#: zotonic_mod_export/priv/templates/_vcalendar_header.tpl:7
+#: zotonic_mod_export/priv/templates/ical/feed_start.tpl:7
 msgid "Calendar"
 msgstr "Takvim"
 
@@ -10885,7 +10885,7 @@ msgstr "Etkin"
 msgid "Activity log"
 msgstr "Etkinlik günlüğü"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:350
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:371
 msgid "Add default connection"
 msgstr "Varsayılan bağlantı ekle"
 
@@ -10980,7 +10980,7 @@ msgstr "Varsayılan değer 1’dir: Doğrudan bağlı kaynakları içe aktar. Ba
 msgid "Delete feed"
 msgstr "Beslemeyi sil"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:536
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:557
 msgid "Delete feed?"
 msgstr "Beslemeyi silmek ister misiniz?"
 
@@ -11025,8 +11025,8 @@ msgid "Development environment: local destinations and self-signed certificates 
 msgstr "Geliştirme ortamı: Yerel hedefler ve kendi imzalı sertifikalar izin verilmektedir."
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:12
-msgid "Discover RSS, Atom or JSON feeds and import their articles automatically."
-msgstr "RSS, Atom veya JSON beslemelerini keşfedin ve bu beslemelerdeki makaleleri otomatik olarak içe aktarın."
+msgid "Discover RSS, Atom, JSON or iCalendar feeds and import their content automatically."
+msgstr "RSS, Atom, JSON veya iCalendar beslemelerini keşfedin ve içeriklerini otomatik olarak içe aktarın."
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:27
 msgid "Discover feeds"
@@ -11090,7 +11090,7 @@ msgstr "Besleme"
 msgid "Feed activity log"
 msgstr "Besleme etkinlik günlüğü"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:548
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:569
 msgid "Feed deleted"
 msgstr "Gönderi silindi"
 
@@ -11098,7 +11098,7 @@ msgstr "Gönderi silindi"
 msgid "Feed not found or access denied."
 msgstr "Besleme bulunamadı veya erişim reddedildi."
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:514
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:535
 msgid "Feed queued for fetching. Watch the activity log for results."
 msgstr "Besleme, alınmak üzere kuyruğa alındı. Sonuçlar için etkinlik günlüğünü takip edin."
 
@@ -11145,7 +11145,7 @@ msgstr "Kategoriyi içe aktar"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:4
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:11
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:281
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:302
 msgid "Import feeds"
 msgstr "Beslemeleri içe aktar"
 
@@ -11169,7 +11169,7 @@ msgstr "Kullanıcıyı içe aktar"
 msgid "Imported / updated / skipped"
 msgstr "İçe aktarıldı / güncellendi / atlandı"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:525
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:546
 msgid "Imported content deleted"
 msgstr "İçe aktarılan içerik silindi"
 
@@ -11333,11 +11333,11 @@ msgstr "Beslemeyi kaydet"
 msgid "Select a feed"
 msgstr "Bir besleme seçin"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:357
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:378
 msgid "Select connected page"
 msgstr "Bağlı sayfayı seçin"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:389
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:410
 msgid "Select import user"
 msgstr "Kullanıcıyı içe aktar seçeneğini seçin"
 
@@ -11457,7 +11457,7 @@ msgstr "Web sitesi veya besleme URL'si"
 msgid "WordPress enrichment unavailable; the feed data will be used."
 msgstr "WordPress zenginleştirme özelliği kullanılamıyor; besleme verileri kullanılacaktır."
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:339
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:360
 msgid "You are not allowed to manage feeds."
 msgstr "Beslemeleri yönetme izniniz yok."
 

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-23 20:28\n"
+"PO-Revision-Date: 2026-10-25 21:18\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "MIME-Version: 1.0\n"
@@ -10064,7 +10064,7 @@ msgstr "Nós paramos a entrega de e-mails."
 msgid "Will try again"
 msgstr "Vou tentar novamente"
 
-#: zotonic_mod_export/priv/templates/_vcalendar_header.tpl:7
+#: zotonic_mod_export/priv/templates/ical/feed_start.tpl:7
 msgid "Calendar"
 msgstr "Calendário"
 
@@ -10885,7 +10885,7 @@ msgstr "Ativo"
 msgid "Activity log"
 msgstr "Registo de atividades"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:350
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:371
 msgid "Add default connection"
 msgstr "Adicionar ligação predefinida"
 
@@ -10980,7 +10980,7 @@ msgstr "O valor predefinido é 1: importar recursos diretamente ligados. Utilize
 msgid "Delete feed"
 msgstr "Eliminar feed"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:536
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:557
 msgid "Delete feed?"
 msgstr "Apagar feed?"
 
@@ -11025,8 +11025,8 @@ msgid "Development environment: local destinations and self-signed certificates 
 msgstr "Ambiente de desenvolvimento: são permitidos destinos locais e certificados autoassinados."
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:12
-msgid "Discover RSS, Atom or JSON feeds and import their articles automatically."
-msgstr "Descubra feeds RSS, Atom ou JSON e importe os respetivos artigos automaticamente."
+msgid "Discover RSS, Atom, JSON or iCalendar feeds and import their content automatically."
+msgstr "Descubra feeds RSS, Atom, JSON ou iCalendar e importe o seu conteúdo automaticamente."
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:27
 msgid "Discover feeds"
@@ -11090,7 +11090,7 @@ msgstr "Feed"
 msgid "Feed activity log"
 msgstr "Registo de atividades do feed"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:548
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:569
 msgid "Feed deleted"
 msgstr "Feed eliminado"
 
@@ -11098,7 +11098,7 @@ msgstr "Feed eliminado"
 msgid "Feed not found or access denied."
 msgstr "Feed não encontrado ou acesso recusado."
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:514
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:535
 msgid "Feed queued for fetching. Watch the activity log for results."
 msgstr "Feed colocado na fila para ser obtido. Consulte o registo de atividades para ver os resultados."
 
@@ -11145,7 +11145,7 @@ msgstr "Categoria de importação"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:4
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:11
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:281
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:302
 msgid "Import feeds"
 msgstr "Importar feeds"
 
@@ -11169,7 +11169,7 @@ msgstr "Importar utilizador"
 msgid "Imported / updated / skipped"
 msgstr "Importado / atualizado / ignorado"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:525
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:546
 msgid "Imported content deleted"
 msgstr "Conteúdo importado eliminado"
 
@@ -11333,11 +11333,11 @@ msgstr "Guardar feed"
 msgid "Select a feed"
 msgstr "Selecione um feed"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:357
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:378
 msgid "Select connected page"
 msgstr "Selecionar a página associada"
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:389
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:410
 msgid "Select import user"
 msgstr "Selecionar utilizador para importar"
 
@@ -11457,7 +11457,7 @@ msgstr "URL do site ou do feed"
 msgid "WordPress enrichment unavailable; the feed data will be used."
 msgstr "O enriquecimento do WordPress não está disponível; serão utilizados os dados do feed."
 
-#: zotonic_mod_import_feed/src/mod_import_feed.erl:339
+#: zotonic_mod_import_feed/src/mod_import_feed.erl:360
 msgid "You are not allowed to manage feeds."
 msgstr "Não tem permissão para gerir feeds."
 
