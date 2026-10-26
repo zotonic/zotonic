@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-26 13:21\n"
+"PO-Revision-Date: 2026-10-26 16:57\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -1090,6 +1090,13 @@ msgstr "Ongeveer {n} items gevonden."
 msgid "Access control"
 msgstr "Toegangsrechten"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:12
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:66
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:46
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:104
+msgid "Active"
+msgstr "Actief"
+
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:30
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:27
 msgid "Active filters"
@@ -1334,6 +1341,10 @@ msgstr "Basisgegevens"
 msgid "Billing address"
 msgstr "Factuuradres"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:9
+msgid "Bind address"
+msgstr "Bindadres"
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:19
 msgid "Block name"
 msgstr "Naam blok"
@@ -1371,7 +1382,7 @@ msgstr "Verander categorie"
 msgid "Change the category of this page"
 msgstr "Verander de categorie van deze pagina"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:140
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:139
 msgid "Check all pages for embedded page references and add a <i>refers</i> connection for all of those references."
 msgstr "Controleer alle pagina's op ingesloten paginaverwijzingen en voeg een <i>verwijst</i> verbinding toe voor al deze verwijzingen."
 
@@ -1438,6 +1449,10 @@ msgstr "Voorbeeld sluiten"
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:50
 msgid "Config Directory"
 msgstr "Configuratiemap"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:24
+msgid "Configured"
+msgstr "Geconfigureerd"
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_delete_rsc.erl:66
 #: zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_delete.erl:62
@@ -1665,6 +1680,11 @@ msgstr "Afhankelijk"
 msgid "Dimensions"
 msgstr "Afmetingen"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:33
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:61
+msgid "Disabled"
+msgstr "Uitgeschakeld"
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:26
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers_list.tpl:15
 #: zotonic_mod_admin/priv/templates/_rsc_edge.tpl:22
@@ -1825,7 +1845,7 @@ msgstr "Noodnummer (telefoon)"
 msgid "Endpoint"
 msgstr "Eindpunt"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:136
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:135
 msgid "Ensure <i>refers</i> connections"
 msgstr "Zorg voor <i>verwijst naar</i> verbindingen"
 
@@ -1901,6 +1921,10 @@ msgstr "Bestaande pagina's"
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:118
 msgid "Failed to download the file."
 msgstr "Downloaden van het bestand is mislukt."
+
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:8
+msgid "Family"
+msgstr "Familie"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:52
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:178
@@ -2445,6 +2469,10 @@ msgstr "Meer hulp nodig?"
 msgid "Network Connections"
 msgstr "Netwerkverbindingen"
 
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:189
+msgid "Network listeners"
+msgstr "Netwerkluisteraars"
+
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:84
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:12
 msgid "New Page"
@@ -2538,6 +2566,10 @@ msgstr "Niet geïndexeerd door zoekmachines"
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:57
 msgid "Not protected"
 msgstr "Niet beschermd"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:35
+msgid "Not running"
+msgstr "Werkt niet"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:26
 msgid "OS Memory"
@@ -2642,6 +2674,11 @@ msgstr "Telefoonnummer voor facturen"
 #: zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:8
 msgid "Pivot queue count size:"
 msgstr "Lengte van pivot-wachtrij:"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:10
+#: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:169
+msgid "Port"
+msgstr "Poort"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:113
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:114
@@ -2765,6 +2802,10 @@ msgstr "Zoekvraag"
 msgid "Query results"
 msgstr "Resultaten zoekopdracht"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:14
+msgid "Ranch limit"
+msgstr "Ranchlimiet"
+
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:94
 msgid "Rebuild all search-indices by putting all pages and data from the database in the indexer queue. This can take a long time!"
 msgstr "Bouw de zoek-index opnieuw op door alle pagina's langs te gaan. Dit kan lang duren!"
@@ -2800,6 +2841,7 @@ msgid "Referrers to"
 msgstr "Verwijzingen naar"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:12
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:51
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:18
 msgid "Refresh"
 msgstr "Verversen"
@@ -2897,6 +2939,12 @@ msgstr "90 graden gedraaid"
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:69
 msgid "Runner availability and ImageMagick versions are cached for up to one minute. Failed probes are retried after five seconds. Refresh this page to check again."
 msgstr "De beschikbaarheid van runners en de versies van ImageMagick worden maximaal één minuut in de cache opgeslagen. Mislukte controles worden na vijf seconden opnieuw uitgevoerd. Vernieuw deze pagina om het nog eens te controleren."
+
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:29
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:62
+#: zotonic_site_status/priv/templates/_sites.tpl:15
+msgid "Running"
+msgstr "Actief"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:113
 msgid "Runs the schema install command from the site's module again."
@@ -3039,6 +3087,13 @@ msgstr "Geselecteerde categorieën"
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:51
 msgid "Selecting a file will make the page a media item."
 msgstr "Door een bestand te selecteren wordt de pagina een media-item."
+
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:7
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:13
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:40
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:7
+msgid "Service"
+msgstr "Service"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_sidebar_parts.tpl:32
 msgid "Settings &amp; more"
@@ -3186,6 +3241,7 @@ msgstr "Begint"
 msgid "State"
 msgstr "Staat"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:11
 #: zotonic_mod_admin/src/mod_admin.erl:531
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
 #: zotonic_mod_base/priv/templates/_session_info.tpl:12
@@ -3279,6 +3335,10 @@ msgstr "Voorvoegsel"
 msgid "Surname"
 msgstr "Achternaam"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:31
+msgid "Suspended"
+msgstr "Opgeschort"
+
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:53
 msgid "Swap"
 msgstr "Wissel"
@@ -3295,15 +3355,15 @@ msgstr "Systeemstatus"
 msgid "System administration"
 msgstr "Systeembeheer"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:170
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:169
 msgid "Task queue"
 msgstr "Taakwachtrij"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:177
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:176
 msgid "Tasks are functions scheduled to run at a certain time."
 msgstr "Taken zijn functies die op een bepaald tijdstip moeten worden uitgevoerd."
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:178
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:177
 msgid "Tasks with errors will retry 10 times before being dropped."
 msgstr "Taken met fouten worden tien keer opnieuw geprobeerd voordat ze worden verwijderd."
 
@@ -3334,6 +3394,10 @@ msgstr "Tekst | een (rijk) tekstblok"
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:71
 msgid "The Zotonic datamodel is being reinstalled. Watch the console for messages"
 msgstr "Het Zotonic-datamodel wordt opnieuw geïnstalleerd. Houd de console in de gaten voor berichten"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:58
+msgid "The addresses 0.0.0.0 and :: mean all local IPv4 and IPv6 interfaces respectively. Configured bindings are shown when a listener is absent."
+msgstr "De adressen 0.0.0.0 en :: verwijzen respectievelijk naar alle lokale IPv4- en IPv6-interfaces. Geconfigureerde koppelingen worden weergegeven wanneer er geen listener is."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:201
 msgid "The billing address is only visible for people who can edit this page."
@@ -3415,6 +3479,10 @@ msgstr "Er is al een pagina met deze naam."
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:4
 msgid "There is an error in the query:"
 msgstr "Er zit een fout in de query:"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:57
+msgid "These listeners are shared by all sites on this Zotonic node. Running means the local listener is active; it does not confirm external reachability."
+msgstr "Deze listeners worden gedeeld door alle sites op dit Zotonic-knooppunt. De status ‘Running’ betekent dat de lokale listener actief is; dit houdt geen bevestiging in dat de site extern bereikbaar is."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:45
 msgid "This block contains content in another language. Removing it will delete the block in all languages."
@@ -3559,9 +3627,14 @@ msgstr "Navigatie open/dicht"
 msgid "Too many connections, only the first and last are shown."
 msgstr "Te veel verbindingen, alleen de eerste en laatste worden weergegeven."
 
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:13
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:33
 msgid "Total"
 msgstr "Totaal"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:59
+msgid "Total connections counts currently tracked connections, not connections over time. The Ranch limit is the listener connection limit; SMTP also applies a separate session check."
+msgstr "Het totale aantal verbindingen geeft het aantal verbindingen weer dat momenteel wordt bijgehouden, niet het aantal verbindingen in de loop van de tijd. De Ranch-limiet is de limiet voor luisteraarsverbindingen; SMTP hanteert daarnaast een afzonderlijke sessiecontrole."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:119
 #: zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:9
@@ -3572,6 +3645,7 @@ msgstr "Typ een tekst om te zoeken"
 msgid "Type to filter the list below."
 msgstr "Typ om de onderstaande lijst te filteren."
 
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:37
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:47
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:62
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:63
@@ -3592,6 +3666,10 @@ msgstr "Unieke naam"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:101
 msgid "Unique uri"
 msgstr "Unieke URI"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:43
+msgid "Unlimited"
+msgstr "Onbeperkt"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:53
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:22
@@ -3662,9 +3740,13 @@ msgstr "Update geselecteerde pagina's"
 msgid "Update {n} pages with the following properties:"
 msgstr "Update {n} pagina's met de volgende eigenschappen:"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:54
+msgid "Updated"
+msgstr "Bijgewerkt"
+
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:89
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:17
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:162
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:161
 msgid "Upload"
 msgstr "Upload"
 
@@ -3676,12 +3758,12 @@ msgstr "Upload bestand"
 msgid "Upload a file from your computer."
 msgstr "Upload een bestand van je computer"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:152
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:151
 msgid "Upload a file to the drop folder. This file will be handled in the background by the mailinglists for recipient import and other modules."
 msgstr "Upload een bestand naar de drop-map. Dit bestand wordt op de achtergrond behandeld door de mailinglijsten voor het importeren van ontvangers en andere modules."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:74
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:149
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:148
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:31
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:36
 msgid "Upload file"
@@ -5639,11 +5721,6 @@ msgstr "Scan modules opnieuw"
 #: zotonic_mod_admin_modules/priv/templates/_admin_status.tpl:4
 msgid "Rescanning will rebuild the index of all modules, actions, templates etc. It will also reload all dispatch rules."
 msgstr "Opnieuw scannen zal de index van alle modules, acties, templates etc. opnieuw opbouwen. Ook alle dispatchregels worden herladen."
-
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:62
-#: zotonic_site_status/priv/templates/_sites.tpl:15
-msgid "Running"
-msgstr "Actief"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:59
 msgid "Runtime"
@@ -10521,12 +10598,6 @@ msgstr "S3-regio"
 msgid "Save Settings"
 msgstr "Bewaar instellingen"
 
-#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:13
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:40
-#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:7
-msgid "Service"
-msgstr "Service"
-
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:201
 msgid "Settings are saved without a write test while the file store is read-only. Verify access by downloading an existing file."
 msgstr "De instellingen worden opgeslagen zonder schrijftest zolang de bestandsopslag alleen-lezen is. Controleer de toegang door een bestaand bestand te downloaden."
@@ -10878,12 +10949,6 @@ msgstr "Bekende eigenschappen zijn:"
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:85
 msgid "You do not have permission to use the CSV/XLSX import module."
 msgstr "Je hebt geen rechten om de CSV/XLSX importmodule te gebruiken."
-
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:66
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:46
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:104
-msgid "Active"
-msgstr "Actief"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:14
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:16
@@ -12199,10 +12264,6 @@ msgstr "De mailinglijst is verwijderd."
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:131
 msgid "Delivery history is preserved. Sending again may result in recipients receiving the same content twice. Older mailings from before run tracking are not used for duplicate detection."
 msgstr "De verzendgeschiedenis blijft behouden. Als u een bericht opnieuw verstuurt, kan het zijn dat ontvangers dezelfde inhoud twee keer ontvangen. Oudere verzendingen van vóór de invoering van het tracking-systeem worden niet gebruikt voor het opsporen van dubbele berichten."
-
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:61
-msgid "Disabled"
-msgstr "Uitgeschakeld"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:26
 msgid "Disabled email subscriptions are automatically deleted after three months."
@@ -18028,10 +18089,6 @@ msgstr "Gebruik alleen een…z en 0…9 tekens."
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:31
 msgid "Please use only lowercase a…z and 0…9 characters."
 msgstr "Gebruik alleen kleine letters a…z en 0…9 tekens."
-
-#: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:169
-msgid "Port"
-msgstr "Poort"
 
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:118
 msgid "PostgreSQL database connection"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-26 13:22\n"
+"PO-Revision-Date: 2026-10-26 16:58\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -1087,6 +1087,13 @@ msgstr "พบสินค้าประมาณ {n} รายการ"
 msgid "Access control"
 msgstr "การควบคุมการเข้าถึง"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:12
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:66
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:46
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:104
+msgid "Active"
+msgstr "กำลังใช้งาน"
+
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:30
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:27
 msgid "Active filters"
@@ -1331,6 +1338,10 @@ msgstr "ขั้นพื้นฐาน"
 msgid "Billing address"
 msgstr "ที่อยู่เรียกเก็บเงิน"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:9
+msgid "Bind address"
+msgstr "ที่อยู่การผูกมัด"
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:19
 msgid "Block name"
 msgstr "ชื่อบล็อก"
@@ -1368,7 +1379,7 @@ msgstr "เปลี่ยนหมวดหมู่"
 msgid "Change the category of this page"
 msgstr "เปลี่ยนหมวดหมู่ของหน้านี้"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:140
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:139
 msgid "Check all pages for embedded page references and add a <i>refers</i> connection for all of those references."
 msgstr "ตรวจสอบหน้าทั้งหมดเพื่อดูการอ้างอิงหน้าที่ฝังอยู่ และเพิ่มการเชื่อมต่อ <i>หมายถึง</i> สำหรับการอ้างอิงทั้งหมดเหล่านั้น"
 
@@ -1435,6 +1446,10 @@ msgstr "ปิดการแสดงตัวอย่าง"
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:50
 msgid "Config Directory"
 msgstr "Config Directory"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:24
+msgid "Configured"
+msgstr "ตั้งค่าแล้ว"
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_delete_rsc.erl:66
 #: zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_delete.erl:62
@@ -1662,6 +1677,11 @@ msgstr "ขึ้นอยู่กับ"
 msgid "Dimensions"
 msgstr "ขนาด"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:33
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:61
+msgid "Disabled"
+msgstr "ไม่สามารถใช้งานได้"
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:26
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers_list.tpl:15
 #: zotonic_mod_admin/priv/templates/_rsc_edge.tpl:22
@@ -1822,7 +1842,7 @@ msgstr "โทรศัพท์ฉุกเฉิน"
 msgid "Endpoint"
 msgstr "จุดปลาย"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:136
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:135
 msgid "Ensure <i>refers</i> connections"
 msgstr "ตรวจสอบให้แน่ใจว่า <i>หมายถึง</i> การเชื่อมต่อ"
 
@@ -1898,6 +1918,10 @@ msgstr "หน้าที่มีอยู่"
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:118
 msgid "Failed to download the file."
 msgstr "ดาวน์โหลดไฟล์ไม่สำเร็จ"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:8
+msgid "Family"
+msgstr "ครอบครัว"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:52
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:178
@@ -2442,6 +2466,10 @@ msgstr "ต้องการความช่วยเหลือเพิ่
 msgid "Network Connections"
 msgstr "เชื่อมต่อเครือข่าย"
 
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:189
+msgid "Network listeners"
+msgstr "ผู้ฟังเครือข่าย"
+
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:84
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:12
 msgid "New Page"
@@ -2535,6 +2563,10 @@ msgstr "ไม่ได้ทำดัชนีโดยเครื่องม
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:57
 msgid "Not protected"
 msgstr "ไม่ได้รับการคุ้มครอง"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:35
+msgid "Not running"
+msgstr "ไม่ทำงาน"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:26
 msgid "OS Memory"
@@ -2639,6 +2671,11 @@ msgstr "เบอร์โทรศัพท์สำหรับออกใบ
 #: zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:8
 msgid "Pivot queue count size:"
 msgstr "ขนาดนับคิว Pivot:"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:10
+#: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:169
+msgid "Port"
+msgstr "ท่าเรือ"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:113
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:114
@@ -2762,6 +2799,10 @@ msgstr "แบบสอบถาม"
 msgid "Query results"
 msgstr "ผลการค้นหา"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:14
+msgid "Ranch limit"
+msgstr "ขีดจำกัดของฟาร์ม"
+
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:94
 msgid "Rebuild all search-indices by putting all pages and data from the database in the indexer queue. This can take a long time!"
 msgstr "สร้างดัชนีการค้นหาใหม่ทั้งหมดโดยใส่เพจและข้อมูลทั้งหมดจากฐานข้อมูลในคิวตัวทำดัชนี อาจใช้เวลานาน!"
@@ -2797,6 +2838,7 @@ msgid "Referrers to"
 msgstr "ผู้อ้างอิงถึง"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:12
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:51
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:18
 msgid "Refresh"
 msgstr "รีเฟรช"
@@ -2893,6 +2935,12 @@ msgstr "หมุน 90 องศา"
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:69
 msgid "Runner availability and ImageMagick versions are cached for up to one minute. Failed probes are retried after five seconds. Refresh this page to check again."
 msgstr "ข้อมูลเกี่ยวกับความพร้อมใช้งานของ Runner และเวอร์ชันของ ImageMagick จะถูกเก็บไว้ในแคชเป็นเวลาสูงสุดหนึ่งนาที การตรวจสอบที่ล้มเหลวจะได้รับการลองใหม่หลังจากผ่านไปห้าวินาที โปรดรีเฟรชหน้านี้เพื่อตรวจสอบอีกครั้ง"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:29
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:62
+#: zotonic_site_status/priv/templates/_sites.tpl:15
+msgid "Running"
+msgstr "วิ่ง"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:113
 msgid "Runs the schema install command from the site's module again."
@@ -3035,6 +3083,13 @@ msgstr "หมวดหมู่ที่เลือก"
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:51
 msgid "Selecting a file will make the page a media item."
 msgstr "การเลือกไฟล์จะทำให้เพจเป็นรายการสื่อ"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:7
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:13
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:40
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:7
+msgid "Service"
+msgstr "บริการ"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_sidebar_parts.tpl:32
 msgid "Settings &amp; more"
@@ -3182,6 +3237,7 @@ msgstr "เริ่ม"
 msgid "State"
 msgstr "สถานะ"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:11
 #: zotonic_mod_admin/src/mod_admin.erl:531
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
 #: zotonic_mod_base/priv/templates/_session_info.tpl:12
@@ -3275,6 +3331,10 @@ msgstr "สุร. คำนำหน้า"
 msgid "Surname"
 msgstr "นามสกุล"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:31
+msgid "Suspended"
+msgstr "ถูกระงับ"
+
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:53
 msgid "Swap"
 msgstr "แลกเปลี่ยน"
@@ -3291,15 +3351,15 @@ msgstr "สถานะระบบ"
 msgid "System administration"
 msgstr "การดูแลระบบ"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:170
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:169
 msgid "Task queue"
 msgstr "คิวงาน"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:177
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:176
 msgid "Tasks are functions scheduled to run at a certain time."
 msgstr "งานคือฟังก์ชันที่กำหนดให้ทำงานในช่วงเวลาหนึ่ง"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:178
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:177
 msgid "Tasks with errors will retry 10 times before being dropped."
 msgstr "งานที่มีข้อผิดพลาดจะลองอีกครั้ง 10 ครั้งก่อนที่จะถูกทิ้ง"
 
@@ -3330,6 +3390,10 @@ msgstr "ข้อความ | บล็อกข้อความ (ที่�
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:71
 msgid "The Zotonic datamodel is being reinstalled. Watch the console for messages"
 msgstr "กำลังติดตั้งโมเดลข้อมูล Zotonic ใหม่ ดูคอนโซลเพื่อดูข้อความ"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:58
+msgid "The addresses 0.0.0.0 and :: mean all local IPv4 and IPv6 interfaces respectively. Configured bindings are shown when a listener is absent."
+msgstr "ที่อยู่ 0.0.0.0 และ :: หมายถึงอินเทอร์เฟซ IPv4 และ IPv6 ท้องถิ่นทั้งหมด ตามลำดับ การผูกมัดที่ตั้งค่าไว้จะแสดงขึ้นเมื่อไม่มีผู้รับฟัง"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:201
 msgid "The billing address is only visible for people who can edit this page."
@@ -3411,6 +3475,10 @@ msgstr "มีเพจชื่อนี้อยู่แล้ว"
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:4
 msgid "There is an error in the query:"
 msgstr "มีข้อผิดพลาดในคำสั่งค้นหา:"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:57
+msgid "These listeners are shared by all sites on this Zotonic node. Running means the local listener is active; it does not confirm external reachability."
+msgstr "ผู้ฟังเหล่านี้ถูกใช้ร่วมกันโดยทุกเว็บไซต์บนโหนด Zotonic นี้ การทำงานหมายความว่าผู้ฟังท้องถิ่นกำลังทำงานอยู่ แต่ไม่ได้ยืนยันว่าสามารถเข้าถึงได้จากภายนอก"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:45
 msgid "This block contains content in another language. Removing it will delete the block in all languages."
@@ -3555,9 +3623,14 @@ msgstr "ไม่ต้องสลับช่องทาง"
 msgid "Too many connections, only the first and last are shown."
 msgstr "การเชื่อมต่อมากเกินไประบบจะแสดงเฉพาะรายการแรกและรายการสุดท้ายเท่านั้น"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:13
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:33
 msgid "Total"
 msgstr "ทั้งหมด"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:59
+msgid "Total connections counts currently tracked connections, not connections over time. The Ranch limit is the listener connection limit; SMTP also applies a separate session check."
+msgstr "จำนวนการเชื่อมต่อทั้งหมดหมายถึงการเชื่อมต่อที่กำลังถูกติดตามอยู่ในขณะนี้ ไม่ใช่จำนวนการเชื่อมต่อสะสมตามเวลา The Ranch limit คือขีดจำกัดการเชื่อมต่อของผู้ฟัง; SMTP ยังมีการตรวจสอบเซสชันแยกต่างหากด้วย"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:119
 #: zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:9
@@ -3568,6 +3641,7 @@ msgstr "พิมพ์ข้อความเพื่อค้นหา"
 msgid "Type to filter the list below."
 msgstr "พิมพ์เพื่อกรองรายการด้านล่าง"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:37
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:47
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:62
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:63
@@ -3588,6 +3662,10 @@ msgstr "ชื่อเฉพาะ"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:101
 msgid "Unique uri"
 msgstr "ยูริที่ไม่เหมือนใคร"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:43
+msgid "Unlimited"
+msgstr "ไม่จำกัด"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:53
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:22
@@ -3658,9 +3736,13 @@ msgstr "อัปเดตหน้าที่เลือก"
 msgid "Update {n} pages with the following properties:"
 msgstr "ปรับปรุง {n} หน้าที่มีคุณสมบัติดังต่อไปนี้:"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:54
+msgid "Updated"
+msgstr "อัปเดตแล้ว"
+
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:89
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:17
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:162
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:161
 msgid "Upload"
 msgstr "ที่อัพโหลด"
 
@@ -3672,12 +3754,12 @@ msgstr "อัปโหลดไฟล์"
 msgid "Upload a file from your computer."
 msgstr "อัปโหลดไฟล์จากคอมพิวเตอร์ของคุณ"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:152
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:151
 msgid "Upload a file to the drop folder. This file will be handled in the background by the mailinglists for recipient import and other modules."
 msgstr "อัปโหลดไฟล์ไปยังโฟลเดอร์วาง ไฟล์นี้จะถูกจัดการในเบื้องหลังโดยรายชื่อผู้รับจดหมายสำหรับการนำเข้าของผู้รับและโมดูลอื่นๆ"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:74
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:149
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:148
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:31
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:36
 msgid "Upload file"
@@ -5635,11 +5717,6 @@ msgstr "สแกนโมดูลอีกครั้ง"
 #: zotonic_mod_admin_modules/priv/templates/_admin_status.tpl:4
 msgid "Rescanning will rebuild the index of all modules, actions, templates etc. It will also reload all dispatch rules."
 msgstr "การสแกนซ้ำจะสร้างดัชนีของโมดูลการดำเนินการเทมเพลตและอื่น ๆ ทั้งหมดอีกครั้งนอกจากนี้ยังโหลดกฎการจัดส่งทั้งหมดอีกครั้ง"
-
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:62
-#: zotonic_site_status/priv/templates/_sites.tpl:15
-msgid "Running"
-msgstr "วิ่ง"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:59
 msgid "Runtime"
@@ -10519,12 +10596,6 @@ msgstr "พื้นที่ S3"
 msgid "Save Settings"
 msgstr "บันทึกการตั้งค่า"
 
-#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:13
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:40
-#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:7
-msgid "Service"
-msgstr "บริการ"
-
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:201
 msgid "Settings are saved without a write test while the file store is read-only. Verify access by downloading an existing file."
 msgstr "การตั้งค่าจะถูกบันทึกโดยไม่มีการทดสอบการเขียน เนื่องจากพื้นที่จัดเก็บไฟล์อยู่ในโหมดอ่านเท่านั้น โปรดตรวจสอบสิทธิ์การเข้าถึงโดยดาวน์โหลดไฟล์ที่มีอยู่"
@@ -10876,12 +10947,6 @@ msgstr "คุณสมบัติที่เป็นที่รู้จั
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:85
 msgid "You do not have permission to use the CSV/XLSX import module."
 msgstr "คุณไม่มีสิทธิ์ในการใช้โมดูลนำเข้า CSV/XLSX"
-
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:66
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:46
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:104
-msgid "Active"
-msgstr "กำลังใช้งาน"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:14
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:16
@@ -12197,10 +12262,6 @@ msgstr "ลบรายชื่อผู้รับจดหมาย"
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:131
 msgid "Delivery history is preserved. Sending again may result in recipients receiving the same content twice. Older mailings from before run tracking are not used for duplicate detection."
 msgstr "ประวัติการส่งจะถูกเก็บรักษาไว้ การส่งซ้ำอาจทำให้ผู้รับได้รับเนื้อหาเดียวกันสองครั้ง การส่งอีเมลเก่าก่อนที่ระบบติดตามการส่งจะเริ่มทำงานจะไม่ถูกนำมาใช้ในการตรวจหาการส่งซ้ำ"
-
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:61
-msgid "Disabled"
-msgstr "ไม่สามารถใช้งานได้"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:26
 msgid "Disabled email subscriptions are automatically deleted after three months."
@@ -18025,10 +18086,6 @@ msgstr "โปรดใช้อักขระ…z และ 0…9 เท่า
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:31
 msgid "Please use only lowercase a…z and 0…9 characters."
 msgstr "โปรดใช้เฉพาะตัวพิมพ์เล็ก a…z และ 0…9 อักขระ"
-
-#: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:169
-msgid "Port"
-msgstr "ท่าเรือ"
 
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:118
 msgid "PostgreSQL database connection"
