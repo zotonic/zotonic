@@ -3,6 +3,8 @@
 -include_lib("eunit/include/eunit.hrl").
 -include_lib("zotonic_core/include/zotonic.hrl").
 
+-export([run_save_check/1]).
+
 merge_test_() ->
     [
         {"empty declaration preserves the tree", ?_assertEqual(
@@ -42,8 +44,34 @@ idempotent_test() ->
     {ok, Merged} = m_hierarchy:merge_partial_tree(Current, Partial),
     ?assertEqual({ok, Merged}, m_hierarchy:merge_partial_tree(Merged, Partial)).
 
+%% Core-module mocks must not replace modules used by the integration test site.
 save_test_() ->
-    {foreach, fun setup/0, fun cleanup/1, [
+    {setup,
+        fun() ->
+            {ok, Peer, _} = peer:start_link(#{
+                connection => standard_io,
+                args => ["-pa" | code:get_path()]
+            }),
+            Peer
+        end,
+        fun peer:stop/1,
+        fun(Peer) ->
+            [{timeout, 30, fun() ->
+                peer:call(Peer, ?MODULE, run_save_check, [N], 30000)
+            end} || N <- lists:seq(1, length(save_checks()))]
+        end}.
+
+run_save_check(N) ->
+    setup(),
+    try
+        Check = lists:nth(N, save_checks()),
+        Check()
+    after
+        cleanup(ok)
+    end.
+
+save_checks() ->
+    [
         fun() ->
             meck:expect(z_acl, is_admin, fun(_) -> false end),
             ?assertEqual({error, eacces}, save([{1, []}])),
@@ -83,7 +111,7 @@ save_test_() ->
             ?assertEqual(0, meck:num_calls(z_depcache, flush, '_')),
             ?assertEqual(0, meck:num_calls(z_notifier, notify, '_'))
         end
-    ]}.
+    ].
 
 save(Tree) ->
     m_hierarchy:save_partial_tree(acl_user_group, acl_user_group, Tree,
