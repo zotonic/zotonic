@@ -541,12 +541,13 @@ facet_union(#facet_def{ name = Name }) ->
 
 
 %% @doc Add an extra search argument to the given query. Called by the query
-%% builder in search_query.erl. For list/ids facets, '=' tests containment and
-%% '<>'/'!=' negates containment. Selection lists use OR, or AND when all
-%% selections are exclusions. Explicit '@>', '<@', and '&&' operators take
+%% builder in search_query.erl. For list/ids facets, `=' tests containment and
+%% `<>'/`!=' negates containment. Selection lists use OR, or AND when all
+%% selections are exclusions. Explicit `@>', `<@', and `&&' operators take
 %% the complete list operand (contains all, contained by, and overlaps).
-%% For example: #{<<"term">> => <<"facet:tags">>, <<"operator">> => <<"@>">>,
-%%                <<"value">> => [<<"red">>, <<"blue">>]}.
+%% For example:
+%% ```#{<<"term">> => <<"facet:tags">>, <<"operator">> => <<"@>">>,
+%%      <<"value">> => [<<"red">>, <<"blue">>]}'''
 %% NULL facets do not match these operators, including exclusions.
 -spec qterm(Field, Op, Value, Context) -> {ok, Term} | {error, term()}
     when Field :: binary(),
