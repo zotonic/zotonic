@@ -7,9 +7,9 @@
 -include("../include/zotonic.hrl").
 
 hash_test() ->
-    ?assertMatch({bcrypt, <<"$2a$12$", _/binary>>}, m_identity:hash("1234")),
-    ?assertMatch({bcrypt, <<"$2a$12$", _/binary>>}, m_identity:hash(<<"1234">>)),
-    ?assertMatch({bcrypt, <<"$2a$12$", _/binary>>}, m_identity:hash(<<195, 154, 105, 105>>)),
+    ?assertMatch({bcrypt, <<"$2b$12$", _/binary>>}, m_identity:hash("1234")),
+    ?assertMatch({bcrypt, <<"$2b$12$", _/binary>>}, m_identity:hash(<<"1234">>)),
+    ?assertMatch({bcrypt, <<"$2b$12$", _/binary>>}, m_identity:hash(<<195, 154, 105, 105>>)),
     ok.
 
 needs_rehash_test() ->
