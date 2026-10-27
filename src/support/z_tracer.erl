@@ -36,7 +36,7 @@ start(DoLogCallback) when is_function(DoLogCallback) ->
     dbg:p(all, c).
 
 stop() ->
-    dbg:stop_clear().
+    dbg:stop().
 
 get_tracer() ->
     dbg:get_tracer().

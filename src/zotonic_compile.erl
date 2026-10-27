@@ -194,12 +194,8 @@ compile_options() ->
     application:load(zotonic),
     {ok, Sites} = application:get_env(zotonic, user_sites_dir),
     {ok, Modules} = application:get_env(zotonic, user_modules_dir),
-    Outdir = case code:lib_dir(zotonic, ebin) of
-                 {error, _} -> "_build/default/lib/zotonic/ebin";
-                 Dir -> Dir
-             end,
+    Outdir = filename:join(code:lib_dir(zotonic), "ebin"),
     [{i, "include"},
-     {i, "deps/webzmachine/include"},
      {i, Modules},
      {i, Sites},
      {outdir, Outdir},

@@ -104,7 +104,7 @@ divide(A, B, _Context) ->
         {undefined, _} -> undefined;
         {_, undefined} -> undefined;
         {_, 0} -> undefined;
-        {_, 0.0} -> undefined;
+        {_, Float} when is_float(Float) andalso Float == 0.0 -> undefined;
         {A1, B1} -> A1 / B1
     end.
 
@@ -120,7 +120,7 @@ modulo(A, B, _Context) ->
         {undefined, _} -> undefined;
         {_, undefined} -> undefined;
         {_, 0} -> undefined;
-        {_, 0.0} -> undefined;
+        {_, Float} when is_float(Float) andalso Float == 0.0 -> undefined;
         {A1, B1} -> A1 rem B1
     end.
 
