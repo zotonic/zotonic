@@ -231,13 +231,19 @@ set_default_language_tz(Context) ->
         }
     catch
         error:badarg ->
-            % The depache is gone, happens during race conditions on site shutdown.
-            % Silently return a default.
-            Context#context{
-                language = [ en ],
-                tz = z_config:get(timezone)
-            }
+            % The depcache tables can disappear during site shutdown.
+            default_language_tz(Context);
+        exit:{noproc, _} ->
+            % Contexts are also needed before depcache starts, e.g. for statistics.
+            default_language_tz(Context)
     end.
+
+-spec default_language_tz(z:context()) -> z:context().
+default_language_tz(Context) ->
+    Context#context{
+        language = [ en ],
+        tz = z_config:get(timezone)
+    }.
 
 % @doc Create a new context used when testing parts of zotonic
 new_tests() ->

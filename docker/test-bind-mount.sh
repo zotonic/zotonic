@@ -15,7 +15,7 @@ export ZOTONIC_GID=${ZOTONIC_GID:-$(id -g)}
 
 case "$runtime" in
     docker) compose=(docker compose -f docker-compose.yml) ;;
-    podman) compose=(podman-compose -f docker-compose.yml -f docker-compose.podman.yml) ;;
+    podman) compose=(podman-compose --in-pod= -f docker-compose.yml -f docker-compose.podman.yml) ;;
     *) echo 'Usage: bash docker/test-bind-mount.sh [docker|podman]' >&2; exit 1 ;;
 esac
 
@@ -53,7 +53,8 @@ import yaml
 
 fixture = sys.argv[1]
 with open(os.path.join(fixture, "merged.yml")) as source:
-    service = yaml.safe_load(source)["services"]["zotonic"]
+    config = yaml.safe_load(source)
+    service = config["services"]["zotonic"]
 mounts = service["volumes"]
 assert len(mounts) == 1, f"Expected one checkout mount, got: {mounts}"
 mount = mounts[0]
@@ -65,13 +66,17 @@ else:
 for key in ("depends_on", "build", "ports", "networks"):
     service.pop(key, None)
 with open(os.path.join(fixture, "isolated.yml"), "w") as target:
-    yaml.safe_dump({"services": {"zotonic": service}}, target)
+    isolated = {"services": {"zotonic": service}}
+    if "x-podman" in config:
+        isolated["x-podman"] = config["x-podman"]
+    yaml.safe_dump(isolated, target)
 PY
 
-# The isolated file already contains the runtime-specific settings.
+# Keep pod creation disabled for both old and new podman-compose versions.
+# The isolated file preserves x-podman settings for newer versions.
 case "$runtime" in
     docker) compose=(docker compose) ;;
-    podman) compose=(podman-compose) ;;
+    podman) compose=(podman-compose --in-pod=) ;;
 esac
 
 cleanup() {

@@ -39,7 +39,12 @@ batch_sidejob_test_() ->
 
 batch_sidejob() ->
     {ok, _} = application:ensure_all_started(sidejob),
-    case catch z_sidejob:usage() of
+    case try z_sidejob:usage()
+    catch
+        throw:CatchReason -> CatchReason;
+        exit:CatchReason -> {'EXIT', CatchReason};
+        error:CatchReason:CatchStack -> {'EXIT', {CatchReason, CatchStack}}
+    end of
         {'EXIT', _} -> z_sidejob:init();
         _ -> ok
     end,

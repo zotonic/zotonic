@@ -107,7 +107,7 @@ handle_cast(restart, #state{ pid = undefined } = State) ->
     {noreply, State};
 handle_cast(restart, #state{ pid = Pid } = State) when is_pid(Pid) ->
     ?LOG_INFO("[inotify] Stopping fswatch file monitor."),
-    catch exec:stop(Pid),
+    try exec:stop(Pid) catch _:_ -> ok end,
     {noreply, start_fswatch(State#state{ port = undefined, tries = 0 })};
 
 handle_cast(Message, State) ->
@@ -156,7 +156,7 @@ handle_info(_Info, State) ->
 terminate(_Reason, #state{pid = undefined}) ->
     ok;
 terminate(_Reason, #state{pid = Pid}) ->
-    catch exec:stop(Pid),
+    try exec:stop(Pid) catch _:_ -> ok end,
     ok.
 
 -spec code_change(term(), term(), term()) -> {ok, term()}.

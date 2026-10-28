@@ -146,7 +146,7 @@ back_preserves_draft_check() ->
             fun({Key, Value}) -> ?assertEqual(Value, proplists:get_value(Key, Vars)) end, Args
         )
     after
-        lists:foreach(fun(M) -> catch meck:unload(M) end, Modules)
+        lists:foreach(fun(M) -> try meck:unload(M) catch _:_ -> ok end end, Modules)
     end.
 
 language_check() ->
@@ -288,7 +288,7 @@ postgres(Db) ->
     after
         epgsql:squery(C, "rollback"),
         epgsql:close(C),
-        lists:foreach(fun(M) -> catch meck:unload(M) end, Modules)
+        lists:foreach(fun(M) -> try meck:unload(M) catch _:_ -> ok end end, Modules)
     end.
 
 %% Fresh installs and repaired/upgraded tables must have identical column definitions.
@@ -1013,7 +1013,7 @@ immediate_publication_check() ->
         Busy = meck:capture(1, z_render, dialog, ['_', "_dialog_mailing_count_error.tpl", '_', '_'], 3),
         ?assertEqual(overload, proplists:get_value(error, Busy))
     after
-        lists:foreach(fun(M) -> catch meck:unload(M) end, Modules)
+        lists:foreach(fun(M) -> try meck:unload(M) catch _:_ -> ok end end, Modules)
     end.
 
 %% A blocked count must not block its postback or offer a send button early.
@@ -1145,7 +1145,7 @@ async_review_check() ->
         after 1000 -> error(no_permission_error)
         end
     after
-        lists:foreach(fun(M) -> catch meck:unload(M) end, Modules)
+        lists:foreach(fun(M) -> try meck:unload(M) catch _:_ -> ok end end, Modules)
     end.
 
 %% Disabled subscriptions do not inflate counts, and disabling an old entry

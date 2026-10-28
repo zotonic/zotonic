@@ -300,7 +300,12 @@ handler_options() ->
 %% @todo Exclude platforms that do not support raw ipv6 socket options
 -spec ipv6_supported() -> boolean().
 ipv6_supported() ->
-    case (catch inet:getaddr("localhost", inet6)) of
+    case (try inet:getaddr("localhost", inet6)
+    catch
+        throw:CatchReason -> CatchReason;
+        exit:CatchReason -> {'EXIT', CatchReason};
+        error:CatchReason:CatchStack -> {'EXIT', {CatchReason, CatchStack}}
+    end) of
         {ok, _Addr} -> true;
         {error, _} -> false
     end.

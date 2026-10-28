@@ -1,4 +1,8 @@
 # Used by start-podman.sh. Map the calling user to the selected container IDs.
+# A per-container keep-id namespace cannot be combined with a pod.
+x-podman:
+    in_pod: false
+
 services:
     zotonic:
         userns_mode: "keep-id:uid=${ZOTONIC_UID:?Set ZOTONIC_UID},gid=${ZOTONIC_GID:?Set ZOTONIC_GID}"

@@ -294,7 +294,12 @@ queue_local_all(Context) ->
 
 
 task_file_to_local(Context) ->
-    case catch m_filestore:mark_move_to_local_limit(?BATCH_MOVE, Context) of
+    case try m_filestore:mark_move_to_local_limit(?BATCH_MOVE, Context)
+    catch
+        throw:CatchReason -> CatchReason;
+        exit:CatchReason -> {'EXIT', CatchReason};
+        error:CatchReason:CatchStack -> {'EXIT', {CatchReason, CatchStack}}
+    end of
         {ok, 0} ->
             ok;
         {ok, N} ->
@@ -310,7 +315,12 @@ task_file_to_local(Context) ->
     end.
 
 task_file_to_remote(Context) ->
-    case catch m_filestore:unmark_move_to_local_limit(?BATCH_MOVE, Context) of
+    case try m_filestore:unmark_move_to_local_limit(?BATCH_MOVE, Context)
+    catch
+        throw:CatchReason -> CatchReason;
+        exit:CatchReason -> {'EXIT', CatchReason};
+        error:CatchReason:CatchStack -> {'EXIT', {CatchReason, CatchStack}}
+    end of
         {ok, 0} ->
             ok;
         {ok, N} ->

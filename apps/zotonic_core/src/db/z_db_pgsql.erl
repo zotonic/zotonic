@@ -923,7 +923,7 @@ set_schema(Conn, Schema) ->
         [{ok, [], []}, {ok, [], []}] ->
             {ok, Conn};
         Error ->
-            catch epgsql:close(Conn),
+            try epgsql:close(Conn) catch _:_ -> ok end,
             {error, Error}
     end.
 

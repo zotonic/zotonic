@@ -16,6 +16,7 @@ for launcher in start-docker.sh start-podman.sh; do
     output=$(env -u ZOTONIC_UID -u ZOTONIC_GID PATH="$fixture:$PATH" sh "$launcher")
     test "${output%%$'\n'*}" = "uid=$(id -u) gid=$(id -g)"
     if [ "$launcher" = start-podman.sh ]; then
+        grep -Fxq -- '--in-pod=' <<< "$output"
         grep -Fxq './docker-compose.podman.yml' <<< "$output"
     fi
     output=$(env ZOTONIC_UID=12345 ZOTONIC_GID=12346 PATH="$fixture:$PATH" sh "$launcher")

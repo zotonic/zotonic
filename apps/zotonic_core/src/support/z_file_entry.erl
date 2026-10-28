@@ -554,7 +554,12 @@ minify_m(Filename, Data, MinifyModule) ->
     case already_minified(Basename) of
         true -> Data;
         false ->
-            case catch MinifyModule:minify(Data) of
+            case try MinifyModule:minify(Data)
+            catch
+                throw:CatchReason -> CatchReason;
+                exit:CatchReason -> {'EXIT', CatchReason};
+                error:CatchReason:CatchStack -> {'EXIT', {CatchReason, CatchStack}}
+            end of
                 Minified when is_binary(Minified) ->
                     Minified;
                 Reason ->

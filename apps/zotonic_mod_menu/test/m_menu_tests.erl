@@ -3,7 +3,10 @@
 -include_lib("eunit/include/eunit.hrl").
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-removal_status_test() ->
+removal_status_test_() ->
+    z_test_support:isolated(fun removal_status/0).
+
+removal_status() ->
     Modules = [m_rsc, z_module_manager],
     lists:foreach(fun(M) -> meck:new(M, [non_strict, no_link]) end, Modules),
     try
@@ -36,7 +39,10 @@ status(Ids, Backup) ->
     Status.
 
 %% Exercise the real filters, including their differing visibility semantics.
-menu_queries_test() ->
+menu_queries_test_() ->
+    z_test_support:isolated(fun menu_queries/0).
+
+menu_queries() ->
     Modules = [m_rsc, m_edge, z_notifier],
     lists:foreach(fun(M) -> meck:new(M, [non_strict, no_link]) end, Modules),
     Menu = [#rsc_tree{id = 1, tree = [#rsc_tree{id = 2}, #rsc_tree{id = 3}]}],

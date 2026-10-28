@@ -15,4 +15,6 @@ ZOTONIC_UID=${ZOTONIC_UID:-$(id -u)}
 ZOTONIC_GID=${ZOTONIC_GID:-$(id -g)}
 export ZOTONIC_UID ZOTONIC_GID
 
-NO_PROXY=* podman-compose -f ./docker-compose.yml -f ./docker-compose.podman.yml run --service-ports zotonic sh
+# An empty --in-pod value disables pods on podman-compose 1.0.x.
+# Newer versions use x-podman.in_pod in the override file.
+NO_PROXY=* podman-compose --in-pod= -f ./docker-compose.yml -f ./docker-compose.podman.yml run --service-ports zotonic sh

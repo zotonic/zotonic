@@ -4,7 +4,17 @@
 -include_lib("eunit/include/eunit.hrl").
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-deduplicate_facet_values_test_() ->
+%% Keep core-module mocks away from the running integration-test site.
+facets_test_() ->
+    z_test_support:isolated([
+        deduplicate_facet_values(),
+        array_facet_operators(),
+        empty_fulltext_facet(),
+        nested_facet_query(),
+        selected_facet_values()
+    ]).
+
+deduplicate_facet_values() ->
     {setup, fun setup_templates/0, fun(_) -> meck:unload(z_template) end,
         fun() ->
             lists:foreach(fun({Field, Input, Expected}) ->
@@ -18,7 +28,7 @@ deduplicate_facet_values_test_() ->
             ])
         end}.
 
-array_facet_operators_test_() ->
+array_facet_operators() ->
     {setup,
         fun() ->
             meck:new(z_template, [no_link]),
@@ -64,7 +74,7 @@ array_facet_operators_test_() ->
             || {Field, A, B} <- [{<<"tags">>, <<"red">>, <<"blue">>}, {<<"refs">>, 42, 43}]
         ]}.
 
-empty_fulltext_facet_test_() ->
+empty_fulltext_facet() ->
     {setup,
         fun() ->
             meck:new(z_template, [no_link]),
@@ -96,7 +106,7 @@ empty_fulltext_facet_test_() ->
                {Kind, Output} <- [{empty, <<>>}, {whitespace, <<" \n\t ">>}]
         ]}.
 
-nested_facet_query_test_() ->
+nested_facet_query() ->
     {setup, fun setup_search/0, fun cleanup_search/1, [
         {binary_to_list(Op), fun() ->
             Facet = #search_sql_term{
@@ -138,7 +148,7 @@ nested_facet_query_test_() ->
         ]
     ]}.
 
-selected_facet_values_test_() ->
+selected_facet_values() ->
     {setup, fun setup_search/0, fun cleanup_search/1,
         [
             {"existing scalar and list selections keep the original counts", fun() ->

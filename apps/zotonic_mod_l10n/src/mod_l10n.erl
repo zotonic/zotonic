@@ -219,7 +219,7 @@ set_user_timezone(Tz, Context) ->
         UserId ->
             case m_rsc:p_no_acl(UserId, <<"pref_tz">>, Context1) of
                 Tz -> nop;
-                _ -> catch m_rsc:update(UserId, #{ <<"pref_tz">> => z_context:tz(Context1) }, Context1)
+                _ -> try m_rsc:update(UserId, #{ <<"pref_tz">> => z_context:tz(Context1) }, Context1) catch _:_ -> ok end
             end
     end,
     Context1.

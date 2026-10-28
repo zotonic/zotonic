@@ -6,6 +6,18 @@
 -define(SITE, zotonic_site_testsandbox).
 
 
+new_before_depcache_starts_test() ->
+    Site = context_without_depcache_test,
+    Depcache = z_utils:name_for_site(z_depcache, Site),
+    ?assertEqual(undefined, whereis(Depcache)),
+
+    Context = z_context:new(Site),
+    ?assertEqual(Site, z_context:site(Context)),
+    ?assertEqual(Depcache, Context#context.depcache),
+    ?assertEqual([en], Context#context.language),
+    ?assertEqual(z_config:get(timezone), Context#context.tz).
+
+
 pickle_roundtrip_test() ->
     Context = z_acl:logon(
         123,
