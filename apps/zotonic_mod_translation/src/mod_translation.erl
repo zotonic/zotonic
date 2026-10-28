@@ -1074,11 +1074,11 @@ set_user_language(Code, Context) ->
                 NewCode ->
                     nop;
                 _ ->
-                    catch m_rsc:update(
+                    try m_rsc:update(
                             UserId,
                             [ {pref_language, NewCode} ],
                             [ no_touch ],
-                            Context1)
+                            Context1) catch _:_ -> ok end
             end
     end,
     Context1.

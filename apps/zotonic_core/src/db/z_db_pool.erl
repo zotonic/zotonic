@@ -121,7 +121,7 @@ pause_workers(PoolPid) when is_pid(PoolPid) ->
     WorkerPids = gen_server:call(PoolPid, get_avail_workers),
     lists:foreach(
                 fun(WorkerPid) ->
-                    catch gen_server:call(WorkerPid, pause, infinity)
+                    try gen_server:call(WorkerPid, pause, infinity) catch _:_ -> ok end
                 end,
                 WorkerPids).
 
@@ -140,7 +140,7 @@ unpause_workers(PoolPid) when is_pid(PoolPid) ->
     WorkerPids = gen_server:call(PoolPid, get_avail_workers),
     lists:foreach(
                 fun(WorkerPid) ->
-                    catch gen_server:call(WorkerPid, unpause, infinity)
+                    try gen_server:call(WorkerPid, unpause, infinity) catch _:_ -> ok end
                 end,
                 WorkerPids).
 

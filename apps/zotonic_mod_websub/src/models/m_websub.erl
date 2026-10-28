@@ -372,7 +372,12 @@ subscription_hostname_sql(Column) ->
         '^[A-Za-z][A-Za-z0-9+.-]*://(?:[^/?#]*@)?([[][^]]+[]]|[^:/?#]+)'))), '.')"].
 
 subscription_row(#{peer_url := Url} = Row) ->
-    Host = case catch uri_string:parse(Url) of
+    Host = case try uri_string:parse(Url)
+    catch
+        throw:CatchReason -> CatchReason;
+        exit:CatchReason -> {'EXIT', CatchReason};
+        error:CatchReason:CatchStack -> {'EXIT', {CatchReason, CatchStack}}
+    end of
         #{host := H} ->
             H;
         _ ->

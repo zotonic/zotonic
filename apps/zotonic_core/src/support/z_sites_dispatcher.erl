@@ -1170,7 +1170,12 @@ first_site_match(Sites, DispHost, OptReq, OptEnv) ->
     maps:fold(
         fun
             (Site, running, no_host_match) ->
-                case catch z_notifier:first(DispHost, z_context:init_cowdata(OptReq, OptEnv, z_context:new(Site))) of
+                case try z_notifier:first(DispHost, z_context:init_cowdata(OptReq, OptEnv, z_context:new(Site)))
+                catch
+                    throw:CatchReason -> CatchReason;
+                    exit:CatchReason -> {'EXIT', CatchReason};
+                    error:CatchReason:CatchStack -> {'EXIT', {CatchReason, CatchStack}}
+                end of
                     {ok, #dispatch_redirect{location=PathOrURI, is_permanent=IsPermanent}} ->
                         #redirect{
                             site = Site,

@@ -158,7 +158,12 @@ m_post([ <<"service-confirm-passcode">> ], #{ payload := Payload }, Context) whe
 m_post([ <<"send-verification-message">> ], #{ payload := Payload }, Context) when is_map(Payload) ->
     case Payload of
         #{ <<"token">> := Token } ->
-            case catch z_crypto:depickle(Token, Context) of
+            case try z_crypto:depickle(Token, Context)
+            catch
+                throw:CatchReason -> CatchReason;
+                exit:CatchReason -> {'EXIT', CatchReason};
+                error:CatchReason:CatchStack -> {'EXIT', {CatchReason, CatchStack}}
+            end of
                 #{ timestamp := {{_,_,_}, {_,_,_}}=Ts,
                    user_id := UserId } ->
                     case z_datetime:next_hour(Ts) > calendar:universal_time() of

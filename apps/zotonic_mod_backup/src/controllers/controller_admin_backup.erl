@@ -90,7 +90,12 @@ event(#submit{message={restore, Args}}, Context) ->
                 <<".json">> -> json;
                 _ -> bert
             end,
-            case catch z_notifier:first(#rsc_upload{id=Id, format=Format, data=Data}, Context) of
+            case try z_notifier:first(#rsc_upload{id=Id, format=Format, data=Data}, Context)
+            catch
+                throw:CatchReason -> CatchReason;
+                exit:CatchReason -> {'EXIT', CatchReason};
+                error:CatchReason:CatchStack -> {'EXIT', {CatchReason, CatchStack}}
+            end of
                 {ok, NewId} ->
                     z_render:wire([{dialog_close, []},
                                    {redirect, [{dispatch, admin_edit_rsc}, {id,NewId}]}], Context);

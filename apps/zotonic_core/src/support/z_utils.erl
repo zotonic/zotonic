@@ -966,7 +966,12 @@ name_for_site(Name, Site) when is_atom(Site) ->
 %% @doc Ensure that the given string matches an existing module. Used to prevent
 %%      a denial of service attack where we exhaust the atom space.
 ensure_existing_module(ModuleName) when is_list(ModuleName) ->
-    case catch list_to_existing_atom(ModuleName) of
+    case try list_to_existing_atom(ModuleName)
+    catch
+        throw:CatchReason -> CatchReason;
+        exit:CatchReason -> {'EXIT', CatchReason};
+        error:CatchReason:CatchStack -> {'EXIT', {CatchReason, CatchStack}}
+    end of
         {'EXIT', {badarg, _Traceback}} ->
             case code:where_is_file(ensure_valid_modulename(ModuleName) ++ ".beam") of
                 non_existing -> {error, not_found};
