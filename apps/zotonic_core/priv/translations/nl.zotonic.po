@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-26 16:57\n"
+"PO-Revision-Date: 2026-10-28 09:34\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -1343,7 +1343,7 @@ msgstr "Factuuradres"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:9
 msgid "Bind address"
-msgstr "Bindadres"
+msgstr "Bind-adres"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:19
 msgid "Block name"
@@ -2471,7 +2471,7 @@ msgstr "Netwerkverbindingen"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:189
 msgid "Network listeners"
-msgstr "Netwerkluisteraars"
+msgstr "Netwerk-listeners"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:84
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:12
@@ -2804,7 +2804,7 @@ msgstr "Resultaten zoekopdracht"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:14
 msgid "Ranch limit"
-msgstr "Ranchlimiet"
+msgstr "Ranch-limiet"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:94
 msgid "Rebuild all search-indices by putting all pages and data from the database in the indexer queue. This can take a long time!"
@@ -3634,7 +3634,7 @@ msgstr "Totaal"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:59
 msgid "Total connections counts currently tracked connections, not connections over time. The Ranch limit is the listener connection limit; SMTP also applies a separate session check."
-msgstr "Het totale aantal verbindingen geeft het aantal verbindingen weer dat momenteel wordt bijgehouden, niet het aantal verbindingen in de loop van de tijd. De Ranch-limiet is de limiet voor luisteraarsverbindingen; SMTP hanteert daarnaast een afzonderlijke sessiecontrole."
+msgstr "Het totale aantal verbindingen geeft het aantal verbindingen weer dat momenteel wordt bijgehouden, niet het aantal verbindingen in de loop van de tijd. De Ranch-limiet is de limiet voor listener connection limit; SMTP hanteert daarnaast een afzonderlijke sessiecontrole."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:119
 #: zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:9
