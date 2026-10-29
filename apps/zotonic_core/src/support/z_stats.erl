@@ -86,18 +86,24 @@ init_site(Site) ->
         site_stats( Site )).
 
 site_stats( Site ) ->
+    % Statistics are registered before the site's depcache starts. These callbacks
+    % only need the site and cache names, not a context's language/timezone lookup.
+    Context = #context{
+        site = Site,
+        depcache = z_utils:name_for_site(z_depcache, Site)
+    },
     [
         % db pool status
         {
             [site, Site, db, pool],
-            {function, z_db_pool, status, [ z_context:new(Site) ], match, {'_', {workers, working}}},
+            {function, z_db_pool, status, [ Context ], match, {'_', {workers, working}}},
             []
         },
 
         % Keep track of the size of the depcache
         {
             [site, Site, depcache, size],
-            {function, z_depcache, size, [ z_context:new(Site) ], match, size},
+            {function, z_depcache, size, [ Context ], match, size},
             []
         },
         % And some basic broker statistics
