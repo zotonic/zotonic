@@ -2,7 +2,14 @@ ERL       ?= erl
 ERLC      ?= $(ERL)c
 APP       := zotonic
 
+# Prefer the checkout's rebar3. An explicit download also selects it for this run.
 REBAR := ./rebar3
+ifeq ($(wildcard ./rebar3),)
+ifeq ($(filter rebar3 ./rebar3,$(MAKECMDGOALS)),)
+REBAR := $(or $(shell command -v rebar3),./rebar3)
+endif
+endif
+
 REBAR_URL := https://github.com/erlang/rebar3/releases/download/3.27.3/rebar3
 REBAR_SHA256 := f1d87d78decfc56b87d971c75ee6355698ec0c49fadd57f2c056043b7ca291b5
 REBAR_STAMP := ./.rebar3-$(REBAR_SHA256)
@@ -23,10 +30,11 @@ all: compile-core compile
 $(REBAR_STAMP):
 	rm -f ./.rebar3-*
 	touch $@
-	rm -f $(REBAR)
+	rm -f ./rebar3
 
-$(REBAR): $(REBAR_STAMP)
-	./tools/download.escript "$(REBAR_URL)" "$(REBAR)" --sha256 "$(REBAR_SHA256)" --executable $(PROXY_ARGS)
+# Run `make rebar3` to download the pinned version, even when PATH has rebar3.
+./rebar3: $(REBAR_STAMP)
+	./tools/download.escript "$(REBAR_URL)" "./rebar3" --sha256 "$(REBAR_SHA256)" --executable $(PROXY_ARGS)
 
 # Use Rebar to get, update and compile dependencies
 .PHONY: upgrade-deps compile-zotonic compile test
@@ -95,4 +103,4 @@ clean: clean_logs $(REBAR)
 dist-clean: clean
 	$(REBAR) $(REBAR_OPTS) clean -a
 	rm -f ./.rebar3-*
-	rm -f $(REBAR)
+	rm -f ./rebar3
