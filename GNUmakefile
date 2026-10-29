@@ -21,7 +21,7 @@ all: compile-core compile
 	@echo "Zotonic" `bin/zotonic -v` "was successfully compiled"
 
 $(REBAR_STAMP):
-	rm -f ./.rebar-*
+	rm -f ./.rebar3-*
 	touch $@
 	rm -f $(REBAR)
 
@@ -94,5 +94,5 @@ clean: clean_logs $(REBAR)
 .PHONY: dist-clean
 dist-clean: clean
 	$(REBAR) $(REBAR_OPTS) clean -a
-	rm -f ./.rebar-*
+	rm -f ./.rebar3-*
 	rm -f $(REBAR)
