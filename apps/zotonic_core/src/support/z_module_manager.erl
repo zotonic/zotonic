@@ -167,6 +167,9 @@ upgrade(Context) ->
 %% @doc Wait till all modules are started, used when starting up a new or test site.
 -spec upgrade_await(z:context()) -> ok | {error, timeout}.
 upgrade_await(Context) ->
+    % Like upgrade/1, discard any active-module list cached before the change
+    % committed. The manager must read the current list when handling upgrade.
+    flush(Context),
     upgrade_await_1(Context, 20).
 
 upgrade_await_1(_Context, 0) ->
