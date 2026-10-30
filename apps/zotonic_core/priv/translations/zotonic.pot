@@ -1742,6 +1742,10 @@ msgstr ""
 msgid "Discover media"
 msgstr ""
 
+#: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:76
+msgid "Disk capacity"
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:69
 msgid "Disks"
 msgstr ""
@@ -2004,6 +2008,7 @@ msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:35
 #: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:48
+#: zotonic_mod_base/priv/templates/directory_index.tpl:17
 msgid "File size"
 msgstr ""
 
@@ -2097,12 +2102,6 @@ msgstr ""
 msgid ""
 "Follows the Connections option. Connected resources keep their subscriptions "
 "when disconnected from this page."
-msgstr ""
-
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:59
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:225
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:132
-msgid "From"
 msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:5
@@ -2256,9 +2255,7 @@ msgid "Latest modified texts"
 msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:43
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:95
-#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:48
-msgid "Link"
+msgid "Link selected page"
 msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:38
@@ -2838,9 +2835,7 @@ msgstr ""
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:21
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:52
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:69
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:33
 #: zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:44
-#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:31
 msgid "Published"
 msgstr ""
 
@@ -3248,13 +3243,6 @@ msgstr ""
 msgid "Site Files Directory"
 msgstr ""
 
-#: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:76
-#: zotonic_mod_base/priv/templates/directory_index.tpl:17
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:67
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:26
-msgid "Size"
-msgstr ""
-
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:15
 msgid "Some disks are almost full."
 msgstr ""
@@ -3330,6 +3318,10 @@ msgstr ""
 msgid "Standard page block types"
 msgstr ""
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:59
+msgid "Start date"
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_admin_sort_header.event.tpl:2
 msgid "Starts"
 msgstr ""
@@ -3342,7 +3334,7 @@ msgstr ""
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:266
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:81
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:82
-msgid "State"
+msgid "State or province"
 msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:11
@@ -3420,15 +3412,6 @@ msgstr ""
 msgid "Summary"
 msgstr ""
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:36
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:37
-#: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:22
-#: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:23
-#: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:18
-#: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:19
-msgid "Sur. prefix"
-msgstr ""
-
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:40
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:41
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:28
@@ -3437,6 +3420,17 @@ msgstr ""
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:22
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:23
 msgid "Surname"
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:36
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:37
+#: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:22
+#: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:23
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:53
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:47
+#: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:18
+#: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:19
+msgid "Surname prefix"
 msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:31
@@ -10112,6 +10106,11 @@ msgstr ""
 msgid "Editor version"
 msgstr ""
 
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:67
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:26
+msgid "Image display size"
+msgstr ""
+
 #: zotonic_mod_editor_tinymce/priv/templates/_editor.tpl:19
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:13
 msgid "Insert media"
@@ -10120,6 +10119,10 @@ msgstr ""
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:83
 #: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:30
 msgid "Large"
+msgstr ""
+
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:95
+msgid "Link settings"
 msgstr ""
 
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:99
@@ -10260,6 +10263,10 @@ msgstr ""
 
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:49
 msgid "Insert internal link"
+msgstr ""
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:48
+msgid "Insert or edit link"
 msgstr ""
 
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:49
@@ -10504,21 +10511,7 @@ msgid "Being sent"
 msgstr ""
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:15
-#: zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:4
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:4
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:4
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_hidden.tpl:4
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:4
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:4
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:4
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:4
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:4
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:4
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:4
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:4
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:4
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:4
-msgid "Block"
+msgid "Block email address"
 msgstr ""
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:194
@@ -10589,6 +10582,11 @@ msgstr ""
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:241
 msgid "Returned by recipient"
+msgstr ""
+
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:225
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:132
+msgid "Sender"
 msgstr ""
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:244
@@ -12016,6 +12014,12 @@ msgstr ""
 msgid ""
 "Protected resources and resources you cannot delete will be kept. Content "
 "shared with other feeds is included."
+msgstr ""
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:33
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:39
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:31
+msgid "Publication date"
 msgstr ""
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:144
@@ -13562,11 +13566,6 @@ msgstr ""
 msgid "Please unsubscribe"
 msgstr ""
 
-#: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:53
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:47
-msgid "Prefix"
-msgstr ""
-
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:31
 msgid "Prepare recipients"
 msgstr ""
@@ -13595,10 +13594,6 @@ msgstr ""
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:5
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:149
 msgid "Progress"
-msgstr ""
-
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:39
-msgid "Publication date"
 msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:23
@@ -16051,11 +16046,6 @@ msgid ""
 "your inbox and spam folder."
 msgstr ""
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:41
-#: zotonic_mod_translation/priv/templates/admin_translation.tpl:42
-msgid "Code"
-msgstr ""
-
 #: zotonic_mod_signup/priv/templates/signup_confirm.tpl:3
 #: zotonic_mod_signup/priv/templates/signup_confirm.tpl:21
 msgid "Confirm my account"
@@ -16233,6 +16223,10 @@ msgstr ""
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:51
 msgid "Too many tries, you can try to signup again in an hour."
+msgstr ""
+
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:41
+msgid "Verification code"
 msgstr ""
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:30
@@ -16808,6 +16802,23 @@ msgstr ""
 msgid ""
 "Closed-question answers for anonymous respondents; all answers for logged-in "
 "respondents"
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:4
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:4
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:4
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_hidden.tpl:4
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:4
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:4
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:4
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:4
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:4
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:4
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:4
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:4
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:4
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:4
+msgid "Content block"
 msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:163
@@ -18355,6 +18366,10 @@ msgstr ""
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:151
 msgid "Italian"
+msgstr ""
+
+#: zotonic_mod_translation/priv/templates/admin_translation.tpl:42
+msgid "Language code"
 msgstr ""
 
 #: zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:75
