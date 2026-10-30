@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-30 13:15\n"
+"PO-Revision-Date: 2026-10-30 14:38\n"
 "Last-Translator: \n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -93,7 +93,7 @@ msgstr "timmar"
 #: zotonic_core/src/support/z_datetime.erl:317
 #: zotonic_mod_admin/priv/templates/_rsc_preview.tpl:11
 msgid "in"
-msgstr "i"
+msgstr "om"
 
 #: zotonic_core/src/support/z_datetime.erl:371
 #: zotonic_core/src/support/z_datetime.erl:374
@@ -109,7 +109,7 @@ msgstr "minuter"
 
 #: zotonic_core/src/support/z_datetime.erl:368
 msgid "moments"
-msgstr "ögonblick"
+msgstr "några ögonblick"
 
 #: zotonic_core/src/support/z_datetime.erl:377
 #: zotonic_core/src/support/z_datetime.erl:380
@@ -129,7 +129,7 @@ msgstr "nu"
 #: zotonic_core/src/support/z_datetime.erl:369
 #: zotonic_core/src/support/z_datetime.erl:372
 msgid "second"
-msgstr "andra"
+msgstr "sekund"
 
 #: zotonic_core/src/support/z_datetime.erl:369
 #: zotonic_core/src/support/z_datetime.erl:372
@@ -165,7 +165,7 @@ msgstr "(offentlig)"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:3
 msgid "ACL rules"
-msgstr "ACL regler"
+msgstr "ACL-regler"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:9
 msgid "ACL rules file"
@@ -191,7 +191,7 @@ msgstr "Lägg till regel"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:55
 msgid "Add links to the collaboration group"
-msgstr "Lägga till länkar till samarbete i grupp"
+msgstr "Lägg till länkar till samarbetsgruppen"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:91
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:141
@@ -237,7 +237,7 @@ msgstr "Alla vanliga innehållsgrupper"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:28
 msgid "Allowed file and mime types, separate with ',' — type 'none' if no extra types allowed, leave empty for the default"
-msgstr "Tillåtna fil- och mime-typer, separerade med ',' - skriv 'none' om inga extra typer är tillåtna, lämna tomma för standard"
+msgstr "Tillåtna filtyper och MIME-typer, separerade med ',' — skriv 'none' om inga extra typer tillåts; lämna fältet tomt för standardinställningen"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_collab.tpl:13
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:44
@@ -251,11 +251,11 @@ msgstr "Är du säker på att du vill ta bort följande grupper av användare:"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:7
 msgid "Are you sure you want to make all rules permanent?"
-msgstr "Är du säker på att du vill göra alla regler permanent?"
+msgstr "Är du säker på att du vill göra alla regler permanenta?"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:38
 msgid "Are you sure you want to restore all ACL rules to their currently published version?"
-msgstr "Are you sure you want to restore all ACL rules to their currently published version?"
+msgstr "Är du säker på att du vill återställa alla ACL-regler till deras nuvarande publicerade version?"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:16
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:36
@@ -419,7 +419,7 @@ msgstr "Ändrad konfiguration."
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:22
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:37
 msgid "Close"
-msgstr "Stänga"
+msgstr "Stäng"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:33
 msgid "Collaboration group managers"
@@ -437,11 +437,11 @@ msgstr "Samarbetsgrupper"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:32
 msgid "Collaboration groups are added by creating a new page in the category:"
-msgstr "Samarbete i grupper läggs till genom att du skapar en ny sida i kategorin:"
+msgstr "Samarbetsgrupper läggs till genom att skapa en ny sida i kategorin:"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:30
 msgid "Collaboration groups are user groups where all content belongs to the group."
-msgstr "Samarbete-grupper är grupper av användare där allt innehåll tillhör gruppen."
+msgstr "Samarbetsgrupper är användargrupper där allt innehåll tillhör gruppen."
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_options.tpl:12
 msgid "Consider resource authors to be owner."
@@ -476,11 +476,11 @@ msgstr "Innehållsgrupper"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:76
 msgid "Content rules for collaboration group members and managers"
-msgstr "Innehåll regler för samarbete gruppmedlemmar och ledare"
+msgstr "Innehållsregler för medlemmar och ansvariga i samarbetsgrupper"
 
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:43
 msgid "Could not move to collaboration group."
-msgstr "Kan inte flytta till en grupp."
+msgstr "Kunde inte flytta till samarbetsgruppen."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:40
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:51
@@ -564,7 +564,7 @@ msgstr "Redigera grupp"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:11
 msgid "Enter extensions (like <tt>.png</tt>), mime types (like <tt>image/png</tt>) or one of:"
-msgstr "Ange tillägg (som <tt>.png</tt>), mime-typer (som <tt>bild / png</tt>) eller en av:"
+msgstr "Ange tillägg (som <tt>.png</tt>), mime-typer (som <tt>image/png</tt>) eller en av:"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:106
 msgid "Exactly this category, no sub-categories"
@@ -572,11 +572,11 @@ msgstr "Exakt denna kategori, inga underkategorier"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:22
 msgid "Export edit rules"
-msgstr "Exportera redigeringsregler"
+msgstr "Exportera reglernas arbetsversion"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:10
 msgid "File types follow the group hierarchy. Derived groups inherit the mime settings from their ancestor."
-msgstr "Filtyper följer grupphierarkin. Deriverade grupper ärver mime-inställningarna från sin förfader."
+msgstr "Filtyper följer grupphierarkin. Undergrupper ärver MIME-inställningarna från sina överordnade grupper."
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:28
 msgid "File uploads"
@@ -617,7 +617,7 @@ msgstr "Importera"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:27
 msgid "Import edit rules..."
-msgstr "Importera redigeringsregler ..."
+msgstr "Importera reglernas arbetsversion…"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:30
 msgid "Import edit version of ACL rules"
@@ -761,7 +761,7 @@ msgstr "Publicera"
 
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:107
 msgid "Publish successful"
-msgstr "Publicera lyckades"
+msgstr "Publiceringen lyckades"
 
 #: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:14
 msgid "Published access control rules are active."
@@ -1149,7 +1149,7 @@ msgstr "Lägg till mediainnehåll"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:14
 msgid "Add media to body"
-msgstr "Lägg till media till brödtexten"
+msgstr "Lägg till media i brödtexten"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:35
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:39
@@ -1409,7 +1409,7 @@ msgstr "Stad"
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_connection.tpl:34
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:37
 msgid "Clear"
-msgstr "Klar"
+msgstr "Rensa"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:10
 msgid "Click \"Save\" to see your changes."
@@ -1468,7 +1468,7 @@ msgstr "Bekräfta borttagning"
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:47
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:45
 msgid "Connect"
-msgstr "Ansluta"
+msgstr "Anslut"
 
 #: zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_page.tpl:9
 msgid "Connect a page"
@@ -1501,7 +1501,7 @@ msgstr "Innehållstyp"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:42
 msgid "Copied download link to clipboard"
-msgstr "Kopierad nedladdningslänk till urklipp"
+msgstr "Nedladdningslänken har kopierats till urklipp"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:73
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:21
@@ -1654,7 +1654,7 @@ msgstr "Radera den här sidan..."
 
 #: zotonic_mod_admin/src/mod_admin.erl:957
 msgid "Deleted tasks."
-msgstr "Raderade uppgifter."
+msgstr "Uppgifterna har raderats."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:31
 msgid "Deleted."
@@ -1960,7 +1960,7 @@ msgstr "Filstorlek"
 
 #: zotonic_mod_admin/src/mod_admin.erl:882
 msgid "File uploaded to the drop folder, will be handled shortly."
-msgstr "Fil som laddas upp till släppmappen kommer att hanteras inom kort."
+msgstr "Filen har laddats upp till inlämningsmappen och kommer att behandlas inom kort."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:39
 #: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:54
@@ -2034,7 +2034,7 @@ msgstr "Spola alla URL försändelsen regler, mall - och bibliotek cachar och an
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:81
 msgid "Flush system caches"
-msgstr "Spola systemet cachar"
+msgstr "Töm systemets cacheminnen"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:145
 #: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:23
@@ -3723,7 +3723,7 @@ msgstr "Kommande"
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:117
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:16
 msgid "Update"
-msgstr "Uppdatering"
+msgstr "Uppdatera"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_bulk_actions.tpl:17
 msgid "Update selected pages"
@@ -3954,7 +3954,7 @@ msgstr "Du måste ange en beskrivning av filen för att göra det lättare att h
 
 #: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:188
 msgid "Your search query is invalid. Please correct it before saving."
-msgstr "Din sökfråga är ogiltig. Korrigera det innan du sparar."
+msgstr "Din sökfråga är ogiltig. Korrigera den innan du sparar."
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:21
 msgid "Zotonic Version"
@@ -5427,7 +5427,7 @@ msgstr "Rankade par"
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:135
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:61
 msgid "Reset"
-msgstr "Återställa"
+msgstr "Återställ"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:214
 msgid "Scrollable keyword overlap matrix"
@@ -9219,7 +9219,7 @@ msgstr "Utvald redaktör på Zotonic-plattformen"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:114
 msgid "Set the class <tt>environment-development</tt> on the <tt>&lt;html&gt;</tt> element of your pages to see the server log in the browser console.<br>In development, admin pages always show the server log in the javascript console."
-msgstr "Ställ in klassen <tt>miljö-utveckling</tt> på elementet <tt>&lt;html&gt;</tt> på dina sidor för att se serverloggen i webbläsarkonsolen.<br>Under utveckling visar adminsidor alltid serverloggen i javascript-konsolen."
+msgstr "Ställ in klassen <tt>environment-development</tt> på elementet <tt>&lt;html&gt;</tt> på dina sidor för att se serverloggen i webbläsarkonsolen.<br>Under utveckling visar adminsidor alltid serverloggen i javascript-konsolen."
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:272
 msgid "Show an overview of all observers"
@@ -10898,7 +10898,7 @@ msgstr "Sidans huvudtext i HTML-format."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:36
 msgid "The category of the page. Examples: <code>article</code> or <code>text</code>."
-msgstr "Kategorin för sidan. Exempel: <code>artikel</code> eller <code>text</code>."
+msgstr "Kategorin för sidan. Exempel: <code>article</code> eller <code>text</code>."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:72
 msgid "The custom path for the URL of the page, for example <code>/my/page</code>"
@@ -13994,7 +13994,7 @@ msgstr "Anslut till Microsoft"
 
 #: zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:36
 msgid "Control who can log in. Allowed values are: <tt>common</tt>, <tt>organizations</tt>, <tt>consumers</tt>, and tenant identifiers."
-msgstr "Kontrollera vem som kan logga in. Tillåtna värden är: <tt>gemensam</tt>, <tt>organisationer</tt>, <tt>konsumenter</tt>och hyresgästidentifierare."
+msgstr "Kontrollera vem som kan logga in. Tillåtna värden är: <tt>common</tt>, <tt>organizations</tt>, <tt>consumers</tt> och hyresgästidentifierare."
 
 #: zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:3
 #: zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:6
@@ -14559,7 +14559,7 @@ msgstr "Dessa måste vara fullständiga webbadresser, men utan frågor (? ..) el
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:19
 msgid "This must be an unique name to identify the remote service. This can not be changed. Only <tt>A-Z</tt>, <tt>a-z</tt>, <tt>0-9</tt>, <tt>-</tt> and <tt>_</tt> characters are allowed."
-msgstr "Detta måste vara ett unikt namn för att identifiera fjärrtjänsten. Detta kan inte ändras. Endast tecken från <tt>A-Z</tt>, <tt>a-z</tt>, <tt>0-9</tt>, <tt>-</tt> och <tt>_ är</tt> tillåtna."
+msgstr "Detta måste vara ett unikt namn för att identifiera fjärrtjänsten. Detta kan inte ändras. Endast tecken från <tt>A-Z</tt>, <tt>a-z</tt>, <tt>0-9</tt>, <tt>-</tt> och <tt>_</tt> är tillåtna."
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:14
 msgid "This user will be able to use the token."
@@ -14654,7 +14654,7 @@ msgstr "Försök att fixa inbäddade videor för vilka OEmbed-inbäddning missly
 
 #: zotonic_mod_oembed/src/mod_oembed.erl:461
 msgid "Attempting to fix ~p videos."
-msgstr "Försöker fixa ~ p-videor."
+msgstr "Försöker reparera ~p videor."
 
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:27
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:59
@@ -16006,7 +16006,7 @@ msgstr "Första sidan i kategorin"
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:76
 msgid "For date ranges you can also use relative dates, like <code>-5 year</code>."
-msgstr "För datumintervall kan du också använda relativa datum, som <code>-5 år</code>."
+msgstr "För datumintervall kan du också använda relativa datum, som <code>-5 year</code>."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:260
 msgid "Forms can be handled by special code, for example a form that is forwarded to a back office system. Depending on the handler the results are stored in the database or not."
@@ -18072,7 +18072,7 @@ msgstr "Logga in med användarnamn <b>admin</b> och lösenord"
 
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:49
 msgid "Make sure that this hostname has a valid DNS entry or is added to your <tt>/etc/hosts</tt> file."
-msgstr "Se till att detta värdnamn har en giltig DNS-post eller läggs till i din <tt>/ etc / hosts</tt> fil."
+msgstr "Se till att detta värdnamn har en giltig DNS-post eller läggs till i din <tt>/etc/hosts</tt> fil."
 
 #: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:544
 msgid "No permission to create the site directory at:"
