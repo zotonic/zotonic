@@ -1,5 +1,6 @@
 files:
   - source: /apps/zotonic_core/priv/translations/*.pot
+    context: /doc/translations/%file_name%.md
     translation: /apps/zotonic_core/priv/translations/%two_letters_code%.%file_name%.po
     languages_mapping:
       two_letters_code:
