@@ -29,8 +29,8 @@
             <label class="control-label" for="name_first">{_ First name _}</label>
         </div>
         <div class="form-group col-lg-2 col-md-2 label-floating">
-            <input class="form-control" id="name_middle" type="text" name="name_middle" value="{{ id.name_middle }}" placeholder="{_ Middle _}">
-            <label class="control-label" for="name_middle">{_ Middle _}</label>
+            <input class="form-control" id="name_middle" type="text" name="name_middle" value="{{ id.name_middle }}" placeholder="{_ Middle name _}">
+            <label class="control-label" for="name_middle">{_ Middle name _}</label>
         </div>
         <div class="form-group col-lg-2 col-md-2 label-floating">
             <input class="form-control" id="name_surname_prefix" type="text" name="name_surname_prefix" value="{{ id.name_surname_prefix }}" placeholder="{_ Sur. prefix _}">

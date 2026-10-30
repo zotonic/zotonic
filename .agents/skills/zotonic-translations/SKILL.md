@@ -5,6 +5,14 @@ description: Write, review, or audit Zotonic UI translations and action labels, 
 
 # Zotonic Translations
 
+## Project-Specific Preferences
+
+These conventions are the defaults for Zotonic core. Individual non-core projects, such as sites and separately maintained modules, can define their own translation preferences, including terminology, register, and action-label style.
+
+- Record a non-core project's preferences in a project-local skill file, such as `.agents/skills/project-translations/SKILL.md`, so they remain discoverable with that project.
+- Read applicable project-local translation skills before translating or auditing that project. Explicit local preferences take precedence over the defaults in this skill within that project's scope; use these defaults where the local skill is silent.
+- Keep project-specific exceptions in the local skill rather than changing Zotonic core conventions. Record newly agreed preferences there when asked to establish or update that project's translation policy.
+
 ## Dutch UI Style
 
 Zotonic prefers concise, macOS-style **imperatives** for Dutch action buttons and menu commands. This is an explicit project preference. Do not standardize actions on infinitives such as “Opslaan”, “Annuleren”, or “Bewerken”.
@@ -82,6 +90,12 @@ The user chose Apple's localized Mac conventions for the languages below, alongs
 | English `en` / source `en-US` | Direct, neutral **you / your**, concise action labels and instructions. No formal/informal pronoun distinction. | No language-specific address distinction. |
 
 These references establish observed Apple usage, not a claim of an exhaustive published macOS localization policy. The non-binary register guidance for Arabic, Hebrew, Thai, and Portuguese is a practical Zotonic preference informed by these examples. Regional vocabulary, script, gender, and number still require contextual review; do not infer them from formality alone. For languages not listed, inspect the target locale before establishing a new policy.
+
+## Crowdin Glossary
+
+- Consult the live [Zotonic Crowdin glossary](https://crowdin.com/profile/mworrell/resources/glossaries/1971) (glossary `1971`, project `3405`) through the Crowdin integration when translating or auditing terminology. Use its preferred target-language terms where their definitions match the UI context; retain natural grammar and the project's language-specific style.
+- Read glossary definitions and notes, and associate language variants by concept ID. Source-only entries do not establish a preferred target-language translation. For example, the glossary currently maps “passcode” to Dutch “eenmalige code”, distinguishes dependency graphs from charts, and identifies `Content-Security-Policy` as a literal HTTP header. Recheck live entries rather than treating these examples as a fixed glossary snapshot.
+- If glossary access is unavailable or an entry conflicts with the intended meaning or explicit project preferences, report the limitation or conflict. Apply terms within the requested scope; glossary consultation does not authorize glossary edits or unrelated translation changes.
 
 ## Contextual Translation Review
 
