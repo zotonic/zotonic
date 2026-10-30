@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-30 14:38\n"
+"PO-Revision-Date: 2026-10-30 15:38\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -912,7 +912,7 @@ msgstr "هذه الصفحة هي"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:18
 msgid "This rule is managed by module"
-msgstr "هذه القاعدة يتم إدراتها بواسطة الوحدة"
+msgstr "تُدار هذه القاعدة بواسطة الوحدة"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:12
 #: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:48
@@ -929,7 +929,7 @@ msgstr "جرب قواعد ACL"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:47
 msgid "Try a different combination of category and content group."
-msgstr "جرب مجموعة فئة مختلفة و مجموعة محتوى."
+msgstr "جرّب تركيبة مختلفة من الفئة ومجموعة المحتوى."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:14
 msgid "Try rules..."
@@ -961,7 +961,7 @@ msgstr "الرؤية"
 
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:41
 msgid "You are not allowed to move to this collaboration group."
-msgstr "لا يسمح لك بالانتقال إلى مجموعة التعاون هذه."
+msgstr "لا يُسمح لك بالنقل إلى مجموعة التعاون هذه."
 
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:58
 msgid "You are not allowed to perform this action"
@@ -983,12 +983,12 @@ msgstr "جميع"
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
 #: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:297
 msgid "delete (acl action)"
-msgstr "احذف (إجراء acl)"
+msgstr "حذف"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
 #: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:296
 msgid "edit (acl action)"
-msgstr "قم بتعديل (إجراء acl)"
+msgstr "تعديل"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:9
 msgid "in the group"
@@ -997,17 +997,17 @@ msgstr "في المجموعة"
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
 #: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:295
 msgid "insert (acl action)"
-msgstr "أدرج (إجراء acl)"
+msgstr "إدراج"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
 #: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:298
 msgid "link (acl action)"
-msgstr "اربط (إجراء acl)"
+msgstr "ربط"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:27
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:29
 msgid "manage own"
-msgstr "إدارة نفسك"
+msgstr "إدارة المحتوى المملوك للمستخدم"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:9
 msgid "send this URL to somebody else for testing"
@@ -1015,7 +1015,7 @@ msgstr "أرسل رابط URL هذا لشخص آخر للاختبار"
 
 #: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:302
 msgid "use (acl action)"
-msgstr "استخدم (إجراء acl)"
+msgstr "استخدام"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:7
 msgid "use a private or incognito window in your browser"
@@ -1028,7 +1028,7 @@ msgstr "استخدم متصفح آخر (مثلاً. كروم إذا كنت تس�
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
 #: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:294
 msgid "view (acl action)"
-msgstr "عرض (إجراء acl)"
+msgstr "عرض"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:219
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:221
@@ -1057,7 +1057,7 @@ msgstr "<em>بدون عنوان</em>"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:14
 msgid "<strong>First</strong> also known as given name, forename or Christen name.<br/><strong>Middle</strong> often shortened to an initial like in <em>John D. Rockefeller</em>.<br/><strong>Surname prefix</strong> like the Dutch <em>van, van de, der</em>.<br/><strong>Surname</strong> also known as family name or last name."
-msgstr "<strong>الأول</strong> أيضا معروف بالاسم  أو اسم كريستيان.<br/><strong>الأوسط</strong>غالباً يتم تقصيره مثل <em>جون د. روكفلر</em>.<br/><strong>اللقب البادئ</strong>مثل الهولندية <em>فان،فان دو، در</em>.<br/><strong>اللقب</strong> أيضا معروف كـ الاسم العائلي أو الاسم الأخير."
+msgstr "<strong>الاسم الأول</strong> هو الاسم الشخصي، ويُعرف أيضًا باسم المعمودية في بعض السياقات.<br/><strong>الاسم الأوسط</strong> يُختصر غالبًا إلى الحرف الأول، كما في <em>John D. Rockefeller</em>.<br/><strong>بادئة اسم العائلة</strong> مثل الكلمات الهولندية <em>van, van de, der</em>.<br/><strong>اسم العائلة</strong> يُعرف أيضًا باللقب أو الاسم الأخير."
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:123
 msgid "A copy that will remain connected so that a new version can be fetched."
@@ -1201,7 +1201,7 @@ msgstr "كل الصفحات"
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:38
 msgid "All sites have been flushed."
-msgstr "تم مسح جميع المواقع."
+msgstr "تم مسح ذاكرات التخزين المؤقت لجميع المواقع."
 
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:7
 msgid "Allocated"
@@ -1277,12 +1277,12 @@ msgstr "هل أنت متأكد أنك تريد حذف هذه الملاحظة؟"
 
 #: zotonic_mod_admin/priv/templates/_admin_menu.tpl:72
 msgid "Are you sure you want to exit the admin interface?"
-msgstr "هل أنت متأكد أنك تريد إخراج واجهة المشرف؟"
+msgstr "هل أنت متأكد أنك تريد الخروج من واجهة الإدارة؟"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_show_as.tpl:11
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:42
 msgid "Aside"
-msgstr "جانبا"
+msgstr "محتوى جانبي"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:70
 #: zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:4
@@ -1348,7 +1348,7 @@ msgstr "اسم الكتلة"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_show_as.tpl:10
 msgid "Block quote"
-msgstr "اقتباس الكتلة"
+msgstr "اقتباس منفصل"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:36
 msgid "Buffered"
@@ -1393,7 +1393,7 @@ msgstr "تحقق من الصفحات التي تريد تحديثها."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:10
 msgid "Choose a media item from this page to insert in the body text."
-msgstr "اختر عنصر وسائط من هذه القائمة و أدرجه في نص المحتوى."
+msgstr "اختر عنصر وسائط من هذه الصفحة لإدراجه في نص المحتوى."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:108
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:109
@@ -1429,11 +1429,11 @@ msgstr "إغلاق العرض المباشر"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:133
 msgid "Close Sockets"
-msgstr "إغلاق مآخذ"
+msgstr "إغلاق مقابس الشبكة"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:134
 msgid "Close all sockets from ip addresses which have over &gt; 250 open sockets."
-msgstr "إغلاق جميع مآخذ من عناوين IP التي لديها أكثر من &gt; 250 مآخذ مفتوحة."
+msgstr "أغلق جميع مقابس الشبكة التابعة لعناوين IP التي لديها أكثر من 250 مقبسًا مفتوحًا."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:4
 msgid "Close panel"
@@ -1569,7 +1569,7 @@ msgstr "إنشاء"
 #: zotonic_mod_admin/priv/templates/_rsc_preview.tpl:3
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:40
 msgid "Created by"
-msgstr "انشأ من قبل"
+msgstr "أُنشئ بواسطة"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:300
 msgid "Created by me"
@@ -1646,7 +1646,7 @@ msgstr "حذف الصفحات المختارة"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:51
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:73
 msgid "Delete this page."
-msgstr "احذف هذه الصحفة."
+msgstr "احذف هذه الصفحة."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:74
 msgid "Delete this page..."
@@ -1826,7 +1826,7 @@ msgstr "تضمين"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:31
 msgid "Embed code will be sanitized for allowed sites and html."
-msgstr "سيتم تطهير كود التضمين للمواقع و html المسموح بها."
+msgstr "ستُنقَّح شيفرة التضمين بحيث تقتصر على المواقع وعناصر HTML المسموح بها."
 
 #: zotonic_mod_admin/src/mod_admin.erl:590
 msgid "Embed page | a citation, popup, or link to another page"
@@ -1864,7 +1864,7 @@ msgstr "جذر التثبيت Erlang"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:30
 msgid "Erlang Version"
-msgstr "نسخة إرلانج"
+msgstr "إصدار Erlang"
 
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:195
 msgid "Error checking the website."
@@ -1902,7 +1902,7 @@ msgstr "يمكن أن يكون لكل صفحة نطاق زمني. على سبي�
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:12
 msgid "Every page is categorized in exactly one category. The category defines what the page represents. For example an event, a product or a person. The categories are hierarchically defined. In that way you can have a vehicles category with subcategories car and bicycle."
-msgstr "يتم تصنيف كل صفحة في فئة واحدة بالضبط. تحدد الفئة ما تمثله الصفحة. على سبيل المثال حدث، منتج أو شخص. يتم تعريف الفئات بشكل هرمي. وبهذه الطريقة يمكن أن يكون لديك فئة السيارات مع فئات فرعية للسيارات والدراجات."
+msgstr "تُصنَّف كل صفحة ضمن فئة واحدة فقط. تحدد الفئة ما تمثله الصفحة، مثل حدث أو منتج أو شخص. وتُنظَّم الفئات بشكل هرمي؛ فمثلًا يمكن أن تكون هناك فئة للمركبات تندرج تحتها فئتا السيارات والدراجات."
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:82
 msgid "Exact category"
@@ -2030,7 +2030,7 @@ msgstr "الاسم الاول"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:82
 msgid "Flush all URL dispatch rules, template- and library caches and other in-memory cached data."
-msgstr "قم بمسح و تحديث جميع روابط قواعد إرسال و النماذج و ذاكرة التخزين المؤقتة الخاصة بالمكتبة أو بيانات الذاكرة."
+msgstr "امسح جميع قواعد توجيه URL وذاكرات التخزين المؤقت للقوالب والمكتبات والبيانات الأخرى المخزنة مؤقتًا في الذاكرة."
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:81
 msgid "Flush system caches"
@@ -2180,7 +2180,7 @@ msgstr "آخر عناصر الوسائط التي تم التعديل عليها
 
 #: zotonic_mod_admin/priv/templates/_admin_dashboard_persons.tpl:2
 msgid "Latest modified persons"
-msgstr "آخر الأشخاص التي تم تعديل وضعيتهم"
+msgstr "آخر صفحات الأشخاص التي عُدِّلت"
 
 #: zotonic_mod_admin/priv/templates/_admin_dashboard_texts.tpl:2
 msgid "Latest modified texts"
@@ -2192,7 +2192,7 @@ msgstr "رابط الصفحة المحددة"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:38
 msgid "Live query, send notifications when matching items are updated or inserted."
-msgstr "الاستعلام، يرسل الإشعارات عندما يتم تحديث أو إدراج عناصر مطابقة."
+msgstr "استعلام مباشر يرسل إشعارات عند تحديث العناصر المطابقة أو إدراجها."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:2
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:17
@@ -2510,7 +2510,7 @@ msgstr "لا يوجد محتوى الوسائط."
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:192
 msgid "No media found."
-msgstr "لم يتم العثور على عناصر."
+msgstr "لم يتم العثور على وسائط."
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:238
 msgid "No medium"
@@ -2670,7 +2670,7 @@ msgstr "رقم الهاتف للفواتير"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:8
 msgid "Pivot queue count size:"
-msgstr "حجم عدد قائمة الانتظار المحورية:"
+msgstr "عدد العناصر في طابور Pivot:"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:10
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:169
@@ -2702,7 +2702,7 @@ msgstr "مشغل بواسطة"
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:13
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_connection_dialog.tpl:5
 msgid "Predicate"
-msgstr "فاعل"
+msgstr "نوع العلاقة"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:28
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:131
@@ -2719,7 +2719,7 @@ msgstr "تابع بعناية:"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:20
 msgid "Protect"
-msgstr "يحمي"
+msgstr "حماية"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:18
 msgid "Protect from deletion"
@@ -2803,12 +2803,12 @@ msgstr "حد المزرعة"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:94
 msgid "Rebuild all search-indices by putting all pages and data from the database in the indexer queue. This can take a long time!"
-msgstr "أعد بناء جميع مؤشرات البحث عن طريق وضع جميع الصفحات والبيانات من قاعدة البيانات في قائمة انتظار المفهرس. قد يستغرق هذا وقتا طويلا!"
+msgstr "أعد بناء جميع فهارس البحث بوضع جميع الصفحات والبيانات من قاعدة البيانات في طابور الفهرسة. قد يستغرق هذا وقتًا طويلًا!"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:89
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:169
 msgid "Rebuild search indices"
-msgstr "إعادة بناء مؤشرات البحث"
+msgstr "إعادة بناء فهارس البحث"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:103
 msgid "Recalculate the numbering of the category tree. This can take a long time."
@@ -2833,7 +2833,7 @@ msgstr "المُحيلون"
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:3
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:9
 msgid "Referrers to"
-msgstr "يشير إلى"
+msgstr "الصفحات التي تشير إلى"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:12
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:51
@@ -3013,7 +3013,7 @@ msgstr "بحث"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:55
 msgid "Search indices rebuilt."
-msgstr "إعادة بناء مؤشرات البحث."
+msgstr "أُعيد بناء فهارس البحث."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:5
 msgid "Search other media"
@@ -3108,7 +3108,7 @@ msgstr "إظهار كافة {title} صفحات"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_show_as.tpl:3
 msgid "Show as"
-msgstr "كما تظهر"
+msgstr "العرض بصيغة"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:53
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:54
@@ -3266,7 +3266,7 @@ msgstr "الوضع"
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:58
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:59
 msgid "Street Line 1"
-msgstr "خط الشارع 1"
+msgstr "عنوان الشارع — السطر 1"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:102
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:103
@@ -3277,7 +3277,7 @@ msgstr "خط الشارع 1"
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:63
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:64
 msgid "Street Line 2"
-msgstr "خط الشارع 2"
+msgstr "عنوان الشارع — السطر 2"
 
 #: zotonic_mod_admin/src/mod_admin.erl:512
 msgid "Structure"
@@ -3446,7 +3446,7 @@ msgstr "تم إعادة تحميل تكوين الموقع."
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:65
 msgid "The site’s data is being reinstalled. Watch the console for messages"
-msgstr "لقد تم إعادة تثبيت بيانات الموقع. شاهد وحدة تحكم في الرسائل"
+msgstr "تجري إعادة تثبيت بيانات الموقع. راقب الرسائل في وحدة التحكم."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:26
 msgid "The system has allocated more than the specified threshold of available memory, as reported by the underlying operating system."
@@ -3545,7 +3545,7 @@ msgstr "لا يمكن معاينة هذه الصفحة هنا. استخدم خي
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:31
 msgid "This page has been deleted."
-msgstr "لقد تم حذف الصحفة."
+msgstr "تم حذف الصفحة."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_version.tpl:8
 msgid "This page has changed elsewhere. Reload to get the latest version before saving."
@@ -3793,7 +3793,7 @@ msgstr "مستخدم"
 
 #: zotonic_mod_admin/priv/templates/_admin_menu.tpl:68
 msgid "User page"
-msgstr "مستخدم الصفحة"
+msgstr "صفحة المستخدم"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:129
 msgid "Valid for:"
@@ -4038,7 +4038,7 @@ msgstr "تحرير هذه الصفحة"
 
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:84
 msgid "excluding"
-msgstr "ازالة"
+msgstr "باستثناء"
 
 #: zotonic_mod_admin/priv/templates/_action_unlink_undo.tpl:15
 msgid "has been disconnected."
@@ -4091,7 +4091,7 @@ msgstr "محتوى النظام"
 
 #: zotonic_mod_admin/priv/templates/_action_unlink_undo.tpl:3
 msgid "undo"
-msgstr "الغاء التحميل"
+msgstr "تراجع"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:35
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:59
@@ -4116,7 +4116,7 @@ msgstr "تم الرفع في"
 #: zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:17
 #: zotonic_mod_search/priv/templates/_search_view_list_item.tpl:12
 msgid "view"
-msgstr "رأي"
+msgstr "عرض"
 
 #: zotonic_mod_admin/priv/templates/_admin_navbar_brand.tpl:1
 msgid "visit site"
@@ -4257,7 +4257,7 @@ msgstr "التكوين"
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:32
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:79
 msgid "Configuration"
-msgstr "ترتيب"
+msgstr "الإعدادات"
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:19
 msgid "Copy the certificate file path to the clipboard."
@@ -4474,7 +4474,7 @@ msgstr "افتح الشهادة المستوردة، وقم بتوسيع قسم 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:97
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:202
 msgid "Password"
-msgstr "كلمه السر"
+msgstr "كلمة المرور"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:157
 msgid "Per default images smaller than 1MB are embedded in email messages. Using a separate download for images results in a smaller message size but non-public images will not be visible. Leave this disabled if you are sending non-public images."
@@ -4547,7 +4547,7 @@ msgstr "شهادة موقعة ذاتيا"
 #: zotonic_mod_comment/priv/templates/_comments_form.tpl:49
 #: zotonic_mod_contact/priv/templates/contact.tpl:27
 msgid "Send"
-msgstr "إرسال"
+msgstr "أرسل"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:180
 msgid "Send a test email"
@@ -4572,7 +4572,7 @@ msgstr "إظهار السجل للرسالة"
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:8
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:100
 msgid "System Configuration"
-msgstr "أعدادات النظام"
+msgstr "إعدادات النظام"
 
 #: zotonic_mod_admin_config/priv/templates/email_test.tpl:3
 msgid "Test email from"
@@ -4872,7 +4872,7 @@ msgstr "حذف اسم المستخدم"
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:103
 msgid "Deleted the user account."
-msgstr "حذف حساب المستخدم."
+msgstr "تم حذف حساب المستخدم."
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:124
 msgid "Duplicate username, please choose another username."
@@ -5036,21 +5036,21 @@ msgstr "كلمة مرور عشوائية آمنة:"
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:7
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user_dialog.tpl:7
 msgid "Search users"
-msgstr "بحث المستخدمين"
+msgstr "ابحث عن المستخدمين"
 
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:23
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:46
 msgid "Send verification e-mail"
-msgstr "ارسل ايميل التفعيل"
+msgstr "أرسل رسالة تحقق بالبريد الإلكتروني"
 
 #: zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:51
 msgid "Send welcome e-mail"
-msgstr "إرسال بريد إلكتروني ترحيبي"
+msgstr "أرسل رسالة ترحيب بالبريد الإلكتروني"
 
 #: zotonic_mod_admin_identity/src/mod_admin_identity.erl:269
 #: zotonic_mod_admin_identity/src/mod_admin_identity.erl:280
 msgid "Sent verification e-mail."
-msgstr "إرسال بريد إلكتروني للتحقق."
+msgstr "تم إرسال رسالة التحقق بالبريد الإلكتروني."
 
 #: zotonic_mod_admin_identity/priv/templates/_admin_edit_basics_user.tpl:9
 #: zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:7
@@ -5108,7 +5108,7 @@ msgstr "لا يمكن تغيير كلمة مرور المستخدم المسؤو
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:132
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:138
 msgid "The username is already in use, please try another."
-msgstr "اسم المستخدم قيد الاستخدام بالفعل ، يرجى المحاولة مرة أخرى."
+msgstr "اسم المستخدم هذا قيد الاستخدام بالفعل، يرجى تجربة اسم آخر."
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_delete_username.erl:61
 msgid "There is no username coupled to this person."
@@ -5145,7 +5145,7 @@ msgstr "سيؤدي هذا إلى إرسال بريد إلكتروني للتحق
 #: zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:38
 #: zotonic_mod_l10n/priv/templates/admin_l10n.tpl:14
 msgid "Timezone"
-msgstr "وحدة زمنية"
+msgstr "المنطقة الزمنية"
 
 #: zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:26
 msgid "Type password to change password"
@@ -14904,7 +14904,7 @@ msgstr "وصف الصفحة"
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:46
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:48
 msgid "Page keywords"
-msgstr "الكلمات الرئيسية الصفحة"
+msgstr "الكلمات المفتاحية للصفحة"
 
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:22
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:24
