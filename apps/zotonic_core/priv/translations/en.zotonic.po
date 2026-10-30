@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-30 13:15\n"
+"PO-Revision-Date: 2026-10-30 14:38\n"
 "Last-Translator: \n"
 "Language-Team: English\n"
 "MIME-Version: 1.0\n"
@@ -1654,7 +1654,7 @@ msgstr "Delete this page..."
 
 #: zotonic_mod_admin/src/mod_admin.erl:957
 msgid "Deleted tasks."
-msgstr "Deleted tasks."
+msgstr "Tasks deleted."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:31
 msgid "Deleted."
@@ -1960,7 +1960,7 @@ msgstr "File size"
 
 #: zotonic_mod_admin/src/mod_admin.erl:882
 msgid "File uploaded to the drop folder, will be handled shortly."
-msgstr "File uploaded to the drop folder, will be handled shortly."
+msgstr "The file has been uploaded to the drop folder and will be processed shortly."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:39
 #: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:54
