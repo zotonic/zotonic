@@ -473,7 +473,9 @@ is_admin_user(User, Context) ->
 -spec error_message(Reason, Context) -> binary()
     when Reason :: term(), Context :: z:context().
 error_message({invalid_regexp, Line, Reason}, Context) ->
-    iolist_to_binary([?__("Invalid removal regexp on line", Context), " ", integer_to_binary(Line), ": ", Reason]);
+    Message = ?__("Invalid removal regexp on line {line}: {reason}", Context),
+    WithLine = binary:replace(Message, <<"{line}">>, integer_to_binary(Line), [global]),
+    binary:replace(WithLine, <<"{reason}">>, iolist_to_binary(Reason), [global]);
 error_message(feed_paused, Context) ->
     ?__("This feed is paused. Resume it before fetching.", Context);
 error_message(feed_is_running, Context) ->

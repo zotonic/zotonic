@@ -110,7 +110,7 @@
 
     {% if q.options.is_user_local %}
         <p class="help-block">
-            {_ You can enter the password that you have for _} {{ m.site.title }}.
+            {% trans "You can enter the password that you have for {site}." site=m.site.title|escape %}
         </p>
 
         <div class="form-group {% if is_show_passcode or is_set_passcode %}x-hidden{% endif %}" id="form-password"

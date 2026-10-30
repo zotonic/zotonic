@@ -5,7 +5,7 @@
 {% block body %}
 <p>{_ Hello _} {% include "_name.tpl" id=id %},</p>
 
-<p>{_ This email address was added to your personal information on _} {{ m.site.title|default:m.site.hostname }}: {{ idn.key|escape }}.</p>
+<p>{% trans "The email address {email} was added to your personal information on {site}." email=idn.key|escape site=m.site.title|default:m.site.hostname|escape %}</p>
 
 {% with m.identity[id].username as username %}
 {% if username %}
@@ -22,5 +22,5 @@
 
 {% block disclaimer %}
 <p style="color: #666; font-size: 80%;">--<br/>
-{_ You received this email because you verified your email address. You will not receive any additional emails because of this request. _}</p>
+{_ You received this email because verification of your email address was requested. You will not receive any additional emails because of this request. _}</p>
 {% endblock %}

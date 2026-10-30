@@ -222,9 +222,9 @@
 
 		    {% if cat.name == 'category' or cat.name == 'predicate' %}
 			    <div class="form-group label-floating">
-			        <input class="form-control" type="text" id="{{ #name }}" name="name" value="" placeholder="{_ Name _}">
+			        <input class="form-control" type="text" id="{{ #name }}" name="name" value="" placeholder="{_ Unique name _}">
 				    {% validate id=#name name="name" type={presence} %}
-			        <label class="control-label col-md-3" for="{{ #name }}">{_ Name _}</label>
+			        <label class="control-label col-md-3" for="{{ #name }}">{_ Unique name _}</label>
 			    </div>
 		    {% endif %}
 

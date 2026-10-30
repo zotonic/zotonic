@@ -68,6 +68,7 @@ zotonic.tmproj
 __pycache__
 
 doc/ref/models/model_.rst
+doc/translations/audits/
 
 .eunit
 

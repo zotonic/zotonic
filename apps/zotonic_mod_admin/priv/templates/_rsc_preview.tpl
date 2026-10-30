@@ -8,7 +8,7 @@
     <br>
     {_ Created on _} <b>{{ id.created|date:_"Y-m-d H:i" }}</b>
     {% if id.content_group_id %}
-        <span>{_ in _}</span>
+        <span>{_ in content group _}</span>
         <b>{{ id.content_group_id.title }}</b>
     {% endif %}
 </p>

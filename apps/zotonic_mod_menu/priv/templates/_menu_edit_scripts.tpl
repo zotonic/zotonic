@@ -271,9 +271,8 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
                         throw new Error("Could not determine menu removal status");
                     }
                     z_dialog_confirm({
-                        text: "{_ Are you sure you want to remove _}: "
-                            + "<b>" + title + "</b><br>"
-                            + "{_ and all indented items below it? _}"
+                        text: "{{ _"Are you sure you want to remove <b>{title}</b> and all indented items below it?"|escapejs }}"
+                            .replace("{title}", () => title)
                             + removal_text[status],
                         ok: "{_ Remove _}",
                         on_confirm: function() {

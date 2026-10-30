@@ -4,10 +4,11 @@
 <fieldset>
     <div class="form-group">
         <p>
-        	{_ This page is a _}
-        	<strong>{{ id.category_id.title }}</strong>
-        	{_ in the group _}
-        	<strong><a href="{% url admin_edit_rsc id=id.content_group_id %}">{{ id.content_group_id.title }}</a></strong>
+            {% trans "Category: <strong>{category}</strong>. Content group: <strong><a href='{url}'>{group}</a></strong>."
+                category=id.category_id.title|escape
+                group=id.content_group_id.title|escape
+                url={admin_edit_rsc id=id.content_group_id}|url|escape
+            %}
         </p>
 
         {% if m.acl_rule.can_insert[id.content_group_id][id.category_id] %}

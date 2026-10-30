@@ -51,11 +51,12 @@
     {% endif %}
     {% if run.status == "cancelled" %}
         <p>
-            {_ Sending stopped. _} {{ run.stats.sent|default:0 }} {_ sent; _}
-            {{ run.stats.queued|default:0 }} {_ already queued; _}
-            {{ run.stats.retrying|default:0 }} {_ still being retried; _}
-            {{ run.stats.submitting|default:0 }} {_ awaiting confirmation; _}
-            {{ run.stats.cancelled|default:0 }} {_ will not be sent. _}
+            {_ Sending stopped. _}
+            {% trans "Sent: {count};" count=run.stats.sent|default:0 %}
+            {% trans "Already queued: {count};" count=run.stats.queued|default:0 %}
+            {% trans "Still being retried: {count};" count=run.stats.retrying|default:0 %}
+            {% trans "Awaiting confirmation: {count};" count=run.stats.submitting|default:0 %}
+            {% trans "Will not be sent: {count}." count=run.stats.cancelled|default:0 %}
         </p>
     {% endif %}
     </div>
@@ -146,7 +147,7 @@
                               delegate="mod_mailinglist"
                     %}
                 {% endif %}
-                <p>{{ run.stats.pending|default:0 }} {_ emails are waiting to be sent. _}</p>
+                <p>{% trans "Emails waiting to be sent: {count}." count=run.stats.pending|default:0 %}</p>
                 {% if run.stats.submitting %}
                     <p class="alert alert-warning">{_ Some emails have an uncertain sending result. Ask your administrator to investigate before sending them again, to avoid duplicates. _}</p>
                 {% endif %}

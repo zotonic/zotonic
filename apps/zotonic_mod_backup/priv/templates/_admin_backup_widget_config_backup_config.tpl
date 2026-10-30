@@ -97,7 +97,8 @@
             <hr>
             <p class="encryption-extra-explanation">
             <strong>{_ Note: _}</strong>
-            <mark>{_ Please make sure you store the backup encryption password in a safe <u>external</u> location. _}</mark> {_ It can be found in the  _} <a href="{% url admin_config %}">{_ System Configuration _}</a> {_ or in the Zotonic configuration files. _}
+            <mark>{_ Please make sure you store the backup encryption password in a safe <u>external</u> location. _}</mark>
+            {% trans "You can find it in <a href=\"{url}\">System Configuration</a> or in the Zotonic configuration files." url={admin_config}|url|escape %}
             </p>
         {% endif %}
     </div>

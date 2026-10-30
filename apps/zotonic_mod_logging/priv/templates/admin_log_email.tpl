@@ -119,7 +119,7 @@
                                             <li><b>Relayed</b>: the remote mailer reports that the email is relayed to the next server</li>
                                             <li><b>Bounce</b>: the email bounced back from a remote mailer, this is a fatal error</li>
                                             <li><b>Failed</b>: the remote mailer did not accept our email, no further retries</li>
-                                            <li><b>Retry</b>: we could not sent the email and will retry later</li>
+                                            <li><b>Delivery retry</b>: we could not send the email and will retry later</li>
                                             <li><b>Blocked</b>: the recipient’s email address is blocked, check the email address status</li>
                                             <li><b>Received</b>: a remote mailer sent email to us</li>
                                         </ul>"
@@ -155,7 +155,7 @@
                 <option value="relayed" {% if q.status == 'relayed' %}selected="selected"{% endif %}>{_ Relayed _}</option>
                 <option value="bounce" {% if q.status == 'bounce' %}selected="selected"{% endif %}>{_ Bounce _}</option>
                 <option value="failed" {% if q.status == 'failed' %}selected="selected"{% endif %}>{_ Failed _}</option>
-                <option value="retry" {% if q.status == 'retry' %}selected="selected"{% endif %}>{_ Retry _}</option>
+                <option value="retry" {% if q.status == 'retry' %}selected="selected"{% endif %}>{_ Delivery retry _}</option>
                 <option value="blocked" {% if q.status == 'blocked' %}selected="selected"{% endif %}>{_ Blocked _}</option>
                 <option value="received" {% if q.status == 'received' %}selected="selected"{% endif %}>{_ Received _}</option>
             </select>

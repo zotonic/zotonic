@@ -10,7 +10,7 @@
     </div>
     {% if m.rsc[q.page_id].id as filtered_page %}
         <p>
-            {_ Mailings for: _} <strong>{{ m.rsc[filtered_page].title }}</strong>
+            {% trans "Mailings of page: <strong>{title}</strong>" title=m.rsc[filtered_page].title|escape %}
             <a href="{% url admin_mailings %}">{_ Show all pages _}</a>
         </p>
     {% endif %}

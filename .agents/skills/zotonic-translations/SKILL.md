@@ -106,6 +106,15 @@ These references establish observed Apple usage, not a claim of an exhaustive pu
 - Preserve placeholders, plural forms, markup, and links. Keep source strings in English and use Zotonic translation tags or Erlang translation helpers.
 - A request for examples or a skill update does not authorize a bulk translation rewrite or Crowdin submission. Apply changes within the user's requested scope; do not infer an automatic approval policy.
 
+## Placeholders and Technical Literals
+
+- Never translate placeholder contents. Preserve the complete token exactly, including case, delimiters and internal whitespace: `{client}`, `{username}`, `{ url }`, and `{{ predicate }}` must remain unchanged. Translate only the surrounding prose.
+- Preserve each token's occurrence count. Named placeholders may move with the target language's grammar; do not rename, omit, duplicate, split, or substitute them with an example value. Keep placeholders intact inside HTML attributes and links as well as visible text.
+- Preserve template syntax such as `{% cache %}` and formatting directives such as Erlang `~p`. Keep positional arguments in their original order unless the actual formatter explicitly supports indexed reordering. Check each plural form separately when present.
+- Preserve executable technical literals, including configuration keys, module/function names, OAuth scope and enum values, MIME types, and relative-date expressions. For example, keep `User.Read`, `organizations`, `image/png`, `manage_schema/2`, and `-5 year` exactly as written. A code span is not sufficient evidence by itself: distinguish required syntax from an illustrative URL path that may legitimately be localized.
+- Before submitting or approving a translation, compare its placeholders against the source, including multiplicities and delimiter structure, and inspect the surrounding markup. Compare positional directives in order. Do not approve a translation with an unresolved mismatch.
+- For an audit across languages, use current Crowdin source strings and target translations, paginate completely, and record coverage by file and locale. Detect both missing source tokens and unexpected target tokens, including in strings without source placeholders. Report untranslated or missing entries separately. State whether the check covers current selected translations, approved translations, or all historical suggestions; do not imply that a selected-translation scan covers every suggestion.
+
 ## Reference
 
 Apple's [button guidance](https://developer.apple.com/design/human-interface-guidelines/buttons) recommends action-oriented labels. Dutch macOS uses “Bewaar” and “Annuleer”, as shown in [Apple's Dutch Preview documentation](https://support.apple.com/nl-nl/guide/preview/prvw1509/11.0/mac/27). The Dutch imperative convention above records Zotonic's chosen style; it is not a claim that the general HIG mandates Dutch grammar.

@@ -75,7 +75,7 @@
                             <th>{_ Local page _}</th>
                             <th>{_ Remote host _}</th>
                             <th>{_ Status _}</th>
-                            <th>{_ Lease expires _}</th>
+                            <th>{_ Subscription lease expires _}</th>
                             <th>{_ Last activity _}</th>
                         </tr>
                     </thead>

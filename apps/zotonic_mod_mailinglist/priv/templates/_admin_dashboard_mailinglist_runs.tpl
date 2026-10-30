@@ -5,7 +5,7 @@
             <tr>
                 <td>
                     <a href="{% url admin_mailing_run run_id=run.id %}">{{ m.rsc[run.page_id].title|default:_"Untitled" }}</a>
-                    {% if run.is_test %}<span class="label label-info">{_ Test _}</span>{% endif %}
+                    {% if run.is_test %}<span class="label label-info">{_ Test email _}</span>{% endif %}
                     <br>{{ m.rsc[run.mailinglist_id].title }}
                     <br><small>{{ run.created|date:"Y-m-d H:i" }} ·
                         {% if run.language %}

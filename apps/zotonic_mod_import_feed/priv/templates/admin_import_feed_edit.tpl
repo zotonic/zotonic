@@ -17,9 +17,9 @@
             {% wire id="feed-pause" postback={pause id=feed.id paused=not feed.is_paused} delegate=`mod_import_feed` %}
             <button id="feed-pause" class="btn btn-default">
                 {% if feed.is_paused %}
-                    {_ Resume _}
+                    {_ Resume imports _}
                 {% else %}
-                    {_ Pause _}
+                    {_ Pause imports _}
                 {% endif %}
             </button>
             {% wire id="feed-test" postback={test id=feed.id} delegate=`mod_import_feed`
@@ -29,7 +29,7 @@
             <button id="feed-test" class="btn btn-default">{_ Test / preview _}</button>
             {% if not feed.is_paused %}
                 {% wire id="feed-poll" postback={poll id=feed.id} delegate=`mod_import_feed` %}
-                <button id="feed-poll" class="btn btn-default">{_ Poll now _}</button>
+                <button id="feed-poll" class="btn btn-default">{_ Check feed now _}</button>
                 {% wire id="feed-reimport" postback={poll id=feed.id reimport} delegate=`mod_import_feed` %}
                 <button id="feed-reimport" class="btn btn-default">{_ Reimport current entries _}</button>
             {% endif %}

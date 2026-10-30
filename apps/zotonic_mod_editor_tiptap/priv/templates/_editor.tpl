@@ -55,7 +55,7 @@
             toggleHeaderRow: "{{ _"Toggle header row"|escapejs }}", mergeCells: "{{ _"Merge cells"|escapejs }}",
             splitCell: "{{ _"Split cell"|escapejs }}", deleteTable: "{{ _"Delete table"|escapejs }}",
             url: "{{ _"URL"|escapejs }}", invalidUrl: "{{ _"Enter a valid link."|escapejs }}",
-            apply: "{{ _"Apply"|escapejs }}", cancel: "{{ _"Cancel"|escapejs }}",
+            apply: "{{ _"Apply changes"|escapejs }}", cancel: "{{ _"Cancel"|escapejs }}",
             required: "{{ _"This field is required."|escapejs }}",
             save: "{{ _"Save"|escapejs }}",
             saveAndView: "{{ _"Save and View"|escapejs }}"

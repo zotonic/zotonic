@@ -49,7 +49,7 @@
             <table class="table table-striped do_adminLinkedTable">
                 <thead>
                     <tr>
-                        <th width="20%">{_ Name _}</th>
+                        <th width="20%">{_ Display name _}</th>
                         <th width="20%">{_ Username _}</th>
                         <th></th>
                         <th>{_ Last logon _}</th>

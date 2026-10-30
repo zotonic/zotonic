@@ -13,9 +13,9 @@
 {% endif %}
 
 <p>
-    <strong>{{ eligible }} {_ recipients selected. _}</strong>
+    <strong>{% trans "Selected recipients: {count}." count=eligible %}</strong>
     {% if options.language %}
-        {_ Send the _} {{ m.translation.language_list_configured[options.language].name|default:options.language|escape }} {_ version. _}
+        {% trans "Send the {language} version." language=m.translation.language_list_configured[options.language].name|default:options.language|escape %}
         {% if options.audience == "matching_or_unset" %}
             {_ Include recipients whose preference matches this language and recipients without a language preference. _}
         {% elseif options.audience == "all" %}
@@ -25,8 +25,7 @@
         {% endif %}
     {% elseif options.language_policy == "all" %}
         {_ Send to everyone using their best available language. _}
-        {_ If their preferred language is unavailable or not set, use _}
-        <strong>{{ m.translation.language_list_configured[options.fallback_language].name|default:options.fallback_language|escape }}</strong>.
+        {% trans "If their preferred language is unavailable or not set, use <strong>{language}</strong>." language=m.translation.language_list_configured[options.fallback_language].name|default:options.fallback_language|escape %}
     {% elseif options.language_policy == "matching" %}
         {_ Send only to recipients whose preferred language is available. Recipients without a preference are skipped. _}
     {% else %}
@@ -62,7 +61,7 @@
             <tr>
                 <td>{{ m.translation.language_list_configured[row.language].name|default:row.language|escape }}</td>
                 <td>
-                    {% if row.status == "pending" %}{_ Eligible to send _}
+                    {% if row.status == "pending" %}{_ Eligible for delivery _}
                     {% else %}{_ Skipped _}
                     {% endif %}
                 </td>

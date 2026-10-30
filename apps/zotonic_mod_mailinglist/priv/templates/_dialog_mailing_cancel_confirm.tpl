@@ -1,4 +1,4 @@
-<p>{_ Are you sure you want to cancel the mailing to _} “{{ m.rsc[list_id].title }}”?</p>
+<p>{% trans "Are you sure you want to cancel the mailing to “{list}”?" list=m.rsc[list_id].title|escape %}</p>
 
 <div class="modal-footer">
     {% button class="btn btn-default" text=_"Keep mailing" action={dialog_close} %}

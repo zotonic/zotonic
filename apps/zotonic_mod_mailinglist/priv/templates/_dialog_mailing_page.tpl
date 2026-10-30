@@ -148,7 +148,7 @@
     </p>
     {% if not is_test %}
         {% if test_run_id %}
-            <p class="alert alert-info">{_ Test email queued for _} {{ test_email|escape }}.
+            <p class="alert alert-info">{% trans "Test email queued for {email}." email=test_email|escape %}
             <a target="_mailingtest" href="{% url admin_mailing_run run_id=test_run_id %}">{_ View test result _}</a></p>
         {% endif %}
 

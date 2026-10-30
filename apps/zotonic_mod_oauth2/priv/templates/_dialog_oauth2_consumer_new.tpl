@@ -10,8 +10,8 @@
 
     <div class="form-group">
         <div class="label-floating">
-            <input id="{{ #name }}" type="text" value="{{ app.name|escape }}" class="form-control" name="name" required autofocus placeholder="{_ Name _}" maxlength="40">
-            <label class="control-label" for="name">{_ Name _}</label>
+            <input id="{{ #name }}" type="text" value="{{ app.name|escape }}" class="form-control" name="name" required autofocus placeholder="{_ Unique name _}" maxlength="40">
+            <label class="control-label" for="name">{_ Unique name _}</label>
             {% validate id=#name name="name"
                         type={presence}
                         type={format pattern="^[-_a-zA-Z0-9]+$"}

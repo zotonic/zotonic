@@ -65,7 +65,7 @@
             {_ Use a list of checkboxes with titles when adding page connections. _}
         </label>
         <div class="help-block">
-            {_ Instead of a search box this will show a list of all pages in the <i>To</i> categories checked above. At least one category must be checked. _}
+            {_ Instead of a search box, this will show a list of all pages in the target categories selected above. At least one category must be selected. _}
         </div>
     </div>
 

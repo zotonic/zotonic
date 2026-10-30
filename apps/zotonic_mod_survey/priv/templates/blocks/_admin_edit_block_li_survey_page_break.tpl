@@ -15,7 +15,7 @@
         <div class="col-lg-6 col-md-6">
             <label>{_ Page jump condition _}</label>
             <input class="form-control" type="text" id="block-{{name}}-condition1" name="blocks[].condition1" value="{{ blk.condition1 }}"
-                   placeholder="{_ name >= 2 _}" />
+                   placeholder="name &gt;= 2" />
         </div>
         <div class="col-lg-4 col-md-4">
             <label>{_ To question _}</label>
@@ -26,7 +26,7 @@
     <div class="row">
         <div class="col-lg-6 col-md-6">
             <input class="form-control" type="text" id="block-{{name}}-condition2" name="blocks[].condition2" value="{{ blk.condition2 }}"
-                   placeholder="{_ name >= 2 _}" />
+                   placeholder="name &gt;= 2" />
         </div>
         <div class="col-lg-4 col-md-4">
             <input class="form-control" type="text" id="block-{{name}}-target2" name="blocks[].target2" value="{{ blk.target2 }}"

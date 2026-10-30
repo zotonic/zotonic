@@ -41,11 +41,11 @@
                         <th>{_ Feed _}</th>
                         <th>{_ Status _}</th>
                         <th>{_ Articles _}</th>
-                        <th>{_ Polls _}</th>
+                        <th>{_ Feed checks _}</th>
                         <th>{_ Imported / updated / skipped _}</th>
                         <th>{_ Errors _}</th>
-                        <th>{_ Last poll _}</th>
-                        <th>{_ Next poll _}</th>
+                        <th>{_ Last feed check _}</th>
+                        <th>{_ Next feed check _}</th>
                         <th></th>
                     </tr>
                 </thead>

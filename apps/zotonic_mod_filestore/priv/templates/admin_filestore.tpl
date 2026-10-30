@@ -67,7 +67,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>{_ Delete interval _}</td>
+                                <td>{_ Extra deletion delay _}</td>
                                 <td>
                                     <b>
                                         {% if m.filestore.delete_interval == '0' %}
@@ -248,7 +248,7 @@
                                         <th></th>
                                         <th><br>{_ Upload Queue _}</th>
                                         <th><br>{_ Download Queue _}</th>
-                                        <th><br>{_ Delete Queue_}</th>
+                                        <th><br>{_ Deletion queue _}</th>
                                     </tr>
                                 </thead>
                                 <tbody>

@@ -72,7 +72,7 @@
 				{% for rev in revs %}
 					{% if forloop.first %}
 					<li>
-						<h4>{_ Previous _}</h4>
+                        <h4>{_ Previous versions _}</h4>
 					</li>
 					{% endif %}
 					<li>

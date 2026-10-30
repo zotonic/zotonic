@@ -40,12 +40,12 @@
 
         <div class="col-md-6">
             <label class="control-label" for="seo_sitemap_changefreq">
-                {_ Change frequency for sitemap _}
+                {_ Page change frequency for sitemap _}
             </label>
             <div>
                 <select class="form-control" id="seo_sitemap_changefreq" name="seo_sitemap_changefreq">
                     {% if not is_category %}
-                        <option value="" {% if id.seo_sitemap_changefreq|is_undefined %}selected{% endif %}>{_ Change frequency defined for category _}
+                        <option value="" {% if id.seo_sitemap_changefreq|is_undefined %}selected{% endif %}>{_ Page change frequency defined for category _}
                             ({{ id.category_id.seo_sitemap_changefreq|default:"weekly" }})
                         </option>
                     {% endif %}

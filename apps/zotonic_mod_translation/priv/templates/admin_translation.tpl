@@ -20,8 +20,8 @@
     <div class="widget-content">
 
         <p class="help-block">
-            {_ Drag languages to define the preferred order, the first 'view' language will be the default language. _}<br>
-            {_ If a language is set to 'view' or 'editable' then texts for that language are editable in the admin. _}<br>
+            {_ Drag languages to define the preferred order. The first language that is visible to visitors will be the default language. _}<br>
+            {_ Texts can be edited in the admin for languages set to 'Visible to visitors' or 'Editable'. _}<br>
             {_ If a language is set to 'off' then edited texts will loose their translation in that language. _}
         </p>
 
@@ -35,13 +35,13 @@
                 <thead>
                     <tr>
                         <th width="40px"></th>
-                        <th width="5%">{_ View _}</th>
+                        <th width="5%">{_ Visible to visitors _}</th>
                         <th width="5%">{_ Editable _}</th>
                         <th width="5%">{_ Off _}</th>
                         <th width="20%">{_ Language _}</th>
                         <th width="10%">{_ Language code _}</th>
                         <th width="10%">{_ Region _}</th>
-                        <th width="10%">{_ Script _}</th>
+                        <th width="10%">{_ Writing system _}</th>
                         <th></th>
                     </tr>
                 </thead>

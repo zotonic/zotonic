@@ -17,7 +17,7 @@
                 {_ Also delete imported articles and media _}
             </label>
         </div>
-        <p class="help-block">{_ Protected resources and resources you cannot delete will be kept. Content shared with other feeds is included. _}</p>
+        <p class="help-block">{_ Protected resources and resources you cannot delete will be kept. Deletable content shared with other feeds will also be deleted. _}</p>
         <div class="modal-footer">
             {% button class="btn btn-default" text=_"Cancel" action={dialog_close} %}
             <button type="submit" class="btn btn-danger">{_ Delete feed _}</button>

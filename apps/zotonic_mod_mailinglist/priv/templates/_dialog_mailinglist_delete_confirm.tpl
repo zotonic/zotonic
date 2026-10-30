@@ -1,5 +1,5 @@
 <p>
-	{_ Are you sure you want to delete the mailing list _} “{{ m.rsc[id].title }}”? <br/>
+	{% trans "Are you sure you want to delete the mailing list “{list}”?" list=m.rsc[id].title|escape %} <br/>
 	{_ The recipients list of the mailing list will be deleted as well. _}
 </p>
 

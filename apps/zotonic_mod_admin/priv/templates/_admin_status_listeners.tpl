@@ -5,7 +5,7 @@
             <thead>
                 <tr>
                     <th scope="col">{_ Service _}</th>
-                    <th scope="col">{_ Family _}</th>
+                    <th scope="col">{_ Address family _}</th>
                     <th scope="col">{_ Bind address _}</th>
                     <th scope="col">{_ Port _}</th>
                     <th scope="col">{_ Status _}</th>

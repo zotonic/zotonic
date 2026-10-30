@@ -78,7 +78,7 @@
                     {% endif %}
                 {% endblock %}
                 <li role="separator" class="divider"></li>
-                <li class="dropdown-header">{_ View as (new tab) _}</li>
+                <li class="dropdown-header">{_ View format (opens in a new tab) _}</li>
                 {% with id.page_url as page_url %}
                     {% catinclude "_admin_view_types.tpl" id %}
                 {% endwith %}

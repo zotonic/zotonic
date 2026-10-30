@@ -36,7 +36,7 @@
 
 		<div class="modal-footer">
 			{% button tag="a" class="btn btn-default" text=_"Cancel" action={dialog_close} %}
-			{% button type="submit" class="btn btn-primary" text=_"Delete &amp; Move Pages" %}
+			{% button type="submit" class="btn btn-primary" text=_"Delete categories and move their pages" %}
 			{% button tag="a"
 					  class="btn btn-danger pull-left"
 					  text=_"Delete All Pages"
