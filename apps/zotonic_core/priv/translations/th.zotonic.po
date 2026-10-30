@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-30 14:38\n"
+"PO-Revision-Date: 2026-10-30 15:39\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -150,7 +150,7 @@ msgstr "ปี"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:198
 msgid "(private)"
-msgstr "(เอกชน)"
+msgstr "(ส่วนตัว)"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_collab.tpl:15
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:46
@@ -908,7 +908,7 @@ msgstr "สิ่งนี้ไม่สามารถยกเลิกได
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:7
 msgid "This page is a"
-msgstr "หน้านี้คือไฟล์"
+msgstr "หน้านี้อยู่ในประเภท"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:18
 msgid "This rule is managed by module"
@@ -941,7 +941,7 @@ msgstr "บันทึกการตั้งค่าการอัปโห
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:2
 msgid "Upload the ACL rules file that you previously exported. Note: all current rules will be <b>replaced</b> by the rule definition file that is uploaded."
-msgstr "อัปโหลดไฟล์กฎ ACL ที่คุณส่งออกก่อนหน้านี้ หมายเหตุ: กฎปัจจุบันทั้งหมดจะถูกแทนที่ด้วย <b></b> ด้วยไฟล์ข้อกำหนดของกฎที่อัปโหลด"
+msgstr "อัปโหลดไฟล์กฎ ACL ที่คุณส่งออกไว้ก่อนหน้านี้ หมายเหตุ: กฎปัจจุบันทั้งหมดจะถูก<b>แทนที่</b>ด้วยข้อกำหนดของกฎในไฟล์ที่อัปโหลด"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:2
 msgid "Use the following URL to test the access control rules before publishing them."
@@ -983,12 +983,12 @@ msgstr "ทั้งหมด"
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
 #: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:297
 msgid "delete (acl action)"
-msgstr "ลบ (การกระทำ acl)"
+msgstr "ลบ"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
 #: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:296
 msgid "edit (acl action)"
-msgstr "แก้ไข (การกระทำ acl)"
+msgstr "แก้ไข"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:9
 msgid "in the group"
@@ -997,17 +997,17 @@ msgstr "ในกลุ่ม"
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
 #: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:295
 msgid "insert (acl action)"
-msgstr "แทรก (การกระทำ acl)"
+msgstr "เพิ่ม"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
 #: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:298
 msgid "link (acl action)"
-msgstr "ลิงค์ (การกระทำของ acl)"
+msgstr "เชื่อมโยง"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:27
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:29
 msgid "manage own"
-msgstr "จัดการเอง"
+msgstr "จัดการเนื้อหาของตนเอง"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:9
 msgid "send this URL to somebody else for testing"
@@ -1015,7 +1015,7 @@ msgstr "ส่ง URL นี้ไปให้คนอื่นทดสอบ"
 
 #: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:302
 msgid "use (acl action)"
-msgstr "ใช้ (การกระทำ acl)"
+msgstr "ใช้งาน"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:7
 msgid "use a private or incognito window in your browser"
@@ -1028,7 +1028,7 @@ msgstr "ใช้เบราว์เซอร์อื่น (เช่น Chr
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
 #: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:294
 msgid "view (acl action)"
-msgstr "มุมมอง (การกระทำของ acl)"
+msgstr "ดู"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:219
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:221
@@ -1057,7 +1057,7 @@ msgstr "<em>ไม่มีชื่อ</em>"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:14
 msgid "<strong>First</strong> also known as given name, forename or Christen name.<br/><strong>Middle</strong> often shortened to an initial like in <em>John D. Rockefeller</em>.<br/><strong>Surname prefix</strong> like the Dutch <em>van, van de, der</em>.<br/><strong>Surname</strong> also known as family name or last name."
-msgstr "<strong>First</strong> หรือที่เรียกว่าชื่อที่กำหนดชื่อหรือชื่อ Christen<br/><strong>กลาง</strong> มักจะสั้นไปเริ่มต้นเหมือนใน <em>จอห์นดี</em><br/><strong>คำนำหน้านามสกุล</strong> เช่น Dutch <em>van, van de, der</em>.<br/><strong>นามสกุล</strong> หรือที่เรียกว่าชื่อสกุลหรือนามสกุล"
+msgstr "<strong>ชื่อ</strong> คือชื่อที่ตั้งให้บุคคล หรือชื่อที่ใช้ในพิธีล้างบาปในบางบริบท<br/><strong>ชื่อกลาง</strong> มักย่อเป็นอักษรตัวแรก เช่นใน <em>John D. Rockefeller</em><br/><strong>คำนำหน้านามสกุล</strong> เช่นคำในภาษาดัตช์ <em>van, van de, der</em><br/><strong>นามสกุล</strong> เรียกอีกอย่างว่าชื่อสกุล"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:123
 msgid "A copy that will remain connected so that a new version can be fetched."
@@ -1166,7 +1166,7 @@ msgstr "ที่อยู่"
 
 #: zotonic_mod_admin/priv/templates/admin_base.tpl:5
 msgid "Admin"
-msgstr "ธุรการ"
+msgstr "ผู้ดูแลระบบ"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:6
 msgid "Advanced"
@@ -1201,7 +1201,7 @@ msgstr "ทุกหน้า"
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:38
 msgid "All sites have been flushed."
-msgstr "ล้างไซต์ทั้งหมดแล้ว"
+msgstr "ล้างแคชของทุกไซต์แล้ว"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:7
 msgid "Allocated"
@@ -1282,7 +1282,7 @@ msgstr "แน่ใจไหมว่าต้องการออกจาก
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_show_as.tpl:11
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:42
 msgid "Aside"
-msgstr "นอกจากนี้"
+msgstr "เนื้อหาด้านข้าง"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:70
 #: zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:4
@@ -1292,7 +1292,7 @@ msgstr "สื่อที่แนบมา"
 #: zotonic_mod_admin/src/mod_admin.erl:522
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:41
 msgid "Auth"
-msgstr "Auth"
+msgstr "การยืนยันตัวตน"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:222
 msgid "Authoritative"
@@ -1348,7 +1348,7 @@ msgstr "ชื่อบล็อก"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_show_as.tpl:10
 msgid "Block quote"
-msgstr "บล็อกคำพูด"
+msgstr "ข้อความอ้างอิงแยกบล็อก"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:36
 msgid "Buffered"
@@ -1369,7 +1369,7 @@ msgstr "ชื่อหมวดหมู่:"
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:43
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:59
 msgid "Category:"
-msgstr "ประเภท:"
+msgstr "หมวดหมู่:"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:42
 msgid "Change category"
@@ -1445,7 +1445,7 @@ msgstr "ปิดการแสดงตัวอย่าง"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:50
 msgid "Config Directory"
-msgstr "Config Directory"
+msgstr "ไดเรกทอรีการตั้งค่า"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:24
 msgid "Configured"
@@ -1585,7 +1585,7 @@ msgstr "สร้างโดยฉัน"
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:44
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:41
 msgid "Created on"
-msgstr "สร้างบน"
+msgstr "สร้างเมื่อ"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:12
 msgid "Created:"
@@ -1745,7 +1745,7 @@ msgstr "ทำซ้ำ"
 #: zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:8
 #: zotonic_mod_admin/src/actions/action_admin_dialog_duplicate_rsc.erl:59
 msgid "Duplicate page"
-msgstr "หน้าซ้ำ"
+msgstr "ทำสำเนาหน้า"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:34
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:40
@@ -1826,7 +1826,7 @@ msgstr "ฝัง"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:31
 msgid "Embed code will be sanitized for allowed sites and html."
-msgstr "โค้ดฝังจะได้รับการฆ่าเชื้อสำหรับไซต์และ html ที่อนุญาต"
+msgstr "ระบบจะกรองโค้ดฝังให้มีเฉพาะเว็บไซต์และ HTML ที่อนุญาต"
 
 #: zotonic_mod_admin/src/mod_admin.erl:590
 msgid "Embed page | a citation, popup, or link to another page"
@@ -2192,7 +2192,7 @@ msgstr "ลิงก์ไปยังหน้าที่เลือก"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:38
 msgid "Live query, send notifications when matching items are updated or inserted."
-msgstr "แบบสอบถามสดส่งการแจ้งเตือนเมื่อมีการอัปเดตหรือแทรกรายการที่ตรงกัน"
+msgstr "คิวรีแบบเรียลไทม์ ส่งการแจ้งเตือนเมื่อรายการที่ตรงกันถูกอัปเดตหรือเพิ่ม"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:2
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:17
@@ -2670,7 +2670,7 @@ msgstr "เบอร์โทรศัพท์สำหรับออกใบ
 
 #: zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:8
 msgid "Pivot queue count size:"
-msgstr "ขนาดนับคิว Pivot:"
+msgstr "จำนวนรายการในคิว Pivot:"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:10
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:169
@@ -2791,7 +2791,7 @@ msgstr "เผยแพร่เมื่อ เก่าที่สุดก�
 #: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:24
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:19
 msgid "Query"
-msgstr "แบบสอบถาม"
+msgstr "คิวรี"
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:19
 msgid "Query results"
@@ -2894,7 +2894,7 @@ msgstr "ลบการเชื่อมต่อกับ"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:102
 msgid "Renumber category tree"
-msgstr "ต้นไม้ประเภทเปลี่ยนหมายเลข"
+msgstr "กำหนดหมายเลขโครงสร้างหมวดหมู่ใหม่"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:67
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:95
@@ -2959,7 +2959,7 @@ msgstr "ค่าตรวจสอบ SHA-256"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:5
 msgid "SSL Application uses Erlang defaults, it is recommended to change this configuration in your <tt>erlang.config</tt>."
-msgstr "แอปพลิเคชัน SSL ใช้ค่าเริ่มต้นของ Erlang ขอแนะนำให้เปลี่ยนการกำหนดค่านี้ใน <tt>erlang.config</tt>คุณ"
+msgstr "แอปพลิเคชัน SSL ใช้ค่าเริ่มต้นของ Erlang ขอแนะนำให้เปลี่ยนการตั้งค่านี้ในไฟล์ <tt>erlang.config</tt> ของคุณ"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:35
 msgid "Sandbox isolation cannot be used on this system and is disabled. Media processing commands run without isolation, reducing protection against malicious media files."
@@ -2986,7 +2986,7 @@ msgstr "ระบบนี้ไม่สนับสนุนการแยก
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:144
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:88
 msgid "Save &amp; view"
-msgstr "บันทึก &amp; มุมมอง"
+msgstr "บันทึกและดู"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:4
@@ -3021,7 +3021,7 @@ msgstr "ค้นหาสื่ออื่น ๆ"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:7
 msgid "Search query"
-msgstr "การค้นหา"
+msgstr "คิวรีค้นหา"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results.tpl:44
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:77
@@ -3266,7 +3266,7 @@ msgstr "สถานะ"
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:58
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:59
 msgid "Street Line 1"
-msgstr "สตรีทไลน์ 1"
+msgstr "ที่อยู่ถนน บรรทัดที่ 1"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:102
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:103
@@ -3277,7 +3277,7 @@ msgstr "สตรีทไลน์ 1"
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:63
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:64
 msgid "Street Line 2"
-msgstr "สตรีทไลน์ 2"
+msgstr "ที่อยู่ถนน บรรทัดที่ 2"
 
 #: zotonic_mod_admin/src/mod_admin.erl:512
 msgid "Structure"
@@ -3374,7 +3374,7 @@ msgstr "เทมเพลตจะถูกคอมไพล์ใหม่"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:31
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:116
 msgid "Test query"
-msgstr "ทดสอบแบบสอบถาม"
+msgstr "ทดสอบคิวรี"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:41
 msgid "Text"
@@ -3614,7 +3614,7 @@ msgstr "สลับรายการแบบเลื่อนลง"
 #: zotonic_mod_authentication/priv/templates/sessions.tpl:12
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:18
 msgid "Toggle navigation"
-msgstr "ไม่ต้องสลับช่องทาง"
+msgstr "เปิด/ปิดเมนูนำทาง"
 
 #: zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:26
 msgid "Too many connections, only the first and last are shown."
@@ -3658,7 +3658,7 @@ msgstr "ชื่อเฉพาะ"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:97
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:101
 msgid "Unique uri"
-msgstr "ยูริที่ไม่เหมือนใคร"
+msgstr "URI ที่ไม่ซ้ำกัน"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:43
 msgid "Unlimited"
@@ -3878,7 +3878,7 @@ msgstr "เว็บไซต์หรือฝัง"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:62
 msgid "Work Directory"
-msgstr "Work Directory"
+msgstr "ไดเรกทอรีการทำงาน"
 
 #: zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
 #: zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:54
@@ -4159,7 +4159,7 @@ msgstr "ลบทุกหน้า"
 
 #: zotonic_mod_admin_category/src/mod_admin_category.erl:112
 msgid "Delete is canceled, there are pages in the category."
-msgstr "ลบถูกยกเลิกมีหน้าในหมวดหมู่"
+msgstr "ยกเลิกการลบแล้ว เนื่องจากยังมีหน้าอยู่ในหมวดหมู่นี้"
 
 #: zotonic_mod_admin_category/priv/templates/admin_category_sorter.tpl:27
 msgid "Drag categories to the place where you want them in the hierarchy."
@@ -4181,7 +4181,7 @@ msgstr "ไม่สามารถลบทรัพยากรทั้งห
 
 #: zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:33
 msgid "Or click <strong>Delete All Pages</strong> to delete all pages in the categories."
-msgstr "หรือคลิก <strong>Delete All Pages</strong> เพื่อลบเพจทั้งหมดในหมวดหมู่"
+msgstr "หรือคลิก <strong>ลบทุกหน้า</strong> เพื่อลบทุกหน้าในหมวดหมู่เหล่านี้"
 
 #: zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:49
 msgid "There are no pages in these categories."
@@ -4251,7 +4251,7 @@ msgstr "ใบรับรองจากโมดูล SSL"
 
 #: zotonic_mod_admin_config/src/mod_admin_config.erl:105
 msgid "Config"
-msgstr "Config"
+msgstr "การตั้งค่า"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:3
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:32
@@ -4414,7 +4414,7 @@ msgstr "โดยปกติจะตั้งค่าเป็นชื่อ
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:43
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:20
 msgid "Key"
-msgstr "สำคัญ"
+msgstr "คีย์"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:12
 msgid "Make a new config setting"
@@ -4678,7 +4678,7 @@ msgstr "ใช้ได้ถึง"
 #: zotonic_mod_base/src/support/z_chart_svg.erl:1352
 #: zotonic_mod_development/priv/templates/_development_dispatch_options.tpl:2
 msgid "Value"
-msgstr "มูลค่า"
+msgstr "ค่า"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:195
 #: zotonic_mod_admin_config/src/mod_admin_config.erl:152
@@ -4833,7 +4833,7 @@ msgstr "ถูกบล็อก"
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:129
 msgid "Changed the username."
-msgstr "เปลี่ยนชื่อผู้ใช้"
+msgstr "เปลี่ยนชื่อผู้ใช้แล้ว"
 
 #: zotonic_mod_admin_identity/priv/templates/_admin_edit_basics_user.tpl:14
 #: zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:12
@@ -4872,7 +4872,7 @@ msgstr "ลบชื่อผู้ใช้"
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:103
 msgid "Deleted the user account."
-msgstr "ลบบัญชีผู้ใช้"
+msgstr "ลบบัญชีผู้ใช้แล้ว"
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:124
 msgid "Duplicate username, please choose another username."
@@ -4911,11 +4911,11 @@ msgstr "สถานะอีเมล"
 
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:7
 msgid "Enter a unique username and password. Usernames and passwords are case sensitive, so be careful when entering them."
-msgstr "ป้อนชื่อผู้ใช้และรหัสผ่านเฉพาะ ชื่อผู้ใช้และรหัสผ่านเป็นตัวพิมพ์เล็กและใหญ่ดังนั้นโปรดใช้ความระมัดระวังในการป้อน"
+msgstr "ป้อนชื่อผู้ใช้ที่ไม่ซ้ำกันและรหัสผ่าน ชื่อผู้ใช้และรหัสผ่านแยกแยะตัวพิมพ์เล็กและตัวพิมพ์ใหญ่ จึงควรระมัดระวังเมื่อป้อนข้อมูล"
 
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:21
 msgid "Every page/person can be made into a user on the edit page. The difference between a user and a normal page is only that the former has logon credentials attached to its page record."
-msgstr "ทุกหน้า / บุคคลสามารถทำให้เป็นผู้ใช้ในหน้าแก้ไขได้ ความแตกต่างระหว่างผู้ใช้กับเพจปกติคือเพจก่อนหน้านี้มีข้อมูลรับรองการเข้าสู่ระบบที่แนบมากับเรกคอร์ดเพจ"
+msgstr "ทุกหน้า/บุคคลสามารถเปลี่ยนเป็นผู้ใช้ได้ในหน้าแก้ไข ความแตกต่างระหว่างผู้ใช้กับหน้าทั่วไปมีเพียงว่าผู้ใช้มีข้อมูลรับรองการเข้าสู่ระบบแนบอยู่กับระเบียนของหน้านั้น"
 
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:9
 msgid "Give the name and the e-mail address of the new user. A <em>person</em> page will be created for this user."
@@ -4938,7 +4938,7 @@ msgstr "สวัสดี"
 #: zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:21
 #: zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:32
 msgid "Home"
-msgstr "บ้าน"
+msgstr "หน้าแรก"
 
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:4
 msgid "Identities with this email address"
@@ -5023,7 +5023,7 @@ msgstr "มีเพียงผู้ดูแลระบบเท่านั
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:109
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:155
 msgid "Only an administrator or the user him/herself can set a password."
-msgstr "มีเพียงผู้ดูแลระบบหรือผู้ใช้เท่านั้นที่สามารถตั้งรหัสผ่านได้"
+msgstr "มีเพียงผู้ดูแลระบบหรือผู้ใช้คนนั้นเองเท่านั้นที่สามารถตั้งรหัสผ่านได้"
 
 #: zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:3
 msgid "Please verify your email address"
@@ -5165,7 +5165,7 @@ msgstr "การกระทำของผู้ใช้"
 
 #: zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity.tpl:8
 msgid "Username / password"
-msgstr "ชื่อผู้ใช้รหัสผ่าน"
+msgstr "ชื่อผู้ใช้ / รหัสผ่าน"
 
 #: zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:52
 msgid "Username <b>{username}</b>, last logon at {date}."
@@ -5483,7 +5483,7 @@ msgstr "2. ลบผู้แพ้"
 
 #: zotonic_mod_admin_merge/priv/templates/_confirm_merge.tpl:93
 msgid "Add missing languages to"
-msgstr "เพิ่มภาษาที่ขาดหายไป"
+msgstr "เพิ่มภาษาที่ขาดหายไปให้กับ"
 
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:142
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:154
@@ -5494,7 +5494,7 @@ msgstr "ยืนยันการรวม"
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:107
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:116
 msgid "Depiction"
-msgstr "การพรรณนา"
+msgstr "ภาพประกอบ"
 
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:44
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:50
@@ -5529,7 +5529,7 @@ msgstr "รวมสองหน้าเข้าด้วยกัน คุ�
 
 #: zotonic_mod_admin_merge/priv/templates/_admin_edit_sidebar.tpl:16
 msgid "Merge with another page …"
-msgstr "รวมกับหน้า …อื่น"
+msgstr "รวมกับหน้าอื่น …"
 
 #: zotonic_mod_admin_merge/src/mod_admin_merge.erl:144
 msgid "Merging the two pages ..."
@@ -5595,7 +5595,7 @@ msgstr "คุณไม่มีสิทธิ์แก้ไขผู้ชน
 
 #: zotonic_mod_admin_merge/src/mod_admin_merge.erl:118
 msgid "not implemented yet"
-msgstr "ยังไม่ได้ใช้งาน"
+msgstr "ยังไม่ได้พัฒนา"
 
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:34
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:158
@@ -5684,7 +5684,7 @@ msgstr "การขึ้นต่อกันของโมดูล"
 
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:1
 msgid "Modules are missing dependencies"
-msgstr "โมดูลไม่มีการอ้างอิง"
+msgstr "โมดูลขาดส่วนที่ต้องพึ่งพา"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:171
 msgid "No modules found"
@@ -5713,7 +5713,7 @@ msgstr "สแกนโมดูลอีกครั้ง"
 
 #: zotonic_mod_admin_modules/priv/templates/_admin_status.tpl:4
 msgid "Rescanning will rebuild the index of all modules, actions, templates etc. It will also reload all dispatch rules."
-msgstr "การสแกนซ้ำจะสร้างดัชนีของโมดูลการดำเนินการเทมเพลตและอื่น ๆ ทั้งหมดอีกครั้งนอกจากนี้ยังโหลดกฎการจัดส่งทั้งหมดอีกครั้ง"
+msgstr "การสแกนใหม่จะสร้างดัชนีของโมดูล แอ็กชัน เทมเพลต และรายการอื่น ๆ ทั้งหมดขึ้นใหม่ รวมถึงโหลดกฎการกำหนดเส้นทางทั้งหมดอีกครั้ง"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:59
 msgid "Runtime"
@@ -5738,7 +5738,7 @@ msgstr "ขออภัย คุณไม่ได้รับอนุญา�
 
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:3
 msgid "The following modules will not start because they miss dependencies:"
-msgstr "โมดูลต่อไปนี้จะไม่เริ่มทำงานเนื่องจากพลาดการอ้างอิง:"
+msgstr "โมดูลต่อไปนี้จะไม่เริ่มทำงานเนื่องจากขาดส่วนที่ต้องพึ่งพา:"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:16
 msgid "The modules below are activated but could not be found."
@@ -5763,8 +5763,8 @@ msgstr "คุณไม่ได้รับอนุญาตให้เปิ
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:8
 msgid "Zotonic is a modular web development framework. Most functionality is encapsulated inside modules. A set of basic modules are shipped with the Zotonic distribution,\n"
 "            while others are externally developed. This page shows an overview of all modules which are currently known to this Zotonic installation."
-msgstr "Zotonic เป็นกรอบการพัฒนาเว็บแบบแยกส่วน ฟังก์ชันการทำงานส่วนใหญ่ห่อหุ้มอยู่ภายในโมดูล ชุดของโมดูลพื้นฐานจะมาพร้อมกับการกระจาย Zotonic,\n"
-"            ในขณะที่คนอื่น ๆ ได้รับการพัฒนาจากภายนอก หน้านี้แสดงภาพรวมของโมดูลทั้งหมดซึ่งปัจจุบันการติดตั้ง Zotonic นี้รู้จักกันดี"
+msgstr "Zotonic เป็นเฟรมเวิร์กสำหรับพัฒนาเว็บแบบแยกโมดูล ฟังก์ชันส่วนใหญ่รวมอยู่ในโมดูล โดยมีโมดูลพื้นฐานชุดหนึ่งมาพร้อมกับ Zotonic\n"
+"            ส่วนโมดูลอื่น ๆ พัฒนาโดยบุคคลภายนอก หน้านี้แสดงภาพรวมของโมดูลทั้งหมดที่การติดตั้ง Zotonic นี้รู้จักในขณะนี้"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:74
 msgid "modules shown"
@@ -5773,8 +5773,8 @@ msgstr "โมดูลที่แสดง"
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:14
 msgid "A predicate denotes traits or aspects of a page and expresses a relationship between two pages.\n"
 "    The relation is always directed, from the subject to the object.<br/>Predicates are defined in ontologies like <a href=\"http://sioc-project.org/\">SIOC</a>.  On this page you can define the predicates known to Zotonic."
-msgstr "เพรดิเคตแสดงถึงลักษณะหรือลักษณะของเพจและแสดงความสัมพันธ์ระหว่างสองเพจ\n"
-"    ความสัมพันธ์จะถูกกำหนดทิศทางเสมอจากวัตถุไปยังวัตถุ<br/>Predicates ถูกกำหนดไว้ในออนโทโลยีเช่น <a href=\"http://sioc-project.org/\">SIOC</a>ในหน้านี้คุณสามารถกำหนดเพรดิเคตที่ Zotonic รู้จัก"
+msgstr "เพรดิเคตระบุคุณลักษณะหรือแง่มุมของหน้า และแสดงความสัมพันธ์ระหว่างสองหน้า\n"
+"    ความสัมพันธ์มีทิศทางเสมอ จากประธานไปยังกรรม<br/>เพรดิเคตกำหนดไว้ในออนโทโลยี เช่น <a href=\"http://sioc-project.org/\">SIOC</a> ในหน้านี้คุณสามารถกำหนดเพรดิเคตที่ Zotonic รู้จักได้"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:25
 msgid "All Predicates"
@@ -5823,7 +5823,7 @@ msgstr "ลบถูกยกเลิกมีการเชื่อมต่
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:85
 msgid "Do not find subjects using this predicate’s object titles."
-msgstr "อย่าค้นหาวัตถุที่ใช้ชื่อวัตถุของเพรดิเคตนี้"
+msgstr "ไม่ค้นหาหน้าที่เป็นประธานโดยใช้ชื่อของหน้าที่เป็นกรรมของเพรดิเคตนี้"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:95
 msgid "Do not show on the connections list on the resource edit page."
@@ -5905,7 +5905,7 @@ msgstr "ไม่พบหน้าดังกล่าวหรือหน้
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:21
 msgid "Object"
-msgstr "วัตถุ"
+msgstr "กรรม"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_filter_predicates.tpl:1
 msgid "Only show connections with the following predicates:"
@@ -5917,7 +5917,7 @@ msgstr "Ontology กำหนดเพรดิเคตสำหรับชุ
 
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:25
 msgid "Or click <strong>Delete All Connections</strong> to delete all connections with this predicate."
-msgstr "หรือคลิก <strong>Delete All Connections</strong> เพื่อลบการเชื่อมต่อทั้งหมดด้วยเพรดิเคตนี้"
+msgstr "หรือคลิก <strong>ลบการเชื่อมต่อทั้งหมด</strong> เพื่อลบการเชื่อมต่อทั้งหมดที่ใช้เพรดิเคตนี้"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:3
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:51
@@ -5932,7 +5932,7 @@ msgstr "ภาพรวมการเชื่อมต่อเพจ"
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:12
 #: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:226
 msgid "Predicates"
-msgstr "เปรต"
+msgstr "เพรดิเคต"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edge_action.tpl:10
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edge_action.tpl:15
@@ -5990,7 +5990,7 @@ msgstr "ถอยหลัง"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:5
 msgid "Subject"
-msgstr "เรื่อง"
+msgstr "ประธาน"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:105
 msgid "The direction (from/to) of this predicate is reversed from the normal definition."
@@ -14818,7 +14818,7 @@ msgstr "JSON-LD ที่กำหนดเอง"
 
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:101
 msgid "Customize page slug"
-msgstr "ปรับแต่งเพจบุ้ง"
+msgstr "ปรับแต่งชื่อส่วนท้าย URL ของหน้า (slug)"
 
 #: zotonic_mod_seo/priv/templates/admin_seo.tpl:31
 msgid "Description to include on every page"
@@ -14909,7 +14909,7 @@ msgstr "คำหลักของหน้า"
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:22
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:24
 msgid "Page slug"
-msgstr "เพจบุ้ง"
+msgstr "ชื่อส่วนท้าย URL ของหน้า (slug)"
 
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:34
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:36
