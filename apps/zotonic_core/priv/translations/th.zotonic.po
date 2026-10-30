@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-30 17:21\n"
+"PO-Revision-Date: 2026-10-30 17:52\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -3770,7 +3770,7 @@ msgstr "หน้าผู้ใช้"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:178
 msgid "Uses the Connections setting. Connected resources keep their subscriptions when disconnected from this page."
-msgstr ""
+msgstr "ใช้การตั้งค่า \"การเชื่อมต่อ\" ทรัพยากรที่เชื่อมต่อจะยังคงการสมัครรับข้อมูลไว้เมื่อถูกตัดการเชื่อมต่อจากหน้านี้"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:129
 msgid "Valid for:"
@@ -3810,7 +3810,7 @@ msgstr "ดูแผนภาพการเชื่อมต่อ"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:81
 msgid "View format (opens in a new tab)"
-msgstr ""
+msgstr "ดูรูปแบบ (เปิดในแท็บใหม่)"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:17
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:28
@@ -4023,7 +4023,7 @@ msgstr "รหัส:"
 
 #: zotonic_mod_admin/priv/templates/_rsc_preview.tpl:11
 msgid "in content group"
-msgstr ""
+msgstr "ในกลุ่มเนื้อหา"
 
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:84
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:15
@@ -4131,7 +4131,7 @@ msgstr "ลบทุกหน้า"
 
 #: zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:39
 msgid "Delete categories and move their pages"
-msgstr ""
+msgstr "ลบหมวดหมู่และย้ายหน้าในหมวดหมู่นั้น"
 
 #: zotonic_mod_admin_category/src/mod_admin_category.erl:112
 msgid "Delete is canceled, there are pages in the category."
@@ -4242,7 +4242,7 @@ msgstr "คัดลอกเส้นทางของไฟล์ใบรั
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:51
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:57
 msgid "Copy the certificate file to <code>{path}</code>."
-msgstr ""
+msgstr "คัดลอกไฟล์ใบรับรองไปยัง <code>{path}</code>."
 
 #: zotonic_mod_admin_config/src/mod_admin_config.erl:176
 msgid "Could not generate a new self-signed certificate."
@@ -4496,7 +4496,7 @@ msgstr "เริ่มต้นเบราว์เซอร์ใหม่ �
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:52
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:58
 msgid "Run <code>{command}</code> and restart the browser."
-msgstr ""
+msgstr "เรียกใช้ <code>{command}</code> แล้วเริ่มเบราว์เซอร์ใหม่"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:125
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:126
@@ -4846,7 +4846,7 @@ msgstr "ลบบัญชีผู้ใช้แล้ว"
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:9
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:52
 msgid "Display name"
-msgstr ""
+msgstr "ชื่อที่แสดง"
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:124
 msgid "Duplicate username, please choose another username."
@@ -5073,7 +5073,7 @@ msgstr "ที่อยู่อีเมลได้รับการยืน
 
 #: zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:8
 msgid "The email address {email} was added to your personal information on {site}."
-msgstr ""
+msgstr "ที่อยู่อีเมล {email} ได้ถูกเพิ่มเข้าไปในข้อมูลส่วนตัวของคุณบน {site}."
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:150
 msgid "The new username/ password has been set."
@@ -5222,7 +5222,7 @@ msgstr "คุณต้องเป็นผู้ดูแลระบบเพ
 
 #: zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:25
 msgid "You received this email because verification of your email address was requested. You will not receive any additional emails because of this request."
-msgstr ""
+msgstr "คุณได้รับอีเมลนี้เนื่องจากมีคำขอให้ยืนยันที่อยู่อีเมลของคุณ คุณจะไม่ได้รับอีเมลเพิ่มเติมใด ๆ จากคำขอนี้"
 
 #: zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:12
 msgid "Your account name is"
@@ -5257,7 +5257,7 @@ msgstr "ตั้งชื่อผู้ใช้ / รหัสผ่าน"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:307
 msgid "<em>Jaccard similarity</em> divides the number of content items using both keywords by the number using either keyword, counting each item once. <em>Smaller-set overlap</em> divides the shared content count by the content count for the less-used keyword. This helps reveal keywords that may be redundant or nested. Keywords used on very few content items can score highly, so use the minimum-uses filter when looking for meaningful patterns."
-msgstr ""
+msgstr "<em>ความคล้ายคลึงแบบ Jaccard</em>คือการหารจำนวนรายการเนื้อหาที่ใช้ทั้งสองคำหลักด้วยจำนวนรายการที่ใช้คำหลักใดคำหนึ่ง โดยนับแต่ละรายการเพียงครั้งเดียว<em>การทับซ้อนของชุดที่เล็กกว่า (Smaller-set overlap)</em>คือการหารจำนวนเนื้อหาที่ทับซ้อนกันด้วยจำนวนเนื้อหาที่ใช้คำสำคัญที่ถูกใช้น้อยกว่า วิธีนี้ช่วยเปิดเผยคำสำคัญที่อาจซ้ำซ้อนหรือซ้อนกัน คำสำคัญที่ใช้ในเนื้อหาเพียงไม่กี่รายการอาจได้คะแนนสูง ดังนั้นควรใช้ตัวกรอง \"จำนวนการใช้ต่ำสุด\" (minimum-uses filter) เมื่อค้นหาแบบแผนที่มีความหมาย"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:68
 msgid "All content"
@@ -5289,11 +5289,11 @@ msgstr "เซลล์แสดงจำนวนรายการเนื้
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:208
 msgid "Cells show the shared content count as a percentage of all distinct content using either keyword."
-msgstr ""
+msgstr "เซลล์แสดงจำนวนรายการเนื้อหาที่ใช้ทั้งสองคำหลัก คิดเป็นร้อยละของรายการเนื้อหาที่ไม่ซ้ำกันทั้งหมดที่ใช้คำหลักอย่างน้อยหนึ่งคำ"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:206
 msgid "Cells show the shared content count as a percentage of the content count for the less-used keyword."
-msgstr ""
+msgstr "เซลล์แสดงจำนวนเนื้อหาที่ซ้ำกันเป็นร้อยละของจำนวนเนื้อหาสำหรับคำค้นหาที่ใช้น้อยกว่า"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:54
 msgid "Content category"
@@ -5406,7 +5406,7 @@ msgstr "ดูว่าคำค้นหาใดถูกใช้ และ�
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:97
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:273
 msgid "Shared content count"
-msgstr ""
+msgstr "จำนวนเนื้อหาที่ใช้ทั้งสองคำหลัก"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:162
 msgid "Showing {shown} of {matched} keywords"
@@ -5634,11 +5634,11 @@ msgstr "ขึ้นอยู่กับ"
 
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:28
 msgid "Do you still want to activate the module <b>{module}</b>?"
-msgstr ""
+msgstr "คุณยังต้องการเปิดใช้งานโมดูลนี้อยู่หรือไม่ <b>{module}</b>?"
 
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:11
 msgid "Do you still want to deactivate the module <b>{module}</b>?"
-msgstr ""
+msgstr "คุณยังต้องการปิดใช้งานโมดูลนี้อยู่หรือไม่ <b>{module}</b>?"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:17
 msgid "Either they are not installed, or they are not compiled."
@@ -5646,7 +5646,7 @@ msgstr "ทั้งไม่ได้ติดตั้ง หรือไม�
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:59
 msgid "Execution status"
-msgstr ""
+msgstr "สถานะการดำเนินการ"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:140
 msgid "Install the module’s model and data."
@@ -5663,7 +5663,7 @@ msgstr "โมดูลขาดส่วนที่ต้องพึ่งพ
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:74
 msgid "Modules shown:"
-msgstr ""
+msgstr "โมดูลที่แสดง:"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:171
 msgid "No modules found"
@@ -5758,7 +5758,7 @@ msgstr "การเชื่อมต่อเพจทั้งหมด"
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:7
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:41
 msgid "Are you sure you want to delete the predicate “{title}”?"
-msgstr ""
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบเพรดิเคต “{title}”?"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edge_action.tpl:2
 msgid "Are you sure you want to remove the <strong>{{ predicate }}</strong>\n"
@@ -5788,7 +5788,7 @@ msgstr "ลบถูกยกเลิกมีการเชื่อมต่
 
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:31
 msgid "Delete predicate and update connections"
-msgstr ""
+msgstr "ลบเพรดิเคตและอัปเดตการเชื่อมต่อ"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:85
 msgid "Do not find subjects using this predicate’s object titles."
@@ -5844,7 +5844,7 @@ msgstr "ใส่การเชื่อมต่อใหม่ก่อนก
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:68
 msgid "Instead of a search box, this will show a list of all pages in the target categories selected above. At least one category must be selected."
-msgstr ""
+msgstr "แทนที่จะเป็นช่องค้นหา ระบบจะแสดงรายการหน้าทั้งหมดในหมวดหมู่เป้าหมายที่เลือกไว้ข้างต้น ต้องเลือกหมวดหมู่อย่างน้อยหนึ่งหมวดหมู่"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:20
 #: zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:66
@@ -6187,7 +6187,7 @@ msgstr "กำหนดว่าใครควรใช้การพิสู
 
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:69
 msgid "Enable two-factor authentication"
-msgstr ""
+msgstr "เปิดใช้งานการยืนยันตัวตนสองขั้นตอน"
 
 #: zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:21
 msgid "Enable two-factor authentication..."
@@ -6374,7 +6374,7 @@ msgstr "คุณสามารถใช้แอปตรวจสอบสิ
 
 #: zotonic_mod_auth2fa/priv/templates/_logon_login_set_passcode.tpl:1
 msgid "You must enable two-factor authentication now. Next time you sign in, you will need to enter a code generated by your authentication app."
-msgstr ""
+msgstr "คุณต้องเปิดใช้งานการยืนยันตัวตนสองขั้นตอนทันที เมื่อคุณเข้าสู่ระบบครั้งต่อไป คุณจะต้องป้อนรหัสที่สร้างขึ้นโดยแอปยืนยันตัวตนของคุณ"
 
 #: zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:11
 msgid "You need to be allowed to edit the system configuration to view or change the two-factor authentication configuration."
@@ -6700,7 +6700,7 @@ msgstr "เข้าสู่ระบบ"
 #: zotonic_mod_authentication/priv/templates/_logon_login_title.tpl:16
 #: zotonic_mod_authentication/priv/templates/logon.tpl:14
 msgid "Log in to {site}"
-msgstr ""
+msgstr "เข้าสู่ระบบ {site}"
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_title.tpl:6
 msgid "Log in with your existing {site} account to connect the accounts. You only have to do this once."
@@ -6786,7 +6786,7 @@ msgstr "โปรดเลือกรหัสผ่านอื่นเนื
 
 #: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:8
 msgid "Please confirm your password for <span>{site}</span>."
-msgstr ""
+msgstr "กรุณายืนยันรหัสผ่านของคุณสำหรับ <span>{site}</span>."
 
 #: zotonic_mod_authentication/priv/templates/_logon_reset_title.tpl:7
 msgid "Please enter a new password"
@@ -7016,7 +7016,7 @@ msgstr "คุณสามารถเชื่อมต่อบัญชีบ
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:113
 msgid "You can enter the password that you have for {site}."
-msgstr ""
+msgstr "คุณสามารถป้อนรหัสผ่านที่คุณมีสำหรับ {site} ได้"
 
 #: zotonic_mod_authentication/priv/templates/logon_error/message.need_passcode.tpl:2
 msgid "You can find the code in your authentication App."
@@ -7034,7 +7034,7 @@ msgstr "คุณสามารถอ่านได้ที่นี่:"
 #: zotonic_mod_authentication/priv/templates/email_password_reset.tpl:9
 #: zotonic_mod_authentication/priv/templates/email_password_reset.tpl:18
 msgid "You have requested a new password for <a href=\"https://{hostname}/\">{hostname}</a>."
-msgstr ""
+msgstr "คุณได้ขอรหัสผ่านใหม่สำหรับ <a href=\"https://{hostname}/\">{hostname}</a>."
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:99
 msgid "You have to share your email address to be able to log in."
@@ -7166,7 +7166,7 @@ msgstr "โดยค่าเริ่มต้น การสำรองข�
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:12
 msgid "Changes from <strong>{from}</strong> to <strong>{to}</strong>."
-msgstr ""
+msgstr "การเปลี่ยนแปลงตั้งแต่ <strong>{from}</strong> ถึง <strong>{to}</strong>"
 
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:51
 msgid "Check and possibly restore an earlier version of your page."
@@ -7327,7 +7327,7 @@ msgstr "โปรดตรวจสอบให้แน่ใจว่าคุ
 
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:75
 msgid "Previous versions"
-msgstr ""
+msgstr "เวอร์ชันก่อนหน้า"
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:54
 msgid "Recover incoming connections from other pages"
@@ -7501,7 +7501,7 @@ msgstr "หมวดหมู่หรือกลุ่มเนื้อหา
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:5
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:19
 msgid "This version was saved on <strong>{date}</strong> by <strong>{author}</strong>."
-msgstr ""
+msgstr "เวอร์ชันนี้ถูกบันทึกไว้เมื่อวันที่ <strong>{date}</strong> โดย <strong>{author}</strong>."
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:10
 msgid "This will overwrite your page with the contents of the backup file."
@@ -7547,7 +7547,7 @@ msgstr "คุณไม่สามารถดูการแก้ไขได
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:101
 msgid "You can find it in <a href=\"{url}\">System Configuration</a> or in the Zotonic configuration files."
-msgstr ""
+msgstr "คุณสามารถหา<a href=\"{url}\">ได้ในส่วนการตั้งค่าระบบ</a>หรือในไฟล์การตั้งค่าของ Zotonic"
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:9
 msgid "You can have one backup per day of the week, older ones will be overwritten."
@@ -7665,7 +7665,7 @@ msgstr "แท็กความเข้ากันได้"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:130
 msgid "Completed"
-msgstr ""
+msgstr "เสร็จแล้ว"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:130
 msgid "Completion"
@@ -7700,7 +7700,7 @@ msgstr "ชื่อเรียกอื่นของ Donut"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:44
 msgid "Donut chart with data from an Erlang map"
-msgstr ""
+msgstr "แผนภูมิโดนัทที่ใช้ข้อมูลจาก map ของ Erlang"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:81
 msgid "East"
@@ -7839,7 +7839,7 @@ msgstr "มีนาคม"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:153
 msgid "Market share"
-msgstr ""
+msgstr "ส่วนแบ่งตลาด"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:114
 #: zotonic_mod_l10n/src/support/l10n_date.erl:43
@@ -8296,11 +8296,11 @@ msgstr "ไม่เผยแพร่"
 
 #: zotonic_mod_contact/priv/templates/email_contact.tpl:3
 msgid "Contact form on {site}"
-msgstr ""
+msgstr "แบบฟอร์มติดต่อบน {site}"
 
 #: zotonic_mod_contact/priv/templates/email_contact.tpl:6
 msgid "Hello, the contact form on “{site}” has been submitted."
-msgstr ""
+msgstr "สวัสดี แบบฟอร์มติดต่อบน “{site}” ถูกส่งแล้ว"
 
 #: zotonic_mod_contact/priv/templates/contact.tpl:32
 msgid "Thank you!"
@@ -8320,7 +8320,7 @@ msgstr "กลุ่มเนื้อหา"
 
 #: zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:37
 msgid "Delete content groups and move their pages"
-msgstr ""
+msgstr "ลบกลุ่มเนื้อหาและย้ายหน้าภายในกลุ่มนั้น"
 
 #: zotonic_mod_content_groups/src/mod_content_groups.erl:101
 msgid "Delete is canceled, there are pages in this content group."
@@ -8636,7 +8636,7 @@ msgstr "คลิกเพื่อเริ่มต้นใหม่"
 
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:30
 msgid "Code editor"
-msgstr ""
+msgstr "โปรแกรมแก้ไขโค้ด"
 
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:13
 msgid "Column"
@@ -9094,7 +9094,7 @@ msgstr "ไม่พบเทมเพลตในบริบท"
 
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:44
 msgid "No template syntax errors found."
-msgstr ""
+msgstr "ไม่พบข้อผิดพลาดในไวยากรณ์ของเทมเพลต"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:422
 msgid "No traced parent templates"
@@ -9627,7 +9627,7 @@ msgstr "จัดให้อยู่ด้านขวา"
 
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:58
 msgid "Apply changes"
-msgstr ""
+msgstr "ใช้การเปลี่ยนแปลง"
 
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:36
 msgid "Bold"
@@ -9969,7 +9969,7 @@ msgstr "สถานะข้อผิดพลาดล่าสุด"
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:260
 msgid "Mail server message"
-msgstr ""
+msgstr "ข้อความจากเซิร์ฟเวอร์อีเมล"
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:167
 msgid "Most Recent"
@@ -10069,7 +10069,7 @@ msgstr "ที่อยู่อีเมลนี้ถูกบล็อก"
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:47
 msgid "This email address has been blocked. No emails will be sent to or received from this address."
-msgstr ""
+msgstr "ที่อยู่อีเมลนี้ถูกบล็อกแล้ว จะไม่มีการส่งอีเมลไปยังหรือรับอีเมลจากที่อยู่นี้"
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:93
 msgid "This email address is not valid."
@@ -10172,7 +10172,7 @@ msgstr "ส่งออก"
 #: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:65
 #: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:66
 msgid "Fields to export"
-msgstr ""
+msgstr "ฟิลด์ที่จะส่งออก"
 
 #: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:8
 msgid "Help about export"
@@ -10376,7 +10376,7 @@ msgstr "ลบไฟล์จากที่เก็บไฟล์บนคล
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:251
 msgid "Deletion queue"
-msgstr ""
+msgstr "คิวการลบ"
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:250
 msgid "Download Queue"
@@ -10400,7 +10400,7 @@ msgstr "หน้ารายการข้อผิดพลาด"
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:70
 msgid "Extra deletion delay"
-msgstr ""
+msgstr "ความล่าช้าในการลบเพิ่มเติม"
 
 #: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:8
 msgid "Failed reads in the last 15 minutes:"
@@ -10990,7 +10990,7 @@ msgstr "เปลี่ยนผู้ใช้"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:32
 msgid "Check feed now"
-msgstr ""
+msgstr "ตรวจสอบฟีดตอนนี้"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:30
 msgid "Checking website for feeds…"
@@ -11137,7 +11137,7 @@ msgstr "บันทึกกิจกรรมฟีด"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:44
 msgid "Feed checks"
-msgstr ""
+msgstr "การตรวจสอบฟีด"
 
 #: zotonic_mod_import_feed/src/mod_import_feed.erl:569
 msgid "Feed deleted"
@@ -11224,7 +11224,7 @@ msgstr "การนำเข้าจะดำเนินการด้วย
 
 #: zotonic_mod_import_feed/src/models/m_import_feed.erl:476
 msgid "Invalid removal regexp on line {line}: {reason}"
-msgstr ""
+msgstr "นิพจน์ปกติสำหรับการลบไม่ถูกต้องในบรรทัด {line}: {reason}"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_result.tpl:9
 msgid "Kept:"
@@ -11236,7 +11236,7 @@ msgstr "ประเภท"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:47
 msgid "Last feed check"
-msgstr ""
+msgstr "การตรวจสอบฟีดครั้งล่าสุด"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:51
 msgid "Last processed"
@@ -11282,7 +11282,7 @@ msgstr "กิจกรรมใหม่จะปรากฏขึ้นทั
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:48
 msgid "Next feed check"
-msgstr ""
+msgstr "การตรวจสอบฟีดครั้งถัดไป"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log.tpl:21
 msgid "No activity for this feed, or access denied."
@@ -11314,7 +11314,7 @@ msgstr "หยุดการนำเข้าอัตโนมัติ"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:22
 msgid "Pause imports"
-msgstr ""
+msgstr "หยุดการนำเข้าชั่วคราว"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:62
 msgid "Paused"
@@ -11330,7 +11330,7 @@ msgstr "ทรัพยากรที่ได้รับการคุ้ม
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_dialog.tpl:20
 msgid "Protected resources and resources you cannot delete will be kept. Deletable content shared with other feeds will also be deleted."
-msgstr ""
+msgstr "ทรัพยากรที่ได้รับการคุ้มครองและทรัพยากรที่คุณไม่สามารถลบได้จะยังคงอยู่ ส่วนเนื้อหาที่สามารถลบได้และถูกแชร์ไปยังฟีดอื่น ๆ จะถูกลบไปด้วย"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:33
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:39
@@ -11358,7 +11358,7 @@ msgstr "ทรัพยากร"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:20
 msgid "Resume imports"
-msgstr ""
+msgstr "ดำเนินการนำเข้าต่อ"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:167
 msgid "Save & refetch deleted"
@@ -11394,7 +11394,7 @@ msgstr "เลือกผู้ใช้"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:7
 msgid "Settings for importing"
-msgstr ""
+msgstr "การตั้งค่าสำหรับการนำเข้า"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:48
 msgid "Source identity"
@@ -11406,7 +11406,7 @@ msgstr "สมัครรับข่าวสารจากบทความ
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:123
 msgid "Subscriptions require non-authoritative imports and a source that supports updates."
-msgstr ""
+msgstr "การสมัครรับการอัปเดตต้องนำเข้าเป็นสำเนาที่ไม่ใช่ต้นฉบับ และแหล่งข้อมูลต้องรองรับการอัปเดต"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:37
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:101
@@ -11486,7 +11486,7 @@ msgstr "ผู้ใช้"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:15
 msgid "User account for imports"
-msgstr ""
+msgstr "บัญชีผู้ใช้สำหรับการนำเข้า"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:32
 msgid "Uses credentials registered for the import user and destination host. Credentials are only sent over HTTPS."
@@ -11750,7 +11750,16 @@ msgid "<ul>\n"
 "        <li><b>Blocked</b>: the recipient’s email address is blocked, check the email address status</li>\n"
 "                                            <li><b>Received</b>: a remote mailer sent email to us</li>\n"
 "              </ul>"
-msgstr ""
+msgstr "<ul>\n"
+"                                            <li><b>การส่ง</b>: อีเมลกำลังถูกส่งไปยังระบบส่งอีเมลระยะไกล</li>\n"
+"                           <li><b>ส่งแล้ว</b>: อีเมลได้ถูกส่งไปยังเซิร์ฟเวอร์อีเมลระยะไกล</li>\n"
+"      <li><b>ถ่ายทอด</b>: เซิร์ฟเวอร์อีเมลระยะไกลรายงานว่าอีเมลได้ถูกส่งต่อไปยังเซิร์ฟเวอร์ถัดไป</li>\n"
+"                                            <li><b>ตีกลับ</b>: อีเมลถูกส่งกลับจากระบบส่งอีเมลระยะไกล ซึ่งเป็นข้อผิดพลาดร้ายแรง</li>\n"
+"                                            <li><b>ล้มเหลว</b>: เซิร์ฟเวอร์อีเมลระยะไกลไม่รับอีเมลของเรา ไม่มีการลองส่งใหม่</li>\n"
+"                                            <li><b>ลองส่งใหม่</b>: ไม่สามารถส่งอีเมลได้ และจะลองส่งใหม่ในภายหลัง</li>\n"
+"        <li><b>ถูกบล็อก</b>: ที่อยู่อีเมลของผู้รับถูกบล็อก ตรวจสอบสถานะที่อยู่อีเมล</li>\n"
+"                                            <li><b>ได้รับ</b>: เซิร์ฟเวอร์อีเมลระยะไกลได้ส่งอีเมลมาให้กับเรา</li>\n"
+"              </ul>"
 
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:156
 msgid "Bounce"
@@ -11783,7 +11792,7 @@ msgstr "แก้ไขข้อบกพร่อง"
 
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:158
 msgid "Delivery retry"
-msgstr ""
+msgstr "ลองส่งใหม่"
 
 #: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:35
 msgid "Directive"
@@ -12074,7 +12083,7 @@ msgstr "ทุกสถานะ"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:56
 msgid "Already queued: {count};"
-msgstr ""
+msgstr "อยู่ในคิวแล้ว: {count};"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:9
 msgid "Any page can be sent as a mailing. You can send a mailing from any edit page. On this page you can add or remove mailing lists and their recipients."
@@ -12082,11 +12091,11 @@ msgstr "สามารถส่งหน้าใดก็ได้เป็น
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_cancel_confirm.tpl:1
 msgid "Are you sure you want to cancel the mailing to “{list}”?"
-msgstr ""
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการยกเลิกการส่งอีเมลไปยัง “{list}”?"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:2
 msgid "Are you sure you want to delete the mailing list “{list}”?"
-msgstr ""
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบรายชื่อผู้รับจดหมาย “{list}”?"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_test_public_alert.tpl:9
 msgid "Ask an administrator to change the test mailing list’s access settings."
@@ -12098,7 +12107,7 @@ msgstr "จะพร้อมใช้งานเมื่อการส่ง
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:58
 msgid "Awaiting confirmation: {count};"
-msgstr ""
+msgstr "กำลังรอการยืนยัน: {count};"
 
 #: zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:13
 msgid "Before you will receive any further mail you need to confirm your subscription."
@@ -12179,7 +12188,7 @@ msgstr "ไม่สามารถเพิ่มผู้รับ"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:4
 msgid "Could not be sent: {count}"
-msgstr ""
+msgstr "ไม่สามารถส่งได้: {count}"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_count_error.tpl:9
 msgid "Could not count the eligible recipients. The list query may have taken too long. Go back and try again, or ask an administrator to check the mailing list."
@@ -12302,7 +12311,7 @@ msgstr "แก้ไขผู้รับ"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:64
 msgid "Eligible for delivery"
-msgstr ""
+msgstr "สามารถจัดส่งได้"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:9
 msgid "Eligible recipients will be counted in the review step."
@@ -12324,11 +12333,11 @@ msgstr "การสมัครรับข่าวสารทางอีเ
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:9
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_summary.tpl:10
 msgid "Emails processed: {processed} / {selected}"
-msgstr ""
+msgstr "อีเมลที่ได้รับการประมวลผล: {processed} / {selected}"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:150
 msgid "Emails waiting to be sent: {count}."
-msgstr ""
+msgstr "อีเมลที่รอส่ง: {count}."
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:60
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:85
@@ -12360,7 +12369,7 @@ msgstr "ไม่รวม"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:5
 msgid "Excluded: {count}"
-msgstr ""
+msgstr "ไม่รวม: {count}"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:44
 msgid "Externally managed list &mdash; no unsubscribe/subscribe links"
@@ -12428,7 +12437,7 @@ msgstr "คุณสามารถแก้ไขอาร์กิวเมน
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:28
 msgid "If their preferred language is unavailable or not set, use <strong>{language}</strong>."
-msgstr ""
+msgstr "หากภาษาที่พวกเขาเลือกใช้ไม่มีหรือยังไม่ได้ตั้งค่า ให้ใช้ <strong>{language}</strong>."
 
 #: zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:24
 msgid "If you don’t want to receive any mail then please ignore this message."
@@ -12515,7 +12524,7 @@ msgstr "รายชื่อผู้รับจดหมาย"
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:8
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:12
 msgid "Mailing list recipients: {title}"
-msgstr ""
+msgstr "ผู้รับในรายชื่อผู้รับอีเมล: {title}"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:12
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:7
@@ -12570,7 +12579,7 @@ msgstr "ส่งจดหมายไปที่:"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:13
 msgid "Mailings of page: <strong>{title}</strong>"
-msgstr ""
+msgstr "การส่งจดหมายของหน้า: <strong>{title}</strong>"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:9
 msgid "Manage mailing lists"
@@ -13017,7 +13026,7 @@ msgstr "เลือก..."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:16
 msgid "Selected recipients: {count}."
-msgstr ""
+msgstr "ผู้รับที่ได้รับการคัดเลือก: {count}."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:55
 msgid "Selection"
@@ -13115,7 +13124,7 @@ msgstr "ส่งอีเมลทันที"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:18
 msgid "Send the {language} version."
-msgstr ""
+msgstr "ส่งเวอร์ชัน {language}"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:31
 msgid "Send this page immediately to the test mailing list. The page does not need to be published."
@@ -13208,11 +13217,11 @@ msgstr "\"ส่งแล้ว\" หมายถึงว่าอีเมล�
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:2
 msgid "Sent: <strong>{count}</strong>"
-msgstr ""
+msgstr "ส่งแล้ว: <strong>{count}</strong>"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:55
 msgid "Sent: {count};"
-msgstr ""
+msgstr "ส่งแล้ว: {count};"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:14
 msgid "Show all pages"
@@ -13286,7 +13295,7 @@ msgstr "สถานะและความคืบหน้า"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:57
 msgid "Still being retried: {count};"
-msgstr ""
+msgstr "ยังคงลองส่งใหม่: {count};"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:131
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:135
@@ -13331,7 +13340,7 @@ msgstr "สมาชิกเพิ่มผ่านแบบฟอร์มก
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:45
 msgid "Subscription email: <b>{email}</b>"
-msgstr ""
+msgstr "อีเมลสมัครรับข่าวสาร: <b>{email}</b>"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:33
 msgid "Target mailing list"
@@ -13355,11 +13364,11 @@ msgstr "ที่อยู่อีเมลสำหรับทดสอบ"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:151
 msgid "Test email queued for {email}."
-msgstr ""
+msgstr "อีเมลทดสอบอยู่ในคิวสำหรับ {email}."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_mailing_runs_panel.tpl:8
 msgid "Test email:"
-msgstr ""
+msgstr "อีเมลทดสอบ:"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:163
 msgid "Test language"
@@ -13509,7 +13518,7 @@ msgstr "เลือกช่องทำเครื่องหมายหา
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:2
 msgid "Times shown in {timezone}."
-msgstr ""
+msgstr "เวลาที่แสดงใช้เขตเวลา {timezone}"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_task_language.tpl:4
 msgid "Unknown language"
@@ -13620,7 +13629,7 @@ msgstr "กำลังรอให้กระบวนการส่งเร
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:3
 msgid "Waiting: {count}"
-msgstr ""
+msgstr "กำลังรอ: {count}"
 
 #: zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:3
 msgid "Welcome to"
@@ -13644,7 +13653,7 @@ msgstr "ทำไมผู้รับบางรายจึงไม่ได
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:59
 msgid "Will not be sent: {count}."
-msgstr ""
+msgstr "จะไม่ถูกส่ง: {count}."
 
 #: zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:113
 msgid "You are not allowed to add or enable recipients."
@@ -13833,7 +13842,7 @@ msgstr "เพิ่มด้านบน"
 
 #: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:274
 msgid "Are you sure you want to remove <b>{title}</b> and all indented items below it?"
-msgstr ""
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบ <b>{title}</b> และรายการทั้งหมดที่เยื้องอยู่ด้านล่างมัน?"
 
 #: zotonic_mod_menu/priv/templates/_admin_status.tpl:7
 msgid "Check all menu pages and add <i>hasmenupart</i> connections for all of the \n"
@@ -14127,7 +14136,7 @@ msgstr "กำลังพิสูจน์ตัวตน ..."
 #: zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:88
 #: zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:89
 msgid "Authorization URL"
-msgstr ""
+msgstr "URL การอนุญาต"
 
 #: zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:11
 msgid "Authorize"
@@ -14163,7 +14172,7 @@ msgstr "ไม่พบแอปไคลเอ็นต์ OAuth2 หรือ�
 
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:42
 msgid "Content import"
-msgstr ""
+msgstr "การนำเข้าเนื้อหา"
 
 #: zotonic_mod_oauth2/src/mod_oauth2.erl:165
 #: zotonic_mod_oauth2/src/mod_oauth2.erl:276
@@ -14930,11 +14939,11 @@ msgstr "รหัสการตรวจสอบผู้ดูแลเว็
 
 #: zotonic_mod_seo/priv/templates/admin_seo.tpl:83
 msgid "You can find this ID in the tracking script. Its format is <strong>{format}</strong>."
-msgstr ""
+msgstr "คุณสามารถหา ID นี้ได้ในสคริปต์ติดตาม รูปแบบของมันคือ <strong>{format}</strong>."
 
 #: zotonic_mod_seo/priv/templates/admin_seo.tpl:92
 msgid "You can find this ID on your <a href='{url}' rel='noopener noreferrer' target='_blank'>Google Tag Manager account page</a>. Its format is <strong>{format}</strong>."
-msgstr ""
+msgstr "คุณสามารถหา ID นี้<a href='{url}' rel='noopener noreferrer' target='_blank'>ได้บนหน้าบัญชี Google Tag Manager</a> ของคุณ รูปแบบของมันคือ <strong>{format}</strong>."
 
 #: zotonic_mod_seo/priv/templates/admin_seo.tpl:138
 #: zotonic_mod_seo/priv/templates/admin_seo.tpl:170
@@ -14963,11 +14972,11 @@ msgstr "รายเดือน"
 
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:48
 msgid "Page change frequency defined for category"
-msgstr ""
+msgstr "ความถี่ในการเปลี่ยนหน้าที่กำหนดไว้สำหรับหมวดหมู่"
 
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:43
 msgid "Page change frequency for sitemap"
-msgstr ""
+msgstr "ความถี่ในการอัปเดตหน้าสำหรับแผนผังเว็บไซต์"
 
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:19
 msgid "Priority defined for category"
@@ -16001,7 +16010,7 @@ msgstr "ฉันอายุ [age] ปี ฉันชอบไอศกรี�
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:98
 msgid "I am {age} years old. I like {flavor} ice cream and my favorite color is {color}."
-msgstr ""
+msgstr "ฉันอายุ {age} ปี ฉันชอบไอศกรีมรส {flavor} และสีที่ฉันชอบที่สุดคือ {color}"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:211
 msgid "If checked, then a confirmation email with the submitted answers can be sent to the respondent. For logged-in respondents, the known email address is used. For anonymous respondents, add a short text field with the label “email” and the validation set to “must be an email address”."
@@ -16398,11 +16407,11 @@ msgstr "ลบผลลัพธ์แล้ว"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:33
 msgid "Result downloads"
-msgstr ""
+msgstr "ดาวน์โหลดผลลัพธ์"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:20
 msgid "Result views"
-msgstr ""
+msgstr "หน้าแสดงผล"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:22
 #: zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:19
@@ -17114,7 +17123,7 @@ msgstr "คุณได้ตรวจสอบข้อความทั้ง
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:23
 msgid "Drag languages to define the preferred order. The first language that is visible to visitors will be the default language."
-msgstr ""
+msgstr "ลากภาษาเพื่อกำหนดลำดับที่ต้องการ ภาษาแรกที่ผู้เยี่ยมชมเห็นจะเป็นภาษาเริ่มต้น"
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:146
 msgid "Dutch"
@@ -17420,7 +17429,7 @@ msgstr "สวีเดน"
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:24
 msgid "Texts can be edited in the admin for languages set to 'Visible to visitors' or 'Editable'."
-msgstr ""
+msgstr "สามารถแก้ไขข้อความในหน้าผู้ดูแลระบบสำหรับภาษาที่ตั้งค่าเป็น 'ผู้เยี่ยมชมสามารถเห็นได้' หรือ 'แก้ไขได้'"
 
 #: zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_sublanguage_note.tpl:3
 msgid "The golden rule when choosing a language is simplicity. Stick to the main language if you can; use a sub-language (adding region or script) when it adds useful distinguishing information."
@@ -17531,7 +17540,7 @@ msgstr "ใช้ภาษาเริ่มต้นสำหรับข้อ
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:38
 msgid "Visible to visitors"
-msgstr ""
+msgstr "ผู้เยี่ยมชมสามารถเห็นได้"
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:126
 msgid "When a text has no translation in the selected language, try the site default language before the other fallback languages."
@@ -17548,7 +17557,7 @@ msgstr "ไม่มีภาษา"
 #: zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:44
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:44
 msgid "Writing system"
-msgstr ""
+msgstr "ระบบการเขียน"
 
 #: zotonic_mod_translation/src/models/m_translation_tree.erl:152
 #: zotonic_mod_translation/src/models/m_translation_tree.erl:155
@@ -17768,7 +17777,7 @@ msgstr "สมัครรับข้อมูลจากหน้าของ
 
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:78
 msgid "Subscription lease expires"
-msgstr ""
+msgstr "เวลาหมดอายุของการสมัครรับข้อมูล"
 
 #: zotonic_mod_websub/src/filters/filter_websub_error.erl:44
 msgid "Subscription or unsubscription attempts stopped because the retry time limit was reached. Check the remote website and retry the subscription if needed."
@@ -18147,11 +18156,11 @@ msgstr "ไซต์ของคุณพร้อมแล้ว"
 
 #: zotonic_site_status/priv/templates/_site_action_confirm.tpl:2
 msgid "Are you sure you want to restart the site <b>{site}</b>?"
-msgstr ""
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการรีสตาร์ทเว็บไซต์ <b>{site}</b>?"
 
 #: zotonic_site_status/priv/templates/_site_action_confirm.tpl:4
 msgid "Are you sure you want to stop the site <b>{site}</b>?"
-msgstr ""
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการหยุดการทำงานของเว็บไซต์ <b>{site}</b>?"
 
 #: zotonic_site_status/priv/templates/status.tpl:25
 msgid "Commands"
