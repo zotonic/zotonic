@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-30 13:15\n"
+"PO-Revision-Date: 2026-10-30 14:38\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -71,7 +71,7 @@ msgstr "tagasi"
 #: zotonic_core/src/support/z_datetime.erl:375
 #: zotonic_core/src/support/z_datetime.erl:378
 msgid "day"
-msgstr "päeval"
+msgstr "päev"
 
 #: zotonic_core/src/support/z_datetime.erl:375
 #: zotonic_core/src/support/z_datetime.erl:378
@@ -109,7 +109,7 @@ msgstr "minutit"
 
 #: zotonic_core/src/support/z_datetime.erl:368
 msgid "moments"
-msgstr "hetki"
+msgstr "mõni hetk"
 
 #: zotonic_core/src/support/z_datetime.erl:377
 #: zotonic_core/src/support/z_datetime.erl:380
@@ -129,7 +129,7 @@ msgstr "nüüd"
 #: zotonic_core/src/support/z_datetime.erl:369
 #: zotonic_core/src/support/z_datetime.erl:372
 msgid "second"
-msgstr "teine"
+msgstr "sekund"
 
 #: zotonic_core/src/support/z_datetime.erl:369
 #: zotonic_core/src/support/z_datetime.erl:372
@@ -214,7 +214,7 @@ msgstr "Kõik"
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:58
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:84
 msgid "All Categories"
-msgstr "K√µik kategooriad"
+msgstr "Kõik kategooriad"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_module.tpl:17
 msgid "All Modules"
@@ -237,7 +237,7 @@ msgstr "Kõik tavalised sisugrupid"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:28
 msgid "Allowed file and mime types, separate with ',' — type 'none' if no extra types allowed, leave empty for the default"
-msgstr "Lubatud faili- ja miimikatüübid, eraldage tähtedega „,” - tippige „pole”, kui lisatüüpe pole lubatud, jätke vaikimisi tühjaks"
+msgstr "Lubatud failitüübid ja MIME-tüübid, eraldatud komadega — sisestage 'none', kui lisatüübid pole lubatud; vaikeväärtuse kasutamiseks jätke väli tühjaks"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_collab.tpl:13
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:44
@@ -372,11 +372,11 @@ msgstr "Kategooria"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:17
 msgid "Category &amp; Content group"
-msgstr "&amp; kategooria sisugrupp"
+msgstr "Kategooria ja sisugrupp"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:14
 msgid "Change category and/or content group..."
-msgstr "Kategooria ja / või sisugrupi muutmine ..."
+msgstr "Muuda kategooriat ja/või sisugruppi..."
 
 #: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:543
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:152
@@ -466,13 +466,13 @@ msgstr "Sisu"
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:62
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log.tpl:13
 msgid "Content group"
-msgstr "Sisurühm"
+msgstr "Sisugrupp"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_collab_select.tpl:16
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:166
 #: zotonic_mod_content_groups/src/mod_content_groups.erl:231
 msgid "Content groups"
-msgstr "Sisurühmad"
+msgstr "Sisugrupid"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:76
 msgid "Content rules for collaboration group members and managers"
@@ -480,7 +480,7 @@ msgstr "Sisureeglid koostöögrupi liikmetele ja juhtidele"
 
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:43
 msgid "Could not move to collaboration group."
-msgstr "Koostöögruppi ei saanud liikuda."
+msgstr "Koostöögruppi teisaldamine ebaõnnestus."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:40
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:51
@@ -550,7 +550,7 @@ msgstr "Keela"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:43
 msgid "Edit &amp; link rights on the collaboration groups"
-msgstr "Muutke koostöögruppides &amp; lingiõigust"
+msgstr "Koostöögruppide muutmise ja linkimise õigused"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:5
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:43
@@ -564,7 +564,7 @@ msgstr "Muutke koostöögruppi"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:11
 msgid "Enter extensions (like <tt>.png</tt>), mime types (like <tt>image/png</tt>) or one of:"
-msgstr "Sisestage laiendused (nt <tt>.png</tt>), miimikatüübid (nt <tt>pilt / png</tt>) või üks järgmistest:"
+msgstr "Sisestage laiendused (nt <tt>.png</tt>), MIME-tüübid (nt <tt>image/png</tt>) või üks järgmistest:"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:106
 msgid "Exactly this category, no sub-categories"
@@ -572,11 +572,11 @@ msgstr "Täpselt see kategooria, alamkategooriaid pole"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:22
 msgid "Export edit rules"
-msgstr "Ekspordi redigeerimisreeglid"
+msgstr "Ekspordi reeglite tööversioon"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:10
 msgid "File types follow the group hierarchy. Derived groups inherit the mime settings from their ancestor."
-msgstr "Failitüübid järgivad grupihierarhiat. Tuletatud rühmad pärivad miimiaseaded oma esivanemalt."
+msgstr "Failitüübid järgivad grupihierarhiat. Alamgrupid pärivad MIME-seaded oma ülemgrupilt."
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:28
 msgid "File uploads"
@@ -617,7 +617,7 @@ msgstr "Impordi"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:27
 msgid "Import edit rules..."
-msgstr "Impordi muutmisreeglid ..."
+msgstr "Impordi reeglite tööversioon..."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:30
 msgid "Import edit version of ACL rules"
@@ -625,12 +625,12 @@ msgstr "Importige ACL-reeglite redigeerimisversioon"
 
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:137
 msgid "Importing, the list of rules will refresh after importing."
-msgstr "Importimisel värskendatakse reeglite loendit pärast importimist."
+msgstr "Importimine on pooleli. Reeglite loendit värskendatakse pärast importimist."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:40
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:17
 msgid "Keep"
-msgstr "Hoidke"
+msgstr "Säilita"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:159
 msgid "Manage own"
@@ -745,7 +745,7 @@ msgstr "Load"
 
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:46
 msgid "Please select a collaboration_group"
-msgstr "Valige koostöö_grupp"
+msgstr "Valige koostöögrupp"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:34
 msgid "Private"
@@ -753,7 +753,7 @@ msgstr "Privaatne"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:38
 msgid "Private properties are email, phone, visiting address, and date range."
-msgstr "Eraomadused on e-post, telefon, külastusaadress ja kuupäevavahemik."
+msgstr "Privaatsed andmed on e-posti aadress, telefoninumber, külastusaadress ja kuupäevavahemik."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:4
 msgid "Publish"
@@ -774,7 +774,7 @@ msgstr "Avaldatud eeskirjad"
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:41
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:69
 msgid "Revert"
-msgstr "Tagasi"
+msgstr "Taasta"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:35
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:39
@@ -783,7 +783,7 @@ msgstr "Naase avaldatud versiooni juurde"
 
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:101
 msgid "Reverted rules"
-msgstr "Tagasireeglid"
+msgstr "Reeglid taastati"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:17
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:183
@@ -831,7 +831,7 @@ msgstr "Koostöörühma seaded on salvestatud"
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:47
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_results.tpl:41
 msgid "Select"
-msgstr "Valige"
+msgstr "Vali"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_category_dropdown.tpl:3
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:203
@@ -844,7 +844,7 @@ msgstr "Näita"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:23
 msgid "Show private properties to"
-msgstr "Kuva eraomandid aadressile"
+msgstr "Näita privaatseid andmeid järgmistele kasutajatele"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:96
 msgid "Show this ACL user group first:"
@@ -908,7 +908,7 @@ msgstr "Seda ei saa olematuks teha."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:7
 msgid "This page is a"
-msgstr "See leht on a"
+msgstr "See leht on"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:18
 msgid "This rule is managed by module"
@@ -941,11 +941,11 @@ msgstr "Üleslaadimisseaded on salvestatud"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:2
 msgid "Upload the ACL rules file that you previously exported. Note: all current rules will be <b>replaced</b> by the rule definition file that is uploaded."
-msgstr "Laadige üles varem eksporditud ACL-reeglite fail. Märkus: kõik praegused eeskirjad on <b>asendatakse</b> reeglist definitsiooni fail, mis on üles laaditud."
+msgstr "Laadige üles varem eksporditud ACL-reeglite fail. Märkus: kõik praegused reeglid <b>asendatakse</b> üleslaaditud faili reeglitega."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:2
 msgid "Use the following URL to test the access control rules before publishing them."
-msgstr "Enne juurdepääsu avaldamist kontrollige enne URL-i avaldamist järgmist URL-i."
+msgstr "Kasutage järgmist URL-i juurdepääsureeglite testimiseks enne nende avaldamist."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3
@@ -961,7 +961,7 @@ msgstr "Nähtavus"
 
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:41
 msgid "You are not allowed to move to this collaboration group."
-msgstr "Teil pole lubatud sellesse koostöögruppi kolida."
+msgstr "Teil pole lubatud sellesse koostöögruppi teisaldada."
 
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:58
 msgid "You are not allowed to perform this action"
@@ -973,7 +973,7 @@ msgstr "Teil pole lubatud seda lehte vaadata."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:4
 msgid "You can:"
-msgstr "Sa saad:"
+msgstr "Te saate:"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:88
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
@@ -1007,11 +1007,11 @@ msgstr "link (ACL-toiming)"
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:27
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:29
 msgid "manage own"
-msgstr "ise hakkama saama"
+msgstr "oma sisu haldamine"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:9
 msgid "send this URL to somebody else for testing"
-msgstr "saada see URL kellelegi teisele testimiseks"
+msgstr "saatke see URL kellelegi teisele testimiseks"
 
 #: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:302
 msgid "use (acl action)"
@@ -1057,7 +1057,7 @@ msgstr "<em>Pealkirjata</em>"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:14
 msgid "<strong>First</strong> also known as given name, forename or Christen name.<br/><strong>Middle</strong> often shortened to an initial like in <em>John D. Rockefeller</em>.<br/><strong>Surname prefix</strong> like the Dutch <em>van, van de, der</em>.<br/><strong>Surname</strong> also known as family name or last name."
-msgstr "<strong>Esimene</strong> tuntud ka eesnime, eesnime või ristinimena.<br/><strong>Keskmine</strong> lühenes sageli initsiaaliks nagu <em>raamatus John D. Rockefeller</em>.<br/><strong>Perekonnanime eesliide</strong> nagu hollandi <em>van, van de, der</em>.<br/><strong>Perekonnanimi</strong> tuntud ka perekonnanime või perekonnanimena."
+msgstr "<strong>Eesnimi</strong> on inimesele antud nimi, mida nimetatakse ka ristinimeks.<br/><strong>Teine eesnimi</strong> lühendatakse sageli initsiaaliks, nagu nimes <em>John D. Rockefeller</em>.<br/><strong>Perekonnanime eesliide</strong>, näiteks hollandi <em>van, van de, der</em>.<br/><strong>Perekonnanimi</strong> on perekonna ühine nimi."
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:123
 msgid "A copy that will remain connected so that a new version can be fetched."
@@ -1085,7 +1085,7 @@ msgstr "Leiti umbes {n} üksust."
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:122
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_edit_basics.person.tpl:7
 msgid "Access control"
-msgstr "Ligip√§√§s"
+msgstr "Juurdepääsu haldus"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:12
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:66
@@ -1115,7 +1115,7 @@ msgstr "Lisage uus meediumifail"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:19
 msgid "Add a new media item"
-msgstr "Lisa uus meediafail"
+msgstr "Lisa uus meediaüksus"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:32
 msgid "Add a note about this page."
@@ -1158,7 +1158,7 @@ msgstr "Lisada märkus"
 
 #: zotonic_mod_admin/src/mod_admin.erl:1124
 msgid "Added the connection to"
-msgstr "Lisas ühenduse domeeniga"
+msgstr "Lisati seos lehega"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:6
 msgid "Address"
@@ -1166,11 +1166,11 @@ msgstr "Aadress"
 
 #: zotonic_mod_admin/priv/templates/admin_base.tpl:5
 msgid "Admin"
-msgstr "Adminn"
+msgstr "Haldus"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:6
 msgid "Advanced"
-msgstr "Spetsile"
+msgstr "Täpsemad seaded"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:2
 msgid "After the duplication you can edit the new page. The new page will be unpublished."
@@ -1409,7 +1409,7 @@ msgstr "Linn"
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_connection.tpl:34
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:37
 msgid "Clear"
-msgstr "Selge"
+msgstr "Tühjenda"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:10
 msgid "Click \"Save\" to see your changes."
@@ -1468,7 +1468,7 @@ msgstr "Kinnitage eemaldamine"
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:47
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:45
 msgid "Connect"
-msgstr "Ühendage"
+msgstr "Ühenda"
 
 #: zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_page.tpl:9
 msgid "Connect a page"
@@ -1603,7 +1603,7 @@ msgstr "Loomise kuupäev, vanim enne"
 #: zotonic_mod_admin/priv/templates/admin.tpl:8
 #: zotonic_mod_admin/src/mod_admin.erl:486
 msgid "Dashboard"
-msgstr "T√∂√∂laud"
+msgstr "Töölaud"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:44
 msgid "Data Directory"
@@ -1615,7 +1615,7 @@ msgstr "Andmebaasi versioon"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:6
 msgid "Date range"
-msgstr "Kuup√§eva vahemik"
+msgstr "Kuupäevavahemik"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:10
 msgid "Date ranges"
@@ -1654,7 +1654,7 @@ msgstr "Kustuta see lehekülg..."
 
 #: zotonic_mod_admin/src/mod_admin.erl:957
 msgid "Deleted tasks."
-msgstr "Kustutatud ülesanded."
+msgstr "Ülesanded on kustutatud."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:31
 msgid "Deleted."
@@ -1692,7 +1692,7 @@ msgstr "Puudega"
 #: zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:15
 #: zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:17
 msgid "Disconnect"
-msgstr "Katkesta √ºhendus"
+msgstr "Katkesta ühendus"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:36
 msgid "Discover media"
@@ -1840,7 +1840,7 @@ msgstr "Manustatud sisu"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:33
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:34
 msgid "Emergency telephone"
-msgstr "H√§da telefon"
+msgstr "Hädaabitelefon"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:56
 msgid "Endpoint"
@@ -1946,7 +1946,7 @@ msgstr "Tooge uus versioon"
 
 #: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:5
 msgid "Fetch the latest version from the original website using these import options."
-msgstr "Lae need importimisvõimalused kasutades originaalveebisaidilt alla uusim versioon."
+msgstr "Laadige nende impordisuvandite abil algselt veebisaidilt alla uusim versioon."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_media.tpl:6
 msgid "File / media content"
@@ -1960,7 +1960,7 @@ msgstr "Faili suurus"
 
 #: zotonic_mod_admin/src/mod_admin.erl:882
 msgid "File uploaded to the drop folder, will be handled shortly."
-msgstr "Rippkausta üles laaditud fail käsitletakse peagi."
+msgstr "Fail on üles laaditud vastuvõtukausta ja seda töödeldakse peagi."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:39
 #: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:54
@@ -2034,7 +2034,7 @@ msgstr "Loputage kõik URL-ide saatmisreeglid, malli ja teegi vahemälud ning mu
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:81
 msgid "Flush system caches"
-msgstr "T√ºhjendas√ºsteemne vahem√§lu"
+msgstr "Tühjenda süsteemi vahemälud"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:145
 #: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:23
@@ -2168,7 +2168,7 @@ msgstr "Meedia sisu keel"
 
 #: zotonic_mod_admin/priv/templates/_admin_dashboard_events.tpl:3
 msgid "Latest modified events"
-msgstr "Viimati muudetud s√ºndmused"
+msgstr "Viimati muudetud sündmused"
 
 #: zotonic_mod_admin/priv/templates/_admin_dashboard_locations.tpl:3
 msgid "Latest modified locations"
@@ -2607,7 +2607,7 @@ msgstr "Lehekülg on seotud"
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:3
 #: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:231
 msgid "Page connections"
-msgstr "Lehe √ºhendused"
+msgstr "Lehe ühendused"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:20
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:26
@@ -2644,7 +2644,7 @@ msgstr "Lehed"
 
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:84
 msgid "Pages overview"
-msgstr "Lehtede √ºlevaade"
+msgstr "Lehtede ülevaade"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:75
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:36
@@ -2791,7 +2791,7 @@ msgstr "Avaldatud, vanim enne"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:24
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:19
 msgid "Query"
-msgstr "P√§ring"
+msgstr "Päring"
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:19
 msgid "Query results"
@@ -2873,7 +2873,7 @@ msgstr "Uuesti laadimine kustutab kõik salvestamata muudatused selles vormis. K
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:27
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:29
 msgid "Remarks"
-msgstr "M√§rkused"
+msgstr "Märkused"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:70
 msgid "Remote sandbox isolation and queue details are available on each runner’s dashboard."
@@ -3009,7 +3009,7 @@ msgstr "Ajastatud taustaülesanne kõigi viitade ühenduste kontrollimiseks."
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:294
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user_dialog.tpl:9
 msgid "Search"
-msgstr "Otsing"
+msgstr "Otsi"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:55
 msgid "Search indices rebuilt."
@@ -3021,7 +3021,7 @@ msgstr "Otsi muud meediat"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:7
 msgid "Search query"
-msgstr "Otsinu p√§ring"
+msgstr "Otsingupäring"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results.tpl:44
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:77
@@ -3096,7 +3096,7 @@ msgstr "Seaded &amp; veel"
 #: zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:31
 #: zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:36
 msgid "Short title"
-msgstr "L√ºhipealkiri"
+msgstr "Lühipealkiri"
 
 #: zotonic_mod_admin/priv/templates/_admin_features.category.tpl:8
 msgid "Show address on edit page"
@@ -3162,7 +3162,7 @@ msgstr "Mõned ülesanded proovivad uuesti.<br>Vigu kokku: {total}<br>Suurim üh
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:194
 msgid "Something went wrong. Sorry."
-msgstr "Midagi l√§ks valesti. Sorry."
+msgstr "Midagi läks valesti. Vabandame."
 
 #: zotonic_mod_admin/src/mod_admin.erl:855
 msgid "Sorry, could not handle this filename."
@@ -3266,7 +3266,7 @@ msgstr "Staatus"
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:58
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:59
 msgid "Street Line 1"
-msgstr "T√§na rida 1"
+msgstr "Aadressi 1. rida"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:102
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:103
@@ -3277,7 +3277,7 @@ msgstr "T√§na rida 1"
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:63
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:64
 msgid "Street Line 2"
-msgstr "T√§nav rida 2"
+msgstr "Aadressi 2. rida"
 
 #: zotonic_mod_admin/src/mod_admin.erl:512
 msgid "Structure"
@@ -3338,15 +3338,15 @@ msgstr "Vahetada"
 
 #: zotonic_mod_admin/src/mod_admin.erl:526
 msgid "System"
-msgstr "S√ºsteem"
+msgstr "Süsteem"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:3
 msgid "System Status"
-msgstr "S√ºsteemi staatus"
+msgstr "Süsteemi olek"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:8
 msgid "System administration"
-msgstr "S√ºsteemi adminnimine"
+msgstr "Süsteemi haldus"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:169
 msgid "Task queue"
@@ -3749,7 +3749,7 @@ msgstr "Faili üles laadima"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:4
 msgid "Upload a file from your computer."
-msgstr "Lae √ºles oma arvutist."
+msgstr "Laadige fail oma arvutist üles."
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:151
 msgid "Upload a file to the drop folder. This file will be handled in the background by the mailinglists for recipient import and other modules."
@@ -3844,11 +3844,11 @@ msgstr "Kuva olek"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:29
 msgid "Visible from"
-msgstr "N√§htav alates"
+msgstr "Nähtav alates"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:37
 msgid "Visible till"
-msgstr "N√§htav kuni"
+msgstr "Nähtav kuni"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:73
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:38
@@ -3857,7 +3857,7 @@ msgstr "Mine redigeerimisse"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73
 msgid "Visiting address"
-msgstr "K√ºlastusaadress"
+msgstr "Külastusaadress"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:4
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:14
@@ -4042,7 +4042,7 @@ msgstr "välja arvatud"
 
 #: zotonic_mod_admin/priv/templates/_action_unlink_undo.tpl:15
 msgid "has been disconnected."
-msgstr "on lahti √ºhendatud."
+msgstr "on lahti ühendatud."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:23
 msgid "id:"
@@ -4083,7 +4083,7 @@ msgstr "pikslit"
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:20
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:22
 msgid "show all"
-msgstr "n√§ita k√µik"
+msgstr "näita kõiki"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_list_flags.tpl:6
 msgid "system content"
@@ -4104,7 +4104,7 @@ msgstr "pealkirjata"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:51
 msgid "uploaded on"
-msgstr "√ºles laaditud"
+msgstr "üles laaditud"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:57
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:136
@@ -4120,7 +4120,7 @@ msgstr "vaata"
 
 #: zotonic_mod_admin/priv/templates/_admin_navbar_brand.tpl:1
 msgid "visit site"
-msgstr "k√ºlasta saiti"
+msgstr "külasta saiti"
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:25
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:201
@@ -4797,7 +4797,7 @@ msgstr "Eeltäidetud on turvaline parool, vajadusel asendage see."
 #: zotonic_mod_menu/priv/templates/admin_menu_hierarchy.tpl:26
 #: zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:25
 msgid "Add"
-msgstr "Lisama"
+msgstr "Lisa"
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:63
 msgid "Add a new user"
@@ -7279,7 +7279,7 @@ msgstr "Laadige alla varukoopia"
 
 #: zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:49
 msgid "Enable <tt>mod_export</tt> to download backup files."
-msgstr "Varundusfailide allalaadimiseks lubage <tt></tt>"
+msgstr "Varundusfailide allalaadimiseks lubage <tt>mod_export</tt>."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:90
 msgid "Encrypt Backups"
@@ -8123,7 +8123,7 @@ msgstr "See testib suhtlust serveriga."
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:35
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:74
 msgid "Type"
-msgstr "T√º√ºp"
+msgstr "Tüüp"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:92
 msgid "Vertical bar chart"
@@ -9219,7 +9219,7 @@ msgstr "Zotonicu masinas valitud toimetaja"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:114
 msgid "Set the class <tt>environment-development</tt> on the <tt>&lt;html&gt;</tt> element of your pages to see the server log in the browser console.<br>In development, admin pages always show the server log in the javascript console."
-msgstr "Seadistage oma lehtede elemendil <tt>&lt;html&gt;</tt> klass <tt>Environment-development</tt> , et näha brauseri konsoolis serveri logi.<br>Arenduses kuvatakse administraatori lehtedel alati javascripti konsoolis serveri logi."
+msgstr "Seadistage oma lehtede elemendil <tt>&lt;html&gt;</tt> klass <tt>environment-development</tt> , et näha brauseri konsoolis serveri logi.<br>Arenduses kuvatakse administraatori lehtedel alati javascripti konsoolis serveri logi."
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:272
 msgid "Show an overview of all observers"
@@ -10397,7 +10397,7 @@ msgstr "Teenusele ei õnnestunud juurde pääseda, kontrollige uuesti oma seadei
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:85
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:204
 msgid "Could not access the service, double check your settings and try again. Make sure that API key has access rights to create and remove a (temporary) <code>-zotonic-filestore-test-file-</code> file."
-msgstr "Teenusele ei õnnestunud juurde pääseda, kontrollige uuesti oma seadeid ja proovige uuesti. Veenduge, et API-võtmel oleks juurdepääsuõigused (ajutise) <code>zotonic-filestore-test-file-</code> faili loomiseks ja eemaldamiseks."
+msgstr "Teenusele ei õnnestunud juurde pääseda, kontrollige uuesti oma seadeid ja proovige uuesti. Veenduge, et API-võtmel oleks juurdepääsuõigused (ajutise) <code>-zotonic-filestore-test-file-</code> faili loomiseks ja eemaldamiseks."
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:16
 msgid "Currently Zotonic supports FTP, WebDAV and services that are compatible with the S3 file services API. These include:"
@@ -10699,7 +10699,7 @@ msgstr "FTP ja WebDAV puhul luuakse kataloogid alati automaatselt."
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:24
 msgid "With WebDAV the username and password are transfered in the clear, so ensure that you use <tt>webdavs:</tt> URLs (which makes use of https)."
-msgstr "WebDAV-iga edastatakse kasutajanimi ja parool selgelt, seega veenduge, et kasutate <tt>webdavsi:</tt> URL-i (mis kasutab https-i)."
+msgstr "WebDAV-i kasutamisel edastatakse kasutajanimi ja parool krüptimata kujul, seega veenduge, et kasutate <tt>webdavs:</tt> URL-e (mis kasutavad HTTPS-i)."
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:62
 msgid "Yes, keep local files after upload"
@@ -10898,7 +10898,7 @@ msgstr "Lehe HTML põhitekst."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:36
 msgid "The category of the page. Examples: <code>article</code> or <code>text</code>."
-msgstr "Lehekülje kategooria. Näited: <code>artikkel</code> või <code>tekst</code>."
+msgstr "Lehekülje kategooria. Näited: <code>article</code> või <code>text</code>."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:72
 msgid "The custom path for the URL of the page, for example <code>/my/page</code>"
@@ -13994,7 +13994,7 @@ msgstr "Võtke ühendust Microsoftiga"
 
 #: zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:36
 msgid "Control who can log in. Allowed values are: <tt>common</tt>, <tt>organizations</tt>, <tt>consumers</tt>, and tenant identifiers."
-msgstr "Kontrollige, kes saavad sisse logida. Lubatud väärtused on: <tt>common</tt>, <tt>Organisations</tt>, <tt>Consultants</tt>ja rentni Identifiers."
+msgstr "Määrake, kes saavad sisse logida. Lubatud väärtused on <tt>common</tt>, <tt>organizations</tt>, <tt>consumers</tt> ja rentnike identifikaatorid."
 
 #: zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:3
 #: zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:6
@@ -14035,7 +14035,7 @@ msgstr "Salvestatud Microsofti seaded."
 
 #: zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:27
 msgid "Space separated list of scopes that you want the user to consent to. Examples are: <tt>User.Read</tt>, <tt>email</tt>, <tt>offline_access</tt> and <tt>profile</tt>. The <tt>openid</tt> scope is always added automatically."
-msgstr "Tühikuga eraldatud ulatuste loend, millega soovite, et kasutaja nõustuks. Näited on järgmised: <tt>kasutaja. Lugege</tt>, <tt>meili</tt>, <tt>offline_access</tt> ja <tt>profiili</tt>. <tt>openid</tt> ulatus lisatakse alati automaatselt."
+msgstr "Tühikuga eraldatud ulatuste loend, millega soovite, et kasutaja nõustuks. Näited on järgmised: <tt>User.Read</tt>, <tt>email</tt>, <tt>offline_access</tt> ja <tt>profile</tt>. <tt>openid</tt> ulatus lisatakse alati automaatselt."
 
 #: zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:33
 #: zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:34
@@ -14654,7 +14654,7 @@ msgstr "Katse parandada manustatud videoid, mille OEmbedi manustamine pole varem
 
 #: zotonic_mod_oembed/src/mod_oembed.erl:461
 msgid "Attempting to fix ~p videos."
-msgstr "~ P-videote parandamise katse."
+msgstr "Proovitakse parandada ~p videot."
 
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:27
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:59
@@ -15548,7 +15548,7 @@ msgstr "See võib võtta mõnda aega, oodake!"
 
 #: zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:68
 msgid "You can change this by setting <tt>port</tt> in the <tt>zotonic.config</tt> configuration file."
-msgstr "Seda saate muuta, seadistades konfiguratsioonifailis <tt>zotonic.config</tt> <tt>pordi</tt>."
+msgstr "Seda saate muuta, seadistades konfiguratsioonifailis <tt>zotonic.config</tt> <tt>port</tt>."
 
 #: zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:75
 msgid "You can change this by setting <tt>ssl_port</tt> in the <tt>zotonic.config</tt> configuration file."
@@ -16006,7 +16006,7 @@ msgstr "Kategooria esimene leht"
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:76
 msgid "For date ranges you can also use relative dates, like <code>-5 year</code>."
-msgstr "Kuupäevavahemike jaoks saate kasutada ka suhtelisi kuupäevi, näiteks <code>-5 aastat</code>."
+msgstr "Kuupäevavahemike jaoks saate kasutada ka suhtelisi kuupäevi, näiteks <code>-5 year</code>."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:260
 msgid "Forms can be handled by special code, for example a form that is forwarded to a back office system. Depending on the handler the results are stored in the database or not."
@@ -18072,7 +18072,7 @@ msgstr "Logige sisse kasutajanimega <b>admin</b> ja parooliga"
 
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:49
 msgid "Make sure that this hostname has a valid DNS entry or is added to your <tt>/etc/hosts</tt> file."
-msgstr "Veenduge, et sellel hostinimel on kehtiv DNS-sisestus või see on lisatud teie faili <tt>/ etc / hosts</tt>."
+msgstr "Veenduge, et sellel hostinimel on kehtiv DNS-sisestus või see on lisatud teie faili <tt>/etc/hosts</tt>."
 
 #: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:544
 msgid "No permission to create the site directory at:"
