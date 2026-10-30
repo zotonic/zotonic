@@ -12,8 +12,8 @@
     <div class="row">
         <div class="col-md-4">
             <div class="form-group label-floating">
-                <input type="text" id="{{ #name_first }}" name="name_first" value="" class="form-control" tabindex="1" autofocus required placeholder="{_ First _}">
-                <label class="control-label" for="{{ #name_first }}">{_ First _}</label>
+                <input type="text" id="{{ #name_first }}" name="name_first" value="" class="form-control" tabindex="1" autofocus required placeholder="{_ First name _}">
+                <label class="control-label" for="{{ #name_first }}">{_ First name _}</label>
                 {% validate id=#name_first name="name_first" type={presence} %}
            </div>
         </div>
