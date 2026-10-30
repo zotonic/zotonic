@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-30 15:39\n"
+"PO-Revision-Date: 2026-10-30 17:07\n"
 "Last-Translator: \n"
 "Language-Team: English\n"
 "MIME-Version: 1.0\n"
@@ -3300,7 +3300,7 @@ msgstr "Subscribing to connected resources"
 
 #: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:83
 msgid "Succesfully imported page from the remote server."
-msgstr "Succesfully imported page from the remote server."
+msgstr "Successfully imported page from the remote server."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:19
 #: zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:23
@@ -14129,7 +14129,7 @@ msgstr "Allow users registered on the other website to logon on this website."
 
 #: zotonic_mod_oauth2/src/mod_oauth2.erl:206
 msgid "An OAuth2 consumer with this name already exsists, please use another name."
-msgstr "An OAuth2 consumer with this name already exsists, please use another name."
+msgstr "An OAuth2 consumer with this name already exists, please use another name."
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:31
 #: zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:25
@@ -14340,7 +14340,7 @@ msgstr "Find user"
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:71
 msgid "For Zotonic sites this you can enter the domain name(s) of the website."
-msgstr "For Zotonic sites this you can enter the domain name(s) of the website."
+msgstr "For Zotonic sites you can enter the domain name(s) of the website."
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:65
 msgid "For every combination of a user and a label there can only be a single access token. Existing access tokens with this label will be replaced."
@@ -14466,11 +14466,11 @@ msgstr "OAuth2 clients are used to access other websites."
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:104
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:81
 msgid "Only admnistrators can view OAuth2 applications."
-msgstr "Only admnistrators can view OAuth2 applications."
+msgstr "Only administrators can view OAuth2 applications."
 
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:93
 msgid "Only admnistrators can view OAuth2 consumers."
-msgstr "Only admnistrators can view OAuth2 consumers."
+msgstr "Only administrators can view OAuth2 consumers."
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:63
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:64
@@ -15483,7 +15483,7 @@ msgstr "Make sure your hostname is reachable and resolves to a routable address.
 
 #: zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:89
 msgid "Only admnistrators can request certificates."
-msgstr "Only admnistrators can request certificates."
+msgstr "Only administrators can request certificates."
 
 #: zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:15
 msgid "Read more at the Let’s Encrypt website"
@@ -18133,7 +18133,7 @@ msgstr "Starting the new site ..."
 
 #: zotonic_mod_zotonic_site_management/src/mod_zotonic_site_management.erl:100
 msgid "Succesfully created the site."
-msgstr "Succesfully created the site."
+msgstr "Successfully created the site."
 
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:98
 msgid "The config file in <tt>priv/zotonic_site.config</tt> will be overwritten with the database settings from above."
