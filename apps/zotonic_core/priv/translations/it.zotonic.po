@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-30 13:15\n"
+"PO-Revision-Date: 2026-10-30 14:38\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -93,7 +93,7 @@ msgstr "ore"
 #: zotonic_core/src/support/z_datetime.erl:317
 #: zotonic_mod_admin/priv/templates/_rsc_preview.tpl:11
 msgid "in"
-msgstr "in"
+msgstr "tra"
 
 #: zotonic_core/src/support/z_datetime.erl:371
 #: zotonic_core/src/support/z_datetime.erl:374
@@ -109,7 +109,7 @@ msgstr "minuti"
 
 #: zotonic_core/src/support/z_datetime.erl:368
 msgid "moments"
-msgstr "momenti"
+msgstr "qualche istante"
 
 #: zotonic_core/src/support/z_datetime.erl:377
 #: zotonic_core/src/support/z_datetime.erl:380
@@ -191,7 +191,7 @@ msgstr "Aggiungi regola"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:55
 msgid "Add links to the collaboration group"
-msgstr "Aggiungere link al gruppo di collaborazione"
+msgstr "Aggiungi collegamenti al gruppo di collaborazione"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:91
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:141
@@ -237,7 +237,7 @@ msgstr "Tutti i gruppi di contenuto normale"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:28
 msgid "Allowed file and mime types, separate with ',' — type 'none' if no extra types allowed, leave empty for the default"
-msgstr "Tipi di file e MIME consentiti, separati con ',' - digitare 'none' se non sono consentiti tipi extra, lasciare vuoto per il valore predefinito"
+msgstr "Tipi di file e MIME consentiti, separati da ',' — digita 'none' se non sono consentiti tipi aggiuntivi; lascia il campo vuoto per usare il valore predefinito"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_collab.tpl:13
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:44
@@ -476,7 +476,7 @@ msgstr "Gruppi di contenuti"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:76
 msgid "Content rules for collaboration group members and managers"
-msgstr "Regole di contenuto per i membri del gruppo di collaborazione e i manager"
+msgstr "Regole sui contenuti per i membri e i gestori dei gruppi di collaborazione"
 
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:43
 msgid "Could not move to collaboration group."
@@ -831,7 +831,7 @@ msgstr "Impostazioni del gruppo di collaborazione salvate"
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:47
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_results.tpl:41
 msgid "Select"
-msgstr "Selezionare"
+msgstr "Seleziona"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_category_dropdown.tpl:3
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:203
@@ -1149,7 +1149,7 @@ msgstr "Aggiungi contenuto multimediale"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:14
 msgid "Add media to body"
-msgstr "Aggiungere i media al corpo"
+msgstr "Aggiungi contenuti multimediali al testo"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:35
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:39
@@ -1409,7 +1409,7 @@ msgstr "Città"
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_connection.tpl:34
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:37
 msgid "Clear"
-msgstr "Chiaro"
+msgstr "Cancella"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:10
 msgid "Click \"Save\" to see your changes."
@@ -1468,7 +1468,7 @@ msgstr "Conferma la rimozione"
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:47
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:45
 msgid "Connect"
-msgstr "Collegare"
+msgstr "Collega"
 
 #: zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_page.tpl:9
 msgid "Connect a page"
@@ -1564,7 +1564,7 @@ msgstr "Nazione"
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:261
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:119
 msgid "Create"
-msgstr "Creare"
+msgstr "Crea"
 
 #: zotonic_mod_admin/priv/templates/_rsc_preview.tpl:3
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:40
@@ -1692,7 +1692,7 @@ msgstr "Disabile"
 #: zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:15
 #: zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:17
 msgid "Disconnect"
-msgstr "Scollegare"
+msgstr "Scollega"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:36
 msgid "Discover media"
@@ -1727,7 +1727,7 @@ msgstr "Vuoi rimuovere questo blocco di pagina?"
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:33
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:45
 msgid "Download"
-msgstr "Scaricare"
+msgstr "Scarica"
 
 #: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:30
 msgid "Download media from the original website."
@@ -2034,7 +2034,7 @@ msgstr "Lava tutte le regole di dispacciamento degli URL, le cache dei template 
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:81
 msgid "Flush system caches"
-msgstr "Sciacquare le cache di sistema"
+msgstr "Svuota le cache di sistema"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:145
 #: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:23
@@ -2839,7 +2839,7 @@ msgstr "Riferimenti a"
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:51
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:18
 msgid "Refresh"
-msgstr "ricaricare"
+msgstr "Aggiorna"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:94
 msgid "Refreshed every 30 minutes."
@@ -3009,7 +3009,7 @@ msgstr "È stata pianificata un'attività in background per controllare tutte le
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:294
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user_dialog.tpl:9
 msgid "Search"
-msgstr "Ricerca"
+msgstr "Cerca"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:55
 msgid "Search indices rebuilt."
@@ -3723,7 +3723,7 @@ msgstr "In arrivo"
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:117
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:16
 msgid "Update"
-msgstr "Aggiornare"
+msgstr "Aggiorna"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_bulk_actions.tpl:17
 msgid "Update selected pages"
@@ -3741,7 +3741,7 @@ msgstr "Aggiornato"
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:17
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:161
 msgid "Upload"
-msgstr "Caricare"
+msgstr "Carica"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:20
 msgid "Upload File"
@@ -3954,7 +3954,7 @@ msgstr "Devi specificare una descrizione del file per renderlo più facile da tr
 
 #: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:188
 msgid "Your search query is invalid. Please correct it before saving."
-msgstr "La tua query di ricerca non è valida. Correggilo prima di salvare."
+msgstr "La tua query di ricerca non è valida. Correggila prima di salvare."
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:21
 msgid "Zotonic Version"
@@ -5516,7 +5516,7 @@ msgstr "Sinistra"
 #: zotonic_mod_admin_merge/priv/templates/admin_merge.tpl:3
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:3
 msgid "Merge"
-msgstr "Unire"
+msgstr "Unisci"
 
 #: zotonic_mod_admin_merge/priv/templates/_admin_edit_sidebar.tpl:8
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:28
@@ -5750,7 +5750,7 @@ msgstr "Ci sono moduli che dipendono da"
 
 #: zotonic_mod_admin_modules/src/controllers/controller_admin_module_manager.erl:79
 msgid "This module does not have a <tt>manage_schema/2</tt> function."
-msgstr "Questo modulo non ha una funzione <tt>Manage_schema/2</tt>."
+msgstr "Questo modulo non ha una funzione <tt>manage_schema/2</tt>."
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:67
 msgid "Topic"
@@ -6510,7 +6510,7 @@ msgstr "Chiudi questa finestra e accedi se sei già un utente di {site}."
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:18
 #: zotonic_mod_wires/src/actions/action_wires_confirm.erl:82
 msgid "Confirm"
-msgstr "Confermare"
+msgstr "Conferma"
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_title.tpl:4
 msgid "Confirm to connect"
@@ -9219,7 +9219,7 @@ msgstr "Redattore selezionato sulla piattaforma Zotonic"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:114
 msgid "Set the class <tt>environment-development</tt> on the <tt>&lt;html&gt;</tt> element of your pages to see the server log in the browser console.<br>In development, admin pages always show the server log in the javascript console."
-msgstr "Imposta la classe <tt>Environment-Development</tt> sull'elemento <tt>&lt;html&gt;</tt> delle tue pagine per vedere il log del server nella console del browser.<br>In fase di sviluppo, le pagine di amministrazione mostrano sempre il log del server nella console javascript."
+msgstr "Imposta la classe <tt>environment-development</tt> sull'elemento <tt>&lt;html&gt;</tt> delle tue pagine per vedere il log del server nella console del browser.<br>In fase di sviluppo, le pagine di amministrazione mostrano sempre il log del server nella console javascript."
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:272
 msgid "Show an overview of all observers"
@@ -10898,7 +10898,7 @@ msgstr "Il testo principale HTML della pagina."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:36
 msgid "The category of the page. Examples: <code>article</code> or <code>text</code>."
-msgstr "La categoria della pagina. Esempi: <code>articolo</code> o <code>testo</code>."
+msgstr "La categoria della pagina. Esempi: <code>article</code> o <code>text</code>."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:72
 msgid "The custom path for the URL of the page, for example <code>/my/page</code>"
@@ -13994,7 +13994,7 @@ msgstr "Connettiti con Microsoft"
 
 #: zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:36
 msgid "Control who can log in. Allowed values are: <tt>common</tt>, <tt>organizations</tt>, <tt>consumers</tt>, and tenant identifiers."
-msgstr "Controlla chi può accedere. I valori consentiti sono: <tt>comune</tt>, <tt>organizzazioni</tt>, <tt>consumatori</tt>e identificatori tenant."
+msgstr "Controlla chi può accedere. I valori consentiti sono: <tt>common</tt>, <tt>organizations</tt>, <tt>consumers</tt> e identificatori tenant."
 
 #: zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:3
 #: zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:6
@@ -14035,7 +14035,7 @@ msgstr "Salvate le impostazioni di Microsoft."
 
 #: zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:27
 msgid "Space separated list of scopes that you want the user to consent to. Examples are: <tt>User.Read</tt>, <tt>email</tt>, <tt>offline_access</tt> and <tt>profile</tt>. The <tt>openid</tt> scope is always added automatically."
-msgstr "Elenco separato da spazi di ambiti per i quali si desidera che l'utente acconsenta. Esempi sono: <tt>Utente.Leggi</tt>, <tt>email</tt>, <tt>offline_access</tt> e <tt>profilo</tt>. L'ambito <tt>openid</tt> viene sempre aggiunto automaticamente."
+msgstr "Elenco separato da spazi di ambiti per i quali si desidera che l'utente acconsenta. Esempi sono: <tt>User.Read</tt>, <tt>email</tt>, <tt>offline_access</tt> e <tt>profile</tt>. L'ambito <tt>openid</tt> viene sempre aggiunto automaticamente."
 
 #: zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:33
 #: zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:34
@@ -14559,7 +14559,7 @@ msgstr "Questi devono essere URL completi, ma senza le parti di query (?..) o ha
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:19
 msgid "This must be an unique name to identify the remote service. This can not be changed. Only <tt>A-Z</tt>, <tt>a-z</tt>, <tt>0-9</tt>, <tt>-</tt> and <tt>_</tt> characters are allowed."
-msgstr "Deve essere un nome univoco per identificare il servizio remoto. Non può essere modificato. Sono consentiti solo i caratteri <tt>AZ</tt>, <tt>az</tt>, <tt>0-9</tt>, <tt>-</tt> e <tt>_</tt> ."
+msgstr "Deve essere un nome univoco per identificare il servizio remoto. Non può essere modificato. Sono consentiti solo i caratteri <tt>A-Z</tt>, <tt>a-z</tt>, <tt>0-9</tt>, <tt>-</tt> e <tt>_</tt> ."
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:14
 msgid "This user will be able to use the token."
@@ -15548,7 +15548,7 @@ msgstr "Potrebbe volerci un po', aspettate!"
 
 #: zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:68
 msgid "You can change this by setting <tt>port</tt> in the <tt>zotonic.config</tt> configuration file."
-msgstr "Puoi cambiare questo impostando la porta <tt></tt> nel file di configurazione <tt>zotonic.config</tt> ."
+msgstr "Puoi cambiare questa impostazione configurando <tt>port</tt> nel file di configurazione <tt>zotonic.config</tt>."
 
 #: zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:75
 msgid "You can change this by setting <tt>ssl_port</tt> in the <tt>zotonic.config</tt> configuration file."
@@ -16006,7 +16006,7 @@ msgstr "Prima pagina nella categoria"
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:76
 msgid "For date ranges you can also use relative dates, like <code>-5 year</code>."
-msgstr "Per gli intervalli di date puoi anche usare date relative, come <code>-5 anno</code>."
+msgstr "Per gli intervalli di date puoi anche usare date relative, come <code>-5 year</code>."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:260
 msgid "Forms can be handled by special code, for example a form that is forwarded to a back office system. Depending on the handler the results are stored in the database or not."
