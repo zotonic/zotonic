@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-30 13:15\n"
+"PO-Revision-Date: 2026-10-30 14:38\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -88,12 +88,12 @@ msgstr "שָׁעָה"
 #: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:19
 #: zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:6
 msgid "hours"
-msgstr "שעה (ות"
+msgstr "שעות"
 
 #: zotonic_core/src/support/z_datetime.erl:317
 #: zotonic_mod_admin/priv/templates/_rsc_preview.tpl:11
 msgid "in"
-msgstr "ב"
+msgstr "בעוד"
 
 #: zotonic_core/src/support/z_datetime.erl:371
 #: zotonic_core/src/support/z_datetime.erl:374
@@ -206,7 +206,7 @@ msgstr "הוסף קישורים לקבוצת שיתוף הפעולה"
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:67
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:55
 msgid "All"
-msgstr "את כל"
+msgstr "הכול"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_collab.tpl:8
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:39
@@ -237,7 +237,7 @@ msgstr "כל קבוצות התוכן הרגילות"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:28
 msgid "Allowed file and mime types, separate with ',' — type 'none' if no extra types allowed, leave empty for the default"
-msgstr "סוגי קבצים ופנטומימה מותרים, נפרדים עם ',' - הקלד 'none' אם אין אפשרות להוסיף סוגים נוספים, השאר ריק עבור ברירת המחדל"
+msgstr "סוגי קבצים וסוגי MIME מותרים, מופרדים ב-',' — יש להקליד 'none' אם לא מותרים סוגים נוספים, ולהשאיר את השדה ריק לשימוש בברירת המחדל"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_collab.tpl:13
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:44
@@ -347,7 +347,7 @@ msgstr "האם אתה בטוח שברצונך להחזיר את כל כללי ה
 #: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:69
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:218
 msgid "Cancel"
-msgstr "לְבַטֵל"
+msgstr "ביטול"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:6
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:9
@@ -480,7 +480,7 @@ msgstr "כללי תוכן לחברי ומנהלי קבוצת שיתוף פעול
 
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:43
 msgid "Could not move to collaboration group."
-msgstr "לא ניתן היה לעבור לקבוצת שיתוף פעולה."
+msgstr "לא ניתן היה להעביר לקבוצת שיתוף הפעולה."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:40
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:51
@@ -524,7 +524,7 @@ msgstr "לא ניתן היה לעבור לקבוצת שיתוף פעולה."
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:25
 #: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:12
 msgid "Delete"
-msgstr "לִמְחוֹק"
+msgstr "מחיקה"
 
 #: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:531
 msgid "Delete is canceled, there are users in the user groups."
@@ -550,7 +550,7 @@ msgstr "לְהַכּחִישׁ"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:43
 msgid "Edit &amp; link rights on the collaboration groups"
-msgstr "ערוך &amp; זכויות קישור בקבוצות שיתוף הפעולה"
+msgstr "הרשאות עריכה וקישור בקבוצות שיתוף הפעולה"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:5
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:43
@@ -564,7 +564,7 @@ msgstr "ערוך את קבוצת שיתוף הפעולה"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:11
 msgid "Enter extensions (like <tt>.png</tt>), mime types (like <tt>image/png</tt>) or one of:"
-msgstr "הזן סיומות (כמו <tt>.png</tt>), סוגי פנטומימה (כמו <tt>image / png</tt>) או אחד מ:"
+msgstr "הזן סיומות (כמו <tt>.png</tt>), סוגי MIME (כמו <tt>image/png</tt>) או אחד מ:"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:106
 msgid "Exactly this category, no sub-categories"
@@ -572,11 +572,11 @@ msgstr "בדיוק הקטגוריה הזו, אין קטגוריות משנה"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:22
 msgid "Export edit rules"
-msgstr "ייצא כללי עריכה"
+msgstr "ייצוא טיוטת הכללים"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:10
 msgid "File types follow the group hierarchy. Derived groups inherit the mime settings from their ancestor."
-msgstr "סוגי קבצים עוקבים אחר ההיררכיה של הקבוצה. קבוצות נגזרות יורשות את הגדרות הפנטומימה מאב קדמון."
+msgstr "סוגי הקבצים נקבעים לפי היררכיית הקבוצות. קבוצות נגזרות יורשות את הגדרות ה-MIME מהקבוצות שמעליהן."
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:28
 msgid "File uploads"
@@ -617,11 +617,11 @@ msgstr "יְבוּא"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:27
 msgid "Import edit rules..."
-msgstr "ייבא כללי עריכה ..."
+msgstr "ייבוא טיוטת הכללים..."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:30
 msgid "Import edit version of ACL rules"
-msgstr "ייבא גרסת עריכה של כללי ACL"
+msgstr "ייבוא טיוטה של כללי ACL"
 
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:137
 msgid "Importing, the list of rules will refresh after importing."
@@ -732,7 +732,7 @@ msgstr "או לחץ על <strong>'מחק'</strong> כדי לנתק את כל ה�
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:154
 msgid "Own content"
-msgstr "תוכן משלו"
+msgstr "תוכן עצמי"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:27
 msgid "People who can view this page"
@@ -741,11 +741,11 @@ msgstr "אנשים שיכולים לצפות בדף זה"
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:15
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:167
 msgid "Permissions"
-msgstr "אישורים"
+msgstr "הרשאות"
 
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:46
 msgid "Please select a collaboration_group"
-msgstr "אנא בחר קבוצת_שיתוף פעולה"
+msgstr "נא לבחור קבוצת שיתוף פעולה"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:34
 msgid "Private"
@@ -753,15 +753,15 @@ msgstr "פְּרָטִי"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:38
 msgid "Private properties are email, phone, visiting address, and date range."
-msgstr "נכסים פרטיים הם דוא\"ל, טלפון, כתובת ביקור וטווח תאריכים."
+msgstr "המאפיינים הפרטיים הם דוא״ל, טלפון, כתובת לביקור וטווח תאריכים."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:4
 msgid "Publish"
-msgstr "לְפַרְסֵם"
+msgstr "פרסום"
 
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:107
 msgid "Publish successful"
-msgstr "פרסם מוצלח"
+msgstr "הפרסום הצליח"
 
 #: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:14
 msgid "Published access control rules are active."
@@ -774,7 +774,7 @@ msgstr "כללים שפורסמו"
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:41
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:69
 msgid "Revert"
-msgstr "לַחֲזוֹר"
+msgstr "שחזור"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:35
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:39
@@ -783,7 +783,7 @@ msgstr "חזור לגרסה שפורסמה"
 
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:101
 msgid "Reverted rules"
-msgstr "חוקים שהוחזרו"
+msgstr "הכללים שוחזרו"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:17
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:183
@@ -813,7 +813,7 @@ msgstr "חוקים שהוחזרו"
 #: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:95
 #: zotonic_mod_translation/priv/templates/_dialog_translation_edit.tpl:44
 msgid "Save"
-msgstr "להציל"
+msgstr "שמירה"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:79
 msgid "Save Upload Permissions"
@@ -840,11 +840,11 @@ msgstr "בחר קטגוריה"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:84
 msgid "Show"
-msgstr "הופעה"
+msgstr "הצגה"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:23
 msgid "Show private properties to"
-msgstr "הצג נכסים פרטיים ל-"
+msgstr "הצג מאפיינים פרטיים ל-"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:96
 msgid "Show this ACL user group first:"
@@ -1409,7 +1409,7 @@ msgstr "עִיר"
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_connection.tpl:34
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:37
 msgid "Clear"
-msgstr "ברור"
+msgstr "ניקוי"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:10
 msgid "Click \"Save\" to see your changes."
@@ -1468,7 +1468,7 @@ msgstr "אשר את ההסרה"
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:47
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:45
 msgid "Connect"
-msgstr "לְחַבֵּר"
+msgstr "חיבור"
 
 #: zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_page.tpl:9
 msgid "Connect a page"
@@ -1501,7 +1501,7 @@ msgstr "סוג תוכן"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:42
 msgid "Copied download link to clipboard"
-msgstr "קישור להורדה שהועתק ללוח"
+msgstr "קישור ההורדה הועתק ללוח"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:73
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:21
@@ -1522,7 +1522,7 @@ msgstr "קישור להורדה שהועתק ללוח"
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:78
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:94
 msgid "Copy"
-msgstr "עותק"
+msgstr "העתקה"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:35
 msgid "Copy download link"
@@ -1564,7 +1564,7 @@ msgstr "מדינה"
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:261
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:119
 msgid "Create"
-msgstr "לִיצוֹר"
+msgstr "יצירה"
 
 #: zotonic_mod_admin/priv/templates/_rsc_preview.tpl:3
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:40
@@ -1654,7 +1654,7 @@ msgstr "מחק דף זה..."
 
 #: zotonic_mod_admin/src/mod_admin.erl:957
 msgid "Deleted tasks."
-msgstr "משימות שנמחקו."
+msgstr "המשימות נמחקו."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:31
 msgid "Deleted."
@@ -1692,7 +1692,7 @@ msgstr "נכים"
 #: zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:15
 #: zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:17
 msgid "Disconnect"
-msgstr "לְנַתֵק"
+msgstr "ניתוק"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:36
 msgid "Discover media"
@@ -1740,7 +1740,7 @@ msgstr "גרור כדי לשנות מיקום"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:33
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:38
 msgid "Duplicate"
-msgstr "לְשַׁכְפֵּל"
+msgstr "שכפול"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:8
 #: zotonic_mod_admin/src/actions/action_admin_dialog_duplicate_rsc.erl:59
@@ -1794,7 +1794,7 @@ msgstr "כתובת דוא\"ל"
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:14
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:16
 msgid "Edit"
-msgstr "לַעֲרוֹך"
+msgstr "עריכה"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:12
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:16
@@ -2034,7 +2034,7 @@ msgstr "שטוף את כל כללי שליחת כתובות האתרים, מטמ
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:81
 msgid "Flush system caches"
-msgstr "מטמני מערכת שטיפה"
+msgstr "ניקוי מטמוני המערכת"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:145
 #: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:23
@@ -2839,7 +2839,7 @@ msgstr "מפנים ל"
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:51
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:18
 msgid "Refresh"
-msgstr "לְרַעֲנֵן"
+msgstr "רענון"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:94
 msgid "Refreshed every 30 minutes."
@@ -2886,7 +2886,7 @@ msgstr "פרטים על בידוד הסנדבוקס המרוחק ועל התור
 #: zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:7
 #: zotonic_mod_translation/priv/templates/_translation_language_status.tpl:34
 msgid "Remove"
-msgstr "לְהַסִיר"
+msgstr "הסרה"
 
 #: zotonic_mod_admin/src/mod_admin.erl:1128
 msgid "Removed the connection to"
@@ -3009,7 +3009,7 @@ msgstr "תזמן משימת רקע לבדיקת כל חיבורי הפניות."
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:294
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user_dialog.tpl:9
 msgid "Search"
-msgstr "לחפש"
+msgstr "חיפוש"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:55
 msgid "Search indices rebuilt."
@@ -3030,7 +3030,7 @@ msgstr "תוצאות חיפוש"
 
 #: zotonic_mod_admin/priv/templates/_admin_menu.tpl:85
 msgid "Search..."
-msgstr "לחפש..."
+msgstr "חיפוש..."
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:56
 msgid "Security Directory"
@@ -3812,7 +3812,7 @@ msgstr "תקף ל:"
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:20
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:38
 msgid "View"
-msgstr "נוף"
+msgstr "הצגה"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:25
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:71
@@ -4797,7 +4797,7 @@ msgstr "סיסמה מאובטחת ממולאת מראש, החלפה במידת �
 #: zotonic_mod_menu/priv/templates/admin_menu_hierarchy.tpl:26
 #: zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:25
 msgid "Add"
-msgstr "לְהוֹסִיף"
+msgstr "הוספה"
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:63
 msgid "Add a new user"
@@ -5427,7 +5427,7 @@ msgstr "זוגות מדורגים"
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:135
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:61
 msgid "Reset"
-msgstr "אִתחוּל"
+msgstr "איפוס"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:214
 msgid "Scrollable keyword overlap matrix"
@@ -5516,7 +5516,7 @@ msgstr "שמאלה"
 #: zotonic_mod_admin_merge/priv/templates/admin_merge.tpl:3
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:3
 msgid "Merge"
-msgstr "לְמַזֵג"
+msgstr "מיזוג"
 
 #: zotonic_mod_admin_merge/priv/templates/_admin_edit_sidebar.tpl:8
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:28
@@ -6510,7 +6510,7 @@ msgstr "סגור חלון זה והיכנס אם אתה כבר משתמש של {
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:18
 #: zotonic_mod_wires/src/actions/action_wires_confirm.erl:82
 msgid "Confirm"
-msgstr "לְאַשֵׁר"
+msgstr "אישור"
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_title.tpl:4
 msgid "Confirm to connect"
@@ -9219,7 +9219,7 @@ msgstr "עורך נבחר במנוע Zotonic"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:114
 msgid "Set the class <tt>environment-development</tt> on the <tt>&lt;html&gt;</tt> element of your pages to see the server log in the browser console.<br>In development, admin pages always show the server log in the javascript console."
-msgstr "הגדר את המחלקה <tt>סביבה-פיתוח</tt> ברכיב <tt>&lt;html&gt;</tt> של הדפים שלך כדי לראות את יומן השרת במסוף הדפדפן.<br>בפיתוח, דפי ניהול תמיד מציגים את יומן השרת במסוף ה-javascript."
+msgstr "הגדר את המחלקה <tt>environment-development</tt> ברכיב <tt>&lt;html&gt;</tt> של הדפים שלך כדי לראות את יומן השרת במסוף הדפדפן.<br>בפיתוח, דפי ניהול תמיד מציגים את יומן השרת במסוף ה-javascript."
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:272
 msgid "Show an overview of all observers"
@@ -10898,7 +10898,7 @@ msgstr "הטקסט הראשי של הדף ב-HTML."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:36
 msgid "The category of the page. Examples: <code>article</code> or <code>text</code>."
-msgstr "הקטגוריה של הדף. דוגמאות: <code>מאמר</code> או <code>טקסט</code>."
+msgstr "הקטגוריה של הדף. דוגמאות: <code>article</code> או <code>text</code>."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:72
 msgid "The custom path for the URL of the page, for example <code>/my/page</code>"
@@ -13994,7 +13994,7 @@ msgstr "התחבר עם מיקרוסופט"
 
 #: zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:36
 msgid "Control who can log in. Allowed values are: <tt>common</tt>, <tt>organizations</tt>, <tt>consumers</tt>, and tenant identifiers."
-msgstr "שליטה מי יכול להיכנס. הערכים המותרים הם: <tt>נפוץ</tt>, <tt>ארגונים</tt>, <tt>צרכנים</tt>ומזהי דיירים."
+msgstr "שליטה מי יכול להיכנס. הערכים המותרים הם: <tt>common</tt>, <tt>organizations</tt>, <tt>consumers</tt>ומזהי דיירים."
 
 #: zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:3
 #: zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:6
@@ -14559,7 +14559,7 @@ msgstr "אלה חייבות להיות כתובות אתרים שלמות, אך 
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:19
 msgid "This must be an unique name to identify the remote service. This can not be changed. Only <tt>A-Z</tt>, <tt>a-z</tt>, <tt>0-9</tt>, <tt>-</tt> and <tt>_</tt> characters are allowed."
-msgstr "זה חייב להיות שם ייחודי לזיהוי השירות המרוחק. לא ניתן לשנות אותו. מותר להשתמש רק בתווים <tt>A-Z</tt>, <tt>a-z</tt>, <tt>0-9</tt>, <tt>-</tt> <tt> ו-_</tt>."
+msgstr "זה חייב להיות שם ייחודי לזיהוי השירות המרוחק. לא ניתן לשנות אותו. מותר להשתמש רק בתווים <tt>A-Z</tt>, <tt>a-z</tt>, <tt>0-9</tt>, <tt>-</tt> ו-<tt>_</tt>."
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:14
 msgid "This user will be able to use the token."
@@ -14654,7 +14654,7 @@ msgstr "ניסיון לתקן סרטונים מוטבעים שעבורם הטמ�
 
 #: zotonic_mod_oembed/src/mod_oembed.erl:461
 msgid "Attempting to fix ~p videos."
-msgstr "מנסה לתקן ~ p סרטונים."
+msgstr "מנסה לתקן ~p סרטונים."
 
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:27
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:59
@@ -15548,7 +15548,7 @@ msgstr "זה עלול לקחת זמן מה, רגע!"
 
 #: zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:68
 msgid "You can change this by setting <tt>port</tt> in the <tt>zotonic.config</tt> configuration file."
-msgstr "אתה יכול לשנות את זה על ידי קביעת <tt>נמל</tt> ב <tt>zotonic.config</tt> קובץ התצורה."
+msgstr "אפשר לשנות זאת באמצעות הגדרת <tt>port</tt> בקובץ התצורה <tt>zotonic.config</tt>."
 
 #: zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:75
 msgid "You can change this by setting <tt>ssl_port</tt> in the <tt>zotonic.config</tt> configuration file."
@@ -16006,7 +16006,7 @@ msgstr "עמוד ראשון בקטגוריה"
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:76
 msgid "For date ranges you can also use relative dates, like <code>-5 year</code>."
-msgstr "עבור טווחי תאריכים אתה יכול גם להשתמש בתאריכים יחסיים, כמו <code>-5 שנים</code>."
+msgstr "עבור טווחי תאריכים אתה יכול גם להשתמש בתאריכים יחסיים, כמו <code>-5 year</code>."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:260
 msgid "Forms can be handled by special code, for example a form that is forwarded to a back office system. Depending on the handler the results are stored in the database or not."
@@ -18072,7 +18072,7 @@ msgstr "התחבר עם שם משתמש <b>Admin</b> וסיסמה"
 
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:49
 msgid "Make sure that this hostname has a valid DNS entry or is added to your <tt>/etc/hosts</tt> file."
-msgstr "ודא שלשם המארח הזה יש ערך DNS חוקי או שהוא נוסף לקובץ <tt>/ etc / hosts</tt>."
+msgstr "ודא שלשם המארח הזה יש ערך DNS חוקי או שהוא נוסף לקובץ <tt>/etc/hosts</tt>."
 
 #: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:544
 msgid "No permission to create the site directory at:"
