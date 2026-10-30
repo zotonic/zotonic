@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-30 13:15\n"
+"PO-Revision-Date: 2026-10-30 14:38\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -62,7 +62,7 @@ msgstr "غير مصرح به للوصول إلى عنوان URL للمورد ا�
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
 #: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:42
 msgid "Website"
-msgstr "الموقع"
+msgstr "الموقع الإلكتروني"
 
 #: zotonic_core/src/support/z_datetime.erl:317
 msgid "ago"
@@ -93,7 +93,7 @@ msgstr "ساعات"
 #: zotonic_core/src/support/z_datetime.erl:317
 #: zotonic_mod_admin/priv/templates/_rsc_preview.tpl:11
 msgid "in"
-msgstr "في"
+msgstr "بعد"
 
 #: zotonic_core/src/support/z_datetime.erl:371
 #: zotonic_core/src/support/z_datetime.erl:374
@@ -237,7 +237,7 @@ msgstr "كل مجموعات المحتوى العادي"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:28
 msgid "Allowed file and mime types, separate with ',' — type 'none' if no extra types allowed, leave empty for the default"
-msgstr "أنواع الملفات و mime المسموح بها ، منفصلة بـ \"،\" - اكتب \"none\" إذا لم يكن هناك أنواع إضافية مسموح بها ، اتركها فارغة للإعداد الافتراضي"
+msgstr "أنواع الملفات وMIME المسموح بها، مفصولة بالرمز ',' — اكتب 'none' إذا لم يُسمح بأنواع إضافية، واترك الحقل فارغًا لاستخدام القيمة الافتراضية"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_collab.tpl:13
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:44
@@ -247,7 +247,7 @@ msgstr "أي رؤية"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:1
 msgid "Are you sure you want to delete the following user groups:"
-msgstr "هل أنت متأكد أنك تريد حذف المجوعات التالية:"
+msgstr "هل أنت متأكد أنك تريد حذف مجموعات المستخدمين التالية؟"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:7
 msgid "Are you sure you want to make all rules permanent?"
@@ -255,7 +255,7 @@ msgstr "هل أنت متأكد أنك تريد أن تجعل كل القواعد
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:38
 msgid "Are you sure you want to restore all ACL rules to their currently published version?"
-msgstr "هل أنت متأكد أنك تريد استعادة كل قواعد ACL إلى إصدارهم المنشور حالياً؟"
+msgstr "هل أنت متأكد أنك تريد استعادة جميع قواعد ACL إلى نسختها المنشورة حاليًا؟"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:16
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:36
@@ -347,7 +347,7 @@ msgstr "هل أنت متأكد أنك تريد استعادة كل قواعد AC
 #: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:69
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:218
 msgid "Cancel"
-msgstr "ألغي"
+msgstr "إلغاء"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:6
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:9
@@ -437,7 +437,7 @@ msgstr "مجموعات التعاون"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:32
 msgid "Collaboration groups are added by creating a new page in the category:"
-msgstr "تم إضافة مجموعات التعاون بواسطة إنشاء صفحة جديدة في الفئة:"
+msgstr "تُضاف مجموعات التعاون بإنشاء صفحة جديدة في الفئة:"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:30
 msgid "Collaboration groups are user groups where all content belongs to the group."
@@ -480,7 +480,7 @@ msgstr "قواعد المحتوى لأعضاء و مدراء مجموعات ال
 
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:43
 msgid "Could not move to collaboration group."
-msgstr "تعذر الانتقال إلى مجموعة التعاون."
+msgstr "تعذر النقل إلى مجموعة التعاون."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:40
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:51
@@ -550,7 +550,7 @@ msgstr "ينكر"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:43
 msgid "Edit &amp; link rights on the collaboration groups"
-msgstr "قم بتعديل رابط الحقوق لـ &amp; في مجموعات العاون"
+msgstr "صلاحيات التعديل والربط في مجموعات التعاون"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:5
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:43
@@ -564,7 +564,7 @@ msgstr "قم بتعديل مجموعة التعاون"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:11
 msgid "Enter extensions (like <tt>.png</tt>), mime types (like <tt>image/png</tt>) or one of:"
-msgstr "أدخل الامتدادات (مثل <tt>.png</tt>) أو أنواع mime (مثل <tt>صورة / png</tt>) أو أحد:"
+msgstr "أدخل الامتدادات (مثل <tt>.png</tt>) أو أنواع mime (مثل <tt>image/png</tt>) أو أحد:"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:106
 msgid "Exactly this category, no sub-categories"
@@ -572,11 +572,11 @@ msgstr "بالضبط هذه الفئة، لا توجد فئات فرعية"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:22
 msgid "Export edit rules"
-msgstr "تصدير قواعد التعديل"
+msgstr "تصدير مسودة القواعد"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:10
 msgid "File types follow the group hierarchy. Derived groups inherit the mime settings from their ancestor."
-msgstr "أنواع الملفات تتبع التسلسل الهرمي للمجموعة. ترث المجموعات المشتقة إعدادات التمثيل الصامت من أسلافهم."
+msgstr "تتبع أنواع الملفات التسلسل الهرمي للمجموعات. وترث المجموعات الفرعية إعدادات MIME من المجموعات الأعلى منها."
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:28
 msgid "File uploads"
@@ -617,11 +617,11 @@ msgstr "استيراد"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:27
 msgid "Import edit rules..."
-msgstr "استيراد قواعد التعديل..."
+msgstr "استيراد مسودة القواعد..."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:30
 msgid "Import edit version of ACL rules"
-msgstr "استراد قواعد التعديل للإصدار ACL"
+msgstr "استيراد مسودة قواعد ACL"
 
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:137
 msgid "Importing, the list of rules will refresh after importing."
@@ -630,7 +630,7 @@ msgstr "استيراد، سيتم تحديث قائمة القواعد بعد ا
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:40
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:17
 msgid "Keep"
-msgstr "حافظ على"
+msgstr "احتفظ"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:159
 msgid "Manage own"
@@ -745,7 +745,7 @@ msgstr "الأذونات"
 
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:46
 msgid "Please select a collaboration_group"
-msgstr "الرجاء تحديد مجموعة_التعاون"
+msgstr "الرجاء تحديد مجموعة تعاون"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:34
 msgid "Private"
@@ -753,7 +753,7 @@ msgstr "خاص"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:38
 msgid "Private properties are email, phone, visiting address, and date range."
-msgstr "الملكية الخاصة هي عنوان البريد الإلكتروني و هاتف و عنوان الزيارة و نطاق التاريخ."
+msgstr "الخصائص الخاصة هي البريد الإلكتروني والهاتف وعنوان الزيارة والنطاق الزمني."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:4
 msgid "Publish"
@@ -774,7 +774,7 @@ msgstr "القواعد المنشورة"
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:41
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:69
 msgid "Revert"
-msgstr "العودة"
+msgstr "استعادة"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:35
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:39
@@ -783,7 +783,7 @@ msgstr "العودة إلى الوراء للإصدار الذي تم نشره"
 
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:101
 msgid "Reverted rules"
-msgstr "القواعد التي تم إرجاعها"
+msgstr "تمت استعادة القواعد"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:17
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:183
@@ -821,7 +821,7 @@ msgstr "حفظ أذونات التحميل"
 
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:144
 msgid "Saved collaboration group settings"
-msgstr "إعدادات مجموعة التعاون المحفوظة"
+msgstr "تم حفظ إعدادات مجموعة التعاون"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:32
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_visible_for.tpl:38
@@ -831,7 +831,7 @@ msgstr "إعدادات مجموعة التعاون المحفوظة"
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:47
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_results.tpl:41
 msgid "Select"
-msgstr "يختار"
+msgstr "اختيار"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_category_dropdown.tpl:3
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:203
@@ -844,11 +844,11 @@ msgstr "عرض"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:23
 msgid "Show private properties to"
-msgstr "عرض الملكية الخاصة لـ"
+msgstr "عرض الخصائص الخاصة لـ"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:96
 msgid "Show this ACL user group first:"
-msgstr "عرض عرض مجموعة المستخدمين لهذا ACL أولا:"
+msgstr "عرض مجموعة مستخدمي ACL هذه أولاً:"
 
 #: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:510
 #: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:526
@@ -1409,7 +1409,7 @@ msgstr "المدينة"
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_connection.tpl:34
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:37
 msgid "Clear"
-msgstr "واضح"
+msgstr "مسح"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:10
 msgid "Click \"Save\" to see your changes."
@@ -1564,7 +1564,7 @@ msgstr "البلد"
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:261
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:119
 msgid "Create"
-msgstr "خلق"
+msgstr "إنشاء"
 
 #: zotonic_mod_admin/priv/templates/_rsc_preview.tpl:3
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:40
@@ -1654,7 +1654,7 @@ msgstr "احذف هذه الصفحة..."
 
 #: zotonic_mod_admin/src/mod_admin.erl:957
 msgid "Deleted tasks."
-msgstr "المهام المحذوفة."
+msgstr "تم حذف المهام."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:31
 msgid "Deleted."
@@ -2034,7 +2034,7 @@ msgstr "قم بمسح و تحديث جميع روابط قواعد إرسال و
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:81
 msgid "Flush system caches"
-msgstr "إعادة تحديث ذاكرة النظام"
+msgstr "مسح ذاكرات التخزين المؤقت للنظام"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:145
 #: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:23
@@ -2839,7 +2839,7 @@ msgstr "يشير إلى"
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:51
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:18
 msgid "Refresh"
-msgstr "ينعش"
+msgstr "تحديث"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:94
 msgid "Refreshed every 30 minutes."
@@ -3009,7 +3009,7 @@ msgstr "تم جدولة مهمة خلفية للتحقق من جميع الات�
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:294
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user_dialog.tpl:9
 msgid "Search"
-msgstr "يبحث"
+msgstr "بحث"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:55
 msgid "Search indices rebuilt."
@@ -3741,7 +3741,7 @@ msgstr "تم التحديث"
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:17
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:161
 msgid "Upload"
-msgstr "تحميل"
+msgstr "رفع"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:20
 msgid "Upload File"
@@ -3812,7 +3812,7 @@ msgstr "صالح لـ:"
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:20
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:38
 msgid "View"
-msgstr "رأي"
+msgstr "عرض"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:25
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:71
@@ -3954,7 +3954,7 @@ msgstr "يجب عليك تحديد وصف للملف لتسهيل العثور �
 
 #: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:188
 msgid "Your search query is invalid. Please correct it before saving."
-msgstr "استعلام البحث الخاص بك غير صالح. يرجى تصحيحها قبل الحفظ."
+msgstr "استعلام البحث الخاص بك غير صالح. يرجى تصحيحه قبل الحفظ."
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:21
 msgid "Zotonic Version"
@@ -5516,7 +5516,7 @@ msgstr "اليسار"
 #: zotonic_mod_admin_merge/priv/templates/admin_merge.tpl:3
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:3
 msgid "Merge"
-msgstr "قم بدمج"
+msgstr "دمج"
 
 #: zotonic_mod_admin_merge/priv/templates/_admin_edit_sidebar.tpl:8
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:28
@@ -5750,7 +5750,7 @@ msgstr "هناك وحدات تعتمد على"
 
 #: zotonic_mod_admin_modules/src/controllers/controller_admin_module_manager.erl:79
 msgid "This module does not have a <tt>manage_schema/2</tt> function."
-msgstr "لا تحتوي هذه الوحدة على وظيفة <tt>Manage_schema/2</tt>."
+msgstr "لا تحتوي هذه الوحدة على وظيفة <tt>manage_schema/2</tt>."
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:67
 msgid "Topic"
@@ -6510,7 +6510,7 @@ msgstr "أغلق هذه النافذة وقم بتسجيل الدخول إذا �
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:18
 #: zotonic_mod_wires/src/actions/action_wires_confirm.erl:82
 msgid "Confirm"
-msgstr "قم بتأكيد"
+msgstr "تأكيد"
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_title.tpl:4
 msgid "Confirm to connect"
@@ -9219,7 +9219,7 @@ msgstr "محرر مختار على منصة Zotonic"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:114
 msgid "Set the class <tt>environment-development</tt> on the <tt>&lt;html&gt;</tt> element of your pages to see the server log in the browser console.<br>In development, admin pages always show the server log in the javascript console."
-msgstr "قم بتعيين الفئة <tt>تطوير البيئة</tt> على عنصر <tt>&lt;html&gt;</tt> في صفحاتك لرؤية سجل الخادم في وحدة تحكم المتصفح.<br>أثناء التطوير، تعرض صفحات الإدارة دائمًا سجل الخادم في وحدة تحكم جافا سكريبت."
+msgstr "قم بتعيين الفئة <tt>environment-development</tt> على عنصر <tt>&lt;html&gt;</tt> في صفحاتك لرؤية سجل الخادم في وحدة تحكم المتصفح.<br>أثناء التطوير، تعرض صفحات الإدارة دائمًا سجل الخادم في وحدة تحكم جافا سكريبت."
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:272
 msgid "Show an overview of all observers"
@@ -10397,7 +10397,7 @@ msgstr "تعذر الوصول إلى الخدمة ، تحقق جيدًا من ا
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:85
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:204
 msgid "Could not access the service, double check your settings and try again. Make sure that API key has access rights to create and remove a (temporary) <code>-zotonic-filestore-test-file-</code> file."
-msgstr "تعذر الوصول إلى الخدمة ، تحقق جيدًا من الإعدادات وحاول مرة أخرى. تأكد من أن مفتاح API لديه حقوق الوصول لإنشاء وإزالة (مؤقت) <code>ملف zotonic-filestore-test-file-</code>."
+msgstr "تعذر الوصول إلى الخدمة. تحقق من الإعدادات وحاول مرة أخرى. تأكد من أن مفتاح API يملك صلاحية إنشاء الملف المؤقت <code>-zotonic-filestore-test-file-</code> وحذفه."
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:16
 msgid "Currently Zotonic supports FTP, WebDAV and services that are compatible with the S3 file services API. These include:"
@@ -10898,7 +10898,7 @@ msgstr "نص HTML الرئيسي للصفحة."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:36
 msgid "The category of the page. Examples: <code>article</code> or <code>text</code>."
-msgstr "فئة الصفحة. أمثلة: <code>مقالة</code> أو <code>نص</code>."
+msgstr "فئة الصفحة. أمثلة: <code>article</code> أو <code>text</code>."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:72
 msgid "The custom path for the URL of the page, for example <code>/my/page</code>"
@@ -12050,7 +12050,7 @@ msgstr "<em>قم بإزالة</em> كافة المستلمين الموجودي�
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:11
 msgid "<h3>Recipients</h3><p>To add, remove or view the mailing list recipients, click on the “show all recipients” link.</p><h3>Sender name and e-mail address</h3><p>The sender name and e-mail address can be set per mailing list. This defaults to the config key <tt>site.email_from</tt>.  The <i>From</i> of the sent e-mails will be set to the sender name and address.</p><h3>Automatic upload of recipient lists</h3><p>The drop folder filename is used for the automatic upload of complete recipients list. The filename must match the filename of the uploaded recipient list. The complete list of recipients will be replaced with the recipients in the drop folder file.</p><h3>Access control</h3><p>Everybody who can edit a mailing list is also allowed to send a page to the mailing list. Everybody who can view the mailing list is allowed to add an e-mail address to the mailing list.</p>"
-msgstr "<h3>المستلمون</h3><p>لإضافة أو إزالة أو عرض مستلمي القائمة البريدية ، انقر فوق الارتباط \"إظهار كافة المستلمين\".</p><h3>اسم المرسل وعنوان البريد الإلكتروني</h3><p>يمكن تعيين اسم المرسل وعنوان البريد الإلكتروني لكل قائمة بريدية. هذا يتم تعيينه افتراضيًا على موقع مفتاح</tt><tt>. سيتم تعيين <i>من</i> من رسائل البريد الإلكتروني المرسلة على اسم المرسل وعنوانه.</p><h3>التحميل التلقائي لقوائم المستلمين</h3><p>يتم استخدام اسم ملف مجلد الإسقاط للتحميل التلقائي لقائمة المستلمين الكاملة. يجب أن يتطابق اسم الملف مع اسم ملف قائمة المستلمين التي تم تحميلها. سيتم استبدال القائمة الكاملة بالمستلمين بالمستلمين في ملف مجلد الإسقاط.</p><h3>التحكم في الوصول</h3><p>كل شخص يمكنه تعديل قائمة بريدية يُسمح له أيضًا بإرسال صفحة إلى القائمة البريدية. يُسمح لأي شخص يمكنه عرض القائمة البريدية بإضافة عنوان بريد إلكتروني إلى القائمة البريدية.</p>"
+msgstr "<h3>المستلمون</h3><p>لإضافة أو إزالة أو عرض مستلمي القائمة البريدية ، انقر فوق الارتباط \"إظهار كافة المستلمين\".</p><h3>اسم المرسل وعنوان البريد الإلكتروني</h3><p>يمكن تعيين اسم المرسل وعنوان البريد الإلكتروني لكل قائمة بريدية. تُستخدم افتراضيًا قيمة مفتاح الإعداد <tt>site.email_from</tt>. سيتم تعيين <i>من</i> من رسائل البريد الإلكتروني المرسلة على اسم المرسل وعنوانه.</p><h3>التحميل التلقائي لقوائم المستلمين</h3><p>يتم استخدام اسم ملف مجلد الإسقاط للتحميل التلقائي لقائمة المستلمين الكاملة. يجب أن يتطابق اسم الملف مع اسم ملف قائمة المستلمين التي تم تحميلها. سيتم استبدال القائمة الكاملة بالمستلمين بالمستلمين في ملف مجلد الإسقاط.</p><h3>التحكم في الوصول</h3><p>كل شخص يمكنه تعديل قائمة بريدية يُسمح له أيضًا بإرسال صفحة إلى القائمة البريدية. يُسمح لأي شخص يمكنه عرض القائمة البريدية بإضافة عنوان بريد إلكتروني إلى القائمة البريدية.</p>"
 
 #: zotonic_mod_mailinglist/src/mod_mailinglist.erl:444
 msgid "A mailing list cannot be sent as a mailing."
@@ -13994,7 +13994,7 @@ msgstr "تواصل مع Microsoft"
 
 #: zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:36
 msgid "Control who can log in. Allowed values are: <tt>common</tt>, <tt>organizations</tt>, <tt>consumers</tt>, and tenant identifiers."
-msgstr "التحكم في من يمكنه تسجيل الدخول. القيم المسموح بها هي: <tt>مشترك</tt>و <tt>مؤسستان</tt>و <tt>مستهلكون</tt>ومعرفات المستأجر."
+msgstr "التحكم في من يمكنه تسجيل الدخول. القيم المسموح بها هي: <tt>common</tt>و <tt>organizations</tt>و <tt>consumers</tt>ومعرفات المستأجر."
 
 #: zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:3
 #: zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:6
@@ -14035,7 +14035,7 @@ msgstr "حفظ إعدادات Microsoft."
 
 #: zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:27
 msgid "Space separated list of scopes that you want the user to consent to. Examples are: <tt>User.Read</tt>, <tt>email</tt>, <tt>offline_access</tt> and <tt>profile</tt>. The <tt>openid</tt> scope is always added automatically."
-msgstr "قائمة نطاقات مفصولة بمسافة تريد أن يوافق عليها المستخدم. الأمثلة هي: <tt>مستخدم ، اقرأ</tt>، <tt>بريد إلكتروني</tt>، <tt>offline_access</tt> و <tt>ملف تعريف</tt>. يتم دائمًا إضافة النطاق <tt>openid</tt> تلقائيًا."
+msgstr "قائمة نطاقات مفصولة بمسافة تريد أن يوافق عليها المستخدم. الأمثلة هي: <tt>User.Read</tt>، <tt>email</tt>، <tt>offline_access</tt> و <tt>profile</tt>. يتم دائمًا إضافة النطاق <tt>openid</tt> تلقائيًا."
 
 #: zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:33
 #: zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:34
@@ -14559,7 +14559,7 @@ msgstr "يجب أن تكون هذه عناوين URL كاملة ، ولكن بد
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:19
 msgid "This must be an unique name to identify the remote service. This can not be changed. Only <tt>A-Z</tt>, <tt>a-z</tt>, <tt>0-9</tt>, <tt>-</tt> and <tt>_</tt> characters are allowed."
-msgstr "يجب أن يكون هذا اسمًا فريدًا لتعريف الخدمة البعيدة. لا يمكن تغيير هذا الاسم. يُسمح فقط بالأحرف <tt>AZ</tt>، <tt>az</tt>، <tt>0-9</tt>، <tt>-</tt> و <tt>_</tt> ."
+msgstr "يجب أن يكون هذا اسمًا فريدًا لتعريف الخدمة البعيدة. لا يمكن تغيير هذا الاسم. يُسمح فقط بالأحرف <tt>A-Z</tt>، <tt>a-z</tt>، <tt>0-9</tt>، <tt>-</tt> و <tt>_</tt> ."
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:14
 msgid "This user will be able to use the token."
@@ -14654,7 +14654,7 @@ msgstr "محاولة إصلاح مقاطع الفيديو المضمنة الت�
 
 #: zotonic_mod_oembed/src/mod_oembed.erl:461
 msgid "Attempting to fix ~p videos."
-msgstr "محاولة إصلاح ~ p من مقاطع الفيديو."
+msgstr "جارٍ محاولة إصلاح ~p من مقاطع الفيديو."
 
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:27
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:59
@@ -15548,7 +15548,7 @@ msgstr "قد يستغرق هذا بعض الوقت ، انتظر!"
 
 #: zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:68
 msgid "You can change this by setting <tt>port</tt> in the <tt>zotonic.config</tt> configuration file."
-msgstr "يمكنك تغيير هذا عن طريق ضبط <tt>منفذ</tt> في ملف التكوين <tt>zotonic.config</tt>."
+msgstr "يمكنك تغيير هذا عن طريق ضبط <tt>port</tt> في ملف التكوين <tt>zotonic.config</tt>."
 
 #: zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:75
 msgid "You can change this by setting <tt>ssl_port</tt> in the <tt>zotonic.config</tt> configuration file."
@@ -18072,7 +18072,7 @@ msgstr "قم بتسجيل الدخول باسم المستخدم <b>admin</b> و
 
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:49
 msgid "Make sure that this hostname has a valid DNS entry or is added to your <tt>/etc/hosts</tt> file."
-msgstr "تأكد من أن اسم المضيف هذا يحتوي على إدخال DNS صالح أو أنه مضاف إلى ملف <tt>/ etc / hosts</tt> الخاص بك."
+msgstr "تأكد من أن اسم المضيف هذا يحتوي على إدخال DNS صالح أو أنه مضاف إلى ملف <tt>/etc/hosts</tt> الخاص بك."
 
 #: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:544
 msgid "No permission to create the site directory at:"
