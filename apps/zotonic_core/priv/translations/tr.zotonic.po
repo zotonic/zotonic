@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-30 13:15\n"
+"PO-Revision-Date: 2026-10-30 14:38\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "MIME-Version: 1.0\n"
@@ -76,7 +76,7 @@ msgstr "gün"
 #: zotonic_core/src/support/z_datetime.erl:375
 #: zotonic_core/src/support/z_datetime.erl:378
 msgid "days"
-msgstr "günler"
+msgstr "gün"
 
 #: zotonic_core/src/support/z_datetime.erl:373
 #: zotonic_core/src/support/z_datetime.erl:376
@@ -88,7 +88,7 @@ msgstr "saat"
 #: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:19
 #: zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:6
 msgid "hours"
-msgstr "saatler"
+msgstr "saat"
 
 #: zotonic_core/src/support/z_datetime.erl:317
 #: zotonic_mod_admin/priv/templates/_rsc_preview.tpl:11
@@ -105,7 +105,7 @@ msgstr "dakika"
 #: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:20
 #: zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:7
 msgid "minutes"
-msgstr "dakikalar"
+msgstr "dakika"
 
 #: zotonic_core/src/support/z_datetime.erl:368
 msgid "moments"
@@ -119,7 +119,7 @@ msgstr "ay"
 #: zotonic_core/src/support/z_datetime.erl:377
 #: zotonic_core/src/support/z_datetime.erl:380
 msgid "months"
-msgstr "aylar"
+msgstr "ay"
 
 #: zotonic_core/src/support/z_datetime.erl:317
 #: zotonic_core/src/support/z_datetime.erl:367
@@ -134,7 +134,7 @@ msgstr "saniye"
 #: zotonic_core/src/support/z_datetime.erl:369
 #: zotonic_core/src/support/z_datetime.erl:372
 msgid "seconds"
-msgstr "saniyeler"
+msgstr "saniye"
 
 #: zotonic_core/src/support/z_datetime.erl:379
 msgid "year"
@@ -142,7 +142,7 @@ msgstr "yıl"
 
 #: zotonic_core/src/support/z_datetime.erl:379
 msgid "years"
-msgstr "yıllar"
+msgstr "yıl"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_collab.tpl:17
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:48
@@ -182,7 +182,7 @@ msgstr "ACL kullanıcı grubu"
 #: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:18
 #: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:989
 msgid "Access control rules"
-msgstr "Kontrol kurallarına erişim"
+msgstr "Erişim kontrolü kuralları"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list.tpl:22
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list.tpl:25
@@ -237,7 +237,7 @@ msgstr "Tüm normal içerik grupları"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:28
 msgid "Allowed file and mime types, separate with ',' — type 'none' if no extra types allowed, leave empty for the default"
-msgstr "İzin verilen dosya ve mime türleri, ',' ile ayrı - ekstra türe izin verilmiyorsa 'hiçbiri' yazın, varsayılan için boş bırakın"
+msgstr "İzin verilen dosya ve MIME türlerini ',' ile ayırın — ek türlere izin verilmiyorsa 'none' yazın; varsayılan ayar için boş bırakın"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_collab.tpl:13
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:44
@@ -255,7 +255,7 @@ msgstr "Tüm kuralları kalıcı olarak değiştirmek istediğinizden emin misin
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:38
 msgid "Are you sure you want to restore all ACL rules to their currently published version?"
-msgstr "Tüm ACL kurallarını mevcut yayınlanmış sürülerine geri yüklemek istediğinizden emin misiniz?"
+msgstr "Tüm ACL kurallarını şu anda yayımlanmış sürümlerine geri yüklemek istediğinizden emin misiniz?"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:16
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:36
@@ -376,7 +376,7 @@ msgstr "Kategori &amp; İçerik grubu"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:14
 msgid "Change category and/or content group..."
-msgstr "Kategoriyi değiştirin ve/veya içerik grubunu..."
+msgstr "Kategoriyi ve/veya içerik grubunu değiştir..."
 
 #: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:543
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:152
@@ -441,7 +441,7 @@ msgstr "İşbirliği grupları kategori içerisinde yeni sayfa oluşturularak ek
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:30
 msgid "Collaboration groups are user groups where all content belongs to the group."
-msgstr "İşbirliği grupları tüm içeriğin kullanıcılara ait olduğu kullanıcı gruplarıdır."
+msgstr "İşbirliği grupları, tüm içeriğin gruba ait olduğu kullanıcı gruplarıdır."
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_options.tpl:12
 msgid "Consider resource authors to be owner."
@@ -564,7 +564,7 @@ msgstr "İşbirliği grubunu düzenle"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:11
 msgid "Enter extensions (like <tt>.png</tt>), mime types (like <tt>image/png</tt>) or one of:"
-msgstr "Uzantıları ( <tt>.png</tt>gibi), mime türlerini ( <tt>resim / png</tt>) veya şunlardan birini girin:"
+msgstr "Uzantıları (<tt>.png</tt> gibi), mime türlerini (<tt>image/png</tt>) veya şunlardan birini girin:"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:106
 msgid "Exactly this category, no sub-categories"
@@ -831,7 +831,7 @@ msgstr "Kaydedilmiş işbirliği grubu ayarları"
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:47
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_results.tpl:41
 msgid "Select"
-msgstr "Seçiniz"
+msgstr "Seç"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_category_dropdown.tpl:3
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:203
@@ -1409,7 +1409,7 @@ msgstr "Şehir"
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_connection.tpl:34
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:37
 msgid "Clear"
-msgstr "Temiz"
+msgstr "Temizle"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:10
 msgid "Click \"Save\" to see your changes."
@@ -1564,7 +1564,7 @@ msgstr "Ülke"
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:261
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:119
 msgid "Create"
-msgstr "Oluşturmak"
+msgstr "Oluştur"
 
 #: zotonic_mod_admin/priv/templates/_rsc_preview.tpl:3
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:40
@@ -1654,7 +1654,7 @@ msgstr "Bu sayfayı sil..."
 
 #: zotonic_mod_admin/src/mod_admin.erl:957
 msgid "Deleted tasks."
-msgstr "Silinen görevler."
+msgstr "Görevler silindi."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:31
 msgid "Deleted."
@@ -1960,7 +1960,7 @@ msgstr "Dosya boyutu"
 
 #: zotonic_mod_admin/src/mod_admin.erl:882
 msgid "File uploaded to the drop folder, will be handled shortly."
-msgstr "Açılan klasöre yüklenen dosya, kısa süre içinde işlenecektir."
+msgstr "Dosya alım klasörüne yüklendi ve kısa süre içinde işlenecek."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:39
 #: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:54
@@ -2034,7 +2034,7 @@ msgstr "Tüm URL yönlendirme kurallarını, kütüphane belleğini ve diğer be
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:81
 msgid "Flush system caches"
-msgstr "Sistem belleğini sıfırla"
+msgstr "Sistem önbelleklerini temizle"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:145
 #: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:23
@@ -5750,7 +5750,7 @@ msgstr "Bağlı modüller var"
 
 #: zotonic_mod_admin_modules/src/controllers/controller_admin_module_manager.erl:79
 msgid "This module does not have a <tt>manage_schema/2</tt> function."
-msgstr "Bu modülün <tt>Manage_schema/2</tt> işlevi yoktur."
+msgstr "Bu modülün <tt>manage_schema/2</tt> işlevi yoktur."
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:67
 msgid "Topic"
@@ -9219,7 +9219,7 @@ msgstr "Zotonic sisteminde seçilmiş editör"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:114
 msgid "Set the class <tt>environment-development</tt> on the <tt>&lt;html&gt;</tt> element of your pages to see the server log in the browser console.<br>In development, admin pages always show the server log in the javascript console."
-msgstr "Tarayıcı konsolunda sunucu günlüğünü görmek için sayfalarınızın <tt>&lt;html&gt;</tt> öğesinde <tt>ambient-development</tt> sınıfını ayarlayın.<br>Geliştirme aşamasında, yönetici sayfaları her zaman javascript konsolundaki sunucu günlüğünü gösterir."
+msgstr "Tarayıcı konsolunda sunucu günlüğünü görmek için sayfalarınızın <tt>&lt;html&gt;</tt> öğesinde <tt>environment-development</tt> sınıfını ayarlayın.<br>Geliştirme aşamasında, yönetici sayfaları her zaman javascript konsolundaki sunucu günlüğünü gösterir."
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:272
 msgid "Show an overview of all observers"
@@ -10898,7 +10898,7 @@ msgstr "Sayfanın HTML ana metni."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:36
 msgid "The category of the page. Examples: <code>article</code> or <code>text</code>."
-msgstr "Sayfanın kategorisi. Örnekler: <code>makale</code> veya <code>metin</code>."
+msgstr "Sayfanın kategorisi. Örnekler: <code>article</code> veya <code>text</code>."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:72
 msgid "The custom path for the URL of the page, for example <code>/my/page</code>"
@@ -13994,7 +13994,7 @@ msgstr "Microsoft ile bağlantı kurun"
 
 #: zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:36
 msgid "Control who can log in. Allowed values are: <tt>common</tt>, <tt>organizations</tt>, <tt>consumers</tt>, and tenant identifiers."
-msgstr "Kimlerin oturum açabileceğini kontrol edin. İzin verilen değerler şunlardır: <tt>ortak</tt>, <tt>kuruluş</tt>, <tt>tüketici</tt>ve kiracı tanımlayıcıları."
+msgstr "Kimlerin oturum açabileceğini kontrol edin. İzin verilen değerler şunlardır: <tt>common</tt>, <tt>organizations</tt>, <tt>consumers</tt> ve kiracı tanımlayıcıları."
 
 #: zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:3
 #: zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:6
@@ -14035,7 +14035,7 @@ msgstr "Microsoft ayarlarını kaydetti."
 
 #: zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:27
 msgid "Space separated list of scopes that you want the user to consent to. Examples are: <tt>User.Read</tt>, <tt>email</tt>, <tt>offline_access</tt> and <tt>profile</tt>. The <tt>openid</tt> scope is always added automatically."
-msgstr "Kullanıcının izin vermesini istediğiniz kapsamların boşlukla ayrılmış listesi. Örnekler: <tt>Kullanıcı.Okuma</tt>, <tt>e-posta</tt>, <tt>offline_access</tt> ve <tt>profil</tt>. <tt>openid</tt> kapsamı her zaman otomatik olarak eklenir."
+msgstr "Kullanıcının izin vermesini istediğiniz kapsamların boşlukla ayrılmış listesi. Örnekler: <tt>User.Read</tt>, <tt>email</tt>, <tt>offline_access</tt> ve <tt>profile</tt>. <tt>openid</tt> kapsamı her zaman otomatik olarak eklenir."
 
 #: zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:33
 #: zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:34
@@ -14559,7 +14559,7 @@ msgstr "Bunlar tam URL'ler olmalıdır, ancak sorgu (?..) veya karma (#...) böl
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:19
 msgid "This must be an unique name to identify the remote service. This can not be changed. Only <tt>A-Z</tt>, <tt>a-z</tt>, <tt>0-9</tt>, <tt>-</tt> and <tt>_</tt> characters are allowed."
-msgstr "Bu, uzak hizmeti tanımlamak için benzersiz bir ad olmalıdır. Bu değiştirilemez. Yalnızca <tt>AZ</tt>, <tt>az</tt>, <tt>0-9</tt>, <tt>-</tt> ve <tt>_</tt> karakterlerine izin verilir."
+msgstr "Bu, uzak hizmeti tanımlamak için benzersiz bir ad olmalıdır. Bu değiştirilemez. Yalnızca <tt>A-Z</tt>, <tt>a-z</tt>, <tt>0-9</tt>, <tt>-</tt> ve <tt>_</tt> karakterlerine izin verilir."
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:14
 msgid "This user will be able to use the token."
@@ -14654,7 +14654,7 @@ msgstr "Daha önce OEmbed gömme işlemi başarısız olan gömülü videoları 
 
 #: zotonic_mod_oembed/src/mod_oembed.erl:461
 msgid "Attempting to fix ~p videos."
-msgstr "~ p videolarını düzeltmeye çalış."
+msgstr "~p video düzeltilmeye çalışılıyor."
 
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:27
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:59
@@ -16006,7 +16006,7 @@ msgstr "Kategorideki ilk sayfa"
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:76
 msgid "For date ranges you can also use relative dates, like <code>-5 year</code>."
-msgstr "Tarih aralıkları için <code>-5 yıl</code>gibi göreli tarihleri de kullanabilirsiniz."
+msgstr "Tarih aralıkları için <code>-5 year</code> gibi göreli tarihleri de kullanabilirsiniz."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:260
 msgid "Forms can be handled by special code, for example a form that is forwarded to a back office system. Depending on the handler the results are stored in the database or not."
@@ -17123,7 +17123,7 @@ msgstr "Mevcut alt diller"
 
 #: zotonic_mod_translation/src/mod_translation.erl:1009
 msgid "Cannot generate translation files because <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext is not installed</a>."
-msgstr "Çevirme dosyaları oluşturamazsınız çünkü <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\"><a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\"> metin alma yüklenmemiş</a>."
+msgstr "<a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext yüklü olmadığı</a> için çeviri dosyaları oluşturulamıyor."
 
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:51
 msgid "Click to edit."
