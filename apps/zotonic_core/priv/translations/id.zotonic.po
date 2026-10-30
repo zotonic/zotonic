@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-30 17:07\n"
+"PO-Revision-Date: 2026-10-30 17:21\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -85,13 +85,10 @@ msgstr "jam"
 
 #: zotonic_core/src/support/z_datetime.erl:373
 #: zotonic_core/src/support/z_datetime.erl:376
-#: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:19
-#: zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:6
 msgid "hours"
 msgstr "jam"
 
 #: zotonic_core/src/support/z_datetime.erl:317
-#: zotonic_mod_admin/priv/templates/_rsc_preview.tpl:11
 msgid "in"
 msgstr "dalam"
 
@@ -102,8 +99,6 @@ msgstr "menit"
 
 #: zotonic_core/src/support/z_datetime.erl:371
 #: zotonic_core/src/support/z_datetime.erl:374
-#: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:20
-#: zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:7
 msgid "minutes"
 msgstr "menit"
 
@@ -332,7 +327,7 @@ msgstr "Apakah Anda yakin ingin mengembalikan semua peraturan ACL ke versi yang 
 #: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:229
 #: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:237
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:70
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:157
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:160
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:100
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:88
 #: zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:49
@@ -370,11 +365,15 @@ msgstr "Batal"
 msgid "Category"
 msgstr "Kategori"
 
-#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:17
+#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:18
 msgid "Category &amp; Content group"
 msgstr "Kategori &amp; grup konten"
 
-#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:14
+#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:7
+msgid "Category: <strong>{category}</strong>. Content group: <strong><a href='{url}'>{group}</a></strong>."
+msgstr "Kategori: <strong>{category}</strong>. Kelompok konten: <strong><a href='{url}'>{group}</a></strong>."
+
+#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:15
 msgid "Change category and/or content group..."
 msgstr "Ubah kategori dan/atau grup konten..."
 
@@ -421,11 +420,11 @@ msgstr "Konfigurasi berubah."
 msgid "Close"
 msgstr "Tutup"
 
-#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:33
+#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:34
 msgid "Collaboration group managers"
 msgstr "Pengelola grup kolaborasi"
 
-#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:32
+#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:33
 msgid "Collaboration group members"
 msgstr "Anggota grup kolaborasi"
 
@@ -611,7 +610,6 @@ msgid "If checked then users connected with an <em>author</em> predicate are con
 msgstr "Jika dicentang, pengguna yang terhubung melalui predikat <em>author</em> dianggap sebagai pemilik sumber daya saat mengevaluasi aturan ACL. Dengan demikian, aturan ACL yang ditandai <em>kelola sumber daya milik sendiri</em> berlaku bagi penulis."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:18
-#: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:42
 msgid "Import"
 msgstr "Impor"
 
@@ -644,11 +642,11 @@ msgstr "Ukuran maksimum berkas yang dapat diunggah per grup pengguna. Ini membat
 msgid "Maximum upload size"
 msgstr "Ukuran unggahan maksimum"
 
-#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:28
+#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:29
 msgid "Members"
 msgstr "Anggota"
 
-#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:30
+#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:31
 msgid "Members of same user group"
 msgstr "Anggota dari kelompok pengguna yang sama"
 
@@ -727,14 +725,14 @@ msgid "Options for the ACL module."
 msgstr "Opsi untuk modul ACL."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:31
-msgid "Or click <strong>Delete</strong> to disconnect all users and delete the user listed groups."
-msgstr "Atau klik <strong>Hapus</strong> untuk memutuskan semua pengguna dan menghapus grup yang terdaftar."
+msgid "Or click <strong>Delete</strong> to disconnect all users and delete the listed user groups."
+msgstr "Atau klik <strong>Hapus</strong> untuk memutuskan koneksi semua pengguna dan menghapus grup pengguna yang tercantum."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:154
 msgid "Own content"
 msgstr "Konten sendiri"
 
-#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:27
+#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:28
 msgid "People who can view this page"
 msgstr "Orang yang dapat melihat halaman ini"
 
@@ -747,11 +745,11 @@ msgstr "Izin"
 msgid "Please select a collaboration_group"
 msgstr "Silakan pilih grup kolaborasi"
 
-#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:34
+#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:35
 msgid "Private"
 msgstr "Pribadi"
 
-#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:38
+#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:39
 msgid "Private properties are email, phone, visiting address, and date range."
 msgstr "Properti pribadi meliputi email, telepon, alamat kunjungan, dan rentang tanggal."
 
@@ -842,7 +840,7 @@ msgstr "Pilih Kategori"
 msgid "Show"
 msgstr "Tampilkan"
 
-#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:23
+#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:24
 msgid "Show private properties to"
 msgstr "Tampilkan properti pribadi untuk"
 
@@ -905,10 +903,6 @@ msgstr "Mereka dikelola oleh manajer mereka sendiri dan menggunakan aturan akses
 #: zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:33
 msgid "This can not be undone."
 msgstr "Ini tidak dapat dibatalkan."
-
-#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:7
-msgid "This page is a"
-msgstr "Halaman ini adalah"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:18
 msgid "This rule is managed by module"
@@ -989,10 +983,6 @@ msgstr "hapus"
 #: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:296
 msgid "edit (acl action)"
 msgstr "sunting"
-
-#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:9
-msgid "in the group"
-msgstr "dalam kelompok"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
 #: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:295
@@ -1164,6 +1154,10 @@ msgstr "Koneksi telah ditambahkan ke"
 msgid "Address"
 msgstr "Alamat"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:8
+msgid "Address family"
+msgstr "Keluarga alamat"
+
 #: zotonic_mod_admin/priv/templates/admin_base.tpl:5
 msgid "Admin"
 msgstr "Admin"
@@ -1294,10 +1288,6 @@ msgstr "Media terlampir"
 msgid "Auth"
 msgstr "Autentikasi"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:222
-msgid "Authoritative"
-msgstr "Berwibawa"
-
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:162
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:164
 msgid "Automatic updates unavailable"
@@ -1320,7 +1310,7 @@ msgstr "Tersedia"
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:41
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:3
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_count_back.tpl:2
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:101
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:100
 #: zotonic_mod_survey/priv/templates/_survey_end.tpl:28
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:22
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:23
@@ -1495,6 +1485,10 @@ msgstr "Koneksi"
 msgid "Connections"
 msgstr "Koneksi"
 
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:222
+msgid "Content origin"
+msgstr "Sumber konten"
+
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:24
 msgid "Content type"
 msgstr "Jenis konten"
@@ -1554,7 +1548,7 @@ msgstr "Jumlah"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:142
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:220
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:113
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:107
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:110
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:45
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:47
 msgid "Country"
@@ -1724,7 +1718,6 @@ msgid "Do you want to remove this page block?"
 msgstr "Apakah Anda ingin menghapus blok halaman ini?"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:32
-#: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:33
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:45
 msgid "Download"
 msgstr "Unduh"
@@ -1923,10 +1916,6 @@ msgstr "Halaman yang ada"
 msgid "Failed to download the file."
 msgstr "Gagal mengunduh berkas."
 
-#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:8
-msgid "Family"
-msgstr "Keluarga"
-
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:52
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:178
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:182
@@ -2000,7 +1989,7 @@ msgid "Find Page"
 msgstr "Temukan Halaman"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:149
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:217
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:220
 msgid "Find page"
 msgstr "Temukan Halaman"
 
@@ -2041,11 +2030,6 @@ msgstr "Bersihkan cache sistem"
 msgid "Follow connections and import all (deep copy)."
 msgstr "Ikuti koneksi dan impor semua (salinan dalam)."
 
-#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:178
-#: zotonic_mod_websub/priv/templates/_rsc_import_subscription_options.tpl:18
-msgid "Follows the Connections option. Connected resources keep their subscriptions when disconnected from this page."
-msgstr "Pilihan ini mengikuti opsi \"Koneksi\". Sumber daya yang terhubung akan tetap mempertahankan langganannya meskipun terputus dari halaman ini."
-
 #: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:5
 msgid "Function"
 msgstr "Fungsi"
@@ -2069,7 +2053,7 @@ msgstr "Memiliki media terpasang"
 
 #: zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_header.tpl:21
 #: zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_header.tpl:22
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:120
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:123
 msgid "Header"
 msgstr "Judul"
 
@@ -2264,15 +2248,14 @@ msgstr "Buat sebuah halaman baru"
 msgid "Make a new page or media"
 msgstr "Buat halaman atau media baru"
 
-#: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:6
-#: zotonic_mod_survey/src/mod_survey.erl:657
-msgid "Matching"
-msgstr "Pencocokan"
-
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results.tpl:29
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:14
 msgid "Matching id, name, page path or redirection"
 msgstr "Mencocokkan id, nama, jalur halaman atau pengalihan"
+
+#: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:6
+msgid "Matching search text"
+msgstr "Teks pencarian yang cocok"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:3
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:86
@@ -2424,22 +2407,6 @@ msgstr "Pindahkan blok ke bawah"
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:12
 msgid "Move block up"
 msgstr "Pindahkan blok ke atas"
-
-#: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:225
-#: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:227
-#: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:9
-#: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:52
-#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:28
-#: zotonic_mod_comment/priv/templates/_comments_form.tpl:23
-#: zotonic_mod_comment/priv/templates/admin_comments.tpl:22
-#: zotonic_mod_contact/priv/templates/contact.tpl:11
-#: zotonic_mod_contact/priv/templates/email_contact.tpl:10
-#: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:13
-#: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:14
-#: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:38
-#: zotonic_mod_survey/src/models/m_survey.erl:982
-msgid "Name"
-msgstr "Nama"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:205
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:206
@@ -2882,7 +2849,7 @@ msgstr "Rincian isolasi sandbox jarak jauh dan antrian dapat dilihat di dasbor m
 #: zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_page.tpl:16
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_connection.tpl:4
 #: zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:35
-#: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:278
+#: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:277
 #: zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:7
 #: zotonic_mod_translation/priv/templates/_translation_language_status.tpl:34
 msgid "Remove"
@@ -3647,10 +3614,16 @@ msgstr "Tidak tersedia"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:30
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:43
+#: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:225
+#: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:227
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:79
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:80
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:83
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:247
+#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:28
+#: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:13
+#: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:14
+#: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:38
 msgid "Unique name"
 msgstr "Nama yang unik"
 
@@ -3795,6 +3768,10 @@ msgstr "Digunakan"
 msgid "User page"
 msgstr "Halaman pengguna"
 
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:178
+msgid "Uses the Connections setting. Connected resources keep their subscriptions when disconnected from this page."
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:129
 msgid "Valid for:"
 msgstr "Berlaku untuk:"
@@ -3809,8 +3786,6 @@ msgstr "Berlaku untuk:"
 #: zotonic_mod_development/priv/templates/_development_template_xref_includes.tpl:21
 #: zotonic_mod_development/priv/templates/_development_template_xref_inheritance.tpl:19
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:38
-#: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:20
-#: zotonic_mod_translation/priv/templates/admin_translation.tpl:38
 msgid "View"
 msgstr "Lihat"
 
@@ -3829,13 +3804,13 @@ msgstr "Lihat semua halaman dari kategori ini"
 msgid "View all referrers"
 msgstr "Lihat semua perujuk"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:81
-msgid "View as (new tab)"
-msgstr "Lihat sebagai (tab baru)"
-
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:77
 msgid "View connection graph"
 msgstr "Melihat grafik koneksi"
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:81
+msgid "View format (opens in a new tab)"
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:17
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:28
@@ -3973,8 +3948,6 @@ msgstr "tambahkan item media"
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:14
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:19
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:63
-#: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:6
-#: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:16
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:68
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_fields.tpl:54
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:15
@@ -4047,6 +4020,10 @@ msgstr "telah terputus."
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:23
 msgid "id:"
 msgstr "pengenal:"
+
+#: zotonic_mod_admin/priv/templates/_rsc_preview.tpl:11
+msgid "in content group"
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:84
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:15
@@ -4147,15 +4124,14 @@ msgstr "Kategori digunakan untuk mengelompokkan semua halaman. Setiap halaman te
 msgid "Category Hierarchy"
 msgstr "Hierarki kategori"
 
-#: zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:39
-#: zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:37
-msgid "Delete &amp; Move Pages"
-msgstr "Hapus &amp; Pindah Halaman"
-
 #: zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:42
 #: zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:40
 msgid "Delete All Pages"
 msgstr "Hapus semua halaman"
+
+#: zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:39
+msgid "Delete categories and move their pages"
+msgstr ""
 
 #: zotonic_mod_admin_category/src/mod_admin_category.erl:112
 msgid "Delete is canceled, there are pages in the category."
@@ -4265,8 +4241,8 @@ msgstr "Salin jalur file sertifikat ke papan klip."
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:51
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:57
-msgid "Copy the certificate file to"
-msgstr "Salin berkas sertifikat ke"
+msgid "Copy the certificate file to <code>{path}</code>."
+msgstr ""
 
 #: zotonic_mod_admin_config/src/mod_admin_config.erl:176
 msgid "Could not generate a new self-signed certificate."
@@ -4519,8 +4495,8 @@ msgstr "Mulai ulang peramban. Beberapa aplikasi tidak menerima sertifikat yang d
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:52
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:58
-msgid "Run"
-msgstr "Lari"
+msgid "Run <code>{command}</code> and restart the browser."
+msgstr ""
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:125
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:126
@@ -4570,7 +4546,6 @@ msgid "Show log for message"
 msgstr "Tampilkan log untuk pesan"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:8
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:100
 msgid "System Configuration"
 msgstr "Konfigurasi sistem"
 
@@ -4698,11 +4673,6 @@ msgstr "Anda harus menjadi administrator untuk melihat atau mengubah konfigurasi
 msgid "Zotonic sends email using a built-in email server. You can send the email via an external relay."
 msgstr "Zotonic mengirim email menggunakan server email bawaan. Anda dapat mengirim email melalui relai eksternal."
 
-#: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:52
-#: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:58
-msgid "and restart the browser."
-msgstr "dan jalankan ulang peramban."
-
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:68
 msgid "iOS and iPadOS"
 msgstr "iOS dan iPadOS"
@@ -4734,7 +4704,7 @@ msgstr "Sembunyikan menu"
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:73
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:103
 #: zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:24
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:96
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:97
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:21
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:10
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:6
@@ -4781,7 +4751,6 @@ msgid "Yes, discard changes"
 msgstr "Ya, buang perubahan"
 
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:57
-#: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:11
 msgid "till"
 msgstr "sampai"
 
@@ -4873,6 +4842,11 @@ msgstr "Hapus nama pengguna"
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:103
 msgid "Deleted the user account."
 msgstr "Akun pengguna telah dihapus."
+
+#: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:9
+#: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:52
+msgid "Display name"
+msgstr ""
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:124
 msgid "Duplicate username, please choose another username."
@@ -5097,6 +5071,10 @@ msgstr "Pengguna admin tidak dapat dihapus."
 msgid "The e-mail address has been verified."
 msgstr "Alamat email telah diverifikasi."
 
+#: zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:8
+msgid "The email address {email} was added to your personal information on {site}."
+msgstr ""
+
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:150
 msgid "The new username/ password has been set."
 msgstr "Nama pengguna baru/ kata sandi telah ditetapkan."
@@ -5117,10 +5095,6 @@ msgstr "Tidak ada nama pengguna yang digabungkan ke orang ini."
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_delete_username.tpl:4
 msgid "This can't be undone. The username and password will be lost forever."
 msgstr "Ini tidak bisa dibatalkan. Nama pengguna dan kata sandi akan hilang selamanya."
-
-#: zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:8
-msgid "This email address was added to your personal information on"
-msgstr "Alamat email ini telah ditambahkan ke informasi pribadi Anda pada"
 
 #: zotonic_mod_admin_identity/src/mod_admin_identity.erl:316
 msgid "This is not a valid e-mail address."
@@ -5247,8 +5221,8 @@ msgid "You need to be an administrator to add users."
 msgstr "Anda harus menjadi pengelola untuk menambahkan pengguna."
 
 #: zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:25
-msgid "You received this email because you verified your email address. You will not receive any additional emails because of this request."
-msgstr "Anda menerima email ini karena Anda memverifikasi alamat email Anda. Anda tidak akan menerima email tambahan karena permintaan ini."
+msgid "You received this email because verification of your email address was requested. You will not receive any additional emails because of this request."
+msgstr ""
 
 #: zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:12
 msgid "Your account name is"
@@ -5282,8 +5256,8 @@ msgid "set username / password"
 msgstr "atur nama pengguna / kata sandi"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:307
-msgid "<em>Jaccard similarity</em> divides the common content by all distinct content using either keyword. <em>Smaller-set overlap</em> divides it by the least-used keyword and helps reveal keywords that may be redundant or nested. Very small keyword sets can score highly, so use the minimum-uses filter when looking for meaningful patterns."
-msgstr "<em>Kesamaan Jaccard</em> menghitung rasio antara konten yang sama dengan seluruh konten yang berbeda berdasarkan salah satu kata kunci. <em>Tumpang tindih himpunan terkecil</em> menghitung rasio tersebut berdasarkan kata kunci yang paling jarang digunakan dan membantu mengidentifikasi kata kunci yang mungkin berlebihan atau saling tumpang tindih. Himpunan kata kunci yang sangat kecil pun dapat memperoleh skor tinggi, jadi gunakan filter penggunaan minimum saat mencari pola yang bermakna."
+msgid "<em>Jaccard similarity</em> divides the number of content items using both keywords by the number using either keyword, counting each item once. <em>Smaller-set overlap</em> divides the shared content count by the content count for the less-used keyword. This helps reveal keywords that may be redundant or nested. Keywords used on very few content items can score highly, so use the minimum-uses filter when looking for meaningful patterns."
+msgstr ""
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:68
 msgid "All content"
@@ -5314,20 +5288,12 @@ msgid "Cells show the number of content items using both keywords."
 msgstr "Sel-sel tersebut menampilkan jumlah item konten yang menggunakan kedua kata kunci tersebut."
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:208
-msgid "Cells show the shared percentage of the combined keyword sets."
-msgstr "Sel-sel tersebut menunjukkan persentase kesamaan dari gabungan kumpulan kata kunci."
+msgid "Cells show the shared content count as a percentage of all distinct content using either keyword."
+msgstr ""
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:206
-msgid "Cells show which percentage of the smaller keyword set is shared."
-msgstr "Sel-sel tersebut menunjukkan persentase kesamaan dari kumpulan kata kunci yang lebih kecil."
-
-#: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:273
-msgid "Common"
-msgstr "Umum"
-
-#: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:97
-msgid "Common content count"
-msgstr "Jumlah konten umum"
+msgid "Cells show the shared content count as a percentage of the content count for the less-used keyword."
+msgstr ""
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:54
 msgid "Content category"
@@ -5437,6 +5403,11 @@ msgstr "Matriks tumpang tindih kata kunci yang dapat digulir"
 msgid "See which keywords are used and which keywords occur on the same content."
 msgstr "Lihat kata kunci mana saja yang digunakan dan kata kunci mana saja yang muncul dalam konten yang sama."
 
+#: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:97
+#: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:273
+msgid "Shared content count"
+msgstr ""
+
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:162
 msgid "Showing {shown} of {matched} keywords"
 msgstr "Menampilkan {shown} dari {matched} kata kunci"
@@ -5498,7 +5469,7 @@ msgstr "Gambar perwakilan"
 
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:44
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:50
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:120
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:121
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:222
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:27
 msgid "Edit page"
@@ -5662,16 +5633,20 @@ msgid "Depends"
 msgstr "Tergantung"
 
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:28
-msgid "Do you still want to activate the module"
-msgstr "Apakah Anda masih ingin mengaktifkan modul"
+msgid "Do you still want to activate the module <b>{module}</b>?"
+msgstr ""
 
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:11
-msgid "Do you still want to deactivate the module"
-msgstr "Apakah Anda masih ingin menonaktifkan modul"
+msgid "Do you still want to deactivate the module <b>{module}</b>?"
+msgstr ""
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:17
 msgid "Either they are not installed, or they are not compiled."
 msgstr "Entah mereka tidak terinstal, atau mereka tidak dikompilasi."
+
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:59
+msgid "Execution status"
+msgstr ""
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:140
 msgid "Install the module’s model and data."
@@ -5685,6 +5660,10 @@ msgstr "Ketergantungan modul"
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:1
 msgid "Modules are missing dependencies"
 msgstr "Modul kekurangan dependensi"
+
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:74
+msgid "Modules shown:"
+msgstr ""
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:171
 msgid "No modules found"
@@ -5714,10 +5693,6 @@ msgstr "Pindai ulang modul"
 #: zotonic_mod_admin_modules/priv/templates/_admin_status.tpl:4
 msgid "Rescanning will rebuild the index of all modules, actions, templates etc. It will also reload all dispatch rules."
 msgstr "Pemindaian ulang akan membangun kembali indeks semua modul, tindakan, templat, dan sebagainya. Semua aturan perutean juga akan dimuat ulang."
-
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:59
-msgid "Runtime"
-msgstr "Waktu eksekusi"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:47
 msgid "Search modules"
@@ -5766,10 +5741,6 @@ msgid "Zotonic is a modular web development framework. Most functionality is enc
 msgstr "Zotonic adalah kerangka kerja pengembangan web modular. Sebagian besar fungsionalitas dikemas dalam modul. Sekumpulan modul dasar disertakan dalam distribusi Zotonic,\n"
 "            sementara modul lainnya dikembangkan secara eksternal. Halaman ini menampilkan ikhtisar semua modul yang saat ini dikenali oleh instalasi Zotonic ini."
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:74
-msgid "modules shown"
-msgstr "modul yang ditampilkan"
-
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:14
 msgid "A predicate denotes traits or aspects of a page and expresses a relationship between two pages.\n"
 "    The relation is always directed, from the subject to the object.<br/>Predicates are defined in ontologies like <a href=\"http://sioc-project.org/\">SIOC</a>.  On this page you can define the predicates known to Zotonic."
@@ -5786,8 +5757,8 @@ msgstr "Semua koneksi halaman"
 
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:7
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:41
-msgid "Are you sure you want to delete"
-msgstr "Apakah Anda yakin ingin menghapus"
+msgid "Are you sure you want to delete the predicate “{title}”?"
+msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edge_action.tpl:2
 msgid "Are you sure you want to remove the <strong>{{ predicate }}</strong>\n"
@@ -5807,10 +5778,6 @@ msgstr "Ubah predikat pada semua koneksi halaman yang ada menjadi:"
 msgid "Could not create the predicate."
 msgstr "Tidak dapat membuat predikat."
 
-#: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:31
-msgid "Delete &amp; Change Connections"
-msgstr "Hapus &amp; Ubah Koneksi"
-
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:34
 msgid "Delete All Connections"
 msgstr "Hapus Semua Koneksi"
@@ -5818,6 +5785,10 @@ msgstr "Hapus Semua Koneksi"
 #: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:117
 msgid "Delete is canceled, there are connections with this predicate."
 msgstr "Hapus dibatalkan, ada koneksi dengan predikat ini."
+
+#: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:31
+msgid "Delete predicate and update connections"
+msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:85
 msgid "Do not find subjects using this predicate’s object titles."
@@ -5872,8 +5843,8 @@ msgid "Insert new connections before existing connections."
 msgstr "Sisipkan koneksi baru sebelum koneksi yang ada."
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:68
-msgid "Instead of a search box this will show a list of all pages in the <i>To</i> categories checked above. At least one category must be checked."
-msgstr "Alih-alih kotak pencarian, ini akan menampilkan daftar semua halaman dalam kategori <i>Ke</i> yang dicentang di atas. Setidaknya satu kategori harus diperiksa."
+msgid "Instead of a search box, this will show a list of all pages in the target categories selected above. At least one category must be selected."
+msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:20
 #: zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:66
@@ -6214,6 +6185,10 @@ msgstr "Konfigurasi default"
 msgid "Define who should use two-factor authentication, this is the default setting for all users."
 msgstr "Tentukan siapa yang harus menggunakan otentikasi dua faktor, ini adalah pengaturan default untuk semua pengguna."
 
+#: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:69
+msgid "Enable two-factor authentication"
+msgstr ""
+
 #: zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:21
 msgid "Enable two-factor authentication..."
 msgstr "Aktifkan otentikasi dua faktor ..."
@@ -6291,10 +6266,6 @@ msgstr "Pindai kode QR autentikasi dua faktor dengan aplikasi seperti <a href=\"
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:3
 msgid "Scan the two-factor authentication QR code with an app such as <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> or <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
 msgstr "Pindai kode QR autentikasi dua faktor dengan aplikasi seperti <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> atau <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
-
-#: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:69
-msgid "Set passcode"
-msgstr "Tetapkan kode sandi"
 
 #: zotonic_mod_auth2fa/src/mod_auth2fa.erl:79
 msgid "Sorry, you are not allowed to change the 2FA settings."
@@ -6402,8 +6373,8 @@ msgid "You can use two-factor authentication apps such as <a rel=\"noopener nore
 msgstr "Anda dapat menggunakan aplikasi autentikasi dua faktor seperti <a rel=\"noopener noreferrer\" target=\"_blank\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> atau <a rel=\"noopener noreferrer\" target=\"_blank\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
 
 #: zotonic_mod_auth2fa/priv/templates/_logon_login_set_passcode.tpl:1
-msgid "You must set your two-factor authentication passcode now. Next time you sign in you will need to enter the two-factor authentication passcode."
-msgstr "Anda harus menyetel kode sandi autentikasi dua faktor sekarang. Saat berikutnya Anda masuk, Anda harus memasukkan kode sandi autentikasi dua faktor."
+msgid "You must enable two-factor authentication now. Next time you sign in, you will need to enter a code generated by your authentication app."
+msgstr ""
 
 #: zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:11
 msgid "You need to be allowed to edit the system configuration to view or change the two-factor authentication configuration."
@@ -6598,7 +6569,7 @@ msgstr "Layanan Eksternal"
 msgid "For more information visit <a target=\"_blank\" rel=\"noreferrer noopener\" href=\"https://haveibeenpwned.com/Passwords\">{title}</a>"
 msgstr "Untuk informasi lebih lanjut kunjungi <a target=\"_blank\" rel=\"noreferrer noopener\" href=\"https://haveibeenpwned.com/Passwords\">{title}</a>"
 
-#: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:26
+#: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:28
 msgid "For security reasons, password reset codes are only kept for a limited amount of time and can only be used once."
 msgstr "Demi keamanan, kode pengaturan ulang kata sandi hanya disimpan untuk waktu yang terbatas dan hanya dapat digunakan sekali."
 
@@ -6628,19 +6599,19 @@ msgstr "Pergi ke Modul"
 
 #: zotonic_mod_authentication/priv/templates/_logon_box.tpl:46
 #: zotonic_mod_authentication/priv/templates/_logon_box.tpl:86
-#: zotonic_mod_authentication/priv/templates/logon.tpl:49
+#: zotonic_mod_authentication/priv/templates/logon.tpl:53
 msgid "Go to the admin"
 msgstr "Pergi ke admin"
 
 #: zotonic_mod_authentication/priv/templates/_logon_box.tpl:37
 #: zotonic_mod_authentication/priv/templates/_logon_box.tpl:77
-#: zotonic_mod_authentication/priv/templates/logon.tpl:40
+#: zotonic_mod_authentication/priv/templates/logon.tpl:44
 msgid "Go to the home page"
 msgstr "Pergi ke halaman muka"
 
 #: zotonic_mod_authentication/priv/templates/_logon_box.tpl:41
 #: zotonic_mod_authentication/priv/templates/_logon_box.tpl:81
-#: zotonic_mod_authentication/priv/templates/logon.tpl:44
+#: zotonic_mod_authentication/priv/templates/logon.tpl:48
 msgid "Go to the your profile page"
 msgstr "Buka halaman profil Anda"
 
@@ -6665,7 +6636,7 @@ msgstr "Namun alamat email ini bukan milik salah satu pengguna kami atau Anda be
 msgid "I agree to the Terms of Service and the Privacy policies."
 msgstr "Saya menyetujui Ketentuan Layanan dan Kebijakan Privasi."
 
-#: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:30
+#: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:32
 msgid "I forgot my password"
 msgstr "Saya lupa kata sandi saya"
 
@@ -6727,9 +6698,9 @@ msgid "Log in"
 msgstr "Masuk"
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_title.tpl:16
-#: zotonic_mod_authentication/priv/templates/logon.tpl:11
-msgid "Log in to"
-msgstr "Masuk ke"
+#: zotonic_mod_authentication/priv/templates/logon.tpl:14
+msgid "Log in to {site}"
+msgstr ""
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_title.tpl:6
 msgid "Log in with your existing {site} account to connect the accounts. You only have to do this once."
@@ -6741,7 +6712,7 @@ msgid "Log on with"
 msgstr "Masuk dengan"
 
 #: zotonic_mod_authentication/priv/templates/_logon_off.tpl:2
-#: zotonic_mod_authentication/priv/templates/logon.tpl:37
+#: zotonic_mod_authentication/priv/templates/logon.tpl:41
 msgid "Log out"
 msgstr "Keluar"
 
@@ -6814,8 +6785,8 @@ msgid "Please choose a different password as this password has been found in a p
 msgstr "Silakan pilih kata sandi yang berbeda karena kata sandi ini ditemukan dalam daftar kata sandi publik yang muncul dalam pelanggaran data."
 
 #: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:8
-msgid "Please confirm your"
-msgstr "Harap konfirmasikan"
+msgid "Please confirm your password for <span>{site}</span>."
+msgstr ""
 
 #: zotonic_mod_authentication/priv/templates/_logon_reset_title.tpl:7
 msgid "Please enter a new password"
@@ -6829,20 +6800,21 @@ msgstr "Silakan masukkan kata sandi baru untuk akun Anda"
 msgid "Please enter the two-factor authentication passcode."
 msgstr "Harap masukkan kode sandi otentikasi dua faktor."
 
-#: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:16
-#: zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:3
-msgid "Please try again in"
-msgstr "Silakan coba lagi dalam"
-
 #: zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:12
+#: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:18
+#: zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:5
 msgid "Please try again in an hour"
 msgstr "Silakan coba lagi dalam satu jam"
 
 #: zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:14
+#: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:20
+#: zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:7
 msgid "Please try again in {n} hours."
 msgstr "Silakan coba lagi dalam {n} jam."
 
 #: zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:16
+#: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:22
+#: zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:9
 msgid "Please try again in {n} minutes."
 msgstr "Silakan coba lagi dalam {n} menit."
 
@@ -6900,7 +6872,7 @@ msgstr "Sesi yang telah digunakan oleh browser dalam satu jam terakhir."
 msgid "Show password"
 msgstr "Tampilkan kata sandi"
 
-#: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:27
+#: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:29
 msgid "Simply try again:"
 msgstr "Hanya coba lagi:"
 
@@ -6921,7 +6893,7 @@ msgstr "Maaf, tidak bisa mengirim pesan verifikasi."
 msgid "Sorry, too many retries"
 msgstr "Maaf, terlalu banyak percobaan ulang"
 
-#: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:25
+#: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:27
 msgid "Sorry, your password reset code is unknown or expired"
 msgstr "Maaf, kode pengaturan ulang kata sandi Anda tidak dikenal atau telah kedaluwarsa"
 
@@ -7030,7 +7002,7 @@ msgstr "Anda akan membuat akun baru."
 msgid "You are about to log on."
 msgstr "Anda akan masuk."
 
-#: zotonic_mod_authentication/priv/templates/logon.tpl:32
+#: zotonic_mod_authentication/priv/templates/logon.tpl:36
 msgid "You are logged in"
 msgstr "Anda sudah masuk"
 
@@ -7043,8 +7015,8 @@ msgid "You can connect the account on {site} with your account on {service} if b
 msgstr "Anda dapat menghubungkan akun di {site} dengan akun Anda di {service} jika kedua akun memiliki alamat email terverifikasi tetapi ini tidak terjadi. Periksa kedua situs, lalu coba lagi."
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:113
-msgid "You can enter the password that you have for"
-msgstr "Anda dapat memasukkan kata sandi yang Anda miliki untuk"
+msgid "You can enter the password that you have for {site}."
+msgstr ""
 
 #: zotonic_mod_authentication/priv/templates/logon_error/message.need_passcode.tpl:2
 msgid "You can find the code in your authentication App."
@@ -7061,8 +7033,8 @@ msgstr "Anda bisa membacanya di sini:"
 
 #: zotonic_mod_authentication/priv/templates/email_password_reset.tpl:9
 #: zotonic_mod_authentication/priv/templates/email_password_reset.tpl:18
-msgid "You have requested a new password for"
-msgstr "Anda telah meminta kata sandi baru untuk"
+msgid "You have requested a new password for <a href=\"https://{hostname}/\">{hostname}</a>."
+msgstr ""
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:99
 msgid "You have to share your email address to be able to log in."
@@ -7112,14 +7084,9 @@ msgstr "Kata sandi Anda telah diubah"
 msgid "Your password has been reset"
 msgstr "Kata sandi Anda telah disetel ulang"
 
-#: zotonic_mod_authentication/priv/templates/logon.tpl:34
+#: zotonic_mod_authentication/priv/templates/logon.tpl:38
 msgid "Your username is"
 msgstr "Nama pengguna Anda adalah"
-
-#: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:18
-#: zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:5
-msgid "an hour"
-msgstr "satu jam"
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:239
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:100
@@ -7195,9 +7162,9 @@ msgid "By default the backup of the database and files are not encrypted. It is\
 "        external server."
 msgstr "Secara default, cadangan database dan file tidak dienkripsi. Cadangan dapat dienkripsi agar lebih aman disimpan di server eksternal."
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:10
-msgid "Changes since"
-msgstr "Perubahan sejak"
+#: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:12
+msgid "Changes from <strong>{from}</strong> to <strong>{to}</strong>."
+msgstr ""
 
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:51
 msgid "Check and possibly restore an earlier version of your page."
@@ -7303,10 +7270,6 @@ msgstr "Bantuan tentang pencadangan &amp; pemulihan"
 msgid "If the Cloud File Store module is used, then deleted files can be retained indefinitely."
 msgstr "Jika modul Cloud File Store digunakan, maka file yang dihapus dapat disimpan tanpa batas waktu."
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:100
-msgid "It can be found in the"
-msgstr "Itu dapat ditemukan di"
-
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:44
 msgid "It could be that a connected dependent page was deleted because of the deletion of this page, such a deleted dependent page can also be recovered."
 msgstr "Bisa jadi halaman dependen yang terhubung terhapus karena penghapusan halaman ini, halaman dependen yang terhapus tersebut juga dapat dipulihkan."
@@ -7361,10 +7324,8 @@ msgid "Please make sure you store the backup encryption password in a safe <u>ex
 msgstr "Pastikan Anda menyimpan kata sandi enkripsi cadangan di lokasi <u>eksternal</u> yang aman."
 
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:75
-#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:54
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:85
-msgid "Previous"
-msgstr "Sebelumnya"
+msgid "Previous versions"
+msgstr ""
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:54
 msgid "Recover incoming connections from other pages"
@@ -7388,7 +7349,7 @@ msgstr "Kembalikan cadangan"
 msgid "Restore deleted <em>dependent</em> pages that were referred by this page"
 msgstr "Pulihkan halaman <em>dependen</em> yang telah dihapus dan sebelumnya dirujuk oleh halaman ini"
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:41
+#: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:47
 msgid "Restore deleted page"
 msgstr "Kembalikan halaman yang terhapus"
 
@@ -7396,11 +7357,11 @@ msgstr "Kembalikan halaman yang terhapus"
 msgid "Restore page"
 msgstr "Pulihkan halaman"
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:38
+#: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:44
 msgid "Restore this page..."
 msgstr "Pulihkan halaman ini..."
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:30
+#: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:36
 msgid "Revert page to earlier version"
 msgstr "Kembalikan halaman ke versi sebelumnya"
 
@@ -7412,7 +7373,7 @@ msgstr "Kembali ke revisi sebelumnya dari halaman ini."
 msgid "Revert to earlier version..."
 msgstr "Kembali ke versi sebelumnya..."
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:27
+#: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:33
 msgid "Revert to this version..."
 msgstr "Kembalikan ke versi ini..."
 
@@ -7536,9 +7497,9 @@ msgid "The original category or content group no longer exists. Confirm the sugg
 msgstr "Kategori atau kelompok konten asli tersebut sudah tidak ada lagi. Silakan konfirmasi pengganti yang disarankan atau pilih yang lain."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:5
-#: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:15
-msgid "This is the version saved on"
-msgstr "Ini adalah versi yang disimpan di"
+#: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:19
+msgid "This version was saved on <strong>{date}</strong> by <strong>{author}</strong>."
+msgstr ""
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:10
 msgid "This will overwrite your page with the contents of the backup file."
@@ -7582,6 +7543,10 @@ msgstr "Anda tidak diizinkan untuk melihat revisi"
 msgid "You are not allowed to see the revisions."
 msgstr "Anda tidak diizinkan untuk melihat revisi tersebut."
 
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:101
+msgid "You can find it in <a href=\"{url}\">System Configuration</a> or in the Zotonic configuration files."
+msgstr ""
+
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:9
 msgid "You can have one backup per day of the week, older ones will be overwritten."
 msgstr "Anda dapat memiliki satu cadangan per hari dalam seminggu, yang lebih lama akan ditimpa."
@@ -7609,10 +7574,6 @@ msgstr "unduh basis data"
 #: zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:28
 msgid "download files"
 msgstr "unduh berkas"
-
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:100
-msgid "or in the Zotonic configuration files."
-msgstr "atau dalam berkas konfigurasi Zotonic."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:15
 msgid "this backup is in progress"
@@ -7701,8 +7662,8 @@ msgid "Compatibility tags"
 msgstr "Tag kompatibilitas"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:130
-msgid "Complete"
-msgstr "Selesai"
+msgid "Completed"
+msgstr ""
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:130
 msgid "Completion"
@@ -7736,8 +7697,8 @@ msgid "Donut alias"
 msgstr "Alias donut"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:44
-msgid "Donut chart with map data"
-msgstr "Bagan donat dengan data peta"
+msgid "Donut chart with data from an Erlang map"
+msgstr ""
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:81
 msgid "East"
@@ -7873,6 +7834,10 @@ msgstr "Status Koneksi Jembatan MQTT"
 #: zotonic_mod_l10n/src/support/l10n_date.erl:41
 msgid "March"
 msgstr "Maret"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:153
+msgid "Market share"
+msgstr ""
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:114
 #: zotonic_mod_l10n/src/support/l10n_date.erl:43
@@ -8029,10 +7994,6 @@ msgstr "Id sesi"
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:36
 msgid "Several aspects of the connection are tested"
 msgstr "Beberapa aspek koneksi diuji"
-
-#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:153
-msgid "Share"
-msgstr "Berbagi"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:128
 msgid "Single value"
@@ -8252,6 +8213,14 @@ msgstr "Pesan"
 msgid "Moderate comments"
 msgstr "Moderasi komentar"
 
+#: zotonic_mod_comment/priv/templates/_comments_form.tpl:23
+#: zotonic_mod_comment/priv/templates/admin_comments.tpl:22
+#: zotonic_mod_contact/priv/templates/contact.tpl:11
+#: zotonic_mod_contact/priv/templates/email_contact.tpl:10
+#: zotonic_mod_survey/src/models/m_survey.erl:982
+msgid "Name"
+msgstr "Nama"
+
 #: zotonic_mod_comment/priv/templates/_comments_form.tpl:16
 msgid "Note: Comments are moderated"
 msgstr "Catatan: Komentar dimoderasi"
@@ -8323,9 +8292,13 @@ msgstr "terbitkan"
 msgid "unpublish"
 msgstr "batalkan penerbitan"
 
+#: zotonic_mod_contact/priv/templates/email_contact.tpl:3
+msgid "Contact form on {site}"
+msgstr ""
+
 #: zotonic_mod_contact/priv/templates/email_contact.tpl:6
-msgid "Hello, the contact form of"
-msgstr "Halo, formulir kontak dari"
+msgid "Hello, the contact form on “{site}” has been submitted."
+msgstr ""
 
 #: zotonic_mod_contact/priv/templates/contact.tpl:32
 msgid "Thank you!"
@@ -8335,14 +8308,6 @@ msgstr "Terima kasih!"
 msgid "Your message has been submitted! We’ll get in touch soon."
 msgstr "Pesan Anda telah dikirim! Kami akan segera menghubungi Anda."
 
-#: zotonic_mod_contact/priv/templates/email_contact.tpl:3
-msgid "contact form on"
-msgstr "formulir kontak pada"
-
-#: zotonic_mod_contact/priv/templates/email_contact.tpl:6
-msgid "has been submitted."
-msgstr "telah disampaikan."
-
 #: zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:1
 msgid "Are you sure you want to delete the following content groups:"
 msgstr "Apakah Anda yakin ingin menghapus grup konten berikut:"
@@ -8350,6 +8315,10 @@ msgstr "Apakah Anda yakin ingin menghapus grup konten berikut:"
 #: zotonic_mod_content_groups/priv/templates/_admin_edit_sidebar_content_group.tpl:4
 msgid "Content Group"
 msgstr "Grup konten"
+
+#: zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:37
+msgid "Delete content groups and move their pages"
+msgstr ""
 
 #: zotonic_mod_content_groups/src/mod_content_groups.erl:101
 msgid "Delete is canceled, there are pages in this content group."
@@ -8595,10 +8564,6 @@ msgstr "Semua templat yang disertakan"
 msgid "All templates are checked for missing includes or missing <tt>{ext}</tt> template references."
 msgstr "Semua templat diperiksa untuk mencari templat yang hilang dan dirujuk oleh pernyataan include atau <tt>{ext}</tt>."
 
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:44
-msgid "All templates are compiling."
-msgstr "Semua templat sedang dikompilasi."
-
 #: zotonic_mod_development/priv/templates/admin_development.tpl:195
 #: zotonic_mod_development/priv/templates/admin_development.tpl:211
 msgid "All templates will be compiled."
@@ -8666,6 +8631,10 @@ msgstr "Klik untuk memuat templat"
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:18
 msgid "Click to restart"
 msgstr "Klik untuk memulai ulang"
+
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:30
+msgid "Code editor"
+msgstr ""
 
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:13
 msgid "Column"
@@ -8849,10 +8818,6 @@ msgstr "Edit fungsi pelanggan"
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:8
 msgid "Edit template"
 msgstr "Edit templat"
-
-#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:30
-msgid "Editor"
-msgstr "Editor"
 
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:41
 msgid "Editor URL pattern"
@@ -9124,6 +9089,10 @@ msgstr "Tidak ditemukan referensi."
 #: zotonic_mod_development/src/mod_development.erl:625
 msgid "No template found in the context."
 msgstr "Tidak ada templat yang ditemukan dalam konteks."
+
+#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:44
+msgid "No template syntax errors found."
+msgstr ""
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:422
 msgid "No traced parent templates"
@@ -9655,8 +9624,8 @@ msgid "Align right"
 msgstr "Ratakan ke kanan"
 
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:58
-msgid "Apply"
-msgstr "Daftar"
+msgid "Apply changes"
+msgstr ""
 
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:36
 msgid "Bold"
@@ -9997,8 +9966,8 @@ msgid "Last error status"
 msgstr "Status kesalahan terakhir"
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:260
-msgid "Mailer message"
-msgstr "Pesan Mailer"
+msgid "Mail server message"
+msgstr ""
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:167
 msgid "Most Recent"
@@ -10092,13 +10061,13 @@ msgstr "Ada masalah dengan alamat email ini."
 msgid "There have been some problems but they have been cleared. This message will disappear as soon as an email has been received succesfully."
 msgstr "Disana ada beberapa masalah tapi mereka telah dibersihkan. Pesan ini akan hilang segera setelah email telah berhasil diterima."
 
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:47
-msgid "This email address has been blocked, no emails will be sent or received from this address."
-msgstr "Alamat email ini telah diblokir, tidak ada email yang akan dikirim atau diterima dari alamat ini."
-
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:101
 msgid "This email address has been blocked."
 msgstr "Alamat email ini telah diblokir."
+
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:47
+msgid "This email address has been blocked. No emails will be sent to or received from this address."
+msgstr ""
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:93
 msgid "This email address is not valid."
@@ -10200,8 +10169,8 @@ msgstr "Ekspor"
 #: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:57
 #: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:65
 #: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:66
-msgid "Export fields"
-msgstr "Bidang ekspor"
+msgid "Fields to export"
+msgstr ""
 
 #: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:8
 msgid "Help about export"
@@ -10399,17 +10368,13 @@ msgstr "Layanan tidak dapat diakses. Periksa kembali pengaturan Anda dan coba la
 msgid "Currently Zotonic supports FTP, WebDAV and services that are compatible with the S3 file services API. These include:"
 msgstr "Saat ini Zotonic mendukung FTP, WebDAV, dan layanan yang kompatibel dengan API layanan file S3. Layanan tersebut meliputi:"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:251
-msgid "Delete Queue"
-msgstr "Menghapus Antrian"
-
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:185
 msgid "Delete files from the cloud file store"
 msgstr "Hapus file dari penyimpanan file awan"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:70
-msgid "Delete interval"
-msgstr "Hapus interval"
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:251
+msgid "Deletion queue"
+msgstr ""
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:250
 msgid "Download Queue"
@@ -10430,6 +10395,10 @@ msgstr "Masukkan wilayah yang disediakan oleh penyedia layanan penyimpanan Anda 
 #: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:53
 msgid "Error list pages"
 msgstr "Halaman daftar kesalahan"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:70
+msgid "Extra deletion delay"
+msgstr ""
 
 #: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:8
 msgid "Failed reads in the last 15 minutes:"
@@ -10550,6 +10519,11 @@ msgstr "Sekarang"
 #: zotonic_mod_filestore/src/support/filestore_admin.erl:38
 msgid "Only the admin account (user 1) can mark files unrecoverable."
 msgstr "Hanya akun admin (pengguna 1) yang dapat menandai berkas sebagai tidak dapat dipulihkan."
+
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:54
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:85
+msgid "Previous"
+msgstr "Sebelumnya"
 
 #: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:5
 msgid "Read errors older than 24 hours"
@@ -10955,7 +10929,7 @@ msgid "Add default connection"
 msgstr "Tambahkan koneksi default"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user.tpl:32
-#: zotonic_mod_import_feed/src/models/m_import_feed.erl:482
+#: zotonic_mod_import_feed/src/models/m_import_feed.erl:484
 msgid "Administrator accounts cannot run feed imports. Importing external content with full administrator permissions is dangerous. Select a non-administrator account with only the permissions needed for importing."
 msgstr "Akun administrator tidak dapat menjalankan impor feed. Mengimpor konten eksternal dengan hak akses administrator penuh sangat berbahaya. Pilihlah akun non-administrator yang hanya memiliki hak akses yang diperlukan untuk proses impor."
 
@@ -11011,6 +10985,10 @@ msgstr "Secara default, konten yang diimpor tidak bersifat otoritatif. Kedua mod
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user.tpl:23
 msgid "Change user"
 msgstr "Ganti pengguna"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:32
+msgid "Check feed now"
+msgstr ""
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:30
 msgid "Checking website for feeds…"
@@ -11155,6 +11133,10 @@ msgstr "Umpan"
 msgid "Feed activity log"
 msgstr "Catatan aktivitas umpan"
 
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:44
+msgid "Feed checks"
+msgstr ""
+
 #: zotonic_mod_import_feed/src/mod_import_feed.erl:569
 msgid "Feed deleted"
 msgstr "Umpan telah dihapus"
@@ -11222,14 +11204,6 @@ msgstr "Riwayat impor"
 msgid "Import history pages"
 msgstr "Halaman riwayat impor"
 
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:7
-msgid "Import settings"
-msgstr "Impor pengaturan"
-
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:15
-msgid "Import user"
-msgstr "Impor pengguna"
-
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:45
 msgid "Imported / updated / skipped"
 msgstr "Diimpor / diperbarui / dilewati"
@@ -11247,8 +11221,8 @@ msgid "Imports run with this account's permissions. Only administrators and user
 msgstr "Impor dijalankan dengan izin akun ini. Hanya administrator dan pengguna yang memiliki akses penuh ke akun yang dapat mengubahnya."
 
 #: zotonic_mod_import_feed/src/models/m_import_feed.erl:476
-msgid "Invalid removal regexp on line"
-msgstr "Ekspresi reguler penghapusan tidak valid pada baris"
+msgid "Invalid removal regexp on line {line}: {reason}"
+msgstr ""
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_result.tpl:9
 msgid "Kept:"
@@ -11259,8 +11233,8 @@ msgid "Kind"
 msgstr "Jenis"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:47
-msgid "Last poll"
-msgstr "Jajak pendapat terakhir"
+msgid "Last feed check"
+msgstr ""
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:51
 msgid "Last processed"
@@ -11305,8 +11279,8 @@ msgid "New events appear live at the top. Scroll down to load older events. Logs
 msgstr "Peristiwa baru muncul langsung di bagian atas. Gulir ke bawah untuk memuat peristiwa yang lebih lama. Log disimpan selama 30 hari."
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:48
-msgid "Next poll"
-msgstr "Jajak pendapat berikutnya"
+msgid "Next feed check"
+msgstr ""
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log.tpl:21
 msgid "No activity for this feed, or access denied."
@@ -11332,25 +11306,17 @@ msgstr "Satu ekspresi reguler per baris. Teks yang cocok akan dihapus dari ringk
 msgid "Original article"
 msgstr "Artikel asli"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:22
-msgid "Pause"
-msgstr "Jeda"
-
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:161
 msgid "Pause automatic imports"
 msgstr "Jeda impor otomatis"
 
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:22
+msgid "Pause imports"
+msgstr ""
+
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:62
 msgid "Paused"
 msgstr "Dijeda"
-
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:32
-msgid "Poll now"
-msgstr "Ikuti jajak pendapat sekarang"
-
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:44
-msgid "Polls"
-msgstr "Jajak Pendapat"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:8
 msgid "Preview only: no resources have been imported."
@@ -11361,8 +11327,8 @@ msgid "Protected resources and resources you cannot delete are kept. A resource 
 msgstr "Sumber daya yang dilindungi dan sumber daya yang tidak dapat Anda hapus akan tetap disimpan. Sebuah sumber daya juga akan tetap disimpan jika penghapusannya dapat menyebabkan penghapusan otomatis terhadap konten yang bergantung padanya dan tidak dapat Anda hapus."
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_dialog.tpl:20
-msgid "Protected resources and resources you cannot delete will be kept. Content shared with other feeds is included."
-msgstr "Sumber daya yang dilindungi dan sumber daya yang tidak dapat Anda hapus akan tetap disimpan. Hal ini termasuk konten yang dibagikan ke feed lain."
+msgid "Protected resources and resources you cannot delete will be kept. Deletable content shared with other feeds will also be deleted."
+msgstr ""
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:33
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:39
@@ -11389,8 +11355,8 @@ msgid "Resource"
 msgstr "Sumber Daya"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:20
-msgid "Resume"
-msgstr "Daftar Riwayat Hidup"
+msgid "Resume imports"
+msgstr ""
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:167
 msgid "Save & refetch deleted"
@@ -11424,6 +11390,10 @@ msgstr "Pilih akun yang izinnya akan digunakan untuk mengimpor artikel dan media
 msgid "Select user"
 msgstr "Pilih pengguna"
 
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:7
+msgid "Settings for importing"
+msgstr ""
+
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:48
 msgid "Source identity"
 msgstr "Identitas sumber"
@@ -11433,8 +11403,8 @@ msgid "Subscribe imported articles for updates"
 msgstr "Berlangganan artikel yang diimpor untuk mendapatkan pembaruan"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:123
-msgid "Subscriptions require a source that supports updates and non-authoritative imports."
-msgstr "Langganan memerlukan sumber yang mendukung pembaruan dan impor non-otoritatif."
+msgid "Subscriptions require non-authoritative imports and a source that supports updates."
+msgstr ""
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:37
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:101
@@ -11477,7 +11447,7 @@ msgstr "Pengaturan default ini berlaku untuk artikel yang diimpor dan media yang
 msgid "This deletes all deletable articles and media imported by this feed, including resources shared with other feeds. Protected resources and resources you cannot delete are kept. The feed will be paused."
 msgstr "Tindakan ini akan menghapus semua artikel dan media yang dapat dihapus yang diimpor oleh feed ini, termasuk sumber daya yang dibagikan dengan feed lain. Sumber daya yang dilindungi dan sumber daya yang tidak dapat Anda hapus akan tetap disimpan. Feed ini akan ditangguhkan."
 
-#: zotonic_mod_import_feed/src/models/m_import_feed.erl:478
+#: zotonic_mod_import_feed/src/models/m_import_feed.erl:480
 msgid "This feed is paused. Resume it before fetching."
 msgstr "Umpan ini sedang dijeda. Lanjutkan terlebih dahulu sebelum mengambil datanya."
 
@@ -11485,7 +11455,7 @@ msgstr "Umpan ini sedang dijeda. Lanjutkan terlebih dahulu sebelum mengambil dat
 msgid "This feed is paused. Resume it in its settings before fetching."
 msgstr "Umpan ini sedang dijeda. Lanjutkan umpan ini di pengaturannya sebelum mengambil data."
 
-#: zotonic_mod_import_feed/src/models/m_import_feed.erl:480
+#: zotonic_mod_import_feed/src/models/m_import_feed.erl:482
 msgid "This feed is still importing. Pause it and wait for the current import to finish before deleting its content."
 msgstr "Feed ini masih dalam proses impor. Jeda proses ini dan tunggu hingga proses impor saat ini selesai sebelum menghapus isinya."
 
@@ -11511,6 +11481,10 @@ msgstr "Gunakan “Uji coba / pratinjau” untuk mengambil entri contoh."
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:191
 msgid "User"
 msgstr "Pengguna"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:15
+msgid "User account for imports"
+msgstr ""
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:32
 msgid "Uses credentials registered for the import user and destination host. Credentials are only sent over HTTPS."
@@ -11770,20 +11744,11 @@ msgid "<ul>\n"
 "      <li><b>Relayed</b>: the remote mailer reports that the email is relayed to the next server</li>\n"
 "                                            <li><b>Bounce</b>: the email bounced back from a remote mailer, this is a fatal error</li>\n"
 "                                            <li><b>Failed</b>: the remote mailer did not accept our email, no further retries</li>\n"
-"                                            <li><b>Retry</b>: we could not sent the email and will retry later</li>\n"
-" <li><b>Blocked</b>: the recipient’s email address is blocked, check the email address status</li>\n"
+"                                            <li><b>Delivery retry</b>: we could not send the email and will retry later</li>\n"
+"        <li><b>Blocked</b>: the recipient’s email address is blocked, check the email address status</li>\n"
 "                                            <li><b>Received</b>: a remote mailer sent email to us</li>\n"
 "              </ul>"
-msgstr "<ul>\n"
-"                                            <li><b>Terkirim</b>: email sedang dikirim ke pengirim jarak jauh</li>\n"
-"                           <li><b>Terkirim</b>: email telah terkirim ke pengirim jarak jauh</li>\n"
-"      <li><b>Diteruskan</b>: pengirim jarak jauh melaporkan bahwa email diteruskan ke server berikutnya</li>\n"
-"                                            <li><b>Bounce</b>: email dipantulkan kembali dari pengirim jarak jauh, ini adalah kesalahan fatal</li>\n"
-"                                            <li><b>Gagal</b>: pengirim jarak jauh tidak menerima email kita, tidak ada percobaan ulang lebih lanjut</li>\n"
-"                                            <li><b>Coba</b> lagi: kami tidak dapat mengirim email dan akan mencoba lagi nanti</li>\n"
-" <li><b>Diblokir</b>: alamat email penerima diblokir, periksa status alamat email</li>\n"
-"                                            <li><b>Diterima</b>: pengirim jarak jauh mengirim email kepada kami</li>\n"
-"              </ul>"
+msgstr ""
 
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:156
 msgid "Bounce"
@@ -11813,6 +11778,10 @@ msgstr "Pelanggaran Content-Security-Policy dilaporkan ke endpoint terbuka dan l
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:146
 msgid "Debug"
 msgstr "Debug"
+
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:158
+msgid "Delivery retry"
+msgstr ""
 
 #: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:35
 msgid "Directive"
@@ -11921,11 +11890,6 @@ msgstr "URL Pelaporan"
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:49
 msgid "Resources with email identity"
 msgstr "Sumber daya dengan identitas email"
-
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:158
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:114
-msgid "Retry"
-msgstr "Coba lagi"
 
 #: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:40
 msgid "Samples"
@@ -12106,17 +12070,21 @@ msgstr "Semua penerima, dengan email dalam bahasa tersebut"
 msgid "All statuses"
 msgstr "Semua status"
 
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:56
+msgid "Already queued: {count};"
+msgstr ""
+
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:9
 msgid "Any page can be sent as a mailing. You can send a mailing from any edit page. On this page you can add or remove mailing lists and their recipients."
 msgstr "Halaman apa pun dapat dikirim sebagai email massal. Anda dapat mengirimnya dari halaman penyuntingan mana pun. Di sini Anda dapat menambahkan atau menghapus milis dan penerimanya."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_cancel_confirm.tpl:1
-msgid "Are you sure you want to cancel the mailing to"
-msgstr "Apakah Anda yakin Anda ingin membatalkan surat untuk"
+msgid "Are you sure you want to cancel the mailing to “{list}”?"
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:2
-msgid "Are you sure you want to delete the mailing list"
-msgstr "Yakin ingin menghapus milis"
+msgid "Are you sure you want to delete the mailing list “{list}”?"
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_test_public_alert.tpl:9
 msgid "Ask an administrator to change the test mailing list’s access settings."
@@ -12125,6 +12093,10 @@ msgstr "Mintalah kepada administrator untuk mengubah pengaturan akses milis uji 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:87
 msgid "Available when sending and automatic retries finish."
 msgstr "Tersedia setelah proses pengiriman dan upaya ulang otomatis selesai."
+
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:58
+msgid "Awaiting confirmation: {count};"
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:13
 msgid "Before you will receive any further mail you need to confirm your subscription."
@@ -12191,17 +12163,21 @@ msgstr "Konfirmasi untuk berlangganan"
 msgid "Confirmed"
 msgstr "Telah dikonfirmasi"
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:144
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:145
 msgid "Continue sending"
 msgstr "Lanjutkan pengiriman"
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:85
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:86
 msgid "Copies will be saved in the selected languages when sending starts."
 msgstr "Salinan akan disimpan dalam bahasa-bahasa yang dipilih saat proses pengiriman dimulai."
 
 #: zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:105
 msgid "Could not add the recipient."
 msgstr "Penerima tidak bisa ditambahkan."
+
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:4
+msgid "Could not be sent: {count}"
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_count_error.tpl:9
 msgid "Could not count the eligible recipients. The list query may have taken too long. Go back and try again, or ask an administrator to check the mailing list."
@@ -12322,26 +12298,35 @@ msgstr "Edit milis"
 msgid "Edit recipient"
 msgstr "Edit penerima"
 
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:64
+msgid "Eligible for delivery"
+msgstr ""
+
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:9
 msgid "Eligible recipients will be counted in the review step."
 msgstr "Penerima yang memenuhi syarat akan diperhitungkan pada tahap peninjauan."
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:65
-msgid "Eligible to send"
-msgstr "Berhak mengirim"
-
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:62
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:55
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:54
 msgid "Email language"
 msgstr "Bahasa email"
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:50
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:49
 msgid "Email language is the language version of the mailing selected for sending. It can differ from the recipient’s preferred language when a fallback or a fixed Email language is used. Skipped recipients will not receive an email."
 msgstr "Bahasa email adalah versi bahasa dari surat yang dipilih untuk dikirim. Bahasa ini bisa berbeda dari bahasa pilihan penerima jika digunakan bahasa cadangan atau bahasa email tetap. Penerima yang dilewati tidak akan menerima email."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:5
 msgid "Email subscriptions"
 msgstr "Berlangganan email"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:9
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_summary.tpl:10
+msgid "Emails processed: {processed} / {selected}"
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:150
+msgid "Emails waiting to be sent: {count}."
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:60
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:85
@@ -12370,6 +12355,10 @@ msgstr "Semua penerima, dengan bahasa tersedia yang paling sesuai bagi masing-ma
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_summary.tpl:5
 msgid "Excluded"
 msgstr "Dikecualikan"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:5
+msgid "Excluded: {count}"
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:44
 msgid "Externally managed list &mdash; no unsubscribe/subscribe links"
@@ -12436,8 +12425,8 @@ msgid "Here you can edit the arguments of the search query. Every argument goes 
 msgstr "Di sini Anda dapat mengedit argumen kueri pencarian. Tulis setiap argumen pada baris terpisah. Untuk informasi selengkapnya, lihat <a href=\"https://docs.zotonic.com/en/latest/developer-guide/search.html#query-arguments\">dokumentasi argumen kueri</a> di situs Zotonic."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:28
-msgid "If their preferred language is unavailable or not set, use"
-msgstr "Jika bahasa pilihan mereka tidak tersedia atau belum diatur, gunakan"
+msgid "If their preferred language is unavailable or not set, use <strong>{language}</strong>."
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:24
 msgid "If you don’t want to receive any mail then please ignore this message."
@@ -12471,7 +12460,7 @@ msgstr "Hasil pengiriman per penerima, ditampilkan 100 penerima sekaligus."
 msgid "Keep mailing"
 msgstr "Lanjutkan pengiriman"
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:75
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:76
 msgid "Language copies saved when sending started, before recipient-specific personalization."
 msgstr "Salinan dalam setiap bahasa disimpan saat pengiriman dimulai, sebelum personalisasi untuk setiap penerima."
 
@@ -12499,7 +12488,7 @@ msgstr "Pengiriman email"
 msgid "Mailing Lists"
 msgstr "Daftar surat"
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:117
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:118
 msgid "Mailing actions"
 msgstr "Tindakan pengiriman surat"
 
@@ -12520,6 +12509,12 @@ msgstr "Riwayat pengiriman untuk halaman ini"
 msgid "Mailing list"
 msgstr "Daftar surat"
 
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:3
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:8
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:12
+msgid "Mailing list recipients: {title}"
+msgstr ""
+
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:12
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:7
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:7
@@ -12527,7 +12522,7 @@ msgstr "Daftar surat"
 msgid "Mailing lists"
 msgstr "Daftar surat"
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:66
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:67
 msgid "Mailing phases"
 msgstr "Tahapan pengiriman surat"
 
@@ -12572,8 +12567,8 @@ msgid "Mailings are sent to:"
 msgstr "Surat dikirim ke:"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:13
-msgid "Mailings for:"
-msgstr "Surat-surat untuk:"
+msgid "Mailings of page: <strong>{title}</strong>"
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:9
 msgid "Manage mailing lists"
@@ -12632,7 +12627,7 @@ msgstr "Belum ada surat yang dikirim."
 msgid "No mailings yet. Send a mailing from a page’s edit screen to see its progress here."
 msgstr "Belum ada pengiriman email. Kirim email dari layar pengeditan halaman untuk melihat kemajuannya di sini."
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:73
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:72
 msgid "No recipients found."
 msgstr "Tidak ditemukan penerima."
 
@@ -12640,7 +12635,7 @@ msgstr "Tidak ditemukan penerima."
 msgid "No recipients match this filter."
 msgstr "Tidak ada penerima yang sesuai dengan filter ini."
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:87
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:88
 msgid "No saved copies are available. Older mailings and mailings without selected recipients may have no copies."
 msgstr "Tidak ada salinan yang tersimpan. Surat-surat yang lebih lama dan surat-surat tanpa penerima yang dipilih mungkin tidak memiliki salinan."
 
@@ -12653,7 +12648,7 @@ msgid "Nobody received this mailing. Check the recipient below for the reasons, 
 msgstr "Tidak ada yang menerima kiriman ini. Silakan periksa daftar penerima di bawah ini untuk mengetahui alasannya, lalu ubah pilihan bahasa atau penerima."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:188
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:43
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:42
 msgid "Not before"
 msgstr "Bukan sebelum"
 
@@ -12686,7 +12681,7 @@ msgstr "Belum ada yang dikirim."
 msgid "Nothing sent"
 msgstr "Belum ada yang dikirim"
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:96
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:95
 msgid "Nothing to send. Go back and change the language or recipient selection, or choose another mailing list."
 msgstr "Tidak ada yang bisa dikirim. Silakan kembali dan ubah pilihan bahasa atau penerima, atau pilih milis lain."
 
@@ -12722,7 +12717,7 @@ msgstr "Hanya alamat uji coba yang menerima email ini. Pilihan pengiriman Anda t
 msgid "Open a preview in a new tab before continuing:"
 msgstr "Buka pratinjau di tab baru sebelum melanjutkan:"
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:79
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:80
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:143
 #: zotonic_mod_translation/priv/templates/_translation_tree_skipped.tpl:9
 msgid "Opens in a new tab"
@@ -12883,25 +12878,16 @@ msgstr "Hasil penerima"
 msgid "Recipient status"
 msgstr "Status penerima"
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:96
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:97
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:8
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:34
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:57
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:56
 msgid "Recipients"
 msgstr "Penerima"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:10
 msgid "Recipients are subscribed either as email-only (via a simple signup form), or as subscribed persons in the system."
 msgstr "Penerima berlangganan hanya dengan alamat email (melalui formulir pendaftaran sederhana) atau sebagai orang yang terdaftar dalam sistem."
-
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:3
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:12
-msgid "Recipients for"
-msgstr "Penerima untuk"
-
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:8
-msgid "Recipients for “{title}”"
-msgstr "Penerima penghargaan “{title}”"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:111
 msgid "Recipients matching this language, plus those without a language preference"
@@ -12916,7 +12902,7 @@ msgid "Recipients will appear when preparation starts."
 msgstr "Penerima akan muncul saat persiapan dimulai."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:91
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:37
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:36
 msgid "Regional preferences can use the base language, for example Belgian Dutch can use Dutch."
 msgstr "Preferensi regional dapat menggunakan bahasa dasarnya; misalnya, bahasa Belanda Belgia dapat menggunakan bahasa Belanda."
 
@@ -12929,7 +12915,7 @@ msgstr "Hapus penerima ini. Tindakan ini tidak dapat dibatalkan."
 msgid "Removed subscription."
 msgstr "Langganan dihapus."
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:96
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:97
 msgid "Result"
 msgstr "Hasil"
 
@@ -12942,11 +12928,11 @@ msgstr "Hasil"
 msgid "Results"
 msgstr "Hasil"
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:92
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:93
 msgid "Results by language"
 msgstr "Hasil berdasarkan bahasa"
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:106
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:107
 msgid "Results will appear when sending starts."
 msgstr "Hasilnya akan muncul begitu pengiriman dimulai."
 
@@ -12954,7 +12940,7 @@ msgstr "Hasilnya akan muncul begitu pengiriman dimulai."
 msgid "Results will still update for emails already queued."
 msgstr "Hasil akan tetap diperbarui untuk email yang sudah masuk antrian."
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:163
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:164
 msgid "Retry failed recipients"
 msgstr "Coba kirim ulang ke penerima yang gagal"
 
@@ -12990,7 +12976,7 @@ msgstr "Meninjau pengiriman surat uji coba"
 msgid "Review the test mailing list’s access settings"
 msgstr "Periksa pengaturan akses milis uji coba"
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:72
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:73
 msgid "Saved mailing content"
 msgstr "Konten surat yang disimpan"
 
@@ -12998,7 +12984,7 @@ msgstr "Konten surat yang disimpan"
 msgid "Saved the opt-out preference."
 msgstr "Preferensi penolakan kiriman telah disimpan."
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:121
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:120
 msgid "Schedule mailing"
 msgstr "Jadwalkan pengiriman email"
 
@@ -13007,7 +12993,7 @@ msgstr "Jadwalkan pengiriman email"
 msgid "Scheduled"
 msgstr "Terjadwal"
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:46
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:45
 msgid "Scheduled for:"
 msgstr "Dijadwalkan pada:"
 
@@ -13027,7 +13013,11 @@ msgstr "Pilih halaman yang akan dikirim"
 msgid "Select..."
 msgstr "Pilih..."
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:56
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:16
+msgid "Selected recipients: {count}."
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:55
 msgid "Selection"
 msgstr "Pemilihan"
 
@@ -13039,17 +13029,17 @@ msgstr "Kirim surat edaran baru"
 msgid "Send a test email before continuing"
 msgstr "Kirim email percobaan sebelum melanjutkan"
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:175
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:176
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:128
 msgid "Send again to everyone"
 msgstr "Kirim lagi ke semua orang"
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:121
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:122
 msgid "Send another mailing"
 msgstr "Kirim surat lagi"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:186
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:42
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:41
 msgid "Send as soon as the page is published."
 msgstr "Kirim segera setelah halaman tersebut dipublikasikan."
 
@@ -13069,11 +13059,11 @@ msgstr "Kirim email"
 msgid "Send immediately"
 msgstr "Kirim segera"
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:44
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:43
 msgid "Send immediately after confirmation, provided the page is still published."
 msgstr "Kirim segera setelah ada konfirmasi, asalkan halaman tersebut masih dipublikasikan."
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:45
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:44
 msgid "Send immediately after confirmation."
 msgstr "Kirim segera setelah ada konfirmasi."
 
@@ -13082,11 +13072,11 @@ msgstr "Kirim segera setelah ada konfirmasi."
 msgid "Send mailing"
 msgstr "Kirim surat"
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:115
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:114
 msgid "Send mailing now"
 msgstr "Kirim surat sekarang"
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:31
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:30
 msgid "Send only to recipients whose preferred language is available. Recipients without a preference are skipped."
 msgstr "Kirimkan hanya kepada penerima yang bahasa pilihannya tersedia. Penerima yang tidak memiliki preferensi bahasa akan dilewati."
 
@@ -13094,7 +13084,7 @@ msgstr "Kirimkan hanya kepada penerima yang bahasa pilihannya tersedia. Penerima
 msgid "Send page to this list..."
 msgstr "Kirim halaman ini ke milis ini..."
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:157
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:158
 msgid "Send test again"
 msgstr "Kirim ulang email uji coba"
 
@@ -13113,10 +13103,6 @@ msgstr "Kirim email uji coba sekarang"
 msgid "Send test to address"
 msgstr "Kirim tes ke alamat"
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:18
-msgid "Send the"
-msgstr "Kirimkan"
-
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:196
 msgid "Send the mailing on a specific date and time."
 msgstr "Kirim email pada tanggal dan waktu tertentu."
@@ -13124,6 +13110,10 @@ msgstr "Kirim email pada tanggal dan waktu tertentu."
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:191
 msgid "Send the mailing right now."
 msgstr "Kirim email sekarang."
+
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:18
+msgid "Send the {language} version."
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:31
 msgid "Send this page immediately to the test mailing list. The page does not need to be published."
@@ -13147,7 +13137,7 @@ msgstr "Kirim ke semua orang"
 msgid "Send to everyone using their best available language."
 msgstr "Kirimkan kepada semua orang dalam bahasa terbaik yang tersedia bagi mereka."
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:168
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:169
 msgid "Send to people who have not received this page"
 msgstr "Kirimkan kepada orang-orang yang belum menerima halaman ini"
 
@@ -13214,6 +13204,14 @@ msgstr "Sedang dikirim — menunggu konfirmasi"
 msgid "Sent means accepted by the mail server, not confirmed inbox delivery. Later bounces update these results."
 msgstr "\"Terkirim\" berarti telah diterima oleh server email, bukan berarti telah dipastikan sampai di kotak masuk. Pesan yang kemudian ditolak akan memperbarui hasil ini."
 
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:2
+msgid "Sent: <strong>{count}</strong>"
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:55
+msgid "Sent: {count};"
+msgstr ""
+
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:14
 msgid "Show all pages"
 msgstr "Tampilkan semua halaman"
@@ -13230,13 +13228,13 @@ msgstr "Menampilkan hingga 200 pengiriman per halaman, dengan pengiriman yang ma
 msgid "Skip recipients whose preferred language is unavailable or who have not set a preference."
 msgstr "Lewati penerima yang bahasa pilihannya tidak tersedia atau yang belum menentukan preferensi."
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:66
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:65
 #: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:8
 #: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:13
 msgid "Skipped"
 msgstr "Dilewati"
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:151
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:152
 msgid "Some emails have an uncertain sending result. Ask your administrator to investigate before sending them again, to avoid duplicates."
 msgstr "Beberapa email memiliki status pengiriman yang tidak jelas. Mintalah administrator Anda untuk memeriksanya sebelum mengirim ulang email tersebut, guna menghindari pengiriman ganda."
 
@@ -13284,12 +13282,16 @@ msgstr "Dimulai setelah fase penantian."
 msgid "Status and progress"
 msgstr "Status dan kemajuan"
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:130
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:134
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:57
+msgid "Still being retried: {count};"
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:131
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:135
 msgid "Stop sending"
 msgstr "Berhenti mengirim"
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:132
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:133
 msgid "Stop sending? Only emails not yet queued can be stopped. Emails already queued will still be sent."
 msgstr "Hentikan pengiriman? Hanya email yang belum masuk antrian yang dapat dihentikan. Email yang sudah masuk antrian akan tetap terkirim."
 
@@ -13312,7 +13314,6 @@ msgstr "Dihentikan; email yang sudah masuk antrian masih diproses"
 msgid "Subscribe to"
 msgstr "Berlangganan ke"
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:45
 #: zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:47
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:99
 msgid "Subscribed with"
@@ -13326,22 +13327,23 @@ msgstr "Koneksi pelanggan"
 msgid "Subscribers, added via the subscription form."
 msgstr "Pelanggan, ditambahkan melalui formulir berlangganan."
 
+#: zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:45
+msgid "Subscription email: <b>{email}</b>"
+msgstr ""
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:33
 msgid "Target mailing list"
 msgstr "Milis tujuan"
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:185
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:186
 #: zotonic_mod_websub/priv/templates/_websub_error.tpl:3
 msgid "Technical details"
 msgstr "Rincian teknis"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:8
-#: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:16
-msgid "Test"
-msgstr "Uji Coba"
-
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:3
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:8
+#: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:16
 msgid "Test email"
 msgstr "Email uji coba"
 
@@ -13350,8 +13352,12 @@ msgid "Test email address"
 msgstr "Alamat email uji coba"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:151
-msgid "Test email queued for"
-msgstr "Email uji coba yang sedang dalam antrian untuk"
+msgid "Test email queued for {email}."
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_admin_edit_mailing_runs_panel.tpl:8
+msgid "Test email:"
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:163
 msgid "Test language"
@@ -13370,10 +13376,6 @@ msgstr "Email uji coba langsung dikirim. Halaman tersebut tidak perlu dipublikas
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:12
 msgid "Test recipient:"
 msgstr "Penerima uji coba:"
-
-#: zotonic_mod_mailinglist/priv/templates/_admin_edit_mailing_runs_panel.tpl:8
-msgid "Test:"
-msgstr "Tes:"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:85
 msgid "Text shown below the confirmation, welcome and unsubscribe e-mails."
@@ -13443,7 +13445,7 @@ msgstr "Tidak ada pengiriman yang gagal yang perlu dicoba kembali."
 msgid "There is no mailing list with the name ‘mailinglist_test’."
 msgstr "Tidak ada milis dengan nama 'mailinglist_test'."
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:90
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:89
 msgid "These counts are estimates. Recipients and translations are checked again when sending starts."
 msgstr "Jumlah ini hanyalah perkiraan. Penerima dan terjemahan akan diperiksa kembali saat proses pengiriman dimulai."
 
@@ -13491,7 +13493,7 @@ msgstr "Halaman ini tidak tersedia dalam bahasa mereka."
 msgid "This rough total includes all query matches. Duplicate recipients are not removed yet."
 msgstr "Jumlah kasar ini mencakup semua hasil pencocokan kueri. Penerima yang terduplikasi belum dihapus."
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:93
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:92
 msgid "This sends again to everyone selected, including recipients who received this page before."
 msgstr "Hal ini akan mengirimkan kembali pesan tersebut kepada semua orang yang dipilih, termasuk penerima yang sebelumnya telah menerima halaman ini."
 
@@ -13504,8 +13506,8 @@ msgid "Tick the checkbox if you want the recipient to receive a welcome e-mail m
 msgstr "Centang kotak centang jika Anda ingin penerima untuk menerima sebuah pesan e-mail selamat datang."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:2
-msgid "Times shown in"
-msgstr "Waktu yang ditampilkan dalam"
+msgid "Times shown in {timezone}."
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_task_language.tpl:4
 msgid "Unknown language"
@@ -13544,7 +13546,7 @@ msgstr "Unggah berkas berisi penerima. Berkas harus berisi satu alamat e-mail pe
 msgid "Upload a list of recipients."
 msgstr "Unggah daftar penerima."
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:33
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:32
 msgid "Use each recipient’s preferred language."
 msgstr "Gunakan bahasa yang diinginkan oleh masing-masing penerima."
 
@@ -13614,6 +13616,10 @@ msgstr "Menunggu masalah pengiriman ini diselesaikan"
 msgid "Waiting for the sending process to start."
 msgstr "Menunggu proses pengiriman dimulai."
 
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:3
+msgid "Waiting: {count}"
+msgstr ""
+
 #: zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:3
 msgid "Welcome to"
 msgstr "Selamat datang di"
@@ -13630,9 +13636,13 @@ msgstr "Siapa yang seharusnya menerima email dalam bahasa yang dipilih?"
 msgid "Who should receive this mailing?"
 msgstr "Siapa saja yang seharusnya menerima surat ini?"
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:81
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:80
 msgid "Why some recipients are not selected"
 msgstr "Mengapa beberapa penerima tidak terpilih"
+
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:59
+msgid "Will not be sent: {count}."
+msgstr ""
 
 #: zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:113
 msgid "You are not allowed to add or enable recipients."
@@ -13740,14 +13750,6 @@ msgstr "Langganan milis Anda"
 msgid "Your subscriptions"
 msgstr "Langganan Anda"
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:55
-msgid "already queued;"
-msgstr "sudah masuk antrian;"
-
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:57
-msgid "awaiting confirmation;"
-msgstr "menunggu konfirmasi;"
-
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:22
 msgid "before language and other filters"
 msgstr "sebelum penyaringan berdasarkan bahasa dan kriteria lainnya"
@@ -13756,34 +13758,17 @@ msgstr "sebelum penyaringan berdasarkan bahasa dan kriteria lainnya"
 msgid "cancel"
 msgstr "batal"
 
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:4
-msgid "could not be sent"
-msgstr "tidak dapat dikirim"
-
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:30
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:12
 #: zotonic_mod_mailinglist/priv/templates/_mailing_subscriber_count.tpl:3
 msgid "disabled"
 msgstr "dinonaktifkan"
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:149
-msgid "emails are waiting to be sent."
-msgstr "Ada email yang menunggu untuk dikirim."
-
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:9
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_summary.tpl:10
-msgid "emails processed"
-msgstr "email yang telah diproses"
-
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:29
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:11
 #: zotonic_mod_mailinglist/priv/templates/_mailing_subscriber_count.tpl:2
 msgid "enabled"
 msgstr "diaktifkan"
-
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:5
-msgid "excluded"
-msgstr "dikecualikan"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:10
 #: zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:13
@@ -13801,34 +13786,9 @@ msgstr "daftar mailing"
 msgid "pages"
 msgstr "halaman"
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:16
-msgid "recipients selected."
-msgstr "penerima telah dipilih."
-
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_mailing_runs_panel.tpl:10
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:2
 msgid "sent"
 msgstr "dikirim"
-
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:54
-msgid "sent;"
-msgstr "dikirim;"
-
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:56
-msgid "still being retried;"
-msgstr "masih dalam proses persidangan ulang;"
-
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:18
-msgid "version."
-msgstr "versi."
-
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:3
-msgid "waiting"
-msgstr "menunggu"
-
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:58
-msgid "will not be sent."
-msgstr "tidak akan dikirim."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_subscriber_count.tpl:5
 msgid "{count} from the list query"
@@ -13870,8 +13830,8 @@ msgid "Add top"
 msgstr "Tambahkan atas"
 
 #: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:274
-msgid "Are you sure you want to remove"
-msgstr "Apakah Anda yakin ingin menghapus"
+msgid "Are you sure you want to remove <b>{title}</b> and all indented items below it?"
+msgstr ""
 
 #: zotonic_mod_menu/priv/templates/_admin_status.tpl:7
 msgid "Check all menu pages and add <i>hasmenupart</i> connections for all of the \n"
@@ -13890,7 +13850,7 @@ msgstr "Klik <strong>Tambahkan item menu</strong> atau <strong>Item menu</strong
 msgid "Copy of:"
 msgstr "Salinan dari:"
 
-#: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:289
+#: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:288
 msgid "Could not check the selected items. Please try again."
 msgstr "Tidak dapat memeriksa item yang dipilih. Silakan coba lagi."
 
@@ -13960,10 +13920,6 @@ msgstr "Katagori tidak diketahui"
 #: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:263
 msgid "You can undo this change by restoring a previous revision."
 msgstr "Anda dapat membatalkan perubahan ini dengan mengembalikan revisi sebelumnya."
-
-#: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:276
-msgid "and all indented items below it?"
-msgstr "dan semua item berlekuk di bawahnya?"
 
 #: zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:27
 msgid "Add these permissions under {perm}"
@@ -14166,14 +14122,14 @@ msgstr "Mintalah kredensial pengguna di situs web ini untuk diautentikasi di sit
 msgid "Authenticating..."
 msgstr "Mengautentikasi ..."
 
+#: zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:88
+#: zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:89
+msgid "Authorization URL"
+msgstr ""
+
 #: zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:11
 msgid "Authorize"
 msgstr "Izinkan"
-
-#: zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:88
-#: zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:89
-msgid "Authorize URL"
-msgstr "Otorisasi URL"
 
 #: zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:16
 msgid "Authorize access to your account"
@@ -14202,6 +14158,10 @@ msgstr "Terhubung dengan"
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:48
 msgid "Consumer App not found, or no view permission."
 msgstr "Aplikasi Konsumen tidak ditemukan, atau tidak ada izin melihat."
+
+#: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:42
+msgid "Content import"
+msgstr ""
 
 #: zotonic_mod_oauth2/src/mod_oauth2.erl:165
 #: zotonic_mod_oauth2/src/mod_oauth2.erl:276
@@ -14765,7 +14725,7 @@ msgstr "Bangun kembali aspek penelusuran"
 msgid "Rebuilding the faceted search table."
 msgstr "Membangun kembali tabel pencarian segi."
 
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:149
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:152
 msgid "Add Plausible tracking script"
 msgstr "Tambahkan skrip pelacakan Plausible"
 
@@ -14781,7 +14741,7 @@ msgstr "Tambahkan JSON-LD khusus Anda untuk metadata terstruktur. Ini menggantik
 msgid "All pages of this category"
 msgstr "Semua halaman dari kategori ini"
 
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:98
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:101
 msgid "Allowing this is a security risk."
 msgstr "Membiarkan hal ini merupakan risiko keamanan."
 
@@ -14793,16 +14753,16 @@ msgstr "Minta Google untuk mengecualikan semua halaman “{cat}”"
 msgid "Ask Google to not index this page"
 msgstr "Minta Google untuk tidak mengindeks halaman ini"
 
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:134
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:137
 msgid "Bing Webmaster"
 msgstr "Bing Webmaster"
 
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:131
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:132
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:134
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:135
 msgid "Bing Webmaster validation id"
 msgstr "Bing Webmaster validasi id"
 
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:120
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:123
 msgid "Copy the value of the content attribute in the meta tag provided by Google."
 msgstr "Salin nilai atribut content pada tag meta yang diberikan oleh Google."
 
@@ -14823,9 +14783,9 @@ msgstr "Deskripsi untuk memasukkan pada setiap halaman"
 msgid "Do not show site search action"
 msgstr "Jangan tampilkan tindakan pencarian situs"
 
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:119
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:134
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:166
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:122
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:137
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:169
 msgid "Enter here the verification code for"
 msgstr "Masukkan di sini kode verifikasi untuk"
 
@@ -14833,7 +14793,7 @@ msgstr "Masukkan di sini kode verifikasi untuk"
 msgid "Exclude this site from search engines"
 msgstr "Mengecualikan situs ini dari search engine"
 
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:97
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:100
 msgid "For some GTM options (like custom templates) to work, Google allows code to be added to your website.<br>Anyone with access to the Google Tag Manager settings can run arbitrary code on your website.<br>To make this possible we have to lower the overall security of your website."
 msgstr "Agar beberapa opsi GTM (seperti templat khusus) berfungsi, Google mengizinkan kode untuk ditambahkan ke situs web Anda.<br>Siapa pun yang memiliki akses ke pengaturan Google Tag Manager dapat menjalankan kode sembarangan di situs web Anda.<br>Agar ini memungkinkan, kami harus menurunkan keamanan situs web Anda secara keseluruhan."
 
@@ -14846,15 +14806,11 @@ msgstr "Optimasi SEO Umum"
 msgid "Google Analytics tracking id"
 msgstr "Id pelacakan Google Analytics"
 
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:116
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:117
 #: zotonic_mod_seo/priv/templates/admin_seo.tpl:119
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:120
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:122
 msgid "Google Search Console"
 msgstr "Google Search Console"
-
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:92
-msgid "Google Tag Manager account page"
-msgstr "Halaman akun Google Tag Manager"
 
 #: zotonic_mod_seo/priv/templates/admin_seo.tpl:89
 #: zotonic_mod_seo/priv/templates/admin_seo.tpl:90
@@ -14865,11 +14821,11 @@ msgstr "ID Google Tag Manager"
 msgid "Here you find settings to optimize the indexing of your site by search engines."
 msgstr "Di sini Anda dapat mengatur pengindeksan situs Anda agar optimal di mesin pencari."
 
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:101
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:104
 msgid "I accept the security risk of adding custom code in Google Tag Manager"
 msgstr "Saya menerima risiko keamanan dalam menambahkan kode khusus di Google Tag Manager"
 
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:152
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:155
 msgid "If you check this then the default tracking script for Plausible will be added, using the domain <tt>{domain}</tt>."
 msgstr "Jika Anda mencentang ini, skrip pelacakan default untuk Plausible akan ditambahkan, menggunakan domain <tt>{domain}</tt>."
 
@@ -14885,9 +14841,9 @@ msgstr "Kata kunci untuk disertakan di setiap halaman. Pisahkan kata kunci denga
 msgid "More information [Google]"
 msgstr "Informasi lebih lanjut [Google]"
 
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:121
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:136
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:168
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:124
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:139
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:171
 msgid "Multiple codes can be added at once, separated by commas."
 msgstr "Beberapa kode dapat ditambahkan sekaligus, dipisahkan dengan koma."
 
@@ -14923,7 +14879,7 @@ msgstr "Konten SEO"
 msgid "SEO indexing of this page is disabled because it is in the “{cat}” category."
 msgstr "Pengindeksan SEO halaman ini dinonaktifkan karena berada dalam kategori “{cat}”."
 
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:177
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:180
 msgid "Save SEO settings"
 msgstr "Simpan pengaturan SEO"
 
@@ -14961,43 +14917,31 @@ msgstr "Url untuk tindakan pencarian di situs. Defaultnya adalah:"
 msgid "Where can I find my tracking script?"
 msgstr "Di mana saya dapat menemukan tracking script?"
 
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:166
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:169
 msgid "Yandex Webmaster"
 msgstr "Yandex Webmaster"
 
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:163
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:164
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:166
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:167
 msgid "Yandex Webmaster validation id"
 msgstr "ID validasi Webmaster Yandex"
 
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:135
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:167
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:83
+msgid "You can find this ID in the tracking script. Its format is <strong>{format}</strong>."
+msgstr ""
+
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:92
+msgid "You can find this ID on your <a href='{url}' rel='noopener noreferrer' target='_blank'>Google Tag Manager account page</a>. Its format is <strong>{format}</strong>."
+msgstr ""
+
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:138
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:170
 msgid "You find this id in the content attribute of the meta tag, it has the format"
 msgstr "ID ini berada dalam atribut content pada tag meta, dengan format"
-
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:83
-msgid "You find this id in the tracking script, it has the format"
-msgstr "Anda menemukan id ini dalam skrip pelacakan, memiliki format"
-
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:92
-msgid "You find this on your"
-msgstr "Anda menemukan ini pada Anda"
-
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:92
-msgid "it has the format"
-msgstr "itu memiliki format"
 
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:52
 msgid "Always"
 msgstr "Selalu"
-
-#: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:48
-msgid "Change frequency defined for category"
-msgstr "Ubah frekuensi yang ditentukan untuk kategori"
-
-#: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:43
-msgid "Change frequency for sitemap"
-msgstr "Frekuensi perubahan untuk peta situs"
 
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:7
 msgid "Check the logs for progress."
@@ -15014,6 +14958,14 @@ msgstr "Per jam"
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:60
 msgid "Monthly"
 msgstr "Per bulan"
+
+#: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:48
+msgid "Page change frequency defined for category"
+msgstr ""
+
+#: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:43
+msgid "Page change frequency for sitemap"
+msgstr ""
 
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:19
 msgid "Priority defined for category"
@@ -15578,7 +15530,7 @@ msgstr "Tambahkan pertanyaan atau blok"
 msgid "Add all email addresses to a mailinglist. Users are subscribed by connecting them to the mailinglist."
 msgstr "Tambahkan semua alamat email ke milis. Pengguna berlangganan dengan menghubungkan mereka ke milis."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:124
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:127
 msgid "Add an introduction or explanation including uploaded or embedded images or video's. Add full width blocks or set a percentage to combine blocks."
 msgstr "Tambahkan pengantar atau penjelasan termasuk gambar atau video yang diunggah atau disematkan. Tambahkan blok lebar penuh atau atur persentase untuk menggabungkan blok."
 
@@ -15664,7 +15616,7 @@ msgstr "Izinkan formulir non-linear; jawaban disimpan dengan tombol \"Kembali\" 
 msgid "Already submitted"
 msgstr "Sudah dikirimkan"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:150
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:153
 msgid "Another page, video or image."
 msgstr "Halaman lain, video atau gambar."
 
@@ -15725,7 +15677,7 @@ msgstr "Kembali tanpa menyimpan"
 msgid "Because you can edit, you can proceed for testing."
 msgstr "Karena Anda dapat mengedit, Anda dapat melanjutkan untuk pengujian."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:112
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:115
 #: zotonic_mod_survey/src/mod_survey.erl:662
 msgid "Button"
 msgstr "Tombol"
@@ -15738,12 +15690,12 @@ msgstr "Pratinjau tombol"
 msgid "Button style"
 msgstr "Gaya tombol"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:113
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:116
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:18
 msgid "Button text"
 msgstr "Teks tombol"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:147
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:150
 msgid "Can only be used on the last questions page."
 msgstr "Hanya dapat digunakan pada halaman pertanyaan terakhir."
 
@@ -15841,7 +15793,7 @@ msgstr "Buat orang baru untuk menautkan jawabannya."
 msgid "Create and link"
 msgstr "Buat dan tautkan"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:112
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:115
 msgid "Create jumps to other questions or blocks."
 msgstr "Buat lompatan ke pertanyaan atau blok lain."
 
@@ -15995,7 +15947,7 @@ msgstr "Mengisi"
 msgid "Find a person to link the answer to. If you do not find a person then you can create a new person."
 msgstr "Temukan seseorang untuk menautkan jawabannya. Jika Anda tidak menemukan seseorang maka Anda dapat membuat orang baru."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:137
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:140
 msgid "First page in category"
 msgstr "Halaman pertama di kategori"
 
@@ -16019,7 +15971,7 @@ msgstr "Tangani formulir ini dengan"
 msgid "Handling"
 msgstr "Penanganan"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:127
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:130
 msgid "Hidden input"
 msgstr "Masukan tersembunyi"
 
@@ -16040,14 +15992,14 @@ msgstr "Sembunyikan informasi kemajuan"
 msgid "Hide the user’s id or browser-id from result exports"
 msgstr "Sembunyikan id pengguna atau browser-id dari hasil ekspor"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:96
-msgid "I am"
-msgstr "Saya"
-
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:26
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:27
 msgid "I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|other] ice cream and my favorite color is [color]."
 msgstr "Saya [age] tahun. Saya suka es krim [icecream=vanilla|strawberry|chocolate|other] dan warna favorit saya adalah [color]."
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:98
+msgid "I am {age} years old. I like {flavor} ice cream and my favorite color is {color}."
+msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:211
 msgid "If checked, then a confirmation email with the submitted answers can be sent to the respondent. For logged-in respondents, the known email address is used. For anonymous respondents, add a short text field with the label “email” and the validation set to “must be an email address”."
@@ -16154,6 +16106,7 @@ msgstr "Alamat email yang cocok"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:85
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:16
+#: zotonic_mod_survey/src/mod_survey.erl:657
 msgid "Matching question"
 msgstr "Pertanyaan pencocokan"
 
@@ -16213,6 +16166,7 @@ msgstr "Beberapa blok pemisah halaman digabung menjadi satu."
 msgid "Multiple times – each time with new results"
 msgstr "Beberapa kali - setiap kali dengan hasil baru"
 
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:96
 #: zotonic_mod_survey/src/mod_survey.erl:658
 msgid "Narrative"
 msgstr "Narasi"
@@ -16226,7 +16180,7 @@ msgstr "Yang diperlukan untuk lulus"
 msgid "New result:"
 msgstr "Hasil baru:"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:139
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:142
 msgid "Next page in category"
 msgstr "Halaman berikutnya dalam kategori"
 
@@ -16289,7 +16243,7 @@ msgstr "Hanya editor yang dapat menjawab"
 msgid "Optional confirmation email for the respondent"
 msgstr "Email konfirmasi opsional untuk responden"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:135
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:138
 msgid "Options from a page category"
 msgstr "Pilihan dari sebuah halaman kategori"
 
@@ -16342,7 +16296,7 @@ msgstr "Silahkan isi semua kolom yang diperlukan."
 msgid "Please make a choice."
 msgstr "Silakan membuat pilihan."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:143
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:146
 msgid "Please upload your file."
 msgstr "Silahkan upload file Anda."
 
@@ -16440,6 +16394,14 @@ msgstr "Tanggapan"
 msgid "Result deleted."
 msgstr "Hasil dihapus."
 
+#: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:33
+msgid "Result downloads"
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:20
+msgid "Result views"
+msgstr ""
+
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:22
 #: zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:19
 msgid "Results editor"
@@ -16474,7 +16436,7 @@ msgstr "Disimpan"
 msgid "Search for a person"
 msgstr "Cari seseorang"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:138
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:141
 msgid "Second page in category"
 msgstr "Halaman kedua dalam kategori"
 
@@ -16486,7 +16448,7 @@ msgstr "Pilih negara"
 msgid "Select mailinglist"
 msgstr "Pilih milis"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:104
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:107
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:13
 msgid "Select your country"
 msgstr "Pilih negara Anda"
@@ -16617,7 +16579,7 @@ msgstr "Berhenti dan lanjutkan nanti"
 msgid "Stop without saving"
 msgstr "Berhenti tanpa menyimpan"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:128
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:131
 msgid "Store a value without showing an input to the respondent."
 msgstr "Menyimpan nilai tanpa menunjukkan input kepada responden."
 
@@ -16682,7 +16644,7 @@ msgstr "Persentase yang diperlukan untuk lulus tes"
 msgid "Test result"
 msgstr "Hasil tes"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:123
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:126
 msgid "Text, image, video"
 msgstr "Teks, gambar, video"
 
@@ -16746,7 +16708,7 @@ msgstr "Status dan catatan hanya dapat dilihat oleh orang-orang yang berhak meng
 msgid "The status and note are only visible to people who can edit."
 msgstr "Status dan catatan tersebut hanya dapat dilihat oleh orang-orang yang memiliki hak akses untuk mengedit."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:147
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:150
 msgid "The uploaded file will be attached to the result email."
 msgstr "File yang diunggah akan dilampirkan ke email hasil."
 
@@ -16952,7 +16914,7 @@ msgstr "Sesi Anda telah kedaluwarsa, silakan mulai ulang dan coba lagi."
 msgid "answers visible to respondents"
 msgstr "jawaban yang dapat dilihat oleh responden"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:99
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:100
 msgid "chocolate"
 msgstr "cokelat"
 
@@ -16967,10 +16929,6 @@ msgstr "surel"
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:19
 msgid "go to"
 msgstr "pergi ke"
-
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:100
-msgid "ice cream and my favorite color is"
-msgstr "es krim dan warna favorit saya adalah"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:13
 msgid "if"
@@ -17010,11 +16968,6 @@ msgstr "harus berupa sebuah alamat e-mail"
 msgid "must be an email address"
 msgstr "harus berupa alamat email"
 
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:18
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:29
-msgid "name >= 2"
-msgstr "nama > = 2"
-
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:33
 msgid "number"
 msgstr "angka"
@@ -17027,10 +16980,6 @@ msgstr "satu per baris"
 msgid "phone number"
 msgstr "nomor telepon"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:15
-msgid "question == 1"
-msgstr "pertanyaan == 1"
-
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_multiple_choice.tpl:19
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_narrative.tpl:28
 msgid "select…"
@@ -17039,10 +16988,6 @@ msgstr "pilih…"
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:33
 msgid "text"
 msgstr "teks"
-
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:98
-msgid "years old. I like"
-msgstr "tahun. saya suka"
 
 #: zotonic_mod_survey/priv/templates/_survey_result_test_score.tpl:21
 msgid "{points} of {max} points"
@@ -17166,8 +17111,8 @@ msgid "Did you review all texts and correct any mistakes?"
 msgstr "Apakah Anda meninjau semua teks dan memperbaiki kesalahan?"
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:23
-msgid "Drag languages to define the preferred order, the first 'view' language will be the default language."
-msgstr "Seret bahasa untuk menentukan urutan pilihan, bahasa 'tampilan' pertama akan menjadi bahasa default."
+msgid "Drag languages to define the preferred order. The first language that is visible to visitors will be the default language."
+msgstr ""
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:146
 msgid "Dutch"
@@ -17238,10 +17183,6 @@ msgstr "Bahasa Hungaria"
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:25
 msgid "If a language is set to 'off' then edited texts will loose their translation in that language."
 msgstr "Jika suatu bahasa disetel ke 'nonaktif' maka teks yang diedit akan kehilangan terjemahannya dalam bahasa itu."
-
-#: zotonic_mod_translation/priv/templates/admin_translation.tpl:24
-msgid "If a language is set to 'view' or 'editable' then texts for that language are editable in the admin."
-msgstr "Jika suatu bahasa disetel ke 'view' atau 'editable' maka teks untuk bahasa itu dapat diedit di admin."
 
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:110
 #: zotonic_mod_translation/priv/templates/_dialog_translation_edit.tpl:34
@@ -17396,11 +17337,6 @@ msgstr "Simpan atau batalkan perubahan Anda sebelum memulai penerjemahan."
 msgid "Scan all templates for translation tags and generate .pot files that can be used for translating the templates. The <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext package must be installed</a>."
 msgstr "Pindai semua templat untuk mencari tag terjemahan dan buat berkas .pot yang dapat digunakan untuk menerjemahkan templat. <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">Paket gettext harus terpasang</a>."
 
-#: zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:44
-#: zotonic_mod_translation/priv/templates/admin_translation.tpl:44
-msgid "Script"
-msgstr "Script"
-
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:9
 msgid "See also:"
 msgstr "Lihat juga:"
@@ -17479,6 +17415,10 @@ msgstr "Pembuatan berkas .pot telah dimulai. Ini mungkin memerlukan beberapa saa
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:156
 msgid "Swedish"
 msgstr "Swedia"
+
+#: zotonic_mod_translation/priv/templates/admin_translation.tpl:24
+msgid "Texts can be edited in the admin for languages set to 'Visible to visitors' or 'Editable'."
+msgstr ""
 
 #: zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_sublanguage_note.tpl:3
 msgid "The golden rule when choosing a language is simplicity. Stick to the main language if you can; use a sub-language (adding region or script) when it adds useful distinguishing information."
@@ -17587,6 +17527,10 @@ msgstr "Turki"
 msgid "Use the default language for untranslated texts"
 msgstr "Gunakan bahasa default untuk teks yang belum diterjemahkan"
 
+#: zotonic_mod_translation/priv/templates/admin_translation.tpl:38
+msgid "Visible to visitors"
+msgstr ""
+
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:126
 msgid "When a text has no translation in the selected language, try the site default language before the other fallback languages."
 msgstr "Jika sebuah teks tidak memiliki terjemahan dalam bahasa yang dipilih, coba gunakan bahasa default situs tersebut sebelum bahasa cadangan lainnya."
@@ -17598,6 +17542,11 @@ msgstr "Dengan bahasa"
 #: zotonic_mod_translation/priv/templates/_admin_overview_filter_panel.tpl:19
 msgid "Without language"
 msgstr "Tanpa bahasa"
+
+#: zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:44
+#: zotonic_mod_translation/priv/templates/admin_translation.tpl:44
+msgid "Writing system"
+msgstr ""
 
 #: zotonic_mod_translation/src/models/m_translation_tree.erl:152
 #: zotonic_mod_translation/src/models/m_translation_tree.erl:155
@@ -17742,6 +17691,10 @@ msgstr "Berlangganan yang telah kedaluwarsa dan dihentikan juga disertakan. Sela
 msgid "External hostname"
 msgstr "Nama host eksternal"
 
+#: zotonic_mod_websub/priv/templates/_rsc_import_subscription_options.tpl:18
+msgid "Follows the Connections option. Connected resources keep their subscriptions when disconnected from this page."
+msgstr "Pilihan ini mengikuti opsi \"Koneksi\". Sumber daya yang terhubung akan tetap mempertahankan langganannya meskipun terputus dari halaman ini."
+
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:79
 msgid "Last activity"
 msgstr "Aktivitas terakhir"
@@ -17749,10 +17702,6 @@ msgstr "Aktivitas terakhir"
 #: zotonic_mod_websub/priv/templates/_admin_rsc_import_status_live.tpl:19
 msgid "Last update received:"
 msgstr "Pembaruan terakhir diterima:"
-
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:78
-msgid "Lease expires"
-msgstr "Masa sewa berakhir"
 
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:75
 msgid "Local page"
@@ -17787,6 +17736,10 @@ msgstr "Masih menunggu konfirmasi"
 msgid "Remote host"
 msgstr "Host jarak jauh"
 
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:114
+msgid "Retry"
+msgstr "Coba lagi"
+
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:113
 msgid "Retry subscription"
 msgstr "Coba lagi berlangganan"
@@ -17810,6 +17763,10 @@ msgstr "Pengikut halaman kami"
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:86
 msgid "Subscribes to us"
 msgstr "Berlangganan halaman kami"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:78
+msgid "Subscription lease expires"
+msgstr ""
 
 #: zotonic_mod_websub/src/filters/filter_websub_error.erl:44
 msgid "Subscription or unsubscription attempts stopped because the retry time limit was reached. Check the remote website and retry the subscription if needed."
@@ -18186,13 +18143,13 @@ msgstr "Anda bisa mengunjungi situs Anda di:"
 msgid "Your site is ready"
 msgstr "Situs Anda sudah siap"
 
-#: zotonic_site_status/priv/templates/_sites.tpl:54
-msgid "Are you sure you want to restart the site:"
-msgstr "Apakah Anda yakin ingin memulai ulang situs:"
+#: zotonic_site_status/priv/templates/_site_action_confirm.tpl:2
+msgid "Are you sure you want to restart the site <b>{site}</b>?"
+msgstr ""
 
-#: zotonic_site_status/priv/templates/_sites.tpl:41
-msgid "Are you sure you want to stop the site:"
-msgstr "Apakah Anda yakin ingin menghentikan situs ini:"
+#: zotonic_site_status/priv/templates/_site_action_confirm.tpl:4
+msgid "Are you sure you want to stop the site <b>{site}</b>?"
+msgstr ""
 
 #: zotonic_site_status/priv/templates/status.tpl:25
 msgid "Commands"
@@ -18202,7 +18159,7 @@ msgstr "Perintah"
 msgid "Enter your password to manage this server"
 msgstr "Masukkan kata sandi Anda untuk mengelola server ini"
 
-#: zotonic_site_status/priv/templates/_sites.tpl:65
+#: zotonic_site_status/priv/templates/_sites.tpl:69
 msgid "Flush and reload all settings, templates etc."
 msgstr "Bersihkan dan muat ulang semua pengaturan, templat, dan sebagainya."
 
@@ -18229,7 +18186,7 @@ msgstr "Masuk"
 msgid "Manage this server"
 msgstr "Kelola server ini"
 
-#: zotonic_site_status/priv/templates/_sites.tpl:52
+#: zotonic_site_status/priv/templates/_sites.tpl:54
 msgid "Restart the site, all users will be logged off."
 msgstr "Restart situs, semua pengguna akan log off."
 
@@ -18258,7 +18215,7 @@ msgstr "Situs yang ingin Anda kunjungi mengalami beberapa masalah. Silakan coba 
 msgid "This password is not correct."
 msgstr "Kata sandi ini tidak benar."
 
-#: zotonic_site_status/priv/templates/_sites.tpl:73
+#: zotonic_site_status/priv/templates/_sites.tpl:77
 msgid "Visit the admin page for this site."
 msgstr "Kunjungi halaman admin untuk situs ini."
 
@@ -18284,16 +18241,16 @@ msgstr "Selamat datang, pengunjung Halaman yang sedang Anda lihat adalah halaman
 msgid "You can find the password in ~/.zotonic/[version]/zotonic.config."
 msgstr "Anda dapat menemukan kata sandi di ~/.zotonic/[version]/zotonic.config."
 
-#: zotonic_site_status/priv/templates/_sites.tpl:71
+#: zotonic_site_status/priv/templates/_sites.tpl:75
 msgid "admin"
 msgstr "admin"
 
-#: zotonic_site_status/priv/templates/_sites.tpl:63
+#: zotonic_site_status/priv/templates/_sites.tpl:67
 msgid "flush"
 msgstr "bersihkan cache"
 
-#: zotonic_site_status/priv/templates/_sites.tpl:50
-#: zotonic_site_status/priv/templates/_sites.tpl:55
+#: zotonic_site_status/priv/templates/_sites.tpl:52
+#: zotonic_site_status/priv/templates/_sites.tpl:59
 msgid "restart"
 msgstr "mulai kembali"
 
@@ -18302,7 +18259,7 @@ msgid "start"
 msgstr "mulai"
 
 #: zotonic_site_status/priv/templates/_sites.tpl:37
-#: zotonic_site_status/priv/templates/_sites.tpl:42
+#: zotonic_site_status/priv/templates/_sites.tpl:44
 msgid "stop"
 msgstr "berhenti"
 
