@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-30 13:15\n"
+"PO-Revision-Date: 2026-10-30 14:38\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -93,7 +93,7 @@ msgstr "ชั่วโมง"
 #: zotonic_core/src/support/z_datetime.erl:317
 #: zotonic_mod_admin/priv/templates/_rsc_preview.tpl:11
 msgid "in"
-msgstr "ใน"
+msgstr "อีก"
 
 #: zotonic_core/src/support/z_datetime.erl:371
 #: zotonic_core/src/support/z_datetime.erl:374
@@ -109,7 +109,7 @@ msgstr "นาที"
 
 #: zotonic_core/src/support/z_datetime.erl:368
 msgid "moments"
-msgstr "ช่วงเวลา"
+msgstr "ไม่กี่อึดใจ"
 
 #: zotonic_core/src/support/z_datetime.erl:377
 #: zotonic_core/src/support/z_datetime.erl:380
@@ -237,7 +237,7 @@ msgstr "กลุ่มเนื้อหาปกติทั้งหมด"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:28
 msgid "Allowed file and mime types, separate with ',' — type 'none' if no extra types allowed, leave empty for the default"
-msgstr "ประเภทไฟล์และละครใบ้ที่อนุญาตแยกด้วย \",\" - พิมพ์ \"ไม่มี\" หากไม่อนุญาตประเภทพิเศษให้เว้นว่างไว้สำหรับค่าเริ่มต้น"
+msgstr "ประเภทไฟล์และ MIME ที่อนุญาต คั่นด้วย ',' — พิมพ์ 'none' หากไม่อนุญาตประเภทเพิ่มเติม หรือเว้นว่างไว้เพื่อใช้ค่าเริ่มต้น"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_collab.tpl:13
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:44
@@ -368,11 +368,11 @@ msgstr "ยกเลิก"
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log.tpl:12
 #: zotonic_mod_survey/src/mod_survey.erl:656
 msgid "Category"
-msgstr "ประเภท"
+msgstr "หมวดหมู่"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:17
 msgid "Category &amp; Content group"
-msgstr "หมวด &amp; กลุ่มเนื้อหา"
+msgstr "หมวดหมู่ &amp; กลุ่มเนื้อหา"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:14
 msgid "Change category and/or content group..."
@@ -423,7 +423,7 @@ msgstr "ปิด"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:33
 msgid "Collaboration group managers"
-msgstr "ผู้จัดการกลุ่มความร่วมมือ"
+msgstr "ผู้จัดการกลุ่มการทำงานร่วมกัน"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:32
 msgid "Collaboration group members"
@@ -528,7 +528,7 @@ msgstr "ลบ"
 
 #: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:531
 msgid "Delete is canceled, there are users in the user groups."
-msgstr "ลบถูกยกเลิกมีผู้ใช้ในกลุ่มผู้ใช้"
+msgstr "ยกเลิกการลบแล้ว เนื่องจากยังมีผู้ใช้อยู่ในกลุ่มผู้ใช้"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:37
 msgid "Delete user group and move users"
@@ -550,7 +550,7 @@ msgstr "ปฏิเสธ"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:43
 msgid "Edit &amp; link rights on the collaboration groups"
-msgstr "แก้ไขสิทธิ์ลิงก์ &amp; ในกลุ่มการทำงานร่วมกัน"
+msgstr "สิทธิ์ในการแก้ไขและเชื่อมโยงกลุ่มการทำงานร่วมกัน"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:5
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:43
@@ -564,7 +564,7 @@ msgstr "แก้ไขกลุ่มการทำงานร่วมกั
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:11
 msgid "Enter extensions (like <tt>.png</tt>), mime types (like <tt>image/png</tt>) or one of:"
-msgstr "ป้อนนามสกุล (เช่น <tt>.png</tt>) ประเภท mime (เช่น <tt>image / png</tt>) หรืออย่างใดอย่างหนึ่ง:"
+msgstr "ป้อนนามสกุล (เช่น <tt>.png</tt>) ประเภท mime (เช่น <tt>image/png</tt>) หรืออย่างใดอย่างหนึ่ง:"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:106
 msgid "Exactly this category, no sub-categories"
@@ -572,11 +572,11 @@ msgstr "ตรงกับหมวดหมู่นี้ ไม่มีห�
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:22
 msgid "Export edit rules"
-msgstr "ส่งออกกฎการแก้ไข"
+msgstr "ส่งออกกฎฉบับร่าง"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:10
 msgid "File types follow the group hierarchy. Derived groups inherit the mime settings from their ancestor."
-msgstr "ประเภทไฟล์เป็นไปตามลำดับชั้นของกลุ่ม กลุ่มที่ได้รับสืบทอดการตั้งค่าละครใบ้จากบรรพบุรุษของพวกเขา"
+msgstr "ประเภทไฟล์เป็นไปตามลำดับชั้นของกลุ่ม กลุ่มย่อยจะรับการตั้งค่า MIME จากกลุ่มระดับบน"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:28
 msgid "File uploads"
@@ -617,11 +617,11 @@ msgstr "นำเข้า"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:27
 msgid "Import edit rules..."
-msgstr "นำเข้าแก้ไขกฎ ..."
+msgstr "นำเข้ากฎฉบับร่าง..."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:30
 msgid "Import edit version of ACL rules"
-msgstr "นำเข้าเวอร์ชันแก้ไขกฎ ACL"
+msgstr "นำเข้ากฎ ACL ฉบับร่าง"
 
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:137
 msgid "Importing, the list of rules will refresh after importing."
@@ -749,7 +749,7 @@ msgstr "โปรดเลือกกลุ่มการทำงานร่
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:34
 msgid "Private"
-msgstr "เอกชน"
+msgstr "ส่วนตัว"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:38
 msgid "Private properties are email, phone, visiting address, and date range."
@@ -1149,7 +1149,7 @@ msgstr "เพิ่มเนื้อหาสื่อ"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:14
 msgid "Add media to body"
-msgstr "เพิ่มสื่อในร่างกาย"
+msgstr "เพิ่มสื่อในเนื้อหา"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:35
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:39
@@ -1409,7 +1409,7 @@ msgstr "เมือง"
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_connection.tpl:34
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:37
 msgid "Clear"
-msgstr "ชัดเจน"
+msgstr "ล้าง"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:10
 msgid "Click \"Save\" to see your changes."
@@ -1501,7 +1501,7 @@ msgstr "ชนิดของเนื้อหา"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:42
 msgid "Copied download link to clipboard"
-msgstr "คัดลอกลิงค์ดาวน์โหลดไปยังคลิปบอร์ด"
+msgstr "คัดลอกลิงก์ดาวน์โหลดไปยังคลิปบอร์ดแล้ว"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:73
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:21
@@ -1522,7 +1522,7 @@ msgstr "คัดลอกลิงค์ดาวน์โหลดไปยั
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:78
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:94
 msgid "Copy"
-msgstr "สำเนา"
+msgstr "คัดลอก"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:35
 msgid "Copy download link"
@@ -1654,7 +1654,7 @@ msgstr "ลบหน้านี้..."
 
 #: zotonic_mod_admin/src/mod_admin.erl:957
 msgid "Deleted tasks."
-msgstr "งานที่ถูกลบ"
+msgstr "ลบงานแล้ว"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:31
 msgid "Deleted."
@@ -2034,7 +2034,7 @@ msgstr "ล้างกฎการส่ง URL เทมเพลตและ�
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:81
 msgid "Flush system caches"
-msgstr "แคชระบบล้าง"
+msgstr "ล้างแคชของระบบ"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:145
 #: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:23
@@ -3741,7 +3741,7 @@ msgstr "อัปเดตแล้ว"
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:17
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:161
 msgid "Upload"
-msgstr "ที่อัพโหลด"
+msgstr "อัปโหลด"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:20
 msgid "Upload File"
@@ -5750,7 +5750,7 @@ msgstr "มีโมดูลขึ้นอยู่กับ"
 
 #: zotonic_mod_admin_modules/src/controllers/controller_admin_module_manager.erl:79
 msgid "This module does not have a <tt>manage_schema/2</tt> function."
-msgstr "โมดูลนี้ไม่มีฟังก์ชัน <tt>Manage_schema/2</tt>"
+msgstr "โมดูลนี้ไม่มีฟังก์ชัน <tt>manage_schema/2</tt>"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:67
 msgid "Topic"
@@ -9219,7 +9219,7 @@ msgstr "ผู้บรรณาธิการที่ได้รับกา
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:114
 msgid "Set the class <tt>environment-development</tt> on the <tt>&lt;html&gt;</tt> element of your pages to see the server log in the browser console.<br>In development, admin pages always show the server log in the javascript console."
-msgstr "ตั้งค่าคลาส <tt>การพัฒนาสภาพแวดล้อม</tt> บนองค์ประกอบ <tt>&lt;html&gt;</tt> ของเพจของคุณเพื่อดูบันทึกของเซิร์ฟเวอร์ในคอนโซลของเบราว์เซอร์<br>ในการพัฒนา หน้าผู้ดูแลระบบจะแสดงบันทึกของเซิร์ฟเวอร์ในคอนโซลจาวาสคริปต์เสมอ"
+msgstr "ตั้งค่าคลาส <tt>environment-development</tt> บนองค์ประกอบ <tt>&lt;html&gt;</tt> ของเพจของคุณเพื่อดูบันทึกของเซิร์ฟเวอร์ในคอนโซลของเบราว์เซอร์<br>ในการพัฒนา หน้าผู้ดูแลระบบจะแสดงบันทึกของเซิร์ฟเวอร์ในคอนโซลจาวาสคริปต์เสมอ"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:272
 msgid "Show an overview of all observers"
@@ -9857,7 +9857,7 @@ msgstr "ขีดเส้นใต้"
 
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:31
 msgid "Undo"
-msgstr "ยกเลิก"
+msgstr "เลิกทำ"
 
 #: zotonic_mod_editor_tiptap/src/mod_editor_tiptap.erl:248
 msgid "You are not allowed to view this media."
@@ -10898,7 +10898,7 @@ msgstr "ข้อความหลักของหน้าเว็บใน
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:36
 msgid "The category of the page. Examples: <code>article</code> or <code>text</code>."
-msgstr "หมวดหมู่ของหน้า ตัวอย่าง:<code>บทความ</code>หรือ<code>ข้อความ</code>"
+msgstr "หมวดหมู่ของหน้า ตัวอย่าง:<code>article</code>หรือ<code>text</code>"
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:72
 msgid "The custom path for the URL of the page, for example <code>/my/page</code>"
@@ -13994,7 +13994,7 @@ msgstr "เชื่อมต่อกับ Microsoft"
 
 #: zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:36
 msgid "Control who can log in. Allowed values are: <tt>common</tt>, <tt>organizations</tt>, <tt>consumers</tt>, and tenant identifiers."
-msgstr "ควบคุมว่าใครสามารถเข้าสู่ระบบได้ ค่าที่อนุญาตคือ: <tt>ทั่วไป</tt>, <tt>องค์กร</tt>, <tt>ผู้บริโภค</tt>และตัวระบุผู้เช่า"
+msgstr "ควบคุมว่าใครสามารถเข้าสู่ระบบได้ ค่าที่อนุญาตคือ: <tt>common</tt>, <tt>organizations</tt>, <tt>consumers</tt>และตัวระบุผู้เช่า"
 
 #: zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:3
 #: zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:6
@@ -14559,7 +14559,7 @@ msgstr "ต้องเป็น URL ที่สมบูรณ์ แต่ไ
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:19
 msgid "This must be an unique name to identify the remote service. This can not be changed. Only <tt>A-Z</tt>, <tt>a-z</tt>, <tt>0-9</tt>, <tt>-</tt> and <tt>_</tt> characters are allowed."
-msgstr "ต้องเป็นชื่อที่ไม่ซ้ำกันเพื่อระบุบริการระยะไกล ไม่สามารถเปลี่ยนแปลงได้ อนุญาตให้ใช้เฉพาะอักขระ <tt>AZ</tt>, <tt>az</tt>, <tt>0-9</tt>, <tt>-</tt> และ <tt>_</tt> เท่านั้น"
+msgstr "ต้องเป็นชื่อที่ไม่ซ้ำกันเพื่อระบุบริการระยะไกล ไม่สามารถเปลี่ยนแปลงได้ อนุญาตให้ใช้เฉพาะอักขระ <tt>A-Z</tt>, <tt>a-z</tt>, <tt>0-9</tt>, <tt>-</tt> และ <tt>_</tt> เท่านั้น"
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:14
 msgid "This user will be able to use the token."
@@ -14654,7 +14654,7 @@ msgstr "พยายามแก้ไขวิดีโอแบบฝังท
 
 #: zotonic_mod_oembed/src/mod_oembed.erl:461
 msgid "Attempting to fix ~p videos."
-msgstr "กำลังพยายามแก้ไขวิดีโอ ~ p"
+msgstr "กำลังพยายามแก้ไขวิดีโอ ~p รายการ"
 
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:27
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:59
@@ -15548,7 +15548,7 @@ msgstr "อาจใช้เวลาสักครู่โปรดรอ!"
 
 #: zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:68
 msgid "You can change this by setting <tt>port</tt> in the <tt>zotonic.config</tt> configuration file."
-msgstr "คุณสามารถเปลี่ยนแปลงได้โดยตั้งค่า <tt>พอร์ต</tt> ในไฟล์คอนฟิกูเรชัน <tt>zotonic.config</tt>"
+msgstr "คุณสามารถเปลี่ยนแปลงได้โดยตั้งค่า <tt>port</tt> ในไฟล์คอนฟิกูเรชัน <tt>zotonic.config</tt>"
 
 #: zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:75
 msgid "You can change this by setting <tt>ssl_port</tt> in the <tt>zotonic.config</tt> configuration file."
@@ -16006,7 +16006,7 @@ msgstr "หน้าแรกในหมวดหมู่"
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:76
 msgid "For date ranges you can also use relative dates, like <code>-5 year</code>."
-msgstr "สำหรับช่วงวันที่ คุณยังสามารถใช้วันที่สัมพันธ์กัน เช่น <code>-5 ปี</code>ได้ด้วย"
+msgstr "สำหรับช่วงวันที่ คุณยังสามารถใช้วันที่สัมพันธ์กัน เช่น <code>-5 year</code>ได้ด้วย"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:260
 msgid "Forms can be handled by special code, for example a form that is forwarded to a back office system. Depending on the handler the results are stored in the database or not."
@@ -18072,7 +18072,7 @@ msgstr "เข้าสู่ระบบด้วย username <b>admin</b> แ�
 
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:49
 msgid "Make sure that this hostname has a valid DNS entry or is added to your <tt>/etc/hosts</tt> file."
-msgstr "ตรวจสอบให้แน่ใจว่าชื่อโฮสต์นี้มีรายการ DNS ที่ถูกต้องหรือถูกเพิ่มในไฟล์ <tt>/ etc / hosts</tt> คุณ"
+msgstr "ตรวจสอบให้แน่ใจว่าชื่อโฮสต์นี้มีรายการ DNS ที่ถูกต้องหรือถูกเพิ่มในไฟล์ <tt>/etc/hosts</tt> คุณ"
 
 #: zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:544
 msgid "No permission to create the site directory at:"
