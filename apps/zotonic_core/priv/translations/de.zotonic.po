@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-30 13:15\n"
+"PO-Revision-Date: 2026-10-30 14:38\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -62,7 +62,7 @@ msgstr "Nicht autorisiert, auf die Remoteressourcen-URL zuzugreifen."
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:6
 #: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:42
 msgid "Website"
-msgstr "Webseite."
+msgstr "Website"
 
 #: zotonic_core/src/support/z_datetime.erl:317
 msgid "ago"
@@ -237,7 +237,7 @@ msgstr "Alle normalen Inhaltsgruppen"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:28
 msgid "Allowed file and mime types, separate with ',' — type 'none' if no extra types allowed, leave empty for the default"
-msgstr "Erlaubte Datei- und Mime-Typen, getrennt durch ',' - gebe 'none' ein, wenn keine zusätzlichen Typen erlaubt sind, lass es leer für den Standard"
+msgstr "Erlaubte Dateitypen und MIME-Typen, durch ',' getrennt — geben Sie 'none' ein, wenn keine zusätzlichen Typen erlaubt sind; lassen Sie das Feld für die Standardeinstellung leer"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_collab.tpl:13
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:44
@@ -423,17 +423,17 @@ msgstr "Schließen"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:33
 msgid "Collaboration group managers"
-msgstr "Manager von Zusammenarbeitsgruppen"
+msgstr "Manager der Kollaborationsgruppe"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:32
 msgid "Collaboration group members"
-msgstr "Mitglieder der Zusammenartbeitsgruppe"
+msgstr "Mitglieder der Kollaborationsgruppe"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:22
 #: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:985
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:158
 msgid "Collaboration groups"
-msgstr "Zusammenarbeitsgruppen"
+msgstr "Kollaborationsgruppen"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:32
 msgid "Collaboration groups are added by creating a new page in the category:"
@@ -441,7 +441,7 @@ msgstr "Kollaborationsgruppen werden hinzugefügt, indem eine neue Seite in der 
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:30
 msgid "Collaboration groups are user groups where all content belongs to the group."
-msgstr "Zusammenarbeitsgruppen sind Benutzergruppen, bei denen alle Inhalte zur Gruppe gehören."
+msgstr "Kollaborationsgruppen sind Benutzergruppen, bei denen alle Inhalte der Gruppe gehören."
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_options.tpl:12
 msgid "Consider resource authors to be owner."
@@ -476,11 +476,11 @@ msgstr "Inhaltsgruppen"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:76
 msgid "Content rules for collaboration group members and managers"
-msgstr "Inhaltsregeln für Mitglieder und Managers von Zusammenarbeitsgruppen"
+msgstr "Inhaltsregeln für Mitglieder und Manager von Kollaborationsgruppen"
 
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:43
 msgid "Could not move to collaboration group."
-msgstr "Konnte nicht in die Zusammenarbeitsgruppe verschoben werden."
+msgstr "Verschieben in die Kollaborationsgruppe nicht möglich."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:40
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:51
@@ -1149,7 +1149,7 @@ msgstr "Medieninhalte hinzufügen"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:14
 msgid "Add media to body"
-msgstr "Mediendatei zur Seite hinzufügen"
+msgstr "Medien zum Text hinzufügen"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:35
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:39
@@ -1654,7 +1654,7 @@ msgstr "Diese Seite löschen..."
 
 #: zotonic_mod_admin/src/mod_admin.erl:957
 msgid "Deleted tasks."
-msgstr "Gelöschte Aufgaben."
+msgstr "Aufgaben gelöscht."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:31
 msgid "Deleted."
@@ -2839,7 +2839,7 @@ msgstr "Querverweise auf"
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:51
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:18
 msgid "Refresh"
-msgstr "Aktualisierung"
+msgstr "Aktualisieren"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:94
 msgid "Refreshed every 30 minutes."
@@ -3009,7 +3009,7 @@ msgstr "Geplant ist eine Hintergrundaufgabe zum Überprüfen aller Verweisverbin
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:294
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user_dialog.tpl:9
 msgid "Search"
-msgstr "Suche"
+msgstr "Suchen"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:55
 msgid "Search indices rebuilt."
@@ -5027,7 +5027,7 @@ msgstr "Nur ein Administrator oder der Benutzer selbst kann ein Passwort festleg
 
 #: zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:3
 msgid "Please verify your email address"
-msgstr "Bitte bestätige deine Email Adresse"
+msgstr "Bitte bestätigen Sie Ihre E-Mail-Adresse"
 
 #: zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:29
 msgid "Random secure password:"
@@ -5077,7 +5077,7 @@ msgstr "Entschuldigung, Sie sind nicht berechtigt, diese E-Mail-Adresse zu best�
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:97
 msgid "Sorry, you cannot remove your own username."
-msgstr "Leider kannst du deinen eigenen Benutzernamen nicht löschen."
+msgstr "Sie können Ihren eigenen Benutzernamen leider nicht entfernen."
 
 #: zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:16
 #: zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:24
@@ -5275,7 +5275,7 @@ msgstr "Ihr neues Passwort ist zu kurz oder nicht stark genug. Verwenden Sie: Gr
 
 #: zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:20
 msgid "Your username is:"
-msgstr "Dein Benutzername ist:"
+msgstr "Ihr Benutzername ist:"
 
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:84
 msgid "set username / password"
@@ -6434,7 +6434,7 @@ msgstr "Sind Sie sicher, dass Sie ein Konto erstellt haben? Wenn nicht, können 
 
 #: zotonic_mod_authentication/priv/templates/sessions.tpl:61
 msgid "Are you sure?"
-msgstr "Bist du sicher?"
+msgstr "Sind Sie sicher?"
 
 #: zotonic_mod_authentication/priv/templates/logon_service_done.tpl:5
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:259
@@ -6970,7 +6970,7 @@ msgstr "Bei der Authentifizierung mit {service}ist ein Problem aufgetreten."
 
 #: zotonic_mod_authentication/priv/templates/sessions.tpl:144
 msgid "This is you"
-msgstr "Das bist du"
+msgstr "Das sind Sie"
 
 #: zotonic_mod_authentication/priv/templates/logon_error/message.set_passcode.tpl:2
 msgid "To sign in you must have two-factor authentication enabled."
@@ -7034,7 +7034,7 @@ msgstr "Sie sind dabei, sich anzumelden."
 
 #: zotonic_mod_authentication/priv/templates/logon.tpl:32
 msgid "You are logged in"
-msgstr "Du bist eingeloggt"
+msgstr "Sie sind angemeldet"
 
 #: zotonic_mod_authentication/priv/templates/_logon_box.tpl:73
 msgid "You are now logged in."
@@ -7116,7 +7116,7 @@ msgstr "Ihr Passwort wurde zurückgesetzt"
 
 #: zotonic_mod_authentication/priv/templates/logon.tpl:34
 msgid "Your username is"
-msgstr "Dein Benutzername ist"
+msgstr "Ihr Benutzername ist"
 
 #: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:18
 #: zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:5
@@ -7279,7 +7279,7 @@ msgstr "Sicherungskopie herunterladen"
 
 #: zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:49
 msgid "Enable <tt>mod_export</tt> to download backup files."
-msgstr "Aktivieren Sie <tt></tt> , um Sicherungsdateien herunterzuladen."
+msgstr "Aktivieren Sie <tt>mod_export</tt>, um Sicherungsdateien herunterzuladen."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:90
 msgid "Encrypt Backups"
@@ -8310,7 +8310,7 @@ msgstr "Sie dürfen den Kommentar nicht löschen."
 
 #: zotonic_mod_comment/src/controllers/controller_admin_comments.erl:99
 msgid "You are not allowed to toggle the comment."
-msgstr "Du darfst den Kommentar nicht umschalten."
+msgstr "Sie dürfen den Kommentarstatus nicht ändern."
 
 #: zotonic_mod_comment/priv/templates/_comments_form.tpl:7
 #: zotonic_mod_comment/priv/templates/_comments_moderation.tpl:1
@@ -9219,7 +9219,7 @@ msgstr "Ausgewählter Editor auf dem Zotonic-Server"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:114
 msgid "Set the class <tt>environment-development</tt> on the <tt>&lt;html&gt;</tt> element of your pages to see the server log in the browser console.<br>In development, admin pages always show the server log in the javascript console."
-msgstr "Setzen Sie die Klasse <tt>Umgebungsentwicklung</tt> auf das Element <tt>&lt;html&gt;</tt> Ihrer Seiten, um das Serverprotokoll in der Browserkonsole anzuzeigen.<br>Bei der Entwicklung zeigen Admin-Seiten das Serverprotokoll immer in der JavaScript-Konsole an."
+msgstr "Setzen Sie die Klasse <tt>environment-development</tt> auf das Element <tt>&lt;html&gt;</tt> Ihrer Seiten, um das Serverprotokoll in der Browserkonsole anzuzeigen.<br>Bei der Entwicklung zeigen Admin-Seiten das Serverprotokoll immer in der JavaScript-Konsole an."
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:272
 msgid "Show an overview of all observers"
@@ -10462,7 +10462,7 @@ msgstr "Für S3 muss die URL mit <b><tt>https:</tt></b> oder <b><tt>http:</tt></
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:119
 msgid "For WebDAV the URL must start with <b><tt>webdavs:</tt></b> or <b><tt>webdav:</tt></b>"
-msgstr "Für WebDAV muss die URL mit <b><tt>beginnen webdavs:</tt></b> oder <b><tt>webdav:</tt></b>"
+msgstr "Für WebDAV muss die URL mit <b><tt>webdavs:</tt></b> oder <b><tt>webdav:</tt></b> beginnen."
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:275
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the local files are not deleted, as the remote files are considered a backup of the local files."
@@ -10898,7 +10898,7 @@ msgstr "Der HTML-Haupttext der Seite."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:36
 msgid "The category of the page. Examples: <code>article</code> or <code>text</code>."
-msgstr "Die Kategorie der Seite. Beispiele: <code>Artikel</code> oder <code>Text</code>."
+msgstr "Die Kategorie der Seite. Beispiele: <code>article</code> oder <code>text</code>."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:72
 msgid "The custom path for the URL of the page, for example <code>/my/page</code>"
@@ -13701,7 +13701,7 @@ msgstr "Sie sind jetzt abgemeldet von"
 
 #: zotonic_mod_mailinglist/priv/templates/email_mailinglist_goodbye.tpl:9
 msgid "You are now unsubscribed from the mailing list <b>{title}</b>. Hope to see you again."
-msgstr "Sie sind jetzt von der Mailingliste <b>{title}</b>abgemeldet. Hoffe dich wieder zu sehen."
+msgstr "Sie sind jetzt von der Mailingliste <b>{title}</b> abgemeldet. Wir hoffen, Sie bald wiederzusehen."
 
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:69
 msgid "You are subscribed to the following mailing lists."
@@ -13994,7 +13994,7 @@ msgstr "Stellen Sie eine Verbindung mit Microsoft her"
 
 #: zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:36
 msgid "Control who can log in. Allowed values are: <tt>common</tt>, <tt>organizations</tt>, <tt>consumers</tt>, and tenant identifiers."
-msgstr "Steuern Sie, wer sich anmelden kann. Zulässige Werte sind: <tt>allgemein</tt>, <tt>Organisationen</tt>, <tt>Verbraucher</tt>und Mandanten-IDs."
+msgstr "Steuern Sie, wer sich anmelden kann. Zulässige Werte sind: <tt>common</tt>, <tt>organizations</tt>, <tt>consumers</tt> und Mandanten-IDs."
 
 #: zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:3
 #: zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:6
@@ -14739,7 +14739,7 @@ msgstr "Die Zähler wurden zurückgesetzt."
 
 #: zotonic_mod_ratelimit/src/mod_ratelimit.erl:117
 msgid "You are not allowed to do this."
-msgstr "Dies ist dir nicht gestattet."
+msgstr "Sie dürfen dies nicht tun."
 
 #: zotonic_mod_search/priv/templates/_admin_status.tpl:8
 msgid "Check the table for the faceted search and fill it by reindexing all pages."
@@ -15548,7 +15548,7 @@ msgstr "Das kann eine Weile dauern, bleiben Sie dran!"
 
 #: zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:68
 msgid "You can change this by setting <tt>port</tt> in the <tt>zotonic.config</tt> configuration file."
-msgstr "Sie können dies ändern, indem Sie <tt>Port</tt> in der Konfigurationsdatei <tt>zotonic.config</tt> festlegen."
+msgstr "Sie können dies ändern, indem Sie <tt>port</tt> in der Konfigurationsdatei <tt>zotonic.config</tt> festlegen."
 
 #: zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:75
 msgid "You can change this by setting <tt>ssl_port</tt> in the <tt>zotonic.config</tt> configuration file."
@@ -16006,7 +16006,7 @@ msgstr "Erste Seite in der Kategorie"
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:76
 msgid "For date ranges you can also use relative dates, like <code>-5 year</code>."
-msgstr "Für Datumsbereiche können Sie auch relative Daten verwenden, z. B. <code>-5 Jahr</code>."
+msgstr "Für Datumsbereiche können Sie auch relative Daten verwenden, z. B. <code>-5 year</code>."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:260
 msgid "Forms can be handled by special code, for example a form that is forwarded to a back office system. Depending on the handler the results are stored in the database or not."
