@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-30 17:07\n"
+"PO-Revision-Date: 2026-10-30 17:20\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "MIME-Version: 1.0\n"
@@ -85,13 +85,10 @@ msgstr "saat"
 
 #: zotonic_core/src/support/z_datetime.erl:373
 #: zotonic_core/src/support/z_datetime.erl:376
-#: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:19
-#: zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:6
 msgid "hours"
 msgstr "saat"
 
 #: zotonic_core/src/support/z_datetime.erl:317
-#: zotonic_mod_admin/priv/templates/_rsc_preview.tpl:11
 msgid "in"
 msgstr "içinde"
 
@@ -102,8 +99,6 @@ msgstr "dakika"
 
 #: zotonic_core/src/support/z_datetime.erl:371
 #: zotonic_core/src/support/z_datetime.erl:374
-#: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:20
-#: zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:7
 msgid "minutes"
 msgstr "dakika"
 
@@ -332,7 +327,7 @@ msgstr "Tüm ACL kurallarını şu anda yayımlanmış sürümlerine geri yükle
 #: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:229
 #: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:237
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:70
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:157
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:160
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:100
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:88
 #: zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:49
@@ -370,11 +365,15 @@ msgstr "İptal Et"
 msgid "Category"
 msgstr "Kategori"
 
-#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:17
+#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:18
 msgid "Category &amp; Content group"
 msgstr "Kategori &amp; İçerik grubu"
 
-#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:14
+#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:7
+msgid "Category: <strong>{category}</strong>. Content group: <strong><a href='{url}'>{group}</a></strong>."
+msgstr "Kategori: <strong>{category}</strong>. İçerik grubu: <strong><a href='{url}'>{group}</a></strong>."
+
+#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:15
 msgid "Change category and/or content group..."
 msgstr "Kategoriyi ve/veya içerik grubunu değiştir..."
 
@@ -421,11 +420,11 @@ msgstr "Yapılandırma değiştirildi."
 msgid "Close"
 msgstr "Kapat"
 
-#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:33
+#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:34
 msgid "Collaboration group managers"
 msgstr "İşbirliği grubu yöneticileri"
 
-#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:32
+#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:33
 msgid "Collaboration group members"
 msgstr "İşbirliği grubu üyeleri"
 
@@ -611,7 +610,6 @@ msgid "If checked then users connected with an <em>author</em> predicate are con
 msgstr "İşaretlenirse, <em>yazar</em> yüklemiyle bağlanan kullanıcılar ACL kuralları değerlendirilirken kaynak sahibi sayılır. Böylece <em>Kendi kaynaklarını yönet</em> olarak işaretlenen ACL kuralları yazarlara da uygulanır."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:18
-#: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:42
 msgid "Import"
 msgstr "İçe aktar"
 
@@ -644,11 +642,11 @@ msgstr "Gruplar için maksimum dosya yükleme boyutu. Bu kullanıcılar için do
 msgid "Maximum upload size"
 msgstr "Maksimum dosya yükleme boyutu"
 
-#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:28
+#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:29
 msgid "Members"
 msgstr "Üyeler"
 
-#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:30
+#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:31
 msgid "Members of same user group"
 msgstr "Aynı kullanıcı grubunun üyeleri"
 
@@ -727,14 +725,14 @@ msgid "Options for the ACL module."
 msgstr "ACL modülü seçenekleri."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:31
-msgid "Or click <strong>Delete</strong> to disconnect all users and delete the user listed groups."
-msgstr "Veya tüm kullanıcıların bağlantısını kesmek ve kullanıcı listesindeki grupları silmek için <strong>Sil</strong> 'e tıklayın."
+msgid "Or click <strong>Delete</strong> to disconnect all users and delete the listed user groups."
+msgstr "Ya da <strong>“Sil”</strong> düğmesine tıklayarak tüm kullanıcıların bağlantısını kesebilir ve listelenen kullanıcı gruplarını silebilirsiniz."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:154
 msgid "Own content"
 msgstr "Kendi içeriği"
 
-#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:27
+#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:28
 msgid "People who can view this page"
 msgstr "Bu sayfayı görüntüleyebilen kişiler"
 
@@ -747,11 +745,11 @@ msgstr "İzinler"
 msgid "Please select a collaboration_group"
 msgstr "Lütfen bir işbirliği grubu seçin"
 
-#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:34
+#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:35
 msgid "Private"
 msgstr "Özel"
 
-#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:38
+#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:39
 msgid "Private properties are email, phone, visiting address, and date range."
 msgstr "Kişiye özel özellikler e-postalar, telefonlar, ziyaret adresleri ve tarih aralıklarıdır."
 
@@ -842,7 +840,7 @@ msgstr "Kategori seç"
 msgid "Show"
 msgstr "Göster"
 
-#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:23
+#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:24
 msgid "Show private properties to"
 msgstr "Özel özellikleri göster"
 
@@ -905,10 +903,6 @@ msgstr "Kendi yöneticileri tarafından yönetilirler ve aşağıdaki erişim ku
 #: zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:33
 msgid "This can not be undone."
 msgstr "Bu geri alınamaz."
-
-#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:7
-msgid "This page is a"
-msgstr "Bu sayfa bir"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:18
 msgid "This rule is managed by module"
@@ -989,10 +983,6 @@ msgstr "sil (acl eylemi)"
 #: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:296
 msgid "edit (acl action)"
 msgstr "düzenle (acl eylemi)"
-
-#: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:9
-msgid "in the group"
-msgstr "grup içerisinde"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
 #: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:295
@@ -1164,6 +1154,10 @@ msgstr "Bağlantı eklendi:"
 msgid "Address"
 msgstr "Adres"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:8
+msgid "Address family"
+msgstr "Adres ailesi"
+
 #: zotonic_mod_admin/priv/templates/admin_base.tpl:5
 msgid "Admin"
 msgstr "Yönetici"
@@ -1294,10 +1288,6 @@ msgstr "Ekli medya"
 msgid "Auth"
 msgstr "Yetki"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:222
-msgid "Authoritative"
-msgstr "Yetkili"
-
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:162
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:164
 msgid "Automatic updates unavailable"
@@ -1306,7 +1296,7 @@ msgstr "Otomatik güncellemeler kullanılamıyor"
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:159
 #: zotonic_mod_websub/priv/templates/_rsc_import_subscription_options.tpl:7
 msgid "Automatically fetch updates from the original website."
-msgstr "Güncellemeleri orijinal web sitesinden otomatik olarak al."
+msgstr "Güncellemeleri kaynak web sitesinden otomatik olarak alın."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:62
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:35
@@ -1320,7 +1310,7 @@ msgstr "Mevcut"
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:41
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:3
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_count_back.tpl:2
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:101
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:100
 #: zotonic_mod_survey/priv/templates/_survey_end.tpl:28
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:22
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:23
@@ -1340,7 +1330,7 @@ msgstr "Fatura adresi"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:9
 msgid "Bind address"
-msgstr "Adresi bağla"
+msgstr "Bağlama adresi"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:19
 msgid "Block name"
@@ -1495,6 +1485,10 @@ msgstr "Bağlantı"
 msgid "Connections"
 msgstr "Bağlantılar"
 
+#: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:222
+msgid "Content origin"
+msgstr "İçeriğin kaynağı"
+
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:24
 msgid "Content type"
 msgstr "İçerik türü"
@@ -1554,7 +1548,7 @@ msgstr "Sayı"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:142
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:220
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:113
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:107
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:110
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:45
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:47
 msgid "Country"
@@ -1680,7 +1674,7 @@ msgstr "Boyutlar"
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:33
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:61
 msgid "Disabled"
-msgstr "Engelli"
+msgstr "Devre dışı"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:26
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers_list.tpl:15
@@ -1724,7 +1718,6 @@ msgid "Do you want to remove this page block?"
 msgstr "Bu sayfa bloğunu kaldırmak istiyor musunuz?"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:32
-#: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:33
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:45
 msgid "Download"
 msgstr "İndir"
@@ -1923,10 +1916,6 @@ msgstr "Mevcut sayfalar"
 msgid "Failed to download the file."
 msgstr "Dosyayı indirme hatası."
 
-#: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:8
-msgid "Family"
-msgstr "Aile"
-
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:52
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:178
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:182
@@ -2000,7 +1989,7 @@ msgid "Find Page"
 msgstr "Sayfa Bul"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:149
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:217
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:220
 msgid "Find page"
 msgstr "Sayfa bul"
 
@@ -2041,11 +2030,6 @@ msgstr "Sistem önbelleklerini temizle"
 msgid "Follow connections and import all (deep copy)."
 msgstr "Bağlantıları takip edin ve tümünü içe aktarın (derin kopya)."
 
-#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:178
-#: zotonic_mod_websub/priv/templates/_rsc_import_subscription_options.tpl:18
-msgid "Follows the Connections option. Connected resources keep their subscriptions when disconnected from this page."
-msgstr "\"Bağlantılar\" seçeneğinin ardından gelir. Bağlantısı kesilen kaynaklar, bu sayfadan bağlantıları kesildiğinde aboneliklerini korurlar."
-
 #: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:5
 msgid "Function"
 msgstr "İşlev"
@@ -2069,7 +2053,7 @@ msgstr "Ekli medya var"
 
 #: zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_header.tpl:21
 #: zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_header.tpl:22
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:120
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:123
 msgid "Header"
 msgstr "Başlık"
 
@@ -2188,7 +2172,7 @@ msgstr "Son değişen metinler"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:43
 msgid "Link selected page"
-msgstr "Seçilen sayfaya bağlantı"
+msgstr "Seçilen sayfaya bağlantı ekle"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:38
 msgid "Live query, send notifications when matching items are updated or inserted."
@@ -2264,15 +2248,14 @@ msgstr "Yeni bir sayfa oluştur"
 msgid "Make a new page or media"
 msgstr "Yeni bir sayfa veya medya oluştur"
 
-#: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:6
-#: zotonic_mod_survey/src/mod_survey.erl:657
-msgid "Matching"
-msgstr "Eşleşen"
-
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results.tpl:29
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:14
 msgid "Matching id, name, page path or redirection"
 msgstr "Eşleşen kimlik, ad, sayfa yolu veya yönlendirme"
+
+#: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:6
+msgid "Matching search text"
+msgstr "Eşleşen arama metni"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:3
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:86
@@ -2425,22 +2408,6 @@ msgstr "Bloğu aşağı taşı"
 msgid "Move block up"
 msgstr "Bloğu yukarı taşı"
 
-#: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:225
-#: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:227
-#: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:9
-#: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:52
-#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:28
-#: zotonic_mod_comment/priv/templates/_comments_form.tpl:23
-#: zotonic_mod_comment/priv/templates/admin_comments.tpl:22
-#: zotonic_mod_contact/priv/templates/contact.tpl:11
-#: zotonic_mod_contact/priv/templates/email_contact.tpl:10
-#: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:13
-#: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:14
-#: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:38
-#: zotonic_mod_survey/src/models/m_survey.erl:982
-msgid "Name"
-msgstr "İsim"
-
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:205
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:206
 msgid "Name for invoices"
@@ -2583,7 +2550,7 @@ msgstr "Yeni sekmede aç"
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:4
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:10
 msgid "Open panel"
-msgstr "Açık panel"
+msgstr "Paneli aç"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:15
 msgid "Orientation"
@@ -2596,11 +2563,11 @@ msgstr "Sayfa bloğu"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:163
 msgid "Page connected from"
-msgstr "Bu sayfaya bağlantı verilen sayfa"
+msgstr "Bağlantının geldiği sayfa"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:154
 msgid "Page connected to"
-msgstr "Bu sayfa şunlarla bağlantılıdır:"
+msgstr "Bağlantının yöneldiği sayfa"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:6
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:10
@@ -2626,11 +2593,11 @@ msgstr "Sayfa ayarları"
 
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:101
 msgid "Page to connect from"
-msgstr "Bağlanılacak sayfa"
+msgstr "Bağlantı eklenecek kaynak sayfa"
 
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:92
 msgid "Page to connect to"
-msgstr "Bağlanılacak sayfa"
+msgstr "Bağlantı eklenecek hedef sayfa"
 
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:3
 #: zotonic_mod_admin/src/mod_admin.erl:495
@@ -2799,7 +2766,7 @@ msgstr "Sorgu sonuçları"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:14
 msgid "Ranch limit"
-msgstr "Çiftlik sınırı"
+msgstr "Ranch sınırı"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:94
 msgid "Rebuild all search-indices by putting all pages and data from the database in the indexer queue. This can take a long time!"
@@ -2882,7 +2849,7 @@ msgstr "Uzaktan sanal ortam yalıtımı ve kuyruk ayrıntıları, her bir çalı
 #: zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_page.tpl:16
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_connection.tpl:4
 #: zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:35
-#: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:278
+#: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:277
 #: zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:7
 #: zotonic_mod_translation/priv/templates/_translation_language_status.tpl:34
 msgid "Remove"
@@ -3549,7 +3516,7 @@ msgstr "Sayfa silindi."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_version.tpl:8
 msgid "This page has changed elsewhere. Reload to get the latest version before saving."
-msgstr "Bu sayfanın başka bir yerde güncellenmiştir. Kaydetmeden önce en son sürümü görmek için sayfayı yeniden yükleyin."
+msgstr "Bu sayfa başka bir yerde değiştirildi. Kaydetmeden önce en son sürümü almak için sayfayı yeniden yükleyin."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_version.tpl:8
 msgid "This page has changed. Reload to see the latest translations."
@@ -3647,10 +3614,16 @@ msgstr "Mevcut değil"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:30
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:43
+#: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:225
+#: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:227
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:79
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:80
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:83
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:247
+#: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:28
+#: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:13
+#: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:14
+#: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:38
 msgid "Unique name"
 msgstr "Benzersiz isim"
 
@@ -3795,6 +3768,10 @@ msgstr "Kullanılmış"
 msgid "User page"
 msgstr "Kullanıcı sayfası"
 
+#: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:178
+msgid "Uses the Connections setting. Connected resources keep their subscriptions when disconnected from this page."
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:129
 msgid "Valid for:"
 msgstr "Geçerli:"
@@ -3809,8 +3786,6 @@ msgstr "Geçerli:"
 #: zotonic_mod_development/priv/templates/_development_template_xref_includes.tpl:21
 #: zotonic_mod_development/priv/templates/_development_template_xref_inheritance.tpl:19
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:38
-#: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:20
-#: zotonic_mod_translation/priv/templates/admin_translation.tpl:38
 msgid "View"
 msgstr "Görüntüle"
 
@@ -3829,13 +3804,13 @@ msgstr "Bu kategorideki tüm sayfaları incele"
 msgid "View all referrers"
 msgstr "Tüm referansları göster"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:81
-msgid "View as (new tab)"
-msgstr "(Yeni sekmede) Görüntüle"
-
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:77
 msgid "View connection graph"
 msgstr "Bağlantı grafiğini görüntüle"
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:81
+msgid "View format (opens in a new tab)"
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:17
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:28
@@ -3973,8 +3948,6 @@ msgstr "medya öğesi ekle"
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:14
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:19
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:63
-#: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:6
-#: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:16
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:68
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_fields.tpl:54
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:15
@@ -4047,6 +4020,10 @@ msgstr "bağlantı kesildi."
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:23
 msgid "id:"
 msgstr "ID:"
+
+#: zotonic_mod_admin/priv/templates/_rsc_preview.tpl:11
+msgid "in content group"
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:84
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:15
@@ -4147,15 +4124,14 @@ msgstr "Kategoriler tüm sayfaları kategorize etmek için kullanılırlar. Her 
 msgid "Category Hierarchy"
 msgstr "Kategori Hiyerarşisi"
 
-#: zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:39
-#: zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:37
-msgid "Delete &amp; Move Pages"
-msgstr "Sayfaları Sil &amp; Taşı"
-
 #: zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:42
 #: zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:40
 msgid "Delete All Pages"
 msgstr "Tüm Sayfaları Sil"
+
+#: zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:39
+msgid "Delete categories and move their pages"
+msgstr ""
 
 #: zotonic_mod_admin_category/src/mod_admin_category.erl:112
 msgid "Delete is canceled, there are pages in the category."
@@ -4265,8 +4241,8 @@ msgstr "Sertifika dosyasının yolunu panoya kopyalayın."
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:51
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:57
-msgid "Copy the certificate file to"
-msgstr "Sertifika dosyasını şu konuma kopyalayın:"
+msgid "Copy the certificate file to <code>{path}</code>."
+msgstr ""
 
 #: zotonic_mod_admin_config/src/mod_admin_config.erl:176
 msgid "Could not generate a new self-signed certificate."
@@ -4519,8 +4495,8 @@ msgstr "Tarayıcıyı yeniden başlatın. Bazı uygulamalar, kullanıcı tarafı
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:52
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:58
-msgid "Run"
-msgstr "Çalıştır"
+msgid "Run <code>{command}</code> and restart the browser."
+msgstr ""
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:125
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:126
@@ -4570,7 +4546,6 @@ msgid "Show log for message"
 msgstr "Mesaj günlüğünü göster"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:8
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:100
 msgid "System Configuration"
 msgstr "Sistem yapılandırması"
 
@@ -4698,11 +4673,6 @@ msgstr "E-posta yapılandırmasını görüntülemek veya değiştirmek için y�
 msgid "Zotonic sends email using a built-in email server. You can send the email via an external relay."
 msgstr "Zotonic, yerleşik bir e-posta sunucusu kullanarak e-posta gönderir. E-postayı harici bir aktarma yoluyla gönderebilirsiniz."
 
-#: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:52
-#: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:58
-msgid "and restart the browser."
-msgstr "ve tarayıcıyı yeniden başlatın."
-
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:68
 msgid "iOS and iPadOS"
 msgstr "iOS ve iPadOS"
@@ -4734,7 +4704,7 @@ msgstr "Menüyü gizle"
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:73
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:103
 #: zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:24
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:96
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:97
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:21
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:10
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:6
@@ -4781,7 +4751,6 @@ msgid "Yes, discard changes"
 msgstr "Evet, değişiklikleri sil"
 
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:57
-#: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:11
 msgid "till"
 msgstr "kadar"
 
@@ -4873,6 +4842,11 @@ msgstr "Kullanıcı adını sil"
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:103
 msgid "Deleted the user account."
 msgstr "Kullanıcı hesabı silindi."
+
+#: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:9
+#: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:52
+msgid "Display name"
+msgstr ""
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:124
 msgid "Duplicate username, please choose another username."
@@ -5097,6 +5071,10 @@ msgstr "Yönetici kullanıcısı silinemez."
 msgid "The e-mail address has been verified."
 msgstr "E-posta adresi doğrulandı."
 
+#: zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:8
+msgid "The email address {email} was added to your personal information on {site}."
+msgstr ""
+
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:150
 msgid "The new username/ password has been set."
 msgstr "Yeni kullanıcı adı / şifre belirlendi."
@@ -5117,10 +5095,6 @@ msgstr "Bu kişiye bağlı bir kullanıcı adı yok."
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_delete_username.tpl:4
 msgid "This can't be undone. The username and password will be lost forever."
 msgstr "Geri alınamaz. Kullanıcı adı ve şifre kaybedilir."
-
-#: zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:8
-msgid "This email address was added to your personal information on"
-msgstr "Bu e-posta adresi kişisel bilgilerinize eklendi"
 
 #: zotonic_mod_admin_identity/src/mod_admin_identity.erl:316
 msgid "This is not a valid e-mail address."
@@ -5247,8 +5221,8 @@ msgid "You need to be an administrator to add users."
 msgstr "Kullanıcı eklemek için bir yönetici olmalısınız."
 
 #: zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:25
-msgid "You received this email because you verified your email address. You will not receive any additional emails because of this request."
-msgstr "Bu e-postayı, e-posta adresinizi doğruladığınız için aldınız. Bu istek nedeniyle başka e-posta almayacaksınız."
+msgid "You received this email because verification of your email address was requested. You will not receive any additional emails because of this request."
+msgstr ""
 
 #: zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:12
 msgid "Your account name is"
@@ -5282,8 +5256,8 @@ msgid "set username / password"
 msgstr "kullanıcı adı / şifre belirleyin"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:307
-msgid "<em>Jaccard similarity</em> divides the common content by all distinct content using either keyword. <em>Smaller-set overlap</em> divides it by the least-used keyword and helps reveal keywords that may be redundant or nested. Very small keyword sets can score highly, so use the minimum-uses filter when looking for meaningful patterns."
-msgstr "<em>Jaccard benzerliği</em>, ortak içeriği her iki anahtar kelimeden herhangi birini kullanarak belirlenen tüm farklı içeriklere böler. <em>Küçük küme örtüşmesi</em> ise ortak içeriği en az kullanılan anahtar kelimeye göre böler ve gereksiz veya iç içe geçmiş olabilecek anahtar kelimeleri ortaya çıkarmaya yardımcı olur. Çok küçük anahtar kelime kümeleri de yüksek puan alabileceğinden, anlamlı örüntüler ararken “en az kullanım” filtresini kullanın."
+msgid "<em>Jaccard similarity</em> divides the number of content items using both keywords by the number using either keyword, counting each item once. <em>Smaller-set overlap</em> divides the shared content count by the content count for the less-used keyword. This helps reveal keywords that may be redundant or nested. Keywords used on very few content items can score highly, so use the minimum-uses filter when looking for meaningful patterns."
+msgstr ""
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:68
 msgid "All content"
@@ -5314,20 +5288,12 @@ msgid "Cells show the number of content items using both keywords."
 msgstr "Hücreler, her iki anahtar kelimeyi de içeren içerik öğelerinin sayısını gösterir."
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:208
-msgid "Cells show the shared percentage of the combined keyword sets."
-msgstr "Hücreler, birleştirilmiş anahtar kelime kümelerinin ortak yüzdesini göstermektedir."
+msgid "Cells show the shared content count as a percentage of all distinct content using either keyword."
+msgstr ""
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:206
-msgid "Cells show which percentage of the smaller keyword set is shared."
-msgstr "Hücreler, daha küçük anahtar kelime kümesinin yüzde kaçının ortak olduğunu gösterir."
-
-#: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:273
-msgid "Common"
-msgstr "Yaygın"
-
-#: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:97
-msgid "Common content count"
-msgstr "Toplam içerik sayısı"
+msgid "Cells show the shared content count as a percentage of the content count for the less-used keyword."
+msgstr ""
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:54
 msgid "Content category"
@@ -5437,6 +5403,11 @@ msgstr "Kaydırılabilir anahtar kelime örtüşme matrisi"
 msgid "See which keywords are used and which keywords occur on the same content."
 msgstr "Hangi anahtar kelimelerin kullanıldığını ve hangi anahtar kelimelerin aynı içerikte geçtiğini görün."
 
+#: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:97
+#: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:273
+msgid "Shared content count"
+msgstr ""
+
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:162
 msgid "Showing {shown} of {matched} keywords"
 msgstr "{matched} anahtar kelimeden {shown} tanesi gösteriliyor"
@@ -5498,7 +5469,7 @@ msgstr "Görsel"
 
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:44
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:50
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:120
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:121
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:222
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:27
 msgid "Edit page"
@@ -5662,16 +5633,20 @@ msgid "Depends"
 msgstr "Bağlı olmak"
 
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:28
-msgid "Do you still want to activate the module"
-msgstr "Hala modülü etkinleştirmek istiyor musunuz"
+msgid "Do you still want to activate the module <b>{module}</b>?"
+msgstr ""
 
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:11
-msgid "Do you still want to deactivate the module"
-msgstr "Hala modülü devre dışı bırakmak istiyor musunuz"
+msgid "Do you still want to deactivate the module <b>{module}</b>?"
+msgstr ""
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:17
 msgid "Either they are not installed, or they are not compiled."
 msgstr "Ya kurulmamışlardır ya da derlenmemişlerdir."
+
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:59
+msgid "Execution status"
+msgstr ""
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:140
 msgid "Install the module’s model and data."
@@ -5685,6 +5660,10 @@ msgstr "Modül bağımlılıkları"
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:1
 msgid "Modules are missing dependencies"
 msgstr "Modüllerin bağımlılıkları eksik"
+
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:74
+msgid "Modules shown:"
+msgstr ""
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:171
 msgid "No modules found"
@@ -5715,17 +5694,13 @@ msgstr "Modülleri tekrar tara"
 msgid "Rescanning will rebuild the index of all modules, actions, templates etc. It will also reload all dispatch rules."
 msgstr "Yeniden tarama; tüm modüllerin, eylemlerin, şablonların ve diğer bileşenlerin indeksini yeniden oluşturur. Ayrıca tüm yönlendirme kurallarını yeniden yükler."
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:59
-msgid "Runtime"
-msgstr "Çalışma Süresi"
-
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:47
 msgid "Search modules"
-msgstr "Arama modülleri"
+msgstr "Modül ara"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:48
 msgid "Search modules…"
-msgstr "… arama modülleri"
+msgstr "Modül ara…"
 
 #: zotonic_mod_admin_modules/src/controllers/controller_admin_module_manager.erl:82
 #: zotonic_mod_search/src/mod_search.erl:201
@@ -5766,10 +5741,6 @@ msgid "Zotonic is a modular web development framework. Most functionality is enc
 msgstr "Zotonic, modüler bir web geliştirme çerçevesidir. Çoğu işlevsellik, modüller içerisinde kapsüllenmiştir. Zotonic dağılımı ile birlikte bir dizi temel modül gönderilir;\n"
 "             diğerleri ise dışarıdan geliştirilir. Bu sayfada şu anda bu Zotonic kurulumunda bilinen tüm modüllere genel bir bakış sunulmaktadır."
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:74
-msgid "modules shown"
-msgstr "gösterilen modüller"
-
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:14
 msgid "A predicate denotes traits or aspects of a page and expresses a relationship between two pages.\n"
 "    The relation is always directed, from the subject to the object.<br/>Predicates are defined in ontologies like <a href=\"http://sioc-project.org/\">SIOC</a>.  On this page you can define the predicates known to Zotonic."
@@ -5785,8 +5756,8 @@ msgstr "Tüm sayfa bağlantıları"
 
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:7
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:41
-msgid "Are you sure you want to delete"
-msgstr "Silmek istediğinizden emin misiniz"
+msgid "Are you sure you want to delete the predicate “{title}”?"
+msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edge_action.tpl:2
 msgid "Are you sure you want to remove the <strong>{{ predicate }}</strong>\n"
@@ -5806,10 +5777,6 @@ msgstr "Mevcut tüm sayfa bağlantılarının ilişki türünü şununla değiş
 msgid "Could not create the predicate."
 msgstr "İlişki türü oluşturulamadı."
 
-#: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:31
-msgid "Delete &amp; Change Connections"
-msgstr "Sil &amp; Bağlantıyı Değiştir"
-
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:34
 msgid "Delete All Connections"
 msgstr "Tüm Bağlantıları Sil"
@@ -5817,6 +5784,10 @@ msgstr "Tüm Bağlantıları Sil"
 #: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:117
 msgid "Delete is canceled, there are connections with this predicate."
 msgstr "Silme iptal edildi: bu ilişki türünü kullanan bağlantılar var."
+
+#: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:31
+msgid "Delete predicate and update connections"
+msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:85
 msgid "Do not find subjects using this predicate’s object titles."
@@ -5871,8 +5842,8 @@ msgid "Insert new connections before existing connections."
 msgstr "Mevcut bağlantılardan önce yeni bağlantılar ekleyin."
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:68
-msgid "Instead of a search box this will show a list of all pages in the <i>To</i> categories checked above. At least one category must be checked."
-msgstr "Bu, bir arama kutusu yerine yukarıda işaretlenen <i></i> kadar kategorilerdeki tüm sayfaların bir listesini gösterecektir. En az bir kategori işaretlenmelidir."
+msgid "Instead of a search box, this will show a list of all pages in the target categories selected above. At least one category must be selected."
+msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:20
 #: zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:66
@@ -6213,6 +6184,10 @@ msgstr "Varsayılan yapılandırma"
 msgid "Define who should use two-factor authentication, this is the default setting for all users."
 msgstr "İki faktörlü kimlik doğrulamayı kimin kullanması gerektiğini tanımlayın, bu tüm kullanıcılar için varsayılan ayardır."
 
+#: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:69
+msgid "Enable two-factor authentication"
+msgstr ""
+
 #: zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:21
 msgid "Enable two-factor authentication..."
 msgstr "İki faktörlü kimlik doğrulamayı etkinleştirin ..."
@@ -6290,10 +6265,6 @@ msgstr "İki faktörlü kimlik doğrulama QR kodunu <a href=\"https://support.go
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:3
 msgid "Scan the two-factor authentication QR code with an app such as <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> or <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
 msgstr "<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> veya <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>gibi bir uygulamayla iki faktörlü kimlik doğrulama QR kodunu tarayın."
-
-#: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:69
-msgid "Set passcode"
-msgstr "Şifreyi ayarla"
 
 #: zotonic_mod_auth2fa/src/mod_auth2fa.erl:79
 msgid "Sorry, you are not allowed to change the 2FA settings."
@@ -6401,8 +6372,8 @@ msgid "You can use two-factor authentication apps such as <a rel=\"noopener nore
 msgstr "<a rel=\"noopener noreferrer\" target=\"_blank\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> veya <a rel=\"noopener noreferrer\" target=\"_blank\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>gibi iki faktörlü kimlik doğrulama uygulamalarını kullanabilirsiniz."
 
 #: zotonic_mod_auth2fa/priv/templates/_logon_login_set_passcode.tpl:1
-msgid "You must set your two-factor authentication passcode now. Next time you sign in you will need to enter the two-factor authentication passcode."
-msgstr "Şimdi iki faktörlü kimlik doğrulama için tek kullanımlık kodları ayarlamanız gerekir. Bir sonraki oturum açışınızda iki faktörlü kimlik doğrulama için tek kullanımlık kod girmeniz gerekecektir."
+msgid "You must enable two-factor authentication now. Next time you sign in, you will need to enter a code generated by your authentication app."
+msgstr ""
 
 #: zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:11
 msgid "You need to be allowed to edit the system configuration to view or change the two-factor authentication configuration."
@@ -6597,7 +6568,7 @@ msgstr "Harici Servisler"
 msgid "For more information visit <a target=\"_blank\" rel=\"noreferrer noopener\" href=\"https://haveibeenpwned.com/Passwords\">{title}</a>"
 msgstr "Daha fazla bilgi için <a target=\"_blank\" rel=\"noreferrer noopener\" href=\"https://haveibeenpwned.com/Passwords\">{title}</a> adresini ziyaret edin"
 
-#: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:26
+#: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:28
 msgid "For security reasons, password reset codes are only kept for a limited amount of time and can only be used once."
 msgstr "Güvenlik nedeniyle, şifre sıfırlama kodları belirli bir süre saklanır ve sadece bir kere kullanılabilir."
 
@@ -6627,19 +6598,19 @@ msgstr "Modüllere Git"
 
 #: zotonic_mod_authentication/priv/templates/_logon_box.tpl:46
 #: zotonic_mod_authentication/priv/templates/_logon_box.tpl:86
-#: zotonic_mod_authentication/priv/templates/logon.tpl:49
+#: zotonic_mod_authentication/priv/templates/logon.tpl:53
 msgid "Go to the admin"
 msgstr "Yönetim paneline git"
 
 #: zotonic_mod_authentication/priv/templates/_logon_box.tpl:37
 #: zotonic_mod_authentication/priv/templates/_logon_box.tpl:77
-#: zotonic_mod_authentication/priv/templates/logon.tpl:40
+#: zotonic_mod_authentication/priv/templates/logon.tpl:44
 msgid "Go to the home page"
 msgstr "Ana sayfaya git"
 
 #: zotonic_mod_authentication/priv/templates/_logon_box.tpl:41
 #: zotonic_mod_authentication/priv/templates/_logon_box.tpl:81
-#: zotonic_mod_authentication/priv/templates/logon.tpl:44
+#: zotonic_mod_authentication/priv/templates/logon.tpl:48
 msgid "Go to the your profile page"
 msgstr "Profil sayfanıza gidin"
 
@@ -6664,7 +6635,7 @@ msgstr "Ancak bu e-posta adresi kullanıcılarımızdan birine ait değil ya da 
 msgid "I agree to the Terms of Service and the Privacy policies."
 msgstr "Hizmet Şartları ve Gizlilik Politikalarını kabul ediyorum."
 
-#: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:30
+#: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:32
 msgid "I forgot my password"
 msgstr "Şifremi unuttum"
 
@@ -6726,9 +6697,9 @@ msgid "Log in"
 msgstr "Giriş yap"
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_title.tpl:16
-#: zotonic_mod_authentication/priv/templates/logon.tpl:11
-msgid "Log in to"
-msgstr "Giriş"
+#: zotonic_mod_authentication/priv/templates/logon.tpl:14
+msgid "Log in to {site}"
+msgstr ""
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_title.tpl:6
 msgid "Log in with your existing {site} account to connect the accounts. You only have to do this once."
@@ -6740,7 +6711,7 @@ msgid "Log on with"
 msgstr "İle oturum açın"
 
 #: zotonic_mod_authentication/priv/templates/_logon_off.tpl:2
-#: zotonic_mod_authentication/priv/templates/logon.tpl:37
+#: zotonic_mod_authentication/priv/templates/logon.tpl:41
 msgid "Log out"
 msgstr "Çıkış yap"
 
@@ -6813,8 +6784,8 @@ msgid "Please choose a different password as this password has been found in a p
 msgstr "Lütfen farklı bir şifre seçin çünkü bu şifre, bir veri ihlalinde ortaya çıkan herkese açık şifreler listesinde bulunmuştur."
 
 #: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:8
-msgid "Please confirm your"
-msgstr "Lütfen onaylayın"
+msgid "Please confirm your password for <span>{site}</span>."
+msgstr ""
 
 #: zotonic_mod_authentication/priv/templates/_logon_reset_title.tpl:7
 msgid "Please enter a new password"
@@ -6828,20 +6799,21 @@ msgstr "Lütfen hesabınız için yeni bir şifre girin"
 msgid "Please enter the two-factor authentication passcode."
 msgstr "Lütfen iki faktörlü kimlik doğrulama kodunu girin."
 
-#: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:16
-#: zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:3
-msgid "Please try again in"
-msgstr "Lütfen tekrar deneyin"
-
 #: zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:12
+#: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:18
+#: zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:5
 msgid "Please try again in an hour"
 msgstr "Lütfen bir saat sonra tekrar deneyin"
 
 #: zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:14
+#: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:20
+#: zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:7
 msgid "Please try again in {n} hours."
 msgstr "Lütfen {n} saat sonra tekrar deneyin."
 
 #: zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:16
+#: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:22
+#: zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:9
 msgid "Please try again in {n} minutes."
 msgstr "Lütfen {n} dakika sonra tekrar deneyin."
 
@@ -6899,7 +6871,7 @@ msgstr "Son bir saat içerisinde tarayıcı tarafından kullanılan oturumlar."
 msgid "Show password"
 msgstr "Şifreyi göster"
 
-#: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:27
+#: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:29
 msgid "Simply try again:"
 msgstr "Sadece tekrar deneyin:"
 
@@ -6920,7 +6892,7 @@ msgstr "Özür dileriz, onay mesajı gönderilemedi"
 msgid "Sorry, too many retries"
 msgstr "Üzgünüm, çok fazla deneme"
 
-#: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:25
+#: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:27
 msgid "Sorry, your password reset code is unknown or expired"
 msgstr "Üzgünüz, şifre sıfırlama kodunuz yanlış ya da süresi dolmuş"
 
@@ -7029,7 +7001,7 @@ msgstr "Yeni bir hesap oluşturmak üzeresiniz."
 msgid "You are about to log on."
 msgstr "Oturum açmak üzeresiniz."
 
-#: zotonic_mod_authentication/priv/templates/logon.tpl:32
+#: zotonic_mod_authentication/priv/templates/logon.tpl:36
 msgid "You are logged in"
 msgstr "Giriş yaptınız"
 
@@ -7042,8 +7014,8 @@ msgid "You can connect the account on {site} with your account on {service} if b
 msgstr "Her iki hesabın da doğrulanmış bir e-posta adresi varsa, {site} hesabı {service} hesabınıza bağlayabilirsiniz, ancak durum böyle değil. Her iki siteyi de kontrol edin ve ardından tekrar deneyin."
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:113
-msgid "You can enter the password that you have for"
-msgstr "Şu hesap için sahip olduğunuz şifreyi girebilirsiniz:"
+msgid "You can enter the password that you have for {site}."
+msgstr ""
 
 #: zotonic_mod_authentication/priv/templates/logon_error/message.need_passcode.tpl:2
 msgid "You can find the code in your authentication App."
@@ -7060,8 +7032,8 @@ msgstr "Bunları buradan okuyabilirsiniz:"
 
 #: zotonic_mod_authentication/priv/templates/email_password_reset.tpl:9
 #: zotonic_mod_authentication/priv/templates/email_password_reset.tpl:18
-msgid "You have requested a new password for"
-msgstr "Yeni bir şifre talep ettiniz"
+msgid "You have requested a new password for <a href=\"https://{hostname}/\">{hostname}</a>."
+msgstr ""
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:99
 msgid "You have to share your email address to be able to log in."
@@ -7111,14 +7083,9 @@ msgstr "Şifreniz değiştirildi"
 msgid "Your password has been reset"
 msgstr "Şifreniz sıfırlandı"
 
-#: zotonic_mod_authentication/priv/templates/logon.tpl:34
+#: zotonic_mod_authentication/priv/templates/logon.tpl:38
 msgid "Your username is"
 msgstr "Kullanıcı adınız"
-
-#: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:18
-#: zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:5
-msgid "an hour"
-msgstr "bir saat"
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:239
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:100
@@ -7196,9 +7163,9 @@ msgstr "Varsayılan olarak veritabanının ve dosyaların yedeği şifrelenmez. 
 "        mümkündür. Bu, bunları \n"
 "        harici bir sunucuda saklamayı daha güvenli hale getirir."
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:10
-msgid "Changes since"
-msgstr "Tarihinden itibaren yapılan değişiklikler"
+#: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:12
+msgid "Changes from <strong>{from}</strong> to <strong>{to}</strong>."
+msgstr ""
 
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:51
 msgid "Check and possibly restore an earlier version of your page."
@@ -7304,10 +7271,6 @@ msgstr "Yedekleme &amp; geri yükleme hakkında yardım"
 msgid "If the Cloud File Store module is used, then deleted files can be retained indefinitely."
 msgstr "Bulut Dosya Depolama modülü kullanıldığında silinen dosyalar süresiz olarak saklanabilir."
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:100
-msgid "It can be found in the"
-msgstr "Şurada bulunabilir:"
-
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:44
 msgid "It could be that a connected dependent page was deleted because of the deletion of this page, such a deleted dependent page can also be recovered."
 msgstr "Bu sayfanın silinmesi nedeniyle bağlı bağımlı sayfa da silinmiş olabileceği gibi, silinmiş bağımlı sayfa da kurtarılabilir."
@@ -7362,10 +7325,8 @@ msgid "Please make sure you store the backup encryption password in a safe <u>ex
 msgstr "Yedekleme şifreleme parolasını güvenli bir <u>harici</u> konumda sakladığınızdan emin olun."
 
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:75
-#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:54
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:85
-msgid "Previous"
-msgstr "Önceki"
+msgid "Previous versions"
+msgstr ""
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:54
 msgid "Recover incoming connections from other pages"
@@ -7389,7 +7350,7 @@ msgstr "Yedeği geri yükle"
 msgid "Restore deleted <em>dependent</em> pages that were referred by this page"
 msgstr "Bu sayfanın başvurduğu silinmiş <em>bağımlı</em> sayfaları geri yükle"
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:41
+#: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:47
 msgid "Restore deleted page"
 msgstr "Silinen sayfayı geri yükle"
 
@@ -7397,11 +7358,11 @@ msgstr "Silinen sayfayı geri yükle"
 msgid "Restore page"
 msgstr "Sayfayı geri yükle"
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:38
+#: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:44
 msgid "Restore this page..."
 msgstr "Bu sayfayı geri yükle..."
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:30
+#: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:36
 msgid "Revert page to earlier version"
 msgstr "Sayfayı önceki sürüme geri döndür"
 
@@ -7413,7 +7374,7 @@ msgstr "Bu sayfanın önceki bir revizyonuna geri dönün."
 msgid "Revert to earlier version..."
 msgstr "Önceki sürüme geri dönün..."
 
-#: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:27
+#: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:33
 msgid "Revert to this version..."
 msgstr "Bu sürüme geri dön..."
 
@@ -7537,9 +7498,9 @@ msgid "The original category or content group no longer exists. Confirm the sugg
 msgstr "Orijinal kategori veya içerik grubu artık mevcut değil. Önerilen alternatifi onaylayın veya başka bir seçenek seçin."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:5
-#: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:15
-msgid "This is the version saved on"
-msgstr "Bu sürümün kaydedildiği tarih:"
+#: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:19
+msgid "This version was saved on <strong>{date}</strong> by <strong>{author}</strong>."
+msgstr ""
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:10
 msgid "This will overwrite your page with the contents of the backup file."
@@ -7583,6 +7544,10 @@ msgstr "Önceki sürümleri görme izniniz yok"
 msgid "You are not allowed to see the revisions."
 msgstr "Değişiklikleri göremezsiniz."
 
+#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:101
+msgid "You can find it in <a href=\"{url}\">System Configuration</a> or in the Zotonic configuration files."
+msgstr ""
+
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:9
 msgid "You can have one backup per day of the week, older ones will be overwritten."
 msgstr "Haftanın her günü bir yedeğiniz olabilir, eskilerin üzerine yazılacaktır."
@@ -7610,10 +7575,6 @@ msgstr "veritabanını indir"
 #: zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:28
 msgid "download files"
 msgstr "dosyaları indir"
-
-#: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:100
-msgid "or in the Zotonic configuration files."
-msgstr "veya Zotonic yapılandırma dosyalarında."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:15
 msgid "this backup is in progress"
@@ -7702,8 +7663,8 @@ msgid "Compatibility tags"
 msgstr "Uyumluluk etiketleri"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:130
-msgid "Complete"
-msgstr "Tamamla"
+msgid "Completed"
+msgstr ""
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:130
 msgid "Completion"
@@ -7737,8 +7698,8 @@ msgid "Donut alias"
 msgstr "Donut takma adı"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:44
-msgid "Donut chart with map data"
-msgstr "Harita verilerini içeren halka grafik"
+msgid "Donut chart with data from an Erlang map"
+msgstr ""
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:81
 msgid "East"
@@ -7874,6 +7835,10 @@ msgstr "MQTT Köprü Bağlantı Durumu"
 #: zotonic_mod_l10n/src/support/l10n_date.erl:41
 msgid "March"
 msgstr "Mart"
+
+#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:153
+msgid "Market share"
+msgstr ""
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:114
 #: zotonic_mod_l10n/src/support/l10n_date.erl:43
@@ -8030,10 +7995,6 @@ msgstr "Oturum Kimliği"
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:36
 msgid "Several aspects of the connection are tested"
 msgstr "Bağlantının çeşitli yönleri test edilir"
-
-#: zotonic_mod_base/priv/templates/tests/chart_test.tpl:153
-msgid "Share"
-msgstr "Paylaş"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:128
 msgid "Single value"
@@ -8253,6 +8214,14 @@ msgstr "Mesaj"
 msgid "Moderate comments"
 msgstr "Yorumları yönet"
 
+#: zotonic_mod_comment/priv/templates/_comments_form.tpl:23
+#: zotonic_mod_comment/priv/templates/admin_comments.tpl:22
+#: zotonic_mod_contact/priv/templates/contact.tpl:11
+#: zotonic_mod_contact/priv/templates/email_contact.tpl:10
+#: zotonic_mod_survey/src/models/m_survey.erl:982
+msgid "Name"
+msgstr "İsim"
+
 #: zotonic_mod_comment/priv/templates/_comments_form.tpl:16
 msgid "Note: Comments are moderated"
 msgstr "Not: Yorumlar kontrol edilmektedir"
@@ -8324,9 +8293,13 @@ msgstr "yayınla"
 msgid "unpublish"
 msgstr "yayından kaldır"
 
+#: zotonic_mod_contact/priv/templates/email_contact.tpl:3
+msgid "Contact form on {site}"
+msgstr ""
+
 #: zotonic_mod_contact/priv/templates/email_contact.tpl:6
-msgid "Hello, the contact form of"
-msgstr "Merhaba, iletişim formundan"
+msgid "Hello, the contact form on “{site}” has been submitted."
+msgstr ""
 
 #: zotonic_mod_contact/priv/templates/contact.tpl:32
 msgid "Thank you!"
@@ -8336,14 +8309,6 @@ msgstr "Teşekkürler!"
 msgid "Your message has been submitted! We’ll get in touch soon."
 msgstr "Mesajınız gönderildi! Yakında iletişime geçeceğiz."
 
-#: zotonic_mod_contact/priv/templates/email_contact.tpl:3
-msgid "contact form on"
-msgstr "iletişim formunda"
-
-#: zotonic_mod_contact/priv/templates/email_contact.tpl:6
-msgid "has been submitted."
-msgstr "gönderildi."
-
 #: zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:1
 msgid "Are you sure you want to delete the following content groups:"
 msgstr "Aşağıdaki içerik gruplarını silmek istediğinizden emin misiniz:"
@@ -8351,6 +8316,10 @@ msgstr "Aşağıdaki içerik gruplarını silmek istediğinizden emin misiniz:"
 #: zotonic_mod_content_groups/priv/templates/_admin_edit_sidebar_content_group.tpl:4
 msgid "Content Group"
 msgstr "İçerik Grubu"
+
+#: zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:37
+msgid "Delete content groups and move their pages"
+msgstr ""
 
 #: zotonic_mod_content_groups/src/mod_content_groups.erl:101
 msgid "Delete is canceled, there are pages in this content group."
@@ -8590,15 +8559,11 @@ msgstr "Genişletilmiş ve geçersiz kılınan tüm şablonlar"
 
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:87
 msgid "All included templates"
-msgstr "Tüm şablonlar dahildir"
+msgstr "Dahil edilen tüm şablonlar"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:192
 msgid "All templates are checked for missing includes or missing <tt>{ext}</tt> template references."
 msgstr "Tüm şablonlar, bulunamayan include şablonları veya <tt>{ext}</tt> şablon başvuruları açısından kontrol edilir."
-
-#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:44
-msgid "All templates are compiling."
-msgstr "Tüm şablonlar derleniyor."
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:195
 #: zotonic_mod_development/priv/templates/admin_development.tpl:211
@@ -8667,6 +8632,10 @@ msgstr "Şablonları yüklemek için tıklayın"
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:18
 msgid "Click to restart"
 msgstr "Yeniden başlatmak için tıklayın"
+
+#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:30
+msgid "Code editor"
+msgstr ""
 
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:13
 msgid "Column"
@@ -8801,7 +8770,7 @@ msgstr "CSS ve JavaScript dosyalarını ayrı dosyalar olarak indir. Onları bir
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
 msgid "Edit action"
-msgstr "Düzenleme işlemi"
+msgstr "Eylemi düzenle"
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:33
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:42
@@ -8815,7 +8784,7 @@ msgstr "Denetleyiciyi düzenle"
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:106
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:89
 msgid "Edit dispatch file"
-msgstr "Gönderim dosyasını düzenle"
+msgstr "Yönlendirme kuralları dosyasını düzenle"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
 msgid "Edit event handler"
@@ -8839,7 +8808,7 @@ msgstr "scomp'u düzenle"
 
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:30
 msgid "Edit subscriber function"
-msgstr "Abone düzenleme işlevi"
+msgstr "Abone işlevini düzenle"
 
 #: zotonic_mod_development/priv/templates/_development_template.tpl:17
 #: zotonic_mod_development/priv/templates/_development_template.tpl:22
@@ -8851,17 +8820,13 @@ msgstr "Abone düzenleme işlevi"
 msgid "Edit template"
 msgstr "Şablonu düzenle"
 
-#: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:30
-msgid "Editor"
-msgstr "Editör"
-
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:41
 msgid "Editor URL pattern"
 msgstr "Düzenleyici URL şablonu"
 
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:8
 msgid "Editor launch requested."
-msgstr "Editörün göreve başlaması talep edildi."
+msgstr "Kod düzenleyicisinin başlatılması istendi."
 
 #: zotonic_mod_development/priv/templates/_development_editor_button.tpl:14
 msgid "Editor settings"
@@ -9125,6 +9090,10 @@ msgstr "Hiçbir kaynak bulunamadı."
 #: zotonic_mod_development/src/mod_development.erl:625
 msgid "No template found in the context."
 msgstr "Bağlamda şablon bulunamadı."
+
+#: zotonic_mod_development/priv/templates/_development_template_xref.tpl:44
+msgid "No template syntax errors found."
+msgstr ""
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:422
 msgid "No traced parent templates"
@@ -9404,7 +9373,7 @@ msgstr "Bu kaynak bilinmiyor yada URI'a sahip değil"
 
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:12
 msgid "This server uses browser launches only. Configure your host editor and path mapping below."
-msgstr "Bu sunucu yalnızca tarayıcı üzerinden çalıştırılmaktadır. Aşağıda ana bilgisayar düzenleyicinizi ve yol eşlemenizi yapılandırın."
+msgstr "Bu sunucuda düzenleyici yalnızca tarayıcı üzerinden başlatılabilir. Aşağıda bilgisayarınızdaki düzenleyiciyi ve yol eşlemesini yapılandırın."
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:543
 msgid "This template is used by"
@@ -9465,7 +9434,7 @@ msgstr "Şablon hata ayıklama noktaları güncellendi."
 
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:44
 msgid "Use {file} for a URL-encoded filename, {path} for an encoded path preserving slashes, and {line} and {column} for the position."
-msgstr "URL kodlamalı bir dosya adı için {file} , eğik çizgileri koruyan kodlanmış bir yol için {path} , konum için ise {line} ve {column} adreslerini kullanın."
+msgstr "URL kodlamalı dosya adı için {file}, eğik çizgileri koruyan kodlanmış yol için {path}, konum için {line} ve {column} kullanın."
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:234
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:12
@@ -9656,8 +9625,8 @@ msgid "Align right"
 msgstr "Sağa hizala"
 
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:58
-msgid "Apply"
-msgstr "Başvur"
+msgid "Apply changes"
+msgstr ""
 
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:36
 msgid "Bold"
@@ -9698,7 +9667,7 @@ msgstr "Biçim"
 
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:51
 msgid "Full window"
-msgstr "Tam ekran"
+msgstr "Tam pencere"
 
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:33
 msgid "Heading 1"
@@ -9777,7 +9746,7 @@ msgstr "Numaralı liste"
 
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:40
 msgid "Outdent"
-msgstr "Dışa doğru çıkıntı"
+msgstr "Girintiyi azalt"
 
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:32
 msgid "Paragraph"
@@ -9813,7 +9782,7 @@ msgstr "Kaydet ve Görüntüle"
 
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:56
 msgid "Split cell"
-msgstr "Bölünmüş hücre"
+msgstr "Hücreyi böl"
 
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:37
 msgid "Strikethrough"
@@ -9890,7 +9859,7 @@ msgstr "Aktarım yapan Zotonic sunucusundaki API'nin tam URL'si."
 
 #: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:98
 msgid "Copy relay API URL to clipboard"
-msgstr "Röle API URL’sini panoya kopyala"
+msgstr "Aktarım API URL’sini panoya kopyala"
 
 #: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:44
 #: zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:75
@@ -9998,8 +9967,8 @@ msgid "Last error status"
 msgstr "Son hata durumu"
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:260
-msgid "Mailer message"
-msgstr "Posta mesajı"
+msgid "Mail server message"
+msgstr ""
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:167
 msgid "Most Recent"
@@ -10093,13 +10062,13 @@ msgstr "Bu e-posta adresi ile ilgili problemler var."
 msgid "There have been some problems but they have been cleared. This message will disappear as soon as an email has been received succesfully."
 msgstr "Bazı sorunlar vardı ama temizlendi. Bu mesaj bir e-posta başarılı şekilde alınır alınmaz yok olacak."
 
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:47
-msgid "This email address has been blocked, no emails will be sent or received from this address."
-msgstr "Bu e-posta adresi engellendi, bu adresten e-posta gönderilmeyecek veya alınmayacaktır."
-
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:101
 msgid "This email address has been blocked."
 msgstr "Bu e-posta adresi engellendi."
+
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:47
+msgid "This email address has been blocked. No emails will be sent to or received from this address."
+msgstr ""
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:93
 msgid "This email address is not valid."
@@ -10201,8 +10170,8 @@ msgstr "Dışa aktarma"
 #: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:57
 #: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:65
 #: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:66
-msgid "Export fields"
-msgstr "Dışa aktarma alanları"
+msgid "Fields to export"
+msgstr ""
 
 #: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:8
 msgid "Help about export"
@@ -10365,7 +10334,7 @@ msgstr "Bulut dosya deposu yapılandırması"
 
 #: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:5
 msgid "Cloud file store needs attention"
-msgstr "Bulut dosya depolama sistemine özen gösterilmesi gerekiyor"
+msgstr "Bulut dosya deposu müdahale gerektiriyor"
 
 #: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:15
 msgid "Consecutive failures"
@@ -10400,17 +10369,13 @@ msgstr "Hizmete erişilemedi. Ayarlarınızı kontrol edip tekrar deneyin. API a
 msgid "Currently Zotonic supports FTP, WebDAV and services that are compatible with the S3 file services API. These include:"
 msgstr "Şu anda Zotonic FTP, WebDAV ve S3 dosya hizmetleri API'siyle uyumlu hizmetleri destekliyor. Bunlar şunları içerir:"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:251
-msgid "Delete Queue"
-msgstr "Silme kuyruğu"
-
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:185
 msgid "Delete files from the cloud file store"
 msgstr "Bulut dosya deposundan dosyaları sil"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:70
-msgid "Delete interval"
-msgstr "Aralığı sil"
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:251
+msgid "Deletion queue"
+msgstr ""
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:250
 msgid "Download Queue"
@@ -10431,6 +10396,10 @@ msgstr "Signature V4'ü kullanmak için depolama sağlayıcınızın sağladığ
 #: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:53
 msgid "Error list pages"
 msgstr "Hata listesi sayfaları"
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:70
+msgid "Extra deletion delay"
+msgstr ""
 
 #: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:8
 msgid "Failed reads in the last 15 minutes:"
@@ -10551,6 +10520,11 @@ msgstr "Şimdi"
 #: zotonic_mod_filestore/src/support/filestore_admin.erl:38
 msgid "Only the admin account (user 1) can mark files unrecoverable."
 msgstr "Yalnızca yönetici hesabı (kullanıcı 1) dosyaları kurtarılamaz olarak işaretleyebilir."
+
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:54
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:85
+msgid "Previous"
+msgstr "Önceki"
 
 #: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:5
 msgid "Read errors older than 24 hours"
@@ -10956,7 +10930,7 @@ msgid "Add default connection"
 msgstr "Varsayılan bağlantı ekle"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user.tpl:32
-#: zotonic_mod_import_feed/src/models/m_import_feed.erl:482
+#: zotonic_mod_import_feed/src/models/m_import_feed.erl:484
 msgid "Administrator accounts cannot run feed imports. Importing external content with full administrator permissions is dangerous. Select a non-administrator account with only the permissions needed for importing."
 msgstr "Yönetici hesapları, besleme içe aktarma işlemlerini gerçekleştiremez. Tam yönetici izinleriyle harici içerik içe aktarmak tehlikelidir. Yalnızca içe aktarma işlemi için gerekli izinlere sahip, yönetici olmayan bir hesap seçin."
 
@@ -10997,7 +10971,7 @@ msgstr "Makaleler ve ilgili medya öğeleri, sayfa başına 100 giriş."
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:94
 msgid "Attach the most important medium directly"
-msgstr "En önemli ortamı doğrudan ekleyin"
+msgstr "En önemli medya dosyasını doğrudan ekle"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:29
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media_metadata_extra.tpl:50
@@ -11007,11 +10981,15 @@ msgstr "Yazar"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:58
 msgid "By default imported content is non-authoritative. Both modes keep source identities and allow updates from this feed."
-msgstr "Varsayılan olarak, içe aktarılan içerik bağlayıcı nitelikte değildir. Her iki mod da kaynak kimliklerini korur ve bu beslemeden güncellemelere izin verir."
+msgstr "Varsayılan olarak içe aktarılan içerik yerel asıl sürüm değildir. Her iki mod da kaynak kimliklerini korur ve bu beslemeden güncellemelere izin verir."
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user.tpl:23
 msgid "Change user"
 msgstr "Kullanıcıyı değiştir"
+
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:32
+msgid "Check feed now"
+msgstr ""
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:30
 msgid "Checking website for feeds…"
@@ -11156,9 +11134,13 @@ msgstr "Besleme"
 msgid "Feed activity log"
 msgstr "Besleme etkinlik günlüğü"
 
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:44
+msgid "Feed checks"
+msgstr ""
+
 #: zotonic_mod_import_feed/src/mod_import_feed.erl:569
 msgid "Feed deleted"
-msgstr "Gönderi silindi"
+msgstr "Besleme silindi"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:93
 msgid "Feed not found or access denied."
@@ -11199,7 +11181,7 @@ msgstr "İlk içe aktarma sırasında tüm sayfaları içe aktar"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:55
 msgid "Import as authoritative local content"
-msgstr "Yetkili yerel içerik olarak içe aktar"
+msgstr "Yerel asıl içerik olarak içe aktar"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:93
 msgid "Import as dependent resources with depiction connections"
@@ -11207,7 +11189,7 @@ msgstr "Görsel bağlantıları olan bağımlı kaynaklar olarak içe aktar"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:49
 msgid "Import category"
-msgstr "Kategoriyi içe aktar"
+msgstr "İçe aktarma kategorisi"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:4
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:11
@@ -11217,19 +11199,11 @@ msgstr "Beslemeleri içe aktar"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:41
 msgid "Import history"
-msgstr "İthalat geçmişi"
+msgstr "İçe aktarma geçmişi"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:83
 msgid "Import history pages"
 msgstr "İçe aktarma geçmişi sayfaları"
-
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:7
-msgid "Import settings"
-msgstr "Ayarları içe aktar"
-
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:15
-msgid "Import user"
-msgstr "Kullanıcıyı içe aktar"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:45
 msgid "Imported / updated / skipped"
@@ -11241,15 +11215,15 @@ msgstr "İçe aktarılan içerik silindi"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:64
 msgid "Importing"
-msgstr "İthalat"
+msgstr "İçe aktarılıyor"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:23
 msgid "Imports run with this account's permissions. Only administrators and users with full access to accounts can change it."
 msgstr "İçe aktarmalar bu hesabın izinleriyle gerçekleştirilir. Yalnızca yöneticiler ve hesaplara tam erişim hakkına sahip kullanıcılar bunu değiştirebilir."
 
 #: zotonic_mod_import_feed/src/models/m_import_feed.erl:476
-msgid "Invalid removal regexp on line"
-msgstr "Satırdaki geçersiz kaldırma düzenli ifadesi"
+msgid "Invalid removal regexp on line {line}: {reason}"
+msgstr ""
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_result.tpl:9
 msgid "Kept:"
@@ -11260,8 +11234,8 @@ msgid "Kind"
 msgstr "Tür"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:47
-msgid "Last poll"
-msgstr "Son anket"
+msgid "Last feed check"
+msgstr ""
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:51
 msgid "Last processed"
@@ -11269,11 +11243,11 @@ msgstr "Son işleme tarihi"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:5
 msgid "Loading example entries…"
-msgstr "… dosyasındaki örnek girişler yükleniyor"
+msgstr "Örnek girdiler yükleniyor…"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_discovery.tpl:5
 msgid "Loading feed and example entries…"
-msgstr "… dosyasındaki besleme verilerini ve örnek girişleri yükleniyor"
+msgstr "Besleme ve örnek girdiler yükleniyor…"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:86
 #: zotonic_mod_logging/priv/templates/admin_log_base.tpl:3
@@ -11295,19 +11269,19 @@ msgstr "Bulunan medya dosyaları"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:52
 msgid "Medium attached directly"
-msgstr "Orta boy, doğrudan takılı"
+msgstr "Medya dosyası doğrudan eklendi"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:142
 msgid "Minimum polling interval (minutes)"
-msgstr "En az oylama aralığı (dakika)"
+msgstr "En kısa besleme kontrol aralığı (dakika)"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_log.tpl:20
 msgid "New events appear live at the top. Scroll down to load older events. Logs are kept for 30 days."
 msgstr "Yeni etkinlikler en üstte anlık olarak görüntülenir. Daha eski etkinlikleri yüklemek için aşağı kaydırın. Kayıtlar 30 gün boyunca saklanır."
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:48
-msgid "Next poll"
-msgstr "Bir sonraki anket"
+msgid "Next feed check"
+msgstr ""
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log.tpl:21
 msgid "No activity for this feed, or access denied."
@@ -11323,7 +11297,7 @@ msgstr "Seçili bir içe aktarma kullanıcısı yok"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:77
 msgid "Nothing imported yet."
-msgstr "Henüz hiçbir şey ithal edilmedi."
+msgstr "Henüz hiçbir şey içe aktarılmadı."
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:134
 msgid "One regexp per line. Matching text is removed from summaries and body text, including text across links. HTML formatting is preserved. Patterns are case-sensitive."
@@ -11333,25 +11307,17 @@ msgstr "Her satıra bir düzenli ifade. Eşleşen metinler, özetlerden ve ana m
 msgid "Original article"
 msgstr "Orijinal makale"
 
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:22
-msgid "Pause"
-msgstr "Duraklat"
-
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:161
 msgid "Pause automatic imports"
 msgstr "Otomatik içe aktarmaları duraklat"
 
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:22
+msgid "Pause imports"
+msgstr ""
+
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:62
 msgid "Paused"
 msgstr "Duraklatıldı"
-
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:32
-msgid "Poll now"
-msgstr "Şimdi oy verin"
-
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:44
-msgid "Polls"
-msgstr "Anketler"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:8
 msgid "Preview only: no resources have been imported."
@@ -11362,8 +11328,8 @@ msgid "Protected resources and resources you cannot delete are kept. A resource 
 msgstr "Korumalı kaynaklar ve silemeyeceğiniz kaynaklar korunur. Bir kaynağın silinmesi, silemeyeceğiniz bağımlı içeriklerin otomatik olarak silinmesine yol açabilecekse, bu kaynak da korunur."
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_dialog.tpl:20
-msgid "Protected resources and resources you cannot delete will be kept. Content shared with other feeds is included."
-msgstr "Korunan kaynaklar ve silemeyeceğiniz kaynaklar korunacaktır. Diğer akışlarla paylaşılan içerikler de buna dahildir."
+msgid "Protected resources and resources you cannot delete will be kept. Deletable content shared with other feeds will also be deleted."
+msgstr ""
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:33
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:39
@@ -11390,12 +11356,12 @@ msgid "Resource"
 msgstr "Kaynak"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:20
-msgid "Resume"
-msgstr "Özgeçmiş"
+msgid "Resume imports"
+msgstr ""
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:167
 msgid "Save & refetch deleted"
-msgstr "Silinenleri kaydet ve yeniden getir"
+msgstr "Kaydet ve silinenleri yeniden getir"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:166
 msgid "Save feed"
@@ -11411,7 +11377,7 @@ msgstr "Bağlı sayfayı seçin"
 
 #: zotonic_mod_import_feed/src/mod_import_feed.erl:410
 msgid "Select import user"
-msgstr "Kullanıcıyı içe aktar seçeneğini seçin"
+msgstr "İçe aktarma için hesap seçin"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_connection_dialog.tpl:18
 msgid "Select page"
@@ -11425,6 +11391,10 @@ msgstr "Makaleleri ve medya dosyalarını içe aktarmak için izinleri kullanıl
 msgid "Select user"
 msgstr "Kullanıcı seçin"
 
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:7
+msgid "Settings for importing"
+msgstr ""
+
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:48
 msgid "Source identity"
 msgstr "Kaynak kimliği"
@@ -11434,8 +11404,8 @@ msgid "Subscribe imported articles for updates"
 msgstr "Güncellemeler için içe aktarılan makalelere abone olun"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:123
-msgid "Subscriptions require a source that supports updates and non-authoritative imports."
-msgstr "Abonelikler için, güncellemeleri ve yetkili olmayan içe aktarmaları destekleyen bir kaynak gereklidir."
+msgid "Subscriptions require non-authoritative imports and a source that supports updates."
+msgstr ""
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:37
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:101
@@ -11478,7 +11448,7 @@ msgstr "Bu varsayılan ayarlar, içe aktarılan makaleler ve bunlara bağlı med
 msgid "This deletes all deletable articles and media imported by this feed, including resources shared with other feeds. Protected resources and resources you cannot delete are kept. The feed will be paused."
 msgstr "Bu işlem, diğer beslemelerle paylaşılan kaynaklar da dahil olmak üzere, bu besleme tarafından içe aktarılan silinebilir tüm makaleleri ve medya öğelerini siler. Korunan kaynaklar ve silinemeyen kaynaklar korunur. Besleme duraklatılacaktır."
 
-#: zotonic_mod_import_feed/src/models/m_import_feed.erl:478
+#: zotonic_mod_import_feed/src/models/m_import_feed.erl:480
 msgid "This feed is paused. Resume it before fetching."
 msgstr "Bu akış duraklatılmıştır. Alım işlemine başlamadan önce akışı devam ettirin."
 
@@ -11486,7 +11456,7 @@ msgstr "Bu akış duraklatılmıştır. Alım işlemine başlamadan önce akış
 msgid "This feed is paused. Resume it in its settings before fetching."
 msgstr "Bu akış duraklatılmıştır. Verileri almadan önce ayarlarından akışı yeniden başlatın."
 
-#: zotonic_mod_import_feed/src/models/m_import_feed.erl:480
+#: zotonic_mod_import_feed/src/models/m_import_feed.erl:482
 msgid "This feed is still importing. Pause it and wait for the current import to finish before deleting its content."
 msgstr "Bu akış hâlâ içe aktarılıyor. İçeriğini silmeden önce akışı duraklatın ve mevcut içe aktarma işleminin tamamlanmasını bekleyin."
 
@@ -11512,6 +11482,10 @@ msgstr "Örnek girişleri almak için “Test / önizleme” seçeneğini kullan
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:191
 msgid "User"
 msgstr "Kullanıcı"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:15
+msgid "User account for imports"
+msgstr ""
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:32
 msgid "Uses credentials registered for the import user and destination host. Credentials are only sent over HTTPS."
@@ -11771,20 +11745,11 @@ msgid "<ul>\n"
 "      <li><b>Relayed</b>: the remote mailer reports that the email is relayed to the next server</li>\n"
 "                                            <li><b>Bounce</b>: the email bounced back from a remote mailer, this is a fatal error</li>\n"
 "                                            <li><b>Failed</b>: the remote mailer did not accept our email, no further retries</li>\n"
-"                                            <li><b>Retry</b>: we could not sent the email and will retry later</li>\n"
-" <li><b>Blocked</b>: the recipient’s email address is blocked, check the email address status</li>\n"
+"                                            <li><b>Delivery retry</b>: we could not send the email and will retry later</li>\n"
+"        <li><b>Blocked</b>: the recipient’s email address is blocked, check the email address status</li>\n"
 "                                            <li><b>Received</b>: a remote mailer sent email to us</li>\n"
 "              </ul>"
-msgstr "<ul>\n"
-"                                            <li><b>Gönderiliyor</b>: e-posta uzak posta göndericisine gönderiliyor</li>\n"
-"                           <li><b>Gönderildi</b>: e-posta uzak postacıya gönderildi</li>\n"
-"      <li><b>Aktarıldı</b>: uzak posta göndericisi e-postanın bir sonraki sunucuya aktarıldığını bildirir</li>\n"
-"                                            <li><b>Bounce</b>: e-posta uzak bir postacıdan geri döndü, bu ölümcül bir hatadır</li>\n"
-"                                            <li><b>Başarısız</b>: uzak posta göndericisi e-postamızı kabul etmedi, başka deneme yok</li>\n"
-"                                            <li><b>Yeniden</b> dene: e-postayı gönderemedik ve daha sonra yeniden deneyeceğiz</li>\n"
-" <li><b>Engellendi</b>: alıcının e-posta adresi engellendi, e-posta adresi durumunu kontrol edin</li>\n"
-"                                            <li><b>Alındı</b>: uzak bir postacı bize e-posta gönderdi</li>\n"
-"              </ul>"
+msgstr ""
 
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:156
 msgid "Bounce"
@@ -11814,6 +11779,10 @@ msgstr "Content-Security-Policy ihlalleri açık bir uç noktaya bildirilir ve s
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:146
 msgid "Debug"
 msgstr "Hata ayıklama"
+
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:158
+msgid "Delivery retry"
+msgstr ""
 
 #: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:35
 msgid "Directive"
@@ -11922,11 +11891,6 @@ msgstr "Raporlama URL'leri"
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:49
 msgid "Resources with email identity"
 msgstr "E-posta kimliğine sahip kaynaklar"
-
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:158
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:114
-msgid "Retry"
-msgstr "Tekrar dene"
 
 #: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:40
 msgid "Samples"
@@ -12107,17 +12071,21 @@ msgstr "O dili kullanan tüm alıcılar"
 msgid "All statuses"
 msgstr "Tüm durumlar"
 
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:56
+msgid "Already queued: {count};"
+msgstr ""
+
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:9
 msgid "Any page can be sent as a mailing. You can send a mailing from any edit page. On this page you can add or remove mailing lists and their recipients."
 msgstr "Herhangi bir sayfa posta olarak gönderilebilir. Herhangi bir düzenleme sayfasından posta gönderebilirsiniz. Bu sayfadan posta listeleri ve onların alıcılarını ekleyebilir ve çıkarabilirsiniz."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_cancel_confirm.tpl:1
-msgid "Are you sure you want to cancel the mailing to"
-msgstr "Postalamayı iptal etmek istediğinizden emin misiniz"
+msgid "Are you sure you want to cancel the mailing to “{list}”?"
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:2
-msgid "Are you sure you want to delete the mailing list"
-msgstr "Postalama listesini silmek istediğinizden emin misiniz"
+msgid "Are you sure you want to delete the mailing list “{list}”?"
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_test_public_alert.tpl:9
 msgid "Ask an administrator to change the test mailing list’s access settings."
@@ -12126,6 +12094,10 @@ msgstr "Bir yöneticiden, test posta listesinin erişim ayarlarını değiştirm
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:87
 msgid "Available when sending and automatic retries finish."
 msgstr "Gönderme işlemi ve otomatik yeniden denemeler tamamlandığında kullanılabilir."
+
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:58
+msgid "Awaiting confirmation: {count};"
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:13
 msgid "Before you will receive any further mail you need to confirm your subscription."
@@ -12192,17 +12164,21 @@ msgstr "Aboneliği onayla"
 msgid "Confirmed"
 msgstr "Onaylandı"
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:144
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:145
 msgid "Continue sending"
 msgstr "Göndermeye devam et"
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:85
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:86
 msgid "Copies will be saved in the selected languages when sending starts."
 msgstr "Gönderim başladığında, kopyalar seçilen dillerde kaydedilecektir."
 
 #: zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:105
 msgid "Could not add the recipient."
 msgstr "Alıcı eklenemedi."
+
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:4
+msgid "Could not be sent: {count}"
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_count_error.tpl:9
 msgid "Could not count the eligible recipients. The list query may have taken too long. Go back and try again, or ask an administrator to check the mailing list."
@@ -12323,26 +12299,35 @@ msgstr "Posta listesini düzenle"
 msgid "Edit recipient"
 msgstr "Alıcıyı düzenle"
 
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:64
+msgid "Eligible for delivery"
+msgstr ""
+
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:9
 msgid "Eligible recipients will be counted in the review step."
 msgstr "Uygun alıcılar, değerlendirme aşamasında sayılacaktır."
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:65
-msgid "Eligible to send"
-msgstr "Göndermeye uygun"
-
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:62
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:55
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:54
 msgid "Email language"
 msgstr "E-posta dili"
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:50
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:49
 msgid "Email language is the language version of the mailing selected for sending. It can differ from the recipient’s preferred language when a fallback or a fixed Email language is used. Skipped recipients will not receive an email."
 msgstr "E-posta dili, gönderilecek iletinin seçilen dil sürümüdür. Yedek dil veya sabit bir e-posta dili kullanıldığında alıcının tercih ettiği dilden farklı olabilir. Atlanan alıcılar e-posta almaz."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:5
 msgid "Email subscriptions"
 msgstr "E-posta abonelikleri"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:9
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_summary.tpl:10
+msgid "Emails processed: {processed} / {selected}"
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:150
+msgid "Emails waiting to be sent: {count}."
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:60
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:85
@@ -12371,6 +12356,10 @@ msgstr "Herkes, elindeki en iyi dili kullanarak"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_summary.tpl:5
 msgid "Excluded"
 msgstr "Dışarıda tutulanlar"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:5
+msgid "Excluded: {count}"
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:44
 msgid "Externally managed list &mdash; no unsubscribe/subscribe links"
@@ -12437,8 +12426,8 @@ msgid "Here you can edit the arguments of the search query. Every argument goes 
 msgstr "Burada arama sorgusunun argümanlarını düzenleyebilirsiniz. Her argümanı ayrı bir satıra yazın. Daha fazla bilgi için Zotonic sitesindeki <a href=\"https://docs.zotonic.com/en/latest/developer-guide/search.html#query-arguments\">sorgu argümanları belgelerine</a> bakın."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:28
-msgid "If their preferred language is unavailable or not set, use"
-msgstr "Tercih ettikleri dil mevcut değilse veya ayarlanmamışsa, şunu kullanın:"
+msgid "If their preferred language is unavailable or not set, use <strong>{language}</strong>."
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:24
 msgid "If you don’t want to receive any mail then please ignore this message."
@@ -12472,7 +12461,7 @@ msgstr "Tek tek gönderim sonuçları; her seferinde 100 alıcı gösterilmekted
 msgid "Keep mailing"
 msgstr "Posta göndermeye devam et"
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:75
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:76
 msgid "Language copies saved when sending started, before recipient-specific personalization."
 msgstr "Gönderim işlemi başladığında, alıcıya özel kişiselleştirme yapılmadan önce dil kopyaları kaydedildi."
 
@@ -12500,7 +12489,7 @@ msgstr "Posta"
 msgid "Mailing Lists"
 msgstr "Posta listeleri"
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:117
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:118
 msgid "Mailing actions"
 msgstr "Posta gönderim işlemleri"
 
@@ -12521,6 +12510,12 @@ msgstr "Bu sayfanın e-posta geçmişi"
 msgid "Mailing list"
 msgstr "Postalama listesi"
 
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:3
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:8
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:12
+msgid "Mailing list recipients: {title}"
+msgstr ""
+
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:12
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:7
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:7
@@ -12528,7 +12523,7 @@ msgstr "Postalama listesi"
 msgid "Mailing lists"
 msgstr "Posta listeleri"
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:66
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:67
 msgid "Mailing phases"
 msgstr "Posta gönderim aşamaları"
 
@@ -12573,8 +12568,8 @@ msgid "Mailings are sent to:"
 msgstr "Postalar şu adrese gönderilir:"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:13
-msgid "Mailings for:"
-msgstr "Aşağıdakiler için postalar:"
+msgid "Mailings of page: <strong>{title}</strong>"
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:9
 msgid "Manage mailing lists"
@@ -12633,7 +12628,7 @@ msgstr "Henüz herhangi bir posta gönderimi yapılmadı."
 msgid "No mailings yet. Send a mailing from a page’s edit screen to see its progress here."
 msgstr "Henüz gönderilen e-posta yok. Bir sayfanın düzenleme ekranından e-posta göndererek, buradaki ilerleme durumunu görebilirsiniz."
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:73
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:72
 msgid "No recipients found."
 msgstr "Hiçbir alıcı bulunamadı."
 
@@ -12641,7 +12636,7 @@ msgstr "Hiçbir alıcı bulunamadı."
 msgid "No recipients match this filter."
 msgstr "Bu filtreye uyan alıcı bulunamadı."
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:87
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:88
 msgid "No saved copies are available. Older mailings and mailings without selected recipients may have no copies."
 msgstr "Kaydedilmiş kopya bulunmamaktadır. Daha eski postalar ve alıcı seçilmemiş postalarda kopya bulunmayabilir."
 
@@ -12654,9 +12649,9 @@ msgid "Nobody received this mailing. Check the recipient below for the reasons, 
 msgstr "Hiç kimse bu postayı almadı. Nedenlerini öğrenmek için aşağıdaki alıcıyı kontrol edin, ardından dil ayarını veya alıcı seçimini değiştirin."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:188
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:43
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:42
 msgid "Not before"
-msgstr "Ondan önce değil"
+msgstr "En erken"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:34
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:55
@@ -12687,7 +12682,7 @@ msgstr "Hiçbir şey gönderilmedi."
 msgid "Nothing sent"
 msgstr "Hiçbir şey gönderilmedi"
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:96
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:95
 msgid "Nothing to send. Go back and change the language or recipient selection, or choose another mailing list."
 msgstr "Gönderilecek bir şey yok. Geri dönüp dili veya alıcı seçimini değiştirin ya da başka bir posta listesi seçin."
 
@@ -12723,7 +12718,7 @@ msgstr "Bu e-postayı yalnızca test adresi alır. E-posta tercihleriniz burada 
 msgid "Open a preview in a new tab before continuing:"
 msgstr "Devam etmeden önce yeni bir sekmede önizlemeyi açın:"
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:79
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:80
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:143
 #: zotonic_mod_translation/priv/templates/_translation_tree_skipped.tpl:9
 msgid "Opens in a new tab"
@@ -12884,25 +12879,16 @@ msgstr "Alıcı sonuçları"
 msgid "Recipient status"
 msgstr "Alıcının durumu"
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:96
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:97
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:8
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:34
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:57
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:56
 msgid "Recipients"
 msgstr "Alıcılar"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:10
 msgid "Recipients are subscribed either as email-only (via a simple signup form), or as subscribed persons in the system."
 msgstr "Alıcılar, basit bir kayıt formuyla yalnızca e-posta adresleri üzerinden veya sistemde kayıtlı kişiler olarak abone olurlar."
-
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:3
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:12
-msgid "Recipients for"
-msgstr "Alıcılar için"
-
-#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:8
-msgid "Recipients for “{title}”"
-msgstr "“{title} ” ödülünün kazananları"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:111
 msgid "Recipients matching this language, plus those without a language preference"
@@ -12917,7 +12903,7 @@ msgid "Recipients will appear when preparation starts."
 msgstr "Hazırlık başladığında alıcılar görünecektir."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:91
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:37
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:36
 msgid "Regional preferences can use the base language, for example Belgian Dutch can use Dutch."
 msgstr "Bölgesel tercihler temel dili kullanabilir; örneğin, Belçika Felemenkçesi Felemenkçe’yi kullanabilir."
 
@@ -12930,7 +12916,7 @@ msgstr "Bu alıcıyı kaldırın. Telafi etmek mümkün değil."
 msgid "Removed subscription."
 msgstr "Abonelik kaldırıldı."
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:96
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:97
 msgid "Result"
 msgstr "Sonuç"
 
@@ -12943,11 +12929,11 @@ msgstr "Sonuç"
 msgid "Results"
 msgstr "Sonuçlar"
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:92
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:93
 msgid "Results by language"
 msgstr "Dile göre sonuçlar"
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:106
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:107
 msgid "Results will appear when sending starts."
 msgstr "Gönderme işlemi başladığında sonuçlar görünecektir."
 
@@ -12955,13 +12941,13 @@ msgstr "Gönderme işlemi başladığında sonuçlar görünecektir."
 msgid "Results will still update for emails already queued."
 msgstr "Kuyruğa alınmış e-postalar için sonuçlar yine de güncellenecektir."
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:163
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:164
 msgid "Retry failed recipients"
-msgstr "Başarısız olan alıcılara yeniden deneme"
+msgstr "Teslim edilemeyen alıcılara yeniden gönder"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:124
 msgid "Retry previously failed recipients"
-msgstr "Daha önce gönderim başarısız olan alıcılara yeniden deneme"
+msgstr "Daha önce teslim edilemeyen alıcılara yeniden gönder"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:4
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_status.tpl:8
@@ -12991,7 +12977,7 @@ msgstr "Deneme postalaması incelemesi"
 msgid "Review the test mailing list’s access settings"
 msgstr "Test posta listesinin erişim ayarlarını gözden geçirin"
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:72
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:73
 msgid "Saved mailing content"
 msgstr "Kaydedilmiş e-posta içeriği"
 
@@ -12999,7 +12985,7 @@ msgstr "Kaydedilmiş e-posta içeriği"
 msgid "Saved the opt-out preference."
 msgstr "Devre dışı bırakma tercihi kaydedildi."
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:121
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:120
 msgid "Schedule mailing"
 msgstr "Posta gönderimini planla"
 
@@ -13008,7 +12994,7 @@ msgstr "Posta gönderimini planla"
 msgid "Scheduled"
 msgstr "Planlanmış"
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:46
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:45
 msgid "Scheduled for:"
 msgstr "Planlanan tarih:"
 
@@ -13028,7 +13014,11 @@ msgstr "Gönderilecek sayfayı seçin"
 msgid "Select..."
 msgstr "Seç..."
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:56
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:16
+msgid "Selected recipients: {count}."
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:55
 msgid "Selection"
 msgstr "Seçim"
 
@@ -13040,17 +13030,17 @@ msgstr "Yeni bir posta gönder"
 msgid "Send a test email before continuing"
 msgstr "Devam etmeden önce bir test e-postası gönderin"
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:175
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:176
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:128
 msgid "Send again to everyone"
 msgstr "Herkese tekrar gönder"
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:121
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:122
 msgid "Send another mailing"
 msgstr "Başka bir posta gönder"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:186
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:42
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:41
 msgid "Send as soon as the page is published."
 msgstr "Sayfa yayınlanır yayınlanmaz gönderin."
 
@@ -13070,11 +13060,11 @@ msgstr "E-posta gönder"
 msgid "Send immediately"
 msgstr "Hemen gönder"
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:44
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:43
 msgid "Send immediately after confirmation, provided the page is still published."
 msgstr "Sayfa hâlâ yayında ise, onaylandıktan hemen sonra gönderin."
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:45
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:44
 msgid "Send immediately after confirmation."
 msgstr "Onaylandıktan hemen sonra gönderin."
 
@@ -13083,11 +13073,11 @@ msgstr "Onaylandıktan hemen sonra gönderin."
 msgid "Send mailing"
 msgstr "Posta gönder"
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:115
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:114
 msgid "Send mailing now"
 msgstr "Şimdi posta gönder"
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:31
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:30
 msgid "Send only to recipients whose preferred language is available. Recipients without a preference are skipped."
 msgstr "Yalnızca tercih ettiği dil mevcut olan alıcılara gönderin. Tercihi belirtilmemiş alıcılar atlanır."
 
@@ -13095,7 +13085,7 @@ msgstr "Yalnızca tercih ettiği dil mevcut olan alıcılara gönderin. Tercihi 
 msgid "Send page to this list..."
 msgstr "Bu sayfayı bu listeye gönder..."
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:157
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:158
 msgid "Send test again"
 msgstr "Testi tekrar gönder"
 
@@ -13114,10 +13104,6 @@ msgstr "Şimdi test postasını gönder"
 msgid "Send test to address"
 msgstr "Adrese test gönder"
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:18
-msgid "Send the"
-msgstr "Şunu gönderin:"
-
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:196
 msgid "Send the mailing on a specific date and time."
 msgstr "Postayı belirli bir tarih ve saatte gönderin."
@@ -13125,6 +13111,10 @@ msgstr "Postayı belirli bir tarih ve saatte gönderin."
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:191
 msgid "Send the mailing right now."
 msgstr "Postayı hemen gönderin."
+
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:18
+msgid "Send the {language} version."
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:31
 msgid "Send this page immediately to the test mailing list. The page does not need to be published."
@@ -13148,7 +13138,7 @@ msgstr "Herkese gönder"
 msgid "Send to everyone using their best available language."
 msgstr "Herkese, kendileri için en uygun dilde gönderin."
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:168
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:169
 msgid "Send to people who have not received this page"
 msgstr "Bu sayfayı henüz almamış kişilere gönderin"
 
@@ -13181,7 +13171,7 @@ msgstr "Gönderen:"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_status.tpl:12
 msgid "Sending needs attention"
-msgstr "Gönderim konusunda dikkatli olunması gerekiyor"
+msgstr "Gönderim müdahale gerektiriyor"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:96
 msgid "Sending needs attention before the remaining phases can finish. See the actions below."
@@ -13215,6 +13205,14 @@ msgstr "Gönderiliyor — onay bekleniyor"
 msgid "Sent means accepted by the mail server, not confirmed inbox delivery. Later bounces update these results."
 msgstr "\"Gönderildi\" ifadesi, mesajın posta sunucusu tarafından kabul edildiği anlamına gelir; gelen kutusuna ulaştığı kesinleşmiş değildir. Daha sonra gelen geri dönüşler bu sonuçları günceller."
 
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:2
+msgid "Sent: <strong>{count}</strong>"
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:55
+msgid "Sent: {count};"
+msgstr ""
+
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:14
 msgid "Show all pages"
 msgstr "Tüm sayfaları göster"
@@ -13231,13 +13229,13 @@ msgstr "Sayfa başına en fazla 200 işlem gösterilir; aktif işlemler önce ge
 msgid "Skip recipients whose preferred language is unavailable or who have not set a preference."
 msgstr "Tercih ettikleri dil mevcut olmayan veya bir tercih belirtmemiş alıcıları atlayın."
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:66
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:65
 #: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:8
 #: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:13
 msgid "Skipped"
 msgstr "Atlandı"
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:151
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:152
 msgid "Some emails have an uncertain sending result. Ask your administrator to investigate before sending them again, to avoid duplicates."
 msgstr "Bazı e-postaların gönderim durumu belirsizdir. Yinelenmeleri önlemek için, bunları tekrar göndermeden önce sistem yöneticinizden durumu araştırmasını isteyin."
 
@@ -13285,12 +13283,16 @@ msgstr "Bekleme aşamasından sonra başlar."
 msgid "Status and progress"
 msgstr "Durum ve ilerleme"
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:130
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:134
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:57
+msgid "Still being retried: {count};"
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:131
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:135
 msgid "Stop sending"
 msgstr "Göndermeyi durdur"
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:132
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:133
 msgid "Stop sending? Only emails not yet queued can be stopped. Emails already queued will still be sent."
 msgstr "Göndermeyi durdurmak mı? Yalnızca henüz kuyruğa alınmamış e-postaların gönderimi durdurulabilir. Kuyruğa alınmış e-postalar yine de gönderilecektir."
 
@@ -13313,7 +13315,6 @@ msgstr "Durduruldu; kuyruğa alınmış e-postalar hâlâ işlenmeye devam ediyo
 msgid "Subscribe to"
 msgstr "Abone ol"
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:45
 #: zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:47
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:99
 msgid "Subscribed with"
@@ -13327,22 +13328,23 @@ msgstr "Abone bağlantıları"
 msgid "Subscribers, added via the subscription form."
 msgstr "Aboneler, abonelik formu aracılığıyla eklenir."
 
+#: zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:45
+msgid "Subscription email: <b>{email}</b>"
+msgstr ""
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:33
 msgid "Target mailing list"
 msgstr "Hedef posta listesi"
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:185
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:186
 #: zotonic_mod_websub/priv/templates/_websub_error.tpl:3
 msgid "Technical details"
 msgstr "Teknik ayrıntılar"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:8
-#: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:16
-msgid "Test"
-msgstr "Test"
-
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:3
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:8
+#: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:16
 msgid "Test email"
 msgstr "Deneme e-postası"
 
@@ -13351,8 +13353,12 @@ msgid "Test email address"
 msgstr "Deneme e-posta adresi"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:151
-msgid "Test email queued for"
-msgstr "Test e-postası kuyruğa alındı"
+msgid "Test email queued for {email}."
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_admin_edit_mailing_runs_panel.tpl:8
+msgid "Test email:"
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:163
 msgid "Test language"
@@ -13371,10 +13377,6 @@ msgstr "Deneme e-postaları hemen gönderilir. Sayfanın yayınlanmış olması 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:12
 msgid "Test recipient:"
 msgstr "Test alıcısı:"
-
-#: zotonic_mod_mailinglist/priv/templates/_admin_edit_mailing_runs_panel.tpl:8
-msgid "Test:"
-msgstr "Test:"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:85
 msgid "Text shown below the confirmation, welcome and unsubscribe e-mails."
@@ -13444,7 +13446,7 @@ msgstr "Yeniden denenecek başarısız bir teslimat yok."
 msgid "There is no mailing list with the name ‘mailinglist_test’."
 msgstr "‘mailinglist_test’ adında bir posta listesi yok."
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:90
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:89
 msgid "These counts are estimates. Recipients and translations are checked again when sending starts."
 msgstr "Bu sayılar tahmini değerlerdir. Gönderim başladığında alıcılar ve çeviriler yeniden kontrol edilir."
 
@@ -13482,7 +13484,7 @@ msgstr "Bu e-posta mevcut değil veya onu görüntüleme izniniz yok."
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:106
 msgid "This mailing is unavailable."
-msgstr "Bu posta hizmeti kullanılamıyor."
+msgstr "Bu e-posta gönderimi kullanılamıyor."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_skip_reason.tpl:2
 msgid "This page is not available in their language."
@@ -13492,7 +13494,7 @@ msgstr "Bu sayfa, onların dilinde mevcut değildir."
 msgid "This rough total includes all query matches. Duplicate recipients are not removed yet."
 msgstr "Bu yaklaşık toplam, tüm sorgu eşleşmelerini içermektedir. Yinelenen alıcılar henüz çıkarılmamıştır."
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:93
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:92
 msgid "This sends again to everyone selected, including recipients who received this page before."
 msgstr "Bu, daha önce bu sayfayı almış olanlar da dahil olmak üzere, seçilen herkese yeniden gönderilir."
 
@@ -13505,8 +13507,8 @@ msgid "Tick the checkbox if you want the recipient to receive a welcome e-mail m
 msgstr "Alıcıların hoş geldiniz e-posta mesajı almasını istiyorsanız kutucuğu işaretleyin."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:2
-msgid "Times shown in"
-msgstr "Gösterilen saatler"
+msgid "Times shown in {timezone}."
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_task_language.tpl:4
 msgid "Unknown language"
@@ -13545,7 +13547,7 @@ msgstr "Alıcılarıyla birlikte bir dosya yükleyin. Dosya satır başına tek 
 msgid "Upload a list of recipients."
 msgstr "Alıcıların bir listesini yükle."
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:33
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:32
 msgid "Use each recipient’s preferred language."
 msgstr "Her alıcının tercih ettiği dili kullanın."
 
@@ -13605,7 +13607,7 @@ msgstr "Bekleniyor"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_status.tpl:2
 msgid "Waiting for publication"
-msgstr "Yayınlanmasını bekliyorum"
+msgstr "Yayınlanması bekleniyor"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:74
 msgid "Waiting for the sending issue to be resolved"
@@ -13613,7 +13615,11 @@ msgstr "Gönderim sorununun çözülmesini bekliyoruz"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:27
 msgid "Waiting for the sending process to start."
-msgstr "Gönderme işleminin başlamasını bekliyorum."
+msgstr "Gönderme işleminin başlaması bekleniyor."
+
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:3
+msgid "Waiting: {count}"
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:3
 msgid "Welcome to"
@@ -13631,9 +13637,13 @@ msgstr "Seçilen e-posta dilinde gönderilen e-postayı kimler almalıdır?"
 msgid "Who should receive this mailing?"
 msgstr "Bu postayı kimler almalıdır?"
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:81
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:80
 msgid "Why some recipients are not selected"
 msgstr "Neden bazı alıcılar seçilmiyor?"
+
+#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:59
+msgid "Will not be sent: {count}."
+msgstr ""
 
 #: zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:113
 msgid "You are not allowed to add or enable recipients."
@@ -13655,7 +13665,7 @@ msgstr "Alıcıları değiştiremezsiniz"
 
 #: zotonic_mod_mailinglist/src/mod_mailinglist.erl:1077
 msgid "You are not allowed to change this mailing."
-msgstr "Bu posta adresini değiştiremezsiniz."
+msgstr "Bu e-posta gönderimini değiştirme yetkiniz yok."
 
 #: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist.erl:77
 msgid "You are not allowed to delete the mailing list."
@@ -13741,14 +13751,6 @@ msgstr "Posta listesi abonelikleriniz"
 msgid "Your subscriptions"
 msgstr "Abonelikleriniz"
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:55
-msgid "already queued;"
-msgstr "zaten kuyruğa alınmış;"
-
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:57
-msgid "awaiting confirmation;"
-msgstr "onay bekleniyor;"
-
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:22
 msgid "before language and other filters"
 msgstr "dil ve diğer filtrelerden önce"
@@ -13757,34 +13759,17 @@ msgstr "dil ve diğer filtrelerden önce"
 msgid "cancel"
 msgstr "iptal et"
 
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:4
-msgid "could not be sent"
-msgstr "gönderilemedi"
-
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:30
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:12
 #: zotonic_mod_mailinglist/priv/templates/_mailing_subscriber_count.tpl:3
 msgid "disabled"
-msgstr "engelli"
-
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:149
-msgid "emails are waiting to be sent."
-msgstr "Gönderilmeyi bekleyen e-postalar var."
-
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:9
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_summary.tpl:10
-msgid "emails processed"
-msgstr "işlenen e-postalar"
+msgstr "devre dışı"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:29
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:11
 #: zotonic_mod_mailinglist/priv/templates/_mailing_subscriber_count.tpl:2
 msgid "enabled"
 msgstr "etkinleştirildi"
-
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:5
-msgid "excluded"
-msgstr "hariç tutulan"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:10
 #: zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:13
@@ -13802,34 +13787,9 @@ msgstr "posta listesi"
 msgid "pages"
 msgstr "sayfaları"
 
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:16
-msgid "recipients selected."
-msgstr "alıcılar seçildi."
-
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_mailing_runs_panel.tpl:10
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:2
 msgid "sent"
 msgstr "gönderildi"
-
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:54
-msgid "sent;"
-msgstr "gönderildi;"
-
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:56
-msgid "still being retried;"
-msgstr "hala yeniden yargılanıyor;"
-
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:18
-msgid "version."
-msgstr "sürüm."
-
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:3
-msgid "waiting"
-msgstr "bekleme"
-
-#: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:58
-msgid "will not be sent."
-msgstr "gönderilmeyecektir."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_subscriber_count.tpl:5
 msgid "{count} from the list query"
@@ -13871,8 +13831,8 @@ msgid "Add top"
 msgstr "En üste ekle"
 
 #: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:274
-msgid "Are you sure you want to remove"
-msgstr "Silmek istediğinizden emin misiniz?"
+msgid "Are you sure you want to remove <b>{title}</b> and all indented items below it?"
+msgstr ""
 
 #: zotonic_mod_menu/priv/templates/_admin_status.tpl:7
 msgid "Check all menu pages and add <i>hasmenupart</i> connections for all of the \n"
@@ -13891,7 +13851,7 @@ msgstr "Sayfa eklemek için <strong>Menü öğesi ekle</strong> yada <strong>Men
 msgid "Copy of:"
 msgstr "Kopyası:"
 
-#: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:289
+#: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:288
 msgid "Could not check the selected items. Please try again."
 msgstr "Seçilen öğeler kontrol edilemedi. Lütfen tekrar deneyin."
 
@@ -13961,10 +13921,6 @@ msgstr "Bilinmeyen kategori"
 #: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:263
 msgid "You can undo this change by restoring a previous revision."
 msgstr "Bu değişikliği, önceki bir sürümü geri yükleyerek geri alabilirsiniz."
-
-#: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:276
-msgid "and all indented items below it?"
-msgstr "ve altındaki tüm girintili öğeler?"
 
 #: zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:27
 msgid "Add these permissions under {perm}"
@@ -14167,14 +14123,14 @@ msgstr "Web sitelerinde veya Uygulamalarında kimlik doğrulaması yapmak için 
 msgid "Authenticating..."
 msgstr "Kimlik doğrulanıyor ..."
 
+#: zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:88
+#: zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:89
+msgid "Authorization URL"
+msgstr ""
+
 #: zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:11
 msgid "Authorize"
 msgstr "Yetkilendir"
-
-#: zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:88
-#: zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:89
-msgid "Authorize URL"
-msgstr "URL'yi yetkilendir"
 
 #: zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:16
 msgid "Authorize access to your account"
@@ -14203,6 +14159,10 @@ msgstr "İle bağlantı"
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:48
 msgid "Consumer App not found, or no view permission."
 msgstr "İstemci uygulaması bulunamadı veya görüntüleme izni yok."
+
+#: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:42
+msgid "Content import"
+msgstr ""
 
 #: zotonic_mod_oauth2/src/mod_oauth2.erl:165
 #: zotonic_mod_oauth2/src/mod_oauth2.erl:276
@@ -14766,7 +14726,7 @@ msgstr "Arama fasetlerini yeniden oluştur"
 msgid "Rebuilding the faceted search table."
 msgstr "Fasetli arama tablosu yeniden oluşturuluyor."
 
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:149
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:152
 msgid "Add Plausible tracking script"
 msgstr "Plausible izleme betiğini ekleyin"
 
@@ -14782,7 +14742,7 @@ msgstr "Yapılandırılmış meta veriler için özel JSON-LD'nizi ekleyin. Bu, 
 msgid "All pages of this category"
 msgstr "Bu kategorinin tüm sayfaları"
 
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:98
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:101
 msgid "Allowing this is a security risk."
 msgstr "Buna izin vermek bir güvenlik riskidir."
 
@@ -14794,16 +14754,16 @@ msgstr "Google'dan tüm “{cat}” sayfalarını hariç tutmasını isteyin"
 msgid "Ask Google to not index this page"
 msgstr "Google'dan bu sayfayı dizine eklememesini isteyin"
 
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:134
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:137
 msgid "Bing Webmaster"
 msgstr "Bing Web Yöneticisi"
 
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:131
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:132
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:134
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:135
 msgid "Bing Webmaster validation id"
 msgstr "Bing Web Yöneticisi doğrulama kimliği"
 
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:120
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:123
 msgid "Copy the value of the content attribute in the meta tag provided by Google."
 msgstr "Google'ın sağladığı meta etiketindeki content niteliğinin değerini kopyalayın."
 
@@ -14824,9 +14784,9 @@ msgstr "Her sayfaya eklenecek tanım"
 msgid "Do not show site search action"
 msgstr "Site arama işlemini gösterme"
 
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:119
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:134
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:166
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:122
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:137
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:169
 msgid "Enter here the verification code for"
 msgstr "Doğrulama kodunu buraya girin"
 
@@ -14834,7 +14794,7 @@ msgstr "Doğrulama kodunu buraya girin"
 msgid "Exclude this site from search engines"
 msgstr "Bu siteyi arama motorlarından çıkar"
 
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:97
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:100
 msgid "For some GTM options (like custom templates) to work, Google allows code to be added to your website.<br>Anyone with access to the Google Tag Manager settings can run arbitrary code on your website.<br>To make this possible we have to lower the overall security of your website."
 msgstr "Bazı GTM seçeneklerinin (özel şablonlar gibi) çalışması için Google, web sitenize kod eklenmesine izin verir.<br>Google Etiket Yöneticisi ayarlarına erişimi olan herkes web sitenizde keyfi kod çalıştırabilir.<br>Bunu mümkün kılmak için web sitenizin genel güvenliğini düşürmemiz gerekir."
 
@@ -14847,15 +14807,11 @@ msgstr "Genel SEO Optimizasyonu"
 msgid "Google Analytics tracking id"
 msgstr "Google Analytics izleme kimliği"
 
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:116
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:117
 #: zotonic_mod_seo/priv/templates/admin_seo.tpl:119
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:120
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:122
 msgid "Google Search Console"
 msgstr "Google Arama Konsolu"
-
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:92
-msgid "Google Tag Manager account page"
-msgstr "Google Etiket Yöneticisi hesap sayfası"
 
 #: zotonic_mod_seo/priv/templates/admin_seo.tpl:89
 #: zotonic_mod_seo/priv/templates/admin_seo.tpl:90
@@ -14866,11 +14822,11 @@ msgstr "Google Etiket Yöneticisi kimliği"
 msgid "Here you find settings to optimize the indexing of your site by search engines."
 msgstr "Burada sitenizin arama motorları tarafından dizine eklenmesini iyileştirecek ayarları bulabilirsiniz."
 
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:101
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:104
 msgid "I accept the security risk of adding custom code in Google Tag Manager"
 msgstr "Google Etiket Yöneticisi'ne özel kod eklemenin güvenlik riskini kabul ediyorum"
 
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:152
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:155
 msgid "If you check this then the default tracking script for Plausible will be added, using the domain <tt>{domain}</tt>."
 msgstr "Bunu işaretlerseniz, <tt>{domain}</tt> alan adını kullanan varsayılan Plausible izleme betiği eklenir."
 
@@ -14886,9 +14842,9 @@ msgstr "Her sayfaya eklenecek anahtar kelimeler. Anahtar kelimeleri \",\" ile ay
 msgid "More information [Google]"
 msgstr "Daha fazla bilgi [Google]"
 
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:121
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:136
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:168
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:124
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:139
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:171
 msgid "Multiple codes can be added at once, separated by commas."
 msgstr "Virgülle ayrılarak aynı anda birden fazla kod eklenebilir."
 
@@ -14924,7 +14880,7 @@ msgstr "SEO içeriği"
 msgid "SEO indexing of this page is disabled because it is in the “{cat}” category."
 msgstr "Bu sayfanın SEO indekslemesi “{cat}” kategorisinde olduğu için devre dışı bırakıldı."
 
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:177
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:180
 msgid "Save SEO settings"
 msgstr "SEO ayarlarını kaydet"
 
@@ -14962,43 +14918,31 @@ msgstr "Sitedeki arama işleminin URL'si. Varsayılanlar:"
 msgid "Where can I find my tracking script?"
 msgstr "İzleme komut dosyamı nerede bulabilirim?"
 
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:166
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:169
 msgid "Yandex Webmaster"
 msgstr "Yandex Web yöneticisi"
 
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:163
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:164
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:166
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:167
 msgid "Yandex Webmaster validation id"
 msgstr "Yandex Web yöneticisi doğrulama kimliği"
 
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:135
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:167
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:83
+msgid "You can find this ID in the tracking script. Its format is <strong>{format}</strong>."
+msgstr ""
+
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:92
+msgid "You can find this ID on your <a href='{url}' rel='noopener noreferrer' target='_blank'>Google Tag Manager account page</a>. Its format is <strong>{format}</strong>."
+msgstr ""
+
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:138
+#: zotonic_mod_seo/priv/templates/admin_seo.tpl:170
 msgid "You find this id in the content attribute of the meta tag, it has the format"
 msgstr "Bu kimliği meta etiketinin content niteliğinde bulabilirsiniz. Biçimi:"
-
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:83
-msgid "You find this id in the tracking script, it has the format"
-msgstr "Bu kimliği izleme betiğinde bulabilirsiniz. Biçimi:"
-
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:92
-msgid "You find this on your"
-msgstr "Bunu bulabileceğiniz yer:"
-
-#: zotonic_mod_seo/priv/templates/admin_seo.tpl:92
-msgid "it has the format"
-msgstr "formatı var"
 
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:52
 msgid "Always"
 msgstr "Her zaman"
-
-#: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:48
-msgid "Change frequency defined for category"
-msgstr "Kategori için tanımlanan sıklığı değiştir"
-
-#: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:43
-msgid "Change frequency for sitemap"
-msgstr "Site haritası için frekansı değiştirin"
 
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:7
 msgid "Check the logs for progress."
@@ -15015,6 +14959,14 @@ msgstr "Saatlik"
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:60
 msgid "Monthly"
 msgstr "Aylık"
+
+#: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:48
+msgid "Page change frequency defined for category"
+msgstr ""
+
+#: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:43
+msgid "Page change frequency for sitemap"
+msgstr ""
 
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:19
 msgid "Priority defined for category"
@@ -15579,7 +15531,7 @@ msgstr "Bir soru yada blok ekle"
 msgid "Add all email addresses to a mailinglist. Users are subscribed by connecting them to the mailinglist."
 msgstr "Tüm e-posta adreslerini bir posta listesine ekleyin. Kullanıcılar, posta listesine bağlanarak abone olurlar."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:124
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:127
 msgid "Add an introduction or explanation including uploaded or embedded images or video's. Add full width blocks or set a percentage to combine blocks."
 msgstr "Yüklenen veya gömülü resimler veya videolar dahil olmak üzere bir giriş veya açıklama ekleyin. Tam genişlikte bloklar ekleyin veya blokları birleştirmek için bir yüzde ayarlayın."
 
@@ -15665,7 +15617,7 @@ msgstr "Doğrusal olmayan formlara izin verin; cevaplar \"Geri\" düğmesi ile k
 msgid "Already submitted"
 msgstr "Zaten gönderildi"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:150
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:153
 msgid "Another page, video or image."
 msgstr "Başka bir sayfa, video veya resim."
 
@@ -15726,7 +15678,7 @@ msgstr "Kaydetmeden geri dön"
 msgid "Because you can edit, you can proceed for testing."
 msgstr "Düzenleyebildiğiniz için test için ilerleyebilirsiniz."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:112
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:115
 #: zotonic_mod_survey/src/mod_survey.erl:662
 msgid "Button"
 msgstr "Buton"
@@ -15739,12 +15691,12 @@ msgstr "Düğme önizlemesi"
 msgid "Button style"
 msgstr "Buton stili"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:113
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:116
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:18
 msgid "Button text"
 msgstr "buton metni"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:147
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:150
 msgid "Can only be used on the last questions page."
 msgstr "Sadece son sorular sayfasında kullanılabilir."
 
@@ -15842,7 +15794,7 @@ msgstr "Yanıtı bağlamak için yeni bir kişi oluşturun."
 msgid "Create and link"
 msgstr "Oluştur ve bağla"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:112
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:115
 msgid "Create jumps to other questions or blocks."
 msgstr "Diğer sorulara veya bloklara atlamalar oluşturun."
 
@@ -15996,7 +15948,7 @@ msgstr "Doldurma"
 msgid "Find a person to link the answer to. If you do not find a person then you can create a new person."
 msgstr "Cevabı bağlamak için bir kişi bulun. Bir kişi bulamazsanız, yeni bir kişi oluşturabilirsiniz."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:137
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:140
 msgid "First page in category"
 msgstr "Kategorideki ilk sayfa"
 
@@ -16020,7 +15972,7 @@ msgstr "Form işleyicisi"
 msgid "Handling"
 msgstr "Kullanma"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:127
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:130
 msgid "Hidden input"
 msgstr "Gizli giriş"
 
@@ -16041,14 +15993,14 @@ msgstr "İlerleme bilgilerini gizle"
 msgid "Hide the user’s id or browser-id from result exports"
 msgstr "Sonuç verilerinden kullanıcının kimliğini veya tarayıcı kimliğini gizle"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:96
-msgid "I am"
-msgstr "Ben"
-
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:26
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:27
 msgid "I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|other] ice cream and my favorite color is [color]."
 msgstr "[age] yaşındayım. [icecream=vanilyalı|çilekli|çikolatalı|diğer] dondurmaları severim ve en sevdiğim renk [color]."
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:98
+msgid "I am {age} years old. I like {flavor} ice cream and my favorite color is {color}."
+msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:211
 msgid "If checked, then a confirmation email with the submitted answers can be sent to the respondent. For logged-in respondents, the known email address is used. For anonymous respondents, add a short text field with the label “email” and the validation set to “must be an email address”."
@@ -16155,6 +16107,7 @@ msgstr "Eşleşen e-posta adresi"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:85
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:16
+#: zotonic_mod_survey/src/mod_survey.erl:657
 msgid "Matching question"
 msgstr "Eşleştirme sorusu"
 
@@ -16214,6 +16167,7 @@ msgstr "Çoklu sayfa sonu bloklar birleştirilir."
 msgid "Multiple times – each time with new results"
 msgstr "Birden çok kez - her seferinde yeni sonuçlarla"
 
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:96
 #: zotonic_mod_survey/src/mod_survey.erl:658
 msgid "Narrative"
 msgstr "Öykü"
@@ -16227,7 +16181,7 @@ msgstr "Geçmek için gereklidir"
 msgid "New result:"
 msgstr "Yeni sonuç:"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:139
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:142
 msgid "Next page in category"
 msgstr "Kategorideki sonraki sayfa"
 
@@ -16290,7 +16244,7 @@ msgstr "Yalnızca editörler cevap verebilir"
 msgid "Optional confirmation email for the respondent"
 msgstr "Katılımcı için isteğe bağlı onay e-postası"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:135
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:138
 msgid "Options from a page category"
 msgstr "Sayfa kategorisinden seçenekler"
 
@@ -16343,7 +16297,7 @@ msgstr "Lütfen tüm gerekli alanları doldurun."
 msgid "Please make a choice."
 msgstr "Lütfen bir seçim yapın."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:143
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:146
 msgid "Please upload your file."
 msgstr "Lütfen dosyanızı yükleyin."
 
@@ -16441,6 +16395,14 @@ msgstr "Yanıtlar"
 msgid "Result deleted."
 msgstr "Sonuç silindi."
 
+#: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:33
+msgid "Result downloads"
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:20
+msgid "Result views"
+msgstr ""
+
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:22
 #: zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:19
 msgid "Results editor"
@@ -16475,7 +16437,7 @@ msgstr "Kaydedilmiş"
 msgid "Search for a person"
 msgstr "Bir kişiyi ara"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:138
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:141
 msgid "Second page in category"
 msgstr "Kategorideki ikinci sayfa"
 
@@ -16487,7 +16449,7 @@ msgstr "Ülkeyi seç"
 msgid "Select mailinglist"
 msgstr "Posta listesi seç"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:104
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:107
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:13
 msgid "Select your country"
 msgstr "Ülkenizi seçin"
@@ -16618,7 +16580,7 @@ msgstr "Durdurun ve daha sonra devam edin"
 msgid "Stop without saving"
 msgstr "Kaydetmeden dur"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:128
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:131
 msgid "Store a value without showing an input to the respondent."
 msgstr "Yanıtlayana bir girdi göstermeden bir değer kaydedin."
 
@@ -16683,7 +16645,7 @@ msgstr "Test geçme yüzdesi"
 msgid "Test result"
 msgstr "Test sonucu"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:123
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:126
 msgid "Text, image, video"
 msgstr "Metin, resim, video"
 
@@ -16747,7 +16709,7 @@ msgstr "Durum ve not, yalnızca anketi düzenleyebilen kişiler tarafından gör
 msgid "The status and note are only visible to people who can edit."
 msgstr "Durum ve not, yalnızca düzenleme yetkisi olan kişiler tarafından görülebilir."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:147
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:150
 msgid "The uploaded file will be attached to the result email."
 msgstr "Yüklenen dosya sonuç e-postasına eklenecektir."
 
@@ -16953,7 +16915,7 @@ msgstr "Oturumunuz sona erdi, lütfen yeniden başlatıp tekrar deneyin."
 msgid "answers visible to respondents"
 msgstr "yanıtların katılımcılara görünür olması"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:99
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:100
 msgid "chocolate"
 msgstr "çikolata"
 
@@ -16968,10 +16930,6 @@ msgstr "e-posta"
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:19
 msgid "go to"
 msgstr "git"
-
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:100
-msgid "ice cream and my favorite color is"
-msgstr "dondurma ve en sevdiğim renk"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:13
 msgid "if"
@@ -17011,11 +16969,6 @@ msgstr "bir e-posta adresi olmalıdır"
 msgid "must be an email address"
 msgstr "bir e-posta adresi olmalı"
 
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:18
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:29
-msgid "name >= 2"
-msgstr "ad >= 2"
-
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:33
 msgid "number"
 msgstr "sayı"
@@ -17028,10 +16981,6 @@ msgstr "her satıra bir tane"
 msgid "phone number"
 msgstr "telefon numarası"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:15
-msgid "question == 1"
-msgstr "soru == 1"
-
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_multiple_choice.tpl:19
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_narrative.tpl:28
 msgid "select…"
@@ -17040,10 +16989,6 @@ msgstr "seçin…"
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:33
 msgid "text"
 msgstr "Metin"
-
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:98
-msgid "years old. I like"
-msgstr "yaşında. Ben severim"
 
 #: zotonic_mod_survey/priv/templates/_survey_result_test_score.tpl:21
 msgid "{points} of {max} points"
@@ -17167,8 +17112,8 @@ msgid "Did you review all texts and correct any mistakes?"
 msgstr "Tüm metinleri gözden geçirip hataları düzelttiniz mi?"
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:23
-msgid "Drag languages to define the preferred order, the first 'view' language will be the default language."
-msgstr "Tercih edilen sırayı tanımlamak için dilleri sürükleyin, ilk 'görüntüleme' dili varsayılan dil olacaktır."
+msgid "Drag languages to define the preferred order. The first language that is visible to visitors will be the default language."
+msgstr ""
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:146
 msgid "Dutch"
@@ -17239,10 +17184,6 @@ msgstr "Macarca"
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:25
 msgid "If a language is set to 'off' then edited texts will loose their translation in that language."
 msgstr "Bir dil 'kapalı' olarak ayarlanırsa, düzenlenen metinler o dildeki çevirilerini kaybeder."
-
-#: zotonic_mod_translation/priv/templates/admin_translation.tpl:24
-msgid "If a language is set to 'view' or 'editable' then texts for that language are editable in the admin."
-msgstr "Bir dil 'görüntülenebilir' veya 'düzenlenebilir' olarak ayarlanmışsa, o dil için metinler yöneticide düzenlenebilir."
 
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:110
 #: zotonic_mod_translation/priv/templates/_dialog_translation_edit.tpl:34
@@ -17397,11 +17338,6 @@ msgstr "Çeviriye başlamadan önce değişikliklerinizi kaydedin veya silin."
 msgid "Scan all templates for translation tags and generate .pot files that can be used for translating the templates. The <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext package must be installed</a>."
 msgstr "Çeviri etiketleri için tüm şablonları tara ve şablonları çevirmek için kullanılabilecek .pot dosyaları oluştur. <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext paketi yüklü olmalıdır</a>."
 
-#: zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:44
-#: zotonic_mod_translation/priv/templates/admin_translation.tpl:44
-msgid "Script"
-msgstr "Komut dosyası"
-
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:9
 msgid "See also:"
 msgstr "Ayrıca bkz:"
@@ -17471,7 +17407,7 @@ msgstr "İspanyolca"
 
 #: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:18
 msgid "Start the translation of {count} pages? Editing will be disabled until the translations are ready."
-msgstr "{count} sayfalarının çevirisine başlasak mı? Çeviriler tamamlanana kadar düzenleme işlevi devre dışı bırakılacaktır."
+msgstr "{count} sayfanın çevirisi başlatılsın mı? Çeviriler tamamlanana kadar düzenleme devre dışı bırakılacak."
 
 #: zotonic_mod_translation/src/mod_translation.erl:996
 msgid "Started building the .pot files. This may take a while..."
@@ -17480,6 +17416,10 @@ msgstr ".pot dosyaları oluşturulmaya başlandı. Bu biraz zaman alabilir..."
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:156
 msgid "Swedish"
 msgstr "İsveçce"
+
+#: zotonic_mod_translation/priv/templates/admin_translation.tpl:24
+msgid "Texts can be edited in the admin for languages set to 'Visible to visitors' or 'Editable'."
+msgstr ""
 
 #: zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_sublanguage_note.tpl:3
 msgid "The golden rule when choosing a language is simplicity. Stick to the main language if you can; use a sub-language (adding region or script) when it adds useful distinguishing information."
@@ -17588,6 +17528,10 @@ msgstr "Türkçe"
 msgid "Use the default language for untranslated texts"
 msgstr "Çevrilmemiş metinler için varsayılan dili kullanın"
 
+#: zotonic_mod_translation/priv/templates/admin_translation.tpl:38
+msgid "Visible to visitors"
+msgstr ""
+
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:126
 msgid "When a text has no translation in the selected language, try the site default language before the other fallback languages."
 msgstr "Bir metnin seçilen dilde çevirisi bulunmuyorsa, diğer yedek dillerden önce sitenin varsayılan dilini deneyin."
@@ -17599,6 +17543,11 @@ msgstr "Şu dilde"
 #: zotonic_mod_translation/priv/templates/_admin_overview_filter_panel.tpl:19
 msgid "Without language"
 msgstr "Şu dilde olmayan"
+
+#: zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:44
+#: zotonic_mod_translation/priv/templates/admin_translation.tpl:44
+msgid "Writing system"
+msgstr ""
 
 #: zotonic_mod_translation/src/models/m_translation_tree.erl:152
 #: zotonic_mod_translation/src/models/m_translation_tree.erl:155
@@ -17743,6 +17692,10 @@ msgstr "Süresi dolmuş ve durdurulmuş abonelikler de dahil edilmiştir. Yenile
 msgid "External hostname"
 msgstr "Dış ana bilgisayar adı"
 
+#: zotonic_mod_websub/priv/templates/_rsc_import_subscription_options.tpl:18
+msgid "Follows the Connections option. Connected resources keep their subscriptions when disconnected from this page."
+msgstr "\"Bağlantılar\" seçeneğinin ardından gelir. Bağlantısı kesilen kaynaklar, bu sayfadan bağlantıları kesildiğinde aboneliklerini korurlar."
+
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:79
 msgid "Last activity"
 msgstr "Son etkinlik"
@@ -17750,10 +17703,6 @@ msgstr "Son etkinlik"
 #: zotonic_mod_websub/priv/templates/_admin_rsc_import_status_live.tpl:19
 msgid "Last update received:"
 msgstr "Alınan son güncelleme:"
-
-#: zotonic_mod_websub/priv/templates/admin_websub.tpl:78
-msgid "Lease expires"
-msgstr "Kira sözleşmesi sona eriyor"
 
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:75
 msgid "Local page"
@@ -17788,6 +17737,10 @@ msgstr "Onay bekleniyor"
 msgid "Remote host"
 msgstr "Uzak ana bilgisayar"
 
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:114
+msgid "Retry"
+msgstr "Tekrar dene"
+
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:113
 msgid "Retry subscription"
 msgstr "Aboneliği yeniden dene"
@@ -17810,7 +17763,11 @@ msgstr "Sayfalarımızın takipçileri"
 
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:86
 msgid "Subscribes to us"
-msgstr "Bize abone olun"
+msgstr "Bize abone"
+
+#: zotonic_mod_websub/priv/templates/admin_websub.tpl:78
+msgid "Subscription lease expires"
+msgstr ""
 
 #: zotonic_mod_websub/src/filters/filter_websub_error.erl:44
 msgid "Subscription or unsubscription attempts stopped because the retry time limit was reached. Check the remote website and retry the subscription if needed."
@@ -17898,11 +17855,11 @@ msgstr "Bu sayfanın abone listesini görüntüle"
 
 #: zotonic_mod_websub/priv/templates/_admin_edit_sidebar_websub.tpl:19
 msgid "View subscriptions to the external page"
-msgstr "Harici sayfadaki abonelikleri görüntüle"
+msgstr "Harici sayfaya yapılan abonelikleri görüntüle"
 
 #: zotonic_mod_websub/priv/templates/_admin_rsc_import_status_live.tpl:8
 msgid "Waiting for automatic updates to be confirmed."
-msgstr "Otomatik güncellemelerin onaylanmasını bekliyorum."
+msgstr "Otomatik güncellemelerin onaylanması bekleniyor."
 
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:87
 msgid "We subscribe"
@@ -18187,13 +18144,13 @@ msgstr "Sitenizi şu adresten ziyaret edebilirsiniz:"
 msgid "Your site is ready"
 msgstr "Siteniz hazır"
 
-#: zotonic_site_status/priv/templates/_sites.tpl:54
-msgid "Are you sure you want to restart the site:"
-msgstr "Siteyi yeniden başlatmak istediğinizden emin misiniz:"
+#: zotonic_site_status/priv/templates/_site_action_confirm.tpl:2
+msgid "Are you sure you want to restart the site <b>{site}</b>?"
+msgstr ""
 
-#: zotonic_site_status/priv/templates/_sites.tpl:41
-msgid "Are you sure you want to stop the site:"
-msgstr "Siteyi durdurmak istediğinizden emin misiniz:"
+#: zotonic_site_status/priv/templates/_site_action_confirm.tpl:4
+msgid "Are you sure you want to stop the site <b>{site}</b>?"
+msgstr ""
 
 #: zotonic_site_status/priv/templates/status.tpl:25
 msgid "Commands"
@@ -18203,7 +18160,7 @@ msgstr "Komutlar"
 msgid "Enter your password to manage this server"
 msgstr "Bu sunucuyu yönetmek için şifrenizi girin"
 
-#: zotonic_site_status/priv/templates/_sites.tpl:65
+#: zotonic_site_status/priv/templates/_sites.tpl:69
 msgid "Flush and reload all settings, templates etc."
 msgstr "Tüm ayarları, şablonları vb. Temizleyin ve yeniden yükleyin."
 
@@ -18235,7 +18192,7 @@ msgstr "Oturum Aç"
 msgid "Manage this server"
 msgstr "Bu sunucuyu yönet"
 
-#: zotonic_site_status/priv/templates/_sites.tpl:52
+#: zotonic_site_status/priv/templates/_sites.tpl:54
 msgid "Restart the site, all users will be logged off."
 msgstr "Siteyi yeniden başlatın; tüm kullanıcıların oturumları kapatılacaktır."
 
@@ -18264,7 +18221,7 @@ msgstr "Ziyaret etmeye çalıştığınız site bazı sorunlar yaşıyor. Lütfe
 msgid "This password is not correct."
 msgstr "Bu şifre doğru değil."
 
-#: zotonic_site_status/priv/templates/_sites.tpl:73
+#: zotonic_site_status/priv/templates/_sites.tpl:77
 msgid "Visit the admin page for this site."
 msgstr "Bu sitenin admin sayfasını ziyaret edin."
 
@@ -18290,16 +18247,16 @@ msgstr "Hoş geldiniz! Zotonic web sunucusunun varsayılan sayfasını görüyor
 msgid "You can find the password in ~/.zotonic/[version]/zotonic.config."
 msgstr "Şifrenizi şu adreste bulabilirsiniz: ~/.zotonic/[version]/zotonic.config."
 
-#: zotonic_site_status/priv/templates/_sites.tpl:71
+#: zotonic_site_status/priv/templates/_sites.tpl:75
 msgid "admin"
 msgstr "yönetici"
 
-#: zotonic_site_status/priv/templates/_sites.tpl:63
+#: zotonic_site_status/priv/templates/_sites.tpl:67
 msgid "flush"
 msgstr "temizleme"
 
-#: zotonic_site_status/priv/templates/_sites.tpl:50
-#: zotonic_site_status/priv/templates/_sites.tpl:55
+#: zotonic_site_status/priv/templates/_sites.tpl:52
+#: zotonic_site_status/priv/templates/_sites.tpl:59
 msgid "restart"
 msgstr "yeniden başlat"
 
@@ -18308,7 +18265,7 @@ msgid "start"
 msgstr "başlat"
 
 #: zotonic_site_status/priv/templates/_sites.tpl:37
-#: zotonic_site_status/priv/templates/_sites.tpl:42
+#: zotonic_site_status/priv/templates/_sites.tpl:44
 msgid "stop"
 msgstr "durdur"
 
