@@ -25,8 +25,8 @@
 <fieldset>
     <div class="row">
         <div class="form-group col-lg-4 col-md-4 label-floating">
-            <input class="form-control" id="name_first" type="text" name="name_first" value="{{ id.name_first }}" placeholder="{_ First _}">
-            <label class="control-label" for="name_first">{_ First _}</label>
+            <input class="form-control" id="name_first" type="text" name="name_first" value="{{ id.name_first }}" placeholder="{_ First name _}">
+            <label class="control-label" for="name_first">{_ First name _}</label>
         </div>
         <div class="form-group col-lg-2 col-md-2 label-floating">
             <input class="form-control" id="name_middle" type="text" name="name_middle" value="{{ id.name_middle }}" placeholder="{_ Middle _}">
