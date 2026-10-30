@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-30 17:20\n"
+"PO-Revision-Date: 2026-10-30 17:52\n"
 "Last-Translator: \n"
 "Language-Team: English\n"
 "MIME-Version: 1.0\n"
@@ -3770,7 +3770,7 @@ msgstr "User page"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:178
 msgid "Uses the Connections setting. Connected resources keep their subscriptions when disconnected from this page."
-msgstr ""
+msgstr "Uses the Connections setting. Connected resources keep their subscriptions when disconnected from this page."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:129
 msgid "Valid for:"
@@ -3810,7 +3810,7 @@ msgstr "View connection graph"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:81
 msgid "View format (opens in a new tab)"
-msgstr ""
+msgstr "View format (opens in a new tab)"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:17
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:28
@@ -4023,7 +4023,7 @@ msgstr "id:"
 
 #: zotonic_mod_admin/priv/templates/_rsc_preview.tpl:11
 msgid "in content group"
-msgstr ""
+msgstr "in content group"
 
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:84
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:15
@@ -4131,7 +4131,7 @@ msgstr "Delete All Pages"
 
 #: zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:39
 msgid "Delete categories and move their pages"
-msgstr ""
+msgstr "Delete categories and move their pages"
 
 #: zotonic_mod_admin_category/src/mod_admin_category.erl:112
 msgid "Delete is canceled, there are pages in the category."
@@ -4242,7 +4242,7 @@ msgstr "Copy the certificate file path to the clipboard."
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:51
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:57
 msgid "Copy the certificate file to <code>{path}</code>."
-msgstr ""
+msgstr "Copy the certificate file to <code>{path}</code>."
 
 #: zotonic_mod_admin_config/src/mod_admin_config.erl:176
 msgid "Could not generate a new self-signed certificate."
@@ -4496,7 +4496,7 @@ msgstr "Restart the browser. Some apps do not accept user-installed certificates
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:52
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:58
 msgid "Run <code>{command}</code> and restart the browser."
-msgstr ""
+msgstr "Run <code>{command}</code> and restart the browser."
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:125
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:126
@@ -4846,7 +4846,7 @@ msgstr "Deleted the user account."
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:9
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:52
 msgid "Display name"
-msgstr ""
+msgstr "Display name"
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:124
 msgid "Duplicate username, please choose another username."
@@ -5073,7 +5073,7 @@ msgstr "The e-mail address has been verified."
 
 #: zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:8
 msgid "The email address {email} was added to your personal information on {site}."
-msgstr ""
+msgstr "The email address {email} was added to your personal information on {site}."
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:150
 msgid "The new username/ password has been set."
@@ -5222,7 +5222,7 @@ msgstr "You need to be an administrator to add users."
 
 #: zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:25
 msgid "You received this email because verification of your email address was requested. You will not receive any additional emails because of this request."
-msgstr ""
+msgstr "You received this email because verification of your email address was requested. You will not receive any additional emails because of this request."
 
 #: zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:12
 msgid "Your account name is"
@@ -5257,7 +5257,7 @@ msgstr "set username / password"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:307
 msgid "<em>Jaccard similarity</em> divides the number of content items using both keywords by the number using either keyword, counting each item once. <em>Smaller-set overlap</em> divides the shared content count by the content count for the less-used keyword. This helps reveal keywords that may be redundant or nested. Keywords used on very few content items can score highly, so use the minimum-uses filter when looking for meaningful patterns."
-msgstr ""
+msgstr "<em>Jaccard similarity</em> divides the number of content items using both keywords by the number using either keyword, counting each item once. <em>Smaller-set overlap</em> divides the shared content count by the content count for the less-used keyword. This helps reveal keywords that may be redundant or nested. Keywords used on very few content items can score highly, so use the minimum-uses filter when looking for meaningful patterns."
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:68
 msgid "All content"
@@ -5289,11 +5289,11 @@ msgstr "Cells show the number of content items using both keywords."
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:208
 msgid "Cells show the shared content count as a percentage of all distinct content using either keyword."
-msgstr ""
+msgstr "Cells show the shared content count as a percentage of all distinct content using either keyword."
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:206
 msgid "Cells show the shared content count as a percentage of the content count for the less-used keyword."
-msgstr ""
+msgstr "Cells show the shared content count as a percentage of the content count for the less-used keyword."
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:54
 msgid "Content category"
@@ -5406,7 +5406,7 @@ msgstr "See which keywords are used and which keywords occur on the same content
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:97
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:273
 msgid "Shared content count"
-msgstr ""
+msgstr "Shared content count"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:162
 msgid "Showing {shown} of {matched} keywords"
@@ -5634,11 +5634,11 @@ msgstr "Depends"
 
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:28
 msgid "Do you still want to activate the module <b>{module}</b>?"
-msgstr ""
+msgstr "Do you still want to activate the module <b>{module}</b>?"
 
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:11
 msgid "Do you still want to deactivate the module <b>{module}</b>?"
-msgstr ""
+msgstr "Do you still want to deactivate the module <b>{module}</b>?"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:17
 msgid "Either they are not installed, or they are not compiled."
@@ -5646,7 +5646,7 @@ msgstr "Either they are not installed, or they are not compiled."
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:59
 msgid "Execution status"
-msgstr ""
+msgstr "Execution status"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:140
 msgid "Install the module’s model and data."
@@ -5663,7 +5663,7 @@ msgstr "Modules are missing dependencies"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:74
 msgid "Modules shown:"
-msgstr ""
+msgstr "Modules shown:"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:171
 msgid "No modules found"
@@ -5758,7 +5758,7 @@ msgstr "All page connections"
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:7
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:41
 msgid "Are you sure you want to delete the predicate “{title}”?"
-msgstr ""
+msgstr "Are you sure you want to delete the predicate “{title}”?"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edge_action.tpl:2
 msgid "Are you sure you want to remove the <strong>{{ predicate }}</strong>\n"
@@ -5790,7 +5790,7 @@ msgstr "Delete is canceled, there are connections with this predicate."
 
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:31
 msgid "Delete predicate and update connections"
-msgstr ""
+msgstr "Delete predicate and update connections"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:85
 msgid "Do not find subjects using this predicate’s object titles."
@@ -5846,7 +5846,7 @@ msgstr "Insert new connections before existing connections."
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:68
 msgid "Instead of a search box, this will show a list of all pages in the target categories selected above. At least one category must be selected."
-msgstr ""
+msgstr "Instead of a search box, this will show a list of all pages in the target categories selected above. At least one category must be selected."
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:20
 #: zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:66
@@ -6189,7 +6189,7 @@ msgstr "Define who should use two-factor authentication, this is the default set
 
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:69
 msgid "Enable two-factor authentication"
-msgstr ""
+msgstr "Enable two-factor authentication"
 
 #: zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:21
 msgid "Enable two-factor authentication..."
@@ -6376,7 +6376,7 @@ msgstr "You can use two-factor authentication apps such as <a rel=\"noopener nor
 
 #: zotonic_mod_auth2fa/priv/templates/_logon_login_set_passcode.tpl:1
 msgid "You must enable two-factor authentication now. Next time you sign in, you will need to enter a code generated by your authentication app."
-msgstr ""
+msgstr "You must enable two-factor authentication now. Next time you sign in, you will need to enter a code generated by your authentication app."
 
 #: zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:11
 msgid "You need to be allowed to edit the system configuration to view or change the two-factor authentication configuration."
@@ -6702,7 +6702,7 @@ msgstr "Log in"
 #: zotonic_mod_authentication/priv/templates/_logon_login_title.tpl:16
 #: zotonic_mod_authentication/priv/templates/logon.tpl:14
 msgid "Log in to {site}"
-msgstr ""
+msgstr "Log in to {site}"
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_title.tpl:6
 msgid "Log in with your existing {site} account to connect the accounts. You only have to do this once."
@@ -6788,7 +6788,7 @@ msgstr "Please choose a different password as this password has been found in a 
 
 #: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:8
 msgid "Please confirm your password for <span>{site}</span>."
-msgstr ""
+msgstr "Please confirm your password for <span>{site}</span>."
 
 #: zotonic_mod_authentication/priv/templates/_logon_reset_title.tpl:7
 msgid "Please enter a new password"
@@ -7018,7 +7018,7 @@ msgstr "You can connect the account on {site} with your account on {service} if 
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:113
 msgid "You can enter the password that you have for {site}."
-msgstr ""
+msgstr "You can enter the password that you have for {site}."
 
 #: zotonic_mod_authentication/priv/templates/logon_error/message.need_passcode.tpl:2
 msgid "You can find the code in your authentication App."
@@ -7036,7 +7036,7 @@ msgstr "You can read them here:"
 #: zotonic_mod_authentication/priv/templates/email_password_reset.tpl:9
 #: zotonic_mod_authentication/priv/templates/email_password_reset.tpl:18
 msgid "You have requested a new password for <a href=\"https://{hostname}/\">{hostname}</a>."
-msgstr ""
+msgstr "You have requested a new password for <a href=\"https://{hostname}/\">{hostname}</a>."
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:99
 msgid "You have to share your email address to be able to log in."
@@ -7168,7 +7168,7 @@ msgstr "By default the backup of the database and files are not encrypted. It is
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:12
 msgid "Changes from <strong>{from}</strong> to <strong>{to}</strong>."
-msgstr ""
+msgstr "Changes from <strong>{from}</strong> to <strong>{to}</strong>."
 
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:51
 msgid "Check and possibly restore an earlier version of your page."
@@ -7329,7 +7329,7 @@ msgstr "Please make sure you store the backup encryption password in a safe <u>e
 
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:75
 msgid "Previous versions"
-msgstr ""
+msgstr "Previous versions"
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:54
 msgid "Recover incoming connections from other pages"
@@ -7503,7 +7503,7 @@ msgstr "The original category or content group no longer exists. Confirm the sug
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:5
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:19
 msgid "This version was saved on <strong>{date}</strong> by <strong>{author}</strong>."
-msgstr ""
+msgstr "This version was saved on <strong>{date}</strong> by <strong>{author}</strong>."
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:10
 msgid "This will overwrite your page with the contents of the backup file."
@@ -7549,7 +7549,7 @@ msgstr "You are not allowed to see the revisions."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:101
 msgid "You can find it in <a href=\"{url}\">System Configuration</a> or in the Zotonic configuration files."
-msgstr ""
+msgstr "You can find it in <a href=\"{url}\">System Configuration</a> or in the Zotonic configuration files."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:9
 msgid "You can have one backup per day of the week, older ones will be overwritten."
@@ -7667,7 +7667,7 @@ msgstr "Compatibility tags"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:130
 msgid "Completed"
-msgstr ""
+msgstr "Completed"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:130
 msgid "Completion"
@@ -7702,7 +7702,7 @@ msgstr "Donut alias"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:44
 msgid "Donut chart with data from an Erlang map"
-msgstr ""
+msgstr "Donut chart with data from an Erlang map"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:81
 msgid "East"
@@ -7841,7 +7841,7 @@ msgstr "March"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:153
 msgid "Market share"
-msgstr ""
+msgstr "Market share"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:114
 #: zotonic_mod_l10n/src/support/l10n_date.erl:43
@@ -8298,11 +8298,11 @@ msgstr "unpublish"
 
 #: zotonic_mod_contact/priv/templates/email_contact.tpl:3
 msgid "Contact form on {site}"
-msgstr ""
+msgstr "Contact form on {site}"
 
 #: zotonic_mod_contact/priv/templates/email_contact.tpl:6
 msgid "Hello, the contact form on “{site}” has been submitted."
-msgstr ""
+msgstr "Hello, the contact form on “{site}” has been submitted."
 
 #: zotonic_mod_contact/priv/templates/contact.tpl:32
 msgid "Thank you!"
@@ -8322,7 +8322,7 @@ msgstr "Content Group"
 
 #: zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:37
 msgid "Delete content groups and move their pages"
-msgstr ""
+msgstr "Delete content groups and move their pages"
 
 #: zotonic_mod_content_groups/src/mod_content_groups.erl:101
 msgid "Delete is canceled, there are pages in this content group."
@@ -8638,7 +8638,7 @@ msgstr "Click to restart"
 
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:30
 msgid "Code editor"
-msgstr ""
+msgstr "Code editor"
 
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:13
 msgid "Column"
@@ -9096,7 +9096,7 @@ msgstr "No template found in the context."
 
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:44
 msgid "No template syntax errors found."
-msgstr ""
+msgstr "No template syntax errors found."
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:422
 msgid "No traced parent templates"
@@ -9629,7 +9629,7 @@ msgstr "Align right"
 
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:58
 msgid "Apply changes"
-msgstr ""
+msgstr "Apply changes"
 
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:36
 msgid "Bold"
@@ -9971,7 +9971,7 @@ msgstr "Last error status"
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:260
 msgid "Mail server message"
-msgstr ""
+msgstr "Mail server message"
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:167
 msgid "Most Recent"
@@ -10071,7 +10071,7 @@ msgstr "This email address has been blocked."
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:47
 msgid "This email address has been blocked. No emails will be sent to or received from this address."
-msgstr ""
+msgstr "This email address has been blocked. No emails will be sent to or received from this address."
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:93
 msgid "This email address is not valid."
@@ -10174,7 +10174,7 @@ msgstr "Export"
 #: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:65
 #: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:66
 msgid "Fields to export"
-msgstr ""
+msgstr "Fields to export"
 
 #: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:8
 msgid "Help about export"
@@ -10378,7 +10378,7 @@ msgstr "Delete files from the cloud file store"
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:251
 msgid "Deletion queue"
-msgstr ""
+msgstr "Deletion queue"
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:250
 msgid "Download Queue"
@@ -10402,7 +10402,7 @@ msgstr "Error list pages"
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:70
 msgid "Extra deletion delay"
-msgstr ""
+msgstr "Extra deletion delay"
 
 #: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:8
 msgid "Failed reads in the last 15 minutes:"
@@ -10992,7 +10992,7 @@ msgstr "Change user"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:32
 msgid "Check feed now"
-msgstr ""
+msgstr "Check feed now"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:30
 msgid "Checking website for feeds…"
@@ -11139,7 +11139,7 @@ msgstr "Feed activity log"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:44
 msgid "Feed checks"
-msgstr ""
+msgstr "Feed checks"
 
 #: zotonic_mod_import_feed/src/mod_import_feed.erl:569
 msgid "Feed deleted"
@@ -11226,7 +11226,7 @@ msgstr "Imports run with this account's permissions. Only administrators and use
 
 #: zotonic_mod_import_feed/src/models/m_import_feed.erl:476
 msgid "Invalid removal regexp on line {line}: {reason}"
-msgstr ""
+msgstr "Invalid removal regexp on line {line}: {reason}"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_result.tpl:9
 msgid "Kept:"
@@ -11238,7 +11238,7 @@ msgstr "Kind"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:47
 msgid "Last feed check"
-msgstr ""
+msgstr "Last feed check"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:51
 msgid "Last processed"
@@ -11284,7 +11284,7 @@ msgstr "New events appear live at the top. Scroll down to load older events. Log
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:48
 msgid "Next feed check"
-msgstr ""
+msgstr "Next feed check"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log.tpl:21
 msgid "No activity for this feed, or access denied."
@@ -11316,7 +11316,7 @@ msgstr "Pause automatic imports"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:22
 msgid "Pause imports"
-msgstr ""
+msgstr "Pause imports"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:62
 msgid "Paused"
@@ -11332,7 +11332,7 @@ msgstr "Protected resources and resources you cannot delete are kept. A resource
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_dialog.tpl:20
 msgid "Protected resources and resources you cannot delete will be kept. Deletable content shared with other feeds will also be deleted."
-msgstr ""
+msgstr "Protected resources and resources you cannot delete will be kept. Deletable content shared with other feeds will also be deleted."
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:33
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:39
@@ -11360,7 +11360,7 @@ msgstr "Resource"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:20
 msgid "Resume imports"
-msgstr ""
+msgstr "Resume imports"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:167
 msgid "Save & refetch deleted"
@@ -11396,7 +11396,7 @@ msgstr "Select user"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:7
 msgid "Settings for importing"
-msgstr ""
+msgstr "Settings for importing"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:48
 msgid "Source identity"
@@ -11408,7 +11408,7 @@ msgstr "Subscribe imported articles for updates"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:123
 msgid "Subscriptions require non-authoritative imports and a source that supports updates."
-msgstr ""
+msgstr "Subscriptions require non-authoritative imports and a source that supports updates."
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:37
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:101
@@ -11488,7 +11488,7 @@ msgstr "User"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:15
 msgid "User account for imports"
-msgstr ""
+msgstr "User account for imports"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:32
 msgid "Uses credentials registered for the import user and destination host. Credentials are only sent over HTTPS."
@@ -11752,7 +11752,16 @@ msgid "<ul>\n"
 "        <li><b>Blocked</b>: the recipient’s email address is blocked, check the email address status</li>\n"
 "                                            <li><b>Received</b>: a remote mailer sent email to us</li>\n"
 "              </ul>"
-msgstr ""
+msgstr "<ul>\n"
+"                                            <li><b>Sending</b>: the email is being sent to the remote mailer</li>\n"
+"                           <li><b>Sent</b>: the email has been sent to the remote mailer</li>\n"
+"      <li><b>Relayed</b>: the remote mailer reports that the email is relayed to the next server</li>\n"
+"                                            <li><b>Bounce</b>: the email bounced back from a remote mailer, this is a fatal error</li>\n"
+"                                            <li><b>Failed</b>: the remote mailer did not accept our email, no further retries</li>\n"
+"                                            <li><b>Delivery retry</b>: we could not send the email and will retry later</li>\n"
+"        <li><b>Blocked</b>: the recipient’s email address is blocked, check the email address status</li>\n"
+"                                            <li><b>Received</b>: a remote mailer sent email to us</li>\n"
+"              </ul>"
 
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:156
 msgid "Bounce"
@@ -11785,7 +11794,7 @@ msgstr "Debug"
 
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:158
 msgid "Delivery retry"
-msgstr ""
+msgstr "Delivery retry"
 
 #: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:35
 msgid "Directive"
@@ -12076,7 +12085,7 @@ msgstr "All statuses"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:56
 msgid "Already queued: {count};"
-msgstr ""
+msgstr "Already queued: {count};"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:9
 msgid "Any page can be sent as a mailing. You can send a mailing from any edit page. On this page you can add or remove mailing lists and their recipients."
@@ -12084,11 +12093,11 @@ msgstr "Any page can be sent as a mailing. You can send a mailing from any edit 
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_cancel_confirm.tpl:1
 msgid "Are you sure you want to cancel the mailing to “{list}”?"
-msgstr ""
+msgstr "Are you sure you want to cancel the mailing to “{list}”?"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:2
 msgid "Are you sure you want to delete the mailing list “{list}”?"
-msgstr ""
+msgstr "Are you sure you want to delete the mailing list “{list}”?"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_test_public_alert.tpl:9
 msgid "Ask an administrator to change the test mailing list’s access settings."
@@ -12100,7 +12109,7 @@ msgstr "Available when sending and automatic retries finish."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:58
 msgid "Awaiting confirmation: {count};"
-msgstr ""
+msgstr "Awaiting confirmation: {count};"
 
 #: zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:13
 msgid "Before you will receive any further mail you need to confirm your subscription."
@@ -12181,7 +12190,7 @@ msgstr "Could not add the recipient."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:4
 msgid "Could not be sent: {count}"
-msgstr ""
+msgstr "Could not be sent: {count}"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_count_error.tpl:9
 msgid "Could not count the eligible recipients. The list query may have taken too long. Go back and try again, or ask an administrator to check the mailing list."
@@ -12304,7 +12313,7 @@ msgstr "Edit recipient"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:64
 msgid "Eligible for delivery"
-msgstr ""
+msgstr "Eligible for delivery"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:9
 msgid "Eligible recipients will be counted in the review step."
@@ -12326,11 +12335,11 @@ msgstr "Email subscriptions"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:9
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_summary.tpl:10
 msgid "Emails processed: {processed} / {selected}"
-msgstr ""
+msgstr "Emails processed: {processed} / {selected}"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:150
 msgid "Emails waiting to be sent: {count}."
-msgstr ""
+msgstr "Emails waiting to be sent: {count}."
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:60
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:85
@@ -12362,7 +12371,7 @@ msgstr "Excluded"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:5
 msgid "Excluded: {count}"
-msgstr ""
+msgstr "Excluded: {count}"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:44
 msgid "Externally managed list &mdash; no unsubscribe/subscribe links"
@@ -12430,7 +12439,7 @@ msgstr "Here you can edit the arguments of the search query. Every argument goes
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:28
 msgid "If their preferred language is unavailable or not set, use <strong>{language}</strong>."
-msgstr ""
+msgstr "If their preferred language is unavailable or not set, use <strong>{language}</strong>."
 
 #: zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:24
 msgid "If you don’t want to receive any mail then please ignore this message."
@@ -12517,7 +12526,7 @@ msgstr "Mailing list"
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:8
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:12
 msgid "Mailing list recipients: {title}"
-msgstr ""
+msgstr "Mailing list recipients: {title}"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:12
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:7
@@ -12572,7 +12581,7 @@ msgstr "Mailings are sent to:"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:13
 msgid "Mailings of page: <strong>{title}</strong>"
-msgstr ""
+msgstr "Mailings of page: <strong>{title}</strong>"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:9
 msgid "Manage mailing lists"
@@ -13019,7 +13028,7 @@ msgstr "Select..."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:16
 msgid "Selected recipients: {count}."
-msgstr ""
+msgstr "Selected recipients: {count}."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:55
 msgid "Selection"
@@ -13117,7 +13126,7 @@ msgstr "Send the mailing right now."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:18
 msgid "Send the {language} version."
-msgstr ""
+msgstr "Send the {language} version."
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:31
 msgid "Send this page immediately to the test mailing list. The page does not need to be published."
@@ -13210,11 +13219,11 @@ msgstr "Sent means accepted by the mail server, not confirmed inbox delivery. La
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:2
 msgid "Sent: <strong>{count}</strong>"
-msgstr ""
+msgstr "Sent: <strong>{count}</strong>"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:55
 msgid "Sent: {count};"
-msgstr ""
+msgstr "Sent: {count};"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:14
 msgid "Show all pages"
@@ -13288,7 +13297,7 @@ msgstr "Status and progress"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:57
 msgid "Still being retried: {count};"
-msgstr ""
+msgstr "Still being retried: {count};"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:131
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:135
@@ -13333,7 +13342,7 @@ msgstr "Subscribers, added via the subscription form."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:45
 msgid "Subscription email: <b>{email}</b>"
-msgstr ""
+msgstr "Subscription email: <b>{email}</b>"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:33
 msgid "Target mailing list"
@@ -13357,11 +13366,11 @@ msgstr "Test email address"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:151
 msgid "Test email queued for {email}."
-msgstr ""
+msgstr "Test email queued for {email}."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_mailing_runs_panel.tpl:8
 msgid "Test email:"
-msgstr ""
+msgstr "Test email:"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:163
 msgid "Test language"
@@ -13511,7 +13520,7 @@ msgstr "Tick the checkbox if you want the recipient to receive a welcome e-mail 
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:2
 msgid "Times shown in {timezone}."
-msgstr ""
+msgstr "Times shown in {timezone}."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_task_language.tpl:4
 msgid "Unknown language"
@@ -13622,7 +13631,7 @@ msgstr "Waiting for the sending process to start."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:3
 msgid "Waiting: {count}"
-msgstr ""
+msgstr "Waiting: {count}"
 
 #: zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:3
 msgid "Welcome to"
@@ -13646,7 +13655,7 @@ msgstr "Why some recipients are not selected"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:59
 msgid "Will not be sent: {count}."
-msgstr ""
+msgstr "Will not be sent: {count}."
 
 #: zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:113
 msgid "You are not allowed to add or enable recipients."
@@ -13835,7 +13844,7 @@ msgstr "Add top"
 
 #: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:274
 msgid "Are you sure you want to remove <b>{title}</b> and all indented items below it?"
-msgstr ""
+msgstr "Are you sure you want to remove <b>{title}</b> and all indented items below it?"
 
 #: zotonic_mod_menu/priv/templates/_admin_status.tpl:7
 msgid "Check all menu pages and add <i>hasmenupart</i> connections for all of the \n"
@@ -14130,7 +14139,7 @@ msgstr "Authenticating..."
 #: zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:88
 #: zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:89
 msgid "Authorization URL"
-msgstr ""
+msgstr "Authorization URL"
 
 #: zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:11
 msgid "Authorize"
@@ -14166,7 +14175,7 @@ msgstr "Consumer App not found, or no view permission."
 
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:42
 msgid "Content import"
-msgstr ""
+msgstr "Content import"
 
 #: zotonic_mod_oauth2/src/mod_oauth2.erl:165
 #: zotonic_mod_oauth2/src/mod_oauth2.erl:276
@@ -14933,11 +14942,11 @@ msgstr "Yandex Webmaster validation id"
 
 #: zotonic_mod_seo/priv/templates/admin_seo.tpl:83
 msgid "You can find this ID in the tracking script. Its format is <strong>{format}</strong>."
-msgstr ""
+msgstr "You can find this ID in the tracking script. Its format is <strong>{format}</strong>."
 
 #: zotonic_mod_seo/priv/templates/admin_seo.tpl:92
 msgid "You can find this ID on your <a href='{url}' rel='noopener noreferrer' target='_blank'>Google Tag Manager account page</a>. Its format is <strong>{format}</strong>."
-msgstr ""
+msgstr "You can find this ID on your <a href='{url}' rel='noopener noreferrer' target='_blank'>Google Tag Manager account page</a>. Its format is <strong>{format}</strong>."
 
 #: zotonic_mod_seo/priv/templates/admin_seo.tpl:138
 #: zotonic_mod_seo/priv/templates/admin_seo.tpl:170
@@ -14966,11 +14975,11 @@ msgstr "Monthly"
 
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:48
 msgid "Page change frequency defined for category"
-msgstr ""
+msgstr "Page change frequency defined for category"
 
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:43
 msgid "Page change frequency for sitemap"
-msgstr ""
+msgstr "Page change frequency for sitemap"
 
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:19
 msgid "Priority defined for category"
@@ -16004,7 +16013,7 @@ msgstr "I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|othe
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:98
 msgid "I am {age} years old. I like {flavor} ice cream and my favorite color is {color}."
-msgstr ""
+msgstr "I am {age} years old. I like {flavor} ice cream and my favorite color is {color}."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:211
 msgid "If checked, then a confirmation email with the submitted answers can be sent to the respondent. For logged-in respondents, the known email address is used. For anonymous respondents, add a short text field with the label “email” and the validation set to “must be an email address”."
@@ -16401,11 +16410,11 @@ msgstr "Result deleted."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:33
 msgid "Result downloads"
-msgstr ""
+msgstr "Result downloads"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:20
 msgid "Result views"
-msgstr ""
+msgstr "Result views"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:22
 #: zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:19
@@ -17117,7 +17126,7 @@ msgstr "Did you review all texts and correct any mistakes?"
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:23
 msgid "Drag languages to define the preferred order. The first language that is visible to visitors will be the default language."
-msgstr ""
+msgstr "Drag languages to define the preferred order. The first language that is visible to visitors will be the default language."
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:146
 msgid "Dutch"
@@ -17423,7 +17432,7 @@ msgstr "Swedish"
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:24
 msgid "Texts can be edited in the admin for languages set to 'Visible to visitors' or 'Editable'."
-msgstr ""
+msgstr "Texts can be edited in the admin for languages set to 'Visible to visitors' or 'Editable'."
 
 #: zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_sublanguage_note.tpl:3
 msgid "The golden rule when choosing a language is simplicity. Stick to the main language if you can; use a sub-language (adding region or script) when it adds useful distinguishing information."
@@ -17534,7 +17543,7 @@ msgstr "Use the default language for untranslated texts"
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:38
 msgid "Visible to visitors"
-msgstr ""
+msgstr "Visible to visitors"
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:126
 msgid "When a text has no translation in the selected language, try the site default language before the other fallback languages."
@@ -17551,7 +17560,7 @@ msgstr "Without language"
 #: zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:44
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:44
 msgid "Writing system"
-msgstr ""
+msgstr "Writing system"
 
 #: zotonic_mod_translation/src/models/m_translation_tree.erl:152
 #: zotonic_mod_translation/src/models/m_translation_tree.erl:155
@@ -17771,7 +17780,7 @@ msgstr "Subscribes to us"
 
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:78
 msgid "Subscription lease expires"
-msgstr ""
+msgstr "Subscription lease expires"
 
 #: zotonic_mod_websub/src/filters/filter_websub_error.erl:44
 msgid "Subscription or unsubscription attempts stopped because the retry time limit was reached. Check the remote website and retry the subscription if needed."
@@ -18150,11 +18159,11 @@ msgstr "Your site is ready"
 
 #: zotonic_site_status/priv/templates/_site_action_confirm.tpl:2
 msgid "Are you sure you want to restart the site <b>{site}</b>?"
-msgstr ""
+msgstr "Are you sure you want to restart the site <b>{site}</b>?"
 
 #: zotonic_site_status/priv/templates/_site_action_confirm.tpl:4
 msgid "Are you sure you want to stop the site <b>{site}</b>?"
-msgstr ""
+msgstr "Are you sure you want to stop the site <b>{site}</b>?"
 
 #: zotonic_site_status/priv/templates/status.tpl:25
 msgid "Commands"
