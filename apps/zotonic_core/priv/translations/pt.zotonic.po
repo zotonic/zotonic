@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-30 13:15\n"
+"PO-Revision-Date: 2026-10-30 14:38\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "MIME-Version: 1.0\n"
@@ -165,24 +165,24 @@ msgstr "(público)"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:3
 msgid "ACL rules"
-msgstr "Regras LCA"
+msgstr "Regras ACL"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:9
 msgid "ACL rules file"
-msgstr "Arquivos de regras do LCA"
+msgstr "Ficheiro de regras ACL"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:4
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:12
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:41
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:22
 msgid "ACL user group"
-msgstr "Grupo de usuários ACL"
+msgstr "Grupo de utilizadores ACL"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7
 #: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:18
 #: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:989
 msgid "Access control rules"
-msgstr "Regras de controle de acesso"
+msgstr "Regras de controlo de acesso"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list.tpl:22
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list.tpl:25
@@ -191,7 +191,7 @@ msgstr "Adicionar Regra"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:55
 msgid "Add links to the collaboration group"
-msgstr "Adicionar links para o grupo de colaboração"
+msgstr "Adicionar ligações ao grupo de colaboração"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:91
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:141
@@ -223,7 +223,7 @@ msgstr "Todos os Módulos"
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_module.tpl:9
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:9
 msgid "All User Groups"
-msgstr "Todos os Grupos de Usuários"
+msgstr "Todos os grupos de utilizadores"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_collab_select.tpl:29
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:18
@@ -233,11 +233,11 @@ msgstr "Todos os grupos de colaboração"
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_collab_select.tpl:17
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:15
 msgid "All normal content groups"
-msgstr "Todos os grupos de conteúdo normal"
+msgstr "Todos os grupos de conteúdo normais"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:28
 msgid "Allowed file and mime types, separate with ',' — type 'none' if no extra types allowed, leave empty for the default"
-msgstr "Tipos de arquivo e mime permitidos, separados com ',' - digite 'none' se nenhum tipo extra for permitido, deixe em branco para o padrão"
+msgstr "Tipos de ficheiro e MIME permitidos, separados por ',' — introduza 'none' se não forem permitidos tipos adicionais; deixe o campo vazio para utilizar o valor predefinido"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_collab.tpl:13
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:44
@@ -247,15 +247,15 @@ msgstr "Qualquer visibilidade"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:1
 msgid "Are you sure you want to delete the following user groups:"
-msgstr "Você tem certeza de que deseja excluir os seguintes grupos de usuários:"
+msgstr "Tem a certeza de que pretende eliminar os seguintes grupos de utilizadores?"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:7
 msgid "Are you sure you want to make all rules permanent?"
-msgstr "Tens a certeza que queres tornar todas as regras permanentes?"
+msgstr "Tem a certeza de que pretende tornar todas as regras permanentes?"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:38
 msgid "Are you sure you want to restore all ACL rules to their currently published version?"
-msgstr "Você tem certeza de que quer restaurar todas as regras do LCA à sua versão publicada atualmente?"
+msgstr "Tem a certeza de que pretende repor todas as regras ACL na versão atualmente publicada?"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:16
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:36
@@ -441,7 +441,7 @@ msgstr "Os grupos de colaboração são adicionados através da criação de uma
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:30
 msgid "Collaboration groups are user groups where all content belongs to the group."
-msgstr "Os grupos de colaboração são grupos de usuários onde todo o conteúdo pertence ao grupo."
+msgstr "Os grupos de colaboração são grupos de utilizadores em que todo o conteúdo pertence ao grupo."
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_options.tpl:12
 msgid "Consider resource authors to be owner."
@@ -476,7 +476,7 @@ msgstr "Grupos de conteúdo"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:76
 msgid "Content rules for collaboration group members and managers"
-msgstr "Regras de conteúdo para membros e gerentes de grupos de colaboração"
+msgstr "Regras de conteúdo para membros e gestores dos grupos de colaboração"
 
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:43
 msgid "Could not move to collaboration group."
@@ -524,7 +524,7 @@ msgstr "Não foi possível mover para o grupo de colaboração."
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:25
 #: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:12
 msgid "Delete"
-msgstr "Excluir"
+msgstr "Eliminar"
 
 #: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:531
 msgid "Delete is canceled, there are users in the user groups."
@@ -813,7 +813,7 @@ msgstr "Regras revertidas"
 #: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:95
 #: zotonic_mod_translation/priv/templates/_dialog_translation_edit.tpl:44
 msgid "Save"
-msgstr "Salvar"
+msgstr "Guardar"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:79
 msgid "Save Upload Permissions"
@@ -831,7 +831,7 @@ msgstr "Configurações do grupo de colaboração salvas"
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:47
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_results.tpl:41
 msgid "Select"
-msgstr "Selecione"
+msgstr "Selecionar"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_category_dropdown.tpl:3
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:203
@@ -1085,7 +1085,7 @@ msgstr "Cerca de {n} itens encontrados."
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:122
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_edit_basics.person.tpl:7
 msgid "Access control"
-msgstr "Controle de acesso"
+msgstr "Controlo de acesso"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:12
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:66
@@ -1149,7 +1149,7 @@ msgstr "Adicionar conteúdo de mídia"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:14
 msgid "Add media to body"
-msgstr "Adicionar mídia ao corpo"
+msgstr "Adicionar conteúdo multimédia ao texto"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:35
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:39
@@ -1468,7 +1468,7 @@ msgstr "Confirmar remoção"
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:47
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:45
 msgid "Connect"
-msgstr "Vincular"
+msgstr "Associar"
 
 #: zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_page.tpl:9
 msgid "Connect a page"
@@ -1501,7 +1501,7 @@ msgstr "Tipo de conteúdo"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:42
 msgid "Copied download link to clipboard"
-msgstr "Link para download copiado para a área de transferência"
+msgstr "Ligação de transferência copiada para a área de transferência"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:73
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:21
@@ -1522,7 +1522,7 @@ msgstr "Link para download copiado para a área de transferência"
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:78
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:94
 msgid "Copy"
-msgstr "Cópia"
+msgstr "Copiar"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:35
 msgid "Copy download link"
@@ -1654,7 +1654,7 @@ msgstr "Eliminar esta página..."
 
 #: zotonic_mod_admin/src/mod_admin.erl:957
 msgid "Deleted tasks."
-msgstr "Tarefas excluídas."
+msgstr "Tarefas eliminadas."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:31
 msgid "Deleted."
@@ -1740,7 +1740,7 @@ msgstr "Arrastar para mudar de posição"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:33
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:38
 msgid "Duplicate"
-msgstr "Duplicata"
+msgstr "Duplicar"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:8
 #: zotonic_mod_admin/src/actions/action_admin_dialog_duplicate_rsc.erl:59
@@ -1960,7 +1960,7 @@ msgstr "Tamanho do arquivo"
 
 #: zotonic_mod_admin/src/mod_admin.erl:882
 msgid "File uploaded to the drop folder, will be handled shortly."
-msgstr "O arquivo enviado para a pasta suspensa será tratado em breve."
+msgstr "O ficheiro foi carregado para a pasta de receção e será processado em breve."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:39
 #: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:54
@@ -2034,7 +2034,7 @@ msgstr "Descarregue todas as regras de envio de URLs, caches de modelos e biblio
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:81
 msgid "Flush system caches"
-msgstr "Caches do sistema de descarga"
+msgstr "Limpar as caches do sistema"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:145
 #: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:23
@@ -3741,7 +3741,7 @@ msgstr "Atualizado"
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:17
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:161
 msgid "Upload"
-msgstr "Envio"
+msgstr "Carregar"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:20
 msgid "Upload File"
@@ -3954,7 +3954,7 @@ msgstr "Tem de especificar uma descrição do ficheiro para facilitar a sua loca
 
 #: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:188
 msgid "Your search query is invalid. Please correct it before saving."
-msgstr "Sua consulta de pesquisa é inválida. Corrija-o antes de salvar."
+msgstr "A sua consulta de pesquisa é inválida. Corrija-a antes de guardar."
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:21
 msgid "Zotonic Version"
@@ -4797,7 +4797,7 @@ msgstr "Uma senha segura é pré-preenchida, substitua se necessário."
 #: zotonic_mod_menu/priv/templates/admin_menu_hierarchy.tpl:26
 #: zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:25
 msgid "Add"
-msgstr "Adicione"
+msgstr "Adicionar"
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:63
 msgid "Add a new user"
@@ -6510,7 +6510,7 @@ msgstr "Feche esta janela e faça logon se você já for um usuário de {site}."
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:18
 #: zotonic_mod_wires/src/actions/action_wires_confirm.erl:82
 msgid "Confirm"
-msgstr "Confirme"
+msgstr "Confirmar"
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_title.tpl:4
 msgid "Confirm to connect"
@@ -9219,7 +9219,7 @@ msgstr "Editor selecionado na máquina Zotonic"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:114
 msgid "Set the class <tt>environment-development</tt> on the <tt>&lt;html&gt;</tt> element of your pages to see the server log in the browser console.<br>In development, admin pages always show the server log in the javascript console."
-msgstr "Defina a classe <tt>ambiente-desenvolvimento</tt> no elemento <tt>&lt;html&gt;</tt> de suas páginas para ver o log do servidor no console do navegador.<br>No desenvolvimento, as páginas de administração sempre mostram o log do servidor no console javascript."
+msgstr "Defina a classe <tt>environment-development</tt> no elemento <tt>&lt;html&gt;</tt> das suas páginas para ver o registo do servidor na consola do navegador.<br>Durante o desenvolvimento, as páginas de administração mostram sempre o registo do servidor na consola JavaScript."
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:272
 msgid "Show an overview of all observers"
@@ -10898,7 +10898,7 @@ msgstr "O texto principal HTML da página."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:36
 msgid "The category of the page. Examples: <code>article</code> or <code>text</code>."
-msgstr "A categoria da página. Exemplos: <code>artigo</code> ou <code>texto</code>."
+msgstr "A categoria da página. Exemplos: <code>article</code> ou <code>text</code>."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:72
 msgid "The custom path for the URL of the page, for example <code>/my/page</code>"
@@ -13994,7 +13994,7 @@ msgstr "Conecte-se com a Microsoft"
 
 #: zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:36
 msgid "Control who can log in. Allowed values are: <tt>common</tt>, <tt>organizations</tt>, <tt>consumers</tt>, and tenant identifiers."
-msgstr "Controle quem pode fazer login. Os valores permitidos são: <tt>comum</tt>, <tt>organizações</tt>, <tt>consumidores</tt>e identificadores de locatário."
+msgstr "Controle quem pode iniciar sessão. Os valores permitidos são: <tt>common</tt>, <tt>organizations</tt>, <tt>consumers</tt> e identificadores de inquilino."
 
 #: zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:3
 #: zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:6
@@ -14559,7 +14559,7 @@ msgstr "Devem ser URLs completos, mas sem as partes de consulta (? ..) ou hash (
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:19
 msgid "This must be an unique name to identify the remote service. This can not be changed. Only <tt>A-Z</tt>, <tt>a-z</tt>, <tt>0-9</tt>, <tt>-</tt> and <tt>_</tt> characters are allowed."
-msgstr "Este deve ser um nome exclusivo para identificar o serviço remoto. Isso não pode ser alterado. Apenas os caracteres <tt>AZ</tt>, <tt>az</tt>, <tt>0-9</tt>, <tt>-</tt> e <tt>_</tt> são permitidos."
+msgstr "Este deve ser um nome exclusivo para identificar o serviço remoto. Isso não pode ser alterado. Apenas os caracteres <tt>A-Z</tt>, <tt>a-z</tt>, <tt>0-9</tt>, <tt>-</tt> e <tt>_</tt> são permitidos."
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:14
 msgid "This user will be able to use the token."
@@ -15548,7 +15548,7 @@ msgstr "Isto pode demorar um pouco, aguenta-te!"
 
 #: zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:68
 msgid "You can change this by setting <tt>port</tt> in the <tt>zotonic.config</tt> configuration file."
-msgstr "Você pode alterar isso definindo <tt>porta</tt> no arquivo de configuração <tt>zotonic.config</tt> ."
+msgstr "Pode alterar esta opção definindo <tt>port</tt> no ficheiro de configuração <tt>zotonic.config</tt>."
 
 #: zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:75
 msgid "You can change this by setting <tt>ssl_port</tt> in the <tt>zotonic.config</tt> configuration file."
@@ -16006,7 +16006,7 @@ msgstr "Primeira página na categoria"
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:76
 msgid "For date ranges you can also use relative dates, like <code>-5 year</code>."
-msgstr "Para intervalos de datas, você também pode usar datas relativas, como <code>-5 ano</code>."
+msgstr "Para intervalos de datas, também pode usar datas relativas, como <code>-5 year</code>."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:260
 msgid "Forms can be handled by special code, for example a form that is forwarded to a back office system. Depending on the handler the results are stored in the database or not."
